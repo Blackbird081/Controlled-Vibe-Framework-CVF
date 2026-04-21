@@ -5,7 +5,7 @@ import { useLanguage } from '@/lib/i18n';
 import { type OpenClawMode } from '@/lib/openclaw-config';
 
 // Types
-export type ProviderKey = 'gemini' | 'openai' | 'anthropic' | 'alibaba' | 'openrouter';
+export type ProviderKey = 'gemini' | 'openai' | 'anthropic' | 'alibaba' | 'openrouter' | 'deepseek';
 
 // Available models for each provider
 export const AVAILABLE_MODELS: Record<ProviderKey, { id: string; name: string; recommended?: boolean }[]> = {
@@ -41,6 +41,10 @@ export const AVAILABLE_MODELS: Record<ProviderKey, { id: string; name: string; r
         { id: 'google/gemini-2.5-flash-preview', name: 'Gemini 2.5 Flash (OR)' },
         { id: 'deepseek/deepseek-chat-v3-0324', name: 'DeepSeek V3' },
     ],
+    deepseek: [
+        { id: 'deepseek-chat', name: 'DeepSeek Chat', recommended: true },
+        { id: 'deepseek-reasoner', name: 'DeepSeek Reasoner' },
+    ],
 };
 
 export interface AIProviderSettings {
@@ -49,10 +53,11 @@ export interface AIProviderSettings {
     anthropic: { apiKey: string; enabled: boolean; selectedModel: string };
     alibaba: { apiKey: string; enabled: boolean; selectedModel: string };
     openrouter: { apiKey: string; enabled: boolean; selectedModel: string };
+    deepseek: { apiKey: string; enabled: boolean; selectedModel: string };
 }
 
 export interface UserPreferences {
-    defaultProvider: 'gemini' | 'openai' | 'anthropic' | 'alibaba' | 'openrouter';
+    defaultProvider: ProviderKey;
     defaultExportMode: 'simple' | 'governance' | 'full';
     defaultLanguage: 'vi' | 'en';
     autoSaveHistory: boolean;
@@ -84,6 +89,7 @@ const defaultSettings: SettingsData = {
         anthropic: { apiKey: '', enabled: false, selectedModel: 'claude-sonnet-4-20250514' },
         alibaba: { apiKey: '', enabled: false, selectedModel: 'qwen-turbo' },
         openrouter: { apiKey: '', enabled: false, selectedModel: 'meta-llama/llama-4-maverick' },
+        deepseek: { apiKey: '', enabled: false, selectedModel: 'deepseek-chat' },
     },
     preferences: {
         defaultProvider: 'gemini',
@@ -319,6 +325,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             anthropicDesc: 'Claude 3.5 Sonnet',
             alibabaDesc: 'Qwen Turbo/Plus/Max (International)',
             openrouterDesc: 'Multi-model hub (Llama, Mistral, DeepSeek...)',
+            deepseekDesc: 'DeepSeek Chat/Reasoner trực tiếp',
             warningReset: 'Sẽ xóa tất cả settings và API keys',
             close: 'Đóng',
         },
@@ -359,6 +366,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             anthropicDesc: 'Claude 3.5 Sonnet',
             alibabaDesc: 'Qwen Turbo/Plus/Max (International)',
             openrouterDesc: 'Multi-model hub (Llama, Mistral, DeepSeek...)',
+            deepseekDesc: 'Direct DeepSeek Chat/Reasoner',
             warningReset: 'This will delete all settings and API keys',
             close: 'Close',
         },
@@ -372,6 +380,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
         { id: 'anthropic' as const, name: 'Anthropic Claude', icon: '🧠', desc: l.anthropicDesc, color: 'orange' },
         { id: 'alibaba' as const, name: 'Alibaba DashScope', icon: '🌏', desc: l.alibabaDesc, color: 'amber' },
         { id: 'openrouter' as const, name: 'OpenRouter', icon: '🔀', desc: l.openrouterDesc, color: 'violet' },
+        { id: 'deepseek' as const, name: 'DeepSeek', icon: '🦋', desc: l.deepseekDesc, color: 'cyan' },
     ];
 
     return (
@@ -609,6 +618,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                             <option value="anthropic">🧠 Anthropic</option>
                                             <option value="alibaba">🌏 Alibaba DashScope</option>
                                             <option value="openrouter">🔀 OpenRouter</option>
+                                            <option value="deepseek">🦋 DeepSeek</option>
                                         </select>
                                     </div>
                                 ))}
@@ -631,6 +641,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                 <option value="anthropic">🧠 Anthropic</option>
                                 <option value="alibaba">🌏 Alibaba DashScope</option>
                                 <option value="openrouter">🔀 OpenRouter</option>
+                                <option value="deepseek">🦋 DeepSeek</option>
                             </select>
                         </div>
 

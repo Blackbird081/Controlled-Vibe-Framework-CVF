@@ -30,6 +30,12 @@ export function validateApiKey(provider: string, key: string): { valid: boolean;
                 return { valid: false, error: 'Invalid OpenAI API key format (should start with sk-)' };
             }
             break;
+        case 'deepseek':
+            // DeepSeek keys use the same sk- prefix convention.
+            if (!trimmedKey.startsWith('sk-') || trimmedKey.length < 40) {
+                return { valid: false, error: 'Invalid DeepSeek API key format (should start with sk-)' };
+            }
+            break;
         case 'anthropic':
             // Anthropic keys start with 'sk-ant-'
             if (!trimmedKey.startsWith('sk-ant-') || trimmedKey.length < 40) {

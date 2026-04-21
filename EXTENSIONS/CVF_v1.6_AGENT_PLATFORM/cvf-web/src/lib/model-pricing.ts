@@ -19,6 +19,9 @@ export const DEFAULT_MODEL_PRICING: ModelPricing = {
     'claude-3.5-haiku': { input: 0.80, output: 4.00 },
     'claude-3.5-sonnet': { input: 3.00, output: 15.00 },
     'claude-3-opus': { input: 15.00, output: 75.00 },
+    // DeepSeek
+    'deepseek-chat': { input: 0.27, output: 1.10 },
+    'deepseek-reasoner': { input: 0.55, output: 2.19 },
 };
 
 export const DEFAULT_FALLBACK_PRICING = { input: 1.00, output: 4.00 };

@@ -108,6 +108,14 @@ const WEB_PROVIDER_DEFINITIONS: Record<AIProvider, ProviderDefinition> = {
     costTier: 'standard',
     capabilities: ['chat', 'code', 'analysis'],
   },
+  deepseek: {
+    providerId: 'deepseek',
+    providerName: 'DeepSeek',
+    modelFamily: 'deepseek',
+    maxRiskLevel: 'R1',
+    costTier: 'standard',
+    capabilities: ['chat', 'code', 'analysis'],
+  },
 };
 
 // --- Router logic (aligned with ProviderRouterContract.route()) ---

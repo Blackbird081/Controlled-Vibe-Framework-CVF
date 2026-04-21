@@ -29,6 +29,11 @@ export async function GET() {
             configured: !!process.env.OPENROUTER_API_KEY,
             model: DEFAULT_MODELS.openrouter,
         },
+        {
+            provider: 'deepseek',
+            configured: !!process.env.DEEPSEEK_API_KEY,
+            model: DEFAULT_MODELS.deepseek,
+        },
     ];
 
     const defaultProvider = (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';

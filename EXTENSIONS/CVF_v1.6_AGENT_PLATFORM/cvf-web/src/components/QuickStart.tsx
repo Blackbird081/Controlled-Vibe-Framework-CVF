@@ -35,6 +35,7 @@ const PROVIDERS = [
   { id: 'anthropic', name: 'Anthropic', icon: '🧠', desc: { vi: 'Claude', en: 'Claude' } },
   { id: 'alibaba', name: 'Alibaba Qwen', icon: '🌏', desc: { vi: 'Qwen Turbo', en: 'Qwen Turbo' } },
   { id: 'openrouter', name: 'OpenRouter', icon: '🔀', desc: { vi: 'Nhiều model', en: 'Multi-model' } },
+  { id: 'deepseek', name: 'DeepSeek', icon: '🦋', desc: { vi: 'Chat/Reasoner', en: 'Chat/Reasoner' } },
 ] as const;
 
 export default function QuickStart({ onComplete, onSkip, language = 'vi' }: QuickStartProps) {

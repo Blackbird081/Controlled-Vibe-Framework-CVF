@@ -126,6 +126,7 @@ export async function POST(request: NextRequest) {
             gemini: process.env.GOOGLE_AI_API_KEY,
             alibaba: resolveAlibabaApiKey(),
             openrouter: process.env.OPENROUTER_API_KEY,
+            deepseek: process.env.DEEPSEEK_API_KEY,
         };
 
         // Build the prompt from template inputs

@@ -8,7 +8,7 @@
 import { detectSpecMode } from '@/lib/agent-chat';
 
 // Types
-export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'alibaba' | 'openrouter';
+export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'alibaba' | 'openrouter' | 'deepseek';
 
 export interface AIMessage {
     role: 'user' | 'assistant' | 'system';
@@ -35,6 +35,7 @@ export interface AIResponse {
 export interface AIProviderConfig {
     apiKey: string;
     model?: string;
+    baseUrl?: string;
     temperature?: number;
     maxTokens?: number;
     systemPrompt?: string;
@@ -479,6 +480,7 @@ export class OpenAIProvider {
     constructor(config: AIProviderConfig) {
         this.apiKey = config.apiKey;
         this.model = config.model || 'gpt-4o';
+        this.baseUrl = config.baseUrl || this.baseUrl;
         this.language = config.language || 'vi';
     }
 
@@ -938,6 +940,12 @@ export function createAIProvider(provider: AIProvider, config: AIProviderConfig)
             return new AlibabaDashScopeWebProvider(config);
         case 'openrouter':
             return new OpenRouterProvider(config);
+        case 'deepseek':
+            return new OpenAIProvider({
+                ...config,
+                model: config.model || 'deepseek-chat',
+                baseUrl: 'https://api.deepseek.com',
+            });
         default:
             throw new Error(`Unknown provider: ${provider}`);
     }

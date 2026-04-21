@@ -3,7 +3,7 @@
 import { DEFAULT_MODEL_PRICING, ModelPricing, calculateTokenCost } from '@/lib/model-pricing';
 
 // ==================== TYPES ====================
-export type ProviderKey = 'gemini' | 'openai' | 'anthropic' | 'alibaba' | 'openrouter';
+export type ProviderKey = 'gemini' | 'openai' | 'anthropic' | 'alibaba' | 'openrouter' | 'deepseek';
 
 export interface QuotaSettings {
     enabled: boolean;
@@ -59,7 +59,7 @@ export const DEFAULT_QUOTA_SETTINGS: QuotaSettings = {
     dailyBudget: 0,           // Unlimited by default
     monthlyBudget: 0,         // Unlimited by default
     fallbackEnabled: true,
-    fallbackOrder: ['gemini', 'openai', 'anthropic', 'alibaba', 'openrouter'],
+    fallbackOrder: ['gemini', 'openai', 'anthropic', 'alibaba', 'openrouter', 'deepseek'],
     maxTokensPerRequest: 0,   // Unlimited
 };
 
@@ -182,6 +182,7 @@ export class QuotaManager {
                 anthropic: { tokens: 0, cost: 0, requests: 0 },
                 alibaba: { tokens: 0, cost: 0, requests: 0 },
                 openrouter: { tokens: 0, cost: 0, requests: 0 },
+                deepseek: { tokens: 0, cost: 0, requests: 0 },
             },
         };
 

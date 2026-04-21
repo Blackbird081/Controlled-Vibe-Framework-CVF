@@ -433,9 +433,63 @@ describe('ai/providers', () => {
         });
     });
 
+    describe('executeAI — DeepSeek', () => {
+        it('returns success with parsed response', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: 'Hello from DeepSeek' } }],
+                    usage: { prompt_tokens: 5, completion_tokens: 7, total_tokens: 12 },
+                }),
+            });
+
+            const result = await executeAI('deepseek', 'sk-test', 'Hello');
+            expect(result.success).toBe(true);
+            expect(result.output).toBe('Hello from DeepSeek');
+            expect(result.provider).toBe('deepseek');
+            expect(result.tokensUsed).toBe(12);
+            expect(result.usage?.inputTokens).toBe(5);
+            expect(result.usage?.outputTokens).toBe(7);
+        });
+
+        it('uses the direct DeepSeek endpoint and custom options', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: 'custom deepseek' } }],
+                    usage: { total_tokens: 9 },
+                }),
+            });
+
+            const result = await executeAI('deepseek', 'sk-test', 'Hello', {
+                model: 'deepseek-reasoner',
+                maxTokens: 2048,
+                temperature: 0.3,
+            });
+
+            expect(result.success).toBe(true);
+            expect(fetchMock.mock.calls[0][0]).toBe('https://api.deepseek.com/chat/completions');
+            const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+            expect(body.model).toBe('deepseek-reasoner');
+            expect(body.max_tokens).toBe(2048);
+            expect(body.temperature).toBe(0.3);
+        });
+
+        it('handles DeepSeek API errors', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: false,
+                json: async () => ({ error: { message: 'DeepSeek auth failed' } }),
+            });
+
+            const result = await executeAI('deepseek', 'sk-test', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.error).toContain('DeepSeek auth failed');
+        });
+    });
+
     describe('executeAI — unknown provider', () => {
         it('returns error for unknown provider', async () => {
-            const result = await executeAI('deepseek' as unknown as Parameters<typeof executeAI>[0], 'key', 'hello');
+            const result = await executeAI('not-a-provider' as unknown as Parameters<typeof executeAI>[0], 'key', 'hello');
             expect(result.success).toBe(false);
             expect(result.error).toContain('Unknown provider');
         });

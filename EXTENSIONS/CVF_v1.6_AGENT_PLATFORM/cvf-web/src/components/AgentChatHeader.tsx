@@ -46,6 +46,7 @@ export function AgentChatHeader({
                         {defaultProvider === 'anthropic' && '🧠 Claude'}
                         {defaultProvider === 'alibaba' && '🧭 Qwen'}
                         {defaultProvider === 'openrouter' && '🧩 OpenRouter'}
+                        {defaultProvider === 'deepseek' && '🦋 DeepSeek'}
                     </p>
                 </div>
                 {currentMode !== 'simple' && (

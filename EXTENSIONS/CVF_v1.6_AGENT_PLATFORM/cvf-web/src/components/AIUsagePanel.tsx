@@ -101,6 +101,7 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
         anthropic: 'bg-purple-500',
         alibaba: 'bg-amber-500',
         openrouter: 'bg-slate-500',
+        deepseek: 'bg-cyan-500',
     };
 
     const providerNames: Record<ProviderKey, string> = {
@@ -109,6 +110,7 @@ export function AIUsagePanel({ onClose }: AIUsagePanelProps) {
         anthropic: 'Anthropic',
         alibaba: 'Alibaba',
         openrouter: 'OpenRouter',
+        deepseek: 'DeepSeek',
     };
 
     return (

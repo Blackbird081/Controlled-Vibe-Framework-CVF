@@ -17,6 +17,7 @@ const PROVIDERS: Array<{ id: ProviderKey; name: string; icon: string; hint: stri
     { id: 'gemini', name: 'Google Gemini', icon: '✨', hint: 'Recommended for most users' },
     { id: 'openai', name: 'OpenAI', icon: '🤖', hint: 'Best for GPT-4 class models' },
     { id: 'anthropic', name: 'Anthropic Claude', icon: '🧠', hint: 'Strong for long-form reasoning' },
+    { id: 'deepseek', name: 'DeepSeek', icon: '🦋', hint: 'Direct DeepSeek Chat/Reasoner' },
 ];
 
 export function ApiKeyWizard({ onComplete, onClose, settings, updateProvider, updatePreferences }: ApiKeyWizardProps) {

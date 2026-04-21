@@ -13,6 +13,7 @@ describe('/api/providers', () => {
         delete process.env.CVF_BENCHMARK_ALIBABA_KEY;
         delete process.env.CVF_ALIBABA_API_KEY;
         delete process.env.OPENROUTER_API_KEY;
+        delete process.env.DEEPSEEK_API_KEY;
         delete process.env.DEFAULT_AI_PROVIDER;
     });
 
@@ -49,5 +50,17 @@ describe('/api/providers', () => {
 
         expect(data.anyConfigured).toBe(true);
         expect(alibaba.configured).toBe(true);
+    });
+
+    it('reports DeepSeek as configured when its API key is present', async () => {
+        process.env.DEEPSEEK_API_KEY = 'sk-deepseek-test-key';
+
+        const res = await GET();
+        const data = await res.json();
+        const deepseek = data.providers.find((p: { provider: string }) => p.provider === 'deepseek');
+
+        expect(data.anyConfigured).toBe(true);
+        expect(deepseek.configured).toBe(true);
+        expect(deepseek.model).toBe('deepseek-chat');
     });
 });

@@ -53,6 +53,7 @@ export function ExecuteWithAIButton({ template, spec, onExecute, disabled }: Exe
         anthropic: '🧠 Claude',
         alibaba: '🧭 Qwen',
         openrouter: '🧩 OpenRouter',
+        deepseek: '🦋 DeepSeek',
     };
 
     const handleExecute = () => {

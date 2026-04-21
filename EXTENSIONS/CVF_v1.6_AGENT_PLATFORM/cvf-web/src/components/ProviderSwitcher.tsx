@@ -19,6 +19,7 @@ const PROVIDERS: ProviderOption[] = [
     { id: 'anthropic', name: 'Claude', icon: '🧠', color: 'from-purple-500 to-pink-500', model: 'claude-sonnet-4-20250514' },
     { id: 'alibaba', name: 'Qwen', icon: '🌏', color: 'from-amber-500 to-orange-500', model: 'qwen-turbo' },
     { id: 'openrouter', name: 'OpenRouter', icon: '🔀', color: 'from-violet-500 to-indigo-500', model: 'meta-llama/llama-4-maverick' },
+    { id: 'deepseek', name: 'DeepSeek', icon: '🦋', color: 'from-cyan-500 to-blue-500', model: 'deepseek-chat' },
 ];
 
 interface ProviderSwitcherProps {

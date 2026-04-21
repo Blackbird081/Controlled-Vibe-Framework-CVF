@@ -368,6 +368,62 @@ async function executeOpenRouter(
     }
 }
 
+// DeepSeek Client (OpenAI-compatible)
+async function executeDeepSeek(
+    config: AIConfig,
+    systemPrompt: string,
+    userPrompt: string
+): Promise<ExecutionResponse> {
+    const startTime = Date.now();
+
+    try {
+        const response = await fetch('https://api.deepseek.com/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${config.apiKey}`,
+            },
+            body: JSON.stringify({
+                model: config.model,
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userPrompt },
+                ],
+                max_tokens: config.maxTokens || 4096,
+                temperature: config.temperature || 0.7,
+            }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error?.message || 'DeepSeek API error');
+        }
+
+        const data = await response.json();
+        return {
+            success: true,
+            output: data.choices[0].message.content,
+            provider: 'deepseek',
+            model: config.model,
+            tokensUsed: data.usage?.total_tokens,
+            usage: {
+                inputTokens: data.usage?.prompt_tokens,
+                outputTokens: data.usage?.completion_tokens,
+                totalTokens: data.usage?.total_tokens,
+            },
+            executionTime: Date.now() - startTime,
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            provider: 'deepseek',
+            model: config.model,
+            executionTime: Date.now() - startTime,
+        };
+    }
+}
+
 // Main execute function
 export async function executeAI(
     provider: AIProvider,
@@ -396,6 +452,8 @@ export async function executeAI(
             return executeAlibaba(config, systemPrompt, userPrompt);
         case 'openrouter':
             return executeOpenRouter(config, systemPrompt, userPrompt);
+        case 'deepseek':
+            return executeDeepSeek(config, systemPrompt, userPrompt);
         default:
             return {
                 success: false,

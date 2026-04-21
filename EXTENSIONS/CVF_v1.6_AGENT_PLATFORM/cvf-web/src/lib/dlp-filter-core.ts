@@ -74,7 +74,7 @@ const PRESET_PATTERNS: PresetPatternDefinition[] = [
 ];
 
 const ALLOWLIST_PATTERNS: RegExp[] = [
-  /\b(?:gpt-[\w.-]+|claude[\w.-]*|gemini[\w.-]*|qwen[\w.-]*|qvq[\w.-]*|openrouter)\b/iu,
+  /\b(?:gpt-[\w.-]+|claude[\w.-]*|gemini[\w.-]*|qwen[\w.-]*|qvq[\w.-]*|openrouter|deepseek[\w.-]*)\b/iu,
   /\bCVF_[A-Z0-9_]+\b/u,
   /\b[\w.+-]+@cvf\.local\b/iu,
 ];

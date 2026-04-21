@@ -11,6 +11,7 @@
 [![Guard Contract](https://img.shields.io/badge/Guard%20Contract-187%20tests%20pass-brightgreen.svg)](EXTENSIONS/CVF_GUARD_CONTRACT/)
 [![MCP Bridge](https://img.shields.io/badge/MCP%20Bridge-4%20endpoints%20active-blue.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/)
 [![Non-Coder Value](https://img.shields.io/badge/non--coder%20value-1%20provider%20proven-brightgreen.svg)](docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md)
+[![Multi Provider](https://img.shields.io/badge/multi--provider-2%20live%20lanes%20proven-brightgreen.svg)](docs/audits/deepseek-canary/INDEX.md)
 [![Knowledge Benefit](https://img.shields.io/badge/knowledge%20benefit-%2B0.775%20delta-brightgreen.svg)](docs/assessments/CVF_W102_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md)
 [![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
 [![CI](https://img.shields.io/badge/CI-governed%20verification%20active-brightgreen.svg)](.github/workflows/cvf-ci.yml)
@@ -69,6 +70,7 @@ What CVF is good at:
 The strongest public-safe claim CVF can make right now is:
 
 - **on one validated provider lane, CVF has proven real non-coder value**
+- **across two live provider lanes, CVF has proven multi-provider operability**
 - the governed path preserves normal-task usefulness
 - risky requests are blocked or guided instead of left as prompt roulette
 - `NEEDS_APPROVAL` is no longer a dead end
@@ -81,21 +83,25 @@ Public-safe product wording:
 
 Boundaries that still matter:
 
-- this claim is currently **proven on one provider lane**, not all providers
-- multi-provider robustness is still a future portability problem, not a proven public claim
+- one-provider non-coder value is proven on the Alibaba lane
+- multi-provider operability is proven on Alibaba `qwen-turbo` and DeepSeek `deepseek-chat`
+- provider speed, strength, reliability, and cost remain provider-lane economics chosen by the user
 - the public `Skill Library` front door is now synced to a governed subset, but benchmark truth still comes only from the `GC-044` trusted subset
 
 Canonical claim boundary:
 
 - [Public Non-Coder Value Statement](docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md)
+- [Alibaba live canary receipts](docs/audits/alibaba-canary/INDEX.md)
+- [DeepSeek live canary receipts](docs/audits/deepseek-canary/INDEX.md)
 
 ## Core Value: Governed AI For Non-Coders
 
-CVF is building toward a governed provider hub, but the currently proven product value is simpler and stronger:
+CVF is building toward a governed provider hub. The currently proven product value is now two-layered:
 
 - **CVF gives non-coders a governed AI path**
+- **CVF can run that governed path across more than one live provider lane**
 - provider choice may evolve, but governance, risk handling, approval flow, and evidence discipline remain CVF-owned
-- once one provider lane proves real value, additional providers become a portability and robustness task rather than the first proof-of-value task
+- provider speed, model strength, latency, and cost are lane-specific tradeoffs, not CVF architecture blockers
 
 Long-term hub direction:
 
@@ -106,6 +112,7 @@ Long-term hub direction:
 What CVF is not claiming today:
 
 - full parity across every provider lane
+- identical speed, quality, latency, or cost across provider lanes
 - universal quality across every legacy skill or template in the current web library
 - fully unified controlled autonomy on every channel
 - platform breadth comparable to larger orchestration ecosystems
@@ -184,13 +191,14 @@ Current posture on the active reference path:
 | Architecture baseline | `v3.7-W46T1 CLOSURE-ASSESSED` |
 | MC sequence | `MC1-MC5 FULLY COMPLETE` |
 | One-provider non-coder value | `PROVEN — governed path value proven on Alibaba lane` |
+| Multi-provider operability | `PROVEN — Alibaba qwen-turbo + DeepSeek deepseek-chat live canaries PASS 6/6` |
 | Knowledge-native execute-path value | `PROVEN — injected 0.950 vs raw 0.175 (+0.775 delta)` |
 | Post-closure integration wave | `CVF ADDING NEW + Windows_Skill_Normalization INTEGRATED` |
 | Runnable inherited upgrade surface | ``cvf-web`` `/api/governance/external-assets/prepare` |
 | Latest verified local counts | CPF 2999 / EPF 1301 / GEF 625 / LPF 1493 / cvf-web 2027 |
 | Canonical phase model | `ALIGNED` |
 | Hardened default guard path | `ALIGNED` |
-| Web non-coder semantics | `VALUE PROVEN (1 provider)` |
+| Web non-coder semantics | `VALUE PROVEN (Alibaba); PORTABILITY PROVEN (Alibaba + DeepSeek)` |
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` |
 | Governance executable ownership | `SUBSTANTIALLY ALIGNED` |
 | End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` |
@@ -200,6 +208,7 @@ Read this status as:
 
 - the MC1-MC5 architecture baseline is complete and CLOSURE-ASSESSED
 - the one-provider governed path now has evidence-backed non-coder value
+- the multi-provider path now has evidence-backed live operability on Alibaba and DeepSeek
 - the knowledge-native execute path now has live benefit evidence after `W101-T1` + `W102-T1`
 - the post-closure integration wave is no longer docs-only; a bounded runnable governance surface now exists in `cvf-web`
 - the latest verified local baseline is CPF `2999`, EPF `1301`, GEF `625`, LPF `1493`, and `cvf-web` `2027`

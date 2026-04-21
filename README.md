@@ -245,6 +245,17 @@ The post-closure additions from `CVF ADDING NEW` and `Windows_Skill_Normalizatio
 
 This is the current proof that the upgrade wave is not only canon/docs work anymore.
 
+### Release Candidate Readiness (2026-04-21)
+
+CVF has entered release candidate state. All core proof milestones are closed.
+
+| Document | Purpose |
+| --- | --- |
+| [RC Truth Packet](docs/reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md) | Authoritative record of what is proven, evidence links, claim boundary |
+| [Demo Script](docs/guides/CVF_DEMO_SCRIPT_2026-04-21.md) | Three walkable demo paths — no paid API calls required by default |
+| [Known Limitations Register](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md) | Honest accounting of scope boundaries and open gaps |
+| [Public RC Roadmap](docs/roadmaps/CVF_PUBLIC_RELEASE_CANDIDATE_AND_DEMO_READINESS_ROADMAP_2026-04-21.md) | CP1-CP5 delivery plan for this packaging wave |
+
 Primary status anchors:
 
 - [Agent Handoff](AGENT_HANDOFF.md)

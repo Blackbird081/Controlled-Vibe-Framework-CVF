@@ -2,7 +2,11 @@
 
 > **Mục đích:** Một trang duy nhất giúp người mới hiểu CVF là gì, dùng như thế nào, và đi đâu tiếp.
 > **Thời gian đọc:** ~15 phút
-> **Cập nhật:** 2026-03-08
+> **Cập nhật:** 2026-03-08 (RC nav added 2026-04-21)
+>
+> **Trạng thái hiện tại (2026-04-21):** CVF đã đạt Release Candidate. Các mốc lớn đã đóng:
+> non-coder value proven · Alibaba CERTIFIED · DeepSeek CERTIFIED · provider UX delivered · front-door product proof passed.
+> Xem: [RC Truth Packet](../reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md) · [Demo Script](CVF_DEMO_SCRIPT_2026-04-21.md) · [Known Limitations](../reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
 
 ---
 

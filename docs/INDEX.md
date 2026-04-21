@@ -143,6 +143,15 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 - `../governance/toolkit/05_OPERATION/CVF_PRODUCT_VALUE_VALIDATION_GUARD.md`
 - `../governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md`
 
+## Release Candidate Navigation (2026-04-21)
+
+Nếu cần hiểu trạng thái milestone hiện tại, chuẩn bị demo, hoặc chia sẻ CVF:
+
+- `reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md` — bảng milestone đã proven, evidence links, claim boundary copy-paste safe
+- `guides/CVF_DEMO_SCRIPT_2026-04-21.md` — 3 demo path: non-coder builder / governed risk / provider switch certified lane
+- `reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md` — scope boundary và open gap chính thức
+- `roadmaps/CVF_PUBLIC_RELEASE_CANDIDATE_AND_DEMO_READINESS_ROADMAP_2026-04-21.md` — CP1-CP5 packaging roadmap
+
 ## Product Value Validation
 
 If the current task is proving or rejecting CVF user-facing value:

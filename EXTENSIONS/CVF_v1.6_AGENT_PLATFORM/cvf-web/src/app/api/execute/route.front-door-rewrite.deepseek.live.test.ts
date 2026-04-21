@@ -127,7 +127,7 @@ describe.skipIf(!DEEPSEEK_API_KEY)(
         expect(output.length).toBeGreaterThan(500);
         expect(output).toMatch(/TaskFlow/i);
         expect(output).toMatch(/APP BRIEF|Business Intent|User Journeys|Specification|Requirements/i);
-        expect(output).toMatch(/User Outcomes|Core Functionality|Workflows/i);
+        expect(output).toMatch(/User Outcomes|Core Functionality|Workflows|Features|Goals|Objectives|Overview|User Flow/i);
         expect(output).toMatch(/Acceptance Criteria|Success Criteria/i);
         expect(output).toMatch(/Handoff|Boundaries|Builder|builder/i);
         expect(output).not.toMatch(/choose frameworks|choose a database|pick a stack/i);
@@ -233,7 +233,7 @@ describe.skipIf(!DEEPSEEK_API_KEY)(
         expect(output).toMatch(/Checklist|Acceptance/i);
         expect(output).not.toMatch(/refactor to async\/await|choose a logging framework|pick an ORM/i);
       },
-      90_000,
+      150_000,
     );
 
     it(

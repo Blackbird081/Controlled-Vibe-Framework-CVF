@@ -94,8 +94,8 @@ def check_dashscope_key() -> PreCondition:
     if key and len(key) > 8:
         return PreCondition(name, "PASS", "DASHSCOPE_API_KEY is set (Alibaba live demo path enabled)")
     return PreCondition(
-        name, "WARN",
-        "DASHSCOPE_API_KEY not set — demo Path C (live Alibaba governance) will be limited",
+        name, "FAIL",
+        "DASHSCOPE_API_KEY not set — live Alibaba governance proof is mandatory",
     )
 
 

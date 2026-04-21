@@ -6,6 +6,13 @@ Memory class: SUMMARY_RECORD
 > Status: CLOSED DELIVERED 2026-04-21 — CP1-CP5 all delivered
 > Context: post-RC packaging; closes L-003 and L-008 from Known Limitations Register
 
+Post-closure verification note:
+
+- The final verified implementation uses live provider output for non-coder governance proof via `/api/execute` with `action=analyze`.
+- `governance/full` modes may correctly stop before provider execution because approval/phase gates are pre-provider controls; those UI states are not counted as live-output proof.
+- The release gate now scopes `--e2e` to mock UI-structure specs and `--e2e-live` to live governance specs only; the default full gate runs both and treats live governance as mandatory.
+- Verified on 2026-04-21: live governance E2E PASS (`7 passed`) and UI mock E2E PASS (`6 passed`). Missing `DASHSCOPE_API_KEY` is a release-gate failure, not a skip.
+
 ---
 
 ## Core Principle
@@ -111,12 +118,12 @@ Existing test problems:
 Purpose:
 
 - establish which existing tests are STABLE / DRIFT / OBSOLETE
-- split Playwright config into live (default) and mock (CI-fallback)
+- split Playwright config into live (default) and mock (UI-only structure checks)
 - update `utils.ts` with live provider helpers
 
 ### 1a — Playwright Config Split
 
-Create `playwright.config.mock.ts` — identical to current config but adds `NEXT_PUBLIC_CVF_MOCK_AI=1` to webServer env. This becomes the CI-safe config for environments without provider keys.
+Create `playwright.config.mock.ts` — identical to current config but adds `NEXT_PUBLIC_CVF_MOCK_AI=1` to webServer env. This is valid for UI-only structure checks; it is not valid for governance closure.
 
 Current `playwright.config.ts` becomes the live config:
 
@@ -400,7 +407,7 @@ When `--e2e-live` is passed:
 npx playwright test --config playwright.config.ts --reporter=line
 ```
 
-Default (no flag): E2E row shows SKIP with instruction.
+Default (no flag): run both UI-only mock specs and mandatory live governance specs; fail if `DASHSCOPE_API_KEY` is not set.
 
 ### 5b — Known Limitations Register updates
 
@@ -415,7 +422,7 @@ Create `scripts/check_cvf_demo_preconditions.py`:
 
 ```
 check node_modules installed → WARN if missing
-check DASHSCOPE_API_KEY in env → WARN if missing (demo Path C will be limited)
+check DASHSCOPE_API_KEY in env → FAIL if missing (live governance proof is mandatory)
 check provider evaluator returns CERTIFIED for Alibaba → WARN if not
 check demo script file exists → FAIL if missing
 check RC docs present → FAIL if missing
@@ -495,7 +502,7 @@ Verification:
 
 ```bash
 python scripts/run_cvf_release_gate_bundle.py --dry-run
-# E2E row: SKIP with two-flag instruction
+# E2E rows: UI mock + live governance both run; live fails if DASHSCOPE_API_KEY is missing
 python scripts/check_cvf_demo_preconditions.py
 ```
 
@@ -526,7 +533,7 @@ Each completed control point should leave:
 
 This roadmap is complete when:
 
-1. Config split exists: live (default) and mock (CI-fallback).
+1. Config split exists: live (default) and mock (UI-only structure checks).
 2. `utils.ts` has live provider helpers for Alibaba and DeepSeek.
 3. All existing tests pass or are explicitly retired.
 4. Non-coder governance golden path spec (5 tests) passes with live Alibaba calls — real AI, real governance, real assertion.

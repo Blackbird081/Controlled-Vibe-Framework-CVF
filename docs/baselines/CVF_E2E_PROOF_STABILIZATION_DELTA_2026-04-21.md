@@ -4,7 +4,7 @@ Memory class: SUMMARY_RECORD
 
 > Date: 2026-04-21
 > Roadmap: `docs/roadmaps/CVF_E2E_PROOF_AND_REGRESSION_STABILIZATION_ROADMAP_2026-04-21.md`
-> Status: CP1–CP5 DELIVERED
+> Status: CP1–CP5 DELIVERED — live verification repaired and rerun
 > Commit: see closure commit for this delta
 
 ---
@@ -41,9 +41,15 @@ Closes: **L-003**
 | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/governance-gate-live.spec.ts` | NEW — 3 tests |
 
 Tests (run with live Alibaba `qwen-turbo`; use `playwright.config.ts`):
-1. Normal governed request completes without block — response visible, no denied UI, approval controls rendered
-2. Bypass detection handles high-risk output correctly — soft assertion; documents which outcome occurred
-3. Governance audit trail updated after real call — navigates to audit section or checks `/api/audit/events`
+1. Normal governed `/api/execute` request completes against a real provider response
+2. Output validation and guard runtime metadata are present for the real provider response
+3. Governance audit trail endpoint responds after the real call
+
+Post-verification repair:
+
+- The first E2E closure claimed live `governance/full` UI behavior, but those modes can be stopped before provider execution by approval/phase gates.
+- The repaired proof uses a non-coder `analyze` action so the request reaches Alibaba and still asserts CVF governance metadata (`guardResult`, `outputValidation`, `providerRouting`).
+- `/api/execute` now passes `rawBody.action` into `buildWebGuardContext`; before this repair the guard incorrectly treated the whole natural-language intent as the action and blocked safe analysis requests before provider execution.
 
 ---
 
@@ -53,9 +59,9 @@ Tests (run with live Alibaba `qwen-turbo`; use `playwright.config.ts`):
 | --- | --- |
 | `scripts/run_cvf_release_gate_bundle.py` | UPDATED — `--e2e` and `--e2e-live` flags added |
 
-- `--e2e`: runs `npx playwright test --config playwright.config.mock.ts --reporter=line`
-- `--e2e-live`: runs `npx playwright test --config playwright.config.ts --reporter=line` (skips if `DASHSCOPE_API_KEY` not set)
-- Default (no flag): E2E row shows SKIP with two-flag instruction
+- `--e2e`: runs mock-mode UI structure specs only (`admin-rbac`, `provider-lane-ui`)
+- `--e2e-live`: runs live governance specs only (`noncoder-governance-live`, `governance-gate-live`; fails if `DASHSCOPE_API_KEY` is not set)
+- Default (no flag): runs both UI-only mock specs and mandatory live governance specs
 - New `check_e2e()` helper added; timeout 600s to cover Playwright startup + live call latency
 
 ---
@@ -68,7 +74,7 @@ Tests (run with live Alibaba `qwen-turbo`; use `playwright.config.ts`):
 
 Checks:
 1. `node_modules` installed (WARN if missing)
-2. `DASHSCOPE_API_KEY` set (WARN if missing)
+2. `DASHSCOPE_API_KEY` set (FAIL if missing)
 3. Provider evaluator returns CERTIFIED for Alibaba (WARN/FAIL)
 4. Demo script file exists (FAIL if missing)
 5. RC docs present (FAIL if missing)
@@ -94,8 +100,8 @@ Output: `DEMO READY` / `DEMO READY (WARNINGS)` / `DEMO NOT READY`
 
 | Suite | Before | After | Delta |
 | --- | --- | --- | --- |
-| Playwright mock specs | 2 files / 5 tests | 3 files / 9 tests | +1 file / +4 tests |
-| Playwright live specs | 1 file / 5 tests | 2 files / 8 tests | +1 file / +3 tests |
+| Playwright mock specs | 2 files / 5 tests | 2 active gate files / 6 tests | provider UI + admin structure |
+| Playwright live specs | 1 file / 5 tests | 2 active live files / 7 pass + 1 skipped phase-gate placeholder | real Alibaba output proof |
 | Vitest (cvf-web) | unchanged | unchanged | 0 |
 
 ---
@@ -117,13 +123,19 @@ cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
 npx playwright test --config playwright.config.mock.ts tests/e2e/provider-lane-ui.spec.ts --reporter=line
 
 # CP4 — live governance gate spec (requires DASHSCOPE_API_KEY)
-DASHSCOPE_API_KEY=<key> npx playwright test tests/e2e/governance-gate-live.spec.ts --reporter=line
+DASHSCOPE_API_KEY=<key> npx playwright test tests/e2e/noncoder-governance-live.spec.ts tests/e2e/governance-gate-live.spec.ts --workers=1 --reporter=line
 
-# CP5a — release gate dry-run (shows E2E SKIP with instruction)
+# CP5a — release gate dry-run (shows UI mock + mandatory live governance E2E commands)
 python scripts/run_cvf_release_gate_bundle.py --dry-run
 
-# CP5a — release gate with mock E2E
+# CP5a — targeted UI-only mock E2E
 python scripts/run_cvf_release_gate_bundle.py --e2e
+
+# CP5a — targeted live governance E2E
+DASHSCOPE_API_KEY=<key> python scripts/run_cvf_release_gate_bundle.py --e2e-live
+
+# CP5a — full release gate; required for release-quality proof
+DASHSCOPE_API_KEY=<key> python scripts/run_cvf_release_gate_bundle.py --json
 
 # CP5b — demo preconditions
 python scripts/check_cvf_demo_preconditions.py

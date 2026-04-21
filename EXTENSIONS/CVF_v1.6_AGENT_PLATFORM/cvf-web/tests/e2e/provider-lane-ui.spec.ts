@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { seedStorage, login } from './utils';
+import { seedStorage, login, openSettingsModal } from './utils';
 
 // All tests in this spec use mock mode (NEXT_PUBLIC_CVF_MOCK_AI=1).
 // Badge data comes from static PROVIDER_LANE_EVIDENCE — no live API call needed.
@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 
 test('Settings shows Certified badge for Alibaba', async ({ page }) => {
     await login(page);
-    await page.goto('/settings');
+    await openSettingsModal(page);
 
     // Certified badge must be visible in the Alibaba provider card area
     await expect(
@@ -32,7 +32,7 @@ test('Settings shows Certified badge for Alibaba', async ({ page }) => {
 
 test('Settings shows Certified badge for DeepSeek', async ({ page }) => {
     await login(page);
-    await page.goto('/settings');
+    await openSettingsModal(page);
 
     // Both Alibaba and DeepSeek should have Certified — get all occurrences
     const certifiedBadges = page.getByText('Certified');
@@ -47,7 +47,7 @@ test('Settings shows Certified badge for DeepSeek', async ({ page }) => {
 
 test('ProviderSwitcher shows at least one lane badge', async ({ page }) => {
     await login(page);
-    await page.goto('/home');
+    await openSettingsModal(page);
 
     // Open ProviderSwitcher — look for the button that triggers provider switching
     const switcherBtn = page.locator(
@@ -60,14 +60,14 @@ test('ProviderSwitcher shows at least one lane badge', async ({ page }) => {
         await switcherBtn.click();
     }
 
-    // At least one lane status badge must be visible somewhere on the page
+    // At least one lane status badge must be visible somewhere in the provider surface.
     const badge = page.getByText(/Certified|Canary Pass|Experimental|Unconfigured/i).first();
     await expect(badge).toBeVisible({ timeout: 10_000 });
 });
 
 test('Provider section contains no parity or quality comparison language', async ({ page }) => {
     await login(page);
-    await page.goto('/settings');
+    await openSettingsModal(page);
 
     // Scan the full settings page for disallowed parity claims
     const fullText = await page.locator('main, [role="main"], body').first().textContent();

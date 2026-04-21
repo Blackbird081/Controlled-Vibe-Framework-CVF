@@ -38,15 +38,15 @@ Classification key:
 
 ---
 
-### L-002 — Live Canaries Are User-Paid and Opt-In
+### L-002 — Live Provider Credits Are Operator-Supplied
 
 | Field | Value |
 | --- | --- |
 | Classification | Permanent |
 | Area | CI / provider testing |
-| Statement | CVF's CI pipeline does not make live provider API calls by default. All canary runs consume the operator's own provider API credits. Live canary execution requires explicit operator opt-in with a user-supplied key. |
-| Why permanent | Embedding live paid calls in default CI would create unexpected costs for every contributor. This is a deliberate design choice, not a missing feature. |
-| Operator path | `python scripts/run_cvf_provider_live_canary.py --provider alibaba --save-receipt` |
+| Statement | CVF never commits provider API keys. Certification canaries consume the operator's own provider credits, and release-quality governance E2E now requires an operator-supplied live key (`DASHSCOPE_API_KEY`). Mock mode is valid only for UI structure checks. |
+| Why permanent | Paid provider access must remain operator-controlled, while CVF governance claims require live execution evidence. A missing live key is therefore a release-gate failure, not a successful mock fallback. |
+| Operator path | `python scripts/run_cvf_release_gate_bundle.py --json` for mandatory live governance E2E; `python scripts/run_cvf_provider_live_canary.py --provider alibaba --save-receipt` for lane certification receipts |
 
 ---
 
@@ -56,7 +56,7 @@ Classification key:
 | --- | --- |
 | Classification | Closed |
 | Area | Test coverage |
-| Closure | `tests/e2e/provider-lane-ui.spec.ts` (4 tests) added — provider lane badges + no-parity-language assertions cover W110-T3 surfaces. All existing mock-mode specs verified stable under `playwright.config.mock.ts`. Drift repaired in CP1 (config split + drift audit). |
+| Closure | `tests/e2e/provider-lane-ui.spec.ts` (4 tests) added — provider lane badges + no-parity-language assertions cover W110-T3 surfaces. Release-gate mock E2E now runs the current UI-structure specs under `playwright.config.mock.ts`; obsolete exact-mock-response agent flow checks are excluded from the gate. Drift repaired in CP1 (config split + drift audit). |
 | Evidence | E2E Proof & Regression Stabilization roadmap — CP1 + CP3 DELIVERED 2026-04-21. Delta: `docs/baselines/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`. |
 
 ---
@@ -115,16 +115,16 @@ Classification key:
 | --- | --- |
 | Classification | Closed |
 | Area | Non-coder value validation |
-| Closure | `tests/e2e/noncoder-governance-live.spec.ts` (5 tests) added — covers landing → template gallery → intake wizard → real Alibaba AI call → governance badge + approval controls + phase gate. Tests 4 and 5 use live Alibaba `qwen-turbo` calls; assert governance behavior, not AI content. |
+| Closure | `tests/e2e/noncoder-governance-live.spec.ts` covers landing → template gallery → intake wizard structure, then real Alibaba `qwen-turbo` output through `/api/execute`. The live proof asserts governance metadata (`guardResult`, `outputValidation`, `providerRouting`) rather than exact AI text. Phase-gated/full-mode UI behavior is not used as live-output proof because it can correctly stop before provider execution. |
 | Evidence | E2E Proof & Regression Stabilization roadmap — CP2 DELIVERED 2026-04-21. Delta: `docs/baselines/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`. |
 
 ---
 
 ## How to Use This Register
 
-**For demo preparation:** acknowledge open gaps proactively; do not wait for them to be discovered. Honesty about L-007 (two certified providers) builds trust faster than silence. L-003 and L-008 are now closed.
+**For demo preparation:** acknowledge open gaps proactively; do not wait for them to be discovered. Be explicit that Alibaba and DeepSeek are certified while other providers remain experimental until canary-run. L-003 and L-008 are now closed.
 
-**For agent handoff:** cite this register when scoping the next wave. "L-003 Playwright drift" and "L-008 non-coder path not automated" are valid candidate inputs for a test stabilization wave.
+**For agent handoff:** cite this register when scoping the next wave. Closed items such as L-003 and L-008 must not be reopened unless fresh evidence shows new drift.
 
 **For future waves:** when a limitation is closed, update its entry to `Closed` with a date and evidence pointer, or remove it from this register entirely. Do not let closed gaps accumulate here.
 

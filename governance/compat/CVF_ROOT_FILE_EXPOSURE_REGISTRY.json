@@ -24,6 +24,7 @@
     { "path": ".git_commit_msg.txt", "exposureClass": "INTERNAL_ONLY" },
     { "path": ".gitignore", "exposureClass": "INTERNAL_ONLY" },
     { "path": ".markdownlintrc", "exposureClass": "INTERNAL_ONLY" },
+    { "path": "AGENTS.md", "exposureClass": "PUBLIC_DOCS_ONLY" },
     { "path": "AGENT_HANDOFF.md", "exposureClass": "INTERNAL_ONLY" },
     { "path": "AGENT_PLATFORM_PROGRESS_2026-02-06.md", "exposureClass": "INTERNAL_ONLY" },
     { "path": "ARCHITECTURE.md", "exposureClass": "PUBLIC_DOCS_ONLY" },

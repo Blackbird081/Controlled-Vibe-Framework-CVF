@@ -10,7 +10,7 @@ test('admin can open the enterprise control plane', async ({ page }) => {
   await login(page);
   await page.goto('/admin/finops');
 
-  await expect(page.getByRole('heading', { name: /FinOps Dashboard/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /FinOps Dashboard|Chi phí & ngân sách/i })).toBeVisible();
 });
 
 test('developer is redirected away from /admin routes', async ({ page }) => {

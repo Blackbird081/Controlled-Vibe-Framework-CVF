@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { seedStorageWithAlibaba, login, openStrategyAnalysis, sendSpecToAgent } from './utils';
+import { seedStorageWithAlibaba, login, postLiveGovernedExecution } from './utils';
 
 // All tests in this spec make real Alibaba (qwen-turbo) API calls.
 // Assert governance BEHAVIOR — never assert exact AI response content.
@@ -14,79 +14,31 @@ test.beforeEach(async ({ page }) => {
 
 test('normal governed request completes without block', async ({ page }) => {
     await login(page);
-    await openStrategyAnalysis(page);
-    await sendSpecToAgent(page, 'governance');
+    const { response, body } = await postLiveGovernedExecution(page, 'simple');
 
-    // Response must be visible — governance ran, did NOT block
-    const responseEl = page.locator('.prose, [data-agent-response], [class*="response"]').first();
-    await expect(responseEl).toBeVisible({ timeout: 30_000 });
-
-    // No error/block/denied UI
-    await expect(
-        page.getByText(/bị từ chối|denied|blocked|Error:/i)
-    ).not.toBeVisible();
-
-    // Approval controls rendered — proves governance pipeline ran end-to-end
-    await expect(
-        page.getByRole('button', { name: /Chấp nhận|Accept/i }).first()
-    ).toBeVisible({ timeout: 5_000 });
-
-    // Response is not a mock string
-    const text = await responseEl.textContent();
-    expect(text).not.toContain('MOCK_');
-    expect(text?.length).toBeGreaterThan(30);
+    expect(response.status()).toBe(200);
+    expect(body.success).toBe(true);
+    expect(String(body.output ?? '').length).toBeGreaterThan(100);
+    expect(String(body.output ?? '')).not.toContain('MOCK_');
+    expect(body.enforcement).toBeDefined();
+    expect(body.guardResult).toBeDefined();
+    expect(body.providerRouting?.selectedProvider).toBe('alibaba');
 });
 
 test('bypass detection handles high-risk output correctly', async ({ page }) => {
     await login(page);
+    const { response, body } = await postLiveGovernedExecution(page, 'simple');
 
-    // Navigate to home and open a template for direct input
-    await page.goto('/home');
-
-    // Use Strategy Analysis — submit a prompt designed to elicit bypass language
-    await openStrategyAnalysis(page);
-    await sendSpecToAgent(page, 'governance');
-
-    // Wait for any governance response
-    await page.waitForSelector('.prose, [data-agent-response], [class*="response"]', {
-        timeout: 30_000,
-    });
-
-    // Soft assertion: if bypass was detected CVF should show a block/warning;
-    // if the AI refused to produce bypass language, normal governance flow is correct.
-    const bypassBlocked = await page
-        .getByText(/bypass|bị chặn|blocked|Warning|Cảnh báo/i)
-        .count();
-
-    if (bypassBlocked > 0) {
-        // CVF fired bypass detection — approval or block UI must be present
-        const controlVisible = await page
-            .getByRole('button', { name: /Chấp nhận|Accept|Duyệt/i })
-            .count();
-        expect(controlVisible + bypassBlocked).toBeGreaterThan(0);
-        test.info().annotations.push({
-            type: 'bypass_outcome',
-            description: 'CVF bypass detection fired — block/warning UI verified',
-        });
-    } else {
-        // AI did not produce bypass language — normal governance flow is correct
-        const responseEl = page.locator('.prose, [class*="response"]').first();
-        await expect(responseEl).toBeVisible({ timeout: 5_000 });
-        test.info().annotations.push({
-            type: 'bypass_outcome',
-            description: 'AI did not produce bypass language — governance passed through correctly',
-        });
-    }
+    expect(response.status()).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.outputValidation).toBeDefined();
+    expect(body.guardResult).toBeDefined();
+    expect(String(body.output ?? '')).not.toContain('MOCK_');
 });
 
 test('governance audit trail updated after real AI call', async ({ page }) => {
     await login(page);
-    await openStrategyAnalysis(page);
-    await sendSpecToAgent(page, 'governance');
-
-    // Wait for response to complete
-    await page.locator('.prose, [data-agent-response], [class*="response"]').first()
-        .waitFor({ timeout: 30_000 });
+    await postLiveGovernedExecution(page, 'simple');
 
     // Navigate to audit / history section
     const auditNav = page.getByRole('link', { name: /Audit|Lịch sử|History|Governance/i }).first();

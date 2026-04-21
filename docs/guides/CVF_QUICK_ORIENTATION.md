@@ -2,11 +2,11 @@
 
 > **Mục đích:** Một trang duy nhất giúp người mới hiểu CVF là gì, dùng như thế nào, và đi đâu tiếp.
 > **Thời gian đọc:** ~15 phút
-> **Cập nhật:** 2026-03-08 (RC nav added 2026-04-21)
+> **Cập nhật:** 2026-04-21 (W111 live evidence publication sync)
 >
 > **Trạng thái hiện tại (2026-04-21):** CVF đã đạt Release Candidate. Các mốc lớn đã đóng:
-> non-coder value proven · Alibaba CERTIFIED · DeepSeek CERTIFIED · provider UX delivered · front-door product proof passed.
-> Xem: [RC Truth Packet](../reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md) · [Demo Script](CVF_DEMO_SCRIPT_2026-04-21.md) · [Known Limitations](../reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
+> non-coder value proven with live governance E2E · Alibaba CERTIFIED · DeepSeek CERTIFIED · provider UX delivered · front-door product proof passed.
+> Xem: [Live Evidence Packet](../reference/CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md) · [RC Truth Packet](../reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md) · [Demo Script](CVF_DEMO_SCRIPT_2026-04-21.md) · [Known Limitations](../reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
 
 ---
 
@@ -88,12 +88,12 @@ Quick glance vào trạng thái hệ thống hiện tại:
 | Phase | Mục tiêu | Trạng thái | Ý nghĩa |
 |---|---|---|---|
 | Phase 0 | Baseline freeze | ✅ Done | Mốc đối soát đã ổn |
-| Phase 1 | Unified control plane | 🟡 Mostly done | Có nhưng chưa toàn hệ |
-| Phase 2 | E2E conformance | 🟡 Strong baseline | 84/84 PASS, chưa full gate |
-| Phase 3 | Skill governance | 🟡 Mostly done | Runtime blocking hoạt động |
-| Phase 4 | Durable execution | 🟡 Mostly done | Rollback/replay/recovery có |
-| Phase 5 | Release discipline | ✅ Done | Manifest/inventory/matrix rõ |
-| Phase 6 | Enterprise evidence | 🟡 Depth-frozen | 4 postures, 8 families, đủ dùng |
+| Phase 1 | Unified control plane | ✅ Closed on active path | Guard contract + runtime gates wired into current web/API path |
+| Phase 2 | E2E conformance | ✅ Live-gated | Release gate includes UI mock `6 passed` + live governance `7 passed` |
+| Phase 3 | Skill/provider governance | ✅ Current scope proven | Alibaba + DeepSeek certified lanes; mock is UI-only |
+| Phase 4 | Durable execution | 🟡 Mostly done | Rollback/replay/recovery exist; full SaaS durability not claimed |
+| Phase 5 | Release discipline | ✅ Done | Manifest/inventory/matrix + live evidence packet |
+| Phase 6 | Enterprise evidence | 🟡 Bounded | Enterprise/admin evidence exists; hosted production SaaS not claimed |
 
 ---
 
@@ -103,6 +103,7 @@ Quick glance vào trạng thái hệ thống hiện tại:
 |---|---|
 | Hiểu cấu trúc repo đúng và nhanh | [`CVF_PUBLIC_STRUCTURE_OVERVIEW.md`](../reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md) |
 | Hiểu kiến trúc CVF đầy đủ | [`CVF_CORE_KNOWLEDGE_BASE.md`](../CVF_CORE_KNOWLEDGE_BASE.md) |
+| Xem bằng chứng live mới nhất | [`CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md`](../reference/CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md) |
 | Bắt đầu dùng CVF cho project | [`GET_STARTED.md`](../GET_STARTED.md) |
 | Hướng dẫn chi tiết solo/team/enterprise | [`docs/guides/`](./) |
 | Xem danh sách 141 skills | [`EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/`](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |

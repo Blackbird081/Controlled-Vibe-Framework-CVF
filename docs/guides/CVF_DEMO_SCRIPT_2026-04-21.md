@@ -2,7 +2,7 @@
 
 **Date:** 2026-04-21  
 **Audience:** operators, collaborators, potential adopters  
-**Default mode:** all paths run without paid API calls unless live mode is explicitly opted in  
+**Default mode:** UI walkthroughs can run without paid API calls; any governance-quality proof must use live provider execution
 
 ---
 
@@ -17,8 +17,8 @@ npm run dev
 # Dev server starts at http://localhost:3000
 ```
 
-No API key required for Demo Path A and B.  
-Demo Path C requires an Alibaba or DeepSeek key only for the optional live canary step.
+No API key is required for UI-only walkthroughs.
+An Alibaba or DeepSeek key is required before claiming that CVF governs real AI/agent output.
 
 Claim boundary to keep in mind during any demo:
 
@@ -30,7 +30,7 @@ Claim boundary to keep in mind during any demo:
 
 **Audience:** stakeholders who want to see CVF's non-coder value proposition  
 **Duration:** ~5 minutes  
-**Live API call:** not required  
+**Live API call:** not required for UI walkthrough; required if used as governance proof
 
 ### What this demonstrates
 
@@ -89,7 +89,7 @@ After intake, CVF shows:
 
 **Audience:** engineering leads, security reviewers, governance stakeholders  
 **Duration:** ~5 minutes  
-**Live API call:** not required  
+**Live API call:** required if claiming runtime governance proof; UI-only simulation is not sufficient for publication
 
 ### What this demonstrates
 
@@ -144,11 +144,11 @@ Confirm the action. Show that:
 
 **Audience:** technical evaluators, multi-provider adopters, platform operators  
 **Duration:** ~5 minutes (default); ~10 minutes with live canary  
-**Live API call:** optional — requires operator key  
+**Live API call:** required for fresh certification or release-quality governance proof — requires operator key
 
 ### What this demonstrates
 
-CVF supports multiple AI providers. Alibaba and DeepSeek are both CERTIFIED by canary evidence. The operator can see lane status, inspect evidence, and optionally run a live canary.
+CVF supports multiple AI providers. Alibaba and DeepSeek are both CERTIFIED by canary evidence. The operator can see lane status, inspect evidence, and run a live canary when fresh proof is required.
 
 ### Steps
 
@@ -189,9 +189,9 @@ Select Alibaba or DeepSeek in the ProviderSwitcher dropdown.
 
 Show that the UI updates the active provider without a full reload.
 
-**Step 6 — Run a live canary (optional, requires API key)**
+**Step 6 — Run a live canary (requires API key for fresh proof)**
 
-Only do this if the operator has provided their own key and agrees to the cost.
+Do this before publishing a fresh claim about provider behavior. Only use operator-provided keys, and never print or commit key values.
 
 ```bash
 # Exit dev server first or run in a separate terminal
@@ -219,11 +219,11 @@ Expected output: 6/6 scenarios PASS, receipt printed to console.
 
 **If asked about API keys during demo:**
 
-> "All default demo paths run without live API calls. When an operator supplies their own key, CVF can run live canaries against that provider. No keys are stored or transmitted by CVF."
+> "UI walkthroughs can run without live API calls, but governance-quality proof requires an operator-supplied live provider key. No keys are committed, and raw values are never printed."
 
 **If asked about E2E tests:**
 
-> "CVF has unit tests and provider canary tests. Some Playwright E2E tests have known drift after recent UI changes — that is a known gap in the limitations register, not a hidden deficiency."
+> "CVF's release-quality gate includes live governance E2E. Mock Playwright tests are kept only for UI structure, not for proving AI governance."
 
 **If asked about cost:**
 

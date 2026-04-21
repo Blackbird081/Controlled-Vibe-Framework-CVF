@@ -46,10 +46,23 @@ If you want the deeper private-core chain after that, use [Docs Index](docs/INDE
 
 If you need the current canonical continuation posture after `W54-T1`, use:
 
+- [Agent Instructions](AGENTS.md)
 - [Agent Handoff](AGENT_HANDOFF.md)
 - [Whitepaper Progress Tracker](docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md)
 - [Master Architecture Closure Roadmap](docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md)
 - [New Machine Setup Checklist](docs/reference/CVF_NEW_MACHINE_SETUP_CHECKLIST.md)
+
+## Mandatory Live Governance Proof
+
+Release-quality CVF governance proof must use real provider API calls. Mock mode is valid only for UI structure checks such as navigation, routing, static badge rendering, and RBAC pages.
+
+Use this command before publishing any claim that CVF controls AI/agent behavior for non-coders:
+
+```bash
+python scripts/run_cvf_release_gate_bundle.py --json
+```
+
+The gate runs UI-only mock E2E plus live governance E2E, and it must fail if `DASHSCOPE_API_KEY` is missing. `--e2e` is a targeted UI-only check, not governance evidence.
 
 ## What CVF Is
 
@@ -90,6 +103,7 @@ Boundaries that still matter:
 
 Canonical claim boundary:
 
+- [Live Evidence Publication Packet](docs/reference/CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md)
 - [Public Non-Coder Value Statement](docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md)
 - [Provider Lane Readiness Matrix](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
 - [Alibaba live canary receipts](docs/audits/alibaba-canary/INDEX.md)

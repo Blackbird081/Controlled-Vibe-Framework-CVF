@@ -148,9 +148,11 @@ Nếu cần xác định baseline/release line/module status hiện hành:
 Nếu cần hiểu trạng thái milestone hiện tại, chuẩn bị demo, hoặc chia sẻ CVF:
 
 - `reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md` — bảng milestone đã proven, evidence links, claim boundary copy-paste safe
+- `reference/CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md` — live API-backed evidence packet for current CVF effectiveness claims
 - `guides/CVF_DEMO_SCRIPT_2026-04-21.md` — 3 demo path: non-coder builder / governed risk / provider switch certified lane
 - `reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md` — scope boundary và open gap chính thức
 - `roadmaps/CVF_PUBLIC_RELEASE_CANDIDATE_AND_DEMO_READINESS_ROADMAP_2026-04-21.md` — CP1-CP5 packaging roadmap
+- `roadmaps/CVF_W111_T1_LIVE_EVIDENCE_PUBLICATION_ROADMAP_2026-04-21.md` — closure record for mandatory live evidence publication sync
 
 ## Product Value Validation
 

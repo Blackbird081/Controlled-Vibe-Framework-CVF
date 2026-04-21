@@ -277,6 +277,7 @@ export async function POST(request: NextRequest) {
             riskLevel: body.cvfRiskLevel,
             role: isServiceAllowed ? 'OPERATOR' : 'HUMAN',
             userRole: isServiceAllowed ? 'admin' : session?.role,
+            action: (rawBody as Record<string, unknown>).action as string || undefined,
             intent: body.intent,
             fileScope: (rawBody as Record<string, unknown>).fileScope as string[] | undefined,
             aiCommit: (rawBody as Record<string, unknown>).aiCommit as {

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastReviewed": "2026-04-13",
+  "lastReviewed": "2026-04-21",
   "classes": [
     {
       "id": "ACTIVE_DECISION_REVIEW",
@@ -17,11 +17,11 @@
   ],
   "summary": {
     "activeRecentCount": 50,
-    "retainEvidenceCount": 180,
+    "retainEvidenceCount": 181,
     "safeToArchiveCount": 77,
     "archivedCount": 335,
-    "derivedAt": "2026-04-13",
-    "derivationMethod": "Derived from scripts/cvf_active_archive.py full review screening and refreshed after live-reference reclassification for W2-T29 tranche closure evidence plus relocation/publication canon reviews still blocked by active references, including P4 CP6-CP12 review documents still pinned by live references and W57-T1/W59-T1/W61-T1/W64-T1/W65-T1 review artifacts still anchored by active execution plans, audits, baselines, and orientation docs."
+    "derivedAt": "2026-04-21",
+    "derivationMethod": "Derived from scripts/cvf_active_archive.py full review screening and refreshed after live-reference reclassification for W2-T29 tranche closure evidence plus relocation/publication canon reviews still blocked by active references, including P4 CP6-CP12 review documents still pinned by live references, W57-T1/W59-T1/W61-T1/W64-T1/W65-T1 review artifacts still anchored by active execution plans, audits, baselines, and orientation docs, and W105-T1 closure review retained by current handoff/front-door references."
   },
   "retainEvidencePaths": [
     "docs/reviews/CVF_BASELINE_INTEGRITY_REVIEW_2026-03-21.md",
@@ -194,6 +194,7 @@
     "docs/reviews/CVF_W65_T1_TRANCHE_CLOSURE_REVIEW_2026-04-10.md",
     "docs/reviews/CVF_W66_T1_CP1_PVV_CORPUS_RUBRIC_FREEZE_REVIEW_2026-04-11.md",
     "docs/reviews/CVF_W66_T1_CP2_RUN_HARNESS_SETUP_REVIEW_2026-04-11.md",
+    "docs/reviews/CVF_W105_T1_TRANCHE_CLOSURE_REVIEW_2026-04-19.md",
     "docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md",
     "docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md",
     "docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md",

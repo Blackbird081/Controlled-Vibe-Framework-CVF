@@ -105,8 +105,8 @@ These items are explicitly out of scope for this release candidate. They are not
 | Limitation | Classification | Notes |
 |---|---|---|
 | Provider parity | Permanent boundary | Alibaba and DeepSeek pass CVF canaries. Speed, cost, quality, and reliability comparisons are not assessed by CVF. |
-| Live canaries in default CI | Permanent boundary | CI runs without paid live API calls. Canaries are operator opt-in with user-supplied keys. |
-| Playwright E2E full coverage | Open gap | Some E2E tests may have drift against current UI after W110-T3 changes. |
+| Live provider credits | Permanent boundary | Keys are operator-supplied and never committed. Release-quality governance E2E requires `DASHSCOPE_API_KEY`; certification canaries also consume operator credits. |
+| Playwright E2E full coverage | Closed for current release gate | Mock E2E is UI-only; live governance E2E is mandatory in `python scripts/run_cvf_release_gate_bundle.py --json`. |
 | Legacy EXTENSIONS formal review | Open gap | Modules outside the core agent platform were not re-reviewed in W110 scope. |
 | SaaS hosting / deployment | Permanent boundary | CVF is a local governance framework. There is no hosted service. |
 | Token cost calibration | Open gap | Risk engine estimates token cost but does not calibrate against live provider billing data. |

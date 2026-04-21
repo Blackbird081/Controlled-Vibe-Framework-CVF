@@ -116,6 +116,14 @@ Scope      Plan     Execute    Validate   Close + lock evidence
 
 **Nguyên tắc vàng:** AI là executor, BẠN là decision maker.
 
+**Bằng chứng governance:** nếu bạn muốn công bố rằng CVF kiểm soát AI/Agent thật, phải chạy live API-backed gate:
+
+```bash
+python scripts/run_cvf_release_gate_bundle.py --json
+```
+
+Mock chỉ dùng để kiểm UI/routing/static badges, không dùng làm bằng chứng governance.
+
 ### Step 2: Chạy Ví Dụ Đầu Tiên (3 phút)
 
 #### Option A: Web UI (CVF Core Only)
@@ -180,7 +188,7 @@ npm install
 
 # 3. Setup environment
 cp .env.example .env
-# Edit .env - add API keys if needed
+# Edit .env - add API keys if you need live governance proof
 
 # 4. Start server
 npm run dev

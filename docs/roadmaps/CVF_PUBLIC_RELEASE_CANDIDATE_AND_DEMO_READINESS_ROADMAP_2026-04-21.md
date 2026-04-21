@@ -105,7 +105,8 @@ Exit:
 
 Purpose:
 
-- let any operator run a bounded, accurate demo of CVF without spending paid API credits by default
+- let any operator run bounded UI walkthroughs of CVF without spending paid API credits
+- require live provider execution before any governance-quality proof is published
 - give three named demo paths that correspond to the proven milestone claims
 
 Create:
@@ -118,7 +119,7 @@ Required demo paths:
 
 Scope: user with no coding background creates a governed app using CVF template + front-door wizard.
 
-Default mode: mock / local — no live AI call required.
+Default mode: UI walkthrough only. Live AI call is required if this path is used as governance proof.
 
 Steps:
 
@@ -136,7 +137,7 @@ Claim: "Non-coder governance path — no code written, CVF handles structure and
 
 Scope: a change classified above R1 enters the governed approval flow.
 
-Default mode: local policy evaluation — no live AI call required.
+Default mode: local policy walkthrough only. Live AI call is required before claiming runtime governance proof.
 
 Steps:
 
@@ -153,7 +154,7 @@ Claim: "CVF enforces governed AI behavior at runtime — not just in docs."
 
 Scope: operator switches between Anthropic (default), Alibaba, and DeepSeek lanes.
 
-Default mode: provider status UI — no live call required unless operator opts in.
+Default mode: provider status UI only. Fresh certification or release-quality proof requires a live call with an operator key.
 
 Steps:
 
@@ -162,7 +163,7 @@ Steps:
 3. Explain certification evidence (canary receipts, provider matrix link)
 4. Optional live mode: `python scripts/run_cvf_provider_live_canary.py --provider alibaba` (requires key)
 
-Expected output: lane badges visible, certification status explained, optional live call succeeds if key present.
+Expected output: lane badges visible, certification status explained, fresh live call succeeds if key is provided.
 
 Claim: "Multi-provider operability is proven. Provider parity is not claimed."
 
@@ -170,8 +171,8 @@ Claim: "Multi-provider operability is proven. Provider parity is not claimed."
 
 Operator notes:
 
-- all three paths work offline / without paid API calls by default
-- live mode is always opt-in and requires the operator to provide their own key
+- all three paths can be walked as UI demos without paid API calls
+- governance-quality proof requires live mode and an operator-provided key
 - do not record or commit any API keys used during demo
 
 Exit:
@@ -216,7 +217,7 @@ Exit:
 Purpose:
 
 - one command (or short sequence) that confirms CVF is in a shareable state
-- no paid live calls by default
+- live governance E2E is mandatory for release-quality proof
 - covers: build, provider readiness, front-door smoke, secrets scan, docs governance
 
 Create or extend:
@@ -230,7 +231,8 @@ Required checks (in order):
 | Web build | `npm run build` (cvf-web) | yes |
 | TypeScript check | `npm run check` (guard contract) | yes |
 | Provider readiness | `python scripts/check_cvf_provider_release_readiness.py` | yes if no CERTIFIED lane |
-| Front-door smoke | `python scripts/run_cvf_provider_live_canary.py --smoke-only` or mock | warn only |
+| E2E UI mock | Playwright mock UI specs | yes |
+| E2E live governance | Playwright live governance specs | yes |
 | Secrets scan | `python tools/security_scan.py` or equivalent | yes |
 | Docs governance | check truth packet + known limitations register exist and are non-empty | yes |
 
@@ -241,16 +243,17 @@ CVF RELEASE GATE BUNDLE — 2026-04-21
 [PASS] Web build
 [PASS] TypeScript check
 [PASS] Provider readiness — Alibaba: CERTIFIED, DeepSeek: CERTIFIED
-[WARN] Front-door smoke — live mode skipped (no key or --mock flag set)
 [PASS] Secrets scan
 [PASS] Docs governance — truth packet and limitations register present
+[PASS] E2E Playwright UI (mock)
+[PASS] E2E Playwright Governance (live)
 ---
-GATE RESULT: PASS (1 warning)
+GATE RESULT: PASS
 ```
 
 Required flags:
 
-- `--mock` — skip live calls, use saved receipts
+- `--mock` — use saved provider-readiness receipts; not a substitute for live governance E2E in the default gate
 - `--dry-run` — print what would run without executing
 - `--json` — machine-readable output for CI integration
 
@@ -277,7 +280,7 @@ Required entries:
 | Limitation | Status | Notes |
 |---|---|---|
 | Provider parity not claimed | Permanent | Alibaba + DeepSeek pass CVF canaries; speed/cost/quality parity is not assessed |
-| Live canaries are user-paid | Permanent | CI runs in mock mode by default; live canaries require operator opt-in and key |
+| Live provider credits are operator-supplied | Permanent | Keys are never committed; release-quality governance E2E requires `DASHSCOPE_API_KEY`; certification canaries consume operator credits |
 | Playwright E2E has known drift | Open | Some E2E tests may fail against current UI if not synced after W110-T3 changes |
 | Legacy EXTENSIONS not in W110 scope | Open | Modules outside core agent platform not formally re-reviewed in W110 |
 | No SaaS deployment | Permanent | CVF is a local governance framework; it does not include hosted infrastructure |
@@ -316,7 +319,7 @@ Deliver:
 
 - `docs/guides/CVF_DEMO_SCRIPT_2026-04-21.md`
 - all three demo paths walkable from cold checkout
-- no API key required for default mode
+- API key required for any live governance proof; mock/demo UI paths do not prove CVF governs real AI
 
 Suggested verification:
 
@@ -346,13 +349,15 @@ grep -r "not proven\|under construction\|not yet proven" docs/ README.md
 Deliver:
 
 - `scripts/run_cvf_release_gate_bundle.py`
-- `--mock` and `--dry-run` flags working
+- default gate runs UI mock specs plus mandatory live governance specs
+- `--mock` is limited to saved provider-readiness receipts and UI-only checks
+- `--dry-run` flag working
 - clean PASS or PASS-with-warning output
 
 Suggested verification:
 
 ```bash
-python scripts/run_cvf_release_gate_bundle.py --mock
+DASHSCOPE_API_KEY=<key> python scripts/run_cvf_release_gate_bundle.py --json
 ```
 
 ### CP5 — Known Limitations Register

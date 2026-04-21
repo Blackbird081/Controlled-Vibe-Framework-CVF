@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
 CVF Release Gate Bundle — 2026-04-21
-Runs all release-readiness checks in sequence. Makes no live API calls by default.
+Runs all release-readiness checks in sequence.
+
+Release-quality governance proof requires live provider execution. Mock mode is
+valid only for UI structure checks and saved provider-readiness receipts.
 
 Usage:
   python scripts/run_cvf_release_gate_bundle.py
@@ -12,11 +15,11 @@ Usage:
   python scripts/run_cvf_release_gate_bundle.py --e2e-live
 
 Flags:
-  --mock      Skip live API calls; use saved receipts only (default for CI)
+  --mock      Use saved receipts for provider readiness; live governance E2E remains mandatory in the default gate
   --dry-run   Print what would run without executing anything
-  --json      Machine-readable output (implies --mock)
-  --e2e       Run mock-mode Playwright suite (playwright.config.mock.ts) after other checks
-  --e2e-live  Run live-mode Playwright suite (playwright.config.ts); requires DASHSCOPE_API_KEY
+  --json      Machine-readable output
+  --e2e       Targeted run: UI-only mock Playwright specs
+  --e2e-live  Targeted run: live governance Playwright specs; requires DASHSCOPE_API_KEY
 
 Exit codes:
   0  All checks PASS (warnings allowed)
@@ -212,20 +215,27 @@ def check_secrets(dry_run: bool) -> CheckResult:
 
 
 def check_e2e(dry_run: bool, live: bool) -> CheckResult:
-    mode = "live" if live else "mock"
+    mode = "live governance" if live else "UI mock"
     config = "playwright.config.ts" if live else "playwright.config.mock.ts"
-    name = f"E2E Playwright ({mode})"
+    specs = [
+        "tests/e2e/noncoder-governance-live.spec.ts",
+        "tests/e2e/governance-gate-live.spec.ts",
+    ] if live else [
+        "tests/e2e/admin-rbac.spec.ts",
+        "tests/e2e/provider-lane-ui.spec.ts",
+    ]
+    name = "E2E Playwright Governance (live)" if live else "E2E Playwright UI (mock)"
     if dry_run:
-        cmd_str = f"npx playwright test --config {config} --reporter=line"
+        cmd_str = f"npx playwright test --config {config} {' '.join(specs)} --reporter=line"
         return CheckResult(name, "SKIP", f"dry-run — would run: {cmd_str}", [str(CVF_WEB)])
     if not CVF_WEB.exists():
         return CheckResult(name, "FAIL", "cvf-web directory not found", [str(CVF_WEB)])
     if live and not os.environ.get("DASHSCOPE_API_KEY"):
         return CheckResult(
-            name, "SKIP",
-            "DASHSCOPE_API_KEY not set — live E2E skipped; set key to run full live suite"
+            name, "FAIL",
+            "DASHSCOPE_API_KEY not set — live governance E2E is mandatory for release-quality CVF proof"
         )
-    cmd = ["npx", "playwright", "test", "--config", config, "--reporter=line"]
+    cmd = ["npx", "playwright", "test", "--config", config, *specs, "--reporter=line"]
     code, stdout, stderr = run_cmd(cmd, cwd=CVF_WEB, timeout=600)
     output = (stdout + stderr).strip()
     lines = output.splitlines()
@@ -300,15 +310,21 @@ def json_output(results: list[CheckResult], date: str) -> int:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="CVF Release Gate Bundle")
-    parser.add_argument("--mock", action="store_true", help="Skip live API calls (uses saved receipts)")
+    parser.add_argument(
+        "--mock",
+        action="store_true",
+        help="Use saved provider readiness receipts; live governance E2E remains mandatory in the default gate",
+    )
     parser.add_argument("--dry-run", action="store_true", dest="dry_run", help="Print what would run without executing")
-    parser.add_argument("--json", action="store_true", dest="json_out", help="Machine-readable JSON output (implies --mock)")
-    parser.add_argument("--e2e", action="store_true", dest="e2e", help="Run mock-mode Playwright E2E suite")
-    parser.add_argument("--e2e-live", action="store_true", dest="e2e_live", help="Run live-mode Playwright E2E suite (requires DASHSCOPE_API_KEY)")
+    parser.add_argument("--json", action="store_true", dest="json_out", help="Machine-readable JSON output")
+    parser.add_argument("--e2e", action="store_true", dest="e2e", help="Targeted run: UI-only mock Playwright specs")
+    parser.add_argument(
+        "--e2e-live",
+        action="store_true",
+        dest="e2e_live",
+        help="Targeted run: live governance Playwright specs (requires DASHSCOPE_API_KEY)",
+    )
     args = parser.parse_args()
-
-    if args.json_out:
-        args.mock = True
 
     from datetime import date
     today = date.today().isoformat()
@@ -325,16 +341,13 @@ def main() -> None:
         check_docs_governance(),
     ]
 
+    if args.e2e:
+        results.append(check_e2e(args.dry_run, live=False))
     if args.e2e_live:
         results.append(check_e2e(args.dry_run, live=True))
-    elif args.e2e:
+    if not args.e2e and not args.e2e_live:
         results.append(check_e2e(args.dry_run, live=False))
-    else:
-        results.append(CheckResult(
-            "E2E Playwright",
-            "SKIP",
-            "E2E not requested — pass --e2e (mock) or --e2e-live (live, requires DASHSCOPE_API_KEY)",
-        ))
+        results.append(check_e2e(args.dry_run, live=True))
 
     if args.json_out:
         sys.exit(json_output(results, today))

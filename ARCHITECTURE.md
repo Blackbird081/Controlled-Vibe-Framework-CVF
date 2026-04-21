@@ -2,7 +2,7 @@
 
 > Front-door architecture view for GitHub readers.
 >
-> Current readout: the active system-unification wave is complete on the active reference path, while future expansion is gated by reassessment and `GC-018`.
+> Current readout: CVF is a governance-first AI/agent control framework with live non-coder governance proof, certified Alibaba + DeepSeek provider lanes, and mandatory live API release evidence for governance claims.
 >
 > This page is one of the three root front-door entrypoints alongside `README.md` and `START_HERE.md`.
 
@@ -14,6 +14,13 @@ CVF is easiest to understand as a governance-first stack with four distinct role
 - `Control plane` defines how execution is constrained
 - `Execution channels` deliver governed experiences for coders and non-coders
 - `Evidence + continuation governance` decides whether the system can safely deepen or reopen
+
+The current publication posture is live-first:
+
+- governance behavior is proven through real provider execution, not mock strings;
+- Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` are certified provider lanes;
+- mock mode is valid only for UI structure checks;
+- release-quality proof runs through `python scripts/run_cvf_release_gate_bundle.py --json`.
 
 ```mermaid
 flowchart TB
@@ -98,7 +105,7 @@ flowchart TB
 
 ## 3. Active Reference Path
 
-The current active path is the clearest expression of CVF today:
+The current active path is the clearest expression of CVF today. For governance claims, this path must reach a real provider API call.
 
 ```mermaid
 flowchart LR
@@ -107,7 +114,8 @@ flowchart LR
     GUARDS["Guard contract<br/>phase, role, risk, scope"]
     ORCH["Runtime orchestrator<br/>INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE"]
     APPROVAL["Approval checkpoints"]
-    EXEC["Execution and tool use"]
+    EXEC["Execution and tool/model use"]
+    PROVIDER["Certified provider lane<br/>Alibaba / DeepSeek"]
     REVIEW["Review and audit evidence"]
     FREEZE["Freeze artifact / receipt"]
 
@@ -116,13 +124,14 @@ flowchart LR
     GUARDS --> ORCH
     ORCH --> APPROVAL
     APPROVAL --> EXEC
-    EXEC --> REVIEW
+    EXEC --> PROVIDER
+    PROVIDER --> REVIEW
     REVIEW --> FREEZE
 ```
 
 ## 4. Interaction Model
 
-This is the practical governed loop that CVF currently proves on the active path:
+This is the practical governed loop that CVF currently proves on the active path. Mock UI tests do not count as governance evidence.
 
 ```mermaid
 sequenceDiagram
@@ -131,6 +140,7 @@ sequenceDiagram
     participant Guard as Guard Contract
     participant Runtime as Governance Runtime
     participant Tool as Tool / Model / Agent
+    participant Provider as Live Provider API
     participant Evidence as Audit / Freeze / Baseline
 
     User->>Entry: submit intent
@@ -139,6 +149,8 @@ sequenceDiagram
     Entry->>Runtime: open governed execution path
     Runtime->>Runtime: orchestrate canonical phase loop
     Runtime->>Tool: execute within approved boundary
+    Tool->>Provider: live model call when governance is asserted
+    Provider-->>Tool: model output
     Tool-->>Runtime: result + traces
     Runtime->>Evidence: review receipt + freeze artifact
     Evidence-->>User: reviewable outcome
@@ -153,12 +165,25 @@ The architecture should be read this way:
 - Web UI, SDK flows, and multi-agent paths are valuable only when they stay under the same governed semantics
 - baselines, reviews, and continuation gates are part of the system boundary, not just project paperwork
 - deeper governance and evidence records matter, but they are not the preferred first-click path from the repository front door
+- provider choice is user-owned, but governance evidence remains CVF-owned
+- release-quality governance claims require live API-backed evidence; mock mode is UI-only
 
-## 6. Read Next
+## 6. Current Evidence Posture
+
+| Claim | Current status | Evidence |
+| --- | --- | --- |
+| Non-coder governed AI path | Live-proven | `E2E Playwright Governance (live): 7 passed` via release gate |
+| Multi-provider operability | Certified on 2 lanes | Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` both `CERTIFIED` |
+| Release gate | Mandatory live governance | `python scripts/run_cvf_release_gate_bundle.py --json` |
+| Mock boundary | UI-only | `AGENTS.md` and live evidence packet |
+| Provider parity | Not claimed | Speed, cost, quality, latency, and reliability remain provider economics |
+
+## 7. Read Next
 
 ### General Orientation
 
 - [README](README.md)
+- [Agent Instructions](AGENTS.md)
 - [Getting Started](docs/GET_STARTED.md)
 - [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md)
 
@@ -170,5 +195,8 @@ The architecture should be read this way:
 
 ### Status And Governance Context
 
-- [Release Readiness](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md)
+- [Live Evidence Publication Packet](docs/reference/CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md)
+- [Release Candidate Truth Packet](docs/reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md)
+- [Provider Lane Readiness Matrix](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
+- [Known Limitations Register](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
 - [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)

@@ -27,18 +27,20 @@ Commands run on 2026-04-21:
 ```bash
 python scripts/check_cvf_provider_release_readiness.py --json
 python scripts/run_cvf_release_gate_bundle.py --dry-run --json
-python scripts/run_cvf_release_gate_bundle.py --mock --json
+DASHSCOPE_API_KEY=<key> python scripts/run_cvf_release_gate_bundle.py --json
 rg "sk-[A-Za-z0-9]{20,}" scripts -n
 ```
 
 Results:
 
 - Provider readiness: PASS, `certified_count=2` (Alibaba `qwen-turbo`, DeepSeek `deepseek-chat`)
-- Release gate bundle: PASS, 5/5 checks
+- Release gate bundle: PASS; current gate includes mandatory live governance E2E plus UI-only mock E2E
 - Web build: PASS
 - Guard Contract TypeScript check: PASS
 - Secrets scan: PASS
 - Docs governance: PASS
+- E2E Playwright UI (mock): PASS
+- E2E Playwright Governance (live): PASS
 - Script key scan: no hardcoded `sk-*` keys found under `scripts/`
 
 ## Remediation Applied During Verification
@@ -48,6 +50,7 @@ Results:
 - Fixed `scripts/run_cvf_release_gate_bundle.py` on Windows by resolving `.cmd` shims for commands such as `npm`.
 - Fixed subprocess output decoding with UTF-8 replacement handling for non-ASCII build output.
 - Tightened release-gate secret scanning to skip local tool state and known test/placeholder fixtures while still catching real committed keys in source scripts and docs.
+- Superseded mock-only release gate closure: live API-backed governance E2E is now mandatory for release-quality proof; mock remains UI-only.
 
 ## Claim Boundary
 

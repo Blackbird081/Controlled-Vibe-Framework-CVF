@@ -65,3 +65,39 @@ export async function sendSpecToAgent(page: Page, mode: 'simple' | 'governance' 
     await page.getByRole('button', { name: /Gửi đến Agent|Send to Agent/i }).click();
     await page.getByRole('heading', { name: 'CVF Agent' }).waitFor();
 }
+
+export async function seedStorageWithAlibaba(page: Page) {
+    const key = process.env.DASHSCOPE_API_KEY ?? '';
+    await page.addInitScript((k) => {
+        localStorage.setItem('cvf_settings', JSON.stringify({
+            providers: {
+                alibaba: { apiKey: k, enabled: true, selectedModel: 'qwen-turbo' },
+            },
+            preferences: {
+                defaultProvider: 'alibaba',
+                defaultLanguage: 'vi',
+                autoSaveHistory: true,
+                showWelcomeTour: false,
+            },
+        }));
+        localStorage.setItem('cvf_onboarding_complete', 'true');
+    }, key);
+}
+
+export async function seedStorageWithDeepSeek(page: Page) {
+    const key = process.env.DEEPSEEK_API_KEY ?? '';
+    await page.addInitScript((k) => {
+        localStorage.setItem('cvf_settings', JSON.stringify({
+            providers: {
+                deepseek: { apiKey: k, enabled: true, selectedModel: 'deepseek-chat' },
+            },
+            preferences: {
+                defaultProvider: 'deepseek',
+                defaultLanguage: 'vi',
+                autoSaveHistory: true,
+                showWelcomeTour: false,
+            },
+        }));
+        localStorage.setItem('cvf_onboarding_complete', 'true');
+    }, key);
+}

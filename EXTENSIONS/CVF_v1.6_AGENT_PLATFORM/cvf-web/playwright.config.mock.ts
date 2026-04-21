@@ -1,12 +1,10 @@
 import { defineConfig } from '@playwright/test';
 
-// Live config — real provider calls, governance pipeline active.
-// For mock/CI-safe runs use: playwright.config.mock.ts
 export default defineConfig({
     testDir: './tests/e2e',
-    timeout: 180_000,
+    timeout: 60_000,
     expect: {
-        timeout: 30_000,
+        timeout: 10_000,
     },
     use: {
         baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3001',
@@ -19,5 +17,8 @@ export default defineConfig({
         port: 3001,
         reuseExistingServer: false,
         timeout: 120_000,
+        env: {
+            NEXT_PUBLIC_CVF_MOCK_AI: '1',
+        },
     },
 });

@@ -44,10 +44,17 @@ NHỮNG GÌ PHẢI GIỮ NGUYÊN:
 [focus]
 
 SUCCESS CRITERIA:
-- Chỉ ra các rủi ro bằng ngôn ngữ plain-language
+- Analyze the code sample and identify key risks in plain-language terms
 - Phân biệt điều gì chỉ là cảnh báo và điều gì có thể gây lỗi thật
 - Đưa ra brief handoff rõ để builder sửa
-- Không biến câu trả lời thành code-review jargon dump`,
+- Không biến câu trả lời thành code-review jargon dump
+
+OUTPUT FORMAT (use these exact section headings in English):
+## Intended Outcome
+## What Looks Healthy
+## Main Risks
+## Builder Handoff Brief
+## Acceptance Checklist`,
         outputExpected: ['Điểm đang ổn', 'Vấn đề cần xử lý', 'Mức độ ảnh hưởng', 'Brief handoff cho builder', 'Checklist xác nhận sau sửa'],
         difficulty: 'medium',
         outputTemplate: `# Plain-Language Build Review

@@ -51,10 +51,17 @@ GIỚI HẠN DỮ LIỆU ĐÃ BIẾT:
 [knownLimitations]
 
 SUCCESS CRITERIA:
-- Trả lời bằng ngôn ngữ kinh doanh / vận hành
+- Analyze each data slice to answer every question directly with evidence
 - Nêu rõ bằng chứng và mức độ tin cậy theo dữ liệu đang có
 - Kết thúc bằng các hành động ưu tiên
-- Không bắt người dùng đọc hiểu thuật ngữ thống kê để dùng được kết quả`,
+- Không bắt người dùng đọc hiểu thuật ngữ thống kê để dùng được kết quả
+
+OUTPUT FORMAT (use these exact section headings in English):
+## What Data We Looked At
+## What The Data Clearly Suggests
+## What Needs Caution
+## Recommended Actions
+## Follow-Up Checklist`,
         outputExpected: ['Tóm tắt dữ liệu', 'Insight chính', 'Điều dữ liệu chưa trả lời chắc chắn', 'Khuyến nghị ưu tiên', 'Checklist theo dõi tiếp'],
         difficulty: 'advanced',
         outputTemplate: `# Decision-Focused Data Analysis

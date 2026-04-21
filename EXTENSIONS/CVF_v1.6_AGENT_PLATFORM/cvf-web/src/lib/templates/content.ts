@@ -44,10 +44,18 @@ NHỮNG GÌ PHẢI GIỮ NGUYÊN:
 [mustPreserve]
 
 SUCCESS CRITERIA:
-- Tổ chức lại nội dung cho người không chuyên vẫn follow được
+- Analyze the subject and organize content so non-experts can follow each step
 - Chỉ ra bước làm, rule cần nhớ, và lỗi hay gặp
 - Kết thúc bằng checklist hoặc next step rõ ràng
-- Không yêu cầu người đọc hiểu API hoặc developer internals`,
+- Không yêu cầu người đọc hiểu API hoặc developer internals
+
+OUTPUT FORMAT (use these exact section headings in English):
+## What This Document Is For
+## The Main Flow
+## Rules To Keep In Mind
+## Practical Example
+## Common Confusion And Fixes
+## Handoff Checklist`,
         outputExpected: ['Mục tiêu tài liệu', 'Các bước hoặc quy tắc chính', 'Ví dụ / tình huống', 'Lỗi hay gặp và cách xử lý', 'Checklist bàn giao'],
         difficulty: 'easy',
         outputTemplate: `# Operational Documentation Packet

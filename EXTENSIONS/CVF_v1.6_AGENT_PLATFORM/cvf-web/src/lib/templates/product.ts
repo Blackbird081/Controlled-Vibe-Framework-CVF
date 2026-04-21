@@ -318,7 +318,7 @@ SUCCESS CRITERIA:
 - The end user does not need to choose frameworks or hidden technical patterns
 - Extract reusable design DNA instead of one-off mockup notes
 - Preserve logic/runtime boundaries
-- Define layout, component, state, and QA rules
+- Define layout, component, state, and QA rules — label this section "QA Rules" with pre-build approval and post-build validation checklists
 - Produce an agent-ready web build handoff packet
 - Include an explicit review gate so non-coder approval happens before builder-side runtime changes`,
         outputExpected: ['Product Goal & User Promise', 'UX Style DNA', 'Page / Modal Blueprint', 'Component & State Rules', 'Responsive / Accessibility Rules', 'Agent Build Guardrails', 'Review Gate & Acceptance Checklist'],

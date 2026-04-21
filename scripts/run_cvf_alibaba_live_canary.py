@@ -42,13 +42,14 @@ def resolve_api_key() -> str | None:
 
 def run_tests(api_key: str, json_out: Path) -> int:
     env = {**os.environ, "ALIBABA_API_KEY": api_key}
-    cmd = [
-        "npx", "vitest", "run", TEST_PATTERN,
-        "--reporter=verbose",
-        "--reporter=json",
-        f"--outputFile={json_out}",
-    ]
-    result = subprocess.run(cmd, cwd=CVF_WEB, env=env)
+    # shell=True ensures npx resolves correctly on Windows (npx.cmd) and Unix
+    cmd = (
+        f'npx vitest run "{TEST_PATTERN}"'
+        f" --reporter=verbose"
+        f" --reporter=json"
+        f' --outputFile="{json_out}"'
+    )
+    result = subprocess.run(cmd, shell=True, cwd=CVF_WEB, env=env)
     return result.returncode
 
 
@@ -102,13 +103,13 @@ def build_receipt(vitest: dict, api_key_present: bool) -> dict:
 
 
 def render_md(r: dict) -> str:
-    icons = {"PASS": "✓", "FAIL": "✗", "SKIP": "–"}
+    icons = {"PASS": "[PASS]", "FAIL": "[FAIL]", "SKIP": "[SKIP]"}
     rows = "\n".join(
-        f"| {s['id']} | `{s['template_id']}` | {icons.get(s['status'], '?')} {s['status']} | {s['duration_ms']}ms |"
+        f"| {s['id']} | `{s['template_id']}` | {icons.get(s['status'], '?')} | {s['duration_ms']}ms |"
         for s in r["scenarios"]
     )
     return (
-        f"# Alibaba Live Canary — Receipt {r['run_id']}\n\n"
+        f"# Alibaba Live Canary -- Receipt {r['run_id']}\n\n"
         f"**Timestamp:** {r['timestamp']}  \n"
         f"**Provider:** {r['provider']} / {r['model']}  \n"
         f"**Overall:** {r['overall_status']}  \n\n"
@@ -123,9 +124,9 @@ def save_receipt(r: dict) -> None:
     AUDITS_DIR.mkdir(parents=True, exist_ok=True)
     rid = r["run_id"]
     (AUDITS_DIR / f"RECEIPT_{rid}.json").write_text(json.dumps(r, indent=2), encoding="utf-8")
-    (AUDITS_DIR / f"RECEIPT_{rid}.md").write_text(render_md(r), encoding="utf-8")
+    (AUDITS_DIR / f"CVF_RECEIPT_{rid}.md").write_text(render_md(r), encoding="utf-8")
 
-    entry = f"- [{rid}](RECEIPT_{rid}.md) — {r['overall_status']} ({r['pass_count']}/6 pass)\n"
+    entry = f"- [{rid}](CVF_RECEIPT_{rid}.md) — {r['overall_status']} ({r['pass_count']}/6 pass)\n"
     if INDEX_FILE.exists():
         content = INDEX_FILE.read_text(encoding="utf-8")
         if "## Receipts" not in content:
@@ -136,11 +137,11 @@ def save_receipt(r: dict) -> None:
             "# Alibaba Live Canary — Receipt Index\n\n## Receipts\n" + entry,
             encoding="utf-8",
         )
-    print(f"\nReceipt: docs/audits/alibaba-canary/RECEIPT_{rid}.json + .md")
+    print(f"\nReceipt: docs/audits/alibaba-canary/RECEIPT_{rid}.json + CVF_RECEIPT_{rid}.md")
 
 
 def print_summary(r: dict) -> None:
-    icons = {"PASS": "✓", "FAIL": "✗", "SKIP": "–"}
+    icons = {"PASS": "[PASS]", "FAIL": "[FAIL]", "SKIP": "[SKIP]"}
     bar = "=" * 62
     print(f"\n{bar}")
     print(f"CVF Alibaba Live Canary — {r['run_id']}")

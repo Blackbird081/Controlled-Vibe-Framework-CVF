@@ -1,0 +1,109 @@
+{
+  "run_id": "20260421-070308-78d233",
+  "timestamp": "2026-04-21T07:03:08.786949+00:00",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "triggered_by": "cli",
+  "scenarios": [
+    {
+      "id": "S1",
+      "template_id": "app_builder_complete",
+      "status": "PASS",
+      "duration_ms": 72317,
+      "quality_signals": {
+        "min_output_met": true,
+        "keyword_matches": [
+          "TaskFlow",
+          "Acceptance Criteria",
+          "Handoff Boundaries"
+        ],
+        "antipattern_clean": true,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S2",
+      "template_id": "api_design",
+      "status": "PASS",
+      "duration_ms": 129555,
+      "quality_signals": {
+        "min_output_met": true,
+        "keyword_matches": [
+          "LeadSync",
+          "Operations/Payloads/Giao th\u1ee9c",
+          "approval/Ph\u00ea Duy\u1ec7t",
+          "Checklist/Ki\u1ec3m Tra"
+        ],
+        "antipattern_clean": true,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S3",
+      "template_id": "code_review",
+      "status": "PASS",
+      "duration_ms": 72489,
+      "quality_signals": {
+        "min_output_met": true,
+        "keyword_matches": [
+          "Intended Outcome/M\u1ee5c ti\u00eau",
+          "Main Risks/R\u1ee7i ro",
+          "Builder Handoff",
+          "Checklist/Acceptance"
+        ],
+        "antipattern_clean": true,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S4",
+      "template_id": "documentation",
+      "status": "PASS",
+      "duration_ms": 102407,
+      "quality_signals": {
+        "min_output_met": true,
+        "keyword_matches": [
+          "What This Document Is For/M\u1ee5c ti\u00eau",
+          "Main Flow/Steps",
+          "Checklist/Handoff",
+          "SRE/P1"
+        ],
+        "antipattern_clean": true,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S5",
+      "template_id": "web_ux_redesign_system",
+      "status": "FAIL",
+      "duration_ms": 159916,
+      "quality_signals": {
+        "min_output_met": false,
+        "keyword_matches": [],
+        "antipattern_clean": false,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S6",
+      "template_id": "data_analysis",
+      "status": "PASS",
+      "duration_ms": 73187,
+      "quality_signals": {
+        "min_output_met": true,
+        "keyword_matches": [
+          "What Data We Looked At/Ngu\u1ed3n D\u1eef Li\u1ec7u",
+          "Suggests/Insight",
+          "Recommended Actions/Khuy\u1ebfn ngh\u1ecb",
+          "Checklist/Follow-Up"
+        ],
+        "antipattern_clean": true,
+        "validated_by_vitest": true
+      }
+    }
+  ],
+  "overall_status": "FAIL",
+  "pass_count": 5,
+  "fail_count": 1,
+  "skip_count": 0
+}

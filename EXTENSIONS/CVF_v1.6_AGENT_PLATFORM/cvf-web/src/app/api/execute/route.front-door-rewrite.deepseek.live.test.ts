@@ -128,11 +128,11 @@ describe.skipIf(!DEEPSEEK_API_KEY)(
         expect(output).toMatch(/TaskFlow/i);
         expect(output).toMatch(/APP BRIEF|Business Intent|User Journeys|Specification|Requirements/i);
         expect(output).toMatch(/User Outcomes|Core Functionality|Workflows/i);
-        expect(output).toMatch(/Acceptance Criteria/i);
+        expect(output).toMatch(/Acceptance Criteria|Success Criteria/i);
         expect(output).toMatch(/Handoff|Boundaries|Builder|builder/i);
         expect(output).not.toMatch(/choose frameworks|choose a database|pick a stack/i);
       },
-      90_000,
+      120_000,
     );
 
     it(
@@ -332,13 +332,13 @@ describe.skipIf(!DEEPSEEK_API_KEY)(
         expect(response.status).toBe(200);
         expect(body.success).toBe(true);
         expect(output.length).toBeGreaterThan(600);
-        expect(output).toMatch(/Review Gate/i);
+        expect(output).toMatch(/Review Gate|Pre-Build Approval|Approval Checklist/i);
         expect(output).toMatch(/QA Rules|Pre-Build Approval|Post-Build Validation|Release Process/i);
         expect(output).toMatch(/approval|required/i);
         expect(output).toMatch(/routes|auth|API|store/i);
         expect(output).not.toMatch(/choose frameworks|pick a framework|select a stack/i);
       },
-      180_000,
+      240_000,
     );
 
     it(

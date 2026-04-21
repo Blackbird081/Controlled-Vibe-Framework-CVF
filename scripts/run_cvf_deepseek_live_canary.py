@@ -90,7 +90,7 @@ def run_tests(api_key: str, json_out: Path) -> int:
         f" --reporter=verbose"
         f" --reporter=json"
         f' --outputFile="{json_out}"'
-        f" --testTimeout=180000"
+        f" --testTimeout=240000"
     )
     result = subprocess.run(cmd, shell=True, cwd=CVF_WEB, env=env)
     return result.returncode

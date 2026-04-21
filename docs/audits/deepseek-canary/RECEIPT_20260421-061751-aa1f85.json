@@ -1,0 +1,85 @@
+{
+  "run_id": "20260421-061751-aa1f85",
+  "timestamp": "2026-04-21T06:17:51.477075+00:00",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "triggered_by": "cli",
+  "scenarios": [
+    {
+      "id": "S1",
+      "template_id": "app_builder_complete",
+      "status": "FAIL",
+      "duration_ms": 45008,
+      "quality_signals": {
+        "min_output_met": false,
+        "keyword_matches": [],
+        "antipattern_clean": false,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S2",
+      "template_id": "api_design",
+      "status": "FAIL",
+      "duration_ms": 45006,
+      "quality_signals": {
+        "min_output_met": false,
+        "keyword_matches": [],
+        "antipattern_clean": false,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S3",
+      "template_id": "code_review",
+      "status": "FAIL",
+      "duration_ms": 45004,
+      "quality_signals": {
+        "min_output_met": false,
+        "keyword_matches": [],
+        "antipattern_clean": false,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S4",
+      "template_id": "documentation",
+      "status": "FAIL",
+      "duration_ms": 45009,
+      "quality_signals": {
+        "min_output_met": false,
+        "keyword_matches": [],
+        "antipattern_clean": false,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S5",
+      "template_id": "web_ux_redesign_system",
+      "status": "FAIL",
+      "duration_ms": 45002,
+      "quality_signals": {
+        "min_output_met": false,
+        "keyword_matches": [],
+        "antipattern_clean": false,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S6",
+      "template_id": "data_analysis",
+      "status": "FAIL",
+      "duration_ms": 45009,
+      "quality_signals": {
+        "min_output_met": false,
+        "keyword_matches": [],
+        "antipattern_clean": false,
+        "validated_by_vitest": true
+      }
+    }
+  ],
+  "overall_status": "FAIL",
+  "pass_count": 0,
+  "fail_count": 6,
+  "skip_count": 0
+}

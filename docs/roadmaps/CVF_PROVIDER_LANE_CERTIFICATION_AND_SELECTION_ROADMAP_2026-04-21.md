@@ -3,7 +3,7 @@
 Memory class: SUMMARY_RECORD
 
 > Date: 2026-04-21
-> Status: PROPOSED FOR NEXT AGENT
+> Status: FULLY DELIVERED 2026-04-21 — all four control points closed
 > Context: post-Alibaba + post-DeepSeek live canary PASS 6/6
 
 ---
@@ -26,6 +26,15 @@ The next problem is productizing provider choice:
 - which lanes are experimental or degraded
 - which evidence supports each lane
 - how users choose speed, cost, quality, and reliability tradeoffs
+
+Delivery status:
+
+- CP1 status taxonomy + readiness matrix: DELIVERED
+- CP2 generalized provider live canary runner: DELIVERED
+- CP3 certification evaluator: DELIVERED
+- CP4 provider status API/docs productization: DELIVERED
+
+Implementation delta: `docs/baselines/CVF_W110_T2_PROVIDER_LANE_CERTIFICATION_DELTA_2026-04-21.md`
 
 ---
 

@@ -58,7 +58,7 @@
 - **Multi-provider operability PROVEN (2026-04-21, W110-T1)**: same locked 6-scenario front-door canary passes on both Alibaba `qwen-turbo` (CERTIFIED — 3 consecutive PASS 6/6) and DeepSeek `deepseek-chat` (CANARY_PASS — 1 PASS 6/6). Provider parity (equal latency/cost/quality) is not claimed; these are user-selected provider economics. Evidence: `docs/audits/alibaba-canary/INDEX.md` + `docs/audits/deepseek-canary/INDEX.md`. Lane taxonomy and readiness matrix: `docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md`.
 - **Front-door CI smoke gate is now wired (2026-04-21)**: `front-door-smoke` CI job added to `.github/workflows/cvf-ci.yml`; runs 4 static corpus governance tests on every push without API key; wired into the `ci-passed` summary gate. Front-door quality is now protected by automation.
 - **Product proof expansion + productization lane CLOSED (2026-04-21)**: all four steps of `docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md` are DELIVERED. Evidence: `docs/assessments/CVF_FRONT_DOOR_PRODUCT_PROOF_EXPANSION_ASSESSMENT_2026-04-21.md` + `docs/assessments/CVF_PRODUCTIZATION_LANE_ASSESSMENT_2026-04-21.md`.
-- **Canonical next-direction roadmap**: `docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md` — FULLY DELIVERED. Active roadmap: `docs/roadmaps/CVF_PROVIDER_LANE_CERTIFICATION_AND_SELECTION_ROADMAP_2026-04-21.md` (W110-T2 — provider lane certification + selection productization, in progress).
+- **Canonical next-direction roadmap**: `docs/roadmaps/CVF_PROVIDER_LANE_CERTIFICATION_AND_SELECTION_ROADMAP_2026-04-21.md` — FULLY DELIVERED 2026-04-21. Provider lane certification + selection productization is closed for the current scope; next work requires a fresh operator-driven roadmap or `GC-018`.
 
 ### Wave 1 Retrieval Partitioning — CLOSED DELIVERED 2026-04-18
 
@@ -167,7 +167,7 @@
 
 ## Immediate Next Action Required
 
-**W110-T2 — Provider Lane Certification + Selection Productization — ACTIVE (2026-04-21).** Active roadmap: `docs/roadmaps/CVF_PROVIDER_LANE_CERTIFICATION_AND_SELECTION_ROADMAP_2026-04-21.md`. Delivering: typed lane status taxonomy (`provider-lane-status.ts`), provider readiness matrix (`docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md`), generalized canary runner (`scripts/run_cvf_provider_live_canary.py`), certification evaluator (`scripts/evaluate_cvf_provider_lane_certification.py`), and `laneStatus` field in `/api/providers` route. Core architecture remains closure-assessed; redesign W105-W109, front-door rewrite/runtime sync, product proof expansion (6/6 templates), and productization lane are all closed and reflected in canon.
+**No implementation tranche is active as of 2026-04-21.** W110-T2 Provider Lane Certification + Selection Productization is CLOSED DELIVERED. Delivered: typed lane status taxonomy (`provider-lane-status.ts`), provider readiness matrix (`docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md`), generalized canary runner (`scripts/run_cvf_provider_live_canary.py`), certification evaluator (`scripts/evaluate_cvf_provider_lane_certification.py`), and `laneStatus` field in `/api/providers` route. Core architecture remains closure-assessed; redesign W105-W109, front-door rewrite/runtime sync, product proof expansion (6/6 templates), productization lane, and provider lane certification are all closed and reflected in canon.
 
 Current guidance:
 

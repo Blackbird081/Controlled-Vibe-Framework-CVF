@@ -290,10 +290,10 @@ Memory class: POINTER_RECORD
 - Successor roadmap: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md`
 - Current status review: `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (includes all post-cycle records through `W7-T10`)
 - Post-W7 upgrade planning baseline: `docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md`
-- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_POST_W109_FRONT_DOOR_2026-04-21.md` (W109 redesign closure + front-door rewrite/runtime validation sync; no active tranche)
+- Latest GC-026 tracker sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_POST_FRONT_DOOR_PRODUCTIZATION_2026-04-21.md` (post-W109 front-door canon updated through product-proof expansion + productization closure; no active tranche)
 - Latest continuity sync delta: `docs/baselines/CVF_W59_T1_CP1_MC5_WHITEPAPER_PROMOTION_DELTA_2026-04-07.md`
 - Current closure anchor: `docs/reviews/CVF_W65_T1_TRANCHE_CLOSURE_REVIEW_2026-04-10.md`
-- Active quality assessment: `docs/assessments/CVF_FRONT_DOOR_POST_W109_RUNTIME_VALIDATION_2026-04-21.md` (post-redesign + post-rewrite Alibaba-first governed runtime validation; retrieval 4/4 + web_build_handoff 1/1 + representative rewrite surfaces 3/3)
+- Active quality assessment: `docs/assessments/CVF_PRODUCTIZATION_LANE_ASSESSMENT_2026-04-21.md` (front-door productization lane delivered; front-door-smoke CI gate wired into ci-passed; Alibaba-first front door now automation-protected after 6/6 product-proof expansion)
 - Most recent continuation authorization: `docs/baselines/CVF_GC018_FRONT_DOOR_ALIBABA_RUNTIME_VALIDATION_AUTHORIZATION_2026-04-21.md` (bounded live-validation authorization for post-W109 front-door runtime proof)
-- Current forward roadmap: `docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md` (canon sync complete; product proof expansion next; productization lane ready after step 3 starts)
+- Current forward roadmap: `docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md` (all 4 steps delivered; no active roadmap step; next bounded move is multi-provider expansion or a new operator-driven feature with fresh GC-018)
 - Current validation anchor: `docs/roadmaps/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md`

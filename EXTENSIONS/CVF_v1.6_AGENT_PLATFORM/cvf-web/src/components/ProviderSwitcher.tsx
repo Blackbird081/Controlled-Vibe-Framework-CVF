@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { useSettings } from './Settings';
 import { AIProvider } from '@/lib/ai-providers';
+import { PROVIDER_LANE_EVIDENCE, LANE_BADGE_STYLE } from '@/lib/provider-lane-metadata';
 
 interface ProviderOption {
     id: AIProvider;
@@ -110,6 +111,16 @@ export function ProviderSwitcher({ compact = false, showStatus = true, onChange 
                                             {provider.name}
                                         </div>
                                         <div className="text-xs text-gray-500">{provider.model}</div>
+                                        {(() => {
+                                            const ev = PROVIDER_LANE_EVIDENCE[provider.id];
+                                            if (!ev) return null;
+                                            const s = LANE_BADGE_STYLE[ev.status];
+                                            return (
+                                                <span className={`inline-block mt-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium ${s.bg} ${s.text}`}>
+                                                    {ev.label}
+                                                </span>
+                                            );
+                                        })()}
                                     </div>
                                     {providerHasKey ? (
                                         <span className="text-xs text-green-500">✓</span>
@@ -150,6 +161,16 @@ export function ProviderSwitcher({ compact = false, showStatus = true, onChange 
                             <span className={`text-xs ${isSelected ? 'text-white/80' : 'text-gray-500'}`}>
                                 {provider.model}
                             </span>
+                            {(() => {
+                                const ev = PROVIDER_LANE_EVIDENCE[provider.id];
+                                if (!ev) return null;
+                                const s = LANE_BADGE_STYLE[ev.status];
+                                return (
+                                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${isSelected ? 'bg-white/20 text-white' : `${s.bg} ${s.text}`}`}>
+                                        {ev.label}
+                                    </span>
+                                );
+                            })()}
                             {showStatus && (
                                 <span className={`px-2 py-0.5 rounded-full text-xs ${providerHasKey
                                     ? isSelected

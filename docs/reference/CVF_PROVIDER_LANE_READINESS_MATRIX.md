@@ -60,3 +60,13 @@ Run a provider canary to add a new receipt:
 python scripts/run_cvf_provider_live_canary.py --provider alibaba --save-receipt
 python scripts/run_cvf_provider_live_canary.py --provider deepseek --save-receipt
 ```
+
+Check release readiness without live API calls:
+
+```bash
+python scripts/check_cvf_provider_release_readiness.py
+```
+
+Operator runbook (when to smoke, canary, save receipt, downgrade, certify):
+
+- [`docs/reference/CVF_PROVIDER_LANE_OPERATOR_RUNBOOK.md`](CVF_PROVIDER_LANE_OPERATOR_RUNBOOK.md)

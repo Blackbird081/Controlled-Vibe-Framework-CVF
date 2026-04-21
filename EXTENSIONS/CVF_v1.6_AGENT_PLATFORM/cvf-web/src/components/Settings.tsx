@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { type OpenClawMode } from '@/lib/openclaw-config';
+import { PROVIDER_LANE_EVIDENCE, LANE_BADGE_STYLE } from '@/lib/provider-lane-metadata';
 
 // Types
 export type ProviderKey = 'gemini' | 'openai' | 'anthropic' | 'alibaba' | 'openrouter' | 'deepseek';
@@ -446,6 +447,20 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                                 {provider.name}
                                             </span>
                                             <p className="text-xs text-gray-500">{provider.desc}</p>
+                                            {(() => {
+                                                const evidence = PROVIDER_LANE_EVIDENCE[provider.id];
+                                                if (!evidence) return null;
+                                                const style = LANE_BADGE_STYLE[evidence.status];
+                                                return (
+                                                    <span
+                                                        className={`inline-flex items-center gap-1 mt-1 px-1.5 py-0.5 rounded text-[10px] font-medium ${style.bg} ${style.text}`}
+                                                        title={`${evidence.note} (${evidence.passWindow}) — User-paid provider lane`}
+                                                    >
+                                                        {evidence.label}
+                                                        <span className="opacity-60">{evidence.passWindow}</span>
+                                                    </span>
+                                                );
+                                            })()}
                                         </div>
                                     </div>
                                     <button

@@ -167,7 +167,7 @@
 
 ## Immediate Next Action Required
 
-**No implementation tranche is active as of 2026-04-21.** W110-T2 Provider Lane Certification + Selection Productization is CLOSED DELIVERED. Delivered: typed lane status taxonomy (`provider-lane-status.ts`), provider readiness matrix (`docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md`), generalized canary runner (`scripts/run_cvf_provider_live_canary.py`), certification evaluator (`scripts/evaluate_cvf_provider_lane_certification.py`), and `laneStatus` field in `/api/providers` route. Core architecture remains closure-assessed; redesign W105-W109, front-door rewrite/runtime sync, product proof expansion (6/6 templates), productization lane, and provider lane certification are all closed and reflected in canon.
+**W110-T2 + W110-T3 CLOSED DELIVERED (2026-04-21).** W110-T2: typed lane status taxonomy, provider readiness matrix, generalized canary runner, certification evaluator, `laneStatus` in `/api/providers`. W110-T3: provider lane UI badges in `Settings.tsx` + `ProviderSwitcher.tsx` (via `provider-lane-metadata.ts`), operator runbook (`docs/reference/CVF_PROVIDER_LANE_OPERATOR_RUNBOOK.md`), release readiness gate (`scripts/check_cvf_provider_release_readiness.py`). DeepSeek CANARY_PASS → CERTIFIED promotion is optional; requires operator approval for 2 more paid canary runs (see runbook Section 6). No active tranche. Core architecture closure-assessed; all previous waves closed.
 
 Current guidance:
 

@@ -14,6 +14,16 @@ Required command for release-quality proof:
 python scripts/run_cvf_release_gate_bundle.py --json
 ```
 
-This command must include live governance E2E and must fail if `DASHSCOPE_API_KEY` is missing. `--e2e` is a targeted UI-only mock check and is not a substitute for governance proof.
+This command must include live governance E2E and must fail if no DashScope-compatible live key is available. `DASHSCOPE_API_KEY` is accepted directly; `ALIBABA_API_KEY`, `CVF_ALIBABA_API_KEY`, and `CVF_BENCHMARK_ALIBABA_KEY` are accepted aliases. `--e2e` is a targeted UI-only mock check and is not a substitute for governance proof.
 
 Never commit or print raw API key values. Use operator-supplied environment variables such as `DASHSCOPE_API_KEY`, `ALIBABA_API_KEY`, and `DEEPSEEK_API_KEY`.
+
+## Latest Closed Continuation Roadmap
+
+The latest closed implementation roadmap is `docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md`.
+
+Treat its boundary language as binding:
+
+- Workspace bootstrap is now agent-enforcement-ready when generated artifacts and the workspace doctor pass.
+- Web is governance-inherited on the active governed AI path, not the full CVF runtime.
+- Future work must improve enforcement without overstating either claim.

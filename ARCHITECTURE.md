@@ -21,6 +21,8 @@ The current publication posture is live-first:
 - Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` are certified provider lanes;
 - mock mode is valid only for UI structure checks;
 - release-quality proof runs through `python scripts/run_cvf_release_gate_bundle.py --json`.
+- Web is governance-inherited on the active governed AI path, but is not the full CVF runtime.
+- Workspace bootstrap is now agent-enforcement-ready when generated artifacts and the workspace doctor pass.
 
 ```mermaid
 flowchart TB
@@ -177,8 +179,34 @@ The architecture should be read this way:
 | Release gate | Mandatory live governance | `python scripts/run_cvf_release_gate_bundle.py --json` |
 | Mock boundary | UI-only | `AGENTS.md` and live evidence packet |
 | Provider parity | Not claimed | Speed, cost, quality, latency, and reliability remain provider economics |
+| Web CVF inheritance | Active path only | Web is governance-inherited on `/api/execute`; it does not claim full CVF runtime inheritance |
+| Workspace agent enforcement | Delivered | W112-T1 adds downstream `AGENTS.md`, `.cvf/` manifest/policy, and workspace doctor checks |
 
-## 7. Read Next
+## 7. Current Control Boundaries
+
+### Web
+
+The web surface can deepen control, but it should not claim to be the whole CVF runtime. The correct boundary is:
+
+- `YES`: live-proven governance on the active governed AI execution path
+- `YES`: provider routing, DLP, output validation, audit, and bypass detection on the meaningful execution path
+- `NO`: physical sandbox isolation for arbitrary code execution
+- `NO`: full inheritance of every CVF module, guard plane, and workspace/agent behavior
+
+Delivered deepening milestone: [W112-T1 Workspace Agent Enforcement and Web Control Uplift](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md).
+
+### Workspace
+
+The current workspace bootstrap protects the CVF core by placing downstream projects in sibling folders and generates agent-enforcement artifacts for the downstream project.
+
+Delivered W112-T1 behavior:
+
+- generate downstream `AGENTS.md`
+- generate `.cvf/manifest.json` and `.cvf/policy.json`
+- add a workspace doctor/preflight gate
+- require first-request agent protocol before downstream execution
+
+## 8. Read Next
 
 ### General Orientation
 
@@ -200,3 +228,4 @@ The architecture should be read this way:
 - [Provider Lane Readiness Matrix](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
 - [Known Limitations Register](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
 - [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)
+- [W112-T1 Workspace Agent Enforcement And Web Control Uplift Roadmap](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md)

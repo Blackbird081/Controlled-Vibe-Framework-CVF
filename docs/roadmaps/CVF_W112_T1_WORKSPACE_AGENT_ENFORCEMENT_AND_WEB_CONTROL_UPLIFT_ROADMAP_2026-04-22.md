@@ -1,14 +1,30 @@
 # CVF W112-T1 Workspace Agent Enforcement And Web Control Uplift Roadmap
 
 > Date: 2026-04-22
-> Status: OPERATOR-APPROVED ROADMAP / READY FOR IMPLEMENTATION
+> Status: CLOSED DELIVERED / POST-REVIEW FIX VERIFIED
 > Memory class: SUMMARY_RECORD
 > Scope class: GOVERNANCE REALIZATION + WEB CONTROL DEEPENING
 > Canonical predecessor: `docs/roadmaps/CVF_W111_T1_LIVE_EVIDENCE_PUBLICATION_ROADMAP_2026-04-21.md`
 
+## 0. Closure Readout
+
+W112-T1 is closed delivered after post-review verification on 2026-04-22.
+
+Verified closure evidence:
+
+- Workspace bootstrap smoke: `PASS (11/11 checks passed)` via `scripts/new-cvf-workspace.ps1` plus `scripts/check_cvf_workspace_agent_enforcement.ps1`
+- Web targeted tests: `31 passed` for governance envelope and execute route coverage
+- Web lint: `PASS` with warnings only
+- Release gate bundle: `PASS` after setting process-local `DASHSCOPE_API_KEY` alias from the configured Alibaba key; UI mock `6 passed`, live governance `7 passed`
+
+Post-review fixes applied:
+
+- PowerShell workspace scripts were made ASCII-safe for Windows PowerShell parsing.
+- `WebGovernanceEnvelope.tranceRef` typo was corrected to `trancheRef`.
+
 ## 1. Intent
 
-W112-T1 turns two current truths into enforceable product behavior:
+W112-T1 turned two current truths into enforceable product behavior:
 
 1. A downloaded CVF workspace must make agent governance active from the first downstream user request, not merely available as documentation.
 2. CVF Web cannot and should not claim full CVF inheritance, but it can improve control quality on governance-relevant web entrypoints.
@@ -21,20 +37,27 @@ The target claim after this roadmap is closed:
 
 ### 2.1 Workspace
 
-Current status:
+Pre-W112 status:
 
 - `scripts/new-cvf-workspace.ps1` creates an isolated sibling layout.
 - The downstream project receives a bootstrap log.
 - The generated VS Code workspace opens the downstream project, not CVF core.
 
-Current gap:
+Pre-W112 gap:
 
 - The downstream project does not automatically receive a binding `AGENTS.md`.
 - No `.cvf/` enforcement manifest is generated.
 - No local doctor/preflight proves the downstream agent loaded CVF rules.
 - No local hooks or CI checks require CVF agent governance before agent execution.
 
-Therefore the workspace is currently `isolation-ready / reference-ready`, not `agent-enforcement-ready`.
+W112 closure status:
+
+- The downstream project now receives generated `AGENTS.md`.
+- `.cvf/manifest.json` and `.cvf/policy.json` are generated.
+- The workspace doctor verifies required enforcement artifacts.
+- Workspace smoke passed `11/11`.
+
+Therefore the workspace is now `agent-enforcement-ready` when bootstrap artifacts and the doctor pass.
 
 ### 2.2 Web
 
@@ -318,7 +341,7 @@ Governance assertion rule:
 
 ## 8. Exit Criteria
 
-W112-T1 is closed only when:
+W112-T1 was closed after:
 
 - New downstream workspaces receive agent instructions by default.
 - New downstream workspaces receive `.cvf/` policy and manifest artifacts.

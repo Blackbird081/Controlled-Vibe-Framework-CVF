@@ -24,7 +24,7 @@ if (-not (Test-Path $projectResolved -PathType Container)) {
 
 $gitDir = Join-Path $projectResolved ".git"
 if (-not (Test-Path $gitDir -PathType Container)) {
-    Write-Host "[WARN] No .git directory found — hooks require a git repository." -ForegroundColor Yellow
+    Write-Host "[WARN] No .git directory found - hooks require a git repository." -ForegroundColor Yellow
     Write-Host "       Initialize git first: git init" -ForegroundColor Yellow
     exit 0
 }
@@ -36,7 +36,7 @@ if (-not (Test-Path $hooksDir)) {
 
 $doctorScript = Join-Path $cvfCorePath "scripts\check_cvf_workspace_agent_enforcement.ps1"
 
-# ── pre-commit hook ───────────────────────────────────────────────────────────
+# pre-commit hook
 $preCommitPath = Join-Path $hooksDir "pre-commit"
 if ((Test-Path $preCommitPath) -and -not $Force) {
     Write-Host "[WARN] pre-commit hook already exists. Use -Force to overwrite." -ForegroundColor Yellow
@@ -64,7 +64,7 @@ exit 0
     Write-Host "[OK]   Installed pre-commit hook: $preCommitPath" -ForegroundColor Green
 }
 
-# ── CI workflow sample ────────────────────────────────────────────────────────
+# CI workflow sample
 $ciSampleSrc = Join-Path $cvfCorePath "governance\toolkit\05_OPERATION\CVF_CI_ENFORCEMENT_SAMPLE.yml"
 $githubWorkflowsDir = Join-Path $projectResolved ".github\workflows"
 $ciDest = Join-Path $githubWorkflowsDir "cvf-enforcement.yml"

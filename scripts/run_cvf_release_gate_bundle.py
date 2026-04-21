@@ -19,7 +19,7 @@ Flags:
   --dry-run   Print what would run without executing anything
   --json      Machine-readable output
   --e2e       Targeted run: UI-only mock Playwright specs
-  --e2e-live  Targeted run: live governance Playwright specs; requires DASHSCOPE_API_KEY
+  --e2e-live  Targeted run: live governance Playwright specs; requires a DashScope-compatible live key
 
 Exit codes:
   0  All checks PASS (warnings allowed)
@@ -34,6 +34,8 @@ import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from _local_env import bootstrap_repo_env
 
 REPO_ROOT = Path(__file__).parent.parent
 CVF_WEB = REPO_ROOT / "EXTENSIONS" / "CVF_v1.6_AGENT_PLATFORM" / "cvf-web"
@@ -65,6 +67,17 @@ SCAN_SKIP = {
 }
 
 SCAN_EXTENSIONS = {".py", ".ts", ".tsx", ".js", ".jsx", ".env", ".json", ".md", ".yaml", ".yml", ".sh"}
+
+
+def bootstrap_live_provider_env() -> None:
+    bootstrap_repo_env()
+    if os.environ.get("DASHSCOPE_API_KEY"):
+        return
+    for alias in ("ALIBABA_API_KEY", "CVF_ALIBABA_API_KEY", "CVF_BENCHMARK_ALIBABA_KEY"):
+        value = os.environ.get(alias, "").strip()
+        if value:
+            os.environ["DASHSCOPE_API_KEY"] = value
+            return
 
 
 @dataclass
@@ -230,10 +243,12 @@ def check_e2e(dry_run: bool, live: bool) -> CheckResult:
         return CheckResult(name, "SKIP", f"dry-run — would run: {cmd_str}", [str(CVF_WEB)])
     if not CVF_WEB.exists():
         return CheckResult(name, "FAIL", "cvf-web directory not found", [str(CVF_WEB)])
+    if live:
+        bootstrap_live_provider_env()
     if live and not os.environ.get("DASHSCOPE_API_KEY"):
         return CheckResult(
             name, "FAIL",
-            "DASHSCOPE_API_KEY not set — live governance E2E is mandatory for release-quality CVF proof"
+            "No DashScope-compatible live key set — live governance E2E is mandatory for release-quality CVF proof"
         )
     cmd = ["npx", "playwright", "test", "--config", config, *specs, "--reporter=line"]
     code, stdout, stderr = run_cmd(cmd, cwd=CVF_WEB, timeout=600)
@@ -322,7 +337,7 @@ def main() -> None:
         "--e2e-live",
         action="store_true",
         dest="e2e_live",
-        help="Targeted run: live governance Playwright specs (requires DASHSCOPE_API_KEY)",
+        help="Targeted run: live governance Playwright specs (requires a DashScope-compatible live key)",
     )
     args = parser.parse_args()
 

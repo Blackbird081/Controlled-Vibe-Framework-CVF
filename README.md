@@ -62,7 +62,7 @@ Use this command before publishing any claim that CVF controls AI/agent behavior
 python scripts/run_cvf_release_gate_bundle.py --json
 ```
 
-The gate runs UI-only mock E2E plus live governance E2E, and it must fail if `DASHSCOPE_API_KEY` is missing. `--e2e` is a targeted UI-only check, not governance evidence.
+The gate runs UI-only mock E2E plus live governance E2E, and it must fail if no DashScope-compatible live key is available. `DASHSCOPE_API_KEY` is accepted directly; `ALIBABA_API_KEY`, `CVF_ALIBABA_API_KEY`, and `CVF_BENCHMARK_ALIBABA_KEY` are accepted aliases. `--e2e` is a targeted UI-only check, not governance evidence.
 
 ## What CVF Is
 
@@ -170,6 +170,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\new-cvf-workspace.ps1 `
 
 See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md).
 
+Current boundary: this bootstrap is now `agent-enforcement-ready` when the generated downstream `AGENTS.md`, `.cvf/` policy manifests, bootstrap log, and workspace doctor checks are present. See [W112-T1 Workspace Agent Enforcement and Web Control Uplift](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md).
+
 ### Moving To A New Machine
 
 Use [New Machine Setup Checklist](docs/reference/CVF_NEW_MACHINE_SETUP_CHECKLIST.md).
@@ -214,6 +216,8 @@ Current posture on the active reference path:
 | Canonical phase model | `ALIGNED` |
 | Hardened default guard path | `ALIGNED` |
 | Web non-coder semantics | `VALUE PROVEN (Alibaba); PORTABILITY PROVEN (Alibaba + DeepSeek)` |
+| Web CVF inheritance boundary | `GOVERNANCE-INHERITED ACTIVE PATH; not full CVF runtime` |
+| Workspace bootstrap | `AGENT-ENFORCEMENT-READY via W112 bootstrap + doctor` |
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` |
 | Governance executable ownership | `SUBSTANTIALLY ALIGNED` |
 | End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` |
@@ -228,6 +232,8 @@ Read this status as:
 - the post-closure integration wave is no longer docs-only; a bounded runnable governance surface now exists in `cvf-web`
 - the latest verified local baseline is CPF `2999`, EPF `1301`, GEF `625`, LPF `1493`, and `cvf-web` `2027`
 - the active path has no open tranche and remains `SUBSTANTIALLY DELIVERED`
+- Web is live-proven on its active governed AI path, but it should not be described as fully inheriting every CVF runtime/module
+- workspace bootstrap now isolates downstream work and generates downstream agent-enforcement artifacts
 - relocation is closed-by-default; next work should follow the Post-MC5 Continuation Strategy
 - future expansion must go through scan continuity review, reassessment, or a fresh bounded `GC-018`
 

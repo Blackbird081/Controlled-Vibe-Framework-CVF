@@ -29,7 +29,7 @@ export interface WebGovernanceEnvelope {
     providerLane: string | null;
     auditEventIds: string[];
     requestTimestamp: string;
-    tranceRef: 'W112-T1';
+    trancheRef: 'W112-T1';
 }
 
 let _policyCounter = 0;
@@ -78,7 +78,7 @@ export function buildGovernanceEnvelope(input: BuildEnvelopeInput): WebGovernanc
         providerLane: input.providerLane ?? null,
         auditEventIds: input.auditEventIds ?? [],
         requestTimestamp: new Date(ts).toISOString(),
-        tranceRef: 'W112-T1',
+        trancheRef: 'W112-T1',
     };
 }
 

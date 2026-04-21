@@ -29,7 +29,7 @@ Write-Host "=======================================" -ForegroundColor Cyan
 Write-Host "Project: $projectResolved"
 Write-Host ""
 
-# ── Check 1: Project exists ───────────────────────────────────────────────────
+# Check 1: Project exists
 $projectExists = Test-Path $projectResolved -PathType Container
 Add-Check "Project folder exists" $projectExists $projectResolved
 
@@ -38,7 +38,7 @@ if (-not $projectExists) {
     exit 1
 }
 
-# ── Check 2: Project is NOT inside CVF core ───────────────────────────────────
+# Check 2: Project is NOT inside CVF core
 $insideCore = $projectResolved.StartsWith($cvfCoreCandidate, [System.StringComparison]::OrdinalIgnoreCase) -and
               ($projectResolved.Length -gt $cvfCoreCandidate.Length)
 
@@ -52,15 +52,15 @@ foreach ($marker in $coreMarkers) {
     }
 }
 $isolationOk = -not $insideCore -and -not $pathContainsCore
-$isolationDetail = if (-not $isolationOk) { "Project path appears to be inside CVF core — workspace isolation violated" } else { "OK" }
+$isolationDetail = if (-not $isolationOk) { "Project path appears to be inside CVF core - workspace isolation violated" } else { "OK" }
 Add-Check "Project isolated from CVF core" $isolationOk $isolationDetail
 
-# ── Check 3: .cvf/manifest.json exists ───────────────────────────────────────
+# Check 3: .cvf/manifest.json exists
 $manifestPath = Join-Path $projectResolved ".cvf\manifest.json"
 $manifestExists = Test-Path $manifestPath -PathType Leaf
 Add-Check ".cvf/manifest.json exists" $manifestExists $manifestPath
 
-# ── Check 4: .cvf/manifest.json is valid JSON with required fields ───────────
+# Check 4: .cvf/manifest.json is valid JSON with required fields
 $manifestValid = $false
 $manifestObj = $null
 if ($manifestExists) {
@@ -80,12 +80,12 @@ if ($manifestExists) {
     Add-Check ".cvf/manifest.json is valid" $manifestValid $manifestDetail
 }
 
-# ── Check 5: .cvf/policy.json exists ─────────────────────────────────────────
+# Check 5: .cvf/policy.json exists
 $policyPath = Join-Path $projectResolved ".cvf\policy.json"
 $policyExists = Test-Path $policyPath -PathType Leaf
 Add-Check ".cvf/policy.json exists" $policyExists $policyPath
 
-# ── Check 6: live governance evidence policy is enabled ──────────────────────
+# Check 6: live governance evidence policy is enabled
 $liveEvidenceEnabled = $false
 if ($policyExists) {
     try {
@@ -94,25 +94,25 @@ if ($policyExists) {
         $liveEvidenceEnabled = ($policyObj.liveGovernanceEvidenceRequired -eq $true)
     }
     catch {
-        # parse error — already counted as FAIL via policyExists path
+        # parse error - already counted as FAIL via policyExists path
     }
     $liveEvidenceDetail = if ($liveEvidenceEnabled) { "liveGovernanceEvidenceRequired = true" } else { "liveGovernanceEvidenceRequired is not true in policy.json" }
     Add-Check "Live governance evidence mandatory" $liveEvidenceEnabled $liveEvidenceDetail
 }
 
-# ── Check 7: downstream AGENTS.md exists ─────────────────────────────────────
+# Check 7: downstream AGENTS.md exists
 $agentsPath = Join-Path $projectResolved "AGENTS.md"
 $agentsExists = Test-Path $agentsPath -PathType Leaf
 Add-Check "AGENTS.md exists" $agentsExists $agentsPath
 
-# ── Check 8: Bootstrap log exists ────────────────────────────────────────────
+# Check 8: Bootstrap log exists
 $docsDir = Join-Path $projectResolved "docs"
 $bootstrapLogs = @(Get-ChildItem -Path $docsDir -Filter "CVF_BOOTSTRAP_LOG_*.md" -ErrorAction SilentlyContinue)
 $bootstrapLogExists = ($bootstrapLogs.Count -gt 0)
 $bootstrapLogDetail = if ($bootstrapLogExists) { $bootstrapLogs[0].FullName } else { "No CVF_BOOTSTRAP_LOG_*.md found in $docsDir" }
 Add-Check "Bootstrap log exists" $bootstrapLogExists $bootstrapLogDetail
 
-# ── Check 9: CVF core path is reachable ──────────────────────────────────────
+# Check 9: CVF core path is reachable
 $cvfCorePath = $null
 if ($null -ne $manifestObj -and $manifestObj.cvfCorePath) {
     $cvfCorePath = $manifestObj.cvfCorePath
@@ -126,21 +126,21 @@ else {
     Add-Check "CVF core path reachable" $false "cvfCorePath not found in manifest"
 }
 
-# ── Check 10: CVF core commit matches manifest ────────────────────────────────
+# Check 10: CVF core commit matches manifest
 if ($coreReachable -and $manifestObj.cvfCoreCommit) {
     $ErrorActionPreference = "SilentlyContinue"
     $actualCommit = git -C $cvfCorePath rev-parse --short HEAD 2>$null
     $ErrorActionPreference = "SilentlyContinue"
     $commitMatch = ($actualCommit -eq $manifestObj.cvfCoreCommit)
-    $commitDetail = if ($commitMatch) { "Commit: $actualCommit" } else { "Manifest: $($manifestObj.cvfCoreCommit) / Actual: $actualCommit (warn only — core may have updated)" }
+    $commitDetail = if ($commitMatch) { "Commit: $actualCommit" } else { "Manifest: $($manifestObj.cvfCoreCommit) / Actual: $actualCommit (warn only - core may have updated)" }
     Add-Check "CVF core commit matches manifest" $commitMatch $commitDetail
     if (-not $commitMatch) {
-        # Commit mismatch is a warning, not a hard failure — decrement failCount
+        # Commit mismatch is a warning, not a hard failure - decrement failCount
         $failCount--
     }
 }
 
-# ── Check 11: Required docs in manifest exist ─────────────────────────────────
+# Check 11: Required docs in manifest exist
 if ($null -ne $manifestObj -and $manifestObj.requiredDocs) {
     $allDocsPresent = $true
     $missingDocs = @()
@@ -155,10 +155,10 @@ if ($null -ne $manifestObj -and $manifestObj.requiredDocs) {
     Add-Check "Required docs referenced by manifest exist" $allDocsPresent $docsDetail
 }
 
-# ── Print results table ───────────────────────────────────────────────────────
+# Print results table
 Write-Host ""
 Write-Host ("  {0,-50} {1}" -f "Check", "Status") -ForegroundColor White
-Write-Host ("  {0,-50} {1}" -f ("─" * 50), ("─" * 6)) -ForegroundColor DarkGray
+Write-Host ("  {0,-50} {1}" -f ("-" * 50), ("-" * 6)) -ForegroundColor DarkGray
 
 foreach ($r in $results) {
     $color = if ($r.Status -eq "PASS") { "Green" } else { "Red" }

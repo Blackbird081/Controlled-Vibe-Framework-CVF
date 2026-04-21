@@ -97,7 +97,7 @@ $recordIdDate = Get-Date -Format "yyyyMMdd"
 $bootstrapLogPath = Join-Path $docsDir "CVF_BOOTSTRAP_LOG_$recordIdDate.md"
 $cvfHead = git -C $cvfCorePath rev-parse --short HEAD
 
-# ── CP2: Generate .cvf/ enforcement manifest and policy ──────────────────────
+# CP2: Generate .cvf/ enforcement manifest and policy
 $cvfManifestDir = Join-Path $projectPath ".cvf"
 Ensure-Directory $cvfManifestDir
 
@@ -144,7 +144,7 @@ $policyJson = $policyObj | ConvertTo-Json -Depth 5
 Set-Content -Path (Join-Path $cvfManifestDir "policy.json") -Value $policyJson -Encoding utf8
 Write-Ok "Created: $cvfManifestDir\policy.json"
 
-# ── CP1: Generate downstream AGENTS.md from template ─────────────────────────
+# CP1: Generate downstream AGENTS.md from template
 $agentsTemplatePath = Join-Path $cvfCorePath "governance\toolkit\05_OPERATION\CVF_DOWNSTREAM_AGENTS_TEMPLATE.md"
 $downstreamAgentsPath = Join-Path $projectPath "AGENTS.md"
 $agentInstructionsStatus = "MISSING"
@@ -159,7 +159,7 @@ if (Test-Path $agentsTemplatePath) {
 
     if (Test-Path $downstreamAgentsPath) {
         Write-Warn "AGENTS.md already exists at: $downstreamAgentsPath"
-        Write-Warn "Inserting CVF merge block at top — review and merge manually."
+        Write-Warn "Inserting CVF merge block at top - review and merge manually."
         $existingContent = Get-Content -Path $downstreamAgentsPath -Raw -Encoding utf8
         $mergeBlock = @"
 <!-- CVF_MERGE_BLOCK_START: generated $dateStamp by new-cvf-workspace.ps1 -->
@@ -184,7 +184,7 @@ else {
     $agentInstructionsStatus = "MISSING - template not found"
 }
 
-# ── Bootstrap Log ─────────────────────────────────────────────────────────────
+# Bootstrap Log
 $logContent = @"
 # CVF Project Bootstrap Log
 
@@ -240,7 +240,7 @@ Write-Ok "Workspace bootstrap complete."
 Write-Host "Open this workspace file in VS Code:" -ForegroundColor Yellow
 Write-Host "  $workspaceFilePath"
 Write-Host ""
-Write-Host "Next step — run workspace doctor:" -ForegroundColor Yellow
+Write-Host "Next step - run workspace doctor:" -ForegroundColor Yellow
 Write-Host "  powershell -ExecutionPolicy Bypass -File `"$cvfCorePath\scripts\check_cvf_workspace_agent_enforcement.ps1`" -ProjectPath `"$projectPath`""
 Write-Host ""
 Write-Host "Isolation reminder:" -ForegroundColor Yellow

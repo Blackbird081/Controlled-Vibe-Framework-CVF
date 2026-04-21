@@ -33,7 +33,7 @@ describe('web-governance-envelope', () => {
             expect(env.surfaceClass).toBe('governance-execution');
             expect(env.evidenceMode).toBe('live');
             expect(env.policySnapshotId).toMatch(/^pol-/);
-            expect(env.tranceRef).toBe('W112-T1');
+            expect(env.trancheRef).toBe('W112-T1');
             expect(env.auditEventIds).toEqual([]);
             expect(typeof env.requestTimestamp).toBe('string');
         });

@@ -18,6 +18,7 @@
 - `cvf-next` is now a synchronized compatibility mirror and should not drift ahead of `main` without an explicit branch strategy change
 - Pre-public restructuring posture is now narrowed, canonized, and closed-by-default: avoid reopening root-level relocation unless a separate preservation override explicitly justifies it
 - Canonical scan continuity registry: `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
+- **Governance test policy (standing rule, 2026-04-21):** All tests asserting CVF governance behavior — risk classification, approval flow, DLP filtering, bypass detection, phase gate, audit trail — must use live provider API calls. `NEXT_PUBLIC_CVF_MOCK_AI=1` bypasses the entire `/api/execute` governance pipeline (guard engine, DLP, bypass detection, output validation, audit events) and is only permitted for pure UI structure tests (navigation, routing, static badge rendering). This rule applies to all future tranches and E2E waves without exception. The operator explicitly authorizes free use of Alibaba and DeepSeek API keys for all testing. See: `docs/roadmaps/CVF_E2E_PROOF_AND_REGRESSION_STABILIZATION_ROADMAP_2026-04-21.md`.
 - Operator policy (2026-04-18, reaffirmed 2026-04-19): Alibaba is the preferred live-test lane for CVF because quota/model coverage is favorable for validation. Canonical env is `ALIBABA_API_KEY`; compatibility aliases `CVF_BENCHMARK_ALIBABA_KEY` and `CVF_ALIBABA_API_KEY` remain supported. If one of these env vars is already configured, future agents should use it without asking for a new key. Operator has also pre-authorized use of the configured Alibaba model set for live validation where applicable; agents should use the existing configured/manifested models without re-asking unless a tranche explicitly requires a new model decision. Never commit raw key values. Note: shell/process env may still appear empty on some sessions; local test/bootstrap is now standardized to fall back to `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/.env.local` for Vitest + benchmark/PVV runners before declaring Alibaba config "missing".
 - Enterprise Admin Console Phase C (C0–C4) is **CLOSED DELIVERED 2026-04-18** (commit `faa9668b`). Roadmap: `docs/roadmaps/CVF_ENTERPRISE_ADMIN_ROADMAP_V2_1_PHASE_C_2026-04-18.md`.
 - Enterprise Admin Console Phase D (D1+D2) is **CLOSED DELIVERED 2026-04-18** (implementation commit `4a44eed9`; supplemental closure commit `5d3242a6`). D1: DLP filter core + execute-path hook + admin panel + knowledge partitioning plumbing (D1.4a). D2: SIEM webhook + signed CSV + CLI verify + break-glass + owner impersonation. **D1.4b (RAG chunk enforcement) intentionally deferred** — no real retrieval adapter exists; plumbing (`orgId`/`teamId` `_scope` param) is in place. Live DLP smoke test (`route.dlp.live.test.ts`) proves D1.2 E2E redaction with real Alibaba call when `ALIBABA_API_KEY` is present.
@@ -91,6 +92,29 @@
 - LPF (Learning Plane Foundation): `npm run check` + `npm test` clean; **1493 tests, 0 failures**
 - `cvf-web`: `npx tsc --noEmit` clean; `npm run test:run` clean; **2027 passed / 55 skipped** (W101-T1: 129/132 test files active, 2027 tests pass); `npm run build` clean
 - `.github/workflows/cvf-ci.yml` now mirrors this local baseline across Guard Contract, MCP server, 4 foundation packages, and `cvf-web`; first hosted GitHub Actions confirmation is still pending
+
+### Governance Test Policy — Standing Rule (2026-04-21)
+
+**Mock mode does not prove CVF governs real AI. Live calls are mandatory for any governance assertion.**
+
+`NEXT_PUBLIC_CVF_MOCK_AI=1` makes `ai-providers.ts` return a hardcoded string before any governance logic runs. The guard engine, DLP filter, bypass detection, output validation, and audit events are all bypassed. A test passing in mock mode only proves the UI renders a fixed string — not that CVF controls real AI behavior.
+
+**Mandatory for live calls:** risk badge visible after AI response, approval controls rendered, phase gate modal triggered, DLP/bypass gate fired, audit trail updated, or any assertion about how CVF responds to actual AI output.
+
+**Assert governance behavior, not AI content.** Response text varies run-to-run. Governance behavior does not. Use `expect(approvalButton).toBeVisible()`, not `expect(text).toContain('some AI phrase')`.
+
+Provider priority for live tests:
+
+- Alibaba `qwen-turbo` — primary (7–12s observed, use 30s timeout)
+- DeepSeek `deepseek-chat` — secondary or parallel validation (62–155s observed, use 180s timeout)
+
+The operator grants permission to use both Alibaba (`DASHSCOPE_API_KEY`) and DeepSeek (`DEEPSEEK_API_KEY`) keys freely for all testing. Never commit key values.
+
+Mock mode is only acceptable for: UI navigation/routing, static badge rendering from local data maps, RBAC redirect tests where no AI call is made.
+
+This policy is binding for all future tranches, test waves, Playwright specs, and live validation runs.
+
+---
 
 ### Reuse Rule For Future Agents
 - Treat the `2026-04-13` local verification set as the current shared baseline.

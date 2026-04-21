@@ -39,7 +39,19 @@ Kết quả:
 - `D:\CVF-Workspace\.Controlled-Vibe-Framework-CVF`
 - `D:\CVF-Workspace\Trading-Tools`
 - `D:\CVF-Workspace\Trading-Tools.code-workspace` (terminal mặc định vào project)
+- `D:\CVF-Workspace\Trading-Tools\AGENTS.md`
+- `D:\CVF-Workspace\Trading-Tools\.cvf\manifest.json`
+- `D:\CVF-Workspace\Trading-Tools\.cvf\policy.json`
 - `D:\CVF-Workspace\Trading-Tools\docs\CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
+
+Kiểm tra agent-enforcement artifacts:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\check_cvf_workspace_agent_enforcement.ps1 `
+  -ProjectPath "D:\CVF-Workspace\Trading-Tools"
+```
+
+Mốc tiếp theo đang active: [W113-T1 First Downstream Project Proof](roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md) sẽ chứng minh luồng project downstream thật trước khi claim downstream adoption đã proven.
 
 ---
 

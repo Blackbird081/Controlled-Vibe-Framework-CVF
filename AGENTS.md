@@ -18,12 +18,15 @@ This command must include live governance E2E and must fail if no DashScope-comp
 
 Never commit or print raw API key values. Use operator-supplied environment variables such as `DASHSCOPE_API_KEY`, `ALIBABA_API_KEY`, and `DEEPSEEK_API_KEY`.
 
-## Latest Closed Continuation Roadmap
+## Current Continuation Roadmap
+
+The current approved implementation roadmap is `docs/roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md`.
 
 The latest closed implementation roadmap is `docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md`.
 
-Treat its boundary language as binding:
+Treat the W112/W113 boundary language as binding:
 
 - Workspace bootstrap is now agent-enforcement-ready when generated artifacts and the workspace doctor pass.
+- W113 must prove this in a real downstream project before public docs claim downstream adoption is proven.
 - Web is governance-inherited on the active governed AI path, not the full CVF runtime.
 - Future work must improve enforcement without overstating either claim.

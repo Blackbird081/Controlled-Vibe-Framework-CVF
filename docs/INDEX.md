@@ -154,6 +154,7 @@ Nếu cần hiểu trạng thái milestone hiện tại, chuẩn bị demo, ho�
 - `roadmaps/CVF_PUBLIC_RELEASE_CANDIDATE_AND_DEMO_READINESS_ROADMAP_2026-04-21.md` — CP1-CP5 packaging roadmap
 - `roadmaps/CVF_W111_T1_LIVE_EVIDENCE_PUBLICATION_ROADMAP_2026-04-21.md` — closure record for mandatory live evidence publication sync
 - `roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md` — closed W112 milestone for downstream workspace agent enforcement and honest web control deepening
+- `roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md` — active roadmap to prove the first real downstream project adoption path
 
 ## Product Value Validation
 

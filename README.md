@@ -172,6 +172,8 @@ See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_IS
 
 Current boundary: this bootstrap is now `agent-enforcement-ready` when the generated downstream `AGENTS.md`, `.cvf/` policy manifests, bootstrap log, and workspace doctor checks are present. See [W112-T1 Workspace Agent Enforcement and Web Control Uplift](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md).
 
+Active next proof: [W113-T1 First Downstream Project Proof](docs/roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md) will prove the full downstream adoption path in a real project before public docs claim downstream adoption is proven.
+
 ### Moving To A New Machine
 
 Use [New Machine Setup Checklist](docs/reference/CVF_NEW_MACHINE_SETUP_CHECKLIST.md).
@@ -218,6 +220,7 @@ Current posture on the active reference path:
 | Web non-coder semantics | `VALUE PROVEN (Alibaba); PORTABILITY PROVEN (Alibaba + DeepSeek)` |
 | Web CVF inheritance boundary | `GOVERNANCE-INHERITED ACTIVE PATH; not full CVF runtime` |
 | Workspace bootstrap | `AGENT-ENFORCEMENT-READY via W112 bootstrap + doctor` |
+| Downstream adoption proof | `W113-T1 ACTIVE ROADMAP` |
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` |
 | Governance executable ownership | `SUBSTANTIALLY ALIGNED` |
 | End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` |
@@ -234,6 +237,7 @@ Read this status as:
 - the active path has no open tranche and remains `SUBSTANTIALLY DELIVERED`
 - Web is live-proven on its active governed AI path, but it should not be described as fully inheriting every CVF runtime/module
 - workspace bootstrap now isolates downstream work and generates downstream agent-enforcement artifacts
+- downstream adoption proof is the active W113 workline and should not be claimed as proven until W113 closes
 - relocation is closed-by-default; next work should follow the Post-MC5 Continuation Strategy
 - future expansion must go through scan continuity review, reassessment, or a fresh bounded `GC-018`
 

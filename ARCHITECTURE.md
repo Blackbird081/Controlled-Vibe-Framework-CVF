@@ -181,6 +181,7 @@ The architecture should be read this way:
 | Provider parity | Not claimed | Speed, cost, quality, latency, and reliability remain provider economics |
 | Web CVF inheritance | Active path only | Web is governance-inherited on `/api/execute`; it does not claim full CVF runtime inheritance |
 | Workspace agent enforcement | Delivered | W112-T1 adds downstream `AGENTS.md`, `.cvf/` manifest/policy, and workspace doctor checks |
+| Downstream adoption proof | Active roadmap | W113-T1 must prove a real downstream project flow before public adoption-proof claims |
 
 ## 7. Current Control Boundaries
 
@@ -206,6 +207,13 @@ Delivered W112-T1 behavior:
 - add a workspace doctor/preflight gate
 - require first-request agent protocol before downstream execution
 
+Active W113-T1 proof direction:
+
+- bootstrap a real downstream sample project outside CVF core
+- record first-request agent declaration
+- execute `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`
+- capture live API-backed governance evidence
+
 ## 8. Read Next
 
 ### General Orientation
@@ -229,3 +237,4 @@ Delivered W112-T1 behavior:
 - [Known Limitations Register](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
 - [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)
 - [W112-T1 Workspace Agent Enforcement And Web Control Uplift Roadmap](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md)
+- [W113-T1 First Downstream Project Proof Roadmap](docs/roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md)

@@ -95,6 +95,7 @@ def main() -> None:
             "lanes": lanes,
         }
         print(json.dumps(result, indent=2))
+        sys.exit(0 if (certified or canary) else 1)
     else:
         print_report(lanes)
 

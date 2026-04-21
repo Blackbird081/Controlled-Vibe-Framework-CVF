@@ -2,7 +2,11 @@
 // Authorization: CVF_GC018_W91_T1_TEMPLATE_OUTPUT_QUALITY_BENCHMARK_AUTHORIZATION_2026-04-15.md
 // Run: node scripts/w91_benchmark.js
 
-const ALIBABA_KEY = 'sk-2073fe59cd4e47d5b59f5e1438eaaf21';
+require('./load-repo-env.cjs').loadRepoEnv();
+
+const ALIBABA_KEY = process.env.ALIBABA_API_KEY
+    || process.env.CVF_BENCHMARK_ALIBABA_KEY
+    || process.env.CVF_ALIBABA_API_KEY;
 const DASHSCOPE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions';
 const MODEL_PRIORITY = ['qwen3-max', 'qwen2.5-14b-instruct', 'qwen-plus-2025-07-28', 'qwen2.5-72b-instruct', 'qwen-max'];
 
@@ -252,6 +256,10 @@ async function callAlibaba(templateId, prompt) {
 }
 
 async function run() {
+    if (!ALIBABA_KEY) {
+        throw new Error('ALIBABA_API_KEY is not set. Compatibility aliases: CVF_BENCHMARK_ALIBABA_KEY, CVF_ALIBABA_API_KEY.');
+    }
+
     const results = [];
     for (const t of templates) {
         console.log(`\n${'='.repeat(60)}`);

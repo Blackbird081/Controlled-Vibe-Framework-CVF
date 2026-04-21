@@ -1,6 +1,6 @@
 # CVF Known Limitations Register
 
-**Date:** 2026-04-21  
+**Date:** 2026-04-21 (updated 2026-04-21 — L-003 + L-008 closed by E2E stabilization wave)  
 **Scope:** CVF Release Candidate — post-provider-lane closure  
 **Classification:** Permanent boundary / Open gap  
 
@@ -50,15 +50,14 @@ Classification key:
 
 ---
 
-### L-003 — Playwright E2E Coverage Has Known Drift
+### L-003 — Playwright E2E Coverage Has Known Drift — **CLOSED 2026-04-21**
 
 | Field | Value |
 | --- | --- |
-| Classification | Open |
+| Classification | Closed |
 | Area | Test coverage |
-| Statement | Some Playwright E2E tests may not reflect the current UI state after W110-T3 changes (provider lane badges, Settings updates, ProviderSwitcher updates). The tests have not been fully resynchronized against these surfaces. |
-| Impact | E2E test failures do not indicate broken functionality; they indicate test drift. Unit tests and manual walkthrough remain the current verification standard for UI correctness. |
-| Future action | Resync affected E2E tests in a dedicated test stabilization wave. |
+| Closure | `tests/e2e/provider-lane-ui.spec.ts` (4 tests) added — provider lane badges + no-parity-language assertions cover W110-T3 surfaces. All existing mock-mode specs verified stable under `playwright.config.mock.ts`. Drift repaired in CP1 (config split + drift audit). |
+| Evidence | E2E Proof & Regression Stabilization roadmap — CP1 + CP3 DELIVERED 2026-04-21. Delta: `docs/baselines/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`. |
 
 ---
 
@@ -110,21 +109,20 @@ Classification key:
 
 ---
 
-### L-008 — Full E2E Non-Coder Path Not Automated End-to-End
+### L-008 — Full E2E Non-Coder Path Not Automated End-to-End — **CLOSED 2026-04-21**
 
 | Field | Value |
 | --- | --- |
-| Classification | Open |
+| Classification | Closed |
 | Area | Non-coder value validation |
-| Statement | The non-coder value path (landing → template gallery → intake wizard → risk classification → governed output) is proven via manual walkthrough and front-door canary. There is no single automated test that covers the full path end-to-end in a headless browser. |
-| Impact | The path works; it is not fragile. But the proof is manual + canary, not a fully automated regression suite. |
-| Future action | Full E2E automation of the non-coder path in a dedicated test wave. |
+| Closure | `tests/e2e/noncoder-governance-live.spec.ts` (5 tests) added — covers landing → template gallery → intake wizard → real Alibaba AI call → governance badge + approval controls + phase gate. Tests 4 and 5 use live Alibaba `qwen-turbo` calls; assert governance behavior, not AI content. |
+| Evidence | E2E Proof & Regression Stabilization roadmap — CP2 DELIVERED 2026-04-21. Delta: `docs/baselines/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`. |
 
 ---
 
 ## How to Use This Register
 
-**For demo preparation:** acknowledge open gaps proactively; do not wait for them to be discovered. Honesty about L-003 (E2E drift) and L-007 (two certified providers) builds trust faster than silence.
+**For demo preparation:** acknowledge open gaps proactively; do not wait for them to be discovered. Honesty about L-007 (two certified providers) builds trust faster than silence. L-003 and L-008 are now closed.
 
 **For agent handoff:** cite this register when scoping the next wave. "L-003 Playwright drift" and "L-008 non-coder path not automated" are valid candidate inputs for a test stabilization wave.
 

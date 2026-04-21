@@ -61,7 +61,7 @@
 - **Front-door CI smoke gate is now wired (2026-04-21)**: `front-door-smoke` CI job added to `.github/workflows/cvf-ci.yml`; runs 4 static corpus governance tests on every push without API key; wired into the `ci-passed` summary gate. Front-door quality is now protected by automation.
 - **Product proof expansion + productization lane CLOSED (2026-04-21)**: all four steps of `docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md` are DELIVERED. Evidence: `docs/assessments/CVF_FRONT_DOOR_PRODUCT_PROOF_EXPANSION_ASSESSMENT_2026-04-21.md` + `docs/assessments/CVF_PRODUCTIZATION_LANE_ASSESSMENT_2026-04-21.md`.
 - **Canonical next-direction roadmap**: `docs/roadmaps/CVF_PROVIDER_LANE_CERTIFICATION_AND_SELECTION_ROADMAP_2026-04-21.md` — FULLY DELIVERED 2026-04-21. Provider lane certification + selection productization is closed for the current scope; next work requires a fresh operator-driven roadmap or `GC-018`.
-- **E2E Proof & Regression Stabilization — IN PROGRESS (2026-04-21)**: Active roadmap `docs/roadmaps/CVF_E2E_PROOF_AND_REGRESSION_STABILIZATION_ROADMAP_2026-04-21.md`. CP1 and CP2 are delivered in the current session. CP3-CP5 are pending. Next agent must continue this roadmap as the active lane — see the Pending Work block below.
+- **E2E Proof & Regression Stabilization — CLOSED DELIVERED 2026-04-21**: Roadmap `docs/roadmaps/CVF_E2E_PROOF_AND_REGRESSION_STABILIZATION_ROADMAP_2026-04-21.md` fully closed. CP1–CP5 all delivered. L-003 (Playwright drift) and L-008 (non-coder path not automated) both CLOSED. Delta: `docs/baselines/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`. No active tranche.
 
 ### Wave 1 Retrieval Partitioning — CLOSED DELIVERED 2026-04-18
 
@@ -813,55 +813,43 @@ npm run test
 
 ---
 
-## Pending Work — E2E Proof & Regression Stabilization (CP3-CP5)
+## E2E Proof & Regression Stabilization — CLOSED DELIVERED 2026-04-21
 
-Roadmap: `docs/roadmaps/CVF_E2E_PROOF_AND_REGRESSION_STABILIZATION_ROADMAP_2026-04-21.md`
+Roadmap: `docs/roadmaps/CVF_E2E_PROOF_AND_REGRESSION_STABILIZATION_ROADMAP_2026-04-21.md` — **FULLY CLOSED**
 
-### What Was Delivered This Session (CP1 + CP2)
+### All CP Deliverables
 
-- `playwright.config.mock.ts` — created; keeps `NEXT_PUBLIC_CVF_MOCK_AI=1`. CI-safe / mock-only runs.
-- `playwright.config.ts` — live config: removed `NEXT_PUBLIC_CVF_MOCK_AI`, timeout `180_000`, expect.timeout `30_000`.
-- `tests/e2e/utils.ts` — added `seedStorageWithAlibaba()` (reads `DASHSCOPE_API_KEY`) and `seedStorageWithDeepSeek()` (reads `DEEPSEEK_API_KEY`).
-- `tests/e2e/agent-flows.spec.ts` — drift audit done; all selectors STABLE; no changes required.
-- `tests/e2e/noncoder-governance-live.spec.ts` — created; 5 tests (3 structural + 2 live Alibaba); closes L-008.
+| CP | Files | Status |
+| --- | --- | --- |
+| CP1 | `playwright.config.mock.ts`, `playwright.config.ts` (updated), `tests/e2e/utils.ts` (seedStorageWithAlibaba/DeepSeek) | DELIVERED (commit 7a99e383) |
+| CP2 | `tests/e2e/noncoder-governance-live.spec.ts` — 5 tests (3 structural + 2 live Alibaba) | DELIVERED (commit 7a99e383) |
+| CP3 | `tests/e2e/provider-lane-ui.spec.ts` — 4 mock-mode tests; Certified badge + no-parity-language | DELIVERED 2026-04-21 |
+| CP4 | `tests/e2e/governance-gate-live.spec.ts` — 3 live Alibaba tests; governance gate proof | DELIVERED 2026-04-21 |
+| CP5 | `scripts/run_cvf_release_gate_bundle.py` (`--e2e`/`--e2e-live` flags); `scripts/check_cvf_demo_preconditions.py` (NEW); L-003+L-008 closed in register; delta doc | DELIVERED 2026-04-21 |
 
-### Pending: CP3 — Provider Lane UI Spec (Mock)
+### Limitations Closed
 
-Create `tests/e2e/provider-lane-ui.spec.ts`. Run under `playwright.config.mock.ts`. 4 tests:
+- **L-003** (Playwright E2E drift) — CLOSED by CP1 + CP3
+- **L-008** (non-coder path not automated) — CLOSED by CP2
 
-1. Settings shows Certified badge for Alibaba
-2. Settings shows Certified badge for DeepSeek
-3. ProviderSwitcher shows at least one lane badge (Certified / Canary Pass / Experimental / Unconfigured)
-4. No parity language in provider section (no `/fastest|cheapest|best provider|equal quality|parity/i`)
-
-Key refs: `PROVIDER_LANE_EVIDENCE` in `src/lib/`; `src/components/Settings.tsx`. Closes L-003.
-
-### Pending: CP4 — Governance Gate Live Proof
-
-Create `tests/e2e/governance-gate-live.spec.ts`. Uses `seedStorageWithAlibaba`. 3 tests:
-
-1. Normal governed request completes without block (response visible, approval controls visible, no denied UI)
-2. Bypass detection — soft assertion: if AI produces bypass language, gate fires; if AI refuses, test passes with info note
-3. Governance audit trail updated after real call (navigate to history/audit section, expect at least one entry)
-
-### Pending: CP5 — Release Gate v2, Demo Preconditions, Limitations Closure
-
-1. Add `--e2e` flag to `scripts/run_cvf_release_gate_bundle.py`: runs `npx playwright test --config playwright.config.mock.ts --reporter=line`
-2. Add `--e2e-live` flag: runs `npx playwright test --config playwright.config.ts --reporter=line`
-3. Create `scripts/check_cvf_demo_preconditions.py`: check node_modules, DASHSCOPE_API_KEY, provider evaluator CERTIFIED for Alibaba, demo script exists, RC docs present. Output: DEMO READY / DEMO READY (WARNINGS) / DEMO NOT READY
-4. Update `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md`: mark L-003 Closed (CP3 done) and L-008 Closed (CP2 done)
-5. Write delta: `docs/baselines/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`
-
-Verification (run from `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web`):
+### Verification Commands
 
 ```bash
-# CP3
+# CP3 — mock provider lane UI spec
+cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
 npx playwright test --config playwright.config.mock.ts tests/e2e/provider-lane-ui.spec.ts --reporter=line
-# CP4
+
+# CP4 — live governance gate spec
 DASHSCOPE_API_KEY=<key> npx playwright test tests/e2e/governance-gate-live.spec.ts --reporter=line
-# CP5
-python scripts/run_cvf_release_gate_bundle.py --dry-run && python scripts/check_cvf_demo_preconditions.py
+
+# CP5 — release gate + demo preconditions
+python scripts/run_cvf_release_gate_bundle.py --dry-run
+python scripts/check_cvf_demo_preconditions.py
 ```
+
+Delta: `docs/baselines/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`
+
+No active tranche. Next: fresh operator direction or GC-018.
 
 ---
 

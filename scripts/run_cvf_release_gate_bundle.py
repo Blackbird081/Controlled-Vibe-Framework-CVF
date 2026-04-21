@@ -8,11 +8,15 @@ Usage:
   python scripts/run_cvf_release_gate_bundle.py --mock
   python scripts/run_cvf_release_gate_bundle.py --dry-run
   python scripts/run_cvf_release_gate_bundle.py --json
+  python scripts/run_cvf_release_gate_bundle.py --e2e
+  python scripts/run_cvf_release_gate_bundle.py --e2e-live
 
 Flags:
-  --mock     Skip live API calls; use saved receipts only (default for CI)
-  --dry-run  Print what would run without executing anything
-  --json     Machine-readable output (implies --mock)
+  --mock      Skip live API calls; use saved receipts only (default for CI)
+  --dry-run   Print what would run without executing anything
+  --json      Machine-readable output (implies --mock)
+  --e2e       Run mock-mode Playwright suite (playwright.config.mock.ts) after other checks
+  --e2e-live  Run live-mode Playwright suite (playwright.config.ts); requires DASHSCOPE_API_KEY
 
 Exit codes:
   0  All checks PASS (warnings allowed)
@@ -207,6 +211,31 @@ def check_secrets(dry_run: bool) -> CheckResult:
     return CheckResult(name, "PASS", "No secret patterns detected")
 
 
+def check_e2e(dry_run: bool, live: bool) -> CheckResult:
+    mode = "live" if live else "mock"
+    config = "playwright.config.ts" if live else "playwright.config.mock.ts"
+    name = f"E2E Playwright ({mode})"
+    if dry_run:
+        cmd_str = f"npx playwright test --config {config} --reporter=line"
+        return CheckResult(name, "SKIP", f"dry-run — would run: {cmd_str}", [str(CVF_WEB)])
+    if not CVF_WEB.exists():
+        return CheckResult(name, "FAIL", "cvf-web directory not found", [str(CVF_WEB)])
+    if live and not os.environ.get("DASHSCOPE_API_KEY"):
+        return CheckResult(
+            name, "SKIP",
+            "DASHSCOPE_API_KEY not set — live E2E skipped; set key to run full live suite"
+        )
+    cmd = ["npx", "playwright", "test", "--config", config, "--reporter=line"]
+    code, stdout, stderr = run_cmd(cmd, cwd=CVF_WEB, timeout=600)
+    output = (stdout + stderr).strip()
+    lines = output.splitlines()
+    summary = next((l for l in reversed(lines) if l.strip()), "")
+    if code == 0:
+        return CheckResult(name, "PASS", f"Playwright {mode} suite passed", [summary] if summary else [])
+    failures = [l for l in lines if "failed" in l.lower() or "error" in l.lower()][:8]
+    return CheckResult(name, "FAIL", f"Playwright {mode} suite failed", failures or lines[-8:])
+
+
 def check_docs_governance() -> CheckResult:
     name = "Docs governance (RC docs present)"
     missing = [str(d.relative_to(REPO_ROOT)) for d in REQUIRED_DOCS if not d.exists()]
@@ -274,6 +303,8 @@ def main() -> None:
     parser.add_argument("--mock", action="store_true", help="Skip live API calls (uses saved receipts)")
     parser.add_argument("--dry-run", action="store_true", dest="dry_run", help="Print what would run without executing")
     parser.add_argument("--json", action="store_true", dest="json_out", help="Machine-readable JSON output (implies --mock)")
+    parser.add_argument("--e2e", action="store_true", dest="e2e", help="Run mock-mode Playwright E2E suite")
+    parser.add_argument("--e2e-live", action="store_true", dest="e2e_live", help="Run live-mode Playwright E2E suite (requires DASHSCOPE_API_KEY)")
     args = parser.parse_args()
 
     if args.json_out:
@@ -293,6 +324,17 @@ def main() -> None:
         check_secrets(args.dry_run),
         check_docs_governance(),
     ]
+
+    if args.e2e_live:
+        results.append(check_e2e(args.dry_run, live=True))
+    elif args.e2e:
+        results.append(check_e2e(args.dry_run, live=False))
+    else:
+        results.append(CheckResult(
+            "E2E Playwright",
+            "SKIP",
+            "E2E not requested — pass --e2e (mock) or --e2e-live (live, requires DASHSCOPE_API_KEY)",
+        ))
 
     if args.json_out:
         sys.exit(json_output(results, today))

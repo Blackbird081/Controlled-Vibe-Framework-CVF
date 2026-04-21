@@ -3,7 +3,7 @@
 Memory class: SUMMARY_RECORD
 
 > Date: 2026-04-21
-> Status: OPEN — CP1-CP5 pending
+> Status: CLOSED DELIVERED 2026-04-21 — CP1-CP5 all delivered
 > Context: post-RC packaging; closes L-003 and L-008 from Known Limitations Register
 
 ---

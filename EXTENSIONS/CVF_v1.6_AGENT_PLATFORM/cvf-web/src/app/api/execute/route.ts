@@ -20,6 +20,8 @@ import { applyDLPFilter } from '@/lib/dlp-filter';
 import { withSessionAuditPayload } from '@/lib/middleware-auth';
 import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
 import { formatKnowledgeChunks, queryKnowledgeChunks } from '@/lib/knowledge-retrieval';
+import { buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
+import { getApprovalStore } from '../approvals/store';
 
 // ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
 // Patterns cover both explicit keyword combos (V1) and governance-approval phrasing (V2).
@@ -96,6 +98,17 @@ export async function POST(request: NextRequest) {
         if (typeof body.model === 'string') {
             body.model = body.model.trim() || undefined;
         }
+
+        // ── CP7/CP8: Build governance envelope + policy snapshot id ──────────
+        const govEnvelope = buildGovernanceEnvelope({
+            routeId: '/api/execute',
+            surfaceClass: 'governance-execution',
+            evidenceMode: 'live',
+            actorId: session?.userId ?? (isServiceAllowed ? 'service-account' : null),
+            actorRole: session?.role ?? (isServiceAllowed ? 'service' : null),
+            phase: body.cvfPhase ?? null,
+            riskLevel: body.cvfRiskLevel ?? null,
+        });
 
         // Rate limit by session + IP (after provider known)
         const limiter = getRateLimiter();
@@ -235,6 +248,8 @@ export async function POST(request: NextRequest) {
                     model: 'blocked',
                     enforcement,
                     ...(guidedResponse ? { guidedResponse } : {}),
+                    governanceEnvelope: govEnvelope,
+                    policySnapshotId: govEnvelope.policySnapshotId,
                 },
                 { status: 400 }
             );
@@ -256,6 +271,32 @@ export async function POST(request: NextRequest) {
 
         if (enforcement.status === 'NEEDS_APPROVAL') {
             const guidedResponse = lookupGuidedResponse(userPrompt);
+            // CP9: Auto-create approval record so the user can track and resume post-approval
+            const approvalId = `apr-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+            const approvalNow = new Date();
+            getApprovalStore().set(approvalId, {
+                id: approvalId,
+                templateId: body.templateId || body.templateName || 'unknown',
+                templateName: body.templateName || body.templateId || 'unknown',
+                intent: body.intent!,
+                riskLevel: body.cvfRiskLevel,
+                phase: body.cvfPhase,
+                reason: enforcement.reasons.join(' | ') || 'Human approval required',
+                blockReason: enforcement.reasons.join(' | ') || 'NEEDS_APPROVAL',
+                requestContext: {
+                    templateName: body.templateName,
+                    intent: body.intent,
+                    cvfPhase: body.cvfPhase,
+                    cvfRiskLevel: body.cvfRiskLevel,
+                    provider,
+                    model: body.model,
+                    policySnapshotId: govEnvelope.policySnapshotId,
+                    envelopeId: govEnvelope.envelopeId,
+                },
+                expiresAt: new Date(approvalNow.getTime() + 24 * 60 * 60 * 1000).toISOString(),
+                status: 'pending',
+                submittedAt: approvalNow.toISOString(),
+            });
             return NextResponse.json(
                 {
                     success: false,
@@ -264,6 +305,10 @@ export async function POST(request: NextRequest) {
                     model: 'approval-required',
                     enforcement,
                     ...(guidedResponse ? { guidedResponse } : {}),
+                    approvalId,
+                    approvalStatus: 'pending',
+                    governanceEnvelope: govEnvelope,
+                    policySnapshotId: govEnvelope.policySnapshotId,
                 },
                 { status: 409 }
             );
@@ -351,6 +396,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Use router-selected provider (may differ from requested if default was ineligible)
+        govEnvelope.providerLane = routingResult.selectedProvider ?? provider;
         const routedProvider: AIProvider = routingResult.selectedProvider ?? provider;
         const routedApiKey = apiKeyMap[routedProvider];
 
@@ -524,6 +570,10 @@ export async function POST(request: NextRequest) {
                 decision: routingResult.decision,
                 selectedProvider: routingResult.selectedProvider,
                 rationale: routingResult.rationale,
+                deniedReason: routingResult.deniedReason,
+                fallbackChain: routingResult.fallbackChain,
+                requestedProvider: provider,
+                routerOverrode: routingResult.selectedProvider !== null && routingResult.selectedProvider !== provider,
             },
             knowledgeInjection: {
                 injected: !!enrichedSystemPrompt,
@@ -536,6 +586,8 @@ export async function POST(request: NextRequest) {
                 issues: outputValidation.issues,
                 retryAttempts: retryState.attempt,
             } : undefined,
+            governanceEnvelope: govEnvelope,
+            policySnapshotId: govEnvelope.policySnapshotId,
         });
 
     } catch (error) {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { appendAuditEvent } from '@/lib/control-plane-events';
+import { buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
 
 import { ApprovalRequestRecord, getApprovalStore } from './store';
 
@@ -28,6 +29,13 @@ export async function POST(request: NextRequest) {
 
         const id = generateId();
         const now = new Date();
+        const govEnvelope = buildGovernanceEnvelope({
+            routeId: '/api/approvals',
+            surfaceClass: 'governance-execution',
+            evidenceMode: 'live',
+            riskLevel: body.riskLevel ? String(body.riskLevel) : null,
+            phase: body.phase ? String(body.phase) : null,
+        });
         const record: ApprovalRequestRecord = {
             id,
             templateId: String(body.templateId),
@@ -38,6 +46,10 @@ export async function POST(request: NextRequest) {
             riskLevel: body.riskLevel ? String(body.riskLevel) : undefined,
             phase: body.phase ? String(body.phase) : undefined,
             reason: String(body.reason || ''),
+            requestContext: {
+                policySnapshotId: govEnvelope.policySnapshotId,
+                envelopeId: govEnvelope.envelopeId,
+            },
             expiresAt: new Date(now.getTime() + EXPIRY_MS).toISOString(),
             status: 'pending',
             submittedAt: now.toISOString(),
@@ -51,6 +63,8 @@ export async function POST(request: NextRequest) {
             status: record.status,
             submittedAt: record.submittedAt,
             expiresAt: record.expiresAt,
+            policySnapshotId: govEnvelope.policySnapshotId,
+            governanceEnvelope: govEnvelope,
             message: 'Your request has been submitted for review. An admin will evaluate it and you will see the result here.',
         }, { status: 201 });
     } catch (error) {

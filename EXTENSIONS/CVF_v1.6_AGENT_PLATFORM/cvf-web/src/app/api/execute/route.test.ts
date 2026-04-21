@@ -69,6 +69,7 @@ describe('/api/execute', () => {
         delete process.env.CVF_BENCHMARK_ALIBABA_KEY;
         delete process.env.CVF_ALIBABA_API_KEY;
         delete process.env.OPENROUTER_API_KEY;
+        delete process.env.DEEPSEEK_API_KEY;
         delete process.env.DEFAULT_AI_PROVIDER;
         delete process.env.CVF_SESSION_SECRET;
         verifySessionCookieMock.mockResolvedValue({

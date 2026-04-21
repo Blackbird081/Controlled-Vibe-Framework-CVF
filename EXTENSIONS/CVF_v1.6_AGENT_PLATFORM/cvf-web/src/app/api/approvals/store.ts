@@ -5,6 +5,17 @@
 
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'expired';
 
+export interface ApprovalRequestContext {
+    templateName?: string;
+    intent?: string;
+    cvfPhase?: string;
+    cvfRiskLevel?: string;
+    provider?: string;
+    model?: string;
+    policySnapshotId?: string;
+    envelopeId?: string;
+}
+
 export interface ApprovalRequestRecord {
     id: string;
     templateId: string;
@@ -15,6 +26,8 @@ export interface ApprovalRequestRecord {
     riskLevel?: string;
     phase?: string;
     reason: string;
+    blockReason?: string;
+    requestContext?: ApprovalRequestContext;
     expiresAt: string;
     status: ApprovalStatus;
     submittedAt: string;

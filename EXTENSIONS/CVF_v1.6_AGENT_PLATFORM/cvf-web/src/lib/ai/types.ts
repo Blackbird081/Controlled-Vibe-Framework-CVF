@@ -1,4 +1,5 @@
 import type { EnforcementResult } from '@/lib/enforcement';
+import type { LaneStatus } from '@/lib/provider-lane-status';
 
 // AI Provider Types and Interfaces
 export type AIProvider = 'openai' | 'claude' | 'gemini' | 'alibaba' | 'openrouter' | 'deepseek';
@@ -58,6 +59,8 @@ export interface ProviderStatus {
     provider: AIProvider;
     configured: boolean;
     model: string;
+    /** Canary certification status from the provider lane taxonomy. */
+    laneStatus: LaneStatus;
 }
 
 // Default models per provider (should match AVAILABLE_MODELS in Settings.tsx)

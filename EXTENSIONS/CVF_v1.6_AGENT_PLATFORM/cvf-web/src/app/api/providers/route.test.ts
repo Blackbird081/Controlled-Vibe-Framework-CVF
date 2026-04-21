@@ -63,4 +63,42 @@ describe('/api/providers', () => {
         expect(deepseek.configured).toBe(true);
         expect(deepseek.model).toBe('deepseek-chat');
     });
+
+    it('returns UNCONFIGURED lane status when no key is present', async () => {
+        const res = await GET();
+        const data = await res.json();
+        for (const p of data.providers) {
+            expect(p.laneStatus).toBe('UNCONFIGURED');
+        }
+    });
+
+    it('returns CERTIFIED lane status for Alibaba when configured', async () => {
+        process.env.ALIBABA_API_KEY = 'ali-key';
+
+        const res = await GET();
+        const data = await res.json();
+        const alibaba = data.providers.find((p: { provider: string }) => p.provider === 'alibaba');
+
+        expect(alibaba.laneStatus).toBe('CERTIFIED');
+    });
+
+    it('returns CANARY_PASS lane status for DeepSeek when configured', async () => {
+        process.env.DEEPSEEK_API_KEY = 'ds-key';
+
+        const res = await GET();
+        const data = await res.json();
+        const deepseek = data.providers.find((p: { provider: string }) => p.provider === 'deepseek');
+
+        expect(deepseek.laneStatus).toBe('CANARY_PASS');
+    });
+
+    it('returns EXPERIMENTAL lane status for providers with no canary evidence', async () => {
+        process.env.OPENAI_API_KEY = 'openai-key';
+
+        const res = await GET();
+        const data = await res.json();
+        const openai = data.providers.find((p: { provider: string }) => p.provider === 'openai');
+
+        expect(openai.laneStatus).toBe('EXPERIMENTAL');
+    });
 });

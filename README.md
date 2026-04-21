@@ -11,7 +11,7 @@
 [![Guard Contract](https://img.shields.io/badge/Guard%20Contract-187%20tests%20pass-brightgreen.svg)](EXTENSIONS/CVF_GUARD_CONTRACT/)
 [![MCP Bridge](https://img.shields.io/badge/MCP%20Bridge-4%20endpoints%20active-blue.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/)
 [![Non-Coder Value](https://img.shields.io/badge/non--coder%20value-1%20provider%20proven-brightgreen.svg)](docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md)
-[![Multi Provider](https://img.shields.io/badge/multi--provider-2%20live%20lanes%20proven-brightgreen.svg)](docs/audits/deepseek-canary/INDEX.md)
+[![Multi Provider](https://img.shields.io/badge/multi--provider-Alibaba%20CERTIFIED%20%7C%20DeepSeek%20CANARY__PASS-brightgreen.svg)](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
 [![Knowledge Benefit](https://img.shields.io/badge/knowledge%20benefit-%2B0.775%20delta-brightgreen.svg)](docs/assessments/CVF_W102_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md)
 [![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
 [![CI](https://img.shields.io/badge/CI-governed%20verification%20active-brightgreen.svg)](.github/workflows/cvf-ci.yml)
@@ -91,6 +91,7 @@ Boundaries that still matter:
 Canonical claim boundary:
 
 - [Public Non-Coder Value Statement](docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md)
+- [Provider Lane Readiness Matrix](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
 - [Alibaba live canary receipts](docs/audits/alibaba-canary/INDEX.md)
 - [DeepSeek live canary receipts](docs/audits/deepseek-canary/INDEX.md)
 
@@ -191,7 +192,7 @@ Current posture on the active reference path:
 | Architecture baseline | `v3.7-W46T1 CLOSURE-ASSESSED` |
 | MC sequence | `MC1-MC5 FULLY COMPLETE` |
 | One-provider non-coder value | `PROVEN — governed path value proven on Alibaba lane` |
-| Multi-provider operability | `PROVEN — Alibaba qwen-turbo + DeepSeek deepseek-chat live canaries PASS 6/6` |
+| Multi-provider operability | `PROVEN — Alibaba qwen-turbo CERTIFIED (3/3 pass) + DeepSeek deepseek-chat CANARY_PASS (1/3)` |
 | Knowledge-native execute-path value | `PROVEN — injected 0.950 vs raw 0.175 (+0.775 delta)` |
 | Post-closure integration wave | `CVF ADDING NEW + Windows_Skill_Normalization INTEGRATED` |
 | Runnable inherited upgrade surface | ``cvf-web`` `/api/governance/external-assets/prepare` |

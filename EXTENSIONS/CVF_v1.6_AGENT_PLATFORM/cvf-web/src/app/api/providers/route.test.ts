@@ -82,14 +82,14 @@ describe('/api/providers', () => {
         expect(alibaba.laneStatus).toBe('CERTIFIED');
     });
 
-    it('returns CANARY_PASS lane status for DeepSeek when configured', async () => {
+    it('returns CERTIFIED lane status for DeepSeek when configured', async () => {
         process.env.DEEPSEEK_API_KEY = 'ds-key';
 
         const res = await GET();
         const data = await res.json();
         const deepseek = data.providers.find((p: { provider: string }) => p.provider === 'deepseek');
 
-        expect(deepseek.laneStatus).toBe('CANARY_PASS');
+        expect(deepseek.laneStatus).toBe('CERTIFIED');
     });
 
     it('returns EXPERIMENTAL lane status for providers with no canary evidence', async () => {

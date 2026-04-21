@@ -3,7 +3,7 @@
 Memory class: SUMMARY_RECORD
 
 > Date: 2026-04-21
-> Status: PROPOSED FOR NEXT AGENT
+> Status: FULLY DELIVERED 2026-04-21 — CP1-CP4 closed
 > Context: post-W110-T2 provider lane certification closure
 
 ---
@@ -42,13 +42,22 @@ Current lane state:
 | Provider | Model | Status | Meaning |
 |---|---|---|---|
 | Alibaba | `qwen-turbo` | `CERTIFIED` | latest 3 saved canaries are PASS 6/6 |
-| DeepSeek | `deepseek-chat` | `CANARY_PASS` | latest canary is PASS 6/6; not yet 3 consecutive PASS |
+| DeepSeek | `deepseek-chat` | `CERTIFIED` | latest 3 saved canaries are PASS 6/6 |
 
 Claim boundary:
 
 > Multi-provider operability is proven. Provider parity is not claimed. Provider economics remain user-selected.
 
 This roadmap must preserve that claim boundary in UI text, docs, runbooks, and release output.
+
+Delivery status:
+
+- CP1 Provider Status UI: DELIVERED
+- CP2 Operator Runbook: DELIVERED
+- CP3 Release Readiness Gate: DELIVERED
+- CP4 DeepSeek Certification Repeat: DELIVERED — DeepSeek promoted to `CERTIFIED`
+
+Implementation delta: `docs/baselines/CVF_W110_T3_PROVIDER_LANE_UX_RELEASE_READINESS_DELTA_2026-04-21.md`
 
 ---
 

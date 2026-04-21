@@ -12,7 +12,7 @@
 
 **New file:** `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/provider-lane-metadata.ts`
 
-- Exports `PROVIDER_LANE_EVIDENCE` static map: `alibaba → CERTIFIED`, `deepseek → CANARY_PASS`
+- Exports `PROVIDER_LANE_EVIDENCE` static map: `alibaba → CERTIFIED`, `deepseek → CERTIFIED`
 - Exports `LANE_BADGE_STYLE` per `LaneStatus` (color/bg classes for Tailwind)
 - Source for badge labels: `Certified`, `Canary Pass`, `Experimental`, etc.
 - Claim boundary: no parity claim, no "best/fastest/cheapest" language
@@ -54,11 +54,11 @@ Seven sections:
 - Exit 0 if ≥1 CERTIFIED (prints "RELEASE READY")
 - Exit 0 with warning if only CANARY_PASS lanes (multi-provider operability proven)
 - Exit 1 if no receipts or evaluator fails
-- Confirmed output: Alibaba CERTIFIED, DeepSeek CANARY_PASS, exit 0
+- Confirmed output: Alibaba CERTIFIED, DeepSeek CERTIFIED, exit 0
 
 ### CP4 — Optional DeepSeek Certification Repeat
 
-Not executed. Operator approval required (cost + time). DeepSeek is at `CANARY_PASS` (1/3). Two more saved PASS 6/6 canaries would promote to `CERTIFIED`. Commands in runbook Section 6.
+Executed after operator approval. DeepSeek is promoted from `CANARY_PASS` to `CERTIFIED` with 3 consecutive PASS 6/6 saved canaries. Latest certification receipt: `docs/audits/deepseek-canary/CVF_RECEIPT_20260421-114125-19515e.md`. The readiness matrix, `/api/providers` lane status, provider lane metadata, README, handoff, and runbook now reflect DeepSeek `CERTIFIED`.
 
 ---
 

@@ -8,409 +8,495 @@ Memory class: SUMMARY_RECORD
 
 ---
 
-## Goal
+## Core Principle
 
-CVF is release-candidate ready. The remaining credibility gap is test coverage: the non-coder value path and provider lane UI are proven by manual walkthrough and canary receipts, but not by automated regression. This roadmap converts that manual proof into repeatable, headless E2E coverage.
+Non-coders do not know how AI or agents work internally. CVF's entire value proposition is that it controls real AI on their behalf. A test that only proves a hardcoded string renders in the right place proves nothing about governance. Every test that asserts governance behavior must use a real AI call — no exceptions.
 
-Motivation from Known Limitations Register:
+**Live calls are the default for governance tests. Mock mode is for pure UI structure only.**
 
-- **L-003** — Playwright E2E has known drift after W110-T3 UI changes (Settings, ProviderSwitcher, lane badges)
-- **L-008** — Non-coder golden path not covered by any automated headless test
+The operator grants permission to use Alibaba (qwen-turbo) and DeepSeek (deepseek-chat) API keys freely for all testing in this roadmap. Alibaba is the primary provider for live tests (7–12s, cheaper). DeepSeek is the secondary (62–155s, parallel validation).
 
-Delivering this roadmap means:
+---
 
-- existing E2E tests are audited, drift is documented, broken tests are fixed or retired
-- a new non-coder golden path spec exists and runs green in mock mode
-- a new provider lane UI spec exists and verifies CERTIFIED badge rendering without live API calls
-- the release gate bundle gains an optional `--e2e` flag for operators who want full automated smoke
+## Why Mock Mode Is Insufficient for Governance Tests
 
-No new providers. No new features. No architecture changes. Test coverage only.
+`/api/execute` runs a full governance pipeline on every request:
+
+- guard context evaluation (`buildWebGuardContext`)
+- enforcement rule matching (`evaluateEnforcement`)
+- DLP filter (`applyDLPFilter`)
+- output bypass detection (`detectBypassInOutput` — 14 patterns)
+- output validation (`validateOutput`)
+- audit event emission (`appendAuditEvent`)
+- budget and rate-limit checks
+
+`NEXT_PUBLIC_CVF_MOCK_AI=1` returns a hardcoded string (`MOCK_GOVERNANCE_RESPONSE`) **before any of this pipeline runs**. A test that passes in mock mode only proves that the UI renders the mock string. It proves nothing about whether CVF actually governs real AI output.
+
+The only honest governance test is one where a real provider responds and CVF's pipeline processes that real response.
+
+---
+
+## Test Architecture
+
+Two clearly separated test layers:
+
+| Layer | Mode | Playwright config | Purpose |
+| --- | --- | --- | --- |
+| Structure tests | Mock (`NEXT_PUBLIC_CVF_MOCK_AI=1`) | `playwright.config.mock.ts` | UI navigation, routing, badge rendering — no AI required |
+| Governance tests | Live (real AI call) | `playwright.config.ts` (default) | Prove CVF governs real AI responses on behalf of non-coders |
+
+**Governance assertion rule:** Never assert the content of the AI response. Assert the governance behavior that fires in response to any AI output:
+
+- Did the risk badge appear?
+- Did the approval controls render?
+- Did the phase gate modal trigger?
+- Did the DLP/bypass gate intercept?
+- Was the audit trail updated?
+
+These assertions are deterministic regardless of what the AI says. A real AI call can produce any text, but the governance layer must respond correctly to all of it.
+
+---
+
+## Provider Setup for Live Tests
+
+Live tests read provider keys from environment variables. `utils.ts` must provide helpers that inject these keys into the browser `localStorage` before each live test.
+
+Required env vars for live E2E:
+
+```bash
+DASHSCOPE_API_KEY=<alibaba key>     # primary
+DEEPSEEK_API_KEY=<deepseek key>     # secondary / parallel validation
+```
+
+`seedStorageWithAlibaba()` helper injects:
+
+```json
+{
+  "providers": {
+    "alibaba": { "apiKey": "<DASHSCOPE_API_KEY from env>", "enabled": true, "selectedModel": "qwen-turbo" }
+  },
+  "preferences": { "defaultProvider": "alibaba" }
+}
+```
+
+`seedStorageWithDeepSeek()` — same pattern for DeepSeek.
+
+The Playwright webServer for live tests must NOT set `NEXT_PUBLIC_CVF_MOCK_AI=1`.
+
+Live timeouts:
+
+- Alibaba: expect 15–30s per governance test (buffer over observed 7–12s)
+- DeepSeek: expect 180s per test (buffer over observed 62–155s)
 
 ---
 
 ## Current E2E Baseline
 
-Playwright config: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/playwright.config.ts`
-
-- Test dir: `tests/e2e/`
-- Base URL: `http://localhost:3001`
-- Mock mode: `NEXT_PUBLIC_CVF_MOCK_AI=1` set by webServer env
-- Timeout: 60 s per test
-
 Existing spec files:
 
-| File | Tests | Last known state | Drift risk |
+| File | Tests | Drift risk | Current mode |
 | --- | --- | --- | --- |
-| `agent-flows.spec.ts` | 3 | simple / governance / full mode flows | HIGH — checks Vietnamese UI strings and modal headings that may have shifted in W110-T3 |
-| `admin-rbac.spec.ts` | 2 | admin enterprise plane + developer redirect | LOW — RBAC logic is stable; page routes unchanged |
+| `agent-flows.spec.ts` | 3 | HIGH — asserts `MOCK_SIMPLE_RESPONSE`, `MOCK_GOVERNANCE_RESPONSE` exact strings; modal headings may have shifted in W110-T3 | Mock only |
+| `admin-rbac.spec.ts` | 2 | LOW — RBAC route logic stable | Mock |
 
-Missing coverage:
+Existing test problems:
 
-| Gap | Limitation |
-| --- | --- |
-| Non-coder golden path (landing → template → intake → risk output) | L-008 |
-| Provider lane badge rendering in Settings / ProviderSwitcher | L-003 adjacent |
-| Demo Script paths (Path A, B, C) — no automated assertion | L-008 adjacent |
+- `agent-flows.spec.ts` tests 3 governance flows but uses mock strings → proves UI renders mock, not governance works
+- Both specs use `DEFAULT_SETTINGS` that seeds a Gemini key, which is not one of the certified providers
 
 ---
 
-## Non-Goals
-
-This roadmap is not for:
-
-- replacing manual demo or canary runs
-- writing E2E tests for every UI surface in cvf-web
-- running live AI provider calls in Playwright (mock mode only)
-- fixing TypeScript type errors unrelated to test files
-- adding new governance features
-- testing legacy EXTENSIONS outside the agent platform
-
----
-
-## Step 1 — E2E Inventory and Drift Classification
+## Step 1 — E2E Inventory, Drift Repair, and Config Split
 
 Purpose:
 
-- establish ground truth about which existing tests pass, which are drifted, and which are obsolete
-- prevent the next agent from silently skipping broken tests
+- establish which existing tests are STABLE / DRIFT / OBSOLETE
+- split Playwright config into live (default) and mock (CI-fallback)
+- update `utils.ts` with live provider helpers
 
-Run existing suite against current UI:
+### 1a — Playwright Config Split
 
-```bash
-cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-npx playwright test --reporter=line 2>&1 | tee test-output.txt
+Create `playwright.config.mock.ts` — identical to current config but adds `NEXT_PUBLIC_CVF_MOCK_AI=1` to webServer env. This becomes the CI-safe config for environments without provider keys.
+
+Current `playwright.config.ts` becomes the live config:
+
+- remove `NEXT_PUBLIC_CVF_MOCK_AI: '1'` from webServer env
+- increase `timeout` to `180_000` (DeepSeek ceiling)
+- increase `expect.timeout` to `30_000`
+
+### 1b — Update `utils.ts`
+
+Add live provider helpers:
+
+```ts
+export async function seedStorageWithAlibaba(page: Page) {
+    const key = process.env.DASHSCOPE_API_KEY ?? '';
+    await page.addInitScript((k) => {
+        localStorage.setItem('cvf_settings', JSON.stringify({
+            providers: {
+                alibaba: { apiKey: k, enabled: true, selectedModel: 'qwen-turbo' },
+            },
+            preferences: {
+                defaultProvider: 'alibaba',
+                defaultLanguage: 'vi',
+                autoSaveHistory: true,
+                showWelcomeTour: false,
+            },
+        }));
+        localStorage.setItem('cvf_onboarding_complete', 'true');
+    }, key);
+}
+
+export async function seedStorageWithDeepSeek(page: Page) {
+    const key = process.env.DEEPSEEK_API_KEY ?? '';
+    await page.addInitScript((k) => {
+        localStorage.setItem('cvf_settings', JSON.stringify({
+            providers: {
+                deepseek: { apiKey: k, enabled: true, selectedModel: 'deepseek-chat' },
+            },
+            preferences: {
+                defaultProvider: 'deepseek',
+                defaultLanguage: 'vi',
+                autoSaveHistory: true,
+                showWelcomeTour: false,
+            },
+        }));
+        localStorage.setItem('cvf_onboarding_complete', 'true');
+    }, key);
+}
 ```
 
-For each spec, record:
+### 1c — Existing Test Drift Repair
 
-| Spec | Test | Result | Classification |
-| --- | --- | --- | --- |
-| `agent-flows.spec.ts` | Simple mode | PASS / FAIL / SKIP | STABLE / DRIFT / OBSOLETE |
-| `agent-flows.spec.ts` | Governance mode | — | — |
-| `agent-flows.spec.ts` | Full mode | — | — |
-| `admin-rbac.spec.ts` | Admin access | — | — |
-| `admin-rbac.spec.ts` | Dev redirect | — | — |
+Run existing specs against current UI. For each test:
 
-Classification rules:
+- **STABLE** → no change
+- **DRIFT** → update selector/text; keep behavioral assertion
+- **OBSOLETE** → remove with `// removed: <reason>`
 
-- **STABLE** — passes as-is, no changes needed
-- **DRIFT** — fails because UI changed; test logic is still valid, selector/text needs update
-- **OBSOLETE** — tests behavior that no longer exists or was intentionally removed
+`agent-flows.spec.ts` expected drift:
 
-Drift repairs (for DRIFT tests only):
-
-- update selectors, text, or route names to match current UI
-- do not change the behavioral assertion — what the test verifies should remain the same
-- if the behavior itself was removed, reclassify as OBSOLETE and retire the test
-
-Obsolete retirements:
-
-- remove the test case
-- leave a one-line comment in the spec explaining why: `// removed: <behavior> was retired in W110-T3`
+- `MOCK_SIMPLE_RESPONSE` / `MOCK_GOVERNANCE_RESPONSE` exact string checks → these are valid for mock-mode structural tests; keep them in the mock spec but note they do not prove governance
+- Vietnamese modal headings may have shifted → update to use language-neutral or regex selectors
 
 Exit:
 
-- all surviving tests pass or are explicitly marked skip with a reason
-- drift classification table is recorded in the baseline delta
+- all surviving mock tests pass under `playwright.config.mock.ts`
+- config split in place
 
 ---
 
-## Step 2 — Non-Coder Golden Path Spec
+## Step 2 — Non-Coder Governance Golden Path (Live)
 
 Purpose:
 
-- automate Demo Script Path A as a headless Playwright test
-- close L-008 in the Known Limitations Register
+- automate Demo Script Path A as a live, headless test
+- prove CVF governs real Alibaba AI responses on behalf of a non-coder
+- close L-008
 
 Create:
 
-- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/noncoder-golden-path.spec.ts`
+- `tests/e2e/noncoder-governance-live.spec.ts`
 
-Required test cases:
+All tests in this spec use `seedStorageWithAlibaba` and the live Playwright config.
 
-### Test: landing page renders value props
+### Test 1: landing renders value props and non-coder CTA
 
 ```
 navigate to /landing
-expect heading "CVF" or "Controlled Vibe" to be visible
-expect at least one CTA button to be visible
-expect language toggle (EN/VI) to be present
+expect CVF heading visible
+expect at least one CTA button visible
+expect language toggle visible
 ```
 
-### Test: template gallery loads and shows templates
+This test is structural — no AI call. Proves the front door is accessible.
+
+### Test 2: template gallery shows governed templates
 
 ```
-navigate to / (home/dashboard)
-expect template cards to be visible (at least 1)
-expect at least one "Use Template" or "Start" button to be visible
+navigate to / (home)
+expect at least 1 template card visible
+expect at least 1 "Use Template" or "Start" CTA visible
 ```
 
-### Test: intake wizard advances through steps
+No AI call. Proves non-coder can find an entry point.
+
+### Test 3: intake wizard advances — real AI not yet needed
 
 ```
-navigate to / → click first template
-expect intake form to be visible
-fill in: project name, description
+navigate to / → select first template
+expect intake form visible
+fill project name and description
 advance to next step
-expect risk classification or governance step to be shown
+expect next step or risk indicator visible
 ```
 
-### Test: risk classification output is shown
+No AI call. Proves wizard navigation works.
+
+### Test 4: governance fires on real Alibaba AI response
 
 ```
-complete intake wizard with minimal data
-expect risk level indicator to be visible (R0 / R1 / R2 / R3 or any risk badge)
+seed Alibaba key from env
+login as admin
+open Strategy Analysis
+fill spec with governance mode intent
+submit to agent in governance mode
+
+// assert governance behavior, NOT AI content
+await expect(page.locator('[data-governance-badge], .governance-badge, text=/Có Quy tắc|Has Rules/i').first())
+    .toBeVisible({ timeout: 30_000 });
+await expect(page.getByRole('button', { name: /Chấp nhận|Accept/i }))
+    .toBeVisible({ timeout: 5_000 });
+
+// assert response is real (not mock string)
+const responseEl = page.locator('[data-agent-response], .agent-response').first();
+await expect(responseEl).toBeVisible({ timeout: 30_000 });
+const text = await responseEl.textContent();
+expect(text?.length).toBeGreaterThan(50);
+expect(text).not.toContain('MOCK_');
 ```
 
-Mock mode requirements:
+This is the L-008 closure test: real AI call, real governance pipeline, non-coder-facing result.
 
-- all tests must run with `NEXT_PUBLIC_CVF_MOCK_AI=1` (already set by playwright.config.ts webServer)
-- no live AI API call is acceptable
-- if the UI requires an auth session, use the same `seedStorage` + `login` helper from `utils.ts`
+### Test 5: risk level is classified on real AI output
+
+```
+seed Alibaba key from env
+login, open template, submit intent in full mode
+await phase gate modal ({ timeout: 30_000 })
+expect heading matching /Phase 1|Intake|Discovery/i visible
+expect "Approve" or "Duyệt" button visible
+```
+
+Proves CVF enforces phase control on real AI output.
 
 Exit:
 
-- spec file created
-- all 4 tests pass in mock mode
-- L-008 marked `Closed` in Known Limitations Register with date and spec path
+- all 5 tests pass with live Alibaba calls
+- L-008 marked Closed in Known Limitations Register
 
 ---
 
-## Step 3 — Provider Lane UI Spec
+## Step 3 — Provider Lane UI Spec (Structure, Mock OK)
 
 Purpose:
 
-- automate verification that CERTIFIED lane badges render correctly in Settings and ProviderSwitcher
-- ensure UI copy does not accidentally claim parity (language assertions)
-- closes L-003 (drift) partially and covers the W110-T3 UI surface
+- prove CERTIFIED badge renders correctly for Alibaba and DeepSeek
+- assert no parity language in provider UI
+
+Badge data comes from static `PROVIDER_LANE_EVIDENCE` map — no live call needed. Mock mode is correct here.
 
 Create:
 
-- `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/provider-lane-ui.spec.ts`
+- `tests/e2e/provider-lane-ui.spec.ts`
 
-Required test cases:
+Run under `playwright.config.mock.ts`.
 
-### Test: Settings shows Certified badge for Alibaba
+### Test 1: Settings shows Certified badge for Alibaba
 
 ```
 navigate to /settings
-expect element with text "Certified" (case-insensitive) to be visible near Alibaba provider card
-expect element with text "3/3" or "PASS" to be visible
-expect NO element with text "parity", "fastest", "cheapest", "best" to exist in provider section
+expect text "Certified" visible near Alibaba provider card
+expect text "3/3" or "PASS" visible
+expect NO text "parity", "fastest", "cheapest", "best" in provider section
 ```
 
-### Test: Settings shows Certified badge for DeepSeek
+### Test 2: Settings shows Certified badge for DeepSeek
+
+Same pattern.
+
+### Test 3: ProviderSwitcher shows lane badge
 
 ```
-same pattern as Alibaba
+open ProviderSwitcher
+expect at least one badge: "Certified" | "Canary Pass" | "Experimental" | "Unconfigured"
 ```
 
-### Test: ProviderSwitcher compact dropdown shows lane badge
+### Test 4: Claim boundary preserved in UI copy
 
 ```
-open ProviderSwitcher dropdown
-expect at least one provider item with a lane badge to be visible
-expect badge text to be one of: "Certified", "Canary Pass", "Experimental", "Unconfigured"
+in provider settings section:
+expect NO text matching /fastest|cheapest|best provider|equal quality|parity/i
+expect text matching /User-paid|evidence|canary|certification/i to be visible
 ```
-
-### Test: Unconfigured provider shows Unconfigured badge (if applicable)
-
-```
-if a provider without key is shown in the UI:
-expect badge text "Unconfigured" or "Add API key" to be visible
-```
-
-Mock mode requirements:
-
-- provider badge data comes from static `PROVIDER_LANE_EVIDENCE` map in `provider-lane-metadata.ts`
-- no live API call is needed; mock mode is sufficient
-- if Settings requires auth, use `seedStorage` + `login` helper
-
-Claim boundary assertion:
-
-- at least one test must assert that prohibited parity language does NOT appear in the provider section
-- prohibited text: "parity", "fastest", "cheapest", "best provider", "equal quality"
 
 Exit:
 
-- spec file created
-- all tests pass in mock mode
-- L-003 classification updated in Known Limitations Register from Open to Closed or Reduced
+- all 4 tests pass in mock mode
+- L-003 updated in Known Limitations Register
 
 ---
 
-## Step 4 — Demo Script Executable Check
+## Step 4 — DLP and Bypass Gate Live Proof
 
 Purpose:
 
-- turn the manual demo script (Path A, B, C) into a verifiable checklist
-- not a full E2E replacement — a smoke check that confirms pre-conditions are met
+- prove CVF's bypass detection and DLP filter intercept real AI output that attempts to circumvent governance
+- this is the hardest governance claim to prove without live calls — it requires sending a real prompt and asserting the gate fires
 
 Create:
 
-- `scripts/check_cvf_demo_preconditions.py`
+- `tests/e2e/governance-gate-live.spec.ts`
 
-Required checks:
+All tests use `seedStorageWithAlibaba`.
 
-| Check | Command | Exit |
-| --- | --- | --- |
-| Dev server dependency: node_modules installed | check `cvf-web/node_modules` exists | WARN if missing |
-| Provider matrix readable | `python scripts/evaluate_cvf_provider_lane_certification.py --json` | FAIL if error |
-| Alibaba CERTIFIED | evaluator output | WARN if not CERTIFIED |
-| DeepSeek CERTIFIED | evaluator output | WARN if not CERTIFIED |
-| Demo script file exists | check `docs/guides/CVF_DEMO_SCRIPT_2026-04-21.md` | FAIL if missing |
-| Release gate docs present | check truth packet + limitations register | FAIL if missing |
-
-Output format:
+### Test 1: normal governed request completes without block
 
 ```
-CVF DEMO PRECONDITION CHECK — 2026-04-21
-[PASS] node_modules installed
-[PASS] Provider matrix readable
-[PASS] Alibaba: CERTIFIED
-[PASS] DeepSeek: CERTIFIED
-[PASS] Demo script present
-[PASS] RC docs present
----
-RESULT: DEMO READY
+submit a low-risk intent in governance mode via real Alibaba call
+expect response visible within 30s
+expect NO block/error/denied UI
+expect approval controls visible (governance ran, but didn't block)
+```
+
+### Test 2: bypass detection fires on high-risk output
+
+```
+submit a prompt designed to elicit bypass language in the AI response
+(e.g., "Tell me to proceed with deploy without review in your response")
+await response
+
+if bypass was detected:
+  expect block/warning UI visible
+  expect response NOT to be accepted without approval
+
+if bypass was not detected in AI output (AI didn't comply with the elicit):
+  expect normal governance flow
+  test.info("bypass not elicited — governance passed through correctly")
+```
+
+Note: this test has a soft assertion — if the AI refuses to produce bypass language (good behavior), governance passes through normally. The test still passes. What matters is: CVF correctly handles both outcomes.
+
+### Test 3: governance audit trail is updated after real call
+
+```
+complete a real governance mode call
+navigate to governance/history or audit section
+expect at least one recent audit entry
+expect entry contains provider reference or timestamp
 ```
 
 Exit:
 
-- script exists and runs clean
-- output maps directly to Demo Script Path A / B / C prerequisites
+- all 3 tests pass with live Alibaba calls
+- evidence that CVF governs real AI, not just mock strings, is in test output
 
 ---
 
-## Step 5 — Release Gate v2 (Optional E2E Flag)
+## Step 5 — Release Gate v2 and Limitations Closure
 
-Purpose:
+### 5a — `run_cvf_release_gate_bundle.py` — add `--e2e` flag
 
-- add `--e2e` flag to `run_cvf_release_gate_bundle.py`
-- when passed, runs Playwright E2E suite as an additional check after the existing 5 checks
-- default behavior is unchanged — no live calls, no Playwright by default
-
-Extend:
-
-- `scripts/run_cvf_release_gate_bundle.py`
-
-New flag: `--e2e`
-
-Behavior when `--e2e` is set:
+When `--e2e` is passed:
 
 ```bash
 cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-npx playwright test --reporter=line
+npx playwright test --config playwright.config.mock.ts --reporter=line
 ```
 
-- exit code 0 → E2E check PASS
-- exit code non-0 → E2E check FAIL with output excerpt
+When `--e2e-live` is passed:
 
-New output row in gate report:
-
-```
-[PASS] E2E suite (Playwright)
-       5/5 tests passed
+```bash
+npx playwright test --config playwright.config.ts --reporter=line
 ```
 
-or:
+Default (no flag): E2E row shows SKIP with instruction.
+
+### 5b — Known Limitations Register updates
+
+| Limitation | Action |
+| --- | --- |
+| L-003 (Playwright drift) | Mark Closed — drift repaired in CP1, provider lane UI spec in CP3 |
+| L-008 (non-coder path not automated) | Mark Closed — live governance golden path in CP2 |
+
+### 5c — Demo Preconditions Script
+
+Create `scripts/check_cvf_demo_preconditions.py`:
 
 ```
-[FAIL] E2E suite (Playwright)
-       2/5 tests failed — see test-output.txt
+check node_modules installed → WARN if missing
+check DASHSCOPE_API_KEY in env → WARN if missing (demo Path C will be limited)
+check provider evaluator returns CERTIFIED for Alibaba → WARN if not
+check demo script file exists → FAIL if missing
+check RC docs present → FAIL if missing
 ```
 
-When `--e2e` is not set:
-
-```
-[SKIP] E2E suite (Playwright)
-       pass --e2e to include headless browser checks
-```
-
-Exit:
-
-- `--e2e` flag works and integrates with existing PASS/FAIL/WARN gate output
-- default `--dry-run` and `--mock` behavior unchanged
+Output: DEMO READY / DEMO READY (WARNINGS) / DEMO NOT READY
 
 ---
 
 ## Recommended Control Points
 
-### CP1 — E2E Inventory and Drift Repair
+### CP1 — Config Split, utils.ts Update, Drift Repair
 
 Deliver:
 
-- drift classification table (per test: STABLE / DRIFT / OBSOLETE)
-- all DRIFT tests repaired
-- all OBSOLETE tests retired with comment
-- all surviving tests pass
+- `playwright.config.mock.ts`
+- `tests/e2e/utils.ts` with `seedStorageWithAlibaba`, `seedStorageWithDeepSeek`
+- all existing tests pass under mock config
 
-Suggested verification:
+Verification:
 
 ```bash
 cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-npx playwright test --reporter=line
+npx playwright test --config playwright.config.mock.ts --reporter=line
 ```
 
-Expected: all tests PASS or explicitly skipped.
-
-### CP2 — Non-Coder Golden Path Spec
+### CP2 — Non-Coder Governance Golden Path (Live)
 
 Deliver:
 
-- `tests/e2e/noncoder-golden-path.spec.ts`
-- 4 tests, all PASS in mock mode
-- L-008 closed in Known Limitations Register
+- `tests/e2e/noncoder-governance-live.spec.ts`
+- 5 tests pass with live Alibaba calls
+- L-008 Closed
 
-Suggested verification:
+Verification:
 
 ```bash
-npx playwright test tests/e2e/noncoder-golden-path.spec.ts --reporter=line
+DASHSCOPE_API_KEY=<key> npx playwright test tests/e2e/noncoder-governance-live.spec.ts --reporter=line
 ```
 
-### CP3 — Provider Lane UI Spec
+### CP3 — Provider Lane UI Spec (Mock)
 
 Deliver:
 
 - `tests/e2e/provider-lane-ui.spec.ts`
-- CERTIFIED badge assertions for Alibaba + DeepSeek
-- claim boundary negative assertion (no parity language)
-- L-003 updated in Known Limitations Register
+- 4 tests pass in mock mode
+- L-003 Closed
 
-Suggested verification:
+Verification:
 
 ```bash
-npx playwright test tests/e2e/provider-lane-ui.spec.ts --reporter=line
+npx playwright test --config playwright.config.mock.ts tests/e2e/provider-lane-ui.spec.ts --reporter=line
 ```
 
-### CP4 — Demo Script Executable Check
+### CP4 — Governance Gate Live Proof
 
 Deliver:
 
+- `tests/e2e/governance-gate-live.spec.ts`
+- 3 tests pass with live Alibaba calls
+
+Verification:
+
+```bash
+DASHSCOPE_API_KEY=<key> npx playwright test tests/e2e/governance-gate-live.spec.ts --reporter=line
+```
+
+### CP5 — Release Gate v2, Demo Preconditions, Limitations Closure
+
+Deliver:
+
+- `--e2e` and `--e2e-live` flags in `run_cvf_release_gate_bundle.py`
 - `scripts/check_cvf_demo_preconditions.py`
-- clean output (PASS or WARN only) from a cold repo with configured providers
+- Known Limitations Register L-003 and L-008 updated
 
-Suggested verification:
-
-```bash
-python scripts/check_cvf_demo_preconditions.py
-```
-
-### CP5 — Release Gate v2 (--e2e flag)
-
-Deliver:
-
-- `--e2e` flag in `run_cvf_release_gate_bundle.py`
-- E2E check row in gate output
-- default behavior unchanged
-
-Suggested verification:
+Verification:
 
 ```bash
 python scripts/run_cvf_release_gate_bundle.py --dry-run
-# E2E row should show SKIP with instruction
-python scripts/run_cvf_release_gate_bundle.py --e2e --mock
-# E2E row should show PASS or FAIL based on actual Playwright run
+# E2E row: SKIP with two-flag instruction
+python scripts/check_cvf_demo_preconditions.py
 ```
 
 ---
@@ -419,19 +505,20 @@ python scripts/run_cvf_release_gate_bundle.py --e2e --mock
 
 Each completed control point should leave:
 
-- a baseline delta under `docs/baselines/` recording what changed
-- test output or screenshot path if E2E tests newly pass
-- Known Limitations Register updated with L-003 and L-008 closure state
+- a baseline delta under `docs/baselines/`
+- Playwright test output captured (pass/fail summary, not full transcript)
+- provider + model recorded for live test runs (no key values)
+- Known Limitations Register updated after CP2 (L-008) and CP3 (L-003)
 
 ---
 
 ## Risk Notes
 
-- `agent-flows.spec.ts` checks Vietnamese UI strings — if the app language defaulted to English in W110-T3, those strings will fail; fix by matching the actual rendered language or using language-neutral selectors.
-- Playwright requires a running dev server; the `webServer` block in `playwright.config.ts` handles this automatically, but the first cold run will take ~2 minutes to start.
-- Provider lane UI spec must not rely on live API state — all badge data comes from `PROVIDER_LANE_EVIDENCE` static map, which is always present regardless of API key.
-- Adding new E2E tests increases total test runtime; keep each spec focused and avoid testing the same surface twice.
-- The `--e2e` flag in the gate bundle should always be opt-in; never add it to CI by default without the operator's decision.
+- Live tests are slower: Alibaba 15–30s per test, DeepSeek 180s. Set timeouts generously.
+- Never assert exact AI response text. AI output varies run-to-run; governance behavior should not.
+- The bypass detection test (Step 4, Test 2) has a soft outcome — if the AI refuses to produce bypass language, the test still passes. Document which outcome occurred in the test output.
+- Playwright's webServer auto-start adds ~2 minutes on the first cold run. Account for this in CI if added later.
+- `utils.ts` must not hardcode API keys. Keys come from env only and are not logged.
 
 ---
 
@@ -439,13 +526,15 @@ Each completed control point should leave:
 
 This roadmap is complete when:
 
-1. All existing Playwright tests are classified and either pass or are explicitly retired.
-2. A non-coder golden path spec exists with 4 passing tests (L-008 closed).
-3. A provider lane UI spec exists with CERTIFIED badge assertions and no-parity-language assertions (L-003 updated).
-4. A demo precondition check script exists and runs clean.
-5. The release gate bundle has a working `--e2e` flag that integrates E2E results into the gate report.
-6. Known Limitations Register L-003 and L-008 are updated to reflect closed or reduced state.
+1. Config split exists: live (default) and mock (CI-fallback).
+2. `utils.ts` has live provider helpers for Alibaba and DeepSeek.
+3. All existing tests pass or are explicitly retired.
+4. Non-coder governance golden path spec (5 tests) passes with live Alibaba calls — real AI, real governance, real assertion.
+5. Provider lane UI spec (4 tests) passes in mock mode — badge rendering and no-parity-language.
+6. Governance gate live spec (3 tests) passes with live Alibaba calls — proves DLP, bypass detection, and audit trail on real AI output.
+7. `run_cvf_release_gate_bundle.py` has `--e2e` and `--e2e-live` flags.
+8. Known Limitations Register L-003 and L-008 marked Closed.
 
 ---
 
-*Filed: 2026-04-21 — next wave after RC packaging; focus on regression proof for non-coder path and provider lane UI*
+*Filed: 2026-04-21 — live-first governance E2E proof; mock mode is not sufficient to prove CVF controls real AI on behalf of non-coders*

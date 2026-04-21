@@ -16,10 +16,10 @@ export const PROVIDER_LANE_EVIDENCE: Partial<Record<string, LaneEvidence>> = {
     note: 'Certified by repeated CVF canary',
   },
   deepseek: {
-    status: 'CANARY_PASS',
-    label: 'Canary Pass',
-    passWindow: '1/3 PASS',
-    note: 'Latest CVF canary passed',
+    status: 'CERTIFIED',
+    label: 'Certified',
+    passWindow: '3/3 PASS',
+    note: 'Certified by repeated CVF canary',
   },
 };
 

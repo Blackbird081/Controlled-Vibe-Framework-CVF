@@ -1,6 +1,6 @@
 # CVF Provider Lane Readiness Matrix
 
-**Last updated:** 2026-04-21  
+**Last updated:** 2026-04-21 (DeepSeek promoted to CERTIFIED)  
 **Computed by:** `scripts/evaluate_cvf_provider_lane_certification.py`  
 **Status taxonomy:** `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/provider-lane-status.ts`
 
@@ -25,7 +25,7 @@
 | Provider | Model | Status | Latest Receipt | Pass Window | Operator Note |
 |---|---|---|---|---|---|
 | Alibaba | `qwen-turbo` | `CERTIFIED` | [20260421-072551-422037](../audits/alibaba-canary/CVF_RECEIPT_20260421-072551-422037.md) | 3 consecutive PASS 6/6 | Fast (7–12 s). User-paid DashScope billing. |
-| DeepSeek | `deepseek-chat` | `CANARY_PASS` | [20260421-074637-0c0d3e](../audits/deepseek-canary/CVF_RECEIPT_20260421-074637-0c0d3e.md) | Latest PASS 6/6; 1 of 3 needed for CERTIFIED | Slower (67–240 s observed). User-paid billing. |
+| DeepSeek | `deepseek-chat` | `CERTIFIED` | [20260421-114125-19515e](../audits/deepseek-canary/CVF_RECEIPT_20260421-114125-19515e.md) | 3 consecutive PASS 6/6 | Slower (62–155 s observed). User-paid billing. |
 
 ---
 

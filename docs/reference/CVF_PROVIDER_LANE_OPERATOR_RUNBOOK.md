@@ -106,7 +106,7 @@ After a status change, update `docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX
 
 ## 6 — DeepSeek Certification Path
 
-DeepSeek `deepseek-chat` is currently at `CANARY_PASS` (1 PASS 6/6 saved). To promote to `CERTIFIED`:
+DeepSeek `deepseek-chat` is currently `CERTIFIED` (3 consecutive PASS 6/6 — 2026-04-21). To re-certify after a `DEGRADED` event:
 
 **Prerequisite:** operator explicitly agrees to cost and time of two additional live canary runs. DeepSeek is significantly slower than Alibaba (observed 67–240 s per scenario) and each run costs provider credits.
 

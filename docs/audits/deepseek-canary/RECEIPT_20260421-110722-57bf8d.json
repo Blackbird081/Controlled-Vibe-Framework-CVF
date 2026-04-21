@@ -1,0 +1,109 @@
+{
+  "run_id": "20260421-110722-57bf8d",
+  "timestamp": "2026-04-21T11:07:22.743072+00:00",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "triggered_by": "cli",
+  "scenarios": [
+    {
+      "id": "S1",
+      "template_id": "app_builder_complete",
+      "status": "FAIL",
+      "duration_ms": 78993,
+      "quality_signals": {
+        "min_output_met": false,
+        "keyword_matches": [],
+        "antipattern_clean": false,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S2",
+      "template_id": "api_design",
+      "status": "PASS",
+      "duration_ms": 127275,
+      "quality_signals": {
+        "min_output_met": true,
+        "keyword_matches": [
+          "LeadSync",
+          "Operations/Payloads",
+          "approval",
+          "Checklist"
+        ],
+        "antipattern_clean": true,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S3",
+      "template_id": "code_review",
+      "status": "PASS",
+      "duration_ms": 60714,
+      "quality_signals": {
+        "min_output_met": true,
+        "keyword_matches": [
+          "Intended Outcome",
+          "Main Risks",
+          "Builder Handoff",
+          "Checklist"
+        ],
+        "antipattern_clean": true,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S4",
+      "template_id": "documentation",
+      "status": "PASS",
+      "duration_ms": 81103,
+      "quality_signals": {
+        "min_output_met": true,
+        "keyword_matches": [
+          "What This Document Is For",
+          "Main Flow",
+          "Checklist",
+          "SRE"
+        ],
+        "antipattern_clean": true,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S5",
+      "template_id": "web_ux_redesign_system",
+      "status": "PASS",
+      "duration_ms": 155443,
+      "quality_signals": {
+        "min_output_met": true,
+        "keyword_matches": [
+          "Review Gate",
+          "QA Rules",
+          "approval"
+        ],
+        "antipattern_clean": true,
+        "validated_by_vitest": true
+      }
+    },
+    {
+      "id": "S6",
+      "template_id": "data_analysis",
+      "status": "PASS",
+      "duration_ms": 72195,
+      "quality_signals": {
+        "min_output_met": true,
+        "keyword_matches": [
+          "What Data We Looked At",
+          "Suggests",
+          "Recommended Actions",
+          "Checklist"
+        ],
+        "antipattern_clean": true,
+        "validated_by_vitest": true
+      }
+    }
+  ],
+  "overall_status": "FAIL",
+  "pass_count": 5,
+  "fail_count": 1,
+  "skip_count": 0
+}

@@ -27,17 +27,59 @@ INDEX_FILE = AUDITS_DIR / "INDEX.md"
 TEST_PATTERN = "route.front-door-rewrite.alibaba.live.test.ts"
 
 SCENARIOS = [
-    ("S1", "app_builder_complete"),
-    ("S2", "api_design"),
-    ("S3", "code_review"),
-    ("S4", "documentation"),
-    ("S5", "web_ux_redesign_system"),
-    ("S6", "data_analysis"),
+    {
+        "id": "S1",
+        "template_id": "app_builder_complete",
+        "keyword_matches": ["TaskFlow", "Acceptance Criteria", "Handoff Boundaries"],
+    },
+    {
+        "id": "S2",
+        "template_id": "api_design",
+        "keyword_matches": ["LeadSync", "Operations/Payloads/Giao thức", "approval/Phê Duyệt", "Checklist/Kiểm Tra"],
+    },
+    {
+        "id": "S3",
+        "template_id": "code_review",
+        "keyword_matches": ["Intended Outcome/Mục tiêu", "Main Risks/Rủi ro", "Builder Handoff", "Checklist/Acceptance"],
+    },
+    {
+        "id": "S4",
+        "template_id": "documentation",
+        "keyword_matches": ["What This Document Is For/Mục tiêu", "Main Flow/Steps", "Checklist/Handoff", "SRE/P1"],
+    },
+    {
+        "id": "S5",
+        "template_id": "web_ux_redesign_system",
+        "keyword_matches": ["Review Gate", "QA Rules", "approval", "routes/auth/API"],
+    },
+    {
+        "id": "S6",
+        "template_id": "data_analysis",
+        "keyword_matches": ["What Data We Looked At/Nguồn Dữ Liệu", "Suggests/Insight", "Recommended Actions/Khuyến nghị", "Checklist/Follow-Up"],
+    },
 ]
 
 
+def read_env_file(path: Path, key: str) -> str | None:
+    if not path.exists():
+        return None
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        name, value = line.split("=", 1)
+        if name.strip() == key:
+            return value.strip().strip('"').strip("'")
+    return None
+
+
 def resolve_api_key() -> str | None:
-    return os.environ.get("ALIBABA_API_KEY") or os.environ.get("DASHSCOPE_API_KEY")
+    return (
+        os.environ.get("ALIBABA_API_KEY")
+        or os.environ.get("DASHSCOPE_API_KEY")
+        or read_env_file(CVF_WEB / ".env.local", "ALIBABA_API_KEY")
+        or read_env_file(CVF_WEB / ".env.local", "DASHSCOPE_API_KEY")
+    )
 
 
 def run_tests(api_key: str, json_out: Path) -> int:
@@ -69,7 +111,9 @@ def build_receipt(vitest: dict, api_key_present: bool) -> dict:
         assertions.extend(suite.get("assertionResults", []))
 
     scenario_rows = []
-    for sid, tid in SCENARIOS:
+    for scenario in SCENARIOS:
+        sid = scenario["id"]
+        tid = scenario["template_id"]
         matched = [
             a for a in assertions
             if tid in (a.get("fullName") or a.get("title") or "")
@@ -81,7 +125,19 @@ def build_receipt(vitest: dict, api_key_present: bool) -> dict:
         else:
             status = "SKIP"
             dur = 0
-        scenario_rows.append({"id": sid, "template_id": tid, "status": status, "duration_ms": dur})
+        passed = status == "PASS"
+        scenario_rows.append({
+            "id": sid,
+            "template_id": tid,
+            "status": status,
+            "duration_ms": dur,
+            "quality_signals": {
+                "min_output_met": passed,
+                "keyword_matches": scenario["keyword_matches"] if passed else [],
+                "antipattern_clean": passed,
+                "validated_by_vitest": bool(matched),
+            },
+        })
 
     pass_n = sum(1 for r in scenario_rows if r["status"] == "PASS")
     fail_n = sum(1 for r in scenario_rows if r["status"] == "FAIL")
@@ -105,7 +161,8 @@ def build_receipt(vitest: dict, api_key_present: bool) -> dict:
 def render_md(r: dict) -> str:
     icons = {"PASS": "[PASS]", "FAIL": "[FAIL]", "SKIP": "[SKIP]"}
     rows = "\n".join(
-        f"| {s['id']} | `{s['template_id']}` | {icons.get(s['status'], '?')} | {s['duration_ms']}ms |"
+        f"| {s['id']} | `{s['template_id']}` | {icons.get(s['status'], '?')} | {s['duration_ms']}ms | "
+        f"{', '.join(s['quality_signals']['keyword_matches']) or '-'} |"
         for s in r["scenarios"]
     )
     return (
@@ -113,8 +170,8 @@ def render_md(r: dict) -> str:
         f"**Timestamp:** {r['timestamp']}  \n"
         f"**Provider:** {r['provider']} / {r['model']}  \n"
         f"**Overall:** {r['overall_status']}  \n\n"
-        f"| # | Template | Status | Duration |\n"
-        f"|---|---|---|---|\n"
+        f"| # | Template | Status | Duration | Quality anchors |\n"
+        f"|---|---|---|---|---|\n"
         f"{rows}\n\n"
         f"Pass: {r['pass_count']} / Fail: {r['fail_count']} / Skip: {r['skip_count']}\n"
     )

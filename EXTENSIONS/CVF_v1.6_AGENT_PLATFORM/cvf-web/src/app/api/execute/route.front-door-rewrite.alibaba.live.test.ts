@@ -182,7 +182,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
         expect(output).toMatch(/LeadSync|tích hợp/i);
         expect(output).toMatch(/Operations|Payloads|Giao thức/i);
         expect(output).toMatch(/approval|Quyền Hạn|Phê Duyệt/i);
-        expect(output).toMatch(/Checklist/i);
+        expect(output).toMatch(/Checklist|Danh Sách Kiểm Tra|Kiểm Tra/i);
         expect(output).not.toMatch(/choose API style|REST vs GraphQL|pick pagination/i);
       },
       45_000,

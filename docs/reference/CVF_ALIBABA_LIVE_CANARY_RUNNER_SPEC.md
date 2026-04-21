@@ -22,6 +22,7 @@ The runner wraps existing proven test files — it does **not** mutate them.
 
 ```bash
 # Prerequisite: ALIBABA_API_KEY must be set in environment
+# Local fallback: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/.env.local
 export ALIBABA_API_KEY=sk-...
 
 # Dry run (stdout only, no file written)
@@ -64,6 +65,12 @@ Each run with `--save-receipt` writes two files to `docs/audits/alibaba-canary/`
 - `run_id`, `timestamp`, `provider`, `model`
 - per-scenario: `status`, `duration_ms`, `quality_signals`
 - `overall_status`, `pass_count`, `fail_count`, `skip_count`
+
+`quality_signals` are derived from the locked Vitest assertions. On PASS, they record:
+- `min_output_met: true`
+- `keyword_matches`: the scenario's locked quality anchors
+- `antipattern_clean: true`
+- `validated_by_vitest: true`
 
 **`RECEIPT_<run-id>.md`** — human-readable table + overall verdict
 

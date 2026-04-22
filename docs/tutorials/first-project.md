@@ -9,6 +9,32 @@
 
 ---
 
+## Recommended W113 Workspace Path
+
+The recommended path for a real project is now the W112/W113 enforced workspace bootstrap.
+
+From the CVF core repository:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\new-cvf-workspace.ps1 `
+  -WorkspaceRoot "D:\CVF-Workspace" `
+  -ProjectName "bookmark-manager"
+
+powershell -ExecutionPolicy Bypass -File .\scripts\check_cvf_workspace_agent_enforcement.ps1 `
+  -ProjectPath "D:\CVF-Workspace\bookmark-manager"
+```
+
+Expected generated artifacts:
+
+- `AGENTS.md`
+- `.cvf/manifest.json`
+- `.cvf/policy.json`
+- `docs/CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
+
+Before the agent performs any substantive action, it should record a declaration that it has read the generated `.cvf` policy and manifest.
+
+The manual markdown flow below remains useful for learning the phase model, but the enforced workspace path is the recommended path for real downstream work.
+
 ## Before You Start
 
 You need:

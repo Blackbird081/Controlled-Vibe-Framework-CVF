@@ -1,24 +1,44 @@
 # CVF W113-T1 First Downstream Project Proof Roadmap
 
 > Date: 2026-04-22
-> Status: OPERATOR-APPROVED ROADMAP / READY FOR IMPLEMENTATION
+> Status: CLOSED DELIVERED / LIVE-PROVEN
 > Memory class: SUMMARY_RECORD
 > Scope class: DOWNSTREAM ADOPTION PROOF + DISTRIBUTION HARDENING
 > Canonical predecessor: `docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md`
+
+## 0. Closure Readout
+
+W113-T1 is closed delivered on 2026-04-22.
+
+Closure evidence:
+
+- Downstream workspace bootstrap: PASS
+- Workspace doctor: `PASS (11/11 checks passed)`
+- First-request agent declaration: recorded
+- Downstream phase run: `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`
+- Downstream sample tests: `python -m unittest discover -s tests` -> `2 tests OK`
+- Hook/CI adoption proof: pre-commit hook installed, CI sample installed
+- Fail-closed proof: doctor failed when `.cvf/policy.json` was missing, then passed after restore
+- Web W112 live metadata proof: `w113-workspace-web-live-proof.spec.ts` -> `1 passed`
+- Release gate: `python scripts/run_cvf_release_gate_bundle.py --json` -> `PASS`, UI mock `6 passed`, live governance `7 passed`
+
+Assessment:
+
+- `docs/assessments/CVF_W113_T1_DOWNSTREAM_LIVE_PROOF_ASSESSMENT_2026-04-22.md`
 
 ## 1. Intent
 
 W112 made CVF Workspace agent-enforcement-ready by generating downstream `AGENTS.md`, `.cvf/` policy artifacts, and a workspace doctor.
 
-W113 must prove that this is usable in a real downstream project, not only in a smoke folder.
+W113 proved that this is usable in a real downstream project, not only in a smoke folder.
 
-The target claim after W113 is closed:
+The closed W113 claim is:
 
 > A user can download CVF, bootstrap a separate downstream project, and have an agent apply CVF governance from the first request with local enforcement artifacts, doctor verification, and live API-backed governance evidence.
 
 ## 2. Current Truth Boundary
 
-Current proven state:
+Pre-W113 proven state:
 
 - CVF Web active governed AI path is live-proven.
 - Multi-provider operability is certified on Alibaba and DeepSeek.
@@ -26,14 +46,14 @@ Current proven state:
 - Workspace bootstrap generates downstream enforcement artifacts.
 - Workspace doctor can pass `11/11` on a generated workspace.
 
-Current unproven state:
+Pre-W113 unproven state:
 
 - No canonical downstream sample project proves the full adoption path.
 - No published artifact shows an agent declaration from a downstream project before first action.
 - No downstream tutorial demonstrates `.cvf/manifest.json` + `.cvf/policy.json` + `AGENTS.md` in an actual project flow.
 - No downstream CI/hook proof is recorded.
 
-Therefore W113 is a proof-and-packaging roadmap, not a redesign or broad feature wave.
+Therefore W113 was a proof-and-packaging roadmap, not a redesign or broad feature wave.
 
 ## 3. Non-Goals
 
@@ -84,10 +104,10 @@ Acceptance:
 - Proof project is outside the CVF root.
 - Artifact inventory is recorded in a W113 evidence doc.
 
-Suggested evidence file:
+Closure evidence file:
 
 ```text
-docs/assessments/CVF_W113_T1_DOWNSTREAM_BOOTSTRAP_PROOF_2026-04-22.md
+docs/assessments/CVF_W113_T1_DOWNSTREAM_LIVE_PROOF_ASSESSMENT_2026-04-22.md
 ```
 
 ## 6. CP2: First-Request Agent Declaration Proof
@@ -236,7 +256,7 @@ git diff --check
 
 ## 13. Exit Criteria
 
-W113-T1 may close only when:
+W113-T1 closed after:
 
 - A downstream project has been bootstrapped outside CVF core.
 - Workspace doctor passes on the downstream project.

@@ -51,7 +51,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\check_cvf_workspace_agent_enf
   -ProjectPath "D:\CVF-Workspace\Trading-Tools"
 ```
 
-Mốc tiếp theo đang active: [W113-T1 First Downstream Project Proof](roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md) sẽ chứng minh luồng project downstream thật trước khi claim downstream adoption đã proven.
+Mốc W113 đã chứng minh luồng project downstream thật đầu tiên với live API-backed governance evidence: [W113-T1 First Downstream Project Proof](roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md).
 
 ---
 

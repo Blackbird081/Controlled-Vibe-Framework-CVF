@@ -1,5 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { InProcessKnowledgeStore } from '@/lib/knowledge-store';
+import { existsSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { randomUUID } from 'node:crypto';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { InProcessKnowledgeStore, FileBackedKnowledgeStore } from '@/lib/knowledge-store';
 import { queryKnowledgeChunks } from '@/lib/knowledge-retrieval';
 import { knowledgeStore } from '@/lib/knowledge-store';
 
@@ -87,6 +91,46 @@ describe('W118-CP4 Regression: Unified Persistent Knowledge Store', () => {
 
       const result = await queryKnowledgeChunks({ intent: 'private org info', orgId: 'org_y', teamId: 'team_y' });
       expect(result.chunks.some(c => c.id === 'scoped-chunk')).toBe(false);
+    });
+  });
+
+  describe('Persistence (real file I/O)', () => {
+    let tmpPath: string;
+
+    beforeEach(() => {
+      tmpPath = join(tmpdir(), `cvf-test-store-${randomUUID()}.json`);
+    });
+
+    afterEach(() => {
+      if (existsSync(tmpPath)) rmSync(tmpPath);
+    });
+
+    it('CP4-F1: seed file written on first run when no file exists', () => {
+      expect(existsSync(tmpPath)).toBe(false);
+      const store = new FileBackedKnowledgeStore(tmpPath);
+      expect(existsSync(tmpPath)).toBe(true);
+      expect(store.getCollections().length).toBeGreaterThan(0);
+    });
+
+    it('CP4-F2: mutate store → create new instance from same path → data matches', () => {
+      const store1 = new FileBackedKnowledgeStore(tmpPath);
+      store1.upsertCollection({ id: 'fb-col', name: 'FileBacked', description: '', orgId: null, teamId: null, chunks: [] });
+      store1.addChunk('fb-col', { id: 'fb-chunk', content: 'file backed content', keywords: ['file', 'backed'] });
+
+      const store2 = new FileBackedKnowledgeStore(tmpPath);
+      const col = store2.getCollection('fb-col');
+      expect(col).toBeDefined();
+      expect(col?.chunks).toHaveLength(1);
+      expect(col?.chunks[0].id).toBe('fb-chunk');
+    });
+
+    it('CP4-F3: ephemeral collections not persisted (absent in reloaded store)', () => {
+      const store1 = new FileBackedKnowledgeStore(tmpPath);
+      store1.registerEphemeral({ id: 'eph-col', name: 'Ephemeral', description: '', orgId: null, teamId: null, chunks: [] });
+
+      const store2 = new FileBackedKnowledgeStore(tmpPath);
+      expect(store2.getCollection('eph-col')).toBeUndefined();
+      expect(store2.getEphemeralCollectionIds()).not.toContain('eph-col');
     });
   });
 

@@ -107,7 +107,7 @@ export class InProcessKnowledgeStore implements KnowledgeStore {
   }
 }
 
-class FileBackedKnowledgeStore extends InProcessKnowledgeStore {
+export class FileBackedKnowledgeStore extends InProcessKnowledgeStore {
   constructor(private readonly _filePath: string) {
     super();
     this._loadOrSeed();

@@ -1,4 +1,4 @@
-# CVF Agent Handoff — 2026-04-21
+# CVF Agent Handoff — 2026-04-22
 
 > Branch: `main`
 > Branch posture: `main` is the canonical continuation branch after 2026-04-04 convergence; `cvf-next` is kept as a synchronized mirror for compatibility
@@ -6,7 +6,7 @@
 > Remote tracking branch: `origin/main` (canonical continuation)
 > Compatibility mirror branch: `origin/cvf-next`
 > Exact remote SHA must be derived live from git when needed; do not hand-maintain it in handoff
-> State: **UNIFIED ON MAIN / MASTER ARCHITECTURE CLOSURE-ASSESSED / W105-W109 REDESIGN CLOSED / FRONT-DOOR REWRITE + ALIBABA-FIRST RUNTIME SYNC DELIVERED / PRODUCT PROOF EXPANSION + PRODUCTIZATION LANE DELIVERED** — core architecture remains closure-assessed and closed-by-default; redesign wave `W105-T1` through `W109-T1` is delivered; strict front door is all-trusted (`42` skills / `50` linked templates / `50/50` trusted); Alibaba-first live validation now covers `6/6` priority front-door templates (`app_builder_complete`, `api_design`, `web_ux_redesign_system`, `code_review`, `documentation`, `data_analysis`); front-door governance corpus is now protected by a dedicated `front-door-smoke` CI job wired into the `ci-passed` gate; product proof expansion and productization lane are both CLOSED. Any further reopen still requires a fresh `GC-018`.
+> State: **UNIFIED ON MAIN / MASTER ARCHITECTURE CLOSURE-ASSESSED / W112-W113 WORKSPACE+WEB LIVE PROOF CLOSED / W114 NON-CODER VALUE MAXIMIZATION ACTIVE CP1-CP6 COMPLETE** — core architecture remains closure-assessed and closed-by-default; redesign wave `W105-T1` through `W109-T1` is delivered; strict front door is all-trusted (`42` skills / `50` linked templates / `50/50` trusted); Alibaba-first live validation covers `6/6` priority front-door templates (`app_builder_complete`, `api_design`, `web_ux_redesign_system`, `code_review`, `documentation`, `data_analysis`); workspace bootstrap is agent-enforcement-ready when generated artifacts and the workspace doctor pass; W113 proves one downstream project with live API-backed web governance metadata; W114 CP1-CP7 now strengthens repeatable, visible, evidence-backed non-coder benefit, adds a secret-free workspace-to-web evidence bridge, and proves multi-sample downstream adoption across three project kinds. Any further core reopen still requires a fresh `GC-018`.
 > Architecture baseline snapshot: `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` (`v3.7-W46T1`; document type: CLOSURE-ASSESSED; operational readout refreshed through `2026-04-21`)
 
 ---
@@ -20,6 +20,7 @@
 - Canonical scan continuity registry: `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
 - **Governance test policy (standing rule, 2026-04-21):** All tests asserting CVF governance behavior — risk classification, approval flow, DLP filtering, bypass detection, phase gate, audit trail — must use live provider API calls. `NEXT_PUBLIC_CVF_MOCK_AI=1` bypasses the entire `/api/execute` governance pipeline (guard engine, DLP, bypass detection, output validation, audit events) and is only permitted for pure UI structure tests (navigation, routing, static badge rendering). The default release gate now runs mandatory live governance E2E and fails if `DASHSCOPE_API_KEY` is absent; `--mock` can only support saved provider-readiness receipts and UI structure checks. This rule applies to all future tranches and E2E waves without exception. The operator explicitly authorizes free use of Alibaba and DeepSeek API keys for all testing. See: `docs/roadmaps/CVF_E2E_PROOF_AND_REGRESSION_STABILIZATION_ROADMAP_2026-04-21.md`.
 - Operator policy (2026-04-18, reaffirmed 2026-04-19): Alibaba is the preferred live-test lane for CVF because quota/model coverage is favorable for validation. Canonical env is `ALIBABA_API_KEY`; compatibility aliases `CVF_BENCHMARK_ALIBABA_KEY` and `CVF_ALIBABA_API_KEY` remain supported. If one of these env vars is already configured, future agents should use it without asking for a new key. Operator has also pre-authorized use of the configured Alibaba model set for live validation where applicable; agents should use the existing configured/manifested models without re-asking unless a tranche explicitly requires a new model decision. Never commit raw key values. Note: shell/process env may still appear empty on some sessions; local test/bootstrap is now standardized to fall back to `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/.env.local` for Vitest + benchmark/PVV runners before declaring Alibaba config "missing".
+- **Workspace/Web API-key test status (2026-04-22):** workspace bootstrap, doctor, hook, and CI sample intentionally do **not** copy, store, or require provider API keys in downstream projects; they prove enforcement artifacts (`AGENTS.md`, `.cvf/manifest.json`, `.cvf/policy.json`, bootstrap log) and fail-closed policy, not live provider reachability. Release-quality live proof remains the CVF core/web gate: `python scripts/run_cvf_release_gate_bundle.py --json`. That runner loads repo-local env files through `scripts/_local_env.py`, accepts `DASHSCOPE_API_KEY` directly, and maps `ALIBABA_API_KEY`, `CVF_ALIBABA_API_KEY`, or `CVF_BENCHMARK_ALIBABA_KEY` into the DashScope-compatible key required by Playwright live governance specs. W113 additionally proved the W112 web metadata path with `tests/e2e/w113-workspace-web-live-proof.spec.ts` (`1 passed`) using Alibaba `qwen-turbo`. Do not put raw keys into downstream `.cvf/`, generated `AGENTS.md`, roadmap evidence, or handoff text.
 - Enterprise Admin Console Phase C (C0–C4) is **CLOSED DELIVERED 2026-04-18** (commit `faa9668b`). Roadmap: `docs/roadmaps/CVF_ENTERPRISE_ADMIN_ROADMAP_V2_1_PHASE_C_2026-04-18.md`.
 - Enterprise Admin Console Phase D (D1+D2) is **CLOSED DELIVERED 2026-04-18** (implementation commit `4a44eed9`; supplemental closure commit `5d3242a6`). D1: DLP filter core + execute-path hook + admin panel + knowledge partitioning plumbing (D1.4a). D2: SIEM webhook + signed CSV + CLI verify + break-glass + owner impersonation. **D1.4b (RAG chunk enforcement) intentionally deferred** — no real retrieval adapter exists; plumbing (`orgId`/`teamId` `_scope` param) is in place. Live DLP smoke test (`route.dlp.live.test.ts`) proves D1.2 E2E redaction with real Alibaba call when `ALIBABA_API_KEY` is present.
 - Enterprise Admin next-frontier roadmap: `docs/roadmaps/CVF_ENTERPRISE_ADMIN_RETRIEVAL_PARTITIONING_ROADMAP_2026-04-18.md`. Default order is `Wave 1: Retrieval Partitioning` then `Wave 2: Alibaba-first Runtime / Product Validation`; parallel execution is preferred only when the two waves are genuinely independent and not validating a moving target.
@@ -65,6 +66,99 @@
 - **W111-T1 — Live Evidence Publication Packet CLOSED DELIVERED (2026-04-21)**: Roadmap `docs/roadmaps/CVF_W111_T1_LIVE_EVIDENCE_PUBLICATION_ROADMAP_2026-04-21.md` and packet `docs/reference/CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md` are delivered. Root `AGENTS.md`, `README.md`, `ARCHITECTURE.md`, `docs/INDEX.md`, demo/truth/limitations docs now align on the same rule: governance claims require live API-backed evidence; mock is UI-only. Latest publication gate: `python scripts/run_cvf_release_gate_bundle.py --json` PASS with UI mock `6 passed` + live governance `7 passed`; provider readiness reports Alibaba + DeepSeek `CERTIFIED`.
 - **W112-T1 — Workspace Agent Enforcement + Web Control Uplift CLOSED DELIVERED (2026-04-22)**: roadmap `docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md` is delivered and post-review fixed. Workspace bootstrap now generates downstream `AGENTS.md`, `.cvf/manifest.json`, `.cvf/policy.json`, bootstrap log, and doctor/preflight checks; workspace smoke passed `11/11`. Web now has a shared governance envelope on `/api/execute` and `/api/approvals`, policy snapshot ids, approval continuity, and provider routing metadata. Boundary remains binding: Web is governance-inherited and live-proven on the active `/api/execute` path, but must not claim full CVF runtime inheritance.
 - **W113-T1 — First Downstream Project Proof CLOSED DELIVERED / LIVE-PROVEN (2026-04-22)**: roadmap `docs/roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md` is closed. Assessment: `docs/assessments/CVF_W113_T1_DOWNSTREAM_LIVE_PROOF_ASSESSMENT_2026-04-22.md`. Proof: downstream workspace outside CVF core, generated enforcement artifacts, doctor `11/11 PASS`, first-request agent declaration, full `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` downstream run, sample tests `2 OK`, hook/CI adoption proof, fail-closed doctor proof, W113 live web metadata spec `1 passed`, release gate PASS with UI mock `6 passed` + live governance `7 passed`. Boundary remains: one downstream sample proof, not universal provider parity or full-Web-runtime claim.
+- **W114-T1 — Non-Coder Value Maximization + Evidence ACTIVE / CP1+CP2+CP3+CP4+CP5+CP6+CP7 COMPLETE (2026-04-23)**: roadmap `docs/roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md` is the current strategic continuation lane. CP1 scorecard is filed at `docs/assessments/CVF_W114_T1_NONCODER_VALUE_SCORECARD_2026-04-23.md`. CP3 decision is complete: `scripts/run_cvf_release_gate_bundle.py` now includes `tests/e2e/w113-workspace-web-live-proof.spec.ts` in the default live Playwright release gate, so W112/W113 web metadata proof is no longer targeted-only; fresh gate on 2026-04-23 passed with UI mock `6 passed` + live governance `8 passed`. CP2 is complete: `scripts/check_cvf_workspace_agent_enforcement.ps1 -CheckLiveReadiness` reports live key presence/source without printing raw key values or failing normal enforcement doctor; assessment filed at `docs/assessments/CVF_W114_T1_SECRET_FREE_WORKSPACE_LIVE_READINESS_ASSESSMENT_2026-04-23.md`. CP4 is complete: `scripts/w114_noncoder_outcome_evidence_pack.js` ran 19 governed `/api/execute` route cases on the Alibaba lane; expected decisions `19/19`, useful allowed outputs `12/12`, guided high-risk blocks `5/5`, knowledge injected + expected term hits `3/3`, follow-up refinements `2/2`, approval artifacts `2/2`. Evidence: `docs/assessments/CVF_W114_T1_NONCODER_OUTCOME_EVIDENCE_PACK_2026-04-23.md` and raw JSON `docs/assessments/CVF_W114_T1_NONCODER_OUTCOME_EVIDENCE_RAW_2026-04-23.json`. CP5 is complete: `ProcessingScreen` now renders route-returned governance evidence (decision, provider/model, routing, knowledge source, output hint, policy snapshot, envelope, approval id) and uses execute-route approval ids directly. Assessment: `docs/assessments/CVF_W114_T1_WEB_BENEFIT_VISIBILITY_ASSESSMENT_2026-04-23.md`. CP6 is complete: `scripts/write_cvf_workspace_web_evidence_bridge.ps1` writes a downstream `docs/CVF_WORKSPACE_WEB_EVIDENCE_BRIDGE_<YYYYMMDD>.md` receipt linking doctor proof, optional secret-free live readiness, and CVF core/web release evidence without copying keys; `scripts/new-cvf-workspace.ps1` and downstream AGENTS template now advertise the command. Temporary downstream verification passed: bridge receipt recorded doctor `PASS`, `live_key_available=true`, raw key values `NOT PRINTED`, provider keys copied `NO`. Assessment: `docs/assessments/CVF_W114_T1_WORKSPACE_WEB_EVIDENCE_BRIDGE_ASSESSMENT_2026-04-23.md`. Verification: ProcessingScreen Vitest `19 passed`, targeted ESLint PASS, `npm run build` PASS, CP6 parser/temp workspace verification PASS, and post-CP6 release gate PASS with build PASS, guard typecheck PASS, provider readiness PASS, secrets scan PASS, docs governance PASS, UI mock `6 passed`, live governance `8 passed`. CP7 is complete: `scripts/w114_cp7_multi_sample_downstream_proof.ps1` created and verified three downstream samples (`cvf-downstream-note-taker-cli`, `cvf-downstream-webapp-planner`, `cvf-downstream-data-analyzer`) — all doctor `11/11 PASS`, all unit tests pass, sample 3 includes workspace-to-web evidence bridge PASS. Assessment: `docs/assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md`. Raw results: `docs/assessments/CVF_W114_CP7_RAW_2026-04-23.json`. Any governance claim still requires live API-backed evidence. Next recommended step: CP8 public evidence packet refresh.
+
+#### W114 Execution Packet — Read This Before Implementing
+
+W114 is the current recommended implementation lane. Treat this packet as the minimum handoff needed to execute correctly.
+
+Authoritative source docs:
+
+- Roadmap: `docs/roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md`
+- Public non-coder claim boundary: `docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md`
+- Measurement standard: `docs/reference/CVF_NON_CODER_VALUE_MEASUREMENT_STANDARD_2026-04-14.md`
+- W100 proof: `docs/assessments/CVF_W100_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md` (`E2E VALUE PROVEN`)
+- W101/W102 proof: `docs/assessments/CVF_W101_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md` + `docs/assessments/CVF_W102_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md` (knowledge-native execute path + live benefit)
+- W113 proof: `docs/assessments/CVF_W113_T1_DOWNSTREAM_LIVE_PROOF_ASSESSMENT_2026-04-22.md`
+
+Strategic rule:
+
+- Core architecture is stable-by-default. Do not reopen master architecture or broad core modules unless live evidence exposes a real control gap.
+- Future core changes should be narrow: fix measured enforcement gaps, expose existing CVF value, or absorb external knowledge only when it improves measured non-coder outcomes.
+- The product priority is now non-coder benefit: visible value, useful output, safe iteration, trustworthy evidence, and repeatable workspace adoption.
+
+Correct W114 claim target:
+
+> A non-coder can start from CVF Web or a CVF-governed workspace, receive visible governance guidance, produce useful work, iterate safely, and leave with evidence that CVF improved the outcome without hiding risk or leaking secrets.
+
+Do **not** claim:
+
+- Web is the full CVF runtime.
+- Workspace doctor proves API-key/live-provider readiness.
+- One downstream sample proves universal downstream adoption.
+- Alibaba value proof means provider parity.
+- Mock UI checks prove governance behavior.
+- Raw provider keys can be written into `.cvf/`, generated `AGENTS.md`, roadmaps, receipts, or handoff text.
+
+Recommended CP order:
+
+1. **CP1 scorecard first — COMPLETE 2026-04-23**: scorecard filed at `docs/assessments/CVF_W114_T1_NONCODER_VALUE_SCORECARD_2026-04-23.md`, reconciling W86-W102 plus W112-W113 with statuses `PROVEN`, `PARTIAL`, `NOT_PROVEN`, `OUT_OF_SCOPE`.
+2. **CP3 release-gate decision second — COMPLETE 2026-04-23**: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/w113-workspace-web-live-proof.spec.ts` is now part of the default live release gate via `scripts/run_cvf_release_gate_bundle.py`. Fresh verification: `python scripts/run_cvf_release_gate_bundle.py --json` PASS with UI mock `6 passed` and live governance `8 passed`.
+3. **CP2 secret-free workspace live readiness third — COMPLETE 2026-04-23**: `scripts/check_cvf_workspace_agent_enforcement.ps1 -CheckLiveReadiness` checks env presence without writing or printing secrets. Normal workspace doctor still validates enforcement artifacts, not provider connectivity.
+4. **CP4 live outcome evidence pack — COMPLETE 2026-04-23**: script `scripts/w114_noncoder_outcome_evidence_pack.js`; evidence `docs/assessments/CVF_W114_T1_NONCODER_OUTCOME_EVIDENCE_PACK_2026-04-23.md` + raw JSON. Result: 19/19 expected decisions, 12/12 useful allowed outputs, 5/5 guided high-risk blocks, 3/3 knowledge injected with term hits, 2/2 follow-up refinements, 2/2 approval artifacts.
+5. **CP5 Web benefit visibility pass — COMPLETE 2026-04-23**: `ProcessingScreen` now shows route-returned governance evidence and avoids duplicate approval submission when `/api/execute` already returned `approvalId`. Assessment: `docs/assessments/CVF_W114_T1_WEB_BENEFIT_VISIBILITY_ASSESSMENT_2026-04-23.md`.
+6. **CP6 workspace-to-web evidence bridge — COMPLETE 2026-04-23**: script `scripts/write_cvf_workspace_web_evidence_bridge.ps1`; assessment `docs/assessments/CVF_W114_T1_WORKSPACE_WEB_EVIDENCE_BRIDGE_ASSESSMENT_2026-04-23.md`; bootstrap and downstream AGENTS template now include the receipt path.
+7. **CP7 multi-sample downstream proof — NEXT**: extend W113 from one sample to at least three downstream samples if time/scope allows. Each sample must stay outside CVF core and include first-request declaration, phase run, doctor pass, bridge/freeze receipt, and at least one live web governance evidence link.
+8. **CP8 public evidence packet refresh**: update README/ARCHITECTURE/public copy only after evidence exists. Public claims must remain less than or equal to proof.
+
+Likely implementation surfaces:
+
+- Workspace scripts: `scripts/new-cvf-workspace.ps1`, `scripts/check_cvf_workspace_agent_enforcement.ps1`, `scripts/install_cvf_hooks.ps1`
+- Release gate: `scripts/run_cvf_release_gate_bundle.py`, `scripts/_local_env.py`
+- Web live E2E: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/*.spec.ts`
+- Web execute path: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts`
+- Web value UI likely lives under `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/` and dashboard/app routes; inspect before editing.
+- Existing knowledge context path: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/knowledge-context-injector.ts`
+- Existing governance metadata: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/web-governance-envelope.ts`
+
+Required proof commands by claim type:
+
+```bash
+python scripts/run_cvf_release_gate_bundle.py --json
+```
+
+Use this for release-quality governance proof. It must include live governance E2E and fail without a DashScope-compatible key.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\check_cvf_workspace_agent_enforcement.ps1 `
+  -ProjectPath "<downstream-project>"
+```
+
+Use this for workspace enforcement proof. It proves downstream enforcement artifacts and fail-closed policy, not live provider readiness.
+
+```bash
+cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+npx playwright test --config playwright.config.ts tests/e2e/w113-workspace-web-live-proof.spec.ts --reporter=line
+```
+
+Use this if validating the W112/W113 web metadata path directly. If this spec is promoted into release gate, update the handoff and roadmap closure notes.
+
+Live key handling:
+
+- Accepted release-gate key names: `DASHSCOPE_API_KEY`, `ALIBABA_API_KEY`, `CVF_ALIBABA_API_KEY`, `CVF_BENCHMARK_ALIBABA_KEY`.
+- `scripts/_local_env.py` may load ignored local env files before declaring keys missing.
+- Never print key values. Report only presence, alias used, provider lane, and model.
+
+Stop/ask conditions:
+
+- If a W114 step would require broad core architecture changes, stop and file/ask for a bounded `GC-018` rationale.
+- If live keys are unavailable, do not claim governance proof; record the blocker and run only UI/static checks.
+- If evidence contradicts current public wording, update claim boundaries before improving copy.
+- If downstream samples would need to live inside the CVF repo, stop; W113/W114 require downstream projects outside CVF core.
+
+Closure requirement:
+
+- W114 may close only with a new evidence record, handoff sync, docs index sync, and either a passed live release gate or a clearly documented live-key blocker. Public docs must not move ahead of evidence.
 
 ### Wave 1 Retrieval Partitioning — CLOSED DELIVERED 2026-04-18
 

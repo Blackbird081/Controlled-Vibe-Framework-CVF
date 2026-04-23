@@ -1,0 +1,35 @@
+[
+  {
+    "sample": "cvf-downstream-note-taker-cli",
+    "kind": "cli-productivity",
+    "doctorPassed": true,
+    "doctorChecks": "11/11 checks passed",
+    "testsPassed": true,
+    "testSummary": "Ran 2 test",
+    "liveBridge": false,
+    "bridgeResult": null,
+    "projectPath": "C:\\Users\\DELL\\AppData\\Local\\Temp\\CVF-W114-CP7-Proof\\cvf-downstream-note-taker-cli"
+  },
+  {
+    "sample": "cvf-downstream-webapp-planner",
+    "kind": "web-app-planning",
+    "doctorPassed": true,
+    "doctorChecks": "11/11 checks passed",
+    "testsPassed": true,
+    "testSummary": "Ran 3 test",
+    "liveBridge": false,
+    "bridgeResult": null,
+    "projectPath": "C:\\Users\\DELL\\AppData\\Local\\Temp\\CVF-W114-CP7-Proof\\cvf-downstream-webapp-planner"
+  },
+  {
+    "sample": "cvf-downstream-data-analyzer",
+    "kind": "data-analysis",
+    "doctorPassed": true,
+    "doctorChecks": "11/11 checks passed",
+    "testsPassed": true,
+    "testSummary": "Ran 3 test",
+    "liveBridge": true,
+    "bridgeResult": "PASS",
+    "projectPath": "C:\\Users\\DELL\\AppData\\Local\\Temp\\CVF-W114-CP7-Proof\\cvf-downstream-data-analyzer"
+  }
+]

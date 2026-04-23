@@ -71,7 +71,9 @@
 
 #### Next Planned Tranche
 
-W117-T1 is CLOSED DELIVERED. No further planned tranches at this time.
+W117-T1 is CLOSED DELIVERED. W118-T1 is the next planned tranche — requires implementation start after GC-018 is reviewed.
+
+- **W118-T1 — Unified Persistent Knowledge Store + Minimal Audit PLANNED**: roadmap `docs/roadmaps/CVF_W118_T1_UNIFIED_PERSISTENT_KNOWLEDGE_STORE_ROADMAP_2026-04-23.md`. GC-018: `docs/baselines/CVF_GC018_W118_T1_UNIFIED_PERSISTENT_KNOWLEDGE_STORE_AUTHORIZATION_2026-04-23.md`. Goal: unify the two separate knowledge collection paths (`_runtimeCollections` from W116 and `knowledgeStore` from W117) under a single `KnowledgeStore` interface; add file-backed JSON persistence for admin-CRUD collections only (ephemeral W116 ingest is never persisted); add minimal append-only audit trail for all store mutations. CP1 unification → CP2 persistence adapter (`FileBackedKnowledgeStore`, `.data/knowledge-store.json`, atomic write) → CP3 audit trail (`KnowledgeStoreAuditEntry`, `GET /api/admin/knowledge/audit`) → CP4 regression evidence (persistence, ephemeral isolation, downstream ingest, Wave 2 live 4/4, release gate PASS).
 
 - **W115-T1 — Non-Coder Onboarding Experience CLOSED DELIVERED (2026-04-23)**: roadmap `docs/roadmaps/CVF_W115_T1_NONCODER_ONBOARDING_EXPERIENCE_ROADMAP_2026-04-23.md`. CP1 dismissable setup banner (`cvf_setup_banner_dismissed`). CP2 `⚡ Try` quick-path on `documentation`, `strategy_analysis`, `seo_audit` templates. CP3 `OnboardingTour` component (10 unit tests, `cvf_onboarding_seen`). CP4 friction audit at `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/docs/assessments/CVF_W115_T1_ONBOARDING_FRICTION_AUDIT_2026-04-23.md`. Time-to-first-output ≈ 95s (target ≤ 5 min — MET). Release gate PASS: live governance `8 passed`, UI mock `6 passed`. GC-018: `docs/baselines/CVF_GC018_W115_T1_NONCODER_ONBOARDING_EXPERIENCE_AUTHORIZATION_2026-04-23.md`. GC-026: `docs/baselines/CVF_GC026_TRACKER_SYNC_W115_T1_CLOSED_2026-04-23.md`. Test delta: +10 unit tests. No governance runtime changes.
 

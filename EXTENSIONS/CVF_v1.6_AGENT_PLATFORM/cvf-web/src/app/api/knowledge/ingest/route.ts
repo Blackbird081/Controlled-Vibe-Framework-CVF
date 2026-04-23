@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { registerRuntimeCollection, KnowledgeChunk } from '@/lib/knowledge-retrieval';
+import { knowledgeStore } from '@/lib/knowledge-store';
+import type { KnowledgeChunk } from '@/lib/knowledge-retrieval';
 
 export interface KnowledgeIngestRequest {
   collectionId: string;
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     validChunks.push({ id: chunk.id, content: chunk.content, keywords: chunk.keywords });
   }
 
-  registerRuntimeCollection({
+  knowledgeStore.registerEphemeral({
     id: parsed.collectionId,
     name: parsed.collectionName ?? parsed.collectionId,
     description: `Downstream project knowledge — ${parsed.collectionId}`,

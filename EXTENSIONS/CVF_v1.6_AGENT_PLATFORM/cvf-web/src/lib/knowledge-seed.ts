@@ -1,0 +1,79 @@
+import type { KnowledgeCollectionDefinition } from './knowledge-store';
+
+export const KNOWLEDGE_COLLECTIONS: KnowledgeCollectionDefinition[] = [
+  {
+    id: 'cvf-global-governance',
+    name: 'CVF Global Governance',
+    description: 'Global governed guidance shared across the enterprise runtime.',
+    orgId: null,
+    teamId: null,
+    chunks: [
+      {
+        id: 'global-guardrails-001',
+        keywords: ['governance', 'control-plane', 'enterprise', 'guardrails'],
+        content:
+          'CVF enterprise runtime prioritizes governed retrieval, append-only audit evidence, and explicit phase-based controls before execution.',
+      },
+    ],
+  },
+  {
+    id: 'cvf-exec-playbook',
+    name: 'Executive Control Playbook',
+    description: 'Executive control knowledge for the main admin operating team.',
+    orgId: 'org_cvf',
+    teamId: 'team_exec',
+    chunks: [
+      {
+        id: 'exec-playbook-001',
+        keywords: ['finops', 'quota', 'executive', 'control'],
+        content:
+          'Executive Control uses codename ALPHA-ORBIT for the FinOps escalation lane and reviews hard-cap incidents before restoring quota overrides.',
+      },
+    ],
+  },
+  {
+    id: 'cvf-engineering-runbooks',
+    name: 'Engineering Runbooks',
+    description: 'Engineering-only guidance for implementation teams.',
+    orgId: 'org_cvf',
+    teamId: 'team_eng',
+    chunks: [
+      {
+        id: 'eng-runbook-001',
+        keywords: ['engineering', 'deploy', 'runbook', 'incident'],
+        content:
+          'Engineering Runbooks use codename BRAVO-CIRCUIT for deployment remediation and patch verification during service incidents.',
+      },
+    ],
+  },
+  {
+    id: 'tenant-org-a-private',
+    name: 'Tenant Org A Private',
+    description: 'Cross-tenant leakage test fixture for org_a.',
+    orgId: 'org_a',
+    teamId: 'team_a',
+    chunks: [
+      {
+        id: 'org-a-private-001',
+        keywords: ['tenant-a', 'partition', 'alpha-scope'],
+        content:
+          'Tenant org_a private codename is TENANT-A-SIGNAL. Only team_a is allowed to retrieve this chunk.',
+      },
+    ],
+  },
+  {
+    id: 'tenant-org-b-private',
+    name: 'Tenant Org B Private',
+    description: 'Cross-tenant leakage test fixture for org_b.',
+    orgId: 'org_b',
+    teamId: 'team_b',
+    chunks: [
+      {
+        id: 'org-b-private-001',
+        keywords: ['tenant-b', 'partition', 'shadow-beta'],
+        content:
+          'Tenant org_b private codename is SHADOW-BETA. Only team_b is allowed to retrieve this chunk.',
+      },
+    ],
+  },
+];

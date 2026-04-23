@@ -1,20 +1,9 @@
 import { getKnowledgeCollectionScopes } from '@/lib/policy-reader';
 import { knowledgeStore } from '@/lib/knowledge-store';
+import { KNOWLEDGE_COLLECTIONS } from '@/lib/knowledge-seed';
 
-export interface KnowledgeChunk {
-  id: string;
-  content: string;
-  keywords: string[];
-}
-
-export interface KnowledgeCollectionDefinition {
-  id: string;
-  name: string;
-  description: string;
-  orgId: string | null;
-  teamId: string | null;
-  chunks: KnowledgeChunk[];
-}
+export type { KnowledgeChunk, KnowledgeCollectionDefinition } from '@/lib/knowledge-store';
+import type { KnowledgeChunk, KnowledgeCollectionDefinition } from '@/lib/knowledge-store';
 
 export interface EffectiveKnowledgeCollection extends KnowledgeCollectionDefinition {
   chunkCount: number;
@@ -29,100 +18,16 @@ export interface KnowledgeQueryResult {
   droppedCollectionIds: string[];
 }
 
-const _runtimeCollections = new Map<string, KnowledgeCollectionDefinition>();
-
+const _storeAutoSeeds = process.env.NODE_ENV !== 'test';
 let _storeSeeded = false;
 function ensureStoreSeeded(): void {
+  if (_storeAutoSeeds) return;
   if (_storeSeeded) return;
   _storeSeeded = true;
   knowledgeStore.seed(KNOWLEDGE_COLLECTIONS);
 }
 
-export function registerRuntimeCollection(collection: KnowledgeCollectionDefinition): void {
-  _runtimeCollections.set(collection.id, collection);
-}
-
-export function getRegisteredCollectionIds(): string[] {
-  return Array.from(_runtimeCollections.keys());
-}
-
-const KNOWLEDGE_COLLECTIONS: KnowledgeCollectionDefinition[] = [
-  {
-    id: 'cvf-global-governance',
-    name: 'CVF Global Governance',
-    description: 'Global governed guidance shared across the enterprise runtime.',
-    orgId: null,
-    teamId: null,
-    chunks: [
-      {
-        id: 'global-guardrails-001',
-        keywords: ['governance', 'control-plane', 'enterprise', 'guardrails'],
-        content:
-          'CVF enterprise runtime prioritizes governed retrieval, append-only audit evidence, and explicit phase-based controls before execution.',
-      },
-    ],
-  },
-  {
-    id: 'cvf-exec-playbook',
-    name: 'Executive Control Playbook',
-    description: 'Executive control knowledge for the main admin operating team.',
-    orgId: 'org_cvf',
-    teamId: 'team_exec',
-    chunks: [
-      {
-        id: 'exec-playbook-001',
-        keywords: ['finops', 'quota', 'executive', 'control'],
-        content:
-          'Executive Control uses codename ALPHA-ORBIT for the FinOps escalation lane and reviews hard-cap incidents before restoring quota overrides.',
-      },
-    ],
-  },
-  {
-    id: 'cvf-engineering-runbooks',
-    name: 'Engineering Runbooks',
-    description: 'Engineering-only guidance for implementation teams.',
-    orgId: 'org_cvf',
-    teamId: 'team_eng',
-    chunks: [
-      {
-        id: 'eng-runbook-001',
-        keywords: ['engineering', 'deploy', 'runbook', 'incident'],
-        content:
-          'Engineering Runbooks use codename BRAVO-CIRCUIT for deployment remediation and patch verification during service incidents.',
-      },
-    ],
-  },
-  {
-    id: 'tenant-org-a-private',
-    name: 'Tenant Org A Private',
-    description: 'Cross-tenant leakage test fixture for org_a.',
-    orgId: 'org_a',
-    teamId: 'team_a',
-    chunks: [
-      {
-        id: 'org-a-private-001',
-        keywords: ['tenant-a', 'partition', 'alpha-scope'],
-        content:
-          'Tenant org_a private codename is TENANT-A-SIGNAL. Only team_a is allowed to retrieve this chunk.',
-      },
-    ],
-  },
-  {
-    id: 'tenant-org-b-private',
-    name: 'Tenant Org B Private',
-    description: 'Cross-tenant leakage test fixture for org_b.',
-    orgId: 'org_b',
-    teamId: 'team_b',
-    chunks: [
-      {
-        id: 'org-b-private-001',
-        keywords: ['tenant-b', 'partition', 'shadow-beta'],
-        content:
-          'Tenant org_b private codename is SHADOW-BETA. Only team_b is allowed to retrieve this chunk.',
-      },
-    ],
-  },
-];
+export const getRegisteredCollectionIds = (): string[] => knowledgeStore.getEphemeralCollectionIds();
 
 function tokenize(input: string): string[] {
   return [...new Set(
@@ -159,10 +64,7 @@ async function getEffectiveCollections(): Promise<KnowledgeCollectionDefinition[
   const scopeOverrides = await getKnowledgeCollectionScopes();
 
   ensureStoreSeeded();
-  const allCollections = [
-    ...knowledgeStore.getCollections(),
-    ...Array.from(_runtimeCollections.values()),
-  ];
+  const allCollections = knowledgeStore.getCollections();
 
   return allCollections.map(collection => {
     const override = scopeOverrides.get(collection.id);

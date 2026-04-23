@@ -24,6 +24,12 @@ The current publication posture is live-first:
 - Web is governance-inherited on the active governed AI path, but is not the full CVF runtime.
 - Workspace bootstrap is now agent-enforcement-ready when generated artifacts and the workspace doctor pass.
 
+Current optimization posture:
+
+- the master architecture and core module baseline are stable-by-default;
+- future core changes should be evidence-driven and narrow, usually to absorb useful external knowledge or close a measured control gap;
+- the highest-value continuation is now non-coder benefit: make CVF's governed path visibly useful, repeatable across downstream workspaces, and backed by live evidence.
+
 ```mermaid
 flowchart TB
     subgraph META["Meta Governance Layer"]
@@ -174,14 +180,15 @@ The architecture should be read this way:
 
 | Claim | Current status | Evidence |
 | --- | --- | --- |
-| Non-coder governed AI path | Live-proven | `E2E Playwright Governance (live): 7 passed` via release gate |
+| Non-coder governed AI path | Live-proven | `E2E Playwright Governance (live): 8 passed` via release gate; W114 CP4 outcome pack `19/19` expected decisions |
 | Multi-provider operability | Certified on 2 lanes | Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` both `CERTIFIED` |
 | Release gate | Mandatory live governance | `python scripts/run_cvf_release_gate_bundle.py --json` |
 | Mock boundary | UI-only | `AGENTS.md` and live evidence packet |
 | Provider parity | Not claimed | Speed, cost, quality, latency, and reliability remain provider economics |
 | Web CVF inheritance | Active path only | Web is governance-inherited on `/api/execute`; it does not claim full CVF runtime inheritance |
 | Workspace agent enforcement | Delivered | W112-T1 adds downstream `AGENTS.md`, `.cvf/` manifest/policy, and workspace doctor checks |
-| Downstream adoption proof | Live-proven sample | W113-T1 proves one real downstream project flow with live API-backed governance evidence |
+| Downstream adoption proof | Repeatable across 3 kinds | W114-CP7 proves cli-productivity, web-app-planning, and data-analysis — all doctor 11/11 PASS, all tests pass, sample 3 includes live web evidence bridge |
+| Non-coder value optimization | CP1-CP7 COMPLETE | W114-T1 full evidence packet: outcome pack 19/19, web visibility, workspace bridge, multi-sample proof; next is CP8 public refresh |
 
 ## 7. Current Control Boundaries
 
@@ -214,6 +221,26 @@ Delivered W113-T1 proof:
 - execute `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`
 - capture live API-backed governance evidence
 
+### Non-Coder Value
+
+The most important current product question is no longer whether the core CVF module architecture is coherent. The practical question is whether a non-coder receives enough visible benefit to trust and reuse CVF.
+
+Current proven baseline:
+
+- one-provider non-coder governed value is proven on the validated Alibaba lane;
+- knowledge-native context can improve output quality in `/api/execute`;
+- Web exposes governed execution metadata on the active live path;
+- workspace adoption is proven for one downstream sample.
+- W114 CP4 adds compact live outcome evidence: 19/19 expected route decisions, 12/12 useful allowed outputs, 5/5 guided high-risk blocks, 3/3 knowledge hits, 2/2 follow-up refinements, and 2/2 approval artifacts.
+- W114 CP5 makes the main processing UI display route-returned governance evidence instead of leaving that evidence only in API responses.
+- W114 CP6 gives downstream workspaces a secret-free bridge receipt that links workspace doctor proof to CVF Web live evidence records.
+- W114 CP7 proves the downstream adoption pattern is repeatable: `scripts/w114_cp7_multi_sample_downstream_proof.ps1` creates 3 sample projects (cli-productivity, web-app-planning, data-analysis), all passing doctor 11/11 and unit tests, with sample 3 also running the live web evidence bridge.
+- W114 CP8 publishes the public evidence packet: `docs/reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md` summarizes plain-language non-coder benefit claims, evidence chain, claim boundaries, and known limitations.
+
+Current posture: W114 CP1-CP7 complete. Downstream adoption pattern is now repeatable and scripted. Public evidence packet is published.
+
+Active roadmap: [W114-T1 Non-Coder Value Maximization And Evidence](docs/roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md).
+
 ## 8. Read Next
 
 ### General Orientation
@@ -238,3 +265,7 @@ Delivered W113-T1 proof:
 - [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)
 - [W112-T1 Workspace Agent Enforcement And Web Control Uplift Roadmap](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md)
 - [W113-T1 First Downstream Project Proof Roadmap](docs/roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md)
+- [W114-T1 Non-Coder Value Maximization And Evidence Roadmap](docs/roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md)
+- [W114-T1 Non-Coder Outcome Evidence Pack](docs/assessments/CVF_W114_T1_NONCODER_OUTCOME_EVIDENCE_PACK_2026-04-23.md)
+- [W114-T1 Web Benefit Visibility Assessment](docs/assessments/CVF_W114_T1_WEB_BENEFIT_VISIBILITY_ASSESSMENT_2026-04-23.md)
+- [W114-T1 Workspace-To-Web Evidence Bridge Assessment](docs/assessments/CVF_W114_T1_WORKSPACE_WEB_EVIDENCE_BRIDGE_ASSESSMENT_2026-04-23.md)

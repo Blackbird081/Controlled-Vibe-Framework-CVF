@@ -1,7 +1,7 @@
 # CVF W114-T1 Non-Coder Value Maximization And Evidence Roadmap
 
 > Date: 2026-04-22
-> Status: ACTIVE / CP1+CP2+CP3+CP4+CP5+CP6+CP7 COMPLETE
+> Status: CLOSED DELIVERED / CP1+CP2+CP3+CP4+CP5+CP6+CP7+CP8 COMPLETE
 > Memory class: SUMMARY_RECORD
 > Scope class: PRODUCT VALUE OPTIMIZATION + LIVE EVIDENCE EXPANSION
 > Canonical predecessors:
@@ -25,7 +25,7 @@ CP1 update (2026-04-23):
 - CP6 status: COMPLETE — downstream workspace-to-web evidence bridge receipt script delivered and verified on a temporary downstream workspace.
 - Release gate verification after CP6: `python scripts/run_cvf_release_gate_bundle.py --json` PASS on 2026-04-23; secrets scan PASS, UI mock `6 passed`, live governance `8 passed`.
 - CP7 status: COMPLETE — multi-sample downstream proof delivered. Three samples verified: `cvf-downstream-note-taker-cli` (cli-productivity), `cvf-downstream-webapp-planner` (web-app-planning), `cvf-downstream-data-analyzer` (data-analysis). All 3 doctor `11/11 PASS`, all 3 tests pass, sample 3 includes live workspace-to-web evidence bridge. Script: `scripts/w114_cp7_multi_sample_downstream_proof.ps1`. Assessment: `docs/assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md`. Raw: `docs/assessments/CVF_W114_CP7_RAW_2026-04-23.json`.
-- Next recommended step: CP8 public evidence packet refresh.
+- CP8 status: COMPLETE — W114 public evidence packet published at `docs/reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md`. README and ARCHITECTURE updated to reflect CP7 downstream repeatability and bounded claims. All 7 W114 exit criteria satisfied. W114 is CLOSED DELIVERED. Assessment: `docs/assessments/CVF_W114_T1_CP8_PUBLIC_EVIDENCE_PACKET_2026-04-23.md`.
 
 The master architecture and core module posture are stable enough that the next highest-value work is not broad core expansion.
 

@@ -1,6 +1,8 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$ProjectPath
+    [string]$ProjectPath,
+
+    [switch]$CheckLiveReadiness
 )
 
 $ErrorActionPreference = "SilentlyContinue"
@@ -21,6 +23,112 @@ function Add-Check {
         Status = $status
         Detail = $Detail
     })
+}
+
+function Normalize-EnvValue {
+    param([string]$Value)
+    if ([string]::IsNullOrWhiteSpace($Value)) {
+        return ""
+    }
+    $trimmed = $Value.Trim()
+    if (($trimmed.StartsWith('"') -and $trimmed.EndsWith('"')) -or
+        ($trimmed.StartsWith("'") -and $trimmed.EndsWith("'"))) {
+        return $trimmed.Substring(1, $trimmed.Length - 2).Trim()
+    }
+    return $trimmed
+}
+
+function Get-LocalEnvKeySource {
+    param(
+        [string]$CorePath,
+        [string[]]$KeyNames
+    )
+
+    if ([string]::IsNullOrWhiteSpace($CorePath) -or -not (Test-Path $CorePath -PathType Container)) {
+        return $null
+    }
+
+    $envFiles = @(
+        (Join-Path $CorePath "EXTENSIONS\CVF_v1.6_AGENT_PLATFORM\cvf-web\.env.local"),
+        (Join-Path $CorePath "EXTENSIONS\CVF_v1.6_AGENT_PLATFORM\cvf-web\.env"),
+        (Join-Path $CorePath ".env.local"),
+        (Join-Path $CorePath ".env")
+    )
+
+    foreach ($envFile in $envFiles) {
+        if (-not (Test-Path $envFile -PathType Leaf)) {
+            continue
+        }
+
+        $lines = Get-Content -Path $envFile -Encoding utf8
+        foreach ($line in $lines) {
+            $trimmed = $line.Trim()
+            if ([string]::IsNullOrWhiteSpace($trimmed) -or $trimmed.StartsWith("#")) {
+                continue
+            }
+            if ($trimmed.StartsWith("export ")) {
+                $trimmed = $trimmed.Substring(7).Trim()
+            }
+
+            foreach ($keyName in $KeyNames) {
+                if ($trimmed -match "^$([regex]::Escape($keyName))\s*=(.+)$") {
+                    $value = Normalize-EnvValue $Matches[1]
+                    if (-not [string]::IsNullOrWhiteSpace($value)) {
+                        return [PSCustomObject]@{
+                            KeyName = $keyName
+                            Source  = "ignored_local_env"
+                            Path    = $envFile
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return $null
+}
+
+function Get-LiveReadiness {
+    param([string]$CorePath)
+
+    $dashScopeAliases = @(
+        "DASHSCOPE_API_KEY",
+        "ALIBABA_API_KEY",
+        "CVF_ALIBABA_API_KEY",
+        "CVF_BENCHMARK_ALIBABA_KEY"
+    )
+
+    foreach ($alias in $dashScopeAliases) {
+        $value = [Environment]::GetEnvironmentVariable($alias)
+        if (-not [string]::IsNullOrWhiteSpace($value)) {
+            return [PSCustomObject]@{
+                LiveKeyAvailable = $true
+                ProviderLane     = "alibaba"
+                KeyName          = $alias
+                Source           = "process_env"
+                Path             = ""
+            }
+        }
+    }
+
+    $localSource = Get-LocalEnvKeySource -CorePath $CorePath -KeyNames $dashScopeAliases
+    if ($null -ne $localSource) {
+        return [PSCustomObject]@{
+            LiveKeyAvailable = $true
+            ProviderLane     = "alibaba"
+            KeyName          = $localSource.KeyName
+            Source           = $localSource.Source
+            Path             = $localSource.Path
+        }
+    }
+
+    return [PSCustomObject]@{
+        LiveKeyAvailable = $false
+        ProviderLane     = "none"
+        KeyName          = "none"
+        Source           = "none"
+        Path             = ""
+    }
 }
 
 Write-Host ""
@@ -155,22 +263,58 @@ if ($null -ne $manifestObj -and $manifestObj.requiredDocs) {
     Add-Check "Required docs referenced by manifest exist" $allDocsPresent $docsDetail
 }
 
+# Check 12 (optional/warn): if knowledgePath is declared in manifest, folder should exist
+if ($null -ne $manifestObj -and $manifestObj.knowledgePath) {
+    $knowledgeFolderPath = Join-Path $projectResolved $manifestObj.knowledgePath.TrimEnd('/')
+    $knowledgeFolderExists = Test-Path $knowledgeFolderPath -PathType Container
+    $knowledgeDetail = if ($knowledgeFolderExists) { "OK: $knowledgeFolderPath" } else { "Folder not found: $knowledgeFolderPath (run new-cvf-workspace.ps1 or create manually)" }
+    if (-not $knowledgeFolderExists) {
+        Write-Host "[WARN] Knowledge folder declared but missing: $knowledgeFolderPath" -ForegroundColor Yellow
+    }
+    # warn only — do not increment failCount
+    $null = $script:results.Add([PSCustomObject]@{
+        Check  = "knowledge/ folder present (optional)"
+        Status = if ($knowledgeFolderExists) { "PASS" } else { "WARN" }
+        Detail = $knowledgeDetail
+    })
+}
+
 # Print results table
 Write-Host ""
 Write-Host ("  {0,-50} {1}" -f "Check", "Status") -ForegroundColor White
 Write-Host ("  {0,-50} {1}" -f ("-" * 50), ("-" * 6)) -ForegroundColor DarkGray
 
 foreach ($r in $results) {
-    $color = if ($r.Status -eq "PASS") { "Green" } else { "Red" }
-    $symbol = if ($r.Status -eq "PASS") { "[PASS]" } else { "[FAIL]" }
+    $color = switch ($r.Status) { "PASS" { "Green" } "WARN" { "Yellow" } default { "Red" } }
+    $symbol = switch ($r.Status) { "PASS" { "[PASS]" } "WARN" { "[WARN]" } default { "[FAIL]" } }
     Write-Host ("  {0,-50} " -f $r.Check) -NoNewline
     Write-Host $symbol -ForegroundColor $color
-    if ($r.Detail -and $r.Status -eq "FAIL") {
+    if ($r.Detail -and $r.Status -ne "PASS") {
         Write-Host ("         -> $($r.Detail)") -ForegroundColor DarkYellow
     }
 }
 
 Write-Host ""
+
+if ($CheckLiveReadiness) {
+    $readiness = Get-LiveReadiness -CorePath $cvfCorePath
+    Write-Host "CVF Live Governance Readiness (optional, secret-free)" -ForegroundColor Cyan
+    Write-Host "====================================================" -ForegroundColor Cyan
+    Write-Host ("  live_key_available: {0}" -f ($readiness.LiveKeyAvailable.ToString().ToLowerInvariant()))
+    Write-Host ("  provider_lane:      {0}" -f $readiness.ProviderLane)
+    Write-Host ("  key_name:           {0}" -f $readiness.KeyName)
+    Write-Host ("  source:             {0}" -f $readiness.Source)
+    if ($readiness.Path) {
+        Write-Host ("  source_path:        {0}" -f $readiness.Path)
+    }
+    Write-Host "  raw_key_value:      NOT PRINTED"
+    Write-Host "  release_gate:       python scripts/run_cvf_release_gate_bundle.py --json"
+    if (-not $readiness.LiveKeyAvailable) {
+        Write-Host "  note: Missing live key does not fail workspace enforcement doctor." -ForegroundColor Yellow
+    }
+    Write-Host ""
+}
+
 $totalChecks = $results.Count
 $passCount = $totalChecks - $failCount
 

@@ -156,11 +156,44 @@ Nếu cần hiểu trạng thái milestone hiện tại, chuẩn bị demo, ho�
 - `roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md` — closed W112 milestone for downstream workspace agent enforcement and honest web control deepening
 - `roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md` — closed roadmap proving the first real downstream project adoption path
 - `assessments/CVF_W113_T1_DOWNSTREAM_LIVE_PROOF_ASSESSMENT_2026-04-22.md` — W113 downstream live proof evidence
+- `roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md` — closed W114 milestone for repeatable non-coder benefit with bounded live and workspace evidence
+- `assessments/CVF_W114_T1_NONCODER_VALUE_SCORECARD_2026-04-23.md` — CP1 scorecard refresh for W114 non-coder value proof/gap posture
+- `assessments/CVF_W114_T1_SECRET_FREE_WORKSPACE_LIVE_READINESS_ASSESSMENT_2026-04-23.md` — CP2 secret-free workspace live readiness closure record
+- `assessments/CVF_W114_T1_NONCODER_OUTCOME_EVIDENCE_PACK_2026-04-23.md` — CP4 compact live outcome evidence pack for non-coder benefit
+- `assessments/CVF_W114_T1_NONCODER_OUTCOME_EVIDENCE_RAW_2026-04-23.json` — raw CP4 route evidence, with raw provider keys omitted
+- `assessments/CVF_W114_T1_WEB_BENEFIT_VISIBILITY_ASSESSMENT_2026-04-23.md` — CP5 Web processing-screen visibility closure record
+- `assessments/CVF_W114_T1_WORKSPACE_WEB_EVIDENCE_BRIDGE_ASSESSMENT_2026-04-23.md` — CP6 downstream workspace-to-web evidence bridge closure record
+- `assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md` — CP7 multi-sample downstream workspace proof with live-evidence bridge boundary
+- `reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md` — CP8 public evidence packet with bounded non-coder benefit claims
 
 ## Product Value Validation
 
 If the current task is proving or rejecting CVF user-facing value:
 
+- `roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md`
+  - closed continuation lane after W112/W113
+  - records non-coder scorecard refresh, secret-free live readiness, Web benefit visibility, workspace-to-web evidence bridge, multi-sample downstream proof, and public evidence packet publication
+- `assessments/CVF_W114_T1_NONCODER_VALUE_SCORECARD_2026-04-23.md`
+  - current CP1 status record
+  - distinguishes `PROVEN`, `PARTIAL`, `NOT_PROVEN`, and `OUT_OF_SCOPE` non-coder value dimensions
+- `assessments/CVF_W114_T1_SECRET_FREE_WORKSPACE_LIVE_READINESS_ASSESSMENT_2026-04-23.md`
+  - CP2 status record
+  - documents optional `-CheckLiveReadiness` workspace doctor mode and secret-free proof boundary
+- `assessments/CVF_W114_T1_NONCODER_OUTCOME_EVIDENCE_PACK_2026-04-23.md`
+  - CP4 status record
+  - summarizes 19 governed `/api/execute` outcome cases across normal work, high-risk guidance, knowledge-native, follow-up, and approval paths
+- `assessments/CVF_W114_T1_WEB_BENEFIT_VISIBILITY_ASSESSMENT_2026-04-23.md`
+  - CP5 status record
+  - documents the main processing-screen governance evidence panel and route-created approval id behavior
+- `assessments/CVF_W114_T1_WORKSPACE_WEB_EVIDENCE_BRIDGE_ASSESSMENT_2026-04-23.md`
+  - CP6 status record
+  - documents the secret-free downstream bridge receipt linking workspace doctor proof to CVF Web live evidence
+- `assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md`
+  - CP7 status record
+  - proves the tested downstream bootstrap pattern across three sample kinds; not universal downstream compatibility
+- `reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md`
+  - CP8 status record
+  - separates live API-backed Web governance claims from workspace/downstream artifact, doctor, test, and bridge claims
 - `roadmaps/CVF_PRODUCT_VALUE_VALIDATION_WAVE_ROADMAP_2026-04-11.md`
   - canonical doctrine now distinguishes `CP3A` provider-hub validation from `CP3B` controlled value testing
   - canonical unit is a governed `run lane` = one admitted `provider + model` configuration

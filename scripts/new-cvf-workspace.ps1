@@ -118,6 +118,7 @@ $manifestObj = [ordered]@{
     enforcementVersion           = "1.0"
     bootstrapScript              = "scripts/new-cvf-workspace.ps1"
     w112TrancheRef               = "CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md"
+    knowledgePath                = "knowledge/"
 }
 $manifestJson = $manifestObj | ConvertTo-Json -Depth 5
 Set-Content -Path (Join-Path $cvfManifestDir "manifest.json") -Value $manifestJson -Encoding utf8
@@ -143,6 +144,45 @@ $policyObj = [ordered]@{
 $policyJson = $policyObj | ConvertTo-Json -Depth 5
 Set-Content -Path (Join-Path $cvfManifestDir "policy.json") -Value $policyJson -Encoding utf8
 Write-Ok "Created: $cvfManifestDir\policy.json"
+
+# W116-CP1: Generate knowledge/ folder stub
+$knowledgeDir = Join-Path $projectPath "knowledge"
+if (-not (Test-Path $knowledgeDir)) {
+    Ensure-Directory $knowledgeDir
+    $knowledgeReadme = @"
+# Project Knowledge
+
+Place `.md` files in this folder to inject project-specific context into CVF-governed AI runs.
+
+## How it works
+
+1. Add `.md` files describing your project's specs, decisions, or domain terms.
+2. Run `scripts/ingest_cvf_downstream_knowledge.ps1` to index them into `knowledge/_index.json`.
+3. CVF-governed `/api/execute` calls that include your `knowledgeCollectionId` will automatically
+   retrieve relevant chunks and inject them into the AI system prompt.
+
+## What to put here
+
+- Architecture decisions and rationale
+- Domain terminology and definitions
+- Project specs, requirements, or acceptance criteria
+- Process guides or runbooks your team follows
+
+## What NOT to put here
+
+- Secrets, API keys, or credentials (never — governance enforcement will reject these)
+- Binary files or non-markdown formats (not supported in this wave)
+
+## Reference
+
+W116-T1 Downstream Knowledge Pipeline — `docs/roadmaps/CVF_W116_T1_DOWNSTREAM_KNOWLEDGE_PIPELINE_ROADMAP_2026-04-23.md`
+"@
+    Set-Content -Path (Join-Path $knowledgeDir "README.md") -Value $knowledgeReadme -Encoding utf8
+    Write-Ok "Created: $knowledgeDir\README.md (project knowledge stub)"
+}
+else {
+    Write-Ok "knowledge/ folder already exists: $knowledgeDir"
+}
 
 # CP1: Generate downstream AGENTS.md from template
 $agentsTemplatePath = Join-Path $cvfCorePath "governance\toolkit\05_OPERATION\CVF_DOWNSTREAM_AGENTS_TEMPLATE.md"
@@ -212,8 +252,9 @@ $logContent = @"
 - [x] Project folder available
 - [x] VS Code terminal defaults configured
 - [x] Agent Instructions: $agentInstructionsStatus
-- [x] .cvf/manifest.json: PRESENT
+- [x] .cvf/manifest.json: PRESENT (knowledgePath: knowledge/)
 - [x] .cvf/policy.json: PRESENT
+- [x] knowledge/ folder: PRESENT (add .md files and run ingest script to enable project-knowledge injection)
 - [ ] Runtime artifacts migrated (if needed)
 - [ ] Toolchain baseline recorded (python, node, pnpm, optional uv)
 
@@ -221,7 +262,15 @@ $logContent = @"
 Run the workspace doctor to verify enforcement artifacts:
   powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\check_cvf_workspace_agent_enforcement.ps1 -ProjectPath "$projectPath"
 
+Optional secret-free live readiness check:
+  powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\check_cvf_workspace_agent_enforcement.ps1 -ProjectPath "$projectPath" -CheckLiveReadiness
+
+Workspace-to-web evidence bridge receipt (run during REVIEW/FREEZE):
+  powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\write_cvf_workspace_web_evidence_bridge.ps1 -ProjectPath "$projectPath" -CheckLiveReadiness -ReleaseGateResult "ATTACH_LATEST_CVF_CORE_GATE_RESULT"
+
 - [ ] Workspace doctor: PASS
+- [ ] Optional live readiness: PASS / MISSING KEY / NOT RUN
+- [ ] Workspace-to-web evidence bridge receipt: PRESENT / NOT NEEDED
 - [ ] API health check
 - [ ] Frontend startup check
 - [ ] Critical workflow smoke check
@@ -242,6 +291,10 @@ Write-Host "  $workspaceFilePath"
 Write-Host ""
 Write-Host "Next step - run workspace doctor:" -ForegroundColor Yellow
 Write-Host "  powershell -ExecutionPolicy Bypass -File `"$cvfCorePath\scripts\check_cvf_workspace_agent_enforcement.ps1`" -ProjectPath `"$projectPath`""
+Write-Host "Optional secret-free live readiness check:" -ForegroundColor Yellow
+Write-Host "  powershell -ExecutionPolicy Bypass -File `"$cvfCorePath\scripts\check_cvf_workspace_agent_enforcement.ps1`" -ProjectPath `"$projectPath`" -CheckLiveReadiness"
+Write-Host "Workspace-to-web evidence bridge receipt (during REVIEW/FREEZE):" -ForegroundColor Yellow
+Write-Host "  powershell -ExecutionPolicy Bypass -File `"$cvfCorePath\scripts\write_cvf_workspace_web_evidence_bridge.ps1`" -ProjectPath `"$projectPath`" -CheckLiveReadiness -ReleaseGateResult `"ATTACH_LATEST_CVF_CORE_GATE_RESULT`""
 Write-Host ""
 Write-Host "Isolation reminder:" -ForegroundColor Yellow
 Write-Host "  Work in project root only: $projectPath"

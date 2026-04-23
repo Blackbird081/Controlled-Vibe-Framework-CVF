@@ -35,6 +35,8 @@ export interface ExecutionRequest {
     };
     /** W101-T1 — pre-governed knowledge context to inject into the system prompt */
     knowledgeContext?: string;
+    /** W116-T1 — downstream project collection id to target during knowledge retrieval */
+    knowledgeCollectionId?: string;
 }
 
 export interface ExecutionResponse {

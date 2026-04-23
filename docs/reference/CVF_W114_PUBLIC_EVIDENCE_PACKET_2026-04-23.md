@@ -4,7 +4,7 @@
 > Status: PUBLISHED
 > Memory class: FULL_RECORD
 > Audience: public readers, potential adopters, non-coder users
-> Scope: W114-T1 Non-Coder Value Maximization — CP1 through CP7 complete
+> Scope: W114-T1 Non-Coder Value Maximization — CP1 through CP8 complete
 
 ## What CVF Does For a Non-Coder
 
@@ -23,7 +23,7 @@ The user experience is: I submit a task, I can see what CVF is doing and why, I 
 
 ## Evidence Summary
 
-All claims below are backed by live API calls on the Alibaba `qwen-turbo` provider lane.
+The Web governance and non-coder outcome claims below are backed by live API calls on the Alibaba `qwen-turbo` provider lane. Workspace and downstream claims are backed by generated enforcement artifacts, workspace doctor results, downstream sample tests, and secret-free bridge receipts that reference the live release-gate evidence without copying provider keys.
 
 | Claim | Evidence | Status |
 | --- | --- | --- |
@@ -34,9 +34,9 @@ All claims below are backed by live API calls on the Alibaba `qwen-turbo` provid
 | Knowledge-native context improves output quality | CP4: 3/3 knowledge requests reflected expected project facts; +0.775 delta from W102 | PROVEN |
 | Governance decisions match expected policy | CP4: 19/19 governance decisions matched expected outcomes | PROVEN |
 | Web processing screen shows governance evidence | CP5: panel displays decision, provider, model, routing, snapshot id, envelope, approval id | PROVEN |
-| Workspace bootstrap enforces CVF protocol from first request | W112/W113: doctor 11/11 PASS across multiple samples | PROVEN |
-| Downstream adoption pattern is repeatable | CP7: 3 samples across cli, web-planning, data-analysis — all doctor 11/11, all tests pass | PROVEN |
-| Evidence bridge links workspace to web without distributing keys | CP6: bridge receipt records doctor PASS, live key presence only, keys NOT copied | PROVEN |
+| Workspace bootstrap enforces CVF protocol from first request | W112/W113: generated downstream artifacts plus doctor 11/11 PASS across multiple samples | WORKSPACE-PROVEN |
+| Downstream adoption pattern is repeatable across tested sample kinds | CP7: 3 samples across cli, web-planning, data-analysis — all doctor 11/11, all tests pass | WORKSPACE-PROVEN |
+| Evidence bridge links workspace proof to live web evidence without distributing keys | CP6: bridge receipt records doctor PASS, live key presence only, keys NOT copied, and release-gate reference | BRIDGED |
 | Multi-provider operability | W110: Alibaba qwen-turbo CERTIFIED (3/3), DeepSeek deepseek-chat CERTIFIED (3/3) | PROVEN |
 | Release gate enforces live governance | Default gate requires live Playwright governance spec pass | ENFORCED |
 
@@ -51,7 +51,7 @@ More specifically:
 - If your task needs approval, CVF creates the approval artifact for you — you do not need to manually manage that workflow.
 - If you have project knowledge configured, CVF uses it to improve your output without you having to repeat context.
 - You can see what governance decisions were made on your request, which provider handled it, and what policy applied.
-- You can adopt CVF on a new downstream project and be agent-enforcement-ready from the first request.
+- You can adopt CVF on a new downstream project using the tested bootstrap pattern and get generated agent-enforcement artifacts plus a workspace doctor check from the first request.
 
 ## Evidence Chain
 
@@ -93,7 +93,7 @@ Release gate (mandatory live governance baseline):
 python scripts/run_cvf_release_gate_bundle.py --json
 ```
 
-Post-CP7 gate result: secrets scan PASS, UI mock `6 passed`, live governance `8 passed`.
+Post-CP7 gate result used as live Web governance baseline: secrets scan PASS, UI mock `6 passed`, live governance `8 passed`.
 
 ## Claim Boundaries
 
@@ -142,4 +142,4 @@ powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\write_cvf_workspace_
 | --- | --- |
 | 2026-04-21 | Initial live evidence publication (W111-T1) |
 | 2026-04-22 | Workspace enforcement + first downstream proof (W112/W113) |
-| 2026-04-23 | Non-coder value maximization evidence (W114 CP1-CP7) — this packet |
+| 2026-04-23 | Non-coder value maximization evidence (W114 CP1-CP8) — this packet |

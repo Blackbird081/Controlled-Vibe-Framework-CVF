@@ -300,6 +300,72 @@ describe('ProcessingScreen — risk badge (W94-T1)', () => {
   });
 });
 
+// ── W114-T1 CP5: Governance evidence visibility ─────────────────────────────
+
+describe('ProcessingScreen — governance evidence visibility (W114-T1 CP5)', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('renders provider, routing, knowledge, and policy evidence returned by /api/execute', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      json: async () => ({
+        success: true,
+        output: 'Governed output',
+        provider: 'alibaba',
+        model: 'qwen-turbo',
+        enforcement: { status: 'ALLOW', reasons: [], riskGate: { riskLevel: 'R1', status: 'ALLOW', reason: 'Allowed' } },
+        providerRouting: { decision: 'ALLOW', selectedProvider: 'alibaba', requestedProvider: 'alibaba' },
+        knowledgeInjection: { injected: true, source: 'inline-service', contextLength: 120, chunkCount: 0 },
+        outputValidation: { qualityHint: 'usable', issues: [], retryAttempts: 0 },
+        governanceEnvelope: { envelopeId: 'env-test-001', policySnapshotId: 'pol-test-001' },
+        policySnapshotId: 'pol-test-001',
+      }),
+    }));
+
+    render(<ProcessingScreen {...baseProps} onComplete={vi.fn()} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('governance-evidence-panel')).toBeDefined();
+    });
+
+    const panel = screen.getByTestId('governance-evidence-panel');
+    expect(panel.textContent).toContain('CVF governed this run');
+    expect(panel.textContent).toContain('ALLOW');
+    expect(panel.textContent).toContain('alibaba');
+    expect(panel.textContent).toContain('qwen-turbo');
+    expect(panel.textContent).toContain('inline-service');
+    expect(panel.textContent).toContain('pol-test-001');
+    expect(panel.textContent).toContain('env-test-001');
+  });
+
+  it('uses execute-route approvalId directly when NEEDS_APPROVAL creates one', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      json: async () => ({
+        success: false,
+        error: 'Human approval required.',
+        provider: 'alibaba',
+        model: 'approval-required',
+        enforcement: { status: 'NEEDS_APPROVAL', reasons: ['Approval required'], riskGate: { riskLevel: 'R3', status: 'NEEDS_APPROVAL', reason: 'R3' } },
+        approvalId: 'apr-route-001',
+        approvalStatus: 'pending',
+        governanceEnvelope: { envelopeId: 'env-approval-001', policySnapshotId: 'pol-approval-001' },
+        policySnapshotId: 'pol-approval-001',
+      }),
+    }));
+
+    render(<ProcessingScreen {...baseProps} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('approval-status-panel')).toBeDefined();
+    });
+
+    expect(screen.queryByTestId('submit-approval-btn')).toBeNull();
+    expect(screen.getByTestId('approval-status-panel').textContent).toContain('apr-route-001');
+    expect(screen.getByTestId('governance-evidence-panel').textContent).toContain('apr-route-001');
+  });
+});
+
 // ── W92-T1: NEEDS_APPROVAL Flow Completion ───────────────────────────────────
 
 describe('ProcessingScreen — NEEDS_APPROVAL flow (W92-T1)', () => {

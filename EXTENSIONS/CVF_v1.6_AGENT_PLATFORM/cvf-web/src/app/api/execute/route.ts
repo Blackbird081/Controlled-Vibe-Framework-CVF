@@ -421,6 +421,7 @@ export async function POST(request: NextRequest) {
                 intent: body.intent!,
                 orgId: session?.orgId,
                 teamId: session?.teamId,
+                collectionId: typeof body.knowledgeCollectionId === 'string' ? body.knowledgeCollectionId : undefined,
             });
         }
         const retrievedKnowledgeContext = formatKnowledgeChunks(retrievalResult.chunks);

@@ -175,7 +175,7 @@ See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_IS
 
 Current boundary: this bootstrap is now `agent-enforcement-ready` when the generated downstream `AGENTS.md`, `.cvf/` policy manifests, bootstrap log, and workspace doctor checks are present. See [W112-T1 Workspace Agent Enforcement and Web Control Uplift](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md).
 
-Downstream proof: [W113-T1](docs/roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md) proved the first downstream adoption path. [W114-CP7](docs/assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md) extended this to 3 sample projects across cli-productivity, web-app-planning, and data-analysis — all doctor 11/11 PASS, all tests pass, sample 3 includes live web evidence bridge.
+Downstream proof: [W113-T1](docs/roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md) proved the first downstream adoption path. [W114-CP7](docs/assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md) extended this to 3 sample projects across cli-productivity, web-app-planning, and data-analysis — all doctor 11/11 PASS, all tests pass, sample 3 includes a secret-free bridge to live Web evidence.
 
 ### Moving To A New Machine
 
@@ -223,7 +223,7 @@ Current posture on the active reference path:
 | Web non-coder semantics | `VALUE PROVEN (Alibaba); PORTABILITY PROVEN (Alibaba + DeepSeek)` |
 | Web CVF inheritance boundary | `GOVERNANCE-INHERITED ACTIVE PATH; not full CVF runtime` |
 | Workspace bootstrap | `AGENT-ENFORCEMENT-READY via W112 bootstrap + doctor` |
-| Downstream adoption proof | `W114-CP7 LIVE-PROVEN on 3 sample projects (cli-productivity, web-planning, data-analysis)` |
+| Downstream adoption proof | `W114-CP7 WORKSPACE-PROVEN on 3 sample projects with live-evidence bridge boundary` |
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` |
 | Governance executable ownership | `SUBSTANTIALLY ALIGNED` |
 | End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` |
@@ -240,13 +240,13 @@ Read this status as:
 - the active path has no open tranche and remains `SUBSTANTIALLY DELIVERED`
 - Web is live-proven on its active governed AI path, but it should not be described as fully inheriting every CVF runtime/module
 - workspace bootstrap now isolates downstream work and generates downstream agent-enforcement artifacts
-- downstream adoption proof is live-proven on one sample project through W113
-- the current highest-value continuation is W114: make non-coder benefit more visible, repeatable, and evidence-backed across Web and downstream workspaces
+- downstream adoption proof is workspace-proven across three sample kinds through W114 CP7, with a secret-free bridge to live Web evidence
+- W114 is closed delivered: non-coder benefit is more visible, repeatable, and evidence-backed across Web and downstream workspaces within the stated claim boundaries
 - W114 CP4 now adds compact live outcome evidence: 19/19 expected decisions, 12/12 useful allowed outputs, 5/5 guided high-risk blocks, 3/3 knowledge hits, 2/2 follow-up refinements, and 2/2 approval artifacts
 - W114 CP5 now makes the main Web processing flow display route-returned governance evidence
 - W114 CP6 now lets downstream workspaces generate a secret-free bridge receipt linking workspace doctor proof to CVF Web live evidence
-- W114 CP7 now proves the downstream adoption pattern is repeatable across 3 project kinds (cli-productivity, web-app-planning, data-analysis): all doctor 11/11, all tests pass, sample 3 includes live web evidence bridge — multi-sample proof script: `scripts/w114_cp7_multi_sample_downstream_proof.ps1`
-- W114 CP1-CP7 complete; public evidence packet: `docs/reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md`
+- W114 CP7 now proves the downstream adoption pattern is repeatable across 3 tested project kinds (cli-productivity, web-app-planning, data-analysis): all doctor 11/11, all tests pass, sample 3 includes a secret-free bridge to live Web evidence — multi-sample proof script: `scripts/w114_cp7_multi_sample_downstream_proof.ps1`
+- W114 CP1-CP8 complete; public evidence packet: `docs/reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md`
 - relocation is closed-by-default; next work should follow the Post-MC5 Continuation Strategy
 - future expansion must go through scan continuity review, reassessment, or a fresh bounded `GC-018`
 

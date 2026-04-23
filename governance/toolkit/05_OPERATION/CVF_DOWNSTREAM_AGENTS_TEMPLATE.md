@@ -106,11 +106,12 @@ governance-relevant behavior are at minimum R2.
 
 Before taking action, read:
 
-1. `.cvf/manifest.json` — enforcement manifest
+1. `.cvf/manifest.json` — enforcement manifest (includes `knowledgePath` if project knowledge is configured)
 2. `.cvf/policy.json` — governance policy
 3. `docs/CVF_BOOTSTRAP_LOG_*.md` — workspace bootstrap record
 4. `{{CVF_CORE_PATH}}/AGENT_HANDOFF.md` — current CVF state and active tranches
 5. `{{CVF_CORE_PATH}}/AGENTS.md` — CVF-level mandatory governance proof rules
+6. `knowledge/` folder (if present) — project-specific knowledge files; run `scripts/ingest_cvf_downstream_knowledge.ps1` to index them before governed AI runs that benefit from project context
 
 ## Handoff and Tranche Closure Protocol
 
@@ -124,6 +125,25 @@ When closing a tranche or handing off to another agent:
    - Next governed move
 3. Commit all artifacts before declaring closure.
 4. Do NOT declare a tranche closed if tests are failing or artifacts are missing.
+
+## Workspace-To-Web Evidence Bridge
+
+When a downstream tranche reaches REVIEW or FREEZE and needs to reference CVF Web governance proof:
+
+1. Run the workspace doctor from the CVF core path.
+2. Optionally run the secret-free live readiness check.
+3. Generate a bridge receipt:
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File "{{CVF_CORE_PATH}}\scripts\write_cvf_workspace_web_evidence_bridge.ps1" `
+     -ProjectPath "<this-project-root>" `
+     -CheckLiveReadiness `
+     -ReleaseGateResult "ATTACH_LATEST_CVF_CORE_GATE_RESULT"
+   ```
+
+4. Store the generated `docs/CVF_WORKSPACE_WEB_EVIDENCE_BRIDGE_*.md` in this downstream project.
+
+The bridge receipt may point to CVF core/web release evidence. It must not copy provider API keys, local `.env` contents, or raw provider secrets into this project.
 
 ## Override Refusal
 

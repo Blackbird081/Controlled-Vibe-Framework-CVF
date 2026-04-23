@@ -16,6 +16,7 @@ Verified closure evidence:
 - Web targeted tests: `31 passed` for governance envelope and execute route coverage
 - Web lint: `PASS` with warnings only
 - Release gate bundle: `PASS` after setting process-local `DASHSCOPE_API_KEY` alias from the configured Alibaba key; UI mock `6 passed`, live governance `7 passed`
+- API-key handling: downstream workspace enforcement does not copy or store provider secrets; live key validation stays in CVF core/web release proof.
 
 Post-review fixes applied:
 
@@ -338,6 +339,20 @@ Governance assertion rule:
 
 - Any test or public claim that asserts CVF controls AI/agent behavior must use a real provider API call.
 - Mock remains valid only for UI structure and non-governance rendering checks.
+
+### 7.1 API-Key Test Boundary
+
+Current workspace/web key posture:
+
+- Workspace bootstrap, doctor, hook, and CI sample validate local enforcement readiness, not provider connectivity.
+- Generated downstream files must not contain raw provider keys.
+- `.cvf/policy.json` records that live governance evidence is required, but it is not a secret store.
+- Web live governance tests use operator-supplied env from the CVF core/web process.
+- `python scripts/run_cvf_release_gate_bundle.py --json` is the current release-quality key-backed proof command.
+- The release gate accepts `DASHSCOPE_API_KEY` directly and also accepts `ALIBABA_API_KEY`, `CVF_ALIBABA_API_KEY`, or `CVF_BENCHMARK_ALIBABA_KEY` by mapping them into the DashScope-compatible env expected by the live Playwright specs.
+- `scripts/_local_env.py` loads repo-local env files such as `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/.env.local` before the gate declares the live key missing.
+
+This means a workspace doctor `PASS` proves the downstream agent-enforcement contract is present, while a release gate `PASS` proves the web/governance path can use a live provider key. These are complementary checks and must not be collapsed into one claim.
 
 ## 8. Exit Criteria
 

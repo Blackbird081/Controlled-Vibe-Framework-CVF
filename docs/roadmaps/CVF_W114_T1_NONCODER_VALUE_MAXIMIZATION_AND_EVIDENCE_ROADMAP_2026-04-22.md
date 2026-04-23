@@ -24,7 +24,7 @@ CP1 update (2026-04-23):
 - Release gate verification after CP5: `python scripts/run_cvf_release_gate_bundle.py --json` PASS on 2026-04-23; secrets scan PASS, UI mock `6 passed`, live governance `8 passed`.
 - CP6 status: COMPLETE — downstream workspace-to-web evidence bridge receipt script delivered and verified on a temporary downstream workspace.
 - Release gate verification after CP6: `python scripts/run_cvf_release_gate_bundle.py --json` PASS on 2026-04-23; secrets scan PASS, UI mock `6 passed`, live governance `8 passed`.
-- CP7 status: COMPLETE — multi-sample downstream proof delivered. Three samples verified: `cvf-downstream-note-taker-cli` (cli-productivity), `cvf-downstream-webapp-planner` (web-app-planning), `cvf-downstream-data-analyzer` (data-analysis). All 3 doctor `11/11 PASS`, all 3 tests pass, sample 3 includes live workspace-to-web evidence bridge. Script: `scripts/w114_cp7_multi_sample_downstream_proof.ps1`. Assessment: `docs/assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md`. Raw: `docs/assessments/CVF_W114_CP7_RAW_2026-04-23.json`.
+- CP7 status: COMPLETE — multi-sample downstream proof delivered. Three samples verified: `cvf-downstream-note-taker-cli` (cli-productivity), `cvf-downstream-webapp-planner` (web-app-planning), `cvf-downstream-data-analyzer` (data-analysis). All 3 doctor `11/11 PASS`, all 3 tests pass, sample 3 includes a secret-free workspace-to-web bridge receipt that references live Web evidence. Script: `scripts/w114_cp7_multi_sample_downstream_proof.ps1`. Assessment: `docs/assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md`. Raw: `docs/assessments/CVF_W114_CP7_RAW_2026-04-23.json`.
 - CP8 status: COMPLETE — W114 public evidence packet published at `docs/reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md`. README and ARCHITECTURE updated to reflect CP7 downstream repeatability and bounded claims. All 7 W114 exit criteria satisfied. W114 is CLOSED DELIVERED. Assessment: `docs/assessments/CVF_W114_T1_CP8_PUBLIC_EVIDENCE_PACKET_2026-04-23.md`.
 
 The master architecture and core module posture are stable enough that the next highest-value work is not broad core expansion.
@@ -390,7 +390,7 @@ W114 closes only when:
 4. CP4 compact live outcome evidence pack. COMPLETE 2026-04-23.
 5. CP5 Web benefit visibility pass. COMPLETE 2026-04-23.
 6. CP6 workspace-to-web evidence bridge. COMPLETE 2026-04-23.
-7. CP7 multi-sample downstream proof. NEXT.
-8. CP8 public evidence packet refresh.
+7. CP7 multi-sample downstream proof. COMPLETE 2026-04-23.
+8. CP8 public evidence packet refresh. COMPLETE 2026-04-23.
 
 The goal is not more architecture for its own sake. The goal is to make CVF's existing governance machinery plainly useful to non-coders, with proof.

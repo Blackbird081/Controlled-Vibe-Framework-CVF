@@ -9,6 +9,7 @@ export * from './DynamicForm';
 export * from './HistoryList';
 export * from './MarketingCampaignWizard';
 export * from './OnboardingWizard';
+export * from './OnboardingTour';
 export * from './ProcessingScreen';
 export * from './ProductDesignWizard';
 export { default as QuickStart } from './QuickStart';

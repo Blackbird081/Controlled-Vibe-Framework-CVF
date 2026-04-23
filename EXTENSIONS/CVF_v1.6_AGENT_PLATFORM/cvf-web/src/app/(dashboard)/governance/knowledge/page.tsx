@@ -43,8 +43,11 @@ const ACTION_BADGE: Record<string, string> = {
 
 const LABELS = {
     vi: {
-        title: '📚 Knowledge Governance', subtitle: 'Lifecycle: Compile → Govern → Maintain → Refactor',
-        step1: '1. Compile & Govern', step2: '2. Maintain', step3: '3. Refactor',
+        title: '📚 Knowledge Governance', subtitle: 'Lifecycle: Compile → Govern → Maintain → Refactor → Load Project Knowledge',
+        step1: '1. Compile & Govern', step2: '2. Maintain', step3: '3. Refactor', step4: '4. Load Project Knowledge',
+        loadTitle: 'Load Project Knowledge', loadDesc: 'Nạp knowledge file từ downstream workspace vào session store để AI có thể sử dụng.',
+        collectionIdLabel: 'Collection ID', collectionNameLabel: 'Collection Name (tùy chọn)',
+        pasteJson: 'Dán nội dung _index.json ở đây', loadBtn: 'Load Knowledge', loading: 'Đang nạp...', loadOk: 'Đã nạp',
         contextId: 'Context ID', artifactType: 'Artifact Type', sourceIds: 'Source IDs (phân cách bằng dấu phẩy)',
         citationRef: 'Citation Ref', citationTrail: 'Citation Trail (mỗi dòng một bước)', compiledBy: 'Compiled By',
         content: 'Content', govDecision: 'Govern Decision', govNone: 'Chưa govern (pending)',
@@ -58,8 +61,11 @@ const LABELS = {
         proposals: 'Refactor Proposals', noProposals: '✅ Không có đề xuất',
     },
     en: {
-        title: '📚 Knowledge Governance', subtitle: 'Lifecycle: Compile → Govern → Maintain → Refactor',
-        step1: '1. Compile & Govern', step2: '2. Maintain', step3: '3. Refactor',
+        title: '📚 Knowledge Governance', subtitle: 'Lifecycle: Compile → Govern → Maintain → Refactor → Load Project Knowledge',
+        step1: '1. Compile & Govern', step2: '2. Maintain', step3: '3. Refactor', step4: '4. Load Project Knowledge',
+        loadTitle: 'Load Project Knowledge', loadDesc: 'Load a downstream project knowledge index into the session store so governed AI runs can inject project-specific context.',
+        collectionIdLabel: 'Collection ID', collectionNameLabel: 'Collection Name (optional)',
+        pasteJson: 'Paste _index.json content here', loadBtn: 'Load Knowledge', loading: 'Loading...', loadOk: 'Loaded',
         contextId: 'Context ID', artifactType: 'Artifact Type', sourceIds: 'Source IDs (comma-separated)',
         citationRef: 'Citation Ref', citationTrail: 'Citation Trail (one step per line)', compiledBy: 'Compiled By',
         content: 'Content', govDecision: 'Govern Decision', govNone: 'Skip govern (pending)',
@@ -82,7 +88,7 @@ export default function KnowledgeGovernancePage() {
     const { language } = useLanguage();
     const l = LABELS[language];
 
-    const [activeStep, setActiveStep] = useState<'compile' | 'maintain' | 'refactor'>('compile');
+    const [activeStep, setActiveStep] = useState<'compile' | 'maintain' | 'refactor' | 'ingest'>('compile');
 
     const [form, setForm] = useState<CompileForm>({
         contextId: 'ctx-001', artifactType: 'concept',
@@ -102,6 +108,39 @@ export default function KnowledgeGovernancePage() {
     const [maintaining, setMaintaining] = useState(false);
     const [refactoring, setRefactoring] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const [ingestCollectionId, setIngestCollectionId] = useState('');
+    const [ingestCollectionName, setIngestCollectionName] = useState('');
+    const [ingestJson, setIngestJson] = useState('');
+    const [ingesting, setIngesting] = useState(false);
+    const [ingestResult, setIngestResult] = useState<{ accepted: number; collectionId: string } | null>(null);
+
+    async function handleIngest() {
+        setIngesting(true); setError(null); setIngestResult(null);
+        try {
+            let chunks: unknown[];
+            try {
+                const parsed = JSON.parse(ingestJson);
+                chunks = Array.isArray(parsed) ? parsed : Array.isArray(parsed?.chunks) ? parsed.chunks : null;
+                if (!chunks) throw new Error('Expected a JSON array or an object with a chunks array');
+            } catch (e) {
+                throw new Error(`Invalid JSON: ${e instanceof Error ? e.message : e}`);
+            }
+            const res = await fetch('/api/knowledge/ingest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    collectionId: ingestCollectionId.trim(),
+                    collectionName: ingestCollectionName.trim() || undefined,
+                    chunks,
+                }),
+            });
+            const json = await res.json();
+            if (!res.ok) throw new Error(json.error || 'Ingest failed');
+            setIngestResult(json);
+        } catch (e) { setError(e instanceof Error ? e.message : 'Error'); }
+        finally { setIngesting(false); }
+    }
 
     async function handleCompile() {
         setCompiling(true); setError(null);
@@ -163,6 +202,7 @@ export default function KnowledgeGovernancePage() {
         { key: 'compile', label: l.step1, enabled: true },
         { key: 'maintain', label: l.step2, enabled: artifact?.governanceStatus === 'approved' },
         { key: 'refactor', label: l.step3, enabled: !!maintainResult },
+        { key: 'ingest', label: l.step4, enabled: true },
     ];
 
     return (
@@ -293,6 +333,44 @@ export default function KnowledgeGovernancePage() {
                                 </div>
                                 <p className="text-gray-600 dark:text-gray-400">{refactorResult.rationale}</p>
                             </div>
+                        </div>
+                    )}
+                </div>
+            )}
+            {/* ── Step 4: Load Project Knowledge ── */}
+            {activeStep === 'ingest' && (
+                <div className="space-y-4">
+                    <div className={CARD}>
+                        <h2 className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-1">{l.loadTitle}</h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{l.loadDesc}</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className={LABEL}>{l.collectionIdLabel}</label>
+                                <input className={FIELD} title="Collection ID" placeholder="e.g. my-project-docs" value={ingestCollectionId} onChange={e => setIngestCollectionId(e.target.value)} />
+                            </div>
+                            <div>
+                                <label className={LABEL}>{l.collectionNameLabel}</label>
+                                <input className={FIELD} title="Collection Name" placeholder="My Project Docs" value={ingestCollectionName} onChange={e => setIngestCollectionName(e.target.value)} />
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className={LABEL}>{l.pasteJson}</label>
+                                <textarea className={FIELD} rows={8} title="JSON content" placeholder='[{"id":"c1","content":"...","keywords":["key1"]}]' value={ingestJson} onChange={e => setIngestJson(e.target.value)} />
+                            </div>
+                        </div>
+                        <button
+                            onClick={handleIngest}
+                            disabled={ingesting || !ingestCollectionId.trim() || !ingestJson.trim()}
+                            className="mt-4 px-5 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg disabled:opacity-50 transition-colors"
+                        >
+                            {ingesting ? l.loading : l.loadBtn}
+                        </button>
+                    </div>
+
+                    {ingestResult && (
+                        <div className={`${CARD} border-emerald-300 dark:border-emerald-600`}>
+                            <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">{l.loadOk} — {ingestResult.accepted} chunks loaded into session store</p>
+                            <p className="text-xs text-gray-500 mt-1">Collection ID: <code className="font-mono">{ingestResult.collectionId}</code></p>
+                            <p className="text-xs text-gray-400 mt-1">Use this collection ID in your <code className="font-mono">knowledgeCollectionId</code> execute request field to target these chunks.</p>
                         </div>
                     )}
                 </div>

@@ -21,6 +21,7 @@ Closure evidence:
 - Fail-closed proof: doctor failed when `.cvf/policy.json` was missing, then passed after restore
 - Web W112 live metadata proof: `w113-workspace-web-live-proof.spec.ts` -> `1 passed`
 - Release gate: `python scripts/run_cvf_release_gate_bundle.py --json` -> `PASS`, UI mock `6 passed`, live governance `7 passed`
+- API-key posture: the downstream proof project did not receive or store a provider API key; live governance proof used the operator-provided CVF core/web environment.
 
 Assessment:
 
@@ -175,6 +176,14 @@ Acceptance:
 - Governance claim is backed by a real provider API call.
 - Mock is not used for risk, phase, approval, provider routing, audit, or agent-control claims.
 - Evidence records provider lane and model without exposing key values.
+
+Current W113 key handling readout:
+
+- The downstream workspace proves agent enforcement artifacts and first-request protocol; it is not a secret distribution mechanism.
+- Provider keys must remain in operator-controlled environment variables or ignored local env files.
+- The default release gate loads repo-local env through `scripts/_local_env.py`, accepts `DASHSCOPE_API_KEY`, and maps `ALIBABA_API_KEY`, `CVF_ALIBABA_API_KEY`, or `CVF_BENCHMARK_ALIBABA_KEY` into the DashScope-compatible env used by live governance Playwright.
+- The counted W113 web metadata proof ran against Alibaba `qwen-turbo` and asserted live `/api/execute` response metadata: governance envelope, policy snapshot id, and provider routing lane.
+- A workspace doctor `PASS` alone must not be described as an API-key/live-provider proof.
 
 ## 9. CP5: Downstream CI / Hook Adoption Proof
 

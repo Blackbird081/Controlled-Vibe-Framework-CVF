@@ -9,6 +9,7 @@ export type AnalyticsEventType =
     | 'execution_rejected'
     | 'execution_retry'
     | 'template_selected'
+    | 'template_try_quick_path'
     | 'skill_viewed'
     | 'skill_copied'
     | 'analytics_opened'

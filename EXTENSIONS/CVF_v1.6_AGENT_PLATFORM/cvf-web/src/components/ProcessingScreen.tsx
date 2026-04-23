@@ -29,6 +29,19 @@ interface ProcessingScreenProps {
     onCancel: () => void;
 }
 
+interface GovernanceEvidenceState {
+    provider?: string;
+    model?: string;
+    decision?: string;
+    providerDecision?: string;
+    policySnapshotId?: string;
+    envelopeId?: string;
+    knowledgeSource?: string;
+    knowledgeInjected?: boolean;
+    validationHint?: string;
+    approvalId?: string;
+}
+
 export function ProcessingScreen({
     templateName,
     templateId,
@@ -52,6 +65,8 @@ export function ProcessingScreen({
     const [enforcementStatus, setEnforcementStatus] = useState<string | null>(null);
     // W94-T1: Risk badge state
     const [executionRiskLevel, setExecutionRiskLevel] = useState<SafetyRiskLevel | null>(null);
+    // W114-T1 CP5: user-visible governance evidence from the live execute route
+    const [governanceEvidence, setGovernanceEvidence] = useState<GovernanceEvidenceState | null>(null);
     // W96-T1: Completion state — set when success+riskLevel; suppresses 300ms path
     const [completedOutput, setCompletedOutput] = useState<string | null>(null);
 
@@ -89,6 +104,18 @@ export function ProcessingScreen({
 
             const data = await response.json();
             const enforcement = data.enforcement;
+            setGovernanceEvidence({
+                provider: data.provider,
+                model: data.model,
+                decision: enforcement?.status,
+                providerDecision: data.providerRouting?.decision,
+                policySnapshotId: data.policySnapshotId || data.governanceEnvelope?.policySnapshotId,
+                envelopeId: data.governanceEnvelope?.envelopeId,
+                knowledgeSource: data.knowledgeInjection?.source,
+                knowledgeInjected: data.knowledgeInjection?.injected,
+                validationHint: data.outputValidation?.qualityHint,
+                approvalId: data.approvalId,
+            });
             // W94-T1: Extract risk level for badge (R4 → R3 cap for safety-status.ts compat)
             const rawRisk = enforcement?.riskGate?.riskLevel as string | undefined;
             const badgeLevel: SafetyRiskLevel | null =
@@ -145,6 +172,7 @@ export function ProcessingScreen({
                 setError(data.error || (isVi ? 'Cần phê duyệt trước khi thực thi.' : 'Approval required before execution.'));
                 if (data.guidedResponse) setGuidedResponse(data.guidedResponse);
                 setEnforcementStatus('NEEDS_APPROVAL');
+                if (data.approvalId) setApprovalRequestId(data.approvalId);
                 return true;
             }
 
@@ -386,6 +414,51 @@ export function ProcessingScreen({
                         </div>
                     );
                 })()}
+
+                {governanceEvidence && (
+                    <div
+                        data-testid="governance-evidence-panel"
+                        className="mt-3 mb-4 mx-auto max-w-md rounded-lg border border-emerald-200
+                            dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950 p-3 text-left"
+                    >
+                        <p className="text-xs font-semibold text-emerald-800 dark:text-emerald-200 mb-2">
+                            {isVi ? 'CVF đã kiểm soát lượt chạy này' : 'CVF governed this run'}
+                        </p>
+                        <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-emerald-700 dark:text-emerald-300">
+                            {governanceEvidence.decision && (
+                                <p><span className="font-medium">{isVi ? 'Quyết định:' : 'Decision:'}</span> {governanceEvidence.decision}</p>
+                            )}
+                            {governanceEvidence.provider && (
+                                <p><span className="font-medium">{isVi ? 'Provider:' : 'Provider:'}</span> {governanceEvidence.provider}</p>
+                            )}
+                            {governanceEvidence.model && (
+                                <p><span className="font-medium">{isVi ? 'Model:' : 'Model:'}</span> {governanceEvidence.model}</p>
+                            )}
+                            {governanceEvidence.providerDecision && (
+                                <p><span className="font-medium">{isVi ? 'Routing:' : 'Routing:'}</span> {governanceEvidence.providerDecision}</p>
+                            )}
+                            {governanceEvidence.knowledgeSource && governanceEvidence.knowledgeSource !== 'none' && (
+                                <p><span className="font-medium">{isVi ? 'Knowledge:' : 'Knowledge:'}</span> {governanceEvidence.knowledgeSource}</p>
+                            )}
+                            {governanceEvidence.validationHint && (
+                                <p><span className="font-medium">{isVi ? 'Output:' : 'Output:'}</span> {governanceEvidence.validationHint}</p>
+                            )}
+                        </div>
+                        {(governanceEvidence.policySnapshotId || governanceEvidence.envelopeId || governanceEvidence.approvalId) && (
+                            <div className="mt-2 space-y-1 text-[11px] text-emerald-600 dark:text-emerald-400">
+                                {governanceEvidence.policySnapshotId && (
+                                    <p className="break-all"><span className="font-medium">Policy:</span> {governanceEvidence.policySnapshotId}</p>
+                                )}
+                                {governanceEvidence.envelopeId && (
+                                    <p className="break-all"><span className="font-medium">Envelope:</span> {governanceEvidence.envelopeId}</p>
+                                )}
+                                {governanceEvidence.approvalId && (
+                                    <p className="break-all"><span className="font-medium">Approval:</span> {governanceEvidence.approvalId}</p>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {/* Progress bar */}
                 <div className="w-80 mx-auto">

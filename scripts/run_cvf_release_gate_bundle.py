@@ -233,6 +233,7 @@ def check_e2e(dry_run: bool, live: bool) -> CheckResult:
     specs = [
         "tests/e2e/noncoder-governance-live.spec.ts",
         "tests/e2e/governance-gate-live.spec.ts",
+        "tests/e2e/w113-workspace-web-live-proof.spec.ts",
     ] if live else [
         "tests/e2e/admin-rbac.spec.ts",
         "tests/e2e/provider-lane-ui.spec.ts",

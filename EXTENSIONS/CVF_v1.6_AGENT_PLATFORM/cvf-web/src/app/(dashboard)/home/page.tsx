@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Layers3, ShieldCheck, Sparkles, Wand2 } from 'lucide-react';
-import { templates } from '@/lib/templates';
+import { templates, generateIntent } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
 import { useSettings } from '@/components/Settings';
 import { Template, Execution } from '@/types';
@@ -32,11 +32,33 @@ import {
     TemplatePreviewModal,
     SurfaceStatCard,
     SurfaceTopBar,
+    OnboardingTour,
 } from '@/components';
 
 type WorkflowState = 'browse' | 'form' | 'processing' | 'result' |
     'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' |
     'security-wizard' | 'research-wizard' | 'system-wizard' | 'content-wizard' | 'data-wizard';
+
+const QUICK_TRY_CONFIGS: Record<string, Record<string, string>> = {
+    documentation: {
+        subject: 'Quy trình onboarding khách hàng mới và gửi báo giá',
+        currentNotes: 'Khách vào form đăng ký → sales gọi lại trong 2h → nếu đủ điều kiện thì gửi báo giá trong ngày. Hay bị hỏi: bao lâu triển khai, cần chuẩn bị gì.',
+        readerGoal: 'Nhân viên mới có thể xử lý lead đầu vào mà không phải hỏi lại team lead.',
+        audience: 'Người mới tiếp nhận',
+    },
+    strategy_analysis: {
+        topic: 'Mở rộng thị trường miền Trung cho dòng sản phẩm SaaS B2B',
+        context: 'Công ty SaaS B2B, 200 nhân viên, doanh thu $5M/năm. Thị trường đang tăng trưởng 15%/năm. Hiện chỉ có văn phòng tại TP.HCM và Hà Nội.',
+        options: '1. Mở chi nhánh trực tiếp tại Đà Nẵng\n2. Hợp tác với đối tác địa phương\n3. Chỉ bán online và hỗ trợ từ xa',
+        priority: 'Growth',
+    },
+    seo_audit: {
+        url: 'https://shopx.vn',
+        industry: 'SaaS B2B — quản lý dự án',
+        keywords: 'quản lý dự án online\nproject management tool',
+        competitors: 'asana.com, monday.com',
+    },
+};
 
 const WIZARD_MAP: Record<string, WorkflowState> = {
     app_builder_wizard: 'wizard',
@@ -67,6 +89,9 @@ export default function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [starterHandoff, setStarterHandoff] = useState<GovernedStarterHandoff | null>(null);
     const [iterationContext, setIterationContext] = useState<string | null>(null);
+    const [bannerDismissed, setBannerDismissed] = useState(
+        () => typeof window !== 'undefined' && localStorage.getItem('cvf_setup_banner_dismissed') === '1',
+    );
 
     const { addExecution, updateExecution, currentExecution } = useExecutionStore();
 
@@ -169,6 +194,14 @@ export default function HomePage() {
         setWorkflowState('processing');
     }, [addExecution]);
 
+    const handleTryTemplate = useCallback((template: Template, prefilled: Record<string, string>) => {
+        trackEvent('template_try_quick_path', { templateId: template.id });
+        setSelectedTemplate(template);
+        setCurrentInput(prefilled);
+        setCurrentIntent(generateIntent(template, prefilled));
+        setWorkflowState('form');
+    }, []);
+
     const handleSelectTemplate = useCallback((template: Template) => {
         if (template.isFolder) {
             setCurrentFolder(template.id);
@@ -262,6 +295,11 @@ export default function HomePage() {
         syncStarterHandoff();
         window.addEventListener('cvf:starterHandoffReady', syncStarterHandoff);
         return () => window.removeEventListener('cvf:starterHandoffReady', syncStarterHandoff);
+    }, []);
+
+    const handleDismissBanner = useCallback(() => {
+        localStorage.setItem('cvf_setup_banner_dismissed', '1');
+        setBannerDismissed(true);
     }, []);
 
     const handleAccept = useCallback(() => {
@@ -453,9 +491,21 @@ export default function HomePage() {
                             </div>
                         )}
 
-                        {!mockAiEnabled && !hasAnyApiKey && (
-                            <div className="cvf-surface cvf-density-section rounded-[28px] border border-amber-200 bg-amber-50/90 p-5 text-amber-950 dark:border-amber-500/20 dark:bg-amber-500/8 dark:text-amber-100">
-                                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                        {!mockAiEnabled && !hasAnyApiKey && !bannerDismissed && (
+                            <div
+                                id="cvf-setup-banner"
+                                className="cvf-surface cvf-density-section relative rounded-[28px] border border-amber-200 bg-amber-50/90 p-5 text-amber-950 dark:border-amber-500/20 dark:bg-amber-500/8 dark:text-amber-100"
+                            >
+                                <button
+                                    onClick={handleDismissBanner}
+                                    aria-label={language === 'en' ? 'Dismiss setup banner' : 'Ẩn thông báo cài đặt'}
+                                    className="cvf-control absolute right-4 top-4 rounded-xl p-1.5 text-amber-600 transition hover:bg-amber-200/60 dark:text-amber-300 dark:hover:bg-amber-500/20"
+                                >
+                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                                <div className="flex flex-col gap-4 pr-8 lg:flex-row lg:items-center lg:justify-between">
                                     <div>
                                         <div className="text-lg font-semibold">{t('main.apiKeyTitle')}</div>
                                         <div className="mt-1 text-sm text-amber-700 dark:text-amber-200/80">{t('main.apiKeyDesc')}</div>
@@ -547,6 +597,9 @@ export default function HomePage() {
                                                 template={template}
                                                 onClick={() => handleSelectTemplate(template)}
                                                 onPreview={(e) => { e.stopPropagation(); setPreviewTemplate(template); }}
+                                                onTry={QUICK_TRY_CONFIGS[template.id]
+                                                    ? () => handleTryTemplate(template, QUICK_TRY_CONFIGS[template.id])
+                                                    : undefined}
                                             />
                                         </div>
                                     ))}
@@ -608,6 +661,8 @@ export default function HomePage() {
                 templateName={previewTemplate?.name || ''}
                 sampleOutput={previewTemplate?.sampleOutput}
             />
+
+            {workflowState === 'browse' && <OnboardingTour />}
         </div>
     );
 }

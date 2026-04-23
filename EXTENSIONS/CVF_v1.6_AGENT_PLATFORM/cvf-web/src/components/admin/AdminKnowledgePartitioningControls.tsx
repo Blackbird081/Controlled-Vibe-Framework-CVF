@@ -3,6 +3,12 @@
 import { useMemo, useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
 
+type KnowledgeChunkView = {
+  id: string;
+  content: string;
+  keywords: string[];
+};
+
 type KnowledgeCollectionView = {
   id: string;
   name: string;
@@ -10,6 +16,7 @@ type KnowledgeCollectionView = {
   orgId: string | null;
   teamId: string | null;
   chunkCount: number;
+  chunks?: KnowledgeChunkView[];
 };
 
 type OrgOption = {
@@ -22,6 +29,9 @@ type TeamOption = {
   orgId: string;
   name: string;
 };
+
+const EMPTY_NEW_COLLECTION = { id: '', name: '', description: '', orgId: '', teamId: '' };
+const EMPTY_NEW_CHUNK = { id: '', content: '', keywords: '' };
 
 export function AdminKnowledgePartitioningControls({
   initialCollections,
@@ -38,6 +48,119 @@ export function AdminKnowledgePartitioningControls({
   const [savingCollectionId, setSavingCollectionId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  const [showAddCollection, setShowAddCollection] = useState(false);
+  const [newCollection, setNewCollection] = useState(EMPTY_NEW_COLLECTION);
+  const [addingCollection, setAddingCollection] = useState(false);
+
+  const [addChunkForId, setAddChunkForId] = useState<string | null>(null);
+  const [newChunk, setNewChunk] = useState(EMPTY_NEW_CHUNK);
+  const [addingChunk, setAddingChunk] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const addCollection = async () => {
+    if (!newCollection.id.trim() || !newCollection.name.trim()) {
+      setError(vi ? 'ID và tên là bắt buộc.' : 'Collection ID and name are required.');
+      return;
+    }
+    setAddingCollection(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/admin/knowledge/collections', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: newCollection.id.trim(),
+          name: newCollection.name.trim(),
+          description: newCollection.description.trim(),
+          orgId: newCollection.orgId.trim() || null,
+          teamId: newCollection.teamId.trim() || null,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error ?? 'Failed to add collection.');
+      setCollections(current => [...current, {
+        id: newCollection.id.trim(),
+        name: newCollection.name.trim(),
+        description: newCollection.description.trim(),
+        orgId: newCollection.orgId.trim() || null,
+        teamId: newCollection.teamId.trim() || null,
+        chunkCount: 0,
+        chunks: [],
+      }]);
+      setNewCollection(EMPTY_NEW_COLLECTION);
+      setShowAddCollection(false);
+      setSuccess(vi ? 'Đã thêm bộ sưu tập.' : 'Collection added.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to add collection.');
+    } finally {
+      setAddingCollection(false);
+    }
+  };
+
+  const deleteCollection = async (collectionId: string) => {
+    setDeletingId(collectionId);
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/knowledge/collections/${encodeURIComponent(collectionId)}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error ?? 'Failed to delete collection.');
+      setCollections(current => current.filter(c => c.id !== collectionId));
+      setSuccess(vi ? 'Đã xóa bộ sưu tập.' : 'Collection deleted.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete collection.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const addChunk = async (collectionId: string) => {
+    if (!newChunk.id.trim() || !newChunk.content.trim()) {
+      setError(vi ? 'ID và nội dung đoạn dữ liệu là bắt buộc.' : 'Chunk ID and content are required.');
+      return;
+    }
+    setAddingChunk(true);
+    setError(null);
+    try {
+      const keywords = newChunk.keywords.split(',').map(k => k.trim()).filter(Boolean);
+      const res = await fetch(`/api/admin/knowledge/collections/${encodeURIComponent(collectionId)}/chunks`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: newChunk.id.trim(), content: newChunk.content.trim(), keywords }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error ?? 'Failed to add chunk.');
+      const chunk: KnowledgeChunkView = { id: newChunk.id.trim(), content: newChunk.content.trim(), keywords };
+      setCollections(current => current.map(c => c.id === collectionId
+        ? { ...c, chunkCount: c.chunkCount + 1, chunks: [...(c.chunks ?? []), chunk] }
+        : c));
+      setNewChunk(EMPTY_NEW_CHUNK);
+      setAddChunkForId(null);
+      setSuccess(vi ? 'Đã thêm đoạn dữ liệu.' : 'Chunk added.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to add chunk.');
+    } finally {
+      setAddingChunk(false);
+    }
+  };
+
+  const deleteChunk = async (collectionId: string, chunkId: string) => {
+    setError(null);
+    try {
+      const res = await fetch(
+        `/api/admin/knowledge/collections/${encodeURIComponent(collectionId)}/chunks/${encodeURIComponent(chunkId)}`,
+        { method: 'DELETE' },
+      );
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error ?? 'Failed to delete chunk.');
+      setCollections(current => current.map(c => c.id === collectionId
+        ? { ...c, chunkCount: Math.max(0, c.chunkCount - 1), chunks: (c.chunks ?? []).filter(ch => ch.id !== chunkId) }
+        : c));
+      setSuccess(vi ? 'Đã xóa đoạn dữ liệu.' : 'Chunk deleted.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete chunk.');
+    }
+  };
 
   const organizationsById = useMemo(
     () => new Map(organizations.map(org => [org.id, org])),
@@ -113,6 +236,73 @@ export function AdminKnowledgePartitioningControls({
             : 'Each collection below decides which organization or team may contribute context to AI responses.'}
         </p>
       </div>
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => { setShowAddCollection(s => !s); setError(null); setSuccess(null); }}
+          className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-500"
+        >
+          {vi ? '+ Thêm bộ sưu tập' : '+ Add Collection'}
+        </button>
+      </div>
+
+      {showAddCollection && (
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-900/40 dark:bg-emerald-950/20">
+          <h4 className="mb-3 text-sm font-semibold text-emerald-900 dark:text-emerald-100">
+            {vi ? 'Bộ sưu tập mới' : 'New Collection'}
+          </h4>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <input
+              type="text" placeholder={vi ? 'ID (bắt buộc)' : 'ID (required)'}
+              value={newCollection.id}
+              onChange={e => setNewCollection(c => ({ ...c, id: e.target.value }))}
+              className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950"
+            />
+            <input
+              type="text" placeholder={vi ? 'Tên (bắt buộc)' : 'Name (required)'}
+              value={newCollection.name}
+              onChange={e => setNewCollection(c => ({ ...c, name: e.target.value }))}
+              className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950"
+            />
+            <input
+              type="text" placeholder={vi ? 'Mô tả' : 'Description'}
+              value={newCollection.description}
+              onChange={e => setNewCollection(c => ({ ...c, description: e.target.value }))}
+              className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950"
+            />
+            <input
+              type="text" placeholder={vi ? 'orgId (tuỳ chọn)' : 'orgId (optional)'}
+              value={newCollection.orgId}
+              onChange={e => setNewCollection(c => ({ ...c, orgId: e.target.value }))}
+              className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950"
+            />
+            <input
+              type="text" placeholder={vi ? 'teamId (tuỳ chọn)' : 'teamId (optional)'}
+              value={newCollection.teamId}
+              onChange={e => setNewCollection(c => ({ ...c, teamId: e.target.value }))}
+              className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950"
+            />
+          </div>
+          <div className="mt-3 flex gap-2">
+            <button
+              type="button"
+              onClick={addCollection}
+              disabled={addingCollection}
+              className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-500 disabled:opacity-60"
+            >
+              {addingCollection ? (vi ? 'Đang thêm...' : 'Adding...') : (vi ? 'Xác nhận' : 'Confirm')}
+            </button>
+            <button
+              type="button"
+              onClick={() => { setShowAddCollection(false); setNewCollection(EMPTY_NEW_COLLECTION); }}
+              className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+            >
+              {vi ? 'Hủy' : 'Cancel'}
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-4 xl:grid-cols-2">
         {collections.map(collection => {
@@ -202,14 +392,96 @@ export function AdminKnowledgePartitioningControls({
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() => saveScope(collection.id)}
-                disabled={savingCollectionId === collection.id}
-                className="mt-4 w-full rounded-xl bg-sky-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {savingCollectionId === collection.id ? (vi ? 'Đang lưu...' : 'Saving...') : (vi ? 'Lưu phạm vi' : 'Save scope')}
-              </button>
+              <div className="mt-4 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => saveScope(collection.id)}
+                  disabled={savingCollectionId === collection.id}
+                  className="flex-1 rounded-xl bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {savingCollectionId === collection.id ? (vi ? 'Đang lưu...' : 'Saving...') : (vi ? 'Lưu phạm vi' : 'Save scope')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => deleteCollection(collection.id)}
+                  disabled={deletingId === collection.id}
+                  className="rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:opacity-60 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-300"
+                >
+                  {deletingId === collection.id ? (vi ? 'Đang xóa...' : 'Deleting...') : (vi ? 'Xóa' : 'Delete')}
+                </button>
+              </div>
+
+              {(collection.chunks ?? []).length > 0 && (
+                <div className="mt-4 space-y-1">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    {vi ? 'Đoạn dữ liệu' : 'Chunks'}
+                  </div>
+                  {(collection.chunks ?? []).map(chunk => (
+                    <div key={chunk.id} className="flex items-start gap-2 rounded-xl bg-gray-50 px-3 py-2 text-sm dark:bg-gray-800">
+                      <div className="flex-1 min-w-0">
+                        <span className="font-mono text-xs text-gray-400">{chunk.id}</span>
+                        <p className="mt-0.5 text-gray-700 dark:text-gray-200 line-clamp-2">{chunk.content}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => deleteChunk(collection.id, chunk.id)}
+                        className="shrink-0 rounded-lg px-2 py-1 text-xs font-semibold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
+                      >
+                        {vi ? 'Xóa' : 'Del'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {addChunkForId === collection.id ? (
+                <div className="mt-3 space-y-2">
+                  <input
+                    type="text" placeholder={vi ? 'Chunk ID (bắt buộc)' : 'Chunk ID (required)'}
+                    value={newChunk.id}
+                    onChange={e => setNewChunk(c => ({ ...c, id: e.target.value }))}
+                    className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950"
+                  />
+                  <textarea
+                    placeholder={vi ? 'Nội dung (bắt buộc)' : 'Content (required)'}
+                    value={newChunk.content}
+                    onChange={e => setNewChunk(c => ({ ...c, content: e.target.value }))}
+                    rows={2}
+                    className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950"
+                  />
+                  <input
+                    type="text" placeholder={vi ? 'Keywords (cách bởi dấu phẩy)' : 'Keywords (comma-separated)'}
+                    value={newChunk.keywords}
+                    onChange={e => setNewChunk(c => ({ ...c, keywords: e.target.value }))}
+                    className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => addChunk(collection.id)}
+                      disabled={addingChunk}
+                      className="rounded-xl bg-sky-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-sky-500 disabled:opacity-60"
+                    >
+                      {addingChunk ? (vi ? 'Đang thêm...' : 'Adding...') : (vi ? 'Thêm đoạn' : 'Add Chunk')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setAddChunkForId(null); setNewChunk(EMPTY_NEW_CHUNK); }}
+                      className="rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+                    >
+                      {vi ? 'Hủy' : 'Cancel'}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => { setAddChunkForId(collection.id); setNewChunk(EMPTY_NEW_CHUNK); }}
+                  className="mt-3 rounded-xl border border-dashed border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-500 transition hover:border-sky-400 hover:text-sky-600 dark:border-gray-600 dark:text-gray-400"
+                >
+                  {vi ? '+ Thêm đoạn dữ liệu' : '+ Add Chunk'}
+                </button>
+              )}
             </article>
           );
         })}

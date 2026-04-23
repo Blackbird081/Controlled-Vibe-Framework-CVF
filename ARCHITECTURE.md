@@ -187,8 +187,8 @@ The architecture should be read this way:
 | Provider parity | Not claimed | Speed, cost, quality, latency, and reliability remain provider economics |
 | Web CVF inheritance | Active path only | Web is governance-inherited on `/api/execute`; it does not claim full CVF runtime inheritance |
 | Workspace agent enforcement | Delivered | W112-T1 adds downstream `AGENTS.md`, `.cvf/` manifest/policy, and workspace doctor checks |
-| Downstream adoption proof | Repeatable across 3 kinds | W114-CP7 proves cli-productivity, web-app-planning, and data-analysis — all doctor 11/11 PASS, all tests pass, sample 3 includes live web evidence bridge |
-| Non-coder value optimization | CP1-CP7 COMPLETE | W114-T1 full evidence packet: outcome pack 19/19, web visibility, workspace bridge, multi-sample proof; next is CP8 public refresh |
+| Downstream adoption proof | Repeatable across 3 tested kinds | W114-CP7 proves cli-productivity, web-app-planning, and data-analysis — all doctor 11/11 PASS, all tests pass, sample 3 includes a secret-free bridge to live Web evidence |
+| Non-coder value optimization | CP1-CP8 COMPLETE | W114-T1 full evidence packet: outcome pack 19/19, web visibility, workspace bridge, multi-sample proof, and public evidence packet |
 
 ## 7. Current Control Boundaries
 
@@ -234,12 +234,12 @@ Current proven baseline:
 - W114 CP4 adds compact live outcome evidence: 19/19 expected route decisions, 12/12 useful allowed outputs, 5/5 guided high-risk blocks, 3/3 knowledge hits, 2/2 follow-up refinements, and 2/2 approval artifacts.
 - W114 CP5 makes the main processing UI display route-returned governance evidence instead of leaving that evidence only in API responses.
 - W114 CP6 gives downstream workspaces a secret-free bridge receipt that links workspace doctor proof to CVF Web live evidence records.
-- W114 CP7 proves the downstream adoption pattern is repeatable: `scripts/w114_cp7_multi_sample_downstream_proof.ps1` creates 3 sample projects (cli-productivity, web-app-planning, data-analysis), all passing doctor 11/11 and unit tests, with sample 3 also running the live web evidence bridge.
+- W114 CP7 proves the downstream adoption pattern is repeatable across three tested sample kinds: `scripts/w114_cp7_multi_sample_downstream_proof.ps1` creates 3 sample projects (cli-productivity, web-app-planning, data-analysis), all passing doctor 11/11 and unit tests, with sample 3 also writing a secret-free bridge to live Web evidence.
 - W114 CP8 publishes the public evidence packet: `docs/reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md` summarizes plain-language non-coder benefit claims, evidence chain, claim boundaries, and known limitations.
 
-Current posture: W114 CP1-CP7 complete. Downstream adoption pattern is now repeatable and scripted. Public evidence packet is published.
+Current posture: W114 CP1-CP8 complete. Downstream adoption pattern is now repeatable and scripted across tested sample kinds. Public evidence packet is published with explicit live-vs-workspace claim boundaries.
 
-Active roadmap: [W114-T1 Non-Coder Value Maximization And Evidence](docs/roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md).
+Latest closed non-coder value roadmap: [W114-T1 Non-Coder Value Maximization And Evidence](docs/roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md).
 
 ## 8. Read Next
 

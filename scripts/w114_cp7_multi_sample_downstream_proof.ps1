@@ -2,6 +2,8 @@
 # W114-CP7: Creates 3 temporary downstream samples proving multi-sample CVF adoption.
 # Each sample is outside CVF core, records enforcement artifacts, doctor pass, and phase governance.
 # Sample 3 additionally runs the workspace-to-web evidence bridge with live readiness check.
+# CP7 itself proves downstream workspace adoption. Release-quality governance proof still
+# requires a separate live run of: python scripts/run_cvf_release_gate_bundle.py --json
 #
 # Usage:
 #   powershell -ExecutionPolicy Bypass -File .\scripts\w114_cp7_multi_sample_downstream_proof.ps1
@@ -10,7 +12,8 @@
 
 param(
     [string]$TempRoot = "$env:TEMP\CVF-W114-CP7-Proof",
-    [string]$ResultsJson = ""
+    [string]$ResultsJson = "",
+    [string]$ReleaseGateResult = "REFERENCE_ONLY_ATTACH_LATEST_LIVE_GATE_RESULT"
 )
 
 $ErrorActionPreference = "Stop"
@@ -489,7 +492,7 @@ This declaration was recorded before downstream design/build artifacts were crea
         $bridgeOutput = & pwsh -ExecutionPolicy Bypass -File $bridgeScript `
             -ProjectPath $projectPath `
             -CheckLiveReadiness `
-            -ReleaseGateResult "PASS:8live" 2>&1
+            -ReleaseGateResult $ReleaseGateResult 2>&1
         $bridgeText   = $bridgeOutput -join "`n"
         $bridgeOk     = $bridgeText -match "Bridge receipt written"
         $bridgeResult = if ($bridgeOk) { "PASS" } else { "WARN: $bridgeText" }

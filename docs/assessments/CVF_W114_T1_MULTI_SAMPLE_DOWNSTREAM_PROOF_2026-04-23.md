@@ -1,14 +1,14 @@
 # CVF W114-T1 Multi-Sample Downstream Proof Assessment
 
 > Date: 2026-04-23
-> Status: PASS / LIVE-PROVEN
+> Status: PASS / WORKSPACE-PROVEN / LIVE-EVIDENCE-BRIDGED
 > Memory class: FULL_RECORD
 > Roadmap: `docs/roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md`
 > Checkpoint: CP7
 
 ## 1. Verdict
 
-W114-CP7 is complete and live-proven.
+W114-CP7 is complete as a multi-sample downstream workspace proof, with a secret-free bridge to the live Web governance evidence chain.
 
 CVF now has evidence that the downstream adoption pattern is repeatable across three distinct
 project kinds — not just the single bookmark-cli proof from W113.
@@ -150,7 +150,7 @@ Project: `cvf-downstream-data-analyzer`
 Kind: `data-analysis`
 Path: `C:\Users\DELL\AppData\Local\Temp\CVF-W114-CP7-Proof\cvf-downstream-data-analyzer`
 
-Description: Data/content analysis task demonstrating CVF governance on an analytics workflow, with live web evidence bridge.
+Description: Data/content analysis task demonstrating CVF governance on an analytics workflow, with a workspace-to-web evidence bridge.
 
 ### Enforcement Artifacts
 
@@ -224,13 +224,13 @@ Before W114-CP7, CVF had one downstream sample proof (W113 — bookmark-cli).
 After CP7:
 
 - The bootstrap + enforcement + doctor pattern works repeatably across three different project kinds.
-- Any downstream project that follows the CVF bootstrap pattern will be agent-enforcement-ready after setup.
-- The workspace-to-web evidence bridge links downstream enforcement proof to CVF Web governance evidence without distributing API keys.
+- The tested bootstrap pattern makes these three downstream sample kinds agent-enforcement-ready after setup.
+- The workspace-to-web evidence bridge links downstream enforcement proof to CVF Web governance evidence without distributing API keys; it does not itself replace a live release-gate run.
 - The multi-sample pattern is scripted and reproducible: `scripts/w114_cp7_multi_sample_downstream_proof.ps1`.
 
 ## 8. Boundary
 
-This assessment proves the downstream adoption pattern across three small proof samples.
+This assessment proves the downstream adoption pattern across three small proof samples and one secret-free bridge receipt to the live Web evidence chain.
 
 It does not claim:
 

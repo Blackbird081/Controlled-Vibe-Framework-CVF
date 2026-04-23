@@ -1,4 +1,5 @@
 import { getKnowledgeCollectionScopes } from '@/lib/policy-reader';
+import { knowledgeStore } from '@/lib/knowledge-store';
 
 export interface KnowledgeChunk {
   id: string;
@@ -26,6 +27,23 @@ export interface KnowledgeQueryResult {
   droppedChunkCount: number;
   allowedCollectionIds: string[];
   droppedCollectionIds: string[];
+}
+
+const _runtimeCollections = new Map<string, KnowledgeCollectionDefinition>();
+
+let _storeSeeded = false;
+function ensureStoreSeeded(): void {
+  if (_storeSeeded) return;
+  _storeSeeded = true;
+  knowledgeStore.seed(KNOWLEDGE_COLLECTIONS);
+}
+
+export function registerRuntimeCollection(collection: KnowledgeCollectionDefinition): void {
+  _runtimeCollections.set(collection.id, collection);
+}
+
+export function getRegisteredCollectionIds(): string[] {
+  return Array.from(_runtimeCollections.keys());
 }
 
 const KNOWLEDGE_COLLECTIONS: KnowledgeCollectionDefinition[] = [
@@ -140,7 +158,13 @@ function scopeAllowsCollection(
 async function getEffectiveCollections(): Promise<KnowledgeCollectionDefinition[]> {
   const scopeOverrides = await getKnowledgeCollectionScopes();
 
-  return KNOWLEDGE_COLLECTIONS.map(collection => {
+  ensureStoreSeeded();
+  const allCollections = [
+    ...knowledgeStore.getCollections(),
+    ...Array.from(_runtimeCollections.values()),
+  ];
+
+  return allCollections.map(collection => {
     const override = scopeOverrides.get(collection.id);
     if (!override) return collection;
 
@@ -166,6 +190,7 @@ export async function queryKnowledgeChunks(input: {
   orgId?: string;
   teamId?: string;
   limit?: number;
+  collectionId?: string;
 }): Promise<KnowledgeQueryResult> {
   const queryTokens = tokenize(input.intent);
   if (queryTokens.length === 0) {
@@ -179,7 +204,10 @@ export async function queryKnowledgeChunks(input: {
     };
   }
 
-  const collections = await getEffectiveCollections();
+  const allEffective = await getEffectiveCollections();
+  const collections = input.collectionId
+    ? allEffective.filter(c => c.id === input.collectionId)
+    : allEffective;
   const scored = collections.flatMap(collection => (
     collection.chunks
       .map(chunk => ({

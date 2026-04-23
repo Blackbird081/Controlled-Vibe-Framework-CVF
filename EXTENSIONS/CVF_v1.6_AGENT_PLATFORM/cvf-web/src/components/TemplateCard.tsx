@@ -8,9 +8,10 @@ interface TemplateCardProps {
     template: Template;
     onClick: () => void;
     onPreview?: (e: React.MouseEvent) => void;
+    onTry?: () => void;
 }
 
-export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps) {
+export function TemplateCard({ template, onClick, onPreview, onTry }: TemplateCardProps) {
     const { language } = useLanguage();
     const categoryInfo = CATEGORY_INFO[template.category as Category];
     const categoryDisplayName = language === 'en' ? categoryInfo.nameEn : categoryInfo.name;
@@ -90,18 +91,29 @@ export function TemplateCard({ template, onClick, onPreview }: TemplateCardProps
                     </svg>
                 </div>
 
-                {onPreview && template.sampleOutput && (
-                    <button
-                        onClick={onPreview}
-                        className="cvf-control rounded-2xl p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-indigo-600 dark:hover:bg-white/[0.06] dark:hover:text-indigo-300"
-                        title={language === 'en' ? 'Preview output' : 'Xem trước kết quả'}
-                    >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                    </button>
-                )}
+                <div className="flex items-center gap-1.5">
+                    {onTry && (
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onTry(); }}
+                            className="cvf-control rounded-2xl border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
+                            title={language === 'en' ? 'Try with sample data' : 'Thử với dữ liệu mẫu'}
+                        >
+                            {language === 'en' ? '⚡ Try' : '⚡ Thử ngay'}
+                        </button>
+                    )}
+                    {onPreview && template.sampleOutput && (
+                        <button
+                            onClick={onPreview}
+                            className="cvf-control rounded-2xl p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-indigo-600 dark:hover:bg-white/[0.06] dark:hover:text-indigo-300"
+                            title={language === 'en' ? 'Preview output' : 'Xem trước kết quả'}
+                        >
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );

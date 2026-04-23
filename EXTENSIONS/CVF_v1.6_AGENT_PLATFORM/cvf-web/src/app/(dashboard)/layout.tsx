@@ -51,6 +51,16 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         return null;
     });
 
+    // React to ?open= param on client-side navigation (useState init only runs on first mount)
+    useEffect(() => {
+        if (openParam === 'agent') {
+            setActiveModal('agent');
+            setIsAgentMinimized(false);
+        } else if (openParam === 'multi-agent') {
+            setActiveModal('multi-agent');
+        }
+    }, [openParam]);
+
     // Listen for API Key Wizard open event from child pages
     useEffect(() => {
         const handler = () => modals.openModal('apiKeyWizard');

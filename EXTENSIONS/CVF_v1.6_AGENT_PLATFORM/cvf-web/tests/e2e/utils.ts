@@ -19,6 +19,7 @@ export async function seedStorage(page: Page) {
     await page.addInitScript((settings) => {
         localStorage.setItem('cvf_settings', JSON.stringify(settings));
         localStorage.setItem('cvf_onboarding_complete', 'true');
+        localStorage.setItem('cvf_onboarding_seen', '1');
     }, DEFAULT_SETTINGS);
 }
 
@@ -37,7 +38,7 @@ export async function loginAs(page: Page, username: string, password: string) {
     }
 
     await page.getByRole('button', { name: /Đăng nhập/i }).click();
-    await page.waitForURL('**/home', { timeout: 10000 });
+    await expect(page.getByRole('heading', { name: /Templates/i }).first()).toBeVisible({ timeout: 15_000 });
 }
 
 export async function login(page: Page) {
@@ -84,6 +85,7 @@ export async function seedStorageWithAlibaba(page: Page) {
             },
         }));
         localStorage.setItem('cvf_onboarding_complete', 'true');
+        localStorage.setItem('cvf_onboarding_seen', '1');
     }, key);
 }
 
@@ -102,6 +104,7 @@ export async function seedStorageWithDeepSeek(page: Page) {
             },
         }));
         localStorage.setItem('cvf_onboarding_complete', 'true');
+        localStorage.setItem('cvf_onboarding_seen', '1');
     }, key);
 }
 

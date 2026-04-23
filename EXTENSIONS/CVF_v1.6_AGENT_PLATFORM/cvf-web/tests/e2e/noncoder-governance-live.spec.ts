@@ -39,11 +39,11 @@ test('template gallery shows governed templates for non-coder', async ({ page })
 test('intake wizard advances after project details — no AI call required', async ({ page }) => {
     await login(page);
     await page.goto('/home');
-    const strategyButton = page.getByRole('button', { name: /Chiến lược|Strategy/i }).first();
+    const strategyButton = page.getByRole('button', { name: /Phân tích Chiến lược|Strategy Analysis/i }).first();
     await strategyButton.click();
 
     await expect(
-        page.getByRole('heading', { name: /Strategy|Chiến lược/i }).first()
+        page.getByRole('heading', { name: /Phân tích Chiến lược|Strategy Analysis/i }).first()
     ).toBeVisible({ timeout: 10_000 });
 });
 

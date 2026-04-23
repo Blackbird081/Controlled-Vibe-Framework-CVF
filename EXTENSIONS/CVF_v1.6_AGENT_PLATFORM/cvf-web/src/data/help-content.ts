@@ -23,6 +23,7 @@ export interface HelpFeature {
     desc: string;
     link?: string;
     linkText?: string;
+    event?: string;
 }
 
 export interface HelpContent {
@@ -101,8 +102,7 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 icon: '🤖',
                 title: 'Agent Chat',
                 desc: 'Chat trực tiếp với AI (Gemini/OpenAI/Claude) ngay trên web, có governance tự động inject.',
-                link: '/home?open=agent',
-                linkText: 'Mở Agent Chat',
+                event: 'cvf:openAgent',
             },
             {
                 icon: '🔐',
@@ -113,8 +113,7 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 icon: '🧪',
                 title: 'Self-UAT (1-click)',
                 desc: 'Kiểm tra AI compliance bằng 1 nút bấm. 6 tiêu chí: Awareness, Phase, Role, Risk, Skill, Refusal.',
-                link: '/home?open=agent',
-                linkText: 'Mở Self-UAT',
+                event: 'cvf:openAgent',
             },
             {
                 icon: '📚',
@@ -132,8 +131,7 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 icon: '🎯',
                 title: 'Multi-Agent Workflow',
                 desc: '4 agents: Orchestrator → Architect → Builder → Reviewer. Phối hợp tự động.',
-                link: '/home?open=multi-agent',
-                linkText: 'Mở Multi-Agent',
+                event: 'cvf:openMultiAgent',
             },
             {
                 icon: '📖',
@@ -236,8 +234,7 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 icon: '🤖',
                 title: 'Agent Chat',
                 desc: 'Chat directly with AI (Gemini/OpenAI/Claude) on web, with governance auto-injected.',
-                link: '/home?open=agent',
-                linkText: 'Open Agent Chat',
+                event: 'cvf:openAgent',
             },
             {
                 icon: '🔐',
@@ -248,8 +245,7 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 icon: '🧪',
                 title: 'Self-UAT (1-click)',
                 desc: 'Check AI compliance with one button. 6 criteria: Awareness, Phase, Role, Risk, Skill, Refusal.',
-                link: '/home?open=agent',
-                linkText: 'Open Self-UAT',
+                event: 'cvf:openAgent',
             },
             {
                 icon: '📚',
@@ -267,8 +263,7 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 icon: '🎯',
                 title: 'Multi-Agent Workflow',
                 desc: '4 agents: Orchestrator → Architect → Builder → Reviewer. Automatic coordination.',
-                link: '/home?open=multi-agent',
-                linkText: 'Open Multi-Agent',
+                event: 'cvf:openMultiAgent',
             },
             {
                 icon: '📖',

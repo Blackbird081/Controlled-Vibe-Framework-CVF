@@ -13,10 +13,10 @@ export default function HelpPage() {
     const [openIndex, setOpenIndex] = useState<number>(0);
 
     const supportCards = [
-        { icon: BookOpen, title: content.features[0]?.title, desc: content.features[0]?.desc, href: content.features[0]?.link },
-        { icon: Rocket, title: content.features[2]?.title, desc: content.features[2]?.desc, href: content.features[2]?.link },
-        { icon: Users, title: content.features[5]?.title, desc: content.features[5]?.desc, href: content.features[5]?.link },
-        { icon: LifeBuoy, title: content.features[6]?.title, desc: content.features[6]?.desc, href: content.features[6]?.link },
+        { icon: BookOpen, title: content.features[0]?.title, desc: content.features[0]?.desc, href: content.features[0]?.link, event: content.features[0]?.event },
+        { icon: Rocket, title: content.features[2]?.title, desc: content.features[2]?.desc, href: content.features[2]?.link, event: content.features[2]?.event },
+        { icon: Users, title: content.features[5]?.title, desc: content.features[5]?.desc, href: content.features[5]?.link, event: content.features[5]?.event },
+        { icon: LifeBuoy, title: content.features[6]?.title, desc: content.features[6]?.desc, href: content.features[6]?.link, event: content.features[6]?.event },
     ].filter(card => card.title && card.desc);
 
     return (
@@ -58,6 +58,18 @@ export default function HelpPage() {
                             </div>
                         );
 
+                        if (card.event) {
+                            return (
+                                <button
+                                    key={card.title}
+                                    type="button"
+                                    className="block w-full text-left"
+                                    onClick={() => window.dispatchEvent(new CustomEvent(card.event!))}
+                                >
+                                    {body}
+                                </button>
+                            );
+                        }
                         return card.href ? (
                             <Link key={card.title} href={card.href} className="block">
                                 {body}

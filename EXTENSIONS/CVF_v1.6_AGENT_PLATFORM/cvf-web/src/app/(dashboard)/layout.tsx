@@ -51,16 +51,6 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         return null;
     });
 
-    // React to ?open= param on client-side navigation (useState init only runs on first mount)
-    useEffect(() => {
-        if (openParam === 'agent') {
-            setActiveModal('agent');
-            setIsAgentMinimized(false);
-        } else if (openParam === 'multi-agent') {
-            setActiveModal('multi-agent');
-        }
-    }, [openParam]);
-
     // Listen for API Key Wizard open event from child pages
     useEffect(() => {
         const handler = () => modals.openModal('apiKeyWizard');
@@ -76,9 +66,17 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             setActiveModal('agent');
             setIsAgentMinimized(false);
         };
+        const handleOpenMultiAgent = () => {
+            modals.closeAllModals();
+            setActiveModal('multi-agent');
+        };
 
         window.addEventListener('cvf:openAgent', handleOpenAgent as EventListener);
-        return () => window.removeEventListener('cvf:openAgent', handleOpenAgent as EventListener);
+        window.addEventListener('cvf:openMultiAgent', handleOpenMultiAgent);
+        return () => {
+            window.removeEventListener('cvf:openAgent', handleOpenAgent as EventListener);
+            window.removeEventListener('cvf:openMultiAgent', handleOpenMultiAgent);
+        };
     }, [modals]);
 
     // Map pathname to Sidebar's expected appState string

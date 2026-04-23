@@ -22,7 +22,9 @@ import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
 import { formatKnowledgeChunks, queryKnowledgeChunks } from '@/lib/knowledge-retrieval';
 import { buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
 import type { WebGovernanceEnvelope } from '@/lib/web-governance-envelope';
-import { getApprovalStore } from '../approvals/store';
+import { deriveServiceTokenIdentity, verifyServiceTokenRequest } from '@/lib/service-token-auth';
+import { getApprovalStore, type ApprovalRequestRecord } from '../approvals/store';
+import { buildApprovalRequestSnapshot, computeApprovalRequestHash } from '../approvals/approval-binding';
 
 // ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
 // Patterns cover both explicit keyword combos (V1) and governance-approval phrasing (V2).
@@ -110,19 +112,35 @@ function buildEvidenceReceipt(input: {
 
 export async function POST(request: NextRequest) {
     try {
+        const rawBodyText = await request.text();
+        let rawBody: unknown;
+        try {
+            rawBody = JSON.parse(rawBodyText);
+        } catch {
+            return NextResponse.json({ success: false, error: 'Invalid input payload.' }, { status: 400 });
+        }
+
         // AuthN: allow either session cookie or service token
         const session = await verifySessionCookie(request);
         const serviceToken = request.headers.get('x-cvf-service-token');
         const configuredServiceToken = process.env.CVF_SERVICE_TOKEN;
-        const isServiceAllowed = configuredServiceToken && serviceToken === configuredServiceToken;
+        const isServiceAllowed = verifyServiceTokenRequest({
+            configuredToken: configuredServiceToken,
+            presentedToken: serviceToken,
+            signature: request.headers.get('x-cvf-service-signature'),
+            timestamp: request.headers.get('x-cvf-service-timestamp'),
+            body: rawBodyText,
+        });
         if (!session && !isServiceAllowed) {
             return NextResponse.json(
-                { success: false, error: 'Unauthorized: please login.' },
+                {
+                    success: false,
+                    error: serviceToken ? 'Unauthorized: invalid service token or signature.' : 'Unauthorized: please login.',
+                },
                 { status: 401 }
             );
         }
 
-        const rawBody = await request.json();
         if (!rawBody || typeof rawBody !== 'object') {
             return NextResponse.json({ success: false, error: 'Invalid input payload.' }, { status: 400 });
         }
@@ -148,7 +166,10 @@ export async function POST(request: NextRequest) {
 
         // Rate limit by session + IP (after provider known)
         const limiter = getRateLimiter();
-        const limitResult = limiter.consume(request, session?.user || 'service', body.provider);
+        const limitIdentity = session?.userId
+            ?? session?.user
+            ?? (serviceToken ? deriveServiceTokenIdentity(serviceToken) : 'service');
+        const limitResult = limiter.consume(request, limitIdentity, body.provider);
         if (!limitResult.allowed) {
             return NextResponse.json(
                 { success: false, error: 'Too many requests. Please slow down.' },
@@ -164,9 +185,100 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        if (!session && isServiceAllowed && typeof body.knowledgeContext === 'string' && body.knowledgeContext.trim()) {
+            await appendAuditEvent({
+                eventType: 'INLINE_KNOWLEDGE_CONTEXT_BLOCKED',
+                actorId: 'service-account',
+                actorRole: 'service',
+                targetResource: body.templateName || body.templateId || 'unknown-template',
+                action: 'BLOCK_INLINE_KNOWLEDGE_CONTEXT',
+                riskLevel: body.cvfRiskLevel ?? 'R2',
+                phase: body.cvfPhase ?? 'PHASE D',
+                outcome: 'BLOCKED',
+                payload: {
+                    reason: 'service-token-inline-knowledge-disabled',
+                },
+            });
+
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Inline knowledgeContext is no longer accepted for service-token execution. Use scoped retrieval instead.',
+                },
+                { status: 400 },
+            );
+        }
+
         // Get provider config from environment or request
         const provider: AIProvider = body.provider ||
             (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
+        const approvalSnapshot = buildApprovalRequestSnapshot(body as Partial<ExecutionRequest>, provider);
+        const approvalRequestHash = computeApprovalRequestHash(approvalSnapshot);
+        let approvedRequestRecord: ApprovalRequestRecord | null = null;
+
+        if (body.approvalId) {
+            const approvalId = String(body.approvalId);
+            const approvalStore = getApprovalStore();
+            const approvalRecord = approvalStore.get(approvalId);
+
+            if (!approvalRecord) {
+                return NextResponse.json(
+                    { success: false, error: 'Approval request not found.', approvalId },
+                    { status: 404 },
+                );
+            }
+
+            if (!approvalRecord.requestHash) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: 'Approval request predates request binding and must be re-issued.',
+                        approvalId,
+                    },
+                    { status: 409 },
+                );
+            }
+
+            if (approvalRecord.requestHash !== approvalRequestHash) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: 'Approval request does not match the current execution payload.',
+                        approvalId,
+                    },
+                    { status: 409 },
+                );
+            }
+
+            if (new Date(approvalRecord.expiresAt).getTime() <= Date.now()) {
+                approvalStore.set(approvalRecord.id, {
+                    ...approvalRecord,
+                    status: 'expired',
+                });
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: 'Approval request has expired and must be re-submitted.',
+                        approvalId,
+                    },
+                    { status: 409 },
+                );
+            }
+
+            if (approvalRecord.status !== 'approved') {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: `Approval request is ${approvalRecord.status} and cannot authorize execution.`,
+                        approvalId,
+                        approvalStatus: approvalRecord.status,
+                    },
+                    { status: 409 },
+                );
+            }
+
+            approvedRequestRecord = approvalRecord;
+        }
 
         // Get API key from environment
         const apiKeyMap: Record<AIProvider, string | undefined> = {
@@ -322,56 +434,76 @@ export async function POST(request: NextRequest) {
         }
 
         if (enforcement.status === 'NEEDS_APPROVAL') {
-            const guidedResponse = lookupGuidedResponse(userPrompt);
-            // CP9: Auto-create approval record so the user can track and resume post-approval
-            const approvalId = `apr-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-            const approvalNow = new Date();
-            getApprovalStore().set(approvalId, {
-                id: approvalId,
-                templateId: body.templateId || body.templateName || 'unknown',
-                templateName: body.templateName || body.templateId || 'unknown',
-                intent: body.intent!,
-                riskLevel: body.cvfRiskLevel,
-                phase: body.cvfPhase,
-                reason: enforcement.reasons.join(' | ') || 'Human approval required',
-                blockReason: enforcement.reasons.join(' | ') || 'NEEDS_APPROVAL',
-                requestContext: {
-                    templateName: body.templateName,
-                    intent: body.intent,
-                    cvfPhase: body.cvfPhase,
-                    cvfRiskLevel: body.cvfRiskLevel,
-                    provider,
-                    model: body.model,
-                    policySnapshotId: govEnvelope.policySnapshotId,
-                    envelopeId: govEnvelope.envelopeId,
-                },
-                expiresAt: new Date(approvalNow.getTime() + 24 * 60 * 60 * 1000).toISOString(),
-                status: 'pending',
-                submittedAt: approvalNow.toISOString(),
-            });
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: enforcement.reasons.join(' | ') || 'Human approval required before execution.',
-                    provider,
-                    model: 'approval-required',
-                    enforcement,
-                    ...(guidedResponse ? { guidedResponse } : {}),
-                    approvalId,
-                    approvalStatus: 'pending',
-                    governanceEnvelope: govEnvelope,
-                    policySnapshotId: govEnvelope.policySnapshotId,
-                    governanceEvidenceReceipt: buildEvidenceReceipt({
-                        envelope: govEnvelope,
-                        decision: enforcement.status,
-                        riskLevel: enforcement.riskGate?.riskLevel,
+            if (approvedRequestRecord) {
+                await appendAuditEvent({
+                    eventType: 'APPROVAL_CONSUMED',
+                    actorId: session?.userId ?? 'service-account',
+                    actorRole: session?.role ?? 'service',
+                    targetResource: body.templateName || body.templateId || 'unknown-template',
+                    action: 'RESUME_EXECUTION',
+                    riskLevel: body.cvfRiskLevel ?? approvedRequestRecord.riskLevel ?? 'R1',
+                    phase: body.cvfPhase ?? approvedRequestRecord.phase,
+                    outcome: 'APPROVED',
+                    payload: withSessionAuditPayload(session, {
+                        approvalId: approvedRequestRecord.id,
+                        requestHash: approvedRequestRecord.requestHash,
+                    }),
+                });
+                getApprovalStore().delete(approvedRequestRecord.id);
+            } else {
+                const guidedResponse = lookupGuidedResponse(userPrompt);
+                // CP9: Auto-create approval record so the user can track and resume post-approval
+                const approvalId = `apr-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+                const approvalNow = new Date();
+                getApprovalStore().set(approvalId, {
+                    id: approvalId,
+                    templateId: body.templateId || body.templateName || 'unknown',
+                    templateName: body.templateName || body.templateId || 'unknown',
+                    intent: body.intent!,
+                    riskLevel: body.cvfRiskLevel,
+                    phase: body.cvfPhase,
+                    reason: enforcement.reasons.join(' | ') || 'Human approval required',
+                    blockReason: enforcement.reasons.join(' | ') || 'NEEDS_APPROVAL',
+                    requestContext: {
+                        templateName: body.templateName,
+                        intent: body.intent,
+                        cvfPhase: body.cvfPhase,
+                        cvfRiskLevel: body.cvfRiskLevel,
+                        provider,
+                        model: body.model,
+                        policySnapshotId: govEnvelope.policySnapshotId,
+                        envelopeId: govEnvelope.envelopeId,
+                    },
+                    requestHash: approvalRequestHash,
+                    requestSnapshot: approvalSnapshot,
+                    expiresAt: new Date(approvalNow.getTime() + 24 * 60 * 60 * 1000).toISOString(),
+                    status: 'pending',
+                    submittedAt: approvalNow.toISOString(),
+                });
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: enforcement.reasons.join(' | ') || 'Human approval required before execution.',
                         provider,
                         model: 'approval-required',
+                        enforcement,
+                        ...(guidedResponse ? { guidedResponse } : {}),
                         approvalId,
-                    }),
-                },
-                { status: 409 }
-            );
+                        approvalStatus: 'pending',
+                        governanceEnvelope: govEnvelope,
+                        policySnapshotId: govEnvelope.policySnapshotId,
+                        governanceEvidenceReceipt: buildEvidenceReceipt({
+                            envelope: govEnvelope,
+                            decision: enforcement.status,
+                            riskLevel: enforcement.riskGate?.riskLevel,
+                            provider,
+                            model: 'approval-required',
+                            approvalId,
+                        }),
+                    },
+                    { status: 409 }
+                );
+            }
         }
 
         // ── PRE-GUARDS: Run guard runtime pipeline (shared engine — Sprint 6) ──
@@ -476,41 +608,42 @@ export async function POST(request: NextRequest) {
         }
 
         // Use router-selected provider (may differ from requested if default was ineligible)
-        govEnvelope.providerLane = routingResult.selectedProvider ?? provider;
-        const routedProvider: AIProvider = routingResult.selectedProvider ?? provider;
+        if (!routingResult.selectedProvider) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Provider routing failed to resolve an executable provider.',
+                    provider,
+                    model: 'router-error',
+                    enforcement,
+                    guardResult,
+                    providerRouting: {
+                        decision: routingResult.decision,
+                        rationale: routingResult.rationale,
+                    },
+                },
+                { status: 500 },
+            );
+        }
+
+        govEnvelope.providerLane = routingResult.selectedProvider;
+        const routedProvider: AIProvider = routingResult.selectedProvider;
         const routedApiKey = apiKeyMap[routedProvider];
 
         // ── KNOWLEDGE RETRIEVAL + TENANT PARTITION ENFORCEMENT ────────────────────
-        const allowInlineKnowledgeContext = !session && isServiceAllowed;
-        const inlineKnowledgeContext = allowInlineKnowledgeContext ? body.knowledgeContext : undefined;
-
-        // Service-token callers with explicit inline context bypass retrieval (governed hand-off path).
-        // All session callers always go through scoped retrieval.
-        let retrievalResult: Awaited<ReturnType<typeof queryKnowledgeChunks>>;
-        if (inlineKnowledgeContext) {
-            retrievalResult = {
-                chunks: [],
-                matchedChunkCount: 0,
-                allowedChunkCount: 0,
-                droppedChunkCount: 0,
-                allowedCollectionIds: [],
-                droppedCollectionIds: [],
-            };
-        } else {
-            retrievalResult = await queryKnowledgeChunks({
-                intent: body.intent!,
-                orgId: session?.orgId,
-                teamId: session?.teamId,
-                collectionId: typeof body.knowledgeCollectionId === 'string' ? body.knowledgeCollectionId : undefined,
-            });
-        }
+        const retrievalResult = await queryKnowledgeChunks({
+            intent: body.intent!,
+            orgId: session?.orgId,
+            teamId: session?.teamId,
+            collectionId: typeof body.knowledgeCollectionId === 'string' ? body.knowledgeCollectionId : undefined,
+        });
         const retrievedKnowledgeContext = formatKnowledgeChunks(retrievalResult.chunks);
-        const finalKnowledgeContext = retrievedKnowledgeContext ?? inlineKnowledgeContext;
+        const finalKnowledgeContext = retrievedKnowledgeContext;
         const requestedKnowledgeCollectionId =
             typeof body.knowledgeCollectionId === 'string' && body.knowledgeCollectionId.trim()
                 ? body.knowledgeCollectionId.trim()
                 : null;
-        const knowledgeSource = retrievedKnowledgeContext ? 'retrieval' : inlineKnowledgeContext ? 'inline-service' : 'none';
+        const knowledgeSource = retrievedKnowledgeContext ? 'retrieval' : 'none';
         const enrichedSystemPrompt = hasKnowledgeContext(finalKnowledgeContext)
             ? buildKnowledgeSystemPrompt(CVF_SYSTEM_PROMPT, finalKnowledgeContext, {
                 orgId: session?.orgId,
@@ -608,6 +741,59 @@ export async function POST(request: NextRequest) {
             }
         }
 
+        if (aiResult.success && aiResult.output && outputValidation?.decision === 'RETRY') {
+            await appendAuditEvent({
+                eventType: 'OUTPUT_VALIDATION_EXHAUSTED',
+                actorId: session?.userId ?? 'service-account',
+                actorRole: session?.role ?? 'service',
+                targetResource: body.templateName || body.templateId || 'unknown-template',
+                action: 'BLOCK_INVALID_OUTPUT',
+                riskLevel: body.cvfRiskLevel ?? enforcement.riskGate?.riskLevel ?? 'R1',
+                phase: body.cvfPhase ?? 'PHASE D',
+                outcome: 'BLOCKED',
+                payload: withSessionAuditPayload(session, {
+                    issues: outputValidation.issues,
+                    qualityHint: outputValidation.qualityHint,
+                    retryAttempts: retryState.attempt,
+                    provider: routedProvider,
+                    model: body.model ?? aiResult.model ?? routedProvider,
+                }),
+            });
+
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Generated response failed output validation after retry attempts.',
+                    provider: routedProvider,
+                    model: body.model ?? aiResult.model ?? routedProvider,
+                    enforcement,
+                    guardResult,
+                    outputValidation: {
+                        qualityHint: outputValidation.qualityHint,
+                        issues: outputValidation.issues,
+                        retryAttempts: retryState.attempt,
+                    },
+                    governanceEnvelope: govEnvelope,
+                    policySnapshotId: govEnvelope.policySnapshotId,
+                    governanceEvidenceReceipt: buildEvidenceReceipt({
+                        envelope: govEnvelope,
+                        decision: enforcement.status,
+                        riskLevel: enforcement.riskGate?.riskLevel,
+                        provider: routedProvider,
+                        model: body.model ?? aiResult.model ?? routedProvider,
+                        routingDecision: routingResult.decision,
+                        knowledgeSource,
+                        knowledgeInjected: !!enrichedSystemPrompt,
+                        knowledgeCollectionId: requestedKnowledgeCollectionId,
+                        knowledgeChunkCount: retrievalResult.allowedChunkCount,
+                        approvalId: approvedRequestRecord?.id,
+                        validationHint: outputValidation.qualityHint,
+                    }),
+                },
+                { status: 422 },
+            );
+        }
+
         // ── POST-EXECUTION BYPASS DETECTION GUARD ──────────────────────────────
         if (aiResult.success && aiResult.output) {
             const bypassCheck = detectBypassInOutput(aiResult.output);
@@ -701,6 +887,7 @@ export async function POST(request: NextRequest) {
                 knowledgeInjected: !!enrichedSystemPrompt,
                 knowledgeCollectionId: requestedKnowledgeCollectionId,
                 knowledgeChunkCount: retrievalResult.allowedChunkCount,
+                approvalId: approvedRequestRecord?.id,
                 validationHint: outputValidation?.qualityHint,
             }),
         });

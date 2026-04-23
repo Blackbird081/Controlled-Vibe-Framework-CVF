@@ -36,3 +36,4 @@ Treat the W113/W116/W117/W118/W119 boundary language as binding:
 - W119 proved the bounded non-coder adoption journey: secret-free first-run readiness; project knowledge ingest into governed `/api/execute`; route-returned `governanceEvidenceReceipt`; ProcessingScreen/ResultViewer evidence visibility and copy/export; live W119 runner 3/3 locked journeys pass on Alibaba lane with raw keys not printed.
 - Web is governance-inherited on the active governed AI path, not the full CVF runtime.
 - Future work must improve enforcement without overstating either claim.
+

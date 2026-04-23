@@ -37,6 +37,9 @@ jobs:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
+      - name: Governance Hook Chain
+        working-directory: ${{ github.workspace }}
+        run: python governance/compat/run_local_governance_hook_chain.py --hook pre-commit
       - run: npm ci
       - run: npm run test:run
       - name: Coverage Check

@@ -6,6 +6,7 @@ import { canAccessAdmin } from '@/lib/enterprise-access';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import type { SessionCookie } from '@/lib/middleware-auth';
 import { verifySessionCookie, withSessionAuditPayload } from '@/lib/middleware-auth';
+import { constantTimeEqual } from '@/lib/service-token-auth';
 
 export type AdminSession = SessionCookie | BreakGlassSession;
 
@@ -25,7 +26,7 @@ const BREAK_GLASS_SESSION: BreakGlassSession = {
   role: 'owner',
   orgId: 'org_cvf',
   teamId: 'team_exec',
-  expiresAt: Number.MAX_SAFE_INTEGER,
+  expiresAt: 0,
   authMode: 'break-glass',
 };
 
@@ -33,6 +34,37 @@ type AdminSessionOptions = {
   ownerOnly?: boolean;
   allowBreakGlass?: boolean;
 };
+
+const DEFAULT_BREAK_GLASS_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
+
+function resolveBreakGlassMaxAgeMs(): number {
+  const configuredDays = Number(process.env.CVF_BREAK_GLASS_MAX_AGE_DAYS);
+  if (Number.isFinite(configuredDays) && configuredDays > 0) {
+    return configuredDays * 24 * 60 * 60 * 1000;
+  }
+
+  return DEFAULT_BREAK_GLASS_MAX_AGE_MS;
+}
+
+function resolveBreakGlassIssuedAt(configuredToken: string): number | null {
+  const configuredIssuedAt = process.env.CVF_BREAK_GLASS_TOKEN_ISSUED_AT?.trim();
+  if (configuredIssuedAt) {
+    const numericIssuedAt = Number(configuredIssuedAt);
+    if (Number.isFinite(numericIssuedAt)) {
+      return numericIssuedAt;
+    }
+
+    const parsedIssuedAt = Date.parse(configuredIssuedAt);
+    return Number.isFinite(parsedIssuedAt) ? parsedIssuedAt : null;
+  }
+
+  const tokenMatch = configuredToken.match(/^(?:cvfbg|bg)[.:](\d{13})[.:].+$/i);
+  if (!tokenMatch) {
+    return null;
+  }
+
+  return Number(tokenMatch[1]);
+}
 
 function isOwnerLikeSession(session: AdminSession): boolean {
   if (session.authMode === 'break-glass') return true;
@@ -60,7 +92,70 @@ async function resolveBreakGlassSession(
   targetResource: string,
 ): Promise<BreakGlassSession | null> {
   const configuredToken = process.env.CVF_BREAK_GLASS_TOKEN;
-  if (!token || !configuredToken || token !== configuredToken) {
+  if (!token || !configuredToken || !constantTimeEqual(token, configuredToken)) {
+    return null;
+  }
+
+  const issuedAtMs = resolveBreakGlassIssuedAt(configuredToken);
+  if (issuedAtMs === null) {
+    await appendAuditEvent({
+      eventType: 'BREAK_GLASS_DENIED',
+      actorId: 'break-glass',
+      actorRole: 'owner',
+      targetResource,
+      action: 'EMERGENCY_ACCESS',
+      riskLevel: 'R3',
+      phase: 'PHASE D',
+      outcome: 'DENIED',
+      payload: {
+        authMode: 'break-glass',
+        reason: 'missing-issued-at',
+      },
+    });
+    console.error('[CVF BREAK GLASS DENIED] Configure CVF_BREAK_GLASS_TOKEN_ISSUED_AT or use an encoded token timestamp.');
+    return null;
+  }
+
+  const FUTURE_GRACE_MS = 60_000;
+  if (issuedAtMs > Date.now() + FUTURE_GRACE_MS) {
+    await appendAuditEvent({
+      eventType: 'BREAK_GLASS_DENIED',
+      actorId: 'break-glass',
+      actorRole: 'owner',
+      targetResource,
+      action: 'EMERGENCY_ACCESS',
+      riskLevel: 'R3',
+      phase: 'PHASE D',
+      outcome: 'DENIED',
+      payload: {
+        authMode: 'break-glass',
+        reason: 'future-issued-at',
+        issuedAt: new Date(issuedAtMs).toISOString(),
+      },
+    });
+    console.error('[CVF BREAK GLASS DENIED] Break-glass token issuedAt is in the future — rotate and reissue with a valid timestamp.');
+    return null;
+  }
+
+  const maxAgeMs = resolveBreakGlassMaxAgeMs();
+  if (Date.now() - issuedAtMs > maxAgeMs) {
+    await appendAuditEvent({
+      eventType: 'BREAK_GLASS_DENIED',
+      actorId: 'break-glass',
+      actorRole: 'owner',
+      targetResource,
+      action: 'EMERGENCY_ACCESS',
+      riskLevel: 'R3',
+      phase: 'PHASE D',
+      outcome: 'DENIED',
+      payload: {
+        authMode: 'break-glass',
+        reason: 'token-expired',
+        issuedAt: new Date(issuedAtMs).toISOString(),
+        maxAgeMs,
+      },
+    });
+    console.error('[CVF BREAK GLASS DENIED] Break-glass token has expired and must be rotated.');
     return null;
   }
 
@@ -77,11 +172,15 @@ async function resolveBreakGlassSession(
     outcome: 'GRANTED',
     payload: {
       authMode: 'break-glass',
+      issuedAt: new Date(issuedAtMs).toISOString(),
     },
   });
   console.error('[CVF BREAK GLASS USED] Rotate CVF_BREAK_GLASS_TOKEN immediately.');
 
-  return BREAK_GLASS_SESSION;
+  return {
+    ...BREAK_GLASS_SESSION,
+    expiresAt: issuedAtMs + maxAgeMs,
+  };
 }
 
 async function buildDeniedResponsePayload(

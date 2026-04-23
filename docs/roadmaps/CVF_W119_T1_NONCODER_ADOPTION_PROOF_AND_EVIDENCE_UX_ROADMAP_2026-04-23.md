@@ -3,11 +3,13 @@
 # CVF W119-T1 Non-Coder Adoption Proof And Evidence UX Roadmap
 
 > Date: 2026-04-23
-> Status: PLANNED
+> Status: CLOSED DELIVERED
 > Scope class: PRODUCTIZATION / NONCODER ADOPTION PROOF
 > Predecessor: W118-T1 CLOSED DELIVERED 2026-04-23
 > Authorization: `docs/baselines/CVF_GC018_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_AUTHORIZATION_2026-04-23.md`
 > Wave ID: W119
+
+> Closure evidence: `docs/assessments/CVF_W119_T1_NONCODER_ADOPTION_EVIDENCE_PACK_2026-04-23.md`
 
 ---
 
@@ -215,3 +217,21 @@ W119-T1 closes only when:
 - knowledge-assisted journey shows measurable project-knowledge use;
 - full release gate passes with live governance E2E;
 - public docs/handoff are synchronized without overclaiming.
+
+---
+
+## 10. Closure Record — 2026-04-23
+
+W119-T1 is **CLOSED DELIVERED**.
+
+- CP1 scenario lock filed: `docs/baselines/CVF_W119_T1_NONCODER_ADOPTION_SCENARIO_LOCK_2026-04-23.md`.
+- CP2 delivered secret-free first-run readiness: `/api/providers` returns source/status only; Home distinguishes live task readiness from workspace enforcement readiness.
+- CP3 delivered `governanceEvidenceReceipt` on `/api/execute`, visible in `ProcessingScreen`, retained/exportable in `ResultViewer`.
+- CP4 live runner delivered: `scripts/w119_noncoder_adoption_evidence_pack.js`.
+- CP4 live evidence pass: 3/3 locked journeys, 3/3 expected decisions, 3/3 evidence receipts, 3 accepted knowledge chunks, 3/3 useful live outputs, raw keys not printed.
+- CP5 public/handoff sync completed.
+
+Targeted regression: 79/79 W119-related tests pass.
+Release gate: `python scripts/run_cvf_release_gate_bundle.py --json` PASS after W119 closure; Web build PASS, Guard Contract typecheck PASS, provider readiness PASS (`2` certified lanes), secrets scan PASS, docs governance PASS, UI mock Playwright `6 passed`, live governance Playwright `8 passed`.
+
+Release boundary remains binding: future release-quality public governance claims still require fresh live release-gate evidence.

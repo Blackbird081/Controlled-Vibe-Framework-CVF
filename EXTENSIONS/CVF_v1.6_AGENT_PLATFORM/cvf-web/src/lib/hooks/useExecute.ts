@@ -87,6 +87,9 @@ export function useProviders() {
         provider: AIProvider;
         configured: boolean;
         model: string;
+        laneStatus?: string;
+        keySourceName?: string | null;
+        readiness?: 'live_task_ready' | 'not_configured';
     }[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [anyConfigured, setAnyConfigured] = useState(false);

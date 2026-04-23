@@ -6,7 +6,7 @@ import { useLanguage } from '@/lib/i18n';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
 import { getSafetyStatus } from '@/lib/safety-status';
 import type { SafetyRiskLevel } from '@/lib/safety-status';
-import type { ExecutionRequest } from '@/lib/ai';
+import type { ExecutionRequest, GovernanceEvidenceReceipt } from '@/lib/ai';
 
 export interface ProcessingExecutionOverrides {
     mode?: ExecutionRequest['mode'];
@@ -25,19 +25,24 @@ interface ProcessingScreenProps {
     inputs?: Record<string, string>;
     intent?: string;
     executionOverrides?: ProcessingExecutionOverrides;
-    onComplete: (output: string) => void;
+    onComplete: (output: string, evidenceReceipt?: GovernanceEvidenceReceipt) => void;
     onCancel: () => void;
 }
 
-interface GovernanceEvidenceState {
+export interface GovernanceEvidenceState {
     provider?: string;
     model?: string;
     decision?: string;
+    riskLevel?: string;
     providerDecision?: string;
     policySnapshotId?: string;
     envelopeId?: string;
+    receiptId?: string;
+    evidenceMode?: string;
     knowledgeSource?: string;
     knowledgeInjected?: boolean;
+    knowledgeCollectionId?: string | null;
+    knowledgeChunkCount?: number;
     validationHint?: string;
     approvalId?: string;
 }
@@ -67,6 +72,7 @@ export function ProcessingScreen({
     const [executionRiskLevel, setExecutionRiskLevel] = useState<SafetyRiskLevel | null>(null);
     // W114-T1 CP5: user-visible governance evidence from the live execute route
     const [governanceEvidence, setGovernanceEvidence] = useState<GovernanceEvidenceState | null>(null);
+    const [evidenceReceipt, setEvidenceReceipt] = useState<GovernanceEvidenceReceipt | undefined>(undefined);
     // W96-T1: Completion state — set when success+riskLevel; suppresses 300ms path
     const [completedOutput, setCompletedOutput] = useState<string | null>(null);
 
@@ -104,17 +110,24 @@ export function ProcessingScreen({
 
             const data = await response.json();
             const enforcement = data.enforcement;
+            const receipt = data.governanceEvidenceReceipt as GovernanceEvidenceReceipt | undefined;
+            setEvidenceReceipt(receipt);
             setGovernanceEvidence({
-                provider: data.provider,
-                model: data.model,
-                decision: enforcement?.status,
-                providerDecision: data.providerRouting?.decision,
-                policySnapshotId: data.policySnapshotId || data.governanceEnvelope?.policySnapshotId,
-                envelopeId: data.governanceEnvelope?.envelopeId,
-                knowledgeSource: data.knowledgeInjection?.source,
-                knowledgeInjected: data.knowledgeInjection?.injected,
-                validationHint: data.outputValidation?.qualityHint,
-                approvalId: data.approvalId,
+                provider: receipt?.provider || data.provider,
+                model: receipt?.model || data.model,
+                decision: receipt?.decision || enforcement?.status,
+                riskLevel: receipt?.riskLevel || enforcement?.riskGate?.riskLevel,
+                providerDecision: receipt?.routingDecision || data.providerRouting?.decision,
+                policySnapshotId: receipt?.policySnapshotId || data.policySnapshotId || data.governanceEnvelope?.policySnapshotId,
+                envelopeId: receipt?.envelopeId || data.governanceEnvelope?.envelopeId,
+                receiptId: receipt?.receiptId,
+                evidenceMode: receipt?.evidenceMode,
+                knowledgeSource: receipt?.knowledgeSource || data.knowledgeInjection?.source,
+                knowledgeInjected: receipt?.knowledgeInjected ?? data.knowledgeInjection?.injected,
+                knowledgeCollectionId: receipt?.knowledgeCollectionId ?? data.knowledgeInjection?.collectionId,
+                knowledgeChunkCount: receipt?.knowledgeChunkCount ?? data.knowledgeInjection?.chunkCount,
+                validationHint: receipt?.validationHint || data.outputValidation?.qualityHint,
+                approvalId: receipt?.approvalId || data.approvalId,
             });
             // W94-T1: Extract risk level for badge (R4 → R3 cap for safety-status.ts compat)
             const rawRisk = enforcement?.riskGate?.riskLevel as string | undefined;
@@ -146,7 +159,7 @@ export function ProcessingScreen({
                     setCompletedOutput(data.output);
                 } else {
                     setTimeout(() => {
-                        onComplete(data.output);
+                        onComplete(data.output, receipt);
                     }, 300);
                 }
                 return true;
@@ -250,9 +263,9 @@ export function ProcessingScreen({
     // W96-T1: auto-advance after 2000ms when completion state is set
     useEffect(() => {
         if (!completedOutput) return;
-        const timer = setTimeout(() => onComplete(completedOutput), 2000);
+        const timer = setTimeout(() => onComplete(completedOutput, evidenceReceipt), 2000);
         return () => clearTimeout(timer);
-    }, [completedOutput, onComplete]);
+    }, [completedOutput, evidenceReceipt, onComplete]);
 
     useEffect(() => {
         // Try real execution first if we have the required data
@@ -385,7 +398,7 @@ export function ProcessingScreen({
                         <button
                             type="button"
                             data-testid="view-results-btn"
-                            onClick={() => onComplete(completedOutput)}
+                            onClick={() => onComplete(completedOutput, evidenceReceipt)}
                             className="mt-1 px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white
                                 text-sm font-medium rounded-lg transition-colors"
                         >
@@ -428,6 +441,9 @@ export function ProcessingScreen({
                             {governanceEvidence.decision && (
                                 <p><span className="font-medium">{isVi ? 'Quyết định:' : 'Decision:'}</span> {governanceEvidence.decision}</p>
                             )}
+                            {governanceEvidence.riskLevel && (
+                                <p><span className="font-medium">{isVi ? 'Rủi ro:' : 'Risk:'}</span> {governanceEvidence.riskLevel}</p>
+                            )}
                             {governanceEvidence.provider && (
                                 <p><span className="font-medium">{isVi ? 'Provider:' : 'Provider:'}</span> {governanceEvidence.provider}</p>
                             )}
@@ -440,12 +456,21 @@ export function ProcessingScreen({
                             {governanceEvidence.knowledgeSource && governanceEvidence.knowledgeSource !== 'none' && (
                                 <p><span className="font-medium">{isVi ? 'Knowledge:' : 'Knowledge:'}</span> {governanceEvidence.knowledgeSource}</p>
                             )}
+                            {governanceEvidence.knowledgeCollectionId && (
+                                <p className="break-all"><span className="font-medium">{isVi ? 'Collection:' : 'Collection:'}</span> {governanceEvidence.knowledgeCollectionId}</p>
+                            )}
+                            {typeof governanceEvidence.knowledgeChunkCount === 'number' && governanceEvidence.knowledgeChunkCount > 0 && (
+                                <p><span className="font-medium">{isVi ? 'Chunks:' : 'Chunks:'}</span> {governanceEvidence.knowledgeChunkCount}</p>
+                            )}
                             {governanceEvidence.validationHint && (
                                 <p><span className="font-medium">{isVi ? 'Output:' : 'Output:'}</span> {governanceEvidence.validationHint}</p>
                             )}
                         </div>
-                        {(governanceEvidence.policySnapshotId || governanceEvidence.envelopeId || governanceEvidence.approvalId) && (
+                        {(governanceEvidence.receiptId || governanceEvidence.policySnapshotId || governanceEvidence.envelopeId || governanceEvidence.approvalId) && (
                             <div className="mt-2 space-y-1 text-[11px] text-emerald-600 dark:text-emerald-400">
+                                {governanceEvidence.receiptId && (
+                                    <p className="break-all"><span className="font-medium">Receipt:</span> {governanceEvidence.receiptId}</p>
+                                )}
                                 {governanceEvidence.policySnapshotId && (
                                     <p className="break-all"><span className="font-medium">Policy:</span> {governanceEvidence.policySnapshotId}</p>
                                 )}

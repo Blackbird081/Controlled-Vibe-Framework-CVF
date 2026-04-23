@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { Execution } from '@/types';
 import { useLanguage } from '@/lib/i18n';
 import { analyzeOutputSafety } from '@/lib/safety-status';
+import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 
 interface ResultViewerProps {
     execution: Execution;
@@ -16,6 +17,8 @@ interface ResultViewerProps {
     onSendToAgent?: (content: string) => void;
     // W97-T1: optional follow-up handler; when provided, shows the follow-up section
     onFollowUp?: (refinement: string) => void;
+    // W119-T1: route-returned evidence receipt for non-coder handoff.
+    evidenceReceipt?: GovernanceEvidenceReceipt;
 }
 
 type ExportLanguage = 'en' | 'vi';
@@ -36,6 +39,9 @@ const exportLabels = {
         helpTitle: '💡 Export Result',
         helpDesc: 'Export completed analysis for storage or sharing',
         exporting: '⏳ Exporting...',
+        evidenceTitle: 'What CVF did',
+        copyReceipt: 'Copy evidence receipt',
+        copiedReceipt: 'Receipt copied',
     },
     vi: {
         title: 'Kết Quả Phân Tích CVF',
@@ -52,19 +58,53 @@ const exportLabels = {
         helpTitle: '💡 Xuất Kết Quả',
         helpDesc: 'Xuất kết quả phân tích để lưu trữ hoặc chia sẻ',
         exporting: '⏳ Đang xuất...',
+        evidenceTitle: 'CVF đã làm gì',
+        copyReceipt: 'Sao chép receipt',
+        copiedReceipt: 'Đã sao chép receipt',
     },
 };
 
-export function ResultViewer({ execution, output, onAccept, onReject, onRetry, onBack, onSendToAgent, onFollowUp }: ResultViewerProps) {
+export function ResultViewer({ execution, output, onAccept, onReject, onRetry, onBack, onSendToAgent, onFollowUp, evidenceReceipt }: ResultViewerProps) {
     const { language } = useLanguage();
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [receiptCopied, setReceiptCopied] = useState(false);
     const [exportLang, setExportLang] = useState<ExportLanguage>(language as ExportLanguage);
     const [exporting, setExporting] = useState<string | null>(null);
     // W97-T1: follow-up input state
     const [followupText, setFollowupText] = useState('');
 
     const labels = exportLabels[exportLang];
+
+    const generateEvidenceReceiptContent = useCallback(() => {
+        if (!evidenceReceipt) return '';
+        const fields = [
+            ['Receipt', evidenceReceipt.receiptId],
+            ['Evidence mode', evidenceReceipt.evidenceMode],
+            ['Route', evidenceReceipt.routeId],
+            ['Decision', evidenceReceipt.decision],
+            ['Risk', evidenceReceipt.riskLevel],
+            ['Provider', evidenceReceipt.provider],
+            ['Model', evidenceReceipt.model],
+            ['Routing', evidenceReceipt.routingDecision],
+            ['Policy', evidenceReceipt.policySnapshotId],
+            ['Envelope', evidenceReceipt.envelopeId],
+            ['Knowledge source', evidenceReceipt.knowledgeSource],
+            ['Knowledge collection', evidenceReceipt.knowledgeCollectionId],
+            ['Knowledge chunks', typeof evidenceReceipt.knowledgeChunkCount === 'number' ? String(evidenceReceipt.knowledgeChunkCount) : undefined],
+            ['Approval', evidenceReceipt.approvalId],
+            ['Output hint', evidenceReceipt.validationHint],
+            ['Generated', evidenceReceipt.generatedAt],
+        ].filter(([, value]) => value !== undefined && value !== null && String(value).length > 0);
+
+        return [
+            '## CVF Evidence Receipt',
+            '',
+            ...fields.map(([label, value]) => `- **${label}:** ${value}`),
+            '',
+            '_No raw provider keys are included in this receipt._',
+        ].join('\n');
+    }, [evidenceReceipt]);
 
     // Generate export content - remove any existing footer from output to prevent duplication
     const generateExportContent = () => {
@@ -79,6 +119,8 @@ export function ResultViewer({ execution, output, onAccept, onReject, onRetry, o
 ---
 
 ${cleanOutput}
+
+${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
 
 ---
 *${labels.footer}*
@@ -109,6 +151,17 @@ ${cleanOutput}
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         setShowExportMenu(false);
+    };
+
+    const handleCopyReceipt = async () => {
+        if (!evidenceReceipt) return;
+        try {
+            await navigator.clipboard.writeText(generateEvidenceReceiptContent());
+            setReceiptCopied(true);
+            setTimeout(() => setReceiptCopied(false), 1500);
+        } catch (err) {
+            console.error('Failed to copy receipt:', err);
+        }
     };
 
     // Real PDF export using jsPDF
@@ -442,6 +495,42 @@ ${cleanOutput}
                     </div>
                 </div>
             </div>
+
+            {/* Output Safety Badge */}
+            {evidenceReceipt && (
+                <section
+                    data-testid="w119-evidence-receipt"
+                    className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-950 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-100"
+                >
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                            <div className="text-sm font-semibold">{labels.evidenceTitle}</div>
+                            <div className="mt-2 grid gap-x-5 gap-y-1 text-xs sm:grid-cols-2">
+                                {evidenceReceipt.decision && <p><span className="font-medium">Decision:</span> {evidenceReceipt.decision}</p>}
+                                {evidenceReceipt.riskLevel && <p><span className="font-medium">Risk:</span> {evidenceReceipt.riskLevel}</p>}
+                                {evidenceReceipt.provider && <p><span className="font-medium">Provider:</span> {evidenceReceipt.provider}</p>}
+                                {evidenceReceipt.model && <p><span className="font-medium">Model:</span> {evidenceReceipt.model}</p>}
+                                {evidenceReceipt.routingDecision && <p><span className="font-medium">Routing:</span> {evidenceReceipt.routingDecision}</p>}
+                                {evidenceReceipt.knowledgeSource && evidenceReceipt.knowledgeSource !== 'none' && <p><span className="font-medium">Knowledge:</span> {evidenceReceipt.knowledgeSource}</p>}
+                                {evidenceReceipt.knowledgeCollectionId && <p className="break-all"><span className="font-medium">Collection:</span> {evidenceReceipt.knowledgeCollectionId}</p>}
+                                {typeof evidenceReceipt.knowledgeChunkCount === 'number' && <p><span className="font-medium">Chunks:</span> {evidenceReceipt.knowledgeChunkCount}</p>}
+                            </div>
+                            <div className="mt-2 space-y-1 text-[11px] text-emerald-700 dark:text-emerald-200/80">
+                                <p className="break-all"><span className="font-medium">Receipt:</span> {evidenceReceipt.receiptId}</p>
+                                {evidenceReceipt.policySnapshotId && <p className="break-all"><span className="font-medium">Policy:</span> {evidenceReceipt.policySnapshotId}</p>}
+                                {evidenceReceipt.envelopeId && <p className="break-all"><span className="font-medium">Envelope:</span> {evidenceReceipt.envelopeId}</p>}
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={handleCopyReceipt}
+                            className="cvf-control rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-emerald-700"
+                        >
+                            {receiptCopied ? labels.copiedReceipt : labels.copyReceipt}
+                        </button>
+                    </div>
+                </section>
+            )}
 
             {/* Output Safety Badge */}
             {(() => {

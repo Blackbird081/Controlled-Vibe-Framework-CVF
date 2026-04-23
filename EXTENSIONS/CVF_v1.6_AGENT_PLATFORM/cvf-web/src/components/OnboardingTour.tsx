@@ -34,6 +34,14 @@ const TOUR_STEPS = [
         bodyEn: 'Go to Settings → Provider Keys and add an Alibaba (Qwen) or DeepSeek API key. Free-tier keys work. Without a key, only demo mode is available.',
         bodyVi: 'Vào Settings → Provider Keys và thêm API key của Alibaba (Qwen) hoặc DeepSeek. Free-tier là đủ. Không có key thì chỉ dùng được demo mode.',
     },
+    {
+        id: 'receipt',
+        icon: '📄',
+        titleEn: 'Keep the evidence receipt with your result',
+        titleVi: 'Giữ receipt bằng chứng cùng kết quả',
+        bodyEn: 'After a live governed run, the result page shows what CVF checked: decision, risk, provider, policy, knowledge source, and receipt id. You can copy it for handoff.',
+        bodyVi: 'Sau một lượt chạy live có governance, trang kết quả hiển thị CVF đã kiểm gì: quyết định, rủi ro, provider, policy, nguồn knowledge và mã receipt. Bạn có thể sao chép để bàn giao.',
+    },
 ];
 
 export function OnboardingTour({ onDismiss }: OnboardingTourProps) {

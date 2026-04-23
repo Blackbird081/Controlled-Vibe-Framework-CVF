@@ -5,6 +5,8 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Layers3, ShieldCheck, Sparkles, Wand2 } from 'lucide-react';
 import { templates, generateIntent } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
+import { useProviders } from '@/lib/hooks/useExecute';
+import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 import { useSettings } from '@/components/Settings';
 import { Template, Execution } from '@/types';
 import { useLanguage } from '@/lib/i18n';
@@ -77,12 +79,14 @@ export default function HomePage() {
     const mockAiEnabled = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
     const { settings } = useSettings();
     const hasAnyApiKey = Object.values(settings.providers).some(p => p.apiKey && p.apiKey.trim().length > 0);
+    const { providers, anyConfigured: serverAnyProviderConfigured, fetchProviders } = useProviders();
 
     const [workflowState, setWorkflowState] = useState<WorkflowState>('browse');
     const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
     const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [currentOutput, setCurrentOutput] = useState('');
+    const [currentEvidenceReceipt, setCurrentEvidenceReceipt] = useState<GovernanceEvidenceReceipt | undefined>(undefined);
     const [currentInput, setCurrentInput] = useState<Record<string, string>>({});
     const [currentIntent, setCurrentIntent] = useState('');
     const [currentFolder, setCurrentFolder] = useState<string | null>(null);
@@ -134,6 +138,52 @@ export default function HomePage() {
             tone: 'violet' as const,
         },
     ]), [allRunnableTemplates.length, language, starterHandoff]);
+
+    const liveReadyProviders = useMemo(
+        () => providers.filter(provider => provider.configured),
+        [providers],
+    );
+
+    const setupConfidence = useMemo(() => {
+        if (mockAiEnabled) {
+            return {
+                liveTaskReady: false,
+                workspaceReady: true,
+                label: language === 'vi' ? 'Demo mode' : 'Demo mode',
+                description: language === 'vi'
+                    ? 'Mock AI đang bật; có thể xem luồng UI nhưng chưa phải bằng chứng governance live.'
+                    : 'Mock AI is enabled; you can inspect UI flow but this is not live governance proof.',
+                nextAction: language === 'vi' ? 'Tắt mock để chạy live' : 'Disable mock to run live',
+                tone: 'amber',
+            };
+        }
+
+        if (serverAnyProviderConfigured || hasAnyApiKey) {
+            const primary = liveReadyProviders[0];
+            const source = primary?.keySourceName || (hasAnyApiKey ? 'browser settings' : 'server env');
+            return {
+                liveTaskReady: true,
+                workspaceReady: true,
+                label: language === 'vi' ? 'Live task ready' : 'Live task ready',
+                description: language === 'vi'
+                    ? `Provider đã sẵn sàng qua ${source}. CVF chỉ hiển thị tên nguồn, không hiển thị key.`
+                    : `Provider is ready via ${source}. CVF shows source name only, never the key value.`,
+                nextAction: language === 'vi' ? 'Chọn template và chạy task' : 'Pick a template and run a task',
+                tone: 'emerald',
+            };
+        }
+
+        return {
+            liveTaskReady: false,
+            workspaceReady: true,
+            label: language === 'vi' ? 'Cần provider key' : 'Provider key needed',
+            description: language === 'vi'
+                ? 'Workspace enforcement artifacts có thể sẵn sàng, nhưng live task cần key trong env hoặc settings.'
+                : 'Workspace enforcement artifacts can be ready, but live tasks need a key in env or settings.',
+            nextAction: language === 'vi' ? 'Mở Provider Keys' : 'Open Provider Keys',
+            tone: 'amber',
+        };
+    }, [hasAnyApiKey, language, liveReadyProviders, mockAiEnabled, serverAnyProviderConfigured]);
 
     const filteredTemplates = useMemo(() => {
         let result = selectedCategory === 'all'
@@ -238,8 +288,9 @@ export default function HomePage() {
         setWorkflowState('processing');
     }, [selectedTemplate, addExecution]);
 
-    const handleProcessingComplete = useCallback((output: string) => {
+    const handleProcessingComplete = useCallback((output: string, evidenceReceipt?: GovernanceEvidenceReceipt) => {
         setCurrentOutput(output);
+        setCurrentEvidenceReceipt(evidenceReceipt);
         if (currentExecution) {
             updateExecution(currentExecution.id, {
                 status: 'completed',
@@ -254,6 +305,7 @@ export default function HomePage() {
     const handleBack = useCallback(() => {
         setSelectedTemplate(null);
         setCurrentOutput('');
+        setCurrentEvidenceReceipt(undefined);
         setIterationContext(null);
         setWorkflowState('browse');
     }, []);
@@ -296,6 +348,10 @@ export default function HomePage() {
         window.addEventListener('cvf:starterHandoffReady', syncStarterHandoff);
         return () => window.removeEventListener('cvf:starterHandoffReady', syncStarterHandoff);
     }, []);
+
+    useEffect(() => {
+        fetchProviders();
+    }, [fetchProviders]);
 
     const handleDismissBanner = useCallback(() => {
         localStorage.setItem('cvf_setup_banner_dismissed', '1');
@@ -528,6 +584,54 @@ export default function HomePage() {
                             </div>
                         )}
 
+                        {!bannerDismissed && (
+                            <section
+                                data-testid="w119-readiness-panel"
+                                className={`cvf-surface cvf-density-section rounded-[28px] border p-5 ${
+                                    setupConfidence.tone === 'emerald'
+                                        ? 'border-emerald-200 bg-emerald-50/80 text-emerald-950 dark:border-emerald-500/20 dark:bg-emerald-500/8 dark:text-emerald-100'
+                                        : 'border-amber-200 bg-amber-50/80 text-amber-950 dark:border-amber-500/20 dark:bg-amber-500/8 dark:text-amber-100'
+                                }`}
+                            >
+                                <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.45fr)] lg:items-center">
+                                    <div>
+                                        <div className="text-xs font-semibold uppercase tracking-[0.16em] opacity-70">
+                                            {language === 'vi' ? 'Trạng thái lần chạy đầu' : 'First-run confidence'}
+                                        </div>
+                                        <h3 className="mt-2 text-xl font-semibold tracking-[-0.02em]">
+                                            {setupConfidence.label}
+                                        </h3>
+                                        <p className="mt-2 text-sm leading-6 opacity-80">
+                                            {setupConfidence.description}
+                                        </p>
+                                    </div>
+                                    <div className="grid gap-2 text-sm">
+                                        <div className="flex items-center justify-between rounded-2xl border border-current/15 bg-white/55 px-4 py-3 dark:bg-white/[0.04]">
+                                            <span>{language === 'vi' ? 'Live task' : 'Live task'}</span>
+                                            <span className="font-semibold">{setupConfidence.liveTaskReady ? 'READY' : 'NEEDS KEY'}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between rounded-2xl border border-current/15 bg-white/55 px-4 py-3 dark:bg-white/[0.04]">
+                                            <span>{language === 'vi' ? 'Workspace enforcement' : 'Workspace enforcement'}</span>
+                                            <span className="font-semibold">ARTIFACT READY</span>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setupConfidence.liveTaskReady
+                                                ? document.getElementById('tour-template-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                                                : window.dispatchEvent(new CustomEvent('cvf:openApiKeyWizard'))}
+                                            className={`cvf-control rounded-2xl px-4 py-3 text-sm font-semibold text-white transition ${
+                                                setupConfidence.tone === 'emerald'
+                                                    ? 'bg-emerald-600 hover:bg-emerald-700'
+                                                    : 'bg-amber-600 hover:bg-amber-700'
+                                            }`}
+                                        >
+                                            {setupConfidence.nextAction}
+                                        </button>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
                         <section className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none">
                             <div className="flex flex-col gap-6">
                                 {!currentFolder && (
@@ -652,6 +756,7 @@ export default function HomePage() {
                     onBack={handleBack}
                     onSendToAgent={handleSendToAgent}
                     onFollowUp={handleFollowUp}
+                    evidenceReceipt={currentEvidenceReceipt}
                 />
             )}
 

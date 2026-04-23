@@ -181,6 +181,7 @@ The architecture should be read this way:
 | Claim | Current status | Evidence |
 | --- | --- | --- |
 | Non-coder governed AI path | Live-proven | `E2E Playwright Governance (live): 8 passed` via release gate; W114 CP4 outcome pack `19/19` expected decisions |
+| Non-coder adoption journey | Live-proven | W119 evidence pack `3/3` locked journeys pass: first governed output, project knowledge use, evidence handoff |
 | Multi-provider operability | Certified on 2 lanes | Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` both `CERTIFIED` |
 | Release gate | Mandatory live governance | `python scripts/run_cvf_release_gate_bundle.py --json` |
 | Mock boundary | UI-only | `AGENTS.md` and live evidence packet |
@@ -236,10 +237,11 @@ Current proven baseline:
 - W114 CP6 gives downstream workspaces a secret-free bridge receipt that links workspace doctor proof to CVF Web live evidence records.
 - W114 CP7 proves the downstream adoption pattern is repeatable across three tested sample kinds: `scripts/w114_cp7_multi_sample_downstream_proof.ps1` creates 3 sample projects (cli-productivity, web-app-planning, data-analysis), all passing doctor 11/11 and unit tests, with sample 3 also writing a secret-free bridge to live Web evidence.
 - W114 CP8 publishes the public evidence packet: `docs/reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md` summarizes plain-language non-coder benefit claims, evidence chain, claim boundaries, and known limitations.
+- W119 proves a bounded first-use adoption journey end-to-end: secret-free first-run readiness, project knowledge ingest/retrieval, governed live `/api/execute`, visible/exportable evidence receipt, and 3/3 locked live journeys passing on the Alibaba lane.
 
-Current posture: W114 CP1-CP8 complete. Downstream adoption pattern is now repeatable and scripted across tested sample kinds. Public evidence packet is published with explicit live-vs-workspace claim boundaries.
+Current posture: W119 closed delivered. Downstream adoption pattern is repeatable across tested sample kinds, and one realistic non-coder Web adoption journey is now live-proven with project knowledge and evidence handoff. Public claims remain bounded to live Web `/api/execute`, tested workspace artifacts/doctor/bridge evidence, and local single-process knowledge persistence.
 
-Latest closed non-coder value roadmap: [W114-T1 Non-Coder Value Maximization And Evidence](docs/roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md).
+Latest closed non-coder value roadmap: [W119-T1 Non-Coder Adoption Proof And Evidence UX](docs/roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md).
 
 ## 8. Read Next
 
@@ -269,3 +271,5 @@ Latest closed non-coder value roadmap: [W114-T1 Non-Coder Value Maximization And
 - [W114-T1 Non-Coder Outcome Evidence Pack](docs/assessments/CVF_W114_T1_NONCODER_OUTCOME_EVIDENCE_PACK_2026-04-23.md)
 - [W114-T1 Web Benefit Visibility Assessment](docs/assessments/CVF_W114_T1_WEB_BENEFIT_VISIBILITY_ASSESSMENT_2026-04-23.md)
 - [W114-T1 Workspace-To-Web Evidence Bridge Assessment](docs/assessments/CVF_W114_T1_WORKSPACE_WEB_EVIDENCE_BRIDGE_ASSESSMENT_2026-04-23.md)
+- [W119-T1 Non-Coder Adoption Proof And Evidence UX Roadmap](docs/roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md)
+- [W119-T1 Non-Coder Adoption Evidence Pack](docs/assessments/CVF_W119_T1_NONCODER_ADOPTION_EVIDENCE_PACK_2026-04-23.md)

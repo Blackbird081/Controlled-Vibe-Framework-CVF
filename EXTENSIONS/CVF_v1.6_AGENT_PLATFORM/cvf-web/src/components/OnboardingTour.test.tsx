@@ -33,10 +33,10 @@ describe('OnboardingTour', () => {
         expect(screen.queryByRole('dialog')).toBeNull();
     });
 
-    it('shows step 1 of 3 content on first render', async () => {
+    it('shows step 1 of 4 content on first render', async () => {
         render(<OnboardingTour />);
         await act(async () => { vi.advanceTimersByTime(700); });
-        expect(screen.getByText('1 / 3')).toBeTruthy();
+        expect(screen.getByText('1 / 4')).toBeTruthy();
         expect(screen.getByText(/Pick a task from the template gallery/i)).toBeTruthy();
     });
 
@@ -44,7 +44,7 @@ describe('OnboardingTour', () => {
         render(<OnboardingTour />);
         await act(async () => { vi.advanceTimersByTime(700); });
         fireEvent.click(screen.getByText('Next →'));
-        expect(screen.getByText('2 / 3')).toBeTruthy();
+        expect(screen.getByText('2 / 4')).toBeTruthy();
         expect(screen.getByText(/CVF checks every request/i)).toBeTruthy();
     });
 
@@ -53,18 +53,28 @@ describe('OnboardingTour', () => {
         await act(async () => { vi.advanceTimersByTime(700); });
         fireEvent.click(screen.getByText('Next →'));
         fireEvent.click(screen.getByText('Next →'));
-        expect(screen.getByText('3 / 3')).toBeTruthy();
+        expect(screen.getByText('3 / 4')).toBeTruthy();
         expect(screen.getByText(/Connect an AI provider/i)).toBeTruthy();
         expect(screen.getByText(/Open Settings/i)).toBeTruthy();
+    });
+
+    it('advances to step 4 and explains the evidence receipt', async () => {
+        render(<OnboardingTour />);
+        await act(async () => { vi.advanceTimersByTime(700); });
+        fireEvent.click(screen.getByText('Next →'));
+        fireEvent.click(screen.getByText('Next →'));
+        fireEvent.click(screen.getByText('Next →'));
+        expect(screen.getByText('4 / 4')).toBeTruthy();
+        expect(screen.getByText(/Keep the evidence receipt/i)).toBeTruthy();
     });
 
     it('goes back to previous step when Back is clicked', async () => {
         render(<OnboardingTour />);
         await act(async () => { vi.advanceTimersByTime(700); });
         fireEvent.click(screen.getByText('Next →'));
-        expect(screen.getByText('2 / 3')).toBeTruthy();
+        expect(screen.getByText('2 / 4')).toBeTruthy();
         fireEvent.click(screen.getByText('← Back'));
-        expect(screen.getByText('1 / 3')).toBeTruthy();
+        expect(screen.getByText('1 / 4')).toBeTruthy();
     });
 
     it('dismisses tour and sets localStorage when X button clicked', async () => {
@@ -78,6 +88,7 @@ describe('OnboardingTour', () => {
     it('dismisses tour and sets localStorage when Get started is clicked', async () => {
         render(<OnboardingTour />);
         await act(async () => { vi.advanceTimersByTime(700); });
+        fireEvent.click(screen.getByText('Next →'));
         fireEvent.click(screen.getByText('Next →'));
         fireEvent.click(screen.getByText('Next →'));
         fireEvent.click(screen.getByText('Get started →'));

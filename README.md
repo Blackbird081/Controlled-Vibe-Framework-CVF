@@ -89,9 +89,10 @@ The strongest public-safe claim CVF can make right now is:
 - `NEEDS_APPROVAL` is no longer a dead end
 - risk visibility and follow-up rounds now exist in the main non-coder flow
 - knowledge-native context now improves live `/api/execute` outcomes, not just governance docs
-- the Web processing screen now visibly shows governance evidence per request (decision, provider, model, routing, policy snapshot, approval id)
+- the Web processing/result flow now visibly shows and exports governance evidence receipts per request (decision, risk, provider/model, routing, policy snapshot, envelope/receipt id, knowledge source, approval id when present)
 - downstream workspace adoption is repeatable across at least 3 project kinds with a scripted proof path
 - a workspace-to-web evidence bridge links downstream enforcement proof to CVF Web live evidence without distributing API keys
+- W119 proves one bounded first-use adoption journey: first governed output, project knowledge use, and evidence handoff all passed live on the Alibaba lane
 
 Public-safe product wording:
 
@@ -224,6 +225,7 @@ Current posture on the active reference path:
 | Web CVF inheritance boundary | `GOVERNANCE-INHERITED ACTIVE PATH; not full CVF runtime` |
 | Workspace bootstrap | `AGENT-ENFORCEMENT-READY via W112 bootstrap + doctor` |
 | Downstream adoption proof | `W114-CP7 WORKSPACE-PROVEN on 3 sample projects with live-evidence bridge boundary` |
+| Non-coder adoption journey | `W119 LIVE-PROVEN on 3 locked journeys with project knowledge + evidence receipt` |
 | Cross-extension workflow realism | `SUBSTANTIALLY ALIGNED` |
 | Governance executable ownership | `SUBSTANTIALLY ALIGNED` |
 | End-to-end controlled autonomy loop | `SUBSTANTIALLY ALIGNED` |
@@ -247,6 +249,8 @@ Read this status as:
 - W114 CP6 now lets downstream workspaces generate a secret-free bridge receipt linking workspace doctor proof to CVF Web live evidence
 - W114 CP7 now proves the downstream adoption pattern is repeatable across 3 tested project kinds (cli-productivity, web-app-planning, data-analysis): all doctor 11/11, all tests pass, sample 3 includes a secret-free bridge to live Web evidence — multi-sample proof script: `scripts/w114_cp7_multi_sample_downstream_proof.ps1`
 - W114 CP1-CP8 complete; public evidence packet: `docs/reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md`
+- W119 is closed delivered: one realistic non-coder adoption journey is now live-proven end-to-end with first-run readiness, knowledge-assisted execution, visible/exportable evidence receipt, and no raw-key leakage in evidence artifacts.
+- W119 live evidence pack: 3/3 locked journeys passed; 3/3 expected decisions; 3/3 evidence receipts; 3 accepted knowledge chunks; 3/3 useful live outputs; raw provider keys not printed.
 - relocation is closed-by-default; next work should follow the Post-MC5 Continuation Strategy
 - future expansion must go through scan continuity review, reassessment, or a fresh bounded `GC-018`
 
@@ -296,6 +300,8 @@ Primary status anchors:
 - [W114 Non-Coder Outcome Evidence Pack](docs/assessments/CVF_W114_T1_NONCODER_OUTCOME_EVIDENCE_PACK_2026-04-23.md)
 - [W114 Web Benefit Visibility Assessment](docs/assessments/CVF_W114_T1_WEB_BENEFIT_VISIBILITY_ASSESSMENT_2026-04-23.md)
 - [W114 Workspace-To-Web Evidence Bridge Assessment](docs/assessments/CVF_W114_T1_WORKSPACE_WEB_EVIDENCE_BRIDGE_ASSESSMENT_2026-04-23.md)
+- [W119 Non-Coder Adoption Roadmap](docs/roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md)
+- [W119 Non-Coder Adoption Evidence Pack](docs/assessments/CVF_W119_T1_NONCODER_ADOPTION_EVIDENCE_PACK_2026-04-23.md)
 - [PVV Alibaba Pause Checkpoint](docs/assessments/CVF_PVV_ALIBABA_MULTI_ROLE_PAUSE_CHECKPOINT_2026-04-12.md)
 - [Product Value Validation Wave Roadmap](docs/roadmaps/CVF_PRODUCT_VALUE_VALIDATION_WAVE_ROADMAP_2026-04-11.md)
 - [Next Development Direction Review](docs/assessments/CVF_NEXT_DEVELOPMENT_DIRECTION_REVIEW_2026-04-13.md)

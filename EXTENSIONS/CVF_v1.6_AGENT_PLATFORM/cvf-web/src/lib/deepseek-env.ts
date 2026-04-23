@@ -17,6 +17,19 @@ export function resolveDeepSeekApiKey(
   return undefined;
 }
 
+export function resolveDeepSeekApiKeySourceName(
+  env: NodeJS.ProcessEnv = process.env,
+): string | null {
+  for (const envName of DEEPSEEK_API_KEY_ENV_NAMES) {
+    const raw = env[envName];
+    if (typeof raw === 'string' && raw.trim()) {
+      return envName;
+    }
+  }
+
+  return null;
+}
+
 export function isDeepSeekApiKeyConfigured(
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {

@@ -1,0 +1,238 @@
+{
+  "tranche": "W119-T1",
+  "generatedAt": "2026-04-23T07:19:58.596Z",
+  "route": "/api/execute",
+  "ingestRoute": "/api/knowledge/ingest",
+  "targetBaseUrl": "http://localhost:3019",
+  "providerLane": "alibaba",
+  "liveKeyAvailable": true,
+  "liveKeySourceName": "ALIBABA_API_KEY",
+  "rawKeyValue": "NOT PRINTED",
+  "serviceTokenValue": "NOT PRINTED",
+  "scenarioLock": "docs/baselines/CVF_W119_T1_NONCODER_ADOPTION_SCENARIO_LOCK_2026-04-23.md",
+  "ingest": {
+    "status": 200,
+    "accepted": 3,
+    "collectionId": "w119-lumencart-project"
+  },
+  "summary": {
+    "totalJourneys": 3,
+    "passedJourneys": 3,
+    "expectedDecisionMet": 3,
+    "evidenceReceiptMet": 3,
+    "knowledgeJourneys": 2,
+    "knowledgeCollectionMet": 3,
+    "usefulOutputs": 3,
+    "ingestAccepted": 3,
+    "rawKeysPrinted": false
+  },
+  "results": [
+    {
+      "id": "W119-S1-FIRST-GOVERNED-OUTPUT",
+      "journey": "first_governed_output",
+      "expectedDecision": "ALLOW",
+      "expectedDecisionMet": true,
+      "evidenceReceiptMet": true,
+      "knowledgeMet": true,
+      "termMet": true,
+      "usefulness": {
+        "length": 1378,
+        "hasStructure": true,
+        "hasAction": true,
+        "governanceSafe": true,
+        "pass": true
+      },
+      "pass": true,
+      "httpStatus": 200,
+      "durationMs": 5490,
+      "provider": "alibaba",
+      "model": "qwen-turbo",
+      "governanceDecision": "ALLOW",
+      "riskLevel": "R1",
+      "providerRouting": {
+        "decision": "ALLOW",
+        "selectedProvider": "alibaba",
+        "requestedProvider": "alibaba",
+        "routerOverrode": false
+      },
+      "knowledgeInjection": {
+        "injected": false,
+        "contextLength": 0,
+        "source": "none",
+        "chunkCount": 0,
+        "collectionId": null,
+        "allowedCollectionIds": []
+      },
+      "expectedTerms": [
+        "2 hours",
+        "same-day",
+        "checklist"
+      ],
+      "expectedTermHits": [
+        "2 hours",
+        "same-day",
+        "checklist"
+      ],
+      "evidenceReceipt": {
+        "receiptId": "rcpt-env-mob5iqbi-8uq6nb",
+        "evidenceMode": "live",
+        "routeId": "/api/execute",
+        "decision": "ALLOW",
+        "riskLevel": "R1",
+        "provider": "alibaba",
+        "model": "qwen-turbo",
+        "routingDecision": "ALLOW",
+        "policySnapshotId": "pol-20260423-0001",
+        "envelopeId": "env-mob5iqbi-8uq6nb",
+        "knowledgeSource": "none",
+        "knowledgeCollectionId": null,
+        "knowledgeChunkCount": 0,
+        "validationHint": "excellent",
+        "generatedAt": "2026-04-23T07:19:46.110Z"
+      },
+      "outputLength": 1378,
+      "outputExcerpt": "```markdown\n## Onboarding Checklist for New Sales Assistant\n\n### 1. Welcome & Introduction\n- Review company mission, values, and sales process\n- Meet with team lead for 30-minute orientation\n- Get access to CRM system and internal tools\n\n### 2. Lead Handling Protocol\n- Call back all leads within 2 hours of web form submission\n- Verify lead details: name, contact info, and initial inquiry\n- Document all lead interactions in CRM\n\n### 3. Qualification Process\n- Ask standard qualification questions:\n  - What type of service are they interested in?\n  - What is their budget range?\n  - Do they have any specific requirements?\n\n### 4. Quote Generation\n- Provide same-day quote for qualified leads\n- Use standardized quote template\n- Include:\n  - Service description\n  - Estimated cost\n  - Payment terms\n  - Next steps\n\n### 5. Common Questions\n- Prepare answers for:\n  - How long does setup take? (Answ",
+      "rawKeyValue": "NOT PRINTED"
+    },
+    {
+      "id": "W119-S2-KNOWLEDGE-ASSISTED-TASK",
+      "journey": "knowledge_assisted_project_task",
+      "expectedDecision": "ALLOW",
+      "expectedDecisionMet": true,
+      "evidenceReceiptMet": true,
+      "knowledgeMet": true,
+      "termMet": true,
+      "usefulness": {
+        "length": 1234,
+        "hasStructure": true,
+        "hasAction": true,
+        "governanceSafe": true,
+        "pass": true
+      },
+      "pass": true,
+      "httpStatus": 200,
+      "durationMs": 3797,
+      "provider": "alibaba",
+      "model": "qwen-turbo",
+      "governanceDecision": "ALLOW",
+      "riskLevel": "R1",
+      "providerRouting": {
+        "decision": "ALLOW",
+        "selectedProvider": "alibaba",
+        "requestedProvider": "alibaba",
+        "routerOverrode": false
+      },
+      "knowledgeInjection": {
+        "injected": true,
+        "contextLength": 562,
+        "source": "retrieval",
+        "chunkCount": 3,
+        "collectionId": "w119-lumencart-project",
+        "allowedCollectionIds": [
+          "w119-lumencart-project"
+        ]
+      },
+      "expectedTerms": [
+        "LumenCart",
+        "offline-first",
+        "night-market",
+        "30 seconds"
+      ],
+      "expectedTermHits": [
+        "LumenCart",
+        "offline-first",
+        "night-market",
+        "30 seconds"
+      ],
+      "evidenceReceipt": {
+        "receiptId": "rcpt-env-mob5iuh2-9f8oz3",
+        "evidenceMode": "live",
+        "routeId": "/api/execute",
+        "decision": "ALLOW",
+        "riskLevel": "R1",
+        "provider": "alibaba",
+        "model": "qwen-turbo",
+        "routingDecision": "ALLOW",
+        "policySnapshotId": "pol-20260423-0002",
+        "envelopeId": "env-mob5iuh2-9f8oz3",
+        "knowledgeSource": "retrieval",
+        "knowledgeCollectionId": "w119-lumencart-project",
+        "knowledgeChunkCount": 3,
+        "validationHint": "excellent",
+        "generatedAt": "2026-04-23T07:19:51.494Z"
+      },
+      "outputLength": 1234,
+      "outputExcerpt": "```markdown\n## Decision Memo: LumenCart Onboarding Strategy\n\n### Recommendation\nBuild offline-first checkout first\n\n### Rationale\n1. **Vendor Focus:** Night-market vendors prioritize quick, reliable transactions over catalog browsing or analytics. An offline checkout ensures they can operate during power outages or internet disruptions.\n2. **Success Metric Alignment:** The project's success metric (checkout under 30 seconds) is directly tied to the checkout flow. Prioritizing this feature ensures we meet our core objective from the start.\n3. **Constraint Compliance:** By building an offline-first checkout, we avoid assuming permanent internet connectivity, which aligns with the project's requirements.\n\n### Implementation Plan\n- Develop a local transaction processing system that stores data temporarily and syncs when online\n- Implement simple, intuitive UI for vendors to complete transact",
+      "rawKeyValue": "NOT PRINTED"
+    },
+    {
+      "id": "W119-S3-EVIDENCE-HANDOFF",
+      "journey": "evidence_handoff",
+      "expectedDecision": "ALLOW",
+      "expectedDecisionMet": true,
+      "evidenceReceiptMet": true,
+      "knowledgeMet": true,
+      "termMet": true,
+      "usefulness": {
+        "length": 610,
+        "hasStructure": true,
+        "hasAction": true,
+        "governanceSafe": true,
+        "pass": true
+      },
+      "pass": true,
+      "httpStatus": 200,
+      "durationMs": 3321,
+      "provider": "alibaba",
+      "model": "qwen-turbo",
+      "governanceDecision": "ALLOW",
+      "riskLevel": "R1",
+      "providerRouting": {
+        "decision": "ALLOW",
+        "selectedProvider": "alibaba",
+        "requestedProvider": "alibaba",
+        "routerOverrode": false
+      },
+      "knowledgeInjection": {
+        "injected": true,
+        "contextLength": 368,
+        "source": "retrieval",
+        "chunkCount": 2,
+        "collectionId": "w119-lumencart-project",
+        "allowedCollectionIds": [
+          "w119-lumencart-project"
+        ]
+      },
+      "expectedTerms": [
+        "LumenCart",
+        "offline-first",
+        "receipt"
+      ],
+      "expectedTermHits": [
+        "LumenCart",
+        "offline-first",
+        "receipt"
+      ],
+      "evidenceReceipt": {
+        "receiptId": "rcpt-env-mob5ixex-m5jyl9",
+        "evidenceMode": "live",
+        "routeId": "/api/execute",
+        "decision": "ALLOW",
+        "riskLevel": "R1",
+        "provider": "alibaba",
+        "model": "qwen-turbo",
+        "routingDecision": "ALLOW",
+        "policySnapshotId": "pol-20260423-0003",
+        "envelopeId": "env-mob5ixex-m5jyl9",
+        "knowledgeSource": "retrieval",
+        "knowledgeCollectionId": "w119-lumencart-project",
+        "knowledgeChunkCount": 2,
+        "validationHint": "excellent",
+        "generatedAt": "2026-04-23T07:19:55.305Z"
+      },
+      "outputLength": 610,
+      "outputExcerpt": "```markdown\n## LumenCart First Build Handoff\n\n**Project Name:** LumenCart  \n**Priority Milestone:** Offline-first core functionality for night-market vendors  \n**Constraint:** Must work without permanent internet connectivity  \n\n### Key Focus\nBuild the checkout flow that ensures vendors can complete transactions in under 30 seconds during busy market shifts.  \n\n### Evidence Receipt\n- The system must function offline (no internet connection required)\n- Checkout process must be completed within 30 seconds for a vendor during peak hours\n- All data must sync automatically when internet becomes available\n```",
+      "rawKeyValue": "NOT PRINTED"
+    }
+  ]
+}

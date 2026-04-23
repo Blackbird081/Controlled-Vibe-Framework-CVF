@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { executeAI, AIProvider, ExecutionRequest, CVF_SYSTEM_PROMPT } from '@/lib/ai';
+import { executeAI, AIProvider, ExecutionRequest, CVF_SYSTEM_PROMPT, type GovernanceEvidenceReceipt } from '@/lib/ai';
 import { evaluateEnforcement } from '@/lib/enforcement';
 import { getTemplateById } from '@/lib/templates';
 import { verifySessionCookie } from '@/lib/middleware-auth';
@@ -21,6 +21,7 @@ import { withSessionAuditPayload } from '@/lib/middleware-auth';
 import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
 import { formatKnowledgeChunks, queryKnowledgeChunks } from '@/lib/knowledge-retrieval';
 import { buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
+import type { WebGovernanceEnvelope } from '@/lib/web-governance-envelope';
 import { getApprovalStore } from '../approvals/store';
 
 // ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
@@ -70,6 +71,41 @@ function shouldRequireSkillPreflight(input: {
     return isBuildPhase(input.phase)
         || input.templateCategory === 'development'
         || isBuildLikeIntent(input.intent);
+}
+
+function buildEvidenceReceipt(input: {
+    envelope: WebGovernanceEnvelope;
+    decision?: string;
+    riskLevel?: string;
+    provider?: AIProvider | string;
+    model?: string;
+    routingDecision?: string;
+    knowledgeSource?: string;
+    knowledgeInjected?: boolean;
+    knowledgeCollectionId?: string | null;
+    knowledgeChunkCount?: number;
+    approvalId?: string;
+    validationHint?: string;
+}): GovernanceEvidenceReceipt {
+    return {
+        receiptId: `rcpt-${input.envelope.envelopeId}`,
+        evidenceMode: 'live',
+        routeId: input.envelope.routeId,
+        decision: input.decision,
+        riskLevel: input.riskLevel ?? input.envelope.riskLevel ?? undefined,
+        provider: input.provider,
+        model: input.model,
+        routingDecision: input.routingDecision,
+        policySnapshotId: input.envelope.policySnapshotId,
+        envelopeId: input.envelope.envelopeId,
+        knowledgeSource: input.knowledgeSource,
+        knowledgeInjected: input.knowledgeInjected,
+        knowledgeCollectionId: input.knowledgeCollectionId ?? null,
+        knowledgeChunkCount: input.knowledgeChunkCount,
+        approvalId: input.approvalId,
+        validationHint: input.validationHint,
+        generatedAt: input.envelope.requestTimestamp,
+    };
 }
 
 export async function POST(request: NextRequest) {
@@ -250,6 +286,13 @@ export async function POST(request: NextRequest) {
                     ...(guidedResponse ? { guidedResponse } : {}),
                     governanceEnvelope: govEnvelope,
                     policySnapshotId: govEnvelope.policySnapshotId,
+                    governanceEvidenceReceipt: buildEvidenceReceipt({
+                        envelope: govEnvelope,
+                        decision: enforcement.status,
+                        riskLevel: enforcement.riskGate?.riskLevel,
+                        provider,
+                        model: 'blocked',
+                    }),
                 },
                 { status: 400 }
             );
@@ -264,6 +307,15 @@ export async function POST(request: NextRequest) {
                     provider,
                     model: 'clarify',
                     enforcement,
+                    governanceEnvelope: govEnvelope,
+                    policySnapshotId: govEnvelope.policySnapshotId,
+                    governanceEvidenceReceipt: buildEvidenceReceipt({
+                        envelope: govEnvelope,
+                        decision: enforcement.status,
+                        riskLevel: enforcement.riskGate?.riskLevel,
+                        provider,
+                        model: 'clarify',
+                    }),
                 },
                 { status: 422 }
             );
@@ -309,6 +361,14 @@ export async function POST(request: NextRequest) {
                     approvalStatus: 'pending',
                     governanceEnvelope: govEnvelope,
                     policySnapshotId: govEnvelope.policySnapshotId,
+                    governanceEvidenceReceipt: buildEvidenceReceipt({
+                        envelope: govEnvelope,
+                        decision: enforcement.status,
+                        riskLevel: enforcement.riskGate?.riskLevel,
+                        provider,
+                        model: 'approval-required',
+                        approvalId,
+                    }),
                 },
                 { status: 409 }
             );
@@ -372,6 +432,16 @@ export async function POST(request: NextRequest) {
                         decision: routingResult.decision,
                         rationale: routingResult.rationale,
                     },
+                    governanceEnvelope: govEnvelope,
+                    policySnapshotId: govEnvelope.policySnapshotId,
+                    governanceEvidenceReceipt: buildEvidenceReceipt({
+                        envelope: govEnvelope,
+                        decision: enforcement.status,
+                        riskLevel: enforcement.riskGate?.riskLevel,
+                        provider,
+                        model: 'router-denied',
+                        routingDecision: routingResult.decision,
+                    }),
                 },
                 { status: 403 }
             );
@@ -390,6 +460,16 @@ export async function POST(request: NextRequest) {
                         decision: routingResult.decision,
                         rationale: routingResult.rationale,
                     },
+                    governanceEnvelope: govEnvelope,
+                    policySnapshotId: govEnvelope.policySnapshotId,
+                    governanceEvidenceReceipt: buildEvidenceReceipt({
+                        envelope: govEnvelope,
+                        decision: enforcement.status,
+                        riskLevel: enforcement.riskGate?.riskLevel,
+                        provider,
+                        model: 'router-escalated',
+                        routingDecision: routingResult.decision,
+                    }),
                 },
                 { status: 409 }
             );
@@ -426,6 +506,11 @@ export async function POST(request: NextRequest) {
         }
         const retrievedKnowledgeContext = formatKnowledgeChunks(retrievalResult.chunks);
         const finalKnowledgeContext = retrievedKnowledgeContext ?? inlineKnowledgeContext;
+        const requestedKnowledgeCollectionId =
+            typeof body.knowledgeCollectionId === 'string' && body.knowledgeCollectionId.trim()
+                ? body.knowledgeCollectionId.trim()
+                : null;
+        const knowledgeSource = retrievedKnowledgeContext ? 'retrieval' : inlineKnowledgeContext ? 'inline-service' : 'none';
         const enrichedSystemPrompt = hasKnowledgeContext(finalKnowledgeContext)
             ? buildKnowledgeSystemPrompt(CVF_SYSTEM_PROMPT, finalKnowledgeContext, {
                 orgId: session?.orgId,
@@ -462,6 +547,20 @@ export async function POST(request: NextRequest) {
                     error: `API key not configured for provider: ${routedProvider}. Please set the corresponding environment variable.`,
                     provider: routedProvider,
                     model: 'not configured',
+                    governanceEnvelope: govEnvelope,
+                    policySnapshotId: govEnvelope.policySnapshotId,
+                    governanceEvidenceReceipt: buildEvidenceReceipt({
+                        envelope: govEnvelope,
+                        decision: enforcement.status,
+                        riskLevel: enforcement.riskGate?.riskLevel,
+                        provider: routedProvider,
+                        model: 'not configured',
+                        routingDecision: routingResult.decision,
+                        knowledgeSource,
+                        knowledgeInjected: !!enrichedSystemPrompt,
+                        knowledgeCollectionId: requestedKnowledgeCollectionId,
+                        knowledgeChunkCount: retrievalResult.allowedChunkCount,
+                    }),
                 },
                 { status: 400 }
             );
@@ -579,8 +678,10 @@ export async function POST(request: NextRequest) {
             knowledgeInjection: {
                 injected: !!enrichedSystemPrompt,
                 contextLength: finalKnowledgeContext?.length ?? 0,
-                source: retrievedKnowledgeContext ? 'retrieval' : inlineKnowledgeContext ? 'inline-service' : 'none',
+                source: knowledgeSource,
                 chunkCount: retrievalResult.allowedChunkCount,
+                collectionId: requestedKnowledgeCollectionId,
+                allowedCollectionIds: retrievalResult.allowedCollectionIds,
             },
             outputValidation: outputValidation ? {
                 qualityHint: outputValidation.qualityHint,
@@ -589,6 +690,19 @@ export async function POST(request: NextRequest) {
             } : undefined,
             governanceEnvelope: govEnvelope,
             policySnapshotId: govEnvelope.policySnapshotId,
+            governanceEvidenceReceipt: buildEvidenceReceipt({
+                envelope: govEnvelope,
+                decision: enforcement.status,
+                riskLevel: enforcement.riskGate?.riskLevel,
+                provider: routedProvider,
+                model: body.model ?? aiResult.model ?? routedProvider,
+                routingDecision: routingResult.decision,
+                knowledgeSource,
+                knowledgeInjected: !!enrichedSystemPrompt,
+                knowledgeCollectionId: requestedKnowledgeCollectionId,
+                knowledgeChunkCount: retrievalResult.allowedChunkCount,
+                validationHint: outputValidation?.qualityHint,
+            }),
         });
 
     } catch (error) {

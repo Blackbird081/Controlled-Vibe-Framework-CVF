@@ -76,6 +76,25 @@ const defaultProps = {
     onBack: vi.fn(),
 };
 
+const mockEvidenceReceipt = {
+    receiptId: 'rcpt-env-w119-001',
+    evidenceMode: 'live' as const,
+    routeId: '/api/execute',
+    decision: 'ALLOW',
+    riskLevel: 'R1',
+    provider: 'alibaba',
+    model: 'qwen-turbo',
+    routingDecision: 'ALLOW',
+    policySnapshotId: 'pol-w119-001',
+    envelopeId: 'env-w119-001',
+    knowledgeSource: 'retrieval',
+    knowledgeInjected: true,
+    knowledgeCollectionId: 'w119-lumencart-project',
+    knowledgeChunkCount: 2,
+    validationHint: 'usable',
+    generatedAt: '2026-04-23T00:00:00.000Z',
+};
+
 describe('ResultViewer', () => {
     beforeEach(() => {
         mockLanguage = 'en';
@@ -95,6 +114,33 @@ describe('ResultViewer', () => {
     it('renders markdown output', () => {
         render(<ResultViewer {...defaultProps} />);
         expect(screen.getByText('This is a test output.')).toBeTruthy();
+    });
+
+    it('renders W119 evidence receipt fields for non-coder handoff', () => {
+        render(<ResultViewer {...defaultProps} evidenceReceipt={mockEvidenceReceipt} />);
+
+        const receipt = screen.getByTestId('w119-evidence-receipt');
+        expect(receipt.textContent).toContain('What CVF did');
+        expect(receipt.textContent).toContain('ALLOW');
+        expect(receipt.textContent).toContain('R1');
+        expect(receipt.textContent).toContain('alibaba');
+        expect(receipt.textContent).toContain('w119-lumencart-project');
+        expect(receipt.textContent).toContain('rcpt-env-w119-001');
+        expect(receipt.textContent).not.toMatch(/sk-|api[_-]?key/i);
+    });
+
+    it('copies W119 evidence receipt without raw keys', async () => {
+        render(<ResultViewer {...defaultProps} evidenceReceipt={mockEvidenceReceipt} />);
+        fireEvent.click(screen.getByText(/Copy evidence receipt/i));
+
+        await waitFor(() => {
+            expect(navigator.clipboard.writeText).toHaveBeenCalled();
+        });
+
+        const copied = String((navigator.clipboard.writeText as unknown as { mock: { calls: unknown[][] } }).mock.calls.at(-1)?.[0] || '');
+        expect(copied).toContain('CVF Evidence Receipt');
+        expect(copied).toContain('rcpt-env-w119-001');
+        expect(copied).not.toMatch(/sk-|api[_-]?key\s*[:=]/i);
     });
 
     it('calls onBack when back button is clicked', () => {
@@ -193,14 +239,17 @@ describe('ResultViewer', () => {
         });
 
         it('copies to clipboard', async () => {
-            render(<ResultViewer {...defaultProps} />);
+            render(<ResultViewer {...defaultProps} evidenceReceipt={mockEvidenceReceipt} />);
             fireEvent.click(screen.getByText(/Export/i));
-            const copyBtn = screen.getByText(/Copy/i);
+            const copyBtn = screen.getByText(/Copy to Clipboard/i);
             fireEvent.click(copyBtn);
 
             await waitFor(() => {
                 expect(navigator.clipboard.writeText).toHaveBeenCalled();
             });
+            const copied = String((navigator.clipboard.writeText as unknown as { mock: { calls: unknown[][] } }).mock.calls.at(-1)?.[0] || '');
+            expect(copied).toContain('CVF Evidence Receipt');
+            expect(copied).toContain('rcpt-env-w119-001');
         });
 
         it('shows PDF and Word download buttons', () => {

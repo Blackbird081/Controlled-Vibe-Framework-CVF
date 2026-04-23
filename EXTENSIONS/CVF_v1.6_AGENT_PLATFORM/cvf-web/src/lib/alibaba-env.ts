@@ -17,6 +17,19 @@ export function resolveAlibabaApiKey(
   return undefined;
 }
 
+export function resolveAlibabaApiKeySourceName(
+  env: NodeJS.ProcessEnv = process.env,
+): string | null {
+  for (const envName of ALIBABA_API_KEY_ENV_NAMES) {
+    const raw = env[envName];
+    if (typeof raw === 'string' && raw.trim()) {
+      return envName;
+    }
+  }
+
+  return null;
+}
+
 export function isAlibabaApiKeyConfigured(
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {

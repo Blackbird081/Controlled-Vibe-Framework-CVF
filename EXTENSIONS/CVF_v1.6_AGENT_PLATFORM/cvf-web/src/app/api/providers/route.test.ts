@@ -50,6 +50,9 @@ describe('/api/providers', () => {
 
         expect(data.anyConfigured).toBe(true);
         expect(alibaba.configured).toBe(true);
+        expect(alibaba.keySourceName).toBe('CVF_BENCHMARK_ALIBABA_KEY');
+        expect(alibaba.readiness).toBe('live_task_ready');
+        expect(JSON.stringify(alibaba)).not.toContain('ali-benchmark-key');
     });
 
     it('reports DeepSeek as configured when its API key is present', async () => {
@@ -62,6 +65,7 @@ describe('/api/providers', () => {
         expect(data.anyConfigured).toBe(true);
         expect(deepseek.configured).toBe(true);
         expect(deepseek.model).toBe('deepseek-chat');
+        expect(deepseek.keySourceName).toBe('DEEPSEEK_API_KEY');
     });
 
     it('returns UNCONFIGURED lane status when no key is present', async () => {
@@ -69,6 +73,8 @@ describe('/api/providers', () => {
         const data = await res.json();
         for (const p of data.providers) {
             expect(p.laneStatus).toBe('UNCONFIGURED');
+            expect(p.keySourceName).toBeNull();
+            expect(p.readiness).toBe('not_configured');
         }
     });
 

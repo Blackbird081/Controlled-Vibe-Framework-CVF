@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { AIProvider, DEFAULT_MODELS, ProviderStatus } from '@/lib/ai';
-import { isAlibabaApiKeyConfigured } from '@/lib/alibaba-env';
-import { isDeepSeekApiKeyConfigured } from '@/lib/deepseek-env';
+import { isAlibabaApiKeyConfigured, resolveAlibabaApiKeySourceName } from '@/lib/alibaba-env';
+import { isDeepSeekApiKeyConfigured, resolveDeepSeekApiKeySourceName } from '@/lib/deepseek-env';
 import type { LaneStatus } from '@/lib/provider-lane-status';
 
 /** Canary certification status per provider — updated by evaluate_cvf_provider_lane_certification.py */
@@ -15,47 +15,63 @@ function laneStatusFor(provider: AIProvider, configured: boolean): LaneStatus {
     return KNOWN_LANE_STATUS[provider] ?? 'EXPERIMENTAL';
 }
 
+function providerStatus(input: {
+    provider: AIProvider;
+    configured: boolean;
+    model: string;
+    keySourceName?: string | null;
+}): ProviderStatus {
+    return {
+        provider: input.provider,
+        configured: input.configured,
+        model: input.model,
+        laneStatus: laneStatusFor(input.provider, input.configured),
+        keySourceName: input.configured ? input.keySourceName ?? input.provider.toUpperCase() + '_API_KEY' : null,
+        readiness: input.configured ? 'live_task_ready' : 'not_configured',
+    };
+}
+
 export async function GET() {
     const alibabaConfigured = isAlibabaApiKeyConfigured();
     const deepseekConfigured = isDeepSeekApiKeyConfigured();
 
     const providers: ProviderStatus[] = [
-        {
+        providerStatus({
             provider: 'openai',
             configured: !!process.env.OPENAI_API_KEY,
             model: DEFAULT_MODELS.openai,
-            laneStatus: laneStatusFor('openai', !!process.env.OPENAI_API_KEY),
-        },
-        {
+            keySourceName: 'OPENAI_API_KEY',
+        }),
+        providerStatus({
             provider: 'claude',
             configured: !!process.env.ANTHROPIC_API_KEY,
             model: DEFAULT_MODELS.claude,
-            laneStatus: laneStatusFor('claude', !!process.env.ANTHROPIC_API_KEY),
-        },
-        {
+            keySourceName: 'ANTHROPIC_API_KEY',
+        }),
+        providerStatus({
             provider: 'gemini',
             configured: !!process.env.GOOGLE_AI_API_KEY,
             model: DEFAULT_MODELS.gemini,
-            laneStatus: laneStatusFor('gemini', !!process.env.GOOGLE_AI_API_KEY),
-        },
-        {
+            keySourceName: 'GOOGLE_AI_API_KEY',
+        }),
+        providerStatus({
             provider: 'alibaba',
             configured: alibabaConfigured,
             model: DEFAULT_MODELS.alibaba,
-            laneStatus: laneStatusFor('alibaba', alibabaConfigured),
-        },
-        {
+            keySourceName: resolveAlibabaApiKeySourceName(),
+        }),
+        providerStatus({
             provider: 'openrouter',
             configured: !!process.env.OPENROUTER_API_KEY,
             model: DEFAULT_MODELS.openrouter,
-            laneStatus: laneStatusFor('openrouter', !!process.env.OPENROUTER_API_KEY),
-        },
-        {
+            keySourceName: 'OPENROUTER_API_KEY',
+        }),
+        providerStatus({
             provider: 'deepseek',
             configured: deepseekConfigured,
             model: DEFAULT_MODELS.deepseek,
-            laneStatus: laneStatusFor('deepseek', deepseekConfigured),
-        },
+            keySourceName: resolveDeepSeekApiKeySourceName(),
+        }),
     ];
 
     const defaultProvider = (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';

@@ -165,8 +165,12 @@ Nếu cần hiểu trạng thái milestone hiện tại, chuẩn bị demo, ho�
 - `assessments/CVF_W114_T1_WORKSPACE_WEB_EVIDENCE_BRIDGE_ASSESSMENT_2026-04-23.md` — CP6 downstream workspace-to-web evidence bridge closure record
 - `assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md` — CP7 multi-sample downstream workspace proof with live-evidence bridge boundary
 - `reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md` — CP8 public evidence packet with bounded non-coder benefit claims
-- `baselines/CVF_GC018_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_AUTHORIZATION_2026-04-23.md` — GC-018 authorization for planned W119 adoption-proof tranche
-- `roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md` — planned W119 tranche for non-coder adoption journey proof and evidence UX
+- `baselines/CVF_GC018_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_AUTHORIZATION_2026-04-23.md` — GC-018 authorization for closed W119 adoption-proof tranche
+- `baselines/CVF_W119_T1_NONCODER_ADOPTION_SCENARIO_LOCK_2026-04-23.md` — locked W119 non-coder adoption journeys
+- `roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md` — closed W119 tranche for non-coder adoption journey proof and evidence UX
+- `assessments/CVF_W119_T1_NONCODER_ADOPTION_EVIDENCE_PACK_2026-04-23.md` — live W119 evidence pack, 3/3 locked journeys pass
+- `assessments/CVF_W119_T1_NONCODER_ADOPTION_EVIDENCE_RAW_2026-04-23.json` — raw W119 route evidence with raw provider keys omitted
+- `baselines/CVF_GC026_TRACKER_SYNC_W119_T1_CLOSED_2026-04-23.md` — W119 tracker sync closure note
 
 ## Product Value Validation
 
@@ -197,8 +201,13 @@ If the current task is proving or rejecting CVF user-facing value:
   - CP8 status record
   - separates live API-backed Web governance claims from workspace/downstream artifact, doctor, test, and bridge claims
 - `roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md`
-  - planned W119 adoption-proof lane
+  - closed W119 adoption-proof lane
   - connects onboarding, project knowledge, live governed output, and evidence receipt into one bounded non-coder journey
+- `assessments/CVF_W119_T1_NONCODER_ADOPTION_EVIDENCE_PACK_2026-04-23.md`
+  - live adoption evidence
+  - 3/3 locked journeys pass: first governed output, knowledge-assisted task, evidence handoff
+- `baselines/CVF_W119_T1_NONCODER_ADOPTION_SCENARIO_LOCK_2026-04-23.md`
+  - scenario lock for future regression and adoption-proof extensions
 - `baselines/CVF_GC018_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_AUTHORIZATION_2026-04-23.md`
   - bounded authorization for W119
   - blocks provider parity claims, broad core reopen, raw-key persistence, external storage expansion, and mock governance proof

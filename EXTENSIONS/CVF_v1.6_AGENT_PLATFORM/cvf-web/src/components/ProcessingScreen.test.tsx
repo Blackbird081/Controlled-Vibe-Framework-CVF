@@ -79,7 +79,7 @@ describe('ProcessingScreen', () => {
     expect(typeof body.aiCommit.commitId).toBe('string');
     expect(typeof body.aiCommit.timestamp).toBe('number');
 
-    await waitFor(() => expect(onComplete).toHaveBeenCalledWith('Governed output'));
+    await waitFor(() => expect(onComplete).toHaveBeenCalledWith('Governed output', undefined));
   });
 });
 
@@ -156,7 +156,7 @@ describe('ProcessingScreen — guided response (W88-T1)', () => {
     const onComplete = vi.fn();
     render(<ProcessingScreen {...baseProps} onComplete={onComplete} />);
 
-    await waitFor(() => expect(onComplete).toHaveBeenCalledWith('Normal output'));
+    await waitFor(() => expect(onComplete).toHaveBeenCalledWith('Normal output', undefined));
 
     expect(screen.queryByTestId('guided-response-panel')).toBeNull();
   });
@@ -320,10 +320,29 @@ describe('ProcessingScreen — governance evidence visibility (W114-T1 CP5)', ()
         outputValidation: { qualityHint: 'usable', issues: [], retryAttempts: 0 },
         governanceEnvelope: { envelopeId: 'env-test-001', policySnapshotId: 'pol-test-001' },
         policySnapshotId: 'pol-test-001',
+        governanceEvidenceReceipt: {
+          receiptId: 'rcpt-env-test-001',
+          evidenceMode: 'live',
+          routeId: '/api/execute',
+          decision: 'ALLOW',
+          riskLevel: 'R1',
+          provider: 'alibaba',
+          model: 'qwen-turbo',
+          routingDecision: 'ALLOW',
+          policySnapshotId: 'pol-test-001',
+          envelopeId: 'env-test-001',
+          knowledgeSource: 'retrieval',
+          knowledgeInjected: true,
+          knowledgeCollectionId: 'w119-lumencart-project',
+          knowledgeChunkCount: 2,
+          validationHint: 'usable',
+          generatedAt: '2026-04-23T00:00:00.000Z',
+        },
       }),
     }));
 
-    render(<ProcessingScreen {...baseProps} onComplete={vi.fn()} />);
+    const onComplete = vi.fn();
+    render(<ProcessingScreen {...baseProps} onComplete={onComplete} />);
 
     await waitFor(() => {
       expect(screen.getByTestId('governance-evidence-panel')).toBeDefined();
@@ -334,9 +353,18 @@ describe('ProcessingScreen — governance evidence visibility (W114-T1 CP5)', ()
     expect(panel.textContent).toContain('ALLOW');
     expect(panel.textContent).toContain('alibaba');
     expect(panel.textContent).toContain('qwen-turbo');
-    expect(panel.textContent).toContain('inline-service');
+    expect(panel.textContent).toContain('retrieval');
+    expect(panel.textContent).toContain('rcpt-env-test-001');
+    expect(panel.textContent).toContain('w119-lumencart-project');
+    expect(panel.textContent).toContain('2');
     expect(panel.textContent).toContain('pol-test-001');
     expect(panel.textContent).toContain('env-test-001');
+
+    screen.getByTestId('view-results-btn').click();
+    expect(onComplete).toHaveBeenCalledWith('Governed output', expect.objectContaining({
+      receiptId: 'rcpt-env-test-001',
+      knowledgeCollectionId: 'w119-lumencart-project',
+    }));
   });
 
   it('uses execute-route approvalId directly when NEEDS_APPROVAL creates one', async () => {
@@ -554,7 +582,7 @@ describe('ProcessingScreen — W96-T1 completion state', () => {
     });
 
     getByTestId('view-results-btn').click();
-    expect(onComplete).toHaveBeenCalledWith('Result text');
+    expect(onComplete).toHaveBeenCalledWith('Result text', undefined);
   });
 
   it('existing success path (no riskGate) calls onComplete without showing completion-banner', async () => {
@@ -575,7 +603,7 @@ describe('ProcessingScreen — W96-T1 completion state', () => {
     );
 
     await waitFor(() => {
-      expect(onComplete).toHaveBeenCalledWith('Quick result');
+      expect(onComplete).toHaveBeenCalledWith('Quick result', undefined);
     });
 
     expect(queryByTestId('completion-banner')).toBeNull();

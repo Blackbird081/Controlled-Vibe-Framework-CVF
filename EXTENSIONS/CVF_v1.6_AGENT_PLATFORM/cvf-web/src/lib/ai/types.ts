@@ -39,6 +39,26 @@ export interface ExecutionRequest {
     knowledgeCollectionId?: string;
 }
 
+export interface GovernanceEvidenceReceipt {
+    receiptId: string;
+    evidenceMode: 'live' | 'mock' | 'static';
+    routeId: string;
+    decision?: string;
+    riskLevel?: string;
+    provider?: AIProvider | string;
+    model?: string;
+    routingDecision?: string;
+    policySnapshotId?: string;
+    envelopeId?: string;
+    knowledgeSource?: string;
+    knowledgeInjected?: boolean;
+    knowledgeCollectionId?: string | null;
+    knowledgeChunkCount?: number;
+    approvalId?: string;
+    validationHint?: string;
+    generatedAt: string;
+}
+
 export interface ExecutionResponse {
     success: boolean;
     output?: string;
@@ -55,6 +75,7 @@ export interface ExecutionResponse {
     };
     executionTime?: number;
     enforcement?: EnforcementResult;
+    governanceEvidenceReceipt?: GovernanceEvidenceReceipt;
 }
 
 export interface ProviderStatus {
@@ -63,6 +84,10 @@ export interface ProviderStatus {
     model: string;
     /** Canary certification status from the provider lane taxonomy. */
     laneStatus: LaneStatus;
+    /** Name of the env source when configured; never contains the key value. */
+    keySourceName?: string | null;
+    /** Secret-free readiness summary for non-coder setup confidence. */
+    readiness?: 'live_task_ready' | 'not_configured';
 }
 
 // Default models per provider (should match AVAILABLE_MODELS in Settings.tsx)

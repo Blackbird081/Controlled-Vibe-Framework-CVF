@@ -131,6 +131,16 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
       source: 'retrieval',
       chunkCount: 1,
     });
+    expect(data.governanceEvidenceReceipt).toMatchObject({
+      evidenceMode: 'live',
+      routeId: '/api/execute',
+      decision: 'ALLOW',
+      knowledgeSource: 'retrieval',
+      knowledgeInjected: true,
+      knowledgeChunkCount: 1,
+    });
+    expect(data.governanceEvidenceReceipt.receiptId).toContain(data.governanceEnvelope.envelopeId);
+    expect(JSON.stringify(data.governanceEvidenceReceipt)).not.toMatch(/openai-test-key|sk-/i);
   });
 
   it('audits dropped cross-tenant chunks when query matches forbidden tenant content', async () => {

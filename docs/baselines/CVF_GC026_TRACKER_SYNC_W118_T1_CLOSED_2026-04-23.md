@@ -7,8 +7,8 @@
 - Previous pointer: W117-T1 — D1.4b RAG Chunk Enforcement (CLOSED 2026-04-23)
 - New pointer: W118-T1 — Unified Persistent Knowledge Store + Minimal Audit (CLOSED 2026-04-23)
 - Last canonical closure: W118-T1
-- Current active tranche: NONE — W118-T1 CLOSED. Fresh GC-018 required for any continuation.
-- Next governed move: Fresh quality assessment + GC-018 for next candidate tranche.
+- Current active tranche: W119-T1 PLANNED by fresh GC-018 after W118 closure.
+- Next governed move: Implement W119-T1 non-coder adoption proof and evidence UX within the bounded GC-018 authorization.
 - Canonical tracker updated: 2026-04-23
 
 ---
@@ -44,7 +44,7 @@
 - `GET /api/admin/knowledge/audit` route — admin session required; returns `{ entries: KnowledgeStoreAuditEntry[] }`; audit log is in-memory per server session, does not persist across restarts
 
 **CP4 — Regression Evidence**
-- `src/app/api/admin/knowledge/w118-cp4-regression.test.ts` — 8 assertions: persistence round-trip, ephemeral exclusion, unified getCollections, downstream ingest queryability, scope filter on ephemeral, audit count (2 mutations = 2 entries), seed not counted, register_ephemeral source
+- `src/app/api/admin/knowledge/w118-cp4-regression.test.ts` — 11 assertions: persistence round-trip, real file I/O seed/write/reload checks, ephemeral exclusion, unified getCollections, downstream ingest queryability, scope filter on ephemeral, audit count (2 mutations = 2 entries), seed not counted, register_ephemeral source
 - `src/app/api/admin/knowledge/audit/route.test.ts` — 3 assertions: empty log, mutation-populated log, 403 auth guard
 - Wave 2 live regression: 4/4 pass (exec-playbook, engineering-runbooks, cross-tenant drop, global governance)
 - Release gate: `python scripts/run_cvf_release_gate_bundle.py --json` → `gate_result: PASS`, all 8 checks PASS
@@ -53,10 +53,10 @@
 
 | Suite | Before W118 | After W118 | Delta |
 |---|---|---|---|
-| Targeted knowledge suite | 54 | 65 | +11 |
+| Targeted W118 regression coverage | 0 | 14 | +14 |
 | Pre-existing failures | 3 | 3 | 0 |
 
-New test files: `src/app/api/admin/knowledge/audit/route.test.ts` (+3), `src/app/api/admin/knowledge/w118-cp4-regression.test.ts` (+8)
+W118 regression files: `src/app/api/admin/knowledge/audit/route.test.ts` (+3), `src/app/api/admin/knowledge/w118-cp4-regression.test.ts` (+11 after CP2 evidence hardening)
 
 ### Architecture Boundary (preserved)
 

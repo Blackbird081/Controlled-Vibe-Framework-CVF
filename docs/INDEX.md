@@ -165,6 +165,8 @@ Nếu cần hiểu trạng thái milestone hiện tại, chuẩn bị demo, ho�
 - `assessments/CVF_W114_T1_WORKSPACE_WEB_EVIDENCE_BRIDGE_ASSESSMENT_2026-04-23.md` — CP6 downstream workspace-to-web evidence bridge closure record
 - `assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md` — CP7 multi-sample downstream workspace proof with live-evidence bridge boundary
 - `reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md` — CP8 public evidence packet with bounded non-coder benefit claims
+- `baselines/CVF_GC018_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_AUTHORIZATION_2026-04-23.md` — GC-018 authorization for planned W119 adoption-proof tranche
+- `roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md` — planned W119 tranche for non-coder adoption journey proof and evidence UX
 
 ## Product Value Validation
 
@@ -194,6 +196,12 @@ If the current task is proving or rejecting CVF user-facing value:
 - `reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md`
   - CP8 status record
   - separates live API-backed Web governance claims from workspace/downstream artifact, doctor, test, and bridge claims
+- `roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md`
+  - planned W119 adoption-proof lane
+  - connects onboarding, project knowledge, live governed output, and evidence receipt into one bounded non-coder journey
+- `baselines/CVF_GC018_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_AUTHORIZATION_2026-04-23.md`
+  - bounded authorization for W119
+  - blocks provider parity claims, broad core reopen, raw-key persistence, external storage expansion, and mock governance proof
 - `roadmaps/CVF_PRODUCT_VALUE_VALIDATION_WAVE_ROADMAP_2026-04-11.md`
   - canonical doctrine now distinguishes `CP3A` provider-hub validation from `CP3B` controlled value testing
   - canonical unit is a governed `run lane` = one admitted `provider + model` configuration

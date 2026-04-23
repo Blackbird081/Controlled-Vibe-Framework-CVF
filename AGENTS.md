@@ -24,12 +24,15 @@ The latest closed implementation roadmap is `docs/roadmaps/CVF_W118_T1_UNIFIED_P
 
 The previous closed implementation roadmap is `docs/roadmaps/CVF_W117_T1_D1_4B_RAG_CHUNK_ENFORCEMENT_ROADMAP_2026-04-23.md`.
 
+The next planned implementation roadmap is `docs/roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md`.
+
 Treat the W113/W116/W117/W118 boundary language as binding:
 
 - Workspace bootstrap is now agent-enforcement-ready when generated artifacts and the workspace doctor pass.
 - W113 proved this in one real downstream sample project with live API-backed governance evidence.
 - W116 proved the downstream knowledge pipeline: `.md` files in `knowledge/` → ingested chunks → positive retrieval delta confirmed by unit evidence tests (16/16 pass).
 - W117 proved the writable knowledge store: `KNOWLEDGE_COLLECTIONS` constant replaced by `InProcessKnowledgeStore`; admin CRUD API and UI delivered; Wave 2 live regression 4/4 pass; D1.4b deferred note retired.
-- W118 proved unified persistent knowledge store: `_runtimeCollections` Map eliminated; `InProcessKnowledgeStore` unified with ephemeral path (`registerEphemeral()`); `FileBackedKnowledgeStore` delivers JSON-file persistence for admin-CRUD collections; `KnowledgeStoreAuditEntry` append-only audit trail delivered; `GET /api/admin/knowledge/audit` route delivered; Wave 2 live regression 4/4 pass; test delta +11 (65/65 pass in targeted suite).
+- W118 proved unified persistent knowledge store: `_runtimeCollections` Map eliminated; `InProcessKnowledgeStore` unified with ephemeral path (`registerEphemeral()`); `FileBackedKnowledgeStore` delivers JSON-file persistence for admin-CRUD collections; `KnowledgeStoreAuditEntry` append-only audit trail delivered; `GET /api/admin/knowledge/audit` route delivered; Wave 2 live regression 4/4 pass; CP2 evidence hardening added real file I/O regression coverage (11 CP4 tests + 3 audit route tests in targeted W118 coverage).
+- W119 is planned as a non-coder adoption proof and evidence UX tranche. It must not reopen broad core architecture; it must connect Web onboarding, project knowledge, governed live output, and evidence receipt into one bounded adoption journey.
 - Web is governance-inherited on the active governed AI path, not the full CVF runtime.
 - Future work must improve enforcement without overstating either claim.

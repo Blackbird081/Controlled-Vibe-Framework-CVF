@@ -1,5 +1,11 @@
 # CVF Workspace Rules
 
+> Canonical CVF reference.
+>
+> This file is the source of truth for CVF workspace topology and bootstrap behavior. A workspace root may also contain `WORKSPACE_RULES.md`; that file is a local copy/adaptation for the specific machine and may include local project names or local paths.
+>
+> Keep the shared rules aligned, but do not require the local workspace copy to be byte-for-byte identical.
+
 This document defines the canonical workspace topology for CVF-managed local work.
 
 ## Purpose

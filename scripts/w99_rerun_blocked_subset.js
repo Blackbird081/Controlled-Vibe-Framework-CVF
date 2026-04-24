@@ -6,6 +6,8 @@
  * Purpose: confirm E2E VALUE PROVEN after OFU-1 OPERATOR matrix fix.
  */
 
+const { buildServiceTokenHeaders } = require('./service-token-signature.cjs');
+
 const BASE_URL = 'http://localhost:3000';
 const SERVICE_TOKEN = 'pvv-pilot-2026';
 
@@ -145,13 +147,14 @@ async function runScenario(scenario) {
   };
 
   try {
+    const serviceAuth = buildServiceTokenHeaders(SERVICE_TOKEN, payload);
     const res = await fetch(`${BASE_URL}/api/execute`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-cvf-service-token': SERVICE_TOKEN,
+        ...serviceAuth.headers,
       },
-      body: JSON.stringify(payload),
+      body: serviceAuth.body,
     });
 
     const body = await res.json();

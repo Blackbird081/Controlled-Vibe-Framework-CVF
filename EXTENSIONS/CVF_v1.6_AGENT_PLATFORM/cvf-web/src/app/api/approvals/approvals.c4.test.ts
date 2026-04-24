@@ -5,9 +5,14 @@ import path from 'node:path';
 import { mkdtemp } from 'node:fs/promises';
 
 const appendAuditEventMock = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
+const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/control-plane-events', () => ({
     appendAuditEvent: appendAuditEventMock,
+}));
+
+vi.mock('@/lib/middleware-auth', () => ({
+    verifySessionCookie: verifySessionCookieMock,
 }));
 
 import { GET, POST } from './route';
@@ -21,6 +26,15 @@ describe('C4.2 — Lazy expiry on GET /api/approvals', () => {
         process.env.CVF_CONTROL_PLANE_EVENTS_PATH = path.join(tempDir, 'events.json');
         getApprovalStore().clear();
         appendAuditEventMock.mockClear();
+        verifySessionCookieMock.mockReset();
+        verifySessionCookieMock.mockResolvedValue({
+            userId: 'user-1',
+            user: 'Test User',
+            role: 'admin',
+            orgId: 'org-1',
+            teamId: 'team-1',
+            expiresAt: Date.now() + 60_000,
+        });
     });
 
     it('does not expire a pending request whose expiresAt is in the future', async () => {
@@ -34,6 +48,19 @@ describe('C4.2 — Lazy expiry on GET /api/approvals', () => {
             expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
             status: 'pending',
             submittedAt: new Date().toISOString(),
+            submittedByActorId: 'user-1',
+            submittedByOrgId: 'org-1',
+            submittedByTeamId: 'team-1',
+            submittedByAuthMode: 'session',
+            requestSnapshot: {
+                templateId: 'tpl-a',
+                templateName: 'Template A',
+                intent: 'build something',
+                actorId: 'user-1',
+                actorOrgId: 'org-1',
+                actorTeamId: 'team-1',
+                actorAuthMode: 'session',
+            },
         });
 
         const res = await GET();
@@ -55,6 +82,19 @@ describe('C4.2 — Lazy expiry on GET /api/approvals', () => {
             expiresAt: new Date(Date.now() - 60 * 1000).toISOString(),
             status: 'pending',
             submittedAt: new Date(Date.now() - 90000).toISOString(),
+            submittedByActorId: 'user-1',
+            submittedByOrgId: 'org-1',
+            submittedByTeamId: 'team-1',
+            submittedByAuthMode: 'session',
+            requestSnapshot: {
+                templateId: 'tpl-b',
+                templateName: 'Template B',
+                intent: 'deploy',
+                actorId: 'user-1',
+                actorOrgId: 'org-1',
+                actorTeamId: 'team-1',
+                actorAuthMode: 'session',
+            },
         });
 
         const res = await GET();
@@ -75,6 +115,19 @@ describe('C4.2 — Lazy expiry on GET /api/approvals', () => {
             expiresAt: new Date(Date.now() - 5000).toISOString(),
             status: 'pending',
             submittedAt: new Date(Date.now() - 90000).toISOString(),
+            submittedByActorId: 'user-1',
+            submittedByOrgId: 'org-1',
+            submittedByTeamId: 'team-1',
+            submittedByAuthMode: 'session',
+            requestSnapshot: {
+                templateId: 'tpl-c',
+                templateName: 'Template C',
+                intent: 'run migrations',
+                actorId: 'user-1',
+                actorOrgId: 'org-1',
+                actorTeamId: 'team-1',
+                actorAuthMode: 'session',
+            },
         });
         store.set('apr-4', {
             id: 'apr-4',
@@ -85,6 +138,19 @@ describe('C4.2 — Lazy expiry on GET /api/approvals', () => {
             expiresAt: new Date(Date.now() - 1000).toISOString(),
             status: 'pending',
             submittedAt: new Date(Date.now() - 90000).toISOString(),
+            submittedByActorId: 'user-1',
+            submittedByOrgId: 'org-1',
+            submittedByTeamId: 'team-1',
+            submittedByAuthMode: 'session',
+            requestSnapshot: {
+                templateId: 'tpl-d',
+                templateName: 'Template D',
+                intent: 'export data',
+                actorId: 'user-1',
+                actorOrgId: 'org-1',
+                actorTeamId: 'team-1',
+                actorAuthMode: 'session',
+            },
         });
 
         await GET();
@@ -106,6 +172,19 @@ describe('C4.2 — Lazy expiry on GET /api/approvals', () => {
             expiresAt: new Date(Date.now() - 5000).toISOString(),
             status: 'expired',
             submittedAt: new Date(Date.now() - 90000).toISOString(),
+            submittedByActorId: 'user-1',
+            submittedByOrgId: 'org-1',
+            submittedByTeamId: 'team-1',
+            submittedByAuthMode: 'session',
+            requestSnapshot: {
+                templateId: 'tpl-e',
+                templateName: 'Template E',
+                intent: 'review',
+                actorId: 'user-1',
+                actorOrgId: 'org-1',
+                actorTeamId: 'team-1',
+                actorAuthMode: 'session',
+            },
         });
 
         await GET();
@@ -158,5 +237,75 @@ describe('C4.2 — Lazy expiry on GET /api/approvals', () => {
         expect(record?.toolPayload).toEqual({ server: 'prod-01', version: '1.2.3' });
         expect(record?.riskLevel).toBe('R3');
         expect(record?.phase).toBe('BUILD');
+        expect(record?.requestHash).toBeTruthy();
+        expect(record?.submittedByActorId).toBe('user-1');
+        expect(record?.requestSnapshot?.actorId).toBe('user-1');
+        expect(record?.requestSnapshot?.actorOrgId).toBe('org-1');
+        expect(record?.requestSnapshot?.actorTeamId).toBe('team-1');
+    });
+
+    it('GET scopes regular users to their own approvals', async () => {
+        const store = getApprovalStore();
+        store.set('apr-own', {
+            id: 'apr-own',
+            templateId: 'tpl-own',
+            templateName: 'Own Template',
+            intent: 'own',
+            reason: 'own reason',
+            expiresAt: new Date(Date.now() + 60_000).toISOString(),
+            status: 'pending',
+            submittedAt: new Date().toISOString(),
+            submittedByActorId: 'user-1',
+            submittedByOrgId: 'org-1',
+            submittedByTeamId: 'team-1',
+            submittedByAuthMode: 'session',
+            requestSnapshot: {
+                templateId: 'tpl-own',
+                templateName: 'Own Template',
+                intent: 'own',
+                actorId: 'user-1',
+                actorOrgId: 'org-1',
+                actorTeamId: 'team-1',
+                actorAuthMode: 'session',
+            },
+        });
+        store.set('apr-other', {
+            id: 'apr-other',
+            templateId: 'tpl-other',
+            templateName: 'Other Template',
+            intent: 'other',
+            reason: 'other reason',
+            expiresAt: new Date(Date.now() + 60_000).toISOString(),
+            status: 'pending',
+            submittedAt: new Date().toISOString(),
+            submittedByActorId: 'user-2',
+            submittedByOrgId: 'org-1',
+            submittedByTeamId: 'team-1',
+            submittedByAuthMode: 'session',
+            requestSnapshot: {
+                templateId: 'tpl-other',
+                templateName: 'Other Template',
+                intent: 'other',
+                actorId: 'user-2',
+                actorOrgId: 'org-1',
+                actorTeamId: 'team-1',
+                actorAuthMode: 'session',
+            },
+        });
+
+        verifySessionCookieMock.mockResolvedValue({
+            userId: 'user-1',
+            user: 'Regular User',
+            role: 'developer',
+            orgId: 'org-1',
+            teamId: 'team-1',
+            expiresAt: Date.now() + 60_000,
+        });
+
+        const res = await GET();
+        const body = await res.json() as { success: boolean; data: Array<{ id: string }> };
+
+        expect(body.success).toBe(true);
+        expect(body.data.map(record => record.id)).toEqual(['apr-own']);
     });
 });

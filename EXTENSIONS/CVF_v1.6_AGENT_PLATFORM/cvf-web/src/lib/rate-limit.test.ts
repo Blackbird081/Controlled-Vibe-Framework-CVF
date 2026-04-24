@@ -53,6 +53,15 @@ describe('rate-limit', () => {
         expect(res.allowed).toBe(false);
     });
 
+    it('isolates distinct service caller identities', () => {
+        process.env.CVF_RATE_LIMIT = '1';
+        const limiter = getRateLimiter();
+        const req = makeRequest('10.0.0.30');
+
+        expect(limiter.consume(req, 'service:alpha').allowed).toBe(true);
+        expect(limiter.consume(req, 'service:beta').allowed).toBe(true);
+    });
+
     it('enforces provider quota separately', () => {
         process.env.CVF_RATE_LIMIT = '100';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '2';

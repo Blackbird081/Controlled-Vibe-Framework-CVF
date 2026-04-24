@@ -47,6 +47,18 @@ export interface GovernanceEvidenceState {
     approvalId?: string;
 }
 
+function mapSettingsProviderToExecutionProvider(provider?: string): ExecutionRequest['provider'] | undefined {
+    if (!provider) {
+        return undefined;
+    }
+
+    if (provider === 'anthropic') {
+        return 'claude';
+    }
+
+    return provider as ExecutionRequest['provider'];
+}
+
 export function ProcessingScreen({
     templateName,
     templateId,
@@ -75,6 +87,10 @@ export function ProcessingScreen({
     const [evidenceReceipt, setEvidenceReceipt] = useState<GovernanceEvidenceReceipt | undefined>(undefined);
     // W96-T1: Completion state — set when success+riskLevel; suppresses 300ms path
     const [completedOutput, setCompletedOutput] = useState<string | null>(null);
+    const executionProvider = mapSettingsProviderToExecutionProvider(settings.preferences?.defaultProvider);
+    const selectedModel = settings.preferences?.defaultProvider
+        ? settings.providers?.[settings.preferences.defaultProvider]?.selectedModel
+        : undefined;
 
     // Real API execution
     const executeReal = useCallback(async () => {
@@ -100,6 +116,8 @@ export function ProcessingScreen({
                     inputs,
                     intent,
                     mode,
+                    ...(executionProvider ? { provider: executionProvider } : {}),
+                    ...(selectedModel ? { model: selectedModel } : {}),
                     ...executionOverrides,
                     aiCommit,
                 }),
@@ -196,7 +214,7 @@ export function ProcessingScreen({
             setError(err instanceof Error ? err.message : 'Network error');
             return false;
         }
-    }, [templateId, templateName, inputs, intent, onComplete, settings.preferences.defaultExportMode, isVi, executionOverrides]);
+    }, [templateId, templateName, inputs, intent, onComplete, settings.preferences.defaultExportMode, isVi, executionOverrides, executionProvider, selectedModel]);
 
     // W92-T1: Submit approval request
     const submitApprovalRequest = useCallback(async () => {
@@ -209,7 +227,12 @@ export function ProcessingScreen({
                 body: JSON.stringify({
                     templateId: templateId || templateName,
                     templateName,
+                    inputs,
                     intent,
+                    ...(executionOverrides?.cvfPhase ? { cvfPhase: executionOverrides.cvfPhase } : {}),
+                    ...(executionOverrides?.cvfRiskLevel ? { cvfRiskLevel: executionOverrides.cvfRiskLevel } : {}),
+                    ...(executionProvider ? { provider: executionProvider } : {}),
+                    ...(selectedModel ? { model: selectedModel } : {}),
                     reason: error || '',
                 }),
             });
@@ -220,7 +243,7 @@ export function ProcessingScreen({
         } finally {
             setApprovalSubmitting(false);
         }
-    }, [templateId, templateName, intent, error]);
+    }, [templateId, templateName, inputs, intent, error, executionOverrides?.cvfPhase, executionOverrides?.cvfRiskLevel, executionProvider, selectedModel]);
 
     const runMockExecution = useCallback(() => {
         const statuses = isVi

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { requireAdminApiSession, withAdminAuditPayload } from '@/lib/admin-session';
+import { resolveAdminResourceScope } from '@/lib/admin-resource-scope';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { MOCK_TEAMS } from '@/lib/mock-enterprise-db';
 import { appendQuotaPolicyEvent } from '@/lib/policy-events';
@@ -28,6 +29,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'Unknown teamId.' }, { status: 400 });
   }
 
+  const scopeResult = resolveAdminResourceScope(session, { orgId: team.orgId, teamId });
+  if (!scopeResult.ok) {
+    return NextResponse.json({ success: false, error: scopeResult.error }, { status: scopeResult.status });
+  }
+
   if (!['daily', 'weekly', 'monthly'].includes(period)) {
     return NextResponse.json({ success: false, error: 'Invalid quota period.' }, { status: 400 });
   }
@@ -42,7 +48,7 @@ export async function POST(request: NextRequest) {
   const now = new Date().toISOString();
   const record = await appendQuotaPolicyEvent({
     teamId,
-    orgId: team.orgId,
+    orgId: scopeResult.scope.orgId,
     softCapUSD,
     hardCapUSD,
     period,
@@ -62,6 +68,7 @@ export async function POST(request: NextRequest) {
     phase: 'PHASE C',
     outcome: 'SUCCESS',
     payload: withAdminAuditPayload(session, {
+      orgId: scopeResult.scope.orgId,
       teamName: team.name,
       softCapUSD,
       hardCapUSD,

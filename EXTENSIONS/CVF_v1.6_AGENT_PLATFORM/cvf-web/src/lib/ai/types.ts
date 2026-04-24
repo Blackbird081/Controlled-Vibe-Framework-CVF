@@ -37,6 +37,8 @@ export interface ExecutionRequest {
     knowledgeContext?: string;
     /** W116-T1 — downstream project collection id to target during knowledge retrieval */
     knowledgeCollectionId?: string;
+    /** Approval request id returned by NEEDS_APPROVAL flow */
+    approvalId?: string;
 }
 
 export interface GovernanceEvidenceReceipt {

@@ -53,6 +53,7 @@ import { POST } from './route';
 
 describe('/api/execute — retrieval partitioning enforcement', () => {
   const originalEnv = { ...process.env };
+  const validOutput = '## Scoped Knowledge Result\n\nThis structured response uses retrieved project knowledge and includes enough detail to satisfy output validation.\n\n1. Summarize the relevant tenant context.\n2. Keep the recommendation constrained to allowed data.\n3. Return a safe next-step plan.';
   let tempDir = '';
 
   beforeEach(async () => {
@@ -84,7 +85,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     });
     executeAIMock.mockResolvedValue({
       success: true,
-      output: 'response with scoped context',
+      output: validOutput,
       provider: 'openai',
       model: 'gpt-4o',
     });
@@ -181,7 +182,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     expect(options.systemPrompt as string).not.toContain('INLINE-BYPASS SHOULD NOT APPEAR');
   });
 
-  it('allows legacy inline knowledgeContext only for service-token callers without session', async () => {
+  it('blocks inline knowledgeContext for service-token callers to preserve scoped retrieval', async () => {
     process.env.CVF_SERVICE_TOKEN = 'svc';
     verifySessionCookieMock.mockResolvedValueOnce(null);
 
@@ -199,11 +200,10 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
 
     const res = await POST(req as never);
     const data = await res.json();
-    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
 
-    expect(res.status).toBe(200);
-    expect(options.systemPrompt as string).toContain('SERVICE-ONLY INLINE CONTEXT');
-    expect(data.knowledgeInjection.source).toBe('inline-service');
+    expect(res.status).toBe(400);
+    expect(data.error).toMatch(/Inline knowledgeContext is no longer accepted/i);
+    expect(executeAIMock).not.toHaveBeenCalled();
   });
 
   it('applies admin scope overrides to collection retrieval', async () => {

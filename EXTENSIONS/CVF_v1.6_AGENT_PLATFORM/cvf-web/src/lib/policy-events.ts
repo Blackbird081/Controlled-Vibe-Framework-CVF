@@ -47,6 +47,8 @@ export interface QuotaOverrideEvent extends PolicyEventBase {
 export interface ToolPolicyEvent extends PolicyEventBase {
   kind: 'tool-policy';
   toolId: string;
+  orgId: string;
+  teamId: string | null;
   allowedRoles: TeamRole[];
   setBy: string;
   setAt: string;
@@ -61,6 +63,8 @@ export interface DLPPatternRecord {
 
 export interface DLPPolicyEvent extends PolicyEventBase {
   kind: 'dlp-policy';
+  orgId: string;
+  teamId: string | null;
   patterns: DLPPatternRecord[];
   setBy: string;
   setAt: string;

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import type { TeamRole } from 'cvf-guard-contract/enterprise';
 
 import { requireAdminApiSession, withAdminAuditPayload } from '@/lib/admin-session';
+import { resolveAdminResourceScope } from '@/lib/admin-resource-scope';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { appendToolPolicyEvent } from '@/lib/policy-events';
 
@@ -15,6 +16,8 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json() as {
     toolId?: string;
+    orgId?: string | null;
+    teamId?: string | null;
     allowedRoles?: string[];
   };
 
@@ -35,10 +38,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'Owner role cannot be removed from a tool.' }, { status: 400 });
   }
 
+  const scopeResult = resolveAdminResourceScope(session, { orgId: body.orgId, teamId: body.teamId });
+  if (!scopeResult.ok) {
+    return NextResponse.json({ success: false, error: scopeResult.error }, { status: scopeResult.status });
+  }
+
   const timestamp = new Date().toISOString();
   const policy = await appendToolPolicyEvent({
     timestamp,
     toolId,
+    orgId: scopeResult.scope.orgId,
+    teamId: scopeResult.scope.teamId,
     allowedRoles,
     setBy: session.userId,
     setAt: timestamp,
@@ -53,7 +63,11 @@ export async function POST(request: NextRequest) {
     riskLevel: 'R1',
     phase: 'PHASE C',
     outcome: 'SUCCESS',
-    payload: withAdminAuditPayload(session, { allowedRoles }),
+    payload: withAdminAuditPayload(session, {
+      orgId: scopeResult.scope.orgId,
+      teamId: scopeResult.scope.teamId,
+      allowedRoles,
+    }),
   });
 
   return NextResponse.json({ success: true, data: policy }, { status: 201 });

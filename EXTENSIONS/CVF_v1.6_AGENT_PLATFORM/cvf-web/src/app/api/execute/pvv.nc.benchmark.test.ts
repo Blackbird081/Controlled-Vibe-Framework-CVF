@@ -30,6 +30,7 @@
  * thresholds after any run is seen.
  */
 import { describe, it, expect, afterAll } from 'vitest';
+import { createHmac } from 'node:crypto';
 import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
 
 const ALIBABA_KEY = resolveAlibabaApiKey() ?? '';
@@ -227,13 +228,20 @@ async function callGoverned(task: typeof NC_TASKS[0]): Promise<{
         model: MODEL,
         cvfRiskLevel: task.taskClass === 'HIGH_RISK' ? 'R2' : 'R0',
     };
+    const bodyText = JSON.stringify(body);
+    const timestamp = String(Date.now());
+    const signature = createHmac('sha256', SERVICE_TOKEN)
+        .update(`${timestamp}.${bodyText}`)
+        .digest('hex');
     const response = await fetch(EXECUTE_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'x-cvf-service-token': SERVICE_TOKEN,
+            'x-cvf-service-timestamp': timestamp,
+            'x-cvf-service-signature': signature,
         },
-        body: JSON.stringify(body),
+        body: bodyText,
     });
     const durationMs = Date.now() - start;
     const data = await response.json() as {

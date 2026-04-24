@@ -20,7 +20,7 @@ Output:
   docs/baselines/pvv_cp3b_batch_progress.txt
 """
 
-import sys, os, re, json, time, urllib.request, urllib.error, random
+import sys, os, re, json, time, urllib.request, urllib.error, random, hashlib, hmac
 sys.stdout.reconfigure(encoding='utf-8')
 sys.stderr.reconfigure(encoding='utf-8')
 
@@ -101,17 +101,26 @@ def detect_catastrophic_miss(task, output):
 # ── Governed caller — /api/execute ────────────────────────────────────────────
 def call_governed(lane, task_prompt, task_title, timeout=120):
     """Call /api/execute with CVF governance wrapping."""
-    body = json.dumps({
+    body_text = json.dumps({
         'templateName': f'CVF PVV CP3B — {task_title}',
         'intent': 'analyze governance scenario',
         'provider': 'alibaba',
         'model': lane['model'],
         'inputs': {'task': task_prompt},
-    }).encode('utf-8')
+    })
+    timestamp = str(int(time.time() * 1000))
+    signature = hmac.new(
+        CVF_SERVICE_TOKEN.encode('utf-8'),
+        f'{timestamp}.{body_text}'.encode('utf-8'),
+        hashlib.sha256,
+    ).hexdigest()
+    body = body_text.encode('utf-8')
 
     req = urllib.request.Request(EXECUTE_URL, data=body, headers={
         'Content-Type': 'application/json',
         'x-cvf-service-token': CVF_SERVICE_TOKEN,
+        'x-cvf-service-timestamp': timestamp,
+        'x-cvf-service-signature': signature,
     })
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         http_status = resp.status

@@ -69,6 +69,30 @@ describe('/api/admin/quota/policy', () => {
     expect(response.status).toBe(400);
   });
 
+  it('rejects quota policy changes outside the admin org scope', async () => {
+    requireAdminApiSessionMock.mockResolvedValueOnce({
+      userId: 'usr_external_admin',
+      user: 'external-admin',
+      role: 'admin',
+      orgId: 'org_other',
+      teamId: 'team_external',
+      expiresAt: Date.now() + 60_000,
+    });
+
+    const response = await POST(new Request('http://localhost/api/admin/quota/policy', {
+      method: 'POST',
+      body: JSON.stringify({
+        teamId: 'team_eng',
+        softCapUSD: 25,
+        hardCapUSD: 100,
+        period: 'monthly',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    }) as never);
+
+    expect(response.status).toBe(403);
+  });
+
   it('appends a policy event for an admin session', async () => {
     requireAdminApiSessionMock.mockResolvedValueOnce({
       userId: 'usr_2',
@@ -94,6 +118,7 @@ describe('/api/admin/quota/policy', () => {
     expect(response.status).toBe(201);
     expect(body.success).toBe(true);
     expect(body.data.kind).toBe('quota-policy');
+    expect(body.data.orgId).toBe('org_cvf');
     expect(body.data.teamId).toBe('team_eng');
   });
 });

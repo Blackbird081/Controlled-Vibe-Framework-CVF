@@ -276,6 +276,10 @@ describe('enforcement — dual-mode', () => {
             const result = await evaluateEnforcementAsync(baseInput);
             expect(result.source).toBe('client');
             expect(result.status).toBe('ALLOW');
+            expect(result.degraded).toMatchObject({
+                reason: 'invalid_server_response',
+            });
+            expect(result.reasons.join(' ')).toContain('fell back to local enforcement');
         });
 
         it('falls back to client-side on network error', async () => {
@@ -286,6 +290,10 @@ describe('enforcement — dual-mode', () => {
             const result = await evaluateEnforcementAsync(baseInput);
             expect(result.source).toBe('client');
             expect(result.status).toBe('ALLOW');
+            expect(result.degraded).toMatchObject({
+                reason: 'engine_error',
+            });
+            expect(result.reasons.join(' ')).toContain('fell back to local enforcement');
         });
 
         it('passes through requestId and artifactId', async () => {

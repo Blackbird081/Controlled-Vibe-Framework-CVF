@@ -4,7 +4,8 @@ import { appendAuditEvent } from '@/lib/control-plane-events';
 import { canAccessAdmin } from '@/lib/enterprise-access';
 import { verifySessionCookie } from '@/lib/middleware-auth';
 
-import { getApprovalStore } from '../store';
+import { approvalRecordMatchesActor, approvalRecordMatchesScope, buildApprovalActorBinding } from '../approval-binding';
+import { getApprovalStore, type ApprovalRequestRecord } from '../store';
 
 /**
  * GET /api/approvals/[id]
@@ -14,11 +15,22 @@ export async function GET(
     _request: NextRequest,
     { params }: { params: Promise<{ id: string }> },
 ) {
+    const session = await verifySessionCookie(_request);
+    if (!session) {
+        return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const approvalActor = buildApprovalActorBinding({ session });
     const { id } = await params;
     const store = getApprovalStore();
     const record = store.get(id);
 
-    if (!record) {
+    const canReadRecord = record && (
+        approvalRecordMatchesActor(record, approvalActor)
+        || (canAccessAdmin(session.role) && approvalRecordMatchesScope(record, approvalActor))
+    );
+
+    if (!record || !canReadRecord) {
         return NextResponse.json(
             { success: false, error: 'Approval request not found.' },
             { status: 404 },
@@ -54,8 +66,9 @@ export async function PATCH(
     const { id } = await params;
     const store = getApprovalStore();
     const record = store.get(id);
+    const approvalActor = buildApprovalActorBinding({ session });
 
-    if (!record) {
+    if (!record || !approvalRecordMatchesScope(record, approvalActor)) {
         return NextResponse.json({ success: false, error: 'Approval request not found.' }, { status: 404 });
     }
 
@@ -67,34 +80,40 @@ export async function PATCH(
     }
 
     const body = await request.json();
-    const action = body.action as string;
-    if (action !== 'approved' && action !== 'rejected') {
+    const requestedAction = String(body.action);
+    if (requestedAction !== 'approved' && requestedAction !== 'rejected') {
         return NextResponse.json(
             { success: false, error: 'action must be "approved" or "rejected"' },
             { status: 400 },
         );
     }
 
+    const action = requestedAction;
     const now = new Date().toISOString();
-    record.status = action;
-    record.reviewedAt = now;
-    record.reviewedBy = session.userId ?? session.user ?? 'admin';
-    record.reviewComment = body.reviewComment ? String(body.reviewComment) : undefined;
+    const reviewerId = session.userId ?? session.user ?? 'admin';
+    const updatedRecord: ApprovalRequestRecord = {
+        ...record,
+        status: action,
+        reviewedAt: now,
+        reviewedBy: reviewerId,
+        reviewComment: body.reviewComment ? String(body.reviewComment) : undefined,
+    };
+    store.set(id, updatedRecord);
 
     await appendAuditEvent({
         eventType: 'APPROVAL_DECIDED',
-        actorId: record.reviewedBy,
+        actorId: reviewerId,
         actorRole: session.role,
-        targetResource: record.templateName,
+        targetResource: updatedRecord.templateName,
         action: action.toUpperCase(),
-        riskLevel: record.riskLevel ?? 'R1',
+        riskLevel: updatedRecord.riskLevel ?? 'R1',
         outcome: action.toUpperCase(),
         payload: {
-            approvalId: record.id,
-            templateId: record.templateId,
-            reviewComment: record.reviewComment ?? null,
+            approvalId: updatedRecord.id,
+            templateId: updatedRecord.templateId,
+            reviewComment: updatedRecord.reviewComment ?? null,
         },
     });
 
-    return NextResponse.json({ success: true, data: record });
+    return NextResponse.json({ success: true, data: updatedRecord });
 }

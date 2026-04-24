@@ -76,6 +76,11 @@ export interface EnforcementResult {
     governanceStateSnapshot: UnifiedGovernanceState;
     /** Whether server-side evaluation was used */
     source: 'client' | 'server';
+    /** Present when the governance engine was enabled but evaluation degraded to local fallback */
+    degraded?: {
+        reason: 'invalid_server_response' | 'engine_error';
+        message: string;
+    };
 }
 
 const SKILL_PREFLIGHT_MISSING_REASON = 'Skill Preflight declaration is required before Build/Execute actions.';
@@ -276,8 +281,15 @@ export async function evaluateEnforcementAsync(
         const serverResult = routeResult?.result ?? await governanceEvaluate(requestPayload);
 
         if (!serverResult || !serverResult.report) {
-            // Server unreachable or invalid response — fallback
-            return evaluateEnforcement(input);
+            const fallback = evaluateEnforcement(input);
+            return {
+                ...fallback,
+                reasons: [...fallback.reasons, 'Governance engine returned no usable report; fell back to local enforcement.'],
+                degraded: {
+                    reason: 'invalid_server_response',
+                    message: 'Governance engine returned no usable report; local enforcement fallback was used.',
+                },
+            };
         }
 
         const mapped = mapServerStatus(serverResult.report);
@@ -306,7 +318,14 @@ export async function evaluateEnforcementAsync(
             source: 'server',
         };
     } catch {
-        // Network error, timeout, etc. — fallback to client-side
-        return evaluateEnforcement(input);
+        const fallback = evaluateEnforcement(input);
+        return {
+            ...fallback,
+            reasons: [...fallback.reasons, 'Governance engine request failed; fell back to local enforcement.'],
+            degraded: {
+                reason: 'engine_error',
+                message: 'Governance engine request failed; local enforcement fallback was used.',
+            },
+        };
     }
 }

@@ -8,6 +8,7 @@ const path = require('path');
 const { spawn, execSync } = require('child_process');
 
 require('./load-repo-env.cjs').loadRepoEnv();
+const { buildServiceTokenHeaders } = require('./service-token-signature.cjs');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const CVF_WEB = path.join(REPO_ROOT, 'EXTENSIONS', 'CVF_v1.6_AGENT_PLATFORM', 'cvf-web');
@@ -178,10 +179,17 @@ async function waitForServer(timeoutMs = 90_000) {
 }
 
 async function postJson(url, payload, headers = {}) {
+  const serviceAuth = headers['x-cvf-service-token']
+    ? buildServiceTokenHeaders(headers['x-cvf-service-token'], payload)
+    : null;
   const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...headers },
-    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers,
+      ...(serviceAuth ? serviceAuth.headers : {}),
+    },
+    body: serviceAuth ? serviceAuth.body : JSON.stringify(payload),
   });
   const data = await res.json().catch(() => ({ error: 'Non-JSON response' }));
   return { status: res.status, data };

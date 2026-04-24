@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { requireAdminApiSession, withAdminAuditPayload } from '@/lib/admin-session';
+import { resolveAdminResourceScope } from '@/lib/admin-resource-scope';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { appendDLPPolicyEvent } from '@/lib/policy-events';
 import { getActiveDLPPolicy } from '@/lib/policy-reader';
 
 type DLPPolicyPayload = {
+  orgId?: string | null;
+  teamId?: string | null;
   patterns?: Array<{
     id?: string;
     label?: string;
@@ -61,9 +64,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'Invalid DLP policy payload.' }, { status: 400 });
   }
 
+  const scopeResult = resolveAdminResourceScope(session, { orgId: body?.orgId, teamId: body?.teamId });
+  if (!scopeResult.ok) {
+    return NextResponse.json({ success: false, error: scopeResult.error }, { status: scopeResult.status });
+  }
+
   const now = new Date().toISOString();
   const record = await appendDLPPolicyEvent({
     timestamp: now,
+    orgId: scopeResult.scope.orgId,
+    teamId: scopeResult.scope.teamId,
     patterns,
     setBy: session.userId,
     setAt: now,
@@ -80,6 +90,8 @@ export async function POST(request: NextRequest) {
     phase: 'PHASE D',
     outcome: 'SUCCESS',
     payload: withAdminAuditPayload(session, {
+      orgId: scopeResult.scope.orgId,
+      teamId: scopeResult.scope.teamId,
       patternCount: patterns.length,
       enabledPatternCount: patterns.filter(pattern => pattern.enabled).length,
     }),

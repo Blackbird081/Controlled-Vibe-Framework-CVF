@@ -67,6 +67,29 @@ describe('/api/admin/tool-registry/policy', () => {
     expect(response.status).toBe(400);
   });
 
+  it('rejects tool policy changes outside the admin org scope', async () => {
+    requireAdminApiSessionMock.mockResolvedValueOnce({
+      userId: 'usr_external_admin',
+      user: 'external-admin',
+      role: 'admin',
+      orgId: 'org_other',
+      teamId: 'team_external',
+      expiresAt: Date.now() + 60_000,
+    });
+
+    const response = await POST(new Request('http://localhost/api/admin/tool-registry/policy', {
+      method: 'POST',
+      body: JSON.stringify({
+        toolId: 'web_search',
+        orgId: 'org_cvf',
+        allowedRoles: ['owner', 'admin', 'reviewer'],
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    }) as never);
+
+    expect(response.status).toBe(403);
+  });
+
   it('appends a tool policy event for an admin session', async () => {
     requireAdminApiSessionMock.mockResolvedValueOnce({
       userId: 'usr_2',
@@ -90,6 +113,8 @@ describe('/api/admin/tool-registry/policy', () => {
     expect(response.status).toBe(201);
     expect(body.success).toBe(true);
     expect(body.data.kind).toBe('tool-policy');
+    expect(body.data.orgId).toBe('org_cvf');
+    expect(body.data.teamId).toBeNull();
     expect(body.data.allowedRoles).toEqual(['owner', 'admin', 'reviewer']);
   });
 });

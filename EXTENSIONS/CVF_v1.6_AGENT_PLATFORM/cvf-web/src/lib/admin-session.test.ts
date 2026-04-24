@@ -31,11 +31,15 @@ import { requireAdminApiSession } from './admin-session';
 
 describe('admin-session', () => {
   const originalToken = process.env.CVF_BREAK_GLASS_TOKEN;
+  const originalIssuedAt = process.env.CVF_BREAK_GLASS_TOKEN_ISSUED_AT;
+  const originalMaxAge = process.env.CVF_BREAK_GLASS_MAX_AGE_DAYS;
 
   beforeEach(() => {
     appendAuditEventMock.mockReset();
     verifySessionCookieMock.mockReset();
     delete process.env.CVF_BREAK_GLASS_TOKEN;
+    delete process.env.CVF_BREAK_GLASS_TOKEN_ISSUED_AT;
+    delete process.env.CVF_BREAK_GLASS_MAX_AGE_DAYS;
   });
 
   afterEach(() => {
@@ -44,10 +48,23 @@ describe('admin-session', () => {
     } else {
       delete process.env.CVF_BREAK_GLASS_TOKEN;
     }
+
+    if (originalIssuedAt) {
+      process.env.CVF_BREAK_GLASS_TOKEN_ISSUED_AT = originalIssuedAt;
+    } else {
+      delete process.env.CVF_BREAK_GLASS_TOKEN_ISSUED_AT;
+    }
+
+    if (originalMaxAge) {
+      process.env.CVF_BREAK_GLASS_MAX_AGE_DAYS = originalMaxAge;
+    } else {
+      delete process.env.CVF_BREAK_GLASS_MAX_AGE_DAYS;
+    }
   });
 
   it('grants break-glass access and emits an audit event', async () => {
     process.env.CVF_BREAK_GLASS_TOKEN = 'emergency-token';
+    process.env.CVF_BREAK_GLASS_TOKEN_ISSUED_AT = String(Date.now());
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
     const result = await requireAdminApiSession(new Request('http://localhost/api/admin/finops', {
@@ -67,6 +84,31 @@ describe('admin-session', () => {
       riskLevel: 'R3',
     }));
     expect(consoleErrorSpy).toHaveBeenCalledWith('[CVF BREAK GLASS USED] Rotate CVF_BREAK_GLASS_TOKEN immediately.');
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('rejects expired break-glass tokens', async () => {
+    process.env.CVF_BREAK_GLASS_TOKEN = 'expired-token';
+    process.env.CVF_BREAK_GLASS_TOKEN_ISSUED_AT = new Date('2026-01-01T00:00:00.000Z').toISOString();
+    process.env.CVF_BREAK_GLASS_MAX_AGE_DAYS = '1';
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    verifySessionCookieMock.mockResolvedValue(null);
+
+    const result = await requireAdminApiSession(new Request('http://localhost/api/admin/finops', {
+      headers: {
+        'x-cvf-break-glass': 'expired-token',
+      },
+    }) as never, '/api/admin/finops');
+
+    expect(result).toBeInstanceOf(Response);
+    expect((result as Response).status).toBe(401);
+    expect(appendAuditEventMock).toHaveBeenCalledWith(expect.objectContaining({
+      eventType: 'BREAK_GLASS_DENIED',
+      outcome: 'DENIED',
+    }));
+    expect(consoleErrorSpy).toHaveBeenCalledWith('[CVF BREAK GLASS DENIED] Break-glass token has expired and must be rotated.');
 
     consoleErrorSpy.mockRestore();
   });

@@ -17,11 +17,13 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
-    withSessionAuditPayload: (session: { impersonation?: { realActorId: string; sessionId: string } } | null | undefined, payload?: Record<string, unknown>) => {
+    withSessionAuditPayload: (session: { impersonation?: { realActorId: string; sessionId: string; impersonatedUserId: string } } | null | undefined, payload?: Record<string, unknown>) => {
         const nextPayload = { ...(payload ?? {}) };
         if (session?.impersonation) {
             nextPayload.impersonatedBy = session.impersonation.realActorId;
             nextPayload.impersonationSessionId = session.impersonation.sessionId;
+            nextPayload.realActorId = session.impersonation.realActorId;
+            nextPayload.impersonatedActorId = session.impersonation.impersonatedUserId;
         }
         return Object.keys(nextPayload).length > 0 ? nextPayload : undefined;
     },
@@ -42,9 +44,11 @@ vi.mock('@/lib/control-plane-events', async () => {
 });
 
 import { POST } from './route';
+import { getApprovalStore } from '../approvals/store';
 
 describe('/api/execute', () => {
     const originalEnv = { ...process.env };
+    const validOutput = '## Governed Response\n\nThis response provides a structured recommendation with enough detail to satisfy output validation requirements.\n\n1. Review the request context carefully.\n2. Apply the governed execution plan.\n3. Return a concise, safe outcome for the operator.';
 
     beforeEach(() => {
         executeAIMock.mockReset();
@@ -53,6 +57,7 @@ describe('/api/execute', () => {
         checkTeamQuotaMock.mockReset();
         appendAuditEventMock.mockReset();
         appendCostEventMock.mockReset();
+        getApprovalStore().clear();
         evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
         checkTeamQuotaMock.mockResolvedValue({
             exceeded: false,
@@ -73,8 +78,11 @@ describe('/api/execute', () => {
         delete process.env.DEFAULT_AI_PROVIDER;
         delete process.env.CVF_SESSION_SECRET;
         verifySessionCookieMock.mockResolvedValue({
+            userId: 'user-tester',
             user: 'tester',
             role: 'admin',
+            orgId: 'org-1',
+            teamId: 'team-1',
             expiresAt: Date.now() + 1000 * 60 * 60,
         });
     });
@@ -118,7 +126,7 @@ describe('/api/execute', () => {
         process.env.ANTHROPIC_API_KEY = 'claude-key';
         executeAIMock.mockResolvedValue({
             success: true,
-            output: 'fallback response',
+            output: validOutput,
             provider: 'claude',
             model: 'claude-3-5-sonnet',
         });
@@ -182,7 +190,7 @@ describe('/api/execute', () => {
         verifySessionCookieMock.mockResolvedValueOnce(null);
         executeAIMock.mockResolvedValue({
             success: true,
-            output: 'ok',
+            output: validOutput,
             provider: 'alibaba',
             model: 'qvq-max',
         });
@@ -212,7 +220,7 @@ describe('/api/execute', () => {
         verifySessionCookieMock.mockResolvedValueOnce(null);
         executeAIMock.mockResolvedValue({
             success: true,
-            output: 'ok',
+            output: validOutput,
             provider: 'alibaba',
             model: 'qwen-turbo',
         });
@@ -262,7 +270,7 @@ describe('/api/execute', () => {
         verifySessionCookieMock.mockResolvedValueOnce(null);
         executeAIMock.mockResolvedValue({
             success: true,
-            output: 'ok',
+            output: validOutput,
             provider: 'openai',
             model: 'gpt-4o',
         });
@@ -392,6 +400,153 @@ describe('/api/execute', () => {
         expect(data.enforcement.status).toBe('NEEDS_APPROVAL');
     });
 
+    it('resumes execution when an approved approvalId matches the original request', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'NEEDS_APPROVAL',
+            reasons: ['R3 requires explicit human approval before execution.'],
+            riskGate: { status: 'NEEDS_APPROVAL', riskLevel: 'R3', reason: 'R3 requires explicit human approval before execution.' },
+        });
+
+        const requestBody = {
+            templateId: 'strategy_tpl',
+            templateName: 'Strategy',
+            intent: 'Review regulated rollout plan',
+            inputs: { goal: 'Test' },
+            provider: 'openai',
+        };
+
+        const pendingRes = await POST(new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+        }) as never);
+        const pendingData = await pendingRes.json();
+
+        expect(pendingRes.status).toBe(409);
+        expect(pendingData.approvalId).toBeTruthy();
+
+        const store = getApprovalStore();
+        const approvalRecord = store.get(pendingData.approvalId);
+        expect(approvalRecord?.requestHash).toBeTruthy();
+        store.set(pendingData.approvalId, {
+            ...approvalRecord!,
+            status: 'approved',
+        });
+
+        executeAIMock.mockResolvedValue({
+            success: true,
+            output: validOutput,
+            provider: 'openai',
+            model: 'gpt-4o',
+        });
+
+        const approvedRes = await POST(new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                ...requestBody,
+                approvalId: pendingData.approvalId,
+            }),
+        }) as never);
+        const approvedData = await approvedRes.json();
+
+        expect(approvedRes.status).not.toBe(409);
+        expect(String(approvedData.error || '')).not.toMatch(/approval/i);
+    });
+
+    it('rejects a mismatched approvalId when the execution payload changes', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'NEEDS_APPROVAL',
+            reasons: ['R3 requires explicit human approval before execution.'],
+            riskGate: { status: 'NEEDS_APPROVAL', riskLevel: 'R3', reason: 'R3 requires explicit human approval before execution.' },
+        });
+
+        const requestBody = {
+            templateId: 'strategy_tpl',
+            templateName: 'Strategy',
+            intent: 'Review regulated rollout plan',
+            inputs: { goal: 'Test' },
+            provider: 'openai',
+        };
+
+        const pendingRes = await POST(new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+        }) as never);
+        const pendingData = await pendingRes.json();
+        const store = getApprovalStore();
+        const approvalRecord = store.get(pendingData.approvalId);
+        store.set(pendingData.approvalId, {
+            ...approvalRecord!,
+            status: 'approved',
+        });
+
+        const mismatchRes = await POST(new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                ...requestBody,
+                intent: 'Review regulated rollout plan and grant admin access',
+                approvalId: pendingData.approvalId,
+            }),
+        }) as never);
+        const mismatchData = await mismatchRes.json();
+
+        expect(mismatchRes.status).toBe(409);
+        expect(mismatchData.error).toMatch(/does not match/i);
+        expect(executeAIMock).not.toHaveBeenCalled();
+    });
+
+    it('rejects an approved approvalId when a different actor replays it', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'NEEDS_APPROVAL',
+            reasons: ['R3 requires explicit human approval before execution.'],
+            riskGate: { status: 'NEEDS_APPROVAL', riskLevel: 'R3', reason: 'R3 requires explicit human approval before execution.' },
+        });
+
+        const requestBody = {
+            templateId: 'strategy_tpl',
+            templateName: 'Strategy',
+            intent: 'Review regulated rollout plan',
+            inputs: { goal: 'Test' },
+            provider: 'openai',
+        };
+
+        const pendingRes = await POST(new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+        }) as never);
+        const pendingData = await pendingRes.json();
+        const store = getApprovalStore();
+        const approvalRecord = store.get(pendingData.approvalId);
+        store.set(pendingData.approvalId, {
+            ...approvalRecord!,
+            status: 'approved',
+        });
+
+        verifySessionCookieMock.mockResolvedValue({
+            userId: 'user-other',
+            user: 'other',
+            role: 'admin',
+            orgId: 'org-2',
+            teamId: 'team-2',
+            expiresAt: Date.now() + 1000 * 60 * 60,
+        });
+
+        const replayRes = await POST(new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                ...requestBody,
+                approvalId: pendingData.approvalId,
+            }),
+        }) as never);
+        const replayData = await replayRes.json();
+
+        expect(replayRes.status).toBe(403);
+        expect(replayData.error).toMatch(/different actor/i);
+        expect(executeAIMock).not.toHaveBeenCalled();
+    });
+
     it('returns enforcement BLOCK with 400', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         evaluateEnforcementMock.mockReturnValue({
@@ -486,6 +641,38 @@ describe('/api/execute', () => {
         expect(executeAIMock).not.toHaveBeenCalled();
         expect(appendAuditEventMock).toHaveBeenCalledWith(expect.objectContaining({
             eventType: 'QUOTA_HARD_CAP_BLOCKED',
+        }));
+    });
+
+    it('blocks invalid output after retry exhaustion', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        executeAIMock.mockResolvedValue({
+            success: true,
+            output: 'short',
+            provider: 'openai',
+            model: 'gpt-4o',
+        });
+
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateName: 'Strategy',
+                intent: 'Analyze the market carefully',
+                inputs: { goal: 'Test' },
+                provider: 'openai',
+            }),
+        });
+
+        const res = await POST(req as never);
+        const data = await res.json();
+
+        expect(res.status).toBe(422);
+        expect(data.success).toBe(false);
+        expect(data.error).toMatch(/failed output validation/i);
+        expect(data.outputValidation.issues).toContain('TOO_SHORT');
+        expect(data.governanceEvidenceReceipt?.decision).toBe('BLOCK');
+        expect(appendAuditEventMock).toHaveBeenCalledWith(expect.objectContaining({
+            eventType: 'OUTPUT_VALIDATION_EXHAUSTED',
         }));
     });
 });

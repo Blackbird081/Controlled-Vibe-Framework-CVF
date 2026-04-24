@@ -11,6 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 require('./load-repo-env.cjs').loadRepoEnv();
+const { buildServiceTokenHeaders } = require('./service-token-signature.cjs');
 
 const CVF_API_URL = 'http://localhost:3000/api/execute';
 const SERVICE_TOKEN = 'pvv-pilot-2026';
@@ -291,13 +292,14 @@ const SCENARIOS = [
 // ─── CVF API CALL ─────────────────────────────────────────────────────────────
 
 async function callCvfApi(payload) {
+    const serviceAuth = buildServiceTokenHeaders(SERVICE_TOKEN, payload);
     const res = await fetch(CVF_API_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'x-cvf-service-token': SERVICE_TOKEN,
+            ...serviceAuth.headers,
         },
-        body: JSON.stringify(payload),
+        body: serviceAuth.body,
     });
     const data = await res.json();
     return { status: res.status, data };

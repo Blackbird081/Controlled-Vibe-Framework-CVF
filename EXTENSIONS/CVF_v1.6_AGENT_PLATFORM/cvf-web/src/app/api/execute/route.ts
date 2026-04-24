@@ -24,7 +24,12 @@ import { buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
 import type { WebGovernanceEnvelope } from '@/lib/web-governance-envelope';
 import { deriveServiceTokenIdentity, verifyServiceTokenRequest } from '@/lib/service-token-auth';
 import { getApprovalStore, type ApprovalRequestRecord } from '../approvals/store';
-import { buildApprovalRequestSnapshot, computeApprovalRequestHash } from '../approvals/approval-binding';
+import {
+    approvalRecordMatchesActor,
+    buildApprovalActorBinding,
+    buildApprovalRequestSnapshot,
+    computeApprovalRequestHash,
+} from '../approvals/approval-binding';
 
 // ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
 // Patterns cover both explicit keyword combos (V1) and governance-approval phrasing (V2).
@@ -124,6 +129,7 @@ export async function POST(request: NextRequest) {
         const session = await verifySessionCookie(request);
         const serviceToken = request.headers.get('x-cvf-service-token');
         const configuredServiceToken = process.env.CVF_SERVICE_TOKEN;
+        const serviceIdentity = serviceToken ? deriveServiceTokenIdentity(serviceToken) : null;
         const isServiceAllowed = verifyServiceTokenRequest({
             configuredToken: configuredServiceToken,
             presentedToken: serviceToken,
@@ -168,7 +174,7 @@ export async function POST(request: NextRequest) {
         const limiter = getRateLimiter();
         const limitIdentity = session?.userId
             ?? session?.user
-            ?? (serviceToken ? deriveServiceTokenIdentity(serviceToken) : 'service');
+            ?? (serviceIdentity || 'service');
         const limitResult = limiter.consume(request, limitIdentity, body.provider);
         if (!limitResult.allowed) {
             return NextResponse.json(
@@ -212,7 +218,11 @@ export async function POST(request: NextRequest) {
         // Get provider config from environment or request
         const provider: AIProvider = body.provider ||
             (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
-        const approvalSnapshot = buildApprovalRequestSnapshot(body as Partial<ExecutionRequest>, provider);
+        const approvalActor = buildApprovalActorBinding({
+            session,
+            serviceIdentity: isServiceAllowed ? serviceIdentity : null,
+        });
+        const approvalSnapshot = buildApprovalRequestSnapshot(body as Partial<ExecutionRequest>, provider, approvalActor);
         const approvalRequestHash = computeApprovalRequestHash(approvalSnapshot);
         let approvedRequestRecord: ApprovalRequestRecord | null = null;
 
@@ -236,6 +246,28 @@ export async function POST(request: NextRequest) {
                         approvalId,
                     },
                     { status: 409 },
+                );
+            }
+
+            if (!approvalRecord.requestSnapshot?.actorId || !approvalRecord.submittedByActorId || !approvalRecord.submittedByAuthMode) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: 'Approval request predates actor binding and must be re-issued.',
+                        approvalId,
+                    },
+                    { status: 409 },
+                );
+            }
+
+            if (!approvalRecordMatchesActor(approvalRecord, approvalActor)) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: 'Approval request was issued for a different actor and cannot be reused.',
+                        approvalId,
+                    },
+                    { status: 403 },
                 );
             }
 
@@ -476,6 +508,10 @@ export async function POST(request: NextRequest) {
                     },
                     requestHash: approvalRequestHash,
                     requestSnapshot: approvalSnapshot,
+                    submittedByActorId: approvalActor?.actorId,
+                    submittedByOrgId: approvalActor?.actorOrgId ?? null,
+                    submittedByTeamId: approvalActor?.actorTeamId ?? null,
+                    submittedByAuthMode: approvalActor?.actorAuthMode,
                     expiresAt: new Date(approvalNow.getTime() + 24 * 60 * 60 * 1000).toISOString(),
                     status: 'pending',
                     submittedAt: approvalNow.toISOString(),
@@ -638,7 +674,7 @@ export async function POST(request: NextRequest) {
             collectionId: typeof body.knowledgeCollectionId === 'string' ? body.knowledgeCollectionId : undefined,
         });
         const retrievedKnowledgeContext = formatKnowledgeChunks(retrievalResult.chunks);
-        const finalKnowledgeContext = retrievedKnowledgeContext;
+        const finalKnowledgeContext = retrievedKnowledgeContext ?? undefined;
         const requestedKnowledgeCollectionId =
             typeof body.knowledgeCollectionId === 'string' && body.knowledgeCollectionId.trim()
                 ? body.knowledgeCollectionId.trim()
@@ -777,7 +813,7 @@ export async function POST(request: NextRequest) {
                     policySnapshotId: govEnvelope.policySnapshotId,
                     governanceEvidenceReceipt: buildEvidenceReceipt({
                         envelope: govEnvelope,
-                        decision: enforcement.status,
+                        decision: 'BLOCK',
                         riskLevel: enforcement.riskGate?.riskLevel,
                         provider: routedProvider,
                         model: body.model ?? aiResult.model ?? routedProvider,

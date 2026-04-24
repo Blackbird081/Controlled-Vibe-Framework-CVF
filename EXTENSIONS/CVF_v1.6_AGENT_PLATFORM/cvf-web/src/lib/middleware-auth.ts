@@ -60,6 +60,8 @@ export function withSessionAuditPayload(
     if (session?.impersonation) {
         nextPayload.impersonatedBy = session.impersonation.realActorId;
         nextPayload.impersonationSessionId = session.impersonation.sessionId;
+        nextPayload.realActorId = session.impersonation.realActorId;
+        nextPayload.impersonatedActorId = session.impersonation.impersonatedUserId;
     }
 
     return Object.keys(nextPayload).length > 0 ? nextPayload : undefined;

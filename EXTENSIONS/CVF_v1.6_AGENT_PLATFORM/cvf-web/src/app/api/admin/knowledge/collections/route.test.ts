@@ -3,11 +3,14 @@ import { NextRequest } from 'next/server';
 import { POST } from './route';
 import { knowledgeStore } from '@/lib/knowledge-store';
 import type { KnowledgeCollectionDefinition } from '@/lib/knowledge-retrieval';
+import { requireAdminApiSession } from '@/lib/admin-session';
 
 vi.mock('@/lib/admin-session', () => ({
   requireAdminApiSession: vi.fn().mockResolvedValue({ user: { role: 'admin' } }),
   withAdminAuditPayload: vi.fn((session: unknown, payload: unknown) => payload),
 }));
+
+const requireAdminApiSessionMock = vi.mocked(requireAdminApiSession);
 
 function makeRequest(body: unknown) {
   return new NextRequest('http://localhost/api/admin/knowledge/collections', {
@@ -20,6 +23,16 @@ function makeRequest(body: unknown) {
 describe('POST /api/admin/knowledge/collections', () => {
   beforeEach(() => {
     (knowledgeStore as unknown as { _store: Map<string, KnowledgeCollectionDefinition> })._store.clear();
+    requireAdminApiSessionMock.mockReset();
+    requireAdminApiSessionMock.mockResolvedValue({
+      userId: 'usr_2',
+      user: 'admin',
+      role: 'admin',
+      orgId: 'org_cvf',
+      teamId: 'team_exec',
+      expiresAt: Date.now() + 60_000,
+      authMode: 'session',
+    });
   });
 
   it('returns 400 when id is missing', async () => {
@@ -52,16 +65,30 @@ describe('POST /api/admin/knowledge/collections', () => {
   });
 
   it('sets orgId and teamId when provided', async () => {
-    await POST(makeRequest({ id: 'scoped-col', name: 'Scoped', orgId: 'org_x', teamId: 'team_x' }));
+    await POST(makeRequest({ id: 'scoped-col', name: 'Scoped', orgId: 'org_cvf', teamId: 'team_eng' }));
     const col = knowledgeStore.getCollection('scoped-col');
-    expect(col?.orgId).toBe('org_x');
-    expect(col?.teamId).toBe('team_x');
+    expect(col?.orgId).toBe('org_cvf');
+    expect(col?.teamId).toBe('team_eng');
   });
 
-  it('defaults orgId/teamId to null when empty strings', async () => {
+  it('defaults orgId to the admin org when empty strings', async () => {
     await POST(makeRequest({ id: 'global-col', name: 'Global', orgId: '', teamId: '' }));
     const col = knowledgeStore.getCollection('global-col');
-    expect(col?.orgId).toBeNull();
+    expect(col?.orgId).toBe('org_cvf');
     expect(col?.teamId).toBeNull();
+  });
+
+  it('rejects creating a collection outside the admin org scope', async () => {
+    requireAdminApiSessionMock.mockResolvedValueOnce({
+      userId: 'usr_external_admin',
+      user: 'external-admin',
+      role: 'admin',
+      orgId: 'org_other',
+      teamId: 'team_external',
+      expiresAt: Date.now() + 60_000,
+      authMode: 'session',
+    });
+    const res = await POST(makeRequest({ id: 'foreign-col', name: 'Foreign', orgId: 'org_cvf', teamId: '' }));
+    expect(res.status).toBe(403);
   });
 });

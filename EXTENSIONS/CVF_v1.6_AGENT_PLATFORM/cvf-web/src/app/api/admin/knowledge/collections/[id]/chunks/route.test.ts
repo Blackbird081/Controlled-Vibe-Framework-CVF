@@ -3,11 +3,14 @@ import { NextRequest } from 'next/server';
 import { POST } from './route';
 import { knowledgeStore } from '@/lib/knowledge-store';
 import type { KnowledgeCollectionDefinition } from '@/lib/knowledge-retrieval';
+import { requireAdminApiSession } from '@/lib/admin-session';
 
 vi.mock('@/lib/admin-session', () => ({
   requireAdminApiSession: vi.fn().mockResolvedValue({ user: { role: 'admin' } }),
   withAdminAuditPayload: vi.fn((session: unknown, payload: unknown) => payload),
 }));
+
+const requireAdminApiSessionMock = vi.mocked(requireAdminApiSession);
 
 const SEED: KnowledgeCollectionDefinition = {
   id: 'col-a',
@@ -30,6 +33,16 @@ describe('POST /api/admin/knowledge/collections/[id]/chunks', () => {
   beforeEach(() => {
     (knowledgeStore as unknown as { _store: Map<string, KnowledgeCollectionDefinition> })._store.clear();
     knowledgeStore.upsertCollection({ ...SEED });
+    requireAdminApiSessionMock.mockReset();
+    requireAdminApiSessionMock.mockResolvedValue({
+      userId: 'usr_2',
+      user: 'admin',
+      role: 'admin',
+      orgId: 'org_cvf',
+      teamId: 'team_exec',
+      expiresAt: Date.now() + 60_000,
+      authMode: 'session',
+    });
   });
 
   it('returns 404 for unknown collection', async () => {
@@ -66,5 +79,13 @@ describe('POST /api/admin/knowledge/collections/[id]/chunks', () => {
     const data = await res.json();
     expect(data.chunkId).toBe('c1');
     expect(knowledgeStore.getCollection('col-a')?.chunks).toHaveLength(1);
+  });
+
+  it('rejects adding a chunk to a collection outside the admin org scope', async () => {
+    knowledgeStore.upsertCollection({ ...SEED, id: 'foreign-col', orgId: 'org_other' });
+    const res = await POST(makeRequest({ id: 'c1', content: 'hello world', keywords: ['hello', 'world'] }), {
+      params: Promise.resolve({ id: 'foreign-col' }),
+    });
+    expect(res.status).toBe(403);
   });
 });

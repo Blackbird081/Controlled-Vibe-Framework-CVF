@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdminApiSession } from '@/lib/admin-session';
+import { resolveAdminResourceScope } from '@/lib/admin-resource-scope';
 import { knowledgeStore } from '@/lib/knowledge-store';
 
 export async function POST(request: NextRequest) {
@@ -27,12 +28,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: `Collection '${collectionId}' already exists.` }, { status: 409 });
   }
 
+  const scopeResult = resolveAdminResourceScope(session, {
+    orgId: typeof orgId === 'string' ? orgId : null,
+    teamId: typeof teamId === 'string' ? teamId : null,
+  });
+  if (!scopeResult.ok) {
+    return NextResponse.json({ success: false, error: scopeResult.error }, { status: scopeResult.status });
+  }
+
   knowledgeStore.upsertCollection({
     id: collectionId,
     name: (name as string).trim(),
     description: typeof description === 'string' ? description.trim() : '',
-    orgId: typeof orgId === 'string' && orgId.trim() ? orgId.trim() : null,
-    teamId: typeof teamId === 'string' && teamId.trim() ? teamId.trim() : null,
+    orgId: scopeResult.scope.orgId,
+    teamId: scopeResult.scope.teamId,
     chunks: [],
   });
 

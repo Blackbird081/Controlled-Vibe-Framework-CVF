@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdminApiSession } from '@/lib/admin-session';
+import { canAdminAccessResourceScope } from '@/lib/admin-resource-scope';
 import { knowledgeStore } from '@/lib/knowledge-store';
 
 export async function DELETE(
@@ -10,8 +11,17 @@ export async function DELETE(
   if (session instanceof NextResponse) return session;
 
   const { id, chunkId } = await params;
-  if (!knowledgeStore.getCollection(id)) {
+  const collection = knowledgeStore.getCollection(id);
+  if (!collection) {
     return NextResponse.json({ success: false, error: `Collection '${id}' not found.` }, { status: 404 });
+  }
+
+  const accessResult = canAdminAccessResourceScope(session, {
+    orgId: collection.orgId,
+    teamId: collection.teamId,
+  });
+  if (!accessResult.ok) {
+    return NextResponse.json({ success: false, error: accessResult.error }, { status: accessResult.status });
   }
 
   knowledgeStore.deleteChunk(id, chunkId);

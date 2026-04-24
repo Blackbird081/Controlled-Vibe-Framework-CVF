@@ -10,12 +10,40 @@ export type AdminResourceScopeResult =
   | { ok: true; scope: AdminResourceScope }
   | { ok: false; status: 400 | 403; error: string };
 
+export type AdminResourceAccessResult =
+  | { ok: true; scope: AdminResourceScope }
+  | { ok: false; status: 403; error: string };
+
 function normalizeScopeValue(value?: string | null): string {
   return typeof value === 'string' ? value.trim() : '';
 }
 
 function isBreakGlassOrOwner(session: AdminSession): boolean {
   return session.authMode === 'break-glass' || session.role === 'owner' || session.realRole === 'owner';
+}
+
+export function canAdminAccessResourceScope(
+  session: AdminSession,
+  input: { orgId?: string | null; teamId?: string | null },
+): AdminResourceAccessResult {
+  const orgId = normalizeScopeValue(input.orgId);
+  const teamId = normalizeScopeValue(input.teamId);
+
+  if (!orgId || isBreakGlassOrOwner(session) || orgId === session.orgId) {
+    return {
+      ok: true,
+      scope: {
+        orgId: orgId || session.orgId,
+        teamId: teamId || null,
+      },
+    };
+  }
+
+  return {
+    ok: false,
+    status: 403,
+    error: 'Admin resource scope is outside the current organization.',
+  };
 }
 
 export function resolveAdminResourceScope(

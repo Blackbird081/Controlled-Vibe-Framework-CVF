@@ -234,7 +234,25 @@ else {
     Add-Check "CVF core path reachable" $false "cvfCorePath not found in manifest"
 }
 
-# Check 10: CVF core commit matches manifest
+# Check 10: Workspace rules file exists at workspace root
+$workspaceRulesPath = $null
+if ($null -ne $manifestObj -and $manifestObj.workspaceRulesPath) {
+    $workspaceRulesPath = $manifestObj.workspaceRulesPath
+}
+elseif ($null -ne $manifestObj -and $manifestObj.workspaceRoot) {
+    $workspaceRulesPath = Join-Path $manifestObj.workspaceRoot "WORKSPACE_RULES.md"
+}
+
+$workspaceRulesExists = $false
+if ($workspaceRulesPath) {
+    $workspaceRulesExists = Test-Path $workspaceRulesPath -PathType Leaf
+    Add-Check "Workspace rules file exists" $workspaceRulesExists $workspaceRulesPath
+}
+else {
+    Add-Check "Workspace rules file exists" $false "workspaceRoot/workspaceRulesPath not found in manifest"
+}
+
+# Check 11: CVF core commit matches manifest
 if ($coreReachable -and $manifestObj.cvfCoreCommit) {
     $ErrorActionPreference = "SilentlyContinue"
     $actualCommit = git -C $cvfCorePath rev-parse --short HEAD 2>$null
@@ -248,7 +266,7 @@ if ($coreReachable -and $manifestObj.cvfCoreCommit) {
     }
 }
 
-# Check 11: Required docs in manifest exist
+# Check 12: Required docs in manifest exist
 if ($null -ne $manifestObj -and $manifestObj.requiredDocs) {
     $allDocsPresent = $true
     $missingDocs = @()
@@ -263,7 +281,7 @@ if ($null -ne $manifestObj -and $manifestObj.requiredDocs) {
     Add-Check "Required docs referenced by manifest exist" $allDocsPresent $docsDetail
 }
 
-# Check 12 (optional/warn): if knowledgePath is declared in manifest, folder should exist
+# Check 13 (optional/warn): if knowledgePath is declared in manifest, folder should exist
 if ($null -ne $manifestObj -and $manifestObj.knowledgePath) {
     $knowledgeFolderPath = Join-Path $projectResolved $manifestObj.knowledgePath.TrimEnd('/')
     $knowledgeFolderExists = Test-Path $knowledgeFolderPath -PathType Container

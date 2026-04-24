@@ -28,7 +28,7 @@ No next implementation roadmap is pre-authorized. Fresh GC-018 required for cont
 
 Treat the W113/W116/W117/W118/W119 boundary language as binding:
 
-- Workspace bootstrap is now agent-enforcement-ready when generated artifacts and the workspace doctor pass.
+- Workspace bootstrap is now agent-enforcement-ready when generated artifacts, workspace-root `WORKSPACE_RULES.md`, and the workspace doctor pass. Canonical workspace topology is `docs/reference/CVF_WORKSPACE_RULES.md`: a non-git parent workspace, hidden `.Controlled-Vibe-Framework-CVF` governance clone, and sibling downstream application folders.
 - W113 proved this in one real downstream sample project with live API-backed governance evidence.
 - W116 proved the downstream knowledge pipeline: `.md` files in `knowledge/` → ingested chunks → positive retrieval delta confirmed by unit evidence tests (16/16 pass).
 - W117 proved the writable knowledge store: `KNOWLEDGE_COLLECTIONS` constant replaced by `InProcessKnowledgeStore`; admin CRUD API and UI delivered; Wave 2 live regression 4/4 pass; D1.4b deferred note retired.
@@ -36,4 +36,3 @@ Treat the W113/W116/W117/W118/W119 boundary language as binding:
 - W119 proved the bounded non-coder adoption journey: secret-free first-run readiness; project knowledge ingest into governed `/api/execute`; route-returned `governanceEvidenceReceipt`; ProcessingScreen/ResultViewer evidence visibility and copy/export; live W119 runner 3/3 locked journeys pass on Alibaba lane with raw keys not printed.
 - Web is governance-inherited on the active governed AI path, not the full CVF runtime.
 - Future work must improve enforcement without overstating either claim.
-

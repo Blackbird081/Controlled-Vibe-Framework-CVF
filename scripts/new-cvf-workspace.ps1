@@ -37,6 +37,7 @@ $workspaceRootResolved = [System.IO.Path]::GetFullPath($WorkspaceRoot)
 $cvfCorePath = Join-Path $workspaceRootResolved ".Controlled-Vibe-Framework-CVF"
 $projectPath = Join-Path $workspaceRootResolved $ProjectName
 $workspaceFilePath = Join-Path $workspaceRootResolved "$ProjectName.code-workspace"
+$workspaceRulesPath = Join-Path $workspaceRootResolved "WORKSPACE_RULES.md"
 
 Write-Info "Workspace root: $workspaceRootResolved"
 Ensure-Directory $workspaceRootResolved
@@ -48,6 +49,42 @@ if (-not (Test-Path $cvfCorePath)) {
 }
 else {
     Write-Info "CVF core already exists: $cvfCorePath"
+}
+
+if (-not (Test-Path $workspaceRulesPath -PathType Leaf)) {
+    $workspaceRulesContent = @"
+# CVF Workspace Rules
+
+This folder is a CVF workspace container. It is not a git repository.
+
+## Required layout
+
+````text
+CVF-Workspace/
+  .Controlled-Vibe-Framework-CVF/
+  <Application-Project-1>/
+  <Application-Project-2>/
+  WORKSPACE_RULES.md
+````
+
+## Rules
+
+- `.Controlled-Vibe-Framework-CVF/` is the CVF governance repository.
+- Application projects must be sibling folders, not children of the CVF governance repository.
+- Do not add downstream application code inside `.Controlled-Vibe-Framework-CVF/`.
+- Run CVF core update commands from `.Controlled-Vibe-Framework-CVF/`.
+- Run application work from the application project root.
+- Keep provider keys and secrets out of this file, `.cvf/`, generated `AGENTS.md`, and bootstrap logs.
+
+## Reference
+
+Canonical source: `.Controlled-Vibe-Framework-CVF/docs/reference/CVF_WORKSPACE_RULES.md`
+"@
+    Set-Content -Path $workspaceRulesPath -Value $workspaceRulesContent -Encoding utf8
+    Write-Ok "Created: $workspaceRulesPath"
+}
+else {
+    Write-Info "Workspace rules already exist: $workspaceRulesPath"
 }
 
 if (-not (Test-Path $projectPath)) {
@@ -105,6 +142,7 @@ $manifestObj = [ordered]@{
     cvfCorePath                  = $cvfCorePath
     cvfCoreCommit                = $cvfHead
     workspaceRoot                = $workspaceRootResolved
+    workspaceRulesPath           = $workspaceRulesPath
     projectPath                  = $projectPath
     phaseModel                   = @("INTAKE", "DESIGN", "BUILD", "REVIEW", "FREEZE")
     liveGovernanceEvidenceRequired = $true
@@ -112,6 +150,7 @@ $manifestObj = [ordered]@{
     requiredDocs                 = @(
         ".cvf/manifest.json",
         ".cvf/policy.json",
+        "..\WORKSPACE_RULES.md",
         "docs/CVF_BOOTSTRAP_LOG_$recordIdDate.md"
     )
     bootstrapDate                = $dateStamp
@@ -130,6 +169,7 @@ $policyObj = [ordered]@{
     liveGovernanceEvidenceRequired = $true
     mockAllowedOnlyForUi         = $true
     workspaceIsolationRequired   = $true
+    workspaceRulesRequired       = $true
     phaseTransitionRequired      = $true
     riskCeiling                  = "R2"
     overrideRefusal = @(
@@ -237,12 +277,14 @@ $logContent = @"
 
 ## 2. Workspace Topology
 - Workspace Root: $workspaceRootResolved
+- Workspace Rules: $workspaceRulesPath
 - CVF Core Path: $cvfCorePath
 - Project Path: $projectPath
 - VS Code Workspace File: $workspaceFilePath
 
 ## 3. Isolation Validation
 - [x] CVF core and downstream project are sibling folders
+- [x] Workspace rules file exists at workspace root
 - [x] IDE/terminal target is project workspace
 - [x] terminal.integrated.cwd is `${workspaceFolder}`
 - [ ] Team acknowledgment recorded
@@ -254,6 +296,7 @@ $logContent = @"
 - [x] Agent Instructions: $agentInstructionsStatus
 - [x] .cvf/manifest.json: PRESENT (knowledgePath: knowledge/)
 - [x] .cvf/policy.json: PRESENT
+- [x] WORKSPACE_RULES.md: PRESENT
 - [x] knowledge/ folder: PRESENT (add .md files and run ingest script to enable project-knowledge injection)
 - [ ] Runtime artifacts migrated (if needed)
 - [ ] Toolchain baseline recorded (python, node, pnpm, optional uv)

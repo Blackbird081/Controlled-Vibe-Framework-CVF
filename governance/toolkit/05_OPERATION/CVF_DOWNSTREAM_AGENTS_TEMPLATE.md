@@ -87,6 +87,7 @@ This project must remain isolated from the CVF core repository:
 - Do NOT commit downstream project artifacts into the CVF core repository.
 - CVF core path (`{{CVF_CORE_PATH}}`) is **read-only reference** for this project.
 - Your IDE/terminal working directory must always be this project root.
+- The workspace root must contain `WORKSPACE_RULES.md`; if missing, stop and re-run bootstrap or restore the workspace rules file.
 
 ## Risk Classification
 
@@ -108,10 +109,11 @@ Before taking action, read:
 
 1. `.cvf/manifest.json` — enforcement manifest (includes `knowledgePath` if project knowledge is configured)
 2. `.cvf/policy.json` — governance policy
-3. `docs/CVF_BOOTSTRAP_LOG_*.md` — workspace bootstrap record
-4. `{{CVF_CORE_PATH}}/AGENT_HANDOFF.md` — current CVF state and active tranches
-5. `{{CVF_CORE_PATH}}/AGENTS.md` — CVF-level mandatory governance proof rules
-6. `knowledge/` folder (if present) — project-specific knowledge files; run `scripts/ingest_cvf_downstream_knowledge.ps1` to index them before governed AI runs that benefit from project context
+3. `../WORKSPACE_RULES.md` — workspace container and isolation rules
+4. `docs/CVF_BOOTSTRAP_LOG_*.md` — workspace bootstrap record
+5. `{{CVF_CORE_PATH}}/AGENT_HANDOFF.md` — current CVF state and active tranches
+6. `{{CVF_CORE_PATH}}/AGENTS.md` — CVF-level mandatory governance proof rules
+7. `knowledge/` folder (if present) — project-specific knowledge files; run `scripts/ingest_cvf_downstream_knowledge.ps1` to index them before governed AI runs that benefit from project context
 
 ## Handoff and Tranche Closure Protocol
 

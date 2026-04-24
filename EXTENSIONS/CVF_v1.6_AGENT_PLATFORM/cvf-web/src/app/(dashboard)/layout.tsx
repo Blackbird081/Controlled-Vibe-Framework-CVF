@@ -26,6 +26,12 @@ import {
     type QuickStartResult,
 } from '@/lib/governed-starter-path';
 
+function resolveOpenModal(openParam: string | null): 'agent' | 'multi-agent' | null {
+    if (openParam === 'agent') return 'agent';
+    if (openParam === 'multi-agent') return 'multi-agent';
+    return null;
+}
+
 /**
  * Inner layout component — uses useSearchParams which requires Suspense.
  */
@@ -41,15 +47,17 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     const modals = useModals(permissions);
     const { executions } = useExecutionStore();
     const openParam = searchParams.get('open');
+    const queryModal = resolveOpenModal(openParam);
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
     const [isAgentMinimized, setIsAgentMinimized] = useState(false);
-    const [activeModal, setActiveModal] = useState<'agent' | 'multi-agent' | 'tools' | null>(() => {
-        if (openParam === 'agent') return 'agent';
-        if (openParam === 'multi-agent') return 'multi-agent';
-        return null;
-    });
+    // Seed from URL so the correct modal renders on the first frame (no flash).
+    // After mount, state is the sole rendering driver — URL changes are synced
+    // below via useEffect so that openShellModal / cvf:open* can freely
+    // override without the URL re-asserting on every render.
+    const [activeModal, setActiveModal] = useState<'agent' | 'multi-agent' | 'tools' | null>(() => queryModal);
+    const visibleModal = activeModal;
 
     // Listen for API Key Wizard open event from child pages
     useEffect(() => {
@@ -79,6 +87,16 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         };
     }, [modals]);
 
+    // Sync URL ?open= changes (e.g. browser back/forward) into state.
+    // Resets isAgentMinimized so back-nav to ?open=agent always shows the
+    // full modal, not a stale minimised pill from a prior session.
+    useEffect(() => {
+        if (queryModal !== null) {
+            setActiveModal(queryModal);
+            setIsAgentMinimized(false);
+        }
+    }, [queryModal]);
+
     // Map pathname to Sidebar's expected appState string
     const pathnameToAppState = (p: string): string => {
         if (p === '/' || p.startsWith('/home')) return 'home';
@@ -93,10 +111,10 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         if (p.startsWith('/governance')) return 'governance';
         if (p.startsWith('/simulation')) return 'simulation';
         if (p.startsWith('/safety')) return 'safety';
-        return activeModal || 'home';
+        return visibleModal || 'home';
     };
 
-    const appStateForSidebar = activeModal || pathnameToAppState(pathname);
+    const appStateForSidebar = visibleModal || pathnameToAppState(pathname);
 
     const hasBlockingOverlay = Boolean(
         modals.showOnboarding
@@ -105,7 +123,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         || modals.showSettings
         || modals.showAIUsage
         || modals.showApiKeyWizard
-        || activeModal
+        || visibleModal
     );
 
     useEffect(() => {
@@ -120,6 +138,21 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         setAgentPrompt(undefined);
         setIsAgentMinimized(false);
         modals.openModal(name);
+    };
+
+    const closeActiveModal = () => {
+        setActiveModal(null);
+        setAgentPrompt(undefined);
+        setIsAgentMinimized(false);
+
+        if (!queryModal) {
+            return;
+        }
+
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete('open');
+        const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
+        router.replace(nextUrl);
     };
 
     // Navigation handler — real pages use router, modals set state
@@ -283,20 +316,20 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             )}
 
             {/* Agent Chat */}
-            {activeModal === 'agent' && !isAgentMinimized && (
+            {visibleModal === 'agent' && !isAgentMinimized && (
                 <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-0 md:p-4">
                     <div className="w-full h-full md:h-[85vh] md:max-w-5xl rounded-none md:rounded-xl overflow-hidden shadow-2xl">
                         <AgentChatWithHistory
                             initialPrompt={agentPrompt}
-                            onClose={() => { setActiveModal(null); setAgentPrompt(undefined); setIsAgentMinimized(false); }}
-                            onComplete={() => { setActiveModal(null); setAgentPrompt(undefined); setIsAgentMinimized(false); }}
+                            onClose={closeActiveModal}
+                            onComplete={closeActiveModal}
                             onMinimize={() => setIsAgentMinimized(true)}
                         />
                     </div>
                 </div>
             )}
 
-            {activeModal === 'agent' && isAgentMinimized && (
+            {visibleModal === 'agent' && isAgentMinimized && (
                 <div
                     className="fixed bottom-4 right-4 z-50 bg-gradient-to-r from-purple-600 to-blue-600 
                      text-white px-5 py-3 rounded-xl shadow-2xl cursor-pointer
@@ -311,19 +344,19 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             )}
 
             {/* Multi-Agent */}
-            {activeModal === 'multi-agent' && (
+            {visibleModal === 'multi-agent' && (
                 <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-0 md:p-4">
                     <div className="w-full h-full md:h-[85vh] md:max-w-5xl rounded-none md:rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900">
                         <MultiAgentPanel
-                            onClose={() => setActiveModal(null)}
-                            onComplete={() => setActiveModal(null)}
+                            onClose={closeActiveModal}
+                            onComplete={closeActiveModal}
                         />
                     </div>
                 </div>
             )}
 
             {/* Tools */}
-            {activeModal === 'tools' && (
+            {visibleModal === 'tools' && (
                 <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-0 md:p-4">
                     <div className="w-full h-full md:h-[85vh] md:max-w-5xl rounded-none md:rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900">
                         <ToolsPage onClose={() => setActiveModal(null)} />

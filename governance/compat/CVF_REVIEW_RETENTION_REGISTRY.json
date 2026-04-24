@@ -17,7 +17,7 @@
   ],
   "summary": {
     "activeRecentCount": 50,
-    "retainEvidenceCount": 181,
+    "retainEvidenceCount": 182,
     "safeToArchiveCount": 77,
     "archivedCount": 335,
     "derivedAt": "2026-04-21",
@@ -195,6 +195,7 @@
     "docs/reviews/CVF_W66_T1_CP1_PVV_CORPUS_RUBRIC_FREEZE_REVIEW_2026-04-11.md",
     "docs/reviews/CVF_W66_T1_CP2_RUN_HARNESS_SETUP_REVIEW_2026-04-11.md",
     "docs/reviews/CVF_W105_T1_TRANCHE_CLOSURE_REVIEW_2026-04-19.md",
+    "docs/reviews/CVF_W110_GC018_ALIBABA_LIVE_CANARY_RUNNER_2026-04-21.md",
     "docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md",
     "docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md",
     "docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md",

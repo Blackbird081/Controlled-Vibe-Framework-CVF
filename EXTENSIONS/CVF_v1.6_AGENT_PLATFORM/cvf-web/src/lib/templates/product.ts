@@ -317,6 +317,7 @@ REFERENCES / NOTES: [references]
 SUCCESS CRITERIA:
 - The end user does not need to choose frameworks or hidden technical patterns
 - Extract reusable design DNA instead of one-off mockup notes
+- Apply CVF Redesign DNA from cvf_web_ux_redesign_system: dark-primary command workspace, layered panels, stat strips, pill filters, compact operational cards, restrained motion, and clear state design
 - Preserve logic/runtime boundaries
 - Define layout, component, state, and QA rules — label this section "QA Rules" with pre-build approval and post-build validation checklists
 - Produce an agent-ready web build handoff packet
@@ -448,6 +449,7 @@ REFERENCES / NOTES:
 SUCCESS CRITERIA:
 - Ask only for plain-language product intent, not hidden technical choices
 - Translate the brief into a clear agent-ready web build packet
+- Use the CVF Web Redesign DNA automatically: professional command workspace, dark-primary layered shell by default, strong page hierarchy, KPI/stat strips where useful, pill filters, compact cards/tables, meaningful empty/loading/error states, and restrained hover/motion
 - Preserve existing logic, integrations, data contracts, and protected flows
 - Give page structure, UX priorities, and acceptance checklist
 - Keep the result simple enough for a non-coder to review before handoff
@@ -458,12 +460,14 @@ OUTPUT CONTRACT:
   1. Website Goal
   2. Target Users
   3. Required Pages and Flows
-  4. UX / Visual Direction
-  5. Protected Constraints
-  6. Agent Build Instructions
-  7. Acceptance Checklist
+  4. CVF Web Redesign DNA
+  5. UX / Visual Direction
+  6. Protected Constraints
+  7. Agent Build Instructions
+  8. Acceptance Checklist
 - Do not ask the end user to choose frameworks, stacks, or internal technical patterns
-- Do not add extra deliverables unless the user explicitly requested them`,
+- Do not add extra deliverables unless the user explicitly requested them
+- Treat Claude Design prototypes as historical source material only; do not require Claude Design to implement the packet`,
         outputExpected: ['Website Goal & Audience', 'Page / Flow List', 'UX Direction', 'Protected Constraints', 'Agent Build Packet', 'Acceptance Checklist'],
         outputTemplate: `# Web Build Handoff Packet
 
@@ -480,23 +484,28 @@ OUTPUT CONTRACT:
 - Modals / forms
 - Primary user journey
 
-## 4. UX / Visual Direction
+## 4. CVF Web Redesign DNA
+- Experience tone and shell pattern
+- Color, typography, component, and motion rules
+- Anti-patterns to avoid
+
+## 5. UX / Visual Direction
 - Tone and feel
 - Content density
 - CTA hierarchy
 - Mobile behavior
 
-## 5. Protected Constraints
+## 6. Protected Constraints
 - Logic to preserve
 - APIs / integrations to preserve
 - Data / auth / routes that must not change
 
-## 6. Agent Build Instructions
+## 7. Agent Build Instructions
 - What to build
 - What can be redesigned
 - What must remain unchanged
 
-## 7. Acceptance Checklist
+## 8. Acceptance Checklist
 - Desktop + mobile
 - Empty / loading / error states
 - Clear CTA and readable content
@@ -515,21 +524,25 @@ OUTPUT CONTRACT:
 - Home, Services, Pricing, FAQ, Contact modal, Thank-you page
 - Main flow: land on Home -> review services -> compare pricing -> submit consultation form
 
-## 4. UX / Visual Direction
+## 4. CVF Web Redesign DNA
+- Use the CVF-style command workspace language where appropriate: layered surfaces, crisp section hierarchy, compact cards, pill filters, and restrained motion.
+- Keep the interface premium and operational, not decorative.
+
+## 5. UX / Visual Direction
 - Clean, bright, editorial layout with strong section separation
 - CTA buttons should stand out without looking flashy
 - Mobile should prioritize scanability and short decision paths
 
-## 5. Protected Constraints
+## 6. Protected Constraints
 - Keep current lead form API, CRM webhook, admin auth, and route structure
 - Do not change payload fields or backend validation logic
 
-## 6. Agent Build Instructions
+## 7. Agent Build Instructions
 - Redesign presentation layer and information flow
 - Keep business logic and integrations intact
 - Choose internal implementation details without asking the end user to pick frameworks
 
-## 7. Acceptance Checklist
+## 8. Acceptance Checklist
 - Works well on desktop and mobile
 - Includes loading, empty, and error feedback
 - Form is easy to complete

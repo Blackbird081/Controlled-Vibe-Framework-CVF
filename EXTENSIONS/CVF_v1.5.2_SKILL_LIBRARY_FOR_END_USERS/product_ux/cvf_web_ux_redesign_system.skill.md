@@ -23,16 +23,133 @@ Biến một lần redesign UX thành **hệ thống tái sử dụng** cho các
 
 Người dùng **không cần** biết framework, stack, hay kỹ thuật ẩn phía sau. Phần đó phải được CVF/agent tự suy ra khi tạo packet handoff.
 
+Skill này **không phụ thuộc Claude Design ở runtime**. Claude Design chỉ là nguồn prototype ban đầu. Agent dùng skill này phải tự tạo được giao diện theo CVF redesign DNA khi người dùng yêu cầu dựng web/app/dashboard mới.
+
 **Khi nào nên dùng:**
 - Muốn áp dụng lại tinh thần giao diện của CVF web redesign cho dự án khác
 - Cần chuyển từ "mood đẹp" sang spec UX/UI có thể implement
 - Cần giữ logic cũ nhưng thay toàn bộ presentation layer
 - Muốn tạo design brief thống nhất cho designer, AI, và frontend team
+- CVF Web cần tự xuất build spec khi user yêu cầu dựng một web app mới
+- Agent cần dựng UI cùng phong cách CVF redesign mà không có prototype Claude Design đi kèm
 
 **Không phù hợp khi:**
 - Chỉ sửa 1 component nhỏ hoặc fix spacing đơn lẻ
 - Đã có design system production hoàn chỉnh và chỉ cần follow system đó
 - Cần invention hoàn toàn mới, không muốn reuse ngôn ngữ giao diện từ CVF
+
+---
+
+## 🧬 CVF Redesign DNA (Extracted)
+
+Nguồn gốc DNA này được rút từ prototype Claude Design trong `App onboarding/`:
+`CVF Redesign.html`, `CVF Redesign v2.html`, `cvf-theme.jsx`, `cvf-sidebar.jsx`, `cvf-pages-*.jsx`, `browser-window.jsx`.
+
+Không copy nguyên prototype vào sản phẩm. Dùng các rule dưới đây để tái tạo phong cách bằng framework hiện tại.
+
+### Experience Tone
+
+- Cảm giác như một **professional command workspace**, không phải landing page trang trí.
+- Giao diện tối, tập trung, có chiều sâu, nhưng vẫn đủ sáng để scan nhanh.
+- Nội dung nghiệp vụ phải đứng trước hiệu ứng: data, actions, filters, status là first-class UI.
+- Visual tone: premium, operational, calm, precise, slightly futuristic.
+
+### Color System
+
+- Primary accent mặc định: indigo `#5b5cf6`; có thể đổi theo domain nhưng vẫn dùng một accent chính.
+- Dark shell: `#0d0f1a` / `#0d0e18`.
+- Content background dark: `#111218`; card dark: `#1c1d27`.
+- Light mode nếu có: content bg `#f4f5fa`, card `#ffffff`, topbar `#ffffff`.
+- Border mảnh dùng alpha: dark `rgba(255,255,255,0.06-0.10)`, light `rgba(0,0,0,0.06-0.10)`.
+- Accent overlays dùng opacity thấp: `accent + 1a`, `accent + 22`, `accent + 30`, `accent + 44`.
+- Semantic colors chỉ dùng cho trạng thái: success `#10b981`, warning `#f59e0b`, danger `#f43f5e`, info/indigo/violet cho metadata.
+
+### Typography
+
+- Ưu tiên `DM Sans` hoặc system sans tương đương; dùng `DM Mono` chỉ cho version, technical id, hoặc compact metadata.
+- Heading: 24-26px, 700, letter spacing khoảng `-0.03em`.
+- Section title: 13-14px, 600, letter spacing nhẹ `-0.01em`.
+- Body/table/card text: 12-13.5px, line-height 1.45-1.65.
+- Metadata label: 9-11px, uppercase, 700, letter spacing `0.06em-0.10em`.
+- Số KPI: 26px+, 700, line-height 1, letter spacing `-0.03em`.
+
+### Shell & Navigation
+
+- App shell mặc định: fixed left sidebar + topbar/action strip + scrollable content area.
+- Sidebar width chuẩn: 220px; compact vẫn phải giữ icon + label đọc được.
+- Sidebar nền tối riêng biệt với content, border-right alpha mảnh.
+- Sidebar gồm: logo block, user block, grouped nav, footer actions/language.
+- Nav group label uppercase nhỏ, muted, letter-spaced.
+- Active nav item dùng accent-tinted bg, active text sáng hơn, có dot indicator 5px ở cuối.
+- Hover nav dùng alpha white rất nhẹ; transition 130-150ms.
+- Topbar cao 44-52px, border-bottom mảnh, title/subtitle bên trái hoặc action/tweak bên phải.
+
+### Layout Rhythm
+
+- Page content padding chuẩn: 26-28px; compact: 20-22px.
+- Section spacing: 18-24px.
+- Card grid gap: 10-13px.
+- Cards dùng radius 12-14px; icon containers radius 8-10px.
+- Dùng `repeat(auto-fill, minmax(255px, 1fr))` cho browse/card grids; compact có thể 220px.
+- Dashboard nên theo thứ tự: header/action strip → KPI/stat strip → chart/detail grid → table/activity log.
+- Form page nên group theo panel, primary action rõ, không chia wizard nếu luồng ngắn.
+
+### Component Recipes
+
+**Card**
+- Background surface, 1px border, radius 12-14px, padding 16-20px.
+- Hover: border chuyển sang accent alpha, translateY(-2px), shadow `0 8px 28px accentAlpha + 0 2px 8px rgba(0,0,0,0.07)`.
+- Không dùng card lồng card trừ khi item lặp nằm trong panel nghiệp vụ rõ ràng.
+
+**Stat/KPI Card**
+- Label uppercase 11px muted, icon pill 28px, value 26px bold, optional subtext 11px.
+- Icon bg dùng semantic/accent alpha 18%.
+- KPI quan trọng nhất đặt trước, không để chart cạnh tranh với số chính.
+
+**Filter Bar**
+- Surface riêng với border, radius 14px, padding 13-16px.
+- Input search cao 36px, radius 9px, icon left 13px.
+- Category pills radius 20px, padding 6px 13px, active bg accent, inactive bg tab alpha.
+- Count chip bên trong pill: 9px, bold, alpha bg.
+
+**Button**
+- Radius 7-8px, font 11-12px, medium weight.
+- Primary: solid accent + white.
+- Soft: accent alpha bg + accent text.
+- Outline: transparent + accent border 44 alpha.
+- Ghost: transparent, hover tab bg.
+- Icon size 11-13px; không dùng text-only khi icon rõ nghĩa.
+
+**Badge**
+- Uppercase 9px, 700, letter spacing `0.04em`, padding 2px 7px, radius 4px.
+- Dark mode dùng text color làm bg alpha và light bg color làm text.
+
+**Input**
+- Height 36px, radius 9px, bg input surface, border alpha.
+- Focus border đổi sang accent, không thêm glow lớn.
+
+**Empty / Loading / Error**
+- Empty state nằm đúng grid/table area, text muted, padding 48-52px.
+- Loading dùng skeleton/pulse nhẹ hoặc muted text; không dùng spinner to quá.
+- Error dùng danger semantic + action khôi phục.
+
+### Motion & Effects
+
+- Page enter: fade + translateY(6px), 0.2s ease.
+- Card enter: fade + translateY(8px), 0.22s ease, có thể stagger 35ms cho grid.
+- Hover lift tối đa 2px.
+- Transition thông dụng: 0.13-0.18s cho hover, 0.2-0.3s cho theme/layout.
+- Scrollbar rất mảnh 3px, thumb alpha thấp.
+- Không dùng animation looping, parallax, bokeh/orb decoration, hoặc motion làm giảm khả năng scan.
+
+### Anti-Patterns
+
+- Không biến dashboard thành landing/hero marketing.
+- Không dùng một màu tím/xanh phủ toàn bộ giao diện; accent phải có vai trò.
+- Không hardcode prototype inline style nếu codebase đã có token/CSS variables.
+- Không thêm UI library chỉ để đạt style.
+- Không copy Chrome/browser frame vào production app, trừ khi đang làm portfolio/demo/presentation.
+- Không để visual effect che mất table, filter, CTA, empty/error state.
 
 ---
 
@@ -96,6 +213,8 @@ Người dùng **không cần** biết framework, stack, hay kỹ thuật ẩn p
 
 **Kết quả bạn sẽ nhận được:**
 
+Khi người dùng yêu cầu dựng web/app mới, agent phải tự xuất spec trước khi build nếu chưa có spec. Spec này không cần người dùng biết thuật ngữ kỹ thuật; agent suy luận từ business intent và hỏi lại chỉ khi thiếu thông tin gây rủi ro.
+
 ```markdown
 # Web Build Handoff Packet
 
@@ -150,6 +269,19 @@ Người dùng **không cần** biết framework, stack, hay kỹ thuật ẩn p
 - Tokenization plan
 - QA checklist before ship
 ```
+
+---
+
+## 🔁 Execution Workflow
+
+1. **Collect intent:** xác định app type, users, core flows, pages, must-preserve logic, content density.
+2. **Choose surface archetype:** dashboard, workspace, admin console, landing, docs, settings, data table, form workflow.
+3. **Generate packet:** dùng 8 khối output ở trên và CVF Redesign DNA để tạo spec đủ implement.
+4. **Map to codebase:** dùng token/CSS variables/component system hiện có; nếu không có, tạo token tối thiểu.
+5. **Implement presentation:** restyle shell, page layout, components, states; giữ route/auth/API/state/data contracts.
+6. **Verify:** desktop/tablet/mobile, focus, contrast, empty/loading/error, no new deps unless approved.
+
+Nếu input là prototype Claude Design/HTML/JSX, không đưa toàn bộ prototype vào app. Trích xuất visual intent thành packet trước, sau đó mới implement.
 
 ---
 

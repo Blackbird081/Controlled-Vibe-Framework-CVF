@@ -129,6 +129,23 @@ describe('templates/index', () => {
             expect(spec).toContain(today);
         });
 
+        it('includes CVF Web Redesign DNA for web build handoff specs', () => {
+            const template = getTemplateById('web_build_handoff');
+            expect(template).toBeTruthy();
+
+            const spec = generateCompleteSpec(template!, {
+                websiteGoal: 'Build a service website',
+                audience: 'Non-coder operators',
+                mustDo: 'Browse services\nSubmit contact form',
+                screens: 'Home\nContact modal',
+                mustPreserve: 'Existing lead API',
+                lookAndFeel: 'Premium and structured',
+            });
+
+            expect(spec).toContain('CVF Web Redesign DNA');
+            expect(spec).toContain('professional command workspace');
+        });
+
         it('handles template without outputExpected', () => {
             const template = { ...templates[0], outputExpected: [], outputTemplate: undefined };
             const spec = generateCompleteSpec(template, {});

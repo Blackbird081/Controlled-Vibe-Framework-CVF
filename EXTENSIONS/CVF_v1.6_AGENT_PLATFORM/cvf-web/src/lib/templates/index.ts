@@ -7,6 +7,7 @@ import { marketingTemplates } from './marketing';
 import { productTemplates } from './product';
 import { securityTemplates } from './security';
 import { developmentTemplates } from './development';
+import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
 
 export const templates: Template[] = [
     ...businessTemplates,
@@ -46,6 +47,10 @@ export function generateCompleteSpec(
 ): string {
     const date = new Date().toISOString().split('T')[0];
     const intent = userIntent?.trim() || generateIntent(template, values);
+    const cvfWebDnaAppendix = shouldAttachCvfWebRedesignDna({
+        templateId: template.id,
+        templateName: template.name,
+    }) ? CVF_WEB_REDESIGN_DNA_APPENDIX : '';
 
     // Build user input section
     const userInputLines = Object.entries(values)
@@ -153,6 +158,8 @@ ${expectedOutput}
 ${outputTemplate ? `\n---\n\n## 📐 Output Template\n\n\`\`\`markdown\n${outputTemplate}\n\`\`\`\n` : ''}
 
 ---
+
+${cvfWebDnaAppendix ? `${cvfWebDnaAppendix}\n\n---\n\n` : ''}
 
 ${executionConstraints}
 

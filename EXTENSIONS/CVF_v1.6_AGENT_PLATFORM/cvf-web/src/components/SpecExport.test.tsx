@@ -89,6 +89,13 @@ const mockValues: Record<string, string> = {
     optional_field: 'Extra info',
 };
 
+const webHandoffTemplate: Template = {
+    ...mockTemplate,
+    id: 'web_build_handoff',
+    name: 'Bàn giao Web cho Agent',
+    category: 'product',
+};
+
 const defaultProps = {
     template: mockTemplate,
     values: mockValues,
@@ -342,5 +349,12 @@ describe('generateCompleteSpec', () => {
         const spec = generateCompleteSpec(mockTemplate, {});
         expect(typeof spec).toBe('string');
         // Should still produce a spec, just without filled values
+    });
+
+    it('adds CVF Web Redesign DNA to exported web handoff packets', () => {
+        const spec = generateCompleteSpec(webHandoffTemplate, mockValues);
+
+        expect(spec).toContain('CVF Web Redesign DNA');
+        expect(spec).toContain('professional command workspace');
     });
 });

@@ -1,4 +1,5 @@
 import type { ExecutionRequest } from '@/lib/ai';
+import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
 
 export function buildExecutionPrompt(request: ExecutionRequest): string {
   const { templateName, inputs, intent } = request;
@@ -41,6 +42,15 @@ export function buildExecutionPrompt(request: ExecutionRequest): string {
       prompt += `- Declared skills: ${request.skillIds.join(', ')}\n`;
     }
     prompt += `\n`;
+  }
+
+  if (shouldAttachCvfWebRedesignDna({
+    templateId: request.templateId,
+    templateName: request.templateName,
+    skillIds: request.skillIds,
+  })) {
+    prompt += `### Bound UX Skill Context\n`;
+    prompt += `${CVF_WEB_REDESIGN_DNA_APPENDIX}\n\n`;
   }
 
   if (request.fileScope?.length) {

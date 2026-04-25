@@ -8,6 +8,7 @@ import { useSettings } from './Settings';
 import { evaluateSpecGate } from '@/lib/spec-gate';
 import { evaluateEnforcement } from '@/lib/enforcement';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
+import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
 import {
     autoDetectGovernance,
     buildGovernanceSpecBlock,
@@ -735,6 +736,10 @@ function generateSpec(
     Object.entries(values).forEach(([key, value]) => {
         intent = intent.replace(new RegExp(`\\[${key}\\]`, 'g'), value || 'N/A');
     });
+    const cvfWebDnaAppendix = shouldAttachCvfWebRedesignDna({
+        templateId: template.id,
+        templateName: template.name,
+    }) ? CVF_WEB_REDESIGN_DNA_APPENDIX : '';
 
     const modeLabel = mode === 'full' ? labels.modeFull : mode === 'governance' ? labels.modeGovernance : labels.modeSimple;
 
@@ -815,6 +820,8 @@ ${outputTemplate ? `\n---\n\n## 📐 ${labels.outputTemplate}\n\n\`\`\`markdown\
 
     spec += `
 ---
+
+${cvfWebDnaAppendix ? `${cvfWebDnaAppendix}\n\n---\n\n` : ''}
 
 ${executionConstraints[lang]}
 

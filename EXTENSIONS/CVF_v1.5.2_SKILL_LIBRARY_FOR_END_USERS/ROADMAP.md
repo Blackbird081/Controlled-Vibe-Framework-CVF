@@ -1,7 +1,7 @@
 # CVF Skill Library - Roadmap
 
 > **CVF Skill Library v1.5.2**  
-> **Last Updated:** 2026-02-07
+> **Last Updated:** 2026-04-26
 
 ---
 
@@ -13,7 +13,7 @@
 | Product & UX | 8 | ✅ **DONE** |
 | Security & Compliance | 6 | ✅ **DONE** |
 | App Development | 8 | ✅ **DONE** |
-| Finance & Analytics | 8 | ✅ **DONE** |
+| Finance & Analytics | 4 | ✅ **CANONICALIZED** |
 | HR & Operations | 5 | ✅ **DONE** |
 | Legal & Contracts | 5 | ✅ **DONE** |
 | AI/ML Evaluation | 6 | ✅ **DONE** |
@@ -82,22 +82,21 @@
 
 ---
 
-## ✅ Phase 4: Finance & Analytics — COMPLETE
+## ✅ Phase 4: Finance & Analytics — CANONICALIZED
 
 **Location:** `finance_analytics/`
 
 | Skill | Description |
 |-------|-------------|
-| Budget Analysis | Variance analysis, allocation review |
-| Financial Statement Review | Balance sheet, P&L, ratios |
-| ROI Calculator Review | Investment return calculations |
-| KPI Dashboard Audit | Metric selection, visualization |
-| Cash Flow Analysis | Working capital, runway projection |
-| Investment Due Diligence | Pre-investment checklist |
-| Financial Risk Assessment | Risk identification & mitigation |
-| Revenue Forecast Review | Projection methodology |
+| Finance Analysis System | Budget, statement, cash flow, KPI, and ROI analysis packet |
+| Forecast & Scenario Review | Forecast, scenario, stress test, and threshold decision packet |
+| Investment & Risk Due Diligence | Investment, vendor, project, and financial risk due diligence |
+| Finance QA Checklist | Final QA for evidence, assumptions, risk language, and approval boundary |
 
-**Commit:** `TBD` (2026-02-04)
+Legacy micro-skills were moved to `finance_analytics/legacy/canonicalized_2026_04/`
+with `.legacy.md` extensions so they are not indexed as active skills.
+
+**Canonicalization:** 2026-04-26
 
 ---
 
@@ -132,7 +131,7 @@
 | Marketing & SEO | 9 | ✅ Done |
 | Product & UX | 8 | ✅ Done |
 | Security & Compliance | 6 | ✅ Done |
-| Finance & Analytics | 8 | ✅ Done |
+| Finance & Analytics | 4 | ✅ Canonicalized |
 | AI/ML Evaluation | 6 | ✅ Done |
 | Web Development | 5 | ✅ Done |
 | Business Analysis | 3 | ✅ Done |
@@ -174,7 +173,7 @@
 
 | Tool | Location | Description |
 |------|----------|-------------|
-| `skills_index.csv` | `data/skills_index.csv` | Structured metadata for all 141 skills |
+| `skills_index.csv` | `data/skills_index.csv` | Structured metadata for all 131 active skills |
 | `generate_index.py` | `tools/skill-index/` | Parse .skill.md → CSV index |
 | `search_skills.py` | `tools/skill-search/` | BM25 search engine (pure Python, < 10ms) |
 | `reason_skills.py` | `tools/skill-search/` | Industry reasoning engine (50 rules, 12 industries) |
@@ -212,7 +211,7 @@ python tools/skill-search/plan_skills.py --task "e-commerce mobile app" --format
 
 - Script: `scripts/validate_skills.py`
 - Index: `tools/skill-index/generate_index.py --validate`
-- Status: ✅ All 141 skills pass (0 issues / 0 warnings) — 2026-02-22
+- Status: ✅ Finance Analytics canonical active set passes (4 files, 0 issues / 0 warnings) — 2026-04-26
 
 ---
 

@@ -271,7 +271,7 @@ flowchart TB
 
 1. Run Web UI: `npm install && npm run dev`
 2. Use AI Agent Chat with Gemini/OpenAI/Anthropic
-3. Browse 141 skills + 34 agent tools
+3. Browse 131 active skills + 34 agent tools
 
 → See [Agent Platform Guide](reference/CVF_v16_AGENT_PLATFORM.md)
 

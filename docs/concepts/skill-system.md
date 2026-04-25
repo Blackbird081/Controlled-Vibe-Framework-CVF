@@ -75,21 +75,21 @@ The Form Input section is the core of a skill — it defines exactly what inform
 
 ## Skill Library
 
-CVF includes **114 pre-built skills** across 12 domains:
+CVF includes **131 active skills** across 12 domains:
 
 | Domain | Skills | Examples |
 |--------|:------:|---------|
-| Marketing & SEO | 9 | SEO audit, content strategy, A/B test |
-| Product & UX | 8 | User story, wireframe spec, UX audit |
-| Security & Compliance | 6 | Threat model, compliance check |
-| Finance & Analytics | 8 | Financial model, KPI dashboard |
-| App Development | 8 | REST API, database migration, test suite |
+| Marketing & SEO | 13 | SEO audit, content strategy, conversion |
+| Product & UX | 17 | UX audit, CVF web redesign, design handoff |
+| Security & Compliance | 8 | Threat model, compliance check |
+| Finance & Analytics | 4 | Analysis packet, forecast, due diligence, QA |
+| App Development | 43 | App spec, API, database, deployment |
 | HR & Operations | 5 | Job description, onboarding, OKR |
-| Legal & Contracts | 5 | Contract review, NDA, Terms of Service |
-| AI/ML Evaluation | 6 | Model evaluation, bias audit |
-| Web Development | 6 | Landing page, performance audit |
-| Business Analysis | 3 | Market research, competitive analysis |
-| Content Creation | 3 | Blog post, technical docs |
+| Legal & Contracts | 7 | Contract review, NDA, Terms of Service |
+| AI/ML Evaluation | 10 | Model evaluation, bias audit |
+| Web Development | 11 | Landing page, performance audit |
+| Business Analysis | 6 | Market research, competitive analysis |
+| Content Creation | 4 | Blog post, technical docs |
 | Technical Review | 3 | Code review, architecture review |
 
 **Browse all:** [`EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/`](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)

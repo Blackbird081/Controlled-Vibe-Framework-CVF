@@ -51,7 +51,7 @@ The `non_coder_workflow` domain was dissolved. Its 7 skills were migrated:
 | Related commits | `36195bd` |
 
 ### Context
-8 new skills were imported from the CVF-Compatible Skills archive. All were written in Vietnamese. The existing 141 skills in the CVF library are written in English. Skills function as governance instructions for AI/Agent execution — they define constraints, validation hooks, and behavioral rules that the AI reads and follows.
+8 new skills were imported from the CVF-Compatible Skills source archive. All were written in Vietnamese. The active CVF skill library is governed by domain folders and canonicalization policy. Skills function as governance instructions for AI/Agent execution — they define constraints, validation hooks, and behavioral rules that the AI reads and follows.
 
 ### Decision
 **All skill file content MUST be written in English.**
@@ -66,7 +66,7 @@ All 8 imported skills were fully translated to English (v1.1.0). This applies to
 
 ### Consequences
 - `SKILL_INTAKE_GOVERNANCE.md` mandates English as a disqualification rule
-- Existing 141 skills: already in English — no action needed
+- Existing active skill library: already governed by domain folders and canonicalization policy
 - New or imported skills: must be translated BEFORE being placed in the library
 - The filename `05_auto_documentation_vn.skill.md` retains `_vn` in the name to indicate the skill *generates* Vietnamese output, not that the skill itself is in Vietnamese
 

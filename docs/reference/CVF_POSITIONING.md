@@ -48,7 +48,7 @@ CVF has 5 distinct layers (not a monolith):
 │     v1.3, governance/      — Python scripts, CI/CD       │
 ├─────────────────────────────────────────────────────────┤
 │  📖 CORE (Layer 1) ← This IS CVF                        │
-│     v1.0, v1.1, v1.2       — Rules + 141 Skills          │
+│     v1.0, v1.1, v1.2       — Rules + 131 Active Skills   │
 │     → Always needed. Start here.                          │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -57,7 +57,7 @@ CVF has 5 distinct layers (not a monolith):
 - **Principles:** Outcome > Code, Spec-first, Risk-aware
 - **Canonical loop:** INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 - **Risk Model:** R0 (Auto) → R1 (Audit) → R2 (Review) → R3 (Manual)
-- **Skill Library:** 141 skills across 12 domains
+- **Skill Library:** 131 active skills across 12 domains
 
 ### Layer 2: Tools (Optional)
 - `report_spec_metrics.py` — Spec quality scoring
@@ -114,7 +114,7 @@ CVF has 5 distinct layers (not a monolith):
 |---------|-----|------|------|----------------|
 | AI governance | ✅ Core focus | ❌ | ❌ | ❌ |
 | Risk-based phases | ✅ R0-R3 | ❌ | ✅ | ❌ |
-| Skill library | ✅ 141 skills | ❌ | ❌ | Partial |
+| Skill library | ✅ 131 active skills | ❌ | ❌ | Partial |
 | Agent-agnostic | ✅ | N/A | N/A | ❌ Usually locked |
 | Quality scoring | ✅ | ✅ Metrics | ✅ Metrics | ❌ |
 | AI Safety Runtime | ✅ v1.7.x | ❌ | ❌ | ❌ |

@@ -142,7 +142,7 @@ Khi đánh giá giá trị sản phẩm hiện tại của CVF, mặc định hi
 │     v1.2 — Skill Governance: Registry, Risk model R0–R3    │
 │     v1.5 — UX Platform (FROZEN)                            │
 │     v1.5.1 — End-User Orientation                           │
-│     v1.5.2 — Skill Library (141 skills, 12 domains, ACTIVE) │
+│     v1.5.2 — Skill Library (131 active skills, 12 domains)  │
 ├─────────────────────────────────────────────────────────────┤
 │  🛡️ LAYER 1.5 — DEVELOPMENT GOVERNANCE                      │
 │     v1.1.1 — Phase Governance Protocol (STABLE ✅)          │
@@ -187,7 +187,7 @@ Khi đánh giá giá trị sản phẩm hiện tại của CVF, mặc định hi
 | v1.4 | Usage Layer | 2 | Active ✅ | `CVF_v1.4_USAGE_LAYER/` |
 | v1.5 | UX Platform | 1 | **FROZEN** ❄️ | `CVF_v1.5_UX_PLATFORM/` |
 | v1.5.1 | End-User Orientation | 1 | Active ✅ | `CVF_v1.5.1_END_USER_ORIENTATION/` |
-| v1.5.2 | Skill Library (141 skills) | 1 | Active ✅ | `CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` |
+| v1.5.2 | Skill Library (131 active skills) | 1 | Active ✅ | `CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` |
 | v1.6 | Agent Platform | 3 | Active ⭐ | `CVF_v1.6_AGENT_PLATFORM/` |
 | v1.6.1 | Governance Engine | 3 | Active 🔐 | `CVF_v1.6.1_GOVERNANCE_ENGINE/` |
 | v1.7 | Controlled Intelligence | 2.5 | Active 🧠 | `CVF_v1.7_CONTROLLED_INTELLIGENCE/` |
@@ -397,7 +397,7 @@ python governance/compat/check_docs_governance_compat.py --enforce
 
 | Thuộc tính | Giá trị |
 |---|---|
-| Tổng số skills | **141 skills** |
+| Tổng số skills | **131 active skills** |
 | Số domains | **12 domains** |
 | Agent Tools | **34 tools** |
 | Location | `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` |
@@ -509,7 +509,7 @@ Controlled-Vibe-Framework-CVF/
 | **Total Tests** | **~2,430+ tests** |
 | Web Coverage | 93.05% Stmts |
 | Kernel Coverage | 96.45% Stmts · 91.41% Branch · 99.09% Fn · 97.01% Lines |
-| Skills | 141 skills, 12 domains |
+| Skills | 131 active skills, 12 domains |
 | Agent Tools | 34 tools |
 | Overall Score | 9.4/10 (independent) · 8.5/10 (Antigravity) · **7.8/10** (system assessment 2026-03-09) |
 | **v1.7.3 addition** | Runtime Adapter Hub: 5 contracts + 4 adapters |

@@ -13,7 +13,7 @@ before importing external skill packs or adding overlapping micro-skills.
 
 | Metric | Value |
 |--------|-------|
-| **Tổng Skills** | **141 skills** |
+| **Tổng Skills** | **131 skills** |
 | **Domains** | 12 domains |
 | **Phase 5 (NEW)** | 16 skills |
 
@@ -120,7 +120,16 @@ kept under `legacy/` for audit/reference only.
 ---
 
 ### 💰 [Finance & Analytics](finance_analytics/) (Phase 4)
-8 skills cho financial analysis, budgeting, và forecasting
+Canonical finance guidance now uses 4 active, non-coder friendly skills. Older
+finance micro-skills are retained under `finance_analytics/legacy/` for
+audit/reference only.
+
+| Skill | Mục đích | Difficulty |
+|-------|----------|------------|
+| Finance Analysis System | Phân tích budget, statement, cash flow, KPI, ROI thành finance packet | Medium |
+| Forecast & Scenario Review | Review forecast, scenario, stress test, và threshold decision | Medium |
+| Investment & Risk Due Diligence | Due diligence investment/project/vendor với risk register | Advanced |
+| Finance QA Checklist | QA evidence, assumptions, risk boundary trước khi gửi quyết định | Easy |
 
 ---
 

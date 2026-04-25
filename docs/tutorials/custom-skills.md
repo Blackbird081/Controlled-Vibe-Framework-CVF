@@ -380,16 +380,16 @@ The CVF Skill Library organizes skills by domain:
 
 | Domain | Count | Example Skills |
 |--------|:-----:|---------|
-| Marketing & SEO | 9 | SEO audit, content strategy, A/B test plan |
-| Product & UX | 8 | User story, wireframe spec, UX audit |
-| Security & Compliance | 6 | Threat model, compliance check, pen test plan |
-| Finance & Analytics | 8 | Financial model, KPI dashboard, forecast |
-| App Development | 8 | REST API, database migration, test suite |
+| Marketing & SEO | 13 | SEO audit, content strategy, conversion |
+| Product & UX | 17 | UX audit, CVF web redesign, design handoff |
+| Security & Compliance | 8 | Threat model, compliance check, pen test plan |
+| Finance & Analytics | 4 | Analysis packet, forecast, due diligence, QA |
+| App Development | 43 | REST API, database migration, test suite |
 | HR & Operations | 5 | Job description, onboarding plan, OKR |
-| Legal & Contracts | 5 | Contract review, NDA template, ToS draft |
-| AI/ML Evaluation | 6 | Model evaluation, bias audit, dataset review |
-| Web Development | 6 | Landing page, responsive layout, performance |
-| **Total** | **114** | |
+| Legal & Contracts | 7 | Contract review, NDA template, ToS draft |
+| AI/ML Evaluation | 10 | Model evaluation, bias audit, dataset review |
+| Web Development | 11 | Landing page, responsive layout, performance |
+| **Total** | **131** | |
 
 Browse all skills: [`EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/`](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
 

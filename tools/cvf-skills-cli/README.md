@@ -1,6 +1,6 @@
 # cvf-skills
 
-> CVF Skill Library CLI — Search, Plan, and Apply 141 skills across 12 domains.
+> CVF Skill Library CLI — Search, Plan, and Apply 131 active skills across 12 domains.
 
 **Zero dependencies. Pure Node.js. Works offline.**
 
@@ -160,7 +160,7 @@ cvf-skills-cli/
 │   ├── commands.js        # search/plan/list/init commands
 │   └── commands.test.js   # 23 tests (node --test)
 ├── data/
-│   ├── skills_index.csv   # 141 skill records
+│   ├── skills_index.csv   # 131 active skill records
 │   └── skill_reasoning.csv # 50 industry reasoning rules
 ├── package.json
 └── README.md

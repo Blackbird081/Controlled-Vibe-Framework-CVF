@@ -62,7 +62,7 @@ Phase E: Freeze     → Chốt trạng thái cuối và khóa phạm vi
 
 2. **Cho AI đọc CVF rules** khi bắt đầu phiên làm việc — AI sẽ tự tuân thủ 5-phase controlled loop, risk model, governance guards.
 
-3. **Dùng Skill Library** (141 skills, 12 domains) — chọn skill phù hợp trước khi code.
+3. **Dùng Skill Library** (131 active skills, 12 domains) — chọn skill phù hợp trước khi code.
 
 4. **Tuân thủ Workspace Isolation** — không phát triển project trong CVF root.
 
@@ -106,7 +106,7 @@ Quick glance vào trạng thái hệ thống hiện tại:
 | Xem bằng chứng live mới nhất | [`CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md`](../reference/CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md) |
 | Bắt đầu dùng CVF cho project | [`GET_STARTED.md`](../GET_STARTED.md) |
 | Hướng dẫn chi tiết solo/team/enterprise | [`docs/guides/`](./) |
-| Xem danh sách 141 skills | [`EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/`](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| Xem danh sách 131 active skills | [`EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/`](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
 | Xem quyết định kiến trúc | [`CVF_ARCHITECTURE_DECISIONS.md`](../CVF_ARCHITECTURE_DECISIONS.md) |
 | Xem roadmap nâng cấp | [`CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md`](../reviews/cvf_phase_governance/CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md) |
 | Xem Web UI | [`CVF_v1.6_AGENT_PLATFORM`](../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) |

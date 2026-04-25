@@ -26,6 +26,7 @@ Before evaluating any new skill, reviewers must verify it aligns with:
 4. **Form template purpose** — User-facing skills capture input. Agent skills govern execution. Do not mix these.
 5. **English-only content** — All skill section content must be in English for AI/Agent consistency.
 6. **Non-coder abstraction first** — If a skill is exposed to non-coders, users must describe goals in plain language while hidden frameworks, stacks, and execution patterns stay inside the generated spec/handoff layer.
+7. **Few, strong portfolio** — Prefer a small canonical domain portfolio over many micro-skills. Apply `governance/skill-library/specs/SKILL_PORTFOLIO_CANONICALIZATION_POLICY.md` before adding or importing skills.
 
 ---
 
@@ -60,6 +61,7 @@ Reject immediately if the skill:
 | Does not produce a verifiable, structured output | Cannot be UAT-tested |
 | Content is in Vietnamese or mixed language | All skill content must be in English |
 | Proposed domain is based on user type ("non_coder_workflow") | Domains must be job functions, not personas |
+| Can be merged into an existing canonical domain skill | Keeps the active library small and easier for non-coders to choose from |
 
 ---
 
@@ -87,6 +89,7 @@ Use this priority order to assign the correct domain:
 | Duplicate of existing skill | ❌ REJECT — update existing skill if improvements exist |
 | No structured output | ❌ REJECT — redesign as proper spec template first |
 | Domain unclear | ⚠️ HOLD — request domain assignment from governance reviewer |
+| Useful guidance but not a standalone job | ✅ ABSORB — merge into canonical skill, docs, examples, or QA checklist |
 
 ---
 

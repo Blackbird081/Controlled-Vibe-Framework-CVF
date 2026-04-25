@@ -32,12 +32,16 @@ Prevent skill library from growing noisy with near-duplicate entries.
 2. Skills above threshold → quarantine (moved, not deleted)
 3. Quarantined skills retained in `dupe-quarantine/` for audit trail
 4. Higher quality_score skill is always kept
+5. Apply `SKILL_PORTFOLIO_CANONICALIZATION_POLICY.md` before creating any
+   replacement skill; merge into a canonical domain skill when possible.
 
 ## 5. Integration
 
 - Run deduplication before any bulk import
 - Run monthly as maintenance check
 - Quarantine report included in governance dashboard
+- Run a portfolio review after external knowledge absorption so useful
+  guidance enriches existing active skills instead of creating a noisy chooser.
 
 ## 6. Current State (2026-02-08)
 

@@ -5,6 +5,10 @@
 
 **Policy Note:** v1.5 UX Platform đã **FROZEN** (maintenance-only). Skill Library v1.5.2 **tiếp tục mở rộng** và được **v1.6 thừa hưởng** để dùng chung.
 
+**Portfolio Note:** Active skills should stay few, strong, and non-coder friendly.
+Use `governance/skill-library/specs/SKILL_PORTFOLIO_CANONICALIZATION_POLICY.md`
+before importing external skill packs or adding overlapping micro-skills.
+
 ## 📊 Thống kê
 
 | Metric | Value |

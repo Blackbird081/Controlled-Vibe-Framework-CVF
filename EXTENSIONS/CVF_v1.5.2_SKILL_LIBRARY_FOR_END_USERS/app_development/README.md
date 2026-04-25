@@ -30,7 +30,7 @@ Domain này cung cấp các skills để tạo **spec chất lượng cao** cho 
 | 4 | [Database Schema Design](./04_database_schema_design.skill.md) | Data modeling, relationships | Apps có database |
 | 5 | [API Design Spec](./05_api_design_spec.skill.md) | Endpoints, request/response | Apps có API |
 | 6 | [Desktop App Spec](./06_desktop_app_spec.skill.md) | Electron/Tauri apps | Desktop applications |
-| 7 | [CLI Tool Spec](./07_cli_tool_spec.skill.md) | Command-line tools | Automation, scripts |
+| 7 | [Project Init Checklist](./07_project_init_checklist.skill.md) | Project setup, init checklist | Starting any new project |
 | 8 | [Local Deployment](./08_local_deployment.skill.md) | Packaging, distribution | Ready to ship |
 
 ---

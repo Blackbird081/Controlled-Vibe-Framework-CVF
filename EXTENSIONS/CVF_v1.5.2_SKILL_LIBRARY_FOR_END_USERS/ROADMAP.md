@@ -5,23 +5,23 @@
 
 ---
 
-## 📊 Tiến độ tổng quan (Baseline v1.5.2)
+## 📊 Tiến độ tổng quan — Canonicalized Portfolio (2026-04-26)
 
-| Domain | Skills | Status |
-|--------|:------:|--------|
-| Marketing & SEO | 9 | ✅ **DONE** |
-| Product & UX | 8 | ✅ **DONE** |
-| Security & Compliance | 6 | ✅ **DONE** |
-| App Development | 8 | ✅ **DONE** |
-| Finance & Analytics | 4 | ✅ **CANONICALIZED** |
-| HR & Operations | 5 | ✅ **DONE** |
-| Legal & Contracts | 5 | ✅ **DONE** |
-| AI/ML Evaluation | 6 | ✅ **DONE** |
-| Web Development | 5 | ✅ **DONE** |
-| Business Analysis | 3 | ✅ **DONE** |
-| Content Creation | 3 | ✅ **DONE** |
-| Technical Review | 3 | ✅ **DONE** |
-| **TỔNG** | **12 Domains** | **69** | **Baseline Complete** |
+| Domain | Active | Legacy | Status |
+|--------|--------|--------|--------|
+| App Development | 8 | 35 | ✅ **CANONICALIZED** |
+| Product & UX | 6+2 | 9 | ✅ **CANONICALIZED** |
+| Marketing & SEO | 5 | 8 | ✅ **CANONICALIZED** |
+| Web Development | 6 | 5 | ✅ **CANONICALIZED** |
+| AI/ML Evaluation | 6 | 4 | ✅ **CANONICALIZED** |
+| Security & Compliance | 4 | 4 | ✅ **CANONICALIZED** |
+| Finance & Analytics | 4 | 11 | ✅ **CANONICALIZED** |
+| HR & Operations | 5 | 0 | ✅ **CANONICALIZED** |
+| Legal & Contracts | 5 | 2 | ✅ **CANONICALIZED** |
+| Business Analysis | 4 | 2 | ✅ **CANONICALIZED** |
+| Content Creation | 4 | 0 | ✅ **CANONICALIZED** |
+| Technical Review | 3 | 0 | ✅ **CANONICALIZED** |
+| **TỔNG** | **62 active** | **80 archived** | **Full Canonicalization Complete** |
 
 
 ---
@@ -148,7 +148,7 @@ with `.legacy.md` extensions so they are not indexed as active skills.
 | Integration | Status |
 |-------------|--------|
 | CVF Web UI Templates | ✅ 31 templates (23 new) |
-| Skill Library Files | ✅ 69 .skill.md files |
+| Skill Library Files | ✅ 62 active .skill.md files (80 archived in legacy/) |
 | AI Quick Links | ✅ ChatGPT, Claude, Gemini |
 | Export Functions | ✅ Clipboard, File export |
 
@@ -211,7 +211,34 @@ python tools/skill-search/plan_skills.py --task "e-commerce mobile app" --format
 
 - Script: `scripts/validate_skills.py`
 - Index: `tools/skill-index/generate_index.py --validate`
-- Status: ✅ Finance Analytics canonical active set passes (4 files, 0 issues / 0 warnings) — 2026-04-26
+- Status: ✅ Full portfolio canonicalized — 62 active skills, 80 archived — 2026-04-26
+
+---
+
+## ✅ Full Portfolio Canonicalization — COMPLETE (2026-04-26)
+
+**Goal:** Reduce portfolio from 131 scattered skills to 62 high-quality canonical skills.
+**Method:** For each domain, keep a numbered canonical set (01–NN) that covers the domain
+lifecycle without tool lock-in. Move all vendor-specific, duplicate, or niche skills to
+`legacy/superseded_2026_04/` with `.skill.legacy.md` extension.
+
+| Domain | Before | After | Archived | Legacy folder |
+| ------- | ------ | ----- | -------- | ------------- |
+| app_development | 43 | 8 | 35 | `legacy/superseded_2026_04/` |
+| product_ux | 17 | 6+2 | 9 | `legacy/superseded_2026_04/` |
+| marketing_seo | 13 | 5 | 8 | `legacy/superseded_2026_04/` |
+| web_development | 11 | 6 | 5 | `legacy/superseded_2026_04/` |
+| ai_ml_evaluation | 10 | 6 | 4 | `legacy/superseded_2026_04/` |
+| security_compliance | 8 | 4 | 4 | `legacy/superseded_2026_04/` |
+| legal_contracts | 7 | 5 | 2 | `legacy/superseded_2026_04/` |
+| business_analysis | 6 | 4 | 2 | `legacy/superseded_2026_04/` |
+| content_creation | 4 | 4 | 0 | — |
+| hr_operations | 5 | 5 | 0 | — |
+| technical_review | 3 | 3 | 0 | — |
+| finance_analytics | 4 | 4 | 11 | `legacy/canonicalized_2026_04/` |
+| **TOTAL** | **131** | **62** | **80** | |
+
+**Canonicalization date:** 2026-04-26
 
 ---
 

@@ -1,1765 +1,634 @@
-{
-  "generatedAt": "2026-04-25T23:09:59.000Z",
+﻿{
+  "generatedAt": "2026-04-26T06:32:16.250Z",
   "totalSkills": 62,
   "categories": [
     {
       "id": "ai_ml_evaluation",
-      "label": "AI & ML Evaluation",
+      "name": "AI & ML Evaluation",
       "skills": [
         {
-          "id": "ai_ml_evaluation/01_model_selection",
-          "name": "Model Selection",
+          "id": "01_model_selection",
+          "title": "Model Selection",
           "domain": "ai_ml_evaluation",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "ai",
-            "ai_ml_evaluation",
-            "chọn",
-            "evaluation",
-            "llm",
-            "ml",
-            "model",
-            "mới",
-            "selection"
-          ],
-          "description": "Chọn LLM cho dự án mới",
-          "file_path": "ai_ml_evaluation/01_model_selection.skill.md"
+          "summary": "Chọn LLM cho dự án mới",
+          "path": "ai_ml_evaluation/01_model_selection.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "ai_ml_evaluation/02_prompt_evaluation",
-          "name": "Prompt Evaluation",
+          "id": "02_prompt_evaluation",
+          "title": "Prompt Evaluation",
           "domain": "ai_ml_evaluation",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "ai",
-            "ai_ml_evaluation",
-            "deploy",
-            "evaluation",
-            "ml",
-            "prompt",
-            "review"
-          ],
-          "description": "Review prompt trước khi deploy",
-          "file_path": "ai_ml_evaluation/02_prompt_evaluation.skill.md"
+          "summary": "Review prompt trước khi deploy",
+          "path": "ai_ml_evaluation/02_prompt_evaluation.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "ai_ml_evaluation/03_output_quality_check",
-          "name": "Output Quality Check",
+          "id": "03_output_quality_check",
+          "title": "Output Quality Check",
           "domain": "ai_ml_evaluation",
           "difficulty": "Easy",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "ai",
-            "ai_ml_evaluation",
-            "check",
-            "dùng",
-            "evaluation",
-            "ml",
-            "output",
-            "quality",
-            "review"
-          ],
-          "description": "Review AI output trước khi dùng",
-          "file_path": "ai_ml_evaluation/03_output_quality_check.skill.md"
+          "summary": "Review AI output trước khi dùng",
+          "path": "ai_ml_evaluation/03_output_quality_check.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "ai_ml_evaluation/04_bias_detection",
-          "name": "Bias Detection",
+          "id": "04_bias_detection",
+          "title": "Bias Detection",
           "domain": "ai_ml_evaluation",
           "difficulty": "Advanced",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "ai",
-            "ai_ml_evaluation",
-            "audit",
-            "bias",
-            "detection",
-            "evaluation",
-            "ml",
-            "system"
-          ],
-          "description": "Audit AI system cho bias",
-          "file_path": "ai_ml_evaluation/04_bias_detection.skill.md"
+          "summary": "Audit AI system cho bias",
+          "path": "ai_ml_evaluation/04_bias_detection.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "ai_ml_evaluation/05_cost_optimization",
-          "name": "Cost Optimization",
+          "id": "05_cost_optimization",
+          "title": "Cost Optimization",
           "domain": "ai_ml_evaluation",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "ai",
-            "ai_ml_evaluation",
-            "cao",
-            "cost",
-            "costs",
-            "evaluation",
-            "ml",
-            "optimization",
-            "đang"
-          ],
-          "description": "AI costs đang cao",
-          "file_path": "ai_ml_evaluation/05_cost_optimization.skill.md"
+          "summary": "AI costs đang cao",
+          "path": "ai_ml_evaluation/05_cost_optimization.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "ai_ml_evaluation/06_ai_use_case_fit",
-          "name": "AI Use Case Fit",
+          "id": "06_ai_use_case_fit",
+          "title": "AI Use Case Fit",
           "domain": "ai_ml_evaluation",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "ai",
-            "ai_ml_evaluation",
-            "case",
-            "dùng",
-            "evaluation",
-            "fit",
-            "giá",
-            "ml",
-            "nên",
-            "use",
-            "đánh"
-          ],
-          "description": "Đánh giá có nên dùng AI không",
-          "file_path": "ai_ml_evaluation/06_ai_use_case_fit.skill.md"
+          "summary": "Đánh giá có nên dùng AI không",
+          "path": "ai_ml_evaluation/06_ai_use_case_fit.skill.md",
+          "risk_level": "R1"
         }
       ]
     },
     {
       "id": "app_development",
-      "label": "App Development",
+      "name": "App Development",
       "skills": [
         {
-          "id": "app_development/01_app_requirements_spec",
-          "name": "App Requirements Spec",
+          "id": "01_app_requirements_spec",
+          "title": "App Requirements Spec",
           "domain": "app_development",
           "difficulty": "Easy",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "app",
-            "app_development",
-            "bắt",
-            "development",
-            "mới",
-            "requirements",
-            "spec",
-            "đầu"
-          ],
-          "description": "Bắt đầu một dự án app mới",
-          "file_path": "app_development/01_app_requirements_spec.skill.md"
+          "summary": "Bắt đầu một dự án app mới",
+          "path": "app_development/01_app_requirements_spec.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "app_development/02_tech_stack_selection",
-          "name": "Tech Stack Selection",
+          "id": "02_tech_stack_selection",
+          "title": "Tech Stack Selection",
           "domain": "app_development",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "app",
-            "app_development",
-            "chọn",
-            "công",
-            "development",
-            "nghệ",
-            "requirements",
-            "selection",
-            "stack",
-            "tech"
-          ],
-          "description": "Đã có requirements, cần chọn công nghệ",
-          "file_path": "app_development/02_tech_stack_selection.skill.md"
+          "summary": "Đã có requirements, cần chọn công nghệ",
+          "path": "app_development/02_tech_stack_selection.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "app_development/03_architecture_design",
-          "name": "Architecture Design",
+          "id": "03_architecture_design",
+          "title": "Architecture Design",
           "domain": "app_development",
           "difficulty": "Advanced",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "app",
-            "app_development",
-            "architecture",
-            "design",
-            "development",
-            "requirements",
-            "stack",
-            "tech"
-          ],
-          "description": "Đã có requirements và tech stack",
-          "file_path": "app_development/03_architecture_design.skill.md"
+          "summary": "Đã có requirements và tech stack",
+          "path": "app_development/03_architecture_design.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "app_development/04_database_schema_design",
-          "name": "Database Schema Design",
+          "id": "04_database_schema_design",
+          "title": "Database Schema Design",
           "domain": "app_development",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "app",
-            "app_development",
-            "database",
-            "design",
-            "development",
-            "schema"
-          ],
-          "description": "|-------|-----------|------|---------|",
-          "file_path": "app_development/04_database_schema_design.skill.md"
+          "summary": "|-------|-----------|------|---------|",
+          "path": "app_development/04_database_schema_design.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "app_development/05_api_design_spec",
-          "name": "API Design Spec",
+          "id": "05_api_design_spec",
+          "title": "API Design Spec",
           "domain": "app_development",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "api",
-            "app",
-            "app_development",
-            "backend",
-            "design",
-            "development",
-            "graphql",
-            "rest",
-            "spec"
-          ],
-          "description": "App có backend API (REST/GraphQL)",
-          "file_path": "app_development/05_api_design_spec.skill.md"
+          "summary": "App có backend API (REST/GraphQL)",
+          "path": "app_development/05_api_design_spec.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "app_development/06_desktop_app_spec",
-          "name": "Desktop App Spec",
+          "id": "06_desktop_app_spec",
+          "title": "Desktop App Spec",
           "domain": "app_development",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "app",
-            "app_development",
-            "application",
-            "desktop",
-            "development",
-            "dựng",
-            "linux",
-            "macos",
-            "spec",
-            "windows",
-            "xây"
-          ],
-          "description": "Xây dựng desktop application (Windows/macOS/Linux)",
-          "file_path": "app_development/06_desktop_app_spec.skill.md"
+          "summary": "Xây dựng desktop application (Windows/macOS/Linux)",
+          "path": "app_development/06_desktop_app_spec.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "app_development/07_project_init_checklist",
-          "name": "Project Init Checklist",
+          "id": "07_project_init_checklist",
+          "title": "Project Init Checklist",
           "domain": "app_development",
           "difficulty": "Easy",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery (Pre-Phase A)"
-          ],
-          "keywords": [
-            "app",
-            "app_development",
-            "checklist",
-            "development",
-            "init",
-            "project",
-            "skill",
-            "use"
-          ],
-          "description": "When to use this skill:",
-          "file_path": "app_development/07_project_init_checklist.skill.md"
+          "summary": "When to use this skill:",
+          "path": "app_development/07_project_init_checklist.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "app_development/08_local_deployment",
-          "name": "Local Deployment Spec",
+          "id": "08_local_deployment",
+          "title": "Local Deployment Spec",
           "domain": "app_development",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "app",
-            "app_development",
-            "build",
-            "deployment",
-            "development",
-            "distribute",
-            "gói",
-            "local",
-            "spec",
-            "xong",
-            "đóng"
-          ],
-          "description": "App đã build xong, cần đóng gói để distribute",
-          "file_path": "app_development/08_local_deployment.skill.md"
+          "summary": "App đã build xong, cần đóng gói để distribute",
+          "path": "app_development/08_local_deployment.skill.md",
+          "risk_level": "R1"
         }
       ]
     },
     {
       "id": "business_analysis",
-      "label": "Business Analysis",
+      "name": "Business Analysis",
       "skills": [
         {
-          "id": "business_analysis/01_strategy_analysis",
-          "name": "Strategy Analysis",
+          "id": "01_strategy_analysis",
+          "title": "Strategy Analysis",
           "domain": "business_analysis",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery"
-          ],
-          "keywords": [
-            "analysis",
-            "business",
-            "business_analysis",
-            "doanh",
-            "kinh",
-            "phương",
-            "strategy",
-            "sánh"
-          ],
-          "description": "So sánh các phương án kinh doanh",
-          "file_path": "business_analysis/01_strategy_analysis.skill.md"
+          "summary": "So sánh các phương án kinh doanh",
+          "path": "business_analysis/01_strategy_analysis.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "business_analysis/02_risk_assessment",
-          "name": "Risk Assessment",
+          "id": "02_risk_assessment",
+          "title": "Risk Assessment",
           "domain": "business_analysis",
           "difficulty": "Advanced",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery"
-          ],
-          "keywords": [
-            "analysis",
-            "assessment",
-            "business",
-            "business_analysis",
-            "giá",
-            "lớn",
-            "quyết",
-            "risk",
-            "rủi",
-            "đánh",
-            "định"
-          ],
-          "description": "Đánh giá rủi ro trước khi ra quyết định lớn",
-          "file_path": "business_analysis/02_risk_assessment.skill.md"
+          "summary": "Đánh giá rủi ro trước khi ra quyết định lớn",
+          "path": "business_analysis/02_risk_assessment.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "business_analysis/03_market_research",
-          "name": "Market Research",
+          "id": "03_market_research",
+          "title": "Market Research",
           "domain": "business_analysis",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery"
-          ],
-          "keywords": [
-            "analysis",
-            "business",
-            "business_analysis",
-            "cứu",
-            "market",
-            "mới",
-            "nghiên",
-            "research",
-            "thị",
-            "trường"
-          ],
-          "description": "Nghiên cứu thị trường mới",
-          "file_path": "business_analysis/03_market_research.skill.md"
+          "summary": "Nghiên cứu thị trường mới",
+          "path": "business_analysis/03_market_research.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "business_analysis/04_business_plan",
-          "name": "Business Plan",
+          "id": "04_business_plan",
+          "title": "Business Plan",
           "domain": "business_analysis",
           "difficulty": "Easy",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery"
-          ],
-          "keywords": [
-            "analysis",
-            "business",
-            "business_analysis",
-            "creating",
-            "existing",
-            "investo",
-            "new",
-            "phase",
-            "pivot",
-            "plan",
-            "preparing",
-            "scratch",
-            "share",
-            "solopreneur",
-            "structure",
-            "update",
-            "updating",
-            "use",
-            "write"
-          ],
-          "description": "> Write, structure, and update a business plan for a solopreneur. Use when creating a plan from scratch, updating an existing plan after a pivot or new phase, or preparing a plan to share with investo",
-          "file_path": "business_analysis/04_business_plan.skill.md"
+          "summary": "> Write, structure, and update a business plan for a solopreneur. Use when creating a plan from scratch, updating an existing plan after a pivot or new phase, or preparing a plan to share with investo",
+          "path": "business_analysis/04_business_plan.skill.md",
+          "risk_level": "R1"
         }
       ]
     },
     {
       "id": "content_creation",
-      "label": "Content Creation",
+      "name": "Content Creation",
       "skills": [
         {
-          "id": "content_creation/01_documentation",
-          "name": "Documentation",
+          "id": "01_documentation",
+          "title": "Documentation",
           "domain": "content_creation",
           "difficulty": "Easy",
-          "risk_level": "R0",
-          "phases": [
-            "Discovery",
-            "Design"
-          ],
-          "keywords": [
-            "content",
-            "content_creation",
-            "creation",
-            "documentation",
-            "read"
-          ],
-          "description": "Who should read this",
-          "file_path": "content_creation/01_documentation.skill.md"
+          "summary": "Who should read this",
+          "path": "content_creation/01_documentation.skill.md",
+          "risk_level": "R0"
         },
         {
-          "id": "content_creation/02_report_writing",
-          "name": "Report Writing",
+          "id": "02_report_writing",
+          "title": "Report Writing",
           "domain": "content_creation",
           "difficulty": "Medium",
-          "risk_level": "R0",
-          "phases": [
-            "Discovery",
-            "Design"
-          ],
-          "keywords": [
-            "báo",
-            "content",
-            "content_creation",
-            "creation",
-            "cáo",
-            "doanh",
-            "kinh",
-            "report",
-            "writing",
-            "định"
-          ],
-          "description": "Báo cáo kinh doanh định kỳ",
-          "file_path": "content_creation/02_report_writing.skill.md"
+          "summary": "Báo cáo kinh doanh định kỳ",
+          "path": "content_creation/02_report_writing.skill.md",
+          "risk_level": "R0"
         },
         {
-          "id": "content_creation/03_presentation",
-          "name": "Presentation",
+          "id": "03_presentation",
+          "title": "Presentation",
           "domain": "content_creation",
           "difficulty": "Easy",
-          "risk_level": "R0",
-          "phases": [
-            "Discovery",
-            "Design"
-          ],
-          "keywords": [
-            "content",
-            "content_creation",
-            "creation",
-            "deck",
-            "investors",
-            "pitch",
-            "presentation"
-          ],
-          "description": "Pitch deck cho investors",
-          "file_path": "content_creation/03_presentation.skill.md"
+          "summary": "Pitch deck cho investors",
+          "path": "content_creation/03_presentation.skill.md",
+          "risk_level": "R0"
         },
         {
-          "id": "content_creation/04_collaborative_writing",
-          "name": "Collaborative Writing",
+          "id": "04_collaborative_writing",
+          "title": "Collaborative Writing",
           "domain": "content_creation",
           "difficulty": "Easy",
-          "risk_level": "R0",
-          "phases": [
-            "Discovery",
-            "Design"
-          ],
-          "keywords": [
-            "authoring",
-            "coauthoring",
-            "content",
-            "content_creation",
-            "creation",
-            "decision",
-            "doc",
-            "docs",
-            "documentation",
-            "guide",
-            "proposals",
-            "similar",
-            "specs",
-            "structured",
-            "technical",
-            "through",
-            "use",
-            "user",
-            "users",
-            "wants",
-            "workflow",
-            "write"
-          ],
-          "description": "> Guide users through a structured workflow for co-authoring documentation. Use when user wants to write documentation, proposals, technical specs, decision docs, or similar structured content. This w",
-          "file_path": "content_creation/04_collaborative_writing.skill.md"
+          "summary": "> Guide users through a structured workflow for co-authoring documentation. Use when user wants to write documentation, proposals, technical specs, decision docs, or similar structured content. This w",
+          "path": "content_creation/04_collaborative_writing.skill.md",
+          "risk_level": "R0"
         }
       ]
     },
     {
       "id": "finance_analytics",
-      "label": "Finance Analytics",
+      "name": "Finance & Analytics",
       "skills": [
         {
-          "id": "finance_analytics/01_finance_analysis_system",
-          "name": "Finance Analysis System",
+          "id": "01_finance_analysis_system",
+          "title": "Finance Analysis System",
           "domain": "finance_analytics",
           "difficulty": "Medium",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "analysis",
-            "analytics",
-            "coder",
-            "finance",
-            "finance_analytics",
-            "needs",
-            "non",
-            "packet",
-            "skill",
-            "structured",
-            "system",
-            "use"
-          ],
-          "description": "Use this skill when a non-coder needs a structured finance analysis packet for",
-          "file_path": "finance_analytics/01_finance_analysis_system.skill.md"
+          "summary": "Use this skill when a non-coder needs a structured finance analysis packet for",
+          "path": "finance_analytics/01_finance_analysis_system.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "finance_analytics/02_forecast_scenario_review",
-          "name": "Forecast & Scenario Review",
+          "id": "02_forecast_scenario_review",
+          "title": "Forecast & Scenario Review",
           "domain": "finance_analytics",
           "difficulty": "Medium",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "analytics",
-            "coder",
-            "comparison",
-            "finance",
-            "finance_analytics",
-            "forecast",
-            "needs",
-            "non",
-            "review",
-            "scenario",
-            "skill",
-            "use"
-          ],
-          "description": "Use this skill when a non-coder needs a finance forecast, scenario comparison,",
-          "file_path": "finance_analytics/02_forecast_scenario_review.skill.md"
+          "summary": "Use this skill when a non-coder needs a finance forecast, scenario comparison,",
+          "path": "finance_analytics/02_forecast_scenario_review.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "finance_analytics/03_investment_risk_due_diligence",
-          "name": "Investment & Risk Due Diligence",
+          "id": "03_investment_risk_due_diligence",
+          "title": "Investment & Risk Due Diligence",
           "domain": "finance_analytics",
           "difficulty": "Advanced",
-          "risk_level": "R3",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "analytics",
-            "coder",
-            "diligence",
-            "due",
-            "finance",
-            "finance_analytics",
-            "investment",
-            "needs",
-            "non",
-            "packet",
-            "risk",
-            "skill",
-            "use"
-          ],
-          "description": "Use this skill when a non-coder needs a due diligence packet for investment,",
-          "file_path": "finance_analytics/03_investment_risk_due_diligence.skill.md"
+          "summary": "Use this skill when a non-coder needs a due diligence packet for investment,",
+          "path": "finance_analytics/03_investment_risk_due_diligence.skill.md",
+          "risk_level": "R3"
         },
         {
-          "id": "finance_analytics/04_finance_qa_checklist",
-          "name": "Finance QA Checklist",
+          "id": "04_finance_qa_checklist",
+          "title": "Finance QA Checklist",
           "domain": "finance_analytics",
           "difficulty": "Easy",
-          "risk_level": "R1",
-          "phases": [
-            "Review"
-          ],
-          "keywords": [
-            "analytics",
-            "checklist",
-            "final",
-            "finance",
-            "finance_analytics",
-            "gate",
-            "packet",
-            "sent",
-            "skill",
-            "use",
-            "user"
-          ],
-          "description": "Use this skill as the final QA gate before a finance packet is sent to a user,",
-          "file_path": "finance_analytics/04_finance_qa_checklist.skill.md"
+          "summary": "Use this skill as the final QA gate before a finance packet is sent to a user,",
+          "path": "finance_analytics/04_finance_qa_checklist.skill.md",
+          "risk_level": "R1"
         }
       ]
     },
     {
       "id": "hr_operations",
-      "label": "HR Operations",
+      "name": "HR Operations",
       "skills": [
         {
-          "id": "hr_operations/01_job_description",
-          "name": "Job Description",
+          "id": "01_job_description",
+          "title": "Job Description",
           "domain": "hr_operations",
           "difficulty": "Easy",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Review"
-          ],
-          "keywords": [
-            "description",
-            "hr",
-            "hr_operations",
-            "job",
-            "mới",
-            "operations",
-            "trí",
-            "tạo"
-          ],
-          "description": "Tạo JD cho vị trí mới",
-          "file_path": "hr_operations/01_job_description.skill.md"
+          "summary": "Tạo JD cho vị trí mới",
+          "path": "hr_operations/01_job_description.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "hr_operations/02_interview_evaluation",
-          "name": "Interview Evaluation",
+          "id": "02_interview_evaluation",
+          "title": "Interview Evaluation",
           "domain": "hr_operations",
           "difficulty": "Medium",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Review"
-          ],
-          "keywords": [
-            "evaluation",
-            "giá",
-            "hr",
-            "hr_operations",
-            "hợp",
-            "interview",
-            "operations",
-            "phỏng",
-            "tổng",
-            "viên",
-            "vấn",
-            "đánh",
-            "ứng"
-          ],
-          "description": "Sau khi phỏng vấn ứng viên, cần đánh giá tổng hợp",
-          "file_path": "hr_operations/02_interview_evaluation.skill.md"
+          "summary": "Sau khi phỏng vấn ứng viên, cần đánh giá tổng hợp",
+          "path": "hr_operations/02_interview_evaluation.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "hr_operations/03_performance_review",
-          "name": "Performance Review",
+          "id": "03_performance_review",
+          "title": "Performance Review",
           "domain": "hr_operations",
           "difficulty": "Medium",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Review"
-          ],
-          "keywords": [
-            "annually",
-            "giá",
-            "hiệu",
-            "hr",
-            "hr_operations",
-            "operations",
-            "performance",
-            "quarterly",
-            "review",
-            "suất",
-            "đánh",
-            "định"
-          ],
-          "description": "Đánh giá hiệu suất định kỳ (quarterly/annually)",
-          "file_path": "hr_operations/03_performance_review.skill.md"
+          "summary": "Đánh giá hiệu suất định kỳ (quarterly/annually)",
+          "path": "hr_operations/03_performance_review.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "hr_operations/04_onboarding_checklist",
-          "name": "Onboarding Checklist",
+          "id": "04_onboarding_checklist",
+          "title": "Onboarding Checklist",
           "domain": "hr_operations",
           "difficulty": "Easy",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Review"
-          ],
-          "keywords": [
-            "checklist",
-            "hr",
-            "hr_operations",
-            "join",
-            "mới",
-            "nhân",
-            "onboarding",
-            "operations",
-            "viên"
-          ],
-          "description": "Có nhân viên mới join",
-          "file_path": "hr_operations/04_onboarding_checklist.skill.md"
+          "summary": "Có nhân viên mới join",
+          "path": "hr_operations/04_onboarding_checklist.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "hr_operations/05_policy_documentation",
-          "name": "Policy Documentation",
+          "id": "05_policy_documentation",
+          "title": "Policy Documentation",
           "domain": "hr_operations",
           "difficulty": "Medium",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Review"
-          ],
-          "keywords": [
-            "documentation",
-            "hr",
-            "hr_operations",
-            "numbers",
-            "operations",
-            "policy",
-            "rules",
-            "specific"
-          ],
-          "description": "✅ Specific rules với numbers",
-          "file_path": "hr_operations/05_policy_documentation.skill.md"
+          "summary": "✅ Specific rules với numbers",
+          "path": "hr_operations/05_policy_documentation.skill.md",
+          "risk_level": "R2"
         }
       ]
     },
     {
       "id": "legal_contracts",
-      "label": "Legal & Contracts",
+      "name": "Legal & Contracts",
       "skills": [
         {
-          "id": "legal_contracts/01_contract_review",
-          "name": "Contract Review",
+          "id": "01_contract_review",
+          "title": "Contract Review",
           "domain": "legal_contracts",
           "difficulty": "Medium",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Review"
-          ],
-          "keywords": [
-            "contract",
-            "contracts",
-            "language",
-            "legal",
-            "legal_contracts",
-            "legalistic",
-            "plain",
-            "request",
-            "review"
-          ],
-          "description": "| Too legalistic | Request plain language |",
-          "file_path": "legal_contracts/01_contract_review.skill.md"
+          "summary": "| Too legalistic | Request plain language |",
+          "path": "legal_contracts/01_contract_review.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "legal_contracts/02_nda_template",
-          "name": "NDA Template",
+          "id": "02_nda_template",
+          "title": "NDA Template",
           "domain": "legal_contracts",
           "difficulty": "Medium",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Review"
-          ],
-          "keywords": [
-            "confidential",
-            "contracts",
-            "definition",
-            "info",
-            "legal",
-            "legal_contracts",
-            "nda",
-            "rộng",
-            "template"
-          ],
-          "description": "[ ] Definition of confidential info đủ rộng",
-          "file_path": "legal_contracts/02_nda_template.skill.md"
+          "summary": "[ ] Definition of confidential info đủ rộng",
+          "path": "legal_contracts/02_nda_template.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "legal_contracts/03_terms_of_service",
-          "name": "Terms of Service",
+          "id": "03_terms_of_service",
+          "title": "Terms of Service",
           "domain": "legal_contracts",
           "difficulty": "Advanced",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Review"
-          ],
-          "keywords": [
-            "contracts",
-            "launch",
-            "legal",
-            "legal_contracts",
-            "mới",
-            "phẩm",
-            "service",
-            "sản",
-            "terms",
-            "website"
-          ],
-          "description": "Launch sản phẩm/website mới",
-          "file_path": "legal_contracts/03_terms_of_service.skill.md"
+          "summary": "Launch sản phẩm/website mới",
+          "path": "legal_contracts/03_terms_of_service.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "legal_contracts/04_compliance_checklist",
-          "name": "Compliance Checklist",
+          "id": "04_compliance_checklist",
+          "title": "Compliance Checklist",
           "domain": "legal_contracts",
           "difficulty": "Medium",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Review"
-          ],
-          "keywords": [
-            "checklist",
-            "compliance",
-            "contracts",
-            "launch",
-            "legal",
-            "legal_contracts",
-            "mới",
-            "phẩm",
-            "sản",
-            "thị",
-            "trường"
-          ],
-          "description": "Launch sản phẩm ở thị trường mới",
-          "file_path": "legal_contracts/04_compliance_checklist.skill.md"
+          "summary": "Launch sản phẩm ở thị trường mới",
+          "path": "legal_contracts/04_compliance_checklist.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "legal_contracts/05_ip_protection",
-          "name": "IP Protection",
+          "id": "05_ip_protection",
+          "title": "IP Protection",
           "domain": "legal_contracts",
           "difficulty": "Medium",
-          "risk_level": "R2",
-          "phases": [
-            "Discovery",
-            "Review"
-          ],
-          "keywords": [
-            "assets",
-            "contracts",
-            "công",
-            "giá",
-            "legal",
-            "legal_contracts",
-            "protection",
-            "đánh"
-          ],
-          "description": "Đánh giá IP assets của công ty",
-          "file_path": "legal_contracts/05_ip_protection.skill.md"
+          "summary": "Đánh giá IP assets của công ty",
+          "path": "legal_contracts/05_ip_protection.skill.md",
+          "risk_level": "R2"
         }
       ]
     },
     {
       "id": "marketing_seo",
-      "label": "Marketing & SEO",
+      "name": "Marketing & SEO",
       "skills": [
         {
-          "id": "marketing_seo/01_seo_audit",
-          "name": "SEO Audit",
+          "id": "01_seo_audit",
+          "title": "SEO Audit",
           "domain": "marketing_seo",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design"
-          ],
-          "keywords": [
-            "audit",
-            "bản",
-            "cải",
-            "engines",
-            "giá",
-            "hiển",
-            "hiện",
-            "khả",
-            "marketing",
-            "marketing_seo",
-            "năng",
-            "phát",
-            "search",
-            "seo",
-            "thiện",
-            "thị",
-            "trên",
-            "tăng",
-            "vấn",
-            "website",
-            "xuất",
-            "yếu",
-            "đánh"
-          ],
-          "description": "Đánh giá website về các yếu tố SEO cơ bản, phát hiện vấn đề và đề xuất cải thiện để tăng khả năng hiển thị trên search engines.",
-          "file_path": "marketing_seo/01_seo_audit.skill.md"
+          "summary": "Đánh giá website về các yếu tố SEO cơ bản, phát hiện vấn đề và đề xuất cải thiện để tăng khả năng hiển thị trên search engines.",
+          "path": "marketing_seo/01_seo_audit.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "marketing_seo/02_competitor_analysis",
-          "name": "Competitor Analysis",
+          "id": "02_competitor_analysis",
+          "title": "Competitor Analysis",
           "domain": "marketing_seo",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design"
-          ],
-          "keywords": [
-            "analysis",
-            "competitor",
-            "cách",
-            "cạnh",
-            "differentiation",
-            "diện",
-            "hội",
-            "marketing",
-            "marketing_seo",
-            "mạnh",
-            "phân",
-            "seo",
-            "thủ",
-            "toàn",
-            "tranh",
-            "tìm",
-            "tích",
-            "yếu",
-            "điểm",
-            "đối"
-          ],
-          "description": "Phân tích đối thủ cạnh tranh một cách toàn diện để tìm ra điểm mạnh, điểm yếu, và cơ hội differentiation.",
-          "file_path": "marketing_seo/02_competitor_analysis.skill.md"
+          "summary": "Phân tích đối thủ cạnh tranh một cách toàn diện để tìm ra điểm mạnh, điểm yếu, và cơ hội differentiation.",
+          "path": "marketing_seo/02_competitor_analysis.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "marketing_seo/03_content_quality_review",
-          "name": "Content Quality Review",
+          "id": "03_content_quality_review",
+          "title": "Content Quality Review",
           "domain": "marketing_seo",
           "difficulty": "Easy",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design"
-          ],
-          "keywords": [
-            "article",
-            "blog",
-            "bảo",
-            "checklist",
-            "chất",
-            "content",
-            "engagement",
-            "giá",
-            "lượng",
-            "marketing",
-            "marketing_seo",
-            "mặt",
-            "quality",
-            "ranking",
-            "seo",
-            "sharing",
-            "user",
-            "value",
-            "webpage",
-            "worthy",
-            "đánh",
-            "đảm"
-          ],
-          "description": "Đánh giá chất lượng content (blog, article, webpage) về mặt SEO, engagement, và value để user. Đảm bảo content worthy of ranking và sharing.",
-          "file_path": "marketing_seo/03_content_quality_review.skill.md"
+          "summary": "Đánh giá chất lượng content (blog, article, webpage) về mặt SEO, engagement, và value để user. Đảm bảo content worthy of ranking và sharing.",
+          "path": "marketing_seo/03_content_quality_review.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "marketing_seo/04_social_media_review",
-          "name": "Social Media Review",
+          "id": "04_social_media_review",
+          "title": "Social Media Review",
           "domain": "marketing_seo",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design"
-          ],
-          "keywords": [
-            "ads",
-            "cpc",
-            "ctr",
-            "decrease",
-            "facebook",
-            "giá",
-            "improve",
-            "increase",
-            "instagram",
-            "linkedin",
-            "marketing",
-            "marketing_seo",
-            "media",
-            "review",
-            "roas",
-            "seo",
-            "social",
-            "tiktok",
-            "tối",
-            "đánh"
-          ],
-          "description": "Đánh giá và tối ưu social media ads (Facebook, Instagram, TikTok, LinkedIn) để improve CTR, decrease CPC, và increase ROAS.",
-          "file_path": "marketing_seo/04_social_media_review.skill.md"
+          "summary": "Đánh giá và tối ưu social media ads (Facebook, Instagram, TikTok, LinkedIn) để improve CTR, decrease CPC, và increase ROAS.",
+          "path": "marketing_seo/04_social_media_review.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "marketing_seo/05_brand_strategy_review",
-          "name": "Brand Strategy Review",
+          "id": "05_brand_strategy_review",
+          "title": "Brand Strategy Review",
           "domain": "marketing_seo",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design"
-          ],
-          "keywords": [
-            "across",
-            "audit",
-            "brand",
-            "bảo",
-            "consistency",
-            "dựng",
-            "giá",
-            "guidelines",
-            "marketing",
-            "marketing_seo",
-            "nhất",
-            "quán",
-            "seo",
-            "touchpoints",
-            "voice",
-            "xây",
-            "đánh",
-            "đảm"
-          ],
-          "description": "Đánh giá và đảm bảo brand voice nhất quán across all touchpoints. Xây dựng hoặc audit brand voice guidelines.",
-          "file_path": "marketing_seo/05_brand_strategy_review.skill.md"
+          "summary": "Đánh giá và đảm bảo brand voice nhất quán across all touchpoints. Xây dựng hoặc audit brand voice guidelines.",
+          "path": "marketing_seo/05_brand_strategy_review.skill.md",
+          "risk_level": "R1"
         }
       ]
     },
     {
       "id": "product_ux",
-      "label": "Product & UX",
+      "name": "Product & UX",
       "skills": [
         {
-          "id": "product_ux/01_user_persona_development",
-          "name": "User Persona Development",
+          "id": "01_user_persona_development",
+          "title": "User Persona Development",
           "domain": "product_ux",
           "difficulty": "Easy",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "align",
-            "better",
-            "data",
-            "decisions",
-            "development",
-            "dựa",
-            "giúp",
-            "make",
-            "persona",
-            "personas",
-            "product",
-            "product_ux",
-            "research",
-            "review",
-            "target",
-            "team",
-            "trên",
-            "tạo",
-            "user",
-            "users",
-            "ux"
-          ],
-          "description": "Tạo hoặc review user personas dựa trên data và research. Personas giúp team align về target users và make better product decisions.",
-          "file_path": "product_ux/01_user_persona_development.skill.md"
+          "summary": "Tạo hoặc review user personas dựa trên data và research. Personas giúp team align về target users và make better product decisions.",
+          "path": "product_ux/01_user_persona_development.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "product_ux/02_user_flow_analysis",
-          "name": "User Flow Analysis",
+          "id": "02_user_flow_analysis",
+          "title": "User Flow Analysis",
           "domain": "product_ux",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "analysis",
-            "flow",
-            "indicator",
-            "product",
-            "product_ux",
-            "progress",
-            "user",
-            "ux",
-            "visible"
-          ],
-          "description": "[ ] Progress indicator có visible?",
-          "file_path": "product_ux/02_user_flow_analysis.skill.md"
+          "summary": "[ ] Progress indicator có visible?",
+          "path": "product_ux/02_user_flow_analysis.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "product_ux/03_ux_heuristic_evaluation",
-          "name": "UX Heuristic Evaluation",
+          "id": "03_ux_heuristic_evaluation",
+          "title": "UX Heuristic Evaluation",
           "domain": "product_ux",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "evaluation",
-            "heuristic",
-            "product",
-            "product_ux",
-            "ux"
-          ],
-          "description": "",
-          "file_path": "product_ux/03_ux_heuristic_evaluation.skill.md"
+          "summary": "",
+          "path": "product_ux/03_ux_heuristic_evaluation.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "product_ux/04_accessibility_audit",
-          "name": "Accessibility Audit",
+          "id": "04_accessibility_audit",
+          "title": "Accessibility Audit",
           "domain": "product_ux",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "accessibility",
-            "audit",
-            "product",
-            "product_ux",
-            "ux",
-            "wcag"
-          ],
-          "description": "|------|---------|",
-          "file_path": "product_ux/04_accessibility_audit.skill.md"
+          "summary": "|------|---------|",
+          "path": "product_ux/04_accessibility_audit.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "product_ux/05_onboarding_experience_review",
-          "name": "Onboarding Experience Review",
+          "id": "05_onboarding_experience_review",
+          "title": "Onboarding Experience Review",
           "domain": "product_ux",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "activation",
-            "churn",
-            "days",
-            "drives",
-            "early",
-            "experience",
-            "first",
-            "giá",
-            "good",
-            "onboarding",
-            "product",
-            "product_ux",
-            "reduces",
-            "review",
-            "time",
-            "tối",
-            "user",
-            "ux",
-            "đánh"
-          ],
-          "description": "Đánh giá và tối ưu first-time user experience (onboarding). Good onboarding drives activation và reduces churn in early days.",
-          "file_path": "product_ux/05_onboarding_experience_review.skill.md"
+          "summary": "Đánh giá và tối ưu first-time user experience (onboarding). Good onboarding drives activation và reduces churn in early days.",
+          "path": "product_ux/05_onboarding_experience_review.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "product_ux/06_ux_writing",
-          "name": "UX Writing",
+          "id": "06_ux_writing",
+          "title": "UX Writing",
           "domain": "product_ux",
           "difficulty": "Easy",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "chí",
-            "product",
-            "product_ux",
-            "ràng",
-            "tiêu",
-            "ux",
-            "writing"
-          ],
-          "description": "Cần Ux Writing với tiêu chí rõ ràng",
-          "file_path": "product_ux/06_ux_writing.skill.md"
+          "summary": "Cần Ux Writing với tiêu chí rõ ràng",
+          "path": "product_ux/06_ux_writing.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "product_ux/claude_design_handoff",
-          "name": "Claude Design → Code Handoff",
+          "id": "claude_design_handoff",
+          "title": "Claude Design → Code Handoff",
           "domain": "product_ux",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Design",
-            "Build",
-            "Review"
-          ],
-          "keywords": [
-            "chuyển",
-            "claude",
-            "code",
-            "design",
-            "handoff",
-            "khai",
-            "logic",
-            "mất",
-            "phá",
-            "product",
-            "product_ux",
-            "prototype",
-            "sang",
-            "system",
-            "thiết",
-            "thác",
-            "thật",
-            "ux",
-            "visual",
-            "đẹp"
-          ],
-          "description": "Khai thác Claude Design (`claude.ai/design`) để thiết kế UI visual đẹp, sau đó chuyển prototype/handoff sang code thật — không mất đi logic, không phá design system.",
-          "file_path": "product_ux/claude_design_handoff.skill.md"
+          "summary": "Khai thác Claude Design (`claude.ai/design`) để thiết kế UI visual đẹp, sau đó chuyển prototype/handoff sang code thật — không mất đi logic, không phá design system.",
+          "path": "product_ux/claude_design_handoff.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "product_ux/cvf_web_ux_redesign_system",
-          "name": "CVF Web UX Redesign System",
+          "id": "cvf_web_ux_redesign_system",
+          "title": "CVF Web UX Redesign System",
           "domain": "product_ux",
           "difficulty": "Advanced",
-          "risk_level": "R1",
-          "phases": [
-            "Discovery",
-            "Design",
-            "Build",
-            "Review"
-          ],
-          "keywords": [
-            "app",
-            "biến",
-            "cvf",
-            "dashboard",
-            "design",
-            "dna",
-            "dùng",
-            "dụng",
-            "giúp",
-            "gói",
-            "land",
-            "lần",
-            "product",
-            "product_ux",
-            "redesign",
-            "skill",
-            "spec",
-            "system",
-            "thành",
-            "thống",
-            "tái",
-            "ux",
-            "web",
-            "workspace",
-            "đem",
-            "đóng"
-          ],
-          "description": "Biến một lần redesign UX thành hệ thống tái sử dụng cho các web app sau này. Skill này giúp đóng gói \"design DNA\" của CVF web redesign thành một spec có thể đem dùng lại cho dashboard, workspace, land",
-          "file_path": "product_ux/cvf_web_ux_redesign_system.skill.md"
+          "summary": "Biến một lần redesign UX thành hệ thống tái sử dụng cho các web app sau này. Skill này giúp đóng gói \"design DNA\" của CVF web redesign thành một spec có thể đem dùng lại cho dashboard, workspace, land",
+          "path": "product_ux/cvf_web_ux_redesign_system.skill.md",
+          "risk_level": "R1"
         }
       ]
     },
     {
       "id": "security_compliance",
-      "label": "Security & Compliance",
+      "name": "Security & Compliance",
       "skills": [
         {
-          "id": "security_compliance/01_security_assessment",
-          "name": "Security Assessment",
+          "id": "01_security_assessment",
+          "title": "Security Assessment",
           "domain": "security_compliance",
           "difficulty": "Medium",
-          "risk_level": "R2",
-          "phases": [
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "against",
-            "api",
-            "apis",
-            "best",
-            "bảo",
-            "checklist",
-            "common",
-            "compliance",
-            "endpoints",
-            "follow",
-            "giá",
-            "practices",
-            "protected",
-            "security",
-            "security_compliance",
-            "vulnerabilities",
-            "đánh",
-            "đảm"
-          ],
-          "description": "Đánh giá security của API endpoints. Đảm bảo APIs protected against common vulnerabilities và follow best practices.",
-          "file_path": "security_compliance/01_security_assessment.skill.md"
+          "summary": "Đánh giá security của API endpoints. Đảm bảo APIs protected against common vulnerabilities và follow best practices.",
+          "path": "security_compliance/01_security_assessment.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "security_compliance/02_data_privacy_compliance",
-          "name": "Data Privacy Compliance",
+          "id": "02_data_privacy_compliance",
+          "title": "Data Privacy Compliance",
           "domain": "security_compliance",
           "difficulty": "Medium",
-          "risk_level": "R2",
-          "phases": [
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "compliance",
-            "data",
-            "handling",
-            "mechanism",
-            "opt",
-            "review",
-            "security",
-            "security_compliance"
-          ],
-          "description": "[ ] Opt-out mechanism?",
-          "file_path": "security_compliance/02_data_privacy_compliance.skill.md"
+          "summary": "[ ] Opt-out mechanism?",
+          "path": "security_compliance/02_data_privacy_compliance.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "security_compliance/03_incident_response",
-          "name": "Incident Response",
+          "id": "03_incident_response",
+          "title": "Incident Response",
           "domain": "security_compliance",
           "difficulty": "Advanced",
-          "risk_level": "R2",
-          "phases": [
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "breaches",
-            "bảo",
-            "compliance",
-            "dựng",
-            "effectively",
-            "handle",
-            "incident",
-            "incidents",
-            "plan",
-            "prepared",
-            "response",
-            "review",
-            "security",
-            "security_compliance",
-            "team",
-            "xây",
-            "đảm"
-          ],
-          "description": "Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared để handle security incidents và breaches effectively.",
-          "file_path": "security_compliance/03_incident_response.skill.md"
+          "summary": "Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared để handle security incidents và breaches effectively.",
+          "path": "security_compliance/03_incident_response.skill.md",
+          "risk_level": "R2"
         },
         {
-          "id": "security_compliance/04_dependency_management",
-          "name": "Dependency Management",
+          "id": "04_dependency_management",
+          "title": "Dependency Management",
           "domain": "security_compliance",
           "difficulty": "Advanced",
-          "risk_level": "R2",
-          "phases": [
-            "Design",
-            "Review"
-          ],
-          "keywords": [
-            "bug",
-            "bumps",
-            "compliance",
-            "cve",
-            "dependencies",
-            "dependency",
-            "etc",
-            "fixes",
-            "fork",
-            "freetype",
-            "handles",
-            "harfbuzz",
-            "libexpat",
-            "libjpeg",
-            "libpng",
-            "libwebp",
-            "native",
-            "security",
-            "security_compliance",
-            "skia",
-            "skiasharp",
-            "turbo",
-            "update",
-            "use",
-            "version",
-            "zlib"
-          ],
-          "description": "> Update native dependencies (libpng, libexpat, zlib, libwebp, harfbuzz, freetype, libjpeg-turbo, etc.) in SkiaSharp's Skia fork. Handles security CVE fixes, bug fixes, and version bumps. Use when use",
-          "file_path": "security_compliance/04_dependency_management.skill.md"
+          "summary": "> Update native dependencies (libpng, libexpat, zlib, libwebp, harfbuzz, freetype, libjpeg-turbo, etc.) in SkiaSharp's Skia fork. Handles security CVE fixes, bug fixes, and version bumps. Use when use",
+          "path": "security_compliance/04_dependency_management.skill.md",
+          "risk_level": "R2"
         }
       ]
     },
     {
       "id": "technical_review",
-      "label": "Technical Review",
+      "name": "Technical Review",
       "skills": [
         {
-          "id": "technical_review/01_code_review",
-          "name": "Code Review",
+          "id": "01_code_review",
+          "title": "Code Review",
           "domain": "technical_review",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Build",
-            "Review"
-          ],
-          "keywords": [
-            "code",
-            "focus",
-            "logic",
-            "performance",
-            "review",
-            "security",
-            "specify",
-            "technical",
-            "technical_review"
-          ],
-          "description": "2. Specify focus — Security? Performance? Logic?",
-          "file_path": "technical_review/01_code_review.skill.md"
+          "summary": "2. Specify focus — Security? Performance? Logic?",
+          "path": "technical_review/01_code_review.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "technical_review/02_architecture_review",
-          "name": "Architecture Review",
+          "id": "02_architecture_review",
+          "title": "Architecture Review",
           "domain": "technical_review",
           "difficulty": "Advanced",
-          "risk_level": "R1",
-          "phases": [
-            "Build",
-            "Review"
-          ],
-          "keywords": [
-            "architecture",
-            "design",
-            "documents",
-            "review",
-            "system",
-            "technical",
-            "technical_review"
-          ],
-          "description": "Review system design documents",
-          "file_path": "technical_review/02_architecture_review.skill.md"
+          "summary": "Review system design documents",
+          "path": "technical_review/02_architecture_review.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "technical_review/03_security_audit",
-          "name": "Security Audit",
+          "id": "03_security_audit",
+          "title": "Security Audit",
           "domain": "technical_review",
           "difficulty": "Advanced",
-          "risk_level": "R1",
-          "phases": [
-            "Build",
-            "Review"
-          ],
-          "keywords": [
-            "applications",
-            "audit",
-            "review",
-            "security",
-            "technical",
-            "technical_review"
-          ],
-          "description": "Security review for applications",
-          "file_path": "technical_review/03_security_audit.skill.md"
+          "summary": "Security review for applications",
+          "path": "technical_review/03_security_audit.skill.md",
+          "risk_level": "R1"
         }
       ]
     },
     {
       "id": "web_development",
-      "label": "Web Development",
+      "name": "Web Development",
       "skills": [
         {
-          "id": "web_development/01_landing_page",
-          "name": "Landing Page",
+          "id": "01_landing_page",
+          "title": "Landing Page",
           "domain": "web_development",
           "difficulty": "Easy",
-          "risk_level": "R1",
-          "phases": [
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "development",
-            "dịch",
-            "giới",
-            "landing",
-            "page",
-            "phẩm",
-            "sản",
-            "thiệu",
-            "web",
-            "web_development"
-          ],
-          "description": "Giới thiệu sản phẩm/dịch vụ",
-          "file_path": "web_development/01_landing_page.skill.md"
+          "summary": "Giới thiệu sản phẩm/dịch vụ",
+          "path": "web_development/01_landing_page.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "web_development/02_saas_app",
-          "name": "SaaS App",
+          "id": "02_saas_app",
+          "title": "SaaS App",
           "domain": "web_development",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "app",
-            "development",
-            "dụng",
-            "nhập",
-            "saas",
-            "web",
-            "web_development",
-            "đăng",
-            "ứng"
-          ],
-          "description": "Ứng dụng web có đăng nhập/đăng ký",
-          "file_path": "web_development/02_saas_app.skill.md"
+          "summary": "Ứng dụng web có đăng nhập/đăng ký",
+          "path": "web_development/02_saas_app.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "web_development/03_dashboard",
-          "name": "Dashboard",
+          "id": "03_dashboard",
+          "title": "Dashboard",
           "domain": "web_development",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "chính",
-            "customers",
-            "dashboard",
-            "data",
-            "development",
-            "orders",
-            "products",
-            "revenue",
-            "web",
-            "web_development"
-          ],
-          "description": "Data chính: Orders, revenue, products, customers",
-          "file_path": "web_development/03_dashboard.skill.md"
+          "summary": "Data chính: Orders, revenue, products, customers",
+          "path": "web_development/03_dashboard.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "web_development/04_blog_docs",
-          "name": "Blog / Documentation",
+          "id": "04_blog_docs",
+          "title": "Blog / Documentation",
           "domain": "web_development",
           "difficulty": "Easy",
-          "risk_level": "R1",
-          "phases": [
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "blog",
-            "công",
-            "development",
-            "documentation",
-            "nhân",
-            "web",
-            "web_development"
-          ],
-          "description": "Blog cá nhân hoặc công ty",
-          "file_path": "web_development/04_blog_docs.skill.md"
+          "summary": "Blog cá nhân hoặc công ty",
+          "path": "web_development/04_blog_docs.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "web_development/05_data_visualization",
-          "name": "Data Visualization",
+          "id": "05_data_visualization",
+          "title": "Data Visualization",
           "domain": "web_development",
           "difficulty": "Medium",
-          "risk_level": "R1",
-          "phases": [
-            "Design",
-            "Build"
-          ],
-          "keywords": [
-            "chart",
-            "data",
-            "development",
-            "framework",
-            "next",
-            "recharts",
-            "visualization",
-            "web",
-            "web_development"
-          ],
-          "description": "Framework: Next.js + Recharts",
-          "file_path": "web_development/05_data_visualization.skill.md"
+          "summary": "Framework: Next.js + Recharts",
+          "path": "web_development/05_data_visualization.skill.md",
+          "risk_level": "R1"
         },
         {
-          "id": "web_development/06_accessibility_audit",
-          "name": "Accessibility Audit",
+          "id": "06_accessibility_audit",
+          "title": "Accessibility Audit",
           "domain": "web_development",
           "difficulty": "Advanced",
-          "risk_level": "R2",
-          "phases": [
-            "Build",
-            "Review"
-          ],
-          "keywords": [
-            "accessibility",
-            "aria",
-            "audit",
-            "chuyên",
-            "compatibility",
-            "development",
-            "focus",
-            "html",
-            "hơn",
-            "implementation",
-            "keyboard",
-            "kiểm",
-            "labels",
-            "links",
-            "management",
-            "navigation",
-            "reader",
-            "screen",
-            "semantic",
-            "skip",
-            "sâu",
-            "thuật",
-            "tra",
-            "trung",
-            "tập",
-            "web",
-            "web_development"
-          ],
-          "description": "Kiểm tra ARIA labels, keyboard navigation, semantic HTML, focus management, skip links, và screen reader compatibility. Chuyên sâu hơn Accessibility Audit — tập trung vào kỹ thuật implementation.",
-          "file_path": "web_development/06_accessibility_audit.skill.md"
+          "summary": "Kiểm tra ARIA labels, keyboard navigation, semantic HTML, focus management, skip links, và screen reader compatibility. Chuyên sâu hơn Accessibility Audit — tập trung vào kỹ thuật implementation.",
+          "path": "web_development/06_accessibility_audit.skill.md",
+          "risk_level": "R2"
         }
       ]
     }

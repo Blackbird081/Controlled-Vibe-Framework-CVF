@@ -1,7 +1,8 @@
 # Business Analysis Domain
 
-> **Source:** CVF Governance + Business Best Practices  
-> **Skills:** 3 | **Level:** Medium to Advanced
+> **Source:** CVF Governance + Business Best Practices
+> **Skills:** 4 | **Level:** Medium to Advanced
+> **Canonicalized:** 2026-04-26
 
 ---
 
@@ -21,6 +22,7 @@ Domain này giúp End User làm việc với AI để phân tích và ra quyết
 | 1 | [Strategy Analysis](./01_strategy_analysis.skill.md) | Phân tích chiến lược kinh doanh | ⭐⭐ Medium |
 | 2 | [Risk Assessment](./02_risk_assessment.skill.md) | Đánh giá rủi ro dự án/quyết định | ⭐⭐⭐ Advanced |
 | 3 | [Market Research](./03_market_research.skill.md) | Nghiên cứu thị trường | ⭐⭐ Medium |
+| 4 | [Business Plan](./04_business_plan.skill.md) | Soạn/cập nhật business plan | ⭐ Easy |
 
 ---
 

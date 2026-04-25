@@ -1,7 +1,8 @@
 # Content Creation Domain
 
-> **Source:** CVF Governance + Writing Best Practices  
-> **Skills:** 3 | **Level:** Easy to Medium
+> **Source:** CVF Governance + Writing Best Practices
+> **Skills:** 4 | **Level:** Easy to Medium
+> **Canonicalized:** 2026-04-26
 
 ---
 
@@ -21,6 +22,7 @@ Domain này giúp End User làm việc với AI để tạo nội dung chất l�
 | 1 | [Documentation](./01_documentation.skill.md) | Tài liệu kỹ thuật, hướng dẫn | ⭐ Easy |
 | 2 | [Report Writing](./02_report_writing.skill.md) | Báo cáo kinh doanh, phân tích | ⭐⭐ Medium |
 | 3 | [Presentation](./03_presentation.skill.md) | Slides, pitch deck | ⭐ Easy |
+| 4 | [Collaborative Writing](./04_collaborative_writing.skill.md) | Co-authoring docs, specs, proposals | ⭐ Easy |
 
 ---
 

@@ -1,7 +1,8 @@
 # Web Development Domain
 
-> **Source:** Vibecode Kit v4.0 + CVF Governance  
-> **Skills:** 5 | **Level:** Beginner to Advanced
+> **Source:** Vibecode Kit v4.0 + CVF Governance
+> **Skills:** 6 | **Level:** Beginner to Advanced
+> **Canonicalized:** 2026-04-26
 
 ---
 
@@ -22,7 +23,8 @@ Domain này giúp End User làm việc với AI để tạo các sản phẩm we
 | 2 | [SaaS App](./02_saas_app.skill.md) | Ứng dụng web có đăng nhập | ⭐⭐ Medium |
 | 3 | [Dashboard](./03_dashboard.skill.md) | Bảng điều khiển/admin | ⭐⭐ Medium |
 | 4 | [Blog/Docs](./04_blog_docs.skill.md) | Blog hoặc documentation | ⭐ Easy |
-| 5 | [Portfolio](./05_portfolio.skill.md) | Portfolio cá nhân/agency | ⭐ Easy |
+| 5 | [Data Visualization](./05_data_visualization.skill.md) | Charts, graphs, data viz | ⭐⭐ Medium |
+| 6 | [Accessibility Audit](./06_accessibility_audit.skill.md) | ARIA, keyboard, screen reader | ⭐⭐⭐ Advanced |
 
 ---
 

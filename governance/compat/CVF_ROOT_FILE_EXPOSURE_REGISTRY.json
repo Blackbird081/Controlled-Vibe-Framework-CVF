@@ -32,6 +32,7 @@
     { "path": "CLAUDE.md", "exposureClass": "INTERNAL_ONLY" },
     { "path": "CVF_ECOSYSTEM_ARCHITECTURE.md", "exposureClass": "PUBLIC_DOCS_ONLY" },
     { "path": "CVF_LITE.md", "exposureClass": "PUBLIC_DOCS_ONLY" },
+    { "path": "DESIGN.md", "exposureClass": "PUBLIC_DOCS_ONLY" },
     { "path": "LICENSE", "exposureClass": "PUBLIC_DOCS_ONLY" },
     { "path": "netlify.toml", "exposureClass": "INTERNAL_ONLY" },
     { "path": "package-lock.json", "exposureClass": "INTERNAL_ONLY" },

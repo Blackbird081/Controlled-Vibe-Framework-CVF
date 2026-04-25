@@ -26,6 +26,7 @@ export const CVF_WEB_REDESIGN_DNA_APPENDIX = `## CVF Web Redesign DNA
 
 Apply this UI/UX DNA when the request is about building or redesigning a website, dashboard, admin surface, docs surface, landing page, or product shell.
 
+- Canonical source: use the root CVF DESIGN.md as the visual contract. External references and Claude Design prototypes are learning material only.
 - Runtime independence: do not require Claude Design at build time. Treat Claude Design prototypes as historical source material only.
 - Experience tone: professional command workspace; premium, structured, calm, precise, operational.
 - Layout: fixed left navigation for apps/dashboards; topbar/action strip; scrollable content; max-width content lanes for reading surfaces; no marketing hero unless the user explicitly asks for a landing page.

@@ -62,6 +62,8 @@ Claude Design có thể trả về **prototype code trực tiếp** (`.html`, `.
 
 Nếu Claude Design không có nút handoff/spec, dùng prototype code làm source of truth. Không yêu cầu Claude Design xuất spec trước.
 
+`DESIGN.md` ở root CVF là canonical visual contract. Prototype Claude Design chỉ được dùng để trích xuất visual intent; nếu prototype xung đột với `DESIGN.md`, ưu tiên `DESIGN.md`.
+
 ---
 
 ## 📋 Form Input

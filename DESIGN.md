@@ -266,3 +266,87 @@ CVF skill library rule:
 - Prefer one canonical system skill, one prototype-ingest skill, and one QA
   checklist over many overlapping design skills.
 
+## 11. Canonical UI/UX Skill Portfolio
+
+Use a small active portfolio for web UI/UX work:
+
+| Role | Canonical Surface | Purpose |
+| --- | --- | --- |
+| System design | `product_ux/cvf_web_ux_redesign_system` | Converts product intent, page type, and reference material into CVF-native web design DNA and implementation guardrails. |
+| Prototype ingestion | `product_ux/claude_design_handoff` | Extracts useful structure, motion, component recipes, and visual intent from Claude Design or other prototypes without copying brand identity. |
+| Pre-delivery QA | `app_development/ui_pre_delivery_checklist` plus accessibility/heuristic checks when needed | Verifies responsive behavior, focus, loading, empty/error states, a11y, and DESIGN.md conformance before ship. |
+
+Do not create a new UI/UX skill for palette generation, typography pairing,
+style selection, generic frontend design, or dark/light audit unless it
+introduces a genuinely new capability that cannot live inside the canonical
+system skill or QA checklist.
+
+## 12. Style Vocabulary
+
+Agents may choose a CVF style mode from this vocabulary, then adapt it to the
+product domain. A style mode is not a brand clone; it is a design recipe.
+
+### Enterprise Dashboard
+
+Use for SaaS admin, reporting, operations, CRM, finance, logistics, and
+internal tooling.
+
+- Layout: left sidebar, dense topbar, KPI strip, table/chart split, audit rail
+- Surfaces: dark-primary panels, crisp borders, low shadow
+- Typography: compact headings, tabular metrics, readable 12-14px data text
+- Visual focus: state, filters, evidence, fast scanning
+- Avoid: oversized hero sections, decorative cards, soft consumer styling
+
+### Developer SaaS
+
+Use for tools, APIs, agent consoles, documentation dashboards, and technical
+workflows.
+
+- Layout: clean shell, command/search bar, code blocks, status badges
+- Surfaces: restrained monochrome or dark chrome with one accent
+- Typography: sans for UI, mono for IDs, logs, snippets, and metadata
+- Visual focus: precision, hierarchy, inspectability
+- Avoid: noisy gradients, novelty icons, vague marketing blocks
+
+### Premium Landing
+
+Use for public product pages, product launches, service websites, and portfolio
+surfaces.
+
+- Layout: first-viewport product signal, full-bleed real/generated visual,
+  clear CTA, next section visible
+- Surfaces: spacious sections, strong imagery, restrained cards
+- Typography: larger editorial heading, concise supporting copy
+- Visual focus: trust, offer clarity, proof, conversion path
+- Avoid: split hero cards, generic gradient-only hero, empty feature claims
+
+### Ops / Industrial
+
+Use for logistics, ports, factories, field operations, warehouse, maintenance,
+and safety workflows.
+
+- Layout: operational shell, shift/status strip, queue/table priority, alerts
+- Surfaces: sturdy dark or neutral surfaces with strong state colors
+- Typography: clear labels, bold numbers, short Vietnamese/ops copy
+- Visual focus: current state, exceptions, handoff, accountable actions
+- Avoid: playful motion, decorative imagery, ambiguous soft colors
+
+### Consumer Friendly
+
+Use for simple consumer apps, booking, food, wellness, education, and onboarding
+flows.
+
+- Layout: fewer controls per view, guided steps, clear primary action
+- Surfaces: lighter or warmer palette variants mapped back to CVF tokens
+- Typography: slightly more generous line-height and section spacing
+- Visual focus: reassurance, clarity, reduced cognitive load
+- Avoid: enterprise density, jargon, excessive settings-first screens
+
+Selection rule:
+- If the product is used repeatedly for work, start from Enterprise Dashboard
+  or Ops / Industrial.
+- If the product sells or explains something publicly, start from Premium
+  Landing.
+- If the product is a tool for builders, start from Developer SaaS.
+- If the user explicitly names a mood, map the mood into one of these modes
+  and state the tradeoff in the handoff packet.

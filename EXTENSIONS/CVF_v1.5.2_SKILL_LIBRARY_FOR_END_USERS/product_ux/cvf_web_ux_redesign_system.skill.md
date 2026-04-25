@@ -384,8 +384,8 @@ Theme Strategy: dark-primary, light-supporting
 
 ## 🔗 Related Skills
 
-- [Design System Generator](./design_system_generator.skill.md)
-- [Interaction Design Review](./interaction_design_review.skill.md)
+- [Claude Design Handoff](./claude_design_handoff.skill.md)
+- [Accessibility Audit](./accessibility_audit.skill.md)
 - [UX Heuristic Evaluation](./ux_heuristic_evaluation.skill.md)
 - [UI Pre-Delivery Checklist](../app_development/ui_pre_delivery_checklist.skill.md)
 

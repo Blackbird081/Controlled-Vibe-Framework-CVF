@@ -81,9 +81,7 @@
 | Desktop App Spec | Windows, menus, shortcuts | Medium |
 | CLI Tool Spec | Commands, arguments | Medium |
 | Local Deployment | Packaging, distribution | Medium |
-| Mobile Framework UI Guide | UI best practices theo framework (SwiftUI, RN, Flutter) | Medium | ⭐ NEW |
 | UI Pre-Delivery Checklist | Checklist cuối trước khi ship UI | Easy | ⭐ NEW |
-| Industry UI Reasoning | Design reasoning theo ngành + anti-patterns | Medium | ⭐ NEW |
 
 ---
 
@@ -98,16 +96,17 @@
 ---
 
 ### 🎨 [Product & UX](product_ux/) (Phase 2)
-14 skills cho A/B testing, accessibility, flows, onboarding, **design system**, **UI styles**, và **interaction review**
+Canonical UI/UX web guidance now lives in root `DESIGN.md`,
+`product_ux/cvf_web_ux_redesign_system.skill.md`, and
+`product_ux/claude_design_handoff.skill.md`. Legacy visual micro-skills are
+kept under `legacy/` for audit/reference only.
 
 | Skill (NEW) | Mục đích | Difficulty |
 |-------------|----------|------------|
-| UI Style Selection | Recommend UI style từ 67+ options | Medium | ⭐ NEW |
-| Color Palette Generator | Tạo color system + contrast ratios | Medium | ⭐ NEW |
-| Typography Pairing | Chọn heading/body font phù hợp | Medium | ⭐ NEW |
-| Design System Generator | Tạo complete design system | Advanced | ⭐ NEW |
-| Interaction Design Review | Audit touch targets, hover, focus | Medium | ⭐ NEW |
-| Dark/Light Mode Audit | Check dark/light mode implementation | Medium | ⭐ NEW |
+| CVF Web UX Redesign System | Chuẩn hóa design DNA, layout, component rules, và handoff cho web build/redesign | Advanced | ⭐ NEW |
+| Claude Design Handoff | Hấp thụ prototype Claude Design/HTML thành spec sạch cho agent build | Advanced | ⭐ NEW |
+| Accessibility Audit | Kiểm tra WCAG compliance khi cần QA chuyên sâu | Medium | |
+| UX Heuristic Evaluation | Đánh giá UX theo Nielsen khi cần review sau build | Medium | |
 
 ---
 

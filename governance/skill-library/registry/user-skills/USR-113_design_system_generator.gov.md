@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [design_system_generator.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/design_system_generator.skill.md)
+→ [design_system_generator.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/legacy/visual_system_superseded_2026_04/design_system_generator.skill.md)
 
 ---
 

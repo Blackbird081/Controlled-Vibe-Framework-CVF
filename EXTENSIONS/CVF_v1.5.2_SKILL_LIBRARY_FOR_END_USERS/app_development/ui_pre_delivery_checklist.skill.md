@@ -19,6 +19,10 @@ Không yêu cầu.
 
 Checklist kiểm tra cuối cùng trước khi ship UI code. Validates visual quality, interaction, dark/light mode, layout responsiveness, và accessibility.
 
+Canonical source: always check against the root CVF `DESIGN.md`. Legacy style,
+palette, typography, interaction, and dark/light micro-skills are reference
+material only; do not ask agents to chain them for normal UI delivery.
+
 **Khi nào nên dùng:**
 - Trước khi merge PR có UI changes
 - Trước khi deploy lên production
@@ -84,6 +88,8 @@ Checklist kiểm tra cuối cùng trước khi ship UI code. Validates visual qu
 
 ### 🎨 Visual Quality
 
+- [ ] **DESIGN.md conformance** — Uses CVF style mode, tokens, spacing, and
+  component rules unless an approved project override exists
 - [ ] **No emojis as icons** — Use SVG (Heroicons/Lucide)
 - [ ] **Consistent icon set** — All from same library
 - [ ] **Brand logos correct** — Verified from Simple Icons
@@ -95,7 +101,7 @@ Checklist kiểm tra cuối cùng trước khi ship UI code. Validates visual qu
 
 - [ ] **All clickable elements** have `cursor-pointer`
 - [ ] **Hover states** provide clear visual feedback
-- [ ] **Transitions** are smooth (150-300ms)
+- [ ] **Transitions** are smooth and restrained (120-240ms, reduced-motion respected)
 - [ ] **Focus states** visible for keyboard navigation
 - [ ] **Loading states** for async operations
 - [ ] **Error states** clear and helpful
@@ -106,7 +112,8 @@ Checklist kiểm tra cuối cùng trước khi ship UI code. Validates visual qu
 - [ ] **Glass/transparent** elements visible in light mode
 - [ ] **Borders** visible in both modes
 - [ ] **Images** look good in both modes
-- [ ] **Test both modes** before delivery
+- [ ] **Test both modes** before delivery if the app supports both; otherwise
+  confirm the single supported mode is intentional
 
 ### 📐 Layout
 
@@ -123,6 +130,7 @@ Checklist kiểm tra cuối cùng trước khi ship UI code. Validates visual qu
 - [ ] **Color** is not the only indicator
 - [ ] **`prefers-reduced-motion`** respected
 - [ ] **Touch targets** ≥ 44x44px on mobile
+- [ ] **Keyboard path** reaches all primary actions, filters, dialogs, and menus
 
 ---
 
@@ -217,9 +225,9 @@ Overall: 25/27 (93%) — Fix 2 items → Ship
 
 ## 🔗 Related Skills
 
-- [Interaction Design Review](../product_ux/interaction_design_review.skill.md)
+- [CVF Web UX Redesign System](../product_ux/cvf_web_ux_redesign_system.skill.md)
 - [Accessibility Audit](../product_ux/accessibility_audit.skill.md)
-- [Dark/Light Mode Audit](../product_ux/dark_light_mode_audit.skill.md)
+- [UX Heuristic Evaluation](../product_ux/ux_heuristic_evaluation.skill.md)
 
 ---
 

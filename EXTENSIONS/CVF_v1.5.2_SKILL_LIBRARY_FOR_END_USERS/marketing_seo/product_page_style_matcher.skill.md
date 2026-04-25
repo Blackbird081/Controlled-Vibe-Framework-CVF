@@ -201,7 +201,7 @@ Confidence: 88% match
 
 - [Conversion Landing Optimizer](./conversion_landing_optimizer.skill.md)
 - [Landing Page](../web_development/01_landing_page.skill.md)
-- [UI Style Selection](../product_ux/ui_style_selection.skill.md)
+- [CVF Web UX Redesign System](../product_ux/cvf_web_ux_redesign_system.skill.md)
 
 ---
 

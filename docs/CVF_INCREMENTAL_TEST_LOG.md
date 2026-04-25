@@ -2161,3 +2161,22 @@ Utility and guard:
   - `/skills`, search, and planner now consume the same governed front-door subset rather than mixed legacy corpus inputs
   - front-door corpus is reduced to governed visible skills; quarantined skills remain off the public path
   - exported specs now inherit non-coder success, governed response, and knowledge-context guidance aligned with current CVF posture
+## [2026-04-26] Batch: UI/UX Skill Portfolio Consolidation
+- Scope: consolidate CVF UI/UX guidance around root `DESIGN.md`, `cvf_web_ux_redesign_system`, `claude_design_handoff`, and active QA/a11y review surfaces; move superseded visual micro-skills into legacy folders.
+- Skill/data surfaces:
+  - `DESIGN.md`
+  - `AGENTS.md`
+  - `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/`
+  - `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/app_development/`
+  - `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/data/skill_reasoning.csv`
+  - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/data/skills-index.json`
+- Verification:
+  - `npm --prefix EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web run test:run -- src/lib/skill-planner.test.ts src/lib/skill-search.test.ts src/components/SkillSearch.test.tsx src/lib/execute-prompt-contract.test.ts src/lib/templates/index.test.ts src/components/SpecExport.test.tsx` -> 86 tests, 0 failures
+  - `npm --prefix EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web run build` -> pass; 105 static pages generated
+  - `python governance/compat/check_prepublic_p3_readiness.py --enforce` -> pass
+  - `python governance/compat/check_repository_exposure_classification.py --enforce` -> pass
+  - `python governance/compat/check_repository_lifecycle_classification.py --enforce` -> pass
+- Notes:
+  - UI/UX planner chains now route visual design work through `product_ux/cvf_web_ux_redesign_system` instead of separate style/color/font/design-system micro-skills.
+  - `skills-index.json` now reports 42 front-door skills and 96 quarantined scanned skills after legacy relocation.
+  - Legacy files remain retained for audit/reference and are no longer scanned as active skill records by the CVF Web skill index builder.

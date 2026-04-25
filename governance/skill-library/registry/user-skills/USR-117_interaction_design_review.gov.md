@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [interaction_design_review.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/interaction_design_review.skill.md)
+→ [interaction_design_review.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/legacy/visual_system_superseded_2026_04/interaction_design_review.skill.md)
 
 ---
 

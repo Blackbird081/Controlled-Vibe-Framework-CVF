@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [typography_pairing.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/typography_pairing.skill.md)
+→ [typography_pairing.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/legacy/visual_system_superseded_2026_04/typography_pairing.skill.md)
 
 ---
 

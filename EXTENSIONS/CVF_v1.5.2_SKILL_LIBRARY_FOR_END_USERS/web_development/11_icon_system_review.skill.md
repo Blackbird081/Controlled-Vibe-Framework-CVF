@@ -195,7 +195,7 @@ Action: Consolidate to Heroicons only + update GitHub logo
 ## 🔗 Related Skills
 
 - [Accessibility Audit](../product_ux/accessibility_audit.skill.md)
-- [UI Style Selection](../product_ux/ui_style_selection.skill.md)
+- [CVF Web UX Redesign System](../product_ux/cvf_web_ux_redesign_system.skill.md)
 
 ---
 

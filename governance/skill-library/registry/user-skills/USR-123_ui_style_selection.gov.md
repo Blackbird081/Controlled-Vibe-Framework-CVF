@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [ui_style_selection.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/ui_style_selection.skill.md)
+→ [ui_style_selection.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/legacy/visual_system_superseded_2026_04/ui_style_selection.skill.md)
 
 ---
 

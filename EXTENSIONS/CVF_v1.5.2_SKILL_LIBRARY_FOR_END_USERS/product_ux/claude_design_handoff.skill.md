@@ -309,7 +309,7 @@ Claude Design tạo ra prototype dashboard với:
 ## 🔗 Related Skills
 
 - [CVF Web UX Redesign System](./cvf_web_ux_redesign_system.skill.md) — Redesign toàn hệ thống, không phụ thuộc Claude Design
-- [Design System Generator](./design_system_generator.skill.md) — Tạo design system trước khi dùng skill này
+- [CVF Web UX Redesign System](./cvf_web_ux_redesign_system.skill.md) — Chuẩn hóa design system và implementation guardrails trước/sau khi hấp thụ prototype
 - [Dashboard](../web_development/03_dashboard.skill.md) — Build dashboard từ đầu
 
 ---

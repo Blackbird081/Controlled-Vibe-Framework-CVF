@@ -1,5 +1,15 @@
 # CVF Agent Instructions
 
+## UI / Web Design Contract
+
+For any UI, frontend, web app, redesign, dashboard, landing page, or visual
+handoff work, read the root `DESIGN.md` before implementation. Treat
+`DESIGN.md` as the canonical CVF visual contract.
+
+Use external design repos, Claude Design prototypes, screenshots, and copied
+HTML only as reference material. Absorb patterns into CVF language; do not
+copy a third-party brand identity or override CVF's design contract.
+
 ## Mandatory Live Governance Proof
 
 Any test, roadmap closure, release gate, demo proof, or public claim that asserts CVF governance behavior must use a real provider API call.

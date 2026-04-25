@@ -146,7 +146,8 @@ Hotkeys: Ctrl+N (new), Ctrl+F (search)
 
 - [Security Audit](../technical_review/03_security_audit.skill.md) - Đánh giá bảo mật sau khi build
 - [Code Review](../technical_review/01_code_review.skill.md) - Review code quality
-- [UX Heuristic Evaluation](../product_ux/ux_heuristic_evaluation.skill.md) - Đánh giá UX
+- [CVF Web UX Redesign System](../product_ux/cvf_web_ux_redesign_system.skill.md) - Chuẩn UI/UX web theo `DESIGN.md`
+- [UX Heuristic Evaluation](../product_ux/ux_heuristic_evaluation.skill.md) - Đánh giá UX sau build
 
 ---
 

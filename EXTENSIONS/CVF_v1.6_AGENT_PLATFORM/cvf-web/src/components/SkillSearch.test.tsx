@@ -36,8 +36,8 @@ describe('SkillSearchBar', () => {
             name: 'Product UX',
             skills: [
               {
-                id: 'product_ux/ui_style_selection',
-                title: 'UI Style Selection',
+                id: 'product_ux/cvf_web_ux_redesign_system',
+                title: 'CVF Web UX Redesign System',
                 domain: 'product_ux',
                 difficulty: 'Medium',
                 riskLevel: 'R1',
@@ -127,7 +127,7 @@ describe('SkillPlanner', () => {
                     difficulty: 'Medium',
                     riskLevel: 'R1',
                     allowedPhases: 'Discovery,Design',
-                    summary: 'Helps pick style',
+                    summary: 'Builds CVF web design DNA',
                     path: 'test.md',
                     linkedTemplates: [{ templateId: 'product_design_wizard', corpusClass: 'TRUSTED_FOR_VALUE_PROOF' }],
                   },
@@ -141,7 +141,7 @@ describe('SkillPlanner', () => {
         return Promise.resolve({
           ok: true,
           text: () => Promise.resolve(`industry,task_pattern,skill_chain,rationale
-Fintech,dashboard|analytics,product_ux/ui_style_selection,Fintech needs trust design`),
+Fintech,dashboard|analytics,product_ux/cvf_web_ux_redesign_system,Fintech needs trust design`),
         });
       }
       return Promise.resolve({ ok: false });

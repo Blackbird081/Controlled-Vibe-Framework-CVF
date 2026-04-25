@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [prototype_prompt_generator.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/app_development/prototype_prompt_generator.skill.md)
+→ [prototype_prompt_generator.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/app_development/legacy/ui_ux_superseded_2026_04/prototype_prompt_generator.skill.md)
 
 ---
 

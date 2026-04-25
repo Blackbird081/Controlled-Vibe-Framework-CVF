@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [penpot_uiux_design.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/app_development/penpot_uiux_design.skill.md)
+→ [penpot_uiux_design.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/app_development/legacy/ui_ux_superseded_2026_04/penpot_uiux_design.skill.md)
 
 ---
 

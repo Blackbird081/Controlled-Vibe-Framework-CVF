@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [dark_light_mode_audit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/dark_light_mode_audit.skill.md)
+→ [dark_light_mode_audit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/legacy/visual_system_superseded_2026_04/dark_light_mode_audit.skill.md)
 
 ---
 

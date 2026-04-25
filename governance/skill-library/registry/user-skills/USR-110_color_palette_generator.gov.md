@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [color_palette_generator.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/color_palette_generator.skill.md)
+→ [color_palette_generator.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/legacy/visual_system_superseded_2026_04/color_palette_generator.skill.md)
 
 ---
 

@@ -16,8 +16,8 @@ import {
 // ─── Test data ───────────────────────────────────────────────────────
 
 const SAMPLE_CSV = `skill_id,domain,skill_name,difficulty,risk_level,phases,keywords,description,file_path
-product_ux/ui_style_selection,product_ux,UI Style Selection Guide,Medium,R1,"Discovery,Design",style ui selection guide,"Helps pick UI style",product_ux/ui_style_selection.skill.md
-product_ux/color_palette_generator,product_ux,Color Palette Generator,Easy,R0,Design,"color palette generator brand","Generates color palettes",product_ux/color_palette_generator.skill.md
+product_ux/cvf_web_ux_redesign_system,product_ux,CVF Web UX Redesign System,Medium,R1,"Discovery,Design",style ui redesign system guide,"Builds CVF web design DNA",product_ux/cvf_web_ux_redesign_system.skill.md
+product_ux/accessibility_audit,product_ux,Accessibility Audit,Easy,R0,Review,"accessibility color contrast keyboard","Audits accessibility",product_ux/accessibility_audit.skill.md
 web_development/07_landing_page_pattern,web_development,Landing Page Pattern Selection,Easy,R0,"Discovery,Design",landing page pattern conversion,"Select landing page layout",web_development/07_landing_page_pattern.skill.md
 security_compliance/security_audit_checklist,security_compliance,Security Audit Checklist,Advanced,R3,"Review,Deploy",security audit checklist owasp,"Security audit for apps",security_compliance/security_audit_checklist.skill.md
 web_development/06_chart_data_visualization,web_development,Chart Data Visualization,Medium,R1,Build,"chart data visualization d3","Data viz best practices",web_development/06_chart_data_visualization.skill.md`;
@@ -90,9 +90,9 @@ describe('parseCSV', () => {
   it('parses valid CSV into SkillRecord array', () => {
     const records = parseCSV(SAMPLE_CSV);
     expect(records).toHaveLength(5);
-    expect(records[0].skill_id).toBe('product_ux/ui_style_selection');
+    expect(records[0].skill_id).toBe('product_ux/cvf_web_ux_redesign_system');
     expect(records[0].domain).toBe('product_ux');
-    expect(records[0].skill_name).toBe('UI Style Selection Guide');
+    expect(records[0].skill_name).toBe('CVF Web UX Redesign System');
   });
 
   it('handles empty CSV', () => {
@@ -129,7 +129,7 @@ describe('searchSkills API', () => {
   });
 
   it('searches with domain filter', () => {
-    const results = searchSkills('selection', { domain: 'product_ux' });
+    const results = searchSkills('redesign', { domain: 'product_ux' });
     expect(results.length).toBeGreaterThan(0);
     expect(results.every(r => r.skill.domain === 'product_ux')).toBe(true);
   });

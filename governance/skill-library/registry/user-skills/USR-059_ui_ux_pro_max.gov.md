@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [ui_ux_pro_max.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/app_development/ui_ux_pro_max.skill.md)
+→ [ui_ux_pro_max.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/app_development/legacy/ui_ux_superseded_2026_04/ui_ux_pro_max.skill.md)
 
 ---
 

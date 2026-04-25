@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [industry_ui_reasoning.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/app_development/industry_ui_reasoning.skill.md)
+→ [industry_ui_reasoning.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/app_development/legacy/ui_ux_superseded_2026_04/industry_ui_reasoning.skill.md)
 
 ---
 

@@ -18,17 +18,17 @@ import { parseCSV, loadSkills, type SkillRecord } from './skill-search';
 // ─── Test Data ───────────────────────────────────────────────────────
 
 const SAMPLE_SKILLS_CSV = `skill_id,domain,skill_name,difficulty,risk_level,phases,keywords,description,file_path
-product_ux/ui_style_selection,product_ux,UI Style Selection Guide,Medium,R1,"Discovery,Design",style ui selection,"Helps pick UI style",product_ux/ui_style_selection.skill.md
-product_ux/color_palette_generator,product_ux,Color Palette Generator,Easy,R0,Design,"color palette","Generates color palettes",product_ux/color_palette_generator.skill.md
+product_ux/cvf_web_ux_redesign_system,product_ux,CVF Web UX Redesign System,Advanced,R1,"Discovery,Design,Build,Review",cvf design system web redesign,"Builds CVF-native web design DNA",product_ux/cvf_web_ux_redesign_system.skill.md
+product_ux/accessibility_audit,product_ux,Accessibility Audit,Easy,R0,Review,"accessibility contrast keyboard","Audits accessibility",product_ux/accessibility_audit.skill.md
 web_development/07_landing_page_pattern,web_development,Landing Page Pattern Selection,Easy,R0,"Discovery,Design","landing page","Select landing page layout",web_development/07_landing_page_pattern.skill.md
 web_development/06_chart_data_visualization,web_development,Chart Data Visualization,Medium,R1,Build,"chart data visualization","Data viz best practices",web_development/06_chart_data_visualization.skill.md
-app_development/industry_ui_reasoning,app_development,Industry UI Reasoning,Medium,R1,Discovery,"industry reasoning","Design reasoning for industry",app_development/industry_ui_reasoning.skill.md`;
+product_ux/ux_heuristic_evaluation,product_ux,UX Heuristic Evaluation,Medium,R1,Review,"heuristic ux review","Reviews UX heuristics",product_ux/ux_heuristic_evaluation.skill.md`;
 
 const SAMPLE_REASONING_CSV = `industry,task_pattern,skill_chain,rationale
-Fintech,dashboard|analytics|data viz,app_development/industry_ui_reasoning|product_ux/ui_style_selection|web_development/06_chart_data_visualization,Fintech needs trust-focused design and data visualization
-Ecommerce,product listing|cart|checkout|marketplace,"web_development/07_landing_page_pattern|product_ux/ui_style_selection|product_ux/color_palette_generator",Ecommerce needs visual product showcase
-Beauty,booking|portfolio|spa,"product_ux/ui_style_selection|product_ux/color_palette_generator|web_development/07_landing_page_pattern",Beauty needs elegant visual style
-Generic,new project|redesign|audit,"app_development/industry_ui_reasoning|product_ux/ui_style_selection",Generic fallback for unknown industries`;
+Fintech,dashboard|analytics|data viz,product_ux/cvf_web_ux_redesign_system|web_development/06_chart_data_visualization,Fintech needs trust-focused design and data visualization
+Ecommerce,product listing|cart|checkout|marketplace,"web_development/07_landing_page_pattern|product_ux/cvf_web_ux_redesign_system|product_ux/accessibility_audit",Ecommerce needs visual product showcase
+Beauty,booking|portfolio|spa,"product_ux/cvf_web_ux_redesign_system|product_ux/accessibility_audit|web_development/07_landing_page_pattern",Beauty needs elegant visual style
+Generic,new project|redesign|audit,"product_ux/cvf_web_ux_redesign_system|product_ux/ux_heuristic_evaluation",Generic fallback for unknown industries`;
 
 // ─── parseReasoningCSV Tests ─────────────────────────────────────────
 
@@ -38,7 +38,7 @@ describe('parseReasoningCSV', () => {
     expect(rules).toHaveLength(4);
     expect(rules[0].industry).toBe('Fintech');
     expect(rules[0].task_pattern).toBe('dashboard|analytics|data viz');
-    expect(rules[0].skill_chain).toContain('industry_ui_reasoning');
+    expect(rules[0].skill_chain).toContain('cvf_web_ux_redesign_system');
   });
 
   it('returns empty for empty input', () => {

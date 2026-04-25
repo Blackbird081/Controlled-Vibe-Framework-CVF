@@ -341,7 +341,8 @@ Nếu input là prototype Claude Design/HTML/JSX, không đưa toàn bộ protot
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input mẫu
+
 ```text
 Project / Surface: AI operations dashboard
 Users / Roles: Ops manager, analyst, reviewer
@@ -354,7 +355,8 @@ Motion Budget: subtle reveal + clear hover feedback only
 Theme Strategy: dark-primary, light-supporting
 ```
 
-### Output tóm tắt:
+### Output mẫu
+
 ```markdown
 1. Experience North Star
 - Feel like a high-trust command center, not a generic SaaS admin.
@@ -384,12 +386,17 @@ Theme Strategy: dark-primary, light-supporting
 
 ---
 
+## 🔗 Next Step
+
+→ [Claude Design Handoff](./claude_design_handoff.skill.md) — convert redesign output into clean agent handoff
+
+---
+
 ## 🔗 Related Skills
 
 - [Claude Design Handoff](./claude_design_handoff.skill.md)
-- [Accessibility Audit](./accessibility_audit.skill.md)
-- [UX Heuristic Evaluation](./ux_heuristic_evaluation.skill.md)
-- [UI Pre-Delivery Checklist](../app_development/ui_pre_delivery_checklist.skill.md)
+- [Accessibility Audit](./04_accessibility_audit.skill.md)
+- [UX Heuristic Evaluation](./03_ux_heuristic_evaluation.skill.md)
 
 ---
 

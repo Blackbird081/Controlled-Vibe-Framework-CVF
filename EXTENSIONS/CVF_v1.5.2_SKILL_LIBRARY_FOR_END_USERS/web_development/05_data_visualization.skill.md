@@ -165,7 +165,8 @@ PERFORMANCE:
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input mẫu
+
 ```
 Loại: Sales funnel - 5 stages (Visit→Lead→Demo→Trial→Paid)
 Mục đích: Identify drop-off points
@@ -173,7 +174,8 @@ Framework: Next.js + Recharts
 Interactive: Hover + click to filter
 ```
 
-### Output tóm tắt:
+### Output mẫu
+
 ```
 Chart: Horizontal Funnel Chart
 Library: Recharts (custom shape)
@@ -186,11 +188,24 @@ Alternative: Stacked bar if comparing multiple periods
 
 ---
 
+## 🔗 Next Step
+
+→ [Dashboard](./03_dashboard.skill.md) — Tích hợp charts vào dashboard layout
+
+---
+
 ## 🔗 Related Skills
 
 - [Dashboard](./03_dashboard.skill.md)
-- [Landing Page Pattern](./landing_page_pattern.skill.md)
-- [React Performance Audit](./react_performance_audit.skill.md)
+- [Landing Page](./01_landing_page.skill.md)
+
+---
+
+## 📜 Version History
+
+| Version | Date | Changes |
+| ------- | ---- | ------- |
+| 1.0.0 | 2026-02-22 | Initial creation, adapted from UI UX Pro Max (MIT) |
 
 ---
 

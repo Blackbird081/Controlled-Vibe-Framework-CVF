@@ -169,7 +169,8 @@ SCORE: 4/10 → Target: 8/10
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input mẫu
+
 ```
 URL: React SaaS dashboard
 Components: Modal, Dropdown menu, Data table, Toast notifications
@@ -177,7 +178,8 @@ Framework: React + Radix UI
 Compliance: WCAG 2.1 AA
 ```
 
-### Output tóm tắt:
+### Output mẫu
+
 ```
 Radix UI components: mostly compliant ✅
 Custom data table: needs aria-sort, aria-rowcount
@@ -190,10 +192,24 @@ Score: 7/10 — minor fixes needed
 
 ---
 
+## 🔗 Next Step
+
+→ [Accessibility Audit](../product_ux/04_accessibility_audit.skill.md) — UX-level WCAG audit (broader scope)
+
+---
+
 ## 🔗 Related Skills
 
-- [Accessibility Audit](../product_ux/accessibility_audit.skill.md)
-- [CSS Animation & Performance](./09_css_animation_performance.skill.md)
+- [Accessibility Audit](../product_ux/04_accessibility_audit.skill.md)
+- [SaaS App](./02_saas_app.skill.md)
+
+---
+
+## 📜 Version History
+
+| Version | Date | Changes |
+| ------- | ---- | ------- |
+| 1.0.0 | 2026-02-22 | Initial creation, adapted from UI UX Pro Max (MIT) |
 
 ---
 

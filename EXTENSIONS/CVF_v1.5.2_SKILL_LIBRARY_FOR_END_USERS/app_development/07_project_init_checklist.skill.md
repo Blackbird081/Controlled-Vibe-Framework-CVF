@@ -15,7 +15,7 @@
 
 ---
 
-## 🎯 Purpose
+## 🎯 Mục đích
 
 **When to use this skill:**
 - Starting any new project with AI
@@ -111,7 +111,7 @@ Status: 🟢 In Progress
 
 ---
 
-## 🔍 Evaluation Criteria
+## 🔍 Cách đánh giá
 
 **Accept Checklist:**
 - [ ] All 8 checklist items present and clear
@@ -144,9 +144,10 @@ Status: 🟢 In Progress
 
 ---
 
-## 📊 Example
+## 📊 Ví dụ thực tế
 
-### Sample Input:
+### Input mẫu
+
 ```
 Project Name: "SalesTracker"
 Description: "Track sales rep performance"
@@ -154,7 +155,8 @@ Operating System: Windows 11
 Python: Python 3.11 installed
 ```
 
-### Sample Output:
+### Output mẫu
+
 - 8-item checklist displayed
 - User ticks 7/8 (skipped: governance folder not yet created)
 - AI guides User to create folder (30 seconds)
@@ -165,13 +167,13 @@ Python: Python 3.11 installed
 
 ## 🔗 Next Step
 
-After Checklist Pass → [Vibe-to-Spec Translator](./01_vibe_to_spec.skill.md) — begin Phase A
+After Checklist Pass → [App Requirements Spec](./01_app_requirements_spec.skill.md) — begin Phase A
 
 ---
 
 ## 🔗 Related Skills
 
-- [Vibe-to-Spec Translator](./01_vibe_to_spec.skill.md) — First skill to use in Phase A
+- [App Requirements Spec](./01_app_requirements_spec.skill.md) — First skill to use in Phase A
 - [App Requirements Spec](./01_app_requirements_spec.skill.md) — Next step after init
 
 ---

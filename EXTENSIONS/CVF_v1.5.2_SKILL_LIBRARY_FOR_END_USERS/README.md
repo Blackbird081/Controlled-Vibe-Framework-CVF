@@ -12,10 +12,10 @@ before importing external skill packs or adding overlapping micro-skills.
 ## 📊 Thống kê
 
 | Metric | Value |
-|--------|-------|
-| **Tổng Skills** | **131 skills** |
+| ------ | ----- |
+| **Tổng Skills** | **62 active skills** |
 | **Domains** | 12 domains |
-| **Phase 5 (NEW)** | 16 skills |
+| **Archived** | 80 skills (legacy/) |
 
 ## 🚀 Bắt đầu nhanh
 
@@ -89,13 +89,17 @@ before importing external skill packs or adding overlapping micro-skills.
 
 ---
 
-### 📈 [Marketing & SEO](marketing_seo/) (Phase 1)
-11 skills cho SEO, copywriting, content, ads, brand, **conversion optimization**, và **style matching**
+### 📈 [Marketing & SEO](marketing_seo/) (Canonicalized)
 
-| Skill (NEW) | Mục đích | Difficulty |
-|-------------|----------|------------|
-| Conversion Landing Optimizer | Tối ưu landing page cho conversion | Medium | ⭐ NEW |
-| Product Page Style Matcher | Map product → visual style phù hợp | Easy | ⭐ NEW |
+5 skills cho SEO, competitor analysis, content quality, social media, và brand strategy
+
+| Skill | Mục đích | Difficulty |
+| ----- | -------- | ---------- |
+| SEO Audit | Audit SEO toàn diện | Medium |
+| Competitor Analysis | Phân tích đối thủ | Medium |
+| Content Quality Review | Review chất lượng content | Easy |
+| Social Media Review | Review social ads/posts | Easy |
+| Brand Strategy Review | Review brand voice & strategy | Medium |
 
 ---
 
@@ -134,10 +138,11 @@ audit/reference only.
 ---
 
 ### Các Domains khác
-- [Web Development](web_development/) - 11 skills (+6 NEW: chart visualization, landing patterns, ARIA audit, CSS animation, React perf, icon system)
-- [Business Analysis](business_analysis/) - 3 skills
-- [Content Creation](content_creation/) - 3 skills
-- [Technical Review](technical_review/) - 3 skills
+
+- [Web Development](web_development/) — 6 skills
+- [Business Analysis](business_analysis/) — 4 skills
+- [Content Creation](content_creation/) — 4 skills
+- [Technical Review](technical_review/) — 3 skills
 
 ---
 

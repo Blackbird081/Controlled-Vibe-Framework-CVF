@@ -30,6 +30,7 @@
     <td align="center"><a href="#repository-map"><strong>Repo Map</strong></a></td>
     <td align="center"><a href="#key-docs"><strong>Docs Hub</strong></a></td>
     <td align="center"><a href="#governance--evidence"><strong>Governance</strong></a></td>
+    <td align="center"><a href="CONTRIBUTORS.md"><strong>Contributors</strong></a></td>
     <td align="center"><a href="#contributing"><strong>Contributing</strong></a></td>
   </tr>
 </table>
@@ -463,6 +464,9 @@ For the deeper private-core chain, continue with:
 - [Memory Record Classification](docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md)
 
 ## Contributing
+
+For contributor attribution and AI collaboration roles, see
+[Contributors](CONTRIBUTORS.md).
 
 For substantive changes:
 

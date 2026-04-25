@@ -266,6 +266,17 @@ CVF skill library rule:
 - Prefer one canonical system skill, one prototype-ingest skill, and one QA
   checklist over many overlapping design skills.
 
+Promotion rule:
+- A reference pattern may update `DESIGN.md` when it improves reusable design
+  judgment across CVF products.
+- A reference pattern may update `product_ux/cvf_web_ux_redesign_system` when it
+  changes how agents should produce web design DNA or implementation guardrails.
+- A reference pattern may update `product_ux/claude_design_handoff` when it
+  changes how agents extract value from prototypes or generated HTML.
+- A new UI/UX skill is allowed only when the capability is recurring,
+  non-overlapping, and cannot be expressed as a rule in the canonical system
+  skill or QA checklist.
+
 ## 11. Canonical UI/UX Skill Portfolio
 
 Use a small active portfolio for web UI/UX work:
@@ -350,3 +361,64 @@ Selection rule:
 - If the product is a tool for builders, start from Developer SaaS.
 - If the user explicitly names a mood, map the mood into one of these modes
   and state the tradeoff in the handoff packet.
+
+## 13. Design Reference Intake Gate
+
+Use this gate before absorbing any external design repository, `DESIGN.md`
+collection, inspiration gallery, generated prototype, screenshot set, or UI
+prompt pack into CVF.
+
+### Intake Classification
+
+Classify the source before reading it deeply:
+
+- Design corpus: useful for style vocabulary, layout patterns, and component
+  behavior.
+- Component library: useful for interaction states, density, accessibility, and
+  token structure.
+- Production app or screenshot: useful for workflow hierarchy and information
+  architecture.
+- Brand clone or trend pack: useful only for contrast and anti-patterns unless
+  it contains reusable product logic.
+- Prompt/spec repository: useful for agent instructions, acceptance criteria,
+  and handoff structure.
+
+### Hard Rejects
+
+Do not absorb a reference if it requires:
+
+- copying brand identity, proprietary visual signatures, logos, names, or exact
+  compositions
+- replacing CVF tokens with an unrelated token system
+- adding a new UI/UX skill that duplicates the canonical portfolio
+- prioritizing decoration over task clarity, accessibility, or maintainability
+- weakening non-coder handoff clarity
+- adding framework or package dependencies only for visual style
+- preserving source-specific licensing or attribution claims CVF cannot satisfy
+
+### Quality Score
+
+Promote only patterns that pass all five checks:
+
+| Check | Required Question |
+| --- | --- |
+| Product fit | Does it improve a real CVF user workflow, not only visual taste? |
+| Reusability | Can it serve more than one project, page type, or domain? |
+| Governability | Can an agent apply it from written rules without copying source assets? |
+| Accessibility | Does it preserve contrast, focus states, responsive layout, and readable density? |
+| Skill hygiene | Does it enrich an existing canonical skill instead of creating overlap? |
+
+### Absorption Output
+
+For each accepted source, write a short intake note with:
+
+1. Source name and URL/path
+2. What was absorbed
+3. What was rejected
+4. Which CVF surface changed: `DESIGN.md`, a canonical skill, QA checklist, or a
+   one-off project handoff
+5. Why no duplicate skill was created
+
+`awesome-design-md` is treated as a design-reference corpus: absorb useful
+design-contract patterns, vocabulary, and agent-facing acceptance criteria; do
+not import it as a competing skill library.

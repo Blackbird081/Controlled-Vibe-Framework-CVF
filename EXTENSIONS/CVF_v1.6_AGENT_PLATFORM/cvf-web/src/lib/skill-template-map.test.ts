@@ -11,6 +11,7 @@ import {
     categoryToDomainMap,
     domainToCategoryMap,
 } from './skill-template-map';
+import { getTemplateById } from './templates';
 
 describe('skill-template-map', () => {
     it('templateToSkillMap has at least 40 entries', () => {
@@ -21,6 +22,12 @@ describe('skill-template-map', () => {
         for (const [id, ref] of Object.entries(templateToSkillMap)) {
             expect(ref.domain.length, `${id} should have domain`).toBeGreaterThan(0);
             expect(ref.skillId.length, `${id} should have skillId`).toBeGreaterThan(0);
+        }
+    });
+
+    it('every mapped template id exists in the template registry', () => {
+        for (const templateId of Object.keys(templateToSkillMap)) {
+            expect(getTemplateById(templateId), `${templateId} should exist`).toBeDefined();
         }
     });
 

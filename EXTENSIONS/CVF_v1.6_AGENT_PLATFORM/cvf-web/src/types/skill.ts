@@ -52,6 +52,5 @@ export interface SkillIndexMeta {
 export interface SkillIndexPayload {
     generatedAt?: string;
     categories: SkillCategory[];
-    archiveCategories?: SkillCategory[];
     meta?: SkillIndexMeta;
 }

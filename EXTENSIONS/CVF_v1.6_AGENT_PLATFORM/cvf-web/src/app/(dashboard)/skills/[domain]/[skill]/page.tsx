@@ -31,9 +31,7 @@ export default function SkillDetailPage() {
                 }
                 const payload = await response.json() as SkillIndexPayload | SkillCategory[];
                 const categories: SkillCategory[] = Array.isArray(payload) ? payload : (payload.categories ?? []);
-                const archiveCategories: SkillCategory[] = Array.isArray(payload) ? [] : (payload.archiveCategories ?? []);
-                const combinedCategories = [...categories, ...archiveCategories];
-                const category = combinedCategories.find((item) => item.id === domain);
+                const category = categories.find((item) => item.id === domain);
                 const found = category?.skills?.find((item) => item.id === skillId) ?? null;
                 if (active) {
                     setSkill(found);
@@ -91,7 +89,7 @@ export default function SkillDetailPage() {
         <div className="pb-10">
             <SurfaceTopBar
                 title={skill.title}
-                subtitle={`${skill.domain} / ${skill.id}.skill.md`}
+                subtitle={`${skill.domain} - ${skill.difficulty}`}
                 actions={(
                     <Link
                         href="/skills"

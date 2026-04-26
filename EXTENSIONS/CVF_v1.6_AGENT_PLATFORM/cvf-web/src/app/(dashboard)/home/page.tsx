@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Layers3, ShieldCheck, Sparkles, Wand2 } from 'lucide-react';
 import { templates, generateIntent } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
@@ -76,6 +77,8 @@ const WIZARD_MAP: Record<string, WorkflowState> = {
 
 export default function HomePage() {
     const { t, language } = useLanguage();
+    const searchParams = useSearchParams();
+    const handledLaunchParam = useRef('');
     const mockAiEnabled = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
     const { settings } = useSettings();
     const hasAnyApiKey = Object.values(settings.providers).some(p => p.apiKey && p.apiKey.trim().length > 0);
@@ -270,6 +273,47 @@ export default function HomePage() {
         setSelectedTemplate(template);
         setWorkflowState('form');
     }, []);
+
+    useEffect(() => {
+        const templateId = searchParams.get('template')?.trim();
+        const category = searchParams.get('category')?.trim();
+        const launchKey = `${templateId || ''}|${category || ''}`;
+        if ((!templateId && !category) || handledLaunchParam.current === launchKey) {
+            return;
+        }
+        handledLaunchParam.current = launchKey;
+
+        if (templateId) {
+            const template = templates.find(item => item.id === templateId);
+            if (!template) {
+                return;
+            }
+            setCurrentFolder(null);
+            setSelectedTemplate(template);
+            trackEvent('template_selected', {
+                templateId: template.id,
+                templateName: template.name,
+                category: template.category,
+                source: 'skill_library',
+            });
+
+            if (template.isFolder) {
+                setCurrentFolder(template.id);
+                setWorkflowState('browse');
+                return;
+            }
+
+            const wizardState = WIZARD_MAP[template.id];
+            setWorkflowState(wizardState ?? 'form');
+            return;
+        }
+
+        if (category) {
+            setCurrentFolder(null);
+            setSelectedCategory(category);
+            setWorkflowState('browse');
+        }
+    }, [searchParams]);
 
     const handleFormSubmit = useCallback((values: Record<string, string>, intent: string) => {
         setCurrentInput(values);

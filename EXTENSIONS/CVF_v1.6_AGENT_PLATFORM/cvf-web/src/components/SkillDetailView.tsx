@@ -8,54 +8,6 @@ import { useLanguage } from '@/lib/i18n';
 
 type ViewMode = 'skill' | 'uat';
 
-const uatBadgeClasses = (status?: string) => {
-    switch ((status || '').toUpperCase()) {
-        case 'PASS':
-            return 'bg-emerald-100 text-emerald-800';
-        case 'SOFT FAIL':
-            return 'bg-amber-100 text-amber-800';
-        case 'FAIL':
-            return 'bg-rose-100 text-rose-800';
-        default:
-            return 'bg-gray-100 text-gray-700';
-    }
-};
-
-const specGateBadgeClasses = (status?: string) => {
-    switch ((status || '').toUpperCase()) {
-        case 'PASS':
-            return 'bg-emerald-100 text-emerald-800';
-        case 'CLARIFY':
-            return 'bg-amber-100 text-amber-800';
-        case 'FAIL':
-            return 'bg-rose-100 text-rose-800';
-        default:
-            return 'bg-gray-100 text-gray-700';
-    }
-};
-
-const corpusClassBadge = (skill: Skill, t: (key: string) => string) => {
-    if (skill.corpusClass === 'TRUSTED_FOR_VALUE_PROOF') {
-        return {
-            className: 'bg-emerald-100 text-emerald-800',
-            label: skill.trustedBenchmarkSurface ? t('skills.trustedBenchmark') : t('skills.trustedSupporting'),
-        };
-    }
-    if (skill.corpusClass === 'REVIEW_REQUIRED') {
-        return {
-            className: 'bg-amber-100 text-amber-800',
-            label: t('skills.reviewRequired'),
-        };
-    }
-    if (skill.corpusClass === 'LEGACY_LOW_CONFIDENCE' || skill.corpusClass === 'REJECT_FOR_NON_CODER_FRONTDOOR' || skill.corpusClass === 'UNSCREENED_LEGACY') {
-        return {
-            className: 'bg-slate-100 text-slate-700',
-            label: t('skills.quarantined'),
-        };
-    }
-    return null;
-};
-
 export function SkillDetailView({ skill }: { skill: Skill }) {
     const [viewMode, setViewMode] = useState<ViewMode>('skill');
     const { t } = useLanguage();
@@ -76,10 +28,18 @@ export function SkillDetailView({ skill }: { skill: Skill }) {
                     <div>
                         <div className="flex items-center gap-2 mb-2">
                             <span className="rounded-full bg-indigo-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">{skill.domain}</span>
-                            <span className="text-slate-300 dark:text-white/20">•</span>
-                            <span className="text-xs text-slate-500 dark:text-white/35 font-mono">{skill.id}.skill.md</span>
+                            {skill.difficulty && (
+                                <span className="rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
+                                    {t('skills.difficultyLabel')}: {skill.difficulty}
+                                </span>
+                            )}
                         </div>
-                        <h1 className="text-3xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">{skill.title}</h1>
+                        <h1 className="text-2xl font-semibold tracking-[-0.02em] text-slate-700 dark:text-slate-100 sm:text-[1.75rem]">{skill.title}</h1>
+                        {skill.summary && (
+                            <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-white/55">
+                                {skill.summary}
+                            </p>
+                        )}
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="flex items-center rounded-full border border-slate-200 bg-white p-1 dark:border-white/[0.08] dark:bg-[#10131d]">
@@ -98,78 +58,15 @@ export function SkillDetailView({ skill }: { skill: Skill }) {
                         </div>
                         <button
                             onClick={handleCopy}
-                            className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-[#10131d] dark:text-white/70 dark:hover:bg-white/[0.06]"
+                            className="inline-flex h-9 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50 hover:text-slate-800 dark:border-white/[0.08] dark:bg-[#10131d] dark:text-white/65 dark:hover:bg-white/[0.06] dark:hover:text-white/85"
                         >
+                            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
                             {t('skills.copyRaw')}
                         </button>
                     </div>
                 </div>
-
-                <div className="mt-4 flex flex-wrap gap-2">
-                    {skill.riskLevel && (
-                        <span className="px-2.5 py-1 text-[11px] font-semibold bg-rose-100 text-rose-800 rounded-full">
-                            {t('skills.risk')}: {skill.riskLevel}
-                        </span>
-                    )}
-                    {skill.autonomy && (
-                        <span className="px-2.5 py-1 text-[11px] font-semibold bg-amber-100 text-amber-800 rounded-full">
-                            {t('skills.autonomy')}: {skill.autonomy}
-                        </span>
-                    )}
-                    {skill.allowedRoles && (
-                        <span className="px-2.5 py-1 text-[11px] font-semibold bg-sky-100 text-sky-800 rounded-full">
-                            {t('skills.roles')}: {skill.allowedRoles}
-                        </span>
-                    )}
-                    {skill.allowedPhases && (
-                        <span className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-100 text-emerald-800 rounded-full">
-                            {t('skills.phases')}: {skill.allowedPhases}
-                        </span>
-                    )}
-                    {skill.authorityScope && (
-                        <span className="px-2.5 py-1 text-[11px] font-semibold bg-indigo-100 text-indigo-800 rounded-full">
-                            {t('skills.scope')}: {skill.authorityScope}
-                        </span>
-                    )}
-                    {corpusClassBadge(skill, t) && (
-                        <span className={`px-2.5 py-1 text-[11px] font-semibold rounded-full ${corpusClassBadge(skill, t)?.className}`}>
-                            {corpusClassBadge(skill, t)?.label}
-                        </span>
-                    )}
-                    {skill.specGate && (
-                        <span className={`px-2.5 py-1 text-[11px] font-semibold rounded-full ${specGateBadgeClasses(skill.specGate)}`}>
-                            {t('skills.specGate')}: {skill.specGate}
-                        </span>
-                    )}
-                    <span className={`px-2.5 py-1 text-[11px] font-semibold rounded-full ${uatBadgeClasses(skill.uatStatus)}`}>
-                        {t('skills.outputUatLabel')}: {skill.uatStatus || t('skills.notRun')}
-                    </span>
-                    {typeof skill.uatScore === 'number' && (
-                        <span className="px-2.5 py-1 text-[11px] font-semibold bg-gray-100 text-gray-700 rounded-full">
-                            {t('skills.scoreLabel')}: {skill.uatScore}%
-                        </span>
-                    )}
-                    {skill.uatQuality && (
-                        <span className="px-2.5 py-1 text-[11px] font-semibold bg-gray-100 text-gray-700 rounded-full">
-                            {t('skills.outputQuality')}: {skill.uatQuality}
-                        </span>
-                    )}
-                    {typeof skill.specScore === 'number' && (
-                        <span className="px-2.5 py-1 text-[11px] font-semibold bg-blue-100 text-blue-700 rounded-full">
-                            {t('skills.specLabel')}: {skill.specScore}%
-                        </span>
-                    )}
-                    {skill.specQuality && (
-                        <span className="px-2.5 py-1 text-[11px] font-semibold bg-blue-100 text-blue-700 rounded-full">
-                            {t('skills.specQualityLabel')}: {skill.specQuality}
-                        </span>
-                    )}
-                </div>
-                {skill.corpusNote && (
-                    <div className="mt-4 rounded-2xl border border-slate-200 bg-white/70 px-4 py-3 text-xs leading-6 text-slate-700 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/60">
-                        {skill.corpusNote}
-                    </div>
-                )}
             </div>
 
             <div className="max-h-[70vh] overflow-y-auto p-6 sm:p-8">

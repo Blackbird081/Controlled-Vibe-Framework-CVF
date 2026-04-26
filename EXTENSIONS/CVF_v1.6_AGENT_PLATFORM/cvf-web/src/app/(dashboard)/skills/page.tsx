@@ -58,19 +58,19 @@ export default function SkillsPage() {
 
     const statCards = useMemo(() => ([
         {
-            label: language === 'vi' ? 'Tổng số skill' : 'Total Skills',
+            label: language === 'vi' ? 'Tổng kỹ năng' : 'Total Skills',
             value: String(stats.totalSkills || 0),
             icon: Layers3,
             tone: 'accent' as const,
         },
         {
-            label: language === 'vi' ? 'Miền kỹ năng' : 'Domains',
+            label: language === 'vi' ? 'Nhóm kỹ năng' : 'Skill Groups',
             value: String(stats.totalDomains || 0),
             icon: ShieldCheck,
             tone: 'emerald' as const,
         },
         {
-            label: language === 'vi' ? 'Sẵn cho tìm kiếm' : 'Search-ready',
+            label: language === 'vi' ? 'Có thể tìm' : 'Searchable',
             value: String(stats.searchable || 0),
             icon: Search,
             tone: 'amber' as const,
@@ -88,14 +88,14 @@ export default function SkillsPage() {
             <SurfaceTopBar
                 title={language === 'vi' ? 'Kỹ năng AI' : 'Skills'}
                 subtitle={language === 'vi'
-                    ? 'Khám phá kỹ năng AI đã được kiểm duyệt — tìm đúng skill cho công việc của bạn.'
-                    : 'Explore curated AI skills — find the right one for your task.'}
+                    ? 'Chọn đúng kỹ năng cho việc bạn cần làm — CVF sẽ hướng dẫn từng bước và tạo bản mô tả rõ ràng.'
+                    : 'Choose the right skill for the job — CVF guides the steps and creates a clear working brief.'}
                 actions={(
                     <Link
                         href="/marketplace"
                         className="cvf-control inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
                     >
-                        {language === 'vi' ? 'Mở marketplace' : 'Browse marketplace'}
+                        {language === 'vi' ? 'Mở kho mở rộng' : 'Browse add-ons'}
                     </Link>
                 )}
             />
@@ -109,18 +109,18 @@ export default function SkillsPage() {
                                     {language === 'vi' ? 'Thư viện kỹ năng' : 'Skill Library'}
                                 </div>
                                 <h2 className="mt-2 text-4xl font-semibold tracking-[-0.05em] text-slate-950 dark:text-white">
-                                    {language === 'vi' ? 'Kỹ năng AI cho mọi loại công việc' : 'AI skills for every type of work'}
+                                    {language === 'vi' ? 'Sẵn sàng để dùng' : 'Ready to use'}
                                 </h2>
                                 <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600 dark:text-white/55">
                                     {language === 'vi'
-                                        ? 'Mỗi skill đã được kiểm duyệt và gắn với template sẵn có. Chọn skill, điền form, nhận kết quả đã quản trị.'
-                                        : 'Every skill is curated and linked to ready-made templates. Pick a skill, fill the form, get a governed result.'}
+                                        ? 'Mỗi kỹ năng đều có phần hướng dẫn rõ ràng. Chọn kỹ năng, trả lời vài câu hỏi chính, rồi nhận bản mô tả công việc.'
+                                        : 'Each skill includes clear guidance. Pick a skill, answer a few key questions, then get a working brief.'}
                                 </p>
                             </div>
                             <div className="rounded-[24px] border border-slate-200 bg-white px-5 py-4 text-sm text-slate-500 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/45">
                                 {language === 'vi'
-                                        ? 'Mỗi skill có trang chi tiết đầy đủ — xem ví dụ, yêu cầu và cách sử dụng.'
-                                        : 'Each skill has a full detail page — see examples, requirements, and usage tips.'}
+                                        ? 'Danh sách này chỉ giữ những kỹ năng dùng được ngay.'
+                                        : 'This list keeps only skills that are ready to use.'}
                             </div>
                         </div>
 

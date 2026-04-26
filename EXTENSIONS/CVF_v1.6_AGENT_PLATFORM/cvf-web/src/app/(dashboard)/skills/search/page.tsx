@@ -65,13 +65,13 @@ function SkillSearchPageInner() {
             tone: 'accent' as const,
         },
         {
-            label: language === 'vi' ? 'Các pha planner' : 'Planner phases',
+            label: language === 'vi' ? 'Bước kế hoạch' : 'Plan steps',
             value: String(plan?.phases.length ?? 0),
             icon: GitBranch,
             tone: 'emerald' as const,
         },
         {
-            label: language === 'vi' ? 'Skill được đề xuất' : 'Recommended skills',
+            label: language === 'vi' ? 'Kỹ năng đề xuất' : 'Recommended skills',
             value: String(plan?.total_skills ?? 0),
             icon: Workflow,
             tone: 'amber' as const,
@@ -87,16 +87,16 @@ function SkillSearchPageInner() {
     return (
         <div className="pb-10">
             <SurfaceTopBar
-                title={language === 'vi' ? 'Tìm kiếm skill & lập kế hoạch' : 'Skill Search & Planner'}
+                title={language === 'vi' ? 'Tìm kỹ năng & lập kế hoạch' : 'Skill Search & Planner'}
                 subtitle={language === 'vi'
-                    ? 'Tìm skill theo từ khóa hoặc xây dựng kế hoạch làm việc AI theo từng bước.'
-                    : 'Search skills by keyword or build a step-by-step AI work plan.'}
+                    ? 'Tìm kỹ năng theo từ khóa hoặc xây dựng kế hoạch làm việc theo từng bước.'
+                    : 'Search skills by keyword or build a step-by-step work plan.'}
                 actions={(
                     <Link
                         href="/skills"
                         className="cvf-control inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
                     >
-                        {language === 'vi' ? 'Mở thư viện skill' : 'Open skill library'}
+                        {language === 'vi' ? 'Mở thư viện kỹ năng' : 'Open skill library'}
                     </Link>
                 )}
             />
@@ -190,7 +190,7 @@ function SkillSearchPageInner() {
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
                                         <div className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-500">
-                                            {language === 'vi' ? 'Skill đang chọn' : 'Selected skill'}
+                                            {language === 'vi' ? 'Kỹ năng đang chọn' : 'Selected skill'}
                                         </div>
                                         <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-white">
                                             {selectedSkill.skill_name}
@@ -205,10 +205,10 @@ function SkillSearchPageInner() {
                                     </button>
                                 </div>
                                 <div className="mt-4 space-y-2 text-sm text-slate-600 dark:text-white/58">
-                                    <p><span className="font-semibold text-slate-900 dark:text-white">{language === 'vi' ? 'Miền:' : 'Domain:'}</span> {selectedSkill.domain}</p>
-                                    <p><span className="font-semibold text-slate-900 dark:text-white">{language === 'vi' ? 'Rủi ro:' : 'Risk:'}</span> {selectedSkill.risk_level}</p>
+                                    <p><span className="font-semibold text-slate-900 dark:text-white">{language === 'vi' ? 'Nhóm:' : 'Group:'}</span> {selectedSkill.domain}</p>
+                                    <p><span className="font-semibold text-slate-900 dark:text-white">{language === 'vi' ? 'Mức lưu ý:' : 'Care level:'}</span> {selectedSkill.risk_level}</p>
                                     <p><span className="font-semibold text-slate-900 dark:text-white">{language === 'vi' ? 'Độ khó:' : 'Difficulty:'}</span> {selectedSkill.difficulty}</p>
-                                    <p><span className="font-semibold text-slate-900 dark:text-white">{language === 'vi' ? 'Pha:' : 'Phases:'}</span> {selectedSkill.phases}</p>
+                                    <p><span className="font-semibold text-slate-900 dark:text-white">{language === 'vi' ? 'Bước phù hợp:' : 'Best steps:'}</span> {selectedSkill.phases}</p>
                                     {selectedSkill.description && <p className="pt-2">{selectedSkill.description}</p>}
                                 </div>
                                 <div className="mt-5">
@@ -216,7 +216,7 @@ function SkillSearchPageInner() {
                                         href={`/skills/${selectedSkill.domain}/${selectedSkill.skill_id}`}
                                         className="text-sm font-semibold text-indigo-600 transition hover:text-indigo-500 dark:text-indigo-300 dark:hover:text-indigo-200"
                                     >
-                                        {language === 'vi' ? 'Mở skill detail' : 'Open skill detail'} →
+                                        {language === 'vi' ? 'Mở chi tiết kỹ năng' : 'Open skill detail'} →
                                     </Link>
                                 </div>
                             </div>

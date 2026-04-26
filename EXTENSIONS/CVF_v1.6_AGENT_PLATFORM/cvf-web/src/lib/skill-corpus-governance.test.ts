@@ -10,8 +10,10 @@ const { loadSkillCorpusGovernance } = require('../../scripts/skill-corpus-govern
 function loadSkillIndex() {
   const raw = readFileSync(path.resolve(process.cwd(), 'public/data/skills-index.json'), 'utf8');
   return JSON.parse(raw) as {
+    archiveCategories?: unknown;
     categories: Array<{
       skills: Array<{
+        frontDoorVisible?: boolean;
         linkedTemplates?: Array<{
           templateId: string;
           corpusClass: string;
@@ -66,5 +68,18 @@ describe('skill corpus governance', () => {
     expect(linkedTemplates.some((item) => item.corpusClass === 'LEGACY_LOW_CONFIDENCE')).toBe(false);
     expect(linkedTemplates.some((item) => item.corpusClass === 'REJECT_FOR_NON_CODER_FRONTDOOR')).toBe(false);
     expect(linkedTemplates.some((item) => item.corpusClass === 'UNSCREENED_LEGACY')).toBe(false);
+  });
+
+  it('publishes only agent-ready public skills and does not expose archive categories', () => {
+    const skillIndex = loadSkillIndex();
+    const publicSkills = skillIndex.categories.flatMap((category) => category.skills);
+
+    expect(skillIndex.archiveCategories).toBeUndefined();
+    expect(publicSkills.length).toBeGreaterThan(0);
+    publicSkills.forEach((skill) => {
+      expect(skill.frontDoorVisible).toBe(true);
+      expect(skill.linkedTemplates?.length ?? 0).toBeGreaterThan(0);
+      expect(skill.linkedTemplates?.every((item) => item.corpusClass === 'TRUSTED_FOR_VALUE_PROOF')).toBe(true);
+    });
   });
 });

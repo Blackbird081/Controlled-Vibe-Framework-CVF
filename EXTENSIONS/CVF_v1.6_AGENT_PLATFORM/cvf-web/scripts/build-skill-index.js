@@ -271,15 +271,15 @@ function loadSpecReportMap() {
 function buildSkillIndex() {
     if (!fs.existsSync(SKILLS_ROOT)) {
         console.warn(`Skills root not found: ${SKILLS_ROOT}`);
-        return { categories: [], archiveCategories: [], meta: {} };
+        return { categories: [], meta: {} };
     }
 
     const uatReportMap = loadUatReportMap();
     const specReportMap = loadSpecReportMap();
     const corpusGovernance = loadSkillCorpusGovernance();
     const categories = [];
-    const archiveCategories = [];
     let totalScannedSkills = 0;
+    let nonPublicSkills = 0;
 
     const entries = fs.readdirSync(SKILLS_ROOT, { withFileTypes: true });
     for (const entry of entries) {
@@ -290,7 +290,6 @@ function buildSkillIndex() {
         const categoryPath = path.join(SKILLS_ROOT, folderName);
         const files = fs.readdirSync(categoryPath);
         const visibleSkills = [];
-        const archivedSkills = [];
 
         for (const file of files) {
             if (!file.endsWith('.skill.md')) continue;
@@ -367,7 +366,7 @@ function buildSkillIndex() {
             if (skillRecord.frontDoorVisible) {
                 visibleSkills.push(skillRecord);
             } else {
-                archivedSkills.push(skillRecord);
+                nonPublicSkills += 1;
             }
         }
 
@@ -380,23 +379,18 @@ function buildSkillIndex() {
             });
         }
 
-        if (archivedSkills.length > 0) {
-            archiveCategories.push({
-                id: folderName,
-                name: categoryName,
-                skills: archivedSkills,
-            });
-        }
+        // Non-public skills are intentionally not serialized to the web bundle.
+        // Git history and source files remain the audit trail; the product surface
+        // only exposes agent-ready public skills with a governed template path.
     }
 
     return {
         generatedAt: new Date().toISOString(),
         categories,
-        archiveCategories,
         meta: {
             totalScannedSkills,
             frontDoorSkills: categories.reduce((sum, category) => sum + category.skills.length, 0),
-            quarantinedSkills: archiveCategories.reduce((sum, category) => sum + category.skills.length, 0),
+            quarantinedSkills: nonPublicSkills,
             trustedMappedSkills: corpusGovernance.summary.trustedSkills,
             reviewMappedSkills: corpusGovernance.summary.reviewSkills,
             trustedBenchmarkSkills: corpusGovernance.summary.trustedBenchmarkSkills,

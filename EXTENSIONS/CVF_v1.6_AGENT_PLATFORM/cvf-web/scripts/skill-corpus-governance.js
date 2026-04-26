@@ -170,12 +170,15 @@ function buildSkillGovernanceMap() {
         const hasTrustedLinks = classSet.has(TRUSTED);
         const trustedBenchmarkSurface = entry.linkedTemplates.some((item) => item.trustedBenchmarkSurface);
 
+        const publicLinkedTemplates = entry.linkedTemplates.filter((item) => item.corpusClass === TRUSTED);
+
         entry.corpusClass = primaryClass;
-        entry.frontDoorVisible = primaryClass === TRUSTED || primaryClass === REVIEW;
+        entry.frontDoorVisible = primaryClass === TRUSTED && publicLinkedTemplates.length > 0;
         entry.trustedBenchmarkSurface = trustedBenchmarkSurface;
         entry.hasRestrictedLinks = hasRestrictedLinks;
         entry.hasReviewLinks = hasReviewLinks;
         entry.hasTrustedLinks = hasTrustedLinks;
+        entry.linkedTemplates = entry.frontDoorVisible ? publicLinkedTemplates : entry.linkedTemplates;
         entry.frontDoorTier = primaryClass === TRUSTED
             ? (trustedBenchmarkSurface ? 'TRUSTED_BENCHMARK' : 'TRUSTED_SUPPORTING')
             : primaryClass === REVIEW

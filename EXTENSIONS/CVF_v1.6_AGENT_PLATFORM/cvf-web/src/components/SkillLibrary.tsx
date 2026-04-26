@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -13,7 +14,7 @@ import { useLanguage } from '@/lib/i18n';
 
 export function SkillLibrary() {
     const router = useRouter();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const [categories, setCategories] = useState<SkillCategory[]>([]);
     const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
     const [loading, setLoading] = useState(true);
@@ -186,7 +187,7 @@ export function SkillLibrary() {
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                                         </button>
                                     </div>
-                                    <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight">
+                                    <h1 className="text-2xl font-semibold leading-tight tracking-[-0.02em] text-slate-700 dark:text-slate-100 sm:text-[1.75rem]">
                                         {selectedSkill.title}
                                     </h1>
                                 </div>
@@ -197,7 +198,7 @@ export function SkillLibrary() {
                                             trackEvent('skill_copied', { skillId: selectedSkill.id, skillTitle: selectedSkill.title });
                                             alert(t('skills.copied'));
                                         }}
-                                        className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm"
+                                        className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50 hover:text-slate-800 dark:border-white/[0.08] dark:bg-[#10131d] dark:text-white/65 dark:hover:bg-white/[0.06] dark:hover:text-white/85"
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                                         {t('skills.copyRaw')}
@@ -205,26 +206,32 @@ export function SkillLibrary() {
                                 </div>
                             </div>
 
-                            {/* Template Integration Area */}
-                            <div className="flex flex-wrap items-center gap-3 mt-4">
+                            {/* Guided Forms */}
+                            <div className="mt-4 flex flex-wrap items-center gap-2">
                                 {linkedTemplates.length > 0 ? (
-                                    linkedTemplates.map(tmpl => tmpl && (
-                                        <a
-                                            key={tmpl.id}
-                                            href={`/?template=${tmpl.id}`}
-                                            className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold bg-gray-900 text-white dark:bg-white dark:text-gray-900 rounded-xl hover:opacity-90 transition-opacity shadow-md"
-                                        >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                                            {t('skills.useTemplate').replace('📝 ', '')} {tmpl.name}
-                                        </a>
-                                    ))
+                                    <>
+                                        <span className="mr-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400 dark:text-white/35">
+                                            {language === 'vi' ? 'Mẫu hướng dẫn' : 'Guided forms'}
+                                        </span>
+                                        {linkedTemplates.map(tmpl => tmpl && (
+                                            <Link
+                                                key={tmpl.id}
+                                                href={`/home?template=${encodeURIComponent(tmpl.id)}`}
+                                                title={`${t('skills.useTemplate')}: ${tmpl.name}`}
+                                                className="inline-flex h-8 max-w-[240px] items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs font-semibold text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/70 dark:hover:border-indigo-400/40 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-200"
+                                            >
+                                                <svg className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                                <span className="truncate">{tmpl.name}</span>
+                                            </Link>
+                                        ))}
+                                    </>
                                 ) : domainCategory ? (
-                                    <a
-                                        href={`/?category=${domainCategory}`}
-                                        className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-sm"
+                                    <Link
+                                        href={`/home?category=${encodeURIComponent(domainCategory)}`}
+                                        className="inline-flex h-8 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs font-semibold text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/70 dark:hover:border-indigo-400/40 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-200"
                                     >
                                         {t('skills.browseTemplates')} {domainCategory}
-                                    </a>
+                                    </Link>
                                 ) : null}
                             </div>
                         </div>
@@ -236,16 +243,6 @@ export function SkillLibrary() {
                             </div>
                         </div>
 
-                        {/* Background Metadata (Low Emphasis for non-coders) */}
-                        <div className="bg-gray-50 dark:bg-[#161618] border-t border-gray-100 dark:border-gray-800/60 p-4">
-                            <p className="text-[10px] text-gray-400 dark:text-gray-500 font-medium uppercase tracking-widest mb-2 px-2">Technical Specs</p>
-                            <div className="flex flex-wrap gap-2 px-2">
-                                {selectedSkill.riskLevel && <span className="px-2 py-1 text-[10px] bg-white dark:bg-gray-800 text-gray-500 border border-gray-200 dark:border-gray-700 rounded-md">Risk: {selectedSkill.riskLevel}</span>}
-                                {selectedSkill.autonomy && <span className="px-2 py-1 text-[10px] bg-white dark:bg-gray-800 text-gray-500 border border-gray-200 dark:border-gray-700 rounded-md">Autonomy: {selectedSkill.autonomy}</span>}
-                                {selectedSkill.allowedRoles && <span className="px-2 py-1 text-[10px] bg-white dark:bg-gray-800 text-gray-500 border border-gray-200 dark:border-gray-700 rounded-md">Roles: {selectedSkill.allowedRoles}</span>}
-                                {selectedSkill.id && <span className="px-2 py-1 text-[10px] bg-white dark:bg-gray-800 text-gray-500 border border-gray-200 dark:border-gray-700 rounded-md font-mono">ID: {selectedSkill.id}</span>}
-                            </div>
-                        </div>
                     </div>
                 ) : (
                     <div className="flex-1 flex flex-col items-center justify-center text-center p-8 lg:p-12 absolute inset-0 bg-gradient-to-br from-gray-50/50 to-white dark:from-[#111113] dark:to-[#161618]">
@@ -255,7 +252,7 @@ export function SkillLibrary() {
                                 <svg className="w-10 h-10 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
                             </div>
                         </div>
-                        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
+                        <h3 className="mb-4 text-2xl font-semibold tracking-[-0.02em] text-slate-800 dark:text-slate-100">
                             {t('skills.selectSkill')}
                         </h3>
                         <p className="max-w-md text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed">

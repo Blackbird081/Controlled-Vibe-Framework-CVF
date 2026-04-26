@@ -13,63 +13,6 @@ export const productTemplates: Template[] = [
         outputExpected: ['Product Design Spec', 'User Personas', 'User Flows', 'Design Brief'],
     },
     {
-        id: 'ab_test_review',
-        name: 'Review A/B Test',
-        icon: '🧪',
-        description: 'Review thử nghiệm thay đổi sản phẩm theo cách người không chuyên vẫn hiểu được thay đổi nào đang tốt hơn và vì sao',
-        category: 'product',
-        difficulty: 'advanced',
-        fields: [
-            { id: 'changeGoal', type: 'textarea', label: 'Bạn đã thay đổi điều gì và hy vọng điều gì sẽ tốt hơn?', placeholder: 'Mô tả thay đổi và kết quả mong đợi bằng ngôn ngữ sản phẩm', required: true, rows: 3, section: 'required', hint: 'Không cần công thức thống kê. Chỉ cần nói thay đổi nào đã được thử và kỳ vọng tác động ra sao.', example: 'Đổi CTA từ “Đăng ký” sang “Bắt đầu miễn phí” để nhiều người bấm thử hơn.' },
-            { id: 'successSignal', type: 'text', label: 'Bạn đang nhìn vào dấu hiệu thành công nào?', placeholder: 'Ví dụ: số người bấm, số đơn, số người hoàn thành form...', required: true, section: 'required', hint: 'Chọn một dấu hiệu chính dễ hiểu nhất.', example: 'Tỷ lệ người hoàn thành đăng ký dùng thử' },
-            { id: 'variants', type: 'textarea', label: 'Hai phiên bản khác nhau ở điểm nào?', placeholder: 'Mô tả bản cũ và bản mới theo ngôn ngữ UX / nội dung', required: true, rows: 3, section: 'required', hint: 'Mô tả khác biệt chính mà người dùng nhìn thấy hoặc trải nghiệm.', example: 'Bản cũ: nút xanh “Đăng ký”. Bản mới: nút cam “Bắt đầu miễn phí” kèm dòng phụ “Không cần thẻ”.' },
-            { id: 'results', type: 'textarea', label: 'Bạn đang thấy kết quả gì?', placeholder: 'Kể cả kết quả thô, cảm nhận team, hoặc số liệu hiện có', required: false, rows: 3, section: 'advanced', hint: 'Có thể là số liệu đơn giản hoặc mô tả xu hướng. Không bắt buộc phải có p-value hay sample size.', example: 'Bản mới có vẻ được bấm nhiều hơn, nhưng số người trả phí chưa khác rõ. Team sales thấy lead mới có vẻ chất lượng hơn.' },
-            { id: 'decisionNeed', type: 'text', label: 'Bạn cần quyết định gì sau review này?', placeholder: 'Giữ bản mới, rollback, chạy tiếp, hay cần dữ liệu bổ sung?', required: false, section: 'advanced', hint: 'Giúp AI kết thúc bằng khuyến nghị đúng nhu cầu.', example: 'Quyết định có rollout bản mới cho toàn bộ traffic hay test thêm 1 vòng nữa.' },
-        ],
-        intentPattern: `INTENT:
-Tôi muốn review thử nghiệm thay đổi sản phẩm này theo cách dễ hiểu để ra quyết định.
-
-THAY ĐỔI VÀ MỤC TIÊU:
-[changeGoal]
-
-DẤU HIỆU THÀNH CÔNG:
-[successSignal]
-
-VARIANTS: [variants]
-RESULTS: [results]
-QUYẾT ĐỊNH CẦN CHỐT: [decisionNeed]
-
-SUCCESS CRITERIA:
-- Tóm tắt phiên bản nào đang có lợi thế
-- Nói rõ mức độ tin cậy của kết luận theo dữ liệu đang có
-- Đề xuất nên rollout, giữ test, hay dừng lại
-- Không ép người dùng hiểu jargon thống kê`,
-        outputExpected: ['Tóm tắt thử nghiệm', 'Điều dữ liệu đang nghiêng về', 'Điều còn chưa chắc', 'Khuyến nghị quyết định', 'Checklist vòng test tiếp theo'],
-        outputTemplate: `# Product Experiment Review
-
-## 1. What Changed
-- Previous version
-- New version
-- Intended improvement
-
-## 2. What The Current Results Suggest
-- Main signal
-- Supporting observations
-
-## 3. What We Still Cannot Conclude Safely
-- Missing proof
-- Possible confounders
-
-## 4. Decision Recommendation
-- Roll out
-- Keep testing
-- Roll back
-
-## 5. Next Test Checklist
-- What to measure next
-- What to keep constant`,
-    },
-    {
         id: 'accessibility_audit',
         name: 'Kiểm tra Accessibility',
         icon: '♿',
@@ -547,35 +490,5 @@ OUTPUT CONTRACT:
 - Includes loading, empty, and error feedback
 - Form is easy to complete
 - Copy is readable for non-technical users`,
-    },
-    {
-        id: 'grandma_ux_test',
-        name: 'Grandma UX Test',
-        icon: '👵',
-        description: 'Non-technical UX review — can a 60-year-old grandma use your app? Tests simplicity, clarity, and button design.',
-        category: 'product',
-        difficulty: 'easy',
-        fields: [
-            { id: 'appDescription', type: 'textarea', label: 'App Description', placeholder: 'e.g. "Household expense tracker for homemakers"', required: true, rows: 2, section: 'required', hint: 'What does the app do and who is it for?', example: 'Medication reminder app for elderly users — reminds them daily and tracks compliance' },
-            { id: 'coreFeatures', type: 'textarea', label: 'Core Features to Test', placeholder: 'e.g. "Record expense, view monthly report"', required: true, rows: 3, section: 'required', hint: 'The most common tasks users perform — these will be tested for clarity', example: 'Set a reminder, mark medication as taken, view history' },
-            { id: 'uiDescription', type: 'textarea', label: 'UI Description (optional)', placeholder: 'e.g. "Left sidebar, data table in center, big green button on top"', required: false, rows: 2, section: 'advanced', hint: 'Brief description of the current interface layout', example: 'Top navigation with icons, medication list below, large colored buttons for each action' },
-        ],
-        intentPattern: `INTENT:
-Apply CVF Skill: Grandma UX Test
-
-APP: [appDescription]
-UI: [uiDescription]
-
-CORE FEATURES TO TEST:
-[coreFeatures]
-
-OUTPUT REQUIREMENTS:
-- Generate a Grandma UX Test Report with exactly 3 Quick Start steps (each ≤ 2 sentences)
-- Evaluate each UX rule: button size/color, language clarity, status feedback
-- Classify issues as: Must Fix | Should Fix | Optional
-- Include an overall UX Score out of 10
-- NO technical jargon (no "component", "state", "render", "API")
-- Ask: "Could a 60-year-old grandma do this on her own?"`,
-        outputExpected: ['3-Step Quick Start', 'UX Evaluation by category', 'Prioritized Issue List', 'UX Score /10'],
     },
 ];

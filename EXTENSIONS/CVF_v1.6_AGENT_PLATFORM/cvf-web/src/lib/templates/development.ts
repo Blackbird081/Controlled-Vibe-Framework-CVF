@@ -37,16 +37,15 @@ THÔNG TIN:
 - Platform: [platform]
 - Yêu cầu thêm: [preferences]
 
-QUAN TRỌNG - YÊU CẦU CHO AI:
-Đây là Vibe Coding - User chỉ mô tả ý tưởng, AI chịu trách nhiệm 100% về:
-1. Phân tích requirements
-2. Chọn tech stack phù hợp
-3. Thiết kế architecture
-4. Thiết kế database (nếu cần)
-5. Build toàn bộ app
-6. Test và packaging
+OUTPUT REQUIREMENTS:
+- Translate the user's idea into a working app without asking them to choose frameworks or technical patterns
+- AI is responsible for requirements analysis, tech stack selection, architecture, database design, and full build
+- User only evaluates the final result
 
-User chỉ đánh giá kết quả cuối cùng.`,
+SUCCESS CRITERIA:
+- Produce a working [appType] for [targetUser] on [platform]
+- The app solves the described idea end-to-end
+- Setup instructions are non-technical and runnable without terminal expertise`,
         outputExpected: ['Complete Working App', 'Setup Instructions', 'User Guide'],
     },
     {
@@ -193,47 +192,6 @@ OUTPUT REQUIREMENTS:
         outputExpected: ['Requirements Document', 'Feature List with Priority', 'Scope Definition', 'Success Metrics'],
     },
     {
-        id: 'tech_stack_selection',
-        name: 'Chọn Tech Stack',
-        icon: '⚙️',
-        description: 'Chọn công nghệ phù hợp cho app dựa trên requirements',
-        category: 'development',
-        difficulty: 'medium',
-        parentFolder: 'individual_skills_folder',
-        fields: [
-            { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop (Cross-platform)', 'CLI Tool', 'Mobile (Cross-platform)', 'Web SPA', 'API Backend'], required: true, section: 'required', hint: 'Loại app quyết định các lựa chọn tech khác nhau' },
-            { id: 'performancePriority', type: 'select', label: 'Performance Priority', options: ['Low', 'Medium', 'High', 'Critical'], required: true, section: 'required', hint: 'Mức ưu tiên về hiệu năng: Critical = latency-sensitive, real-time' },
-            { id: 'devSpeed', type: 'select', label: 'Development Speed Priority', options: ['Low', 'Medium', 'High'], required: true, section: 'required', hint: 'Ưu tiên tốc độ phát triển: High = cần ship nhanh' },
-            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux...', required: true, section: 'required', hint: 'Các platform cần hỗ trợ', example: 'Windows + macOS + Linux' },
-            { id: 'dataNeeds', type: 'select', label: 'Data Storage Needs', options: ['None', 'Local Only', 'Cloud Only', 'Both'], required: true, section: 'required', hint: 'Nơi lưu trữ dữ liệu của ứng dụng' },
-            { id: 'offlineRequired', type: 'select', label: 'Offline Required?', options: ['Yes', 'No', 'Partial'], required: true, section: 'required', hint: 'App có cần hoạt động khi mất mạng?' },
-            { id: 'teamExp', type: 'text', label: 'Team Experience', placeholder: 'VD: Python, JavaScript', required: false, section: 'advanced', hint: 'Ngôn ngữ/framework team đã quen', example: 'TypeScript, React, Python' },
-            { id: 'langPreference', type: 'text', label: 'Language Preference', placeholder: 'Ngôn ngữ ưu tiên (nếu có)', required: false, section: 'advanced', hint: 'Để trống để AI tự đề xuất', example: 'Rust hoặc TypeScript' },
-            { id: 'bundleSize', type: 'text', label: 'Bundle Size Constraint', placeholder: 'VD: < 50MB', required: false, section: 'advanced', hint: 'Giới hạn kích thước file cài đặt', example: '< 30MB' },
-        ],
-        intentPattern: `INTENT:
-So sánh và recommend tech stack cho [appType].
-
-REQUIREMENTS:
-- Performance Priority: [performancePriority]
-- Development Speed: [devSpeed]
-- Target Platforms: [platforms]
-- Data Storage: [dataNeeds]
-- Offline Required: [offlineRequired]
-- Bundle Size: [bundleSize]
-
-TEAM CONTEXT:
-- Experience: [teamExp]
-- Language Preference: [langPreference]
-
-OUTPUT REQUIREMENTS:
-- Compare at least 2 options per layer
-- Clear reasoning for each choice
-- Trade-offs acknowledged
-- Final stack consistent with requirements`,
-        outputExpected: ['Options Comparison Tables', 'Recommended Stack', 'Trade-offs Analysis', 'Setup Commands'],
-    },
-    {
         id: 'architecture_design',
         name: 'Thiết kế Kiến trúc',
         icon: '🧱',
@@ -272,50 +230,6 @@ OUTPUT REQUIREMENTS:
 - Data flow documentation
 - Key design decisions`,
         outputExpected: ['System Diagram', 'Component Breakdown', 'Directory Structure', 'Data Flow', 'Design Decisions'],
-    },
-    {
-        id: 'database_schema',
-        name: 'Thiết kế Database Schema',
-        icon: '🗄️',
-        description: 'Thiết kế database schema với ERD và SQL',
-        category: 'development',
-        difficulty: 'advanced',
-        parentFolder: 'individual_skills_folder',
-        fields: [
-            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required', hint: 'Tên app cần thiết kế database', example: 'TaskFlow' },
-            { id: 'dbType', type: 'select', label: 'Database Type', options: ['SQLite', 'PostgreSQL', 'MySQL', 'MongoDB'], required: true, section: 'required', hint: 'Loại database: SQLite cho local app, PostgreSQL cho server' },
-            { id: 'entities', type: 'textarea', label: 'Main Entities', placeholder: 'VD: User, Task, Category, Tag', required: true, rows: 2, section: 'required', hint: 'Các entity/bảng chính của hệ thống', example: 'User, Project, Task, Category, Tag' },
-            { id: 'relationships', type: 'textarea', label: 'Relationships', placeholder: 'VD: User has many Tasks, Task belongs to Category', required: true, rows: 3, section: 'required', hint: 'Mối quan hệ giữa các entity', example: 'User has many Projects\nProject has many Tasks\nTask belongs to Category\nTask has many Tags (M:N)' },
-            { id: 'keyFields', type: 'textarea', label: 'Key Fields per Entity', placeholder: 'VD: Task: title, description, due_date, status', required: true, rows: 3, section: 'required', hint: 'Các trường quan trọng của mỗi entity', example: 'Task: title, description, status (todo/doing/done), priority, due_date\nUser: email, name, avatar' },
-            { id: 'queryNeeds', type: 'textarea', label: 'Common Queries', placeholder: 'VD: Search by title, filter by status', required: false, rows: 2, section: 'advanced', hint: 'Các query thường dùng để AI tối ưu index', example: 'Tasks by status, tasks by due_date range, full-text search title' },
-            { id: 'audit', type: 'select', label: 'Audit Requirements', options: ['None', 'Created/Updated timestamps', 'Full audit trail'], required: false, section: 'advanced', hint: 'Có cần lưu lịch sử thay đổi?' },
-        ],
-        intentPattern: `INTENT:
-Thiết kế database schema cho [appName].
-
-DATABASE: [dbType]
-
-ENTITIES:
-[entities]
-
-RELATIONSHIPS:
-[relationships]
-
-KEY FIELDS:
-[keyFields]
-
-COMMON QUERIES:
-[queryNeeds]
-
-AUDIT: [audit]
-
-OUTPUT REQUIREMENTS:
-- ERD diagram (ASCII art)
-- Table definitions với data types
-- SQL CREATE statements
-- Index recommendations
-- Sample queries`,
-        outputExpected: ['ERD Diagram', 'Table Definitions', 'SQL Schema', 'Indexes', 'Sample Queries'],
     },
     {
         id: 'api_design',
@@ -364,50 +278,6 @@ OUTPUT REQUIREMENTS:
 ## 6. Acceptance Checklist`,
     },
     {
-        id: 'desktop_app_spec',
-        name: 'Spec Ứng dụng Desktop',
-        icon: '🖥️',
-        description: 'Spec cho desktop app: windows, menus, shortcuts, tray',
-        category: 'development',
-        difficulty: 'advanced',
-        parentFolder: 'individual_skills_folder',
-        fields: [
-            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required', hint: 'Tên app desktop cần tạo spec', example: 'TaskFlow' },
-            { id: 'framework', type: 'select', label: 'Framework', options: ['Tauri', 'Electron', 'PyQt/PySide', 'Wails', 'Native'], required: true, section: 'required', hint: 'Tauri = nhẹ + Rust, Electron = Node.js + Chrome, PyQt = Python' },
-            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux', required: true, section: 'required', hint: 'Hệ điều hành cần hỗ trợ', example: 'Windows + macOS' },
-            { id: 'windowType', type: 'select', label: 'Window Type', options: ['Single Window', 'Multi-Window', 'Frameless'], required: true, section: 'required', hint: 'Single = 1 cửa sổ, Frameless = custom title bar' },
-            { id: 'defaultSize', type: 'text', label: 'Default Size', placeholder: 'VD: 1024x768', required: true, section: 'required', hint: 'Kích thước cửa sổ mặc định', example: '1200x800' },
-            { id: 'menuBar', type: 'textarea', label: 'Menu Bar', placeholder: 'VD: File (New, Save, Exit), Edit, Help', required: true, rows: 2, section: 'required', hint: 'Cấu trúc menu bar của app', example: 'File (New Project, Save, Export, Exit)\nEdit (Undo, Redo, Preferences)\nHelp (About, Docs)' },
-            { id: 'tray', type: 'select', label: 'System Tray', options: ['No', 'Yes - Basic', 'Yes - With Quick Actions'], required: false, section: 'advanced', hint: 'Icon ở system tray khi minimize' },
-            { id: 'shortcuts', type: 'textarea', label: 'Keyboard Shortcuts', placeholder: 'VD: Ctrl+N new, Ctrl+S save', required: false, rows: 2, section: 'advanced', hint: 'Phím tắt cho các thao tác thường dùng', example: 'Ctrl+N: New task\nCtrl+S: Save\nCtrl+F: Search\nCtrl+Q: Quit' },
-            { id: 'nativeFeatures', type: 'text', label: 'Native Features', placeholder: 'VD: Notifications, File dialogs', required: false, section: 'advanced', hint: 'Tính năng native OS cần dùng', example: 'Desktop notifications, native file dialogs, auto-start' },
-        ],
-        intentPattern: `INTENT:
-Tạo Desktop App Specification cho [appName].
-
-FRAMEWORK: [framework]
-PLATFORMS: [platforms]
-WINDOW: [windowType], [defaultSize]
-
-MENU BAR:
-[menuBar]
-
-SYSTEM TRAY: [tray]
-
-KEYBOARD SHORTCUTS:
-[shortcuts]
-
-NATIVE FEATURES: [nativeFeatures]
-
-OUTPUT REQUIREMENTS:
-- Window configuration complete
-- Menu structure với shortcuts
-- System tray behavior
-- Platform-specific notes
-- Lifecycle behavior (startup, close)`,
-        outputExpected: ['Window Config', 'Menu Structure', 'Shortcuts Table', 'Tray Behavior', 'Platform Notes'],
-    },
-    {
         id: 'cli_tool_spec',
         name: 'Spec Công cụ CLI',
         icon: '⌨️',
@@ -449,44 +319,6 @@ OUTPUT REQUIREMENTS:
 - Examples cho mỗi command`,
         outputExpected: ['Command Documentation', 'Arguments/Options', 'Exit Codes', 'Config Format', 'Usage Examples'],
     },
-    {
-        id: 'local_deployment',
-        name: 'Spec Triển khai Local',
-        icon: '💿',
-        description: 'Packaging và distribution spec cho local apps',
-        category: 'development',
-        difficulty: 'advanced',
-        parentFolder: 'individual_skills_folder',
-        fields: [
-            { id: 'appName', type: 'text', label: 'App Name', placeholder: 'Tên app', required: true, section: 'required', hint: 'Tên app cần tạo deployment spec', example: 'TaskFlow' },
-            { id: 'appType', type: 'select', label: 'App Type', options: ['Desktop (Tauri)', 'Desktop (Electron)', 'CLI Tool', 'Service'], required: true, section: 'required', hint: 'Loại app quyết định cách packaging' },
-            { id: 'platforms', type: 'text', label: 'Target Platforms', placeholder: 'Windows, macOS, Linux', required: true, section: 'required', hint: 'Các platform cần build installer', example: 'Windows (.msi) + macOS (.dmg)' },
-            { id: 'distribution', type: 'select', label: 'Distribution Method', options: ['GitHub Releases', 'Website Download', 'Package Manager (npm/pip)', 'Internal Only'], required: true, section: 'required', hint: 'Kênh phân phối app đến users' },
-            { id: 'autoUpdate', type: 'select', label: 'Auto-Update', options: ['No', 'Yes - Prompt User', 'Yes - Silent'], required: false, section: 'advanced', hint: 'Auto-update giúp users luôn dùng version mới nhất' },
-            { id: 'signing', type: 'select', label: 'Code Signing', options: ['No', 'Windows Only', 'macOS Only', 'Both'], required: false, section: 'advanced', hint: 'Code signing giúp tránh cảnh báo SmartScreen/Gatekeeper' },
-            { id: 'dependencies', type: 'text', label: 'Runtime Dependencies', placeholder: 'VD: None, .NET, Python', required: false, section: 'advanced', hint: 'Phần mềm cần cài trước khi chạy app', example: 'None (standalone binary)' },
-        ],
-        intentPattern: `INTENT:
-Tạo Deployment Specification cho [appName].
-
-APP TYPE: [appType]
-PLATFORMS: [platforms]
-DISTRIBUTION: [distribution]
-
-AUTO-UPDATE: [autoUpdate]
-CODE SIGNING: [signing]
-DEPENDENCIES: [dependencies]
-
-OUTPUT REQUIREMENTS:
-- Build artifacts for all platforms
-- Build commands
-- Installer configuration
-- Distribution process
-- Code signing steps (if applicable)
-- Testing checklist`,
-        outputExpected: ['Build Artifacts', 'Build Commands', 'Installer Config', 'CI/CD Config', 'Distribution Process'],
-    },
-
     // === Vibe Workflow Templates (linked to new skills) ===
     {
         id: 'vibe_workflow_folder',

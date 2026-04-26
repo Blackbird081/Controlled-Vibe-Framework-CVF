@@ -15,8 +15,10 @@ import { trackEvent } from '@/lib/analytics';
 import {
     clearGovernedStarterHandoff,
     readGovernedStarterHandoff,
+    saveGovernedStarterHandoff,
     type GovernedStarterHandoff,
 } from '@/lib/governed-starter-path';
+import { isIntentFirstEnabled, type IntentRouteResult } from '@/lib/intent-router';
 import {
     TemplateCard,
     CategoryTabs,
@@ -36,6 +38,7 @@ import {
     SurfaceStatCard,
     SurfaceTopBar,
     OnboardingTour,
+    IntentEntry,
 } from '@/components';
 
 type WorkflowState = 'browse' | 'form' | 'processing' | 'result' |
@@ -443,6 +446,42 @@ export default function HomePage() {
         setStarterHandoff(null);
     }, []);
 
+    const handleIntentRoute = useCallback((result: IntentRouteResult, userInput: string) => {
+        // §8.A4 hard contract: refuse to route on weak confidence (no guessed wizard).
+        if (!result.recommendedTemplateId || !result.starterKey) {
+            return;
+        }
+
+        // Persist routed context into starter handoff so the wizard surface can
+        // show userInput + rationale + phase/risk (Codex review M3 — preserve
+        // routed context across the IntentEntry → wizard transition).
+        const handoff: GovernedStarterHandoff = {
+            recommendedTemplateId: result.recommendedTemplateId,
+            recommendedTemplateLabel: result.recommendedTemplateLabel ?? '',
+            userInput,
+            provider: 'alibaba',
+            phase: result.phase,
+            riskLevel: result.riskLevel,
+            friendlyPhase: result.friendlyPhase,
+            friendlyRisk: result.friendlyRisk,
+            suggestedTemplates: [result.starterKey],
+        };
+        saveGovernedStarterHandoff(handoff);
+        setStarterHandoff(handoff);
+
+        const wizardState = WIZARD_MAP[result.recommendedTemplateId];
+        if (wizardState) {
+            setWorkflowState(wizardState);
+            return;
+        }
+        const starterTemplate = templates.find(t => t.id === result.recommendedTemplateId);
+        if (starterTemplate) {
+            setSelectedTemplate(starterTemplate);
+            setCurrentIntent(userInput);
+            setWorkflowState('form');
+        }
+    }, []);
+
     return (
         <div className="pb-10">
             {workflowState === 'browse' && (
@@ -530,6 +569,13 @@ export default function HomePage() {
                                 </div>
                             </div>
                         </section>
+
+                        {isIntentFirstEnabled() && !currentFolder && (
+                            <IntentEntry
+                                onRoute={handleIntentRoute}
+                                language={language as 'vi' | 'en'}
+                            />
+                        )}
 
                         {starterHandoff && !currentFolder && (
                             <div className="cvf-surface cvf-density-section rounded-[28px] border border-indigo-200/80 bg-white p-6 shadow-[0_10px_30px_-24px_rgba(79,70,229,0.45)] dark:border-indigo-500/20 dark:bg-[#171b29] dark:shadow-none">

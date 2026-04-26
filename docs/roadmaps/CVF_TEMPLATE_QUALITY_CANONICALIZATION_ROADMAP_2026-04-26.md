@@ -1,8 +1,57 @@
 # CVF Template Quality Canonicalization Roadmap
 **Date:** 2026-04-26  
 **Triggered by:** Skill portfolio canonicalization (131 → 62 → 27 active skills, commit d4b3382b)  
-**Status:** PROPOSAL — Awaiting owner approval before execution  
+**Status:** CLOSED DELIVERED — Execution completed on 2026-04-26; planning body retained as historical audit baseline  
 **Author:** Audit pass by Claude Code (Sonnet 4.6)
+
+---
+
+## 0. Closure Record — 2026-04-26
+
+This roadmap began as a proposal, but the tranche was executed and closed on the
+same day. Future agents should treat this file as a closed execution record and
+should not re-open template-quality audit work unless a fresh regression appears.
+
+### Delivered
+
+- Phase 0+1 shipped in commit `d06c61cc`:
+  - dead template references removed
+  - missing live-skill mappings repaired where rescue was valid
+  - governance CI gate added for RULE-T1 through RULE-T5
+- Phase 2 shipped in commit `0f4c2491`:
+  - remaining Silver/Bronze templates upgraded
+  - `outputTemplate` coverage completed across the form-template catalog
+  - full-rule enforcement enabled with no grandfather exceptions
+- Contract hardening shipped in commit `30ff4c66`:
+  - template intent rendering normalized
+  - execute prompt contract bound more tightly to template output structure
+  - regression/test coverage expanded
+
+### Closed-State Snapshot
+
+- Template registry: `53` total template objects
+- Runnable form templates: `42`
+- Wizards: `9`
+- Folder containers: `2`
+- Public Web skills: `27` across `9` public categories
+- Form templates missing live mapping: `0`
+- Form templates missing `outputTemplate`: `0`
+- Public linked templates outside `TRUSTED_FOR_VALUE_PROOF`: `0`
+
+### Verification
+
+- Targeted regression gate passes in `cvf-web`:
+  - `src/lib/templates/governance-enforcement.test.ts`
+  - `src/lib/templates/index.test.ts`
+  - `src/lib/skill-corpus-governance.test.ts`
+  - `src/lib/skill-template-map.test.ts`
+- Latest observed result on this repo state: `45/45` tests passed
+
+### Continuation Rule
+
+Do not spend future roadmap cycles re-auditing the template layer as if it were
+still a proposal. The next product bottleneck is non-coder activation and
+intent-to-starter-path routing, not template contract completeness.
 
 ---
 

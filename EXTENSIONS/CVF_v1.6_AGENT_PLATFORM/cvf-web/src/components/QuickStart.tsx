@@ -16,6 +16,7 @@ import {
   resolveGovernedStarterTemplate,
   type QuickStartResult,
 } from '@/lib/governed-starter-path';
+import { routeIntent, isIntentFirstEnabled, type IntentRouteResult } from '@/lib/intent-router';
 
 interface QuickStartProps {
   onComplete: (result: QuickStartResult) => void;
@@ -44,8 +45,11 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
   const [apiKey, setApiKey] = useState('');
   const [userInput, setUserInput] = useState('');
   const [detectedIntent, setDetectedIntent] = useState<DetectedIntent | null>(null);
+  const [intentRouteResult, setIntentRouteResult] = useState<IntentRouteResult | null>(null);
   const routedIntent = detectedIntent ?? detectIntent(userInput);
-  const governedStarter = resolveGovernedStarterTemplate(routedIntent.suggestedTemplates);
+  const governedStarter = intentRouteResult
+    ? { id: intentRouteResult.recommendedTemplateId, label: intentRouteResult.recommendedTemplateLabel }
+    : resolveGovernedStarterTemplate(routedIntent.suggestedTemplates);
 
   const l = language === 'vi' ? {
     title: '🚀 Khởi động nhanh có govern',
@@ -101,8 +105,12 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
     setUserInput(value);
     if (value.trim().length > 5) {
       setDetectedIntent(detectIntent(value));
+      if (isIntentFirstEnabled()) {
+        setIntentRouteResult(routeIntent(value));
+      }
     } else {
       setDetectedIntent(null);
+      setIntentRouteResult(null);
     }
   };
 
@@ -239,6 +247,9 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
             <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="text-xs text-gray-500 mb-1">{l.starter}</div>
               <div className="font-medium">{governedStarter.label}</div>
+              {intentRouteResult?.rationale && (
+                <div className="text-xs text-gray-400 mt-1">{intentRouteResult.rationale}</div>
+              )}
             </div>
             <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="text-xs text-gray-500 mb-1">{l.requestLabel}</div>

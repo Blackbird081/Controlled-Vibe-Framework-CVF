@@ -40,6 +40,9 @@ CÁCH BẢO VỆ HIỆN TẠI:
 MỐI LO ƯU TIÊN:
 [worry]
 
+OUTPUT FORMAT:
+- Main Exposure Risks → Current Safeguards → Priority Hardening Actions → Verification Checklist
+
 SUCCESS CRITERIA:
 - Xác định rủi ro theo luồng nghiệp vụ
 - Nói rõ ai có thể làm sai điều gì và ảnh hưởng ra sao
@@ -91,12 +94,24 @@ DATA COLLECTED:
 PROCESSING PURPOSE: [purpose]
 THIRD PARTIES: [thirdParties]
 
+OUTPUT FORMAT:
+- Compliance Score → Gap Analysis → Privacy Policy Review → Remediation Plan
+
 SUCCESS CRITERIA:
 - Consent mechanism check
 - User rights implementation
 - Privacy policy review
 - Cookie compliance`,
         outputExpected: ['Compliance Score', 'Gap Analysis', 'Privacy Policy Review', 'Remediation Plan'],
+        outputTemplate: `## GDPR Compliance Output
+
+**Compliance Score:**
+
+## Gap Analysis
+
+## Privacy Policy Review
+
+## Remediation Plan`,
     },
     {
         id: 'privacy_policy_audit',
@@ -121,12 +136,23 @@ BUSINESS TYPE: [businessType]
 TARGET MARKETS: [markets]
 DATA TYPES: [dataTypes]
 
+OUTPUT FORMAT:
+- Compliance Score → Missing Elements → Readability Score → Improvement Suggestions
+
 SUCCESS CRITERIA:
 - Required elements check
 - Readability assessment
 - Regional compliance
 - Third-party coverage`,
         outputExpected: ['Compliance Score', 'Missing Elements', 'Readability Score', 'Improvement Suggestions'],
+        outputTemplate: `## Privacy Policy Audit Output
+
+**Compliance Score:**
+**Readability Score:**
+
+## Missing Elements
+
+## Improvement Suggestions`,
     },
     {
         id: 'incident_response',
@@ -149,12 +175,26 @@ INDUSTRY: [industry]
 CRITICAL SYSTEMS: [criticalSystems]
 CURRENT PLAN: [currentPlan]
 
+OUTPUT FORMAT:
+- IRP Assessment → Team Roles → Response Playbooks → Communication Templates
+
 SUCCESS CRITERIA:
 - Team roles definition
 - Severity levels
 - Response procedures
 - Communication templates`,
         outputExpected: ['IRP Assessment', 'Team Roles', 'Response Playbooks', 'Communication Templates'],
+        outputTemplate: `## Incident Response Plan
+
+## 1. IRP Assessment
+
+## 2. Team Roles
+| Role | Responsibility | Contact |
+| --- | --- | --- |
+
+## 3. Response Playbooks
+
+## 4. Communication Templates`,
     },
     {
         id: 'data_handling',
@@ -176,6 +216,9 @@ DATA TYPES: [dataTypes]
 DATA SOURCES: [sources]
 STORAGE / SHARING FLOW: [storageFlow]
 RULES / REGULATIONS: [regulations]
+
+OUTPUT FORMAT:
+- Data Lifecycle Map → Main Gaps → Recommended Governance Rules → Verification Checklist
 
 SUCCESS CRITERIA:
 - Vẽ rõ vòng đời dữ liệu theo ngôn ngữ công việc
@@ -229,11 +272,23 @@ SERVICE TYPE: [serviceType]
 BUSINESS MODEL: [model]
 TARGET MARKETS: [markets]
 
+OUTPUT FORMAT:
+- ToS Score → Coverage Analysis → Fairness Review → Improvement Suggestions
+
 SUCCESS CRITERIA:
 - Essential sections coverage
 - User-friendliness
 - Fairness assessment
 - Regional compliance`,
         outputExpected: ['ToS Score', 'Coverage Analysis', 'Fairness Review', 'Improvement Suggestions'],
+        outputTemplate: `## Terms of Service Review Output
+
+**ToS Score:**
+
+## Coverage Analysis
+
+## Fairness Review
+
+## Improvement Suggestions`,
     },
 ];

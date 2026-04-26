@@ -47,6 +47,14 @@ SUCCESS CRITERIA:
 - The app solves the described idea end-to-end
 - Setup instructions are non-technical and runnable without terminal expertise`,
         outputExpected: ['Complete Working App', 'Setup Instructions', 'User Guide'],
+        outputTemplate: `## App Build Output
+
+## 1. Complete Working App
+- Files delivered:
+
+## 2. Setup Instructions
+
+## 3. User Guide`,
     },
     {
         id: 'app_builder_complete',
@@ -190,6 +198,19 @@ OUTPUT REQUIREMENTS:
 - Out of scope được định nghĩa
 - Success criteria có thể measure được`,
         outputExpected: ['Requirements Document', 'Feature List with Priority', 'Scope Definition', 'Success Metrics'],
+        outputTemplate: `## App Requirements Specification
+
+## 1. Requirements Document
+
+## 2. Feature List
+| Feature | Priority | In Scope |
+| --- | --- | --- |
+
+## 3. Scope Definition
+- In scope:
+- Out of scope:
+
+## 4. Success Metrics`,
     },
     {
         id: 'architecture_design',
@@ -230,6 +251,17 @@ OUTPUT REQUIREMENTS:
 - Data flow documentation
 - Key design decisions`,
         outputExpected: ['System Diagram', 'Component Breakdown', 'Directory Structure', 'Data Flow', 'Design Decisions'],
+        outputTemplate: `## Architecture Design Output
+
+## 1. System Diagram (ASCII)
+
+## 2. Component Breakdown
+
+## 3. Directory Structure
+
+## 4. Data Flow
+
+## 5. Design Decisions`,
     },
     {
         id: 'api_design',
@@ -318,6 +350,17 @@ OUTPUT REQUIREMENTS:
 - Config file format
 - Examples cho mỗi command`,
         outputExpected: ['Command Documentation', 'Arguments/Options', 'Exit Codes', 'Config Format', 'Usage Examples'],
+        outputTemplate: `## CLI Tool Specification
+
+## 1. Command Documentation
+
+## 2. Arguments / Options
+
+## 3. Exit Codes
+
+## 4. Config Format
+
+## 5. Usage Examples`,
     },
     // === Vibe Workflow Templates (linked to new skills) ===
     {
@@ -360,6 +403,13 @@ OUTPUT REQUIREMENTS:
 - End with a confirmation question: "Do you approve this Vibe Mapping?"
 - Do NOT start designing or coding until User types "Approve Vibe"`,
         outputExpected: ['Vibe Mapping Table (3 columns)', 'Plain-language descriptions', 'User confirmation step'],
+        outputTemplate: `## Vibe Mapping Table
+
+| Your Keyword | I understand it as... | I will build... |
+| --- | --- | --- |
+
+---
+Do you approve this Vibe Mapping? Type "Approve Vibe" to continue.`,
     },
     {
         id: 'vibe_logic_mapping',
@@ -434,6 +484,20 @@ OUTPUT REQUIREMENTS:
 - After confirmation: create governance/PROJECT_PROGRESS.md tracking file
 - Do NOT discuss project content until checklist passes ≥ 80%`,
         outputExpected: ['8-item Init Checklist', 'Tally display', 'Confirmation prompt', 'PROJECT_PROGRESS.md'],
+        outputTemplate: `## Project Init Checklist
+
+- [ ] 1. Project name defined
+- [ ] 2. One-line description clear
+- [ ] 3. OS confirmed
+- [ ] 4. Python / runtime ready
+- [ ] 5. Idea validated
+- [ ] 6. Scope boundary set
+- [ ] 7. CVF compliance acknowledged
+- [ ] 8. Progress file ready
+
+**Tally: [X]/8 items ✅**
+
+Type "Checklist Pass" to proceed.`,
     },
     {
         id: 'non_coder_debug',
@@ -466,6 +530,17 @@ OUTPUT REQUIREMENTS:
 - Include at least 3 test cases in Test Results
 - Do NOT blame the hardware or environment before checking code logic`,
         outputExpected: ['Plain-language Bug Report', 'Root cause in plain terms', 'At least 3 test case results'],
+        outputTemplate: `## Bug Report
+
+## Symptom
+
+## Root Cause
+
+## How I Fixed It
+
+## Test Results
+| Test | Input | Expected | Result |
+| --- | --- | --- | --- |`,
     },
     {
         id: 'auto_documentation',
@@ -502,5 +577,14 @@ OUTPUT REQUIREMENTS:
 - Include at least 3 common errors with plain-language fixes
 - No unexplained technical jargon`,
         outputExpected: ['Full USER_GUIDE.md content', 'Quick Start ≤ 5 steps', '3+ Common Errors with fixes'],
+        outputTemplate: `# USER_GUIDE.md
+
+## Quick Start (≤ 5 steps)
+
+## Core Features
+
+## Common Issues & Fixes
+
+## Support Contact`,
     },
 ];

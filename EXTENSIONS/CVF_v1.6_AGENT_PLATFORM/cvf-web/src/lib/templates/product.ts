@@ -32,12 +32,24 @@ TARGET WCAG LEVEL: [level]
 TARGET USERS: [audience]
 KNOWN ISSUES: [issues]
 
+OUTPUT FORMAT:
+- WCAG Compliance Score → Critical Issues → Recommended Fixes → Testing Checklist
+
 SUCCESS CRITERIA:
 - Visual accessibility check
 - Keyboard navigation
 - Screen reader compatibility
 - Color contrast analysis`,
         outputExpected: ['WCAG Compliance Score', 'Critical Issues', 'Recommended Fixes', 'Testing Checklist'],
+        outputTemplate: `## Accessibility Audit Output
+
+**WCAG Compliance Score:**
+
+## Critical Issues
+
+## Recommended Fixes
+
+## Testing Checklist`,
     },
     {
         id: 'user_flow_analysis',
@@ -62,12 +74,24 @@ CONVERSION GOAL: [goal]
 DROP-OFF POINTS: [dropoff]
 CURRENT METRICS: [metrics]
 
+OUTPUT FORMAT:
+- Flow Diagram → Friction Analysis → Drop-off Causes → Optimization Roadmap
+
 SUCCESS CRITERIA:
 - Friction point identification
 - Drop-off analysis
 - Optimization recommendations
 - Quick wins vs long-term fixes`,
         outputExpected: ['Flow Diagram', 'Friction Analysis', 'Drop-off Causes', 'Optimization Roadmap'],
+        outputTemplate: `## User Flow Analysis Output
+
+## 1. Flow Diagram (text)
+
+## 2. Friction Analysis
+
+## 3. Drop-off Causes
+
+## 4. Optimization Roadmap`,
     },
     {
         id: 'ux_heuristic_evaluation',
@@ -89,12 +113,26 @@ DESCRIPTION: [description]
 URL: [url]
 FOCUS AREAS: [focus]
 
+OUTPUT FORMAT:
+- Heuristic Scores → Issue Severity Matrix → Top Issues → Recommendations
+
 SUCCESS CRITERIA:
 - Đánh giá theo Nielsen's 10 Heuristics
 - Severity rating cho issues
 - Priority recommendations
 - Before/After examples`,
         outputExpected: ['Heuristic Scores', 'Issue Severity Matrix', 'Top Issues', 'Recommendations'],
+        outputTemplate: `## UX Heuristic Evaluation Output
+
+## 1. Heuristic Scores
+| Heuristic | Score (/5) | Status |
+| --- | --- | --- |
+
+## 2. Issue Severity Matrix
+
+## 3. Top Issues
+
+## 4. Recommendations`,
     },
     {
         id: 'feature_prioritization',
@@ -118,12 +156,26 @@ FEATURES:
 PRODUCT GOAL: [goal]
 CONSTRAINTS: [constraints]
 
+OUTPUT FORMAT:
+- Scoring Matrix → Prioritized List → Quick Wins → Roadmap Recommendation
+
 SUCCESS CRITERIA:
 - Score mỗi feature theo framework
 - Prioritized list
 - Quick wins identification
 - Roadmap suggestion`,
         outputExpected: ['Scoring Matrix', 'Prioritized List', 'Quick Wins', 'Roadmap Recommendation'],
+        outputTemplate: `## Feature Prioritization Output
+
+## 1. Scoring Matrix
+| Feature | Reach | Impact | Confidence | Effort | Score |
+| --- | --- | --- | --- | --- | --- |
+
+## 2. Prioritized List
+
+## 3. Quick Wins
+
+## 4. Roadmap Recommendation`,
     },
     {
         id: 'user_persona',
@@ -147,12 +199,30 @@ USER DATA:
 SEGMENTS: [segments]
 BUSINESS GOALS: [goals]
 
+OUTPUT FORMAT:
+- Persona Profiles → User Journey Maps → Pain Points → Opportunities
+
 SUCCESS CRITERIA:
 - 2-4 distinct personas
 - Demographics, goals, pain points
 - Jobs to be done
 - Decision criteria`,
         outputExpected: ['Persona Profiles', 'User Journey Maps', 'Pain Points', 'Opportunities'],
+        outputTemplate: `## User Persona Output
+
+## 1. Persona Profiles
+
+### Persona 1: [Name]
+- Demographics:
+- Goals:
+- Pain points:
+- Decision criteria:
+
+## 2. User Journey Map
+
+## 3. Pain Points Summary
+
+## 4. Opportunities`,
     },
     {
         id: 'error_handling_ux',
@@ -176,12 +246,26 @@ CURRENT ERRORS:
 USER TYPE: [audience]
 BRAND TONE: [tone]
 
+OUTPUT FORMAT:
+- Error Analysis → Rewritten Messages → UX Improvements → Best Practices
+
 SUCCESS CRITERIA:
 - Error message clarity
 - User guidance
 - Recovery options
 - Consistent tone`,
         outputExpected: ['Error Analysis', 'Rewritten Messages', 'UX Improvements', 'Best Practices'],
+        outputTemplate: `## Error Handling UX Output
+
+## 1. Error Analysis
+
+## 2. Rewritten Messages
+| Original | Improved |
+| --- | --- |
+
+## 3. UX Improvements
+
+## 4. Best Practices`,
     },
     {
         id: 'onboarding_review',
@@ -205,12 +289,24 @@ CURRENT FLOW:
 TIME TO VALUE: [ttv]
 DROP-OFF RATE: [dropoff]
 
+OUTPUT FORMAT:
+- Onboarding Assessment → Friction Points → Optimization Recommendations → Metrics to Track
+
 SUCCESS CRITERIA:
 - Identify friction points
 - Reduce time to value
 - Progressive disclosure
 - Personalization opportunities`,
         outputExpected: ['Onboarding Assessment', 'Friction Points', 'Optimization Recommendations', 'Metrics to Track'],
+        outputTemplate: `## Onboarding Review Output
+
+## 1. Onboarding Assessment
+
+## 2. Friction Points
+
+## 3. Optimization Recommendations
+
+## 4. Metrics to Track`,
     },
     {
         id: 'web_ux_redesign_system',
@@ -256,6 +352,9 @@ CONTENT DENSITY: [contentDensity]
 MOTION BUDGET: [motionBudget]
 THEME STRATEGY: [themeStrategy]
 REFERENCES / NOTES: [references]
+
+OUTPUT FORMAT:
+- Experience North Star → Visual DNA → Layout & Navigation → Component Language → Surface Blueprint → Implementation Guardrails → Review Gate
 
 SUCCESS CRITERIA:
 - The end user does not need to choose frameworks or hidden technical patterns
@@ -389,7 +488,7 @@ LOOK AND FEEL:
 REFERENCES / NOTES:
 [references]
 
-SUCCESS CRITERIA:
+OUTPUT REQUIREMENTS:
 - Ask only for plain-language product intent, not hidden technical choices
 - Translate the brief into a clear agent-ready web build packet
 - Use the CVF Web Redesign DNA automatically: professional command workspace, dark-primary layered shell by default, strong page hierarchy, KPI/stat strips where useful, pill filters, compact cards/tables, meaningful empty/loading/error states, and restrained hover/motion
@@ -397,20 +496,12 @@ SUCCESS CRITERIA:
 - Give page structure, UX priorities, and acceptance checklist
 - Keep the result simple enough for a non-coder to review before handoff
 
-OUTPUT CONTRACT:
-- Return Markdown only
-- Use these headings exactly and in this order:
-  1. Website Goal
-  2. Target Users
-  3. Required Pages and Flows
-  4. CVF Web Redesign DNA
-  5. UX / Visual Direction
-  6. Protected Constraints
-  7. Agent Build Instructions
-  8. Acceptance Checklist
-- Do not ask the end user to choose frameworks, stacks, or internal technical patterns
-- Do not add extra deliverables unless the user explicitly requested them
-- Treat Claude Design prototypes as historical source material only; do not require Claude Design to implement the packet`,
+OUTPUT FORMAT:
+- Website Goal → Target Users → Required Pages and Flows → CVF Web Redesign DNA → UX / Visual Direction → Protected Constraints → Agent Build Instructions → Acceptance Checklist
+
+SUCCESS CRITERIA:
+- Non-coder can read and approve the packet without technical knowledge
+- Agent has all information needed to build without asking the user for framework or stack choices`,
         outputExpected: ['Website Goal & Audience', 'Page / Flow List', 'UX Direction', 'Protected Constraints', 'Agent Build Packet', 'Acceptance Checklist'],
         outputTemplate: `# Web Build Handoff Packet
 

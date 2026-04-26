@@ -110,27 +110,12 @@ describe('CVF Template Governance Enforcement', () => {
 });
 
 // ─── Phase 2 enforcement (Silver → Gold) ───────────────────────────────────
-// These tests enforce RULE-T2 output format block and RULE-T3 outputTemplate.
-// They are currently skipped because 31 existing Silver templates need the
-// Phase 2 upgrade pass before they can pass. Set PHASE_2_COMPLETE = true
-// once all Silver templates have outputTemplate added (roadmap Phase 2).
-// NEW templates submitted after Phase 2 must pass all rules — add them to
-// PHASE_2_GRANDFATHERED_IDS below if added before the upgrade pass.
-const PHASE_2_COMPLETE = false;
+// Phase 2 upgrade complete: all 36 Silver templates now have outputTemplate
+// and OUTPUT FORMAT / OUTPUT REQUIREMENTS in intentPattern.
+const PHASE_2_COMPLETE = true;
 
-// IDs that existed before Phase 2 started — grandfathered until upgrade pass
-const PHASE_2_GRANDFATHERED_IDS = new Set([
-    'risk_assessment', 'competitor_review', 'architecture_review', 'email_template',
-    'seo_audit', 'copywriting_evaluation', 'landing_page_cro', 'pricing_strategy',
-    'content_quality', 'email_campaign', 'social_ad_review', 'brand_voice',
-    'accessibility_audit', 'user_flow_analysis', 'ux_heuristic_evaluation',
-    'feature_prioritization', 'user_persona', 'error_handling_ux', 'onboarding_review',
-    'web_ux_redesign_system', 'web_build_handoff', 'api_security', 'gdpr_compliance',
-    'privacy_policy_audit', 'incident_response', 'data_handling', 'tos_review',
-    'strategy_analysis',
-    'build_my_app', 'app_requirements_spec', 'architecture_design', 'cli_tool_spec',
-    'vibe_to_spec', 'project_init_checklist', 'non_coder_debug', 'auto_documentation',
-]);
+// All templates upgraded — grandfathered list cleared.
+const PHASE_2_GRANDFATHERED_IDS = new Set<string>();
 
 describe('CVF Template Governance — Phase 2 (Silver → Gold upgrade)', () => {
 

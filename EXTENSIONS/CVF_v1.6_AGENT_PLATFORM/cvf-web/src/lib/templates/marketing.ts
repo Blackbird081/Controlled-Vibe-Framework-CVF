@@ -31,12 +31,28 @@ INDUSTRY: [industry]
 TARGET KEYWORDS: [keywords]
 COMPETITORS: [competitors]
 
+OUTPUT FORMAT:
+- Technical SEO Report → On-Page Analysis → Content Quality Score → Priority Issues → Action Plan
+
 SUCCESS CRITERIA:
 - Đánh giá Technical SEO (SSL, speed, mobile)
 - Đánh giá On-page SEO (title, meta, content)
 - Đánh giá Off-page SEO (backlinks)
 - Xác định priority issues`,
         outputExpected: ['Technical SEO Report', 'On-Page Analysis', 'Content Quality Score', 'Priority Issues', 'Action Plan'],
+        outputTemplate: `## SEO Audit Output
+
+## 1. Technical SEO Report
+| Check | Status | Priority |
+| --- | --- | --- |
+
+## 2. On-Page Analysis
+
+## 3. Content Quality Score
+
+## 4. Priority Issues
+
+## 5. Action Plan`,
         difficulty: 'medium',
         sampleOutput: `# SEO Audit Report: shopx.vn
 
@@ -99,12 +115,26 @@ TARGET AUDIENCE: [audience]
 CTA GOAL: [cta]
 TONE: [tone]
 
+OUTPUT FORMAT:
+- Copy Score → Strengths → Issues → Rewritten Version → A/B Test Ideas
+
 SUCCESS CRITERIA:
 - Đánh giá clarity, benefits, emotional triggers
 - Đánh giá CTA effectiveness
 - Đề xuất cải thiện
 - Viết lại phiên bản tối ưu`,
         outputExpected: ['Copy Score (/10)', 'Strengths', 'Issues', 'Rewritten Version', 'A/B Test Ideas'],
+        outputTemplate: `## Copy Evaluation Output
+
+**Score:** /10
+
+## Strengths
+
+## Issues
+
+## Rewritten Version
+
+## A/B Test Ideas`,
     },
     {
         id: 'landing_page_cro',
@@ -128,12 +158,26 @@ TARGET AUDIENCE: [audience]
 TRAFFIC SOURCE: [traffic]
 CURRENT CR: [currentCR]
 
+OUTPUT FORMAT:
+- CRO Score → Above the Fold Analysis → Friction Points → Quick Wins → A/B Test Suggestions
+
 SUCCESS CRITERIA:
 - Đánh giá above the fold elements
 - Xác định friction points
 - Priority quick wins
 - Đề xuất A/B tests`,
         outputExpected: ['CRO Score (/100)', 'Above the Fold Analysis', 'Friction Points', 'Quick Wins', 'A/B Test Suggestions'],
+        outputTemplate: `## Landing Page CRO Output
+
+**CRO Score:** /100
+
+## Above the Fold Analysis
+
+## Friction Points
+
+## Quick Wins
+
+## A/B Test Suggestions`,
     },
     {
         id: 'pricing_strategy',
@@ -157,12 +201,26 @@ MODEL: [model]
 TARGET: [target]
 COMPETITOR PRICES: [competitors]
 
+OUTPUT FORMAT:
+- Pricing Assessment → Value Analysis → Competitive Position → Optimization Opportunities → Recommended Structure
+
 SUCCESS CRITERIA:
 - Value-based pricing analysis
 - Competitive positioning
 - Pricing psychology
 - Đề xuất tối ưu`,
         outputExpected: ['Pricing Assessment', 'Value Analysis', 'Competitive Position', 'Optimization Opportunities', 'Recommended Structure'],
+        outputTemplate: `## Pricing Strategy Output
+
+## 1. Pricing Assessment
+
+## 2. Value Analysis
+
+## 3. Competitive Position
+
+## 4. Optimization Opportunities
+
+## 5. Recommended Structure`,
     },
     {
         id: 'content_quality',
@@ -186,12 +244,26 @@ CONTENT:
 TARGET KEYWORD: [keyword]
 AUDIENCE: [audience]
 
+OUTPUT FORMAT:
+- Content Score → SEO Analysis → Readability Report → E-E-A-T Assessment → Improvement Recommendations
+
 SUCCESS CRITERIA:
 - E-E-A-T assessment
 - SEO optimization check
 - Readability score
 - Gap analysis vs competitors`,
         outputExpected: ['Content Score (/10)', 'SEO Analysis', 'Readability Report', 'E-E-A-T Assessment', 'Improvement Recommendations'],
+        outputTemplate: `## Content Quality Output
+
+**Score:** /10
+
+## SEO Analysis
+
+## Readability Report
+
+## E-E-A-T Assessment
+
+## Improvement Recommendations`,
     },
     {
         id: 'email_campaign',
@@ -215,12 +287,26 @@ EMAIL:
 AUDIENCE: [audience]
 GOAL: [goal]
 
+OUTPUT FORMAT:
+- Email Score → Subject Line Analysis → Content Review → Deliverability Check → Rewritten Version
+
 SUCCESS CRITERIA:
 - Subject line effectiveness
 - Body content quality
 - CTA clarity
 - Mobile-friendliness`,
         outputExpected: ['Email Score (/10)', 'Subject Line Analysis', 'Content Review', 'Deliverability Check', 'Rewritten Version'],
+        outputTemplate: `## Email Campaign Output
+
+**Score:** /10
+
+## Subject Line Analysis
+
+## Content Review
+
+## Deliverability Check
+
+## Rewritten Version`,
     },
     {
         id: 'social_ad_review',
@@ -247,12 +333,28 @@ AD COPY:
 
 AUDIENCE: [audience]
 
+OUTPUT FORMAT:
+- Ad Score → Creative Analysis → Copy Review → Platform Optimization → A/B Test Ideas → Rewritten Ad
+
 SUCCESS CRITERIA:
 - Creative effectiveness (thumb-stopping)
 - Copy quality (hook, benefits, CTA)
 - Platform optimization
 - Predicted performance`,
         outputExpected: ['Ad Score (/10)', 'Creative Analysis', 'Copy Review', 'Platform Optimization', 'A/B Test Ideas', 'Rewritten Ad'],
+        outputTemplate: `## Social Ad Review Output
+
+**Score:** /10
+
+## Creative Analysis
+
+## Copy Review
+
+## Platform Optimization
+
+## A/B Test Ideas
+
+## Rewritten Ad`,
     },
     {
         id: 'brand_voice',
@@ -278,11 +380,25 @@ BRAND VALUES: [values]
 SAMPLE CONTENT:
 [samples]
 
+OUTPUT FORMAT:
+- Voice Audit → Consistency Score → Voice Attributes → Tone Matrix → Language Guidelines
+
 SUCCESS CRITERIA:
 - Voice attributes assessment
 - Cross-channel consistency
 - Tone appropriateness
 - Improvement recommendations`,
         outputExpected: ['Voice Audit', 'Consistency Score (/10)', 'Voice Attributes', 'Tone Matrix', 'Language Guidelines'],
+        outputTemplate: `## Brand Voice Output
+
+## Voice Audit
+
+**Consistency Score:** /10
+
+## Voice Attributes
+
+## Tone Matrix
+
+## Language Guidelines`,
     },
 ];

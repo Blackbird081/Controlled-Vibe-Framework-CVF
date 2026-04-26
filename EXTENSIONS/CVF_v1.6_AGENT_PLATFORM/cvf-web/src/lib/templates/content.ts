@@ -134,11 +134,25 @@ CONTEXT:
 RECIPIENT: [recipient]
 TONE: [tone]
 
+OUTPUT FORMAT:
+- Subject Line | Opening | Body | Call to Action | Closing
+
 SUCCESS CRITERIA:
 - Chuyên nghiệp
 - Rõ ràng call-to-action
 - Phù hợp context`,
         outputExpected: ['Subject Line', 'Opening', 'Body', 'Call to Action', 'Closing'],
+        outputTemplate: `## Email Output
+
+**Subject:**
+
+**Opening:**
+
+**Body:**
+
+**CTA:**
+
+**Closing:**`,
         difficulty: 'easy',
     },
 ];

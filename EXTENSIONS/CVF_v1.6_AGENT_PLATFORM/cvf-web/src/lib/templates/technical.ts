@@ -126,11 +126,25 @@ REQUIREMENTS:
 
 CONCERNS: [concerns]
 
+OUTPUT FORMAT:
+- Architecture Assessment → Strengths → Weaknesses → Bottlenecks → Recommendations
+
 SUCCESS CRITERIA:
 - Đánh giá design principles
 - Phát hiện bottlenecks
 - Đề xuất improvements`,
         outputExpected: ['Architecture Assessment', 'Strengths', 'Weaknesses', 'Bottlenecks', 'Recommendations'],
+        outputTemplate: `## Architecture Review Output
+
+## 1. Architecture Assessment
+
+## 2. Strengths
+
+## 3. Weaknesses
+
+## 4. Bottlenecks
+
+## 5. Recommendations`,
         difficulty: 'advanced',
     },
 ];

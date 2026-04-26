@@ -39,9 +39,12 @@ CONSTRAINTS:
 
 PRIORITY: [priority]
 
+OUTPUT FORMAT:
+- Executive Summary → SWOT Analysis → Options Comparison → Risk Assessment → Recommendations → Next Actions
+
 SUCCESS CRITERIA:
 - Phân tích rõ ưu/nhược điểm
-- Xác định rủi ro chính  
+- Xác định rủi ro chính
 - Đưa ra khuyến nghị có căn cứ`,
         outputExpected: ['Executive Summary', 'Assumptions & Missing Data', 'SWOT Analysis', 'Options Comparison', 'Risk Assessment', 'Recommendations', 'Success Criteria Check', 'Next Actions'],
         outputTemplate: `# Strategy Analysis Output
@@ -130,11 +133,29 @@ STAKEHOLDERS: [stakeholders]
 TIMELINE: [timeline]
 RISK TOLERANCE: [tolerance]
 
+OUTPUT FORMAT:
+- Risk Matrix → Top Risks → Mitigation Plans → Contingency Plans → Recommendations
+
 SUCCESS CRITERIA:
 - Xác định 5-10 rủi ro chính
 - Phân loại theo mức độ (High/Medium/Low)
 - Đề xuất mitigation cho mỗi rủi ro`,
         outputExpected: ['Risk Matrix', 'Top Risks', 'Mitigation Plans', 'Contingency Plans', 'Recommendations'],
+        outputTemplate: `## Risk Assessment Output
+
+## 1. Risk Matrix
+| Risk | Likelihood | Impact | Level | Owner |
+| --- | --- | --- | --- | --- |
+
+## 2. Top Risks
+
+## 3. Mitigation Plans
+- Risk → Mitigation:
+
+## 4. Contingency Plans
+- If risk occurs:
+
+## 5. Recommendations`,
         difficulty: 'medium',
     },
     {
@@ -160,11 +181,27 @@ COMPETITORS:
 COMPARISON CRITERIA:
 [criteria]
 
+OUTPUT FORMAT:
+- Competitor Matrix → SWOT per Competitor → Differentiation Opportunities → Market Positioning
+
 SUCCESS CRITERIA:
 - Ma trận so sánh các đối thủ
 - Điểm mạnh/yếu từng đối thủ
 - Cơ hội khác biệt hóa`,
         outputExpected: ['Competitor Matrix', 'SWOT per Competitor', 'Differentiation Opportunities', 'Market Positioning'],
+        outputTemplate: `## Competitor Analysis Output
+
+## 1. Competitor Matrix
+| Criteria | Your Company | Competitor A | Competitor B |
+| --- | --- | --- | --- |
+
+## 2. SWOT per Competitor
+
+## 3. Differentiation Opportunities
+- Gap:
+- How to exploit:
+
+## 4. Market Positioning`,
         difficulty: 'medium',
     },
 ];

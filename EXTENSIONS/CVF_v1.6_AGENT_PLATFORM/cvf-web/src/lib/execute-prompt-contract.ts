@@ -1,9 +1,12 @@
 import type { ExecutionRequest } from '@/lib/ai';
 import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
+import { getTemplateById } from '@/lib/templates';
+import { renderTemplateIntent } from '@/lib/template-intent';
 
 export function buildExecutionPrompt(request: ExecutionRequest): string {
   const { templateName, inputs, intent } = request;
   const previousOutput = inputs._previousOutput;
+  const template = request.templateId ? getTemplateById(request.templateId) : undefined;
 
   let prompt = `## Task: ${templateName}\n\n`;
   prompt += `### User Intent\n${intent}\n\n`;
@@ -51,6 +54,24 @@ export function buildExecutionPrompt(request: ExecutionRequest): string {
   })) {
     prompt += `### Bound UX Skill Context\n`;
     prompt += `${CVF_WEB_REDESIGN_DNA_APPENDIX}\n\n`;
+  }
+
+  if (template?.outputTemplate || template?.outputExpected?.length) {
+    prompt += `### Template Output Contract\n`;
+    prompt += `Follow this template contract more strongly than generic sectioning advice.\n`;
+    prompt += `Do not return the raw skeleton or a fenced code block. Fill the headings with the supplied user input values, names, constraints, and concrete decisions.\n`;
+    if (template.outputExpected?.length) {
+      prompt += `Expected sections:\n`;
+      for (const section of template.outputExpected) {
+        prompt += `- ${section}\n`;
+      }
+      prompt += `\n`;
+    }
+    if (template.outputTemplate) {
+      const renderedOutputTemplate = renderTemplateIntent(template.outputTemplate, inputs);
+      prompt += `Use these headings and labels exactly where applicable:\n`;
+      prompt += `\`\`\`markdown\n${renderedOutputTemplate}\n\`\`\`\n\n`;
+    }
   }
 
   if (request.fileScope?.length) {

@@ -60,11 +60,28 @@ describe('templates/index', () => {
         });
 
         it('uses N/A for missing values', () => {
-            const template = templates[0];
+            const template = templates.find(t => t.fields.length > 0 && /\[[A-Za-z0-9_]+\]/.test(t.intentPattern));
+            expect(template).toBeDefined();
+
             const intent = generateIntent(template, {});
-            if (template.fields.length > 0) {
-                expect(intent).toContain('N/A');
-            }
+            expect(intent).toContain('N/A');
+            expect(intent).not.toMatch(/\[[A-Za-z0-9_]+\]/);
+        });
+
+        it('normalizes multi-select values without leaving placeholders', () => {
+            const template = getTemplateById('code_review');
+            expect(template).toBeDefined();
+
+            const intent = generateIntent(template!, {
+                workSample: 'function pay() {}',
+                goal: 'Review payment behavior',
+                worry: 'Timeouts',
+                mustPreserve: 'Mobile API contract',
+                focus: ['Logic risk', 'Security risk'],
+            });
+
+            expect(intent).toContain('Logic risk, Security risk');
+            expect(intent).not.toMatch(/\[[A-Za-z0-9_]+\]/);
         });
     });
 

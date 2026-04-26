@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-26T00:44:31.313Z",
+  "generatedAt": "2026-04-26T06:25:43.280Z",
   "categories": [
     {
       "id": "ai_ml_evaluation",
@@ -93,6 +93,16 @@
             },
             {
               "templateId": "vibe_to_spec",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "non_coder_debug",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "auto_documentation",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
@@ -709,6 +719,16 @@
               "templateId": "user_flow_analysis",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "feature_prioritization",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "error_handling_ux",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
             }
           ],
           "corpusNote": "Trusted benchmark surface under GC-044 / D3 trusted subset."
@@ -939,6 +959,11 @@
               "templateId": "data_handling",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "tos_review",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
             }
           ],
           "corpusNote": "Trusted supporting front-door surface under GC-044."
@@ -1041,7 +1066,7 @@
           "frontDoorVisible": true,
           "frontDoorTier": "TRUSTED_BENCHMARK",
           "trustedBenchmarkSurface": true,
-          "hasRestrictedLinks": false,
+          "hasRestrictedLinks": true,
           "linkedTemplates": [
             {
               "templateId": "system_design_wizard",

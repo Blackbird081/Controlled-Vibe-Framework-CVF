@@ -126,9 +126,11 @@ OUTPUT REQUIREMENTS:
             'Acceptance Criteria',
             'Handoff Checklist'
         ],
-        outputTemplate: `# Complete App Brief
+        outputTemplate: `# Complete App Brief: [appName]
 
 ## 1. Product Goal
+- App name: [appName]
+- App type: [appType]
 
 ## 2. Must-Have Workflows
 

@@ -27,11 +27,10 @@ const rewriteContracts: Record<string, RewriteContract> = {
     requiredIntentPhrases: ['ra quyết định', 'Không bắt người dùng đọc hiểu thuật ngữ thống kê'],
     requiredOutputPhrases: ['# Decision-Focused Data Analysis', '## 4. Recommended Actions'],
   },
-  ab_test_review: {
-    requiredFields: ['changeGoal', 'successSignal', 'variants', 'results', 'decisionNeed'],
-    forbiddenFields: ['sampleSize'],
-    requiredIntentPhrases: ['ra quyết định', 'Không ép người dùng hiểu jargon thống kê'],
-    requiredOutputPhrases: ['# Product Experiment Review', '## 4. Decision Recommendation'],
+  architecture_review: {
+    requiredFields: ['system', 'description', 'requirements', 'concerns'],
+    requiredIntentPhrases: ['Đánh giá design principles', 'Phát hiện bottlenecks'],
+    requiredOutputPhrases: ['## Architecture Review Output', '## 5. Recommendations'],
   },
   api_security: {
     requiredFields: ['criticalFlows', 'sensitiveData', 'currentProtections', 'worry'],
@@ -44,6 +43,11 @@ const rewriteContracts: Record<string, RewriteContract> = {
     forbiddenFields: ['storageSystems'],
     requiredIntentPhrases: ['vòng đời dữ liệu', 'Không yêu cầu người dùng biết hạ tầng chi tiết'],
     requiredOutputPhrases: ['# Data Handling Review', '## 4. Recommended Governance Rules'],
+  },
+  tos_review: {
+    requiredFields: ['tos', 'serviceType', 'model', 'markets'],
+    requiredIntentPhrases: ['Fairness assessment', 'Regional compliance'],
+    requiredOutputPhrases: ['## Terms of Service Review Output', '## Improvement Suggestions'],
   },
   app_builder_complete: {
     requiredFields: ['appName', 'appType', 'problem', 'targetUsers', 'coreFeatures', 'successCriteria', 'mustPreserve', 'platforms', 'dataNeeds', 'lookAndFeel', 'outOfScope', 'constraints'],

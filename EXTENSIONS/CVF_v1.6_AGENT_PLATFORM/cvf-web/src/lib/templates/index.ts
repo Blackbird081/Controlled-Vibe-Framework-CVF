@@ -8,6 +8,7 @@ import { productTemplates } from './product';
 import { securityTemplates } from './security';
 import { developmentTemplates } from './development';
 import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
+import { renderTemplateIntent, type TemplateIntentValue } from '@/lib/template-intent';
 
 export const templates: Template[] = [
     ...businessTemplates,
@@ -28,12 +29,8 @@ export function getTemplatesByCategory(category: string): Template[] {
     return templates.filter(t => t.category === category);
 }
 
-export function generateIntent(template: Template, values: Record<string, string>): string {
-    let intent = template.intentPattern;
-    Object.entries(values).forEach(([key, value]) => {
-        intent = intent.replace(new RegExp(`\\[${key}\\]`, 'g'), value || 'N/A');
-    });
-    return intent;
+export function generateIntent(template: Template, values: Record<string, TemplateIntentValue>): string {
+    return renderTemplateIntent(template.intentPattern, values);
 }
 
 /**
@@ -66,7 +63,9 @@ export function generateCompleteSpec(
     const expectedOutput = template.outputExpected
         ?.map(item => `- ${item}`)
         .join('\n') || '- Comprehensive analysis\n- Actionable recommendations';
-    const outputTemplate = template.outputTemplate || (template.outputExpected?.length
+    const outputTemplate = template.outputTemplate
+        ? renderTemplateIntent(template.outputTemplate, values)
+        : (template.outputExpected?.length
         ? template.outputExpected.map(section => `## ${section}\n- ...`).join('\n\n')
         : '');
 

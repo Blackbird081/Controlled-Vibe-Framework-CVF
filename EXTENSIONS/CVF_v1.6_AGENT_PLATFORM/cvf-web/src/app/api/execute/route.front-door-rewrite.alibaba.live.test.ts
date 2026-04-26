@@ -127,8 +127,8 @@ describe.skipIf(!ALIBABA_API_KEY)(
         expect(body.success).toBe(true);
         expect(output.length).toBeGreaterThan(500);
         expect(output).toMatch(/TaskFlow/i);
-        expect(output).toMatch(/Requirements Overview|Specification/i);
-        expect(output).toMatch(/User Outcomes|Core Functionality|Workflows/i);
+        expect(output).toMatch(/Requirements Overview|Specification|Complete App Brief/i);
+        expect(output).toMatch(/User Outcomes|Core Functionality|Workflows|Must-Have Workflows/i);
         expect(output).toMatch(/Acceptance Criteria/i);
         expect(output).toMatch(/Handoff Boundaries|Boundaries/i);
         expect(output).toMatch(/Acceptance Criteria/i);
@@ -335,7 +335,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
         expect(body.success).toBe(true);
         expect(output.length).toBeGreaterThan(600);
         expect(output).toMatch(/Review Gate/i);
-        expect(output).toMatch(/QA Rules|Pre-Build Approval|Post-Build Validation|Release Process/i);
+        expect(output).toMatch(/QA Rules|QA checklist|Pre-Build Approval|Post-Build Validation|Release Process/i);
         expect(output).toMatch(/approval|required/i);
         expect(output).toMatch(/routes|auth|API|store/i);
         expect(output).not.toMatch(/choose frameworks|pick a framework|select a stack/i);

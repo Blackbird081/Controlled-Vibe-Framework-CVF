@@ -6,7 +6,7 @@
  * These tests are CI gate — a failure here blocks merge.
  */
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { templates } from './index';
 import skillTemplateMapRaw from '@/data/skill-template-map.json';
@@ -50,6 +50,18 @@ function loadActiveSkillIds(): Set<string> {
 const skillMap = skillTemplateMapRaw.templateToSkillMap as Record<string, { domain: string; skillId: string }>;
 const mappedTemplateIds = new Set(Object.keys(skillMap));
 const formTemplates = templates.filter(t => isFormTemplate(t.id));
+
+const WIZARD_COMPONENT_FILES: Record<string, string> = {
+    business_strategy_wizard: 'BusinessStrategyWizard.tsx',
+    content_strategy_wizard: 'ContentStrategyWizard.tsx',
+    app_builder_wizard: 'AppBuilderWizard.tsx',
+    marketing_campaign_wizard: 'MarketingCampaignWizard.tsx',
+    product_design_wizard: 'ProductDesignWizard.tsx',
+    research_project_wizard: 'ResearchProjectWizard.tsx',
+    data_analysis_wizard: 'DataAnalysisWizard.tsx',
+    security_assessment_wizard: 'SecurityAssessmentWizard.tsx',
+    system_design_wizard: 'SystemDesignWizard.tsx',
+};
 
 // ─── Tests ─────────────────────────────────────────────────────────────────
 describe('CVF Template Governance Enforcement', () => {
@@ -151,6 +163,31 @@ describe('CVF Template Governance — Phase 2 (Silver → Gold upgrade)', () => 
         });
         const report = broken.map(t => t.id).join(', ');
         expect(broken, `Wizard templates with broken skill mapping: ${report}`).toHaveLength(0);
+    });
+
+    it('RULE-T7(wizard): all wizard components expose the governed non-coder live execution wrapper', () => {
+        const missing: string[] = [];
+
+        for (const [templateId, fileName] of Object.entries(WIZARD_COMPONENT_FILES)) {
+            const componentPath = join(process.cwd(), 'src/components', fileName);
+            if (!existsSync(componentPath)) {
+                missing.push(`${templateId} missing component ${fileName}`);
+                continue;
+            }
+
+            const source = readFileSync(componentPath, 'utf-8');
+            if (!source.includes('buildNonCoderReferenceLoop')) {
+                missing.push(`${templateId} missing buildNonCoderReferenceLoop`);
+            }
+            if (!source.includes('buildNonCoderLiveExecutionRequest')) {
+                missing.push(`${templateId} missing buildNonCoderLiveExecutionRequest`);
+            }
+            if (!source.includes('<ProcessingScreen')) {
+                missing.push(`${templateId} missing live ProcessingScreen path`);
+            }
+        }
+
+        expect(missing, `Wizard governance wrapper gaps: ${missing.join('; ')}`).toHaveLength(0);
     });
 
 });

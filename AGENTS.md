@@ -30,13 +30,14 @@ Never commit or print raw API key values. Use operator-supplied environment vari
 
 ## Latest Closed Continuation Roadmap
 
-The latest closed continuation roadmap is `docs/roadmaps/CVF_W127_T1_NONCODER_ADOPTION_METRICS_AND_FRICTION_BASELINE_ROADMAP_2026-04-27.md`.
+The latest closed continuation roadmap is `docs/roadmaps/CVF_W128_T1_NONCODER_ROLLOUT_READOUT_AND_OPTIMIZATION_LOOP_ROADMAP_2026-04-27.md`.
 
-The previous closed continuation roadmap is `docs/roadmaps/CVF_W126_T1_TRUSTED_FORM_TEMPLATE_ROUTING_EXPANSION_ROADMAP_2026-04-27.md`.
+The previous closed continuation roadmap is `docs/roadmaps/CVF_W127_T1_NONCODER_ADOPTION_METRICS_AND_FRICTION_BASELINE_ROADMAP_2026-04-27.md`.
 
-No next implementation roadmap is pre-authorized. Fresh GC-018 required for continuation.
+W129-T1 is AUTHORIZED. GC-018 issued 2026-04-27. Implementation may begin.
+Active roadmap: `docs/roadmaps/CVF_W129_T1_NONCODER_CONTROLLED_ROLLOUT_AND_FIRST_SIGNAL_CAPTURE_ROADMAP_2026-04-27.md`
 
-Treat the W113/W116/W117/W118/W119/W122/W123/W124/W125/W126/W127 boundary language as binding:
+Treat the W113/W116/W117/W118/W119/W122/W123/W124/W125/W126/W127/W128/W129 boundary language as binding:
 
 - Workspace bootstrap is now agent-enforcement-ready when generated artifacts, workspace-root `WORKSPACE_RULES.md`, and the workspace doctor pass. Canonical workspace topology is `docs/reference/CVF_WORKSPACE_RULES.md`: a non-git parent workspace, hidden `.Controlled-Vibe-Framework-CVF` governance clone, and sibling downstream application folders.
 - W113 proved this in one real downstream sample project with live API-backed governance evidence.
@@ -50,5 +51,7 @@ Treat the W113/W116/W117/W118/W119/W122/W123/W124/W125/W126/W127 boundary langua
 - W125 proved noncoder deliverable packs and handoff productization: `deliverable-pack.ts` typed contract (`DeliverablePack`, `PackType`, `PackGovernanceEvidence`); `inferPackType()` with template-match → category-fallback → `documentation_handoff` default; `generateDeliverablePack(execution, receipt?)` builds all pack fields; `serializePackToMarkdown()` 7-section export; `ResultViewer` upgraded with Result/Pack tab toggle and pack preview panel (6 sections); export menu extended with distinct "Download Deliverable Pack (.md)" option; 28/28 unit tests + 36/36 ResultViewer tests + E2E spec 4 journeys; release gate PASS.
 - W126 proved trusted form-template routing expansion: `form-routing.ts` adds the bounded trusted-form subset (`email_template`, `documentation`, `competitor_review`, `risk_assessment`, `user_persona`, `feature_prioritization`, `pricing_strategy`, `strategy_analysis`); `routeIntent()` now enforces wizard -> trusted form -> weak-fallback precedence; form routes return `routeType: 'form'` with `starterKey: null`; Home handoff guard became route-type aware; vitest 28/28 pass. Routing claim remains bounded to the audited trusted subset, not the full template corpus.
 - W127 proved noncoder adoption metrics and friction baseline: `noncoder-metrics.ts` computes 6 browser-local metrics (`time_to_first_value`, `route_recovery_rate`, `weak_fallback_rate`, `followup_continuation_rate`, `evidence_export_rate`, `deliverable_pack_export_rate`); `generateMetricReport()` + `summarizeFriction()` provide threshold-based readout; analytics instrumentation now includes `intent_routed`, `followup_started`, `evidence_exported`, and `deliverable_pack_exported`; Day-0 baseline artifact is published with N/A values until real traffic accumulates. Release gate PASS.
+- W128 proved noncoder rollout readout and optimization loop: `noncoder-rollout-readout.ts` adds typed lane readouts and bounded `RolloutRecommendation` output across 6 lanes (`entry_routing`, `clarification_recovery`, `trusted_form`, `followup_continuity`, `evidence_export`, `deliverable_pack`); recommendations are feature-flag aware via `readNoncoderFlags()` and deterministic threshold logic; `AnalyticsDashboard` now exposes a `Noncoder Health` readout with low-data caveat, summary strip, flag posture, lane cards, and prioritized next actions. Targeted verification: 56/56 pass; release gate PASS 7/7.
+- W129 authorized noncoder controlled rollout and first signal capture: GC-018 issued 2026-04-27 (depth audit 9/10); rollout playbook (flag order + enable/hold/rollback criteria) + first flag enable (`NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR`) + two rollout analytics events (`rollout_flag_enabled`, `rollout_session_start`) + first signal readout from governed sessions + signal capture doc + continuation decision lock; W128 threshold contract remains binding; one flag per CP; no governance path changes; W130 cannot open without measured signal.
 - Web is governance-inherited on the active governed AI path, not the full CVF runtime.
 - Future work must improve enforcement without overstating either claim.

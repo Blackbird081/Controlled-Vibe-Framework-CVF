@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-04-27T12:31:55.216Z",
+  "liveExecutionStatus": 200,
+  "liveDecision": "ALLOW",
+  "eventCount": 12,
+  "eventCounts": {
+    "rollout_flag_enabled": 6,
+    "rollout_session_start": 1,
+    "intent_routed": 5,
+    "clarification_weak_confidence_detected": 0,
+    "clarification_browse_fallback": 0
+  },
+  "entryRouting": {
+    "status": "healthy",
+    "metricValue": 0,
+    "explanation": "0% fallback to browse.",
+    "recommendation": "Entry routing is performing well. Consider widening the intent-first rollout."
+  },
+  "trustedForm": {
+    "status": "healthy",
+    "metricValue": 0,
+    "explanation": "Trusted form routing shares the weak-fallback signal. A decreasing trend confirms form routing is absorbing formerly-weak routes.",
+    "recommendation": "Browse fallback is low — trusted form routing is absorbing weak wizard routes."
+  }
+}

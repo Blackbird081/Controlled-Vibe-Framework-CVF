@@ -3,7 +3,7 @@
 # CVF W129-T1 Noncoder Controlled Rollout And First Signal Capture Roadmap
 
 > Date: 2026-04-27
-> Status: CLOSED DELIVERED — Stage A flag enabled; entry_routing exits no_data; signal readout published; release gate PASS 7/7 on 2026-04-27
+> Status: CLOSED DELIVERED — rollout playbook locked; Stage A operator posture documented; dedicated Stage A routing evidence captured; release gate PASS 7/7 on 2026-04-27
 > Scope class: NONCODER CONTROLLED ROLLOUT / FIRST SIGNAL CAPTURE / OPERATOR EVIDENCE
 > Predecessor: W128-T1 CLOSED DELIVERED 2026-04-27
 > Authorization: `docs/baselines/CVF_GC018_W129_T1_NONCODER_CONTROLLED_ROLLOUT_AND_FIRST_SIGNAL_CAPTURE_AUTHORIZATION_2026-04-27.md`

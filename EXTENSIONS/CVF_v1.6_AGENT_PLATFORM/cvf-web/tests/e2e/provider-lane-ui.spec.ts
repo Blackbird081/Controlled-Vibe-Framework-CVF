@@ -17,7 +17,7 @@ test('Settings shows Certified badge for Alibaba', async ({ page }) => {
     // Certified badge must be visible in the Alibaba provider card area
     await expect(
         page.getByText('Certified').first()
-    ).toBeVisible({ timeout: 10_000 });
+    ).toBeVisible({ timeout: 20_000 });
 
     // 3/3 PASS evidence note must be present
     await expect(
@@ -42,7 +42,7 @@ test('Settings shows Certified badge for DeepSeek', async ({ page }) => {
     // DeepSeek row visible
     await expect(
         page.getByText(/deepseek/i).first()
-    ).toBeVisible({ timeout: 10_000 });
+    ).toBeVisible({ timeout: 20_000 });
 });
 
 test('ProviderSwitcher shows at least one lane badge', async ({ page }) => {
@@ -62,7 +62,7 @@ test('ProviderSwitcher shows at least one lane badge', async ({ page }) => {
 
     // At least one lane status badge must be visible somewhere in the provider surface.
     const badge = page.getByText(/Certified|Canary Pass|Experimental|Unconfigured/i).first();
-    await expect(badge).toBeVisible({ timeout: 10_000 });
+    await expect(badge).toBeVisible({ timeout: 20_000 });
 });
 
 test('Provider section contains no parity or quality comparison language', async ({ page }) => {

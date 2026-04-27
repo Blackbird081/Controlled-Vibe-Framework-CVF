@@ -1,0 +1,79 @@
+{
+  "capturedAt": "2026-04-27T14:30:58.332Z",
+  "provider": "alibaba / qwen-turbo",
+  "stage": "Stage A volume pass — §7 Post-Closure Addendum",
+  "attemptedJourneys": 12,
+  "successfulJourneys": 12,
+  "liveExecutionStatus": 200,
+  "liveDecision": "ALLOW",
+  "stageBDecision": "STAGE_B_MAY_ENABLE — execution_created threshold met and entry_routing not action_required",
+  "thresholdMet": true,
+  "eventCounts": {
+    "execution_created": 12,
+    "intent_routed": 12,
+    "clarification_browse_fallback": 0,
+    "rollout_flag_enabled": 13,
+    "rollout_session_start": 1
+  },
+  "entryRouting": {
+    "status": "healthy",
+    "metricValue": 0,
+    "explanation": "0% fallback to browse.",
+    "recommendation": "Entry routing is performing well. Consider widening the intent-first rollout."
+  },
+  "trustedForm": {
+    "status": "healthy",
+    "metricValue": 0,
+    "explanation": "Trusted form routing shares the weak-fallback signal. A decreasing trend confirms form routing is absorbing formerly-weak routes."
+  },
+  "journeyLog": [
+    {
+      "prompt": "Tôi cần đánh giá rủi ro khi ra mắt dịch vụ tại thị trường mới",
+      "status": "success"
+    },
+    {
+      "prompt": "Giúp tôi phân tích đối thủ cạnh tranh trong ngành F&B tại Việt Nam",
+      "status": "success"
+    },
+    {
+      "prompt": "Tôi cần viết tài liệu quy trình bàn giao dự án cho đội tiếp nhận",
+      "status": "success"
+    },
+    {
+      "prompt": "Soạn email follow-up sau cuộc họp với khách hàng tiềm năng",
+      "status": "success"
+    },
+    {
+      "prompt": "Tôi cần đánh giá rủi ro khi mở văn phòng tại thị trường ASEAN",
+      "status": "success"
+    },
+    {
+      "prompt": "Giúp tôi phân tích đối thủ cạnh tranh cho dịch vụ giao hàng trực tuyến",
+      "status": "success"
+    },
+    {
+      "prompt": "Viết email chào hàng gửi đối tác phân phối mới",
+      "status": "success"
+    },
+    {
+      "prompt": "Tôi cần viết tài liệu hướng dẫn vận hành quy trình phê duyệt ngân sách",
+      "status": "success"
+    },
+    {
+      "prompt": "Tôi cần định giá dịch vụ tư vấn theo giờ hoặc theo dự án",
+      "status": "success"
+    },
+    {
+      "prompt": "Giúp tôi ưu tiên tính năng cho danh sách backlog của nhóm kỹ thuật",
+      "status": "success"
+    },
+    {
+      "prompt": "Tôi cần xác định người dùng mục tiêu cho dịch vụ tài chính cá nhân",
+      "status": "success"
+    },
+    {
+      "prompt": "Tôi cần đánh giá rủi ro khi chuyển nhà cung cấp dịch vụ cloud",
+      "status": "success"
+    }
+  ]
+}

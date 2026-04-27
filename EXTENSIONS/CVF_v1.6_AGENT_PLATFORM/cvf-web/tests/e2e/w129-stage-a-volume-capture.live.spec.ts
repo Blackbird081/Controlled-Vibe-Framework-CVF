@@ -65,59 +65,64 @@ const STAGE_B_THRESHOLD = 10;
 
 /**
  * 12 form-route journeys using W126 trusted form activation patterns.
- * All prompts are designed to route to DynamicForm (not wizard) so that
- * the standard handleFormSubmit → addExecution → execution_created path fires.
+ * All prompts are verified against intent-detector.ts TEMPLATE_PATTERNS to
+ * ensure NO wizard-family match occurs (wizard-first precedence rule).
+ *
+ * Avoided words: chiến lược (→business-strategy wizard), hệ thống (→system-design),
+ * sản phẩm/product (→product-design), app/ứng dụng (→app-builder),
+ * kinh doanh/doanh nghiệp (→business-strategy), marketing (→marketing-campaign),
+ * nội dung/content (→content-strategy), security/bảo mật (→security-assessment).
  *
  * topicValue: pre-filled value for the first text input (main topic/subject field).
  */
 const VOLUME_JOURNEYS = [
   {
-    prompt: 'Tôi cần phân tích chiến lược mở rộng thị trường Đông Nam Á',
-    topicValue: 'Chiến lược mở rộng thị trường Đông Nam Á',
+    prompt: 'Tôi cần đánh giá rủi ro khi ra mắt dịch vụ tại thị trường mới',
+    topicValue: 'Ra mắt dịch vụ tại thị trường ASEAN',
   },
   {
-    prompt: 'Giúp tôi đánh giá rủi ro dự án tích hợp hệ thống ERP',
-    topicValue: 'Tích hợp hệ thống ERP doanh nghiệp vừa',
+    prompt: 'Giúp tôi phân tích đối thủ cạnh tranh trong ngành F&B tại Việt Nam',
+    topicValue: 'Cạnh tranh ngành F&B Việt Nam',
   },
   {
-    prompt: 'Tôi muốn phân tích đối thủ cạnh tranh trong ngành SaaS B2B',
-    topicValue: 'Cạnh tranh SaaS B2B thị trường Việt Nam',
+    prompt: 'Tôi cần viết tài liệu quy trình bàn giao dự án cho đội tiếp nhận',
+    topicValue: 'Quy trình bàn giao dự án nội bộ',
   },
   {
-    prompt: 'Tôi cần viết tài liệu quy trình onboarding nhân viên mới',
-    topicValue: 'Quy trình onboarding nhân viên',
+    prompt: 'Soạn email follow-up sau cuộc họp với khách hàng tiềm năng',
+    topicValue: 'Follow-up sau buổi demo với khách hàng',
   },
   {
-    prompt: 'Giúp tôi phân tích chiến lược ra mắt sản phẩm cho thị trường B2B',
-    topicValue: 'Chiến lược go-to-market sản phẩm B2B',
+    prompt: 'Tôi cần đánh giá rủi ro khi mở văn phòng tại thị trường ASEAN',
+    topicValue: 'Mở văn phòng tại thị trường Đông Nam Á',
   },
   {
-    prompt: 'Tôi cần đánh giá rủi ro khi triển khai cloud migration',
-    topicValue: 'Cloud migration cho doanh nghiệp vừa',
+    prompt: 'Giúp tôi phân tích đối thủ cạnh tranh cho dịch vụ giao hàng trực tuyến',
+    topicValue: 'Đối thủ dịch vụ giao hàng trực tuyến',
   },
   {
-    prompt: 'Soạn email proposal gửi khách hàng enterprise',
-    topicValue: 'Enterprise partnership proposal',
+    prompt: 'Viết email chào hàng gửi đối tác phân phối mới',
+    topicValue: 'Đề xuất hợp tác với đối tác phân phối',
   },
   {
-    prompt: 'Tôi muốn xây dựng chiến lược giá cho sản phẩm SaaS',
-    topicValue: 'Chiến lược định giá SaaS theo gói',
+    prompt: 'Tôi cần viết tài liệu hướng dẫn vận hành quy trình phê duyệt ngân sách',
+    topicValue: 'Quy trình phê duyệt ngân sách nội bộ',
   },
   {
-    prompt: 'Giúp tôi ưu tiên tính năng cho product roadmap quý tới',
-    topicValue: 'Product roadmap Q3 2026',
+    prompt: 'Tôi cần định giá dịch vụ tư vấn theo giờ hoặc theo dự án',
+    topicValue: 'Định giá dịch vụ tư vấn tài chính',
   },
   {
-    prompt: 'Tôi cần xác định người dùng mục tiêu cho sản phẩm fintech',
-    topicValue: 'Target user cho ứng dụng fintech',
+    prompt: 'Giúp tôi ưu tiên tính năng cho danh sách backlog của nhóm kỹ thuật',
+    topicValue: 'Backlog tính năng quý Q3 2026',
   },
   {
-    prompt: 'Tôi cần phân tích chiến lược phát triển kênh bán hàng mới',
-    topicValue: 'Phát triển kênh sales mới cho doanh nghiệp',
+    prompt: 'Tôi cần xác định người dùng mục tiêu cho dịch vụ tài chính cá nhân',
+    topicValue: 'Người dùng mục tiêu dịch vụ fintech',
   },
   {
-    prompt: 'Giúp tôi đánh giá rủi ro khi mở rộng sang thị trường quốc tế',
-    topicValue: 'Rủi ro mở rộng thị trường quốc tế',
+    prompt: 'Tôi cần đánh giá rủi ro khi chuyển nhà cung cấp dịch vụ cloud',
+    topicValue: 'Chuyển đổi nhà cung cấp cloud hosting',
   },
 ] as const;
 
@@ -223,8 +228,13 @@ test.describe('W129 Stage A volume capture — Stage B unlock evidence', () => {
           }
         }
 
-        await firstTextInput.press('Enter');
-        await page.waitForTimeout(800);
+        // Use requestSubmit() so React onSubmit fires regardless of input count.
+        // Enter key only implicitly submits when form has exactly 1 text input.
+        await page.evaluate(() => {
+          const form = document.querySelector('form');
+          if (form) { try { form.requestSubmit(); } catch { form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })); } }
+        });
+        await page.waitForTimeout(1200);
 
         const formGone = await firstTextInput.isHidden().catch(() => true);
         if (formGone) {
@@ -266,9 +276,6 @@ test.describe('W129 Stage A volume capture — Stage B unlock evidence', () => {
         : !thresholdMet
           ? `STAGE_B_HOLD — execution_created ${executionCreatedCount}/${STAGE_B_THRESHOLD} (threshold not met)`
           : `STAGE_B_HOLD — entry_routing is ${entryRouting?.status ?? 'unknown'} (must not be action_required)`;
-
-      expect(executionCreatedCount).toBeGreaterThanOrEqual(STAGE_B_THRESHOLD);
-      expect(entryRouting?.status).not.toBe('action_required');
 
       const summary = {
         capturedAt: new Date().toISOString(),
@@ -362,6 +369,12 @@ test.describe('W129 Stage A volume capture — Stage B unlock evidence', () => {
       mkdirSync(dirname(VOLUME_MD_PATH), { recursive: true });
       writeFileSync(VOLUME_MD_PATH, markdown, 'utf8');
       writeFileSync(VOLUME_JSON_PATH, JSON.stringify(summary, null, 2), 'utf8');
+
+      console.log('[W129-volume] journey log:', JSON.stringify(journeyLog, null, 2));
+      console.log(`[W129-volume] execution_created=${executionCreatedCount}, intent_routed=${intentRoutedCount}, entry_routing=${entryRouting?.status}`);
+
+      expect(executionCreatedCount).toBeGreaterThanOrEqual(STAGE_B_THRESHOLD);
+      expect(entryRouting?.status).not.toBe('action_required');
     },
   );
 });

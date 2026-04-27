@@ -1,0 +1,81 @@
+{
+  "capturedAt": "2026-04-27T18:32:43.856Z",
+  "provider": "alibaba / qwen-turbo",
+  "stage": "Stage B signal capture — §8 Post-Closure Addendum",
+  "attemptedJourneys": 8,
+  "clarifiedJourneys": 8,
+  "routeRecoveredJourneys": 8,
+  "liveExecutionStatus": 200,
+  "liveDecision": "ALLOW",
+  "stageCDecision": "STAGE_C_MAY_ENABLE — clarification_question_asked threshold met and clarification_recovery not action_required",
+  "thresholdMet": true,
+  "eventCounts": {
+    "clarification_question_asked": 8,
+    "clarification_answered": 8,
+    "clarification_route_recovered": 8,
+    "clarification_browse_fallback": 0,
+    "clarification_weak_confidence_detected": 8,
+    "execution_created": 0
+  },
+  "clarificationRecovery": {
+    "status": "healthy",
+    "metricValue": 100,
+    "explanation": "100% of weak routes recovered via clarification.",
+    "recommendation": "Clarification loop is recovering weak routes effectively."
+  },
+  "entryRouting": {
+    "status": "healthy",
+    "metricValue": 0,
+    "explanation": "0% fallback to browse."
+  },
+  "journeyLog": [
+    {
+      "input": "help",
+      "desc": "EN ambiguous short help",
+      "outcome": "clarify_then_route",
+      "clarificationFired": true
+    },
+    {
+      "input": "idea",
+      "desc": "EN vague idea",
+      "outcome": "clarify_then_route",
+      "clarificationFired": true
+    },
+    {
+      "input": "goal",
+      "desc": "EN vague goal",
+      "outcome": "clarify_then_route",
+      "clarificationFired": true
+    },
+    {
+      "input": "Giúp",
+      "desc": "VN short help (4 chars)",
+      "outcome": "clarify_then_route",
+      "clarificationFired": true
+    },
+    {
+      "input": "work",
+      "desc": "EN vague work",
+      "outcome": "clarify_then_route",
+      "clarificationFired": true
+    },
+    {
+      "input": "task",
+      "desc": "EN vague task",
+      "outcome": "clarify_then_route",
+      "clarificationFired": true
+    },
+    {
+      "input": "plan",
+      "desc": "EN ambiguous plan (no wizard match without context)",
+      "outcome": "clarify_then_route",
+      "clarificationFired": true
+    },
+    {
+      "input": "need",
+      "desc": "EN vague need",
+      "outcome": "clarify_then_route",
+      "clarificationFired": true
+    }
+  ]
+}

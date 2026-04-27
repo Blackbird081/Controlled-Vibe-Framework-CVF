@@ -1,0 +1,65 @@
+{
+  "capturedAt": "2026-04-27T18:43:08.107Z",
+  "provider": "alibaba / qwen-turbo",
+  "stage": "Stage C signal capture — §9 Post-Closure Addendum",
+  "flags": {
+    "NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR": true,
+    "NEXT_PUBLIC_CVF_NONCODER_CLARIFICATION_LOOP": true,
+    "NEXT_PUBLIC_CVF_NONCODER_ITERATION_MEMORY": true
+  },
+  "attemptedJourneys": 5,
+  "successJourneys": 3,
+  "liveExecutionStatus": 200,
+  "liveDecision": "ALLOW",
+  "rolloutDecision": "W129_ROLLOUT_COMPLETE — All 3 flags enabled, all measured lanes healthy, followup_started threshold met. W130 may be opened with fresh GC-018.",
+  "rolloutComplete": true,
+  "eventCounts": {
+    "followup_started": 3,
+    "execution_created": 7,
+    "intent_routed": 5
+  },
+  "laneReadout": {
+    "followup_continuity": {
+      "status": "healthy",
+      "metricValue": 42.9,
+      "explanation": "43% of sessions included a follow-up iteration."
+    },
+    "entry_routing": {
+      "status": "healthy",
+      "metricValue": 0
+    },
+    "clarification_recovery": {
+      "status": "no_data",
+      "metricValue": null
+    }
+  },
+  "journeyLog": [
+    {
+      "prompt": "Tôi cần đánh giá rủi ro khi triển khai quy trình mới tại công ty",
+      "outcome": "api_timeout",
+      "followupFired": false,
+      "detail": "API call did not complete within 60s"
+    },
+    {
+      "prompt": "Soạn email giới thiệu dịch vụ tư vấn đến khách hàng tiềm năng",
+      "outcome": "followup_submitted",
+      "followupFired": true
+    },
+    {
+      "prompt": "Phân tích đối thủ cạnh tranh trong lĩnh vực dịch vụ logistics",
+      "outcome": "followup_submitted",
+      "followupFired": true
+    },
+    {
+      "prompt": "Viết tài liệu hướng dẫn sử dụng cho nhân viên mới",
+      "outcome": "followup_submitted",
+      "followupFired": true
+    },
+    {
+      "prompt": "Định giá dịch vụ tư vấn cho khách hàng doanh nghiệp vừa và nhỏ",
+      "outcome": "api_timeout",
+      "followupFired": false,
+      "detail": "API call did not complete within 60s"
+    }
+  ]
+}

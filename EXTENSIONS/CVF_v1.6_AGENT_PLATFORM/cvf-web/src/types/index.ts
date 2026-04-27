@@ -33,6 +33,17 @@ export interface Template {
     folderName?: string;       // Display name when inside folder
 }
 
+// W123-T1: snapshot of key governance receipt fields for evidence continuity chain
+export interface ExecutionEvidenceSnapshot {
+    decision?: string;
+    riskLevel?: string;
+    provider?: string;
+    model?: string;
+    policySnapshotId?: string;
+    knowledgeCollectionId?: string;
+    receiptId?: string;
+}
+
 export interface Execution {
     id: string;
     templateId: string;
@@ -46,6 +57,14 @@ export interface Execution {
     qualityScore?: number;
     createdAt: Date;
     completedAt?: Date;
+    // W123-T1: continuation chain fields
+    threadId?: string;
+    rootExecutionId?: string;
+    parentExecutionId?: string;
+    projectLabel?: string;
+    knowledgeCollectionId?: string;
+    evidenceReceiptSnapshot?: ExecutionEvidenceSnapshot;
+    starterSource?: 'template' | 'wizard' | 'intent-router' | 'history-followup';
 }
 
 export interface QualityScore {

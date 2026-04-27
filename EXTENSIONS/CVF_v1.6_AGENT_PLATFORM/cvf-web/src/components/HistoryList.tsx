@@ -7,9 +7,14 @@ interface HistoryListProps {
     executions: Execution[];
     onSelect: (execution: Execution) => void;
     onBrowse?: () => void;
+    // W123-T1: continue-work CTA — only shown when NEXT_PUBLIC_CVF_NONCODER_ITERATION_MEMORY=true
+    onContinue?: (execution: Execution) => void;
 }
 
-export function HistoryList({ executions, onSelect, onBrowse }: HistoryListProps) {
+const iterationMemoryEnabled =
+    process.env.NEXT_PUBLIC_CVF_NONCODER_ITERATION_MEMORY === 'true';
+
+export function HistoryList({ executions, onSelect, onBrowse, onContinue }: HistoryListProps) {
     const { language } = useLanguage();
     if (executions.length === 0) {
         return (
@@ -73,9 +78,29 @@ export function HistoryList({ executions, onSelect, onBrowse }: HistoryListProps
                                     {execution.result === 'accepted' ? '✅' : '❌'}
                                 </span>
                                 <div>
-                                    <h4 className="font-medium text-gray-900 dark:text-white">
-                                        {execution.templateName}
-                                    </h4>
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <h4 className="font-medium text-gray-900 dark:text-white">
+                                            {execution.templateName}
+                                        </h4>
+                                        {iterationMemoryEnabled && execution.projectLabel && (
+                                            <span
+                                                data-testid="thread-label"
+                                                className="text-xs px-2 py-0.5 bg-blue-100 dark:bg-blue-900/40
+                                                    text-blue-700 dark:text-blue-300 rounded-full font-medium"
+                                            >
+                                                🧵 {execution.projectLabel}
+                                            </span>
+                                        )}
+                                        {iterationMemoryEnabled && execution.parentExecutionId && (
+                                            <span
+                                                data-testid="followup-badge"
+                                                className="text-xs px-2 py-0.5 bg-purple-100 dark:bg-purple-900/40
+                                                    text-purple-700 dark:text-purple-300 rounded-full"
+                                            >
+                                                {language === 'en' ? 'Follow-up' : 'Tiếp theo'}
+                                            </span>
+                                        )}
+                                    </div>
                                     <p className="text-sm text-gray-500 line-clamp-1">
                                         {Object.values(execution.input)[0]}
                                     </p>
@@ -90,6 +115,16 @@ export function HistoryList({ executions, onSelect, onBrowse }: HistoryListProps
                                     <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
                                         {execution.qualityScore.toFixed(1)}/10
                                     </span>
+                                )}
+                                {iterationMemoryEnabled && onContinue && execution.result === 'accepted' && (
+                                    <button
+                                        data-testid="continue-work-btn"
+                                        onClick={(e) => { e.stopPropagation(); onContinue(execution); }}
+                                        className="px-3 py-1 text-xs font-medium rounded-lg
+                                            bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+                                    >
+                                        {language === 'en' ? 'Continue →' : 'Tiếp tục →'}
+                                    </button>
                                 )}
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

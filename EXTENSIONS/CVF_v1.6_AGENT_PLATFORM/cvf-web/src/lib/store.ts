@@ -13,6 +13,9 @@ interface ExecutionStore {
     updateExecution: (id: string, updates: Partial<Execution>) => void;
     setCurrentExecution: (execution: Execution | null) => void;
     getExecutionById: (id: string) => Execution | undefined;
+    // W123-T1: thread helpers
+    getThreadExecutions: (threadId: string) => Execution[];
+    setProjectLabel: (threadId: string, label: string) => void;
 
     // Governance Engine state
     ledgerEntries: LedgerBlock[];
@@ -81,6 +84,23 @@ export const useExecutionStore = create<ExecutionStore>()(
             setCurrentExecution: (execution) => set({ currentExecution: execution }),
 
             getExecutionById: (id) => get().executions.find((e) => e.id === id),
+
+            // W123-T1: thread helpers
+            getThreadExecutions: (threadId) =>
+                get().executions
+                    .filter((e) => e.threadId === threadId)
+                    .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()),
+
+            setProjectLabel: (threadId, label) =>
+                set((state) => ({
+                    executions: state.executions.map((e) =>
+                        e.threadId === threadId ? { ...e, projectLabel: label } : e
+                    ),
+                    currentExecution:
+                        state.currentExecution?.threadId === threadId
+                            ? { ...state.currentExecution, projectLabel: label }
+                            : state.currentExecution,
+                })),
 
             // ── Governance Engine ──────────────────────────────
 

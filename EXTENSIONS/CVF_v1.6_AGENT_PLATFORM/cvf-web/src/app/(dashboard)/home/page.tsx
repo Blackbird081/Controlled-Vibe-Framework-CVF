@@ -19,6 +19,7 @@ import {
     type GovernedStarterHandoff,
 } from '@/lib/governed-starter-path';
 import { isIntentFirstEnabled, type IntentRouteResult } from '@/lib/intent-router';
+import { buildContinuationExecution, buildEvidenceSnapshot } from '@/lib/execution-continuity';
 import {
     TemplateCard,
     CategoryTabs,
@@ -103,7 +104,7 @@ export default function HomePage() {
         () => typeof window !== 'undefined' && localStorage.getItem('cvf_setup_banner_dismissed') === '1',
     );
 
-    const { addExecution, updateExecution, currentExecution } = useExecutionStore();
+    const { addExecution, updateExecution, currentExecution, getExecutionById } = useExecutionStore();
 
     const allRunnableTemplates = useMemo(
         () => templates.filter(template => !template.isFolder),
@@ -318,6 +319,22 @@ export default function HomePage() {
         }
     }, [searchParams]);
 
+    // W123-T1: restore result state when navigating from history with ?continue=exec_id
+    useEffect(() => {
+        const continueId = searchParams.get('continue')?.trim();
+        if (!continueId) return;
+        const exec = getExecutionById(continueId);
+        if (!exec || exec.result !== 'accepted' || !exec.output) return;
+        const tpl = templates.find((t) => t.id === exec.templateId);
+        if (!tpl) return;
+        setSelectedTemplate(tpl);
+        setCurrentInput(exec.input);
+        setCurrentIntent(exec.intent);
+        setCurrentOutput(exec.output);
+        setCurrentEvidenceReceipt(undefined);
+        setWorkflowState('result');
+    }, [searchParams, getExecutionById]);
+
     const handleFormSubmit = useCallback((values: Record<string, string>, intent: string) => {
         setCurrentInput(values);
         setCurrentIntent(intent);
@@ -339,11 +356,15 @@ export default function HomePage() {
         setCurrentOutput(output);
         setCurrentEvidenceReceipt(evidenceReceipt);
         if (currentExecution) {
+            // W123-T1: snapshot evidence receipt + knowledge collection into execution for continuity chain
+            const snap = buildEvidenceSnapshot(evidenceReceipt as Record<string, unknown> | undefined);
             updateExecution(currentExecution.id, {
                 status: 'completed',
                 output,
                 qualityScore: 8.2,
                 completedAt: new Date(),
+                ...(snap ? { evidenceReceiptSnapshot: snap } : {}),
+                ...(snap?.knowledgeCollectionId ? { knowledgeCollectionId: snap.knowledgeCollectionId } : {}),
             });
         }
         setWorkflowState('result');
@@ -364,19 +385,29 @@ export default function HomePage() {
             : currentOutput;
         setIterationContext(truncated);
         setCurrentIntent(refinement);
-        const execution: Execution = {
-            id: `exec_followup_${Date.now()}`,
-            templateId: selectedTemplate.id,
-            templateName: selectedTemplate.name,
-            category: selectedTemplate.category,
-            input: { ...currentInput, _previousOutput: truncated },
-            intent: refinement,
-            status: 'processing',
-            createdAt: new Date(),
-        };
+        // W123-T1: build durable continuation chain when a parent execution exists
+        const execution: Execution = currentExecution
+            ? buildContinuationExecution({
+                templateId: selectedTemplate.id,
+                templateName: selectedTemplate.name,
+                category: selectedTemplate.category,
+                input: { ...currentInput, _previousOutput: truncated },
+                intent: refinement,
+                parentExecution: currentExecution,
+            })
+            : {
+                id: `exec_followup_${Date.now()}`,
+                templateId: selectedTemplate.id,
+                templateName: selectedTemplate.name,
+                category: selectedTemplate.category,
+                input: { ...currentInput, _previousOutput: truncated },
+                intent: refinement,
+                status: 'processing',
+                createdAt: new Date(),
+            };
         addExecution(execution);
         setWorkflowState('processing');
-    }, [selectedTemplate, currentOutput, currentInput, addExecution]);
+    }, [selectedTemplate, currentOutput, currentInput, currentExecution, addExecution]);
 
     const handleSendToAgent = useCallback((prompt: string) => {
         window.dispatchEvent(new CustomEvent('cvf:openAgent', {

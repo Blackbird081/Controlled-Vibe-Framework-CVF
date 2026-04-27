@@ -9,6 +9,7 @@ export default function HistoryPage() {
     const { t } = useLanguage();
     const router = useRouter();
     const { executions, setCurrentExecution } = useExecutionStore();
+    const iterationMemoryEnabled = process.env.NEXT_PUBLIC_CVF_NONCODER_ITERATION_MEMORY === 'true';
 
     return (
         <div className="px-4 py-6 md:py-8">
@@ -31,6 +32,11 @@ export default function HistoryPage() {
                     router.push('/home');
                 }}
                 onBrowse={() => router.push('/home')}
+                // W123-T1: continue-work CTA navigates home with continue param
+                onContinue={iterationMemoryEnabled ? (exec) => {
+                    setCurrentExecution(exec);
+                    router.push(`/home?continue=${exec.id}`);
+                } : undefined}
             />
         </div>
     );

@@ -19,7 +19,12 @@ export type AnalyticsEventType =
     | 'tools_opened'
     | 'enforcement_decision'
     | 'pre_uat_failed'
-    | 'demo_auto_run';
+    | 'demo_auto_run'
+    | 'clarification_weak_confidence_detected'
+    | 'clarification_question_asked'
+    | 'clarification_answered'
+    | 'clarification_route_recovered'
+    | 'clarification_browse_fallback';
 
 export interface AnalyticsEvent {
     id: string;

@@ -478,14 +478,15 @@ export default function HomePage() {
     }, []);
 
     const handleIntentRoute = useCallback((result: IntentRouteResult, userInput: string) => {
-        // §8.A4 hard contract: refuse to route on weak confidence (no guessed wizard).
-        if (!result.recommendedTemplateId || !result.starterKey) {
+        // §8.A4 hard contract: refuse to route on weak confidence.
+        // W126: form routes (routeType === 'form') have strong confidence with starterKey null.
+        if (!result.recommendedTemplateId || (result.routeType === 'wizard' && !result.starterKey)) {
             return;
         }
 
-        // Persist routed context into starter handoff so the wizard surface can
+        // Persist routed context into starter handoff so the wizard/form surface can
         // show userInput + rationale + phase/risk (Codex review M3 — preserve
-        // routed context across the IntentEntry → wizard transition).
+        // routed context across the IntentEntry → wizard/form transition).
         const handoff: GovernedStarterHandoff = {
             recommendedTemplateId: result.recommendedTemplateId,
             recommendedTemplateLabel: result.recommendedTemplateLabel ?? '',
@@ -495,7 +496,7 @@ export default function HomePage() {
             riskLevel: result.riskLevel,
             friendlyPhase: result.friendlyPhase,
             friendlyRisk: result.friendlyRisk,
-            suggestedTemplates: [result.starterKey],
+            suggestedTemplates: result.starterKey ? [result.starterKey] : [result.recommendedTemplateId],
         };
         saveGovernedStarterHandoff(handoff);
         setStarterHandoff(handoff);

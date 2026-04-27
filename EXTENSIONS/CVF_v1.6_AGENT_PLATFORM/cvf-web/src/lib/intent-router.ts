@@ -20,8 +20,15 @@
 
 import { detectIntent, type DetectedPhase, type DetectedRisk } from '@/lib/intent-detector';
 import { resolveGovernedStarterTemplate } from '@/lib/governed-starter-path';
+import { routeToTrustedForm } from '@/lib/form-routing';
 
 export type IntentRouteConfidence = 'strong' | 'weak';
+
+/**
+ * Route type for W126: distinguishes wizard-family routes from direct form routes.
+ * null when confidence is weak (no routing target resolved).
+ */
+export type IntentRouteType = 'wizard' | 'form' | null;
 
 /**
  * IntentRouteResult.
@@ -41,6 +48,8 @@ export interface IntentRouteResult {
   friendlyPhase: string;
   friendlyRisk: string;
   confidence: IntentRouteConfidence;
+  /** W126: 'wizard' for wizard-family routes, 'form' for trusted direct-form routes, null when weak. */
+  routeType: IntentRouteType;
   fallback: IntentRouteFallback | null;
   intentRoutedAt: string;
 }
@@ -84,6 +93,7 @@ export function routeIntent(userInput: string): IntentRouteResult | null {
       friendlyPhase: '🧭 Tiếp nhận & Làm rõ',
       friendlyRisk: '⚪ Không rủi ro',
       confidence: 'weak',
+      routeType: null,
       fallback: { reason: 'empty_input', suggestion: 'Describe your goal in plain language to get a personalized recommendation.' },
       intentRoutedAt,
     };
@@ -102,6 +112,7 @@ export function routeIntent(userInput: string): IntentRouteResult | null {
       friendlyPhase: '🧭 Tiếp nhận & Làm rõ',
       friendlyRisk: '🟢 Rủi ro thấp',
       confidence: 'weak',
+      routeType: null,
       fallback: { reason: 'unsupported_language', suggestion: 'Please describe your goal in Vietnamese or English.' },
       intentRoutedAt,
     };
@@ -110,38 +121,58 @@ export function routeIntent(userInput: string): IntentRouteResult | null {
   const detected = detectIntent(userInput);
   const isWeak = detected.suggestedTemplates.length === 0;
 
-  // Low confidence — weak: no target, point user to library or refinement.
-  if (isWeak) {
+  // Precedence 1: wizard-family route (existing W122 behavior).
+  if (!isWeak) {
+    const resolved = resolveGovernedStarterTemplate(detected.suggestedTemplates);
+    const starterKey = detected.suggestedTemplates[0];
     return {
-      starterKey: null,
-      recommendedTemplateId: null,
-      recommendedTemplateLabel: null,
-      rationale: `Intent classified as ${detected.friendlyPhase} (${detected.friendlyRisk}), but no governed wizard target matched with confidence. Refine your description or browse the library.`,
+      starterKey,
+      recommendedTemplateId: resolved.id,
+      recommendedTemplateLabel: resolved.label,
+      rationale: `Detected ${detected.friendlyPhase} intent with ${detected.friendlyRisk}. Routing to the best-fit governed wizard starter path.`,
       phase: detected.phase,
       riskLevel: detected.riskLevel,
       friendlyPhase: detected.friendlyPhase,
       friendlyRisk: detected.friendlyRisk,
-      confidence: 'weak',
-      fallback: { reason: 'weak_confidence', suggestion: 'Browse the skill library or try a more specific description.' },
+      confidence: 'strong',
+      routeType: 'wizard',
+      fallback: null,
       intentRoutedAt,
     };
   }
 
-  // Strong confidence — resolve a wizard target.
-  const resolved = resolveGovernedStarterTemplate(detected.suggestedTemplates);
-  const starterKey = detected.suggestedTemplates[0];
+  // Precedence 2: trusted form route (W126 — only when no wizard matched).
+  const formMatch = routeToTrustedForm(userInput);
+  if (formMatch) {
+    return {
+      starterKey: null,
+      recommendedTemplateId: formMatch.id,
+      recommendedTemplateLabel: formMatch.label,
+      rationale: `Detected ${detected.friendlyPhase} intent with ${detected.friendlyRisk}. Routing directly to the best-fit trusted form template for your specific request.`,
+      phase: detected.phase,
+      riskLevel: detected.riskLevel,
+      friendlyPhase: detected.friendlyPhase,
+      friendlyRisk: detected.friendlyRisk,
+      confidence: 'strong',
+      routeType: 'form',
+      fallback: null,
+      intentRoutedAt,
+    };
+  }
 
+  // Precedence 3: no match — weak, route to clarification or browse.
   return {
-    starterKey,
-    recommendedTemplateId: resolved.id,
-    recommendedTemplateLabel: resolved.label,
-    rationale: `Detected ${detected.friendlyPhase} intent with ${detected.friendlyRisk}. Routing to the best-fit governed wizard starter path.`,
+    starterKey: null,
+    recommendedTemplateId: null,
+    recommendedTemplateLabel: null,
+    rationale: `Intent classified as ${detected.friendlyPhase} (${detected.friendlyRisk}), but no governed target matched with confidence. Refine your description or browse the library.`,
     phase: detected.phase,
     riskLevel: detected.riskLevel,
     friendlyPhase: detected.friendlyPhase,
     friendlyRisk: detected.friendlyRisk,
-    confidence: 'strong',
-    fallback: null,
+    confidence: 'weak',
+    routeType: null,
+    fallback: { reason: 'weak_confidence', suggestion: 'Browse the skill library or try a more specific description.' },
     intentRoutedAt,
   };
 }

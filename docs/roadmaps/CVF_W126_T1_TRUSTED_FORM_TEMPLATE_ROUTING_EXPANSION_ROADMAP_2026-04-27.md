@@ -3,11 +3,11 @@
 # CVF W126-T1 Trusted Form-Template Routing Expansion Roadmap
 
 > Date: 2026-04-27
-> Status: EXECUTION-READY FOR DELEGATION — Scope and execution locks defined; fresh `GC-018` required before implementation
+> Status: CLOSED DELIVERED — trusted form subset shipped; vitest 28/28 pass; release gate bundle PASS 7/7 on 2026-04-27
 > Scope class: ROUTING COVERAGE EXPANSION / TRUSTED FORM ACTIVATION
 > Predecessor: W122-T1 CLOSED DELIVERED 2026-04-27
 > Intended follow-on: W124-T1 once clarification recovery is stable
-> Authorization: Fresh `GC-018` required before implementation
+> Authorization: `docs/reviews/CVF_W126_GC018_HANDOFF_2026-04-27.md`
 > Wave ID: W126
 
 ---
@@ -150,4 +150,3 @@ W126 closes only when:
 1. trusted form routing is opt-in by explicit audit only
 2. wizard-family safety bar must not regress
 3. unclear cases still prefer clarify/browse over speculative routing
-

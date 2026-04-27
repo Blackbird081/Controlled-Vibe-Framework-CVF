@@ -6,8 +6,14 @@ import { exportAnalyticsEvents, useAnalyticsEvents } from '@/lib/analytics';
 import { useLanguage } from '@/lib/i18n';
 import { GovernanceMetrics } from './GovernanceMetrics';
 import { RiskTrendChart } from './RiskTrendChart';
+import {
+  computeLaneReadout,
+  buildRolloutRecommendations,
+  readNoncoderFlags,
+  type LaneStatus,
+} from '@/lib/noncoder-rollout-readout';
 
-type DashboardTab = 'analytics' | 'governance';
+type DashboardTab = 'analytics' | 'governance' | 'noncoder';
 
 export function AnalyticsDashboard() {
     const { executions } = useExecutionStore();
@@ -168,6 +174,18 @@ export function AnalyticsDashboard() {
         };
     }, [events]);
 
+    const noncoderReadout = useMemo(() => {
+        const flags = readNoncoderFlags();
+        return computeLaneReadout(events, flags);
+    }, [events]);
+
+    const rolloutRecommendations = useMemo(
+        () => buildRolloutRecommendations(noncoderReadout),
+        [noncoderReadout],
+    );
+
+    const noncoderFlags = useMemo(() => readNoncoderFlags(), []);
+
     const skillStats = useMemo(() => {
         const skillEvents = events.filter(e => e.type === 'skill_viewed');
         const bySkill: Record<string, { title: string; count: number; domain?: string }> = {};
@@ -232,6 +250,17 @@ export function AnalyticsDashboard() {
                     >
                         🛡️ {isVi ? 'Governance Health' : 'Governance Health'}
                     </button>
+                    <button
+                        onClick={() => setActiveTab('noncoder')}
+                        className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
+                            activeTab === 'noncoder'
+                                ? 'bg-indigo-500 text-white'
+                                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                        }`}
+                        data-testid="noncoder-readout-tab"
+                    >
+                        🎯 {isVi ? 'Noncoder Health' : 'Noncoder Health'}
+                    </button>
                 </div>
             </div>
 
@@ -240,6 +269,16 @@ export function AnalyticsDashboard() {
                     <GovernanceMetrics />
                     <RiskTrendChart />
                 </div>
+            )}
+
+            {activeTab === 'noncoder' && (
+                <NoncoderReadoutPanel
+                    readout={noncoderReadout}
+                    recommendations={rolloutRecommendations}
+                    flags={noncoderFlags}
+                    eventCount={events.length}
+                    isVi={isVi}
+                />
             )}
 
             {activeTab === 'analytics' && (<>
@@ -518,6 +557,150 @@ export function AnalyticsDashboard() {
             </div>
 
             </>)}
+        </div>
+    );
+}
+
+// ---------------------------------------------------------------------------
+// NoncoderReadoutPanel — W128 CP2+CP3
+// ---------------------------------------------------------------------------
+
+const STATUS_COLOR: Record<LaneStatus, string> = {
+    healthy: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700',
+    watch: 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-700',
+    action_required: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700',
+    no_data: 'bg-gray-50 dark:bg-gray-700/30 border-gray-200 dark:border-gray-700',
+};
+
+const STATUS_BADGE: Record<LaneStatus, string> = {
+    healthy: 'bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200',
+    watch: 'bg-amber-100 dark:bg-amber-800 text-amber-700 dark:text-amber-200',
+    action_required: 'bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200',
+    no_data: 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400',
+};
+
+const STATUS_LABEL: Record<LaneStatus, string> = {
+    healthy: '✅ Healthy',
+    watch: '⚠️ Watch',
+    action_required: '🔴 Act Now',
+    no_data: '⬜ No Data',
+};
+
+interface NoncoderReadoutPanelProps {
+    readout: ReturnType<typeof computeLaneReadout>;
+    recommendations: ReturnType<typeof buildRolloutRecommendations>;
+    flags: ReturnType<typeof readNoncoderFlags>;
+    eventCount: number;
+    isVi: boolean;
+}
+
+function NoncoderReadoutPanel({ readout, recommendations, flags, eventCount, isVi }: NoncoderReadoutPanelProps) {
+    const counts = {
+        healthy: readout.filter((l) => l.status === 'healthy').length,
+        watch: readout.filter((l) => l.status === 'watch').length,
+        action_required: readout.filter((l) => l.status === 'action_required').length,
+        no_data: readout.filter((l) => l.status === 'no_data').length,
+    };
+
+    const flagRows: { label: string; envKey: string; active: boolean }[] = [
+        { label: 'Intent-First Front Door', envKey: 'NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR', active: flags.intentFirstEnabled },
+        { label: 'Clarification Loop', envKey: 'NEXT_PUBLIC_CVF_NONCODER_CLARIFICATION_LOOP', active: flags.clarificationLoopEnabled },
+        { label: 'Iteration Memory', envKey: 'NEXT_PUBLIC_CVF_NONCODER_ITERATION_MEMORY', active: flags.iterationMemoryEnabled },
+        { label: 'Trusted Form Routing', envKey: 'NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR (co-gated)', active: flags.intentFirstEnabled },
+    ];
+
+    return (
+        <div className="space-y-6" data-testid="noncoder-readout-panel">
+
+            {/* Low-data caveat */}
+            {eventCount < 30 && (
+                <div className="rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-700 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">
+                    {isVi
+                        ? `Dữ liệu thấp (${eventCount} events). Kết quả có thể chưa đại diện. Thu thập ít nhất 1–2 tuần traffic trước khi đưa ra quyết định.`
+                        : `Low data volume (${eventCount} events). Results may not be representative. Collect at least 1–2 weeks of traffic before acting on recommendations.`
+                    }
+                </div>
+            )}
+
+            {/* Summary strip */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {(['healthy', 'watch', 'action_required', 'no_data'] as LaneStatus[]).map((s) => (
+                    <div key={s} className={`rounded-xl p-4 border ${STATUS_COLOR[s]}`}>
+                        <div className="text-2xl font-bold text-gray-900 dark:text-white">{counts[s]}</div>
+                        <div className={`mt-1 text-xs font-medium px-2 py-0.5 rounded inline-block ${STATUS_BADGE[s]}`}>
+                            {STATUS_LABEL[s]}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Feature-flag posture */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3 text-sm">
+                    🏳️ {isVi ? 'Trạng thái Feature Flags' : 'Feature Flag Posture'}
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {flagRows.map((row) => (
+                        <div key={row.envKey} className="flex items-center justify-between gap-2 text-xs py-1.5 px-2 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                            <span className="text-gray-700 dark:text-gray-300 truncate">{row.label}</span>
+                            <span className={`shrink-0 px-2 py-0.5 rounded font-semibold ${row.active ? 'bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200' : 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400'}`}>
+                                {row.active ? (isVi ? 'BẬT' : 'ON') : (isVi ? 'TẮT' : 'OFF')}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Lane-by-lane readout */}
+            <div className="space-y-3">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm">
+                    📊 {isVi ? 'Readout theo Lane' : 'Lane Readout'}
+                </h3>
+                {readout.map((lane) => (
+                    <div key={lane.laneId} className={`rounded-xl p-4 border ${STATUS_COLOR[lane.status]}`} data-testid={`lane-${lane.laneId}`}>
+                        <div className="flex items-start justify-between gap-3 mb-2">
+                            <div className="flex items-center gap-2">
+                                <span className="font-medium text-sm text-gray-900 dark:text-white">{lane.laneName}</span>
+                                <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${STATUS_BADGE[lane.status]}`}>
+                                    {STATUS_LABEL[lane.status]}
+                                </span>
+                                <span className={`text-xs px-1.5 py-0.5 rounded ${lane.flagActive ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-400'}`}>
+                                    {isVi ? 'Flag' : 'Flag'}: {lane.flagActive ? 'ON' : 'OFF'}
+                                </span>
+                            </div>
+                            {lane.metricValue !== null && (
+                                <span className="text-sm font-bold text-gray-700 dark:text-gray-200 shrink-0">
+                                    {lane.metricValue}%
+                                </span>
+                            )}
+                        </div>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">{lane.explanation}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500 italic">{lane.recommendation}</p>
+                    </div>
+                ))}
+            </div>
+
+            {/* Recommended next actions */}
+            {recommendations.length > 0 && (
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3 text-sm">
+                        🎯 {isVi ? 'Hành động được đề xuất' : 'Recommended Next Actions'}
+                    </h3>
+                    <div className="space-y-3">
+                        {recommendations.map((rec) => (
+                            <div key={rec.laneId} className="flex gap-3 text-sm">
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 text-xs font-bold flex items-center justify-center">
+                                    {rec.priority}
+                                </span>
+                                <div>
+                                    <div className="text-gray-700 dark:text-gray-300">{rec.action}</div>
+                                    <div className="text-xs text-gray-400 mt-0.5">{rec.rationale}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

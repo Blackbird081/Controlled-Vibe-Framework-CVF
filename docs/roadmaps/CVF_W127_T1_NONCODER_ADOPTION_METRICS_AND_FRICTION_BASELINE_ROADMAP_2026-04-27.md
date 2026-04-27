@@ -3,11 +3,11 @@
 # CVF W127-T1 Noncoder Adoption Metrics And Friction Baseline Roadmap
 
 > Date: 2026-04-27
-> Status: EXECUTION-READY FOR DELEGATION — Scope and execution locks defined; fresh `GC-018` required before implementation
+> Status: CLOSED DELIVERED — browser-local metric layer shipped; vitest 20/20 pass; release gate bundle PASS 7/7 on 2026-04-27
 > Scope class: NONCODER PRODUCT MEASUREMENT / FRICTION BASELINE / ADOPTION EVIDENCE
 > Predecessor: W119-T1 CLOSED DELIVERED 2026-04-23; W122-T1 CLOSED DELIVERED 2026-04-27
 > Intended follow-on: W123-T1 / W124-T1 / W125-T1 once their product surfaces exist
-> Authorization: Fresh `GC-018` required before implementation
+> Authorization: `docs/reviews/CVF_W127_GC018_HANDOFF_2026-04-27.md`
 > Wave ID: W127
 
 ---
@@ -146,4 +146,3 @@ W127 closes only when:
 1. metrics remain product-quality metrics, not vanity totals
 2. instrumentation must stay consistent with governance/privacy posture
 3. W127 measures existing lanes; it does not reopen them architecturally
-

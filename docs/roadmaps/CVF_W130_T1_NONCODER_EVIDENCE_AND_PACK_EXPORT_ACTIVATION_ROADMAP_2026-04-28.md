@@ -3,7 +3,7 @@
 # CVF W130-T1 Noncoder Evidence And Pack Export Activation Roadmap
 
 > Date: 2026-04-28
-> Status: AUTHORIZED — ready to begin
+> Status: CLOSED DELIVERED — CP0–CP5 complete
 > Scope class: NONCODER UX / OUTPUT DISCOVERABILITY / ANALYTICS LANE EXIT
 > Predecessor: W129-T1 CLOSED DELIVERED + ROLLOUT COMPLETE 2026-04-28
 > Authorization: `docs/baselines/CVF_GC018_W130_T1_NONCODER_EVIDENCE_AND_PACK_EXPORT_ACTIVATION_AUTHORIZATION_2026-04-28.md`
@@ -256,3 +256,36 @@ W130 exists to justify one of these follow-on shapes, but not to pre-choose them
 4. `W131 — Clarification Question Quality Optimization` (if `clarification_recovery` rate drops with diverse real prompts)
 
 W131 should be chosen from measured W128 lane data after W130 export signals accumulate real traffic.
+
+---
+
+## 9. Closure Outcome
+
+W130-T1 is **CLOSED DELIVERED**.
+
+Delivered outcome:
+
+- CP0: export activation contract published at `docs/reviews/CVF_W130_EXPORT_ACTIVATION_CONTRACT_2026-04-28.md`
+- CP1: `ResultViewer.tsx` now surfaces a noncoder export nudge with dedicated evidence-copy and pack-download CTAs
+- CP2: noncoder sessions default to Pack view in `ResultViewer`
+- CP3+CP4: `tests/e2e/w130-evidence-pack-export.live.spec.ts` PASS on Alibaba lane; evidence artifact published at `docs/reviews/CVF_W130_EVIDENCE_PACK_EXPORT_EVIDENCE_2026-04-28.{md,json}`
+- CP5: handoff, `AGENTS.md`, and GC-026 closure sync completed
+
+Measured result from the closure packet:
+
+- `evidence_exported=1`
+- `deliverable_pack_exported=1`
+- `execution_accepted=1`
+- `evidence_export=healthy`
+- `deliverable_pack=healthy`
+
+Implementation notes captured by this tranche:
+
+- `ProcessingScreen.tsx` now waits for hydrated user settings before launching live execution, preventing false fallback to default Gemini settings during live proof runs
+- `ResultViewer.tsx` now uses a clipboard fallback path so the evidence-copy CTA still records `evidence_exported` when browser clipboard permissions are limited
+
+Boundary:
+
+- The W130 closure packet includes **1 successful governed journey** that fired both export events and moved both lanes out of `no_data`
+- The same packet also records **2 `mock_fallback_no_receipt` journeys**; these are visible in the evidence log and are **not** counted toward the export-lane exit claim
+- Therefore W130 proves that the export surfaces are measurable and discoverable in the governed noncoder path; it does **not** prove uniform live stability for every trusted-form prompt under current provider/runtime conditions

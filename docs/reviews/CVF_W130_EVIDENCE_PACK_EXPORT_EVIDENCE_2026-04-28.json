@@ -1,0 +1,58 @@
+{
+  "capturedAt": "2026-04-27T19:41:33.100Z",
+  "provider": "alibaba / qwen-turbo",
+  "tranche": "W130-T1 CP3 — Evidence And Pack Export Activation Proof",
+  "flags": {
+    "NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR": true,
+    "NEXT_PUBLIC_CVF_NONCODER_CLARIFICATION_LOOP": true,
+    "NEXT_PUBLIC_CVF_NONCODER_ITERATION_MEMORY": true
+  },
+  "attemptedJourneys": 3,
+  "successJourneys": 1,
+  "liveExecutionStatus": 200,
+  "liveDecision": "ALLOW",
+  "w130Decision": "W130_CP4_PASS — both evidence_export and deliverable_pack lanes exited no_data",
+  "bothLanesExited": true,
+  "eventCounts": {
+    "evidence_exported": 1,
+    "deliverable_pack_exported": 1,
+    "execution_created": 3,
+    "execution_accepted": 1
+  },
+  "laneReadout": {
+    "evidence_export": {
+      "status": "healthy",
+      "metricValue": 100
+    },
+    "deliverable_pack": {
+      "status": "healthy",
+      "metricValue": 100
+    },
+    "entry_routing": {
+      "status": "healthy",
+      "metricValue": 0
+    }
+  },
+  "journeyLog": [
+    {
+      "prompt": "Soạn email giới thiệu dịch vụ tư vấn đến khách hàng tiềm năng",
+      "outcome": "mock_fallback_no_receipt",
+      "evidenceFired": false,
+      "packFired": false,
+      "detail": "ResultViewer appeared without governanceEvidenceReceipt — likely mock fallback after live failure"
+    },
+    {
+      "prompt": "Phân tích đối thủ cạnh tranh trong lĩnh vực dịch vụ logistics",
+      "outcome": "mock_fallback_no_receipt",
+      "evidenceFired": false,
+      "packFired": false,
+      "detail": "ResultViewer appeared without governanceEvidenceReceipt — likely mock fallback after live failure"
+    },
+    {
+      "prompt": "Viết tài liệu hướng dẫn sử dụng cho nhân viên mới",
+      "outcome": "both_exports_fired",
+      "evidenceFired": true,
+      "packFired": true
+    }
+  ]
+}

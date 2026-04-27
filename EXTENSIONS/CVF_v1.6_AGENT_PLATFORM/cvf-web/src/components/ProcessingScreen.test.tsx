@@ -12,6 +12,7 @@ vi.mock('./Settings', () => ({
         defaultExportMode: 'governance',
       },
     },
+    isLoaded: true,
   }),
 }));
 

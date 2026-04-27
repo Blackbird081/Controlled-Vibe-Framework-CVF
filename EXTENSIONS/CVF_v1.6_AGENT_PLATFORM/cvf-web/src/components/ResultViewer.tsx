@@ -84,6 +84,34 @@ export function ResultViewer({ execution, output, onAccept, onReject, onRetry, o
 
     const labels = exportLabels[exportLang];
 
+    const writeTextToClipboard = useCallback(async (text: string): Promise<boolean> => {
+        try {
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(text);
+                return true;
+            }
+        } catch {
+            // Fall back to the legacy copy path below.
+        }
+
+        try {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            textarea.style.pointerEvents = 'none';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            const copied = document.execCommand('copy');
+            document.body.removeChild(textarea);
+            return copied;
+        } catch {
+            return false;
+        }
+    }, []);
+
     const generateEvidenceReceiptContent = useCallback(() => {
         if (!evidenceReceipt) return '';
         const fields = [
@@ -137,7 +165,10 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
 
     const handleCopyToClipboard = async () => {
         try {
-            await navigator.clipboard.writeText(generateExportContent());
+            const copiedOk = await writeTextToClipboard(generateExportContent());
+            if (!copiedOk) {
+                throw new Error('Clipboard copy failed');
+            }
             setCopied(true);
             setTimeout(() => {
                 setCopied(false);
@@ -166,7 +197,10 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
     const handleCopyReceipt = async () => {
         if (!evidenceReceipt) return;
         try {
-            await navigator.clipboard.writeText(generateEvidenceReceiptContent());
+            const copiedOk = await writeTextToClipboard(generateEvidenceReceiptContent());
+            if (!copiedOk) {
+                throw new Error('Receipt copy failed');
+            }
             setReceiptCopied(true);
             setTimeout(() => setReceiptCopied(false), 1500);
         } catch (err) {
@@ -178,14 +212,17 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
     const handleCopyReceiptWithTracking = useCallback(async () => {
         if (!evidenceReceipt) return;
         try {
-            await navigator.clipboard.writeText(generateEvidenceReceiptContent());
+            const copiedOk = await writeTextToClipboard(generateEvidenceReceiptContent());
+            if (!copiedOk) {
+                throw new Error('Receipt copy failed');
+            }
             setReceiptCopied(true);
             setTimeout(() => setReceiptCopied(false), 1500);
             trackEvent('evidence_exported', { executionId: execution.id, format: 'receipt_copy' });
         } catch (err) {
             console.error('Failed to copy receipt:', err);
         }
-    }, [evidenceReceipt, generateEvidenceReceiptContent, execution.id]);
+    }, [evidenceReceipt, execution.id, generateEvidenceReceiptContent, writeTextToClipboard]);
 
     // W125-T1: Download deliverable pack as .md
     const handleDownloadPack = useCallback(() => {

@@ -74,16 +74,16 @@ const EVIDENCE_JSON_PATH = resolve(
 /** 3 trusted form-route prompts — verified strong-confidence routing */
 const W130_JOURNEYS = [
   {
-    prompt: 'Soạn email giới thiệu dịch vụ tư vấn chiến lược đến khách hàng doanh nghiệp',
-    topicValue: 'Email tư vấn chiến lược',
+    prompt: 'Soạn email giới thiệu dịch vụ tư vấn đến khách hàng tiềm năng',
+    topicValue: 'Email giới thiệu dịch vụ tư vấn',
   },
   {
-    prompt: 'Đánh giá rủi ro khi triển khai hệ thống CRM mới cho công ty',
-    topicValue: 'Rủi ro triển khai CRM',
+    prompt: 'Phân tích đối thủ cạnh tranh trong lĩnh vực dịch vụ logistics',
+    topicValue: 'Đối thủ cạnh tranh dịch vụ logistics',
   },
   {
-    prompt: 'Viết tài liệu hướng dẫn quy trình onboarding cho nhân viên mới',
-    topicValue: 'Quy trình onboarding',
+    prompt: 'Viết tài liệu hướng dẫn sử dụng cho nhân viên mới',
+    topicValue: 'Tài liệu hướng dẫn cho nhân viên mới',
   },
 ] as const;
 
@@ -117,6 +117,7 @@ test.describe('W130-T1 CP3 — evidence and pack export activation proof', () =>
         | 'both_exports_fired'
         | 'pack_only_fired'
         | 'evidence_only_fired'
+        | 'mock_fallback_no_receipt'
         | 'nudge_not_visible'
         | 'api_timeout'
         | 'form_not_found'
@@ -198,12 +199,24 @@ test.describe('W130-T1 CP3 — evidence and pack export activation proof', () =>
         });
         await page.waitForTimeout(500);
 
-        // 7. Wait for export nudge section to appear (API completes → ResultViewer renders)
+        // 7. Wait for ResultViewer to render from a real governed response.
+        // The evidence receipt is the proof that this journey did not fall back to mock mode.
         const exportNudge = page.locator('[data-testid="noncoder-export-nudge"]');
+        const evidenceReceipt = page.locator('[data-testid="w119-evidence-receipt"]');
         try {
-          await exportNudge.waitFor({ state: 'visible', timeout: 60_000 });
+          await exportNudge.waitFor({ state: 'visible', timeout: 90_000 });
+          await evidenceReceipt.waitFor({ state: 'visible', timeout: 15_000 });
         } catch {
-          journeyLog.push({ prompt: journey.prompt, outcome: 'api_timeout', evidenceFired: false, packFired: false, detail: 'Export nudge did not appear within 60s (API timeout)' });
+          const nudgeVisible = await exportNudge.isVisible().catch(() => false);
+          journeyLog.push({
+            prompt: journey.prompt,
+            outcome: nudgeVisible ? 'mock_fallback_no_receipt' : 'api_timeout',
+            evidenceFired: false,
+            packFired: false,
+            detail: nudgeVisible
+              ? 'ResultViewer appeared without governanceEvidenceReceipt — likely mock fallback after live failure'
+              : 'Export nudge did not appear within 90s (API timeout or stalled run)',
+          });
           continue;
         }
 
@@ -211,6 +224,7 @@ test.describe('W130-T1 CP3 — evidence and pack export activation proof', () =>
         let evidenceFired = false;
         const copyEvidenceBtn = page.locator('[data-testid="nudge-copy-evidence-btn"]');
         if (await copyEvidenceBtn.isVisible().catch(() => false)) {
+          await copyEvidenceBtn.scrollIntoViewIfNeeded().catch(() => {});
           await copyEvidenceBtn.click();
           await page.waitForTimeout(300);
           evidenceFired = true;
@@ -222,10 +236,20 @@ test.describe('W130-T1 CP3 — evidence and pack export activation proof', () =>
         if (await downloadPackBtn.isVisible().catch(() => false)) {
           // Handle potential file download dialog without failing
           const downloadPromise = page.waitForEvent('download', { timeout: 5_000 }).catch(() => null);
+          await downloadPackBtn.scrollIntoViewIfNeeded().catch(() => {});
           await downloadPackBtn.click();
           await downloadPromise;
           await page.waitForTimeout(300);
           packFired = true;
+        }
+
+        // 10. Accept the execution so W127/W128 export lanes have a non-zero accepted denominator.
+        const acceptBtn = page.getByRole('button', { name: /Accept/i });
+        if (await acceptBtn.isVisible().catch(() => false)) {
+          await acceptBtn.scrollIntoViewIfNeeded().catch(() => {});
+          await acceptBtn.click();
+          await page.waitForLoadState('networkidle').catch(() => {});
+          await expect(page.getByRole('heading', { name: /Templates/i }).first()).toBeVisible({ timeout: 15_000 });
         }
 
         const outcome: JourneyOutcome =
@@ -251,6 +275,7 @@ test.describe('W130-T1 CP3 — evidence and pack export activation proof', () =>
       const evidenceExportedCount = countByType(events, 'evidence_exported');
       const packExportedCount = countByType(events, 'deliverable_pack_exported');
       const executionCreatedCount = countByType(events, 'execution_created');
+      const executionAcceptedCount = countByType(events, 'execution_accepted');
 
       // ── Lane readout ─────────────────────────────────────────────────────────
       const readout = computeLaneReadout(events, W130_FLAGS);
@@ -291,6 +316,7 @@ test.describe('W130-T1 CP3 — evidence and pack export activation proof', () =>
           evidence_exported: evidenceExportedCount,
           deliverable_pack_exported: packExportedCount,
           execution_created: executionCreatedCount,
+          execution_accepted: executionAcceptedCount,
         },
         laneReadout: {
           evidence_export: evidenceLane ? { status: evidenceLane.status, metricValue: evidenceLane.metricValue } : null,
@@ -327,6 +353,7 @@ test.describe('W130-T1 CP3 — evidence and pack export activation proof', () =>
         `| evidence_exported | ${evidenceExportedCount} |`,
         `| deliverable_pack_exported | ${packExportedCount} |`,
         `| execution_created (cumulative) | ${executionCreatedCount} |`,
+        `| execution_accepted | ${executionAcceptedCount} |`,
         '',
         '## Lane Readout',
         '',
@@ -363,7 +390,7 @@ test.describe('W130-T1 CP3 — evidence and pack export activation proof', () =>
       writeFileSync(EVIDENCE_JSON_PATH, JSON.stringify(summary, null, 2), 'utf8');
 
       console.log('[W130-cp3] journey log:', JSON.stringify(journeyLog, null, 2));
-      console.log(`[W130-cp3] evidence_exported=${evidenceExportedCount}, deliverable_pack_exported=${packExportedCount}`);
+      console.log(`[W130-cp3] evidence_exported=${evidenceExportedCount}, deliverable_pack_exported=${packExportedCount}, execution_accepted=${executionAcceptedCount}`);
       console.log(`[W130-cp3] evidence_export=${evidenceLane?.status}, deliverable_pack=${packLane?.status}`);
       console.log(`[W130-cp3] ${w130Decision}`);
 

@@ -68,7 +68,7 @@ export function ProcessingScreen({
     onComplete,
     onCancel
 }: ProcessingScreenProps) {
-    const { settings } = useSettings();
+    const { settings, isLoaded } = useSettings();
     const { language } = useLanguage();
     const isVi = language === 'vi';
     const [progress, setProgress] = useState(0);
@@ -291,6 +291,10 @@ export function ProcessingScreen({
     }, [completedOutput, evidenceReceipt, onComplete]);
 
     useEffect(() => {
+        if (!isLoaded) {
+            return;
+        }
+
         // Try real execution first if we have the required data
         if (inputs && intent && Object.keys(inputs).length > 0) {
             const runId = setTimeout(() => {
@@ -307,7 +311,7 @@ export function ProcessingScreen({
             // No inputs provided, use mock
             runMockExecution();
         }
-    }, [inputs, intent, executeReal, runMockExecution]);
+    }, [inputs, intent, executeReal, runMockExecution, isLoaded]);
 
     return (
         <div className="min-h-[60vh] flex flex-col items-center justify-center">

@@ -47,7 +47,7 @@ Not authorized in this tranche:
 
 | CP | Deliverable | Acceptance |
 |---|---|---|
-| CP0 | Pack taxonomy lock — `docs/reviews/W125_DELIVERABLE_PACK_TAXONOMY.md` | 4 pack families, consumer + purpose defined per family |
+| CP0 | Pack taxonomy lock — `docs/reviews/CVF_W125_DELIVERABLE_PACK_TAXONOMY_2026-04-27.md` | 4 pack families, consumer + purpose defined per family |
 | CP1 | `src/lib/deliverable-pack.ts` — typed contract + generator functions | All 4 pack types can be generated from current result surfaces; unit tests pass |
 | CP2 | `ResultViewer` pack preview + export upgrade | Pack preview distinct from raw output; export surface present |
 | CP3 | Starter/template → pack type mapping | App-builder → planning pack; strategy/review/doc → sensible defaults; no user taxonomy knowledge required |

@@ -89,7 +89,7 @@ What is still missing is a stronger "this is a pack" abstraction:
 **Deliver**
 
 Lock the initial pack family in
-`docs/reviews/W125_DELIVERABLE_PACK_TAXONOMY.md`.
+`docs/reviews/CVF_W125_DELIVERABLE_PACK_TAXONOMY_2026-04-27.md`.
 
 Initial pack targets:
 

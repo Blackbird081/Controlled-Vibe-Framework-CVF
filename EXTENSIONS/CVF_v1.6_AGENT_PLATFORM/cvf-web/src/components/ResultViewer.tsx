@@ -75,8 +75,8 @@ export function ResultViewer({ execution, output, onAccept, onReject, onRetry, o
     const [exporting, setExporting] = useState<string | null>(null);
     // W97-T1: follow-up input state
     const [followupText, setFollowupText] = useState('');
-    // W125-T1: deliverable pack view mode
-    const [viewMode, setViewMode] = useState<'result' | 'pack'>('result');
+    // W125-T1: deliverable pack view mode; W130-T1: default to pack in noncoder mode (onFollowUp present)
+    const [viewMode, setViewMode] = useState<'result' | 'pack'>(onFollowUp ? 'pack' : 'result');
     const deliverablePack = useMemo(
         () => generateDeliverablePack(execution, evidenceReceipt),
         [execution, evidenceReceipt]
@@ -173,6 +173,19 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
             console.error('Failed to copy receipt:', err);
         }
     };
+
+    // W130-T1: Copy receipt with analytics tracking (fires evidence_exported)
+    const handleCopyReceiptWithTracking = useCallback(async () => {
+        if (!evidenceReceipt) return;
+        try {
+            await navigator.clipboard.writeText(generateEvidenceReceiptContent());
+            setReceiptCopied(true);
+            setTimeout(() => setReceiptCopied(false), 1500);
+            trackEvent('evidence_exported', { executionId: execution.id, format: 'receipt_copy' });
+        } catch (err) {
+            console.error('Failed to copy receipt:', err);
+        }
+    }, [evidenceReceipt, generateEvidenceReceiptContent, execution.id]);
 
     // W125-T1: Download deliverable pack as .md
     const handleDownloadPack = useCallback(() => {
@@ -698,6 +711,50 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
                             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors"
                         >
                             📦 Download Pack (.md)
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* W130-T1: Noncoder export nudge — save results section */}
+            {onFollowUp && output && (
+                <div
+                    data-testid="noncoder-export-nudge"
+                    className="mt-6 rounded-xl border border-purple-200 dark:border-purple-700
+                        bg-purple-50 dark:bg-purple-950/40 p-4"
+                >
+                    <p className="text-sm font-semibold text-purple-800 dark:text-purple-200 mb-1">
+                        💾 {language === 'vi' ? 'Lưu kết quả của bạn' : 'Save your results'}
+                    </p>
+                    <p className="text-xs text-purple-700 dark:text-purple-300 mb-4">
+                        {language === 'vi'
+                            ? 'Tải xuống kết quả cùng bằng chứng quản trị để lưu trữ hoặc bàn giao.'
+                            : 'Download your output with governance evidence for handoff or storage.'}
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                        {evidenceReceipt && (
+                            <button
+                                type="button"
+                                data-testid="nudge-copy-evidence-btn"
+                                onClick={handleCopyReceiptWithTracking}
+                                className="px-4 py-2 text-sm font-medium rounded-lg border border-purple-300
+                                    dark:border-purple-600 bg-white dark:bg-gray-900 text-purple-700
+                                    dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/40
+                                    transition-colors"
+                            >
+                                {receiptCopied
+                                    ? (language === 'vi' ? '✅ Đã sao chép' : '✅ Copied!')
+                                    : (language === 'vi' ? '📋 Sao chép bằng chứng' : '📋 Copy Evidence Receipt')}
+                            </button>
+                        )}
+                        <button
+                            type="button"
+                            data-testid="nudge-download-pack-btn"
+                            onClick={handleDownloadPack}
+                            className="px-4 py-2 text-sm font-medium rounded-lg bg-purple-600
+                                hover:bg-purple-700 text-white transition-colors"
+                        >
+                            📦 {language === 'vi' ? 'Tải Deliverable Pack (.md)' : 'Download Deliverable Pack (.md)'}
                         </button>
                     </div>
                 </div>

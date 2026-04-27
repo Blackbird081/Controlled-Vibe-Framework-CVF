@@ -6,6 +6,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ResultViewer } from './ResultViewer';
 
+const mockTrackEvent = vi.fn();
+vi.mock('@/lib/analytics', () => ({
+    trackEvent: (...args: unknown[]) => mockTrackEvent(...args),
+}));
+
 let mockLanguage = 'en';
 vi.mock('@/lib/i18n', () => ({
     useLanguage: () => ({
@@ -99,6 +104,7 @@ describe('ResultViewer', () => {
     beforeEach(() => {
         mockLanguage = 'en';
         vi.clearAllMocks();
+        mockTrackEvent.mockClear();
     });
 
     afterEach(() => {
@@ -554,6 +560,84 @@ Regular **bold** text`;
             expect(clickMock).toHaveBeenCalled();
             expect(revokeObjectURLMock).toHaveBeenCalledWith('blob:mock');
             expect(capturedDownload).toMatch(/^cvf-result-business_plan-\d+\.md$/);
+        });
+    });
+
+    // W130-T1: Noncoder export nudge
+    describe('noncoder export nudge (W130-T1)', () => {
+        it('renders noncoder export nudge when onFollowUp is provided and output is present', () => {
+            render(
+                <ResultViewer
+                    {...defaultProps}
+                    onFollowUp={vi.fn()}
+                    evidenceReceipt={mockEvidenceReceipt}
+                />
+            );
+            expect(screen.getByTestId('noncoder-export-nudge')).toBeTruthy();
+            expect(screen.getByTestId('nudge-download-pack-btn')).toBeTruthy();
+            expect(screen.getByTestId('nudge-copy-evidence-btn')).toBeTruthy();
+        });
+
+        it('does not render noncoder export nudge when onFollowUp is absent', () => {
+            render(<ResultViewer {...defaultProps} evidenceReceipt={mockEvidenceReceipt} />);
+            expect(screen.queryByTestId('noncoder-export-nudge')).toBeNull();
+        });
+
+        it('nudge copy evidence btn fires evidence_exported analytics event', async () => {
+            render(
+                <ResultViewer
+                    {...defaultProps}
+                    onFollowUp={vi.fn()}
+                    evidenceReceipt={mockEvidenceReceipt}
+                />
+            );
+            const copyBtn = screen.getByTestId('nudge-copy-evidence-btn');
+            fireEvent.click(copyBtn);
+            await waitFor(() => {
+                expect(mockTrackEvent).toHaveBeenCalledWith(
+                    'evidence_exported',
+                    expect.objectContaining({ format: 'receipt_copy' })
+                );
+            });
+        });
+
+        it('nudge download pack btn fires deliverable_pack_exported analytics event', () => {
+            render(
+                <ResultViewer
+                    {...defaultProps}
+                    onFollowUp={vi.fn()}
+                    evidenceReceipt={mockEvidenceReceipt}
+                />
+            );
+
+            const createObjectURLMock = vi.fn(() => 'blob:mock');
+            (URL as unknown as Record<string, unknown>).createObjectURL = createObjectURLMock;
+            (URL as unknown as Record<string, unknown>).revokeObjectURL = vi.fn();
+            const clickMock = vi.fn();
+            const originalCreate = document.createElement.bind(document);
+            vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+                if (tag === 'a') return { click: clickMock, href: '', download: '' } as unknown as HTMLAnchorElement;
+                return originalCreate(tag);
+            });
+            vi.spyOn(document.body, 'appendChild').mockImplementation((n) => n as Node);
+            vi.spyOn(document.body, 'removeChild').mockImplementation((n) => n as Node);
+
+            fireEvent.click(screen.getByTestId('nudge-download-pack-btn'));
+            expect(mockTrackEvent).toHaveBeenCalledWith(
+                'deliverable_pack_exported',
+                expect.objectContaining({ executionId: mockExecution.id })
+            );
+        });
+
+        it('pack tab is default active tab in noncoder mode', () => {
+            render(
+                <ResultViewer
+                    {...defaultProps}
+                    onFollowUp={vi.fn()}
+                />
+            );
+            const packBtn = screen.getByTestId('pack-view-toggle');
+            expect(packBtn.className).toContain('bg-blue-600');
         });
     });
 

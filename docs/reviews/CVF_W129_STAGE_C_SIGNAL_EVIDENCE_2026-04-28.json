@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-04-27T18:43:08.107Z",
+  "capturedAt": "2026-04-27T18:56:24.732Z",
   "provider": "alibaba / qwen-turbo",
   "stage": "Stage C signal capture — §9 Post-Closure Addendum",
   "flags": {
@@ -11,7 +11,7 @@
   "successJourneys": 3,
   "liveExecutionStatus": 200,
   "liveDecision": "ALLOW",
-  "rolloutDecision": "W129_ROLLOUT_COMPLETE — All 3 flags enabled, all measured lanes healthy, followup_started threshold met. W130 may be opened with fresh GC-018.",
+  "rolloutDecision": "W129_ROLLOUT_COMPLETE — All 3 flags enabled; aggregate Stage A+B+C evidence keeps all measured lanes out of action_required, and the followup_started threshold is met. W130 may be opened with fresh GC-018.",
   "rolloutComplete": true,
   "eventCounts": {
     "followup_started": 3,

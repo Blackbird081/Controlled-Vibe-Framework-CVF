@@ -271,7 +271,7 @@ test.describe('W129 Stage C signal capture — §9 Post-Closure Addendum', () =>
       const rolloutComplete = followupStartedCount >= 3 && allLanesHealthy;
 
       const rolloutDecision = rolloutComplete
-        ? 'W129_ROLLOUT_COMPLETE — All 3 flags enabled, all measured lanes healthy, followup_started threshold met. W130 may be opened with fresh GC-018.'
+        ? 'W129_ROLLOUT_COMPLETE — All 3 flags enabled; aggregate Stage A+B+C evidence keeps all measured lanes out of action_required, and the followup_started threshold is met. W130 may be opened with fresh GC-018.'
         : followupStartedCount < 3
           ? `W129_ROLLOUT_PARTIAL — followup_started ${followupStartedCount}/3 (threshold not met)`
           : `W129_ROLLOUT_HOLD — one or more lanes in action_required`;
@@ -341,6 +341,9 @@ test.describe('W129 Stage C signal capture — §9 Post-Closure Addendum', () =>
         `| entry_routing | ${entryLane?.status ?? 'n/a'} | ${entryLane?.metricValue ?? 'n/a'} |`,
         `| clarification_recovery | ${clarLane?.status ?? 'n/a'} | ${clarLane?.metricValue ?? 'n/a'} |`,
         '',
+        '> Note: This Stage C run does not replay weak-confidence clarification prompts, so `clarification_recovery` can remain `no_data` inside this packet alone.',
+        '> Rollout completion relies on aggregate evidence: Stage A volume proved `entry_routing=healthy`, Stage B proved `clarification_recovery=healthy`, and this Stage C run proves `followup_continuity=healthy`.',
+        '',
         '## Journey Log',
         '',
         '| Prompt | Outcome | Follow-up Fired |',
@@ -358,7 +361,7 @@ test.describe('W129 Stage C signal capture — §9 Post-Closure Addendum', () =>
         '## Continuation',
         '',
         rolloutComplete
-          ? '- **W129 rollout is COMPLETE.** All 3 flags enabled and all measured lanes healthy.'
+          ? '- **W129 rollout is COMPLETE.** All 3 flags are enabled, and the combined Stage A+B+C evidence keeps all measured lanes out of `action_required`.'
           : '- W129 rollout not yet complete — see rollout decision above.',
         rolloutComplete
           ? '- Next: open W130 with fresh GC-018 to start next tranche.'

@@ -1,7 +1,7 @@
 <!-- Memory class: FULL_RECORD -->
 # CVF W129 Stage C Signal Evidence
 
-**Captured:** 2026-04-27T18:43:08.107Z
+**Captured:** 2026-04-27T18:56:24.732Z
 **Provider:** alibaba / qwen-turbo
 **Stage:** Stage C signal capture — §9 Post-Closure Addendum
 
@@ -15,7 +15,7 @@
 
 ## W129 Rollout Completion Decision
 
-**Decision:** W129_ROLLOUT_COMPLETE — All 3 flags enabled, all measured lanes healthy, followup_started threshold met. W130 may be opened with fresh GC-018.
+**Decision:** W129_ROLLOUT_COMPLETE — All 3 flags enabled; aggregate Stage A+B+C evidence keeps all measured lanes out of action_required, and the followup_started threshold is met. W130 may be opened with fresh GC-018.
 
 ## Event Counts
 
@@ -32,6 +32,9 @@
 | followup_continuity | healthy | 42.9 |
 | entry_routing | healthy | 0 |
 | clarification_recovery | no_data | n/a |
+
+> Note: This Stage C run does not replay weak-confidence clarification prompts, so `clarification_recovery` can remain `no_data` inside this packet alone.
+> Rollout completion relies on aggregate evidence: Stage A volume proved `entry_routing=healthy`, Stage B proved `clarification_recovery=healthy`, and this Stage C run proves `followup_continuity=healthy`.
 
 ## Journey Log
 
@@ -53,5 +56,5 @@
 
 ## Continuation
 
-- **W129 rollout is COMPLETE.** All 3 flags enabled and all measured lanes healthy.
+- **W129 rollout is COMPLETE.** All 3 flags are enabled, and the combined Stage A+B+C evidence keeps all measured lanes out of `action_required`.
 - Next: open W130 with fresh GC-018 to start next tranche.

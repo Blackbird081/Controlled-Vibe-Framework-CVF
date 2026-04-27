@@ -431,6 +431,19 @@ export default function HomePage() {
         fetchProviders();
     }, [fetchProviders]);
 
+    // W129-T1: rollout signal capture — fire once per session when rollout flag is active
+    useEffect(() => {
+        if (!isIntentFirstEnabled()) return;
+        const sessionKey = 'cvf_w129_rollout_session_fired';
+        if (typeof window === 'undefined') return;
+        trackEvent('rollout_flag_enabled', { flag: 'NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR' });
+        if (!sessionStorage.getItem(sessionKey)) {
+            sessionStorage.setItem(sessionKey, '1');
+            trackEvent('rollout_session_start', { flag: 'NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR' });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const handleDismissBanner = useCallback(() => {
         localStorage.setItem('cvf_setup_banner_dismissed', '1');
         setBannerDismissed(true);

@@ -29,7 +29,10 @@ export type AnalyticsEventType =
     | 'intent_routed'
     | 'followup_started'
     | 'evidence_exported'
-    | 'deliverable_pack_exported';
+    | 'deliverable_pack_exported'
+    // W129-T1: controlled rollout signal capture
+    | 'rollout_flag_enabled'
+    | 'rollout_session_start';
 
 export interface AnalyticsEvent {
     id: string;

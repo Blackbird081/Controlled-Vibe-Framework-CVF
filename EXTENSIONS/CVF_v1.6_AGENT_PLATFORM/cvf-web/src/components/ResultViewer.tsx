@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import { generateDeliverablePack, serializePackToMarkdown } from '@/lib/deliverable-pack';
 import ReactMarkdown from 'react-markdown';
 import { Execution } from '@/types';
 import { useLanguage } from '@/lib/i18n';
@@ -73,6 +74,12 @@ export function ResultViewer({ execution, output, onAccept, onReject, onRetry, o
     const [exporting, setExporting] = useState<string | null>(null);
     // W97-T1: follow-up input state
     const [followupText, setFollowupText] = useState('');
+    // W125-T1: deliverable pack view mode
+    const [viewMode, setViewMode] = useState<'result' | 'pack'>('result');
+    const deliverablePack = useMemo(
+        () => generateDeliverablePack(execution, evidenceReceipt),
+        [execution, evidenceReceipt]
+    );
 
     const labels = exportLabels[exportLang];
 
@@ -163,6 +170,21 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
             console.error('Failed to copy receipt:', err);
         }
     };
+
+    // W125-T1: Download deliverable pack as .md
+    const handleDownloadPack = useCallback(() => {
+        const content = serializePackToMarkdown(deliverablePack);
+        const blob = new Blob([content], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `cvf-pack-${execution.templateId}-${Date.now()}.md`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        setShowExportMenu(false);
+    }, [deliverablePack, execution.templateId]);
 
     // Real PDF export using jsPDF
     const handleExportPdf = useCallback(async () => {
@@ -417,6 +439,25 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
+                    {/* W125-T1: Result / Pack view toggle */}
+                    <div className="flex rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden text-sm">
+                        <button
+                            onClick={() => setViewMode('result')}
+                            className={`px-3 py-2 transition-colors ${viewMode === 'result' ? 'bg-blue-600 text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+                            aria-label="Result view"
+                        >
+                            📄 Result
+                        </button>
+                        <button
+                            onClick={() => setViewMode('pack')}
+                            data-testid="pack-view-toggle"
+                            className={`px-3 py-2 transition-colors border-l border-gray-300 dark:border-gray-600 ${viewMode === 'pack' ? 'bg-blue-600 text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+                            aria-label="Deliverable pack preview"
+                        >
+                            📦 Pack
+                        </button>
+                    </div>
+
                     {/* Export Dropdown */}
                     <div className="relative">
                         <button
@@ -486,10 +527,21 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
                                 <button
                                     onClick={handleExportDocx}
                                     disabled={exporting === 'docx'}
-                                    className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg flex items-center gap-2 text-sm disabled:opacity-50"
+                                    className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-sm disabled:opacity-50"
                                 >
                                     {exporting === 'docx' ? labels.exporting : labels.downloadDocx}
                                 </button>
+
+                                {/* W125-T1: Deliverable pack export */}
+                                <div className="border-t border-gray-200 dark:border-gray-700">
+                                    <button
+                                        onClick={handleDownloadPack}
+                                        data-testid="download-pack-btn"
+                                        className="w-full px-4 py-3 text-left hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-b-lg flex items-center gap-2 text-sm text-blue-700 dark:text-blue-300"
+                                    >
+                                        📦 Download Deliverable Pack (.md)
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -559,12 +611,88 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
                 );
             })()}
 
-            {/* Output Content */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-8">
-                <div className="prose dark:prose-invert max-w-none">
-                    <ReactMarkdown>{output}</ReactMarkdown>
+            {/* Output Content / Pack Preview */}
+            {viewMode === 'result' ? (
+                <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-8">
+                    <div className="prose dark:prose-invert max-w-none">
+                        <ReactMarkdown>{output}</ReactMarkdown>
+                    </div>
                 </div>
-            </div>
+            ) : (
+                /* W125-T1: Deliverable pack preview */
+                <div
+                    data-testid="deliverable-pack-preview"
+                    className="bg-white dark:bg-gray-800 rounded-xl border border-blue-200 dark:border-blue-700 p-4 sm:p-8 space-y-6"
+                >
+                    {/* Pack type badge + headline */}
+                    <div>
+                        <span className="inline-block mb-2 px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 uppercase tracking-wider">
+                            📦 {deliverablePack.packType.replace(/_/g, ' ')}
+                        </span>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">{deliverablePack.headline}</h2>
+                    </div>
+
+                    {/* Executive summary */}
+                    <div className="rounded-lg bg-gray-50 dark:bg-gray-900/40 p-4 border border-gray-100 dark:border-gray-700">
+                        <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Executive Summary</div>
+                        <p className="text-sm text-gray-800 dark:text-gray-200">{deliverablePack.executiveSummary}</p>
+                    </div>
+
+                    {/* Main output (collapsed) */}
+                    <div>
+                        <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Main Output</div>
+                        <div className="prose dark:prose-invert max-w-none text-sm max-h-64 overflow-y-auto border border-gray-100 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-900/40">
+                            <ReactMarkdown>{deliverablePack.mainOutput}</ReactMarkdown>
+                        </div>
+                    </div>
+
+                    {/* Scope boundary */}
+                    <div>
+                        <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Scope Boundary</div>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">{deliverablePack.scopeBoundary}</p>
+                    </div>
+
+                    {/* Governance evidence */}
+                    <div className="rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 p-4">
+                        <div className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider mb-2">Governance Evidence</div>
+                        <div className="text-xs text-emerald-800 dark:text-emerald-200 space-y-1">
+                            <p><span className="font-medium">Decision:</span> {deliverablePack.governanceEvidence.decision}</p>
+                            {deliverablePack.governanceEvidence.provider && <p><span className="font-medium">Provider:</span> {deliverablePack.governanceEvidence.provider}</p>}
+                            {deliverablePack.governanceEvidence.model && <p><span className="font-medium">Model:</span> {deliverablePack.governanceEvidence.model}</p>}
+                            <p><span className="font-medium">Receipt available:</span> {deliverablePack.governanceEvidence.receiptAvailable ? 'Yes' : 'No'}</p>
+                        </div>
+                    </div>
+
+                    {/* Recommended next actions */}
+                    <div>
+                        <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Recommended Next Actions</div>
+                        <ol className="space-y-1">
+                            {deliverablePack.recommendedNextActions.map((action, i) => (
+                                <li key={i} className="flex gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                    <span className="font-semibold text-blue-600 dark:text-blue-400 shrink-0">{i + 1}.</span>
+                                    <span>{action}</span>
+                                </li>
+                            ))}
+                        </ol>
+                    </div>
+
+                    {/* Handoff notes */}
+                    <div className="rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 p-4">
+                        <div className="text-xs font-semibold text-amber-700 dark:text-amber-300 uppercase tracking-wider mb-1">Handoff Notes</div>
+                        <p className="text-sm text-amber-800 dark:text-amber-200">{deliverablePack.handoffNotes}</p>
+                    </div>
+
+                    {/* Download CTA */}
+                    <div className="flex justify-end">
+                        <button
+                            onClick={handleDownloadPack}
+                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors"
+                        >
+                            📦 Download Pack (.md)
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* W97-T1: Follow-up section — only shown when onFollowUp prop is provided */}
             {onFollowUp && output && (

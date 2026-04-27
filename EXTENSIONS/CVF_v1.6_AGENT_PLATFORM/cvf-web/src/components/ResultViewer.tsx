@@ -7,6 +7,7 @@ import { Execution } from '@/types';
 import { useLanguage } from '@/lib/i18n';
 import { analyzeOutputSafety } from '@/lib/safety-status';
 import type { GovernanceEvidenceReceipt } from '@/lib/ai';
+import { trackEvent } from '@/lib/analytics';
 
 interface ResultViewerProps {
     execution: Execution;
@@ -158,6 +159,8 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         setShowExportMenu(false);
+        // W127: track evidence export
+        trackEvent('evidence_exported', { executionId: execution.id, format: 'md' });
     };
 
     const handleCopyReceipt = async () => {
@@ -184,7 +187,9 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         setShowExportMenu(false);
-    }, [deliverablePack, execution.templateId]);
+        // W127: track deliverable pack export
+        trackEvent('deliverable_pack_exported', { executionId: execution.id, templateId: execution.templateId });
+    }, [deliverablePack, execution.templateId, execution.id]);
 
     // Real PDF export using jsPDF
     const handleExportPdf = useCallback(async () => {
@@ -273,6 +278,8 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
             doc.text(labels.footer, margin, y);
 
             doc.save(`cvf-result-${execution.templateId}-${Date.now()}.pdf`);
+            // W127: track evidence export
+            trackEvent('evidence_exported', { executionId: execution.id, format: 'pdf' });
         } catch (err) {
             console.error('PDF export failed:', err);
         } finally {
@@ -408,6 +415,8 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
 
             const blob = await Packer.toBlob(docFile);
             saveAs(blob, `cvf-result-${execution.templateId}-${Date.now()}.docx`);
+            // W127: track evidence export
+            trackEvent('evidence_exported', { executionId: execution.id, format: 'docx' });
         } catch (err) {
             console.error('Word export failed:', err);
         } finally {
@@ -725,6 +734,8 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
                             disabled={followupText.trim().length < 5}
                             onClick={() => {
                                 if (followupText.trim().length >= 5) {
+                                    // W127: track follow-up continuation
+                                    trackEvent('followup_started', { executionId: execution.id });
                                     onFollowUp(followupText.trim());
                                     setFollowupText('');
                                 }

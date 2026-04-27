@@ -24,7 +24,12 @@ export type AnalyticsEventType =
     | 'clarification_question_asked'
     | 'clarification_answered'
     | 'clarification_route_recovered'
-    | 'clarification_browse_fallback';
+    | 'clarification_browse_fallback'
+    // W127-T1: noncoder adoption metrics instrumentation
+    | 'intent_routed'
+    | 'followup_started'
+    | 'evidence_exported'
+    | 'deliverable_pack_exported';
 
 export interface AnalyticsEvent {
     id: string;

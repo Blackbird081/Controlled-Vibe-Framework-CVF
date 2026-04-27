@@ -78,6 +78,11 @@ export function IntentEntry({ onRoute, language = 'vi' }: IntentEntryProps) {
     const result = routeIntent(userInput);
     if (!result) return;
     if (result.confidence === 'strong' && result.recommendedTemplateId) {
+      // W127: track successful intent routing (wizard or form)
+      trackEvent('intent_routed', {
+        routeType: result.routeType,
+        templateId: result.recommendedTemplateId,
+      });
       onRoute(result, userInput);
       return;
     }

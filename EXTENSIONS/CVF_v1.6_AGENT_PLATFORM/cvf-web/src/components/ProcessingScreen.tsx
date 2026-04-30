@@ -207,6 +207,12 @@ export function ProcessingScreen({
                 return true;
             }
 
+            // CP3: guard BLOCK must not trigger mock fallback — guard decision is a classified non-counted outcome
+            if (data.guardResult?.finalDecision === 'BLOCK') {
+                setError(data.error || (isVi ? 'Bị chặn bởi hệ thống bảo vệ.' : 'Blocked by guard pipeline.'));
+                return true;
+            }
+
             // If real execution fails, show error but fall back to mock
             setError(data.error || (isVi ? 'Thực thi API thất bại' : 'API execution failed'));
             return false;

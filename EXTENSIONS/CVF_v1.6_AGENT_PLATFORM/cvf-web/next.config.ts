@@ -47,6 +47,39 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        has: [
+          {
+            type: 'query',
+            key: 'template',
+            value: '(?<template>.+)',
+          },
+        ],
+        destination: '/home?template=:template',
+        permanent: false,
+      },
+      {
+        source: '/',
+        has: [
+          {
+            type: 'query',
+            key: 'category',
+            value: '(?<category>.+)',
+          },
+        ],
+        destination: '/home?category=:category',
+        permanent: false,
+      },
+      {
+        source: '/',
+        destination: '/landing',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

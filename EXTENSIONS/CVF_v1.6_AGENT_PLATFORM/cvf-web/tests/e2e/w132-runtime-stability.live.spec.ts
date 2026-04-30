@@ -351,8 +351,11 @@ async function runIsolatedJourney(
 
   try {
     await page.goto('/home');
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(300);
+    // domcontentloaded not networkidle — the app holds persistent SSE connections that never
+    // become idle, causing networkidle to wait up to the full test timeout (30+ min observed).
+    // localStorage (settings) is available as soon as the DOM is parsed.
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(800);
 
     // CP2: verify settings hydration before submitting
     const settingsRaw = await page.evaluate(() => localStorage.getItem('cvf_settings')).catch(() => null);

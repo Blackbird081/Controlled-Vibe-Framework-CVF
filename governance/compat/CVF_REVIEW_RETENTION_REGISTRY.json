@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastReviewed": "2026-04-21",
+  "lastReviewed": "2026-04-30",
   "classes": [
     {
       "id": "ACTIVE_DECISION_REVIEW",
@@ -17,11 +17,11 @@
   ],
   "summary": {
     "activeRecentCount": 50,
-    "retainEvidenceCount": 182,
+    "retainEvidenceCount": 194,
     "safeToArchiveCount": 77,
     "archivedCount": 335,
-    "derivedAt": "2026-04-21",
-    "derivationMethod": "Derived from scripts/cvf_active_archive.py full review screening and refreshed after live-reference reclassification for W2-T29 tranche closure evidence plus relocation/publication canon reviews still blocked by active references, including P4 CP6-CP12 review documents still pinned by live references, W57-T1/W59-T1/W61-T1/W64-T1/W65-T1 review artifacts still anchored by active execution plans, audits, baselines, and orientation docs, and W105-T1 closure review retained by current handoff/front-door references."
+    "derivedAt": "2026-04-30",
+    "derivationMethod": "Derived from scripts/cvf_active_archive.py full review screening and refreshed after live-reference reclassification for W2-T29 tranche closure evidence plus relocation/publication canon reviews still blocked by active references, including P4 CP6-CP12 review documents still pinned by live references, W57-T1/W59-T1/W61-T1/W64-T1/W65-T1 review artifacts still anchored by active execution plans, audits, baselines, and orientation docs, W105-T1 closure review retained by current handoff/front-door references, and W123-W129 noncoder adoption and rollout evidence retained by W131 continuation references."
   },
   "retainEvidencePaths": [
     "docs/reviews/CVF_BASELINE_INTEGRITY_REVIEW_2026-03-21.md",
@@ -196,6 +196,18 @@
     "docs/reviews/CVF_W66_T1_CP2_RUN_HARNESS_SETUP_REVIEW_2026-04-11.md",
     "docs/reviews/CVF_W105_T1_TRANCHE_CLOSURE_REVIEW_2026-04-19.md",
     "docs/reviews/CVF_W110_GC018_ALIBABA_LIVE_CANARY_RUNNER_2026-04-21.md",
+    "docs/reviews/CVF_W123_CONTINUITY_SURFACE_INVENTORY_2026-04-27.md",
+    "docs/reviews/CVF_W124_CLARIFICATION_CONTRACT_INVENTORY_2026-04-27.md",
+    "docs/reviews/CVF_W125_DELIVERABLE_PACK_TAXONOMY_2026-04-27.md",
+    "docs/reviews/CVF_W126_GC018_HANDOFF_2026-04-27.md",
+    "docs/reviews/CVF_W127_GC018_HANDOFF_2026-04-27.md",
+    "docs/reviews/CVF_W127_NONCODER_ADOPTION_BASELINE_2026-04-27.md",
+    "docs/reviews/CVF_W128_GC018_HANDOFF_2026-04-27.md",
+    "docs/reviews/CVF_W128_NONCODER_ROLLOUT_READOUT_2026-04-27.md",
+    "docs/reviews/CVF_W128_ROLLOUT_DECISION_CONTRACT_2026-04-27.md",
+    "docs/reviews/CVF_W129_ROLLOUT_PLAYBOOK_2026-04-27.md",
+    "docs/reviews/CVF_W129_STAGE_A_SIGNAL_CAPTURE_EVIDENCE_2026-04-27.md",
+    "docs/reviews/CVF_W129_STAGE_A_VOLUME_EVIDENCE_2026-04-27.md",
     "docs/reviews/CVF_W7_T10_CP2_GATE_CLOSURE_VERIFICATION_MATRIX_2026-03-28.md",
     "docs/reviews/CVF_W7_T10_CP3_CLOSURE_REVIEW_2026-03-28.md",
     "docs/reviews/CVF_W7_T3_CP1_GUARD_BINDING_MATRIX_2026-03-28.md",

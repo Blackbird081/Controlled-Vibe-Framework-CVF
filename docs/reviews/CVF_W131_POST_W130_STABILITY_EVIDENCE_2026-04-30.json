@@ -1,0 +1,102 @@
+{
+  "capturedAt": "2026-04-30T00:00:00.000Z",
+  "reconstructionNote": "Manual reconstruction from spec console output. Spec hit 40-min timeout before writeEvidence() was called.",
+  "provider": "alibaba",
+  "model": "qwen-turbo",
+  "tranche": "W131-T1 CP3 — Alibaba Primary Stability Run",
+  "flags": {
+    "NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR": true,
+    "NEXT_PUBLIC_CVF_NONCODER_CLARIFICATION_LOOP": true,
+    "NEXT_PUBLIC_CVF_NONCODER_ITERATION_MEMORY": true
+  },
+  "attemptedJourneys": 24,
+  "countedJourneys": 1,
+  "testDurationMinutes": 40.2,
+  "testResult": "timeout_hit",
+  "liveExecutionStatus": 0,
+  "liveDecision": null,
+  "outcomeBreakdown": {
+    "accepted_with_exports": 1,
+    "accepted_missing_receipt": 0,
+    "accepted_export_failed": 0,
+    "route_miss": 1,
+    "clarification_not_recovered": 0,
+    "api_timeout": 2,
+    "provider_error": 0,
+    "mock_fallback_no_receipt": 2,
+    "ui_flow_error": 18
+  },
+  "eventCounts": {
+    "evidence_exported": 1,
+    "deliverable_pack_exported": 1,
+    "execution_created": 1,
+    "execution_accepted": 1
+  },
+  "laneReadout": {
+    "entry_routing": { "status": "watch", "metricValue": null, "note": "estimated: 1 route_miss in 6 real journeys" },
+    "clarification_recovery": { "status": "no_data", "metricValue": null },
+    "trusted_form": { "status": "watch", "metricValue": null, "note": "estimated: 2 mock_fallback + 2 api_timeout in 6 real attempts" },
+    "followup_continuity": { "status": "no_data", "metricValue": null },
+    "evidence_export": { "status": "watch", "metricValue": null, "note": "1 event from 1 accepted journey" },
+    "deliverable_pack": { "status": "watch", "metricValue": null, "note": "1 event from 1 accepted journey" }
+  },
+  "trustedFormCoverage": {
+    "email_template": { "attempted": 2, "accepted": 0 },
+    "documentation": { "attempted": 2, "accepted": 1 },
+    "competitor_review": { "attempted": 2, "accepted": 0 },
+    "risk_assessment": { "attempted": 2, "accepted": 0 },
+    "user_persona": { "attempted": 2, "accepted": 0 },
+    "feature_prioritization": { "attempted": 2, "accepted": 0 },
+    "pricing_strategy": { "attempted": 2, "accepted": 0 },
+    "strategy_analysis": { "attempted": 2, "accepted": 0 }
+  },
+  "stabilityFindings": [
+    {
+      "id": "SF1",
+      "severity": "high",
+      "title": "Provider instability exceeds GC-018 threshold",
+      "detail": "In 6 real journeys (before browser collapse): api_timeout=2 (33%), mock_fallback_no_receipt=2 (33%), route_miss=1 (17%), accepted=1 (17%). Combined api_timeout+mock_fallback = 67%, far above GC-018 §9 threshold of 25%.",
+      "trigger": "continuation_rule_provider_stability"
+    },
+    {
+      "id": "SF2",
+      "severity": "high",
+      "title": "Browser session collapsed at journey 7",
+      "detail": "Playwright test.setTimeout(2400000ms) fired, killing browser context. All journeys 7-24 returned ui_flow_error. Spec was fixed post-run: writeEvidence() now called before analytics collection.",
+      "trigger": "spec_architecture_fix_applied"
+    },
+    {
+      "id": "SF3",
+      "severity": "medium",
+      "title": "Clarification and follow-up lanes unmeasured",
+      "detail": "All 5 clarification journeys and 3 follow-up journeys returned ui_flow_error due to browser collapse. clarification_recovery and followup_continuity remain no_data.",
+      "trigger": "continuation_rule_clarification_quality"
+    }
+  ],
+  "journeyLog": [
+    { "prompt": "Soạn email giới thiệu dịch vụ tư vấn đến khách hàng tiềm năng", "formType": "email_template", "journeyKind": "standard", "outcome": "mock_fallback_no_receipt", "evidenceFired": false, "packFired": false },
+    { "prompt": "Viết email xác nhận lịch hẹn với đối tác kinh doanh", "formType": "email_template", "journeyKind": "standard", "outcome": "api_timeout", "evidenceFired": false, "packFired": false },
+    { "prompt": "Viết tài liệu hướng dẫn sử dụng cho nhân viên mới", "formType": "documentation", "journeyKind": "standard", "outcome": "accepted_with_exports", "evidenceFired": true, "packFired": true },
+    { "prompt": "Tạo tài liệu kỹ thuật cho API tích hợp hệ thống thanh toán", "formType": "documentation", "journeyKind": "standard", "outcome": "api_timeout", "evidenceFired": false, "packFired": false },
+    { "prompt": "Phân tích đối thủ cạnh tranh trong lĩnh vực dịch vụ logistics", "formType": "competitor_review", "journeyKind": "standard", "outcome": "mock_fallback_no_receipt", "evidenceFired": false, "packFired": false },
+    { "prompt": "So sánh và đánh giá các phần mềm quản lý nhân sự phổ biến", "formType": "competitor_review", "journeyKind": "standard", "outcome": "route_miss", "evidenceFired": false, "packFired": false },
+    { "prompt": "Đánh giá rủi ro cho dự án triển khai phần mềm quản lý kho tại doanh nghiệp", "formType": "risk_assessment", "journeyKind": "standard", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Phân tích rủi ro khi mở rộng kinh doanh sang thị trường Đông Nam Á", "formType": "risk_assessment", "journeyKind": "standard", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Xây dựng hồ sơ khách hàng mục tiêu cho ứng dụng quản lý tài chính cá nhân", "formType": "user_persona", "journeyKind": "standard", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Tạo user persona cho nền tảng học trực tuyến dành cho người đi làm", "formType": "user_persona", "journeyKind": "standard", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Lập danh sách ưu tiên tính năng cho phiên bản tiếp theo của sản phẩm SaaS", "formType": "feature_prioritization", "journeyKind": "standard", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Phân tích và sắp xếp thứ tự các tính năng cần phát triển cho ứng dụng di động", "formType": "feature_prioritization", "journeyKind": "standard", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Xây dựng chiến lược định giá cho sản phẩm SaaS B2B trong thị trường SME", "formType": "pricing_strategy", "journeyKind": "standard", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Phân tích mô hình freemium so với subscription cho dịch vụ phần mềm quản lý", "formType": "pricing_strategy", "journeyKind": "standard", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Phân tích chiến lược mở rộng sang thị trường miền Trung Việt Nam", "formType": "strategy_analysis", "journeyKind": "standard", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Đánh giá cơ hội và thách thức khi ra mắt sản phẩm mới cho phân khúc doanh nghiệp lớn", "formType": "strategy_analysis", "journeyKind": "standard", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Tôi cần giúp đỡ về marketing cho công ty", "formType": "clarification_path", "journeyKind": "clarification", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Làm thế nào để phát triển kinh doanh hiệu quả", "formType": "clarification_path", "journeyKind": "clarification", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Cần một kế hoạch cho sản phẩm mới", "formType": "clarification_path", "journeyKind": "clarification", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Phân tích thị trường", "formType": "clarification_path", "journeyKind": "clarification", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Viết gì đó giúp tôi tăng doanh số", "formType": "clarification_path", "journeyKind": "clarification", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Tôi muốn tìm hiểu thêm về rủi ro chính trong phân tích này", "formType": "followup", "journeyKind": "followup", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Cần thêm ví dụ thực tế và số liệu minh họa", "formType": "followup", "journeyKind": "followup", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" },
+    { "prompt": "Tập trung vào giải pháp ngắn hạn có thể thực hiện ngay", "formType": "followup", "journeyKind": "followup", "outcome": "ui_flow_error", "evidenceFired": false, "packFired": false, "detail": "browser_context_closed" }
+  ]
+}

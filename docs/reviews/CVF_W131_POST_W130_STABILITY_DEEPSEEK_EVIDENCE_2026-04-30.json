@@ -1,0 +1,127 @@
+{
+  "capturedAt": "2026-04-30T05:09:04.073Z",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "tranche": "W131-T1 CP4 — DeepSeek Confirmatory Run",
+  "flags": {
+    "NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR": true,
+    "NEXT_PUBLIC_CVF_NONCODER_CLARIFICATION_LOOP": true,
+    "NEXT_PUBLIC_CVF_NONCODER_ITERATION_MEMORY": true
+  },
+  "attemptedJourneys": 6,
+  "countedJourneys": 1,
+  "liveExecutionStatus": 0,
+  "liveDecision": null,
+  "outcomeBreakdown": {
+    "accepted_with_exports": 1,
+    "accepted_missing_receipt": 0,
+    "accepted_export_failed": 0,
+    "route_miss": 1,
+    "clarification_not_recovered": 0,
+    "api_timeout": 2,
+    "provider_error": 0,
+    "mock_fallback_no_receipt": 2,
+    "ui_flow_error": 0
+  },
+  "eventCounts": {
+    "evidence_exported": 0,
+    "deliverable_pack_exported": 0,
+    "execution_created": 0,
+    "execution_accepted": 0
+  },
+  "laneReadout": {
+    "entry_routing": {
+      "status": "no_data",
+      "metricValue": null
+    },
+    "clarification_recovery": {
+      "status": "no_data",
+      "metricValue": null
+    },
+    "trusted_form": {
+      "status": "no_data",
+      "metricValue": null
+    },
+    "followup_continuity": {
+      "status": "no_data",
+      "metricValue": null
+    },
+    "evidence_export": {
+      "status": "no_data",
+      "metricValue": null
+    },
+    "deliverable_pack": {
+      "status": "no_data",
+      "metricValue": null
+    }
+  },
+  "trustedFormCoverage": {
+    "email_template": {
+      "attempted": 2,
+      "accepted": 0
+    },
+    "documentation": {
+      "attempted": 2,
+      "accepted": 1
+    },
+    "competitor_review": {
+      "attempted": 2,
+      "accepted": 0
+    }
+  },
+  "journeyLog": [
+    {
+      "prompt": "Soạn email giới thiệu dịch vụ tư vấn đến khách hàng tiềm năng",
+      "formType": "email_template",
+      "journeyKind": "standard",
+      "outcome": "mock_fallback_no_receipt",
+      "evidenceFired": false,
+      "packFired": false,
+      "detail": "ResultViewer without governance receipt"
+    },
+    {
+      "prompt": "Viết email xác nhận lịch hẹn với đối tác kinh doanh",
+      "formType": "email_template",
+      "journeyKind": "standard",
+      "outcome": "api_timeout",
+      "evidenceFired": false,
+      "packFired": false,
+      "detail": "Export nudge did not appear within 90s"
+    },
+    {
+      "prompt": "Viết tài liệu hướng dẫn sử dụng cho nhân viên mới",
+      "formType": "documentation",
+      "journeyKind": "standard",
+      "outcome": "accepted_with_exports",
+      "evidenceFired": true,
+      "packFired": true
+    },
+    {
+      "prompt": "Tạo tài liệu kỹ thuật cho API tích hợp hệ thống thanh toán",
+      "formType": "documentation",
+      "journeyKind": "standard",
+      "outcome": "api_timeout",
+      "evidenceFired": false,
+      "packFired": false,
+      "detail": "Export nudge did not appear within 90s"
+    },
+    {
+      "prompt": "Phân tích đối thủ cạnh tranh trong lĩnh vực dịch vụ logistics",
+      "formType": "competitor_review",
+      "journeyKind": "standard",
+      "outcome": "mock_fallback_no_receipt",
+      "evidenceFired": false,
+      "packFired": false,
+      "detail": "ResultViewer without governance receipt"
+    },
+    {
+      "prompt": "So sánh và đánh giá các phần mềm quản lý nhân sự phổ biến",
+      "formType": "competitor_review",
+      "journeyKind": "standard",
+      "outcome": "route_miss",
+      "evidenceFired": false,
+      "packFired": false,
+      "detail": "No strong-confidence route produced — CTA disabled"
+    }
+  ]
+}

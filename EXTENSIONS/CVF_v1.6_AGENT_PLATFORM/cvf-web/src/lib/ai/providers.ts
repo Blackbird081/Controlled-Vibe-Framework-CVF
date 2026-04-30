@@ -256,6 +256,8 @@ async function executeAlibaba(
                     }
                     : {}),
             }),
+            // CP3: bound provider wait so route returns a classified error before the E2E 90s deadline
+            signal: AbortSignal.timeout(85_000),
         });
 
         if (!response.ok) {

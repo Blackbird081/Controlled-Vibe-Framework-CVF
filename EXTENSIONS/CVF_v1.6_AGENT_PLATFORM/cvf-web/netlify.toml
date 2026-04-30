@@ -9,6 +9,26 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+[[redirects]]
+  from = "/"
+  to = "/home?template=:template"
+  status = 302
+  force = true
+  query = {template = ":template"}
+
+[[redirects]]
+  from = "/"
+  to = "/home?category=:category"
+  status = 302
+  force = true
+  query = {category = ":category"}
+
+[[redirects]]
+  from = "/"
+  to = "/landing"
+  status = 302
+  force = true
+
 # Reduce stale HTML risk after deploys while keeping hashed chunks cacheable.
 [[headers]]
   for = "/*"

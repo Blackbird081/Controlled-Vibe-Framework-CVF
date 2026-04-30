@@ -30,7 +30,6 @@ import { test, expect, type Page } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'fs';
 import { dirname, resolve } from 'path';
 import {
-  login,
   postLiveGovernedExecution,
   seedStorageWithAlibaba,
   seedStorageWithDeepSeek,
@@ -293,6 +292,9 @@ function writeEvidence(
 // ── Provider setup (called once per isolated page before login) ───────────────
 
 async function setupPage(page: Page, provider: 'alibaba' | 'deepseek') {
+  page.setDefaultNavigationTimeout(15_000);
+  page.setDefaultTimeout(15_000);
+
   if (provider === 'alibaba') {
     await seedStorageWithAlibaba(page);
   } else {
@@ -303,6 +305,14 @@ async function setupPage(page: Page, provider: 'alibaba' | 'deepseek') {
     localStorage.setItem('cvf_onboarding_seen', '1');
     localStorage.setItem('cvf_setup_banner_dismissed', 'true');
   });
+}
+
+async function loginForW132(page: Page) {
+  await page.goto('/login', { waitUntil: 'domcontentloaded', timeout: 15_000 });
+  await page.locator('input[type="text"][placeholder="admin"]').fill('admin');
+  await page.locator('input[type="password"][placeholder="admin123"]').fill('admin123');
+  await page.getByRole('button', { name: /Đăng nhập/i }).click();
+  await expect(page.getByRole('heading', { name: /Templates/i }).first()).toBeVisible({ timeout: 15_000 });
 }
 
 // ── Isolated journey runner (CP1 context already created by caller) ───────────
@@ -350,7 +360,7 @@ async function runIsolatedJourney(
   });
 
   try {
-    await page.goto('/home');
+    await page.goto('/home', { waitUntil: 'domcontentloaded', timeout: 15_000 });
     // domcontentloaded not networkidle — the app holds persistent SSE connections that never
     // become idle, causing networkidle to wait up to the full test timeout (30+ min observed).
     // localStorage (settings) is available as soon as the DOM is parsed.
@@ -531,7 +541,7 @@ test.describe('W132-T1 CP4 — Alibaba isolated-session stability run', () => {
         const page = await ctx.newPage();
         try {
           await setupPage(page, 'alibaba');
-          await login(page);
+          await loginForW132(page);
           const result = await runIsolatedJourney(page, journey, config);
           journeyLog.push(result);
           console.log(
@@ -575,7 +585,7 @@ test.describe('W132-T1 CP4 — Alibaba isolated-session stability run', () => {
       const proofPage = await proofCtx.newPage();
       try {
         await setupPage(proofPage, 'alibaba');
-        await login(proofPage);
+        await loginForW132(proofPage);
         const { response, body } = await postLiveGovernedExecution(proofPage, 'governance');
         liveStatus = response.status();
         liveDecision = body.governanceEvidenceReceipt?.decision ?? null;
@@ -636,7 +646,7 @@ test.describe('W132-T1 CP5 — DeepSeek isolated-session confirmatory run', () =
         const page = await ctx.newPage();
         try {
           await setupPage(page, 'deepseek');
-          await login(page);
+          await loginForW132(page);
           const result = await runIsolatedJourney(page, journey, config);
           journeyLog.push(result);
           console.log(
@@ -679,7 +689,7 @@ test.describe('W132-T1 CP5 — DeepSeek isolated-session confirmatory run', () =
       const proofPage = await proofCtx.newPage();
       try {
         await setupPage(proofPage, 'deepseek');
-        await login(proofPage);
+        await loginForW132(proofPage);
         const dsResp = await proofPage.request.post('/api/execute', {
           data: {
             templateId: 'strategy_analysis',

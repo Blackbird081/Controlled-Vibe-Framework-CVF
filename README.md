@@ -16,6 +16,38 @@ CVF is not tied to one model provider and it is not a skill marketplace. Skills,
 templates, and UI helpers can make CVF easier to apply, especially for
 non-coders, but the core product is the control layer that governs execution.
 
+## Architecture At A Glance
+
+```mermaid
+flowchart TB
+  User["User / Developer / Plugin / Agent"] --> Intake["CVF Intake + Context"]
+  Intake --> Risk["Risk + Policy Decision"]
+  Risk --> Approval["Approval / Phase Gate"]
+  Approval --> Adapter["Provider or Agent Adapter"]
+  Adapter --> Worker["Model / Agent / Tool Execution"]
+  Worker --> Validation["DLP + Output Validation"]
+  Validation --> Receipt["Audit Receipt + Cost/Quota Signal"]
+  Receipt --> Output["Governed Output"]
+
+  subgraph Core["CVF Core Governance"]
+    Intake
+    Risk
+    Approval
+    Validation
+    Receipt
+  end
+
+  subgraph External["External Execution Boundary"]
+    Adapter
+    Worker
+  end
+```
+
+CVF should be understood as a governed pass-through layer: outside agents,
+plugins, providers, and workflows connect to CVF, pass through CVF's rules and
+evidence boundary, then return governed output. CVF does not need to own the
+agent that performs the work.
+
 ## Current Public Surface
 
 This renewed repository contains the current product surface:
@@ -82,6 +114,9 @@ E2E and must fail if no DashScope-compatible live key is available.
 | `ECOSYSTEM/doctrine` | Current doctrine and layer model for CVF positioning. |
 | `governance/public-surface-manifest.json` | Allowlist and classification for public files. |
 | `scripts/check_public_surface.py` | Fast public-release scanner. |
+
+See `ARCHITECTURE.md` for the layer diagram, dependency rules, and clone
+treeview.
 
 ## Provider Boundary
 
@@ -162,4 +197,3 @@ This public repository does not include the internal operating journal:
 - provider-key setup transcripts
 
 Those belong in the private provenance archive or local operator storage.
-

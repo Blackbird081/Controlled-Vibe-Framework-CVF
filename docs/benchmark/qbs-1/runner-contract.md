@@ -19,6 +19,21 @@ run can produce a public claim.
 | `artifact_root` | yes | Run output directory. |
 | `preregistration_tag` | required for scored runs | Public tag `qbs/preregister/<run-id>`. |
 
+## Current Calibration Runner
+
+The public calibration runner is:
+
+```bash
+python scripts/run_qbs_calibration_pilot.py --preregistration-tag qbs/preregister/<run-id>
+```
+
+The runner is designed for `CALIBRATION_PILOT` only. It executes a small
+three-task calibration corpus across `CFG-A0`, `CFG-A1`, and `CFG-B`, then
+writes sanitized artifacts under `docs/benchmark/runs/<run-id>/`.
+
+The calibration runner does not produce L4/L5/L6 evidence and does not create a
+public QBS quality score.
+
 ## Runner Configs
 
 The runner executes each task through:
@@ -80,4 +95,3 @@ reviewer to reconstruct:
 - which cost/latency signals were captured;
 - which gates passed or failed;
 - which claim, if any, is allowed.
-

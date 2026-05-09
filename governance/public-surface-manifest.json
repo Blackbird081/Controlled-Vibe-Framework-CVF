@@ -42,6 +42,8 @@
       "scripts/_local_env.py",
       "scripts/check_cvf_provider_release_readiness.py",
       "scripts/evaluate_cvf_provider_lane_certification.py",
+      "scripts/cvf_provider_check.py",
+      "scripts/run_cvf_multi_provider_live_smoke.py",
       "scripts/check_public_surface.py",
       "governance/public-surface-manifest.json",
       "docs/guides/minimum-useful-cvf.md"

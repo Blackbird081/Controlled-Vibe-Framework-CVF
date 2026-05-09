@@ -46,6 +46,20 @@ DeepSeek:
 DEEPSEEK_API_KEY
 ```
 
+OpenAI:
+
+```text
+OPENAI_API_KEY
+CVF_OPENAI_API_KEY
+```
+
+Gemini:
+
+```text
+GOOGLE_AI_API_KEY
+GEMINI_API_KEY
+CVF_GEMINI_API_KEY
+```
+
 Other provider keys should follow the same rule: operator supplied, never
 printed, never committed, never included in evidence.
-

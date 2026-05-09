@@ -24,6 +24,10 @@ GitHub's sidebar contributor list is generated from commit metadata. This file
 is CVF's canonical acknowledgement of collaboration roles inside the public
 repository.
 
+The repository includes `.mailmap` identity mappings so public GitHub metadata
+can resolve the maintained Blackbird081, Claude, and Codex attribution names
+where GitHub supports mapped contributor identities.
+
 ## Contributor Boundary
 
 External contributors should use `CONTRIBUTING.md` and the public pull request

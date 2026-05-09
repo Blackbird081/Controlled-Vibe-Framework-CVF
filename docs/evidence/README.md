@@ -10,5 +10,8 @@ Start with:
 - `web-governance-path.md`
 - `redaction-and-key-safety.md`
 - `claim-boundaries.md`
-- `renewed-repo-release-gate-proof.md`
 
+Benchmark methodology is published separately under `docs/benchmark/`. That
+folder explains how future quality claims must be measured before any QBS score
+is published.
+- `renewed-repo-release-gate-proof.md`

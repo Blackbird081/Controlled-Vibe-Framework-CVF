@@ -47,6 +47,7 @@
       "scripts/run_cvf_multi_provider_live_smoke.py",
       "scripts/check_public_surface.py",
       "governance/public-surface-manifest.json",
+      "docs/benchmark/**",
       "docs/guides/minimum-useful-cvf.md"
     ],
     "KEEP_PUBLIC_EVIDENCE_SUMMARY": [

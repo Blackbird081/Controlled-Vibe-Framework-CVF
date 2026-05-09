@@ -38,6 +38,7 @@ repository maintenance, governance checks, and verification support. See
     <td align="center"><a href="#technical-footprint"><strong>Tech Stack</strong></a></td>
     <td align="center"><a href="#provider-boundary"><strong>Providers</strong></a></td>
     <td align="center"><a href="#governance-boundary"><strong>Governance</strong></a></td>
+    <td align="center"><a href="#quality-benchmark-suite"><strong>Benchmark</strong></a></td>
     <td align="center"><a href="#public-evidence"><strong>Evidence</strong></a></td>
     <td align="center"><a href="CONTRIBUTORS.md"><strong>Contributors</strong></a></td>
   </tr>
@@ -253,6 +254,20 @@ CVF governance behavior means:
 Any public claim about those behaviors must cite live provider evidence.
 Mock mode is acceptable only for UI structure, navigation, layout, and RBAC
 checks that do not assert AI governance behavior.
+
+## Quality Benchmark Suite
+
+CVF publishes its benchmark methodology separately from benchmark scores. The
+Quality Benchmark Suite defines how CVF quality claims must be measured before
+they are made public:
+
+- `docs/benchmark/README.md`
+- `docs/benchmark/quality-benchmark-suite-methodology.md`
+- `docs/benchmark/quality-benchmark-suite-claim-ladder.md`
+- `docs/benchmark/quality-benchmark-suite-standards-alignment.md`
+
+Current status: methodology is public, but no public QBS quality score is
+claimed yet.
 
 ## Cost And Quota
 

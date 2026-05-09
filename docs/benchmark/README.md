@@ -14,10 +14,11 @@ Start here:
 - [Claim Ladder](quality-benchmark-suite-claim-ladder.md)
 - [Standards Alignment](quality-benchmark-suite-standards-alignment.md)
 - [QBS-1 Runner And Corpus Planning](qbs-1/README.md)
+- [QBS-1 Calibration Runs](runs/qbs1-calibration-20260509-three-provider/README.md)
 
 ## Current Status
 
-Status: `QBS1_PLANNING_READY_NO_PUBLIC_QBS_RESULT`
+Status: `QBS1_CALIBRATION_PILOT_PASS_NO_PUBLIC_QBS_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -28,9 +29,13 @@ Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a
 powered run is published.
 
-QBS-1 runner and corpus planning is now published. Scored runs remain blocked
-until a run-specific `qbs/preregister/<run-id>` tag freezes the exact corpus,
-configs, provider/model list, reviewer plan, and artifact path.
+QBS-1 runner and corpus planning is now published. A three-provider calibration
+pilot has also passed as harness proof only. It is not a powered QBS score and
+does not authorize public quality-level claims.
+
+Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
+freezes the exact corpus, configs, provider/model list, reviewer plan, and
+artifact path.
 
 ## What QBS Measures
 
@@ -48,6 +53,7 @@ QBS is not a model leaderboard and not an enterprise-readiness claim.
 
 ## Public Boundary
 
-This folder contains public benchmark methodology only. Raw internal reviews,
-handoffs, calibration packets, and uncurated run logs remain outside the public
-surface. Curated evidence summaries belong under `docs/evidence/`.
+This folder contains public benchmark methodology and curated public run
+artifacts. Raw internal reviews, handoffs, exploratory calibration notes, and
+uncurated run logs remain outside the public surface. Curated evidence summaries
+belong under `docs/evidence/`.

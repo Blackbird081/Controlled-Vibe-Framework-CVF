@@ -14,6 +14,8 @@ Allowed:
   score is claimed until a powered run is published.
 - QBS-1 runner/corpus planning is public, but scored QBS runs require a
   run-specific `qbs/preregister/<run-id>` tag.
+- QBS-1 calibration pilot evidence may be cited as runner/harness proof only,
+  with public status `CALIBRATION_DIRECTIONAL_NO_QBS_SCORE`.
 
 Not allowed without new evidence:
 
@@ -21,6 +23,7 @@ Not allowed without new evidence:
 - all agent frameworks are certified
 - CVF has a public QBS quality score
 - QBS-1 planning documents are scored benchmark evidence
+- QBS-1 calibration pilot evidence proves powered QBS quality levels
 - web proves the entire CVF runtime
 - mock tests prove governance behavior
 - public docs include the full internal operating history

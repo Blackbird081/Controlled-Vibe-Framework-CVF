@@ -1,0 +1,19 @@
+{
+  "run_id": "qbs1-calibration-20260509-three-provider",
+  "run_class": "CALIBRATION_PILOT",
+  "criteria_version": "public-qbs-methodology-v2",
+  "preregistration_tag": "qbs/preregister/qbs1-calibration-20260509-three-provider-r5",
+  "providers": [
+    "alibaba",
+    "deepseek",
+    "openai"
+  ],
+  "models": {
+    "alibaba": "qwen-turbo",
+    "deepseek": "deepseek-chat",
+    "openai": "gpt-4o-mini"
+  },
+  "artifact_root": "docs/benchmark/runs/qbs1-calibration-20260509-three-provider",
+  "allowed_claim_level": "none",
+  "verdict": "PASS"
+}

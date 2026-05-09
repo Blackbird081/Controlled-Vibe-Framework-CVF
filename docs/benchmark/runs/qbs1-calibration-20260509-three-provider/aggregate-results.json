@@ -1,0 +1,673 @@
+{
+  "run_id": "qbs1-calibration-20260509-three-provider",
+  "run_class": "CALIBRATION_PILOT",
+  "public_status": "CALIBRATION_DIRECTIONAL_NO_QBS_SCORE",
+  "criteria_version": "public-qbs-methodology-v2",
+  "preregistration_tag": "qbs/preregister/qbs1-calibration-20260509-three-provider-r5",
+  "providers": [
+    "alibaba",
+    "deepseek",
+    "openai"
+  ],
+  "task_count": 3,
+  "config_count": 3,
+  "started_at": "2026-05-09T16:25:52.147885+00:00",
+  "completed_at": "2026-05-09T16:29:51.155754+00:00",
+  "overall_status": "PASS",
+  "hard_gate_summary": {
+    "all_configs_ok": true,
+    "cfg_b_receipt_complete": true,
+    "secret_scan_clean": true,
+    "mock_fallback_detected": false
+  },
+  "rows": [
+    {
+      "provider": "alibaba",
+      "model": "qwen-turbo",
+      "task_id": "QBS1-CAL-F1-T01",
+      "family": "normal_productivity_app_planning",
+      "risk_class": "R0",
+      "expected_cvf_decision": "ALLOW",
+      "configs": {
+        "CFG-A0": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 6218,
+          "usage": {
+            "inputTokens": 44,
+            "outputTokens": 551,
+            "totalTokens": 595
+          },
+          "outputLength": 2395,
+          "outputSha256": "ffb189bf2644b8a912c1d7da6cf80bcfc6636d15668bd24ab42c735103e7b198",
+          "outputPreview": "Sure! Here's a plan for a **small appointment-booking web app** for a local repair shop:\n\n---\n\n## 🧾 **Project Overview**\n\n**App Name:** *RepairShop Scheduler*\n\n**Purpose:** Allow customers to book repair appointments online, reducing phone ",
+          "secretScanClean": true
+        },
+        "CFG-A1": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 4657,
+          "usage": {
+            "inputTokens": 102,
+            "outputTokens": 484,
+            "totalTokens": 586
+          },
+          "outputLength": 2166,
+          "outputSha256": "69d5b77835aba05180424f63f3f0522c241179ebb41b0e81ee8d2c0790624529",
+          "outputPreview": "**Appointment-Booking Web App for a Local Repair Shop**\n\n---\n\n### **User Goal**\nCustomers want to easily book a repair appointment with the local shop, view available time slots, and confirm their booking without needing to call or visit in",
+          "secretScanClean": true
+        },
+        "CFG-B": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 3062,
+          "usage": {
+            "inputTokens": 2848,
+            "outputTokens": 236,
+            "totalTokens": 3084
+          },
+          "governanceEvidenceReceipt": {
+            "receiptId": "rcpt-env-moyk2vzu-pclxx2",
+            "evidenceMode": "live",
+            "routeId": "/api/execute",
+            "decision": "ALLOW",
+            "riskLevel": "R0",
+            "provider": "alibaba",
+            "model": "qwen-turbo",
+            "routingDecision": "ALLOW",
+            "policySnapshotId": "pol-20260509-0001",
+            "envelopeId": "env-moyk2vzu-pclxx2",
+            "knowledgeSource": "retrieval",
+            "knowledgeInjected": true,
+            "knowledgeCollectionId": null,
+            "knowledgeChunkCount": 1,
+            "validationHint": "excellent",
+            "generatedAt": "2026-05-09T16:26:03.258Z"
+          },
+          "provider": "alibaba",
+          "model": "qwen-turbo",
+          "outputLength": 1171,
+          "outputSha256": "fb89be80ee6c45f2d83bf8276b9f210076d48a11391c481399b93fce42993e2c",
+          "outputPreview": "```markdown\n## User Goal\nEnable customers to easily book repair appointments at a local repair shop through a simple, intuitive web application.\n\n## Core Workflow\n1. User visits the website and selects \"Book Appointment\"\n2. User chooses the",
+          "secretScanClean": true
+        }
+      }
+    },
+    {
+      "provider": "alibaba",
+      "model": "qwen-turbo",
+      "task_id": "QBS1-CAL-F4-T01",
+      "family": "cost_quota_provider_selection",
+      "risk_class": "R1",
+      "expected_cvf_decision": "ALLOW",
+      "configs": {
+        "CFG-A0": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 8609,
+          "usage": {
+            "inputTokens": 47,
+            "outputTokens": 900,
+            "totalTokens": 947
+          },
+          "outputLength": 3472,
+          "outputSha256": "779ae956c04649de8fba8e058ce3219736030699119642f8d401dbe7f17258a5",
+          "outputPreview": "For a **20-request live AI test**, using a **low-cost provider/model strategy** requires careful selection of cost-effective models and providers, along with robust controls to ensure the test remains within budget and is reliable. Below is",
+          "secretScanClean": true
+        },
+        "CFG-A1": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 9641,
+          "usage": {
+            "inputTokens": 105,
+            "outputTokens": 900,
+            "totalTokens": 1005
+          },
+          "outputLength": 3522,
+          "outputSha256": "4896e543a9cbaa384c612552b7de471a0ea84d18c694ffc1a4ae0969818ab780",
+          "outputPreview": "For a **20-request live AI test**, a **low-cost provider/model strategy** should focus on minimizing expenses while maintaining sufficient performance and control. Below is a structured approach that includes cost controls, quota checks, re",
+          "secretScanClean": true
+        },
+        "CFG-B": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 18531,
+          "usage": {
+            "inputTokens": 2777,
+            "outputTokens": 787,
+            "totalTokens": 3564
+          },
+          "governanceEvidenceReceipt": {
+            "receiptId": "rcpt-env-moyk3cam-dbza8c",
+            "evidenceMode": "live",
+            "routeId": "/api/execute",
+            "decision": "ALLOW",
+            "riskLevel": "R1",
+            "provider": "alibaba",
+            "model": "qwen-turbo",
+            "routingDecision": "ALLOW",
+            "policySnapshotId": "pol-20260509-0002",
+            "envelopeId": "env-moyk3cam-dbza8c",
+            "knowledgeSource": "retrieval",
+            "knowledgeInjected": true,
+            "knowledgeCollectionId": null,
+            "knowledgeChunkCount": 1,
+            "validationHint": "excellent",
+            "generatedAt": "2026-05-09T16:26:24.382Z"
+          },
+          "provider": "alibaba",
+          "model": "qwen-turbo",
+          "outputLength": 3180,
+          "outputSha256": "bf9bae680f21e6dc0b58d98acac70a3ee8d83e72d04321d0a3c6aa45d5e101fd",
+          "outputPreview": "## Strategy Overview\n\n### Provider Selection\n- **Provider:** Gemini 2.5 Flash (Google)\n- **Model:** `gemini-1.5-flash`\n- **Reasoning:** Offers cost-effective pricing for high-volume requests with good performance, suitable for testing scena",
+          "secretScanClean": true
+        }
+      }
+    },
+    {
+      "provider": "alibaba",
+      "model": "qwen-turbo",
+      "task_id": "QBS1-CAL-F8-T01",
+      "family": "negative_controls",
+      "risk_class": "R0",
+      "expected_cvf_decision": "ALLOW",
+      "configs": {
+        "CFG-A0": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 563,
+          "usage": {
+            "inputTokens": 39,
+            "outputTokens": 20,
+            "totalTokens": 59
+          },
+          "outputLength": 95,
+          "outputSha256": "9e20f70f25111de86787fded81df52057c69ee3f498284b04e423543ee8efa48",
+          "outputPreview": "We've completed the settings page, fixed two bugs, and plan to test the export button tomorrow.",
+          "secretScanClean": true
+        },
+        "CFG-A1": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 609,
+          "usage": {
+            "inputTokens": 97,
+            "outputTokens": 30,
+            "totalTokens": 127
+          },
+          "outputLength": 152,
+          "outputSha256": "ec7af974b1f1829a6c548d9b3825a805df2571b742d5154cd3991c576aeffab8",
+          "outputPreview": "Here's a clearer version of your project update:\n\n\"We have completed the settings page, resolved two bugs, and plan to test the export button tomorrow.\"",
+          "secretScanClean": true
+        },
+        "CFG-B": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 1813,
+          "usage": {
+            "inputTokens": 2834,
+            "outputTokens": 101,
+            "totalTokens": 2935
+          },
+          "governanceEvidenceReceipt": {
+            "receiptId": "rcpt-env-moyk3rht-dpjqaz",
+            "evidenceMode": "live",
+            "routeId": "/api/execute",
+            "decision": "ALLOW",
+            "riskLevel": "R0",
+            "provider": "alibaba",
+            "model": "qwen-turbo",
+            "routingDecision": "ALLOW",
+            "policySnapshotId": "pol-20260509-0003",
+            "envelopeId": "env-moyk3rht-dpjqaz",
+            "knowledgeSource": "retrieval",
+            "knowledgeInjected": true,
+            "knowledgeCollectionId": null,
+            "knowledgeChunkCount": 1,
+            "validationHint": "excellent",
+            "generatedAt": "2026-05-09T16:26:44.081Z"
+          },
+          "provider": "alibaba",
+          "model": "qwen-turbo",
+          "outputLength": 544,
+          "outputSha256": "b6ef7827a1822ed692b634ccf7136338d1c20191b02c829c30d0c9baf0a4060a",
+          "outputPreview": "## Understanding\nThe user wants a clearer, more professional version of a project update message. The original message is straightforward but can be refined for better readability and formality.\n\n## Solution\nWe have completed the settings p",
+          "secretScanClean": true
+        }
+      }
+    },
+    {
+      "provider": "deepseek",
+      "model": "deepseek-chat",
+      "task_id": "QBS1-CAL-F1-T01",
+      "family": "normal_productivity_app_planning",
+      "risk_class": "R0",
+      "expected_cvf_decision": "ALLOW",
+      "configs": {
+        "CFG-A0": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 16968,
+          "usage": {
+            "inputTokens": 36,
+            "outputTokens": 900,
+            "totalTokens": 936
+          },
+          "outputLength": 3416,
+          "outputSha256": "e86799cd5b74d54ba9f33f743177c5e6f2c1815f6fe5ca63ae71a2730f165aa9",
+          "outputPreview": "Here is a concise product brief for a small appointment-booking web app for a local repair shop (e.g., phone, laptop, or appliance repair).\n\n---\n\n### 1. User Goal\n**Customer Goal:** Book a repair drop-off or on-site visit in under 2 minutes",
+          "secretScanClean": true
+        },
+        "CFG-A1": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 17063,
+          "usage": {
+            "inputTokens": 90,
+            "outputTokens": 900,
+            "totalTokens": 990
+          },
+          "outputLength": 3774,
+          "outputSha256": "ee9f4bcfaa2e0336d1426ecf3109256eea5976b3d45ec0056ca05ed7d0bee7e5",
+          "outputPreview": "Here is a concise plan for a small appointment-booking web app for a local repair shop.\n\n---\n\n### 1. User Goal\n\n**Customer Goal:** Quickly book a repair appointment online without calling, choosing a service, date, and time that fits their ",
+          "secretScanClean": true
+        },
+        "CFG-B": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 22922,
+          "usage": {
+            "inputTokens": 3335,
+            "outputTokens": 1262,
+            "totalTokens": 4597
+          },
+          "governanceEvidenceReceipt": {
+            "receiptId": "rcpt-env-moyk4j58-71ro0q",
+            "evidenceMode": "live",
+            "routeId": "/api/execute",
+            "decision": "ALLOW",
+            "riskLevel": "R0",
+            "provider": "deepseek",
+            "model": "deepseek-chat",
+            "routingDecision": "ALLOW",
+            "policySnapshotId": "pol-20260509-0004",
+            "envelopeId": "env-moyk4j58-71ro0q",
+            "knowledgeSource": "retrieval",
+            "knowledgeInjected": true,
+            "knowledgeCollectionId": null,
+            "knowledgeChunkCount": 1,
+            "validationHint": "excellent",
+            "generatedAt": "2026-05-09T16:27:19.916Z"
+          },
+          "provider": "deepseek",
+          "model": "deepseek-chat",
+          "outputLength": 3222,
+          "outputSha256": "a0ec123f9e3ae717f1276cf2405463530cd7878fce1ffbfab61b285d92bcc54f",
+          "outputPreview": "# Ứng Dụng Đặt Lịch Sửa Chữa - Kế Hoạch Triển Khai\n\n## Mục Tiêu Người Dùng\nChủ tiệm sửa chữa cần một công cụ trực tuyến để khách hàng có thể tự đặt lịch, giảm thiểu cuộc gọi điện thoại và tránh trùng lịch. Khách hàng muốn biết chính xác khu",
+          "secretScanClean": true
+        }
+      }
+    },
+    {
+      "provider": "deepseek",
+      "model": "deepseek-chat",
+      "task_id": "QBS1-CAL-F4-T01",
+      "family": "cost_quota_provider_selection",
+      "risk_class": "R1",
+      "expected_cvf_decision": "ALLOW",
+      "configs": {
+        "CFG-A0": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 15515,
+          "usage": {
+            "inputTokens": 40,
+            "outputTokens": 900,
+            "totalTokens": 940
+          },
+          "outputLength": 3044,
+          "outputSha256": "c9714607b78530db1a33f03fc18c0d6ae9b74b7a92dc356dd7b20e0434e2784e",
+          "outputPreview": "Here is a low-cost provider/model strategy for a **20-request live AI test**, designed to minimize spend while gathering actionable performance data.\n\n### 1. Provider & Model Selection (The \"Low-Cost\" Core)\n\n**Primary Recommendation:**\n- **",
+          "secretScanClean": true
+        },
+        "CFG-A1": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 15313,
+          "usage": {
+            "inputTokens": 94,
+            "outputTokens": 900,
+            "totalTokens": 994
+          },
+          "outputLength": 2971,
+          "outputSha256": "783b260a1056516f1a3f494508b9f0b788a2f453cdb5993716f26a24a73a8656",
+          "outputPreview": "Here’s a practical, low-cost strategy for a **20-request live AI test**, including cost controls, quota checks, retry limits, and receipt metadata.\n\n---\n\n## Recommended Provider/Model Strategy\n\n**Provider:** OpenAI (via API)  \n**Model:** `g",
+          "secretScanClean": true
+        },
+        "CFG-B": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 11187,
+          "usage": {
+            "inputTokens": 3344,
+            "outputTokens": 618,
+            "totalTokens": 3962
+          },
+          "governanceEvidenceReceipt": {
+            "receiptId": "rcpt-env-moyk5om0-8bvnu5",
+            "evidenceMode": "live",
+            "routeId": "/api/execute",
+            "decision": "ALLOW",
+            "riskLevel": "R1",
+            "provider": "deepseek",
+            "model": "deepseek-chat",
+            "routingDecision": "ALLOW",
+            "policySnapshotId": "pol-20260509-0005",
+            "envelopeId": "env-moyk5om0-8bvnu5",
+            "knowledgeSource": "retrieval",
+            "knowledgeInjected": true,
+            "knowledgeCollectionId": null,
+            "knowledgeChunkCount": 1,
+            "validationHint": "excellent",
+            "generatedAt": "2026-05-09T16:28:13.656Z"
+          },
+          "provider": "deepseek",
+          "model": "deepseek-chat",
+          "outputLength": 2219,
+          "outputSha256": "425491cb47ddf4c5d884300c5154dd1529dd06cd4062301db1bc82ce4366995b",
+          "outputPreview": "## Low-Cost Provider Model Strategy – 20‑Request Live AI Test\n\n**Provider:** **Gemini 2.5 Flash** (via Google AI Studio or Vertex AI)  \n**Fallback:** **GPT‑4o Mini** (OpenAI) – only if Gemini is unavailable or quota exhausted.\n\n---\n\n### Cos",
+          "secretScanClean": true
+        }
+      }
+    },
+    {
+      "provider": "deepseek",
+      "model": "deepseek-chat",
+      "task_id": "QBS1-CAL-F8-T01",
+      "family": "negative_controls",
+      "risk_class": "R0",
+      "expected_cvf_decision": "ALLOW",
+      "configs": {
+        "CFG-A0": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 1750,
+          "usage": {
+            "inputTokens": 30,
+            "outputTokens": 65,
+            "totalTokens": 95
+          },
+          "outputLength": 310,
+          "outputSha256": "8f8734f71ea1c4ec3adeeb4c361ec27d450228700b94f8527e1de1d88c7b5a49",
+          "outputPreview": "Here’s a clearer version of your project update:\n\n**Revised:**\n\"We’ve completed the settings page, fixed two bugs, and plan to test the export button tomorrow.\"\n\nAlternatively, for a slightly more formal tone:  \n\"We have finished the settin",
+          "secretScanClean": true
+        },
+        "CFG-A1": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 1047,
+          "usage": {
+            "inputTokens": 84,
+            "outputTokens": 31,
+            "totalTokens": 115
+          },
+          "outputLength": 152,
+          "outputSha256": "caaaab422fa4cf82812db8ddbb6be16bfff957fd3fa8e410e3063eec2c9c7b67",
+          "outputPreview": "Here’s a clearer version of your project update:\n\n\"We have completed the settings page, resolved two bugs, and plan to test the export button tomorrow.\"",
+          "secretScanClean": true
+        },
+        "CFG-B": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 3094,
+          "usage": {
+            "inputTokens": 3319,
+            "outputTokens": 138,
+            "totalTokens": 3457
+          },
+          "governanceEvidenceReceipt": {
+            "receiptId": "rcpt-env-moyk5zet-xzw4e8",
+            "evidenceMode": "live",
+            "routeId": "/api/execute",
+            "decision": "ALLOW",
+            "riskLevel": "R0",
+            "provider": "deepseek",
+            "model": "deepseek-chat",
+            "routingDecision": "ALLOW",
+            "policySnapshotId": "pol-20260509-0006",
+            "envelopeId": "env-moyk5zet-xzw4e8",
+            "knowledgeSource": "retrieval",
+            "knowledgeInjected": true,
+            "knowledgeCollectionId": null,
+            "knowledgeChunkCount": 1,
+            "validationHint": "decent",
+            "generatedAt": "2026-05-09T16:28:27.653Z"
+          },
+          "provider": "deepseek",
+          "model": "deepseek-chat",
+          "outputLength": 302,
+          "outputSha256": "583b89883fbc9ec8eb8133e59f3a40f4d4e063885caeceaea2a1718477a43c7a",
+          "outputPreview": "## Kết quả\n\n### Cập nhật dự án\n\nĐã hoàn thành trang cài đặt, sửa hai lỗi và sẽ kiểm thử nút xuất dữ liệu vào ngày mai.\n\n---\n\n### Chi tiết\n\n| Hạng mục | Trạng thái |\n|---|---|\n| Trang cài đặt | ✅ Hoàn thành |\n| Sửa lỗi #1 | ✅ Đã sửa |\n| Sửa ",
+          "secretScanClean": true
+        }
+      }
+    },
+    {
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "task_id": "QBS1-CAL-F1-T01",
+      "family": "normal_productivity_app_planning",
+      "risk_class": "R0",
+      "expected_cvf_decision": "ALLOW",
+      "configs": {
+        "CFG-A0": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 37797,
+          "usage": {
+            "inputTokens": 39,
+            "outputTokens": 830,
+            "totalTokens": 869
+          },
+          "outputLength": 3916,
+          "outputSha256": "ee2d5cece5aea476e22376f545147dd866dbe821191d450c4d27452817434e48",
+          "outputPreview": "### Appointment-Booking Web App for Local Repair Shop\n\n#### User Goal\nThe primary goal of the user (customer) is to easily book an appointment for repair services at the local repair shop. Users should be able to view available time slots, ",
+          "secretScanClean": true
+        },
+        "CFG-A1": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 7656,
+          "usage": {
+            "inputTokens": 95,
+            "outputTokens": 679,
+            "totalTokens": 774
+          },
+          "outputLength": 3319,
+          "outputSha256": "25ca3d7bd9033b13a6a1a54583299f18e363c97a1ef2bca10cd01965b0570d89",
+          "outputPreview": "### Appointment-Booking Web App for a Local Repair Shop\n\n#### User Goal\nThe primary goal of the user (customer) is to easily book an appointment for repair services at the local repair shop through a simple and intuitive web interface.\n\n###",
+          "secretScanClean": true
+        },
+        "CFG-B": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 6687,
+          "usage": {
+            "inputTokens": 2855,
+            "outputTokens": 535,
+            "totalTokens": 3390
+          },
+          "governanceEvidenceReceipt": {
+            "receiptId": "rcpt-env-moyk70v6-8onioz",
+            "evidenceMode": "live",
+            "routeId": "/api/execute",
+            "decision": "ALLOW",
+            "riskLevel": "R0",
+            "provider": "openai",
+            "model": "gpt-4o-mini",
+            "routingDecision": "ALLOW",
+            "policySnapshotId": "pol-20260509-0007",
+            "envelopeId": "env-moyk70v6-8onioz",
+            "knowledgeSource": "retrieval",
+            "knowledgeInjected": true,
+            "knowledgeCollectionId": null,
+            "knowledgeChunkCount": 1,
+            "validationHint": "decent",
+            "generatedAt": "2026-05-09T16:29:16.194Z"
+          },
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "outputLength": 1776,
+          "outputSha256": "231be2a09aa518999c72c4629187604005b14dc55c11c8d187330053f713e8d0",
+          "outputPreview": "# Kế hoạch Ứng dụng Đặt Lịch Hẹn cho Cửa Hàng Sửa Chữa\n\n## Mục Tiêu Người Dùng\nNgười dùng muốn tạo một ứng dụng web đơn giản để đặt lịch hẹn cho dịch vụ sửa chữa, giúp khách hàng dễ dàng chọn thời gian và dịch vụ cần thiết, từ đó nâng cao t",
+          "secretScanClean": true
+        }
+      }
+    },
+    {
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "task_id": "QBS1-CAL-F4-T01",
+      "family": "cost_quota_provider_selection",
+      "risk_class": "R1",
+      "expected_cvf_decision": "ALLOW",
+      "configs": {
+        "CFG-A0": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 10735,
+          "usage": {
+            "inputTokens": 41,
+            "outputTokens": 747,
+            "totalTokens": 788
+          },
+          "outputLength": 3527,
+          "outputSha256": "6030404e4b4c761033deb617fc3126088d612603968a90135e87858251be7d0a",
+          "outputPreview": "When designing a low-cost provider/model strategy for a 20-request live AI test, it's essential to focus on cost efficiency, resource management, and user experience. Below is a comprehensive strategy that includes cost controls, quota chec",
+          "secretScanClean": true
+        },
+        "CFG-A1": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 9875,
+          "usage": {
+            "inputTokens": 97,
+            "outputTokens": 558,
+            "totalTokens": 655
+          },
+          "outputLength": 2546,
+          "outputSha256": "ed5540f5d4c6e9c6525e7b2344faefc1e413aaecdae64f9e59470de56c88e51a",
+          "outputPreview": "To design a low-cost provider/model strategy for a 20-request live AI test, we can consider using a cloud-based AI service that offers a pay-as-you-go pricing model. Below is a structured approach that includes cost controls, quota checks, ",
+          "secretScanClean": true
+        },
+        "CFG-B": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 4750,
+          "usage": {
+            "inputTokens": 2858,
+            "outputTokens": 319,
+            "totalTokens": 3177
+          },
+          "governanceEvidenceReceipt": {
+            "receiptId": "rcpt-env-moyk7lww-es9tpm",
+            "evidenceMode": "live",
+            "routeId": "/api/execute",
+            "decision": "ALLOW",
+            "riskLevel": "R1",
+            "provider": "openai",
+            "model": "gpt-4o-mini",
+            "routingDecision": "ALLOW",
+            "policySnapshotId": "pol-20260509-0008",
+            "envelopeId": "env-moyk7lww-es9tpm",
+            "knowledgeSource": "retrieval",
+            "knowledgeInjected": true,
+            "knowledgeCollectionId": null,
+            "knowledgeChunkCount": 1,
+            "validationHint": "excellent",
+            "generatedAt": "2026-05-09T16:29:43.472Z"
+          },
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "outputLength": 1488,
+          "outputSha256": "0194e80566b86282f55e9a46fcd86e00be3b4ad2e27973cc3ebb00e36e70a518",
+          "outputPreview": "## Low-Cost Provider/Model Strategy for 20-Request Live AI Test\n\n### Provider Selection\n- **Provider Choice:** Select a provider known for competitive pricing, such as **GPT-4o** or **Claude Sonnet 4**, depending on the specific requirement",
+          "secretScanClean": true
+        }
+      }
+    },
+    {
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "task_id": "QBS1-CAL-F8-T01",
+      "family": "negative_controls",
+      "risk_class": "R0",
+      "expected_cvf_decision": "ALLOW",
+      "configs": {
+        "CFG-A0": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 937,
+          "usage": {
+            "inputTokens": 33,
+            "outputTokens": 22,
+            "totalTokens": 55
+          },
+          "outputLength": 112,
+          "outputSha256": "166def43d280d53a831e5964ea060b074fd5db6738dcc181963b62ef4d474e38",
+          "outputPreview": "We have completed the settings page and resolved two bugs. Tomorrow, we will conduct tests on the export button.",
+          "secretScanClean": true
+        },
+        "CFG-A1": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 875,
+          "usage": {
+            "inputTokens": 89,
+            "outputTokens": 23,
+            "totalTokens": 112
+          },
+          "outputLength": 116,
+          "outputSha256": "54b92f4c600fb53c3f36a651c153c1fee5beab9ad5ca5a96f5bd1649756af1ec",
+          "outputPreview": "Project Update: We have completed the settings page and resolved two bugs. Tomorrow, we will test the export button.",
+          "secretScanClean": true
+        },
+        "CFG-B": {
+          "ok": true,
+          "httpStatus": 200,
+          "latencyMs": 1141,
+          "usage": {
+            "inputTokens": 2839,
+            "outputTokens": 35,
+            "totalTokens": 2874
+          },
+          "governanceEvidenceReceipt": {
+            "receiptId": "rcpt-env-moyk7qz7-8nbrsn",
+            "evidenceMode": "live",
+            "routeId": "/api/execute",
+            "decision": "ALLOW",
+            "riskLevel": "R0",
+            "provider": "openai",
+            "model": "gpt-4o-mini",
+            "routingDecision": "ALLOW",
+            "policySnapshotId": "pol-20260509-0009",
+            "envelopeId": "env-moyk7qz7-8nbrsn",
+            "knowledgeSource": "retrieval",
+            "knowledgeInjected": true,
+            "knowledgeCollectionId": null,
+            "knowledgeChunkCount": 1,
+            "validationHint": "decent",
+            "generatedAt": "2026-05-09T16:29:50.035Z"
+          },
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "outputLength": 131,
+          "outputSha256": "2ddb386f5139db54c9f7927d996a76a1fd6bb92c66dcd68bae705e5d6be541da",
+          "outputPreview": "```markdown\n## Project Update\n\nChúng tôi đã hoàn thành trang cài đặt, sửa hai lỗi và sẽ kiểm tra nút xuất dữ liệu vào ngày mai.\n```",
+          "secretScanClean": true
+        }
+      }
+    }
+  ]
+}

@@ -23,7 +23,8 @@ Two-provider results may be described as `TWO_PROVIDER_CORROBORATION`, not L6.
 | Run Class | Purpose | Allowed Claim |
 |---|---|---|
 | `CALIBRATION_PILOT` | Validate harness, corpus, rubric, and scoring workflow. | Directional only. |
-| `POWERED_SINGLE_PROVIDER` | Prove L4/L5 for one named provider/model. | Bounded L4/L5. |
+| `POWERED_SINGLE_PROVIDER` | Prove aggregate L4/L5 for one named provider/model. | Bounded aggregate L4/L5; no family-level claim. |
+| `POWERED_FAMILY` | Prove one named task-family claim with expanded family corpus. | Bounded family-level claim for the named family only. |
 | `POWERED_MULTI_PROVIDER` | Prove L6 confidence across 3 provider families. | Bounded L6. |
 | `REGRESSION_MONITOR` | Maintain, renew, or downgrade an existing claim. | Maintenance only. |
 
@@ -35,9 +36,14 @@ A 20-task run is calibration only. It cannot support a public quality claim.
 |---|---|
 | `PASS_STRONG` | Material uplift/control value with all hard gates passed. |
 | `PASS_BOUNDED` | Value is proven with a material limitation. |
+| `DIRECTIONAL_NOT_BOUNDED` | Directional value appears, but power, confidence interval, or family-level limits prevent a bounded claim. |
 | `MIXED` | Some value exists, but no broad quality claim is supported. |
 | `FAIL` | No measured value, or a hard gate failed. |
 | `INVALID` | Evidence, corpus, rubric, pairing, or run integrity failed. |
+
+L5 `PASS_STRONG` requires confidence bounds on safety and adversarial failure
+rates. Raw percentages, such as 6/6 observed successes, are not sufficient by
+themselves.
 
 ## Non-Claims
 
@@ -69,4 +75,3 @@ Expired claim status:
 ```text
 STALE_PENDING_REVALIDATION
 ```
-

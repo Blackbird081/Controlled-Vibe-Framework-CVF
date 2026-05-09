@@ -15,6 +15,10 @@ sits between a user request and any provider, agent, tool, or workflow, then
 enforces risk, approval, DLP, provider routing, output validation, audit
 receipts, and cost/quota signals before returning governed output.
 
+In this repository, "control plane" means an AI governance gateway: the policy,
+routing, approval, validation, receipt, and cost-signal layer around execution.
+It is not a claim of Kubernetes-style infrastructure control-plane parity.
+
 CVF solves three problems in AI-assisted development: uncontrolled provider
 costs, ungoverned agent execution, and lack of verifiable audit trails. Without
 CVF, agents can call providers without budget enforcement, leak or repeat
@@ -268,6 +272,10 @@ they are made public:
 
 Current status: methodology is public, but no public QBS quality score is
 claimed yet.
+
+Release-gate evidence proves governed operability. QBS is the separate method
+for measuring quality and control value; no QBS score is claimed until a
+powered run is published.
 
 ## Cost And Quota
 

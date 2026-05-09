@@ -54,6 +54,7 @@
       "PROVENANCE.md",
       "docs/EXPORT_MANIFEST.md",
       "docs/evidence/**",
+      "docs/benchmark/runs/**",
       "docs/reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md",
       "docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md",
       "docs/guides/CVF_DEMO_SCRIPT_2026-04-21.md"

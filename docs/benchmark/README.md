@@ -23,6 +23,10 @@ no public QBS quality score has been claimed. Any future QBS result must name
 the provider, model, corpus version, run class, criteria version, run date, and
 claim level.
 
+Release-gate evidence proves governed operability. QBS is the separate method
+for measuring quality and control value; no QBS score is claimed until a
+powered run is published.
+
 ## What QBS Measures
 
 QBS evaluates CVF as a governed execution system:
@@ -42,4 +46,3 @@ QBS is not a model leaderboard and not an enterprise-readiness claim.
 This folder contains public benchmark methodology only. Raw internal reviews,
 handoffs, calibration packets, and uncurated run logs remain outside the public
 surface. Curated evidence summaries belong under `docs/evidence/`.
-

@@ -4,7 +4,8 @@ CVF public claims are intentionally underclaimed.
 
 Allowed:
 
-- CVF is a provider-agnostic governance control plane.
+- CVF is designed to be a provider-agnostic AI governance gateway/control
+  plane. Current public provider claims remain lane-specific.
 - The public repo includes a buildable web control surface.
 - Release-quality governance proof requires live provider calls.
 - Alibaba/DashScope is the active live proof lane when configured.

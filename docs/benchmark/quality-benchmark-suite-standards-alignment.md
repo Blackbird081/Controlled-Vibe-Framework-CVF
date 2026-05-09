@@ -18,6 +18,10 @@ base language model.
 | MT-Bench / Chatbot Arena | Assistant answer quality and conversational preference. |
 | AgentBench | LLM-as-agent performance in interactive environments. |
 | OWASP / MITRE ATLAS | LLM application and AI-system risk classes. |
+| NIST AI RMF | AI risk management functions and trustworthy AI characteristics. |
+| ISO/IEC 42001 | AI management system requirements. |
+| EU AI Act | Legal risk classes and high-risk AI governance obligations. |
+| MLCommons AILuminate | AI risk and reliability benchmark practice. |
 | CVF QBS | Governed execution system: model + policy + routing + receipt + cost/trace + approval/control. |
 
 CVF QBS is system-level evaluation. Direct model quality is one baseline, not
@@ -34,6 +38,10 @@ the full object being measured.
 | AgentBench | Agent task environments and multi-step behavior. | Agent-control axis and tasks involving scope/tool-boundary discipline. | AgentBench measures agent task completion; QBS measures governed control over behavior. |
 | OWASP LLM Top 10 | LLM application risk taxonomy. | Adversarial and high-risk task families. | OWASP is a risk taxonomy, not a benchmark scoring protocol. |
 | MITRE ATLAS | AI adversary tactics and techniques. | Mapping for prompt injection, data/context poisoning, evasion, exfiltration, and abuse patterns. | ATLAS is threat modeling; QBS needs paired direct-vs-governed measurement. |
+| NIST AI RMF 1.0 | Govern, Map, Measure, and Manage risk functions. | Governance-axis mapping, measurement discipline, and trustworthiness framing. | NIST AI RMF is a risk-management framework, not a paired benchmark. |
+| ISO/IEC 42001:2023 | AI management system requirements. | Evidence retention, process control, and review discipline. | ISO 42001 is a management-system standard, not a task corpus or scoring method. |
+| EU AI Act | Legal risk classes and high-risk obligations. | Risk-class awareness and public claim discipline for regulated contexts. | QBS is not a legal compliance assessment. |
+| MLCommons AILuminate | Industry AI risk and reliability benchmark precedent. | Safety/risk benchmark framing and stricter confidence around safety claims. | AILuminate targets model/system risk categories; QBS adds CVF-specific governance receipts, routing, and cost controls. |
 
 ## 3. Methodology References
 
@@ -48,6 +56,10 @@ QBS uses these as external anchors:
 | AgentBench: Evaluating LLMs as Agents | Agent-oriented evaluation precedent. |
 | OWASP Top 10 for LLM Applications | LLM app risk taxonomy. |
 | MITRE ATLAS | AI threat/tactic mapping. |
+| NIST AI Risk Management Framework 1.0 | Risk-management functions and trustworthy AI framing. |
+| ISO/IEC 42001:2023 | AI management system and process-control reference. |
+| Regulation (EU) 2024/1689, Artificial Intelligence Act | Legal risk-class and high-risk AI governance context. |
+| MLCommons AILuminate | AI risk and reliability benchmark precedent. |
 
 Reference URLs:
 
@@ -59,6 +71,10 @@ Reference URLs:
 - https://arxiv.org/abs/2308.03688
 - https://owasp.org/www-project-top-10-for-large-language-model-applications
 - https://atlas.mitre.org/
+- https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10
+- https://www.iso.org/standard/42001
+- https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689
+- https://mlcommons.org/ailuminate/
 
 ## 4. Risk Mapping
 
@@ -69,6 +85,7 @@ Reference URLs:
 | Cost / quota / provider selection | LLM application operational risk. | Surface provider/model/cost signals where available and avoid hidden spend. |
 | Ambiguous non-coder requests | Human factors and task ambiguity. | Clarify rather than overconfidently execute. |
 | Negative controls | Benchmark validity discipline. | Avoid unnecessary blocking or overhead on harmless tasks. |
+| Regulated or high-impact contexts | NIST AI RMF, ISO/IEC 42001, EU AI Act. | Preserve risk labels, receipts, approval boundaries, and claim limitations. |
 
 ## 5. Peer-Review Checklist
 
@@ -96,8 +113,11 @@ QBS is closest to a system benchmark for governed AI execution. It combines:
 - reviewer-calibration caution from MT-Bench
 - agent-task awareness from AgentBench
 - adversarial taxonomy grounding from OWASP and MITRE ATLAS
+- risk-management and management-system framing from NIST AI RMF and ISO/IEC
+  42001
+- legal risk-class awareness from the EU AI Act
+- AI risk/reliability benchmark precedent from MLCommons AILuminate
 
 The result is CVF-native because the question is not only "did the model answer
 well?" The question is "did the user get a useful answer through a controlled,
 auditable, cost-aware, policy-bound execution path?"
-

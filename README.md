@@ -1,27 +1,52 @@
 # Controlled Vibe Framework (CVF)
 
-CVF is a local-first governance control plane for AI and agent execution.
+> **Developed by Tien / Blackbird081**
+>
+> **Controlled vibe coding. Not faster, but safer and more governable.**
 
-It sits between a user request and any provider, agent, tool, or workflow:
+[![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
+[![Release Gate](https://img.shields.io/badge/release%20gate-7%2F7%20PASS-brightgreen.svg)](docs/evidence/latest-release-gate.md)
+[![Provider Proof](https://img.shields.io/badge/provider%20proof-Alibaba%20certified%20%7C%20DeepSeek%20bounded-brightgreen.svg)](docs/evidence/provider-lanes.md)
+[![Public Surface](https://img.shields.io/badge/public%20surface-scanned-blue.svg)](governance/public-surface-manifest.json)
+[![Architecture](https://img.shields.io/badge/architecture-diagram%20first-blue.svg)](ARCHITECTURE.md)
 
-```text
-user or developer input
-  -> CVF intake, rules, risk, approval, DLP, provider routing
-  -> selected AI provider / agent / tool
-  -> CVF output validation, audit, receipt, cost/quota signal
-  -> governed output
-```
+CVF is a local-first governance control plane for AI and agent execution. It
+sits between a user request and any provider, agent, tool, or workflow, then
+enforces risk, approval, DLP, provider routing, output validation, audit
+receipts, and cost/quota signals before returning governed output.
 
-CVF is not tied to one model provider and it is not a skill marketplace. Skills,
-templates, and UI helpers can make CVF easier to apply, especially for
-non-coders, but the core product is the control layer that governs execution.
+CVF solves three problems in AI-assisted development: uncontrolled provider
+costs, ungoverned agent execution, and lack of verifiable audit trails. Without
+CVF, agents can call providers without budget enforcement, leak or repeat
+sensitive content in outputs, and leave weak evidence of what ran.
 
 ## Attribution
 
 CVF is owned and governed by **Tien / Blackbird081**. Claude and Codex are
 acknowledged AI collaboration contributors for design, implementation,
 repository maintenance, governance checks, and verification support. See
-`CONTRIBUTORS.md`.
+[CONTRIBUTORS.md](CONTRIBUTORS.md).
+
+## Quick Navigation
+
+<table>
+  <tr>
+    <td align="center"><a href="#architecture-at-a-glance"><strong>Overview</strong></a></td>
+    <td align="center"><a href="#quick-start"><strong>Start Here</strong></a></td>
+    <td align="center"><a href="ARCHITECTURE.md"><strong>Architecture</strong></a></td>
+    <td align="center"><a href="#provider-boundary"><strong>Providers</strong></a></td>
+    <td align="center"><a href="#governance-boundary"><strong>Governance</strong></a></td>
+    <td align="center"><a href="#public-evidence"><strong>Evidence</strong></a></td>
+    <td align="center"><a href="CONTRIBUTORS.md"><strong>Contributors</strong></a></td>
+  </tr>
+</table>
+
+## Current Live-Proof Boundary
+
+> Current live proof: Alibaba/DashScope is the primary certified release lane
+> with a `7/7` release-gate PASS. DeepSeek has bounded provider-lane evidence.
+> Other providers may have adapter contracts or experimental integration
+> surfaces, but provider parity is not claimed until live evidence exists.
 
 ## Architecture At A Glance
 

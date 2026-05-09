@@ -34,6 +34,7 @@ repository maintenance, governance checks, and verification support. See
     <td align="center"><a href="#architecture-at-a-glance"><strong>Overview</strong></a></td>
     <td align="center"><a href="#quick-start"><strong>Start Here</strong></a></td>
     <td align="center"><a href="ARCHITECTURE.md"><strong>Architecture</strong></a></td>
+    <td align="center"><a href="#technical-footprint"><strong>Tech Stack</strong></a></td>
     <td align="center"><a href="#provider-boundary"><strong>Providers</strong></a></td>
     <td align="center"><a href="#governance-boundary"><strong>Governance</strong></a></td>
     <td align="center"><a href="#public-evidence"><strong>Evidence</strong></a></td>
@@ -92,6 +93,23 @@ This renewed repository contains the current product surface:
 
 The full development history is preserved separately in the provenance archive.
 See `PROVENANCE.md`.
+
+## Technical Footprint
+
+The public repository is intentionally slimmed for external use, so its GitHub
+language mix is different from the private provenance archive. Current public
+surface by GitHub Linguist byte count:
+
+| Language | Public role | Current share |
+|---|---|---:|
+| TypeScript | Web control surface, governance runtime contracts, tests | 98.7% |
+| JavaScript | Node scripts, config, build/runtime helpers | 0.8% |
+| Python | Release gates, public-surface scanners, provider readiness checks | 0.3% |
+| CSS | Web styling surface | 0.1% |
+
+The private provenance archive contains a broader historical language mix and
+more internal verification material. The public repo preserves only the current
+external-facing implementation, docs, and proof surfaces.
 
 ## Quick Start
 

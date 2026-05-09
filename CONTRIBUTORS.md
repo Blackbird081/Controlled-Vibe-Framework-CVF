@@ -17,7 +17,8 @@ authority, or governance authority.
   support.
 - **Codex (OpenAI)** - AI engineering collaborator used for repository
   maintenance, governance checks, skill consolidation, design-system
-  codification, and implementation verification.
+  codification, implementation verification, and public-repository sync
+  support.
 
 ## Attribution Notes
 

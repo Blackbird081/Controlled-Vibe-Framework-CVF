@@ -7,6 +7,7 @@ import hmac
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -204,7 +205,10 @@ def wait_for_server(base_url: str, timeout_seconds: int) -> None:
 
 
 def start_server(env: dict[str, str], port: int) -> subprocess.Popen[str]:
-    command = ["npm", "run", "dev", "--", "-p", str(port)]
+    npm = shutil.which("npm") or shutil.which("npm.cmd")
+    if not npm:
+        raise RuntimeError("npm executable was not found on PATH")
+    command = [npm, "run", "dev", "--", "-p", str(port)]
     return subprocess.Popen(
         command,
         cwd=WEB_ROOT,

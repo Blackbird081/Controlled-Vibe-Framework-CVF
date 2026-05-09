@@ -43,7 +43,8 @@
       "scripts/check_cvf_provider_release_readiness.py",
       "scripts/evaluate_cvf_provider_lane_certification.py",
       "scripts/check_public_surface.py",
-      "governance/public-surface-manifest.json"
+      "governance/public-surface-manifest.json",
+      "docs/guides/minimum-useful-cvf.md"
     ],
     "KEEP_PUBLIC_EVIDENCE_SUMMARY": [
       "PROVENANCE.md",

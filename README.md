@@ -32,6 +32,7 @@ repository maintenance, governance checks, and verification support. See
 <table>
   <tr>
     <td align="center"><a href="#architecture-at-a-glance"><strong>Overview</strong></a></td>
+    <td align="center"><a href="#who-cvf-is-for"><strong>Audience</strong></a></td>
     <td align="center"><a href="#quick-start"><strong>Start Here</strong></a></td>
     <td align="center"><a href="ARCHITECTURE.md"><strong>Architecture</strong></a></td>
     <td align="center"><a href="#technical-footprint"><strong>Tech Stack</strong></a></td>
@@ -48,6 +49,48 @@ repository maintenance, governance checks, and verification support. See
 > with a `7/7` release-gate PASS. DeepSeek has bounded provider-lane evidence.
 > Other providers may have adapter contracts or experimental integration
 > surfaces, but provider parity is not claimed until live evidence exists.
+
+## Who CVF Is For
+
+CVF is for builders, operators, and small teams who want a governed baseline for
+AI-assisted work without spending months wiring their own rules, provider
+checks, approval points, output validation, and audit receipts from scratch.
+
+It is a good fit when you need:
+
+- AI or agent execution to pass through explicit risk and policy gates
+- local-first control over provider keys, cost, quota, and evidence
+- a repeatable path for non-coder or operator-facing governed requests
+- a developer-readable control plane that can sit around providers, tools, or agents
+
+## Who CVF Is Not For
+
+CVF is not a one-size-fits-all AI framework.
+
+You may not need CVF if you already have a stable Claude Code, Codex, Cursor, or
+custom agent setup with reliable hooks, policies, skills, cost controls, and
+evidence capture. CVF is also not a hosted SaaS product, an autonomous AGI
+system, a no-config consumer app, or a replacement for your existing CI/CD.
+
+The goal is not to use CVF for its own sake. The goal is to build, ship,
+operate, and review AI-assisted work with clearer boundaries.
+
+## Minimum Useful CVF
+
+The smallest useful slice is:
+
+```text
+request -> risk check -> governed provider call -> validation -> audit receipt
+```
+
+In practice:
+
+- in 30 minutes, run the web app and inspect the governed request path
+- in 1 day, add an operator-supplied provider key and run the live release gate
+- in 1 week, connect a real workflow and decide which actions require approval
+
+For a practical walkthrough and common failure boundaries, see
+`docs/guides/minimum-useful-cvf.md`.
 
 ## Architecture At A Glance
 
@@ -159,6 +202,8 @@ python scripts/run_cvf_release_gate_bundle.py --json
 
 That command is the release-quality proof command. It includes live governance
 E2E and must fail if no DashScope-compatible live key is available.
+
+For the smallest operational path, use `docs/guides/minimum-useful-cvf.md`.
 
 ## Module Map
 

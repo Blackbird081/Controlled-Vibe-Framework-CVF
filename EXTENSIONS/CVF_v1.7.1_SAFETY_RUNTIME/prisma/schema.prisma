@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ─── Proposal ────────────────────────────────────────────────
+
+model Proposal {
+  id            String   @id @default(uuid())
+  source        String   // "openclaw" | "structured" | "api"
+  action        String
+  payload       String   // JSON stringified
+  policyVersion String
+  policyHash    String
+  confidence    Float    @default(1.0)
+  riskLevel     String   @default("low") // "low" | "medium" | "high"
+  state         String   @default("proposed") // ApprovalState enum
+  decision      String?  // "approved" | "rejected" | "pending"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  executions    ExecutionJournal[]
+
+  @@index([state])
+  @@index([createdAt])
+}
+
+// ─── Execution Journal ───────────────────────────────────────
+
+model ExecutionJournal {
+  id            String   @id @default(uuid())
+  proposalId    String
+  policyVersion String
+  policyHash    String
+  decision      String   // "approved" | "rejected" | "pending"
+  timestamp     DateTime @default(now())
+
+  proposal      Proposal @relation(fields: [proposalId], references: [id])
+
+  @@index([proposalId])
+  @@index([timestamp])
+}
+
+// ─── Policy Version ──────────────────────────────────────────
+
+model PolicyVersion {
+  id          String   @id @default(uuid())
+  version     String   @unique
+  hash        String
+  rules       String   // JSON array of { id, description }
+  createdAt   DateTime @default(now())
+  isActive    Boolean  @default(true)
+
+  @@index([version])
+}
+
+// ─── AI Audit Log ────────────────────────────────────────────
+
+model AuditLog {
+  id            String   @id @default(uuid())
+  userId        String?
+  model         String?
+  totalTokens   Int?
+  promptTokens  Int?
+  completionTokens Int?
+  costUsd       Float?
+  request       String?  // JSON stringified request
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// ─── Budget Config ───────────────────────────────────────────
+
+model BudgetConfig {
+  id            String   @id @default(uuid())
+  scope         String   // "EXECUTION" | "USER_DAILY" | "ORG_MONTHLY" | "SESSION_LOOP"
+  hardLimitUsd  Float
+  softLimitUsd  Float?
+  maxTokens     Int?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  @@unique([scope])
+}
+
+// ─── Simulation Snapshot ─────────────────────────────────────
+
+model SimulationSnapshot {
+  id            String   @id @default(uuid())
+  proposalId    String
+  proposal      String   // JSON stringified
+  policyVersion String
+  decision      String
+  timestamp     DateTime @default(now())
+
+  @@index([proposalId])
+}

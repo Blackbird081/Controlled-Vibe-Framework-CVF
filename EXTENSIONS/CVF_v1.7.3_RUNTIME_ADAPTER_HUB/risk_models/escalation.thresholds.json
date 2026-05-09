@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+
+  "thresholds": {
+    "allow": {
+      "max_score": 39
+    },
+    "review": {
+      "min_score": 40,
+      "max_score": 69
+    },
+    "sandbox": {
+      "min_score": 70,
+      "max_score": 89
+    },
+    "deny": {
+      "min_score": 90
+    }
+  }
+}

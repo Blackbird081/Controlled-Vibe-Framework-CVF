@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "cvf-guard-server": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "cwd": "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER"
+    }
+  }
+}

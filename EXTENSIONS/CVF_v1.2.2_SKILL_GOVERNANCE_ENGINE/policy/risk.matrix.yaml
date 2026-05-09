@@ -1,0 +1,18 @@
+risk_matrix_name: CVF-Risk-Matrix
+version: 1.0
+
+risk_factors:
+  data_access:
+    weight: 20
+  external_dependency:
+    weight: 15
+  code_execution:
+    weight: 25
+  cost_impact:
+    weight: 10
+
+risk_thresholds:
+  low: 40
+  medium: 60
+  high: 80
+  critical: 90

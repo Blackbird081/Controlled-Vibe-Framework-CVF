@@ -1,0 +1,86 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Proposal {
+  id               String   @id @default(uuid())
+  instruction      String   @default("")
+  source           String   @default("api")
+  action           String   @default("submit")
+  payload          String   @default("{}")
+  policyVersion    String   @default("v1")
+  policyHash       String   @default("pending")
+  confidence       Float    @default(1.0)
+  riskLevel        String   @default("low")
+  riskScore        Int      @default(0)
+  estimatedCost    Float?
+  requiresApproval Boolean  @default(false)
+  approvalStatus   String   @default("PENDING")
+  state            String   @default("proposed")
+  decision         String?
+  status           String?
+  userId           String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  executions       ExecutionJournal[]
+
+  @@index([state])
+  @@index([createdAt])
+}
+
+model ExecutionJournal {
+  id            String   @id @default(uuid())
+  proposalId    String
+  policyVersion String
+  policyHash    String
+  decision      String
+  timestamp     DateTime @default(now())
+
+  proposal      Proposal @relation(fields: [proposalId], references: [id])
+
+  @@index([proposalId])
+  @@index([timestamp])
+}
+
+model SimulationSnapshot {
+  id            String   @id @default(uuid())
+  proposalId    String
+  proposal      String
+  policyVersion String
+  decision      String
+  timestamp     DateTime @default(now())
+
+  @@index([proposalId])
+}
+
+model AuditLog {
+  id               String   @id @default(uuid())
+  userId           String?
+  model            String?
+  totalTokens      Int?
+  promptTokens     Int?
+  completionTokens Int?
+  costUsd          Float?
+  request          String?
+  createdAt        DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model BudgetConfig {
+  id           String   @id @default(uuid())
+  scope        String
+  hardLimitUsd Float
+  softLimitUsd Float?
+  maxTokens    Int?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  @@unique([scope])
+}

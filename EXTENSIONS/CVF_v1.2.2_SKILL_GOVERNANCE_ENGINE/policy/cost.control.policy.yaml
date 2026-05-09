@@ -1,0 +1,12 @@
+policy_name: CVF-Cost-Control
+version: 1.0
+
+cost_limits:
+  max_tokens_per_execution: 4000
+  max_runtime_ms: 5000
+  max_external_cost_flag: false
+
+optimization_rules:
+  prefer_lower_token_usage: true
+  prefer_lower_runtime: true
+  penalize_external_cost: true

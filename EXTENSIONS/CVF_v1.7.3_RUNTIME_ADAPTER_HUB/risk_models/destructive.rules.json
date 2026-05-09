@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "destructive_patterns": [
+    {
+      "match": ["rm -rf", "del /f /q", "format c:"],
+      "risk_increase": 30
+    },
+    {
+      "match": ["drop table", "truncate table"],
+      "risk_increase": 25
+    },
+    {
+      "match": ["delete *", "recursive delete"],
+      "risk_increase": 20
+    }
+  ]
+}

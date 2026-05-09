@@ -1,0 +1,714 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useLanguage } from '@/lib/i18n';
+import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
+import { evaluateSpecGate } from '@/lib/spec-gate';
+import { ProcessingScreen } from './ProcessingScreen';
+import { WorkflowVisualizer } from './WorkflowVisualizer';
+import {
+    buildNonCoderLiveExecutionRequest,
+    buildNonCoderReferenceLoop,
+    formatNonCoderReferenceLoopMarkdown,
+} from '@/lib/non-coder-reference-loop';
+
+const DRAFT_STORAGE_KEY = 'cvf_security_assessment_wizard_draft';
+
+interface WizardField {
+    id: string;
+    type: 'text' | 'textarea' | 'select';
+    label: string;
+    placeholder?: string;
+    required: boolean;
+    options?: string[];
+    rows?: number;
+    tip?: string;
+}
+
+interface WizardStep {
+    id: number;
+    name: string;
+    icon: string;
+    description: string;
+    required: boolean;
+    fields: WizardField[];
+    isReview?: boolean;
+}
+
+interface WizardData {
+    [key: string]: string;
+}
+
+interface SecurityAssessmentWizardProps {
+    onBack: () => void;
+}
+
+function getWizardSteps(lang: Lang): WizardStep[] {
+    return [
+    {
+        id: 1,
+        name: 'Scope & Assets',
+        icon: '🎯',
+        description: lang === 'vi' ? 'Xác định phạm vi và tài sản cần bảo vệ' : 'Define scope and assets to protect',
+        required: true,
+        fields: [
+            { id: 'systemName', type: 'text', label: lang === 'vi' ? 'Tên hệ thống' : 'System Name', placeholder: lang === 'vi' ? 'VD: Customer Portal v2.0' : 'e.g. Customer Portal v2.0', required: true, tip: lang === 'vi' ? '💡 Hệ thống hoặc application cần assess' : '💡 System or application to assess' },
+            { id: 'systemType', type: 'select', label: lang === 'vi' ? 'Loại hệ thống' : 'System Type', options: ['Web Application', 'Mobile App', 'API Service', 'Infrastructure', 'Cloud Environment', 'Enterprise System'], required: true },
+            { id: 'assets', type: 'textarea', label: 'Critical Assets', placeholder: lang === 'vi' ? 'VD:\n- User database (PII)\n- Payment processing\n- Authentication system\n- Admin panel' : 'e.g.:\n- User database (PII)\n- Payment processing\n- Authentication system\n- Admin panel', required: true, rows: 4, tip: lang === 'vi' ? '💡 Liệt kê tài sản quan trọng cần bảo vệ' : '💡 List critical assets to protect' },
+            { id: 'boundaries', type: 'textarea', label: 'System Boundaries', placeholder: lang === 'vi' ? 'In scope: Web app, API, Database\nOut of scope: Third-party services, CDN' : 'In scope: Web app, API, Database\nOut of scope: Third-party services, CDN', required: true, rows: 3 },
+            { id: 'regulations', type: 'text', label: 'Compliance Requirements', placeholder: lang === 'vi' ? 'VD: GDPR, PCI-DSS, SOC2, HIPAA' : 'e.g. GDPR, PCI-DSS, SOC2, HIPAA', required: false },
+        ]
+    },
+    {
+        id: 2,
+        name: 'Threat Modeling',
+        icon: '⚠️',
+        description: lang === 'vi' ? 'Xác định các mối đe dọa tiềm ẩn' : 'Identify potential threats',
+        required: true,
+        fields: [
+            { id: 'threatActors', type: 'textarea', label: 'Threat Actors', placeholder: lang === 'vi' ? 'VD:\n- External hackers\n- Malicious insiders\n- Competitors\n- Script kiddies' : 'e.g.:\n- External hackers\n- Malicious insiders\n- Competitors\n- Script kiddies', required: true, rows: 3, tip: lang === 'vi' ? '💡 Ai có thể tấn công hệ thống?' : '💡 Who could attack the system?' },
+            { id: 'attackVectors', type: 'textarea', label: 'Attack Vectors', placeholder: lang === 'vi' ? 'VD:\n- SQL Injection\n- XSS\n- CSRF\n- Brute force\n- Social engineering' : 'e.g.:\n- SQL Injection\n- XSS\n- CSRF\n- Brute force\n- Social engineering', required: true, rows: 4, tip: lang === 'vi' ? '💡 Các phương thức tấn công có thể' : '💡 Possible attack methods' },
+            { id: 'dataFlow', type: 'textarea', label: 'Data Flow Description', placeholder: lang === 'vi' ? 'User → Frontend → API → Database\nDescribe trust boundaries and data paths' : 'User → Frontend → API → Database\nDescribe trust boundaries and data paths', required: true, rows: 3 },
+            { id: 'existingControls', type: 'textarea', label: 'Existing Security Controls', placeholder: lang === 'vi' ? 'VD:\n- WAF configured\n- MFA enabled\n- Encryption at rest' : 'e.g.:\n- WAF configured\n- MFA enabled\n- Encryption at rest', required: false, rows: 3 },
+        ]
+    },
+    {
+        id: 3,
+        name: 'Vulnerability Assessment',
+        icon: '🔍',
+        description: lang === 'vi' ? 'Đánh giá lỗ hổng bảo mật' : 'Assess security vulnerabilities',
+        required: true,
+        fields: [
+            { id: 'knownVulns', type: 'textarea', label: 'Known Vulnerabilities', placeholder: lang === 'vi' ? 'VD:\n- Outdated dependencies\n- Weak password policy\n- Missing rate limiting' : 'e.g.:\n- Outdated dependencies\n- Weak password policy\n- Missing rate limiting', required: true, rows: 4, tip: lang === 'vi' ? '💡 Lỗ hổng đã biết hoặc nghi ngờ' : '💡 Known or suspected vulnerabilities' },
+            { id: 'techStack', type: 'textarea', label: 'Technology Stack', placeholder: lang === 'vi' ? 'VD:\n- Frontend: React 18\n- Backend: Node.js 18\n- Database: PostgreSQL 15\n- Cloud: AWS' : 'e.g.:\n- Frontend: React 18\n- Backend: Node.js 18\n- Database: PostgreSQL 15\n- Cloud: AWS', required: true, rows: 3 },
+            { id: 'authMechanism', type: 'select', label: 'Authentication', options: ['Username/Password', 'OAuth2/OIDC', 'SAML', 'API Keys', 'JWT', 'Multi-factor'], required: true },
+            { id: 'dataClassification', type: 'textarea', label: 'Data Classification', placeholder: lang === 'vi' ? 'VD:\n- Public: Product catalog\n- Internal: User emails\n- Confidential: Passwords, tokens\n- Restricted: Payment data' : 'e.g.:\n- Public: Product catalog\n- Internal: User emails\n- Confidential: Passwords, tokens\n- Restricted: Payment data', required: false, rows: 3 },
+        ]
+    },
+    {
+        id: 4,
+        name: 'Risk Analysis',
+        icon: '📊',
+        description: lang === 'vi' ? 'Phân tích và đánh giá rủi ro' : 'Analyze and assess risks',
+        required: true,
+        fields: [
+            { id: 'riskMatrix', type: 'textarea', label: 'Risk Assessment', placeholder: lang === 'vi' ? 'Risk 1: SQL Injection\n  Impact: High, Likelihood: Medium\n\nRisk 2: Session hijacking\n  Impact: High, Likelihood: Low' : 'Risk 1: SQL Injection\n  Impact: High, Likelihood: Medium\n\nRisk 2: Session hijacking\n  Impact: High, Likelihood: Low', required: true, rows: 5, tip: lang === 'vi' ? '💡 Đánh giá Impact × Likelihood cho mỗi risk' : '💡 Assess Impact × Likelihood for each risk' },
+            { id: 'riskAppetite', type: 'select', label: 'Risk Appetite', options: ['Conservative (minimize all risks)', 'Moderate (accept controlled risks)', 'Aggressive (focus on critical only)'], required: true },
+            { id: 'businessImpact', type: 'textarea', label: 'Business Impact Analysis', placeholder: lang === 'vi' ? 'VD:\n- Data breach: Revenue loss $X, reputation damage\n- Service outage: $Y/hour\n- Compliance violation: Fines up to $Z' : 'e.g.:\n- Data breach: Revenue loss $X, reputation damage\n- Service outage: $Y/hour\n- Compliance violation: Fines up to $Z', required: true, rows: 3 },
+        ]
+    },
+    {
+        id: 5,
+        name: 'Review',
+        icon: '✅',
+        description: lang === 'vi' ? 'Xem lại và xuất Security Assessment' : 'Review and export Security Assessment',
+        required: true,
+        isReview: true,
+        fields: []
+    }
+    ];
+}
+
+function generateConsolidatedSpec(data: WizardData): string {
+    const spec = `
+# 🔐 SECURITY ASSESSMENT REPORT
+
+> Generated by CVF Security Assessment Wizard
+> System: ${data.systemName || 'N/A'}
+> Type: ${data.systemType || 'N/A'}
+
+---
+
+## 1️⃣ SCOPE & ASSETS
+
+### System Under Assessment
+${data.systemName || 'N/A'} (${data.systemType || 'N/A'})
+
+### Critical Assets
+${data.assets || 'N/A'}
+
+### System Boundaries
+${data.boundaries || 'N/A'}
+
+### Compliance Requirements
+${data.regulations || 'None specified'}
+
+---
+
+## 2️⃣ THREAT MODELING
+
+### Threat Actors
+${data.threatActors || 'N/A'}
+
+### Attack Vectors
+${data.attackVectors || 'N/A'}
+
+### Data Flow
+${data.dataFlow || 'N/A'}
+
+### Existing Security Controls
+${data.existingControls || 'None documented'}
+
+---
+
+## 3️⃣ VULNERABILITY ASSESSMENT
+
+### Known Vulnerabilities
+${data.knownVulns || 'N/A'}
+
+### Technology Stack
+${data.techStack || 'N/A'}
+
+### Authentication Mechanism
+${data.authMechanism || 'N/A'}
+
+### Data Classification
+${data.dataClassification || 'Not classified'}
+
+---
+
+## 4️⃣ RISK ANALYSIS
+
+### Risk Assessment Matrix
+${data.riskMatrix || 'N/A'}
+
+### Risk Appetite
+${data.riskAppetite || 'N/A'}
+
+### Business Impact Analysis
+${data.businessImpact || 'N/A'}
+
+---
+
+## 📋 SUMMARY FOR AI
+
+**SYSTEM:** ${data.systemName} (${data.systemType})
+
+**CRITICAL ASSETS:**
+${data.assets?.substring(0, 200) || 'N/A'}
+
+**TOP THREATS:**
+${data.attackVectors?.substring(0, 200) || 'N/A'}
+
+**KNOWN VULNERABILITIES:**
+${data.knownVulns?.substring(0, 200) || 'N/A'}
+
+---
+
+## 🎯 EXPECTED OUTPUTS
+
+Based on this assessment, AI should generate:
+1. **Threat Model Diagram** - STRIDE-based analysis
+2. **Vulnerability Priority List** - CVSS-scored findings
+3. **Risk Matrix Visualization** - Impact × Likelihood grid
+4. **Remediation Roadmap** - Prioritized by risk score
+5. **Security Controls Recommendations** - Specific to tech stack
+6. **Compliance Gap Analysis** - If regulations specified
+7. **Penetration Test Scope** - Areas to focus testing
+
+**REMEMBER:**
+- Use industry standards (OWASP, NIST, CIS)
+- Prioritize by risk, not just severity
+- Include both quick wins and long-term fixes
+- Consider defense-in-depth strategy
+`;
+
+    return spec.trim();
+}
+
+function toSecuritySlug(value: string): string {
+    return value
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        || 'security-assessment';
+}
+
+function buildSecurityAssessmentGovernedPacket(data: WizardData) {
+    const systemName = data.systemName?.trim() || 'Security Assessment';
+    const slug = toSecuritySlug(systemName);
+    const targetUsers = data.assets?.trim() || 'security stakeholders';
+    const assessmentSpec = generateConsolidatedSpec(data);
+
+    return buildNonCoderReferenceLoop({
+        appName: systemName,
+        appType: 'Security Assessment',
+        problem: data.boundaries?.trim() || systemName,
+        targetUsers,
+        coreFeatures: data.attackVectors?.trim() || data.riskMatrix?.trim() || 'Threat model\nRisk matrix\nRemediation roadmap',
+        outOfScope: data.existingControls?.trim() || 'Any remediation implementation work outside this governed assessment packet',
+        techPreference: data.systemType?.trim() || 'Governed security workflow',
+        dataStorage: data.dataClassification?.trim() || data.assets?.trim() || 'Security-relevant assets',
+        archType: 'Security assessment packet',
+        apiStyle: 'Threat and risk review',
+        distribution: 'Security review packet',
+        spec: assessmentSpec,
+        title: `${systemName} Governed Security Assessment Packet`,
+        templateId: 'security_assessment_wizard',
+        templateName: 'Security Assessment Wizard',
+        intent: `Produce one governed security assessment packet for "${systemName}" for ${targetUsers}.`,
+        riskLevel: 'R3',
+        fileScope: [
+            `docs/security-assessment/${slug}.assessment.md`,
+            `docs/security-assessment/${slug}.review.md`,
+            `docs/security-assessment/${slug}.freeze.md`,
+        ],
+        baselineArtifact: `docs/baselines/${slug.toUpperCase().replace(/-/g, '_')}_SECURITY_ASSESSMENT_FREEZE_RECEIPT.md`,
+        acceptedOutput: `${systemName} governed security assessment packet`,
+        followUps: [
+            `Validate the threat model and remediation priorities for "${systemName}" with the security owner`,
+            'Open a separate implementation batch for remediation work outside this assessment packet',
+        ],
+        skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:security-${slug}`,
+        inputs: {
+            systemName: data.systemName || '',
+            systemType: data.systemType || '',
+            assets: data.assets || '',
+            boundaries: data.boundaries || '',
+            regulations: data.regulations || '',
+            threatActors: data.threatActors || '',
+            attackVectors: data.attackVectors || '',
+            dataFlow: data.dataFlow || '',
+            existingControls: data.existingControls || '',
+            knownVulns: data.knownVulns || '',
+            techStack: data.techStack || '',
+            authMechanism: data.authMechanism || '',
+            dataClassification: data.dataClassification || '',
+            riskMatrix: data.riskMatrix || '',
+            riskAppetite: data.riskAppetite || '',
+            businessImpact: data.businessImpact || '',
+        },
+    });
+}
+
+export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardProps) {
+    const { language } = useLanguage();
+    const WIZARD_STEPS = getWizardSteps(language);
+    const [currentStep, setCurrentStep] = useState(1);
+    const [wizardData, setWizardData] = useState<WizardData>({});
+    const [showExport, setShowExport] = useState(false);
+    const [showGovernedPacket, setShowGovernedPacket] = useState(false);
+    const [showLiveRun, setShowLiveRun] = useState(false);
+    const [liveRunOutput, setLiveRunOutput] = useState<string | null>(null);
+    const [hasDraft, setHasDraft] = useState(false);
+
+    useEffect(() => {
+        const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+        if (savedDraft) {
+            try {
+                const parsed = JSON.parse(savedDraft);
+                if (parsed.data && Object.keys(parsed.data).length > 0) {
+                    setHasDraft(true);
+                }
+            } catch { /* ignore */ }
+        }
+    }, []);
+
+    useEffect(() => {
+        if (Object.keys(wizardData).length > 0) {
+            localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({
+                data: wizardData,
+                step: currentStep,
+                savedAt: new Date().toISOString()
+            }));
+        }
+    }, [wizardData, currentStep]);
+
+    const loadDraft = () => {
+        const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+        if (savedDraft) {
+            try {
+                const parsed = JSON.parse(savedDraft);
+                setWizardData(parsed.data || {});
+                setCurrentStep(parsed.step || 1);
+                setHasDraft(false);
+            } catch { /* ignore */ }
+        }
+    };
+
+    const clearDraft = () => {
+        localStorage.removeItem(DRAFT_STORAGE_KEY);
+        setWizardData({});
+        setCurrentStep(1);
+        setHasDraft(false);
+    };
+
+    const currentStepConfig = WIZARD_STEPS.find(s => s.id === currentStep)!;
+
+    const canJumpToStep = (targetStep: number): boolean => {
+        if (targetStep <= currentStep) return true;
+        for (let i = 1; i < targetStep; i++) {
+            const step = WIZARD_STEPS.find(s => s.id === i);
+            if (!step || !step.required) continue;
+            const requiredFields = step.fields.filter(f => f.required);
+            const allFilled = requiredFields.every(f => wizardData[f.id]?.trim());
+            if (!allFilled) return false;
+        }
+        return true;
+    };
+
+    const handleStepClick = (stepId: number) => {
+        if (canJumpToStep(stepId)) setCurrentStep(stepId);
+    };
+
+    const handleFieldChange = (fieldId: string, value: string) => {
+        setWizardData(prev => ({ ...prev, [fieldId]: value }));
+    };
+
+    const isStepValid = () => {
+        if (!currentStepConfig.required) return true;
+        const requiredFields = currentStepConfig.fields.filter(f => f.required);
+        return requiredFields.every(f => wizardData[f.id]?.trim());
+    };
+
+    const progress = Math.round((currentStep / WIZARD_STEPS.length) * 100);
+    const generatedSpec = generateConsolidatedSpec(wizardData);
+    const specGate = evaluateSpecGate(WIZARD_STEPS.flatMap(step => step.fields), wizardData);
+    const canExport = specGate.status === 'PASS';
+    const specGateLabel = specGate.status === 'PASS'
+        ? wt(WIZARD_COMMON.specGatePass, language)
+        : specGate.status === 'CLARIFY'
+            ? wt(WIZARD_COMMON.specGateClarify, language)
+            : wt(WIZARD_COMMON.specGateFail, language);
+    const specGateClass = specGate.status === 'PASS'
+        ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+        : specGate.status === 'CLARIFY'
+            ? 'bg-amber-50 border-amber-200 text-amber-700'
+            : 'bg-rose-50 border-rose-200 text-rose-700';
+    const governedPacket = buildSecurityAssessmentGovernedPacket(wizardData);
+    const governedPacketMarkdown = formatNonCoderReferenceLoopMarkdown(governedPacket);
+    const governedLiveExecution = buildNonCoderLiveExecutionRequest(governedPacket);
+
+    if (showExport) {
+        return (
+            <div className="max-w-4xl mx-auto">
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                            🔐 Security Assessment - {wizardData.systemName || 'Untitled'}
+                        </h2>
+                        <button onClick={() => setShowExport(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">✕</button>
+                    </div>
+                    <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 max-h-[60vh] overflow-y-auto mb-4">
+                        <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">{generatedSpec}</pre>
+                    </div>
+                    <div className={`mb-4 p-3 rounded-lg border text-sm ${specGateClass}`}>
+                        <div className="font-semibold">{specGateLabel}</div>
+                        {specGate.missing.length > 0 && (
+                            <div className="text-xs mt-1">
+                                {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
+                            </div>
+                        )}
+                    </div>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => { navigator.clipboard.writeText(generatedSpec); alert(wt(WIZARD_COMMON.copiedToClipboard, language)); }}
+                            disabled={!canExport}
+                            className={`flex-1 py-3 rounded-lg font-medium transition-all ${canExport
+                                ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white hover:from-red-700 hover:to-rose-700'
+                                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            }`}
+                        >📋 Copy to Clipboard</button>
+                        <button
+                            onClick={() => {
+                                const blob = new Blob([generatedSpec], { type: 'text/markdown' });
+                                const a = document.createElement('a');
+                                a.href = URL.createObjectURL(blob);
+                                a.download = `security-assessment-${wizardData.systemName || 'report'}.md`;
+                                a.click();
+                            }}
+                            disabled={!canExport}
+                            className={`flex-1 py-3 rounded-lg font-medium transition-all ${canExport
+                                ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            }`}
+                        >💾 Download .md</button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (showLiveRun) {
+        return (
+            <div className="max-w-5xl mx-auto">
+                {liveRunOutput ? (
+                    <div className="space-y-6">
+                        <div className="rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/70 dark:bg-emerald-900/20 p-6">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                    <h2 className="text-xl font-bold text-emerald-900 dark:text-emerald-100">
+                                        {language === 'vi' ? 'Live Governed Run đã hoàn tất' : 'Live governed run completed'}
+                                    </h2>
+                                    <p className="text-sm text-emerald-800 dark:text-emerald-200">
+                                        {language === 'vi'
+                                            ? 'Security assessment packet đã đi qua governed execute path và sẵn sàng cho bước freeze/đối soát.'
+                                            : 'The security assessment packet completed the governed execute path and is ready for freeze/audit handoff.'}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        setShowLiveRun(false);
+                                        setLiveRunOutput(null);
+                                    }}
+                                    className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                                >
+                                    {language === 'vi' ? 'Quay lại review' : 'Back to review'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                                {language === 'vi' ? 'Live output' : 'Live output'}
+                            </h3>
+                            <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono max-h-[40vh] overflow-y-auto">
+                                {liveRunOutput}
+                            </pre>
+                        </div>
+
+                        <div className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50/70 dark:bg-red-900/20 p-6">
+                            <h3 className="text-lg font-semibold text-red-900 dark:text-red-100 mb-3">
+                                Freeze receipt
+                            </h3>
+                            <div className="space-y-2 text-sm text-red-900 dark:text-red-100">
+                                <div><strong>{language === 'vi' ? 'Accepted output' : 'Accepted output'}:</strong> {governedPacket.freezeReceipt.acceptedOutput}</div>
+                                <div><strong>{language === 'vi' ? 'Baseline artifact' : 'Baseline artifact'}:</strong> {governedPacket.freezeReceipt.baselineArtifact}</div>
+                                <div><strong>{language === 'vi' ? 'Locked scope' : 'Locked scope'}:</strong> {governedPacket.freezeReceipt.lockedScope.join(', ')}</div>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <ProcessingScreen
+                        templateName={governedLiveExecution.request.templateName}
+                        templateId={governedLiveExecution.request.templateId}
+                        inputs={governedLiveExecution.request.inputs}
+                        intent={governedLiveExecution.request.intent}
+                        executionOverrides={{
+                            mode: governedLiveExecution.request.mode,
+                            cvfPhase: governedLiveExecution.request.cvfPhase,
+                            cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
+                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
+                            fileScope: governedLiveExecution.request.fileScope,
+                        }}
+                        onComplete={(output) => setLiveRunOutput(output)}
+                        onCancel={() => {
+                            setShowLiveRun(false);
+                            setLiveRunOutput(null);
+                        }}
+                    />
+                )}
+            </div>
+        );
+    }
+
+    return (
+        <div className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-4 mb-6">
+                <button onClick={onBack} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg text-gray-600 dark:text-gray-400">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">🔐 Security Assessment Wizard</h1>
+                    <p className="text-gray-600 dark:text-gray-400">
+                        {language === 'vi'
+                            ? 'Thu thập security brief rồi review governed packet và live path'
+                            : 'Capture the security brief, then review the governed packet and live path'}
+                    </p>
+                </div>
+            </div>
+
+            {hasDraft && (
+                <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <span className="text-2xl">📝</span>
+                        <div>
+                            <p className="font-medium text-amber-800 dark:text-amber-200">{wt(WIZARD_COMMON.draftFound, language)}</p>
+                            <p className="text-sm text-amber-600 dark:text-amber-400">{wt(WIZARD_COMMON.draftResume, language)}</p>
+                        </div>
+                    </div>
+                    <div className="flex gap-2">
+                        <button onClick={loadDraft} className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-medium">{wt(WIZARD_COMMON.continue, language)}</button>
+                        <button onClick={clearDraft} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">{wt(WIZARD_COMMON.startNew, language)}</button>
+                    </div>
+                </div>
+            )}
+
+            <div className="mb-8">
+                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
+                    <span>Step {currentStep} / 5: {currentStepConfig.name}</span>
+                    <span>{progress}%</span>
+                </div>
+                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-red-600 to-rose-600 transition-all duration-300" style={{ width: `${progress}%` }} />
+                </div>
+            </div>
+
+            <div className="flex justify-between mb-8 overflow-x-auto pb-2">
+                {WIZARD_STEPS.map(step => {
+                    const isActive = step.id === currentStep;
+                    const isCompleted = step.id < currentStep;
+                    const canJump = canJumpToStep(step.id);
+                    return (
+                        <button key={step.id} onClick={() => handleStepClick(step.id)} disabled={!canJump}
+                            className={`flex flex-col items-center min-w-[70px] transition-all ${canJump ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-50'}`}>
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all ${isActive ? 'bg-red-600 text-white ring-4 ring-red-200 dark:ring-red-800' : isCompleted ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-500'}`}>
+                                {isCompleted ? '✓' : step.icon}
+                            </div>
+                            <span className={`text-xs mt-1 text-center ${isActive ? 'font-bold text-red-600' : 'text-gray-500'}`}>{step.name}</span>
+                        </button>
+                    );
+                })}
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-3 mb-4">
+                    <span className="text-3xl">{currentStepConfig.icon}</span>
+                    <div>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Step {currentStep}: {currentStepConfig.name}</h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{currentStepConfig.description}</p>
+                    </div>
+                </div>
+
+                {currentStepConfig.isReview ? (
+                    <div className="space-y-4">
+                        <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
+                            <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">{wt(WIZARD_COMMON.reviewReady, language)}</h3>
+                            <p className="text-green-700 dark:text-green-300 text-sm">{wt(WIZARD_COMMON.reviewDesc, language)}</p>
+                        </div>
+                        <WorkflowVisualizer mode="full" currentStep={4} />
+                        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 max-h-96 overflow-y-auto">
+                            <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">{generatedSpec}</pre>
+                        </div>
+                        <div className={`p-3 rounded-lg border text-sm ${specGateClass}`}>
+                            <div className="font-semibold">{specGateLabel}</div>
+                            {specGate.missing.length > 0 && (
+                                <div className="text-xs mt-1">
+                                    {wt(WIZARD_COMMON.missingRequired, language)}: {specGate.missing.map(field => field.label).join(', ')}
+                                </div>
+                            )}
+                        </div>
+                        <div className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50/70 dark:bg-red-900/20 p-5">
+                            <div className="flex items-start justify-between gap-4">
+                                <div>
+                                    <h3 className="text-lg font-semibold text-red-900 dark:text-red-100">
+                                        Governed system packet cho non-coder
+                                    </h3>
+                                    <p className="text-sm text-red-800 dark:text-red-200 mt-1">
+                                        {language === 'vi'
+                                            ? 'Packet này khóa phase, risk, file scope, approval checkpoints và freeze receipt trước khi launch live path.'
+                                            : 'This packet locks phase, risk, file scope, approval checkpoints, and freeze receipt before launching the live path.'}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setShowGovernedPacket((value) => !value)}
+                                    className="px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors text-sm font-medium"
+                                >
+                                    {showGovernedPacket
+                                        ? (language === 'vi' ? 'Ẩn packet' : 'Hide packet')
+                                        : (language === 'vi' ? 'Governed demo packet' : 'Governed demo packet')}
+                                </button>
+                            </div>
+
+                            <div className="mt-4 grid gap-3 md:grid-cols-3 text-sm">
+                                <div className="rounded-lg bg-white/80 dark:bg-gray-900/40 border border-red-200 dark:border-red-800 p-3">
+                                    <div className="font-semibold text-red-900 dark:text-red-100">Approval checkpoints</div>
+                                    <div className="text-red-800 dark:text-red-200 mt-1">
+                                        {governedPacket.approvals.map((approval) => `${approval.phase} -> ${approval.requiredFor}`).join(', ')}
+                                    </div>
+                                </div>
+                                <div className="rounded-lg bg-white/80 dark:bg-gray-900/40 border border-red-200 dark:border-red-800 p-3">
+                                    <div className="font-semibold text-red-900 dark:text-red-100">Freeze receipt</div>
+                                    <div className="text-red-800 dark:text-red-200 mt-1">
+                                        {governedPacket.freezeReceipt.baselineArtifact}
+                                    </div>
+                                </div>
+                                <div className="rounded-lg bg-white/80 dark:bg-gray-900/40 border border-red-200 dark:border-red-800 p-3">
+                                    <div className="font-semibold text-red-900 dark:text-red-100">Execution handoff</div>
+                                    <div className="text-red-800 dark:text-red-200 mt-1">
+                                        {governedLiveExecution.request.cvfPhase} / {governedLiveExecution.request.cvfRiskLevel}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {showGovernedPacket && (
+                                <div className="mt-4 rounded-lg border border-red-200 dark:border-red-800 bg-white dark:bg-gray-950 p-4">
+                                    <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono max-h-[28rem] overflow-y-auto">
+                                        {governedPacketMarkdown}
+                                    </pre>
+                                </div>
+                            )}
+                        </div>
+                        <div className="grid gap-3 md:grid-cols-3">
+                            <button
+                                type="button"
+                                onClick={() => setShowGovernedPacket((value) => !value)}
+                                className="py-3 rounded-lg font-medium bg-white dark:bg-gray-900 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-200 hover:bg-red-50 dark:hover:bg-red-950 transition-colors"
+                            >
+                                {language === 'vi' ? 'Governed demo packet' : 'Governed demo packet'}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowLiveRun(true);
+                                    setLiveRunOutput(null);
+                                }}
+                                className="py-3 rounded-lg font-medium bg-gradient-to-r from-red-600 to-rose-600 text-white hover:from-red-700 hover:to-rose-700 transition-all"
+                            >
+                                {language === 'vi' ? 'Chạy live governed path' : 'Run live governed path'}
+                            </button>
+                            <button onClick={() => setShowExport(true)} disabled={!canExport} className={`py-3 rounded-lg font-medium transition-all ${canExport
+                                ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            }`}>
+                                {language === 'vi' ? '🔐 Xuất Security Assessment Report' : '🔐 Export Security Assessment Report'}
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        {currentStepConfig.fields.map(field => (
+                            <div key={field.id}>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    {field.label}{field.required && <span className="text-red-500 ml-1">*</span>}
+                                </label>
+                                {field.type === 'text' && (
+                                    <input type="text" value={wizardData[field.id] || ''} onChange={e => handleFieldChange(field.id, e.target.value)} placeholder={field.placeholder}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500" />
+                                )}
+                                {field.type === 'textarea' && (
+                                    <textarea value={wizardData[field.id] || ''} onChange={e => handleFieldChange(field.id, e.target.value)} placeholder={field.placeholder} rows={field.rows || 3}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 resize-none" />
+                                )}
+                                {field.type === 'select' && field.options && (
+                                    <select value={wizardData[field.id] || ''} onChange={e => handleFieldChange(field.id, e.target.value)}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500">
+                                        <option value="">{wt(WIZARD_COMMON.select, language)}</option>
+                                        {field.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                    </select>
+                                )}
+                                {field.tip && <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 italic">{field.tip}</p>}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            <div className="flex justify-between mt-6">
+                <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep === 1}
+                    className={`px-6 py-3 rounded-lg font-medium ${currentStep === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}>
+                    {wt(WIZARD_COMMON.previous, language)}
+                </button>
+                {currentStep < WIZARD_STEPS.length && (
+                    <button onClick={() => setCurrentStep(currentStep + 1)} disabled={currentStepConfig.required && !isStepValid()}
+                        className={`px-6 py-3 rounded-lg font-medium ${currentStepConfig.required && !isStepValid() ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-red-600 text-white hover:bg-red-700'}`}>
+                        {wt(WIZARD_COMMON.next, language)}
+                    </button>
+                )}
+            </div>
+        </div>
+    );
+}

@@ -1,0 +1,52 @@
+{
+  "name": "cvf-safety-runtime",
+  "version": "1.7.1",
+  "description": "CVF Safety Runtime — Policy enforcement engine for non-coder AI safety",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\"",
+    "check": "npm run build && npm run lint && npm run format:check",
+    "dev:ui": "cd cvf-ui && npm run dev",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@prisma/client": "^7.4.1",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "eslint": "^9.0.0",
+    "prettier": "^3.4.0",
+    "prisma": "^7.4.1",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^4.3.6"
+  },
+  "exportReadiness": {
+    "status": "REVIEW_REQUIRED",
+    "phase": "B",
+    "blockers": [
+      "Mixed package: contains UI layer (cvf-ui/), Express server, Prisma, React, Next.js — not suitable for library export as-is",
+      "Heavy runtime dependencies (express, next, react, react-dom, zod) create consumer burden",
+      "Export surface should be scoped to simulation/ subdirectory only (sandbox.isolation.contract.ts)",
+      "Requires package boundary split before publication: separate simulation/ into standalone package"
+    ],
+    "exportSurface": "simulation/sandbox.isolation.contract.ts only (not whole package)",
+    "documentation": "docs/reference/CVF_PREPUBLIC_SAFETY_RUNTIME_EXPORT_SURFACE_2026-04-10.md"
+  }
+}

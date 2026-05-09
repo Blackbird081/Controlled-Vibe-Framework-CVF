@@ -1,0 +1,1 @@
+{"version":3,"file":"audit-trail.guard.d.ts","sourceRoot":"","sources":["../../src/guards/audit-trail.guard.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAEH,OAAO,KAAK,EAAE,KAAK,EAAE,mBAAmB,EAAE,WAAW,EAAE,MAAM,YAAY,CAAC;AAE1E,qBAAa,eAAgB,YAAW,KAAK;IAC3C,EAAE,SAAiB;IACnB,IAAI,SAAuB;IAC3B,WAAW,SAA8D;IACzE,QAAQ,SAAM;IACd,OAAO,UAAQ;IAEf,QAAQ,CAAC,OAAO,EAAE,mBAAmB,GAAG,WAAW;CA6CpD"}

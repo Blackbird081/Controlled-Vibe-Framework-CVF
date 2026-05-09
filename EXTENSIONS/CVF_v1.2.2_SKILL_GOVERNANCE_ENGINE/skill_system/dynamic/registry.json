@@ -1,0 +1,31 @@
+{
+  "version": "1.0",
+  "registry_type": "DYNAMIC",
+  "skills": [
+    {
+      "id": "dynamic.intent_pattern_optimizer",
+      "name": "Intent Pattern Optimizer",
+      "domain": "ai_research",
+      "version": "0.1.0",
+      "maturity": "PROBATION",
+      "type": "DYNAMIC",
+      "origin": "evolution_engine",
+      "metadata": {
+        "description": "Optimizes recurring intent patterns into reusable structured skill blocks.",
+        "risk_profile": {
+          "base_score": 40,
+          "factors": ["code_execution"]
+        },
+        "cost_profile": {
+          "estimated_tokens": 1800,
+          "estimated_runtime_ms": 900,
+          "external_cost_flag": false
+        },
+        "performance": {
+          "success_rate": 0.78,
+          "execution_count": 12
+        }
+      }
+    }
+  ]
+}

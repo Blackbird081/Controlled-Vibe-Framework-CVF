@@ -1,0 +1,85 @@
+name: CVF Protected Live Release Gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_live_provider_cost:
+        description: "Type RUN_LIVE_GATE to confirm live provider quota/cost usage."
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  protected-live-release-gate:
+    name: Protected Live Release Gate
+    if: ${{ github.event.inputs.confirm_live_provider_cost == 'RUN_LIVE_GATE' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    environment: cvf-live-release-gate
+    permissions:
+      contents: read
+    env:
+      DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+      ALIBABA_API_KEY: ${{ secrets.ALIBABA_API_KEY }}
+      CVF_ALIBABA_API_KEY: ${{ secrets.CVF_ALIBABA_API_KEY }}
+      CVF_BENCHMARK_ALIBABA_KEY: ${{ secrets.CVF_BENCHMARK_ALIBABA_KEY }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      CVF_PLAYWRIGHT_PORT: "3011"
+      PLAYWRIGHT_BASE_URL: "http://127.0.0.1:3011"
+      NEXT_DIST_DIR: ".next-cvf-release-gate"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
+
+      - name: Install CVF Guard Contract dependencies
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+        run: npm install --no-audit --no-fund
+
+      - name: Install Web dependencies
+        working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+        run: npx playwright install --with-deps chromium
+
+      - name: Run protected live release gate
+        shell: bash
+        run: |
+          set -o pipefail
+          python scripts/run_cvf_release_gate_bundle.py --json | tee cvf-protected-live-release-gate-result.json
+
+      - name: Upload release gate result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cvf-protected-live-release-gate-result
+          path: cvf-protected-live-release-gate-result.json
+          if-no-files-found: error
+
+      - name: Upload Playwright diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cvf-protected-live-playwright-diagnostics
+          path: |
+            EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/test-results
+            EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/playwright-report
+          if-no-files-found: warn

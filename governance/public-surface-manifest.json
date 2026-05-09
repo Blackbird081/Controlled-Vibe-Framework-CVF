@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "owner": "Blackbird081",
+  "default_policy": "public-core-or-curated-evidence-only",
+  "classes": {
+    "KEEP_PUBLIC_CORE": [
+      "README.md",
+      "ARCHITECTURE.md",
+      "GOVERNANCE.md",
+      "PROVIDERS.md",
+      "COST_AND_QUOTA.md",
+      "CONTRIBUTING.md",
+      "SECURITY.md",
+      "LICENSE",
+      "netlify.toml",
+      "CODEOWNERS",
+      ".gitignore",
+      ".github/pull_request_template.md",
+      ".github/workflows/public-surface.yml",
+      ".github/workflows/cvf-protected-live-release-gate.yml",
+      "ECOSYSTEM/doctrine/**",
+      "EXTENSIONS/CVF_GUARD_CONTRACT/**",
+      "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/**",
+      "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/**",
+      "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/**",
+      "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/**",
+      "EXTENSIONS/CVF_MODEL_GATEWAY/**",
+      "EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION/**",
+      "EXTENSIONS/CVF_ECO_v1.4_RAG_PIPELINE/**",
+      "EXTENSIONS/CVF_ECO_v2.1_GOVERNANCE_CANVAS/**",
+      "EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/**",
+      "EXTENSIONS/CVF_ECO_v2.4_GRAPH_GOVERNANCE/**",
+      "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/**",
+      "EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/**",
+      "EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/**",
+      "EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/**",
+      "EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/**",
+      "EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/risk_models/**",
+      "EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/**",
+      "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/**",
+      "scripts/run_cvf_release_gate_bundle.py",
+      "scripts/_local_env.py",
+      "scripts/check_cvf_provider_release_readiness.py",
+      "scripts/evaluate_cvf_provider_lane_certification.py",
+      "scripts/check_public_surface.py",
+      "governance/public-surface-manifest.json"
+    ],
+    "KEEP_PUBLIC_EVIDENCE_SUMMARY": [
+      "PROVENANCE.md",
+      "docs/EXPORT_MANIFEST.md",
+      "docs/evidence/**",
+      "docs/reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md",
+      "docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md",
+      "docs/guides/CVF_DEMO_SCRIPT_2026-04-21.md"
+    ],
+    "PRIVATE_PROVENANCE_BLOCKED": [
+      "AGENT_HANDOFF*.md",
+      "CLAUDE*.md",
+      "*REBUTTAL*",
+      "*TRANSFER_NOTE*",
+      "*RAW*",
+      "*HANDOFF*",
+      "docs/reviews/**",
+      "docs/roadmaps/**",
+      "docs/audits/**",
+      "docs/baselines/**",
+      "docs/logs/**",
+      "docs/assessments/**",
+      ".cvf/runtime/**",
+      ".cvf/config/**",
+      ".env",
+      ".env.*"
+    ]
+  },
+  "allowlist": [
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/w113-workspace-web-live-proof.spec.ts",
+      "reason": "Required by the release gate bundle; public because it is a live governance proof spec, not a raw evidence packet."
+    },
+    {
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-handoff.ts",
+      "reason": "Runtime source for governed agent handoff contracts, not an internal operator handoff artifact."
+    },
+    {
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-handoff.test.ts",
+      "reason": "Unit coverage for public runtime source, not an internal operator handoff artifact."
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/agent-handoff-validator.ts",
+      "reason": "Web runtime validator source, not an internal operator handoff artifact."
+    },
+    {
+      "path": "docs/EXPORT_MANIFEST.md",
+      "reason": "Required provenance binding manifest; large because it lists exported public paths and hashes."
+    }
+  ],
+  "review_rule": "Any new public evidence or exception requires owner review and a manifest reason."
+}

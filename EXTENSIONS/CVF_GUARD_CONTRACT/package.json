@@ -1,0 +1,59 @@
+{
+  "name": "cvf-guard-contract",
+  "version": "0.1.0",
+  "description": "CVF Guard Contract — Unified guard types, hardened default engine, and governed runtime helpers for cross-channel governance enforcement",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts",
+    "./engine": "./src/engine.ts",
+    "./enterprise": "./src/enterprise/enterprise.ts",
+    "./guards/*": "./src/guards/*.ts",
+    "./runtime/agent-handoff": "./src/runtime/agent-handoff.ts",
+    "./runtime/agent-coordination": "./src/runtime/agent-coordination.ts"
+  },
+  "files": [
+    "README.md",
+    "src/index.ts",
+    "src/types.ts",
+    "src/engine.ts",
+    "src/enterprise/enterprise.ts",
+    "src/guards",
+    "src/enterprise",
+    "src/runtime/agent-handoff.ts",
+    "src/runtime/agent-coordination.ts"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^20",
+    "@vitest/coverage-v8": "^1.6.1",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  },
+  "keywords": [
+    "cvf",
+    "governance",
+    "guard",
+    "contract"
+  ],
+  "optionalDependencies": {
+    "better-sqlite3": "^12.6.2"
+  },
+  "license": "CC-BY-NC-ND-4.0",
+  "exportReadiness": {
+    "status": "CANDIDATE",
+    "phase": "A",
+    "targetDate": "2026-05-01",
+    "blockers": [],
+    "documentation": "docs/reference/CVF_PREPUBLIC_GUARD_CONTRACT_EXPORT_SURFACE_2026-04-03.md"
+  }
+}

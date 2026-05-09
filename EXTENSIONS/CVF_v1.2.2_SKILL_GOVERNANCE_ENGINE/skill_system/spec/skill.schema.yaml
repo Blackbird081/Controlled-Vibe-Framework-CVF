@@ -1,0 +1,106 @@
+version: 1.0
+schema: CVF-Skill-Spec
+
+skill:
+  id:
+    type: string
+    required: true
+    pattern: "^[a-z0-9_.-]+$"
+
+  name:
+    type: string
+    required: true
+
+  description:
+    type: string
+    required: true
+
+  version:
+    type: string
+    required: true
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+
+  type:
+    type: enum
+    required: true
+    allowed:
+      - STATIC
+      - DYNAMIC
+      - EXTERNAL
+
+  domain:
+    type: string
+    required: true
+
+  owner:
+    type: string
+    required: true
+
+  maturity:
+    type: enum
+    required: true
+    allowed:
+      - EXPERIMENTAL
+      - PROBATION
+      - STABLE
+      - DEPRECATED
+
+  risk_profile:
+    base_score:
+      type: integer
+      min: 0
+      max: 100
+    factors:
+      - data_access
+      - external_dependency
+      - code_execution
+      - cost_impact
+
+  cost_profile:
+    estimated_tokens:
+      type: integer
+    estimated_runtime_ms:
+      type: integer
+    external_cost_flag:
+      type: boolean
+
+  contract:
+    input_schema:
+      type: object
+    output_schema:
+      type: object
+    side_effects:
+      type: array
+
+  integrity:
+    checksum:
+      type: string
+    source:
+      type: string
+    verified:
+      type: boolean
+
+  risk_r_level:
+    type: enum
+    required: true
+    allowed: [R0, R1, R2, R3]
+    description: >
+      CVF canonical risk level (maps to numeric score in risk_profile):
+      R0 = 0–20  (Passive  — no side effects, read/analyze only)
+      R1 = 21–40 (Controlled — small bounded changes)
+      R2 = 41–60 (Elevated  — has authority, may chain)
+      R3 = 61–70 (Critical  — cross-domain, hard gate required)
+
+  evaluation:
+    success_metrics:
+      type: array
+      required: true
+      description: "List of measurable conditions that indicate skill succeeded"
+    failure_conditions:
+      type: array
+      required: true
+      description: "List of conditions that trigger skill failure and rollback"
+    rollback_strategy:
+      type: string
+      required: false
+      description: "Steps to undo skill execution if failure occurs"

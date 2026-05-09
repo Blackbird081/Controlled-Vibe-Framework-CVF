@@ -1,0 +1,310 @@
+'use client';
+
+import { useState } from 'react';
+import { useForm, useWatch, type FieldErrors, type UseFormRegister } from 'react-hook-form';
+import { Template, TemplateField } from '@/types';
+import { generateIntent } from '@/lib/templates';
+import { SpecExport } from './SpecExport';
+import { useLanguage } from '@/lib/i18n';
+import { getSkillForTemplate } from '@/lib/skill-template-map';
+
+interface DynamicFormProps {
+    template: Template;
+    onSubmit: (values: Record<string, string>, intent: string) => void;
+    onBack: () => void;
+    onSendToAgent?: (spec: string) => void;
+}
+
+function FormField({ field, register, errors }: {
+    field: TemplateField;
+    register: UseFormRegister<Record<string, string>>;
+    errors: FieldErrors<Record<string, string>>;
+}) {
+    const baseClasses = `
+    w-full px-4 py-3 rounded-lg
+    border border-gray-300 dark:border-gray-600
+    bg-white dark:bg-gray-800
+    text-gray-900 dark:text-white
+    placeholder-gray-400 dark:placeholder-gray-500
+    focus:ring-2 focus:ring-blue-500 focus:border-transparent
+    transition-all duration-200
+  `;
+
+    const errorClasses = errors[field.id] ? 'border-red-500 focus:ring-red-500' : '';
+
+    switch (field.type) {
+        case 'textarea':
+            return (
+                <textarea
+                    {...register(field.id, { required: field.required })}
+                    placeholder={field.placeholder}
+                    rows={field.rows || 4}
+                    className={`${baseClasses} ${errorClasses} resize-none`}
+                />
+            );
+
+        case 'select':
+            return (
+                <select
+                    {...register(field.id)}
+                    defaultValue={field.default}
+                    className={`${baseClasses} ${errorClasses}`}
+                >
+                    {field.options?.map((opt) => (
+                        <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                </select>
+            );
+
+        default:
+            return (
+                <input
+                    type="text"
+                    {...register(field.id, { required: field.required })}
+                    placeholder={field.placeholder}
+                    maxLength={field.maxLength}
+                    className={`${baseClasses} ${errorClasses}`}
+                />
+            );
+    }
+}
+
+export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: DynamicFormProps) {
+    const { language, t } = useLanguage();
+    const [showAdvanced, setShowAdvanced] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
+    const [showSpecExport, setShowSpecExport] = useState(false);
+
+    const { register, handleSubmit, control, formState: { errors } } = useForm<Record<string, string>>();
+    const watchedValues = useWatch({ control }) as Record<string, string | undefined> | undefined;
+    const formValues = Object.fromEntries(
+        Object.entries(watchedValues || {}).map(([key, value]) => [key, value || ''])
+    ) as Record<string, string>;
+    const previewIntent = generateIntent(template, formValues);
+
+    const requiredFields = template.fields.filter(f => f.section !== 'advanced');
+    const advancedFields = template.fields.filter(f => f.section === 'advanced');
+
+    const onFormSubmit = (data: Record<string, string>) => {
+        const intent = generateIntent(template, data);
+        onSubmit(data, intent);
+    };
+
+    return (
+        <div className="max-w-3xl mx-auto">
+            {/* Header */}
+            <div className="flex items-center gap-4 mb-8">
+                <button
+                    onClick={onBack}
+                    className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <div>
+                    <h1 className="text-2xl font-bold flex items-center gap-3">
+                        <span>{template.icon}</span>
+                        <span>{template.name}</span>
+                    </h1>
+                    <div className="flex items-center gap-2 mt-1">
+                        <p className="text-gray-600 dark:text-gray-400">{template.description}</p>
+                        {(() => {
+                            const skillRef = getSkillForTemplate(template.id);
+                            if (!skillRef) return null;
+                            return (
+                                <a
+                                    href={`/skills/${skillRef.domain}/${skillRef.skillId}`}
+                                    className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-emerald-100 text-emerald-800 rounded-full hover:bg-emerald-200 transition-colors whitespace-nowrap"
+                                    title={t('skills.viewRelatedSkill')}
+                                >
+                                    {t('skills.viewSkill')}
+                                </a>
+                            );
+                        })()}
+                    </div>
+                </div>
+            </div>
+
+            <div className="mb-6 rounded-xl border border-blue-200/70 bg-blue-50/70 px-4 py-4 text-sm text-blue-900 dark:border-blue-900/60 dark:bg-blue-950/30 dark:text-blue-100">
+                <p className="font-semibold mb-1">
+                    {language === 'en'
+                        ? 'You only need to describe the website in plain language.'
+                        : 'Bạn chỉ cần mô tả website bằng ngôn ngữ bình thường.'}
+                </p>
+                <p className="text-blue-800 dark:text-blue-200">
+                    {language === 'en'
+                        ? 'CVF will turn your brief into an agent-ready build packet, including the hidden structure and guardrails.'
+                        : 'CVF sẽ tự đóng gói brief này thành packet giao việc cho agent, bao gồm cả cấu trúc ẩn và guardrails cần thiết.'}
+                </p>
+            </div>
+
+            <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+                {/* Required Fields */}
+                {requiredFields.map((field) => (
+                    <div key={field.id}>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            {field.label}
+                            {field.required && <span className="text-red-500 ml-1">*</span>}
+                        </label>
+                        <FormField field={field} register={register} errors={errors} />
+                        {errors[field.id] && (
+                            <p className="mt-1 text-sm text-red-500">This field is required</p>
+                        )}
+                        {field.hint && (
+                            <p className="mt-1.5 text-xs text-amber-600 dark:text-amber-400 flex items-start gap-1">
+                                <span>💡</span>
+                                <span>{field.hint}</span>
+                            </p>
+                        )}
+                        {field.example && (
+                            <p className="mt-1 text-xs text-gray-400 dark:text-gray-500 italic">
+                                VD: {field.example}
+                            </p>
+                        )}
+                    </div>
+                ))}
+
+                {/* Advanced Fields Toggle */}
+                {advancedFields.length > 0 && (
+                    <div>
+                        <button
+                            type="button"
+                            onClick={() => setShowAdvanced(!showAdvanced)}
+                            className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600"
+                        >
+                            <svg
+                                className={`w-4 h-4 transition-transform ${showAdvanced ? 'rotate-180' : ''}`}
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                            {showAdvanced ? (language === 'en' ? 'Hide' : 'Ẩn') : (language === 'en' ? 'Show' : 'Hiện')} {language === 'en' ? 'Advanced Options' : 'Tùy chọn nâng cao'} ({advancedFields.length})
+                        </button>
+
+                        {showAdvanced && (
+                            <div className="mt-4 space-y-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                {advancedFields.map((field) => (
+                                    <div key={field.id}>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            {field.label}
+                                        </label>
+                                        <FormField field={field} register={register} errors={errors} />
+                                        {field.hint && (
+                                            <p className="mt-1.5 text-xs text-amber-600 dark:text-amber-400 flex items-start gap-1">
+                                                <span>💡</span>
+                                                <span>{field.hint}</span>
+                                            </p>
+                                        )}
+                                        {field.example && (
+                                            <p className="mt-1 text-xs text-gray-400 dark:text-gray-500 italic">
+                                                VD: {field.example}
+                                            </p>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Technical Details Toggle — collapsed by default */}
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                    <button
+                        type="button"
+                        onClick={() => setShowPreview(!showPreview)}
+                        className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 font-medium transition-colors"
+                    >
+                        <svg
+                            className={`w-4 h-4 transition-transform ${showPreview ? 'rotate-180' : ''}`}
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                        {language === 'en' ? 'Preview agent instructions' : 'Xem bản giao cho agent'}
+                    </button>
+
+                    {showPreview && (
+                        <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">
+                                {previewIntent}
+                            </pre>
+                        </div>
+                    )}
+                </div>
+
+                {/* AI Quick Links */}
+                <div className="flex flex-wrap items-center gap-2 py-3">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{language === 'en' ? 'Paste to AI:' : 'Paste vào AI:'}</span>
+                    <a
+                        href="https://chat.openai.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs px-3 py-1.5 bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 rounded-full hover:bg-green-200 dark:hover:bg-green-800 transition-colors"
+                    >
+                        <span>🤖</span> ChatGPT
+                    </a>
+                    <a
+                        href="https://claude.ai/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs px-3 py-1.5 bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 rounded-full hover:bg-orange-200 dark:hover:bg-orange-800 transition-colors"
+                    >
+                        <span>🧠</span> Claude
+                    </a>
+                    <a
+                        href="https://gemini.google.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs px-3 py-1.5 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+                    >
+                        <span>✨</span> Gemini
+                    </a>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3">
+                    {/* Export/Copy Spec Button */}
+                    <button
+                        type="button"
+                        onClick={() => setShowSpecExport(!showSpecExport)}
+                        className="flex-1 py-4 px-6 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 
+                         text-gray-700 dark:text-gray-300 font-semibold rounded-lg
+                         transition-all duration-200
+                         flex items-center justify-center gap-2"
+                    >
+                        <span>📋</span>
+                        <span>{language === 'en' ? 'Export Spec' : 'Xuất Spec'}</span>
+                    </button>
+
+                    {/* Submit Button - Opens SpecExport to choose mode first */}
+                    <button
+                        type="button"
+                        onClick={() => setShowSpecExport(true)}
+                        title={language === 'en' ? 'Submit this form to generate AI output' : 'Gửi form để AI tạo kết quả'}
+                        className="flex-1 py-4 px-6 bg-blue-600 hover:bg-blue-700 
+                         text-white font-semibold rounded-lg
+                         shadow-lg hover:shadow-xl
+                         transition-all duration-200
+                         flex items-center justify-center gap-2"
+                    >
+                        <span>{language === 'en' ? 'Create Agent Spec' : 'Tạo Spec cho Agent'}</span>
+                        <span>🚀</span>
+                    </button>
+                </div>
+            </form>
+
+            {/* Spec Export Panel */}
+            {showSpecExport && (
+                <div className="mt-6">
+                    <SpecExport
+                        template={template}
+                        values={formValues}
+                        onClose={() => setShowSpecExport(false)}
+                        onSendToAgent={onSendToAgent}
+                    />
+                </div>
+            )}
+        </div>
+    );
+}

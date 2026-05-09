@@ -1,0 +1,44 @@
+{
+  "name": "cvf-governance-expansion-foundation",
+  "version": "0.1.0",
+  "description": "CVF Governance Expansion Foundation — operational governance modules: watchdog pulse, watchdog escalation, and consumer pipeline bridges",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "README.md",
+    "src/"
+  ],
+  "sideEffects": false,
+  "private": true,
+  "scripts": {
+    "test": "vitest run --config vitest.config.ts",
+    "test:coverage": "vitest run --coverage --config vitest.config.ts",
+    "test:watch": "vitest",
+    "check": "tsc -p tsconfig.json --noEmit"
+  },
+  "keywords": [
+    "cvf",
+    "governance",
+    "foundation",
+    "watchdog",
+    "escalation",
+    "pipeline"
+  ],
+  "license": "CC-BY-NC-ND-4.0",
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^1.6.1",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.1"
+  },
+  "exportReadiness": {
+    "status": "CANDIDATE",
+    "phase": "B",
+    "targetDate": "2026-06-01",
+    "blockers": [],
+    "documentation": "docs/reference/CVF_PREPUBLIC_GOVERNANCE_EXPANSION_FOUNDATION_EXPORT_SURFACE_2026-04-10.md"
+  }
+}

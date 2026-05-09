@@ -1,0 +1,27 @@
+maturity_model: CVF-Skill-Maturity-v1
+
+levels:
+
+  EXPERIMENTAL:
+    description: Generated or imported but unverified
+    execution_allowed: false
+    probation_required: true
+
+  PROBATION:
+    description: Limited controlled execution
+    execution_allowed: true
+    max_risk_score: 60
+    min_success_rate: 0.7
+    required_runs: 5
+
+  STABLE:
+    description: Approved for full production usage
+    execution_allowed: true
+    max_risk_score: 80
+    min_success_rate: 0.85
+    required_runs: 20
+
+  DEPRECATED:
+    description: Scheduled for removal
+    execution_allowed: false
+    migration_required: true

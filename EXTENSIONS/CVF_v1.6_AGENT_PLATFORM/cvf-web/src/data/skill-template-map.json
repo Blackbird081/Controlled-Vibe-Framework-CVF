@@ -1,0 +1,74 @@
+{
+  "templateToSkillMap": {
+    "business_strategy_wizard": { "domain": "business_analysis", "skillId": "04_business_plan" },
+    "strategy_analysis": { "domain": "business_analysis", "skillId": "01_strategy_analysis" },
+    "risk_assessment": { "domain": "business_analysis", "skillId": "02_risk_assessment" },
+    "competitor_review": { "domain": "business_analysis", "skillId": "03_market_research" },
+
+    "system_design_wizard": { "domain": "technical_review", "skillId": "02_architecture_review" },
+    "code_review": { "domain": "technical_review", "skillId": "01_code_review" },
+    "architecture_review": { "domain": "technical_review", "skillId": "02_architecture_review" },
+
+    "content_strategy_wizard": { "domain": "content_creation", "skillId": "01_documentation" },
+    "documentation": { "domain": "content_creation", "skillId": "01_documentation" },
+    "email_template": { "domain": "content_creation", "skillId": "02_report_writing" },
+
+    "app_builder_wizard": { "domain": "app_development", "skillId": "01_app_requirements_spec" },
+    "build_my_app": { "domain": "app_development", "skillId": "01_app_requirements_spec" },
+    "app_builder_complete": { "domain": "app_development", "skillId": "01_app_requirements_spec" },
+    "app_requirements_spec": { "domain": "app_development", "skillId": "01_app_requirements_spec" },
+    "vibe_to_spec": { "domain": "app_development", "skillId": "01_app_requirements_spec" },
+    "non_coder_debug": { "domain": "app_development", "skillId": "01_app_requirements_spec" },
+    "auto_documentation": { "domain": "app_development", "skillId": "01_app_requirements_spec" },
+    "vibe_logic_mapping": { "domain": "app_development", "skillId": "03_architecture_design" },
+    "architecture_design": { "domain": "app_development", "skillId": "03_architecture_design" },
+    "api_design": { "domain": "app_development", "skillId": "05_api_design_spec" },
+    "cli_tool_spec": { "domain": "app_development", "skillId": "07_project_init_checklist" },
+    "project_init_checklist": { "domain": "app_development", "skillId": "07_project_init_checklist" },
+
+    "marketing_campaign_wizard": { "domain": "marketing_seo", "skillId": "01_seo_audit" },
+    "seo_audit": { "domain": "marketing_seo", "skillId": "01_seo_audit" },
+    "copywriting_evaluation": { "domain": "marketing_seo", "skillId": "03_content_quality_review" },
+    "landing_page_cro": { "domain": "marketing_seo", "skillId": "03_content_quality_review" },
+    "content_quality": { "domain": "marketing_seo", "skillId": "03_content_quality_review" },
+    "email_campaign": { "domain": "marketing_seo", "skillId": "03_content_quality_review" },
+    "social_ad_review": { "domain": "marketing_seo", "skillId": "04_social_media_review" },
+    "pricing_strategy": { "domain": "marketing_seo", "skillId": "05_brand_strategy_review" },
+    "brand_voice": { "domain": "marketing_seo", "skillId": "05_brand_strategy_review" },
+
+    "product_design_wizard": { "domain": "product_ux", "skillId": "02_user_flow_analysis" },
+    "user_flow_analysis": { "domain": "product_ux", "skillId": "02_user_flow_analysis" },
+    "feature_prioritization": { "domain": "product_ux", "skillId": "02_user_flow_analysis" },
+    "error_handling_ux": { "domain": "product_ux", "skillId": "02_user_flow_analysis" },
+    "ux_heuristic_evaluation": { "domain": "product_ux", "skillId": "03_ux_heuristic_evaluation" },
+    "accessibility_audit": { "domain": "product_ux", "skillId": "04_accessibility_audit" },
+    "user_persona": { "domain": "product_ux", "skillId": "01_user_persona_development" },
+    "onboarding_review": { "domain": "product_ux", "skillId": "05_onboarding_experience_review" },
+    "web_ux_redesign_system": { "domain": "product_ux", "skillId": "cvf_web_ux_redesign_system" },
+    "web_build_handoff": { "domain": "product_ux", "skillId": "cvf_web_ux_redesign_system" },
+
+    "security_assessment_wizard": { "domain": "security_compliance", "skillId": "01_security_assessment" },
+    "api_security": { "domain": "security_compliance", "skillId": "01_security_assessment" },
+    "gdpr_compliance": { "domain": "security_compliance", "skillId": "02_data_privacy_compliance" },
+    "privacy_policy_audit": { "domain": "security_compliance", "skillId": "02_data_privacy_compliance" },
+    "data_handling": { "domain": "security_compliance", "skillId": "02_data_privacy_compliance" },
+    "tos_review": { "domain": "security_compliance", "skillId": "02_data_privacy_compliance" },
+    "incident_response": { "domain": "security_compliance", "skillId": "03_incident_response" },
+
+    "research_project_wizard": { "domain": "ai_ml_evaluation", "skillId": "01_model_selection" },
+    "data_analysis_wizard": { "domain": "finance_analytics", "skillId": "01_finance_analysis_system" },
+    "data_analysis": { "domain": "finance_analytics", "skillId": "01_finance_analysis_system" }
+  },
+  "categoryToDomainMap": {
+    "business": "business_analysis",
+    "technical": "technical_review",
+    "content": "content_creation",
+    "development": "app_development",
+    "marketing": "marketing_seo",
+    "product": "product_ux",
+    "security": "security_compliance",
+    "research": "ai_ml_evaluation",
+    "finance": "finance_analytics",
+    "hr": "hr_operations"
+  }
+}

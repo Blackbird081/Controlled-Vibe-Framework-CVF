@@ -16,6 +16,13 @@ CVF is not tied to one model provider and it is not a skill marketplace. Skills,
 templates, and UI helpers can make CVF easier to apply, especially for
 non-coders, but the core product is the control layer that governs execution.
 
+## Attribution
+
+CVF is owned and governed by **Tien / Blackbird081**. Claude and Codex are
+acknowledged AI collaboration contributors for design, implementation,
+repository maintenance, governance checks, and verification support. See
+`CONTRIBUTORS.md`.
+
 ## Architecture At A Glance
 
 ```mermaid
@@ -115,8 +122,9 @@ E2E and must fail if no DashScope-compatible live key is available.
 | `governance/public-surface-manifest.json` | Allowlist and classification for public files. |
 | `scripts/check_public_surface.py` | Fast public-release scanner. |
 
-See `ARCHITECTURE.md` for the layer diagram, dependency rules, and clone
-treeview.
+See `ARCHITECTURE.md` for the diagram-first architecture view, including the
+module map, dependency rules, active reference path, interaction model, and
+clone treeview.
 
 ## Provider Boundary
 

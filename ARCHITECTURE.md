@@ -12,6 +12,16 @@ The core architecture is local-first and provider-agnostic:
 - CVF records enough evidence for an operator or developer to inspect what
   happened.
 
+Diagram set:
+
+- module map: how input, control plane, execution boundary, governance
+  expansion, and learning plane relate
+- dependency rules: which layers may depend on which lower layers
+- active reference path: how a governed request reaches provider execution and
+  receipt closure
+- interaction model: the live-proof sequence from user intent to audit/freeze
+  evidence
+
 ## Canonical Flow
 
 ```text
@@ -155,6 +165,67 @@ The dependency direction is deliberate:
   creation;
 - web may expose controls, but it must not become the only runtime path;
 - evidence may summarize behavior only when live proof exists.
+
+## Active Reference Path
+
+For governance claims, the active path must reach a real provider API call and
+produce receipt/evidence output.
+
+```mermaid
+flowchart TB
+  subgraph Request["Request and governance"]
+    direction LR
+    Intent["User intent<br/>coder / non-coder"]
+    Entry["Entry surface<br/>SDK / Web / API"]
+    Guard["Guard contract<br/>phase / role / risk / scope"]
+    Runtime["Governance runtime<br/>INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE"]
+  end
+
+  subgraph Run["Approved execution"]
+    direction LR
+    Approval["Approval checkpoint"]
+    Execute["Execution<br/>inside approved boundary"]
+    Provider["Certified provider lane<br/>Alibaba primary<br/>DeepSeek bounded"]
+  end
+
+  subgraph Close["Evidence closure"]
+    direction LR
+    Review["Review and audit evidence"]
+    Receipt["Freeze artifact / receipt"]
+  end
+
+  Intent --> Entry --> Guard --> Runtime
+  Runtime --> Approval --> Execute --> Provider
+  Provider --> Review --> Receipt
+```
+
+Diagram note: Alibaba/DashScope is the primary certified release lane. DeepSeek
+has bounded provider-lane evidence. Provider parity is not claimed.
+
+## Interaction Model
+
+This sequence shows the practical governed loop. Mock UI checks do not count as
+governance proof unless the live provider call and receipt evidence are present.
+
+```mermaid
+sequenceDiagram
+  actor User
+  participant Entry as SDK or Web Entry
+  participant Guard as Guard Contract
+  participant Runtime as Runtime + Tool/Agent
+  participant Provider as Live Provider API
+  participant Evidence as Audit / Freeze
+
+  User->>Entry: submit intent
+  Entry->>Guard: evaluate boundaries
+  Guard-->>Entry: allow / block / escalate
+  Entry->>Runtime: open governed path
+  Runtime->>Runtime: run canonical phase loop
+  Runtime->>Provider: live call inside approved boundary
+  Provider-->>Runtime: model output
+  Runtime->>Evidence: review receipt + freeze artifact
+  Evidence-->>User: reviewable outcome
+```
 
 ## Provider And Agent Boundary
 

@@ -13,7 +13,8 @@ authority, or governance authority.
 ## AI Collaboration Contributors
 
 - **Claude** - AI design and coding collaborator used for prototype generation,
-  UI redesign exploration, and selected implementation support.
+  UI redesign exploration, roadmap critique, and selected implementation
+  support.
 - **Codex (OpenAI)** - AI engineering collaborator used for repository
   maintenance, governance checks, skill consolidation, design-system
   codification, and implementation verification.

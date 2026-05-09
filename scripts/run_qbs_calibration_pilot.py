@@ -270,7 +270,7 @@ def call_cvf(base_url: str, env: dict[str, str], provider: str, task: dict[str, 
         method="POST",
     )
     try:
-        with urllib.request.urlopen(request, timeout=120) as response:
+        with urllib.request.urlopen(request, timeout=240) as response:
             data = json.loads(response.read().decode("utf-8", errors="replace"))
             return {
                 "ok": bool(data.get("success")),
@@ -294,6 +294,13 @@ def call_cvf(base_url: str, env: dict[str, str], provider: str, task: dict[str, 
             "latencyMs": round((time.monotonic() - started) * 1000),
             "error": data.get("error"),
             "governanceEvidenceReceipt": data.get("governanceEvidenceReceipt"),
+        }
+    except Exception as error:
+        return {
+            "ok": False,
+            "latencyMs": round((time.monotonic() - started) * 1000),
+            "error": str(error),
+            "governanceEvidenceReceipt": None,
         }
 
 

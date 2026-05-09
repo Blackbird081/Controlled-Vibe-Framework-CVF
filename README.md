@@ -271,7 +271,8 @@ they are made public:
 - `docs/benchmark/quality-benchmark-suite-standards-alignment.md`
 
 Current status: methodology is public, but no public QBS quality score is
-claimed yet.
+claimed yet. QBS-1 runner and corpus planning is also published under
+`docs/benchmark/qbs-1/`.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

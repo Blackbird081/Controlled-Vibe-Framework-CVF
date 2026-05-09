@@ -13,10 +13,11 @@ Start here:
 - [Methodology](quality-benchmark-suite-methodology.md)
 - [Claim Ladder](quality-benchmark-suite-claim-ladder.md)
 - [Standards Alignment](quality-benchmark-suite-standards-alignment.md)
+- [QBS-1 Runner And Corpus Planning](qbs-1/README.md)
 
 ## Current Status
 
-Status: `METHODOLOGY_READY_NO_PUBLIC_QBS_RESULT`
+Status: `QBS1_PLANNING_READY_NO_PUBLIC_QBS_RESULT`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -26,6 +27,10 @@ claim level.
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a
 powered run is published.
+
+QBS-1 runner and corpus planning is now published. Scored runs remain blocked
+until a run-specific `qbs/preregister/<run-id>` tag freezes the exact corpus,
+configs, provider/model list, reviewer plan, and artifact path.
 
 ## What QBS Measures
 

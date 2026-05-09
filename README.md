@@ -52,34 +52,43 @@ repository maintenance, governance checks, and verification support. See
 ## Architecture At A Glance
 
 ```mermaid
-flowchart TB
-  User["User / Developer / Plugin / Agent"] --> Intake["CVF Intake + Context"]
-  Intake --> Risk["Risk + Policy Decision"]
-  Risk --> Approval["Approval / Phase Gate"]
-  Approval --> Adapter["Provider or Agent Adapter"]
-  Adapter --> Worker["Model / Agent / Tool Execution"]
-  Worker --> Validation["DLP + Output Validation"]
-  Validation --> Receipt["Audit Receipt + Cost/Quota Signal"]
-  Receipt --> Output["Governed Output"]
-
-  subgraph Core["CVF Core Governance"]
-    Intake
-    Risk
-    Approval
-    Validation
-    Receipt
+flowchart LR
+  subgraph Entry["Entry Surfaces"]
+    User["Non-coder UI"]
+    Dev["SDK / CLI"]
+    Agent["Plugin / Agent"]
   end
 
-  subgraph External["External Execution Boundary"]
-    Adapter
-    Worker
+  subgraph Govern["Governance Control Plane"]
+    Guard["Guard Contract<br/>phase / role / risk / scope"]
+    Control["Control Plane<br/>intake / context / routing"]
+    Runtime["Execution Plane<br/>policy gate / job state"]
   end
+
+  subgraph Boundary["Approved Execution Boundary"]
+    Adapter["Provider or Tool Adapter"]
+    Provider["Live Provider / Agent / Tool"]
+  end
+
+  subgraph Evidence["Evidence + Continuation"]
+    Review["DLP / validation / bypass checks"]
+    Receipt["Audit receipt + cost signal"]
+    Learning["Learning signal<br/>feedback / drift / reinjection"]
+  end
+
+  User --> Guard
+  Dev --> Guard
+  Agent --> Guard
+  Guard --> Control --> Runtime --> Adapter --> Provider
+  Provider --> Review --> Receipt --> Learning
+  Learning -. governed feedback .-> Control
 ```
 
-CVF should be understood as a governed pass-through layer: outside agents,
-plugins, providers, and workflows connect to CVF, pass through CVF's rules and
-evidence boundary, then return governed output. CVF does not need to own the
-agent that performs the work.
+CVF should be understood as a governed control plane: entry surfaces submit
+intent, guard/control/runtime layers decide what may run, approved execution
+stays outside the governance boundary, and evidence closes the loop. See
+[ARCHITECTURE.md](ARCHITECTURE.md) for the full module map, dependency rules,
+active reference path, and interaction model.
 
 ## Current Public Surface
 

@@ -8,10 +8,12 @@ import json
 import os
 import re
 import shutil
+import socket
 import subprocess
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -191,13 +193,15 @@ def call_openai_compatible(
 
 
 def wait_for_server(base_url: str, timeout_seconds: int) -> None:
+    parsed = urllib.parse.urlparse(base_url)
+    host = parsed.hostname or "127.0.0.1"
+    port = parsed.port or 80
     deadline = time.time() + timeout_seconds
     last_error = ""
     while time.time() < deadline:
         try:
-            with urllib.request.urlopen(f"{base_url}/api/providers", timeout=5) as response:
-                if response.status < 500:
-                    return
+            with socket.create_connection((host, port), timeout=5):
+                return
         except Exception as error:
             last_error = str(error)
         time.sleep(2)
@@ -335,7 +339,11 @@ def run(args: argparse.Namespace) -> int:
     if not args.no_start_server:
         server = start_server(env, args.port)
         base_url = f"http://127.0.0.1:{args.port}"
-        wait_for_server(base_url, 90)
+        try:
+            wait_for_server(base_url, 120)
+        except Exception:
+            server.terminate()
+            raise
 
     started_at = datetime.now(timezone.utc).isoformat()
     rows: list[dict[str, Any]] = []

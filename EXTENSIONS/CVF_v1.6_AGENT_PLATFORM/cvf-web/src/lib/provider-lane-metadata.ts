@@ -21,6 +21,12 @@ export const PROVIDER_LANE_EVIDENCE: Partial<Record<string, LaneEvidence>> = {
     passWindow: '3/3 PASS',
     note: 'Certified by repeated CVF canary',
   },
+  openai: {
+    status: 'CERTIFIED',
+    label: 'Certified',
+    passWindow: '3/3 PASS',
+    note: 'Certified by repeated CVF canary on gpt-4o-mini',
+  },
 };
 
 export const LANE_BADGE_STYLE: Record<LaneStatus, { text: string; bg: string }> = {

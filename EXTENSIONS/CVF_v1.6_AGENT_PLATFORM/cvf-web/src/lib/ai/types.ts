@@ -94,7 +94,7 @@ export interface ProviderStatus {
 
 // Default models per provider (should match AVAILABLE_MODELS in Settings.tsx)
 export const DEFAULT_MODELS: Record<AIProvider, string> = {
-    openai: 'gpt-4o',
+    openai: 'gpt-4o-mini',
     claude: 'claude-sonnet-4-20250514',
     gemini: 'gemini-2.5-flash',
     alibaba: 'qwen-turbo',

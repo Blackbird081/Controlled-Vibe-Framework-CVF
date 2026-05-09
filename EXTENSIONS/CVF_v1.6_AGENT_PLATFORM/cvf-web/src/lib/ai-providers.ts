@@ -479,7 +479,7 @@ export class OpenAIProvider {
 
     constructor(config: AIProviderConfig) {
         this.apiKey = config.apiKey;
-        this.model = config.model || 'gpt-4o';
+        this.model = config.model || 'gpt-4o-mini';
         this.baseUrl = config.baseUrl || this.baseUrl;
         this.language = config.language || 'vi';
     }

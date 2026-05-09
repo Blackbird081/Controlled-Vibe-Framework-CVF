@@ -28,6 +28,11 @@ PROVIDERS = [
         "model": "deepseek-chat",
         "audit_dir": REPO_ROOT / "docs" / "evidence" / "provider-lane-receipts" / "deepseek",
     },
+    {
+        "name": "openai",
+        "model": "gpt-4o-mini",
+        "audit_dir": REPO_ROOT / "docs" / "evidence" / "provider-lane-receipts" / "openai",
+    },
 ]
 
 CERTIFICATION_WINDOW = 3

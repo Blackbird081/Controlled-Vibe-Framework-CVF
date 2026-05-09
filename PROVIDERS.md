@@ -9,7 +9,7 @@ boundary, not the definition of CVF itself.
 |---|---|---|---|
 | Alibaba/DashScope | `qwen-turbo` / configured lane | Live lane used for release-quality proof. | Requires operator-supplied key. |
 | DeepSeek | `deepseek-chat` | Confirmatory/provider-lane evidence exists. | Not a parity claim. |
-| OpenAI | operator-selected | Adapter-ready direction. | No public parity claim in this repo. |
+| OpenAI | `gpt-4o-mini` | Certified by 3 consecutive live canary PASS receipts. | Certification is model-specific; not a blanket OpenAI parity claim. |
 | Gemini | operator-selected | Adapter-ready direction. | No public parity claim in this repo. |
 | Claude | operator-selected | Adapter-ready direction. | No public parity claim in this repo. |
 

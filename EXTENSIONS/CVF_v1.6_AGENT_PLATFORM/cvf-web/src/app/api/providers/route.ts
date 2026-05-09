@@ -2,12 +2,14 @@ import { NextResponse } from 'next/server';
 import { AIProvider, DEFAULT_MODELS, ProviderStatus } from '@/lib/ai';
 import { isAlibabaApiKeyConfigured, resolveAlibabaApiKeySourceName } from '@/lib/alibaba-env';
 import { isDeepSeekApiKeyConfigured, resolveDeepSeekApiKeySourceName } from '@/lib/deepseek-env';
+import { isOpenAIApiKeyConfigured, resolveOpenAIApiKeySourceName } from '@/lib/openai-env';
 import type { LaneStatus } from '@/lib/provider-lane-status';
 
 /** Canary certification status per provider — updated by evaluate_cvf_provider_lane_certification.py */
 const KNOWN_LANE_STATUS: Partial<Record<AIProvider, LaneStatus>> = {
     alibaba: 'CERTIFIED',  // 3 consecutive PASS 6/6 — 2026-04-21
     deepseek: 'CERTIFIED', // 3 consecutive PASS 6/6 — 2026-04-21
+    openai: 'CERTIFIED',   // 3 consecutive PASS 6/6 — 2026-05-09, gpt-4o-mini
 };
 
 function laneStatusFor(provider: AIProvider, configured: boolean): LaneStatus {
@@ -32,15 +34,16 @@ function providerStatus(input: {
 }
 
 export async function GET() {
+    const openaiConfigured = isOpenAIApiKeyConfigured();
     const alibabaConfigured = isAlibabaApiKeyConfigured();
     const deepseekConfigured = isDeepSeekApiKeyConfigured();
 
     const providers: ProviderStatus[] = [
         providerStatus({
             provider: 'openai',
-            configured: !!process.env.OPENAI_API_KEY,
+            configured: openaiConfigured,
             model: DEFAULT_MODELS.openai,
-            keySourceName: 'OPENAI_API_KEY',
+            keySourceName: resolveOpenAIApiKeySourceName(),
         }),
         providerStatus({
             provider: 'claude',

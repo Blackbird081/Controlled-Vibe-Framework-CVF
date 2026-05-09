@@ -6,7 +6,7 @@
 
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
 [![Release Gate](https://img.shields.io/badge/release%20gate-7%2F7%20PASS-brightgreen.svg)](docs/evidence/latest-release-gate.md)
-[![Provider Proof](https://img.shields.io/badge/provider%20proof-Alibaba%20certified%20%7C%20DeepSeek%20bounded-brightgreen.svg)](docs/evidence/provider-lanes.md)
+[![Provider Proof](https://img.shields.io/badge/provider%20proof-3%20live%20lanes%206%2F6-brightgreen.svg)](docs/evidence/provider-lanes.md)
 [![Public Surface](https://img.shields.io/badge/public%20surface-scanned-blue.svg)](governance/public-surface-manifest.json)
 [![Architecture](https://img.shields.io/badge/architecture-diagram%20first-blue.svg)](ARCHITECTURE.md)
 
@@ -51,9 +51,9 @@ repository maintenance, governance checks, and verification support. See
 ## Current Live-Proof Boundary
 
 > Current live proof: Alibaba/DashScope is the primary certified release lane
-> with a `7/7` release-gate PASS. DeepSeek has bounded provider-lane evidence.
-> Other providers may have adapter contracts or experimental integration
-> surfaces, but provider parity is not claimed until live evidence exists.
+> with a `7/7` release-gate PASS. Alibaba, DeepSeek, and OpenAI have current
+> named-model governed live canary receipts at `6/6` PASS. These are
+> governed-path operability proofs, not QBS quality benchmark scores.
 
 ## Who CVF Is For
 

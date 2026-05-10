@@ -274,7 +274,10 @@ Current status: methodology is public, but no public QBS quality score is
 claimed yet. QBS-1 runner and corpus planning is also published under
 `docs/benchmark/qbs-1/`. A three-provider QBS-1 calibration pilot has passed
 under `docs/benchmark/runs/qbs1-calibration-20260509-three-provider/`; it is
-harness proof only and does not claim a QBS score.
+harness proof only and does not claim a QBS score. A scored-run readiness
+packet now adds the aggregate-only powered corpus JSON and readiness checker,
+but scored execution remains blocked until a run-specific pre-registration tag
+and separate authorization exist.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

@@ -16,6 +16,8 @@ Allowed:
   run-specific `qbs/preregister/<run-id>` tag.
 - QBS-1 calibration pilot evidence may be cited as runner/harness proof only,
   with public status `CALIBRATION_DIRECTIONAL_NO_QBS_SCORE`.
+- QBS-1 scored-run readiness packet may be cited as aggregate-only
+  `POWERED_SINGLE_PROVIDER` preparation, not as scored benchmark evidence.
 
 Not allowed without new evidence:
 
@@ -24,6 +26,7 @@ Not allowed without new evidence:
 - CVF has a public QBS quality score
 - QBS-1 planning documents are scored benchmark evidence
 - QBS-1 calibration pilot evidence proves powered QBS quality levels
+- QBS-1 scored-run readiness packet proves a public QBS quality score
 - web proves the entire CVF runtime
 - mock tests prove governance behavior
 - public docs include the full internal operating history

@@ -34,6 +34,24 @@ writes sanitized artifacts under `docs/benchmark/runs/<run-id>/`.
 The calibration runner does not produce L4/L5/L6 evidence and does not create a
 public QBS quality score.
 
+## Current Scored-Run Readiness Checker
+
+The public scored-run readiness checker is:
+
+```bash
+python scripts/check_qbs_scored_run_readiness.py --json
+```
+
+It validates the 48-task aggregate-only `POWERED_SINGLE_PROVIDER` corpus packet
+and public artifact prerequisites. It does not execute a scored benchmark and
+does not publish a QBS quality score.
+
+Before scored execution, the checker must be run with tag verification:
+
+```bash
+python scripts/check_qbs_scored_run_readiness.py --json --require-preregistration --preregistration-tag qbs/preregister/<run-id>
+```
+
 ## Runner Configs
 
 The runner executes each task through:

@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS1_CALIBRATION_PILOT_PASS_NO_SCORED_RUN`
+Status: `QBS3_SCORED_RUN_READINESS_PACKET_READY_NO_SCORED_RUN`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -14,10 +14,12 @@ as harness proof only.
 ## Planning Packet
 
 - [Corpus Candidate](corpus-candidate.md)
+- [Powered Single-Provider Corpus V1](powered-single-provider-corpus-v1.json)
 - [Runner Contract](runner-contract.md)
 - [Scoring Rubric](scoring-rubric.md)
 - [Artifact Layout](artifact-layout.md)
 - [Pre-Registration Template](preregistration-template.md)
+- [Scored Run Readiness](scored-run-readiness.md)
 
 Runner entry point:
 
@@ -25,14 +27,22 @@ Runner entry point:
 python scripts/run_qbs_calibration_pilot.py --preregistration-tag qbs/preregister/<run-id>
 ```
 
+Readiness checker:
+
+```bash
+python scripts/check_qbs_scored_run_readiness.py --json
+```
+
 ## Gate State
 
 | Gate | State |
 |---|---|
 | QBS-1 corpus design | `UNLOCKED` |
+| QBS-1 powered corpus JSON | `READY_FOR_PREREGISTRATION` |
 | QBS-1 runner harness design | `CALIBRATION_RUNNER_AVAILABLE` |
 | QBS-1 calibration pilot | `PASS_NO_QBS_SCORE` |
-| QBS-1 scored run | `BLOCKED` until `qbs/preregister/<run-id>` tag exists |
+| QBS-1 scored-run readiness packet | `PASS` |
+| QBS-1 scored run | `BLOCKED` until run-specific authorization and `qbs/preregister/<run-id>` tag exist |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 

@@ -21,6 +21,7 @@ as harness proof only.
 - [Pre-Registration Template](preregistration-template.md)
 - [Scored Run Readiness](scored-run-readiness.md)
 - [Alibaba Powered Single-Provider Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba.md)
+- [QBS-6 Hard-Gate Remediation](hard-gate-remediation-qbs6.md)
 
 Runner entry point:
 
@@ -45,6 +46,7 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-1 scored-run readiness packet | `PASS` |
 | QBS-1 scored-run pre-registration | `PREREGISTERED` as `qbs/preregister/qbs1-powered-single-provider-20260510-alibaba` |
 | QBS-1 powered execution | `FAILED_NO_SCORE` for `qbs1-powered-single-provider-20260510-alibaba` |
+| QBS-6 hard-gate remediation | `COMPLETE_RERUN_BLOCKED` |
 | QBS-1 scored claim | `BLOCKED` until hard gates pass and reviewer scoring completes |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |

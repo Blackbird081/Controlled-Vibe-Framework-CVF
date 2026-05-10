@@ -85,6 +85,14 @@ export interface EnforcementResult {
 
 const SKILL_PREFLIGHT_MISSING_REASON = 'Skill Preflight declaration is required before Build/Execute actions.';
 const SKILL_PREFLIGHT_PATTERN = /\b(SKILL_PREFLIGHT_RECORD|SKILL PREFLIGHT PASS|PREFLIGHT PASS|SPF-[A-Z0-9_-]+)\b/i;
+const R2_APPROVAL_CONTENT_PATTERNS = [
+    /\b(customer|account)\s+(records?|identifiers?|details?)\b/i,
+    /\bsensitive\s+(indicators?|identifiers?|account)\b/i,
+    /\bcredential\s+leak\b/i,
+    /\bexternal\s+(tool|scraping|crawler)\b/i,
+    /\boutside\s+(the\s+)?declared\s+scope\b/i,
+    /\bdata\s+access\b.*\b(not|was not|wasn't)\s+approved\b/i,
+];
 
 function isBuildPhase(phase?: string): boolean {
     if (!phase) return false;
@@ -109,6 +117,11 @@ function evaluateSkillPreflight(input: EnforcementInput): SkillPreflightStatus {
         recordRef: recordRef || undefined,
         skillIds: explicitSkillIds,
     };
+}
+
+function requiresSensitiveR2Approval(content: string, riskLevel?: string | null): boolean {
+    if (riskLevel !== 'R2') return false;
+    return R2_APPROVAL_CONTENT_PATTERNS.some(pattern => pattern.test(content));
 }
 
 /**
@@ -143,7 +156,8 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
     }
 
     const inferredRisk = inferRiskLevelFromText(input.content);
-    const riskGate = evaluateRiskGate(inferredRisk, input.mode);
+    const effectiveRisk = input.cvfRiskLevel ?? inferredRisk;
+    const riskGate = evaluateRiskGate(effectiveRisk, input.mode, input.cvfPhase);
     if (riskGate.status === 'BLOCK') {
         status = 'BLOCK';
         reasons.push(riskGate.reason);
@@ -151,6 +165,14 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
     if (riskGate.status === 'NEEDS_APPROVAL' && status !== 'BLOCK') {
         status = 'NEEDS_APPROVAL';
         reasons.push(riskGate.reason);
+    }
+    if (
+        riskGate.status === 'ALLOW'
+        && status !== 'BLOCK'
+        && requiresSensitiveR2Approval(input.content, riskGate.riskLevel)
+    ) {
+        status = 'NEEDS_APPROVAL';
+        reasons.push('R2 sensitive or access-boundary request requires explicit human approval.');
     }
 
     return {
@@ -162,7 +184,7 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
         governanceStateSnapshot: buildUnifiedGovernanceState({
             governanceState: input.governanceState,
             cvfPhase: input.cvfPhase,
-            cvfRiskLevel: input.cvfRiskLevel ?? inferredRisk ?? undefined,
+            cvfRiskLevel: effectiveRisk ?? undefined,
             enforcementStatus: status,
             reasons,
             source: 'client',

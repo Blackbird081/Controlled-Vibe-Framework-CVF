@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS5_POWERED_SINGLE_PROVIDER_EXECUTION_FAILED_NO_PUBLIC_QBS_SCORE`
+Status: `QBS6_REMEDIATION_COMPLETE_RERUN_BLOCKED_NO_PUBLIC_QBS_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -34,7 +34,8 @@ pilot has also passed as harness proof only. A scored-run readiness packet now
 adds the aggregate-only powered corpus JSON and readiness checker. The first
 planned single-provider scored run is publicly pre-registered and has executed
 on Alibaba/DashScope `qwen-turbo`, but it failed hard gates. No public QBS
-score or quality-level claim is made.
+score or quality-level claim is made. QBS-6 records bounded hard-gate
+remediation and keeps rerun/scoring blocked until a new pre-registration.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -43,6 +44,7 @@ artifact path.
 Latest powered execution artifact:
 
 - [QBS-1 Alibaba Powered Single-Provider Execution](runs/qbs1-powered-single-provider-20260510-alibaba/README.md)
+- [QBS-6 Hard-Gate Remediation](qbs-1/hard-gate-remediation-qbs6.md)
 
 ## What QBS Measures
 

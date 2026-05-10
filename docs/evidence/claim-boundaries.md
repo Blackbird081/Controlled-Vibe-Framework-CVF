@@ -22,6 +22,8 @@ Allowed:
   not as execution evidence.
 - QBS-1 Alibaba powered execution may be cited as a failed/no-score hard-gate
   result, not as a quality score.
+- QBS-6 remediation may be cited as bounded hard-gate remediation and rerun
+  planning, not as a rerun result.
 
 Not allowed without new evidence:
 
@@ -33,6 +35,7 @@ Not allowed without new evidence:
 - QBS-1 scored-run readiness packet proves a public QBS quality score
 - QBS-1 pre-registration proves scored benchmark results
 - QBS-1 failed powered execution proves L4/L5/L6 quality claims
+- QBS-6 remediation changes the QBS-5 failed result
 - web proves the entire CVF runtime
 - mock tests prove governance behavior
 - public docs include the full internal operating history

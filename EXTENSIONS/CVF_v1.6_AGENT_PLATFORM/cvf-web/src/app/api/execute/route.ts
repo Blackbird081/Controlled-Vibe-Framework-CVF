@@ -387,6 +387,15 @@ export async function POST(request: NextRequest) {
                     details: safety.details,
                     provider,
                     model: 'blocked',
+                    governanceEnvelope: govEnvelope,
+                    policySnapshotId: govEnvelope.policySnapshotId,
+                    governanceEvidenceReceipt: buildEvidenceReceipt({
+                        envelope: govEnvelope,
+                        decision: 'BLOCK',
+                        riskLevel: body.cvfRiskLevel ?? 'R3',
+                        provider,
+                        model: 'blocked',
+                    }),
                 },
                 { status: 400 }
             );

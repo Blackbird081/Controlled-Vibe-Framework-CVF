@@ -278,7 +278,8 @@ harness proof only and does not claim a QBS score. A scored-run readiness
 packet now adds the aggregate-only powered corpus JSON and readiness checker,
 and the first planned single-provider scored run has a public pre-registration
 packet/tag. That first Alibaba/DashScope execution has now run and failed hard
-gates, so no QBS score or quality-level claim is made.
+gates, so no QBS score or quality-level claim is made. QBS-6 records bounded
+hard-gate remediation, but rerun/scoring remains blocked.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

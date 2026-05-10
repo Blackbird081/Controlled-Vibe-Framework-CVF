@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS11_R6_PREREGISTRATION_IN_PROGRESS_NO_QBS_SCORE`
+Status: `QBS11_R6_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -46,8 +46,10 @@ delta does not support an L4/L5 claim. QBS-10 identifies the primary root cause
 as missing or too-terse user-facing output for governed non-ALLOW outcomes and
 adds deterministic block, clarify, approval, and front-door clarification
 guidance. QBS-10 is remediation only; it publishes no new benchmark score.
-QBS-11 starts a post-remediation R6 pre-registration so the same public
-contract can be rerun and scored before any future claim is considered.
+QBS-11 executed and scored the post-remediation R6 run. Hard gates passed and
+the median `CFG-B` vs `CFG-A1` delta improved to `-0.125`, but reviewer
+agreement failed the claim gate (`kappa=0.5043578866178171`,
+`rho=0.5987420572601858`). No public QBS score or L4/L5 claim is made.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -60,6 +62,7 @@ Latest powered execution artifact:
 - [QBS-1 Alibaba Powered Single-Provider Execution](runs/qbs1-powered-single-provider-20260510-alibaba/README.md)
 - [QBS-1 Alibaba Powered Single-Provider R4 Execution](runs/qbs1-powered-single-provider-20260510-alibaba-r4/README.md)
 - [QBS-1 Alibaba Powered Single-Provider R5 Scored Review](runs/qbs1-powered-single-provider-20260510-alibaba-r5/README.md)
+- [QBS-1 Alibaba Powered Single-Provider R6 Scored Review](runs/qbs1-powered-single-provider-20260510-alibaba-r6/README.md)
 - [QBS-6 Hard-Gate Remediation](qbs-1/hard-gate-remediation-qbs6.md)
 - [QBS-7 Rerun Pre-Registration Plan](qbs-1/rerun-plan-qbs7.md)
 - [QBS-10 Quality Delta Root-Cause And Remediation](qbs-1/quality-delta-root-cause-qbs10.md)

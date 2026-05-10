@@ -1,0 +1,20 @@
+{
+  "status": "FAIL",
+  "quadratic_weighted_cohen_kappa": 0.5043578866178171,
+  "spearman_rho": 0.5987420572601858,
+  "paired_score_count": 432,
+  "reviewers": [
+    {
+      "reviewer": "openai",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "prompt_version": "qbs9-model-assisted-reviewer-v1"
+    },
+    {
+      "reviewer": "deepseek",
+      "provider": "deepseek",
+      "model": "deepseek-chat",
+      "prompt_version": "qbs9-model-assisted-reviewer-v1"
+    }
+  ]
+}

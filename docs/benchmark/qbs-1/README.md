@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS11_R6_PREREGISTRATION_IN_PROGRESS_NO_QBS_SCORE`
+Status: `QBS11_R6_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -60,12 +60,15 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-9 reviewer scoring | `REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` for `qbs1-powered-single-provider-20260510-alibaba-r5` |
 | QBS-10 quality delta remediation | `REMEDIATION_COMPLETE_NO_NEW_SCORE` |
 | QBS-11 R6 pre-registration | `PREREGISTERED_POST_QBS10_REMEDIATION_RUN_NO_QBS_SCORE` |
+| QBS-11 R6 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
+| QBS-11 R6 reviewer agreement | `FAIL` with kappa `0.5043578866178171`, rho `0.5987420572601858` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-11 R6 is the next pre-registered post-remediation run. It must execute,
-retain a redacted reviewer output bundle, pass hard gates, complete reviewer
-scoring, and pass agreement before any quality claim can be considered.
+QBS-11 R6 completed execution and reviewer scoring after QBS-10 remediation.
+Hard gates passed and the median normalized quality delta improved, but
+reviewer agreement failed the claim gate. The next track should address reviewer
+agreement and residual quality variance before another public claim attempt.

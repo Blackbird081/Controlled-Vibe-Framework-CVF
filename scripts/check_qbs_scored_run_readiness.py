@@ -37,6 +37,7 @@ EXPECTED_FAMILIES = [
 ]
 EXPECTED_DECISIONS = {"ALLOW", "BLOCK", "NEEDS_APPROVAL", "CLARIFY"}
 EXPECTED_RISKS = {"R0", "R1", "R2", "R3"}
+RERUN_TAG_PATTERN = re.compile(r"-r(\d+)$")
 SECRET_PATTERNS = [
     re.compile(r"sk-[A-Za-z0-9]{20,}"),
     re.compile(r"ghp_[A-Za-z0-9]{20,}"),
@@ -194,12 +195,14 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     validate_run_preregistration_files(args.preregistration_tag if tag_sha else None, errors)
     validate_secret_scan(errors)
     run_id = args.preregistration_tag.removeprefix("qbs/preregister/") if args.preregistration_tag else ""
+    rerun_match = RERUN_TAG_PATTERN.search(run_id)
+    rerun_index = int(rerun_match.group(1)) if rerun_match else 0
     preregistered_status = (
         "QBS8_RERUN_PREREGISTERED_NO_SCORED_RUN"
-        if run_id.endswith("-r3") or run_id.endswith("-r4")
+        if rerun_index >= 3
         else
         "QBS7_RERUN_PREREGISTERED_NO_SCORED_RUN"
-        if run_id.endswith("-r2")
+        if rerun_index == 2
         else "QBS4_SCORED_RUN_PREREGISTERED_NO_SCORED_RUN"
     )
 
@@ -222,7 +225,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             if not tag_sha
             else (
                 "operator may run the authorized QBS8 live rerun"
-                if run_id.endswith("-r3") or run_id.endswith("-r4")
+                if rerun_index >= 3
                 else "operator may request separate QBS8 live rerun authorization"
                 if run_id.endswith("-r2")
                 else "operator may request separate scored-run execution authorization"

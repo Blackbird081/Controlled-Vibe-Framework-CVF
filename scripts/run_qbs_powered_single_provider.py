@@ -416,7 +416,7 @@ def normalize_cvf_response(data: dict[str, Any], status: int, started: float) ->
     }
 
 
-def summarize_result(result: dict[str, Any], config: str, expected_decision: str) -> dict[str, Any]:
+def summarize_result(result: dict[str, Any], config: str, expected_decision: str, retain_redacted_output: bool = False) -> dict[str, Any]:
     copied = dict(result)
     output = redact(str(copied.pop("output", "") or ""))
     error = redact(str(copied.get("error", "") or ""))
@@ -427,7 +427,7 @@ def summarize_result(result: dict[str, Any], config: str, expected_decision: str
         outcome_ok = bool(copied.get("transportOk")) and bool(receipt) and receipt_decision == expected_decision
     else:
         outcome_ok = bool(copied.get("transportOk"))
-    return {
+    summary = {
         **copied,
         "outcomeOk": outcome_ok,
         "receiptDecision": receipt_decision,
@@ -438,6 +438,9 @@ def summarize_result(result: dict[str, Any], config: str, expected_decision: str
         "errorPreview": error[:240] if error else None,
         "secretScanClean": secret_clean,
     }
+    if retain_redacted_output:
+        summary["redactedOutput"] = output
+    return summary
 
 
 def retry_call(fn: Any, attempts: int, delay_seconds: float) -> dict[str, Any]:
@@ -568,8 +571,8 @@ def run(args: argparse.Namespace) -> int:
                         args.retry_attempts,
                         args.retry_delay_seconds,
                     )
-                    a0_summary = summarize_result(a0, "CFG-A0", task["expected_cvf_decision"])
-                    a1_summary = summarize_result(a1, "CFG-A1", task["expected_cvf_decision"])
+                    a0_summary = summarize_result(a0, "CFG-A0", task["expected_cvf_decision"], args.retain_redacted_outputs)
+                    a1_summary = summarize_result(a1, "CFG-A1", task["expected_cvf_decision"], args.retain_redacted_outputs)
                     time.sleep(args.inter_call_delay_seconds)
                 if should_keep_existing_cfg_b(existing_row, task["expected_cvf_decision"], args.rerun_all_cfg_b):
                     b_summary = existing_row["configs"]["CFG-B"]
@@ -587,7 +590,7 @@ def run(args: argparse.Namespace) -> int:
                             args.retry_attempts,
                             args.retry_delay_seconds,
                         )
-                    b_summary = summarize_result(b, "CFG-B", task["expected_cvf_decision"])
+                    b_summary = summarize_result(b, "CFG-B", task["expected_cvf_decision"], args.retain_redacted_outputs)
                 rows.append({
                     "provider": "alibaba",
                     "model": model,
@@ -696,6 +699,33 @@ def run(args: argparse.Namespace) -> int:
     })
     write_json(artifact_root / "hard-gate-results.json", hard_gates)
     write_json(artifact_root / "aggregate-results.json", report)
+    if args.retain_redacted_outputs:
+        reviewer_bundle = {
+            "run_id": run_id,
+            "status": "REDACTED_REVIEWER_OUTPUT_BUNDLE",
+            "redaction_policy": "secret patterns replaced with [REDACTED_SECRET]; public bundle contains generated outputs, not raw provider request logs",
+            "rows": [
+                {
+                    "task_id": row["task_id"],
+                    "family": row["family"],
+                    "risk_class": row["risk_class"],
+                    "expected_cvf_decision": row["expected_cvf_decision"],
+                    "negative_control": row["negative_control"],
+                    "repeat": row["repeat"],
+                    "configs": {
+                        config_name: {
+                            "output": config_result.get("redactedOutput", ""),
+                            "outputSha256": config_result.get("outputSha256"),
+                            "receiptDecision": config_result.get("receiptDecision"),
+                            "expectedDecision": config_result.get("expectedDecision"),
+                        }
+                        for config_name, config_result in row["configs"].items()
+                    },
+                }
+                for row in rows
+            ],
+        }
+        write_json(artifact_root / "redacted-reviewer-output-bundle.json", reviewer_bundle)
     write_json(artifact_root / "cost-latency-results.json", build_cost_latency(rows))
     write_json(artifact_root / "reviewer-agreement.json", {
         "status": "NOT_STARTED",
@@ -755,6 +785,7 @@ def main() -> int:
     parser.add_argument("--inter-call-delay-seconds", type=float, default=0.5)
     parser.add_argument("--resume-missing-cfg-b", action="store_true")
     parser.add_argument("--rerun-all-cfg-b", action="store_true")
+    parser.add_argument("--retain-redacted-outputs", action="store_true")
     return run(parser.parse_args())
 
 

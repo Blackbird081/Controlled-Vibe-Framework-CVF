@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS14_REVIEWER_CALIBRATION_REQUIRED_NO_NEW_SCORE`
+Status: `QBS15_REVIEWER_CALIBRATION_ANCHORS_READY_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -31,6 +31,8 @@ as harness proof only.
 - [QBS-12 Reviewer Disagreement And Residual Quality Remediation](reviewer-disagreement-remediation-qbs12.md)
 - [QBS-14 Reviewer Calibration Plan](reviewer-calibration-plan-qbs14.md)
 - [QBS-14 Reviewer Drift Analysis JSON](reviewer-drift-analysis-qbs14.json)
+- [QBS-15 Reviewer Calibration Anchors](reviewer-calibration-anchors-qbs15.md)
+- [QBS-15 Reviewer Calibration Anchors JSON](reviewer-calibration-anchors-qbs15.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 
@@ -71,13 +73,14 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-13 R7 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
 | QBS-13 R7 reviewer agreement | `FAIL` with kappa `0.46363630803481326`, rho `0.5329992930685284` |
 | QBS-14 reviewer drift analysis | `CALIBRATION_REQUIRED_NO_NEW_SCORE` |
+| QBS-15 reviewer calibration anchors | `ANCHORS_READY_NO_NEW_SCORE` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-14 concludes that the next track should stop live reruns and address
-reviewer calibration plus residual `CFG-B` output quality before another claim
-attempt. The recommended next control is a fixed calibration anchor set with
-high-disagreement examples from R5/R6/R7.
+QBS-15 creates the fixed calibration anchor set recommended by QBS-14 and
+updates the scorer to support explicit calibration guidance. The next track
+should adjudicate high-disagreement anchors with a third reviewer or human
+spot-check before pre-registering any future claim run.

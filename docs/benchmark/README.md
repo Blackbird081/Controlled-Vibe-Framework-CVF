@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS14_REVIEWER_CALIBRATION_REQUIRED_NO_NEW_SCORE`
+Status: `QBS15_REVIEWER_CALIBRATION_ANCHORS_READY_NO_NEW_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -61,6 +61,8 @@ reviewer agreement failed the claim gate (`kappa=0.46363630803481326`,
 QBS-14 analyzes reviewer drift across R5/R6/R7 and concludes that another live
 rerun should not be pre-registered until reviewer calibration and residual
 `CFG-B` quality work are completed.
+QBS-15 creates the first fixed reviewer calibration anchor set and updates the
+reviewer scorer so future runs can opt into explicit calibration guidance.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -81,6 +83,8 @@ Latest powered execution artifact:
 - [QBS-12 Reviewer Disagreement And Residual Quality Remediation](qbs-1/reviewer-disagreement-remediation-qbs12.md)
 - [QBS-14 Reviewer Calibration Plan](qbs-1/reviewer-calibration-plan-qbs14.md)
 - [QBS-14 Reviewer Drift Analysis JSON](qbs-1/reviewer-drift-analysis-qbs14.json)
+- [QBS-15 Reviewer Calibration Anchors](qbs-1/reviewer-calibration-anchors-qbs15.md)
+- [QBS-15 Reviewer Calibration Anchors JSON](qbs-1/reviewer-calibration-anchors-qbs15.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 

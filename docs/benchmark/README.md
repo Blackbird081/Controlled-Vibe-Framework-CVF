@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS12_REMEDIATION_COMPLETE_NO_NEW_SCORE`
+Status: `QBS13_R7_PREREGISTRATION_IN_PROGRESS_NO_QBS_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -54,6 +54,8 @@ QBS-12 analyzes the R6 disagreement pattern and remediates the clearest
 remaining defects: generic approval-gated security output, unsupported provider
 benchmark numbers, and excess meta-commentary on simple transformations. QBS-12
 publishes no new score.
+QBS-13 starts a post-QBS12 R7 pre-registration so the same contract can be
+rerun and scored before any future claim is considered.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -72,6 +74,7 @@ Latest powered execution artifact:
 - [QBS-10 Quality Delta Root-Cause And Remediation](qbs-1/quality-delta-root-cause-qbs10.md)
 - [QBS-12 Reviewer Disagreement And Residual Quality Remediation](qbs-1/reviewer-disagreement-remediation-qbs12.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
+- [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 
 ## What QBS Measures
 

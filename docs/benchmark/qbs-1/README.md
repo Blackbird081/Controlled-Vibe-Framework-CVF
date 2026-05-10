@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS12_REMEDIATION_COMPLETE_NO_NEW_SCORE`
+Status: `QBS13_R7_PREREGISTRATION_IN_PROGRESS_NO_QBS_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -30,6 +30,7 @@ as harness proof only.
 - [QBS-10 Quality Delta Root-Cause And Remediation](quality-delta-root-cause-qbs10.md)
 - [QBS-12 Reviewer Disagreement And Residual Quality Remediation](reviewer-disagreement-remediation-qbs12.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
+- [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 
 Runner entry point:
 
@@ -64,14 +65,13 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-11 R6 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
 | QBS-11 R6 reviewer agreement | `FAIL` with kappa `0.5043578866178171`, rho `0.5987420572601858` |
 | QBS-12 residual quality remediation | `REMEDIATION_COMPLETE_NO_NEW_SCORE` |
+| QBS-13 R7 pre-registration | `PREREGISTERED_POST_QBS12_REMEDIATION_RUN_NO_QBS_SCORE` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-12 closes the first R6 disagreement pass and remediates generic
-approval-gated security output, unsupported provider benchmark-numbering, and
-excess meta-commentary on simple transformations. The next scored attempt still
-requires a new pre-registration and must pass hard gates, reviewer agreement,
-and claim-ladder thresholds.
+QBS-13 R7 is the next pre-registered post-remediation run. It must execute,
+retain a redacted reviewer output bundle, pass hard gates, complete reviewer
+scoring, and pass agreement before any quality claim can be considered.

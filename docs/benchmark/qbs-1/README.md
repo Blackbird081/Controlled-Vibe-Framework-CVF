@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS8_RERUN_READY_NO_PUBLIC_QBS_SCORE`
+Status: `QBS8_EXECUTION_COMPLETE_REVIEW_PENDING_NO_PUBLIC_QBS_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -25,6 +25,7 @@ as harness proof only.
 - [QBS-7 Rerun Pre-Registration Plan](rerun-plan-qbs7.md)
 - [Alibaba Powered Single-Provider R2 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r2.md)
 - [Alibaba Powered Single-Provider R3 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r3.md)
+- [Alibaba Powered Single-Provider R4 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r4.md)
 
 Runner entry point:
 
@@ -51,12 +52,14 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-1 powered execution | `FAILED_NO_SCORE` for `qbs1-powered-single-provider-20260510-alibaba` |
 | QBS-6 hard-gate remediation | `COMPLETE_RERUN_BLOCKED` |
 | QBS-7 rerun pre-registration | `PREREGISTERED` as `qbs/preregister/qbs1-powered-single-provider-20260510-alibaba-r2` |
-| QBS-8 live rerun run-set | `PREREGISTERED` as `qbs/preregister/qbs1-powered-single-provider-20260510-alibaba-r3` |
-| QBS-1 scored claim | `BLOCKED` until hard gates pass and reviewer scoring completes |
+| QBS-8 live rerun run-set | `PREREGISTERED` as `qbs/preregister/qbs1-powered-single-provider-20260510-alibaba-r4` |
+| QBS-8 live rerun execution | `EXECUTION_COMPLETE_REVIEW_PENDING` for `qbs1-powered-single-provider-20260510-alibaba-r4` |
+| QBS-1 scored claim | `BLOCKED` until reviewer scoring and agreement completes |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-8 may execute the R3 rerun under the operator authorization recorded in the
-private provenance handoff. QBS-7 remains a no-score R2 preregistration packet.
+Reviewer scoring and agreement remain the next gate before any public QBS score
+or L4/L5/L6 claim. QBS-7 and R3 remain no-score preregistration/diagnostic
+artifacts; R4 is the hard-gate-passing execution artifact.

@@ -1,0 +1,5 @@
+{
+  "status": "NOT_STARTED",
+  "reason": "QBS powered execution artifacts only; reviewer scoring requires a later authorized track.",
+  "reviewer_plan": "docs/benchmark/qbs-1/reviewer-plan.qbs1-powered-single-provider-20260510-alibaba-r4.md"
+}

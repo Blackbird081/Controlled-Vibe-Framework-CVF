@@ -1,0 +1,48 @@
+{
+  "run_id": "qbs1-powered-single-provider-20260510-alibaba-r4",
+  "run_class": "POWERED_SINGLE_PROVIDER",
+  "provider": "alibaba",
+  "provider_display": "Alibaba/DashScope OpenAI-compatible API",
+  "model": "qwen-turbo",
+  "endpoint_class": "openai_compatible_chat_completions",
+  "endpoint_public_hint": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions",
+  "credential_sources": [
+    "DASHSCOPE_API_KEY",
+    "ALIBABA_API_KEY",
+    "CVF_ALIBABA_API_KEY",
+    "CVF_BENCHMARK_ALIBABA_KEY"
+  ],
+  "credential_policy": "operator-supplied ignored local environment only; raw values must not be printed or committed",
+  "configs": [
+    "CFG-A0",
+    "CFG-A1",
+    "CFG-B"
+  ],
+  "repeat_count": 3,
+  "task_count": 48,
+  "planned_configuration_executions": 432,
+  "temperature": 0.2,
+  "max_tokens": 900,
+  "timeout_seconds": {
+    "direct_model": 90,
+    "cvf_governed_path": 240,
+    "front_door_clarification_path": 240
+  },
+  "pairing_rule": "same provider, model, temperature, and output limit across CFG-A0, CFG-A1, and CFG-B",
+  "rerun_delta": {
+    "parent_failed_run": "qbs1-powered-single-provider-20260510-alibaba",
+    "supersedes_unexecuted_or_invalid_runs": [
+      "qbs1-powered-single-provider-20260510-alibaba-r2",
+      "qbs1-powered-single-provider-20260510-alibaba-r3"
+    ],
+    "qbs6_runtime_remediation_included": true,
+    "f7_entrypoint": "intent_first_front_door_clarification_before_execute",
+    "f7_runner_suffix_fix_included": true,
+    "r3_block_enforcement_included": true
+  },
+  "cost_boundary": {
+    "operator_approval_required_before_live_run": true,
+    "stop_on_quota_or_budget_uncertainty": false,
+    "cost_claim_requires_token_or_cost_metadata_where_available": true
+  }
+}

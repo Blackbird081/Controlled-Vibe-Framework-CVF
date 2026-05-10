@@ -29,6 +29,9 @@ Allowed:
 - QBS-8 R3 pre-registration may be cited as the live rerun target after bounded
   F7 router hardening, not as a QBS score before execution artifacts and
   reviewer scoring exist.
+- QBS-8 R4 powered execution may be cited as hard-gate-passing
+  `POWERED_SINGLE_PROVIDER` execution evidence for Alibaba/DashScope
+  `qwen-turbo`, still pending reviewer scoring and agreement.
 
 Not allowed without new evidence:
 
@@ -43,6 +46,8 @@ Not allowed without new evidence:
 - QBS-6 remediation changes the QBS-5 failed result
 - QBS-7 pre-registration proves scored rerun results
 - QBS-8 pre-registration alone proves scored rerun results
+- QBS-8 hard-gate-passing execution alone proves a public QBS score, L4/L5/L6,
+  family-level claims, or provider parity
 - web proves the entire CVF runtime
 - mock tests prove governance behavior
 - public docs include the full internal operating history

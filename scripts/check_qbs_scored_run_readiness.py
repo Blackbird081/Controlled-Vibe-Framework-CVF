@@ -196,7 +196,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     run_id = args.preregistration_tag.removeprefix("qbs/preregister/") if args.preregistration_tag else ""
     preregistered_status = (
         "QBS8_RERUN_PREREGISTERED_NO_SCORED_RUN"
-        if run_id.endswith("-r3")
+        if run_id.endswith("-r3") or run_id.endswith("-r4")
         else
         "QBS7_RERUN_PREREGISTERED_NO_SCORED_RUN"
         if run_id.endswith("-r2")
@@ -222,7 +222,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             if not tag_sha
             else (
                 "operator may run the authorized QBS8 live rerun"
-                if run_id.endswith("-r3")
+                if run_id.endswith("-r3") or run_id.endswith("-r4")
                 else "operator may request separate QBS8 live rerun authorization"
                 if run_id.endswith("-r2")
                 else "operator may request separate scored-run execution authorization"

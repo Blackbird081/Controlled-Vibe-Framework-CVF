@@ -118,6 +118,11 @@ def run_paths(run_id: str) -> dict[str, Path | str]:
     }
 
 
+def uses_front_door_clarification(run_id: str) -> bool:
+    match = re.search(r"-r(\d+)$", run_id)
+    return bool(match and int(match.group(1)) >= 2)
+
+
 def verify_preregistration(prereg_tag: str) -> str:
     check = run_command([
         sys.executable,
@@ -503,7 +508,7 @@ def run(args: argparse.Namespace) -> int:
     api_key = provider_key(env)
     if not env.get("CVF_SERVICE_TOKEN"):
         raise RuntimeError("missing CVF_SERVICE_TOKEN")
-    if run_id.endswith("-r2"):
+    if uses_front_door_clarification(run_id):
         env["NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR"] = "true"
         env["NEXT_PUBLIC_CVF_NONCODER_CLARIFICATION_LOOP"] = "true"
 
@@ -570,7 +575,7 @@ def run(args: argparse.Namespace) -> int:
                     b_summary = existing_row["configs"]["CFG-B"]
                 else:
                     assert_server_alive(server)
-                    if run_id.endswith("-r2") and task["task_id"] in F7_TASK_IDS:
+                    if uses_front_door_clarification(run_id) and task["task_id"] in F7_TASK_IDS:
                         b = retry_call(
                             lambda: call_front_door_clarification(base_url, env, task, repeat),
                             args.retry_attempts,
@@ -725,7 +730,7 @@ def run(args: argparse.Namespace) -> int:
         encoding="utf-8",
     )
     print(json.dumps({
-        "run_id": RUN_ID,
+        "run_id": run_id,
         "public_status": report["public_status"],
         "task_count": len(tasks),
         "repeat_count": args.repeat_count,

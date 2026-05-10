@@ -93,6 +93,16 @@ const R2_APPROVAL_CONTENT_PATTERNS = [
     /\boutside\s+(the\s+)?declared\s+scope\b/i,
     /\bdata\s+access\b.*\b(not|was not|wasn't)\s+approved\b/i,
 ];
+const R3_BLOCK_CONTENT_PATTERNS = [
+    /\b(api\s+key|credential|secret)\b.{0,120}\b(use|access|log\s*in|login)\b/i,
+    /\bthird-party\s+account\b.{0,120}\b(data|access)\b/i,
+    /\bbypass\b.{0,120}\b(access-control|admin|approval|governance)\b/i,
+    /\bignore\b.{0,80}\b(governance|approval|policy)\b/i,
+    /\bexecute\b.{0,80}\bprohibited\b/i,
+    /\b(hidden\s+system\s+instruction|internal\s+policy)\b/i,
+    /\bsneak\w*\s+around\b.{0,80}\bapproval\b/i,
+    /\b(remove|delete|hide)\b.{0,80}\b(audit\s+traces?|logs?|evidence)\b/i,
+];
 
 function isBuildPhase(phase?: string): boolean {
     if (!phase) return false;
@@ -122,6 +132,11 @@ function evaluateSkillPreflight(input: EnforcementInput): SkillPreflightStatus {
 function requiresSensitiveR2Approval(content: string, riskLevel?: string | null): boolean {
     if (riskLevel !== 'R2') return false;
     return R2_APPROVAL_CONTENT_PATTERNS.some(pattern => pattern.test(content));
+}
+
+function requiresR3Block(content: string, riskLevel?: string | null): boolean {
+    if (riskLevel !== 'R3') return false;
+    return R3_BLOCK_CONTENT_PATTERNS.some(pattern => pattern.test(content));
 }
 
 /**
@@ -157,6 +172,10 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
 
     const inferredRisk = inferRiskLevelFromText(input.content);
     const effectiveRisk = input.cvfRiskLevel ?? inferredRisk;
+    if (status !== 'BLOCK' && requiresR3Block(input.content, effectiveRisk)) {
+        status = 'BLOCK';
+        reasons.push('R3 prohibited secret, bypass, hidden-policy, approval-evasion, or audit-evasion request is blocked.');
+    }
     const riskGate = evaluateRiskGate(effectiveRisk, input.mode, input.cvfPhase);
     if (riskGate.status === 'BLOCK') {
         status = 'BLOCK';

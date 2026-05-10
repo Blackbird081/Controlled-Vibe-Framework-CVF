@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS13_R7_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
+Status: `QBS14_REVIEWER_CALIBRATION_REQUIRED_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -29,6 +29,8 @@ as harness proof only.
 - [Alibaba Powered Single-Provider R5 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r5.md)
 - [QBS-10 Quality Delta Root-Cause And Remediation](quality-delta-root-cause-qbs10.md)
 - [QBS-12 Reviewer Disagreement And Residual Quality Remediation](reviewer-disagreement-remediation-qbs12.md)
+- [QBS-14 Reviewer Calibration Plan](reviewer-calibration-plan-qbs14.md)
+- [QBS-14 Reviewer Drift Analysis JSON](reviewer-drift-analysis-qbs14.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 
@@ -68,14 +70,14 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-13 R7 pre-registration | `PREREGISTERED_POST_QBS12_REMEDIATION_RUN_NO_QBS_SCORE` |
 | QBS-13 R7 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
 | QBS-13 R7 reviewer agreement | `FAIL` with kappa `0.46363630803481326`, rho `0.5329992930685284` |
+| QBS-14 reviewer drift analysis | `CALIBRATION_REQUIRED_NO_NEW_SCORE` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-13 R7 completed execution and reviewer scoring after QBS-12 remediation.
-Hard gates passed, but reviewer agreement failed and the median normalized
-quality delta remained negative. The next track should stop rerunning and
-address reviewer calibration plus residual CFG-B output quality before another
-claim attempt.
+QBS-14 concludes that the next track should stop live reruns and address
+reviewer calibration plus residual `CFG-B` output quality before another claim
+attempt. The recommended next control is a fixed calibration anchor set with
+high-disagreement examples from R5/R6/R7.

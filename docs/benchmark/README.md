@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS3_SCORED_RUN_READINESS_PACKET_READY_NO_PUBLIC_QBS_SCORE`
+Status: `QBS4_SCORED_RUN_PREREGISTERED_NO_PUBLIC_QBS_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -31,8 +31,10 @@ powered run is published.
 
 QBS-1 runner and corpus planning is now published. A three-provider calibration
 pilot has also passed as harness proof only. A scored-run readiness packet now
-adds the aggregate-only powered corpus JSON and readiness checker. None of
-these artifacts is a powered QBS score or a public quality-level claim.
+adds the aggregate-only powered corpus JSON and readiness checker. The first
+planned single-provider scored run is publicly pre-registered, but it has not
+executed. None of these artifacts is a powered QBS score or a public
+quality-level claim.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and

@@ -145,10 +145,36 @@ def validate_preregistration(args: argparse.Namespace, errors: list[str], warnin
     return result.stdout.strip()
 
 
+def validate_run_preregistration_files(tag: str | None, errors: list[str]) -> None:
+    if not tag:
+        return
+    run_id = tag.removeprefix("qbs/preregister/")
+    expected_paths = [
+        QBS_ROOT / "preregistrations" / f"{run_id}.md",
+        QBS_ROOT / f"provider-model-manifest.{run_id}.json",
+        QBS_ROOT / f"config-prompt-manifest.{run_id}.json",
+        QBS_ROOT / f"reviewer-plan.{run_id}.md",
+    ]
+    for path in expected_paths:
+        if not path.exists():
+            errors.append(f"missing run pre-registration file: {path.relative_to(REPO_ROOT)}")
+    provider_manifest = expected_paths[1]
+    if provider_manifest.exists():
+        payload = load_json(provider_manifest)
+        if payload.get("run_id") != run_id:
+            errors.append("provider/model manifest run_id does not match pre-registration tag")
+        if payload.get("run_class") != "POWERED_SINGLE_PROVIDER":
+            errors.append("provider/model manifest must declare POWERED_SINGLE_PROVIDER")
+        if payload.get("repeat_count") != 3:
+            errors.append("provider/model manifest repeat_count must be 3")
+        if payload.get("planned_configuration_executions") != 432:
+            errors.append("provider/model manifest must declare 432 planned configuration executions")
+
+
 def validate_secret_scan(errors: list[str]) -> None:
     scanned_paths = [
-        *QBS_ROOT.glob("*.md"),
-        *QBS_ROOT.glob("*.json"),
+        *QBS_ROOT.rglob("*.md"),
+        *QBS_ROOT.rglob("*.json"),
         REPO_ROOT / "scripts" / "check_qbs_scored_run_readiness.py",
     ]
     for path in scanned_paths:
@@ -165,11 +191,16 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     validate_required_files(errors)
     corpus = validate_corpus(errors)
     tag_sha = validate_preregistration(args, errors, warnings)
+    validate_run_preregistration_files(args.preregistration_tag if tag_sha else None, errors)
     validate_secret_scan(errors)
 
     return {
         "status": "PASS" if not errors else "FAIL",
-        "public_status": "QBS3_SCORED_RUN_READINESS_PACKET_READY_NO_SCORED_RUN",
+        "public_status": (
+            "QBS4_SCORED_RUN_PREREGISTERED_NO_SCORED_RUN"
+            if tag_sha
+            else "QBS3_SCORED_RUN_READINESS_PACKET_READY_NO_SCORED_RUN"
+        ),
         "corpus_version": corpus.get("corpus_version"),
         "run_class": corpus.get("run_class"),
         "claim_scope": corpus.get("claim_scope"),

@@ -7,6 +7,36 @@ import {
 } from '@/lib/intent-router-clarification';
 import { deriveServiceTokenIdentity, verifyServiceTokenRequest } from '@/lib/service-token-auth';
 
+function buildFrontDoorClarificationOutput(input: {
+  decision: 'CLARIFY' | 'ALLOW';
+  question?: string;
+  options?: string[];
+  rationale?: string;
+}): string {
+  if (input.decision !== 'CLARIFY') {
+    return input.rationale || 'CVF did not classify this prompt as clarification-required.';
+  }
+
+  const optionLines = (input.options || [])
+    .map(option => option.trim())
+    .filter(Boolean)
+    .map(option => `- ${option}`)
+    .join('\n');
+
+  return [
+    '## CVF Clarification Needed',
+    '',
+    'I should not guess the route for this request because the intent is still ambiguous.',
+    '',
+    `Question: ${input.question || 'What best describes what you are trying to do right now?'}`,
+    '',
+    'Choose the closest option or answer in your own words:',
+    optionLines || '- Describe whether you want research, planning, building, or review.',
+    '',
+    'After that, CVF can route the work through the appropriate governed path.',
+  ].join('\n');
+}
+
 export async function POST(request: NextRequest) {
   const rawBodyText = await request.text();
   const serviceToken = request.headers.get('x-cvf-service-token');
@@ -66,7 +96,12 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({
     success: decision === 'CLARIFY',
-    output: clarification?.clarificationQuestion || routeResult?.rationale || '',
+    output: buildFrontDoorClarificationOutput({
+      decision,
+      question: clarification?.clarificationQuestion,
+      options: clarification?.clarificationOptions,
+      rationale: routeResult?.rationale,
+    }),
     governanceEvidenceReceipt: {
       receiptId: `rcpt-${envelope.envelopeId}`,
       evidenceMode: 'live',

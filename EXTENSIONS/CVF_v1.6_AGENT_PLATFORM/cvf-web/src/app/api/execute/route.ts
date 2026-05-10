@@ -147,6 +147,67 @@ function buildEvidenceReceipt(input: {
     };
 }
 
+function buildGovernedStopOutput(input: {
+    decision: 'BLOCK' | 'CLARIFY' | 'NEEDS_APPROVAL';
+    reason?: string;
+    missing?: string[];
+    approvalId?: string;
+    guidedResponse?: string | null;
+}): string {
+    const reason = input.reason?.trim();
+    const guidedResponse = input.guidedResponse?.trim();
+    const missing = (input.missing || [])
+        .map(field => field.trim())
+        .filter(Boolean);
+
+    if (input.decision === 'CLARIFY') {
+        const missingLines = missing.length
+            ? missing.map(field => `- ${field}`).join('\n')
+            : '- The goal, audience, constraints, and success criteria for this request.';
+
+        return [
+            '## CVF Decision: Clarification Needed',
+            '',
+            'I need a little more information before this can be executed safely and usefully.',
+            '',
+            'Please provide:',
+            missingLines,
+            '',
+            'Once those details are provided, CVF can re-check the request and continue through the governed path.',
+        ].join('\n');
+    }
+
+    if (input.decision === 'NEEDS_APPROVAL') {
+        return [
+            '## CVF Decision: Approval Required',
+            '',
+            'This request may be valid, but it crosses a boundary that needs explicit human approval before execution.',
+            ...(reason ? ['', `Reason: ${reason}`] : []),
+            ...(input.approvalId ? ['', `Approval request: ${input.approvalId}`] : []),
+            '',
+            'Safe next steps:',
+            '- Submit or wait for the approval decision tied to this request.',
+            '- Keep the request within the approved phase, scope, provider, and data-access boundary.',
+            '- If approval is not available, restate the goal as a lower-risk planning or documentation task.',
+            ...(guidedResponse ? ['', 'Suggested safe alternative:', guidedResponse] : []),
+        ].join('\n');
+    }
+
+    return [
+        '## CVF Decision: Blocked',
+        '',
+        'I cannot help execute that request because it would cross a safety, access, audit, or governance boundary.',
+        ...(reason ? ['', `Reason: ${reason}`] : []),
+        '',
+        'Safe next steps:',
+        '- Use an approved account, data source, and access path for any operational work.',
+        '- Report exposed credentials, secrets, or audit concerns through the appropriate security channel.',
+        '- Restate the request as a compliant planning, documentation, remediation, or review task.',
+        '- Keep evidence, approvals, and scope visible so the next attempt can pass governance review.',
+        ...(guidedResponse ? ['', 'Suggested safe alternative:', guidedResponse] : []),
+    ].join('\n');
+}
+
 export async function POST(request: NextRequest) {
     const routeStartedAtMs = Date.now();
     try {
@@ -380,10 +441,15 @@ export async function POST(request: NextRequest) {
         // Safety filters
         const safety = applySafetyFilters(filteredPrompt);
         if (safety.blocked) {
+            const output = buildGovernedStopOutput({
+                decision: 'BLOCK',
+                reason: safety.reason || 'Request blocked by safety filters.',
+            });
             return NextResponse.json(
                 {
                     success: false,
                     error: safety.reason || 'Request blocked by safety filters.',
+                    output,
                     details: safety.details,
                     provider,
                     model: 'blocked',
@@ -464,10 +530,17 @@ export async function POST(request: NextRequest) {
 
         if (enforcement.status === 'BLOCK') {
             const guidedResponse = lookupGuidedResponse(userPrompt);
+            const blockReason = enforcement.reasons.join(' | ') || 'Execution blocked by CVF policy.';
+            const output = buildGovernedStopOutput({
+                decision: 'BLOCK',
+                reason: blockReason,
+                guidedResponse,
+            });
             return NextResponse.json(
                 {
                     success: false,
-                    error: enforcement.reasons.join(' | ') || 'Execution blocked by CVF policy.',
+                    error: blockReason,
+                    output,
                     provider,
                     model: 'blocked',
                     enforcement,
@@ -487,11 +560,18 @@ export async function POST(request: NextRequest) {
         }
 
         if (enforcement.status === 'CLARIFY') {
+            const missing = enforcement.specGate?.missing?.map(field => field.label) || [];
+            const output = buildGovernedStopOutput({
+                decision: 'CLARIFY',
+                reason: enforcement.reasons.join(' | ') || 'Spec needs clarification before execution.',
+                missing,
+            });
             return NextResponse.json(
                 {
                     success: false,
                     error: 'Spec needs clarification before execution.',
-                    missing: enforcement.specGate?.missing?.map(field => field.label) || [],
+                    output,
+                    missing,
                     provider,
                     model: 'clarify',
                     enforcement,
@@ -530,6 +610,13 @@ export async function POST(request: NextRequest) {
                 const guidedResponse = lookupGuidedResponse(userPrompt);
                 // CP9: Auto-create approval record so the user can track and resume post-approval
                 const approvalId = `apr-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+                const approvalReason = enforcement.reasons.join(' | ') || 'Human approval required before execution.';
+                const output = buildGovernedStopOutput({
+                    decision: 'NEEDS_APPROVAL',
+                    reason: approvalReason,
+                    approvalId,
+                    guidedResponse,
+                });
                 const approvalNow = new Date();
                 getApprovalStore().set(approvalId, {
                     id: approvalId,
@@ -563,7 +650,8 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json(
                     {
                         success: false,
-                        error: enforcement.reasons.join(' | ') || 'Human approval required before execution.',
+                        error: approvalReason,
+                        output,
                         provider,
                         model: 'approval-required',
                         enforcement,

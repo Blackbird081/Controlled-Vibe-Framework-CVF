@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS9_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM`
+Status: `QBS10_REMEDIATION_COMPLETE_NO_NEW_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -42,7 +42,10 @@ R3 block-enforcement hardening, then completes the live Alibaba/DashScope
 `qwen-turbo` execution with hard gates passing. QBS-9 re-executes the same
 contract as R5 with a redacted reviewer output bundle and completes
 model-assisted scoring. Reviewer agreement passes, but the measured quality
-delta does not support an L4/L5 claim.
+delta does not support an L4/L5 claim. QBS-10 identifies the primary root cause
+as missing or too-terse user-facing output for governed non-ALLOW outcomes and
+adds deterministic block, clarify, approval, and front-door clarification
+guidance. QBS-10 is remediation only; it publishes no new benchmark score.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -57,6 +60,7 @@ Latest powered execution artifact:
 - [QBS-1 Alibaba Powered Single-Provider R5 Scored Review](runs/qbs1-powered-single-provider-20260510-alibaba-r5/README.md)
 - [QBS-6 Hard-Gate Remediation](qbs-1/hard-gate-remediation-qbs6.md)
 - [QBS-7 Rerun Pre-Registration Plan](qbs-1/rerun-plan-qbs7.md)
+- [QBS-10 Quality Delta Root-Cause And Remediation](qbs-1/quality-delta-root-cause-qbs10.md)
 
 ## What QBS Measures
 

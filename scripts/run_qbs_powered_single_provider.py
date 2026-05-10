@@ -141,17 +141,52 @@ def wait_for_server(base_url: str, timeout_seconds: int) -> None:
 
 
 def start_server(env: dict[str, str], port: int) -> subprocess.Popen[str]:
-    npm = shutil.which("npm") or shutil.which("npm.cmd")
-    if not npm:
-        raise RuntimeError("npm executable was not found on PATH")
+    node = shutil.which("node") or shutil.which("node.exe")
+    if not node:
+        raise RuntimeError("node executable was not found on PATH")
+    for script_name in ["build-risk-models.js", "build-skill-index.js"]:
+        preflight = subprocess.run(
+            [node, str(WEB_ROOT / "scripts" / script_name)],
+            cwd=WEB_ROOT,
+            env={**env, "PORT": str(port)},
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            text=True,
+            check=False,
+        )
+        if preflight.returncode != 0:
+            raise RuntimeError(f"dev server preflight failed: {script_name}")
+    next_bin = WEB_ROOT / "node_modules" / ".bin" / ("next.cmd" if os.name == "nt" else "next")
+    if not next_bin.exists():
+        raise RuntimeError("next executable was not found")
     return subprocess.Popen(
-        [npm, "run", "dev", "--", "-p", str(port)],
+        [str(next_bin), "dev", "--port", str(port)],
         cwd=WEB_ROOT,
         env={**env, "PORT": str(port)},
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
         text=True,
     )
+
+
+def stop_server(server: subprocess.Popen[str] | None) -> None:
+    if not server:
+        return
+    if server.poll() is not None:
+        return
+    if os.name == "nt":
+        subprocess.run(
+            ["taskkill", "/PID", str(server.pid), "/T", "/F"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+        return
+    server.terminate()
+    try:
+        server.wait(timeout=20)
+    except subprocess.TimeoutExpired:
+        server.kill()
 
 
 def call_openai_compatible(
@@ -243,7 +278,7 @@ def call_cvf(base_url: str, env: dict[str, str], model: str, task: dict[str, Any
         },
         "provider": "alibaba",
         "model": model,
-        "mode": "simple",
+        "mode": "governance",
         "action": "analyze",
         "cvfPhase": "PHASE B",
         "cvfRiskLevel": task["risk_class"],
@@ -272,7 +307,11 @@ def call_cvf(base_url: str, env: dict[str, str], model: str, task: dict[str, Any
             data = json.loads(raw)
         except json.JSONDecodeError:
             data = {"error": raw[:500]}
-        return normalize_cvf_response(data, error.code, started)
+        normalized = normalize_cvf_response(data, error.code, started)
+        if error.code == 429:
+            normalized["transportOk"] = False
+            normalized["retryAfterSeconds"] = int(error.headers.get("Retry-After", "30"))
+        return normalized
     except Exception as error:
         return {
             "transportOk": False,
@@ -280,6 +319,11 @@ def call_cvf(base_url: str, env: dict[str, str], model: str, task: dict[str, Any
             "error": str(error),
             "governanceEvidenceReceipt": None,
         }
+
+
+def assert_server_alive(server: subprocess.Popen[str] | None) -> None:
+    if server and server.poll() is not None:
+        raise RuntimeError(f"dev server exited early with code {server.returncode}")
 
 
 def normalize_cvf_response(data: dict[str, Any], status: int, started: float) -> dict[str, Any]:
@@ -330,8 +374,15 @@ def retry_call(fn: Any, attempts: int, delay_seconds: float) -> dict[str, Any]:
         if last.get("transportOk"):
             return last
         if attempt < attempts:
-            time.sleep(delay_seconds)
+            time.sleep(float(last.get("retryAfterSeconds") or delay_seconds))
     return last
+
+
+def should_keep_existing_cfg_b(existing_row: dict[str, Any] | None, expected_decision: str, rerun_all: bool) -> bool:
+    if rerun_all or not existing_row:
+        return False
+    existing_b = existing_row.get("configs", {}).get("CFG-B", {})
+    return bool(existing_b.get("governanceEvidenceReceipt")) and existing_b.get("receiptDecision") == expected_decision
 
 
 def median(values: list[float]) -> float | None:
@@ -399,29 +450,55 @@ def run(args: argparse.Namespace) -> int:
             server.terminate()
             raise
 
-    started_at = datetime.now(timezone.utc).isoformat()
+    existing_report: dict[str, Any] | None = None
+    existing_rows_by_key: dict[tuple[str, int], dict[str, Any]] = {}
+    if args.resume_missing_cfg_b:
+        existing_path = ARTIFACT_ROOT / "aggregate-results.json"
+        if not existing_path.exists():
+            raise RuntimeError("--resume-missing-cfg-b requires existing aggregate-results.json")
+        existing_report = read_json(existing_path)
+        for row in existing_report.get("rows", []):
+            existing_rows_by_key[(row["task_id"], int(row["repeat"]))] = row
+
+    started_at = (
+        existing_report.get("started_at")
+        if existing_report and existing_report.get("started_at")
+        else datetime.now(timezone.utc).isoformat()
+    )
     rows: list[dict[str, Any]] = []
     try:
         for task in tasks:
             for repeat in repeats:
                 print(f"QBS5 {task['task_id']} repeat {repeat}", flush=True)
-                a0 = retry_call(
-                    lambda: call_openai_compatible(api_key, model, task["user_prompt"], None, max_tokens, temperature),
-                    args.retry_attempts,
-                    args.retry_delay_seconds,
-                )
-                time.sleep(args.inter_call_delay_seconds)
-                a1 = retry_call(
-                    lambda: call_openai_compatible(api_key, model, task["user_prompt"], a1_prompt, max_tokens, temperature),
-                    args.retry_attempts,
-                    args.retry_delay_seconds,
-                )
-                time.sleep(args.inter_call_delay_seconds)
-                b = retry_call(
-                    lambda: call_cvf(base_url, env, model, task, repeat),
-                    args.retry_attempts,
-                    args.retry_delay_seconds,
-                )
+                existing_row = existing_rows_by_key.get((task["task_id"], repeat))
+                if args.resume_missing_cfg_b and existing_row:
+                    a0_summary = existing_row["configs"]["CFG-A0"]
+                    a1_summary = existing_row["configs"]["CFG-A1"]
+                else:
+                    a0 = retry_call(
+                        lambda: call_openai_compatible(api_key, model, task["user_prompt"], None, max_tokens, temperature),
+                        args.retry_attempts,
+                        args.retry_delay_seconds,
+                    )
+                    time.sleep(args.inter_call_delay_seconds)
+                    a1 = retry_call(
+                        lambda: call_openai_compatible(api_key, model, task["user_prompt"], a1_prompt, max_tokens, temperature),
+                        args.retry_attempts,
+                        args.retry_delay_seconds,
+                    )
+                    a0_summary = summarize_result(a0, "CFG-A0", task["expected_cvf_decision"])
+                    a1_summary = summarize_result(a1, "CFG-A1", task["expected_cvf_decision"])
+                    time.sleep(args.inter_call_delay_seconds)
+                if should_keep_existing_cfg_b(existing_row, task["expected_cvf_decision"], args.rerun_all_cfg_b):
+                    b_summary = existing_row["configs"]["CFG-B"]
+                else:
+                    assert_server_alive(server)
+                    b = retry_call(
+                        lambda: call_cvf(base_url, env, model, task, repeat),
+                        args.retry_attempts,
+                        args.retry_delay_seconds,
+                    )
+                    b_summary = summarize_result(b, "CFG-B", task["expected_cvf_decision"])
                 rows.append({
                     "provider": "alibaba",
                     "model": model,
@@ -432,19 +509,14 @@ def run(args: argparse.Namespace) -> int:
                     "negative_control": task["negative_control"],
                     "repeat": repeat,
                     "configs": {
-                        "CFG-A0": summarize_result(a0, "CFG-A0", task["expected_cvf_decision"]),
-                        "CFG-A1": summarize_result(a1, "CFG-A1", task["expected_cvf_decision"]),
-                        "CFG-B": summarize_result(b, "CFG-B", task["expected_cvf_decision"]),
+                        "CFG-A0": a0_summary,
+                        "CFG-A1": a1_summary,
+                        "CFG-B": b_summary,
                     },
                 })
                 time.sleep(args.inter_call_delay_seconds)
     finally:
-        if server:
-            server.terminate()
-            try:
-                server.wait(timeout=20)
-            except subprocess.TimeoutExpired:
-                server.kill()
+        stop_server(server)
 
     completed_at = datetime.now(timezone.utc).isoformat()
     all_direct_ok = all(row["configs"][cfg]["outcomeOk"] for row in rows for cfg in ["CFG-A0", "CFG-A1"])
@@ -582,6 +654,8 @@ def main() -> int:
     parser.add_argument("--retry-attempts", type=int, default=2)
     parser.add_argument("--retry-delay-seconds", type=float, default=3.0)
     parser.add_argument("--inter-call-delay-seconds", type=float, default=0.5)
+    parser.add_argument("--resume-missing-cfg-b", action="store_true")
+    parser.add_argument("--rerun-all-cfg-b", action="store_true")
     return run(parser.parse_args())
 
 

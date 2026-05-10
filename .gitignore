@@ -9,6 +9,7 @@ playwright-report/
 !.env.example
 .cvf/runtime/
 .cvf/config/
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/.data/
 *.log
 *.tmp
 *.tsbuildinfo

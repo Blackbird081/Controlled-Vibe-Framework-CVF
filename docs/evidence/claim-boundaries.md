@@ -20,6 +20,8 @@ Allowed:
   `POWERED_SINGLE_PROVIDER` preparation, not as scored benchmark evidence.
 - QBS-1 pre-registration may be cited as a frozen plan for a future scored run,
   not as execution evidence.
+- QBS-1 Alibaba powered execution may be cited as a failed/no-score hard-gate
+  result, not as a quality score.
 
 Not allowed without new evidence:
 
@@ -30,6 +32,7 @@ Not allowed without new evidence:
 - QBS-1 calibration pilot evidence proves powered QBS quality levels
 - QBS-1 scored-run readiness packet proves a public QBS quality score
 - QBS-1 pre-registration proves scored benchmark results
+- QBS-1 failed powered execution proves L4/L5/L6 quality claims
 - web proves the entire CVF runtime
 - mock tests prove governance behavior
 - public docs include the full internal operating history

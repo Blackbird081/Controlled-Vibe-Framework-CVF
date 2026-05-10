@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS4_SCORED_RUN_PREREGISTERED_NO_SCORED_RUN`
+Status: `QBS5_POWERED_SINGLE_PROVIDER_EXECUTION_FAILED_NO_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -44,7 +44,8 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-1 calibration pilot | `PASS_NO_QBS_SCORE` |
 | QBS-1 scored-run readiness packet | `PASS` |
 | QBS-1 scored-run pre-registration | `PREREGISTERED` as `qbs/preregister/qbs1-powered-single-provider-20260510-alibaba` |
-| QBS-1 scored run | `BLOCKED` until separate live execution authorization |
+| QBS-1 powered execution | `FAILED_NO_SCORE` for `qbs1-powered-single-provider-20260510-alibaba` |
+| QBS-1 scored claim | `BLOCKED` until hard gates pass and reviewer scoring completes |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 

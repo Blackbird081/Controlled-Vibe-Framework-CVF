@@ -315,6 +315,7 @@ def summarize(
     anchor_items: list[dict[str, Any]],
     reviewer_scores: dict[str, list[dict[str, Any]]],
     reviewer_ids: list[str],
+    reference_limitation: str,
 ) -> dict[str, Any]:
     reference_by_anchor = {item["anchor_id"]: item["reference"] for item in anchor_items}
     scores_by_anchor: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
@@ -408,7 +409,7 @@ def summarize(
         "gate_policy": {
             "inter_reviewer": "PASS when weighted kappa >= 0.60 or Spearman rho >= 0.60",
             "reviewer_vs_reference": "PASS when quality_within_one_rate >= 0.80 and rework_match_rate >= 0.60 for each reviewer",
-            "reference_limitation": "QBS16 adjudication is a model-only calibration reference, not human gold.",
+            "reference_limitation": reference_limitation,
         },
         "anchor_count": len(anchor_items),
         "paired_anchor_count": len(paired_anchor_ids),
@@ -428,6 +429,7 @@ def main() -> int:
     parser.add_argument("--env-file", action="append", default=[])
     parser.add_argument("--reviewers", default="openai:gpt-4o-mini,deepseek:deepseek-chat")
     parser.add_argument("--prompt-version", default=DEFAULT_PROMPT_VERSION)
+    parser.add_argument("--status", default="QBS17_CALIBRATION_ONLY_CHECK_COMPLETE_NO_NEW_SCORE")
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--include-consensus", action="store_true")
     parser.add_argument("--limit", type=int)
@@ -454,7 +456,7 @@ def main() -> int:
     for batch_index, anchor_batch in enumerate(chunks(anchor_items, max(1, args.batch_size)), start=1):
         payload = build_payload(args.prompt_version, rubric_addendum, anchor_batch)
         for reviewer_id, spec in reviewer_specs.items():
-            print(f"QBS17 calibration batch {batch_index} reviewer {reviewer_id}", flush=True)
+            print(f"QBS calibration batch {batch_index} reviewer {reviewer_id}", flush=True)
             result = call_reviewer(spec, reviewer_keys[reviewer_id], payload)
             if not result.get("ok"):
                 raise RuntimeError(f"reviewer {reviewer_id} failed for batch {batch_index}: {result.get('error')}")
@@ -468,9 +470,13 @@ def main() -> int:
                 reviewer_scores[reviewer_id].append(normalize_score(score, reviewer_id))
 
     reviewer_ids = list(reviewer_specs)
-    summary = summarize(anchor_items, reviewer_scores, reviewer_ids)
+    reference_limitation = adjudication.get(
+        "reference_limitation",
+        "QBS16 adjudication is a model-only calibration reference, not human gold.",
+    )
+    summary = summarize(anchor_items, reviewer_scores, reviewer_ids, reference_limitation)
     payload = {
-        "status": "QBS17_CALIBRATION_ONLY_CHECK_COMPLETE_NO_NEW_SCORE",
+        "status": args.status,
         "prompt_version": args.prompt_version,
         "source_anchor_file": str(args.anchors),
         "source_adjudication_file": str(args.adjudication),
@@ -484,7 +490,7 @@ def main() -> int:
             for reviewer_id, spec in reviewer_specs.items()
         ],
         "claim_boundary": "Calibration-only reviewer-plan check. No live QBS score, no L4/L5 claim, and no historical score mutation.",
-        "reference_limitation": "QBS16 adjudication is a third-model reference, not human gold-label review.",
+        "reference_limitation": reference_limitation,
         "summary": summary,
         "scores_by_reviewer": reviewer_scores,
         "usage": usage,

@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS17_CALIBRATION_ONLY_CHECK_COMPLETE_NO_NEW_SCORE`
+Status: `QBS18_CALIBRATION_ONLY_RERUN_PASS_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -38,6 +38,10 @@ as harness proof only.
 - [QBS-16 Reviewer Rubric Addendum](reviewer-rubric-addendum-qbs16.md)
 - [QBS-17 Reviewer Calibration-Only Agreement Check](reviewer-calibration-agreement-qbs17.md)
 - [QBS-17 Reviewer Calibration-Only Agreement JSON](reviewer-calibration-agreement-qbs17.json)
+- [QBS-18 Calibration Reference Cleanup And Rerun](reviewer-calibration-cleanup-and-rerun-qbs18.md)
+- [QBS-18 Cleaned Calibration Reference JSON](reviewer-calibration-reference-qbs18.json)
+- [QBS-18 Calibration Rerun JSON](reviewer-calibration-agreement-qbs18-rerun.json)
+- [QBS-18 Rework Rubric Normalization](reviewer-rework-rubric-normalization-qbs18.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 
@@ -81,14 +85,14 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-15 reviewer calibration anchors | `ANCHORS_READY_NO_NEW_SCORE` |
 | QBS-16 anchor adjudication | `ADJUDICATION_COMPLETE_NO_NEW_SCORE` |
 | QBS-17 calibration-only reviewer agreement | `FAIL_NO_NEW_SCORE` with kappa `0.7365591397849462`, rho `0.7935131868283122`, but reviewer-vs-reference alignment failed |
+| QBS-18 cleaned-reference calibration rerun | `PASS_NO_NEW_SCORE` with kappa `0.9046321525885559`, rho `0.9219234991142461` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-17 completed the calibration-only check against the QBS16 addendum. It
-restored inter-reviewer agreement on the anchor set but failed
-reviewer-vs-reference alignment. The next track should audit anchor/reference
-conflicts and normalize the rework-label rubric before pre-registering any
-future claim run.
+QBS-18 completed anchor/reference cleanup, rework-label normalization, and a
+calibration-only rerun. The calibration gate now passes, but no QBS score has
+been claimed. The next track may freeze the reviewer plan and pre-register a
+future R8 claim run.

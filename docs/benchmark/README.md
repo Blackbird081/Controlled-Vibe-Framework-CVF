@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS15_REVIEWER_CALIBRATION_ANCHORS_READY_NO_NEW_SCORE`
+Status: `QBS16_ANCHOR_ADJUDICATION_COMPLETE_NO_NEW_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -63,6 +63,9 @@ rerun should not be pre-registered until reviewer calibration and residual
 `CFG-B` quality work are completed.
 QBS-15 creates the first fixed reviewer calibration anchor set and updates the
 reviewer scorer so future runs can opt into explicit calibration guidance.
+QBS-16 adjudicates the high-disagreement anchors with a third model adjudicator
+fallback and publishes a reviewer rubric addendum. This is still no-score and
+does not unlock R8 without a revised reviewer plan.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -85,6 +88,9 @@ Latest powered execution artifact:
 - [QBS-14 Reviewer Drift Analysis JSON](qbs-1/reviewer-drift-analysis-qbs14.json)
 - [QBS-15 Reviewer Calibration Anchors](qbs-1/reviewer-calibration-anchors-qbs15.md)
 - [QBS-15 Reviewer Calibration Anchors JSON](qbs-1/reviewer-calibration-anchors-qbs15.json)
+- [QBS-16 Anchor Adjudication](qbs-1/reviewer-anchor-adjudication-qbs16.md)
+- [QBS-16 Anchor Adjudication JSON](qbs-1/reviewer-calibration-adjudication-qbs16.json)
+- [QBS-16 Reviewer Rubric Addendum](qbs-1/reviewer-rubric-addendum-qbs16.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 

@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS11_R6_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
+Status: `QBS12_REMEDIATION_COMPLETE_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -28,6 +28,7 @@ as harness proof only.
 - [Alibaba Powered Single-Provider R4 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r4.md)
 - [Alibaba Powered Single-Provider R5 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r5.md)
 - [QBS-10 Quality Delta Root-Cause And Remediation](quality-delta-root-cause-qbs10.md)
+- [QBS-12 Reviewer Disagreement And Residual Quality Remediation](reviewer-disagreement-remediation-qbs12.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 
 Runner entry point:
@@ -62,13 +63,15 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-11 R6 pre-registration | `PREREGISTERED_POST_QBS10_REMEDIATION_RUN_NO_QBS_SCORE` |
 | QBS-11 R6 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
 | QBS-11 R6 reviewer agreement | `FAIL` with kappa `0.5043578866178171`, rho `0.5987420572601858` |
+| QBS-12 residual quality remediation | `REMEDIATION_COMPLETE_NO_NEW_SCORE` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-11 R6 completed execution and reviewer scoring after QBS-10 remediation.
-Hard gates passed and the median normalized quality delta improved, but
-reviewer agreement failed the claim gate. The next track should address reviewer
-agreement and residual quality variance before another public claim attempt.
+QBS-12 closes the first R6 disagreement pass and remediates generic
+approval-gated security output, unsupported provider benchmark-numbering, and
+excess meta-commentary on simple transformations. The next scored attempt still
+requires a new pre-registration and must pass hard gates, reviewer agreement,
+and claim-ladder thresholds.

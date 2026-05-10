@@ -153,6 +153,7 @@ function buildGovernedStopOutput(input: {
     missing?: string[];
     approvalId?: string;
     guidedResponse?: string | null;
+    userPrompt?: string;
 }): string {
     const reason = input.reason?.trim();
     const guidedResponse = input.guidedResponse?.trim();
@@ -189,6 +190,8 @@ function buildGovernedStopOutput(input: {
             '- Submit or wait for the approval decision tied to this request.',
             '- Keep the request within the approved phase, scope, provider, and data-access boundary.',
             '- If approval is not available, restate the goal as a lower-risk planning or documentation task.',
+            '',
+            buildApprovalPreparationOutput(input.userPrompt),
             ...(guidedResponse ? ['', 'Suggested safe alternative:', guidedResponse] : []),
         ].join('\n');
     }
@@ -205,6 +208,47 @@ function buildGovernedStopOutput(input: {
         '- Restate the request as a compliant planning, documentation, remediation, or review task.',
         '- Keep evidence, approvals, and scope visible so the next attempt can pass governance review.',
         ...(guidedResponse ? ['', 'Suggested safe alternative:', guidedResponse] : []),
+    ].join('\n');
+}
+
+function buildApprovalPreparationOutput(userPrompt?: string): string {
+    const normalizedPrompt = (userPrompt || '').toLowerCase();
+    const securityIncident =
+        /\b(credential|secret|token|api\s*key|leak|incident|indicator|account identifier|security)\b/i
+            .test(normalizedPrompt);
+    const externalAccess =
+        /\b(scrap|crawler|external tool|third-party|outside .*scope|data access|account access)\b/i
+            .test(normalizedPrompt);
+
+    if (securityIncident) {
+        return [
+            'Pre-approval safe work:',
+            '- Draft a disclosure or incident note without including raw credentials, tokens, indicators, or account identifiers.',
+            '- Prepare a redaction plan: replace sensitive values with labels such as [REDACTED_CREDENTIAL], [REDACTED_ACCOUNT], or [REDACTED_INDICATOR].',
+            '- List the approver, affected system, evidence source, containment status, and intended audience.',
+            '',
+            'Safe disclosure skeleton:',
+            '- Summary: A potential security exposure is under review.',
+            '- What is known: Describe the category of affected data without revealing sensitive values.',
+            '- Actions underway: revoke or rotate exposed credentials, preserve evidence, notify the security owner, and monitor for misuse.',
+            '- What recipients should do: avoid sharing raw secrets, follow the approved incident channel, and wait for confirmed next steps.',
+        ].join('\n');
+    }
+
+    if (externalAccess) {
+        return [
+            'Pre-approval safe work:',
+            '- Define the exact data source, owner, purpose, time window, and access method.',
+            '- Confirm the request stays within the declared scope and does not use personal or third-party accounts without approval.',
+            '- Prepare a lower-risk alternative using user-supplied sample data or a planning-only analysis.',
+        ].join('\n');
+    }
+
+    return [
+        'Pre-approval safe work:',
+        '- Prepare the approval packet: purpose, data involved, scope, approver, retention needs, and rollback path.',
+        '- Separate what can be planned now from what must wait for approval.',
+        '- Provide a safe, non-operational draft if the user only needs documentation before approval.',
     ].join('\n');
 }
 
@@ -616,6 +660,7 @@ export async function POST(request: NextRequest) {
                     reason: approvalReason,
                     approvalId,
                     guidedResponse,
+                    userPrompt,
                 });
                 const approvalNow = new Date();
                 getApprovalStore().set(approvalId, {

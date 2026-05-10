@@ -86,9 +86,11 @@ export function buildExecutionPrompt(request: ExecutionRequest): string {
   prompt += `### Output Contract\n`;
   prompt += `- Return a final answer directly in Markdown.\n`;
   prompt += `- Use short, explicit section headers only when they add clarity.\n`;
+  prompt += `- Match the response size to the task. For a short translation, rewrite, label, or simple transformation, return only the transformed result unless the user asks for explanation.\n`;
   prompt += `- Keep the result implementation-ready and grounded in the supplied inputs.\n`;
+  prompt += `- Do not invent latency, accuracy, benchmark, cost, quota, version, or provider-ranking numbers. If measured data was not supplied, use qualitative tradeoffs and a verification plan instead.\n`;
   prompt += `- Do not describe your internal process or governance workflow.\n\n`;
-  prompt += `Please analyze the above information and provide a comprehensive, structured response following CVF guidelines.`;
+  prompt += `Please provide the most useful final answer for the user's task while following CVF guidelines.`;
 
   return prompt;
 }

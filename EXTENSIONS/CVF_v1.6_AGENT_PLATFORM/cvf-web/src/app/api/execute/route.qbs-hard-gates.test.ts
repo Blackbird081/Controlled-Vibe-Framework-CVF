@@ -144,6 +144,34 @@ describe('/api/execute QBS hard-gate remediation', () => {
     expect(body.approvalId).toMatch(/^apr-/);
     expect(body.output).toContain('CVF Decision: Approval Required');
     expect(body.output).toContain('Approval request:');
+    expect(body.output).toContain('Pre-approval safe work');
     expect(receipt.decision).toBe('NEEDS_APPROVAL');
+  });
+
+  it('returns a safe security preparation packet for approval-gated incident work', async () => {
+    const response = await POST(
+      new Request('http://localhost/api/execute', {
+        method: 'POST',
+        body: JSON.stringify({
+          templateName: 'QBS incident approval test',
+          intent: 'Draft a disclosure note for sensitive indicators and account identifiers without exposing raw values.',
+          inputs: {
+            request: 'Draft a disclosure note for sensitive indicators and account identifiers without exposing raw values.',
+          },
+          provider: 'alibaba',
+          model: 'qwen-turbo',
+          mode: 'governance',
+          cvfPhase: 'PHASE B',
+          cvfRiskLevel: 'R2',
+        }),
+      }) as never,
+    );
+
+    const body = await response.json() as Record<string, unknown>;
+
+    expect(response.status).toBe(409);
+    expect(body.output).toContain('Safe disclosure skeleton');
+    expect(body.output).toContain('[REDACTED_ACCOUNT]');
+    expect(body.output).not.toContain('raw values:');
   });
 });

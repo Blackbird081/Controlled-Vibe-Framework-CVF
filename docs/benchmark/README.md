@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS11_R6_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
+Status: `QBS12_REMEDIATION_COMPLETE_NO_NEW_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -50,6 +50,10 @@ QBS-11 executed and scored the post-remediation R6 run. Hard gates passed and
 the median `CFG-B` vs `CFG-A1` delta improved to `-0.125`, but reviewer
 agreement failed the claim gate (`kappa=0.5043578866178171`,
 `rho=0.5987420572601858`). No public QBS score or L4/L5 claim is made.
+QBS-12 analyzes the R6 disagreement pattern and remediates the clearest
+remaining defects: generic approval-gated security output, unsupported provider
+benchmark numbers, and excess meta-commentary on simple transformations. QBS-12
+publishes no new score.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -66,6 +70,7 @@ Latest powered execution artifact:
 - [QBS-6 Hard-Gate Remediation](qbs-1/hard-gate-remediation-qbs6.md)
 - [QBS-7 Rerun Pre-Registration Plan](qbs-1/rerun-plan-qbs7.md)
 - [QBS-10 Quality Delta Root-Cause And Remediation](qbs-1/quality-delta-root-cause-qbs10.md)
+- [QBS-12 Reviewer Disagreement And Residual Quality Remediation](qbs-1/reviewer-disagreement-remediation-qbs12.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 
 ## What QBS Measures

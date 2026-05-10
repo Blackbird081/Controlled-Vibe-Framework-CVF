@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS10_REMEDIATION_COMPLETE_NO_NEW_SCORE`
+Status: `QBS11_R6_PREREGISTRATION_IN_PROGRESS_NO_QBS_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -28,6 +28,7 @@ as harness proof only.
 - [Alibaba Powered Single-Provider R4 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r4.md)
 - [Alibaba Powered Single-Provider R5 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r5.md)
 - [QBS-10 Quality Delta Root-Cause And Remediation](quality-delta-root-cause-qbs10.md)
+- [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 
 Runner entry point:
 
@@ -58,12 +59,13 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-8 live rerun execution | `EXECUTION_COMPLETE_REVIEW_PENDING` for `qbs1-powered-single-provider-20260510-alibaba-r4` |
 | QBS-9 reviewer scoring | `REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` for `qbs1-powered-single-provider-20260510-alibaba-r5` |
 | QBS-10 quality delta remediation | `REMEDIATION_COMPLETE_NO_NEW_SCORE` |
+| QBS-11 R6 pre-registration | `PREREGISTERED_POST_QBS10_REMEDIATION_RUN_NO_QBS_SCORE` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-10 closes the first root-cause pass and remediates missing or too-terse
-user-facing output for governed non-ALLOW states. Future work must create a new
-pre-registered run before attempting another scored claim.
+QBS-11 R6 is the next pre-registered post-remediation run. It must execute,
+retain a redacted reviewer output bundle, pass hard gates, complete reviewer
+scoring, and pass agreement before any quality claim can be considered.

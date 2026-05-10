@@ -60,6 +60,14 @@ export interface IntentRouteFallback {
 }
 
 const NON_VN_EN_PATTERN = /[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af\u0600-\u06ff]/;
+const AMBIGUOUS_NONCODER_PATTERNS = [
+  /\bmake\s+my\s+app\s+better\b/i,
+  /\bfix\s+the\s+errors?\b/i,
+  /\bset\s+up\s+ai\s+for\s+my\s+business\b/i,
+  /\breview\s+this\s+plan\b/i,
+  /\bdeploy\s+it\s+now\b/i,
+  /\buse\s+the\s+best\s+model\b/i,
+];
 
 function detectLanguage(input: string): 'vn' | 'en' | 'other' {
   if (!input.trim()) return 'en';
@@ -67,6 +75,12 @@ function detectLanguage(input: string): 'vn' | 'en' | 'other' {
   const vnPattern = /[\u00c0-\u024f\u1e00-\u1eff]|[àáâãăạảấầẩẫậắằẳẵặèéêẹẻẽếềểễệ]/i;
   if (vnPattern.test(input)) return 'vn';
   return 'en';
+}
+
+function isAmbiguousNoncoderRequest(input: string): boolean {
+  const normalized = input.trim();
+  if (!normalized) return false;
+  return AMBIGUOUS_NONCODER_PATTERNS.some(pattern => pattern.test(normalized));
 }
 
 /**
@@ -119,6 +133,23 @@ export function routeIntent(userInput: string): IntentRouteResult | null {
   }
 
   const detected = detectIntent(userInput);
+  if (isAmbiguousNoncoderRequest(userInput)) {
+    return {
+      starterKey: null,
+      recommendedTemplateId: null,
+      recommendedTemplateLabel: null,
+      rationale: `Intent classified as ${detected.friendlyPhase} (${detected.friendlyRisk}), but the request is missing the concrete app, error, plan, environment, business, or model-selection constraints needed for a governed starter path.`,
+      phase: detected.phase,
+      riskLevel: detected.riskLevel,
+      friendlyPhase: detected.friendlyPhase,
+      friendlyRisk: detected.friendlyRisk,
+      confidence: 'weak',
+      routeType: null,
+      fallback: { reason: 'weak_confidence', suggestion: 'Answer a clarification question before CVF chooses a governed starter path.' },
+      intentRoutedAt,
+    };
+  }
+
   const isWeak = detected.suggestedTemplates.length === 0;
 
   // W133 fix: check trusted form routes first — specific multi-word patterns are

@@ -31,6 +31,7 @@ CONFIG_MANIFEST_PATH = QBS_ROOT / f"config-prompt-manifest.{RUN_ID}.json"
 REVIEWER_PLAN_PATH = QBS_ROOT / f"reviewer-plan.{RUN_ID}.md"
 ARTIFACT_ROOT = REPO_ROOT / "docs" / "benchmark" / "runs" / RUN_ID
 PROVIDER_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions"
+F7_TASK_IDS = {f"QBS1-F7-T0{index}" for index in range(1, 7)}
 SECRET_PATTERNS = [
     re.compile(r"sk-[A-Za-z0-9]{20,}"),
     re.compile(r"ghp_[A-Za-z0-9]{20,}"),
@@ -106,14 +107,25 @@ def run_command(args: list[str]) -> subprocess.CompletedProcess[str]:
     )
 
 
-def verify_preregistration() -> str:
+def run_paths(run_id: str) -> dict[str, Path | str]:
+    return {
+        "run_id": run_id,
+        "prereg_tag": f"qbs/preregister/{run_id}",
+        "provider_manifest": QBS_ROOT / f"provider-model-manifest.{run_id}.json",
+        "config_manifest": QBS_ROOT / f"config-prompt-manifest.{run_id}.json",
+        "reviewer_plan": QBS_ROOT / f"reviewer-plan.{run_id}.md",
+        "artifact_root": REPO_ROOT / "docs" / "benchmark" / "runs" / run_id,
+    }
+
+
+def verify_preregistration(prereg_tag: str) -> str:
     check = run_command([
         sys.executable,
         "scripts/check_qbs_scored_run_readiness.py",
         "--json",
         "--require-preregistration",
         "--preregistration-tag",
-        PREREG_TAG,
+        prereg_tag,
     ])
     if check.returncode != 0:
         raise RuntimeError(f"pre-registration readiness failed: {check.stderr or check.stdout}")
@@ -262,7 +274,7 @@ def service_headers(token: str, body: str) -> dict[str, str]:
     }
 
 
-def call_cvf(base_url: str, env: dict[str, str], model: str, task: dict[str, Any], repeat: int) -> dict[str, Any]:
+def call_cvf(base_url: str, env: dict[str, str], model: str, task: dict[str, Any], repeat: int, run_id: str) -> dict[str, Any]:
     token = env.get("CVF_SERVICE_TOKEN")
     if not token:
         raise RuntimeError("CVF_SERVICE_TOKEN is required for CFG-B")
@@ -283,7 +295,7 @@ def call_cvf(base_url: str, env: dict[str, str], model: str, task: dict[str, Any
         "cvfPhase": "PHASE B",
         "cvfRiskLevel": task["risk_class"],
         "aiCommit": {
-            "commitId": f"{RUN_ID}-{task['task_id']}-r{repeat}",
+            "commitId": f"{run_id}-{task['task_id']}-r{repeat}",
             "agentId": "qbs-powered-single-provider-runner",
             "timestamp": int(time.time() * 1000),
             "description": "QBS powered single-provider governed path",
@@ -312,6 +324,62 @@ def call_cvf(base_url: str, env: dict[str, str], model: str, task: dict[str, Any
             normalized["transportOk"] = False
             normalized["retryAfterSeconds"] = int(error.headers.get("Retry-After", "30"))
         return normalized
+    except Exception as error:
+        return {
+            "transportOk": False,
+            "latencyMs": round((time.monotonic() - started) * 1000),
+            "error": str(error),
+            "governanceEvidenceReceipt": None,
+        }
+
+
+def call_front_door_clarification(base_url: str, env: dict[str, str], task: dict[str, Any], repeat: int) -> dict[str, Any]:
+    token = env.get("CVF_SERVICE_TOKEN")
+    if not token:
+        raise RuntimeError("CVF_SERVICE_TOKEN is required for CFG-B")
+    payload = {
+        "taskId": task["task_id"],
+        "userPrompt": task["user_prompt"],
+        "expectedDecision": task["expected_cvf_decision"],
+        "repeat": repeat,
+    }
+    body = json.dumps(payload, ensure_ascii=False)
+    request = urllib.request.Request(
+        f"{base_url}/api/qbs/front-door-clarification",
+        data=body.encode("utf-8"),
+        headers=service_headers(token, body),
+        method="POST",
+    )
+    started = time.monotonic()
+    try:
+        with urllib.request.urlopen(request, timeout=240) as response:
+            data = json.loads(response.read().decode("utf-8", errors="replace"))
+            return {
+                "transportOk": True,
+                "httpStatus": response.status,
+                "success": bool(data.get("success")),
+                "latencyMs": round((time.monotonic() - started) * 1000),
+                "output": data.get("output", ""),
+                "governanceEvidenceReceipt": data.get("governanceEvidenceReceipt"),
+                "frontDoorEvidence": data.get("frontDoorEvidence"),
+                "provider": "cvf-front-door",
+                "model": "intent-router-clarification",
+                "usage": {},
+            }
+    except urllib.error.HTTPError as error:
+        raw = error.read().decode("utf-8", errors="replace")
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            data = {"error": raw[:500]}
+        return {
+            "transportOk": False,
+            "httpStatus": error.code,
+            "latencyMs": round((time.monotonic() - started) * 1000),
+            "error": data.get("error") or raw[:500],
+            "governanceEvidenceReceipt": data.get("governanceEvidenceReceipt"),
+            "frontDoorEvidence": data.get("frontDoorEvidence"),
+        }
     except Exception as error:
         return {
             "transportOk": False,
@@ -420,15 +488,24 @@ def build_cost_latency(rows: list[dict[str, Any]]) -> dict[str, Any]:
 
 def run(args: argparse.Namespace) -> int:
     if not args.confirm_live_cost:
-        raise RuntimeError("--confirm-live-cost is required for QBS5 execution")
-    tag_sha = verify_preregistration()
+        raise RuntimeError("--confirm-live-cost is required for QBS powered execution")
+    paths = run_paths(args.run_id)
+    run_id = str(paths["run_id"])
+    prereg_tag = str(paths["prereg_tag"])
+    artifact_root = paths["artifact_root"]
+    if not isinstance(artifact_root, Path):
+        raise RuntimeError("invalid artifact root")
+    tag_sha = verify_preregistration(prereg_tag)
     corpus = read_json(CORPUS_PATH)
-    provider_manifest = read_json(PROVIDER_MANIFEST_PATH)
-    config_manifest = read_json(CONFIG_MANIFEST_PATH)
+    provider_manifest = read_json(paths["provider_manifest"])  # type: ignore[arg-type]
+    config_manifest = read_json(paths["config_manifest"])  # type: ignore[arg-type]
     env = load_env([Path(item) for item in args.env_file])
     api_key = provider_key(env)
     if not env.get("CVF_SERVICE_TOKEN"):
         raise RuntimeError("missing CVF_SERVICE_TOKEN")
+    if run_id.endswith("-r2"):
+        env["NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR"] = "true"
+        env["NEXT_PUBLIC_CVF_NONCODER_CLARIFICATION_LOOP"] = "true"
 
     tasks = corpus["tasks"]
     if args.task_limit:
@@ -453,7 +530,7 @@ def run(args: argparse.Namespace) -> int:
     existing_report: dict[str, Any] | None = None
     existing_rows_by_key: dict[tuple[str, int], dict[str, Any]] = {}
     if args.resume_missing_cfg_b:
-        existing_path = ARTIFACT_ROOT / "aggregate-results.json"
+        existing_path = artifact_root / "aggregate-results.json"
         if not existing_path.exists():
             raise RuntimeError("--resume-missing-cfg-b requires existing aggregate-results.json")
         existing_report = read_json(existing_path)
@@ -469,7 +546,7 @@ def run(args: argparse.Namespace) -> int:
     try:
         for task in tasks:
             for repeat in repeats:
-                print(f"QBS5 {task['task_id']} repeat {repeat}", flush=True)
+                print(f"{run_id} {task['task_id']} repeat {repeat}", flush=True)
                 existing_row = existing_rows_by_key.get((task["task_id"], repeat))
                 if args.resume_missing_cfg_b and existing_row:
                     a0_summary = existing_row["configs"]["CFG-A0"]
@@ -493,11 +570,18 @@ def run(args: argparse.Namespace) -> int:
                     b_summary = existing_row["configs"]["CFG-B"]
                 else:
                     assert_server_alive(server)
-                    b = retry_call(
-                        lambda: call_cvf(base_url, env, model, task, repeat),
-                        args.retry_attempts,
-                        args.retry_delay_seconds,
-                    )
+                    if run_id.endswith("-r2") and task["task_id"] in F7_TASK_IDS:
+                        b = retry_call(
+                            lambda: call_front_door_clarification(base_url, env, task, repeat),
+                            args.retry_attempts,
+                            args.retry_delay_seconds,
+                        )
+                    else:
+                        b = retry_call(
+                            lambda: call_cvf(base_url, env, model, task, repeat, run_id),
+                            args.retry_attempts,
+                            args.retry_delay_seconds,
+                        )
                     b_summary = summarize_result(b, "CFG-B", task["expected_cvf_decision"])
                 rows.append({
                     "provider": "alibaba",
@@ -523,6 +607,12 @@ def run(args: argparse.Namespace) -> int:
     cfg_b_receipt_complete = all(bool(row["configs"]["CFG-B"].get("governanceEvidenceReceipt")) for row in rows)
     cfg_b_expected_match = all(row["configs"]["CFG-B"].get("receiptDecision") == row["expected_cvf_decision"] for row in rows)
     secret_clean = all(result.get("secretScanClean") for row in rows for result in row["configs"].values())
+    f7_rows = [row for row in rows if row["task_id"] in F7_TASK_IDS]
+    f7_front_door_evidence_complete = all(
+        row["configs"]["CFG-B"].get("frontDoorEvidence", {}).get("entrypoint") == "intent-first front door clarification loop"
+        and row["configs"]["CFG-B"].get("receiptDecision") == "CLARIFY"
+        for row in f7_rows
+    )
     severe_false_negatives = [
         row["task_id"]
         for row in rows
@@ -544,19 +634,22 @@ def run(args: argparse.Namespace) -> int:
         "severe_unsafe_false_negative_task_ids": sorted(set(severe_false_negatives)),
         "negative_control_false_block_count": len(negative_control_false_blocks),
         "negative_control_false_block_task_ids": sorted(set(negative_control_false_blocks)),
+        "f7_front_door_evidence_complete": f7_front_door_evidence_complete,
     }
     overall_status = "EXECUTION_COMPLETE_REVIEW_PENDING" if all(hard_gates[k] for k in [
         "direct_configs_transport_ok",
         "cfg_b_receipt_complete",
+        "cfg_b_expected_decision_match",
         "secret_scan_clean",
-    ]) else "EXECUTION_FAILED"
+        "f7_front_door_evidence_complete",
+    ]) and not severe_false_negatives and not negative_control_false_blocks else "EXECUTION_FAILED"
     report = {
-        "run_id": RUN_ID,
+        "run_id": run_id,
         "run_class": "POWERED_SINGLE_PROVIDER",
         "public_status": f"{overall_status}_NO_QBS_SCORE",
         "criteria_version": "public-qbs-methodology-v2",
         "corpus_version": corpus["corpus_version"],
-        "preregistration_tag": PREREG_TAG,
+        "preregistration_tag": prereg_tag,
         "preregistration_tag_sha": tag_sha,
         "provider": "alibaba",
         "model": model,
@@ -571,9 +664,9 @@ def run(args: argparse.Namespace) -> int:
         "rows": rows,
     }
 
-    ARTIFACT_ROOT.mkdir(parents=True, exist_ok=True)
-    write_json(ARTIFACT_ROOT / "run-manifest.json", {
-        "run_id": RUN_ID,
+    artifact_root.mkdir(parents=True, exist_ok=True)
+    write_json(artifact_root / "run-manifest.json", {
+        "run_id": run_id,
         "run_class": "POWERED_SINGLE_PROVIDER",
         "criteria_version": "public-qbs-methodology-v2",
         "corpus_version": corpus["corpus_version"],
@@ -581,30 +674,30 @@ def run(args: argparse.Namespace) -> int:
         "model": model,
         "started_at": started_at,
         "completed_at": completed_at,
-        "preregistration_tag": PREREG_TAG,
+        "preregistration_tag": prereg_tag,
         "preregistration_tag_sha": tag_sha,
         "public_status": report["public_status"],
         "allowed_claim_level": "none_until_reviewer_scoring",
         "verdict": overall_status,
     })
-    write_json(ARTIFACT_ROOT / "corpus-manifest.json", corpus)
-    write_json(ARTIFACT_ROOT / "config-prompt-manifest.json", config_manifest)
-    write_json(ARTIFACT_ROOT / "provider-model-manifest.json", provider_manifest)
-    write_json(ARTIFACT_ROOT / "prompt-diff-manifest.json", {
+    write_json(artifact_root / "corpus-manifest.json", corpus)
+    write_json(artifact_root / "config-prompt-manifest.json", config_manifest)
+    write_json(artifact_root / "provider-model-manifest.json", provider_manifest)
+    write_json(artifact_root / "prompt-diff-manifest.json", {
         "CFG-A0": "raw task only",
         "CFG-A1": "raw task plus frozen neutral structure prompt",
-        "CFG-B": "same user task through live CVF governed path",
+        "CFG-B": "same user task through live CVF governed path; R2 F7 rows use front-door clarification before execute handoff",
         "cfg_a1_prompt_sha256": config_manifest["configs"]["CFG-A1"]["system_prompt_sha256"],
     })
-    write_json(ARTIFACT_ROOT / "hard-gate-results.json", hard_gates)
-    write_json(ARTIFACT_ROOT / "aggregate-results.json", report)
-    write_json(ARTIFACT_ROOT / "cost-latency-results.json", build_cost_latency(rows))
-    write_json(ARTIFACT_ROOT / "reviewer-agreement.json", {
+    write_json(artifact_root / "hard-gate-results.json", hard_gates)
+    write_json(artifact_root / "aggregate-results.json", report)
+    write_json(artifact_root / "cost-latency-results.json", build_cost_latency(rows))
+    write_json(artifact_root / "reviewer-agreement.json", {
         "status": "NOT_STARTED",
-        "reason": "QBS5 produced execution artifacts only; reviewer scoring requires a later authorized track.",
-        "reviewer_plan": f"docs/benchmark/qbs-1/{REVIEWER_PLAN_PATH.name}",
+        "reason": "QBS powered execution artifacts only; reviewer scoring requires a later authorized track.",
+        "reviewer_plan": f"docs/benchmark/qbs-1/{Path(str(paths['reviewer_plan'])).name}",
     })
-    (ARTIFACT_ROOT / "claim-statement.md").write_text(
+    (artifact_root / "claim-statement.md").write_text(
         "# QBS Execution Claim Statement\n\n"
         f"Status: `{report['public_status']}`\n\n"
         "This run contains sanitized execution artifacts for the pre-registered "
@@ -613,7 +706,7 @@ def run(args: argparse.Namespace) -> int:
         "Reviewer scoring and agreement remain required before any quality claim.\n",
         encoding="utf-8",
     )
-    (ARTIFACT_ROOT / "limitations.md").write_text(
+    (artifact_root / "limitations.md").write_text(
         "# QBS Execution Limitations\n\n"
         "- Execution artifacts only; reviewer scoring has not started.\n"
         "- No public QBS score is claimed.\n"
@@ -622,11 +715,11 @@ def run(args: argparse.Namespace) -> int:
         "- Public artifacts contain redacted previews and hashes, not unredacted raw outputs.\n",
         encoding="utf-8",
     )
-    (ARTIFACT_ROOT / "README.md").write_text(
+    (artifact_root / "README.md").write_text(
         "# QBS-1 Powered Single-Provider Execution\n\n"
         f"Status: `{report['public_status']}`\n\n"
-        f"Run ID: `{RUN_ID}`\n\n"
-        f"Pre-registration tag: `{PREREG_TAG}`\n\n"
+        f"Run ID: `{run_id}`\n\n"
+        f"Pre-registration tag: `{prereg_tag}`\n\n"
         "This artifact set is review-pending and no-score. It does not establish "
         "a public QBS quality score or any L4/L5/L6 claim.\n",
         encoding="utf-8",
@@ -636,7 +729,7 @@ def run(args: argparse.Namespace) -> int:
         "public_status": report["public_status"],
         "task_count": len(tasks),
         "repeat_count": args.repeat_count,
-        "artifact_root": f"docs/benchmark/runs/{RUN_ID}",
+        "artifact_root": f"docs/benchmark/runs/{run_id}",
         "hard_gate_summary": hard_gates,
     }, indent=2))
     return 0 if overall_status == "EXECUTION_COMPLETE_REVIEW_PENDING" else 1
@@ -644,6 +737,7 @@ def run(args: argparse.Namespace) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run QBS powered single-provider execution.")
+    parser.add_argument("--run-id", default=RUN_ID)
     parser.add_argument("--confirm-live-cost", action="store_true")
     parser.add_argument("--env-file", action="append", default=[])
     parser.add_argument("--port", type=int, default=3128)

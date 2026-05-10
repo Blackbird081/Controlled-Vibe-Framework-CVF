@@ -195,6 +195,9 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     validate_secret_scan(errors)
     run_id = args.preregistration_tag.removeprefix("qbs/preregister/") if args.preregistration_tag else ""
     preregistered_status = (
+        "QBS8_RERUN_PREREGISTERED_NO_SCORED_RUN"
+        if run_id.endswith("-r3")
+        else
         "QBS7_RERUN_PREREGISTERED_NO_SCORED_RUN"
         if run_id.endswith("-r2")
         else "QBS4_SCORED_RUN_PREREGISTERED_NO_SCORED_RUN"
@@ -218,7 +221,9 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "create and verify a run-specific pre-registration tag"
             if not tag_sha
             else (
-                "operator may request separate QBS8 live rerun authorization"
+                "operator may run the authorized QBS8 live rerun"
+                if run_id.endswith("-r3")
+                else "operator may request separate QBS8 live rerun authorization"
                 if run_id.endswith("-r2")
                 else "operator may request separate scored-run execution authorization"
             )

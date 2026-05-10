@@ -26,6 +26,9 @@ Allowed:
   planning, not as a rerun result.
 - QBS-7 rerun pre-registration may be cited as a frozen R2 rerun plan with the
   F7 front-door clarification entrypoint, not as rerun execution evidence.
+- QBS-8 R3 pre-registration may be cited as the live rerun target after bounded
+  F7 router hardening, not as a QBS score before execution artifacts and
+  reviewer scoring exist.
 
 Not allowed without new evidence:
 
@@ -39,6 +42,7 @@ Not allowed without new evidence:
 - QBS-1 failed powered execution proves L4/L5/L6 quality claims
 - QBS-6 remediation changes the QBS-5 failed result
 - QBS-7 pre-registration proves scored rerun results
+- QBS-8 pre-registration alone proves scored rerun results
 - web proves the entire CVF runtime
 - mock tests prove governance behavior
 - public docs include the full internal operating history

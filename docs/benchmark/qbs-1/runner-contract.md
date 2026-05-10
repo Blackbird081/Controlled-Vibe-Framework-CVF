@@ -58,7 +58,7 @@ The public execution runner for the first pre-registered single-provider lane
 is:
 
 ```bash
-python scripts/run_qbs_powered_single_provider.py --confirm-live-cost --env-file <local ignored env file>
+python scripts/run_qbs_powered_single_provider.py --run-id <run-id> --confirm-live-cost --env-file <local ignored env file>
 ```
 
 It executes the frozen Alibaba/DashScope `qwen-turbo` run and writes sanitized,
@@ -75,6 +75,10 @@ The runner executes each task through:
 
 `CFG-B` must call the live CVF governed execution path. A direct-model prompt
 that imitates CVF does not satisfy the contract.
+
+For R2/R3 reruns, the F7 ambiguous non-coder rows use the intent-first
+front-door clarification entrypoint before any execute handoff can count as
+valid `CFG-B` evidence.
 
 ## Repeat Policy
 

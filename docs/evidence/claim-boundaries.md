@@ -24,6 +24,8 @@ Allowed:
   result, not as a quality score.
 - QBS-6 remediation may be cited as bounded hard-gate remediation and rerun
   planning, not as a rerun result.
+- QBS-7 rerun pre-registration may be cited as a frozen R2 rerun plan with the
+  F7 front-door clarification entrypoint, not as rerun execution evidence.
 
 Not allowed without new evidence:
 
@@ -36,6 +38,7 @@ Not allowed without new evidence:
 - QBS-1 pre-registration proves scored benchmark results
 - QBS-1 failed powered execution proves L4/L5/L6 quality claims
 - QBS-6 remediation changes the QBS-5 failed result
+- QBS-7 pre-registration proves scored rerun results
 - web proves the entire CVF runtime
 - mock tests prove governance behavior
 - public docs include the full internal operating history

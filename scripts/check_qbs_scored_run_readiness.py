@@ -193,11 +193,17 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     tag_sha = validate_preregistration(args, errors, warnings)
     validate_run_preregistration_files(args.preregistration_tag if tag_sha else None, errors)
     validate_secret_scan(errors)
+    run_id = args.preregistration_tag.removeprefix("qbs/preregister/") if args.preregistration_tag else ""
+    preregistered_status = (
+        "QBS7_RERUN_PREREGISTERED_NO_SCORED_RUN"
+        if run_id.endswith("-r2")
+        else "QBS4_SCORED_RUN_PREREGISTERED_NO_SCORED_RUN"
+    )
 
     return {
         "status": "PASS" if not errors else "FAIL",
         "public_status": (
-            "QBS4_SCORED_RUN_PREREGISTERED_NO_SCORED_RUN"
+            preregistered_status
             if tag_sha
             else "QBS3_SCORED_RUN_READINESS_PACKET_READY_NO_SCORED_RUN"
         ),
@@ -211,7 +217,11 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "allowed_next_step": (
             "create and verify a run-specific pre-registration tag"
             if not tag_sha
-            else "operator may request separate scored-run execution authorization"
+            else (
+                "operator may request separate QBS8 live rerun authorization"
+                if run_id.endswith("-r2")
+                else "operator may request separate scored-run execution authorization"
+            )
         ),
         "errors": errors,
         "warnings": warnings,

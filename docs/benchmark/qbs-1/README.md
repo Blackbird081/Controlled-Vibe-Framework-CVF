@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS5_POWERED_SINGLE_PROVIDER_EXECUTION_FAILED_NO_SCORE`
+Status: `QBS7_RERUN_PREREGISTERED_NO_PUBLIC_QBS_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -22,6 +22,8 @@ as harness proof only.
 - [Scored Run Readiness](scored-run-readiness.md)
 - [Alibaba Powered Single-Provider Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba.md)
 - [QBS-6 Hard-Gate Remediation](hard-gate-remediation-qbs6.md)
+- [QBS-7 Rerun Pre-Registration Plan](rerun-plan-qbs7.md)
+- [Alibaba Powered Single-Provider R2 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r2.md)
 
 Runner entry point:
 
@@ -47,13 +49,13 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-1 scored-run pre-registration | `PREREGISTERED` as `qbs/preregister/qbs1-powered-single-provider-20260510-alibaba` |
 | QBS-1 powered execution | `FAILED_NO_SCORE` for `qbs1-powered-single-provider-20260510-alibaba` |
 | QBS-6 hard-gate remediation | `COMPLETE_RERUN_BLOCKED` |
+| QBS-7 rerun pre-registration | `PREREGISTERED` as `qbs/preregister/qbs1-powered-single-provider-20260510-alibaba-r2` |
 | QBS-1 scored claim | `BLOCKED` until hard gates pass and reviewer scoring completes |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-1 may proceed from calibration into corpus expansion, reviewer workflow
-design, and scored-run readiness checks. A scored run may not start until a
-run-specific pre-registration tag freezes the corpus, criteria, configs,
-provider/model list, reviewer plan, and artifact path.
+QBS-8 may execute the R2 rerun only after explicit live-cost authorization,
+credential availability, stop conditions, and reviewer readiness are confirmed.
+QBS-7 itself is only a frozen rerun pre-registration packet.

@@ -52,6 +52,19 @@ Before scored execution, the checker must be run with tag verification:
 python scripts/check_qbs_scored_run_readiness.py --json --require-preregistration --preregistration-tag qbs/preregister/<run-id>
 ```
 
+## Current Powered Single-Provider Runner
+
+The public execution runner for the first pre-registered single-provider lane
+is:
+
+```bash
+python scripts/run_qbs_powered_single_provider.py --confirm-live-cost --env-file <local ignored env file>
+```
+
+It executes the frozen Alibaba/DashScope `qwen-turbo` run and writes sanitized,
+review-pending artifacts under the pre-registered artifact root. It does not
+publish a QBS score; reviewer scoring and agreement remain a separate gate.
+
 ## Runner Configs
 
 The runner executes each task through:

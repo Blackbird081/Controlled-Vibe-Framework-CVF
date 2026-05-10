@@ -33,8 +33,8 @@ QBS-1 runner and corpus planning is now published. A three-provider calibration
 pilot has also passed as harness proof only. A scored-run readiness packet now
 adds the aggregate-only powered corpus JSON and readiness checker. The first
 planned single-provider scored run is publicly pre-registered, but it has not
-executed. None of these artifacts is a powered QBS score or a public
-quality-level claim.
+executed unless a run folder is present under `docs/benchmark/runs/`. None of
+these artifacts is a powered QBS score or a public quality-level claim.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and

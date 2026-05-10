@@ -46,6 +46,7 @@
       "scripts/cvf_provider_check.py",
       "scripts/run_cvf_multi_provider_live_smoke.py",
       "scripts/run_qbs_calibration_pilot.py",
+      "scripts/run_qbs_powered_single_provider.py",
       "scripts/check_qbs_scored_run_readiness.py",
       "scripts/check_public_surface.py",
       "governance/public-surface-manifest.json",

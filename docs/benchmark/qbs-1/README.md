@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS8_EXECUTION_COMPLETE_REVIEW_PENDING_NO_PUBLIC_QBS_SCORE`
+Status: `QBS9_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -26,6 +26,7 @@ as harness proof only.
 - [Alibaba Powered Single-Provider R2 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r2.md)
 - [Alibaba Powered Single-Provider R3 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r3.md)
 - [Alibaba Powered Single-Provider R4 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r4.md)
+- [Alibaba Powered Single-Provider R5 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r5.md)
 
 Runner entry point:
 
@@ -54,12 +55,13 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-7 rerun pre-registration | `PREREGISTERED` as `qbs/preregister/qbs1-powered-single-provider-20260510-alibaba-r2` |
 | QBS-8 live rerun run-set | `PREREGISTERED` as `qbs/preregister/qbs1-powered-single-provider-20260510-alibaba-r4` |
 | QBS-8 live rerun execution | `EXECUTION_COMPLETE_REVIEW_PENDING` for `qbs1-powered-single-provider-20260510-alibaba-r4` |
-| QBS-1 scored claim | `BLOCKED` until reviewer scoring and agreement completes |
+| QBS-9 reviewer scoring | `REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` for `qbs1-powered-single-provider-20260510-alibaba-r5` |
+| QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-Reviewer scoring and agreement remain the next gate before any public QBS score
-or L4/L5/L6 claim. QBS-7 and R3 remain no-score preregistration/diagnostic
-artifacts; R4 is the hard-gate-passing execution artifact.
+QBS-9 closes reviewer scoring with no public QBS claim. Future work should
+analyze why `CFG-B` underperformed `CFG-A1` on output quality before attempting
+another scored claim.

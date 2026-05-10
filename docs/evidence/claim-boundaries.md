@@ -32,6 +32,9 @@ Allowed:
 - QBS-8 R4 powered execution may be cited as hard-gate-passing
   `POWERED_SINGLE_PROVIDER` execution evidence for Alibaba/DashScope
   `qwen-turbo`, still pending reviewer scoring and agreement.
+- QBS-9 R5 reviewer scoring may be cited as model-assisted reviewer scoring
+  with reviewer agreement passed and no public QBS claim because `CFG-B` did
+  not meet the L4 quality-uplift threshold versus `CFG-A1`.
 
 Not allowed without new evidence:
 
@@ -48,6 +51,8 @@ Not allowed without new evidence:
 - QBS-8 pre-registration alone proves scored rerun results
 - QBS-8 hard-gate-passing execution alone proves a public QBS score, L4/L5/L6,
   family-level claims, or provider parity
+- QBS-9 reviewer agreement alone proves a QBS quality uplift when the measured
+  `CFG-B` quality delta is negative
 - web proves the entire CVF runtime
 - mock tests prove governance behavior
 - public docs include the full internal operating history

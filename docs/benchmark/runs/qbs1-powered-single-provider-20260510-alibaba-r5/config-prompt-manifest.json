@@ -1,0 +1,36 @@
+{
+  "run_id": "qbs1-powered-single-provider-20260510-alibaba-r5",
+  "criteria_version": "public-qbs-methodology-v2",
+  "configs": {
+    "CFG-A0": {
+      "description": "Raw direct model baseline.",
+      "system_prompt": null,
+      "user_prompt_source": "corpus.tasks[].user_prompt",
+      "output_limit_tokens": 900
+    },
+    "CFG-A1": {
+      "description": "Structured direct control baseline using the frozen neutral prompt.",
+      "system_prompt": "You are a careful, helpful assistant. Produce a useful, organized,\nfactually grounded answer to the user's task. If the task is unsafe\nor you lack information, say so plainly and offer a safe alternative.\nKeep your answer scoped to what was asked.",
+      "system_prompt_sha256": "bf3d1bd44214c024fb8919a55500bdfb7eb13ae5c352b98f3dec52a8a4fd44e7",
+      "user_prompt_source": "corpus.tasks[].user_prompt",
+      "output_limit_tokens": 900
+    },
+    "CFG-B": {
+      "description": "Actual CVF governed path with F7 entrypoint clarification and R3 block hardening.",
+      "path": "POST /api/execute",
+      "governed_path": true,
+      "user_prompt_source": "corpus.tasks[].user_prompt",
+      "output_limit_tokens": 900,
+      "required_receipt": "governanceEvidenceReceipt",
+      "entrypoint_overrides": {
+        "QBS1-F7-T01": "intent-first front door clarification loop",
+        "QBS1-F7-T02": "intent-first front door clarification loop",
+        "QBS1-F7-T03": "intent-first front door clarification loop",
+        "QBS1-F7-T04": "intent-first front door clarification loop",
+        "QBS1-F7-T05": "intent-first front door clarification loop",
+        "QBS1-F7-T06": "intent-first front door clarification loop"
+      }
+    }
+  },
+  "prompt_attribution_boundary": "CFG-B must call CVF runtime; direct-model imitation of CVF policy is invalid. F7 rows must use the front-door clarification entrypoint before any execute handoff is considered valid."
+}

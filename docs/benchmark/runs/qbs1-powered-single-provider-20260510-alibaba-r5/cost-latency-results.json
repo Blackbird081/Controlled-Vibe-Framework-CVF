@@ -1,0 +1,17 @@
+{
+  "CFG-A0": {
+    "medianLatencyMs": 5797.0,
+    "medianTotalTokens": 399.0,
+    "sampleCount": 144
+  },
+  "CFG-A1": {
+    "medianLatencyMs": 4680.0,
+    "medianTotalTokens": 397.5,
+    "sampleCount": 144
+  },
+  "CFG-B": {
+    "medianLatencyMs": 2843.5,
+    "medianTotalTokens": 3097.5,
+    "sampleCount": 144
+  }
+}

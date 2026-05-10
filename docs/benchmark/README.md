@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS16_ANCHOR_ADJUDICATION_COMPLETE_NO_NEW_SCORE`
+Status: `QBS17_CALIBRATION_ONLY_CHECK_COMPLETE_NO_NEW_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -65,7 +65,12 @@ QBS-15 creates the first fixed reviewer calibration anchor set and updates the
 reviewer scorer so future runs can opt into explicit calibration guidance.
 QBS-16 adjudicates the high-disagreement anchors with a third model adjudicator
 fallback and publishes a reviewer rubric addendum. This is still no-score and
-does not unlock R8 without a revised reviewer plan.
+does not unlock R8 without a revised reviewer plan. QBS-17 runs that
+calibration-only check with OpenAI and DeepSeek reviewers. Inter-reviewer
+agreement passes on the anchor set (`kappa=0.7365591397849462`,
+`rho=0.7935131868283122`), but reviewer-vs-QBS16-reference alignment fails due
+to rework-label instability and unresolved anchor/reference conflicts. R8
+remains blocked.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -91,6 +96,8 @@ Latest powered execution artifact:
 - [QBS-16 Anchor Adjudication](qbs-1/reviewer-anchor-adjudication-qbs16.md)
 - [QBS-16 Anchor Adjudication JSON](qbs-1/reviewer-calibration-adjudication-qbs16.json)
 - [QBS-16 Reviewer Rubric Addendum](qbs-1/reviewer-rubric-addendum-qbs16.md)
+- [QBS-17 Reviewer Calibration-Only Agreement Check](qbs-1/reviewer-calibration-agreement-qbs17.md)
+- [QBS-17 Reviewer Calibration-Only Agreement JSON](qbs-1/reviewer-calibration-agreement-qbs17.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 

@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS16_ANCHOR_ADJUDICATION_COMPLETE_NO_NEW_SCORE`
+Status: `QBS17_CALIBRATION_ONLY_CHECK_COMPLETE_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -36,6 +36,8 @@ as harness proof only.
 - [QBS-16 Anchor Adjudication](reviewer-anchor-adjudication-qbs16.md)
 - [QBS-16 Anchor Adjudication JSON](reviewer-calibration-adjudication-qbs16.json)
 - [QBS-16 Reviewer Rubric Addendum](reviewer-rubric-addendum-qbs16.md)
+- [QBS-17 Reviewer Calibration-Only Agreement Check](reviewer-calibration-agreement-qbs17.md)
+- [QBS-17 Reviewer Calibration-Only Agreement JSON](reviewer-calibration-agreement-qbs17.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 
@@ -78,13 +80,15 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-14 reviewer drift analysis | `CALIBRATION_REQUIRED_NO_NEW_SCORE` |
 | QBS-15 reviewer calibration anchors | `ANCHORS_READY_NO_NEW_SCORE` |
 | QBS-16 anchor adjudication | `ADJUDICATION_COMPLETE_NO_NEW_SCORE` |
+| QBS-17 calibration-only reviewer agreement | `FAIL_NO_NEW_SCORE` with kappa `0.7365591397849462`, rho `0.7935131868283122`, but reviewer-vs-reference alignment failed |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-16 adjudicates the high-disagreement anchors with a third model adjudicator
-fallback and publishes a reviewer rubric addendum. The next track should run a
-calibration-only check against the addendum before pre-registering any future
-claim run.
+QBS-17 completed the calibration-only check against the QBS16 addendum. It
+restored inter-reviewer agreement on the anchor set but failed
+reviewer-vs-reference alignment. The next track should audit anchor/reference
+conflicts and normalize the rework-label rubric before pre-registering any
+future claim run.

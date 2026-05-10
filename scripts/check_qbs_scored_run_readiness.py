@@ -197,14 +197,24 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     run_id = args.preregistration_tag.removeprefix("qbs/preregister/") if args.preregistration_tag else ""
     rerun_match = RERUN_TAG_PATTERN.search(run_id)
     rerun_index = int(rerun_match.group(1)) if rerun_match else 0
-    preregistered_status = (
-        "QBS8_RERUN_PREREGISTERED_NO_SCORED_RUN"
-        if rerun_index >= 3
-        else
-        "QBS7_RERUN_PREREGISTERED_NO_SCORED_RUN"
-        if rerun_index == 2
-        else "QBS4_SCORED_RUN_PREREGISTERED_NO_SCORED_RUN"
-    )
+    if rerun_index >= 8:
+        preregistered_status = "QBS19_R8_PREREGISTERED_NO_SCORED_RUN"
+        allowed_next_step = "operator may run the pre-registered QBS-19 R8 live run after key and cost approval"
+    elif rerun_index == 7:
+        preregistered_status = "QBS13_R7_PREREGISTERED_NO_SCORED_RUN"
+        allowed_next_step = "operator may run the authorized QBS-13 R7 live rerun"
+    elif rerun_index == 6:
+        preregistered_status = "QBS11_R6_PREREGISTERED_NO_SCORED_RUN"
+        allowed_next_step = "operator may run the authorized QBS-11 R6 live rerun"
+    elif rerun_index >= 3:
+        preregistered_status = "QBS8_RERUN_PREREGISTERED_NO_SCORED_RUN"
+        allowed_next_step = "operator may run the authorized QBS8 live rerun"
+    elif rerun_index == 2:
+        preregistered_status = "QBS7_RERUN_PREREGISTERED_NO_SCORED_RUN"
+        allowed_next_step = "operator may request separate QBS8 live rerun authorization"
+    else:
+        preregistered_status = "QBS4_SCORED_RUN_PREREGISTERED_NO_SCORED_RUN"
+        allowed_next_step = "operator may request separate scored-run execution authorization"
 
     return {
         "status": "PASS" if not errors else "FAIL",
@@ -223,13 +233,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "allowed_next_step": (
             "create and verify a run-specific pre-registration tag"
             if not tag_sha
-            else (
-                "operator may run the authorized QBS8 live rerun"
-                if rerun_index >= 3
-                else "operator may request separate QBS8 live rerun authorization"
-                if run_id.endswith("-r2")
-                else "operator may request separate scored-run execution authorization"
-            )
+            else allowed_next_step
         ),
         "errors": errors,
         "warnings": warnings,

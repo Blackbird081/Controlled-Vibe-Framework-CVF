@@ -1,0 +1,48 @@
+{
+  "run_id": "qbs1-powered-single-provider-20260510-alibaba-r8",
+  "run_class": "POWERED_SINGLE_PROVIDER",
+  "provider": "alibaba",
+  "provider_display": "Alibaba/DashScope OpenAI-compatible API",
+  "model": "qwen-turbo",
+  "endpoint_class": "openai_compatible_chat_completions",
+  "endpoint_public_hint": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions",
+  "credential_sources": [
+    "DASHSCOPE_API_KEY",
+    "ALIBABA_API_KEY",
+    "CVF_ALIBABA_API_KEY",
+    "CVF_BENCHMARK_ALIBABA_KEY"
+  ],
+  "credential_policy": "operator-supplied ignored local environment only; raw values must not be printed or committed",
+  "configs": ["CFG-A0", "CFG-A1", "CFG-B"],
+  "repeat_count": 3,
+  "task_count": 48,
+  "planned_configuration_executions": 432,
+  "temperature": 0.2,
+  "max_tokens": 900,
+  "timeout_seconds": {
+    "direct_model": 90,
+    "cvf_governed_path": 240,
+    "front_door_clarification_path": 240
+  },
+  "pairing_rule": "same provider, model, temperature, and output limit across CFG-A0, CFG-A1, and CFG-B",
+  "reviewer_scoring": {
+    "redacted_output_bundle_required": true,
+    "model_assisted_reviewers": [
+      { "provider": "openai", "model": "gpt-4o-mini" },
+      { "provider": "deepseek", "model": "deepseek-chat" }
+    ],
+    "prompt_version": "qbs18-calibration-only-rerun-v1",
+    "calibration_reference": "docs/benchmark/qbs-1/reviewer-calibration-reference-qbs18.json",
+    "rework_rubric_normalization": "docs/benchmark/qbs-1/reviewer-rework-rubric-normalization-qbs18.md"
+  },
+  "post_calibration_delta": {
+    "parent_scored_run": "qbs1-powered-single-provider-20260510-alibaba-r7",
+    "calibration_artifact": "docs/benchmark/qbs-1/reviewer-calibration-cleanup-and-rerun-qbs18.md",
+    "changed_surface": "reviewer plan and scoring calibration only; no new runtime remediation delta from R7"
+  },
+  "cost_boundary": {
+    "operator_approval_required_before_live_run": true,
+    "stop_on_quota_or_budget_uncertainty": false,
+    "cost_claim_requires_token_or_cost_metadata_where_available": true
+  }
+}

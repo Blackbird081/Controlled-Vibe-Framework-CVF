@@ -168,8 +168,13 @@ def normalize_rework(value: Any) -> str:
 def compact_calibration_context(calibration_anchors: dict[str, Any] | None) -> dict[str, Any] | None:
     if not calibration_anchors:
         return None
+    source = "QBS15 reviewer calibration anchors"
+    anchor_items = calibration_anchors.get("anchors")
+    if not anchor_items and calibration_anchors.get("adjudications"):
+        source = "QBS18 cleaned reviewer calibration reference"
+        anchor_items = calibration_anchors.get("adjudications")
     compact_anchors = []
-    for anchor in calibration_anchors.get("anchors", [])[:12]:
+    for anchor in (anchor_items or [])[:14]:
         compact_anchors.append({
             "anchor_id": anchor.get("anchor_id"),
             "anchor_kind": anchor.get("anchor_kind"),
@@ -177,13 +182,18 @@ def compact_calibration_context(calibration_anchors: dict[str, Any] | None) -> d
             "calibration_issue": anchor.get("calibration_issue"),
             "reviewer_quality": anchor.get("reviewer_quality"),
             "reviewer_rework": anchor.get("reviewer_rework"),
+            "reference_quality": anchor.get("adjudicated_quality"),
+            "reference_rework": anchor.get("adjudicated_rework"),
             "adjudication_required": anchor.get("adjudication_required"),
+            "rubric_rule": anchor.get("rubric_rule"),
             "redacted_output_preview": str(anchor.get("redacted_output_preview", ""))[:900],
         })
     return {
-        "source": "QBS15 reviewer calibration anchors",
+        "source": source,
         "status": calibration_anchors.get("status"),
         "anchor_policy": calibration_anchors.get("anchor_policy"),
+        "reference_limitation": calibration_anchors.get("reference_limitation"),
+        "rework_normalization": calibration_anchors.get("rework_normalization"),
         "calibration_axes": calibration_anchors.get("calibration_axes"),
         "instructions": [
             "Treat high_disagreement anchors as examples of where reviewers need stricter shared interpretation, not as automatic gold labels.",

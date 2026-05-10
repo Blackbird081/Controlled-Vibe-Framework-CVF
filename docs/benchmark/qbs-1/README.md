@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS13_R7_PREREGISTRATION_IN_PROGRESS_NO_QBS_SCORE`
+Status: `QBS13_R7_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -66,12 +66,16 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-11 R6 reviewer agreement | `FAIL` with kappa `0.5043578866178171`, rho `0.5987420572601858` |
 | QBS-12 residual quality remediation | `REMEDIATION_COMPLETE_NO_NEW_SCORE` |
 | QBS-13 R7 pre-registration | `PREREGISTERED_POST_QBS12_REMEDIATION_RUN_NO_QBS_SCORE` |
+| QBS-13 R7 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
+| QBS-13 R7 reviewer agreement | `FAIL` with kappa `0.46363630803481326`, rho `0.5329992930685284` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-13 R7 is the next pre-registered post-remediation run. It must execute,
-retain a redacted reviewer output bundle, pass hard gates, complete reviewer
-scoring, and pass agreement before any quality claim can be considered.
+QBS-13 R7 completed execution and reviewer scoring after QBS-12 remediation.
+Hard gates passed, but reviewer agreement failed and the median normalized
+quality delta remained negative. The next track should stop rerunning and
+address reviewer calibration plus residual CFG-B output quality before another
+claim attempt.

@@ -1,0 +1,15 @@
+{
+  "run_id": "qbs1-powered-single-provider-20260510-alibaba-r7",
+  "run_class": "POWERED_SINGLE_PROVIDER",
+  "criteria_version": "public-qbs-methodology-v2",
+  "corpus_version": "qbs1-powered-single-provider-corpus-v1-2026-05-10",
+  "provider": "alibaba",
+  "model": "qwen-turbo",
+  "started_at": "2026-05-10T09:50:11.667001+00:00",
+  "completed_at": "2026-05-10T10:46:01.600459+00:00",
+  "preregistration_tag": "qbs/preregister/qbs1-powered-single-provider-20260510-alibaba-r7",
+  "preregistration_tag_sha": "556edd368ed4d0e45b6f88d915be4c4b6fd1d4b3",
+  "public_status": "EXECUTION_COMPLETE_REVIEW_PENDING_NO_QBS_SCORE",
+  "allowed_claim_level": "none_until_reviewer_scoring",
+  "verdict": "EXECUTION_COMPLETE_REVIEW_PENDING"
+}

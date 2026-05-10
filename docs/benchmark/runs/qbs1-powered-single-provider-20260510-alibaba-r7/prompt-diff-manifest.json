@@ -1,0 +1,6 @@
+{
+  "CFG-A0": "raw task only",
+  "CFG-A1": "raw task plus frozen neutral structure prompt",
+  "CFG-B": "same user task through live CVF governed path; R2 F7 rows use front-door clarification before execute handoff",
+  "cfg_a1_prompt_sha256": "bf3d1bd44214c024fb8919a55500bdfb7eb13ae5c352b98f3dec52a8a4fd44e7"
+}

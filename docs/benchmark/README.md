@@ -18,9 +18,9 @@ Start here:
 
 ## Current Status
 
-Status: `QBS25_R9_POST_SCORE_ANALYSIS_COMPLETE_NO_NEW_SCORE`
+Status: `QBS26_R9_CALIBRATION_ANCHORS_READY_NO_NEW_SCORE`
 
-As of 2026-05-09, CVF has public live provider and release-gate evidence, but
+As of 2026-05-11, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
 the provider, model, corpus version, run class, criteria version, run date, and
 claim level.
@@ -89,7 +89,9 @@ score completeness is restored (`432` paired scores), but reviewer agreement
 fails (`kappa=0.37156033151334533`, `rho=0.43818074648985417`) and no public
 QBS score or L4/L5 claim is made. QBS-25 analyzes R9 and concludes that the
 next blocker is reviewer drift plus residual ALLOW-task quality, not scorer
-completeness.
+completeness. QBS-26 turns the R9 failure surface into 35 provisional
+calibration anchors covering all 8 QBS families. These anchors still require
+explicit adjudication before any further live rerun is pre-registered.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -130,6 +132,8 @@ Latest powered execution artifact:
 - [QBS-23 R9 Pre-Registration](qbs-1/r9-preregistration-qbs23.md)
 - [QBS-25 R9 Post-Score Analysis](qbs-1/r9-post-score-analysis-qbs25.md)
 - [QBS-25 R9 Post-Score Analysis JSON](qbs-1/r9-post-score-analysis-qbs25.json)
+- [QBS-26 R9 Calibration Anchors](qbs-1/r9-calibration-anchors-qbs26.md)
+- [QBS-26 R9 Calibration Anchors JSON](qbs-1/r9-calibration-anchors-qbs26.json)
 - [Alibaba Powered Single-Provider R9 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260511-alibaba-r9.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)

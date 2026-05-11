@@ -276,14 +276,11 @@ claimed yet. QBS-1 runner and corpus planning is also published under
 under `docs/benchmark/runs/qbs1-calibration-20260509-three-provider/`; it is
 harness proof only and does not claim a QBS score. A scored-run readiness
 packet now adds the aggregate-only powered corpus JSON and readiness checker.
-The Alibaba/DashScope single-provider lane has progressed through R8 scoring.
-QBS-20 hard gates passed, but reviewer agreement and claim-ladder thresholds
-did not pass. QBS-21 analyzes the R8 scoring failure and publishes no new run
-or score. QBS-22 remediates scorer completeness and targeted governed ALLOW
-quality issues. QBS-23 pre-registers the post-remediation R9 rerun, but still
-QBS-24 scoring again fails reviewer agreement and claim-ladder thresholds, so
-QBS-25 analyzes the failure and still makes no QBS score or quality-level
-claim.
+The Alibaba/DashScope single-provider lane has progressed through R9 scoring.
+QBS-24 hard gates passed, but reviewer agreement and claim-ladder thresholds
+did not pass. QBS-25 analyzes the R9 scoring failure and publishes no new run
+or score. QBS-26 turns the R9 failure surface into provisional calibration
+anchors for adjudication. No QBS score or quality-level claim is made.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

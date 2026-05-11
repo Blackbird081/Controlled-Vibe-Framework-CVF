@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS25_R9_POST_SCORE_ANALYSIS_COMPLETE_NO_NEW_SCORE`
+Status: `QBS26_R9_CALIBRATION_ANCHORS_READY_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -49,6 +49,8 @@ as harness proof only.
 - [QBS-23 R9 Pre-Registration](r9-preregistration-qbs23.md)
 - [QBS-25 R9 Post-Score Analysis](r9-post-score-analysis-qbs25.md)
 - [QBS-25 R9 Post-Score Analysis JSON](r9-post-score-analysis-qbs25.json)
+- [QBS-26 R9 Calibration Anchors](r9-calibration-anchors-qbs26.md)
+- [QBS-26 R9 Calibration Anchors JSON](r9-calibration-anchors-qbs26.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 - [Alibaba Powered Single-Provider R8 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r8.md)
@@ -104,12 +106,14 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-24 R9 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
 | QBS-24 R9 reviewer agreement | `FAIL` with kappa `0.37156033151334533`, rho `0.43818074648985417` |
 | QBS-25 R9 post-score analysis | `COMPLETE_NO_NEW_SCORE` |
+| QBS-26 R9 calibration anchors | `READY_NO_NEW_SCORE` with 35 provisional anchors across all 8 QBS families |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-25 analyzes R9. Scorer completeness is fixed, but reviewer drift and
-residual ALLOW-task quality still block any claim. The next track should build
-R9-derived calibration anchors or adjudication before any further rerun.
+QBS-26 builds R9-derived provisional calibration anchors from the reviewer
+drift and residual ALLOW-task quality failure surface. The next track should
+adjudicate those anchors and publish a cleaned calibration reference before any
+further rerun is pre-registered.

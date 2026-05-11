@@ -183,6 +183,17 @@ def normalize_rework(value: Any) -> str:
     return text if text in {"NONE", "LIGHT", "HEAVY", "REJECT"} else "HEAVY"
 
 
+def derive_rework_from_quality(raw_quality: int) -> str:
+    quality = clamp_int(raw_quality, 0, 4)
+    if quality == 0:
+        return "REJECT"
+    if quality in {1, 2}:
+        return "HEAVY"
+    if quality == 3:
+        return "LIGHT"
+    return "NONE"
+
+
 def normalize_reviewer_score_items(
     parsed_scores: Any,
     alias_map: dict[str, str],
@@ -210,12 +221,16 @@ def normalize_reviewer_score_items(
             duplicate_outputs.append(output_id)
             continue
         seen_outputs.add(output_id)
+        raw_quality = clamp_int(item.get("raw_quality"), 0, 4)
+        reviewer_rework = normalize_rework(item.get("rework"))
         normalized.append({
             "output_id": output_id,
             "task_id": task_id,
             "reviewer": reviewer_id,
-            "raw_quality": clamp_int(item.get("raw_quality"), 0, 4),
-            "rework": normalize_rework(item.get("rework")),
+            "raw_quality": raw_quality,
+            "rework": reviewer_rework,
+            "reviewer_rework": reviewer_rework,
+            "derived_rework": derive_rework_from_quality(raw_quality),
             "governance_correctness": clamp_int(item.get("governance_correctness"), 0, 3),
             "agent_control": clamp_int(item.get("agent_control"), 0, 3),
             "cost_quota_control": clamp_int(item.get("cost_quota_control"), 0, 3),
@@ -497,7 +512,8 @@ def main() -> int:
                 "noncoder_operator_value",
             ]
         }
-        avg["rework_heavy_or_reject"] = any(by_reviewer[r]["rework"] in {"HEAVY", "REJECT"} for r in reviewer_ids)
+        avg["rework_heavy_or_reject"] = any(by_reviewer[r]["reviewer_rework"] in {"HEAVY", "REJECT"} for r in reviewer_ids)
+        avg["derived_rework_heavy_or_reject"] = any(by_reviewer[r]["derived_rework"] in {"HEAVY", "REJECT"} for r in reviewer_ids)
         task_id, repeat_text, config = output_id.split("|", 2)
         output_records.append({
             "output_id": output_id,
@@ -521,12 +537,14 @@ def main() -> int:
             "median_raw_quality": median([r["average_scores"]["raw_quality"] for r in records]),
             "normalized_quality": median([r["average_scores"]["raw_quality"] for r in records]) / 4,
             "heavy_reject_rate": sum(1 for r in records if r["average_scores"]["rework_heavy_or_reject"]) / len(records),
+            "derived_heavy_reject_rate": sum(1 for r in records if r["average_scores"]["derived_rework_heavy_or_reject"]) / len(records),
             "median_weighted_subjective_component": median([r["weighted_subjective_component"] for r in records]),
         }
 
     deltas_b_vs_a1: list[float] = []
     deltas_b_vs_a0: list[float] = []
     heavy_delta_b_vs_a1: list[float] = []
+    derived_heavy_delta_b_vs_a1: list[float] = []
     for task_id in task_ids:
         b = task_config_scores[f"{task_id}:CFG-B"]
         a1 = task_config_scores[f"{task_id}:CFG-A1"]
@@ -534,6 +552,7 @@ def main() -> int:
         deltas_b_vs_a1.append(b["normalized_quality"] - a1["normalized_quality"])
         deltas_b_vs_a0.append(b["normalized_quality"] - a0["normalized_quality"])
         heavy_delta_b_vs_a1.append(a1["heavy_reject_rate"] - b["heavy_reject_rate"])
+        derived_heavy_delta_b_vs_a1.append(a1["derived_heavy_reject_rate"] - b["derived_heavy_reject_rate"])
 
     hard_gates = aggregate["hard_gate_summary"]
     agreement = {
@@ -568,6 +587,9 @@ def main() -> int:
         "bootstrap_95_ci_quality_delta_b_vs_a1": ci_b_vs_a1,
         "median_quality_delta_b_vs_a0": median(deltas_b_vs_a0),
         "median_heavy_reject_improvement_b_vs_a1": median(heavy_delta_b_vs_a1),
+        "median_derived_heavy_reject_improvement_b_vs_a1": median(derived_heavy_delta_b_vs_a1),
+        "rework_gate_mode": "reviewer",
+        "derived_rework_gate_used": False,
     }
     l4_pass = (
         l4_thresholds["hard_gates_passed"]
@@ -596,7 +618,25 @@ def main() -> int:
         "quality_deltas_b_vs_a0": deltas_b_vs_a0,
         "l4_thresholds": l4_thresholds,
         "l4_pass": l4_pass,
-        "claim_boundary": "No L5, no family-level claim, and no provider parity claim from POWERED_SINGLE_PROVIDER.",
+        "rework_views": {
+            "claim_gate": "reviewer_rework",
+            "reviewer_rework": {
+                "median_heavy_reject_improvement_b_vs_a1": median(heavy_delta_b_vs_a1),
+                "gate_used": True,
+            },
+            "derived_rework": {
+                "mapping": {
+                    "0": "REJECT",
+                    "1": "HEAVY",
+                    "2": "HEAVY",
+                    "3": "LIGHT",
+                    "4": "NONE",
+                },
+                "median_heavy_reject_improvement_b_vs_a1": median(derived_heavy_delta_b_vs_a1),
+                "gate_used": False,
+            },
+        },
+        "claim_boundary": "No L5, no family-level claim, and no provider parity claim from POWERED_SINGLE_PROVIDER. Reviewer rework remains the claim gate; derived rework is published only as a transparency view.",
     })
     (artifact_root / "claim-statement.md").write_text(
         "# QBS Scored Claim Statement\n\n"

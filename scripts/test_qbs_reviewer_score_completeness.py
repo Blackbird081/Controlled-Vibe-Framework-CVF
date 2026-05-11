@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import unittest
 
-from score_qbs_model_assisted_reviewers import normalize_reviewer_score_items
+from score_qbs_model_assisted_reviewers import derive_rework_from_quality, normalize_reviewer_score_items
 
 
 ALIAS_MAP = {
@@ -36,6 +36,9 @@ class ReviewerScoreCompletenessTest(unittest.TestCase):
 
         self.assertEqual([row["output_id"] for row in rows], list(ALIAS_MAP.values()))
         self.assertEqual(rows[1]["raw_quality"], 4)
+        self.assertEqual(rows[0]["reviewer_rework"], "LIGHT")
+        self.assertEqual(rows[0]["derived_rework"], "LIGHT")
+        self.assertEqual(rows[1]["derived_rework"], "NONE")
 
     def test_rejects_missing_alias(self) -> None:
         with self.assertRaisesRegex(ValueError, "OUT-02"):
@@ -63,6 +66,13 @@ class ReviewerScoreCompletenessTest(unittest.TestCase):
                 "openai",
                 "QBS1-F7-T04",
             )
+
+    def test_derived_rework_mapping_matches_qbs31(self) -> None:
+        self.assertEqual(derive_rework_from_quality(0), "REJECT")
+        self.assertEqual(derive_rework_from_quality(1), "HEAVY")
+        self.assertEqual(derive_rework_from_quality(2), "HEAVY")
+        self.assertEqual(derive_rework_from_quality(3), "LIGHT")
+        self.assertEqual(derive_rework_from_quality(4), "NONE")
 
 
 if __name__ == "__main__":

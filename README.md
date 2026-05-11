@@ -284,8 +284,10 @@ anchors, QBS-27 adjudicates those anchors with a model-adjudicator fallback,
 QBS-28 cleans them into a calibration reference, and QBS-29 runs a
 calibration-only reviewer agreement check. QBS-29 still fails the calibration
 gate. QBS-30 analyzes that failure and QBS-31 publishes reviewer-rubric
-remediation. QBS-32 reruns calibration-only review and still fails. The next
-scored rerun remains blocked, so no QBS score or quality-level claim is made.
+remediation. QBS-32 reruns calibration-only review and still fails. QBS-33
+adds calibration-only derived-rework support and dual-published rework views
+while preserving reviewer rework as the scored-run claim gate. The next scored
+rerun remains blocked, so no QBS score or quality-level claim is made.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

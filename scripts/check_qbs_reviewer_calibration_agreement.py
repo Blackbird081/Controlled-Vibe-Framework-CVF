@@ -121,6 +121,17 @@ def normalize_rework(value: Any) -> str:
     return text if text in {"NONE", "LIGHT", "HEAVY", "REJECT"} else "HEAVY"
 
 
+def derive_rework_from_quality(raw_quality: int) -> str:
+    quality = clamp_int(raw_quality, 0, 4)
+    if quality == 0:
+        return "REJECT"
+    if quality in {1, 2}:
+        return "HEAVY"
+    if quality == 3:
+        return "LIGHT"
+    return "NONE"
+
+
 def parse_reviewer(value: str) -> dict[str, Any]:
     provider, _, model = value.partition(":")
     if provider not in REVIEWER_SPECS:
@@ -301,11 +312,15 @@ def call_reviewer(spec: dict[str, Any], key: str, payload: dict[str, Any], attem
 
 
 def normalize_score(item: dict[str, Any], reviewer_id: str) -> dict[str, Any]:
+    raw_quality = clamp_int(item.get("raw_quality"), 0, 4)
+    reviewer_rework = normalize_rework(item.get("rework"))
     return {
         "reviewer": reviewer_id,
         "anchor_id": str(item.get("anchor_id", "")),
-        "raw_quality": clamp_int(item.get("raw_quality"), 0, 4),
-        "rework": normalize_rework(item.get("rework")),
+        "raw_quality": raw_quality,
+        "rework": reviewer_rework,
+        "reviewer_rework": reviewer_rework,
+        "derived_rework": derive_rework_from_quality(raw_quality),
         "calibration_confidence": clamp_int(item.get("calibration_confidence"), 0, 3),
         "rationale": redact(str(item.get("rationale", "")))[:500],
     }
@@ -316,6 +331,7 @@ def summarize(
     reviewer_scores: dict[str, list[dict[str, Any]]],
     reviewer_ids: list[str],
     reference_limitation: str,
+    rework_mode: str,
 ) -> dict[str, Any]:
     reference_by_anchor = {item["anchor_id"]: item["reference"] for item in anchor_items}
     scores_by_anchor: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
@@ -354,14 +370,17 @@ def summarize(
                 continue
             reference = reference_by_anchor[anchor_id]
             quality_delta = score["raw_quality"] - reference["adjudicated_quality"]
+            evaluated_rework = score["derived_rework"] if rework_mode == "derived" else score["reviewer_rework"]
             rows.append({
                 "anchor_id": anchor_id,
                 "raw_quality": score["raw_quality"],
                 "reference_quality": reference["adjudicated_quality"],
                 "absolute_quality_delta": abs(quality_delta),
-                "rework": score["rework"],
+                "rework": evaluated_rework,
+                "reviewer_rework": score["reviewer_rework"],
+                "derived_rework": score["derived_rework"],
                 "reference_rework": reference["adjudicated_rework"],
-                "rework_match": score["rework"] == reference["adjudicated_rework"],
+                "rework_match": evaluated_rework == reference["adjudicated_rework"],
             })
         exact = sum(1 for row in rows if row["absolute_quality_delta"] == 0)
         within_one = sum(1 for row in rows if row["absolute_quality_delta"] <= 1)
@@ -382,11 +401,12 @@ def summarize(
         reference_quality = reference_by_anchor[anchor_id]["adjudicated_quality"]
         for reviewer_id in reviewer_ids:
             score = scores_by_anchor[anchor_id][reviewer_id]
+            evaluated_rework = score["derived_rework"] if rework_mode == "derived" else score["reviewer_rework"]
             issue_rows[issue_by_anchor[anchor_id]].append({
                 "anchor_id": anchor_id,
                 "reviewer": reviewer_id,
                 "absolute_quality_delta": abs(score["raw_quality"] - reference_quality),
-                "rework_match": score["rework"] == reference_by_anchor[anchor_id]["adjudicated_rework"],
+                "rework_match": evaluated_rework == reference_by_anchor[anchor_id]["adjudicated_rework"],
             })
 
     by_issue = {}
@@ -409,6 +429,8 @@ def summarize(
         "gate_policy": {
             "inter_reviewer": "PASS when weighted kappa >= 0.60 or Spearman rho >= 0.60",
             "reviewer_vs_reference": "PASS when quality_within_one_rate >= 0.80 and rework_match_rate >= 0.60 for each reviewer",
+            "rework_mode": rework_mode,
+            "rework_mode_boundary": "derived mode uses QBS-31 quality-to-rework mapping for calibration only; reviewer mode preserves reviewer-supplied labels.",
             "reference_limitation": reference_limitation,
         },
         "anchor_count": len(anchor_items),
@@ -417,6 +439,7 @@ def summarize(
         "reviewer_vs_reference": reviewer_vs_reference,
         "by_calibration_issue": by_issue,
         "reference_quality_distribution": dict(Counter(reference["adjudicated_quality"] for reference in reference_by_anchor.values())),
+        "reference_rework_distribution": dict(Counter(reference["adjudicated_rework"] for reference in reference_by_anchor.values())),
     }
 
 
@@ -450,6 +473,7 @@ def write_markdown(path: Path, payload: dict[str, Any]) -> None:
         f"- Source reference: `{payload['source_adjudication_file']}`",
         f"- Rubric addendum: `{payload['source_rubric_addendum_file']}`",
         f"- Reference limitation: {payload['reference_limitation']}",
+        f"- Rework mode: `{payload['rework_mode']}`",
         "",
         "## Result",
         "",
@@ -515,6 +539,7 @@ def main() -> int:
     parser.add_argument("--include-consensus", action="store_true")
     parser.add_argument("--limit", type=int)
     parser.add_argument("--md-output", type=Path)
+    parser.add_argument("--rework-mode", choices=["reviewer", "derived"], default="reviewer")
     args = parser.parse_args()
 
     anchors = read_json(args.anchors)
@@ -556,10 +581,11 @@ def main() -> int:
         "reference_limitation",
         "QBS16 adjudication is a model-only calibration reference, not human gold.",
     )
-    summary = summarize(anchor_items, reviewer_scores, reviewer_ids, reference_limitation)
+    summary = summarize(anchor_items, reviewer_scores, reviewer_ids, reference_limitation, args.rework_mode)
     payload = {
         "status": args.status,
         "prompt_version": args.prompt_version,
+        "rework_mode": args.rework_mode,
         "source_anchor_file": str(args.anchors).replace("\\", "/"),
         "source_adjudication_file": str(args.adjudication).replace("\\", "/"),
         "source_rubric_addendum_file": str(args.rubric_addendum).replace("\\", "/"),
@@ -571,7 +597,7 @@ def main() -> int:
             }
             for reviewer_id, spec in reviewer_specs.items()
         ],
-        "claim_boundary": "Calibration-only reviewer-plan check. No live QBS score, no L4/L5 claim, and no historical score mutation.",
+        "claim_boundary": "Calibration-only reviewer-plan check. No live QBS score, no L4/L5 claim, and no historical score mutation. Derived rework mode is a calibration-only view based on the QBS-31 quality-to-rework mapping.",
         "reference_limitation": reference_limitation,
         "summary": summary,
         "scores_by_reviewer": reviewer_scores,

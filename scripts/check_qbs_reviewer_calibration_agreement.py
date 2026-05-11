@@ -334,8 +334,10 @@ def summarize(
     reviewer_ids: list[str],
     reference_limitation: str,
     rework_mode: str,
+    by_family_enabled: bool = False,
 ) -> dict[str, Any]:
     reference_by_anchor = {item["anchor_id"]: item["reference"] for item in anchor_items}
+    family_by_anchor = {item["anchor_id"]: item["task"]["family"] for item in anchor_items}
     scores_by_anchor: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
     for reviewer_id, scores in reviewer_scores.items():
         for score in scores:
@@ -420,6 +422,67 @@ def summarize(
             "rework_match_rate": sum(1 for row in rows if row["rework_match"]) / len(rows),
         }
 
+    by_family: dict[str, Any] = {}
+    if by_family_enabled:
+        anchors_by_family: dict[str, list[str]] = defaultdict(list)
+        for anchor_id in paired_anchor_ids:
+            anchors_by_family[family_by_anchor[anchor_id]].append(anchor_id)
+        for family, family_anchor_ids in sorted(anchors_by_family.items()):
+            family_inter_reviewer: dict[str, Any]
+            if len(reviewer_ids) >= 2:
+                left = [scores_by_anchor[anchor_id][reviewer_ids[0]]["raw_quality"] for anchor_id in family_anchor_ids]
+                right = [scores_by_anchor[anchor_id][reviewer_ids[1]]["raw_quality"] for anchor_id in family_anchor_ids]
+                family_inter_reviewer = {
+                    "quadratic_weighted_cohen_kappa": weighted_kappa(left, right),
+                    "spearman_rho": spearman(left, right),
+                }
+            else:
+                family_inter_reviewer = {
+                    "quadratic_weighted_cohen_kappa": None,
+                    "spearman_rho": None,
+                }
+            reviewer_metrics: dict[str, Any] = {}
+            for reviewer_id in reviewer_ids:
+                rows = []
+                for anchor_id in family_anchor_ids:
+                    score = scores_by_anchor[anchor_id][reviewer_id]
+                    reference = reference_by_anchor[anchor_id]
+                    evaluated_rework = score["derived_rework"] if rework_mode == "derived" else score["reviewer_rework"]
+                    absolute_quality_delta = abs(score["raw_quality"] - reference["adjudicated_quality"])
+                    rows.append({
+                        "anchor_id": anchor_id,
+                        "raw_quality": score["raw_quality"],
+                        "reference_quality": reference["adjudicated_quality"],
+                        "absolute_quality_delta": absolute_quality_delta,
+                        "rework_match": evaluated_rework == reference["adjudicated_rework"],
+                    })
+                reviewer_metrics[reviewer_id] = {
+                    "quality_exact_match_rate": sum(1 for row in rows if row["absolute_quality_delta"] == 0) / len(rows) if rows else None,
+                    "quality_within_one_rate": sum(1 for row in rows if row["absolute_quality_delta"] <= 1) / len(rows) if rows else None,
+                    "mean_absolute_quality_delta": statistics.mean([row["absolute_quality_delta"] for row in rows]) if rows else None,
+                    "rework_match_rate": sum(1 for row in rows if row["rework_match"]) / len(rows) if rows else None,
+                    "rows": rows,
+                }
+            disagreement_rows = []
+            if len(reviewer_ids) >= 2:
+                for anchor_id in family_anchor_ids:
+                    disagreement_rows.append({
+                        "anchor_id": anchor_id,
+                        "absolute_reviewer_quality_delta": abs(
+                            scores_by_anchor[anchor_id][reviewer_ids[0]]["raw_quality"]
+                            - scores_by_anchor[anchor_id][reviewer_ids[1]]["raw_quality"]
+                        ),
+                        "reference_quality": reference_by_anchor[anchor_id]["adjudicated_quality"],
+                    })
+            by_family[family] = {
+                "anchor_count": len(family_anchor_ids),
+                "exploratory_only": len(family_anchor_ids) < 4,
+                "gate_boundary": "diagnostic_only_no_per_family_threshold",
+                "inter_reviewer": family_inter_reviewer,
+                "reviewer_vs_reference": reviewer_metrics,
+                "reviewer_disagreement_rows": disagreement_rows,
+            }
+
     overall_status = (
         "PASS"
         if inter_reviewer["status"] == "PASS"
@@ -440,6 +503,7 @@ def summarize(
         "inter_reviewer": inter_reviewer,
         "reviewer_vs_reference": reviewer_vs_reference,
         "by_calibration_issue": by_issue,
+        "by_family": by_family,
         "reference_quality_distribution": dict(Counter(reference["adjudicated_quality"] for reference in reference_by_anchor.values())),
         "reference_rework_distribution": dict(Counter(reference["adjudicated_rework"] for reference in reference_by_anchor.values())),
     }
@@ -516,6 +580,23 @@ def write_markdown(path: Path, payload: dict[str, Any]) -> None:
             data["rework_match_rate"],
         ]))
 
+    if summary.get("by_family"):
+        lines.extend([
+            "",
+            "Per-family diagnostics:",
+            "",
+            markdown_table_row(["Family", "Anchors", "Exploratory", "Kappa", "Spearman"]),
+            markdown_table_row(["---", "---", "---", "---", "---"]),
+        ])
+        for family, data in summary["by_family"].items():
+            lines.append(markdown_table_row([
+                family,
+                data["anchor_count"],
+                data["exploratory_only"],
+                data["inter_reviewer"]["quadratic_weighted_cohen_kappa"],
+                data["inter_reviewer"]["spearman_rho"],
+            ]))
+
     lines.extend([
         "",
         "## Claim Boundary",
@@ -542,6 +623,7 @@ def main() -> int:
     parser.add_argument("--limit", type=int)
     parser.add_argument("--md-output", type=Path)
     parser.add_argument("--rework-mode", choices=["reviewer", "derived"], default="reviewer")
+    parser.add_argument("--by-family", action="store_true")
     args = parser.parse_args()
 
     anchors = read_json(args.anchors)
@@ -588,11 +670,12 @@ def main() -> int:
         "reference_limitation",
         "QBS16 adjudication is a model-only calibration reference, not human gold.",
     )
-    summary = summarize(anchor_items, reviewer_scores, reviewer_ids, reference_limitation, args.rework_mode)
+    summary = summarize(anchor_items, reviewer_scores, reviewer_ids, reference_limitation, args.rework_mode, args.by_family)
     payload = {
         "status": args.status,
         "prompt_version": args.prompt_version,
         "rework_mode": args.rework_mode,
+        "by_family_enabled": args.by_family,
         "source_anchor_file": str(args.anchors).replace("\\", "/"),
         "source_adjudication_file": str(args.adjudication).replace("\\", "/"),
         "source_rubric_addendum_file": str(args.rubric_addendum).replace("\\", "/"),

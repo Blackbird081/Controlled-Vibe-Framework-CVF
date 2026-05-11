@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS21_R8_POST_SCORE_ANALYSIS_COMPLETE_NO_NEW_SCORE`
+Status: `QBS22_REMEDIATION_COMPLETE_NO_NEW_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -81,7 +81,8 @@ and scores R8. Hard gates pass, but reviewer agreement fails
 L4/L5 claim is made. QBS-21 analyzes the R8 post-score failure: one OpenAI
 reviewer alias was missing, reviewer drift remained highest in builder-handoff
 and cost/provider families, and `CFG-B` ALLOW-task quality remained below the
-direct structured baseline. No new run or score is introduced.
+direct structured baseline. QBS-22 remediates scorer completeness and targeted
+ALLOW output-quality instructions without running a new score.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -117,6 +118,7 @@ Latest powered execution artifact:
 - [QBS-19 R8 Reviewer Plan Freeze](qbs-1/r8-reviewer-plan-freeze-qbs19.md)
 - [QBS-21 R8 Post-Score Analysis](qbs-1/r8-post-score-analysis-qbs21.md)
 - [QBS-21 R8 Post-Score Analysis JSON](qbs-1/r8-post-score-analysis-qbs21.json)
+- [QBS-22 Scorer Completeness And ALLOW Quality Remediation](qbs-1/scorer-completeness-and-allow-quality-remediation-qbs22.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 - [Alibaba Powered Single-Provider R8 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r8.md)

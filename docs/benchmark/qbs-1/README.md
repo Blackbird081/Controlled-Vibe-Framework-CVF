@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS21_R8_POST_SCORE_ANALYSIS_COMPLETE_NO_NEW_SCORE`
+Status: `QBS22_REMEDIATION_COMPLETE_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -45,6 +45,7 @@ as harness proof only.
 - [QBS-19 R8 Reviewer Plan Freeze](r8-reviewer-plan-freeze-qbs19.md)
 - [QBS-21 R8 Post-Score Analysis](r8-post-score-analysis-qbs21.md)
 - [QBS-21 R8 Post-Score Analysis JSON](r8-post-score-analysis-qbs21.json)
+- [QBS-22 Scorer Completeness And ALLOW Quality Remediation](scorer-completeness-and-allow-quality-remediation-qbs22.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 - [Alibaba Powered Single-Provider R8 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r8.md)
@@ -94,12 +95,13 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-20 R8 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
 | QBS-20 R8 reviewer agreement | `FAIL` with kappa `0.5004684065769088`, rho `0.5702347881140457` |
 | QBS-21 R8 post-score analysis | `COMPLETE_NO_NEW_SCORE` |
+| QBS-22 scorer completeness + ALLOW quality remediation | `REMEDIATION_COMPLETE_NO_NEW_SCORE` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-21 analyzes the R8 scoring failure. The next track should remediate scorer
-completeness and residual `CFG-B` ALLOW-task quality before any further full
-live rerun is pre-registered.
+QBS-22 remediates scorer completeness and residual `CFG-B` ALLOW-task quality.
+The next track may prepare a new pre-registered rerun only with unchanged claim
+gates and no score claim before execution and scoring complete.

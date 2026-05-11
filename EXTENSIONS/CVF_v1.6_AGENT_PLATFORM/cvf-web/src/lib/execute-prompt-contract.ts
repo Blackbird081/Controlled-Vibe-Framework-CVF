@@ -85,10 +85,14 @@ export function buildExecutionPrompt(request: ExecutionRequest): string {
 
   prompt += `### Output Contract\n`;
   prompt += `- Return a final answer directly in Markdown.\n`;
-  prompt += `- Use short, explicit section headers only when they add clarity.\n`;
-  prompt += `- Match the response size to the task. For a short translation, rewrite, label, or simple transformation, return only the transformed result unless the user asks for explanation.\n`;
-  prompt += `- Keep the result implementation-ready and grounded in the supplied inputs.\n`;
+  prompt += `- Use the same natural language as the user's request unless the user explicitly asks for translation or another language.\n`;
+  prompt += `- Use short, explicit section headers only when they add clarity. Do not wrap the final answer in a fenced markdown block unless the user asked for a file or code block.\n`;
+  prompt += `- Match the response size to the task. For a short translation, rewrite, label, or simple transformation, preserve the requested tone and return only the transformed result unless the user asks for explanation.\n`;
+  prompt += `- Keep the result implementation-ready and grounded in the supplied inputs; include concrete assumptions only when the user did not provide enough detail.\n`;
+  prompt += `- For product briefs, plans, and documentation, include the practical components a handoff reader expects: purpose, audience/users, scope, key features or steps, success measures, risks/constraints, and next actions.\n`;
+  prompt += `- For developer handoffs, include scope, likely files/modules, implementation notes, tests, security/data considerations, rollback notes, and verification steps.\n`;
   prompt += `- Do not invent latency, accuracy, benchmark, cost, quota, version, or provider-ranking numbers. If measured data was not supplied, use qualitative tradeoffs and a verification plan instead.\n`;
+  prompt += `- If the task asks for general provider/model tradeoffs or says not to use live price/benchmark claims, do not choose a specific named provider or model as the final answer unless the user supplied the allowed candidates. Provide lane criteria and verification steps instead.\n`;
   prompt += `- Do not describe your internal process or governance workflow.\n\n`;
   prompt += `Please provide the most useful final answer for the user's task while following CVF guidelines.`;
 

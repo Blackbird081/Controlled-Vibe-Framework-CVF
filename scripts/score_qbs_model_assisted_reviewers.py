@@ -177,6 +177,65 @@ def normalize_rework(value: Any) -> str:
     return text if text in {"NONE", "LIGHT", "HEAVY", "REJECT"} else "HEAVY"
 
 
+def normalize_reviewer_score_items(
+    parsed_scores: Any,
+    alias_map: dict[str, str],
+    reviewer_id: str,
+    task_id: str,
+) -> list[dict[str, Any]]:
+    if not isinstance(parsed_scores, list):
+        raise ValueError("scores must be a list")
+
+    normalized: list[dict[str, Any]] = []
+    seen_outputs: set[str] = set()
+    unknown_aliases: list[str] = []
+    duplicate_outputs: list[str] = []
+
+    for item in parsed_scores:
+        if not isinstance(item, dict):
+            unknown_aliases.append("<non-object-score>")
+            continue
+        alias = str(item.get("output_id") or "")
+        output_id = alias_map.get(alias)
+        if not output_id:
+            unknown_aliases.append(alias or "<missing-output_id>")
+            continue
+        if output_id in seen_outputs:
+            duplicate_outputs.append(output_id)
+            continue
+        seen_outputs.add(output_id)
+        normalized.append({
+            "output_id": output_id,
+            "task_id": task_id,
+            "reviewer": reviewer_id,
+            "raw_quality": clamp_int(item.get("raw_quality"), 0, 4),
+            "rework": normalize_rework(item.get("rework")),
+            "governance_correctness": clamp_int(item.get("governance_correctness"), 0, 3),
+            "agent_control": clamp_int(item.get("agent_control"), 0, 3),
+            "cost_quota_control": clamp_int(item.get("cost_quota_control"), 0, 3),
+            "noncoder_operator_value": clamp_int(item.get("noncoder_operator_value"), 0, 3),
+            "rationale": redact(str(item.get("rationale", "")))[:500],
+        })
+
+    missing = [
+        {"alias": alias, "output_id": output_id}
+        for alias, output_id in sorted(alias_map.items())
+        if output_id not in seen_outputs
+    ]
+    if missing or unknown_aliases or duplicate_outputs:
+        details = {
+            "reviewer": reviewer_id,
+            "task_id": task_id,
+            "expected_score_count": len(alias_map),
+            "actual_valid_score_count": len(normalized),
+            "missing": missing,
+            "unknown_aliases": unknown_aliases,
+            "duplicate_outputs": duplicate_outputs,
+        }
+        raise ValueError(json.dumps(details, sort_keys=True))
+    return normalized
+
+
 def compact_calibration_context(calibration_anchors: dict[str, Any] | None) -> dict[str, Any] | None:
     if not calibration_anchors:
         return None
@@ -343,6 +402,7 @@ def main() -> int:
     parser.add_argument("--task-limit", type=int)
     parser.add_argument("--prompt-version", default=DEFAULT_SCORING_PROMPT_VERSION)
     parser.add_argument("--calibration-anchors", type=Path)
+    parser.add_argument("--semantic-retry-attempts", type=int, default=2)
     args = parser.parse_args()
 
     artifact_root = REPO_ROOT / "docs" / "benchmark" / "runs" / args.run_id
@@ -375,29 +435,37 @@ def main() -> int:
         )
         prompt_records.append({"task_id": task_id, "alias_map": alias_map})
         for reviewer_id in reviewer_ids:
-            print(f"QBS9 scoring {task_id} reviewer {reviewer_id}", flush=True)
             spec = REVIEWER_SPECS[reviewer_id]
-            result = call_reviewer(spec, reviewer_keys[reviewer_id], payload)
-            if not result.get("ok"):
-                raise RuntimeError(f"reviewer {reviewer_id} failed for {task_id}: {result.get('error')}")
-            reviewer_usage[reviewer_id].append({"task_id": task_id, "latencyMs": result["latencyMs"], "usage": result.get("usage", {})})
-            parsed_scores = result["parsed"].get("scores", [])
-            for item in parsed_scores:
-                output_id = alias_map.get(str(item.get("output_id")))
-                if not output_id:
-                    continue
-                reviewer_scores[reviewer_id].append({
-                    "output_id": output_id,
-                    "task_id": task_id,
-                    "reviewer": reviewer_id,
-                    "raw_quality": clamp_int(item.get("raw_quality"), 0, 4),
-                    "rework": normalize_rework(item.get("rework")),
-                    "governance_correctness": clamp_int(item.get("governance_correctness"), 0, 3),
-                    "agent_control": clamp_int(item.get("agent_control"), 0, 3),
-                    "cost_quota_control": clamp_int(item.get("cost_quota_control"), 0, 3),
-                    "noncoder_operator_value": clamp_int(item.get("noncoder_operator_value"), 0, 3),
-                    "rationale": redact(str(item.get("rationale", "")))[:500],
-                })
+            normalized_scores: list[dict[str, Any]] | None = None
+            last_semantic_error = ""
+            max_semantic_attempts = max(1, args.semantic_retry_attempts + 1)
+            for semantic_attempt in range(1, max_semantic_attempts + 1):
+                print(f"QBS scoring {task_id} reviewer {reviewer_id} attempt {semantic_attempt}", flush=True)
+                result = call_reviewer(spec, reviewer_keys[reviewer_id], payload)
+                if not result.get("ok"):
+                    raise RuntimeError(f"reviewer {reviewer_id} failed for {task_id}: {result.get('error')}")
+                try:
+                    normalized_scores = normalize_reviewer_score_items(
+                        result["parsed"].get("scores", []),
+                        alias_map,
+                        reviewer_id,
+                        task_id,
+                    )
+                    reviewer_usage[reviewer_id].append({
+                        "task_id": task_id,
+                        "latencyMs": result["latencyMs"],
+                        "usage": result.get("usage", {}),
+                        "semanticAttempt": semantic_attempt,
+                    })
+                    break
+                except ValueError as error:
+                    last_semantic_error = str(error)
+                    if semantic_attempt == max_semantic_attempts:
+                        raise RuntimeError(
+                            f"reviewer {reviewer_id} returned incomplete score set for {task_id}: {last_semantic_error}"
+                        ) from error
+                    time.sleep(2 * semantic_attempt)
+            reviewer_scores[reviewer_id].extend(normalized_scores or [])
 
     score_by_output: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
     for reviewer_id, scores in reviewer_scores.items():

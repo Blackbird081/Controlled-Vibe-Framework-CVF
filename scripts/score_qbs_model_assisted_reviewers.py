@@ -41,6 +41,18 @@ REVIEWER_SPECS = {
 DEFAULT_SCORING_PROMPT_VERSION = "qbs9-model-assisted-reviewer-v1"
 
 
+def scored_public_status(run_id: str, l4_pass: bool, agreement_status: str) -> str:
+    if run_id.endswith("-r8"):
+        if l4_pass:
+            return "QBS20_R8_REVIEWER_SCORED_L4_CANDIDATE_NO_L5_NO_FAMILY_CLAIM"
+        if agreement_status != "PASS":
+            return "QBS20_R8_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM"
+        return "QBS20_R8_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM"
+    if l4_pass:
+        return "QBS9_REVIEWER_SCORED_L4_CANDIDATE_NO_L5_NO_FAMILY_CLAIM"
+    return "QBS9_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM"
+
+
 def read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -490,7 +502,7 @@ def main() -> int:
         and ci_b_vs_a1[0] > 0
         and l4_thresholds["median_heavy_reject_improvement_b_vs_a1"] >= 0.10
     )
-    public_status = "QBS9_REVIEWER_SCORED_L4_CANDIDATE_NO_L5_NO_FAMILY_CLAIM" if l4_pass else "QBS9_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM"
+    public_status = scored_public_status(args.run_id, l4_pass, agreement["status"])
 
     write_json(artifact_root / "model-assisted-reviewer-scores.json", {
         "run_id": args.run_id,

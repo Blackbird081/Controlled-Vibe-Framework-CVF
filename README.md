@@ -276,10 +276,9 @@ claimed yet. QBS-1 runner and corpus planning is also published under
 under `docs/benchmark/runs/qbs1-calibration-20260509-three-provider/`; it is
 harness proof only and does not claim a QBS score. A scored-run readiness
 packet now adds the aggregate-only powered corpus JSON and readiness checker.
-The Alibaba/DashScope single-provider lane has progressed through R7 scoring,
-QBS-18 reviewer calibration cleanup, and QBS-19 R8 pre-registration. No QBS
-score or quality-level claim is made until a future live run passes hard gates,
-reviewer agreement, and claim-ladder thresholds.
+The Alibaba/DashScope single-provider lane has progressed through R8 scoring.
+QBS-20 hard gates passed, but reviewer agreement and claim-ladder thresholds
+did not pass, so no QBS score or quality-level claim is made.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

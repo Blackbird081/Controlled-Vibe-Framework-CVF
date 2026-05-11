@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS19_R8_PREREGISTERED_NO_SCORED_RUN`
+Status: `QBS20_R8_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -89,13 +89,15 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-17 calibration-only reviewer agreement | `FAIL_NO_NEW_SCORE` with kappa `0.7365591397849462`, rho `0.7935131868283122`, but reviewer-vs-reference alignment failed |
 | QBS-18 cleaned-reference calibration rerun | `PASS_NO_NEW_SCORE` with kappa `0.9046321525885559`, rho `0.9219234991142461` |
 | QBS-19 R8 reviewer plan freeze | `PREREGISTERED_NO_SCORED_RUN` as `qbs/preregister/qbs1-powered-single-provider-20260510-alibaba-r8` |
+| QBS-20 R8 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
+| QBS-20 R8 reviewer agreement | `FAIL` with kappa `0.5004684065769088`, rho `0.5702347881140457` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-19 freezes the R8 reviewer plan and pre-registers the next
-single-provider run. The next track may execute R8 live only after operator
-key and live-cost approval, then score the run with the QBS18 calibrated
-reviewer plan.
+QBS-20 executed and scored R8 with the QBS19 frozen reviewer plan. Hard gates
+passed, but reviewer agreement failed and the aggregate quality deltas still
+do not support an L4/L5 claim. The next track should analyze R8 disagreement
+and residual `CFG-B` quality causes before any further rerun.

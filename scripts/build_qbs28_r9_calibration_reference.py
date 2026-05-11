@@ -25,6 +25,14 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
+def repo_relative(path: Path) -> str:
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(REPO_ROOT)).replace("\\", "/")
+    except ValueError:
+        return str(path).replace("\\", "/")
+
+
 def normalized_rework_for_quality(quality: int) -> str:
     if quality <= 0:
         return "REJECT"
@@ -77,7 +85,11 @@ def build_reference(anchors_path: Path, adjudication_path: Path) -> dict[str, An
     anchors_by_id = build_anchor_lookup(anchors)
 
     references: list[dict[str, Any]] = []
+    excluded_requires_review: list[str] = []
     for item in adjudication.get("adjudications", []):
+        if item.get("requires_review"):
+            excluded_requires_review.append(item["anchor_id"])
+            continue
         anchor = anchors_by_id[item["anchor_id"]]
         reference = dict(item)
         original_quality = int(reference["adjudicated_quality"])
@@ -122,18 +134,30 @@ def build_reference(anchors_path: Path, adjudication_path: Path) -> dict[str, An
         }
         references.append(reference)
 
+    status = "QBS28_R9_CLEANED_CALIBRATION_REFERENCE_READY_NO_NEW_SCORE"
+    if "qbs36" in adjudication_path.name.lower():
+        status = "QBS36_R9_TRIANGULATED_CALIBRATION_REFERENCE_READY_NO_NEW_SCORE"
+
+    reference_limitation = (
+        "Derived from QBS26 R9 anchors and QBS27 Alibaba/DashScope model adjudication; "
+        "still not a human gold-label review."
+    )
+    if "qbs36" in adjudication_path.name.lower():
+        reference_limitation = (
+            "Derived from QBS26 R9 anchors and QBS36 available-provider triangulation "
+            "with reviewer provider overlap; model-only and not a human gold-label review."
+        )
+
     return {
-        "status": "QBS28_R9_CLEANED_CALIBRATION_REFERENCE_READY_NO_NEW_SCORE",
-        "source_anchor_file": str(anchors_path.relative_to(REPO_ROOT)).replace("\\", "/"),
-        "source_adjudication_file": str(adjudication_path.relative_to(REPO_ROOT)).replace("\\", "/"),
+        "status": status,
+        "source_anchor_file": repo_relative(anchors_path),
+        "source_adjudication_file": repo_relative(adjudication_path),
         "claim_boundary": (
             "Reference cleanup only. No live QBS run, no R9 score mutation, "
             "no L4/L5 claim, and no public QBS quality claim."
         ),
-        "reference_limitation": (
-            "Derived from QBS26 R9 anchors and QBS27 Alibaba/DashScope model adjudication; "
-            "still not a human gold-label review."
-        ),
+        "reference_limitation": reference_limitation,
+        "excluded_requires_review_anchor_ids": excluded_requires_review,
         "rework_normalization": {
             "REJECT": "quality 0; empty, unsafe, irrelevant, or hard-gate-violating output",
             "HEAVY": "quality 1-2; partially useful but needs substantial rewrite before handoff",
@@ -155,14 +179,24 @@ def markdown_table_row(values: list[Any]) -> str:
 
 def write_markdown(path: Path, payload: dict[str, Any]) -> None:
     summary = payload["summary"]
-    lines = [
-        "# QBS-28 R9 Cleaned Calibration Reference",
-        "",
-        f"Status: `{payload['status']}`",
-        "",
+    is_qbs36 = "QBS36" in payload["status"]
+    title = "QBS-36 R9 Triangulated Calibration Reference" if is_qbs36 else "QBS-28 R9 Cleaned Calibration Reference"
+    description = [
+        "QBS-36 cleans available-provider triangulation into a reviewer",
+        "calibration reference that future calibration checks can cite. It",
+        "performs no live QBS scored run, does not mutate R9 scores, and does",
+        "not make a QBS quality claim.",
+    ] if is_qbs36 else [
         "QBS-28 cleans the QBS-27 adjudication into a reviewer calibration",
         "reference that future scorer runs can cite. It performs no live QBS run,",
         "does not mutate R9 scores, and does not make a QBS quality claim.",
+    ]
+    lines = [
+        f"# {title}",
+        "",
+        f"Status: `{payload['status']}`",
+        "",
+        *description,
         "",
         "## Source",
         "",
@@ -176,6 +210,7 @@ def write_markdown(path: Path, payload: dict[str, Any]) -> None:
         f"- Quality distribution: `{json.dumps(summary['quality_distribution'], sort_keys=True)}`",
         f"- Rework distribution: `{json.dumps(summary['rework_distribution'], sort_keys=True)}`",
         f"- Cleanup actions: `{json.dumps(summary['cleanup_action_counts'], sort_keys=True)}`",
+        f"- Excluded requires-review anchors: `{len(payload.get('excluded_requires_review_anchor_ids', []))}`",
         "",
         "## Family Coverage",
         "",

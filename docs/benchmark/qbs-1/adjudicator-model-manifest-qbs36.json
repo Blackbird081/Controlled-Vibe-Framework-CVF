@@ -1,0 +1,48 @@
+{
+  "status": "QBS36_ADJUDICATOR_MODEL_MANIFEST_READY_NO_NEW_SCORE",
+  "verified_at": "2026-05-11",
+  "claim_boundary": "Available-provider triangulation manifest only. Model-only, not human gold-label review. No live QBS scored run and no public QBS quality claim.",
+  "method_boundary": "Uses Alibaba/OpenAI/DeepSeek provider lanes already available to the operator. This reduces single-model Alibaba/qwen-turbo self-confirmation risk but retains reviewer provider overlap because OpenAI and DeepSeek are also reviewer providers.",
+  "models": [
+    {
+      "provider": "alibaba",
+      "model_id": "qwen3-max",
+      "fallback_model_id": "qwen-plus-2025-07-28",
+      "env_key_alias": [
+        "DASHSCOPE_API_KEY",
+        "ALIBABA_API_KEY",
+        "CVF_ALIBABA_API_KEY",
+        "CVF_BENCHMARK_ALIBABA_KEY"
+      ],
+      "endpoint_type": "openai_compatible_chat_completions",
+      "source_doc_url": "https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope",
+      "reviewer_overlap_boundary": "Provider overlaps with benchmarked Alibaba lane, but model differs from prior qwen-turbo adjudicator and benchmarked qwen-turbo lane.",
+      "operator_boundary": "Do not use qvq-max."
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4o",
+      "fallback_model_id": null,
+      "env_key_alias": [
+        "OPENAI_API_KEY",
+        "CVF_OPENAI_API_KEY"
+      ],
+      "endpoint_type": "chat_completions",
+      "source_doc_url": "https://platform.openai.com/docs/models",
+      "reviewer_overlap_boundary": "Provider overlaps with OpenAI reviewer lane, but model differs from reviewer gpt-4o-mini."
+    },
+    {
+      "provider": "deepseek",
+      "model_id": "deepseek-reasoner",
+      "fallback_model_id": null,
+      "env_key_alias": [
+        "DEEPSEEK_API_KEY",
+        "CVF_BENCHMARK_DEEPSEEK_KEY",
+        "CVF_DEEPSEEK_API_KEY"
+      ],
+      "endpoint_type": "openai_compatible_chat_completions",
+      "source_doc_url": "https://api-docs.deepseek.com/",
+      "reviewer_overlap_boundary": "Provider overlaps with DeepSeek reviewer lane, but model differs from reviewer deepseek-chat. DeepSeek aliases are time-sensitive and must be rechecked before future reruns."
+    }
+  ]
+}

@@ -289,8 +289,10 @@ adds calibration-only derived-rework support and dual-published rework views
 while preserving reviewer rework as the scored-run claim gate. QBS-34 adds
 bounded missing-alias retry and redacted reviewer-completeness diagnostics.
 QBS-35 adds deterministic env/key/workspace preflight for live/reviewer/
-adjudicator entry points. The next scored rerun remains blocked, so no QBS
-score or quality-level claim is made.
+adjudicator entry points. QBS-36 rebuilds the R9 calibration reference with
+model-only available-provider triangulation across Alibaba/OpenAI/DeepSeek.
+The next scored rerun remains blocked, so no QBS score or quality-level claim
+is made.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

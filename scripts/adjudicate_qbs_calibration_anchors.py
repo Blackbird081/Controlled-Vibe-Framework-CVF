@@ -27,19 +27,19 @@ SECRET_PATTERNS = [
 ADJUDICATOR_SPECS = {
     "alibaba": {
         "provider": "alibaba",
-        "model": "qwen-turbo",
+        "model": "qwen3-max",
         "url": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions",
         "key_names": ["DASHSCOPE_API_KEY", "ALIBABA_API_KEY", "CVF_ALIBABA_API_KEY", "CVF_BENCHMARK_ALIBABA_KEY"],
     },
     "openai": {
         "provider": "openai",
-        "model": "gpt-4o-mini",
+        "model": "gpt-4o",
         "url": "https://api.openai.com/v1/chat/completions",
         "key_names": ["OPENAI_API_KEY", "CVF_OPENAI_API_KEY"],
     },
     "deepseek": {
         "provider": "deepseek",
-        "model": "deepseek-chat",
+        "model": "deepseek-reasoner",
         "url": "https://api.deepseek.com/chat/completions",
         "key_names": ["DEEPSEEK_API_KEY", "CVF_BENCHMARK_DEEPSEEK_KEY", "CVF_DEEPSEEK_API_KEY"],
     },
@@ -121,6 +121,17 @@ def normalize_rework(value: Any) -> str:
     return text if text in {"NONE", "LIGHT", "HEAVY", "REJECT"} else "HEAVY"
 
 
+def derive_rework_from_quality(raw_quality: int) -> str:
+    quality = clamp_int(raw_quality, 0, 4)
+    if quality == 0:
+        return "REJECT"
+    if quality in {1, 2}:
+        return "HEAVY"
+    if quality == 3:
+        return "LIGHT"
+    return "NONE"
+
+
 def parse_adjudicator(value: str) -> dict[str, Any]:
     provider, _, model = value.partition(":")
     if provider not in ADJUDICATOR_SPECS:
@@ -129,6 +140,13 @@ def parse_adjudicator(value: str) -> dict[str, Any]:
     if model:
         spec["model"] = model
     return spec
+
+
+def parse_adjudicator_list(value: str) -> list[dict[str, Any]]:
+    specs = [parse_adjudicator(item.strip()) for item in value.split(",") if item.strip()]
+    if not specs:
+        raise ValueError("at least one adjudicator is required")
+    return specs
 
 
 def build_payload(anchor: dict[str, Any], corpus_task: dict[str, Any]) -> dict[str, Any]:
@@ -251,6 +269,7 @@ def summarize(adjudications: list[dict[str, Any]]) -> dict[str, Any]:
         "overall_decision_counts": dict(Counter(item["decision"] for item in adjudications)),
         "overall_rework_counts": dict(Counter(item["adjudicated_rework"] for item in adjudications)),
         "overall_mean_adjudicated_quality": statistics.mean([item["adjudicated_quality"] for item in adjudications]) if adjudications else None,
+        "requires_review_count": sum(1 for item in adjudications if item.get("requires_review")),
         "high_disagreement_count": len(high_disagreement),
         "decision_counts": dict(Counter(item["decision"] for item in high_disagreement)),
         "rework_counts": dict(Counter(item["adjudicated_rework"] for item in high_disagreement)),
@@ -277,25 +296,36 @@ def markdown_table_row(values: list[Any]) -> str:
 
 def write_markdown(path: Path, payload: dict[str, Any]) -> None:
     summary = payload["summary"]
-    lines = [
-        "# QBS-27 R9 Anchor Adjudication",
-        "",
-        f"Status: `{payload['status']}`",
-        "",
+    is_qbs36 = "QBS36" in payload["status"]
+    title = "QBS-36 R9 Available-Provider Anchor Triangulation" if is_qbs36 else "QBS-27 R9 Anchor Adjudication"
+    description = [
+        "QBS-36 adjudicates the QBS-26 R9-derived calibration anchors with",
+        "available-provider triangulation across Alibaba/OpenAI/DeepSeek.",
+        "It does not execute a new live QBS scored run, mutate R9 scores, or",
+        "make a QBS quality claim.",
+    ] if is_qbs36 else [
         "QBS-27 adjudicates the QBS-26 R9-derived calibration anchors with a",
         "third model adjudicator fallback. It does not execute a new live QBS run,",
         "mutate R9 scores, or make a QBS quality claim.",
+    ]
+    lines = [
+        f"# {title}",
+        "",
+        f"Status: `{payload['status']}`",
+        "",
+        *description,
         "",
         "## Source",
         "",
         f"- Source anchors: `{payload['source_anchor_file']}`",
-        f"- Adjudicator: `{payload['adjudicator']['provider']}` / `{payload['adjudicator']['model']}`",
-        f"- Limitation: {payload['adjudicator']['limitation']}",
+        f"- Adjudicators: `{', '.join(item['provider'] + ':' + item['model'] for item in payload['adjudicators'])}`",
+        f"- Limitation: {payload['adjudication_limitation']}",
         "",
         "## Result",
         "",
         f"- Anchors adjudicated: `{summary['adjudication_count']}`",
         f"- Mean adjudicated quality: `{summary['overall_mean_adjudicated_quality']}`",
+        f"- Requires review: `{summary['requires_review_count']}`",
         "",
         "Anchor kinds:",
         "",
@@ -334,8 +364,8 @@ def write_markdown(path: Path, payload: dict[str, Any]) -> None:
         "",
         "## Adjudication Inventory",
         "",
-        markdown_table_row(["Anchor", "Kind", "Family", "Quality", "Rework", "Decision", "Rule"]),
-        markdown_table_row(["---", "---", "---", "---", "---", "---", "---"]),
+        markdown_table_row(["Anchor", "Kind", "Family", "Quality", "Rework", "Requires review", "Decision", "Rule"]),
+        markdown_table_row(["---", "---", "---", "---", "---", "---", "---", "---"]),
     ])
     for item in payload["adjudications"]:
         lines.append(markdown_table_row([
@@ -344,6 +374,7 @@ def write_markdown(path: Path, payload: dict[str, Any]) -> None:
             item["family"],
             item["adjudicated_quality"],
             item["adjudicated_rework"],
+            item.get("requires_review", False),
             item["decision"],
             item["rubric_rule"],
         ]))
@@ -365,6 +396,7 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=QBS_ROOT / "reviewer-calibration-adjudication-qbs16.json")
     parser.add_argument("--env-file", action="append", default=[])
     parser.add_argument("--adjudicator", default="alibaba:qwen-turbo")
+    parser.add_argument("--adjudicator-ensemble")
     parser.add_argument("--include-consensus", action="store_true")
     parser.add_argument("--limit", type=int)
     parser.add_argument("--status", default="")
@@ -375,14 +407,17 @@ def main() -> int:
     anchors = read_json(args.anchors)
     corpus = read_json(QBS_ROOT / "powered-single-provider-corpus-v1.json")
     corpus_by_id = {task["task_id"]: task for task in corpus["tasks"]}
-    spec = parse_adjudicator(args.adjudicator)
+    adjudicator_specs = parse_adjudicator_list(args.adjudicator_ensemble) if args.adjudicator_ensemble else [parse_adjudicator(args.adjudicator)]
     preflight = preflight_qbs_live_run(
         env_files=args.env_file,
-        required_key_aliases=[spec["key_names"]],
+        required_key_aliases=[spec["key_names"] for spec in adjudicator_specs],
         label="qbs-anchor-adjudication",
     )
     env = load_env(preflight.env_files)
-    key = env_key(env, spec["key_names"])
+    adjudicator_keys = {
+        f"{spec['provider']}:{spec['model']}": env_key(env, spec["key_names"])
+        for spec in adjudicator_specs
+    }
 
     target_anchors = [
         anchor for anchor in anchors["anchors"]
@@ -397,10 +432,30 @@ def main() -> int:
         print(f"QBS adjudicating {anchor['anchor_id']} {anchor['output_id']}", flush=True)
         payload = build_payload(anchor, corpus_by_id[anchor["task_id"]])
         payload["prompt_version"] = args.prompt_version
-        result = call_adjudicator(spec, key, payload)
-        if not result.get("ok"):
-            raise RuntimeError(f"adjudicator failed for {anchor['anchor_id']}: {result.get('error')}")
-        parsed = result["parsed"]
+        votes: list[dict[str, Any]] = []
+        for spec in adjudicator_specs:
+            adjudicator_id = f"{spec['provider']}:{spec['model']}"
+            result = call_adjudicator(spec, adjudicator_keys[adjudicator_id], payload)
+            if not result.get("ok"):
+                raise RuntimeError(f"adjudicator {adjudicator_id} failed for {anchor['anchor_id']}: {result.get('error')}")
+            parsed = result["parsed"]
+            votes.append({
+                "adjudicator": adjudicator_id,
+                "provider": spec["provider"],
+                "model": spec["model"],
+                "adjudicated_quality": clamp_int(parsed.get("adjudicated_quality"), 0, 4),
+                "adjudicated_rework": normalize_rework(parsed.get("adjudicated_rework")),
+                "decision": str(parsed.get("decision", "cannot_adjudicate")),
+                "rationale": redact(str(parsed.get("rationale", "")))[:700],
+                "rubric_rule": redact(str(parsed.get("rubric_rule", "")))[:500],
+                "latencyMs": result.get("latencyMs"),
+                "usage": result.get("usage", {}),
+            })
+        quality_votes = sorted(vote["adjudicated_quality"] for vote in votes)
+        median_quality = int(quality_votes[len(quality_votes) // 2])
+        requires_review = bool(quality_votes and (max(quality_votes) - min(quality_votes) > 1))
+        decision = "requires_review" if requires_review else "median_quality_reference"
+        rubric_rules = [vote["rubric_rule"] for vote in votes if vote.get("rubric_rule")]
         reviewer_quality = anchor.get("reviewer_quality")
         reviewer_rework = anchor.get("reviewer_rework")
         if reviewer_quality is None:
@@ -424,34 +479,46 @@ def main() -> int:
             "calibration_issue": anchor["calibration_issue"],
             "reviewer_quality": reviewer_quality,
             "reviewer_rework": reviewer_rework,
-            "adjudicated_quality": clamp_int(parsed.get("adjudicated_quality"), 0, 4),
-            "adjudicated_rework": normalize_rework(parsed.get("adjudicated_rework")),
-            "decision": str(parsed.get("decision", "cannot_adjudicate")),
-            "rationale": redact(str(parsed.get("rationale", "")))[:700],
-            "rubric_rule": redact(str(parsed.get("rubric_rule", "")))[:500],
+            "adjudicated_quality": median_quality,
+            "adjudicated_rework": derive_rework_from_quality(median_quality),
+            "decision": decision,
+            "requires_review": requires_review,
+            "quality_votes": quality_votes,
+            "adjudicator_votes": votes,
+            "rationale": "Median-quality available-provider triangulation; excluded from reference when requires_review is true.",
+            "rubric_rule": " | ".join(rubric_rules)[:500],
         })
-        usage.append({
-            "anchor_id": anchor["anchor_id"],
-            "latencyMs": result.get("latencyMs"),
-            "usage": result.get("usage", {}),
-        })
+        for vote in votes:
+            usage.append({
+                "anchor_id": anchor["anchor_id"],
+                "adjudicator": vote["adjudicator"],
+                "latencyMs": vote.get("latencyMs"),
+                "usage": vote.get("usage", {}),
+            })
 
     inferred_status = "QBS16_ANCHOR_ADJUDICATION_COMPLETE_NO_NEW_SCORE"
-    if "qbs26" in args.anchors.name.lower() or "qbs27" in args.output.name.lower():
+    if "qbs36" in args.output.name.lower():
+        inferred_status = "QBS36_AVAILABLE_PROVIDER_TRIANGULATION_COMPLETE_NO_NEW_SCORE"
+    elif "qbs26" in args.anchors.name.lower() or "qbs27" in args.output.name.lower():
         inferred_status = "QBS27_R9_ANCHOR_ADJUDICATION_COMPLETE_NO_NEW_SCORE"
 
     payload = {
         "status": args.status or inferred_status,
         "prompt_version": args.prompt_version,
         "source_anchor_file": str(args.anchors).replace("\\", "/"),
-        "adjudicator": {
-            "provider": spec["provider"],
-            "model": spec["model"],
-            "limitation": "Model adjudication fallback, not a human gold-label review.",
-        },
+        "adjudicators": [
+            {
+                "provider": spec["provider"],
+                "model": spec["model"],
+            }
+            for spec in adjudicator_specs
+        ],
+        "adjudication_method": "available_provider_triangulation_median_quality",
+        "adjudication_limitation": "Model-only available-provider triangulation with reviewer provider overlap; not a human gold-label review.",
         "claim_boundary": (
             "This artifact does not execute a new live QBS run, does not mutate "
-            "R9 scores, and does not create a public QBS quality claim."
+            "R9 scores, and does not create a public QBS quality claim. It is "
+            "model-only available-provider triangulation, not human-gold adjudication."
         ),
         "adjudications": adjudications,
         "summary": summarize(adjudications),

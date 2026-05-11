@@ -197,7 +197,10 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     run_id = args.preregistration_tag.removeprefix("qbs/preregister/") if args.preregistration_tag else ""
     rerun_match = RERUN_TAG_PATTERN.search(run_id)
     rerun_index = int(rerun_match.group(1)) if rerun_match else 0
-    if rerun_index >= 8:
+    if rerun_index >= 9:
+        preregistered_status = "QBS23_R9_PREREGISTERED_NO_SCORED_RUN"
+        allowed_next_step = "operator may run the pre-registered QBS-23 R9 live run after key and cost approval"
+    elif rerun_index == 8:
         preregistered_status = "QBS19_R8_PREREGISTERED_NO_SCORED_RUN"
         allowed_next_step = "operator may run the pre-registered QBS-19 R8 live run after key and cost approval"
     elif rerun_index == 7:

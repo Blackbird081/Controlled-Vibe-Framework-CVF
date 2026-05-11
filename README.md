@@ -280,7 +280,8 @@ The Alibaba/DashScope single-provider lane has progressed through R8 scoring.
 QBS-20 hard gates passed, but reviewer agreement and claim-ladder thresholds
 did not pass. QBS-21 analyzes the R8 scoring failure and publishes no new run
 or score. QBS-22 remediates scorer completeness and targeted governed ALLOW
-quality issues, but still makes no QBS score or quality-level claim.
+quality issues. QBS-23 pre-registers the post-remediation R9 rerun, but still
+makes no QBS score or quality-level claim.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

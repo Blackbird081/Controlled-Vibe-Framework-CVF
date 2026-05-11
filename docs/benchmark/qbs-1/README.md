@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS27_R9_ANCHOR_ADJUDICATION_COMPLETE_NO_NEW_SCORE`
+Status: `QBS28_R9_CLEANED_CALIBRATION_REFERENCE_READY_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -53,6 +53,8 @@ as harness proof only.
 - [QBS-26 R9 Calibration Anchors JSON](r9-calibration-anchors-qbs26.json)
 - [QBS-27 R9 Anchor Adjudication](r9-anchor-adjudication-qbs27.md)
 - [QBS-27 R9 Anchor Adjudication JSON](r9-anchor-adjudication-qbs27.json)
+- [QBS-28 R9 Cleaned Calibration Reference](r9-calibration-reference-qbs28.md)
+- [QBS-28 R9 Cleaned Calibration Reference JSON](r9-calibration-reference-qbs28.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 - [Alibaba Powered Single-Provider R8 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r8.md)
@@ -110,12 +112,13 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-25 R9 post-score analysis | `COMPLETE_NO_NEW_SCORE` |
 | QBS-26 R9 calibration anchors | `READY_NO_NEW_SCORE` with 35 provisional anchors across all 8 QBS families |
 | QBS-27 R9 anchor adjudication | `COMPLETE_NO_NEW_SCORE` with 35 model-adjudicated anchors |
+| QBS-28 R9 cleaned calibration reference | `READY_NO_NEW_SCORE` with 35 cleaned reference items |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-27 adjudicates the QBS-26 anchors with a model-adjudicator fallback. The
-next track should publish a cleaned calibration reference before any further
-rerun is pre-registered.
+QBS-28 publishes a cleaned R9-derived calibration reference. The next track
+should run a calibration-only reviewer agreement check against that reference
+before any further rerun is pre-registered.

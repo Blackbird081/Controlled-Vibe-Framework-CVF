@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS27_R9_ANCHOR_ADJUDICATION_COMPLETE_NO_NEW_SCORE`
+Status: `QBS28_R9_CLEANED_CALIBRATION_REFERENCE_READY_NO_NEW_SCORE`
 
 As of 2026-05-11, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -92,8 +92,10 @@ next blocker is reviewer drift plus residual ALLOW-task quality, not scorer
 completeness. QBS-26 turns the R9 failure surface into 35 provisional
 calibration anchors covering all 8 QBS families. QBS-27 adjudicates all 35
 anchors with the Alibaba/DashScope `qwen-turbo` model-adjudicator fallback.
-The result is still no-score and no-claim; the next blocker is publishing a
-cleaned calibration reference before any further live rerun is pre-registered.
+QBS-28 cleans that adjudication into a 35-item calibration reference for future
+reviewer scoring. The result is still no-score and no-claim; the next blocker
+is a calibration-only reviewer agreement check before any further live rerun is
+pre-registered.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -138,6 +140,8 @@ Latest powered execution artifact:
 - [QBS-26 R9 Calibration Anchors JSON](qbs-1/r9-calibration-anchors-qbs26.json)
 - [QBS-27 R9 Anchor Adjudication](qbs-1/r9-anchor-adjudication-qbs27.md)
 - [QBS-27 R9 Anchor Adjudication JSON](qbs-1/r9-anchor-adjudication-qbs27.json)
+- [QBS-28 R9 Cleaned Calibration Reference](qbs-1/r9-calibration-reference-qbs28.md)
+- [QBS-28 R9 Cleaned Calibration Reference JSON](qbs-1/r9-calibration-reference-qbs28.json)
 - [Alibaba Powered Single-Provider R9 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260511-alibaba-r9.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)

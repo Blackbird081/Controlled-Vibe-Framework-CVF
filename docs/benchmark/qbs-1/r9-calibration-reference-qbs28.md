@@ -1,0 +1,51 @@
+# QBS-28 R9 Cleaned Calibration Reference
+
+Status: `QBS28_R9_CLEANED_CALIBRATION_REFERENCE_READY_NO_NEW_SCORE`
+
+QBS-28 cleans the QBS-27 adjudication into a reviewer calibration
+reference that future scorer runs can cite. It performs no live QBS run,
+does not mutate R9 scores, and does not make a QBS quality claim.
+
+## Source
+
+- Source anchors: `docs/benchmark/qbs-1/r9-calibration-anchors-qbs26.json`
+- Source adjudication: `docs/benchmark/qbs-1/r9-anchor-adjudication-qbs27.json`
+- Limitation: Derived from QBS26 R9 anchors and QBS27 Alibaba/DashScope model adjudication; still not a human gold-label review.
+
+## Result
+
+- Reference count: `35`
+- Quality distribution: `{"1": 8, "2": 11, "3": 8, "4": 8}`
+- Rework distribution: `{"HEAVY": 19, "LIGHT": 8, "NONE": 8}`
+- Cleanup actions: `{"normalize_rework_label": 3, "unchanged": 32}`
+
+## Family Coverage
+
+| Family | Count | Quality distribution | Rework distribution |
+| --- | --- | --- | --- |
+| ambiguous_noncoder_requests | 2 | {"1": 1, "4": 1} | {"HEAVY": 1, "NONE": 1} |
+| builder_handoff_technical_planning | 7 | {"1": 2, "2": 3, "3": 2} | {"HEAVY": 5, "LIGHT": 2} |
+| bypass_adversarial_governance | 4 | {"1": 1, "2": 1, "4": 2} | {"HEAVY": 2, "NONE": 2} |
+| cost_quota_provider_selection | 5 | {"1": 3, "2": 1, "3": 1} | {"HEAVY": 4, "LIGHT": 1} |
+| documentation_operations | 4 | {"2": 2, "4": 2} | {"HEAVY": 2, "NONE": 2} |
+| high_risk_security_secrets | 2 | {"4": 2} | {"NONE": 2} |
+| negative_controls | 5 | {"2": 1, "3": 3, "4": 1} | {"HEAVY": 1, "LIGHT": 3, "NONE": 1} |
+| normal_productivity_app_planning | 6 | {"1": 1, "2": 3, "3": 2} | {"HEAVY": 4, "LIGHT": 2} |
+
+## Calibration Issue Coverage
+
+| Issue | Count | Quality distribution | Cleanup actions |
+| --- | --- | --- | --- |
+| allow_output_specificity_without_inventing_scope | 6 | {"1": 1, "2": 3, "3": 2} | {"unchanged": 6} |
+| avoid_over_governance_on_simple_safe_tasks | 5 | {"2": 1, "3": 3, "4": 1} | {"normalize_rework_label": 2, "unchanged": 3} |
+| blocked_output_usefulness_vs_refusal_correctness | 3 | {"1": 1, "2": 1, "4": 1} | {"unchanged": 3} |
+| builder_handoff_completeness_files_tests_rollback_verification | 7 | {"1": 2, "2": 3, "3": 2} | {"unchanged": 7} |
+| clarifying_question_specificity_without_solution_assumption | 2 | {"1": 1, "4": 1} | {"unchanged": 2} |
+| documentation_operational_specificity_and_next_actions | 4 | {"2": 2, "4": 2} | {"unchanged": 4} |
+| named_provider_recommendations_without_measured_candidates | 5 | {"1": 3, "2": 1, "3": 1} | {"normalize_rework_label": 1, "unchanged": 4} |
+| secret_handling_refusal_and_safe_alternative | 2 | {"4": 2} | {"unchanged": 2} |
+| unsafe_request_boundary_and_alternative_helpfulness | 1 | {"4": 1} | {"unchanged": 1} |
+
+## Claim Boundary
+
+Reference cleanup only. No live QBS run, no R9 score mutation, no L4/L5 claim, and no public QBS quality claim.

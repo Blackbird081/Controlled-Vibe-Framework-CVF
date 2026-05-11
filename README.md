@@ -280,8 +280,9 @@ The Alibaba/DashScope single-provider lane has progressed through R9 scoring.
 QBS-24 hard gates passed, but reviewer agreement and claim-ladder thresholds
 did not pass. QBS-25 analyzes the R9 scoring failure and publishes no new run
 or score. QBS-26 turns the R9 failure surface into provisional calibration
-anchors, and QBS-27 adjudicates those anchors with a model-adjudicator
-fallback. No QBS score or quality-level claim is made.
+anchors, QBS-27 adjudicates those anchors with a model-adjudicator fallback,
+and QBS-28 cleans them into a calibration reference. No QBS score or
+quality-level claim is made.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

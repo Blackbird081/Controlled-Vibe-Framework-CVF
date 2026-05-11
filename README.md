@@ -287,9 +287,10 @@ gate. QBS-30 analyzes that failure and QBS-31 publishes reviewer-rubric
 remediation. QBS-32 reruns calibration-only review and still fails. QBS-33
 adds calibration-only derived-rework support and dual-published rework views
 while preserving reviewer rework as the scored-run claim gate. QBS-34 adds
-bounded missing-alias retry and redacted reviewer-completeness diagnostics. The
-next scored rerun remains blocked, so no QBS score or quality-level claim is
-made.
+bounded missing-alias retry and redacted reviewer-completeness diagnostics.
+QBS-35 adds deterministic env/key/workspace preflight for live/reviewer/
+adjudicator entry points. The next scored rerun remains blocked, so no QBS
+score or quality-level claim is made.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

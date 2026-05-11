@@ -19,6 +19,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from preflight_qbs_live_run import preflight_qbs_live_run
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 WEB_ROOT = REPO_ROOT / "EXTENSIONS" / "CVF_v1.6_AGENT_PLATFORM" / "cvf-web"
@@ -66,11 +68,7 @@ def read_env_file(path: Path) -> dict[str, str]:
 
 def load_env(extra_env_files: list[Path]) -> dict[str, str]:
     env = {**os.environ}
-    for env_path in [
-        WEB_ROOT / ".env.local",
-        REPO_ROOT / ".env.local",
-        *extra_env_files,
-    ]:
+    for env_path in extra_env_files:
         for key, value in read_env_file(env_path).items():
             if value and not env.get(key):
                 env[key] = value
@@ -507,7 +505,15 @@ def run(args: argparse.Namespace) -> int:
     corpus = read_json(CORPUS_PATH)
     provider_manifest = read_json(paths["provider_manifest"])  # type: ignore[arg-type]
     config_manifest = read_json(paths["config_manifest"])  # type: ignore[arg-type]
-    env = load_env([Path(item) for item in args.env_file])
+    preflight = preflight_qbs_live_run(
+        env_files=args.env_file,
+        required_key_aliases=[
+            ["DASHSCOPE_API_KEY", "ALIBABA_API_KEY", "CVF_ALIBABA_API_KEY", "CVF_BENCHMARK_ALIBABA_KEY"],
+            ["CVF_SERVICE_TOKEN"],
+        ],
+        label="qbs-powered-single-provider",
+    )
+    env = load_env(preflight.env_files)
     api_key = provider_key(env)
     if not env.get("CVF_SERVICE_TOKEN"):
         raise RuntimeError("missing CVF_SERVICE_TOKEN")

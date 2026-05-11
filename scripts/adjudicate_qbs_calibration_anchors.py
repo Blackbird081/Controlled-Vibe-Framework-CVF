@@ -13,6 +13,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+from preflight_qbs_live_run import preflight_qbs_live_run
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 QBS_ROOT = REPO_ROOT / "docs" / "benchmark" / "qbs-1"
@@ -374,7 +376,12 @@ def main() -> int:
     corpus = read_json(QBS_ROOT / "powered-single-provider-corpus-v1.json")
     corpus_by_id = {task["task_id"]: task for task in corpus["tasks"]}
     spec = parse_adjudicator(args.adjudicator)
-    env = load_env([Path(item) for item in args.env_file])
+    preflight = preflight_qbs_live_run(
+        env_files=args.env_file,
+        required_key_aliases=[spec["key_names"]],
+        label="qbs-anchor-adjudication",
+    )
+    env = load_env(preflight.env_files)
     key = env_key(env, spec["key_names"])
 
     target_anchors = [

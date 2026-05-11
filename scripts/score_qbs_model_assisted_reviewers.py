@@ -15,6 +15,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+from preflight_qbs_live_run import preflight_qbs_live_run
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 QBS_ROOT = REPO_ROOT / "docs" / "benchmark" / "qbs-1"
@@ -614,8 +616,13 @@ def main() -> int:
     corpus = read_json(QBS_ROOT / "powered-single-provider-corpus-v1.json")
     corpus_by_id = {task["task_id"]: task for task in corpus["tasks"]}
     calibration_anchors = read_json(args.calibration_anchors) if args.calibration_anchors else None
-    env = load_env([Path(item) for item in args.env_file])
     reviewer_ids = [item.strip() for item in args.reviewers.split(",") if item.strip()]
+    preflight = preflight_qbs_live_run(
+        env_files=args.env_file,
+        required_key_aliases=[REVIEWER_SPECS[rid]["key_names"] for rid in reviewer_ids],
+        label="qbs-model-assisted-reviewer-scoring",
+    )
+    env = load_env(preflight.env_files)
     reviewer_keys = {rid: env_key(env, REVIEWER_SPECS[rid]["key_names"]) for rid in reviewer_ids}
 
     rows_by_task: dict[str, list[dict[str, Any]]] = defaultdict(list)

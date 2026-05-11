@@ -14,6 +14,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+from preflight_qbs_live_run import preflight_qbs_live_run
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 QBS_ROOT = REPO_ROOT / "docs" / "benchmark" / "qbs-1"
@@ -551,8 +553,13 @@ def main() -> int:
     if args.limit:
         anchor_items = anchor_items[:args.limit]
 
-    env = load_env([Path(item) for item in args.env_file])
     reviewer_specs = {item: parse_reviewer(item) for item in [value.strip() for value in args.reviewers.split(",") if value.strip()]}
+    preflight = preflight_qbs_live_run(
+        env_files=args.env_file,
+        required_key_aliases=[spec["key_names"] for spec in reviewer_specs.values()],
+        label="qbs-calibration-reviewer-agreement",
+    )
+    env = load_env(preflight.env_files)
     reviewer_keys = {
         reviewer_id: env_key(env, spec["key_names"])
         for reviewer_id, spec in reviewer_specs.items()

@@ -420,6 +420,82 @@ def summarize(
     }
 
 
+def markdown_table_row(values: list[Any]) -> str:
+    escaped_values = [
+        str(value).replace("\\", "\\\\").replace("|", "\\|").replace("\n", " ")
+        for value in values
+    ]
+    return "| " + " | ".join(escaped_values) + " |"
+
+
+def write_markdown(path: Path, payload: dict[str, Any]) -> None:
+    summary = payload["summary"]
+    lines = [
+        "# QBS-29 R9 Calibration-Only Reviewer Agreement",
+        "",
+        f"Status: `{payload['status']}`",
+        "",
+        "QBS-29 runs a calibration-only reviewer agreement check against the",
+        "QBS-28 cleaned R9 calibration reference. It performs no live QBS scored",
+        "run, mutates no historical scores, and makes no QBS quality claim.",
+        "",
+        "## Source",
+        "",
+        f"- Source anchors: `{payload['source_anchor_file']}`",
+        f"- Source reference: `{payload['source_adjudication_file']}`",
+        f"- Rubric addendum: `{payload['source_rubric_addendum_file']}`",
+        f"- Reference limitation: {payload['reference_limitation']}",
+        "",
+        "## Result",
+        "",
+        f"- Overall status: `{summary['status']}`",
+        f"- Anchors checked: `{summary['anchor_count']}`",
+        f"- Paired anchors: `{summary['paired_anchor_count']}`",
+        f"- Inter-reviewer status: `{summary['inter_reviewer']['status']}`",
+        f"- Weighted kappa: `{summary['inter_reviewer']['quadratic_weighted_cohen_kappa']}`",
+        f"- Spearman rho: `{summary['inter_reviewer']['spearman_rho']}`",
+        "",
+        "Reviewer vs reference:",
+        "",
+        markdown_table_row(["Reviewer", "Status", "Within one", "Rework match", "Mean abs delta"]),
+        markdown_table_row(["---", "---", "---", "---", "---"]),
+    ]
+    for reviewer, data in summary["reviewer_vs_reference"].items():
+        lines.append(markdown_table_row([
+            reviewer,
+            data["status"],
+            data["quality_within_one_rate"],
+            data["rework_match_rate"],
+            data["mean_absolute_quality_delta"],
+        ]))
+
+    lines.extend([
+        "",
+        "Calibration issues:",
+        "",
+        markdown_table_row(["Issue", "Count", "Mean abs delta", "Within one", "Rework match"]),
+        markdown_table_row(["---", "---", "---", "---", "---"]),
+    ])
+    for issue, data in summary["by_calibration_issue"].items():
+        lines.append(markdown_table_row([
+            issue,
+            data["count"],
+            data["mean_absolute_quality_delta"],
+            data["within_one_rate"],
+            data["rework_match_rate"],
+        ]))
+
+    lines.extend([
+        "",
+        "## Claim Boundary",
+        "",
+        payload["claim_boundary"],
+        "",
+    ])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run QBS17 calibration-only reviewer agreement check.")
     parser.add_argument("--anchors", type=Path, default=QBS_ROOT / "reviewer-calibration-anchors-qbs15.json")
@@ -433,6 +509,7 @@ def main() -> int:
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--include-consensus", action="store_true")
     parser.add_argument("--limit", type=int)
+    parser.add_argument("--md-output", type=Path)
     args = parser.parse_args()
 
     anchors = read_json(args.anchors)
@@ -478,9 +555,9 @@ def main() -> int:
     payload = {
         "status": args.status,
         "prompt_version": args.prompt_version,
-        "source_anchor_file": str(args.anchors),
-        "source_adjudication_file": str(args.adjudication),
-        "source_rubric_addendum_file": str(args.rubric_addendum),
+        "source_anchor_file": str(args.anchors).replace("\\", "/"),
+        "source_adjudication_file": str(args.adjudication).replace("\\", "/"),
+        "source_rubric_addendum_file": str(args.rubric_addendum).replace("\\", "/"),
         "reviewers": [
             {
                 "reviewer": reviewer_id,
@@ -496,6 +573,8 @@ def main() -> int:
         "usage": usage,
     }
     write_json(args.output, payload)
+    if args.md_output:
+        write_markdown(args.md_output, payload)
     print(json.dumps({
         "status": payload["status"],
         "output": str(args.output),

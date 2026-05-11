@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS28_R9_CLEANED_CALIBRATION_REFERENCE_READY_NO_NEW_SCORE`
+Status: `QBS29_R9_CALIBRATION_ONLY_REVIEWER_AGREEMENT_COMPLETE_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -55,6 +55,8 @@ as harness proof only.
 - [QBS-27 R9 Anchor Adjudication JSON](r9-anchor-adjudication-qbs27.json)
 - [QBS-28 R9 Cleaned Calibration Reference](r9-calibration-reference-qbs28.md)
 - [QBS-28 R9 Cleaned Calibration Reference JSON](r9-calibration-reference-qbs28.json)
+- [QBS-29 R9 Calibration-Only Reviewer Agreement](r9-calibration-agreement-qbs29.md)
+- [QBS-29 R9 Calibration-Only Reviewer Agreement JSON](r9-calibration-agreement-qbs29.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 - [Alibaba Powered Single-Provider R8 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r8.md)
@@ -113,12 +115,14 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-26 R9 calibration anchors | `READY_NO_NEW_SCORE` with 35 provisional anchors across all 8 QBS families |
 | QBS-27 R9 anchor adjudication | `COMPLETE_NO_NEW_SCORE` with 35 model-adjudicated anchors |
 | QBS-28 R9 cleaned calibration reference | `READY_NO_NEW_SCORE` with 35 cleaned reference items |
+| QBS-29 R9 calibration-only reviewer agreement | `FAIL_NO_NEW_SCORE`; inter-reviewer PASS by Spearman, OpenAI-vs-reference FAIL |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-28 publishes a cleaned R9-derived calibration reference. The next track
-should run a calibration-only reviewer agreement check against that reference
-before any further rerun is pre-registered.
+QBS-29 runs a calibration-only reviewer agreement check against the QBS-28
+reference. Inter-reviewer agreement passes by Spearman, but OpenAI-vs-reference
+alignment fails, so another live rerun remains blocked. The next track should
+analyze and remediate the calibration/reference mismatch.

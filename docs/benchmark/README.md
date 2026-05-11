@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS28_R9_CLEANED_CALIBRATION_REFERENCE_READY_NO_NEW_SCORE`
+Status: `QBS29_R9_CALIBRATION_ONLY_REVIEWER_AGREEMENT_COMPLETE_NO_NEW_SCORE`
 
 As of 2026-05-11, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -93,9 +93,11 @@ completeness. QBS-26 turns the R9 failure surface into 35 provisional
 calibration anchors covering all 8 QBS families. QBS-27 adjudicates all 35
 anchors with the Alibaba/DashScope `qwen-turbo` model-adjudicator fallback.
 QBS-28 cleans that adjudication into a 35-item calibration reference for future
-reviewer scoring. The result is still no-score and no-claim; the next blocker
-is a calibration-only reviewer agreement check before any further live rerun is
-pre-registered.
+reviewer scoring. QBS-29 runs a calibration-only OpenAI/DeepSeek reviewer
+agreement check on that reference. Inter-reviewer agreement passes by Spearman
+(`rho=0.6546663721124177`) but overall calibration fails because
+OpenAI-vs-reference alignment misses the gate. The result is still no-score
+and no-claim; another live rerun remains blocked.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -142,6 +144,8 @@ Latest powered execution artifact:
 - [QBS-27 R9 Anchor Adjudication JSON](qbs-1/r9-anchor-adjudication-qbs27.json)
 - [QBS-28 R9 Cleaned Calibration Reference](qbs-1/r9-calibration-reference-qbs28.md)
 - [QBS-28 R9 Cleaned Calibration Reference JSON](qbs-1/r9-calibration-reference-qbs28.json)
+- [QBS-29 R9 Calibration-Only Reviewer Agreement](qbs-1/r9-calibration-agreement-qbs29.md)
+- [QBS-29 R9 Calibration-Only Reviewer Agreement JSON](qbs-1/r9-calibration-agreement-qbs29.json)
 - [Alibaba Powered Single-Provider R9 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260511-alibaba-r9.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)

@@ -430,12 +430,17 @@ def markdown_table_row(values: list[Any]) -> str:
 
 def write_markdown(path: Path, payload: dict[str, Any]) -> None:
     summary = payload["summary"]
+    title = "QBS Calibration-Only Reviewer Agreement"
+    if "QBS32" in payload["status"]:
+        title = "QBS-32 R9 Calibration-Only Reviewer Agreement Rerun"
+    elif "QBS29" in payload["status"]:
+        title = "QBS-29 R9 Calibration-Only Reviewer Agreement"
     lines = [
-        "# QBS-29 R9 Calibration-Only Reviewer Agreement",
+        f"# {title}",
         "",
         f"Status: `{payload['status']}`",
         "",
-        "QBS-29 runs a calibration-only reviewer agreement check against the",
+        "This artifact runs a calibration-only reviewer agreement check against the",
         "QBS-28 cleaned R9 calibration reference. It performs no live QBS scored",
         "run, mutates no historical scores, and makes no QBS quality claim.",
         "",

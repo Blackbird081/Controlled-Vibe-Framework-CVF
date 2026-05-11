@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS30_R9_CALIBRATION_FAILURE_ANALYSIS_COMPLETE_NO_NEW_SCORE`
+Status: `QBS31_R9_REVIEWER_RUBRIC_REMEDIATION_READY_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -59,6 +59,7 @@ as harness proof only.
 - [QBS-29 R9 Calibration-Only Reviewer Agreement JSON](r9-calibration-agreement-qbs29.json)
 - [QBS-30 R9 Calibration Failure Analysis](r9-calibration-failure-analysis-qbs30.md)
 - [QBS-30 R9 Calibration Failure Analysis JSON](r9-calibration-failure-analysis-qbs30.json)
+- [QBS-31 R9 Reviewer Rubric Remediation](r9-reviewer-rubric-remediation-qbs31.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 - [Alibaba Powered Single-Provider R8 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r8.md)
@@ -119,6 +120,7 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-28 R9 cleaned calibration reference | `READY_NO_NEW_SCORE` with 35 cleaned reference items |
 | QBS-29 R9 calibration-only reviewer agreement | `FAIL_NO_NEW_SCORE`; inter-reviewer PASS by Spearman, OpenAI-vs-reference FAIL |
 | QBS-30 R9 calibration failure analysis | `COMPLETE_NO_NEW_SCORE`; rerun remains blocked pending rubric/reference remediation |
+| QBS-31 R9 reviewer rubric remediation | `READY_NO_NEW_SCORE`; calibration-only rerun required before any scored rerun |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
@@ -129,4 +131,5 @@ QBS-29 runs a calibration-only reviewer agreement check against the QBS-28
 reference. Inter-reviewer agreement passes by Spearman, but OpenAI-vs-reference
 alignment fails, so another live rerun remains blocked. QBS-30 classifies the
 failure as OpenAI-vs-reference alignment plus rework-label instability. The
-next track should remediate the rubric/reference mismatch.
+QBS-31 remediation addendum is now ready. The next track should rerun the
+calibration-only reviewer agreement check using the QBS-31 addendum.

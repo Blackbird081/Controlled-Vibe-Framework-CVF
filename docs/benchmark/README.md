@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS30_R9_CALIBRATION_FAILURE_ANALYSIS_COMPLETE_NO_NEW_SCORE`
+Status: `QBS31_R9_REVIEWER_RUBRIC_REMEDIATION_READY_NO_NEW_SCORE`
 
 As of 2026-05-11, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -100,6 +100,9 @@ OpenAI-vs-reference alignment misses the gate. The result is still no-score
 and no-claim; another live rerun remains blocked. QBS-30 classifies the
 blocker as OpenAI-vs-reference alignment plus rework-label instability and
 requires rubric/reference remediation before another calibration-only check.
+QBS-31 publishes that remediation addendum, tightening quality-to-rework
+mapping and issue-specific reviewer rules. Another calibration-only check is
+required before any scored rerun can be pre-registered.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -150,6 +153,7 @@ Latest powered execution artifact:
 - [QBS-29 R9 Calibration-Only Reviewer Agreement JSON](qbs-1/r9-calibration-agreement-qbs29.json)
 - [QBS-30 R9 Calibration Failure Analysis](qbs-1/r9-calibration-failure-analysis-qbs30.md)
 - [QBS-30 R9 Calibration Failure Analysis JSON](qbs-1/r9-calibration-failure-analysis-qbs30.json)
+- [QBS-31 R9 Reviewer Rubric Remediation](qbs-1/r9-reviewer-rubric-remediation-qbs31.md)
 - [Alibaba Powered Single-Provider R9 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260511-alibaba-r9.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)

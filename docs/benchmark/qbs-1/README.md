@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS26_R9_CALIBRATION_ANCHORS_READY_NO_NEW_SCORE`
+Status: `QBS27_R9_ANCHOR_ADJUDICATION_COMPLETE_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -51,6 +51,8 @@ as harness proof only.
 - [QBS-25 R9 Post-Score Analysis JSON](r9-post-score-analysis-qbs25.json)
 - [QBS-26 R9 Calibration Anchors](r9-calibration-anchors-qbs26.md)
 - [QBS-26 R9 Calibration Anchors JSON](r9-calibration-anchors-qbs26.json)
+- [QBS-27 R9 Anchor Adjudication](r9-anchor-adjudication-qbs27.md)
+- [QBS-27 R9 Anchor Adjudication JSON](r9-anchor-adjudication-qbs27.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 - [Alibaba Powered Single-Provider R8 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r8.md)
@@ -107,13 +109,13 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-24 R9 reviewer agreement | `FAIL` with kappa `0.37156033151334533`, rho `0.43818074648985417` |
 | QBS-25 R9 post-score analysis | `COMPLETE_NO_NEW_SCORE` |
 | QBS-26 R9 calibration anchors | `READY_NO_NEW_SCORE` with 35 provisional anchors across all 8 QBS families |
+| QBS-27 R9 anchor adjudication | `COMPLETE_NO_NEW_SCORE` with 35 model-adjudicated anchors |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-26 builds R9-derived provisional calibration anchors from the reviewer
-drift and residual ALLOW-task quality failure surface. The next track should
-adjudicate those anchors and publish a cleaned calibration reference before any
-further rerun is pre-registered.
+QBS-27 adjudicates the QBS-26 anchors with a model-adjudicator fallback. The
+next track should publish a cleaned calibration reference before any further
+rerun is pre-registered.

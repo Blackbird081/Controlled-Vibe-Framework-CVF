@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS20_R8_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
+Status: `QBS21_R8_POST_SCORE_ANALYSIS_COMPLETE_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -43,6 +43,8 @@ as harness proof only.
 - [QBS-18 Calibration Rerun JSON](reviewer-calibration-agreement-qbs18-rerun.json)
 - [QBS-18 Rework Rubric Normalization](reviewer-rework-rubric-normalization-qbs18.md)
 - [QBS-19 R8 Reviewer Plan Freeze](r8-reviewer-plan-freeze-qbs19.md)
+- [QBS-21 R8 Post-Score Analysis](r8-post-score-analysis-qbs21.md)
+- [QBS-21 R8 Post-Score Analysis JSON](r8-post-score-analysis-qbs21.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 - [Alibaba Powered Single-Provider R8 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r8.md)
@@ -91,13 +93,13 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-19 R8 reviewer plan freeze | `PREREGISTERED_NO_SCORED_RUN` as `qbs/preregister/qbs1-powered-single-provider-20260510-alibaba-r8` |
 | QBS-20 R8 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
 | QBS-20 R8 reviewer agreement | `FAIL` with kappa `0.5004684065769088`, rho `0.5702347881140457` |
+| QBS-21 R8 post-score analysis | `COMPLETE_NO_NEW_SCORE` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-20 executed and scored R8 with the QBS19 frozen reviewer plan. Hard gates
-passed, but reviewer agreement failed and the aggregate quality deltas still
-do not support an L4/L5 claim. The next track should analyze R8 disagreement
-and residual `CFG-B` quality causes before any further rerun.
+QBS-21 analyzes the R8 scoring failure. The next track should remediate scorer
+completeness and residual `CFG-B` ALLOW-task quality before any further full
+live rerun is pre-registered.

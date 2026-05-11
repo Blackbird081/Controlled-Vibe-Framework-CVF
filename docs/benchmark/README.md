@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS20_R8_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
+Status: `QBS21_R8_POST_SCORE_ANALYSIS_COMPLETE_NO_NEW_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -78,7 +78,10 @@ Alibaba/DashScope `qwen-turbo` powered single-provider run. QBS-20 executes
 and scores R8. Hard gates pass, but reviewer agreement fails
 (`kappa=0.5004684065769088`, `rho=0.5702347881140457`), the median
 `CFG-B` vs `CFG-A1` quality delta remains `-0.125`, and no public QBS score or
-L4/L5 claim is made.
+L4/L5 claim is made. QBS-21 analyzes the R8 post-score failure: one OpenAI
+reviewer alias was missing, reviewer drift remained highest in builder-handoff
+and cost/provider families, and `CFG-B` ALLOW-task quality remained below the
+direct structured baseline. No new run or score is introduced.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -112,6 +115,8 @@ Latest powered execution artifact:
 - [QBS-18 Calibration Rerun JSON](qbs-1/reviewer-calibration-agreement-qbs18-rerun.json)
 - [QBS-18 Rework Rubric Normalization](qbs-1/reviewer-rework-rubric-normalization-qbs18.md)
 - [QBS-19 R8 Reviewer Plan Freeze](qbs-1/r8-reviewer-plan-freeze-qbs19.md)
+- [QBS-21 R8 Post-Score Analysis](qbs-1/r8-post-score-analysis-qbs21.md)
+- [QBS-21 R8 Post-Score Analysis JSON](qbs-1/r8-post-score-analysis-qbs21.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 - [Alibaba Powered Single-Provider R8 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r8.md)

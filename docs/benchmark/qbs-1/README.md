@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS24_R9_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
+Status: `QBS25_R9_POST_SCORE_ANALYSIS_COMPLETE_NO_NEW_SCORE`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -47,6 +47,8 @@ as harness proof only.
 - [QBS-21 R8 Post-Score Analysis JSON](r8-post-score-analysis-qbs21.json)
 - [QBS-22 Scorer Completeness And ALLOW Quality Remediation](scorer-completeness-and-allow-quality-remediation-qbs22.md)
 - [QBS-23 R9 Pre-Registration](r9-preregistration-qbs23.md)
+- [QBS-25 R9 Post-Score Analysis](r9-post-score-analysis-qbs25.md)
+- [QBS-25 R9 Post-Score Analysis JSON](r9-post-score-analysis-qbs25.json)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)
 - [Alibaba Powered Single-Provider R8 Pre-Registration](preregistrations/qbs1-powered-single-provider-20260510-alibaba-r8.md)
@@ -101,13 +103,13 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-23 R9 pre-registration | `PREREGISTERED_NO_SCORED_RUN` as `qbs/preregister/qbs1-powered-single-provider-20260511-alibaba-r9` |
 | QBS-24 R9 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
 | QBS-24 R9 reviewer agreement | `FAIL` with kappa `0.37156033151334533`, rho `0.43818074648985417` |
+| QBS-25 R9 post-score analysis | `COMPLETE_NO_NEW_SCORE` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-24 executed and scored R9. Scorer completeness improved to `432` paired
-scores, but reviewer agreement failed and the aggregate quality delta still
-does not support an L4/L5 claim. The next track should analyze R9 reviewer
-drift before any further rerun.
+QBS-25 analyzes R9. Scorer completeness is fixed, but reviewer drift and
+residual ALLOW-task quality still block any claim. The next track should build
+R9-derived calibration anchors or adjudication before any further rerun.

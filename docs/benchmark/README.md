@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS24_R9_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
+Status: `QBS25_R9_POST_SCORE_ANALYSIS_COMPLETE_NO_NEW_SCORE`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -87,7 +87,9 @@ the post-remediation R9 pre-registration. No R9 execution or score is claimed
 by pre-registration. QBS-24 executes and scores R9. Hard gates pass and paired
 score completeness is restored (`432` paired scores), but reviewer agreement
 fails (`kappa=0.37156033151334533`, `rho=0.43818074648985417`) and no public
-QBS score or L4/L5 claim is made.
+QBS score or L4/L5 claim is made. QBS-25 analyzes R9 and concludes that the
+next blocker is reviewer drift plus residual ALLOW-task quality, not scorer
+completeness.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -126,6 +128,8 @@ Latest powered execution artifact:
 - [QBS-21 R8 Post-Score Analysis JSON](qbs-1/r8-post-score-analysis-qbs21.json)
 - [QBS-22 Scorer Completeness And ALLOW Quality Remediation](qbs-1/scorer-completeness-and-allow-quality-remediation-qbs22.md)
 - [QBS-23 R9 Pre-Registration](qbs-1/r9-preregistration-qbs23.md)
+- [QBS-25 R9 Post-Score Analysis](qbs-1/r9-post-score-analysis-qbs25.md)
+- [QBS-25 R9 Post-Score Analysis JSON](qbs-1/r9-post-score-analysis-qbs25.json)
 - [Alibaba Powered Single-Provider R9 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260511-alibaba-r9.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)

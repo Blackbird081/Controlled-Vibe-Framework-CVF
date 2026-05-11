@@ -11,8 +11,7 @@ from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 QBS_ROOT = REPO_ROOT / "docs" / "benchmark" / "qbs-1"
-RUN_ID = "qbs1-powered-single-provider-20260510-alibaba-r8"
-RUN_ROOT = REPO_ROOT / "docs" / "benchmark" / "runs" / RUN_ID
+DEFAULT_RUN_ID = "qbs1-powered-single-provider-20260510-alibaba-r8"
 
 
 def read_json(path: Path) -> Any:
@@ -213,12 +212,19 @@ def summarize_quality_deltas(scored: dict[str, Any], corpus: dict[str, Any]) -> 
     }
 
 
-def build_report() -> dict[str, Any]:
-    bundle = read_json(RUN_ROOT / "redacted-reviewer-output-bundle.json")
-    reviewer_scores = read_json(RUN_ROOT / "model-assisted-reviewer-scores.json")
-    scored = read_json(RUN_ROOT / "scored-results.json")
-    agreement = read_json(RUN_ROOT / "reviewer-agreement.json")
-    hard_gates = read_json(RUN_ROOT / "hard-gate-results.json")
+def analysis_status_for(run_id: str) -> str:
+    if run_id.endswith("-r9"):
+        return "QBS25_R9_POST_SCORE_ANALYSIS_COMPLETE_NO_NEW_SCORE"
+    return "QBS21_R8_POST_SCORE_ANALYSIS_COMPLETE_NO_NEW_SCORE"
+
+
+def build_report(run_id: str) -> dict[str, Any]:
+    run_root = REPO_ROOT / "docs" / "benchmark" / "runs" / run_id
+    bundle = read_json(run_root / "redacted-reviewer-output-bundle.json")
+    reviewer_scores = read_json(run_root / "model-assisted-reviewer-scores.json")
+    scored = read_json(run_root / "scored-results.json")
+    agreement = read_json(run_root / "reviewer-agreement.json")
+    hard_gates = read_json(run_root / "hard-gate-results.json")
     corpus = read_json(QBS_ROOT / "powered-single-provider-corpus-v1.json")
 
     expected, metadata = build_expected_outputs(bundle)
@@ -226,8 +232,8 @@ def build_report() -> dict[str, Any]:
     paired = paired_disagreements(metadata, scores_by_reviewer)
 
     return {
-        "status": "QBS21_R8_POST_SCORE_ANALYSIS_COMPLETE_NO_NEW_SCORE",
-        "run_id": RUN_ID,
+        "status": analysis_status_for(run_id),
+        "run_id": run_id,
         "source_public_status": scored["public_status"],
         "claim_boundary": "Post-score analysis only. No new QBS score, no L4/L5 claim, no family-level claim, and no provider-parity claim.",
         "hard_gates": hard_gates,
@@ -255,9 +261,10 @@ def build_report() -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Analyze QBS R8 post-score result.")
+    parser.add_argument("--run-id", default=DEFAULT_RUN_ID)
     parser.add_argument("--output", type=Path, default=QBS_ROOT / "r8-post-score-analysis-qbs21.json")
     args = parser.parse_args()
-    report = build_report()
+    report = build_report(args.run_id)
     write_json(args.output, report)
     print(json.dumps({
         "status": report["status"],

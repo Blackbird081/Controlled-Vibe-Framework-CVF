@@ -283,7 +283,8 @@ or score. QBS-26 turns the R9 failure surface into provisional calibration
 anchors, QBS-27 adjudicates those anchors with a model-adjudicator fallback,
 QBS-28 cleans them into a calibration reference, and QBS-29 runs a
 calibration-only reviewer agreement check. QBS-29 still fails the calibration
-gate, so no QBS score or quality-level claim is made.
+gate. QBS-30 analyzes that failure and keeps the next scored rerun blocked, so
+no QBS score or quality-level claim is made.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

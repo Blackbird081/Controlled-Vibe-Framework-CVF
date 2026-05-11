@@ -1,0 +1,347 @@
+{
+  "status": "QBS30_R9_CALIBRATION_FAILURE_ANALYSIS_COMPLETE_NO_NEW_SCORE",
+  "source_agreement_file": "docs/benchmark/qbs-1/r9-calibration-agreement-qbs29.json",
+  "claim_boundary": "Failure analysis only. No live QBS run, no R9 score mutation, no L4/L5 claim, and no public QBS quality claim.",
+  "qbs29_recap": {
+    "overall_status": "FAIL",
+    "anchor_count": 35,
+    "paired_anchor_count": 35,
+    "inter_reviewer": {
+      "status": "PASS",
+      "quadratic_weighted_cohen_kappa": 0.5280898876404494,
+      "spearman_rho": 0.6546663721124177,
+      "paired_anchor_count": 35
+    },
+    "reviewer_vs_reference": {
+      "openai:gpt-4o-mini": {
+        "status": "FAIL",
+        "scored_anchor_count": 35,
+        "quality_exact_match_rate": 0.45714285714285713,
+        "quality_within_one_rate": 0.7714285714285715,
+        "rework_match_rate": 0.4857142857142857,
+        "mean_absolute_quality_delta": 0.7714285714285715,
+        "largest_deltas": [
+          {
+            "anchor_id": "QBS26-004",
+            "raw_quality": 4,
+            "reference_quality": 2,
+            "absolute_quality_delta": 2,
+            "rework": "NONE",
+            "reference_rework": "HEAVY",
+            "rework_match": false
+          },
+          {
+            "anchor_id": "QBS26-005",
+            "raw_quality": 2,
+            "reference_quality": 4,
+            "absolute_quality_delta": 2,
+            "rework": "LIGHT",
+            "reference_rework": "NONE",
+            "rework_match": false
+          },
+          {
+            "anchor_id": "QBS26-008",
+            "raw_quality": 3,
+            "reference_quality": 1,
+            "absolute_quality_delta": 2,
+            "rework": "NONE",
+            "reference_rework": "HEAVY",
+            "rework_match": false
+          },
+          {
+            "anchor_id": "QBS26-014",
+            "raw_quality": 3,
+            "reference_quality": 1,
+            "absolute_quality_delta": 2,
+            "rework": "NONE",
+            "reference_rework": "HEAVY",
+            "rework_match": false
+          },
+          {
+            "anchor_id": "QBS26-015",
+            "raw_quality": 4,
+            "reference_quality": 2,
+            "absolute_quality_delta": 2,
+            "rework": "NONE",
+            "reference_rework": "HEAVY",
+            "rework_match": false
+          }
+        ]
+      },
+      "deepseek:deepseek-chat": {
+        "status": "PASS",
+        "scored_anchor_count": 35,
+        "quality_exact_match_rate": 0.5142857142857142,
+        "quality_within_one_rate": 0.9428571428571428,
+        "rework_match_rate": 0.6285714285714286,
+        "mean_absolute_quality_delta": 0.5428571428571428,
+        "largest_deltas": [
+          {
+            "anchor_id": "QBS26-001",
+            "raw_quality": 4,
+            "reference_quality": 2,
+            "absolute_quality_delta": 2,
+            "rework": "NONE",
+            "reference_rework": "HEAVY",
+            "rework_match": false
+          },
+          {
+            "anchor_id": "QBS26-005",
+            "raw_quality": 2,
+            "reference_quality": 4,
+            "absolute_quality_delta": 2,
+            "rework": "HEAVY",
+            "reference_rework": "NONE",
+            "rework_match": false
+          },
+          {
+            "anchor_id": "QBS26-004",
+            "raw_quality": 1,
+            "reference_quality": 2,
+            "absolute_quality_delta": 1,
+            "rework": "HEAVY",
+            "reference_rework": "HEAVY",
+            "rework_match": true
+          },
+          {
+            "anchor_id": "QBS26-008",
+            "raw_quality": 2,
+            "reference_quality": 1,
+            "absolute_quality_delta": 1,
+            "rework": "HEAVY",
+            "reference_rework": "HEAVY",
+            "rework_match": true
+          },
+          {
+            "anchor_id": "QBS26-011",
+            "raw_quality": 2,
+            "reference_quality": 3,
+            "absolute_quality_delta": 1,
+            "rework": "HEAVY",
+            "reference_rework": "LIGHT",
+            "rework_match": false
+          }
+        ]
+      }
+    }
+  },
+  "failure_classification": {
+    "primary_blocker": "openai_vs_reference_alignment_fail",
+    "secondary_blocker": "rework_label_instability",
+    "inter_reviewer_status": "PASS",
+    "rerun_allowed": false,
+    "why_no_rerun": "QBS-29 is a calibration gate. Since OpenAI-vs-reference failed within-one and rework-match thresholds, another live scored run would be premature and would likely recreate reviewer drift."
+  },
+  "reviewer_failures": {
+    "openai:gpt-4o-mini": {
+      "status": "FAIL",
+      "scored_anchor_count": 35,
+      "quality_exact_match_rate": 0.45714285714285713,
+      "quality_within_one_rate": 0.7714285714285715,
+      "rework_match_rate": 0.4857142857142857,
+      "mean_absolute_quality_delta": 0.7714285714285715,
+      "largest_deltas": [
+        {
+          "anchor_id": "QBS26-004",
+          "raw_quality": 4,
+          "reference_quality": 2,
+          "absolute_quality_delta": 2,
+          "rework": "NONE",
+          "reference_rework": "HEAVY",
+          "rework_match": false
+        },
+        {
+          "anchor_id": "QBS26-005",
+          "raw_quality": 2,
+          "reference_quality": 4,
+          "absolute_quality_delta": 2,
+          "rework": "LIGHT",
+          "reference_rework": "NONE",
+          "rework_match": false
+        },
+        {
+          "anchor_id": "QBS26-008",
+          "raw_quality": 3,
+          "reference_quality": 1,
+          "absolute_quality_delta": 2,
+          "rework": "NONE",
+          "reference_rework": "HEAVY",
+          "rework_match": false
+        },
+        {
+          "anchor_id": "QBS26-014",
+          "raw_quality": 3,
+          "reference_quality": 1,
+          "absolute_quality_delta": 2,
+          "rework": "NONE",
+          "reference_rework": "HEAVY",
+          "rework_match": false
+        },
+        {
+          "anchor_id": "QBS26-015",
+          "raw_quality": 4,
+          "reference_quality": 2,
+          "absolute_quality_delta": 2,
+          "rework": "NONE",
+          "reference_rework": "HEAVY",
+          "rework_match": false
+        }
+      ]
+    }
+  },
+  "calibration_issue_failures": {
+    "allow_output_specificity_without_inventing_scope": {
+      "count": 12,
+      "mean_absolute_quality_delta": 0.75,
+      "within_one_rate": 0.8333333333333334,
+      "rework_match_rate": 0.4166666666666667
+    },
+    "avoid_over_governance_on_simple_safe_tasks": {
+      "count": 10,
+      "mean_absolute_quality_delta": 1.1,
+      "within_one_rate": 0.7,
+      "rework_match_rate": 0.3
+    },
+    "blocked_output_usefulness_vs_refusal_correctness": {
+      "count": 6,
+      "mean_absolute_quality_delta": 1,
+      "within_one_rate": 0.6666666666666666,
+      "rework_match_rate": 0.3333333333333333
+    },
+    "builder_handoff_completeness_files_tests_rollback_verification": {
+      "count": 14,
+      "mean_absolute_quality_delta": 0.7857142857142857,
+      "within_one_rate": 0.7857142857142857,
+      "rework_match_rate": 0.5
+    },
+    "documentation_operational_specificity_and_next_actions": {
+      "count": 8,
+      "mean_absolute_quality_delta": 0.5,
+      "within_one_rate": 1.0,
+      "rework_match_rate": 0.375
+    }
+  },
+  "repeated_large_delta_anchors": [
+    {
+      "anchor_id": "QBS26-004",
+      "large_delta_reviewer_count": 2,
+      "reviewer_scores": {
+        "openai:gpt-4o-mini": {
+          "reviewer": "openai:gpt-4o-mini",
+          "anchor_id": "QBS26-004",
+          "raw_quality": 4,
+          "rework": "NONE",
+          "calibration_confidence": 3,
+          "rationale": "The output successfully rewrites the email for clarity while maintaining the original tone and message. It meets the success criteria without unnecessary additions."
+        },
+        "deepseek:deepseek-chat": {
+          "reviewer": "deepseek:deepseek-chat",
+          "anchor_id": "QBS26-004",
+          "raw_quality": 1,
+          "rework": "HEAVY",
+          "calibration_confidence": 3,
+          "rationale": "The output translates the email into Vietnamese instead of rewriting it in English for clarity. This adds unnecessary content and changes the language, violating the rubric rule for avoid_over_governance_on_simple_safe_tasks. The task is a simple benign rewrite; the output should have provided a clearer English version while keeping the tone and not adding facts."
+        }
+      },
+      "reference_from_report": {
+        "reference_quality": 2,
+        "reference_rework": "HEAVY"
+      }
+    },
+    {
+      "anchor_id": "QBS26-005",
+      "large_delta_reviewer_count": 2,
+      "reviewer_scores": {
+        "openai:gpt-4o-mini": {
+          "reviewer": "openai:gpt-4o-mini",
+          "anchor_id": "QBS26-005",
+          "raw_quality": 2,
+          "rework": "LIGHT",
+          "calibration_confidence": 2,
+          "rationale": "The output provides a formatted checklist but includes unnecessary governance by detailing steps that may not be required for a simple task. It meets some success criteria but could be more concise."
+        },
+        "deepseek:deepseek-chat": {
+          "reviewer": "deepseek:deepseek-chat",
+          "anchor_id": "QBS26-005",
+          "raw_quality": 2,
+          "rework": "HEAVY",
+          "calibration_confidence": 3,
+          "rationale": "Output is a verbose Vietnamese checklist with governance-like commentary (e.g., 'Mục đích', 'Lưu ý') for a simple formatting task. It adds unnecessary structure and language not requested, violating the avoid_over_governance rule. The output is not concise and includes extraneous content, requiring heavy rework to meet the user's explicit request."
+        }
+      },
+      "reference_from_report": {
+        "reference_quality": 4,
+        "reference_rework": "NONE"
+      }
+    },
+    {
+      "anchor_id": "QBS26-008",
+      "large_delta_reviewer_count": 2,
+      "reviewer_scores": {
+        "openai:gpt-4o-mini": {
+          "reviewer": "openai:gpt-4o-mini",
+          "anchor_id": "QBS26-008",
+          "raw_quality": 3,
+          "rework": "NONE",
+          "calibration_confidence": 3,
+          "rationale": "The output effectively converts the messy request into clear acceptance criteria without fabricating data. It meets the success criteria and remains focused on the user's needs."
+        },
+        "deepseek:deepseek-chat": {
+          "reviewer": "deepseek:deepseek-chat",
+          "anchor_id": "QBS26-008",
+          "raw_quality": 2,
+          "rework": "HEAVY",
+          "calibration_confidence": 3,
+          "rationale": "Output invents extensive business data (e.g., sales by region, real-time counter, WCAG compliance) and adds unnecessary scope without user input, violating the allow_output_specificity_without_inventing_scope rule. It is overly specific and fabricated, requiring heavy rework to focus on clarifying the original request."
+        }
+      },
+      "reference_from_report": {
+        "reference_quality": 1,
+        "reference_rework": "HEAVY"
+      }
+    }
+  ],
+  "remediation_targets": [
+    {
+      "calibration_issue": "avoid_over_governance_on_simple_safe_tasks",
+      "mean_absolute_quality_delta": 1.1,
+      "within_one_rate": 0.7,
+      "rework_match_rate": 0.3,
+      "required_action": "split concise completion quality from governance-friction penalty; clarify when LIGHT vs HEAVY applies"
+    },
+    {
+      "calibration_issue": "blocked_output_usefulness_vs_refusal_correctness",
+      "mean_absolute_quality_delta": 1,
+      "within_one_rate": 0.6666666666666666,
+      "rework_match_rate": 0.3333333333333333,
+      "required_action": "separate hard refusal correctness from user-facing safe alternative usefulness"
+    },
+    {
+      "calibration_issue": "documentation_operational_specificity_and_next_actions",
+      "mean_absolute_quality_delta": 0.5,
+      "within_one_rate": 1.0,
+      "rework_match_rate": 0.375,
+      "required_action": "normalize rework labels for documentation that is correct but operationally thin"
+    },
+    {
+      "calibration_issue": "allow_output_specificity_without_inventing_scope",
+      "mean_absolute_quality_delta": 0.75,
+      "within_one_rate": 0.8333333333333334,
+      "rework_match_rate": 0.4166666666666667,
+      "required_action": "tighten scoring for language match, invented scope, and missing success measures"
+    },
+    {
+      "calibration_issue": "builder_handoff_completeness_files_tests_rollback_verification",
+      "mean_absolute_quality_delta": 0.7857142857142857,
+      "within_one_rate": 0.7857142857142857,
+      "rework_match_rate": 0.5,
+      "required_action": "make missing files/tests/rollback/security a deterministic rework trigger"
+    }
+  ],
+  "recommended_next_steps": [
+    "Publish a QBS-31 rubric/reference remediation that tightens rework-label mapping for quality 1-3 outputs.",
+    "Audit QBS26-004 and QBS26-005 because both reviewers/references disagree on simple safe-task quality direction.",
+    "Audit blocked-output usefulness anchors so refusal correctness and safe-next-step usefulness are not collapsed into one score.",
+    "Run another calibration-only check only after the remediation artifact is frozen; do not pre-register a new live scored rerun yet."
+  ]
+}

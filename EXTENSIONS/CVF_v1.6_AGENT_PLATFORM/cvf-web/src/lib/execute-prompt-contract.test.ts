@@ -79,4 +79,24 @@ describe('buildExecutionPrompt', () => {
     expect(prompt).toContain('For developer handoffs, include scope, likely files/modules');
     expect(prompt).toContain('security/data considerations, rollback notes, and verification steps');
   });
+
+  it('carries QBS governance family metadata without treating it as a score', () => {
+    const prompt = buildExecutionPrompt({
+      templateId: '',
+      templateName: 'QBS Powered Single-Provider Task',
+      intent: 'Produce a developer handoff for adding email-and-password login.',
+      qbsFamily: 'builder_handoff_technical_planning',
+      inputs: {
+        request: 'Produce a developer handoff for adding email-and-password login.',
+      },
+      provider: 'alibaba',
+      model: 'qwen-turbo',
+      mode: 'governance',
+      cvfPhase: 'PHASE B',
+      cvfRiskLevel: 'R1',
+    });
+
+    expect(prompt).toContain('Governance family: builder_handoff_technical_planning');
+    expect(prompt).toContain('metadata only; not a decision or score');
+  });
 });

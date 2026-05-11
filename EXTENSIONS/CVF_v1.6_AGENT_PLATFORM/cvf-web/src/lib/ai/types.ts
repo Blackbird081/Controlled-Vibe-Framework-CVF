@@ -17,6 +17,10 @@ export interface ExecutionRequest {
     templateName: string;
     inputs: Record<string, string>;
     intent: string;
+    /** QBS-38 — benchmark-supplied family metadata, never a governance decision by itself. */
+    qbsFamily?: string;
+    /** QBS-38 — resolved runtime family metadata for prompt/receipt context. */
+    governanceFamily?: string;
     provider?: AIProvider;
     model?: string;
     mode?: 'simple' | 'governance' | 'full';
@@ -57,6 +61,7 @@ export interface GovernanceEvidenceReceipt {
     knowledgeCollectionId?: string | null;
     knowledgeChunkCount?: number;
     approvalId?: string;
+    governanceFamily?: string;
     validationHint?: string;
     generatedAt: string;
 }

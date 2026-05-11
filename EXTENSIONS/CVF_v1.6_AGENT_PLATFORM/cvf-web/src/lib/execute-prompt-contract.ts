@@ -1,5 +1,6 @@
 import type { ExecutionRequest } from '@/lib/ai';
 import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
+import { resolveGovernanceFamily } from '@/lib/governance-family';
 import { getTemplateById } from '@/lib/templates';
 import { renderTemplateIntent } from '@/lib/template-intent';
 
@@ -7,6 +8,14 @@ export function buildExecutionPrompt(request: ExecutionRequest): string {
   const { templateName, inputs, intent } = request;
   const previousOutput = inputs._previousOutput;
   const template = request.templateId ? getTemplateById(request.templateId) : undefined;
+  const governanceFamily = resolveGovernanceFamily({
+    governanceFamily: request.governanceFamily,
+    qbsFamily: request.qbsFamily,
+    intent,
+    templateId: request.templateId,
+    templateCategory: template?.category,
+    riskLevel: request.cvfRiskLevel,
+  });
 
   let prompt = `## Task: ${templateName}\n\n`;
   prompt += `### User Intent\n${intent}\n\n`;
@@ -29,10 +38,11 @@ export function buildExecutionPrompt(request: ExecutionRequest): string {
 
   prompt += `\n---\n\n`;
 
-  if (request.cvfPhase || request.cvfRiskLevel) {
+  if (request.cvfPhase || request.cvfRiskLevel || governanceFamily) {
     prompt += `### Governance Context\n`;
     if (request.cvfPhase) prompt += `- Phase target: ${request.cvfPhase}\n`;
     if (request.cvfRiskLevel) prompt += `- Risk level: ${request.cvfRiskLevel}\n`;
+    if (governanceFamily) prompt += `- Governance family: ${governanceFamily} (metadata only; not a decision or score)\n`;
     prompt += `\n`;
   }
 

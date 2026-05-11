@@ -284,6 +284,7 @@ def call_cvf(base_url: str, env: dict[str, str], model: str, task: dict[str, Any
     payload = {
         "templateName": "QBS Powered Single-Provider Task",
         "intent": task["user_prompt"],
+        "qbsFamily": task["family"],
         "inputs": {
             "request": task["user_prompt"],
             "taskId": task["task_id"],

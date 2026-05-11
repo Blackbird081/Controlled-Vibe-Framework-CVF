@@ -292,9 +292,11 @@ QBS-35 adds deterministic env/key/workspace preflight for live/reviewer/
 adjudicator entry points. QBS-36 rebuilds the R9 calibration reference with
 model-only available-provider triangulation across Alibaba/OpenAI/DeepSeek.
 QBS-37 runs a post-triangulation calibration-only reviewer check with
-per-family diagnostics and passes aggregate calibration gates. The next scored
-rerun remains blocked pending runtime-family/output-contract remediation, so no
-QBS score or quality-level claim is made.
+per-family diagnostics and passes aggregate calibration gates. QBS-38 adds
+runtime governance-family metadata for the QBS corpus and the three chronic
+underperformance families, without changing any score. The next scored rerun
+remains blocked pending remaining output-contract remediation, so no QBS score
+or quality-level claim is made.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

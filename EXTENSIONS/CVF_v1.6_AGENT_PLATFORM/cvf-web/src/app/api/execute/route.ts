@@ -15,6 +15,7 @@ import { lookupGuidedResponse } from './guided.response.registry';
 import { buildKnowledgeSystemPrompt, hasKnowledgeContext } from '@/lib/knowledge-context-injector';
 import { buildExecutionPrompt } from '@/lib/execute-prompt-contract';
 import { emitExecutionTelemetry, resolveTokenUsage } from '@/lib/execute-telemetry';
+import { resolveGovernanceFamily } from '@/lib/governance-family';
 import { checkTeamQuota } from '@/lib/quota-guard';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { applyDLPFilter } from '@/lib/dlp-filter';
@@ -124,6 +125,7 @@ function buildEvidenceReceipt(input: {
     knowledgeCollectionId?: string | null;
     knowledgeChunkCount?: number;
     approvalId?: string;
+    governanceFamily?: string;
     validationHint?: string;
 }): GovernanceEvidenceReceipt {
     return {
@@ -142,6 +144,7 @@ function buildEvidenceReceipt(input: {
         knowledgeCollectionId: input.knowledgeCollectionId ?? null,
         knowledgeChunkCount: input.knowledgeChunkCount,
         approvalId: input.approvalId,
+        governanceFamily: input.governanceFamily,
         validationHint: input.validationHint,
         generatedAt: input.envelope.requestTimestamp,
     };
@@ -460,6 +463,16 @@ export async function POST(request: NextRequest) {
             deepseek: process.env.DEEPSEEK_API_KEY,
         };
 
+        const template = body.templateId ? getTemplateById(body.templateId) : undefined;
+        body.governanceFamily = resolveGovernanceFamily({
+            governanceFamily: body.governanceFamily,
+            qbsFamily: body.qbsFamily,
+            intent: body.intent,
+            templateId: template?.id ?? body.templateId,
+            templateCategory: template?.category,
+            riskLevel: body.cvfRiskLevel,
+        }) ?? undefined;
+
         // Build the prompt from template inputs
         const userPrompt = buildExecutionPrompt(body as ExecutionRequest);
         const dlpResult = await applyDLPFilter(userPrompt);
@@ -546,7 +559,6 @@ export async function POST(request: NextRequest) {
         }
 
         const mode = body.mode || 'simple';
-        const template = body.templateId ? getTemplateById(body.templateId) : undefined;
         const executionMaxTokens = resolveExecutionMaxTokens(template?.id ?? body.templateId);
         const specFields = template?.fields || [];
         const requiresSkillPreflight = shouldRequireSkillPreflight({
@@ -1104,8 +1116,10 @@ export async function POST(request: NextRequest) {
                 knowledgeCollectionId: requestedKnowledgeCollectionId,
                 knowledgeChunkCount: retrievalResult.allowedChunkCount,
                 approvalId: approvedRequestRecord?.id,
+                governanceFamily: body.governanceFamily,
                 validationHint: outputValidation?.qualityHint,
             }),
+            governanceFamily: body.governanceFamily ?? null,
         });
 
     } catch (error) {

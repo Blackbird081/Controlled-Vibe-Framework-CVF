@@ -257,6 +257,185 @@ def normalize_reviewer_score_items(
     return normalized
 
 
+def parse_completeness_error(error: ValueError) -> dict[str, Any] | None:
+    try:
+        parsed = json.loads(str(error))
+    except json.JSONDecodeError:
+        return None
+    return parsed if isinstance(parsed, dict) else None
+
+
+def parsed_score_items(value: Any) -> list[dict[str, Any]]:
+    if not isinstance(value, list):
+        return []
+    return [item for item in value if isinstance(item, dict)]
+
+
+def valid_score_items_for_aliases(parsed_scores: Any, alias_map: dict[str, str], aliases: set[str]) -> list[dict[str, Any]]:
+    items: list[dict[str, Any]] = []
+    seen_outputs: set[str] = set()
+    for item in parsed_score_items(parsed_scores):
+        alias = str(item.get("output_id") or "")
+        output_id = alias_map.get(alias)
+        if alias not in aliases or not output_id or output_id in seen_outputs:
+            continue
+        seen_outputs.add(output_id)
+        items.append(item)
+    return items
+
+
+def build_missing_alias_payload(payload: dict[str, Any], missing_aliases: list[str]) -> dict[str, Any]:
+    missing = set(missing_aliases)
+    narrowed = dict(payload)
+    narrowed["outputs"] = [
+        output for output in payload.get("outputs", [])
+        if str(output.get("output_id")) in missing
+    ]
+    narrowed["instructions"] = (
+        "Score only the missing output aliases in this narrowed retry payload. "
+        "Return JSON object with key 'scores', a list containing exactly these aliases: "
+        f"{', '.join(missing_aliases)}. Each score object must include output_id, raw_quality, "
+        "rework, governance_correctness, agent_control, cost_quota_control, "
+        "noncoder_operator_value, and rationale."
+    )
+    narrowed["missing_alias_retry"] = {
+        "expected_aliases": missing_aliases,
+        "reason": "previous reviewer response omitted these aliases",
+    }
+    return narrowed
+
+
+def write_completeness_diagnostic(
+    path: Path,
+    *,
+    task_id: str,
+    reviewer_id: str,
+    prompt_version: str,
+    corpus_task: dict[str, Any],
+    missing_aliases: list[str],
+    alias_map: dict[str, str],
+    valid_score_count: int,
+    payload: dict[str, Any],
+    include_payload_preview: bool = False,
+) -> None:
+    output_length_by_alias = {
+        str(output.get("output_id")): len(str(output.get("output", "")))
+        for output in payload.get("outputs", [])
+        if str(output.get("output_id")) in set(missing_aliases)
+    }
+    config_by_alias: dict[str, str] = {}
+    repeat_by_alias: dict[str, int | None] = {}
+    for alias in missing_aliases:
+        output_id = alias_map.get(alias, "")
+        parts = output_id.split("|")
+        if len(parts) == 3:
+            config_by_alias[alias] = parts[2]
+            try:
+                repeat_by_alias[alias] = int(parts[1].removeprefix("r"))
+            except ValueError:
+                repeat_by_alias[alias] = None
+    record: dict[str, Any] = {
+        "task_id": task_id,
+        "reviewer": reviewer_id,
+        "prompt_version": prompt_version,
+        "family": corpus_task.get("family"),
+        "missing_aliases": missing_aliases,
+        "expected_alias_count": len(alias_map),
+        "valid_score_count": valid_score_count,
+        "config": config_by_alias,
+        "repeat": repeat_by_alias,
+        "output_length_by_missing_alias": output_length_by_alias,
+    }
+    if include_payload_preview:
+        record["payload_preview_redacted"] = redact(json.dumps({
+            "task": payload.get("task"),
+            "outputs": [
+                {
+                    "output_id": output.get("output_id"),
+                    "repeat": output.get("repeat"),
+                    "output_preview": str(output.get("output", ""))[:500],
+                }
+                for output in payload.get("outputs", [])
+                if str(output.get("output_id")) in set(missing_aliases)
+            ],
+        }, ensure_ascii=False))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def recover_missing_alias_scores(
+    *,
+    spec: dict[str, Any],
+    reviewer_key: str,
+    reviewer_id: str,
+    task_id: str,
+    corpus_task: dict[str, Any],
+    prompt_version: str,
+    payload: dict[str, Any],
+    alias_map: dict[str, str],
+    initial_parsed_scores: Any,
+    initial_error: ValueError,
+    missing_alias_retry_attempts: int,
+    diagnostics_path: Path,
+) -> list[dict[str, Any]] | None:
+    details = parse_completeness_error(initial_error)
+    if not details:
+        return None
+    if details.get("unknown_aliases") or details.get("duplicate_outputs"):
+        return None
+    missing = details.get("missing")
+    if not isinstance(missing, list) or not missing:
+        return None
+    missing_aliases = [str(item.get("alias")) for item in missing if isinstance(item, dict) and item.get("alias")]
+    if not missing_aliases:
+        return None
+
+    missing_alias_set = set(missing_aliases)
+    present_aliases = set(alias_map) - missing_alias_set
+    combined_items = valid_score_items_for_aliases(initial_parsed_scores, alias_map, present_aliases)
+
+    for attempt in range(1, max(1, missing_alias_retry_attempts) + 1):
+        retry_payload = build_missing_alias_payload(payload, missing_aliases)
+        result = call_reviewer(spec, reviewer_key, retry_payload)
+        if not result.get("ok"):
+            return None
+        try:
+            recovered = normalize_reviewer_score_items(
+                result["parsed"].get("scores", []),
+                {alias: alias_map[alias] for alias in missing_aliases},
+                reviewer_id,
+                task_id,
+            )
+        except ValueError as error:
+            retry_details = parse_completeness_error(error) or {}
+            retry_missing = retry_details.get("missing") if isinstance(retry_details, dict) else None
+            retry_missing_aliases = [
+                str(item.get("alias"))
+                for item in retry_missing
+                if isinstance(item, dict) and item.get("alias")
+            ] if isinstance(retry_missing, list) else missing_aliases
+            if attempt >= 2:
+                write_completeness_diagnostic(
+                    diagnostics_path,
+                    task_id=task_id,
+                    reviewer_id=reviewer_id,
+                    prompt_version=prompt_version,
+                    corpus_task=corpus_task,
+                    missing_aliases=retry_missing_aliases,
+                    alias_map=alias_map,
+                    valid_score_count=len(combined_items),
+                    payload=payload,
+                )
+            continue
+        recovered_aliases = {score["output_id"] for score in recovered}
+        if len(recovered_aliases) == len(missing_aliases):
+            combined_items.extend(result["parsed"].get("scores", []))
+            return normalize_reviewer_score_items(combined_items, alias_map, reviewer_id, task_id)
+
+    return None
+
+
 def compact_calibration_context(calibration_anchors: dict[str, Any] | None) -> dict[str, Any] | None:
     if not calibration_anchors:
         return None
@@ -424,9 +603,12 @@ def main() -> int:
     parser.add_argument("--prompt-version", default=DEFAULT_SCORING_PROMPT_VERSION)
     parser.add_argument("--calibration-anchors", type=Path)
     parser.add_argument("--semantic-retry-attempts", type=int, default=2)
+    parser.add_argument("--missing-alias-retry-attempts", type=int, default=2)
+    parser.add_argument("--completeness-diagnostics-output", type=Path)
     args = parser.parse_args()
 
     artifact_root = REPO_ROOT / "docs" / "benchmark" / "runs" / args.run_id
+    diagnostics_path = args.completeness_diagnostics_output or artifact_root / f"{args.run_id}-reviewer-completeness-diagnostics.jsonl"
     aggregate = read_json(artifact_root / "aggregate-results.json")
     bundle = read_json(artifact_root / "redacted-reviewer-output-bundle.json")
     corpus = read_json(QBS_ROOT / "powered-single-provider-corpus-v1.json")
@@ -480,6 +662,30 @@ def main() -> int:
                     })
                     break
                 except ValueError as error:
+                    recovered_scores = recover_missing_alias_scores(
+                        spec=spec,
+                        reviewer_key=reviewer_keys[reviewer_id],
+                        reviewer_id=reviewer_id,
+                        task_id=task_id,
+                        corpus_task=corpus_by_id[task_id],
+                        prompt_version=args.prompt_version,
+                        payload=payload,
+                        alias_map=alias_map,
+                        initial_parsed_scores=result["parsed"].get("scores", []),
+                        initial_error=error,
+                        missing_alias_retry_attempts=args.missing_alias_retry_attempts,
+                        diagnostics_path=diagnostics_path,
+                    )
+                    if recovered_scores is not None:
+                        normalized_scores = recovered_scores
+                        reviewer_usage[reviewer_id].append({
+                            "task_id": task_id,
+                            "latencyMs": result["latencyMs"],
+                            "usage": result.get("usage", {}),
+                            "semanticAttempt": semantic_attempt,
+                            "missingAliasRecovered": True,
+                        })
+                        break
                     last_semantic_error = str(error)
                     if semantic_attempt == max_semantic_attempts:
                         raise RuntimeError(

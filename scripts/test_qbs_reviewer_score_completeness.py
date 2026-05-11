@@ -2,7 +2,10 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
+import score_qbs_model_assisted_reviewers as scorer
 from score_qbs_model_assisted_reviewers import derive_rework_from_quality, normalize_reviewer_score_items
 
 
@@ -73,6 +76,61 @@ class ReviewerScoreCompletenessTest(unittest.TestCase):
         self.assertEqual(derive_rework_from_quality(2), "HEAVY")
         self.assertEqual(derive_rework_from_quality(3), "LIGHT")
         self.assertEqual(derive_rework_from_quality(4), "NONE")
+
+    def test_recovers_missing_alias_with_narrow_retry(self) -> None:
+        initial_scores = [score("OUT-01")]
+        try:
+            normalize_reviewer_score_items(
+                initial_scores,
+                ALIAS_MAP,
+                "openai",
+                "QBS1-F7-T04",
+            )
+        except ValueError as error:
+            initial_error = error
+        else:
+            raise AssertionError("missing alias should raise before recovery")
+
+        original_call = scorer.call_reviewer
+
+        def fake_call_reviewer(*_args: object, **_kwargs: object) -> dict[str, object]:
+            return {
+                "ok": True,
+                "latencyMs": 1,
+                "usage": {},
+                "parsed": {"scores": [score("OUT-02", 4)]},
+            }
+
+        with TemporaryDirectory() as temp_dir:
+            scorer.call_reviewer = fake_call_reviewer
+            try:
+                recovered = scorer.recover_missing_alias_scores(
+                    spec={"model": "test"},
+                    reviewer_key="test-key",
+                    reviewer_id="openai",
+                    task_id="QBS1-F7-T04",
+                    corpus_task={"family": "ambiguous_noncoder_requests"},
+                    prompt_version="test-prompt",
+                    payload={
+                        "outputs": [
+                            {"output_id": "OUT-01", "repeat": 2, "output": "a"},
+                            {"output_id": "OUT-02", "repeat": 2, "output": "b"},
+                        ],
+                    },
+                    alias_map=ALIAS_MAP,
+                    initial_parsed_scores=initial_scores,
+                    initial_error=initial_error,
+                    missing_alias_retry_attempts=2,
+                    diagnostics_path=Path(temp_dir) / "diag.jsonl",
+                )
+            finally:
+                scorer.call_reviewer = original_call
+
+        self.assertIsNotNone(recovered)
+        self.assertEqual(
+            [row["output_id"] for row in recovered or []],
+            list(ALIAS_MAP.values()),
+        )
 
 
 if __name__ == "__main__":

@@ -281,7 +281,8 @@ QBS-20 hard gates passed, but reviewer agreement and claim-ladder thresholds
 did not pass. QBS-21 analyzes the R8 scoring failure and publishes no new run
 or score. QBS-22 remediates scorer completeness and targeted governed ALLOW
 quality issues. QBS-23 pre-registers the post-remediation R9 rerun, but still
-makes no QBS score or quality-level claim.
+QBS-24 scoring again fails reviewer agreement and claim-ladder thresholds, so
+no QBS score or quality-level claim is made.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

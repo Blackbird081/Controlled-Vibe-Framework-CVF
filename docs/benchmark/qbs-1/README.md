@@ -1,6 +1,6 @@
 # QBS-1 Runner And Corpus Planning
 
-Status: `QBS23_R9_PREREGISTERED_NO_SCORED_RUN`
+Status: `QBS24_R9_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
 
 QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
 Suite. It translates the public methodology into concrete runner, corpus,
@@ -99,11 +99,15 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-21 R8 post-score analysis | `COMPLETE_NO_NEW_SCORE` |
 | QBS-22 scorer completeness + ALLOW quality remediation | `REMEDIATION_COMPLETE_NO_NEW_SCORE` |
 | QBS-23 R9 pre-registration | `PREREGISTERED_NO_SCORED_RUN` as `qbs/preregister/qbs1-powered-single-provider-20260511-alibaba-r9` |
+| QBS-24 R9 execution | `HARD_GATES_PASS_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM` |
+| QBS-24 R9 reviewer agreement | `FAIL` with kappa `0.37156033151334533`, rho `0.43818074648985417` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-23 freezes the post-QBS22 R9 rerun plan. The next track may execute R9 live
-only after the pre-registration tag is created and verified.
+QBS-24 executed and scored R9. Scorer completeness improved to `432` paired
+scores, but reviewer agreement failed and the aggregate quality delta still
+does not support an L4/L5 claim. The next track should analyze R9 reviewer
+drift before any further rerun.

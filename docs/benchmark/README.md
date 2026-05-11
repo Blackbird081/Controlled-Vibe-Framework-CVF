@@ -18,7 +18,7 @@ Start here:
 
 ## Current Status
 
-Status: `QBS23_R9_PREREGISTERED_NO_SCORED_RUN`
+Status: `QBS24_R9_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM`
 
 As of 2026-05-09, CVF has public live provider and release-gate evidence, but
 no public QBS quality score has been claimed. Any future QBS result must name
@@ -84,7 +84,10 @@ and cost/provider families, and `CFG-B` ALLOW-task quality remained below the
 direct structured baseline. QBS-22 remediates scorer completeness and targeted
 ALLOW output-quality instructions without running a new score. QBS-23 freezes
 the post-remediation R9 pre-registration. No R9 execution or score is claimed
-by pre-registration.
+by pre-registration. QBS-24 executes and scores R9. Hard gates pass and paired
+score completeness is restored (`432` paired scores), but reviewer agreement
+fails (`kappa=0.37156033151334533`, `rho=0.43818074648985417`) and no public
+QBS score or L4/L5 claim is made.
 
 Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
 freezes the exact corpus, configs, provider/model list, reviewer plan, and
@@ -100,6 +103,7 @@ Latest powered execution artifact:
 - [QBS-1 Alibaba Powered Single-Provider R6 Scored Review](runs/qbs1-powered-single-provider-20260510-alibaba-r6/README.md)
 - [QBS-1 Alibaba Powered Single-Provider R7 Scored Review](runs/qbs1-powered-single-provider-20260510-alibaba-r7/README.md)
 - [QBS-1 Alibaba Powered Single-Provider R8 Scored Review](runs/qbs1-powered-single-provider-20260510-alibaba-r8/README.md)
+- [QBS-1 Alibaba Powered Single-Provider R9 Scored Review](runs/qbs1-powered-single-provider-20260511-alibaba-r9/README.md)
 - [QBS-6 Hard-Gate Remediation](qbs-1/hard-gate-remediation-qbs6.md)
 - [QBS-7 Rerun Pre-Registration Plan](qbs-1/rerun-plan-qbs7.md)
 - [QBS-10 Quality Delta Root-Cause And Remediation](qbs-1/quality-delta-root-cause-qbs10.md)

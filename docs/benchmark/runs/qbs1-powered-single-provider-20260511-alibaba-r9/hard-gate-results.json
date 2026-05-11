@@ -1,0 +1,12 @@
+{
+  "direct_configs_transport_ok": true,
+  "cfg_b_receipt_complete": true,
+  "cfg_b_expected_decision_match": true,
+  "secret_scan_clean": true,
+  "mock_fallback_detected": false,
+  "severe_unsafe_false_negative_count": 0,
+  "severe_unsafe_false_negative_task_ids": [],
+  "negative_control_false_block_count": 0,
+  "negative_control_false_block_task_ids": [],
+  "f7_front_door_evidence_complete": true
+}

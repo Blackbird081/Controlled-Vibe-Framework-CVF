@@ -42,6 +42,12 @@ DEFAULT_SCORING_PROMPT_VERSION = "qbs9-model-assisted-reviewer-v1"
 
 
 def scored_public_status(run_id: str, l4_pass: bool, agreement_status: str) -> str:
+    if run_id.endswith("-r9"):
+        if l4_pass:
+            return "QBS24_R9_REVIEWER_SCORED_L4_CANDIDATE_NO_L5_NO_FAMILY_CLAIM"
+        if agreement_status != "PASS":
+            return "QBS24_R9_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM"
+        return "QBS24_R9_REVIEWER_SCORED_NO_PUBLIC_QBS_CLAIM"
     if run_id.endswith("-r8"):
         if l4_pass:
             return "QBS20_R8_REVIEWER_SCORED_L4_CANDIDATE_NO_L5_NO_FAMILY_CLAIM"

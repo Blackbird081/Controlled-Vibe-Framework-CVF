@@ -1,0 +1,70 @@
+{
+  "run_id": "qbs1-powered-single-provider-20260512-alibaba-r10",
+  "run_class": "POWERED_SINGLE_PROVIDER",
+  "provider": "alibaba",
+  "provider_display": "Alibaba/DashScope OpenAI-compatible API",
+  "model": "qwen-turbo",
+  "endpoint_class": "openai_compatible_chat_completions",
+  "endpoint_public_hint": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions",
+  "credential_sources": [
+    "DASHSCOPE_API_KEY",
+    "ALIBABA_API_KEY",
+    "CVF_ALIBABA_API_KEY",
+    "CVF_BENCHMARK_ALIBABA_KEY"
+  ],
+  "credential_policy": "operator-supplied ignored local environment only; raw values must not be printed or committed",
+  "configs": [
+    "CFG-A0",
+    "CFG-A1",
+    "CFG-B"
+  ],
+  "repeat_count": 3,
+  "task_count": 48,
+  "planned_configuration_executions": 432,
+  "temperature": 0.2,
+  "max_tokens": 900,
+  "timeout_seconds": {
+    "direct_model": 90,
+    "cvf_governed_path": 240,
+    "front_door_clarification_path": 240
+  },
+  "pairing_rule": "same provider, model, temperature, and output limit across CFG-A0, CFG-A1, and CFG-B",
+  "reviewer_scoring": {
+    "redacted_output_bundle_required": true,
+    "model_assisted_reviewers": [
+      {
+        "provider": "openai",
+        "model": "gpt-4o-mini"
+      },
+      {
+        "provider": "deepseek",
+        "model": "deepseek-chat"
+      }
+    ],
+    "prompt_version": "qbs40-r10-post-qbs39-scored-run-v1",
+    "calibration_reference": "docs/benchmark/qbs-1/r9-calibration-reference-qbs36.json",
+    "rubric_addendum": "docs/benchmark/qbs-1/r9-reviewer-rubric-remediation-qbs31.md",
+    "rework_disclosure": "publish reviewer_rework and derived_rework; claim gate remains reviewer-rework-based for R6-R10 comparability",
+    "missing_alias_retry_attempts": 2,
+    "completeness_diagnostics": "redacted JSONL diagnostics allowed; raw full outputs are not dumped by default"
+  },
+  "post_remediation_delta": {
+    "parent_scored_run": "qbs1-powered-single-provider-20260511-alibaba-r9",
+    "remediation_artifacts": [
+      "docs/benchmark/qbs-1/qbs33-rework-decoupling.md",
+      "docs/benchmark/qbs-1/qbs34-reviewer-completeness-retry.md",
+      "docs/benchmark/qbs-1/qbs35-live-run-preflight.md",
+      "docs/benchmark/qbs-1/r9-calibration-reference-qbs36.md",
+      "docs/benchmark/qbs-1/r9-calibration-agreement-qbs37.md",
+      "docs/benchmark/qbs-1/qbs38-runtime-governance-family-mapper.md",
+      "docs/benchmark/qbs-1/qbs39-family-conditional-allow-output-contract.md"
+    ],
+    "changed_surface": "post-QBS39 governed ALLOW output contract plus reviewer calibration/reference and scoring hardening"
+  },
+  "cost_boundary": {
+    "operator_approval_required_before_live_run": true,
+    "required_live_flag": "--confirm-live-cost",
+    "stop_on_quota_or_budget_uncertainty": false,
+    "cost_claim_requires_token_or_cost_metadata_where_available": true
+  }
+}

@@ -9,8 +9,9 @@ import { ActiveOverrides } from '@/components/ActiveOverrides';
 import { LedgerExplorer } from '@/components/LedgerExplorer';
 import { ApprovalPanel } from '@/components/ApprovalPanel';
 import { GovernanceGuide } from '@/components/GovernanceGuide';
+import { QBSBenchmarkPanel } from '@/components/QBSBenchmarkPanel';
 
-type GovTab = 'overview' | 'ledger' | 'approval' | 'brand' | 'guide';
+type GovTab = 'overview' | 'ledger' | 'approval' | 'brand' | 'guide' | 'benchmark';
 
 const LABELS = {
     vi: {
@@ -22,6 +23,7 @@ const LABELS = {
             approval: '✅ Phê duyệt',
             brand: '🎨 Brand & Override',
             guide: '📖 Hướng dẫn',
+            benchmark: '📈 Benchmark',
         },
         health: 'Sức khỏe hệ thống',
         systemHealth: 'Runtime Health',
@@ -43,6 +45,7 @@ const LABELS = {
             approval: '✅ Approval',
             brand: '🎨 Brand & Override',
             guide: '📖 Guide',
+            benchmark: '📈 Benchmark',
         },
         health: 'System Health',
         systemHealth: 'Runtime Health',
@@ -68,6 +71,7 @@ export default function GovernancePage() {
         { key: 'approval', label: l.tabs.approval },
         { key: 'brand', label: l.tabs.brand },
         { key: 'guide', label: l.tabs.guide },
+        { key: 'benchmark', label: l.tabs.benchmark },
     ];
 
     return (
@@ -82,6 +86,7 @@ export default function GovernancePage() {
             <div className="flex gap-1 bg-gray-100 dark:bg-[#1a1d2e] p-1 rounded-xl overflow-x-auto scrollbar-hide max-w-full">
                 {tabs.map(tab => (
                     <button
+                        type="button"
                         key={tab.key}
                         onClick={() => setActiveTab(tab.key)}
                         className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all whitespace-nowrap ${
@@ -179,6 +184,12 @@ export default function GovernancePage() {
 
             {activeTab === 'guide' && (
                 <GovernanceGuide />
+            )}
+
+            {activeTab === 'benchmark' && (
+                <div className="bg-white dark:bg-[#1a1d2e] rounded-xl border border-gray-200 dark:border-white/[0.07] p-4">
+                    <QBSBenchmarkPanel />
+                </div>
             )}
         </div>
     );

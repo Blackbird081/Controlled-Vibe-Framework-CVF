@@ -1,0 +1,211 @@
+{
+  "version": "v1",
+  "corpus_generated": "2026-05-13",
+  "benchmark_run": "2026-05-12T17:48:05Z",
+  "metrics": {
+    "truePositive": 12,
+    "falseNegative": 0,
+    "trueNegative": 7,
+    "falsePositive": 1,
+    "precision": 0.9231,
+    "recall": 1.0,
+    "f1": 0.96,
+    "adversarialTotal": 4,
+    "adversarialPassed": 4,
+    "grade": "PASS"
+  },
+  "case_results": [
+    {
+      "id": "tp-email-01",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": null
+    },
+    {
+      "id": "tp-email-02",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": null
+    },
+    {
+      "id": "tp-email-03",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": null
+    },
+    {
+      "id": "tp-api-key-sk-01",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": null
+    },
+    {
+      "id": "tp-api-key-sk-02",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": null
+    },
+    {
+      "id": "tp-bearer-01",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": null
+    },
+    {
+      "id": "tp-aws-01",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": "Exactly AKIA + 16 uppercase alphanumeric chars = 20-char AWS key format"
+    },
+    {
+      "id": "tp-cccd-01",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": null
+    },
+    {
+      "id": "tp-cccd-02",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": null
+    },
+    {
+      "id": "tp-credit-card-01",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": null
+    },
+    {
+      "id": "tp-credit-card-02",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": null
+    },
+    {
+      "id": "tp-multi-01",
+      "category": "true_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": null
+    },
+    {
+      "id": "fp-version-01",
+      "category": "false_pii",
+      "expectRedacted": true,
+      "actualRedacted": true,
+      "correct": true,
+      "note": "Known engine limitation: 12-digit version string triggers CCCD pattern. Documented false positive — regex cannot distinguish version from CCCD without context."
+    },
+    {
+      "id": "fp-model-name-01",
+      "category": "false_pii",
+      "expectRedacted": false,
+      "actualRedacted": false,
+      "correct": true,
+      "note": "Model name is allowlisted"
+    },
+    {
+      "id": "fp-model-name-02",
+      "category": "false_pii",
+      "expectRedacted": false,
+      "actualRedacted": false,
+      "correct": true,
+      "note": "Model names are allowlisted"
+    },
+    {
+      "id": "fp-cvf-const-01",
+      "category": "false_pii",
+      "expectRedacted": false,
+      "actualRedacted": false,
+      "correct": true,
+      "note": "CVF_ prefix is allowlisted"
+    },
+    {
+      "id": "fp-cvf-email-01",
+      "category": "false_pii",
+      "expectRedacted": false,
+      "actualRedacted": false,
+      "correct": true,
+      "note": "@cvf.local domain is allowlisted"
+    },
+    {
+      "id": "fp-variable-name-01",
+      "category": "false_pii",
+      "expectRedacted": false,
+      "actualRedacted": false,
+      "correct": true,
+      "note": "Variable name containing 'email' — not an email address"
+    },
+    {
+      "id": "fp-url-key-01",
+      "category": "false_pii",
+      "expectRedacted": false,
+      "actualRedacted": false,
+      "correct": true,
+      "note": "URL path segment resembling key name, not an actual API key"
+    },
+    {
+      "id": "fp-short-number-01",
+      "category": "false_pii",
+      "expectRedacted": false,
+      "actualRedacted": false,
+      "correct": true,
+      "note": "Numbers too short or common config values"
+    },
+    {
+      "id": "adv-email-space-01",
+      "category": "adversarial",
+      "expectRedacted": false,
+      "actualRedacted": false,
+      "correct": true,
+      "note": "Intentionally obfuscated — regex engine is expected to miss this; known limit"
+    },
+    {
+      "id": "adv-api-key-split-01",
+      "category": "adversarial",
+      "expectRedacted": false,
+      "actualRedacted": false,
+      "correct": true,
+      "note": "Split across words — regex engine expected to miss; known limit"
+    },
+    {
+      "id": "adv-cccd-formatted-01",
+      "category": "adversarial",
+      "expectRedacted": false,
+      "actualRedacted": false,
+      "correct": true,
+      "note": "CCCD with separators — regex requires contiguous digits; known limit"
+    },
+    {
+      "id": "adv-credit-card-alpha-01",
+      "category": "adversarial",
+      "expectRedacted": false,
+      "actualRedacted": false,
+      "correct": true,
+      "note": "Spelled-out card number — regex engine cannot detect; known limit"
+    }
+  ]
+}

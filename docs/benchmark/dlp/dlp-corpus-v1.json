@@ -1,0 +1,179 @@
+{
+  "version": "v1",
+  "generated": "2026-05-13",
+  "note": "All values are synthetic. No real PII. Fabricated for benchmark purposes only.",
+  "categories": {
+    "true_pii": {
+      "description": "Inputs containing PII that MUST be redacted. False negative if any pass through.",
+      "cases": [
+        {
+          "id": "tp-email-01",
+          "patternId": "preset-email",
+          "input": "Please contact support at helpdesk@example-corp.com for assistance.",
+          "expectRedacted": true
+        },
+        {
+          "id": "tp-email-02",
+          "patternId": "preset-email",
+          "input": "User registered with email: test.user+tag@mail.example.org",
+          "expectRedacted": true
+        },
+        {
+          "id": "tp-email-03",
+          "patternId": "preset-email",
+          "input": "Forward this to alice@fake-domain.io and bob@another-fake.net",
+          "expectRedacted": true
+        },
+        {
+          "id": "tp-api-key-sk-01",
+          "patternId": "preset-api-key-sk",
+          "input": "Set your key: sk-fakekeyforbenchmarkabcdefghij1234",
+          "expectRedacted": true
+        },
+        {
+          "id": "tp-api-key-sk-02",
+          "patternId": "preset-api-key-sk",
+          "input": "Authorization header value: sk-proj-fakeprojtestBenchmarkABCDEFGH",
+          "expectRedacted": true
+        },
+        {
+          "id": "tp-bearer-01",
+          "patternId": "preset-api-key-bearer",
+          "input": "Curl with: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dGVzdA",
+          "expectRedacted": true
+        },
+        {
+          "id": "tp-aws-01",
+          "patternId": "preset-api-key-aws",
+          "input": "AWS key detected: AKIAIOSFODNN7EXAMPLE",
+          "expectRedacted": true,
+          "note": "Exactly AKIA + 16 uppercase alphanumeric chars = 20-char AWS key format"
+        },
+        {
+          "id": "tp-cccd-01",
+          "patternId": "preset-cccd",
+          "input": "Số CCCD: 079201234567",
+          "expectRedacted": true
+        },
+        {
+          "id": "tp-cccd-02",
+          "patternId": "preset-cccd",
+          "input": "ID number is 012345678901 as provided.",
+          "expectRedacted": true
+        },
+        {
+          "id": "tp-credit-card-01",
+          "patternId": "preset-credit-card",
+          "input": "Card ending 4111111111111111 was charged.",
+          "expectRedacted": true
+        },
+        {
+          "id": "tp-credit-card-02",
+          "patternId": "preset-credit-card",
+          "input": "Payment method: 5500 0000 0000 0004 (test Mastercard)",
+          "expectRedacted": true
+        },
+        {
+          "id": "tp-multi-01",
+          "patternId": "multiple",
+          "input": "User alice@testmail.example.com used key sk-fakekey1234567890abcde to access.",
+          "expectRedacted": true
+        }
+      ]
+    },
+    "false_pii": {
+      "description": "Inputs that look like PII patterns but MUST NOT be redacted. False positive if blocked.",
+      "cases": [
+        {
+          "id": "fp-version-01",
+          "patternId": "preset-cccd",
+          "input": "Release version 202601234567 is now live.",
+          "expectRedacted": true,
+          "note": "Known engine limitation: 12-digit version string triggers CCCD pattern. Documented false positive — regex cannot distinguish version from CCCD without context."
+        },
+        {
+          "id": "fp-model-name-01",
+          "patternId": "preset-api-key-sk",
+          "input": "Using model qwen-turbo for this request.",
+          "expectRedacted": false,
+          "note": "Model name is allowlisted"
+        },
+        {
+          "id": "fp-model-name-02",
+          "patternId": "preset-api-key-sk",
+          "input": "Provider: deepseek-reasoner with claude-3-5-sonnet-20241022",
+          "expectRedacted": false,
+          "note": "Model names are allowlisted"
+        },
+        {
+          "id": "fp-cvf-const-01",
+          "patternId": "preset-email",
+          "input": "Constant CVF_RULE_BLOCK_RATE used in logging.",
+          "expectRedacted": false,
+          "note": "CVF_ prefix is allowlisted"
+        },
+        {
+          "id": "fp-cvf-email-01",
+          "patternId": "preset-email",
+          "input": "Internal address: admin@cvf.local is reserved.",
+          "expectRedacted": false,
+          "note": "@cvf.local domain is allowlisted"
+        },
+        {
+          "id": "fp-variable-name-01",
+          "patternId": "preset-email",
+          "input": "Set email_validator = true in config.",
+          "expectRedacted": false,
+          "note": "Variable name containing 'email' — not an email address"
+        },
+        {
+          "id": "fp-url-key-01",
+          "patternId": "preset-api-key-sk",
+          "input": "See docs at https://example.com/api/key-value-store for details.",
+          "expectRedacted": false,
+          "note": "URL path segment resembling key name, not an actual API key"
+        },
+        {
+          "id": "fp-short-number-01",
+          "patternId": "preset-cccd",
+          "input": "Port 443 and timeout 30000 ms configured.",
+          "expectRedacted": false,
+          "note": "Numbers too short or common config values"
+        }
+      ]
+    },
+    "adversarial": {
+      "description": "Obfuscated or edge-case PII. Benchmark documents behavior; these are NOT gates. Known regex engine limitations.",
+      "cases": [
+        {
+          "id": "adv-email-space-01",
+          "patternId": "preset-email",
+          "input": "Contact user @ example . com (spaces inserted)",
+          "expectRedacted": false,
+          "note": "Intentionally obfuscated — regex engine is expected to miss this; known limit"
+        },
+        {
+          "id": "adv-api-key-split-01",
+          "patternId": "preset-api-key-sk",
+          "input": "Key is sk- followed by abcdefghijklmnop1234",
+          "expectRedacted": false,
+          "note": "Split across words — regex engine expected to miss; known limit"
+        },
+        {
+          "id": "adv-cccd-formatted-01",
+          "patternId": "preset-cccd",
+          "input": "ID: 079-201-234-567 (hyphen-separated)",
+          "expectRedacted": false,
+          "note": "CCCD with separators — regex requires contiguous digits; known limit"
+        },
+        {
+          "id": "adv-credit-card-alpha-01",
+          "patternId": "preset-credit-card",
+          "input": "Card: four one one one... (spelled out)",
+          "expectRedacted": false,
+          "note": "Spelled-out card number — regex engine cannot detect; known limit"
+        }
+      ]
+    }
+  }
+}

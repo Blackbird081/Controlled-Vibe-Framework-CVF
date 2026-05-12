@@ -17,6 +17,7 @@ import { buildExecutionPrompt } from '@/lib/execute-prompt-contract';
 import { emitExecutionTelemetry, resolveTokenUsage } from '@/lib/execute-telemetry';
 import { resolveGovernanceFamily } from '@/lib/governance-family';
 import { buildGovernanceTaxEntry, logGovernanceTax } from '@/lib/governance-tax-logger';
+import { resolveProviderPolicy, executeWithFailover, type ProviderPreference } from '@/lib/provider-policy-engine';
 import { checkTeamQuota } from '@/lib/quota-guard';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { applyDLPFilter } from '@/lib/dlp-filter';
@@ -855,7 +856,23 @@ export async function POST(request: NextRequest) {
         }
 
         govEnvelope.providerLane = routingResult.selectedProvider;
-        const routedProvider: AIProvider = routingResult.selectedProvider;
+        const baseRoutedProvider: AIProvider = routingResult.selectedProvider;
+
+        // ── PROVIDER POLICY ENGINE: preference + risk-tier resolution ──────────
+        const rawPreference = (rawBody as Record<string, unknown>).providerPreference;
+        const preference: ProviderPreference =
+            rawPreference === 'fast' || rawPreference === 'accurate' ? rawPreference : 'auto';
+        const rawRisk = (body.cvfRiskLevel ?? 'R1').trim().toUpperCase();
+        const policyRisk = (rawRisk === 'R0' || rawRisk === 'R1' || rawRisk === 'R2' || rawRisk === 'R3')
+            ? rawRisk as 'R0' | 'R1' | 'R2' | 'R3'
+            : 'R1' as const;
+        const policyResult = resolveProviderPolicy({
+            riskLevel: policyRisk,
+            preference,
+            configuredProviders: configuredProviders,
+            requestedProvider: baseRoutedProvider,
+        });
+        const routedProvider: AIProvider = policyResult.resolvedProvider;
         const routedApiKey = apiKeyMap[routedProvider];
 
         // ── KNOWLEDGE RETRIEVAL + TENANT PARTITION ENFORCEMENT ────────────────────
@@ -929,12 +946,24 @@ export async function POST(request: NextRequest) {
 
         const policyEngineEndMs = Date.now();
 
-        // ── EXECUTE AI with auto-retry on output validation failure ──
-        let aiResult = await executeAI(routedProvider, routedApiKey, filteredPrompt, {
-            model: body.model,
-            maxTokens: executionMaxTokens,
-            ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}),
-        });
+        // ── EXECUTE AI with failover + auto-retry on output validation failure ──
+        const failoverExec = await executeWithFailover(
+            routedProvider,
+            policyResult.fallbackChain as AIProvider[],
+            policyResult.riskTierOverride,
+            (p: AIProvider) => {
+                const key = apiKeyMap[p];
+                if (!key) throw new Error(`No API key for failover provider: ${p}`);
+                return executeAI(p, key, filteredPrompt, {
+                    model: body.model,
+                    maxTokens: executionMaxTokens,
+                    ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}),
+                });
+            },
+        );
+        let aiResult = failoverExec.result;
+        const finalProvider = failoverExec.provider;
+        const failoverUsed = failoverExec.failoverUsed;
         let outputValidation: ValidationResult | undefined;
         const retryState: RetryState = { attempt: 0, previousIssues: [] };
 
@@ -1113,6 +1142,10 @@ export async function POST(request: NextRequest) {
                 fallbackChain: routingResult.fallbackChain,
                 requestedProvider: provider,
                 routerOverrode: routingResult.selectedProvider !== null && routingResult.selectedProvider !== provider,
+                policyPreference: preference,
+                policyResolvedProvider: finalProvider,
+                policyRiskTierOverride: policyResult.riskTierOverride,
+                failoverUsed,
             },
             knowledgeInjection: {
                 injected: !!enrichedSystemPrompt,

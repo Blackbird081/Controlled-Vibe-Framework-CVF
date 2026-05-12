@@ -4,6 +4,8 @@ import { useState, useCallback, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { type OpenClawMode } from '@/lib/openclaw-config';
 import { PROVIDER_LANE_EVIDENCE, LANE_BADGE_STYLE } from '@/lib/provider-lane-metadata';
+import { ProviderPreferenceSelector } from './ProviderPreferenceSelector';
+import type { ProviderPreference } from '@/lib/provider-policy-engine';
 
 // Types
 export type ProviderKey = 'gemini' | 'openai' | 'anthropic' | 'alibaba' | 'openrouter' | 'deepseek';
@@ -66,6 +68,7 @@ export interface UserPreferences {
     analyticsEnabled: boolean;
     openClawEnabled: boolean;
     openClawMode: OpenClawMode;
+    providerPreference: ProviderPreference;
     multiAgentMode: 'single' | 'multi';
     agentProviders: {
         orchestrator: ProviderKey;
@@ -101,6 +104,7 @@ const defaultSettings: SettingsData = {
         analyticsEnabled: true,
         openClawEnabled: false,
         openClawMode: 'disabled' as OpenClawMode,
+        providerPreference: 'auto' as ProviderPreference,
         multiAgentMode: 'single',
         agentProviders: {
             orchestrator: 'gemini',
@@ -659,6 +663,13 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                 <option value="deepseek">🦋 DeepSeek</option>
                             </select>
                         </div>
+
+                        {/* Provider Preference */}
+                        <ProviderPreferenceSelector
+                            value={settings.preferences.providerPreference ?? 'auto'}
+                            onChange={(v) => updatePreferences({ providerPreference: v })}
+                            lang={settings.preferences.defaultLanguage}
+                        />
 
                         {/* Default Export Mode */}
                         <div>

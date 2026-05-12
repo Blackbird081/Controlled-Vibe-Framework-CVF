@@ -101,6 +101,10 @@
     {
       "path": "docs/EXPORT_MANIFEST.md",
       "reason": "Required provenance binding manifest; large because it lists exported public paths and hashes."
+    },
+    {
+      "path": "docs/reviews/CVF_GC018_TRACK_D_PROVIDER_POLICY_ENGINE_2026-05-13.md",
+      "reason": "EA Track D GC-018 continuation candidate; public governance authorization record for Phase D.1 Provider Policy Engine implementation."
     }
   ],
   "review_rule": "Any new public evidence or exception requires owner review and a manifest reason."

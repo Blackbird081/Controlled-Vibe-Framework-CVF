@@ -295,9 +295,11 @@ QBS-37 runs a post-triangulation calibration-only reviewer check with
 per-family diagnostics and passes aggregate calibration gates. QBS-38 adds
 runtime governance-family metadata for the QBS corpus and the three chronic
 underperformance families, without changing any score. QBS-39 adds
-family-conditional ALLOW output contracts for those families. The next scored
-rerun remains blocked pending separate R10 pre-registration and explicit live
-cost confirmation, so no QBS score or quality-level claim is made.
+family-conditional ALLOW output contracts for those families. QBS-40 freezes
+the R10 checkpoint and pre-registration packet, including the run-specific
+public tag requirement. R10 live execution remains blocked until an operator
+explicitly runs the pre-registered command with `--confirm-live-cost`, so no
+QBS score or quality-level claim is made.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

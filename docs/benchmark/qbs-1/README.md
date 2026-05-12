@@ -124,17 +124,22 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-30 R9 calibration failure analysis | `COMPLETE_NO_NEW_SCORE`; rerun remains blocked pending rubric/reference remediation |
 | QBS-31 R9 reviewer rubric remediation | `READY_NO_NEW_SCORE`; calibration-only rerun required before any scored rerun |
 | QBS-32 R9 calibration-only rerun | `FAIL_NO_NEW_SCORE`; inter-reviewer FAIL and both reviewers miss reference rework gate |
+| QBS-33 rework decoupling | `READY_NO_NEW_SCORE`; scored artifacts can dual-publish reviewer and derived rework views |
+| QBS-34 reviewer completeness retry | `READY_NO_NEW_SCORE`; missing blinded aliases get bounded retry plus redacted diagnostics |
+| QBS-35 live run preflight | `READY_NO_NEW_SCORE`; live/reviewer/adjudicator scripts verify env and workspace boundary before proceeding |
+| QBS-36 available-provider triangulation | `COMPLETE_NO_NEW_SCORE`; 35-anchor model-only reference rebuilt with Alibaba/OpenAI/DeepSeek lanes |
+| QBS-37 post-triangulation calibration diagnostic | `COMPLETE_NO_NEW_SCORE`; aggregate reviewer calibration PASS, per-family metrics diagnostic-only |
+| QBS-38 governance-family mapper | `READY_NO_NEW_SCORE`; family metadata added without changing governance decisions |
+| QBS-39 family ALLOW output contract | `READY_NO_NEW_SCORE`; chronic-negative family contracts added for ALLOW path only |
+| QBS-40 R10 pre-registration | `PREREGISTERED_NO_SCORED_RUN` as `qbs/preregister/qbs1-powered-single-provider-20260512-alibaba-r10` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-29 runs a calibration-only reviewer agreement check against the QBS-28
-reference. Inter-reviewer agreement passes by Spearman, but OpenAI-vs-reference
-alignment fails, so another live rerun remains blocked. QBS-30 classifies the
-failure as OpenAI-vs-reference alignment plus rework-label instability. The
-QBS-31 remediation addendum is now ready. The next track should rerun the
-calibration-only reviewer agreement check using the QBS-31 addendum. QBS-32
-did that rerun and still failed, so a scored rerun remains blocked. Next work
-requires deeper reference/adjudication strategy, not prompt-only calibration.
+QBS-40 freezes the R10 checkpoint and pre-registration packet. The next
+authorized work is live R10 execution only if an operator explicitly runs the
+pre-registered command with `--confirm-live-cost`. Pre-registration alone does
+not authorize a score, L4/L5 claim, family-level claim, provider-parity claim,
+or human-gold claim.

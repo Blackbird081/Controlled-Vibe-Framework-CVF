@@ -105,11 +105,16 @@ mapping and issue-specific reviewer rules. Another calibration-only check is
 required before any scored rerun can be pre-registered. QBS-32 runs that
 calibration-only rerun and still fails: inter-reviewer agreement fails
 (`kappa=0.44639718804920914`, `rho=0.46647062187999994`) and both reviewers
-miss the reviewer-vs-reference rework gate. Scored rerun remains blocked.
+miss the reviewer-vs-reference rework gate. QBS-33 through QBS-39 then complete
+method-level remediation: rework decoupling, reviewer-completeness retry,
+deterministic preflight, model-only available-provider triangulation, family
+diagnostics, governance-family metadata, and family-conditional ALLOW output
+contracts. QBS-40 freezes the R10 checkpoint and pre-registration packet.
 
-Scored runs remain blocked until a run-specific `qbs/preregister/<run-id>` tag
-freezes the exact corpus, configs, provider/model list, reviewer plan, and
-artifact path.
+Live R10 execution remains blocked until a run-specific
+`qbs/preregister/<run-id>` tag freezes the exact corpus, configs,
+provider/model list, reviewer plan, and artifact path, and an operator
+explicitly runs the pre-registered command with `--confirm-live-cost`.
 
 No public QBS score is claimed until reviewer scoring and agreement complete.
 
@@ -159,6 +164,15 @@ Latest powered execution artifact:
 - [QBS-31 R9 Reviewer Rubric Remediation](qbs-1/r9-reviewer-rubric-remediation-qbs31.md)
 - [QBS-32 R9 Calibration-Only Reviewer Agreement Rerun](qbs-1/r9-calibration-agreement-rerun-qbs32.md)
 - [QBS-32 R9 Calibration-Only Reviewer Agreement Rerun JSON](qbs-1/r9-calibration-agreement-rerun-qbs32.json)
+- [QBS-33 Rework Decoupling](qbs-1/qbs33-rework-decoupling.md)
+- [QBS-34 Reviewer Completeness Retry](qbs-1/qbs34-reviewer-completeness-retry.md)
+- [QBS-35 Live Run Preflight](qbs-1/qbs35-live-run-preflight.md)
+- [QBS-36 R9 Triangulated Calibration Reference](qbs-1/r9-calibration-reference-qbs36.md)
+- [QBS-37 R9 Post-Triangulation Calibration Diagnostic](qbs-1/r9-calibration-agreement-qbs37.md)
+- [QBS-38 Runtime Governance-Family Mapper](qbs-1/qbs38-runtime-governance-family-mapper.md)
+- [QBS-39 Family-Conditional ALLOW Output Contract](qbs-1/qbs39-family-conditional-allow-output-contract.md)
+- [QBS-40 R10 Checkpoint And Pre-Registration](qbs-1/qbs40-r10-checkpoint-and-preregistration.md)
+- [Alibaba Powered Single-Provider R10 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260512-alibaba-r10.md)
 - [Alibaba Powered Single-Provider R9 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260511-alibaba-r9.md)
 - [Alibaba Powered Single-Provider R6 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r6.md)
 - [Alibaba Powered Single-Provider R7 Pre-Registration](qbs-1/preregistrations/qbs1-powered-single-provider-20260510-alibaba-r7.md)

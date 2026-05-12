@@ -16,6 +16,7 @@ import { buildKnowledgeSystemPrompt, hasKnowledgeContext } from '@/lib/knowledge
 import { buildExecutionPrompt } from '@/lib/execute-prompt-contract';
 import { emitExecutionTelemetry, resolveTokenUsage } from '@/lib/execute-telemetry';
 import { resolveGovernanceFamily } from '@/lib/governance-family';
+import { buildGovernanceTaxEntry, logGovernanceTax } from '@/lib/governance-tax-logger';
 import { checkTeamQuota } from '@/lib/quota-guard';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { applyDLPFilter } from '@/lib/dlp-filter';
@@ -731,6 +732,8 @@ export async function POST(request: NextRequest) {
             }
         }
 
+        const preProcessingEndMs = Date.now();
+
         // ── PRE-GUARDS: Run guard runtime pipeline (shared engine — Sprint 6) ──
         const guardEngine = getSharedGuardEngine();
         const guardContext = buildWebGuardContext({
@@ -924,6 +927,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        const policyEngineEndMs = Date.now();
+
         // ── EXECUTE AI with auto-retry on output validation failure ──
         let aiResult = await executeAI(routedProvider, routedApiKey, filteredPrompt, {
             model: body.model,
@@ -1022,6 +1027,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        const providerEndMs = Date.now();
+
         // ── POST-EXECUTION BYPASS DETECTION GUARD ──────────────────────────────
         if (aiResult.success && aiResult.output) {
             const bypassCheck = detectBypassInOutput(aiResult.output);
@@ -1074,6 +1081,24 @@ export async function POST(request: NextRequest) {
         const usage = aiResult.success && aiResult.output
             ? resolveTokenUsage(filteredPrompt, aiResult.output, aiResult)
             : undefined;
+
+        const postProcessingEndMs = Date.now();
+        try {
+            logGovernanceTax(buildGovernanceTaxEntry({
+                request_id: govEnvelope.envelopeId,
+                phases: {
+                    pre_processing_ms: preProcessingEndMs - routeStartedAtMs,
+                    policy_engine_ms: policyEngineEndMs - preProcessingEndMs,
+                    provider_ms: providerEndMs - policyEngineEndMs,
+                    post_processing_ms: postProcessingEndMs - providerEndMs,
+                },
+                decision: enforcement.status,
+                provider: routedProvider,
+                governance_family: body.governanceFamily ?? null,
+            }));
+        } catch {
+            // Non-fatal
+        }
 
         return NextResponse.json({
             ...aiResult,

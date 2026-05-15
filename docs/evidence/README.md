@@ -9,6 +9,7 @@ Start with:
 - `provider-lanes.md`
 - `web-governance-path.md`
 - `redaction-and-key-safety.md`
+- `current-cvf-quality-status.md`
 - `claim-boundaries.md`
 
 Benchmark methodology is published separately under `docs/benchmark/`. That

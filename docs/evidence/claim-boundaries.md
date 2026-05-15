@@ -10,6 +10,10 @@ Allowed:
 - Release-quality governance proof requires live provider calls.
 - Alibaba/DashScope is the active live proof lane when configured.
 - DeepSeek has confirmatory evidence, not parity certification.
+- Current CVF quality status may be cited as a bounded local-first baseline:
+  governance/audit/safety remain strong, non-coder deliverable contracts are
+  hardened, and output-quality parity is not proven. See
+  `docs/evidence/current-cvf-quality-status.md`.
 - QBS methodology is public under `docs/benchmark/`, but no public QBS quality
   score is claimed until a powered run is published.
 - QBS-1 runner/corpus planning is public, but scored QBS runs require a
@@ -39,6 +43,10 @@ Allowed:
 Not allowed without new evidence:
 
 - all providers have equal quality
+- CVF has output-quality parity with direct provider output
+- CVF improves output quality across EVT-4
+- focused small-sample checks prove broad metric superiority
+- the EVT4-03 output-validation failure root cause is fixed
 - all agent frameworks are certified
 - CVF has a public QBS quality score
 - QBS-1 planning documents are scored benchmark evidence

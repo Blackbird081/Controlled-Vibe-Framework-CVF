@@ -54,6 +54,11 @@ repository maintenance, governance checks, and verification support. See
 > with a `7/7` release-gate PASS. Alibaba, DeepSeek, and OpenAI have current
 > named-model governed live canary receipts at `6/6` PASS. These are
 > governed-path operability proofs, not QBS quality benchmark scores.
+>
+> Current quality status: CVF is a governance-first local deployment baseline.
+> Non-coder deliverable contracts have been hardened, but EVT-4 output-quality
+> parity is not proven. See
+> `docs/evidence/current-cvf-quality-status.md`.
 
 ## Who CVF Is For
 
@@ -334,6 +339,7 @@ rename/reuse automatically.
 Start here:
 
 - `docs/evidence/README.md`
+- `docs/evidence/current-cvf-quality-status.md`
 - `docs/evidence/latest-release-gate.md`
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`

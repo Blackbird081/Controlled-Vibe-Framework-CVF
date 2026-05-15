@@ -214,6 +214,8 @@ That command is the release-quality proof command. It includes live governance
 E2E and must fail if no DashScope-compatible live key is available.
 
 For the smallest operational path, use `docs/guides/minimum-useful-cvf.md`.
+For the current recommended deployment baseline, use
+`docs/guides/local-first-deployment-baseline.md`.
 
 ## Module Map
 
@@ -345,6 +347,7 @@ Start here:
 - `docs/evidence/web-governance-path.md`
 - `docs/evidence/redaction-and-key-safety.md`
 - `docs/evidence/claim-boundaries.md`
+- `docs/guides/local-first-deployment-baseline.md`
 
 ## What Is Intentionally Not Here
 

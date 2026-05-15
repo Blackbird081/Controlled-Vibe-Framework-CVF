@@ -23,6 +23,11 @@ An Alibaba or DeepSeek key is required before claiming that CVF governs real AI/
 Claim boundary to keep in mind during any demo:
 
 > CVF proves governed AI-assisted development. Multi-provider operability is proven for Alibaba and DeepSeek. Provider parity is not claimed. Provider economics are user-selected.
+>
+> Current quality boundary: CVF is a governance-first local deployment
+> baseline. Non-coder deliverable contracts have been hardened, but EVT-4
+> output-quality parity is not proven. Use
+> `docs/evidence/current-cvf-quality-status.md` as the current public summary.
 
 ---
 

@@ -1,6 +1,6 @@
 # Latest Release Gate
 
-Status at renewal export: bounded public summary.
+Status: fresh local-first release gate PASS on 2026-05-16.
 
 The release-quality local command is:
 
@@ -19,7 +19,8 @@ Renewed repository live proof must be run after GitHub cutover through:
 
 Boundary:
 
+- Local-first release gate proof is recorded at
+  `docs/evidence/local-first-release-gate-proof-2026-05-16.md`.
 - Historical live evidence is preserved in the provenance repository.
-- This renewed repository must produce its own hosted live-gate run before any
-  new public GA claim depends on hosted GitHub evidence.
-
+- Hosted GitHub protected live-gate evidence is still separate from local proof.
+  Any hosted/public GA claim must cite a hosted workflow run when required.

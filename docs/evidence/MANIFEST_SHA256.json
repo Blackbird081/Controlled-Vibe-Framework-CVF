@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-15T22:46:59.551914+00:00",
-  "git_commit": "8aa7e97c0ea2b52a0537049e3ccbeb5a127a1b79",
-  "file_count": 248,
+  "generated_at": "2026-05-15T23:04:23.386871+00:00",
+  "git_commit": "2727c46dc088aa8d90aa865a6351924901152179",
+  "file_count": 249,
   "files": {
     "docs/benchmark/dlp/dlp-benchmark-v1.json": "a16f0e3ea3a97b144cb8b3621df67bc2837711caea8dc4be617bfa7b60bff3ff",
     "docs/benchmark/dlp/dlp-corpus-v1.json": "d504f2ff4c7935bebf4714e366923988fb43da1fa453c1219664425cc3028bfb",
@@ -237,7 +237,8 @@
     "docs/benchmark/runs/qbs1-powered-single-provider-20260512-alibaba-r10/scored-results.json": "048fdbf8dc8fcb03ea38d3d10f1a74a64b18f0e956152202f2379451ba94abf4",
     "docs/evidence/claim-boundaries.md": "f2d74d59c719abc5e6c3fc8e6ea9b7bac254abfd2bf34e78f63ef2edd9e1b0ac",
     "docs/evidence/current-cvf-quality-status.md": "a160ba8cc38df12a36b6a35beecf8fae665706305e70a5c9511475ebf5a8cce3",
-    "docs/evidence/latest-release-gate.md": "14a7e4c44fd7925487e888c314139273c5c9633491690c412bd0e7bb6b36bc44",
+    "docs/evidence/latest-release-gate.md": "b472da1ad32a3c3e60e2d81220e0971a807c0fe95944a43a7ca8751dcd657251",
+    "docs/evidence/local-first-release-gate-proof-2026-05-16.md": "b7299ac300b94e2516f21fced39d11b13de2b042e8da114acf29dd6037bf344d",
     "docs/evidence/provider-lane-receipts/alibaba/RECEIPT_20260421-072551-422037.json": "c40fe6e2b6c238a9f7af4093f336b7cf40a723dd742e3b556b82721ad0c153cf",
     "docs/evidence/provider-lane-receipts/alibaba/RECEIPT_20260509-160312-276776.json": "277155caf4e387114c4857c3e049b08f739da00466757be921b1f0ac3aede364",
     "docs/evidence/provider-lane-receipts/deepseek/RECEIPT_20260421-114125-19515e.json": "6c28bdcb2767fada0689116af41dcd79489e711258774058554ab70b24b01c90",
@@ -247,7 +248,7 @@
     "docs/evidence/provider-lane-receipts/openai/RECEIPT_20260509-141626-fa4465.json": "b0c8726554b9d18e98fcddccd3baef12e0c2aa5af6630b1b6581fefa97d27412",
     "docs/evidence/provider-lane-receipts/openai/RECEIPT_20260509-160806-7e3b5b.json": "8fb7331b10195bb6f4012d5bda99f36433a2a79507ffdfca83436d23eb1bea3b",
     "docs/evidence/provider-lanes.md": "520fbf888c171ae03e6d11c74c155be8ef2e38e29e34f82712059091b4da491a",
-    "docs/evidence/README.md": "89a7692942370037f049fdb5d95cb57f668fc9a159d49244b3d2d1c99b741006",
+    "docs/evidence/README.md": "db51f02464e74cdc3032010a608f34d86596c86416e30600cb1369cfadcf7e29",
     "docs/evidence/redaction-and-key-safety.md": "1ba53c296eba7209126c6a47e84a242549e6b2fcfb39496fd7a39bf39b6d8f0b",
     "docs/evidence/renewed-repo-release-gate-proof.md": "bb38a26bc0020a8b117ee84aeda1cb4fd7811b8aa52dba7471c94a50f1339272",
     "docs/evidence/web-governance-path.md": "f184abcab400575ed23b875ae5f07896a40f39c3975a0402d7e316083c72f81d"

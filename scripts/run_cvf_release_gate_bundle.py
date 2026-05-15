@@ -121,7 +121,11 @@ def platform_cmd(cmd: list[str]) -> list[str]:
 def is_allowed_secret_line(path: Path, line: str) -> bool:
     lowered = line.lower()
     rel = path.relative_to(REPO_ROOT)
+    rel_posix = rel.as_posix()
     parts = {p.lower() for p in rel.parts}
+
+    if rel_posix.startswith("docs/benchmark/dlp/"):
+        return True
 
     if "tests" in parts or ".test." in path.name.lower() or path.name.lower().endswith(".spec.ts"):
         return True

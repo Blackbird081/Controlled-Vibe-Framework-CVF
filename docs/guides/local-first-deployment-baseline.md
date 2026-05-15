@@ -27,6 +27,7 @@ Not allowed:
 See:
 
 - `docs/evidence/current-cvf-quality-status.md`
+- `docs/evidence/local-first-release-gate-proof-2026-05-16.md`
 - `docs/evidence/claim-boundaries.md`
 
 ## 2. Operator Setup
@@ -75,6 +76,10 @@ Expected release-quality posture:
 - the command must include live governance E2E;
 - the command must fail if no DashScope-compatible live key is available;
 - mock UI checks are not a substitute for governance proof.
+
+Latest public proof:
+
+- `docs/evidence/local-first-release-gate-proof-2026-05-16.md`
 
 ## 4. Demo Path
 

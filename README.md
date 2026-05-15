@@ -59,6 +59,9 @@ repository maintenance, governance checks, and verification support. See
 > Non-coder deliverable contracts have been hardened, but EVT-4 output-quality
 > parity is not proven. See
 > `docs/evidence/current-cvf-quality-status.md`.
+>
+> Fresh local-first release gate: `7/7` PASS on 2026-05-16 with live governance
+> E2E. See `docs/evidence/local-first-release-gate-proof-2026-05-16.md`.
 
 ## Who CVF Is For
 
@@ -342,6 +345,7 @@ Start here:
 
 - `docs/evidence/README.md`
 - `docs/evidence/current-cvf-quality-status.md`
+- `docs/evidence/local-first-release-gate-proof-2026-05-16.md`
 - `docs/evidence/latest-release-gate.md`
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`

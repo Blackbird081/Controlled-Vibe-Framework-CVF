@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import {
     Sparkles, Home, Zap, Search, HelpCircle, BookOpen,
     Bot, Network, Wrench, FlaskConical, Lightbulb,
-    Activity, BarChart3, ShoppingBag, Shield, Building2, Lock,
+    Activity, BarChart3, ShoppingBag, Shield, Building2, Lock, Gauge,
     UserCircle, Settings, Coins, LogOut, Globe, FileCheck2, ClipboardCheck,
 } from 'lucide-react';
 import SidebarNavItem from './sidebar/SidebarNavItem';
@@ -223,6 +223,11 @@ export default function Sidebar({
                             <SidebarNavItem icon={BarChart3} label={t('nav.analytics') || 'Analytics'}
                                 isActive={appState === 'analytics' || isRoute('/analytics')}
                                 onClick={() => handleNav('analytics')} />
+                        )}
+                        {userRole !== 'viewer' && (
+                            <SidebarNavItem icon={Gauge} label={t('nav.runtime') || 'Runtime Monitor'}
+                                isActive={appState === 'runtime' || isRoute('/runtime')}
+                                onClick={() => handleNav('runtime')} />
                         )}
                         {userRole !== 'viewer' && (
                             <SidebarNavItem icon={ShoppingBag} label={t('nav.marketplace') || 'Marketplace'}

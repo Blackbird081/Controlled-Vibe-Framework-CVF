@@ -11,6 +11,16 @@ export type {
   ControlledMemoryReceipt, ControlledMemoryRecord, ControlledMemoryReinjectionRequest,
   ControlledMemoryScope, ControlledMemorySensitivity,
 } from "./controlled.memory.gateway.contract";
+export {
+  applyMemoryPrivacyFilter,
+  APPROVED_MEMORY_CAPTURE_SOURCES,
+  isApprovedMemoryCaptureSource,
+  resolveMemoryRetention,
+} from "./controlled.memory.subcontracts";
+export type {
+  ApprovedMemoryCaptureSource,
+  MemoryRetentionDecision,
+} from "./controlled.memory.subcontracts";
 
 // W4-T8 — Evaluation Engine Consumer Pipeline Bridge (CP1)
 export {

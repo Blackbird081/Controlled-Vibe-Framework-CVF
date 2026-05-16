@@ -1,10 +1,6 @@
 # CVF 16.5 Runtime Absorption
 
-Memory class: FULL_RECORD
-
-Status: PUBLIC RUNTIME ABSORPTION SUMMARY
-
-Date: 2026-05-16
+Date: 2026-05-17
 
 ## Purpose
 
@@ -56,12 +52,12 @@ planes or clearly isolated as bounded extension surfaces.
 
 | Lane | Public surface | User value |
 |---|---|---|
-| Model Gateway runtime | `EXTENSIONS/CVF_MODEL_GATEWAY/` | Provider choice, fallback, quota, sticky-session, credential boundary, and receipt structure become explicit and testable. |
-| Controlled Memory | `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/controlled.memory.gateway.contract.ts` | Memory write/read behavior can be governed by source, purpose, retention, and review status. |
+| Model Gateway runtime | `EXTENSIONS/CVF_MODEL_GATEWAY/` | Provider choice, fallback, quota, sticky-session, credential boundary, receipt structure, and provider output handling become explicit and testable. |
+| Controlled Memory | `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/controlled.memory.gateway.contract.ts`, `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/controlled.memory.subcontracts.ts` | Memory write/read behavior can be governed by source, purpose, retention, review status, privacy filtering, and capture boundaries. |
 | Agent Boundary / Delegation | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/agent.governed.session.contract.ts` | Agent sessions get bounded delegation state instead of implicit handoff assumptions. |
 | Tool Call Trace / Sandbox | `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/tool.call.trace.contract.ts` | Tool calls can carry traceable sandbox posture and review facts. |
 | MCP Business Adapter | `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/mcp.business.adapter.contract.ts` | Business-tool invocations get approval and outcome boundaries before being treated as governed actions. |
-| Observability Delta | `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/` | Runtime signals stay observe-only and do not silently mutate policy or execution. |
+| Observability Plane Foundation | `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/runtime/page.tsx` | Runtime signals stay observe-only and are now visible through a web-facing Runtime Monitor for operators and non-coders. |
 | Knowledge Vault Intake | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/knowledge.vault.intake.contract.ts` | External knowledge intake can be classified, deduplicated, risk-tagged, and review-gated. |
 | Document Artifact Renderer | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/document.artifact.renderer.contract.ts` | Governance evidence can be rendered into reviewable Markdown/HTML artifacts without inventing new evidence. |
 | OpenSpec Change Adapter | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/openspec.change.adapter.contract.ts` | Change proposals can be converted into phase-safe, reviewable implementation packets. |
@@ -71,13 +67,14 @@ planes or clearly isolated as bounded extension surfaces.
 
 `cvf-web` already inherits earlier non-coder hardening: governed request entry,
 receipt visibility, deliverable-pack export, evidence export, local-first
-provider posture, and protected release-gate controls.
+provider posture, protected release-gate controls, and a read-only Runtime
+Monitor at `/runtime`.
 
-The CVF 16.5 lanes above are now public runtime surfaces, but most are not yet
-directly surfaced as first-class non-coder web workflows. The web app should
-not claim direct UI coverage for Knowledge Vault intake, HTML artifact export,
-OpenSpec packet intake, Skill Evolution review queues, or Observability Delta
-dashboards until those routes/components and tests exist.
+The CVF 16.5 lanes above are now public runtime surfaces. Some are directly
+surfaced as first-class non-coder web workflows: Knowledge Intake,
+self-contained HTML Artifact Export, Work Transfer, and Runtime Monitor. The
+web app should not claim direct UI coverage for OpenSpec packet intake or Skill
+Evolution review queues until those routes/components and tests exist.
 
 ## What This Means For Non-Coders
 
@@ -101,27 +98,30 @@ release-gate evidence files.
 
 ## Verification
 
-Public publication verification on 2026-05-16:
+Public publication verification on 2026-05-17:
 
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION`: TypeScript check PASS; focused
   Vitest `48/48` PASS.
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION`: TypeScript check PASS; focused
   Vitest `161/161` PASS including the public self-contained gateway alignment.
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION`: TypeScript check PASS; focused
-  Vitest `6/6` PASS.
-- `EXTENSIONS/CVF_MODEL_GATEWAY`: TypeScript check PASS; Vitest `24/24` PASS.
+  memory gateway/subcontract Vitest `10/10` PASS.
+- `EXTENSIONS/CVF_MODEL_GATEWAY`: TypeScript check PASS; provider output
+  contract Vitest `5/5` PASS.
 - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE`: TypeScript/test check
   PASS; package Vitest `102/102` PASS and focused skill-evolution `13/13`
   PASS.
 - `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME`: TypeScript/test
-  check PASS; Vitest `7/7` PASS.
-- `cvf-web`: production build PASS; governed execute/QBS clarification route
-  tests `6/6` PASS.
+  check PASS; public package Vitest `12/12` PASS.
+- `cvf-web`: focused Runtime Monitor/API/server tests `7/7` PASS; TypeScript
+  check PASS; production build PASS through the release-gate bundle.
+- Live release gate: `7/7` PASS on 2026-05-17 with live governance E2E using
+  operator-supplied provider keys.
 - Public-surface scan: PASS.
 
 ## Practical User Benefit
 
 For non-coders and operators, this upgrade makes CVF more reviewable and less
-implicit. The immediate benefit is clearer evidence and fewer hidden
-assumptions. The next product benefit is web integration that turns the most
-useful absorbed knowledge into simple guided flows.
+implicit. The immediate benefit is clearer evidence, visible runtime state,
+safer memory handling, provider outputs with explicit boundaries, and fewer
+hidden assumptions when AI work is reused or handed to another person.

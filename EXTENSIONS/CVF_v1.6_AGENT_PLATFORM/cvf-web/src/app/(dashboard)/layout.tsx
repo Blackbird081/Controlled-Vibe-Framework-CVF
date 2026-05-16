@@ -106,6 +106,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         if (p.startsWith('/skills/search')) return 'skill-search';
         if (p.startsWith('/history')) return 'history';
         if (p.startsWith('/analytics')) return 'analytics';
+        if (p.startsWith('/runtime')) return 'runtime';
         if (p.startsWith('/marketplace')) return 'marketplace';
         if (p.startsWith('/skills')) return 'skills';
         if (p.startsWith('/help')) return 'help';
@@ -165,6 +166,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             case 'landing': router.push('/landing'); setActiveModal(null); break;
             case 'history': router.push('/history'); setActiveModal(null); break;
             case 'analytics': router.push('/analytics'); setActiveModal(null); break;
+            case 'runtime': router.push('/runtime'); setActiveModal(null); break;
             case 'marketplace': router.push('/marketplace'); setActiveModal(null); break;
             case 'skills': router.push('/skills'); setActiveModal(null); break;
             case 'skill-search': router.push('/skills/search'); setActiveModal(null); break;

@@ -72,6 +72,8 @@ What you can do on the Web UI:
   signals, and token behavior.
 - **Visual audit trail:** inspect receipts and review states for AI-assisted
   work.
+- **Runtime monitor:** see current work, provider pressure, local activity,
+  alerts, and receipts in a read-only operator view.
 - **No-code configuration:** adjust provider and policy settings through the
   interface instead of editing source files.
 
@@ -84,9 +86,10 @@ Three governed end-user workflows are available without writing code:
 | Knowledge Intake | `/knowledge/intake` | Submit new notes, policies, or product facts as a governed knowledge packet with a visible source, audience, and review boundary. |
 | Artifact Export | `/artifacts` | Export any CVF document as a self-contained HTML review packet. When the governance engine is configured, the export includes a live governance receipt (`decision: ALLOW`, risk level, timestamp). |
 | Work Transfer | `/work-transfer` | Review the audit history of recorded actions and export individual records as governed HTML artifacts for handover or review. |
+| Runtime Monitor | `/runtime` | View a read-only snapshot of current work, provider pressure, local activity, alerts, and receipts without reading logs or source files. |
 
-All three routes are reachable from the sidebar and from the home
-screen after login.
+These routes are reachable from the sidebar and from the home screen after
+login.
 
 ## Scope
 
@@ -154,8 +157,8 @@ To evaluate CVF locally, an operator needs:
 > parity is not proven. See
 > `docs/evidence/current-cvf-quality-status.md`.
 >
-> Fresh local-first release gate: `7/7` PASS on 2026-05-16 with live governance
-> E2E. See `docs/evidence/local-first-release-gate-proof-2026-05-16.md`.
+> Fresh local-first release gate: `7/7` PASS on 2026-05-17 with live governance
+> E2E. See `docs/evidence/latest-release-gate.md`.
 >
 > CVF 16.5 knowledge absorption is now public as bounded product evidence for
 > provider choice, memory handling, knowledge intake, reviewable artifacts,

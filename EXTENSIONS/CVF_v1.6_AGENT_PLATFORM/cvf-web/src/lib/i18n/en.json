@@ -5,6 +5,7 @@
     "nav.templates": "Templates",
     "nav.history": "History",
     "nav.analytics": "Analytics",
+    "nav.runtime": "Runtime Monitor",
     "nav.marketplace": "Marketplace",
     "nav.aiAgent": "AI Agent",
     "nav.multiAgent": "Multi-Agent",

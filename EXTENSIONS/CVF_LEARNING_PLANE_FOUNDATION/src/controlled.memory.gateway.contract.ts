@@ -1,4 +1,9 @@
 import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
+import {
+  applyMemoryPrivacyFilter,
+  isApprovedMemoryCaptureSource,
+  resolveMemoryRetention,
+} from "./controlled.memory.subcontracts";
 
 export type ControlledMemoryKind = "working" | "episodic" | "semantic" | "procedural";
 export type ControlledMemoryScope = "session" | "project" | "user" | "global";
@@ -114,42 +119,8 @@ export interface ControlledMemoryGatewayDependencies {
   estimateTokens?: (content: string) => number;
 }
 
-const SECRET_PATTERNS: { pattern: RegExp; label: string }[] = [
-  { pattern: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, label: "[PII_EMAIL]" },
-  { pattern: /\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b/g, label: "[PII_PHONE]" },
-  { pattern: /\b(?:sk|pk|api|key|token|secret|bearer|auth)[-_]?[A-Za-z0-9]{12,}\b/gi, label: "[SECRET_MASKED]" },
-  { pattern: /password\s*[=:]\s*\S+/gi, label: "[SECRET_MASKED]" },
-];
-
 function defaultEstimateTokens(content: string): number {
   return Math.ceil(content.length / 4);
-}
-
-function applyPrivacyFilter(content: string): { content: string; report: ControlledMemoryPrivacyReport } {
-  let filtered = content;
-  let maskedTokenCount = 0;
-  const appliedPatterns: string[] = [];
-
-  for (const { pattern, label } of SECRET_PATTERNS) {
-    const matches = filtered.match(pattern);
-    if (!matches?.length) {
-      continue;
-    }
-    maskedTokenCount += matches.length;
-    if (!appliedPatterns.includes(label)) {
-      appliedPatterns.push(label);
-    }
-    filtered = filtered.replace(pattern, label);
-  }
-
-  return {
-    content: filtered,
-    report: {
-      filtered: maskedTokenCount > 0,
-      maskedTokenCount,
-      appliedPatterns,
-    },
-  };
 }
 
 export class ControlledMemoryGatewayContract {
@@ -163,16 +134,29 @@ export class ControlledMemoryGatewayContract {
   }
 
   capture(request: ControlledMemoryCaptureRequest): ControlledMemoryCaptureResult {
+    if (!isApprovedMemoryCaptureSource(request.sourceEvent)) {
+      return {
+        receipt: this.buildReceipt(
+          request.policy,
+          "denied",
+          "memory_capture_source_not_approved",
+          [],
+        ),
+      };
+    }
     const blocked = this.evaluateWritePolicy(request.policy, request.scope, request.sensitivity ?? "internal");
     if (blocked) {
       return { receipt: this.buildReceipt(request.policy, blocked.decision, blocked.reason, []) };
     }
 
     const capturedAt = this.now();
-    const { content, report } = applyPrivacyFilter(request.content);
-    const expiresAt = request.ttlDays
-      ? new Date(Date.parse(capturedAt) + request.ttlDays * 24 * 60 * 60 * 1000).toISOString()
-      : undefined;
+    const { content, report } = applyMemoryPrivacyFilter(request.content);
+    const retention = resolveMemoryRetention({
+      kind: request.kind,
+      sensitivity: request.sensitivity ?? "internal",
+      capturedAt,
+      ttlDays: request.ttlDays,
+    });
     const memoryHash = computeDeterministicHash(
       "cvf-controlled-memory-record",
       request.sourceEvent,
@@ -197,7 +181,7 @@ export class ControlledMemoryGatewayContract {
       lifecycleState: "active",
       content,
       tokenEstimate: this.estimateTokens(content),
-      expiresAt,
+      expiresAt: retention.expiresAt,
       provenance: request.provenance,
       privacyReport: report,
     };

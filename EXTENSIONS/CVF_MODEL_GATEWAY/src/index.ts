@@ -299,6 +299,23 @@ export {
 } from "./gateway-receipt";
 
 export type {
+  ProviderExitClass,
+  ProviderExitClassification,
+  ProviderJsonEnvelope,
+  ProviderOutputMode,
+  ProviderStdoutPolicy,
+  ProviderStreamChunk,
+} from "./provider-output-contract";
+export {
+  assertProviderStdoutPolicy,
+  classifyProviderExitCode,
+  parseProviderJsonEnvelope,
+  parseProviderNdjsonStream,
+  PROVIDER_OUTPUT_EXIT_CODES,
+  PROVIDER_STDOUT_POLICY,
+} from "./provider-output-contract";
+
+export type {
   CredentialMetadata,
   CredentialReference,
 } from "./credential-boundary";

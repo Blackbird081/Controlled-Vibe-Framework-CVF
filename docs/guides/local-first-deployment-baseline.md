@@ -34,6 +34,28 @@ Allowed: CVF is a governance-first local deployment baseline with bounded live
 proof. Not allowed: CVF has output-quality parity, broad EVT-4 superiority, or
 a clean full EVT-4 no-degrade result.
 
+## Source
+
+Predecessor evidence behind this baseline:
+
+- `docs/evidence/current-cvf-quality-status.md` — current quality posture
+- `docs/evidence/local-first-release-gate-proof-2026-05-16.md` — release-gate proof
+- `docs/evidence/claim-boundaries.md` — public claim boundary
+- `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md` — known limits register
+
+## Decision
+
+Treated as the current recommended next step for operators evaluating CVF
+locally. Future updates to the recommended baseline require fresh evidence
+under `docs/evidence/` and explicit revision of this guide.
+
+## Evidence
+
+The release-gate command in section 3 and the public receipts under
+`docs/evidence/provider-lane-receipts/` are the operational evidence backing
+this baseline. The known-limits section makes explicit which claims are not
+backed by evidence.
+
 ## 1. What This Baseline Claims
 
 Allowed claim:

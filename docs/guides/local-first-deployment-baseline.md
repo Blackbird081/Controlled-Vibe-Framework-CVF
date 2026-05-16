@@ -1,13 +1,38 @@
 # Local-First Deployment Baseline
 
-Date: 2026-05-16
+Memory class: POINTER_RECORD
 
 Status: CURRENT RECOMMENDED NEXT STEP
+
+Date: 2026-05-16
 
 This guide turns the current CVF state into a practical local-first deployment
 baseline. It is meant for operators and evaluators who want to run CVF, inspect
 governance behavior, and understand the current quality boundary without
 reading the private provenance archive.
+
+## Purpose
+
+Explain how to use the current public CVF state as a local-first governance
+baseline without overstating output-quality claims.
+
+## Muc dich nhanh
+
+Dung CVF hien tai nhu baseline local-first: chay UI, cau hinh key bang env,
+chay live gate khi can claim governance, va noi ro output-quality parity chua
+duoc chung minh.
+
+## Scope
+
+This guide covers operator setup, live governance proof, demo flow, known
+limits, and the recommended operating decision. It does not authorize new
+runtime behavior or new provider certification.
+
+## Claim Boundary
+
+Allowed: CVF is a governance-first local deployment baseline with bounded live
+proof. Not allowed: CVF has output-quality parity, broad EVT-4 superiority, or
+a clean full EVT-4 no-degrade result.
 
 ## 1. What This Baseline Claims
 

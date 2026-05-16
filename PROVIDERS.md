@@ -1,7 +1,27 @@
 # Providers
 
+Memory class: POINTER_RECORD
+
+Status: CURRENT PUBLIC PROVIDER BOUNDARY
+
 CVF is provider-agnostic. Providers are execution lanes behind a governance
 boundary, not the definition of CVF itself.
+
+## Purpose
+
+Explain the current public provider lanes, adapter expectations, and key
+handling rules without implying unsupported provider parity.
+
+## Scope
+
+This file covers public provider posture and operator key handling. Detailed
+release-gate evidence and quality benchmark methodology live under
+`docs/evidence/` and `docs/benchmark/`.
+
+## Claim Boundary
+
+Provider claims are lane-specific. A provider may be adapter-ready without
+being certified for parity, quality, cost, speed, reliability, or rate limits.
 
 ## Current Public Lane Status
 

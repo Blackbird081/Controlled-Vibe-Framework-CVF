@@ -140,8 +140,10 @@ Controlled-Vibe-Framework-CVF/
 |   |-- CVF_GOVERNANCE_EXPANSION_FOUNDATION/
 |   |-- CVF_LEARNING_PLANE_FOUNDATION/
 |   |-- CVF_MODEL_GATEWAY/
+|   |-- CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/
 |   |-- CVF_v1.6_AGENT_PLATFORM/
 |   |   `-- cvf-web/
+|   |-- CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/
 |   `-- supporting bounded modules...
 |-- docs/
 |   |-- evidence/
@@ -263,6 +265,13 @@ The adapter must make governance-visible facts available:
 - token/cost signal where available
 - audit receipt reference
 
+CVF 16.5 adds public deterministic contracts for gateway routing, credential
+boundaries, fallback policy, quota ledger, sticky sessions, controlled memory,
+knowledge intake, document artifact rendering, OpenSpec change packets, tool
+trace/sandbox posture, MCP business actions, observe-only runtime signals, and
+proposal-only skill evolution. These contracts improve runtime reviewability;
+live governance behavior still requires release-gate evidence.
+
 ## Local-First Posture
 
 The default deployment posture is local-first. Developers can clone and run CVF
@@ -281,10 +290,13 @@ The web app helps users:
 - submit governed requests
 - see risk and provider posture
 - inspect evidence receipts
+- export deliverable packs and evidence summaries
 - run protected governance jobs
 - operate non-coder workflows
 
 Claims about web governance must still be backed by live provider evidence.
+The newly public CVF 16.5 runtime contracts are backend primitives until the
+web app exposes dedicated non-coder flows for them.
 
 ## Public vs Provenance Boundary
 

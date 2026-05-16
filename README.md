@@ -125,6 +125,12 @@ To evaluate CVF locally, an operator needs:
 >
 > Fresh local-first release gate: `7/7` PASS on 2026-05-16 with live governance
 > E2E. See `docs/evidence/local-first-release-gate-proof-2026-05-16.md`.
+>
+> CVF 16.5 runtime absorption is now public as deterministic runtime contracts
+> and tests for provider, memory, agent, tool, knowledge, artifact, change, and
+> skill-evolution boundaries. See
+> `docs/evidence/cvf-16-5-runtime-absorption.md`. This is contract coverage,
+> not a new live-provider proof or output-quality parity claim.
 
 ## Who CVF Is For
 
@@ -138,6 +144,8 @@ It is a good fit when you need:
 - local-first control over provider keys, cost, quota, and evidence
 - a repeatable path for non-coder or operator-facing governed requests
 - a developer-readable control plane that can sit around providers, tools, or agents
+- governed memory, knowledge intake, tool calls, agent delegation, and change
+  packets that can be reviewed instead of trusted implicitly
 
 ## Who CVF Is Not For
 
@@ -214,6 +222,9 @@ active reference path, and interaction model.
 This renewed repository contains the current product surface:
 
 - foundation packages for guard, control, execution, governance expansion, and learning planes
+- runtime-owned CVF 16.5 absorption contracts for model gateway, memory,
+  knowledge intake, artifact rendering, OpenSpec change packets, tool tracing,
+  MCP business actions, observability deltas, and skill evolution
 - the `cvf-web` control surface used by operators and non-coders
 - release-gate scripts and protected live-gate workflow
 - curated evidence summaries and provider boundaries
@@ -292,7 +303,10 @@ For the current recommended deployment baseline, use
 | `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION` | Execution-plane contracts for dispatch, policy gates, command runtime, and reintake. |
 | `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION` | Expansion layer for governance checkpoints, watchdog signals, and audit surfaces. |
 | `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION` | Learning-plane contracts for feedback, scoring, drift, and reinjection. |
+| `EXTENSIONS/CVF_MODEL_GATEWAY` | Model/provider routing, credential boundary, fallback policy, quota ledger, sticky session, and gateway receipts. |
 | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web` | Web control surface and non-coder/operator UI. |
+| `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE` | Skill governance plus proposal-only governed skill evolution loop. |
+| `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME` | Observe-only runtime signal contracts that do not mutate governance policy. |
 | `ECOSYSTEM/doctrine` | Current doctrine and layer model for CVF positioning. |
 | `governance/public-surface-manifest.json` | Allowlist and classification for public files. |
 | `scripts/check_public_surface.py` | Fast public-release scanner. |
@@ -384,6 +398,7 @@ Start here:
 - `docs/evidence/README.md`
 - `docs/evidence/current-cvf-quality-status.md`
 - `docs/evidence/local-first-release-gate-proof-2026-05-16.md`
+- `docs/evidence/cvf-16-5-runtime-absorption.md`
 - `docs/evidence/latest-release-gate.md`
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`

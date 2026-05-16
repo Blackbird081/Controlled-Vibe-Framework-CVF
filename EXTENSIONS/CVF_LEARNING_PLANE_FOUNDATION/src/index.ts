@@ -1,5 +1,19 @@
 // W4-T8 — Evaluation Engine Consumer Pipeline Bridge (CP1)
 export {
+  ControlledMemoryGatewayContract,
+  createControlledMemoryGatewayContract,
+} from "./controlled.memory.gateway.contract";
+export type {
+  ControlledMemoryCaptureRequest, ControlledMemoryCaptureResult, ControlledMemoryContextSegment,
+  ControlledMemoryDecision, ControlledMemoryGatewayDependencies, ControlledMemoryKind,
+  ControlledMemoryLifecycleState, ControlledMemoryPolicyContext, ControlledMemoryPolicyResult,
+  ControlledMemoryPrivacyReport, ControlledMemoryQueryRequest, ControlledMemoryQueryResult,
+  ControlledMemoryReceipt, ControlledMemoryRecord, ControlledMemoryReinjectionRequest,
+  ControlledMemoryScope, ControlledMemorySensitivity,
+} from "./controlled.memory.gateway.contract";
+
+// W4-T8 — Evaluation Engine Consumer Pipeline Bridge (CP1)
+export {
   EvaluationEngineConsumerPipelineContract,
   createEvaluationEngineConsumerPipelineContract,
 } from "./evaluation.engine.consumer.pipeline.contract";

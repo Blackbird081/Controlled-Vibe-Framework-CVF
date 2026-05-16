@@ -37,9 +37,11 @@ describe("CVF_MODEL_GATEWAY", () => {
   });
 
   it("publishes wrapper lineage metadata", () => {
-    expect(MODEL_GATEWAY_WRAPPER.executionClass).toBe("wrapper/re-export merge");
-    expect(MODEL_GATEWAY_WRAPPER.runtimeAdapterHub).toContain("CVF_v1.7.3_RUNTIME_ADAPTER_HUB");
-    expect(MODEL_GATEWAY_WRAPPER.externalIntegration).toContain("CVF_v1.2.1_EXTERNAL_INTEGRATION");
+    expect(MODEL_GATEWAY_WRAPPER.executionClass).toBe("implementation-owner upgrade");
+    expect(MODEL_GATEWAY_WRAPPER.runtimeOwnership).toBe("implementation-owner upgrade");
+    expect(MODEL_GATEWAY_WRAPPER.runtimeAdapterHub).toContain("public self-contained");
+    expect(MODEL_GATEWAY_WRAPPER.externalIntegration).toContain("public deterministic");
     expect(MODEL_GATEWAY_WRAPPER.preservesRiskModelAssets).toBe(true);
+    expect(MODEL_GATEWAY_WRAPPER.enforcesGuardContractBeforeRouting).toBe(true);
   });
 });

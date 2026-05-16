@@ -49,6 +49,7 @@ Start with:
 - `redaction-and-key-safety.md`
 - `current-cvf-quality-status.md`
 - `local-first-release-gate-proof-2026-05-16.md`
+- `cvf-16-5-runtime-absorption.md`
 - `claim-boundaries.md`
 
 Benchmark methodology is published separately under `docs/benchmark/`. That

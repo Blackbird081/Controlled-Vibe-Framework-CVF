@@ -1,19 +1,25 @@
 # CVF Model Gateway
 
-`CVF_MODEL_GATEWAY` is the approved `B* Merge 3` wrapper/re-export package.
+`CVF_MODEL_GATEWAY` is the public implementation-owner gateway surface for CVF
+16.5 runtime absorption.
 
-It gives CVF one official gateway surface for:
+It publishes deterministic local contracts for:
 
-- runtime adapter contracts and adapters from `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`
-- intake / validation / certification entrypoints from `CVF_v1.2.1_EXTERNAL_INTEGRATION`
+- gateway policy decisions;
+- provider registry and provider health;
+- quota ledger;
+- gateway receipts;
+- credential boundaries;
+- fallback decisions;
+- sticky sessions;
+- routing policy;
+- public skill-intake compatibility helpers.
 
-Current-cycle execution class:
+Current execution class:
 
-- `wrapper/re-export merge`
-- source modules stay in place
-- active risk-model assets and release-evidence paths do not move
+- `implementation-owner upgrade`
+- runtime-owned gateway policy, provider registry, health, quota, receipt,
+  credential, fallback, sticky-session, routing, and skill-compat modules
 
-Source lineage:
-
-- `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/`
-- `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/`
+The private provenance archive keeps the full CVF 16.5 source-intake history.
+This public package keeps only the curated runtime-owned surface and its tests.

@@ -78,7 +78,7 @@ describe("CVF_EXECUTION_PLANE_FOUNDATION", () => {
   it("creates a stable execution-plane shell while preserving lineage", () => {
     const shell = createExecutionPlaneFoundationShell();
 
-    expect(shell.gatewayWrapper.executionClass).toBe("wrapper/re-export merge");
+    expect(shell.gatewayWrapper.executionClass).toBe("implementation-owner upgrade");
     expect(shell.gateway.wrapper).toBe(MODEL_GATEWAY_WRAPPER);
     expect(shell.mcpBridge.alignment.sourcePackage).toContain("CVF_ECO_v2.5_MCP_SERVER");
     expect(shell.registry.count()).toBeGreaterThan(0);
@@ -115,7 +115,7 @@ describe("CVF_EXECUTION_PLANE_FOUNDATION", () => {
     expect(mcpBridge.alignment).toBe(EXECUTION_MCP_BRIDGE_ALIGNMENT);
     expect(typeof mcpBridge.runtime.createGuardEngine).toBe("function");
     expect(summary.controlPointId).toBe("CP2");
-    expect(summary.gatewayAlignment.wrapperAnchor).toBe("wrapper/re-export merge");
+    expect(summary.gatewayAlignment.wrapperAnchor).toBe("implementation-owner upgrade");
     expect(summary.mcpBridgeAlignment.deferredInternals).toContain(
       "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/cli",
     );
@@ -173,7 +173,7 @@ describe("CVF_EXECUTION_PLANE_FOUNDATION", () => {
   it("records canonical coordination metadata for CP1", () => {
     expect(EXECUTION_PLANE_FOUNDATION_COORDINATION.preservesLineage).toBe(true);
     expect(EXECUTION_PLANE_FOUNDATION_COORDINATION.externalIntegrationReference).toContain(
-      "CVF_v1.2.1_EXTERNAL_INTEGRATION",
+      "public deterministic skill intake",
     );
   });
 
@@ -200,7 +200,7 @@ describe("CVF_EXECUTION_PLANE_FOUNDATION", () => {
 
     expect(summary.trancheId).toBe("W2-T1");
     expect(summary.controlPointId).toBe("CP3");
-    expect(summary.alignment.explainabilitySource).toContain("RUNTIME_ADAPTER_HUB");
+    expect(summary.alignment.explainabilitySource).toContain("public-explainability-compat");
     expect(summary.explainabilityLocales).toContain("en");
     expect(summary.sampleExplanation.summary).toBeTruthy();
     expect(summary.registeredAdapters).toHaveLength(4);
@@ -223,7 +223,7 @@ describe("CVF_EXECUTION_PLANE_FOUNDATION", () => {
     const surface = createExecutionAuthorizationBoundarySurface();
 
     expect(surface.alignment.controlPoint).toBe("CP4");
-    expect(surface.alignment.executionClass).toBe("wrapper/re-export");
+    expect(surface.alignment.executionClass).toBe("implementation-owner");
     expect(surface.alignment.preservesLineage).toBe(true);
     expect(surface.policy.decisionTypes).toContain("allow");
     expect(surface.policy.decisionTypes).toContain("deny");

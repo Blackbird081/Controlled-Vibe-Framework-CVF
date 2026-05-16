@@ -39,6 +39,7 @@ Predecessor evidence anchors:
 - `docs/evidence/latest-release-gate.md`
 - `docs/evidence/local-first-release-gate-proof-2026-05-16.md`
 - `docs/evidence/provider-lanes.md`
+- `docs/evidence/cvf-16-5-runtime-absorption.md`
 - non-coder hardening roadmap closure (QH-1..QH-5)
 - EVT-4 roadmap-completion regression run
 
@@ -67,6 +68,16 @@ The non-coder hardening roadmap is complete at the product-contract level:
 MVP/backlog, pricing, SOP/handoff, persona, and decision-memo outputs now carry
 clearer scope, next actions, acceptance checks, experiments, risk checks, and
 handoff criteria.
+
+CVF 16.5 runtime absorption is also public as deterministic local contracts and
+tests for model gateway behavior, controlled memory, agent delegation, tool
+trace/sandbox posture, MCP business actions, observe-only runtime signals,
+knowledge-vault intake, document artifact rendering, OpenSpec change packets,
+and proposal-only skill evolution.
+
+This strengthens control, auditability, and implementation reviewability. It
+does not change the EVT-4 quality conclusion and does not prove live provider
+governance behavior without release-gate evidence.
 
 ## Evidence Snapshot
 

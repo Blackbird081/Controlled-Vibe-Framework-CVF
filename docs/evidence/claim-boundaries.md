@@ -56,6 +56,12 @@ Allowed:
   governance/audit/safety remain strong, non-coder deliverable contracts are
   hardened, and output-quality parity is not proven. See
   `docs/evidence/current-cvf-quality-status.md`.
+- CVF 16.5 runtime absorption may be cited as deterministic local contract
+  coverage for provider/model gateway behavior, controlled memory, knowledge
+  intake, agent delegation, tool tracing, MCP business actions, artifact
+  rendering, OpenSpec change packets, observe-only runtime signals, and
+  proposal-only skill evolution. See
+  `docs/evidence/cvf-16-5-runtime-absorption.md`.
 - QBS methodology is public under `docs/benchmark/`, but no public QBS quality
   score is claimed until a powered run is published.
 - QBS-1 runner/corpus planning is public, but scored QBS runs require a
@@ -103,6 +109,10 @@ Not allowed without new evidence:
   family-level claims, or provider parity
 - QBS-9 reviewer agreement alone proves a QBS quality uplift when the measured
   `CFG-B` quality delta is negative
+- CVF 16.5 deterministic contracts prove live provider governance behavior
+- `cvf-web` directly exposes every CVF 16.5 runtime contract
+- document artifact rendering creates new audit evidence by itself
+- governed skill evolution self-writes production skills without review gates
 - web proves the entire CVF runtime
 - mock tests prove governance behavior
 - public docs include the full internal operating history

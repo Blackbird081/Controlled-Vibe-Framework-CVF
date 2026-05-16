@@ -7,7 +7,7 @@ import {
     Sparkles, Home, Zap, Search, HelpCircle, BookOpen,
     Bot, Network, Wrench, FlaskConical, Lightbulb,
     Activity, BarChart3, ShoppingBag, Shield, Building2, Lock,
-    UserCircle, Settings, Coins, LogOut, Globe,
+    UserCircle, Settings, Coins, LogOut, Globe, FileCheck2, ClipboardCheck,
 } from 'lucide-react';
 import SidebarNavItem from './sidebar/SidebarNavItem';
 import SidebarNavGroup from './sidebar/SidebarNavGroup';
@@ -60,7 +60,7 @@ export default function Sidebar({
     onClose,
     user,
 }: SidebarProps) {
-    const { t } = useLanguage();
+    const { language, setLanguage, t } = useLanguage();
     const pathname = usePathname();
 
     const roleKey = (userRole in ROLE_BADGE_COLOR ? userRole : 'admin');
@@ -194,6 +194,21 @@ export default function Sidebar({
                                 isActive={isRoute('/governance/knowledge')}
                                 href="/governance/knowledge" onNavigate={onClose} />
                         )}
+                        {userRole !== 'viewer' && (
+                            <SidebarNavItem icon={BookOpen} label={t('nav.knowledgeIntake') || 'Knowledge Intake'}
+                                isActive={isRoute('/knowledge/intake')}
+                                href="/knowledge/intake" onNavigate={onClose} />
+                        )}
+                        {userRole !== 'viewer' && (
+                            <SidebarNavItem icon={FileCheck2} label={t('nav.artifacts') || 'Artifacts'}
+                                isActive={isRoute('/artifacts')}
+                                href="/artifacts" onNavigate={onClose} />
+                        )}
+                        {userRole !== 'viewer' && (
+                            <SidebarNavItem icon={ClipboardCheck} label={t('nav.workTransfer') || 'Work Transfer'}
+                                isActive={isRoute('/work-transfer')}
+                                href="/work-transfer" onNavigate={onClose} />
+                        )}
                     </SidebarNavGroup>
 
                     {/* Platform */}
@@ -254,21 +269,17 @@ export default function Sidebar({
                     <SidebarNavItem icon={LogOut} label={t('auth.logout') || 'Logout'}
                         isActive={false}
                         onClick={onLogout} />
-                    {/* VI·EN — cosmetic placeholder (roadmap §2.8) */}
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 mt-0.5">
-                        <Globe size={12} strokeWidth={1.75} className="text-white/25" aria-hidden="true" />
-                        {(['VI', 'EN'] as const).map((lang, i) => (
-                            <span key={lang} className="flex items-center gap-1">
-                                {i > 0 && <span className="text-white/20 text-[10px]">·</span>}
-                                <span
-                                    className="text-[11px] text-white/25 font-medium cursor-default select-none"
-                                    title="Language switching coming soon"
-                                >
-                                    {lang}
-                                </span>
-                            </span>
-                        ))}
-                    </div>
+                    <button
+                        type="button"
+                        onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
+                        className="mt-0.5 flex w-full items-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-medium text-white/45 transition hover:bg-white/[0.07] hover:text-white/75"
+                        aria-label={t('lang.current')}
+                    >
+                        <Globe size={12} strokeWidth={1.75} aria-hidden="true" />
+                        <span>{language === 'vi' ? 'VI' : 'EN'}</span>
+                        <span className="text-white/20">·</span>
+                        <span>{language === 'vi' ? 'Switch to EN' : 'Chuyển sang VI'}</span>
+                    </button>
                 </div>
             </aside>
         </>

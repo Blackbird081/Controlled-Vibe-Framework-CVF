@@ -1,8 +1,50 @@
 # CVF Audit Receipt Integrity Model
 
+Memory class: FULL_RECORD
+
 **Track:** EA Track C — Audit Receipt Integrity
 **Status:** `EA_TRACK_C_INTEGRITY_MODEL_DOCUMENTED`
 **Date:** 2026-05-13
+
+---
+
+## Purpose
+
+Define how CVF audit receipts and evidence artifacts can be verified as
+intact and untampered after the fact, so evaluators, auditors, and agents
+have a single reference for the integrity model behind public evidence.
+
+## Scope
+
+CVF governance evidence receipts produced at `/api/execute`, the Git-based
+hash chain used as the primary integrity anchor, and the boundary against
+external tamper claims that require additional controls.
+
+## Source
+
+EA Track C — Audit Receipt Integrity. Integrity properties below are derived
+from CVF's existing receipt schema and Git's content-addressable storage,
+not from new runtime behavior added by this document.
+
+## Protocol
+
+The integrity protocol is: every `/api/execute` call emits a structured
+receipt; the receipt and every committed artifact are anchored by Git commit
+SHA; verification commands below traverse that anchor without trusting any
+single rendered file.
+
+## Enforcement
+
+Integrity is enforced by Git's hash chain at the repository layer. CVF does
+not add a parallel signing layer in this model. Verification commands in the
+sections below are the operator-facing enforcement surface.
+
+## Related Artifacts
+
+- `docs/evidence/` evidence files
+- `docs/benchmark/runs/` QBS run artifacts
+- `docs/reviews/` governance reviews
+- `docs/baselines/` authorization packets
 
 ---
 
@@ -174,3 +216,11 @@ All steps above require no CVF-specific tooling — only `git`, `python`, and
   remote is not publicly auditable.
 - Receipt chain integrity is a **framework property**, not a claim about the AI
   output quality contained in those receipts.
+
+## Claim Boundary
+
+This model claims only that CVF artifacts are integrity-anchored by Git's
+hash chain and that receipts emitted at `/api/execute` are structured for
+post-hoc verification. It does not claim GPG signing, hardware attestation,
+provenance-remote public auditability, or any property of the AI output
+quality contained inside receipts.

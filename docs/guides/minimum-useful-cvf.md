@@ -16,11 +16,11 @@ semantics. Those require separate implementation and verification.
 Give a new operator the shortest practical path from "what is CVF?" to a local
 walkthrough and, when needed, live governed proof.
 
-## Mục đích nhanh
+## Quick Summary
 
-Nếu bạn chỉ cần hiểu CVF có ích ở đâu, hãy bắt đầu bằng luồng nhỏ nhất:
-yêu cầu -> đánh giá rủi ro -> gọi provider có kiểm soát -> kiểm chứng đầu ra
--> biên nhận audit.
+If you only need to understand where CVF helps, start with the smallest useful
+flow: request -> risk check -> controlled provider call -> output check ->
+audit receipt.
 
 ## Scope
 
@@ -80,6 +80,10 @@ manual approval notes, inconsistent outputs, and weak evidence of what happened.
 With CVF, the same workflow has a governed boundary: the request is classified,
 the provider lane is explicit, output is checked, and the user receives a
 reviewable evidence receipt.
+
+For non-coders, the point is not to learn the internal system. The point is to
+get a result that comes with plain review cues: what was requested, what was
+checked, what evidence exists, and what still needs human judgment.
 
 ## Path A: UI-Only Walkthrough
 

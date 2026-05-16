@@ -14,11 +14,11 @@ handoffs, full live run artifacts, and internal logs remain in provenance.
 State the current honest public quality posture for CVF so users, evaluators,
 and agents do not overclaim output quality.
 
-## Mục đích nhanh
+## Quick Summary
 
-Kết luận hiện tại: CVF mạnh về governance, biên nhận, audit, safety, và các
-luồng non-coder có cấu trúc. CVF chưa chứng minh được parity về chất lượng đầu
-ra so với output trực tiếp từ provider.
+Current conclusion: CVF is strongest at governance, receipts, auditability,
+safety checks, and structured non-coder workflows. CVF has not proven
+output-quality parity with direct provider output.
 
 ## Scope
 
@@ -78,6 +78,11 @@ and proposal-only skill evolution.
 This strengthens control, auditability, and implementation reviewability. It
 does not change the EVT-4 quality conclusion and does not prove live provider
 governance behavior without release-gate evidence.
+
+For non-coders, the practical effect is that CVF can make AI work easier to
+review before it is accepted or handed off. The user benefit is clearer scope,
+next steps, evidence, and remaining risk, not a claim that every answer is
+better than a direct provider answer.
 
 ## Evidence Snapshot
 

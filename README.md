@@ -34,11 +34,18 @@ Help a new evaluator understand what CVF is, how to run the smallest useful
 local path, what evidence currently supports public claims, and what CVF does
 not claim.
 
-## Mục đích nhanh
+## Plain-English Value
 
-CVF giúp bạn đặt một lớp kiểm soát quanh AI/agent: mỗi yêu cầu đi qua đánh giá
-rủi ro, ranh giới provider, kiểm chứng đầu ra, biên nhận audit, và tín hiệu
-chi phí/quota trước khi được xem là kết quả có thể review.
+CVF gives people a safer way to use AI for real work. Before an AI result is
+treated as ready to review, CVF checks the request, keeps the provider choice
+visible, records what happened, watches for unsafe output, and gives the user a
+receipt they can keep or hand off.
+
+When CVF absorbs new approved knowledge, the goal is not to hide more machinery
+behind the scenes. The goal is to make the web experience more useful for
+non-coders: clearer starting points, better review packets, visible receipts,
+and fewer hidden assumptions when work moves from an AI response to a real
+decision.
 
 ## Scope
 
@@ -126,11 +133,11 @@ To evaluate CVF locally, an operator needs:
 > Fresh local-first release gate: `7/7` PASS on 2026-05-16 with live governance
 > E2E. See `docs/evidence/local-first-release-gate-proof-2026-05-16.md`.
 >
-> CVF 16.5 runtime absorption is now public as deterministic runtime contracts
-> and tests for provider, memory, agent, tool, knowledge, artifact, change, and
-> skill-evolution boundaries. See
-> `docs/evidence/cvf-16-5-runtime-absorption.md`. This is contract coverage,
-> not a new live-provider proof or output-quality parity claim.
+> CVF 16.5 knowledge absorption is now public as bounded product evidence for
+> provider choice, memory handling, knowledge intake, reviewable artifacts,
+> change packets, and skill improvement boundaries. See
+> `docs/evidence/cvf-16-5-runtime-absorption.md`. This is local evidence, not a
+> new live-provider proof or output-quality parity claim.
 
 ## Who CVF Is For
 
@@ -143,9 +150,13 @@ It is a good fit when you need:
 - AI or agent execution to pass through explicit risk and policy gates
 - local-first control over provider keys, cost, quota, and evidence
 - a repeatable path for non-coder or operator-facing governed requests
-- a developer-readable control plane that can sit around providers, tools, or agents
-- governed memory, knowledge intake, tool calls, agent delegation, and change
-  packets that can be reviewed instead of trusted implicitly
+- a control layer that can sit around providers, tools, or agents
+- reviewable memory, knowledge intake, tool use, delegation, and change packets
+
+For non-coders, the practical value is simpler: CVF helps turn AI output into a
+reviewable work packet. The user should be able to see what was asked, what was
+checked, what evidence exists, what still needs judgment, and what can be
+handed to the next person without guessing.
 
 ## Who CVF Is Not For
 
@@ -222,9 +233,9 @@ active reference path, and interaction model.
 This renewed repository contains the current product surface:
 
 - foundation packages for guard, control, execution, governance expansion, and learning planes
-- runtime-owned CVF 16.5 absorption contracts for model gateway, memory,
-  knowledge intake, artifact rendering, OpenSpec change packets, tool tracing,
-  MCP business actions, observability deltas, and skill evolution
+- CVF 16.5 knowledge absorption surfaces that make provider choice, memory,
+  knowledge intake, review packets, change handoff, and skill improvement more
+  explicit and easier to inspect
 - the `cvf-web` control surface used by operators and non-coders
 - release-gate scripts and protected live-gate workflow
 - curated evidence summaries and provider boundaries

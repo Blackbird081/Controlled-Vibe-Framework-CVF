@@ -16,11 +16,12 @@ reading the private provenance archive.
 Explain how to use the current public CVF state as a local-first governance
 baseline without overstating output-quality claims.
 
-## Mục đích nhanh
+## Quick Summary
 
-Dùng CVF hiện tại như một baseline local-first: chạy UI, cấu hình key bằng
-biến môi trường, chạy live gate khi cần tuyên bố governance, và nói rõ rằng
-parity về chất lượng đầu ra so với provider trực tiếp chưa được chứng minh.
+Use the current CVF state as a local-first baseline: run the web app, supply
+keys only through trusted local settings or environment variables, run live
+proof when making governance claims, and state clearly that output-quality
+parity with direct provider output has not been proven.
 
 ## Scope
 
@@ -63,6 +64,15 @@ Allowed claim:
 CVF is a governance-first local deployment baseline. It provides a governed
 request path, provider boundary, DLP/output-validation posture, audit receipts,
 and structured non-coder deliverable contracts.
+
+Plain-language user value:
+
+- users can start from guided work surfaces instead of blank prompts;
+- important checks are visible before a result is accepted;
+- receipts make it easier to review what happened later;
+- handoff packets reduce guesswork when another person continues the work;
+- new approved knowledge should appear as clearer web guidance, not as hidden
+  complexity.
 
 Not allowed:
 

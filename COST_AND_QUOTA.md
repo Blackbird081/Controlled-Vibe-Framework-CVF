@@ -11,11 +11,11 @@ CVF treats provider cost as a governance concern.
 Explain how CVF treats live provider cost, quota, and key handling as part of
 the governed operating boundary.
 
-## Mục đích nhanh
+## Quick Summary
 
-CVF không tự ý sử dụng credit của provider. Người vận hành phải tự cung cấp key,
-tự đặt budget/quota tại console của provider, và chỉ tuyên bố live governance
-khi đã chạy live gate có bằng chứng.
+CVF does not spend provider credits by itself. The operator supplies the key,
+sets budget and quota limits with the provider, and only makes live governance
+claims after running a live gate with evidence.
 
 ## Scope
 

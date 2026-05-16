@@ -12,11 +12,11 @@ Record which CVF 16.5 knowledge-intake upgrades are now present in the public
 CVF repository as runnable runtime contracts, tests, or bounded extension
 surfaces.
 
-## Mục đích nhanh
+## Quick Summary
 
-Đợt hấp thụ kiến thức này không chỉ lưu trong provenance. Các phần phù hợp đã
-được đưa ra public repo thành contract/runtime có test, để người dùng và dev có
-thể kiểm tra trực tiếp thay vì chỉ đọc mô tả.
+This knowledge intake did not stay as private notes. The parts that were safe
+to publish were turned into public, reviewable CVF surfaces so users can inspect
+the boundary instead of relying on a promise.
 
 ## Scope
 
@@ -79,6 +79,19 @@ not claim direct UI coverage for Knowledge Vault intake, HTML artifact export,
 OpenSpec packet intake, Skill Evolution review queues, or Observability Delta
 dashboards until those routes/components and tests exist.
 
+## What This Means For Non-Coders
+
+The useful web-facing direction is straightforward:
+
+- clearer places to start a governed task;
+- simpler ways to bring approved reference material into a request;
+- visible receipts that explain what CVF checked;
+- exportable packets that can be reviewed or handed to another person;
+- fewer hidden assumptions when AI work is reused later.
+
+This page does not claim that every lane is already exposed as a simple web
+workflow. It records the public foundation for making those workflows visible.
+
 ## Evidence
 
 Public evidence consists of source contracts plus colocated Vitest coverage.
@@ -109,9 +122,6 @@ Public publication verification on 2026-05-16:
 ## Practical User Benefit
 
 For non-coders and operators, this upgrade makes CVF more reviewable and less
-implicit. Provider routing, memory intake, agent delegation, tool calls,
-business-tool invocation, document evidence, change packets, observability
-signals, and skill evolution now have clearer runtime boundaries. The immediate
-benefit is stronger auditability and fewer hidden assumptions. The next product
-benefit requires web integration that exposes the most useful lanes through
-simple non-coder workflows.
+implicit. The immediate benefit is clearer evidence and fewer hidden
+assumptions. The next product benefit is web integration that turns the most
+useful absorbed knowledge into simple guided flows.

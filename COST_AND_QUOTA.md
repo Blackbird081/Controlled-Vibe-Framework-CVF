@@ -13,7 +13,7 @@ the governed operating boundary.
 
 ## Mục đích nhanh
 
-CVF không tự ý tiêu credit của provider. Người vận hành phải tự cung cấp key,
+CVF không tự ý sử dụng credit của provider. Người vận hành phải tự cung cấp key,
 tự đặt budget/quota tại console của provider, và chỉ tuyên bố live governance
 khi đã chạy live gate có bằng chứng.
 

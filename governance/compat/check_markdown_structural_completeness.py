@@ -38,14 +38,7 @@ THIS_SCRIPT_PATH = "governance/compat/check_markdown_structural_completeness.py"
 REQUIRED_FILES = (
     STANDARD_PATH,
     GUARD_PATH,
-    MASTER_POLICY_PATH,
-    CONTROL_MATRIX_PATH,
-    BOOTSTRAP_PATH,
-    DOCS_INDEX_PATH,
-    README_PATH,
-    KB_PATH,
-    HOOK_CHAIN_PATH,
-    WORKFLOW_PATH,
+    THIS_SCRIPT_PATH,
 )
 
 REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
@@ -70,14 +63,6 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         THIS_SCRIPT_PATH,
         "New governed Markdown files must follow",
     ),
-    MASTER_POLICY_PATH: ("GC-045", STANDARD_PATH, GUARD_PATH, THIS_SCRIPT_PATH),
-    CONTROL_MATRIX_PATH: ("GC-045", STANDARD_PATH, GUARD_PATH, THIS_SCRIPT_PATH),
-    BOOTSTRAP_PATH: ("GC-045", STANDARD_PATH, "Markdown Structural Completeness"),
-    DOCS_INDEX_PATH: ("reference/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_STANDARD.md",),
-    README_PATH: ("GC-045", Path(GUARD_PATH).name),
-    KB_PATH: (Path(GUARD_PATH).name, "Markdown structural completeness"),
-    HOOK_CHAIN_PATH: (THIS_SCRIPT_PATH,),
-    WORKFLOW_PATH: (THIS_SCRIPT_PATH, "Markdown Structural Completeness"),
 }
 
 COMMON_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (

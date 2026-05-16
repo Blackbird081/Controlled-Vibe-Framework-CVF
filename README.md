@@ -1,5 +1,9 @@
 # Controlled Vibe Framework (CVF)
 
+Memory class: POINTER_RECORD
+
+Status: CURRENT PUBLIC FRONT DOOR
+
 > **Developed by Tien / Blackbird081**
 >
 > **Controlled vibe coding. Not faster, but safer and more governable.**
@@ -23,6 +27,31 @@ CVF solves three problems in AI-assisted development: uncontrolled provider
 costs, ungoverned agent execution, and lack of verifiable audit trails. Without
 CVF, agents can call providers without budget enforcement, leak or repeat
 sensitive content in outputs, and leave weak evidence of what ran.
+
+## Purpose
+
+Help a new evaluator understand what CVF is, how to run the smallest useful
+local path, what evidence currently supports public claims, and what CVF does
+not claim.
+
+## Muc dich nhanh
+
+CVF giup ban dat mot lop kiem soat quanh AI/agent: yeu cau di qua risk gate,
+provider boundary, validation, receipt, va cost/quota signal truoc khi duoc xem
+la ket qua co the review.
+
+## Scope
+
+This README is the public orientation layer for the current clean public repo.
+It points to architecture, governance, provider, cost, evidence, provenance, and
+guide documents. It is not the full internal development journal.
+
+## Claim Boundary
+
+Allowed public claim: CVF is a local-first governance control plane for AI and
+agent execution with current live evidence for bounded governance behavior.
+Not allowed: CVF has output-quality parity with direct providers, all providers
+are equivalent, or mock UI tests prove governance behavior.
 
 ## Attribution
 
@@ -280,36 +309,11 @@ they are made public:
 - `docs/benchmark/quality-benchmark-suite-claim-ladder.md`
 - `docs/benchmark/quality-benchmark-suite-standards-alignment.md`
 
-Current status: methodology is public, but no public QBS quality score is
-claimed yet. QBS-1 runner and corpus planning is also published under
-`docs/benchmark/qbs-1/`. A three-provider QBS-1 calibration pilot has passed
-under `docs/benchmark/runs/qbs1-calibration-20260509-three-provider/`; it is
-harness proof only and does not claim a QBS score. A scored-run readiness
-packet now adds the aggregate-only powered corpus JSON and readiness checker.
-The Alibaba/DashScope single-provider lane has progressed through R9 scoring.
-QBS-24 hard gates passed, but reviewer agreement and claim-ladder thresholds
-did not pass. QBS-25 analyzes the R9 scoring failure and publishes no new run
-or score. QBS-26 turns the R9 failure surface into provisional calibration
-anchors, QBS-27 adjudicates those anchors with a model-adjudicator fallback,
-QBS-28 cleans them into a calibration reference, and QBS-29 runs a
-calibration-only reviewer agreement check. QBS-29 still fails the calibration
-gate. QBS-30 analyzes that failure and QBS-31 publishes reviewer-rubric
-remediation. QBS-32 reruns calibration-only review and still fails. QBS-33
-adds calibration-only derived-rework support and dual-published rework views
-while preserving reviewer rework as the scored-run claim gate. QBS-34 adds
-bounded missing-alias retry and redacted reviewer-completeness diagnostics.
-QBS-35 adds deterministic env/key/workspace preflight for live/reviewer/
-adjudicator entry points. QBS-36 rebuilds the R9 calibration reference with
-model-only available-provider triangulation across Alibaba/OpenAI/DeepSeek.
-QBS-37 runs a post-triangulation calibration-only reviewer check with
-per-family diagnostics and passes aggregate calibration gates. QBS-38 adds
-runtime governance-family metadata for the QBS corpus and the three chronic
-underperformance families, without changing any score. QBS-39 adds
-family-conditional ALLOW output contracts for those families. QBS-40 freezes
-the R10 checkpoint and pre-registration packet, including the run-specific
-public tag requirement. R10 live execution remains blocked until an operator
-explicitly runs the pre-registered command with `--confirm-live-cost`, so no
-QBS score or quality-level claim is made.
+Current status: methodology and run artifacts are public, but no public QBS
+quality score is claimed. The Alibaba/DashScope powered lane has reached a
+pre-registered R10 checkpoint, but live R10 execution still requires an explicit
+operator command with `--confirm-live-cost`. Until execution artifacts and
+reviewer scoring exist, QBS remains methodology/readiness evidence only.
 
 Release-gate evidence proves governed operability. QBS is the separate method
 for measuring quality and control value; no QBS score is claimed until a

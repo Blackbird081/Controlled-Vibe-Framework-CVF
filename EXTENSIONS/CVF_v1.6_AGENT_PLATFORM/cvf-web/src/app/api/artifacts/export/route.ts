@@ -2,6 +2,8 @@ import { createHash } from 'node:crypto';
 
 import { NextRequest, NextResponse } from 'next/server';
 
+import { fetchGovernanceReceipt } from './proof';
+
 type ArtifactMemoryClass = 'POINTER_RECORD' | 'FULL_RECORD';
 
 interface ArtifactExportRequest {
@@ -266,6 +268,13 @@ export async function POST(request: NextRequest) {
   const html = buildHtml(input, generatedAt, sourceHash);
   const verification = buildVerification(input, html);
 
+  const serviceToken = process.env.CVF_SERVICE_TOKEN;
+  const governanceReceipt = await fetchGovernanceReceipt(
+    slugify(receiptAnchor),
+    sourceContent,
+    serviceToken,
+  );
+
   return NextResponse.json({
     success: true,
     data: {
@@ -274,6 +283,7 @@ export async function POST(request: NextRequest) {
       receiptAnchor: slugify(receiptAnchor),
       verification,
       generatedAt,
+      ...(governanceReceipt ? { governanceReceipt } : {}),
     },
   });
 }

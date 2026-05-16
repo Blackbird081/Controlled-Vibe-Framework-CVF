@@ -33,12 +33,20 @@ export interface ArtifactVerificationItem {
   detail?: string;
 }
 
+export interface GovernanceReceipt {
+  receiptId: string;
+  decision: string;
+  evaluatedAt: string;
+  riskLevel: string;
+}
+
 export interface ArtifactExportResult {
   html: string;
   filename: string;
   receiptAnchor: string;
   verification: ArtifactVerificationItem[];
   generatedAt: string;
+  governanceReceipt?: GovernanceReceipt;
 }
 
 interface ArtifactExportApiResponse {
@@ -407,6 +415,15 @@ export function ArtifactExportPanel({
                   <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
                     <p className="break-all font-mono">#{result.receiptAnchor}</p>
                     <p>{new Date(result.generatedAt).toLocaleString()}</p>
+                    {result.governanceReceipt && (
+                      <div
+                        data-testid="governance-receipt-badge"
+                        className="mt-1 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200"
+                      >
+                        <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                        Governed · {result.governanceReceipt.decision}
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <p className="text-sm text-gray-500 dark:text-gray-400">{labels.noOutput}</p>

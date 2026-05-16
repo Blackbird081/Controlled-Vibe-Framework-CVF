@@ -75,6 +75,19 @@ What you can do on the Web UI:
 - **No-code configuration:** adjust provider and policy settings through the
   interface instead of editing source files.
 
+## Web Workflows
+
+Three governed end-user workflows are available without writing code:
+
+| Workflow | Route | What it does |
+| --- | --- | --- |
+| Knowledge Intake | `/knowledge/intake` | Submit new notes, policies, or product facts as a governed knowledge packet with a visible source, audience, and review boundary. |
+| Artifact Export | `/artifacts` | Export any CVF document as a self-contained HTML review packet. When the governance engine is configured, the export includes a live governance receipt (`decision: ALLOW`, risk level, timestamp). |
+| Work Transfer | `/work-transfer` | Review the audit history of recorded actions and export individual records as governed HTML artifacts for handover or review. |
+
+All three routes are reachable from the sidebar and from the home
+screen after login.
+
 ## Scope
 
 This README is the public orientation layer for the current clean public repo.

@@ -1,6 +1,31 @@
 # Cost And Quota
 
+Memory class: POINTER_RECORD
+
+Status: CURRENT PUBLIC COST BOUNDARY
+
 CVF treats provider cost as a governance concern.
+
+## Purpose
+
+Explain how CVF treats live provider cost, quota, and key handling as part of
+the governed operating boundary.
+
+## Muc dich nhanh
+
+CVF khong tu y tieu provider credit. Operator phai tu cung cap key, tu dat
+budget/quota o provider console, va chi claim live governance khi da chay live
+gate co bang chung.
+
+## Scope
+
+This file covers public cost/quota posture and operator responsibilities. It
+does not provide live billing calibration or a managed SaaS billing model.
+
+## Claim Boundary
+
+CVF can expose cost/quota signals and stop rules, but actual provider billing
+and quotas remain owned by the provider and the operator account.
 
 ## Current Guardrail
 
@@ -32,4 +57,3 @@ Deeper cost/quota guardrails should include:
 - browser-visible cost posture before triggering live jobs
 
 Managed storage is optional. Local-first remains the baseline.
-

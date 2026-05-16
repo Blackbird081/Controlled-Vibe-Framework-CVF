@@ -1,9 +1,39 @@
 # CVF Quality Benchmark Suite Claim Ladder
 
+Memory class: POINTER_RECORD
+
 Status: `PUBLIC_METHODOLOGY`
 
-This document defines which quality claims CVF may make from benchmark and live
-evidence.
+## Purpose
+
+Define which quality claims CVF may make from benchmark and live evidence, so
+public claim language stays bounded by the evidence layer that actually
+supports it.
+
+## Scope
+
+Public claim levels, run classes, and the rules that bind a claim level to
+required evidence. This file does not contain scored-run results.
+
+## Source
+
+Predecessor evidence anchors:
+
+- `docs/benchmark/quality-benchmark-suite-methodology.md`
+- `docs/evidence/provider-lanes.md`
+- `docs/evidence/latest-release-gate.md`
+
+## Decision
+
+Treated as the authoritative public claim-ladder reference. Public quality
+claims must cite a claim level from this file plus the run-class evidence
+that justifies the level.
+
+## Evidence
+
+Claim levels and run classes below act as the public rubric for which
+evidence unlocks which claim. Each scored run published under
+`docs/benchmark/runs/` references this ladder to bound its allowed claim.
 
 ## Claim Levels
 
@@ -75,3 +105,30 @@ Expired claim status:
 ```text
 STALE_PENDING_REVALIDATION
 ```
+
+## Protocol
+
+Every public claim must (a) name the claim level, (b) name the supporting
+run class, (c) cite the run artifact or evidence file that justifies the
+level, and (d) carry the expiry trigger conditions listed above.
+
+## Enforcement
+
+Hard-gate enforcement inside the methodology blocks a run from publishing a
+level it did not earn. The ladder is enforced at evidence write-time
+(QBS scoring) and at public-write-time (READMEs and external docs).
+
+## Related Artifacts
+
+- `quality-benchmark-suite-methodology.md`
+- `quality-benchmark-suite-standards-alignment.md`
+- `qbs-1/README.md`
+- `../evidence/claim-boundaries.md`
+
+## Claim Boundary
+
+This ladder claims only that the listed levels and run classes describe the
+public rubric for CVF quality claims. It does not claim any specific level
+is currently held, does not authorize publishing a level beyond the evidence
+on file, and does not extend the ladder retroactively to runs that did not
+pre-register the claimed level.

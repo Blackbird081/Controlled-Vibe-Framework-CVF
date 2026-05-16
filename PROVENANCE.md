@@ -1,11 +1,31 @@
 # CVF Provenance
 
+Memory class: POINTER_RECORD
+
+Status: CURRENT PUBLIC PROVENANCE SUMMARY
+
 CVF's full development history is preserved in the provenance repository:
 
 `Controlled-Vibe-Framework-CVF-Provenance`
 
 The public repository intentionally contains the current product surface and
 curated evidence summaries, not the full internal operating log.
+
+## Purpose
+
+Explain how the clean public repo remains connected to the private provenance
+archive without exposing the full internal operating journal.
+
+## Scope
+
+This file records the public provenance anchor, auditor access posture, what is
+preserved, and what is intentionally excluded from public history.
+
+## Claim Boundary
+
+The public repo is a curated product surface, not the full historical record.
+Full raw development evidence is preserved separately and may be shared through
+operator-controlled provenance access.
 
 ## Verification
 
@@ -44,4 +64,3 @@ partner provenance packet.
 - `.cvf/runtime/` owner-specific local state
 - temporary browser/test artifacts
 - developer local caches
-

@@ -1,9 +1,29 @@
 # Contributors
 
+Memory class: POINTER_RECORD
+
+Status: CURRENT PUBLIC ATTRIBUTION RECORD
+
 CVF is created, governed, and released by its human maintainer. AI assistants
 may contribute implementation, review, documentation, and design-system work
 under that human direction, but they do not hold project ownership, licensing
 authority, or governance authority.
+
+## Purpose
+
+Record public, role-based attribution for CVF without confusing GitHub commit
+metadata with project ownership or governance authority.
+
+## Scope
+
+This file acknowledges the human owner and AI collaboration contributors for
+the public repository. It does not include detailed private prompts, rebuttals,
+handoffs, or internal operating history.
+
+## Claim Boundary
+
+Contributor acknowledgement does not transfer ownership, licensing authority,
+release authority, or governance authority away from the human maintainer.
 
 ## Human Maintainer
 

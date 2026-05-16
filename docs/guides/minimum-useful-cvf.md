@@ -1,11 +1,37 @@
 # Minimum Useful CVF
 
+Memory class: POINTER_RECORD
+
+Status: CURRENT PUBLIC GUIDE
+
 This guide shows the smallest public-safe way to understand CVF as an
-operational system, not just an architecture diagram.
+operational system.
 
 It is intentionally not an enterprise readiness document. It does not claim
 NIST, ISO, hosted multi-tenancy, SLO commitments, or cryptographic receipt
-semantics. Those claims require separate implementation and verification.
+semantics. Those require separate implementation and verification.
+
+## Purpose
+
+Give a new operator the shortest practical path from "what is CVF?" to a local
+walkthrough and, when needed, live governed proof.
+
+## Muc dich nhanh
+
+Neu ban chi can hieu CVF co ich o dau, hay bat dau bang flow nho nhat:
+request -> risk check -> governed provider call -> validation -> audit receipt.
+
+## Scope
+
+This guide covers UI-only walkthrough, live governed proof, and
+real workflow adoption. It does not replace the full architecture,
+provider, cost, or evidence documents.
+
+## Claim Boundary
+
+UI-only walkthroughs prove navigation and product surface only. Governance
+claims require the live release-gate command and an operator-supplied provider
+key.
 
 ## The Smallest Useful Flow
 
@@ -104,7 +130,7 @@ Use this path when CVF is becoming part of actual work.
 5. Keep only the curated result public; keep raw operating material private.
 
 The first adoption target should be boring and repeatable. CVF is most useful
-when it reduces daily AI-operation chaos, not when it is used only for a demo.
+when it reduces daily AI-operation chaos.
 
 ## Common Failure Boundaries
 
@@ -116,16 +142,6 @@ when it reduces daily AI-operation chaos, not when it is used only for a demo.
 | Invalid or unsafe output | Treat output validation as part of the governed result, not as optional polish. |
 | UI mock test passes | Count it only as UI structure evidence, not governance evidence. |
 | Unsupported provider | Treat as experimental until live evidence is produced for that lane. |
-
-## Before And After
-
-| Without CVF | With CVF |
-|---|---|
-| Prompt and provider choices are ad hoc. | Provider lane and policy boundary are visible. |
-| Approval may happen in chat or memory. | Approval state is part of the governed path. |
-| Output quality checks are manual and inconsistent. | Validation is part of the control loop. |
-| Evidence is scattered across logs and screenshots. | Receipts and summaries give a reviewable trail. |
-| Mock tests can be mistaken for governance proof. | Mock is explicitly limited to UI structure. |
 
 ## Read Next
 

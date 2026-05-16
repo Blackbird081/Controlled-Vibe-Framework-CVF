@@ -1,5 +1,9 @@
 # CVF Known Limitations Register
 
+Memory class: FULL_RECORD
+
+Status: CURRENT PUBLIC LIMITATIONS REGISTER
+
 **Date:** 2026-04-21 (updated 2026-04-21 — L-003 + L-008 closed by E2E stabilization wave)  
 **Scope:** CVF Release Candidate — post-provider-lane closure  
 **Classification:** Permanent boundary / Open gap  
@@ -16,6 +20,18 @@ It exists to prevent two failure modes:
 2. **Underclaim** — listing gaps that are actually closed, making CVF look less capable than it is.
 
 Every entry must reflect actual current state. Aspirational items do not belong here.
+
+## Scope
+
+This register covers public-safe limitations and closed limitation entries that
+shape CVF release-candidate claim boundaries. It does not contain private raw
+run logs, handoffs, or unpublished provider-key material.
+
+## Claim Boundary
+
+This file permits honest limitation disclosure only. A limitation may be removed
+or closed only when a later evidence packet proves the change and updates the
+public claim boundary.
 
 Classification key:
 

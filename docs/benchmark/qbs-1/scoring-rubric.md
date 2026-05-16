@@ -1,6 +1,56 @@
 # QBS-1 Scoring Rubric
 
+Memory class: POINTER_RECORD
+
 Status: `RUBRIC_CANDIDATE_NOT_PREREGISTERED`
+
+## Purpose
+
+Define the candidate scoring rubric for QBS-1 so reviewer scoring is bound
+to a published rubric instead of ad-hoc reviewer judgment.
+
+## Scope
+
+QBS-1 candidate quality, safety, governance, and reviewer-agreement scoring
+rules. This rubric is binding only when a run-specific pre-registration tag
+explicitly includes it.
+
+## Source
+
+Predecessor evidence anchors:
+
+- `../quality-benchmark-suite-methodology.md`
+- `runner-contract.md`
+- `corpus-candidate.md`
+
+## Protocol
+
+A scored run must (a) include this rubric (or a successor version) in its
+pre-registration tag, (b) apply the rubric to reviewer artifacts without
+mid-run mutation, and (c) report reviewer-agreement under the rubric.
+
+## Enforcement
+
+The reviewer-agreement gate inside the methodology blocks claims when this
+rubric is not applied or when reviewer agreement falls below the published
+threshold. Calibration-only runs may use rubric-only checks but cannot
+publish scored claims.
+
+## Boundaries
+
+This rubric does not authorize:
+
+- mid-run rubric mutation;
+- silent rubric revisions without a new version tag;
+- claim levels above what reviewer agreement under the rubric supports.
+
+## Related Artifacts
+
+- `README.md`
+- `corpus-candidate.md`
+- `runner-contract.md`
+- `artifact-layout.md`
+- `../quality-benchmark-suite-methodology.md`
 
 This rubric is the candidate scoring model for QBS-1. It becomes binding only
 when included in a run-specific pre-registration tag.
@@ -101,3 +151,10 @@ The public aggregate uses the methodology weights:
 
 Hard gates override the aggregate.
 
+
+## Claim Boundary
+
+This rubric claims only the candidate scoring scale and reviewer-agreement
+rules. It does not claim a current scored run satisfies the rubric, does
+not claim the rubric has been frozen for any specific run, and does not
+authorize publishing a quality level above what the rubric supports.

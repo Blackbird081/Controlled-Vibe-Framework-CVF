@@ -1,9 +1,91 @@
 # QBS-1 Runner Contract
 
+Memory class: FULL_RECORD
+
 Status: `RUNNER_CONTRACT_READY_NO_IMPLEMENTATION_CLAIM`
 
-This contract defines what the QBS-1 runner must do before any scored benchmark
-run can produce a public claim.
+## Purpose
+
+Define what the QBS-1 runner must do before any scored benchmark run can
+produce a public claim, so reviewer-facing artifacts are reproducible and
+bounded by a documented contract rather than ad-hoc runner behavior.
+
+## Scope
+
+Runner inputs, contract guarantees, prohibited shortcuts, and verification
+expectations for QBS-1 scored runs. This file does not contain scored-run
+results.
+
+## Core Principle
+
+A QBS-1 runner produces evidence, not claims. Every run must respect the
+methodology, the corpus identity, the prompt-diff manifest, and the
+reviewer plan. Skipping any element of the contract invalidates the run.
+
+## Allowed
+
+The runner may:
+
+- execute pre-registered scored runs against frozen corpus/provider/prompt
+  manifests;
+- produce hard-gate, raw, paired, and reviewer-ready artifacts under the
+  declared `artifact_root`;
+- emit deterministic seeds, hashes, and run identity in the manifest;
+- surface operational diagnostics (timing, retries, partial failures) in
+  governed log form.
+
+## Forbidden
+
+The runner must not:
+
+- run a scored execution without a public `qbs/preregister/<run-id>` tag;
+- silently mutate the corpus, prompt manifest, or scoring rubric mid-run;
+- substitute mock outputs for live provider calls in a scored run;
+- omit prompt-diff manifest, run manifest, or receipt evidence;
+- claim a level above the methodology's claim ladder.
+
+## Rule
+
+Every scored QBS-1 run must satisfy the inputs section below, produce the
+required artifact set, and bind the run identity to a public pre-registration
+tag. Any deviation requires a methodology revision.
+
+## Exceptions
+
+`CALIBRATION_PILOT` runs may skip live-provider strictness but must still
+declare their calibration-only status in every artifact and the public
+claim ladder treats them as directional only.
+
+## Violations
+
+A run with any of the following is `INVALID` and must not be cited as
+scored evidence:
+
+- missing pre-registration tag for `POWERED_*` run class;
+- mismatched corpus/prompt/provider hash versus the tagged manifest;
+- absent reviewer plan or absent reviewer artifacts;
+- evidence completeness below the methodology threshold.
+
+## Audit Requirements
+
+Every scored run must publish:
+
+- run manifest with hashes;
+- prompt-diff manifest;
+- receipts for each `CFG-B` call;
+- reviewer artifacts;
+- hard-gate result table;
+- claim statement bound to the claim ladder.
+
+## Related Artifacts
+
+- `corpus-candidate.md`
+- `scoring-rubric.md`
+- `artifact-layout.md`
+- `preregistration-template.md`
+- `scored-run-readiness.md`
+- `provider-routing-policy.md`
+- `../quality-benchmark-suite-methodology.md`
 
 ## Runner Inputs
 
@@ -130,3 +212,10 @@ reviewer to reconstruct:
 - which cost/latency signals were captured;
 - which gates passed or failed;
 - which claim, if any, is allowed.
+
+## Invariant
+
+This contract claims only the runner-level obligations above. It does not
+claim a current implementation exists, does not claim any specific scored
+run satisfies the contract, and does not authorize publishing a QBS claim
+without a fully-executed pre-registered run.

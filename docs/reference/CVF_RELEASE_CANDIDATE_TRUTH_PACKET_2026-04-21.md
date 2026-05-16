@@ -1,5 +1,7 @@
 # CVF Release Candidate Truth Packet
 
+Memory class: FULL_RECORD
+
 **Date:** 2026-04-21  
 **Status:** RELEASE CANDIDATE — evidence-backed  
 **Scope:** CVF core platform + provider lane + front-door product surface  
@@ -13,6 +15,23 @@ This document is the single authoritative record of what CVF has proven, what ev
 It is intended for: agent handoff, operator orientation, external reviewers, and demo preparation.
 
 It is not marketing copy. Every claim here must be traceable to a receipt, a baseline delta, or a closed roadmap CP.
+
+---
+
+## Source
+
+Predecessor evidence anchors:
+
+- Front-door rewrite waves closed (commits `d9c7313b`, `956a7609`, `303517a2`, `bf28ed9b`)
+- Provider canary CERTIFIED records for Alibaba (`qwen-turbo`) and DeepSeek (`deepseek-chat`)
+- Release-gate bundle on the public surface
+
+## Decision
+
+Treated as the single authoritative public RC truth record for 2026-04-21.
+Later evidence and limitations are tracked in
+`docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md` and
+`docs/evidence/`.
 
 ---
 

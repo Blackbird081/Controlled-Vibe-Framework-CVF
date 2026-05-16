@@ -17,6 +17,28 @@ This file governs public-facing claim language for the current repository. It
 does not replace the evidence summaries or benchmark methodology that support
 individual claims.
 
+## Source
+
+Predecessor evidence anchors:
+
+- `docs/evidence/current-cvf-quality-status.md`
+- `docs/evidence/latest-release-gate.md`
+- `docs/evidence/provider-lanes.md`
+- `docs/benchmark/quality-benchmark-suite-methodology.md`
+- `docs/benchmark/qbs-1/` planning material
+
+## Decision
+
+Treated as the authoritative public claim-boundary reference. Public-facing
+documents, READMEs, and external communication must use the allowed claims
+verbatim where they apply. Adding a claim to the allowed list requires fresh
+evidence under `docs/evidence/` or a new benchmark run.
+
+## Evidence
+
+Each allowed claim below cites the public evidence file that supports it.
+Each not-allowed claim is blocked until a new evidence artifact unlocks it.
+
 ## Claim Boundary
 
 Only claims listed as allowed below may be used as public posture. The

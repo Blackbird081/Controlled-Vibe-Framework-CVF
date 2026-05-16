@@ -16,10 +16,11 @@ semantics. Those require separate implementation and verification.
 Give a new operator the shortest practical path from "what is CVF?" to a local
 walkthrough and, when needed, live governed proof.
 
-## Muc dich nhanh
+## Mục đích nhanh
 
-Neu ban chi can hieu CVF co ich o dau, hay bat dau bang flow nho nhat:
-request -> risk check -> governed provider call -> validation -> audit receipt.
+Nếu bạn chỉ cần hiểu CVF có ích ở đâu, hãy bắt đầu bằng luồng nhỏ nhất:
+yêu cầu -> đánh giá rủi ro -> gọi provider có kiểm soát -> kiểm chứng đầu ra
+-> biên nhận audit.
 
 ## Scope
 

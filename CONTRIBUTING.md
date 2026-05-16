@@ -1,6 +1,25 @@
 # Contributing
 
+Memory class: POINTER_RECORD
+
+Status: CURRENT PUBLIC CONTRIBUTION GUIDE
+
 CVF welcomes technical contributions that improve the governance control plane.
+
+## Purpose
+
+Give external contributors the minimum public-surface rules and local checks
+needed before opening a CVF pull request.
+
+## Scope
+
+This file covers contribution hygiene for the public repo. It does not grant
+ownership, release authority, or permission to publish provenance-only material.
+
+## Claim Boundary
+
+Public contributions must preserve the clean public surface. Internal operating
+artifacts belong in provenance or local storage unless explicitly curated.
 
 ## Public-Surface Rule
 
@@ -41,4 +60,3 @@ python scripts/run_cvf_release_gate_bundle.py --json
 ```
 
 The last command requires a live provider key and may incur provider cost.
-

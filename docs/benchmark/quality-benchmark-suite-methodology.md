@@ -1,14 +1,48 @@
 # CVF Quality Benchmark Suite Methodology
 
+Memory class: FULL_RECORD
+
 Status: `PUBLIC_METHODOLOGY`
+
+## Purpose
+
+Define the public methodology the CVF Quality Benchmark Suite (QBS) uses to
+measure whether CVF improves user control over AI and agent behavior
+compared with direct model use.
+
+## Scope
+
+Evaluation object, axes and weights, baselines, gates, and claim-ladder rules
+that govern any QBS run. This file does not contain scored-run results.
+
+## Source
 
 The CVF Quality Benchmark Suite (QBS) measures whether CVF improves user
 control over AI and agent behavior compared with direct model use.
 
-QBS evaluates a governed execution system, not only a base language model. The
-system under test is the combination of model, routing, risk policy, approval
-boundary, DLP/redaction, output validation, receipt generation, cost signals,
-and operator-facing handoff.
+QBS evaluates a governed execution system, not only a base language model.
+The system under test is the combination of model, routing, risk policy,
+approval boundary, DLP/redaction, output validation, receipt generation, cost
+signals, and operator-facing handoff.
+
+## Protocol
+
+The methodology body below specifies the evaluation object, axes, baselines,
+hard gates, reviewer-agreement gates, and claim ladder. Any QBS run must
+follow this protocol; deviations require a published methodology revision.
+
+## Enforcement
+
+Hard gates and reviewer-agreement gates inside the methodology block claim
+levels that the run did not actually prove. Pre-registration, gate
+enforcement, and reviewer rubrics in this file are the enforcement surface.
+
+## Related Artifacts
+
+- `README.md`
+- `quality-benchmark-suite-claim-ladder.md`
+- `quality-benchmark-suite-standards-alignment.md`
+- `qbs-1/README.md`
 
 ## 1. Evaluation Object
 
@@ -308,3 +342,11 @@ A publishable QBS run should produce:
 
 No public QBS score is valid without the corresponding public methodology
 version and claim statement.
+
+## Claim Boundary
+
+This methodology claims only the published evaluation protocol, gates,
+reviewer rubric, and claim ladder. It does not claim any specific QBS run
+result, does not claim provider parity, and does not authorize publishing
+quality-level claims that the published methodology and scored-run artifacts
+do not jointly support.

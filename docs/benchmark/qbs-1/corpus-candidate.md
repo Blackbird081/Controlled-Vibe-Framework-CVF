@@ -1,10 +1,59 @@
 # QBS-1 Corpus Candidate
 
+Memory class: POINTER_RECORD
+
 Status: `CORPUS_CANDIDATE_NOT_PREREGISTERED`
 
-This document defines the QBS-1 candidate corpus structure. It is not frozen for
-a scored run until a public tag of form `qbs/preregister/<run-id>` points to the
-final corpus commit.
+## Purpose
+
+Define the QBS-1 candidate corpus structure so scored runs can pre-register
+against a known frozen corpus identity instead of an ad-hoc snapshot.
+
+## Scope
+
+QBS-1 corpus version, family mix, and structural rules. This file does not
+contain raw task content or scored-run results.
+
+## Source
+
+Predecessor evidence anchors:
+
+- `../quality-benchmark-suite-methodology.md`
+- `runner-contract.md`
+- `scoring-rubric.md`
+
+## Protocol
+
+A scored run must pre-register against a public tag of form
+`qbs/preregister/<run-id>` that points to the final corpus commit. Without
+that tag, the corpus is treated as candidate, not frozen.
+
+## Enforcement
+
+Pre-registration tag presence is the enforcement surface. Runner harness and
+methodology gates verify the tag identity before counting any result as a
+scored run.
+
+## Boundaries
+
+This file does not authorize:
+
+- changing the family mix without a methodology revision;
+- mixing knowledge-sensitive families into a first powered claim without
+  explicitly including them;
+- treating an unfrozen candidate as a frozen corpus.
+
+## Related Artifacts
+
+- `README.md`
+- `../quality-benchmark-suite-methodology.md`
+- `runner-contract.md`
+- `scoring-rubric.md`
+- `preregistration-template.md`
+
+This document defines the QBS-1 candidate corpus structure. It is not frozen
+for a scored run until a public tag of form `qbs/preregister/<run-id>` points
+to the final corpus commit.
 
 ## Corpus Version
 
@@ -152,3 +201,10 @@ The candidate corpus becomes a scored-run corpus only when:
 - the corpus manifest hash is recorded;
 - a public `qbs/preregister/<run-id>` tag points to the frozen commit.
 
+
+## Claim Boundary
+
+This file claims only the candidate corpus structure and family mix. It does
+not claim a frozen corpus, does not authorize publishing a scored run
+without a pre-registration tag, and does not extend QBS-1 claims beyond
+what the methodology's claim ladder permits.

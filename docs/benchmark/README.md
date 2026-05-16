@@ -1,12 +1,38 @@
 # CVF Quality Benchmark Suite
 
+Memory class: POINTER_RECORD
+
+Status: `QBS32_R9_CALIBRATION_ONLY_RERUN_COMPLETE_NO_NEW_SCORE`
+
+## Purpose
+
+Point evaluators and agents at CVF's public benchmark methodology so they
+can evaluate the framework's quality claims under a published rubric rather
+than ad-hoc comparisons.
+
+## Scope
+
+Public QBS methodology, claim ladder, standards alignment, and the QBS-1
+runner and corpus material. This file does not contain scored-run results
+themselves; those live under `runs/`.
+
+## Source
+
 The CVF Quality Benchmark Suite (QBS) is the public methodology for measuring
 whether CVF improves control over AI and agent execution compared with direct
 model use.
 
-QBS is intentionally published before benchmark scores are claimed. The method
-defines what would count as evidence, which baselines are fair, which claims are
-allowed, and which gates can invalidate a result.
+QBS is intentionally published before benchmark scores are claimed. The
+method defines what would count as evidence, which baselines are fair, which
+claims are allowed, and which gates can invalidate a result.
+
+## Decision
+
+QBS is treated as the authoritative public quality methodology for CVF. Any
+public quality claim must cite QBS run artifacts, provider/model identity,
+corpus version, run class, criteria version, run date, and claim level.
+
+## Evidence
 
 Start here:
 
@@ -18,16 +44,14 @@ Start here:
 
 ## Current Status
 
-Status: `QBS32_R9_CALIBRATION_ONLY_RERUN_COMPLETE_NO_NEW_SCORE`
+As of 2026-05-11, CVF has public live provider and release-gate evidence,
+but no public QBS quality score has been claimed. Any future QBS result must
+name the provider, model, corpus version, run class, criteria version, run
+date, and claim level.
 
-As of 2026-05-11, CVF has public live provider and release-gate evidence, but
-no public QBS quality score has been claimed. Any future QBS result must name
-the provider, model, corpus version, run class, criteria version, run date, and
-claim level.
-
-Release-gate evidence proves governed operability. QBS is the separate method
-for measuring quality and control value; no QBS score is claimed until a
-powered run is published.
+Release-gate evidence proves governed operability. QBS is the separate
+method for measuring quality and control value; no QBS score is claimed
+until a powered run is published.
 
 QBS-1 runner and corpus planning is now published. A three-provider calibration
 pilot has also passed as harness proof only. A scored-run readiness packet now
@@ -198,3 +222,33 @@ This folder contains public benchmark methodology and curated public run
 artifacts. Raw internal reviews, handoffs, exploratory calibration notes, and
 uncurated run logs remain outside the public surface. Curated evidence summaries
 belong under `docs/evidence/`.
+
+## Protocol
+
+QBS execution must (a) pre-register run identity (provider, model, corpus,
+criteria version, run class, run date, claim level), (b) execute under that
+pre-registration, (c) score with the published reviewer rubric, (d) publish
+hard-gate and reviewer-agreement results, and (e) make no claim above the
+data layer the run actually proves.
+
+## Enforcement
+
+Hard gates and reviewer-agreement gates inside the QBS methodology block
+unsupported public claim levels. Runs that fail any gate publish a
+no-score, no-claim record. The QBS history above is the live demonstration
+of this enforcement.
+
+## Related Artifacts
+
+- `quality-benchmark-suite-methodology.md`
+- `quality-benchmark-suite-claim-ladder.md`
+- `quality-benchmark-suite-standards-alignment.md`
+- `qbs-1/README.md`
+- `runs/qbs1-calibration-20260509-three-provider/README.md`
+
+## Claim Boundary
+
+This file claims only the QBS methodology and current public status as
+documented. It does not claim a QBS score, does not claim provider or model
+parity, and does not authorize a public quality claim without a fully
+published powered run.

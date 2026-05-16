@@ -60,6 +60,40 @@ acknowledged AI collaboration contributors for design, implementation,
 repository maintenance, governance checks, and verification support. See
 [CONTRIBUTORS.md](CONTRIBUTORS.md).
 
+## Source
+
+CVF is a documentation-and-runtime repository owned by Tien / Blackbird081.
+Public source of truth is this repository; provenance history is preserved
+in a separate provenance repository accessible to partners on request.
+
+## Requirements
+
+To evaluate CVF locally, an operator needs:
+
+- Git and Node.js (for the Next.js control surface);
+- a DashScope-compatible (or other listed-provider) API key supplied via
+  environment variable when live governance proof is required;
+- familiarity with the documents pointed at by [Quick Navigation](#quick-navigation).
+
+## Enforcement
+
+- Provider boundary: every governed request runs through the policy,
+  validation, and receipt path documented in [GOVERNANCE.md](GOVERNANCE.md).
+- Public claim boundary: every public quality or governance claim must cite
+  a curated evidence file under [docs/evidence/](docs/evidence/).
+- Release gate: the local release-gate bundle described in
+  [docs/evidence/latest-release-gate.md](docs/evidence/latest-release-gate.md)
+  is the authoritative governed-operability proof.
+
+## Related Artifacts
+
+- [ARCHITECTURE.md](ARCHITECTURE.md) — technical evaluation surface
+- [GOVERNANCE.md](GOVERNANCE.md) — governance boundary
+- [PROVIDERS.md](PROVIDERS.md) — provider expectations
+- [COST_AND_QUOTA.md](COST_AND_QUOTA.md) — cost and quota posture
+- [PROVENANCE.md](PROVENANCE.md) — provenance split
+- [docs/evidence/](docs/evidence/) — curated public evidence
+
 ## Quick Navigation
 
 <table>

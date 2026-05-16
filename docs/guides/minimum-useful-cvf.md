@@ -34,6 +34,34 @@ UI-only walkthroughs prove navigation and product surface only. Governance
 claims require the live release-gate command and an operator-supplied provider
 key.
 
+## Source
+
+This guide is a public-safe orientation written from the current CVF
+control-surface state. It does not substitute for the architecture,
+governance, provider, or evidence documents linked under Related Artifacts.
+
+## Requirements
+
+To follow the live-proof path (Path B below), an operator needs:
+
+- a DashScope-compatible API key supplied via environment variable;
+- Python and Node.js installed locally;
+- ability to run `scripts/run_cvf_release_gate_bundle.py` from the repo root.
+
+## Enforcement
+
+UI walkthroughs (Path A) prove navigation only. Governance claims must run
+Path B (live release-gate) and produce the JSON release-gate output, which
+includes the live governance E2E result.
+
+## Related Artifacts
+
+- `README.md` — public positioning and quick start
+- `ARCHITECTURE.md` — control-plane model
+- `GOVERNANCE.md` — governed behaviors and live-proof rule
+- `PROVIDERS.md` — provider-lane boundaries
+- `docs/evidence/README.md` — curated public evidence summaries
+
 ## The Smallest Useful Flow
 
 ```text

@@ -1,6 +1,27 @@
 # Governance
 
+Memory class: POINTER_RECORD
+
+Status: CURRENT PUBLIC GOVERNANCE SUMMARY
+
 CVF governance is the rule layer around AI and agent execution.
+
+## Purpose
+
+Summarize the public governance behaviors CVF claims, the live-proof rule for
+those claims, and the evidence policy for public documentation.
+
+## Scope
+
+This file is the high-level governance entry point. Detailed provider lanes,
+claim boundaries, evidence summaries, and local deployment instructions live in
+the linked public docs.
+
+## Claim Boundary
+
+Release-quality claims about governance behavior require a real provider API
+call. Mock mode may support UI structure checks only when no AI governance
+behavior is being asserted.
 
 ## Governed Behaviors
 
@@ -61,4 +82,3 @@ Evidence summaries must state:
 - pass/fail status
 - scope boundary
 - provenance pointer when raw proof exists elsewhere
-

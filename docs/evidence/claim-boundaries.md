@@ -1,6 +1,26 @@
 # Claim Boundaries
 
+Memory class: FULL_RECORD
+
+Status: CURRENT PUBLIC CLAIM BOUNDARY
+
 CVF public claims are intentionally underclaimed.
+
+## Purpose
+
+Define what public CVF claims are allowed and which claims require new evidence
+before they can be made.
+
+## Scope
+
+This file governs public-facing claim language for the current repository. It
+does not replace the evidence summaries or benchmark methodology that support
+individual claims.
+
+## Claim Boundary
+
+Only claims listed as allowed below may be used as public posture. The
+not-allowed list remains blocked until fresh public evidence changes it.
 
 Allowed:
 

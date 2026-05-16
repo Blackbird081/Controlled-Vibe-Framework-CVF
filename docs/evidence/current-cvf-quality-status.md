@@ -14,11 +14,11 @@ handoffs, full live run artifacts, and internal logs remain in provenance.
 State the current honest public quality posture for CVF so users, evaluators,
 and agents do not overclaim output quality.
 
-## Muc dich nhanh
+## Mục đích nhanh
 
-Ket luan hien tai: CVF manh ve governance, receipt, audit, safety va structured
-non-coder workflows. CVF chua chung minh output-quality parity voi direct
-provider output.
+Kết luận hiện tại: CVF mạnh về governance, biên nhận, audit, safety, và các
+luồng non-coder có cấu trúc. CVF chưa chứng minh được parity về chất lượng đầu
+ra so với output trực tiếp từ provider.
 
 ## Scope
 

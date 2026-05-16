@@ -1,13 +1,51 @@
 # CVF Quality Benchmark Suite Standards Alignment
 
+Memory class: POINTER_RECORD
+
 Status: `PUBLIC_METHODOLOGY`
 
-This document explains how the CVF Quality Benchmark Suite (QBS) relates to
-existing benchmark and risk-evaluation traditions.
+## Purpose
 
-QBS does not replace these benchmarks. It borrows their discipline while
-measuring a different object: a governed AI/agent control system, not only the
-base language model.
+Explain how the CVF Quality Benchmark Suite (QBS) relates to existing
+benchmark and risk-evaluation traditions, so external evaluators can map
+QBS results onto familiar reference frames without expecting parity.
+
+## Scope
+
+Public alignment commentary across NLP, agent, and risk benchmark families.
+This file does not contain scored-run results or methodology body details.
+
+## Rule
+
+QBS borrows discipline from existing benchmarks but measures a different
+object: a governed AI/agent control system, not only the base language
+model. Public CVF docs must respect this distinction when referencing other
+benchmark families.
+
+## Requirements
+
+Any external comparison must (a) name the other benchmark, (b) name the
+evaluation object on both sides, (c) flag the differences in evaluation
+object (model vs governed system), and (d) avoid implying that a QBS run
+result substitutes for a public score on the other benchmark.
+
+## Exceptions
+
+No public override path exists. If a future tranche needs to claim parity
+with another benchmark, it must publish that claim through a fresh
+methodology revision and a scored run that targets the parity claim
+directly.
+
+## Enforcement Surface
+
+Public docs, READMEs, and external communication. The CVF claim-boundary
+file (`../evidence/claim-boundaries.md`) blocks contradictory claims.
+
+## Related Artifacts
+
+- `quality-benchmark-suite-methodology.md`
+- `quality-benchmark-suite-claim-ladder.md`
+- `../evidence/claim-boundaries.md`
 
 ## 1. Object Of Evaluation
 
@@ -121,3 +159,11 @@ QBS is closest to a system benchmark for governed AI execution. It combines:
 The result is CVF-native because the question is not only "did the model answer
 well?" The question is "did the user get a useful answer through a controlled,
 auditable, cost-aware, policy-bound execution path?"
+
+## Final Clause
+
+This alignment file claims only that QBS borrows discipline from listed
+benchmarks while evaluating a different object. It does not claim parity
+with any of them, does not claim QBS supersedes any of them, and does not
+authorize publishing a comparative score without a fresh methodology
+revision.

@@ -1,5 +1,9 @@
 # CVF Architecture
 
+Memory class: POINTER_RECORD
+
+Status: CURRENT PUBLIC ARCHITECTURE
+
 CVF is a governance control plane. Its job is to control how AI and agents are
 allowed to act, not to replace the agents or providers that perform the work.
 
@@ -21,6 +25,24 @@ Diagram set:
   receipt closure
 - interaction model: the live-proof sequence from user intent to audit/freeze
   evidence
+
+## Purpose
+
+Describe CVF's public architecture in a diagram-first form so developers and
+LLM/agent readers can understand the control-plane boundary quickly.
+
+## Scope
+
+This document covers the current public repository architecture: guard contract,
+control plane, execution plane, governance expansion, learning plane, web
+surface, provider boundary, and provenance/public split. It does not document
+the full private development history.
+
+## Claim Boundary
+
+CVF controls the governance path around AI and agent execution. It does not
+claim to own provider infrastructure, replace every external agent, or prove
+governance behavior through mock UI checks alone.
 
 ## Canonical Flow
 

@@ -1,6 +1,55 @@
 # QBS-1 Artifact Layout
 
+Memory class: POINTER_RECORD
+
 Status: `ARTIFACT_LAYOUT_READY`
+
+## Purpose
+
+Define the public sanitized layout for QBS-1 run artifacts so reviewers and
+agents can locate each artifact deterministically, and so raw operator-only
+material stays out of the public surface.
+
+## Scope
+
+Required public run files, directory structure, and sanitization boundary
+for QBS-1 scored runs. This file does not contain actual run artifacts.
+
+## Source
+
+Predecessor evidence anchors:
+
+- `runner-contract.md`
+- `scoring-rubric.md`
+- `corpus-candidate.md`
+
+## Protocol
+
+Each scored run writes its public artifacts under `docs/benchmark/runs/<run-id>/`
+following the file list below. Sanitization happens before commit; raw or
+unredacted material is preserved separately in the provenance archive.
+
+## Enforcement
+
+Public-surface scanner verifies the artifact set and forbids committing raw
+provider request IDs or operator-only context onto the public surface.
+Missing required files trigger an evidence-completeness gate failure.
+
+## Boundaries
+
+This layout does not authorize:
+
+- committing unsanitized provider transcripts;
+- omitting receipt or claim-statement artifacts from a scored run;
+- treating a run with missing artifacts as scored evidence.
+
+## Related Artifacts
+
+- `README.md`
+- `runner-contract.md`
+- `scoring-rubric.md`
+- `preregistration-template.md`
+- `scored-run-readiness.md`
 
 Public sanitized QBS run artifacts live under:
 
@@ -67,3 +116,10 @@ Every public run manifest must include:
 - `allowed_claim_level`
 - `verdict`
 
+
+## Claim Boundary
+
+This layout claims only the public artifact structure and sanitization
+boundary. It does not claim a specific scored run satisfies the layout, does
+not authorize partial artifact sets to count as scored evidence, and does
+not permit raw provider transcripts on the public surface.

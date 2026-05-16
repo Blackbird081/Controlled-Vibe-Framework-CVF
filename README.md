@@ -1,9 +1,5 @@
 # Controlled Vibe Framework (CVF)
 
-Memory class: POINTER_RECORD
-
-Status: CURRENT PUBLIC FRONT DOOR
-
 > **Developed by Tien / Blackbird081**
 >
 > **Controlled vibe coding. Not faster, but safer and more governable.**
@@ -13,6 +9,22 @@ Status: CURRENT PUBLIC FRONT DOOR
 [![Provider Proof](https://img.shields.io/badge/provider%20proof-3%20live%20lanes%206%2F6-brightgreen.svg)](docs/evidence/provider-lanes.md)
 [![Public Surface](https://img.shields.io/badge/public%20surface-scanned-blue.svg)](governance/public-surface-manifest.json)
 [![Architecture](https://img.shields.io/badge/architecture-diagram%20first-blue.svg)](ARCHITECTURE.md)
+
+## Quick Navigation
+
+<table>
+  <tr>
+    <td align="center"><a href="#core-value"><strong>Core Value</strong></a></td>
+    <td align="center"><a href="#try-the-web-interface"><strong>Web UI</strong></a></td>
+    <td align="center"><a href="#architecture-at-a-glance"><strong>Overview</strong></a></td>
+    <td align="center"><a href="#who-cvf-is-for"><strong>Audience</strong></a></td>
+    <td align="center"><a href="#quick-start"><strong>Start Here</strong></a></td>
+    <td align="center"><a href="ARCHITECTURE.md"><strong>Architecture</strong></a></td>
+    <td align="center"><a href="#provider-boundary"><strong>Providers</strong></a></td>
+    <td align="center"><a href="#governance-boundary"><strong>Governance</strong></a></td>
+    <td align="center"><a href="#public-evidence"><strong>Evidence</strong></a></td>
+  </tr>
+</table>
 
 CVF is a local-first governance control plane for AI and agent execution. It
 sits between a user request and any provider, agent, tool, or workflow, then
@@ -34,7 +46,7 @@ Help a new evaluator understand what CVF is, how to run the smallest useful
 local path, what evidence currently supports public claims, and what CVF does
 not claim.
 
-## Plain-English Value
+## Core Value
 
 CVF gives people a safer way to use AI for real work. Before an AI result is
 treated as ready to review, CVF checks the request, keeps the provider choice
@@ -46,6 +58,22 @@ behind the scenes. The goal is to make the web experience more useful for
 non-coders: clearer starting points, better review packets, visible receipts,
 and fewer hidden assumptions when work moves from an AI response to a real
 decision.
+
+## Try the Web Interface
+
+CVF includes a dedicated web-facing platform for operators and non-coders to
+manage governed AI workflows without touching a line of code.
+
+**Access the live platform:** [vibcode.netlify.app/home](https://vibcode.netlify.app/home)
+
+What you can do on the Web UI:
+
+- **Interactive dashboard:** view AI execution history, provider choices, cost
+  signals, and token behavior.
+- **Visual audit trail:** inspect receipts and review states for AI-assisted
+  work.
+- **No-code configuration:** adjust provider and policy settings through the
+  interface instead of editing source files.
 
 ## Scope
 
@@ -100,23 +128,6 @@ To evaluate CVF locally, an operator needs:
 - [COST_AND_QUOTA.md](COST_AND_QUOTA.md) — cost and quota posture
 - [PROVENANCE.md](PROVENANCE.md) — provenance split
 - [docs/evidence/](docs/evidence/) — curated public evidence
-
-## Quick Navigation
-
-<table>
-  <tr>
-    <td align="center"><a href="#architecture-at-a-glance"><strong>Overview</strong></a></td>
-    <td align="center"><a href="#who-cvf-is-for"><strong>Audience</strong></a></td>
-    <td align="center"><a href="#quick-start"><strong>Start Here</strong></a></td>
-    <td align="center"><a href="ARCHITECTURE.md"><strong>Architecture</strong></a></td>
-    <td align="center"><a href="#technical-footprint"><strong>Tech Stack</strong></a></td>
-    <td align="center"><a href="#provider-boundary"><strong>Providers</strong></a></td>
-    <td align="center"><a href="#governance-boundary"><strong>Governance</strong></a></td>
-    <td align="center"><a href="#quality-benchmark-suite"><strong>Benchmark</strong></a></td>
-    <td align="center"><a href="#public-evidence"><strong>Evidence</strong></a></td>
-    <td align="center"><a href="CONTRIBUTORS.md"><strong>Contributors</strong></a></td>
-  </tr>
-</table>
 
 ## Current Live-Proof Boundary
 

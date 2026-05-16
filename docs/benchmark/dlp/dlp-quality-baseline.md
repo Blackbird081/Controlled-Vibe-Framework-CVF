@@ -1,5 +1,9 @@
 # CVF DLP Quality Baseline — v1
 
+Memory class: FULL_RECORD
+
+Status: PASS
+
 ```text
 Document class: EVIDENCE_BASELINE
 Track: EA Track E — Phase E.1 DLP Quality Benchmark
@@ -7,6 +11,60 @@ Authorization: GC-018 (docs/reviews/CVF_GC018_TRACK_E_DLP_QUALITY_BENCHMARK_2026
 Date: 2026-05-13
 Status: PASS
 ```
+
+## Purpose
+
+Record the public DLP quality baseline produced by EA Track E Phase E.1 so
+evaluators and agents can verify CVF's DLP claim under a frozen corpus and
+threshold.
+
+## Scope
+
+Single DLP baseline run on 2026-05-13 using the EA Track E corpus. This file
+does not contain raw input samples or adversarial seed material; those are
+preserved in the provenance archive.
+
+## Target
+
+EA Track E Phase E.1 DLP quality benchmark run identified above. The baseline
+metrics, threshold, and grade are the public-facing record.
+
+## Methodology
+
+The benchmark loads the frozen DLP corpus, runs the CVF DLP path on each
+sample, classifies outcomes into TP/FN/TN/FP plus an adversarial bound check,
+and computes Precision/Recall/F1 against the PASS threshold `F1 >= 0.80`.
+
+## Source
+
+EA Track E Phase E.1 corpus, frozen at the run date above. The corpus seed
+material is preserved in the provenance archive; the public file contains
+only the metrics and run identity.
+
+## Evidence
+
+The numeric metrics under Baseline Metrics below are the verification body.
+Re-running `python scripts/run_dlp_benchmark.py --save` reproduces the
+metrics from the frozen corpus. Exit code 0 confirms PASS at the threshold.
+
+## Findings
+
+Baseline run produced `PASS` with `F1=0.9600`, `Precision=0.9231`,
+`Recall=1.0000`, no false negatives, and adversarial cases within expected
+bounds.
+
+## Risk
+
+- The single false positive (`FP=1`) is a known operator-acceptable type
+  documented in EA Track E Phase E.1.
+- Threshold `F1 >= 0.80` is a baseline gate, not a parity claim.
+- Future regression must use the same frozen corpus or publish a corpus
+  revision.
+
+## Decision
+
+Baseline `v1` accepted as the current public DLP quality reference. Future
+DLP claims must cite this baseline or a later versioned baseline.
 
 ## Baseline Metrics
 

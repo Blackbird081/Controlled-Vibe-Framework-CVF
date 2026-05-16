@@ -4,8 +4,8 @@ Memory class: POINTER_RECORD
 
 Status: CURRENT PUBLIC EVIDENCE INDEX
 
-This folder contains curated public evidence summaries. Raw development logs,
-handoffs, rebuttals, and full wave packets remain in the provenance archive.
+This folder contains curated public evidence summaries. Raw development
+logs and full internal wave packets remain in the provenance archive.
 
 ## Purpose
 
@@ -23,6 +23,23 @@ transcripts.
 Evidence summaries support only the specific claim boundaries stated in each
 linked file. Release-gate evidence proves governed operability, not broad
 output-quality superiority.
+
+## Source
+
+This index points at curated public evidence files maintained under
+`docs/evidence/` and `docs/benchmark/`. Each linked file states its own
+predecessor evidence and update history.
+
+## Decision
+
+This file is the authoritative public evidence index. Public documents must
+point here when citing CVF evidence, rather than at private provenance
+material.
+
+## Evidence
+
+Each linked file below contains its own evidence body and verification
+boundary. The summary list is the curated public set.
 
 Start with:
 

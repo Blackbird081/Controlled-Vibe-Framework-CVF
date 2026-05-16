@@ -1,15 +1,60 @@
 # QBS-1 Runner And Corpus Planning
 
+Memory class: POINTER_RECORD
+
 Status: `QBS32_R9_CALIBRATION_ONLY_RERUN_COMPLETE_NO_NEW_SCORE`
 
-QBS-1 is the first implementation planning packet for the CVF Quality Benchmark
-Suite. It translates the public methodology into concrete runner, corpus,
-scoring, artifact, and pre-registration requirements.
+## Purpose
+
+Translate the public QBS methodology into concrete runner, corpus, scoring,
+artifact, and pre-registration requirements so QBS-1 runs are reproducible
+and pre-registered before scoring begins.
+
+## Scope
+
+QBS-1 planning packet: corpus, runner contract, scoring rubric, artifact
+layout, pre-registration template, scored-run readiness, and the QBS-N
+remediation history (QBS-6 through QBS-40+). This folder does not contain
+scored benchmark results; those live under `../runs/`.
+
+## Source
+
+QBS-1 is the first implementation planning packet for the CVF Quality
+Benchmark Suite.
 
 This folder does not contain scored benchmark results. The first calibration
 pilot is published under
 [`../runs/qbs1-calibration-20260509-three-provider/`](../runs/qbs1-calibration-20260509-three-provider/README.md)
 as harness proof only.
+
+## Protocol
+
+QBS-1 runs follow the public methodology in
+`../quality-benchmark-suite-methodology.md`. Every scored execution must
+pre-register identity, run under the frozen runner contract and scoring
+rubric, and publish results into the artifact layout documented below.
+
+## Enforcement
+
+QBS-N remediation history items below act as the enforcement record: every
+gate failure prevented a public claim level and required documented
+remediation before a new run could pre-register.
+
+## Boundaries
+
+QBS-1 planning material does not authorize:
+
+- claims above the methodology's claim ladder;
+- mixing knowledge-sensitive families into a first powered claim without
+  explicitly including them;
+- treating calibration-only runs as scored runs.
+
+## Related Artifacts
+
+- `../README.md`
+- `../quality-benchmark-suite-methodology.md`
+- `../quality-benchmark-suite-claim-ladder.md`
+- `../runs/`
 
 ## Planning Packet
 
@@ -143,3 +188,11 @@ authorized work is live R10 execution only if an operator explicitly runs the
 pre-registered command with `--confirm-live-cost`. Pre-registration alone does
 not authorize a score, L4/L5 claim, family-level claim, provider-parity claim,
 or human-gold claim.
+
+## Claim Boundary
+
+This file claims only the QBS-1 planning packet, the documented remediation
+history, and the next authorized work. It does not claim a QBS score, does
+not claim provider or model parity, and does not authorize publishing a
+quality-level claim without a fully executed and pre-registered powered run
+under the public methodology.

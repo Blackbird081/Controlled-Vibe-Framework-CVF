@@ -16,11 +16,11 @@ reading the private provenance archive.
 Explain how to use the current public CVF state as a local-first governance
 baseline without overstating output-quality claims.
 
-## Muc dich nhanh
+## Mục đích nhanh
 
-Dung CVF hien tai nhu baseline local-first: chay UI, cau hinh key bang env,
-chay live gate khi can claim governance, va noi ro output-quality parity chua
-duoc chung minh.
+Dùng CVF hiện tại như một baseline local-first: chạy UI, cấu hình key bằng
+biến môi trường, chạy live gate khi cần tuyên bố governance, và nói rõ rằng
+parity về chất lượng đầu ra so với provider trực tiếp chưa được chứng minh.
 
 ## Scope
 

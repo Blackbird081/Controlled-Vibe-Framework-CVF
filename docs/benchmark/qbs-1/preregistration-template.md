@@ -1,6 +1,56 @@
 # QBS-1 Pre-Registration Template
 
+Memory class: POINTER_RECORD
+
 Status: `TEMPLATE_READY`
+
+## Purpose
+
+Provide a frozen template for pre-registering QBS-1 scored runs so each run
+binds its identity to a public commit before execution begins.
+
+## Scope
+
+Pre-registration tag format, fields to freeze, and the boundary between
+pre-registration and execution. This file does not contain run-specific
+pre-registration material.
+
+## Source
+
+Predecessor evidence anchors:
+
+- `runner-contract.md`
+- `corpus-candidate.md`
+- `scoring-rubric.md`
+- `../quality-benchmark-suite-methodology.md`
+
+## Protocol
+
+Authors produce a pre-registration packet under
+`preregistrations/<run-id>.md`, freeze the surrounding methodology/corpus/
+rubric commits, and create the public `qbs/preregister/<run-id>` tag against
+that commit before any scored execution.
+
+## Enforcement
+
+Runner harness verifies pre-registration tag identity before counting a run
+as scored. Missing or mismatched tag triggers `INVALID_PREREGISTRATION`.
+
+## Boundaries
+
+This template does not authorize:
+
+- changing pre-registered fields after the tag is published;
+- treating an untagged preparation as pre-registration;
+- pre-registering against a methodology version that is not public.
+
+## Related Artifacts
+
+- `README.md`
+- `runner-contract.md`
+- `corpus-candidate.md`
+- `scoring-rubric.md`
+- `artifact-layout.md`
 
 Use this template before any scored QBS run.
 
@@ -67,3 +117,10 @@ git push origin qbs/preregister/<run-id>
 After the tag is pushed, any change to the frozen inputs creates a new run-set
 version and requires a new pre-registration tag.
 
+
+## Claim Boundary
+
+This template claims only the pre-registration format and freeze rules. It
+does not claim a current pre-registration exists for any specific run, does
+not authorize publishing scored claims without a verified tag, and does not
+permit retroactive pre-registration after execution.

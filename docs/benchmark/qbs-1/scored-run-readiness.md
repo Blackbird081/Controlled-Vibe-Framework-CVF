@@ -1,9 +1,63 @@
 # QBS-1 Scored Run Readiness
 
+Memory class: POINTER_RECORD
+
 Status: `QBS3_SCORED_RUN_READINESS_PACKET_READY_NO_SCORED_RUN`
 
-This packet prepares QBS-1 for a future scored run. It does not publish a QBS
-quality score and does not authorize a powered benchmark execution by itself.
+## Purpose
+
+Record the readiness packet that prepares QBS-1 for a future powered scored
+run, so the steps before execution are explicit and the boundary against
+"readiness equals scored result" is firm.
+
+## Scope
+
+Readiness inputs, gates, and checks required before a scored run is
+authorized. This file does not publish a QBS quality score and does not
+authorize execution by itself.
+
+## Source
+
+Predecessor evidence anchors:
+
+- `runner-contract.md`
+- `corpus-candidate.md`
+- `scoring-rubric.md`
+- `preregistration-template.md`
+- `../quality-benchmark-suite-methodology.md`
+
+## Protocol
+
+Operators run the readiness checker, pre-register the run via tag, and only
+then may execute the powered run. The checker's exit status is the public
+readiness signal.
+
+## Enforcement
+
+The readiness checker (`scripts/check_qbs_scored_run_readiness.py`) is the
+enforcement surface. Without a passing readiness check and a verified
+pre-registration tag, the runner refuses to execute as a scored run.
+
+## Boundaries
+
+This readiness packet does not authorize:
+
+- skipping pre-registration when execution begins;
+- treating readiness PASS as a scored claim;
+- citing readiness PASS in public docs as benchmark evidence.
+
+## Related Artifacts
+
+- `README.md`
+- `runner-contract.md`
+- `corpus-candidate.md`
+- `scoring-rubric.md`
+- `artifact-layout.md`
+- `preregistration-template.md`
+
+This packet prepares QBS-1 for a future scored run. It does not publish a
+QBS quality score and does not authorize a powered benchmark execution by
+itself.
 
 ## Readiness Inputs
 
@@ -71,3 +125,11 @@ Not allowed:
 - family-level result claim;
 - provider parity claim;
 - claim that a powered scored run has executed.
+
+## Claim Boundary
+
+This readiness packet claims only that the documented prerequisites are
+defined and the readiness checker is published. It does not claim a scored
+run has been executed, does not claim a public QBS quality score, and does
+not authorize publishing a scored claim without a fully-executed
+pre-registered run.

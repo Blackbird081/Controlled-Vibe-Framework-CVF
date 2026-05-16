@@ -1,8 +1,47 @@
 # Governance Tax Fitness Function
 
+Memory class: FULL_RECORD
+
 **Track:** EA Track A — Governance Tax Measurement
 **Status:** `EA_TRACK_A_INSTRUMENTATION_DEPLOYED`
 **Date:** 2026-05-12
+
+## Purpose
+
+Define the public governance-tax fitness function so evaluators and agents can
+verify how CVF measures its own latency overhead and where the public budget
+threshold sits.
+
+## Scope
+
+Definition, formula, and budget for governance-tax measurement across the CVF
+control plane. This file does not contain raw measurement runs; those are
+captured separately under the governance-tax instrumentation surface.
+
+## Source
+
+EA Track A — Governance Tax Measurement. Instrumentation is deployed in the
+CVF control plane and emits the `governance_tax_ms` family of metrics used by
+the fitness function below.
+
+## Protocol
+
+Each governed request emits `pre_processing_ms`, `policy_engine_ms`,
+`post_processing_ms`, and `provider_ms`. The fitness function combines the
+non-provider components into `governance_tax_ms` and compares against the
+public budget defined in the body below.
+
+## Enforcement
+
+Governance-tax violations against the documented budget are surfaced as
+operational signals, not as gates that block governed responses. Tightening
+the budget requires a fresh tranche.
+
+## Related Artifacts
+
+- `../quality-benchmark-suite-methodology.md`
+- `../quality-benchmark-suite-claim-ladder.md`
+- `../../evidence/web-governance-path.md`
 
 ## Definition
 

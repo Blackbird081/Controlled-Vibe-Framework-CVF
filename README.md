@@ -34,11 +34,11 @@ Help a new evaluator understand what CVF is, how to run the smallest useful
 local path, what evidence currently supports public claims, and what CVF does
 not claim.
 
-## Muc dich nhanh
+## Mục đích nhanh
 
-CVF giup ban dat mot lop kiem soat quanh AI/agent: yeu cau di qua risk gate,
-provider boundary, validation, receipt, va cost/quota signal truoc khi duoc xem
-la ket qua co the review.
+CVF giúp bạn đặt một lớp kiểm soát quanh AI/agent: mỗi yêu cầu đi qua đánh giá
+rủi ro, ranh giới provider, kiểm chứng đầu ra, biên nhận audit, và tín hiệu
+chi phí/quota trước khi được xem là kết quả có thể review.
 
 ## Scope
 

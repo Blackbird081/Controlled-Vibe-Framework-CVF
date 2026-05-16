@@ -38,6 +38,41 @@ Classification key:
 - **Permanent** — will not change without a deliberate architecture decision. Not a deficiency.
 - **Open** — known gap; may be closed in a future wave. Not hidden; just not yet addressed.
 
+## Source
+
+Predecessor evidence anchors:
+
+- `docs/evidence/current-cvf-quality-status.md`
+- `docs/evidence/latest-release-gate.md`
+- `docs/evidence/provider-lanes.md`
+- `docs/evidence/claim-boundaries.md`
+- internal wave packets preserved in the provenance archive
+
+## Requirements
+
+Every register entry must:
+
+- carry a unique `L-NNN` ID;
+- declare classification (`Permanent` or `Open`);
+- name the affected area;
+- state the limitation in public-safe language;
+- cite the evidence anchor that supports the entry;
+- record closure date and closure receipt when an entry moves to closed.
+
+## Enforcement
+
+This register is treated as the authoritative public limitations source.
+Public documents and external communication may not contradict an open
+entry. Closing an entry requires fresh evidence under `docs/evidence/` and
+a dated update to this file.
+
+## Related Artifacts
+
+- `docs/evidence/claim-boundaries.md`
+- `docs/evidence/current-cvf-quality-status.md`
+- `docs/benchmark/quality-benchmark-suite-methodology.md`
+- `docs/benchmark/qbs-1/README.md`
+
 ---
 
 ## Limitations Register

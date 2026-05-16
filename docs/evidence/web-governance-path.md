@@ -30,6 +30,11 @@ Publicly supported web claims:
   review paths
 - protected release-gate job trigger exists
 - provider key values are not intended to be displayed or committed
+- governed HTML artifact export with live receipt — confirmed 2026-05-16:
+  `POST /api/artifacts/export` returns `governanceReceipt` when
+  `NEXTAUTH_URL` is set and `/api/governance/evaluate` returns a live
+  receipt; receipt fields confirmed: `receiptId`, `decision: "ALLOW"`,
+  `evaluatedAt`, `riskLevel: "R0"`
 
 ## Decision
 

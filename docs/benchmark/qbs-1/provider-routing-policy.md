@@ -1,11 +1,43 @@
 # CVF Provider Routing Policy — QBS-1 Benchmark Reference
 
+Memory class: FULL_RECORD
+
+Status: CURRENT PUBLIC PROVIDER ROUTING POLICY
+
 ```text
 Document class: GOVERNANCE_POLICY
 Track: EA Track D — Phase D.1 Provider Policy Engine
 Authorization: GC-018 continuation candidate (docs/reviews/CVF_GC018_TRACK_D_PROVIDER_POLICY_ENGINE_2026-05-13.md)
 Date: 2026-05-13
 ```
+
+## Scope
+
+Public provider routing policy that governs `resolveProviderPolicy` for the
+CVF Agent Platform. This file is the authoritative reference for benchmark
+runs that route provider selection through CVF.
+
+## Target
+
+`resolveProviderPolicy` in `src/lib/provider-policy-engine.ts` and any
+benchmark or scored run that depends on CVF provider selection.
+
+## Methodology
+
+Policy assigns a preference tier per (provider, model) pair, applies
+selection in order of tier, and falls back to a documented backup tier when
+the primary tier is unavailable.
+
+## Findings
+
+The current policy passes EA Track D Phase D.1 acceptance criteria and is
+referenced by QBS-1 scored-run readiness for provider routing identity.
+
+## Decision
+
+Treated as the authoritative public provider routing policy reference.
+Updates require a new dated revision under EA Track D and a corresponding
+public commit.
 
 ## Purpose
 
@@ -104,3 +136,41 @@ is extended by Track D to include:
 - Phase D.2 (review-chain topology) is **not** in scope of this document.
 - Provider name changes require updating `CAPABILITY_ORDER` and
   `WEB_PROVIDER_DEFINITIONS` in `provider-router-adapter.ts`.
+
+## Rule
+
+Provider selection runs after `enforcement.status === 'ALLOW'`, scans the
+preference-tier table in declared order, picks the first available tier,
+and records the selected provider/model in the request receipt.
+
+## Requirements
+
+- preference-tier order is declared in code and reflected in this document
+- provider names stay out of noncoder-facing UI
+- selection is logged in the audit receipt for every governed request
+
+## Exceptions
+
+No public override path. Provider name changes require updating
+`CAPABILITY_ORDER` and `WEB_PROVIDER_DEFINITIONS` in
+`provider-router-adapter.ts` and a new revision of this file.
+
+## Enforcement Surface
+
+- `resolveProviderPolicy` in `src/lib/provider-policy-engine.ts`
+- `provider-router-adapter.ts` capability ordering
+- audit receipt fields recording the selected provider/model
+
+## Related Artifacts
+
+- `runner-contract.md`
+- `../quality-benchmark-suite-methodology.md`
+- `../../evidence/provider-lanes.md`
+- `../../reviews/CVF_GC018_TRACK_D_PROVIDER_POLICY_ENGINE_2026-05-13.md`
+
+## Final Clause
+
+This policy claims only the preference-tier routing rule, the declared
+fallback behavior, and the audit-receipt requirement. It does not claim
+provider parity, does not authorize hidden provider substitution, and does
+not extend Phase D.1 into review-chain topology (Phase D.2).

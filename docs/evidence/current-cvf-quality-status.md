@@ -32,6 +32,22 @@ This file permits only the bounded baseline claim below. It blocks
 output-quality parity, broad EVT-4 superiority, and claims that EVT4-03 is
 fixed.
 
+## Source
+
+Predecessor evidence anchors:
+
+- `docs/evidence/latest-release-gate.md`
+- `docs/evidence/local-first-release-gate-proof-2026-05-16.md`
+- `docs/evidence/provider-lanes.md`
+- non-coder hardening roadmap closure (QH-1..QH-5)
+- EVT-4 roadmap-completion regression run
+
+## Decision
+
+The bounded baseline claim below is the authoritative current quality
+posture for CVF. Updates to this baseline require fresh evidence under
+`docs/evidence/` and a dated revision of this file.
+
 ## Short Conclusion
 
 CVF is currently strongest as a governance-first framework:

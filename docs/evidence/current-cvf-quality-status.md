@@ -1,12 +1,36 @@
 # Current CVF Quality Status
 
-Date: 2026-05-16
+Memory class: FULL_RECORD
 
 Status: BOUNDED BASELINE FOR LOCAL-FIRST DEPLOYMENT
 
-This public summary reflects the current evidence-backed CVF quality posture.
-It is intentionally conservative. Raw handoffs, full live run artifacts, and
-internal operating logs remain in the private provenance archive.
+Date: 2026-05-16
+
+This summary reflects the current evidence-backed CVF quality posture. Raw
+handoffs, full live run artifacts, and internal logs remain in provenance.
+
+## Purpose
+
+State the current honest public quality posture for CVF so users, evaluators,
+and agents do not overclaim output quality.
+
+## Muc dich nhanh
+
+Ket luan hien tai: CVF manh ve governance, receipt, audit, safety va structured
+non-coder workflows. CVF chua chung minh output-quality parity voi direct
+provider output.
+
+## Scope
+
+This summary covers the latest public quality boundary for local-first
+deployment. It points to curated evidence and intentionally omits raw private
+run artifacts.
+
+## Claim Boundary
+
+This file permits only the bounded baseline claim below. It blocks
+output-quality parity, broad EVT-4 superiority, and claims that EVT4-03 is
+fixed.
 
 ## Short Conclusion
 
@@ -23,16 +47,10 @@ as an output-quality optimizer or direct-model parity layer.
 
 ## What Was Hardened
 
-The non-coder output-quality hardening roadmap is complete at the
-product-contract level:
-
-| Track | Product Behavior Added |
-| --- | --- |
-| QH-1 MVP/backlog | Scope-first outputs with `Do now / MVP`, `Do next`, `Defer`, first build/validation step, owner/role, and acceptance checks. |
-| QH-2 pricing | Concrete tiers/options, target users, included limits/features, price anchors or relative bands, first pricing experiment, and risk checks. |
-| QH-3 SOP/handoff | Procedural runbooks with required artifacts, steps, decision branches, QA checks, failure recovery, escalation, and handoff acceptance. |
-| QH-4 persona | Persona-to-action packets with triggers, objections, decision criteria, success signals, product/support actions, and experiments. |
-| QH-5 decision memo | Decision activation memos with first 24-72 hour activation step, switch/rollback trigger, risk checks, and acceptance checks. |
+The non-coder hardening roadmap is complete at the product-contract level:
+MVP/backlog, pricing, SOP/handoff, persona, and decision-memo outputs now carry
+clearer scope, next actions, acceptance checks, experiments, risk checks, and
+handoff criteria.
 
 ## Evidence Snapshot
 

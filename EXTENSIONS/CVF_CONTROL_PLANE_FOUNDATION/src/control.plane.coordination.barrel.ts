@@ -124,6 +124,17 @@ export type {
   ReproducibilitySnapshot,
 } from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/determinism_control/reproducibility.snapshot";
 
+export {
+  createAgentHandoff,
+  validateAgentHandoff,
+  verifyPolicyContinuity,
+} from "./agent.handoff.contract";
+export type {
+  AgentHandoffRecord,
+  AgentHandoffRiskCeiling,
+  AgentHandoffValidationResult,
+} from "./agent.handoff.contract";
+
 export const CONTROL_PLANE_FOUNDATION_COORDINATION = {
   executionClass: "coordination package",
   intentValidation: "EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION",

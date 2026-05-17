@@ -67,7 +67,8 @@ This consensus roadmap does **not**:
 | 6 | Open GC-018 for GAP-MEM 3 memory sub-contracts | complete 2026-05-17 |
 | 7 | ADD-W7-SIGNALS boundary signals schema extension | complete 2026-05-17 |
 | 8 | ADD-B Context Profile Metadata | complete 2026-05-17 |
-| 9+ | Defer remaining items until trigger conditions occur | pending — per item triggers |
+| 9 | GAP-AGENT-HANDOFF cross-agent handoff protocol | complete 2026-05-17 |
+| 10+ | Defer remaining items until trigger conditions occur | pending — per item triggers |
 
 ## Acceptance Criteria
 
@@ -119,7 +120,7 @@ After Claude–Codex consensus:
 | ADD-BRIEF Brief Normalization | promoted doctrine | ⭐⭐⭐⭐ | completed 2026-05-17 |
 | ADD-PROVIDER Output Contracts | runtime-owned | ⭐⭐⭐ | completed 2026-05-17 |
 | GAP-MEM (3 items) | runtime-owned | ⭐⭐⭐ | completed 2026-05-17 |
-| GAP-AGENT-HANDOFF | Nhóm 3 deferred | ⭐⭐ | Scope reduced from full agent governance |
+| GAP-AGENT-HANDOFF | runtime-owned | ⭐⭐ | completed 2026-05-17 |
 | ADD-W7-SIGNALS | runtime-owned | ⭐⭐⭐ | completed 2026-05-17 |
 | ADD-B Context Profile | runtime-owned | ⭐⭐⭐ | completed 2026-05-17 |
 | ADD-C1 Continuity | Nhóm 3 deferred | ⭐⭐⭐ | Unchanged |
@@ -159,7 +160,8 @@ No new tooling, no new file, no new hook.
 | 6 | Implementation | GAP-MEM 3 memory sub-contracts | Complete: `docs/roadmaps/CVF_GAP_MEM_SUBCONTRACTS_RUNTIME_ADOPTION_ROADMAP_2026-05-17.md` |
 | 7 | Implementation | ADD-W7-SIGNALS boundary signals schema extension | Complete: `docs/roadmaps/CVF_ADD_W7_SIGNALS_RUNTIME_ADOPTION_ROADMAP_2026-05-17.md` |
 | 8 | Implementation | ADD-B Context Profile Metadata | Complete: `docs/roadmaps/CVF_ADD_B_CONTEXT_PROFILE_RUNTIME_ADOPTION_ROADMAP_2026-05-17.md` |
-| 9+ | Deferred | Remaining Nhóm 3 items | Each requires its own GC-018 when trigger occurs |
+| 9 | Implementation | GAP-AGENT-HANDOFF cross-agent handoff protocol | Complete: `docs/roadmaps/CVF_GAP_AGENT_HANDOFF_RUNTIME_ADOPTION_ROADMAP_2026-05-17.md` |
+| 10+ | Deferred | Remaining Nhóm 3 items | Each requires its own GC-018 when trigger occurs |
 
 **Step ordering rules (consensus):**
 
@@ -171,7 +173,9 @@ No new tooling, no new file, no new hook.
 - Step 7 (ADD-W7-SIGNALS) completed 2026-05-17 after ADD-D promotion.
 - Step 8 (ADD-B Context Profile Metadata) completed 2026-05-17 after operator
   authorization.
-- Step 9+ chỉ khi trigger conditions của từng item xảy ra.
+- Step 9 (GAP-AGENT-HANDOFF) completed 2026-05-17 after operator
+  authorization.
+- Step 10+ chỉ khi trigger conditions của từng item xảy ra.
 
 ### CD-4 — Disagreements resolved
 
@@ -269,7 +273,7 @@ Steps 1 và 2 đã apply trong commit này. Inventory đã được amended vớ
 consensus accuracy state. Reporting rule đã được narrow với explicit
 triggers + enforcement surface.
 
-Step 3 is complete. Steps 4-9 là roadmap forward. Mỗi step yêu cầu một
+Step 3 is complete. Steps 4-10 là roadmap forward. Mỗi step yêu cầu một
 authorization packet riêng khi mở:
 
 - Step 3 (ADD-A + ADD-D + ADD-BRIEF doctrine promotion): completed by
@@ -278,7 +282,9 @@ authorization packet riêng khi mở:
 - Step 7 (ADD-W7-SIGNALS): completed with fresh GC-018 after ADD-D promotion.
 - Step 8 (ADD-B Context Profile Metadata): completed with fresh GC-018 after
   operator authorization.
-- Step 9+: defer cho đến khi trigger conditions xảy ra.
+- Step 9 (GAP-AGENT-HANDOFF): completed with fresh GC-018 after operator
+  authorization.
+- Step 10+: defer cho đến khi trigger conditions xảy ra.
 
 Không có further review loop required. Consensus đã đạt được sau:
 

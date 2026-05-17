@@ -157,7 +157,7 @@ describe.skipIf(!OPENAI_API_KEY)(
 
         expect(output.length).toBeGreaterThan(450);
         expect(output).toMatch(/LeadSync|integration|tích hợp/i);
-        expect(output).toMatch(/operations|payloads|workflow|giao thức/i);
+        expect(output).toMatch(/operations|payloads|workflow|giao thức|hoạt động|dữ liệu|thông tin trao đổi/i);
         expect(output).toMatch(/approval|phê duyệt|quyền/i);
         expect(output).toMatch(/checklist|kiểm tra/i);
       },

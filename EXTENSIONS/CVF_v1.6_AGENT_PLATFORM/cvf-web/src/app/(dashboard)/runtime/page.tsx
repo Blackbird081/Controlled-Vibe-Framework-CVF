@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Activity, AlertTriangle, CheckCircle2, Clock3, Gauge, RefreshCw, ServerCog, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
+import { useRuntimeStore } from '@/lib/hooks/useRuntimeStore';
 
 type Severity = 'INFO' | 'NOTICE' | 'WARNING' | 'HIGH' | 'CRITICAL';
 
@@ -134,12 +135,16 @@ export default function RuntimeMonitorPage() {
     const [snapshot, setSnapshot] = useState<RuntimeSnapshot | null>(null);
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
+    const { headers: runtimeHeaders } = useRuntimeStore();
 
-    async function load() {
+    const load = useCallback(async () => {
         setLoading(true);
         setError(false);
         try {
-            const response = await fetch('/api/runtime/observability', { cache: 'no-store' });
+            const response = await fetch('/api/runtime/observability', {
+                cache: 'no-store',
+                headers: runtimeHeaders,
+            });
             if (!response.ok) throw new Error('runtime-observability-load-failed');
             setSnapshot(await response.json() as RuntimeSnapshot);
         } catch {
@@ -147,13 +152,13 @@ export default function RuntimeMonitorPage() {
         } finally {
             setLoading(false);
         }
-    }
+    }, [runtimeHeaders]);
 
     useEffect(() => {
         void load();
         const timer = window.setInterval(() => void load(), 30000);
         return () => window.clearInterval(timer);
-    }, []);
+    }, [load]);
 
     const summaryCards = useMemo(() => {
         if (!snapshot) return [];

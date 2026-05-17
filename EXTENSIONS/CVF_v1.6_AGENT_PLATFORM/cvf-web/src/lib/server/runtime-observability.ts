@@ -1,7 +1,9 @@
 import { existsSync } from 'fs';
 import { resolve } from 'path';
 import { listGovernanceJobs, type GovernanceJobEvent } from './web-governance-jobs';
+import { summarizeCostQuota } from './web-governance-cost-quota';
 import { getSystemHealth } from './system-health';
+import { type IntegrationStoreAdapter, storeRecordToJobEvent } from './integration-store';
 
 export type RuntimeSeverity = 'INFO' | 'NOTICE' | 'WARNING' | 'HIGH' | 'CRITICAL';
 export type RuntimeDashboardMode = 'READ_ONLY_MODE';
@@ -127,6 +129,7 @@ interface RuntimeObservabilityOptions {
     repoRoot?: string;
     appRoot?: string;
     now?: () => string;
+    integrationAdapter?: IntegrationStoreAdapter;
 }
 
 const ALLOWED_ACTIONS = ['observe', 'summarize', 'alert', 'emit_receipt', 'recommend_escalation'];
@@ -149,11 +152,23 @@ const EMPTY_COUNTS: Record<RuntimeSeverity, number> = {
     CRITICAL: 0,
 };
 
-export function getRuntimeObservabilitySnapshot(options: RuntimeObservabilityOptions = {}): RuntimeObservabilitySnapshot {
+export async function getRuntimeObservabilitySnapshot(options: RuntimeObservabilityOptions = {}): Promise<RuntimeObservabilitySnapshot> {
     const generatedAt = options.now?.() ?? new Date().toISOString();
     const appRoot = options.appRoot ?? process.cwd();
     const repoRoot = options.repoRoot ?? resolve(appRoot, '..', '..', '..');
-    const jobs = listGovernanceJobs({ repoRoot });
+    let jobs: ReturnType<typeof listGovernanceJobs> = listGovernanceJobs({ repoRoot });
+    if (options.integrationAdapter?.isAvailable()) {
+        const records = await options.integrationAdapter.fetchLatestJobs(20);
+        if (records.length > 0) {
+            const mappedEvents = records.map(storeRecordToJobEvent);
+            jobs = {
+                auditPath: 'integration-store',
+                events: mappedEvents,
+                jobs: mappedEvents,
+                costQuota: summarizeCostQuota(repoRoot, generatedAt),
+            };
+        }
+    }
     const latestJob = jobs.jobs[0] ?? null;
     const systemHealth = getSystemHealth({ appRoot, repoRoot, now: () => generatedAt });
     const correlationId = latestJob?.correlationId ?? 'web-runtime-local';

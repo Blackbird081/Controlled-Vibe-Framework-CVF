@@ -22,9 +22,9 @@ describe('runtime observability snapshot for web', () => {
         }
     });
 
-    it('returns a read-only snapshot with source-tagged panels', () => {
+    it('returns a read-only snapshot with source-tagged panels', async () => {
         const repoRoot = makeRepo();
-        const snapshot = getRuntimeObservabilitySnapshot({
+        const snapshot = await getRuntimeObservabilitySnapshot({
             repoRoot,
             appRoot: resolve(repoRoot, 'EXTENSIONS', 'CVF_v1.6_AGENT_PLATFORM', 'cvf-web'),
             now: () => '2026-05-17T00:00:00.000Z',
@@ -38,7 +38,7 @@ describe('runtime observability snapshot for web', () => {
         expect(snapshot.panels.alerts.some((alert) => alert.source === 'CVF_TOKEN_CONTEXT_METER')).toBe(true);
     });
 
-    it('maps governance job audit events into session visibility', () => {
+    it('maps governance job audit events into session visibility', async () => {
         const repoRoot = makeRepo();
         const auditPath = resolve(repoRoot, '.cvf', 'runtime', 'web-governance-jobs.jsonl');
         writeFileSync(auditPath, `${JSON.stringify({
@@ -73,7 +73,7 @@ describe('runtime observability snapshot for web', () => {
             costQuota: null,
         })}\n`, 'utf8');
 
-        const snapshot = getRuntimeObservabilitySnapshot({
+        const snapshot = await getRuntimeObservabilitySnapshot({
             repoRoot,
             appRoot: resolve(repoRoot, 'EXTENSIONS', 'CVF_v1.6_AGENT_PLATFORM', 'cvf-web'),
             now: () => '2026-05-17T00:00:02.000Z',
@@ -83,6 +83,81 @@ describe('runtime observability snapshot for web', () => {
         expect(snapshot.panels.sessions[0].provider).toBe('alibaba');
         expect(snapshot.panels.sessions[0].status).toBe('ACTIVE');
         expect(snapshot.summary.activeSessions).toBe(1);
+    });
+
+    it('uses integration store records when the configured adapter returns jobs', async () => {
+        const repoRoot = makeRepo();
+        const snapshot = await getRuntimeObservabilitySnapshot({
+            repoRoot,
+            appRoot: resolve(repoRoot, 'EXTENSIONS', 'CVF_v1.6_AGENT_PLATFORM', 'cvf-web'),
+            now: () => '2026-05-17T00:00:02.000Z',
+            integrationAdapter: {
+                isAvailable: () => true,
+                fetchLatestJobs: async () => [{
+                    job_id: 'store-job',
+                    event_type: 'running',
+                    status: 'running',
+                    provider_lane: 'alibaba',
+                    cwd_label: 'external-store',
+                    correlation_id: 'store-corr',
+                    evidence_refs: ['store-receipt'],
+                    cost_quota: null,
+                    requested_at: '2026-05-17T00:00:00.000Z',
+                    recorded_at: '2026-05-17T00:00:01.000Z',
+                }],
+            },
+        });
+
+        expect(snapshot.panels.sessions[0].sessionId).toBe('store-job');
+        expect(snapshot.panels.sessions[0].source).toBe('CVF_AGENT_SESSION_MONITOR');
+    });
+
+    it('falls back to local audit jobs when the configured adapter returns no jobs', async () => {
+        const repoRoot = makeRepo();
+        const auditPath = resolve(repoRoot, '.cvf', 'runtime', 'web-governance-jobs.jsonl');
+        writeFileSync(auditPath, `${JSON.stringify({
+            eventId: 'evt-local',
+            jobId: 'local-job',
+            eventType: 'running',
+            jobType: 'provider_check',
+            requestedBy: 'operator',
+            role: 'operator',
+            authMode: 'authenticated',
+            localMode: false,
+            requestIpClass: 'loopback',
+            requestedAt: '2026-05-17T00:00:00.000Z',
+            recordedAt: '2026-05-17T00:00:01.000Z',
+            decision: 'allowed',
+            decisionReason: 'role_authorized',
+            status: 'running',
+            cwdLabel: 'Controlled-Vibe-Framework-CVF',
+            handlerId: 'scripts.cvf_provider_check.json.live',
+            fixedArgv: ['scripts/cvf_provider_check.py', '--provider', 'alibaba', '--live', '--json'],
+            providerLane: 'alibaba',
+            redactionApplied: true,
+            stdoutSummary: 'running',
+            stderrSummary: '',
+            exitCode: null,
+            timeoutMs: 30000,
+            timedOut: false,
+            errorClass: null,
+            evidenceRefs: [],
+            uiRequestId: 'ui-local',
+            correlationId: 'corr-local',
+            costQuota: null,
+        })}\n`, 'utf8');
+
+        const snapshot = await getRuntimeObservabilitySnapshot({
+            repoRoot,
+            appRoot: resolve(repoRoot, 'EXTENSIONS', 'CVF_v1.6_AGENT_PLATFORM', 'cvf-web'),
+            now: () => '2026-05-17T00:00:02.000Z',
+            integrationAdapter: {
+                isAvailable: () => true,
+                fetchLatestJobs: async () => [],
+            },
+        });
+
+        expect(snapshot.panels.sessions[0].sessionId).toBe('local-job');
     });
 
     it('keeps the adaptive runtime contract file discoverable', () => {

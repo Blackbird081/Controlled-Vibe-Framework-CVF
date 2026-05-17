@@ -164,6 +164,21 @@ export type {
   KnowledgeContextAssemblyBatchContractDependencies,
 } from "./knowledge.context.assembly.batch.contract";
 
+export {
+  guardProviderAction,
+  providerToKnowledgeVaultAssetType,
+  providerToContextProfileSourceRelevance,
+  queryProvider,
+  validateScopedKnowledgeProvider,
+} from "./scoped.knowledge.provider.contract";
+export type {
+  ScopedKnowledgeFreshness,
+  ScopedKnowledgeProvider,
+  ScopedKnowledgeProviderClass,
+  ScopedKnowledgeProviderValidation,
+  ScopedKnowledgeSourceClass,
+} from "./scoped.knowledge.provider.contract";
+
 // W76-T1 — KnowledgeContextAssemblyConsumerPipelineContract
 export {
   KnowledgeContextAssemblyConsumerPipelineContract,

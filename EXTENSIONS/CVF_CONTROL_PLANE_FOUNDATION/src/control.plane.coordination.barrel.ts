@@ -135,6 +135,18 @@ export type {
   AgentHandoffValidationResult,
 } from "./agent.handoff.contract";
 
+export {
+  validateClosureReport,
+  validateDelegationContract,
+  validateWriteScope,
+} from "./delegation.contract";
+export type {
+  DelegationContract,
+  DelegationRiskCeiling,
+  DelegationValidationResult,
+  DelegationWriteScope,
+} from "./delegation.contract";
+
 export const CONTROL_PLANE_FOUNDATION_COORDINATION = {
   executionClass: "coordination package",
   intentValidation: "EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION",

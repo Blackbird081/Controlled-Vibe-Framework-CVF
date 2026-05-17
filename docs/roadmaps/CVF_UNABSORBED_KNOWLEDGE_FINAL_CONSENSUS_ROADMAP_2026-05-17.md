@@ -2,10 +2,9 @@
 
 Memory class: FULL_RECORD
 
-Status: FINAL — Claude and Codex consensus after audit. No further operator
-authorization required for the inventory accuracy fixes and reporting rule
-amendments below. Each absorption roadmap (steps 3-5) still requires its
-own GC-018 packet when opened.
+Status: CLOSED 2026-05-17 — Claude and Codex consensus absorption queue fully
+executed through Step 10c. No remaining deferred item from this roadmap is
+pending.
 
 ## Purpose
 
@@ -37,8 +36,7 @@ In scope:
 
 Out of scope:
 
-- implementing any absorption item — each implementation step requires its
-  own GC-018 packet;
+- reopening any closed absorption item without a fresh GC-018 packet;
 - changing GA posture (`GA_LOCAL_FIRST_APPROVED` unchanged);
 - public README or CHANGELOG changes;
 - live provider proof.
@@ -47,9 +45,7 @@ Out of scope:
 
 This consensus roadmap does **not**:
 
-- implement any absorption item (each requires its own GC-018 packet later);
-- implement runtime absorption items; Step 3 doctrine promotion is now recorded
-  separately in its own doc-only promotion packet;
+- reopen already completed absorption items;
 - change GA posture (`GA_LOCAL_FIRST_APPROVED` unchanged);
 - change public README, CHANGELOG, or release gates;
 - claim live provider proof;
@@ -68,7 +64,9 @@ This consensus roadmap does **not**:
 | 7 | ADD-W7-SIGNALS boundary signals schema extension | complete 2026-05-17 |
 | 8 | ADD-B Context Profile Metadata | complete 2026-05-17 |
 | 9 | GAP-AGENT-HANDOFF cross-agent handoff protocol | complete 2026-05-17 |
-| 10+ | Defer remaining items until trigger conditions occur | pending — per item triggers |
+| 10a | ADD-C1 Continuity Checkpoint schema | complete 2026-05-17 |
+| 10b | ADD-C2 Delegation/Worker/Subagent contract | complete 2026-05-17 |
+| 10c | ADD-E1 Scoped Knowledge/Code Graph provider contract | complete 2026-05-17 |
 
 ## Acceptance Criteria
 
@@ -81,9 +79,10 @@ This consensus roadmap is accepted when all of the following are true:
 - pre-commit governance hooks pass on all amended and new files;
 - final consensus roadmap exists in `docs/roadmaps/` referencing all
   prerequisite review files;
-- no implementation has been started by this packet.
+- all implementation items authorized by later GC-018 packets are now closed.
 
-All seven criteria are met by this commit.
+All seven criteria are met. Later GC-018 packets closed the full queue through
+Step 10c.
 
 ## Source
 
@@ -105,8 +104,8 @@ After Claude–Codex consensus:
   removed; OBS-1 upgraded to ⭐⭐⭐⭐⭐; ADD-BRIEF và ADD-W7-SIGNALS added);
 - reporting rule has been narrowed to 3 explicit trigger conditions + 1
   enforcement checklist line;
-- consensus on absorption sequence: doctrine first, implementation second,
-  deferred items remain deferred until their triggers occur.
+- consensus on absorption sequence: doctrine first, implementation second;
+- all deferred items were later authorized and closed through Step 10c.
 
 ## Consensus Decisions
 
@@ -123,9 +122,9 @@ After Claude–Codex consensus:
 | GAP-AGENT-HANDOFF | runtime-owned | ⭐⭐ | completed 2026-05-17 |
 | ADD-W7-SIGNALS | runtime-owned | ⭐⭐⭐ | completed 2026-05-17 |
 | ADD-B Context Profile | runtime-owned | ⭐⭐⭐ | completed 2026-05-17 |
-| ADD-C1 Continuity | Nhóm 3 deferred | ⭐⭐⭐ | Unchanged |
-| ADD-C2 Delegation | Nhóm 3 deferred | ⭐⭐⭐ | Unchanged |
-| ADD-E1 Scoped Knowledge | Nhóm 3 deferred | ⭐⭐ | Unchanged |
+| ADD-C1 Continuity | runtime-owned | ⭐⭐⭐ | completed 2026-05-17 |
+| ADD-C2 Delegation | runtime-owned | ⭐⭐⭐ | completed 2026-05-17 |
+| ADD-E1 Scoped Knowledge | runtime-owned | ⭐⭐ | completed 2026-05-17 |
 | GAP-SKILL | REMOVED | — | Spot-check found false positive |
 
 ### CD-2 — Reporting rule scope (final)
@@ -161,7 +160,9 @@ No new tooling, no new file, no new hook.
 | 7 | Implementation | ADD-W7-SIGNALS boundary signals schema extension | Complete: `docs/roadmaps/CVF_ADD_W7_SIGNALS_RUNTIME_ADOPTION_ROADMAP_2026-05-17.md` |
 | 8 | Implementation | ADD-B Context Profile Metadata | Complete: `docs/roadmaps/CVF_ADD_B_CONTEXT_PROFILE_RUNTIME_ADOPTION_ROADMAP_2026-05-17.md` |
 | 9 | Implementation | GAP-AGENT-HANDOFF cross-agent handoff protocol | Complete: `docs/roadmaps/CVF_GAP_AGENT_HANDOFF_RUNTIME_ADOPTION_ROADMAP_2026-05-17.md` |
-| 10+ | Deferred | Remaining Nhóm 3 items | Each requires its own GC-018 when trigger occurs |
+| 10a | Implementation | ADD-C1 Continuity Checkpoint schema | Complete: `docs/roadmaps/CVF_ADD_C1_CONTINUITY_RUNTIME_ADOPTION_ROADMAP_2026-05-17.md` |
+| 10b | Implementation | ADD-C2 Delegation/Worker/Subagent contract | Complete: `docs/roadmaps/CVF_ADD_C2_DELEGATION_RUNTIME_ADOPTION_ROADMAP_2026-05-17.md` |
+| 10c | Implementation | ADD-E1 Scoped Knowledge/Code Graph provider contract | Complete: `docs/roadmaps/CVF_ADD_E1_SCOPED_KNOWLEDGE_RUNTIME_ADOPTION_ROADMAP_2026-05-17.md` |
 
 **Step ordering rules (consensus):**
 
@@ -175,7 +176,13 @@ No new tooling, no new file, no new hook.
   authorization.
 - Step 9 (GAP-AGENT-HANDOFF) completed 2026-05-17 after operator
   authorization.
-- Step 10+ chỉ khi trigger conditions của từng item xảy ra.
+- Step 10a (ADD-C1 Continuity Checkpoint schema) completed 2026-05-17 after
+  operator authorization.
+- Step 10b (ADD-C2 Delegation/Worker/Subagent contract) completed 2026-05-17
+  after operator authorization.
+- Step 10c (ADD-E1 Scoped Knowledge/Code Graph provider contract) completed
+  2026-05-17 after operator authorization.
+- No remaining deferred item from this roadmap is pending.
 
 ### CD-4 — Disagreements resolved
 
@@ -206,25 +213,25 @@ Cụ thể các điểm thống nhất sau audit:
 
 This consensus roadmap:
 
-- **không** authorize implementation runtime nào;
+- **không** authorize additional runtime implementation beyond the later
+  step-specific GC-018 packets;
 - **không** authorize public claim change nào;
 - **đã** record doctrine promotion completion through the separate Step 3
   promotion packet;
 - **không** require live provider proof (không có runtime claim);
 - **đã** authorize inventory accuracy fixes (Step 1, đã apply);
 - **đã** authorize reporting rule narrowing (Step 2, đã apply);
-- **đã** xác lập sequence cho các absorption steps tiếp theo (binding
-  ordering rules).
+- **đã** xác lập và đóng full absorption sequence through Step 10c.
 
-Các absorption steps 4-7 mỗi step cần:
+Các completed absorption steps 4-10c mỗi step đã dùng:
 
 - một authorization packet riêng (GC-018 or later scoped authorization);
-- không cần phản biện thêm về whether to absorb — consensus đã quyết định
-  về what to absorb và ordering;
-- phải tuân theo CD-3 step ordering rules.
+- CD-3 step ordering rules;
+- focused verification recorded in each adoption roadmap.
 
-GA posture (`GA_LOCAL_FIRST_APPROVED`) không thay đổi. 10 lanes đã
-`runtime-owned` không thay đổi.
+GA posture (`GA_LOCAL_FIRST_APPROVED`) không thay đổi. Newly completed
+runtime-owned contract lanes remain bounded by their adoption roadmap claim
+boundaries.
 
 ## Verification / Evidence
 
@@ -273,8 +280,8 @@ Steps 1 và 2 đã apply trong commit này. Inventory đã được amended vớ
 consensus accuracy state. Reporting rule đã được narrow với explicit
 triggers + enforcement surface.
 
-Step 3 is complete. Steps 4-10 là roadmap forward. Mỗi step yêu cầu một
-authorization packet riêng khi mở:
+Step 3 through Step 10c are complete. Each implementation step used a fresh
+authorization packet:
 
 - Step 3 (ADD-A + ADD-D + ADD-BRIEF doctrine promotion): completed by
   `docs/reviews/CVF_ADD_A_D_BRIEF_DOCTRINE_PROMOTION_2026-05-17.md`.
@@ -284,7 +291,14 @@ authorization packet riêng khi mở:
   operator authorization.
 - Step 9 (GAP-AGENT-HANDOFF): completed with fresh GC-018 after operator
   authorization.
-- Step 10+: defer cho đến khi trigger conditions xảy ra.
+- Step 10a (ADD-C1 Continuity Checkpoint schema): completed with fresh GC-018
+  after operator authorization.
+- Step 10b (ADD-C2 Delegation/Worker/Subagent contract): completed with fresh
+  GC-018 after operator authorization.
+- Step 10c (ADD-E1 Scoped Knowledge/Code Graph provider contract): completed
+  with fresh GC-018 after operator authorization.
+
+No further absorption steps are pending from this consensus roadmap.
 
 Không có further review loop required. Consensus đã đạt được sau:
 

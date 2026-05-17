@@ -167,3 +167,9 @@ export type {
   ExecutionReintakeBatchContractDependencies,
   ExecutionReintakeBatchDominant,
 } from "./execution.reintake.batch.contract";
+
+export { evaluateDelegatedWriteBoundary } from "./delegation.boundary.guard.contract";
+export type {
+  DelegatedWriteBoundaryResult,
+  ExecutionDelegationBoundary,
+} from "./delegation.boundary.guard.contract";

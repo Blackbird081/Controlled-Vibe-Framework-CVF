@@ -57,6 +57,9 @@ planes or clearly isolated as bounded extension surfaces.
 | ADD-W7 Boundary Signals | `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts` | Evidence receipts can optionally record boundary-first outcome signals without changing runtime enforcement behavior. |
 | ADD-B Context Profile Metadata | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/context.profile.contract.ts` | Context assembly can rank known sources, preserve budget hints, and surface sensitivity flags without gaining execution authority. |
 | GAP-AGENT-HANDOFF | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/agent.handoff.contract.ts` | Cross-agent handoffs can carry context snapshots, receipt IDs, acceptance evidence, and policy continuity checks without creating new agent authority. |
+| ADD-C1 Continuity Checkpoint | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/continuity.checkpoint.contract.ts` | Closed decisions, open items, artifacts, evidence receipts, and reinjection policy can be handed forward in a shared checkpoint shape without changing W123 runtime behavior. |
+| ADD-C2 Delegation Contract | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/delegation.contract.ts`, `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/delegation.boundary.guard.contract.ts` | Delegated work can declare ownership, inherited boundaries, forbidden paths, and closure evidence while EPF rejects out-of-scope writes. |
+| ADD-E1 Scoped Knowledge Provider | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/scoped.knowledge.provider.contract.ts` | Code graph, cortex, source-map, and indexed-reference providers can be registered as read-only scoped knowledge sources and consumed through context profile source relevance. |
 | Controlled Memory | `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/controlled.memory.gateway.contract.ts`, `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/controlled.memory.subcontracts.ts` | Memory write/read behavior can be governed by source, purpose, retention, review status, privacy filtering, and capture boundaries. |
 | Agent Boundary / Delegation | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/agent.governed.session.contract.ts` | Agent sessions get bounded delegation state instead of implicit handoff assumptions. |
 | Tool Call Trace / Sandbox | `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/tool.call.trace.contract.ts` | Tool calls can carry traceable sandbox posture and review facts. |
@@ -106,12 +109,13 @@ Public publication verification on 2026-05-17:
 
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION`: TypeScript check PASS; focused
   Vitest `48/48` PASS.
-- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION`: TypeScript check PASS; focused
-  Vitest `161/161` PASS including the public self-contained gateway alignment.
+- `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION`: TypeScript check PASS; package
+  Vitest `1324/1324` PASS including delegated-write boundary coverage.
 - `EXTENSIONS/CVF_GUARD_CONTRACT`: TypeScript check PASS; package Vitest
   `231/231` PASS with 5 provider skips.
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION`: TypeScript check PASS; package
-  Vitest `3459/3459` PASS after ADD-B and GAP-AGENT-HANDOFF coverage.
+  Vitest `3536/3536` PASS after ADD-B, GAP-AGENT-HANDOFF, ADD-C1, ADD-C2,
+  and ADD-E1 coverage.
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION`: TypeScript check PASS; focused
   memory gateway/subcontract Vitest `10/10` PASS.
 - `EXTENSIONS/CVF_MODEL_GATEWAY`: TypeScript check PASS; provider output

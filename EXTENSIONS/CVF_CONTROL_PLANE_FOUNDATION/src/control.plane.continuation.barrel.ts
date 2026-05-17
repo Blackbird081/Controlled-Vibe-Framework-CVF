@@ -264,3 +264,11 @@ export type {
   ModelGatewayBoundaryBatch,
   ModelGatewayBoundaryBatchContractDependencies,
 } from "./model.gateway.boundary.batch.contract";
+
+export { validateCheckpoint } from "./continuity.checkpoint.contract";
+export type {
+  ContinuityArtifactRole,
+  ContinuityCheckpoint,
+  ContinuityCheckpointValidation,
+  ReinjectionPolicy,
+} from "./continuity.checkpoint.contract";

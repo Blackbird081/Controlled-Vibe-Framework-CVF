@@ -41,7 +41,6 @@ Nguồn được review:
 | `docs-classified` | Đã review, đã phân loại, chưa implement |
 | `roadmap-ready` | Có đủ GC-018/ADR/source/test packet, sẵn sàng implement |
 | `runtime-owned` | Đã implement với tests |
-| `deferred` | Được accept về giá trị, chưa implement, chờ roadmap phù hợp |
 | `excluded` | Bị reject hoàn toàn, không actionable |
 
 ---
@@ -293,8 +292,8 @@ layer enhancement, khi đó dùng Family B làm design input.
 
 **Nguồn:** `Agent Harnesses`, `Hermes Agent`, `Human System Harness`
 
-**Trạng thái hiện tại:** `deferred` — "DEFER PHASE B". Doctrine synthesis
-hoàn thành private, chưa promote.
+**Trạng thái hiện tại:** `runtime-owned` — completed 2026-05-17 through the
+Control Plane Foundation continuity checkpoint schema contract.
 
 **Nội dung:**
 
@@ -320,8 +319,9 @@ khi mở lại roadmap continuity/handoff.
 
 **Nguồn:** `deepagents`, `Hermes Agent`, `Human System Harness`
 
-**Trạng thái hiện tại:** `deferred` — "DEFER PHASE B". Doctrine synthesis
-hoàn thành private.
+**Trạng thái hiện tại:** `runtime-owned` — completed 2026-05-17 through the
+Control Plane Foundation delegation contract and Execution Plane thin boundary
+guard.
 
 **Nội dung:**
 
@@ -349,8 +349,8 @@ làm trigger.
 
 **Nguồn:** `code-review-graph`, `cortex-hub`
 
-**Trạng thái hiện tại:** `deferred` — "DEFER PHASE B". Doctrine synthesis
-hoàn thành private.
+**Trạng thái hiện tại:** `runtime-owned` — completed 2026-05-17 through the
+Control Plane Foundation scoped knowledge provider contract.
 
 **Nội dung:**
 
@@ -365,10 +365,12 @@ Read-only bounded knowledge input với:
 - Giảm context waste khi query code intelligence
 - Chưa có use case cụ thể trong CVF hiện tại
 
-**Đánh giá:** ⭐⭐ — Giá trị conditional. Chỉ absorb khi có roadmap cụ thể
-cần code graph. Không nên absorb proactive.
+**Đánh giá:** ⭐⭐ — Giá trị conditional. Absorbed as a bounded read-only
+provider contract after operator authorization for the remaining deferred
+queue; no indexing runtime or code execution was introduced.
 
-**Điều kiện để absorb:** Mở roadmap code intelligence hoặc indexed knowledge.
+**Điều kiện để absorb:** Complete — see
+`docs/roadmaps/CVF_ADD_E1_SCOPED_KNOWLEDGE_RUNTIME_ADOPTION_ROADMAP_2026-05-17.md`.
 
 ---
 
@@ -511,16 +513,15 @@ new agent authority.
 | 4 | ADD-W7-SIGNALS W7 Signal Candidates ⭐⭐⭐ | Complete 2026-05-17; optional boundary signal fields on governance evidence receipt schema |
 | 5 | ADD-B Context Profile Metadata ⭐⭐⭐ | Complete 2026-05-17; advisory context profile metadata for source ranking, budget hints, and sensitivity flags |
 | 6 | GAP-AGENT-HANDOFF Cross-agent handoff ⭐⭐ | Complete 2026-05-17; typed handoff record, receipt ID, validation helper, and policy continuity check |
+| 7 | ADD-C1 Continuity Checkpoint ⭐⭐⭐ | Complete 2026-05-17; shared checkpoint record shape for closed decisions, open items, artifacts, reinjection policy, and evidence receipts |
+| 8 | ADD-C2 Delegation / Subagent Contracts ⭐⭐⭐ | Complete 2026-05-17; delegation ownership, inherited boundaries, closure requirements, and EPF delegated-write boundary guard |
+| 9 | ADD-E1 Scoped Knowledge / Code Graph ⭐⭐ | Complete 2026-05-17; read-only scoped knowledge provider contract, intake subclass mapping, context-profile source relevance bridge, and provider-action block |
 
 ---
 
 ### Nhóm 3 — Deferred, chờ trigger cụ thể
 
-| ID | Tên | Trigger |
-|---|---|---|
-| ADD-C1 | Continuity / Handoff Doctrine | Khi W123 continuation mở lại |
-| ADD-C2 | Delegation / Subagent Contracts | Khi W7/W8 orchestration mở |
-| ADD-E1 | Scoped Knowledge / Code Graph | Khi code intelligence roadmap mở |
+No remaining Nhóm 3 deferred items after Step 10c closure on 2026-05-17.
 
 ---
 
@@ -568,8 +569,8 @@ Có hai loại gap thực sự:
    "Promote A + D as first and only public promotion candidate" nhưng không
    agent nào thực hiện bước đó hay thông báo cho người vận hành.
 
-Sau absorption 2026-05-17: **3 doc-only doctrine items promoted**, **3 nhóm 2
-runtime items implemented**, **6 nhóm 3/deferred candidates** còn lại, và
+Sau absorption 2026-05-17: **3 doc-only doctrine items promoted**, **9 nhóm 2
+runtime items implemented**, **0 nhóm 3 deferred candidates** còn lại, và
 **6 items excluded hoàn toàn**.
 
 ## Risk
@@ -577,12 +578,12 @@ runtime items implemented**, **6 nhóm 3/deferred candidates** còn lại, và
 **R0 cho Nhóm 1 (ADD-A + ADD-D + ADD-BRIEF):** Promotion completed doc-only;
 no runtime risk.
 
-**R1 cho Nhóm 2 (OBS-1, GAP-MEM, ADD-PROVIDER):** Complete 2026-05-17 with
-fresh GC-018 packets and focused implementation evidence.
+**R1 cho Nhóm 2 (OBS-1, GAP-MEM, ADD-PROVIDER, ADD-W7-SIGNALS, ADD-B,
+GAP-AGENT-HANDOFF, ADD-C1, ADD-C2, ADD-E1):** Complete 2026-05-17 with fresh
+GC-018 packets and focused implementation evidence.
 Risk chính là scope creep nếu future work mở rộng khỏi claim boundary đã ghi.
 
-**R0 cho Nhóm 3 (deferred):** Không cần làm gì ngay — chỉ ghi nhận để không
-mất context khi trigger đến.
+**R0 cho Nhóm 3:** No remaining deferred items in this absorption queue.
 
 Không có corrective action bắt buộc. Tất cả items đều có precedent review
 đầy đủ từ Claude–Codex rebuttal chain.
@@ -590,8 +591,8 @@ Không có corrective action bắt buộc. Tất cả items đều có precedent
 ## Decision
 
 Nhóm 1 và Nhóm 2 consensus queue đã complete locally on 2026-05-17.
-Remaining decisions apply only to Nhóm 3/deferred items and require fresh
-trigger-specific roadmaps if reopened.
+No remaining deferred items from this inventory are pending. Any future
+expansion requires a fresh trigger-specific roadmap and GC-018.
 
 ## Enforcement
 

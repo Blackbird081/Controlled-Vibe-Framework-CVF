@@ -28,3 +28,7 @@ docs/reviews/
 
 # Internal implementation roadmaps and Codex execution specs
 docs/roadmaps/
+
+# Internal operation scripts (contain provenance URLs and sync logic)
+scripts/cvf-provenance-push.ps1
+scripts/cvf-public-sync.ps1

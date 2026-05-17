@@ -262,8 +262,8 @@ Still requires a separate schema-extension roadmap before implementation.
 
 **Nguồn:** `Workflow GoClaw`, `caveman`, `AGENT ENGINEER`, `Agent Harnesses`
 
-**Trạng thái hiện tại:** `deferred` — "ACCEPT WITH CONSTRAINTS". Được accept
-về giá trị nhưng chỉ khi có owner surface cụ thể cần nó.
+**Trạng thái hiện tại:** `runtime-owned` — completed 2026-05-17 through the
+Control Plane Foundation ADD-B context profile metadata contract.
 
 **Nội dung:**
 
@@ -510,6 +510,7 @@ sung.
 | 2 | ADD-PROVIDER Output Contracts ⭐⭐⭐ | Complete 2026-05-17; JSON envelope, NDJSON, stdout policy, exit codes |
 | 3 | GAP-MEM 3 memory sub-contracts ⭐⭐⭐ | Complete 2026-05-17; privacy filter + capture adapter + retention policy |
 | 4 | ADD-W7-SIGNALS W7 Signal Candidates ⭐⭐⭐ | Complete 2026-05-17; optional boundary signal fields on governance evidence receipt schema |
+| 5 | ADD-B Context Profile Metadata ⭐⭐⭐ | Complete 2026-05-17; advisory context profile metadata for source ranking, budget hints, and sensitivity flags |
 
 ---
 
@@ -517,7 +518,6 @@ sung.
 
 | ID | Tên | Trigger |
 |---|---|---|
-| ADD-B | Context Profile Metadata | Khi context packaging roadmap mở |
 | ADD-C1 | Continuity / Handoff Doctrine | Khi W123 continuation mở lại |
 | ADD-C2 | Delegation / Subagent Contracts | Khi W7/W8 orchestration mở |
 | ADD-E1 | Scoped Knowledge / Code Graph | Khi code intelligence roadmap mở |

@@ -65,3 +65,11 @@ export type {
   ContextEnrichmentBatch,
   ContextEnrichmentBatchContractDependencies,
 } from "./context.enrichment.batch.contract";
+
+export { applyContextProfile } from "./context.profile.contract";
+export type {
+  AppliedContextProfile,
+  ContextProfile,
+  ContextProfileEvidenceSensitivity,
+  ContextProfileFreshnessTag,
+} from "./context.profile.contract";

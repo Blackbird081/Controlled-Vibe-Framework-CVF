@@ -37,6 +37,7 @@ The public repository carries the curated implementation surface only:
 - `EXTENSIONS/CVF_MODEL_GATEWAY/`
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/`
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/`
+- `EXTENSIONS/CVF_GUARD_CONTRACT/`
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/`
 - `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/`
 - `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/`
@@ -53,6 +54,7 @@ planes or clearly isolated as bounded extension surfaces.
 | Lane | Public surface | User value |
 |---|---|---|
 | Model Gateway runtime | `EXTENSIONS/CVF_MODEL_GATEWAY/` | Provider choice, fallback, quota, sticky-session, credential boundary, receipt structure, and provider output handling become explicit and testable. |
+| ADD-W7 Boundary Signals | `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts` | Evidence receipts can optionally record boundary-first outcome signals without changing runtime enforcement behavior. |
 | Controlled Memory | `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/controlled.memory.gateway.contract.ts`, `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/controlled.memory.subcontracts.ts` | Memory write/read behavior can be governed by source, purpose, retention, review status, privacy filtering, and capture boundaries. |
 | Agent Boundary / Delegation | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/agent.governed.session.contract.ts` | Agent sessions get bounded delegation state instead of implicit handoff assumptions. |
 | Tool Call Trace / Sandbox | `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/tool.call.trace.contract.ts` | Tool calls can carry traceable sandbox posture and review facts. |
@@ -104,6 +106,8 @@ Public publication verification on 2026-05-17:
   Vitest `48/48` PASS.
 - `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION`: TypeScript check PASS; focused
   Vitest `161/161` PASS including the public self-contained gateway alignment.
+- `EXTENSIONS/CVF_GUARD_CONTRACT`: TypeScript check PASS; package Vitest
+  `231/231` PASS with 5 provider skips.
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION`: TypeScript check PASS; focused
   memory gateway/subcontract Vitest `10/10` PASS.
 - `EXTENSIONS/CVF_MODEL_GATEWAY`: TypeScript check PASS; provider output

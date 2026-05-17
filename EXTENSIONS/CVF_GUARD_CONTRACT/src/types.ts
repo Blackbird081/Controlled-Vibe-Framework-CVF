@@ -133,6 +133,53 @@ export interface GuardPipelineResult {
   agentGuidance?: string;
 }
 
+/**
+ * Optional outcome-side signals for boundary-first governance evidence.
+ * These fields record observed boundary behavior; they do not enforce policy.
+ */
+export interface BoundarySignals {
+  pathLockSignal?: {
+    restrictedPathId: string;
+    pathFollowed: boolean;
+    deviationReason?: string;
+  };
+  minimalResponseMatch?: {
+    policyId: string;
+    boundedScope: string;
+    actualScopeMatch: boolean;
+  };
+  restrictedPathCount?: {
+    totalGatesEncountered: number;
+    gatesCrossed: number;
+    gatesRejected: number;
+  };
+}
+
+/**
+ * Canonical evidence receipt schema for governed execution surfaces.
+ * Boundary signals are optional so existing receipts remain valid.
+ */
+export interface GovernanceEvidenceReceipt {
+  receiptId: string;
+  evidenceMode: 'live' | 'mock' | 'static';
+  routeId: string;
+  decision?: string;
+  riskLevel?: string;
+  provider?: string;
+  model?: string;
+  routingDecision?: string;
+  policySnapshotId?: string;
+  envelopeId?: string;
+  knowledgeSource?: string;
+  knowledgeInjected?: boolean;
+  knowledgeCollectionId?: string | null;
+  knowledgeChunkCount?: number;
+  approvalId?: string;
+  validationHint?: string;
+  generatedAt: string;
+  boundarySignals?: BoundarySignals;
+}
+
 export interface HandoffTransitionContext {
   workActuallyClosed?: boolean;
   sameWorkerContinuesImmediately?: boolean;

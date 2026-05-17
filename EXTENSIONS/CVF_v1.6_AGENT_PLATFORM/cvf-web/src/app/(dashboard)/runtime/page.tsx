@@ -113,7 +113,7 @@ const copy = {
         status: 'Trạng thái',
         process: 'Tiến trình',
         pid: 'PID',
-        port: 'Cong',
+        port: 'Cổng',
         empty: 'Chưa có dữ liệu để hiển thị.',
         loading: 'Đang tải bảng theo dõi...',
         failed: 'Không tải được bảng theo dõi runtime.',

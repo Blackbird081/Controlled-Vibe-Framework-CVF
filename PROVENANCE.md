@@ -64,3 +64,18 @@ partner provenance packet.
 - `.cvf/runtime/` owner-specific local state
 - temporary browser/test artifacts
 - developer local caches
+
+## Public-Sync Exclusion List (enforced by .gitignore)
+
+The following artifact classes exist in the provenance repo only and must
+never be synced to this public repository:
+
+| Pattern | Class | Reason |
+|---|---|---|
+| `AGENT_HANDOFF*.md` | Internal Codex execution briefs | Contains internal task structure, operator decisions, and unpublished roadmap details |
+| `docs/baselines/` | GC-018 authorization records | Internal governance decision records; auditor-access only |
+| `docs/reviews/` | Internal audit and review records | Internal operating log; not curated for public |
+| `docs/roadmaps/` | Internal implementation roadmaps | Codex execution specs and internal planning documents |
+
+These rules are enforced by `.gitignore` in this repository. Any agent performing
+a manual sync must verify these categories are excluded before pushing.

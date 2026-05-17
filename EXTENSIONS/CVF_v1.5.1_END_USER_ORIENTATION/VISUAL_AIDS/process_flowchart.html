@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVF v1.5 - Interactive Process Map</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2rem;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+        }
+        
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .step {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 600px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .step:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .step.active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .step-role {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        .step-role.user { background: rgba(76, 175, 80, 0.2); color: #4CAF50; }
+        .step-role.operator { background: rgba(33, 150, 243, 0.2); color: #2196F3; }
+        .step-role.cvf { background: rgba(156, 39, 176, 0.2); color: #9C27B0; }
+        
+        .step-content {
+            color: #ccc;
+            line-height: 1.6;
+            display: none;
+        }
+        
+        .step.active .step-content {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step-example {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #a5d6a7;
+        }
+        
+        .arrow {
+            font-size: 24px;
+            color: #667eea;
+            animation: bounce 1s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+        
+        .tips-section {
+            margin-top: 40px;
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .tips-title {
+            color: #FFC107;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tips-list {
+            list-style: none;
+            color: #ccc;
+        }
+        
+        .tips-list li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .tips-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 CVF v1.5 — Quy Trình Làm Việc</h1>
+        <p class="subtitle">Click vào từng bước để xem chi tiết</p>
+        
+        <div class="flow-container">
+            <!-- Step 1 -->
+            <div class="step" onclick="toggleStep(this)">
+                <div class="step-number">1</div>
+                <div class="step-header">
+                    <span class="step-title">📝 Xác định Mục tiêu</span>
+                    <span class="step-role user">End User</span>
+                </div>
+                <div class="step-content">
+                    <p>Bạn mô tả <strong>bạn cần gì</strong>, không phải AI làm gì.</p>
+                    <div class="step-example">
+                        ✅ Đúng: "Tôi cần phân tích 3 phương án kinh doanh để chọn 1"<br>
+                        ❌ Sai: "Hãy suy nghĩ như chuyên gia và dùng SWOT"
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">↓</div>
+            
+            <!-- Step 2 -->
+            <div class="step" onclick="toggleStep(this)">
+                <div class="step-number">2</div>
+                <div class="step-header">
+                    <span class="step-title">📋 Chọn Template</span>
+                    <span class="step-role user">End User</span>
+                </div>
+                <div class="step-content">
+                    <p>Chọn template phù hợp từ thư viện:</p>
+                    <div class="step-example">
+                        📊 Business: Strategy Analysis, Risk Assessment...<br>
+                        💻 Technical: Code Review, Architecture Review...<br>
+                        📝 Content: Documentation, Report Writing...<br>
+                        🔬 Research: Literature Review, Data Analysis...
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">↓</div>
+            
+            <!-- Step 3 -->
+            <div class="step" onclick="toggleStep(this)">
+                <div class="step-number">3</div>
+                <div class="step-header">
+                    <span class="step-title">📝 Điền Form</span>
+                    <span class="step-role user">End User</span>
+                </div>
+                <div class="step-content">
+                    <p>Điền thông tin vào form theo template. Không cần viết prompt!</p>
+                    <div class="step-example">
+                        • Mục tiêu: [Mô tả ngắn gọn]<br>
+                        • Bối cảnh: [Thông tin liên quan]<br>
+                        • Ràng buộc: [Giới hạn nếu có]<br>
+                        • Kết quả mong đợi: [Dạng output]
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">↓</div>
+            
+            <!-- Step 4 -->
+            <div class="step" onclick="toggleStep(this)">
+                <div class="step-number">4</div>
+                <div class="step-header">
+                    <span class="step-title">⚙️ CVF Xử lý</span>
+                    <span class="step-role cvf">CVF System</span>
+                </div>
+                <div class="step-content">
+                    <p>CVF tự động:</p>
+                    <div class="step-example">
+                        1. Chuyển form → Intent chuẩn<br>
+                        2. Kiểm tra ràng buộc<br>
+                        3. Thực thi với AI<br>
+                        4. Kiểm tra output
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">↓</div>
+            
+            <!-- Step 5 -->
+            <div class="step" onclick="toggleStep(this)">
+                <div class="step-number">5</div>
+                <div class="step-header">
+                    <span class="step-title">✅ Đánh giá Kết quả</span>
+                    <span class="step-role user">End User</span>
+                </div>
+                <div class="step-content">
+                    <p>Bạn đánh giá output theo tiêu chí đã đặt:</p>
+                    <div class="step-example">
+                        ✅ ACCEPT — Kết quả dùng được<br>
+                        🔄 REVISE — Cần chỉnh sửa nhỏ<br>
+                        ❌ REJECT — Không đạt, cần làm lại
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tips-section">
+            <div class="tips-title">💡 Mẹo quan trọng</div>
+            <ul class="tips-list">
+                <li>Mục tiêu càng rõ → Kết quả càng tốt</li>
+                <li>Không can thiệp vào cách AI làm việc</li>
+                <li>Chỉ đánh giá output cuối cùng</li>
+                <li>Nếu CVF từ chối → Đọc lý do và điều chỉnh</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            CVF v1.5 UX Platform — Making AI accessible to everyone
+        </div>
+    </div>
+    
+    <script>
+        function toggleStep(element) {
+            document.querySelectorAll('.step').forEach(step => {
+                if (step !== element) step.classList.remove('active');
+            });
+            element.classList.toggle('active');
+        }
+        
+        // Auto-open first step
+        document.querySelector('.step').classList.add('active');
+    </script>
+</body>
+</html>

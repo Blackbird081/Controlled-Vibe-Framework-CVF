@@ -1,0 +1,8 @@
+[
+  {
+    "id": "INT-001",
+    "severity": "critical",
+    "type": "min_touch_target",
+    "threshold": 44
+  }
+]

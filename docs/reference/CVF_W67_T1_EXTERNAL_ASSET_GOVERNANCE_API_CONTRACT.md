@@ -1,0 +1,392 @@
+# CVF W67-T1 External Asset Governance — API Contract
+
+Memory class: FULL_RECORD
+
+> Wave: W67-T1 External Asset Productization + W69-T1 Governed Registry Lifecycle + Read Model
+> Status: ACTIVE — W67-T1 CP1+CP2+CP3 DELIVERED 2026-04-13 | W69-T1 CP1+CP2+CP3 DELIVERED 2026-04-13
+> Authorization: `docs/baselines/CVF_GC018_W67_T1_EXTERNAL_ASSET_PRODUCTIZATION_AUTHORIZATION_2026-04-13.md`
+> Authorization: `docs/baselines/CVF_GC018_W69_T1_GOVERNED_REGISTRY_LIFECYCLE_READMODEL_AUTHORIZATION_2026-04-13.md`
+
+---
+
+## Overview
+
+Two governed routes form the external asset preparation + registration path.
+Both routes are isolated from `/api/execute`, provider adapters, and PVV evidence files.
+
+| Route | Method | Purpose |
+|-------|--------|---------|
+| `/api/governance/external-assets/prepare` | POST | Run governance pipeline; return workflowStatus + review data |
+| `/api/governance/external-assets/register` | POST | Persist an approved asset in the governed registry |
+| `/api/governance/external-assets/register` | GET | List or query registered governed assets (filter-capable) |
+| `/api/governance/external-assets/retire` | POST | Retire an active registry entry (append-only, lifecycle-aware) |
+
+---
+
+## Authentication
+
+Both routes accept either:
+- **Session cookie** — set by NextAuth.js login (`verifySessionCookie`)
+- **Service token** — `x-cvf-service-token: <CVF_SERVICE_TOKEN env>` header
+
+Unauthenticated requests return `401 Unauthorized`.
+
+---
+
+## POST `/api/governance/external-assets/prepare`
+
+Runs the full bounded governance pipeline:
+`intake validation → semantic classification → planner heuristics → provisional signal capture → W7 normalization → registry-ready preparation`
+
+### Request Body
+
+```jsonc
+{
+  // REQUIRED
+  "profile": {
+    "source_ref": "CVF_ADDING_NEW/skill.md",          // string — asset source path or identifier
+    "source_kind": "document_bundle",                  // "document_bundle" | "repo" | "external_url" | "inline"
+    "source_quality": "internal_design_draft",         // "internal_design_draft" | "community_analysis" | "verified_external" | "operator_supplied"
+    "officially_verified": false,                      // boolean
+    "provenance_notes": "Curated from...",             // string (required for registry_ready)
+    "candidate_asset_type": "W7SkillAsset",            // "W7SkillAsset" | "W7ToolAsset" | "W7PolicyAsset"
+    "description_or_trigger": "Normalize PowerShell…", // string
+    "instruction_body": "...",                         // string
+    // OPTIONAL
+    "tools": ["powershell"],
+    "execution_environment": {
+      "os": "windows",
+      "shell": "powershell",
+      "shell_version": "7.5",
+      "script_type": "ps1",
+      "compatibility": "native"
+    }
+  },
+  // OPTIONAL
+  "semanticItems": [
+    "CONTEXT_VALIDATION_REQUIRED",
+    { "semanticItem": "COMPLETE_OUTPUT_REQUIRED", "declaredClass": "output_contract" }
+  ],
+  "windows": {
+    "commandsValidated": true,
+    "unsupportedOperatorsRemoved": true,
+    "exitCodeHandlingExplicit": true,
+    "deterministicExecution": true
+  },
+  "registry": {
+    "governanceOwner": "cvf-architecture",
+    "approvalState": "approved",   // "draft" | "pending_review" | "approved"
+    "riskLevel": "R1",             // "R0" | "R1" | "R2" | "R3"
+    "registryRefs": ["cvf://registry/w7/..."],
+    "evaluationEnabled": true
+  },
+  "diagnostic": {
+    "taskId": "task-001",
+    "runId": "run-001",
+    "runtimeIndicator": "NOT_PROVIDED"
+  }
+}
+```
+
+### Response — 200 OK
+
+```jsonc
+{
+  "success": true,
+  "data": {
+    // CP1 — Workflow status (explicit closure state)
+    "workflowStatus": "registry_ready",   // "invalid" | "review_required" | "registry_ready"
+    "readyForRegistry": true,             // boolean (derived from all checks passing)
+    "warnings": [],                       // string[] — coded warning keys by category
+
+    // CVF ADD RT0-RT8 runtime metadata
+    "governedCapability": {
+      "capabilityName": "...",
+      "capabilityClass": "skill",
+      "riskClass": "R1",
+      "ownerSurface": "cvf-architecture",
+      "sandboxTier": "read_only",
+      "policyBinding": "CVF_GOVERNED_CAPABILITY_INTAKE_DOCTRINE_2026-05-07",
+      "evidenceRequirement": "unit"
+    },
+    "boundaryFirstGovernance": {
+      "policyClass": "restricted_execution_path",
+      "agentBehavior": "follow_restricted_path",
+      "operatorDecisionRequired": false,
+      "candidateW7Signals": {
+        "pathLockSignal": true,
+        "minimalResponseMatch": false,
+        "restrictedPathCount": 1
+      }
+    },
+    "governedContextProfile": { "advisoryOnly": true, "...": "..." },
+    "continuityDelegation": { "delegationAllowed": false, "...": "..." },
+    "scopedKnowledgeProvider": { "policyAuthority": false, "...": "..." },
+
+    // Pipeline stage outputs
+    "intake": { "valid": true, "issues": [], "normalizedProfile": {...} },
+    "semanticPolicy": { "valid": true, "unknownItems": [], "classMismatches": [] } | null,
+    "plannerTrigger": { "confidence": "HIGH", "clarification_needed": false, "negative_matches": [], ... },
+    "provisionalSignal": { "name": "...", ... } | null,
+    "normalizedCandidate": { "valid": true, "issues": [], ... },
+    "registryReady": {
+      "valid": true,
+      "governedAsset": {
+        "name": "...",
+        "version": "1.0.0",
+        "governance": {
+          "owner": "cvf-architecture",
+          "approvalState": "approved",
+          "riskLevel": "R1",
+          "registryRefs": [...]
+        }
+      },
+      "issues": []
+    },
+    "windowsCompatibility": {
+      "classification": "WINDOWS_NATIVE",  // "WINDOWS_NATIVE" | "CROSS_PLATFORM" | "REJECTED_FOR_WINDOWS_TARGET" | ...
+      "blockers": []
+    } | null,
+    "diagnosticPacket": {
+      "primaryAttribution": "INTAKE_SHAPE",  // "INTAKE_SHAPE" | "PLANNER_TRIGGER_QUALITY" | ... | "RUNTIME_OR_PROVIDER_BEHAVIOR"
+      "executionEnvironmentSummary": { "declared": true, ... }
+    }
+  }
+}
+```
+
+### workflowStatus Derivation
+
+| workflowStatus | Condition |
+|---|---|
+| `registry_ready` | `readyForRegistry === true` (all checks pass) |
+| `invalid` | `intake.valid === false` (cannot proceed) |
+| `review_required` | `intake.valid === true` AND `readyForRegistry === false` |
+
+### Warning Key Format
+
+Warnings follow the pattern `{CATEGORY}_{CODE}_{FIELD}`:
+
+| Prefix | Category |
+|--------|----------|
+| `INTAKE_` | Intake validation issues |
+| `SEMANTIC_UNKNOWN_` | Unrecognized semantic items |
+| `SEMANTIC_CLASS_MISMATCH_` | Semantic class conflicts |
+| `PLANNER_CLARIFICATION_REQUIRED` | Planner needs more inputs |
+| `PLANNER_NEGATIVE_MATCH_` | Planner negative signal |
+| `PROVISIONAL_SIGNAL_` | Weak trigger definition captured |
+| `NORMALIZATION_` | W7 normalization issues |
+| `REGISTRY_` | Registry preparation issues |
+
+### Error Responses
+
+| Status | Condition |
+|--------|-----------|
+| 400 | Missing `profile` field |
+| 401 | Unauthenticated |
+| 500 | Internal pipeline error |
+
+---
+
+## POST `/api/governance/external-assets/register`
+
+Persists a governed asset in the governed registry after independently re-running the
+full governance pipeline on the submitted profile. Callers cannot self-declare
+`approvalState` or `workflowStatus` — the server is the authority. Only assets the
+server independently classifies as `workflowStatus === 'registry_ready'` are persisted.
+
+Write path is isolated from `/api/execute` and PVV evidence files.
+Persistence: append-only JSONL at `data/governed-asset-registry.jsonl`.
+
+### Request Body
+
+Same shape as `POST /prepare` — submit the full governance profile, not a pre-assembled asset record.
+
+```jsonc
+{
+  // REQUIRED
+  "profile": {
+    "source_ref": "CVF_ADDING_NEW/skill.md",
+    "source_kind": "document_bundle",
+    "source_quality": "internal_design_draft",
+    "officially_verified": false,
+    "provenance_notes": "Curated from...",
+    "candidate_asset_type": "W7SkillAsset",
+    "description_or_trigger": "Normalize PowerShell skills for CVF",
+    "instruction_body": "..."
+  },
+  // OPTIONAL — same optional fields as /prepare
+  "semanticItems": [...],
+  "registry": {
+    "governanceOwner": "cvf-architecture",
+    "riskLevel": "R1",
+    "registryRefs": ["cvf://registry/..."]
+  },
+  "windows": { ... },
+  "planner": { ... }
+}
+```
+
+### Response — 200 OK (registry_ready confirmed by server)
+
+```jsonc
+{
+  "success": true,
+  "entry": {
+    "id": "uuid-v4",
+    "registeredAt": "2026-04-13T10:00:00.000Z",
+    "workflowStatus": "registry_ready",
+    "lifecycleStatus": "active",          // W69-T1: 'active' | 'retired'
+    "retiredAt": null,                    // W69-T1: ISO timestamp when retired, else absent
+    "source_ref": "CVF_ADDING_NEW/skill.md",
+    "candidate_asset_type": "W7SkillAsset",
+    "description_or_trigger": "...",
+    "approvalState": "approved",
+    "governanceOwner": "cvf-architecture",
+    "riskLevel": "R1",
+    "registryRefs": ["cvf://registry/w7/..."],
+    "assetName": "skill.md",
+    "assetVersion": "1.0.0",
+    "governedCapability": { "...": "server-derived CVF ADD capability metadata" },
+    "boundaryFirstGovernance": { "...": "server-derived boundary metadata" },
+    "governedContextProfile": { "advisoryOnly": true, "...": "..." },
+    "continuityDelegation": { "delegationAllowed": false, "...": "..." },
+    "scopedKnowledgeProvider": { "policyAuthority": false, "...": "..." }
+  }
+}
+```
+
+### Response — 422 Unprocessable (pipeline did not reach registry_ready)
+
+Returned when the server re-derives `workflowStatus !== 'registry_ready'`. The caller cannot override this by self-declaring `approvalState`.
+
+```jsonc
+{
+  "success": false,
+  "error": "Asset is not registry_ready (workflowStatus: review_required); resolve all issues via /prepare before registering",
+  "workflowStatus": "review_required",  // or "invalid"
+  "warnings": ["PLANNER_CLARIFICATION_REQUIRED"]
+}
+```
+
+### Response — 409 Conflict (duplicate asset)
+
+Returned when `source_ref` + `candidate_asset_type` already exists in the registry.
+The existing entry is included so the caller can inspect it without re-querying.
+
+```jsonc
+{
+  "success": false,
+  "error": "Asset already registered: source_ref \"CVF_ADDING_NEW/skill.md\" + candidate_asset_type \"W7SkillAsset\" already exists in the governed registry",
+  "existingEntry": { ...AssetRegistryEntry }
+}
+```
+
+**Duplicate policy (W69-T1 lifecycle-aware)**: `source_ref` + `candidate_asset_type` is the logical identity key.
+Only ACTIVE entries block re-registration. A retired entry does NOT block re-registration.
+To replace an asset: retire the active entry via `POST /retire`, then register the new version.
+
+---
+
+## GET `/api/governance/external-assets/register`
+
+List, filter, or fetch a single governed registry entry.
+
+### Without query params — list all
+
+```jsonc
+{ "success": true, "count": 2, "entries": [ { ...AssetRegistryEntry }, ... ] }
+```
+
+### With `?id=<uuid>` — single entry detail
+
+```jsonc
+// 200 OK
+{ "success": true, "entry": { ...AssetRegistryEntry } }
+
+// 404 Not Found
+{ "success": false, "error": "Registry entry not found: <uuid>" }
+```
+
+### Filter params (W69-T1) — ANDed, applied when no `?id`
+
+| Param | Values | Effect |
+|-------|--------|--------|
+| `?status=` | `active` \| `retired` | Filter by lifecycle status |
+| `?source_ref=` | URL-encoded string | Filter by source ref |
+| `?candidate_asset_type=` | string | Filter by asset type |
+| `?capability_class=` | string | Filter by CVF ADD governed capability class |
+| `?boundary_policy_class=` | string | Filter by CVF ADD boundary policy class |
+| `?policy_authority=` | `true` \| `false` | Filter by scoped knowledge provider policy-authority flag |
+
+```jsonc
+// ?status=active
+{ "success": true, "count": 1, "entries": [ { "lifecycleStatus": "active", ... } ] }
+
+// ?status=retired&candidate_asset_type=W7SkillAsset
+{ "success": true, "count": 0, "entries": [] }
+
+// ?capability_class=skill&boundary_policy_class=restricted_execution_path&policy_authority=false
+{ "success": true, "count": 1, "entries": [ { "scopedKnowledgeProvider": { "policyAuthority": false }, ... } ] }
+```
+
+---
+
+## POST `/api/governance/external-assets/retire`
+
+Retires an active registry entry (W69-T1). The original JSONL line is never mutated;
+a retirement record is appended. Re-registration of the same logical asset is allowed
+after retirement.
+
+### Request Body
+
+```jsonc
+{ "id": "uuid-v4" }  // uuid of the active entry to retire
+```
+
+### Response — 200 OK
+
+```jsonc
+{
+  "success": true,
+  "entry": {
+    "id": "uuid-v4",
+    "lifecycleStatus": "retired",
+    "retiredAt": "2026-04-13T11:00:00.000Z",
+    ...  // all other AssetRegistryEntry fields preserved
+  }
+}
+```
+
+### Error Responses
+
+| Status | Condition |
+|--------|-----------|
+| 400 | Missing or empty `id` field |
+| 401 | Unauthenticated |
+| 404 | Entry not found or already retired |
+
+---
+
+## Operator UI
+
+The operator-facing page is available at `/governance/external-assets` in the cvf-web dashboard.
+
+Tabs:
+- **Prepare Asset** — submit a profile, view `workflowStatus` badge + closure guidance, register if ready
+- **Registry** — list all registered governed assets with audit metadata and CVF ADD runtime readout
+
+---
+
+## Governance Boundaries
+
+- Does NOT call `/api/execute` or any provider adapter
+- Does NOT write to PVV evidence files (`pvv_*`, `batch_evidence.jsonl`)
+- Registry sink is isolated to `data/governed-asset-registry.jsonl`
+- All writes are append-only (auditable)
+- MVP persistence: local server file. Serverless deployment requires external store (future scope)
+
+---
+
+*Filed: 2026-04-13*
+*Wave: W67-T1 CP1+CP2+CP3 DELIVERED*

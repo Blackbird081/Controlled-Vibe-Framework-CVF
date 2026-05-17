@@ -1,0 +1,71 @@
+# Unit Test Generation Capability
+# Domain: development
+# Risk: R1 (Generates code, bounded side effects)
+
+capability_id: "UNIT_TEST_GENERATE_v1"
+domain: "development"
+description: "Generate unit tests for given source code following best practices"
+risk_level: "R1"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Execution"
+  allowed_phases:
+    - "C"
+  required_decisions: []
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "source_code"
+    type: "string"
+    required: true
+    description: "Source code to generate tests for"
+  - name: "language"
+    type: "string"
+    required: true
+    description: "Programming language"
+  - name: "framework"
+    type: "string"
+    required: false
+    description: "Test framework (pytest, jest, junit, etc.)"
+  - name: "coverage_target"
+    type: "integer"
+    required: false
+    default: 80
+    description: "Target code coverage percentage"
+  - name: "include_edge_cases"
+    type: "boolean"
+    required: false
+    default: true
+    description: "Generate edge case tests"
+
+output_spec:
+  - name: "test_code"
+    type: "string"
+    description: "Generated test code"
+    success_criteria: "Valid, runnable test code"
+  - name: "test_count"
+    type: "integer"
+    description: "Number of test cases generated"
+  - name: "coverage_estimate"
+    type: "integer"
+    description: "Estimated coverage percentage"
+  - name: "test_cases"
+    type: "array"
+    description: "List of test case descriptions"
+
+execution:
+  side_effects: false
+  rollback_possible: true
+  idempotent: true
+  execution_type: "EXECUTABLE"
+  expected_duration: "5-15 seconds"
+
+audit:
+  trace_level: "Full"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "language"
+    - "test_count"

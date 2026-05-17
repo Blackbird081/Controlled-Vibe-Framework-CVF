@@ -1,0 +1,49 @@
+name: Bug report
+description: Report a reproducible problem in CVF.
+title: "[Bug]: "
+labels: ["bug", "rc-feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing CVF. For governance behavior claims, include real-provider evidence when possible.
+  - type: input
+    id: version
+    attributes:
+      label: CVF version or tag
+      description: Example: v4.0.0-rc.1
+      placeholder: v4.0.0-rc.1
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: List the shortest steps that trigger the issue.
+      placeholder: |
+        1. Clone the repo
+        2. Run ...
+        3. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node/Python versions, browser, provider lane, and any relevant flags.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or logs
+      description: Paste relevant logs, screenshots, or command output. Do not include API keys or secrets.
+    validations:
+      required: false

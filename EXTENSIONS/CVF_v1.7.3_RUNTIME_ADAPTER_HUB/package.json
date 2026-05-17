@@ -1,0 +1,59 @@
+{
+    "name": "cvf-runtime-adapter-hub",
+    "version": "0.1.0",
+    "description": "CVF v1.7.3 — Runtime Adapter Hub: Universal adapter layer for multi-runtime AI safety",
+    "type": "module",
+    "main": "./index.ts",
+    "types": "./index.ts",
+    "exports": {
+        ".": "./index.ts",
+        "./contracts": "./contracts/index.ts",
+        "./adapters": "./adapters/index.ts",
+        "./policy": "./policy/natural.policy.parser.ts",
+        "./explainability": "./explainability/explainability.layer.ts",
+        "./risk-models/risk-matrix": "./risk_models/risk.matrix.json",
+        "./risk-models/destructive-rules": "./risk_models/destructive.rules.json",
+        "./risk-models/external-comm-rules": "./risk_models/external.comm.rules.json",
+        "./risk-models/escalation-thresholds": "./risk_models/escalation.thresholds.json"
+    },
+    "files": [
+        "README.md",
+        "index.ts",
+        "contracts",
+        "adapters",
+        "policy/natural.policy.parser.ts",
+        "explainability/explainability.layer.ts",
+        "risk_models/risk.matrix.json",
+        "risk_models/destructive.rules.json",
+        "risk_models/external.comm.rules.json",
+        "risk_models/escalation.thresholds.json"
+    ],
+    "sideEffects": false,
+    "scripts": {
+        "check": "npm run typecheck && npm run test",
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage"
+    },
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "@vitest/coverage-v8": "^3.2.4",
+        "typescript": "^5.7.0",
+        "vitest": "^3.0.0"
+    },
+    "keywords": [
+        "cvf",
+        "ai-safety",
+        "runtime-adapter",
+        "hypervisor"
+    ],
+    "license": "CC-BY-NC-ND-4.0",
+    "exportReadiness": {
+        "status": "CANDIDATE",
+        "phase": "B",
+        "targetDate": "2026-06-01",
+        "blockers": [],
+        "documentation": "docs/reference/CVF_PREPUBLIC_RUNTIME_ADAPTER_HUB_EXPORT_SURFACE_2026-04-10.md"
+    }
+}

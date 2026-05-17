@@ -1,0 +1,77 @@
+# Slack Message Capability
+# Domain: communication
+# Risk: R2 (Sends to external system)
+
+capability_id: "SLACK_MESSAGE_v1"
+domain: "communication"
+description: "Send messages to Slack channels or users"
+risk_level: "R2"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Execution"
+  allowed_phases:
+    - "C"
+    - "D"
+  required_decisions: []
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "channel"
+    type: "string"
+    required: true
+    description: "Slack channel ID or name (e.g., #general)"
+  - name: "message"
+    type: "string"
+    required: true
+    description: "Message content"
+    max_length: 4000
+  - name: "thread_ts"
+    type: "string"
+    required: false
+    description: "Thread timestamp for replies"
+  - name: "attachments"
+    type: "array"
+    required: false
+    description: "Rich message attachments"
+  - name: "as_user"
+    type: "boolean"
+    required: false
+    default: false
+    description: "Send as bot user vs app"
+
+output_spec:
+  - name: "success"
+    type: "boolean"
+    description: "Whether message was sent"
+  - name: "message_ts"
+    type: "string"
+    description: "Message timestamp ID"
+  - name: "channel_id"
+    type: "string"
+    description: "Resolved channel ID"
+
+execution:
+  side_effects: true
+  rollback_possible: false
+  idempotent: false
+  execution_type: "EXECUTABLE"
+  expected_duration: "1-3 seconds"
+
+audit:
+  trace_level: "Full"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "channel"
+    - "message_ts"
+    - "success"
+
+failure_info:
+  known_failure_modes:
+    - "Channel not found"
+    - "Rate limited"
+    - "Insufficient permissions"
+  worst_case_impact: "Message not delivered"
+  human_intervention_required: false

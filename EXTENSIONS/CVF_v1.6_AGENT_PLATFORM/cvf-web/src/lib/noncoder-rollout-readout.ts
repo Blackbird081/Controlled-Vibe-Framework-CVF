@@ -2,7 +2,7 @@
  * noncoder-rollout-readout.ts
  * W128-T1 — Lane readout model + rollout recommendations
  *
- * Turns W127 metrics into 6 operator-readable lane readouts with
+ * Turns W127/EVT-5 metrics into operator-readable lane readouts with
  * flag-aware recommendations. Threshold contract: CVF_W128_ROLLOUT_DECISION_CONTRACT.md
  */
 
@@ -123,6 +123,12 @@ const RECOMMENDATIONS: Record<string, LaneRecs> = {
     action_required: () => 'Very low pack export rate. Improve pack discoverability or add an in-result prompt.',
     no_data: () => 'No accepted executions recorded yet.',
   },
+  task_recovery: {
+    healthy: () => 'Users are taking a next step after governance friction.',
+    watch: () => 'Some users may abandon after governance friction. Review recovery CTAs and copy.',
+    action_required: () => 'Low recovery rate. Improve BLOCK/CLARIFY/NEEDS_APPROVAL next-step affordances.',
+    no_data: () => 'No governance-friction recovery prompts recorded yet.',
+  },
 };
 
 function rec(laneId: string, status: LaneStatus, flags: NoncoderFlags): string {
@@ -147,6 +153,7 @@ export function computeLaneReadout(
   const followStatus = statusHigher(m.followupContinuationRate, 0.15, 0.05);
   const evStatus = statusHigher(m.evidenceExportRate, 0.15, 0.05);
   const packStatus = statusHigher(m.deliverablePackExportRate, 0.15, 0.05);
+  const recoveryStatus = statusHigher(m.taskRecoveryRate, 0.50, 0.30);
 
   return [
     {
@@ -218,6 +225,18 @@ export function computeLaneReadout(
         ? 'No accepted executions recorded yet.'
         : `${(m.deliverablePackExportRate * 100).toFixed(0)}% of accepted executions had a pack exported.`,
       recommendation: rec('deliverable_pack', packStatus, f),
+    },
+    {
+      laneId: 'task_recovery',
+      laneName: 'Task Recovery',
+      status: recoveryStatus,
+      metricValue: pct(m.taskRecoveryRate),
+      metricLabel: 'Task recovery rate (%)',
+      flagActive: true,
+      explanation: m.taskRecoveryRate === null
+        ? 'No BLOCK/CLARIFY/NEEDS_APPROVAL recovery prompts recorded yet.'
+        : `${(m.taskRecoveryRate * 100).toFixed(0)}% of governance-friction prompts led to a recovery action. Abandonment: ${m.governanceAbandonmentRate !== null ? (m.governanceAbandonmentRate * 100).toFixed(0) : 'N/A'}%.`,
+      recommendation: rec('task_recovery', recoveryStatus, f),
     },
   ];
 }

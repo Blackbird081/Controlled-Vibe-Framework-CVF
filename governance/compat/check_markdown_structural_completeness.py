@@ -38,7 +38,14 @@ THIS_SCRIPT_PATH = "governance/compat/check_markdown_structural_completeness.py"
 REQUIRED_FILES = (
     STANDARD_PATH,
     GUARD_PATH,
-    THIS_SCRIPT_PATH,
+    MASTER_POLICY_PATH,
+    CONTROL_MATRIX_PATH,
+    BOOTSTRAP_PATH,
+    DOCS_INDEX_PATH,
+    README_PATH,
+    KB_PATH,
+    HOOK_CHAIN_PATH,
+    WORKFLOW_PATH,
 )
 
 REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
@@ -63,6 +70,14 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         THIS_SCRIPT_PATH,
         "New governed Markdown files must follow",
     ),
+    MASTER_POLICY_PATH: ("GC-045", STANDARD_PATH, GUARD_PATH, THIS_SCRIPT_PATH),
+    CONTROL_MATRIX_PATH: ("GC-045", STANDARD_PATH, GUARD_PATH, THIS_SCRIPT_PATH),
+    BOOTSTRAP_PATH: ("GC-045", STANDARD_PATH, "Markdown Structural Completeness"),
+    DOCS_INDEX_PATH: ("reference/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_STANDARD.md",),
+    README_PATH: ("GC-045", Path(GUARD_PATH).name),
+    KB_PATH: (Path(GUARD_PATH).name, "Markdown structural completeness"),
+    HOOK_CHAIN_PATH: (THIS_SCRIPT_PATH,),
+    WORKFLOW_PATH: (THIS_SCRIPT_PATH, "Markdown Structural Completeness"),
 }
 
 COMMON_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (
@@ -314,7 +329,7 @@ def _check_required_markers() -> list[dict[str, Any]]:
     return violations
 
 
-def _run_check(base: str | None, head: str | None, all_changed: bool, no_bootstrap: bool = False) -> dict[str, Any]:
+def _run_check(base: str | None, head: str | None, all_changed: bool) -> dict[str, Any]:
     resolved_base, resolved_head, base_source = _resolve_range(base, head)
     changed = _get_changed(resolved_base, resolved_head)
     targets = [
@@ -322,7 +337,7 @@ def _run_check(base: str | None, head: str | None, all_changed: bool, no_bootstr
         if _is_governed_markdown(path) and (all_changed or _is_new(statuses))
     ]
 
-    violations = [] if no_bootstrap else _check_required_markers()
+    violations = _check_required_markers()
     for path in targets:
         issues = _validate_markdown(path)
         if issues:
@@ -376,12 +391,11 @@ def main() -> int:
     parser.add_argument("--base", default=None)
     parser.add_argument("--head", default=None)
     parser.add_argument("--all-changed", action="store_true", help="Check all changed governed markdown, not only new files")
-    parser.add_argument("--no-bootstrap", action="store_true", help="Skip self-bootstrap REQUIRED_FILES check (use in portable workspaces such as public-sync)")
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--enforce", action="store_true")
     args = parser.parse_args()
 
-    report = _run_check(args.base, args.head, args.all_changed, args.no_bootstrap)
+    report = _run_check(args.base, args.head, args.all_changed)
     if args.json:
         print(json.dumps(report, indent=2))
     else:

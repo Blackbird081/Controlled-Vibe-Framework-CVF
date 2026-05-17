@@ -21,6 +21,8 @@ export interface NoncoderMetrics {
   followupContinuationRate: number | null;
   evidenceExportRate: number | null;
   deliverablePackExportRate: number | null;
+  taskRecoveryRate: number | null;
+  governanceAbandonmentRate: number | null;
 }
 
 export interface MetricReport {
@@ -129,6 +131,19 @@ function computeDeliverablePackExportRate(events: AnalyticsEvent[]): number | nu
   return safeRate(packed, accepted);
 }
 
+// ─── Metric: task_recovery_rate / abandonment_after_governance ──────────────
+
+function computeTaskRecoveryRate(events: AnalyticsEvent[]): number | null {
+  const prompted = countByType(events, 'task_recovery_prompted');
+  const started = countByType(events, 'task_recovery_started');
+  return safeRate(started, prompted);
+}
+
+function computeGovernanceAbandonmentRate(events: AnalyticsEvent[]): number | null {
+  const recoveryRate = computeTaskRecoveryRate(events);
+  return recoveryRate === null ? null : 1 - recoveryRate;
+}
+
 // ─── Main computation ─────────────────────────────────────────────────────────
 
 /**
@@ -143,6 +158,8 @@ export function computeNoncoderMetrics(events: AnalyticsEvent[]): NoncoderMetric
     followupContinuationRate: computeFollowupContinuationRate(events),
     evidenceExportRate: computeEvidenceExportRate(events),
     deliverablePackExportRate: computeDeliverablePackExportRate(events),
+    taskRecoveryRate: computeTaskRecoveryRate(events),
+    governanceAbandonmentRate: computeGovernanceAbandonmentRate(events),
   };
 }
 
@@ -197,6 +214,12 @@ function summarizeFriction(metrics: NoncoderMetrics): string {
     wins.push('deliverable pack export rate is healthy — users find packs valuable');
   }
 
+  if (metrics.taskRecoveryRate !== null && metrics.taskRecoveryRate < 0.5) {
+    issues.push('task recovery rate below 50% — users may abandon after governance friction');
+  } else if (metrics.taskRecoveryRate !== null) {
+    wins.push('task recovery rate shows users continue after governance friction');
+  }
+
   if (issues.length === 0 && wins.length === 0) return 'No data available to assess friction.';
   const parts: string[] = [];
   if (wins.length > 0) parts.push(`Wins: ${wins.join('; ')}.`);
@@ -232,6 +255,8 @@ export function generateMetricReport(
     `| Followup continuation rate | ${formatRate(metrics.followupContinuationRate)} |`,
     `| Evidence export rate | ${formatRate(metrics.evidenceExportRate)} |`,
     `| Deliverable pack export rate | ${formatRate(metrics.deliverablePackExportRate)} |`,
+    `| Task recovery rate | ${formatRate(metrics.taskRecoveryRate)} |`,
+    `| Governance abandonment rate | ${formatRate(metrics.governanceAbandonmentRate)} |`,
     ``,
     `## Friction Assessment`,
     ``,

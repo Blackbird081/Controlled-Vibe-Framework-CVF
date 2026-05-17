@@ -1,0 +1,142 @@
+# How to Present CVF to Management (10-Minute Brief)
+
+> Mục tiêu của tài liệu này:
+> Giúp **operator / sponsor** trình bày CVF cho **management** trong **10 phút**,
+> không cần giải thích AI, không cần thuyết phục bằng kỹ thuật.
+
+CVF được trình bày như **cơ chế kiểm soát rủi ro quyết định**, không phải công cụ AI.
+
+---
+
+## 0–1 phút: Đặt vấn đề đúng (Problem Framing)
+
+"Hiện tại, AI đang được dùng để:
+
+* Phân tích nhanh hơn
+* Viết đẹp hơn
+* Trông có vẻ hợp lý hơn
+
+Nhưng vấn đề thật sự là:
+👉 **Khi quyết định sai, không ai chịu trách nhiệm rõ ràng.**"
+
+Chốt ý:
+
+* AI làm quyết định **trông hợp lý**, không đảm bảo **đúng**
+
+---
+
+## 1–3 phút: Rủi ro hiện hữu (Risk Exposure)
+
+Trình bày 3 rủi ro phổ biến:
+
+1. **Hợp thức hóa quyết định đã có**
+   AI bị dùng để chứng minh một lựa chọn sẵn có.
+
+2. **Ép tiến độ – bỏ qua dữ liệu thiếu**
+   Output vẫn ra, nhưng nền tảng yếu.
+
+3. **Đổ lỗi cho AI**
+   Khi sai, không truy được ai quyết định gì.
+
+Chốt câu:
+
+> "AI không tạo ra rủi ro mới, nhưng nó **khuếch đại rủi ro cũ** rất nhanh."
+
+---
+
+## 3–5 phút: CVF là gì (Without Tech)
+
+CVF **không phải**:
+
+* Công cụ AI
+* Phần mềm mới
+* Quy trình cứng
+
+CVF **là**:
+
+* Một **framework kiểm soát cách AI được dùng**
+* Một **lớp bảo vệ cho quyết định quan trọng**
+
+So sánh dễ hiểu:
+
+> "CVF với AI giống như checklist an toàn với hàng không.
+> Nó không lái máy bay, nhưng thiếu nó thì tai nạn chắc chắn tăng."
+
+---
+
+## 5–7 phút: CVF thay đổi điều gì
+
+CVF tạo ra 3 thay đổi then chốt:
+
+1. **Rõ ràng trách nhiệm**
+
+   * AI không chịu trách nhiệm
+   * Operator có quyền dừng / escalate
+   * Quyết định cuối cùng thuộc về management
+
+2. **Ngăn sai sớm**
+
+   * Phát hiện bias từ input
+   * Dừng khi dữ liệu không đủ
+
+3. **Audit được sau này**
+
+   * Biết vì sao quyết định được đưa ra
+   * Không dựa vào "trí nhớ con người"
+
+---
+
+## 7–9 phút: Chi phí & tác động thực tế
+
+### Chi phí
+
+* Không cần mua tool mới
+* Không thay đổi hệ thống IT
+* Chỉ cần:
+
+  * 1 operator
+  * Training ~60 phút
+
+### Tác động
+
+* Quyết định chậm hơn một chút
+* Nhưng:
+
+  * Ít sai lớn
+  * Ít tranh cãi hậu kiểm
+  * Ít rủi ro cá nhân cho management
+
+Chốt câu quan trọng:
+
+> "CVF không tối ưu tốc độ.
+> CVF tối ưu **khả năng chịu trách nhiệm**."
+
+---
+
+## 9–10 phút: Đề xuất triển khai nhẹ
+
+Đề xuất rất cụ thể:
+
+* Áp CVF cho **1–2 quyết định rủi ro cao**
+* Không rollout đại trà
+* Review sau 1–2 tháng
+
+Cam kết:
+
+* Nếu không tạo giá trị → dừng
+* Không lock-in
+
+---
+
+## Câu kết để dừng cuộc họp
+
+> **"CVF không giúp chúng ta ra quyết định đúng hơn mỗi lần.
+> CVF giúp chúng ta không phải hối hận vì những quyết định sai đáng lẽ tránh được."**
+
+---
+
+📌 Ghi chú cho người trình bày:
+
+* Không tranh luận AI đúng/sai
+* Không demo tool
+* Luôn quay về: *trách nhiệm – rủi ro – audit*

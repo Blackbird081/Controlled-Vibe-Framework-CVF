@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, ClipboardList, LayoutGrid, Rocket, Shield, Sparkles } from 'lucide-react';
+import { ArrowRight, BookOpenCheck, ClipboardList, FileOutput, LayoutGrid, Rocket, Shield, Sparkles, SwitchCamera } from 'lucide-react';
 import { SurfaceTopBar } from '@/components';
 import { useLanguage, LanguageToggle } from '@/lib/i18n';
 import HeroVisualizer from '@/app/landing/components/HeroVisualizer';
@@ -210,6 +210,27 @@ export default function LandingPage() {
                 <TemplateShowcase lang={safeLanguage} />
                 <TestimonialCards lang={safeLanguage} />
                 <InsideVibCode lang={safeLanguage} />
+
+                <section className="rounded-[28px] border border-indigo-200/80 bg-indigo-50/60 p-6 dark:border-indigo-500/20 dark:bg-indigo-500/8">
+                    <div className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-500 dark:text-indigo-300">
+                        {safeLanguage === 'vi' ? 'Luồng có quản trị — sẵn dùng ngay' : 'Governed workflows — ready now'}
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-3">
+                        {[
+                            { href: '/knowledge/intake', icon: BookOpenCheck, label: safeLanguage === 'vi' ? 'Nạp kiến thức' : 'Knowledge Intake', desc: safeLanguage === 'vi' ? 'Đưa tài liệu mới vào kho với nguồn và lý do rõ ràng' : 'Add new knowledge with a visible source and reason' },
+                            { href: '/artifacts', icon: FileOutput, label: safeLanguage === 'vi' ? 'Xuất artifact' : 'Artifact Export', desc: safeLanguage === 'vi' ? 'Tạo gói HTML có governance receipt cho reviewer' : 'Produce an HTML packet with a governance receipt' },
+                            { href: '/work-transfer', icon: SwitchCamera, label: safeLanguage === 'vi' ? 'Chuyển giao công việc' : 'Work Transfer', desc: safeLanguage === 'vi' ? 'Xem lịch sử chuyển giao và xuất record ra artifact' : 'Review transfer history and export records as artifacts' },
+                        ].map(({ href, icon: Icon, label, desc }) => (
+                            <Link key={href} href={href} className="flex items-start gap-3 rounded-2xl border border-indigo-100 bg-white p-4 transition hover:shadow-sm dark:border-white/[0.07] dark:bg-white/[0.04]">
+                                <Icon size={18} className="mt-0.5 shrink-0 text-indigo-500 dark:text-indigo-300" />
+                                <div>
+                                    <div className="text-sm font-semibold text-slate-900 dark:text-white">{label}</div>
+                                    <div className="mt-0.5 text-xs leading-5 text-slate-500 dark:text-white/45">{desc}</div>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </section>
             </div>
         </div>
     );

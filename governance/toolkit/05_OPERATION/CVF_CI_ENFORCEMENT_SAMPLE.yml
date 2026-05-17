@@ -1,0 +1,54 @@
+# CVF Workspace Agent Enforcement — CI Sample
+# Copy this file to .github/workflows/cvf-enforcement.yml in your downstream project.
+# Requires: CVF core cloned alongside the project (via bootstrap script).
+#
+# This workflow runs the CVF workspace doctor on every push and pull request,
+# failing the build if mandatory enforcement artifacts are missing.
+
+name: CVF Workspace Enforcement
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  cvf-enforcement-doctor:
+    name: CVF Agent Enforcement Doctor
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout downstream project
+        uses: actions/checkout@v4
+        with:
+          path: project
+
+      - name: Checkout CVF core
+        uses: actions/checkout@v4
+        with:
+          repository: Blackbird081/Controlled-Vibe-Framework-CVF
+          path: .Controlled-Vibe-Framework-CVF
+
+      - name: Run CVF workspace enforcement doctor
+        shell: pwsh
+        run: |
+          $projectPath = "${{ github.workspace }}/project"
+          $cvfCorePath = "${{ github.workspace }}/.Controlled-Vibe-Framework-CVF"
+          $doctorScript = Join-Path $cvfCorePath "scripts/check_cvf_workspace_agent_enforcement.ps1"
+
+          if (-not (Test-Path $doctorScript)) {
+            Write-Error "CVF doctor script not found: $doctorScript"
+            exit 1
+          }
+
+          powershell -ExecutionPolicy Bypass -File $doctorScript -ProjectPath $projectPath
+          exit $LASTEXITCODE
+
+      - name: Fail on missing enforcement artifacts
+        if: failure()
+        run: |
+          echo "CVF enforcement doctor failed."
+          echo "Run the bootstrap script to generate missing artifacts:"
+          echo "  powershell scripts/new-cvf-workspace.ps1 -WorkspaceRoot <root> -ProjectName <project>"
+          exit 1

@@ -1,0 +1,152 @@
+# CVF – Adoption & Lightweight Enablement Pack (Post v1.4.3)
+
+> Mục tiêu: **giúp CVF được dùng đúng – nhanh – không loạn**,
+> mà **không phá cấu trúc, không làm CVF thành framework hướng dẫn AI chi tiết**.
+
+Pack này **không phải version mới**, mà là **hướng triển khai hợp lý sau khi freeze v1.4.3**.
+
+---
+
+## 1. Adoption Guide (How CVF enters an organization)
+
+### 1.1. CVF phù hợp với ai
+
+CVF nên được đưa vào khi tổ chức có:
+
+* Quyết định phức tạp, nhiều ràng buộc
+* Rủi ro từ AI (sai, lệch scope, hợp thức hóa quyết định)
+* Nhu cầu audit / giải trình sau quyết định
+
+CVF **không phù hợp** cho:
+
+* Dùng AI giải trí
+* Task cá nhân không rủi ro
+* Môi trường "làm nhanh – bỏ qua hậu quả"
+
+---
+
+### 1.2. Cách đưa CVF vào mà không gây phản ứng
+
+❌ Sai cách:
+
+* Áp CVF cho mọi task
+* Ép user đọc hết tài liệu
+* Truyền thông CVF như "quy trình mới bắt buộc"
+
+✅ Đúng cách:
+
+* Chọn **1–2 use case rủi ro cao**
+* Chỉ định **1 operator chính thức**
+* Dùng CVF như **lớp bảo vệ**, không phải rào cản
+
+---
+
+### 1.3. Nguyên tắc adoption
+
+* CVF được "mượn" trước khi được "chuẩn hóa"
+* Operator là người hiểu CVF sâu nhất
+* End user chỉ cần hiểu **boundary**, không cần hiểu framework
+
+---
+
+## 2. Training Cut-down (Học tối thiểu để dùng đúng)
+
+### 2.1. Những gì BẮT BUỘC phải học
+
+Operator mới chỉ cần:
+
+* Onboarding 60 phút
+* Hiểu escalation
+* Biết lúc nào phải dừng
+
+Không yêu cầu:
+
+* Hiểu AI model
+* Viết prompt phức tạp
+* Biết nội bộ CVF core
+
+---
+
+### 2.2. Những gì KHÔNG nên dạy
+
+Không nên training:
+
+* "Prompt hay"
+* "Hack AI"
+* "Làm sao ra output nhanh"
+
+→ Những thứ này **đi ngược CVF**.
+
+---
+
+### 2.3. Chuẩn pass training
+
+Operator được xem là đạt khi:
+
+* Từ chối được task sai
+* Escalate đúng lúc
+* Giải thích được vì sao dừng
+
+---
+
+## 3. Lightweight Onboarding Kit
+
+### 3.1. Bộ tối thiểu cho operator mới
+
+Chỉ cần cung cấp:
+
+* README.md (entry)
+* 00_SCOPE_AND_BOUNDARY.md
+* operator_quick_start.md
+* escalation_flow.md
+
+Không đưa toàn bộ repo ngay từ đầu.
+
+---
+
+### 3.2. Bộ tối thiểu cho end user
+
+Chỉ cần:
+
+* end_user_expectation_contract.md
+* 1 trang giới thiệu: "CVF giúp gì / không giúp gì"
+
+Không để end user đọc execution rules.
+
+---
+
+### 3.3. Nguyên tắc phân phối tài liệu
+
+* Operator: full access
+* End user: boundary-only
+* Management: outcome & audit view
+
+---
+
+## 4. Khi nào NÊN mở rộng tiếp (v1.4.x hoặc v1.5)
+
+Chỉ mở rộng khi:
+
+* Có nhiều operator
+* Xuất hiện sai lệch lặp lại
+* Cần chuẩn hóa training ở quy mô lớn
+
+Không mở rộng chỉ vì:
+
+* Muốn "đủ bộ"
+* So sánh framework khác
+* Theo trend AI
+
+---
+
+## 5. Một câu chốt cho toàn bộ pack
+
+> **CVF không cần được hiểu bởi tất cả mọi người.
+> CVF chỉ cần được dùng đúng bởi đúng người.**
+
+---
+
+📌 Pack này đánh dấu:
+
+* CVF v1.4.3 đã đủ chín
+* Mọi mở rộng sau này phải phục vụ adoption, không phải complexity

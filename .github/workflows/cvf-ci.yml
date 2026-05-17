@@ -1,0 +1,287 @@
+name: CVF CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ─── Guard Contract Tests ────────────────────────────────────────────
+  test-guard-contract:
+    name: Guard Contract (unit tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_GUARD_CONTRACT/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npx vitest run
+        # Note: live API tests (CVF_GEMINI_LIVE_TEST=true) are excluded in CI
+        # to avoid quota/billing issues. Run manually with API keys.
+
+  # ─── MCP Server Tests ────────────────────────────────────────────────
+  test-mcp-server:
+    name: MCP ECO v2.5 (71 tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/package-lock.json
+
+      - name: Install CVF Guard Contract (local dep)
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+        run: npm ci
+
+      - name: Install MCP Server dependencies
+        run: npm ci
+
+      - name: Run MCP tests
+        run: npm test
+
+  # ─── Web UI Type Check + Build ───────────────────────────────────────
+  typecheck-web-ui:
+    name: Web UI v1.6 (type check + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
+
+      - name: Install CVF Guard Contract (local dep)
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+        run: npm ci
+
+      - name: Install Web UI dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Build verification
+        run: npm run build
+
+  # ─── Control Plane Foundation Tests ──────────────────────────────────
+  test-cpf:
+    name: Control Plane Foundation (2929 tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run check
+
+      - name: Run tests
+        run: npm test
+
+  # ─── Execution Plane Foundation Tests ────────────────────────────────
+  test-epf:
+    name: Execution Plane Foundation (1301 tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run check
+
+      - name: Run tests
+        run: npm test
+
+  # ─── Governance Expansion Foundation Tests ───────────────────────────
+  test-gef:
+    name: Governance Expansion Foundation (625 tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run check
+
+      - name: Run tests
+        run: npm test
+
+  # ─── Learning Plane Foundation Tests ─────────────────────────────────
+  test-lpf:
+    name: Learning Plane Foundation (1465 tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run check
+
+      - name: Run tests
+        run: npm test
+
+  # ─── Web UI Tests ────────────────────────────────────────────────────
+  test-web-ui:
+    name: Web UI v1.6 (1853 tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
+
+      - name: Install CVF Guard Contract (local dep)
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+        run: npm ci
+
+      - name: Install Web UI dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test:run
+
+      - name: Build verification
+        run: npm run build
+
+  # ─── Front-Door Static Smoke ─────────────────────────────────────────
+  front-door-smoke:
+    name: Front-Door Governance Smoke (static, no API key)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
+
+      - name: Install CVF Guard Contract (local dep)
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+        run: npm ci
+
+      - name: Install Web UI dependencies
+        run: npm ci
+
+      - name: Front-door governance smoke
+        run: |
+          npx vitest run \
+            src/lib/front-door-rewrite-regression.test.ts \
+            src/lib/front-door-template-standard.test.ts \
+            src/lib/skill-corpus-governance.test.ts \
+            src/lib/skill-template-map.test.ts
+
+  # ─── Summary gate ────────────────────────────────────────────────────
+  ci-passed:
+    name: CI Passed
+    needs: [
+      test-guard-contract,
+      test-mcp-server,
+      typecheck-web-ui,
+      test-cpf,
+      test-epf,
+      test-gef,
+      test-lpf,
+      test-web-ui,
+      front-door-smoke
+    ]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "✅ All CVF CI checks passed."

@@ -1,0 +1,16 @@
+
+> cvf-agent@1.6.0 predev
+> node scripts/build-risk-models.js && node scripts/build-skill-index.js
+
+Generated risk models: D:\UNG DUNG AI\TOOL AI 2026\Controlled-Vibe-Framework-CVF\EXTENSIONS\CVF_v1.6_AGENT_PLATFORM\cvf-web\src\lib\generated\risk-models.generated.ts
+Risk matrix entries: 10
+Destructive rules: 7
+Escalation thresholds: 4
+Generated skill index: D:\UNG DUNG AI\TOOL AI 2026\Controlled-Vibe-Framework-CVF\EXTENSIONS\CVF_v1.6_AGENT_PLATFORM\cvf-web\public\data\skills-index.json
+Total categories: 12
+Total skills: 149
+
+> cvf-agent@1.6.0 dev
+> next dev 3001
+
+Invalid project directory provided, no such directory: D:\UNG DUNG AI\TOOL AI 2026\Controlled-Vibe-Framework-CVF\EXTENSIONS\CVF_v1.6_AGENT_PLATFORM\cvf-web\3001

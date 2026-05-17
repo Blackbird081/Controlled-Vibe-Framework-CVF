@@ -1,0 +1,76 @@
+# Code Review Capability
+# Domain: development
+# Risk: R1 (Controlled)
+
+capability_id: "CODE_REVIEW_v1"
+domain: "development"
+description: "Review code for quality, security issues, and best practices. Provides actionable feedback without modifying code."
+risk_level: "R1"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Analysis"
+    - "Execution"
+  allowed_phases:
+    - "C"  # Development
+    - "D"  # Delivery
+  required_decisions: []
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "code"
+    type: "string"
+    required: true
+    validation_rule: "non_empty"
+  - name: "language"
+    type: "string"
+    required: false
+    default: "python"
+  - name: "focus_areas"
+    type: "array"
+    required: false
+    default: ["quality", "security", "performance"]
+  - name: "severity_threshold"
+    type: "string"
+    required: false
+    default: "low"
+
+output_spec:
+  - name: "issues"
+    type: "array"
+    success_criteria: "List of identified issues with severity and location"
+  - name: "score"
+    type: "integer"
+    range: [0, 100]
+    success_criteria: "Overall code quality score"
+  - name: "recommendations"
+    type: "array"
+    success_criteria: "Actionable improvement suggestions"
+  - name: "summary"
+    type: "string"
+    success_criteria: "Brief summary of findings"
+
+execution:
+  side_effects: false
+  rollback_possible: true
+  idempotent: true
+  expected_duration: "30-60 seconds"
+  execution_type: "EXECUTABLE"
+
+audit:
+  trace_level: "Full"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "inputs"
+    - "outputs"
+    - "code_hash"
+
+failure_info:
+  known_failure_modes:
+    - "Code too large (>10000 lines)"
+    - "Unsupported language"
+    - "Timeout on complex analysis"
+  worst_case_impact: "Review incomplete, user retry required"
+  human_intervention_required: false

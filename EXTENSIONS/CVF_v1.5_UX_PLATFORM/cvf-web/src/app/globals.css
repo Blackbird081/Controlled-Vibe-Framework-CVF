@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+/* Enable class-based dark mode for Tailwind v4 */
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+
+  /* Touch-friendly tap targets */
+  button,
+  a,
+  .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Full-width forms on mobile */
+  .mobile-full {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Reduce padding on mobile */
+  .prose {
+    font-size: 0.95rem;
+  }
+
+  .prose h1 {
+    font-size: 1.25rem;
+  }
+
+  .prose h2 {
+    font-size: 1.125rem;
+  }
+
+  /* Stack buttons vertically on mobile */
+  .mobile-stack {
+    flex-direction: column;
+  }
+
+  .mobile-stack>* {
+    width: 100%;
+  }
+}
+
+/* Safe area for notched devices */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Driver.js custom styles */
+.driver-popover {
+  background: #1f2937 !important;
+  color: #f3f4f6 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+.driver-popover-title {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+}
+
+.driver-popover-description {
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+  margin-bottom: 0 !important;
+}
+
+.driver-popover-progress-text {
+  color: #9ca3af !important;
+  font-size: 0.8rem !important;
+}
+
+.driver-popover-footer {
+  margin-top: 16px !important;
+}
+
+.driver-popover-navigation-btns button {
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  font-weight: 500 !important;
+  text-shadow: none !important;
+  border: none !important;
+}
+
+.driver-popover-next-btn {
+  background: #3b82f6 !important;
+  color: white !important;
+}
+
+.driver-popover-next-btn:hover {
+  background: #2563eb !important;
+}
+
+.driver-popover-prev-btn {
+  background: #4b5563 !important;
+  color: white !important;
+}
+
+.driver-popover-prev-btn:hover {
+  background: #374151 !important;
+}
+
+.driver-popover-close-btn {
+  color: #9ca3af !important;
+}
+
+.driver-popover-close-btn:hover {
+  color: #f3f4f6 !important;
+}
+
+/* Text balance utility */
+.text-balance {
+  text-wrap: balance;
+}

@@ -1,0 +1,53 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "commonjs",
+        "lib": [
+            "ES2020"
+        ],
+        "outDir": "./dist",
+        "rootDir": ".",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "baseUrl": ".",
+        "paths": {
+            "@core/*": [
+                "02_TOOLKIT_CORE/*"
+            ],
+            "@adapters/*": [
+                "03_ADAPTER_LAYER/*"
+            ],
+            "@extensions/*": [
+                "04_EXTENSION_LAYER/*"
+            ],
+            "@providers/*": [
+                "07_AI_PROVIDER_ABSTRACTION/*"
+            ]
+        }
+    },
+    "include": [
+        "00_CANONICAL_REFERENCE/**/*.ts",
+        "02_TOOLKIT_CORE/**/*.ts",
+        "03_ADAPTER_LAYER/**/*.ts",
+        "04_EXTENSION_LAYER/**/*.ts",
+        "05_UAT_AND_CERTIFICATION/**/*.ts",
+        "06_VERSIONING_AND_FREEZE/**/*.ts",
+        "07_AI_PROVIDER_ABSTRACTION/**/*.ts",
+        "__tests__/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

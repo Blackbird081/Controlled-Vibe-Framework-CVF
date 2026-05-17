@@ -1,0 +1,74 @@
+{
+    "common": {
+        "appName": "CVF v1.5",
+        "tagline": "Use CVF without knowing CVF",
+        "loading": "Loading...",
+        "submit": "Submit",
+        "cancel": "Cancel",
+        "back": "Back",
+        "next": "Next",
+        "save": "Save",
+        "close": "Close",
+        "accept": "Accept",
+        "reject": "Reject",
+        "retry": "Retry",
+        "preview": "Preview",
+        "export": "Export",
+        "copy": "Copy",
+        "copied": "Copied!"
+    },
+    "nav": {
+        "home": "Home",
+        "skills": "📚 Skills",
+        "help": "📖 Help",
+        "history": "📜 History",
+        "analytics": "📊 Analytics"
+    },
+    "home": {
+        "title": "Choose a template to get started",
+        "subtitle": "CVF v1.5 helps you use AI without writing prompts. Just pick a template, fill the form, and get results.",
+        "useTemplate": "Use Template",
+        "allCategories": "All"
+    },
+    "processing": {
+        "title": "Processing...",
+        "analyzing": "Analyzing your request",
+        "generating": "Generating results",
+        "validating": "Validating quality"
+    },
+    "result": {
+        "complete": "Complete",
+        "qualityScore": "Quality Score",
+        "excellent": "Excellent",
+        "good": "Good",
+        "acceptable": "Acceptable",
+        "poor": "Poor"
+    },
+    "analytics": {
+        "title": "Analytics",
+        "subtitle": "Usage and quality statistics",
+        "totalRuns": "Total Runs",
+        "accepted": "Accepted Results",
+        "avgQuality": "Avg Quality Score",
+        "acceptRate": "Accept Rate",
+        "weeklyActivity": "This Week's Activity",
+        "topTemplates": "Top Templates",
+        "resultDistribution": "Result Distribution",
+        "noData": "No data yet"
+    },
+    "onboarding": {
+        "welcome": "Welcome to CVF v1.5",
+        "welcomeDesc": "A platform that helps you use AI safely and effectively without technical skills.",
+        "whatIsCvf": "What is CVF?",
+        "whatIsCvfDesc": "It's a smart \"gatekeeper\". You express your intent, CVF handles the execution to ensure accurate results.",
+        "noPrompt": "I don't know prompting?",
+        "noPromptDesc": "No problem! CVF doesn't use prompts. Just choose a Template and fill out a form like a simple questionnaire.",
+        "howToStart": "How do I start?",
+        "howToStartDesc": "Pick a Template that fits your needs (Business, Technical, Content...), fill in the details and hit Submit. AI does the rest.",
+        "quickStart": "Quick Start Tutorial",
+        "quickStartDesc": "Watch a short video (30s) to learn how to create your first Business Strategy.",
+        "continue": "Continue →",
+        "startNow": "Start Now 🚀",
+        "skip": "Skip introduction"
+    }
+}

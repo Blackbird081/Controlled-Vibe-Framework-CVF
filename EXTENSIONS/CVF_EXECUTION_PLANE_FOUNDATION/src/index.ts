@@ -653,54 +653,24 @@ export type {
   SessionSnapshot,
 } from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
 
-export type ExplainLocale = "vi" | "en";
-export type IntentType = "CODE_EXECUTION" | "TOOL_INVOCATION" | "PROVIDER_CALL" | "GENERAL";
-export type ExplainRiskLevel = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
-export type ExecutionAction = "ALLOW" | "ESCALATE" | "BLOCK" | "REVIEW";
+export {
+  ExplainabilityLayer,
+} from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/explainability/explainability.layer";
+export type {
+  ExplainLocale,
+  IntentType,
+  RiskLevel as ExplainRiskLevel,
+  ExecutionAction,
+  ExplainInput,
+  HumanReadableExplanation,
+} from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/explainability/explainability.layer";
 
-export interface ExplainInput {
-  intentType: IntentType;
-  riskLevel: ExplainRiskLevel;
-  riskScore: number;
-  action: ExecutionAction;
-}
-
-export interface HumanReadableExplanation {
-  summary: string;
-  details: string;
-  riskMessage: string;
-  actionMessage: string;
-}
-
-export class ExplainabilityLayer {
-  constructor(private readonly locale: ExplainLocale = "en") {}
-
-  explain(input: ExplainInput): HumanReadableExplanation {
-    const prefix = this.locale === "vi" ? "CVF đánh giá" : "CVF assessed";
-    return {
-      summary: `${prefix} ${input.intentType} as ${input.riskLevel}.`,
-      details: `${input.intentType} received risk score ${input.riskScore} and action ${input.action}.`,
-      riskMessage: `Risk score ${input.riskScore} requires ${input.action}.`,
-      actionMessage: `Governed action: ${input.action}.`,
-    };
-  }
-}
-
-export interface EdgeSecurityConfig {
-  enablePIIMasking: boolean;
-  enableSecretMasking: boolean;
-  enableInjectionPrecheck: boolean;
-  enableAuditLog: boolean;
-  maskingTokenPrefix: string;
-}
-
-export const defaultEdgeSecurityConfig: EdgeSecurityConfig = {
-  enablePIIMasking: true,
-  enableSecretMasking: true,
-  enableInjectionPrecheck: true,
-  enableAuditLog: true,
-  maskingTokenPrefix: "[CVF_MASKED",
-};
+export {
+  defaultEdgeSecurityConfig,
+} from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/edge_security/edge.config";
+export type {
+  EdgeSecurityConfig,
+} from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/edge_security/edge.config";
 
 import {
   GuardRuntimeEngine,
@@ -711,6 +681,8 @@ import {
   generateSystemPrompt,
   type GeneratedPrompt,
 } from "../../CVF_ECO_v2.5_MCP_SERVER/src/sdk";
+import { ExplainabilityLayer, type HumanReadableExplanation } from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/explainability/explainability.layer";
+import { defaultEdgeSecurityConfig, type EdgeSecurityConfig } from "../../CVF_v1.7.3_RUNTIME_ADAPTER_HUB/edge_security/edge.config";
 import {
   OpenClawAdapter,
   PicoClawAdapter,
@@ -735,8 +707,8 @@ export const EXECUTION_PLANE_FOUNDATION_COORDINATION = {
   executionClass: "coordination package",
   mcpServer: "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER",
   modelGateway: "EXTENSIONS/CVF_MODEL_GATEWAY",
-  runtimeAdapterHub: "public self-contained runtime compatibility surface",
-  externalIntegrationReference: "public deterministic skill intake compatibility surface",
+  runtimeAdapterHub: "EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB",
+  externalIntegrationReference: "EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION",
   initialPhysicalMoveExcluded: [
     "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/guards",
     "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/cli",
@@ -748,7 +720,7 @@ export const EXECUTION_PLANE_FOUNDATION_COORDINATION = {
 } as const;
 
 export const EXECUTION_GATEWAY_WRAPPER_ALIGNMENT = {
-  executionClass: "implementation-owner alignment",
+  executionClass: "wrapper/re-export alignment",
   shellPackage: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION",
   sourcePackage: "EXTENSIONS/CVF_MODEL_GATEWAY",
   wrapperAnchor: MODEL_GATEWAY_WRAPPER.executionClass,
@@ -767,7 +739,7 @@ export const EXECUTION_GATEWAY_WRAPPER_ALIGNMENT = {
 } as const;
 
 export const EXECUTION_MCP_BRIDGE_ALIGNMENT = {
-  executionClass: "implementation-owner alignment",
+  executionClass: "wrapper/re-export alignment",
   shellPackage: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION",
   sourcePackage: "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/sdk.ts",
   runtimeEntrypoints: [
@@ -1009,7 +981,7 @@ export const EXECUTION_ADAPTER_EVIDENCE_ALIGNMENT = {
   executionClass: "coordination package" as const,
   controlPoint: "CP3" as const,
   shellPackage: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION" as const,
-  explainabilitySource: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/public-explainability-compat" as const,
+  explainabilitySource: "EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/explainability" as const,
   releaseEvidenceSource: "EXTENSIONS/CVF_MODEL_GATEWAY" as const,
   adapterInventory: [
     "OpenClawAdapter",
@@ -1100,11 +1072,11 @@ export function describeExecutionAdapterEvidence(): ExecutionAdapterEvidenceSumm
 
 
 export const EXECUTION_AUTHORIZATION_BOUNDARY_ALIGNMENT = {
-  executionClass: "implementation-owner" as const,
+  executionClass: "wrapper/re-export" as const,
   controlPoint: "CP4" as const,
   shellPackage: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION" as const,
-  policyContractSource: "EXTENSIONS/CVF_MODEL_GATEWAY/public-policy-contracts" as const,
-  edgeSecuritySource: "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/public-edge-security-compat" as const,
+  policyContractSource: "EXTENSIONS/CVF_MODEL_GATEWAY (via CVF_v1.7.3_RUNTIME_ADAPTER_HUB/contracts)" as const,
+  edgeSecuritySource: "EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/edge_security" as const,
   authorizationTypes: [
     "PolicyDecision",
     "PolicyContract",

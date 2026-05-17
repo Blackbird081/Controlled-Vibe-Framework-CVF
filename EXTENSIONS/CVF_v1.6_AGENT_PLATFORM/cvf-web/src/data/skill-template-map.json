@@ -4,6 +4,8 @@
     "strategy_analysis": { "domain": "business_analysis", "skillId": "01_strategy_analysis" },
     "risk_assessment": { "domain": "business_analysis", "skillId": "02_risk_assessment" },
     "competitor_review": { "domain": "business_analysis", "skillId": "03_market_research" },
+    "operator_plan": { "domain": "business_analysis", "skillId": "04_business_plan" },
+    "decision_memo": { "domain": "business_analysis", "skillId": "01_strategy_analysis" },
 
     "system_design_wizard": { "domain": "technical_review", "skillId": "02_architecture_review" },
     "code_review": { "domain": "technical_review", "skillId": "01_code_review" },
@@ -11,7 +13,12 @@
 
     "content_strategy_wizard": { "domain": "content_creation", "skillId": "01_documentation" },
     "documentation": { "domain": "content_creation", "skillId": "01_documentation" },
+    "faq_outline": { "domain": "content_creation", "skillId": "01_documentation" },
+    "acceptance_criteria": { "domain": "content_creation", "skillId": "01_documentation" },
     "email_template": { "domain": "content_creation", "skillId": "02_report_writing" },
+    "meeting_notes": { "domain": "content_creation", "skillId": "02_report_writing" },
+    "job_description": { "domain": "content_creation", "skillId": "02_report_writing" },
+    "performance_review": { "domain": "content_creation", "skillId": "02_report_writing" },
 
     "app_builder_wizard": { "domain": "app_development", "skillId": "01_app_requirements_spec" },
     "build_my_app": { "domain": "app_development", "skillId": "01_app_requirements_spec" },

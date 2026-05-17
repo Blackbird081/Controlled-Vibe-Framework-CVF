@@ -1,0 +1,16 @@
+[
+  {
+    "id": "enterprise-blue-gray",
+    "primary": "#1F3A8A",
+    "secondary": "#64748B",
+    "background": "#F8FAFC",
+    "text": "#0F172A"
+  },
+  {
+    "id": "dark-slate",
+    "primary": "#2563EB",
+    "secondary": "#334155",
+    "background": "#0F172A",
+    "text": "#F1F5F9"
+  }
+]

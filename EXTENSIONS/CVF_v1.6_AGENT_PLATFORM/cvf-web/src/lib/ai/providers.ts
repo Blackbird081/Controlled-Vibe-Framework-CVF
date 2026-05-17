@@ -4,6 +4,16 @@ function isAlibabaStreamingOnlyModel(model: string): boolean {
     return /^qvq-/i.test(model);
 }
 
+function usesOpenAICompletionTokenParam(model: string): boolean {
+    return /^(gpt-5|o[134]|o3|o4)/i.test(model);
+}
+
+function resolveProviderTimeoutMs(): number {
+    const configured = Number(process.env.CVF_AI_PROVIDER_TIMEOUT_MS || 60_000);
+    if (!Number.isFinite(configured) || configured <= 0) return 60_000;
+    return Math.max(1_000, configured);
+}
+
 async function parseAlibabaStreamingResponse(response: Response): Promise<{
     output: string;
     tokensUsed?: number;
@@ -60,21 +70,28 @@ async function executeOpenAI(
     const startTime = Date.now();
 
     try {
+        const body: Record<string, unknown> = {
+            model: config.model,
+            messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: userPrompt },
+            ],
+        };
+
+        if (usesOpenAICompletionTokenParam(config.model)) {
+            body.max_completion_tokens = config.maxTokens || 4096;
+        } else {
+            body.max_tokens = config.maxTokens || 4096;
+            body.temperature = config.temperature || 0.7;
+        }
+
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${config.apiKey}`,
             },
-            body: JSON.stringify({
-                model: config.model,
-                messages: [
-                    { role: 'system', content: systemPrompt },
-                    { role: 'user', content: userPrompt },
-                ],
-                max_tokens: config.maxTokens || 4096,
-                temperature: config.temperature || 0.7,
-            }),
+            body: JSON.stringify(body),
         });
 
         if (!response.ok) {
@@ -258,8 +275,8 @@ async function executeAlibaba(
                     }
                     : {}),
             }),
-            // W133: reduced from 85s → 60s to ensure route responds before the 90s Playwright deadline
-            signal: AbortSignal.timeout(60_000),
+            // W133 default remains 60s; EVT/model rebaselines may opt into a longer bounded timeout.
+            signal: AbortSignal.timeout(resolveProviderTimeoutMs()),
         });
 
         if (!response.ok) {
@@ -398,8 +415,8 @@ async function executeDeepSeek(
                 max_tokens: config.maxTokens || 4096,
                 temperature: config.temperature || 0.7,
             }),
-            // W133: bound to 60s so route responds well before the 90s Playwright deadline
-            signal: AbortSignal.timeout(60_000),
+            // W133 default remains 60s; EVT/model rebaselines may opt into a longer bounded timeout.
+            signal: AbortSignal.timeout(resolveProviderTimeoutMs()),
         });
 
         if (!response.ok) {

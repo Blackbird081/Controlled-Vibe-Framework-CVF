@@ -1,0 +1,64 @@
+# Data Transform Capability
+# Domain: data
+# Risk: R1 (Transforms data, bounded side effects)
+
+capability_id: "DATA_TRANSFORM_v1"
+domain: "data"
+description: "Transform data between formats (JSON, CSV, XML, YAML)"
+risk_level: "R1"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Execution"
+  allowed_phases:
+    - "C"
+  required_decisions: []
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "data"
+    type: "string"
+    required: true
+    description: "Input data to transform"
+  - name: "source_format"
+    type: "string"
+    required: true
+    description: "Source format (json, csv, xml, yaml)"
+    enum: ["json", "csv", "xml", "yaml"]
+  - name: "target_format"
+    type: "string"
+    required: true
+    description: "Target format (json, csv, xml, yaml)"
+    enum: ["json", "csv", "xml", "yaml"]
+  - name: "options"
+    type: "object"
+    required: false
+    description: "Transformation options (delimiter, encoding, etc.)"
+
+output_spec:
+  - name: "transformed_data"
+    type: "string"
+    description: "Data in target format"
+    success_criteria: "Valid data in target format"
+  - name: "record_count"
+    type: "integer"
+    description: "Number of records processed"
+  - name: "warnings"
+    type: "array"
+    description: "Any warnings during transformation"
+
+execution:
+  side_effects: false
+  rollback_possible: true
+  idempotent: true
+  execution_type: "EXECUTABLE"
+  expected_duration: "1-10 seconds"
+
+audit:
+  trace_level: "Minimal"
+  required_fields:
+    - "timestamp"
+    - "source_format"
+    - "target_format"
+    - "record_count"

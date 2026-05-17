@@ -1,0 +1,17 @@
+name: Broken Contract - Bad Schema
+version: "1.0.0"
+
+risk_level: R0
+
+# Schema is not valid JSON Schema
+input_schema: "this is not a schema object"
+
+output_schema:
+  type: object
+  properties:
+    result:
+      type: string
+
+execution:
+  handler: "test_handler"
+  timeout_seconds: 30

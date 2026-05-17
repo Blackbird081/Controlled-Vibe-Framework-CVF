@@ -49,6 +49,29 @@ export const TRUSTED_FORM_MAP: Record<string, TrustedFormEntry> = {
     ],
     wizardWinsWhen: 'user asks for content strategy, research report, or a marketing campaign',
   },
+  'faq_outline': {
+    id: 'faq_outline',
+    label: '❓ FAQ Outline',
+    activationPatterns: [
+      /\b(faq|frequently asked questions?)\b/i,
+      /\b(question(?:s)? and answer(?:s)?|q&a)\b/i,
+      /\bcreate\s+(an?\s+)?faq\b/i,
+      /câu hỏi thường gặp|tạo faq|viết faq/i,
+    ],
+    wizardWinsWhen: 'user asks for a full documentation set or content strategy rather than a bounded FAQ',
+  },
+  'acceptance_criteria': {
+    id: 'acceptance_criteria',
+    label: '✅ Acceptance Criteria',
+    activationPatterns: [
+      /\bacceptance criteria\b/i,
+      /\bgiven\s+when\s+then\b/i,
+      /\btestable criteria\b/i,
+      /\bpass\/fail checks?\b/i,
+      /tiêu chí nghiệm thu|điều kiện nghiệm thu|acceptance criteria/i,
+    ],
+    wizardWinsWhen: 'user asks to build the feature or app itself rather than write verification criteria',
+  },
   'competitor_review': {
     id: 'competitor_review',
     label: '🔍 Competitor Review',
@@ -130,6 +153,31 @@ export const TRUSTED_FORM_MAP: Record<string, TrustedFormEntry> = {
       /\banalyze a decision\b/i,
     ],
     wizardWinsWhen: 'user says "help me build a business strategy" (business-strategy wizard wins)',
+  },
+  'operator_plan': {
+    id: 'operator_plan',
+    label: '🗓️ Operator Plan',
+    activationPatterns: [
+      /\b(\d+[- ]?day|weekly|monthly)\s+(operations?\s+)?plan\b/i,
+      /\boperations?\s+plan\b/i,
+      /\boperator action plan\b/i,
+      /\b(retention|launch|rollout)\s+plan\b/i,
+      /kế hoạch vận hành|kế hoạch triển khai|kế hoạch giữ chân/i,
+    ],
+    wizardWinsWhen: 'user asks for a full business strategy or app build rather than an operator action plan',
+  },
+  'decision_memo': {
+    id: 'decision_memo',
+    label: '⚖️ Decision Memo',
+    activationPatterns: [
+      /\bdecision memo\b/i,
+      /\bcompare\s+.+\s+(options?|channels?|approaches?)\b/i,
+      /\bcompare\s+.+\s+(and|,)\s+.+\s+for\b/i,
+      /\b(channel choice|choose between|versus|vs\.?)\b/i,
+      /\b(freemium|paid-only)\b/i,
+      /so sánh.+(phương án|lựa chọn|kênh)|chọn giữa/i,
+    ],
+    wizardWinsWhen: 'user asks for broad strategy analysis without a bounded set of options',
   },
   'meeting_notes': {
     id: 'meeting_notes',

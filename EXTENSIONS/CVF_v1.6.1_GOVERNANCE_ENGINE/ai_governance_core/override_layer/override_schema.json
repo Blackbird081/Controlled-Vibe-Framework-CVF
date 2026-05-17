@@ -1,0 +1,13 @@
+{
+  "required_fields": [
+    "id",
+    "project",
+    "type",
+    "scope",
+    "approved_by",
+    "reason",
+    "created_at",
+    "expires_at",
+    "active"
+  ]
+}

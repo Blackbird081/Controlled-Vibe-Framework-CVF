@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVF - Template Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #888;
+        }
+
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .tab:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-color: transparent;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .template-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .template-card.hidden {
+            display: none;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .card-category {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-bottom: 12px;
+        }
+
+        .card-category.business {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .card-category.technical {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+        }
+
+        .card-category.content {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+        }
+
+        .card-category.research {
+            background: rgba(156, 39, 176, 0.2);
+            color: #9C27B0;
+        }
+
+        .card-desc {
+            color: #aaa;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .card-fields {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .card-fields-title {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .field-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .field-chip {
+            background: rgba(102, 126, 234, 0.2);
+            color: #a5b4fc;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        .modal-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .modal-title .icon {
+            font-size: 2.5rem;
+        }
+
+        .modal-section {
+            margin-bottom: 20px;
+        }
+
+        .modal-section-title {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .modal-example {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #a5d6a7;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>📚 CVF Template Gallery</h1>
+        <p class="subtitle">Chọn template phù hợp với công việc của bạn</p>
+    </div>
+
+    <div class="category-tabs">
+        <div class="tab active" onclick="filterCategory('all')">🎯 Tất cả</div>
+        <div class="tab" onclick="filterCategory('business')">📊 Business</div>
+        <div class="tab" onclick="filterCategory('technical')">💻 Technical</div>
+        <div class="tab" onclick="filterCategory('content')">📝 Content</div>
+        <div class="tab" onclick="filterCategory('research')">🔬 Research</div>
+    </div>
+
+    <div class="gallery" id="gallery">
+        <!-- Business Templates -->
+        <div class="template-card" data-category="business" onclick="openModal('strategy')">
+            <div class="card-header">
+                <span class="card-icon">📊</span>
+                <span class="card-title">Strategy Analysis</span>
+            </div>
+            <span class="card-category business">Business</span>
+            <p class="card-desc">Phân tích chiến lược kinh doanh, so sánh các phương án và đưa ra khuyến nghị.</p>
+            <div class="card-fields">
+                <div class="card-fields-title">Form fields</div>
+                <div class="field-list">
+                    <span class="field-chip">Mục tiêu</span>
+                    <span class="field-chip">Phương án</span>
+                    <span class="field-chip">Tiêu chí</span>
+                    <span class="field-chip">Ràng buộc</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="template-card" data-category="business" onclick="openModal('risk')">
+            <div class="card-header">
+                <span class="card-icon">⚠️</span>
+                <span class="card-title">Risk Assessment</span>
+            </div>
+            <span class="card-category business">Business</span>
+            <p class="card-desc">Đánh giá rủi ro dự án, xác định các yếu tố rủi ro và biện pháp giảm thiểu.</p>
+            <div class="card-fields">
+                <div class="card-fields-title">Form fields</div>
+                <div class="field-list">
+                    <span class="field-chip">Dự án</span>
+                    <span class="field-chip">Phạm vi</span>
+                    <span class="field-chip">Yếu tố rủi ro</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Templates -->
+        <div class="template-card" data-category="technical" onclick="openModal('code')">
+            <div class="card-header">
+                <span class="card-icon">🔍</span>
+                <span class="card-title">Code Review</span>
+            </div>
+            <span class="card-category technical">Technical</span>
+            <p class="card-desc">Review code theo best practices, phát hiện bugs và đề xuất cải tiến.</p>
+            <div class="card-fields">
+                <div class="card-fields-title">Form fields</div>
+                <div class="field-list">
+                    <span class="field-chip">Code/URL</span>
+                    <span class="field-chip">Ngôn ngữ</span>
+                    <span class="field-chip">Focus area</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="template-card" data-category="technical" onclick="openModal('arch')">
+            <div class="card-header">
+                <span class="card-icon">🏗️</span>
+                <span class="card-title">Architecture Review</span>
+            </div>
+            <span class="card-category technical">Technical</span>
+            <p class="card-desc">Đánh giá kiến trúc hệ thống, scalability và maintainability.</p>
+            <div class="card-fields">
+                <div class="card-fields-title">Form fields</div>
+                <div class="field-list">
+                    <span class="field-chip">System</span>
+                    <span class="field-chip">Diagram</span>
+                    <span class="field-chip">Concerns</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Templates -->
+        <div class="template-card" data-category="content" onclick="openModal('doc')">
+            <div class="card-header">
+                <span class="card-icon">📄</span>
+                <span class="card-title">Documentation</span>
+            </div>
+            <span class="card-category content">Content</span>
+            <p class="card-desc">Tạo tài liệu kỹ thuật, user guides, và API documentation.</p>
+            <div class="card-fields">
+                <div class="card-fields-title">Form fields</div>
+                <div class="field-list">
+                    <span class="field-chip">Chủ đề</span>
+                    <span class="field-chip">Đối tượng</span>
+                    <span class="field-chip">Format</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="template-card" data-category="content" onclick="openModal('report')">
+            <div class="card-header">
+                <span class="card-icon">📊</span>
+                <span class="card-title">Report Writing</span>
+            </div>
+            <span class="card-category content">Content</span>
+            <p class="card-desc">Viết báo cáo phân tích, tổng hợp dữ liệu và đưa ra insights.</p>
+            <div class="card-fields">
+                <div class="card-fields-title">Form fields</div>
+                <div class="field-list">
+                    <span class="field-chip">Data</span>
+                    <span class="field-chip">Period</span>
+                    <span class="field-chip">Audience</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Research Templates -->
+        <div class="template-card" data-category="research" onclick="openModal('lit')">
+            <div class="card-header">
+                <span class="card-icon">📚</span>
+                <span class="card-title">Literature Review</span>
+            </div>
+            <span class="card-category research">Research</span>
+            <p class="card-desc">Tổng hợp và phân tích tài liệu nghiên cứu theo chủ đề.</p>
+            <div class="card-fields">
+                <div class="card-fields-title">Form fields</div>
+                <div class="field-list">
+                    <span class="field-chip">Topic</span>
+                    <span class="field-chip">Sources</span>
+                    <span class="field-chip">Focus</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="template-card" data-category="research" onclick="openModal('data')">
+            <div class="card-header">
+                <span class="card-icon">📈</span>
+                <span class="card-title">Data Analysis</span>
+            </div>
+            <span class="card-category research">Research</span>
+            <p class="card-desc">Phân tích dữ liệu, tìm patterns và đưa ra insights.</p>
+            <div class="card-fields">
+                <div class="card-fields-title">Form fields</div>
+                <div class="field-list">
+                    <span class="field-chip">Dataset</span>
+                    <span class="field-chip">Questions</span>
+                    <span class="field-chip">Methods</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div class="modal-title">
+                <span class="icon" id="modal-icon">📊</span>
+                <div>
+                    <h2 id="modal-name">Template Name</h2>
+                    <span class="card-category business" id="modal-category">Category</span>
+                </div>
+            </div>
+            <div class="modal-section">
+                <div class="modal-section-title">📋 Mô tả</div>
+                <p id="modal-desc" style="color:#ccc; line-height:1.6;"></p>
+            </div>
+            <div class="modal-section">
+                <div class="modal-section-title">✅ Khi nào dùng</div>
+                <ul id="modal-when" style="color:#aaa; margin-left:20px;"></ul>
+            </div>
+            <div class="modal-section">
+                <div class="modal-section-title">📝 Ví dụ Input</div>
+                <div class="modal-example" id="modal-example"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        CVF v1.5 Template Library — Chọn template, điền form, nhận kết quả!
+    </div>
+
+    <script>
+        const templates = {
+            strategy: {
+                icon: '📊',
+                name: 'Strategy Analysis',
+                category: 'business',
+                desc: 'Phân tích chiến lược kinh doanh, so sánh các phương án và đưa ra khuyến nghị dựa trên tiêu chí đã định.',
+                when: [
+                    'Cần so sánh nhiều phương án kinh doanh',
+                    'Đánh giá chiến lược mở rộng/đầu tư',
+                    'Ra quyết định dựa trên phân tích đa tiêu chí'
+                ],
+                example: `Mục tiêu: Đánh giá 3 phương án mở rộng thị trường
+Phương án: A) Online, B) Mở chi nhánh, C) Nhượng quyền
+Tiêu chí: Chi phí < 500tr, ROI > 20%, Rủi ro thấp
+Ràng buộc: Không tuyển thêm > 10 người`
+            },
+            risk: {
+                icon: '⚠️',
+                name: 'Risk Assessment',
+                category: 'business',
+                desc: 'Đánh giá rủi ro toàn diện cho dự án, xác định yếu tố rủi ro và đề xuất biện pháp giảm thiểu.',
+                when: [
+                    'Khởi động dự án mới',
+                    'Đánh giá trước khi ra quyết định lớn',
+                    'Review định kỳ rủi ro dự án'
+                ],
+                example: `Dự án: Triển khai hệ thống ERP mới
+Phạm vi: Toàn công ty, 6 tháng
+Yếu tố rủi ro: Timeline, Budget, Change management`
+            },
+            code: {
+                icon: '🔍',
+                name: 'Code Review',
+                category: 'technical',
+                desc: 'Review code theo best practices, phát hiện bugs tiềm ẩn và đề xuất cải tiến.',
+                when: [
+                    'Trước khi merge PR quan trọng',
+                    'Review code của team member',
+                    'Kiểm tra security vulnerabilities'
+                ],
+                example: `Code: [paste code hoặc GitHub URL]
+Ngôn ngữ: Python
+Focus: Security, Performance, Clean code`
+            },
+            arch: {
+                icon: '🏗️',
+                name: 'Architecture Review',
+                category: 'technical',
+                desc: 'Đánh giá kiến trúc hệ thống về scalability, maintainability và reliability.',
+                when: [
+                    'Thiết kế hệ thống mới',
+                    'Refactor legacy system',
+                    'Pre-launch architecture review'
+                ],
+                example: `System: E-commerce platform
+Diagram: [Mô tả hoặc link diagram]
+Concerns: Scalability to 1M users, High availability`
+            },
+            doc: {
+                icon: '📄',
+                name: 'Documentation',
+                category: 'content',
+                desc: 'Tạo tài liệu chuyên nghiệp cho nhiều mục đích: user guide, API docs, internal docs.',
+                when: [
+                    'Cần tài liệu hướng dẫn sử dụng',
+                    'Document API cho developers',
+                    'Tạo internal knowledge base'
+                ],
+                example: `Chủ đề: API Authentication
+Đối tượng: Backend developers
+Format: Markdown với code examples`
+            },
+            report: {
+                icon: '📊',
+                name: 'Report Writing',
+                category: 'content',
+                desc: 'Viết báo cáo phân tích dựa trên dữ liệu, tổng hợp insights và đề xuất hành động.',
+                when: [
+                    'Báo cáo tháng/quý',
+                    'Phân tích sau campaign',
+                    'Executive summary từ data'
+                ],
+                example: `Data: [Mô tả hoặc upload file]
+Period: Q1 2026
+Audience: Management team`
+            },
+            lit: {
+                icon: '📚',
+                name: 'Literature Review',
+                category: 'research',
+                desc: 'Tổng hợp và phân tích tài liệu nghiên cứu, tìm gaps và trends.',
+                when: [
+                    'Bắt đầu research project',
+                    'Chuẩn bị proposal',
+                    'Survey current state of art'
+                ],
+                example: `Topic: AI in supply chain optimization
+Sources: 10 papers gần đây
+Focus: Practical applications, limitations`
+            },
+            data: {
+                icon: '📈',
+                name: 'Data Analysis',
+                category: 'research',
+                desc: 'Phân tích dữ liệu định lượng, tìm patterns và đưa ra insights actionable.',
+                when: [
+                    'Analyze survey results',
+                    'Customer behavior analysis',
+                    'Performance metrics deep-dive'
+                ],
+                example: `Dataset: Customer churn data (1000 rows)
+Questions: What predicts churn?
+Methods: Descriptive + correlation analysis`
+            }
+        };
+
+        function filterCategory(category) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.template-card').forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        function openModal(templateId) {
+            const t = templates[templateId];
+            document.getElementById('modal-icon').textContent = t.icon;
+            document.getElementById('modal-name').textContent = t.name;
+            document.getElementById('modal-category').textContent = t.category.charAt(0).toUpperCase() + t.category.slice(1);
+            document.getElementById('modal-category').className = 'card-category ' + t.category;
+            document.getElementById('modal-desc').textContent = t.desc;
+            document.getElementById('modal-when').innerHTML = t.when.map(w => `<li>${w}</li>`).join('');
+            document.getElementById('modal-example').textContent = t.example;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal(e) {
+            if (!e || e.target.id === 'modal') {
+                document.getElementById('modal').classList.remove('active');
+            }
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+
+</html>

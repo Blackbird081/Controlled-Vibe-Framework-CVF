@@ -1,0 +1,38 @@
+[
+  {
+    "id": "store-L1-1776750970267",
+    "version": "1.0",
+    "category": "REASONING",
+    "description": "Avoid recursive reasoning loops",
+    "active": true,
+    "createdAt": 1000,
+    "severity": "medium",
+    "rootCause": "unbounded recursion",
+    "preventionRule": "limit depth to 3",
+    "riskLevel": "R2"
+  },
+  {
+    "id": "store-L2-1776750970267",
+    "version": "1.0",
+    "category": "RISK",
+    "description": "Avoid recursive reasoning loops",
+    "active": false,
+    "createdAt": 1000,
+    "severity": "medium",
+    "rootCause": "unbounded recursion",
+    "preventionRule": "limit depth to 3",
+    "riskLevel": "R2"
+  },
+  {
+    "id": "store-L3-1776750970267",
+    "version": "1.0",
+    "category": "POLICY",
+    "description": "Avoid recursive reasoning loops",
+    "active": false,
+    "createdAt": 1000,
+    "severity": "medium",
+    "rootCause": "unbounded recursion",
+    "preventionRule": "limit depth to 3",
+    "riskLevel": "R2"
+  }
+]

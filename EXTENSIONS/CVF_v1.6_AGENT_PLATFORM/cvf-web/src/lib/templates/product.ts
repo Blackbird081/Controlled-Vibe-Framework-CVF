@@ -157,25 +157,45 @@ PRODUCT GOAL: [goal]
 CONSTRAINTS: [constraints]
 
 OUTPUT FORMAT:
-- Scoring Matrix → Prioritized List → Quick Wins → Roadmap Recommendation
+- MVP Scope → Why This Scope → Supporting Scoring Matrix → Implementation/Validation Steps → Risk And Deferral Checks
 
 SUCCESS CRITERIA:
-- Score mỗi feature theo framework
-- Prioritized list
-- Quick wins identification
-- Roadmap suggestion`,
-        outputExpected: ['Scoring Matrix', 'Prioritized List', 'Quick Wins', 'Roadmap Recommendation'],
-        outputTemplate: `## Feature Prioritization Output
+- Prioritized list includes do-now / do-next / defer groups
+- Every top feature has a first implementation or validation step
+- MVP scope is explicit enough for a non-technical operator to hand off
+- Scoring supports the scope decision instead of replacing it
+- Acceptance checks are observable`,
+        outputExpected: ['MVP Scope', 'Why This Scope', 'Supporting Scoring Matrix', 'Implementation/Validation Steps', 'Risk And Deferral Checks'],
+        outputTemplate: `## MVP Scope And Prioritization Decision
 
-## 1. Scoring Matrix
-| Feature | Reach | Impact | Confidence | Effort | Score |
+## 1. Recommended Scope First
+- Do now / MVP:
+- Do next:
+- Defer:
+- Explicit non-goals:
+- First validation or build step:
+- Owner/role:
+- Acceptance check:
+
+## 2. Why This Scope
+- Product/operator goal:
+- Constraints:
+- Main tradeoff:
+- Assumptions to confirm:
+
+## 3. Supporting Scoring Matrix
+| Feature | User Problem Solved | Reach | Impact | Confidence | Effort | Score | Rank |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+
+## 4. Implementation Or Validation Steps
+| Step | Owner/Role | Action | Artifact | Success Metric | Acceptance Check |
 | --- | --- | --- | --- | --- | --- |
 
-## 2. Prioritized List
-
-## 3. Quick Wins
-
-## 4. Roadmap Recommendation`,
+## 5. Risk And Deferral Checks
+- [ ] Owner can explain why each top item was chosen
+- [ ] Deferred items have a reason and revisit trigger
+- [ ] First implementation or validation step is clear
+- [ ] Operator can verify completion without developer interpretation`,
     },
     {
         id: 'user_persona',
@@ -200,29 +220,39 @@ SEGMENTS: [segments]
 BUSINESS GOALS: [goals]
 
 OUTPUT FORMAT:
-- Persona Profiles → User Journey Maps → Pain Points → Opportunities
+- Persona Profiles and Decision Signals → Persona-Linked Actions → First Experiments → Persona Usability Checks
 
 SUCCESS CRITERIA:
 - 2-4 distinct personas
-- Demographics, goals, pain points
-- Jobs to be done
-- Decision criteria`,
-        outputExpected: ['Persona Profiles', 'User Journey Maps', 'Pain Points', 'Opportunities'],
-        outputTemplate: `## User Persona Output
+- Each persona has trigger, objection, decision criteria, and success signal
+- Each persona maps to product, marketing/support, and onboarding or activation action
+- Each persona has a first experiment
+- Acceptance checks prove whether the persona is usable`,
+        outputExpected: ['Persona Profiles and Decision Signals', 'Persona-Linked Actions', 'First Experiments', 'Persona Usability Checks'],
+        outputTemplate: `# Persona-To-Action Packet
 
-## 1. Persona Profiles
+## 1. Segments And Assumptions
+- Source data used:
+- Assumptions:
+- Segment boundaries:
 
-### Persona 1: [Name]
-- Demographics:
-- Goals:
-- Pain points:
-- Decision criteria:
+## 2. Persona Profiles And Decision Signals
+| Persona | Context | Job To Be Done | Trigger | Objection | Decision Criteria | Success Signal |
+| --- | --- | --- | --- | --- | --- | --- |
 
-## 2. User Journey Map
+## 3. Persona-Linked Actions
+| Persona | Product Action | Marketing/Support Action | Onboarding Or Activation Action | Owner/Role | Acceptance Check |
+| --- | --- | --- | --- | --- | --- |
 
-## 3. Pain Points Summary
+## 4. First Experiments
+| Persona | Experiment | Hypothesis | Success Metric | Timebox | Decision Rule |
+| --- | --- | --- | --- | --- | --- |
 
-## 4. Opportunities`,
+## 5. Persona Usability Checks
+- [ ] Every persona has a trigger, objection, decision criteria, and success signal
+- [ ] Every persona maps to at least one product action and one marketing/support action
+- [ ] Every persona has a first experiment and measurable acceptance check
+- [ ] Unsupported demographic or behavioral claims are labeled as assumptions`,
     },
     {
         id: 'error_handling_ux',

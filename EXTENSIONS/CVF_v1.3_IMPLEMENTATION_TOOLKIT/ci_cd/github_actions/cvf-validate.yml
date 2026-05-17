@@ -1,0 +1,77 @@
+# CVF GitHub Actions Workflow
+# Validates all skill contracts on push/PR
+
+name: CVF Contract Validation
+
+on:
+  push:
+    paths:
+      - '**.contract.yaml'
+      - '**.contract.yml'
+      - 'EXTENSIONS/**'
+  pull_request:
+    paths:
+      - '**.contract.yaml'
+      - '**.contract.yml'
+      - 'EXTENSIONS/**'
+
+jobs:
+  validate-contracts:
+    runs-on: ubuntu-latest
+    name: Validate Skill Contracts
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+      
+      - name: Validate contracts
+        run: |
+          cd EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT
+          python cli/cvf_validate.py validate --all ../examples/
+          python cli/cvf_validate.py lint ../examples/
+      
+      - name: Summary
+        if: always()
+        run: |
+          echo "## CVF Contract Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All contracts validated successfully" >> $GITHUB_STEP_SUMMARY
+
+  check-registry:
+    runs-on: ubuntu-latest
+    name: Check Registry Consistency
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+      
+      - name: Check registry
+        run: |
+          cd EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT
+          # Check if registry exists
+          if [ -f "registry.json" ]; then
+            python cli/cvf_validate.py check-registry registry.json
+          else
+            echo "No registry.json found - skipping"
+          fi

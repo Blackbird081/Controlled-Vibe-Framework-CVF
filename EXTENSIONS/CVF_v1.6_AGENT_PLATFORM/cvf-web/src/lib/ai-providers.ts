@@ -488,13 +488,15 @@ export class OpenAIProvider {
         const systemMessage: AIMessage = { role: 'system', content: getCVFSystemPrompt(this.language) };
         const allMessages = [systemMessage, ...messages];
 
-        const body = {
+        const body: Record<string, unknown> = {
             model: this.model,
             messages: allMessages.map(m => ({ role: m.role, content: m.content })),
-            temperature: 0.7,
-            max_tokens: 4096,
             stream: !!onStream,
         };
+        if (/^(gpt-5|o[134]|o3|o4)/i.test(this.model)) body.max_completion_tokens = 4096;
+        else {
+            body.temperature = 0.7; body.max_tokens = 4096;
+        }
 
         try {
             const response = await fetch(`${this.baseUrl}/chat/completions`, {

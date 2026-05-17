@@ -1,52 +1,8 @@
 # CVF Demo Script
 
-Memory class: POINTER_RECORD
-
-Status: CURRENT PUBLIC DEMO SCRIPT
-
 **Date:** 2026-04-21  
 **Audience:** operators, collaborators, potential adopters  
 **Default mode:** UI walkthroughs can run without paid API calls; any governance-quality proof must use live provider execution
-
-## Purpose
-
-Give operators and collaborators a reproducible demo script that exercises
-CVF's main public surfaces without overclaiming output quality.
-
-## Scope
-
-UI walkthrough paths, governance-quality proof paths, and the boundary
-between UI-only checks and live-provider checks. This script does not
-substitute for the architecture, governance, provider, or evidence
-documents.
-
-## Source
-
-Predecessor evidence anchors:
-
-- `../../README.md`
-- `local-first-deployment-baseline.md`
-- `minimum-useful-cvf.md`
-- `../evidence/latest-release-gate.md`
-
-## Protocol
-
-Each demo path lists exact commands and expected observations. Operators
-must distinguish UI-only outcomes (navigation evidence) from live-provider
-outcomes (governance evidence) when communicating results.
-
-## Enforcement
-
-Governance claims arising from a demo must cite the live release-gate path
-result, not the UI-only path. UI walkthroughs are accepted only as
-navigation evidence.
-
-## Related Artifacts
-
-- `minimum-useful-cvf.md`
-- `local-first-deployment-baseline.md`
-- `../../README.md`
-- `../evidence/latest-release-gate.md`
 
 ---
 
@@ -67,11 +23,6 @@ An Alibaba or DeepSeek key is required before claiming that CVF governs real AI/
 Claim boundary to keep in mind during any demo:
 
 > CVF proves governed AI-assisted development. Multi-provider operability is proven for Alibaba and DeepSeek. Provider parity is not claimed. Provider economics are user-selected.
->
-> Current quality boundary: CVF is a governance-first local deployment
-> baseline. Non-coder deliverable contracts have been hardened, but EVT-4
-> output-quality parity is not proven. Use
-> `docs/evidence/current-cvf-quality-status.md` as the current public summary.
 
 ---
 
@@ -293,11 +244,3 @@ Expected output: 6/6 scenarios PASS, receipt printed to console.
 ---
 
 *Filed: 2026-04-21 — demo script for RC public readiness*
-
-## Claim Boundary
-
-This demo script claims only that the listed commands and observations
-reproduce CVF's public surfaces. It does not claim output-quality parity
-with direct provider output, does not claim a UI walkthrough proves
-governance behavior, and does not extend CVF's public claim boundary
-documented in `../evidence/claim-boundaries.md`.

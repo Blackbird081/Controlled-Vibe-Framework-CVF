@@ -1,0 +1,35 @@
+{
+  "name": "cvf-skills",
+  "version": "1.0.0",
+  "description": "CVF Skill Library CLI — Search, Plan, and Manage CVF Skills",
+  "author": "CVF Framework",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "cvf-skills": "./bin/cvf-skills.js"
+  },
+  "main": "./src/index.js",
+  "files": [
+    "bin/",
+    "src/",
+    "data/",
+    "templates/",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test src/**/*.test.js",
+    "lint": "echo 'No lint configured'"
+  },
+  "keywords": [
+    "cvf",
+    "skill-library",
+    "ui-ux",
+    "design-system",
+    "bm25",
+    "search",
+    "cli"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

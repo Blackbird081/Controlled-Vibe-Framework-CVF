@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useSettings } from './Settings';
 import { useLanguage } from '@/lib/i18n';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
+import { trackEvent } from '@/lib/analytics';
 import { getSafetyStatus } from '@/lib/safety-status';
 import type { SafetyRiskLevel } from '@/lib/safety-status';
 import type { ExecutionRequest, GovernanceEvidenceReceipt } from '@/lib/ai';
@@ -47,6 +48,8 @@ export interface GovernanceEvidenceState {
     approvalId?: string;
 }
 
+type FalsePositiveReportState = 'idle' | 'submitting' | 'submitted' | 'error';
+
 function mapSettingsProviderToExecutionProvider(provider?: string): ExecutionRequest['provider'] | undefined {
     if (!provider) {
         return undefined;
@@ -74,6 +77,32 @@ function resolveTemplateGuardAction(overrides?: ProcessingExecutionOverrides): s
     return 'analyze template execution request';
 }
 
+function resolveApprovalSafeHint(reasons: unknown, isVi: boolean): string | null {
+    const reasonText = Array.isArray(reasons) ? reasons.join(' ') : String(reasons ?? '');
+    const normalized = reasonText.toLowerCase();
+
+    const hints = [
+        {
+            pattern: /skill preflight|preflight/i,
+            vi: 'Bạn có thể bổ sung khai báo phạm vi/kỹ năng trước khi gửi lại, hoặc giữ yêu cầu này trong hàng chờ review.',
+            en: 'You can add the missing scope or skill declaration before retrying, or keep this request in the review queue.',
+        },
+        {
+            pattern: /budget|quota|cost/i,
+            vi: 'Bạn có thể giảm phạm vi xử lý hoặc chờ admin xem xét giới hạn trước khi chạy lại.',
+            en: 'You can narrow the task scope or wait for an admin to review the limit before retrying.',
+        },
+        {
+            pattern: /r3|r4|approval|human approval|executive/i,
+            vi: 'Bạn có thể gửi review như hiện tại, hoặc tách yêu cầu thành bước lập kế hoạch rủi ro thấp hơn trước.',
+            en: 'You can keep this in review, or split the task into a lower-risk planning step first.',
+        },
+    ];
+
+    const match = hints.find(hint => hint.pattern.test(normalized));
+    return match ? (isVi ? match.vi : match.en) : null;
+}
+
 export function ProcessingScreen({
     templateName,
     templateId,
@@ -95,6 +124,8 @@ export function ProcessingScreen({
     const [approvalRequestId, setApprovalRequestId] = useState<string | null>(null);
     const [approvalSubmitting, setApprovalSubmitting] = useState(false);
     const [enforcementStatus, setEnforcementStatus] = useState<string | null>(null);
+    const [approvalSafeHint, setApprovalSafeHint] = useState<string | null>(null);
+    const [falsePositiveReportState, setFalsePositiveReportState] = useState<FalsePositiveReportState>('idle');
     // W94-T1: Risk badge state
     const [executionRiskLevel, setExecutionRiskLevel] = useState<SafetyRiskLevel | null>(null);
     // W114-T1 CP5: user-visible governance evidence from the live execute route
@@ -147,6 +178,7 @@ export function ProcessingScreen({
             const enforcement = data.enforcement;
             const receipt = data.governanceEvidenceReceipt as GovernanceEvidenceReceipt | undefined;
             setEvidenceReceipt(receipt);
+            setFalsePositiveReportState('idle');
             setGovernanceEvidence({
                 provider: receipt?.provider || data.provider,
                 model: receipt?.model || data.model,
@@ -220,6 +252,7 @@ export function ProcessingScreen({
                 setError(data.error || (isVi ? 'Cần phê duyệt trước khi thực thi.' : 'Approval required before execution.'));
                 if (data.guidedResponse) setGuidedResponse(data.guidedResponse);
                 setEnforcementStatus('NEEDS_APPROVAL');
+                setApprovalSafeHint(resolveApprovalSafeHint(enforcement.reasons, isVi));
                 if (data.approvalId) setApprovalRequestId(data.approvalId);
                 return true;
             }
@@ -238,6 +271,57 @@ export function ProcessingScreen({
             return false;
         }
     }, [templateId, templateName, inputs, intent, onComplete, settings.preferences.defaultExportMode, isVi, executionOverrides, executionProvider, selectedModel]);
+
+    const canReportFalsePositive =
+        Boolean(governanceEvidence?.receiptId) &&
+        (governanceEvidence?.decision === 'BLOCK' || governanceEvidence?.decision === 'CLARIFY');
+
+    useEffect(() => {
+        const decision = governanceEvidence?.decision;
+        if (!governanceEvidence?.receiptId || !decision) return;
+        if (decision !== 'BLOCK' && decision !== 'CLARIFY' && decision !== 'NEEDS_APPROVAL') return;
+        trackEvent('task_recovery_prompted', {
+            receiptId: governanceEvidence.receiptId,
+            decision,
+            riskLevel: governanceEvidence.riskLevel,
+            templateId,
+        });
+    }, [governanceEvidence?.decision, governanceEvidence?.receiptId, governanceEvidence?.riskLevel, templateId]);
+
+    const reportFalsePositive = useCallback(async () => {
+        if (!canReportFalsePositive || !governanceEvidence?.receiptId || !governanceEvidence.decision) return;
+
+        setFalsePositiveReportState('submitting');
+        try {
+            const response = await fetch('/api/governance/false-positive-report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    receiptId: governanceEvidence.receiptId,
+                    envelopeId: governanceEvidence.envelopeId,
+                    decision: governanceEvidence.decision,
+                    riskLevel: governanceEvidence.riskLevel,
+                    reason: error ?? undefined,
+                    templateId: templateId || templateName,
+                    routeId: '/api/execute',
+                }),
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.success) {
+                throw new Error(typeof data.error === 'string' ? data.error : 'Unable to record report');
+            }
+            setFalsePositiveReportState('submitted');
+            trackEvent('task_recovery_started', {
+                method: 'false_positive_report',
+                receiptId: governanceEvidence.receiptId,
+                decision: governanceEvidence.decision,
+                riskLevel: governanceEvidence.riskLevel,
+                templateId,
+            });
+        } catch {
+            setFalsePositiveReportState('error');
+        }
+    }, [canReportFalsePositive, error, governanceEvidence, templateId, templateName]);
 
     // W92-T1: Submit approval request
     const submitApprovalRequest = useCallback(async () => {
@@ -262,6 +346,12 @@ export function ProcessingScreen({
             const data = await response.json();
             if (data.success && data.id) {
                 setApprovalRequestId(data.id);
+                trackEvent('task_recovery_started', {
+                    method: 'approval_request',
+                    approvalId: data.id,
+                    decision: 'NEEDS_APPROVAL',
+                    templateId,
+                });
             }
         } finally {
             setApprovalSubmitting(false);
@@ -368,7 +458,7 @@ export function ProcessingScreen({
 
                 {error && !guidedResponse && (
                     <p className="text-sm text-amber-600 dark:text-amber-400 mb-4" role="alert" aria-live="assertive">
-                        ⚠️ {error} — {isVi ? 'Đang dùng chế độ demo' : 'Using demo mode'}
+                        ⚠️ {error}{!isRealExecution ? ` — ${isVi ? 'Đang dùng chế độ demo' : 'Using demo mode'}` : ''}
                     </p>
                 )}
 
@@ -390,6 +480,43 @@ export function ProcessingScreen({
                         <p className="text-sm text-blue-900 dark:text-blue-100 whitespace-pre-wrap">
                             {guidedResponse}
                         </p>
+                    </div>
+                )}
+
+                {canReportFalsePositive && (
+                    <div
+                        className="mt-3 mb-4 mx-auto max-w-md rounded-lg border border-rose-200 dark:border-rose-800
+                            bg-rose-50 dark:bg-rose-950/40 p-4 text-left"
+                        data-testid="false-positive-report-panel"
+                    >
+                        <p className="text-sm font-semibold text-rose-800 dark:text-rose-200 mb-1">
+                            {isVi ? 'Quyết định này có vẻ chưa đúng?' : 'Does this decision look wrong?'}
+                        </p>
+                        <p className="text-xs text-rose-700 dark:text-rose-300 mb-3">
+                            {isVi
+                                ? 'Gửi báo cáo để CVF đo tỷ lệ chặn/làm rõ nhầm. Báo cáo này không tự mở khóa yêu cầu.'
+                                : 'Report it so CVF can measure incorrect blocks or clarifications. This does not auto-unlock the request.'}
+                        </p>
+                        <button
+                            type="button"
+                            onClick={reportFalsePositive}
+                            disabled={falsePositiveReportState === 'submitting' || falsePositiveReportState === 'submitted'}
+                            data-testid="report-false-positive-btn"
+                            className="w-full rounded-lg border border-rose-300 bg-white px-4 py-2 text-sm font-medium
+                                text-rose-700 transition-colors hover:bg-rose-100 disabled:opacity-60
+                                dark:border-rose-700 dark:bg-gray-950 dark:text-rose-200 dark:hover:bg-rose-900/30"
+                        >
+                            {falsePositiveReportState === 'submitting'
+                                ? (isVi ? 'Đang gửi...' : 'Reporting...')
+                                : falsePositiveReportState === 'submitted'
+                                    ? (isVi ? 'Đã ghi nhận báo cáo' : 'Report recorded')
+                                    : (isVi ? 'Report false positive' : 'Report false positive')}
+                        </button>
+                        {falsePositiveReportState === 'error' && (
+                            <p className="mt-2 text-xs text-rose-700 dark:text-rose-300" role="alert">
+                                {isVi ? 'Chưa ghi nhận được báo cáo. Vui lòng thử lại.' : 'The report was not recorded. Please try again.'}
+                            </p>
+                        )}
                     </div>
                 )}
 
@@ -432,6 +559,16 @@ export function ProcessingScreen({
                                 ? 'Quản trị viên sẽ xem xét yêu cầu của bạn. Khi được phê duyệt, bạn có thể thử lại. Khi bị từ chối, bạn sẽ nhận được lý do cụ thể.'
                                 : 'An admin will review your request. Once approved, you can retry your task. If rejected, you will receive a specific reason.'}
                         </p>
+                        <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
+                            {isVi
+                                ? 'Yêu cầu phê duyệt hiện hết hạn sau 24 giờ trong workflow local.'
+                                : 'Approval requests currently expire after 24 hours in the local workflow.'}
+                        </p>
+                        {approvalSafeHint && (
+                            <p className="mt-2 rounded border border-amber-200 bg-white/60 p-2 text-xs text-amber-700 dark:border-amber-800 dark:bg-gray-950/40 dark:text-amber-300">
+                                {approvalSafeHint}
+                            </p>
+                        )}
                     </div>
                 )}
 

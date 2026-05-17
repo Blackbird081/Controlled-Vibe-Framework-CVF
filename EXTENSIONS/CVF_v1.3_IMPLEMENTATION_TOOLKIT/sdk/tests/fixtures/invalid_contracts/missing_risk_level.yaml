@@ -1,0 +1,24 @@
+name: Broken Contract - Missing Risk Level
+version: "1.0.0"
+metadata:
+  description: "Invalid - no risk_level field"
+  author: "test-suite"
+
+# Missing risk_level - INVALID!
+
+input_schema:
+  type: object
+  properties:
+    data:
+      type: string
+  required: ["data"]
+
+output_schema:
+  type: object
+  properties:
+    result:
+      type: string
+
+execution:
+  handler: "test_handler"
+  timeout_seconds: 30

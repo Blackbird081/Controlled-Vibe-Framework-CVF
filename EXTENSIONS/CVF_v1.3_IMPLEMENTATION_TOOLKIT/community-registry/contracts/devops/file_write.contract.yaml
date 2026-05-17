@@ -1,0 +1,98 @@
+# File Write Capability
+# Domain: devops
+# Risk: R3 (Critical - writes to filesystem)
+
+capability_id: "FILE_WRITE_v1"
+domain: "devops"
+description: "Write content to files in designated directories"
+risk_level: "R3"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Execution"
+  allowed_phases:
+    - "C"
+    - "D"
+  required_decisions:
+    - "FILE_WRITE_APPROVED"
+    - "HUMAN_APPROVAL"
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "path"
+    type: "string"
+    required: true
+    description: "Target file path (must be in allowed directories)"
+  - name: "content"
+    type: "string"
+    required: true
+    description: "Content to write"
+  - name: "mode"
+    type: "string"
+    required: false
+    default: "overwrite"
+    description: "Write mode"
+    enum: ["overwrite", "append", "create_only"]
+  - name: "create_dirs"
+    type: "boolean"
+    required: false
+    default: false
+    description: "Create parent directories if they don't exist"
+  - name: "backup"
+    type: "boolean"
+    required: false
+    default: true
+    description: "Create backup of existing file"
+
+output_spec:
+  - name: "success"
+    type: "boolean"
+    description: "Whether write succeeded"
+  - name: "bytes_written"
+    type: "integer"
+    description: "Number of bytes written"
+  - name: "backup_path"
+    type: "string"
+    description: "Path to backup file if created"
+  - name: "final_path"
+    type: "string"
+    description: "Final file path"
+
+execution:
+  side_effects: true
+  rollback_possible: true
+  idempotent: false
+  execution_type: "EXECUTABLE"
+  expected_duration: "< 5 seconds"
+
+audit:
+  trace_level: "Full"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "path"
+    - "bytes_written"
+    - "backup_path"
+    - "approver"
+    - "content_hash"
+
+failure_info:
+  known_failure_modes:
+    - "Permission denied"
+    - "Disk full"
+    - "Path outside allowed directories"
+    - "File locked by another process"
+  worst_case_impact: "Data loss if overwriting critical file"
+  human_intervention_required: true
+
+constraints:
+  allowed_directories:
+    - "/app/output/"
+    - "/app/config/"
+    - "/tmp/"
+  max_file_size: 10485760  # 10 MB
+  forbidden_extensions:
+    - ".exe"
+    - ".sh"
+    - ".bat"

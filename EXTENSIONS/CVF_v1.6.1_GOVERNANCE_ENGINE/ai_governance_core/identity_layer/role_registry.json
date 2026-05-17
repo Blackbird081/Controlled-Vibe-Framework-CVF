@@ -1,0 +1,10 @@
+{
+  "roles": [
+    "DEVELOPER",
+    "DESIGNER",
+    "TEAM_LEAD",
+    "SECURITY_OFFICER",
+    "AI_GOVERNANCE_ADMIN",
+    "EXECUTIVE_APPROVER"
+  ]
+}

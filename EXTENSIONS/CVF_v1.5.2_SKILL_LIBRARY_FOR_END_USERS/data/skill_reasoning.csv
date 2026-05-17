@@ -1,0 +1,51 @@
+industry,task_pattern,skill_chain,rationale
+Fintech,dashboard|analytics|metrics|data viz,product_ux/cvf_web_ux_redesign_system|web_development/05_data_visualization|product_ux/03_ux_heuristic_evaluation,Fintech dashboard cần trust-focused style + data visualization + consistent design system
+Fintech,payment|checkout|transaction,product_ux/cvf_web_ux_redesign_system|security_compliance/01_security_assessment|product_ux/03_ux_heuristic_evaluation,Payment flow cần security-first design + trust signals + API security
+Fintech,banking|mobile bank|neobank,product_ux/cvf_web_ux_redesign_system|product_ux/04_accessibility_audit|product_ux/03_ux_heuristic_evaluation,Mobile banking cần trust + dark mode support + mobile best practices
+Fintech,trading|stock|crypto,product_ux/cvf_web_ux_redesign_system|web_development/05_data_visualization|web_development/06_accessibility_audit|product_ux/03_ux_heuristic_evaluation,Trading UI cần real-time data viz + performance-critical rendering
+Fintech,insurance|claim,product_ux/cvf_web_ux_redesign_system|marketing_seo/01_seo_audit,Insurance cần trust + clear communication + conversion optimization
+Fintech,lending|loan|credit,product_ux/cvf_web_ux_redesign_system|security_compliance/02_data_privacy_compliance|marketing_seo/01_seo_audit,Lending cần compliance + trust + conversion funnel
+Healthcare,patient portal|medical|health record,product_ux/cvf_web_ux_redesign_system|product_ux/04_accessibility_audit|product_ux/03_ux_heuristic_evaluation,Healthcare cần accessibility-first + calming colors + clear typography
+Healthcare,telemedicine|telehealth|video consult,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation,Telemedicine cần mobile-first + calming UX + smooth interaction
+Healthcare,pharmacy|prescription|medication,product_ux/cvf_web_ux_redesign_system|security_compliance/02_data_privacy_compliance|product_ux/03_ux_heuristic_evaluation,Pharmacy cần HIPAA/privacy compliance + trust + safe color coding
+Healthcare,fitness|wellness|gym,product_ux/cvf_web_ux_redesign_system|web_development/05_data_visualization,Fitness cần motivating colors + progress charts + mobile-first
+Healthcare,mental health|therapy|meditation,product_ux/cvf_web_ux_redesign_system|product_ux/04_accessibility_audit,Mental health cần calming + accessible + preference-respecting UI
+Ecommerce,product listing|catalog|inventory,product_ux/cvf_web_ux_redesign_system|web_development/07_landing_page_pattern|marketing_seo/05_brand_strategy_review|product_ux/03_ux_heuristic_evaluation,E-commerce listing cần product-focused layout + style matching + conversion
+Ecommerce,cart|checkout|order,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation|security_compliance/01_security_assessment,Cart/checkout cần frictionless interaction + secure payment flow
+Ecommerce,marketplace|multi vendor,product_ux/cvf_web_ux_redesign_system|web_development/06_accessibility_audit,Marketplace cần scalable design system + performance for many products
+Ecommerce,review|rating|feedback,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation|product_ux/04_accessibility_audit,Review UI cần accessible + trustworthy + clear interaction
+Ecommerce,fashion|clothing|apparel,product_ux/cvf_web_ux_redesign_system|marketing_seo/05_brand_strategy_review|marketing_seo/01_seo_audit,Fashion e-commerce cần visual-heavy + style-matched + conversion-optimized
+Ecommerce,food|grocery|delivery,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation,Food delivery cần mobile-first + warm colors + fast interaction
+SaaS,dashboard|admin|panel,product_ux/cvf_web_ux_redesign_system|web_development/05_data_visualization|web_development/06_accessibility_audit,SaaS dashboard cần professional style + data viz + performance
+SaaS,settings|config|preferences,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation|product_ux/04_accessibility_audit,Settings page cần clear hierarchy + accessible forms + keyboard nav
+SaaS,onboarding|setup|wizard,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation|marketing_seo/01_seo_audit,Onboarding flow cần engaging + low friction + conversion optimization
+SaaS,pricing|subscription|plan,product_ux/cvf_web_ux_redesign_system|marketing_seo/01_seo_audit|web_development/07_landing_page_pattern,Pricing page cần clear + trustworthy + conversion-focused
+SaaS,documentation|help|knowledge base,product_ux/cvf_web_ux_redesign_system|product_ux/04_accessibility_audit,Docs cần readable typography + accessible + dark mode support
+SaaS,analytics|reporting|bi,product_ux/cvf_web_ux_redesign_system|web_development/05_data_visualization|web_development/06_accessibility_audit,Analytics/BI cần data-dense layout + chart types + performance
+Education,lms|course|learning,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation,LMS cần engaging + readable + clear progression UI
+Education,quiz|exam|assessment,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation|product_ux/04_accessibility_audit,Quiz UI cần accessible + clear feedback + keyboard navigable
+Education,student portal|enrollment,product_ux/cvf_web_ux_redesign_system|web_development/07_landing_page_pattern|marketing_seo/01_seo_audit,Student portal cần inviting + conversion-optimized enrollment
+Education,tutoring|video|classroom,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation,Video classroom cần responsive + smooth interaction + mobile support
+Beauty,salon|spa|booking,product_ux/cvf_web_ux_redesign_system|marketing_seo/05_brand_strategy_review,Beauty/spa cần premium + calming + style-matched
+Beauty,cosmetic|skincare|makeup,product_ux/cvf_web_ux_redesign_system|marketing_seo/05_brand_strategy_review|marketing_seo/01_seo_audit,Cosmetics cần visual-heavy + brand-aligned + conversion-optimized
+Beauty,portfolio|stylist|artist,product_ux/cvf_web_ux_redesign_system|web_development/07_landing_page_pattern,Portfolio cần visual-first + personal brand + elegant layout
+Food,restaurant|menu|dining,product_ux/cvf_web_ux_redesign_system|marketing_seo/05_brand_strategy_review,Restaurant cần warm colors + food photography focus + readable menu
+Food,recipe|cooking|meal plan,product_ux/cvf_web_ux_redesign_system|web_development/07_landing_page_pattern,Recipe app cần warm + readable + step-by-step layout
+Food,cafe|coffee|bakery,product_ux/cvf_web_ux_redesign_system|marketing_seo/05_brand_strategy_review,Cafe/coffee cần artisan + warm + cozy branding
+RealEstate,listing|property|house,product_ux/cvf_web_ux_redesign_system|web_development/07_landing_page_pattern|marketing_seo/01_seo_audit,Property listing cần trust + image-heavy + search-focused
+RealEstate,virtual tour|3d,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation|web_development/06_accessibility_audit,Virtual tour cần smooth interaction + performance + immersive
+RealEstate,agent|broker|portfolio,product_ux/cvf_web_ux_redesign_system|web_development/07_landing_page_pattern|marketing_seo/05_brand_strategy_review,Agent portfolio cần professional + trust + personal branding
+Gaming,leaderboard|ranking|score,product_ux/cvf_web_ux_redesign_system|web_development/05_data_visualization|web_development/06_accessibility_audit,Leaderboard cần exciting + animated + data visualization
+Gaming,store|shop|marketplace,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation|web_development/06_accessibility_audit,Game store cần immersive + smooth animation + engaging interaction
+Gaming,profile|avatar|character,product_ux/cvf_web_ux_redesign_system|product_ux/04_accessibility_audit|web_development/06_accessibility_audit,Game profile cần dark-mode-first + animated + personalized
+Travel,booking|reservation|hotel,product_ux/cvf_web_ux_redesign_system|marketing_seo/01_seo_audit|product_ux/03_ux_heuristic_evaluation,Travel booking cần trust + urgency + conversion optimization
+Travel,itinerary|trip|plan,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation,Trip planning cần intuitive interaction + mobile-friendly + visual
+Travel,review|experience|destination,product_ux/cvf_web_ux_redesign_system|web_development/07_landing_page_pattern,Travel reviews cần authentic + readable + image-rich layout
+Media,article|news|blog,product_ux/cvf_web_ux_redesign_system|product_ux/04_accessibility_audit,News/blog cần readable typography + dark mode + accessible
+Media,video|streaming|content,product_ux/cvf_web_ux_redesign_system|product_ux/04_accessibility_audit|web_development/06_accessibility_audit|web_development/06_accessibility_audit,Streaming cần dark-first + performance + smooth transitions
+Media,podcast|audio|music,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation|product_ux/04_accessibility_audit,Audio app cần immersive + dark mode + smooth controls
+Generic,landing page|homepage|hero,web_development/07_landing_page_pattern|product_ux/cvf_web_ux_redesign_system|marketing_seo/01_seo_audit|product_ux/03_ux_heuristic_evaluation,Landing page cần pattern selection + style + conversion optimization
+Generic,mobile app|ios|android,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation,Mobile app cần framework guidance + platform conventions + pre-delivery
+Generic,redesign|refresh|overhaul,product_ux/cvf_web_ux_redesign_system|product_ux/03_ux_heuristic_evaluation|product_ux/04_accessibility_audit,Redesign cần complete style refresh + design system + quality check
+Generic,audit|review|check,product_ux/03_ux_heuristic_evaluation|product_ux/04_accessibility_audit,UI audit cần multi-dimension review: interaction + a11y + dark mode + icons
+Generic,new project|startup|mvp,product_ux/cvf_web_ux_redesign_system|web_development/07_landing_page_pattern|product_ux/03_ux_heuristic_evaluation,New project cần full design setup: industry reasoning → style → design system → landing

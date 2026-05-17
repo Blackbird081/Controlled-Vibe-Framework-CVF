@@ -1,0 +1,78 @@
+name: CVF Extensions CI
+
+on:
+  push:
+    paths:
+      - 'EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/**'
+      - 'EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/**'
+      - 'EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/**'
+      - 'EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/**'
+  pull_request:
+    paths:
+      - 'EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/**'
+      - 'EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/**'
+      - 'EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/**'
+      - 'EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/**'
+
+jobs:
+  # ─── v1.7 Intelligence Module ───────────────────────────────
+  intelligence-tests:
+    name: "🧠 v1.7 Intelligence Tests"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npx vitest run
+
+  # ─── v1.7.1 Safety Runtime ──────────────────────────────────
+  safety-runtime-tests:
+    name: "⚙️ v1.7.1 Safety Runtime Tests"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npx vitest run
+
+  # ─── v1.7.2 Safety Dashboard ────────────────────────────────
+  safety-dashboard-build:
+    name: "🛡️ v1.7.2 Safety Dashboard Build"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npx vitest run
+      - run: npm run build
+
+  # ─── v1.7.3 Runtime Adapter Hub ─────────────────────────────
+  runtime-adapter-hub-tests:
+    name: "🔌 v1.7.3 Runtime Adapter Hub Tests"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npx vitest run
+      - run: npm run typecheck

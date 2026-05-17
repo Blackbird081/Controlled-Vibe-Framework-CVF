@@ -1,0 +1,166 @@
+{
+    "CVF Contract Template": {
+        "prefix": "cvf-contract",
+        "body": [
+            "# ${1:Capability Name}",
+            "# Domain: ${2:domain}",
+            "# Risk: ${3|R0,R1,R2,R3|}",
+            "",
+            "capability_id: \"${4:CAPABILITY_NAME}_v1\"",
+            "domain: \"${2:domain}\"",
+            "description: \"${5:Description of what this capability does}\"",
+            "risk_level: \"${3:R1}\"",
+            "version: \"1.0\"",
+            "",
+            "governance:",
+            "  allowed_archetypes:",
+            "    - \"${6|Analysis,Decision,Planning,Execution,Supervisor,Exploration|}\"",
+            "  allowed_phases:",
+            "    - \"${7|A,B,C,D|}\"",
+            "  required_decisions: []",
+            "  required_status: \"ACTIVE\"",
+            "",
+            "input_spec:",
+            "  - name: \"${8:input_name}\"",
+            "    type: \"${9|string,integer,boolean,array,object|}\"",
+            "    required: true",
+            "",
+            "output_spec:",
+            "  - name: \"${10:output_name}\"",
+            "    type: \"${11|string,integer,boolean,array,object|}\"",
+            "    success_criteria: \"${12:Criteria for success}\"",
+            "",
+            "execution:",
+            "  side_effects: ${13|false,true|}",
+            "  rollback_possible: ${14|true,false|}",
+            "  idempotent: ${15|true,false|}",
+            "",
+            "audit:",
+            "  trace_level: \"${16|Full,Minimal|}\"",
+            "  required_fields:",
+            "    - \"timestamp\"",
+            "    - \"actor\"",
+            "    - \"inputs\"",
+            "    - \"outputs\""
+        ],
+        "description": "Create a new CVF Skill Contract"
+    },
+    "Input Field": {
+        "prefix": "cvf-input",
+        "body": [
+            "- name: \"${1:field_name}\"",
+            "  type: \"${2|string,integer,boolean,array,object|}\"",
+            "  required: ${3|true,false|}",
+            "  ${4:default: \"${5:default_value}\"}"
+        ],
+        "description": "Add an input field specification"
+    },
+    "Output Field": {
+        "prefix": "cvf-output",
+        "body": [
+            "- name: \"${1:field_name}\"",
+            "  type: \"${2|string,integer,boolean,array,object|}\"",
+            "  success_criteria: \"${3:Criteria for success}\""
+        ],
+        "description": "Add an output field specification"
+    },
+    "Governance Block": {
+        "prefix": "cvf-governance",
+        "body": [
+            "governance:",
+            "  allowed_archetypes:",
+            "    - \"${1|Analysis,Decision,Planning,Execution,Supervisor,Exploration|}\"",
+            "  allowed_phases:",
+            "    - \"${2|A,B,C,D|}\"",
+            "  required_decisions:",
+            "    - \"${3:DECISION_ID}\"",
+            "  required_status: \"ACTIVE\""
+        ],
+        "description": "Add governance constraints block"
+    },
+    "Execution Properties": {
+        "prefix": "cvf-execution",
+        "body": [
+            "execution:",
+            "  side_effects: ${1|false,true|}",
+            "  rollback_possible: ${2|true,false|}",
+            "  idempotent: ${3|true,false|}",
+            "  expected_duration: \"${4:1-5 seconds}\"",
+            "  execution_type: \"${5|EXECUTABLE,NON_EXECUTABLE|}\""
+        ],
+        "description": "Add execution properties block"
+    },
+    "Audit Requirements": {
+        "prefix": "cvf-audit",
+        "body": [
+            "audit:",
+            "  trace_level: \"${1|Full,Minimal|}\"",
+            "  required_fields:",
+            "    - \"timestamp\"",
+            "    - \"actor\"",
+            "    - \"inputs\"",
+            "    - \"outputs\""
+        ],
+        "description": "Add audit requirements block"
+    },
+    "Failure Info": {
+        "prefix": "cvf-failure",
+        "body": [
+            "failure_info:",
+            "  known_failure_modes:",
+            "    - \"${1:Failure mode 1}\"",
+            "    - \"${2:Failure mode 2}\"",
+            "  worst_case_impact: \"${3:Description of worst case}\"",
+            "  human_intervention_required: ${4|false,true|}"
+        ],
+        "description": "Add failure information block"
+    },
+    "Risk Level R0": {
+        "prefix": "cvf-risk-r0",
+        "body": [
+            "# Risk Level: R0 - Passive (No side effects)",
+            "# Required Controls: Logging",
+            "risk_level: \"R0\""
+        ],
+        "description": "Set risk level to R0 (Passive)"
+    },
+    "Risk Level R1": {
+        "prefix": "cvf-risk-r1",
+        "body": [
+            "# Risk Level: R1 - Controlled (Small bounded effects)",
+            "# Required Controls: Logging, Scope Guard",
+            "risk_level: \"R1\""
+        ],
+        "description": "Set risk level to R1 (Controlled)"
+    },
+    "Risk Level R2": {
+        "prefix": "cvf-risk-r2",
+        "body": [
+            "# Risk Level: R2 - Elevated (Has authority, may chain)",
+            "# Required Controls: Logging, Scope Guard, Explicit Approval, Audit",
+            "risk_level: \"R2\"",
+            "",
+            "governance:",
+            "  required_decisions:",
+            "    - \"${1:APPROVAL_DECISION}\""
+        ],
+        "description": "Set risk level to R2 (Elevated) with required approval"
+    },
+    "Risk Level R3": {
+        "prefix": "cvf-risk-r3",
+        "body": [
+            "# Risk Level: R3 - Critical (System changes, external impact)",
+            "# Required Controls: All + Hard Gate + Human-in-the-loop",
+            "risk_level: \"R3\"",
+            "",
+            "governance:",
+            "  required_decisions:",
+            "    - \"${1:APPROVAL_DECISION}\"",
+            "    - \"${2:HUMAN_REVIEW}\"",
+            "",
+            "failure_info:",
+            "  human_intervention_required: true"
+        ],
+        "description": "Set risk level to R3 (Critical) with human approval"
+    }
+}

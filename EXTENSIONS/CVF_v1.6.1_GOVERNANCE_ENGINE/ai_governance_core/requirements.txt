@@ -1,0 +1,14 @@
+# CVF Governance Engine — Python Dependencies
+# CVF v1.6.1
+
+# API Server
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.5.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Optional: Cross-process file locking
+# filelock>=3.13.0

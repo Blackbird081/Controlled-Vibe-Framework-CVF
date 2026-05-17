@@ -1,0 +1,15 @@
+{
+  "name": "@cvf/guard-contract",
+  "version": "1.0.0",
+  "description": "CVF Cross-Channel Guard Contract — shared types and mapping functions",
+  "type": "module",
+  "main": "cross-channel-guard-contract.ts",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^4.0.0"
+  }
+}

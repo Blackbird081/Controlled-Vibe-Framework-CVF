@@ -1,0 +1,18 @@
+[
+  {
+    "id": "minimal-light",
+    "category": "enterprise",
+    "tags": ["dashboard", "admin", "logistics"],
+    "radius": "8px",
+    "shadow": "soft",
+    "spacing": "8px-grid"
+  },
+  {
+    "id": "minimal-dark",
+    "category": "enterprise",
+    "tags": ["dashboard", "analytics", "internal"],
+    "radius": "8px",
+    "shadow": "soft",
+    "spacing": "8px-grid"
+  }
+]

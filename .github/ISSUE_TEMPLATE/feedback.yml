@@ -1,0 +1,47 @@
+name: RC feedback
+description: Share feedback from trying the public release candidate.
+title: "[Feedback]: "
+labels: ["feedback", "rc-feedback"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: CVF version or tag
+      placeholder: v4.0.0-rc.1
+    validations:
+      required: true
+  - type: dropdown
+    id: path
+    attributes:
+      label: What did you try?
+      options:
+        - Clone and local setup
+        - Non-coder web flow
+        - Deploy guide
+        - Extension authoring
+        - Governance release gate
+        - Documentation only
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: worked
+    attributes:
+      label: What worked well?
+      description: Note anything clear, useful, or surprisingly easy.
+    validations:
+      required: false
+  - type: textarea
+    id: friction
+    attributes:
+      label: What was confusing or blocked you?
+      description: This is the main RC signal. Be direct and concrete.
+    validations:
+      required: true
+  - type: textarea
+    id: request
+    attributes:
+      label: What would make CVF more useful?
+      description: Provider requests, docs gaps, UX friction, missing examples, or workflow needs.
+    validations:
+      required: false

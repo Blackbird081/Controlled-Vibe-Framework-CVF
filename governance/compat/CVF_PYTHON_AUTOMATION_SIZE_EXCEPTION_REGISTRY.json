@@ -1,0 +1,5 @@
+{
+  "softThresholdLines": 600,
+  "hardThresholdLines": 1200,
+  "exceptions": []
+}

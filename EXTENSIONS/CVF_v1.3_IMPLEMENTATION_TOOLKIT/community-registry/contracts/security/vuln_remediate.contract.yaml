@@ -1,0 +1,88 @@
+# Vulnerability Remediation Capability
+# Domain: security
+# Risk: R3 (Critical - modifies code to fix vulnerabilities)
+
+capability_id: "VULN_REMEDIATE_v1"
+domain: "security"
+description: "Automatically remediate known vulnerabilities by patching code or dependencies"
+risk_level: "R3"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Execution"
+  allowed_phases:
+    - "D"
+  required_decisions:
+    - "SECURITY_TEAM_APPROVAL"
+    - "CODE_CHANGE_APPROVED"
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "vulnerability_id"
+    type: "string"
+    required: true
+    description: "CVE ID or internal vulnerability identifier"
+  - name: "target_type"
+    type: "string"
+    required: true
+    description: "Type of remediation"
+    enum: ["dependency", "code_patch", "config"]
+  - name: "target_path"
+    type: "string"
+    required: true
+    description: "Path to file or package to remediate"
+  - name: "dry_run"
+    type: "boolean"
+    required: false
+    default: true
+    description: "Preview changes without applying"
+  - name: "create_backup"
+    type: "boolean"
+    required: false
+    default: true
+    description: "Create backup before modification"
+
+output_spec:
+  - name: "remediated"
+    type: "boolean"
+    description: "Whether vulnerability was remediated"
+  - name: "changes"
+    type: "array"
+    description: "List of changes made"
+  - name: "backup_path"
+    type: "string"
+    description: "Path to backup if created"
+  - name: "verification"
+    type: "object"
+    description: "Post-remediation verification results"
+  - name: "rollback_command"
+    type: "string"
+    description: "Command to rollback changes"
+
+execution:
+  side_effects: true
+  rollback_possible: true
+  idempotent: false
+  execution_type: "EXECUTABLE"
+  expected_duration: "30-300 seconds"
+
+audit:
+  trace_level: "Full"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "vulnerability_id"
+    - "target_path"
+    - "changes"
+    - "approver"
+    - "security_reviewer"
+
+failure_info:
+  known_failure_modes:
+    - "Patch incompatible with current version"
+    - "Breaking changes in dependency update"
+    - "Cannot verify fix after application"
+    - "Rollback failed"
+  worst_case_impact: "Application broken due to incompatible fix"
+  human_intervention_required: true

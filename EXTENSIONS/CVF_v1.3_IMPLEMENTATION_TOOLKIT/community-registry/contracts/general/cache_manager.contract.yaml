@@ -1,0 +1,72 @@
+# Cache Manager Capability
+# Domain: general
+# Risk: R1 (Modifies in-memory state)
+
+capability_id: "CACHE_MANAGER_v1"
+domain: "general"
+description: "Manage in-memory cache operations (get, set, delete)"
+risk_level: "R1"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Execution"
+  allowed_phases:
+    - "C"
+    - "D"
+  required_decisions: []
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "operation"
+    type: "string"
+    required: true
+    description: "Cache operation to perform"
+    enum: ["get", "set", "delete", "clear", "keys"]
+  - name: "key"
+    type: "string"
+    required: false
+    description: "Cache key (required for get/set/delete)"
+  - name: "value"
+    type: "any"
+    required: false
+    description: "Value to cache (required for set)"
+  - name: "ttl"
+    type: "integer"
+    required: false
+    default: 3600
+    description: "Time to live in seconds (for set)"
+  - name: "namespace"
+    type: "string"
+    required: false
+    default: "default"
+    description: "Cache namespace"
+
+output_spec:
+  - name: "success"
+    type: "boolean"
+    description: "Whether operation succeeded"
+  - name: "value"
+    type: "any"
+    description: "Retrieved value (for get)"
+  - name: "keys"
+    type: "array"
+    description: "List of keys (for keys operation)"
+  - name: "exists"
+    type: "boolean"
+    description: "Whether key existed"
+
+execution:
+  side_effects: true
+  rollback_possible: true
+  idempotent: false
+  execution_type: "EXECUTABLE"
+  expected_duration: "< 100ms"
+
+audit:
+  trace_level: "Minimal"
+  required_fields:
+    - "timestamp"
+    - "operation"
+    - "key"
+    - "success"

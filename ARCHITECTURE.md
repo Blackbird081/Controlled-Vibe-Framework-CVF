@@ -1,318 +1,298 @@
 # CVF Architecture
 
-Memory class: POINTER_RECORD
+> Front-door architecture view for GitHub readers.
+>
+> Current readout: CVF is a governance-first AI/agent control framework with live non-coder governance proof, certified Alibaba + DeepSeek provider lanes, and mandatory live API release evidence for governance claims.
+>
+> This page is one of the three root front-door entrypoints alongside `README.md` and `START_HERE.md`.
 
-Status: CURRENT PUBLIC ARCHITECTURE
+## 1. System Shape
 
-CVF is a governance control plane. Its job is to control how AI and agents are
-allowed to act, not to replace the agents or providers that perform the work.
+CVF is easiest to understand as a governance-first stack with four distinct roles:
 
-The core architecture is local-first and provider-agnostic:
+- `Meta governance` defines why the system exists and what it should optimize for
+- `Control plane` defines how execution is constrained
+- `Execution channels` deliver governed experiences for coders and non-coders
+- `Evidence + continuation governance` decides whether the system can safely deepen or reopen
 
-- CVF receives an input and assembles context.
-- CVF applies rules, risk, approval, DLP, output validation, and evidence.
-- The actual work may be performed by any bounded provider, plugin, tool, or
-  external agent.
-- CVF records enough evidence for an operator or developer to inspect what
-  happened.
+The current publication posture is live-first:
+
+- governance behavior is proven through real provider execution, not mock strings;
+- Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` are certified provider lanes;
+- mock mode is valid only for UI structure checks;
+- release-quality proof runs through `python scripts/run_cvf_release_gate_bundle.py --json`.
+- Web is governance-inherited on the active governed AI path, but is not the full CVF runtime.
+- Workspace bootstrap is now agent-enforcement-ready when generated artifacts and the workspace doctor pass.
+
+Current optimization posture:
+
+- the master architecture and core module baseline are stable-by-default;
+- future core changes should be evidence-driven and narrow, usually to absorb useful external knowledge or close a measured control gap;
+- the highest-value continuation is now non-coder benefit: make CVF's governed path visibly useful, repeatable across downstream workspaces, and backed by live evidence.
 
 Diagram set:
 
-- module map: how input, control plane, execution boundary, governance
-  expansion, and learning plane relate
+- module map: how meta governance, control plane, execution channels, and evidence governance relate
 - dependency rules: which layers may depend on which lower layers
-- active reference path: how a governed request reaches provider execution and
-  receipt closure
-- interaction model: the live-proof sequence from user intent to audit/freeze
-  evidence
-
-## Purpose
-
-Describe CVF's public architecture in a diagram-first form so developers and
-LLM/agent readers can understand the control-plane boundary quickly.
-
-## Scope
-
-This document covers the current public repository architecture: guard contract,
-control plane, execution plane, governance expansion, learning plane, web
-surface, provider boundary, and provenance/public split. It does not document
-the full private development history.
-
-## Claim Boundary
-
-CVF controls the governance path around AI and agent execution. It does not
-claim to own provider infrastructure, replace every external agent, or prove
-governance behavior through mock UI checks alone.
-
-## Canonical Flow
-
-```text
-request
-  -> intake and context assembly
-  -> risk classification
-  -> policy and approval gate
-  -> provider or agent adapter
-  -> execution
-  -> DLP/redaction and output validation
-  -> audit receipt
-  -> governed result
-```
+- active reference path: how a governed request reaches provider execution and receipt closure
+- interaction model: the live-proof sequence from user intent to audit/freeze evidence
 
 ```mermaid
 flowchart TB
-  subgraph UserBoundary["Input Boundary"]
-    U1["Non-coder UI"]
-    U2["Developer SDK/CLI"]
-    U3["Plugin / External Agent"]
-  end
+    subgraph META["Meta Governance Layer"]
+        DOCT["Doctrine<br/>ECOSYSTEM/doctrine"]
+        OPER["Operating Model<br/>ECOSYSTEM/operating-model"]
+        STRAT["Strategy and Roadmaps<br/>ECOSYSTEM/strategy + docs/roadmaps"]
+    end
 
-  subgraph ControlPlane["Governance Control Plane"]
-    C1["Intake + Context Assembly"]
-    C2["Risk Classification"]
-    C3["Policy + Approval Gate"]
-    C4["Provider / Agent Routing"]
-  end
+    subgraph CTRL["Governance Control Plane"]
+        CONTRACT["Shared Guard Contract<br/>EXTENSIONS/CVF_GUARD_CONTRACT"]
+        RUNTIME["Canonical Governance Runtime<br/>CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL"]
+        GATES["CI + Local Compat Gates<br/>governance/compat + .githooks"]
+    end
 
-  subgraph ExecutionBoundary["Execution Boundary"]
-    E1["Provider Adapter"]
-    E2["Agent / Tool Adapter"]
-    E3["Runtime Job State"]
-  end
+    subgraph CHANNELS["Execution Channels"]
+        SDK["Coder-facing SDK and governed loop"]
+        WEB["Web UI and non-coder governed flows"]
+        AGENTS["Multi-agent runtime and adapters"]
+    end
 
-  subgraph GovernanceExpansion["Governance Expansion"]
-    G1["DLP + Redaction"]
-    G2["Output Validation"]
-    G3["Bypass Detection"]
-    G4["Audit Receipt"]
-  end
+    subgraph EVIDENCE["Evidence and Continuation Governance"]
+        BASE["Baselines + Reviews + Readiness"]
+        HOLD["GC-018 + post-closure reassessment"]
+    end
 
-  subgraph LearningPlane["Learning Plane"]
-    L1["Feedback Ledger"]
-    L2["Drift / Pattern Signal"]
-    L3["Governed Reinjection"]
-  end
+    DOCT --> CONTRACT
+    DOCT --> RUNTIME
+    OPER --> WEB
+    STRAT --> BASE
 
-  U1 --> C1
-  U2 --> C1
-  U3 --> C1
-  C1 --> C2 --> C3 --> C4
-  C4 --> E1
-  C4 --> E2
-  E1 --> G1
-  E2 --> G1
-  E3 --> G4
-  G1 --> G2 --> G3 --> G4
-  G4 --> L1 --> L2 --> L3
-  L3 --> C1
+    CONTRACT --> SDK
+    CONTRACT --> WEB
+    CONTRACT --> AGENTS
+    RUNTIME --> SDK
+    RUNTIME --> WEB
+    RUNTIME --> AGENTS
+    GATES --> CONTRACT
+    GATES --> RUNTIME
+    GATES --> BASE
+
+    SDK --> BASE
+    WEB --> BASE
+    AGENTS --> BASE
+    BASE --> HOLD
 ```
 
-## Planes
+Diagram note: this is the public module map, not an exhaustive folder tree. It shows how doctrine and operating model govern the control plane, how the guard/runtime pair feeds execution channels, and how evidence gates future continuation.
 
-| Plane | Responsibility |
-|---|---|
-| Guard Contract | Shared types, rules, enforcement primitives, runtime helpers. |
-| Control Plane | Intake, routing, context packaging, knowledge selection, provider selection. |
-| Execution Plane | Dispatch, command/runtime boundary, policy gate, async execution status. |
-| Governance Expansion | Checkpoints, watchdogs, audit logs, reintake, external asset governance. |
-| Learning Plane | Feedback ledger, truth score, pattern detection, drift, reinjection. |
-| Web Surface | Operator/non-coder visibility and control surface over governed paths. |
+## 2. Dependency Rules
 
-## Public Repository Tree
+The engineering stack is intentionally asymmetric:
 
-This renewed public repository is intentionally smaller than the provenance
-archive. When cloned, the working tree should look like this at the top level:
-
-```text
-Controlled-Vibe-Framework-CVF/
-|-- ARCHITECTURE.md
-|-- GOVERNANCE.md
-|-- PROVIDERS.md
-|-- COST_AND_QUOTA.md
-|-- PROVENANCE.md
-|-- README.md
-|-- netlify.toml
-|-- ECOSYSTEM/
-|   `-- doctrine/
-|-- EXTENSIONS/
-|   |-- CVF_GUARD_CONTRACT/
-|   |-- CVF_CONTROL_PLANE_FOUNDATION/
-|   |-- CVF_EXECUTION_PLANE_FOUNDATION/
-|   |-- CVF_GOVERNANCE_EXPANSION_FOUNDATION/
-|   |-- CVF_LEARNING_PLANE_FOUNDATION/
-|   |-- CVF_MODEL_GATEWAY/
-|   |-- CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/
-|   |-- CVF_v1.6_AGENT_PLATFORM/
-|   |   `-- cvf-web/
-|   |-- CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/
-|   `-- supporting bounded modules...
-|-- docs/
-|   |-- evidence/
-|   `-- EXPORT_MANIFEST.md
-|-- governance/
-|   `-- public-surface-manifest.json
-|-- scripts/
-|   |-- check_public_surface.py
-|   |-- run_cvf_release_gate_bundle.py
-|   `-- provider readiness scripts
-`-- .github/
-    |-- workflows/
-    `-- pull_request_template.md
-```
-
-The provenance archive keeps the full development journal, raw wave history,
-reviews, rebuttals, handoffs, and local operational traces. The public tree
-keeps only the product surface, architecture, runnable code, curated evidence,
-and release gates.
-
-## Dependency Rules
-
-```mermaid
-flowchart LR
-  Doctrine["Doctrine / Architecture"] --> Guard["Guard Contract"]
-  Guard --> Control["Control Plane"]
-  Guard --> Execution["Execution Plane"]
-  Control --> Web["Web Control Surface"]
-  Execution --> Web
-  Control --> Providers["Provider Adapters"]
-  Execution --> Providers
-  Providers --> Evidence["Receipts + Evidence"]
-  Web --> Evidence
-  Evidence --> Learning["Learning Plane"]
-  Learning --> Control
-```
-
-The dependency direction is deliberate:
-
-- doctrine defines boundaries, but does not execute runtime behavior;
-- guard contracts must stay reusable and provider-neutral;
-- provider adapters must not bypass risk, approval, DLP, validation, or receipt
-  creation;
-- web may expose controls, but it must not become the only runtime path;
-- evidence may summarize behavior only when live proof exists.
-
-## Active Reference Path
-
-For governance claims, the active path must reach a real provider API call and
-produce receipt/evidence output.
+- higher execution layers depend downward
+- Layer 0 never depends upward
+- doctrine governs engineering, but does not execute code
+- evidence governs continuation, but does not replace runtime controls
 
 ```mermaid
 flowchart TB
-  subgraph Request["Request and governance"]
-    direction LR
-    Intent["User intent<br/>coder / non-coder"]
-    Entry["Entry surface<br/>SDK / Web / API"]
-    Guard["Guard contract<br/>phase / role / risk / scope"]
-    Runtime["Governance runtime<br/>INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE"]
-  end
+    META["Meta Layer<br/>Doctrine / Operating Model / Strategy"]
 
-  subgraph Run["Approved execution"]
-    direction LR
-    Approval["Approval checkpoint"]
-    Execute["Execution<br/>inside approved boundary"]
-    Provider["Certified provider lane<br/>Alibaba primary<br/>DeepSeek bounded"]
-  end
+    L3["Layer 3<br/>Web Platform, APIs, non-coder surfaces"]
+    L2["Layer 2<br/>Canonical runtime, orchestrator, workflow bridge"]
+    L1["Layer 1<br/>Shared guard contract, skill and risk semantics"]
+    L0["Layer 0<br/>Frozen baseline primitives and foundational rules"]
 
-  subgraph Close["Evidence closure"]
-    direction LR
-    Review["Review and audit evidence"]
-    Receipt["Freeze artifact / receipt"]
-  end
+    EVID["Cross-cutting evidence layer<br/>baselines, reviews, release posture"]
 
-  Intent --> Entry --> Guard --> Runtime
-  Runtime --> Approval --> Execute --> Provider
-  Provider --> Review --> Receipt
+    META -. governs .-> L3
+    META -. governs .-> L2
+    META -. governs .-> L1
+    META -. governs .-> L0
+
+    L3 --> L2
+    L2 --> L1
+    L1 --> L0
+
+    L3 --> EVID
+    L2 --> EVID
+    L1 --> EVID
+    EVID --> HOLD["Continuation gate<br/>GC-018 / reassessment"]
 ```
 
-Diagram note: Alibaba/DashScope is the primary certified release lane. DeepSeek
-has bounded provider-lane evidence. Provider parity is not claimed.
+Diagram note: dependency direction is intentionally conservative. Higher product surfaces can depend on the lower governance layers, but Layer 0 and the guard semantics should not depend on Web UI or provider-specific behavior.
 
-## Interaction Model
+## 3. Active Reference Path
 
-This sequence shows the practical governed loop. Mock UI checks do not count as
-governance proof unless the live provider call and receipt evidence are present.
+The current active path is the clearest expression of CVF today. For governance claims, this path must reach a real provider API call.
+
+```mermaid
+flowchart TB
+    subgraph REQUEST["Request and governance"]
+        direction LR
+        INTENT["User intent<br/>coder / non-coder"]
+        ENTRY["Entry surface<br/>SDK / wizard / API"]
+        GUARDS["Guard contract<br/>phase / role / risk / scope"]
+        ORCH["Runtime orchestrator<br/>INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE"]
+    end
+
+    subgraph RUN["Approved execution"]
+        direction LR
+        APPROVAL["Approval checkpoints"]
+        EXEC["Execution<br/>inside approved boundary"]
+        PROVIDER["Certified provider lane<br/>Alibaba primary<br/>DeepSeek bounded"]
+    end
+
+    subgraph CLOSE["Evidence closure"]
+        direction LR
+        REVIEW["Review and audit evidence"]
+        FREEZE["Freeze artifact / receipt"]
+    end
+
+    INTENT --> ENTRY
+    ENTRY --> GUARDS
+    GUARDS --> ORCH
+    ORCH --> APPROVAL
+    APPROVAL --> EXEC
+    EXEC --> PROVIDER
+    PROVIDER --> REVIEW
+    REVIEW --> FREEZE
+```
+
+Diagram note: this is the path that must reach a real provider API call before CVF can claim governance behavior. Alibaba/DashScope is the primary certified release lane; DeepSeek has certified canary evidence and bounded confirmatory coverage. Provider parity is not claimed.
+
+## 4. Interaction Model
+
+This is the practical governed loop that CVF currently proves on the active path. Mock UI tests do not count as governance evidence.
 
 ```mermaid
 sequenceDiagram
-  actor User
-  participant Entry as SDK or Web Entry
-  participant Guard as Guard Contract
-  participant Runtime as Runtime + Tool/Agent
-  participant Provider as Live Provider API
-  participant Evidence as Audit / Freeze
+    actor User
+    participant Entry as SDK or Web Entry
+    participant Guard as Guard Contract
+    participant Runtime as Runtime + Tool/Agent
+    participant Provider as Live Provider API
+    participant Evidence as Audit / Freeze
 
-  User->>Entry: submit intent
-  Entry->>Guard: evaluate boundaries
-  Guard-->>Entry: allow / block / escalate
-  Entry->>Runtime: open governed path
-  Runtime->>Runtime: run canonical phase loop
-  Runtime->>Provider: live call inside approved boundary
-  Provider-->>Runtime: model output
-  Runtime->>Evidence: review receipt + freeze artifact
-  Evidence-->>User: reviewable outcome
+    User->>Entry: submit intent
+    Entry->>Guard: evaluate boundaries
+    Guard-->>Entry: allow / block / escalate
+    Entry->>Runtime: open governed path
+    Runtime->>Runtime: run canonical phase loop
+    Runtime->>Provider: live call inside approved boundary
+    Provider-->>Runtime: model output
+    Runtime->>Evidence: review receipt + freeze artifact
+    Evidence-->>User: reviewable outcome
 ```
 
-## Provider And Agent Boundary
+Diagram note: mock UI tests can validate screens and navigation, but this sequence only counts as governance proof when the provider call is live and the resulting receipt/evidence is captured.
 
-CVF does not need to own the model or the worker agent. A provider, plugin,
-tool, or external agent connects to CVF through an adapter boundary.
+## 5. What This Means
 
-The adapter must make governance-visible facts available:
+The architecture should be read this way:
 
-- selected provider/model
-- request metadata
-- risk and policy decision
-- output validation result
-- token/cost signal where available
-- audit receipt reference
+- CVF is not just a collection of extensions
+- the control plane is the point of coherence
+- Web UI, SDK flows, and multi-agent paths are valuable only when they stay under the same governed semantics
+- baselines, reviews, and continuation gates are part of the system boundary, not just project paperwork
+- deeper governance and evidence records matter, but they are not the preferred first-click path from the repository front door
+- provider choice is user-owned, but governance evidence remains CVF-owned
+- release-quality governance claims require live API-backed evidence; mock mode is UI-only
 
-CVF 16.5 adds public deterministic contracts for gateway routing, credential
-boundaries, fallback policy, quota ledger, sticky sessions, controlled memory,
-knowledge intake, document artifact rendering, OpenSpec change packets, tool
-trace/sandbox posture, MCP business actions, observe-only runtime signals, and
-proposal-only skill evolution. These contracts improve runtime reviewability;
-live governance behavior still requires release-gate evidence.
+## 6. Current Evidence Posture
 
-## Local-First Posture
+| Claim | Current status | Evidence |
+| --- | --- | --- |
+| Non-coder governed AI path | Live-proven | W149 trusted-form corpus: Alibaba direct API `40/40`, Alibaba browser UI `40/40`, DeepSeek confirmatory subset `12/12` |
+| Non-coder adoption journey | Live-proven | W119 evidence pack `3/3` locked journeys pass: first governed output, project knowledge use, evidence handoff |
+| Multi-provider operability | Certified on 2 lanes | Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` both `CERTIFIED`; provider parity is not claimed |
+| Release gate | Mandatory live governance | W152 preserves `python scripts/run_cvf_release_gate_bundle.py --json` PASS, including live governance E2E |
+| Mock boundary | UI-only | `AGENTS.md` and live evidence packet |
+| Provider parity | Not claimed | Speed, cost, quality, latency, and reliability remain provider economics |
+| Web CVF inheritance | Active path only | Web is governance-inherited on `/api/execute`; it does not claim full CVF runtime inheritance |
+| Workspace agent enforcement | Delivered | W112-T1 adds downstream `AGENTS.md`, `.cvf/` manifest/policy, and workspace doctor checks |
+| Downstream adoption proof | Repeatable across 3 tested kinds | W114-CP7 proves cli-productivity, web-app-planning, and data-analysis — all doctor 11/11 PASS, all tests pass, sample 3 includes a secret-free bridge to live Web evidence |
+| Trusted-form web front door | Live-usable under W149 boundary | 40-form corpus locked; Alibaba full matrix passed; DeepSeek subset passed |
 
-The default deployment posture is local-first. Developers can clone and run CVF
-on their own machine. Web exists to make the same controls visible and usable,
-especially for non-coders and operators.
+## 7. Current Control Boundaries
 
-Managed/cloud persistence can be added later, but it must not become the only
-valid way to use CVF.
+### Web
 
-## Web Boundary
+The web surface can deepen control, but it should not claim to be the whole CVF runtime. The correct boundary is:
 
-`cvf-web` is a control surface. It is not the whole CVF runtime.
+- `YES`: live-proven governance on the active governed AI execution path
+- `YES`: provider routing, DLP, output validation, audit, and bypass detection on the meaningful execution path
+- `NO`: physical sandbox isolation for arbitrary code execution
+- `NO`: full inheritance of every CVF module, guard plane, and workspace/agent behavior
 
-The web app helps users:
+Delivered deepening milestone: [W112-T1 Workspace Agent Enforcement and Web Control Uplift](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md).
 
-- submit governed requests
-- see risk and provider posture
-- inspect evidence receipts
-- export deliverable packs and evidence summaries
-- run protected governance jobs
-- operate non-coder workflows
+### Workspace
 
-Claims about web governance must still be backed by live provider evidence.
-The newly public CVF 16.5 runtime contracts are backend primitives until the
-web app exposes dedicated non-coder flows for them.
+The current workspace bootstrap protects the CVF core by placing downstream projects in sibling folders and generates agent-enforcement artifacts for the downstream project.
 
-## Public vs Provenance Boundary
+Delivered W112-T1 behavior:
 
-This repository is the public product surface. It should be useful to
-developers evaluating the system, operators running local-first governance, and
-integrators building adapters.
+- generate downstream `AGENTS.md`
+- generate `.cvf/manifest.json` and `.cvf/policy.json`
+- add a workspace doctor/preflight gate
+- require first-request agent protocol before downstream execution
 
-The following material is intentionally kept outside the public repo unless it
-is curated into evidence:
+Delivered W113-T1 proof:
 
-- raw handoff logs;
-- rebuttal chains;
-- historical wave notes;
-- local runtime state;
-- browser traces and temporary artifacts;
-- private key setup transcripts;
-- draft assessments that no longer describe the current product.
+- bootstrap a real downstream sample project outside CVF core
+- record first-request agent declaration
+- execute `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`
+- capture live API-backed governance evidence
 
-The public-surface scanner enforces that boundary before push.
+### Non-Coder Value
+
+The most important current product question is no longer whether the core CVF module architecture is coherent. The practical question is whether a non-coder receives enough visible benefit to trust and reuse CVF.
+
+Current proven baseline:
+
+- one-provider non-coder governed value is proven on the validated Alibaba lane;
+- knowledge-native context can improve output quality in `/api/execute`;
+- Web exposes governed execution metadata on the active live path;
+- workspace adoption is proven for one downstream sample.
+- W114 CP4 adds compact live outcome evidence: 19/19 expected route decisions, 12/12 useful allowed outputs, 5/5 guided high-risk blocks, 3/3 knowledge hits, 2/2 follow-up refinements, and 2/2 approval artifacts.
+- W114 CP5 makes the main processing UI display route-returned governance evidence instead of leaving that evidence only in API responses.
+- W114 CP6 gives downstream workspaces a secret-free bridge receipt that links workspace doctor proof to CVF Web live evidence records.
+- W114 CP7 proves the downstream adoption pattern is repeatable across three tested sample kinds: `scripts/w114_cp7_multi_sample_downstream_proof.ps1` creates 3 sample projects (cli-productivity, web-app-planning, data-analysis), all passing doctor 11/11 and unit tests, with sample 3 also writing a secret-free bridge to live Web evidence.
+- W114 CP8 publishes the public evidence packet: `docs/reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md` summarizes plain-language non-coder benefit claims, evidence chain, claim boundaries, and known limitations.
+- W119 proves a bounded first-use adoption journey end-to-end: secret-free first-run readiness, project knowledge ingest/retrieval, governed live `/api/execute`, visible/exportable evidence receipt, and 3/3 locked live journeys passing on the Alibaba lane.
+
+Current posture: W119 closed delivered. Downstream adoption pattern is repeatable across tested sample kinds, and one realistic non-coder Web adoption journey is now live-proven with project knowledge and evidence handoff. Public claims remain bounded to live Web `/api/execute`, tested workspace artifacts/doctor/bridge evidence, and local single-process knowledge persistence.
+
+Latest closed non-coder value roadmap: [W119-T1 Non-Coder Adoption Proof And Evidence UX](docs/roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md).
+
+## 8. Read Next
+
+### General Orientation
+
+- [README](README.md)
+- [Agent Instructions](AGENTS.md)
+- [Getting Started](docs/GET_STARTED.md)
+- [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md)
+
+### Architecture Depth
+
+- [Detailed Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md)
+- [Ecosystem Architecture](CVF_ECOSYSTEM_ARCHITECTURE.md)
+- [Reference Governed Loop](docs/reference/CVF_REFERENCE_GOVERNED_LOOP.md)
+
+### Status And Governance Context
+
+- [Live Evidence Publication Packet](docs/reference/CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md)
+- [Release Candidate Truth Packet](docs/reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md)
+- [Provider Lane Readiness Matrix](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
+- [Known Limitations Register](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
+- [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)
+- [W112-T1 Workspace Agent Enforcement And Web Control Uplift Roadmap](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md)
+- [W113-T1 First Downstream Project Proof Roadmap](docs/roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md)
+- [W114-T1 Non-Coder Value Maximization And Evidence Roadmap](docs/roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md)
+- [W114-T1 Non-Coder Outcome Evidence Pack](docs/assessments/CVF_W114_T1_NONCODER_OUTCOME_EVIDENCE_PACK_2026-04-23.md)
+- [W114-T1 Web Benefit Visibility Assessment](docs/assessments/CVF_W114_T1_WEB_BENEFIT_VISIBILITY_ASSESSMENT_2026-04-23.md)
+- [W114-T1 Workspace-To-Web Evidence Bridge Assessment](docs/assessments/CVF_W114_T1_WORKSPACE_WEB_EVIDENCE_BRIDGE_ASSESSMENT_2026-04-23.md)
+- [W119-T1 Non-Coder Adoption Proof And Evidence UX Roadmap](docs/roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md)
+- [W119-T1 Non-Coder Adoption Evidence Pack](docs/assessments/CVF_W119_T1_NONCODER_ADOPTION_EVIDENCE_PACK_2026-04-23.md)

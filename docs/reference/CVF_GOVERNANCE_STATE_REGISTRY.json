@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "2026-03-07",
+  "generatedAt": "2026-03-06T18:23:35.388530Z",
+  "status": "active",
+  "agentCount": 1,
+  "sources": {
+    "agentRegistry": "governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md",
+    "selfUatDecisionLog": "governance/toolkit/04_TESTING/CVF_SELF_UAT_DECISION_LOG.md"
+  },
+  "agents": {
+    "AI_ASSISTANT_V1": {
+      "registryBinding": {
+        "agentId": "AI_ASSISTANT_V1",
+        "certificationStatus": "APPROVED_INTERNAL",
+        "approvedPhases": [
+          "DESIGN",
+          "BUILD",
+          "REVIEW"
+        ],
+        "approvedSkills": [
+          "code_generation",
+          "code_review"
+        ],
+        "lastSelfUatDate": "2026-03-07"
+      },
+      "uatBinding": {
+        "status": "PASS",
+        "lastRunAt": "2026-03-07T01:25:00Z"
+      }
+    }
+  }
+}

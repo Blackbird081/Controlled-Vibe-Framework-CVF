@@ -30,6 +30,9 @@ export type AnalyticsEventType =
     | 'followup_started'
     | 'evidence_exported'
     | 'deliverable_pack_exported'
+    // EVT-5: task recovery after governance friction
+    | 'task_recovery_prompted'
+    | 'task_recovery_started'
     // W129-T1: controlled rollout signal capture
     | 'rollout_flag_enabled'
     | 'rollout_session_start';

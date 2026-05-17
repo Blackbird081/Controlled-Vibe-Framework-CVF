@@ -1,0 +1,70 @@
+# Vulnerability Scan Capability
+# Domain: security
+# Risk: R0 (Read-only scanning, no modifications)
+
+capability_id: "VULN_SCAN_v1"
+domain: "security"
+description: "Scan code or dependencies for known security vulnerabilities"
+risk_level: "R0"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Analysis"
+  allowed_phases:
+    - "C"
+    - "D"
+  required_decisions: []
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "scan_type"
+    type: "string"
+    required: true
+    description: "Type of scan to perform"
+    enum: ["code", "dependencies", "container", "all"]
+  - name: "target"
+    type: "string"
+    required: true
+    description: "Path or URL to scan"
+  - name: "severity_threshold"
+    type: "string"
+    required: false
+    default: "medium"
+    description: "Minimum severity to report"
+    enum: ["low", "medium", "high", "critical"]
+  - name: "include_cve"
+    type: "boolean"
+    required: false
+    default: true
+    description: "Include CVE identifiers"
+
+output_spec:
+  - name: "vulnerabilities"
+    type: "array"
+    description: "List of vulnerabilities found"
+  - name: "summary"
+    type: "object"
+    description: "Summary counts by severity"
+  - name: "scan_time"
+    type: "string"
+    description: "Time taken for scan"
+  - name: "risk_score"
+    type: "integer"
+    description: "Overall risk score (0-100)"
+
+execution:
+  side_effects: false
+  rollback_possible: true
+  idempotent: true
+  execution_type: "EXECUTABLE"
+  expected_duration: "10-60 seconds"
+
+audit:
+  trace_level: "Full"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "scan_type"
+    - "target"
+    - "risk_score"

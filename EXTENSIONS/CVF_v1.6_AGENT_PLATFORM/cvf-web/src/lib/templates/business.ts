@@ -182,26 +182,188 @@ COMPARISON CRITERIA:
 [criteria]
 
 OUTPUT FORMAT:
-- Competitor Matrix → SWOT per Competitor → Differentiation Opportunities → Market Positioning
+- Competitor Matrix → Competitor Implications → Differentiation Opportunities → Action Plan → Validation Checks
 
 SUCCESS CRITERIA:
 - Ma trận so sánh các đối thủ
 - Điểm mạnh/yếu từng đối thủ
-- Cơ hội khác biệt hóa`,
-        outputExpected: ['Competitor Matrix', 'SWOT per Competitor', 'Differentiation Opportunities', 'Market Positioning'],
+- Cơ hội khác biệt hóa có first action
+- Có cách validate từng differentiation angle`,
+        outputExpected: ['Competitor Matrix', 'Competitor Implications', 'Differentiation Opportunities', 'Action Plan', 'Validation Checks'],
         outputTemplate: `## Competitor Analysis Output
 
 ## 1. Competitor Matrix
-| Criteria | Your Company | Competitor A | Competitor B |
-| --- | --- | --- | --- |
+| Criteria | Your Product/App | Competitor / Alternative A | Competitor / Alternative B | Operator Implication |
+| --- | --- | --- | --- | --- |
 
-## 2. SWOT per Competitor
+## 2. Competitor Implications
+- What users already expect:
+- What competitors make difficult:
+- What a simple product can credibly do better:
 
 ## 3. Differentiation Opportunities
-- Gap:
-- How to capture:
+| Differentiation Angle | User Pain It Solves | Proof Needed | First Action | Risk |
+| --- | --- | --- | --- | --- |
 
-## 4. Market Positioning`,
+## 4. Action Plan
+| Step | Owner/Role | Action | Artifact | Success Metric | Acceptance Check |
+| --- | --- | --- | --- | --- | --- |
+
+## 5. Validation Checks
+- [ ] Each angle is tied to a real user pain
+- [ ] Each angle has a proof or validation method
+- [ ] The operator knows the next action to test differentiation`,
         difficulty: 'medium',
+    },
+    {
+        id: 'operator_plan',
+        name: 'Kế hoạch Vận hành',
+        icon: '🗓️',
+        description: 'Tạo kế hoạch hành động có timeline, owner, metric và acceptance checks cho người vận hành không chuyên',
+        category: 'business',
+        fields: [
+            { id: 'goal', type: 'text', label: 'Mục tiêu kế hoạch', placeholder: 'VD: Launch marketplace trong 30 ngày', required: true, section: 'required', hint: 'Kết quả thực tế cần đạt được', example: 'Ra mắt marketplace gia sư khu phố trong 30 ngày' },
+            { id: 'context', type: 'textarea', label: 'Bối cảnh', placeholder: 'Mô tả sản phẩm, đội ngũ, tình trạng hiện tại...', required: true, rows: 5, section: 'required', hint: 'Cung cấp bối cảnh đủ để chia phase và owner', example: 'Đội nhỏ, cần onboarding gia sư, signup phụ huynh, matching workflow' },
+            { id: 'timeline', type: 'text', label: 'Timeline', placeholder: 'VD: 30 ngày, 6 tuần, Q2', required: false, section: 'advanced', hint: 'Mốc thời gian mong muốn', example: '30 ngày' },
+            { id: 'owners', type: 'text', label: 'Owner / vai trò', placeholder: 'VD: Ops lead, support, founder', required: false, section: 'advanced', hint: 'Các vai trò có thể nhận việc', example: 'Founder, ops lead, support contractor' },
+            { id: 'constraints', type: 'textarea', label: 'Ràng buộc', placeholder: 'Budget, nhân sự, dữ liệu, rủi ro...', required: false, rows: 3, section: 'advanced', hint: 'Giới hạn cần tính vào kế hoạch', example: 'Small team, limited budget, no engineering this month' },
+        ],
+        intentPattern: `INTENT:
+Tôi muốn tạo kế hoạch vận hành cho [goal].
+
+CONTEXT:
+[context]
+
+TIMELINE: [timeline]
+OWNERS / ROLES: [owners]
+CONSTRAINTS:
+[constraints]
+
+OUTPUT FORMAT:
+- Operator Action Plan → First 24-72 Hour Start Procedure → Detailed Timeline → Operating Cadence and Decision Branches → QA Checks → Risks/Failure Modes/Escalation → Acceptance Checks
+
+SUCCESS CRITERIA:
+- Có timeline/phases rõ ràng
+- Mỗi bước có owner hoặc role
+- Mỗi bước có artifact, success metric, acceptance check
+- Có decision branches, recurring cadence, QA checkpoints và escalation rule
+- Có daily/weekly detail đủ cụ thể cho non-coder
+- Người không chuyên có thể bắt đầu trong 24-72 giờ`,
+        outputExpected: ['Operator Action Plan', 'First 24-72 Hour Start Procedure', 'Detailed Timeline', 'Operating Cadence and Decision Branches', 'QA Checks', 'Risks/Failure Modes/Escalation', 'Acceptance Checks'],
+        outputTemplate: `# Operator Action Plan
+
+## 1. Goal, Constraints, Done State, And Assumptions
+- Goal:
+- Constraints:
+- Done state:
+- Assumptions:
+
+## 2. First 24-72 Hour Start Procedure
+| Step | Owner/Role | Action | Concrete Artifact | Done Signal | Acceptance Check |
+| --- | --- | --- | --- | --- | --- |
+| 1. | | | | | |
+| 2. | | | | | |
+| 3. | | | | | |
+
+## 3. Detailed Timeline
+| Phase/Date | Owner/Role | Detailed Action | Concrete Artifact | Success Metric | Acceptance Check |
+| --- | --- | --- | --- | --- | --- |
+| 1. | | | | | |
+| 2. | | | | | |
+| 3. | | | | | |
+
+## 4. Operating Cadence And Decision Branches
+| Cadence/Situation | Owner/Role | What To Check | Decision Rule | Next Action |
+| --- | --- | --- | --- | --- |
+| Daily/weekly | | | | |
+| Exception | | | | |
+
+## 5. QA Checks And Review Checkpoints
+- Pre-launch QA:
+- Operational QA:
+- Customer/user-facing QA:
+- Review checkpoints:
+
+## 6. Risks, Dependencies, Failure Modes, And Escalation
+- Key risks:
+- Dependencies:
+- Failure mode:
+- Escalation rule:
+
+## 7. Acceptance Checks
+- [ ] Owner is clear for every action
+- [ ] Required artifacts are named
+- [ ] Metrics are measurable
+- [ ] Acceptance checks are specific enough to verify
+- [ ] First 72 hours can be executed without extra strategy work`,
+        difficulty: 'easy',
+    },
+    {
+        id: 'decision_memo',
+        name: 'Decision Memo',
+        icon: '⚖️',
+        description: 'So sánh các lựa chọn bằng cùng tiêu chí và đưa ra recommendation có decision rule',
+        category: 'business',
+        fields: [
+            { id: 'decision', type: 'text', label: 'Quyết định cần đưa ra', placeholder: 'VD: Chọn channel growth đầu tiên', required: true, section: 'required', hint: 'Nêu rõ câu hỏi quyết định', example: 'Chọn giữa content marketing, partnerships, paid ads' },
+            { id: 'context', type: 'textarea', label: 'Bối cảnh', placeholder: 'Sản phẩm, thị trường, người mua, mục tiêu...', required: true, rows: 5, section: 'required', hint: 'Thông tin giúp so sánh các option', example: 'Niche newsletter product, limited budget, needs first 500 subscribers' },
+            { id: 'options', type: 'textarea', label: 'Các lựa chọn', placeholder: 'Mỗi option một dòng', required: true, rows: 4, section: 'required', hint: 'Các option phải được so sánh cùng tiêu chí', example: 'Content marketing\nPartnerships\nPaid ads' },
+            { id: 'constraints', type: 'textarea', label: 'Ràng buộc', placeholder: 'Budget, timeline, risk tolerance...', required: false, rows: 3, section: 'advanced', hint: 'Giới hạn ảnh hưởng đến recommendation', example: 'Limited budget, small operator team, need activation this month' },
+            { id: 'criteria', type: 'text', label: 'Tiêu chí ưu tiên', placeholder: 'VD: cost, speed, confidence, risk', required: false, section: 'advanced', hint: 'Các tiêu chí so sánh quan trọng nhất', example: 'Cost, speed to validate, effort, risk' },
+        ],
+        intentPattern: `INTENT:
+Tôi muốn tạo decision memo cho [decision].
+
+CONTEXT:
+[context]
+
+OPTIONS:
+[options]
+
+CONSTRAINTS:
+[constraints]
+
+CRITERIA: [criteria]
+
+OUTPUT FORMAT:
+- Recommendation and First Activation Step → Option-by-Option Comparison → Decision Rule/Switch Trigger/Rollback → Risks and Assumption Checks → Activation Acceptance Checks
+
+SUCCESS CRITERIA:
+- So sánh mọi option được nêu
+- Dùng cùng tiêu chí cho từng option
+- Recommendation có first activation step trong 24-72 giờ
+- Có rule để đổi quyết định nếu điều kiện thay đổi
+- Có switch/rollback trigger và validation checks cho risks/assumptions`,
+        outputExpected: ['Recommendation and First Activation Step', 'Option-by-Option Comparison', 'Decision Rule/Switch Trigger/Rollback', 'Risks and Assumption Checks', 'Activation Acceptance Checks'],
+        outputTemplate: `# Decision Activation Memo
+
+## 1. Recommendation And First Activation Step
+- Decision:
+- Recommended option:
+- Why it wins:
+- First 24-72 hour activation step:
+- Owner/role:
+- Acceptance check for the first step:
+
+## 2. Option-By-Option Comparison
+| Option | Best Fit Scenario | Pros | Cons | Cost/Effort | Risks | Activation Step | Evidence/Assumption |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+
+## 3. Decision Rule, Switch Trigger, And Rollback
+- Decision rule:
+- Switch trigger:
+- Rollback or pause trigger:
+- When to revisit:
+
+## 4. Risks And Assumption Checks
+| Risk/Assumption | How To Validate | Owner/Role | Deadline/Timebox | Mitigation |
+| --- | --- | --- | --- | --- |
+
+## 5. Activation Acceptance Checks
+- [ ] Every named option was compared
+- [ ] Operator knows the first 24-72 hour activation step
+- [ ] Switch or rollback trigger is explicit
+- [ ] Risks and assumptions have validation checks`,
+        difficulty: 'easy',
     },
 ];

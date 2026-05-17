@@ -1,0 +1,8 @@
+[
+  {
+    "id": "PERF-001",
+    "severity": "high",
+    "type": "image_format",
+    "allowed": ["webp", "avif"]
+  }
+]

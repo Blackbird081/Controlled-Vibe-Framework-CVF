@@ -202,25 +202,45 @@ TARGET: [target]
 COMPETITOR PRICES: [competitors]
 
 OUTPUT FORMAT:
-- Pricing Assessment → Value Analysis → Competitive Position → Optimization Opportunities → Recommended Structure
+- Recommendation Summary → Pricing Tiers/Options → Assumptions/Guardrails → First Experiment → Risk/Validation Checks
 
 SUCCESS CRITERIA:
-- Value-based pricing analysis
-- Competitive positioning
-- Pricing psychology
-- Đề xuất tối ưu`,
-        outputExpected: ['Pricing Assessment', 'Value Analysis', 'Competitive Position', 'Optimization Opportunities', 'Recommended Structure'],
-        outputTemplate: `## Pricing Strategy Output
+- Concrete tiers or pricing options
+- Target user per option
+- Included limits/features
+- Price anchors or relative bands when exact prices are not supplied
+- First pricing experiment
+- Risk and validation checks`,
+        outputExpected: ['Recommendation Summary', 'Pricing Tiers/Options', 'Assumptions/Guardrails', 'First Experiment', 'Risk/Validation Checks'],
+        outputTemplate: `## Pricing Recommendation
 
-## 1. Pricing Assessment
+## 1. Recommendation Summary
+- Recommended pricing model:
+- Starting tiers or options:
+- Target user for the first test:
+- First pricing experiment:
+- Assumptions to validate:
 
-## 2. Value Analysis
+## 2. Pricing Tiers Or Options
+| Tier/Option | Target User | Included Features Or Limits | Price Anchor Or Relative Band | Why It Fits | Risk |
+| --- | --- | --- | --- | --- | --- |
 
-## 3. Competitive Position
+## 3. Assumptions And Guardrails
+- Supplied facts used:
+- Labeled assumptions:
+- Exact prices not supported by the input:
+- Guardrails for discounting or exceptions:
 
-## 4. Optimization Opportunities
+## 4. First Experiment
+| Step | Owner/Role | Action | Artifact | Success Metric | Acceptance Check |
+| --- | --- | --- | --- | --- | --- |
 
-## 5. Recommended Structure`,
+## 5. Risk And Validation Checks
+- [ ] Each tier or option has a clear target user
+- [ ] Included limits or features are explicit
+- [ ] Price anchors are labeled as supplied, relative, or assumed
+- [ ] First experiment can be run without another strategy pass
+- [ ] Risks and rollback or adjustment signals are visible`,
     },
     {
         id: 'content_quality',

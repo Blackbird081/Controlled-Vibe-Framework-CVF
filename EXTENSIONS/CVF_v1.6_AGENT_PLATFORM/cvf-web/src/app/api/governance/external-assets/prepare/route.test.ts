@@ -1,0 +1,256 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+const verifySessionCookieMock = vi.hoisted(() => vi.fn());
+
+vi.mock('@/lib/middleware-auth', () => ({
+  verifySessionCookie: verifySessionCookieMock,
+}));
+
+import { POST } from './route';
+
+describe('/api/governance/external-assets/prepare', () => {
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    process.env = { ...originalEnv };
+    delete process.env.CVF_SERVICE_TOKEN;
+    verifySessionCookieMock.mockReset();
+    verifySessionCookieMock.mockResolvedValue({
+      user: 'tester',
+      role: 'admin',
+      expiresAt: Date.now() + 1000 * 60 * 60,
+    });
+  });
+
+  it('returns 401 when no session and no service token', async () => {
+    verifySessionCookieMock.mockResolvedValueOnce(null);
+
+    const req = new Request('http://localhost/api/governance/external-assets/prepare', {
+      method: 'POST',
+      body: JSON.stringify({
+        profile: {},
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(401);
+    expect(data.success).toBe(false);
+    expect(data.error).toMatch(/Unauthorized/);
+  });
+
+  it('returns 400 when profile is missing', async () => {
+    const req = new Request('http://localhost/api/governance/external-assets/prepare', {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(400);
+    expect(data.success).toBe(false);
+    expect(data.error).toMatch(/profile/);
+  });
+
+  it('runs the bounded external-asset governance pipeline end-to-end', async () => {
+    process.env.CVF_SERVICE_TOKEN = 'svc';
+    verifySessionCookieMock.mockResolvedValueOnce(null);
+
+    const req = new Request('http://localhost/api/governance/external-assets/prepare', {
+      method: 'POST',
+      headers: { 'x-cvf-service-token': 'svc' },
+      body: JSON.stringify({
+        profile: {
+          source_ref: 'Windows_Skill_Normalization/CVF_W7_Windows_Skill_Normalization.md',
+          source_kind: 'document_bundle',
+          source_quality: 'internal_design_draft',
+          officially_verified: false,
+          provenance_notes: 'Curated from Windows skill normalization packet.',
+          candidate_asset_type: 'W7SkillAsset',
+          description_or_trigger: 'Normalize Windows PowerShell skills for CVF',
+          instruction_body:
+            'Normalize PowerShell-oriented skills for governed CVF use.\\n```powershell\\nGet-ChildItem\\n```',
+          tools: ['powershell'],
+          execution_environment: {
+            os: 'windows',
+            shell: 'powershell',
+            shell_version: '7.5',
+            script_type: 'ps1',
+            compatibility: 'native',
+          },
+        },
+        semanticItems: [
+          'CONTEXT_VALIDATION_REQUIRED',
+          { semanticItem: 'COMPLETE_OUTPUT_REQUIRED', declaredClass: 'output_contract' },
+        ],
+        windows: {
+          commandsValidated: true,
+          unsupportedOperatorsRemoved: true,
+          exitCodeHandlingExplicit: true,
+          deterministicExecution: true,
+        },
+        registry: {
+          governanceOwner: 'cvf-architecture',
+          approvalState: 'approved',
+          riskLevel: 'R1',
+          registryRefs: ['cvf://registry/w7/windows-normalization'],
+          evaluationEnabled: true,
+        },
+        diagnostic: {
+          taskId: 'task-001',
+          runId: 'run-001',
+          runtimeIndicator: 'NOT_PROVIDED',
+        },
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.success).toBe(true);
+    expect(data.data.workflowStatus).toBe('registry_ready');
+    expect(data.data.readyForRegistry).toBe(true);
+    expect(data.data.intake.valid).toBe(true);
+    expect(data.data.semanticPolicy.valid).toBe(true);
+    expect(data.data.normalizedCandidate.valid).toBe(true);
+    expect(data.data.registryReady.valid).toBe(true);
+    expect(data.data.windowsCompatibility.classification).toBe('WINDOWS_NATIVE');
+    expect(data.data.diagnosticPacket.executionEnvironmentSummary.declared).toBe(true);
+    expect(data.data.registryReady.governedAsset.governance.owner).toBe('cvf-architecture');
+    expect(data.data.governedCapability.capabilityClass).toBe('skill');
+    expect(data.data.governedCapability.ownerSurface).toBe('cvf-architecture');
+    expect(data.data.governedCapability.policyBinding).toBe(
+      'CVF_GOVERNED_CAPABILITY_INTAKE_DOCTRINE_2026-05-07',
+    );
+    expect(data.data.governedCapabilityValidation.valid).toBe(true);
+    expect(data.data.boundaryFirstGovernance.policyClass).toBe('restricted_execution_path');
+    expect(data.data.boundaryFirstGovernance.operatorDecisionRequired).toBe(false);
+    expect(data.data.governedContextProfile.advisoryOnly).toBe(true);
+    expect(data.data.governedContextProfile.handoffNeed).toBe('closure');
+    expect(data.data.continuityDelegation.phase).toBe('closure');
+    expect(data.data.continuityDelegation.delegationAllowed).toBe(false);
+    expect(data.data.scopedKnowledgeProvider.policyAuthority).toBe(false);
+    expect(data.data.scopedKnowledgeProvider.ownerSurface).toBe('knowledge-layer');
+  });
+
+  it('surfaces invalid intake shape through the runnable diagnostic pipeline', async () => {
+    const req = new Request('http://localhost/api/governance/external-assets/prepare', {
+      method: 'POST',
+      body: JSON.stringify({
+        profile: {
+          source_ref: 'CVF_ADDING_NEW/skill.md',
+          source_kind: 'repo',
+          source_quality: 'community_analysis',
+          officially_verified: false,
+          provenance_notes: '',
+          candidate_asset_type: 'W7SkillAsset',
+          description_or_trigger: 'Convert shell skill into governed CVF asset',
+          instruction_body:
+            'Use shell script directly.\\n```bash\\necho test\\n```',
+        },
+        windows: {
+          commandsValidated: false,
+          unsupportedOperatorsRemoved: false,
+          exitCodeHandlingExplicit: false,
+          deterministicExecution: false,
+        },
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.success).toBe(true);
+    expect(data.data.workflowStatus).toBe('invalid');
+    expect(data.data.readyForRegistry).toBe(false);
+    expect(data.data.intake.valid).toBe(false);
+    expect(data.data.diagnosticPacket.primaryAttribution).toBe('INTAKE_SHAPE');
+    expect(data.data.windowsCompatibility.classification).toBe('REJECTED_FOR_WINDOWS_TARGET');
+    expect(data.data.warnings).toContain('INTAKE_REQUIRED_PROVENANCE_NOTES');
+    expect(data.data.governedCapability.evaluationStatus).toBe('rejected');
+    expect(data.data.boundaryFirstGovernance.policyClass).toBe('hard_prohibition');
+    expect(data.data.governedContextProfile.advisoryOnly).toBe(true);
+    expect(data.data.continuityDelegation.phase).toBe('registry_review');
+    expect(data.data.scopedKnowledgeProvider.confidence).toBe('low');
+  });
+
+  it('returns workflowStatus=review_required when planner needs clarification (missing prerequisites)', async () => {
+    const req = new Request('http://localhost/api/governance/external-assets/prepare', {
+      method: 'POST',
+      body: JSON.stringify({
+        profile: {
+          source_ref: 'CVF_ADDING_NEW/skill.md',
+          source_kind: 'repo',
+          source_quality: 'community_analysis',
+          officially_verified: false,
+          provenance_notes: 'Curated from community analysis.',
+          candidate_asset_type: 'W7SkillAsset',
+          description_or_trigger: 'Convert shell skill into governed CVF asset',
+          instruction_body: 'Use shell script directly.',
+        },
+        // Provide candidates with prerequisites not in availableInputs — forces
+        // clarification_needed=true and provisionalSignal!=null, blocking registry_ready
+        planner: {
+          candidates: [
+            {
+              candidateRef: 'source:CVF_ADDING_NEW/skill.md',
+              triggerPhrases: ['Convert shell skill into governed CVF asset'],
+              prerequisites: ['APPROVED_REVIEW'],
+              riskLevel: 'R1',
+            },
+          ],
+          availableInputs: [],
+        },
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.success).toBe(true);
+    expect(data.data.intake.valid).toBe(true);
+    expect(data.data.plannerTrigger.clarification_needed).toBe(true);
+    expect(data.data.provisionalSignal).not.toBeNull();
+    expect(data.data.readyForRegistry).toBe(false);
+    expect(data.data.workflowStatus).toBe('review_required');
+    expect(data.data.warnings).toContain('PLANNER_CLARIFICATION_REQUIRED');
+  });
+
+  it('returns workflowStatus=review_required when intake valid but semantic policy invalid', async () => {
+    const req = new Request('http://localhost/api/governance/external-assets/prepare', {
+      method: 'POST',
+      body: JSON.stringify({
+        profile: {
+          source_ref: 'CVF_ADDING_NEW/skill.md',
+          source_kind: 'repo',
+          source_quality: 'community_analysis',
+          officially_verified: false,
+          provenance_notes: 'Curated from community analysis.',
+          candidate_asset_type: 'W7SkillAsset',
+          description_or_trigger: 'Convert shell skill into governed CVF asset',
+          instruction_body: 'Use shell script directly.',
+        },
+        // Provide semanticItems with a class mismatch to invalidate semantic policy
+        // while leaving intake valid — this forces review_required not invalid
+        semanticItems: [
+          { semanticItem: 'COMPLETE_OUTPUT_REQUIRED', declaredClass: 'wrong_class' },
+        ],
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.success).toBe(true);
+    expect(data.data.intake.valid).toBe(true);
+    expect(data.data.semanticPolicy).not.toBeNull();
+    expect(data.data.readyForRegistry).toBe(false);
+    expect(data.data.workflowStatus).toBe('review_required');
+  });
+});

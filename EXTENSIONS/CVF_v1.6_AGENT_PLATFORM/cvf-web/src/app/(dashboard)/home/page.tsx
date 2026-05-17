@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useMemo, useCallback, useEffect, useRef, startTransition } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Layers3, ShieldCheck, Sparkles, Wand2 } from 'lucide-react';
+import { BookOpenCheck, FileOutput, Layers3, ShieldCheck, Sparkles, Wand2 } from 'lucide-react';
 import { templates, generateIntent } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
 import { useProviders } from '@/lib/hooks/useExecute';
@@ -772,6 +772,23 @@ export default function HomePage() {
                                 </div>
                             </section>
                         )}
+
+                        <div className="grid gap-3 sm:grid-cols-2">
+                            {[
+                                { href: '/knowledge/intake', icon: BookOpenCheck, tone: 'emerald', label: language === 'vi' ? 'Nạp kiến thức' : 'Knowledge Intake', desc: language === 'vi' ? 'Thêm tài liệu mới vào kho có quản trị' : 'Add new knowledge to the governed vault' },
+                                { href: '/artifacts', icon: FileOutput, tone: 'indigo', label: language === 'vi' ? 'Xuất artifact' : 'Artifact Export', desc: language === 'vi' ? 'Xuất gói review HTML có governance receipt' : 'Export an HTML review packet with governance receipt' },
+                            ].map(({ href, icon: Icon, tone, label, desc }) => (
+                                <Link key={href} href={href} className={`flex items-start gap-4 rounded-[22px] border p-5 transition hover:shadow-md ${tone === 'emerald' ? 'border-emerald-200 bg-emerald-50/70 dark:border-emerald-500/20 dark:bg-emerald-500/8' : 'border-indigo-200 bg-indigo-50/70 dark:border-indigo-500/20 dark:bg-indigo-500/8'}`}>
+                                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${tone === 'emerald' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300' : 'bg-indigo-100 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300'}`}>
+                                        <Icon size={18} />
+                                    </div>
+                                    <div>
+                                        <div className={`text-sm font-semibold ${tone === 'emerald' ? 'text-emerald-900 dark:text-emerald-100' : 'text-indigo-900 dark:text-indigo-100'}`}>{label}</div>
+                                        <div className="mt-0.5 text-xs leading-5 text-slate-500 dark:text-white/45">{desc}</div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
 
                         <section className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none">
                             <div className="flex flex-col gap-6">

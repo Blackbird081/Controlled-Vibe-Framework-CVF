@@ -45,73 +45,206 @@ NHỮNG GÌ PHẢI GIỮ NGUYÊN:
 
 SUCCESS CRITERIA:
 - Analyze the subject and organize content so non-experts can follow each step
-- Chỉ ra bước làm, rule cần nhớ, và lỗi hay gặp
-- Kết thúc bằng checklist hoặc next step rõ ràng
+- Chỉ ra bước làm, required artifacts/fields, rule cần nhớ, QA checks, và lỗi hay gặp
+- Có decision branches và escalation rules khi tình huống rẽ nhánh
+- Kết thúc bằng handoff acceptance checklist rõ ràng
+- Giữ phần overview/assumptions ngắn; ưu tiên procedure, QA và recovery có thể làm ngay
 - Không yêu cầu người đọc hiểu API hoặc developer internals
 
 OUTPUT FORMAT (use these exact section headings in English):
 ## What This Document Is For
-## The Main Flow
-## Rules To Keep In Mind
-## Practical Example
-## Common Confusion And Fixes
-## Handoff Checklist`,
-        outputExpected: ['Mục tiêu tài liệu', 'Các bước hoặc quy tắc chính', 'Ví dụ / tình huống', 'Lỗi hay gặp và cách xử lý', 'Checklist bàn giao'],
+## Required Inputs, Artifacts, And Fields
+## Step-By-Step Procedure
+## Decision Branches
+## QA Checks
+## Common Failure Modes And Recovery
+## Final Handoff Acceptance Checklist`,
+        outputExpected: ['Mục tiêu tài liệu', 'Required inputs/artifacts/fields', 'Step-by-step procedure', 'Decision branches', 'QA checks', 'Failure recovery', 'Final handoff acceptance checklist'],
         difficulty: 'easy',
-        outputTemplate: `# Operational Documentation Packet
+        outputTemplate: `# SOP And Handoff Runbook
 
 ## 1. What This Document Is For
-- Topic
+- Topic, in one sentence
 - Who should use it
 - What they should achieve
+- Done state
+- Key assumptions, max 3 bullets
 
-## 2. The Main Flow
-- Step-by-step actions
-- Key decisions or branches
+## 2. Required Inputs, Artifacts, And Fields
+| Required Item | Source/Owner | Where It Lives | Needed Before Step | Acceptance Check |
+| --- | --- | --- | --- | --- |
 
-## 3. Rules To Keep In Mind
-- Required constraints
-- Terms or phrases that must stay unchanged
+## 3. Step-By-Step Procedure
+| Step | Owner/Role | Trigger | Action | Required Artifact Or Field | Done Signal | Acceptance Check |
+| --- | --- | --- | --- | --- | --- | --- |
 
-## 4. Practical Example
-- A realistic scenario
-- What good execution looks like
+## 4. Decision Branches
+| Situation | Decision Rule | Next Action | Owner/Role | Escalate When |
+| --- | --- | --- | --- | --- |
 
-## 5. Common Confusion And Fixes
-- Common mistake
-- How to recover
+## 5. QA Checks
+- Pre-handoff QA:
+- Data/content QA:
+- User-facing QA:
+- Audit/evidence to retain:
 
-## 6. Handoff Checklist
-- What to verify before passing work on`,
-        sampleOutput: `# Operational Documentation Packet
+## 6. Common Failure Modes And Recovery
+| Situation | How To Notice It | What To Do | When To Escalate |
+| --- | --- | --- | --- |
+
+## 7. Final Handoff Acceptance Checklist
+- [ ] Required artifacts or fields are complete
+- [ ] Procedure steps have visible done signals
+- [ ] QA checks have pass/fail evidence
+- [ ] Escalation rule is clear
+- [ ] Open assumptions are marked for confirmation`,
+        sampleOutput: `# SOP And Handoff Runbook
 
 ## 1. What This Document Is For
 - This guide explains how the team receives a new inbound lead and turns it into a same-day quotation.
 - It is written for new sales operators.
+- Done state: the lead is qualified, quoted, or escalated with notes.
+- Key assumptions: lead form and CRM access are available; the approved quote template exists.
 
-## 2. The Main Flow
-1. Check whether the form submission is complete.
-2. Call the lead within 2 hours.
-3. Confirm project type, budget range, and timeline.
-4. If the lead is qualified, send the correct quote package the same day.
+## 2. Required Inputs, Artifacts, And Fields
+| Required Item | Source/Owner | Where It Lives | Needed Before Step | Acceptance Check |
+| --- | --- | --- | --- | --- |
+| Lead form | Website form | CRM lead record | Step 1 | Required fields are present |
+| Quote template | Sales lead | Shared drive | Step 4 | Approved version is used |
 
-## 3. Rules To Keep In Mind
-- Keep the Enterprise Plus package name unchanged.
-- Never promise a timeline before qualification is complete.
-- Escalate any legal or procurement question to the manager.
+## 3. Step-By-Step Procedure
+| Step | Owner/Role | Trigger | Action | Required Artifact Or Field | Done Signal | Acceptance Check |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | Sales operator | New form arrives | Check whether the submission is complete | Lead form | Lead status updated | Missing fields are marked |
+| 2 | Sales operator | Lead is complete | Call the lead within 2 hours | Phone/email | Call note stored | Project type, budget, timeline captured |
 
-## 4. Practical Example
-- A lead asks for automation support for a 30-person team.
-- The operator confirms needs, checks budget fit, and sends the approved quote template.
+## 4. Decision Branches
+| Situation | Decision Rule | Next Action | Owner/Role | Escalate When |
+| --- | --- | --- | --- | --- |
+| Missing budget | Budget not stated | Ask for range before quote | Sales operator | Lead refuses or asks for procurement terms |
 
-## 5. Common Confusion And Fixes
-- If the lead asks for pricing before qualification, explain the quick intake first.
-- If required information is missing, pause and request the missing items before quoting.
+## 5. QA Checks
+- Lead status, notes, and next action are visible in CRM.
+- Quote uses approved package wording.
 
-## 6. Handoff Checklist
-- Lead status updated
-- Qualification notes stored
-- Quote sent or escalation recorded`,
+## 6. Common Failure Modes And Recovery
+| Situation | How To Notice It | What To Do | When To Escalate |
+| --- | --- | --- | --- |
+| Lead asks for pricing too early | Qualification fields are blank | Explain quick intake first | Legal/procurement terms appear |
+
+## 7. Final Handoff Acceptance Checklist
+- [ ] Lead status updated
+- [ ] Qualification notes stored
+- [ ] Quote sent or escalation recorded
+- [ ] Open assumptions are marked`,
+    },
+    {
+        id: 'faq_outline',
+        name: 'FAQ Outline',
+        icon: '❓',
+        description: 'Tạo FAQ có câu hỏi, câu trả lời trực tiếp, edge cases và publish readiness checks',
+        category: 'content',
+        fields: [
+            { id: 'subject', type: 'text', label: 'FAQ nói về việc gì?', placeholder: 'VD: Checkout flow cho khóa học online', required: true, section: 'required', hint: 'Tên workflow, sản phẩm hoặc phần cần giải thích', example: 'Checkout flow cho khóa học online' },
+            { id: 'context', type: 'textarea', label: 'Bối cảnh / ghi chú', placeholder: 'Dán thông tin thô, câu hỏi hay gặp, policy...', required: true, rows: 6, section: 'required', hint: 'Thông tin để viết câu trả lời cụ thể', example: 'Người mua chọn khóa học, nhập email, thanh toán, nhận link enroll. Hay hỏi về refund và lỗi thanh toán.' },
+            { id: 'audience', type: 'text', label: 'Audience', placeholder: 'VD: khách hàng mới, support operators', required: false, section: 'advanced', hint: 'Ai sẽ đọc FAQ', example: 'Customers and support operators' },
+            { id: 'mustCover', type: 'textarea', label: 'Must cover', placeholder: 'Payment, access, troubleshooting...', required: false, rows: 3, section: 'advanced', hint: 'Các nhóm câu hỏi phải có', example: 'Payment, enrollment access, refund, troubleshooting' },
+        ],
+        intentPattern: `INTENT:
+Tôi muốn tạo FAQ outline cho [subject].
+
+CONTEXT:
+[context]
+
+AUDIENCE: [audience]
+MUST COVER:
+[mustCover]
+
+OUTPUT FORMAT:
+- Audience and Scope → FAQ Entries → Edge Cases → Publish Readiness Checks
+
+SUCCESS CRITERIA:
+- Có 8-12 câu hỏi cụ thể
+- Câu trả lời trực tiếp, dễ hiểu
+- Bao gồm payment/access/troubleshooting khi liên quan
+- Có checklist xác nhận có thể publish`,
+        outputExpected: ['Audience and Scope', 'FAQ Entries', 'Edge Cases', 'Publish Readiness Checks'],
+        difficulty: 'easy',
+        outputTemplate: `# FAQ Outline
+
+## 1. Audience And Scope
+- Who this FAQ is for:
+- What workflow or product area it covers:
+
+## 2. FAQ Entries
+| Question | Direct Answer | When It Applies | Owner/Source To Confirm |
+| --- | --- | --- | --- |
+| 1. | | | |
+| 2. | | | |
+
+## 3. Must-Include Edge Cases
+- Payment/access/troubleshooting questions:
+- Policy or wording that must stay unchanged:
+
+## 4. Publish Readiness Checks
+- [ ] Answers are direct and understandable by the target audience
+- [ ] Missing facts are marked as assumptions or confirmation items
+- [ ] Support/operator escalation path is clear`,
+    },
+    {
+        id: 'acceptance_criteria',
+        name: 'Acceptance Criteria',
+        icon: '✅',
+        description: 'Viết acceptance criteria quan sát được, test được, kèm data/state/error expectations',
+        category: 'content',
+        fields: [
+            { id: 'feature', type: 'text', label: 'Feature / workflow', placeholder: 'VD: Dashboard weekly sales', required: true, section: 'required', hint: 'Tính năng hoặc workflow cần kiểm tra', example: 'Dashboard hiển thị weekly sales, conversion, open tasks' },
+            { id: 'context', type: 'textarea', label: 'Bối cảnh / yêu cầu', placeholder: 'Dữ liệu, trạng thái, role, constraints...', required: true, rows: 6, section: 'required', hint: 'Thông tin để viết tiêu chí test được', example: 'Dashboard cần cho operator kiểm weekly sales, conversion, open tasks trước handoff.' },
+            { id: 'users', type: 'text', label: 'Users / roles', placeholder: 'VD: operator, manager, customer', required: false, section: 'advanced', hint: 'Vai trò dùng tính năng', example: 'Non-technical operator and manager' },
+            { id: 'states', type: 'textarea', label: 'States to cover', placeholder: 'Empty, error, loading, permission...', required: false, rows: 3, section: 'advanced', hint: 'Các state cần test', example: 'Empty state, stale data, permission denied, failed refresh' },
+        ],
+        intentPattern: `INTENT:
+Tôi muốn viết acceptance criteria cho [feature].
+
+CONTEXT:
+[context]
+
+USERS / ROLES: [users]
+STATES TO COVER:
+[states]
+
+OUTPUT FORMAT:
+- Scope Under Test → Criteria By Workflow → Empty/Error/Edge States → Handoff Checks
+
+SUCCESS CRITERIA:
+- Mỗi tiêu chí quan sát được và test được
+- Có Given/When/Then hoặc pass/fail check
+- Bao gồm data source, refresh/state, empty/error expectations
+- Người không chuyên có thể xác nhận trước handoff`,
+        outputExpected: ['Scope Under Test', 'Criteria By Workflow', 'Empty/Error/Edge States', 'Handoff Checks'],
+        difficulty: 'easy',
+        outputTemplate: `# Acceptance Criteria Packet
+
+## 1. Scope Under Test
+- Feature/workflow:
+- User or operator outcome:
+
+## 2. Criteria By Workflow
+| Workflow Area | Given | When | Then | Data/State Requirement | Pass/Fail Check |
+| --- | --- | --- | --- | --- | --- |
+| 1. | | | | | |
+| 2. | | | | | |
+
+## 3. Empty, Error, And Edge States
+- Empty state:
+- Error state:
+- Permission/access state:
+- Refresh or data-latency state:
+
+## 4. Handoff Checks
+- [ ] Each criterion is observable
+- [ ] Each criterion can be verified by a non-technical operator or tester
+- [ ] Open assumptions are listed`,
     },
     {
         id: 'email_template',

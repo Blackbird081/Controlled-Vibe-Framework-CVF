@@ -15,9 +15,6 @@ import { lookupGuidedResponse } from './guided.response.registry';
 import { buildKnowledgeSystemPrompt, hasKnowledgeContext } from '@/lib/knowledge-context-injector';
 import { buildExecutionPrompt } from '@/lib/execute-prompt-contract';
 import { emitExecutionTelemetry, resolveTokenUsage } from '@/lib/execute-telemetry';
-import { resolveGovernanceFamily } from '@/lib/governance-family';
-import { buildGovernanceTaxEntry, logGovernanceTax } from '@/lib/governance-tax-logger';
-import { resolveProviderPolicy, executeWithFailover, type ProviderPreference } from '@/lib/provider-policy-engine';
 import { checkTeamQuota } from '@/lib/quota-guard';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { applyDLPFilter } from '@/lib/dlp-filter';
@@ -28,6 +25,7 @@ import { buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
 import type { WebGovernanceEnvelope } from '@/lib/web-governance-envelope';
 import { deriveServiceTokenIdentity, verifyServiceTokenRequest } from '@/lib/service-token-auth';
 import { hasValidationRetryBudget, resolveExecutionMaxTokens } from '@/lib/execute-route-budget';
+import { recordReportableDecisionObserved } from '@/lib/false-positive-report';
 import { getApprovalStore, type ApprovalRequestRecord } from '../approvals/store';
 import {
     approvalRecordMatchesActor,
@@ -127,7 +125,6 @@ function buildEvidenceReceipt(input: {
     knowledgeCollectionId?: string | null;
     knowledgeChunkCount?: number;
     approvalId?: string;
-    governanceFamily?: string;
     validationHint?: string;
 }): GovernanceEvidenceReceipt {
     return {
@@ -146,115 +143,9 @@ function buildEvidenceReceipt(input: {
         knowledgeCollectionId: input.knowledgeCollectionId ?? null,
         knowledgeChunkCount: input.knowledgeChunkCount,
         approvalId: input.approvalId,
-        governanceFamily: input.governanceFamily,
         validationHint: input.validationHint,
         generatedAt: input.envelope.requestTimestamp,
     };
-}
-
-function buildGovernedStopOutput(input: {
-    decision: 'BLOCK' | 'CLARIFY' | 'NEEDS_APPROVAL';
-    reason?: string;
-    missing?: string[];
-    approvalId?: string;
-    guidedResponse?: string | null;
-    userPrompt?: string;
-}): string {
-    const reason = input.reason?.trim();
-    const guidedResponse = input.guidedResponse?.trim();
-    const missing = (input.missing || [])
-        .map(field => field.trim())
-        .filter(Boolean);
-
-    if (input.decision === 'CLARIFY') {
-        const missingLines = missing.length
-            ? missing.map(field => `- ${field}`).join('\n')
-            : '- The goal, audience, constraints, and success criteria for this request.';
-
-        return [
-            '## CVF Decision: Clarification Needed',
-            '',
-            'I need a little more information before this can be executed safely and usefully.',
-            '',
-            'Please provide:',
-            missingLines,
-            '',
-            'Once those details are provided, CVF can re-check the request and continue through the governed path.',
-        ].join('\n');
-    }
-
-    if (input.decision === 'NEEDS_APPROVAL') {
-        return [
-            '## CVF Decision: Approval Required',
-            '',
-            'This request may be valid, but it crosses a boundary that needs explicit human approval before execution.',
-            ...(reason ? ['', `Reason: ${reason}`] : []),
-            ...(input.approvalId ? ['', `Approval request: ${input.approvalId}`] : []),
-            '',
-            'Safe next steps:',
-            '- Submit or wait for the approval decision tied to this request.',
-            '- Keep the request within the approved phase, scope, provider, and data-access boundary.',
-            '- If approval is not available, restate the goal as a lower-risk planning or documentation task.',
-            '',
-            buildApprovalPreparationOutput(input.userPrompt),
-            ...(guidedResponse ? ['', 'Suggested safe alternative:', guidedResponse] : []),
-        ].join('\n');
-    }
-
-    return [
-        '## CVF Decision: Blocked',
-        '',
-        'I cannot help execute that request because it would cross a safety, access, audit, or governance boundary.',
-        ...(reason ? ['', `Reason: ${reason}`] : []),
-        '',
-        'Safe next steps:',
-        '- Use an approved account, data source, and access path for any operational work.',
-        '- Report exposed credentials, secrets, or audit concerns through the appropriate security channel.',
-        '- Restate the request as a compliant planning, documentation, remediation, or review task.',
-        '- Keep evidence, approvals, and scope visible so the next attempt can pass governance review.',
-        ...(guidedResponse ? ['', 'Suggested safe alternative:', guidedResponse] : []),
-    ].join('\n');
-}
-
-function buildApprovalPreparationOutput(userPrompt?: string): string {
-    const normalizedPrompt = (userPrompt || '').toLowerCase();
-    const securityIncident =
-        /\b(credential|secret|token|api\s*key|leak|incident|indicator|account identifier|security)\b/i
-            .test(normalizedPrompt);
-    const externalAccess =
-        /\b(scrap|crawler|external tool|third-party|outside .*scope|data access|account access)\b/i
-            .test(normalizedPrompt);
-
-    if (securityIncident) {
-        return [
-            'Pre-approval safe work:',
-            '- Draft a disclosure or incident note without including raw credentials, tokens, indicators, or account identifiers.',
-            '- Prepare a redaction plan: replace sensitive values with labels such as [REDACTED_CREDENTIAL], [REDACTED_ACCOUNT], or [REDACTED_INDICATOR].',
-            '- List the approver, affected system, evidence source, containment status, and intended audience.',
-            '',
-            'Safe disclosure skeleton:',
-            '- Summary: A potential security exposure is under review.',
-            '- What is known: Describe the category of affected data without revealing sensitive values.',
-            '- Actions underway: revoke or rotate exposed credentials, preserve evidence, notify the security owner, and monitor for misuse.',
-            '- What recipients should do: avoid sharing raw secrets, follow the approved incident channel, and wait for confirmed next steps.',
-        ].join('\n');
-    }
-
-    if (externalAccess) {
-        return [
-            'Pre-approval safe work:',
-            '- Define the exact data source, owner, purpose, time window, and access method.',
-            '- Confirm the request stays within the declared scope and does not use personal or third-party accounts without approval.',
-            '- Prepare a lower-risk alternative using user-supplied sample data or a planning-only analysis.',
-        ].join('\n');
-    }
-
-    return [
-        'Pre-approval safe work:',
-        '- Prepare the approval packet: purpose, data involved, scope, approver, retention needs, and rollback path.',
-        '- Separate what can be planned now from what must wait for approval.',
-        '- Provide a safe, non-operational draft if the user only needs documentation before approval.',
-    ].join('\n');
 }
 
 export async function POST(request: NextRequest) {
@@ -465,16 +356,6 @@ export async function POST(request: NextRequest) {
             deepseek: process.env.DEEPSEEK_API_KEY,
         };
 
-        const template = body.templateId ? getTemplateById(body.templateId) : undefined;
-        body.governanceFamily = resolveGovernanceFamily({
-            governanceFamily: body.governanceFamily,
-            qbsFamily: body.qbsFamily,
-            intent: body.intent,
-            templateId: template?.id ?? body.templateId,
-            templateCategory: template?.category,
-            riskLevel: body.cvfRiskLevel,
-        }) ?? undefined;
-
         // Build the prompt from template inputs
         const userPrompt = buildExecutionPrompt(body as ExecutionRequest);
         const dlpResult = await applyDLPFilter(userPrompt);
@@ -500,27 +381,13 @@ export async function POST(request: NextRequest) {
         // Safety filters
         const safety = applySafetyFilters(filteredPrompt);
         if (safety.blocked) {
-            const output = buildGovernedStopOutput({
-                decision: 'BLOCK',
-                reason: safety.reason || 'Request blocked by safety filters.',
-            });
             return NextResponse.json(
                 {
                     success: false,
                     error: safety.reason || 'Request blocked by safety filters.',
-                    output,
                     details: safety.details,
                     provider,
                     model: 'blocked',
-                    governanceEnvelope: govEnvelope,
-                    policySnapshotId: govEnvelope.policySnapshotId,
-                    governanceEvidenceReceipt: buildEvidenceReceipt({
-                        envelope: govEnvelope,
-                        decision: 'BLOCK',
-                        riskLevel: body.cvfRiskLevel ?? 'R3',
-                        provider,
-                        model: 'blocked',
-                    }),
                 },
                 { status: 400 }
             );
@@ -561,7 +428,8 @@ export async function POST(request: NextRequest) {
         }
 
         const mode = body.mode || 'simple';
-        const executionMaxTokens = resolveExecutionMaxTokens(template?.id ?? body.templateId);
+        const template = body.templateId ? getTemplateById(body.templateId) : undefined;
+        const executionTemplateId = template?.id ?? body.templateId;
         const specFields = template?.fields || [];
         const requiresSkillPreflight = shouldRequireSkillPreflight({
             phase: body.cvfPhase,
@@ -588,60 +456,56 @@ export async function POST(request: NextRequest) {
 
         if (enforcement.status === 'BLOCK') {
             const guidedResponse = lookupGuidedResponse(userPrompt);
-            const blockReason = enforcement.reasons.join(' | ') || 'Execution blocked by CVF policy.';
-            const output = buildGovernedStopOutput({
-                decision: 'BLOCK',
-                reason: blockReason,
-                guidedResponse,
+            const governanceEvidenceReceipt = buildEvidenceReceipt({
+                envelope: govEnvelope,
+                decision: enforcement.status,
+                riskLevel: enforcement.riskGate?.riskLevel,
+                provider,
+                model: 'blocked',
+            });
+            await recordReportableDecisionObserved({
+                receipt: governanceEvidenceReceipt,
+                templateId: body.templateId || body.templateName,
             });
             return NextResponse.json(
                 {
                     success: false,
-                    error: blockReason,
-                    output,
+                    error: enforcement.reasons.join(' | ') || 'Execution blocked by CVF policy.',
                     provider,
                     model: 'blocked',
                     enforcement,
                     ...(guidedResponse ? { guidedResponse } : {}),
                     governanceEnvelope: govEnvelope,
                     policySnapshotId: govEnvelope.policySnapshotId,
-                    governanceEvidenceReceipt: buildEvidenceReceipt({
-                        envelope: govEnvelope,
-                        decision: enforcement.status,
-                        riskLevel: enforcement.riskGate?.riskLevel,
-                        provider,
-                        model: 'blocked',
-                    }),
+                    governanceEvidenceReceipt,
                 },
                 { status: 400 }
             );
         }
 
         if (enforcement.status === 'CLARIFY') {
-            const missing = enforcement.specGate?.missing?.map(field => field.label) || [];
-            const output = buildGovernedStopOutput({
-                decision: 'CLARIFY',
-                reason: enforcement.reasons.join(' | ') || 'Spec needs clarification before execution.',
-                missing,
+            const governanceEvidenceReceipt = buildEvidenceReceipt({
+                envelope: govEnvelope,
+                decision: enforcement.status,
+                riskLevel: enforcement.riskGate?.riskLevel,
+                provider,
+                model: 'clarify',
+            });
+            await recordReportableDecisionObserved({
+                receipt: governanceEvidenceReceipt,
+                templateId: body.templateId || body.templateName,
             });
             return NextResponse.json(
                 {
                     success: false,
                     error: 'Spec needs clarification before execution.',
-                    output,
-                    missing,
+                    missing: enforcement.specGate?.missing?.map(field => field.label) || [],
                     provider,
                     model: 'clarify',
                     enforcement,
                     governanceEnvelope: govEnvelope,
                     policySnapshotId: govEnvelope.policySnapshotId,
-                    governanceEvidenceReceipt: buildEvidenceReceipt({
-                        envelope: govEnvelope,
-                        decision: enforcement.status,
-                        riskLevel: enforcement.riskGate?.riskLevel,
-                        provider,
-                        model: 'clarify',
-                    }),
+                    governanceEvidenceReceipt,
                 },
                 { status: 422 }
             );
@@ -668,14 +532,6 @@ export async function POST(request: NextRequest) {
                 const guidedResponse = lookupGuidedResponse(userPrompt);
                 // CP9: Auto-create approval record so the user can track and resume post-approval
                 const approvalId = `apr-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-                const approvalReason = enforcement.reasons.join(' | ') || 'Human approval required before execution.';
-                const output = buildGovernedStopOutput({
-                    decision: 'NEEDS_APPROVAL',
-                    reason: approvalReason,
-                    approvalId,
-                    guidedResponse,
-                    userPrompt,
-                });
                 const approvalNow = new Date();
                 getApprovalStore().set(approvalId, {
                     id: approvalId,
@@ -709,8 +565,7 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json(
                     {
                         success: false,
-                        error: approvalReason,
-                        output,
+                        error: enforcement.reasons.join(' | ') || 'Human approval required before execution.',
                         provider,
                         model: 'approval-required',
                         enforcement,
@@ -732,8 +587,6 @@ export async function POST(request: NextRequest) {
                 );
             }
         }
-
-        const preProcessingEndMs = Date.now();
 
         // ── PRE-GUARDS: Run guard runtime pipeline (shared engine — Sprint 6) ──
         const guardEngine = getSharedGuardEngine();
@@ -856,24 +709,9 @@ export async function POST(request: NextRequest) {
         }
 
         govEnvelope.providerLane = routingResult.selectedProvider;
-        const baseRoutedProvider: AIProvider = routingResult.selectedProvider;
-
-        // ── PROVIDER POLICY ENGINE: preference + risk-tier resolution ──────────
-        const rawPreference = (rawBody as Record<string, unknown>).providerPreference;
-        const preference: ProviderPreference =
-            rawPreference === 'fast' || rawPreference === 'accurate' ? rawPreference : 'auto';
-        const rawRisk = (body.cvfRiskLevel ?? 'R1').trim().toUpperCase();
-        const policyRisk = (rawRisk === 'R0' || rawRisk === 'R1' || rawRisk === 'R2' || rawRisk === 'R3')
-            ? rawRisk as 'R0' | 'R1' | 'R2' | 'R3'
-            : 'R1' as const;
-        const policyResult = resolveProviderPolicy({
-            riskLevel: policyRisk,
-            preference,
-            configuredProviders: configuredProviders,
-            requestedProvider: baseRoutedProvider,
-        });
-        const routedProvider: AIProvider = policyResult.resolvedProvider;
+        const routedProvider: AIProvider = routingResult.selectedProvider;
         const routedApiKey = apiKeyMap[routedProvider];
+        const executionMaxTokens = resolveExecutionMaxTokens(executionTemplateId, routedProvider, body.model);
 
         // ── KNOWLEDGE RETRIEVAL + TENANT PARTITION ENFORCEMENT ────────────────────
         const retrievalResult = await queryKnowledgeChunks({
@@ -888,8 +726,9 @@ export async function POST(request: NextRequest) {
             typeof body.knowledgeCollectionId === 'string' && body.knowledgeCollectionId.trim()
                 ? body.knowledgeCollectionId.trim()
                 : null;
-        const knowledgeSource = retrievedKnowledgeContext ? 'retrieval' : 'none';
-        const enrichedSystemPrompt = hasKnowledgeContext(finalKnowledgeContext)
+        const knowledgeInjected = hasKnowledgeContext(finalKnowledgeContext);
+        const knowledgeSource = knowledgeInjected ? 'retrieval' : 'none';
+        const enrichedSystemPrompt = knowledgeInjected
             ? buildKnowledgeSystemPrompt(CVF_SYSTEM_PROMPT, finalKnowledgeContext, {
                 orgId: session?.orgId,
                 teamId: session?.teamId,
@@ -935,7 +774,7 @@ export async function POST(request: NextRequest) {
                         model: 'not configured',
                         routingDecision: routingResult.decision,
                         knowledgeSource,
-                        knowledgeInjected: !!enrichedSystemPrompt,
+                        knowledgeInjected,
                         knowledgeCollectionId: requestedKnowledgeCollectionId,
                         knowledgeChunkCount: retrievalResult.allowedChunkCount,
                     }),
@@ -944,32 +783,18 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const policyEngineEndMs = Date.now();
-
-        // ── EXECUTE AI with failover + auto-retry on output validation failure ──
-        const failoverExec = await executeWithFailover(
-            routedProvider,
-            policyResult.fallbackChain as AIProvider[],
-            policyResult.riskTierOverride,
-            (p: AIProvider) => {
-                const key = apiKeyMap[p];
-                if (!key) throw new Error(`No API key for failover provider: ${p}`);
-                return executeAI(p, key, filteredPrompt, {
-                    model: body.model,
-                    maxTokens: executionMaxTokens,
-                    ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}),
-                });
-            },
-        );
-        let aiResult = failoverExec.result;
-        const finalProvider = failoverExec.provider;
-        const failoverUsed = failoverExec.failoverUsed;
+        // ── EXECUTE AI with auto-retry on output validation failure ──
+        let aiResult = await executeAI(routedProvider, routedApiKey, filteredPrompt, {
+            model: body.model,
+            maxTokens: executionMaxTokens,
+            ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}),
+        });
         let outputValidation: ValidationResult | undefined;
         const retryState: RetryState = { attempt: 0, previousIssues: [] };
 
-        if (aiResult.success && aiResult.output) {
+        if (aiResult.success) {
             outputValidation = validateOutput({
-                output: aiResult.output,
+                output: aiResult.output ?? '',
                 intent: body.intent!,
                 templateName: body.templateName,
                 templateCategory: template?.category,
@@ -992,10 +817,10 @@ export async function POST(request: NextRequest) {
                     model: body.model,
                     maxTokens: executionMaxTokens,
                 });
-                if (!aiResult.success || !aiResult.output) break;
+                if (!aiResult.success) break;
 
                 outputValidation = validateOutput({
-                    output: aiResult.output,
+                    output: aiResult.output ?? '',
                     intent: body.intent!,
                     templateName: body.templateName,
                     templateCategory: template?.category,
@@ -1003,7 +828,7 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        if (aiResult.success && aiResult.output && outputValidation?.decision === 'RETRY') {
+        if (aiResult.success && outputValidation?.decision === 'RETRY') {
             await appendAuditEvent({
                 eventType: 'OUTPUT_VALIDATION_EXHAUSTED',
                 actorId: session?.userId ?? 'service-account',
@@ -1045,7 +870,7 @@ export async function POST(request: NextRequest) {
                         model: body.model ?? aiResult.model ?? routedProvider,
                         routingDecision: routingResult.decision,
                         knowledgeSource,
-                        knowledgeInjected: !!enrichedSystemPrompt,
+                        knowledgeInjected,
                         knowledgeCollectionId: requestedKnowledgeCollectionId,
                         knowledgeChunkCount: retrievalResult.allowedChunkCount,
                         approvalId: approvedRequestRecord?.id,
@@ -1055,8 +880,6 @@ export async function POST(request: NextRequest) {
                 { status: 422 },
             );
         }
-
-        const providerEndMs = Date.now();
 
         // ── POST-EXECUTION BYPASS DETECTION GUARD ──────────────────────────────
         if (aiResult.success && aiResult.output) {
@@ -1111,24 +934,6 @@ export async function POST(request: NextRequest) {
             ? resolveTokenUsage(filteredPrompt, aiResult.output, aiResult)
             : undefined;
 
-        const postProcessingEndMs = Date.now();
-        try {
-            logGovernanceTax(buildGovernanceTaxEntry({
-                request_id: govEnvelope.envelopeId,
-                phases: {
-                    pre_processing_ms: preProcessingEndMs - routeStartedAtMs,
-                    policy_engine_ms: policyEngineEndMs - preProcessingEndMs,
-                    provider_ms: providerEndMs - policyEngineEndMs,
-                    post_processing_ms: postProcessingEndMs - providerEndMs,
-                },
-                decision: enforcement.status,
-                provider: routedProvider,
-                governance_family: body.governanceFamily ?? null,
-            }));
-        } catch {
-            // Non-fatal
-        }
-
         return NextResponse.json({
             ...aiResult,
             usage,
@@ -1142,13 +947,9 @@ export async function POST(request: NextRequest) {
                 fallbackChain: routingResult.fallbackChain,
                 requestedProvider: provider,
                 routerOverrode: routingResult.selectedProvider !== null && routingResult.selectedProvider !== provider,
-                policyPreference: preference,
-                policyResolvedProvider: finalProvider,
-                policyRiskTierOverride: policyResult.riskTierOverride,
-                failoverUsed,
             },
             knowledgeInjection: {
-                injected: !!enrichedSystemPrompt,
+                injected: knowledgeInjected,
                 contextLength: finalKnowledgeContext?.length ?? 0,
                 source: knowledgeSource,
                 chunkCount: retrievalResult.allowedChunkCount,
@@ -1170,14 +971,12 @@ export async function POST(request: NextRequest) {
                 model: body.model ?? aiResult.model ?? routedProvider,
                 routingDecision: routingResult.decision,
                 knowledgeSource,
-                knowledgeInjected: !!enrichedSystemPrompt,
+                knowledgeInjected,
                 knowledgeCollectionId: requestedKnowledgeCollectionId,
                 knowledgeChunkCount: retrievalResult.allowedChunkCount,
                 approvalId: approvedRequestRecord?.id,
-                governanceFamily: body.governanceFamily,
                 validationHint: outputValidation?.qualityHint,
             }),
-            governanceFamily: body.governanceFamily ?? null,
         });
 
     } catch (error) {

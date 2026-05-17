@@ -1,0 +1,61 @@
+# Embedding Generation Capability
+# Domain: ai-ml
+# Risk: R0 (Read-only, generates vectors)
+
+capability_id: "EMBEDDING_GENERATE_v1"
+domain: "ai-ml"
+description: "Generate vector embeddings for text using ML models"
+risk_level: "R0"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Execution"
+  allowed_phases:
+    - "C"
+  required_decisions: []
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "text"
+    type: "string"
+    required: true
+    description: "Text to generate embedding for"
+    max_length: 8000
+  - name: "model"
+    type: "string"
+    required: false
+    default: "text-embedding-3-small"
+    description: "Embedding model to use"
+  - name: "dimensions"
+    type: "integer"
+    required: false
+    description: "Output embedding dimensions"
+
+output_spec:
+  - name: "embedding"
+    type: "array"
+    description: "Vector embedding"
+  - name: "dimensions"
+    type: "integer"
+    description: "Number of dimensions"
+  - name: "model_used"
+    type: "string"
+    description: "Model that generated embedding"
+  - name: "tokens"
+    type: "integer"
+    description: "Token count"
+
+execution:
+  side_effects: false
+  rollback_possible: true
+  idempotent: true
+  execution_type: "EXECUTABLE"
+  expected_duration: "1-3 seconds"
+
+audit:
+  trace_level: "Minimal"
+  required_fields:
+    - "timestamp"
+    - "model_used"
+    - "tokens"

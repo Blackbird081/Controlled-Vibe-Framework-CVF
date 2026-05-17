@@ -1,0 +1,27 @@
+name: Broken Contract - Invalid Risk Level
+version: "1.0.0"
+metadata:
+  description: "Invalid - bad risk_level value"
+  author: "test-suite"
+
+risk_level: "R99"  # Invalid - only R0, R1, R2, R3 allowed
+
+input_schema:
+  type: object
+  properties:
+    data:
+      type: string
+  required: ["data"]
+
+output_schema:
+  type: object
+  properties:
+    result:
+      type: string
+
+execution:
+  handler: "test_handler"
+  timeout_seconds: 30
+
+audit:
+  log_level: "INFO"

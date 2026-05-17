@@ -1,0 +1,67 @@
+# Text Analysis Capability
+# Domain: ai-ml
+# Risk: R0 (Read-only analysis)
+
+capability_id: "TEXT_ANALYSIS_v1"
+domain: "ai-ml"
+description: "Analyze text for sentiment, entities, and key phrases"
+risk_level: "R0"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Analysis"
+  allowed_phases:
+    - "B"
+    - "C"
+    - "D"
+  required_decisions: []
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "text"
+    type: "string"
+    required: true
+    description: "Text to analyze"
+    max_length: 10000
+  - name: "analyses"
+    type: "array"
+    required: false
+    default: ["sentiment", "entities", "key_phrases"]
+    description: "Types of analysis to perform"
+  - name: "language"
+    type: "string"
+    required: false
+    default: "auto"
+    description: "Text language (auto-detect if not specified)"
+
+output_spec:
+  - name: "sentiment"
+    type: "object"
+    description: "Sentiment analysis result"
+  - name: "entities"
+    type: "array"
+    description: "Named entities found"
+  - name: "key_phrases"
+    type: "array"
+    description: "Key phrases extracted"
+  - name: "language_detected"
+    type: "string"
+    description: "Detected language"
+  - name: "confidence"
+    type: "number"
+    description: "Overall confidence score"
+
+execution:
+  side_effects: false
+  rollback_possible: true
+  idempotent: true
+  execution_type: "EXECUTABLE"
+  expected_duration: "1-5 seconds"
+
+audit:
+  trace_level: "Minimal"
+  required_fields:
+    - "timestamp"
+    - "language_detected"
+    - "analyses"

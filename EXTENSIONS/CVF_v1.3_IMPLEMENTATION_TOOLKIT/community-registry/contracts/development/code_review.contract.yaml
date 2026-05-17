@@ -1,0 +1,72 @@
+# Code Review Capability
+# Domain: development
+# Risk: R1 (Controlled side effects)
+
+capability_id: "CODE_REVIEW_v1"
+domain: "development"
+description: "Review code for quality, security, and best practices"
+risk_level: "R1"
+version: "1.0"
+
+governance:
+  allowed_archetypes:
+    - "Analysis"
+    - "Execution"
+  allowed_phases:
+    - "C"
+    - "D"
+  required_decisions: []
+  required_status: "ACTIVE"
+
+input_spec:
+  - name: "code"
+    type: "string"
+    required: true
+    description: "Source code to review"
+  - name: "language"
+    type: "string"
+    required: false
+    default: "python"
+    description: "Programming language"
+  - name: "focus_areas"
+    type: "array"
+    required: false
+    default: ["quality", "security", "performance"]
+    description: "Areas to focus on during review"
+  - name: "severity_threshold"
+    type: "string"
+    required: false
+    default: "warning"
+    description: "Minimum severity to report"
+    enum: ["info", "warning", "error", "critical"]
+
+output_spec:
+  - name: "issues"
+    type: "array"
+    description: "List of issues found"
+    success_criteria: "All issues have severity, line, and description"
+  - name: "score"
+    type: "integer"
+    description: "Overall quality score (0-100)"
+  - name: "summary"
+    type: "string"
+    description: "Brief summary of the review"
+  - name: "suggestions"
+    type: "array"
+    description: "Improvement suggestions"
+
+execution:
+  side_effects: false
+  rollback_possible: true
+  idempotent: true
+  execution_type: "EXECUTABLE"
+  expected_duration: "5-30 seconds"
+
+audit:
+  trace_level: "Full"
+  required_fields:
+    - "timestamp"
+    - "actor"
+    - "language"
+    - "score"
+    - "issue_count"

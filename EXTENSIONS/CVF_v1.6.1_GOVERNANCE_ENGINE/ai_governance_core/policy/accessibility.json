@@ -1,0 +1,14 @@
+[
+  {
+    "id": "A11Y-001",
+    "severity": "critical",
+    "type": "contrast_ratio",
+    "threshold": 4.5
+  },
+  {
+    "id": "A11Y-002",
+    "severity": "critical",
+    "type": "min_font_size",
+    "threshold": 16
+  }
+]

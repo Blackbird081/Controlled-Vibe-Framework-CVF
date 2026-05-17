@@ -1,0 +1,64 @@
+{
+  "version": "1.0",
+  "matrix_id": "governance-severity-matrix",
+  "created_at": "2026-02-21T17:30:00Z",
+  "severity_levels": {
+    "LOW": {
+      "risk_weight_default": 0.1,
+      "requires_manual_review": false,
+      "requires_approval": false,
+      "auto_escalate": false,
+      "escalation_level": null,
+      "max_sla_hours": null,
+      "log_level": "INFO",
+      "action_override_priority": 5
+    },
+    "MEDIUM": {
+      "risk_weight_default": 0.4,
+      "requires_manual_review": true,
+      "requires_approval": false,
+      "auto_escalate": false,
+      "escalation_level": "TEAM_LEAD",
+      "max_sla_hours": 24,
+      "log_level": "WARNING",
+      "action_override_priority": 4
+    },
+    "HIGH": {
+      "risk_weight_default": 0.7,
+      "requires_manual_review": true,
+      "requires_approval": true,
+      "auto_escalate": false,
+      "escalation_level": "SECURITY_OFFICER",
+      "max_sla_hours": 12,
+      "log_level": "ERROR",
+      "action_override_priority": 3
+    },
+    "CRITICAL": {
+      "risk_weight_default": 0.95,
+      "requires_manual_review": true,
+      "requires_approval": true,
+      "auto_escalate": true,
+      "escalation_level": "CTO",
+      "max_sla_hours": 4,
+      "log_level": "CRITICAL",
+      "action_override_priority": 1
+    }
+  },
+  "decision_priority_order": [
+    "DENY",
+    "ESCALATE",
+    "REVIEW",
+    "SANDBOX",
+    "ALLOW"
+  ],
+  "global_thresholds": {
+    "risk_score_auto_block": 0.95,
+    "risk_score_force_review": 0.75,
+    "risk_score_force_sandbox": 0.5
+  },
+  "integrity": {
+    "hash_algorithm": "SHA256",
+    "checksum": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+    "immutable": true
+  }
+}

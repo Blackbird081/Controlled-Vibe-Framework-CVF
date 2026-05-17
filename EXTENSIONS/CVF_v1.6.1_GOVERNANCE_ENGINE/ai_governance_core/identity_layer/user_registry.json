@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "id": "u001",
+      "name": "minh.nguyen",
+      "role": "TEAM_LEAD"
+    },
+    {
+      "id": "u002",
+      "name": "security.admin",
+      "role": "SECURITY_OFFICER"
+    }
+  ]
+}

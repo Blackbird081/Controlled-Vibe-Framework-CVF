@@ -6,6 +6,7 @@ import { exportAnalyticsEvents, useAnalyticsEvents } from '@/lib/analytics';
 import { useLanguage } from '@/lib/i18n';
 import { GovernanceMetrics } from './GovernanceMetrics';
 import { RiskTrendChart } from './RiskTrendChart';
+import { EvtGovernanceHealthPanel } from './EvtGovernanceHealthPanel';
 import {
   computeLaneReadout,
   buildRolloutRecommendations,
@@ -266,6 +267,7 @@ export function AnalyticsDashboard() {
 
             {activeTab === 'governance' && (
                 <div className="space-y-4">
+                    <EvtGovernanceHealthPanel events={events} isVi={isVi} />
                     <GovernanceMetrics />
                     <RiskTrendChart />
                 </div>

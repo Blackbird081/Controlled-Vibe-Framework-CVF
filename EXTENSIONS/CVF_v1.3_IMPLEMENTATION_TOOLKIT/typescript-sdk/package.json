@@ -1,0 +1,51 @@
+{
+    "name": "@cvf/sdk",
+    "version": "1.3.0",
+    "description": "CVF (Controlled Vibe Framework) SDK for TypeScript/JavaScript",
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "scripts": {
+        "build": "tsup src/index.ts --format cjs,esm --dts",
+        "prepublishOnly": "npm run build",
+        "test": "vitest",
+        "lint": "eslint src/**/*.ts"
+    },
+    "files": [
+        "dist"
+    ],
+    "keywords": [
+        "cvf",
+        "ai",
+        "governance",
+        "skill-contracts",
+        "capability",
+        "llm"
+    ],
+    "author": "CVF Team",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "tsup": "^8.0.0",
+        "typescript": "^5.3.0",
+        "vitest": "^1.0.0",
+        "eslint": "^8.0.0"
+    },
+    "dependencies": {
+        "yaml": "^2.3.0"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}

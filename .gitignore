@@ -15,3 +15,16 @@ EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/.data/
 *.tsbuildinfo
 __pycache__/
 *.pyc
+
+# ── Internal governance artifacts — provenance repo only ──────────────────────
+# Agent execution briefs (Codex handoffs — never public)
+AGENT_HANDOFF*.md
+
+# GC-018 authorization baselines (internal decision records)
+docs/baselines/
+
+# Internal audit / review records
+docs/reviews/
+
+# Internal implementation roadmaps and Codex execution specs
+docs/roadmaps/

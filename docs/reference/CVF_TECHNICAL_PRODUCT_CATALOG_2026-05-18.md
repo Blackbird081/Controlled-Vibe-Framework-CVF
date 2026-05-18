@@ -1,13 +1,17 @@
 # CVF Technical Product Catalog
 
 Memory class: POINTER_RECORD
-Status: PUBLIC-CATALOG DRAFT
+Status: PHASE-B PUBLIC-CATALOG BASELINE
 
 ## Purpose
 
 This catalog gives users, developers, and agents a compact technical map of
 Controlled Vibe Framework (CVF). It separates what is already proven from what
 is intentionally bounded or still roadmap work.
+
+Phase B claim boundary:
+
+- `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 
 ## Scope
 
@@ -29,6 +33,26 @@ Catalog reconciliation model:
 ## Owner
 
 Owner surface: public/product orientation and claim-boundary documentation.
+
+## Source / Predecessor Evidence
+
+- `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
+- `docs/evidence/latest-release-gate.md`
+- `docs/evidence/provider-lanes.md`
+- `docs/evidence/web-governance-path.md`
+- `docs/evidence/cvf-16-5-runtime-absorption.md`
+
+## Decision / Baseline / Proposed Tranche
+
+Decision: Phase B public catalog baseline accepted for public orientation.
+
+Baseline: this catalog remains bounded to public repository evidence and the
+structured claim boundary. It does not claim complete Agent OS status,
+universal provider parity, full legacy absorption, or release readiness beyond
+published evidence.
+
+Proposed tranche: none. Future Phase D implementation requires separate
+GC-018 authorization.
 
 ## Requirements
 
@@ -143,6 +167,7 @@ Test-Path GOVERNANCE.md
 Test-Path governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md
 Test-Path docs/evidence/cvf-16-5-runtime-absorption.md
 Test-Path docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md
+Test-Path docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md
 Test-Path governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md
 Test-Path governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md
 Test-Path governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md
@@ -174,6 +199,7 @@ PASS governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md
 PASS scripts/run_cvf_release_gate_bundle.py
 PASS docs/evidence/cvf-16-5-runtime-absorption.md
 PASS docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md
+PASS docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md
 PASS governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md
 PASS governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md
 PASS governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md
@@ -202,6 +228,10 @@ Required posture:
 
 ## Claim Boundary
 
+The structured Phase B public claim boundary is:
+
+- `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
+
 CVF may claim:
 
 - governance-first AI control framework;
@@ -227,6 +257,7 @@ CVF must not claim yet:
 - `GOVERNANCE.md`
 - `docs/GET_STARTED.md`
 - `docs/evidence/README.md`
+- `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 - `docs/evidence/latest-release-gate.md`
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`

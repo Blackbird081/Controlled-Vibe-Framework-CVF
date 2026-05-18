@@ -31,11 +31,15 @@ and must not introduce private provenance links.
 - `docs/GET_STARTED.md`
 - `docs/evidence/README.md`
 - `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md`
+- `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 
 ## Claim Boundary
 
 Public documentation must preserve CVF's bounded claim posture. Mock-only UI
 checks are not release-quality governance proof.
+
+The structured Phase B public claim boundary is
+`docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`.
 
 ## Enforcement / Verification
 
@@ -51,4 +55,5 @@ python governance/compat/check_markdown_structural_completeness.py
 - `docs/evidence/latest-release-gate.md`
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`
+- `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 - `governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md`

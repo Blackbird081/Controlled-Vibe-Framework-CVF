@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "2026-05-19",
+  "templateId": "app_builder_complete",
+  "requiredRole": "BUILDER",
+  "minimumPermission": "output.product_brief",
+  "providerLane": "certified",
+  "dlpRequired": true,
+  "quotaRequired": true,
+  "receiptRequired": true,
+  "guardPolicyRef": "CVF_GOVERNED_EXECUTE_ROUTE",
+  "requiredIntakeFields": [
+    "appName",
+    "appType",
+    "problem",
+    "targetUsers",
+    "coreFeatures",
+    "successCriteria",
+    "platforms"
+  ],
+  "protectedBoundaryFields": [
+    "mustPreserve",
+    "outOfScope",
+    "constraints"
+  ],
+  "outputSections": [
+    "Product Brief",
+    "Core Workflows",
+    "Protected Constraints",
+    "Builder Plan",
+    "Acceptance Criteria",
+    "Handoff Checklist"
+  ],
+  "claimBoundary": "schema_defined_not_runtime_bound"
+}
+

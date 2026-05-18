@@ -5,7 +5,8 @@
   "main": "src/cli.ts",
   "scripts": {
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check": "tsc --noEmit"
   },
   "devDependencies": {
     "typescript": "^5.4.0",

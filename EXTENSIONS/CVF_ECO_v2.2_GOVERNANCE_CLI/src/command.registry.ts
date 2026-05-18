@@ -1,4 +1,5 @@
 import { CLICommand, CLICommandHandler, CLIArgs, CLIOutput, CLIConfig, DEFAULT_CLI_CONFIG } from "./types";
+import { executeGovernedTemplateCommand } from "./execute.client";
 
 export class CommandRegistry {
   private handlers: Map<CLICommand, CLICommandHandler> = new Map();
@@ -21,6 +22,21 @@ export class CommandRegistry {
         message: `Unknown command: ${args.command}. Run 'cvf-guard help' for usage.`,
         exitCode: 1,
       };
+    }
+    return handler.execute(args);
+  }
+
+  async executeAsync(args: CLIArgs): Promise<CLIOutput> {
+    const handler = this.handlers.get(args.command);
+    if (!handler) {
+      return {
+        success: false,
+        message: `Unknown command: ${args.command}. Run 'cvf-guard help' for usage.`,
+        exitCode: 1,
+      };
+    }
+    if (handler.executeAsync) {
+      return handler.executeAsync(args);
     }
     return handler.execute(args);
   }
@@ -78,6 +94,27 @@ export class CommandRegistry {
       description: "Evaluate an agent action against governance rules",
       usage: "cvf-guard evaluate --domain <domain> --action <action> --target <target> [--amount <n>]",
       execute: (args) => this.evaluateCommand(args),
+    });
+
+    this.register({
+      name: "execute",
+      description: "Execute a governed CVF template through the web execute route",
+      usage: "cvf execute --template <id> --role <role> [--input <json>] [--endpoint <url>] [--verbose]",
+      execute: (args) => {
+        if (args.flags.help === true || args.flags.h === true) {
+          return {
+            success: true,
+            message: "execute: Execute a governed CVF template through the web execute route\nUsage: cvf execute --template <id> --role <role> [--input <json>] [--endpoint <url>] [--verbose]",
+            exitCode: 0,
+          };
+        }
+        return {
+          success: false,
+          message: "The execute command performs HTTP I/O. Use GovernanceCLI.runAsync() or the async CLI entrypoint.",
+          exitCode: 1,
+        };
+      },
+      executeAsync: (args) => executeGovernedTemplateCommand(args),
     });
 
     this.register({

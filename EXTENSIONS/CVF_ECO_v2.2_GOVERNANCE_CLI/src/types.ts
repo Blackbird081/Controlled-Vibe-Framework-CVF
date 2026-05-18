@@ -1,5 +1,6 @@
 export type CLICommand =
   | "evaluate"
+  | "execute"
   | "session"
   | "report"
   | "audit"
@@ -25,6 +26,7 @@ export interface CLICommandHandler {
   description: string;
   usage: string;
   execute(args: CLIArgs): CLIOutput;
+  executeAsync?(args: CLIArgs): Promise<CLIOutput>;
 }
 
 export interface CLIConfig {

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { executeAI, AIProvider, ExecutionRequest, CVF_SYSTEM_PROMPT, type GovernanceEvidenceReceipt } from '@/lib/ai';
+import { executeAI, AIProvider, ExecutionRequest, CVF_SYSTEM_PROMPT } from '@/lib/ai';
 import { evaluateEnforcement } from '@/lib/enforcement';
 import { getTemplateById } from '@/lib/templates';
-import { isTrustedFormTemplateId } from '@/lib/form-routing';
 import { verifySessionCookie } from '@/lib/middleware-auth';
 import { applySafetyFilters } from '@/lib/safety';
 import { getRateLimiter } from '@/lib/rate-limit';
@@ -21,11 +20,29 @@ import { applyDLPFilter } from '@/lib/dlp-filter';
 import { withSessionAuditPayload } from '@/lib/middleware-auth';
 import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
 import { formatKnowledgeChunks, queryKnowledgeChunks } from '@/lib/knowledge-retrieval';
-import { buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
-import type { WebGovernanceEnvelope } from '@/lib/web-governance-envelope';
+import { buildEvidenceReceipt, buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
 import { deriveServiceTokenIdentity, verifyServiceTokenRequest } from '@/lib/service-token-auth';
 import { hasValidationRetryBudget, resolveExecutionMaxTokens } from '@/lib/execute-route-budget';
 import { recordReportableDecisionObserved } from '@/lib/false-positive-report';
+import { buildPhase2CProductBriefSliceForRoute } from '@/lib/phase2c-product-brief-slice';
+import { buildPhase3EOperationalMetricsForRoute } from '@/lib/phase3e-operational-emission';
+import {
+    buildWorkflowExecutionProjection,
+    resolveWorkflowBindingForExecution,
+} from '@/lib/workflows/workflow-resolver';
+import { buildRouteAuditMemoryCapture } from '@/lib/audit-memory-receipt';
+import {
+    buildRoleOutputDeniedResponse,
+    buildRolePermissionDeniedResponse,
+} from '@/lib/execute-role-permission-gate';
+import { resolveExecutionCVFRole, resolveExecutionOutputClass } from '@/lib/execute-role-resolver';
+import {
+    buildOutputBypassGuardResult,
+    checkRoleOutputPermission,
+    detectBypassInOutput,
+    resolveGuardAction,
+    shouldRequireSkillPreflight,
+} from '@/lib/execute-route-guards';
 import { getApprovalStore, type ApprovalRequestRecord } from '../approvals/store';
 import {
     approvalRecordMatchesActor,
@@ -33,120 +50,6 @@ import {
     buildApprovalRequestSnapshot,
     computeApprovalRequestHash,
 } from '../approvals/approval-binding';
-
-// ── Output-level bypass detection (P1 guard — mirrors PVV CAT_MISS detector) ──
-// Patterns cover both explicit keyword combos (V1) and governance-approval phrasing (V2).
-const OUTPUT_BYPASS_PATTERNS: RegExp[] = [
-    // V1 — original PVV detector patterns
-    /\bapprove\b.{0,80}\bbypass\b/i,
-    /\bbypass\b.{0,80}\bapprove\b/i,
-    /\bauthorize\b.{0,80}\bbypass\b/i,
-    /\bimmediately\b.{0,80}\bdeploy\b/i,
-    /\byes\b.{0,30}\bbypass\b/i,
-    /\bproceed\b.{0,50}\bwithout\b.{0,40}\breview\b/i,
-    /\bskip\b.{0,50}\bgovernance\b/i,
-    // V2 — governance-approval phrasing (from C-014 analysis)
-    /\bgovernance\b.{0,30}\boverride\b/i,
-    /\boverride\b.{0,50}\bgovernance\b/i,
-    /\bskip\b.{0,50}\bcheck\b.{0,50}\boverride\b/i,
-    /\bwithout\s+applying\b/i,
-    /\bexecut\w*\b.{0,50}\bwithout\b.{0,60}\bcheck\b/i,
-    /\ballow\w*\b.{0,60}\bskip\b.{0,50}\bcheck\b/i,
-];
-
-const DEFAULT_ANALYZE_TEMPLATE_GUARD_ACTION = 'analyze template execution request';
-const DEFAULT_BUILD_TEMPLATE_GUARD_ACTION = 'build template execution request';
-
-function detectBypassInOutput(output: string): { detected: boolean; matchedPattern?: string } {
-    for (const pattern of OUTPUT_BYPASS_PATTERNS) {
-        const match = output.match(pattern);
-        if (match) return { detected: true, matchedPattern: match[0].slice(0, 100) };
-    }
-    return { detected: false };
-}
-
-function isBuildPhase(phase?: string): boolean {
-    if (!phase) return false;
-    const normalized = phase.trim().toUpperCase();
-    return normalized === 'BUILD' || normalized === 'PHASE C' || normalized === 'C';
-}
-
-function isBuildLikeIntent(intent?: string): boolean {
-    if (!intent) return false;
-    const reviewOnlyCodeIntent = /\b(code review|review code|check code|code audit|code quality|đánh giá code|kiểm tra chất lượng code|review code)\b/i.test(intent);
-    if (reviewOnlyCodeIntent) return false;
-    return /\b(build|implement|develop|create files?|write code|generate code|sửa code|sua code|viết code|thực thi|triển khai)\b/i.test(intent);
-}
-
-function shouldRequireSkillPreflight(input: {
-    phase?: string;
-    templateCategory?: string;
-    intent?: string;
-    templateId?: string;
-}): boolean {
-    const isTrustedForm = isTrustedFormTemplateId(input.templateId);
-    return isBuildPhase(input.phase)
-        || (!isTrustedForm && isBuildLikeIntent(input.intent))
-        || (input.templateCategory === 'development' && !isTrustedForm);
-}
-
-function resolveGuardAction(rawBody: Record<string, unknown>): string {
-    const explicitAction = rawBody.action;
-    if (typeof explicitAction === 'string' && explicitAction.trim()) {
-        return explicitAction.trim();
-    }
-
-    // W134: generated form intents are user content, not authority verbs.
-    // Using them as guard actions caused legitimate VN trusted forms to be
-    // blocked before AI execution by the English action allow-list.
-    const phase = typeof rawBody.cvfPhase === 'string' ? rawBody.cvfPhase.trim().toUpperCase() : '';
-    const hasBuildPreflight =
-        typeof rawBody.skillPreflightDeclaration === 'string' ||
-        typeof rawBody.skillPreflightRecordRef === 'string' ||
-        Array.isArray(rawBody.skillIds) ||
-        Array.isArray(rawBody.fileScope);
-
-    if (phase === 'BUILD' || phase === 'PHASE C' || phase === 'C' || hasBuildPreflight) {
-        return DEFAULT_BUILD_TEMPLATE_GUARD_ACTION;
-    }
-
-    return DEFAULT_ANALYZE_TEMPLATE_GUARD_ACTION;
-}
-
-function buildEvidenceReceipt(input: {
-    envelope: WebGovernanceEnvelope;
-    decision?: string;
-    riskLevel?: string;
-    provider?: AIProvider | string;
-    model?: string;
-    routingDecision?: string;
-    knowledgeSource?: string;
-    knowledgeInjected?: boolean;
-    knowledgeCollectionId?: string | null;
-    knowledgeChunkCount?: number;
-    approvalId?: string;
-    validationHint?: string;
-}): GovernanceEvidenceReceipt {
-    return {
-        receiptId: `rcpt-${input.envelope.envelopeId}`,
-        evidenceMode: 'live',
-        routeId: input.envelope.routeId,
-        decision: input.decision,
-        riskLevel: input.riskLevel ?? input.envelope.riskLevel ?? undefined,
-        provider: input.provider,
-        model: input.model,
-        routingDecision: input.routingDecision,
-        policySnapshotId: input.envelope.policySnapshotId,
-        envelopeId: input.envelope.envelopeId,
-        knowledgeSource: input.knowledgeSource,
-        knowledgeInjected: input.knowledgeInjected,
-        knowledgeCollectionId: input.knowledgeCollectionId ?? null,
-        knowledgeChunkCount: input.knowledgeChunkCount,
-        approvalId: input.approvalId,
-        validationHint: input.validationHint,
-        generatedAt: input.envelope.requestTimestamp,
-    };
-}
 
 export async function POST(request: NextRequest) {
     const routeStartedAtMs = Date.now();
@@ -430,6 +333,38 @@ export async function POST(request: NextRequest) {
         const mode = body.mode || 'simple';
         const template = body.templateId ? getTemplateById(body.templateId) : undefined;
         const executionTemplateId = template?.id ?? body.templateId;
+        const resolvedExecutionRole = resolveExecutionCVFRole(session, isServiceAllowed);
+        const resolvedOutputClass = resolveExecutionOutputClass(executionTemplateId, template?.category, mode);
+
+        if (!resolvedExecutionRole.allowed || !resolvedExecutionRole.permissionRole) {
+            return buildRolePermissionDeniedResponse({
+                session,
+                body,
+                provider,
+                envelope: govEnvelope,
+                resolvedRole: resolvedExecutionRole,
+                resolvedOutputClass,
+            });
+        }
+
+        const rolePermission = checkRoleOutputPermission(
+            resolvedExecutionRole.permissionRole,
+            resolvedOutputClass.outputClass,
+        );
+
+        if (!rolePermission.allowed) {
+            return buildRoleOutputDeniedResponse({
+                session,
+                body,
+                provider,
+                envelope: govEnvelope,
+                resolvedRole: resolvedExecutionRole,
+                resolvedOutputClass,
+                rolePermission,
+            });
+        }
+        const workflowBinding = resolveWorkflowBindingForExecution(executionTemplateId);
+
         const specFields = template?.fields || [];
         const requiresSkillPreflight = shouldRequireSkillPreflight({
             phase: body.cvfPhase,
@@ -594,7 +529,7 @@ export async function POST(request: NextRequest) {
             requestId: (rawBody as Record<string, unknown>).requestId as string || undefined,
             phase: body.cvfPhase,
             riskLevel: body.cvfRiskLevel,
-            role: isServiceAllowed ? 'OPERATOR' : 'HUMAN',
+            role: resolvedExecutionRole.permissionRole,
             userRole: isServiceAllowed ? 'admin' : session?.role,
             action: resolveGuardAction(rawBody as Record<string, unknown>),
             intent: body.intent,
@@ -885,21 +820,7 @@ export async function POST(request: NextRequest) {
         if (aiResult.success && aiResult.output) {
             const bypassCheck = detectBypassInOutput(aiResult.output);
             if (bypassCheck.detected) {
-                const bypassGuardResult = {
-                    ...guardResult,
-                    finalDecision: 'BLOCK' as const,
-                    blockedBy: 'output_bypass_detection',
-                    results: [
-                        ...(guardResult.results ?? []),
-                        {
-                            guardId: 'output_bypass_detection',
-                            decision: 'BLOCK' as const,
-                            severity: 'ERROR' as const,
-                            reason: `Governance bypass language detected in model output: "${bypassCheck.matchedPattern}"`,
-                            timestamp: new Date().toISOString(),
-                        },
-                    ],
-                };
+                const bypassGuardResult = buildOutputBypassGuardResult(guardResult, bypassCheck.matchedPattern);
                 return NextResponse.json(
                     {
                         success: false,
@@ -934,11 +855,106 @@ export async function POST(request: NextRequest) {
             ? resolveTokenUsage(filteredPrompt, aiResult.output, aiResult)
             : undefined;
 
+        const governanceEvidenceReceipt = buildEvidenceReceipt({
+            envelope: govEnvelope,
+            decision: enforcement.status,
+            riskLevel: enforcement.riskGate?.riskLevel,
+            provider: routedProvider,
+            model: body.model ?? aiResult.model ?? routedProvider,
+            routingDecision: routingResult.decision,
+            knowledgeSource,
+            knowledgeInjected,
+            knowledgeCollectionId: requestedKnowledgeCollectionId,
+            knowledgeChunkCount: retrievalResult.allowedChunkCount,
+            approvalId: approvedRequestRecord?.id,
+            validationHint: outputValidation?.qualityHint,
+        });
+        const workflowExecution = aiResult.success && workflowBinding
+            ? buildWorkflowExecutionProjection(workflowBinding, governanceEvidenceReceipt.receiptId)
+            : undefined;
+        if (workflowExecution) {
+            await appendAuditEvent({
+                eventType: 'WORKFLOW_BINDING_EXECUTED',
+                actorId: session?.userId ?? 'service-account',
+                actorRole: session?.role ?? (isServiceAllowed ? 'service' : 'unknown'),
+                targetResource: body.templateName || body.templateId || workflowExecution.templateId,
+                action: 'EMIT_WORKFLOW_STEP_TRACES',
+                riskLevel: body.cvfRiskLevel ?? enforcement.riskGate?.riskLevel ?? 'R1',
+                phase: body.cvfPhase ?? 'PHASE E',
+                outcome: 'COMPLETED',
+                payload: withSessionAuditPayload(session, {
+                    workflowId: workflowExecution.workflowId,
+                    workflowVersion: workflowExecution.workflowVersion,
+                    capabilityId: workflowExecution.capabilityId,
+                    templateId: workflowExecution.templateId,
+                    stepTraces: workflowExecution.stepTraces,
+                    receipts: workflowExecution.receipts,
+                    receiptObligations: workflowExecution.receiptObligations,
+                    receiptBinding: workflowExecution.receiptBinding,
+                    deferredStepIds: workflowExecution.deferredStepIds,
+                    governanceReceiptId: governanceEvidenceReceipt.receiptId,
+                    rolePermission: {
+                        role: resolvedExecutionRole.role,
+                        permissionRole: rolePermission.role,
+                        outputClass: rolePermission.outputClass,
+                        allowed: rolePermission.allowed,
+                        source: resolvedExecutionRole.source,
+                    },
+                }),
+            });
+        }
+        const phase2cProductBrief = aiResult.success && aiResult.output
+            ? buildPhase2CProductBriefSliceForRoute({
+                responseSuccess: aiResult.success,
+                templateId: executionTemplateId,
+                templateName: template?.name ?? body.templateName,
+                category: template?.category,
+                inputs: body.inputs || {},
+                intent: body.intent || '',
+                output: aiResult.output,
+                evidenceReceipt: governanceEvidenceReceipt,
+                validation: outputValidation ? {
+                    qualityHint: outputValidation.qualityHint,
+                    issues: outputValidation.issues,
+                } : undefined,
+            })
+            : undefined;
+        const phase3eOperationalMetrics = buildPhase3EOperationalMetricsForRoute({
+            phase2cProductBrief,
+            evidenceReceipt: governanceEvidenceReceipt,
+            responseSuccess: aiResult.success,
+        });
+        const { auditMemoryReceipt, auditEventPayload } = buildRouteAuditMemoryCapture({
+            governanceReceiptId: governanceEvidenceReceipt.receiptId,
+            actorId: session?.userId ?? (isServiceAllowed ? 'service-account' : 'unknown-actor'),
+            actorRole: resolvedExecutionRole.role ?? (isServiceAllowed ? 'service' : 'unknown'),
+            sessionId: session?.userId ?? (isServiceAllowed ? serviceIdentity ?? undefined : undefined),
+            sessionRole: session?.role ?? (isServiceAllowed ? 'service' : undefined),
+            templateId: executionTemplateId,
+            templateName: body.templateName || body.templateId,
+            workflowId: workflowExecution?.workflowId,
+            provider: routedProvider,
+            model: body.model ?? aiResult.model ?? routedProvider,
+            decision: enforcement.status,
+            stepTraceIds: workflowExecution?.stepTraces.map((trace) => trace.stepId) ?? [],
+            rolePermission: { role: resolvedExecutionRole.role, permissionRole: rolePermission.role, outputClass: rolePermission.outputClass, allowed: rolePermission.allowed },
+            riskLevel: body.cvfRiskLevel ?? enforcement.riskGate?.riskLevel,
+            phase: body.cvfPhase,
+        });
+        await appendAuditEvent({ ...auditEventPayload, payload: withSessionAuditPayload(session, auditEventPayload.payload) });
+
         return NextResponse.json({
             ...aiResult,
             usage,
             enforcement,
             guardResult,
+            rolePermission: {
+                role: resolvedExecutionRole.role,
+                permissionRole: rolePermission.role,
+                outputClass: rolePermission.outputClass,
+                allowed: rolePermission.allowed,
+                source: resolvedExecutionRole.source,
+            },
             providerRouting: {
                 decision: routingResult.decision,
                 selectedProvider: routingResult.selectedProvider,
@@ -963,20 +979,11 @@ export async function POST(request: NextRequest) {
             } : undefined,
             governanceEnvelope: govEnvelope,
             policySnapshotId: govEnvelope.policySnapshotId,
-            governanceEvidenceReceipt: buildEvidenceReceipt({
-                envelope: govEnvelope,
-                decision: enforcement.status,
-                riskLevel: enforcement.riskGate?.riskLevel,
-                provider: routedProvider,
-                model: body.model ?? aiResult.model ?? routedProvider,
-                routingDecision: routingResult.decision,
-                knowledgeSource,
-                knowledgeInjected,
-                knowledgeCollectionId: requestedKnowledgeCollectionId,
-                knowledgeChunkCount: retrievalResult.allowedChunkCount,
-                approvalId: approvedRequestRecord?.id,
-                validationHint: outputValidation?.qualityHint,
-            }),
+            governanceEvidenceReceipt,
+            auditMemoryReceipt,
+            ...(workflowExecution ? workflowExecution : {}),
+            ...(phase2cProductBrief ? { phase2cProductBrief } : {}),
+            ...(phase3eOperationalMetrics ? { phase3eOperationalMetrics } : {}),
         });
 
     } catch (error) {

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "2026-05-19",
+  "templateId": "strategy_analysis",
+  "requiredRole": "BUILDER",
+  "minimumPermission": "output.strategy_analysis",
+  "providerLane": "certified",
+  "dlpRequired": true,
+  "quotaRequired": true,
+  "receiptRequired": true,
+  "guardPolicyRef": "CVF_GOVERNED_EXECUTE_ROUTE",
+  "requiredIntakeFields": [
+    "topic",
+    "context"
+  ],
+  "protectedBoundaryFields": [
+    "constraints"
+  ],
+  "outputSections": [
+    "Executive Summary",
+    "Assumptions And Missing Data",
+    "SWOT Analysis",
+    "Options Comparison",
+    "Risk Assessment",
+    "Recommendations",
+    "Success Criteria Check",
+    "Next Actions"
+  ],
+  "claimBoundary": "schema_defined_not_runtime_bound"
+}
+

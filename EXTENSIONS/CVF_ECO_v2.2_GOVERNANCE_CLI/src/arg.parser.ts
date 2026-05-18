@@ -1,7 +1,7 @@
 import { CLIArgs, CLICommand } from "./types";
 
 const VALID_COMMANDS: CLICommand[] = [
-  "evaluate", "session", "report", "audit", "status", "help", "version",
+  "evaluate", "execute", "session", "report", "audit", "status", "help", "version",
 ];
 
 export class ArgParser {

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "2026-05-19",
+  "templateId": "documentation",
+  "requiredRole": "BUILDER",
+  "minimumPermission": "output.documentation",
+  "providerLane": "certified",
+  "dlpRequired": true,
+  "quotaRequired": true,
+  "receiptRequired": true,
+  "guardPolicyRef": "CVF_GOVERNED_EXECUTE_ROUTE",
+  "requiredIntakeFields": [
+    "subject",
+    "currentNotes",
+    "readerGoal"
+  ],
+  "protectedBoundaryFields": [
+    "mustPreserve"
+  ],
+  "outputSections": [
+    "What This Document Is For",
+    "Required Inputs, Artifacts, And Fields",
+    "Step-By-Step Procedure",
+    "Decision Branches",
+    "QA Checks",
+    "Common Failure Modes And Recovery",
+    "Final Handoff Acceptance Checklist"
+  ],
+  "claimBoundary": "schema_defined_not_runtime_bound"
+}
+

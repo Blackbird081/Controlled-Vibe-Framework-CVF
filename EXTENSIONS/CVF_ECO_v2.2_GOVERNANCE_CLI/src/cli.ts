@@ -18,6 +18,11 @@ export class GovernanceCLI {
     return this.registry.execute(args);
   }
 
+  async runAsync(argv: string[]): Promise<CLIOutput> {
+    const args = this.parser.parse(argv);
+    return this.registry.executeAsync(args);
+  }
+
   getRegistry(): CommandRegistry {
     return this.registry;
   }

@@ -36,6 +36,12 @@ describe("GovernanceCLI", () => {
       expect(result.message).toContain("code_security");
     });
 
+    it("shows execute help", () => {
+      const result = cli.run(["execute", "--help"]);
+      expect(result.success).toBe(true);
+      expect(result.message).toContain("cvf execute");
+    });
+
     it("blocks dangerous actions", () => {
       const result = cli.run(["evaluate", "--domain", "infrastructure", "--action", "execute"]);
       expect(result.exitCode).toBe(2);

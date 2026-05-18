@@ -5,15 +5,16 @@ describe("CommandRegistry", () => {
   const registry = new CommandRegistry();
 
   describe("built-in commands", () => {
-    it("has 7 built-in commands", () => {
+    it("has 8 built-in commands", () => {
       const commands = registry.listCommands();
-      expect(commands.length).toBe(7);
+      expect(commands.length).toBe(8);
     });
 
     it("includes all expected commands", () => {
       const names = registry.listCommands().map((c) => c.name);
       expect(names).toContain("help");
       expect(names).toContain("version");
+      expect(names).toContain("execute");
       expect(names).toContain("status");
       expect(names).toContain("evaluate");
       expect(names).toContain("session");
@@ -89,6 +90,28 @@ describe("CommandRegistry", () => {
       });
       expect(result.success).toBe(true);
       expect(result.data).toHaveProperty("riskScore");
+    });
+  });
+
+  describe("execute command", () => {
+    it("shows execute help through the sync runner", () => {
+      const result = registry.execute({
+        command: "execute",
+        flags: { help: true },
+        positional: [],
+      });
+      expect(result.success).toBe(true);
+      expect(result.message).toContain("cvf execute");
+    });
+
+    it("requires the async runner for HTTP execution", () => {
+      const result = registry.execute({
+        command: "execute",
+        flags: { template: "app_builder_complete", role: "BUILDER" },
+        positional: [],
+      });
+      expect(result.success).toBe(false);
+      expect(result.message).toContain("runAsync");
     });
   });
 

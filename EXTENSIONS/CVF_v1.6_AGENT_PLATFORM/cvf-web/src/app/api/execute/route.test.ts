@@ -116,6 +116,184 @@ describe('/api/execute', () => {
         expect(data.error).toMatch(/Missing required fields/);
     });
 
+    it('denies OBSERVER role before provider dispatch for code_patch output', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        verifySessionCookieMock.mockResolvedValueOnce({
+            userId: 'viewer-user',
+            user: 'viewer',
+            role: 'viewer',
+            orgId: 'org-1',
+            teamId: 'team-1',
+            expiresAt: Date.now() + 1000 * 60 * 60,
+        });
+
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateName: 'Code Patch',
+                intent: 'Create a small patch',
+                inputs: { goal: 'Change code safely' },
+                provider: 'openai',
+                mode: 'code',
+            }),
+        });
+
+        const res = await POST(req as never);
+        const data = await res.json();
+
+        expect(res.status).toBe(403);
+        expect(data.success).toBe(false);
+        expect(data.rolePermission).toMatchObject({
+            role: 'OBSERVER',
+            permissionRole: 'OBSERVER',
+            outputClass: 'code_patch',
+            allowed: false,
+        });
+        expect(executeAIMock).not.toHaveBeenCalled();
+        expect(appendAuditEventMock).toHaveBeenCalledWith(expect.objectContaining({
+            eventType: 'ROLE_OUTPUT_PERMISSION_DENIED',
+        }));
+    });
+
+    it('allows BUILDER role to produce app_builder_complete artifact output', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        verifySessionCookieMock.mockResolvedValueOnce({
+            userId: 'developer-user',
+            user: 'developer',
+            role: 'developer',
+            orgId: 'org-1',
+            teamId: 'team-1',
+            expiresAt: Date.now() + 1000 * 60 * 60,
+        });
+        executeAIMock.mockResolvedValue({
+            success: true,
+            output: validOutput,
+            provider: 'openai',
+            model: 'gpt-4o',
+        });
+
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateId: 'app_builder_complete',
+                templateName: 'App Builder Complete',
+                intent: 'Create Product Brief for TaskFlow',
+                inputs: {
+                    appName: 'TaskFlow',
+                    appType: 'Web App',
+                    problem: 'Small teams need a lighter way to plan work.',
+                    targetUsers: 'Small product teams',
+                    coreFeatures: 'Task board, owner fields, status filters',
+                    successCriteria: 'A user can create and triage tasks quickly.',
+                    platforms: 'Web browser',
+                },
+                provider: 'openai',
+                cvfPhase: 'BUILD',
+                action: 'build template execution request',
+                skillPreflightPassed: true,
+                skillPreflightDeclaration: 'SKILL PREFLIGHT PASS: product brief only, no implementation.',
+                skillIds: ['product-brief-authoring'],
+                aiCommit: {
+                    commitId: 'phase-e-role-builder-allow',
+                    agentId: 'cvf-route-test',
+                    timestamp: Date.now(),
+                    description: 'Phase E E.2 builder role artifact permission test',
+                },
+            }),
+        });
+
+        const res = await POST(req as never);
+        const data = await res.json();
+
+        expect(res.status).toBe(200);
+        expect(data.rolePermission).toMatchObject({
+            role: 'BUILDER',
+            permissionRole: 'BUILDER',
+            outputClass: 'artifact',
+            allowed: true,
+        });
+        expect(data.workflowId).toBe('workflow.product.create_product_brief.v1');
+        expect(data.stepTraces.map((trace: { stepId: string }) => trace.stepId)).toEqual([
+            'step-1-intake-validation',
+            'step-2-knowledge-retrieval',
+            'step-3-provider-call',
+            'step-5-receipt-emit',
+        ]);
+        expect(data.stepTraces.every((trace: {
+            preconditionChecked: boolean;
+            decision: string;
+            receiptId: string;
+            source: string;
+        }) => (
+            trace.preconditionChecked === true
+            && trace.decision === 'completed'
+            && trace.receiptId === data.governanceEvidenceReceipt.receiptId
+            && trace.source === 'route_dispatch'
+        ))).toBe(true);
+        expect(data.stepTraces.map((trace: { stepId: string }) => trace.stepId))
+            .not.toContain('step-4-review-gate');
+        expect(data.receipts).toEqual(data.receiptBinding.emissions.map((emission: {
+            stepId: string;
+            obligationId: string;
+        }) => ({
+            stepId: emission.stepId,
+            receiptId: data.governanceEvidenceReceipt.receiptId,
+            source: 'governance_evidence_receipt',
+            obligationId: emission.obligationId,
+        })));
+        expect(data.receiptObligations.map((obligation: { role: string; actionClass: string }) => [
+            obligation.role,
+            obligation.actionClass,
+        ])).toEqual([
+            ['BUILDER', 'artifact_export'],
+            ['BUILDER', 'file_read'],
+            ['BUILDER', 'provider_call'],
+            ['BUILDER', 'artifact_export'],
+        ]);
+        expect(data.receiptBinding).toMatchObject({
+            contractVersion: 'phaseE.receiptBinding.v1',
+            workflowId: 'workflow.product.create_product_brief.v1',
+            fullMatrixDisposition: 'deferred_with_reason',
+        });
+        expect(data.deferredStepIds).toEqual(['step-4-review-gate']);
+        const workflowAuditEvent = appendAuditEventMock.mock.calls
+            .map((call: unknown[]) => call[0] as { eventType?: string; payload?: Record<string, unknown> })
+            .find((event) => event.eventType === 'WORKFLOW_BINDING_EXECUTED');
+        expect(workflowAuditEvent?.payload).toMatchObject({
+            workflowId: 'workflow.product.create_product_brief.v1',
+            governanceReceiptId: data.governanceEvidenceReceipt.receiptId,
+            stepTraces: data.stepTraces,
+            receipts: data.receipts,
+            receiptBinding: data.receiptBinding,
+            deferredStepIds: ['step-4-review-gate'],
+            rolePermission: data.rolePermission,
+        });
+        expect(data.auditMemoryReceipt).toMatchObject({
+            tier: 'session',
+            contractVersion: 'phaseD.memoryContinuity.v1',
+            ownerRole: 'OPERATOR',
+            receipt: {
+                traceId: data.governanceEvidenceReceipt.receiptId,
+                decision: 'captured',
+                reason: 'memory_captured_after_policy_and_privacy',
+                provenanceRequired: true,
+            },
+        });
+        expect(data.auditMemoryReceipt.receipt.memoryIds).toHaveLength(1);
+        const auditMemoryEvent = appendAuditEventMock.mock.calls
+            .map((call: unknown[]) => call[0] as { eventType?: string; payload?: Record<string, unknown> })
+            .find((event) => event.eventType === 'AUDIT_MEMORY_RECEIPT_CAPTURED');
+        expect(auditMemoryEvent?.payload).toMatchObject({
+            governanceReceiptId: data.governanceEvidenceReceipt.receiptId,
+            memoryReceiptId: data.auditMemoryReceipt.receipt.receiptId,
+            memoryIds: data.auditMemoryReceipt.receipt.memoryIds,
+            memoryTier: 'session',
+            memoryContractVersion: 'phaseD.memoryContinuity.v1',
+        });
+        expect(executeAIMock).toHaveBeenCalledTimes(1);
+        expect(executeAIMock.mock.calls[0][2]).not.toContain('GOVERNANCE_AUDIT_MEMORY_RECEIPT');
+    });
+
     it('caps trusted noncoder template max tokens for provider calls', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         executeAIMock.mockResolvedValue({
@@ -180,6 +358,123 @@ describe('/api/execute', () => {
             expect.any(String),
             expect.objectContaining({ maxTokens: 3072 }),
         );
+    });
+
+    it('attaches the Phase 2.C product brief slice for app_builder_complete', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        executeAIMock.mockResolvedValue({
+            success: true,
+            output: [
+                '## Product Brief',
+                '',
+                'TaskFlow helps small teams organize work with a concise task board, owner fields, and acceptance criteria.',
+                '',
+                '## Acceptance Criteria',
+                '',
+                '1. Users can create tasks in under one minute.',
+                '2. Users can review work by status.',
+            ].join('\n'),
+            provider: 'openai',
+            model: 'gpt-4o',
+        });
+
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateId: 'app_builder_complete',
+                templateName: 'App Builder Complete',
+                intent: 'Create Product Brief for TaskFlow',
+                inputs: {
+                    appName: 'TaskFlow',
+                    appType: 'Web App',
+                    problem: 'Small teams need a lighter way to plan work.',
+                    targetUsers: 'Small product teams',
+                    coreFeatures: 'Task board, owner fields, status filters',
+                    successCriteria: 'A user can create and triage tasks quickly.',
+                    platforms: 'Web browser',
+                },
+                provider: 'openai',
+                action: 'analyze template execution request',
+                skillPreflightPassed: true,
+                skillPreflightDeclaration: 'SKILL PREFLIGHT PASS: product brief only, no implementation.',
+                skillIds: ['product-brief-authoring'],
+                aiCommit: {
+                    commitId: 'phase2c-product-brief-test',
+                    agentId: 'cvf-route-test',
+                    timestamp: Date.now(),
+                    description: 'Phase 2.C product brief vertical slice test',
+                },
+            }),
+        });
+
+        const res = await POST(req as never);
+        const data = await res.json();
+        expect(res.status).toBe(200);
+        expect(data.phase2cProductBrief).toMatchObject({
+            sliceId: 'CVF_17_05_PHASE_2C_CREATE_PRODUCT_BRIEF',
+            status: 'generated',
+            templateId: 'app_builder_complete',
+            claimBoundary: 'live_governance_proof_required_before_public_claim',
+            receiptAdapter: {
+                source: 'web_governance_evidence_receipt',
+                target: 'deliverable_pack_governance_evidence',
+            },
+        });
+        expect(data.phase2cProductBrief.capabilityRefs).toContain(
+            'CVF-17.05:Phase2B:GovernedCapability:create-product-brief'
+        );
+        expect(data.phase2cProductBrief.outputValidation.structuredResult).toBe(true);
+        expect(data.phase2cProductBrief.deliverablePack.packType).toBe('app_planning');
+        expect(data.phase2cProductBrief.deliverablePack.governanceEvidence.receiptAvailable).toBe(true);
+        expect(data.phase2cProductBrief.deliverablePack.governanceEvidence.rawReceipt.receiptId)
+            .toBe(data.governanceEvidenceReceipt.receiptId);
+        expect(data.phase3eOperationalMetrics).toMatchObject({
+            pilotId: 'CVF_17_05_PHASE_3E_EMISSION_PILOT',
+            status: 'emitted',
+            sourceSliceId: 'CVF_17_05_PHASE_2C_CREATE_PRODUCT_BRIEF',
+            claimBoundary: 'pilot_only_no_full_operational_intelligence_claim',
+        });
+        expect(data.phase3eOperationalMetrics.metrics.map((metric: { metricId: string }) => metric.metricId)).toEqual([
+            'policy-violation-rate',
+            'receipt-integrity',
+            'task-completion-rate',
+        ]);
+        expect(data.phase3eOperationalMetrics.metrics).toHaveLength(3);
+        expect(data.phase3eOperationalMetrics.skippedMetrics.length).toBeGreaterThanOrEqual(7);
+    });
+
+    it('does not attach the Phase 2.C product brief slice for other templates', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        executeAIMock.mockResolvedValue({
+            success: true,
+            output: validOutput,
+            provider: 'openai',
+            model: 'gpt-4o',
+        });
+
+        const req = new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                templateId: 'documentation',
+                templateName: 'Documentation',
+                intent: 'Create onboarding documentation',
+                inputs: { topic: 'Onboarding', audience: 'Operators', scope: 'Basic workflow' },
+                provider: 'openai',
+            }),
+        });
+
+        const res = await POST(req as never);
+        const data = await res.json();
+        expect(res.status).toBe(200);
+        expect(data.phase2cProductBrief).toBeUndefined();
+        expect(data.phase3eOperationalMetrics).toBeUndefined();
+        expect(data.workflowId).toBeUndefined();
+        expect(data.stepTraces).toBeUndefined();
+        expect(data.receipts).toBeUndefined();
+        const workflowAuditEvent = appendAuditEventMock.mock.calls
+            .map((call: unknown[]) => call[0] as { eventType?: string })
+            .find((event) => event.eventType === 'WORKFLOW_BINDING_EXECUTED');
+        expect(workflowAuditEvent).toBeUndefined();
     });
 
     it('resolves execution token budget only for trusted noncoder templates', () => {

@@ -67,6 +67,7 @@ describe("ArgParser", () => {
   describe("validation", () => {
     it("validates known commands", () => {
       expect(parser.isValidCommand("evaluate")).toBe(true);
+      expect(parser.isValidCommand("execute")).toBe(true);
       expect(parser.isValidCommand("session")).toBe(true);
       expect(parser.isValidCommand("help")).toBe(true);
     });

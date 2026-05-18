@@ -1,74 +1,30 @@
 # CVF Technical Product Catalog
 
-Memory class: POINTER_RECORD
-Status: PHASE-B PUBLIC-CATALOG BASELINE
+Status: CURRENT — updated 2026-05-19
+Version: CVF v4.0.0 GA
 
 ## Purpose
 
-This catalog gives users, developers, and agents a compact technical map of
-Controlled Vibe Framework (CVF). It separates what is already proven from what
-is intentionally bounded or still roadmap work.
+This catalog gives users, developers, and agents a compact technical map
+of Controlled Vibe Framework (CVF). It answers three questions:
 
-Phase B claim boundary:
+1. What can CVF help me accomplish right now?
+2. What capabilities exist and at what maturity level?
+3. What does CVF explicitly not claim?
 
-- `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
+All capability claims in this catalog are backed by a public evidence
+path. If no evidence path is listed, the capability is roadmap only.
 
-## Scope
-
-This is a public orientation document. It links only to public repository
-surfaces and does not expose private provenance or legacy reference folders.
-
-Catalog reconciliation model:
-
-- This public-sync file is the customer-facing derivative.
-- The provenance copy at the same relative path is the annotated internal
-  source copy.
-- The two files may differ in annotation density, but they must not disagree
-  on product claims or claim boundaries.
-- Permanent path verification rule: every path cited by this public-sync
-  catalog must be `Test-Path`-verified on this public-sync filesystem before
-  commit. Provenance-only verification is not sufficient for customer-facing
-  catalog paths.
-
-## Owner
-
-Owner surface: public/product orientation and claim-boundary documentation.
-
-## Source / Predecessor Evidence
-
-- `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
-- `docs/evidence/latest-release-gate.md`
-- `docs/evidence/provider-lanes.md`
-- `docs/evidence/web-governance-path.md`
-- `docs/evidence/cvf-16-5-runtime-absorption.md`
-- `docs/evidence/phase-e-governed-execution-chain.md`
-
-## Decision / Baseline / Proposed Tranche
-
-Decision: Phase B public catalog baseline accepted for public orientation.
-
-Baseline: this catalog remains bounded to public repository evidence and the
-structured claim boundary. It does not claim complete Agent OS status,
-universal provider parity, full legacy absorption, or release readiness beyond
-published evidence.
-
-Proposed tranche: none. Future Phase D implementation requires separate
-GC-018 authorization.
-
-## Requirements
-
-This catalog must separate proven, bounded, and roadmap capabilities; link only
-to public repository surfaces; and preserve the mandatory live-governance-proof
-boundary.
+---
 
 ## What CVF Is
 
 CVF is a governance-first control framework for AI-assisted execution.
 
-It places a governed control plane between user intent, agent/runtime actions,
-provider calls, policy checks, and evidence receipts. Its practical purpose is
-to make AI work safer, more auditable, and more repeatable for both developers
-and non-coders.
+It places a governed control plane between user intent, agent actions,
+provider calls, policy checks, and evidence receipts. Its practical
+purpose is to make AI work safer, more auditable, and more repeatable
+for both developers and non-coders.
 
 The core operating loop is:
 
@@ -76,18 +32,24 @@ The core operating loop is:
 INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE
 ```
 
+---
+
 ## Maturity and Delivery History
 
-CVF v4.0.0 GA was released 2026-05-16. The framework was built through
+CVF v4.0.0 GA was released 2026-05-16. The framework reached GA through
 130+ incremental delivery tranches covering: knowledge retrieval pipeline,
 certified provider lanes, skill governance engine, template marketplace,
 non-coder UX, governance CLI, benchmark infrastructure, and a fully
 governed execution chain (role permission → workflow binding → provider
-call → receipt emission). All release claims are backed by live provider
-proof — mock-only tests are not accepted as governance evidence.
+call → receipt emission).
+
+All release claims are backed by live provider proof. Mock-only tests
+are not accepted as governance evidence.
 
 Release gate: `scripts/run_cvf_release_gate_bundle.py`
 Latest result: `docs/evidence/latest-release-gate.md`
+
+---
 
 ## What CVF Can Do Today
 
@@ -97,16 +59,15 @@ not claim these as universal across all templates, providers, or
 deployment configurations.
 
 **1. Generate a governed Product Brief with full execution chain.**
-A user with Developer role submits a product brief request. CVF
-resolves their role to `BUILDER`, checks output permission, binds the
-`Create Product Brief` workflow, dispatches ordered steps (intake →
-retrieval → provider call → receipt emission), and returns a response
-with step traces, a governance evidence receipt, and a workflow audit
-payload.
+A Developer-role user submits a product brief request. CVF resolves
+their role to `BUILDER`, checks output permission, binds the workflow,
+dispatches ordered steps (intake → retrieval → provider call → receipt
+emission), and returns a response with step traces, a governance
+evidence receipt, and a workflow audit payload.
 Evidence: `docs/evidence/phase-e-governed-execution-chain.md`
 
 **2. Run a live governance proof across the full release gate.**
-CVF can execute a seven-check release gate covering: web build, guard
+CVF executes a seven-check release gate covering: web build, guard
 contract TypeScript, provider readiness, secrets scan, RC docs
 governance, Playwright UI mock E2E, and Playwright live governance E2E.
 All seven must pass before a release claim is made.
@@ -125,7 +86,7 @@ The governance CLI (`cvf-guard`) supports four commands: `evaluate`
 (run a guard policy check), `audit` (generate a session audit report),
 `session` (inspect session continuity state), `report` (export
 governance evidence). Suitable for developer and operator use cases.
-Evidence: `ARCHITECTURE.md` (governance CLI section)
+Evidence: `ARCHITECTURE.md`
 
 **5. Benchmark provider output against the CVF Quality Baseline.**
 CVF's benchmark infrastructure supports preregistered quality runs
@@ -134,229 +95,144 @@ evidence and cited in release decisions.
 Evidence: `docs/evidence/current-cvf-quality-status.md`,
 `docs/benchmark/`
 
-## Product Catalog
+---
 
-| Capability | Current status | What to verify |
-|---|---|---|
-| Governance control plane | proven and active | `ARCHITECTURE.md`, `GOVERNANCE.md`, `governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md` |
-| Live governance proof | proven and mandatory for release claims | `scripts/run_cvf_release_gate_bundle.py`, `docs/evidence/latest-release-gate.md` |
-| Non-coder governed path | proven on bounded provider lanes | `docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md`, `docs/evidence/web-governance-path.md` |
-| Provider lanes | certified only where evidence exists | `docs/evidence/provider-lanes.md` |
-| Knowledge-backed execution | proven in bounded execute path | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md`, `docs/evidence/phase-e-governed-execution-chain.md` |
-| Deliverable packs and evidence export | implemented in web product path | `README.md`, `docs/evidence/web-governance-path.md` |
-| External asset/capability governance | partially productized | `docs/evidence/web-governance-path.md`, `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |
-| Role and agent governance | partially absorbed with selected-flow execution proof | `governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md`, `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`, `docs/evidence/phase-e-governed-execution-chain.md` |
-| Memory and continuity | partially absorbed | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md` |
-| Provider method breadth | demand-gated | provider evidence and roadmap docs; no universal provider-method parity claim |
-| Operational observability | partially absorbed | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
-| Tool/MCP/database action governance | roadmap | current tool guards exist, but full action taxonomy is not claimed |
-| Async workers/subagents | roadmap | sandbox concepts exist, but canonical async lifecycle is not claimed |
-| Graph/code-intelligence context | roadmap | no full graph-native context resolver claim yet |
+## Capability Catalog
+
+| Capability | Status | Evidence |
+| --- | --- | --- |
+| Governance control plane | proven | `ARCHITECTURE.md`, `GOVERNANCE.md` |
+| Live governance proof | proven — mandatory for release claims | `docs/evidence/latest-release-gate.md` |
+| Governed execution chain (Product Brief) | proven — selected flow | `docs/evidence/phase-e-governed-execution-chain.md` |
+| Knowledge-backed execution with guards | proven — bounded execute path | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
+| Non-coder governed path | proven — bounded provider lanes | `docs/evidence/web-governance-path.md` |
+| Governance CLI (`cvf-guard`) | active | `ARCHITECTURE.md` |
+| Certified provider lanes | proven where evidence exists | `docs/evidence/provider-lanes.md` |
+| Skill governance engine | active | `docs/reference/CVF_MODULE_INVENTORY.md` |
+| Template marketplace | active | `docs/evidence/web-governance-path.md` |
+| Deliverable packs and evidence export | active — web product path | `docs/evidence/web-governance-path.md` |
+| Benchmark infrastructure (QBS) | active | `docs/evidence/current-cvf-quality-status.md`, `docs/benchmark/` |
+| Role and agent governance | partially proven — selected flow | `docs/evidence/phase-e-governed-execution-chain.md` |
+| Memory and continuity contracts | partially absorbed — contract-local | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |
+| Operational observability | partially absorbed | `docs/evidence/cvf-16-5-runtime-absorption.md` |
+| External asset/capability governance | partially productized | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |
+| Provider method breadth | demand-gated | no universal provider-method parity claim |
+| Async workers / subagents | roadmap | concepts exist; canonical lifecycle not claimed |
+| Tool/MCP/database action governance | roadmap | guards exist; full action taxonomy not claimed |
+| Graph/code-intelligence context | roadmap | no graph-native context resolver claim |
+
+---
 
 ## Key Extensions
 
-CVF is built from modular extensions. The table below covers the most
-significant ones. Each extension is self-contained with its own tests.
-This list does not expose implementation internals — it gives readers
-enough context to understand what already exists before proposing new
-work.
+CVF is built from modular extensions. Each is self-contained with its
+own tests. This table gives readers enough context to understand what
+already exists before proposing new work.
 
 | Extension | What it does | Status |
 | --- | --- | --- |
-| `CVF_v1.6_AGENT_PLATFORM` | Web UI (Next.js): governed execute path, template marketplace, role-based access, analytics, safety dashboard | active |
+| `CVF_v1.6_AGENT_PLATFORM` | Web UI: governed execute path, template marketplace, role-based access, analytics, safety dashboard | active |
 | `CVF_GUARD_CONTRACT` | Governance contract SDK: role-permission, runtime-workflow, orchestrator, memory-continuity contracts | active |
-| `CVF_ECO_v2.2_GOVERNANCE_CLI` | Governance CLI: `cvf-guard evaluate`, `audit`, `session`, `report` commands | active |
-| `CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE` | Skill lifecycle: fusion, evolution, probation, deprecation, ranking, and governed skill registry | active |
-| `CVF_MODEL_GATEWAY` | Provider adapter hub: LLM, tool, and memory adapters with routing policy, fallback policy, and gateway receipt | active |
+| `CVF_ECO_v2.2_GOVERNANCE_CLI` | Governance CLI: `cvf-guard evaluate`, `audit`, `session`, `report` | active |
+| `CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE` | Skill lifecycle: fusion, evolution, probation, deprecation, ranking, governed registry | active |
+| `CVF_MODEL_GATEWAY` | Provider adapter hub: LLM, tool, and memory adapters with routing policy, fallback policy, gateway receipt | active |
 | `CVF_LEARNING_PLANE_FOUNDATION` | Memory governance: controlled memory gateway, retention policy events, tier contracts | active |
-| `CVF_ECO_v3.0_TASK_MARKETPLACE` | Task marketplace: governed task registry, template binding, and outcome-oriented task packs | active |
-| `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL` | Phase governance: deterministic phase orchestration, guard runtime pipeline, hardened session protocol | active |
+| `CVF_ECO_v3.0_TASK_MARKETPLACE` | Task marketplace: governed task registry, template binding, outcome-oriented task packs | active |
+| `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL` | Phase governance: deterministic orchestration, guard runtime pipeline, hardened session protocol | active |
 
-For the full extension inventory see `docs/reference/CVF_MODULE_INVENTORY.md`.
+Full extension inventory: `docs/reference/CVF_MODULE_INVENTORY.md`
+
+---
 
 ## What Users Can Expect
 
-CVF gives users a governed AI path that records decisions and evidence instead
-of treating AI output as an untracked chat transcript.
+**Non-coders:** CVF is strongest where the request enters a trusted
+form or bounded governed workflow. The platform resolves your role,
+selects the right workflow, runs provider and policy checks, and
+returns a governed artifact with an evidence receipt — not a raw chat
+response.
 
-For non-coders, CVF is strongest where the request enters a trusted form or
-bounded governed workflow. For developers, CVF is strongest where phase,
-guard, policy, and evidence contracts are respected by the repository workflow.
+**Developers:** CVF is strongest where phase, guard, policy, and
+evidence contracts are respected by the repository workflow. The
+governance CLI, release gate, and guard contract SDK are the primary
+developer surfaces.
+
+**Agents:** Treat this repository as a governed workspace, not a
+free-form coding sandbox. Read the front-door instructions before
+changing files. Do not claim governance behavior without live proof.
+Use roadmap and approval gates for substantial continuation.
+
+---
 
 ## What Developers Can Verify
 
-Start here:
-
-- `README.md`
-- `ARCHITECTURE.md`
-- `docs/GET_STARTED.md`
-- `docs/evidence/README.md`
-- `docs/evidence/latest-release-gate.md`
-- `docs/evidence/provider-lanes.md`
-- `docs/evidence/web-governance-path.md`
-
-Release-quality governance proof uses:
-
 ```bash
+# Start here
+cat README.md
+cat ARCHITECTURE.md
+cat docs/GET_STARTED.md
+
+# Evidence
+cat docs/evidence/README.md
+cat docs/evidence/latest-release-gate.md
+cat docs/evidence/provider-lanes.md
+cat docs/evidence/web-governance-path.md
+cat docs/evidence/phase-e-governed-execution-chain.md
+
+# Run the full release gate
 python scripts/run_cvf_release_gate_bundle.py --json
 ```
 
-Mock-only UI checks are not sufficient for claims that CVF controls AI or
-provider behavior.
+Mock-only UI checks are not sufficient for claims that CVF controls AI
+or provider behavior. Live provider proof is required.
 
-## Verification
-
-Readers can verify the public claims through the linked architecture, evidence,
-provider-lane, and release-gate files in this repository.
-
-Codex reconciliation check:
-
-- `START_HERE.md` and `docs/INDEX.md` were removed from this catalog because
-  they were not present in the public-sync clone at reconciliation time.
-- Directory-only references were replaced with concrete file paths where a
-  stable public file was available.
-
-Claude N-1 correction (2026-05-18):
-
-- Codex's first reconciliation round added `docs/audits/alibaba-canary/INDEX.md`
-  and `docs/audits/deepseek-canary/INDEX.md` to the Provider lanes row. Those
-  two paths exist in the provenance repository but **do not exist in this
-  public-sync clone** (`docs/audits/` is empty here). The two paths were
-  removed; the Provider lanes row now points only at the verified
-  `docs/evidence/provider-lanes.md`.
-- Lesson for Codex: when Model B (public-sync = customer-facing derivative)
-  is chosen, every public-sync catalog path must be `Test-Path`-verified
-  **on the public-sync filesystem**, not on the provenance repository.
-  Copying provenance paths into public-sync without re-verification reproduces
-  the same C-1 failure mode the matrix correction was meant to retire.
-- Binding rule retained from Step 1: future catalog edits must repeat the
-  public-sync `Test-Path` check below before commit.
-
-Verification command run in public-sync (Claude re-verified after N-1 fix):
-
-```powershell
-Test-Path README.md
-Test-Path ARCHITECTURE.md
-Test-Path docs/GET_STARTED.md
-Test-Path docs/evidence/README.md
-Test-Path docs/evidence/latest-release-gate.md
-Test-Path docs/evidence/provider-lanes.md
-Test-Path docs/evidence/web-governance-path.md
-Test-Path docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md
-Test-Path GOVERNANCE.md
-Test-Path governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md
-Test-Path docs/evidence/cvf-16-5-runtime-absorption.md
-Test-Path docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md
-Test-Path docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md
-Test-Path governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md
-Test-Path governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md
-Test-Path governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md
-```
-
-Result after N-1 fix: 15/15 PASS in public-sync. The two removed paths
-(`docs/audits/alibaba-canary/INDEX.md`,
-`docs/audits/deepseek-canary/INDEX.md`) returned False before removal and
-are no longer cited.
-
-Step 1 re-check (2026-05-18): extracted the 15 `Test-Path` lines above from
-this catalog and verified them in the public-sync clone: 15/15 PASS.
-
-Step 4 public-sync claim-link re-check (2026-05-18): every file-level path
-cited by the public-sync catalog was verified from the public-sync clone before
-commit:
-
-```powershell
-PASS README.md
-PASS ARCHITECTURE.md
-PASS docs/GET_STARTED.md
-PASS docs/evidence/README.md
-PASS docs/evidence/latest-release-gate.md
-PASS docs/evidence/provider-lanes.md
-PASS docs/evidence/web-governance-path.md
-PASS docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md
-PASS GOVERNANCE.md
-PASS governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md
-PASS scripts/run_cvf_release_gate_bundle.py
-PASS docs/evidence/cvf-16-5-runtime-absorption.md
-PASS docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md
-PASS docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md
-PASS governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md
-PASS governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md
-PASS governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md
-PASS docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md
-```
-
-Knowledge-backed execution check: `docs/evidence/cvf-16-5-runtime-absorption.md`
-materially backs the bounded claim because it lists public runtime contracts,
-knowledge-vault intake, controlled memory, governed web inheritance, test
-coverage, and live release-gate evidence. The row remains `proven in bounded
-execute path`, not a universal runtime or UI claim.
-
-Phase E public-sync claim-link re-check (2026-05-18): every file-level path
-cited by the updated public-sync catalog was verified from the public-sync
-clone before commit. The new execution-chain evidence path is:
-
-```powershell
-PASS docs/evidence/phase-e-governed-execution-chain.md
-```
-
-The evidence supports only the selected Product Brief execution chain:
-role permission, workflow step traces, provider receipt, selected-flow receipt
-binding, and workflow audit payload. It does not widen the catalog to a
-complete Agent OS, universal provider parity, or full legacy absorption claim.
-
-## What Agents Must Respect
-
-Agents using CVF should treat the repository as a governed workspace, not a
-free-form coding sandbox.
-
-Required posture:
-
-- read the front-door instructions before changing files;
-- preserve provenance/public repository boundaries;
-- do not print or commit API keys;
-- do not claim governance behavior without live proof;
-- record gaps instead of silently absorbing broad legacy concepts;
-- use roadmap and approval gates for substantial continuation.
+---
 
 ## Claim Boundary
 
-The structured Phase B public claim boundary is:
-
-- `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
-
 CVF may claim:
 
-- governance-first AI control framework;
-- bounded live non-coder value;
-- evidence-backed provider lanes where receipts exist;
-- governed knowledge-backed execution in the proven path;
-- public auditability through docs, evidence packets, guards, and release gates.
+- governance-first AI control framework
+- bounded live non-coder value on certified provider lanes
+- evidence-backed provider lanes where receipts exist
+- governed knowledge-backed execution in the proven execute path
+- governed Product Brief workflow with role permission, step traces, and receipt
+- public auditability through docs, evidence packets, guards, and release gates
 
-CVF must not claim yet:
+CVF does not yet claim:
 
-- complete Agent OS status;
-- full universal provider parity;
-- full external capability marketplace readiness;
-- full legacy repository absorption;
-- unrestricted autonomous self-improvement;
-- complete role-permission, memory-reinjection, async-worker, graph-context,
-  database-action, or provider-method coverage.
+- complete Agent OS status
+- universal provider parity across all methods
+- full external capability marketplace readiness
+- full legacy repository absorption
+- complete role-permission, memory-reinjection, async-worker,
+  graph-context, database-action, or provider-method coverage
+
+Full boundary document: `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
+
+---
+
+## Catalog Update Rule
+
+This catalog must be updated when a capability tranche is closed. The
+update rules:
+
+1. New proven capability → add a row with `proven` status and an
+   evidence path verified in this repository.
+2. New or extended extension → add or update the extension table row.
+3. Row status upgrade (`roadmap` → `partially absorbed` → `proven`) →
+   update status and replace with a concrete evidence link.
+4. Every new path must exist in this repository before being cited.
+
+---
 
 ## Related Artifacts
 
-- `README.md`
-- `ARCHITECTURE.md`
-- `GOVERNANCE.md`
-- `docs/GET_STARTED.md`
-- `docs/evidence/README.md`
+- `README.md` — entry point
+- `ARCHITECTURE.md` — system shape and layer model
+- `GOVERNANCE.md` — governance posture
+- `docs/GET_STARTED.md` — getting started guide
+- `docs/evidence/README.md` — evidence index
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
-- `docs/evidence/latest-release-gate.md`
-- `docs/evidence/provider-lanes.md`
-- `docs/evidence/web-governance-path.md`
-- `governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md`
-
-## Final Clause
-
-This catalog is deliberately conservative. It is useful for evaluation because
-it separates proven product behavior from roadmap ambition.
+- `docs/reference/CVF_MODULE_INVENTORY.md`
+- `docs/benchmark/` — QBS benchmark results

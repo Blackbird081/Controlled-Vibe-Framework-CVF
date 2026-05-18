@@ -41,6 +41,7 @@ Owner surface: public/product orientation and claim-boundary documentation.
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`
 - `docs/evidence/cvf-16-5-runtime-absorption.md`
+- `docs/evidence/phase-e-governed-execution-chain.md`
 
 ## Decision / Baseline / Proposed Tranche
 
@@ -83,10 +84,10 @@ INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE
 | Live governance proof | proven and mandatory for release claims | `scripts/run_cvf_release_gate_bundle.py`, `docs/evidence/latest-release-gate.md` |
 | Non-coder governed path | proven on bounded provider lanes | `docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md`, `docs/evidence/web-governance-path.md` |
 | Provider lanes | certified only where evidence exists | `docs/evidence/provider-lanes.md` |
-| Knowledge-backed execution | proven in bounded execute path | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
+| Knowledge-backed execution | proven in bounded execute path | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md`, `docs/evidence/phase-e-governed-execution-chain.md` |
 | Deliverable packs and evidence export | implemented in web product path | `README.md`, `docs/evidence/web-governance-path.md` |
 | External asset/capability governance | partially productized | `docs/evidence/web-governance-path.md`, `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |
-| Role and agent governance | partially absorbed | `governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md`, `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md` |
+| Role and agent governance | partially absorbed with selected-flow execution proof | `governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md`, `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`, `docs/evidence/phase-e-governed-execution-chain.md` |
 | Memory and continuity | partially absorbed | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md` |
 | Provider method breadth | demand-gated | provider evidence and roadmap docs; no universal provider-method parity claim |
 | Operational observability | partially absorbed | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
@@ -211,6 +212,19 @@ materially backs the bounded claim because it lists public runtime contracts,
 knowledge-vault intake, controlled memory, governed web inheritance, test
 coverage, and live release-gate evidence. The row remains `proven in bounded
 execute path`, not a universal runtime or UI claim.
+
+Phase E public-sync claim-link re-check (2026-05-18): every file-level path
+cited by the updated public-sync catalog was verified from the public-sync
+clone before commit. The new execution-chain evidence path is:
+
+```powershell
+PASS docs/evidence/phase-e-governed-execution-chain.md
+```
+
+The evidence supports only the selected Product Brief execution chain:
+role permission, workflow step traces, provider receipt, selected-flow receipt
+binding, and workflow audit payload. It does not widen the catalog to a
+complete Agent OS, universal provider parity, or full legacy absorption claim.
 
 ## What Agents Must Respect
 

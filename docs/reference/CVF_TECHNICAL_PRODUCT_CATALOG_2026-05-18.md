@@ -56,7 +56,7 @@ INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE
 | Capability | Current status | What to verify |
 |---|---|---|
 | Governance control plane | proven and active | `ARCHITECTURE.md`, `GOVERNANCE.md`, `governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md` |
-| Live governance proof | mandatory for release claims | `scripts/run_cvf_release_gate_bundle.py`, `docs/evidence/latest-release-gate.md` |
+| Live governance proof | proven and mandatory for release claims | `scripts/run_cvf_release_gate_bundle.py`, `docs/evidence/latest-release-gate.md` |
 | Non-coder governed path | proven on bounded provider lanes | `docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md`, `docs/evidence/web-governance-path.md` |
 | Provider lanes | certified only where evidence exists | `docs/evidence/provider-lanes.md` |
 | Knowledge-backed execution | proven in bounded execute path | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
@@ -65,7 +65,7 @@ INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE
 | Role and agent governance | partially absorbed | `governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md`, `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md` |
 | Memory and continuity | partially absorbed | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md` |
 | Provider method breadth | demand-gated | provider evidence and roadmap docs; no universal provider-method parity claim |
-| Operational observability | partially absorbed | `docs/evidence/`, runtime and operations docs |
+| Operational observability | partially absorbed | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
 | Tool/MCP/database action governance | roadmap | current tool guards exist, but full action taxonomy is not claimed |
 | Async workers/subagents | roadmap | sandbox concepts exist, but canonical async lifecycle is not claimed |
 | Graph/code-intelligence context | roadmap | no full graph-native context resolver claim yet |
@@ -155,6 +155,36 @@ are no longer cited.
 
 Step 1 re-check (2026-05-18): extracted the 15 `Test-Path` lines above from
 this catalog and verified them in the public-sync clone: 15/15 PASS.
+
+Step 4 public-sync claim-link re-check (2026-05-18): every file-level path
+cited by the public-sync catalog was verified from the public-sync clone before
+commit:
+
+```powershell
+PASS README.md
+PASS ARCHITECTURE.md
+PASS docs/GET_STARTED.md
+PASS docs/evidence/README.md
+PASS docs/evidence/latest-release-gate.md
+PASS docs/evidence/provider-lanes.md
+PASS docs/evidence/web-governance-path.md
+PASS docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md
+PASS GOVERNANCE.md
+PASS governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md
+PASS scripts/run_cvf_release_gate_bundle.py
+PASS docs/evidence/cvf-16-5-runtime-absorption.md
+PASS docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md
+PASS governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md
+PASS governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md
+PASS governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md
+PASS docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md
+```
+
+Knowledge-backed execution check: `docs/evidence/cvf-16-5-runtime-absorption.md`
+materially backs the bounded claim because it lists public runtime contracts,
+knowledge-vault intake, controlled memory, governed web inheritance, test
+coverage, and live release-gate evidence. The row remains `proven in bounded
+execute path`, not a universal runtime or UI claim.
 
 ## What Agents Must Respect
 

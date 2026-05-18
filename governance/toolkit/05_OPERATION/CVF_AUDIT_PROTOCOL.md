@@ -18,6 +18,14 @@
 6. Refusal quality consistency
 7. Drift behavior analysis
 
+8. Public catalog path verification
+
+   For any public-sync catalog reconciliation, every customer-facing path cited
+   in `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md` must be
+   `Test-Path`-verified on the public-sync filesystem before commit.
+   Provenance-only verification is advisory context, not proof that a public
+   repository path exists.
+
 ---
 
 ## 3. AUDIT OUTCOME

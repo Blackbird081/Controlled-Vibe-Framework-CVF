@@ -21,6 +21,10 @@ Catalog reconciliation model:
   source copy.
 - The two files may differ in annotation density, but they must not disagree
   on product claims or claim boundaries.
+- Permanent path verification rule: every path cited by this public-sync
+  catalog must be `Test-Path`-verified on this public-sync filesystem before
+  commit. Provenance-only verification is not sufficient for customer-facing
+  catalog paths.
 
 ## Owner
 
@@ -121,6 +125,8 @@ Claude N-1 correction (2026-05-18):
   **on the public-sync filesystem**, not on the provenance repository.
   Copying provenance paths into public-sync without re-verification reproduces
   the same C-1 failure mode the matrix correction was meant to retire.
+- Binding rule retained from Step 1: future catalog edits must repeat the
+  public-sync `Test-Path` check below before commit.
 
 Verification command run in public-sync (Claude re-verified after N-1 fix):
 
@@ -146,6 +152,9 @@ Result after N-1 fix: 15/15 PASS in public-sync. The two removed paths
 (`docs/audits/alibaba-canary/INDEX.md`,
 `docs/audits/deepseek-canary/INDEX.md`) returned False before removal and
 are no longer cited.
+
+Step 1 re-check (2026-05-18): extracted the 15 `Test-Path` lines above from
+this catalog and verified them in the public-sync clone: 15/15 PASS.
 
 ## What Agents Must Respect
 
@@ -180,6 +189,18 @@ CVF must not claim yet:
 - unrestricted autonomous self-improvement;
 - complete role-permission, memory-reinjection, async-worker, graph-context,
   database-action, or provider-method coverage.
+
+## Related Artifacts
+
+- `README.md`
+- `ARCHITECTURE.md`
+- `GOVERNANCE.md`
+- `docs/GET_STARTED.md`
+- `docs/evidence/README.md`
+- `docs/evidence/latest-release-gate.md`
+- `docs/evidence/provider-lanes.md`
+- `docs/evidence/web-governance-path.md`
+- `governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md`
 
 ## Final Clause
 

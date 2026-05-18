@@ -76,6 +76,64 @@ The core operating loop is:
 INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE
 ```
 
+## Maturity and Delivery History
+
+CVF v4.0.0 GA was released 2026-05-16. The framework was built through
+130+ incremental delivery tranches covering: knowledge retrieval pipeline,
+certified provider lanes, skill governance engine, template marketplace,
+non-coder UX, governance CLI, benchmark infrastructure, and a fully
+governed execution chain (role permission → workflow binding → provider
+call → receipt emission). All release claims are backed by live provider
+proof — mock-only tests are not accepted as governance evidence.
+
+Release gate: `scripts/run_cvf_release_gate_bundle.py`
+Latest result: `docs/evidence/latest-release-gate.md`
+
+## What CVF Can Do Today
+
+The following outcomes are proven on at least one certified provider
+lane and backed by a public evidence path. Each is bounded — CVF does
+not claim these as universal across all templates, providers, or
+deployment configurations.
+
+**1. Generate a governed Product Brief with full execution chain.**
+A user with Developer role submits a product brief request. CVF
+resolves their role to `BUILDER`, checks output permission, binds the
+`Create Product Brief` workflow, dispatches ordered steps (intake →
+retrieval → provider call → receipt emission), and returns a response
+with step traces, a governance evidence receipt, and a workflow audit
+payload.
+Evidence: `docs/evidence/phase-e-governed-execution-chain.md`
+
+**2. Run a live governance proof across the full release gate.**
+CVF can execute a seven-check release gate covering: web build, guard
+contract TypeScript, provider readiness, secrets scan, RC docs
+governance, Playwright UI mock E2E, and Playwright live governance E2E.
+All seven must pass before a release claim is made.
+Evidence: `docs/evidence/latest-release-gate.md`
+
+**3. Execute knowledge-backed AI with DLP, quota, and guard controls.**
+The governed execute path applies DLP filtering, team quota checks, a
+guard engine policy evaluation, and scoped knowledge retrieval before
+dispatching to the provider. Output is validated and wrapped in a
+governance envelope with an evidence receipt.
+Evidence: `docs/evidence/web-governance-path.md`,
+`docs/evidence/cvf-16-5-runtime-absorption.md`
+
+**4. Audit an AI session or workflow with the governance CLI.**
+The governance CLI (`cvf-guard`) supports four commands: `evaluate`
+(run a guard policy check), `audit` (generate a session audit report),
+`session` (inspect session continuity state), `report` (export
+governance evidence). Suitable for developer and operator use cases.
+Evidence: `ARCHITECTURE.md` (governance CLI section)
+
+**5. Benchmark provider output against the CVF Quality Baseline.**
+CVF's benchmark infrastructure supports preregistered quality runs
+across provider lanes. Benchmark results are recorded as public
+evidence and cited in release decisions.
+Evidence: `docs/evidence/current-cvf-quality-status.md`,
+`docs/benchmark/`
+
 ## Product Catalog
 
 | Capability | Current status | What to verify |
@@ -94,6 +152,27 @@ INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE
 | Tool/MCP/database action governance | roadmap | current tool guards exist, but full action taxonomy is not claimed |
 | Async workers/subagents | roadmap | sandbox concepts exist, but canonical async lifecycle is not claimed |
 | Graph/code-intelligence context | roadmap | no full graph-native context resolver claim yet |
+
+## Key Extensions
+
+CVF is built from modular extensions. The table below covers the most
+significant ones. Each extension is self-contained with its own tests.
+This list does not expose implementation internals — it gives readers
+enough context to understand what already exists before proposing new
+work.
+
+| Extension | What it does | Status |
+| --- | --- | --- |
+| `CVF_v1.6_AGENT_PLATFORM` | Web UI (Next.js): governed execute path, template marketplace, role-based access, analytics, safety dashboard | active |
+| `CVF_GUARD_CONTRACT` | Governance contract SDK: role-permission, runtime-workflow, orchestrator, memory-continuity contracts | active |
+| `CVF_ECO_v2.2_GOVERNANCE_CLI` | Governance CLI: `cvf-guard evaluate`, `audit`, `session`, `report` commands | active |
+| `CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE` | Skill lifecycle: fusion, evolution, probation, deprecation, ranking, and governed skill registry | active |
+| `CVF_MODEL_GATEWAY` | Provider adapter hub: LLM, tool, and memory adapters with routing policy, fallback policy, and gateway receipt | active |
+| `CVF_LEARNING_PLANE_FOUNDATION` | Memory governance: controlled memory gateway, retention policy events, tier contracts | active |
+| `CVF_ECO_v3.0_TASK_MARKETPLACE` | Task marketplace: governed task registry, template binding, and outcome-oriented task packs | active |
+| `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL` | Phase governance: deterministic phase orchestration, guard runtime pipeline, hardened session protocol | active |
+
+For the full extension inventory see `docs/reference/CVF_MODULE_INVENTORY.md`.
 
 ## What Users Can Expect
 

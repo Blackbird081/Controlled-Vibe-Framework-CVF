@@ -33,6 +33,7 @@ repository maintenance, and verification support. See
     <td align="center"><a href="#what-cvf-is"><strong>Overview</strong></a></td>
     <td align="center"><a href="#start-here"><strong>Start Here</strong></a></td>
     <td align="center"><a href="ARCHITECTURE.md"><strong>Architecture</strong></a></td>
+    <td align="center"><a href="docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md"><strong>Catalog</strong></a></td>
     <td align="center"><a href="#developer-technical-design"><strong>Dev Design</strong></a></td>
     <td align="center"><a href="#current-status"><strong>Status</strong></a></td>
     <td align="center"><a href="#repository-map"><strong>Repo Map</strong></a></td>

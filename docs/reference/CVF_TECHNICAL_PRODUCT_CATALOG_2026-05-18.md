@@ -58,12 +58,13 @@ lane and backed by a public evidence path. Each is bounded — CVF does
 not claim these as universal across all templates, providers, or
 deployment configurations.
 
-**1. Generate a governed Product Brief with full execution chain.**
+**1. Generate a governed Product Brief through a bounded governed execution chain.**
 A Developer-role user submits a product brief request. CVF resolves
 their role to `BUILDER`, checks output permission, binds the workflow,
 dispatches ordered steps (intake → retrieval → provider call → receipt
 emission), and returns a response with step traces, a governance
-evidence receipt, and a workflow audit payload.
+evidence receipt, and a workflow audit payload. This is the selected
+Product Brief flow — not a universal claim across all templates.
 Evidence: `docs/evidence/phase-e-governed-execution-chain.md`
 
 **2. Run a live governance proof across the full release gate.**
@@ -86,7 +87,7 @@ The governance CLI (`cvf-guard`) supports four commands: `evaluate`
 (run a guard policy check), `audit` (generate a session audit report),
 `session` (inspect session continuity state), `report` (export
 governance evidence). Suitable for developer and operator use cases.
-Evidence: `ARCHITECTURE.md`
+Evidence: `ARCHITECTURE.md`, `docs/reference/CVF_MODULE_INVENTORY.md`
 
 **5. Benchmark provider output against the CVF Quality Baseline.**
 CVF's benchmark infrastructure supports preregistered quality runs
@@ -99,14 +100,25 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 
 ## Capability Catalog
 
+**Status vocabulary**
+
+| Status | Meaning |
+| --- | --- |
+| `proven` | Live-tested on at least one certified provider lane; evidence receipt exists |
+| `partially proven` | Core path tested; not all configurations or flows covered |
+| `partially absorbed` | Contract or design exists; not wired into the live execute path |
+| `active` | Implemented and used; evidence exists but not as a formal governance proof |
+| `demand-gated` | Ready when a concrete consuming flow is named; not built speculatively |
+| `roadmap` | Designed or scoped; no current implementation or evidence |
+
 | Capability | Status | Evidence |
 | --- | --- | --- |
 | Governance control plane | proven | `ARCHITECTURE.md`, `GOVERNANCE.md` |
 | Live governance proof | proven — mandatory for release claims | `docs/evidence/latest-release-gate.md` |
-| Governed execution chain (Product Brief) | proven — selected flow | `docs/evidence/phase-e-governed-execution-chain.md` |
+| Governed execution chain (Product Brief) | proven — bounded to selected Product Brief flow | `docs/evidence/phase-e-governed-execution-chain.md` |
 | Knowledge-backed execution with guards | proven — bounded execute path | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
 | Non-coder governed path | proven — bounded provider lanes | `docs/evidence/web-governance-path.md` |
-| Governance CLI (`cvf-guard`) | active | `ARCHITECTURE.md` |
+| Governance CLI (`cvf-guard`) | active | `ARCHITECTURE.md`, `docs/reference/CVF_MODULE_INVENTORY.md` |
 | Certified provider lanes | proven where evidence exists | `docs/evidence/provider-lanes.md` |
 | Skill governance engine | active | `docs/reference/CVF_MODULE_INVENTORY.md` |
 | Template marketplace | active | `docs/evidence/web-governance-path.md` |
@@ -218,11 +230,13 @@ This catalog must be updated when a capability tranche is closed. The
 update rules:
 
 1. New proven capability → add a row with `proven` status and an
-   evidence path verified in this repository.
+   evidence path verified in the public-sync clone.
 2. New or extended extension → add or update the extension table row.
 3. Row status upgrade (`roadmap` → `partially absorbed` → `proven`) →
    update status and replace with a concrete evidence link.
-4. Every new path must exist in this repository before being cited.
+4. Every new path must exist in the public-sync clone and pass
+   `Test-Path` before being cited. Do not copy provenance paths
+   without re-verifying them here — broken links have occurred this way.
 
 ---
 

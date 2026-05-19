@@ -38,7 +38,8 @@ export type CVFRole =
   | 'GOVERNOR'
   | 'HUMAN'
   | 'AI_AGENT'
-  | 'OPERATOR';
+  | 'OPERATOR'
+  | 'SERVICE_AGENT';
 
 export type GuardDecision = 'ALLOW' | 'BLOCK' | 'ESCALATE';
 

@@ -81,6 +81,13 @@ export const AUTHORITY_MATRIX: Record<CVFRole, Record<CanonicalCVFPhase, Authori
     REVIEW: { allowed: true, allowedActions: ['read', 'approve', 'critique', 'test', 'deploy', 'release'], maxRisk: 'R2' },
     FREEZE: FORBIDDEN,
   },
+  SERVICE_AGENT: {
+    INTAKE: FORBIDDEN,
+    DESIGN: FORBIDDEN,
+    BUILD: { allowed: true, allowedActions: ['execute', 'create', 'build', 'analyze', 'draft', 'read'], maxRisk: 'R2' },
+    REVIEW: { allowed: true, allowedActions: ['read'], maxRisk: 'R1' },
+    FREEZE: FORBIDDEN,
+  },
 };
 
 export const RESTRICTED_ACTIONS: Record<CVFRole, string[]> = Object.fromEntries(

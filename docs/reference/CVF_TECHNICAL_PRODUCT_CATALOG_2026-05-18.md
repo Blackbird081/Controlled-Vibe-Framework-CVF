@@ -107,6 +107,7 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 | `proven` | Live-tested on at least one certified provider lane; evidence receipt exists |
 | `partially proven` | Core path tested; not all configurations or flows covered |
 | `partially absorbed` | Contract or design exists; not wired into the live execute path |
+| `schema-defined` | Concrete schema/policy/spec artifacts exist; runtime binding and live proof are not claimed |
 | `active` | Implemented and used; evidence exists but not as a formal governance proof |
 | `demand-gated` | Ready when a concrete consuming flow is named; not built speculatively |
 | `roadmap` | Designed or scoped; no current implementation or evidence |
@@ -118,14 +119,15 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 | Governed execution chain (Product Brief) | proven — bounded to selected Product Brief flow | `docs/evidence/phase-e-governed-execution-chain.md` |
 | Knowledge-backed execution with guards | proven — bounded execute path | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
 | Non-coder governed path | proven — bounded provider lanes | `docs/evidence/web-governance-path.md` |
-| Governance CLI (`cvf-guard`) | active | `ARCHITECTURE.md`, `docs/reference/CVF_MODULE_INVENTORY.md` |
+| Governance CLI (`cvf-guard`, `cvf execute`) | active; `execute` caller is mock-tested and delegates to the web execute route | `ARCHITECTURE.md`, `docs/reference/CVF_MODULE_INVENTORY.md`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/execute.client.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/execute.client.test.ts` |
 | Certified provider lanes | proven where evidence exists | `docs/evidence/provider-lanes.md` |
 | Skill governance engine | active | `docs/reference/CVF_MODULE_INVENTORY.md` |
 | Template marketplace | active | `docs/evidence/web-governance-path.md` |
 | Deliverable packs and evidence export | active — web product path | `docs/evidence/web-governance-path.md` |
+| Workflow capability packs | schema-defined — selected templates only | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governed-packs/app_builder_complete/workflow.spec.md`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governed-packs/strategy_analysis/workflow.spec.md`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governed-packs/documentation/workflow.spec.md` |
 | Benchmark infrastructure (QBS) | active | `docs/evidence/current-cvf-quality-status.md`, `docs/benchmark/` |
 | Role and agent governance | partially proven — selected flow | `docs/evidence/phase-e-governed-execution-chain.md` |
-| Memory and continuity contracts | partially absorbed — contract-local | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |
+| Memory and continuity contracts | partially runtime-wired — execute-route audit memory receipt, no provider prompt reinjection claim | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/audit-memory-receipt.ts`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/audit-memory-receipt.test.ts` |
 | Operational observability | partially absorbed | `docs/evidence/cvf-16-5-runtime-absorption.md` |
 | External asset/capability governance | partially productized | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |
 | Provider method breadth | demand-gated | no universal provider-method parity claim |

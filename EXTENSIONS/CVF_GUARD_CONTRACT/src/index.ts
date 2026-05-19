@@ -40,6 +40,61 @@ export { FileScopeGuard, PROTECTED_PATHS as FILE_SCOPE_PROTECTED_PATHS, READ_ONL
 export { ScopeGuard, PROTECTED_PATHS, CVF_ROOT_INDICATORS } from './guards/scope.guard';
 export { AuditTrailGuard } from './guards/audit-trail.guard';
 
+// Phase D role-permission contract
+export type {
+  RolePermissionOutputClass,
+  RolePermissionDenyRuleId,
+  ReceiptOwnerAxis,
+  ReceiptOwnerBoundary,
+  RolePermissionProfile,
+} from './contracts/role-permission.contract';
+
+export {
+  ROLE_PERMISSION_SCHEMA_VERSION,
+  ROLE_PERMISSION_OUTPUT_CLASSES,
+  ROLE_PERMISSION_DENY_RULES,
+  ROLE_PERMISSION_PROFILES,
+  getRolePermissionProfile,
+  isOutputAllowedForRole,
+  roleHasDenyRule,
+  rolePermissionCoversAllRoles,
+} from './contracts/role-permission.contract';
+
+// Phase E workflow binding contract
+export type {
+  WorkflowBindingStatus,
+  WorkflowStepDecision,
+  WorkflowStepTraceSource,
+  WorkflowStepRole,
+  WorkflowStep,
+  WorkflowBinding,
+  WorkflowStepExecutionTrace,
+  WorkflowBindingValidationResult,
+} from './contracts/workflow-binding.contract';
+
+export {
+  WORKFLOW_BINDING_CONTRACT_VERSION,
+  validateWorkflowBinding,
+  getActiveWorkflowSteps,
+} from './contracts/workflow-binding.contract';
+
+// Phase E receipt binding contract
+export type {
+  ReceiptBindingDisposition,
+  StepReceiptEmissionSource,
+  StepReceiptObligation,
+  StepReceiptEmission,
+  StepReceiptBindingResult,
+} from './contracts/receipt-binding.contract';
+
+export {
+  RECEIPT_BINDING_CONTRACT_VERSION,
+  FULL_ROLE_ACTION_MATRIX_DEFERRED_REASON,
+  buildSelectedFlowReceiptObligations,
+  emitStepReceipt,
+  bindStepReceipts,
+} from './contracts/receipt-binding.contract';
+
 // Factory
 import type { GuardRuntimeConfig } from './types';
 import { GuardRuntimeEngine } from './engine';

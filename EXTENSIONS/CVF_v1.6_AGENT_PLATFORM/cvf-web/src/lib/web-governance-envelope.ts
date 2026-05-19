@@ -1,3 +1,5 @@
+import type { GovernanceEvidenceReceipt } from '@/lib/ai';
+
 /**
  * Web Governance Envelope — CVF W112-T1 (CP7)
  * =============================================
@@ -58,6 +60,21 @@ export interface BuildEnvelopeInput {
     auditEventIds?: string[];
 }
 
+export interface BuildGovernanceEvidenceReceiptInput {
+    envelope: WebGovernanceEnvelope;
+    decision?: string;
+    riskLevel?: string;
+    provider?: string;
+    model?: string;
+    routingDecision?: string;
+    knowledgeSource?: string;
+    knowledgeInjected?: boolean;
+    knowledgeCollectionId?: string | null;
+    knowledgeChunkCount?: number;
+    approvalId?: string;
+    validationHint?: string;
+}
+
 /**
  * Build a WebGovernanceEnvelope for the current request.
  * Call once per route handler and attach the result to the response.
@@ -79,6 +96,30 @@ export function buildGovernanceEnvelope(input: BuildEnvelopeInput): WebGovernanc
         auditEventIds: input.auditEventIds ?? [],
         requestTimestamp: new Date(ts).toISOString(),
         trancheRef: 'W112-T1',
+    };
+}
+
+export function buildEvidenceReceipt(
+    input: BuildGovernanceEvidenceReceiptInput,
+): GovernanceEvidenceReceipt {
+    return {
+        receiptId: `rcpt-${input.envelope.envelopeId}`,
+        evidenceMode: 'live',
+        routeId: input.envelope.routeId,
+        decision: input.decision,
+        riskLevel: input.riskLevel ?? input.envelope.riskLevel ?? undefined,
+        provider: input.provider,
+        model: input.model,
+        routingDecision: input.routingDecision,
+        policySnapshotId: input.envelope.policySnapshotId,
+        envelopeId: input.envelope.envelopeId,
+        knowledgeSource: input.knowledgeSource,
+        knowledgeInjected: input.knowledgeInjected,
+        knowledgeCollectionId: input.knowledgeCollectionId ?? null,
+        knowledgeChunkCount: input.knowledgeChunkCount,
+        approvalId: input.approvalId,
+        validationHint: input.validationHint,
+        generatedAt: input.envelope.requestTimestamp,
     };
 }
 

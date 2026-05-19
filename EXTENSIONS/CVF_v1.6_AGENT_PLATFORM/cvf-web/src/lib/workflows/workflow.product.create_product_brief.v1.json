@@ -1,0 +1,98 @@
+{
+  "workflowId": "workflow.product.create_product_brief.v1",
+  "version": "phaseE.workflowBinding.v1",
+  "templateId": "app_builder_complete",
+  "capabilityId": "product.create_product_brief",
+  "steps": [
+    {
+      "stepId": "step-1-intake-validation",
+      "label": "Intake validation",
+      "sequence": 1,
+      "role": {
+        "role": "BUILDER"
+      },
+      "outputClass": "recommendation",
+      "actionClass": "artifact_export",
+      "transition": {
+        "fromState": "intake_pending",
+        "toState": "design_ready",
+        "trigger": "input_accepted",
+        "receiptRequired": true
+      },
+      "receiptRequired": true,
+      "status": "active"
+    },
+    {
+      "stepId": "step-2-knowledge-retrieval",
+      "label": "Knowledge retrieval",
+      "sequence": 2,
+      "role": {
+        "role": "BUILDER"
+      },
+      "outputClass": "analysis",
+      "actionClass": "file_read",
+      "transition": {
+        "fromState": "design_ready",
+        "toState": "build_running",
+        "trigger": "design_confirmed",
+        "receiptRequired": true
+      },
+      "receiptRequired": true,
+      "status": "active"
+    },
+    {
+      "stepId": "step-3-provider-call",
+      "label": "Provider call",
+      "sequence": 3,
+      "role": {
+        "role": "BUILDER"
+      },
+      "outputClass": "artifact",
+      "actionClass": "provider_call",
+      "transition": {
+        "fromState": "build_running",
+        "toState": "review_pending",
+        "trigger": "review_requested",
+        "receiptRequired": true
+      },
+      "receiptRequired": true,
+      "status": "active"
+    },
+    {
+      "stepId": "step-4-review-gate",
+      "label": "Review gate",
+      "sequence": 4,
+      "role": {
+        "role": "REVIEWER"
+      },
+      "outputClass": "review_finding",
+      "actionClass": "artifact_export",
+      "transition": {
+        "fromState": "review_pending",
+        "toState": "freeze_ready",
+        "trigger": "approval_granted",
+        "receiptRequired": true
+      },
+      "receiptRequired": true,
+      "status": "deferred_until_reviewer_surface"
+    },
+    {
+      "stepId": "step-5-receipt-emit",
+      "label": "Receipt emit",
+      "sequence": 5,
+      "role": {
+        "role": "BUILDER"
+      },
+      "outputClass": "implementation_note",
+      "actionClass": "artifact_export",
+      "transition": {
+        "fromState": "freeze_ready",
+        "toState": "completed",
+        "trigger": "freeze_requested",
+        "receiptRequired": true
+      },
+      "receiptRequired": true,
+      "status": "active"
+    }
+  ]
+}

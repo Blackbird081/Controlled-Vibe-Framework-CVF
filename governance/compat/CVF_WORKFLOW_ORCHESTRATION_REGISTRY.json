@@ -1,0 +1,62 @@
+[
+  {
+    "surface": ".github/workflows/public-surface.yml",
+    "requiredFragments": ["python scripts/check_public_surface.py"],
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "surface": ".github/workflows/cvf-static-ci.yml",
+    "requiredFragments": ["python scripts/run_cvf_static_ci_gate.py --json"],
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "surface": ".github/workflows/cvf-protected-live-release-gate.yml",
+    "requiredFragments": ["python scripts/run_cvf_release_gate_bundle.py --json"],
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "surface": ".github/workflows/ci.yml",
+    "requiredFragments": [
+      "python governance/compat/run_local_governance_hook_chain.py --hook pre-commit",
+      "npm run test:run",
+      "npm run build"
+    ],
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "surface": ".github/workflows/cvf-web-ci.yml",
+    "requiredFragments": [
+      "check_core_compat.py",
+      "npm run lint -- --max-warnings=0",
+      "npm run build",
+      "npm run test:run",
+      "npm run test:coverage"
+    ],
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "surface": "scripts/run_cvf_static_ci_gate.py",
+    "requiredFragments": [
+      "check_public_surface",
+      "check_workflow_orchestration_guard",
+      "check_web_build",
+      "check_web_typecheck",
+      "check_secrets",
+      "check_docs_governance_compat",
+      "check_static_governance_tests"
+    ],
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "surface": "governance/compat/run_local_governance_hook_chain.py",
+    "requiredFragments": ["check_workflow_orchestration_guard.py"],
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  }
+]

@@ -6,10 +6,15 @@ import { CommandRegistry } from "../src/command.registry";
 import {
   auditEventCaptureRate,
   computeGovernanceReliabilityReport,
+  crossSessionContinuityRate,
+  deterministicConsistencyRate,
   parseAuditJsonl,
   policyDecisionRate,
+  policyViolationRate,
   receiptIntegrityRate,
+  retryRecoveryRate,
   stepTraceCompletionRate,
+  taskCompletionRate,
   type AuditEvent,
 } from "../src/governance-reliability-metrics";
 
@@ -71,7 +76,54 @@ describe("governance reliability metrics", () => {
       policyDecisionRate: { rate: 0, count: 0, total: 0 },
       stepTraceCompletionRate: { rate: 0, count: 0, total: 0 },
       auditEventCaptureRate: { rate: 0, count: 0, total: 0 },
+      taskCompletionRate: { rate: 0, count: 0, total: 0 },
+      retryRecoveryRate: { rate: 0, count: 0, total: 0 },
+      policyViolationRate: { rate: 0, count: 0, total: 0 },
+      crossSessionContinuityRate: { rate: 0, count: 0, total: 0 },
+      deterministicConsistencyRate: { rate: 0, count: 0, total: 0 },
     });
+  });
+
+  it("computes task completion rate from allow decisions", () => {
+    const result = taskCompletionRate([{ decision: "allow" }, { decision: "allow" }, { decision: "deny" }]);
+
+    expect(result).toEqual({ rate: 2 / 3, count: 2, total: 3 });
+  });
+
+  it("computes retry recovery rate from retry and recovered statuses", () => {
+    const result = retryRecoveryRate([
+      { enforcement: { status: "retry" } },
+      { enforcement: { status: "recovered" } },
+      { enforcement: { status: "deny" } },
+    ]);
+
+    expect(result).toEqual({ rate: 2 / 3, count: 2, total: 3 });
+  });
+
+  it("computes policy violation rate from deny and blocked statuses", () => {
+    const result = policyViolationRate([
+      { enforcement: { status: "deny" } },
+      { enforcement: { status: "blocked" } },
+      { enforcement: { status: "allow" } },
+    ]);
+
+    expect(result).toEqual({ rate: 2 / 3, count: 2, total: 3 });
+  });
+
+  it("computes cross-session continuity from repeated runIds", () => {
+    const result = crossSessionContinuityRate([{ runId: "run-1" }, { runId: "run-1" }, { runId: "run-2" }]);
+
+    expect(result).toEqual({ rate: 0.5, count: 1, total: 2 });
+  });
+
+  it("computes deterministic consistency from executionIds with one event", () => {
+    const result = deterministicConsistencyRate([
+      { executionId: "exec-1" },
+      { executionId: "exec-1" },
+      { executionId: "exec-2" },
+    ]);
+
+    expect(result).toEqual({ rate: 0.5, count: 1, total: 2 });
   });
 
   it("returns zero receipt integrity when all receipts are null", () => {
@@ -105,7 +157,28 @@ describe("governance reliability metrics", () => {
       expect(result.success).toBe(true);
       expect(JSON.parse(result.message)).toMatchObject({
         receiptIntegrityRate: { count: 3, total: 4 },
+        deterministicConsistencyRate: { count: 2, total: 3 },
       });
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("runs cvf benchmark run against a JSONL file", () => {
+    const tempDir = mkdtempSync(join(tmpdir(), "cvf-governance-benchmark-"));
+    const inputPath = join(tempDir, "audit.jsonl");
+    writeFileSync(inputPath, fixture.map((event) => JSON.stringify(event)).join("\n"));
+
+    try {
+      const result = new CommandRegistry().execute({
+        command: "benchmark",
+        positional: ["run"],
+        flags: { input: inputPath },
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.message).toContain("CVF Governance Reliability Report");
+      expect(result.message).toContain("deterministicConsistencyRate:");
     } finally {
       rmSync(tempDir, { recursive: true, force: true });
     }

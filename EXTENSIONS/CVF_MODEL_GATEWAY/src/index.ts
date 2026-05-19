@@ -107,6 +107,66 @@ export {
 } from "./provider-output-contract";
 
 export type {
+  StreamCapableProvider,
+  StreamContract,
+  StreamRequest,
+} from "./stream-contract";
+export {
+  isStreamContract,
+  STREAM_CONTRACT_REQUIRED_FIELDS,
+} from "./stream-contract";
+
+export type {
+  VisionCapableProvider,
+  VisionContract,
+  VisionRequest,
+} from "./vision-contract";
+export {
+  isVisionContract,
+  VISION_CONTRACT_REQUIRED_FIELDS,
+} from "./vision-contract";
+
+export type {
+  ReasoningCapableProvider,
+  ReasoningContract,
+  ReasoningRequest,
+} from "./reasoning-contract";
+export {
+  isReasoningContract,
+  REASONING_CONTRACT_REQUIRED_FIELDS,
+} from "./reasoning-contract";
+
+export type {
+  JsonModeCapableProvider,
+  JsonModeContract,
+  JsonModeRequest,
+} from "./json-mode-contract";
+export {
+  isJsonModeContract,
+  JSON_MODE_CONTRACT_REQUIRED_FIELDS,
+} from "./json-mode-contract";
+
+export type {
+  ToolCallCapableProvider,
+  ToolCallContract,
+  ToolCallRequest,
+} from "./tool-call-contract";
+export {
+  isToolCallContract,
+  TOOL_CALL_CONTRACT_REQUIRED_FIELDS,
+} from "./tool-call-contract";
+
+export type {
+  EmbeddingCapableProvider,
+  EmbeddingContract,
+  EmbeddingRequest,
+} from "./embedding-contract";
+export {
+  EMBEDDING_CONTRACT_REQUIRED_FIELDS,
+  isEmbeddingContract,
+} from "./embedding-contract";
+
+export type {
   CredentialMetadata,
   CredentialReference,
 } from "./credential-boundary";

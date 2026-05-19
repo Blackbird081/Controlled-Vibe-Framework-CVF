@@ -50,6 +50,7 @@ import {
     buildApprovalRequestSnapshot,
     computeApprovalRequestHash,
 } from '../approvals/approval-binding';
+import { buildGovernedDecisionOutput } from './route-decision-output';
 
 export async function POST(request: NextRequest) {
     const routeStartedAtMs = Date.now();
@@ -284,13 +285,18 @@ export async function POST(request: NextRequest) {
         // Safety filters
         const safety = applySafetyFilters(filteredPrompt);
         if (safety.blocked) {
+            const governanceEvidenceReceipt = buildEvidenceReceipt({ envelope: govEnvelope, decision: 'BLOCK', riskLevel: body.cvfRiskLevel, provider, model: 'blocked' });
             return NextResponse.json(
                 {
                     success: false,
                     error: safety.reason || 'Request blocked by safety filters.',
                     details: safety.details,
+                    output: buildGovernedDecisionOutput({ decision: 'BLOCK', reason: safety.reason || 'Request blocked by safety filters.' }),
                     provider,
                     model: 'blocked',
+                    governanceEnvelope: govEnvelope,
+                    policySnapshotId: govEnvelope.policySnapshotId,
+                    governanceEvidenceReceipt,
                 },
                 { status: 400 }
             );
@@ -391,21 +397,17 @@ export async function POST(request: NextRequest) {
 
         if (enforcement.status === 'BLOCK') {
             const guidedResponse = lookupGuidedResponse(userPrompt);
-            const governanceEvidenceReceipt = buildEvidenceReceipt({
-                envelope: govEnvelope,
-                decision: enforcement.status,
-                riskLevel: enforcement.riskGate?.riskLevel,
-                provider,
-                model: 'blocked',
-            });
+            const governanceEvidenceReceipt = buildEvidenceReceipt({ envelope: govEnvelope, decision: enforcement.status, riskLevel: enforcement.riskGate?.riskLevel, provider, model: 'blocked' });
             await recordReportableDecisionObserved({
                 receipt: governanceEvidenceReceipt,
                 templateId: body.templateId || body.templateName,
             });
+            const reason = enforcement.reasons.join(' | ') || 'Execution blocked by CVF policy.';
             return NextResponse.json(
                 {
                     success: false,
-                    error: enforcement.reasons.join(' | ') || 'Execution blocked by CVF policy.',
+                    error: reason,
+                    output: buildGovernedDecisionOutput({ decision: 'BLOCK', reason, guidedResponse }),
                     provider,
                     model: 'blocked',
                     enforcement,
@@ -419,22 +421,18 @@ export async function POST(request: NextRequest) {
         }
 
         if (enforcement.status === 'CLARIFY') {
-            const governanceEvidenceReceipt = buildEvidenceReceipt({
-                envelope: govEnvelope,
-                decision: enforcement.status,
-                riskLevel: enforcement.riskGate?.riskLevel,
-                provider,
-                model: 'clarify',
-            });
+            const governanceEvidenceReceipt = buildEvidenceReceipt({ envelope: govEnvelope, decision: enforcement.status, riskLevel: enforcement.riskGate?.riskLevel, provider, model: 'clarify' });
             await recordReportableDecisionObserved({
                 receipt: governanceEvidenceReceipt,
                 templateId: body.templateId || body.templateName,
             });
+            const missing = enforcement.specGate?.missing?.map(field => field.label) || [];
             return NextResponse.json(
                 {
                     success: false,
                     error: 'Spec needs clarification before execution.',
-                    missing: enforcement.specGate?.missing?.map(field => field.label) || [],
+                    output: buildGovernedDecisionOutput({ decision: 'CLARIFY', missing }),
+                    missing,
                     provider,
                     model: 'clarify',
                     enforcement,
@@ -501,6 +499,7 @@ export async function POST(request: NextRequest) {
                     {
                         success: false,
                         error: enforcement.reasons.join(' | ') || 'Human approval required before execution.',
+                        output: buildGovernedDecisionOutput({ decision: 'NEEDS_APPROVAL', approvalId }),
                         provider,
                         model: 'approval-required',
                         enforcement,

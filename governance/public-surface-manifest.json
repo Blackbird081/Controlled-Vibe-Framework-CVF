@@ -100,6 +100,66 @@
       "reason": "Web runtime validator source, not an internal operator handoff artifact."
     },
     {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/agent-handoff-validator.test.ts",
+      "reason": "Unit coverage for the public web runtime validator; not an internal operator handoff artifact."
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.web-build-handoff.alibaba.live.test.ts",
+      "reason": "Live route proof for the public web-build handoff template path; not an internal operator handoff artifact."
+    },
+    {
+      "path": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/agent.handoff.contract.ts",
+      "reason": "Public control-plane contract source for agent handoff semantics, not an operator session handoff."
+    },
+    {
+      "path": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/agent.handoff.contract.test.ts",
+      "reason": "Unit coverage for public control-plane handoff contract source."
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/models/external-skill.raw.ts",
+      "reason": "Typed raw external skill intake model required by the public external integration package."
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/claude_design_handoff.skill.md",
+      "reason": "Curated public skill file; handoff here names a product UX deliverable type, not a private agent handoff."
+    },
+    {
+      "path": "governance/compat/check_agent_handoff_guard_compat.py",
+      "reason": "Public governance compatibility checker referenced by the local hook chain."
+    },
+    {
+      "path": "governance/compat/test_check_agent_handoff_guard_compat.py",
+      "reason": "Unit coverage for the public governance compatibility checker."
+    },
+    {
+      "path": "governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md",
+      "reason": "Public operational guard reference needed by governance compatibility checks."
+    },
+    {
+      "path": "governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md",
+      "reason": "Public operational transition guard reference needed by governance compatibility checks."
+    },
+    {
+      "path": "docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md",
+      "reason": "Public template referenced by governance compatibility checks; it is a blank contract template, not a private handoff."
+    },
+    {
+      "path": "docs/reference/CVF_ADR_AGENT_HANDOFF_CONTRACT_RELATIONSHIP_2026-05-17.md",
+      "reason": "Public ADR explaining contract relationships, not a private session handoff."
+    },
+    {
+      "path": "docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md",
+      "reason": "Blank public review template, not a completed private rebuttal packet."
+    },
+    {
+      "path": "docs/CVF_ARCHITECTURE_DECISIONS.md",
+      "reason": "Canonical public ADR ledger; large because it is append-only and indexed."
+    },
+    {
+      "path": "docs/reference/CVF_IN_VSCODE_GUIDE.md",
+      "reason": "Canonical public setup guide; large because it combines setup, workflow, and troubleshooting."
+    },
+    {
       "path": "docs/EXPORT_MANIFEST.md",
       "reason": "Required provenance binding manifest; large because it lists exported public paths and hashes."
     },
@@ -110,6 +170,10 @@
     {
       "path": "docs/reviews/CVF_GC018_TRACK_E_DLP_QUALITY_BENCHMARK_2026-05-13.md",
       "reason": "EA Track E GC-018 continuation candidate; public governance authorization record for Phase E.1 DLP Quality Benchmark implementation."
+    },
+    {
+      "path": "docs/reviews/CVF_GC019_PUBLIC_SYNC_CI_SURFACE_AND_WORKFLOW_ORCHESTRATION_REVIEW_2026-05-19.md",
+      "reason": "Public structural review for CI surface cleanup and workflow orchestration guard introduction; contains no private provenance payload."
     }
   ],
   "review_rule": "Any new public evidence or exception requires owner review and a manifest reason."

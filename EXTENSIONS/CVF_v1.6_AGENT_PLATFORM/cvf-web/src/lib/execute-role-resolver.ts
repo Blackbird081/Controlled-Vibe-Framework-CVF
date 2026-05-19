@@ -23,6 +23,7 @@ export interface ResolvedExecutionOutputClass {
 const RBAC_TO_CVF_ROLE: Readonly<Record<string, CVFRole>> = {
   owner: 'OPERATOR',
   admin: 'OPERATOR',
+  operator: 'OPERATOR',
   developer: 'BUILDER',
   reviewer: 'REVIEWER',
   viewer: 'OBSERVER',

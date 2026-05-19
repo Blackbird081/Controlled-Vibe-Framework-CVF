@@ -353,12 +353,14 @@ Output (Allow / Strip & Allow / Block)
 | CVF_PROGRESS_TRACKER_SYNC_GUARD.md | Tranche posture change | Canonical tracker and sync note must stay aligned |
 | CVF_SURFACE_SCAN_CONTINUITY_GUARD.md | Fresh tranche selection or scan-state change | Canonical scan registry must preserve what was already scanned |
 | CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md | New/resumed governed sessions | Canonical bootstrap must load first |
+| CVF_WORKFLOW_ORCHESTRATION_GUARD.md | GitHub workflow or CI runner changes | Workflows must route governed checks through canonical runner scripts |
 | CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md | Major structural merge or move | Audit -> review -> decision path required |
 
 Automated foundational surface gate:
 
 - `governance/compat/check_foundational_guard_surfaces.py` now enforces ADR update truth, architecture-baseline refresh, extension naming/versioning, GC-019 packet presence, test-depth reporting markers, and workspace-isolation drift within the same change range
 - local pre-push and CI both run this gate so these six foundational guards are no longer policy-only review checkpoints
+- `governance/compat/check_workflow_orchestration_guard.py` enforces the workflow orchestration contract so public-surface, static CI, web CI, and live release proof stay routed through canonical runners instead of duplicated YAML-local logic
 
 Archive protection note:
 

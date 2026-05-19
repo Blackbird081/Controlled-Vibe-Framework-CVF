@@ -85,6 +85,8 @@ export interface EnforcementResult {
 
 const SKILL_PREFLIGHT_MISSING_REASON = 'Skill Preflight declaration is required before Build/Execute actions.';
 const SKILL_PREFLIGHT_PATTERN = /\b(SKILL_PREFLIGHT_RECORD|SKILL PREFLIGHT PASS|PREFLIGHT PASS|SPF-[A-Z0-9_-]+)\b/i;
+const R2_APPROVAL_SIGNAL_PATTERN = /\b(sensitive|incident|account identifier|account access|customer record|external scraping|outside (?:the )?declared scope|third-party account|access-boundary)\b/i;
+const R3_BLOCK_SIGNAL_PATTERN = /\b(bypass|ignore all governance|skip governance|remove audit traces|delete audit|hide audit|without (?:approval|review)|prohibited action)\b/i;
 
 function isBuildPhase(phase?: string): boolean {
     if (!phase) return false;
@@ -143,7 +145,16 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
     }
 
     const inferredRisk = inferRiskLevelFromText(input.content);
-    const riskGate = evaluateRiskGate(inferredRisk, input.mode);
+    const effectiveRisk = input.cvfRiskLevel ?? inferredRisk;
+    const riskGate = evaluateRiskGate(effectiveRisk, input.mode);
+    if (riskGate.riskLevel === 'R3' && R3_BLOCK_SIGNAL_PATTERN.test(input.content)) {
+        status = 'BLOCK';
+        reasons.push('R3 bypass or audit-evasion request is blocked by policy.');
+    }
+    if (riskGate.riskLevel === 'R2' && R2_APPROVAL_SIGNAL_PATTERN.test(input.content) && status !== 'BLOCK') {
+        status = 'NEEDS_APPROVAL';
+        reasons.push('R2 sensitive or access-boundary request requires explicit human approval.');
+    }
     if (riskGate.status === 'BLOCK') {
         status = 'BLOCK';
         reasons.push(riskGate.reason);
@@ -162,7 +173,7 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
         governanceStateSnapshot: buildUnifiedGovernanceState({
             governanceState: input.governanceState,
             cvfPhase: input.cvfPhase,
-            cvfRiskLevel: input.cvfRiskLevel ?? inferredRisk ?? undefined,
+            cvfRiskLevel: effectiveRisk ?? undefined,
             enforcementStatus: status,
             reasons,
             source: 'client',

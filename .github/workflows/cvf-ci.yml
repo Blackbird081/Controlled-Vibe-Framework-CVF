@@ -261,12 +261,8 @@ jobs:
         run: npm ci
 
       - name: Front-door governance smoke
-        run: |
-          npx vitest run \
-            src/lib/front-door-rewrite-regression.test.ts \
-            src/lib/front-door-template-standard.test.ts \
-            src/lib/skill-corpus-governance.test.ts \
-            src/lib/skill-template-map.test.ts
+        working-directory: ${{ github.workspace }}
+        run: python scripts/run_cvf_static_ci_gate.py --json
 
   # ─── Summary gate ────────────────────────────────────────────────────
   ci-passed:

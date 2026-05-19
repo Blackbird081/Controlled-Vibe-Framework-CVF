@@ -1,5 +1,6 @@
 import type { ExecutionRequest } from '@/lib/ai';
 import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
+import { resolveGovernanceFamily, type GovernanceFamily } from '@/lib/governance-family';
 import { getTemplateById } from '@/lib/templates';
 import { renderTemplateIntent } from '@/lib/template-intent';
 
@@ -418,6 +419,37 @@ function buildDeliverableContract(shape: DeliverableShape | undefined): string |
   }
 }
 
+function buildFamilyOutputContract(family: GovernanceFamily | null): string | undefined {
+  switch (family) {
+    case 'builder_handoff_technical_planning':
+      return [
+        'Governance family: builder_handoff_technical_planning',
+        '- Files/modules likely to touch: name concrete paths when known; use "unknown - requires repo inspection" when the repository has not been inspected.',
+        '- Tests to add or run: include the most relevant unit, integration, or manual checks.',
+        '- Rollback step: state how to revert or disable the change.',
+        '- Verification step: state the observable proof that the handoff is complete.',
+        '- Security/data consideration: identify auth, privacy, credential, data, or permission concerns.',
+        '- Keep implementation details bounded to the supplied request and clearly label assumptions.',
+      ].join('\n');
+    case 'cost_quota_provider_selection':
+      return [
+        'Governance family: cost_quota_provider_selection',
+        '- Provide decision criteria, tradeoff categories, and a verification plan.',
+        '- Compare cost, quota, latency, provider/model fit, operational risk, and fallback path when relevant.',
+        '- do not invent or assert a specific provider name, model name, latency number, quota, or price unless supplied.',
+      ].join('\n');
+    case 'normal_productivity_app_planning':
+      return [
+        'Governance family: normal_productivity_app_planning',
+        '- preserve the user input language unless the user asks otherwise.',
+        '- Cover purpose, audience/users, scope, workflow, minimum useful features or steps, success measures, risks/constraints, and next actions.',
+        '- Keep the packet usable by a non-technical operator or builder handoff recipient.',
+      ].join('\n');
+    default:
+      return undefined;
+  }
+}
+
 export function buildExecutionPrompt(request: ExecutionRequest): string {
   const { templateName, inputs, intent } = request;
   const previousOutput = inputs._previousOutput;
@@ -429,6 +461,14 @@ export function buildExecutionPrompt(request: ExecutionRequest): string {
   const primaryDeliverableContract = buildDeliverableContract(primaryDeliverableShape);
   const taskShapeGuidance = buildTaskShapeGuidance(deliverableShapes);
   const responseLanguage = resolveResponseLanguage(request);
+  const familyContract = buildFamilyOutputContract(resolveGovernanceFamily({
+    qbsFamily: request.qbsFamily,
+    governanceFamily: request.governanceFamily,
+    intent: request.intent,
+    templateId: request.templateId,
+    templateCategory: template?.category,
+    riskLevel: request.cvfRiskLevel,
+  }));
 
   let prompt = `## Task: ${templateName}\n\n`;
   prompt += `### Response Language\nUse ${responseLanguage} for the final answer. Do not translate the deliverable into another language unless the user explicitly asks.\n\n`;
@@ -515,6 +555,10 @@ export function buildExecutionPrompt(request: ExecutionRequest): string {
 
   if (request.fileScope?.length) {
     prompt += `### File Scope\n- Allowed scope: ${request.fileScope.join(', ')}\n\n`;
+  }
+
+  if (familyContract) {
+    prompt += `### Family Output Contract\n${familyContract}\n\n`;
   }
 
   if (previousOutput && previousOutput.trim()) {

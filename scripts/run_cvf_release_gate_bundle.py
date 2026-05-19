@@ -147,7 +147,7 @@ def check_web_build(dry_run: bool) -> CheckResult:
         return CheckResult(name, "SKIP", "dry-run — would run: npm run build", [str(CVF_WEB)])
     if not CVF_WEB.exists():
         return CheckResult(name, "FAIL", "cvf-web directory not found", [str(CVF_WEB)])
-    code, stdout, stderr = run_cmd(["npm", "run", "build"], cwd=CVF_WEB, timeout=300)
+    code, stdout, stderr = run_cmd(["npm", "run", "build"], cwd=CVF_WEB, timeout=600)
     if code == 0:
         return CheckResult(name, "PASS", "Build succeeded")
     lines = (stdout + stderr).splitlines()

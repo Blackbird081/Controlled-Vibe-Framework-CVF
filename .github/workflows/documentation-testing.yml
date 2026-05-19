@@ -448,6 +448,21 @@ jobs:
         run: |
           python governance/compat/check_governed_file_size.py --enforce
 
+  workflow-orchestration:
+    name: Workflow Orchestration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce workflow orchestration guard
+        run: |
+          python governance/compat/check_workflow_orchestration_guard.py --enforce
+
   test-partition-ownership:
     name: Test Partition Ownership
     runs-on: ubuntu-latest
@@ -562,8 +577,8 @@ jobs:
         run: |
           python governance/compat/check_repository_lifecycle_classification.py --enforce
 
-    repository-exposure-classification:
-      name: Repository Exposure Classification
+  repository-exposure-classification:
+    name: Repository Exposure Classification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -575,28 +590,28 @@ jobs:
         with:
           python-version: '3.11'
 
-        - name: Enforce GC-038 repository exposure classification
-          run: |
-            python governance/compat/check_repository_exposure_classification.py --enforce
+      - name: Enforce GC-038 repository exposure classification
+        run: |
+          python governance/compat/check_repository_exposure_classification.py --enforce
 
-    prepublic-p3-readiness:
-      name: Pre-Public P3 Readiness
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
+  prepublic-p3-readiness:
+    name: Pre-Public P3 Readiness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-        - name: Set up Python
-          uses: actions/setup-python@v4
-          with:
-            python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-        - name: Enforce GC-039 pre-public p3 readiness
-          run: |
-            python governance/compat/check_prepublic_p3_readiness.py --enforce
+      - name: Enforce GC-039 pre-public p3 readiness
+        run: |
+          python governance/compat/check_prepublic_p3_readiness.py --enforce
 
-    audit-retention-registry:
+  audit-retention-registry:
     name: Audit Retention Registry
     runs-on: ubuntu-latest
     steps:
@@ -839,7 +854,7 @@ jobs:
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [docs-governance-compat, governed-artifact-authoring, markdown-structural-completeness, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, governed-file-size, test-partition-ownership, release-manifest-consistency, cross-channel-guard-compat, guard-registry-compat, guard-authoring-standard, active-window-registry, repository-lifecycle-classification, repository-exposure-classification, prepublic-p3-readiness, foundational-guard-surfaces, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
+    needs: [docs-governance-compat, governed-artifact-authoring, markdown-structural-completeness, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, governed-file-size, workflow-orchestration, test-partition-ownership, release-manifest-consistency, cross-channel-guard-compat, guard-registry-compat, guard-authoring-standard, active-window-registry, repository-lifecycle-classification, repository-exposure-classification, prepublic-p3-readiness, foundational-guard-surfaces, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
     if: always()
     
     steps:
@@ -861,6 +876,7 @@ jobs:
           echo "Conformance trace rotation: ${{ needs.conformance-trace-rotation.result }}"
           echo "Python automation size: ${{ needs.python-automation-size.result }}"
           echo "Governed file size: ${{ needs.governed-file-size.result }}"
+          echo "Workflow orchestration: ${{ needs.workflow-orchestration.result }}"
           echo "Test partition ownership: ${{ needs.test-partition-ownership.result }}"
           echo "Release manifest consistency: ${{ needs.release-manifest-consistency.result }}"
           echo "Cross-channel guard compat: ${{ needs.cross-channel-guard-compat.result }}"

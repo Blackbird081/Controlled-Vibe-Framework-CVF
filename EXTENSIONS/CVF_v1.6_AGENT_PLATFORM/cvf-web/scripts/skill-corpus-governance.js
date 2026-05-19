@@ -12,6 +12,20 @@ const TEMPLATE_CLASS_OVERRIDE_PATHS = [
     path.resolve(BASE_DIR, '../../../docs/baselines/CVF_FRONT_DOOR_WAVE2_EXECUTION_NOTE_2026-04-21.md'),
 ];
 const MAP_DATA_PATH = path.resolve(BASE_DIR, 'src/data/skill-template-map.json');
+const PUBLIC_BENCHMARK_WIZARD_IDS = new Set([
+    'app_builder_wizard',
+    'business_strategy_wizard',
+    'marketing_campaign_wizard',
+    'content_strategy_wizard',
+    'data_analysis_wizard',
+    'system_design_wizard',
+    'security_assessment_wizard',
+    'product_design_wizard',
+    'research_project_wizard',
+]);
+const PUBLIC_REVIEW_REQUIRED_TEMPLATE_IDS = new Set([
+    'architecture_review',
+]);
 
 const TRUSTED = 'TRUSTED_FOR_VALUE_PROOF';
 const REVIEW = 'REVIEW_REQUIRED';
@@ -93,7 +107,19 @@ function parseTemplateClassOverrides(section) {
 }
 
 function loadTemplateClassMap() {
+    const mapData = JSON.parse(readFile(MAP_DATA_PATH));
+    const publicFallbackMap = Object.fromEntries(
+        Object.keys(mapData.templateToSkillMap || {}).map((templateId) => [
+            templateId,
+            PUBLIC_REVIEW_REQUIRED_TEMPLATE_IDS.has(templateId) ? REVIEW : TRUSTED,
+        ]),
+    );
+
     const d2 = readFile(D2_MATRIX_PATH);
+    if (!d2) {
+        return publicFallbackMap;
+    }
+
     const sections = {
         [TRUSTED]: extractSection(d2, '## TRUSTED_FOR_VALUE_PROOF', [
             '## REVIEW_REQUIRED',
@@ -129,6 +155,10 @@ function loadTemplateClassMap() {
 
 function loadTrustedBenchmarkSet() {
     const d3 = readFile(D3_TRUSTED_SUBSET_PATH);
+    if (!d3) {
+        return new Set(PUBLIC_BENCHMARK_WIZARD_IDS);
+    }
+
     const section = extractSection(d3, '## Benchmark-Ready Subset', ['## §1']);
     const tableIds = collectTemplateIdsFromMarkdownTable(section);
     if (tableIds.size > 0) {

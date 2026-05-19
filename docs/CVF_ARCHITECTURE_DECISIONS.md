@@ -1419,3 +1419,47 @@ The guard enforces full artifact-type templates (spec / baseline / handoff / rev
 - `docs/reference/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_STANDARD.md`
 - `docs/reviews/CVF_GC045_MARKDOWN_STRUCTURAL_COMPLETENESS_IMPLEMENTATION_REVIEW_2026-05-16.md`
 - `docs/reviews/CVF_GC019_GC045_GUARD_INTRODUCTION_STRUCTURAL_REVIEW_2026-05-16.md`
+
+## ADR-035: Public CI Must Route Through Canonical Workflow Orchestration Guards
+
+### Status
+ACCEPTED - 2026-05-19
+
+### Context
+The public repository CI began correctly exposing surface and runtime drift: public-surface blockers, missing static gate entrypoint, workflow-local static smoke lists, file-size exceptions, secret-like fixtures, and web test expectations. The important architectural lesson was not only that those individual failures needed fixes, but that CVF still allowed GitHub Actions YAML, static runners, public-surface checks, and release gates to evolve as separate islands.
+
+If checks are scattered across workflow files, future maintenance can pass one lane while silently drifting another. CVF needs CI to behave like a governed system: workflows schedule jobs, while canonical runner scripts own the governed check definitions.
+
+### Decision
+Introduce `CVF_WORKFLOW_ORCHESTRATION_GUARD.md` and `governance/compat/check_workflow_orchestration_guard.py`.
+
+The guard requires public-surface, static CI, web CI, and protected live release workflows to route through canonical CVF runner scripts. It also blocks duplicated static front-door test lists inside workflow YAML, keeping those lists in `scripts/run_cvf_static_ci_gate.py`.
+
+The static CI gate now includes public-surface and workflow-orchestration checks, so the non-live public gate has one canonical path before full web CI or protected live release proof.
+
+### Alternatives
+- Keep workflow YAML as the source of truth. Rejected because YAML-local test lists already drifted from public/static CI expectations.
+- Fold the rule into an existing guard registry check. Rejected because registry discoverability does not verify CI orchestration or command routing.
+- Rely only on full web CI. Rejected because full tests do not protect public-surface shape, static gate entrypoints, or release-gate wiring.
+
+### Consequences
+- Public CI has a clearer sequence: public surface -> static gate -> full web/runtime CI -> protected live release gate.
+- Future workflow edits must preserve canonical runner commands or the workflow orchestration guard fails.
+- Static governance test ownership moves out of GitHub workflow YAML and into the static CI runner.
+- The public-sync cleanup of tracked raw/runtime artifacts is recorded in the matching `GC019` structural review artifact.
+
+### Verification Gate
+- `python governance/compat/check_workflow_orchestration_guard.py --enforce`
+- `python scripts/run_cvf_static_ci_gate.py --json`
+- `npm run test:run` in `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web`
+
+### Related Files
+- `governance/toolkit/05_OPERATION/CVF_WORKFLOW_ORCHESTRATION_GUARD.md`
+- `governance/compat/check_workflow_orchestration_guard.py`
+- `scripts/run_cvf_static_ci_gate.py`
+- `.github/workflows/public-surface.yml`
+- `.github/workflows/cvf-static-ci.yml`
+- `.github/workflows/cvf-ci.yml`
+- `.github/workflows/cvf-web-ci.yml`
+- `.github/workflows/cvf-protected-live-release-gate.yml`
+- `docs/reviews/CVF_GC019_PUBLIC_SYNC_CI_SURFACE_AND_WORKFLOW_ORCHESTRATION_REVIEW_2026-05-19.md`

@@ -204,7 +204,6 @@ describe('/api/execute', () => {
 
         const res = await POST(req as never);
         const data = await res.json();
-
         expect(res.status).toBe(200);
         expect(data.rolePermission).toMatchObject({
             role: 'BUILDER',

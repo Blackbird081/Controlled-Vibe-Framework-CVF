@@ -474,6 +474,8 @@ Important current continuity controls:
 
 Foundational governance surfaces that used to depend mainly on reviewer discipline are now also blocked by `governance/compat/check_foundational_guard_surfaces.py`, covering ADR updates, architecture-baseline refresh, extension naming, structural audit packets, test-depth reporting, and workspace isolation.
 
+Workflow orchestration is guarded by `governance/compat/check_workflow_orchestration_guard.py`, which keeps GitHub Actions routed through canonical CVF runner scripts instead of duplicated workflow-local command lists.
+
 Mandatory guard index:
 
 - `CVF_ACTIVE_ARCHIVE_GUARD.md`
@@ -521,6 +523,7 @@ Mandatory guard index:
 - `CVF_TEST_DEPTH_CLASSIFICATION_GUARD.md`
 - `CVF_TEST_DOCUMENTATION_GUARD.md`
 - `CVF_TEST_PARTITION_OWNERSHIP_GUARD.md`
+- `CVF_WORKFLOW_ORCHESTRATION_GUARD.md`
 - `CVF_WORKSPACE_ISOLATION_GUARD.md`
 
 Grouped management map:

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-26T06:25:43.280Z",
+  "generatedAt": "2026-05-19T03:09:42.958Z",
   "categories": [
     {
       "id": "ai_ml_evaluation",
@@ -133,15 +133,20 @@
           "frontDoorVisible": true,
           "frontDoorTier": "TRUSTED_SUPPORTING",
           "trustedBenchmarkSurface": false,
-          "hasRestrictedLinks": true,
+          "hasRestrictedLinks": false,
           "linkedTemplates": [
             {
               "templateId": "vibe_logic_mapping",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "architecture_design",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
             }
           ],
-          "corpusNote": "Front-door trusted via at least one trusted template path; some linked template surfaces remain quarantined."
+          "corpusNote": "Trusted supporting front-door surface under GC-044."
         },
         {
           "id": "05_api_design_spec",
@@ -201,15 +206,20 @@
           "frontDoorVisible": true,
           "frontDoorTier": "TRUSTED_SUPPORTING",
           "trustedBenchmarkSurface": false,
-          "hasRestrictedLinks": true,
+          "hasRestrictedLinks": false,
           "linkedTemplates": [
+            {
+              "templateId": "cli_tool_spec",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
+            },
             {
               "templateId": "project_init_checklist",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
           ],
-          "corpusNote": "Front-door trusted via at least one trusted template path; some linked template surfaces remain quarantined."
+          "corpusNote": "Trusted supporting front-door surface under GC-044."
         }
       ]
     },
@@ -245,6 +255,11 @@
           "linkedTemplates": [
             {
               "templateId": "strategy_analysis",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "decision_memo",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
@@ -349,6 +364,11 @@
               "templateId": "business_strategy_wizard",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": true
+            },
+            {
+              "templateId": "operator_plan",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
             }
           ],
           "corpusNote": "Trusted benchmark surface under GC-044 / D3 trusted subset."
@@ -394,6 +414,16 @@
               "templateId": "documentation",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "faq_outline",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "acceptance_criteria",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
             }
           ],
           "corpusNote": "Trusted benchmark surface under GC-044 / D3 trusted subset."
@@ -426,6 +456,21 @@
           "linkedTemplates": [
             {
               "templateId": "email_template",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "meeting_notes",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "job_description",
+              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
+              "trustedBenchmarkSurface": false
+            },
+            {
+              "templateId": "performance_review",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
@@ -1066,7 +1111,7 @@
           "frontDoorVisible": true,
           "frontDoorTier": "TRUSTED_BENCHMARK",
           "trustedBenchmarkSurface": true,
-          "hasRestrictedLinks": true,
+          "hasRestrictedLinks": false,
           "linkedTemplates": [
             {
               "templateId": "system_design_wizard",
@@ -1088,9 +1133,7 @@
     "trustedBenchmarkSkills": 9,
     "governanceSource": [
       "docs/baselines/CVF_CORPUS_RESCREEN_D2_MATRIX_2026-04-15.md",
-      "docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md",
-      "docs/baselines/CVF_FRONT_DOOR_WAVE1_EXECUTION_NOTE_2026-04-21.md",
-      "docs/baselines/CVF_FRONT_DOOR_WAVE2_EXECUTION_NOTE_2026-04-21.md"
+      "docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md"
     ]
   }
 }

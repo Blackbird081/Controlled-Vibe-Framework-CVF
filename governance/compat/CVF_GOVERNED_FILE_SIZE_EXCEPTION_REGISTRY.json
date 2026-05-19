@@ -123,6 +123,28 @@
       "status": "ACTIVE_EXCEPTION",
       "rationale": "The ADR ledger is a canonical append-only architecture decision surface. Current governance hardening adds mandatory ADR records faster than the historical backlog can be split into archived volumes without disrupting one-file decision lookup.",
       "requiredFollowup": "Split older superseded or pre-governance-era ADR history into an ADR archive volume before the file exceeds 1500 lines, while keeping the active ledger as the canonical entrypoint."
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts",
+      "fileClass": "general_source",
+      "approvedMaxLines": 1001,
+      "status": "RESOLVED",
+      "rationale": "Public-sync mirror of the provenance tombstone for the already-split /api/execute route. The file sits exactly at hardThresholdLines + 1 and this entry preserves audit continuity without creating a reusable expansion cap.",
+      "requiredFollowup": "Do not raise, clone, or re-activate this exception. The next substantive /api/execute route change must reduce the file below the hard threshold or extract additional logic before adding behavior.",
+      "lockBoundary": {
+        "operatorApproved": true,
+        "operatorApprovalDate": "2026-05-18",
+        "noBumpAllowed": "approvedMaxLines is frozen at hardThresholdLines + 1 (1001) as a resolved tombstone.",
+        "noExtensionAllowed": "This entry is not precedent for new route growth or other files."
+      }
+    },
+    {
+      "path": "docs/EXPORT_MANIFEST.md",
+      "fileClass": "active_markdown",
+      "approvedMaxLines": 2000,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Public export manifest is a generated provenance binding index listing exported public paths and hashes. The line count reflects repository surface size rather than narrative sprawl.",
+      "requiredFollowup": "Keep the manifest generated and bounded. If it exceeds 2000 lines, split into generated manifest volumes or compress the generated representation instead of raising the cap."
     }
   ]
 }

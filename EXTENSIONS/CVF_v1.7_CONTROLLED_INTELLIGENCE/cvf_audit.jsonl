@@ -1,3 +1,0 @@
-{"eventType":"PHASE_COMPLETE","description":"phase done","timestamp":1776750970258,"sessionId":"s1"}
-{"eventType":"RISK_ESCALATE","description":"escalated","timestamp":1776750970260,"sessionId":"s1"}
-{"eventType":"PHASE_COMPLETE","description":"another phase","timestamp":1776750970261,"sessionId":"s2"}

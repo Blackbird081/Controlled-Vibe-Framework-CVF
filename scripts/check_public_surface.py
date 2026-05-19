@@ -4,6 +4,7 @@ from __future__ import annotations
 import fnmatch
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -73,15 +74,39 @@ def is_binary(path: Path) -> bool:
     return b"\0" in chunk
 
 
+def git_surface_files() -> list[Path]:
+    tracked = subprocess.run(
+        ["git", "ls-files"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=True,
+    ).stdout.splitlines()
+    untracked = subprocess.run(
+        ["git", "ls-files", "--others", "--exclude-standard"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=True,
+    ).stdout.splitlines()
+
+    paths: list[Path] = []
+    for rel_path in sorted(set(tracked + untracked)):
+        path = ROOT / rel_path
+        if path.is_file() and not any(part in SKIP_DIRS for part in path.parts):
+            paths.append(path)
+    return paths
+
+
 def scan() -> list[str]:
     allowlist = load_allowlist()
     violations: list[str] = []
 
-    for path in ROOT.rglob("*"):
-        if any(part in SKIP_DIRS for part in path.parts):
-            continue
-        if not path.is_file():
-            continue
+    for path in git_surface_files():
         r = rel(path)
         if path.name == ".env.example":
             pass

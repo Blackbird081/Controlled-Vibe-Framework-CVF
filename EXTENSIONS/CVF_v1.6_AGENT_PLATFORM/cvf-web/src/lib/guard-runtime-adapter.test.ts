@@ -539,7 +539,8 @@ describe('Constants', () => {
   });
 
   test('RESTRICTED_ACTIONS covers all roles', () => {
-    expect(Object.keys(RESTRICTED_ACTIONS)).toHaveLength(8);
+    expect(Object.keys(RESTRICTED_ACTIONS)).toHaveLength(9);
+    expect(RESTRICTED_ACTIONS.SERVICE_AGENT).toBeDefined();
   });
 
   test('DEFAULT_MUTATION_BUDGETS R3 is smallest', () => {

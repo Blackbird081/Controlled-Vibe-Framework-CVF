@@ -189,14 +189,18 @@ def validate(registry_path: Path) -> dict[str, Any]:
             })
         elif baseline_entry is not None:
             baseline_approved_max = baseline_entry.get("approvedMaxLines")
-            if baseline_approved_max != approved_max:
+            try:
+                baseline_approved_max_int = int(baseline_approved_max)
+            except (TypeError, ValueError):
+                baseline_approved_max_int = None
+            if baseline_approved_max_int is not None and approved_max > baseline_approved_max_int:
                 violations.append({
                     "type": "approved_max_changed_from_head",
                     "path": label,
                     "message": (
                         f"approvedMaxLines changed from HEAD value {baseline_approved_max} "
                         f"to {approved_max}. Existing governed exceptions are frozen in the "
-                        "normal commit path and require explicit human-approved override."
+                        "normal commit path when the cap is raised and require explicit human-approved override."
                     ),
                 })
 

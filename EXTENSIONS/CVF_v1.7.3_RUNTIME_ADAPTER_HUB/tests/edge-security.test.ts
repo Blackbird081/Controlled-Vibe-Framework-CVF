@@ -16,8 +16,8 @@ describe('Edge security detectors', () => {
     })
 
     it('detectSecrets finds multiple secrets across same type', () => {
-        const s1 = 'sk-test-key-placeholder-abcdefghijklmnopqrstuvwxyz1234'
-        const s2 = 'sk-test-key-placeholder-zyxwvutsrqponmlkjihgfedcba5678'
+        const s1 = `sk-${'a'.repeat(24)}`
+        const s2 = `sk-${'b'.repeat(24)}`
         const matches = detectSecrets(`${s1} then ${s2}`)
         expect(matches.filter(m => m.type === 'apiKey')).toHaveLength(2)
     })
@@ -37,7 +37,7 @@ describe('Edge security proxy + vault', () => {
 
     it('masks all repeated sensitive occurrences and rehydrates response', () => {
         const proxy = new SecurityProxy()
-        const testKey = 'sk-test-key-placeholder-abcdefghijklmnopqrstuvwxyz1234'
+        const testKey = `sk-${'a'.repeat(24)}`
         const input = `email a@b.com and again a@b.com with key ${testKey}`
         const processed = proxy.processRequest('sess-1', input)
 

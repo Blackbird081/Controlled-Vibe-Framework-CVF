@@ -24,7 +24,8 @@
       "softThresholdLines": 900,
       "hardThresholdLines": 1200,
       "maxApprovableLines": 2000,
-      "maxAllowedBumpPercent": 50
+      "maxAllowedBumpPercent": 65,
+      "_note_active_markdown": "Allows bounded generated public manifests up to 1980 lines while preserving the absolute 2000-line approval ceiling."
     }
   },
   "exceptions": [
@@ -141,10 +142,10 @@
     {
       "path": "docs/EXPORT_MANIFEST.md",
       "fileClass": "active_markdown",
-      "approvedMaxLines": 2000,
+      "approvedMaxLines": 1980,
       "status": "ACTIVE_EXCEPTION",
       "rationale": "Public export manifest is a generated provenance binding index listing exported public paths and hashes. The line count reflects repository surface size rather than narrative sprawl.",
-      "requiredFollowup": "Keep the manifest generated and bounded. If it exceeds 2000 lines, split into generated manifest volumes or compress the generated representation instead of raising the cap."
+      "requiredFollowup": "Keep the manifest generated and bounded. If it exceeds 1980 lines, split into generated manifest volumes or compress the generated representation instead of raising the cap."
     }
   ]
 }

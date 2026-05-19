@@ -130,6 +130,10 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 | Memory and continuity contracts | partially runtime-wired — execute-route audit memory receipt, no provider prompt reinjection claim | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/audit-memory-receipt.ts`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/audit-memory-receipt.test.ts` |
 | Operational observability | partially absorbed | `docs/evidence/cvf-16-5-runtime-absorption.md` |
 | External asset/capability governance | partially productized | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |
+| Provider streaming contract (`StreamContract`) | schema-defined — bounded to governed pack policy flag | `EXTENSIONS/CVF_MODEL_GATEWAY/src/stream-contract.ts`, `EXTENSIONS/CVF_MODEL_GATEWAY/tests/stream-contract.test.ts` |
+| Governance reliability benchmark CLI (`cvf benchmark governance`) | active — offline metric computation against audit JSONL | `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/governance-reliability-metrics.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/governance-reliability-metrics.test.ts` |
+| Non-coder outcome quick actions (home UI) | active — three governed pack entry points wired in home page | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OutcomeQuickActions.tsx` |
+| Runtime actor-role gate on execute path | active — `allowedActorRoles` enforced for three governed pack policies; non-permitted roles rejected with HTTP 403 before provider dispatch | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/execute-role-resolver.ts`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts` |
 | Provider method breadth | demand-gated | no universal provider-method parity claim |
 | Async workers / subagents | roadmap | concepts exist; canonical lifecycle not claimed |
 | Tool/MCP/database action governance | roadmap | guards exist; full action taxonomy not claimed |

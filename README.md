@@ -432,6 +432,7 @@ Primary status anchors:
 
 ### Track status and evidence
 
+- [Technical Product Catalog](docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md) — what CVF can do today, key extensions, and delivery history
 - [Release Manifest](docs/reference/CVF_RELEASE_MANIFEST.md)
 - [Module Inventory](docs/reference/CVF_MODULE_INVENTORY.md)
 - [Release Readiness](docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md)

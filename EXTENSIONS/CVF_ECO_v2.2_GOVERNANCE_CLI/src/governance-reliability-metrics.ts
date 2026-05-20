@@ -1,8 +1,11 @@
-export interface AuditEvent {
+interface GenericAuditEvent {
   executionId?: string;
   runId?: string;
   eventType?: string;
   type?: string;
+  timestamp?: string;
+  at?: string;
+  createdAt?: string;
   receiptId?: string | null;
   decision?: string | null;
   enforcement?: {
@@ -11,8 +14,24 @@ export interface AuditEvent {
   stepTraceIds?: string[];
 }
 
+export interface OperatorCorrectionEvent extends GenericAuditEvent {
+  eventType: "operator_correction";
+  executionId: string;
+  correctedAt: string;
+  correctionSource: "operator" | "reviewer";
+}
+
+export interface RollbackEvent extends GenericAuditEvent {
+  eventType: "rollback";
+  executionId: string;
+  rolledBackAt: string;
+  success: boolean;
+}
+
+export type AuditEvent = GenericAuditEvent | OperatorCorrectionEvent | RollbackEvent;
+
 export interface MetricResult {
-  rate: number;
+  rate: number | null;
   count: number;
   total: number;
 }
@@ -27,6 +46,9 @@ export interface GovernanceReliabilityReport {
   policyViolationRate: MetricResult;
   crossSessionContinuityRate: MetricResult;
   deterministicConsistencyRate: MetricResult;
+  humanCorrectionRate: MetricResult;
+  longHorizonStabilityRate: MetricResult;
+  rollbackSuccessRate: MetricResult;
 }
 
 export function receiptIntegrityRate(events: AuditEvent[]): MetricResult {
@@ -106,6 +128,50 @@ export function deterministicConsistencyRate(events: AuditEvent[]): MetricResult
   return ratio([...executionGroups.values()].filter((count) => count === 1).length, executionGroups.size);
 }
 
+export function humanCorrectionRate(events: AuditEvent[]): MetricResult {
+  const executions = distinctExecutions(events);
+  const correctedExecutions = new Set(
+    events
+      .filter((event) => eventKind(event) === "operator_correction")
+      .map(executionKey)
+      .filter(Boolean),
+  );
+  return ratio(correctedExecutions.size, executions.size);
+}
+
+export function longHorizonStabilityRate(events: AuditEvent[], windowDays: number): MetricResult {
+  const groups = groupByExecution(events);
+  if (groups.size === 0) {
+    return { rate: 1, count: 0, total: 0 };
+  }
+
+  let stable = 0;
+  groups.forEach((group) => {
+    const times = group
+      .map(eventTime)
+      .filter((value): value is number => typeof value === "number" && Number.isFinite(value))
+      .sort((a, b) => a - b);
+    const withinWindow = times.length < 2 || ((times[times.length - 1]! - times[0]!) / 86_400_000) <= windowDays;
+    const hasViolation = group.some((event) => {
+      const kind = eventKind(event);
+      return kind === "policy_violation" || (kind === "rollback" && (event as RollbackEvent).success === false);
+    });
+    if (withinWindow && !hasViolation) {
+      stable += 1;
+    }
+  });
+
+  return ratio(stable, groups.size);
+}
+
+export function rollbackSuccessRate(events: AuditEvent[]): MetricResult {
+  const rollbackEvents = events.filter((event): event is RollbackEvent => eventKind(event) === "rollback");
+  if (rollbackEvents.length === 0) {
+    return { rate: null, count: 0, total: 0 };
+  }
+  return ratio(rollbackEvents.filter((event) => event.success === true).length, rollbackEvents.length);
+}
+
 export function computeGovernanceReliabilityReport(events: AuditEvent[]): GovernanceReliabilityReport {
   return {
     receiptIntegrityRate: receiptIntegrityRate(events),
@@ -117,6 +183,9 @@ export function computeGovernanceReliabilityReport(events: AuditEvent[]): Govern
     policyViolationRate: policyViolationRate(events),
     crossSessionContinuityRate: crossSessionContinuityRate(events),
     deterministicConsistencyRate: deterministicConsistencyRate(events),
+    humanCorrectionRate: humanCorrectionRate(events),
+    longHorizonStabilityRate: longHorizonStabilityRate(events, 30),
+    rollbackSuccessRate: rollbackSuccessRate(events),
   };
 }
 
@@ -138,6 +207,36 @@ function ratio(count: number, total: number): MetricResult {
 
 function executionKey(event: AuditEvent): string {
   return nonEmptyString(event.executionId) ?? nonEmptyString(event.runId) ?? "";
+}
+
+function distinctExecutions(events: AuditEvent[]): Set<string> {
+  return new Set(events.map(executionKey).filter(Boolean));
+}
+
+function groupByExecution(events: AuditEvent[]): Map<string, AuditEvent[]> {
+  const groups = new Map<string, AuditEvent[]>();
+  events.forEach((event) => {
+    const key = executionKey(event);
+    if (!key) return;
+    groups.set(key, [...(groups.get(key) ?? []), event]);
+  });
+  return groups;
+}
+
+function eventKind(event: AuditEvent): string {
+  return nonEmptyString(event.eventType) ?? nonEmptyString(event.type) ?? "";
+}
+
+function eventTime(event: AuditEvent): number | undefined {
+  const raw =
+    nonEmptyString((event as OperatorCorrectionEvent).correctedAt) ??
+    nonEmptyString((event as RollbackEvent).rolledBackAt) ??
+    nonEmptyString(event.timestamp) ??
+    nonEmptyString(event.at) ??
+    nonEmptyString(event.createdAt);
+  if (!raw) return undefined;
+  const parsed = Date.parse(raw);
+  return Number.isFinite(parsed) ? parsed : undefined;
 }
 
 function nonEmptyString(value: unknown): string | undefined {

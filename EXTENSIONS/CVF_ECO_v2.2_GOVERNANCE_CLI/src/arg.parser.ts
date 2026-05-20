@@ -1,8 +1,11 @@
 import { CLIArgs, CLICommand } from "./types";
 
 const VALID_COMMANDS: CLICommand[] = [
-  "evaluate", "execute", "session", "report", "audit", "status", "help", "version",
+  "evaluate", "execute", "run", "skill", "receipt", "trace", "provider",
+  "benchmark", "session", "report", "audit", "status", "help", "version",
 ];
+
+const BOOLEAN_FLAGS = new Set(["stream"]);
 
 export class ArgParser {
   parse(argv: string[]): CLIArgs {
@@ -20,7 +23,7 @@ export class ArgParser {
         const eqIdx = key.indexOf("=");
         if (eqIdx >= 0) {
           flags[key.slice(0, eqIdx)] = key.slice(eqIdx + 1);
-        } else if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
+        } else if (!BOOLEAN_FLAGS.has(key) && i + 1 < args.length && !args[i + 1].startsWith("-")) {
           flags[key] = args[i + 1];
           i++;
         } else {

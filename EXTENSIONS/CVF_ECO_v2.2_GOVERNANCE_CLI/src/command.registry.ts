@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import {
   CLICommand,
   CLICommandHandler,
@@ -129,6 +129,42 @@ export class CommandRegistry {
         };
       },
       executeAsync: (args) => executeGovernedTemplateCommand(args),
+    });
+
+    this.register({
+      name: "run",
+      description: "Alias to cvf execute --template <template>",
+      usage: "cvf run <template> --role <role> [--input <json>] [--endpoint <url>] [--dry-run] [--receipt] [--verbose]",
+      execute: (args) => this.execute(this.runAliasArgs(args)),
+      executeAsync: (args) => this.executeAsync(this.runAliasArgs(args)),
+    });
+
+    this.register({
+      name: "skill",
+      description: "Read-only skill registry inspection",
+      usage: "cvf skill <list|show> [id] [--input <skills-index.json>]",
+      execute: (args) => this.skillCommand(args),
+    });
+
+    this.register({
+      name: "receipt",
+      description: "Read-only receipt artifact inspection",
+      usage: "cvf receipt show <id> [--input <receipts.jsonl>]",
+      execute: (args) => this.receiptCommand(args),
+    });
+
+    this.register({
+      name: "trace",
+      description: "Read-only audit trace dump",
+      usage: "cvf trace dump [--session <id>] [--input <audit.jsonl>]",
+      execute: (args) => this.traceCommand(args),
+    });
+
+    this.register({
+      name: "provider",
+      description: "Read-only provider lane listing",
+      usage: "cvf provider list",
+      execute: (args) => this.providerCommand(args),
     });
 
     this.register({
@@ -272,6 +308,119 @@ export class CommandRegistry {
     };
   }
 
+  private runAliasArgs(args: CLIArgs): CLIArgs {
+    const templateFromPositional = args.positional[0];
+    return {
+      command: "execute",
+      flags: {
+        ...args.flags,
+        ...(templateFromPositional && !args.flags.template ? { template: templateFromPositional } : {}),
+      },
+      positional: [],
+    };
+  }
+
+  private skillCommand(args: CLIArgs): CLIOutput {
+    const subCommand = args.positional[0] ?? "list";
+    const skills = this.loadSkillRecords(stringFlag(args, "input") || DEFAULT_SKILL_INDEX_PATH);
+    if ("error" in skills) return skills.error;
+
+    if (subCommand === "list") {
+      return {
+        success: true,
+        message: ["id title domain riskLevel", ...skills.records.map((skill) => {
+          return `${skill.id} ${skill.title} ${skill.domain} ${skill.riskLevel}`;
+        })].join("\n"),
+        data: { skills: skills.records },
+        exitCode: 0,
+      };
+    }
+
+    if (subCommand === "show") {
+      const id = args.positional[1];
+      if (!id) return { success: false, message: "Missing required skill id.", exitCode: 1 };
+      const skill = skills.records.find((record) => record.id === id);
+      if (!skill) return { success: false, message: `Skill not found: ${id}`, exitCode: 1 };
+      return {
+        success: true,
+        message: JSON.stringify(skill, null, 2),
+        data: skill,
+        exitCode: 0,
+      };
+    }
+
+    return { success: false, message: "Unknown skill sub-command. Usage: cvf skill <list|show> [id]", exitCode: 1 };
+  }
+
+  private receiptCommand(args: CLIArgs): CLIOutput {
+    const subCommand = args.positional[0];
+    if (subCommand !== "show") {
+      return { success: false, message: "Unknown receipt sub-command. Usage: cvf receipt show <id>", exitCode: 1 };
+    }
+    const id = args.positional[1];
+    if (!id) return { success: false, message: "Missing required receipt id.", exitCode: 1 };
+    const input = stringFlag(args, "input") || DEFAULT_RECEIPT_LOG_PATH;
+    const entries = readJsonlFile(input);
+    if ("error" in entries) return entries.error;
+    const match = entries.records.find((entry) => recordContainsValue(entry, id));
+    if (!match) return { success: false, message: `Receipt not found: ${id}`, exitCode: 1 };
+    return { success: true, message: JSON.stringify(match, null, 2), data: match, exitCode: 0 };
+  }
+
+  private traceCommand(args: CLIArgs): CLIOutput {
+    const subCommand = args.positional[0] ?? "dump";
+    if (subCommand !== "dump") {
+      return { success: false, message: "Unknown trace sub-command. Usage: cvf trace dump [--session <id>]", exitCode: 1 };
+    }
+    const input = stringFlag(args, "input") || DEFAULT_TRACE_LOG_PATH;
+    const entries = readJsonlFile(input);
+    if ("error" in entries) return entries.error;
+    const session = stringFlag(args, "session");
+    const records = session
+      ? entries.records.filter((record) => recordContainsValue(record, session))
+      : entries.records;
+    return {
+      success: true,
+      message: records.map((record) => JSON.stringify(record)).join("\n"),
+      data: { entries: records.length },
+      exitCode: 0,
+    };
+  }
+
+  private providerCommand(args: CLIArgs): CLIOutput {
+    const subCommand = args.positional[0] ?? "list";
+    if (subCommand !== "list") {
+      return { success: false, message: "Unknown provider sub-command. Usage: cvf provider list", exitCode: 1 };
+    }
+    return {
+      success: true,
+      message: ["provider status source", ...PROVIDER_LANES.map((lane) => `${lane.provider} ${lane.status} ${lane.source}`)].join("\n"),
+      data: { providers: PROVIDER_LANES },
+      exitCode: 0,
+    };
+  }
+
+  private loadSkillRecords(path: string): { records: SkillRecord[] } | { error: CLIOutput } {
+    if (!existsSync(path)) {
+      return { error: { success: false, message: `Skill index not found: ${path}`, exitCode: 1 } };
+    }
+    try {
+      const payload = JSON.parse(readFileSync(path, "utf8")) as SkillIndexPayload | SkillIndexPayload["categories"];
+      const categories = Array.isArray(payload) ? payload : (payload?.categories ?? []);
+      return {
+        records: categories.flatMap((category) => (category.skills ?? []).map((skill) => ({
+          id: String(skill.id ?? ""),
+          title: String(skill.title ?? skill.id ?? ""),
+          domain: String(skill.domain ?? category.id ?? category.title ?? "unknown"),
+          riskLevel: String(skill.riskLevel ?? "R1"),
+          path: typeof skill.path === "string" ? skill.path : undefined,
+        }))).filter((skill) => skill.id),
+      };
+    } catch (error) {
+      return { error: { success: false, message: error instanceof Error ? error.message : "Failed to read skill index.", exitCode: 1 } };
+    }
+  }
+
   private benchmarkCommand(args: CLIArgs): CLIOutput {
     const subCommand = args.positional[0];
     if (subCommand !== "governance" && subCommand !== "run") {
@@ -344,7 +493,7 @@ function formatGovernanceReliabilityReport(
   return [
     "metric rate count total",
     ...Object.entries(report).map(([name, result]) => {
-      return `${name} ${result.rate.toFixed(3)} ${result.count} ${result.total}`;
+      return `${name} ${formatMetricRate(result.rate, 3)} ${result.count} ${result.total}`;
     }),
   ].join("\n");
 }
@@ -360,7 +509,66 @@ function formatGovernanceBenchmarkRunReport(
     "CVF Governance Reliability Report",
     "==================================",
     ...Object.entries(report).map(([name, result]) => {
-      return `${name}: ${result.rate.toFixed(2)} (${result.count}/${result.total})`;
+      return `${name}: ${formatMetricRate(result.rate, 2)} (${result.count}/${result.total})`;
     }),
   ].join("\n");
+}
+
+const DEFAULT_SKILL_INDEX_PATH = "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/data/skills-index.json";
+const DEFAULT_RECEIPT_LOG_PATH = "docs/evidence/cvf-execute-receipts.jsonl";
+const DEFAULT_TRACE_LOG_PATH = ".cvf/runtime/web-governance-jobs.jsonl";
+
+interface SkillIndexPayload {
+  categories?: Array<{ id?: string; title?: string; skills?: Array<Record<string, unknown>> }>;
+}
+
+interface SkillRecord {
+  id: string;
+  title: string;
+  domain: string;
+  riskLevel: string;
+  path?: string;
+}
+
+const PROVIDER_LANES = [
+  { provider: "openai", status: "registered", source: "cvf-web/api/providers" },
+  { provider: "claude", status: "registered", source: "cvf-web/api/providers" },
+  { provider: "gemini", status: "registered", source: "cvf-web/api/providers" },
+  { provider: "alibaba", status: "registered", source: "cvf-web/api/providers" },
+  { provider: "openrouter", status: "registered", source: "cvf-web/api/providers" },
+  { provider: "deepseek", status: "registered", source: "cvf-web/api/providers" },
+] as const;
+
+function readJsonlFile(path: string): { records: Record<string, unknown>[] } | { error: CLIOutput } {
+  if (!existsSync(path)) {
+    return { error: { success: false, message: `JSONL input not found: ${path}`, exitCode: 1 } };
+  }
+  try {
+    const records = readFileSync(path, "utf8")
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => JSON.parse(line) as Record<string, unknown>);
+    return { records };
+  } catch (error) {
+    return { error: { success: false, message: error instanceof Error ? error.message : "Failed to read JSONL input.", exitCode: 1 } };
+  }
+}
+
+function recordContainsValue(value: unknown, target: string): boolean {
+  if (value === target) return true;
+  if (Array.isArray(value)) return value.some((item) => recordContainsValue(item, target));
+  if (value && typeof value === "object") {
+    return Object.values(value).some((item) => recordContainsValue(item, target));
+  }
+  return false;
+}
+
+function formatMetricRate(rate: number | null, fractionDigits: number): string {
+  return rate === null ? "n/a" : rate.toFixed(fractionDigits);
+}
+
+function stringFlag(args: CLIArgs, name: string): string | undefined {
+  const value = args.flags[name];
+  return typeof value === "string" && value.trim() ? value.trim() : undefined;
 }

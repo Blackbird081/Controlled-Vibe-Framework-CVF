@@ -8,10 +8,13 @@ import {
   computeGovernanceReliabilityReport,
   crossSessionContinuityRate,
   deterministicConsistencyRate,
+  humanCorrectionRate,
+  longHorizonStabilityRate,
   parseAuditJsonl,
   policyDecisionRate,
   policyViolationRate,
   receiptIntegrityRate,
+  rollbackSuccessRate,
   retryRecoveryRate,
   stepTraceCompletionRate,
   taskCompletionRate,
@@ -81,6 +84,9 @@ describe("governance reliability metrics", () => {
       policyViolationRate: { rate: 0, count: 0, total: 0 },
       crossSessionContinuityRate: { rate: 0, count: 0, total: 0 },
       deterministicConsistencyRate: { rate: 0, count: 0, total: 0 },
+      humanCorrectionRate: { rate: 0, count: 0, total: 0 },
+      longHorizonStabilityRate: { rate: 1, count: 0, total: 0 },
+      rollbackSuccessRate: { rate: null, count: 0, total: 0 },
     });
   });
 
@@ -126,6 +132,70 @@ describe("governance reliability metrics", () => {
     expect(result).toEqual({ rate: 0.5, count: 1, total: 2 });
   });
 
+  it("returns zero human correction rate for an empty log", () => {
+    expect(humanCorrectionRate([])).toEqual({ rate: 0, count: 0, total: 0 });
+  });
+
+  it("computes human correction rate by distinct execution", () => {
+    const result = humanCorrectionRate([
+      { executionId: "exec-1", eventType: "execution_requested" },
+      { executionId: "exec-1", eventType: "operator_correction", correctedAt: "2026-05-20T00:00:00Z", correctionSource: "operator" },
+      { executionId: "exec-2", eventType: "execution_requested" },
+    ]);
+
+    expect(result).toEqual({ rate: 0.5, count: 1, total: 2 });
+  });
+
+  it("does not count non-correction events as human corrections", () => {
+    expect(humanCorrectionRate([
+      { executionId: "exec-1", eventType: "execution_requested" },
+      { executionId: "exec-2", eventType: "receipt_emitted" },
+    ])).toEqual({ rate: 0, count: 0, total: 2 });
+  });
+
+  it("treats no executions as vacuously stable for long-horizon stability", () => {
+    expect(longHorizonStabilityRate([], 30)).toEqual({ rate: 1, count: 0, total: 0 });
+  });
+
+  it("computes long-horizon stability within the requested window", () => {
+    const result = longHorizonStabilityRate([
+      { executionId: "exec-1", eventType: "execution_requested", timestamp: "2026-05-01T00:00:00Z" },
+      { executionId: "exec-1", eventType: "receipt_emitted", timestamp: "2026-05-05T00:00:00Z" },
+      { executionId: "exec-2", eventType: "execution_requested", timestamp: "2026-05-01T00:00:00Z" },
+      { executionId: "exec-2", eventType: "receipt_emitted", timestamp: "2026-06-15T00:00:00Z" },
+    ], 30);
+
+    expect(result).toEqual({ rate: 0.5, count: 1, total: 2 });
+  });
+
+  it("marks executions unstable when rollback fails or policy violation occurs", () => {
+    const result = longHorizonStabilityRate([
+      { executionId: "exec-1", eventType: "execution_requested", timestamp: "2026-05-01T00:00:00Z" },
+      { executionId: "exec-1", eventType: "rollback", rolledBackAt: "2026-05-02T00:00:00Z", success: false },
+      { executionId: "exec-2", eventType: "policy_violation", timestamp: "2026-05-01T00:00:00Z" },
+    ], 30);
+
+    expect(result).toEqual({ rate: 0, count: 0, total: 2 });
+  });
+
+  it("returns null rollback success rate when no rollback events exist", () => {
+    expect(rollbackSuccessRate([{ executionId: "exec-1", eventType: "execution_requested" }]))
+      .toEqual({ rate: null, count: 0, total: 0 });
+  });
+
+  it("computes rollback success rate for all successful rollbacks", () => {
+    expect(rollbackSuccessRate([
+      { executionId: "exec-1", eventType: "rollback", rolledBackAt: "2026-05-20T00:00:00Z", success: true },
+    ])).toEqual({ rate: 1, count: 1, total: 1 });
+  });
+
+  it("computes rollback success rate for mixed rollback outcomes", () => {
+    expect(rollbackSuccessRate([
+      { executionId: "exec-1", eventType: "rollback", rolledBackAt: "2026-05-20T00:00:00Z", success: true },
+      { executionId: "exec-2", eventType: "rollback", rolledBackAt: "2026-05-20T00:00:00Z", success: false },
+    ])).toEqual({ rate: 0.5, count: 1, total: 2 });
+  });
+
   it("returns zero receipt integrity when all receipts are null", () => {
     expect(receiptIntegrityRate([
       { executionId: "exec-1", receiptId: null, decision: "captured" },
@@ -158,6 +228,8 @@ describe("governance reliability metrics", () => {
       expect(JSON.parse(result.message)).toMatchObject({
         receiptIntegrityRate: { count: 3, total: 4 },
         deterministicConsistencyRate: { count: 2, total: 3 },
+        humanCorrectionRate: { count: 0, total: 3 },
+        rollbackSuccessRate: { rate: null, count: 0, total: 0 },
       });
     } finally {
       rmSync(tempDir, { recursive: true, force: true });
@@ -179,6 +251,7 @@ describe("governance reliability metrics", () => {
       expect(result.success).toBe(true);
       expect(result.message).toContain("CVF Governance Reliability Report");
       expect(result.message).toContain("deterministicConsistencyRate:");
+      expect(result.message).toContain("rollbackSuccessRate: n/a");
     } finally {
       rmSync(tempDir, { recursive: true, force: true });
     }

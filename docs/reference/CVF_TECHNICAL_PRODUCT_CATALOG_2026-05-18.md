@@ -1,6 +1,6 @@
 # CVF Technical Product Catalog
 
-Status: CURRENT — updated 2026-05-19
+Status: CURRENT — updated 2026-05-20
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -48,6 +48,12 @@ are not accepted as governance evidence.
 
 Release gate: `scripts/run_cvf_release_gate_bundle.py`
 Latest result: `docs/evidence/latest-release-gate.md`
+
+On 2026-05-20, the public code subset added bounded read-only CLI wrappers,
+expanded offline governance reliability metrics, and a memory tier classifier
+contract. This catalog update cites only paths verified in the public-sync
+clone. The canonical role catalog remains a public-sync coverage gap until a
+public-safe reference file is added.
 
 ---
 
@@ -120,6 +126,7 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 | Knowledge-backed execution with guards | proven — bounded execute path | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
 | Non-coder governed path | proven — bounded provider lanes | `docs/evidence/web-governance-path.md` |
 | Governance CLI (`cvf-guard`, `cvf execute`) | active; `execute` caller is mock-tested and delegates to the web execute route | `ARCHITECTURE.md`, `docs/reference/CVF_MODULE_INVENTORY.md`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/execute.client.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/execute.client.test.ts` |
+| Governance CLI read-only wrappers (`cvf run`, `cvf skill`, `cvf receipt`, `cvf trace`, `cvf provider`) | active — read-only developer/operator wrappers over existing execution, skill, receipt, trace, and provider inspection surfaces; no new provider behavior claimed | `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/command.registry.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-run.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-skill.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-receipt.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-trace.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-provider.test.ts` |
 | Certified provider lanes | proven where evidence exists | `docs/evidence/provider-lanes.md` |
 | Skill governance engine | active | `docs/reference/CVF_MODULE_INVENTORY.md` |
 | Template marketplace | active | `docs/evidence/web-governance-path.md` |
@@ -132,7 +139,9 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 | External asset/capability governance | partially productized | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |
 | Provider streaming contract (`StreamContract`) | schema-defined — bounded to governed pack policy flag | `EXTENSIONS/CVF_MODEL_GATEWAY/src/stream-contract.ts`, `EXTENSIONS/CVF_MODEL_GATEWAY/tests/stream-contract.test.ts` |
 | Provider method contracts (`ReasoningContract`, `JsonModeContract`, `ToolCallContract`, `EmbeddingContract`) | schema-defined — gateway contract layer; no provider execution claimed | `EXTENSIONS/CVF_MODEL_GATEWAY/src/reasoning-contract.ts`, `EXTENSIONS/CVF_MODEL_GATEWAY/src/json-mode-contract.ts`, `EXTENSIONS/CVF_MODEL_GATEWAY/src/tool-call-contract.ts`, `EXTENSIONS/CVF_MODEL_GATEWAY/src/embedding-contract.ts` |
-| Governance reliability benchmark CLI (`cvf benchmark governance`, `cvf benchmark run`) | active — 9-metric offline computation against audit JSONL; `run` subcommand emits formatted reliability report | `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/governance-reliability-metrics.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/command.registry.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/governance-reliability-metrics.test.ts` |
+| Governance reliability benchmark CLI (`cvf benchmark governance`, `cvf benchmark run`) | active — 12-metric offline computation against audit JSONL; `run` subcommand emits formatted reliability report | `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/governance-reliability-metrics.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/command.registry.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/governance-reliability-metrics.test.ts` |
+| Offline governance reliability residual metrics (`humanCorrectionRate`, `longHorizonStabilityRate`, `rollbackSuccessRate`) | active — three additional offline metrics for human correction, long-horizon stability, and rollback success; no live-provider recovery claim | `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/governance-reliability-metrics.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/governance-reliability-metrics.test.ts` |
+| Memory tier classifier contract | schema-defined — single classifier contract for memory tier routing decisions; unit-tested contract surface, no provider prompt reinjection claim | `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/memory-tier-classifier.contract.ts`, `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/memory-tier-classifier.test.ts` |
 | Non-coder outcome quick actions (home UI) | active — three governed pack entry points wired in home page | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OutcomeQuickActions.tsx` |
 | Runtime actor-role gate on execute path | active — `allowedActorRoles` enforced for three governed pack policies; non-permitted roles rejected with HTTP 403 before provider dispatch | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/execute-role-resolver.ts`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts` |
 | Provider method breadth | demand-gated | no universal provider-method parity claim |

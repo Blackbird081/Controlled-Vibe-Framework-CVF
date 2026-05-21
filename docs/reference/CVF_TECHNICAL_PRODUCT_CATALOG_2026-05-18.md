@@ -55,6 +55,13 @@ contract. This catalog update cites only paths verified in the public-sync
 clone. The canonical role catalog remains a public-sync coverage gap until a
 public-safe reference file is added.
 
+On 2026-05-21, the public evidence set added a post-Phase 2.B bounded
+publicization summary: internal runtime coherence was closed in private
+provenance, the release gate passed, and a narrow two-provider governed
+`/api/execute` repeatability probe passed on Alibaba `qwen-turbo` and DeepSeek
+`deepseek-chat`. This is not a broad provider stability or production
+readiness claim.
+
 ---
 
 ## What CVF Can Do Today
@@ -144,6 +151,7 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 | Memory tier classifier contract | schema-defined — single classifier contract for memory tier routing decisions; unit-tested contract surface, no provider prompt reinjection claim | `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/memory-tier-classifier.contract.ts`, `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/memory-tier-classifier.test.ts` |
 | Non-coder outcome quick actions (home UI) | active — three governed pack entry points wired in home page | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OutcomeQuickActions.tsx` |
 | Runtime actor-role gate on execute path | active — `allowedActorRoles` enforced for three governed pack policies; non-permitted roles rejected with HTTP 403 before provider dispatch | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/execute-role-resolver.ts`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts` |
+| Post Phase 2.B publicization readiness | proven — bounded internal coherence summary plus narrow two-provider `/api/execute` repeatability evidence; no broad stability or production readiness claim | `docs/evidence/post-phase-2b-publicization-readiness.md` |
 | Provider method breadth | demand-gated | no universal provider-method parity claim |
 | Async workers / subagents | roadmap | concepts exist; canonical lifecycle not claimed |
 | Tool/MCP/database action governance | roadmap | guards exist; full action taxonomy not claimed |
@@ -223,6 +231,8 @@ CVF may claim:
 - governance-first AI control framework
 - bounded live non-coder value on certified provider lanes
 - evidence-backed provider lanes where receipts exist
+- bounded Phase 2.B publicization evidence for one governed route across
+  Alibaba and DeepSeek
 - governed knowledge-backed execution in the proven execute path
 - governed Product Brief workflow with role permission, step traces, and receipt
 - public auditability through docs, evidence packets, guards, and release gates
@@ -235,6 +245,9 @@ CVF does not yet claim:
 - full legacy repository absorption
 - complete role-permission, memory-reinjection, async-worker,
   graph-context, database-action, or provider-method coverage
+- broad provider stability, persistence/database readiness, Maika
+  child-data/photo/vision proof, kernel-owner replacement, or global freeze
+  lift
 
 Full boundary document: `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 

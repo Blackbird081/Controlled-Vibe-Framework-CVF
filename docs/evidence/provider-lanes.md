@@ -4,7 +4,7 @@ Memory class: FULL_RECORD
 
 Status: CURRENT PUBLIC PROVIDER EVIDENCE BOUNDARY
 
-Last refreshed: `2026-05-09`
+Last refreshed: `2026-05-21`
 
 ## Purpose
 
@@ -36,6 +36,7 @@ history remains in the provenance repository.
 | Alibaba/DashScope | Latest curated `qwen-turbo` governed live canary PASS 6/6: `RECEIPT_20260509-160312-276776.json`. | Active release-quality lane when a live key is supplied. |
 | DeepSeek | Latest curated `deepseek-chat` governed live canary PASS 6/6: `RECEIPT_20260509-160707-91ae8a.json`. | Model-specific governed-path evidence; no blanket provider parity claim. |
 | OpenAI | Latest curated `gpt-4o-mini` governed live canary PASS 6/6: `RECEIPT_20260509-160806-7e3b5b.json`. | Model-specific governed-path evidence; no blanket provider parity claim. |
+| Post Phase 2.B repeatability | Public-safe summary: `docs/evidence/post-phase-2b-publicization-readiness.md`; Alibaba `2/2` + DeepSeek `2/2` governed `/api/execute` journeys PASS. | Narrow route repeatability only; no broad provider stability or universal parity claim. |
 | Other providers | Adapter direction only. | No public parity claim until live evidence exists. |
 
 ## Decision
@@ -47,8 +48,10 @@ evidence exists.
 
 ## Boundary
 
-Provider live canaries prove governed-path operability for named models. They
-are not QBS quality benchmark scores.
+Provider live canaries prove governed-path operability for named models. The
+post-Phase 2.B repeatability summary proves only a narrow governed
+`/api/execute` route across Alibaba and DeepSeek. These records are not QBS
+quality benchmark scores and do not prove broad provider stability.
 
 ## Claim Boundary
 

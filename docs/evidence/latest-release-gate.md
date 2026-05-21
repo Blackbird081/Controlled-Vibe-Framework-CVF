@@ -2,7 +2,7 @@
 
 Memory class: POINTER_RECORD
 
-Status: fresh local-first release gate PASS on 2026-05-16.
+Status: fresh local-first release gate PASS on 2026-05-21.
 
 ## Purpose
 
@@ -39,6 +39,8 @@ Renewed repository live proof must be run after GitHub cutover through:
 - Local-first release gate proof is recorded at
   `docs/evidence/local-first-release-gate-proof-2026-05-16.md`.
 - Historical live evidence is preserved in the provenance repository.
+- The 2026-05-21 local release gate passed all seven checks, including live
+  governance E2E, before the post-Phase 2.B publicization summary was updated.
 - Hosted GitHub protected live-gate evidence is still separate from local
   proof. Any hosted/public GA claim must cite a hosted workflow run when
   required.
@@ -48,6 +50,7 @@ Renewed repository live proof must be run after GitHub cutover through:
 Predecessor evidence:
 
 - `docs/evidence/local-first-release-gate-proof-2026-05-16.md`
+- `docs/evidence/post-phase-2b-publicization-readiness.md`
 - Provenance-only historical run records.
 
 ## Decision

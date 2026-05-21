@@ -41,6 +41,8 @@ Renewed repository live proof must be run after GitHub cutover through:
 - Historical live evidence is preserved in the provenance repository.
 - The 2026-05-21 local release gate passed all seven checks, including live
   governance E2E, before the post-Phase 2.B publicization summary was updated.
+- The gate passed again on 2026-05-21 before the second-window provider
+  repeatability evidence delta was published.
 - Hosted GitHub protected live-gate evidence is still separate from local
   proof. Any hosted/public GA claim must cite a hosted workflow run when
   required.

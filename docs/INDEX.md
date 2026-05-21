@@ -33,6 +33,12 @@ and must not introduce private provenance links.
 - `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md`
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 
+## Public Evidence
+
+The `docs/evidence/` folder is reserved for curated public evidence summaries
+and public-safe evidence pointers. It must not contain raw provenance packets,
+operator environment transcripts, raw provider keys, or private review chains.
+
 ## Claim Boundary
 
 Public documentation must preserve CVF's bounded claim posture. Mock-only UI

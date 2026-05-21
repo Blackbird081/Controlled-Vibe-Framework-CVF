@@ -34,6 +34,7 @@ This applies equally to:
 | `docs/reference/` | authoritative long-lived reference docs |
 | `docs/assessments/` | assessments, audits, verdict-driven evaluations |
 | `docs/audits/` | specialized audit packets for structural changes, execution preflight, or evidence-first merge reviews |
+| `docs/evidence/` | curated public evidence summaries and public-safe evidence pointers |
 | `docs/baselines/` | baseline snapshots and comparison anchors |
 | `docs/roadmaps/` | plans, remediation, rollout, upgrade sequencing |
 | `docs/reviews/` | review archives by scope or module |

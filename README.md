@@ -76,7 +76,7 @@ The gate runs UI-only mock E2E plus live governance E2E, and it must fail if no 
 
 ## Current Live-Proof Boundary
 
-> Current live proof: Alibaba/DashScope is the primary certified release lane, with W149 proving the 40-form trusted corpus through direct API and browser UI journeys and W152 preserving a `7/7` release gate PASS. DeepSeek is a certified provider lane with canary evidence and W149 confirmatory subset coverage (`12/12`), but full provider parity is not claimed. On 2026-05-21, post-Phase 2.B publicization evidence added a narrow `4/4` governed `/api/execute` repeatability proof across Alibaba `qwen-turbo` and DeepSeek `deepseek-chat`; this is not a broad provider stability claim. Other providers may have adapter contracts or experimental integration surfaces, but they are not certified until their own live canary receipts are saved.
+> Current live proof: Alibaba/DashScope is the primary certified release lane, with W149 proving the 40-form trusted corpus through direct API and browser UI journeys and W152 preserving a `7/7` release gate PASS. DeepSeek is a certified provider lane with canary evidence and W149 confirmatory subset coverage (`12/12`), but full provider parity is not claimed. On 2026-05-21, post-Phase 2.B publicization evidence added narrow two-window governed `/api/execute` repeatability across Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` (`10/10` total across the initial and second windows); this is not a broad provider stability claim. Other providers may have adapter contracts or experimental integration surfaces, but they are not certified until their own live canary receipts are saved.
 
 ## What CVF Is
 
@@ -104,7 +104,7 @@ The strongest public-safe claim CVF can make right now is:
 
 - **on one validated provider lane, CVF has proven real non-coder value**
 - **across two live provider lanes, CVF has proven multi-provider operability**
-- **after Phase 2.B, CVF has a bounded internal-coherence summary and narrow two-provider governed-route repeatability proof**
+- **after Phase 2.B, CVF has a bounded internal-coherence summary and narrow two-window, two-provider governed-route repeatability proof**
 - **the trusted-form web front door is live-usable across the current 40-form non-wizard corpus**
 - the governed path preserves normal-task usefulness
 - risky requests are blocked or guided instead of left as prompt roulette

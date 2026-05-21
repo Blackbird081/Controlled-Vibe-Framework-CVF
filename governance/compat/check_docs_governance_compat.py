@@ -42,6 +42,7 @@ ALLOWED_DOCS_FOLDERS = {
     "baselines",
     "roadmaps",
     "reviews",
+    "evidence",
     "logs",
     "concepts",
     "guides",

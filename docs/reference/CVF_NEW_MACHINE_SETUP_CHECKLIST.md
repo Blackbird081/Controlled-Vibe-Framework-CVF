@@ -160,21 +160,12 @@ A broader install is only reasonable when:
 
 Even then, install package-by-package, not by copying old `node_modules/`.
 
-### Convenience Script
+### Public Export Boundary
 
-If you need all 4 foundations installed at once:
-
-```powershell
-.\scripts\bootstrap_foundations.ps1
-```
-
-Or in shell environments:
-
-```bash
-./scripts/bootstrap_foundations.sh
-```
-
-These scripts use `npm ci` when a package lockfile already exists, otherwise `npm install`. The canonical install policy (per-extension) remains unchanged.
+The current public repository does not ship bulk foundation bootstrap scripts.
+Install dependencies package-by-package with the lockfile rule above. If a
+later public export adds convenience scripts, this checklist should be updated
+in the same commit that adds them.
 
 ---
 
@@ -209,7 +200,5 @@ Then run only the commands needed for that package.
 ## 10. Canonical Pointers
 
 - `README.md`
-- `START_HERE.md`
-- `AGENT_HANDOFF.md`
 - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`
 - `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`

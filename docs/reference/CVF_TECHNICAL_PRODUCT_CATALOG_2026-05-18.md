@@ -70,6 +70,12 @@ Guard Contract runtime workflow, orchestrator and policy-decision contracts,
 and the live-proof release gate. This is not a freeze lift or new runtime
 claim.
 
+Also on 2026-05-22, the P1 public developer onboarding proof verified the
+local-first web setup path and non-live static gate for agent/developer
+readers. The proof corrected public docs that referenced non-exported setup
+scripts, then passed `npm ci`, `npm run check`, and the 7/7 static CI gate.
+Evidence: `docs/evidence/public-developer-onboarding-proof-2026-05-22.md`
+
 ---
 
 ## What CVF Can Do Today

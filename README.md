@@ -119,6 +119,7 @@ The strongest public-safe claim CVF can make right now is:
 - **across two live provider lanes, CVF has proven multi-provider operability**
 - **after Phase 2.B, CVF has a bounded internal-coherence summary and narrow two-window, two-provider governed-route repeatability proof**
 - **after the 2026-05-22 A2 audit, CVF has a public-safe governance-kernel coherence readout for agent and developer readers**
+- **after the 2026-05-22 P1 onboarding proof, the public local-first web setup path and non-live static gate are verified for agent/developer readers**
 - **the trusted-form web front door is live-usable across the current 40-form non-wizard corpus**
 - the governed path preserves normal-task usefulness
 - risky requests are blocked or guided instead of left as prompt roulette
@@ -193,7 +194,7 @@ interaction sequence visible before deeper prose. Start with
 | Fast module overview and system shape | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | Canonical module map and layer vocabulary | [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md) |
 | Diagram-first architecture view | [Architecture Diagrams](docs/reference/CVF_ARCHITECTURE_DIAGRAMS.md) |
-| Ecosystem-level structure | [Ecosystem Architecture](CVF_ECOSYSTEM_ARCHITECTURE.md) |
+| Ecosystem-level structure | [Ecosystem Overview](ECOSYSTEM/README.md) |
 | Deep closure-assessed architecture baseline | [Master Architecture Whitepaper](docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md) |
 | Public APIs and external-asset governance metadata | [Reference API Docs](docs/reference/api/README.md) and [External Asset Governance API Contract](docs/reference/CVF_W67_T1_EXTERNAL_ASSET_GOVERNANCE_API_CONTRACT.md) |
 
@@ -209,7 +210,7 @@ The application is organized around these practical modules:
 | Guard contract | `EXTENSIONS/CVF_GUARD_CONTRACT/` | shared guard semantics, policy/risk contract, public SDK boundary |
 | Governance runtime | `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` | canonical phase/governance orchestration primitives |
 | Governance compatibility gates | `governance/compat/` + `governance/toolkit/05_OPERATION/` | local/CI checks that block drift between docs, tests, guards, retention, and release posture |
-| Workspace bootstrap | `scripts/new-cvf-workspace.ps1` + `docs/reference/CVF_WORKSPACE_RULES.md` | downstream project isolation and generated agent-enforcement artifacts |
+| Workspace bootstrap evidence | `docs/reference/CVF_WORKSPACE_RULES.md` + `docs/reference/CVF_W114_PUBLIC_EVIDENCE_PACKET_2026-04-23.md` | downstream project isolation and generated agent-enforcement artifact proof; bootstrap scripts are not shipped as runnable public commands in the current public export |
 
 For new developers, read in this order: `README.md` -> `ARCHITECTURE.md` -> `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/README.md` -> the specific module listed above.
 
@@ -222,7 +223,7 @@ Choose the shortest path for your role:
 | New reader / General evaluator | [Getting Started](docs/GET_STARTED.md) and [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md) |
 | Builder / Integrator | [Controlled Execution Loop](docs/concepts/controlled-execution-loop.md) and [Reference Governed Loop](docs/reference/CVF_REFERENCE_GOVERNED_LOOP.md) |
 | Non-coder / Operator | [Getting Started](docs/GET_STARTED.md) and [Non-Coder Governed Packet](docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md) |
-| Architecture reader | [Architecture](ARCHITECTURE.md), [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md), and [Ecosystem Architecture](CVF_ECOSYSTEM_ARCHITECTURE.md) |
+| Architecture reader | [Architecture](ARCHITECTURE.md), [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md), and [Ecosystem Overview](ECOSYSTEM/README.md) |
 
 ### Quick Run: Web UI
 
@@ -241,26 +242,30 @@ In `Settings`, enable the provider keys you want to use. Each admitted `provider
 
 Operators can use `http://localhost:3000/governance/operations` for allowlisted governance jobs, including the Web-triggered full live release gate. Live jobs are guarded by the local cost/quota policy at `.cvf/config/cost-quota-policy.json` and append local audit records under `.cvf/runtime/`; these files are local-first and are not a cloud control plane.
 
-For a guided RC first-run path on Windows, use the [CVF 5-Minute RC Setup](docs/guides/CVF_5_MINUTE_RC_SETUP.md):
+For a guided public first-run path, use the [CVF 5-Minute RC Setup](docs/guides/CVF_5_MINUTE_RC_SETUP.md).
+For a non-live developer proof after installing the web package, run:
 
 ```bash
-python scripts/cvf_setup.py --write-env --json
+python scripts/run_cvf_static_ci_gate.py --json
 ```
+
+Latest public onboarding proof:
+[Public Developer Onboarding Proof](docs/evidence/public-developer-onboarding-proof-2026-05-22.md).
 
 For Netlify, Vercel, and Docker posture, see the [CVF Deploy Guide](docs/guides/CVF_DEPLOY_GUIDE.md).
 
-### Quick Run: Workspace Bootstrap
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\new-cvf-workspace.ps1 `
-  -WorkspaceRoot "D:\CVF-Workspace" `
-  -ProjectName "My-Project"
-```
+### Workspace Bootstrap Evidence
 
 See [Workspace Isolation Guard](governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md).
 See [CVF Workspace Rules](docs/reference/CVF_WORKSPACE_RULES.md) for the canonical parent-folder layout: workspace root, hidden `.Controlled-Vibe-Framework-CVF` governance clone, and sibling downstream application folders.
 
-Current boundary: this bootstrap is now `agent-enforcement-ready` when the generated downstream `AGENTS.md`, `.cvf/` policy manifests, workspace-root `WORKSPACE_RULES.md`, bootstrap log, and workspace doctor checks are present. See [W112-T1 Workspace Agent Enforcement and Web Control Uplift](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md).
+Current boundary: this bootstrap was proven in the private/provenance
+operator surface and summarized publicly, but the public repository does not
+currently ship `scripts/new-cvf-workspace.ps1` or
+`scripts/check_cvf_workspace_agent_enforcement.ps1` as runnable onboarding
+commands. Treat the public repository as the documentation, evidence, and
+local-first CVF web/runtime front door unless a later public export adds those
+scripts. See [W112-T1 Workspace Agent Enforcement and Web Control Uplift](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md).
 
 Downstream proof: [W113-T1](docs/roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md) proved the first downstream adoption path. [W114-CP7](docs/assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md) extended this to 3 sample projects across cli-productivity, web-app-planning, and data-analysis — all doctor 11/11 PASS, all tests pass, sample 3 includes a secret-free bridge to live Web evidence.
 
@@ -281,15 +286,9 @@ npm ci   # if package-lock.json exists
 # or: npm install   # if that package has no lockfile
 ```
 
-If you need all 4 foundations ready at once, use:
-
-```powershell
-.\scripts\bootstrap_foundations.ps1
-```
-
-```bash
-./scripts/bootstrap_foundations.sh
-```
+The current public repository does not ship bulk foundation bootstrap scripts.
+Install extension dependencies package-by-package, following the lockfile rule
+above.
 
 For hosting and deployment options after local setup, use the [CVF Deploy Guide](docs/guides/CVF_DEPLOY_GUIDE.md).
 
@@ -429,7 +428,6 @@ Primary status anchors:
 - [Architecture Overview](ARCHITECTURE.md)
 - [Architecture Map](docs/reference/CVF_ARCHITECTURE_MAP.md)
 - [Architecture Diagrams](docs/reference/CVF_ARCHITECTURE_DIAGRAMS.md)
-- [Ecosystem Architecture](CVF_ECOSYSTEM_ARCHITECTURE.md)
 - [Docs Index](docs/INDEX.md)
 - [Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md)
 - [Controlled Execution Loop](docs/concepts/controlled-execution-loop.md)
@@ -443,7 +441,7 @@ Primary status anchors:
 - [Quick Orientation](docs/guides/CVF_QUICK_ORIENTATION.md)
 - [Solo Developer Guide](docs/guides/solo-developer.md)
 - [Enterprise Guide](docs/guides/enterprise.md)
-- [First Project Tutorial](docs/tutorials/first-project.md)
+- [CVF 5-Minute RC Setup](docs/guides/CVF_5_MINUTE_RC_SETUP.md)
 
 ### Track status and evidence
 

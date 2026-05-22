@@ -3,12 +3,13 @@
 
 Date: 2026-05-08
 
-Status: RC2-A2 guided first-run path
+Status: public local-first first-run path
 
 ## Boundary
 
-This guide is for Windows RC setup. It is not a GA installer and does not claim
-zero friction across every environment.
+This guide is for a public local-first setup. It is not a hosted installer and
+does not claim zero friction across every environment. The commands below use
+scripts and package commands that are present in the public repository.
 
 ## 1. Clone
 
@@ -17,30 +18,51 @@ git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
 cd Controlled-Vibe-Framework-CVF
 ```
 
-## 2. Run The Doctor
+## 2. Install The Web Package
 
 ```bash
-python scripts/cvf_doctor.py --json
+cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+npm ci
 ```
 
-Fix any `BLOCKED` result before continuing. `WARNING` usually means a provider
-key or local dependency is still missing.
+Use `npm ci` because this package ships a lockfile.
 
-## 3. Create Local Env
+## 3. Run A Non-Live Developer Check
 
 ```bash
-python scripts/cvf_setup.py --write-env --json
+npm run check
 ```
 
-Then edit:
+Then return to the repository root:
+
+```bash
+cd ../../..
+```
+
+For the broader non-live public gate, run:
+
+```bash
+python scripts/run_cvf_static_ci_gate.py --json
+```
+
+This static gate checks public surface, workflow orchestration, web build,
+TypeScript, secrets, docs governance, and selected static governance tests. It
+does not use live provider keys.
+
+## 4. Create Local Env When You Need Live Proof
+
+Create or edit:
 
 ```bash
 EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/.env.local
 ```
 
-Add only the provider keys you intend to use. Never commit `.env.local`.
+Add only the provider keys you intend to use. Never commit `.env.local`. For
+the current release-quality lane, use a DashScope-compatible key via
+`DASHSCOPE_API_KEY`, `ALIBABA_API_KEY`, `CVF_ALIBABA_API_KEY`, or
+`CVF_BENCHMARK_ALIBABA_KEY`.
 
-## 4. Check Provider Readiness
+## 5. Check Provider Readiness
 
 Secret-safe key presence check:
 
@@ -60,11 +82,10 @@ DeepSeek can be checked with:
 python scripts/cvf_provider_check.py --provider deepseek --json
 ```
 
-## 5. Install And Start Web
+## 6. Start Web
 
 ```bash
 cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-npm ci
 npm run dev
 ```
 

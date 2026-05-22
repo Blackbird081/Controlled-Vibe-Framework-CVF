@@ -2,6 +2,37 @@
 
 ---
 
+## [Public Developer Onboarding Proof] — 2026-05-22
+
+Status: PUBLIC_P1_ONBOARDING_PROOF_PUBLISHED
+
+### Added
+
+- Public developer onboarding proof:
+  `docs/evidence/public-developer-onboarding-proof-2026-05-22.md`.
+
+### Changed
+
+- README, Getting Started, 5-Minute RC Setup, New Machine Checklist, and
+  `cvf-web` README now point to commands that exist in the public repository.
+- Workspace bootstrap is described as public evidence/boundary material, not
+  as a runnable public onboarding command in the current export.
+
+### Verified
+
+- `npm ci` in `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web` PASS.
+- `npm run check` in `cvf-web` PASS.
+- `python scripts/run_cvf_static_ci_gate.py --json` PASS 7/7.
+
+### Boundary
+
+- This proves local-first public developer onboarding and the non-live static
+  gate, not live provider behavior or hosted workflow freshness.
+- `npm ci` reports dependency audit residuals; those are not remediated in
+  this docs/proof tranche.
+
+---
+
 ## [Public Docs Sync] — 2026-05-22
 
 Status: PUBLIC_A2_COHERENCE_READOUT_PUBLISHED

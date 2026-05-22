@@ -44,6 +44,7 @@ boundary. The summary list is the curated public set.
 Start with:
 
 - `latest-release-gate.md`
+- `public-developer-onboarding-proof-2026-05-22.md`
 - `provider-lanes.md`
 - `web-governance-path.md`
 - `redaction-and-key-safety.md`

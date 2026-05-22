@@ -56,24 +56,36 @@
 ```bash
 # Install
 cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-npm install
+npm ci
 
 # Run
 npm run dev
 # Open http://localhost:3000
 
 # Test
-npm run test:run
+npm run check
 ```
 
 ### ⚙️ Configure API Keys
 Go to **Settings** (⚙️) and add your keys:
 
-| Provider | Format | Get Key |
-|----------|--------|---------|
-| Gemini | `AI...` | [Google AI Studio](https://aistudio.google.com) |
-| OpenAI | `sk-...` | [OpenAI Platform](https://platform.openai.com) |
-| Anthropic | `sk-ant-...` | [Anthropic Console](https://console.anthropic.com) |
+| Provider | Public proof posture |
+|----------|----------------------|
+| Alibaba/DashScope | Primary certified live release lane |
+| DeepSeek | Certified canary lane with bounded confirmatory coverage |
+| Other providers | Adapter or experimental surfaces only until separately certified |
+
+For release-quality governance proof, run from the repository root:
+
+```bash
+python scripts/run_cvf_release_gate_bundle.py --json
+```
+
+For a non-live developer check, run from the repository root after `npm ci`:
+
+```bash
+python scripts/run_cvf_static_ci_gate.py --json
+```
 
 ### 🧭 API Key Wizard (NEW)
 Nếu chưa có API key, vào Home sẽ thấy banner **“API key chưa được cấu hình”**.  

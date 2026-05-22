@@ -39,6 +39,25 @@ The active governance surface includes:
 - audit trail updates
 - cost/quota signals
 
+## Governance Kernel Coherence
+
+As of the 2026-05-22 public-safe A2 readout, CVF treats governance-kernel
+coherence as audit-equivalent for the current public orientation baseline.
+Public readers should use the existing owner surfaces instead of expecting a
+new standalone kernel-law packet:
+
+- `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+- `EXTENSIONS/CVF_GUARD_CONTRACT/src/contracts/runtime-workflow.contract.ts`
+- `EXTENSIONS/CVF_GUARD_CONTRACT/src/contracts/orchestrator.contract.ts`
+- `EXTENSIONS/CVF_GUARD_CONTRACT/src/contracts/policy-decision.contract.ts`
+
+Read
+`docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md` before
+adding kernel-law, runtime-authority, execution-state, or core-ontology docs.
+This posture does not lift any freeze and does not claim new runtime,
+provider, tool, database, or subagent coverage.
+
 ## Live-Proof Rule
 
 Any release-quality claim about governance behavior requires a real provider API

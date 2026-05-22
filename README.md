@@ -78,6 +78,19 @@ The gate runs UI-only mock E2E plus live governance E2E, and it must fail if no 
 
 > Current live proof: Alibaba/DashScope is the primary certified release lane, with W149 proving the 40-form trusted corpus through direct API and browser UI journeys and W152 preserving a `7/7` release gate PASS. DeepSeek is a certified provider lane with canary evidence and W149 confirmatory subset coverage (`12/12`), but full provider parity is not claimed. On 2026-05-21, post-Phase 2.B publicization evidence added narrow two-window governed `/api/execute` repeatability across Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` (`10/10` total across the initial and second windows); this is not a broad provider stability claim. Other providers may have adapter contracts or experimental integration surfaces, but they are not certified until their own live canary receipts are saved.
 
+## Current Governance Kernel Posture
+
+The latest public-safe A2 readout says CVF does not need a new standalone
+kernel-law packet for readers to understand the current baseline. Governance
+ownership, session routing, execution lifecycle, orchestration authority,
+policy decisions, and live-proof requirements are already covered by existing
+public surfaces.
+
+Read [Public Governance Kernel Coherence](docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md)
+before proposing `CVF_KERNEL_LAW.md`, `CVF_RUNTIME_AUTHORITY_MODEL.md`,
+`CVF_EXECUTION_STATE_MODEL.md`, or `CVF_CORE_ONTOLOGY.md`. This is a coherence
+readout, not a freeze lift and not a new runtime/provider claim.
+
 ## What CVF Is
 
 CVF is a governance-first control plane — a layer that decides whether an AI call may run, which provider lane it uses, and what evidence is recorded — for AI-assisted execution.
@@ -105,6 +118,7 @@ The strongest public-safe claim CVF can make right now is:
 - **on one validated provider lane, CVF has proven real non-coder value**
 - **across two live provider lanes, CVF has proven multi-provider operability**
 - **after Phase 2.B, CVF has a bounded internal-coherence summary and narrow two-window, two-provider governed-route repeatability proof**
+- **after the 2026-05-22 A2 audit, CVF has a public-safe governance-kernel coherence readout for agent and developer readers**
 - **the trusted-form web front door is live-usable across the current 40-form non-wizard corpus**
 - the governed path preserves normal-task usefulness
 - risky requests are blocked or guided instead of left as prompt roulette

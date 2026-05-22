@@ -1,7 +1,7 @@
 # CVF Public Catalog Claim Boundary
 
 Memory class: POINTER_RECORD
-Status: PHASE-B PUBLIC BASELINE
+Status: CURRENT PUBLIC CLAIM BOUNDARY - updated 2026-05-22
 
 ## Purpose
 
@@ -28,15 +28,18 @@ Owner surface: public/product orientation and claim-boundary documentation.
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`
 - `docs/evidence/cvf-16-5-runtime-absorption.md`
+- `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`
 
 ## Decision / Baseline / Proposed Tranche
 
-Decision: Phase B public catalog baseline accepted as a structured claim
-boundary for the public technical catalog.
+Decision: Phase B public catalog baseline remains accepted as a structured
+claim boundary for the public technical catalog, with the 2026-05-22 A2
+public-safe governance-kernel coherence readout added.
 
 Baseline: this document preserves the existing public claim posture and adds a
-reader-facing classification contract. It does not authorize runtime work,
-release-gate changes, or public claim expansion.
+reader-facing classification contract plus the A2 coherence readout boundary.
+It does not authorize runtime work, release-gate changes, or public claim
+expansion.
 
 Proposed tranche: none. Phase D implementation tranches require separate
 GC-018 authorization before any code change.
@@ -68,6 +71,7 @@ Public catalog claims must:
 | Capability | Public claim allowed now | Evidence anchor | Boundary |
 |---|---|---|---|
 | Governance control plane | CVF is a governance-first AI control framework with documented control-plane surfaces | `ARCHITECTURE.md`, `GOVERNANCE.md`, `governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md` | Does not prove every future tool/runtime action is governed |
+| Governance kernel coherence | Audit-equivalent public reader baseline through existing public owner surfaces | `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`, `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md` | Does not lift freeze or prove new runtime/provider/tool/database/subagent behavior |
 | Live governance proof | Release-quality governance claims require live proof | `scripts/run_cvf_release_gate_bundle.py`, `docs/evidence/latest-release-gate.md` | Mock-only UI checks do not count as governance proof |
 | Non-coder governed path | Bounded non-coder value is proven where public evidence exists | `docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md`, `docs/evidence/web-governance-path.md` | Not a claim of universal non-coder task coverage |
 | Provider lanes | Provider lanes are certified only where public lane evidence exists | `docs/evidence/provider-lanes.md` | No universal provider parity claim |
@@ -89,6 +93,7 @@ CVF may claim:
 - bounded live non-coder value;
 - evidence-backed provider lanes where public evidence exists;
 - governed knowledge-backed execution in the bounded proven path;
+- governance-kernel coherence as audit-equivalent public orientation;
 - public auditability through architecture, evidence packets, guards, and
   release gates.
 
@@ -101,6 +106,8 @@ CVF must not claim:
 - unrestricted autonomous self-improvement;
 - complete role-permission, memory-reinjection, async-worker, graph-context,
   database-action, or provider-method coverage.
+- freeze lift, kernel-owner replacement, or A2 as proof of new runtime
+  behavior.
 
 ## Verification
 
@@ -118,8 +125,14 @@ Test-Path docs/evidence/web-governance-path.md
 Test-Path docs/evidence/cvf-16-5-runtime-absorption.md
 Test-Path docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md
 Test-Path docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md
+Test-Path docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md
 Test-Path docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md
 Test-Path docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md
+Test-Path docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md
+Test-Path docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md
+Test-Path EXTENSIONS/CVF_GUARD_CONTRACT/src/contracts/runtime-workflow.contract.ts
+Test-Path EXTENSIONS/CVF_GUARD_CONTRACT/src/contracts/orchestrator.contract.ts
+Test-Path EXTENSIONS/CVF_GUARD_CONTRACT/src/contracts/policy-decision.contract.ts
 Test-Path governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md
 Test-Path governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md
 Test-Path governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md
@@ -143,3 +156,4 @@ governance behavior, provider behavior, or release readiness.
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`
 - `docs/evidence/cvf-16-5-runtime-absorption.md`
+- `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`

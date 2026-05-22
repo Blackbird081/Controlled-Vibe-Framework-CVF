@@ -84,6 +84,14 @@ Current canonical docs:
 - `CVF_SCOPED_KNOWLEDGE_PROVIDER_BOUNDARY_DOCTRINE_2026-05-07.md` *(canonical — CVF-native; CVF ADD Phase B absorption)*
 - `CVF_EXTENSION_AUTHOR_BOUNDARY.md` *(canonical — public contributor boundary; WPR-1)*
 - `CVF_RELEASE_NOTES_V4_0_0_RC_1_2026-05-08.md` *(canonical — release candidate notes; WPR-4)*
+- `CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md` *(public-safe A2 coherence readout; no freeze lift)*
+
+Current readout note (A2 coherence 2026-05-22):
+
+- governance-kernel coherence is audit-equivalent for the current public orientation baseline
+- public readers should use `CVF_GOVERNANCE_CONTROL_MATRIX.md`, `CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`, and the Guard Contract runtime workflow, orchestrator, and policy-decision contracts before proposing new kernel-law documents
+- do not create `CVF_KERNEL_LAW.md`, `CVF_RUNTIME_AUTHORITY_MODEL.md`, `CVF_EXECUTION_STATE_MODEL.md`, or `CVF_CORE_ONTOLOGY.md` just to mirror older review wording
+- this is not a freeze lift, not a provider/runtime expansion, and not a new live governance proof claim
 
 Current readout note (CVF ADD docs absorption 2026-05-07):
 

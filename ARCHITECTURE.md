@@ -203,6 +203,7 @@ The architecture should be read this way:
 
 | Claim | Current status | Evidence |
 | --- | --- | --- |
+| Governance kernel coherence | Audit-equivalent public reader baseline | `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md` |
 | Non-coder governed AI path | Live-proven | W149 trusted-form corpus: Alibaba direct API `40/40`, Alibaba browser UI `40/40`, DeepSeek confirmatory subset `12/12` |
 | Non-coder adoption journey | Live-proven | W119 evidence pack `3/3` locked journeys pass: first governed output, project knowledge use, evidence handoff |
 | Multi-provider operability | Certified on 2 lanes | Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` both `CERTIFIED`; provider parity is not claimed |
@@ -288,6 +289,7 @@ Latest closed non-coder value roadmap: [W119-T1 Non-Coder Adoption Proof And Evi
 - [Provider Lane Readiness Matrix](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
 - [Known Limitations Register](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
 - [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)
+- [Public Governance Kernel Coherence](docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md)
 - [W112-T1 Workspace Agent Enforcement And Web Control Uplift Roadmap](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md)
 - [W113-T1 First Downstream Project Proof Roadmap](docs/roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md)
 - [W114-T1 Non-Coder Value Maximization And Evidence Roadmap](docs/roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md)

@@ -1,6 +1,6 @@
 # CVF Technical Product Catalog
 
-Status: CURRENT — updated 2026-05-20
+Status: CURRENT - updated 2026-05-22
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -62,6 +62,14 @@ two-window, two-provider governed `/api/execute` repeatability evidence passed
 on Alibaba `qwen-turbo` and DeepSeek `deepseek-chat`. This is not a broad
 provider stability or production readiness claim.
 
+On 2026-05-22, a public-safe A2 coherence readout was added for agent and
+developer readers. It records that governance-kernel coherence is
+audit-equivalent for the current public orientation baseline through existing
+public surfaces: the governance control matrix, session governance bootstrap,
+Guard Contract runtime workflow, orchestrator and policy-decision contracts,
+and the live-proof release gate. This is not a freeze lift or new runtime
+claim.
+
 ---
 
 ## What CVF Can Do Today
@@ -122,12 +130,14 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 | `partially absorbed` | Contract or design exists; not wired into the live execute path |
 | `schema-defined` | Concrete schema/policy/spec artifacts exist; runtime binding and live proof are not claimed |
 | `active` | Implemented and used; evidence exists but not as a formal governance proof |
+| `audit-equivalent` | A reviewed public orientation posture is covered by existing owner surfaces; no new runtime behavior is claimed |
 | `demand-gated` | Ready when a concrete consuming flow is named; not built speculatively |
 | `roadmap` | Designed or scoped; no current implementation or evidence |
 
 | Capability | Status | Evidence |
 | --- | --- | --- |
 | Governance control plane | proven | `ARCHITECTURE.md`, `GOVERNANCE.md` |
+| Governance kernel coherence | audit-equivalent - public reader baseline | `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`, `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md` |
 | Live governance proof | proven — mandatory for release claims | `docs/evidence/latest-release-gate.md` |
 | Governed execution chain (Product Brief) | proven — bounded to selected Product Brief flow | `docs/evidence/phase-e-governed-execution-chain.md` |
 | Knowledge-backed execution with guards | proven — bounded execute path | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
@@ -198,6 +208,12 @@ free-form coding sandbox. Read the front-door instructions before
 changing files. Do not claim governance behavior without live proof.
 Use roadmap and approval gates for substantial continuation.
 
+For governance-kernel coherence, read
+`docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md` before
+creating new kernel-law, runtime-authority, execution-state, or core-ontology
+documents. The current public posture is audit-equivalent through existing
+owner surfaces unless a future review proves a concrete missing surface.
+
 ---
 
 ## What Developers Can Verify
@@ -214,6 +230,7 @@ cat docs/evidence/latest-release-gate.md
 cat docs/evidence/provider-lanes.md
 cat docs/evidence/web-governance-path.md
 cat docs/evidence/phase-e-governed-execution-chain.md
+cat docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md
 
 # Run the full release gate
 python scripts/run_cvf_release_gate_bundle.py --json
@@ -236,6 +253,7 @@ CVF may claim:
 - governed knowledge-backed execution in the proven execute path
 - governed Product Brief workflow with role permission, step traces, and receipt
 - public auditability through docs, evidence packets, guards, and release gates
+- governance-kernel coherence as audit-equivalent for public reader orientation
 
 CVF does not yet claim:
 
@@ -248,6 +266,8 @@ CVF does not yet claim:
 - broad provider stability, persistence/database readiness, Maika
   child-data/photo/vision proof, kernel-owner replacement, or global freeze
   lift
+- that A2 coherence documentation proves new runtime, provider, tool,
+  database, or subagent governance behavior
 
 Full boundary document: `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 
@@ -277,5 +297,6 @@ update rules:
 - `docs/GET_STARTED.md` — getting started guide
 - `docs/evidence/README.md` — evidence index
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
+- `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`
 - `docs/reference/CVF_MODULE_INVENTORY.md`
 - `docs/benchmark/` — QBS benchmark results

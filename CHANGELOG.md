@@ -2,6 +2,33 @@
 
 ---
 
+## [Public Docs Sync] — 2026-05-22
+
+Status: PUBLIC_A2_COHERENCE_READOUT_PUBLISHED
+
+### Added
+
+- Public-safe A2 governance-kernel coherence readout:
+  `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`.
+- README, Governance, Architecture, Technical Product Catalog, Public Catalog
+  Claim Boundary, and Reference README pointers for agent/developer readers.
+
+### Changed
+
+- Technical Product Catalog status updated to 2026-05-22.
+- Public claim boundary updated to include the `audit-equivalent` governance
+  kernel coherence posture.
+
+### Boundary
+
+- This is a documentation and public-reader synchronization update.
+- It does not claim a freeze lift, new runtime behavior, new provider behavior,
+  broad provider stability, or universal tool/database/subagent governance.
+- Live governance proof remains required for release-quality behavior claims:
+  `python scripts/run_cvf_release_gate_bundle.py --json`.
+
+---
+
 ## [v4.0.0] — GA Release — 2026-05-16
 
 Status: GA_LOCAL_FIRST_APPROVED

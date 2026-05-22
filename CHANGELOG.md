@@ -2,6 +2,38 @@
 
 ---
 
+## [Public Dependency Audit Triage] — 2026-05-22
+
+Status: PUBLIC_DEPENDENCY_AUDIT_RESIDUAL_CLOSED
+
+### Added
+
+- Public dependency audit triage evidence:
+  `docs/evidence/public-dependency-audit-triage-2026-05-22.md`.
+
+### Changed
+
+- `cvf-web` dependency lock updated through bounded npm audit remediation.
+- `next` and `eslint-config-next` updated from `16.1.6` to `16.2.6`.
+- `postcss` override pinned to `8.5.15` because `next@16.2.6` still bundles
+  an audit-flagged `postcss@8.4.31`.
+
+### Verified
+
+- `npm audit --json` PASS, 0 vulnerabilities.
+- `npm ls postcss next next-auth --depth=2` PASS.
+- `npm run check` PASS.
+- `python scripts/run_cvf_static_ci_gate.py --json` PASS 7/7.
+
+### Boundary
+
+- No `npm audit fix --force` was used.
+- This closes the public `cvf-web` npm audit residual only; it does not claim
+  live provider behavior, hosted release readiness, or security certification
+  across every extension.
+
+---
+
 ## [Public Developer Onboarding Proof] — 2026-05-22
 
 Status: PUBLIC_P1_ONBOARDING_PROOF_PUBLISHED
@@ -28,8 +60,8 @@ Status: PUBLIC_P1_ONBOARDING_PROOF_PUBLISHED
 
 - This proves local-first public developer onboarding and the non-live static
   gate, not live provider behavior or hosted workflow freshness.
-- `npm ci` reports dependency audit residuals; those are not remediated in
-  this docs/proof tranche.
+- The dependency-audit residual recorded here was later closed by
+  `docs/evidence/public-dependency-audit-triage-2026-05-22.md`.
 
 ---
 

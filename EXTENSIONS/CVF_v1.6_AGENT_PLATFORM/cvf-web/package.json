@@ -26,7 +26,7 @@
     "file-saver": "^2.0.5",
     "jspdf": "^4.1.0",
     "lucide-react": "^0.563.0",
-    "next": "16.1.6",
+    "next": "16.2.6",
     "next-auth": "^5.0.0-beta.30",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -48,10 +48,13 @@
     "@types/react-dom": "^19",
     "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "16.2.6",
     "jsdom": "^28.0.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.18"
+  },
+  "overrides": {
+    "postcss": "8.5.15"
   }
 }

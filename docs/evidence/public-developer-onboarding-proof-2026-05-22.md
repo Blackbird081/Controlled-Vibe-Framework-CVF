@@ -3,7 +3,7 @@
 
 Date: 2026-05-22
 
-Status: PASS with bounded npm audit residuals
+Status: PASS; dependency-audit residual later closed
 
 ## Purpose
 
@@ -90,6 +90,9 @@ This P1 proof does not resolve dependency audit posture. It only proves that
 the public local-first developer onboarding path installs and checks
 successfully. A dependency-audit hardening tranche would require separate
 authorization and a narrower remediation plan.
+
+Update: the dependency-audit residual was later closed on 2026-05-22 in
+`docs/evidence/public-dependency-audit-triage-2026-05-22.md`.
 
 ## Claim Boundary
 

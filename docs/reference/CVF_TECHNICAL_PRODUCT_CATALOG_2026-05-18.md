@@ -76,6 +76,11 @@ readers. The proof corrected public docs that referenced non-exported setup
 scripts, then passed `npm ci`, `npm run check`, and the 7/7 static CI gate.
 Evidence: `docs/evidence/public-developer-onboarding-proof-2026-05-22.md`
 
+The dependency-audit residual from that onboarding proof was then closed on
+2026-05-22. The public web package now has a clean `npm audit --json` result
+after bounded dependency updates and a 7/7 static CI gate rerun. Evidence:
+`docs/evidence/public-dependency-audit-triage-2026-05-22.md`
+
 ---
 
 ## What CVF Can Do Today

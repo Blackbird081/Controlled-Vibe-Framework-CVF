@@ -324,6 +324,37 @@ describe('ai/providers', () => {
             expect(body.temperature).toBe(0.2);
         });
 
+        it('sets Qwen3 thinking parameter according to model capability', async () => {
+            fetchMock.mockResolvedValue({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: 'qwen3 ok' } }],
+                    usage: { total_tokens: 12 },
+                }),
+            });
+
+            await executeAI('alibaba', 'ali-key', 'Hello', {
+                model: 'qwen3-32b',
+            });
+            let body = JSON.parse(fetchMock.mock.calls[0][1].body);
+            expect(body.model).toBe('qwen3-32b');
+            expect(body.enable_thinking).toBe(false);
+
+            await executeAI('alibaba', 'ali-key', 'Hello', {
+                model: 'qwen3-235b-a22b-thinking-2507',
+            });
+            body = JSON.parse(fetchMock.mock.calls[1][1].body);
+            expect(body.model).toBe('qwen3-235b-a22b-thinking-2507');
+            expect(body.enable_thinking).toBe(true);
+
+            await executeAI('alibaba', 'ali-key', 'Hello', {
+                model: 'qwen-turbo',
+            });
+            body = JSON.parse(fetchMock.mock.calls[2][1].body);
+            expect(body.model).toBe('qwen-turbo');
+            expect(body.enable_thinking).toBeUndefined();
+        });
+
         it('supports QVQ streaming-only models on the compatible endpoint', async () => {
             fetchMock.mockResolvedValueOnce({
                 ok: true,

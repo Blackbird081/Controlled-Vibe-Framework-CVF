@@ -4,6 +4,14 @@ function isAlibabaStreamingOnlyModel(model: string): boolean {
     return /^qvq-/i.test(model);
 }
 
+function isQwen3Model(model: string): boolean {
+    return /^qwen3-/i.test(model);
+}
+
+function isQwen3ThinkingModel(model: string): boolean {
+    return /^qwen3-.*thinking/i.test(model);
+}
+
 function usesOpenAICompletionTokenParam(model: string): boolean {
     return /^(gpt-5|o[134]|o3|o4)/i.test(model);
 }
@@ -268,6 +276,9 @@ async function executeAlibaba(
                 ],
                 max_tokens: config.maxTokens || 4096,
                 temperature: config.temperature || 0.7,
+                ...(isQwen3Model(config.model) && !isStreamingOnly
+                    ? { enable_thinking: isQwen3ThinkingModel(config.model) }
+                    : {}),
                 ...(isStreamingOnly
                     ? {
                         stream: true,

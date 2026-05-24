@@ -2,7 +2,7 @@
 
 Memory class: POINTER_RECORD
 
-Status: PUBLIC-SAFE BOUNDED EVIDENCE SUMMARY - 2026-05-24
+Status: PUBLIC-SAFE BOUNDED EVIDENCE SUMMARY - UPDATED 2026-05-24
 
 ## Purpose
 
@@ -20,6 +20,7 @@ In scope:
 - A summary-only AIF operational context preview contract.
 - Release-gate selector hardening evidence at the private provenance boundary.
 - Public claim boundaries.
+- Public-sync availability of the summary-only preview harness.
 
 Out of scope:
 
@@ -29,7 +30,7 @@ Out of scope:
 - Graph-native authority or graph-native routing.
 - Broad provider stability.
 - Hosted/production readiness.
-- A public runtime claim for the current public-sync code subset.
+- Live `/api/execute` route integration for the public-sync code subset.
 
 ## Evidence
 
@@ -41,23 +42,22 @@ Private provenance proof recorded:
 | Learning-plane targeted tests | PASS | Targeted and full single-worker LPF suites passed in private provenance. |
 | Mandatory release gate | PASS | Seven-check release gate passed in private provenance, including live governance E2E. |
 | Governance hook chain | PASS | Local governance hook chain passed before private provenance commit. |
+| Public-sync preview harness | PASS | Public-sync now includes the summary-only preview harness and minimal graph/memory dependencies. Targeted preview test passed `4/4`; full public-sync LPF passed `48 files / 1516 tests`; TypeScript check passed. |
 
 ## Decision
 
 Public catalog language may say:
 
-> CVF has a private-proven Post-AIF operationalization boundary for
-> summary-only AIF context preview, but the current public-sync code subset
-> does not claim live memory reinjection, graph authority, or broad provider
-> stability.
+> CVF has a public-sync available, summary-only AIF operational context preview
+> harness. It does not claim live memory reinjection, graph authority, provider
+> prompt injection, or broad provider stability.
 
 ## Claim Boundary
 
 This file does not claim:
 
-- public code availability for the private preview harness;
 - live memory reinjection;
 - graph-authoritative retrieval or routing;
 - broad provider stability;
 - production/hosted readiness;
-- public release readiness beyond this boundary note.
+- public release readiness beyond this bounded preview-harness availability.

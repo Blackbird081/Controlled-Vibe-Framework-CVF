@@ -22,6 +22,67 @@ export type {
   MemoryRetentionDecision,
 } from "./controlled.memory.subcontracts";
 
+export {
+  AIF_OPERATIONAL_CONTEXT_PREVIEW_VERSION,
+  buildAifOperationalContextPreview,
+} from "./aif-operational-context-preview";
+export type {
+  AifOperationalContextPreview,
+  AifOperationalContextPreviewInput,
+  AifOperationalContextPreviewOptions,
+  AifOperationalContextPreviewStatus,
+} from "./aif-operational-context-preview";
+export {
+  MEMORY_RETRIEVAL_POLICY_VERSION,
+  evaluateRetrievalRequest,
+} from "./memory-retrieval-policy";
+export type {
+  MemoryRetrievalCandidate,
+  MemoryRetrievalMethod,
+  MemoryRetrievalPolicyOptions,
+  MemoryRetrievalRequest,
+  MemoryRetrievalResult,
+} from "./memory-retrieval-policy";
+export {
+  MEMORY_CONTEXT_PACKAGER_VERSION,
+  packageMemoryContext,
+} from "./memory-context-packager";
+export type {
+  ExcludedMemoryItem,
+  MemoryContextBlock,
+  MemoryContextItem,
+  MemoryContextPackageInput,
+} from "./memory-context-packager";
+export {
+  GRAPH_KNOWLEDGE_SCHEMA_VERSION,
+  createDependencyGraph,
+  createGraphEdge,
+  createGraphNode,
+} from "./knowledge/graph/schema/graph-schema";
+export type {
+  DependencyGraph,
+  GraphConfidence,
+  GraphEdge,
+  GraphEdgeKind,
+  GraphKnowledgeService,
+  GraphNode,
+  GraphNodeKind,
+  GraphQueryResult,
+  GraphSourceFile,
+} from "./knowledge/graph/schema/graph-schema";
+export {
+  buildSymbolIndex,
+  buildSymbolIndexFromGraph,
+  buildSymbolIndexFromSources,
+  createInMemoryGraphKnowledgeService,
+  lookupSymbol,
+} from "./knowledge/graph/index/symbol-index";
+export type {
+  InMemoryGraphKnowledgeServiceOptions,
+  SymbolIndex,
+  SymbolIndexPersistenceStore,
+} from "./knowledge/graph/index/symbol-index";
+
 // W4-T8 — Evaluation Engine Consumer Pipeline Bridge (CP1)
 export {
   EvaluationEngineConsumerPipelineContract,

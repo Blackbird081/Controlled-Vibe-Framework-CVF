@@ -82,11 +82,11 @@ after bounded dependency updates and a 7/7 static CI gate rerun. Evidence:
 `docs/evidence/public-dependency-audit-triage-2026-05-22.md`
 
 On 2026-05-24, the private provenance repository closed a Post-AIF
-Operationalization tranche. The public-safe boundary is summary-only:
-AIF operational context preview is private-proven as a non-injective context
-preview contract, while the current public-sync code subset does not claim live
-memory reinjection, graph authority, broad provider stability, or hosted
-production readiness. Evidence:
+Operationalization tranche and the public-sync subset added the summary-only
+AIF operational context preview harness with bounded tests. The public-safe
+boundary remains narrow: no live memory reinjection, graph authority, provider
+prompt injection, broad provider stability, or hosted production readiness is
+claimed. Evidence:
 `docs/evidence/post-aif-operationalization-boundary-2026-05-24.md`
 
 ---
@@ -178,7 +178,7 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 | Governance reliability benchmark CLI (`cvf benchmark governance`, `cvf benchmark run`) | active — 12-metric offline computation against audit JSONL; `run` subcommand emits formatted reliability report | `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/governance-reliability-metrics.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/command.registry.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/governance-reliability-metrics.test.ts` |
 | Offline governance reliability residual metrics (`humanCorrectionRate`, `longHorizonStabilityRate`, `rollbackSuccessRate`) | active — three additional offline metrics for human correction, long-horizon stability, and rollback success; no live-provider recovery claim | `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/governance-reliability-metrics.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/governance-reliability-metrics.test.ts` |
 | Memory tier classifier contract | schema-defined — single classifier contract for memory tier routing decisions; unit-tested contract surface, no provider prompt reinjection claim | `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/memory-tier-classifier.contract.ts`, `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/memory-tier-classifier.test.ts` |
-| AIF operational context preview | roadmap for public code subset — private-proven summary-only preview boundary; no live memory reinjection, graph authority, or provider prompt injection claim | `docs/evidence/post-aif-operationalization-boundary-2026-05-24.md` |
+| AIF operational context preview | active — public-sync summary-only preview harness with targeted and full LPF test proof; no live memory reinjection, graph authority, or provider prompt injection claim | `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/aif-operational-context-preview.ts`, `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/tests/aif-operational-context-preview.test.ts`, `docs/evidence/post-aif-operationalization-boundary-2026-05-24.md` |
 | Non-coder outcome quick actions (home UI) | active — three governed pack entry points wired in home page | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OutcomeQuickActions.tsx` |
 | Runtime actor-role gate on execute path | active — `allowedActorRoles` enforced for three governed pack policies; non-permitted roles rejected with HTTP 403 before provider dispatch | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/execute-role-resolver.ts`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts` |
 | Post Phase 2.B publicization readiness | proven — bounded internal coherence summary plus narrow two-window, two-provider `/api/execute` repeatability evidence; no broad stability or production readiness claim | `docs/evidence/post-phase-2b-publicization-readiness.md` |

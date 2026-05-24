@@ -53,6 +53,7 @@ Start with:
 - `local-first-release-gate-proof-2026-05-16.md`
 - `cvf-16-5-runtime-absorption.md`
 - `post-phase-2b-publicization-readiness.md`
+- `workflow-chain-memory-proof-2026-05-24.md`
 - `claim-boundaries.md`
 
 Benchmark methodology is published separately under `docs/benchmark/`. That

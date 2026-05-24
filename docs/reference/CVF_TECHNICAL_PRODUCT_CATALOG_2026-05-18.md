@@ -89,12 +89,13 @@ prompt injection, broad provider stability, or hosted production readiness is
 claimed. Evidence:
 `docs/evidence/post-aif-operationalization-boundary-2026-05-24.md`
 
-Also on 2026-05-24, the public-sync subset added a public-safe non-coder first
-receipt guide for small teams. Private provenance evidence records one live
-hosted governed `/api/execute` receipt for the trusted `strategy_analysis`
-path, but the public catalog claim remains bounded to the guide path and does
-not claim enterprise SaaS, multi-tenant hosted GA, universal provider
-stability, or broad production readiness. Evidence:
+Also on 2026-05-24, the public-sync subset added public-safe non-coder Step 0
+provider-key setup and first-receipt guides for small teams. Private
+provenance evidence records one live hosted governed `/api/execute` receipt
+for the trusted `strategy_analysis` path, but the public catalog claim remains
+bounded to the guide path and does not claim enterprise SaaS, multi-tenant
+hosted GA, universal provider stability, or broad production readiness.
+Evidence: `docs/guides/CVF_NON_CODER_STEP0_API_KEY_SETUP_2026-05-24.md`,
 `docs/guides/CVF_NON_CODER_SETUP_GUIDE_2026-05-24.md`
 
 ---
@@ -168,7 +169,7 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 | Live governance proof | proven — mandatory for release claims | `docs/evidence/latest-release-gate.md` |
 | Governed execution chain (Product Brief) | proven — bounded to selected Product Brief flow | `docs/evidence/phase-e-governed-execution-chain.md` |
 | Knowledge-backed execution with guards | proven — bounded execute path | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
-| Non-coder governed path | proven — bounded provider lanes; small-team first-receipt guide path available | `docs/evidence/web-governance-path.md`, `docs/guides/CVF_NON_CODER_SETUP_GUIDE_2026-05-24.md` |
+| Non-coder governed path | proven — bounded provider lanes; Step 0 setup and small-team first-receipt guide paths available | `docs/evidence/web-governance-path.md`, `docs/guides/CVF_NON_CODER_STEP0_API_KEY_SETUP_2026-05-24.md`, `docs/guides/CVF_NON_CODER_SETUP_GUIDE_2026-05-24.md` |
 | Governance CLI (`cvf-guard`, `cvf execute`) | active; `execute` caller is mock-tested and delegates to the web execute route | `ARCHITECTURE.md`, `docs/reference/CVF_MODULE_INVENTORY.md`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/execute.client.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/execute.client.test.ts` |
 | Governance CLI read-only wrappers (`cvf run`, `cvf skill`, `cvf receipt`, `cvf trace`, `cvf provider`) | active — read-only developer/operator wrappers over existing execution, skill, receipt, trace, and provider inspection surfaces; no new provider behavior claimed | `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/command.registry.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-run.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-skill.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-receipt.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-trace.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-provider.test.ts` |
 | Certified provider lanes | proven where evidence exists | `docs/evidence/provider-lanes.md` |

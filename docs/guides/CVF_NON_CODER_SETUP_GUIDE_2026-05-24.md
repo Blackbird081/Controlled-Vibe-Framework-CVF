@@ -21,7 +21,9 @@ multi-tenant hosted GA readiness.
 ## What You Need
 
 - A browser.
-- One approved AI provider key configured by the workspace operator.
+- One approved AI provider key configured by the workspace operator. If this
+  is not done yet, complete Step 0 first:
+  `docs/guides/CVF_NON_CODER_STEP0_API_KEY_SETUP_2026-05-24.md`.
 - Access to the CVF web app or a protected CVF `/api/execute` endpoint.
 - A business task that fits one of the trusted templates.
 

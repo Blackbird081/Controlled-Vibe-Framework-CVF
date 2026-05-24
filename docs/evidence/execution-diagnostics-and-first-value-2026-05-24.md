@@ -17,6 +17,8 @@ The public-safe claim covers three linked product improvements:
   not silently replace a classified live failure with mock output.
 - V2: evidence receipt copy/export text now includes action-oriented sections:
   "What happened", "Why this can be used", and "What to do next".
+- WC-2: the non-coder first-value UI also avoids mock output after
+  unclassified failed real execution attempts.
 
 ## Live Proof Summary
 
@@ -34,7 +36,8 @@ diagnostic instead of an ambiguous failure:
 
 Focused verification passed:
 
-- 107 focused web tests
+- 107 focused web tests for the V1/V2/V3 closure
+- 23 focused ProcessingScreen tests for WC-2
 - web TypeScript check
 - mandatory release gate bundle: 7/7 PASS
 
@@ -43,4 +46,5 @@ Focused verification passed:
 This evidence does not claim provider uptime, production SLA, broad hosted
 readiness, universal CLI/MCP parity, memory prompt reinjection, graph authority,
 or a new receipt envelope. It proves a bounded diagnostic and evidence-to-action
-surface for classified CVF live-run failures.
+surface for classified CVF live-run failures, plus truthful non-coder failure
+handling when a real execution attempt fails without a diagnostic.

@@ -1,6 +1,6 @@
 # CVF Technical Product Catalog
 
-Status: CURRENT - updated 2026-05-24
+Status: CURRENT - updated 2026-05-25
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -98,6 +98,15 @@ hosted GA, universal provider stability, or broad production readiness.
 Evidence: `docs/guides/CVF_NON_CODER_STEP0_API_KEY_SETUP_2026-05-24.md`,
 `docs/guides/CVF_NON_CODER_SETUP_GUIDE_2026-05-24.md`
 
+On 2026-05-25, the private provenance repository closed a bounded vertical
+integration wave and the public-sync subset added a curated evidence summary.
+The wave proves response-level vertical integration packaging, not a new
+workflow engine or production-readiness posture: VI4 exposes a consolidated
+evidence package, DeepSeek and OpenAI were added to the live VI4 proof surface,
+and three non-Product-Brief workflows now expose workflow state/recovery
+readouts through the existing governed route. Evidence:
+`docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md`
+
 ---
 
 ## What CVF Can Do Today
@@ -145,6 +154,16 @@ evidence and cited in release decisions.
 Evidence: `docs/evidence/current-cvf-quality-status.md`,
 `docs/benchmark/`
 
+**6. Inspect a consolidated vertical integration evidence package from a governed route call.**
+For selected live `/api/execute` calls, CVF returns a response-level VI4
+package that separates call-level pass rate from multi-surface event counts
+and exposes governance receipt, workflow state/recovery, request context,
+memory-event posture, tool/action readouts, provider-method readiness,
+operational scorecard, and available artifact/metric surfaces. This is an
+API/operator evidence readout — not a route-blocking workflow engine.
+Evidence:
+`docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md`
+
 ---
 
 ## Capability Catalog
@@ -172,6 +191,9 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 | Non-coder governed path | proven — bounded provider lanes; Step 0 setup and small-team first-receipt guide paths available | `docs/evidence/web-governance-path.md`, `docs/guides/CVF_NON_CODER_STEP0_API_KEY_SETUP_2026-05-24.md`, `docs/guides/CVF_NON_CODER_SETUP_GUIDE_2026-05-24.md` |
 | Execution diagnostics and first-value failure recovery | proven — bounded live-run failure classification and non-coder evidence-to-action surface; no provider SLA or production-readiness claim | `docs/evidence/execution-diagnostics-and-first-value-2026-05-24.md` |
 | Workflow chain memory read/write proof | proven — bounded two-turn local workflow-chain proof with live Alibaba `qwen-turbo` receipts; summary-only durable memory receipt, no raw memory reinjection claim | `docs/evidence/workflow-chain-memory-proof-2026-05-24.md` |
+| Vertical integration chain readout (VI4) | proven — response-level package on selected live `/api/execute` calls; separates call-level pass rate from event-model denominator; no route-blocking or workflow-engine claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md` |
+| Multi-provider VI4 coverage | proven — bounded live VI4 package proof on Alibaba `qwen-turbo`, DeepSeek `deepseek-chat`, and OpenAI `gpt-4o`; no broad provider stability or parity claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md`, `docs/evidence/provider-lanes.md` |
+| Multi-workflow VI coverage | proven — bounded workflow state/recovery readouts for `strategy_analysis`, `marketing_campaign_wizard`, and `brand_voice`; no all-template workflow-engine claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md` |
 | Governance CLI (`cvf-guard`, `cvf execute`) | active; `execute` caller is mock-tested and delegates to the web execute route | `ARCHITECTURE.md`, `docs/reference/CVF_MODULE_INVENTORY.md`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/execute.client.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/execute.client.test.ts` |
 | Governance CLI read-only wrappers (`cvf run`, `cvf skill`, `cvf receipt`, `cvf trace`, `cvf provider`) | active — read-only developer/operator wrappers over existing execution, skill, receipt, trace, and provider inspection surfaces; no new provider behavior claimed | `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/command.registry.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-run.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-skill.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-receipt.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-trace.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-provider.test.ts` |
 | Certified provider lanes | proven where evidence exists | `docs/evidence/provider-lanes.md` |
@@ -194,10 +216,28 @@ Evidence: `docs/evidence/current-cvf-quality-status.md`,
 | Non-coder outcome quick actions (home UI) | active — three governed pack entry points wired in home page | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OutcomeQuickActions.tsx` |
 | Runtime actor-role gate on execute path | active — `allowedActorRoles` enforced for three governed pack policies; non-permitted roles rejected with HTTP 403 before provider dispatch | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/execute-role-resolver.ts`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts` |
 | Post Phase 2.B publicization readiness | proven — bounded internal coherence summary plus narrow two-window, two-provider `/api/execute` repeatability evidence; no broad stability or production readiness claim | `docs/evidence/post-phase-2b-publicization-readiness.md` |
-| Provider method breadth | demand-gated | no universal provider-method parity claim |
+| Provider method breadth | partially proven — VI4 provider-method readout exists for named live route calls; no universal provider-method parity claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md` |
 | Async workers / subagents | roadmap | concepts exist; canonical lifecycle not claimed |
 | Tool/MCP/database action governance | roadmap | guards exist; full action taxonomy not claimed |
 | Graph/code-intelligence context | roadmap | no graph-native context resolver claim |
+
+---
+
+## Risk-Tier Public Claim Posture
+
+The public catalog uses risk-tier language only where evidence exists. These
+tiers describe current public claim posture, not a promise that every request
+in a tier will pass.
+
+| Risk tier | Current public posture | Evidence |
+| --- | --- | --- |
+| `R1` | Best-evidenced public lane. The bounded non-coder Strategy path, VI4 package, provider breadth proof, and multi-workflow proof are all R1-compatible route evidence. | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md`, `docs/guides/CVF_NON_CODER_SETUP_GUIDE_2026-05-24.md` |
+| `R2` | Governed/approval-aware posture only. CVF may classify and gate higher-risk work, but this catalog does not claim broad R2 hosted/provider execution readiness. | `docs/evidence/web-governance-path.md`, `docs/evidence/claim-boundaries.md` |
+| `R3` | Policy-boundary and denial/escalation posture only. No public claim is made that R3 requests can be executed through provider lanes. | `GOVERNANCE.md`, `docs/evidence/claim-boundaries.md` |
+
+Boundary: moving a capability from R1 to R2/R3 execution readiness requires a
+fresh live evidence packet and catalog update. The May 25 VI wave does not lift
+that boundary.
 
 ---
 
@@ -262,6 +302,7 @@ cat docs/evidence/latest-release-gate.md
 cat docs/evidence/provider-lanes.md
 cat docs/evidence/web-governance-path.md
 cat docs/evidence/phase-e-governed-execution-chain.md
+cat docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md
 cat docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md
 
 # Run the full release gate
@@ -282,8 +323,12 @@ CVF may claim:
 - evidence-backed provider lanes where receipts exist
 - bounded Phase 2.B publicization evidence for one governed route across
   Alibaba and DeepSeek, including second-window repeatability
+- response-level vertical integration packaging on named provider/model lanes
+  and selected workflow templates
 - governed knowledge-backed execution in the proven execute path
 - governed Product Brief workflow with role permission, step traces, and receipt
+- bounded workflow state/recovery readouts for Product Brief,
+  `strategy_analysis`, `marketing_campaign_wizard`, and `brand_voice`
 - public auditability through docs, evidence packets, guards, and release gates
 - governance-kernel coherence as audit-equivalent for public reader orientation
 
@@ -293,6 +338,7 @@ CVF does not yet claim:
 - universal provider parity across all methods
 - full external capability marketplace readiness
 - full legacy repository absorption
+- all-template workflow runtime or broad workflow engine status
 - complete role-permission, memory-reinjection, async-worker,
   graph-context, database-action, or provider-method coverage
 - broad provider stability, persistence/database readiness, Maika

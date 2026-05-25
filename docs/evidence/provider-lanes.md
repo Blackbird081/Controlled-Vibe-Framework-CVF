@@ -4,7 +4,7 @@ Memory class: FULL_RECORD
 
 Status: CURRENT PUBLIC PROVIDER EVIDENCE BOUNDARY
 
-Last refreshed: `2026-05-21`
+Last refreshed: `2026-05-25`
 
 ## Purpose
 
@@ -37,21 +37,26 @@ history remains in the provenance repository.
 | DeepSeek | Latest curated `deepseek-chat` governed live canary PASS 6/6: `RECEIPT_20260509-160707-91ae8a.json`. | Model-specific governed-path evidence; no blanket provider parity claim. |
 | OpenAI | Latest curated `gpt-4o-mini` governed live canary PASS 6/6: `RECEIPT_20260509-160806-7e3b5b.json`. | Model-specific governed-path evidence; no blanket provider parity claim. |
 | Post Phase 2.B repeatability | Public-safe summary: `docs/evidence/post-phase-2b-publicization-readiness.md`; initial Alibaba `2/2` + DeepSeek `2/2`, then second-window Alibaba `3/3` + DeepSeek `3/3` governed `/api/execute` journeys PASS. | Narrow route repeatability only; no broad provider stability or universal parity claim. |
+| VI4 provider breadth | Public-safe summary: `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md`; Alibaba `qwen-turbo`, DeepSeek `deepseek-chat`, and OpenAI `gpt-4o` each returned live receipt-backed VI4 evidence packages in bounded proofs. | Response-level VI package breadth only; no broad provider stability, provider-method parity, or production-readiness claim. |
 | Other providers | Adapter direction only. | No public parity claim until live evidence exists. |
 
 ## Decision
 
 Three provider lanes (Alibaba/DashScope `qwen-turbo`, DeepSeek `deepseek-chat`,
 OpenAI `gpt-4o-mini`) are treated as currently evidenced for the governed
-canary path. All other providers stay at adapter direction only until live
-evidence exists.
+canary path. The VI4 provider-breadth summary additionally proves response-level
+vertical integration packaging on Alibaba `qwen-turbo`, DeepSeek
+`deepseek-chat`, and OpenAI `gpt-4o`. All other providers stay at adapter
+direction only until live evidence exists.
 
 ## Boundary
 
 Provider live canaries prove governed-path operability for named models. The
 post-Phase 2.B repeatability summary proves only narrow two-window governed
-`/api/execute` repeatability across Alibaba and DeepSeek. These records are
-not QBS quality benchmark scores and do not prove broad provider stability.
+`/api/execute` repeatability across Alibaba and DeepSeek. The VI4
+provider-breadth summary proves only response-level vertical integration
+packaging on named provider/model lanes. These records are not QBS quality
+benchmark scores and do not prove broad provider stability.
 
 ## Claim Boundary
 

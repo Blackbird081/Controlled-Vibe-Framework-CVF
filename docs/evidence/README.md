@@ -54,6 +54,7 @@ Start with:
 - `cvf-16-5-runtime-absorption.md`
 - `post-phase-2b-publicization-readiness.md`
 - `workflow-chain-memory-proof-2026-05-24.md`
+- `vertical-integration-provider-workflow-coverage-2026-05-25.md`
 - `claim-boundaries.md`
 
 Benchmark methodology is published separately under `docs/benchmark/`. That

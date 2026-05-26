@@ -92,6 +92,88 @@ export const templateEnglishFieldLabels: Record<string, Record<string, string>> 
     },
 };
 
+export type TemplateFieldChromeTranslation = {
+    label?: string;
+    placeholder?: string;
+    hint?: string;
+    example?: string;
+};
+
+export const templateEnglishFieldChrome: Record<string, Record<string, TemplateFieldChromeTranslation>> = {
+    app_builder_complete: {
+        appName: {
+            label: '1. App / product name',
+            placeholder: 'Example: TaskFlow',
+            hint: 'Use a memorable name so the packet and handoff stay attached to the right product.',
+            example: 'TaskFlow',
+        },
+        appType: {
+            label: '2. What kind of product is this?',
+            hint: 'Choose only the main product surface. You do not need to name a framework.',
+        },
+        problem: {
+            label: '3. What problem does it solve?',
+            placeholder: 'Describe the pain point or work that is slow, confusing, or manual...',
+            hint: 'Focus on the real-world problem instead of the technical solution.',
+            example: 'A small team needs to track daily work, but Jira is too heavy and takes too long to update.',
+        },
+        targetUsers: {
+            label: '4. Who will use this product?',
+            placeholder: 'Main user group',
+            hint: 'Name the people who benefit directly from the app.',
+            example: 'Solo developers and small teams of 2-5 people',
+        },
+        coreFeatures: {
+            label: '5. The most important things the app must do',
+            placeholder: 'List 3-5 core capabilities for the first version',
+            hint: 'Describe user actions or outcomes they need to achieve.',
+            example: '1. Create and update tasks\n2. View tasks on a board\n3. Filter by status\n4. Remind users about upcoming deadlines',
+        },
+        successCriteria: {
+            label: '6. When would you consider the first version successful?',
+            placeholder: 'Visible completion signs or outcomes you must see',
+            hint: 'Write this as an acceptance checklist from a non-coder perspective.',
+            example: 'A user can create a task within 1 minute, view the board smoothly on desktop, and use core features without internet.',
+        },
+        mustPreserve: {
+            label: '7. What must stay unchanged',
+            placeholder: 'Logic, data, routes, integrations, workflows, required wording...',
+            hint: 'This tells the builder what must not be broken during implementation.',
+            example: 'Keep the reporting webhook, current CSV export format, and published plan names unchanged.',
+        },
+        platforms: {
+            label: '8. Where does the app need to run?',
+            placeholder: 'Windows, macOS, web browser, Android...',
+            hint: 'Name where people will actually use the product.',
+            example: 'Windows + macOS',
+        },
+        dataNeeds: {
+            label: '9. What data does the app need to remember or process?',
+            placeholder: 'User information, tasks, attachments, reports...',
+            hint: 'Do not name a database. Just describe the data type and sensitivity.',
+            example: 'Tasks, deadlines, internal notes, owners, and small attachments',
+        },
+        lookAndFeel: {
+            label: '10. Look and feel',
+            placeholder: 'Describe the desired style or feeling',
+            hint: 'Use plain words such as clean, focused, premium, data-heavy, calm, or fast.',
+            example: 'Minimal, work-focused, easy to scan, low visual noise',
+        },
+        outOfScope: {
+            label: '11. Out of scope',
+            placeholder: 'Clear limits to avoid overbuilding',
+            hint: 'Name the parts that are deliberately not part of this version.',
+            example: 'No multi-user mode yet, no dedicated mobile app, no cloud sync yet',
+        },
+        constraints: {
+            label: '12. Constraints or special conditions',
+            placeholder: 'Deadline, budget, internal rules, offline operation, compliance...',
+            hint: 'Any limit that changes how the builder should implement the product.',
+            example: 'Must work offline, internal rollout in 3 weeks, no complex runtime installation required',
+        },
+    },
+};
+
 export const templateEnglishIntentPatterns: Record<string, string> = {
     app_builder_complete: `INTENT:
 I want to create a complete app brief that remains non-coder friendly.
@@ -157,9 +239,22 @@ export function getTemplateDescription(templateId: string, defaultDesc: string, 
 
 export function getTemplateFieldLabel(templateId: string, fieldId: string, defaultLabel: string, locale: string): string {
     if (locale === 'en') {
-        return templateEnglishFieldLabels[templateId]?.[fieldId] || defaultLabel;
+        return templateEnglishFieldChrome[templateId]?.[fieldId]?.label
+            || templateEnglishFieldLabels[templateId]?.[fieldId]
+            || defaultLabel;
     }
     return defaultLabel;
+}
+
+export function getTemplateFieldChrome(
+    templateId: string,
+    fieldId: string,
+    locale: string,
+): TemplateFieldChromeTranslation {
+    if (locale === 'en') {
+        return templateEnglishFieldChrome[templateId]?.[fieldId] || {};
+    }
+    return {};
 }
 
 export function getTemplateIntentPattern(templateId: string, defaultPattern: string, locale: string): string {

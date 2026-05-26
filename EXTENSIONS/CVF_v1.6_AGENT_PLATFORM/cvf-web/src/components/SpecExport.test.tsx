@@ -7,6 +7,7 @@ import { SpecExport, generateCompleteSpec, generateSpec } from './SpecExport';
 import type { Template } from '@/types';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
 import { evaluateEnforcement } from '@/lib/enforcement';
+import { autoDetectGovernance, buildGovernanceSpecBlock } from '@/lib/governance-context';
 
 // Mocks
 vi.mock('@/lib/i18n', () => ({
@@ -404,6 +405,12 @@ describe('generateSpec Surface 1 English export i18n', () => {
         expect(spec).toContain('**1. App / product name:** App tài chính cá nhân');
         expect(spec).toContain('| 3. What problem does it solve? | ✅ |');
         expect(spec).toContain('I want to create a complete app brief that remains non-coder friendly.');
+        expect(spec).toContain('Portable Agent Handoff Readiness');
+        expect(spec).toContain('READY_FOR_EXTERNAL_AGENT_REVIEW');
+        expect(spec).toContain('User-entered Vietnamese values are source evidence, not translation errors.');
+        expect(spec).toContain('External Agent Acceptance Checklist');
+        expect(spec).toContain('PASS_WITH_MINOR_FIX');
+        expect(spec).toContain('Material Details To Reconfirm If Needed');
 
         expect(spec).toContain('App tài chính cá nhân');
         expect(spec).toContain('Quản lý tài chính cá nhân');
@@ -414,5 +421,31 @@ describe('generateSpec Surface 1 English export i18n', () => {
         expect(spec).not.toContain('Nó giải quyết vấn đề gì');
         expect(spec).not.toContain('Tôi muốn tạo một app brief');
         expect(spec).not.toContain('đúng');
+    });
+
+    it('detects exported governance risk from user values instead of control chrome', () => {
+        generateSpec(appBuilderCompleteTemplate, appBuilderValues, 'en', 'full');
+
+        expect(autoDetectGovernance).toHaveBeenCalledWith(expect.objectContaining({
+            exportMode: 'full',
+            messageText: expect.stringContaining('App tài chính cá nhân'),
+        }));
+        expect(autoDetectGovernance).not.toHaveBeenCalledWith(expect.objectContaining({
+            messageText: expect.stringContaining('databases'),
+        }));
+        expect(buildGovernanceSpecBlock).toHaveBeenCalledWith(
+            expect.objectContaining({ phase: 'INTAKE', role: 'ANALYST', riskLevel: 'R1' }),
+            'en',
+        );
+    });
+
+    it('does not add portable external-agent readiness outside the bounded Surface 1 full English export', () => {
+        const governanceSpec = generateSpec(appBuilderCompleteTemplate, appBuilderValues, 'en', 'governance');
+        const viFullSpec = generateSpec(appBuilderCompleteTemplate, appBuilderValues, 'vi', 'full');
+        const genericSpec = generateSpec(mockTemplate, mockValues, 'en', 'full');
+
+        expect(governanceSpec).not.toContain('Portable Agent Handoff Readiness');
+        expect(viFullSpec).not.toContain('Portable Agent Handoff Readiness');
+        expect(genericSpec).not.toContain('Portable Agent Handoff Readiness');
     });
 });

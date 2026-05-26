@@ -16,6 +16,7 @@ import {
     getTemplateIntentPattern,
     getTemplateName,
 } from '@/lib/template-i18n';
+import { buildPortableAgentHandoffReadiness } from '@/lib/spec-export-portable-handoff';
 import {
     autoDetectGovernance,
     buildGovernanceSpecBlock,
@@ -747,6 +748,7 @@ export function generateSpec(
     };
 
     const intent = renderTemplateIntent(localizedIntentPattern, values);
+    const userValueText = Object.values(values).filter(Boolean).join(' ');
     const cvfWebDnaAppendix = shouldAttachCvfWebRedesignDna({
         templateId: template.id,
         templateName: template.name,
@@ -768,6 +770,7 @@ export function generateSpec(
             })
         ].join('\n')
         : labels.noRequired;
+    const portableHandoffReadiness = buildPortableAgentHandoffReadiness(template, values, lang, mode);
 
     let spec = `---
 # ${labels.specTitle}
@@ -812,7 +815,9 @@ ${userContext}` : ''}
 ## ✅ ${labels.inputCoverage}
 
 ${inputCoverage}
-${missingRequired.length ? `\n\n**${lang === 'vi' ? 'Thiếu input bắt buộc' : 'Missing Required Inputs'}:** ${missingRequired.map((field: { label: string }) => field.label).join(', ')}` : ''}
+${missingRequired.length ? `\n\n**${lang === 'vi' ? 'Thiếu input bắt buộc' : 'Missing Required Inputs'}:** ${missingRequired.map(field => getTemplateFieldLabel(template.id, field.id, field.label, lang)).join(', ')}` : ''}
+
+${portableHandoffReadiness}
 
 ---
 
@@ -896,7 +901,7 @@ ${lang === 'vi'
     if (mode === 'governance' || mode === 'full') {
         const detected = autoDetectGovernance({
             templateCategory: template.category,
-            messageText: intent,
+            messageText: userValueText || intent,
             exportMode: mode,
         });
         const govState: GovernanceState = {
@@ -1225,7 +1230,9 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
                 </div>
                 {missingRequired.length > 0 && (
                     <div className="text-xs mt-1">
-                        {specGateLabels.missing}: {missingRequired.map(field => field.label).join(', ')}
+                        {specGateLabels.missing}: {missingRequired
+                            .map(field => getTemplateFieldLabel(template.id, field.id, field.label, exportLang))
+                            .join(', ')}
                     </div>
                 )}
                 {specGateError && !canSendToAgent && (

@@ -6,9 +6,11 @@ import { describe, it, expect } from 'vitest';
 import {
     getTemplateDescription,
     getTemplateFieldLabel,
+    getTemplateFieldChrome,
     getTemplateIntentPattern,
     getTemplateName,
     templateEnglish,
+    templateEnglishFieldChrome,
     templateEnglishFieldLabels,
 } from './template-i18n';
 
@@ -84,11 +86,27 @@ describe('template-i18n', () => {
             expect(templateEnglishFieldLabels.app_builder_complete.problem).toBe('3. What problem does it solve?');
         });
 
+        it('has English field chrome for app_builder_complete form body', () => {
+            expect(templateEnglishFieldChrome.app_builder_complete.problem.placeholder)
+                .toContain('Describe the pain point');
+            expect(templateEnglishFieldChrome.app_builder_complete.problem.hint)
+                .toContain('real-world problem');
+            expect(templateEnglishFieldChrome.app_builder_complete.successCriteria.example)
+                .toContain('create a task within 1 minute');
+        });
+
         it('returns localized field labels for English exports only', () => {
             expect(getTemplateFieldLabel('app_builder_complete', 'appName', '1. Tên app / sản phẩm', 'en'))
                 .toBe('1. App / product name');
             expect(getTemplateFieldLabel('app_builder_complete', 'appName', '1. Tên app / sản phẩm', 'vi'))
                 .toBe('1. Tên app / sản phẩm');
+        });
+
+        it('returns localized field chrome for English form rendering only', () => {
+            expect(getTemplateFieldChrome('app_builder_complete', 'problem', 'en').hint)
+                .toContain('real-world problem');
+            expect(getTemplateFieldChrome('app_builder_complete', 'problem', 'vi'))
+                .toEqual({});
         });
 
         it('returns an English intent pattern for app_builder_complete English exports', () => {

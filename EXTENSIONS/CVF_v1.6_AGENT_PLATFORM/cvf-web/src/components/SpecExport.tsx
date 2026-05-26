@@ -11,6 +11,12 @@ import { logEnforcementDecision } from '@/lib/enforcement-log';
 import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
 import { renderTemplateIntent } from '@/lib/template-intent';
 import {
+    getTemplateDescription,
+    getTemplateFieldLabel,
+    getTemplateIntentPattern,
+    getTemplateName,
+} from '@/lib/template-i18n';
+import {
     autoDetectGovernance,
     buildGovernanceSpecBlock,
     isRiskAllowed,
@@ -179,8 +185,7 @@ You MUST complete each phase in order. NO SHORTCUTS.
 \`\`\`
 
 **⛔ HARD STOP**: Wait for user confirmation before Design.
-- If user says "yes/đúng/ok/proceed" → Go to Design
-- If user says "đúng rồi" or similar → Go to Design  
+- If user says "yes", "ok", "proceed", or "confirmed" → Go to Design
 - If user corrects you → Update understanding, re-confirm
 - If unclear → Ask specific questions
 
@@ -646,7 +651,7 @@ Tạo output theo format intake và chờ xác nhận.
 `
 };
 
-function generateSpec(
+export function generateSpec(
     template: Template,
     values: Record<string, string>,
     lang: ExportLanguage,
@@ -654,12 +659,18 @@ function generateSpec(
     userContext?: string
 ): string {
     const date = new Date().toISOString().split('T')[0];
+    const localizedTemplateName = getTemplateName(template.id, template.name, lang);
+    const localizedTemplateDescription = getTemplateDescription(template.id, template.description, lang);
+    const localizedIntentPattern = getTemplateIntentPattern(template.id, template.intentPattern, lang);
+    const resolveFieldLabel = (field: Template['fields'][number] | undefined, fallback: string): string => {
+        return field ? getTemplateFieldLabel(template.id, field.id, field.label, lang) : fallback;
+    };
 
     const userInputLines = Object.entries(values)
         .filter(([, value]) => value && value.trim())
         .map(([key, value]) => {
             const field = template.fields.find(f => f.id === key);
-            const label = field?.label || key;
+            const label = resolveFieldLabel(field, key);
             return `- **${label}:** ${value}`;
         })
         .join('\n');
@@ -735,7 +746,7 @@ function generateSpec(
         modeFull: 'CVF Guided Agent (5-Phase)',
     };
 
-    const intent = renderTemplateIntent(template.intentPattern, values);
+    const intent = renderTemplateIntent(localizedIntentPattern, values);
     const cvfWebDnaAppendix = shouldAttachCvfWebRedesignDna({
         templateId: template.id,
         templateName: template.name,
@@ -753,7 +764,7 @@ function generateSpec(
             ...requiredFields.map(field => {
                 const value = values[field.id];
                 const provided = value && value.trim() && value.trim().toLowerCase() !== 'n/a';
-                return `| ${field.label} | ${provided ? '✅' : '❌'} |`;
+                return `| ${resolveFieldLabel(field, field.id)} | ${provided ? '✅' : '❌'} |`;
             })
         ].join('\n')
         : labels.noRequired;
@@ -761,16 +772,16 @@ function generateSpec(
     let spec = `---
 # ${labels.specTitle}
 **${labels.generated}:** ${date}
-**${labels.templateLabel}:** ${template.name}
+**${labels.templateLabel}:** ${localizedTemplateName}
 **${labels.category}:** ${template.category}
 **${labels.mode}:** ${modeLabel}
 ---
 
 ## 📋 ${labels.context}
 
-**${labels.templateLabel}:** ${template.icon} ${template.name}
+**${labels.templateLabel}:** ${localizedTemplateName}
 
-${template.description}
+${localizedTemplateDescription}
 
 ---
 

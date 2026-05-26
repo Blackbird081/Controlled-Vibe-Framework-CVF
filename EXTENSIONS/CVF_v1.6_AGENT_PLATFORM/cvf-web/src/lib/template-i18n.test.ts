@@ -3,7 +3,14 @@
  * Test: template-i18n.ts — getTemplateName and getTemplateDescription
  */
 import { describe, it, expect } from 'vitest';
-import { templateEnglish, getTemplateName, getTemplateDescription } from './template-i18n';
+import {
+    getTemplateDescription,
+    getTemplateFieldLabel,
+    getTemplateIntentPattern,
+    getTemplateName,
+    templateEnglish,
+    templateEnglishFieldLabels,
+} from './template-i18n';
 
 describe('template-i18n', () => {
     it('templateEnglish has at least 40 entries', () => {
@@ -68,6 +75,31 @@ describe('template-i18n', () => {
         it('returns default description for unknown template ID in EN (line 89)', () => {
             const result = getTemplateDescription('totally_unknown_id', 'FallbackDesc', 'en');
             expect(result).toBe('FallbackDesc');
+        });
+    });
+
+    describe('Surface 1 export coverage', () => {
+        it('has English field labels for app_builder_complete required fields', () => {
+            expect(templateEnglishFieldLabels.app_builder_complete.appName).toBe('1. App / product name');
+            expect(templateEnglishFieldLabels.app_builder_complete.problem).toBe('3. What problem does it solve?');
+        });
+
+        it('returns localized field labels for English exports only', () => {
+            expect(getTemplateFieldLabel('app_builder_complete', 'appName', '1. Tên app / sản phẩm', 'en'))
+                .toBe('1. App / product name');
+            expect(getTemplateFieldLabel('app_builder_complete', 'appName', '1. Tên app / sản phẩm', 'vi'))
+                .toBe('1. Tên app / sản phẩm');
+        });
+
+        it('returns an English intent pattern for app_builder_complete English exports', () => {
+            const intent = getTemplateIntentPattern(
+                'app_builder_complete',
+                'Tôi muốn tạo một app brief đầy đủ',
+                'en'
+            );
+
+            expect(intent).toContain('I want to create a complete app brief');
+            expect(intent).not.toContain('Tôi muốn');
         });
     });
 });

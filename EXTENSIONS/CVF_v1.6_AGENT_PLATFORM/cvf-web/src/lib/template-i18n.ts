@@ -75,6 +75,67 @@ export const templateEnglish: Record<string, { name: string; description?: strin
     vibe_logic_mapping: { name: 'Vibe Logic Mapping', description: 'Translate approved vibe keywords into a builder-ready style brief' },
 };
 
+export const templateEnglishFieldLabels: Record<string, Record<string, string>> = {
+    app_builder_complete: {
+        appName: '1. App / product name',
+        appType: '2. What kind of product is this?',
+        problem: '3. What problem does it solve?',
+        targetUsers: '4. Who will use this product?',
+        coreFeatures: '5. The most important things the app must do',
+        successCriteria: '6. When would you consider the first version successful?',
+        mustPreserve: '7. What must stay unchanged',
+        platforms: '8. Where does the app need to run?',
+        dataNeeds: '9. What data does the app need to remember or process?',
+        lookAndFeel: '10. Look and feel',
+        outOfScope: '11. Out of scope',
+        constraints: '12. Constraints or special conditions',
+    },
+};
+
+export const templateEnglishIntentPatterns: Record<string, string> = {
+    app_builder_complete: `INTENT:
+I want to create a complete app brief that remains non-coder friendly.
+
+APP / PRODUCT NAME: [appName]
+APP TYPE: [appType]
+
+PROBLEM TO SOLVE:
+[problem]
+
+TARGET USERS:
+[targetUsers]
+
+CORE FEATURES:
+[coreFeatures]
+
+SUCCESS CRITERIA:
+[successCriteria]
+
+MUST PRESERVE:
+[mustPreserve]
+
+PLATFORMS:
+[platforms]
+
+DATA NEEDS:
+[dataNeeds]
+
+LOOK AND FEEL:
+[lookAndFeel]
+
+OUT OF SCOPE:
+[outOfScope]
+
+CONSTRAINTS:
+[constraints]
+
+OUTPUT REQUIREMENTS:
+- Ask only for business intent, user outcomes, constraints, and preservation rules
+- Do not ask the end user to choose frameworks, databases, or hidden technical patterns
+- Translate this into a builder-ready governed packet
+- Include acceptance criteria and handoff boundaries`,
+};
+
 /**
  * Get the localized name/description for a template.
  * When locale is 'vi', returns template's default name/description (Vietnamese).
@@ -92,4 +153,18 @@ export function getTemplateDescription(templateId: string, defaultDesc: string, 
         return templateEnglish[templateId]?.description || defaultDesc;
     }
     return defaultDesc;
+}
+
+export function getTemplateFieldLabel(templateId: string, fieldId: string, defaultLabel: string, locale: string): string {
+    if (locale === 'en') {
+        return templateEnglishFieldLabels[templateId]?.[fieldId] || defaultLabel;
+    }
+    return defaultLabel;
+}
+
+export function getTemplateIntentPattern(templateId: string, defaultPattern: string, locale: string): string {
+    if (locale === 'en') {
+        return templateEnglishIntentPatterns[templateId] || defaultPattern;
+    }
+    return defaultPattern;
 }

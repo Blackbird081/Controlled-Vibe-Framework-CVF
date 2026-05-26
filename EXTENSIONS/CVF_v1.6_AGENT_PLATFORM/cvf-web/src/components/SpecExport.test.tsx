@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { SpecExport, generateCompleteSpec } from './SpecExport';
+import { SpecExport, generateCompleteSpec, generateSpec } from './SpecExport';
 import type { Template } from '@/types';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
 import { evaluateEnforcement } from '@/lib/enforcement';
@@ -94,6 +94,42 @@ const webHandoffTemplate: Template = {
     id: 'web_build_handoff',
     name: 'Bàn giao Web cho Agent',
     category: 'product',
+};
+
+const appBuilderCompleteTemplate: Template = {
+    ...mockTemplate,
+    id: 'app_builder_complete',
+    icon: '📦',
+    name: '📦 Tạo Ứng dụng Hoàn chỉnh',
+    description: 'Biến brief sản phẩm đầy đủ thành packet build-ready để non-coder vẫn mô tả rõ mục tiêu.',
+    category: 'development',
+    fields: [
+        { id: 'appName', type: 'text', label: '1. Tên app / sản phẩm', required: true },
+        { id: 'appType', type: 'select', label: '2. Đây là loại sản phẩm gì?', required: true },
+        { id: 'problem', type: 'textarea', label: '3. Nó giải quyết vấn đề gì?', required: true },
+        { id: 'targetUsers', type: 'text', label: '4. Ai sẽ dùng sản phẩm này?', required: true },
+        { id: 'coreFeatures', type: 'textarea', label: '5. Những việc quan trọng nhất app phải làm được', required: true },
+        { id: 'successCriteria', type: 'textarea', label: '6. Khi nào bạn xem đây là phiên bản đạt yêu cầu?', required: true },
+        { id: 'platforms', type: 'text', label: '8. App cần chạy ở đâu?', required: true },
+    ],
+    intentPattern: `INTENT:
+Tôi muốn tạo một app brief đầy đủ nhưng vẫn theo chuẩn non-coder.
+
+APP / PRODUCT NAME: [appName]
+PROBLEM TO SOLVE:
+[problem]`,
+    outputExpected: ['Product Brief', 'Core Workflows'],
+    outputTemplate: '# Complete App Brief: [appName]',
+};
+
+const appBuilderValues: Record<string, string> = {
+    appName: 'App tài chính cá nhân',
+    appType: 'Web App',
+    problem: 'Quản lý tài chính cá nhân, dòng tiền ra vào hàng ngày',
+    targetUsers: 'Team 3-5 người',
+    coreFeatures: 'Quản lý thu chi',
+    successCriteria: 'Người dùng tạo task trong 1 phút',
+    platforms: 'Windows',
 };
 
 const defaultProps = {
@@ -356,5 +392,27 @@ describe('generateCompleteSpec', () => {
 
         expect(spec).toContain('CVF Web Redesign DNA');
         expect(spec).toContain('professional command workspace');
+    });
+});
+
+describe('generateSpec Surface 1 English export i18n', () => {
+    it('localizes app_builder_complete chrome while preserving Vietnamese source values', () => {
+        const spec = generateSpec(appBuilderCompleteTemplate, appBuilderValues, 'en', 'full');
+
+        expect(spec).toContain('**Template:** 📦 App Builder Complete');
+        expect(spec).toContain('Create a full product brief and builder-ready handoff');
+        expect(spec).toContain('**1. App / product name:** App tài chính cá nhân');
+        expect(spec).toContain('| 3. What problem does it solve? | ✅ |');
+        expect(spec).toContain('I want to create a complete app brief that remains non-coder friendly.');
+
+        expect(spec).toContain('App tài chính cá nhân');
+        expect(spec).toContain('Quản lý tài chính cá nhân');
+
+        expect(spec).not.toContain('Tạo Ứng dụng Hoàn chỉnh');
+        expect(spec).not.toContain('Biến brief sản phẩm');
+        expect(spec).not.toContain('1. Tên app / sản phẩm');
+        expect(spec).not.toContain('Nó giải quyết vấn đề gì');
+        expect(spec).not.toContain('Tôi muốn tạo một app brief');
+        expect(spec).not.toContain('đúng');
     });
 });

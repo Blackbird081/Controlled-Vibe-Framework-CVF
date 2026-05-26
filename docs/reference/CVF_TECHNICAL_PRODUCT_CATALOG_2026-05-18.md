@@ -1,6 +1,6 @@
 # CVF Technical Product Catalog
 
-Status: CURRENT - updated 2026-05-25
+Status: CURRENT - updated 2026-05-26
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -107,6 +107,14 @@ and three non-Product-Brief workflows now expose workflow state/recovery
 readouts through the existing governed route. Evidence:
 `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md`
 
+On 2026-05-26, the public web export surface added bounded English-mode i18n
+coverage for the `app_builder_complete` Surface 1 markdown export. The export
+now localizes template chrome, input labels, task intent, and protocol chrome
+while preserving user-entered Vietnamese values as source evidence. This is a
+deterministic renderer/i18n claim only; it does not claim universal translation
+quality, all-template coverage, provider behavior, or live governance behavior.
+Evidence: `docs/evidence/surface1-web-export-i18n-coverage-2026-05-26.md`
+
 ---
 
 ## What CVF Can Do Today
@@ -189,6 +197,7 @@ Evidence:
 | Governed execution chain (Product Brief) | proven — bounded to selected Product Brief flow | `docs/evidence/phase-e-governed-execution-chain.md` |
 | Knowledge-backed execution with guards | proven — bounded execute path | `docs/evidence/cvf-16-5-runtime-absorption.md`, `docs/evidence/web-governance-path.md` |
 | Non-coder governed path | proven — bounded provider lanes; Step 0 setup and small-team first-receipt guide paths available | `docs/evidence/web-governance-path.md`, `docs/guides/CVF_NON_CODER_STEP0_API_KEY_SETUP_2026-05-24.md`, `docs/guides/CVF_NON_CODER_SETUP_GUIDE_2026-05-24.md` |
+| Surface 1 English web export i18n (`app_builder_complete`) | active — bounded deterministic renderer coverage for English-mode markdown export chrome; preserves user source values; no universal translation or all-template claim | `docs/evidence/surface1-web-export-i18n-coverage-2026-05-26.md`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SpecExport.tsx`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/template-i18n.ts` |
 | Execution diagnostics and first-value failure recovery | proven — bounded live-run failure classification and non-coder evidence-to-action surface; no provider SLA or production-readiness claim | `docs/evidence/execution-diagnostics-and-first-value-2026-05-24.md` |
 | Workflow chain memory read/write proof | proven — bounded two-turn local workflow-chain proof with live Alibaba `qwen-turbo` receipts; summary-only durable memory receipt, no raw memory reinjection claim | `docs/evidence/workflow-chain-memory-proof-2026-05-24.md` |
 | Vertical integration chain readout (VI4) | proven — response-level package on selected live `/api/execute` calls; separates call-level pass rate from event-model denominator; no route-blocking or workflow-engine claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md` |
@@ -303,6 +312,7 @@ cat docs/evidence/provider-lanes.md
 cat docs/evidence/web-governance-path.md
 cat docs/evidence/phase-e-governed-execution-chain.md
 cat docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md
+cat docs/evidence/surface1-web-export-i18n-coverage-2026-05-26.md
 cat docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md
 
 # Run the full release gate
@@ -329,6 +339,8 @@ CVF may claim:
 - governed Product Brief workflow with role permission, step traces, and receipt
 - bounded workflow state/recovery readouts for Product Brief,
   `strategy_analysis`, `marketing_campaign_wizard`, and `brand_voice`
+- bounded English-mode Surface 1 markdown export i18n for
+  `app_builder_complete`
 - public auditability through docs, evidence packets, guards, and release gates
 - governance-kernel coherence as audit-equivalent for public reader orientation
 

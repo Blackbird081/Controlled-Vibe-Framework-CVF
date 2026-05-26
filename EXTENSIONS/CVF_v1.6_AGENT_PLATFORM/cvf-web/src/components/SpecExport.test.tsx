@@ -133,6 +133,88 @@ const appBuilderValues: Record<string, string> = {
     platforms: 'Windows',
 };
 
+const strategyTemplate: Template = {
+    ...mockTemplate,
+    id: 'strategy_analysis',
+    name: 'Phân tích Chiến lược',
+    description: 'Phân tích chiến lược kinh doanh, so sánh các phương án',
+    fields: [
+        { id: 'topic', type: 'text', label: 'Chủ đề chiến lược', required: true },
+        { id: 'context', type: 'textarea', label: 'Bối cảnh', required: true },
+        { id: 'options', type: 'textarea', label: 'Các phương án (nếu có)', required: false },
+        { id: 'constraints', type: 'text', label: 'Ràng buộc', required: false },
+        { id: 'priority', type: 'select', label: 'Ưu tiên', required: false },
+    ],
+    intentPattern: 'Tôi muốn phân tích chiến lược [topic].\n\nCONTEXT:\n[context]',
+    outputTemplate: '## Success Criteria Check\n- [ ] Phân tích rõ ưu/nhược điểm',
+};
+
+const strategyValues: Record<string, string> = {
+    topic: 'Mở rộng thị trường miền Trung',
+    context: 'Công ty SaaS B2B, thị trường đang tăng trưởng',
+    options: '1. Mở chi nhánh trực tiếp\n2. Hợp tác với đối tác địa phương\n3. Bán hàng online',
+    constraints: 'Budget tối đa $500K',
+    priority: 'Growth',
+};
+
+const brandVoiceTemplate: Template = {
+    ...mockTemplate,
+    id: 'brand_voice',
+    name: 'Đồng bộ Giọng điệu Thương hiệu',
+    description: 'Đảm bảo brand voice nhất quán',
+    category: 'marketing',
+    fields: [
+        { id: 'brand', type: 'text', label: 'Brand Name', required: true },
+        { id: 'industry', type: 'text', label: 'Industry', required: true },
+        { id: 'audience', type: 'text', label: 'Target Audience', required: true },
+        { id: 'samples', type: 'textarea', label: 'Sample Content', required: true },
+        { id: 'values', type: 'text', label: 'Brand Values', required: false },
+    ],
+    intentPattern: 'Tôi muốn đánh giá brand voice consistency cho [brand].',
+};
+
+const brandVoiceValues: Record<string, string> = {
+    brand: 'Thương hiệu tư vấn tài chính',
+    industry: 'Tài chính cá nhân',
+    audience: 'SMB founders và team leaders',
+    samples: 'Website: Giúp bạn kiểm soát dòng tiền\nEmail: Đừng bỏ lỡ báo cáo tuần\nSocial: Mẹo nhỏ để tiết kiệm',
+    values: 'Đơn giản, tin cậy, thân thiện',
+};
+
+const webBuildValues: Record<string, string> = {
+    websiteGoal: 'Giúp khách hàng đăng ký tư vấn và xem dịch vụ nhanh hơn',
+    audience: 'Chủ doanh nghiệp nhỏ đang tìm giải pháp AI automation',
+    mustDo: 'Xem dịch vụ\nSo sánh gói\nĐăng ký tư vấn\nĐể lại thông tin liên hệ',
+    screens: 'Home, Services, Pricing, Contact form modal, Thank-you page',
+    mustPreserve: 'CRM webhook and current lead-submit API',
+    lookAndFeel: 'Tin cậy, sáng rõ, hiện đại, dễ đọc trên mobile',
+    references: 'Headline mạnh, CTA nổi; tránh kiểu quá nhiều hiệu ứng',
+};
+
+const marketingCampaignTemplate: Template = {
+    ...mockTemplate,
+    id: 'marketing_campaign_wizard',
+    name: '📣 Chiến dịch Marketing',
+    description: 'Multi-step wizard tạo Campaign Brief với governed packet và live path để đối soát',
+    category: 'marketing',
+    fields: [
+        { id: 'campaignName', type: 'text', label: 'Campaign Name', required: true },
+        { id: 'campaignType', type: 'select', label: 'Campaign Type', required: true },
+        { id: 'objectives', type: 'textarea', label: 'Objectives', required: true },
+        { id: 'demographics', type: 'textarea', label: 'Demographics', required: true },
+        { id: 'messaging', type: 'textarea', label: 'Key Messages', required: true },
+    ],
+    intentPattern: 'Create a governed marketing campaign packet for [campaignName].',
+};
+
+const marketingCampaignValues: Record<string, string> = {
+    campaignName: 'Ra mắt sản phẩm mới',
+    campaignType: 'Product Launch',
+    objectives: 'Tăng nhận diện thương hiệu và thu thập lead',
+    demographics: 'Người dùng văn phòng 25-40 tuổi',
+    messaging: 'Tiết kiệm thời gian, dễ bắt đầu',
+};
+
 const defaultProps = {
     template: mockTemplate,
     values: mockValues,
@@ -458,5 +540,23 @@ describe('generateSpec Surface 1 English export i18n', () => {
         expect(governanceSpec).not.toContain('Portable Agent Handoff Readiness');
         expect(viFullSpec).not.toContain('Portable Agent Handoff Readiness');
         expect(genericSpec).not.toContain('Portable Agent Handoff Readiness');
+    });
+
+    it.each([
+        ['strategy_analysis', strategyTemplate, strategyValues, ['Expand into the Central region market', 'Clearly compare pros and cons'], ['Mở rộng thị trường miền Trung', 'Phân tích rõ ưu/nhược điểm']],
+        ['brand_voice', brandVoiceTemplate, brandVoiceValues, ['Financial advisory brand', 'Brand Voice Consistency'], ['Thương hiệu tư vấn tài chính', 'Đồng bộ Giọng điệu']],
+        ['web_build_handoff', webHandoffTemplate, webBuildValues, ['Help customers book consultations and view services faster', 'Web Build Handoff'], ['Giúp khách hàng đăng ký tư vấn', 'Bàn giao Web']],
+        ['marketing_campaign_wizard', marketingCampaignTemplate, marketingCampaignValues, ['New product launch', 'Increase brand awareness and collect leads'], ['Ra mắt sản phẩm mới', 'Tăng nhận diện thương hiệu']],
+    ])('emits bounded English working values for %s', (_id, template, values, expected, forbidden) => {
+        const spec = generateSpec(template, values, 'en', 'full');
+
+        expect(spec).toContain('English Working Brief');
+        expect(spec).toContain('READY_FOR_EXTERNAL_AGENT_REVIEW');
+        for (const value of expected) {
+            expect(spec).toContain(value);
+        }
+        for (const value of forbidden) {
+            expect(spec).not.toContain(value);
+        }
     });
 });

@@ -12,6 +12,8 @@ import {
     templateEnglish,
     templateEnglishFieldChrome,
     templateEnglishFieldLabels,
+    templateEnglishOutputTemplates,
+    getTemplateOutputTemplate,
 } from './template-i18n';
 
 describe('template-i18n', () => {
@@ -118,6 +120,36 @@ describe('template-i18n', () => {
 
             expect(intent).toContain('I want to create a complete app brief');
             expect(intent).not.toContain('Tôi muốn');
+        });
+
+        it('has English form chrome for priority Surface 1 scale templates', () => {
+            expect(getTemplateFieldChrome('strategy_analysis', 'topic', 'en').label)
+                .toBe('Strategy topic');
+            expect(getTemplateFieldChrome('brand_voice', 'samples', 'en').hint)
+                .toContain('content samples');
+            expect(getTemplateFieldChrome('web_build_handoff', 'websiteGoal', 'en').placeholder)
+                .toContain('Main business');
+        });
+
+        it('returns English intent patterns for priority Surface 1 scale templates', () => {
+            expect(getTemplateIntentPattern('strategy_analysis', 'Tôi muốn phân tích', 'en'))
+                .toContain('I want to analyze the strategy');
+            expect(getTemplateIntentPattern('brand_voice', 'Tôi muốn đánh giá', 'en'))
+                .toContain('I want to evaluate brand voice');
+            expect(getTemplateIntentPattern('web_build_handoff', 'Tôi là non-coder', 'en'))
+                .toContain('turn this website brief into a build packet');
+        });
+
+        it('uses English output template overrides where source template still has Vietnamese checklist text', () => {
+            const output = getTemplateOutputTemplate(
+                'strategy_analysis',
+                '- [ ] Phân tích rõ ưu/nhược điểm',
+                'en',
+            );
+
+            expect(output).toBe(templateEnglishOutputTemplates.strategy_analysis);
+            expect(output).toContain('Clearly compare pros and cons');
+            expect(output).not.toContain('Phân tích');
         });
     });
 });

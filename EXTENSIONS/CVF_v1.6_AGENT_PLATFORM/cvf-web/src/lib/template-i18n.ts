@@ -76,6 +76,29 @@ export const templateEnglish: Record<string, { name: string; description?: strin
 };
 
 export const templateEnglishFieldLabels: Record<string, Record<string, string>> = {
+    strategy_analysis: {
+        topic: 'Strategy topic',
+        context: 'Context',
+        options: 'Options under consideration',
+        constraints: 'Constraints',
+        priority: 'Priority',
+    },
+    brand_voice: {
+        brand: 'Brand name',
+        industry: 'Industry',
+        audience: 'Target audience',
+        samples: 'Sample content',
+        values: 'Brand values',
+    },
+    web_build_handoff: {
+        websiteGoal: 'What is this website for?',
+        audience: 'Who will use this website?',
+        mustDo: 'What must users be able to do?',
+        screens: 'What pages or popups are needed?',
+        mustPreserve: 'What must stay unchanged?',
+        lookAndFeel: 'What should the interface feel like?',
+        references: 'Examples or additional notes',
+    },
     app_builder_complete: {
         appName: '1. App / product name',
         appType: '2. What kind of product is this?',
@@ -100,6 +123,112 @@ export type TemplateFieldChromeTranslation = {
 };
 
 export const templateEnglishFieldChrome: Record<string, Record<string, TemplateFieldChromeTranslation>> = {
+    strategy_analysis: {
+        topic: {
+            label: 'Strategy topic',
+            placeholder: 'Example: Expand into the Central region',
+            hint: 'Name the decision, strategic direction, or tradeoff that needs analysis.',
+            example: 'Expand into the Central region for an FMCG product line',
+        },
+        context: {
+            label: 'Context',
+            placeholder: 'Describe the industry, company size, market, timing...',
+            hint: 'Give enough business context for useful analysis: industry, company size, market share, constraints, and trends.',
+            example: 'B2B SaaS company, 200 employees, $5M annual revenue. The market is growing 15% year over year.',
+        },
+        options: {
+            label: 'Options under consideration',
+            placeholder: 'List the options you are comparing',
+            hint: 'One option per line. The agent will compare pros, cons, risk, and next steps.',
+            example: '1. Open a direct branch\n2. Partner with local operators\n3. Sell online first',
+        },
+        constraints: {
+            label: 'Constraints',
+            placeholder: 'Budget, timeline, resources...',
+            hint: 'Name budget, time, staffing, operating, or approval limits.',
+            example: 'Maximum budget $500K, must complete by Q3 2026',
+        },
+        priority: {
+            label: 'Priority',
+            hint: 'Choose the primary strategic objective for this analysis.',
+        },
+    },
+    brand_voice: {
+        brand: {
+            label: 'Brand name',
+            placeholder: 'Brand name',
+            hint: 'The brand whose voice consistency should be reviewed.',
+            example: 'TaskFlow',
+        },
+        industry: {
+            label: 'Industry',
+            placeholder: 'Industry',
+            hint: 'The business category or market the brand operates in.',
+            example: 'SaaS / Productivity Tools',
+        },
+        audience: {
+            label: 'Target audience',
+            placeholder: 'Primary customer persona',
+            hint: 'Name the core audience and buying context.',
+            example: 'SMB founders and team leaders, age 28-45',
+        },
+        samples: {
+            label: 'Sample content',
+            placeholder: '3-5 samples from different channels',
+            hint: 'Paste a few content samples from web, email, social, ads, or support messages.',
+            example: 'Website: "Streamline your workflow..."\nEmail: "Hey team! Check out..."\nSocial: "Big news!..."',
+        },
+        values: {
+            label: 'Brand values',
+            placeholder: 'Core brand values',
+            hint: 'The values the voice should preserve.',
+            example: 'Simple, reliable, human-friendly',
+        },
+    },
+    web_build_handoff: {
+        websiteGoal: {
+            label: 'What is this website for?',
+            placeholder: 'Main business or product goal',
+            hint: 'Use business language. You do not need technical terms.',
+            example: 'Help customers book a consultation and understand services faster',
+        },
+        audience: {
+            label: 'Who will use this website?',
+            placeholder: 'Primary users',
+            hint: 'Name the main user group or role.',
+            example: 'Small-business owners looking for AI automation solutions',
+        },
+        mustDo: {
+            label: 'What must users be able to do?',
+            placeholder: 'The 3-5 most important user actions',
+            hint: 'Describe what users need to accomplish on the website.',
+            example: 'View services\nCompare packages\nBook a consultation\nLeave contact information',
+        },
+        screens: {
+            label: 'What pages or popups are needed?',
+            placeholder: 'List pages, modals, or forms',
+            hint: 'List the screens you expect the agent to create.',
+            example: 'Home, Services, Pricing, Contact form modal, Thank-you page',
+        },
+        mustPreserve: {
+            label: 'What must stay unchanged?',
+            placeholder: 'Logic, data, integrations, auth, routes...',
+            hint: 'If there is existing backend logic, say what the builder must not break.',
+            example: 'CRM form webhook, current routes, admin auth, lead-submit API',
+        },
+        lookAndFeel: {
+            label: 'What should the interface feel like?',
+            placeholder: 'Desired style or feeling',
+            hint: 'Describe the overall interface feeling.',
+            example: 'Trustworthy, bright, modern, easy to read on mobile',
+        },
+        references: {
+            label: 'Examples or additional notes',
+            placeholder: 'Reference links or short notes',
+            hint: 'Mention sites you like or things the builder should avoid.',
+            example: 'I like clear sections, strong headlines, and prominent CTAs; avoid excessive effects.',
+        },
+    },
     app_builder_complete: {
         appName: {
             label: '1. App / product name',
@@ -175,6 +304,75 @@ export const templateEnglishFieldChrome: Record<string, Record<string, TemplateF
 };
 
 export const templateEnglishIntentPatterns: Record<string, string> = {
+    strategy_analysis: `INTENT:
+I want to analyze the strategy for [topic].
+
+CONTEXT:
+[context]
+
+OPTIONS:
+[options]
+
+CONSTRAINTS:
+[constraints]
+
+PRIORITY: [priority]
+
+OUTPUT FORMAT:
+- Executive Summary -> SWOT Analysis -> Options Comparison -> Risk Assessment -> Recommendations -> Next Actions
+
+SUCCESS CRITERIA:
+- Clearly compare pros and cons
+- Identify the main risks
+- Provide evidence-backed recommendations`,
+    brand_voice: `INTENT:
+I want to evaluate brand voice consistency for [brand].
+
+INDUSTRY: [industry]
+TARGET AUDIENCE: [audience]
+BRAND VALUES: [values]
+
+SAMPLE CONTENT:
+[samples]
+
+OUTPUT FORMAT:
+- Voice Audit -> Consistency Score -> Voice Attributes -> Tone Matrix -> Language Guidelines
+
+SUCCESS CRITERIA:
+- Assess voice attributes
+- Check cross-channel consistency
+- Judge tone appropriateness
+- Recommend concrete improvements`,
+    web_build_handoff: `INTENT:
+I am a non-coder and want CVF to turn this website brief into a build packet for another agent.
+
+WEBSITE GOAL:
+[websiteGoal]
+
+TARGET USERS:
+[audience]
+
+USERS MUST BE ABLE TO:
+[mustDo]
+
+REQUIRED PAGES / MODALS:
+[screens]
+
+MUST PRESERVE:
+[mustPreserve]
+
+LOOK AND FEEL:
+[lookAndFeel]
+
+REFERENCES / NOTES:
+[references]
+
+OUTPUT REQUIREMENTS:
+- Ask only for plain-language product intent, not hidden technical choices
+- Translate the brief into a clear agent-ready web build packet
+- Apply CVF Web Redesign DNA automatically where relevant
+- Preserve existing logic, integrations, data contracts, and protected flows
+- Provide page structure, UX priorities, and an acceptance checklist`,
     app_builder_complete: `INTENT:
 I want to create a complete app brief that remains non-coder friendly.
 
@@ -216,6 +414,50 @@ OUTPUT REQUIREMENTS:
 - Do not ask the end user to choose frameworks, databases, or hidden technical patterns
 - Translate this into a builder-ready governed packet
 - Include acceptance criteria and handoff boundaries`,
+};
+
+export const templateEnglishOutputTemplates: Record<string, string> = {
+    strategy_analysis: `# Strategy Analysis Output
+
+## Executive Summary
+- Goal:
+- Primary recommendation:
+- Rationale:
+
+## Assumptions & Missing Data
+- Missing inputs:
+- Assumptions used:
+
+## SWOT Analysis
+| Strengths | Weaknesses | Opportunities | Threats |
+| --- | --- | --- | --- |
+| ... | ... | ... | ... |
+
+## Options Comparison
+| Option | Pros | Cons | Cost/Impact | Risks | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Option A |  |  |  |  |  |
+| Option B |  |  |  |  |  |
+
+## Risk Assessment
+- Top risks, ranked:
+1. ...
+2. ...
+- Mitigations:
+- ...
+
+## Recommendations
+- Recommendation 1:
+- Recommendation 2, if needed:
+
+## Success Criteria Check
+- [ ] Clearly compare pros and cons
+- [ ] Identify the main risks
+- [ ] Provide evidence-backed recommendations
+
+## Next Actions
+- Questions for user:
+- Data to confirm:`,
 };
 
 /**
@@ -262,4 +504,11 @@ export function getTemplateIntentPattern(templateId: string, defaultPattern: str
         return templateEnglishIntentPatterns[templateId] || defaultPattern;
     }
     return defaultPattern;
+}
+
+export function getTemplateOutputTemplate(templateId: string, defaultTemplate: string | undefined, locale: string): string | undefined {
+    if (locale === 'en') {
+        return templateEnglishOutputTemplates[templateId] || defaultTemplate;
+    }
+    return defaultTemplate;
 }

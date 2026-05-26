@@ -10,7 +10,7 @@ import { evaluateEnforcement } from '@/lib/enforcement';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
 import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
 import { renderTemplateIntent } from '@/lib/template-intent';
-import { getTemplateDescription, getTemplateFieldLabel, getTemplateIntentPattern, getTemplateName } from '@/lib/template-i18n';
+import { getTemplateDescription, getTemplateFieldLabel, getTemplateIntentPattern, getTemplateName, getTemplateOutputTemplate } from '@/lib/template-i18n';
 import { buildPortableAgentHandoffReadiness } from '@/lib/spec-export-portable-handoff';
 import { buildEnglishWorkingBrief, buildEnglishWorkingValues } from '@/lib/spec-export-english-working-brief';
 import {
@@ -659,6 +659,7 @@ export function generateSpec(
     const localizedTemplateName = getTemplateName(template.id, template.name, lang);
     const localizedTemplateDescription = getTemplateDescription(template.id, template.description, lang);
     const localizedIntentPattern = getTemplateIntentPattern(template.id, template.intentPattern, lang);
+    const localizedOutputTemplate = getTemplateOutputTemplate(template.id, template.outputTemplate, lang);
     const workingValues = buildEnglishWorkingValues(template, values, lang, mode);
     const resolveFieldLabel = (field: Template['fields'][number] | undefined, fallback: string): string => {
         return field ? getTemplateFieldLabel(template.id, field.id, field.label, lang) : fallback;
@@ -676,8 +677,8 @@ export function generateSpec(
     const expectedOutput = template.outputExpected
         ?.map(item => `- ${item}`)
         .join('\n') || '- Comprehensive analysis\n- Actionable recommendations';
-    const outputTemplate = template.outputTemplate
-        ? renderTemplateIntent(template.outputTemplate, workingValues)
+    const outputTemplate = localizedOutputTemplate
+        ? renderTemplateIntent(localizedOutputTemplate, workingValues)
         : (template.outputExpected?.length
         ? template.outputExpected.map(section => `## ${section}\n- ...`).join('\n\n')
         : '');

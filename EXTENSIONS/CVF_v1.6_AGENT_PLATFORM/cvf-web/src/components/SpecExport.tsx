@@ -10,13 +10,9 @@ import { evaluateEnforcement } from '@/lib/enforcement';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
 import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
 import { renderTemplateIntent } from '@/lib/template-intent';
-import {
-    getTemplateDescription,
-    getTemplateFieldLabel,
-    getTemplateIntentPattern,
-    getTemplateName,
-} from '@/lib/template-i18n';
+import { getTemplateDescription, getTemplateFieldLabel, getTemplateIntentPattern, getTemplateName } from '@/lib/template-i18n';
 import { buildPortableAgentHandoffReadiness } from '@/lib/spec-export-portable-handoff';
+import { buildEnglishWorkingBrief, buildEnglishWorkingValues } from '@/lib/spec-export-english-working-brief';
 import {
     autoDetectGovernance,
     buildGovernanceSpecBlock,
@@ -663,11 +659,12 @@ export function generateSpec(
     const localizedTemplateName = getTemplateName(template.id, template.name, lang);
     const localizedTemplateDescription = getTemplateDescription(template.id, template.description, lang);
     const localizedIntentPattern = getTemplateIntentPattern(template.id, template.intentPattern, lang);
+    const workingValues = buildEnglishWorkingValues(template, values, lang, mode);
     const resolveFieldLabel = (field: Template['fields'][number] | undefined, fallback: string): string => {
         return field ? getTemplateFieldLabel(template.id, field.id, field.label, lang) : fallback;
     };
 
-    const userInputLines = Object.entries(values)
+    const userInputLines = Object.entries(workingValues)
         .filter(([, value]) => value && value.trim())
         .map(([key, value]) => {
             const field = template.fields.find(f => f.id === key);
@@ -680,7 +677,7 @@ export function generateSpec(
         ?.map(item => `- ${item}`)
         .join('\n') || '- Comprehensive analysis\n- Actionable recommendations';
     const outputTemplate = template.outputTemplate
-        ? renderTemplateIntent(template.outputTemplate, values)
+        ? renderTemplateIntent(template.outputTemplate, workingValues)
         : (template.outputExpected?.length
         ? template.outputExpected.map(section => `## ${section}\n- ...`).join('\n\n')
         : '');
@@ -747,8 +744,8 @@ export function generateSpec(
         modeFull: 'CVF Guided Agent (5-Phase)',
     };
 
-    const intent = renderTemplateIntent(localizedIntentPattern, values);
-    const userValueText = Object.values(values).filter(Boolean).join(' ');
+    const intent = renderTemplateIntent(localizedIntentPattern, workingValues);
+    const userValueText = Object.values(workingValues).filter(Boolean).join(' ');
     const cvfWebDnaAppendix = shouldAttachCvfWebRedesignDna({
         templateId: template.id,
         templateName: template.name,
@@ -770,7 +767,8 @@ export function generateSpec(
             })
         ].join('\n')
         : labels.noRequired;
-    const portableHandoffReadiness = buildPortableAgentHandoffReadiness(template, values, lang, mode);
+    const englishWorkingBrief = buildEnglishWorkingBrief(template, values, workingValues, lang, mode);
+    const portableHandoffReadiness = buildPortableAgentHandoffReadiness(template, workingValues, lang, mode);
 
     let spec = `---
 # ${labels.specTitle}
@@ -809,6 +807,8 @@ ${userContext ? `
 ## 👤 User Context
 
 ${userContext}` : ''}
+
+${englishWorkingBrief}
 
 ---
 

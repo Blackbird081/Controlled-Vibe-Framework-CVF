@@ -397,24 +397,32 @@ describe('generateCompleteSpec', () => {
 });
 
 describe('generateSpec Surface 1 English export i18n', () => {
-    it('localizes app_builder_complete chrome while preserving Vietnamese source values', () => {
+    it('localizes app_builder_complete chrome and emits English working values for external agents', () => {
         const spec = generateSpec(appBuilderCompleteTemplate, appBuilderValues, 'en', 'full');
 
         expect(spec).toContain('**Template:** 📦 App Builder Complete');
         expect(spec).toContain('Create a full product brief and builder-ready handoff');
-        expect(spec).toContain('**1. App / product name:** App tài chính cá nhân');
+        expect(spec).toContain('English Working Brief');
+        expect(spec).toContain('**Translation status:** READY_FOR_EXTERNAL_AGENT_REVIEW');
+        expect(spec).toContain('**1. App / product name:** Personal finance app');
+        expect(spec).toContain('**3. What problem does it solve?:** Manage personal finances and daily cash inflows and outflows');
+        expect(spec).toContain('**4. Who will use this product?:** Team of 3-5 people');
+        expect(spec).toContain('**5. The most important things the app must do:** Track income and expenses');
+        expect(spec).toContain('**6. When would you consider the first version successful?:** Users can create a task within one minute.');
         expect(spec).toContain('| 3. What problem does it solve? | ✅ |');
         expect(spec).toContain('I want to create a complete app brief that remains non-coder friendly.');
         expect(spec).toContain('Portable Agent Handoff Readiness');
         expect(spec).toContain('READY_FOR_EXTERNAL_AGENT_REVIEW');
-        expect(spec).toContain('User-entered Vietnamese values are source evidence, not translation errors.');
+        expect(spec).toContain('This English packet uses agent-facing working values, not raw multilingual source text.');
         expect(spec).toContain('External Agent Acceptance Checklist');
         expect(spec).toContain('PASS_WITH_MINOR_FIX');
         expect(spec).toContain('Material Details To Reconfirm If Needed');
 
-        expect(spec).toContain('App tài chính cá nhân');
-        expect(spec).toContain('Quản lý tài chính cá nhân');
-
+        expect(spec).not.toContain('App tài chính cá nhân');
+        expect(spec).not.toContain('Quản lý tài chính cá nhân');
+        expect(spec).not.toContain('Team 3-5 người');
+        expect(spec).not.toContain('Quản lý thu chi');
+        expect(spec).not.toContain('Người dùng tạo task trong 1 phút');
         expect(spec).not.toContain('Tạo Ứng dụng Hoàn chỉnh');
         expect(spec).not.toContain('Biến brief sản phẩm');
         expect(spec).not.toContain('1. Tên app / sản phẩm');
@@ -428,10 +436,13 @@ describe('generateSpec Surface 1 English export i18n', () => {
 
         expect(autoDetectGovernance).toHaveBeenCalledWith(expect.objectContaining({
             exportMode: 'full',
-            messageText: expect.stringContaining('App tài chính cá nhân'),
+            messageText: expect.stringContaining('Personal finance app'),
         }));
         expect(autoDetectGovernance).not.toHaveBeenCalledWith(expect.objectContaining({
             messageText: expect.stringContaining('databases'),
+        }));
+        expect(autoDetectGovernance).not.toHaveBeenCalledWith(expect.objectContaining({
+            messageText: expect.stringContaining('tài chính'),
         }));
         expect(buildGovernanceSpecBlock).toHaveBeenCalledWith(
             expect.objectContaining({ phase: 'INTAKE', role: 'ANALYST', riskLevel: 'R1' }),

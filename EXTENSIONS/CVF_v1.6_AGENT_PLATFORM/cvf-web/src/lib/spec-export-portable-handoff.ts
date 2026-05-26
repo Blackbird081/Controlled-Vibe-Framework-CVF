@@ -43,9 +43,10 @@ export function buildPortableAgentHandoffReadiness(
 
 ### Source Values Handling
 
-- User-entered Vietnamese values are source evidence, not translation errors.
-- Preserve product names, user language, business terms, and acceptance criteria unless the operator explicitly asks for translation.
-- English headings and instructions are the control layer; user values remain authoritative even when they are Vietnamese.
+- This English packet uses agent-facing working values, not raw multilingual source text.
+- If any field says \`TRANSLATION_REQUIRED\`, stop before build work and request an approved translation.
+- Preserve product meaning, business terms, and acceptance criteria from the English Working Brief.
+- Do not ask the non-coder to make hidden technical choices while resolving translation gaps.
 
 ### Implementation Decision Policy
 

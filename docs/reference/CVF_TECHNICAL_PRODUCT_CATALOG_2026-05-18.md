@@ -1,6 +1,6 @@
 # CVF Technical Product Catalog
 
-Status: CURRENT - updated 2026-05-26
+Status: CURRENT - updated 2026-05-27
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -115,6 +115,12 @@ deterministic renderer/i18n claim only; it does not claim universal translation
 quality, all-template coverage, provider behavior, or live governance behavior.
 Evidence: `docs/evidence/surface1-web-export-i18n-coverage-2026-05-26.md`
 
+On 2026-05-27, the public documentation set added LHW3 workflow connector
+standards. These standards bind existing CVF evidence surfaces into three
+doc-only chains: operational failure trend readout, clarification re-intake,
+and spec-change workflow packet handoff. This is a schema/documentation claim
+only; it does not claim runtime enforcement or provider behavior.
+
 ---
 
 ## What CVF Can Do Today
@@ -203,6 +209,7 @@ Evidence:
 | Vertical integration chain readout (VI4) | proven — response-level package on selected live `/api/execute` calls; separates call-level pass rate from event-model denominator; no route-blocking or workflow-engine claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md` |
 | Multi-provider VI4 coverage | proven — bounded live VI4 package proof on Alibaba `qwen-turbo`, DeepSeek `deepseek-chat`, and OpenAI `gpt-4o`; no broad provider stability or parity claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md`, `docs/evidence/provider-lanes.md` |
 | Multi-workflow VI coverage | proven — bounded workflow state/recovery readouts for `strategy_analysis`, `marketing_campaign_wizard`, and `brand_voice`; no all-template workflow-engine claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md` |
+| LHW3 workflow connector standards | schema-defined — doc-only connector standards for operational failure trend readout, clarification re-intake, and spec-change workflow packet handoff; no runtime enforcement or provider behavior claim | `docs/roadmaps/CVF_LHW3_WORKFLOW_CONNECTOR_WAVE3_ROADMAP_2026-05-27.md`, `docs/reference/CVF_LHW3_OPERATIONAL_FAILURE_TREND_READOUT_CONNECTOR_SPEC_2026-05-27.md`, `docs/reference/CVF_LHW3_REQUEST_CLARIFICATION_RE_INTAKE_LOOP_CONNECTOR_SPEC_2026-05-27.md`, `docs/reference/CVF_LHW3_SPEC_CHANGE_WORKFLOW_PACKET_CONNECTOR_SPEC_2026-05-27.md` |
 | Governance CLI (`cvf-guard`, `cvf execute`) | active; `execute` caller is mock-tested and delegates to the web execute route | `ARCHITECTURE.md`, `docs/reference/CVF_MODULE_INVENTORY.md`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/execute.client.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/execute.client.test.ts` |
 | Governance CLI read-only wrappers (`cvf run`, `cvf skill`, `cvf receipt`, `cvf trace`, `cvf provider`) | active — read-only developer/operator wrappers over existing execution, skill, receipt, trace, and provider inspection surfaces; no new provider behavior claimed | `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/command.registry.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-run.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-skill.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-receipt.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-trace.test.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/commands/cvf-provider.test.ts` |
 | Certified provider lanes | proven where evidence exists | `docs/evidence/provider-lanes.md` |
@@ -339,6 +346,8 @@ CVF may claim:
 - governed Product Brief workflow with role permission, step traces, and receipt
 - bounded workflow state/recovery readouts for Product Brief,
   `strategy_analysis`, `marketing_campaign_wizard`, and `brand_voice`
+- schema-defined LHW3 documentation connector standards for failure trends,
+  clarification re-intake, and spec-change packet handoff
 - bounded English-mode Surface 1 markdown export i18n for
   `app_builder_complete`
 - public auditability through docs, evidence packets, guards, and release gates
@@ -351,6 +360,8 @@ CVF does not yet claim:
 - full external capability marketplace readiness
 - full legacy repository absorption
 - all-template workflow runtime or broad workflow engine status
+- runtime enforcement of LHW3 connector standards, live failure alerting,
+  automatic clarification re-entry, or automatic spec-change mutation
 - complete role-permission, memory-reinjection, async-worker,
   graph-context, database-action, or provider-method coverage
 - broad provider stability, persistence/database readiness, Maika

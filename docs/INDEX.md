@@ -29,6 +29,7 @@ and must not introduce private provenance links.
 - `ARCHITECTURE.md`
 - `GOVERNANCE.md`
 - `docs/GET_STARTED.md`
+- `docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md`
 - `docs/evidence/README.md`
 - `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md`
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`

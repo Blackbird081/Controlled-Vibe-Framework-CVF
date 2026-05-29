@@ -22,6 +22,7 @@ collaboration tools for design, implementation, review, and documentation. See
 | Install or run locally | [Getting Started](docs/GET_STARTED.md) |
 | Understand governance rules | [Governance](GOVERNANCE.md) |
 | Configure provider lanes | [Providers](PROVIDERS.md) |
+| Choose a multi-agent/provider mix | [Multi-Agent Provider Routing](docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md) |
 | Plan cost and quota | [Cost and Quota](COST_AND_QUOTA.md) |
 | Contribute safely | [Contributing](CONTRIBUTING.md) |
 
@@ -100,7 +101,8 @@ choices are configuration decisions, not the source of trust.
 | Closure gates | verify final state and evidence | no false PASS, no unbacked readiness claim |
 
 Detailed provider recipes and model-lane notes belong in [Providers](PROVIDERS.md)
-and the deeper guides, not in the README front door.
+and [Multi-Agent Provider Routing](docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md),
+not in the README front door.
 
 ## Current Public Claims
 
@@ -195,6 +197,7 @@ CVF is not:
 | Architecture front door | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | Governance model | [GOVERNANCE.md](GOVERNANCE.md) |
 | Provider setup and boundaries | [PROVIDERS.md](PROVIDERS.md) |
+| Multi-agent provider routing | [CVF Multi-Agent Provider Routing](docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md) |
 | Cost and quota | [COST_AND_QUOTA.md](COST_AND_QUOTA.md) |
 | Documentation index | [docs/INDEX.md](docs/INDEX.md) |
 | Technical product catalog | [CVF Technical Product Catalog](docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md) |
@@ -211,6 +214,9 @@ For code or documentation changes:
 2. update the affected tests or evidence when behavior changes;
 3. run the relevant governance compatibility gates;
 4. do not publish private provenance material into this public repository.
+
+Public Markdown changes follow `GC-045` and
+`CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_GUARD.md`.
 
 Start with [Contributing](CONTRIBUTING.md).
 

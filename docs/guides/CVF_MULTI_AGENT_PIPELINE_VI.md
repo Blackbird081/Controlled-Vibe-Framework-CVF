@@ -28,14 +28,14 @@ CVF cung cấp ba tùy chọn định tuyến tùy theo yêu cầu về chi phí
 
 | Vai trò | Nhiệm vụ chính | 🟢 Eco | 🔵 Balanced | 🔴 Premium |
 |---|---|---|---|---|
-| 🛑 **CVF Intake Gates** | Quét Guard Contracts, chặn rủi ro trước khi vào pipeline | Claude Sonnet 4.6 | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
-| 🗺️ **Orchestrator** | Phân rã yêu cầu → Work Orders có cấu trúc JSON/YAML | DeepSeek V3 | Gemini 2.5 Flash | GPT-4.1 / o3 |
-| 🛠️ **Workers — Làm thô** | Viết code thô, xử lý codebase lớn | DeepSeek V3 (batch) | Gemini 2.5 Flash (1–2M ctx) | Gemini 2.5 Pro |
-| 🛠️ **Workers — Thực thi** | Gõ lệnh Terminal CLI, tự sửa lỗi (self-debug loop) | Qwen3-32B | Qwen3-235B | GPT-4.1 / o3 |
-| 🔍 **Reviewer** | Chấm điểm chất lượng, rà soát bảo mật, rollback nếu cần | — | Claude Sonnet 4.6 / Gemini 2.5 Pro | Claude Opus 4.8 |
-| 🔏 **CVF Closure Gates** | Xác thực toàn vẹn, ký Evidence Receipts, FREEZE | Claude Sonnet 4.6 | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
+| 🛑 **CVF Intake Gates** | Quét Guard Contracts, chặn rủi ro trước khi vào pipeline | Claude Sonnet 4.6 (Medium Effort) | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
+| 🗺️ **Orchestrator** | Phân rã yêu cầu → Work Orders có cấu trúc JSON/YAML | DeepSeek V4 Pro | Gemini 3.5 Flash (Medium/High Effort) | GPT-5.5 |
+| 🛠️ **Workers — Làm thô** | Viết code thô, xử lý codebase lớn (1–2M ctx) | DeepSeek V4 Pro (batch) | Gemini 3.5 Flash (Medium/High Effort) | Gemini 3.5 Flash (Medium/High Effort) |
+| 🛠️ **Workers — Thực thi** | Gõ lệnh Terminal CLI, tự sửa lỗi (self-debug loop) | Qwen 3.7 Max | Qwen 3.7 Max / GPT-5.5 | GPT-5.5 |
+| 🔍 **Reviewer** | Chấm điểm chất lượng, rà soát bảo mật, rollback nếu cần | — | Gemini 3.5 Pro / Claude Sonnet 4.6 (Medium/High Effort) | Claude Opus 4.8 |
+| 🔏 **CVF Closure Gates** | Xác thực toàn vẹn, ký Evidence Receipts, FREEZE | Claude Sonnet 4.6 (Medium/High Effort) | Claude Sonnet 4.6 (Medium/High Effort) | Claude Opus 4.8 |
 
-> **Tên model phản ánh khả năng sẵn có tháng 5/2026.** CVF định tuyến theo vai trò và chính sách — không phải model cố định. Khóa provider thuộc về người dùng; quản trị thuộc về CVF.
+> CVF định tuyến theo vai trò và chính sách — không phải model cố định. Khóa provider thuộc về người dùng; quản trị thuộc về CVF.
 
 ---
 
@@ -61,17 +61,17 @@ graph TD
     CG["🔏 CVF Closure Gates"]:::gate
     Fr["✅ FREEZE / Bàn giao"]:::freeze
 
-    AgIG_EB["🟢/🔵 Claude Sonnet 4.6 — Quét Guard Contracts nhanh"]:::optEco
-    AgIG_O["🔴 Claude Opus 4.8 — Phân tích rủi ro chính sách sâu"]:::optPrem
-    AgOrch_E["🟢 DeepSeek V3 — Rã Work Orders JSON giá rẻ (~15s trễ)"]:::optEco
-    AgOrch_B["🔵 Gemini 2.5 Flash — Tốc độ cực cao (4x TPS)"]:::optBal
-    AgOrch_O["🔴 GPT-4.1 / o3 — Định tuyến ý định phức tạp"]:::optPrem
-    AgWkD["Làm thô — Viết code:<br/>🟢 DeepSeek V3 batch / 🔵 Gemini 2.5 Flash (1–2M ctx)<br/>🔴 Gemini 2.5 Pro"]:::worker
-    AgWkR["Thực thi — Gõ Terminal, tự debug:<br/>Qwen3-32B / Qwen3-235B / GPT-4.1"]:::worker
-    AgRev_B["🔵 Sonnet 4.6 / Gemini 2.5 Pro — Quét lỗi, lập báo cáo"]:::optBal
-    AgRev_O["🔴 Claude Opus 4.8 — Phán quyết phê duyệt tối thượng"]:::optPrem
-    AgCG_EB["🟢/🔵 Claude Sonnet 4.6 — Kiểm tra tính toàn vẹn cấu trúc"]:::optEco
-    AgCG_O["🔴 Claude Opus 4.8 — Ký Evidence Receipts, đọc toàn bộ lịch sử"]:::optPrem
+    AgIG_EB["🟢/🔵 Claude Sonnet 4.6 (Med/High Effort) — Quét Guard Contracts"]:::optEco
+    AgIG_O["🔴 Claude Opus 4.8 — Phân tích ngữ nghĩa sâu, rủi ro chính sách"]:::optPrem
+    AgOrch_E["🟢 DeepSeek V4 Pro — Rã Work Orders JSON siêu rẻ (~15s trễ)"]:::optEco
+    AgOrch_B["🔵 Gemini 3.5 Flash (Med/High Effort) — Tốc độ cực cao (4x TPS)"]:::optBal
+    AgOrch_O["🔴 GPT-5.5 — Định tuyến ý định phức tạp, logic trạng thái đỉnh cao"]:::optPrem
+    AgWkD["Làm thô — Viết code:<br/>🟢 DeepSeek V4 Pro (batch qua đêm)<br/>🔵 Gemini 3.5 Flash (1–2M ctx)"]:::worker
+    AgWkR["Thực thi — Gõ Terminal, tự debug:<br/>Qwen 3.7 Max / GPT-5.5"]:::worker
+    AgRev_B["🔵 Gemini 3.5 Pro / Sonnet 4.6 (Med/High Effort) — Quét lỗi, báo cáo thẩm định"]:::optBal
+    AgRev_O["🔴 Claude Opus 4.8 — Phán quyết tối thượng, chặn 100% bug lọt lưới"]:::optPrem
+    AgCG_EB["🟢/🔵 Claude Sonnet 4.6 (Med/High Effort) — Xác thực cấu trúc"]:::optEco
+    AgCG_O["🔴 Claude Opus 4.8 — Đọc toàn bộ lịch sử, ký Evidence Receipts"]:::optPrem
 
     Op --> IG --> Orch --> Wk --> Rev --> CG --> Fr
     Wk --> AgWkD --> AgWkR
@@ -90,9 +90,9 @@ sequenceDiagram
     autonumber
     actor Op as 👤 Operator (Không cần code)
     participant IG as 🛑 Intake Gates<br/>(Sonnet 4.6 / Opus 4.8)
-    participant Orch as 🗺️ Orchestrator<br/>(DeepSeek V3 / Gemini 2.5 Flash / GPT-4.1)
-    participant Wk as 🛠️ Workers<br/>(Gemini 2.5 / Qwen3 / GPT-4.1)
-    participant Rev as 🔍 Reviewer<br/>(Sonnet 4.6 / Gemini 2.5 Pro / Opus 4.8)
+    participant Orch as 🗺️ Orchestrator<br/>(DeepSeek V4 Pro / Gemini 3.5 Flash / GPT-5.5)
+    participant Wk as 🛠️ Workers<br/>(Gemini 3.5 Flash / Qwen 3.7 Max / GPT-5.5)
+    participant Rev as 🔍 Reviewer<br/>(Gemini 3.5 Pro / Sonnet 4.6 / Opus 4.8)
     participant CG as 🔏 Closure Gates<br/>(Sonnet 4.6 / Opus 4.8)
 
     Op->>IG: Gửi yêu cầu thô (ngôn ngữ tự nhiên)
@@ -112,7 +112,7 @@ sequenceDiagram
             alt Worker bị treo / vòng lặp vô hạn
                 Wk-->>Wk: Kill sandbox → xóa cache → khởi động lại (max 2 lần)
             else Worker hoạt động bình thường
-                Wk->>Wk: Làm thô (Gemini/DeepSeek) → Thực thi & debug (Qwen3/GPT-4.1)
+                Wk->>Wk: Làm thô (Gemini 3.5 Flash / DeepSeek V4 Pro) → Thực thi & debug (Qwen 3.7 Max / GPT-5.5)
             end
             Wk->>Rev: Đẩy code + log CLI
             Note over Rev: Chấm điểm chất lượng & bảo mật
@@ -140,21 +140,21 @@ sequenceDiagram
 [Operator (Không cần code)]
        │
        ▼
-[CVF Intake Gates] ──────► 🟢/🔵 Claude Sonnet 4.6   — Quét Guard Contracts nhanh, tiết kiệm
-       │                   🔴    Claude Opus 4.8        — Phân tích ngữ nghĩa sâu, bảo mật cao
+[CVF Intake Gates] ──────► 🟢/🔵 Claude Sonnet 4.6 (Med/High Effort) — Quét Guard Contracts, nhanh + tiết kiệm
+       │                   🔴    Claude Opus 4.8                        — Phân tích ngữ nghĩa sâu, bảo mật cao
        ▼
-[Orchestrator] ──────────► 🟢    DeepSeek V3            — Rã Work Orders JSON, chi phí tối thiểu
-       │                   🔵    Gemini 2.5 Flash        — Tốc độ cực cao, phù hợp batch lớn
-       │                   🔴    GPT-4.1 / o3            — Định tuyến logic phức tạp, tức thì
+[Orchestrator] ──────────► 🟢    DeepSeek V4 Pro                        — Rã Work Orders JSON, chi phí tối thiểu (~15s trễ)
+       │                   🔵    Gemini 3.5 Flash (Med/High Effort)      — Tốc độ cực cao (4x TPS), giá cực tốt
+       │                   🔴    GPT-5.5                                 — Định tuyến logic tinh vi, lập kế hoạch đỉnh cao
        ▼
-[Workers] ───────────────► 🚀 Làm thô:  Gemini 2.5 Flash / DeepSeek V3  (codebase lớn, 1–2M ctx)
-       │                   🛠️ Thực thi: Qwen3-235B / GPT-4.1             (Terminal CLI, tự debug)
+[Workers] ───────────────► 🚀 Làm thô:  Gemini 3.5 Flash (1–2M ctx) / DeepSeek V4 Pro (batch qua đêm)
+       │                   🛠️ Thực thi: Qwen 3.7 Max / GPT-5.5  (Terminal CLI, tự sửa lỗi)
        ▼
-[Reviewer] ──────────────► 🔵    Sonnet 4.6 / Gemini 2.5 Pro   — Quét lỗi, lập báo cáo thẩm định
-       │                   🔴    Claude Opus 4.8                 — Phán quyết tối thượng, chống bug
+[Reviewer] ──────────────► 🔵    Gemini 3.5 Pro / Claude Sonnet 4.6 (Med/High Effort) — Quét lỗi, lập báo cáo thẩm định
+       │                   🔴    Claude Opus 4.8                                        — Phán quyết tối thượng, chống bug 100%
        ▼
-[CVF Closure Gates] ─────► 🟢/🔵 Claude Sonnet 4.6   — Xác thực cấu trúc, xuất Evidence Receipts
-       │                   🔴    Claude Opus 4.8        — Đọc toàn bộ lịch sử, ký số chống giả mạo
+[CVF Closure Gates] ─────► 🟢/🔵 Claude Sonnet 4.6 (Med/High Effort) — Xác thực cấu trúc, xuất Evidence Receipts
+       │                   🔴    Claude Opus 4.8                        — Đọc toàn bộ lịch sử, ký số chống giả mạo
        ▼
 [FREEZE / Bàn giao]
 ```
@@ -165,35 +165,36 @@ sequenceDiagram
 
 **Bước 1 — Tiếp nhận & Quét lọc (Intake Stage)**
 
-Operator nạp prompt → CVF Intake Gates (Claude Sonnet 4.6 hoặc Opus 4.8) đối chiếu bộ luật rào cản hệ thống (Guard Contracts).
+Operator nạp prompt → CVF Intake Gates đối chiếu Guard Contracts. Option [E/B] dùng Claude Sonnet 4.6 (Medium/High Effort) để quét nhanh và tiết kiệm token. Option [O] dùng Claude Opus 4.8 để phân tích ngữ nghĩa sâu cho các dự án đặc biệt quan trọng.
 
-Xử lý ngoại lệ: Nếu prompt chứa vi phạm chính sách hoặc vượt ngưỡng rủi ro, hệ thống chặn ngay lập tức, xuất biên lai từ chối và ngắt luồng — không đẩy sang các lớp sau để bảo vệ tài nguyên token.
+Xử lý ngoại lệ: Nếu prompt vi phạm chính sách, hệ thống chặn ngay — xuất Evidence Receipt và ngắt luồng mà không đẩy sang các lớp sau, bảo vệ tài nguyên token.
 
 **Bước 2 — Phân rã chỉ thị (Orchestration Stage)**
 
-Orchestrator (DeepSeek V3 / Gemini 2.5 Flash / GPT-4.1) nhận payload sạch → tự động biên dịch cấu trúc JSON/YAML để phân phối Work Orders riêng biệt cho từng Worker.
+Orchestrator nhận payload sạch → biên dịch JSON/YAML để phân phối Work Orders:
+- 🟢 Option [E]: DeepSeek V4 Pro — tách lệnh JSON siêu rẻ, chấp nhận độ trễ ~15 giây
+- 🔵 Option [B]: Gemini 3.5 Flash (Medium/High Effort) — tốc độ sinh chuỗi 4x TPS, chi phí cực thấp
+- 🔴 Option [O]: GPT-5.5 — định tuyến ý định phức tạp, xử lý logic trạng thái tốt nhất ngành
 
 **Bước 3 — Thực thi chuyên sâu (Execution Stage)**
 
-Workers kích hoạt phiên làm việc cô lập (Sandboxed Terminal). Gemini 2.5 Flash / DeepSeek V3 viết mã nháp (Drafting), sau đó chuyển cho Qwen3 / GPT-4.1 gõ lệnh và tự sửa lỗi (Self-debugging loop).
+Workers kích hoạt phiên làm việc cô lập (Sandboxed Terminal):
+- Giai đoạn 1 (Làm thô): Gemini 3.5 Flash (Medium/High Effort) nuốt trọn codebase lớn 1–2M token, sinh code thô với tốc độ chóng mặt. DeepSeek V4 Pro xử lý batch qua đêm để ép chi phí tối thiểu.
+- Giai đoạn 2 (Thực thi & Sửa lỗi): Qwen 3.7 Max / GPT-5.5 gõ lệnh Terminal CLI, tự chạy vòng lặp sửa lỗi cục bộ (Self-debugging).
 
-Xử lý ngoại lệ — Khi Worker bị treo (Timeout):
-- Hệ thống đặt rào cản thời gian 5 phút cho mỗi lệnh CLI
-- Nếu vượt quá: kích hoạt `WorkerTimeoutException` → kill sandbox → xóa cache → khởi động lại (tối đa 2 lần)
-- Nếu vẫn thất bại: báo lỗi lên Orchestrator
+Xử lý ngoại lệ — Worker bị treo (>5 phút): `WorkerTimeoutException` → kill sandbox → xóa cache → khởi động lại (max 2 lần) → báo lỗi lên Orchestrator nếu vẫn thất bại.
 
 **Bước 4 — Thẩm định chất lượng (Review Stage)**
 
-Reviewer (Sonnet 4.6 / Gemini 2.5 Pro / Opus 4.8) đối chiếu đầu ra với Work Orders gốc. Nếu không đạt, trả lại (Rollback) kèm chỉ thị sửa đổi chi tiết.
+Reviewer đối chiếu đầu ra với Work Orders gốc:
+- 🔵 Option [B]: Gemini 3.5 Pro hoặc Claude Sonnet 4.6 (Medium/High Effort) — đọc nhanh toàn bộ mã nguồn, xuất báo cáo thẩm định chi tiết
+- 🔴 Option [O]: Claude Opus 4.8 — đọc báo cáo từ lớp dưới, phán quyết phê duyệt/bác bỏ tối thượng, ngăn chặn 100% bug lọt lưới
 
-Xử lý ngoại lệ — Deadlock (>3 lần từ chối):
-- Kích hoạt `ReviewDeadlockException`
-- Orchestrator hạ cấp mục tiêu: bẻ gãy Work Order thành micro-tasks, hoặc nâng cấp model Worker
-- Nếu vẫn thất bại: dừng hoàn toàn → tín hiệu `Human-Intervention-Required`
+Xử lý ngoại lệ — Reviewer từ chối >3 lần: `ReviewDeadlockException` → Orchestrator hạ cấp thành micro-tasks hoặc nâng cấp model. Nếu vẫn thất bại → `Human-Intervention-Required`.
 
 **Bước 5 — Nghiệm thu & Đóng băng (Closure Stage)**
 
-CVF Closure Gates (Sonnet 4.6 hoặc Opus 4.8) thực hiện rà soát cuối về tính toàn vẹn cấu trúc → ký số → xuất Evidence Receipts → FREEZE.
+CVF Closure Gates thực hiện rà soát cuối (Structural Completeness Guard) → ký số → xuất Evidence Receipts → FREEZE. Option [O] dùng Opus 4.8 để đọc lại toàn bộ lịch sử dự án và ký số chống giả mạo.
 
 ---
 
@@ -231,4 +232,4 @@ MCP giữ "sách luật" và "con dấu duyệt bài". CLI cày cuốc trong san
 > - Tính ổn định production của bất kỳ model bên thứ ba nào (DeepSeek, Gemini, GPT, Qwen)
 > - Độ trễ, chi phí hoặc chất lượng giống hệt nhau giữa các tùy chọn E / B / O
 >
-> Tên model phản ánh phiên bản tháng 5/2026. Các hợp đồng quản trị CVF (`Guard Contracts`, `Evidence Receipts`, `GC-018`, `GC-021`) thuộc sở hữu CVF và ổn định bất kể làn provider nào đang hoạt động.
+> Các hợp đồng quản trị CVF (`Guard Contracts`, `Evidence Receipts`, `GC-018`, `GC-021`) thuộc sở hữu CVF và ổn định bất kể làn provider nào đang hoạt động.

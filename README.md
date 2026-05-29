@@ -240,12 +240,12 @@ CVF offers three routing options depending on cost, speed, and security requirem
 
 | Role | Mission | 🟢 Eco | 🔵 Balanced | 🔴 Premium |
 |---|---|---|---|---|
-| 🛑 **CVF Intake Gates** | Scan Guard Contracts, block risk before pipeline entry | Claude Sonnet 4.6 | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
-| 🗺️ **Orchestrator** | Decompose request → structured Work Orders (JSON/YAML) | DeepSeek V3 | Gemini 2.5 Flash | GPT-4.1 / o3 |
-| 🛠️ **Workers — Draft** | Write raw code, handle large codebases | DeepSeek V3 (batch) | Gemini 2.5 Flash (1–2M ctx) | Gemini 2.5 Pro |
-| 🛠️ **Workers — Execute** | Run Terminal CLI commands, self-debug loop | Qwen3-32B | Qwen3-235B | GPT-4.1 / o3 |
-| 🔍 **Reviewer** | Score quality, scan security, rollback if needed | — | Claude Sonnet 4.6 / Gemini 2.5 Pro | Claude Opus 4.8 |
-| 🔏 **CVF Closure Gates** | Verify integrity, sign Evidence Receipts, FREEZE | Claude Sonnet 4.6 | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
+| 🛑 **CVF Intake Gates** | Scan Guard Contracts, block risk before pipeline entry | Claude Sonnet 4.6 (Medium Effort) | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
+| 🗺️ **Orchestrator** | Decompose request → structured Work Orders (JSON/YAML) | DeepSeek V4 Pro | Gemini 3.5 Flash (Medium/High Effort) | GPT-5.5 |
+| 🛠️ **Workers — Draft** | Write raw code, handle large codebases (1–2M ctx) | DeepSeek V4 Pro (batch) | Gemini 3.5 Flash (Medium/High Effort) | Gemini 3.5 Flash (Medium/High Effort) |
+| 🛠️ **Workers — Execute** | Run Terminal CLI commands, self-debug loop | Qwen 3.7 Max | Qwen 3.7 Max / GPT-5.5 | GPT-5.5 |
+| 🔍 **Reviewer** | Score quality, scan security, rollback if needed | — | Gemini 3.5 Pro / Claude Sonnet 4.6 (Medium/High Effort) | Claude Opus 4.8 |
+| 🔏 **CVF Closure Gates** | Verify integrity, sign Evidence Receipts, FREEZE | Claude Sonnet 4.6 (Medium/High Effort) | Claude Sonnet 4.6 (Medium/High Effort) | Claude Opus 4.8 |
 
 > Model names reflect May 2026 availability. CVF routes by role and policy — not by hardcoded model. Provider keys stay user-owned; governance stays CVF-owned.
 
@@ -271,17 +271,17 @@ graph TD
     CG["🔏 CVF Closure Gates"]:::gate
     Fr["✅ FREEZE / Delivery"]:::freeze
 
-    AgIG_EB["🟢/🔵 Claude Sonnet 4.6 — Scan Guard Contracts"]:::optEco
-    AgIG_O["🔴 Claude Opus 4.8 — Deep policy risk analysis"]:::optPrem
-    AgOrch_E["🟢 DeepSeek V3 — Cheap JSON decomposition (~15s latency)"]:::optEco
-    AgOrch_B["🔵 Gemini 2.5 Flash — Ultra-fast Work Orders (4x TPS)"]:::optBal
-    AgOrch_O["🔴 GPT-4.1 / o3 — Complex intent routing"]:::optPrem
-    AgWkD["Draft — Write raw code:<br/>🟢 DeepSeek V3 batch / 🔵 Gemini 2.5 Flash (1–2M ctx)<br/>🔴 Gemini 2.5 Pro"]:::worker
-    AgWkR["Execute — Terminal CLI, self-debug:<br/>Qwen3-32B / Qwen3-235B / GPT-4.1"]:::worker
-    AgRev_B["🔵 Sonnet 4.6 / Gemini 2.5 Pro — Quality scan + review report"]:::optBal
-    AgRev_O["🔴 Claude Opus 4.8 — Final approval authority"]:::optPrem
-    AgCG_EB["🟢/🔵 Claude Sonnet 4.6 — Structural completeness check"]:::optEco
-    AgCG_O["🔴 Claude Opus 4.8 — Sign Evidence Receipts, full history read"]:::optPrem
+    AgIG_EB["🟢/🔵 Claude Sonnet 4.6 (Med/High Effort) — Scan Guard Contracts"]:::optEco
+    AgIG_O["🔴 Claude Opus 4.8 — Deep semantic risk analysis"]:::optPrem
+    AgOrch_E["🟢 DeepSeek V4 Pro — Cheap JSON decomposition (~15s latency)"]:::optEco
+    AgOrch_B["🔵 Gemini 3.5 Flash (Med/High Effort) — Ultra-fast Work Orders (4x TPS)"]:::optBal
+    AgOrch_O["🔴 GPT-5.5 — Complex intent routing, best-in-class state logic"]:::optPrem
+    AgWkD["Draft — Write raw code:<br/>🟢 DeepSeek V4 Pro (batch) / 🔵 Gemini 3.5 Flash (1–2M ctx)"]:::worker
+    AgWkR["Execute — Terminal CLI, self-debug:<br/>Qwen 3.7 Max / GPT-5.5"]:::worker
+    AgRev_B["🔵 Gemini 3.5 Pro / Sonnet 4.6 (Med/High Effort) — Quality scan + review report"]:::optBal
+    AgRev_O["🔴 Claude Opus 4.8 — Final approval authority, zero bug tolerance"]:::optPrem
+    AgCG_EB["🟢/🔵 Claude Sonnet 4.6 (Med/High Effort) — Structural completeness check"]:::optEco
+    AgCG_O["🔴 Claude Opus 4.8 — Full history read, sign Evidence Receipts"]:::optPrem
 
     Op --> IG --> Orch --> Wk --> Rev --> CG --> Fr
     Wk --> AgWkD --> AgWkR
@@ -298,9 +298,9 @@ sequenceDiagram
     autonumber
     actor Op as 👤 Operator (Non-coder)
     participant IG as 🛑 Intake Gates<br/>(Sonnet 4.6 / Opus 4.8)
-    participant Orch as 🗺️ Orchestrator<br/>(DeepSeek V3 / Gemini 2.5 Flash / GPT-4.1)
-    participant Wk as 🛠️ Workers<br/>(Gemini 2.5 / Qwen3 / GPT-4.1)
-    participant Rev as 🔍 Reviewer<br/>(Sonnet 4.6 / Gemini 2.5 Pro / Opus 4.8)
+    participant Orch as 🗺️ Orchestrator<br/>(DeepSeek V4 Pro / Gemini 3.5 Flash / GPT-5.5)
+    participant Wk as 🛠️ Workers<br/>(Gemini 3.5 Flash / Qwen 3.7 Max / GPT-5.5)
+    participant Rev as 🔍 Reviewer<br/>(Gemini 3.5 Pro / Sonnet 4.6 / Opus 4.8)
     participant CG as 🔏 Closure Gates<br/>(Sonnet 4.6 / Opus 4.8)
 
     Op->>IG: Submit raw request (natural language)
@@ -319,7 +319,7 @@ sequenceDiagram
             alt Worker timeout / infinite loop
                 Wk-->>Wk: Kill sandbox → clear cache → restart (max 2×)
             else Normal execution
-                Wk->>Wk: Draft (Gemini/DeepSeek) → Execute & debug (Qwen3/GPT-4.1)
+                Wk->>Wk: Draft (Gemini 3.5 Flash / DeepSeek V4 Pro) → Execute & debug (Qwen 3.7 Max / GPT-5.5)
             end
             Wk->>Rev: Push code + CLI log
             Note over Rev: Score quality & security
@@ -345,21 +345,21 @@ sequenceDiagram
 [Operator (Non-coder)]
        │
        ▼
-[CVF Intake Gates] ──────► 🟢/🔵 Claude Sonnet 4.6   — Fast Guard Contract scan
-       │                   🔴    Claude Opus 4.8        — Deep semantic analysis, high-security
+[CVF Intake Gates] ──────► 🟢/🔵 Claude Sonnet 4.6 (Med/High Effort) — Scan Guard Contracts
+       │                   🔴    Claude Opus 4.8                        — Deep semantic risk analysis
        ▼
-[Orchestrator] ──────────► 🟢    DeepSeek V3            — Cheap JSON Work Order decomposition
-       │                   🔵    Gemini 2.5 Flash        — Ultra-fast batch throughput
-       │                   🔴    GPT-4.1 / o3            — Complex logic routing
+[Orchestrator] ──────────► 🟢    DeepSeek V4 Pro                        — Cheap JSON decomposition (~15s)
+       │                   🔵    Gemini 3.5 Flash (Med/High Effort)      — Ultra-fast (4x TPS)
+       │                   🔴    GPT-5.5                                 — Complex intent routing
        ▼
-[Workers] ───────────────► 🚀 Draft:   Gemini 2.5 Flash / DeepSeek V3   (large codebase, 1–2M ctx)
-       │                   🛠️ Execute: Qwen3-235B / GPT-4.1              (Terminal CLI, self-debug)
+[Workers] ───────────────► 🚀 Draft:   Gemini 3.5 Flash / DeepSeek V4 Pro  (1–2M ctx, batch overnight)
+       │                   🛠️ Execute: Qwen 3.7 Max / GPT-5.5              (Terminal CLI, self-debug)
        ▼
-[Reviewer] ──────────────► 🔵    Sonnet 4.6 / Gemini 2.5 Pro   — Quality scan, review report
-       │                   🔴    Claude Opus 4.8                 — Final approval, bug-proof gate
+[Reviewer] ──────────────► 🔵    Gemini 3.5 Pro / Sonnet 4.6 (Med/High Effort) — Quality scan, report
+       │                   🔴    Claude Opus 4.8                               — Final approval, zero bugs
        ▼
-[CVF Closure Gates] ─────► 🟢/🔵 Claude Sonnet 4.6   — Structural check, Evidence Receipts
-       │                   🔴    Claude Opus 4.8        — Full history read, tamper-proof sign
+[CVF Closure Gates] ─────► 🟢/🔵 Claude Sonnet 4.6 (Med/High Effort) — Structural check, Evidence Receipts
+       │                   🔴    Claude Opus 4.8                        — Full history read, tamper-proof sign
        ▼
 [FREEZE / Delivery]
 ```

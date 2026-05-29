@@ -48,11 +48,19 @@ Provider choice is useful, but it is subordinate to:
 
 ## Routing Postures
 
-| Posture | Use when | Cost posture | Review posture |
-| --- | --- | --- | --- |
-| Eco | many low-risk tasks, batch drafting, cheap decomposition | minimize live/model cost | keep closure gate active |
-| Balanced | most production drafting and governed non-coder work | optimize speed/cost tradeoff | reviewer required |
-| Premium | critical, sensitive, ambiguous, or high-blast-radius work | accept higher cost | strongest review and closure |
+| Marker | Posture | Use when | Cost posture | Review posture |
+| --- | --- | --- | --- | --- |
+| 🟢 Green | Eco | many low-risk tasks, batch drafting, cheap decomposition | lowest intended cost | keep closure gate active |
+| 🔵 Blue | Balanced | most production drafting and governed non-coder work | best speed/cost tradeoff | reviewer required |
+| 🔴 Red | Premium | critical, sensitive, ambiguous, or high-blast-radius work | highest accepted cost | strongest review and closure |
+
+Cost marker legend:
+
+| Marker | Meaning |
+| --- | --- |
+| 🟢 Green lane | cheapest viable lane; use for decomposition, draft work, or low-risk batch execution |
+| 🔵 Blue lane | default lane; use when speed, quality, and cost all matter |
+| 🔴 Red lane | expensive lane; reserve for high-risk work, final judgment, or sensitive closure |
 
 The posture can change by phase. For example, a workflow can draft in Eco,
 review in Balanced, and close in Premium when the result is important.
@@ -61,19 +69,19 @@ review in Balanced, and close in Premium when the result is important.
 
 | Stage | CVF responsibility | Provider lane pattern |
 | --- | --- | --- |
-| Intake Gates | classify request, policy, risk, and scope before work starts | fast structural/risk scanner for Eco/Balanced; deeper semantic reviewer for Premium |
-| Orchestrator | turn the accepted request into structured work orders | cheap JSON decomposition for Eco; fast work-order generation for Balanced; stronger planner for Premium |
-| Workers - Draft | produce first-pass code, docs, specs, or artifacts | large-context or low-cost batch model |
+| Intake Gates | classify request, policy, risk, and scope before work starts | 🟢/🔵 fast structural scanner; 🔴 deeper semantic risk review |
+| Orchestrator | turn the accepted request into structured work orders | 🟢 cheap JSON decomposition; 🔵 fast work-order generation; 🔴 stronger planner |
+| Workers - Draft | produce first-pass code, docs, specs, or artifacts | 🟢 low-cost batch model; 🔵 large-context fast model; 🔴 stronger coder when risk justifies cost |
 | Workers - Execute | run commands, test, self-debug, or call approved tools | terminal-capable coding model under CVF scope |
-| Reviewer | check quality, security, claim boundary, and evidence | broad reviewer for Balanced; strict final reviewer for Premium |
-| Closure Gates | verify structure, diff, receipts, and final claim | closure model must be conservative and evidence-first |
+| Reviewer | check quality, security, claim boundary, and evidence | 🔵 broad reviewer; 🔴 strict final reviewer |
+| Closure Gates | verify structure, diff, receipts, and final claim | 🔵/🔴 closure model must be conservative and evidence-first |
 
 ## Example Provider Mix
 
 The following is an operator routing profile, not a permanent CVF claim. Replace
 provider/model names with the currently available models in your environment.
 
-| Stage | Eco example | Balanced example | Premium example |
+| Stage | 🟢 Eco example | 🔵 Balanced example | 🔴 Premium example |
 | --- | --- | --- | --- |
 | Intake Gates | Claude Sonnet, medium effort | Claude Sonnet, high effort | Claude Opus class |
 | Orchestrator | DeepSeek Pro class | Gemini Flash class | GPT planning class |
@@ -81,6 +89,14 @@ provider/model names with the currently available models in your environment.
 | Execute Worker | Qwen coder class | Qwen coder class or GPT coder class | GPT coder class |
 | Reviewer | N/A or lightweight review | Gemini Pro class or Claude Sonnet | Claude Opus class |
 | Closure Gates | Claude Sonnet | Claude Sonnet | Claude Opus class |
+
+Compact reading:
+
+```text
+🟢 = spend less while preserving gates
+🔵 = default balance for most non-coder work
+🔴 = spend more only where judgment or risk demands it
+```
 
 ## Visual Flow
 

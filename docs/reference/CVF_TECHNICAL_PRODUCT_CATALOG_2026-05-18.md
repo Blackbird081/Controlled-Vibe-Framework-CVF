@@ -1,6 +1,8 @@
 # CVF Technical Product Catalog
 
-Status: CURRENT - updated 2026-05-27
+Memory class: PUBLIC_REFERENCE_CATALOG
+
+Status: CURRENT - updated 2026-05-29
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -14,6 +16,35 @@ of Controlled Vibe Framework (CVF). It answers three questions:
 
 All capability claims in this catalog are backed by a public evidence
 path. If no evidence path is listed, the capability is roadmap only.
+
+## Owner / Source
+
+Owner: CVF public documentation surface.
+
+Source: public-safe repository files only.
+
+## Scope
+
+This catalog is the public capability index for users, developers, and agents.
+It does not mirror private provenance, hidden IDE sessions, operator-only logs,
+raw provider transcripts, or private roadmap packets unless a public-safe
+artifact exists in this repository.
+
+## Protocol / Contract / Requirements
+
+Every capability row must cite an existing public-sync path or explicitly mark
+the capability as roadmap-only. Public claims must preserve bounded evidence
+language and must not convert private provenance status into a public runtime,
+provider, hosted-readiness, production-readiness, or cost-optimization claim.
+
+## Enforcement / Verification
+
+Before changing this catalog, run the public documentation gates:
+
+```bash
+python governance/compat/check_docs_governance_compat.py
+python governance/compat/check_markdown_structural_completeness.py
+```
 
 ---
 
@@ -128,6 +159,16 @@ only; they do not claim database execution, artifact export blocking, live
 simulation execution, provider behavior, receipt-envelope changes, hosted
 readiness, or production readiness.
 
+On 2026-05-29, the public front door was simplified and the detailed
+multi-agent/provider routing material was moved into a dedicated guide for
+agent, developer, and non-coder operator readers. The guide explains when to
+use lower-cost, balanced, or premium model lanes across intake, orchestration,
+worker, reviewer, and closure roles. It is an operator routing and cost-posture
+guide only; it does not prove model output quality, provider cost optimization,
+governed-route behavior, public release readiness, hosted readiness, or
+production readiness.
+Evidence: `docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md`
+
 ---
 
 ## What CVF Can Do Today
@@ -215,6 +256,7 @@ Evidence:
 | Workflow chain memory read/write proof | proven — bounded two-turn local workflow-chain proof with live Alibaba `qwen-turbo` receipts; summary-only durable memory receipt, no raw memory reinjection claim | `docs/evidence/workflow-chain-memory-proof-2026-05-24.md` |
 | Vertical integration chain readout (VI4) | proven — response-level package on selected live `/api/execute` calls; separates call-level pass rate from event-model denominator; no route-blocking or workflow-engine claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md` |
 | Multi-provider VI4 coverage | proven — bounded live VI4 package proof on Alibaba `qwen-turbo`, DeepSeek `deepseek-chat`, and OpenAI `gpt-4o`; no broad provider stability or parity claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md`, `docs/evidence/provider-lanes.md` |
+| Multi-agent provider routing guide | active — public operator/developer guidance for assigning provider/model lanes by role, effort, and cost posture; includes green/blue/red cost markers; no autonomous routing, model-quality, or cost-optimization proof claimed | `docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md` |
 | Multi-workflow VI coverage | proven — bounded workflow state/recovery readouts for `strategy_analysis`, `marketing_campaign_wizard`, and `brand_voice`; no all-template workflow-engine claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md` |
 | LHW3 workflow connector standards | schema-defined — doc-only connector standards for operational failure trend readout, clarification re-intake, and spec-change workflow packet handoff; no runtime enforcement or provider behavior claim | `docs/roadmaps/CVF_LHW3_WORKFLOW_CONNECTOR_WAVE3_ROADMAP_2026-05-27.md`, `docs/reference/CVF_LHW3_OPERATIONAL_FAILURE_TREND_READOUT_CONNECTOR_SPEC_2026-05-27.md`, `docs/reference/CVF_LHW3_REQUEST_CLARIFICATION_RE_INTAKE_LOOP_CONNECTOR_SPEC_2026-05-27.md`, `docs/reference/CVF_LHW3_SPEC_CHANGE_WORKFLOW_PACKET_CONNECTOR_SPEC_2026-05-27.md` |
 | LHW5 boundary connector standards | schema-defined — doc-only connector standards for database-action boundary records, artifact-export advisory records, and failure-simulation scenario packets; no database execution, export blocking, simulation execution, provider behavior, or receipt-envelope claim | `docs/reference/CVF_LHW5_DATABASE_ACTION_BOUNDARY_CONNECTOR_SPEC_2026-05-27.md`, `docs/reference/CVF_LHW5_ARTIFACT_EXPORT_BOUNDARY_ADVISORY_CONNECTOR_SPEC_2026-05-27.md`, `docs/reference/CVF_LHW5_FAILURE_SIMULATION_SCENARIO_PACKET_CONNECTOR_SPEC_2026-05-27.md` |
@@ -350,6 +392,8 @@ CVF may claim:
   Alibaba and DeepSeek, including second-window repeatability
 - response-level vertical integration packaging on named provider/model lanes
   and selected workflow templates
+- public guidance for multi-agent/provider role routing and cost-posture
+  selection through the dedicated provider-routing guide
 - governed knowledge-backed execution in the proven execute path
 - governed Product Brief workflow with role permission, step traces, and receipt
 - bounded workflow state/recovery readouts for Product Brief,
@@ -368,6 +412,8 @@ CVF does not yet claim:
 
 - complete Agent OS status
 - universal provider parity across all methods
+- automatic provider/model assignment across external IDE extensions or hidden
+  agent tabs based only on the public provider-routing guide
 - full external capability marketplace readiness
 - full legacy repository absorption
 - all-template workflow runtime or broad workflow engine status
@@ -412,4 +458,5 @@ update rules:
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 - `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`
 - `docs/reference/CVF_MODULE_INVENTORY.md`
+- `docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md`
 - `docs/benchmark/` — QBS benchmark results

@@ -216,17 +216,13 @@ For new developers, read in this order: `README.md` -> `ARCHITECTURE.md` -> `EXT
 
 ---
 
-## CVF Multi-Agent Pipeline — Visual Flowchart
+## CVF Multi-Agent Pipeline
+
+🇬🇧 English | [🇻🇳 Tiếng Việt](docs/guides/CVF_MULTI_AGENT_PIPELINE_VI.md)
 
 **Contract:** `cvf.multiAgentPipeline.visual.v1` | **Updated:** 2026-05
 
-> 🇻🇳 **Tiếng Việt** · 🇬🇧 **English**
->
-> Sơ đồ này mô tả vòng lặp thực thi đa tác nhân được CVF kiểm soát — không phải một diagram khái niệm, mà là ánh xạ trực tiếp các gate, vai trò và provider đang vận hành thực tế hôm nay.
->
-> This diagram reflects CVF's actual governed multi-agent execution loop — not a concept sketch, but a direct map of the gates, roles, and providers running in production today.
-
-### Pipeline Structure / Cấu trúc Pipeline
+CVF runs a five-stage governed pipeline between the operator and any AI provider. Every request passes through intake gates, orchestration, execution, review, and closure — with an Evidence Receipt at the end proving what ran, who approved it, and what policy applied.
 
 ```
 Operator → CVF Intake Gates → Orchestrator → Workers → Reviewer → CVF Closure Gates → FREEZE
@@ -234,30 +230,26 @@ Operator → CVF Intake Gates → Orchestrator → Workers → Reviewer → CVF 
 
 CVF offers three routing options depending on cost, speed, and security requirements:
 
-| Option | Profile | Mô tả |
+| Option | Profile | Best for |
 |---|---|---|
-| 🟢 **[E] Eco** | Siêu tiết kiệm / Ultra-lean | Ưu tiên chi phí tối thiểu — ideal for high-volume, low-stakes tasks |
-| 🔵 **[B] Balanced** | Tốc độ cao & Cân bằng / High-speed balanced | Speed + quality balance — the default for most governed workflows |
-| 🔴 **[O] Premium** | Sức mạnh tối đa / Maximum power | Full reasoning depth + maximum security — for critical or sensitive projects |
+| 🟢 **[E] Eco** | Ultra-lean | High-volume, low-stakes tasks — minimum token cost |
+| 🔵 **[B] Balanced** | High-speed balanced | Default for most governed workflows |
+| 🔴 **[O] Premium** | Maximum power | Critical or sensitive projects — full reasoning depth |
 
----
-
-### Role Configuration / Cấu hình vai trò Agent
+### Role Configuration
 
 | Role | Mission | 🟢 Eco | 🔵 Balanced | 🔴 Premium |
 |---|---|---|---|---|
-| 🛑 **CVF Intake Gates** | Quét Guard Contracts, chặn rủi ro trước khi vào pipeline | Claude Sonnet 4.6 | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
-| 🗺️ **Orchestrator** | Phân rã yêu cầu → Work Orders có cấu trúc JSON/YAML | DeepSeek V3 | Gemini 2.5 Flash | GPT-4.1 / o3 |
-| 🛠️ **Workers — Draft** | Viết code thô, xử lý codebase lớn | DeepSeek V3 (batch) | Gemini 2.5 Flash (1–2M ctx) | Gemini 2.5 Pro |
-| 🛠️ **Workers — Execute** | Gõ lệnh Terminal CLI, tự sửa lỗi (self-debug loop) | Qwen3-32B | Qwen3-235B | GPT-4.1 / o3 |
-| 🔍 **Reviewer** | Chấm điểm chất lượng, rà soát bảo mật, rollback nếu cần | — | Claude Sonnet 4.6 / Gemini 2.5 Pro | Claude Opus 4.8 |
-| 🔏 **CVF Closure Gates** | Xác thực toàn vẹn, ký Evidence Receipts, FREEZE | Claude Sonnet 4.6 | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
+| 🛑 **CVF Intake Gates** | Scan Guard Contracts, block risk before pipeline entry | Claude Sonnet 4.6 | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
+| 🗺️ **Orchestrator** | Decompose request → structured Work Orders (JSON/YAML) | DeepSeek V3 | Gemini 2.5 Flash | GPT-4.1 / o3 |
+| 🛠️ **Workers — Draft** | Write raw code, handle large codebases | DeepSeek V3 (batch) | Gemini 2.5 Flash (1–2M ctx) | Gemini 2.5 Pro |
+| 🛠️ **Workers — Execute** | Run Terminal CLI commands, self-debug loop | Qwen3-32B | Qwen3-235B | GPT-4.1 / o3 |
+| 🔍 **Reviewer** | Score quality, scan security, rollback if needed | — | Claude Sonnet 4.6 / Gemini 2.5 Pro | Claude Opus 4.8 |
+| 🔏 **CVF Closure Gates** | Verify integrity, sign Evidence Receipts, FREEZE | Claude Sonnet 4.6 | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
 
-> **Model names reflect May 2026 availability.** CVF routes by role and policy — not by hardcoded model. Provider keys stay user-owned; governance stays CVF-owned.
+> Model names reflect May 2026 availability. CVF routes by role and policy — not by hardcoded model. Provider keys stay user-owned; governance stays CVF-owned.
 
----
-
-### Visual Flowchart / Sơ đồ khối trực quan
+### Visual Flowchart
 
 ```mermaid
 graph TD
@@ -279,146 +271,130 @@ graph TD
     CG["🔏 CVF Closure Gates"]:::gate
     Fr["✅ FREEZE / Delivery"]:::freeze
 
-    AgIG_EB["🟢/🔵 Claude Sonnet 4.6 — Quét Guard Contracts"]:::optEco
-    AgIG_O["🔴 Claude Opus 4.8 — Phân tích rủi ro chính sách nâng cao"]:::optPrem
-
-    AgOrch_E["🟢 DeepSeek V3 — JSON rẻ, chấp nhận trễ 15s"]:::optEco
-    AgOrch_B["🔵 Gemini 2.5 Flash — Tốc độ cực cao (4x TPS)"]:::optBal
-    AgOrch_O["🔴 GPT-4.1 / o3 — Định tuyến logic phức tạp"]:::optPrem
-
-    AgWkD["Draft — Viết code thô:<br/>🟢 DeepSeek V3 batch / 🔵 Gemini 2.5 Flash (1–2M ctx)<br/>🔴 Gemini 2.5 Pro"]:::worker
-    AgWkR["Execute — Gõ Terminal, self-debug:<br/>Qwen3-32B / Qwen3-235B / GPT-4.1"]:::worker
-
-    AgRev_B["🔵 Claude Sonnet 4.6 / Gemini 2.5 Pro — Báo cáo thẩm định"]:::optBal
-    AgRev_O["🔴 Claude Opus 4.8 — Phán quyết tối thượng"]:::optPrem
-
-    AgCG_EB["🟢/🔵 Claude Sonnet 4.6 — Xác thực cấu trúc"]:::optEco
-    AgCG_O["🔴 Claude Opus 4.8 — Ký Evidence Receipts toàn bộ lịch sử"]:::optPrem
+    AgIG_EB["🟢/🔵 Claude Sonnet 4.6 — Scan Guard Contracts"]:::optEco
+    AgIG_O["🔴 Claude Opus 4.8 — Deep policy risk analysis"]:::optPrem
+    AgOrch_E["🟢 DeepSeek V3 — Cheap JSON decomposition (~15s latency)"]:::optEco
+    AgOrch_B["🔵 Gemini 2.5 Flash — Ultra-fast Work Orders (4x TPS)"]:::optBal
+    AgOrch_O["🔴 GPT-4.1 / o3 — Complex intent routing"]:::optPrem
+    AgWkD["Draft — Write raw code:<br/>🟢 DeepSeek V3 batch / 🔵 Gemini 2.5 Flash (1–2M ctx)<br/>🔴 Gemini 2.5 Pro"]:::worker
+    AgWkR["Execute — Terminal CLI, self-debug:<br/>Qwen3-32B / Qwen3-235B / GPT-4.1"]:::worker
+    AgRev_B["🔵 Sonnet 4.6 / Gemini 2.5 Pro — Quality scan + review report"]:::optBal
+    AgRev_O["🔴 Claude Opus 4.8 — Final approval authority"]:::optPrem
+    AgCG_EB["🟢/🔵 Claude Sonnet 4.6 — Structural completeness check"]:::optEco
+    AgCG_O["🔴 Claude Opus 4.8 — Sign Evidence Receipts, full history read"]:::optPrem
 
     Op --> IG --> Orch --> Wk --> Rev --> CG --> Fr
     Wk --> AgWkD --> AgWkR
-
     IG -.-> AgIG_EB & AgIG_O
     Orch -.-> AgOrch_E & AgOrch_B & AgOrch_O
     Rev -.-> AgRev_B & AgRev_O
     CG -.-> AgCG_EB & AgCG_O
 ```
 
----
-
-### Sequence Diagram / Sơ đồ luồng hoạt động
+### Execution Sequence
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor Op as 👤 Operator (Non-coder)
-    participant IG as 🛑 CVF Intake Gates<br/>(Sonnet 4.6 / Opus 4.8)
+    participant IG as 🛑 Intake Gates<br/>(Sonnet 4.6 / Opus 4.8)
     participant Orch as 🗺️ Orchestrator<br/>(DeepSeek V3 / Gemini 2.5 Flash / GPT-4.1)
     participant Wk as 🛠️ Workers<br/>(Gemini 2.5 / Qwen3 / GPT-4.1)
     participant Rev as 🔍 Reviewer<br/>(Sonnet 4.6 / Gemini 2.5 Pro / Opus 4.8)
-    participant CG as 🔏 CVF Closure Gates<br/>(Sonnet 4.6 / Opus 4.8)
+    participant CG as 🔏 Closure Gates<br/>(Sonnet 4.6 / Opus 4.8)
 
-    Op->>IG: Gửi yêu cầu thô (natural language)
-    Note over IG: Quét Guard Contracts — ALLOW / BLOCK
-    alt Yêu cầu vi phạm chính sách
-        IG-->>Op: [Blocked] Evidence Receipt + lý do từ chối
-    else Yêu cầu hợp lệ
-        IG->>Orch: Chuyển payload đã xác thực
+    Op->>IG: Submit raw request (natural language)
+    Note over IG: Scan Guard Contracts — ALLOW / BLOCK
+    alt Policy violation
+        IG-->>Op: [Blocked] Evidence Receipt + rejection reason
+    else Valid request
+        IG->>Orch: Forward validated payload
     end
-
-    Note over Orch: Phân rã mục tiêu → Work Orders (JSON/YAML)
-    Orch->>Wk: Phát hành Work Orders có cấu trúc
+    Note over Orch: Decompose goal → Work Orders (JSON/YAML)
+    Orch->>Wk: Issue structured Work Orders
 
     rect rgb(240, 248, 255)
-        Note over Wk,Rev: VÒNG LẶP THỰC THI & KIỂM DUYỆT (Max 3 lần)
+        Note over Wk,Rev: EXECUTION & REVIEW LOOP (max 3 retries)
         loop Self-debug loop (max retry = 3)
-            alt Worker timeout / vòng lặp vô hạn
-                Wk-->>Wk: Kill sandbox → clear cache → restart (max 2 lần)
-            else Worker bình thường
+            alt Worker timeout / infinite loop
+                Wk-->>Wk: Kill sandbox → clear cache → restart (max 2×)
+            else Normal execution
                 Wk->>Wk: Draft (Gemini/DeepSeek) → Execute & debug (Qwen3/GPT-4.1)
             end
             Wk->>Rev: Push code + CLI log
-            Note over Rev: Chấm điểm chất lượng & bảo mật
-            alt Reviewer từ chối (lần 1–2)
-                Rev-->>Wk: Rollback + chỉ thị sửa đổi chi tiết
-            else Reviewer từ chối > 3 lần
-                Rev-->>Orch: Escalation — báo cáo bế tắc
-                Orch->>Wk: Work Orders mới (micro-tasks / nâng cấp model)
-            else Code đạt chuẩn
-                Rev->>CG: Chuyển giao sản phẩm sạch + log nghiệm thu
+            Note over Rev: Score quality & security
+            alt Reviewer rejects (attempt 1–2)
+                Rev-->>Wk: Rollback + detailed correction instructions
+            else Reviewer rejects > 3×
+                Rev-->>Orch: Escalation — deadlock report
+                Orch->>Wk: New Work Orders (micro-tasks / model upgrade)
+            else Code approved
+                Rev->>CG: Hand off clean product + acceptance log
             end
         end
     end
 
     Note over CG: Structural Completeness Guard
-    CG->>CG: Ký số → xuất Evidence Receipts
-    CG->>Op: Bàn giao hoàn thiện + FREEZE
+    CG->>CG: Sign → issue Evidence Receipts
+    CG->>Op: Deliver final product + FREEZE
 ```
 
----
-
-### ASCII Architecture Map / Sơ đồ văn bản
+### Architecture Map
 
 ```
 [Operator (Non-coder)]
        │
        ▼
-[CVF Intake Gates] ──────► 🟢/🔵 Claude Sonnet 4.6   — Quét Guard Contracts, nhanh + tiết kiệm
-       │                   🔴    Claude Opus 4.8        — Phân tích ngữ nghĩa sâu, bảo mật cao
+[CVF Intake Gates] ──────► 🟢/🔵 Claude Sonnet 4.6   — Fast Guard Contract scan
+       │                   🔴    Claude Opus 4.8        — Deep semantic analysis, high-security
        ▼
-[Orchestrator] ──────────► 🟢    DeepSeek V3            — Rã Work Orders JSON, chi phí tối thiểu
-       │                   🔵    Gemini 2.5 Flash        — Tốc độ cực cao, phù hợp batch lớn
-       │                   🔴    GPT-4.1 / o3            — Định tuyến logic phức tạp, tức thì
+[Orchestrator] ──────────► 🟢    DeepSeek V3            — Cheap JSON Work Order decomposition
+       │                   🔵    Gemini 2.5 Flash        — Ultra-fast batch throughput
+       │                   🔴    GPT-4.1 / o3            — Complex logic routing
        ▼
-[Workers] ───────────────► 🚀 Draft:   Gemini 2.5 Flash / DeepSeek V3  (codebase lớn, 1–2M ctx)
-       │                   🛠️ Execute: Qwen3-235B / GPT-4.1             (Terminal CLI, self-debug)
+[Workers] ───────────────► 🚀 Draft:   Gemini 2.5 Flash / DeepSeek V3   (large codebase, 1–2M ctx)
+       │                   🛠️ Execute: Qwen3-235B / GPT-4.1              (Terminal CLI, self-debug)
        ▼
-[Reviewer] ──────────────► 🔵    Sonnet 4.6 / Gemini 2.5 Pro   — Quét lỗi, lập báo cáo thẩm định
-       │                   🔴    Claude Opus 4.8                 — Phán quyết tối thượng, chống bug
+[Reviewer] ──────────────► 🔵    Sonnet 4.6 / Gemini 2.5 Pro   — Quality scan, review report
+       │                   🔴    Claude Opus 4.8                 — Final approval, bug-proof gate
        ▼
-[CVF Closure Gates] ─────► 🟢/🔵 Claude Sonnet 4.6   — Xác thực cấu trúc, xuất Evidence Receipts
-       │                   🔴    Claude Opus 4.8        — Đọc toàn bộ lịch sử, ký số chống giả mạo
+[CVF Closure Gates] ─────► 🟢/🔵 Claude Sonnet 4.6   — Structural check, Evidence Receipts
+       │                   🔴    Claude Opus 4.8        — Full history read, tamper-proof sign
        ▼
 [FREEZE / Delivery]
 ```
 
----
+### Exception Handling
 
-### Exception Handling / Xử lý ngoại lệ
-
-| Tình huống | Cơ chế | Result |
+| Scenario | Mechanism | Outcome |
 |---|---|---|
-| Intake policy violation | Raise `IntakePolicyViolation` → xuất Evidence Receipt, ngắt luồng | Operator nhận lý do từ chối |
-| Worker timeout (>5 min) | Raise `WorkerTimeoutException` → kill sandbox, restart (max 2×) | Retry hoặc báo lên Orchestrator |
-| Reviewer deadlock (>3×) | Raise `ReviewDeadlockException` → Orchestrator hạ cấp thành micro-tasks | Đơn giản hóa hoặc nâng cấp model |
-| Micro-task vẫn thất bại | Dừng luồng → `Human-Intervention-Required` signal | Operator can thiệp thủ công |
+| Intake policy violation | Raise `IntakePolicyViolation` → issue Evidence Receipt, abort | Operator receives rejection reason |
+| Worker timeout (>5 min) | Raise `WorkerTimeoutException` → kill sandbox, restart (max 2×) | Retry or escalate to Orchestrator |
+| Reviewer deadlock (>3×) | Raise `ReviewDeadlockException` → Orchestrator downgrades to micro-tasks | Simplify scope or upgrade model |
+| Micro-task still fails | Stop pipeline → `Human-Intervention-Required` signal | Operator manual intervention |
 
----
+### MCP + CLI Architecture
 
-### MCP + CLI Combined Architecture / Kiến trúc kết hợp
+CVF uses both MCP (governance control plane) and CLI (execution plane) in complementary lanes:
 
-CVF uses both MCP (governance control plane) and CLI (execution plane) — each owns its lane:
-
-| Layer | Surface | Role |
+| Layer | Surface | Responsibility |
 |---|---|---|
 | 🛡️ MCP — Governance | Intake Gates, Reviewer, Closure Gates | Guard Contracts, policy enforcement, Evidence Receipts |
 | 🛠️ CLI — Execution | Orchestrator, Workers | Work Order dispatch, sandboxed terminal, self-debug loop |
 
-> MCP kiểm soát "sách luật" và "con dấu duyệt bài". CLI cày cuốc trong sandbox cô lập. Hai lớp bổ trợ nhau — không phải thay thế nhau.
+MCP holds the rulebook and approval stamp. CLI executes in an isolated sandbox. Neither replaces the other.
 
----
+### Claim Boundary
 
-### Claim Boundary / Phạm vi tuyên bố
-
-> **Contract version:** `cvf.multiAgentPipeline.visual.v1` (2026-05)
+> **Contract:** `cvf.multiAgentPipeline.visual.v1` (2026-05)
 >
-> This diagram describes CVF's pipeline architecture and role-to-model routing logic. It does **not** claim:
+> This section describes CVF's pipeline architecture and role-to-model routing. It does **not** claim:
 > - Full parity across every model or provider lane
 > - Automated multi-agent scheduling without operator oversight
 > - Production stability of any third-party model (DeepSeek, Gemini, GPT, Qwen)
 > - Identical latency, cost, or quality across options E / B / O
 >
-> Model names reflect May 2026 versions. CVF governance contracts (`Guard Contracts`, `Evidence Receipts`, `GC-018`, `GC-021`) are CVF-owned and stable regardless of which provider lane is active.
+> CVF governance contracts (`Guard Contracts`, `Evidence Receipts`, `GC-018`, `GC-021`) are CVF-owned and remain stable regardless of which provider lane is active.
 
 ---
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { executeAI, AIProvider, ExecutionRequest, CVF_SYSTEM_PROMPT } from '@/lib/ai';
+import { executeAI, CVF_SYSTEM_PROMPT, type AIProvider, type ExecutionRequest, type ExecutionResponse } from '@/lib/ai';
 import { evaluateEnforcement } from '@/lib/enforcement';
 import { getTemplateById } from '@/lib/templates';
 import { verifySessionCookie } from '@/lib/middleware-auth';
@@ -12,6 +12,8 @@ import { validateOutput, shouldRetry, type ValidationResult, type RetryState } f
 import { routeWebProvider } from '@/lib/ai/provider-router-adapter';
 import { lookupGuidedResponse } from './guided.response.registry';
 import { buildKnowledgeSystemPrompt, hasKnowledgeContext } from '@/lib/knowledge-context-injector';
+import { buildAifMemoryReinjectionSystemPrompt, evaluateAifMemoryReinjection } from '@/lib/aif-memory-reinjection';
+import { appendAifMemoryReinjectionAudit, buildAifMemoryReinjectionDeniedResponse } from '@/lib/aif-memory-reinjection-route';
 import { buildExecutionPrompt } from '@/lib/execute-prompt-contract';
 import { emitExecutionTelemetry, resolveTokenUsage } from '@/lib/execute-telemetry';
 import { checkTeamQuota } from '@/lib/quota-guard';
@@ -26,32 +28,23 @@ import { hasValidationRetryBudget, resolveExecutionMaxTokens } from '@/lib/execu
 import { recordReportableDecisionObserved } from '@/lib/false-positive-report';
 import { buildPhase2CProductBriefSliceForRoute } from '@/lib/phase2c-product-brief-slice';
 import { buildPhase3EOperationalMetricsForRoute } from '@/lib/phase3e-operational-emission';
-import {
-    buildWorkflowExecutionProjection,
-    resolveWorkflowBindingForExecution,
-} from '@/lib/workflows/workflow-resolver';
+import { buildWorkflowExecutionProjection, resolveWorkflowBindingForExecution } from '@/lib/workflows/workflow-resolver';
 import { buildRouteAuditMemoryCapture } from '@/lib/audit-memory-receipt';
-import {
-    buildRoleOutputDeniedResponse,
-    buildRolePermissionDeniedResponse,
-} from '@/lib/execute-role-permission-gate';
-import { resolveExecutionCVFRole, resolveExecutionOutputClass } from '@/lib/execute-role-resolver';
-import {
-    buildOutputBypassGuardResult,
-    checkRoleOutputPermission,
-    detectBypassInOutput,
-    resolveGuardAction,
-    shouldRequireSkillPreflight,
-} from '@/lib/execute-route-guards';
+import { buildRouteRequestContextReadout } from '@/lib/route-request-context-readout';
+import { buildVerticalIntegrationReadout } from '@/lib/vertical-integration-readout'; import { buildSpecFirstMediationReadout } from '@/lib/spec-first-mediation'; import { buildEnglishSpecFreezeReadout } from '@/lib/spec-english-freeze'; import { buildVi5LanguageReadout } from '@/lib/vi5-language-readout';
+import { buildPipelineChainReadout } from '@/lib/pipeline-chain-readout';
+import { buildWorkerTimeoutReadout } from '@/lib/worker-timeout-handler';
+import { buildReviewerDeadlockReadout } from '@/lib/reviewer-deadlock-handler';
+import { buildContextBudgetReadout } from '@/lib/context-budget-readout';
+import { buildDurableMemorySystemPrompt, evaluateDurableMemoryRoute, evaluateDurableMemoryWrite, resolveDurableMemoryActorRole } from '@/lib/durable-memory-route';
+import { buildRoleOutputDeniedResponse, buildRolePermissionDeniedResponse } from '@/lib/execute-role-permission-gate';
+import { buildExecutionIdentityDecision } from '@/lib/execution-identity';
+import { evaluateExecutionActorRoleGate, resolveExecutionCVFRole, resolveExecutionOutputClass } from '@/lib/execute-role-resolver';
+import { buildOutputBypassGuardResult, checkRoleOutputPermission, detectBypassInOutput, resolveGuardAction, shouldRequireSkillPreflight } from '@/lib/execute-route-guards';
+import { attachReceiptToDiagnostic, buildExecutionDiagnostic } from '@/lib/execution-diagnostics';
 import { getApprovalStore, type ApprovalRequestRecord } from '../approvals/store';
-import {
-    approvalRecordMatchesActor,
-    buildApprovalActorBinding,
-    buildApprovalRequestSnapshot,
-    computeApprovalRequestHash,
-} from '../approvals/approval-binding';
-import { buildGovernedDecisionOutput } from './route-decision-output';
-
+import { approvalRecordMatchesActor, buildApprovalActorBinding, buildApprovalRequestSnapshot, computeApprovalRequestHash } from '../approvals/approval-binding';
+import { executeVisionRouteRequest, prepareVisionRouteRequest } from './vision-route-helper';
 export async function POST(request: NextRequest) {
     const routeStartedAtMs = Date.now();
     try {
@@ -84,19 +77,13 @@ export async function POST(request: NextRequest) {
                 { status: 401 }
             );
         }
-
         if (!rawBody || typeof rawBody !== 'object') {
             return NextResponse.json({ success: false, error: 'Invalid input payload.' }, { status: 400 });
         }
-
         const body = rawBody as Partial<ExecutionRequest>;
-        body.inputs = Object.fromEntries(
-            Object.entries(body.inputs || {}).map(([k, v]) => [k, String(v ?? '').trim()])
-        );
-        if (typeof body.model === 'string') {
-            body.model = body.model.trim() || undefined;
-        }
-
+        body.inputs = Object.fromEntries(Object.entries(body.inputs || {}).map(([k, v]) => [k, String(v ?? '').trim()]));
+        if (typeof body.model === 'string') body.model = body.model.trim() || undefined;
+        const isVisionExecution = prepareVisionRouteRequest(body).isVisionExecution;
         // ── CP7/CP8: Build governance envelope + policy snapshot id ──────────
         const govEnvelope = buildGovernanceEnvelope({
             routeId: '/api/execute',
@@ -120,15 +107,17 @@ export async function POST(request: NextRequest) {
                 { status: 429, headers: { 'Retry-After': String(limitResult.retryAfterSeconds) } }
             );
         }
-
         // Validate required fields
         if (!body.templateName || !body.inputs || !body.intent) {
             return NextResponse.json(
-                { success: false, error: 'Missing required fields: templateName, inputs, intent' },
+                {
+                    success: false,
+                    error: 'Missing required fields: templateName, inputs, intent',
+                    diagnostic: buildExecutionDiagnostic({ stage: 'request_validation', class: 'invalid_input', httpStatus: 400 }),
+                },
                 { status: 400 }
             );
         }
-
         if (!session && isServiceAllowed && typeof body.knowledgeContext === 'string' && body.knowledgeContext.trim()) {
             await appendAuditEvent({
                 eventType: 'INLINE_KNOWLEDGE_CONTEXT_BLOCKED',
@@ -249,7 +238,6 @@ export async function POST(request: NextRequest) {
 
             approvedRequestRecord = approvalRecord;
         }
-
         // Get API key from environment
         const apiKeyMap: Record<AIProvider, string | undefined> = {
             openai: process.env.OPENAI_API_KEY,
@@ -259,7 +247,6 @@ export async function POST(request: NextRequest) {
             openrouter: process.env.OPENROUTER_API_KEY,
             deepseek: process.env.DEEPSEEK_API_KEY,
         };
-
         // Build the prompt from template inputs
         const userPrompt = buildExecutionPrompt(body as ExecutionRequest);
         const dlpResult = await applyDLPFilter(userPrompt);
@@ -281,27 +268,20 @@ export async function POST(request: NextRequest) {
                 }),
             });
         }
-
         // Safety filters
         const safety = applySafetyFilters(filteredPrompt);
         if (safety.blocked) {
-            const governanceEvidenceReceipt = buildEvidenceReceipt({ envelope: govEnvelope, decision: 'BLOCK', riskLevel: body.cvfRiskLevel, provider, model: 'blocked' });
             return NextResponse.json(
                 {
                     success: false,
                     error: safety.reason || 'Request blocked by safety filters.',
                     details: safety.details,
-                    output: buildGovernedDecisionOutput({ decision: 'BLOCK', reason: safety.reason || 'Request blocked by safety filters.' }),
                     provider,
                     model: 'blocked',
-                    governanceEnvelope: govEnvelope,
-                    policySnapshotId: govEnvelope.policySnapshotId,
-                    governanceEvidenceReceipt,
                 },
                 { status: 400 }
             );
         }
-
         const quotaCheck = await checkTeamQuota(session?.teamId);
         if (quotaCheck.exceeded) {
             try {
@@ -341,33 +321,27 @@ export async function POST(request: NextRequest) {
         const executionTemplateId = template?.id ?? body.templateId;
         const resolvedExecutionRole = resolveExecutionCVFRole(session, isServiceAllowed);
         const resolvedOutputClass = resolveExecutionOutputClass(executionTemplateId, template?.category, mode);
-
+        const executionActorId = session?.userId ?? (isServiceAllowed ? 'service-account' : 'unknown-actor');
+        const executionTargetResource = body.templateName || body.templateId || 'unknown-template';
+        const executionIdentityBase = { actorId: executionActorId, sessionRole: session?.role ?? (isServiceAllowed ? 'service' : null), templateId: executionTemplateId, targetResource: executionTargetResource, resolvedRole: resolvedExecutionRole, resolvedOutputClass };
         if (!resolvedExecutionRole.allowed || !resolvedExecutionRole.permissionRole) {
-            return buildRolePermissionDeniedResponse({
-                session,
-                body,
-                provider,
-                envelope: govEnvelope,
-                resolvedRole: resolvedExecutionRole,
-                resolvedOutputClass,
-            });
+            const executionIdentity = buildExecutionIdentityDecision(executionIdentityBase);
+            return buildRolePermissionDeniedResponse({ session, body, provider, envelope: govEnvelope, resolvedRole: resolvedExecutionRole, resolvedOutputClass, executionIdentity });
         }
-
+        const actorRoleGate = evaluateExecutionActorRoleGate(executionTemplateId, resolvedExecutionRole.role);
+        if (!actorRoleGate.permitted) {
+            const executionIdentity = buildExecutionIdentityDecision({ ...executionIdentityBase, actorRoleGate });
+            await appendAuditEvent({ eventType: 'ACTOR_ROLE_GATE_REJECTED', actorId: executionActorId, actorRole: resolvedExecutionRole.role ?? 'unknown', targetResource: executionTargetResource, action: 'BLOCK_EXECUTION_ACTOR_ROLE', riskLevel: 'R1', phase: 'PHASE C', outcome: 'BLOCKED', payload: withSessionAuditPayload(session, { actor_role_gate_result: 'rejected', allowedActorRoles: actorRoleGate.allowedActorRoles, templateId: executionTemplateId, executionIdentity }) });
+            return NextResponse.json({ success: false, error: 'actor_role_not_permitted', executionIdentity }, { status: 403 });
+        }
         const rolePermission = checkRoleOutputPermission(
             resolvedExecutionRole.permissionRole,
             resolvedOutputClass.outputClass,
         );
+        const executionIdentity = buildExecutionIdentityDecision({ ...executionIdentityBase, actorRoleGate, rolePermission });
 
         if (!rolePermission.allowed) {
-            return buildRoleOutputDeniedResponse({
-                session,
-                body,
-                provider,
-                envelope: govEnvelope,
-                resolvedRole: resolvedExecutionRole,
-                resolvedOutputClass,
-                rolePermission,
-            });
+            return buildRoleOutputDeniedResponse({ session, body, provider, envelope: govEnvelope, resolvedRole: resolvedExecutionRole, resolvedOutputClass, rolePermission, executionIdentity });
         }
         const workflowBinding = resolveWorkflowBindingForExecution(executionTemplateId);
 
@@ -397,17 +371,21 @@ export async function POST(request: NextRequest) {
 
         if (enforcement.status === 'BLOCK') {
             const guidedResponse = lookupGuidedResponse(userPrompt);
-            const governanceEvidenceReceipt = buildEvidenceReceipt({ envelope: govEnvelope, decision: enforcement.status, riskLevel: enforcement.riskGate?.riskLevel, provider, model: 'blocked' });
+            const governanceEvidenceReceipt = buildEvidenceReceipt({
+                envelope: govEnvelope,
+                decision: enforcement.status,
+                riskLevel: enforcement.riskGate?.riskLevel,
+                provider,
+                model: 'blocked',
+            });
             await recordReportableDecisionObserved({
                 receipt: governanceEvidenceReceipt,
                 templateId: body.templateId || body.templateName,
             });
-            const reason = enforcement.reasons.join(' | ') || 'Execution blocked by CVF policy.';
             return NextResponse.json(
                 {
                     success: false,
-                    error: reason,
-                    output: buildGovernedDecisionOutput({ decision: 'BLOCK', reason, guidedResponse }),
+                    error: enforcement.reasons.join(' | ') || 'Execution blocked by CVF policy.',
                     provider,
                     model: 'blocked',
                     enforcement,
@@ -421,18 +399,22 @@ export async function POST(request: NextRequest) {
         }
 
         if (enforcement.status === 'CLARIFY') {
-            const governanceEvidenceReceipt = buildEvidenceReceipt({ envelope: govEnvelope, decision: enforcement.status, riskLevel: enforcement.riskGate?.riskLevel, provider, model: 'clarify' });
+            const governanceEvidenceReceipt = buildEvidenceReceipt({
+                envelope: govEnvelope,
+                decision: enforcement.status,
+                riskLevel: enforcement.riskGate?.riskLevel,
+                provider,
+                model: 'clarify',
+            });
             await recordReportableDecisionObserved({
                 receipt: governanceEvidenceReceipt,
                 templateId: body.templateId || body.templateName,
             });
-            const missing = enforcement.specGate?.missing?.map(field => field.label) || [];
             return NextResponse.json(
                 {
                     success: false,
                     error: 'Spec needs clarification before execution.',
-                    output: buildGovernedDecisionOutput({ decision: 'CLARIFY', missing }),
-                    missing,
+                    missing: enforcement.specGate?.missing?.map(field => field.label) || [],
                     provider,
                     model: 'clarify',
                     enforcement,
@@ -499,7 +481,6 @@ export async function POST(request: NextRequest) {
                     {
                         success: false,
                         error: enforcement.reasons.join(' | ') || 'Human approval required before execution.',
-                        output: buildGovernedDecisionOutput({ decision: 'NEEDS_APPROVAL', approvalId }),
                         provider,
                         model: 'approval-required',
                         enforcement,
@@ -590,6 +571,7 @@ export async function POST(request: NextRequest) {
                         model: 'router-denied',
                         routingDecision: routingResult.decision,
                     }),
+                    diagnostic: buildExecutionDiagnostic({ stage: 'routing', class: 'routing_denied', provider, model: 'router-denied', httpStatus: 403 }),
                 },
                 { status: 403 }
             );
@@ -662,12 +644,19 @@ export async function POST(request: NextRequest) {
                 : null;
         const knowledgeInjected = hasKnowledgeContext(finalKnowledgeContext);
         const knowledgeSource = knowledgeInjected ? 'retrieval' : 'none';
-        const enrichedSystemPrompt = knowledgeInjected
-            ? buildKnowledgeSystemPrompt(CVF_SYSTEM_PROMPT, finalKnowledgeContext, {
-                orgId: session?.orgId,
-                teamId: session?.teamId,
-            })
-            : undefined;
+        const knowledgeSystemPrompt = knowledgeInjected
+            ? buildKnowledgeSystemPrompt(CVF_SYSTEM_PROMPT, finalKnowledgeContext, { orgId: session?.orgId, teamId: session?.teamId })
+            : CVF_SYSTEM_PROMPT;
+        const durableMemoryRoute = evaluateDurableMemoryRoute({ request: body, actorId: executionActorId, actorRole: resolveDurableMemoryActorRole(resolvedExecutionRole.role), defaultQuery: body.intent! });
+        const durableMemorySystemPrompt = durableMemoryRoute.promptBlock ? buildDurableMemorySystemPrompt(knowledgeSystemPrompt, durableMemoryRoute.promptBlock) : knowledgeSystemPrompt;
+        const aifMemoryReinjection = evaluateAifMemoryReinjection(body.aifMemoryReinjection);
+        await appendAifMemoryReinjectionAudit({ decision: aifMemoryReinjection, request: body, session });
+
+        if (aifMemoryReinjection.status === 'denied') {
+            return buildAifMemoryReinjectionDeniedResponse({ decision: aifMemoryReinjection, envelope: govEnvelope, enforcement, guardResult, provider: routedProvider, routingResult, knowledgeSource, knowledgeInjected, knowledgeCollectionId: requestedKnowledgeCollectionId, knowledgeChunkCount: retrievalResult.allowedChunkCount });
+        }
+
+        const enrichedSystemPrompt = aifMemoryReinjection.promptBlock ? buildAifMemoryReinjectionSystemPrompt(durableMemorySystemPrompt, aifMemoryReinjection.promptBlock) : knowledgeInjected || durableMemoryRoute.injected ? durableMemorySystemPrompt : undefined;
 
         if (retrievalResult.droppedChunkCount > 0) {
             await appendAuditEvent({
@@ -692,6 +681,20 @@ export async function POST(request: NextRequest) {
         }
 
         if (!routedApiKey) {
+            const governanceEvidenceReceipt = buildEvidenceReceipt({
+                envelope: govEnvelope,
+                decision: enforcement.status,
+                riskLevel: enforcement.riskGate?.riskLevel,
+                provider: routedProvider,
+                model: 'not configured',
+                routingDecision: routingResult.decision,
+                knowledgeSource,
+                knowledgeInjected,
+                knowledgeCollectionId: requestedKnowledgeCollectionId,
+                knowledgeChunkCount: retrievalResult.allowedChunkCount,
+                aifMemoryReinjection: aifMemoryReinjection.receipt,
+                durableMemoryRead: durableMemoryRoute.receipt,
+            });
             return NextResponse.json(
                 {
                     success: false,
@@ -700,33 +703,24 @@ export async function POST(request: NextRequest) {
                     model: 'not configured',
                     governanceEnvelope: govEnvelope,
                     policySnapshotId: govEnvelope.policySnapshotId,
-                    governanceEvidenceReceipt: buildEvidenceReceipt({
-                        envelope: govEnvelope,
-                        decision: enforcement.status,
-                        riskLevel: enforcement.riskGate?.riskLevel,
-                        provider: routedProvider,
-                        model: 'not configured',
-                        routingDecision: routingResult.decision,
-                        knowledgeSource,
-                        knowledgeInjected,
-                        knowledgeCollectionId: requestedKnowledgeCollectionId,
-                        knowledgeChunkCount: retrievalResult.allowedChunkCount,
-                    }),
+                    governanceEvidenceReceipt,
                 },
                 { status: 400 }
             );
         }
 
         // ── EXECUTE AI with auto-retry on output validation failure ──
-        let aiResult = await executeAI(routedProvider, routedApiKey, filteredPrompt, {
-            model: body.model,
-            maxTokens: executionMaxTokens,
-            ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}),
-        });
+        let aiResult: ExecutionResponse;
+        if (isVisionExecution) {
+            if (routedProvider !== 'alibaba') return NextResponse.json({ success: false, error: 'Vision execution requires the Alibaba qwen-vl-plus provider lane.', provider: routedProvider, model: body.model ?? 'vision-router-error', enforcement, guardResult }, { status: 409 });
+            aiResult = await executeVisionRouteRequest({ apiKey: routedApiKey, body, prompt: filteredPrompt, traceId: govEnvelope.envelopeId });
+        } else {
+            aiResult = await executeAI(routedProvider, routedApiKey, filteredPrompt, { model: body.model, maxTokens: executionMaxTokens, ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}) });
+        }
         let outputValidation: ValidationResult | undefined;
         const retryState: RetryState = { attempt: 0, previousIssues: [] };
 
-        if (aiResult.success) {
+        if (aiResult.success && !isVisionExecution) {
             outputValidation = validateOutput({
                 output: aiResult.output ?? '',
                 intent: body.intent!,
@@ -750,6 +744,7 @@ export async function POST(request: NextRequest) {
                 aiResult = await executeAI(routedProvider, routedApiKey, retryPrompt, {
                     model: body.model,
                     maxTokens: executionMaxTokens,
+                    ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}),
                 });
                 if (!aiResult.success) break;
 
@@ -809,6 +804,8 @@ export async function POST(request: NextRequest) {
                         knowledgeChunkCount: retrievalResult.allowedChunkCount,
                         approvalId: approvedRequestRecord?.id,
                         validationHint: outputValidation.qualityHint,
+                        aifMemoryReinjection: aifMemoryReinjection.receipt,
+                        durableMemoryRead: durableMemoryRoute.receipt,
                     }),
                 },
                 { status: 422 },
@@ -825,7 +822,7 @@ export async function POST(request: NextRequest) {
                         success: false,
                         error: 'Response blocked: governance bypass approval detected in model output.',
                         provider: routedProvider,
-                        model: body.model ?? 'unknown',
+                        model: body.model ?? aiResult.model ?? 'unknown',
                         enforcement,
                         guardResult: bypassGuardResult,
                     },
@@ -850,8 +847,9 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        const usage = aiResult.success && aiResult.output
-            ? resolveTokenUsage(filteredPrompt, aiResult.output, aiResult)
+        const usage = aiResult.success && aiResult.output ? resolveTokenUsage(filteredPrompt, aiResult.output, aiResult) : undefined;
+        const durableMemoryWriteReceipt = aiResult.success && aiResult.output
+            ? evaluateDurableMemoryWrite({ request: body, actorId: executionActorId, actorRole: resolveDurableMemoryActorRole(resolvedExecutionRole.role), output: aiResult.output })
             : undefined;
 
         const governanceEvidenceReceipt = buildEvidenceReceipt({
@@ -867,10 +865,13 @@ export async function POST(request: NextRequest) {
             knowledgeChunkCount: retrievalResult.allowedChunkCount,
             approvalId: approvedRequestRecord?.id,
             validationHint: outputValidation?.qualityHint,
+            aifMemoryReinjection: aifMemoryReinjection.receipt,
+            durableMemoryRead: durableMemoryRoute.receipt,
+            durableMemoryWriteReceipt,
         });
-        const workflowExecution = aiResult.success && workflowBinding
-            ? buildWorkflowExecutionProjection(workflowBinding, governanceEvidenceReceipt.receiptId)
-            : undefined;
+        if (isVisionExecution) governanceEvidenceReceipt.vision = true;
+        const executionDiagnostic = !aiResult.success ? attachReceiptToDiagnostic(aiResult.diagnostic, buildExecutionDiagnostic({ stage: 'provider', class: 'unknown_error', provider: routedProvider, model: body.model ?? aiResult.model ?? routedProvider, latencyMs: aiResult.executionTime }), governanceEvidenceReceipt.receiptId, governanceEvidenceReceipt.envelopeId) : aiResult.success && !aiResult.output ? buildExecutionDiagnostic({ stage: 'provider', class: 'provider_empty_output', provider: routedProvider, model: body.model ?? aiResult.model ?? routedProvider, latencyMs: aiResult.executionTime, receiptId: governanceEvidenceReceipt.receiptId, traceId: governanceEvidenceReceipt.envelopeId }) : undefined;
+        const workflowExecution = aiResult.success && workflowBinding ? buildWorkflowExecutionProjection(workflowBinding, governanceEvidenceReceipt.receiptId) : undefined;
         if (workflowExecution) {
             await appendAuditEvent({
                 eventType: 'WORKFLOW_BINDING_EXECUTED',
@@ -891,6 +892,7 @@ export async function POST(request: NextRequest) {
                     receiptObligations: workflowExecution.receiptObligations,
                     receiptBinding: workflowExecution.receiptBinding,
                     deferredStepIds: workflowExecution.deferredStepIds,
+                    stateMachine: workflowExecution.stateMachine,
                     governanceReceiptId: governanceEvidenceReceipt.receiptId,
                     rolePermission: {
                         role: resolvedExecutionRole.role,
@@ -899,6 +901,7 @@ export async function POST(request: NextRequest) {
                         allowed: rolePermission.allowed,
                         source: resolvedExecutionRole.source,
                     },
+                    executionIdentity,
                 }),
             });
         }
@@ -940,8 +943,13 @@ export async function POST(request: NextRequest) {
             riskLevel: body.cvfRiskLevel ?? enforcement.riskGate?.riskLevel,
             phase: body.cvfPhase,
         });
-        await appendAuditEvent({ ...auditEventPayload, payload: withSessionAuditPayload(session, auditEventPayload.payload) });
-
+        await appendAuditEvent({ ...auditEventPayload, payload: withSessionAuditPayload(session, { ...auditEventPayload.payload, actor_role_gate_result: actorRoleGate.result, executionIdentity }) });
+        const requestContextReadout = buildRouteRequestContextReadout({ request: body, knowledgeContextLength: finalKnowledgeContext?.length ?? 0, retrievedChunkCount: retrievalResult.allowedChunkCount, chainTurnIndex: body.verticalIntegrationChain?.turnIndex });
+        const verticalIntegrationReadout = buildVerticalIntegrationReadout({ evidenceReceipt: governanceEvidenceReceipt, workflowExecution, auditMemoryReceipt, requestContextReadout, phase2cProductBrief, phase3eOperationalMetrics, chainRequest: body.verticalIntegrationChain, actorId: session?.userId ?? (isServiceAllowed ? 'service-account' : 'unknown-actor'), templateId: executionTemplateId });
+        const specFirstMediation = buildSpecFirstMediationReadout({ request: body, template, routeOutcome: { success: aiResult.success, provider: routedProvider, model: body.model ?? aiResult.model ?? routedProvider, decision: enforcement.status, receipt: { receiptId: governanceEvidenceReceipt.receiptId, envelopeId: governanceEvidenceReceipt.envelopeId }, rawTechnicalEvidenceAvailable: true } }); const englishSpecFreeze = buildEnglishSpecFreezeReadout({ request: body, specFirstMediation, providerOutput: aiResult.output });
+        const pipelineChainReadout = buildPipelineChainReadout(body.intent ?? '');
+        const workerTimeoutReadout = buildWorkerTimeoutReadout(Date.now() - routeStartedAtMs);
+        const reviewerDeadlockReadout = buildReviewerDeadlockReadout(); const contextBudgetReadout = buildContextBudgetReadout(resolvedExecutionRole.permissionRole ?? 'OPERATOR');
         return NextResponse.json({
             ...aiResult,
             usage,
@@ -954,6 +962,7 @@ export async function POST(request: NextRequest) {
                 allowed: rolePermission.allowed,
                 source: resolvedExecutionRole.source,
             },
+            executionIdentity,
             providerRouting: {
                 decision: routingResult.decision,
                 selectedProvider: routingResult.selectedProvider,
@@ -963,14 +972,8 @@ export async function POST(request: NextRequest) {
                 requestedProvider: provider,
                 routerOverrode: routingResult.selectedProvider !== null && routingResult.selectedProvider !== provider,
             },
-            knowledgeInjection: {
-                injected: knowledgeInjected,
-                contextLength: finalKnowledgeContext?.length ?? 0,
-                source: knowledgeSource,
-                chunkCount: retrievalResult.allowedChunkCount,
-                collectionId: requestedKnowledgeCollectionId,
-                allowedCollectionIds: retrievalResult.allowedCollectionIds,
-            },
+            knowledgeInjection: { injected: knowledgeInjected, contextLength: finalKnowledgeContext?.length ?? 0, source: knowledgeSource, chunkCount: retrievalResult.allowedChunkCount, collectionId: requestedKnowledgeCollectionId, allowedCollectionIds: retrievalResult.allowedCollectionIds },
+            aifMemoryReinjection: aifMemoryReinjection.receipt, durableMemoryRead: durableMemoryRoute.receipt, durableMemoryWriteReceipt,
             outputValidation: outputValidation ? {
                 qualityHint: outputValidation.qualityHint,
                 issues: outputValidation.issues,
@@ -979,22 +982,19 @@ export async function POST(request: NextRequest) {
             governanceEnvelope: govEnvelope,
             policySnapshotId: govEnvelope.policySnapshotId,
             governanceEvidenceReceipt,
+            ...(executionDiagnostic ? { diagnostic: executionDiagnostic } : {}),
             auditMemoryReceipt,
+            requestContextReadout, verticalIntegrationReadout, specFirstMediation, englishSpecFreeze,
+            ...buildVi5LanguageReadout({ request: body, specFirstMediation, englishSpecFreeze, workflowId: workflowExecution?.workflowId }),
             ...(workflowExecution ? workflowExecution : {}),
-            ...(phase2cProductBrief ? { phase2cProductBrief } : {}),
-            ...(phase3eOperationalMetrics ? { phase3eOperationalMetrics } : {}),
+            ...(phase2cProductBrief ? { phase2cProductBrief } : {}), ...(phase3eOperationalMetrics ? { phase3eOperationalMetrics } : {}),
+            pipelineChainReadout,
+            workerTimeoutReadout,
+            reviewerDeadlockReadout,
+            contextBudgetReadout,
         });
-
     } catch (error) {
         console.error('Execute API error:', error);
-        return NextResponse.json(
-            {
-                success: false,
-                error: error instanceof Error ? error.message : 'Internal server error',
-                provider: 'unknown',
-                model: 'unknown',
-            },
-            { status: 500 }
-        );
+        return NextResponse.json({ success: false, error: error instanceof Error ? error.message : 'Internal server error', provider: 'unknown', model: 'unknown' }, { status: 500 });
     }
 }

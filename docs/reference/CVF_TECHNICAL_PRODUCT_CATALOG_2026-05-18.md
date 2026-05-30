@@ -2,7 +2,7 @@
 
 Memory class: PUBLIC_REFERENCE_CATALOG
 
-Status: CURRENT - updated 2026-05-30
+Status: CURRENT - updated 2026-05-31
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -178,6 +178,28 @@ product surface, hidden IDE histories, or raw operator/provider transcripts.
 Evidence:
 `docs/evidence/cvf-28-05-public-sync-capability-export-2026-05-30.md`
 
+On 2026-05-31, the public-sync subset added three batches of new capability:
+(1) CBP-1 Context Budget Policy — a governed advisory module that exposes a
+`contextBudgetReadout` field in `/api/execute` ALLOW responses. The readout
+surfaces task-class-scoped token budget posture per CVFRole. This is an advisory
+readout only; it does not block execution or enforce context limits.
+Evidence: `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/context-budget-policy.ts`,
+`EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/context-budget-readout.ts`
+(2) INT-1 Generic MCP Adapter — two new MCP tools (`cvf_validate_plan`,
+`cvf_emit_agent_event`) that close the CP2 Plan Validator gap and provide
+a generic event emission entry point for external agent frameworks. Both tools
+are advisory only; they do not block execution. Integration guide now available.
+Evidence: `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/index.ts`,
+`docs/guides/CVF_GENERIC_MCP_ADAPTER_INTEGRATION_GUIDE_2026-05-31.md`
+(3) LHW17-19 connector standard batch — nine documentation-only advisory
+connector specs covering Trust & Isolation hardening, Model Gateway unification,
+Learning Plane Truth/Reputation advisory, Failure Simulation gap-map, CVF
+Positioning governance-layer advisory, Context Management strategy, Integration
+Architecture control points, Event Model governance, and Strategic Compass.
+No runtime enforcement, receipt-envelope extension, or production-readiness
+claim. Evidence: `docs/reference/CVF_LHW17_*`, `docs/reference/CVF_LHW18_*`,
+`docs/reference/CVF_LHW19_*` connector spec files.
+
 ---
 
 ## What CVF Can Do Today
@@ -287,6 +309,9 @@ Evidence:
 | Operational observability | partially absorbed | `docs/evidence/cvf-16-5-runtime-absorption.md` |
 | External asset/capability governance | partially productized | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |
 | Provider streaming contract (`StreamContract`) | schema-defined — bounded to governed pack policy flag | `EXTENSIONS/CVF_MODEL_GATEWAY/src/stream-contract.ts`, `EXTENSIONS/CVF_MODEL_GATEWAY/tests/stream-contract.test.ts` |
+| Context budget advisory readout (`contextBudgetReadout`) | active — additive advisory field in `/api/execute` ALLOW responses; surfaces task-class token budget posture per CVFRole; advisory only, no execution blocking | `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/context-budget-policy.ts`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/context-budget-readout.ts` |
+| Generic MCP adapter tools (`cvf_validate_plan`, `cvf_emit_agent_event`) | active — advisory plan validation (CP2) and generic agent lifecycle event emitter for external frameworks; advisory only, no execution blocking | `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/index.ts`, `docs/guides/CVF_GENERIC_MCP_ADAPTER_INTEGRATION_GUIDE_2026-05-31.md` |
+| LHW17-19 advisory connector standards | schema-defined — nine doc-only connector specs covering Trust & Isolation hardening, Model Gateway unification, Learning Plane Truth/Reputation advisory, Failure Simulation gap-map, CVF Positioning, Context Management strategy, Integration Architecture control points, Event Model governance, and Strategic Compass; no runtime enforcement or receipt-envelope claim | `docs/reference/CVF_LHW17_T1_TRUST_ISOLATION_HARDENING_ADVISORY_CONNECTOR_SPEC_2026-05-30.md`, `docs/reference/CVF_LHW18_T2_CVF_POSITIONING_GOVERNANCE_LAYER_ADVISORY_CONNECTOR_SPEC_2026-05-30.md`, `docs/reference/CVF_LHW19_T1_INTEGRATION_ARCHITECTURE_CONTROL_POINTS_ADVISORY_CONNECTOR_SPEC_2026-05-30.md` |
 | Provider method contracts (`ReasoningContract`, `JsonModeContract`, `ToolCallContract`, `EmbeddingContract`) | schema-defined — gateway contract layer; no provider execution claimed | `EXTENSIONS/CVF_MODEL_GATEWAY/src/reasoning-contract.ts`, `EXTENSIONS/CVF_MODEL_GATEWAY/src/json-mode-contract.ts`, `EXTENSIONS/CVF_MODEL_GATEWAY/src/tool-call-contract.ts`, `EXTENSIONS/CVF_MODEL_GATEWAY/src/embedding-contract.ts` |
 | Governance reliability benchmark CLI (`cvf benchmark governance`, `cvf benchmark run`) | active — 12-metric offline computation against audit JSONL; `run` subcommand emits formatted reliability report | `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/governance-reliability-metrics.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/command.registry.ts`, `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/tests/governance-reliability-metrics.test.ts` |
 | Governance benchmark live metrics | proven — bounded 5-call hosted Alibaba/qwen-turbo benchmark window; call-level result `5/5 PASS`; event-model metrics measured `taskCompletionRate=0.5`, `policyViolationRate=0`, `receiptIntegrityRate=0.5` because each call emits two benchmark events; no SLA or production-readiness claim | `docs/evidence/governance-benchmark-live-metrics-2026-05-24.md` |

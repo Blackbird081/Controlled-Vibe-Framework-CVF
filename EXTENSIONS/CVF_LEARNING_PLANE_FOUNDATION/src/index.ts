@@ -1,37 +1,24 @@
-// W4-T8 — Evaluation Engine Consumer Pipeline Bridge (CP1)
+// AIF-C / AIF-B — Agent Intelligence Foundations
 export {
-  ControlledMemoryGatewayContract,
-  createControlledMemoryGatewayContract,
-} from "./controlled.memory.gateway.contract";
+  CONTROLLED_MEMORY_GATEWAY_PHASE2_VERSION,
+  evaluateMemoryGatewayRequest,
+} from "./controlled-memory-gateway";
 export type {
-  ControlledMemoryCaptureRequest, ControlledMemoryCaptureResult, ControlledMemoryContextSegment,
-  ControlledMemoryDecision, ControlledMemoryGatewayDependencies, ControlledMemoryKind,
-  ControlledMemoryLifecycleState, ControlledMemoryPolicyContext, ControlledMemoryPolicyResult,
-  ControlledMemoryPrivacyReport, ControlledMemoryQueryRequest, ControlledMemoryQueryResult,
-  ControlledMemoryReceipt, ControlledMemoryRecord, ControlledMemoryReinjectionRequest,
-  ControlledMemoryScope, ControlledMemorySensitivity,
-} from "./controlled.memory.gateway.contract";
+  MemoryGatewayDecision,
+  MemoryGatewayOperation,
+  MemoryGatewayPolicyDecision,
+  MemoryGatewayRequest,
+  MemoryGatewayRiskLevel,
+} from "./controlled-memory-gateway";
 export {
-  applyMemoryPrivacyFilter,
-  APPROVED_MEMORY_CAPTURE_SOURCES,
-  isApprovedMemoryCaptureSource,
-  resolveMemoryRetention,
-} from "./controlled.memory.subcontracts";
+  MEMORY_LIFECYCLE_POLICY_VERSION,
+  evaluateLifecycleTransition,
+} from "./memory-lifecycle-policy";
 export type {
-  ApprovedMemoryCaptureSource,
-  MemoryRetentionDecision,
-} from "./controlled.memory.subcontracts";
-
-export {
-  AIF_OPERATIONAL_CONTEXT_PREVIEW_VERSION,
-  buildAifOperationalContextPreview,
-} from "./aif-operational-context-preview";
-export type {
-  AifOperationalContextPreview,
-  AifOperationalContextPreviewInput,
-  AifOperationalContextPreviewOptions,
-  AifOperationalContextPreviewStatus,
-} from "./aif-operational-context-preview";
+  MemoryLifecycleState,
+  MemoryLifecycleTransition,
+  MemoryLifecycleTransitionInput,
+} from "./memory-lifecycle-policy";
 export {
   MEMORY_RETRIEVAL_POLICY_VERSION,
   evaluateRetrievalRequest,
@@ -51,8 +38,34 @@ export type {
   ExcludedMemoryItem,
   MemoryContextBlock,
   MemoryContextItem,
+  MemoryContextPackageEvidence,
   MemoryContextPackageInput,
 } from "./memory-context-packager";
+export {
+  APPROVED_MEMORY_EVENT_HOOKS,
+  DISALLOWED_MEMORY_EVENT_HOOKS,
+  evaluateMemoryEventHook,
+  MEMORY_EVENT_HOOKS_VERSION,
+} from "./memory-event-hooks";
+export type {
+  DisallowedMemoryEventHookType,
+  MemoryEventHookDecision,
+  MemoryEventHookEvaluation,
+  MemoryEventHookInput,
+  MemoryEventHookPolicyDecision,
+  MemoryEventHookReceipt,
+  MemoryEventHookType,
+} from "./memory-event-hooks";
+export {
+  AIF_OPERATIONAL_CONTEXT_PREVIEW_VERSION,
+  buildAifOperationalContextPreview,
+} from "./aif-operational-context-preview";
+export type {
+  AifOperationalContextPreview,
+  AifOperationalContextPreviewInput,
+  AifOperationalContextPreviewOptions,
+  AifOperationalContextPreviewStatus,
+} from "./aif-operational-context-preview";
 export {
   GRAPH_KNOWLEDGE_SCHEMA_VERSION,
   createDependencyGraph,
@@ -71,6 +84,12 @@ export type {
   GraphSourceFile,
 } from "./knowledge/graph/schema/graph-schema";
 export {
+  extractDependencies,
+  extractSymbols,
+  parseFileToAST,
+} from "./knowledge/graph/ast/ast-parser";
+export type { ParsedGraphAst } from "./knowledge/graph/ast/ast-parser";
+export {
   buildSymbolIndex,
   buildSymbolIndexFromGraph,
   buildSymbolIndexFromSources,
@@ -82,6 +101,93 @@ export type {
   SymbolIndex,
   SymbolIndexPersistenceStore,
 } from "./knowledge/graph/index/symbol-index";
+export { GraphSQLiteStore } from "./knowledge/graph/storage/graph-sqlite-store";
+export {
+  mapTaskToQuery,
+  resolveBlastRadius,
+} from "./context_builder/graph/task-query-mapper";
+export type {
+  TaskQuery,
+  TaskQueryType,
+} from "./context_builder/graph/task-query-mapper";
+export {
+  GRAPH_AUTHORITY_GATE_VERSION,
+  evaluateGraphAuthorityGate,
+} from "./knowledge/graph/authority/graph-authority-gate";
+export type {
+  GraphAuthorityDecision,
+  GraphAuthorityGateInput,
+  GraphAuthorityGateResult,
+  GraphAuthorityPolicyDecision,
+  GraphAuthorityReceipt,
+  GraphAuthorityThresholds,
+} from "./knowledge/graph/authority/graph-authority-gate";
+
+// W4-T8 — Evaluation Engine Consumer Pipeline Bridge (CP1)
+export {
+  CONTROLLED_MEMORY_GATEWAY_ADAPTER_VERSION,
+  ControlledMemoryGatewayContract,
+  buildControlledMemoryGatewayAdapterSnapshot,
+  createControlledMemoryGatewayContract,
+} from "./controlled.memory.gateway.contract";
+export type {
+  ControlledMemoryGatewayAdapterSnapshot,
+  ControlledMemoryCaptureRequest, ControlledMemoryCaptureResult, ControlledMemoryContextSegment,
+  ControlledMemoryDecision, ControlledMemoryGatewayDependencies, ControlledMemoryKind,
+  ControlledMemoryLifecycleState, ControlledMemoryPolicyContext, ControlledMemoryPolicyResult,
+  ControlledMemoryPrivacyReport, ControlledMemoryQueryRequest, ControlledMemoryQueryResult,
+  ControlledMemoryReceipt, ControlledMemoryRecord, ControlledMemoryReinjectionRequest,
+  ControlledMemoryScope, ControlledMemorySensitivity,
+} from "./controlled.memory.gateway.contract";
+export {
+  applyMemoryPrivacyFilter,
+  APPROVED_MEMORY_CAPTURE_SOURCES,
+  isApprovedMemoryCaptureSource,
+  resolveMemoryRetention,
+} from "./controlled.memory.subcontracts";
+export type {
+  ApprovedMemoryCaptureSource,
+  MemoryRetentionDecision,
+} from "./controlled.memory.subcontracts";
+export {
+  createFileBackedDurableMemoryStore,
+  createInProcessDurableMemoryStore,
+  DURABLE_MEMORY_STORE_VERSION,
+} from "./durable-memory-store";
+export type {
+  DurableMemoryLifecycleState,
+  DurableMemoryOperation,
+  DurableMemoryReadInput,
+  DurableMemoryReadResult,
+  DurableMemoryReceipt,
+  DurableMemoryRecord,
+  DurableMemoryStore,
+  DurableMemoryTier,
+  DurableMemoryWriteInput,
+  DurableMemoryWriteResult,
+} from "./durable-memory-store";
+export {
+  createWorkingMemoryRuntimeStore,
+  describeRuntimeMemoryTier,
+  evaluateRuntimeMemoryAction,
+  listRuntimeMemoryTierRules,
+  RUNTIME_MEMORY_HIERARCHY_CONTRACT_VERSION,
+} from "./runtime-memory-hierarchy";
+export type {
+  RuntimeMemoryAction,
+  RuntimeMemoryActionDecision,
+  RuntimeMemoryActionInput,
+  RuntimeMemoryActorRole,
+  RuntimeMemoryContaminationBoundary,
+  RuntimeMemoryDecisionState,
+  RuntimeMemorySensitivity,
+  RuntimeMemoryTierRule,
+  WorkingMemoryEntry,
+  WorkingMemoryRetrieveInput,
+  WorkingMemoryRuntimeResult,
+  WorkingMemoryRuntimeStore,
+  WorkingMemoryWriteInput,
+} from "./runtime-memory-hierarchy";
 
 // W4-T8 — Evaluation Engine Consumer Pipeline Bridge (CP1)
 export {
@@ -695,6 +801,20 @@ export type {
   FeedbackLedgerContractDependencies,
 } from "./feedback.ledger.contract";
 export {
+  LEARNING_SIGNAL_INTAKE_BRIDGE_VERSION,
+  LearningSignalIntakeBridge,
+  createLearningSignalIntakeBridge,
+} from "./learning-signal-intake-bridge";
+export type {
+  LearningSignalDefectClass,
+  LearningSignalDisposition,
+  LearningSignalIntakeBridgeDependencies,
+  LearningSignalIntakeInput,
+  LearningSignalIntakeRecord,
+  LearningSignalLane,
+  LearningSignalSeverity,
+} from "./learning-signal-intake-bridge";
+export {
   PatternDetectionContract,
   createPatternDetectionContract,
 } from "./pattern.detection.contract";
@@ -762,3 +882,12 @@ export const LEARNING_PLANE_FOUNDATION_COORDINATION = {
   rationale:
     "Learning plane defines its own LearningFeedbackInput interface — compatible with ExecutionFeedbackSignal but owned independently to avoid runtime coupling.",
 } as const;
+export {
+  CONTEXT_BUDGET_POLICY_VERSION,
+  getContextBudget,
+  resolveTaskClass,
+} from "./context-budget-policy";
+export type {
+  ContextBudgetPolicy,
+  ContextTaskClass,
+} from "./context-budget-policy";

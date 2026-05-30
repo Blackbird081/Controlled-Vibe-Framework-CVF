@@ -2,7 +2,7 @@
 
 Memory class: PUBLIC_REFERENCE_CATALOG
 
-Status: CURRENT - updated 2026-05-29
+Status: CURRENT - updated 2026-05-30
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -169,6 +169,15 @@ governed-route behavior, public release readiness, hosted readiness, or
 production readiness.
 Evidence: `docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md`
 
+On 2026-05-30, the public-sync subset exported a bounded CVF 28.05 capability
+batch for Delta, WCE, EL, PM, LHW15, and LHW16. The export includes public-safe
+reference specs, provider-method evidence records, and a curated evidence
+summary. It does not publish runtime source/tests as a build-clean public
+artifact set, private session handoffs, ignored roadmaps/reviews/baselines as
+product surface, hidden IDE histories, or raw operator/provider transcripts.
+Evidence:
+`docs/evidence/cvf-28-05-public-sync-capability-export-2026-05-30.md`
+
 ---
 
 ## What CVF Can Do Today
@@ -257,6 +266,11 @@ Evidence:
 | Vertical integration chain readout (VI4) | proven — response-level package on selected live `/api/execute` calls; separates call-level pass rate from event-model denominator; no route-blocking or workflow-engine claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md` |
 | Multi-provider VI4 coverage | proven — bounded live VI4 package proof on Alibaba `qwen-turbo`, DeepSeek `deepseek-chat`, and OpenAI `gpt-4o`; no broad provider stability or parity claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md`, `docs/evidence/provider-lanes.md` |
 | Multi-agent provider routing guide | active — public operator/developer guidance for assigning provider/model lanes by role, effort, and cost posture; includes green/blue/red cost markers; no autonomous routing, model-quality, or cost-optimization proof claimed | `docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md` |
+| Delta advisory execution readouts and MCP/CLI wire-in | active boundary documented — additive pipeline-chain readout on selected `/api/execute` responses plus local MCP write/submit tools and whitelisted in-process CLI bridge; no arbitrary shell execution, hosted readiness, production claim, or public-build-ready source export claim | `docs/evidence/cvf-28-05-public-sync-capability-export-2026-05-30.md`, `docs/reference/CVF_DELTA_D2_MCP_WRITE_TOOLS_SECURITY_BOUNDARY_2026-05-29.md`, `docs/reference/CVF_DELTA_D3_SANDBOX_BOUNDARY_SPEC_2026-05-29.md` |
+| Workflow-chain CLI execution and per-role provider payload routing | active boundary documented — local CLI workflow chaining, MA1 packet serialization, and per-role provider-map payload construction; no autonomous provider scheduling, IDE-tab orchestration, or public-build-ready source export claim | `docs/evidence/cvf-28-05-public-sync-capability-export-2026-05-30.md`, `docs/reference/CVF_WCE_W2_MA1_CLI_SERIALIZATION_CONNECTOR_SPEC_2026-05-29.md` |
+| Execution-layer advisory timeout/deadlock readouts | bounded evidence documented — additive worker-timeout and reviewer-deadlock readout boundary on governed `/api/execute` ALLOW responses; no automatic model escalation, work-order decomposition execution, or public-build-ready source export claim | `docs/evidence/cvf-28-05-public-sync-capability-export-2026-05-30.md`, `docs/reference/evidence/execution-layer/CVF_EL2_WORKER_TIMEOUT_EVIDENCE_2026-05-29.md` |
+| Provider-method live proof expansion | partially proven — bounded method capability proofs for Alibaba streaming, DeepSeek json mode, and provider-tool-call boundary records; no universal provider parity, end-user SSE delivery, governed-route proof, hosted readiness, or cost optimization claim | `docs/evidence/cvf-28-05-public-sync-capability-export-2026-05-30.md`, `docs/reference/evidence/provider-methods/json-mode/CVF_PM1_JSON_MODE_DEEPSEEK_CHAT_EVIDENCE_2026-05-29.md`, `docs/reference/evidence/provider-methods/json-mode/CVF_PM1_JSON_MODE_GPT4O_EVIDENCE_2026-05-29.md`, `docs/reference/evidence/provider-methods/streaming/CVF_PM2_STREAMING_QWEN_TURBO_EVIDENCE_2026-05-29.md`, `docs/reference/evidence/provider-methods/tool-call/CVF_PM3_TOOL_CALL_BOUNDARY_RECORD_2026-05-29.md` |
+| LHW15/LHW16 workflow connector standards | schema-defined — documentation-only connector standards for runtime observability trend, workflow resume, context profile packaging, database-action proof, MCP approval proof, and code-intelligence adapter boundary; no runtime execution or receipt-envelope claim | `docs/evidence/cvf-28-05-public-sync-capability-export-2026-05-30.md`, `docs/reference/CVF_LHW15_T1_RUNTIME_OBSERVABILITY_TREND_ADVISORY_CONNECTOR_SPEC_2026-05-30.md`, `docs/reference/CVF_LHW16_T1_DATABASE_ACTION_PROOF_ADVISORY_CONNECTOR_SPEC_2026-05-30.md` |
 | Multi-workflow VI coverage | proven — bounded workflow state/recovery readouts for `strategy_analysis`, `marketing_campaign_wizard`, and `brand_voice`; no all-template workflow-engine claim | `docs/evidence/vertical-integration-provider-workflow-coverage-2026-05-25.md` |
 | LHW3 workflow connector standards | schema-defined — doc-only connector standards for operational failure trend readout, clarification re-intake, and spec-change workflow packet handoff; no runtime enforcement or provider behavior claim | `docs/roadmaps/CVF_LHW3_WORKFLOW_CONNECTOR_WAVE3_ROADMAP_2026-05-27.md`, `docs/reference/CVF_LHW3_OPERATIONAL_FAILURE_TREND_READOUT_CONNECTOR_SPEC_2026-05-27.md`, `docs/reference/CVF_LHW3_REQUEST_CLARIFICATION_RE_INTAKE_LOOP_CONNECTOR_SPEC_2026-05-27.md`, `docs/reference/CVF_LHW3_SPEC_CHANGE_WORKFLOW_PACKET_CONNECTOR_SPEC_2026-05-27.md` |
 | LHW5 boundary connector standards | schema-defined — doc-only connector standards for database-action boundary records, artifact-export advisory records, and failure-simulation scenario packets; no database execution, export blocking, simulation execution, provider behavior, or receipt-envelope claim | `docs/reference/CVF_LHW5_DATABASE_ACTION_BOUNDARY_CONNECTOR_SPEC_2026-05-27.md`, `docs/reference/CVF_LHW5_ARTIFACT_EXPORT_BOUNDARY_ADVISORY_CONNECTOR_SPEC_2026-05-27.md`, `docs/reference/CVF_LHW5_FAILURE_SIMULATION_SCENARIO_PACKET_CONNECTOR_SPEC_2026-05-27.md` |
@@ -394,6 +408,9 @@ CVF may claim:
   and selected workflow templates
 - public guidance for multi-agent/provider role routing and cost-posture
   selection through the dedicated provider-routing guide
+- bounded CVF 28.05 public-sync capability export for Delta/WCE/EL/PM and
+  LHW15/LHW16 through reference specs, public evidence records, and curated
+  evidence summary
 - governed knowledge-backed execution in the proven execute path
 - governed Product Brief workflow with role permission, step traces, and receipt
 - bounded workflow state/recovery readouts for Product Brief,
@@ -417,6 +434,9 @@ CVF does not yet claim:
 - full external capability marketplace readiness
 - full legacy repository absorption
 - all-template workflow runtime or broad workflow engine status
+- public-build-ready runtime source/test export for Delta/WCE/EL/PM
+- that ignored internal roadmaps, reviews, baselines, hidden IDE histories, or
+  session handoffs are public product artifacts
 - runtime enforcement of LHW3/LHW5 connector standards, live failure alerting,
   automatic clarification re-entry, automatic spec-change mutation, database
   execution, export blocking, or live failure-simulation execution

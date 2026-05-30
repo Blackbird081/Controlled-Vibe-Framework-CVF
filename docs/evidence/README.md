@@ -55,6 +55,7 @@ Start with:
 - `post-phase-2b-publicization-readiness.md`
 - `workflow-chain-memory-proof-2026-05-24.md`
 - `vertical-integration-provider-workflow-coverage-2026-05-25.md`
+- `cvf-28-05-public-sync-capability-export-2026-05-30.md`
 - `claim-boundaries.md`
 
 Benchmark methodology is published separately under `docs/benchmark/`. That

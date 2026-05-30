@@ -36,6 +36,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             "markdown structural completeness",
             ["python", "governance/compat/check_markdown_structural_completeness.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
+        (
+            "public export disposition quality",
+            ["python", "governance/compat/check_public_export_disposition.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
+        ),
     ],
     "pre-push": [
         (
@@ -49,6 +53,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
         (
             "markdown structural completeness",
             ["python", "governance/compat/check_markdown_structural_completeness.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
+        ),
+        (
+            "public export disposition quality",
+            ["python", "governance/compat/check_public_export_disposition.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
         (
             "cpf public surface maintainability",

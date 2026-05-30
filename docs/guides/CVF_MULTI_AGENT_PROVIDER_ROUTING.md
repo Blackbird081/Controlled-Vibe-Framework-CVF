@@ -26,7 +26,7 @@ not a provider benchmark, pricing sheet, or production-readiness certificate.
 
 Contract: `cvf.multiAgentPipeline.visual.v1`.
 
-Updated: 2026-05.
+Updated: 2026-05-30.
 
 ## Core Idea
 
@@ -83,12 +83,12 @@ provider/model names with the currently available models in your environment.
 
 | Stage | 🟢 Eco example | 🔵 Balanced example | 🔴 Premium example |
 | --- | --- | --- | --- |
-| Intake Gates | Claude Sonnet, medium effort | Claude Sonnet, high effort | Claude Opus class |
-| Orchestrator | DeepSeek Pro class | Gemini Flash class | GPT planning class |
-| Draft Worker | DeepSeek Pro batch | Gemini Flash large-context | Gemini Flash large-context or stronger coder |
-| Execute Worker | Qwen coder class | Qwen coder class or GPT coder class | GPT coder class |
-| Reviewer | N/A or lightweight review | Gemini Pro class or Claude Sonnet | Claude Opus class |
-| Closure Gates | Claude Sonnet | Claude Sonnet | Claude Opus class |
+| Intake Gates | Claude Sonnet 4.6 (Medium Effort) | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
+| Orchestrator | DeepSeek V4 Pro (~15s latency) | Gemini 3.5 Flash (Medium/High Effort) | GPT-5.5 |
+| Draft Worker | DeepSeek V4 Pro (batch overnight) | Gemini 3.5 Flash (1–2M ctx) | Gemini 3.5 Flash (1–2M ctx) |
+| Execute Worker | Qwen 3.7 Max | Qwen 3.7 Max / GPT-5.5 | GPT-5.5 |
+| Reviewer | — | Gemini 3.5 Pro / Claude Sonnet 4.6 | Claude Opus 4.8 |
+| Closure Gates | Claude Sonnet 4.6 (Medium Effort) | Claude Sonnet 4.6 (High Effort) | Claude Opus 4.8 |
 
 Compact reading:
 
@@ -229,6 +229,29 @@ python governance/compat/check_markdown_structural_completeness.py
 
 Provider/model examples must remain framed as routing examples, not certified
 provider parity or production-readiness claims.
+
+## MCP + CLI Architecture
+
+CVF separates the governance control plane (MCP) from the execution plane (CLI).
+This is the "MCP controls CLI" pattern that makes the pipeline both auditable and
+efficient:
+
+| Surface | Layer | What it does |
+| --- | --- | --- |
+| 🛡️ MCP — Governance | Intake Gates, Reviewer, Closure Gates | Enforces Guard Contracts, validates receipts, advances pipeline stage |
+| 🛠️ CLI — Execution | Orchestrator, Workers | Issues scoped work orders, runs governed CLI stages in-process |
+
+Key MCP tools in the governance surface:
+
+- `cvf_submit_review_receipt` — Reviewer submits structured review evidence through the governance plane (not direct file write)
+- `cvf_advance_pipeline_stage` — Advances the pipeline from one stage to the next after conditions are met
+- `cvf_invoke_cli_stage` — Invokes a whitelisted CVF CLI command (`evaluate`, `status`, `help`) through the MCP surface
+
+MCP holds the rulebook and approval stamp. CLI runs in an isolated in-process
+context. Neither replaces the other — they are complementary lanes.
+
+> Boundary: `cvf_invoke_cli_stage` whitelist is limited to `evaluate`, `status`, `help`.
+> Arbitrary shell execution is never exposed through the MCP surface.
 
 ## Related Artifacts
 

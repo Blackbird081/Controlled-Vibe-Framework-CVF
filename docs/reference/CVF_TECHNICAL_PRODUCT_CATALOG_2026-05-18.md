@@ -178,6 +178,23 @@ product surface, hidden IDE histories, or raw operator/provider transcripts.
 Evidence:
 `docs/evidence/cvf-28-05-public-sync-capability-export-2026-05-30.md`
 
+Also on 2026-05-31 (second batch), the public documentation set added LHW20
+CVF_Important Deep Scan Wave connector standards. These cover three additional
+advisory surfaces from the full 97-file deep scan of the CVF_Important legacy
+folder: (1) Security Hardening Checklist Full — six additional hardening items
+(H4-H9: Capability Hierarchy, Secret TTL, Context Isolation, Agent Comm
+Restriction, Severity Classification, Cross-Check Detection), completing the
+full 9-item checklist (H1-H3 from LHW17); (2) Execution Strategy Model — a
+five-pattern taxonomy (SINGLE_SHOT/ITERATIVE/MULTI_STEP/PARALLEL/TREE) plus
+five enhancement techniques and strategy selection rules; (3) Adaptation Policy
+Engine — six mandatory safety constraints (A1-A6: Risk Budget, Confidence
+Gating, Multi-Signal, Cooldown, Tiered Authority, Rollback) that are required
+prerequisites before Learning Plane activation. All three are documentation
+connector standards only; they do not claim runtime enforcement, receipt-envelope
+changes, provider behavior, hosted readiness, or production readiness.
+Evidence: `docs/reference/CVF_LHW20_T1_*`, `docs/reference/CVF_LHW20_T2_*`,
+`docs/reference/CVF_LHW20_T3_*` connector spec files.
+
 On 2026-05-31, the public-sync subset added three batches of new capability:
 (1) CBP-1 Context Budget Policy — a governed advisory module that exposes a
 `contextBudgetReadout` field in `/api/execute` ALLOW responses. The readout

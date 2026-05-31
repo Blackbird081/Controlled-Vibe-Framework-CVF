@@ -1,6 +1,6 @@
 import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 import type { AifMemoryReinjectionReceipt } from '@/lib/aif-memory-reinjection';
-import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation';
+import type { DurableMemoryReceipt } from '../../../../CVF_LEARNING_PLANE_FOUNDATION/src/durable-memory-store';
 
 /**
  * Web Governance Envelope — CVF W112-T1 (CP7)

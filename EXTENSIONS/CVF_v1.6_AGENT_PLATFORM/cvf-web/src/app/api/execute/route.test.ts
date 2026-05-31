@@ -2,26 +2,25 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-
 const executeAIMock = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
 const appendAuditEventMock = vi.hoisted(() => vi.fn());
 const appendCostEventMock = vi.hoisted(() => vi.fn());
-
 vi.mock('@/lib/ai', () => ({
     executeAI: executeAIMock,
     CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
-
 vi.mock('@/lib/enforcement', () => ({
     evaluateEnforcement: evaluateEnforcementMock,
 }));
-
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
-    withSessionAuditPayload: (session: { impersonation?: { realActorId: string; sessionId: string; impersonatedUserId: string } } | null | undefined, payload?: Record<string, unknown>) => {
+    withSessionAuditPayload: (
+        session: { impersonation?: { realActorId: string, sessionId: string, impersonatedUserId: string } } | null | undefined,
+        payload?: Record<string, unknown>,
+    ) => {
         const nextPayload = { ...(payload ?? {}) };
         if (session?.impersonation) {
             nextPayload.impersonatedBy = session.impersonation.realActorId;
@@ -32,12 +31,10 @@ vi.mock('@/lib/middleware-auth', () => ({
         return Object.keys(nextPayload).length > 0 ? nextPayload : undefined;
     },
 }));
-
 vi.mock('@/lib/quota-guard', () => ({
     checkTeamQuota: checkTeamQuotaMock,
     hasSoftCapAuditEvent: vi.fn().mockResolvedValue(false),
 }));
-
 vi.mock('@/lib/control-plane-events', async () => {
     const actual = await vi.importActual<typeof import('@/lib/control-plane-events')>('@/lib/control-plane-events');
     return {
@@ -46,16 +43,13 @@ vi.mock('@/lib/control-plane-events', async () => {
         appendCostEvent: appendCostEventMock,
     };
 });
-
 import { POST } from './route';
 import { hasValidationRetryBudget, resolveExecutionMaxTokens } from '@/lib/execute-route-budget';
 import { getApprovalStore } from '../approvals/store';
-
 describe('/api/execute', () => {
     const originalEnv = { ...process.env };
     const validOutput = '## Governed Response\n\nThis response provides a structured recommendation with enough detail to satisfy output validation requirements.\n\n1. Review the request context carefully.\n2. Apply the governed execution plan.\n3. Return a concise, safe outcome for the operator.';
     let tempDir = '';
-
     beforeEach(async () => {
         tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-execute-route-'));
         executeAIMock.mockReset();
@@ -95,20 +89,17 @@ describe('/api/execute', () => {
             expiresAt: Date.now() + 1000 * 60 * 60,
         });
     });
-
     afterEach(async () => {
         process.env = { ...originalEnv };
         if (tempDir) {
             await rm(tempDir, { recursive: true, force: true });
         }
     });
-
     it('returns 400 when required fields are missing', async () => {
         const req = new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({ templateName: 'T', inputs: {} }),
         });
-
         const res = await POST(req as never);
         const data = await res.json();
         expect(res.status).toBe(400);
@@ -204,6 +195,7 @@ describe('/api/execute', () => {
 
         const res = await POST(req as never);
         const data = await res.json();
+
         expect(res.status).toBe(200);
         expect(data.rolePermission).toMatchObject({
             role: 'BUILDER',
@@ -211,35 +203,46 @@ describe('/api/execute', () => {
             outputClass: 'artifact',
             allowed: true,
         });
+        expect(data.executionIdentity).toMatchObject({
+            contractVersion: 'cvf.executionIdentity.v1',
+            actorId: 'developer-user',
+            cvfRole: 'BUILDER',
+            decision: 'allowed',
+            authority: {
+                canExecute: true,
+                outputClass: 'artifact',
+                outputAllowed: true,
+                allowedActorRoles: ['OPERATOR', 'BUILDER', 'REVIEWER', 'SERVICE_AGENT'],
+            },
+            executionBoundary: {
+                boundary: 'governed_pack_actor_policy',
+                packPolicyApplied: true,
+            },
+            receiptOwnership: {
+                ownerActorId: 'developer-user',
+                ownerRole: 'BUILDER',
+                source: 'session_actor',
+            },
+        });
         expect(data.workflowId).toBe('workflow.product.create_product_brief.v1');
-        expect(data.stepTraces.map((trace: { stepId: string }) => trace.stepId)).toEqual([
-            'step-1-intake-validation',
-            'step-2-knowledge-retrieval',
-            'step-3-provider-call',
-            'step-5-receipt-emit',
+        const stepIds = data.stepTraces.map((trace: { stepId: string }) => trace.stepId);
+        expect(stepIds).toEqual([
+            'step-1-intake-validation', 'step-2-knowledge-retrieval',
+            'step-3-provider-call', 'step-4-review-gate', 'step-5-receipt-emit',
         ]);
-        expect(data.stepTraces.every((trace: {
-            preconditionChecked: boolean;
-            decision: string;
-            receiptId: string;
-            source: string;
-        }) => (
-            trace.preconditionChecked === true
-            && trace.decision === 'completed'
-            && trace.receiptId === data.governanceEvidenceReceipt.receiptId
-            && trace.source === 'route_dispatch'
-        ))).toBe(true);
-        expect(data.stepTraces.map((trace: { stepId: string }) => trace.stepId))
-            .not.toContain('step-4-review-gate');
-        expect(data.receipts).toEqual(data.receiptBinding.emissions.map((emission: {
-            stepId: string;
-            obligationId: string;
-        }) => ({
-            stepId: emission.stepId,
-            receiptId: data.governanceEvidenceReceipt.receiptId,
-            source: 'governance_evidence_receipt',
-            obligationId: emission.obligationId,
-        })));
+        expect(data.stepTraces).toEqual(expect.arrayContaining([
+            expect.objectContaining({ stepId: 'step-4-review-gate', decision: 'deferred', receiptId: null }),
+            expect.objectContaining({ stepId: 'step-5-receipt-emit', decision: 'deferred', receiptId: null }),
+        ]));
+        expect(data.stateMachine).toMatchObject({
+            contractVersion: 'cvf.workflowStateMachineProjection.v1',
+            workflowId: 'workflow.product.create_product_brief.v1',
+            finalState: 'review_pending',
+            completedStepIds: stepIds.slice(0, 3),
+            deferredStepIds: stepIds.slice(3),
+            waitingStepIds: ['step-5-receipt-emit'],
+        });
+        expect(data.receipts.map((receipt: { stepId: string }) => receipt.stepId)).toEqual(stepIds.slice(0, 3));
         expect(data.receiptObligations.map((obligation: { role: string; actionClass: string }) => [
             obligation.role,
             obligation.actionClass,
@@ -254,7 +257,7 @@ describe('/api/execute', () => {
             workflowId: 'workflow.product.create_product_brief.v1',
             fullMatrixDisposition: 'deferred_with_reason',
         });
-        expect(data.deferredStepIds).toEqual(['step-4-review-gate']);
+        expect(data.deferredStepIds).toEqual(stepIds.slice(3));
         const workflowAuditEvent = appendAuditEventMock.mock.calls
             .map((call: unknown[]) => call[0] as { eventType?: string; payload?: Record<string, unknown> })
             .find((event) => event.eventType === 'WORKFLOW_BINDING_EXECUTED');
@@ -264,8 +267,10 @@ describe('/api/execute', () => {
             stepTraces: data.stepTraces,
             receipts: data.receipts,
             receiptBinding: data.receiptBinding,
-            deferredStepIds: ['step-4-review-gate'],
+            deferredStepIds: stepIds.slice(3),
+            stateMachine: data.stateMachine,
             rolePermission: data.rolePermission,
+            executionIdentity: data.executionIdentity,
         });
         expect(data.auditMemoryReceipt).toMatchObject({
             tier: 'session',
@@ -278,6 +283,8 @@ describe('/api/execute', () => {
                 provenanceRequired: true,
             },
         });
+        expect(data.auditMemoryReceipt.captureRecord).toMatchObject({ contractVersion: 'cvf.agentMemoryCaptureRecord.vi3.v1', eventType: 'execution_result', policyContext: { canReinject: false }, rawSecretStored: false, privateReasoningCaptured: false, promotion: { automaticPromotion: false } });
+        expect(data.auditMemoryReceipt.captureRecord.boundaries).toContain('capture_is_observation_not_permission');
         expect(data.auditMemoryReceipt.receipt.memoryIds).toHaveLength(1);
         const auditMemoryEvent = appendAuditEventMock.mock.calls
             .map((call: unknown[]) => call[0] as { eventType?: string; payload?: Record<string, unknown> })
@@ -288,6 +295,12 @@ describe('/api/execute', () => {
             memoryIds: data.auditMemoryReceipt.receipt.memoryIds,
             memoryTier: 'session',
             memoryContractVersion: 'phaseD.memoryContinuity.v1',
+            memoryCaptureRecordVersion: 'cvf.agentMemoryCaptureRecord.vi3.v1',
+            memoryCaptureCanReinject: false,
+            memoryCaptureRawSecretStored: false,
+            memoryCaptureAutomaticPromotion: false,
+            actor_role_gate_result: 'permitted',
+            executionIdentity: data.executionIdentity,
         });
         expect(executeAIMock).toHaveBeenCalledTimes(1);
         expect(executeAIMock.mock.calls[0][2]).not.toContain('GOVERNANCE_AUDIT_MEMORY_RECEIPT');
@@ -440,6 +453,8 @@ describe('/api/execute', () => {
         ]);
         expect(data.phase3eOperationalMetrics.metrics).toHaveLength(3);
         expect(data.phase3eOperationalMetrics.skippedMetrics.length).toBeGreaterThanOrEqual(7);
+        expect(data.verticalIntegrationReadout.status).toBe('integrated');
+        expect(data.verticalIntegrationReadout.liveReceipt.receiptId).toBe(data.governanceEvidenceReceipt.receiptId);
     });
 
     it('does not attach the Phase 2.C product brief slice for other templates', async () => {
@@ -537,6 +552,15 @@ describe('/api/execute', () => {
         const data = await res.json();
         expect(res.status).toBe(200);
         expect(data.success).toBe(true);
+        expect(data.specFirstMediation).toMatchObject({
+            contractVersion: 'cvf.specFirstMediation.l1.v1',
+            entryMode: 'template_first',
+            workingLanguage: 'en',
+            originalPromptPreserved: true,
+            advisoryOutputIsSourceOnly: true,
+            rawTechnicalEvidenceAvailable: true,
+            implementationAuthorization: 'route_governance_required',
+        });
         expect(executeAIMock).toHaveBeenCalledWith('claude', 'claude-key', expect.any(String), {
             model: undefined,
         });

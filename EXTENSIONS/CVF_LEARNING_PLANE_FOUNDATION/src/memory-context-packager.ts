@@ -30,7 +30,21 @@ export interface MemoryContextBlock {
   sourceMemoryIds: readonly string[];
   excludedMemory: readonly ExcludedMemoryItem[];
   tokenEstimate: number;
+  evidence: MemoryContextPackageEvidence;
   rawMemoryReleased: false;
+}
+
+export interface MemoryContextPackageEvidence {
+  contractVersion: typeof MEMORY_CONTEXT_PACKAGER_VERSION;
+  policyDecision: string;
+  sourceMemoryIds: readonly string[];
+  includedMemoryCount: number;
+  excludedMemoryCount: number;
+  tokenBudget: number;
+  tokenEstimate: number;
+  tokenBudgetExceeded: boolean;
+  rawMemoryReleased: false;
+  canReinject: false;
 }
 
 export function packageMemoryContext(
@@ -80,6 +94,18 @@ export function packageMemoryContext(
     sourceMemoryIds: included.map((item) => item.id),
     excludedMemory: excluded,
     tokenEstimate: usedTokens,
+    evidence: {
+      contractVersion: MEMORY_CONTEXT_PACKAGER_VERSION,
+      policyDecision: input.policyDecision,
+      sourceMemoryIds: included.map((item) => item.id),
+      includedMemoryCount: included.length,
+      excludedMemoryCount: excluded.length,
+      tokenBudget: input.tokenBudget,
+      tokenEstimate: usedTokens,
+      tokenBudgetExceeded: excluded.some((item) => item.reason === "token_budget_exceeded"),
+      rawMemoryReleased: false,
+      canReinject: false,
+    },
     rawMemoryReleased: false,
   };
 }

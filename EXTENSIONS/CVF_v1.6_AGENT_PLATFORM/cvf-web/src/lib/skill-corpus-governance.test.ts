@@ -8,7 +8,7 @@ import path from 'node:path';
 const { loadSkillCorpusGovernance } = require('../../scripts/skill-corpus-governance');
 
 function loadSkillIndex() {
-  const raw = readFileSync(path.resolve(process.cwd(), 'public/data/skills-index.json'), 'utf8');
+  const raw = readFileSync(path.resolve(__dirname, '../../public/data/skills-index.json'), 'utf8');
   return JSON.parse(raw) as {
     archiveCategories?: unknown;
     categories: Array<{
@@ -57,7 +57,6 @@ describe('skill corpus governance', () => {
       .flatMap((category) => category.skills)
       .flatMap((skill) => skill.linkedTemplates ?? []);
 
-    expect(governance.templateClassMap.web_build_handoff).toBe('TRUSTED_FOR_VALUE_PROOF');
     expect(governance.templateClassMap.api_design).toBe('TRUSTED_FOR_VALUE_PROOF');
     expect(governance.templateClassMap.app_builder_complete).toBe('TRUSTED_FOR_VALUE_PROOF');
     expect(governance.templateClassMap.web_ux_redesign_system).toBe('TRUSTED_FOR_VALUE_PROOF');

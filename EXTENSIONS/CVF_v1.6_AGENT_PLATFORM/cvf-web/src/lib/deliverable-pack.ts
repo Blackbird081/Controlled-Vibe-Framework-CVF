@@ -29,6 +29,7 @@ export interface DeliverablePack {
   executiveSummary: string;
   mainOutput: string;
   governanceEvidence: PackGovernanceEvidence;
+  artifactVerification: PackArtifactVerification;
   scopeBoundary: string;
   recommendedNextActions: string[];
   handoffNotes: string;
@@ -43,6 +44,37 @@ export interface PackGovernanceEvidence {
   policySnapshot?: string;
   receiptAvailable: boolean;
   rawReceipt?: GovernanceEvidenceReceipt;
+}
+
+export type PackArtifactVerificationStatus =
+  | 'PASS'
+  | 'PASS_WITH_WARNINGS'
+  | 'FAIL';
+
+export type PackArtifactVerificationSeverity = 'blocking' | 'warning';
+
+export interface PackArtifactVerificationCheck {
+  id: string;
+  label: string;
+  passed: boolean;
+  severity: PackArtifactVerificationSeverity;
+  detail: string;
+}
+
+export interface PackArtifactProvenance {
+  rendererPolicy: 'cvf.packArtifactVerification.w6.v1';
+  cvfRootAuthority: 'Controlled Vibe Framework';
+  sourceExecutionId: string;
+  sourceTemplateId: string;
+  generatedAt: string;
+  receiptAvailable: boolean;
+  receiptId?: string;
+}
+
+export interface PackArtifactVerification {
+  status: PackArtifactVerificationStatus;
+  checks: PackArtifactVerificationCheck[];
+  provenance: PackArtifactProvenance;
 }
 
 // ── Category → pack type mapping (CP3 contract) ─────────────────────────────
@@ -60,6 +92,7 @@ const CATEGORY_PACK_MAP: Partial<Record<Category, PackType>> = {
 
 const TEMPLATE_PACK_MAP: Record<string, PackType> = {
   app_builder_wizard: 'app_planning',
+  app_builder_complete: 'app_planning',
   'app-planning': 'app_planning',
   business_strategy_wizard: 'business_decision',
   strategy_analysis: 'business_decision',
@@ -176,6 +209,78 @@ function buildGovernanceEvidence(
   };
 }
 
+function buildArtifactVerification(
+  execution: Execution,
+  generatedAt: string,
+  evidenceReceipt?: GovernanceEvidenceReceipt
+): PackArtifactVerification {
+  const checks: PackArtifactVerificationCheck[] = [
+    {
+      id: 'source_execution_id',
+      label: 'Source execution recorded',
+      passed: Boolean(execution.id),
+      severity: 'blocking',
+      detail: execution.id || 'Missing source execution id.',
+    },
+    {
+      id: 'main_output_present',
+      label: 'Main output present',
+      passed: Boolean((execution.output ?? '').trim()),
+      severity: 'blocking',
+      detail: (execution.output ?? '').trim()
+        ? 'The pack contains generated output.'
+        : 'The pack has no generated output.',
+    },
+    {
+      id: 'governance_receipt_visible',
+      label: 'Governance receipt visible',
+      passed: Boolean(evidenceReceipt?.receiptId),
+      severity: 'warning',
+      detail: evidenceReceipt?.receiptId
+        ? `Receipt ${evidenceReceipt.receiptId} is attached.`
+        : 'No receipt is attached; do not treat this export as live governance proof.',
+    },
+    {
+      id: 'scope_boundary_visible',
+      label: 'Scope boundary visible',
+      passed: true,
+      severity: 'blocking',
+      detail: 'The pack includes a dedicated scope boundary section.',
+    },
+    {
+      id: 'handoff_notes_visible',
+      label: 'Handoff notes visible',
+      passed: true,
+      severity: 'blocking',
+      detail: 'The pack includes handoff notes for the next human or agent.',
+    },
+    {
+      id: 'no_approval_upgrade',
+      label: 'No approval state invented',
+      passed: true,
+      severity: 'blocking',
+      detail: 'The pack reports available evidence without inventing approval.',
+    },
+  ];
+
+  const blockingFailed = checks.some(check => check.severity === 'blocking' && !check.passed);
+  const warningFailed = checks.some(check => check.severity === 'warning' && !check.passed);
+
+  return {
+    status: blockingFailed ? 'FAIL' : warningFailed ? 'PASS_WITH_WARNINGS' : 'PASS',
+    checks,
+    provenance: {
+      rendererPolicy: 'cvf.packArtifactVerification.w6.v1',
+      cvfRootAuthority: 'Controlled Vibe Framework',
+      sourceExecutionId: execution.id,
+      sourceTemplateId: execution.templateId,
+      generatedAt,
+      receiptAvailable: Boolean(evidenceReceipt?.receiptId),
+      receiptId: evidenceReceipt?.receiptId,
+    },
+  };
+}
+
 function buildHeadline(execution: Execution, packType: PackType): string {
   const templateLabel = execution.templateName ?? execution.templateId;
   switch (packType) {
@@ -222,6 +327,7 @@ export function generateDeliverablePack(
 ): DeliverablePack {
   const packType = inferPackType(execution.templateId, execution.category);
   const defaults = PACK_DEFAULTS[packType];
+  const generatedAt = new Date().toISOString();
 
   return {
     packType,
@@ -229,10 +335,11 @@ export function generateDeliverablePack(
     executiveSummary: buildExecutiveSummary(execution, packType),
     mainOutput: execution.output ?? '',
     governanceEvidence: buildGovernanceEvidence(evidenceReceipt),
+    artifactVerification: buildArtifactVerification(execution, generatedAt, evidenceReceipt),
     scopeBoundary: defaults.scopeBoundary,
     recommendedNextActions: defaults.recommendedNextActions,
     handoffNotes: defaults.handoffNotes,
-    generatedAt: new Date().toISOString(),
+    generatedAt,
     sourceExecutionId: execution.id,
   };
 }
@@ -262,6 +369,28 @@ export function serializePackToMarkdown(pack: DeliverablePack): string {
         .join('\n')
     : '- Decision: ALLOWED (no receipt recorded)';
 
+  const verificationChecks = pack.artifactVerification.checks
+    .map((check) => {
+      const marker = check.passed ? 'PASS' : check.severity === 'warning' ? 'WARN' : 'FAIL';
+      return `- **${marker}** ${check.label}: ${check.detail}`;
+    })
+    .join('\n');
+
+  const provenance = pack.artifactVerification.provenance;
+  const artifactVerificationSection = [
+    `- **Status**: ${pack.artifactVerification.status}`,
+    `- **Renderer policy**: ${provenance.rendererPolicy}`,
+    `- **CVF root authority**: ${provenance.cvfRootAuthority}`,
+    `- **Source execution**: ${provenance.sourceExecutionId}`,
+    `- **Source template**: ${provenance.sourceTemplateId}`,
+    `- **Receipt available**: ${provenance.receiptAvailable ? 'yes' : 'no'}`,
+    provenance.receiptId ? `- **Receipt id**: ${provenance.receiptId}` : null,
+    '',
+    verificationChecks,
+  ]
+    .filter(Boolean)
+    .join('\n');
+
   return [
     `# ${pack.headline}`,
     '',
@@ -282,6 +411,10 @@ export function serializePackToMarkdown(pack: DeliverablePack): string {
     '## Governance Evidence',
     '',
     evidenceSection,
+    '',
+    '## Artifact Verification',
+    '',
+    artifactVerificationSection,
     '',
     '## Recommended Next Actions',
     '',

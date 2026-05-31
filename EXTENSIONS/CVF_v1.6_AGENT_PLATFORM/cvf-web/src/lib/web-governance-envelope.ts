@@ -1,4 +1,6 @@
 import type { GovernanceEvidenceReceipt } from '@/lib/ai';
+import type { AifMemoryReinjectionReceipt } from '@/lib/aif-memory-reinjection';
+import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation';
 
 /**
  * Web Governance Envelope — CVF W112-T1 (CP7)
@@ -73,6 +75,9 @@ export interface BuildGovernanceEvidenceReceiptInput {
     knowledgeChunkCount?: number;
     approvalId?: string;
     validationHint?: string;
+    aifMemoryReinjection?: AifMemoryReinjectionReceipt;
+    durableMemoryRead?: DurableMemoryReceipt;
+    durableMemoryWriteReceipt?: DurableMemoryReceipt;
 }
 
 /**
@@ -119,6 +124,9 @@ export function buildEvidenceReceipt(
         knowledgeChunkCount: input.knowledgeChunkCount,
         approvalId: input.approvalId,
         validationHint: input.validationHint,
+        aifMemoryReinjection: input.aifMemoryReinjection,
+        durableMemoryRead: input.durableMemoryRead,
+        durableMemoryWriteReceipt: input.durableMemoryWriteReceipt,
         generatedAt: input.envelope.requestTimestamp,
     };
 }

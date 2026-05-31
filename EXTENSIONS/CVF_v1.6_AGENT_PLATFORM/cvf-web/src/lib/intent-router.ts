@@ -60,14 +60,6 @@ export interface IntentRouteFallback {
 }
 
 const NON_VN_EN_PATTERN = /[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af\u0600-\u06ff]/;
-const AMBIGUOUS_NONCODER_PROMPTS = [
-  /^make my app better$/i,
-  /^fix the errors$/i,
-  /^set up ai for my business$/i,
-  /^review this plan$/i,
-  /^deploy it now$/i,
-  /^use the best model$/i,
-];
 
 function detectLanguage(input: string): 'vn' | 'en' | 'other' {
   if (!input.trim()) return 'en';
@@ -127,25 +119,7 @@ export function routeIntent(userInput: string): IntentRouteResult | null {
   }
 
   const detected = detectIntent(userInput);
-  const isAmbiguousNoncoderPrompt = AMBIGUOUS_NONCODER_PROMPTS.some(pattern => pattern.test(userInput.trim()));
   const isWeak = detected.suggestedTemplates.length === 0;
-
-  if (isAmbiguousNoncoderPrompt) {
-    return {
-      starterKey: null,
-      recommendedTemplateId: null,
-      recommendedTemplateLabel: null,
-      rationale: `Intent classified as ${detected.friendlyPhase} (${detected.friendlyRisk}), but the request is too ambiguous to choose a governed target. Clarify the goal before routing.`,
-      phase: detected.phase,
-      riskLevel: detected.riskLevel,
-      friendlyPhase: detected.friendlyPhase,
-      friendlyRisk: detected.friendlyRisk,
-      confidence: 'weak',
-      routeType: null,
-      fallback: { reason: 'weak_confidence', suggestion: 'Answer one clarification question so CVF can choose the right governed path.' },
-      intentRoutedAt,
-    };
-  }
 
   // W133 fix: check trusted form routes first — specific multi-word patterns are
   // more precise than wizard detection and should not be shadowed by wizard matches.

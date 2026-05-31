@@ -22,6 +22,36 @@ private provenance, review, baseline, or roadmap material.
 
 This file follows `reference/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_STANDARD.md`
 and must not introduce private provenance links.
+Public docs that author, close, or export governed artifacts must also follow
+`reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`.
+Session bootstrap compatibility is governed by
+`reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`.
+Product-value validation templates are governed by
+`reference/CVF_PRODUCT_VALUE_VALIDATION_CORPUS_TEMPLATE.md`,
+`reference/CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_TEMPLATE.md`,
+`reference/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_TEMPLATE.md`, and
+`reference/CVF_PRODUCT_VALUE_VALIDATION_ASSESSMENT_TEMPLATE.md`.
+Knowledge absorption priority is governed by
+`reference/CVF_KNOWLEDGE_ABSORPTION_AND_EXTENSION_PRIORITY_STANDARD_2026-04-13.md`.
+Template and skill value-proof work is governed by
+`reference/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_STANDARD_2026-04-14.md`,
+`reference/CVF_NON_CODER_VALUE_MEASUREMENT_STANDARD_2026-04-14.md`,
+`../governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md`, and
+`roadmaps/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_ROADMAP_2026-04-14.md`.
+Multi-agent review packets use
+`reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`,
+`reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`, and
+`reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`.
+Boardroom runtime governance uses
+`reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`,
+`reference/CVF_BOARDROOM_SESSION_PACKET_TEMPLATE.md`,
+`reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md`, and
+`reference/CVF_BOARDROOM_TRANSITION_DECISION_TEMPLATE.md`.
+Extension package checks use
+`../governance/toolkit/05_OPERATION/CVF_EXTENSION_PACKAGE_CHECK_GUARD.md`.
+Default memory role follows
+`reference/CVF_MEMORY_RECORD_CLASSIFICATION.md` and
+`../governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`.
 
 ## Start Here
 
@@ -63,4 +93,21 @@ python governance/compat/check_markdown_structural_completeness.py
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
+- `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
+- `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_CORPUS_TEMPLATE.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUBRIC_TEMPLATE.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_RUN_MANIFEST_TEMPLATE.md`
+- `docs/reference/CVF_PRODUCT_VALUE_VALIDATION_ASSESSMENT_TEMPLATE.md`
+- `docs/reference/CVF_KNOWLEDGE_ABSORPTION_AND_EXTENSION_PRIORITY_STANDARD_2026-04-13.md`
+- `docs/reference/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_STANDARD_2026-04-14.md`
+- `docs/reference/CVF_NON_CODER_VALUE_MEASUREMENT_STANDARD_2026-04-14.md`
+- `docs/roadmaps/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_ROADMAP_2026-04-14.md`
+- `docs/reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`
+- `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`
+- `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`
+- `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`
+- `docs/reference/CVF_BOARDROOM_SESSION_PACKET_TEMPLATE.md`
+- `docs/reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md`
+- `docs/reference/CVF_BOARDROOM_TRANSITION_DECISION_TEMPLATE.md`
 - `governance/toolkit/05_OPERATION/CVF_AUDIT_PROTOCOL.md`

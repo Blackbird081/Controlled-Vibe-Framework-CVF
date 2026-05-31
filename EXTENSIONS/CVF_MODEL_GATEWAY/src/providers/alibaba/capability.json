@@ -1,0 +1,20 @@
+{
+  "providerId": "alibaba",
+  "models": [
+    {
+      "modelId": "qwen-turbo",
+      "supportedMethods": ["chat", "stream"],
+      "defaultMethod": "chat"
+    },
+    {
+      "modelId": "qwen3-32b",
+      "supportedMethods": ["complete", "chat"],
+      "defaultMethod": "complete"
+    },
+    {
+      "modelId": "qwen3-235b-a22b-thinking-2507",
+      "supportedMethods": ["complete", "chat", "reasoning"],
+      "defaultMethod": "complete"
+    }
+  ]
+}

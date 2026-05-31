@@ -48,7 +48,7 @@
     { "path": "CVF_v1.5_UX_PLATFORM", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
     { "path": "CVF_v1.5.1_END_USER_ORIENTATION", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
     { "path": "CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
-    { "path": "CVF_v1.6_AGENT_PLATFORM", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
+    { "path": "CVF_v1.6_AGENT_PLATFORM", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "PRIVATE_ENTERPRISE_ONLY", "publicSubsetExport": { "status": "RUNTIME_SOURCE_SUBSET_EXPORTED", "evidence": "docs/evidence/cvf-31-05-public-runtime-source-sync-2026-05-31.md" } },
     { "path": "CVF_v1.6.1_GOVERNANCE_ENGINE", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
     { "path": "CVF_v1.7_CONTROLLED_INTELLIGENCE", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "PRIVATE_ENTERPRISE_ONLY" },
     { "path": "CVF_v1.7.1_SAFETY_RUNTIME", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "PUBLIC_EXPORT_CANDIDATE", "exportReadiness": "NEEDS_PACKAGING" },

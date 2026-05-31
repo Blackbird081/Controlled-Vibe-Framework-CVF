@@ -90,6 +90,33 @@ describe('ai/providers', () => {
             expect(body.temperature).toBe(0.5);
         });
 
+        it('sends the operator-nominated gpt-4o model without leaking the API key', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: 'Response' } }],
+                    usage: { total_tokens: 10 },
+                }),
+            });
+
+            const result = await executeAI('openai', 'sk-test-secret', 'Hello', {
+                model: 'gpt-4o',
+                maxTokens: 1024,
+                temperature: 0.2,
+            });
+
+            expect(result.success).toBe(true);
+            expect(result.provider).toBe('openai');
+            expect(result.model).toBe('gpt-4o');
+            const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+            const headers = fetchMock.mock.calls[0][1].headers;
+            expect(body.model).toBe('gpt-4o');
+            expect(body.max_tokens).toBe(1024);
+            expect(body.temperature).toBe(0.2);
+            expect(JSON.stringify(body)).not.toContain('sk-test-secret');
+            expect(headers.Authorization).toBe('Bearer sk-test-secret');
+        });
+
         it('uses max_completion_tokens for GPT-5 family models', async () => {
             fetchMock.mockResolvedValueOnce({
                 ok: true,
@@ -324,33 +351,55 @@ describe('ai/providers', () => {
             expect(body.temperature).toBe(0.2);
         });
 
-        it('sets Qwen3 thinking parameter according to model capability', async () => {
-            fetchMock.mockResolvedValue({
+        it('sets Qwen3 thinking flags for non-streaming Alibaba models only', async () => {
+            fetchMock.mockResolvedValueOnce({
                 ok: true,
                 json: async () => ({
-                    choices: [{ message: { content: 'qwen3 ok' } }],
+                    choices: [{ message: { content: 'qwen3 standard response' } }],
                     usage: { total_tokens: 12 },
                 }),
             });
 
-            await executeAI('alibaba', 'ali-key', 'Hello', {
-                model: 'qwen3-32b',
-            });
-            let body = JSON.parse(fetchMock.mock.calls[0][1].body);
-            expect(body.model).toBe('qwen3-32b');
-            expect(body.enable_thinking).toBe(false);
+            const qwen3Standard = await executeAI('alibaba', 'ali-key', 'Hello', { model: 'qwen3-32b' });
 
-            await executeAI('alibaba', 'ali-key', 'Hello', {
+            expect(qwen3Standard.success).toBe(true);
+            const standardBody = JSON.parse(fetchMock.mock.calls[fetchMock.mock.calls.length - 1][1].body);
+            expect(standardBody.model).toBe('qwen3-32b');
+            expect(standardBody.enable_thinking).toBe(false);
+            expect(standardBody.stream).toBeUndefined();
+
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: 'qwen3 thinking response' } }],
+                    usage: { total_tokens: 12 },
+                }),
+            });
+
+            const qwen3Thinking = await executeAI('alibaba', 'ali-key', 'Hello', {
                 model: 'qwen3-235b-a22b-thinking-2507',
             });
-            body = JSON.parse(fetchMock.mock.calls[1][1].body);
-            expect(body.model).toBe('qwen3-235b-a22b-thinking-2507');
-            expect(body.enable_thinking).toBe(true);
 
-            await executeAI('alibaba', 'ali-key', 'Hello', {
+            expect(qwen3Thinking.success).toBe(true);
+            const thinkingBody = JSON.parse(fetchMock.mock.calls[fetchMock.mock.calls.length - 1][1].body);
+            expect(thinkingBody.model).toBe('qwen3-235b-a22b-thinking-2507');
+            expect(thinkingBody.enable_thinking).toBe(true);
+            expect(thinkingBody.stream).toBeUndefined();
+
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: 'qwen turbo response' } }],
+                    usage: { total_tokens: 13 },
+                }),
+            });
+
+            const result = await executeAI('alibaba', 'ali-key', 'Hello', {
                 model: 'qwen-turbo',
             });
-            body = JSON.parse(fetchMock.mock.calls[2][1].body);
+
+            expect(result.success).toBe(true);
+            const body = JSON.parse(fetchMock.mock.calls[fetchMock.mock.calls.length - 1][1].body);
             expect(body.model).toBe('qwen-turbo');
             expect(body.enable_thinking).toBeUndefined();
         });

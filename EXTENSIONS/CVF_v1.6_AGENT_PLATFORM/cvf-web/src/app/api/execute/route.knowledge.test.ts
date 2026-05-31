@@ -230,4 +230,120 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
 
     expect(options.systemPrompt as string).toContain('BRAVO-CIRCUIT');
   });
+
+  it('injects AIF memory summaries only when explicit reinjection policy allows it', async () => {
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Use governed continuity memory for this execution',
+        inputs: { question: 'What should we preserve?' },
+        provider: 'openai',
+        aifMemoryReinjection: {
+          enabled: true,
+          purpose: 'continuity proof',
+          scope: 'tenant-a',
+          policy: {
+            actorAuthorized: true,
+            canReinject: true,
+            provenanceScoreThreshold: 0.7,
+          },
+          memory: [
+            {
+              id: 'mem-safe',
+              summary: 'Preserve the governed launch constraint summary.',
+              provenanceScore: 0.95,
+              lifecycleState: 'semantic',
+            },
+            {
+              id: 'mem-raw',
+              summary: 'Do not include raw payloads.',
+              content: 'RAW-CONTENT-SHOULD-NOT-APPEAR',
+              provenanceScore: 0.99,
+              lifecycleState: 'semantic',
+            },
+          ],
+        },
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+
+    expect(res.status).toBe(200);
+    expect(options.systemPrompt as string).toContain('## GOVERNED AIF MEMORY REINJECTION');
+    expect(options.systemPrompt as string).toContain('mem-safe: Preserve the governed launch constraint summary.');
+    expect(options.systemPrompt as string).not.toContain('RAW-CONTENT-SHOULD-NOT-APPEAR');
+    expect(data.aifMemoryReinjection).toMatchObject({
+      requested: true,
+      injected: true,
+      mode: 'summary_only',
+      memoryIds: ['mem-safe'],
+      reason: 'aif_memory_reinjection_summary_only_authorized',
+    });
+    expect(data.governanceEvidenceReceipt.aifMemoryReinjection.memoryIds).toEqual(['mem-safe']);
+  });
+
+  it('blocks AIF memory reinjection when actor policy does not authorize it', async () => {
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Attempt unauthorized continuity memory',
+        inputs: { question: 'What should we preserve?' },
+        provider: 'openai',
+        aifMemoryReinjection: {
+          enabled: true,
+          policy: {
+            actorAuthorized: false,
+            canReinject: true,
+          },
+          memory: [{ id: 'mem-safe', summary: 'Safe summary', lifecycleState: 'semantic' }],
+        },
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.error).toBe('aif_memory_reinjection_policy_denied');
+    expect(data.governanceEvidenceReceipt.aifMemoryReinjection.injected).toBe(false);
+    expect(executeAIMock).not.toHaveBeenCalled();
+  });
+
+  it('blocks AIF memory reinjection when all requested memories are secret or disputed', async () => {
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Attempt unsafe continuity memory',
+        inputs: { question: 'What should we preserve?' },
+        provider: 'openai',
+        aifMemoryReinjection: {
+          enabled: true,
+          policy: {
+            actorAuthorized: true,
+            canReinject: true,
+          },
+          memory: [
+            { id: 'mem-secret', summary: 'Secret summary', containsSecret: true, lifecycleState: 'semantic' },
+            { id: 'mem-disputed', summary: 'Disputed summary', lifecycleState: 'disputed' },
+          ],
+        },
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.error).toBe('aif_memory_reinjection_no_eligible_summary_memory');
+    expect(data.governanceEvidenceReceipt.aifMemoryReinjection.excluded).toEqual(expect.arrayContaining([
+      { id: 'mem-secret', reason: 'privacy_filtered' },
+      { id: 'mem-disputed', reason: 'lifecycle_disputed' },
+    ]));
+    expect(executeAIMock).not.toHaveBeenCalled();
+  });
 });

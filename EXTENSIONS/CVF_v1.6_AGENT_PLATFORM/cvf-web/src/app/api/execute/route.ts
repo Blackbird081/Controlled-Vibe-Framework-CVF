@@ -31,11 +31,7 @@ import { buildPhase3EOperationalMetricsForRoute } from '@/lib/phase3e-operationa
 import { buildWorkflowExecutionProjection, resolveWorkflowBindingForExecution } from '@/lib/workflows/workflow-resolver';
 import { buildRouteAuditMemoryCapture } from '@/lib/audit-memory-receipt';
 import { buildRouteRequestContextReadout } from '@/lib/route-request-context-readout';
-import { buildVerticalIntegrationReadout } from '@/lib/vertical-integration-readout'; import { buildSpecFirstMediationReadout } from '@/lib/spec-first-mediation'; import { buildEnglishSpecFreezeReadout } from '@/lib/spec-english-freeze'; import { buildVi5LanguageReadout } from '@/lib/vi5-language-readout';
-import { buildPipelineChainReadout } from '@/lib/pipeline-chain-readout';
-import { buildWorkerTimeoutReadout } from '@/lib/worker-timeout-handler';
-import { buildReviewerDeadlockReadout } from '@/lib/reviewer-deadlock-handler';
-import { buildContextBudgetReadout } from '@/lib/context-budget-readout';
+import { buildVerticalIntegrationReadout } from '@/lib/vertical-integration-readout';
 import { buildDurableMemorySystemPrompt, evaluateDurableMemoryRoute, evaluateDurableMemoryWrite, resolveDurableMemoryActorRole } from '@/lib/durable-memory-route';
 import { buildRoleOutputDeniedResponse, buildRolePermissionDeniedResponse } from '@/lib/execute-role-permission-gate';
 import { buildExecutionIdentityDecision } from '@/lib/execution-identity';
@@ -45,6 +41,7 @@ import { attachReceiptToDiagnostic, buildExecutionDiagnostic } from '@/lib/execu
 import { getApprovalStore, type ApprovalRequestRecord } from '../approvals/store';
 import { approvalRecordMatchesActor, buildApprovalActorBinding, buildApprovalRequestSnapshot, computeApprovalRequestHash } from '../approvals/approval-binding';
 import { executeVisionRouteRequest, prepareVisionRouteRequest } from './vision-route-helper';
+import { buildExecuteResponseReadouts } from './route-response-readouts';
 export async function POST(request: NextRequest) {
     const routeStartedAtMs = Date.now();
     try {
@@ -55,7 +52,6 @@ export async function POST(request: NextRequest) {
         } catch {
             return NextResponse.json({ success: false, error: 'Invalid input payload.' }, { status: 400 });
         }
-
         // AuthN: allow either session cookie or service token
         const session = await verifySessionCookie(request);
         const serviceToken = request.headers.get('x-cvf-service-token');
@@ -94,7 +90,6 @@ export async function POST(request: NextRequest) {
             phase: body.cvfPhase ?? null,
             riskLevel: body.cvfRiskLevel ?? null,
         });
-
         // Rate limit by session + IP (after provider known)
         const limiter = getRateLimiter();
         const limitIdentity = session?.userId
@@ -141,7 +136,6 @@ export async function POST(request: NextRequest) {
                 { status: 400 },
             );
         }
-
         // Get provider config from environment or request
         const provider: AIProvider = body.provider ||
             (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
@@ -152,7 +146,6 @@ export async function POST(request: NextRequest) {
         const approvalSnapshot = buildApprovalRequestSnapshot(body as Partial<ExecutionRequest>, provider, approvalActor);
         const approvalRequestHash = computeApprovalRequestHash(approvalSnapshot);
         let approvedRequestRecord: ApprovalRequestRecord | null = null;
-
         if (body.approvalId) {
             const approvalId = String(body.approvalId);
             const approvalStore = getApprovalStore();
@@ -946,10 +939,19 @@ export async function POST(request: NextRequest) {
         await appendAuditEvent({ ...auditEventPayload, payload: withSessionAuditPayload(session, { ...auditEventPayload.payload, actor_role_gate_result: actorRoleGate.result, executionIdentity }) });
         const requestContextReadout = buildRouteRequestContextReadout({ request: body, knowledgeContextLength: finalKnowledgeContext?.length ?? 0, retrievedChunkCount: retrievalResult.allowedChunkCount, chainTurnIndex: body.verticalIntegrationChain?.turnIndex });
         const verticalIntegrationReadout = buildVerticalIntegrationReadout({ evidenceReceipt: governanceEvidenceReceipt, workflowExecution, auditMemoryReceipt, requestContextReadout, phase2cProductBrief, phase3eOperationalMetrics, chainRequest: body.verticalIntegrationChain, actorId: session?.userId ?? (isServiceAllowed ? 'service-account' : 'unknown-actor'), templateId: executionTemplateId });
-        const specFirstMediation = buildSpecFirstMediationReadout({ request: body, template, routeOutcome: { success: aiResult.success, provider: routedProvider, model: body.model ?? aiResult.model ?? routedProvider, decision: enforcement.status, receipt: { receiptId: governanceEvidenceReceipt.receiptId, envelopeId: governanceEvidenceReceipt.envelopeId }, rawTechnicalEvidenceAvailable: true } }); const englishSpecFreeze = buildEnglishSpecFreezeReadout({ request: body, specFirstMediation, providerOutput: aiResult.output });
-        const pipelineChainReadout = buildPipelineChainReadout(body.intent ?? '');
-        const workerTimeoutReadout = buildWorkerTimeoutReadout(Date.now() - routeStartedAtMs);
-        const reviewerDeadlockReadout = buildReviewerDeadlockReadout(); const contextBudgetReadout = buildContextBudgetReadout(resolvedExecutionRole.permissionRole ?? 'OPERATOR');
+        const responseReadouts = buildExecuteResponseReadouts({
+            request: body,
+            template,
+            routeStartedAtMs,
+            success: aiResult.success,
+            output: aiResult.output,
+            provider: routedProvider,
+            model: body.model ?? aiResult.model ?? routedProvider,
+            decision: enforcement.status,
+            receipt: { receiptId: governanceEvidenceReceipt.receiptId, envelopeId: governanceEvidenceReceipt.envelopeId },
+            workflowId: workflowExecution?.workflowId,
+            permissionRole: resolvedExecutionRole.permissionRole,
+        });
         return NextResponse.json({
             ...aiResult,
             usage,
@@ -984,14 +986,11 @@ export async function POST(request: NextRequest) {
             governanceEvidenceReceipt,
             ...(executionDiagnostic ? { diagnostic: executionDiagnostic } : {}),
             auditMemoryReceipt,
-            requestContextReadout, verticalIntegrationReadout, specFirstMediation, englishSpecFreeze,
-            ...buildVi5LanguageReadout({ request: body, specFirstMediation, englishSpecFreeze, workflowId: workflowExecution?.workflowId }),
+            requestContextReadout,
+            verticalIntegrationReadout,
+            ...responseReadouts,
             ...(workflowExecution ? workflowExecution : {}),
             ...(phase2cProductBrief ? { phase2cProductBrief } : {}), ...(phase3eOperationalMetrics ? { phase3eOperationalMetrics } : {}),
-            pipelineChainReadout,
-            workerTimeoutReadout,
-            reviewerDeadlockReadout,
-            contextBudgetReadout,
         });
     } catch (error) {
         console.error('Execute API error:', error);

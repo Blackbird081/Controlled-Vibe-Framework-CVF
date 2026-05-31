@@ -2,7 +2,11 @@ import { describe, expect, it } from "vitest";
 import { ProviderHealthMonitor } from "../src/provider-health";
 import { ProviderRegistry } from "../src/provider-registry";
 import { QuotaLedger } from "../src/quota-ledger";
-import { RoutingPolicyEngine } from "../src/routing-policy";
+import {
+  ROUTING_POLICY_CONTRACT_VERSION,
+  RoutingPolicyEngine,
+  buildRoutingPolicyContractSnapshot,
+} from "../src";
 
 function buildEngine() {
   const registry = new ProviderRegistry([
@@ -84,5 +88,38 @@ describe("RoutingPolicyEngine", () => {
       traceId: "trace-4",
       policy: { traceId: "trace-4", policyResult: "allow" },
     })).toMatchObject({ status: "no_candidate" });
+  });
+
+  it("builds bounded routing-policy contract snapshots without changing decisions", () => {
+    const parts = buildEngine();
+    const engine = new RoutingPolicyEngine(parts.registry, parts.health, parts.quota);
+    const request = {
+      traceId: "trace-snapshot",
+      requestedModelId: "qwen-turbo",
+      policy: { traceId: "trace-snapshot", policyResult: "allow" as const },
+    };
+
+    const decision = engine.decide(request);
+    const snapshot = buildRoutingPolicyContractSnapshot(request, decision);
+
+    expect(snapshot.version).toBe(ROUTING_POLICY_CONTRACT_VERSION);
+    expect(snapshot.source).toBe("model-gateway:routing-policy");
+    expect(snapshot.traceId).toBe("trace-snapshot");
+    expect(snapshot.status).toBe(decision.status);
+    expect(snapshot.policyResult).toBe("allow");
+  });
+
+  it("returns decision and snapshot together for model-gateway index consumers", () => {
+    const parts = buildEngine();
+    const engine = new RoutingPolicyEngine(parts.registry, parts.health, parts.quota);
+
+    const result = engine.decideWithSnapshot({
+      traceId: "trace-index-snapshot",
+      policy: { traceId: "trace-index-snapshot", policyResult: "deny", reason: "policy_denied" },
+    });
+
+    expect(result.decision.status).toBe("denied");
+    expect(result.snapshot.status).toBe("denied");
+    expect(result.snapshot.reason).toBe("policy_denied");
   });
 });

@@ -82,7 +82,9 @@ export { QuotaLedger } from "./quota-ledger";
 
 export type {
   GatewayReceipt,
+  GatewayReceiptEnvelope,
   GatewayReceiptInput,
+  GatewayReceiptMemoryRecord,
 } from "./gateway-receipt";
 export {
   GatewayReceiptBuilder,
@@ -107,6 +109,48 @@ export {
 } from "./provider-output-contract";
 
 export type {
+  ProviderCapabilityModel,
+  ProviderCapabilityOwnerRef,
+  ProviderCapabilityOwnerRefName,
+  ProviderCapabilityFile,
+  ProviderMethodContract,
+  ProviderMethodName,
+} from "./provider-method-contract";
+export {
+  LEGACY_PROVIDER_METHOD_ALIASES,
+  PROVIDER_CAPABILITY_OWNER_REFS,
+  PROVIDER_CAPABILITY_REGISTRY,
+  REVIEW_CVF_PROVIDER_METHODS,
+} from "./provider-capability-registry";
+export type {
+  ProviderCapabilityLookup,
+} from "./provider-method-gate";
+export {
+  assertProviderMethodSupported,
+  assertRegistryProviderMethodSupported,
+  findProviderCapability,
+  getProviderMethodContract,
+  listRegistrySupportedMethods,
+  listSupportedMethods,
+  normalizeProviderMethodName,
+  UnsupportedMethodError,
+} from "./provider-method-gate";
+
+export type {
+  ProviderFallbackDiagnosticClass,
+  ProviderFallbackPosture,
+  ProviderFallbackUserAction,
+  ProviderMethodFailureInput,
+  ProviderMethodFallbackEvaluation,
+  ProviderMethodFallbackEvaluationInput,
+  ProviderMethodFallbackStatus,
+} from "./provider-method-fallback-normalization";
+export {
+  evaluateProviderMethodFallback,
+  PROVIDER_METHOD_FALLBACK_NORMALIZATION_VERSION,
+} from "./provider-method-fallback-normalization";
+
+export type {
   StreamCapableProvider,
   StreamContract,
   StreamRequest,
@@ -125,6 +169,20 @@ export {
   isVisionContract,
   VISION_CONTRACT_REQUIRED_FIELDS,
 } from "./vision-contract";
+
+export type {
+  VisionRuntimeAdapterOptions,
+  VisionRuntimeProvider,
+  VisionRuntimeRequestBody,
+} from "./vision-runtime-adapter";
+export {
+  assertVisionProviderCapability,
+  buildVisionRuntimeRequestBody,
+  createAlibabaVisionRuntimeAdapter,
+  isVisionRuntimeModel,
+  VISION_RUNTIME_CAPABLE_MODELS,
+  VISION_RUNTIME_DEFAULT_MODELS,
+} from "./vision-runtime-adapter";
 
 export type {
   ReasoningCapableProvider,
@@ -191,9 +249,14 @@ export { StickySessionStore } from "./sticky-session";
 
 export type {
   RoutingDecision,
+  RoutingPolicyContractSnapshot,
   RoutingRequest,
 } from "./routing-policy";
-export { RoutingPolicyEngine } from "./routing-policy";
+export {
+  buildRoutingPolicyContractSnapshot,
+  ROUTING_POLICY_CONTRACT_VERSION,
+  RoutingPolicyEngine,
+} from "./routing-policy";
 
 export const MODEL_GATEWAY_WRAPPER = {
   executionClass: "wrapper/re-export merge",

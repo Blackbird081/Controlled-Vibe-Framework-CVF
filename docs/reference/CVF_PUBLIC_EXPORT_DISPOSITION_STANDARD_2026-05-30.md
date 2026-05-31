@@ -49,6 +49,9 @@ Requirements:
 - public-facing pushes must be made from the public-sync clone;
 - closure artifacts must state the disposition before catalog or README claims;
 - blocked or deferred artifacts must name the next action.
+- source-bearing public sync must be classified as either a full package export
+  or a bounded runtime-source subset export; subset exports must list the
+  exported source paths, verification commands, and remaining private boundary.
 
 ## Exceptions
 
@@ -113,6 +116,7 @@ disposition and blocks missing or overclaimed public-export evidence.
 | Final wave completion says wave complete but lacks disposition | Add the disposition or downgrade the closure claim. |
 | Artifact claims public export without public-sync remote/commit/path evidence | Replace with `DEFERRED_PRIVATE_ONLY` or add public-sync evidence. |
 | Artifact claims public catalog readiness while public-sync lacks artifacts | Use `BLOCKED_MISSING_PUBLIC_ARTIFACTS` and open a public-sync batch. |
+| Agent finishes private work that changes a public-facing source claim but leaves public GitHub stale | Open a public-sync source/docs subset batch or explicitly record `DEFERRED_PRIVATE_ONLY` / `BLOCKED_MISSING_PUBLIC_ARTIFACTS`. |
 
 ## Related Artifacts
 

@@ -56,6 +56,7 @@ Start with:
 - `workflow-chain-memory-proof-2026-05-24.md`
 - `vertical-integration-provider-workflow-coverage-2026-05-25.md`
 - `cvf-28-05-public-sync-capability-export-2026-05-30.md`
+- `cvf-31-05-public-runtime-source-sync-2026-05-31.md`
 - `claim-boundaries.md`
 
 Benchmark methodology is published separately under `docs/benchmark/`. That

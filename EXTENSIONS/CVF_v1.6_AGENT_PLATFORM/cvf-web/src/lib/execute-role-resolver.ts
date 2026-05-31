@@ -1,4 +1,7 @@
 import type { CVFRole, RolePermissionOutputClass } from 'cvf-guard-contract';
+import appBuilderPolicy from './governed-packs/app_builder_complete/execution.policy.json';
+import documentationPolicy from './governed-packs/documentation/execution.policy.json';
+import strategyAnalysisPolicy from './governed-packs/strategy_analysis/execution.policy.json';
 
 export type ExecutionBoundaryRole = CVFRole;
 
@@ -20,13 +23,38 @@ export interface ResolvedExecutionOutputClass {
   source: 'template_id' | 'template_category' | 'default';
 }
 
+export interface ActorRoleGateResult {
+  permitted: boolean;
+  result: 'permitted' | 'rejected' | 'not_applicable';
+  allowedActorRoles?: readonly CVFRole[];
+}
+
+type ActorRolePolicyJson = { allowedActorRoles?: string[] };
+
 const RBAC_TO_CVF_ROLE: Readonly<Record<string, CVFRole>> = {
   owner: 'OPERATOR',
   admin: 'OPERATOR',
-  operator: 'OPERATOR',
   developer: 'BUILDER',
   reviewer: 'REVIEWER',
   viewer: 'OBSERVER',
+};
+
+const KNOWN_CVF_ROLES = new Set<string>([
+  'OBSERVER',
+  'ANALYST',
+  'BUILDER',
+  'REVIEWER',
+  'GOVERNOR',
+  'HUMAN',
+  'AI_AGENT',
+  'OPERATOR',
+  'SERVICE_AGENT',
+]);
+
+const GOVERNED_PACK_POLICIES: Readonly<Record<string, ActorRolePolicyJson>> = {
+  app_builder_complete: appBuilderPolicy,
+  documentation: documentationPolicy,
+  strategy_analysis: strategyAnalysisPolicy,
 };
 
 export function resolveExecutionCVFRole(
@@ -66,6 +94,31 @@ export function resolveExecutionCVFRole(
     source: 'session',
     inputRole,
   };
+}
+
+export function resolveExecutionAllowedActorRoles(templateId?: string | null): readonly CVFRole[] | undefined {
+  const normalizedTemplateId = templateId?.trim();
+  const roles = normalizedTemplateId ? GOVERNED_PACK_POLICIES[normalizedTemplateId]?.allowedActorRoles : undefined;
+  return roles?.filter((role): role is CVFRole => KNOWN_CVF_ROLES.has(role));
+}
+
+export function validateActorRoleGate(
+  resolvedRole: CVFRole | null | undefined,
+  allowedActorRoles: readonly CVFRole[],
+): { permitted: boolean } {
+  return { permitted: Boolean(resolvedRole && allowedActorRoles.includes(resolvedRole)) };
+}
+
+export function evaluateExecutionActorRoleGate(
+  templateId: string | null | undefined,
+  resolvedRole: CVFRole | null | undefined,
+): ActorRoleGateResult {
+  const allowedActorRoles = resolveExecutionAllowedActorRoles(templateId);
+  if (!allowedActorRoles) {
+    return { permitted: true, result: 'not_applicable' };
+  }
+  const gate = validateActorRoleGate(resolvedRole, allowedActorRoles);
+  return { ...gate, result: gate.permitted ? 'permitted' : 'rejected', allowedActorRoles };
 }
 
 export function resolveExecutionOutputClass(

@@ -15,9 +15,11 @@ import {
 } from 'cvf-control-plane-foundation';
 import {
   createProvisionalEvaluationSignalContract,
+} from '../../../../../CVF_LEARNING_PLANE_FOUNDATION/src/provisional.evaluation.signal.contract';
+import {
   createStage1DiagnosticPacketContract,
-  type Stage1RuntimeIndicator,
-} from 'cvf-learning-plane-foundation';
+} from '../../../../../CVF_LEARNING_PLANE_FOUNDATION/src/stage1.diagnostic.packet.contract';
+import type { Stage1RuntimeIndicator } from '../../../../../CVF_LEARNING_PLANE_FOUNDATION/src/stage1.diagnostic.interpretation.contract';
 import {
   buildAgentContinuityDelegationRecord,
   buildBoundaryFirstGovernanceRecord,

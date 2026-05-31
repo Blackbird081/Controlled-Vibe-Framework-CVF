@@ -28,6 +28,35 @@ export type RoutingDecision =
       reason: string;
     };
 
+export const ROUTING_POLICY_CONTRACT_VERSION = "phase2b-routing-policy-1" as const;
+
+export interface RoutingPolicyContractSnapshot {
+  version: typeof ROUTING_POLICY_CONTRACT_VERSION;
+  source: "model-gateway:routing-policy";
+  traceId: string;
+  status: RoutingDecision["status"];
+  reason: string;
+  selectedProviderId?: string;
+  selectedModelId?: string;
+  policyResult?: GatewayPolicyContext["policyResult"];
+}
+
+export function buildRoutingPolicyContractSnapshot(
+  request: RoutingRequest,
+  decision: RoutingDecision,
+): RoutingPolicyContractSnapshot {
+  return {
+    version: ROUTING_POLICY_CONTRACT_VERSION,
+    source: "model-gateway:routing-policy",
+    traceId: decision.traceId,
+    status: decision.status,
+    reason: decision.reason,
+    selectedProviderId: decision.status === "selected" ? decision.providerId : undefined,
+    selectedModelId: decision.status === "selected" ? decision.modelId : undefined,
+    policyResult: request.policy?.policyResult,
+  };
+}
+
 export class RoutingPolicyEngine {
   constructor(
     private readonly registry: ProviderRegistry,
@@ -89,6 +118,17 @@ export class RoutingPolicyEngine {
     }
 
     return { status: "no_candidate", traceId: request.traceId, reason: "no_provider_passed_policy_health_quota" };
+  }
+
+  decideWithSnapshot(request: RoutingRequest): {
+    decision: RoutingDecision;
+    snapshot: RoutingPolicyContractSnapshot;
+  } {
+    const decision = this.decide(request);
+    return {
+      decision,
+      snapshot: buildRoutingPolicyContractSnapshot(request, decision),
+    };
   }
 
   private orderedProviders(request: RoutingRequest): ProviderRecord[] {

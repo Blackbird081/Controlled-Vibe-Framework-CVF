@@ -38,27 +38,15 @@
   "ignoredRoots": [
     ".private_reference",
     ".git",
+    ".pytest_cache",
+    "artifacts",
     "node_modules"
   ],
   "roots": [
-    { "path": ".agents", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     {
-      "path": ".cvf",
+      "path": ".github",
       "lifecycleClass": "ACTIVE_CANONICAL",
-      "exposureClass": "INTERNAL_ONLY",
-      "rationale": "CVF ADD runtime state directory. Holds web-governance-jobs.jsonl and other ephemeral runtime artefacts produced by the governed web-execution path. Internal-only; not intended for public release."
-    },
-    { "path": ".claude", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": ".githooks", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": ".github", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": ".vscode", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    {
-      "path": "CVF_SKILL_LIBRARY",
-      "lifecycleClass": "MERGED_RETAINED",
-      "exposureClass": "PRIVATE_ENTERPRISE_ONLY",
-      "retentionPolicy": "FREEZE_IN_PLACE",
-      "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
-      "rationale": "Enterprise-private retained root. Preserve the current path on cvf-next; explain boundaries through curated docs instead of relocation."
+      "exposureClass": "INTERNAL_ONLY"
     },
     {
       "path": "docs",
@@ -75,32 +63,25 @@
       "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
       "rationale": "Retained strategy and lineage root. Current posture reduces exposure through curation, not path churn."
     },
-    { "path": "EXTENSIONS", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": "governance", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     {
-      "path": "public",
+      "path": "EXTENSIONS",
       "lifecycleClass": "ACTIVE_CANONICAL",
-      "exposureClass": "PUBLIC_DOCS_ONLY",
-      "publicContentAuditStatus": "CURATION_REQUIRED",
-      "publicContentAuditEvidence": "docs/reference/CVF_PREPUBLIC_P3_READINESS.md"
+      "exposureClass": "INTERNAL_ONLY"
     },
     {
-      "path": "REVIEW",
-      "lifecycleClass": "FROZEN_REFERENCE",
-      "exposureClass": "INTERNAL_ONLY",
-      "retentionPolicy": "FREEZE_IN_PLACE",
-      "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
-      "rationale": "Reference-dense review root. Keep location stable and rely on extracted orientation for public-safe navigation."
+      "path": "governance",
+      "lifecycleClass": "ACTIVE_CANONICAL",
+      "exposureClass": "INTERNAL_ONLY"
     },
-    { "path": "scripts", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
-    { "path": "tools", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },
     {
-      "path": "ui_governance_engine",
-      "lifecycleClass": "MERGED_RETAINED",
-      "exposureClass": "PRIVATE_ENTERPRISE_ONLY",
-      "retentionPolicy": "FREEZE_IN_PLACE",
-      "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
-      "rationale": "Enterprise-private retained root. Preserve the current path on cvf-next; explain boundaries through curated docs instead of relocation."
+      "path": "scripts",
+      "lifecycleClass": "ACTIVE_CANONICAL",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "tools",
+      "lifecycleClass": "ACTIVE_CANONICAL",
+      "exposureClass": "INTERNAL_ONLY"
     },
     {
       "path": "v1.0",
@@ -108,7 +89,7 @@
       "exposureClass": "INTERNAL_ONLY",
       "retentionPolicy": "FREEZE_IN_PLACE",
       "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
-      "rationale": "High-density frozen reference root. Preserve path stability and data retention; explain structure through extracted docs instead of relocation."
+      "rationale": "Frozen reference root retained in the public repository for historical compatibility and curated documentation context."
     },
     {
       "path": "v1.1",
@@ -116,7 +97,7 @@
       "exposureClass": "INTERNAL_ONLY",
       "retentionPolicy": "FREEZE_IN_PLACE",
       "relocationPolicy": "DO_NOT_MOVE_WITHOUT_SEPARATE_PRESERVATION_OVERRIDE",
-      "rationale": "High-density frozen reference root. Preserve path stability and data retention; explain structure through extracted docs instead of relocation."
+      "rationale": "Frozen reference root retained in the public repository for historical compatibility and curated documentation context."
     }
   ]
 }

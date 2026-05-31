@@ -9,6 +9,7 @@ import type {
   ResolvedExecutionOutputClass,
 } from '@/lib/execute-role-resolver';
 import type { RoleOutputPermissionCheck } from '@/lib/execute-route-guards';
+import type { ExecutionIdentityDecision } from '@/lib/execution-identity';
 
 interface BuildRolePermissionDeniedResponseInput {
   session: SessionCookie | null;
@@ -17,6 +18,7 @@ interface BuildRolePermissionDeniedResponseInput {
   envelope: WebGovernanceEnvelope;
   resolvedRole: ResolvedExecutionCVFRole;
   resolvedOutputClass: ResolvedExecutionOutputClass;
+  executionIdentity?: ExecutionIdentityDecision;
 }
 
 interface BuildRoleOutputDeniedResponseInput extends BuildRolePermissionDeniedResponseInput {
@@ -30,7 +32,7 @@ function targetResource(body: Partial<ExecutionRequest>): string {
 export async function buildRolePermissionDeniedResponse(
   input: BuildRolePermissionDeniedResponseInput,
 ): Promise<NextResponse> {
-  const { session, body, provider, envelope, resolvedRole, resolvedOutputClass } = input;
+  const { session, body, provider, envelope, resolvedRole, resolvedOutputClass, executionIdentity } = input;
 
   await appendAuditEvent({
     eventType: 'ROLE_PERMISSION_DENIED',
@@ -46,6 +48,7 @@ export async function buildRolePermissionDeniedResponse(
       inputRole: resolvedRole.inputRole,
       resolvedRole: resolvedRole.role,
       resolvedOutputClass,
+      executionIdentity,
     }),
   });
 
@@ -62,6 +65,7 @@ export async function buildRolePermissionDeniedResponse(
         allowed: false,
         source: resolvedRole.source,
       },
+      executionIdentity,
       governanceEnvelope: envelope,
       policySnapshotId: envelope.policySnapshotId,
       governanceEvidenceReceipt: buildEvidenceReceipt({
@@ -79,7 +83,7 @@ export async function buildRolePermissionDeniedResponse(
 export async function buildRoleOutputDeniedResponse(
   input: BuildRoleOutputDeniedResponseInput,
 ): Promise<NextResponse> {
-  const { session, body, provider, envelope, resolvedRole, rolePermission } = input;
+  const { session, body, provider, envelope, resolvedRole, rolePermission, executionIdentity } = input;
 
   await appendAuditEvent({
     eventType: 'ROLE_OUTPUT_PERMISSION_DENIED',
@@ -96,6 +100,7 @@ export async function buildRoleOutputDeniedResponse(
       outputClass: rolePermission.outputClass,
       denialReason: rolePermission.denialReason,
       allowedOutputClasses: rolePermission.profile.allowedOutputClasses,
+      executionIdentity,
     }),
   });
 
@@ -112,6 +117,7 @@ export async function buildRoleOutputDeniedResponse(
         allowed: false,
         source: resolvedRole.source,
       },
+      executionIdentity,
       governanceEnvelope: envelope,
       policySnapshotId: envelope.policySnapshotId,
       governanceEvidenceReceipt: buildEvidenceReceipt({

@@ -114,6 +114,25 @@ export interface ControlledMemoryQueryResult {
   receipt: ControlledMemoryReceipt;
 }
 
+export const CONTROLLED_MEMORY_GATEWAY_ADAPTER_VERSION =
+  "phase2b-controlled-memory-gateway-adapter-1";
+
+export interface ControlledMemoryGatewayAdapterSnapshot {
+  version: typeof CONTROLLED_MEMORY_GATEWAY_ADAPTER_VERSION;
+  source: "learning-plane:controlled-memory-gateway";
+  traceId: string;
+  actorId: string;
+  decision: ControlledMemoryDecision;
+  reason: string;
+  memoryIds: string[];
+  recordCount: number;
+  contextSegmentCount: number;
+  maskedTokenCount: number;
+  estimatedTokens: number;
+  persistentStoreCreated: false;
+  newMemoryTierCreated: false;
+}
+
 export interface ControlledMemoryGatewayDependencies {
   now?: () => string;
   estimateTokens?: (content: string) => number;
@@ -192,6 +211,16 @@ export class ControlledMemoryGatewayContract {
     };
   }
 
+  captureWithAdapter(
+    request: ControlledMemoryCaptureRequest,
+  ): { result: ControlledMemoryCaptureResult; adapter: ControlledMemoryGatewayAdapterSnapshot } {
+    const result = this.capture(request);
+    return {
+      result,
+      adapter: buildControlledMemoryGatewayAdapterSnapshot(result),
+    };
+  }
+
   retrieve(request: ControlledMemoryQueryRequest): ControlledMemoryQueryResult {
     const blocked = this.evaluateReadPolicy(request.policy);
     if (blocked) {
@@ -202,6 +231,16 @@ export class ControlledMemoryGatewayContract {
       records: selected,
       contextSegments: [],
       receipt: this.buildReceipt(request.policy, "retrieved", "memory_retrieved_after_access_lifecycle_budget", selected),
+    };
+  }
+
+  retrieveWithAdapter(
+    request: ControlledMemoryQueryRequest,
+  ): { result: ControlledMemoryQueryResult; adapter: ControlledMemoryGatewayAdapterSnapshot } {
+    const result = this.retrieve(request);
+    return {
+      result,
+      adapter: buildControlledMemoryGatewayAdapterSnapshot(result),
     };
   }
 
@@ -231,6 +270,16 @@ export class ControlledMemoryGatewayContract {
         "memory_reinjection_packaged_with_provenance_and_budget",
         selected,
       ),
+    };
+  }
+
+  reinjectWithAdapter(
+    request: ControlledMemoryReinjectionRequest,
+  ): { result: ControlledMemoryQueryResult; adapter: ControlledMemoryGatewayAdapterSnapshot } {
+    const result = this.reinject(request);
+    return {
+      result,
+      adapter: buildControlledMemoryGatewayAdapterSnapshot(result),
     };
   }
 
@@ -392,4 +441,29 @@ export function createControlledMemoryGatewayContract(
   dependencies?: ControlledMemoryGatewayDependencies,
 ): ControlledMemoryGatewayContract {
   return new ControlledMemoryGatewayContract(dependencies);
+}
+
+export function buildControlledMemoryGatewayAdapterSnapshot(
+  result: ControlledMemoryCaptureResult | ControlledMemoryQueryResult,
+): ControlledMemoryGatewayAdapterSnapshot {
+  const contextSegments = "contextSegments" in result ? result.contextSegments : [];
+  const records = "contextSegments" in result
+    ? result.records
+    : result.record ? [result.record] : [];
+
+  return {
+    version: CONTROLLED_MEMORY_GATEWAY_ADAPTER_VERSION,
+    source: "learning-plane:controlled-memory-gateway",
+    traceId: result.receipt.traceId,
+    actorId: result.receipt.actorId,
+    decision: result.receipt.decision,
+    reason: result.receipt.reason,
+    memoryIds: [...result.receipt.memoryIds],
+    recordCount: records.length,
+    contextSegmentCount: contextSegments.length,
+    maskedTokenCount: result.receipt.maskedTokenCount,
+    estimatedTokens: result.receipt.estimatedTokens,
+    persistentStoreCreated: false,
+    newMemoryTierCreated: false,
+  };
 }

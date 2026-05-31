@@ -1,5 +1,9 @@
 import type { EnforcementResult } from '@/lib/enforcement';
 import type { LaneStatus } from '@/lib/provider-lane-status';
+import type { WorkflowCompositionSummary } from '@/lib/workflow-composition';
+import type { AifMemoryReinjectionReceipt, AifMemoryReinjectionRequest } from '@/lib/aif-memory-reinjection';
+import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation';
+import type { ExecutionDiagnostic } from '@/lib/execution-diagnostics';
 
 // AI Provider Types and Interfaces
 export type AIProvider = 'openai' | 'claude' | 'gemini' | 'alibaba' | 'openrouter' | 'deepseek';
@@ -17,13 +21,15 @@ export interface ExecutionRequest {
     templateName: string;
     inputs: Record<string, string>;
     intent: string;
+    qbsFamily?: string | null;
     provider?: AIProvider;
     model?: string;
+    imageUrl?: string;
+    imageBase64?: string;
+    mimeType?: string;
     mode?: 'simple' | 'governance' | 'full';
     cvfPhase?: string;
     cvfRiskLevel?: string;
-    qbsFamily?: string | null;
-    governanceFamily?: string | null;
     skillPreflightPassed?: boolean;
     skillPreflightDeclaration?: string;
     skillPreflightRecordRef?: string;
@@ -41,6 +47,37 @@ export interface ExecutionRequest {
     knowledgeCollectionId?: string;
     /** Approval request id returned by NEEDS_APPROVAL flow */
     approvalId?: string;
+    /** C2 — explicit, summary-only AIF memory reinjection opt-in */
+    aifMemoryReinjection?: AifMemoryReinjectionRequest;
+    /** R2 — explicit, summary-only durable memory read opt-in */
+    durableMemory?: {
+        enabled?: boolean;
+        tier?: 'skill' | 'long-term';
+        scope?: string;
+        query?: string;
+        maxResults?: number;
+        policy?: {
+            actorAuthorized?: boolean;
+        };
+    };
+    /** S1 — explicit, policy-gated durable memory write opt-in */
+    durableMemoryWrite?: {
+        enabled?: boolean;
+        tier?: 'skill' | 'long-term';
+        scope?: string;
+        policy?: {
+            actorAuthorized?: boolean;
+        };
+        maxSummaryLength?: number;
+    };
+    /** VI1 — optional response-level chain descriptor for vertical integration proof */
+    verticalIntegrationChain?: {
+        threadId?: string;
+        rootReceiptId?: string;
+        parentReceiptId?: string;
+        turnIndex?: number;
+        operatorGoal?: string;
+    };
 }
 
 export interface GovernanceEvidenceReceipt {
@@ -60,6 +97,11 @@ export interface GovernanceEvidenceReceipt {
     knowledgeChunkCount?: number;
     approvalId?: string;
     validationHint?: string;
+    vision?: boolean;
+    aifMemoryReinjection?: AifMemoryReinjectionReceipt;
+    durableMemoryRead?: DurableMemoryReceipt;
+    durableMemoryWriteReceipt?: DurableMemoryReceipt;
+    workflowComposition?: WorkflowCompositionSummary;
     generatedAt: string;
 }
 
@@ -80,6 +122,7 @@ export interface ExecutionResponse {
     executionTime?: number;
     enforcement?: EnforcementResult;
     governanceEvidenceReceipt?: GovernanceEvidenceReceipt;
+    diagnostic?: ExecutionDiagnostic;
 }
 
 export interface ProviderStatus {

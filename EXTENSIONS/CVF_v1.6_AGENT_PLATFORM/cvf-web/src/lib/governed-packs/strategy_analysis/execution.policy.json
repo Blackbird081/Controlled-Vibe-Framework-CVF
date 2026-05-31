@@ -2,11 +2,13 @@
   "schemaVersion": "2026-05-19",
   "templateId": "strategy_analysis",
   "requiredRole": "BUILDER",
+  "allowedActorRoles": ["OPERATOR", "BUILDER", "REVIEWER", "SERVICE_AGENT"],
   "minimumPermission": "output.strategy_analysis",
   "providerLane": "certified",
   "dlpRequired": true,
   "quotaRequired": true,
   "receiptRequired": true,
+  "streamingEnabled": false,
   "guardPolicyRef": "CVF_GOVERNED_EXECUTE_ROUTE",
   "requiredIntakeFields": [
     "topic",
@@ -27,4 +29,3 @@
   ],
   "claimBoundary": "schema_defined_not_runtime_bound"
 }
-

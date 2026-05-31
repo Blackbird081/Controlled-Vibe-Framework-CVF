@@ -53,14 +53,14 @@ describe('security.ts', () => {
         });
 
         it('validates OpenAI key format', () => {
-            expect(validateApiKey('openai', 'sk-test-key-placeholder-12345678901234567890')).toEqual({
+            expect(validateApiKey('openai', 'sk-1234567890123456789012345678901234567890abcd')).toEqual({
                 valid: true
             });
             expect(validateApiKey('openai', 'invalid').valid).toBe(false);
         });
 
         it('validates Anthropic key format', () => {
-            expect(validateApiKey('anthropic', 'sk-ant-test-key-placeholder-12345678901234567890')).toEqual({
+            expect(validateApiKey('anthropic', 'sk-ant-1234567890123456789012345678901234567890')).toEqual({
                 valid: true
             });
             expect(validateApiKey('anthropic', 'sk-123').valid).toBe(false);

@@ -37,6 +37,10 @@ describe('inferPackType', () => {
     expect(inferPackType('app_builder_wizard')).toBe('app_planning');
   });
 
+  it('maps app_builder_complete → app_planning', () => {
+    expect(inferPackType('app_builder_complete')).toBe('app_planning');
+  });
+
   it('maps business_strategy_wizard → business_decision', () => {
     expect(inferPackType('business_strategy_wizard')).toBe('business_decision');
   });
@@ -154,6 +158,24 @@ describe('generateDeliverablePack', () => {
     expect(pack.governanceEvidence.receiptAvailable).toBe(false);
   });
 
+  it('keeps missing receipt visible as artifact verification warning', () => {
+    const exec = makeExecution();
+    const pack = generateDeliverablePack(exec);
+    expect(pack.artifactVerification.status).toBe('PASS_WITH_WARNINGS');
+    expect(pack.artifactVerification.provenance).toMatchObject({
+      rendererPolicy: 'cvf.packArtifactVerification.w6.v1',
+      cvfRootAuthority: 'Controlled Vibe Framework',
+      sourceExecutionId: 'exec_test_1',
+      sourceTemplateId: 'documentation',
+      receiptAvailable: false,
+    });
+    expect(pack.artifactVerification.checks).toContainEqual(expect.objectContaining({
+      id: 'governance_receipt_visible',
+      passed: false,
+      severity: 'warning',
+    }));
+  });
+
   it('sets governanceEvidence from receipt when provided', () => {
     const exec = makeExecution();
     const receipt = {
@@ -171,6 +193,19 @@ describe('generateDeliverablePack', () => {
     expect(pack.governanceEvidence.provider).toBe('alibaba');
     expect(pack.governanceEvidence.model).toBe('qwen-turbo');
     expect(pack.governanceEvidence.decision).toBe('ALLOWED');
+    expect(pack.artifactVerification.status).toBe('PASS');
+    expect(pack.artifactVerification.provenance.receiptId).toBe('rcpt_test_abc');
+  });
+
+  it('fails artifact verification when main output is missing', () => {
+    const exec = makeExecution({ output: '' });
+    const pack = generateDeliverablePack(exec);
+    expect(pack.artifactVerification.status).toBe('FAIL');
+    expect(pack.artifactVerification.checks).toContainEqual(expect.objectContaining({
+      id: 'main_output_present',
+      passed: false,
+      severity: 'blocking',
+    }));
   });
 
   it('includes sourceExecutionId matching execution.id', () => {
@@ -205,8 +240,20 @@ describe('serializePackToMarkdown', () => {
     expect(md).toContain('## Main Output');
     expect(md).toContain('## Scope Boundary');
     expect(md).toContain('## Governance Evidence');
+    expect(md).toContain('## Artifact Verification');
     expect(md).toContain('## Recommended Next Actions');
     expect(md).toContain('## Handoff Notes');
+  });
+
+  it('serializes artifact verification and provenance without upgrading missing receipt', () => {
+    const exec = makeExecution();
+    const pack = generateDeliverablePack(exec);
+    const md = serializePackToMarkdown(pack);
+
+    expect(md).toContain('- **Status**: PASS_WITH_WARNINGS');
+    expect(md).toContain('- **Renderer policy**: cvf.packArtifactVerification.w6.v1');
+    expect(md).toContain('- **Receipt available**: no');
+    expect(md).toContain('No receipt is attached; do not treat this export as live governance proof.');
   });
 
   it('includes numbered next actions', () => {

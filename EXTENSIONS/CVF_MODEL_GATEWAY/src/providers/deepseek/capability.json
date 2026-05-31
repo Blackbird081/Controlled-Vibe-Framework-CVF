@@ -1,0 +1,10 @@
+{
+  "providerId": "deepseek",
+  "models": [
+    {
+      "modelId": "deepseek-chat",
+      "supportedMethods": ["chat", "json_mode"],
+      "defaultMethod": "chat"
+    }
+  ]
+}

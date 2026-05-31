@@ -40,7 +40,7 @@ const nextConfig: NextConfig = {
     'cvf-control-plane-foundation',
     'cvf-learning-plane-foundation',
   ],
-  serverExternalPackages: ['better-sqlite3'],
+  serverExternalPackages: ['better-sqlite3', 'typescript'],
   turbopack: {
     // TypeScript ESM packages use explicit .js extensions in their internal
     // imports. Turbopack must try .ts/.tsx before .js when transpiling LPF.

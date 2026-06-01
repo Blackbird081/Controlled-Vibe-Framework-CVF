@@ -29,6 +29,12 @@ Before performing ANY action on this project, you MUST:
 
 2. Verify that `cvfCorePath` is reachable on disk.
 
+   Run the workspace doctor before material work. The doctor must confirm that
+   the hidden core tracks the public CVF remote, carries the public-safe
+   workspace kit, and matches `origin/main`. If it reports stale or unrelated
+   history, stop and reconcile the hidden core with
+   `scripts/update_cvf_workspace_public_core.ps1`.
+
 3. Read `.cvf/policy.json` and extract:
    - `liveGovernanceEvidenceRequired` — must be `true`
    - `mockAllowedOnlyForUi` — must be `true`

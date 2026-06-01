@@ -77,13 +77,19 @@ The workspace doctor must verify that the generated project remains isolated fro
 
 ## Update Flow
 
-Update CVF rules from inside `.Controlled-Vibe-Framework-CVF`:
+Reconcile an existing hidden public-core clone from inside
+`.Controlled-Vibe-Framework-CVF`:
 
 ```powershell
-cd .Controlled-Vibe-Framework-CVF
-git fetch origin
-git merge origin/main
+powershell -ExecutionPolicy Bypass -File scripts\update_cvf_workspace_public_core.ps1 `
+  -WorkspaceRoot "<workspace-root>"
 ```
+
+The reconciler verifies the workspace boundary, refuses to move a dirty hidden
+core, backs up the existing clone, creates a fresh clone from the public
+remote, refreshes the workspace-root rules file, and optionally updates
+downstream manifest pins. It intentionally does not merge unrelated repository
+histories.
 
 Application projects should be updated from their own repository folders:
 
@@ -95,3 +101,8 @@ git pull
 ## Boundary
 
 This rule set is a local workspace convention and enforcement surface. It does not claim that every downstream app automatically inherits full CVF runtime behavior. A downstream project is agent-enforcement-ready only when its generated artifacts exist and `scripts/check_cvf_workspace_agent_enforcement.ps1` passes.
+
+The workspace doctor also verifies that the hidden public core has the
+public-safe bootstrap kit and matches `origin/main`. Use
+`-AllowOfflinePinnedCore` only as an explicit bounded offline override when a
+remote freshness check cannot run.

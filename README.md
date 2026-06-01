@@ -23,6 +23,7 @@ collaboration tools for design, implementation, review, and documentation. See
 | Understand governance rules | [Governance](GOVERNANCE.md) |
 | Configure provider lanes | [Providers](PROVIDERS.md) |
 | Choose a multi-agent/provider mix | [Multi-Agent Provider Routing](docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md) |
+| Use CVF with your own project | [Workspace Bootstrap](#workspace-bootstrap) |
 | Plan cost and quota | [Cost and Quota](COST_AND_QUOTA.md) |
 | Contribute safely | [Contributing](CONTRIBUTING.md) |
 
@@ -35,60 +36,13 @@ runtime or documentation surface.
 Template and skill value-proof work must respect
 `CVF_TEMPLATE_SKILL_STANDARD_GUARD.md` before claiming trusted benchmark value.
 
-## Mandatory Guards
+## Governance Guards
 
-The public guard registry requires each operation guard filename to appear in
-this README and in `docs/CVF_CORE_KNOWLEDGE_BASE.md`.
+The guard registry is intentionally not duplicated in this README. Use:
 
-| Guard |
-| --- |
-| `CVF_ACTIVE_ARCHIVE_GUARD.md` |
-| `CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md` |
-| `CVF_ADR_GUARD.md` |
-| `CVF_AGENT_HANDOFF_GUARD.md` |
-| `CVF_AGENT_HANDOFF_TRANSITION_GUARD.md` |
-| `CVF_ARCHITECTURE_CHECK_GUARD.md` |
-| `CVF_BARREL_SMOKE_OWNERSHIP_GUARD.md` |
-| `CVF_BASELINE_UPDATE_GUARD.md` |
-| `CVF_BATCH_CONTRACT_DETERMINISM_GUARD.md` |
-| `CVF_BOARDROOM_RUNTIME_GUARD.md` |
-| `CVF_BUG_DOCUMENTATION_GUARD.md` |
-| `CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md` |
-| `CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD.md` |
-| `CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md` |
-| `CVF_DEPTH_AUDIT_GUARD.md` |
-| `CVF_DIAGRAM_VALIDATION_GUARD.md` |
-| `CVF_DOCUMENT_NAMING_GUARD.md` |
-| `CVF_DOCUMENT_STORAGE_GUARD.md` |
-| `CVF_EXTENSION_PACKAGE_CHECK_GUARD.md` |
-| `CVF_EXTENSION_VERSIONING_GUARD.md` |
-| `CVF_FAST_LANE_GOVERNANCE_GUARD.md` |
-| `CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md` |
-| `CVF_GOVERNED_FILE_SIZE_GUARD.md` |
-| `CVF_GUARD_AUTHORING_STANDARD_GUARD.md` |
-| `CVF_GUARD_REGISTRY_GUARD.md` |
-| `CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md` |
-| `CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md` |
-| `CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_GUARD.md` |
-| `CVF_MEMORY_GOVERNANCE_GUARD.md` |
-| `CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md` |
-| `CVF_PREPUBLIC_P3_READINESS_GUARD.md` |
-| `CVF_PRODUCT_VALUE_VALIDATION_GUARD.md` |
-| `CVF_PROGRESS_TRACKER_SYNC_GUARD.md` |
-| `CVF_PUBLIC_SURFACE_MAINTAINABILITY_GUARD.md` |
-| `CVF_PYTHON_AUTOMATION_SIZE_GUARD.md` |
-| `CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md` |
-| `CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md` |
-| `CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md` |
-| `CVF_SHARED_BATCH_HELPER_ADOPTION_GUARD.md` |
-| `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md` |
-| `CVF_SURFACE_SCAN_CONTINUITY_GUARD.md` |
-| `CVF_TEMPLATE_SKILL_STANDARD_GUARD.md` |
-| `CVF_TEST_DEPTH_CLASSIFICATION_GUARD.md` |
-| `CVF_TEST_DOCUMENTATION_GUARD.md` |
-| `CVF_TEST_PARTITION_OWNERSHIP_GUARD.md` |
-| `CVF_WORKFLOW_ORCHESTRATION_GUARD.md` |
-| `CVF_WORKSPACE_ISOLATION_GUARD.md` |
+- [Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md)
+- [Operation Guard Toolkit](governance/toolkit/05_OPERATION/)
+- [Guard Surface Classification](docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md)
 
 ## What CVF Is
 
@@ -231,6 +185,35 @@ For setup and deployment details, use:
 - [Getting Started](docs/GET_STARTED.md)
 - [Deploy Guide](docs/guides/CVF_DEPLOY_GUIDE.md)
 - [Security](SECURITY.md)
+
+## Workspace Bootstrap
+
+For normal user/dev work, keep CVF as a hidden governance core in a parent
+workspace and put downstream projects beside it:
+
+```text
+CVF-Workspace/
+  .Controlled-Vibe-Framework-CVF/
+  WORKSPACE_RULES.md
+  your-app/
+```
+
+Fresh setup:
+
+```powershell
+git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git .Controlled-Vibe-Framework-CVF
+pwsh .Controlled-Vibe-Framework-CVF/scripts/new-cvf-workspace.ps1 -WorkspaceRoot .
+pwsh .Controlled-Vibe-Framework-CVF/scripts/check_cvf_workspace_agent_enforcement.ps1 -WorkspaceRoot .
+```
+
+Refresh an older local workspace core:
+
+```powershell
+pwsh .Controlled-Vibe-Framework-CVF/scripts/update_cvf_workspace_public_core.ps1 -WorkspaceRoot .
+```
+
+See [Workspace Rules](docs/reference/CVF_WORKSPACE_RULES.md) and
+[New Machine Setup Checklist](docs/reference/CVF_NEW_MACHINE_SETUP_CHECKLIST.md).
 
 ## Repository Map
 

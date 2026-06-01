@@ -26,7 +26,11 @@ class CheckGuardAuthoringStandardTests(unittest.TestCase):
         self.enforcer_path = self.repo_root / "governance" / "compat" / "check_sample_guard.py"
         self.enforcer_path.parent.mkdir(parents=True, exist_ok=True)
         self.enforcer_path.write_text("print('ok')\n", encoding="utf-8")
-        (self.repo_root / "README.md").write_text("CVF_SAMPLE_GUARD.md\n", encoding="utf-8")
+        (self.repo_root / "README.md").write_text(
+            "Guard registry: docs/CVF_CORE_KNOWLEDGE_BASE.md\n"
+            "Toolkit: governance/toolkit/05_OPERATION/\n",
+            encoding="utf-8",
+        )
         (self.repo_root / "docs").mkdir(parents=True, exist_ok=True)
         (self.repo_root / "docs" / "CVF_CORE_KNOWLEDGE_BASE.md").write_text("CVF_SAMPLE_GUARD.md\n", encoding="utf-8")
         (self.repo_root / "docs" / "reference").mkdir(parents=True, exist_ok=True)

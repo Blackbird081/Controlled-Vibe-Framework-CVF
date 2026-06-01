@@ -24,14 +24,18 @@ D:\Work\
 Tiền tố `.` cho folder CVF core là quy ước cách ly để tránh sửa nhầm, không bắt buộc chế độ hidden.
 Chi tiết enforcement: [CVF_WORKSPACE_ISOLATION_GUARD.md](../governance/toolkit/05_OPERATION/CVF_WORKSPACE_ISOLATION_GUARD.md).
 
-### Workspace bootstrap boundary
+### Bootstrap nhanh cho project mới (Khuyến nghị)
 
-Public repo hiện không ship `scripts/new-cvf-workspace.ps1` hoặc
-`scripts/check_cvf_workspace_agent_enforcement.ps1` như command runnable cho
-người mới. Các proof W112/W113/W114 vẫn là evidence hợp lệ về mô hình sibling
-workspace, nhưng setup public trước mắt nên dùng CVF web/runtime local-first.
+Dùng script bootstrap để chuẩn hóa workspace sibling cho mọi project downstream:
 
-Kết quả mong muốn của mô hình sibling workspace:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\new-cvf-workspace.ps1 `
+  -WorkspaceRoot "D:\CVF-Workspace" `
+  -ProjectName "Trading-Tools" `
+  -ProjectRepo "https://github.com/Blackbird081/Trading-Tools.git"
+```
+
+Kết quả:
 - `D:\CVF-Workspace\.Controlled-Vibe-Framework-CVF`
 - `D:\CVF-Workspace\Trading-Tools`
 - `D:\CVF-Workspace\Trading-Tools.code-workspace` (terminal mặc định vào project)
@@ -39,6 +43,27 @@ Kết quả mong muốn của mô hình sibling workspace:
 - `D:\CVF-Workspace\Trading-Tools\.cvf\manifest.json`
 - `D:\CVF-Workspace\Trading-Tools\.cvf\policy.json`
 - `D:\CVF-Workspace\Trading-Tools\docs\CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
+
+Kiểm tra agent-enforcement artifacts:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\check_cvf_workspace_agent_enforcement.ps1 `
+  -ProjectPath "D:\CVF-Workspace\Trading-Tools"
+```
+
+Nếu `.Controlled-Vibe-Framework-CVF` đã tồn tại từ lịch sử cũ hoặc lệch với
+public `origin/main`, không merge hai history. Reconcile bằng backup + fresh
+public clone:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\update_cvf_workspace_public_core.ps1 `
+  -WorkspaceRoot "D:\CVF-Workspace" `
+  -UpdateProjectManifests
+```
+
+Doctor kiểm tra enforcement artifacts, public bootstrap kit, đúng public
+remote và freshness so với `origin/main`. Live governance proof vẫn là gate
+riêng.
 
 Mốc W113 đã chứng minh luồng project downstream thật đầu tiên với live API-backed governance evidence: [W113-T1 First Downstream Project Proof](roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md).
 
@@ -139,7 +164,7 @@ cd Controlled-Vibe-Framework-CVF
 
 # Start web UI
 cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-npm ci
+npm install
 npm run dev
 
 # Open browser: http://localhost:3000
@@ -157,17 +182,17 @@ Console này chỉ chạy các job governance được allowlist, hiển thị r
 #### Option B: Manual (Core CVF)
 
 Đọc file này và làm theo:
-- [v1.1/USAGE.md](../v1.1/USAGE.md) - Cách dùng CVF core
-- [v1.1/execution/README.md](../v1.1/execution/README.md) - Chi tiết execution layer
+- [v1.0/USAGE.md](../v1.0/USAGE.md) - Cách dùng CVF core
+- [v1.0/phases/](../v1.0/phases/) - Chi tiết từng phase
 
 ### Step 3: Chọn Bước Tiếp Theo
 
 Sau khi chạy được ví dụ đầu tiên:
 
 - 📖 **Hiểu sâu hơn:** [Core Philosophy](concepts/core-philosophy.md)
-- 🎯 **Build project thật:** [Controlled Execution Loop](concepts/controlled-execution-loop.md)
+- 🎯 **Build project thật:** [Tutorial: Your First Project](tutorials/first-project.md)
 - 🧩 **Dùng Skills:** [Skill Library Guide](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/README.md)
-- ❓ **Có câu hỏi:** [CVF 5-Minute RC Setup](guides/CVF_5_MINUTE_RC_SETUP.md)
+- ❓ **Có câu hỏi:** [Troubleshooting](cheatsheets/troubleshooting.md)
 
 ---
 
@@ -188,10 +213,11 @@ cd Controlled-Vibe-Framework-CVF
 
 # 2. Install dependencies
 cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-npm ci
+npm install
 
 # 3. Setup environment
-# Optional: create .env.local and add provider keys only if you need live governance proof
+cp .env.example .env
+# Edit .env - add API keys if you need live governance proof
 
 # 4. Start server
 npm run dev
@@ -325,9 +351,8 @@ git checkout -b feature/your-feature-name
 
 # 3. Make changes
 
-# 4. Run checks in the package you touched
-cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-npm run check
+# 4. Run tests
+npm test
 
 # 5. Submit PR
 git push origin feature/your-feature-name
@@ -336,9 +361,9 @@ git push origin feature/your-feature-name
 
 ### Contribution Guidelines
 
-- Read: [CONTRIBUTING.md](../CONTRIBUTING.md)
-- Code style: [Contributing Guide](../CONTRIBUTING.md)
-- Skill creation: [Skill Library Guide](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/README.md)
+- Read: [CONTRIBUTING.md](../v1.0/CONTRIBUTING.md)
+- Code style: [Contributing Guide](../v1.0/CONTRIBUTING.md)
+- Skill creation: [Custom Skills Tutorial](tutorials/custom-skills.md)
 
 ### Get Help
 
@@ -359,10 +384,10 @@ git push origin feature/your-feature-name
 
 ### Path 2: Hands-On Tutorials (2-4 hours)
 
-1. [CVF 5-Minute RC Setup](guides/CVF_5_MINUTE_RC_SETUP.md) - 30 mins
-2. [Agent Platform README](../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/README.md) - 45 mins
-3. [Governed Loop Reference](reference/CVF_REFERENCE_GOVERNED_LOOP.md) - 60 mins
-4. [Skill Library Guide](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/README.md) - 90 mins
+1. [First Project](tutorials/first-project.md) - 30 mins
+2. [Using Web UI](tutorials/web-ui-setup.md) - 45 mins
+3. [Agent Platform](tutorials/agent-platform.md) - 60 mins
+4. [Custom Skills](tutorials/custom-skills.md) - 90 mins
 
 ### Path 3: Deep Dives (ongoing)
 
@@ -378,10 +403,10 @@ git push origin feature/your-feature-name
 ### Quick Answers
 
 **"Which version should I use?"**
-→ See: [Version History](concepts/version-evolution.md)
+→ See: [Version Picker](cheatsheets/version-picker.md)
 
 **"Setup not working?"**
-→ See: [CVF 5-Minute RC Setup](guides/CVF_5_MINUTE_RC_SETUP.md)
+→ See: [Troubleshooting](cheatsheets/troubleshooting.md)
 
 **"Don't understand governance?"**
 → See: [Governance 101](concepts/governance-model.md)
@@ -392,7 +417,7 @@ git push origin feature/your-feature-name
 ### Support Channels
 
 1. 🔍 [Search Documentation](GET_STARTED.md)
-2. 📚 [Setup Guide](guides/CVF_5_MINUTE_RC_SETUP.md)
+2. 📚 [Troubleshooting](cheatsheets/troubleshooting.md)
 3. 🐛 [Browse Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
 4. 💬 [Ask on Discord](https://discord.gg/cvf)
 5. ✉️ [Email Support](mailto:support@cvf.io)
@@ -409,10 +434,10 @@ git push origin feature/your-feature-name
 | Category | Link |
 |----------|------|
 | **Guides** | [Solo Dev](guides/solo-developer.md) · [Team](guides/team-setup.md) · [Enterprise](guides/enterprise.md) |
-| **Tutorials** | [CVF 5-Minute RC Setup](guides/CVF_5_MINUTE_RC_SETUP.md) · [Agent Platform README](../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/README.md) · [Governed Loop Reference](reference/CVF_REFERENCE_GOVERNED_LOOP.md) |
+| **Tutorials** | [First Project](tutorials/first-project.md) · [Web UI](tutorials/web-ui-setup.md) · [Agent](tutorials/agent-platform.md) |
 | **Concepts** | [Philosophy](concepts/core-philosophy.md) · [Controlled Loop](concepts/controlled-execution-loop.md) · [Legacy 4-Phase](concepts/4-phase-process.md) · [Governance](concepts/governance-model.md) |
 | **Reference** | [Skills](concepts/skill-system.md) · [Risk Model](concepts/risk-model.md) · [Version History](concepts/version-evolution.md) |
-| **Cheatsheets** | [Version History](concepts/version-evolution.md) · [Setup Guide](guides/CVF_5_MINUTE_RC_SETUP.md) |
+| **Cheatsheets** | [Versions](cheatsheets/version-picker.md) · [Troubleshoot](cheatsheets/troubleshooting.md) |
 
 ---
 
@@ -427,7 +452,7 @@ This guide is bilingual (🇬🇧/🇻🇳). Guides and tutorials are in English
 After getting started, here are recommended next steps:
 
 **For Solo Devs:**
-→ [Start the CVF Web UI](guides/CVF_5_MINUTE_RC_SETUP.md)
+→ [Build Your First Real Project](tutorials/first-project.md)
 
 **For Teams:**
 → [Set Up Team Collaboration](guides/team-setup.md)

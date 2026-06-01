@@ -57,6 +57,26 @@ Use this rule instead:
 
 This keeps setup lighter, faster, and less fragile.
 
+### Optional Downstream Workspace Bootstrap
+
+For agent/LLM-assisted downstream application work, keep the public CVF core in
+a hidden sibling folder and bootstrap the project outside the core:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\new-cvf-workspace.ps1 `
+  -WorkspaceRoot "<workspace-root>" `
+  -ProjectName "<project-name>"
+```
+
+If the workspace already has an old hidden core clone, reconcile it without
+merging unrelated histories:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\update_cvf_workspace_public_core.ps1 `
+  -WorkspaceRoot "<workspace-root>" `
+  -UpdateProjectManifests
+```
+
 Install decision rule:
 
 - `npm ci` is preferred when the package already has a committed `package-lock.json`
@@ -160,12 +180,21 @@ A broader install is only reasonable when:
 
 Even then, install package-by-package, not by copying old `node_modules/`.
 
-### Public Export Boundary
+### Convenience Script
 
-The current public repository does not ship bulk foundation bootstrap scripts.
-Install dependencies package-by-package with the lockfile rule above. If a
-later public export adds convenience scripts, this checklist should be updated
-in the same commit that adds them.
+If you need all 4 foundations installed at once:
+
+```powershell
+.\scripts\bootstrap_foundations.ps1
+```
+
+Or in shell environments:
+
+```bash
+./scripts/bootstrap_foundations.sh
+```
+
+These scripts use `npm ci` when a package lockfile already exists, otherwise `npm install`. The canonical install policy (per-extension) remains unchanged.
 
 ---
 
@@ -200,5 +229,7 @@ Then run only the commands needed for that package.
 ## 10. Canonical Pointers
 
 - `README.md`
+- `START_HERE.md`
+- `AGENT_HANDOFF.md`
 - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`
 - `docs/roadmaps/CVF_MASTER_ARCHITECTURE_CLOSURE_ROADMAP_2026-04-05.md`

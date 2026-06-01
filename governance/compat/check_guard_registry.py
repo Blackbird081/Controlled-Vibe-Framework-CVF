@@ -3,9 +3,10 @@
 CVF Guard Registry Compatibility Gate
 
 Ensures every guard file in governance/toolkit/05_OPERATION/*_GUARD.md
-is registered in both:
-  - README.md (Mandatory Guards table)
-  - docs/CVF_CORE_KNOWLEDGE_BASE.md (Governance Guards table)
+is registered in docs/CVF_CORE_KNOWLEDGE_BASE.md.
+
+README.md is a public/product entry point. It must link to the guard registry
+and toolkit, but it must not duplicate the full operation-guard filename table.
 
 Policy:
   - governance/toolkit/05_OPERATION/CVF_GUARD_REGISTRY_GUARD.md
@@ -27,8 +28,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 GUARD_DIR = REPO_ROOT / "governance" / "toolkit" / "05_OPERATION"
-README_PATH = REPO_ROOT / "README.md"
 KB_PATH = REPO_ROOT / "docs" / "CVF_CORE_KNOWLEDGE_BASE.md"
+README_PATH = REPO_ROOT / "README.md"
 
 POLICY = "governance/toolkit/05_OPERATION/CVF_GUARD_REGISTRY_GUARD.md"
 
@@ -57,40 +58,56 @@ def _check_file_mentions(filepath: Path, guard_names: list[str]) -> dict[str, bo
     return results
 
 
+def _readme_points_to_registry() -> bool:
+    if not README_PATH.exists():
+        return False
+    content = README_PATH.read_text(encoding="utf-8", errors="replace")
+    return (
+        "docs/CVF_CORE_KNOWLEDGE_BASE.md" in content
+        and "governance/toolkit/05_OPERATION" in content
+    )
+
+
 def _run_check() -> dict:
     """Run the full guard registry check."""
     guards = _discover_guards()
-    readme_mentions = _check_file_mentions(README_PATH, guards)
     kb_mentions = _check_file_mentions(KB_PATH, guards)
+    readme_pointer = _readme_points_to_registry()
 
     violations = []
     registered = []
 
+    if not readme_pointer:
+        violations.append({
+            "guard": "README_GUARD_REGISTRY_POINTER",
+            "readme": False,
+            "knowledgeBase": True,
+            "missingIn": ["README.md"],
+            "message": (
+                "README.md must link to docs/CVF_CORE_KNOWLEDGE_BASE.md and "
+                "governance/toolkit/05_OPERATION/ as the guard registry entry points."
+            ),
+        })
+
     for guard in guards:
-        in_readme = readme_mentions.get(guard, False)
         in_kb = kb_mentions.get(guard, False)
 
-        if in_readme and in_kb:
+        if in_kb:
             registered.append({
                 "guard": guard,
-                "readme": True,
+                "readme": readme_pointer,
                 "knowledgeBase": True,
             })
         else:
-            missing_in = []
-            if not in_readme:
-                missing_in.append("README.md")
-            if not in_kb:
-                missing_in.append("docs/CVF_CORE_KNOWLEDGE_BASE.md")
+            missing_in = ["docs/CVF_CORE_KNOWLEDGE_BASE.md"]
             violations.append({
                 "guard": guard,
-                "readme": in_readme,
+                "readme": readme_pointer,
                 "knowledgeBase": in_kb,
                 "missingIn": missing_in,
                 "message": (
-                    f"`{guard}` is not registered in: {', '.join(missing_in)}. "
-                    "All guards MUST be listed in both README.md and "
-                    "CVF_CORE_KNOWLEDGE_BASE.md."
+                    f"`{guard}` is not registered in docs/CVF_CORE_KNOWLEDGE_BASE.md. "
+                    "README.md only links to the registry entry points."
                 ),
             })
 
@@ -108,6 +125,7 @@ def _run_check() -> dict:
         "violationCount": len(violations),
         "registered": registered,
         "violations": violations,
+        "readmePointer": readme_pointer,
         "compliant": len(violations) == 0,
     }
 
@@ -116,7 +134,8 @@ def _print_report(report: dict) -> None:
     print("=== CVF Guard Registry Gate ===")
     print(f"Guard directory: {report['guardDirectory']}")
     print(f"Total guards found: {report['totalGuards']}")
-    print(f"Registered in both files: {report['registeredCount']}")
+    print(f"Registered in knowledge base: {report['registeredCount']}")
+    print(f"README registry pointer: {'present' if report['readmePointer'] else 'missing'}")
     print(f"Violations: {report['violationCount']}")
 
     if report["registered"]:
@@ -131,12 +150,12 @@ def _print_report(report: dict) -> None:
             print(f"  - {violation['guard']} — missing in: {missing}")
 
     if report["compliant"]:
-        print(f"\n✅ COMPLIANT — All {report['totalGuards']} guards are registered in README.md and CVF_CORE_KNOWLEDGE_BASE.md.")
+        print(f"\n✅ COMPLIANT — All {report['totalGuards']} guards are registered in CVF_CORE_KNOWLEDGE_BASE.md and README.md links to the registry.")
     else:
         print("\n❌ VIOLATION — Some guards are not registered.")
         print("   Action required:")
-        print("   1. Add guard row to README.md → Mandatory Guards table")
-        print("   2. Add guard row to docs/CVF_CORE_KNOWLEDGE_BASE.md → Governance Guards table")
+        print("   1. Add the guard row to docs/CVF_CORE_KNOWLEDGE_BASE.md → Governance Guards table")
+        print("   2. Keep README.md as a concise link to the guard registry and operation toolkit")
         print(f"   See: {POLICY}")
 
 

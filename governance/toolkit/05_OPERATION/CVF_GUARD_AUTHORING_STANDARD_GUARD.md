@@ -29,7 +29,8 @@ Every new guard, and every existing guard whose rule or enforcement surface is m
    - `## Related Artifacts`
    - `## Final Clause`
 4. ensure every path named in `Enforced by` exists in the repo
-5. register the guard in both `README.md` and `docs/CVF_CORE_KNOWLEDGE_BASE.md`
+5. register the guard in `docs/CVF_CORE_KNOWLEDGE_BASE.md`; keep `README.md`
+   as a concise link to the guard registry and operation toolkit
 6. if the guard claims a `GC-*` control ID, sync that ID with:
    - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
    - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`

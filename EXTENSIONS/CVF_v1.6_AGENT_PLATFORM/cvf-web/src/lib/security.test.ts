@@ -53,7 +53,7 @@ describe('security.ts', () => {
         });
 
         it('validates OpenAI key format', () => {
-            expect(validateApiKey('openai', 'sk-1234567890123456789012345678901234567890abcd')).toEqual({
+            expect(validateApiKey('openai', 'sk-1234567890123456789012345678901234567890abcd')).toEqual({ // test-key placeholder
                 valid: true
             });
             expect(validateApiKey('openai', 'invalid').valid).toBe(false);

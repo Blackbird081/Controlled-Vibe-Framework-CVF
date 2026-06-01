@@ -76,7 +76,7 @@ Multi-sample downstream proof:
 
 - Script: `scripts/w114_cp7_multi_sample_downstream_proof.ps1`
 - Assessment: `docs/assessments/CVF_W114_T1_MULTI_SAMPLE_DOWNSTREAM_PROOF_2026-04-23.md`
-- Raw: `docs/assessments/CVF_W114_CP7_RAW_2026-04-23.json`
+- Raw: `docs/assessments/archive/CVF_W114_CP7_RAW_2026-04-23.json`
 
 Workspace-to-web evidence bridge:
 
@@ -129,6 +129,9 @@ python scripts/run_cvf_release_gate_bundle.py --json
 # Workspace enforcement (requires a bootstrapped downstream project)
 powershell -ExecutionPolicy Bypass -File .\scripts\check_cvf_workspace_agent_enforcement.ps1 -ProjectPath "<project>"
 
+# Existing hidden-core reconciliation (backup + fresh public clone)
+powershell -ExecutionPolicy Bypass -File .\scripts\update_cvf_workspace_public_core.ps1 -WorkspaceRoot "<workspace-root>" -UpdateProjectManifests
+
 # Multi-sample downstream proof (creates 3 temp samples automatically)
 powershell -ExecutionPolicy Bypass -File .\scripts\w114_cp7_multi_sample_downstream_proof.ps1
 
@@ -143,3 +146,4 @@ powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\write_cvf_workspace_
 | 2026-04-21 | Initial live evidence publication (W111-T1) |
 | 2026-04-22 | Workspace enforcement + first downstream proof (W112/W113) |
 | 2026-04-23 | Non-coder value maximization evidence (W114 CP1-CP8) — this packet |
+| 2026-06-01 | Public workspace kit republished; doctor now verifies public remote, kit completeness, and `origin/main` freshness; stale unrelated hidden-core histories reconcile through backup + fresh clone |

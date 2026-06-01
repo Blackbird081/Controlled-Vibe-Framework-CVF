@@ -53,6 +53,18 @@ Notes:
 4. use CVF as a framework reference, not as the downstream app workspace
 5. store a bootstrap record in downstream project docs using `governance/toolkit/05_OPERATION/CVF_PROJECT_BOOTSTRAP_LOG_TEMPLATE.md`
 
+### Public-Core Freshness
+
+The standard hidden core is a clone of:
+
+`https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git`
+
+The workspace doctor must verify that the hidden core has the public-safe
+workspace kit, tracks the public remote, and matches `origin/main`. If an old
+hidden clone has unrelated history, do not merge it into the current public
+history. Run `scripts/update_cvf_workspace_public_core.ps1` so the old clone is
+backed up and replaced by a fresh public clone.
+
 ## Enforcement Surface
 
 - repo-level enforcement runs through `governance/compat/check_foundational_guard_surfaces.py`
@@ -65,7 +77,9 @@ Notes:
 - `governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md`
 - `README.md`
 - `docs/GET_STARTED.md`
+- `docs/reference/CVF_WORKSPACE_RULES.md`
 - `governance/toolkit/05_OPERATION/CVF_PROJECT_BOOTSTRAP_LOG_TEMPLATE.md`
+- `scripts/update_cvf_workspace_public_core.ps1`
 
 ## Final Clause
 

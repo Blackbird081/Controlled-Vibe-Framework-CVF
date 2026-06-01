@@ -108,6 +108,10 @@
       "reason": "Live route proof for the public web-build handoff template path; not an internal operator handoff artifact."
     },
     {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/spec-export-portable-handoff.ts",
+      "reason": "Public runtime source for portable handoff export semantics; not an internal operator handoff artifact."
+    },
+    {
       "path": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/agent.handoff.contract.ts",
       "reason": "Public control-plane contract source for agent handoff semantics, not an operator session handoff."
     },

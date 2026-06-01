@@ -165,8 +165,11 @@ def _validate_guard(
         if control_id not in master_policy_text:
             issues.append(f"`{control_id}` missing from governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md")
 
-    if guard_path.name not in readme_text:
-        issues.append("guard filename missing from README.md")
+    if (
+        "docs/CVF_CORE_KNOWLEDGE_BASE.md" not in readme_text
+        or "governance/toolkit/05_OPERATION" not in readme_text
+    ):
+        issues.append("README.md missing guard registry pointer")
     if guard_path.name not in kb_text:
         issues.append("guard filename missing from docs/CVF_CORE_KNOWLEDGE_BASE.md")
 
@@ -254,7 +257,7 @@ def _print_report(report: dict[str, object], base: str | None, head: str | None,
         print("   1. Add the required metadata block.")
         print("   2. Add all mandatory sections.")
         print("   3. Ensure `Enforced by` points to existing repo paths.")
-        print("   4. Register the guard in README.md and docs/CVF_CORE_KNOWLEDGE_BASE.md.")
+        print("   4. Register the guard in docs/CVF_CORE_KNOWLEDGE_BASE.md and keep README.md linked to the registry.")
         print("   5. If the guard claims a GC control ID, sync it with the control matrix and master policy.")
 
 

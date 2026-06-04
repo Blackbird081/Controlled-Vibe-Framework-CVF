@@ -23,6 +23,12 @@ Release-quality claims about governance behavior require a real provider API
 call. Mock mode may support UI structure checks only when no AI governance
 behavior is being asserted.
 
+Public-source review must also follow
+`docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`. Route
+files, CI badges, demo data, and documentation-only connector specs are not
+governance proof unless a public evidence path or live release-gate boundary
+explicitly supports the claim.
+
 ## Governed Behaviors
 
 The active governance surface includes:
@@ -73,6 +79,10 @@ Mock mode is only valid for UI structure checks such as layout, navigation,
 static badges, and RBAC pages when those checks do not assert AI governance
 behavior.
 
+Static CI and public-surface checks are useful public hygiene gates, but they
+do not consume provider secrets and do not replace the protected live release
+gate.
+
 ## Release Gate
 
 The release gate checks:
@@ -101,3 +111,10 @@ Evidence summaries must state:
 - pass/fail status
 - scope boundary
 - provenance pointer when raw proof exists elsewhere
+
+## External Review Boundary
+
+External reviewers should classify public source routes and connector specs by
+their cited evidence status. If a route exists but no public evidence path names
+that route or surface, the correct public finding is `coverage not proven`, not
+`governed` and not `production-ready`.

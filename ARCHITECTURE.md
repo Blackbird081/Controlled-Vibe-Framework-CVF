@@ -2,7 +2,10 @@
 
 > Front-door architecture view for GitHub readers.
 >
-> Current readout: CVF is a governance-first AI/agent control framework with live non-coder governance proof, certified Alibaba + DeepSeek provider lanes, and mandatory live API release evidence for governance claims.
+> Current readout: CVF is a governance-first AI/agent control framework with
+> live non-coder governance proof, certified provider lanes where listed in the
+> provider readiness matrix, and mandatory live API release evidence for
+> governance claims.
 >
 > This page is one of the three root front-door entrypoints alongside `README.md` and `START_HERE.md`.
 
@@ -18,11 +21,13 @@ CVF is easiest to understand as a governance-first stack with four distinct role
 The current publication posture is live-first:
 
 - governance behavior is proven through real provider execution, not mock strings;
-- Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` are certified provider lanes;
+- certified provider lanes are listed in `docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md`;
 - mock mode is valid only for UI structure checks;
 - release-quality proof runs through `python scripts/run_cvf_release_gate_bundle.py --json`.
 - Web is governance-inherited on the active governed AI path, but is not the full CVF runtime.
 - Workspace bootstrap is now agent-enforcement-ready when generated artifacts and the workspace doctor pass.
+- public route files, CI badges, and connector specs must be read through
+  `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`.
 
 Current optimization posture:
 
@@ -161,6 +166,10 @@ flowchart TB
 
 Diagram note: this is the path that must reach a real provider API call before CVF can claim governance behavior. Alibaba/DashScope is the primary certified release lane; DeepSeek has certified canary evidence and bounded confirmatory coverage. Provider parity is not claimed.
 
+Source route existence is not part of this proof by itself. A public route must
+be linked to evidence, tests, or the release gate before it is cited as governed
+route coverage.
+
 ## 4. Interaction Model
 
 This is the practical governed loop that CVF currently proves on the active path. Mock UI tests do not count as governance evidence.
@@ -198,6 +207,8 @@ The architecture should be read this way:
 - deeper governance and evidence records matter, but they are not the preferred first-click path from the repository front door
 - provider choice is user-owned, but governance evidence remains CVF-owned
 - release-quality governance claims require live API-backed evidence; mock mode is UI-only
+- static CI/public-surface checks support public hygiene, but do not replace
+  protected live release-gate evidence
 
 ## 6. Current Evidence Posture
 
@@ -209,6 +220,8 @@ The architecture should be read this way:
 | Multi-provider operability | Certified on 2 lanes | Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` both `CERTIFIED`; provider parity is not claimed |
 | Release gate | Mandatory live governance | W152 preserves `python scripts/run_cvf_release_gate_bundle.py --json` PASS, including live governance E2E |
 | Mock boundary | UI-only | `AGENTS.md` and live evidence packet |
+| Static CI boundary | Public hygiene only | `scripts/run_cvf_static_ci_gate.py` and CI workflows do not replace live provider proof |
+| Route coverage boundary | Evidence-linked only | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md` |
 | Provider parity | Not claimed | Speed, cost, quality, latency, and reliability remain provider economics |
 | Web CVF inheritance | Active path only | Web is governance-inherited on `/api/execute`; it does not claim full CVF runtime inheritance |
 | Workspace agent enforcement | Delivered | W112-T1 adds downstream `AGENTS.md`, `.cvf/` manifest/policy, and workspace doctor checks |
@@ -288,6 +301,7 @@ Latest closed non-coder value roadmap: [W119-T1 Non-Coder Adoption Proof And Evi
 - [Release Candidate Truth Packet](docs/reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md)
 - [Provider Lane Readiness Matrix](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
 - [Known Limitations Register](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
+- [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md)
 - [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)
 - [Public Governance Kernel Coherence](docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md)
 - [W112-T1 Workspace Agent Enforcement And Web Control Uplift Roadmap](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md)

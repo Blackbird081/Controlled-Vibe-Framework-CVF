@@ -84,6 +84,10 @@
   },
   "allowlist": [
     {
+      "path": "AGENT_HANDOFF.md",
+      "reason": "Public-core continuation pointer generated for public repository agents; not a private provenance or operator session handoff."
+    },
+    {
       "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/w113-workspace-web-live-proof.spec.ts",
       "reason": "Required by the release gate bundle; public because it is a live governance proof spec, not a raw evidence packet."
     },

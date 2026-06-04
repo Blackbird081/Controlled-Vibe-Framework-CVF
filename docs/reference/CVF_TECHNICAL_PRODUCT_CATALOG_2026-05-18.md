@@ -2,7 +2,7 @@
 
 Memory class: POINTER_RECORD
 
-Status: CURRENT - updated 2026-05-31
+Status: CURRENT - updated 2026-06-04
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -36,6 +36,8 @@ Every capability row must cite an existing public-sync path or explicitly mark
 the capability as roadmap-only. Public claims must preserve bounded evidence
 language and must not convert private provenance status into a public runtime,
 provider, hosted-readiness, production-readiness, or cost-optimization claim.
+Public-source evaluation must also follow
+`docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`.
 
 ## Enforcement / Verification
 
@@ -217,6 +219,13 @@ No runtime enforcement, receipt-envelope extension, or production-readiness
 claim. Evidence: `docs/reference/CVF_LHW17_*`, `docs/reference/CVF_LHW18_*`,
 `docs/reference/CVF_LHW19_*` connector spec files.
 
+On 2026-06-04, the public front door added an explicit public evaluation claim
+boundary for external agents and GitHub readers. It clarifies that route source
+files, CI badges, mock/demo data, and documentation-only connector specs are
+not governance proof unless linked evidence supports the claim. It also
+separates static CI hygiene from protected live release-gate proof.
+Evidence: `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
+
 ---
 
 ## What CVF Can Do Today
@@ -294,6 +303,7 @@ Evidence:
 | Capability | Status | Evidence |
 | --- | --- | --- |
 | Governance control plane | proven | `ARCHITECTURE.md`, `GOVERNANCE.md` |
+| Public evaluation claim boundary | active — external-agent calibration for route coverage, static CI, mock/demo data, connector specs, evidence durability, and provider parity boundaries; no new runtime behavior claimed | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md` |
 | Governance kernel coherence | audit-equivalent - public reader baseline | `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`, `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md` |
 | Live governance proof | proven — mandatory for release claims | `docs/evidence/latest-release-gate.md` |
 | Governed execution chain (Product Brief) | proven — bounded to selected Product Brief flow | `docs/evidence/phase-e-governed-execution-chain.md` |
@@ -443,6 +453,8 @@ or provider behavior. Live provider proof is required.
 CVF may claim:
 
 - governance-first AI control framework
+- public evaluation calibration for external agents through
+  `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
 - bounded live non-coder value on certified provider lanes
 - evidence-backed provider lanes where receipts exist
 - bounded Phase 2.B publicization evidence for one governed route across
@@ -472,6 +484,8 @@ CVF does not yet claim:
 
 - complete Agent OS status
 - universal provider parity across all methods
+- automatic route governance coverage merely because a public route file exists
+- that static CI/public-surface checks prove live AI governance behavior
 - automatic provider/model assignment across external IDE extensions or hidden
   agent tabs based only on the public provider-routing guide
 - full external capability marketplace readiness
@@ -518,6 +532,7 @@ update rules:
 - `GOVERNANCE.md` — governance posture
 - `docs/GET_STARTED.md` — getting started guide
 - `docs/evidence/README.md` — evidence index
+- `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 - `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`
 - `docs/reference/CVF_MODULE_INVENTORY.md`

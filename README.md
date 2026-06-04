@@ -21,6 +21,7 @@ collaboration tools for design, implementation, review, and documentation. See
 | Understand the system shape | [Architecture](ARCHITECTURE.md) |
 | Install or run locally | [Getting Started](docs/GET_STARTED.md) |
 | Understand governance rules | [Governance](GOVERNANCE.md) |
+| Review public claims safely | [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md) |
 | Configure provider lanes | [Providers](PROVIDERS.md) |
 | Choose a multi-agent/provider mix | [Multi-Agent Provider Routing](docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md) |
 | Use CVF with your own project | [Workspace Bootstrap](#workspace-bootstrap) |
@@ -43,6 +44,7 @@ The guard registry is intentionally not duplicated in this README. Use:
 - [Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md)
 - [Operation Guard Toolkit](governance/toolkit/05_OPERATION/)
 - [Guard Surface Classification](docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md)
+- [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md)
 
 ## What CVF Is
 
@@ -124,13 +126,19 @@ not in the README front door.
 
 ## Current Public Claims
 
-CVF can currently claim the following bounded capabilities:
+CVF can currently claim the following bounded capabilities. Public readers and
+external agents should also read the
+[Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md)
+before treating route files, CI badges, demo data, or connector specs as proof.
 
 - a governed non-coder AI path has live evidence on the primary Alibaba lane;
-- Alibaba and DeepSeek have certified provider-lane evidence for bounded
-  multi-provider operability;
+- Alibaba, DeepSeek, and OpenAI have certified provider-lane evidence where
+  listed in the provider readiness matrix;
 - governance behavior claims require live provider-backed proof;
 - mock mode is valid for UI structure checks only;
+- static CI checks do not replace protected live release-gate proof;
+- route source files do not prove route governance coverage without a linked
+  evidence path;
 - provider speed, quality, latency, and cost parity are **not** claimed;
 - public readiness is limited to the evidence and boundaries linked below.
 
@@ -234,6 +242,8 @@ CVF is not:
 - a permissionless autonomous agent runtime;
 - a guarantee that all legacy templates or skills are production-ready;
 - a substitute for live evidence when governance behavior is claimed;
+- a claim that every public API route is governed or production-ready merely
+  because the route exists in source;
 - a place to publish private keys, raw provider logs, or internal provenance
   material.
 
@@ -243,6 +253,7 @@ CVF is not:
 | --- | --- |
 | Architecture front door | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | Governance model | [GOVERNANCE.md](GOVERNANCE.md) |
+| Public claim boundary | [CVF Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md) |
 | Provider setup and boundaries | [PROVIDERS.md](PROVIDERS.md) |
 | Multi-agent provider routing | [CVF Multi-Agent Provider Routing](docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md) |
 | Cost and quota | [COST_AND_QUOTA.md](COST_AND_QUOTA.md) |

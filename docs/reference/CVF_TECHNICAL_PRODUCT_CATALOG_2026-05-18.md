@@ -226,6 +226,14 @@ not governance proof unless linked evidence supports the claim. It also
 separates static CI hygiene from protected live release-gate proof.
 Evidence: `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
 
+Also on 2026-06-04, the public documentation set added an External Review
+Hardening public-sync summary. The summary calibrates external-agent review
+after private follow-up work on route-governance proof and CI
+public-evaluation posture. It is a bounded summary only: no complete API-route
+coverage, ordinary live CI, hosted freshness, production readiness, dependency
+clearance, auth migration, or public release readiness is claimed. Evidence:
+`docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
+
 ---
 
 ## What CVF Can Do Today

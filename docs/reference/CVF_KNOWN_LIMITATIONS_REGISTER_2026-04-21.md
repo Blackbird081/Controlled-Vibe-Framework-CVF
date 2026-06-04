@@ -165,7 +165,7 @@ python scripts/check_public_surface.py
 | Statement | Public API route files may exist without a public evidence packet proving that each route is governed, authenticated, durable, or production-ready. Public review must classify route coverage by linked evidence, tests, and explicit claim text, not by file names or governance-related words inside a route. |
 | Impact | External agents should report missing route evidence as a bounded coverage gap instead of assuming every route is governed or production-ready. |
 | Future action | Add route-level public coverage evidence or caveats when a route is promoted into a public governance claim. |
-| Boundary | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md` |
+| Boundary | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`; `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md` |
 
 ---
 
@@ -178,7 +178,7 @@ python scripts/check_public_surface.py
 | Statement | Public CI and static gates can check docs, source hygiene, guard compatibility, and build posture without consuming provider secrets. They do not prove live governance behavior. Release-quality governance claims still require the protected live release gate with operator-supplied provider credentials. |
 | Why permanent | Live provider quota and keys must remain operator-controlled, while public CI should remain safe to run on ordinary pushes and pull requests. |
 | Operator path | `python scripts/run_cvf_release_gate_bundle.py --json` or the protected live release-gate workflow with explicit quota confirmation. |
-| Boundary | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md` |
+| Boundary | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`; `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md` |
 
 ---
 
@@ -204,6 +204,7 @@ production-readiness attestation.
 - `GOVERNANCE.md`
 - `ARCHITECTURE.md`
 - `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
+- `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 - `docs/evidence/latest-release-gate.md`
 

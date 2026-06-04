@@ -63,6 +63,7 @@ Default memory role follows
 - `docs/evidence/README.md`
 - `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md`
 - `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
+- `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 
 ## Public Evidence
@@ -82,6 +83,9 @@ The structured Phase B public claim boundary is
 External-agent and public-source review claim calibration is
 `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`.
 
+The bounded External Review Hardening public-sync summary is
+`docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`.
+
 ## Enforcement / Verification
 
 Run these checks before changing public docs:
@@ -97,6 +101,7 @@ python governance/compat/check_markdown_structural_completeness.py
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`
 - `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
+- `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 - `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`

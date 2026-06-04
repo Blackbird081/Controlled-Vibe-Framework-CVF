@@ -75,6 +75,22 @@ release gate boundary.
 When evidence is absent, reviewers should classify the route as unproven for
 public governance claims rather than assuming it is unsafe or governed.
 
+The ERH public-sync summary records a bounded follow-up for five previously
+review-flagged route surfaces. That summary is focused source/test evidence
+only. It does not establish complete API-route coverage, hosted route
+freshness, production readiness, or live governance proof for every route.
+
+## CI Public-Evaluation Boundary
+
+Public CI and static workflow files are visible public hygiene. They help
+external agents understand the configured build, docs, static governance, web
+check, and protected live release-gate posture.
+
+They do not mean ordinary pushes consume provider secrets, run live governance
+proof, clear dependency/audit risk, prove hosted freshness, or establish public
+release readiness. The ERH public-sync summary records this as a bounded CI
+public-evaluation posture only.
+
 ## Evidence Durability Boundary
 
 Public evidence summaries are intentionally curated. They may point to receipts,
@@ -113,6 +129,7 @@ Before reporting a CVF public finding, an external agent should:
 - `docs/INDEX.md`
 - `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md`
 - `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md`
+- `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 - `docs/evidence/latest-release-gate.md`
 

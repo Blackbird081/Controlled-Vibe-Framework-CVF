@@ -156,6 +156,10 @@
       "reason": "Public ADR explaining contract relationships, not a private session handoff."
     },
     {
+      "path": "docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md",
+      "reason": "Public-safe External Review Hardening summary that calibrates route and CI public-evaluation claims without exposing private provenance packets."
+    },
+    {
       "path": "docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md",
       "reason": "Blank public review template, not a completed private rebuttal packet."
     },

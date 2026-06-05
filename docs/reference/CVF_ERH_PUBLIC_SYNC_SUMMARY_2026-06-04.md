@@ -4,7 +4,7 @@ Memory class: POINTER_RECORD
 
 Status: CURRENT PUBLIC SUMMARY
 
-Date: 2026-06-04
+Date: 2026-06-05
 
 ## Purpose
 
@@ -38,9 +38,12 @@ readiness claim.
 | ERH item | Public status | What public readers may infer | What public readers must not infer |
 | --- | --- | --- | --- |
 | Public claim calibration | Exported public boundary | CVF has an explicit public evaluation boundary for README, catalog, route, CI, demo, and evidence claims. | Full private provenance is public, or every private claim is exported. |
+| External review rescan layer | Bounded summary | The external review intake was rescanned in private provenance with source-backed paragraph/section coverage, delta tracking, follow-up routing, and adversarial sampling requirements. | Semantic perfection, legal/security assurance, or proof that every public-facing claim is fully implemented in this repository. |
 | Route governance proof workflow | Bounded summary | Five previously review-flagged route surfaces have focused source/test evidence in private provenance for a shared route-governance proof workflow. | Complete API-route coverage, hosted route freshness, production readiness, or live governance proof for every route. |
 | CI public-evaluation workflow | Bounded summary | Public CI/static workflow posture is source-visible and bounded by this repository's workflow files and public claim boundary. | Production-grade CI, ordinary live-provider CI on every push, dependency-audit hardening, hosted freshness, or public release readiness. |
-| Dependency/auth posture | Deferred | Dependency and auth migration decisions remain outside this public summary. | Full CVE clearance, `next-auth` migration, auth runtime changes, or production security readiness. |
+| Safety workflow hardening | Bounded summary | Private ERH follow-up split safety work into workflow-chain hardening and bounded claim calibration. Public docs should not describe regex/pattern checks as ML DLP. | Advanced jailbreak detection, ML DLP, universal safety coverage, hosted security readiness, or provider-independent safety certification. |
+| Evidence durability workflow | Bounded summary | Private ERH follow-up separated local durable evidence, reconstructable policy snapshots, and an external-storage adapter runway. | Default production database backend, live Redis/DB proof, multi-instance consensus, tamper-proof audit, or distributed retention readiness. |
+| Dependency/auth posture | Bounded/deferred | Private follow-up reduced dependency-audit risk with residuals documented separately; auth migration remains outside this public summary. | Full CVE clearance, `next-auth` migration, auth runtime changes, or production security readiness. |
 
 ## Public Evaluation Rules
 
@@ -53,6 +56,10 @@ readiness claim.
   private packets.
 - Treat dependency/auth/security-readiness claims as deferred unless a later
   public artifact explicitly updates the limitations register and catalog.
+- Treat evidence durability as local/bounded unless a public artifact names a
+  live external backend, migration proof, and distributed recovery proof.
+- Treat rescan coverage as intake discipline. It does not replace source-level
+  review or live governance proof for runtime behavior.
 
 ## Related Public Paths
 

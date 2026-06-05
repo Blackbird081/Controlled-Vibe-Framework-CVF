@@ -182,6 +182,19 @@ python scripts/check_public_surface.py
 
 ---
 
+### L-011 — No Public Default Database Or Distributed Audit Backend Claim
+
+| Field | Value |
+| --- | --- |
+| Classification | Open |
+| Area | Evidence durability / audit storage |
+| Statement | Public CVF evidence durability claims are local-first and bounded unless a public evidence path names a live external backend, migration proof, and distributed recovery proof. The public repository must not be read as claiming a default production database, live Redis backend, multi-instance consensus, tamper-proof audit log, or distributed retention readiness. |
+| Impact | External agents should classify missing database/distributed audit proof as an open bounded limitation, not as hidden proof and not as a contradiction when docs say CVF is evidence-based. |
+| Future action | Publish a dedicated external-storage or database-backed evidence packet only if a later tranche implements and tests a live backend with migration and recovery evidence. |
+| Boundary | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`; `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md` |
+
+---
+
 ## How to Use This Register
 
 **For demo preparation:** acknowledge open gaps proactively; do not wait for them to be discovered. Be explicit that certified provider/model lanes are listed in `docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md` while other providers remain experimental until canary-run. L-003 and L-008 are now closed.

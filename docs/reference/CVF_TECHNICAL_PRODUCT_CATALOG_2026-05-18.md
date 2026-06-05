@@ -2,7 +2,7 @@
 
 Memory class: POINTER_RECORD
 
-Status: CURRENT - updated 2026-06-04
+Status: CURRENT - updated 2026-06-05
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -234,6 +234,16 @@ coverage, ordinary live CI, hosted freshness, production readiness, dependency
 clearance, auth migration, or public release readiness is claimed. Evidence:
 `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
 
+On 2026-06-05, that ERH public summary was refreshed after private follow-up
+on review rescan discipline, safety workflow hardening, and evidence durability
+triage. The public-facing boundary remains explicit: these summaries improve
+external-agent calibration, but they do not claim advanced ML DLP, universal
+jailbreak detection, a default production database, live Redis/DB durability,
+multi-instance consensus, tamper-proof audit retention, hosted readiness, or
+public release readiness. Evidence:
+`docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`,
+`docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md`
+
 ---
 
 ## What CVF Can Do Today
@@ -312,6 +322,7 @@ Evidence:
 | --- | --- | --- |
 | Governance control plane | proven | `ARCHITECTURE.md`, `GOVERNANCE.md` |
 | Public evaluation claim boundary | active — external-agent calibration for route coverage, static CI, mock/demo data, connector specs, evidence durability, and provider parity boundaries; no new runtime behavior claimed | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md` |
+| External Review Hardening public summary | active — public-safe calibration for external review rescan, route/CI posture, safety workflow hardening, dependency/auth boundaries, and evidence durability limitations; no private packet export or production-readiness claim | `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`, `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md` |
 | Governance kernel coherence | audit-equivalent - public reader baseline | `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`, `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md` |
 | Live governance proof | proven — mandatory for release claims | `docs/evidence/latest-release-gate.md` |
 | Governed execution chain (Product Brief) | proven — bounded to selected Product Brief flow | `docs/evidence/phase-e-governed-execution-chain.md` |

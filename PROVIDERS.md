@@ -1,7 +1,5 @@
 # Providers
 
-Memory class: POINTER_RECORD
-
 Status: CURRENT PUBLIC PROVIDER BOUNDARY
 
 CVF is provider-agnostic. Providers are execution lanes behind a governance

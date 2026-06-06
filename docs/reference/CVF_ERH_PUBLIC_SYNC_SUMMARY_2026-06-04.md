@@ -1,7 +1,5 @@
 # CVF ERH Public Sync Summary
 
-Memory class: POINTER_RECORD
-
 Status: CURRENT PUBLIC SUMMARY
 
 Date: 2026-06-05

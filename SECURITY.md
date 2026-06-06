@@ -1,7 +1,5 @@
 # Security
 
-Memory class: POINTER_RECORD
-
 Status: CURRENT PUBLIC SECURITY CONTACT SUMMARY
 
 Do not report secrets through public issues.

@@ -1,7 +1,5 @@
 # CVF Public Core Agent Instructions
 
-Memory class: POINTER_RECORD
-
 Status: PUBLIC_CORE_ACTIVE
 
 ## Purpose

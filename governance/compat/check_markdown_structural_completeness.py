@@ -111,6 +111,21 @@ COMMON_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ),
 )
 
+PUBLIC_FACING_MEMORY_MARKER_EXEMPT_PATHS = {
+    "AGENTS.md",
+    "AGENT_HANDOFF.md",
+    "CONTRIBUTING.md",
+    "COST_AND_QUOTA.md",
+    "GOVERNANCE.md",
+    "PROVIDERS.md",
+    "SECURITY.md",
+    "docs/guides/external-agent-review-guide.md",
+    "docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md",
+    "docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md",
+    "docs/reference/CVF_POSITIONING.md",
+    "docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md",
+}
+
 SECTION_GROUPS: dict[str, tuple[tuple[str, tuple[str, ...]], ...]] = {
     "contract": (
         ("core principle", (r"^##\s+Core Principle\b",)),
@@ -306,6 +321,8 @@ def _validate_markdown(path: str) -> list[str]:
     issues: list[str] = []
 
     for label, patterns in COMMON_GROUPS:
+        if label == "memory class" and path in PUBLIC_FACING_MEMORY_MARKER_EXEMPT_PATHS:
+            continue
         if not _has_any(text, patterns):
             issues.append(f"missing common element: {label}")
 

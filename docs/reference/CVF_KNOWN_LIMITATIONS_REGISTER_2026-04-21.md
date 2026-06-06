@@ -1,7 +1,5 @@
 # CVF Known Limitations Register
 
-Memory class: POINTER_RECORD
-
 Status: CURRENT PUBLIC LIMITATIONS REGISTER
 
 **Date:** 2026-04-21 (updated 2026-04-21 — L-003 + L-008 closed by E2E stabilization wave)  
@@ -192,6 +190,45 @@ python scripts/check_public_surface.py
 | Impact | External agents should classify missing database/distributed audit proof as an open bounded limitation, not as hidden proof and not as a contradiction when docs say CVF is evidence-based. |
 | Future action | Publish a dedicated external-storage or database-backed evidence packet only if a later tranche implements and tests a live backend with migration and recovery evidence. |
 | Boundary | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`; `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md` |
+
+---
+
+### L-012 — Public Coverage Visibility Is Configured, Not A Standing Pass Claim
+
+| Field | Value |
+| --- | --- |
+| Classification | Open |
+| Area | CI / coverage discoverability |
+| Statement | Public workflow files expose coverage jobs, but the repository front door must not be read as claiming a current coverage pass unless a specific workflow run or artifact is inspected. |
+| Impact | External agents should distinguish configured coverage from latest-run evidence. |
+| Future action | Publish a small public evidence pointer when a release tag intentionally depends on a coverage artifact. |
+| Boundary | `.github/workflows/cvf-ci.yml`; `.github/workflows/cvf-web-ci.yml`; `.github/workflows/documentation-testing.yml`; `README.md` |
+
+---
+
+### L-013 — CPF Source Surface Still Needs Product-Level Refactor Planning
+
+| Field | Value |
+| --- | --- |
+| Classification | Open |
+| Area | Control Plane Foundation maintainability |
+| Statement | The CPF public barrel is currently small and guard-protected, but the CPF source surface remains broad and should be grouped further only through a source-verified refactor plan. |
+| Impact | External agents should not report the current barrel as a large barrel, but may correctly report broad CPF source grouping as maintainability debt. |
+| Future action | Open a separate refactor work order if CPF source grouping becomes a priority. |
+| Boundary | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts`; `governance/compat/check_cpf_public_surface_maintainability.py` |
+
+---
+
+### L-014 — Package Naming And Five-Minute Demo Remain Product Clarity Debt
+
+| Field | Value |
+| --- | --- |
+| Classification | Open |
+| Area | Onboarding / package taxonomy |
+| Statement | Extension and package names still reflect CVF's historical evolution, and the fastest public demo path still assumes local setup plus optional provider keys rather than a hosted no-key demo. |
+| Impact | New reviewers may perceive naming and first-run setup as heavier than the core governance idea. |
+| Future action | Plan a public product-packaging pass covering extension naming, quick-demo flow, and hosted/no-key demo boundaries without weakening live-proof claims. |
+| Boundary | `README.md`; `docs/GET_STARTED.md`; `docs/START_WITH_CVF.md`; `EXTENSIONS/` |
 
 ---
 

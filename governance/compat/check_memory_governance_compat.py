@@ -134,6 +134,13 @@ EXPECTED_BY_PATH: dict[str, str] = {
     PUBLIC_RENEWAL_V2_ROADMAP_PATH: "FULL_RECORD",
 }
 
+PUBLIC_FACING_MEMORY_MARKER_EXEMPT_PATHS = {
+    "docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md",
+    "docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md",
+    "docs/reference/CVF_POSITIONING.md",
+    "docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md",
+}
+
 
 def _run_git(args: list[str]) -> tuple[int, str, str]:
     proc = subprocess.run(
@@ -207,6 +214,8 @@ def _read_text(path: str) -> str:
 
 
 def _expected_memory_class(path: str) -> str | None:
+    if path in PUBLIC_FACING_MEMORY_MARKER_EXEMPT_PATHS:
+        return None
     if path in EXPECTED_BY_PATH:
         return EXPECTED_BY_PATH[path]
     for prefix, expected in EXPECTED_BY_PREFIX:

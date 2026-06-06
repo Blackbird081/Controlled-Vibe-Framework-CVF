@@ -1,7 +1,5 @@
 # Contributing
 
-Memory class: POINTER_RECORD
-
 Status: CURRENT PUBLIC CONTRIBUTION GUIDE
 
 CVF welcomes technical contributions that improve the governance control plane.

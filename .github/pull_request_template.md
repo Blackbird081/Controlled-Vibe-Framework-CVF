@@ -1,16 +1,18 @@
 ## Public Surface Classification
 
-Choose one:
+Select every public class touched by this PR:
 
 - [ ] KEEP_PUBLIC_CORE
 - [ ] KEEP_PUBLIC_EVIDENCE_SUMMARY
 - [ ] PUBLIC_EXAMPLE_OPTIONAL
-- [ ] PRIVATE_PROVENANCE_BLOCKED - not intended for this repo
+
+## Private Provenance Exclusion
+
+- [ ] I confirmed this PR does not include PRIVATE_PROVENANCE_BLOCKED material
+      such as raw handoffs, rebuttals, logs, uncurated evidence, private
+      operator transcripts, runtime state, `.env` files, or raw provider keys
 
 ## Checks
 
 - [ ] I ran `python scripts/check_public_surface.py`
-- [ ] I did not add raw handoffs, rebuttals, logs, or uncurated evidence
-- [ ] I did not commit `.env`, runtime state, or raw provider keys
 - [ ] Any governance-behavior claim cites live provider evidence
-

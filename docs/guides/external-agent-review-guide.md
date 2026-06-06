@@ -10,6 +10,90 @@ AI system and asks for an independent review.
 Keep external review grounded in the public repository, current claim boundary,
 and reproducible evidence requirements.
 
+## Paste-Ready External Review Prompt
+
+Copy this prompt when asking another AI agent to review CVF from a public
+GitHub link:
+
+```text
+Review the public Controlled Vibe Framework (CVF) repository as a public
+product and evidence surface.
+
+Before making findings, record:
+- repository URL
+- branch or commit SHA under review
+- review date
+- whether you had live provider API keys available
+
+Read these files first, in order:
+1. README.md
+2. docs/guides/external-agent-review-guide.md
+3. docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md
+4. docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md
+5. docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md
+6. docs/GET_STARTED.md
+7. CHANGELOG.md
+8. SECURITY.md
+9. PROVIDERS.md
+10. COST_AND_QUOTA.md
+
+Evaluate CVF with these rules:
+- Treat this repository as the public CVF product/evidence surface, not the
+  full private provenance archive.
+- Treat route files, connector specs, mock UI, static CI badges, and status
+  labels as inventory unless a public evidence path proves the runtime claim.
+- Release-quality governance behavior requires a live provider-backed run:
+  python scripts/run_cvf_release_gate_bundle.py --json
+- If no provider API key is available, classify live proof as unavailable in
+  your environment. Do not replace it with mock proof.
+- Distinguish configured CI/coverage workflows from a specific latest run
+  artifact.
+- Treat provider lanes as lane-specific evidence, not cost, speed, quality,
+  reliability, latency, or parity claims.
+- Check known limitations before reporting production, enterprise, benchmark,
+  route-coverage, evidence-durability, or onboarding gaps.
+- Cite exact public file paths and line numbers for every finding.
+
+Separate your report into:
+1. source-backed bugs or contradictions;
+2. public documentation drift;
+3. security or dependency debt;
+4. benchmark, reviewer-agreement, or corpus-size limitations;
+5. production-readiness or enterprise-readiness gaps;
+6. live-proof gaps requiring API keys;
+7. product/onboarding/refactor debt;
+8. findings you reject as already bounded by public docs.
+
+For each finding, include:
+- finding title
+- severity
+- cited public path and line
+- evidence type: source, docs, CI config, live run, missing live key, or
+  limitation-register item
+- whether the finding is new, known open debt, stale against the reviewed
+  commit, or unsupported by public evidence
+- recommended fix
+
+Do not claim hosted SaaS readiness, production readiness, full route coverage,
+private provenance completeness, provider parity, benchmark parity, or live
+governance behavior unless the public repository provides matching evidence or
+you personally ran the live command successfully.
+```
+
+## How To Interpret CVF Structure
+
+CVF has four public layers that external agents should keep separate:
+
+| Layer | What it means | Common review mistake |
+| --- | --- | --- |
+| Front-door docs | Public explanation and claim boundaries | Treating docs as proof of runtime behavior |
+| Governance guards | Local/CI compatibility checks for repository discipline | Treating every guard as product runtime logic |
+| Extension source | Implementation surfaces and historical modules | Treating file existence as active production coverage |
+| Evidence packets | Bounded proof summaries, receipts, and limitations | Treating one proof as universal capability |
+
+Use the claim boundary and known limitations register to decide whether a
+finding is a defect, open debt, or an unsupported inference.
+
 ## Scope / Target / Owner Boundary
 
 Target: external AI agents, reviewers, and users evaluating the public CVF
@@ -124,29 +208,6 @@ Recommendation: external agents should start from this guide and the public
 claim boundary before issuing a CVF assessment. Findings should be accepted only
 when they cite current public paths, source lines, evidence packets, command
 results, or clearly labeled unavailable live proof.
-
-## Prompt Template
-
-Use this prompt for a cleaner external review:
-
-```text
-Review this public CVF repository as a public product/evidence surface.
-Start with README.md, docs/GET_STARTED.md, CHANGELOG.md, SECURITY.md,
-docs/guides/external-agent-review-guide.md, and
-docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md.
-
-Separate findings into:
-1. source-backed bugs or contradictions;
-2. public documentation drift;
-3. security or dependency debt;
-4. benchmark/evidence limitations;
-5. production-readiness gaps;
-6. live-proof gaps that require API keys.
-
-Do not infer private provenance, hosted SaaS readiness, production readiness,
-provider parity, or live governance behavior unless the public repo provides a
-matching evidence path or live command result. Cite public file paths and lines.
-```
 
 ## Claim Boundary
 

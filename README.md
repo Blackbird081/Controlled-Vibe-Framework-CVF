@@ -22,7 +22,7 @@ collaboration tools for design, implementation, review, and documentation. See
 | Install or run locally | [Getting Started](docs/GET_STARTED.md) |
 | Understand governance rules | [Governance](GOVERNANCE.md) |
 | Review public claims safely | [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md) |
-| Ask an external AI reviewer to evaluate CVF | [External Agent Review Guide](docs/guides/external-agent-review-guide.md) |
+| Ask an external AI reviewer to evaluate CVF | [External Agent Review Guide and paste-ready prompt](docs/guides/external-agent-review-guide.md) |
 | Review ERH follow-up summary | [ERH Public Sync Summary](docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md) |
 | Check current evidence and open debt | [Known Limitations](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md) |
 | Configure provider lanes | [Providers](PROVIDERS.md) |

@@ -1,5 +1,7 @@
 # CVF Positioning — Identity & Definition
 
+Memory class: POINTER_RECORD
+
 > **Created:** Feb 08, 2026 | **Updated:** Feb 25, 2026  
 > **Purpose:** Answer the question "What is CVF?" clearly, avoiding confusion
 
@@ -48,7 +50,7 @@ CVF has 5 distinct layers (not a monolith):
 │     v1.3, governance/      — Python scripts, CI/CD       │
 ├─────────────────────────────────────────────────────────┤
 │  📖 CORE (Layer 1) ← This IS CVF                        │
-│     v1.0, v1.1, v1.2       — Rules + 131 Active Skills   │
+│     v1.0, v1.1, v1.2       — Rules + 62 Active Skills    │
 │     → Always needed. Start here.                          │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -167,4 +169,4 @@ Use one of these taglines when introducing CVF:
 
 ---
 
-*Updated: March 20, 2026*
+*Updated: June 2026*

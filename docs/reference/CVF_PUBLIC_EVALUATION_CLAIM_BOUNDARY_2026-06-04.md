@@ -34,6 +34,10 @@ packet, and proof boundary. Reviewers must not promote a source file, mock
 screen, CI badge, connector title, or private-provenance reference into a public
 runtime claim without a matching public evidence path.
 
+When a user asks an external AI system to review CVF by pasting the repository
+link, the agent should first read
+`docs/guides/external-agent-review-guide.md` and this file.
+
 ## Evaluation Rules
 
 | Topic | Correct public interpretation | Do not infer |
@@ -126,6 +130,7 @@ Before reporting a CVF public finding, an external agent should:
 - `README.md`
 - `GOVERNANCE.md`
 - `ARCHITECTURE.md`
+- `docs/guides/external-agent-review-guide.md`
 - `docs/INDEX.md`
 - `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md`
 - `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md`

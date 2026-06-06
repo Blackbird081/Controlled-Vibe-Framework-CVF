@@ -436,7 +436,7 @@ git push origin feature/your-feature-name
 | **Guides** | [Solo Dev](guides/solo-developer.md) · [Team](guides/team-setup.md) · [Enterprise](guides/enterprise.md) |
 | **Tutorials** | [First Project](tutorials/first-project.md) · [Web UI](tutorials/web-ui-setup.md) · [Agent](tutorials/agent-platform.md) |
 | **Concepts** | [Philosophy](concepts/core-philosophy.md) · [Controlled Loop](concepts/controlled-execution-loop.md) · [Legacy 4-Phase](concepts/4-phase-process.md) · [Governance](concepts/governance-model.md) |
-| **Reference** | [Skills](concepts/skill-system.md) · [Risk Model](concepts/risk-model.md) · [Version History](concepts/version-evolution.md) |
+| **Reference** | [Skills](concepts/skill-system.md) · [Risk Model](concepts/risk-model.md) · [Version History](concepts/version-evolution.md) · [External Review](guides/external-agent-review-guide.md) |
 | **Cheatsheets** | [Versions](cheatsheets/version-picker.md) · [Troubleshoot](cheatsheets/troubleshooting.md) |
 
 ---

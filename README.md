@@ -22,6 +22,7 @@ collaboration tools for design, implementation, review, and documentation. See
 | Install or run locally | [Getting Started](docs/GET_STARTED.md) |
 | Understand governance rules | [Governance](GOVERNANCE.md) |
 | Review public claims safely | [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md) |
+| Ask an external AI reviewer to evaluate CVF | [External Agent Review Guide](docs/guides/external-agent-review-guide.md) |
 | Review ERH follow-up summary | [ERH Public Sync Summary](docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md) |
 | Configure provider lanes | [Providers](PROVIDERS.md) |
 | Choose a multi-agent/provider mix | [Multi-Agent Provider Routing](docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md) |
@@ -129,6 +130,7 @@ not in the README front door.
 
 CVF can currently claim the following bounded capabilities. Public readers and
 external agents should also read the
+[External Agent Review Guide](docs/guides/external-agent-review-guide.md) and
 [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md)
 before treating route files, CI badges, demo data, or connector specs as proof.
 

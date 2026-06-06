@@ -75,7 +75,7 @@ The Form Input section is the core of a skill — it defines exactly what inform
 
 ## Skill Library
 
-CVF includes **131 active skills** across 12 domains:
+CVF includes **62 active skills** across 12 domains:
 
 | Domain | Skills | Examples |
 |--------|:------:|---------|

@@ -188,6 +188,10 @@
       "reason": "Public structural review for CI surface cleanup and workflow orchestration guard introduction; contains no private provenance payload."
     },
     {
+      "path": "docs/reviews/CVF_PUBLIC_SYNC_PR_SURFACE_CONTROL_REVIEW_2026-06-06.md",
+      "reason": "Public-safe structural review for agent-owned PR publication controls and public-sync guard compatibility; contains no private provenance payload."
+    },
+    {
       "path": "docs/audits/CVF_FAST_LANE_N1_PUBLIC_CATALOG_UPDATE_2026-05-20.md",
       "reason": "Public-safe catalog maintenance audit already published with no private provenance payload; retained to preserve public catalog traceability."
     },

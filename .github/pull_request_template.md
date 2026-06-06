@@ -1,16 +1,26 @@
-## Public Surface Classification
+## Public Surface Publication Record
 
-Choose one:
+This section is agent-owned. Do not ask the operator to choose classifications
+manually.
 
-- [ ] KEEP_PUBLIC_CORE
-- [ ] KEEP_PUBLIC_EVIDENCE_SUMMARY
-- [ ] PUBLIC_EXAMPLE_OPTIONAL
-- [ ] PRIVATE_PROVENANCE_BLOCKED - not intended for this repo
+Public classes touched:
+
+- `KEEP_PUBLIC_CORE`: <yes/no>
+- `KEEP_PUBLIC_EVIDENCE_SUMMARY`: <yes/no>
+- `PUBLIC_EXAMPLE_OPTIONAL`: <yes/no>
+
+Private provenance status:
+
+- `PRIVATE_PROVENANCE_BLOCKED`: excluded
+
+Agent evidence:
+
+- `python scripts/check_public_surface.py`: <PASS/FAIL with blocker paths>
+- `python governance/compat/run_local_governance_hook_chain.py --hook pre-push`: <PASS/FAIL>
 
 ## Checks
 
-- [ ] I ran `python scripts/check_public_surface.py`
-- [ ] I did not add raw handoffs, rebuttals, logs, or uncurated evidence
-- [ ] I did not commit `.env`, runtime state, or raw provider keys
-- [ ] Any governance-behavior claim cites live provider evidence
-
+- No raw handoffs, rebuttals, logs, uncurated evidence, private operator
+  transcripts, runtime state, `.env` files, or raw provider keys are included.
+- Any governance-behavior claim cites live provider evidence or is explicitly
+  bounded as documentation-only.

@@ -124,6 +124,7 @@ PUBLIC_FACING_MEMORY_MARKER_EXEMPT_PATHS = {
     "docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md",
     "docs/reference/CVF_POSITIONING.md",
     "docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md",
+    "docs/reviews/CVF_PUBLIC_SYNC_PR_SURFACE_CONTROL_REVIEW_2026-06-06.md",
 }
 
 SECTION_GROUPS: dict[str, tuple[tuple[str, tuple[str, ...]], ...]] = {

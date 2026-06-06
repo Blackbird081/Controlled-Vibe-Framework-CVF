@@ -24,6 +24,7 @@ class CheckActiveWindowRegistryTests(unittest.TestCase):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.repo_root = Path(self.temp_dir.name)
         (self.repo_root / "governance" / "compat").mkdir(parents=True, exist_ok=True)
+        (self.repo_root / "governance").mkdir(parents=True, exist_ok=True)
         (self.repo_root / "governance" / "toolkit" / "05_OPERATION").mkdir(parents=True, exist_ok=True)
         (self.repo_root / "docs" / "reference").mkdir(parents=True, exist_ok=True)
         (self.repo_root / ".github" / "workflows").mkdir(parents=True, exist_ok=True)
@@ -96,6 +97,7 @@ class CheckActiveWindowRegistryTests(unittest.TestCase):
             ),
             encoding="utf-8",
         )
+        self.public_manifest_path = self.repo_root / "governance" / "public-surface-manifest.json"
 
     def tearDown(self) -> None:
         self.temp_dir.cleanup()
@@ -109,8 +111,9 @@ class CheckActiveWindowRegistryTests(unittest.TestCase):
                             with patch.object(MODULE, "WORKFLOW_PATH", self.repo_root / ".github" / "workflows" / "documentation-testing.yml"):
                                 with patch.object(MODULE, "WINDOW_CLASSIFICATION_PATH", self.repo_root / "docs" / "reference" / "CVF_ACTIVE_WINDOW_CLASSIFICATION.md"):
                                     with patch.object(MODULE, "ROTATION_GUARD_DIR", self.repo_root / "governance" / "toolkit" / "05_OPERATION"):
-                                        with patch.object(MODULE, "load_json_policy_baseline", return_value=(baseline, "HEAD" if baseline else None)):
-                                            return MODULE.build_report()
+                                        with patch.object(MODULE, "PUBLIC_SURFACE_MANIFEST_PATH", self.public_manifest_path):
+                                            with patch.object(MODULE, "load_json_policy_baseline", return_value=(baseline, "HEAD" if baseline else None)):
+                                                return MODULE.build_report()
 
     def test_accepts_compliant_registry(self) -> None:
         report = self._build_report()
@@ -128,6 +131,32 @@ class CheckActiveWindowRegistryTests(unittest.TestCase):
         self.registry_path.write_text(json.dumps(current, indent=2), encoding="utf-8")
         report = self._build_report(baseline=baseline)
         self.assertTrue(any(v["type"] == "window_mutated_from_baseline" for v in report["violations"]))
+
+    def test_allows_missing_private_blocked_active_path_in_public_sync(self) -> None:
+        (
+            self.repo_root
+            / "docs"
+            / "reviews"
+            / "cvf_phase_governance"
+            / "CVF_CONFORMANCE_TRACE_2026-03-07.md"
+        ).unlink()
+        self.public_manifest_path.write_text(
+            json.dumps({"classes": {"PRIVATE_PROVENANCE_BLOCKED": ["docs/reviews/**"]}, "allowlist": []}),
+            encoding="utf-8",
+        )
+        report = self._build_report()
+        self.assertTrue(report["compliant"])
+
+    def test_missing_private_path_without_manifest_still_fails(self) -> None:
+        (
+            self.repo_root
+            / "docs"
+            / "reviews"
+            / "cvf_phase_governance"
+            / "CVF_CONFORMANCE_TRACE_2026-03-07.md"
+        ).unlink()
+        report = self._build_report()
+        self.assertTrue(any(v["type"] == "missing_referenced_path" for v in report["violations"]))
 
 
 if __name__ == "__main__":

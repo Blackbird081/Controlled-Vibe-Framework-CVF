@@ -17,13 +17,11 @@
   ],
   "summary": {
     "activeRecentCount": 36,
-    "retainEvidenceCount": 1,
+    "retainEvidenceCount": 0,
     "safeToArchiveCount": 0,
     "archivedCount": 0,
     "derivedAt": "2026-05-31",
-    "derivationMethod": "Public-safe curation registry for the public repository. Private retain-evidence review paths are not exported; the only retained historical review path is the public active-window conformance trace stub required by the public guard chain."
+    "derivationMethod": "Public-safe curation registry for the public repository. Private retain-evidence review paths are not exported; public-sync active-window guards treat private provenance review traces as omitted when blocked by the public-surface manifest."
   },
-  "retainEvidencePaths": [
-    "docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md"
-  ]
+  "retainEvidencePaths": []
 }

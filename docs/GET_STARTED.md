@@ -392,7 +392,7 @@ git push origin feature/your-feature-name
 ### Path 3: Deep Dives (ongoing)
 
 - [Governance Toolkit](../governance/toolkit/) - Comprehensive
-- [Skill Library](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 124 skills
+- [Skill Library](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 62 active skills
 - [Version History](concepts/version-evolution.md) - Evolution
 - [Architecture](reference/CVF_ARCHITECTURE_DIAGRAMS.md) - Technical specs
 
@@ -476,4 +476,4 @@ After getting started, here are recommended next steps:
 
 ---
 
-*Last updated: March 20, 2026 · Version: 1.6.0 + canonical runtime alignment active*
+*Last updated: June 2026 · Version: 4.0.0 GA — see [CHANGELOG](../CHANGELOG.md) for full release history*

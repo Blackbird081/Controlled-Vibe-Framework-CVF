@@ -156,7 +156,7 @@ cvf-web/
 │   │   ├── GovernanceBar.tsx   ← Phase/Role/Risk control
 │   │   ├── GovernancePanel.tsx ← Self-UAT sidebar
 │   │   ├── DynamicForm.tsx     ← Form templates
-│   │   └── SkillLibrary.tsx    ← 124 skills browser
+│   │   └── SkillLibrary.tsx    ← 62 active skills browser
 │   └── lib/
 │       ├── governance-context.ts   ← Authority matrix
 │       ├── skill-template-map.ts   ← Skills ↔ Templates mapping
@@ -371,7 +371,7 @@ Panel bên phải — hiển thị trạng thái governance hiện tại và cho
 
 ### Mapping
 
-- **50 templates** được mapping tới **12 skill domains × 124 skills**
+- **50 templates** được mapping tới **12 skill domains × 62 active skills**
 - Mapping nằm trong file `src/lib/skill-template-map.ts`
 - Ví dụ: template `code_review` ↔ skill `technical_review/01_code_review`
 
@@ -449,7 +449,7 @@ I'll implement the JWT authentication API following the CVF 4-Phase protocol.
 | Self-UAT | Paste prompt riêng | **1-click button** | CLI command |
 | UI | ❌ | ✅ Beautiful web UI | ❌ Terminal |
 | Templates | ❌ | ✅ 50 form templates | ❌ |
-| Skills | Đọc .skill.md files | ✅ 124 skills browser | ❌ |
+| Skills | Đọc .skill.md files | ✅ 62 active skills browser | ❌ |
 | Authority Matrix | Đọc từ docs | ✅ Auto-inject + visualize | Config YAML |
 | Effort | ⬆️ Cao (đọc docs + copy) | ⬇️ **Thấp nhất** | ⬆️ Trung bình |
 

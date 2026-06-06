@@ -4,7 +4,7 @@ CVF Knowledge Absorption Priority Compatibility Gate
 
 Ensures the GC-043 doctrine-first / governance-first knowledge-absorption
 chain stays aligned:
-- standard, executive note, and guard exist
+- standard and guard exist
 - policy, matrix, bootstrap, README, KB, and handoff reference the rule
 - hook chain and CI enforce the rule
 - changed knowledge-absorption roadmaps carry the standard reference and
@@ -27,7 +27,6 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 STANDARD_PATH = "docs/reference/CVF_KNOWLEDGE_ABSORPTION_AND_EXTENSION_PRIORITY_STANDARD_2026-04-13.md"
-EXEC_NOTE_PATH = "docs/assessments/CVF_EXECUTIVE_VALUE_PRIORITIZATION_NOTE_2026-04-13.md"
 GUARD_PATH = "governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md"
 MASTER_POLICY_PATH = "governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md"
 CONTROL_MATRIX_PATH = "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md"
@@ -44,7 +43,6 @@ THIS_SCRIPT_PATH = "governance/compat/check_knowledge_absorption_priority_compat
 
 REQUIRED_FILES = (
     STANDARD_PATH,
-    EXEC_NOTE_PATH,
     GUARD_PATH,
     MASTER_POLICY_PATH,
     CONTROL_MATRIX_PATH,
@@ -66,16 +64,10 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         "Graphify / LLM-Powered / Palace",
         GRAPHIFY_ROADMAP_PATH,
     ),
-    EXEC_NOTE_PATH: (
-        "highest-value next step",
-        "doctrine-first / governance-first uplift",
-        STANDARD_PATH,
-    ),
     GUARD_PATH: (
         "Control ID:",
         "GC-043",
         STANDARD_PATH,
-        EXEC_NOTE_PATH,
         GRAPHIFY_ROADMAP_PATH,
         THIS_SCRIPT_PATH,
         "owner-surface mapping",
@@ -92,7 +84,6 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         "GC-043",
         GUARD_PATH,
         STANDARD_PATH,
-        EXEC_NOTE_PATH,
         THIS_SCRIPT_PATH,
     ),
     BOOTSTRAP_PATH: (

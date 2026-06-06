@@ -1,18 +1,26 @@
-## Public Surface Classification
+## Public Surface Publication Record
 
-Select every public class touched by this PR:
+This section is agent-owned. Do not ask the operator to choose classifications
+manually.
 
-- [ ] KEEP_PUBLIC_CORE
-- [ ] KEEP_PUBLIC_EVIDENCE_SUMMARY
-- [ ] PUBLIC_EXAMPLE_OPTIONAL
+Public classes touched:
 
-## Private Provenance Exclusion
+- `KEEP_PUBLIC_CORE`: <yes/no>
+- `KEEP_PUBLIC_EVIDENCE_SUMMARY`: <yes/no>
+- `PUBLIC_EXAMPLE_OPTIONAL`: <yes/no>
 
-- [ ] I confirmed this PR does not include PRIVATE_PROVENANCE_BLOCKED material
-      such as raw handoffs, rebuttals, logs, uncurated evidence, private
-      operator transcripts, runtime state, `.env` files, or raw provider keys
+Private provenance status:
+
+- `PRIVATE_PROVENANCE_BLOCKED`: excluded
+
+Agent evidence:
+
+- `python scripts/check_public_surface.py`: <PASS/FAIL with blocker paths>
+- `python governance/compat/run_local_governance_hook_chain.py --hook pre-push`: <PASS/FAIL>
 
 ## Checks
 
-- [ ] I ran `python scripts/check_public_surface.py`
-- [ ] Any governance-behavior claim cites live provider evidence
+- No raw handoffs, rebuttals, logs, uncurated evidence, private operator
+  transcripts, runtime state, `.env` files, or raw provider keys are included.
+- Any governance-behavior claim cites live provider evidence or is explicitly
+  bounded as documentation-only.

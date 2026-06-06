@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import fnmatch
 import json
 import re
 import sys
@@ -32,6 +33,7 @@ HOOK_CHAIN_PATH = REPO_ROOT / "governance" / "compat" / "run_local_governance_ho
 WORKFLOW_PATH = REPO_ROOT / ".github" / "workflows" / "documentation-testing.yml"
 WINDOW_CLASSIFICATION_PATH = REPO_ROOT / "docs" / "reference" / "CVF_ACTIVE_WINDOW_CLASSIFICATION.md"
 ROTATION_GUARD_DIR = REPO_ROOT / "governance" / "toolkit" / "05_OPERATION"
+PUBLIC_SURFACE_MANIFEST_PATH = REPO_ROOT / "governance" / "public-surface-manifest.json"
 
 ALLOWED_PROTECTION_MODES = {"PERMANENT_ACTIVE_WINDOW"}
 ALLOWED_STATUSES = {"ACTIVE", "SUPERSEDED", "RETIRED"}
@@ -55,6 +57,25 @@ def _read(path: Path) -> str:
 
 def _read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _load_public_private_blockers() -> tuple[list[str], set[str]]:
+    if not PUBLIC_SURFACE_MANIFEST_PATH.exists():
+        return [], set()
+    try:
+        manifest = _read_json(PUBLIC_SURFACE_MANIFEST_PATH)
+    except json.JSONDecodeError:
+        return [], set()
+    blockers = manifest.get("classes", {}).get("PRIVATE_PROVENANCE_BLOCKED", [])
+    allowlist = {item.get("path", "") for item in manifest.get("allowlist", []) if isinstance(item, dict)}
+    return [item for item in blockers if isinstance(item, str)], {item for item in allowlist if item}
+
+
+def _is_private_provenance_blocked_public_path(rel_path: str) -> bool:
+    blockers, allowlist = _load_public_private_blockers()
+    if rel_path in allowlist:
+        return False
+    return any(fnmatch.fnmatch(rel_path, pattern) or fnmatch.fnmatch(rel_path, pattern.rstrip("/**")) for pattern in blockers)
 
 
 def _extract_active_path_from_rotation_guard(guard_path: Path) -> str | None:
@@ -276,6 +297,8 @@ def build_report() -> dict[str, Any]:
 
         for ref in (entry["activePath"], entry["archiveDir"], entry["rotationGuard"], entry["rotationCheck"], entry["rotationScript"]):
             if not (REPO_ROOT / ref).exists():
+                if ref == entry["activePath"] and _is_private_provenance_blocked_public_path(ref):
+                    continue
                 violations.append(
                     {
                         "type": "missing_referenced_path",

@@ -1,7 +1,5 @@
 # External Agent Review Guide
 
-Memory class: POINTER_RECORD
-
 Status: CURRENT PUBLIC GUIDE
 
 Use this guide when a user pastes the CVF public repository link into another
@@ -36,6 +34,11 @@ route-name, CI-badge, connector-title, or status-label evidence into runtime
 governance proof unless a matching public evidence path or live command result
 exists.
 
+Before reviewing, record the public branch or commit SHA and the review date.
+Several CVF claims are intentionally drift-sensitive: public docs, CI workflow
+configuration, provider status, and live-gate evidence may change between
+branches.
+
 ## Start Here
 
 Read these files first:
@@ -59,6 +62,8 @@ live proof, not a substitute for mock governance proof.
 
 - Treat this repository as the public CVF product surface, not the full private
   provenance archive.
+- Treat root handoff or continuity files as public-safe orientation surfaces,
+  not as complete private session memory.
 - Do not infer runtime governance proof from route names, mock UI, connector
   specs, static CI badges, or documentation status labels.
 - Classify missing live proof as `unverified from public evidence` unless the
@@ -66,6 +71,8 @@ live proof, not a substitute for mock governance proof.
 - Check `CHANGELOG.md` before reporting stale version strings.
 - Check the skill-library source or current public docs before reporting skill
   counts.
+- Check `.github/workflows/` and run artifacts separately: workflow presence
+  means a check is configured, not that the latest public run passed.
 - Cite exact public paths and lines for every finding.
 - Separate security, production readiness, dependency debt, documentation drift,
   benchmark quality, and evidence-chain findings.
@@ -93,6 +100,11 @@ hidden contradictions:
 - Independent immutable anchoring and third-party live-run reproduction remain
   evidence-chain hardening work.
 - Live governance proof requires a provider key and may consume paid quota.
+- CPF public barrel size is guarded, but CPF source grouping remains a broader
+  maintainability/refactor backlog item.
+- Extension/package naming still reflects historical CVF evolution and has not
+  been product-renamed.
+- A five-minute demo path exists as documentation, not as hosted no-key SaaS.
 
 ## Live Proof Boundary
 

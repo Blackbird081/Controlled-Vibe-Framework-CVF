@@ -1,7 +1,5 @@
 # Cost And Quota
 
-Memory class: POINTER_RECORD
-
 Status: CURRENT PUBLIC COST BOUNDARY
 
 CVF treats provider cost as a governance concern.

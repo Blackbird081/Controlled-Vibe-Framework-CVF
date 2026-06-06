@@ -1,7 +1,5 @@
 # Governance
 
-Memory class: POINTER_RECORD
-
 Status: CURRENT PUBLIC GOVERNANCE SUMMARY
 
 CVF governance is the rule layer around AI and agent execution.

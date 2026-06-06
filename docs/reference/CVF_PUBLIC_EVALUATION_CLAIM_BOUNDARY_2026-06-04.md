@@ -1,7 +1,5 @@
 # CVF Public Evaluation Claim Boundary
 
-Memory class: POINTER_RECORD
-
 Status: CURRENT PUBLIC EVALUATION BOUNDARY
 
 Date: 2026-06-04
@@ -66,6 +64,16 @@ non-AI routing surfaces only. Mock mode does not prove risk classification,
 approval flow, DLP filtering, bypass detection, output validation, provider
 routing, audit updates, or governed AI behavior.
 
+## Current Public Evidence Pointers
+
+| Evidence area | Public pointer | Public interpretation |
+| --- | --- | --- |
+| Release-quality live governance | `scripts/run_cvf_release_gate_bundle.py --json`; `.github/workflows/cvf-protected-live-release-gate.yml` | Valid only when a live provider key is available and the run result is inspected. |
+| Static CI and coverage wiring | `.github/workflows/cvf-ci.yml`, `.github/workflows/cvf-web-ci.yml`, `.github/workflows/documentation-testing.yml` | Shows configured public checks and coverage jobs; does not by itself prove the latest hosted run passed. |
+| Provider dependency boundary | `PROVIDERS.md`; `COST_AND_QUOTA.md`; `docs/evidence/provider-lanes.md` | Provider lanes are operator-key-dependent and lane-specific, not parity or SLA claims. |
+| Route-governance claim boundary | `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md` | Bounded route/source/test evidence only; not complete route coverage. |
+| Benchmark and output-quality limits | `docs/benchmark/`; `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md` | Methodology is visible; reviewer agreement, corpus size, and parity claims remain bounded. |
+
 ## Route Coverage Boundary
 
 Public route files must be evaluated by linked evidence, tests, and explicit
@@ -122,8 +130,23 @@ Before reporting a CVF public finding, an external agent should:
 4. Treat route existence as inventory, not coverage proof.
 5. Read the known limitations register before treating a missing capability as
    hidden or contradictory.
-6. Avoid citing private provenance paths unless the operator supplied a
+6. Capture the public commit SHA, branch, and review date before reporting
+   drift-sensitive findings.
+7. Avoid citing private provenance paths unless the operator supplied a
    public-safe excerpt.
+
+## Accepted Public Remediation Backlog
+
+These are accepted public-review improvements. They are not hidden proof and
+they are not runtime claims until a later public artifact closes them.
+
+| Backlog item | Status | Boundary |
+| --- | --- | --- |
+| Public surface hygiene | Partially remediated | Front-door docs should not expose raw internal continuity metadata; historical governed records may still contain archival markers. |
+| Evidence discoverability | Active documentation hardening | Public docs now point readers to live-gate, CI/coverage, provider, route, and benchmark boundaries. |
+| CPF source grouping | Open maintainability debt | CPF source surface remains broad; current public barrel is guarded and small, but deeper grouping remains future refactor work. |
+| Package naming and extension taxonomy | Open product clarity debt | Existing extension names reflect historical evolution; no package rename has been performed. |
+| Five-minute demo path | Open onboarding debt | Public setup is local-first and provider-key-dependent; a lower-friction demo remains a product roadmap item. |
 
 ## Related Artifacts
 

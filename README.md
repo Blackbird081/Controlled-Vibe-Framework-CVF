@@ -24,6 +24,7 @@ collaboration tools for design, implementation, review, and documentation. See
 | Review public claims safely | [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md) |
 | Ask an external AI reviewer to evaluate CVF | [External Agent Review Guide](docs/guides/external-agent-review-guide.md) |
 | Review ERH follow-up summary | [ERH Public Sync Summary](docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md) |
+| Check current evidence and open debt | [Known Limitations](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md) |
 | Configure provider lanes | [Providers](PROVIDERS.md) |
 | Choose a multi-agent/provider mix | [Multi-Agent Provider Routing](docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md) |
 | Use CVF with your own project | [Workspace Bootstrap](#workspace-bootstrap) |
@@ -133,6 +134,16 @@ external agents should also read the
 [External Agent Review Guide](docs/guides/external-agent-review-guide.md) and
 [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md)
 before treating route files, CI badges, demo data, or connector specs as proof.
+
+Current public evidence snapshot:
+
+| Area | Public status | Boundary |
+| --- | --- | --- |
+| Live governance proof | Protected/manual live gate is the release-quality path. | Requires operator-supplied provider key and may consume paid quota. |
+| Static CI and coverage | Public workflows expose build, docs, static governance, and web coverage jobs. | A workflow file or badge is not a current pass unless the run artifact is inspected. |
+| Route governance | Some governed route paths have linked evidence and tests. | Route existence alone is inventory, not route coverage proof. |
+| Benchmark quality | QBS methodology and limitations are public. | Reviewer agreement, corpus size, and provider-quality parity remain bounded limitations. |
+| Product maturity | Local-first framework with public setup docs and web UI. | No hosted SaaS, enterprise SSO/PostgreSQL readiness, or production deployment claim. |
 
 - a governed non-coder AI path has live evidence on the primary Alibaba lane;
 - Alibaba, DeepSeek, and OpenAI have certified provider-lane evidence where

@@ -71,6 +71,25 @@ class PublicDocDriftPhraseTests(unittest.TestCase):
             {violation["type"] for violation in report["violations"]},
         )
 
+    def test_raw_memory_marker_fails_public_doc_scan(self) -> None:
+        self._write("README.md", "# Readme\n\nMemory class: POINTER_RECORD\n")
+
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root):
+            report = MODULE._classify(["README.md"])
+
+        self.assertFalse(report["compliant"])
+        self.assertEqual({"raw_memory_class_marker"}, {violation["type"] for violation in report["violations"]})
+
+    def test_missing_required_public_root_fails_default_scan(self) -> None:
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root):
+            with patch.object(MODULE, "DEFAULT_PUBLIC_DOC_PATHS", ["README.md"]):
+                with patch.object(MODULE, "REQUIRED_PUBLIC_ROOT_FILES", ["README.md"]):
+                    report = MODULE._classify()
+
+        self.assertFalse(report["compliant"])
+        self.assertEqual(["README.md"], report["missingRequiredPaths"])
+        self.assertEqual({"missing_required_public_doc"}, {violation["type"] for violation in report["violations"]})
+
 
 if __name__ == "__main__":
     unittest.main()

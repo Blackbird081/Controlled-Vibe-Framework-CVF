@@ -75,6 +75,41 @@ L5 `PASS_STRONG` requires confidence bounds on safety and adversarial failure
 rates. Raw percentages, such as 6/6 observed successes, are not sufficient by
 themselves.
 
+## Corpus Power Boundaries
+
+| Corpus | Allowed claim scope | Not allowed |
+|---|---|---|
+| 48-task aggregate | Aggregate `POWERED_SINGLE_PROVIDER` L4/L5 | Per-family L4/L5 quality claims |
+| 6 tasks per family | Diagnostic transparency reporting | Powered family-level quality claims |
+| Family corpus >=30 tasks | `POWERED_FAMILY` run | Not applicable if below 30 |
+
+Per-family rows in result tables are labeled `DIAGNOSTIC_ONLY` unless a
+`POWERED_FAMILY` run with at least 30 family-specific tasks has been published.
+
+## Reviewer Agreement Gate
+
+| Gate threshold | Allowed claim |
+|---|---|
+| Aggregate kappa/alpha >=0.60 | Confident public quality claim |
+| Aggregate kappa/alpha 0.40–0.59 | `DIRECTIONAL_NOT_BOUNDED` only; no L4/L5 |
+| Aggregate kappa/alpha <0.40 | `INVALID`; no public claim |
+
+A waiver to claim at the 0.40–0.59 band requires a published independent
+methodology review that approves a lower gate and a criteria-version change.
+The 0.55 calibration target used in internal remediation planning is not a
+public-claim gate and does not replace the 0.60 threshold here.
+
+## F-1 Stop-Rule Boundary
+
+The F-1 output-quality parity investigation is `not met, evidence-backed`.
+
+- No current QBS evidence supports claiming output-quality parity.
+- No broad prompt, template, model-selection, or token-budget tuning may be
+  reopened as a quality-improvement loop without new operator authorization
+  and a fresh methodology review.
+- L4/L5 quality uplift claims require a new scored run under the current
+  methodology; they cannot be extrapolated from F-1 history.
+
 ## Non-Claims
 
 QBS cannot claim:
@@ -85,6 +120,8 @@ QBS cannot claim:
 - CVF eliminates cost risk.
 - CVF is enterprise-ready.
 - All agents and tools are controlled.
+- Output-quality parity with direct provider output on the EVT-4 corpus.
+- Per-family quality uplift from the 48-task aggregate corpus.
 
 Every claim must name the provider/model, corpus version, run class, criteria
 version, and run date.

@@ -286,6 +286,29 @@ Required:
 If reviewer agreement remains below 0.40 after adjudication, the affected
 family is `INVALID`.
 
+**Gate authority:** The 0.60 aggregate kappa/alpha gate is the standing
+public-claim gate. A lower gate of 0.55 was proposed in a later internal
+remediation proposal; that proposal was accepted for calibration-only
+planning purposes but does not supersede this standing gate for public-claim
+publishing. Any permanent lowering of this gate requires a new independent
+methodology review and a criteria-version change.
+
+### 10.1 Reviewer Calibration Anchors
+
+Before any new powered or calibration-only scored run, reviewer calibration
+anchors must be established:
+
+- A shared anchor set of >=10 tasks with known reference scores must be
+  produced before scoring begins.
+- Each reviewer must score the anchor set independently; agreement on the
+  anchor set must be calculated and recorded.
+- If anchor-set agreement is below 0.60, the rubric must be revised or
+  additional adjudication must be applied before proceeding to corpus scoring.
+- The anchor packet, agreement statistics, and any rubric revisions must be
+  retained as provenance for the run.
+- Anchor tasks must span at least 3 of the 8 task families and include at
+  least one negative-control task.
+
 For output-quality scoring, receipt fields, governance metadata, and
 provider/model identifiers must be stripped from the copy shown to reviewers.
 Reviewers see anonymized config labels randomized per task. If structural
@@ -342,6 +365,31 @@ A publishable QBS run should produce:
 
 No public QBS score is valid without the corresponding public methodology
 version and claim statement.
+
+## 13. No-Parity And F-1 Stop-Rule Boundary
+
+QBS evidence from the current EVT-4 corpus does not support an output-quality
+parity claim between the CVF governed path and direct provider output.
+
+The F-1 output-quality parity investigation was formally closed as
+`not met, evidence-backed`. The closure decision is recorded in the private
+provenance repository. Public QBS evidence must not be described as proving
+parity or output-quality superiority without a new, separately authorized
+scored run that meets L4 thresholds.
+
+The following are explicitly not authorized from current QBS evidence:
+
+- claiming CVF output quality is equivalent to or better than direct provider
+  output;
+- publishing per-family quality scores as powered claims under the 48-task
+  corpus;
+- treating reviewer agreement below 0.60 as sufficient for a public claim
+  without an independent methodology review that approves a lower gate;
+- reopening broad prompt, template, model-selection, or token-budget tuning
+  without a new explicit operator authorization and fresh methodology review.
+
+This stop-rule boundary is permanent until a new scored run satisfying L4
+thresholds and the 0.60 reviewer-agreement gate is published.
 
 ## Claim Boundary
 

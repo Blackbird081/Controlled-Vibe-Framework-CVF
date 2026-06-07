@@ -87,12 +87,25 @@ Allowed:
 - QBS-9 R5 reviewer scoring may be cited as model-assisted reviewer scoring
   with reviewer agreement passed and no public QBS claim because `CFG-B` did
   not meet the L4 quality-uplift threshold versus `CFG-A1`.
+- F-1 output-quality parity investigation may be cited as closed
+  `not met, evidence-backed` on the EVT-4 corpus. The governed path carries
+  a measurable output-quality tax against direct provider output on this
+  corpus. This is a documented product boundary.
+- QBS reviewer agreement gate is 0.60 aggregate kappa/alpha for public claims.
+  Runs with aggregate kappa 0.40–0.59 may only be cited as
+  `DIRECTIONAL_NOT_BOUNDED`. Runs with kappa below 0.40 are `INVALID`.
+- QBS 48-task corpus power boundary: aggregate `POWERED_SINGLE_PROVIDER`
+  comparisons only. Per-family claims require a `POWERED_FAMILY` run with
+  at least 30 family-specific tasks.
 
 Not allowed without new evidence:
 
 - all providers have equal quality
 - CVF has output-quality parity with direct provider output
 - CVF improves output quality across EVT-4
+- F-1 parity was met or is met (it is formally closed not-met)
+- QBS runs with aggregate kappa below 0.60 support a public L4/L5 quality claim
+- per-family quality rows from the 48-task corpus are powered L4/L5 claims
 - focused small-sample checks prove broad metric superiority
 - the EVT4-03 output-validation failure root cause is fixed
 - all agent frameworks are certified

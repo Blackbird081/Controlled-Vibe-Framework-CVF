@@ -21,6 +21,10 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
     "pre-commit": [
         (
+            "QBS claim gate",
+            ["python", "governance/compat/check_qbs_claim_gate.py", "--scan-dir", "docs/benchmark", "--enforce"],
+        ),
+        (
             "governed file size compatibility",
             ["python", "governance/compat/check_governed_file_size.py", "--enforce"],
         ),
@@ -209,6 +213,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
         (
             "pre-public p3 readiness compatibility",
             ["python", "governance/compat/check_prepublic_p3_readiness.py", "--enforce"],
+        ),
+        (
+            "QBS claim gate",
+            ["python", "governance/compat/check_qbs_claim_gate.py", "--scan-dir", "docs/benchmark", "--enforce"],
         ),
     ]
 }

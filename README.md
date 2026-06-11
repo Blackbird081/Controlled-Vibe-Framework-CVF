@@ -61,15 +61,14 @@ CVF decides:
 - what evidence must be recorded before the result can be trusted;
 - whether a workflow can close, continue, or must return to review.
 
-The core loop is intentionally simple:
+The governed workflow is intentionally explicit:
 
 ```text
-INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE
+INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE
 ```
 
-That loop is a public shorthand, not the full control model. In governed work,
-CVF expands it into smaller gates so an agent does not jump from a request
-directly into implementation:
+That workflow is the public control map. CVF expands each stage into smaller
+gates so an agent does not jump from a request directly into implementation:
 
 ```text
 INTAKE

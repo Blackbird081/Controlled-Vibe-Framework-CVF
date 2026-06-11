@@ -67,6 +67,65 @@ The core loop is intentionally simple:
 INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE
 ```
 
+That loop is a public shorthand, not the full control model. In governed work,
+CVF expands it into smaller gates so an agent does not jump from a request
+directly into implementation:
+
+```text
+INTAKE
+  -> request capture
+  -> source/context intake
+  -> authority, risk, and domain classification
+  -> ambiguity ledger
+
+DESIGN
+  -> scope boundary
+  -> non-goals
+  -> lane split
+  -> dependency and source-verification plan
+  -> claim boundary
+  -> acceptance criteria
+  -> dispatch-readiness decision
+
+SPEC
+  -> contract, schema, or interface
+  -> machine-readable semantics
+  -> invariants and failure tokens
+  -> evidence requirements
+
+WORK ORDER
+  -> allowed paths and forbidden paths
+  -> source verification table
+  -> implementation steps
+  -> test plan
+  -> worker return schema
+  -> commit authority boundary
+
+BUILD
+  -> implementation
+  -> focused tests
+  -> local gates
+  -> artifact production
+
+REVIEW
+  -> diff gate
+  -> roadmap-to-work-order trace
+  -> acceptance matrix
+  -> finding-to-governance disposition
+  -> closure decision
+
+FREEZE
+  -> commit
+  -> session or handoff sync
+  -> public export disposition
+  -> next allowed move
+```
+
+The purpose of the detailed map is control, not ceremony: ambiguity should be
+resolved in intake and design; source facts should be verified before work
+orders; build should execute a bounded packet; review should close only what
+the evidence supports.
+
 ## Why It Exists
 
 Ungoverned agent workflows can spend tokens without budget discipline, mutate

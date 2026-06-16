@@ -24,6 +24,7 @@ collaboration tools for design, implementation, review, and documentation. See
 | Review public claims safely | [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md) |
 | Ask an external AI reviewer to evaluate CVF | [External Agent Review Guide and paste-ready prompt](docs/guides/external-agent-review-guide.md) |
 | Review ERH follow-up summary | [ERH Public Sync Summary](docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md) |
+| Review latest public front-door/catalog sync | [2026-06-16 Public Sync Evidence](docs/evidence/cvf-16-06-public-front-door-catalog-sync.md) |
 | Check current evidence and open debt | [Known Limitations](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md) |
 | Configure provider lanes | [Providers](PROVIDERS.md) |
 | Choose a multi-agent/provider mix | [Multi-Agent Provider Routing](docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md) |
@@ -200,6 +201,7 @@ Current public evidence snapshot:
 | Live governance proof | Protected/manual live gate is the release-quality path. | Requires operator-supplied provider key and may consume paid quota. |
 | Static CI and coverage | Public workflows expose build, docs, static governance, and web coverage jobs. | A workflow file or badge is not a current pass unless the run artifact is inspected. |
 | Route governance | Some governed route paths have linked evidence and tests. | Route existence alone is inventory, not route coverage proof. |
+| Agent work-order governance | Public docs now record authoring-time guard lessons for dispatch prompt placement, CVF-governed lesson capture, and stale next-move handling. | Documentation/front-door calibration only unless a linked public checker or live proof supports a stronger claim. |
 | Benchmark quality | QBS methodology and limitations are public. | Reviewer agreement, corpus size, and provider-quality parity remain bounded limitations. |
 | Product maturity | Local-first framework with public setup docs and web UI. | No hosted SaaS, enterprise SSO/PostgreSQL readiness, or production deployment claim. |
 
@@ -222,6 +224,7 @@ Important evidence anchors:
 - [Release Candidate Truth Packet](docs/reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md)
 - [Known Limitations Register](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
 - [ERH Public Sync Summary](docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md)
+- [2026-06-16 Public Front-Door and Catalog Sync](docs/evidence/cvf-16-06-public-front-door-catalog-sync.md)
 
 ## Live Governance Proof
 

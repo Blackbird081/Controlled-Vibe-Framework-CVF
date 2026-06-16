@@ -36,6 +36,13 @@ The public core supports local-first runtime use and sibling downstream
 workspace bootstrap. The workspace kit includes bootstrap, doctor, knowledge
 ingest, evidence bridge, hooks, and hidden-core reconciliation scripts.
 
+The 2026-06-16 public front-door/catalog refresh records bounded
+authoring-time governance lessons from private provenance without exporting
+private session state: dispatch prompts should be read-first in work orders,
+reusable agent lessons must be captured in CVF-governed artifacts rather than
+provider-only memory, and stale closed-target next moves must not be
+redispatched from continuity text.
+
 ## Workspace Continuation
 
 For an existing workspace with a stale or unrelated hidden-core history, run:
@@ -59,6 +66,9 @@ reconciliation.
 ## Related Artifacts
 
 - `AGENTS.md`
+- `README.md`
+- `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md`
+- `docs/evidence/cvf-16-06-public-front-door-catalog-sync.md`
 - `docs/reference/CVF_WORKSPACE_RULES.md`
 - `scripts/new-cvf-workspace.ps1`
 - `scripts/update_cvf_workspace_public_core.ps1`

@@ -2,7 +2,7 @@
 
 Memory class: POINTER_RECORD
 
-Status: CURRENT - updated 2026-06-05
+Status: CURRENT - updated 2026-06-16
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -243,6 +243,18 @@ multi-instance consensus, tamper-proof audit retention, hosted readiness, or
 public release readiness. Evidence:
 `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`,
 `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md`
+
+On 2026-06-16, the public front door and technical catalog were refreshed after
+private provenance foundation work on agent work-order governance. The public
+claim is deliberately narrow: CVF records three reusable authoring-time lessons
+for public readers and agents. Dispatch prompts should appear read-first in
+work orders; reusable agent lessons must be captured in CVF-governed artifacts
+rather than provider-only memory; stale continuity text must not redispatch a
+target that has already closed. This is a public documentation and catalog
+calibration update only. It does not export private worker returns, private
+handoffs, private session state, runtime behavior, provider behavior, live
+proof, production readiness, or public release readiness. Evidence:
+`docs/evidence/cvf-16-06-public-front-door-catalog-sync.md`
 
 ---
 

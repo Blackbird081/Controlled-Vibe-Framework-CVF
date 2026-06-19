@@ -28,14 +28,15 @@ Before making findings, record:
 Read these files first, in order:
 1. README.md
 2. docs/guides/external-agent-review-guide.md
-3. docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md
-4. docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md
-5. docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md
-6. docs/GET_STARTED.md
-7. CHANGELOG.md
-8. SECURITY.md
-9. PROVIDERS.md
-10. COST_AND_QUOTA.md
+3. docs/evidence/public-external-review-snapshot-2026-06-19.md
+4. docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md
+5. docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md
+6. docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md
+7. docs/GET_STARTED.md
+8. CHANGELOG.md
+9. SECURITY.md
+10. PROVIDERS.md
+11. COST_AND_QUOTA.md
 
 Evaluate CVF with these rules:
 - Treat this repository as the public CVF product/evidence surface, not the
@@ -128,6 +129,7 @@ branches.
 Read these files first:
 
 - `README.md`
+- `docs/evidence/public-external-review-snapshot-2026-06-19.md`
 - `docs/GET_STARTED.md`
 - `CHANGELOG.md`
 - `SECURITY.md`

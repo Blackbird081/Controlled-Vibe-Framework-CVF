@@ -43,6 +43,7 @@ boundary. The summary list is the curated public set.
 
 Start with:
 
+- `public-external-review-snapshot-2026-06-19.md`
 - `latest-release-gate.md`
 - `public-developer-onboarding-proof-2026-05-22.md`
 - `public-dependency-audit-triage-2026-05-22.md`

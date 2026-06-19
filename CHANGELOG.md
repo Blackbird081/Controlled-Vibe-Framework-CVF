@@ -2,6 +2,29 @@
 
 ---
 
+## [Public External Review Snapshot] — 2026-06-19
+
+Status: PUBLIC_REVIEW_SNAPSHOT_EXPORTED
+
+### Added
+
+- Public external review snapshot:
+  `docs/evidence/public-external-review-snapshot-2026-06-19.md`.
+
+### Changed
+
+- README, public docs index, evidence index, and external-agent review guide now
+  point reviewers to the 2026-06-19 public-safe review snapshot.
+
+### Boundary
+
+- This is a public evaluation pointer and claim-boundary refresh only.
+- It does not export private provenance packets, in-progress worker tranches,
+  raw provider logs, secrets, hosted readiness, production readiness, or
+  universal governed-coding control claims.
+
+---
+
 ## [Public Dependency Audit Triage] — 2026-05-22
 
 Status: PUBLIC_DEPENDENCY_AUDIT_RESIDUAL_CLOSED

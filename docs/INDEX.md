@@ -61,6 +61,7 @@ Default memory role follows
 - `docs/GET_STARTED.md`
 - `docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md`
 - `docs/evidence/README.md`
+- `docs/evidence/public-external-review-snapshot-2026-06-19.md`
 - `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md`
 - `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
 - `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
@@ -98,6 +99,7 @@ python governance/compat/check_markdown_structural_completeness.py
 ## Related Artifacts
 
 - `docs/evidence/latest-release-gate.md`
+- `docs/evidence/public-external-review-snapshot-2026-06-19.md`
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`
 - `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`

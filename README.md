@@ -25,7 +25,6 @@ collaboration tools for design, implementation, review, and documentation. See
 | Ask an external AI reviewer to evaluate CVF | [External Agent Review Guide and paste-ready prompt](docs/guides/external-agent-review-guide.md) |
 | Review the latest public external-evaluation snapshot | [2026-06-19 Public External Review Snapshot](docs/evidence/public-external-review-snapshot-2026-06-19.md) |
 | Review ERH follow-up summary | [ERH Public Sync Summary](docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md) |
-| Review latest public front-door/catalog sync | [2026-06-16 Public Sync Evidence](docs/evidence/cvf-16-06-public-front-door-catalog-sync.md) |
 | Check current evidence and open debt | [Known Limitations](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md) |
 | Configure provider lanes | [Providers](PROVIDERS.md) |
 | Choose a multi-agent/provider mix | [Multi-Agent Provider Routing](docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md) |

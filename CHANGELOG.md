@@ -15,6 +15,8 @@ Status: PUBLIC_REVIEW_SNAPSHOT_EXPORTED
 
 - README, public docs index, evidence index, and external-agent review guide now
   point reviewers to the 2026-06-19 public-safe review snapshot.
+- Technical product catalog and public catalog claim boundary now include the
+  2026-06-19 external-review snapshot as a bounded public evaluation surface.
 
 ### Boundary
 

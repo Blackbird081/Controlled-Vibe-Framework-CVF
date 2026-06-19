@@ -2,7 +2,7 @@
 
 Memory class: POINTER_RECORD
 
-Status: CURRENT - updated 2026-06-16
+Status: CURRENT - updated 2026-06-19
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -256,6 +256,16 @@ handoffs, private session state, runtime behavior, provider behavior, live
 proof, production readiness, or public release readiness. Evidence:
 `docs/evidence/cvf-16-06-public-front-door-catalog-sync.md`
 
+On 2026-06-19, the public external-review catalog posture was refreshed for
+current public repository evaluation. The update adds a public-safe review
+snapshot that tells external agents which public files to read first, how to
+classify findings, and which claims remain out of bounds. This is an external
+review calibration and catalog pointer update only. It does not export private
+provenance packets, in-progress worker tranches, raw provider logs, secrets,
+runtime behavior, provider behavior, hosted readiness, production readiness, or
+universal governed-coding control. Evidence:
+`docs/evidence/public-external-review-snapshot-2026-06-19.md`
+
 ---
 
 ## What CVF Can Do Today
@@ -334,6 +344,7 @@ Evidence:
 | --- | --- | --- |
 | Governance control plane | proven | `ARCHITECTURE.md`, `GOVERNANCE.md` |
 | Public evaluation claim boundary | active — external-agent calibration for route coverage, static CI, mock/demo data, connector specs, evidence durability, and provider parity boundaries; no new runtime behavior claimed | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md` |
+| Public external review snapshot | active — dated public-safe review entry point for external agents; calibrates source order, finding format, live-proof boundary, and private/public separation; no private provenance export or runtime claim | `docs/evidence/public-external-review-snapshot-2026-06-19.md`, `docs/guides/external-agent-review-guide.md` |
 | External Review Hardening public summary | active — public-safe calibration for external review rescan, route/CI posture, safety workflow hardening, dependency/auth boundaries, and evidence durability limitations; no private packet export or production-readiness claim | `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`, `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md` |
 | Governance kernel coherence | audit-equivalent - public reader baseline | `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`, `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md` |
 | Live governance proof | proven — mandatory for release claims | `docs/evidence/latest-release-gate.md` |
@@ -510,6 +521,8 @@ CVF may claim:
   `app_builder_complete`
 - public auditability through docs, evidence packets, guards, and release gates
 - governance-kernel coherence as audit-equivalent for public reader orientation
+- public external-review calibration through
+  `docs/evidence/public-external-review-snapshot-2026-06-19.md`
 
 CVF does not yet claim:
 
@@ -564,6 +577,7 @@ update rules:
 - `docs/GET_STARTED.md` — getting started guide
 - `docs/evidence/README.md` — evidence index
 - `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
+- `docs/evidence/public-external-review-snapshot-2026-06-19.md`
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 - `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`
 - `docs/reference/CVF_MODULE_INVENTORY.md`

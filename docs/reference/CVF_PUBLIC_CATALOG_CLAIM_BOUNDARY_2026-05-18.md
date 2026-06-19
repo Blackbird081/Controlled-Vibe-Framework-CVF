@@ -1,7 +1,7 @@
 # CVF Public Catalog Claim Boundary
 
 Memory class: POINTER_RECORD
-Status: CURRENT PUBLIC CLAIM BOUNDARY - updated 2026-06-16
+Status: CURRENT PUBLIC CLAIM BOUNDARY - updated 2026-06-19
 
 ## Purpose
 
@@ -30,6 +30,7 @@ Owner surface: public/product orientation and claim-boundary documentation.
 - `docs/evidence/cvf-16-5-runtime-absorption.md`
 - `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`
 - `docs/evidence/cvf-16-06-public-front-door-catalog-sync.md`
+- `docs/evidence/public-external-review-snapshot-2026-06-19.md`
 
 ## Decision / Baseline / Proposed Tranche
 
@@ -81,6 +82,7 @@ Public catalog claims must:
 | External asset/capability governance | Partially productized | `docs/evidence/web-governance-path.md`, `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` | Not a full external capability marketplace claim |
 | Role and agent governance | Partially absorbed | `governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md`, `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md` | Full enforceable role-permission runtime remains future work |
 | Agent work-order authoring controls | Bounded public documentation calibration | `docs/evidence/cvf-16-06-public-front-door-catalog-sync.md`, `README.md`, `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md` | Public docs record lessons for prompt placement, CVF-governed lesson capture, and stale next-move handling; no runtime/provider/live-proof claim |
+| Public external review snapshot | Bounded public evaluation calibration | `docs/evidence/public-external-review-snapshot-2026-06-19.md`, `docs/guides/external-agent-review-guide.md` | Review entry point only; no private provenance export, runtime behavior, hosted readiness, or production-readiness claim |
 | Memory and continuity | Partially absorbed | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md` | Full governed reinjection across all worker paths is not claimed |
 | Provider method breadth | Demand-gated | `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md` | New provider methods need named consumer slices and live proof if they affect governed execution |
 | Tool/MCP/database action governance | Roadmap | `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md` | Full canonical action taxonomy is not claimed |
@@ -100,6 +102,8 @@ CVF may claim:
   release gates.
 - bounded public documentation calibration for agent work-order authoring
   controls where a public evidence path exists.
+- bounded public external-review calibration through the 2026-06-19 public
+  review snapshot.
 
 CVF must not claim:
 
@@ -127,6 +131,7 @@ Test-Path docs/evidence/latest-release-gate.md
 Test-Path docs/evidence/provider-lanes.md
 Test-Path docs/evidence/web-governance-path.md
 Test-Path docs/evidence/cvf-16-5-runtime-absorption.md
+Test-Path docs/evidence/public-external-review-snapshot-2026-06-19.md
 Test-Path docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md
 Test-Path docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md
 Test-Path docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md
@@ -162,3 +167,4 @@ governance behavior, provider behavior, or release readiness.
 - `docs/evidence/cvf-16-5-runtime-absorption.md`
 - `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`
 - `docs/evidence/cvf-16-06-public-front-door-catalog-sync.md`
+- `docs/evidence/public-external-review-snapshot-2026-06-19.md`

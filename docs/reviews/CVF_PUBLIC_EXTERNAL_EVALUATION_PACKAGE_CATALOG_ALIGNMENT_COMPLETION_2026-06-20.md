@@ -2,7 +2,7 @@
 
 Memory class: FULL_RECORD
 
-Status: REVIEWED_PENDING_PUBLIC_COMMIT
+Status: CLOSED_PASS_BOUNDED
 
 Date: 2026-06-20
 
@@ -66,13 +66,19 @@ Codex reviewer evidence before public commit:
 
 ## Public Export Disposition
 
-BLOCKED_MISSING_PUBLIC_ARTIFACTS
+EXPORTED
 
-Reason: this packet is still pending Codex review, commit, and public push.
-Public export becomes `EXPORTED` only after Codex commits in the public-sync
-clone, verifies the remote, pushes to
-`https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git`, and records
-the resulting commit evidence.
+Remote: `https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git`.
+
+Public-sync material commit: `aae8fed4c` (`Clarify public catalog and evidence
+snapshot`).
+
+Push evidence: `git push origin main` advanced public `main` from `94bb69dc8`
+to `aae8fed4c`.
+
+This closure-evidence update records the export disposition after the public
+push. It does not add runtime, provider, live-proof, release-readiness,
+production-readiness, or universal-control claims.
 
 ## Claim Boundary
 

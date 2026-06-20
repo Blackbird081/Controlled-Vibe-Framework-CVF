@@ -6,8 +6,13 @@ Status: PUBLIC_REVIEW_SNAPSHOT
 
 ## Purpose
 
-Give external reviewers a current public-safe entry point for evaluating the
-Controlled Vibe Framework (CVF) repository from GitHub.
+Point-in-time evidence artifact: this snapshot is dated 2026-06-19. It is not
+the technical product catalog and does not replace it. For durable system
+orientation, capabilities, and boundaries, read
+`docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md` first.
+
+Give external reviewers a public-safe entry point for evaluating the
+Controlled Vibe Framework (CVF) repository from GitHub as of 2026-06-19.
 
 This snapshot exists because the public repository is a curated product and
 evidence surface, not the private provenance archive. Reviewers should evaluate
@@ -29,17 +34,19 @@ to public evidence.
 External reviewers should read these files first:
 
 1. `README.md`
-2. `docs/guides/external-agent-review-guide.md`
-3. `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
-4. `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md`
-5. `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
-6. `docs/evidence/README.md`
-7. `docs/evidence/claim-boundaries.md`
-8. `docs/evidence/current-cvf-quality-status.md`
-9. `PROVIDERS.md`
-10. `COST_AND_QUOTA.md`
-11. `SECURITY.md`
-12. `CHANGELOG.md`
+2. `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md` (durable catalog: system shape, capabilities, and boundaries)
+3. `docs/guides/external-agent-review-guide.md`
+4. `docs/evidence/public-external-review-snapshot-2026-06-19.md` (this file: 2026-06-19 point-in-time dated evidence, not the catalog)
+5. `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
+6. `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md`
+7. `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
+8. `docs/evidence/README.md`
+9. `docs/evidence/claim-boundaries.md`
+10. `docs/evidence/current-cvf-quality-status.md`
+11. `PROVIDERS.md`
+12. `COST_AND_QUOTA.md`
+13. `SECURITY.md`
+14. `CHANGELOG.md`
 
 ## Public Review Focus
 

@@ -7,6 +7,12 @@ Version: CVF v4.0.0 GA
 
 ## Purpose
 
+This catalog is the durable public orientation surface for users, developers,
+and agents. It is the right starting point for understanding CVF system shape,
+capabilities, and boundaries. The
+`docs/evidence/public-external-review-snapshot-2026-06-19.md` file is a
+point-in-time dated evidence artifact; it is not a replacement for this catalog.
+
 This catalog gives users, developers, and agents a compact technical map
 of Controlled Vibe Framework (CVF). It answers three questions:
 

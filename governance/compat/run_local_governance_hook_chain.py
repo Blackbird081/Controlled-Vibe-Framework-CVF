@@ -45,6 +45,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
             ["python", "governance/compat/check_public_export_disposition.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
         (
+            "memory access claim",
+            ["python", "governance/compat/check_memory_access_claim.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
+        ),
+        (
             "public doc drift phrase compatibility",
             ["python", "governance/compat/check_public_doc_drift_phrases.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
@@ -65,6 +69,10 @@ HOOK_CHAINS: dict[str, list[tuple[str, list[str]]]] = {
         (
             "public export disposition quality",
             ["python", "governance/compat/check_public_export_disposition.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
+        ),
+        (
+            "memory access claim",
+            ["python", "governance/compat/check_memory_access_claim.py", "--base", "HEAD", "--head", "HEAD", "--enforce"],
         ),
         (
             "public doc drift phrase compatibility",

@@ -2,6 +2,33 @@
 
 ---
 
+## [Public Current State Snapshot] — 2026-06-27
+
+Status: PUBLIC_CURRENT_STATE_SNAPSHOT_EXPORTED
+
+### Added
+
+- Public current-state snapshot:
+  `docs/evidence/public-current-state-snapshot-2026-06-27.md`.
+
+### Changed
+
+- README, public docs index, evidence index, technical product catalog, and
+  public catalog claim boundary now point to the 2026-06-27 public-safe current
+  state.
+- Catalog now records MPI-T5 as public static governance tooling, MPI-T6 as
+  demand-gated and parked, and foundation-plane system-chain completion as the
+  next roadmap direction.
+
+### Boundary
+
+- This is a public documentation, catalog, and evidence-pointer refresh only.
+- It does not export private provenance packets, private handoffs, raw provider
+  logs, raw package material, runtime behavior, provider behavior, hosted
+  readiness, production readiness, or MPI-T6 runtime implementation.
+
+---
+
 ## [Public External Review Snapshot] — 2026-06-19
 
 Status: PUBLIC_REVIEW_SNAPSHOT_EXPORTED

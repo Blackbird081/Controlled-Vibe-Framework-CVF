@@ -9,6 +9,12 @@ Date: 2026-05-16
 This summary reflects the current evidence-backed CVF quality posture. Raw
 handoffs, full live run artifacts, and internal logs remain in provenance.
 
+Update note, 2026-06-27: this file remains the bounded public quality baseline.
+For the broader current public repository state, including MPI-T5 public static
+checker posture, MPI-T6 parked reopen conditions, and foundation-plane
+next-roadmap direction, read
+`docs/evidence/public-current-state-snapshot-2026-06-27.md`.
+
 ## Purpose
 
 State the current honest public quality posture for CVF so users, evaluators,

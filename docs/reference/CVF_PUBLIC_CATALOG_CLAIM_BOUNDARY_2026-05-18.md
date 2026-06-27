@@ -1,7 +1,7 @@
 # CVF Public Catalog Claim Boundary
 
 Memory class: POINTER_RECORD
-Status: CURRENT PUBLIC CLAIM BOUNDARY - updated 2026-06-19
+Status: CURRENT PUBLIC CLAIM BOUNDARY - updated 2026-06-27
 
 ## Purpose
 
@@ -31,6 +31,7 @@ Owner surface: public/product orientation and claim-boundary documentation.
 - `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`
 - `docs/evidence/cvf-16-06-public-front-door-catalog-sync.md`
 - `docs/evidence/public-external-review-snapshot-2026-06-19.md`
+- `docs/evidence/public-current-state-snapshot-2026-06-27.md`
 
 ## Decision / Baseline / Proposed Tranche
 
@@ -82,7 +83,11 @@ Public catalog claims must:
 | External asset/capability governance | Partially productized | `docs/evidence/web-governance-path.md`, `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` | Not a full external capability marketplace claim |
 | Role and agent governance | Partially absorbed | `governance/toolkit/03_CONTROL/CVF_AGENT_REGISTRY.md`, `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md` | Full enforceable role-permission runtime remains future work |
 | Agent work-order authoring controls | Bounded public documentation calibration | `docs/evidence/cvf-16-06-public-front-door-catalog-sync.md`, `README.md`, `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md` | Public docs record lessons for prompt placement, CVF-governed lesson capture, and stale next-move handling; no runtime/provider/live-proof claim |
+| Public current state snapshot | Bounded public catalog and roadmap-direction calibration | `docs/evidence/public-current-state-snapshot-2026-06-27.md` | Current-state pointer only; no private provenance export, runtime behavior, hosted readiness, or production-readiness claim |
 | Public external review snapshot | Bounded public evaluation calibration | `docs/evidence/public-external-review-snapshot-2026-06-19.md`, `docs/guides/external-agent-review-guide.md` | Review entry point only; no private provenance export, runtime behavior, hosted readiness, or production-readiness claim |
+| MPI-T5 static memory-access checker | Public local governance tooling | `governance/compat/check_memory_access_claim.py`, `governance/compat/test_check_memory_access_claim.py`, `docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md` | Static governed-Markdown checker only; no runtime memory read, durable/vector storage, adapter, provider/live, or route behavior claim |
+| MPI-T6 runtime expansion | Demand-gated and parked | `docs/evidence/public-current-state-snapshot-2026-06-27.md` | Requires concrete reopen condition and fresh governed authorization; no implementation claim |
+| Foundation-plane system-chain completion | Roadmap direction | `docs/evidence/public-current-state-snapshot-2026-06-27.md` | Direction to prioritize interlock and machine-check gaps; no public registry edit, checker implementation, runtime behavior, or production-readiness claim |
 | Memory and continuity | Partially absorbed | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md` | Full governed reinjection across all worker paths is not claimed |
 | Provider method breadth | Demand-gated | `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md` | New provider methods need named consumer slices and live proof if they affect governed execution |
 | Tool/MCP/database action governance | Roadmap | `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md` | Full canonical action taxonomy is not claimed |
@@ -100,6 +105,7 @@ CVF may claim:
 - governance-kernel coherence as audit-equivalent public orientation;
 - public auditability through architecture, evidence packets, guards, and
   release gates.
+- bounded current-state calibration through the 2026-06-27 public snapshot.
 - bounded public documentation calibration for agent work-order authoring
   controls where a public evidence path exists.
 - bounded public external-review calibration through the 2026-06-19 public
@@ -116,6 +122,11 @@ CVF must not claim:
   database-action, or provider-method coverage.
 - freeze lift, kernel-owner replacement, or A2 as proof of new runtime
   behavior.
+- MPI-T6 runtime memory access, vector/durable-store expansion,
+  external-agent MCP/CLI read access, or route-side memory federation.
+- foundation-plane system-chain roadmap direction as proof of completed
+  registry edits, checker implementation, runtime behavior, or production
+  readiness.
 
 ## Verification
 
@@ -132,6 +143,8 @@ Test-Path docs/evidence/provider-lanes.md
 Test-Path docs/evidence/web-governance-path.md
 Test-Path docs/evidence/cvf-16-5-runtime-absorption.md
 Test-Path docs/evidence/public-external-review-snapshot-2026-06-19.md
+Test-Path docs/evidence/public-current-state-snapshot-2026-06-27.md
+Test-Path docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md
 Test-Path docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md
 Test-Path docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md
 Test-Path docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md
@@ -168,3 +181,5 @@ governance behavior, provider behavior, or release readiness.
 - `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`
 - `docs/evidence/cvf-16-06-public-front-door-catalog-sync.md`
 - `docs/evidence/public-external-review-snapshot-2026-06-19.md`
+- `docs/evidence/public-current-state-snapshot-2026-06-27.md`
+- `docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md`

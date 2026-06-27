@@ -192,8 +192,16 @@
       "reason": "Public-safe structural review for agent-owned PR publication controls and public-sync guard compatibility; contains no private provenance payload."
     },
     {
+      "path": "docs/reviews/CVF_PUBLIC_EXTERNAL_EVALUATION_PACKAGE_CATALOG_ALIGNMENT_COMPLETION_2026-06-20.md",
+      "reason": "Public-safe external-evaluation catalog alignment completion review already published to calibrate public review packaging; contains no private provenance payload."
+    },
+    {
       "path": "docs/reviews/CVF_QBS_GATE1_PUBLIC_SYNC_CLAIM_GATE_WIRE_IN_COMPLETION_2026-06-07.md",
       "reason": "Public-safe QBS claim gate completion review exported with commit 993014398 to document public governance wiring; contains no raw private provenance payload."
+    },
+    {
+      "path": "docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md",
+      "reason": "Public-safe MPI-T5 static checker sync note documenting public governance tooling; contains no private provenance payload."
     },
     {
       "path": "docs/audits/CVF_FAST_LANE_N1_PUBLIC_CATALOG_UPDATE_2026-05-20.md",

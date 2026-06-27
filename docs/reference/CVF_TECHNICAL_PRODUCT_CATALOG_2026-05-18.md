@@ -2,7 +2,7 @@
 
 Memory class: POINTER_RECORD
 
-Status: CURRENT - updated 2026-06-19
+Status: CURRENT - updated 2026-06-27
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -10,8 +10,10 @@ Version: CVF v4.0.0 GA
 This catalog is the durable public orientation surface for users, developers,
 and agents. It is the right starting point for understanding CVF system shape,
 capabilities, and boundaries. The
-`docs/evidence/public-external-review-snapshot-2026-06-19.md` file is a
-point-in-time dated evidence artifact; it is not a replacement for this catalog.
+`docs/evidence/public-current-state-snapshot-2026-06-27.md` and
+`docs/evidence/public-external-review-snapshot-2026-06-19.md` files are
+point-in-time dated evidence artifacts; they are not replacements for this
+catalog.
 
 This catalog gives users, developers, and agents a compact technical map
 of Controlled Vibe Framework (CVF). It answers three questions:
@@ -272,6 +274,18 @@ runtime behavior, provider behavior, hosted readiness, production readiness, or
 universal governed-coding control. Evidence:
 `docs/evidence/public-external-review-snapshot-2026-06-19.md`
 
+On 2026-06-27, the public front door, catalog, claim boundary, and evidence
+index were refreshed with a current-state snapshot. The update records that
+MPI-T5 static memory-access claim checking is public governance tooling,
+MPI-T6 runtime expansion remains parked with concrete reopen conditions, and
+the highest-value next roadmap direction is foundation-plane system-chain gap
+closure through interlock and machine-check coverage. This is a public
+documentation and catalog calibration update only. It does not export private
+provenance packets, private handoffs, raw provider logs, raw package material,
+runtime behavior, provider behavior, hosted readiness, production readiness, or
+MPI-T6 runtime implementation. Evidence:
+`docs/evidence/public-current-state-snapshot-2026-06-27.md`
+
 ---
 
 ## What CVF Can Do Today
@@ -350,6 +364,7 @@ Evidence:
 | --- | --- | --- |
 | Governance control plane | proven | `ARCHITECTURE.md`, `GOVERNANCE.md` |
 | Public evaluation claim boundary | active — external-agent calibration for route coverage, static CI, mock/demo data, connector specs, evidence durability, and provider parity boundaries; no new runtime behavior claimed | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md` |
+| Public current state snapshot | active — dated public-safe status pointer for 2026-06-27; records MPI-T5 public checker posture, MPI-T6 parked reopen conditions, and foundation-plane next-roadmap direction; no private provenance export or runtime claim | `docs/evidence/public-current-state-snapshot-2026-06-27.md`, `docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md` |
 | Public external review snapshot | active — dated public-safe review entry point for external agents; calibrates source order, finding format, live-proof boundary, and private/public separation; no private provenance export or runtime claim | `docs/evidence/public-external-review-snapshot-2026-06-19.md`, `docs/guides/external-agent-review-guide.md` |
 | External Review Hardening public summary | active — public-safe calibration for external review rescan, route/CI posture, safety workflow hardening, dependency/auth boundaries, and evidence durability limitations; no private packet export or production-readiness claim | `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`, `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md` |
 | Governance kernel coherence | audit-equivalent - public reader baseline | `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`, `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md` |
@@ -382,6 +397,9 @@ Evidence:
 | Benchmark infrastructure (QBS) | active | `docs/evidence/current-cvf-quality-status.md`, `docs/benchmark/` |
 | Role and agent governance | partially proven — selected flow | `docs/evidence/phase-e-governed-execution-chain.md` |
 | Memory and continuity contracts | partially proven — execute-route audit memory receipts plus one bounded two-turn live workflow-chain read/write proof; no provider prompt reinjection claim | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/audit-memory-receipt.ts`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/audit-memory-receipt.test.ts`, `docs/evidence/workflow-chain-memory-proof-2026-05-24.md` |
+| MPI-T5 memory-access claim checker | active — public static governance checker for changed governed Markdown; supports Memory Plane claim-boundary discipline | `governance/compat/check_memory_access_claim.py`, `governance/compat/test_check_memory_access_claim.py`, `docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md` |
+| MPI-T6 runtime expansion | roadmap / demand-gated — parked unless concrete product, checker, or integration-partner reopen conditions are met | `docs/evidence/public-current-state-snapshot-2026-06-27.md` |
+| Foundation-plane system-chain completion | roadmap / demand-gated — current next-roadmap direction is interlock and machine-check gap closure before downstream runtime/use-case lanes | `docs/evidence/public-current-state-snapshot-2026-06-27.md` |
 | Operational observability | partially absorbed | `docs/evidence/cvf-16-5-runtime-absorption.md` |
 | External asset/capability governance | partially productized | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |
 | Provider streaming contract (`StreamContract`) | schema-defined — bounded to governed pack policy flag | `EXTENSIONS/CVF_MODEL_GATEWAY/src/stream-contract.ts`, `EXTENSIONS/CVF_MODEL_GATEWAY/tests/stream-contract.test.ts` |
@@ -527,6 +545,8 @@ CVF may claim:
   `app_builder_complete`
 - public auditability through docs, evidence packets, guards, and release gates
 - governance-kernel coherence as audit-equivalent for public reader orientation
+- public current-state calibration through
+  `docs/evidence/public-current-state-snapshot-2026-06-27.md`
 - public external-review calibration through
   `docs/evidence/public-external-review-snapshot-2026-06-19.md`
 
@@ -542,6 +562,11 @@ CVF does not yet claim:
 - full legacy repository absorption
 - all-template workflow runtime or broad workflow engine status
 - public-build-ready runtime source/test export for Delta/WCE/EL/PM
+- MPI-T6 runtime memory access, vector/durable-store expansion, external-agent
+  MCP/CLI read access, or route-side memory federation
+- that foundation-plane system-chain roadmap direction is already a public
+  registry edit, checker implementation, runtime behavior, or production
+  readiness claim
 - that ignored internal roadmaps, reviews, baselines, hidden IDE histories, or
   session handoffs are public product artifacts
 - runtime enforcement of LHW3/LHW5 connector standards, live failure alerting,
@@ -583,7 +608,9 @@ update rules:
 - `docs/GET_STARTED.md` — getting started guide
 - `docs/evidence/README.md` — evidence index
 - `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
+- `docs/evidence/public-current-state-snapshot-2026-06-27.md`
 - `docs/evidence/public-external-review-snapshot-2026-06-19.md`
+- `docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md`
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 - `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`
 - `docs/reference/CVF_MODULE_INVENTORY.md`

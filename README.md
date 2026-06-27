@@ -24,7 +24,8 @@ collaboration tools for design, implementation, review, and documentation. See
 | Understand governance rules | [Governance](GOVERNANCE.md) |
 | Review public claims safely | [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md) |
 | Ask an external AI reviewer to evaluate CVF | [External Agent Review Guide and paste-ready prompt](docs/guides/external-agent-review-guide.md) |
-| Review dated public evidence | [2026-06-19 Public External Review Snapshot](docs/evidence/public-external-review-snapshot-2026-06-19.md) |
+| Review current public state | [2026-06-27 Public Current State Snapshot](docs/evidence/public-current-state-snapshot-2026-06-27.md) |
+| Review external-evaluation baseline | [2026-06-19 Public External Review Snapshot](docs/evidence/public-external-review-snapshot-2026-06-19.md) |
 | Review ERH follow-up summary | [ERH Public Sync Summary](docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md) |
 | Check current evidence and open debt | [Known Limitations](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md) |
 | Configure provider lanes | [Providers](PROVIDERS.md) |
@@ -203,6 +204,8 @@ Current public evidence snapshot:
 | Static CI and coverage | Public workflows expose build, docs, static governance, and web coverage jobs. | A workflow file or badge is not a current pass unless the run artifact is inspected. |
 | Route governance | Some governed route paths have linked evidence and tests. | Route existence alone is inventory, not route coverage proof. |
 | Agent work-order governance | Public docs now record authoring-time guard lessons for dispatch prompt placement, CVF-governed lesson capture, and stale next-move handling. | Documentation/front-door calibration only unless a linked public checker or live proof supports a stronger claim. |
+| Memory Plane Integration | MPI-T5 public static checker is exported; MPI-T6 runtime remains parked with concrete reopen conditions. | No runtime memory route, vector/durable-store expansion, MCP/CLI adapter, provider/live, or route-side federation claim. |
+| Foundation plane roadmap direction | Current priority is plane-to-system workflow-chain completion through interlock and machine-check gap closure. | Roadmap direction only; no public registry edit, checker implementation, runtime/provider behavior, or production-readiness claim. |
 | Benchmark quality | QBS methodology and limitations are public. | Reviewer agreement, corpus size, and provider-quality parity remain bounded limitations. |
 | Product maturity | Local-first framework with public setup docs and web UI. | No hosted SaaS, enterprise SSO/PostgreSQL readiness, or production deployment claim. |
 
@@ -219,7 +222,9 @@ Current public evidence snapshot:
 
 Important evidence anchors:
 
+- [2026-06-27 Public Current State Snapshot](docs/evidence/public-current-state-snapshot-2026-06-27.md)
 - [2026-06-19 Public External Review Snapshot](docs/evidence/public-external-review-snapshot-2026-06-19.md)
+- [MPI-T5 Public Sync Note](docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md)
 - [Provider Lane Readiness Matrix](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
 - [Public Non-Coder Value Statement](docs/reference/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md)
 - [Live Evidence Publication Packet](docs/reference/CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md)
@@ -322,6 +327,9 @@ CVF is not:
 - a substitute for live evidence when governance behavior is claimed;
 - a claim that every public API route is governed or production-ready merely
   because the route exists in source;
+- a claim that MPI-T6 runtime memory access, vector/durable storage,
+  external-agent MCP/CLI read access, or route-side memory federation is open
+  by default;
 - a place to publish private keys, raw provider logs, or internal provenance
   material.
 

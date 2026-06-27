@@ -43,6 +43,7 @@ boundary. The summary list is the curated public set.
 
 Start with:
 
+- `public-current-state-snapshot-2026-06-27.md`
 - `public-external-review-snapshot-2026-06-19.md`
 - `latest-release-gate.md`
 - `public-developer-onboarding-proof-2026-05-22.md`
@@ -58,6 +59,7 @@ Start with:
 - `vertical-integration-provider-workflow-coverage-2026-05-25.md`
 - `cvf-28-05-public-sync-capability-export-2026-05-30.md`
 - `cvf-31-05-public-runtime-source-sync-2026-05-31.md`
+- `../assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md`
 - `claim-boundaries.md`
 
 Benchmark methodology is published separately under `docs/benchmark/`. That

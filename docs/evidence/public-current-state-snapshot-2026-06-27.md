@@ -10,7 +10,8 @@ Date: 2026-06-27
 
 Provide a public-safe current-state snapshot for GitHub readers after the
 private provenance workspace closed additional foundation-plane, evidence
-readout, Memory Plane Integration, and roadmap-reconciliation work.
+readout, Memory Plane Integration, use-case-adapter public-surface inventory,
+and roadmap-reconciliation work.
 
 This snapshot is a curated public surface. It summarizes the public-facing
 state and next-roadmap direction without exporting private handoffs, private
@@ -51,9 +52,10 @@ This snapshot is based on public-safe predecessor surfaces:
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 - `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
 
-Private provenance work after 2026-06-22 is summarized only at public-safe
-claim-boundary level. The private packets, handoffs, source-verification
-tables, raw logs, and operator context are not predecessor public evidence.
+Private provenance work after 2026-06-22, including use-case-adapter
+public-surface inventory work, is summarized only at public-safe claim-boundary
+level. The private packets, handoffs, source-verification tables, raw logs, and
+operator context are not predecessor public evidence.
 
 ## Decision / Baseline / Proposed Tranche
 
@@ -64,7 +66,8 @@ Baseline: CVF remains a local-first governance framework with bounded public
 claims. The latest public runtime/evidence claims remain limited to existing
 public evidence files. MPI-T5 is public static governance tooling. MPI-T6
 runtime expansion is parked. Foundation-plane system-chain completion is the
-next private roadmap direction.
+next private roadmap direction. Use-case adapter and workspace-package posture
+is public comprehension material only, not runtime activation.
 
 Proposed tranche: none. This public-sync batch is documentation, catalog, and
 evidence-pointer calibration only.
@@ -84,7 +87,10 @@ The current public posture is:
 - MPI-T6 runtime expansion remains parked unless concrete reopen conditions are
   met;
 - the highest-value next private roadmap direction is foundation-plane
-  system-chain completion, not downstream runtime or use-case expansion.
+  system-chain completion, not downstream runtime or use-case expansion;
+- use-case adapter and workspace-package material is public only as bounded
+  comprehension/catalog/snapshot guidance unless a later public artifact says
+  otherwise.
 
 ## Public-Safe Current State
 
@@ -94,6 +100,7 @@ The current public posture is:
 | MPI-T5 memory access claim checker | Public repository includes the static checker, focused tests, and hook-chain wiring note. | Static governed-Markdown checker only; no route, durable store, vector store, adapter, provider/live, or runtime memory behavior. |
 | MPI-T6 runtime candidate | Parked/deferred. | Do not reopen unless a recorded product, checker, or integration-partner condition is satisfied and a fresh governed work order exists. |
 | Foundation-plane system-chain gaps | Current priority is closing plane-to-system workflow-chain gaps: interlock registry coverage first, then machine-check coverage. | Private roadmap direction only; no public runtime, registry, checker, or provider behavior is claimed by this snapshot. |
+| Use-case adapter public surface | Public docs state the current use-case-adapter and workspace-package boundary for external developers and agents. | Comprehension/catalog/snapshot boundary only; no package activation, certification, runtime bridge, raw package-material export, or provider/live proof is claimed. |
 | Evidence/readout friction | Private work produced a manual quick-packet pattern for compact current-state answers. | No public UI, dashboard, CLI, MCP, IDE bridge, or generated-state feature is claimed here. |
 | Workspace/package absorption | Private provenance has additional workspace-layer and projection-read-model analysis. | No public package activation, certification, runtime bridge, or raw package import is claimed. |
 
@@ -141,6 +148,8 @@ CVF may claim:
   parked;
 - explicit public notice that foundation-plane system-chain completion is the
   next private roadmap direction.
+- bounded public comprehension guidance for use-case adapter and
+  workspace-package posture, without package activation or runtime claims.
 
 ## Claims Not Allowed By This Snapshot
 
@@ -155,6 +164,8 @@ This snapshot does not claim:
 - Memory Plane runtime expansion, vector-store integration, durable-store
   expansion, external-agent MCP/CLI read implementation, or route-side memory
   federation from MPI-T6;
+- use-case adapter or workspace-package activation, certification, runtime
+  bridging, provider/live proof, or raw package-material export;
 - public export of private handoffs, private session state, private GC-018
   packets, raw provider logs, raw package handoff material, or operator
   transcripts.

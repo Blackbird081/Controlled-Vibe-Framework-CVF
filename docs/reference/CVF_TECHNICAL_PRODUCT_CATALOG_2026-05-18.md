@@ -286,6 +286,15 @@ runtime behavior, provider behavior, hosted readiness, production readiness, or
 MPI-T6 runtime implementation. Evidence:
 `docs/evidence/public-current-state-snapshot-2026-06-27.md`
 
+Also on 2026-06-27, the public front door, catalog, and current-state snapshot
+were refreshed after a bounded use-case-adapter public-surface inventory. The
+public meaning is narrow: external developers and agents can read the current
+use-case-adapter and workspace-package boundary from public docs. This does
+not activate a package, certify a workspace layer, publish raw package
+material, implement an adapter runtime, claim provider/live behavior, or move
+downstream use-case work ahead of foundation-plane gap closure. Evidence:
+`docs/evidence/public-current-state-snapshot-2026-06-27.md`
+
 ---
 
 ## What CVF Can Do Today
@@ -400,6 +409,7 @@ Evidence:
 | MPI-T5 memory-access claim checker | active — public static governance checker for changed governed Markdown; supports Memory Plane claim-boundary discipline | `governance/compat/check_memory_access_claim.py`, `governance/compat/test_check_memory_access_claim.py`, `docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md` |
 | MPI-T6 runtime expansion | roadmap / demand-gated — parked unless concrete product, checker, or integration-partner reopen conditions are met | `docs/evidence/public-current-state-snapshot-2026-06-27.md` |
 | Foundation-plane system-chain completion | roadmap / demand-gated — current next-roadmap direction is interlock and machine-check gap closure before downstream runtime/use-case lanes | `docs/evidence/public-current-state-snapshot-2026-06-27.md` |
+| Use-case adapter public comprehension surface | active — public docs state the current use-case-adapter and workspace-package boundary for external developers and agents; no package activation, certification, runtime bridge, raw package-material export, or provider/live proof claim | `docs/evidence/public-current-state-snapshot-2026-06-27.md` |
 | Operational observability | partially absorbed | `docs/evidence/cvf-16-5-runtime-absorption.md` |
 | External asset/capability governance | partially productized | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |
 | Provider streaming contract (`StreamContract`) | schema-defined — bounded to governed pack policy flag | `EXTENSIONS/CVF_MODEL_GATEWAY/src/stream-contract.ts`, `EXTENSIONS/CVF_MODEL_GATEWAY/tests/stream-contract.test.ts` |
@@ -567,6 +577,9 @@ CVF does not yet claim:
 - that foundation-plane system-chain roadmap direction is already a public
   registry edit, checker implementation, runtime behavior, or production
   readiness claim
+- that use-case adapter or workspace-package material is already activated,
+  certified, runtime-bridged, provider-proven, or exported as raw package
+  material
 - that ignored internal roadmaps, reviews, baselines, hidden IDE histories, or
   session handoffs are public product artifacts
 - runtime enforcement of LHW3/LHW5 connector standards, live failure alerting,

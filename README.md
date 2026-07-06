@@ -24,7 +24,7 @@ collaboration tools for design, implementation, review, and documentation. See
 | Understand governance rules | [Governance](GOVERNANCE.md) |
 | Review public claims safely | [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md) |
 | Ask an external AI reviewer to evaluate CVF | [External Agent Review Guide and paste-ready prompt](docs/guides/external-agent-review-guide.md) |
-| Read the current public state and parked-lane boundaries | [2026-07-05 Public Current State Snapshot](docs/evidence/public-current-state-snapshot-2026-07-05.md) |
+| Read the current public state and parked-lane boundaries | [2026-07-07 Public Current State Snapshot](docs/evidence/public-current-state-snapshot-2026-07-07.md) |
 | Review ERH follow-up summary | [ERH Public Sync Summary](docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md) |
 | Check current evidence and open debt | [Known Limitations](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md) |
 | Configure provider lanes | [Providers](PROVIDERS.md) |
@@ -204,7 +204,7 @@ Current public evidence snapshot:
 | Route governance | Some governed route paths have linked evidence and tests. | Route existence alone is inventory, not route coverage proof. |
 | Agent work-order governance | Public docs now record authoring-time guard lessons for dispatch prompt placement, CVF-governed lesson capture, and stale next-move handling. | Documentation/front-door calibration only unless a linked public checker or live proof supports a stronger claim. |
 | Memory Plane Integration | MPI-T5 public static checker is exported; MPI-T6 runtime remains parked with concrete reopen conditions. | No runtime memory route, vector/durable-store expansion, MCP/CLI adapter, provider/live, or route-side federation claim. |
-| MinerU document-intelligence foundation | Private provenance has bounded foundation-chain work for receipt, quality, memory-route candidate surfaces, and an internal system-chain readiness harness. | Public summary only; no private output, runtime extraction route, production memory/RAG release, provider/live proof, or use-case/legal workflow claim. |
+| MinerU document-intelligence foundation | Private provenance has sealed the bounded MinerU/scanlayer/memory foundation chain as an internal system chain. | Public summary only; no private output, runtime extraction route, production memory/RAG release, provider/live proof, retrieval/vectorization release, hosted release, or use-case/legal workflow claim. |
 | Use-case adapter public surface | Public docs summarize the current use-case-adapter and workspace-package posture for external developers and agents. | Comprehension/catalog/snapshot boundary only; no package activation, adapter runtime, certification, provider/live proof, or raw package-material export. |
 | Benchmark quality | QBS methodology and limitations are public. | Reviewer agreement, corpus size, and provider-quality parity remain bounded limitations. |
 | Product maturity | Local-first framework with public setup docs and web UI. | No hosted SaaS, enterprise SSO/PostgreSQL readiness, or production deployment claim. |
@@ -222,6 +222,7 @@ Current public evidence snapshot:
 
 Important evidence anchors:
 
+- [2026-07-07 Public Current State Snapshot](docs/evidence/public-current-state-snapshot-2026-07-07.md)
 - [2026-07-05 Public Current State Snapshot](docs/evidence/public-current-state-snapshot-2026-07-05.md)
 - [2026-06-27 Public Current State Snapshot](docs/evidence/public-current-state-snapshot-2026-06-27.md)
 - [2026-06-19 Public External Review Snapshot](docs/evidence/public-external-review-snapshot-2026-06-19.md)

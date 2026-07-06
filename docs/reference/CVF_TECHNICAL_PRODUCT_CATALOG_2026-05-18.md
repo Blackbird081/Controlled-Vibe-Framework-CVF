@@ -2,7 +2,7 @@
 
 Memory class: POINTER_RECORD
 
-Status: CURRENT - updated 2026-07-05
+Status: CURRENT - updated 2026-07-07
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -10,6 +10,7 @@ Version: CVF v4.0.0 GA
 This catalog is the durable public orientation surface for users, developers,
 and agents. It is the right starting point for understanding CVF system shape,
 capabilities, and boundaries. The
+`docs/evidence/public-current-state-snapshot-2026-07-07.md`,
 `docs/evidence/public-current-state-snapshot-2026-07-05.md`,
 `docs/evidence/public-current-state-snapshot-2026-06-27.md`, and
 `docs/evidence/public-external-review-snapshot-2026-06-19.md` files are
@@ -315,6 +316,15 @@ output release, use-case/legal workflow readiness, hosted readiness, or
 production readiness claim. Evidence:
 `docs/evidence/public-current-state-snapshot-2026-07-05.md`
 
+On 2026-07-07, the public front door, catalog, and evidence index were
+refreshed after private provenance sealed the MinerU/scanlayer/memory
+foundation lane at R50. The public meaning is bounded: the private foundation
+chain is sealed as an internal system chain, not released as a public runtime
+extraction route, production memory/RAG route, retrieval/vectorization path,
+private-output release, provider/live proof, legal/use-case workflow, hosted
+release, or production deployment claim. Evidence:
+`docs/evidence/public-current-state-snapshot-2026-07-07.md`
+
 ---
 
 ## What CVF Can Do Today
@@ -393,7 +403,7 @@ Evidence:
 | --- | --- | --- |
 | Governance control plane | proven | `ARCHITECTURE.md`, `GOVERNANCE.md` |
 | Public evaluation claim boundary | active — external-agent calibration for route coverage, static CI, mock/demo data, connector specs, evidence durability, and provider parity boundaries; no new runtime behavior claimed | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md` |
-| Public current state snapshot | active — dated public-safe status pointer for 2026-07-05; records MPI-T5 public checker posture, MPI-T6 parked reopen conditions, MinerU private foundation-chain posture, bounded internal system-chain readiness audit posture, and public/private push-continuity cleanup; no private provenance export, runtime extraction, memory/RAG production release, or use-case/legal workflow claim | `docs/evidence/public-current-state-snapshot-2026-07-05.md`, `docs/evidence/public-current-state-snapshot-2026-06-27.md`, `docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md` |
+| Public current state snapshot | active — dated public-safe status pointer for 2026-07-07; records MPI-T5 public checker posture, MPI-T6 parked reopen conditions, MinerU private foundation-chain posture, R50 sealed internal system-chain posture, and public/private boundary discipline; no private provenance export, runtime extraction, memory/RAG production release, retrieval/vectorization release, or use-case/legal workflow claim | `docs/evidence/public-current-state-snapshot-2026-07-07.md`, `docs/evidence/public-current-state-snapshot-2026-07-05.md`, `docs/evidence/public-current-state-snapshot-2026-06-27.md`, `docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md` |
 | Public external review snapshot | active — dated public-safe review entry point for external agents; calibrates source order, finding format, live-proof boundary, and private/public separation; no private provenance export or runtime claim | `docs/evidence/public-external-review-snapshot-2026-06-19.md`, `docs/guides/external-agent-review-guide.md` |
 | External Review Hardening public summary | active — public-safe calibration for external review rescan, route/CI posture, safety workflow hardening, dependency/auth boundaries, and evidence durability limitations; no private packet export or production-readiness claim | `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`, `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md` |
 | Governance kernel coherence | audit-equivalent - public reader baseline | `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`, `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md` |
@@ -428,7 +438,7 @@ Evidence:
 | Memory and continuity contracts | partially proven — execute-route audit memory receipts plus one bounded two-turn live workflow-chain read/write proof; no provider prompt reinjection claim | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/audit-memory-receipt.ts`, `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/audit-memory-receipt.test.ts`, `docs/evidence/workflow-chain-memory-proof-2026-05-24.md` |
 | MPI-T5 memory-access claim checker | active — public static governance checker for changed governed Markdown; supports Memory Plane claim-boundary discipline | `governance/compat/check_memory_access_claim.py`, `governance/compat/test_check_memory_access_claim.py`, `docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md` |
 | MPI-T6 runtime expansion | roadmap / demand-gated — parked unless concrete product, checker, or integration-partner reopen conditions are met | `docs/evidence/public-current-state-snapshot-2026-06-27.md` |
-| MinerU document-intelligence foundation chain | roadmap / demand-gated — private provenance has built and tested an internal foundation chain spanning a Python metadata receipt writer, TypeScript durable memory-store invocation layer, in-process route-release candidate helper, deterministic internal harness, and fixture-only Python-to-TypeScript bridge proof. This is tested foundation-plane work only: production memory/RAG route release, file-backed persistence, provider/live proof, MinerU runtime execution, private-output release, and legal/use-case document workflows remain held pending separate authorization | `docs/evidence/public-current-state-snapshot-2026-07-05.md` |
+| MinerU document-intelligence foundation chain | roadmap / demand-gated — private provenance has sealed the MinerU/scanlayer/memory foundation lane as a bounded internal system chain. This is foundation-plane work only: production memory/RAG route release, runtime extraction, retrieval/vectorization release, provider/live proof, private-output release, and legal/use-case document workflows remain held pending separate authorization | `docs/evidence/public-current-state-snapshot-2026-07-07.md` |
 | Use-case adapter public comprehension surface | active — public docs state the current use-case-adapter and workspace-package boundary for external developers and agents; no package activation, certification, runtime bridge, raw package-material export, or provider/live proof claim | `docs/evidence/public-current-state-snapshot-2026-06-27.md` |
 | Operational observability | partially absorbed | `docs/evidence/cvf-16-5-runtime-absorption.md` |
 | External asset/capability governance | partially productized | `docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md` |

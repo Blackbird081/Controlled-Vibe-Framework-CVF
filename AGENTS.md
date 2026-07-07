@@ -1,5 +1,7 @@
 # CVF Public Core Agent Instructions
 
+Memory class: POINTER_RECORD
+
 Status: PUBLIC_CORE_ACTIVE
 
 ## Purpose
@@ -85,15 +87,13 @@ boundary, and live-proof requirement above.
 
 Use `scripts/check_cvf_workspace_agent_enforcement.ps1` for downstream
 workspace checks and `python scripts/run_cvf_release_gate_bundle.py --json`
-for release-quality live governance proof. Public export disposition is checked
-by `governance/compat/check_public_export_disposition.py`.
+for release-quality live governance proof.
 
 ## Related Artifacts
 
 - `AGENT_HANDOFF.md`
 - `docs/GET_STARTED.md`
 - `docs/reference/CVF_WORKSPACE_RULES.md`
-- `governance/compat/check_public_export_disposition.py`
 - `scripts/update_cvf_workspace_public_core.ps1`
 
 ## Claim Boundary

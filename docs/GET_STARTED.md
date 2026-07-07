@@ -43,6 +43,9 @@ Kết quả:
 - `D:\CVF-Workspace\Trading-Tools\.cvf\manifest.json`
 - `D:\CVF-Workspace\Trading-Tools\.cvf\policy.json`
 - `D:\CVF-Workspace\Trading-Tools\docs\CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
+- `D:\CVF-Workspace\New-CVF-Governed-Project.ps1` (wrapper: bootstrap + doctor + gate trong 1 lệnh)
+- `D:\CVF-Workspace\Run-CVF-NewProject-Enforcement.ps1` (wrapper: enforcement gate cho toàn workspace)
+- `D:\CVF-Workspace\CVF_WORKSPACE_USER_GUIDE.md` / `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md` (hướng dẫn workspace-root, song ngữ)
 
 Kiểm tra agent-enforcement artifacts:
 
@@ -66,6 +69,28 @@ remote và freshness so với `origin/main`. Live governance proof vẫn là gat
 riêng.
 
 Mốc W113 đã chứng minh luồng project downstream thật đầu tiên với live API-backed governance evidence: [W113-T1 First Downstream Project Proof](roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md).
+
+---
+
+## 📖 10 Thuật Ngữ Cần Biết
+
+CVF dùng một số từ chuyên biệt trong tài liệu nội bộ và governance. Dưới đây là bản dịch nhanh dành cho người mới:
+
+| Thuật ngữ | Nghĩa đơn giản |
+| --- | --- |
+| **Guard** | Kiểm soát tự động — một rule được máy enforce, không phải người nhắc nhở |
+| **Tranche** | Đợt triển khai nhỏ, có phạm vi rõ ràng — tương đương "sprint" hoặc "PR" trong dự án thường |
+| **Wave** | Nhóm nhiều tranche liên quan, cùng mục tiêu lớn (ví dụ: Wave memory, Wave provider) |
+| **Closure** | Trạng thái "đã đóng và xác nhận" — một tranche có đủ bằng chứng, không cần làm lại |
+| **Receipt** | Bằng chứng thực thi — file ghi lại AI đã làm gì, kết quả gì, ai phê duyệt |
+| **GC-xxx** | Governance Control số xxx — một rule cụ thể trong hệ thống kiểm soát CVF (ví dụ: GC-023 giới hạn kích thước file) |
+| **Packet** | Bộ tài liệu gắn kết nhau: baseline + work order + completion review |
+| **Lane** | Nhánh công việc song song — ví dụ Lane D (provider), Lane F (UX noncoder) |
+| **Handoff** | File bàn giao giữa các phiên làm việc của agent — giống như "context brief" |
+| **Phase gate** | Điểm kiểm tra bắt buộc trước khi chuyển sang giai đoạn tiếp theo |
+
+> Các thuật ngữ này được dùng chính xác và nhất quán trong tài liệu nội bộ CVF.
+> Đây chỉ là bản dịch tham khảo nhanh — không dùng trong governance artifacts.
 
 ---
 
@@ -241,7 +266,7 @@ npm run dev
 3. **Tools:**
    - Web UI: Templates & Skills
    - Governance Toolkit: Phase gates, risk control
-   - Skill Library: **141** reusable skills (12 domains)
+   - Skill Library: **62** active skills across 12 domains (see [README](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/README.md) for current count)
 
 ### Step 3: First Team Project (5 phút)
 
@@ -436,7 +461,7 @@ git push origin feature/your-feature-name
 | **Guides** | [Solo Dev](guides/solo-developer.md) · [Team](guides/team-setup.md) · [Enterprise](guides/enterprise.md) |
 | **Tutorials** | [First Project](tutorials/first-project.md) · [Web UI](tutorials/web-ui-setup.md) · [Agent](tutorials/agent-platform.md) |
 | **Concepts** | [Philosophy](concepts/core-philosophy.md) · [Controlled Loop](concepts/controlled-execution-loop.md) · [Legacy 4-Phase](concepts/4-phase-process.md) · [Governance](concepts/governance-model.md) |
-| **Reference** | [Skills](concepts/skill-system.md) · [Risk Model](concepts/risk-model.md) · [Version History](concepts/version-evolution.md) · [External Review](guides/external-agent-review-guide.md) |
+| **Reference** | [Skills](concepts/skill-system.md) · [Risk Model](concepts/risk-model.md) · [Version History](concepts/version-evolution.md) |
 | **Cheatsheets** | [Versions](cheatsheets/version-picker.md) · [Troubleshoot](cheatsheets/troubleshooting.md) |
 
 ---

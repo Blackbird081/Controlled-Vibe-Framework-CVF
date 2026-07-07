@@ -75,6 +75,19 @@ For new downstream projects, the bootstrap must produce:
 
 The workspace doctor must verify that the generated project remains isolated from CVF core and that the workspace-root rules file is present.
 
+Bootstrap and reconciliation also install (or refresh) a small set of
+workspace-root wrapper scripts and guides via
+`scripts/install_cvf_workspace_root_wrappers.ps1`:
+
+- `New-CVF-Governed-Project.ps1` — bootstrap + doctor + workspace gate in one command
+- `Run-CVF-NewProject-Enforcement.ps1` — workspace-wide enforcement gate
+- `CVF_WORKSPACE_USER_GUIDE.md` / `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md` — bilingual workspace-root guide
+
+These wrappers only cover the public-safe flow (new-project bootstrap,
+enforcement gate, and workspace-root guidance). Any local-only overlay
+tooling is a separate, provenance-side concern and is not part of this
+public-safe wrapper set.
+
 ## New Project Enforcement Gate
 
 Existing workspaces may contain older sibling projects that predate the current
@@ -95,7 +108,9 @@ other sibling project is treated as a new governed project and must pass
 `scripts/check_cvf_workspace_agent_enforcement.ps1`.
 
 This lets a team adopt the rule immediately for new work without rewriting
-older repositories on day one.
+older repositories on day one. `Run-CVF-NewProject-Enforcement.ps1` (see the
+wrapper list above) runs this same gate workspace-wide from the workspace
+root in one command.
 
 ## Update Flow
 

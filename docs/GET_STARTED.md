@@ -43,6 +43,9 @@ Kết quả:
 - `D:\CVF-Workspace\Trading-Tools\.cvf\manifest.json`
 - `D:\CVF-Workspace\Trading-Tools\.cvf\policy.json`
 - `D:\CVF-Workspace\Trading-Tools\docs\CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
+- `D:\CVF-Workspace\New-CVF-Governed-Project.ps1` (wrapper: bootstrap + doctor + gate trong 1 lệnh)
+- `D:\CVF-Workspace\Run-CVF-NewProject-Enforcement.ps1` (wrapper: enforcement gate cho toàn workspace)
+- `D:\CVF-Workspace\CVF_WORKSPACE_USER_GUIDE.md` / `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md` (hướng dẫn workspace-root, song ngữ)
 
 Kiểm tra agent-enforcement artifacts:
 

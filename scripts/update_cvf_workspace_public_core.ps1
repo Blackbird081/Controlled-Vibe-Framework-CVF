@@ -15,7 +15,6 @@ $workspaceWrapperInstallerPath = Join-Path $PSScriptRoot "install_cvf_workspace_
 $requiredPublicCoreFiles = @(
     "AGENTS.md",
     "AGENT_HANDOFF.md",
-    "AGENT_HANDOFF.md",
     "docs\reference\CVF_WORKSPACE_RULES.md",
     "governance\toolkit\05_OPERATION\CVF_DOWNSTREAM_AGENTS_TEMPLATE.md",
     "scripts\check_cvf_workspace_agent_enforcement.ps1",
@@ -230,7 +229,7 @@ try {
     if (Test-Path -LiteralPath $workspaceWrapperInstallerPath -PathType Leaf) {
         & powershell -ExecutionPolicy Bypass -File $workspaceWrapperInstallerPath -WorkspaceRoot $workspaceResolved
         if ($LASTEXITCODE -ne 0) {
-            exit $LASTEXITCODE
+            throw "Workspace wrapper installer failed with exit code $LASTEXITCODE : $workspaceWrapperInstallerPath"
         }
     }
     else {

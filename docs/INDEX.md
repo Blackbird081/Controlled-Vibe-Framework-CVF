@@ -61,7 +61,7 @@ Default memory role follows
 - `docs/GET_STARTED.md`
 - `docs/guides/CVF_MULTI_AGENT_PROVIDER_ROUTING.md`
 - `docs/evidence/README.md`
-- `docs/evidence/public-current-state-snapshot-2026-06-27.md`
+- `docs/evidence/public-current-state-snapshot-2026-07-07.md`
 - `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md`
 - `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
 - `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
@@ -88,7 +88,7 @@ The bounded External Review Hardening public-sync summary is
 `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`.
 
 The current public state snapshot is
-`docs/evidence/public-current-state-snapshot-2026-06-27.md`.
+`docs/evidence/public-current-state-snapshot-2026-07-07.md`.
 
 ## Enforcement / Verification
 
@@ -102,7 +102,7 @@ python governance/compat/check_markdown_structural_completeness.py
 ## Related Artifacts
 
 - `docs/evidence/latest-release-gate.md`
-- `docs/evidence/public-current-state-snapshot-2026-06-27.md`
+- `docs/evidence/public-current-state-snapshot-2026-07-07.md`
 - `docs/evidence/public-external-review-snapshot-2026-06-19.md`
 - `docs/evidence/provider-lanes.md`
 - `docs/evidence/web-governance-path.md`

@@ -274,7 +274,7 @@ Initial recommended lanes:
 
 | Provider | Model | Reason |
 |---|---|---|
-| OpenAI | `gpt-4o-mini` | Already certified, low cost |
+| OpenAI | `gpt-4o-mini` | Historical/model-specific evidence only; not certified (see Known Limitations L-007), low cost |
 | Alibaba | `qwen-turbo` | Existing certified lane |
 | DeepSeek | `deepseek-chat` | Existing certified confirmatory lane |
 

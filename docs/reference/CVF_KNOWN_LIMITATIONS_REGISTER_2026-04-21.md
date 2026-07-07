@@ -2,7 +2,7 @@
 
 Status: CURRENT PUBLIC LIMITATIONS REGISTER
 
-**Date:** 2026-04-21 (updated 2026-04-21 — L-003 + L-008 closed by E2E stabilization wave)  
+**Date:** 2026-04-21 (updated 2026-07-07 - reconfirmed L-007: OpenAI `gpt-4o-mini` remains `EXPERIMENTAL`, not `CERTIFIED`, and the cited canary receipt is not present in this repository)
 **Scope:** CVF Release Candidate — post-provider-lane closure  
 **Classification:** Permanent boundary / Open gap  
 

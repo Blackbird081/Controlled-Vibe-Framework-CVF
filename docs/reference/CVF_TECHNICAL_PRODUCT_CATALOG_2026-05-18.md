@@ -72,7 +72,7 @@ for both developers and non-coders.
 The core operating loop is:
 
 ```text
-INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE
+INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE
 ```
 
 ---

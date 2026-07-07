@@ -210,8 +210,9 @@ Current public evidence snapshot:
 | Product maturity | Local-first framework with public setup docs and web UI. | No hosted SaaS, enterprise SSO/PostgreSQL readiness, or production deployment claim. |
 
 - a governed non-coder AI path has live evidence on the primary Alibaba lane;
-- Alibaba, DeepSeek, and OpenAI have certified provider-lane evidence where
-  listed in the provider readiness matrix;
+- Alibaba and DeepSeek have certified provider-lane evidence where listed in
+  the provider readiness matrix; OpenAI has historical/model-specific
+  governed evidence only and is not certified (see Known Limitations L-007);
 - governance behavior claims require live provider-backed proof;
 - mock mode is valid for UI structure checks only;
 - static CI checks do not replace protected live release-gate proof;

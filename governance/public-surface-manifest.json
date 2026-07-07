@@ -208,6 +208,22 @@
       "reason": "Public-safe catalog maintenance audit already published with no private provenance payload; retained to preserve public catalog traceability."
     },
     {
+      "path": "docs/audits/alibaba-canary/CVF_RECEIPT_20260421-072551-422037.md",
+      "reason": "Public-safe Alibaba live-canary receipt cited by CVF_PROVIDER_LANE_READINESS_MATRIX.md's CERTIFIED row; contains only pass/fail template results, no private provenance payload or secrets."
+    },
+    {
+      "path": "docs/audits/alibaba-canary/INDEX.md",
+      "reason": "Public-safe curated index pointing to the single allowlisted Alibaba receipt; contains no private provenance payload."
+    },
+    {
+      "path": "docs/audits/deepseek-canary/CVF_RECEIPT_20260421-114125-19515e.md",
+      "reason": "Public-safe DeepSeek live-canary receipt cited by CVF_PROVIDER_LANE_READINESS_MATRIX.md's CERTIFIED row; contains only pass/fail template results, no private provenance payload or secrets."
+    },
+    {
+      "path": "docs/audits/deepseek-canary/INDEX.md",
+      "reason": "Public-safe curated index pointing to the single allowlisted DeepSeek receipt; contains no private provenance payload."
+    },
+    {
       "path": "docs/evidence/workflow-orchestration-guard.jsonl",
       "reason": "Minimal public-safe structured guard evidence for workflow orchestration; contains compliance booleans only, not raw provenance or secrets."
     }

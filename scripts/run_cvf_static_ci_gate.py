@@ -25,6 +25,7 @@ from run_cvf_release_gate_bundle import (
     check_web_build,
     platform_cmd,
 )
+from check_provider_receipt_link_integrity import check_matrix as check_provider_receipt_links
 
 
 STATIC_GOVERNANCE_TESTS = [
@@ -113,6 +114,15 @@ def check_static_governance_tests() -> CheckResult:
     return CheckResult(name, "FAIL", "Static governance/unit tests failed", failures)
 
 
+def check_provider_receipt_link_integrity() -> CheckResult:
+    name = "Provider receipt-link integrity"
+    outcome = check_provider_receipt_links()
+    if outcome.ok:
+        detail = [row.reason for row in outcome.rows]
+        return CheckResult(name, "PASS", "Provider receipt-link integrity passed", detail[:12])
+    return CheckResult(name, "FAIL", "Provider receipt-link integrity failed", outcome.diagnostics[:12])
+
+
 def run_checks() -> list[CheckResult]:
     return [
         check_public_surface(),
@@ -122,6 +132,7 @@ def run_checks() -> list[CheckResult]:
         check_secrets(False),
         check_docs_governance_compat(),
         check_static_governance_tests(),
+        check_provider_receipt_link_integrity(),
     ]
 
 

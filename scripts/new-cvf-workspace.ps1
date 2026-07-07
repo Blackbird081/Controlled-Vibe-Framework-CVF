@@ -69,35 +69,36 @@ if ($missingCoreFiles.Count -gt 0) {
 }
 
 if (-not (Test-Path $workspaceRulesPath -PathType Leaf)) {
-    $workspaceRulesContent = @"
-# CVF Workspace Rules
-
-This folder is a CVF workspace container. It is not a git repository.
-
-## Required layout
-
-````text
-CVF-Workspace/
-  .Controlled-Vibe-Framework-CVF/
-  <Application-Project-1>/
-  <Application-Project-2>/
-  WORKSPACE_RULES.md
-````
-
-## Rules
-
-- `.Controlled-Vibe-Framework-CVF/` is the CVF governance repository.
-- Application projects must be sibling folders, not children of the CVF governance repository.
-- Do not add downstream application code inside `.Controlled-Vibe-Framework-CVF/`.
-- Run CVF core update commands from `.Controlled-Vibe-Framework-CVF/`.
-- Reconcile stale or diverged hidden cores with `scripts/update_cvf_workspace_public_core.ps1`.
-- Run application work from the application project root.
-- Keep provider keys and secrets out of this file, `.cvf/`, generated `AGENTS.md`, and bootstrap logs.
-
-## Reference
-
-Canonical source: `.Controlled-Vibe-Framework-CVF/docs/reference/CVF_WORKSPACE_RULES.md`
-"@
+    $workspaceRulesLines = @(
+        '# CVF Workspace Rules',
+        '',
+        'This folder is a CVF workspace container. It is not a git repository.',
+        '',
+        '## Required layout',
+        '',
+        '````text',
+        'CVF-Workspace/',
+        '  .Controlled-Vibe-Framework-CVF/',
+        '  <Application-Project-1>/',
+        '  <Application-Project-2>/',
+        '  WORKSPACE_RULES.md',
+        '````',
+        '',
+        '## Rules',
+        '',
+        '- `.Controlled-Vibe-Framework-CVF/` is the CVF governance repository.',
+        '- Application projects must be sibling folders, not children of the CVF governance repository.',
+        '- Do not add downstream application code inside `.Controlled-Vibe-Framework-CVF/`.',
+        '- Run CVF core update commands from `.Controlled-Vibe-Framework-CVF/`.',
+        '- Reconcile stale or diverged hidden cores with `scripts/update_cvf_workspace_public_core.ps1`.',
+        '- Run application work from the application project root.',
+        '- Keep provider keys and secrets out of this file, `.cvf/`, generated `AGENTS.md`, and bootstrap logs.',
+        '',
+        '## Reference',
+        '',
+        'Canonical source: `.Controlled-Vibe-Framework-CVF/docs/reference/CVF_WORKSPACE_RULES.md`'
+    )
+    $workspaceRulesContent = $workspaceRulesLines -join "`r`n"
     Set-Content -Path $workspaceRulesPath -Value $workspaceRulesContent -Encoding utf8
     Write-Ok "Created: $workspaceRulesPath"
 }
@@ -207,34 +208,35 @@ Write-Ok "Created: $cvfManifestDir\policy.json"
 $knowledgeDir = Join-Path $projectPath "knowledge"
 if (-not (Test-Path $knowledgeDir)) {
     Ensure-Directory $knowledgeDir
-    $knowledgeReadme = @"
-# Project Knowledge
-
-Place `.md` files in this folder to inject project-specific context into CVF-governed AI runs.
-
-## How it works
-
-1. Add `.md` files describing your project's specs, decisions, or domain terms.
-2. Run `scripts/ingest_cvf_downstream_knowledge.ps1` to index them into `knowledge/_index.json`.
-3. CVF-governed `/api/execute` calls that include your `knowledgeCollectionId` will automatically
-   retrieve relevant chunks and inject them into the AI system prompt.
-
-## What to put here
-
-- Architecture decisions and rationale
-- Domain terminology and definitions
-- Project specs, requirements, or acceptance criteria
-- Process guides or runbooks your team follows
-
-## What NOT to put here
-
-- Secrets, API keys, or credentials (never — governance enforcement will reject these)
-- Binary files or non-markdown formats (not supported in this wave)
-
-## Reference
-
-W116-T1 Downstream Knowledge Pipeline — `docs/roadmaps/CVF_W116_T1_DOWNSTREAM_KNOWLEDGE_PIPELINE_ROADMAP_2026-04-23.md`
-"@
+    $knowledgeReadmeLines = @(
+        '# Project Knowledge',
+        '',
+        'Place `.md` files in this folder to inject project-specific context into CVF-governed AI runs.',
+        '',
+        '## How it works',
+        '',
+        '1. Add `.md` files describing your project''s specs, decisions, or domain terms.',
+        '2. Run `scripts/ingest_cvf_downstream_knowledge.ps1` to index them into `knowledge/_index.json`.',
+        '3. CVF-governed `/api/execute` calls that include your `knowledgeCollectionId` will automatically',
+        '   retrieve relevant chunks and inject them into the AI system prompt.',
+        '',
+        '## What to put here',
+        '',
+        '- Architecture decisions and rationale',
+        '- Domain terminology and definitions',
+        '- Project specs, requirements, or acceptance criteria',
+        '- Process guides or runbooks your team follows',
+        '',
+        '## What NOT to put here',
+        '',
+        '- Secrets, API keys, or credentials (never - governance enforcement will reject these)',
+        '- Binary files or non-markdown formats (not supported in this wave)',
+        '',
+        '## Reference',
+        '',
+        'W116-T1 Downstream Knowledge Pipeline - `docs/roadmaps/CVF_W116_T1_DOWNSTREAM_KNOWLEDGE_PIPELINE_ROADMAP_2026-04-23.md`'
+    )
+    $knowledgeReadme = $knowledgeReadmeLines -join "`r`n"
     Set-Content -Path (Join-Path $knowledgeDir "README.md") -Value $knowledgeReadme -Encoding utf8
     Write-Ok "Created: $knowledgeDir\README.md (project knowledge stub)"
 }
@@ -259,14 +261,15 @@ if (Test-Path $agentsTemplatePath) {
         Write-Warn "AGENTS.md already exists at: $downstreamAgentsPath"
         Write-Warn "Inserting CVF merge block at top - review and merge manually."
         $existingContent = Get-Content -Path $downstreamAgentsPath -Raw -Encoding utf8
-        $mergeBlock = @"
-<!-- CVF_MERGE_BLOCK_START: generated $dateStamp by new-cvf-workspace.ps1 -->
-<!-- Review this block and merge with your existing AGENTS.md content. -->
-$agentContent
-<!-- CVF_MERGE_BLOCK_END -->
-
-$existingContent
-"@
+        $mergeBlockLines = @(
+            "<!-- CVF_MERGE_BLOCK_START: generated $dateStamp by new-cvf-workspace.ps1 -->",
+            "<!-- Review this block and merge with your existing AGENTS.md content. -->",
+            $agentContent,
+            "<!-- CVF_MERGE_BLOCK_END -->",
+            "",
+            $existingContent
+        )
+        $mergeBlock = $mergeBlockLines -join "`r`n"
         Set-Content -Path $downstreamAgentsPath -Value $mergeBlock -Encoding utf8
         Write-Ok "Updated AGENTS.md with CVF merge block: $downstreamAgentsPath"
     }
@@ -283,64 +286,65 @@ else {
 }
 
 # Bootstrap Log
-$logContent = @"
-# CVF Project Bootstrap Log
-
-## 1. Record Metadata
-- Record ID: BOOTSTRAP-$recordIdDate-$ProjectName
-- Date: $dateStamp
-- Prepared By:
-- Reviewed By:
-- CVF Core Commit: $cvfHead
-
-## 2. Workspace Topology
-- Workspace Root: $workspaceRootResolved
-- Workspace Rules: $workspaceRulesPath
-- CVF Core Path: $cvfCorePath
-- Project Path: $projectPath
-- VS Code Workspace File: $workspaceFilePath
-
-## 3. Isolation Validation
-- [x] CVF core and downstream project are sibling folders
-- [x] Workspace rules file exists at workspace root
-- [x] IDE/terminal target is project workspace
-- [x] terminal.integrated.cwd is `${workspaceFolder}`
-- [ ] Team acknowledgment recorded
-
-## 4. Bootstrap Actions
-- [x] CVF core available
-- [x] Project folder available
-- [x] VS Code terminal defaults configured
-- [x] Agent Instructions: $agentInstructionsStatus
-- [x] .cvf/manifest.json: PRESENT (knowledgePath: knowledge/)
-- [x] .cvf/policy.json: PRESENT
-- [x] WORKSPACE_RULES.md: PRESENT
-- [x] knowledge/ folder: PRESENT (add .md files and run ingest script to enable project-knowledge injection)
-- [ ] Runtime artifacts migrated (if needed)
-- [ ] Toolchain baseline recorded (python, node, pnpm, optional uv)
-
-## 5. Post-Bootstrap Checks
-Run the workspace doctor to verify enforcement artifacts:
-  powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\check_cvf_workspace_agent_enforcement.ps1 -ProjectPath "$projectPath"
-
-Optional secret-free live readiness check:
-  powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\check_cvf_workspace_agent_enforcement.ps1 -ProjectPath "$projectPath" -CheckLiveReadiness
-
-Workspace-to-web evidence bridge receipt (run during REVIEW/FREEZE):
-  powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\write_cvf_workspace_web_evidence_bridge.ps1 -ProjectPath "$projectPath" -CheckLiveReadiness -ReleaseGateResult "ATTACH_LATEST_CVF_CORE_GATE_RESULT"
-
-- [ ] Workspace doctor: PASS
-- [ ] Optional live readiness: PASS / MISSING KEY / NOT RUN
-- [ ] Workspace-to-web evidence bridge receipt: PRESENT / NOT NEEDED
-- [ ] API health check
-- [ ] Frontend startup check
-- [ ] Critical workflow smoke check
-
-## 6. Approval
-- Result: PASS / PASS WITH NOTE / FAIL
-- Approved By:
-- Approval Date:
-"@
+$logLines = @(
+    '# CVF Project Bootstrap Log',
+    '',
+    '## 1. Record Metadata',
+    ('- Record ID: BOOTSTRAP-' + $recordIdDate + '-' + $ProjectName),
+    ('- Date: ' + $dateStamp),
+    '- Prepared By:',
+    '- Reviewed By:',
+    ('- CVF Core Commit: ' + $cvfHead),
+    '',
+    '## 2. Workspace Topology',
+    ('- Workspace Root: ' + $workspaceRootResolved),
+    ('- Workspace Rules: ' + $workspaceRulesPath),
+    ('- CVF Core Path: ' + $cvfCorePath),
+    ('- Project Path: ' + $projectPath),
+    ('- VS Code Workspace File: ' + $workspaceFilePath),
+    '',
+    '## 3. Isolation Validation',
+    '- [x] CVF core and downstream project are sibling folders',
+    '- [x] Workspace rules file exists at workspace root',
+    '- [x] IDE/terminal target is project workspace',
+    '- [x] terminal.integrated.cwd is `${workspaceFolder}`',
+    '- [ ] Team acknowledgment recorded',
+    '',
+    '## 4. Bootstrap Actions',
+    '- [x] CVF core available',
+    '- [x] Project folder available',
+    '- [x] VS Code terminal defaults configured',
+    ('- [x] Agent Instructions: ' + $agentInstructionsStatus),
+    '- [x] .cvf/manifest.json: PRESENT (knowledgePath: knowledge/)',
+    '- [x] .cvf/policy.json: PRESENT',
+    '- [x] WORKSPACE_RULES.md: PRESENT',
+    '- [x] knowledge/ folder: PRESENT (add .md files and run ingest script to enable project-knowledge injection)',
+    '- [ ] Runtime artifacts migrated (if needed)',
+    '- [ ] Toolchain baseline recorded (python, node, pnpm, optional uv)',
+    '',
+    '## 5. Post-Bootstrap Checks',
+    'Run the workspace doctor to verify enforcement artifacts:',
+    ('  powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\check_cvf_workspace_agent_enforcement.ps1 -ProjectPath "' + $projectPath + '"'),
+    '',
+    'Optional secret-free live readiness check:',
+    ('  powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\check_cvf_workspace_agent_enforcement.ps1 -ProjectPath "' + $projectPath + '" -CheckLiveReadiness'),
+    '',
+    'Workspace-to-web evidence bridge receipt (run during REVIEW/FREEZE):',
+    ('  powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\write_cvf_workspace_web_evidence_bridge.ps1 -ProjectPath "' + $projectPath + '" -CheckLiveReadiness -ReleaseGateResult "ATTACH_LATEST_CVF_CORE_GATE_RESULT"'),
+    '',
+    '- [ ] Workspace doctor: PASS',
+    '- [ ] Optional live readiness: PASS / MISSING KEY / NOT RUN',
+    '- [ ] Workspace-to-web evidence bridge receipt: PRESENT / NOT NEEDED',
+    '- [ ] API health check',
+    '- [ ] Frontend startup check',
+    '- [ ] Critical workflow smoke check',
+    '',
+    '## 6. Approval',
+    '- Result: PASS / PASS WITH NOTE / FAIL',
+    '- Approved By:',
+    '- Approval Date:'
+)
+$logContent = $logLines -join "`r`n"
 
 Set-Content -Path $bootstrapLogPath -Value $logContent -Encoding utf8
 Write-Ok "Created: $bootstrapLogPath"

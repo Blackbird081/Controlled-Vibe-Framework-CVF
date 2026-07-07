@@ -88,6 +88,30 @@ enforcement gate, and workspace-root guidance). Any local-only overlay
 tooling is a separate, provenance-side concern and is not part of this
 public-safe wrapper set.
 
+## New Project Enforcement Gate
+
+Existing workspaces may contain older sibling projects that predate the current
+bootstrap contract. Those projects do not become governed automatically just
+because they sit next to `.Controlled-Vibe-Framework-CVF/`.
+
+Use a workspace baseline to grandfather legacy projects and enforce the doctor
+for every new project added after the baseline is created:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/check_cvf_workspace_new_project_enforcement.ps1 `
+  -WorkspaceRoot "<workspace-root>"
+```
+
+The gate reads `<workspace-root>/WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json`.
+Projects listed under `legacyProjects` are reported as `LEGACY_EXEMPT`. Every
+other sibling project is treated as a new governed project and must pass
+`scripts/check_cvf_workspace_agent_enforcement.ps1`.
+
+This lets a team adopt the rule immediately for new work without rewriting
+older repositories on day one. `Run-CVF-NewProject-Enforcement.ps1` (see the
+wrapper list above) runs this same gate workspace-wide from the workspace
+root in one command.
+
 ## Update Flow
 
 Reconcile an existing hidden public-core clone from inside

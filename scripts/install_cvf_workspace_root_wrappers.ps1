@@ -151,13 +151,20 @@ if ($AllowOfflinePinnedCore) {
 exit $LASTEXITCODE
 '@
 
-$userGuide = @"
+$userGuide = @'
 # CVF Workspace User Guide
 
-This workspace is the local user area for downstream projects that use the
-public CVF core without mixing project code into the CVF core itself.
+This workspace is the local operator area for downstream projects that use CVF
+rules without mixing application code into the CVF core.
 
-## 1. Workspace Layout
+## Purpose
+
+- Keep the hidden CVF core separate from app projects.
+- Bootstrap new governed projects in a repeatable way.
+- Run the doctor and the workspace-level enforcement gate from one place.
+- Keep a clear boundary between public-safe usage and local-only overlay usage.
+
+## Workspace Layout
 
 ```text
 CVF-Workspace/
@@ -165,42 +172,25 @@ CVF-Workspace/
   <Project-A>/
   <Project-B>/
   WORKSPACE_RULES.md
-  WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json
   New-CVF-Governed-Project.ps1
   Run-CVF-NewProject-Enforcement.ps1
+  Get-CVF-Workspace-OverlayProfiles.ps1
+  Update-CVF-Workspace-Overlay.ps1
+  CVF_WORKSPACE_OVERLAY_STATUS.json
   CVF_WORKSPACE_USER_GUIDE.md
+  CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md
 ```
 
-Rules:
+## Common Commands
 
-- The workspace root is not a git repo.
-- Project code stays in sibling folders, not inside `.Controlled-Vibe-Framework-CVF/`.
-- CVF core maintenance and workspace reconciliation run from the hidden core.
-
-## 2. What The Hidden CVF Folder Is
-
-`.Controlled-Vibe-Framework-CVF/` is a clone of the public repository:
-
-`https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git`
-
-Use it for:
-
-- workspace bootstrap scripts
-- workspace doctor / enforcement gate
-- public-safe rules, guides, and continuation surfaces
-
-Do not use it as the place to build the downstream app itself.
-
-## 3. Fastest Safe Flow
-
-For a brand-new governed project, use one command from the workspace root:
+Create a new governed project:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File ".\New-CVF-Governed-Project.ps1" `
   -ProjectName "<project-name>"
 ```
 
-If the project already has a remote repo:
+Create a new governed project from an existing repo:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File ".\New-CVF-Governed-Project.ps1" `
@@ -208,99 +198,156 @@ powershell -ExecutionPolicy Bypass -File ".\New-CVF-Governed-Project.ps1" `
   -ProjectRepo "<git-url>"
 ```
 
-What this wrapper does:
-
-- runs CVF bootstrap for the target project
-- runs the project doctor
-- runs the workspace-wide new-project enforcement gate
-
-If this one command finishes with PASS, the new project is in the governed flow.
-
-## 4. Daily Commands
-
-Refresh the hidden public core:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File ".Controlled-Vibe-Framework-CVF\scripts\update_cvf_workspace_public_core.ps1" `
-  -WorkspaceRoot "$workspaceRootResolved" `
-  -UpdateProjectManifests
-```
-
-Bootstrap a new project:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File ".Controlled-Vibe-Framework-CVF\scripts\new-cvf-workspace.ps1" `
-  -WorkspaceRoot "$workspaceRootResolved" `
-  -ProjectName "<project-name>"
-```
-
-Run the doctor for one governed project:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File ".Controlled-Vibe-Framework-CVF\scripts\check_cvf_workspace_agent_enforcement.ps1" `
-  -ProjectPath "$workspaceRootResolved\<project-name>"
-```
-
-Run the workspace-wide new-project enforcement gate:
+Run the workspace-wide enforcement gate:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1"
 ```
 
-Optional secret-free readiness check:
+Check overlay profiles:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1" `
-  -CheckLiveReadiness
+powershell -ExecutionPolicy Bypass -File ".\Get-CVF-Workspace-OverlayProfiles.ps1"
 ```
 
-## 5. Legacy Projects Vs New Projects
+Apply a workspace overlay:
 
-This workspace uses:
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace-Overlay.ps1" `
+  -ProfileName "provenance-local" `
+  -UpdateProjectManifests
+```
 
-- `WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json` to grandfather old sibling repos
-- the workspace gate to enforce rules for any new sibling repo not listed in the baseline
+## Overlay Levels
 
-Meaning:
+- `public-core`: public CVF core only
+- `premium-workspace`: public-safe curated overlay
+- `premium-extended-workspace`: curated overlay with optional operator and skill lanes
+- `provenance-local`: local-only overlay with full continuity surfaces
+- `provenance-extended-local`: local-only overlay with full continuity plus optional lanes
 
-- old projects can remain as-is for now
-- every new governed project must pass the doctor
+## Important Rules
 
-## 6. What A Proper New Governed Project Must Have
+- The workspace root is not a git repository.
+- Downstream projects must stay as sibling folders.
+- Do not place application code inside `.Controlled-Vibe-Framework-CVF/`.
+- Use the hidden core only for CVF maintenance, bootstrap, and doctor flows.
+- Public-safe updates and local-only provenance overlays are separate concerns.
 
-After bootstrap, a governed project should contain at minimum:
+## When To Use This Guide
 
-- `.cvf/manifest.json`
-- `.cvf/policy.json`
-- `AGENTS.md`
-- `docs/CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
-- `knowledge/README.md`
+Use this file when you need the shortest path to:
 
-If these are missing, the project is not yet agent-enforcement-ready.
+- bootstrap a new project
+- verify a project with the doctor
+- inspect available overlay profiles
+- understand the local workspace boundary
 
-## 7. What The Workspace Inherits From CVF
+## Vietnamese Guide
 
-This workspace inherits a public-safe operational subset of CVF:
+See the localized companion guide:
 
-- workspace isolation rules
-- bootstrap contract
-- doctor / enforcement gate
-- downstream `AGENTS.md`
-- `.cvf/manifest.json` and `.cvf/policy.json`
-- public continuation and governance bootstrap surfaces
+- `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md`
+'@
 
-It does not claim private continuity surfaces, private operator memory, or
-internal provenance state from this public checkout alone.
+$vietnameseGuide = @'
+# Hướng Dẫn Sử Dụng CVF Workspace
 
-## 8. Practical Operating Rule
+Đây là vùng làm việc local cho các project downstream dùng CVF mà không đưa
+code ứng dụng vào trong core CVF.
 
-Use this decision rule:
+## Mục tiêu
 
-- If you are maintaining CVF itself, work in the dedicated CVF repo.
-- If you are building a downstream app with CVF rules, work inside the project folder under `CVF-Workspace`.
-- If you add a new project, bootstrap it first, then run the enforcement gate.
-"@
+- Giữ tách biệt giữa hidden CVF core và project sản phẩm.
+- Tạo project mới theo chuẩn thống nhất.
+- Chạy doctor và enforcement gate từ một nơi duy nhất.
+- Phân biệt rõ phần public-safe và phần overlay local-only.
+
+## Cấu trúc Workspace
+
+```text
+CVF-Workspace/
+  .Controlled-Vibe-Framework-CVF/
+  <Project-A>/
+  <Project-B>/
+  WORKSPACE_RULES.md
+  New-CVF-Governed-Project.ps1
+  Run-CVF-NewProject-Enforcement.ps1
+  Get-CVF-Workspace-OverlayProfiles.ps1
+  Update-CVF-Workspace-Overlay.ps1
+  CVF_WORKSPACE_OVERLAY_STATUS.json
+  CVF_WORKSPACE_USER_GUIDE.md
+  CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md
+```
+
+## Lệnh Thường Dùng
+
+Tạo project governed mới:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\New-CVF-Governed-Project.ps1" `
+  -ProjectName "<project-name>"
+```
+
+Tạo project governed từ repo có sẵn:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\New-CVF-Governed-Project.ps1" `
+  -ProjectName "<project-name>" `
+  -ProjectRepo "<git-url>"
+```
+
+Chạy enforcement gate cho toàn workspace:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1"
+```
+
+Xem danh sách overlay profile:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Get-CVF-Workspace-OverlayProfiles.ps1"
+```
+
+Áp overlay lên hidden core:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace-Overlay.ps1" `
+  -ProfileName "provenance-local" `
+  -UpdateProjectManifests
+```
+
+## Các Mức Overlay
+
+- `public-core`: chỉ dùng public CVF core
+- `premium-workspace`: overlay curated, an toàn cho public-safe usage
+- `premium-extended-workspace`: overlay curated có thêm operator lane và skill lane
+- `provenance-local`: overlay local-only, có full continuity surfaces
+- `provenance-extended-local`: overlay local-only, có full continuity và lane mở rộng
+
+## Quy Tắc Quan Trọng
+
+- Workspace root không phải git repository.
+- Project downstream phải là folder anh em, không nằm bên trong core.
+- Không đặt code ứng dụng vào `.Controlled-Vibe-Framework-CVF/`.
+- Dùng hidden core cho bootstrap, maintenance và doctor.
+- Public-safe update và overlay provenance local là hai luồng khác nhau.
+
+## Khi Nào Dùng File Này
+
+Dùng file này khi cần:
+
+- bootstrap project mới
+- chạy doctor để kiểm tra project
+- xem overlay profile đang có
+- hiểu ranh giới của workspace local
+
+## Tài Liệu Liên Quan
+
+- `CVF_WORKSPACE_USER_GUIDE.md`
+'@
 
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "New-CVF-Governed-Project.ps1") -Content $governedProjectWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Run-CVF-NewProject-Enforcement.ps1") -Content $workspaceGateWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_USER_GUIDE.md") -Content $userGuide
+Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md") -Content $vietnameseGuide

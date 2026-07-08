@@ -22,10 +22,10 @@ function Write-Warn([string]$Message) {
     Write-Host "[WARN] $Message" -ForegroundColor Yellow
 }
 
-function Ensure-Directory([string]$Path) {
-    if (-not (Test-Path $Path)) {
-        New-Item -ItemType Directory -Path $Path | Out-Null
-        Write-Ok "Created directory: $Path"
+function Ensure-Directory([string]$DirectoryPath) {
+    if (-not (Test-Path -LiteralPath $DirectoryPath -PathType Container)) {
+        New-Item -ItemType Directory -Path $DirectoryPath | Out-Null
+        Write-Ok "Created directory: $DirectoryPath"
     }
 }
 
@@ -38,13 +38,13 @@ $cvfCorePath = Join-Path $workspaceRootResolved ".Controlled-Vibe-Framework-CVF"
 $projectPath = Join-Path $workspaceRootResolved $ProjectName
 $workspaceFilePath = Join-Path $workspaceRootResolved "$ProjectName.code-workspace"
 $workspaceRulesPath = Join-Path $workspaceRootResolved "WORKSPACE_RULES.md"
-$workspaceWrapperInstallerPath = Join-Path $PSScriptRoot "install_cvf_workspace_root_wrappers.ps1"
 $requiredPublicCoreFiles = @(
     "AGENTS.md",
     "AGENT_HANDOFF.md",
     "docs\reference\CVF_WORKSPACE_RULES.md",
     "governance\toolkit\05_OPERATION\CVF_DOWNSTREAM_AGENTS_TEMPLATE.md",
     "scripts\check_cvf_workspace_agent_enforcement.ps1",
+    "scripts\install_cvf_workspace_root_wrappers.ps1",
     "scripts\ingest_cvf_downstream_knowledge.ps1",
     "scripts\update_cvf_workspace_public_core.ps1",
     "scripts\write_cvf_workspace_web_evidence_bridge.ps1"
@@ -53,7 +53,7 @@ $requiredPublicCoreFiles = @(
 Write-Info "Workspace root: $workspaceRootResolved"
 Ensure-Directory $workspaceRootResolved
 
-if (-not (Test-Path $cvfCorePath)) {
+if (-not (Test-Path -LiteralPath $cvfCorePath -PathType Container)) {
     Write-Info "Cloning CVF core into: $cvfCorePath"
     git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git $cvfCorePath
     Write-Ok "CVF core cloned"
@@ -69,8 +69,14 @@ if ($missingCoreFiles.Count -gt 0) {
     throw "CVF public core workspace kit is incomplete. Missing: $($missingCoreFiles -join ', '). Reconcile the hidden core with scripts/update_cvf_workspace_public_core.ps1 before bootstrapping a project."
 }
 
-if (-not (Test-Path $workspaceRulesPath -PathType Leaf)) {
-    $workspaceRulesContent = @"
+$workspaceWrapperInstallerPath = Join-Path $cvfCorePath "scripts\install_cvf_workspace_root_wrappers.ps1"
+& powershell -ExecutionPolicy Bypass -File $workspaceWrapperInstallerPath -WorkspaceRoot $workspaceRootResolved
+if ($LASTEXITCODE -ne 0) {
+    throw "Workspace wrapper installer failed with exit code $LASTEXITCODE : $workspaceWrapperInstallerPath"
+}
+
+if (-not (Test-Path -LiteralPath $workspaceRulesPath -PathType Leaf)) {
+    $workspaceRulesContent = @'
 # CVF Workspace Rules
 
 This folder is a CVF workspace container. It is not a git repository.
@@ -98,7 +104,7 @@ CVF-Workspace/
 ## Reference
 
 Canonical source: `.Controlled-Vibe-Framework-CVF/docs/reference/CVF_WORKSPACE_RULES.md`
-"@
+'@
     Set-Content -Path $workspaceRulesPath -Value $workspaceRulesContent -Encoding utf8
     Write-Ok "Created: $workspaceRulesPath"
 }
@@ -106,17 +112,7 @@ else {
     Write-Info "Workspace rules already exist: $workspaceRulesPath"
 }
 
-if (Test-Path -LiteralPath $workspaceWrapperInstallerPath -PathType Leaf) {
-    & powershell -ExecutionPolicy Bypass -File $workspaceWrapperInstallerPath -WorkspaceRoot $workspaceRootResolved
-    if ($LASTEXITCODE -ne 0) {
-        exit $LASTEXITCODE
-    }
-}
-else {
-    Write-Warn "Workspace wrapper installer not found: $workspaceWrapperInstallerPath"
-}
-
-if (-not (Test-Path $projectPath)) {
+if (-not (Test-Path -LiteralPath $projectPath -PathType Container)) {
     if ([string]::IsNullOrWhiteSpace($ProjectRepo)) {
         Write-Info "Creating empty project folder: $projectPath"
         Ensure-Directory $projectPath
@@ -216,9 +212,9 @@ Write-Ok "Created: $cvfManifestDir\policy.json"
 
 # W116-CP1: Generate knowledge/ folder stub
 $knowledgeDir = Join-Path $projectPath "knowledge"
-if (-not (Test-Path $knowledgeDir)) {
+if (-not (Test-Path -LiteralPath $knowledgeDir -PathType Container)) {
     Ensure-Directory $knowledgeDir
-    $knowledgeReadme = @"
+    $knowledgeReadme = @'
 # Project Knowledge
 
 Place `.md` files in this folder to inject project-specific context into CVF-governed AI runs.
@@ -239,14 +235,15 @@ Place `.md` files in this folder to inject project-specific context into CVF-gov
 
 ## What NOT to put here
 
-- Secrets, API keys, or credentials (never — governance enforcement will reject these)
+- Secrets, API keys, or credentials (never - governance enforcement will reject these)
 - Binary files or non-markdown formats (not supported in this wave)
 
 ## Reference
 
-W116-T1 Downstream Knowledge Pipeline — `docs/roadmaps/CVF_W116_T1_DOWNSTREAM_KNOWLEDGE_PIPELINE_ROADMAP_2026-04-23.md`
-"@
-    Set-Content -Path (Join-Path $knowledgeDir "README.md") -Value $knowledgeReadme -Encoding utf8
+W116-T1 Downstream Knowledge Pipeline - `docs/roadmaps/CVF_W116_T1_DOWNSTREAM_KNOWLEDGE_PIPELINE_ROADMAP_2026-04-23.md`
+'@
+    $knowledgeReadmePath = Join-Path $knowledgeDir "README.md"
+    Set-Content -LiteralPath $knowledgeReadmePath -Value $knowledgeReadme -Encoding utf8
     Write-Ok "Created: $knowledgeDir\README.md (project knowledge stub)"
 }
 else {
@@ -258,18 +255,18 @@ $agentsTemplatePath = Join-Path $cvfCorePath "governance\toolkit\05_OPERATION\CV
 $downstreamAgentsPath = Join-Path $projectPath "AGENTS.md"
 $agentInstructionsStatus = "MISSING"
 
-if (Test-Path $agentsTemplatePath) {
-    $templateContent = Get-Content -Path $agentsTemplatePath -Raw -Encoding utf8
-    $agentContent = $templateContent `
-        -replace '\{\{CVF_CORE_PATH\}\}', $cvfCorePath `
-        -replace '\{\{CVF_CORE_COMMIT\}\}', $cvfHead `
-        -replace '\{\{BOOTSTRAP_DATE\}\}', $dateStamp `
-        -replace '\{\{PROJECT_NAME\}\}', $ProjectName
+if (Test-Path -LiteralPath $agentsTemplatePath -PathType Leaf) {
+    $templateContent = Get-Content -LiteralPath $agentsTemplatePath -Raw -Encoding utf8
+    $agentContent = $templateContent
+    $agentContent = $agentContent -replace '\{\{CVF_CORE_PATH\}\}', $cvfCorePath
+    $agentContent = $agentContent -replace '\{\{CVF_CORE_COMMIT\}\}', $cvfHead
+    $agentContent = $agentContent -replace '\{\{BOOTSTRAP_DATE\}\}', $dateStamp
+    $agentContent = $agentContent -replace '\{\{PROJECT_NAME\}\}', $ProjectName
 
-    if (Test-Path $downstreamAgentsPath) {
+    if (Test-Path -LiteralPath $downstreamAgentsPath -PathType Leaf) {
         Write-Warn "AGENTS.md already exists at: $downstreamAgentsPath"
         Write-Warn "Inserting CVF merge block at top - review and merge manually."
-        $existingContent = Get-Content -Path $downstreamAgentsPath -Raw -Encoding utf8
+        $existingContent = Get-Content -LiteralPath $downstreamAgentsPath -Raw -Encoding utf8
         $mergeBlock = @"
 <!-- CVF_MERGE_BLOCK_START: generated $dateStamp by new-cvf-workspace.ps1 -->
 <!-- Review this block and merge with your existing AGENTS.md content. -->
@@ -278,11 +275,11 @@ $agentContent
 
 $existingContent
 "@
-        Set-Content -Path $downstreamAgentsPath -Value $mergeBlock -Encoding utf8
+        Set-Content -LiteralPath $downstreamAgentsPath -Value $mergeBlock -Encoding utf8
         Write-Ok "Updated AGENTS.md with CVF merge block: $downstreamAgentsPath"
     }
     else {
-        Set-Content -Path $downstreamAgentsPath -Value $agentContent -Encoding utf8
+        Set-Content -LiteralPath $downstreamAgentsPath -Value $agentContent -Encoding utf8
         Write-Ok "Created: $downstreamAgentsPath"
     }
     $agentInstructionsStatus = "PRESENT"

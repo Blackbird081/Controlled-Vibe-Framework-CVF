@@ -11,13 +11,13 @@ param(
 
 $ErrorActionPreference = "Stop"
 $publicRemote = "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git"
-$workspaceWrapperInstallerPath = Join-Path $PSScriptRoot "install_cvf_workspace_root_wrappers.ps1"
 $requiredPublicCoreFiles = @(
     "AGENTS.md",
     "AGENT_HANDOFF.md",
     "docs\reference\CVF_WORKSPACE_RULES.md",
     "governance\toolkit\05_OPERATION\CVF_DOWNSTREAM_AGENTS_TEMPLATE.md",
     "scripts\check_cvf_workspace_agent_enforcement.ps1",
+    "scripts\install_cvf_workspace_root_wrappers.ps1",
     "scripts\ingest_cvf_downstream_knowledge.ps1",
     "scripts\new-cvf-workspace.ps1",
     "scripts\update_cvf_workspace_public_core.ps1",
@@ -35,6 +35,7 @@ $overlayFiles = @(
     "scripts\bootstrap_foundations.ps1",
     "scripts\bootstrap_foundations.sh",
     "scripts\check_cvf_workspace_agent_enforcement.ps1",
+    "scripts\install_cvf_workspace_root_wrappers.ps1",
     "scripts\ingest_cvf_downstream_knowledge.ps1",
     "scripts\install_cvf_hooks.ps1",
     "scripts\new-cvf-workspace.ps1",
@@ -157,6 +158,7 @@ $corePath = Assert-PathInsideWorkspace -Path (Join-Path $workspaceResolved ".Con
 $backupRoot = Assert-PathInsideWorkspace -Path (Join-Path $workspaceResolved "_cvf-core-backups") -Workspace $workspaceResolved
 $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $backupPath = Assert-PathInsideWorkspace -Path (Join-Path $backupRoot ".Controlled-Vibe-Framework-CVF-$timestamp") -Workspace $workspaceResolved
+$workspaceWrapperInstallerPath = Join-Path $corePath "scripts\install_cvf_workspace_root_wrappers.ps1"
 
 Write-Info "Workspace root: $workspaceResolved"
 Write-Info "Public remote:  $publicRemote"

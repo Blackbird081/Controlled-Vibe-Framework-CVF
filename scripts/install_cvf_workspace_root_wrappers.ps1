@@ -299,6 +299,19 @@ Use the hidden public core only as the framework source:
 Application code belongs in sibling project folders, never inside the hidden
 public core.
 
+For paid or shared downstream workspaces, the expected safe profile is
+`paid-user-safe`. If `Update-CVF-Workspace-RulePack.ps1` exists, select it
+before project work:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace-RulePack.ps1" `
+  -ProfileName "paid-user-safe"
+```
+
+Then confirm `CVF_RULE_PACKS/ACTIVE_RULE_PACK.json` records
+`paid-user-safe`. Do not use `-AllowProvenanceContinuity` for paid or shared
+workspaces.
+
 ## Refresh The Workspace Core
 
 Run this when the hidden public core or root wrapper files may be stale:
@@ -355,6 +368,10 @@ The current active profile is recorded in:
 ```text
 CVF_RULE_PACKS/ACTIVE_RULE_PACK.json
 ```
+
+For paid or shared downstream workspaces, use `paid-user-safe` as the default
+profile. It adds curated authoring and boundary guidance without copying
+private operator continuity state.
 
 Existing root continuity files such as `CVF_WORKSPACE_MEMORY.md` and
 `AGENT_HANDOFF.md` are preserved by the rule-pack sync. Agents may read and
@@ -592,6 +609,15 @@ powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace-RulePack.ps1" `
   -ProfileName "paid-user-safe"
 ```
 
+After switching, verify:
+
+```powershell
+Get-Content ".\CVF_RULE_PACKS\ACTIVE_RULE_PACK.json"
+powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1"
+```
+
+For a paid-user-safe workspace, do not pass `-AllowProvenanceContinuity`.
+
 ## Important Rules
 
 - The workspace root is not a git repository.
@@ -672,6 +698,19 @@ Cập nhật hidden public CVF core và làm mới wrapper ở workspace root:
 powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
 ```
 
+Với workspace paid hoặc team downstream, profile an toàn mặc định là
+`paid-user-safe`. Nếu có `Update-CVF-Workspace-RulePack.ps1`, chọn profile này
+trước khi làm việc với project:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace-RulePack.ps1" `
+  -ProfileName "paid-user-safe"
+```
+
+Sau đó kiểm tra `CVF_RULE_PACKS/ACTIVE_RULE_PACK.json` có ghi
+`paid-user-safe`. Không dùng `-AllowProvenanceContinuity` cho workspace paid
+hoặc team downstream.
+
 ## Agent Workflow
 
 Public-safe installer cũng duy trì các ghi chú workflow cho agent tại:
@@ -705,6 +744,10 @@ Rule pack là hướng dẫn local tùy chọn. Nó không biến workspace này
 full CVF repository, và không thay thế `AGENTS.md`, manifest, policy hay
 handoff riêng của từng project.
 
+Với workspace paid hoặc team downstream, dùng `paid-user-safe` làm profile mặc
+định. Profile này thêm hướng dẫn authoring và boundary đã chọn lọc mà không
+copy private operator continuity state.
+
 Các profile thường dùng:
 
 - `public-free` - bộ hướng dẫn nhẹ nhất cho public core.
@@ -717,6 +760,15 @@ Các profile thường dùng:
 powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace-RulePack.ps1" `
   -ProfileName "paid-user-safe"
 ```
+
+Sau khi đổi profile, kiểm tra:
+
+```powershell
+Get-Content ".\CVF_RULE_PACKS\ACTIVE_RULE_PACK.json"
+powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1"
+```
+
+Với workspace paid-user-safe, không truyền `-AllowProvenanceContinuity`.
 
 ## Quy Tắc Quan Trọng
 

@@ -147,6 +147,18 @@ Workspace rule packs use three product-facing tier names:
 Use `paid-user-safe` as the default future customer profile. Use
 `operator-local` only for the operator's own local machine.
 
+For paid-user-safe setup, first refresh the workspace, then select the profile,
+then verify the active manifest and project-local checks:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace-RulePack.ps1" -ProfileName "paid-user-safe"
+```
+
+The active manifest should record `paid-user-safe` in
+`CVF_RULE_PACKS/ACTIVE_RULE_PACK.json`. This profile must not use
+`-AllowProvenanceContinuity`.
+
 ## Update Flow
 
 Reconcile an existing hidden public-core clone from inside

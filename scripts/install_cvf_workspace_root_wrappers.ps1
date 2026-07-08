@@ -579,6 +579,19 @@ Rule packs are optional local guidance. They do not turn this workspace into a
 private full CVF repository, and they should not replace project-level
 `AGENTS.md`, manifests, policies, or handoffs.
 
+Common profile choices:
+
+- `public-free` - lightest public-core guidance set.
+- `paid-user-safe` - curated authoring and boundary references for paid or shared downstream workspaces.
+- `operator-local` - private operator-machine continuity profile; use only on the operator's own machine.
+
+Switch profile when the rule-pack wrapper exists:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace-RulePack.ps1" `
+  -ProfileName "paid-user-safe"
+```
+
 ## Important Rules
 
 - The workspace root is not a git repository.
@@ -691,6 +704,19 @@ Nếu có, đọc các file sau:
 Rule pack là hướng dẫn local tùy chọn. Nó không biến workspace này thành private
 full CVF repository, và không thay thế `AGENTS.md`, manifest, policy hay
 handoff riêng của từng project.
+
+Các profile thường dùng:
+
+- `public-free` - bộ hướng dẫn nhẹ nhất cho public core.
+- `paid-user-safe` - bộ authoring và boundary đã chọn lọc cho paid user hoặc team downstream.
+- `operator-local` - profile continuity riêng cho máy operator; chỉ dùng trên máy riêng của operator.
+
+Đổi profile khi đã có rule-pack wrapper:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace-RulePack.ps1" `
+  -ProfileName "paid-user-safe"
+```
 
 ## Quy Tắc Quan Trọng
 

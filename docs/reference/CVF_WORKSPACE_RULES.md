@@ -134,6 +134,19 @@ Rule packs are selected guidance, not full repository export. They do not turn
 the workspace into the private full CVF repository and do not replace
 project-level `AGENTS.md`, manifests, policies, or handoffs.
 
+### Product Profile Tiers
+
+Workspace rule packs use three product-facing tier names:
+
+| Profile | Intended use | Boundary |
+|---|---|---|
+| `public-free` | Free or public-core-only workspace that needs the lightest guidance set. | No private continuity state. |
+| `paid-user-safe` | Paid user or shared downstream team that needs curated authoring and repository-boundary references. | No private continuity state or full governance library. |
+| `operator-local` | Private operator machine that needs full local continuity on top of the curated governance set. | Requires explicit continuity allowance and must not be copied into public or customer workspaces. |
+
+Use `paid-user-safe` as the default future customer profile. Use
+`operator-local` only for the operator's own local machine.
+
 ## Update Flow
 
 Reconcile an existing hidden public-core clone from inside

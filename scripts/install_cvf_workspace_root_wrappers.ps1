@@ -151,6 +151,95 @@ if ($AllowOfflinePinnedCore) {
 exit $LASTEXITCODE
 '@
 
+$workspaceUpdateWrapper = @'
+param(
+    [switch]$RunGate,
+    [switch]$AllowOfflinePinnedCore
+)
+
+$ErrorActionPreference = "Stop"
+
+function Write-Info([string]$Message) {
+    Write-Host "[INFO] $Message" -ForegroundColor Cyan
+}
+
+function Write-Ok([string]$Message) {
+    Write-Host "[OK]   $Message" -ForegroundColor Green
+}
+
+function Invoke-CheckedCommand([string]$Label, [scriptblock]$Command) {
+    & $Command
+    if ($LASTEXITCODE -ne 0) {
+        throw "$Label failed with exit code $LASTEXITCODE"
+    }
+}
+
+$workspaceRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$corePath = Join-Path $workspaceRoot ".Controlled-Vibe-Framework-CVF"
+$installerPath = Join-Path $corePath "scripts\install_cvf_workspace_root_wrappers.ps1"
+$gatePath = Join-Path $workspaceRoot "Run-CVF-NewProject-Enforcement.ps1"
+$allowedRemotes = @(
+    "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git",
+    "git@github.com:Blackbird081/Controlled-Vibe-Framework-CVF.git"
+)
+
+if (-not (Test-Path -LiteralPath $corePath -PathType Container)) {
+    throw "CVF public core not found: $corePath"
+}
+
+if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+    throw "git is required but was not found in PATH."
+}
+
+$remote = (git -C $corePath remote get-url origin).Trim()
+if ($allowedRemotes -notcontains $remote) {
+    throw "Unexpected CVF public core remote: $remote"
+}
+
+$pending = git -C $corePath status --porcelain
+if ($pending) {
+    throw "CVF public core has pending changes; refusing update: $corePath"
+}
+
+Write-Info "Fetching public CVF core..."
+Invoke-CheckedCommand "git fetch" { git -C $corePath fetch origin --prune }
+
+Write-Info "Fast-forwarding public CVF core..."
+Invoke-CheckedCommand "git pull --ff-only" { git -C $corePath pull --ff-only origin main }
+
+if (-not (Test-Path -LiteralPath $installerPath -PathType Leaf)) {
+    throw "Workspace wrapper installer not found: $installerPath"
+}
+
+Write-Info "Refreshing workspace-root wrappers and guides..."
+& powershell -ExecutionPolicy Bypass -File $installerPath -WorkspaceRoot $workspaceRoot
+if ($LASTEXITCODE -ne 0) {
+    throw "Workspace wrapper installer failed with exit code $LASTEXITCODE"
+}
+
+$head = (git -C $corePath rev-parse --short HEAD).Trim()
+$originHead = (git -C $corePath rev-parse --short origin/main).Trim()
+if ($head -ne $originHead) {
+    throw "CVF public core is not current after update: HEAD=$head origin/main=$originHead"
+}
+
+Write-Ok "CVF workspace updated to public core commit $head."
+
+if ($RunGate) {
+    if (-not (Test-Path -LiteralPath $gatePath -PathType Leaf)) {
+        throw "Workspace enforcement wrapper not found: $gatePath"
+    }
+    $gateArgs = @("-ExecutionPolicy", "Bypass", "-File", $gatePath)
+    if ($AllowOfflinePinnedCore) {
+        $gateArgs += "-AllowOfflinePinnedCore"
+    }
+    & powershell @gateArgs
+    exit $LASTEXITCODE
+}
+
+exit 0
+'@
+
 $userGuide = @'
 # CVF Workspace User Guide
 
@@ -173,6 +262,7 @@ CVF-Workspace/
   WORKSPACE_RULES.md
   New-CVF-Governed-Project.ps1
   Run-CVF-NewProject-Enforcement.ps1
+  Update-CVF-Workspace.ps1
   CVF_WORKSPACE_USER_GUIDE.md
   CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md
 ```
@@ -198,6 +288,12 @@ Run the workspace-wide enforcement gate:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1"
+```
+
+Update the hidden public CVF core and refresh workspace-root wrappers:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
 ```
 
 ## Important Rules
@@ -244,6 +340,7 @@ CVF-Workspace/
   WORKSPACE_RULES.md
   New-CVF-Governed-Project.ps1
   Run-CVF-NewProject-Enforcement.ps1
+  Update-CVF-Workspace.ps1
   CVF_WORKSPACE_USER_GUIDE.md
   CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md
 ```
@@ -271,6 +368,12 @@ Chạy enforcement gate cho toàn workspace:
 powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1"
 ```
 
+Cập nhật hidden public CVF core và làm mới wrapper ở workspace root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
+```
+
 ## Quy Tắc Quan Trọng
 
 - Workspace root không phải git repository.
@@ -293,6 +396,7 @@ Dùng file này khi cần:
 
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "New-CVF-Governed-Project.ps1") -Content $governedProjectWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Run-CVF-NewProject-Enforcement.ps1") -Content $workspaceGateWrapper
+Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Update-CVF-Workspace.ps1") -Content $workspaceUpdateWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_USER_GUIDE.md") -Content $userGuide
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md") -Content $vietnameseGuide
 

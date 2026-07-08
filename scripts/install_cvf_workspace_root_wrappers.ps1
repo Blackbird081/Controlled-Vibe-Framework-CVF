@@ -296,6 +296,22 @@ Update the hidden public CVF core and refresh workspace-root wrappers:
 powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
 ```
 
+## Optional Rule Packs
+
+Some operator-local workspaces may also have curated CVF rule packs installed
+under `CVF_RULE_PACKS/`.
+
+If present, read:
+
+- `CVF_WORKSPACE_RULE_PACKS.md`
+- `CVF_RULE_PACKS/ACTIVE_RULE_PACK.json`
+- `CVF_WORKSPACE_MEMORY.md`
+- `AGENT_HANDOFF.md`
+
+Rule packs are optional local guidance. They do not turn this workspace into a
+full CVF provenance repository, and they should not replace project-level
+`AGENTS.md`, manifests, policies, or handoffs.
+
 ## Important Rules
 
 - The workspace root is not a git repository.
@@ -373,6 +389,22 @@ Cập nhật hidden public CVF core và làm mới wrapper ở workspace root:
 ```powershell
 powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
 ```
+
+## Rule Pack Tùy Chọn
+
+Một số workspace operator-local có thể được cài thêm rule pack đã chọn lọc
+trong `CVF_RULE_PACKS/`.
+
+Nếu có, đọc các file sau:
+
+- `CVF_WORKSPACE_RULE_PACKS.md`
+- `CVF_RULE_PACKS/ACTIVE_RULE_PACK.json`
+- `CVF_WORKSPACE_MEMORY.md`
+- `AGENT_HANDOFF.md`
+
+Rule pack là hướng dẫn local tùy chọn. Nó không biến workspace này thành full
+CVF provenance repository, và không thay thế `AGENTS.md`, manifest, policy hay
+handoff riêng của từng project.
 
 ## Quy Tắc Quan Trọng
 

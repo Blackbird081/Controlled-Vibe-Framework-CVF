@@ -17,9 +17,16 @@ This document defines the canonical workspace topology for CVF-managed local wor
 ```text
 CVF-Workspace/
   .Controlled-Vibe-Framework-CVF/
+  CVF_RULE_PACKS/
   <Application-Project-1>/
   <Application-Project-2>/
   WORKSPACE_RULES.md
+  CVF_WORKSPACE_RULE_PACKS.md
+  CVF_WORKSPACE_MEMORY.md
+  AGENT_HANDOFF.md
+  New-CVF-Governed-Project.ps1
+  Run-CVF-NewProject-Enforcement.ps1
+  Update-CVF-Workspace.ps1
 ```
 
 ## Governance Repository
@@ -54,8 +61,14 @@ Most shared downstream apps are expected to come from `https://github.com/CVF-Ec
 The workspace root should stay clean:
 
 - It should contain `WORKSPACE_RULES.md`.
+- It may contain `CVF_RULE_PACKS/` and `CVF_WORKSPACE_RULE_PACKS.md` when a
+  curated local rule pack has been installed.
+- It may contain `CVF_WORKSPACE_MEMORY.md` and a workspace handoff root file
+  for local agent continuity.
 - It should contain the hidden CVF core clone.
 - It should contain application project folders.
+- It should contain the public-safe root wrappers after bootstrap or
+  reconciliation.
 - It should not contain mixed application source files directly at root.
 - It should not be initialized as a git repository.
 
@@ -79,43 +92,41 @@ Bootstrap and reconciliation also install (or refresh) a small set of
 workspace-root wrapper scripts and guides via
 `scripts/install_cvf_workspace_root_wrappers.ps1`:
 
-- `New-CVF-Governed-Project.ps1` — bootstrap + doctor + workspace gate in one command
-- `Run-CVF-NewProject-Enforcement.ps1` — workspace-wide enforcement gate
-- `CVF_WORKSPACE_USER_GUIDE.md` / `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md` — bilingual workspace-root guide
+- `New-CVF-Governed-Project.ps1` - bootstrap + doctor + workspace gate in one command
+- `Run-CVF-NewProject-Enforcement.ps1` - workspace-wide enforcement gate
+- `Update-CVF-Workspace.ps1` - public-core fast-forward plus wrapper refresh
+- `CVF_WORKSPACE_USER_GUIDE.md` / `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md` - bilingual workspace-root guide
 
 These wrappers only cover the public-safe flow (new-project bootstrap,
 enforcement gate, and workspace-root guidance). Any local-only overlay
 tooling is a separate, provenance-side concern and is not part of this
 public-safe wrapper set.
 
-## New Project Enforcement Gate
+## Rule Packs And Local Continuity
 
-Existing workspaces may contain older sibling projects that predate the current
-bootstrap contract. Those projects do not become governed automatically just
-because they sit next to `.Controlled-Vibe-Framework-CVF/`.
+Operator-local workspaces may install curated rule packs from an
+operator-approved source into the workspace root. When present:
 
-Use a workspace baseline to grandfather legacy projects and enforce the doctor
-for every new project added after the baseline is created:
+- `CVF_RULE_PACKS/ACTIVE_RULE_PACK.json` records the active selected pack.
+- `CVF_WORKSPACE_RULE_PACKS.md` explains the installed pack and refresh flow.
+- `CVF_WORKSPACE_MEMORY.md` is the workspace-local memory front door.
+- The workspace handoff root file is the workspace-local agent handoff.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts/check_cvf_workspace_new_project_enforcement.ps1 `
-  -WorkspaceRoot "<workspace-root>"
-```
-
-The gate reads `<workspace-root>/WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json`.
-Projects listed under `legacyProjects` are reported as `LEGACY_EXEMPT`. Every
-other sibling project is treated as a new governed project and must pass
-`scripts/check_cvf_workspace_agent_enforcement.ps1`.
-
-This lets a team adopt the rule immediately for new work without rewriting
-older repositories on day one. `Run-CVF-NewProject-Enforcement.ps1` (see the
-wrapper list above) runs this same gate workspace-wide from the workspace
-root in one command.
+Rule packs are selected guidance, not full repository export. They do not turn
+the workspace into the private full CVF repository and do not replace
+project-level `AGENTS.md`, manifests, policies, or handoffs.
 
 ## Update Flow
 
 Reconcile an existing hidden public-core clone from inside
-`.Controlled-Vibe-Framework-CVF`:
+the workspace root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
+```
+
+If the root wrapper is missing, use the hidden-core reconciler directly from
+inside `.Controlled-Vibe-Framework-CVF`:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\update_cvf_workspace_public_core.ps1 `

@@ -43,7 +43,6 @@ $overlayFiles = @(
     "scripts\w114_cp7_multi_sample_downstream_proof.ps1",
     "scripts\write_cvf_workspace_web_evidence_bridge.ps1"
 )
-$overlayManifestFile = "_cvf_overlay_export_manifest.json"
 
 function Write-Info([string]$Message) { Write-Host "[INFO] $Message" -ForegroundColor Cyan }
 function Write-Ok([string]$Message) { Write-Host "[OK]   $Message" -ForegroundColor Green }
@@ -58,22 +57,8 @@ function Assert-PathInsideWorkspace([string]$Path, [string]$Workspace) {
     return $resolved
 }
 
-function Get-OverlayRelativePaths([string]$SourceRoot) {
-    $manifestPath = Join-Path $SourceRoot $overlayManifestFile
-    if (Test-Path -LiteralPath $manifestPath -PathType Leaf) {
-        $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding utf8 | ConvertFrom-Json
-        if (-not $manifest.files) {
-            throw "Overlay manifest does not contain a files array: $manifestPath"
-        }
-        return @($manifest.files | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Sort-Object -Unique)
-    }
-
-    return $overlayFiles
-}
-
 function Copy-OverlayFiles([string]$SourceRoot, [string]$TargetRoot) {
-    $relativePaths = Get-OverlayRelativePaths -SourceRoot $SourceRoot
-    foreach ($relativePath in $relativePaths) {
+    foreach ($relativePath in $overlayFiles) {
         $source = Join-Path $SourceRoot $relativePath
         if (-not (Test-Path -LiteralPath $source -PathType Leaf)) {
             continue
@@ -112,8 +97,15 @@ downstream projects. Application work belongs in each project folder.
 ~~~text
 CVF-Workspace/
   .Controlled-Vibe-Framework-CVF/
+  CVF_RULE_PACKS/
   <Application-Project>/
   WORKSPACE_RULES.md
+  CVF_WORKSPACE_RULE_PACKS.md
+  CVF_WORKSPACE_MEMORY.md
+  AGENT_HANDOFF.md
+  New-CVF-Governed-Project.ps1
+  Run-CVF-NewProject-Enforcement.ps1
+  Update-CVF-Workspace.ps1
 ~~~
 
 ## Public Core
@@ -126,9 +118,24 @@ CVF-Workspace/
 Reconcile the hidden core with the latest public remote:
 
 ~~~powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
+~~~
+
+If the root update wrapper is missing, run the hidden-core reconciler directly:
+
+~~~powershell
 powershell -ExecutionPolicy Bypass -File ".Controlled-Vibe-Framework-CVF\scripts\update_cvf_workspace_public_core.ps1" ``
   -WorkspaceRoot "$Workspace"
 ~~~
+
+## Rule Packs And Agent Continuity
+
+- `CVF_RULE_PACKS/ACTIVE_RULE_PACK.json` records the active rule pack when one is installed.
+- `CVF_WORKSPACE_RULE_PACKS.md` explains the installed rule pack and refresh flow.
+- `CVF_WORKSPACE_MEMORY.md` is the workspace-local memory front door.
+- `AGENT_HANDOFF.md` is the workspace-local handoff file.
+- Rule packs are selected local guidance; they do not turn this workspace into the private full CVF repository.
+- Project-level `AGENTS.md`, manifests, policies, and handoffs still belong to each downstream project.
 
 ## Current Sibling Projects
 
@@ -191,7 +198,7 @@ try {
         if (-not (Test-Path -LiteralPath $overlayResolved -PathType Container)) {
             throw "Overlay source not found: $overlayResolved"
         }
-        Write-Warn "Applying reviewed local overlay: $overlayResolved"
+        Write-Warn "Applying reviewed local public-sync overlay: $overlayResolved"
         Copy-OverlayFiles -SourceRoot $overlayResolved -TargetRoot $corePath
     }
 

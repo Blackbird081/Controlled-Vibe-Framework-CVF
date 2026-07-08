@@ -58,6 +58,7 @@ $excludedNames = @(
     ".Controlled-Vibe-Framework-CVF",
     ".claude",
     ".agents",
+    "CVF_RULE_PACKS",
     "_cvf-core-backups",
     "scripts"
 )

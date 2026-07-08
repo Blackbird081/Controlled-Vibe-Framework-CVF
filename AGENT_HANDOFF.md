@@ -1,5 +1,7 @@
 # CVF Public-Core Agent Continuation
 
+Memory class: POINTER_RECORD
+
 Status: PUBLIC_CORE_ACTIVE
 
 ## Purpose
@@ -21,12 +23,6 @@ Owner: public CVF core. This template is mapped to root `AGENT_HANDOFF.md` by
 
 Remote tracking branch: `origin/main`
 
-Default public remote branch: `origin/main`
-
-Exact remote SHA must be derived live from git when needed.
-
-External agent memory files: non-canonical convenience only.
-
 Public repository:
 
 `https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git`
@@ -39,13 +35,6 @@ private provenance memory.
 The public core supports local-first runtime use and sibling downstream
 workspace bootstrap. The workspace kit includes bootstrap, doctor, knowledge
 ingest, evidence bridge, hooks, and hidden-core reconciliation scripts.
-
-The 2026-06-16 public front-door/catalog refresh records bounded
-authoring-time governance lessons from private provenance without exporting
-private session state: dispatch prompts should be read-first in work orders,
-reusable agent lessons must be captured in CVF-governed artifacts rather than
-provider-only memory, and stale closed-target next moves must not be
-redispatched from continuity text.
 
 ## Workspace Continuation
 
@@ -62,24 +51,6 @@ powershell -ExecutionPolicy Bypass -File scripts\update_cvf_workspace_public_cor
 Derive the current public tip from git, keep downstream projects as siblings,
 and reconcile stale hidden cores through backup plus fresh clone.
 
-Consult `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json` before opening a
-fresh public surface tranche.
-
-Do not open a fresh tranche before consulting the canonical scan continuity registry.
-
-Knowledge absorption and extension work must also consult
-`docs/reference/CVF_KNOWLEDGE_ABSORPTION_AND_EXTENSION_PRIORITY_STANDARD_2026-04-13.md`,
-`CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md`, and
-`governance/compat/check_knowledge_absorption_priority_compat.py` before
-opening implementation-first expansion.
-
-Template and skill value-proof work must consult
-`governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md`,
-`docs/reference/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_STANDARD_2026-04-14.md`,
-`docs/reference/CVF_NON_CODER_VALUE_MEASUREMENT_STANDARD_2026-04-14.md`, and
-`governance/compat/check_template_skill_standard_guard_compat.py` before
-claiming `TRUSTED_FOR_VALUE_PROOF`.
-
 ## Enforcement / Verification
 
 Use `scripts/check_cvf_workspace_agent_enforcement.ps1` after bootstrap or
@@ -88,9 +59,6 @@ reconciliation.
 ## Related Artifacts
 
 - `AGENTS.md`
-- `README.md`
-- `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md`
-- `docs/evidence/cvf-16-06-public-front-door-catalog-sync.md`
 - `docs/reference/CVF_WORKSPACE_RULES.md`
 - `scripts/new-cvf-workspace.ps1`
 - `scripts/update_cvf_workspace_public_core.ps1`

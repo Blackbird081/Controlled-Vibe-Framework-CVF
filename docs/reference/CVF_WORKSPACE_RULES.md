@@ -24,6 +24,8 @@ CVF-Workspace/
   CVF_WORKSPACE_RULE_PACKS.md
   CVF_WORKSPACE_MEMORY.md
   AGENT_HANDOFF.md
+  Update-CVF-Workspace-RulePack.ps1
+  .agents/workflows/
   New-CVF-Governed-Project.ps1
   Run-CVF-NewProject-Enforcement.ps1
   Update-CVF-Workspace.ps1
@@ -65,6 +67,10 @@ The workspace root should stay clean:
   curated local rule pack has been installed.
 - It may contain `CVF_WORKSPACE_MEMORY.md` and a workspace handoff root file
   for local agent continuity.
+- It may contain `Update-CVF-Workspace-RulePack.ps1` after an operator-local
+  rule-pack sync.
+- It may contain `.agents/workflows/` with workspace-local agent workflow
+  notes.
 - It should contain the hidden CVF core clone.
 - It should contain application project folders.
 - It should contain the public-safe root wrappers after bootstrap or
@@ -95,12 +101,14 @@ workspace-root wrapper scripts and guides via
 - `New-CVF-Governed-Project.ps1` - bootstrap + doctor + workspace gate in one command
 - `Run-CVF-NewProject-Enforcement.ps1` - workspace-wide enforcement gate
 - `Update-CVF-Workspace.ps1` - public-core fast-forward plus wrapper refresh
+- `.agents/workflows/` - workspace-local agent workflow notes for onboarding and project pre-commit routing
 - `CVF_WORKSPACE_USER_GUIDE.md` / `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md` - bilingual workspace-root guide
 
 These wrappers only cover the public-safe flow (new-project bootstrap,
-enforcement gate, and workspace-root guidance). Any local-only overlay
-tooling is a separate, provenance-side concern and is not part of this
-public-safe wrapper set.
+enforcement gate, public core update, agent workflow notes, and workspace-root
+guidance). Local-only overlay tooling and private full-repository state are
+separate operator-machine concerns and are not part of this public-safe wrapper
+set.
 
 ## Rule Packs And Local Continuity
 
@@ -109,8 +117,13 @@ operator-approved source into the workspace root. When present:
 
 - `CVF_RULE_PACKS/ACTIVE_RULE_PACK.json` records the active selected pack.
 - `CVF_WORKSPACE_RULE_PACKS.md` explains the installed pack and refresh flow.
+- `Update-CVF-Workspace-RulePack.ps1` may be installed by an operator-local
+  rule-pack sync so agents can refresh or switch the active pack without
+  remembering the full source path.
 - `CVF_WORKSPACE_MEMORY.md` is the workspace-local memory front door.
 - The workspace handoff root file is the workspace-local agent handoff.
+- `.agents/workflows/` gives agents short, workspace-local procedures for
+  onboarding and pre-commit routing.
 
 Rule packs are selected guidance, not full repository export. They do not turn
 the workspace into the private full CVF repository and do not replace

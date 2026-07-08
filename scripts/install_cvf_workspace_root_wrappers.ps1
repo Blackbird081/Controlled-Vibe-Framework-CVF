@@ -15,6 +15,10 @@ function Set-WorkspaceArtifact {
         [string]$Content
     )
 
+    $parent = Split-Path -Parent $Path
+    if (-not [string]::IsNullOrWhiteSpace($parent)) {
+        New-Item -ItemType Directory -Path $parent -Force | Out-Null
+    }
     Set-Content -LiteralPath $Path -Value $Content -Encoding utf8
     Write-Ok "Updated workspace artifact: $Path"
 }
@@ -240,6 +244,224 @@ if ($RunGate) {
 exit 0
 '@
 
+$agentOnboardWorkflow = @'
+---
+description: Bootstrap or refresh a downstream project in CVF-Workspace using the current public-safe wrapper flow
+---
+
+# CVF Workspace Onboard Workflow
+
+Use this workflow from the workspace root:
+
+```powershell
+D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace
+```
+
+This is a workspace-local agent workflow. It is not the private full CVF
+repository, and it must not copy private-only CVF state into downstream
+projects.
+
+## Startup
+
+Before changing a project or creating a new one, read:
+
+1. `WORKSPACE_RULES.md`
+2. `CVF_WORKSPACE_USER_GUIDE.md` or `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md`
+3. `CVF_WORKSPACE_RULE_PACKS.md` when present
+4. `CVF_RULE_PACKS/ACTIVE_RULE_PACK.json` when present
+5. `CVF_WORKSPACE_MEMORY.md` and `AGENT_HANDOFF.md` when present
+
+Use the hidden public core only as the framework source:
+
+```text
+.Controlled-Vibe-Framework-CVF/
+```
+
+Application code belongs in sibling project folders, never inside the hidden
+public core.
+
+## Refresh The Workspace Core
+
+Run this when the hidden public core or root wrapper files may be stale:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
+```
+
+If the root update wrapper is missing, use the hidden-core reconciler:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".Controlled-Vibe-Framework-CVF\scripts\update_cvf_workspace_public_core.ps1" `
+  -WorkspaceRoot "D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace"
+```
+
+## Create A New Governed Project
+
+From an empty/new project folder:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\New-CVF-Governed-Project.ps1" `
+  -ProjectName "<project-name>"
+```
+
+From an existing git repository:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\New-CVF-Governed-Project.ps1" `
+  -ProjectName "<project-name>" `
+  -ProjectRepo "<git-url>"
+```
+
+After creation, run the workspace enforcement gate:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1"
+```
+
+## Refresh Rule Packs
+
+Rule packs are selected local guidance copied into the workspace by an
+operator-approved source. They are useful for agent memory, handoff, boundary
+discipline, and project startup, but they do not turn this workspace into the
+private full CVF repository.
+
+Use the refresh command recorded in:
+
+```text
+CVF_WORKSPACE_RULE_PACKS.md
+```
+
+The current active profile is recorded in:
+
+```text
+CVF_RULE_PACKS/ACTIVE_RULE_PACK.json
+```
+
+Existing root continuity files such as `CVF_WORKSPACE_MEMORY.md` and
+`AGENT_HANDOFF.md` are preserved by the rule-pack sync. Agents may read and
+update them as workspace-local continuity surfaces when the operator asks them
+to do so.
+
+## Boundary Rules
+
+- Do not create or edit downstream application code under `.Controlled-Vibe-Framework-CVF/`.
+- Do not copy private-only CVF state, private source mirrors, live-key files, or internal handoffs into downstream projects.
+- Do not claim a project is CVF-governed only because the workspace root has rule packs. The project must have its own generated files, policy, or explicit onboarding evidence.
+- Do not manually rewrite `WORKSPACE_RULES.md` to register a project. Use the wrapper and enforcement gate first.
+- Keep project-local memory, task state, and handoff files inside the project when the project needs its own continuity.
+
+## Legacy Note
+
+The old `scripts/cvf-onboard.ps1` flow creates a heavier `.cvf/` structure and
+is kept only as a legacy local tool. Prefer the root wrappers above for current
+workspace productization.
+'@
+
+$agentPreCommitWorkflow = @'
+---
+description: Run the right pre-commit checks for a CVF-Workspace project without accidentally invoking full CVF repository governance
+---
+
+# CVF Workspace Pre-Commit Workflow
+
+Run this before committing inside a downstream project in:
+
+```text
+D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace
+```
+
+This workflow is intentionally lighter than the private full CVF guard chain.
+A normal workspace project should run its own tests and the workspace
+enforcement gate. It should not run internal CVF checker suites unless the
+change is inside the hidden public core.
+
+## Step 1: Identify The Lane
+
+From the folder you are about to commit, check where you are:
+
+```powershell
+git rev-parse --show-toplevel
+git status --short
+```
+
+Use this routing:
+
+- Downstream application project: run the project checks in Step 2 and the
+  workspace gate in Step 3.
+- Hidden public core `.Controlled-Vibe-Framework-CVF`: use that repository's
+  own documented checks and hooks, then run Step 3 from the workspace root.
+- Workspace root: do not commit from here. The root is a non-git container.
+
+## Step 2: Run Project-Local Checks
+
+Use the project's own package manager and test commands. Common examples:
+
+```powershell
+npm test
+npm run lint
+python -m pytest
+```
+
+Skip commands that do not exist for the project. Do not invent a heavy CVF gate
+for a simple downstream app unless that app explicitly generated one.
+
+## Step 3: Run Workspace Enforcement
+
+Return to the workspace root:
+
+```powershell
+Set-Location "D:\UNG DUNG AI\TOOL AI 2026\CVF-Workspace"
+```
+
+Then run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1"
+```
+
+This verifies the workspace layout and public-core relationship. It does not
+replace project-local tests.
+
+## Step 4: Refresh First When Core Is Stale
+
+If `.Controlled-Vibe-Framework-CVF/` looks stale or wrapper files are missing,
+refresh before committing project changes:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
+```
+
+If optional rule packs are needed, use the refresh command recorded in:
+
+```text
+CVF_WORKSPACE_RULE_PACKS.md
+```
+
+## Step 5: Commit In The Project Repo
+
+Commit only inside the downstream project repository:
+
+```powershell
+git add -A
+git commit -m "<short project-scoped message>"
+```
+
+Keep commits project-scoped. Do not mix application changes, hidden public-core
+updates, and workspace-rule-pack refreshes in the same commit.
+
+## When To Use Full CVF Governance Checks
+
+Use full `governance/compat` checks only when you are deliberately working
+inside the CVF repository itself. For normal workspace projects, the useful CVF
+inheritance is:
+
+- workspace boundary discipline;
+- local memory and handoff continuity;
+- selected rule packs;
+- project-local testing;
+- explicit operator approval before adding heavier governance.
+'@
+
 $userGuide = @'
 # CVF Workspace User Guide
 
@@ -263,6 +485,7 @@ CVF-Workspace/
   New-CVF-Governed-Project.ps1
   Run-CVF-NewProject-Enforcement.ps1
   Update-CVF-Workspace.ps1
+  .agents/workflows/
   CVF_WORKSPACE_USER_GUIDE.md
   CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md
 ```
@@ -295,6 +518,17 @@ Update the hidden public CVF core and refresh workspace-root wrappers:
 ```powershell
 powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
 ```
+
+## Agent Workflows
+
+The public-safe installer also maintains optional agent workflow notes under:
+
+- `.agents/workflows/cvf-onboard.md`
+- `.agents/workflows/pre-commit-check.md`
+
+These files guide agents toward the wrapper flow, project-local tests,
+workspace memory and handoff files, and rule-pack guidance when installed.
+They do not authorize copying private-only CVF state into downstream projects.
 
 ## Optional Rule Packs
 
@@ -357,6 +591,7 @@ CVF-Workspace/
   New-CVF-Governed-Project.ps1
   Run-CVF-NewProject-Enforcement.ps1
   Update-CVF-Workspace.ps1
+  .agents/workflows/
   CVF_WORKSPACE_USER_GUIDE.md
   CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md
 ```
@@ -389,6 +624,17 @@ Cập nhật hidden public CVF core và làm mới wrapper ở workspace root:
 ```powershell
 powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace.ps1" -RunGate
 ```
+
+## Agent Workflow
+
+Public-safe installer cũng duy trì các ghi chú workflow cho agent tại:
+
+- `.agents/workflows/cvf-onboard.md`
+- `.agents/workflows/pre-commit-check.md`
+
+Các file này hướng agent dùng wrapper flow, test riêng của project, workspace
+memory, handoff và rule pack khi có cài đặt. Chúng không cho phép copy private
+CVF state vào project downstream.
 
 ## Rule Pack Tùy Chọn
 
@@ -429,6 +675,8 @@ Dùng file này khi cần:
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "New-CVF-Governed-Project.ps1") -Content $governedProjectWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Run-CVF-NewProject-Enforcement.ps1") -Content $workspaceGateWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Update-CVF-Workspace.ps1") -Content $workspaceUpdateWrapper
+Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved ".agents\workflows\cvf-onboard.md") -Content $agentOnboardWorkflow
+Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved ".agents\workflows\pre-commit-check.md") -Content $agentPreCommitWorkflow
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_USER_GUIDE.md") -Content $userGuide
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md") -Content $vietnameseGuide
 

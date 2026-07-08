@@ -23,6 +23,25 @@ function Set-WorkspaceArtifact {
     Write-Ok "Updated workspace artifact: $Path"
 }
 
+function Set-WorkspaceArtifactIfMissing {
+    param(
+        [string]$Path,
+        [string]$Content
+    )
+
+    if (Test-Path -LiteralPath $Path -PathType Leaf) {
+        Write-Ok "Preserved existing workspace artifact: $Path"
+        return
+    }
+
+    $parent = Split-Path -Parent $Path
+    if (-not [string]::IsNullOrWhiteSpace($parent)) {
+        New-Item -ItemType Directory -Path $parent -Force | Out-Null
+    }
+    Set-Content -LiteralPath $Path -Value $Content -Encoding utf8
+    Write-Ok "Created workspace artifact: $Path"
+}
+
 $workspaceRootResolved = [System.IO.Path]::GetFullPath($WorkspaceRoot)
 if (-not (Test-Path -LiteralPath $workspaceRootResolved -PathType Container)) {
     throw "Workspace root not found: $workspaceRootResolved"
@@ -462,6 +481,13 @@ inheritance is:
 - explicit operator approval before adding heavier governance.
 '@
 
+$workspaceProjectBaseline = @'
+{
+  "schemaVersion": "1.0",
+  "legacyProjects": []
+}
+'@
+
 $userGuide = @'
 # CVF Workspace User Guide
 
@@ -482,6 +508,7 @@ CVF-Workspace/
   <Project-A>/
   <Project-B>/
   WORKSPACE_RULES.md
+  WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json
   New-CVF-Governed-Project.ps1
   Run-CVF-NewProject-Enforcement.ps1
   Update-CVF-Workspace.ps1
@@ -530,6 +557,12 @@ These files guide agents toward the wrapper flow, project-local tests,
 workspace memory and handoff files, and rule-pack guidance when installed.
 They do not authorize copying private-only CVF state into downstream projects.
 
+## Enforcement Baseline
+
+The installer creates `WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json` when it is
+missing. Existing baselines are preserved so older projects stay grandfathered
+only when the operator already recorded them.
+
 ## Optional Rule Packs
 
 Some operator-local workspaces may also have curated CVF rule packs installed
@@ -543,7 +576,7 @@ If present, read:
 - `AGENT_HANDOFF.md`
 
 Rule packs are optional local guidance. They do not turn this workspace into a
-full CVF provenance repository, and they should not replace project-level
+private full CVF repository, and they should not replace project-level
 `AGENTS.md`, manifests, policies, or handoffs.
 
 ## Important Rules
@@ -588,6 +621,7 @@ CVF-Workspace/
   <Project-A>/
   <Project-B>/
   WORKSPACE_RULES.md
+  WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json
   New-CVF-Governed-Project.ps1
   Run-CVF-NewProject-Enforcement.ps1
   Update-CVF-Workspace.ps1
@@ -636,6 +670,12 @@ Các file này hướng agent dùng wrapper flow, test riêng của project, wor
 memory, handoff và rule pack khi có cài đặt. Chúng không cho phép copy private
 CVF state vào project downstream.
 
+## Enforcement Baseline
+
+Installer tạo `WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json` khi file này chưa
+có. Baseline hiện có được giữ nguyên để các project cũ chỉ được exempt khi
+operator đã ghi nhận từ trước.
+
 ## Rule Pack Tùy Chọn
 
 Một số workspace operator-local có thể được cài thêm rule pack đã chọn lọc
@@ -648,8 +688,8 @@ Nếu có, đọc các file sau:
 - `CVF_WORKSPACE_MEMORY.md`
 - `AGENT_HANDOFF.md`
 
-Rule pack là hướng dẫn local tùy chọn. Nó không biến workspace này thành full
-CVF provenance repository, và không thay thế `AGENTS.md`, manifest, policy hay
+Rule pack là hướng dẫn local tùy chọn. Nó không biến workspace này thành private
+full CVF repository, và không thay thế `AGENTS.md`, manifest, policy hay
 handoff riêng của từng project.
 
 ## Quy Tắc Quan Trọng
@@ -677,6 +717,7 @@ Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Run-CVF-NewProjec
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Update-CVF-Workspace.ps1") -Content $workspaceUpdateWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved ".agents\workflows\cvf-onboard.md") -Content $agentOnboardWorkflow
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved ".agents\workflows\pre-commit-check.md") -Content $agentPreCommitWorkflow
+Set-WorkspaceArtifactIfMissing -Path (Join-Path $workspaceRootResolved "WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json") -Content $workspaceProjectBaseline
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_USER_GUIDE.md") -Content $userGuide
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md") -Content $vietnameseGuide
 

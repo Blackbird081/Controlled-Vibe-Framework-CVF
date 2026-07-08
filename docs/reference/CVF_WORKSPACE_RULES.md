@@ -24,6 +24,7 @@ CVF-Workspace/
   CVF_WORKSPACE_RULE_PACKS.md
   CVF_WORKSPACE_MEMORY.md
   AGENT_HANDOFF.md
+  WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json
   Update-CVF-Workspace-RulePack.ps1
   .agents/workflows/
   New-CVF-Governed-Project.ps1
@@ -67,6 +68,9 @@ The workspace root should stay clean:
   curated local rule pack has been installed.
 - It may contain `CVF_WORKSPACE_MEMORY.md` and a workspace handoff root file
   for local agent continuity.
+- It should contain `WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json`; the
+  public-safe installer creates an empty baseline when it is missing and
+  preserves an existing baseline.
 - It may contain `Update-CVF-Workspace-RulePack.ps1` after an operator-local
   rule-pack sync.
 - It may contain `.agents/workflows/` with workspace-local agent workflow
@@ -102,6 +106,7 @@ workspace-root wrapper scripts and guides via
 - `Run-CVF-NewProject-Enforcement.ps1` - workspace-wide enforcement gate
 - `Update-CVF-Workspace.ps1` - public-core fast-forward plus wrapper refresh
 - `.agents/workflows/` - workspace-local agent workflow notes for onboarding and project pre-commit routing
+- `WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json` - local legacy-project exemption baseline, created if missing and preserved if present
 - `CVF_WORKSPACE_USER_GUIDE.md` / `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md` - bilingual workspace-root guide
 
 These wrappers only cover the public-safe flow (new-project bootstrap,

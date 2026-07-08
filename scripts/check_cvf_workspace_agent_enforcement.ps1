@@ -15,6 +15,7 @@ $requiredPublicCoreFiles = @(
     "docs\reference\CVF_WORKSPACE_RULES.md",
     "governance\toolkit\05_OPERATION\CVF_DOWNSTREAM_AGENTS_TEMPLATE.md",
     "scripts\check_cvf_workspace_agent_enforcement.ps1",
+    "scripts\check_cvf_workspace_new_project_enforcement.ps1",
     "scripts\ingest_cvf_downstream_knowledge.ps1",
     "scripts\new-cvf-workspace.ps1",
     "scripts\update_cvf_workspace_public_core.ps1",
@@ -244,6 +245,15 @@ $bootstrapLogs = @(Get-ChildItem -Path $docsDir -Filter "CVF_BOOTSTRAP_LOG_*.md"
 $bootstrapLogExists = ($bootstrapLogs.Count -gt 0)
 $bootstrapLogDetail = if ($bootstrapLogExists) { $bootstrapLogs[0].FullName } else { "No CVF_BOOTSTRAP_LOG_*.md found in $docsDir" }
 Add-Check "Bootstrap log exists" $bootstrapLogExists $bootstrapLogDetail
+
+if ($bootstrapLogExists -and (Test-Path -LiteralPath (Join-Path $projectResolved ".git") -PathType Container)) {
+    $bootstrapLogRelative = "docs/" + $bootstrapLogs[0].Name
+    $ignoreOutput = git -C $projectResolved check-ignore -v $bootstrapLogRelative 2>$null
+    $ignoreDetail = ($ignoreOutput | Out-String).Trim()
+    if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($ignoreDetail)) {
+        Add-Warn "Bootstrap log is visible to git" "IGNORED_BY_PROJECT_GITIGNORE: $bootstrapLogRelative -> $ignoreDetail"
+    }
+}
 
 # Check 9: CVF core path is reachable
 $cvfCorePath = $null

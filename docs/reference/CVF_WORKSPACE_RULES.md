@@ -115,6 +115,35 @@ guidance). Local-only overlay tooling and private full-repository state are
 separate operator-machine concerns and are not part of this public-safe wrapper
 set.
 
+## Adopt Existing Project Flow
+
+An older project may already be listed in
+`WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json` as a local legacy exemption. To
+adopt that project into current workspace enforcement, run the project wrapper
+for the existing project name:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\New-CVF-Governed-Project.ps1" `
+  -ProjectName "<existing-project>"
+```
+
+After the project doctor passes, the wrapper removes that project from the
+legacy baseline and the workspace-wide gate reports it as enforced. Use
+`-KeepLegacyExemption` only when the project should keep its old local
+exemption after refresh.
+
+Manual promotion is also available through the workspace gate:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1" `
+  -PromoteProjectName "<existing-project>"
+```
+
+The workspace doctor warns when a downstream project `.gitignore` hides the
+bootstrap log pattern under `docs/`. Treat that as a local tracking decision:
+either track the log, add a narrow unignore rule, or document why the project
+keeps the log untracked.
+
 ## Rule Packs And Local Continuity
 
 Operator-local workspaces may install curated rule packs from an

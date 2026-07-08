@@ -54,6 +54,8 @@ param(
 
     [string]$ProjectRepo = "",
 
+    [switch]$KeepLegacyExemption,
+
     [switch]$CheckLiveReadiness,
 
     [switch]$AllowOfflinePinnedCore
@@ -136,12 +138,18 @@ if ($AllowOfflinePinnedCore) {
     $gateArgs += "-AllowOfflinePinnedCore"
 }
 
+if (-not $KeepLegacyExemption) {
+    $gateArgs += "-PromoteProjectName"
+    $gateArgs += $ProjectName
+}
+
 & powershell @gateArgs
 exit $LASTEXITCODE
 '@
 
 $workspaceGateWrapper = @'
 param(
+    [string]$PromoteProjectName = "",
     [switch]$CheckLiveReadiness,
     [switch]$AllowOfflinePinnedCore
 )
@@ -168,6 +176,11 @@ if ($CheckLiveReadiness) {
 
 if ($AllowOfflinePinnedCore) {
     $args += "-AllowOfflinePinnedCore"
+}
+
+if (-not [string]::IsNullOrWhiteSpace($PromoteProjectName)) {
+    $args += "-PromoteProjectName"
+    $args += $PromoteProjectName
 }
 
 & powershell @args
@@ -349,6 +362,11 @@ After creation, run the workspace enforcement gate:
 ```powershell
 powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1"
 ```
+
+For an existing project that is already listed in the local legacy baseline,
+rerun `New-CVF-Governed-Project.ps1` for that project. A passing project doctor
+promotes that project out of the baseline unless `-KeepLegacyExemption` is
+supplied.
 
 ## Refresh Rule Packs
 
@@ -557,6 +575,17 @@ Run the workspace-wide enforcement gate:
 powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1"
 ```
 
+Adopt an existing legacy-exempt project into current enforcement:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\New-CVF-Governed-Project.ps1" `
+  -ProjectName "<existing-project>"
+```
+
+After the project doctor passes, the wrapper removes that project from
+`WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json`. Use `-KeepLegacyExemption` only
+when the project should remain grandfathered after refresh.
+
 Update the hidden public CVF core and refresh workspace-root wrappers:
 
 ```powershell
@@ -579,6 +608,15 @@ They do not authorize copying private-only CVF state into downstream projects.
 The installer creates `WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json` when it is
 missing. Existing baselines are preserved so older projects stay grandfathered
 only when the operator already recorded them.
+
+When a grandfathered project is intentionally adopted through
+`New-CVF-Governed-Project.ps1`, a passing project doctor promotes that project
+out of the legacy baseline. Use `-KeepLegacyExemption` only when the project
+should keep its old local exemption after refresh.
+
+If a downstream `.gitignore` hides `docs/CVF_BOOTSTRAP_LOG_*.md`, the doctor
+prints a warning. The project remains usable, but the operator should decide
+whether to track the bootstrap log or document the local exception.
 
 ## Optional Rule Packs
 
@@ -692,6 +730,17 @@ Chạy enforcement gate cho toàn workspace:
 powershell -ExecutionPolicy Bypass -File ".\Run-CVF-NewProject-Enforcement.ps1"
 ```
 
+Adopt một project cũ đang legacy-exempt vào enforcement hiện tại:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\New-CVF-Governed-Project.ps1" `
+  -ProjectName "<existing-project>"
+```
+
+Sau khi project doctor pass, wrapper sẽ xóa project đó khỏi
+`WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json`. Chỉ dùng `-KeepLegacyExemption`
+khi project cần tiếp tục được grandfather sau refresh.
+
 Cập nhật hidden public CVF core và làm mới wrapper ở workspace root:
 
 ```powershell
@@ -727,6 +776,14 @@ CVF state vào project downstream.
 Installer tạo `WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json` khi file này chưa
 có. Baseline hiện có được giữ nguyên để các project cũ chỉ được exempt khi
 operator đã ghi nhận từ trước.
+
+Khi intentionally adopt một project đã grandfather bằng
+`New-CVF-Governed-Project.ps1`, project doctor pass sẽ promote project đó ra
+khỏi legacy baseline. Dùng `-KeepLegacyExemption` nếu vẫn muốn giữ exemption.
+
+Nếu `.gitignore` của project downstream che `docs/CVF_BOOTSTRAP_LOG_*.md`,
+doctor sẽ in cảnh báo. Project vẫn dùng được, nhưng operator nên quyết định
+track bootstrap log hoặc ghi rõ ngoại lệ local.
 
 ## Rule Pack Tùy Chọn
 

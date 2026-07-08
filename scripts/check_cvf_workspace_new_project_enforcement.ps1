@@ -4,6 +4,8 @@ param(
 
     [string]$BaselinePath = "",
 
+    [string]$PromoteProjectName = "",
+
     [switch]$AllowOfflinePinnedCore,
 
     [switch]$CheckLiveReadiness
@@ -15,16 +17,8 @@ function Resolve-FullPath([string]$Path) {
     return [System.IO.Path]::GetFullPath($Path)
 }
 
-function Write-Info([string]$Message) {
-    Write-Host "[INFO] $Message" -ForegroundColor Cyan
-}
-
 function Write-Ok([string]$Message) {
     Write-Host "[OK]   $Message" -ForegroundColor Green
-}
-
-function Write-Warn([string]$Message) {
-    Write-Host "[WARN] $Message" -ForegroundColor Yellow
 }
 
 $workspaceResolved = Resolve-FullPath $WorkspaceRoot
@@ -69,16 +63,25 @@ $projects = Get-ChildItem -LiteralPath $workspaceResolved -Directory -Force |
 
 $results = @()
 $failedProjects = @()
+$promotedProjects = @()
 
 Write-Host ""
 Write-Host "CVF Workspace New-Project Enforcement Gate" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "Workspace: $workspaceResolved"
 Write-Host "Baseline:  $baselineResolved"
+if (-not [string]::IsNullOrWhiteSpace($PromoteProjectName)) {
+    Write-Host "Promote:   $PromoteProjectName"
+}
 Write-Host ""
 
 foreach ($project in $projects) {
-    if ($legacyProjects.ContainsKey($project.Name)) {
+    $isLegacy = $legacyProjects.ContainsKey($project.Name)
+    $promoteThisProject = $isLegacy -and
+        (-not [string]::IsNullOrWhiteSpace($PromoteProjectName)) -and
+        ($project.Name -eq $PromoteProjectName)
+
+    if ($isLegacy -and -not $promoteThisProject) {
         $results += [PSCustomObject]@{
             Project = $project.Name
             Status  = "LEGACY_EXEMPT"
@@ -110,10 +113,17 @@ foreach ($project in $projects) {
     }
 
     if ($exitCode -eq 0) {
-        $status = "ENFORCED_PASS"
+        if ($promoteThisProject) {
+            $status = "PROMOTED_PASS"
+            $promotedProjects += $project.Name
+            $detail = "$detail | removed from workspace legacy baseline"
+        }
+        else {
+            $status = "ENFORCED_PASS"
+        }
     }
     else {
-        $status = "ENFORCED_FAIL"
+        $status = if ($promoteThisProject) { "PROMOTION_FAIL" } else { "ENFORCED_FAIL" }
         $failedProjects += $project.Name
         $failLines = @($output | Select-String "\[FAIL\]" | ForEach-Object { $_.Line.Trim() })
         if ($failLines.Count -gt 0) {
@@ -128,8 +138,21 @@ foreach ($project in $projects) {
     }
 }
 
+if ($promotedProjects.Count -gt 0) {
+    $remainingLegacy = @($baseline.legacyProjects | Where-Object { $promotedProjects -notcontains $_ })
+    $updatedBaseline = [ordered]@{
+        schemaVersion  = if ($baseline.schemaVersion) { $baseline.schemaVersion } else { "1.0" }
+        legacyProjects = @($remainingLegacy)
+    }
+    $updatedBaseline | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $baselineResolved -Encoding utf8
+}
+
 $results | Format-Table -AutoSize
 Write-Host ""
+
+if ($promotedProjects.Count -gt 0) {
+    Write-Ok ("Promoted project(s) out of legacy baseline: {0}" -f ($promotedProjects -join ", "))
+}
 
 if ($failedProjects.Count -gt 0) {
     Write-Host ("RESULT: FAIL - {0} enforced project(s) failed doctor" -f $failedProjects.Count) -ForegroundColor Red

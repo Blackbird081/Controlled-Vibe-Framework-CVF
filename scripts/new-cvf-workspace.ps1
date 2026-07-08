@@ -44,6 +44,7 @@ $requiredPublicCoreFiles = @(
     "docs\reference\CVF_WORKSPACE_RULES.md",
     "governance\toolkit\05_OPERATION\CVF_DOWNSTREAM_AGENTS_TEMPLATE.md",
     "scripts\check_cvf_workspace_agent_enforcement.ps1",
+    "scripts\check_cvf_workspace_new_project_enforcement.ps1",
     "scripts\install_cvf_workspace_root_wrappers.ps1",
     "scripts\ingest_cvf_downstream_knowledge.ps1",
     "scripts\update_cvf_workspace_public_core.ps1",

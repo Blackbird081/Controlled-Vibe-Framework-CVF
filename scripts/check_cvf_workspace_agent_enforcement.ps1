@@ -250,7 +250,9 @@ if ($bootstrapLogExists -and (Test-Path -LiteralPath (Join-Path $projectResolved
     $bootstrapLogRelative = "docs/" + $bootstrapLogs[0].Name
     $ignoreOutput = git -C $projectResolved check-ignore -v $bootstrapLogRelative 2>$null
     $ignoreDetail = ($ignoreOutput | Out-String).Trim()
-    if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($ignoreDetail)) {
+    $lastIgnoreRule = @($ignoreOutput | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Last 1)
+    $isUnignoredByNegation = ($lastIgnoreRule.Count -gt 0 -and $lastIgnoreRule[0] -match '^[^:]+:\d+:!')
+    if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($ignoreDetail) -and -not $isUnignoredByNegation) {
         Add-Warn "Bootstrap log is visible to git" "IGNORED_BY_PROJECT_GITIGNORE: $bootstrapLogRelative -> $ignoreDetail"
     }
 }

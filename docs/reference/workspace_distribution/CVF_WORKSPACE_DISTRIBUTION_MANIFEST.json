@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "distributionVersion": "0.1.0-rc1",
+  "distributionVersion": "0.2.0-rc1",
   "publicRemote": "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git",
   "supportedShells": [
     "Windows PowerShell 5.1",
@@ -13,7 +13,23 @@
   "requiredCoreFiles": [
     "scripts/install_cvf_workspace_root_wrappers.ps1",
     "scripts/sync_cvf_workspace_public_profile.ps1",
-    "scripts/update_cvf_workspace_public_core.ps1"
+    "scripts/update_cvf_workspace_public_core.ps1",
+    "scripts/get_cvf_workspace_status.ps1",
+    "scripts/repair_cvf_workspace.ps1",
+    "scripts/manage_cvf_workspace.ps1"
+  ],
+  "requiredWorkspaceRootFiles": [
+    "New-CVF-Governed-Project.ps1",
+    "Run-CVF-NewProject-Enforcement.ps1",
+    "Update-CVF-Workspace.ps1",
+    "Update-CVF-Workspace-Public-Profile.ps1",
+    "Test-CVF-Workspace.ps1",
+    "Repair-CVF-Workspace.ps1",
+    "Manage-CVF-Workspace.ps1",
+    "CVF_WORKSPACE_USER_GUIDE.md",
+    "CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md",
+    "CVF_WORKSPACE_MEMORY.md",
+    "AGENT_HANDOFF.md"
   ],
   "rootTemplates": [
     {

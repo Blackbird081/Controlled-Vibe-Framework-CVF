@@ -295,6 +295,63 @@ if (-not (Test-Path -LiteralPath $profileScript -PathType Leaf)) {
 exit $LASTEXITCODE
 '@
 
+$workspaceStatusWrapper = @'
+param(
+    [switch]$CheckRemote,
+    [switch]$Json
+)
+
+$ErrorActionPreference = "Stop"
+$workspaceRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$target = Join-Path $workspaceRoot ".Controlled-Vibe-Framework-CVF\scripts\get_cvf_workspace_status.ps1"
+if (-not (Test-Path -LiteralPath $target -PathType Leaf)) {
+    throw "Workspace status source not found: $target"
+}
+$arguments = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $target, "-WorkspaceRoot", $workspaceRoot)
+if ($CheckRemote) { $arguments += "-CheckRemote" }
+if ($Json) { $arguments += "-Json" }
+& powershell @arguments
+exit $LASTEXITCODE
+'@
+
+$workspaceRepairWrapper = @'
+param([switch]$Json)
+
+$ErrorActionPreference = "Stop"
+$workspaceRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$target = Join-Path $workspaceRoot ".Controlled-Vibe-Framework-CVF\scripts\repair_cvf_workspace.ps1"
+if (-not (Test-Path -LiteralPath $target -PathType Leaf)) {
+    throw "Workspace repair source not found: $target"
+}
+$arguments = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $target, "-WorkspaceRoot", $workspaceRoot)
+if ($Json) { $arguments += "-Json" }
+& powershell @arguments
+exit $LASTEXITCODE
+'@
+
+$workspaceManageWrapper = @'
+param(
+    [ValidateSet("Status", "Update", "Repair")]
+    [string]$Action = "Status",
+    [switch]$CheckRemote,
+    [switch]$RunGate,
+    [switch]$Json
+)
+
+$ErrorActionPreference = "Stop"
+$workspaceRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$target = Join-Path $workspaceRoot ".Controlled-Vibe-Framework-CVF\scripts\manage_cvf_workspace.ps1"
+if (-not (Test-Path -LiteralPath $target -PathType Leaf)) {
+    throw "Workspace management source not found: $target"
+}
+$arguments = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $target, "-WorkspaceRoot", $workspaceRoot, "-Action", $Action)
+if ($CheckRemote) { $arguments += "-CheckRemote" }
+if ($RunGate) { $arguments += "-RunGate" }
+if ($Json) { $arguments += "-Json" }
+& powershell @arguments
+exit $LASTEXITCODE
+'@
+
 $agentOnboardWorkflow = @'
 ---
 description: Bootstrap or refresh a downstream project in CVF-Workspace using the current public-safe wrapper flow
@@ -566,12 +623,34 @@ CVF-Workspace/
   New-CVF-Governed-Project.ps1
   Run-CVF-NewProject-Enforcement.ps1
   Update-CVF-Workspace.ps1
+  Manage-CVF-Workspace.ps1
+  Test-CVF-Workspace.ps1
+  Repair-CVF-Workspace.ps1
   .agents/workflows/
   CVF_WORKSPACE_USER_GUIDE.md
   CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md
 ```
 
 ## Common Commands
+
+Check workspace health without changing files:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Manage-CVF-Workspace.ps1" -Action Status -CheckRemote
+```
+
+Repair generated wrappers and the active public profile without updating the
+hidden core:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Manage-CVF-Workspace.ps1" -Action Repair
+```
+
+Update with the existing backup and rollback flow:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Manage-CVF-Workspace.ps1" -Action Update -RunGate
+```
 
 Create a new governed project:
 
@@ -721,12 +800,33 @@ CVF-Workspace/
   New-CVF-Governed-Project.ps1
   Run-CVF-NewProject-Enforcement.ps1
   Update-CVF-Workspace.ps1
+  Manage-CVF-Workspace.ps1
+  Test-CVF-Workspace.ps1
+  Repair-CVF-Workspace.ps1
   .agents/workflows/
   CVF_WORKSPACE_USER_GUIDE.md
   CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md
 ```
 
 ## Lệnh Thường Dùng
+
+Kiểm tra trạng thái workspace mà không thay đổi file:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Manage-CVF-Workspace.ps1" -Action Status -CheckRemote
+```
+
+Sửa lại wrapper và public profile đang active mà không update hidden core:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Manage-CVF-Workspace.ps1" -Action Repair
+```
+
+Update bằng flow backup và rollback hiện có:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\Manage-CVF-Workspace.ps1" -Action Update -RunGate
+```
 
 Tạo project governed mới:
 
@@ -870,6 +970,9 @@ Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "New-CVF-Governed-
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Run-CVF-NewProject-Enforcement.ps1") -Content $workspaceGateWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Update-CVF-Workspace.ps1") -Content $workspaceUpdateWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Update-CVF-Workspace-Public-Profile.ps1") -Content $workspaceProfileWrapper
+Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Test-CVF-Workspace.ps1") -Content $workspaceStatusWrapper
+Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Repair-CVF-Workspace.ps1") -Content $workspaceRepairWrapper
+Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Manage-CVF-Workspace.ps1") -Content $workspaceManageWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved ".agents\workflows\cvf-onboard.md") -Content $agentOnboardWorkflow
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved ".agents\workflows\pre-commit-check.md") -Content $agentPreCommitWorkflow
 Set-WorkspaceArtifactIfMissing -Path (Join-Path $workspaceRootResolved "WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json") -Content $workspaceProjectBaseline

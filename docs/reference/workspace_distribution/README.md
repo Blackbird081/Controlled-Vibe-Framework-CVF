@@ -30,6 +30,25 @@ profiles are not part of this distribution.
   profile from the public core.
 - `scripts/build_cvf_workspace_distribution.ps1` builds a checksum-bearing
   bootstrap package.
+- `scripts/get_cvf_workspace_status.ps1` reports local or remote-aware health.
+- `scripts/repair_cvf_workspace.ps1` restores generated root/profile artifacts
+  without changing the hidden-core revision or selected profile.
+- `scripts/manage_cvf_workspace.ps1` provides the status, update, and repair
+  command surface used by the generated root wrapper.
+
+## Operator Commands
+
+From the workspace root:
+
+```powershell
+.\Manage-CVF-Workspace.ps1 -Action Status -CheckRemote
+.\Manage-CVF-Workspace.ps1 -Action Repair
+.\Manage-CVF-Workspace.ps1 -Action Update -RunGate
+```
+
+Status returns one of `CURRENT`, `UPDATE_AVAILABLE`, `DRIFTED`, or
+`REPAIR_REQUIRED`. Status is read-only. Repair does not fetch or replace the
+hidden public core and does not select a different profile.
 
 ## Boundary
 
@@ -39,10 +58,12 @@ mirrors, credentials, or downstream application data.
 
 ## Public Export Disposition
 
-DEFERRED_PRIVATE_ONLY
+EXPORTED
 
-Reason: this provenance source becomes public only through the bounded R82
-public-sync decision.
+Public commit: `a4d5dba915f9ca8acea251a3a479ca9e1420d1fc`
+
+The stable front door was exported during R82. R83 changes require their own
+bounded public-sync decision before the new command surface is public.
 
 ## Claim Boundary
 

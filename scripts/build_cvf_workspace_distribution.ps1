@@ -40,5 +40,11 @@ $package = [ordered]@{
     distributionVersion = $distributionManifest.distributionVersion
     files = $packageFiles
 }
-$package | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $outputResolved "CVF_WORKSPACE_DISTRIBUTION_PACKAGE.json") -Encoding utf8
+$packageJson = ($package | ConvertTo-Json -Depth 6 -Compress) + [Environment]::NewLine
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+[System.IO.File]::WriteAllText(
+    (Join-Path $outputResolved "CVF_WORKSPACE_DISTRIBUTION_PACKAGE.json"),
+    $packageJson,
+    $utf8NoBom
+)
 Write-Host "[OK] Distribution package built: $outputResolved" -ForegroundColor Green

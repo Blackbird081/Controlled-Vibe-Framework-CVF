@@ -276,6 +276,25 @@ if ($RunGate) {
 exit 0
 '@
 
+$workspaceProfileWrapper = @'
+param(
+    [ValidateSet("public-free", "paid-user-safe")]
+    [string]$ProfileName = "public-free"
+)
+
+$ErrorActionPreference = "Stop"
+$workspaceRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$corePath = Join-Path $workspaceRoot ".Controlled-Vibe-Framework-CVF"
+$profileScript = Join-Path $corePath "scripts\sync_cvf_workspace_public_profile.ps1"
+
+if (-not (Test-Path -LiteralPath $profileScript -PathType Leaf)) {
+    throw "Public profile script not found: $profileScript"
+}
+
+& powershell -ExecutionPolicy Bypass -File $profileScript -WorkspaceRoot $workspaceRoot -ProfileName $ProfileName
+exit $LASTEXITCODE
+'@
+
 $agentOnboardWorkflow = @'
 ---
 description: Bootstrap or refresh a downstream project in CVF-Workspace using the current public-safe wrapper flow
@@ -850,6 +869,7 @@ Dùng file này khi cần:
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "New-CVF-Governed-Project.ps1") -Content $governedProjectWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Run-CVF-NewProject-Enforcement.ps1") -Content $workspaceGateWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Update-CVF-Workspace.ps1") -Content $workspaceUpdateWrapper
+Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Update-CVF-Workspace-Public-Profile.ps1") -Content $workspaceProfileWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved ".agents\workflows\cvf-onboard.md") -Content $agentOnboardWorkflow
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved ".agents\workflows\pre-commit-check.md") -Content $agentPreCommitWorkflow
 Set-WorkspaceArtifactIfMissing -Path (Join-Path $workspaceRootResolved "WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json") -Content $workspaceProjectBaseline

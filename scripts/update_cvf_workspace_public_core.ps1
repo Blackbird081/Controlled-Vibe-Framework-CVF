@@ -18,6 +18,7 @@ $requiredPublicCoreFiles = @(
     "governance\toolkit\05_OPERATION\CVF_DOWNSTREAM_AGENTS_TEMPLATE.md",
     "scripts\check_cvf_workspace_agent_enforcement.ps1",
     "scripts\install_cvf_workspace_root_wrappers.ps1",
+    "scripts\sync_cvf_workspace_public_profile.ps1",
     "scripts\ingest_cvf_downstream_knowledge.ps1",
     "scripts\new-cvf-workspace.ps1",
     "scripts\update_cvf_workspace_public_core.ps1",
@@ -36,6 +37,7 @@ $overlayFiles = @(
     "scripts\bootstrap_foundations.sh",
     "scripts\check_cvf_workspace_agent_enforcement.ps1",
     "scripts\install_cvf_workspace_root_wrappers.ps1",
+    "scripts\sync_cvf_workspace_public_profile.ps1",
     "scripts\ingest_cvf_downstream_knowledge.ps1",
     "scripts\install_cvf_hooks.ps1",
     "scripts\new-cvf-workspace.ps1",
@@ -166,6 +168,7 @@ $backupRoot = Assert-PathInsideWorkspace -Path (Join-Path $workspaceResolved "_c
 $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $backupPath = Assert-PathInsideWorkspace -Path (Join-Path $backupRoot ".Controlled-Vibe-Framework-CVF-$timestamp") -Workspace $workspaceResolved
 $workspaceWrapperInstallerPath = Join-Path $corePath "scripts\install_cvf_workspace_root_wrappers.ps1"
+$activeProfilePath = Join-Path $workspaceResolved "CVF_RULE_PACKS\ACTIVE_RULE_PACK.json"
 
 Write-Info "Workspace root: $workspaceResolved"
 Write-Info "Public remote:  $publicRemote"
@@ -188,9 +191,13 @@ if (Test-Path -LiteralPath $corePath -PathType Container) {
 
 try {
     Write-Info "Cloning latest public core..."
-    git clone $publicRemote $corePath
+    git -c core.longpaths=true clone $publicRemote $corePath
     if ($LASTEXITCODE -ne 0) {
         throw "git clone failed with exit code $LASTEXITCODE"
+    }
+    git -C $corePath config core.longpaths true
+    if ($LASTEXITCODE -ne 0) {
+        throw "failed to persist core.longpaths for the hidden public core"
     }
 
     if (-not [string]::IsNullOrWhiteSpace($OverlaySourcePath)) {
@@ -243,6 +250,17 @@ try {
     }
     else {
         Write-Warn "Workspace wrapper installer not found: $workspaceWrapperInstallerPath"
+    }
+
+    if (Test-Path -LiteralPath $activeProfilePath -PathType Leaf) {
+        $activeProfile = Get-Content -LiteralPath $activeProfilePath -Raw -Encoding utf8 | ConvertFrom-Json
+        if (@("public-free", "paid-user-safe") -contains $activeProfile.activeProfile) {
+            $profileScript = Join-Path $corePath "scripts\sync_cvf_workspace_public_profile.ps1"
+            & powershell -ExecutionPolicy Bypass -File $profileScript -WorkspaceRoot $workspaceResolved -ProfileName $activeProfile.activeProfile
+            if ($LASTEXITCODE -ne 0) {
+                throw "Public profile refresh failed with exit code $LASTEXITCODE"
+            }
+        }
     }
 }
 catch {

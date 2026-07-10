@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "cvf.agent-build-loop-receipt.v1",
+  "workItemId": "example-doc-link-fix",
+  "profile": "SELECTED",
+  "anchor": {
+    "kind": "failing_check",
+    "value": "docs link check reports one missing target",
+    "source": "work_order"
+  },
+  "localRead": {
+    "paths": ["docs/INDEX.md", "docs/reference/example/README.md"],
+    "questionAnswered": "The index points to the old owner path while the new front door exists."
+  },
+  "hypothesis": {
+    "statement": "Updating the single index target will remove the missing-link failure.",
+    "falsifier": "The link check still reports the same target after the index edit.",
+    "falsifiable": true
+  },
+  "edit": {
+    "changedPaths": ["docs/INDEX.md"],
+    "outsideAllowedPaths": false,
+    "summary": "Updated one stale reference index target."
+  },
+  "validation": {
+    "command": "python scripts/check_doc_links.py",
+    "result": "PASS",
+    "evidence": "The missing target is no longer reported."
+  },
+  "metrics": {
+    "timeToFirstEditMs": 42000,
+    "targetedSearchCount": 1,
+    "broadSearchCount": 0,
+    "nearbyReadCount": 2,
+    "rereadCount": 1,
+    "toolCallsBeforeFirstEdit": 3,
+    "totalToolCalls": 5,
+    "validationLatencyMs": 1800,
+    "changedPathCount": 1,
+    "scopeDriftCount": 0,
+    "stopTriggerCount": 0,
+    "reviewSurvived": null,
+    "freezeSurvived": null
+  },
+  "nextDecision": "RETURN_TO_REVIEW",
+  "claimBoundary": "This receipt records one build loop and does not prove final correctness or closure."
+}
+

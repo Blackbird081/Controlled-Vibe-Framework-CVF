@@ -67,6 +67,15 @@ Default memory role follows
 - `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
 - `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
 
+## Agent Build Loop And Public Trust
+
+- `docs/reference/agent_build_loop/README.md` - optional BUILD micro-loop,
+  receipt schema, metrics, and example; no global runtime enforcement.
+- `docs/reference/public_trust/README.md` - operator trust outcomes and threat
+  model with explicit control-status boundaries.
+- `docs/guides/CVF_5_MINUTE_TRUST_DEMO.md` - bounded structure-only or live
+  walkthrough that keeps freeze authority with the operator.
+
 ## Public Evidence
 
 The `docs/evidence/` folder is reserved for curated public evidence summaries

@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://controlled-vibe-framework.dev/schemas/agent-build-loop-receipt-v1.json",
+  "title": "CVF Agent Build Loop Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workItemId",
+    "profile",
+    "anchor",
+    "localRead",
+    "hypothesis",
+    "edit",
+    "validation",
+    "metrics",
+    "nextDecision",
+    "claimBoundary"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "cvf.agent-build-loop-receipt.v1" },
+    "workItemId": { "type": "string", "minLength": 1 },
+    "profile": { "const": "SELECTED" },
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value", "source"],
+      "properties": {
+        "kind": { "enum": ["path", "symbol", "failing_check", "contract"] },
+        "value": { "type": "string", "minLength": 1 },
+        "source": { "enum": ["operator", "work_order", "targeted_search", "nearby_read"] }
+      }
+    },
+    "localRead": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paths", "questionAnswered"],
+      "properties": {
+        "paths": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "questionAnswered": { "type": "string", "minLength": 1 }
+      }
+    },
+    "hypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "falsifier", "falsifiable"],
+      "properties": {
+        "statement": { "type": "string", "minLength": 1 },
+        "falsifier": { "type": "string", "minLength": 1 },
+        "falsifiable": { "type": "boolean" }
+      }
+    },
+    "edit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["changedPaths", "outsideAllowedPaths", "summary"],
+      "properties": {
+        "changedPaths": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "outsideAllowedPaths": { "type": "boolean" },
+        "summary": { "type": "string", "minLength": 1 }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "result", "evidence"],
+      "properties": {
+        "command": { "type": "string", "minLength": 1 },
+        "result": { "enum": ["PASS", "FAIL", "BLOCKED", "NOT_RUN_WITH_REASON"] },
+        "evidence": { "type": "string", "minLength": 1 }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timeToFirstEditMs", "targetedSearchCount", "broadSearchCount",
+        "nearbyReadCount", "rereadCount", "toolCallsBeforeFirstEdit",
+        "totalToolCalls", "validationLatencyMs", "changedPathCount",
+        "scopeDriftCount", "stopTriggerCount", "reviewSurvived",
+        "freezeSurvived"
+      ],
+      "properties": {
+        "timeToFirstEditMs": { "type": ["integer", "null"], "minimum": 0 },
+        "targetedSearchCount": { "type": "integer", "minimum": 0 },
+        "broadSearchCount": { "type": "integer", "minimum": 0 },
+        "nearbyReadCount": { "type": "integer", "minimum": 0 },
+        "rereadCount": { "type": "integer", "minimum": 0 },
+        "toolCallsBeforeFirstEdit": { "type": "integer", "minimum": 0 },
+        "totalToolCalls": { "type": "integer", "minimum": 0 },
+        "validationLatencyMs": { "type": ["integer", "null"], "minimum": 0 },
+        "changedPathCount": { "type": "integer", "minimum": 0 },
+        "scopeDriftCount": { "type": "integer", "minimum": 0 },
+        "stopTriggerCount": { "type": "integer", "minimum": 0 },
+        "reviewSurvived": { "type": ["boolean", "null"] },
+        "freezeSurvived": { "type": ["boolean", "null"] }
+      }
+    },
+    "nextDecision": { "enum": ["CONTINUE", "RETURN_TO_REVIEW", "FREEZE_CANDIDATE", "STOP_ESCALATE"] },
+    "claimBoundary": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "edit": { "properties": { "outsideAllowedPaths": { "const": true } } } } },
+      "then": { "properties": { "nextDecision": { "enum": ["RETURN_TO_REVIEW", "STOP_ESCALATE"] } } }
+    },
+    {
+      "if": { "properties": { "hypothesis": { "properties": { "falsifiable": { "const": false } } } } },
+      "then": { "properties": { "nextDecision": { "enum": ["RETURN_TO_REVIEW", "STOP_ESCALATE"] } } }
+    }
+  ]
+}
+

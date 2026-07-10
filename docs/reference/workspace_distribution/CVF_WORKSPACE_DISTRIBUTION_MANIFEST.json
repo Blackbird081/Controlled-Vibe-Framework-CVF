@@ -19,6 +19,7 @@
     "scripts/manage_cvf_workspace.ps1"
   ],
   "requiredWorkspaceRootFiles": [
+    "WORKSPACE_RULES.md",
     "New-CVF-Governed-Project.ps1",
     "Run-CVF-NewProject-Enforcement.ps1",
     "Update-CVF-Workspace.ps1",

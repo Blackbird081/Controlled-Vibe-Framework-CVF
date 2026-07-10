@@ -606,6 +606,33 @@ $workspaceProjectBaseline = @'
 }
 '@
 
+$workspaceRules = @'
+# CVF Workspace Rules
+
+This folder is a CVF workspace container. It is not a git repository.
+
+## Required Layout
+
+```text
+CVF-Workspace/
+  .Controlled-Vibe-Framework-CVF/
+  <Application-Project>/
+  WORKSPACE_RULES.md
+```
+
+## Rules
+
+- Keep application projects as siblings of `.Controlled-Vibe-Framework-CVF/`.
+- Do not place downstream application code inside the hidden public core.
+- Run application work, tests, and commits from the application project root.
+- Keep secrets out of workspace rules, generated project instructions, and logs.
+- Read `CVF_WORKSPACE_CLASSIFICATION_GUIDE.md` before selecting or changing a profile.
+
+## Canonical Source
+
+`.Controlled-Vibe-Framework-CVF/docs/reference/CVF_WORKSPACE_RULES.md`
+'@
+
 $userGuide = @'
 # CVF Workspace User Guide
 
@@ -984,6 +1011,7 @@ Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Repair-CVF-Worksp
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "Manage-CVF-Workspace.ps1") -Content $workspaceManageWrapper
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved ".agents\workflows\cvf-onboard.md") -Content $agentOnboardWorkflow
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved ".agents\workflows\pre-commit-check.md") -Content $agentPreCommitWorkflow
+Set-WorkspaceArtifactIfMissing -Path (Join-Path $workspaceRootResolved "WORKSPACE_RULES.md") -Content $workspaceRules
 Set-WorkspaceArtifactIfMissing -Path (Join-Path $workspaceRootResolved "WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json") -Content $workspaceProjectBaseline
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_USER_GUIDE.md") -Content $userGuide
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md") -Content $vietnameseGuide

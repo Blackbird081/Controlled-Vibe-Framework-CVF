@@ -114,7 +114,11 @@ else {
                     Add-Issue "CORE_FILE_MISSING" "Required core file is missing: $required" 3
                 }
             }
-            foreach ($requiredRoot in @($manifest.requiredWorkspaceRootFiles)) {
+            $requiredRootFiles = @()
+            if ($null -ne $manifest.PSObject.Properties["requiredWorkspaceRootFiles"]) {
+                $requiredRootFiles = @($manifest.requiredWorkspaceRootFiles)
+            }
+            foreach ($requiredRoot in $requiredRootFiles) {
                 if (-not (Test-Path -LiteralPath (Join-Path $workspaceResolved $requiredRoot) -PathType Leaf)) {
                     Add-Issue "ROOT_ARTIFACT_MISSING" "Required workspace artifact is missing: $requiredRoot" 3
                 }

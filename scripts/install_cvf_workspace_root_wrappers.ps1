@@ -47,6 +47,13 @@ if (-not (Test-Path -LiteralPath $workspaceRootResolved -PathType Container)) {
     throw "Workspace root not found: $workspaceRootResolved"
 }
 
+$coreRoot = Split-Path -Parent $PSScriptRoot
+$classificationGuideSource = Join-Path $coreRoot "docs\guides\CVF_WORKSPACE_CLASSIFICATION_AND_USAGE_GUIDE.md"
+if (-not (Test-Path -LiteralPath $classificationGuideSource -PathType Leaf)) {
+    throw "Workspace classification guide source not found: $classificationGuideSource"
+}
+$classificationGuide = Get-Content -LiteralPath $classificationGuideSource -Raw -Encoding utf8
+
 $governedProjectWrapper = @'
 param(
     [Parameter(Mandatory = $true)]
@@ -774,6 +781,7 @@ Use this file when you need the shortest path to:
 See the localized companion guide:
 
 - `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md`
+- `CVF_WORKSPACE_CLASSIFICATION_GUIDE.md` for profile, health, and project-state classification
 '@
 
 $vietnameseGuide = @'
@@ -964,6 +972,7 @@ Dùng file này khi cần:
 ## Tài Liệu Liên Quan
 
 - `CVF_WORKSPACE_USER_GUIDE.md`
+- `CVF_WORKSPACE_CLASSIFICATION_GUIDE.md`
 '@
 
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "New-CVF-Governed-Project.ps1") -Content $governedProjectWrapper
@@ -978,6 +987,7 @@ Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved ".agents\workflows
 Set-WorkspaceArtifactIfMissing -Path (Join-Path $workspaceRootResolved "WORKSPACE_PROJECT_ENFORCEMENT_BASELINE.json") -Content $workspaceProjectBaseline
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_USER_GUIDE.md") -Content $userGuide
 Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md") -Content $vietnameseGuide
+Set-WorkspaceArtifact -Path (Join-Path $workspaceRootResolved "CVF_WORKSPACE_CLASSIFICATION_GUIDE.md") -Content $classificationGuide
 
 # This installer is the public-safe flow and never writes overlay tooling.
 # Remove any overlay artifacts a prior full/provenance installer run left

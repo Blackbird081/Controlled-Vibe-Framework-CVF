@@ -35,6 +35,10 @@ profiles are not part of this distribution.
   without changing the hidden-core revision or selected profile.
 - `scripts/manage_cvf_workspace.ps1` provides the status, update, and repair
   command surface used by the generated root wrapper.
+- `docs/guides/CVF_WORKSPACE_CLASSIFICATION_AND_USAGE_GUIDE.md` explains how
+  to choose an audience profile, interpret health status, and classify each
+  downstream project before work begins. The installer materializes it at the
+  workspace root as `CVF_WORKSPACE_CLASSIFICATION_GUIDE.md`.
 
 ## Operator Commands
 

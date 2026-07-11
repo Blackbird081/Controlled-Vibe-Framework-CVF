@@ -2,7 +2,7 @@
 
 Memory class: POINTER_RECORD
 
-Status: CURRENT - updated 2026-07-07
+Status: CURRENT - updated 2026-07-11
 Version: CVF v4.0.0 GA
 
 ## Purpose
@@ -10,6 +10,7 @@ Version: CVF v4.0.0 GA
 This catalog is the durable public orientation surface for users, developers,
 and agents. It is the right starting point for understanding CVF system shape,
 capabilities, and boundaries. The
+`docs/evidence/public-current-state-snapshot-2026-07-11.md`,
 `docs/evidence/public-current-state-snapshot-2026-07-07.md`,
 `docs/evidence/public-current-state-snapshot-2026-07-05.md`,
 `docs/evidence/public-current-state-snapshot-2026-06-27.md`, and
@@ -325,6 +326,14 @@ private-output release, provider/live proof, legal/use-case workflow, hosted
 release, or production deployment claim. Evidence:
 `docs/evidence/public-current-state-snapshot-2026-07-07.md`
 
+On 2026-07-11, the public front door and catalog were refreshed after the
+bounded system-chain audit and as-built architecture catalog closed. The public
+projection records 22 initial entities, 8 proof-classed edges, and 3 open gaps
+with explicit conditions. It is not an exhaustive inventory or a claim that
+the gaps are implemented. Evidence:
+`docs/evidence/public-current-state-snapshot-2026-07-11.md` and
+`docs/evidence/as-built-system-chain-and-catalog-2026-07-11.md`.
+
 ---
 
 ## What CVF Can Do Today
@@ -403,7 +412,7 @@ Evidence:
 | --- | --- | --- |
 | Governance control plane | proven | `ARCHITECTURE.md`, `GOVERNANCE.md` |
 | Public evaluation claim boundary | active — external-agent calibration for route coverage, static CI, mock/demo data, connector specs, evidence durability, and provider parity boundaries; no new runtime behavior claimed | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md` |
-| Public current state snapshot | active — dated public-safe status pointer for 2026-07-07; records MPI-T5 public checker posture, MPI-T6 parked reopen conditions, MinerU private foundation-chain posture, R50 sealed internal system-chain posture, and public/private boundary discipline; no private provenance export, runtime extraction, memory/RAG production release, retrieval/vectorization release, or use-case/legal workflow claim | `docs/evidence/public-current-state-snapshot-2026-07-07.md`, `docs/evidence/public-current-state-snapshot-2026-07-05.md`, `docs/evidence/public-current-state-snapshot-2026-06-27.md`, `docs/assessments/CVF_PUBLIC_SYNC_MPI_T5_MEMORY_ACCESS_CLAIM_CHECKER_2026-06-22.md` |
+| Public current state snapshot | active — current dated public-safe pointer for 2026-07-11; includes the bounded as-built system chain, 22 initial catalog entities, 3 open gaps, admission discipline, and public/private boundaries; no exhaustive inventory, private provenance export, runtime extraction, memory/RAG production release, or production-readiness claim | `docs/evidence/public-current-state-snapshot-2026-07-11.md`, `docs/evidence/as-built-system-chain-and-catalog-2026-07-11.md` |
 | Public external review snapshot | active — dated public-safe review entry point for external agents; calibrates source order, finding format, live-proof boundary, and private/public separation; no private provenance export or runtime claim | `docs/evidence/public-external-review-snapshot-2026-06-19.md`, `docs/guides/external-agent-review-guide.md` |
 | External Review Hardening public summary | active — public-safe calibration for external review rescan, route/CI posture, safety workflow hardening, dependency/auth boundaries, and evidence durability limitations; no private packet export or production-readiness claim | `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`, `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md` |
 | Governance kernel coherence | audit-equivalent - public reader baseline | `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md`, `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`, `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md` |

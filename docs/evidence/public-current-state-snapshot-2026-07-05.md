@@ -2,9 +2,11 @@
 
 Memory class: FULL_RECORD
 
-Status: PUBLIC_CURRENT_STATE_SNAPSHOT
+Status: SUPERSEDED_BY_2026_07_11
 
 Date: 2026-07-05
+
+Current pointer: `docs/evidence/public-current-state-snapshot-2026-07-11.md`.
 
 ## Purpose
 

@@ -19,6 +19,7 @@ collaboration tools for design, implementation, review, and documentation. See
 | Need | Go to |
 | --- | --- |
 | Understand the system shape | [Architecture](ARCHITECTURE.md) |
+| Review the current as-built system chain and open gaps | [As-Built System Chain And Architecture Catalog](docs/evidence/as-built-system-chain-and-catalog-2026-07-11.md) |
 | Understand CVF capabilities and boundaries | [Technical Product Catalog](docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md) |
 | Install or run locally | [Getting Started](docs/GET_STARTED.md) |
 | Understand governance rules | [Governance](GOVERNANCE.md) |

@@ -5,7 +5,7 @@ import {
     type DurableMemoryReceipt,
     type DurableMemoryRecord,
     type RuntimeMemoryActorRole,
-} from 'cvf-learning-plane-foundation';
+} from 'cvf-learning-plane-foundation/web-runtime';
 
 import type { ExecutionRequest } from '@/lib/ai';
 

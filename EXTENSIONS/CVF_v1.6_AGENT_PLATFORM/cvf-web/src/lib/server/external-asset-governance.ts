@@ -17,7 +17,7 @@ import {
   createProvisionalEvaluationSignalContract,
   createStage1DiagnosticPacketContract,
   type Stage1RuntimeIndicator,
-} from 'cvf-learning-plane-foundation';
+} from 'cvf-learning-plane-foundation/web-runtime';
 import {
   buildAgentContinuityDelegationRecord,
   buildBoundaryFirstGovernanceRecord,

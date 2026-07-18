@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { buildAuditMemoryReceipt, buildRouteAuditMemoryCapture } from './audit-memory-receipt';
 
 afterEach(() => {
-    vi.doUnmock('cvf-learning-plane-foundation');
+    vi.doUnmock('cvf-learning-plane-foundation/web-runtime');
     vi.doUnmock('../../../../CVF_GUARD_CONTRACT/src/contracts/memory-continuity.contract');
     vi.resetModules();
 });
@@ -223,7 +223,7 @@ describe('audit-memory-receipt', () => {
         });
 
         vi.resetModules();
-        vi.doMock('cvf-learning-plane-foundation', () => ({
+        vi.doMock('cvf-learning-plane-foundation/web-runtime', () => ({
             createControlledMemoryGatewayContract: () => ({ capture }),
         }));
 
@@ -246,7 +246,7 @@ describe('audit-memory-receipt', () => {
         const capture = vi.fn();
 
         vi.resetModules();
-        vi.doMock('cvf-learning-plane-foundation', () => ({
+        vi.doMock('cvf-learning-plane-foundation/web-runtime', () => ({
             createControlledMemoryGatewayContract: () => ({ capture }),
         }));
         vi.doMock('../../../../CVF_GUARD_CONTRACT/src/contracts/memory-continuity.contract', () => ({

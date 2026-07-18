@@ -2,7 +2,7 @@ import type { EnforcementResult } from '@/lib/enforcement';
 import type { LaneStatus } from '@/lib/provider-lane-status';
 import type { WorkflowCompositionSummary } from '@/lib/workflow-composition';
 import type { AifMemoryReinjectionReceipt, AifMemoryReinjectionRequest } from '@/lib/aif-memory-reinjection';
-import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation';
+import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation/web-runtime';
 import type { ExecutionDiagnostic } from '@/lib/execution-diagnostics';
 
 // AI Provider Types and Interfaces

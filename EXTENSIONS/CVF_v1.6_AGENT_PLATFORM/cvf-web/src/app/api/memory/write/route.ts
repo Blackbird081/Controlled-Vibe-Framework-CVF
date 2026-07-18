@@ -8,7 +8,7 @@ import {
   type DurableMemoryTier,
   type RuntimeMemoryActorRole,
   type RuntimeMemorySensitivity,
-} from 'cvf-learning-plane-foundation';
+} from 'cvf-learning-plane-foundation/web-runtime';
 
 import { verifySessionCookie } from '@/lib/middleware-auth';
 import { verifyServiceTokenRequest } from '@/lib/service-token-auth';

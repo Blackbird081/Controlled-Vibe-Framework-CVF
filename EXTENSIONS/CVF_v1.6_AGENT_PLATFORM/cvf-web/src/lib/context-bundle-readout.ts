@@ -3,7 +3,7 @@ import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 import type { AifMemoryReinjectionReceipt } from '@/lib/aif-memory-reinjection';
 import type { KnowledgeQueryResult } from '@/lib/knowledge-retrieval';
 import type { RouteRequestContextReadout } from '@/lib/route-request-context-readout';
-import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation';
+import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation/web-runtime';
 
 export const CONTEXT_BUNDLE_READOUT_VERSION = 'cvf.mlw2.contextBundleReadout.rt1.v1';
 

@@ -3,7 +3,7 @@ import {
   type ContextTaskClass,
   getContextBudget,
   resolveTaskClass,
-} from 'cvf-learning-plane-foundation';
+} from 'cvf-learning-plane-foundation/web-runtime';
 
 export const CONTEXT_BUDGET_READOUT_VERSION =
   "cvf.contextBudgetReadout.cbp1.v1";

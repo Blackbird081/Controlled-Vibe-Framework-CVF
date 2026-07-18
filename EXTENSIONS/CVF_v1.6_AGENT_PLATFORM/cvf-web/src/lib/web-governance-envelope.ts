@@ -1,7 +1,7 @@
 import type { GovernanceEvidenceReceipt, GovernanceTraceEntry, GovernanceTraceStage, RuntimeTelemetryReceipt } from '@/lib/ai';
 import { generatePolicySnapshotId } from '@/lib/policy-snapshot-registry';
 import type { AifMemoryReinjectionReceipt } from '@/lib/aif-memory-reinjection';
-import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation';
+import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation/web-runtime';
 import { buildReceiptIntegrityAnchor } from '@/lib/receipt-integrity-anchor';
 
 /**

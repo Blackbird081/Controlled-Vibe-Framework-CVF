@@ -6,7 +6,8 @@
   "types": "src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./memory-runtime": "./src/memory-runtime.ts"
+    "./memory-runtime": "./src/memory-runtime.ts",
+    "./web-runtime": "./src/web-runtime.ts"
   },
   "files": [
     "README.md",
@@ -33,7 +34,6 @@
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.0.0",
     "@vitest/coverage-v8": "^1.6.1",
-    "typescript": "^5.4.0",
     "vitest": "^1.6.1"
   },
   "exportReadiness": {
@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^12.10.0",
-    "jsdom": "^29.1.1"
+    "jsdom": "^29.1.1",
+    "typescript": "^5.4.0"
   }
 }

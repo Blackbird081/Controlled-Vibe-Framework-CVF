@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "cvf-truth-kernel": ["../../CVF_TRUTH_KERNEL/src/index.ts"]
     }
   },
   "include": [

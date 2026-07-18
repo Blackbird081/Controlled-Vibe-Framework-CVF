@@ -1,0 +1,32 @@
+{
+  "stableId": "cvf.asc.module.governance_l5_owner.v1",
+  "entityType": "MODULE",
+  "name": "Governance L5 Owner",
+  "authorityClass": "ACTIVE_GOVERNED_STANDARD",
+  "maturity": "ACTIVE",
+  "ownerPaths": [
+    "governance/"
+  ],
+  "planeMembership": [
+    "cvf.asc.plane.doctrine_to_contract.v1"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "docs/reference/system_chain/CVF_DOCTRINE_TO_CONTRACT_ROUTE_MAP.md",
+      "lineOrSection": "cited row",
+      "evidenceRole": "module owner/status evidence"
+    }
+  ],
+  "claimBoundary": "Active-tree governance-infrastructure owner for doctrine L5 (subfolders compat/, contracts/, registries/, schemas/, skill-library/, toolkit/).",
+  "freshnessInputs": [
+    "governance/"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_ASC_T0_SOURCE_SCHEMA_AND_RECONCILIATION_CONTRACT_WORKER_RETURN_2026-07-11.md"
+  },
+  "boundaryCaveat": "None of the four doctrine-named folders (/agents, /policy, /audit, /identity) exist verbatim in the active tree.",
+  "priorDisposition": ""
+}

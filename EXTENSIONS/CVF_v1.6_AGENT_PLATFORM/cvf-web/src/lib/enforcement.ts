@@ -13,6 +13,7 @@ import type {
     CVFQualityResult,
     CVFEnforcementResult,
 } from '@/types/governance-engine';
+import type { MemoryReadoutEligibilityResult } from 'cvf-learning-plane-foundation/memory-runtime';
 
 export type EnforcementStatus = 'ALLOW' | 'CLARIFY' | 'BLOCK' | 'NEEDS_APPROVAL';
 
@@ -58,6 +59,7 @@ export interface EnforcementInput {
     artifactId?: string;
     cvfPhase?: string;
     cvfRiskLevel?: string;
+    memoryEligibility?: MemoryReadoutEligibilityResult;
 }
 
 export interface EnforcementResult {
@@ -111,6 +113,12 @@ function evaluateSkillPreflight(input: EnforcementInput): SkillPreflightStatus {
     };
 }
 
+function resolveMemoryEligibilityBlockReason(eligibility?: MemoryReadoutEligibilityResult): string | undefined {
+    if (eligibility?.state === 'REVOKED') return 'memory_access_revoked';
+    if (eligibility?.state === 'READOUT_DENIED') return 'memory_readout_denied';
+    return undefined;
+}
+
 /**
  * Synchronous client-side enforcement — original logic.
  * Always available, no network dependency.
@@ -119,6 +127,12 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
     const reasons: string[] = [];
     let status: EnforcementStatus = 'ALLOW';
     const skillPreflight = evaluateSkillPreflight(input);
+    const memoryBlockReason = resolveMemoryEligibilityBlockReason(input.memoryEligibility);
+
+    if (memoryBlockReason) {
+        status = 'BLOCK';
+        reasons.push(memoryBlockReason);
+    }
 
     if (!input.budgetOk) {
         status = 'BLOCK';
@@ -220,6 +234,10 @@ export async function evaluateEnforcementAsync(
     input: EnforcementInput,
 ): Promise<EnforcementResult> {
     const skillPreflight = evaluateSkillPreflight(input);
+    const memoryBlockReason = resolveMemoryEligibilityBlockReason(input.memoryEligibility);
+    if (memoryBlockReason) {
+        return evaluateEnforcement(input);
+    }
     if (skillPreflight.required && !skillPreflight.declared) {
         return {
             status: 'BLOCK',

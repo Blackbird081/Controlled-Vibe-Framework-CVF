@@ -1,0 +1,26 @@
+{
+  "receiptVersion": "governanceEvidenceReceipt.v1",
+  "requiredFields": [
+    "receiptId",
+    "evidenceMode",
+    "routeId",
+    "generatedAt"
+  ],
+  "decisionValues": [
+    "ALLOW",
+    "BLOCK",
+    "NEEDS_APPROVAL"
+  ],
+  "evidenceModeValues": [
+    "live",
+    "mock",
+    "static"
+  ],
+  "optionalFields": [
+    "provider",
+    "model",
+    "riskLevel",
+    "policySnapshotId",
+    "validationHint"
+  ]
+}

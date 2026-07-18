@@ -1,0 +1,107 @@
+{
+  "acceptanceEvidence": "AGSK-R2 review artifact, AGSK-R3 package-root worker return, AGSK-R5 eligibility audit, SCPL-T2 selection profile coverage, ASSF certified metadata admission checker, ASSF anatomy checker, generated skill-index drift check, ASCP-P4-P6 production scale-up dry-run matrix, truth packet check, and representative live E2E proof",
+  "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+  "adapterEvidence": "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+  "approvalState": "APPROVED",
+  "authorityCeiling": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+  "candidateState": "ACTIVE",
+  "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-documentation-adrs/SKILL.md",
+  "capabilityBoundary": "package root ACTIVE at docs/reference/agent_system_skills/packages/cvf-governance-documentation-adrs/ for production-scoped receipt-backed package execution; production executor and CLI/MCP wrapper are implemented; no automatic invocation, filesystem/git/browser action authority, provider router mutation, public-sync, or production action beyond the active governed work order",
+  "certificationState": "CERTIFIED",
+  "compositionOrder": 19,
+  "conflicts": [],
+  "contextProfile": "agent-skills-source-mirror-candidate:documentation-and-adrs",
+  "dependencies": [],
+  "deprecation": "none",
+  "doNotUseWhen": "Do not use as autonomous runtime authority, provider/live proof by itself, public-sync proof, merge approval, commit permission, or permission to bypass active CVF work-order, source-verification, session-sync, or commit-steward gates.",
+  "executionConstraints": "ACTIVE production package generated from AGSK-R2/R3 evidence, SCPL-T2 selection guidance, and ASCP-P4-P6 scale-up; production executor may request receipt-backed package use only through CVF runtime adapters; no filesystem, git, browser, provider routing, public-sync, or action authority is granted by package loading alone",
+  "externalCliMcpDisposition": "IMPLEMENTED",
+  "externalMutationBoundary": "external CLI/MCP wrapper may return receipt-backed package execution envelopes only; no external mutation, daemon behavior, public API, provider routing, public-sync, commit, or merge authority is permitted",
+  "inputs": [
+    "operator request or governed task context",
+    "source mirror skill file .private_reference/source_mirrors/addyosmani__agent-skills/skills/documentation-and-adrs/SKILL.md",
+    "active CVF authority and allowed-scope boundaries"
+  ],
+  "internalAgentDisposition": "IMPLEMENTED",
+  "legacyRows": [],
+  "license": "Apache-2.0 upstream; CVF_PRIVATE_GOVERNED adaptation metadata",
+  "loaderBoundary": "loading this metadata or package body never grants authority; production execution requires ACTIVE source state, a skill usage receipt, activation policy receipt, package use-proof receipt, and production execution receipt",
+  "name": "CVF Governance Documentation And ADRs",
+  "originLane": "AGSK-R2",
+  "osConstraints": "none for metadata; future package bodies must record platform constraints explicitly",
+  "outputs": [
+    "bounded package guidance after explicit production executor request",
+    "risk trigger notes",
+    "recommended CVF owner-surface routing",
+    "receipt-backed source-truth trace for package use"
+  ],
+  "owner": "CVF ASSF registry and external absorption governance surface",
+  "permissions": "read this metadata, cited CVF-governed artifacts, and the pinned local source mirror only",
+  "phases": [
+    "INTAKE",
+    "DISPATCH_AUTHORING",
+    "WORKER_EXECUTION",
+    "REVIEWER_CLOSURE"
+  ],
+  "platformCompatibility": "cross-platform metadata; upstream skill content may contain tool-specific assumptions that require future normalization before activation",
+  "purpose": "Guide decision records and durable documentation so future agents can understand why a governed change exists and how it should be used.",
+  "registryOrder": 19,
+  "resolverBehavior": "metadata-only until explicitly selected; resolver may return identity, trigger, risk, source, and activation-readiness fields only, and must not treat ACTIVE package metadata as automatic invocation or action authority",
+  "retirement": "none",
+  "reviewArtifacts": [
+    "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+    "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+    "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+    "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+  ],
+  "riskCeiling": "R0",
+  "riskProfile": "R0",
+  "riskTriggers": [
+    "decision without rationale",
+    "public API change",
+    "future maintainer context missing",
+    "stale docs risk"
+  ],
+  "roles": [
+    "dispatcher",
+    "worker",
+    "reviewer"
+  ],
+  "rollback": "restore this registry entry to the pre-ASCP-P4-P6 PROPOSED state, restore the paired package root metadata, remove the paired truth packet, then regenerate docs/reference/agent_system_skills/generated/skill-index.json and docs/reference/agent_system_skills/truth/generated/skill-truth-index.json",
+  "safeStop": "if ACTIVE source checks, receipt checks, provider diagnostics, or governed work-order authority are missing, stop and return a denied execution packet with source-truth trace",
+  "shellAssumptions": "no shell execution required for metadata-only candidate",
+  "sideEffects": "none from metadata loading; any future use that edits files, runs tools, installs dependencies, opens browsers, uses providers, or affects production requires separate authorization",
+  "skillId": "cvf-governance-documentation-adrs",
+  "sourceArtifacts": [
+    ".private_reference/source_mirrors/addyosmani__agent-skills/skills/documentation-and-adrs/SKILL.md",
+    ".private_reference/source_mirrors/addyosmani__agent-skills/README.md",
+    ".private_reference/source_mirrors/addyosmani__agent-skills/LICENSE",
+    "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+    "docs/baselines/CVF_GC018_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_2026-06-30.md",
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_2026-06-30.md",
+    "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+  ],
+  "status": "ACTIVE",
+  "successor": "none",
+  "surfaces": [
+    "docs/reference/agent_system_skills/registry",
+    "docs/reference/external_agent_review",
+    "docs/reviews"
+  ],
+  "taskClasses": [
+    "documentation-authoring",
+    "decision-recording",
+    "architecture-review"
+  ],
+  "triggerPatterns": [
+    "adr",
+    "architecture decision",
+    "documentation update",
+    "decision record",
+    "write docs"
+  ],
+  "uatState": "PASSED",
+  "useWhen": "Use when a governed CVF task matches the upstream `documentation-and-adrs` skill pattern and needs CVF-owned production-scoped package guidance after explicit runtime package selection and receipt-backed execution.",
+  "version": "0.1.0"
+}

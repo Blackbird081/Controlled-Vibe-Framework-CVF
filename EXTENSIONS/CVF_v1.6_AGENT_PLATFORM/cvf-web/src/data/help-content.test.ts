@@ -6,15 +6,15 @@ const LOCALES: Lang[] = ['vi', 'en'];
 
 // Indices used by help/page.tsx supportCards
 const MODAL_CARD_INDICES = [0, 2, 5] as const; // Agent Chat, Self-UAT, Multi-Agent
-const LINK_CARD_INDICES = [6] as const;         // Toolkit Guide
+const LINK_CARD_INDICES = [6, 7, 8] as const;   // Toolkit Guide, SOT3 Evidence, MAO Durable Runs
 
 describe('HELP_CONTENT', () => {
     for (const lang of LOCALES) {
         describe(`locale: ${lang}`, () => {
             const content = HELP_CONTENT[lang];
 
-            it('has a features array with at least 7 entries', () => {
-                expect(content.features.length).toBeGreaterThanOrEqual(7);
+            it('has a features array with at least 9 entries', () => {
+                expect(content.features.length).toBeGreaterThanOrEqual(9);
             });
 
             describe('modal cards (features[0,2,5]) use event, not link', () => {
@@ -34,10 +34,20 @@ describe('HELP_CONTENT', () => {
                 });
             });
 
-            describe('page-nav cards (features[6]) use link, not event', () => {
+            describe('page-nav cards (features[6,7,8]) use link, not event', () => {
                 it('Toolkit Guide (features[6]) has link /help/toolkit', () => {
                     expect(content.features[6].link).toBe('/help/toolkit');
                     expect(content.features[6].event).toBeUndefined();
+                });
+
+                it('SOT3 Evidence (features[7]) has link /governance/sot3-evidence', () => {
+                    expect(content.features[7].link).toBe('/governance/sot3-evidence');
+                    expect(content.features[7].event).toBeUndefined();
+                });
+
+                it('MAO Durable Runs (features[8]) has link /governance/mao-runs', () => {
+                    expect(content.features[8].link).toBe('/governance/mao-runs');
+                    expect(content.features[8].event).toBeUndefined();
                 });
             });
 

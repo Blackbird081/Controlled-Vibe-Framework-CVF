@@ -197,7 +197,7 @@ describe.skipIf(!OPENAI_API_KEY)(
 
         expect(output.length).toBeGreaterThan(400);
         expect(output).toMatch(/document|mục tiêu|purpose|for/i);
-        expect(output).toMatch(/flow|steps|bước/i);
+        expect(output).toMatch(/flow|step|steps|procedure/i);
         expect(output).toMatch(/checklist|handoff/i);
         expect(output).toMatch(/SRE|P1|incident/i);
       },

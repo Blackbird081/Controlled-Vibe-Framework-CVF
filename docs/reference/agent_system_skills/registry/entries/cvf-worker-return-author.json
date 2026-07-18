@@ -1,0 +1,83 @@
+{
+  "registryOrder": 2,
+  "skillId": "cvf-worker-return-author",
+  "name": "CVF Worker Return Author",
+  "version": "0.1.0",
+  "owner": "CVF governance docs surface",
+  "status": "CANDIDATE",
+  "canonicalRoot": "docs/reference/agent_system_skills/registry/entries/cvf-worker-return-author.json",
+  "originLane": "ASSF-T2",
+  "sourceArtifacts": [
+    "docs/baselines/CVF_GC018_ASSF_T2_GENERATED_INDEX_AND_PROGRESSIVE_RESOLVER_2026-06-23.md",
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_ASSF_T2_GENERATED_INDEX_AND_PROGRESSIVE_RESOLVER_FOR_WORKER_2026-06-23.md"
+  ],
+  "legacyRows": [],
+  "license": "CVF_PRIVATE_GOVERNED",
+  "reviewArtifacts": [],
+  "purpose": "Guide a no-commit worker in producing a properly shaped worker-return packet after completing all in-scope deliverables, so the reviewer/closer can validate and commit without rework.",
+  "triggerPatterns": [
+    "worker return",
+    "no-commit return",
+    "COMPLETE_PENDING_REVIEW",
+    "worker packet",
+    "worker return packet shape"
+  ],
+  "taskClasses": [
+    "worker-execution",
+    "worker-return"
+  ],
+  "useWhen": "A worker has completed all required in-scope deliverables and must produce a return packet for reviewer acceptance before any commit.",
+  "doNotUseWhen": "Implementation is not yet complete; stop conditions require BLOCKED_WITH_REASON; reviewer closure or commit is already in progress.",
+  "riskTriggers": [],
+  "roles": [
+    "worker"
+  ],
+  "phases": [
+    "WORKER_EXECUTION",
+    "WORKER_RETURN"
+  ],
+  "surfaces": [
+    "docs/reviews"
+  ],
+  "riskCeiling": "R0",
+  "contextProfile": "governance-docs-only",
+  "inputs": [
+    "completed deliverables list",
+    "execution base HEAD SHA",
+    "git status output",
+    "gate receipts",
+    "pre-implementation autorun receipt"
+  ],
+  "outputs": [
+    "worker return markdown packet conforming to the work order's return packet shape contract under docs/reviews/"
+  ],
+  "executionConstraints": "read-only access to worker outputs; no commits; no session-sync edits; no front-door or handoff edits",
+  "acceptanceEvidence": "run_worker_return_fast_gate.py PASS; reviewer-fast gate PASS",
+  "riskProfile": "R0",
+  "authorityCeiling": "read-only authoring of a single markdown review artifact under docs/reviews/",
+  "sideEffects": "creates one markdown file under docs/reviews/; no git mutation",
+  "permissions": "create docs/reviews/<worker-return-filename>.md",
+  "rollback": "delete the worker return file if the reviewer rejects it",
+  "safeStop": "mark Status: BLOCKED_WITH_REASON in the return packet and stop; do not commit",
+  "candidateState": "CANDIDATE",
+  "approvalState": "AWAITING_REVIEW",
+  "uatState": "NOT_STARTED",
+  "certificationState": "NOT_STARTED",
+  "deprecation": "none",
+  "successor": "none",
+  "retirement": "none",
+  "dependencies": [],
+  "conflicts": [],
+  "compositionOrder": 2,
+  "capabilityBoundary": "no commit, no session-sync, no provider call, no runtime activation, no external-agent adapter",
+  "internalAgentDisposition": "CANDIDATE",
+  "resolverBehavior": "metadata-only; resolver returns identity and selector fields; does not open any SKILL.md or instruction body",
+  "loaderBoundary": "loading this metadata never grants authority to commit, activate, execute, or expand external-agent scope",
+  "externalCliMcpDisposition": "DEFERRED_WITH_REASON",
+  "adapterContract": "N/A with reason: external CLI/MCP adapter not yet authored; separate ASSF adapter work order required",
+  "adapterEvidence": "N/A with reason: no adapter implemented in ASSF-T2",
+  "externalMutationBoundary": "no external mutation permitted until a separate ASSF adapter work order is accepted",
+  "platformCompatibility": "cross-platform",
+  "shellAssumptions": "no shell execution required",
+  "osConstraints": "none"
+}

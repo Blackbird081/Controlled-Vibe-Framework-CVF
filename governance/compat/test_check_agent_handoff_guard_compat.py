@@ -31,6 +31,7 @@ class AgentHandoffGuardCompatTests(unittest.TestCase):
             "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
             "docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md",
             "governance/compat/run_local_governance_hook_chain.py",
+            "CVF_SESSION/ACTIVE_SESSION_STATE.json",
             "AGENT_HANDOFF.md",
         ]
         for rel in required_paths:
@@ -65,6 +66,10 @@ class AgentHandoffGuardCompatTests(unittest.TestCase):
             "governance/compat/check_agent_handoff_guard_compat.py\n",
             encoding="utf-8",
         )
+        (self.repo_root / "CVF_SESSION/ACTIVE_SESSION_STATE.json").write_text(
+            '{ "activeHandoff": "AGENT_HANDOFF.md" }\n',
+            encoding="utf-8",
+        )
 
     def tearDown(self) -> None:
         self.temp_dir.cleanup()
@@ -81,6 +86,7 @@ class AgentHandoffGuardCompatTests(unittest.TestCase):
             report = MODULE._classify([])
 
         self.assertTrue(report["compliant"])
+        self.assertEqual(report["currentHandoffPath"], "AGENT_HANDOFF.md")
         self.assertEqual(report["dynamicViolationCount"], 0)
 
     def test_report_fails_when_tracked_remote_branch_is_missing(self) -> None:

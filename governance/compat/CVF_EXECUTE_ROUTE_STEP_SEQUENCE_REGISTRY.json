@@ -1,0 +1,74 @@
+[
+  {
+    "order": 1,
+    "stepName": "resolveExecutionCVFRole",
+    "callPattern": "resolveExecutionCVFRole(",
+    "selector": "first",
+    "confirmedLine": 336,
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "order": 2,
+    "stepName": "evaluateExecutionActorRoleGate",
+    "callPattern": "evaluateExecutionActorRoleGate(",
+    "selector": "first",
+    "confirmedLine": 348,
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "order": 3,
+    "stepName": "checkRoleOutputPermission",
+    "callPattern": "checkRoleOutputPermission(",
+    "selector": "first",
+    "confirmedLine": 350,
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "order": 4,
+    "stepName": "evaluateEnforcement",
+    "callPattern": "evaluateEnforcement(",
+    "selector": "first",
+    "confirmedLine": 375,
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "order": 5,
+    "stepName": "routeWebProvider",
+    "callPattern": "routeWebProvider(",
+    "selector": "first",
+    "confirmedLine": 564,
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "order": 6,
+    "stepName": "buildEvidenceReceipt",
+    "callPattern": "buildEvidenceReceipt(",
+    "selector": "last",
+    "confirmedLine": 858,
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "order": 7,
+    "stepName": "buildRouteAuditMemoryCapture",
+    "callPattern": "buildRouteAuditMemoryCapture(",
+    "selector": "first",
+    "confirmedLine": 927,
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  },
+  {
+    "order": 8,
+    "stepName": "appendAuditEvent_final",
+    "callPattern": "appendAuditEvent(",
+    "selector": "last",
+    "confirmedLine": 944,
+    "addedAt": "2026-05-19",
+    "addedBy": "Worker"
+  }
+]

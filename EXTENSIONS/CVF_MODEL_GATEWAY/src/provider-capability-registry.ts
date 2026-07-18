@@ -1,8 +1,14 @@
 import type {
   ProviderCapabilityFile,
+  ProviderCapabilityModel,
   ProviderCapabilityOwnerRef,
   ProviderMethodName,
 } from "./provider-method-contract";
+import {
+  ALIBABA_DASHSCOPE_INTL_ENDPOINT,
+  ALIBABA_FREE_QUOTA_LEDGER_REFERENCE,
+  ALIBABA_FREE_QUOTA_MODELS,
+} from "./alibaba-free-quota-model-ledger";
 
 export const REVIEW_CVF_PROVIDER_METHODS = [
   "complete",
@@ -18,6 +24,27 @@ export const REVIEW_CVF_PROVIDER_METHODS = [
 export const LEGACY_PROVIDER_METHOD_ALIASES = {
   chat: "complete",
 } as const satisfies Partial<Record<ProviderMethodName, ProviderMethodName>>;
+
+const ALIBABA_FREE_QUOTA_CAPABILITY_MODELS: ProviderCapabilityModel[] = ALIBABA_FREE_QUOTA_MODELS.map(
+  (entry) => ({
+    modelId: entry.modelId,
+    supportedMethods: ["complete", "chat"] as const,
+    defaultMethod: "complete",
+    metadata: {
+      quotaSource: "operator_alibaba_model_studio_free_quota_screenshot",
+      freeQuotaLedgerRef: ALIBABA_FREE_QUOTA_LEDGER_REFERENCE,
+      expirationDate: entry.expirationDate,
+      freeQuotaRemainingAtCapture: entry.freeQuotaRemainingAtCapture,
+      freeQuotaTotalAtCapture: entry.freeQuotaTotalAtCapture,
+      statusAtCapture: entry.statusAtCapture,
+      diagnosticRerunResult:
+        "diagnosticRerunResult" in entry ? entry.diagnosticRerunResult : null,
+      defaultEndpointHost: new URL(ALIBABA_DASHSCOPE_INTL_ENDPOINT).host,
+      claimBoundary:
+        "bounded free-quota routing candidate only; no provider parity or ranking claim",
+    },
+  }),
+);
 
 export const PROVIDER_CAPABILITY_OWNER_REFS = [
   {
@@ -67,6 +94,7 @@ export const PROVIDER_CAPABILITY_REGISTRY = [
         supportedMethods: ["complete", "chat", "reasoning"],
         defaultMethod: "complete",
       },
+      ...ALIBABA_FREE_QUOTA_CAPABILITY_MODELS,
     ],
   },
   {

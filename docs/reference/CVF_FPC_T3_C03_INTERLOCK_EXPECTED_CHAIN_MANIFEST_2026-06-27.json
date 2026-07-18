@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "0.1.0",
+  "manifestId": "cvf.fpc.t3.c03.interlockExpectedChainManifest.v1",
+  "status": "ACTIVE_REFERENCE",
+  "date": "2026-06-27",
+  "docType": "expected_chain_manifest",
+  "owner": "Codex",
+  "sourceAuthority": [
+    "docs/reference/CVF_FOUNDATION_PLANE_SYSTEM_CHAIN_GAP_PRIORITY_GUIDANCE_2026-06-27.md",
+    "docs/reference/CVF_FPC_T3_FOUNDATION_CHECKER_TEMPLATE_COVERAGE_PLAN_2026-06-13.md",
+    "docs/reference/CVF_FPC_T2_SYSTEM_LOOP_INTERLOCK_EXPANSION_DECISION_MATRIX_2026-06-13.md",
+    "docs/reviews/CVF_FPC_T2_SYSTEM_LOOP_INTERLOCK_EXPANSION_DECISION_COMPLETION_2026-06-13.md",
+    "docs/reviews/CVF_FPC_T3_C04_C01_EPISTEMIC_WORK_ORDER_AND_PROCESS_PACKET_GUARD_COMPLETION_2026-06-13.md",
+    "docs/reference/CVF_SYSTEM_LOOP_INTERLOCK_STANDARD_2026-06-02.md",
+    "docs/reference/CVF_SYSTEM_LOOP_INTERLOCK_REGISTRY_2026-06-02.json",
+    "governance/compat/check_system_loop_interlock.py"
+  ],
+  "comparisonTarget": "docs/reference/CVF_SYSTEM_LOOP_INTERLOCK_REGISTRY_2026-06-02.json",
+  "futureCheckerTarget": "governance/compat/check_system_loop_interlock.py",
+  "futureCheckerMode": "expected-chain manifest comparison",
+  "expectedChains": [
+    {
+      "candidateId": "FPC-T2-C01",
+      "expectedRegistryId": "governance-hook-chain-to-learning-intake",
+      "sourceDisposition": "ADD_INTERLOCK_ENTRY",
+      "currentRegistryDisposition": "PRESENT_ACTIVE",
+      "expectedStatus": "ACTIVE",
+      "expectedAutomationLevel": "STRUCTURAL_GUARDED",
+      "sourcePrerequisite": "FPC-T2 accepted C01 as proposal-only ADD_INTERLOCK_ENTRY; FPC-SCG-T1 registered the active structural interlock.",
+      "futureCheckerDisposition": "ELIGIBLE_FOR_EXPECTED_CHAIN_CHECK",
+      "claimBoundary": "Hook-chain findings are structurally routed to learning intake; this does not prove semantic correctness, autonomous mutation, runtime behavior, or public readiness."
+    },
+    {
+      "candidateId": "FPC-T2-C02",
+      "expectedRegistryId": "memory-consolidation-to-learning-signal",
+      "sourceDisposition": "ADD_INTERLOCK_ENTRY",
+      "currentRegistryDisposition": "PRESENT_ACTIVE",
+      "expectedStatus": "ACTIVE",
+      "expectedAutomationLevel": "STRUCTURAL_GUARDED",
+      "sourcePrerequisite": "FPC-T2 accepted C02 as proposal-only ADD_INTERLOCK_ENTRY; FPC-SCG-T1 registered the active structural interlock; FPC-SCG-T2 closed rawMemoryReleased bounded coverage.",
+      "futureCheckerDisposition": "ELIGIBLE_FOR_EXPECTED_CHAIN_CHECK",
+      "claimBoundary": "Memory consolidation outputs are proposal-only learning signals; this does not prove live learning promotion, autonomous memory mutation, Redis behavior, or public readiness."
+    },
+    {
+      "candidateId": "FPC-T2-C03",
+      "expectedRegistryId": "memory-knowledge-graph-to-retrieval",
+      "sourceDisposition": "ADD_INTERLOCK_ENTRY",
+      "currentRegistryDisposition": "PRESENT_ACTIVE",
+      "expectedStatus": "ACTIVE",
+      "expectedAutomationLevel": "STRUCTURAL_GUARDED",
+      "sourcePrerequisite": "FPC-T2 accepted C03 as proposal-only ADD_INTERLOCK_ENTRY; FPC-SCG-T1 registered the active structural interlock.",
+      "futureCheckerDisposition": "ELIGIBLE_FOR_EXPECTED_CHAIN_CHECK",
+      "claimBoundary": "Knowledge-graph output is summary-only retrieval evidence; this does not prove semantic retrieval correctness, live storage behavior, autonomous mutation, or public readiness."
+    },
+    {
+      "candidateId": "FPC-T2-C04",
+      "expectedRegistryId": "dir-dice-to-downstream-adapter-eligibility",
+      "sourceDisposition": "ADD_INTERLOCK_ENTRY",
+      "currentRegistryDisposition": "PRESENT_ACTIVE",
+      "expectedStatus": "ACTIVE",
+      "expectedAutomationLevel": "STRUCTURAL_GUARDED",
+      "sourcePrerequisite": "FPC-T2 accepted C04 as proposal-only ADD_INTERLOCK_ENTRY; FPC-SCG-T1 registered the active structural interlock; FPC-SCG-T3 closed DICE machine-candidate bounded coverage.",
+      "futureCheckerDisposition": "ELIGIBLE_FOR_EXPECTED_CHAIN_CHECK",
+      "claimBoundary": "DIR/DICE output is downstream eligibility evidence only; this does not authorize Document Translator, Policy_Local, OCR/provider execution, adapter mutation, runtime dispatch, or public readiness."
+    },
+    {
+      "candidateId": "FPC-T2-C05",
+      "expectedRegistryId": "epistemic-process-to-claim-update",
+      "sourceDisposition": "MACHINE_CHECK_FIRST_THEN_REGISTRY_ELIGIBLE",
+      "currentRegistryDisposition": "PRESENT_ACTIVE",
+      "expectedStatus": "ACTIVE",
+      "expectedAutomationLevel": "STRUCTURAL_GUARDED",
+      "sourcePrerequisite": "FPC-T2 required FPC-T3-C01 first; FPC-T3-C04+C01 closed the epistemic process checker and FPC-SCG-T4 wired it into the worker-return fast gate.",
+      "futureCheckerDisposition": "ELIGIBLE_FOR_EXPECTED_CHAIN_CHECK",
+      "claimBoundary": "Epistemic process sections are structurally routed to claim update and reviewer decision; this does not prove semantic truth, reasoning quality, provider behavior, runtime governance behavior, or public readiness."
+    }
+  ],
+  "futureCheckerMinimumRule": "A future checker extension may compare expectedChains[].expectedRegistryId against registry connections[].id and require matching expectedStatus for every ELIGIBLE_FOR_EXPECTED_CHAIN_CHECK row. It must not infer missing planes outside this manifest without a later source-verified manifest update.",
+  "parkedBoundaries": [
+    "runtime/MCP/CLI/IDE bridge implementation",
+    "provider/live proof",
+    "public-sync",
+    "downstream use-case adapter work",
+    "generated session state mutation in material commit",
+    "registry mutation in this tranche",
+    "checker implementation in this tranche",
+    "MPI-T6 runtime work"
+  ],
+  "claimBoundary": "This manifest is a source-verified expected-chain list for a future FPC-T3-C03 checker extension. It does not mutate the system-loop registry, implement checker behavior, prove runtime/provider behavior, authorize public-sync, or certify any plane as complete beyond the cited source artifacts.",
+  "publicExportDisposition": "DEFERRED_PRIVATE_ONLY",
+  "rawMemoryReleased": false
+}

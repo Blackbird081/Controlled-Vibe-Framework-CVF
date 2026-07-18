@@ -359,6 +359,7 @@ def build_report(
     base: str | None = None,
     head: str | None = None,
     changed_paths: dict[str, list[str]] | None = None,
+    scan_mode: str = "auto",
 ) -> dict[str, Any]:
     timestamp = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     violations: list[dict[str, str]] = []
@@ -436,8 +437,23 @@ def build_report(
                 }
             )
 
-    retention_affecting = _retention_affecting_changes_present(changed_paths, resolved_base, resolved_head)
-    dynamic_scan_mode = "full" if retention_affecting else "skipped_no_retention_affecting_changes"
+    if scan_mode not in {"auto", "fast", "full"}:
+        raise ValueError(f"Unsupported scan_mode: {scan_mode}")
+
+    detected_retention_affecting = _retention_affecting_changes_present(
+        changed_paths,
+        resolved_base,
+        resolved_head,
+    )
+    retention_affecting = scan_mode == "full" or (
+        scan_mode == "auto" and detected_retention_affecting
+    )
+    if scan_mode == "fast":
+        dynamic_scan_mode = "skipped_fast_hook_mode"
+    elif retention_affecting:
+        dynamic_scan_mode = "full" if scan_mode == "auto" else "full_forced"
+    else:
+        dynamic_scan_mode = "skipped_no_retention_affecting_changes"
     dynamic_counts: dict[str, int] | dict[str, str]
     missing_registry_paths: list[str] = []
     if retention_affecting:
@@ -463,7 +479,9 @@ def build_report(
         "range": f"{resolved_base}..{resolved_head}",
         "baseSource": base_source,
         "changedFileCount": len(changed_paths),
+        "scanMode": scan_mode,
         "retentionAffectingChanges": retention_affecting,
+        "detectedRetentionAffectingChanges": detected_retention_affecting,
         "dynamicScanMode": dynamic_scan_mode,
         "requiredClassIds": sorted(REQUIRED_CLASS_IDS),
         "registeredRetainEvidenceCount": len(normalized_retain_paths),
@@ -479,10 +497,19 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Validate the CVF review retention registry.")
     parser.add_argument("--base", default=None, help="Git base ref for change-scope detection.")
     parser.add_argument("--head", default=None, help="Git head ref for change-scope detection.")
+    parser.add_argument(
+        "--scan-mode",
+        choices=("auto", "fast", "full"),
+        default="auto",
+        help=(
+            "Dynamic retention scan mode. Use fast for hook chains; use full for "
+            "explicit registry re-derivation or archive/recovery audits."
+        ),
+    )
     parser.add_argument("--enforce", action="store_true", help="Return non-zero exit code on violations.")
     args = parser.parse_args()
 
-    report = build_report(base=args.base, head=args.head)
+    report = build_report(base=args.base, head=args.head, scan_mode=args.scan_mode)
     print(json.dumps(report, indent=2))
     if args.enforce and not report["compliant"]:
         return 1

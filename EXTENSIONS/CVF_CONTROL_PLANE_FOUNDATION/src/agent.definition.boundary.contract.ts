@@ -6,6 +6,8 @@ export type AgentRole = "executor" | "observer" | "orchestrator" | "reviewer" | 
 export type CapabilityValidationStatus = "WITHIN_SCOPE" | "OUT_OF_SCOPE" | "UNDECLARED_AGENT";
 export type ScopeResolutionStatus = "RESOLVED" | "EMPTY_SCOPE" | "UNDECLARED_AGENT";
 
+export const AGENT_DEFINITION_ADAPTER_VERSION = "phase2b-agent-definition-adapter-1" as const;
+
 // Input for registering an agent definition.
 export interface AgentDefinitionInput {
   name: string;
@@ -59,6 +61,18 @@ export interface AgentDefinitionAudit {
 
 export interface AgentDefinitionBoundaryContractDependencies {
   now?: () => string;
+}
+
+export interface AgentDefinitionAdapterSnapshot {
+  version: typeof AGENT_DEFINITION_ADAPTER_VERSION;
+  source: "control-plane:agent-definition-boundary";
+  agentId: string;
+  role: AgentRole;
+  declaredCapabilityCount: number;
+  declaredDomainCount: number;
+  definitionHash: string;
+  scopeStatus?: ScopeResolutionStatus;
+  auditId?: string;
 }
 
 // --- Helpers ---
@@ -153,6 +167,17 @@ export class AgentDefinitionBoundaryContract {
     };
   }
 
+  registerDefinitionWithAdapter(input: AgentDefinitionInput): {
+    record: AgentDefinitionRecord;
+    adapter: AgentDefinitionAdapterSnapshot;
+  } {
+    const record = this.registerDefinition(input);
+    return {
+      record,
+      adapter: buildAgentDefinitionAdapterSnapshot(record),
+    };
+  }
+
   // Validate whether a given capability is within the agent's declared scope.
   // Pass the agent's registered record (callers own the registry lookup).
   validateCapability(
@@ -224,6 +249,24 @@ export class AgentDefinitionBoundaryContract {
     };
   }
 
+  resolveScopeWithAdapter(
+    agentId: string,
+    registered: AgentDefinitionRecord | undefined,
+  ): {
+    resolution: AgentScopeResolution;
+    adapter: AgentDefinitionAdapterSnapshot | undefined;
+  } {
+    const resolution = this.resolveScope(agentId, registered);
+    return {
+      resolution,
+      adapter: registered
+        ? buildAgentDefinitionAdapterSnapshot(registered, {
+          scope: resolution,
+        })
+        : undefined,
+    };
+  }
+
   // Generate a governance audit snapshot of all registered definitions.
   auditDefinitions(registered: AgentDefinitionRecord[]): AgentDefinitionAudit {
     const auditedAt = this.now();
@@ -250,6 +293,26 @@ export class AgentDefinitionBoundaryContract {
       auditHash,
     };
   }
+}
+
+export function buildAgentDefinitionAdapterSnapshot(
+  record: AgentDefinitionRecord,
+  options: {
+    scope?: AgentScopeResolution;
+    audit?: AgentDefinitionAudit;
+  } = {},
+): AgentDefinitionAdapterSnapshot {
+  return {
+    version: AGENT_DEFINITION_ADAPTER_VERSION,
+    source: "control-plane:agent-definition-boundary",
+    agentId: record.agentId,
+    role: record.role,
+    declaredCapabilityCount: record.declaredCapabilities.length,
+    declaredDomainCount: record.declaredDomains.length,
+    definitionHash: record.definitionHash,
+    scopeStatus: options.scope?.status,
+    auditId: options.audit?.auditId,
+  };
 }
 
 export function createAgentDefinitionBoundaryContract(

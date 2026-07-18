@@ -10,6 +10,8 @@
  *   5. cvf_advance_phase      — Request phase advancement
  *   6. cvf_get_audit_log      — Retrieve audit trail
  *   7. cvf_evaluate_full      — Run full guard pipeline
+ *   8. cvf_model_gateway_execute_preview - Preview Model Gateway execute mapping
+ *   9. cvf_model_gateway_execute - Call an injected Model Gateway executor
  *
  * @module index
  */
@@ -18,6 +20,21 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import { getMcpToolAuditSnapshot, withMcpToolAudit } from './audit/mcp-tool-audit.js';
+import { emitInt1AgentEvent, validateInt1Plan } from './tools/int1-connection-point-policy.js';
+import { registerModelGatewayExecutePreviewTool } from './tools/model-gateway-execute-preview.js';
+import { registerModelGatewayExecuteTool } from './tools/model-gateway-execute.js';
+import {
+  registerGovernanceActionPreflightTool,
+  serializePreflightPersistence,
+} from './tools/governance-action-preflight.js';
+import {
+  registerGovernanceActionReceiptConsumerTool,
+  resolveReceiptTtlMs,
+} from './tools/governance-action-receipt-consumer.js';
+import { JsonFileAdapter } from './persistence/json-file.adapter.js';
+import { JsonReceiptConsumptionStore } from './persistence/json-receipt-consumption.store.js';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
 import {
   createGuardEngine,
   GuardRuntimeEngine,
@@ -422,6 +439,39 @@ server.tool(
   }
 );
 
+registerModelGatewayExecutePreviewTool(server);
+registerModelGatewayExecuteTool(server);
+
+// --- Delta-T1: cvf_preflight_governance_action -----------------------
+// Durable, secret-safe pre-action governance receipt. The audit JSON is
+// written to CVF_MCP_DELTA_AUDIT_DIR when set, otherwise a user-local
+// directory outside the repository. The adapter initializes lazily on first
+// save, so no audit data is written at module import.
+
+function resolveDeltaAuditDir(): string {
+  const configured = process.env.CVF_MCP_DELTA_AUDIT_DIR;
+  if (configured && configured.trim().length > 0) {
+    return configured.trim();
+  }
+  return join(homedir(), '.cvf', 'mcp-delta-audit');
+}
+
+const deltaAuditDir = resolveDeltaAuditDir();
+const deltaAuditAdapter = new JsonFileAdapter({ dataDir: deltaAuditDir });
+const deltaAuditPersistence = serializePreflightPersistence(deltaAuditAdapter);
+registerGovernanceActionPreflightTool(server, engine, deltaAuditPersistence);
+
+// --- Delta-T2: cvf_consume_governance_action_receipt -----------------
+// Validates one fresh matching Delta-T1 receipt and atomically claims a
+// secret-safe one-time marker. It does not execute the planned action.
+const deltaReceiptConsumptionStore = new JsonReceiptConsumptionStore({
+  dataDir: deltaAuditDir,
+  auditReader: deltaAuditAdapter,
+});
+registerGovernanceActionReceiptConsumerTool(server, deltaReceiptConsumptionStore, {
+  maxReceiptAgeMs: resolveReceiptTtlMs(process.env.CVF_MCP_DELTA_RECEIPT_TTL_SECONDS),
+});
+
 // ─── Gamma Tool 8: cvf_get_session_memory ─────────────────────────────
 
 server.tool(
@@ -767,43 +817,22 @@ server.tool(
 // GC-018: docs/baselines/CVF_GC018_INT1_GENERIC_MCP_ADAPTER_2026-05-31.md
 // runtimeExecutionAuthorized: false — advisory readout only
 
-const INT1_CONTRACT = 'cvf.genericMcpAdapter.int1.v1' as const;
-const INT1_ALLOWED_EVENT_TYPES = new Set([
-  'intent.received', 'plan.created', 'tool.requested',
-  'execution.state', 'result.produced',
-]);
-
 // ─── Tool INT-1-A: cvf_validate_plan ──────────────────────────────────
 // Closes CP2 Plan Validator gap from LHW19 T1.
 
 server.tool(
   'cvf_validate_plan',
-  'Advisory plan validation gate (CP2). Evaluates plan steps and required tools against CVF risk and forbidden-action policy. Returns advisory decision — does NOT block execution. runtimeExecutionAuthorized=false.',
+  'CP2 plan validation gate. Defaults to advisory readout; optional enforce mode returns a bounded owned-connection-point progression decision. Does not authorize provider execution. runtimeExecutionAuthorized=false.',
   {
     planSteps: z.array(z.string()).describe('List of planned execution steps'),
     toolsRequired: z.array(z.string()).describe('Tools the plan intends to call'),
     agentRole: z.string().describe('Caller role, e.g. AI_AGENT, ORCHESTRATOR, OPERATOR'),
+    connectionPointMode: z.enum(['advisory', 'enforce']).optional().describe('Optional connection point mode: advisory (default) or enforce'),
     planContext: z.string().max(1000).optional().describe('Optional context about the plan purpose'),
   },
   async (args) => withMcpToolAudit('cvf_validate_plan', args as Record<string, unknown>, async () => {
-    const forbiddenPatterns = ['delete_all', 'drop_database', 'rm -rf', 'format_disk'];
-    const forbidden = args.planSteps.filter(step =>
-      forbiddenPatterns.some(p => step.toLowerCase().includes(p))
-    );
-    const riskScore = Math.min(args.planSteps.length * 0.1 + args.toolsRequired.length * 0.2, 3.0);
-    const advisoryDecision = forbidden.length > 0 ? 'REJECT_ADVISORY' : riskScore > 2.0 ? 'REVIEW_RECOMMENDED' : 'ALLOW_ADVISORY';
     return {
-      content: [{ type: 'text' as const, text: JSON.stringify({
-        contractVersion: INT1_CONTRACT,
-        tool: 'cvf_validate_plan',
-        advisoryDecision,
-        planRisk: riskScore.toFixed(2),
-        forbiddenStepsDetected: forbidden,
-        stepCount: args.planSteps.length,
-        toolCount: args.toolsRequired.length,
-        runtimeExecutionAuthorized: false,
-        evaluatedAt: new Date().toISOString(),
-      }, null, 2) }],
+      content: [{ type: 'text' as const, text: JSON.stringify(validateInt1Plan(args), null, 2) }],
     };
   })
 );
@@ -820,30 +849,56 @@ server.tool(
     payload: z.record(z.string(), z.unknown()).describe('Event payload — structure varies by eventType'),
   },
   async (args) => withMcpToolAudit('cvf_emit_agent_event', args as Record<string, unknown>, async () => {
-    const eventType = args.eventType;
-    if (!INT1_ALLOWED_EVENT_TYPES.has(eventType)) {
-      return {
-        content: [{ type: 'text' as const, text: JSON.stringify({
-          contractVersion: INT1_CONTRACT,
-          tool: 'cvf_emit_agent_event',
-          accepted: false,
-          eventType,
-          rejectionReason: `unsupported_event_type: "${eventType}" not in [${[...INT1_ALLOWED_EVENT_TYPES].join(', ')}]`,
-          emittedAt: new Date().toISOString(),
-        }, null, 2) }],
-      };
-    }
-    const eventId = `int1-evt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+    return {
+      content: [{ type: 'text' as const, text: JSON.stringify(emitInt1AgentEvent(args), null, 2) }],
+    };
+  })
+);
+
+// ─── OFB-1: Orchestrator Feedback Bus ────────────────────────────────
+// Contract: cvf.orchestratorFeedbackBus.ofb1.v1
+// GC-018: docs/baselines/CVF_GC018_OFB1_ORCHESTRATOR_FEEDBACK_BUS_2026-05-31.md
+// runtimeExecutionAuthorized: false — advisory aggregation only
+
+const OFB1_CONTRACT = 'cvf.orchestratorFeedbackBus.ofb1.v1' as const;
+
+server.tool(
+  'cvf_get_feedback_summary',
+  'Retrieve aggregated subagent feedback signals for the Orchestrator. Aggregates worker timeout, reviewer rejection count, context budget, and human intervention flag into a single structured summary. Advisory only — the Orchestrator reads this to decide next action (decompose/escalate/proceed). runtimeExecutionAuthorized=false.',
+  {
+    workerRetryCount: z.number().min(0).default(0).describe('Number of worker retries so far'),
+    reviewerRejectionCount: z.number().min(0).default(0).describe('Number of reviewer rejections so far'),
+    contextBudgetExceeded: z.boolean().default(false).describe('Whether the context budget was exceeded'),
+    taskClass: z.string().default('general').describe('Task class: intake, orchestration, implementation, review, closure, or general'),
+    humanInterventionRequired: z.boolean().default(false).describe('Whether human intervention has been flagged'),
+  },
+  async (args) => withMcpToolAudit('cvf_get_feedback_summary', args as Record<string, unknown>, async () => {
+    const workerEscalate = args.workerRetryCount >= 2;
+    const reviewerEscalate = args.reviewerRejectionCount > 3;
+    const escalate = args.humanInterventionRequired || workerEscalate || reviewerEscalate;
+    const caution = args.workerRetryCount > 0 || args.reviewerRejectionCount > 0 || args.contextBudgetExceeded;
+    const overallSignal = escalate ? 'ESCALATE' : caution ? 'CAUTION' : 'NOMINAL';
+    const recommendedAction = args.humanInterventionRequired
+      ? 'HUMAN_INTERVENTION_REQUIRED: Operator must intervene.'
+      : reviewerEscalate
+        ? `DECOMPOSE_TASK: ${args.reviewerRejectionCount} rejections — decompose task into smaller units.`
+        : workerEscalate
+          ? 'ESCALATE_WORKER: Worker timed out repeatedly — consider more capable model.'
+          : args.contextBudgetExceeded
+            ? `REDUCE_CONTEXT: ${args.taskClass} task exceeded budget — narrow scope.`
+            : 'NOMINAL: Proceed normally.';
     return {
       content: [{ type: 'text' as const, text: JSON.stringify({
-        contractVersion: INT1_CONTRACT,
-        tool: 'cvf_emit_agent_event',
-        accepted: true,
-        eventType,
-        eventId,
-        agentId: args.agentId,
+        contractVersion: OFB1_CONTRACT,
+        tool: 'cvf_get_feedback_summary',
+        overallSignal,
+        recommendedAction,
+        workerTimeoutSignal: { triggered: args.workerRetryCount > 0, retryCount: args.workerRetryCount, escalateToOrchestrator: workerEscalate },
+        reviewerRejectionSignal: { triggered: args.reviewerRejectionCount > 0, rejectionCount: args.reviewerRejectionCount, escalateToOrchestrator: reviewerEscalate },
+        contextBudgetSignal: { withinBudget: !args.contextBudgetExceeded, taskClass: args.taskClass },
+        humanInterventionRequired: args.humanInterventionRequired,
         runtimeExecutionAuthorized: false,
-        emittedAt: new Date().toISOString(),
+        summarizedAt: new Date().toISOString(),
       }, null, 2) }],
     };
   })

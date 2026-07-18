@@ -1,5 +1,5 @@
 import { existsSync } from "node:fs";
-import { createRequire } from "node:module";
+import Database from "better-sqlite3";
 import { createDependencyGraph, type GraphEdge, type GraphNode } from "../schema/graph-schema";
 import {
   buildSymbolIndexFromGraph,
@@ -16,22 +16,7 @@ interface StoredEdgeMetadata {
   confidence?: GraphEdge["confidence"];
 }
 
-interface DatabaseStatement {
-  run(params?: unknown): unknown;
-  all(params?: unknown): unknown[];
-}
-
-interface DatabaseHandle {
-  exec(sql: string): void;
-  prepare(sql: string): DatabaseStatement;
-  transaction<T extends (...args: never[]) => unknown>(fn: T): T;
-  close(): void;
-}
-
-type DatabaseConstructor = new (dbPath: string) => DatabaseHandle;
-
-const require = createRequire(import.meta.url);
-const BetterSqliteDatabase = require("better" + "-sqlite3") as DatabaseConstructor;
+type DatabaseHandle = Database.Database;
 
 function readMetadata<T>(value: unknown): T {
   if (typeof value !== "string" || value.trim().length === 0) {
@@ -45,7 +30,7 @@ function readMetadata<T>(value: unknown): T {
 }
 
 function openDatabase(dbPath: string): DatabaseHandle {
-  return new BetterSqliteDatabase(dbPath);
+  return new Database(dbPath);
 }
 
 export class GraphSQLiteStore implements SymbolIndexPersistenceStore {

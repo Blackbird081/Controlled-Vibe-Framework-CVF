@@ -1,9 +1,15 @@
 import { describe, expect, it } from "vitest";
+import type { ProviderCapabilityModel } from "../src/provider-method-contract";
 import {
   PROVIDER_CAPABILITY_OWNER_REFS,
   PROVIDER_CAPABILITY_REGISTRY,
   REVIEW_CVF_PROVIDER_METHODS,
 } from "../src/provider-capability-registry";
+import {
+  ALIBABA_FREE_QUOTA_LEDGER_REFERENCE,
+  ALIBABA_FREE_QUOTA_MODELS,
+  getAlibabaFreeQuotaStatus,
+} from "../src/alibaba-free-quota-model-ledger";
 import {
   assertRegistryProviderMethodSupported,
   getProviderMethodContract,
@@ -156,5 +162,54 @@ describe("provider capability registry", () => {
       "gpt-4o",
       "embedding",
     )).toThrow(UnsupportedMethodError);
+  });
+
+  it("registers all bounded Alibaba free-quota LLM ledger models as chat candidates", () => {
+    const alibaba = PROVIDER_CAPABILITY_REGISTRY.find((entry) => entry.providerId === "alibaba");
+    expect(alibaba).toBeDefined();
+    const registeredModelIds = new Set(alibaba?.models.map((model) => model.modelId));
+    for (const ledgerEntry of ALIBABA_FREE_QUOTA_MODELS) {
+      expect(registeredModelIds.has(ledgerEntry.modelId)).toBe(true);
+      expect(listRegistrySupportedMethods(
+        PROVIDER_CAPABILITY_REGISTRY,
+        "alibaba",
+        ledgerEntry.modelId,
+      )).toEqual(["complete", "chat"]);
+      const contract = getProviderMethodContract(
+        PROVIDER_CAPABILITY_REGISTRY,
+        "alibaba",
+        ledgerEntry.modelId,
+      );
+      expect(contract?.capabilityRef).toBe(`provider-capability/alibaba/${ledgerEntry.modelId}`);
+    }
+  });
+
+  it("keeps Alibaba free-quota metadata bounded to the governed ledger reference", () => {
+    const alibaba = PROVIDER_CAPABILITY_REGISTRY.find((entry) => entry.providerId === "alibaba");
+    const qwen37Plus = alibaba?.models.find(
+      (model): model is ProviderCapabilityModel => model.modelId === "qwen3.7-plus",
+    );
+    expect(qwen37Plus?.metadata).toMatchObject({
+      freeQuotaLedgerRef: ALIBABA_FREE_QUOTA_LEDGER_REFERENCE,
+      expirationDate: "2026-08-31",
+      diagnosticRerunResult: "PASS",
+      defaultEndpointHost: "dashscope-intl.aliyuncs.com",
+    });
+    expect(qwen37Plus?.metadata?.claimBoundary).toContain("no provider parity");
+  });
+
+  it("classifies Alibaba free-quota model usability by expiration before live use", () => {
+    expect(getAlibabaFreeQuotaStatus(
+      "qwen3.7-plus",
+      new Date("2026-06-18T00:00:00Z"),
+    )).toBe("usable");
+    expect(getAlibabaFreeQuotaStatus(
+      "qwen3.7-plus",
+      new Date("2026-09-01T00:00:00Z"),
+    )).toBe("expired");
+    expect(getAlibabaFreeQuotaStatus(
+      "unknown-model",
+      new Date("2026-06-18T00:00:00Z"),
+    )).toBe("unknown");
   });
 });

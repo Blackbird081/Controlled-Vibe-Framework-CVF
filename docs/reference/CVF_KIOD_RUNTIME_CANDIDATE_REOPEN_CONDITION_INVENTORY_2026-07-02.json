@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "0.1.0",
+  "inventoryId": "kiod-runtime-candidate-reopen-condition-inventory-2026-07-02",
+  "status": "ACTIVE_REFERENCE",
+  "date": "2026-07-02",
+  "docType": "reference",
+  "sourceAuthority": [
+    "docs/reviews/CVF_KIOD_R10_RUNTIME_DEFERRED_CANDIDATE_DECISION_2026-07-01.md",
+    "docs/reviews/CVF_KIOD_R10_RUNTIME_DEFERRED_CANDIDATE_DECISION_WORKER_RETURN_2026-07-01.md",
+    "docs/reference/CVF_VALUE_PARKED_LANE_REOPEN_DISCIPLINE_STANDARD_2026-06-25.md"
+  ],
+  "inventoryBoundary": {
+    "enforcementChangeAuthorized": false,
+    "runtimeWorkAuthorized": false,
+    "providerLiveProofAuthorized": false,
+    "publicSyncAuthorized": false,
+    "downstreamImplementationAuthorized": false,
+    "checkerImplementationAuthorized": false
+  },
+  "requiredCandidateIds": [
+    "D-file06",
+    "I-file19"
+  ],
+  "candidateInventories": [
+    {
+      "candidateId": "D-file06",
+      "candidateLabel": "LanceDB vector index / semantic retrieval runtime",
+      "gateStatus": "PARKED",
+      "conditionText": "An operator-stated product requirement explicitly needs CVF to add a live vector-backed semantic retrieval capability not satisfied by existing keyword/path-based lookup; or an external integration partner requires vector-similarity retrieval specifically, not existing memory routes.",
+      "owningArtifacts": [
+        "docs/reviews/CVF_KIOD_R10_RUNTIME_DEFERRED_CANDIDATE_DECISION_2026-07-01.md",
+        "docs/reviews/CVF_KIOD_R10_RUNTIME_DEFERRED_CANDIDATE_DECISION_WORKER_RETURN_2026-07-01.md"
+      ],
+      "evidenceFields": [
+        "Fresh operator decision",
+        "Fresh GC-018",
+        "Source verification of the actual retrieval gap",
+        "A live/runtime proof plan naming the vector store, embedding model, and provider",
+        "Public/provenance boundary review",
+        "Secrets/quota handling plan"
+      ],
+      "requiredConditions": [
+        "Fresh operator decision",
+        "Fresh GC-018",
+        "Source verification of the actual retrieval gap",
+        "A live/runtime proof plan naming the vector store, embedding model, and provider",
+        "Public/provenance boundary review",
+        "Secrets/quota handling plan"
+      ],
+      "forbiddenUntilGatePasses": [
+        "LanceDB implementation",
+        "vector store implementation",
+        "embedding model integration",
+        "rerank implementation",
+        "vector retrieval service call",
+        "provider/live proof for vector retrieval"
+      ],
+      "reproposalRule": "Do not re-propose D-file06 runtime work to the operator without first checking whether the recorded reopen condition is met and citing that check; re-proposal requires source-backed evidence for each required condition above."
+    },
+    {
+      "candidateId": "I-file19",
+      "candidateLabel": "Learning Plane candidate promotion / advisory memory read",
+      "gateStatus": "PARKED",
+      "conditionText": "An operator-stated product requirement explicitly needs the Learning Plane to read memory-index candidates for reviewer-inspected promotion, and this is not satisfiable by the Learning Plane's existing consumer-pipeline contracts (EvaluationEngineConsumerPipelineContract, TruthScoreConsumerPipelineContract, pattern detection, feedback ledger); or a recorded, repeated defect shows the current Learning Plane contracts cannot express a real candidate-promotion need.",
+      "owningArtifacts": [
+        "docs/reviews/CVF_KIOD_R10_RUNTIME_DEFERRED_CANDIDATE_DECISION_2026-07-01.md",
+        "docs/reviews/CVF_KIOD_R10_RUNTIME_DEFERRED_CANDIDATE_DECISION_WORKER_RETURN_2026-07-01.md"
+      ],
+      "evidenceFields": [
+        "Fresh operator decision",
+        "Fresh GC-018",
+        "Source verification against the current EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/ contract surface",
+        "Explicit non-auto-promotion design (reviewer inspection remains mandatory)",
+        "Evidence that a memory-index read does not bypass existing evaluation/truth-score gates"
+      ],
+      "requiredConditions": [
+        "Fresh operator decision",
+        "Fresh GC-018",
+        "Source verification against the current EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/ contract surface",
+        "Explicit non-auto-promotion design (reviewer inspection remains mandatory)",
+        "Evidence that a memory-index read does not bypass existing evaluation/truth-score gates"
+      ],
+      "forbiddenUntilGatePasses": [
+        "Learning Plane runtime integration",
+        "automatic skill promotion",
+        "memory-index read implementation",
+        "candidate-promotion flow implementation",
+        "provider/live proof for Learning Plane memory read"
+      ],
+      "reproposalRule": "Do not re-propose I-file19 runtime work to the operator without first checking whether the recorded reopen condition is met and citing that check; re-proposal requires source-backed evidence for each required condition above."
+    }
+  ],
+  "checkerCandidate": {
+    "checkerPath": "governance/compat/check_kiod_runtime_candidate_reopen_inventory.py",
+    "nextTranche": "N/A_WITH_REASON_THIS_TRANCHE_IS_THE_CHECKER"
+  },
+  "publicExportDisposition": "DEFERRED_PRIVATE_ONLY",
+  "claimBoundary": "This inventory systemizes the KIOD-R10 decision-packet reopen conditions for D-file06 and I-file19 into machine-checkable form. It does not reopen either candidate, does not authorize runtime implementation, provider/live proof, public-sync, package lifecycle mutation, Web/UI/dashboard work, MCP/CLI adapter behavior, model-router work, action authority, or automatic invocation. It preserves the exact reopen-condition semantics recorded in the KIOD-R10 decision packet and worker return; it does not loosen or reinterpret them."
+}

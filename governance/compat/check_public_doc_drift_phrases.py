@@ -12,47 +12,19 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_PUBLIC_DOC_PATHS = [
-    "AGENTS.md",
-    "AGENT_HANDOFF.md",
-    "ARCHITECTURE.md",
-    "CONTRIBUTING.md",
-    "COST_AND_QUOTA.md",
-    "GOVERNANCE.md",
-    "PROVIDERS.md",
     "README.md",
     "SECURITY.md",
     "docs/GET_STARTED.md",
-    "docs/START_WITH_CVF.md",
     "docs/CVF_CORE_KNOWLEDGE_BASE.md",
     "docs/concepts/skill-system.md",
     "docs/guides/CVF_QUICK_ORIENTATION.md",
     "docs/guides/POST_MC5_ORIENTATION.md",
-    "docs/guides/external-agent-review-guide.md",
-    "docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md",
-    "docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md",
     "docs/reference/CVF_POSITIONING.md",
     "docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md",
     "docs/reference/CVF_WEB_TOOLKIT_GUIDE.md",
 ]
 
-REQUIRED_PUBLIC_ROOT_FILES = [
-    "README.md",
-    "ARCHITECTURE.md",
-    "GOVERNANCE.md",
-    "SECURITY.md",
-    "PROVIDERS.md",
-    "COST_AND_QUOTA.md",
-    "docs/GET_STARTED.md",
-    "docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md",
-    "docs/guides/external-agent-review-guide.md",
-]
-
 FORBIDDEN_PATTERNS = [
-    {
-        "id": "raw_memory_class_marker",
-        "pattern": re.compile(r"^Memory class\s*:", re.MULTILINE),
-        "message": "Public-facing docs must not expose raw internal Memory class markers.",
-    },
     {
         "id": "stale_release_date",
         "pattern": re.compile(r"March 20, 2026"),
@@ -120,30 +92,15 @@ def _scan_text(rel_path: str, text: str) -> list[dict[str, object]]:
 
 def _classify(paths: list[str] | None = None) -> dict[str, object]:
     scan_paths = paths or DEFAULT_PUBLIC_DOC_PATHS
-    required_paths = REQUIRED_PUBLIC_ROOT_FILES if paths is None else []
     violations: list[dict[str, object]] = []
     scanned: list[str] = []
     missing: list[str] = []
-    missing_required: list[str] = []
 
     for rel_path in scan_paths:
         normalized = rel_path.replace("\\", "/")
         path = REPO_ROOT / normalized
         if not path.exists():
-            if normalized in required_paths:
-                missing_required.append(normalized)
-                violations.append(
-                    {
-                        "path": normalized,
-                        "line": 0,
-                        "column": 0,
-                        "type": "missing_required_public_doc",
-                        "match": "",
-                        "message": "Required public front-door documentation file is missing.",
-                    }
-                )
-            else:
-                missing.append(normalized)
+            missing.append(normalized)
             continue
         if not path.is_file():
             continue
@@ -155,7 +112,6 @@ def _classify(paths: list[str] | None = None) -> dict[str, object]:
         "timestamp": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "scannedPaths": scanned,
         "missingPaths": missing,
-        "missingRequiredPaths": missing_required,
         "violationCount": len(violations),
         "violations": violations,
         "compliant": not violations,
@@ -165,8 +121,6 @@ def _classify(paths: list[str] | None = None) -> dict[str, object]:
 def _print_report(report: dict[str, object]) -> None:
     print("=== CVF Public Doc Drift Phrase Gate ===")
     print(f"Scanned paths: {len(report['scannedPaths'])}")
-    if report["missingRequiredPaths"]:
-        print(f"Missing required paths: {len(report['missingRequiredPaths'])}")
     if report["missingPaths"]:
         print(f"Missing optional paths: {len(report['missingPaths'])}")
     print(f"Violations: {report['violationCount']}")

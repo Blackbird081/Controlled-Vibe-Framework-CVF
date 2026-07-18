@@ -1,0 +1,4176 @@
+{
+  "schemaVersion": "cvf.system_chain_exhaustive_proof_t2_caller_verification.v1",
+  "recordId": "SCLP-X-T2-CALLER-VERIFICATION",
+  "workOrder": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+  "baseline": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+  "executionBaseHead": "9e3a672e6",
+  "generatedDateUtc": "2026-07-15T00:00:00Z",
+  "commitMode": "WORKER_MUST_NOT_COMMIT",
+  "claimBoundary": "This is a repository-wide, READ-ONLY CALLER-EXISTENCE VERIFICATION record for exactly two accepted T1 targets (GC-009 MandatoryGateway/createMandatoryGateway and GC-010 AgentExecutionRuntime). It is NOT invocation proof, NOT a runtime/provider/live/test/build/CI execution record, and does NOT promote, create, or execute any T3-T4 live case. It performs zero live, provider, browser, business-CLI, runtime, test, build, typecheck, or CI-job invocation. Caller EXISTENCE (construction/import/reference) is evaluated; caller INVOCATION at runtime is explicitly out of scope and not claimed.",
+  "acceptedInputHashManifest": [
+    {
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "sha256Claimed": "ab7797912c35ff6a29173b956678f1af2ce47b8e69b5b2f8940713e1259863ae",
+      "sha256ClaimedCharLength": 64,
+      "sha256Actual": "ab7797912c35ff6a29173b956678f1af2ce47b8e69b5b2f8940713e1259863ae",
+      "sha256ActualCharLength": 64,
+      "matchResult": "MATCH",
+      "note": "The work order flagged a possible transcription quirk (one extra hex character) from the same pattern T1 hit against its own T0 inputs. Independent recomputation confirms both claimed and actual strings are exactly 64 hex characters (standard SHA-256 length) and character-for-character identical. No drift materialized.",
+      "verificationCommand": "python -c \"import hashlib; print(hashlib.sha256(open(path,'rb').read()).hexdigest())\""
+    },
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_COMPLETION_2026-07-15.md",
+      "sha256Claimed": "c429881283632af0f2ecb2f3b90ebd8c24bca423c3f4df3d0e53244ec1417a39",
+      "sha256ClaimedCharLength": 64,
+      "sha256Actual": "c429881283632af0f2ecb2f3b90ebd8c24bca423c3f4df3d0e53244ec1417a39",
+      "sha256ActualCharLength": 64,
+      "matchResult": "MATCH",
+      "note": "Same independent-verification result: claimed and actual are both exactly 64 hex characters and identical. No drift.",
+      "verificationCommand": "python -c \"import hashlib; print(hashlib.sha256(open(path,'rb').read()).hexdigest())\""
+    }
+  ],
+  "hashDriftStopCondition": "NOT_TRIGGERED",
+  "searchUniverse": {
+    "enumerationCommand": "rg --files --hidden --no-ignore -g '!.git/**' -g '!node_modules/**' -g '!**/node_modules/**' -g '!.next/**' -g '!**/.next/**' -g '!.cvf/**' -g '!**/.cvf/**'",
+    "fileCount": 22026,
+    "declaredExclusions": [
+      ".git",
+      "node_modules (incl. nested)",
+      ".next (incl. nested)",
+      ".cvf (incl. nested)",
+      "build output (none present in this repository's tracked tree beyond the above)"
+    ],
+    "manifestArtifact": "sorted, forward-slash-normalized list of all 22026 enumerated paths (inline manifest not embedded in this JSON due to size; reproducible via the enumeration command above)",
+    "manifestHash": "47e2c963495f5a5c85b74d019736df38bc306b27b0d1334affe750fd9f973101",
+    "manifestHashMethod": "SHA-256 over the newline-joined, sorted, forward-slash-normalized enumerated path list",
+    "snapshotTimeUtc": "2026-07-15T00:00:00Z"
+  },
+  "queryManifest": [
+    {
+      "queryId": "Q1_MandatoryGateway_symbol",
+      "command": "rg -n --hidden --no-ignore -g '!.git/**' -g '!node_modules/**' -g '!**/node_modules/**' -g '!.next/**' -g '!**/.next/**' -g '!.cvf/**' -g '!**/.cvf/**' -- \"MandatoryGateway\"",
+      "purpose": "full collision scan for MandatoryGateway",
+      "rawMatchCount": 128
+    },
+    {
+      "queryId": "Q2_createMandatoryGateway_symbol",
+      "command": "rg -n --hidden --no-ignore -g '!.git/**' -g '!node_modules/**' -g '!**/node_modules/**' -g '!.next/**' -g '!**/.next/**' -g '!.cvf/**' -g '!**/.cvf/**' -- \"createMandatoryGateway\"",
+      "purpose": "full collision scan for createMandatoryGateway",
+      "rawMatchCount": 48
+    },
+    {
+      "queryId": "Q3_AgentExecutionRuntime_symbol",
+      "command": "rg -n --hidden --no-ignore -g '!.git/**' -g '!node_modules/**' -g '!**/node_modules/**' -g '!.next/**' -g '!**/.next/**' -g '!.cvf/**' -g '!**/.cvf/**' -- \"AgentExecutionRuntime\"",
+      "purpose": "full collision scan for AgentExecutionRuntime",
+      "rawMatchCount": 127
+    },
+    {
+      "queryId": "Q4_mandatory-gateway_path",
+      "command": "rg -n --hidden --no-ignore -g '!.git/**' -g '!node_modules/**' -g '!**/node_modules/**' -g '!.next/**' -g '!**/.next/**' -g '!.cvf/**' -g '!**/.cvf/**' -- \"mandatory-gateway\"",
+      "purpose": "full collision scan for module path mandatory-gateway",
+      "rawMatchCount": 86
+    },
+    {
+      "queryId": "Q5_agent-execution-runtime_path",
+      "command": "rg -n --hidden --no-ignore -g '!.git/**' -g '!node_modules/**' -g '!**/node_modules/**' -g '!.next/**' -g '!**/.next/**' -g '!.cvf/**' -g '!**/.cvf/**' -- \"agent-execution-runtime\"",
+      "purpose": "full collision scan for module path agent-execution-runtime",
+      "rawMatchCount": 61
+    },
+    {
+      "queryId": "Q6_new_MandatoryGateway_ctor",
+      "command": "rg -n --hidden --no-ignore [same excludes] 'new\\s+MandatoryGateway'",
+      "purpose": "constructor scan for MandatoryGateway",
+      "rawMatchCount": 14
+    },
+    {
+      "queryId": "Q7_createMandatoryGateway_call",
+      "command": "rg -n --hidden --no-ignore [same excludes] -F 'createMandatoryGateway('",
+      "purpose": "factory-call scan for createMandatoryGateway(",
+      "rawMatchCount": 7
+    },
+    {
+      "queryId": "Q8_new_AgentExecutionRuntime_ctor",
+      "command": "rg -n --hidden --no-ignore [same excludes] 'new\\s+AgentExecutionRuntime\\s*\\('",
+      "purpose": "constructor scan for AgentExecutionRuntime",
+      "rawMatchCount": 8
+    },
+    {
+      "queryId": "Q9_from_mandatory-gateway_import",
+      "command": "rg -n --hidden --no-ignore [same excludes] 'from.*mandatory-gateway'",
+      "purpose": "import scan for mandatory-gateway module path",
+      "rawMatchCount": 3
+    },
+    {
+      "queryId": "Q10_require_mandatory-gateway",
+      "command": "rg -n --hidden --no-ignore [same excludes] 'require\\(.*mandatory-gateway'",
+      "purpose": "require() scan for mandatory-gateway module path",
+      "rawMatchCount": 0
+    },
+    {
+      "queryId": "Q11_dynimport_mandatory-gateway",
+      "command": "rg -n --hidden --no-ignore [same excludes] 'import\\(.*mandatory-gateway'",
+      "purpose": "dynamic import() scan for mandatory-gateway module path",
+      "rawMatchCount": 0
+    },
+    {
+      "queryId": "Q12_export_MandatoryGateway",
+      "command": "rg -n --hidden --no-ignore [same excludes] 'export.*MandatoryGateway'",
+      "purpose": "export/re-export scan for MandatoryGateway",
+      "rawMatchCount": 7
+    },
+    {
+      "queryId": "Q13_from_agent-execution-runtime_import",
+      "command": "rg -n --hidden --no-ignore [same excludes] 'from.*agent-execution-runtime'",
+      "purpose": "import scan for agent-execution-runtime module path",
+      "rawMatchCount": 7
+    },
+    {
+      "queryId": "Q14_require_agent-execution-runtime",
+      "command": "rg -n --hidden --no-ignore [same excludes] 'require\\(.*agent-execution-runtime'",
+      "purpose": "require() scan for agent-execution-runtime module path",
+      "rawMatchCount": 0
+    },
+    {
+      "queryId": "Q15_dynimport_agent-execution-runtime",
+      "command": "rg -n --hidden --no-ignore [same excludes] 'import\\(.*agent-execution-runtime'",
+      "purpose": "dynamic import() scan for agent-execution-runtime module path",
+      "rawMatchCount": 0
+    },
+    {
+      "queryId": "Q16_export_AgentExecutionRuntime",
+      "command": "rg -n --hidden --no-ignore [same excludes] 'export.*AgentExecutionRuntime'",
+      "purpose": "export/re-export scan for AgentExecutionRuntime",
+      "rawMatchCount": 4
+    }
+  ],
+  "matchCountReconciliation": {
+    "rawMatchCountAcrossAllQueries": 500,
+    "uniquePathLineRows": 329,
+    "dedupedRowsDroppedFromRaw": 171,
+    "reconciliationNote": "A single (path, line) occurrence found by multiple queries is recorded once in matchLedger with every contributing queryId retained in contributingQueryIds. No unique occurrence was dropped; only exact query-overlap duplicates on the identical (path, line) pair were merged.",
+    "aggregationCheck": "PASS: 500 raw hits across 16 queries reconcile to 329 unique (path,line) ledger rows with zero silently dropped unique occurrences"
+  },
+  "matchClassificationSummary": {
+    "COMMENT_ONLY": 4,
+    "DEFINITION": 5,
+    "GENERATED_COVERAGE": 22,
+    "HISTORICAL_DOCUMENT": 265,
+    "PRIVATE_EXTERNAL_EVIDENCE": 4,
+    "SELF_CONSTRUCTION": 1,
+    "TEST_ONLY": 26,
+    "TYPE_ONLY_IMPORT": 2
+  },
+  "authorityClassSummary": {
+    "CURRENT_RUNTIME_SOURCE": 12,
+    "GENERATED_NON_AUTHORITY": 22,
+    "HISTORICAL_NON_AUTHORITY": 265,
+    "PRIVATE_INPUT_NON_AUTHORITY": 4,
+    "TEST_SOURCE": 26
+  },
+  "matchLedger": [
+    {
+      "rowId": "ROW-0001",
+      "path": ".private_reference/external_reviews/system_chain_gap_closure_2026-07-10/cvf_scout_report.json",
+      "line": 9442,
+      "matchedText": "\"file\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts\",",
+      "matchClassification": "PRIVATE_EXTERNAL_EVIDENCE",
+      "authorityClass": "PRIVATE_INPUT_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0002",
+      "path": ".private_reference/external_reviews/system_chain_gap_closure_2026-07-10/cvf_scout_report.json",
+      "line": 9498,
+      "matchedText": "\"name\": \"AgentExecutionRuntime\"",
+      "matchClassification": "PRIVATE_EXTERNAL_EVIDENCE",
+      "authorityClass": "PRIVATE_INPUT_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0003",
+      "path": ".private_reference/external_reviews/system_chain_gap_closure_2026-07-10/cvf_scout_report.json",
+      "line": 9512,
+      "matchedText": "\"file\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\",",
+      "matchClassification": "PRIVATE_EXTERNAL_EVIDENCE",
+      "authorityClass": "PRIVATE_INPUT_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0004",
+      "path": ".private_reference/external_reviews/system_chain_gap_closure_2026-07-10/cvf_scout_report.json",
+      "line": 9524,
+      "matchedText": "\"name\": \"MandatoryGateway\"",
+      "matchClassification": "PRIVATE_EXTERNAL_EVIDENCE",
+      "authorityClass": "PRIVATE_INPUT_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0005",
+      "path": "CVF_SESSION/ACTIVE_SESSION_BOOTSTRAP_READ_MODEL.json",
+      "line": 5,
+      "matchedText": "\"nextAllowedMove\": \"SCLP-X-T2 is DISPATCH_READY at material commit e0e5e755f. Execute only the exact no-commit three-path worker manifest for repository-wide read-only caller verification of Mandatory",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0006",
+      "path": "CVF_SESSION/ACTIVE_SESSION_STATE.json",
+      "line": 12202,
+      "matchedText": "\"nextAllowedMove\": \"SCLP-X-T2 is DISPATCH_READY at material commit e0e5e755f. Execute only the exact no-commit three-path worker manifest for repository-wide read-only caller verification of Mandatory",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0007",
+      "path": "CVF_SESSION/state/entries/nextAllowedMove.json",
+      "line": 4,
+      "matchedText": "\"value\": \"SCLP-X-T2 is DISPATCH_READY at material commit e0e5e755f. Execute only the exact no-commit three-path worker manifest for repository-wide read-only caller verification of MandatoryGateway, c",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0008",
+      "path": "CVF_SESSION_MEMORY.md",
+      "line": 212,
+      "matchedText": "of `MandatoryGateway`, `createMandatoryGateway`, and `AgentExecutionRuntime`.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0009",
+      "path": "ECOSYSTEM/strategy/archive/CVF_EXECUTION_ROADMAP_2026-03-10.md",
+      "line": 95,
+      "matchedText": "- [ ] Build `AgentExecutionRuntime` class:",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0010",
+      "path": "ECOSYSTEM/strategy/archive/CVF_EXECUTION_ROADMAP_2026-03-10.md",
+      "line": 98,
+      "matchedText": "class AgentExecutionRuntime {",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0011",
+      "path": "ECOSYSTEM/strategy/archive/CVF_EXECUTION_ROADMAP_2026-03-10.md",
+      "line": 125,
+      "matchedText": "- [ ] Connect `AgentExecutionRuntime` to Gemini API",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0012",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/clover.xml",
+      "line": 2214,
+      "matchedText": "<file name=\"agent-execution-runtime.ts\" path=\"D:\\UNG DUNG AI\\TOOL AI 2026\\Controlled-Vibe-Framework-CVF\\EXTENSIONS\\CVF_GUARD_CONTRACT\\src\\runtime\\agent-execution-runtime.ts\">",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0013",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/clover.xml",
+      "line": 3001,
+      "matchedText": "<file name=\"mandatory-gateway.ts\" path=\"D:\\UNG DUNG AI\\TOOL AI 2026\\Controlled-Vibe-Framework-CVF\\EXTENSIONS\\CVF_GUARD_CONTRACT\\src\\runtime\\mandatory-gateway.ts\">",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0014",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/coverage-final.json",
+      "line": 17,
+      "matchedText": ",\"D:\\\\UNG DUNG AI\\\\TOOL AI 2026\\\\Controlled-Vibe-Framework-CVF\\\\EXTENSIONS\\\\CVF_GUARD_CONTRACT\\\\src\\\\runtime\\\\agent-execution-runtime.ts\": {\"path\":\"D:\\\\UNG DUNG AI\\\\TOOL AI 2026\\\\Controlled-Vibe-Frame",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0015",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/coverage-final.json",
+      "line": 20,
+      "matchedText": ",\"D:\\\\UNG DUNG AI\\\\TOOL AI 2026\\\\Controlled-Vibe-Framework-CVF\\\\EXTENSIONS\\\\CVF_GUARD_CONTRACT\\\\src\\\\runtime\\\\mandatory-gateway.ts\": {\"path\":\"D:\\\\UNG DUNG AI\\\\TOOL AI 2026\\\\Controlled-Vibe-Framework-C",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0016",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/agent-execution-runtime.ts.html",
+      "line": 6,
+      "matchedText": "<title>Code coverage report for src/runtime/agent-execution-runtime.ts</title>",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0017",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/agent-execution-runtime.ts.html",
+      "line": 22,
+      "matchedText": "<h1><a href=\"../../index.html\">All files</a> / <a href=\"index.html\">src/runtime</a> agent-execution-runtime.ts</h1>",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0018",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/agent-execution-runtime.ts.html",
+      "line": 936,
+      "matchedText": "* @module cvf-guard-contract/runtime/agent-execution-runtime",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0019",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/agent-execution-runtime.ts.html",
+      "line": 1059,
+      "matchedText": "export class AgentExecutionRuntime {",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q16_export_AgentExecutionRuntime",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0020",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/index.html",
+      "line": 82,
+      "matchedText": "<td class=\"file high\" data-value=\"agent-execution-runtime.ts\"><a href=\"agent-execution-runtime.ts.html\">agent-execution-runtime.ts</a></td>",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0021",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/index.html",
+      "line": 127,
+      "matchedText": "<td class=\"file high\" data-value=\"mandatory-gateway.ts\"><a href=\"mandatory-gateway.ts.html\">mandatory-gateway.ts</a></td>",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0022",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/mandatory-gateway.ts.html",
+      "line": 6,
+      "matchedText": "<title>Code coverage report for src/runtime/mandatory-gateway.ts</title>",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0023",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/mandatory-gateway.ts.html",
+      "line": 22,
+      "matchedText": "<h1><a href=\"../../index.html\">All files</a> / <a href=\"index.html\">src/runtime</a> mandatory-gateway.ts</h1>",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0024",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/mandatory-gateway.ts.html",
+      "line": 522,
+      "matchedText": "* @module cvf-guard-contract/runtime/mandatory-gateway",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0025",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/mandatory-gateway.ts.html",
+      "line": 579,
+      "matchedText": "export class MandatoryGateway {",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q12_export_MandatoryGateway",
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0026",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/mandatory-gateway.ts.html",
+      "line": 698,
+      "matchedText": "assertAllowed(request: Parameters&lt;MandatoryGateway['check']&gt;[0]): void {",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0027",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/mandatory-gateway.ts.html",
+      "line": 732,
+      "matchedText": "export <span class=\"fstat-no\" title=\"function not covered\" >function createMandatoryGateway(</span>",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q12_export_MandatoryGateway",
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q7_createMandatoryGateway_call"
+      ]
+    },
+    {
+      "rowId": "ROW-0028",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/mandatory-gateway.ts.html",
+      "line": 735,
+      "matchedText": "<span class=\"cstat-no\" title=\"statement not covered\" >): MandatoryGateway {</span>",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0029",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/mandatory-gateway.ts.html",
+      "line": 736,
+      "matchedText": "<span class=\"cstat-no\" title=\"statement not covered\" >  return new MandatoryGateway(engine, config);</span>",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0030",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/providers/alibaba-dashscope-provider.ts.html",
+      "line": 348,
+      "matchedText": "* Implements the `ExecutionProvider` interface from AgentExecutionRuntime.",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0031",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/providers/alibaba-dashscope-provider.ts.html",
+      "line": 356,
+      "matchedText": "import type { ExecutionProvider } from '../agent-execution-runtime';",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q13_from_agent-execution-runtime_import",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0032",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/providers/gemini-provider.ts.html",
+      "line": 282,
+      "matchedText": "* Implements the `ExecutionProvider` interface from AgentExecutionRuntime.",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0033",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/coverage/src/runtime/providers/gemini-provider.ts.html",
+      "line": 287,
+      "matchedText": "import type { ExecutionProvider } from '../agent-execution-runtime';",
+      "matchClassification": "GENERATED_COVERAGE",
+      "authorityClass": "GENERATED_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q13_from_agent-execution-runtime_import",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0034",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts",
+      "line": 10,
+      "matchedText": "AgentExecutionRuntime,",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0035",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts",
+      "line": 14,
+      "matchedText": "} from './agent-execution-runtime';",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q13_from_agent-execution-runtime_import",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0036",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts",
+      "line": 45,
+      "matchedText": "return new AgentExecutionRuntime(",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q8_new_AgentExecutionRuntime_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0037",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts",
+      "line": 71,
+      "matchedText": "describe('AgentExecutionRuntime.parseIntent', () => {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0038",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts",
+      "line": 111,
+      "matchedText": "describe('AgentExecutionRuntime.preCheck', () => {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0039",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts",
+      "line": 183,
+      "matchedText": "describe('AgentExecutionRuntime.execute', () => {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0040",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts",
+      "line": 264,
+      "matchedText": "describe('AgentExecutionRuntime.postCheck', () => {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0041",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts",
+      "line": 310,
+      "matchedText": "describe('AgentExecutionRuntime.run (full pipeline)', () => {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0042",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts",
+      "line": 353,
+      "matchedText": "describe('AgentExecutionRuntime config', () => {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0043",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts",
+      "line": 7,
+      "matchedText": "* @module cvf-guard-contract/runtime/agent-execution-runtime",
+      "matchClassification": "COMMENT_ONLY",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0044",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts",
+      "line": 130,
+      "matchedText": "export class AgentExecutionRuntime {",
+      "matchClassification": "DEFINITION",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q16_export_AgentExecutionRuntime",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0045",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
+      "line": 3,
+      "matchedText": "import { MandatoryGateway } from './mandatory-gateway';",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path",
+        "Q9_from_mandatory-gateway_import"
+      ]
+    },
+    {
+      "rowId": "ROW-0046",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
+      "line": 18,
+      "matchedText": "describe('mandatory-gateway', () => {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0047",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
+      "line": 21,
+      "matchedText": "const gateway = new MandatoryGateway(engine);",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0048",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
+      "line": 32,
+      "matchedText": "const gateway = new MandatoryGateway(engine, { enforceAll: false });",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0049",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
+      "line": 41,
+      "matchedText": "const gateway = new MandatoryGateway(engine, { hardBlock: true });",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0050",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
+      "line": 49,
+      "matchedText": "const gateway = new MandatoryGateway(engine, { hardBlock: false });",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0051",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
+      "line": 57,
+      "matchedText": "const gateway = new MandatoryGateway(engine, { hardEscalate: true });",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0052",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
+      "line": 66,
+      "matchedText": "const gateway = new MandatoryGateway(engine, { hardEscalate: true });",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0053",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
+      "line": 78,
+      "matchedText": "const gateway = new MandatoryGateway(engine);",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0054",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
+      "line": 84,
+      "matchedText": "const gateway = new MandatoryGateway(engine, { hardBlock: true });",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0055",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
+      "line": 9,
+      "matchedText": "* @module cvf-guard-contract/runtime/mandatory-gateway",
+      "matchClassification": "COMMENT_ONLY",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0056",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
+      "line": 66,
+      "matchedText": "export class MandatoryGateway {",
+      "matchClassification": "DEFINITION",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q12_export_MandatoryGateway",
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0057",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
+      "line": 185,
+      "matchedText": "assertAllowed(request: Parameters<MandatoryGateway['check']>[0]): void {",
+      "matchClassification": "DEFINITION",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0058",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
+      "line": 219,
+      "matchedText": "export function createMandatoryGateway(",
+      "matchClassification": "DEFINITION",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q12_export_MandatoryGateway",
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q7_createMandatoryGateway_call"
+      ]
+    },
+    {
+      "rowId": "ROW-0059",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
+      "line": 222,
+      "matchedText": "): MandatoryGateway {",
+      "matchClassification": "DEFINITION",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0060",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
+      "line": 223,
+      "matchedText": "return new MandatoryGateway(engine, config);",
+      "matchClassification": "SELF_CONSTRUCTION",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0061",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/alibaba-dashscope-provider.test.ts",
+      "line": 9,
+      "matchedText": "import { AgentExecutionRuntime } from '../agent-execution-runtime';",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q13_from_agent-execution-runtime_import",
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0062",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/alibaba-dashscope-provider.test.ts",
+      "line": 50,
+      "matchedText": "const runtime = new AgentExecutionRuntime(engine, provider, {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q8_new_AgentExecutionRuntime_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0063",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/alibaba-dashscope-provider.test.ts",
+      "line": 90,
+      "matchedText": "const runtime = new AgentExecutionRuntime(engine, provider, {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q8_new_AgentExecutionRuntime_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0064",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/alibaba-dashscope-provider.ts",
+      "line": 5,
+      "matchedText": "* Implements the `ExecutionProvider` interface from AgentExecutionRuntime.",
+      "matchClassification": "COMMENT_ONLY",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0065",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/alibaba-dashscope-provider.ts",
+      "line": 13,
+      "matchedText": "import type { ExecutionProvider } from '../agent-execution-runtime';",
+      "matchClassification": "TYPE_ONLY_IMPORT",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q13_from_agent-execution-runtime_import",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0066",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/gemini-provider.test.ts",
+      "line": 9,
+      "matchedText": "import { AgentExecutionRuntime } from '../agent-execution-runtime';",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q13_from_agent-execution-runtime_import",
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0067",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/gemini-provider.test.ts",
+      "line": 49,
+      "matchedText": "const runtime = new AgentExecutionRuntime(engine, provider, {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q8_new_AgentExecutionRuntime_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0068",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/gemini-provider.test.ts",
+      "line": 66,
+      "matchedText": "const runtime = new AgentExecutionRuntime(engine, provider, {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q8_new_AgentExecutionRuntime_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0069",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/gemini-provider.test.ts",
+      "line": 107,
+      "matchedText": "const runtime = new AgentExecutionRuntime(engine, provider, {",
+      "matchClassification": "TEST_ONLY",
+      "authorityClass": "TEST_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q8_new_AgentExecutionRuntime_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0070",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/gemini-provider.ts",
+      "line": 5,
+      "matchedText": "* Implements the `ExecutionProvider` interface from AgentExecutionRuntime.",
+      "matchClassification": "COMMENT_ONLY",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0071",
+      "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/gemini-provider.ts",
+      "line": 10,
+      "matchedText": "import type { ExecutionProvider } from '../agent-execution-runtime';",
+      "matchClassification": "TYPE_ONLY_IMPORT",
+      "authorityClass": "CURRENT_RUNTIME_SOURCE",
+      "contributingQueryIds": [
+        "Q13_from_agent-execution-runtime_import",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0072",
+      "path": "docs/assessments/archive/CVF_DEFINITIVE_DEEP_DIVE_ASSESSMENT_2026-03-11.md",
+      "line": 105,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0073",
+      "path": "docs/assessments/archive/CVF_DEFINITIVE_DEEP_DIVE_ASSESSMENT_2026-03-11.md",
+      "line": 196,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0074",
+      "path": "docs/assessments/archive/CVF_TRACK5_DEFERRED_ARCHITECTURE_READINESS_ASSESSMENT_2026-04-08.md",
+      "line": 123,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0075",
+      "path": "docs/assessments/archive/CVF_TRACK5_DEFERRED_ARCHITECTURE_READINESS_ASSESSMENT_2026-04-08.md",
+      "line": 180,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0076",
+      "path": "docs/assessments/archive/CVF_TRACK5_DEFERRED_ARCHITECTURE_READINESS_ASSESSMENT_2026-04-08.md",
+      "line": 356,
+      "matchedText": "- Enforces pre-invocation: `MandatoryGateway.check()` + PII detection pass + auth validation",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0077",
+      "path": "docs/assessments/archive/CVF_TRACK5_DEFERRED_ARCHITECTURE_READINESS_ASSESSMENT_2026-04-08.md",
+      "line": 402,
+      "matchedText": "| Mandatory Gateway | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | Logical governance (check/assertAllowed) fully implemented; physical isolation separate |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0078",
+      "path": "docs/assessments/archive/CVF_TRACK5_DEFERRED_ARCHITECTURE_READINESS_ASSESSMENT_2026-04-08.md",
+      "line": 439,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0079",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_2026-07-10.md",
+      "line": 147,
+      "matchedText": "- **GC-009** (`EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts`,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0080",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_2026-07-10.md",
+      "line": 148,
+      "matchedText": "class `MandatoryGateway`, factory `createMandatoryGateway`) - file present,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0081",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_2026-07-10.md",
+      "line": 150,
+      "matchedText": "(`EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts`)",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0082",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_2026-07-10.md",
+      "line": 151,
+      "matchedText": "correctly imports `MandatoryGateway` from the same-directory",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0083",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_2026-07-10.md",
+      "line": 152,
+      "matchedText": "`./mandatory-gateway` (confirmed same-file citation, valid test-to-source",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0084",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_2026-07-10.md",
+      "line": 154,
+      "matchedText": "(`grep -rn \"MandatoryGateway\\|createMandatoryGateway\"` across all `.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0085",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_2026-07-10.md",
+      "line": 427,
+      "matchedText": "| Contract-to-runtime lane: 2 of 3 sampled Governance Control Matrix rows (GC-001, GC-009) lack a fully proven source-caller-test match (GC-001's cited test exercises a different source file; GC-009 h",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0086",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_EVIDENCE_2026-07-10.json",
+      "line": 36,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0087",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_EVIDENCE_2026-07-10.json",
+      "line": 87,
+      "matchedText": "{\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\", \"terminalStatus\": \"READ\", \"manifestHash\": \"98fc0f14315c51e717ed9dacc23e9b1dd4c14438feb42353a9ef81558926181b\"},",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0088",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_EVIDENCE_2026-07-10.json",
+      "line": 125,
+      "matchedText": "\"invokedBy\": \"PER_ROW_TRACED: GC-001 PhaseGateGuard registered at EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts line 122 (engine.registerGuard) and at EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/gove",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0089",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_EVIDENCE_2026-07-10.json",
+      "line": 126,
+      "matchedText": "\"testedBy\": \"PER_ROW_TRACED: GC-001's cited test EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/guard.runtime.test.ts imports PhaseGateGuard from ../governance/guard_runtime/guards/phase.gate.g",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path",
+        "Q9_from_mandatory-gateway_import"
+      ]
+    },
+    {
+      "rowId": "ROW-0090",
+      "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_EVIDENCE_2026-07-10.json",
+      "line": 141,
+      "matchedText": "{\"path\": \"docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md\", \"section\": \"Control Matrix, GC-009 row\", \"lines\": \"44\", \"note\": \"cites EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts and it",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path",
+        "Q9_from_mandatory-gateway_import"
+      ]
+    },
+    {
+      "rowId": "ROW-0091",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_2026-07-11.md",
+      "line": 86,
+      "matchedText": "| GC-009 | every execution channel must pass through guard evaluation f... | MandatoryGateway | GATEWAY_PRECONDITION | guard contract runtime helpers, channel ... | EXTENSIONS/CVF_GUARD_CONTRACT/src/r",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0092",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_2026-07-11.md",
+      "line": 87,
+      "matchedText": "| GC-010 | governed helper runtime must stop on approval-required escal... | AgentExecutionRuntime | GATEWAY_PRECONDITION | guard contract runtime helpers, governed... | EXTENSIONS/CVF_GUARD_CONTRACT/",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0093",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 43,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0094",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 47,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0095",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 51,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0096",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 55,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0097",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 801,
+      "matchedText": "\"primaryOwner\": \"MandatoryGateway\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0098",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 804,
+      "matchedText": "\"primaryEvidence\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts, EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts\"",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0099",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 817,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0100",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 832,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0101",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 850,
+      "matchedText": "\"primaryOwner\": \"AgentExecutionRuntime\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0102",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 853,
+      "matchedText": "\"primaryEvidence\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts, EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts\"",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0103",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 866,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0104",
+      "path": "docs/audits/CVF_MSEA_R94_T0_CONTRACT_TO_RUNTIME_50_ROW_INVENTORY_EVIDENCE_2026-07-11.json",
+      "line": 881,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0105",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T0_INVENTORY_AUDIT_2026-07-15.md",
+      "line": 214,
+      "matchedText": "- `MATRIX_ROW::GC-009` - matrix row itself records `IMPLEMENTED_NOT_INVOCATION_PROVEN`: no non-test production caller proven. Smallest decision-changing next proof step: source-verify a non-test produ",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0106",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T0_INVENTORY_AUDIT_2026-07-15.md",
+      "line": 215,
+      "matchedText": "- `MATRIX_ROW::GC-010` - same status for `AgentExecutionRuntime` (two provider files import only its `ExecutionProvider` type, not a proven caller). Same next-proof-step class.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0107",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 37,
+      "matchedText": "- Guard-contract runtime: `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts`,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0108",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 38,
+      "matchedText": "`EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0109",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 111,
+      "matchedText": "- `MandatoryGateway`/`createMandatoryGateway(` constructor search: only",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q7_createMandatoryGateway_call"
+      ]
+    },
+    {
+      "rowId": "ROW-0110",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 113,
+      "matchedText": "(`EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` lines",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0111",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 116,
+      "matchedText": "- `AgentExecutionRuntime(` constructor search: zero matches anywhere in",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0112",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 118,
+      "matchedText": "- General `MandatoryGateway` collision scan: definition (line 66), one",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0113",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 121,
+      "matchedText": "- General `AgentExecutionRuntime` collision scan: class definition (line",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0114",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 133,
+      "matchedText": "Note: `MandatoryGateway` class is defined at source line 66 and",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0115",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 134,
+      "matchedText": "`createMandatoryGateway` factory at line 219, matching the work order's",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0116",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 135,
+      "matchedText": "Source Verification Block. `AgentExecutionRuntime` class is defined at line",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0117",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 173,
+      "matchedText": "`AgentExecutionRuntime`, intended rule: stop on approval-required",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0118",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 202,
+      "matchedText": "target (`MandatoryGateway`).",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0119",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 237,
+      "matchedText": "completes its source-verification step for `MandatoryGateway` and",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0120",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 238,
+      "matchedText": "`AgentExecutionRuntime` callers (per the rank-1/rank-2 recommended next",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0121",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 277,
+      "matchedText": "freshness search targeted `MandatoryGateway` (GC-009) and",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0122",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 278,
+      "matchedText": "`AgentExecutionRuntime` (GC-010) per the work order's explicit Current",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0123",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 301,
+      "matchedText": "`MandatoryGateway`/`createMandatoryGateway` and `AgentExecutionRuntime` is",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0124",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 331,
+      "matchedText": "`MandatoryGateway` or `AgentExecutionRuntime`, matching T0's",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0125",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 414,
+      "matchedText": "search found only the `MandatoryGateway` defining factory and no",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0126",
+      "path": "docs/audits/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_AUDIT_2026-07-15.md",
+      "line": 415,
+      "matchedText": "`AgentExecutionRuntime` construction site.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0127",
+      "path": "docs/baselines/CVF_GC018_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_2026-07-11.md",
+      "line": 68,
+      "matchedText": "| MandatoryGateway implementation | EXISTS | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | lines 66 and 219 | `MandatoryGateway`; `createMandatoryGateway` | guard-contract runtime",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0128",
+      "path": "docs/baselines/CVF_GC018_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_2026-07-11.md",
+      "line": 69,
+      "matchedText": "| AgentExecutionRuntime implementation | EXISTS | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts` | line 129 | `AgentExecutionRuntime` | guard-contract runtime helper | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0129",
+      "path": "docs/baselines/CVF_GC018_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_2026-07-11.md",
+      "line": 77,
+      "matchedText": "instantiate AgentExecutionRuntime, but no non-test construction of either",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0130",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 57,
+      "matchedText": "| `MandatoryGateway` definition exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | line 65 | `MandatoryGateway` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0131",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 58,
+      "matchedText": "| `createMandatoryGateway` factory exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | line 219 | `createMandatoryGateway` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0132",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 59,
+      "matchedText": "| `AgentExecutionRuntime` definition exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts` | line 129 | `AgentExecutionRuntime` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0133",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 64,
+      "matchedText": "`AgentExecutionRuntime` and no external non-test `MandatoryGateway` factory or",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0134",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 73,
+      "matchedText": "| `new MandatoryGateway` or `createMandatoryGateway(` | `EXTENSIONS/`, excluding tests, specs, `node_modules`, and `.next` | only the defining factory constructs `MandatoryGateway` | ACCEPT - current ",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor",
+        "Q7_createMandatoryGateway_call"
+      ]
+    },
+    {
+      "rowId": "ROW-0135",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 74,
+      "matchedText": "| `new AgentExecutionRuntime(` | `EXTENSIONS/`, excluding tests, specs, `node_modules`, and `.next` | no non-test construction site | ACCEPT - current caller gap remains a T1 input |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q8_new_AgentExecutionRuntime_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0136",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 75,
+      "matchedText": "| `MandatoryGateway` or `AgentExecutionRuntime` general collision scan | same bounded source roots | definitions and provider-interface comments only outside tests | ACCEPT - no same-token production ",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0137",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 21,
+      "matchedText": "`MandatoryGateway`/`createMandatoryGateway` and GC-010",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0138",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 22,
+      "matchedText": "`AgentExecutionRuntime`. T2 verifies caller existence only. It does not invoke",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0139",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 69,
+      "matchedText": "| `MandatoryGateway` exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | line 65 | `MandatoryGateway` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0140",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 70,
+      "matchedText": "| `createMandatoryGateway` exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | line 219 | `createMandatoryGateway` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0141",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 71,
+      "matchedText": "| `AgentExecutionRuntime` exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts` | line 129 | `AgentExecutionRuntime` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0142",
+      "path": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 82,
+      "matchedText": "Dispatch-time repository search found only the defining MandatoryGateway",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0143",
+      "path": "docs/baselines/archive/CVF_GC020_RUNTIME_HANDOFF_ENFORCEMENT_DELTA_2026-03-22.md",
+      "line": 43,
+      "matchedText": "- governed `AgentExecutionRuntime` now emits one `ESCALATION_HANDOFF` checkpoint when execution is stopped for approval in governed mode",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0144",
+      "path": "docs/baselines/archive/CVF_SYSTEM_UNIFICATION_LEGACY_BOUNDARY_DELTA_2026-03-20.md",
+      "line": 25,
+      "matchedText": "- `cd EXTENSIONS/CVF_GUARD_CONTRACT && npx vitest run src/sdk/guard-sdk.test.ts src/runtime/full-skill-registry.test.ts src/runtime/agent-execution-runtime.test.ts src/runtime/providers/gemini-provide",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0145",
+      "path": "docs/baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md",
+      "line": 40,
+      "matchedText": "- `mandatory-gateway.ts` now accepts `fileScope` and `metadata`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0146",
+      "path": "docs/baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE1_DELTA_2026-03-19.md",
+      "line": 41,
+      "matchedText": "- `agent-execution-runtime.ts` now accepts session-level `fileScope` and `metadata`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0147",
+      "path": "docs/baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md",
+      "line": 17,
+      "matchedText": "1. `MandatoryGateway` now surfaces governed execution posture explicitly.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0148",
+      "path": "docs/baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md",
+      "line": 19,
+      "matchedText": "3. `AgentExecutionRuntime` now pauses governed escalations with `NEEDS_APPROVAL` instead of continuing silently.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0149",
+      "path": "docs/baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md",
+      "line": 25,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0150",
+      "path": "docs/baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md",
+      "line": 26,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0151",
+      "path": "docs/baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md",
+      "line": 27,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0152",
+      "path": "docs/baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md",
+      "line": 28,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0153",
+      "path": "docs/baselines/archive/CVF_SYSTEM_UNIFICATION_PHASE2_OWNERSHIP_ALIGNMENT_DELTA_2026-03-20.md",
+      "line": 34,
+      "matchedText": "- `cd EXTENSIONS/CVF_GUARD_CONTRACT && npx vitest run src/runtime/mandatory-gateway.test.ts src/runtime/agent-execution-runtime.test.ts src/runtime/providers/gemini-provider.test.ts src/runtime/provid",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0154",
+      "path": "docs/corpus-intelligence/CVF_CORPUS_SCAN_REGISTRY.json",
+      "line": 4561,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0155",
+      "path": "docs/corpus-intelligence/CVF_CORPUS_SCAN_REGISTRY.json",
+      "line": 4562,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0156",
+      "path": "docs/corpus-intelligence/CVF_CORPUS_SCAN_REGISTRY.json",
+      "line": 4637,
+      "matchedText": "\"production caller for MandatoryGateway or createMandatoryGateway\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0157",
+      "path": "docs/corpus-intelligence/registry/entries/msea-r90-system-chain-audit-a.json",
+      "line": 33,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0158",
+      "path": "docs/corpus-intelligence/registry/entries/msea-r90-system-chain-audit-a.json",
+      "line": 34,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0159",
+      "path": "docs/corpus-intelligence/registry/entries/msea-r90-system-chain-audit-a.json",
+      "line": 109,
+      "matchedText": "\"production caller for MandatoryGateway or createMandatoryGateway\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0160",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_02.md",
+      "line": 286,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0161",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_02.md",
+      "line": 292,
+      "matchedText": "- `cd EXTENSIONS/CVF_GUARD_CONTRACT && npx vitest run src/sdk/guard-sdk.test.ts src/runtime/full-skill-registry.test.ts src/runtime/agent-execution-runtime.test.ts src/runtime/providers/gemini-provide",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0162",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_02.md",
+      "line": 304,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0163",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_02.md",
+      "line": 305,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0164",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_02.md",
+      "line": 306,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0165",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_02.md",
+      "line": 307,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0166",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_02.md",
+      "line": 313,
+      "matchedText": "- `cd EXTENSIONS/CVF_GUARD_CONTRACT && npx vitest run src/runtime/mandatory-gateway.test.ts src/runtime/agent-execution-runtime.test.ts src/runtime/providers/gemini-provider.test.ts src/runtime/provid",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0167",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_02.md",
+      "line": 2914,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts` [NEW]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0168",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_02.md",
+      "line": 2922,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT: npx vitest run src/runtime/agent-execution-runtime.test.ts` -> PASS",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0169",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_02.md",
+      "line": 3080,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0170",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_02.md",
+      "line": 3092,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts` [NEW]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0171",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_03.md",
+      "line": 58,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0172",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_03.md",
+      "line": 59,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0173",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_08.md",
+      "line": 25,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0174",
+      "path": "docs/logs/CVF_INCREMENTAL_TEST_LOG_ARCHIVE_2026_PART_08.md",
+      "line": 26,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0175",
+      "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
+      "line": 46,
+      "matchedText": "| `GC-009` | IMPLEMENTED_NOT_INVOCATION_PROVEN: intended rule is every execution channel must pass through guard evaluation first, but no non-test, non-type-only production caller is currently proven ",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0176",
+      "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
+      "line": 47,
+      "matchedText": "| `GC-010` | IMPLEMENTED_NOT_INVOCATION_PROVEN: intended rule is governed helper runtime must stop on approval-required escalations, but no non-test, non-type-only production caller is currently prove",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0177",
+      "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
+      "line": 57,
+      "matchedText": "| `GC-020` | governed work pauses/transfers must classify the transition first and then leave one truthful handoff before another worker continues | `CVF_AGENT_HANDOFF_TRANSITION_GUARD` + `CVF_AGENT_H",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0178",
+      "path": "docs/reference/system_architecture_catalog/CVF_AS_BUILT_SYSTEM_CATALOG_AGGREGATE.json",
+      "line": 174,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0179",
+      "path": "docs/reference/system_architecture_catalog/CVF_AS_BUILT_SYSTEM_CATALOG_AGGREGATE.json",
+      "line": 181,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\"",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0180",
+      "path": "docs/reference/system_architecture_catalog/CVF_AS_BUILT_SYSTEM_CATALOG_AGGREGATE.json",
+      "line": 418,
+      "matchedText": "\"claimBoundary\": \"Active helper line implementing GC-001, GC-009, GC-011 and other mandatory-gateway/runtime-guard contract rows.\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0181",
+      "path": "docs/reference/system_architecture_catalog/entries/edge.gc009_gateway_no_caller.v1.json",
+      "line": 11,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0182",
+      "path": "docs/reference/system_architecture_catalog/entries/edge.gc009_gateway_no_caller.v1.json",
+      "line": 18,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\"",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0183",
+      "path": "docs/reference/system_architecture_catalog/entries/module.guard_contract_runtime.v1.json",
+      "line": 22,
+      "matchedText": "\"claimBoundary\": \"Active helper line implementing GC-001, GC-009, GC-011 and other mandatory-gateway/runtime-guard contract rows.\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0184",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+      "line": 401,
+      "matchedText": "\"claimFragment\": \"GC-009: IMPLEMENTED_NOT_INVOCATION_PROVEN: intended rule is every execution channel must pass through guard evaluation first, but no non-test, non-type-only production caller is curr",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0185",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+      "line": 410,
+      "matchedText": "\"claimFragment\": \"GC-010: IMPLEMENTED_NOT_INVOCATION_PROVEN: intended rule is governed helper runtime must stop on approval-required escalations, but no non-test, non-type-only production caller is cu",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0186",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+      "line": 914,
+      "matchedText": "\"claimFragment\": \"MODULE cvf.asc.module.guard_contract_runtime.v1: Active helper line implementing GC-001, GC-009, GC-011 and other mandatory-gateway/runtime-guard contract rows.\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0187",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+      "line": 1721,
+      "matchedText": "\"claimText\": \"Governance Control Matrix row GC-009 assigns primary owner `MandatoryGateway` with enforcement class `GATEWAY_PRECONDITION` and rule: IMPLEMENTED_NOT_INVOCATION_PROVEN: intended rule is ",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0188",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+      "line": 1726,
+      "matchedText": "\"owner\": \"`MandatoryGateway`\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0189",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+      "line": 1743,
+      "matchedText": "\"claimText\": \"Governance Control Matrix row GC-010 assigns primary owner `AgentExecutionRuntime` with enforcement class `GATEWAY_PRECONDITION` and rule: IMPLEMENTED_NOT_INVOCATION_PROVEN: intended rul",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0190",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+      "line": 1748,
+      "matchedText": "\"owner\": \"`AgentExecutionRuntime`\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0191",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+      "line": 2975,
+      "matchedText": "\"claimText\": \"As-built catalog entity cvf.asc.module.guard_contract_runtime.v1 (MODULE) asserts: Active helper line implementing GC-001, GC-009, GC-011 and other mandatory-gateway/runtime-guard contra",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0192",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+      "line": 2982,
+      "matchedText": "\"assertedBehavior\": \"Active helper line implementing GC-001, GC-009, GC-011 and other mandatory-gateway/runtime-guard contract rows.\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0193",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+      "line": 2993,
+      "matchedText": "\"claimBoundary\": \"Active helper line implementing GC-001, GC-009, GC-011 and other mandatory-gateway/runtime-guard contract rows.\"",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0194",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+      "line": 3223,
+      "matchedText": "\"description\": \"GC-009 (MandatoryGateway) and GC-010 (AgentExecutionRuntime) are both explicitly recorded as IMPLEMENTED_NOT_INVOCATION_PROVEN in the Governance Control Matrix, with no proven non-test",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0195",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 68,
+      "matchedText": "\"command\": \"rg -n 'new\\\\s+MandatoryGateway|createMandatoryGateway\\\\s*\\\\(' EXTENSIONS --glob '!**/*.test.ts' --glob '!**/*.spec.ts' --glob '!**/node_modules/**' --glob '!**/.next/**'\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0196",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 70,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:219:export function createMandatoryGateway(\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q12_export_MandatoryGateway",
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path",
+        "Q7_createMandatoryGateway_call"
+      ]
+    },
+    {
+      "rowId": "ROW-0197",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 71,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:223:  return new MandatoryGateway(engine, config);\"",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0198",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 73,
+      "matchedText": "\"matchInterpretation\": \"Both matches are inside the defining module's own factory function (createMandatoryGateway at line 219, constructing MandatoryGateway at line 223). No external non-test caller ",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0199",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 76,
+      "matchedText": "\"command\": \"rg -n 'new\\\\s+AgentExecutionRuntime\\\\s*\\\\(' EXTENSIONS --glob '!**/*.test.ts' --glob '!**/*.spec.ts' --glob '!**/node_modules/**' --glob '!**/.next/**'\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0200",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 78,
+      "matchedText": "\"matchInterpretation\": \"Zero matches. No construction site (test or non-test) found for AgentExecutionRuntime outside its own class definition.\"",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0201",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 81,
+      "matchedText": "\"command\": \"rg -n 'MandatoryGateway' EXTENSIONS --glob '!**/*.test.ts' --glob '!**/*.spec.ts' --glob '!**/node_modules/**' --glob '!**/.next/**'\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0202",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 84,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:66:export class MandatoryGateway {\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q12_export_MandatoryGateway",
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0203",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 85,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:185:  assertAllowed(request: Parameters<MandatoryGateway['check']>[0]): void {\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0204",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 86,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:219:export function createMandatoryGateway(\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q12_export_MandatoryGateway",
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path",
+        "Q7_createMandatoryGateway_call"
+      ]
+    },
+    {
+      "rowId": "ROW-0205",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 87,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:222:): MandatoryGateway {\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0206",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 88,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:223:  return new MandatoryGateway(engine, config);\"",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0207",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 93,
+      "matchedText": "\"command\": \"rg -n 'AgentExecutionRuntime' EXTENSIONS --glob '!**/*.test.ts' --glob '!**/*.spec.ts' --glob '!**/node_modules/**' --glob '!**/.next/**'\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0208",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 96,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/gemini-provider.ts:5: * Implements the `ExecutionProvider` interface from AgentExecutionRuntime.\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0209",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 97,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/alibaba-dashscope-provider.ts:5: * Implements the `ExecutionProvider` interface from AgentExecutionRuntime.\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0210",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 98,
+      "matchedText": "\"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts:130:export class AgentExecutionRuntime {\"",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q16_export_AgentExecutionRuntime",
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0211",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 107,
+      "matchedText": "\"MandatoryGateway_class_line\": 66,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0212",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 108,
+      "matchedText": "\"createMandatoryGateway_factory_line\": 219,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0213",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 109,
+      "matchedText": "\"AgentExecutionRuntime_class_line\": 130,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0214",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 110,
+      "matchedText": "\"workOrderCitedAgentExecutionRuntimeLine\": 129,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0215",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 111,
+      "matchedText": "\"lineCiteNote\": \"Work order cited line 129 for AgentExecutionRuntime; direct read confirms the export class declaration is on line 130 (line 129 is the closing brace of a preceding JSDoc comment). Thi",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0216",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 122,
+      "matchedText": "\"relatedClaimRelationship\": \"SAME_UNDERLYING_GAP_DIFFERENT_OWNER_RECORD: the catalog EDGE entity cvf.asc.edge.gc009_gateway_no_caller.v1 cites the identical no-non-test-caller finding for MandatoryGat",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0217",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 131,
+      "matchedText": "\"rationale\": \"The next proof step is a source-verification search (already partially performed by this T1 packet and previously by the T0/baseline dispatcher) for a non-test, non-type-only caller of M",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0218",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 144,
+      "matchedText": "\"recommendedNextAction\": \"Smallest next step: repeat and, if needed, broaden the non-test-caller source search for MandatoryGateway/createMandatoryGateway across the full repository (not just EXTENSIO",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0219",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 154,
+      "matchedText": "\"relatedClaimRelationship\": \"NO_RELATED_CATALOG_ENTITY_IN_THIS_CLAIM_SET: unlike GC-009, none of the three MISSING_PROOF claims or the two owner/GAP candidates cite a distinct catalog EDGE entity spec",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0220",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 159,
+      "matchedText": "\"rationale\": \"GC-010 is also a GATEWAY_PRECONDITION control (AgentExecutionRuntime, intended rule: governed helper runtime must stop on approval-required escalations). Like GC-009, confirming or refut",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0221",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 163,
+      "matchedText": "\"rationale\": \"Same class of cost as GC-009: a read-only repository search for a non-test AgentExecutionRuntime construction site. This T1 packet's own freshness search already executed this exact sear",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0222",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 171,
+      "matchedText": "\"rationale\": \"AgentExecutionRuntime backs an approval-checkpoint-adjacent stop-on-escalation rule. If genuinely uninvoked, escalation stopping is not currently enforced through this runtime path in pr",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0223",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 176,
+      "matchedText": "\"recommendedNextAction\": \"Smallest next step: in the same future T2 packet as GC-009, repeat and, if needed, broaden the non-test-caller source search for AgentExecutionRuntime construction sites, and",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0224",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 195,
+      "matchedText": "\"rationale\": \"If T1-DEC-01's source-verification step is executed, this catalog entity's status is answered for free as a byproduct (same caller-search target: MandatoryGateway). No separate proof cos",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0225",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 207,
+      "matchedText": "\"candidateDecisionRationale\": \"NOT_APPLICABLE_WITH_REASON: this claim is not an independent T2 candidate. Its underlying fact is the same MandatoryGateway no-caller gap already selected for a future b",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0226",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 208,
+      "matchedText": "\"recommendedNextAction\": \"No independent next action. If a future T2 packet source-verifies a MandatoryGateway caller (per T1-DEC-01's recommendedNextAction), the reviewer/closer should reverse-projec",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0227",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 221,
+      "matchedText": "\"t0Description\": \"GC-009 (MandatoryGateway) and GC-010 (AgentExecutionRuntime) are both explicitly recorded as IMPLEMENTED_NOT_INVOCATION_PROVEN in the Governance Control Matrix, with no proven non-te",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0228",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 224,
+      "matchedText": "\"reopenCondition\": \"Reopen this owner/GAP decision once a governed T2 packet (per T1-DEC-01 and T1-DEC-02 recommendedNextAction) completes its source-verification step for MandatoryGateway and AgentEx",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0229",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 256,
+      "matchedText": "\"ctr01DecisionEvidence\": \"This T1 packet's current-caller freshness search targeted GC-009 (MandatoryGateway) and GC-010 (AgentExecutionRuntime) per the work order's Current Runtime Freshness Verifica",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0230",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 332,
+      "matchedText": "\"recommendationScope\": \"A future T2 packet limited to READ-ONLY, repository-wide (not just EXTENSIONS/-scoped) source verification for non-test callers of MandatoryGateway/createMandatoryGateway and A",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0231",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION.json",
+      "line": 352,
+      "matchedText": "\"newNonTestCallerContradictsT0\": \"NOT_TRIGGERED - zero new non-test callers found for MandatoryGateway or AgentExecutionRuntime\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0232",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+      "line": 64,
+      "matchedText": "\"implementedBy\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/phase-gate.guard.ts (GC-001); EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts (GC-009); EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0233",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+      "line": 88,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0234",
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+      "line": 93,
+      "matchedText": "\"path\": \"EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts\",",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0235",
+      "path": "docs/reviews/CVF_INDEPENDENT_SYSTEM_REVIEW_2026-03-19.md",
+      "line": 56,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0236",
+      "path": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_WORKER_RETURN_2026-07-10.md",
+      "line": 45,
+      "matchedText": "| `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | SOURCE_VERIFIED |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0237",
+      "path": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_WORKER_RETURN_2026-07-10.md",
+      "line": 108,
+      "matchedText": "repo-wide search found zero non-test callers of `MandatoryGateway`/",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0238",
+      "path": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_WORKER_RETURN_2026-07-10.md",
+      "line": 109,
+      "matchedText": "`createMandatoryGateway` anywhere; **GC-011** reached a fully proven",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0239",
+      "path": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_WORKER_RETURN_2026-07-10.md",
+      "line": 380,
+      "matchedText": "| `grep -rn \"MandatoryGateway\\|createMandatoryGateway\"` across all non-test `.ts` files (GC-009 caller search) | zero matches - no confirmed production caller |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0240",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_COMPLETION_2026-07-11.md",
+      "line": 33,
+      "matchedText": "Both helpers are implemented and tested. MandatoryGateway has no non-test",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0241",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_COMPLETION_2026-07-11.md",
+      "line": 34,
+      "matchedText": "consumer. AgentExecutionRuntime is constructed by its dedicated test and two",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0242",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 27,
+      "matchedText": "Source-verify whether `MandatoryGateway` (GC-009) and `AgentExecutionRuntime`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0243",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 40,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` (class",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0244",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 41,
+      "matchedText": "`MandatoryGateway`, factory `createMandatoryGateway`)",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0245",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 42,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0246",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 43,
+      "matchedText": "(class `AgentExecutionRuntime`)",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0247",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 51,
+      "matchedText": "full: neither `MandatoryGateway`, `createMandatoryGateway`, nor",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0248",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 52,
+      "matchedText": "`AgentExecutionRuntime` is exported; the `createGuardEngine` factory only",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0249",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 55,
+      "matchedText": "sections: neither `runtime/mandatory-gateway.ts` nor",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0250",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 56,
+      "matchedText": "`runtime/agent-execution-runtime.ts` is listed, so neither is a public",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0251",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 58,
+      "matchedText": "5. Searched the full `EXTENSIONS/` tree for `MandatoryGateway`,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0252",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 59,
+      "matchedText": "`createMandatoryGateway`, and `AgentExecutionRuntime`. The eight matched",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0253",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 63,
+      "matchedText": "AgentExecutionRuntime, but remain test-only evidence. No matched production",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0254",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 74,
+      "matchedText": "9. Confirmed MandatoryGateway is constructed only by its factory and dedicated",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0255",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 75,
+      "matchedText": "test. AgentExecutionRuntime is constructed by its dedicated test and two",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0256",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 94,
+      "matchedText": "Both `MandatoryGateway` and `AgentExecutionRuntime` are fully implemented and",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0257",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 101,
+      "matchedText": "provider files that mention `AgentExecutionRuntime` do so only in a",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0258",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 115,
+      "matchedText": "| GC-009 | `IMPLEMENTED_NOT_INVOCATION_PROVEN` | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts` | \"every execu",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0259",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 116,
+      "matchedText": "| GC-010 | `IMPLEMENTED_NOT_INVOCATION_PROVEN` | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts` | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts` | ",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0260",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 170,
+      "matchedText": "| `rg -n \"MandatoryGateway\\|createMandatoryGateway\\|AgentExecutionRuntime\" EXTENSIONS` (excluding node_modules/dist) | 8 files: both helper sources, both dedicated test files, and two provider files w",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0261",
+      "path": "docs/reviews/CVF_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_WORKER_RETURN_2026-07-11.md",
+      "line": 171,
+      "matchedText": "| `cd EXTENSIONS/CVF_GUARD_CONTRACT && npm test -- src/runtime/mandatory-gateway.test.ts src/runtime/agent-execution-runtime.test.ts` | Test Files 2 passed (2); Tests 54 passed (54) | PASS |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0262",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_COMPLETION_2026-07-15.md",
+      "line": 63,
+      "matchedText": "`createMandatoryGateway` factory and its self-construction; no",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0263",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_COMPLETION_2026-07-15.md",
+      "line": 64,
+      "matchedText": "`AgentExecutionRuntime` construction site was found.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0264",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_COMPLETION_2026-07-15.md",
+      "line": 111,
+      "matchedText": "machine/display line-number offset for `AgentExecutionRuntime`: direct numbered",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0265",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_COMPLETION_2026-07-15.md",
+      "line": 121,
+      "matchedText": "| source display and source-verification gate differ by one line for `AgentExecutionRuntime` | RULE_GAP | GOVERNANCE_CONTROL_PLANE | N/A_WITH_REASON | retain checker-recognized citation and record the",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0266",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_COMPLETION_2026-07-15.md",
+      "line": 170,
+      "matchedText": "- Repository-wide caller searches: only the defining MandatoryGateway factory;",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0267",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_COMPLETION_2026-07-15.md",
+      "line": 171,
+      "matchedText": "zero AgentExecutionRuntime construction sites.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0268",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 39,
+      "matchedText": "| `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | PARTIAL_READ |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0269",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 40,
+      "matchedText": "| `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts` | PARTIAL_READ |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0270",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 74,
+      "matchedText": "`MandatoryGateway` and `AgentExecutionRuntime`.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0271",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 107,
+      "matchedText": "`MandatoryGateway`/`createMandatoryGateway` or `AgentExecutionRuntime`.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0272",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 123,
+      "matchedText": "verification for `MandatoryGateway` and `AgentExecutionRuntime` callers is",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0273",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 133,
+      "matchedText": "`AgentExecutionRuntime` at line 129 of",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0274",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 134,
+      "matchedText": "`EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`;",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0275",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 135,
+      "matchedText": "direct read confirms the `export class AgentExecutionRuntime` declaration is",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q16_export_AgentExecutionRuntime",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0276",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 266,
+      "matchedText": "| Work-order Source Verification Block cited `AgentExecutionRuntime` at line 129; direct source read shows the class declaration is at line 130 (line 129 is a JSDoc closing brace) | RULE_GAP | GOVERNA",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0277",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 279,
+      "matchedText": "`MandatoryGateway` and `AgentExecutionRuntime`, consistent with T0's",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0278",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 287,
+      "matchedText": "zero non-test construction sites for either `MandatoryGateway`/",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0279",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 288,
+      "matchedText": "`createMandatoryGateway` or `AgentExecutionRuntime` outside their own",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0280",
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T1_VALUE_SELECTION_WORKER_RETURN_2026-07-15.md",
+      "line": 293,
+      "matchedText": "source-citation discrepancy for `AgentExecutionRuntime`, see `## Finding-To-",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0281",
+      "path": "docs/reviews/cvf_phase_governance/archive/CVF_INDEPENDENT_EXPERT_REVIEW_POST_SPRINT_2026-03-12.md",
+      "line": 17,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0282",
+      "path": "docs/reviews/cvf_phase_governance/archive/CVF_INDEPENDENT_EXPERT_REVIEW_POST_SPRINT_2026-03-12.md",
+      "line": 46,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0283",
+      "path": "docs/reviews/cvf_phase_governance/archive/CVF_INDEPENDENT_EXPERT_REVIEW_POST_SPRINT_2026-03-12.md",
+      "line": 95,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0284",
+      "path": "docs/reviews/cvf_phase_governance/archive/CVF_INDEPENDENT_EXPERT_REVIEW_POST_SPRINT_2026-03-12.md",
+      "line": 140,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0285",
+      "path": "docs/reviews/cvf_phase_governance/archive/CVF_INDEPENDENT_POSTFIX_REVIEW_2026-03-12.md",
+      "line": 24,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0286",
+      "path": "docs/reviews/cvf_phase_governance/archive/CVF_INDEPENDENT_POSTFIX_REVIEW_2026-03-12.md",
+      "line": 32,
+      "matchedText": "2. /api/execute still runs direct AI execution and does not route through AgentExecutionRuntime.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0287",
+      "path": "docs/reviews/cvf_phase_governance/archive/CVF_INDEPENDENT_POSTFIX_REVIEW_2026-03-12.md",
+      "line": 70,
+      "matchedText": "### 4.2 /api/execute does not use AgentExecutionRuntime",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0288",
+      "path": "docs/reviews/cvf_phase_governance/archive/CVF_INDEPENDENT_POSTFIX_REVIEW_2026-03-12.md",
+      "line": 79,
+      "matchedText": "Observation: execution path runs executeAI directly and bypasses AgentExecutionRuntime.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0289",
+      "path": "docs/reviews/cvf_phase_governance/archive/CVF_INDEPENDENT_POSTFIX_REVIEW_2026-03-12.md",
+      "line": 152,
+      "matchedText": "2. Route /api/execute through AgentExecutionRuntime.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0290",
+      "path": "docs/reviews/cvf_phase_governance/archive/CVF_ROADMAP_FIXES_2026-03-10.md",
+      "line": 118,
+      "matchedText": "class AgentExecutionRuntime {",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0291",
+      "path": "docs/roadmaps/CVF_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_ROADMAP_2026-07-15.md",
+      "line": 214,
+      "matchedText": "repository-wide read-only caller verification for `MandatoryGateway`,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0292",
+      "path": "docs/roadmaps/CVF_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_ROADMAP_2026-07-15.md",
+      "line": 215,
+      "matchedText": "`createMandatoryGateway`, and `AgentExecutionRuntime`; terminally classify",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0293",
+      "path": "docs/roadmaps/archive/CVF_EXECUTION_UPGRADE_ROADMAP_2026-03-11.md",
+      "line": 85,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0294",
+      "path": "docs/roadmaps/archive/CVF_EXECUTION_UPGRADE_ROADMAP_2026-03-11.md",
+      "line": 87,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0295",
+      "path": "docs/roadmaps/archive/CVF_EXECUTION_UPGRADE_ROADMAP_2026-03-11.md",
+      "line": 89,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0296",
+      "path": "docs/roadmaps/archive/CVF_EXECUTION_UPGRADE_ROADMAP_2026-03-11.md",
+      "line": 92,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0297",
+      "path": "docs/roadmaps/archive/CVF_EXECUTION_UPGRADE_ROADMAP_2026-03-11.md",
+      "line": 122,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0298",
+      "path": "docs/roadmaps/archive/CVF_PHASE_1_CONTRACT_BOUNDARY_CONVERGENCE.md",
+      "line": 17,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0299",
+      "path": "docs/roadmaps/archive/CVF_PHASE_1_CONTRACT_BOUNDARY_CONVERGENCE.md",
+      "line": 29,
+      "matchedText": "| **Agent Execution Runtime** | `CVF_GUARD_CONTRACT/runtime/agent-execution-runtime.ts` | `AgentExecutionRuntime` class | Agent consumers |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0300",
+      "path": "docs/roadmaps/archive/CVF_PHASE_1_CONTRACT_BOUNDARY_CONVERGENCE.md",
+      "line": 60,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0301",
+      "path": "docs/roadmaps/archive/CVF_PHASE_1_CONTRACT_BOUNDARY_CONVERGENCE.md",
+      "line": 83,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0302",
+      "path": "docs/roadmaps/archive/CVF_PHASE_1_CONTRACT_BOUNDARY_CONVERGENCE.md",
+      "line": 157,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0303",
+      "path": "docs/roadmaps/archive/CVF_ROADMAP_2026-03-12.md",
+      "line": 120,
+      "matchedText": "[non-ASCII source excerpt paraphrased for encoding compliance: historical Vietnamese-language governance prose citing this symbol/module path; see path/line for original text]",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0304",
+      "path": "docs/roadmaps/archive/CVF_SYSTEM_UNIFICATION_PHASE1_BACKLOG_2026-03-19.md",
+      "line": 248,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0305",
+      "path": "docs/roadmaps/archive/CVF_SYSTEM_UNIFICATION_PHASE1_BACKLOG_2026-03-19.md",
+      "line": 261,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0306",
+      "path": "docs/roadmaps/archive/CVF_SYSTEM_UNIFICATION_PHASE1_BACKLOG_2026-03-19.md",
+      "line": 299,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0307",
+      "path": "docs/roadmaps/archive/CVF_SYSTEM_UNIFICATION_PHASE1_BACKLOG_2026-03-19.md",
+      "line": 300,
+      "matchedText": "- `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.test.ts`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0308",
+      "path": "docs/roadmaps/archive/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_ARCHIVE_W1-W6T76_2026-03-19_TO_2026-03-23.md",
+      "line": 233,
+      "matchedText": "- runtime helper alignment (`mandatory-gateway`, `agent-execution-runtime`): `PARTIAL`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0309",
+      "path": "docs/roadmaps/archive/CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_ARCHIVE_W1-W6T76_2026-03-19_TO_2026-03-23.md",
+      "line": 282,
+      "matchedText": "- runtime helper alignment (`mandatory-gateway`, `agent-execution-runtime`): `COMPLETED`",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0310",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_2026-07-11.md",
+      "line": 42,
+      "matchedText": "Resolve whether GC-009 MandatoryGateway and GC-010 AgentExecutionRuntime have",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0311",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_2026-07-11.md",
+      "line": 140,
+      "matchedText": "| MandatoryGateway exists | EXISTS | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | lines 66 and 219 | `MandatoryGateway`; `createMandatoryGateway` | runtime helper | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0312",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_2026-07-11.md",
+      "line": 141,
+      "matchedText": "| AgentExecutionRuntime exists | EXISTS | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts` | line 129 | `AgentExecutionRuntime` | runtime helper | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0313",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_2026-07-11.md",
+      "line": 273,
+      "matchedText": "rg -n \"MandatoryGateway|createMandatoryGateway|AgentExecutionRuntime\" EXTENSIONS --glob \"!**/node_modules/**\" --glob \"!**/dist/**\"",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0314",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_MSEA_R94_T1B_GATEWAY_HELPER_OWNERSHIP_DISPOSITION_2026-07-11.md",
+      "line": 275,
+      "matchedText": "npm test -- src/runtime/mandatory-gateway.test.ts src/runtime/agent-execution-runtime.test.ts",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q4_mandatory-gateway_path",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0315",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 159,
+      "matchedText": "| `MandatoryGateway` definition exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | line 65 | `MandatoryGateway` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0316",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 160,
+      "matchedText": "| `createMandatoryGateway` factory exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | line 219 | `createMandatoryGateway` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0317",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 161,
+      "matchedText": "| `AgentExecutionRuntime` definition exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts` | line 129 | `AgentExecutionRuntime` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0318",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 188,
+      "matchedText": "rg -n 'new\\s+MandatoryGateway|createMandatoryGateway\\s*\\(' EXTENSIONS --glob '!**/*.test.ts' --glob '!**/*.spec.ts' --glob '!**/node_modules/**' --glob '!**/.next/**'",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0319",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+      "line": 189,
+      "matchedText": "rg -n 'new\\s+AgentExecutionRuntime\\s*\\(' EXTENSIONS --glob '!**/*.test.ts' --glob '!**/*.spec.ts' --glob '!**/node_modules/**' --glob '!**/.next/**'",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0320",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 61,
+      "matchedText": "non-test production caller exists for `MandatoryGateway`/",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0321",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 62,
+      "matchedText": "`createMandatoryGateway` or `AgentExecutionRuntime`. Classify every collision,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0322",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 159,
+      "matchedText": "| `MandatoryGateway` exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | line 65 | `MandatoryGateway` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0323",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 160,
+      "matchedText": "| `createMandatoryGateway` exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts` | line 219 | `createMandatoryGateway` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0324",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 161,
+      "matchedText": "| `AgentExecutionRuntime` exists | `EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts` | line 129 | `AgentExecutionRuntime` | guard-contract runtime | EXISTS | ACCEPT |",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0325",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 201,
+      "matchedText": "2. Run a full collision scan for `MandatoryGateway`,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol"
+      ]
+    },
+    {
+      "rowId": "ROW-0326",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 202,
+      "matchedText": "`createMandatoryGateway`, `AgentExecutionRuntime`, `mandatory-gateway`, and",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q4_mandatory-gateway_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0327",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 203,
+      "matchedText": "`agent-execution-runtime` across that same universe.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q5_agent-execution-runtime_path"
+      ]
+    },
+    {
+      "rowId": "ROW-0328",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 204,
+      "matchedText": "3. Run a constructor/factory-call scan for `new MandatoryGateway`,",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q6_new_MandatoryGateway_ctor"
+      ]
+    },
+    {
+      "rowId": "ROW-0329",
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T2_CALLER_VERIFICATION_2026-07-15.md",
+      "line": 205,
+      "matchedText": "`createMandatoryGateway(`, and `new AgentExecutionRuntime(`.",
+      "matchClassification": "HISTORICAL_DOCUMENT",
+      "authorityClass": "HISTORICAL_NON_AUTHORITY",
+      "contributingQueryIds": [
+        "Q1_MandatoryGateway_symbol",
+        "Q2_createMandatoryGateway_symbol",
+        "Q3_AgentExecutionRuntime_symbol",
+        "Q7_createMandatoryGateway_call",
+        "Q8_new_AgentExecutionRuntime_ctor"
+      ]
+    }
+  ],
+  "targetDecisions": [
+    {
+      "targetId": "GC-009",
+      "targetSymbolOrModule": "MandatoryGateway / createMandatoryGateway",
+      "definitionSource": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
+      "definitionLines": {
+        "MandatoryGateway_class": 66,
+        "createMandatoryGateway_factory": 219
+      },
+      "contributingLedgerRowIds": [
+        "ROW-0022",
+        "ROW-0023",
+        "ROW-0024",
+        "ROW-0025",
+        "ROW-0026",
+        "ROW-0027",
+        "ROW-0028",
+        "ROW-0029",
+        "ROW-0045",
+        "ROW-0046",
+        "ROW-0047",
+        "ROW-0048",
+        "ROW-0049",
+        "ROW-0050",
+        "ROW-0051",
+        "ROW-0052",
+        "ROW-0053",
+        "ROW-0054",
+        "ROW-0055",
+        "ROW-0056",
+        "ROW-0057",
+        "ROW-0058",
+        "ROW-0059",
+        "ROW-0060"
+      ],
+      "nonTestProductionCallRowCount": 0,
+      "testOnlyRowCount": 10,
+      "ambiguousRowCount": 0,
+      "callerVerificationDisposition": "NO_NON_TEST_PRODUCTION_CALLER_FOUND",
+      "callerVerificationDispositionRationale": "Repository-wide search across 22026 enumerated files (16 queries, 500 raw hits, 329 unique path/line rows, zero ambiguous rows) found MandatoryGateway/createMandatoryGateway defined and self-constructed only inside their own defining module (mandatory-gateway.ts lines 66/219/223), exercised only by the module's own co-located test file (mandatory-gateway.test.ts, 10 TEST_ONLY rows), mirrored in generated coverage HTML/XML/JSON (GENERATED_COVERAGE, non-authority), and otherwise referenced only in governance/audit/architecture-catalog/session-routing prose (HISTORICAL_DOCUMENT) or one private external AST-declaration scout report (PRIVATE_EXTERNAL_EVIDENCE). The public package surface (EXTENSIONS/CVF_GUARD_CONTRACT/package.json exports/files) and the barrel module (EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts) were independently re-verified in this T2 tranche and confirmed to omit both the module path and the symbol entirely -- corroborating, with fresh direct evidence, the same conclusion the R94-T1B tranche (2026-07-11) and T1 (2026-07-15) reached.",
+      "architectureRecommendation": "ADD_GAP_ENTRY_PROPOSED",
+      "architectureRecommendationRationale": "Zero unresolved/ambiguous matches for this target, satisfying the work order's requirement for a no-caller recommendation. Proposal only: a reviewer/closer should consider a formal GC-009 no-non-test-production-caller architecture GAP entry; this worker does not create or mutate any owner/GAP record.",
+      "packageSurfaceCorroboration": {
+        "packageJsonExportsOmitsModule": true,
+        "packageJsonFilesOmitsModule": true,
+        "barrelIndexTsOmitsSymbolAndModule": true,
+        "verifiedPaths": [
+          "EXTENSIONS/CVF_GUARD_CONTRACT/package.json",
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts"
+        ]
+      }
+    },
+    {
+      "targetId": "GC-010",
+      "targetSymbolOrModule": "AgentExecutionRuntime",
+      "definitionSource": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts",
+      "definitionLines": {
+        "AgentExecutionRuntime_class": 130,
+        "workOrderCitedLine": 129,
+        "lineCiteNote": "Work order cites line 129 (a known one-line citation offset already identified and accepted by the T1 closure -- line 129 is the closing brace of a preceding JSDoc block; line 130 is the actual `export class AgentExecutionRuntime {` declaration). This is a citation artifact, not a source-fact discrepancy, and does not change this target's disposition."
+      },
+      "contributingLedgerRowIds": [
+        "ROW-0016",
+        "ROW-0017",
+        "ROW-0018",
+        "ROW-0019",
+        "ROW-0030",
+        "ROW-0031",
+        "ROW-0032",
+        "ROW-0033",
+        "ROW-0034",
+        "ROW-0035",
+        "ROW-0036",
+        "ROW-0037",
+        "ROW-0038",
+        "ROW-0039",
+        "ROW-0040",
+        "ROW-0041",
+        "ROW-0042",
+        "ROW-0043",
+        "ROW-0044",
+        "ROW-0061",
+        "ROW-0062",
+        "ROW-0063",
+        "ROW-0064",
+        "ROW-0065",
+        "ROW-0066",
+        "ROW-0067",
+        "ROW-0068",
+        "ROW-0069",
+        "ROW-0070",
+        "ROW-0071"
+      ],
+      "nonTestProductionCallRowCount": 0,
+      "testOnlyRowCount": 16,
+      "ambiguousRowCount": 0,
+      "callerVerificationDisposition": "NO_NON_TEST_PRODUCTION_CALLER_FOUND",
+      "callerVerificationDispositionRationale": "Repository-wide search found AgentExecutionRuntime defined only at its own class declaration (agent-execution-runtime.ts line 130), constructed (`new AgentExecutionRuntime(`) only inside its own co-located test file and the two provider test files (agent-execution-runtime.test.ts, gemini-provider.test.ts, alibaba-dashscope-provider.test.ts -- all TEST_ONLY). The two non-test provider source files (gemini-provider.ts, alibaba-dashscope-provider.ts) import only the `ExecutionProvider` TYPE via `import type { ExecutionProvider } from '../agent-execution-runtime'` -- a type-only import, not a class construction or invocation -- plus one COMMENT_ONLY JSDoc mention each. No non-test file anywhere in the 22026-file universe constructs or invokes the AgentExecutionRuntime class. The package surface and barrel omit this module identically to GC-009 (see packageSurfaceCorroboration below, shared verification).",
+      "architectureRecommendation": "ADD_GAP_ENTRY_PROPOSED",
+      "architectureRecommendationRationale": "Zero unresolved/ambiguous matches for this target. Proposal only: a reviewer/closer should consider a formal GC-010 no-non-test-production-caller architecture GAP entry, potentially combined with GC-009 per OWNER-GAP-01's grouped framing in the accepted T1 record; this worker does not create or mutate any owner/GAP record.",
+      "packageSurfaceCorroboration": {
+        "packageJsonExportsOmitsModule": true,
+        "packageJsonFilesOmitsModule": true,
+        "barrelIndexTsOmitsSymbolAndModule": true,
+        "verifiedPaths": [
+          "EXTENSIONS/CVF_GUARD_CONTRACT/package.json",
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts"
+        ]
+      },
+      "additionalHistoricalCorroboration": "Archived historical review lineage (docs/reviews/cvf_phase_governance/archive/CVF_INDEPENDENT_EXPERT_REVIEW_POST_SPRINT_2026-03-12.md and CVF_INDEPENDENT_POSTFIX_REVIEW_2026-03-12.md, both HISTORICAL_DOCUMENT/HISTORICAL_NON_AUTHORITY) explicitly documents that the /api/execute Web route bypassed AgentExecutionRuntime entirely as of 2026-03-12. This is cited as corroborating historical evidence only, not as fresh proof; /api/execute's current wiring was not re-verified because it is outside the two named symbol/module targets and the 16 authorized queries, and re-verifying it would be scope expansion beyond this work order's Required Search Method."
+    }
+  ],
+  "gc009CatalogEdgeReverseProjection": {
+    "note": "Evidence only, per work order step 11. This is NOT a third independent target. Exactly two targetDecisions exist above (GC-009, GC-010).",
+    "catalogEntity": "cvf.asc.edge.gc009_gateway_no_caller.v1",
+    "catalogEntityPath": "docs/reference/system_architecture_catalog/entries/edge.gc009_gateway_no_caller.v1.json",
+    "t1SourceDecision": "T1-DEC-03 (NOT_APPLICABLE_WITH_REASON as an independent T2 candidate; same underlying MandatoryGateway no-caller gap as T1-DEC-01/GC-009)",
+    "projectedResult": "The GC-009 targetDecision above (NO_NON_TEST_PRODUCTION_CALLER_FOUND) answers this catalog entity's open question as a byproduct, exactly as T1-DEC-01's recommendedNextAction anticipated. The catalog entity's own claimBoundary already self-limits it as sampledOnly/HISTORICAL_TRACE and forbids treating it as full-matrix proof; this T2 evidence does not change that self-limitation, it only confirms the underlying no-caller fact persists under a full repository-wide (not EXTENSIONS/-only) search.",
+    "mutationPerformed": false,
+    "mutationAuthorized": false
+  },
+  "corpusCompletenessAndReportIntegrity": {
+    "corpusTaskClass": "FULL_REPOSITORY_MATCH_CORPUS",
+    "corpusRoot": "repository filesystem at executionBaseHead 9e3a672e6",
+    "snapshotTimeUtc": "2026-07-15T00:00:00Z",
+    "enumerationCommand": "rg --files --hidden --no-ignore -g '!.git/**' -g '!node_modules/**' -g '!**/node_modules/**' -g '!.next/**' -g '!**/.next/**' -g '!.cvf/**' -g '!**/.cvf/**'",
+    "manifestArtifactOrInlineManifest": "this JSON's searchUniverse block",
+    "manifestHash": "47e2c963495f5a5c85b74d019736df38bc306b27b0d1334affe750fd9f973101",
+    "processingLedgerArtifactOrInlineLedger": "this JSON's matchLedger (329 unique rows)",
+    "allowedTerminalStatuses": [
+      "READ",
+      "SKIPPED_WITH_REASON",
+      "DEFERRED",
+      "BLOCKED_UNREADABLE"
+    ],
+    "matchRowTerminalStatuses": [
+      "DEFINITION",
+      "SELF_CONSTRUCTION",
+      "NON_TEST_PRODUCTION_CALL",
+      "TEST_ONLY",
+      "TYPE_ONLY_IMPORT",
+      "COMMENT_ONLY",
+      "GENERATED_COVERAGE",
+      "HISTORICAL_DOCUMENT",
+      "PRIVATE_EXTERNAL_EVIDENCE",
+      "AMBIGUOUS_REFERENCE"
+    ],
+    "reconciliation": {
+      "manifestFileCount": 22026,
+      "rawQueryHitCount": 500,
+      "uniqueLedgerRowCount": 329,
+      "unresolvedRows": 0
+    },
+    "unresolvedFiles": 0,
+    "declaredExclusions": [
+      ".git",
+      "node_modules (incl. nested)",
+      ".next (incl. nested)",
+      ".cvf (incl. nested)"
+    ],
+    "unreadableOrUnsupportedFiles": "none",
+    "aggregationCheck": "PASS: 500 raw hits across 16 queries reconcile to 329 unique ledger rows; every row carries a terminal matchClassification and authorityClass; zero AMBIGUOUS_REFERENCE rows",
+    "driftCheck": "PASS: enumeration, all 16 queries, and both hash recomputations were performed in this same worker execution against executionBaseHead 9e3a672e6 with a clean pre-execution git status",
+    "outputTraceability": "both targetDecisions cite contributingLedgerRowIds resolving to the exact matchLedger rowId set",
+    "adversarialVerification": "package.json exports/files and src/index.ts barrel were independently re-read and confirmed to omit both target modules/symbols (fresh evidence beyond T1/R94-T1B reuse); all 26 TEST_ONLY rows and all 22 GENERATED_COVERAGE rows were individually inspected for path/content pattern rather than assumed from filename alone; the one archived historical review lineage documenting the /api/execute AgentExecutionRuntime bypass (2026-03-12) was read in full and classified HISTORICAL_DOCUMENT",
+    "corpusVerdict": "COMPLETE_VERIFIED"
+  },
+  "knowledgeSystemReconciliation": {
+    "knowledgeTaskClass": "RETRIEVAL_READINESS",
+    "sourceManifest": "this JSON's searchUniverse (22026 files) and matchLedger (329 unique rows)",
+    "sourceManifestHash": "47e2c963495f5a5c85b74d019736df38bc306b27b0d1334affe750fd9f973101",
+    "enumerationSafety": "rg --files --hidden --no-ignore with explicit --hidden and --no-ignore flags per GC-047/GC-048 safety requirement; not a bare rg --files call",
+    "intakeRegistryOrLedger": "this JSON's matchLedger",
+    "authorityAssets": 2,
+    "authorityAssetsNote": "T1 remains decision authority for target selection (2 targets: GC-009, GC-010). This T2 record's own authority scope is exactly caller-existence evidence for those 2 targets, not a re-derivation of T1's 6-record decision corpus or T0's 99-claim inventory.",
+    "derivedViews": "matchLedger and targetDecisions are derived caller-evidence views over the fixed 2-target authority scope; not a graph/Palace/cache view",
+    "semanticRegionLedger": "targetDecisions array (2 rows: GC-009, GC-010)",
+    "regionReconciliation": {
+      "assets": 2,
+      "mapped": 2,
+      "deferred": 0,
+      "unmapped": 0
+    },
+    "orphanOrUnmappedAssets": "none",
+    "crossRegionLinks": "gc009CatalogEdgeReverseProjection links the GC-009 targetDecision to its related T1-DEC-03 catalog-edge claim as evidence only, not a third mapped asset",
+    "driftCheck": "PASS: both accepted T1 input hashes recomputed independently at worker execution time; zero drift",
+    "rebuildabilityCheck": "PASS: this record is deterministically re-derivable by rerunning the 16 named queries against the same executionBaseHead and unchanged source",
+    "retrievalBoundary": "this record can answer whether a non-test production caller exists for MandatoryGateway/createMandatoryGateway or AgentExecutionRuntime as of executionBaseHead 9e3a672e6, and can enumerate every classified collision; it cannot answer new semantic questions about any other GC-001..GC-050 control or about runtime invocation behavior, which remain out of scope",
+    "adversarialVerification": "recomputed mapped=2/deferred=0/unmapped=0 by counting targetDecisions array length (2) against the accepted T1 two-target selection",
+    "knowledgeMapVerdict": "RECONCILED_VERIFIED"
+  },
+  "deltaExecutionClaimBoundaryControlBlock": {
+    "claimScope": "repository-wide read-only caller-existence verification for two accepted T1 target controls",
+    "claimDisposition": "CLAIM_REJECTED: T2 does not claim invocation proof, execution-control behavior, or universal E2E proof",
+    "receiptEvidence": "CVF_RECEIPT_PRESENT: accepted T1 evidence is a read-only selection input",
+    "actionEvidence": "ACTION_EVIDENCE_PRESENT: filesystem enumeration, hashing, text search, match classification, reconciliation, and local gates only",
+    "invocationBoundary": "zero live, provider, browser, business CLI, runtime, test, build, typecheck, and CI invocation",
+    "interceptionBoundary": "no wrapper, proxy, runtime gate, or agent-control implementation",
+    "claimLanguage": "bounded caller-existence verification, not invocation proof",
+    "forbiddenExpansion": "runtime implementation, proof promotion, owner/GAP mutation, T3 execution, provider calls, public, production, scale, certification, shipment, and user value"
+  },
+  "stopConditionsChecked": {
+    "hashDriftEitherInput": "NOT_TRIGGERED - both hashes matched exactly",
+    "unreadableFileInSearchUniverse": "NOT_TRIGGERED - zero unreadable/unsupported files encountered",
+    "targetCannotReceiveTerminalDisposition": "NOT_TRIGGERED - both targets received a terminal disposition from source reading alone",
+    "ambiguousIndirectReferenceUnresolved": "NOT_TRIGGERED - zero AMBIGUOUS_REFERENCE rows in the final ledger",
+    "correctionWouldTouchFourthPath": "NOT_TRIGGERED - only the three authorized output paths were created",
+    "overallStopVerdict": "NO_STOP_CONDITION_TRIGGERED"
+  },
+  "finalStatus": "COMPLETE_PENDING_REVIEW",
+  "publicExportDisposition": {
+    "status": "DEFERRED_PRIVATE_ONLY",
+    "reason": "private provenance caller-verification record; no public-sync authorization"
+  }
+}

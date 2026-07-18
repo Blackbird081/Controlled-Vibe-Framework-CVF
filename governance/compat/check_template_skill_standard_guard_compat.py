@@ -41,7 +41,7 @@ DOCS_INDEX_PATH = "docs/INDEX.md"
 REFERENCE_README_PATH = "docs/reference/README.md"
 ROOT_README_PATH = "README.md"
 KB_PATH = "docs/CVF_CORE_KNOWLEDGE_BASE.md"
-HANDOFF_PATH = "AGENT_HANDOFF.md"
+SESSION_MEMORY_PATH = "CVF_SESSION_MEMORY.md"
 HOOK_CHAIN_PATH = "governance/compat/run_local_governance_hook_chain.py"
 WORKFLOW_PATH = ".github/workflows/documentation-testing.yml"
 THIS_SCRIPT_PATH = "governance/compat/check_template_skill_standard_guard_compat.py"
@@ -64,7 +64,7 @@ REQUIRED_FILES = (
     REFERENCE_README_PATH,
     ROOT_README_PATH,
     KB_PATH,
-    HANDOFF_PATH,
+    SESSION_MEMORY_PATH,
     HOOK_CHAIN_PATH,
     WORKFLOW_PATH,
 )
@@ -153,12 +153,10 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         Path(GUARD_PATH).name,
         "TRUSTED_FOR_VALUE_PROOF",
     ),
-    HANDOFF_PATH: (
-        GUARD_PATH,
-        STANDARD_PATH,
-        MEASUREMENT_PATH,
-        THIS_SCRIPT_PATH,
-        "TRUSTED_FOR_VALUE_PROOF",
+    SESSION_MEMORY_PATH: (
+        "broad external knowledge absorption",
+        "blocked work classes",
+        "CVF_SESSION/ACTIVE_SESSION_STATE.json",
     ),
     HOOK_CHAIN_PATH: (
         THIS_SCRIPT_PATH,
@@ -303,7 +301,7 @@ def _classify(changed_name_status: dict[str, set[str]]) -> dict[str, Any]:
     companion_docs = [
         path
         for path in changed_name_status
-        if path in {STANDARD_PATH, ROADMAP_PATH, VALUE_ROADMAP_PATH, MEASUREMENT_PATH, HANDOFF_PATH}
+        if path in {STANDARD_PATH, ROADMAP_PATH, VALUE_ROADMAP_PATH, MEASUREMENT_PATH}
         or COMPANION_DOC_RE.match(path)
     ]
 

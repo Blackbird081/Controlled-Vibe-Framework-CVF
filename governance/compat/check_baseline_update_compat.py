@@ -43,7 +43,6 @@ NON_SUBSTANTIVE_PREFIXES = (
 )
 
 NON_SUBSTANTIVE_EXACT = {
-    ".github/pull_request_template.md",
     "docs/CVF_INCREMENTAL_TEST_LOG.md",
     "docs/BUG_HISTORY.md",
     "CHANGELOG.md",

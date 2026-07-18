@@ -128,6 +128,36 @@ export type {
   SessionSnapshot,
 } from './memory/session-memory.js';
 
+// ─── Gamma Startup State ──────────────────────────────────────────────
+export {
+  STARTUP_STATE_CONTRACT_VERSION,
+  buildStartupAcknowledgment,
+  checkGovernanceAction,
+  getActiveHandoff,
+  getGovernanceRules,
+  getSessionMemory,
+  getSessionState,
+  readRedactedFile,
+  redactSensitiveText,
+  resolveCvfRepo,
+} from './startup/startup-state.js';
+export type {
+  GovernanceCheckReadout,
+  RedactedFileReadout,
+  ResolvedCvfRepo,
+  StartupAcknowledgmentReadout,
+} from './startup/startup-state.js';
+
+export {
+  getMcpToolAuditSnapshot,
+  recordMcpToolCall,
+  withMcpToolAudit,
+} from './audit/mcp-tool-audit.js';
+export type {
+  McpToolAuditEntry,
+  McpToolAuditSnapshot,
+} from './audit/mcp-tool-audit.js';
+
 // ─── Non-coder: 5 Golden Screens ─────────────────────────────────────
 export {
   generateVibeBoxScreen,

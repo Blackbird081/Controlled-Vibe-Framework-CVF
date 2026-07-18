@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
+    buildEvidenceReceipt,
+    buildGovernanceTrace,
     buildGovernanceEnvelope,
     generatePolicySnapshotId,
     appendAuditEventToEnvelope,
@@ -158,6 +160,209 @@ describe('web-governance-envelope', () => {
             const before = env.auditEventIds;
             appendAuditEventToEnvelope(env, 'evt-X');
             expect(env.auditEventIds).toBe(before);
+        });
+    });
+
+    describe('buildGovernanceTrace', () => {
+        it('builds bounded default trace entries from receipt metadata', () => {
+            const env = buildGovernanceEnvelope({
+                routeId: '/api/execute',
+                surfaceClass: 'governance-execution',
+                evidenceMode: 'live',
+                riskLevel: 'R2',
+            });
+
+            const trace = buildGovernanceTrace({
+                envelope: env,
+                decision: 'ALLOW',
+                provider: 'alibaba',
+                model: 'qwen-turbo',
+                routingDecision: 'alibaba',
+                knowledgeSource: 'project',
+                knowledgeInjected: true,
+                knowledgeCollectionId: 'collection-1',
+                knowledgeChunkCount: 2,
+                approvalId: 'approval-1',
+                validationHint: 'ok',
+                aifMemoryReinjection: { status: 'SKIPPED' } as never,
+            });
+
+            expect(trace?.map((entry) => entry.stage)).toEqual([
+                'enforcement',
+                'routing',
+                'knowledge',
+                'approval',
+                'memory',
+                'validation',
+            ]);
+            expect(trace?.[0]).toMatchObject({
+                stage: 'enforcement',
+                policyId: env.policySnapshotId,
+                decision: 'ALLOW',
+            });
+            expect(trace?.every((entry) => Array.isArray(entry.parametersChecked))).toBe(true);
+            expect(trace?.every((entry) => Array.isArray(entry.constraintsApplied))).toBe(true);
+        });
+
+        it('sanitizes explicit trace entries and drops unsupported fields', () => {
+            const env = buildGovernanceEnvelope({
+                routeId: '/api/execute',
+                surfaceClass: 'governance-execution',
+                evidenceMode: 'live',
+            });
+
+            const receipt = buildEvidenceReceipt({
+                envelope: env,
+                governanceTrace: [
+                    {
+                        stage: 'routing',
+                        policyId: 'policy-1',
+                        decision: 'chosen',
+                        summary: 'Provider lane selected.',
+                        parametersChecked: ['provider'],
+                        constraintsApplied: ['bounded summary'],
+                        rawPrompt: 'please leak this',
+                        providerKey: 'sk-test-secret',
+                        privateMemory: 'internal memory',
+                    },
+                    {
+                        stage: 'unknown',
+                        policyId: 'policy-2',
+                        decision: 'ignored',
+                        summary: 'ignored',
+                        parametersChecked: ['ignored'],
+                        constraintsApplied: ['ignored'],
+                    },
+                ] as never,
+            });
+
+            expect(receipt.governanceTrace).toEqual([
+                {
+                    stage: 'routing',
+                    policyId: 'policy-1',
+                    decision: 'chosen',
+                    summary: 'Provider lane selected.',
+                    parametersChecked: ['provider'],
+                    constraintsApplied: ['bounded summary'],
+                },
+            ]);
+            const serialized = JSON.stringify(receipt.governanceTrace);
+            expect(serialized).not.toContain('sk-test-secret');
+            expect(serialized).not.toContain('please leak this');
+            expect(serialized).not.toContain('internal memory');
+        });
+
+        it('redacts unsafe explicit trace values instead of replaying them', () => {
+            const env = buildGovernanceEnvelope({
+                routeId: '/api/execute',
+                surfaceClass: 'governance-execution',
+                evidenceMode: 'live',
+            });
+
+            const trace = buildGovernanceTrace({
+                envelope: env,
+                governanceTrace: [{
+                    stage: 'validation',
+                    policyId: 'sk-unsafe-policy',
+                    decision: 'secret value',
+                    summary: 'raw prompt should not be repeated',
+                    parametersChecked: ['system prompt'],
+                    constraintsApplied: ['private memory'],
+                }] as never,
+            });
+
+            expect(trace).toEqual([{
+                stage: 'validation',
+                policyId: env.policySnapshotId,
+                decision: 'recorded',
+                summary: 'validation checkpoint recorded',
+                parametersChecked: ['bounded checkpoint metadata'],
+                constraintsApplied: ['summary-only receipt trace'],
+            }]);
+        });
+
+        it('adds bounded runtime telemetry with sanitized trace count', () => {
+            const env = buildGovernanceEnvelope({
+                routeId: '/api/execute',
+                surfaceClass: 'governance-execution',
+                evidenceMode: 'live',
+            });
+
+            const receipt = buildEvidenceReceipt({
+                envelope: env,
+                decision: 'ALLOW',
+                provider: 'alibaba',
+                model: 'qwen-turbo',
+                runtimeTelemetry: {
+                    schemaVersion: 'cvf.runtimeTelemetry.v1',
+                    providerLatencyMs: 321,
+                    routeElapsedMs: 456,
+                    tokenUsage: {
+                        inputTokens: 12,
+                        outputTokens: 34,
+                        totalTokens: 46,
+                    },
+                    estimatedCostUSD: 0.000148,
+                    costEstimateSource: 'cvf_model_pricing_table_or_fallback',
+                    redactionApplied: true,
+                    claimBoundary: 'summary_only_no_raw_prompt_output_key_or_provider_payload',
+                },
+            });
+
+            expect(receipt.runtimeTelemetry).toEqual({
+                schemaVersion: 'cvf.runtimeTelemetry.v1',
+                providerLatencyMs: 321,
+                routeElapsedMs: 456,
+                tokenUsage: {
+                    inputTokens: 12,
+                    outputTokens: 34,
+                    totalTokens: 46,
+                },
+                estimatedCostUSD: 0.000148,
+                costEstimateSource: 'cvf_model_pricing_table_or_fallback',
+                governanceTraceEntryCount: 2,
+                redactionApplied: true,
+                claimBoundary: 'summary_only_no_raw_prompt_output_key_or_provider_payload',
+            });
+            expect(JSON.stringify(receipt.runtimeTelemetry)).not.toMatch(/sk-|BASE_SYSTEM_PROMPT|private memory/i);
+        });
+
+        it('adds receipt integrity metadata without leaking the signing secret', () => {
+            const envelope = buildGovernanceEnvelope({
+                routeId: '/api/execute',
+                surfaceClass: 'governance-execution',
+                evidenceMode: 'live',
+                riskLevel: 'R1',
+                providerLane: 'alibaba',
+            });
+
+            const receipt = buildEvidenceReceipt({
+                envelope,
+                decision: 'ALLOW',
+                riskLevel: 'R1',
+                provider: 'alibaba',
+                model: 'qwen-turbo',
+                routingDecision: 'ALLOW',
+                receiptIntegrity: {
+                    signingSecret: 'builder-test-secret',
+                    externalAnchorId: 'anchor-builder-test',
+                },
+            });
+
+            expect(receipt.receiptIntegrity).toMatchObject({
+                schemaVersion: 'cvf.receiptIntegrity.v1',
+                canonicalization: 'stable-json-v1',
+                digestAlgorithm: 'sha256',
+                hmacAlgorithm: 'hmac-sha256',
+                signatureStatus: 'SIGNED',
+                externalAnchorStatus: 'PROVIDED',
+                externalAnchorId: 'anchor-builder-test',
+                redactionApplied: true,
+                claimBoundary: 'local_receipt_integrity_only_no_third_party_immutability_without_external_anchor',
+            });
+            expect(receipt.receiptIntegrity?.receiptHash).toMatch(/^[a-f0-9]{64}$/);
+            expect(receipt.receiptIntegrity?.signatureDigest).toMatch(/^[a-f0-9]{64}$/);
+            expect(JSON.stringify(receipt)).not.toContain('builder-test-secret');
         });
     });
 });

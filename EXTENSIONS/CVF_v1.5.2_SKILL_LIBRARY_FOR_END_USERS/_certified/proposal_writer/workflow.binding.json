@@ -1,0 +1,21 @@
+{
+  "workflowId": "workflow.proposal_writer.v1",
+  "outcomeKey": "proposal_writer",
+  "packId": "proposal_writer",
+  "inputKeys": [
+    "customer_need",
+    "scope",
+    "timeline",
+    "constraints"
+  ],
+  "outputSections": [
+    "Executive summary",
+    "Scope",
+    "Timeline",
+    "Terms and risks"
+  ],
+  "policyRefs": [
+    "CVF_CAPABILITY_INTAKE_PIPELINE_GUARD",
+    "CVF_F1_DIMINISHING_RETURNS_STOP_RULE"
+  ]
+}

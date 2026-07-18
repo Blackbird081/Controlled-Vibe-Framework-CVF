@@ -7,6 +7,10 @@
     {
       "id": "SCOPED_APPEND_ONLY_TRACE_WINDOW",
       "description": "Scope-local canonical active traces that stay beside their review scope and rotate into scope-local log chains."
+    },
+    {
+      "id": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "description": "Dated governance reference standards that remain active because current authority surfaces cite their exact active paths."
     }
   ],
   "windows": [
@@ -31,6 +35,78 @@
       "rotationGuard": "governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md",
       "rotationCheck": "governance/compat/check_conformance_trace_rotation.py",
       "rotationScript": "scripts/rotate_cvf_conformance_trace.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "agent_autorun_workflow_control_standard_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_AGENT_AUTORUN_WORKFLOW_CONTROL_STANDARD_2026-05-28.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_AGENT_AUTORUN_WORKFLOW_CONTROL_STANDARD_2026-05-28\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "agent_commit_steward_protocol_standard_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_AGENT_COMMIT_STEWARD_PROTOCOL_STANDARD_2026-06-15.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_AGENT_COMMIT_STEWARD_PROTOCOL_STANDARD_2026-06-15\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "agent_error_to_governance_learning_philosophy_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_AGENT_ERROR_TO_GOVERNANCE_LEARNING_PHILOSOPHY_2026-05-28.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_AGENT_ERROR_TO_GOVERNANCE_LEARNING_PHILOSOPHY_2026-05-28\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "rescan_intelligence_hardening_standard_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_RESCAN_INTELLIGENCE_HARDENING_STANDARD_2026-06-05.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_RESCAN_INTELLIGENCE_HARDENING_STANDARD_2026-06-05\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "governed_artifact_literal_format_gotchas_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_GOVERNED_ARTIFACT_LITERAL_FORMAT_GOTCHAS_2026-06-25.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_GOVERNED_ARTIFACT_LITERAL_FORMAT_GOTCHAS_2026-06-25\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "system_loop_interlock_registry_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_SYSTEM_LOOP_INTERLOCK_REGISTRY_2026-06-02.json",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_SYSTEM_LOOP_INTERLOCK_REGISTRY_2026-06-02\\.json$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
       "protectionMode": "PERMANENT_ACTIVE_WINDOW",
       "status": "ACTIVE"
     }

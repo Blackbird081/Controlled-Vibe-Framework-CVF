@@ -1,0 +1,46 @@
+{
+  "stableId": "cvf.asc.gap.packet_posture_bootstrap_archive_path_drift.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.runtime_to_enforcement.v1",
+  "targetPlaneId": "cvf.asc.plane.runtime_to_enforcement.v1",
+  "sourceOwner": "scripts/run_cvf_packet_posture_state_bootstrap.py",
+  "targetOwner": "scripts/export_cvf_release_packet.py; scripts/run_cvf_remediation_export_conformance.py; scripts/export_cvf_remediation_receipt_log.py; scripts/runtime_evidence_manifest/fixtures.py; scripts/runtime_evidence_manifest/baselines.py",
+  "missingEdge": "The packet-posture bootstrap is implemented, but current invocation cannot reach CF-076 through CF-084 because consumer scripts still require two phase-governance artifacts at former live paths after those artifacts were intentionally moved into archive.",
+  "currentStatus": "CLOSED_WITH_EVIDENCE",
+  "proofClass": "LOCAL_RUNTIME_VERIFIED_EDGE",
+  "citations": [
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_RUNTIME_TO_ENFORCEMENT_CURRENT_RUN_COMPLETION_2026-07-14.md",
+      "lineOrSection": "Findings / Position",
+      "evidenceRole": "reviewer-accepted current-run blocker and authority reconciliation"
+    },
+    {
+      "path": "scripts/cvf_archive_log_2026-03-11_225518.json",
+      "lineOrSection": "docs/reviews/cvf_phase_governance archive actions",
+      "evidenceRole": "evidence that both source artifacts were moved intentionally"
+    }
+  ],
+  "impact": "Closed: the repaired bootstrap passed once and the retained UC-02 runner recorded nine of nine scenario PASS results. The semantic registry-to-checker edge is operationally PROVEN bounded.",
+  "closeCondition": {
+    "conditionKind": "MEASURED_THRESHOLD_CROSSED",
+    "conditionText": "A governed repair reconciles the archive authority with all current consumers and the retained UC-02 proof runner then records bootstrap PASS and nine of nine scenario PASS results."
+  },
+  "reopenCondition": {
+    "conditionKind": "PATTERN_OBSERVED_ON_NAMED_SURFACE",
+    "conditionText": "Reopen if a later packet-posture bootstrap or release evidence consumer again resolves an archived phase-governance artifact through a nonexistent live path."
+  },
+  "actionOwner": "CLOSED_BY_SCLP_UC02_R2_CURRENT_RERUN",
+  "freshnessInputs": [
+    "docs/reviews/cvf_phase_governance/archive/CVF_ARCHIVE_INDEX.md",
+    "scripts/run_cvf_packet_posture_state_bootstrap.py",
+    "scripts/export_cvf_release_packet.py",
+    "scripts/run_cvf_remediation_export_conformance.py",
+    "scripts/export_cvf_remediation_receipt_log.py",
+    "scripts/runtime_evidence_manifest/fixtures.py",
+    "scripts/runtime_evidence_manifest/baselines.py"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-14",
+    "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_CURRENT_RERUN_COMPLETION_2026-07-14.md"
+  }
+}

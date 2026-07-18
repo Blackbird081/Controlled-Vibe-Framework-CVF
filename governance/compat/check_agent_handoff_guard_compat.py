@@ -35,7 +35,8 @@ MASTER_POLICY_PATH = "governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md"
 CONTROL_MATRIX_PATH = "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md"
 CONTEXT_MODEL_PATH = "docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md"
 HOOK_CHAIN_PATH = "governance/compat/run_local_governance_hook_chain.py"
-CURRENT_HANDOFF_PATH = "AGENT_HANDOFF.md"
+ACTIVE_SESSION_STATE_PATH = "CVF_SESSION/ACTIVE_SESSION_STATE.json"
+DEFAULT_HANDOFF_PATH = "AGENT_HANDOFF.md"
 THIS_SCRIPT_PATH = "governance/compat/check_agent_handoff_guard_compat.py"
 
 REQUIRED_FILES = (
@@ -46,7 +47,7 @@ REQUIRED_FILES = (
     CONTROL_MATRIX_PATH,
     CONTEXT_MODEL_PATH,
     HOOK_CHAIN_PATH,
-    CURRENT_HANDOFF_PATH,
+    ACTIVE_SESSION_STATE_PATH,
 )
 
 REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
@@ -102,7 +103,7 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
     HOOK_CHAIN_PATH: (
         THIS_SCRIPT_PATH,
     ),
-    CURRENT_HANDOFF_PATH: (
+    DEFAULT_HANDOFF_PATH: (
         "Remote tracking branch:",
         "Exact remote SHA must be derived live from git when needed",
         "External agent memory files: non-canonical convenience only",
@@ -181,6 +182,20 @@ def _read_text(path: str) -> str:
     return abs_path.read_text(encoding="utf-8")
 
 
+def _resolve_current_handoff_path() -> str:
+    state_path = REPO_ROOT / ACTIVE_SESSION_STATE_PATH
+    if not state_path.exists():
+        return DEFAULT_HANDOFF_PATH
+    try:
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return DEFAULT_HANDOFF_PATH
+    active_handoff = state.get("activeHandoff")
+    if isinstance(active_handoff, str) and active_handoff:
+        return active_handoff
+    return DEFAULT_HANDOFF_PATH
+
+
 def _resolve_tracked_remote_ref() -> str | None:
     code, branch_name, _ = _run_git(["rev-parse", "--abbrev-ref", "HEAD"])
     if code != 0 or not branch_name:
@@ -192,10 +207,15 @@ def _resolve_tracked_remote_ref() -> str | None:
 
 
 def _classify(changed_files: list[str]) -> dict[str, Any]:
-    missing_files = [path for path in REQUIRED_FILES if not (REPO_ROOT / path).exists()]
+    current_handoff_path = _resolve_current_handoff_path()
+    required_files = (*REQUIRED_FILES, current_handoff_path)
+    missing_files = [path for path in required_files if not (REPO_ROOT / path).exists()]
 
     marker_violations: dict[str, list[str]] = {}
-    for path, markers in REQUIRED_MARKERS.items():
+    required_markers = dict(REQUIRED_MARKERS)
+    required_markers.pop(DEFAULT_HANDOFF_PATH, None)
+    required_markers[current_handoff_path] = REQUIRED_MARKERS[DEFAULT_HANDOFF_PATH]
+    for path, markers in required_markers.items():
         text = _read_text(path)
         missing_markers = [marker for marker in markers if marker not in text]
         if missing_markers:
@@ -204,21 +224,22 @@ def _classify(changed_files: list[str]) -> dict[str, Any]:
     dynamic_violations: dict[str, list[str]] = {}
     tracked_remote = _resolve_tracked_remote_ref()
     if tracked_remote:
-        handoff_text = _read_text(CURRENT_HANDOFF_PATH)
+        handoff_text = _read_text(current_handoff_path)
         if tracked_remote not in handoff_text:
-            dynamic_violations.setdefault(CURRENT_HANDOFF_PATH, []).append(
+            dynamic_violations.setdefault(current_handoff_path, []).append(
                 f"missing tracked remote branch `{tracked_remote}`"
             )
 
     relevant_changed_files = [
         path for path in changed_files
-        if path in REQUIRED_FILES or path == THIS_SCRIPT_PATH
+        if path in required_files or path == THIS_SCRIPT_PATH
     ]
 
     compliant = not missing_files and not marker_violations and not dynamic_violations
 
     return {
-        "requiredFileCount": len(REQUIRED_FILES),
+        "currentHandoffPath": current_handoff_path,
+        "requiredFileCount": len(required_files),
         "missingFiles": missing_files,
         "missingFileCount": len(missing_files),
         "markerViolations": marker_violations,
@@ -237,6 +258,7 @@ def _print_report(report: dict[str, Any], base: str, head: str, base_source: str
     print("=== CVF Agent Handoff Guard Compatibility Gate ===")
     print(f"Range: {base}..{head}")
     print(f"Base source: {base_source}")
+    print(f"Current handoff path: {report['currentHandoffPath']}")
     print(f"Required files checked: {report['requiredFileCount']}")
     print(f"Relevant GC-020 files changed: {report['relevantChangedFileCount']}")
     print(f"Missing files: {report['missingFileCount']}")
@@ -280,7 +302,7 @@ def _print_report(report: dict[str, Any], base: str, head: str, base_source: str
     print(f"   2. Ensure {CONTEXT_MODEL_PATH} defines the canonical memory/handoff/context-loading model.")
     print(f"   3. Ensure {HANDOFF_GUARD_PATH}, {HANDOFF_TEMPLATE_PATH}, {MASTER_POLICY_PATH}, and")
     print(f"      {CONTROL_MATRIX_PATH} reference the same GC-020 chain truthfully.")
-    print(f"   4. Ensure {CURRENT_HANDOFF_PATH} records the tracked remote branch and marks external memory as non-canonical.")
+    print(f"   4. Ensure {report['currentHandoffPath']} records the tracked remote branch and marks external memory as non-canonical.")
     print(f"   5. Ensure {HOOK_CHAIN_PATH} runs {THIS_SCRIPT_PATH}.")
 
 

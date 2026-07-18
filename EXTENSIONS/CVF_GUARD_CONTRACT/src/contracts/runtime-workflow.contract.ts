@@ -7,7 +7,8 @@
  * docs/baselines/CVF_GC018_LEGACY_RUNTIME_WORKFLOW_TRANCHE_2026-05-18.md
  *
  * SCOPE: Type metadata and deterministic helpers only.
- * No guard dispatch, provider routing, tool execution, or live metric emission is changed.
+ * No guard dispatch, provider routing, or tool execution is changed.
+ * `runtime_receipt_count` is the first bounded live-wired metric.
  */
 
 import type { CVFPhase } from '../types';
@@ -87,7 +88,7 @@ export interface OperationalBenchmarkExtension {
   readonly kind: OperationalBenchmarkMetricKind;
   readonly emittedAtPoint: GuardEnforcementPoint;
   readonly receiptLinked: boolean;
-  readonly liveEmissionWired: false;
+  readonly liveEmissionWired: boolean;
 }
 
 export interface RuntimeWorkflowEvent {
@@ -223,7 +224,7 @@ export const OPERATIONAL_BENCHMARK_EXTENSIONS: readonly OperationalBenchmarkExte
     kind: 'receipt_count',
     emittedAtPoint: 'review',
     receiptLinked: true,
-    liveEmissionWired: false,
+    liveEmissionWired: true,
   },
 ] as const;
 

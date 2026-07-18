@@ -60,12 +60,44 @@ Total score:
 
 | Dimension | Minimum evidence |
 |---|---|
-| Governance Discipline | guard passes or explicit guard findings, authorization packet, closure review, handoff state |
+| Governance Discipline | guard passes or explicit guard findings, authorization packet, closure review, closure-quality gate status, handoff state |
 | Contract / Architecture Quality | contract source, tranche review, compatibility notes, deterministic/hash behavior |
 | Evidence and Traceability | baseline delta, review packet, tracker sync, provenance IDs, report hashes where applicable |
 | Test and Verification Confidence | `npm run check` / `npm test` / relevant guard chain output actually rerun |
 | Maintainability | file-size/test-partition posture, fixture drift status, active advisories or exceptions |
 | Canonical Documentation Quality | whitepaper, tracker, handoff, and any changed reference docs aligned to the same truth |
+
+## Mandatory Closure-Quality Review
+
+Every tranche, roadmap wave, or delegated work-order quality assessment after
+2026-05-28 must check
+`docs/reference/CVF_WORK_ORDER_CLOSURE_QUALITY_GATE_STANDARD_2026-05-28.md`.
+
+Quality reviews that identify agent mistakes must also apply:
+
+`docs/reference/CVF_AGENT_ERROR_TO_GOVERNANCE_LEARNING_PHILOSOPHY_2026-05-28.md`.
+
+Do not stop at assigning blame to a worker. Classify whether the defect exposed
+a work-order gap, rule gap, machine-gate gap, phase-gate placement gap, or
+operator-scope clarity gap.
+
+Minimum review questions:
+
+- Does each roadmap-derived work order include a Roadmap-to-Work-Order Trace
+  Matrix?
+- Did closure compare roadmap requirements, work-order instructions, final
+  artifacts, and completion claims?
+- Are file-change and boundary claims backed by `git diff --name-status`,
+  `git status --short`, committed diff output, receipts, command output, or
+  explicit `N/A with reason`?
+- Are explicit fail conditions absent or marked `BLOCKED`?
+- Are roadmap/work-order/completion checklists finalized with no open checkbox
+  residue?
+- Do session front door, state registry, and active handoff agree after any
+  mode/status change?
+
+If any answer is no, Governance Discipline cannot score above `7.9` and
+Canonical Documentation Quality cannot score above `7.9` until remediated.
 
 ## Low-Score Action Policy
 

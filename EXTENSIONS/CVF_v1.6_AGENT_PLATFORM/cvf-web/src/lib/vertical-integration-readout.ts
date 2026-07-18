@@ -2,7 +2,7 @@ import {
     evaluateMemoryEventHook,
     MEMORY_EVENT_HOOKS_VERSION,
     type MemoryEventHookEvaluation,
-} from '../../../../CVF_LEARNING_PLANE_FOUNDATION/src/memory-event-hooks';
+} from 'cvf-learning-plane-foundation';
 import {
     buildToolActionApprovalReadout,
     evaluateToolActionTaxonomy,

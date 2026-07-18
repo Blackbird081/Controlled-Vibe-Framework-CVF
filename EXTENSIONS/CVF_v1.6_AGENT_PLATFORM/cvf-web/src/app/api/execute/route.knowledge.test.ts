@@ -1,6 +1,8 @@
 /**
  * Wave 1 — Execute path retrieval partitioning integration tests
  */
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
@@ -8,6 +10,35 @@ import path from 'node:path';
 
 import { appendKnowledgeCollectionScopeEvent } from '@/lib/policy-events';
 import { readAuditEvents } from '@/lib/control-plane-events';
+import { knowledgeStore, type Sot3KnowledgeSourceMetadata } from '@/lib/knowledge-store';
+import { Sot3ActivationEvidenceStore } from '@/lib/sot3-activation-evidence-store';
+import { resetRateLimitStoresForTest } from '@/lib/rate-limit';
+
+function computeExpectedContentHash(records: Array<Record<string, unknown>>): string {
+  const sorted = records.map((record) => {
+    const keys = Object.keys(record).sort();
+    return keys.map((key) => [key, record[key]]);
+  });
+  return `sha256:${createHash('sha256').update(JSON.stringify(sorted)).digest('hex')}`;
+}
+
+function buildProvenance(sourceId: string, content: string, overrides: Partial<Sot3KnowledgeSourceMetadata> = {}): Sot3KnowledgeSourceMetadata {
+  return {
+    sourceId,
+    sourceType: 'INTERNAL',
+    owner: 'team-eng',
+    capturedAtUtc: '2026-07-13T00:00:00.000Z',
+    purpose: ['execute-route-context'],
+    confidentiality: 'INTERNAL',
+    expectedContentHash: computeExpectedContentHash([{ source_id: sourceId, id: sourceId, content }]),
+    rawReference: { type: 'object', location: `knowledge-store://${sourceId}` },
+    captureStatus: 'CAPTURED',
+    declaredVersion: null,
+    validFromUtc: null,
+    validUntilUtc: null,
+    ...overrides,
+  };
+}
 
 const executeAIMock = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
@@ -60,6 +91,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-execute-knowledge-'));
     process.env = { ...originalEnv };
     process.env.CVF_CONTROL_PLANE_EVENTS_PATH = path.join(tempDir, 'events.json');
+    process.env.CVF_SOT3_ACTIVATION_EVIDENCE_PATH = path.join(tempDir, 'sot3-activation-evidence.json');
     process.env.OPENAI_API_KEY = 'openai-test-key';
     delete process.env.ANTHROPIC_API_KEY;
     delete process.env.GOOGLE_AI_API_KEY;
@@ -345,5 +377,225 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
       { id: 'mem-disputed', reason: 'lifecycle_disputed' },
     ]));
     expect(executeAIMock).not.toHaveBeenCalled();
+  });
+});
+
+describe('/api/execute - SOT3 knowledge activation modes', () => {
+  const originalEnv = { ...process.env };
+  const validOutput = '## Scoped Knowledge Result\n\nThis structured response uses retrieved project knowledge and includes enough detail to satisfy output validation.\n\n1. Summarize the relevant tenant context.\n2. Keep the recommendation constrained to allowed data.\n3. Return a safe next-step plan.';
+  let tempDir = '';
+
+  beforeEach(async () => {
+    resetRateLimitStoresForTest();
+    tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-execute-sot3-'));
+    process.env = { ...originalEnv };
+    process.env.CVF_CONTROL_PLANE_EVENTS_PATH = path.join(tempDir, 'events.json');
+    process.env.CVF_SOT3_ACTIVATION_EVIDENCE_PATH = path.join(tempDir, 'sot3-activation-evidence.json');
+    process.env.OPENAI_API_KEY = 'openai-test-key';
+    delete process.env.ANTHROPIC_API_KEY;
+    delete process.env.GOOGLE_AI_API_KEY;
+    delete process.env.ALIBABA_API_KEY;
+    delete process.env.CVF_BENCHMARK_ALIBABA_KEY;
+    delete process.env.CVF_ALIBABA_API_KEY;
+    delete process.env.OPENROUTER_API_KEY;
+    delete process.env.DEFAULT_AI_PROVIDER;
+    delete process.env.CVF_SERVICE_TOKEN;
+
+    executeAIMock.mockReset();
+    evaluateEnforcementMock.mockReset();
+    verifySessionCookieMock.mockReset();
+    checkTeamQuotaMock.mockReset();
+
+    evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
+    checkTeamQuotaMock.mockResolvedValue({
+      exceeded: false,
+      currentUSD: 0,
+      softCapUSD: 50,
+      hardCapUSD: 100,
+      overrideActive: false,
+    });
+    executeAIMock.mockResolvedValue({
+      success: true,
+      output: validOutput,
+      provider: 'openai',
+      model: 'gpt-4o',
+    });
+    verifySessionCookieMock.mockResolvedValue({
+      userId: 'usr_a',
+      user: 'Tenant A',
+      role: 'admin',
+      orgId: 'org_a',
+      teamId: 'team_a',
+      expiresAt: Date.now() + 1000 * 60 * 60,
+      authMode: 'session',
+    });
+
+    (knowledgeStore as unknown as { _store: Map<string, unknown> })._store.clear();
+    (knowledgeStore as unknown as { _ephemeral: Map<string, unknown> })._ephemeral.clear();
+  });
+
+  afterEach(async () => {
+    process.env = { ...originalEnv };
+    if (tempDir) {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('ENFORCE mode injects only SOT3-approved context into the provider mock', async () => {
+    process.env.CVF_SOT3_KNOWLEDGE_ACTIVATION_MODE = 'ENFORCE';
+    const provenance = buildProvenance('src-route-enforce', 'ROUTE-ENFORCE-SIGNAL governed content');
+    knowledgeStore.seed([
+      {
+        id: 'route-enforce-col',
+        name: 'Route Enforce Col',
+        description: 'd',
+        orgId: 'org_a',
+        teamId: 'team_a',
+        chunks: [{ id: 'src-route-enforce', content: 'ROUTE-ENFORCE-SIGNAL governed content', keywords: ['route-enforce-signal'], sot3Source: provenance }],
+      },
+    ]);
+
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Need route-enforce-signal governed content details',
+        inputs: { question: 'What is the route-enforce-signal?' },
+        provider: 'openai',
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(executeAIMock).toHaveBeenCalledTimes(1);
+    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+    expect(options.systemPrompt as string).toContain('ROUTE-ENFORCE-SIGNAL governed content');
+    expect(data.knowledgeInjection.injected).toBe(true);
+
+    const evidenceRaw = readFileSync(process.env.CVF_SOT3_ACTIVATION_EVIDENCE_PATH as string, 'utf8');
+    const evidenceDocument = JSON.parse(evidenceRaw);
+    expect(evidenceDocument.records).toHaveLength(1);
+    expect(evidenceDocument.records[0].traces).toHaveLength(1);
+    expect(evidenceRaw).not.toContain('ROUTE-ENFORCE-SIGNAL governed content');
+
+    const freshReader = new Sot3ActivationEvidenceStore(process.env.CVF_SOT3_ACTIVATION_EVIDENCE_PATH);
+    const rehydrated = freshReader.findByRecordId(evidenceDocument.records[0].recordId);
+    expect(rehydrated?.recordId).toBe(evidenceDocument.records[0].recordId);
+  });
+
+  it('ENFORCE mode with missing provenance rejects with a secret-safe 409 before any provider call (SOT3-ACT-A4)', async () => {
+    process.env.CVF_SOT3_KNOWLEDGE_ACTIVATION_MODE = 'ENFORCE';
+    knowledgeStore.seed([
+      {
+        id: 'route-enforce-noprov-col',
+        name: 'Route Enforce No Provenance',
+        description: 'd',
+        orgId: 'org_a',
+        teamId: 'team_a',
+        chunks: [{ id: 'no-prov-route', content: 'ROUTE-NOPROV-SIGNAL raw content that must never appear', keywords: ['route-noprov-signal'] }],
+      },
+    ]);
+
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Need route-noprov-signal raw content details',
+        inputs: { question: 'What is the route-noprov-signal?' },
+        provider: 'openai',
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    // SOT3-ACT-A4: ENFORCE + REJECTED (here MISSING_PROVENANCE) now stops
+    // before executeAI with a secret-safe 409. MISSING_PROVENANCE is not
+    // exempted from the new pre-provider rejection rule; this regression
+    // still proves ENFORCE + missing-provenance is rejected, with the
+    // corrected expected shape (409, zero calls) instead of the prior
+    // shape (200, provider called once, raw content silently dropped).
+    expect(res.status).toBe(409);
+    expect(executeAIMock).toHaveBeenCalledTimes(0);
+    expect(data.success).toBe(false);
+    expect(JSON.stringify(data)).not.toContain('ROUTE-NOPROV-SIGNAL');
+
+    const events = await readAuditEvents();
+    const sot3Event = events.find((event) => event.eventType === 'SOT3_KNOWLEDGE_ACTIVATION_EVALUATED');
+    expect(sot3Event).toBeDefined();
+    expect(JSON.stringify(sot3Event?.payload ?? {})).not.toContain('ROUTE-NOPROV-SIGNAL');
+  });
+
+  it('SHADOW mode audits evaluation but still injects the current raw retrieved context', async () => {
+    process.env.CVF_SOT3_KNOWLEDGE_ACTIVATION_MODE = 'SHADOW';
+    const provenance = buildProvenance('src-route-shadow', 'ROUTE-SHADOW-SIGNAL governed content');
+    knowledgeStore.seed([
+      {
+        id: 'route-shadow-col',
+        name: 'Route Shadow Col',
+        description: 'd',
+        orgId: 'org_a',
+        teamId: 'team_a',
+        chunks: [{ id: 'src-route-shadow', content: 'ROUTE-SHADOW-SIGNAL governed content', keywords: ['route-shadow-signal'], sot3Source: provenance }],
+      },
+    ]);
+
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Need route-shadow-signal governed content details',
+        inputs: { question: 'What is the route-shadow-signal?' },
+        provider: 'openai',
+      }),
+    });
+
+    const res = await POST(req as never);
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+    expect(options.systemPrompt as string).toContain('ROUTE-SHADOW-SIGNAL governed content');
+    expect(data.knowledgeInjection.injected).toBe(true);
+
+    const events = await readAuditEvents();
+    const sot3Event = events.find((event) => event.eventType === 'SOT3_KNOWLEDGE_ACTIVATION_EVALUATED');
+    expect(sot3Event).toBeDefined();
+    expect((sot3Event?.payload as { terminalOutcome?: string } | undefined)?.terminalOutcome).toBe('APPROVED');
+  });
+
+  it('mode missing resolves to OFF and preserves existing provider context behavior', async () => {
+    delete process.env.CVF_SOT3_KNOWLEDGE_ACTIVATION_MODE;
+    knowledgeStore.seed([
+      {
+        id: 'route-off-col',
+        name: 'Route Off Col',
+        description: 'd',
+        orgId: 'org_a',
+        teamId: 'team_a',
+        chunks: [{ id: 'no-mode-route', content: 'ROUTE-OFF-SIGNAL legacy content' , keywords: ['route-off-signal'] }],
+      },
+    ]);
+
+    const req = new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateName: 'Knowledge Query',
+        intent: 'Need route-off-signal legacy content details',
+        inputs: { question: 'What is the route-off-signal?' },
+        provider: 'openai',
+      }),
+    });
+
+    const res = await POST(req as never);
+    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+
+    expect(res.status).toBe(200);
+    expect(options.systemPrompt as string).toContain('ROUTE-OFF-SIGNAL legacy content');
+
+    const events = await readAuditEvents();
+    expect(events.some((event) => event.eventType === 'SOT3_KNOWLEDGE_ACTIVATION_EVALUATED')).toBe(false);
   });
 });

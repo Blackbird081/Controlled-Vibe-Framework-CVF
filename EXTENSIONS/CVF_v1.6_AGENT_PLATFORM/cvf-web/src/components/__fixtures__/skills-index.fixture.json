@@ -17,6 +17,58 @@
         "specScore": 90,
         "specQuality": "Excellent",
         "specGate": "PASS"
+      },
+      {
+        "id": "cvf-dispatch-quality-reviewer",
+        "title": "CVF Dispatch Quality Reviewer",
+        "domain": "Agent System Skills",
+        "difficulty": "Governed",
+        "summary": "Certified ASSF projection fixture",
+        "path": "docs/reference/agent_system_skills/registry/entries/cvf-dispatch-quality-reviewer.json",
+        "content": "# CVF Dispatch Quality Reviewer",
+        "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+        "certificationState": "CERTIFIED",
+        "uatState": "PASSED",
+        "externalCliMcpDisposition": "DEFERRED_WITH_REASON",
+        "canonicalRoot": "docs/reference/agent_system_skills/registry/entries/cvf-dispatch-quality-reviewer.json"
+      },
+      {
+        "id": "cvf-engineering-api-interface-design",
+        "title": "CVF Engineering API And Interface Design",
+        "domain": "api-interface-design",
+        "difficulty": "Governed",
+        "summary": "Certified ASSF runtime package projection fixture",
+        "path": "docs/reference/agent_system_skills/packages/cvf-engineering-api-interface-design/SKILL.md",
+        "content": "# CVF Engineering API And Interface Design",
+        "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+        "runtimePackageProjection": true,
+        "runtimeEligible": true,
+        "activationDecision": "ACTIVATION_READY",
+        "primaryDomain": "api-interface-design",
+        "domainGroup": "engineering",
+        "selectionKeywords": [
+          "api",
+          "interface",
+          "schema"
+        ],
+        "specSignals": [
+          "api design",
+          "interface boundary"
+        ],
+        "recommendedWhen": [
+          "the spec names API endpoints, module contracts, schemas, or component interfaces"
+        ],
+        "notRecommendedWhen": [
+          "task is mainly visual UI implementation"
+        ],
+        "outputGoals": [
+          "contract design",
+          "schema clarity"
+        ],
+        "certificationState": "CERTIFIED",
+        "uatState": "PASSED",
+        "externalCliMcpDisposition": "IMPLEMENTED",
+        "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-api-interface-design/SKILL.md"
       }
     ]
   }

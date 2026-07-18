@@ -218,7 +218,7 @@ export default function LandingPage() {
                     <div className="grid gap-4 sm:grid-cols-3">
                         {[
                             { href: '/knowledge/intake', icon: BookOpenCheck, label: safeLanguage === 'vi' ? 'Nạp kiến thức' : 'Knowledge Intake', desc: safeLanguage === 'vi' ? 'Đưa tài liệu mới vào kho với nguồn và lý do rõ ràng' : 'Add new knowledge with a visible source and reason' },
-                            { href: '/artifacts', icon: FileOutput, label: safeLanguage === 'vi' ? 'Xuất artifact' : 'Artifact Export', desc: safeLanguage === 'vi' ? 'Tạo gói HTML có governance receipt cho reviewer' : 'Produce an HTML packet with a governance receipt' },
+                            { href: '/artifacts', icon: FileOutput, label: safeLanguage === 'vi' ? 'Xuất artifact' : 'Artifact Export', desc: safeLanguage === 'vi' ? 'Tạo gói HTML có xác nhận kiểm soát cho reviewer' : 'Produce an HTML packet with an audit record for reviewers' },
                             { href: '/work-transfer', icon: SwitchCamera, label: safeLanguage === 'vi' ? 'Chuyển giao công việc' : 'Work Transfer', desc: safeLanguage === 'vi' ? 'Xem lịch sử chuyển giao và xuất record ra artifact' : 'Review transfer history and export records as artifacts' },
                         ].map(({ href, icon: Icon, label, desc }) => (
                             <Link key={href} href={href} className="flex items-start gap-3 rounded-2xl border border-indigo-100 bg-white p-4 transition hover:shadow-sm dark:border-white/[0.07] dark:bg-white/[0.04]">

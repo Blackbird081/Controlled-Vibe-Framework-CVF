@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cvf.local/schemas/skill-pack/failure.recovery.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "failureModes",
+    "recoveryActions",
+    "rollbackPolicy"
+  ],
+  "properties": {
+    "failureModes": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recoveryActions": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rollbackPolicy": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

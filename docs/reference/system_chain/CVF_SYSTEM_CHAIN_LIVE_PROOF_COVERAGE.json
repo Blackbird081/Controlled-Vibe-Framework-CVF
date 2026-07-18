@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "cvf.system_chain_live_proof_coverage.v1",
+  "ledgerId": "cvf-system-chain-live-proof-coverage-2026-07-14",
+  "standard": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_LIVE_PROOF_AND_LEARNING_LOOP_STANDARD.md",
+  "sourceMap": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+  "lastReviewedDate": "2026-07-15",
+  "claimBoundary": "This ledger classifies live-proof applicability and current evidence for five generic CVF system-chain lanes. It preserves each source map verdict and does not treat SOT3 UC-01 as proof of any other lane. SCLP-T5 (2026-07-15) reconciled all four use cases and five lanes, retained their bounded evidence states, and retired the stale UC-03 next-use-case pointer after UC-03 closure.",
+  "useCases": [
+    {
+      "useCaseId": "UC-01-SOT3-BOUNDED-ACTIVATION",
+      "status": "PROVEN_BOUNDED",
+      "requiredProofClass": "REAL_PROVIDER_BOUNDED",
+      "observedProofClass": "REAL_PROVIDER_BOUNDED",
+      "scope": "selected CVF Web knowledge-context path, controlled scenario, Alibaba provider lane, environment, and evidence window",
+      "evidenceOwner": "docs/roadmaps/CVF_SOT3_ACTIVATION_AND_OPERATIONAL_PROOF_ROADMAP_2026-07-13.md",
+      "retainedClaim": "LIVE_GOVERNANCE_PROVEN_BOUNDED",
+      "notProven": "other system chains, universal SOT3 activation, production, scale, public shipment, or real-user value"
+    },
+    {
+      "useCaseId": "UC-02-RUNTIME-TO-ENFORCEMENT-CURRENT-RUN",
+      "status": "PROVEN_BOUNDED",
+      "requiredProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "observedProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "scope": "registry-driven CF-076 through CF-084 invocation chain",
+      "selectionReason": "current map says connected, while cited per-checker PASS rows are historical rather than a retained current-run receipt",
+      "providerCallRequired": false,
+      "latestEvidence": "docs/reviews/evidence/system-chain-uc02-current-rerun-2026-07-14.json",
+      "latestResult": "PASS_BOOTSTRAP_9_OF_9",
+      "nextAction": "retain this bounded proof; repair downstream generated Markdown conformance separately without rerunning UC-02"
+    },
+    {
+      "useCaseId": "UC-03-CONTRACT-TO-RUNTIME-REPRESENTATIVE-PATH",
+      "status": "PROVEN_BOUNDED",
+      "requiredProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "observedProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "scope": "one active caller-backed Governance Control Matrix route selected by source verification; unresolved no-caller rows remain excluded",
+      "selectionReason": "file existence and unit tests do not prove production invocation",
+      "providerCallRequired": false,
+      "selectedControlId": "GC-011",
+      "latestEvidence": "docs/reviews/evidence/system-chain-uc03-contract-runtime-proof-2026-07-14.json",
+      "latestResult": "PASS_TWO_OF_TWO_WITH_RECEIPT_CASE_IDENTITY_LIMITATION",
+      "nextAction": "retain the bounded GC-011 result; do not promote GC-009 or GC-010; repair the harness only if a later proof must reuse per-case receipt identity"
+    },
+    {
+      "useCaseId": "UC-04-EVIDENCE-TO-OPERATOR-SURFACE",
+      "status": "PROVEN_BOUNDED_CLI_AND_SELECTED_WEB_PAIR",
+      "requiredProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "scope": "CLI current-run readout first, then the bounded Web Operations subset as a separate scenario",
+      "selectionReason": "source inspection proves wiring shape but not current operator usability",
+      "providerCallRequired": "ONLY_IF_THE_SELECTED_JOB_ASSERTS_AI_GOVERNANCE_BEHAVIOR",
+      "observedProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "latestEvidence": "docs/reviews/evidence/system-chain-uc04b-r3r3-reviewer-negative-proof-2026-07-15.json",
+      "latestResult": "WEB_DEVELOPER_SUCCESS_AND_REVIEWER_DENIAL_PASS_BOUNDED",
+      "nextAction": "retain CLI plus the selected Web developer-success/reviewer-denial pair; do not expand into unified checker inventory without a separate value-assessed packet"
+    }
+  ],
+  "lanes": [
+    {
+      "laneId": "DOCTRINE_TO_CONTRACT",
+      "semanticPosture": "PARTIAL",
+      "semanticVerdict": "PARTIAL_CHAIN_WITH_DOCUMENTED_DRIFT",
+      "liveApplicability": "STATIC_RECOMPUTE_REQUIRED",
+      "requiredProofClass": "STATIC_SOURCE_VERIFIED",
+      "observedProofClass": "STATIC_SOURCE_VERIFIED",
+      "operationalProofStatus": "NOT_APPLICABLE_STATIC_WITH_REASON",
+      "reason": "doctrine ownership and mapping are read-time governance properties, not runtime invocation claims",
+      "nextUseCase": "NONE",
+      "nextAction": "refresh source mapping and gap dispositions during the next governed semantic review"
+    },
+    {
+      "laneId": "CONTRACT_TO_RUNTIME",
+      "semanticPosture": "PARTIAL",
+      "semanticVerdict": "PARTIAL_RUNTIME_CONNECTION_FULL_INVENTORY",
+      "liveApplicability": "RUNTIME_LIVE_REQUIRED",
+      "requiredProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "observedProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "operationalProofStatus": "PROVEN",
+      "reason": "the representative GC-011 path executed once through CvfSdk into PipelineOrchestrator with positive and fail-closed negative cases; this operational proof does not change the lane's PARTIAL semantic posture or promote invocation-unproven rows",
+      "nextUseCase": "NONE",
+      "nextAction": "retain the bounded GC-011 receipt and explicit GC-009/GC-010 exclusion; reopen only for a materially different contract-to-runtime claim or proven active caller"
+    },
+    {
+      "laneId": "RUNTIME_TO_ENFORCEMENT",
+      "semanticPosture": "CURRENT",
+      "semanticVerdict": "PROVEN_CONNECTED_VIA_DATA_DRIVEN_REGISTRY",
+      "liveApplicability": "RUNTIME_LIVE_REQUIRED",
+      "requiredProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "observedProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "operationalProofStatus": "PROVEN",
+      "reason": "the repaired shared bootstrap passed once and the retained registry-driven UC-02 runner recorded CF-076 through CF-084 as nine of nine PASS in one current invocation",
+      "nextUseCase": "NONE",
+      "nextAction": "retain the bounded receipt; treat downstream generated-artifact conformance as a separate GAP and do not rerun UC-02 for that repair"
+    },
+    {
+      "laneId": "ENFORCEMENT_TO_EVIDENCE",
+      "semanticPosture": "CURRENT",
+      "semanticVerdict": "TWELVE_OF_TWELVE_DISPOSITIONED",
+      "liveApplicability": "STATIC_RECOMPUTE_REQUIRED",
+      "requiredProofClass": "STATIC_SOURCE_VERIFIED",
+      "observedProofClass": "STATIC_SOURCE_VERIFIED",
+      "operationalProofStatus": "NOT_APPLICABLE_STATIC_WITH_REASON",
+      "reason": "citation/path integrity is a repository property and is proved by fresh deterministic recomputation, not a provider or runtime call",
+      "nextUseCase": "NONE",
+      "nextAction": "recompute citation and path dispositions when either evidence-owner document changes"
+    },
+    {
+      "laneId": "EVIDENCE_TO_OPERATOR_SURFACE",
+      "semanticPosture": "PARTIAL",
+      "semanticVerdict": "PARTIAL_OPERATOR_VISIBILITY_BY_ENFORCEMENT_CLASS",
+      "liveApplicability": "OPERATOR_SURFACE_LIVE_REQUIRED",
+      "requiredProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "observedProofClass": "CURRENT_RUNTIME_INVOCATION",
+      "operationalProofStatus": "PROVEN",
+      "reason": "the CLI surface and selected Web pair are proven bounded: the developer path succeeds and the reviewer path is denied before runner/provider work with exact one-submission evidence; the lane remains semantically PARTIAL because no unified Web checker inventory is claimed",
+      "nextUseCase": "NONE",
+      "nextAction": "retain bounded CLI and selected Web pair evidence; reopen only for a materially broader, value-assessed operator-surface claim"
+    }
+  ]
+}

@@ -63,6 +63,7 @@ Files that must remain in private core and never be publicly exposed.
 | `CVF_LITE.md` | PUBLIC_READY | Quick start guide |
 | `CHANGELOG.md` | PUBLIC_READY | Version history, public-facing |
 | `LICENSE` | PUBLIC_READY | License file |
+| `SECURITY.md` | PUBLIC_READY | Security reporting and secret-handling guidance |
 | `AGENT_HANDOFF.md` | PRIVATE_ONLY | Internal agent continuation state |
 | `CLAUDE.md` | NEEDS_REVIEW | Contains governance references, needs cleanup |
 
@@ -275,7 +276,7 @@ For files marked `NEEDS_REVIEW`:
 - `docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`
 - `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
 - `docs/.publicignore` (to be created in CP2)
-- `docs/roadmaps/CVF_GC018_W62_T1_DOCS_CURATION_ROADMAP_2026-04-08.md`
+- `docs/roadmaps/archive/CVF_GC018_W62_T1_DOCS_CURATION_ROADMAP_2026-04-08.md`
 
 ---
 

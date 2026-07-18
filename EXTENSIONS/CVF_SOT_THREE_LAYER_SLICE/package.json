@@ -1,0 +1,47 @@
+{
+  "name": "cvf-sot-three-layer-slice",
+  "version": "0.1.0",
+  "description": "CVF SOT3 Three-Layer Vertical Slice - deterministic, no-AI integration orchestrator that invokes the real cvf-refinery, cvf-truth-kernel, and cvf-truth-flow public APIs in sequence and serializes preserved evidence",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "README.md",
+    "src"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "cvf-refinery": "file:../CVF_REFINERY",
+    "cvf-truth-kernel": "file:../CVF_TRUTH_KERNEL",
+    "cvf-truth-flow": "file:../CVF_TRUTH_FLOW"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  },
+  "keywords": [
+    "cvf",
+    "sot3",
+    "three-layer-slice",
+    "governance",
+    "deterministic"
+  ],
+  "license": "CC-BY-NC-ND-4.0",
+  "exportReadiness": {
+    "status": "NOT_PUBLIC",
+    "phase": "PRIVATE_PROVENANCE",
+    "blockers": [
+      "reviewer acceptance",
+      "public-sync authorization"
+    ]
+  }
+}

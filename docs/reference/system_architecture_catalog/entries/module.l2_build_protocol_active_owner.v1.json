@@ -1,0 +1,32 @@
+{
+  "stableId": "cvf.asc.module.l2_build_protocol_active_owner.v1",
+  "entityType": "MODULE",
+  "name": "L2 Build Protocol Active Owner",
+  "authorityClass": "ACCEPTED_REVIEW_EVIDENCE",
+  "maturity": "ACTIVE",
+  "ownerPaths": [
+    "AGENTS.md"
+  ],
+  "planeMembership": [
+    "cvf.asc.plane.doctrine_to_contract.v1"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "docs/reference/system_chain/CVF_DOCTRINE_TO_CONTRACT_ROUTE_MAP.md",
+      "lineOrSection": "cited row",
+      "evidenceRole": "module owner/status evidence"
+    }
+  ],
+  "claimBoundary": "MSEA-R98 ratified AGENTS.md as the differently named active L2 operational owner.",
+  "freshnessInputs": [
+    "AGENTS.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  },
+  "boundaryCaveat": "Broader than the historical protocol; not a one-to-one textual adaptation; does not make /protocols exist; does not inherit frozen status.",
+  "priorDisposition": ""
+}

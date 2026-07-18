@@ -1,0 +1,14 @@
+{
+  "provider": "alibaba",
+  "model": "qwen-turbo",
+  "method": "streaming",
+  "http_status": 200,
+  "receipt_id": "rcpt-pm2-alibaba-06f3bcac34ca",
+  "stream_chunks": 7,
+  "output_length": 25,
+  "first_token_latency_ms": 377.2,
+  "output": "Hello, how are you today?",
+  "rawSecretPrinted": false,
+  "decision": "ALLOW",
+  "evidenceMode": "live"
+}

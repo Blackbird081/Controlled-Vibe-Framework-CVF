@@ -1,7 +1,7 @@
 import {
     createControlledMemoryGatewayContract,
     type ControlledMemoryReceipt,
-} from '../../../../CVF_LEARNING_PLANE_FOUNDATION/src/controlled.memory.gateway.contract';
+} from 'cvf-learning-plane-foundation';
 import type { CVFRole } from 'cvf-guard-contract';
 import {
     MEMORY_CONTINUITY_CONTRACT_VERSION,

@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cvf.internal/schema/mao-runtime-foundation-schema-v1.json",
+  "title": "CVF MAO Runtime Foundation Schema",
+  "description": "Doc-only design schema for the future CVF Multi-Agent Orchestration runtime foundation. No field in this document is claimed to exist as current runtime source. See CVF_MAO_RUNTIME_FOUNDATION_CONTRACT.md for architecture decisions and CVF_MAO_T0_SOURCE_INVENTORY_AND_OVERLAP_DECISIONS.md for source verification.",
+  "type": "object",
+  "$comment": "contractVersion: cvf.mao.runtimeFoundation.t0.v1",
+  "definitions": {
+    "riskLevel": {
+      "type": "string",
+      "enum": ["R0", "R1", "R2", "R3"],
+      "description": "Reused unchanged from existing CVF risk model; not a new MAO field."
+    },
+    "route": {
+      "type": "string",
+      "enum": [
+        "SINGLE_AGENT_SINGLE_ROLE",
+        "SINGLE_AGENT_MULTI_ROLE",
+        "MULTI_AGENT_SINGLE_ROLE",
+        "MULTI_AGENT_MULTI_ROLE"
+      ],
+      "description": "Reused unchanged from the ratified Agent Handoff Contract CF-01. Not redefined by MAO."
+    },
+    "taskState": {
+      "type": "string",
+      "enum": ["planned", "admitted", "running", "succeeded", "rejected", "blocked", "cancelled", "timed_out", "exhausted", "failed"],
+      "description": "New MAO-T0 field. See contract Task Lifecycle State Transition Table for allowed transitions."
+    },
+    "terminalOutcome": {
+      "type": "string",
+      "enum": ["succeeded", "rejected", "blocked", "cancelled", "timed_out", "exhausted", "failed"],
+      "description": "New MAO-T0 field. Subset of taskState restricted to terminal values."
+    },
+    "retryClass": {
+      "type": "string",
+      "enum": ["RETRYABLE_TRANSPORT_INTERRUPTION", "RETRYABLE_PROVIDER_TRANSIENT", "RETRYABLE_SAFE_TIMEOUT", "NON_RETRYABLE_AUTHORITY_REJECTION", "NON_RETRYABLE_APPROVAL_DENIAL", "NON_RETRYABLE_INVALID_OUTPUT", "NON_RETRYABLE_SCOPE_BREACH", "NON_RETRYABLE_AMBIGUOUS_SIDE_EFFECT"],
+      "description": "New MAO-T0 field. Classifies whether a failed invocation is eligible for automatic retry."
+    },
+    "runtimeMode": {
+      "type": "string",
+      "enum": ["QUEUE_SKELETON_ONLY", "READ_MODEL_ONLY", "RUNTIME_IMPLEMENTATION_REQUESTED", "PROVIDER_LIVE_REQUESTED", "PUBLIC_SYNC_REQUESTED"],
+      "description": "Reused unchanged from docs/reference/agent_workspace/CVF_AGENT_WORKSPACE_RUNTIME_EXPANSION_READINESS_CONTRACT.md. Not redefined by MAO."
+    },
+    "authorityEnvelope": {
+      "type": "object",
+      "description": "New MAO-T0 field. Immutable authority binding derived from an accepted work order.",
+      "required": ["workOrderId", "authorityHash", "route", "riskLevel", "budget", "closerActorId", "approvalCheckpoints"],
+      "properties": {
+        "workOrderId": { "type": "string", "description": "Governed work-order path or stable identifier that fixed this authority." },
+        "authorityHash": { "type": "string", "description": "Deterministic hash binding work-order content to this envelope. Immutable once a task graph compiles against it." },
+        "route": { "$ref": "#/definitions/route" },
+        "riskLevel": { "$ref": "#/definitions/riskLevel" },
+        "budget": { "$ref": "#/definitions/budgetAllocation" },
+        "closerActorId": { "type": "string", "description": "AHB-designated closer identity (CF-07). MAO does not define a second closer mechanism." },
+        "approvalCheckpoints": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["HIGH_RISK_FAN_OUT", "SCOPE_OR_BUDGET_EXPANSION", "REVIEWER_DISSENT_OVERRIDE", "PARTIAL_RESULT_ACCEPTANCE", "COMMIT_OR_PUBLIC_ACTION"] },
+          "description": "Required human checkpoints before the corresponding action is permitted."
+        }
+      }
+    },
+    "budgetAllocation": {
+      "type": "object",
+      "description": "New MAO-T0 field.",
+      "required": ["maxInvocations", "maxConcurrentRoles", "maxRevisionDepth"],
+      "properties": {
+        "maxInvocations": { "type": "integer", "minimum": 1 },
+        "maxConcurrentRoles": { "type": "integer", "minimum": 1, "maximum": 3, "description": "Pilot ceiling per roadmap Cost / Token / Latency Controls; more than 3 is value-parked." },
+        "maxRevisionDepth": { "type": "integer", "minimum": 0, "maximum": 1, "description": "Pilot ceiling; a second repair requires operator approval and is outside this schema's default." },
+        "tokenCostCeiling": { "type": ["number", "null"], "description": "Null when the provider does not expose token/cost accounting." },
+        "wallClockCeilingMs": { "type": ["integer", "null"] }
+      }
+    },
+    "taskGraph": {
+      "type": "object",
+      "description": "New MAO-T0 field. Immutable once compiled; runtime events advance task state but never rewrite this definition.",
+      "required": ["taskGraphId", "authorityEnvelope", "compilerVersion", "tasks", "dependencyManifest"],
+      "properties": {
+        "taskGraphId": { "type": "string" },
+        "authorityEnvelope": { "$ref": "#/definitions/authorityEnvelope" },
+        "compilerVersion": { "type": "string" },
+        "tasks": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/taskDefinition" }
+        },
+        "dependencyManifest": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["taskId", "dependsOn"],
+            "properties": {
+              "taskId": { "type": "string" },
+              "dependsOn": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "taskDefinition": {
+      "type": "object",
+      "description": "New MAO-T0 field.",
+      "required": ["taskId", "role", "riskLevel", "fileScope"],
+      "properties": {
+        "taskId": { "type": "string" },
+        "role": { "type": "string", "enum": ["worker", "reviewer", "specialist", "closer"] },
+        "riskLevel": { "$ref": "#/definitions/riskLevel" },
+        "fileScope": { "type": "array", "items": { "type": "string" }, "description": "Declared write scope; overlapping scope across concurrent tasks fails admission per the threat/failure model." },
+        "requiresIsolatedSourcePacket": { "type": "boolean", "default": false, "description": "True for any reviewer task per contract Task Lifecycle step 7." }
+      }
+    },
+    "roleResolutionReceipt": {
+      "type": "object",
+      "description": "New MAO-T0 field.",
+      "required": ["receiptId", "taskGraphId", "decision", "riskReason", "costJustification"],
+      "properties": {
+        "receiptId": { "type": "string" },
+        "taskGraphId": { "type": "string" },
+        "decision": { "type": "string", "enum": ["SINGLE_WORKER_ADMITTED", "BOUNDED_ROLE_PLAN_ADMITTED", "OPERATOR_APPROVAL_REQUIRED", "REJECTED"] },
+        "admittedRoles": { "type": "array", "items": { "type": "string" } },
+        "excludedRoles": { "type": "array", "items": { "type": "string" } },
+        "riskReason": { "type": "string" },
+        "costJustification": { "type": "string" },
+        "approvalRequired": { "type": "boolean" }
+      }
+    },
+    "invocationReceipt": {
+      "type": "object",
+      "description": "New MAO-T0 field. Provider-neutral; must not contain a hardcoded provider name as a schema branch.",
+      "required": ["invocationId", "taskId", "attemptId", "adapterId", "role", "authorityHash", "inputManifestHash", "idempotencyKey", "startedAt", "diagnosticClass"],
+      "properties": {
+        "invocationId": { "type": "string" },
+        "taskId": { "type": "string" },
+        "attemptId": { "type": "string" },
+        "adapterId": { "type": "string", "description": "Capability-adapter identity, not a provider brand name." },
+        "role": { "type": "string" },
+        "authorityHash": { "type": "string" },
+        "inputManifestHash": { "type": "string" },
+        "idempotencyKey": { "type": "string" },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": ["string", "null"], "format": "date-time" },
+        "usage": {
+          "type": "object",
+          "properties": {
+            "tokensReported": { "type": ["number", "null"] },
+            "tokensEstimated": { "type": ["number", "null"] },
+            "latencyMs": { "type": ["number", "null"] },
+            "measurementLabel": { "type": "string", "enum": ["PROVIDER_REPORTED", "ESTIMATED", "UNAVAILABLE"] }
+          },
+          "required": ["measurementLabel"]
+        },
+        "diagnosticClass": { "$ref": "#/definitions/retryClass" }
+      }
+    },
+    "outputReceipt": {
+      "type": "object",
+      "description": "New MAO-T0 field.",
+      "required": ["receiptId", "taskId", "invocationId", "outputManifest", "validationResult"],
+      "properties": {
+        "receiptId": { "type": "string" },
+        "taskId": { "type": "string" },
+        "invocationId": { "type": "string" },
+        "outputManifest": { "type": "array", "items": { "type": "string" } },
+        "changedSetEvidence": { "type": "array", "items": { "type": "string" } },
+        "validationResult": { "type": "string", "enum": ["VALID", "INVALID", "PARTIAL"] },
+        "claimBoundary": { "type": "string" }
+      }
+    },
+    "reviewReceipt": {
+      "type": "object",
+      "description": "New MAO-T0 field. Reviewer evidence must derive from an isolated source packet, never from worker conclusions alone.",
+      "required": ["receiptId", "taskId", "isolatedSourcePacketHash", "decision"],
+      "properties": {
+        "receiptId": { "type": "string" },
+        "taskId": { "type": "string" },
+        "isolatedSourcePacketHash": { "type": "string" },
+        "recomputedEvidence": { "type": "array", "items": { "type": "string" } },
+        "defects": { "type": "array", "items": { "type": "string" } },
+        "dissent": { "type": ["string", "null"] },
+        "decision": { "type": "string", "enum": ["ACCEPT", "REQUEST_REPAIR", "REJECT", "ESCALATE"] },
+        "repairOwner": { "type": ["string", "null"] }
+      }
+    },
+    "integrationReceipt": {
+      "type": "object",
+      "description": "New MAO-T0 field. Authored only by the AHB-designated closer.",
+      "required": ["receiptId", "taskGraphId", "closerActorId", "acceptedOutputs", "rejectedOutputs", "finalChangedSet"],
+      "properties": {
+        "receiptId": { "type": "string" },
+        "taskGraphId": { "type": "string" },
+        "closerActorId": { "type": "string" },
+        "acceptedOutputs": { "type": "array", "items": { "type": "string" } },
+        "rejectedOutputs": { "type": "array", "items": { "type": "string" } },
+        "unresolvedDissent": { "type": "array", "items": { "type": "string" } },
+        "finalChangedSet": { "type": "array", "items": { "type": "string" } },
+        "commitStewardResult": { "type": ["string", "null"] },
+        "sessionSyncRequired": { "type": "boolean" }
+      }
+    },
+    "eventLedgerEntry": {
+      "type": "object",
+      "description": "New MAO-T0 field. Append-only; the sole execution truth per contract Storage And Retention Decision.",
+      "required": ["eventId", "taskGraphId", "taskId", "eventType", "occurredAt", "resultingState"],
+      "properties": {
+        "eventId": { "type": "string" },
+        "taskGraphId": { "type": "string" },
+        "taskId": { "type": "string" },
+        "eventType": { "type": "string", "enum": ["GRAPH_COMPILED", "TASK_ADMITTED", "INVOCATION_STARTED", "INVOCATION_COMPLETED", "REVIEW_RECORDED", "TASK_TRANSITIONED", "CANCEL_REQUESTED", "CANCEL_ACCEPTED", "TIMEOUT_DETECTED", "ORPHAN_RECOVERY_ACTION", "INTEGRATION_RECORDED"] },
+        "occurredAt": { "type": "string", "format": "date-time" },
+        "resultingState": { "$ref": "#/definitions/taskState" }
+      }
+    },
+    "generatedReadModel": {
+      "type": "object",
+      "description": "New MAO-T0 field. Deterministically regenerated from the event ledger; never hand-edited; never treated as execution truth.",
+      "required": ["taskGraphId", "generatedAt", "taskStates", "openDissent"],
+      "properties": {
+        "taskGraphId": { "type": "string" },
+        "generatedAt": { "type": "string", "format": "date-time" },
+        "taskStates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["taskId", "state"],
+            "properties": {
+              "taskId": { "type": "string" },
+              "state": { "$ref": "#/definitions/taskState" },
+              "terminalOutcome": { "anyOf": [{ "$ref": "#/definitions/terminalOutcome" }, { "type": "null" }] }
+            }
+          }
+        },
+        "openDissent": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "workspaceMilestoneProjection": {
+      "type": "object",
+      "description": "New MAO-T0 field. Bounded milestone-only projection into existing workspace lanes per CVF_AGENT_WORKSPACE_STATE_TOPOLOGY_CONTRACT.md. Not a per-heartbeat mirror.",
+      "required": ["taskGraphId", "lane", "milestone"],
+      "properties": {
+        "taskGraphId": { "type": "string" },
+        "lane": { "type": "string", "enum": ["intake", "dispatch", "execution", "worker_return", "review", "accepted_material", "session_sync", "parked", "blocked", "archive_ready"], "description": "Reused unchanged from CVF_AGENT_WORKSPACE_STATE_LANE_TAXONOMY.md." },
+        "milestone": { "type": "string", "enum": ["GRAPH_CREATED", "ADMITTED", "TERMINAL_OUTCOME", "CLOSURE"] }
+      }
+    }
+  },
+  "properties": {
+    "taskGraph": { "$ref": "#/definitions/taskGraph" },
+    "roleResolutionReceipt": { "$ref": "#/definitions/roleResolutionReceipt" },
+    "invocationReceipt": { "$ref": "#/definitions/invocationReceipt" },
+    "outputReceipt": { "$ref": "#/definitions/outputReceipt" },
+    "reviewReceipt": { "$ref": "#/definitions/reviewReceipt" },
+    "integrationReceipt": { "$ref": "#/definitions/integrationReceipt" },
+    "eventLedgerEntry": { "$ref": "#/definitions/eventLedgerEntry" },
+    "generatedReadModel": { "$ref": "#/definitions/generatedReadModel" },
+    "workspaceMilestoneProjection": { "$ref": "#/definitions/workspaceMilestoneProjection" }
+  },
+  "additionalProperties": false
+}

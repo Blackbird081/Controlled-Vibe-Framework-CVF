@@ -1,0 +1,19 @@
+{
+  "stableId": "cvf.asc.edge.contract_to_runtime_to_runtime_to_enforcement.v1",
+  "entityType": "EDGE",
+  "sourceId": "cvf.asc.plane.contract_to_runtime.v1",
+  "targetId": "cvf.asc.plane.runtime_to_enforcement.v1",
+  "edgeProofClass": "DECLARED_EDGE",
+  "evidenceRecency": "NOT_APPLICABLE",
+  "operatorVisibility": "ABSENT",
+  "citations": [],
+  "claimBoundary": "Declared plane-sequence relationship reused from the R91 five-lane whole-picture ordering. DECLARED_EDGE only: no aggregate execution claim across the full chain.",
+  "freshnessInputs": [
+    "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  },
+  "sampledOnly": false
+}

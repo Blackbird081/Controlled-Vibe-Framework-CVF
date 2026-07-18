@@ -1,0 +1,105 @@
+{
+  "registryOrder": 7,
+  "skillId": "cvf-governance-context-packet-builder",
+  "name": "CVF Governance Context Packet Builder",
+  "version": "0.1.0",
+  "owner": "CVF context and work-transfer governance surface",
+  "status": "CANDIDATE",
+  "canonicalRoot": "docs/reference/agent_system_skills/registry/entries/cvf-governance-context-packet-builder.json",
+  "originLane": "AGSK-T7",
+  "sourceArtifacts": [
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_AGSK_T7_PACKAGE_CANDIDATE_EXPANSION_FROM_SOURCE_PACK_2026-06-29.md",
+    "docs/reviews/CVF_AGSK_ABSORPTION_PACK_REABSORPTION_REVIEW_2026-06-29.md",
+    ".private_reference/legacy/CVF 28.06/CVF_Agent_Skills_Governance_Absorption_Pack/docs/absorptions/agent-skills-governance/08_CONTEXT_PACKET_STANDARD.md",
+    ".private_reference/legacy/CVF 28.06/CVF_Agent_Skills_Governance_Absorption_Pack/docs/absorptions/agent-skills-governance/05_SKILL_ACTIVATION_RESOLVER.md"
+  ],
+  "legacyRows": [],
+  "license": "CVF_PRIVATE_GOVERNED",
+  "reviewArtifacts": [
+    "docs/reviews/CVF_AGSK_T7_PACKAGE_CANDIDATE_EXPANSION_FROM_SOURCE_PACK_WORKER_RETURN_2026-06-29.md"
+  ],
+  "purpose": "Help future agents assemble bounded context packets with trusted sources, allowed files, untrusted data labels, and receipt links before package-like work begins.",
+  "triggerPatterns": [
+    "context packet",
+    "progressive disclosure",
+    "trusted source bundle",
+    "context contamination",
+    "work transfer context"
+  ],
+  "taskClasses": [
+    "context-packet",
+    "source-review",
+    "worker-execution",
+    "work-transfer",
+    "package-candidate-triage"
+  ],
+  "useWhen": "A worker or dispatcher must carry only the relevant trusted sources, scope boundaries, source verification, and receipt references into a bounded task.",
+  "doNotUseWhen": "The task is trivial, no governed work transfer is occurring, or full package/runtime activation is being claimed.",
+  "riskTriggers": [
+    "untrusted data mixed with authority",
+    "missing allowed or forbidden files",
+    "stale context warning absent",
+    "receipt link missing"
+  ],
+  "roles": [
+    "dispatcher",
+    "worker",
+    "reviewer"
+  ],
+  "phases": [
+    "CONTEXT_PREP",
+    "DISPATCH_AUTHORING",
+    "WORKER_EXECUTION",
+    "WORKER_RETURN"
+  ],
+  "surfaces": [
+    "docs/work_orders",
+    "docs/reviews",
+    "docs/reference/agent_system_skills/registry"
+  ],
+  "riskCeiling": "R0",
+  "contextProfile": "bounded-context-packet-metadata-only",
+  "inputs": [
+    "trusted instructions",
+    "canonical rules",
+    "source verification table",
+    "allowed files",
+    "forbidden files",
+    "untrusted data"
+  ],
+  "outputs": [
+    "bounded context packet",
+    "trusted source list",
+    "untrusted data labels",
+    "receipt linkage requirement"
+  ],
+  "executionConstraints": "metadata-only candidate; does not create a runtime context loader or memory injection behavior",
+  "acceptanceEvidence": "future promotion requires package instance evidence showing reduced context contamination",
+  "riskProfile": "R0",
+  "authorityCeiling": "metadata-only context guidance; cannot promote external or stale context to authority",
+  "sideEffects": "none from metadata loading",
+  "permissions": "read metadata and cited governed source artifacts only",
+  "rollback": "delete this registry entry and regenerate the skill index if reviewer rejects AGSK-T7",
+  "safeStop": "if trusted and untrusted context cannot be separated, stop and require source clarification",
+  "candidateState": "CANDIDATE",
+  "approvalState": "AWAITING_REVIEW",
+  "uatState": "NOT_STARTED",
+  "certificationState": "NOT_STARTED",
+  "deprecation": "none",
+  "successor": "none",
+  "retirement": "none",
+  "dependencies": [],
+  "conflicts": [],
+  "compositionOrder": 7,
+  "capabilityBoundary": "no runtime memory read, no external-agent context injection, no package body, no SKILL.md",
+  "internalAgentDisposition": "CANDIDATE",
+  "resolverBehavior": "metadata-only; resolver returns identity and selector fields; does not open any SKILL.md or instruction body",
+  "loaderBoundary": "loading this metadata never grants authority to inject context, trust external data, or bypass source verification",
+  "externalCliMcpDisposition": "DEFERRED_WITH_REASON",
+  "adapterContract": "N/A with reason: external CLI/MCP adapter not authored in AGSK-T7",
+  "adapterEvidence": "N/A with reason: no adapter implemented in AGSK-T7",
+  "externalMutationBoundary": "no external mutation permitted until a separate ASSF adapter work order is accepted",
+  "platformCompatibility": "cross-platform",
+  "shellAssumptions": "no shell execution required for metadata-only candidate",
+  "osConstraints": "none"
+}

@@ -3,6 +3,8 @@ import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCI
 
 // --- Types ---
 
+export const ORCHESTRATION_ADAPTER_VERSION = "phase2b-orchestration-adapter-1" as const;
+
 export interface TaskAssignment {
   assignmentId: string;
   taskId: string;
@@ -31,6 +33,19 @@ export interface OrchestrationResult {
 
 export interface OrchestrationContractDependencies {
   now?: () => string;
+}
+
+export interface OrchestrationAdapterSnapshot {
+  version: typeof ORCHESTRATION_ADAPTER_VERSION;
+  source: "control-plane:orchestration-contract";
+  orchestrationId: string;
+  planId: string;
+  totalAssignments: number;
+  phaseBreakdown: Record<DesignTaskPhase, number>;
+  roleBreakdown: Record<DesignAgentRole, number>;
+  riskBreakdown: Record<DesignTaskRisk, number>;
+  warningCount: number;
+  orchestrationHash: string;
 }
 
 // --- Scope Constraints ---
@@ -158,6 +173,17 @@ export class OrchestrationContract {
     };
   }
 
+  orchestrateWithAdapter(plan: DesignPlan): {
+    result: OrchestrationResult;
+    adapter: OrchestrationAdapterSnapshot;
+  } {
+    const result = this.orchestrate(plan);
+    return {
+      result,
+      adapter: buildOrchestrationAdapterSnapshot(result),
+    };
+  }
+
   private buildWarnings(
     plan: DesignPlan,
     assignments: TaskAssignment[],
@@ -194,6 +220,23 @@ export class OrchestrationContract {
 
     return warnings;
   }
+}
+
+export function buildOrchestrationAdapterSnapshot(
+  result: OrchestrationResult,
+): OrchestrationAdapterSnapshot {
+  return {
+    version: ORCHESTRATION_ADAPTER_VERSION,
+    source: "control-plane:orchestration-contract",
+    orchestrationId: result.orchestrationId,
+    planId: result.planId,
+    totalAssignments: result.totalAssignments,
+    phaseBreakdown: { ...result.phaseBreakdown },
+    roleBreakdown: { ...result.roleBreakdown },
+    riskBreakdown: { ...result.riskBreakdown },
+    warningCount: result.warnings.length,
+    orchestrationHash: result.orchestrationHash,
+  };
 }
 
 export function createOrchestrationContract(

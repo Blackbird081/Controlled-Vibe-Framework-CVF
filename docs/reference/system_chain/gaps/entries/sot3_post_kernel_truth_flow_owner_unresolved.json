@@ -1,0 +1,49 @@
+{
+  "stableId": "cvf.asc.gap.sot3_post_kernel_truth_flow_owner_unresolved.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+  "targetPlaneId": "cvf.asc.plane.runtime_to_enforcement.v1",
+  "sourceOwner": "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md",
+  "targetOwner": "EXTENSIONS/CVF_TRUTH_FLOW/",
+  "missingEdge": "The accepted SOT three-layer contract chain names a post-Kernel Truth Flow layer (TruthReference lifecycle, DistributionPackage, FeedbackProposal). SOT3-T5 built this as a deterministic local package (`DistributionEngine`, `KernelAuthorityBoundary`, `FeedbackEngine`) bound only to the real Kernel's own `referenceState()` resolver; SOT3-T6 proved it executes as a real dependency through delivery, consumption, and terminal acknowledgement inside the three-layer vertical slice.",
+  "currentStatus": "ACTIVE_OWNER_CREATED_WITH_BOUNDARY",
+  "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+  "citations": [
+    {
+      "path": "docs/reviews/CVF_SOT3_T1_OWNER_NOVELTY_MAP_2026-07-12.md",
+      "lineOrSection": "CAP-06 Flow lifecycle",
+      "evidenceRole": "reviewer-accepted NEW_OWNER_CANDIDATE disposition (superseded by T5/T6 owner creation)"
+    },
+    {
+      "path": "docs/reviews/CVF_SOT3_T5_COMPLETION_REVIEW_2026-07-13.md",
+      "lineOrSection": "Closure Checklist",
+      "evidenceRole": "reviewer acceptance of the post-Kernel Truth Flow package as deterministic runtime owner"
+    },
+    {
+      "path": "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md",
+      "lineOrSection": "Dependency-Closure Matrix, rows `delivery and consumption` and `terminal lifecycle`",
+      "evidenceRole": "reviewer acceptance that `DistributionEngine` executes as a real dependency, not a mock, reaching terminal `ACKNOWLEDGED` state inside the accepted vertical slice"
+    }
+  ],
+  "impact": "Was: blocked any as-built claim that CVF has a post-Kernel Truth Flow lifecycle. Now: the layer has a private-provenance runtime owner; remaining impact is limited to activation, adapter, provider/live, and public-sync claims, none of which this GAP closure asserts.",
+  "closeCondition": {
+    "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+    "conditionText": "SATISFIED: `docs/reviews/CVF_SOT3_T5_COMPLETION_REVIEW_2026-07-13.md` accepts the post-Kernel Truth Flow package as owner; `docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md` accepts real-instance execution to terminal lifecycle."
+  },
+  "reopenCondition": {
+    "conditionKind": "OPERATOR_DECISION_RECORDED",
+    "conditionText": "Reopen only if a future review finds the `EXTENSIONS/CVF_TRUTH_FLOW/` owner path removed, superseded, or materially non-functional, or if an operator authorizes package activation/adapter/provider work that changes this GAP's boundary."
+  },
+  "actionOwner": "SOT3-T7 semantic value audit and closeout",
+  "freshnessInputs": [
+    "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md",
+    "docs/reviews/CVF_SOT3_T5_COMPLETION_REVIEW_2026-07-13.md",
+    "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-13",
+    "acceptedArtifact": "docs/reviews/CVF_SOT3_T7_WORKER_RETURN_2026-07-13.md"
+  },
+  "boundaryCaveat": "Does not claim package activation, an execution adapter, provider/live proof, public-sync readiness, or production readiness. Private-provenance implementation only.",
+  "priorDisposition": "SOURCE_OWNER_UNRESOLVED_WITH_SEARCH_EVIDENCE"
+}

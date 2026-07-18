@@ -52,11 +52,5 @@
     ],
     "addedAt": "2026-05-19",
     "addedBy": "Worker"
-  },
-  {
-    "surface": "governance/compat/run_local_governance_hook_chain.py",
-    "requiredFragments": ["check_workflow_orchestration_guard.py"],
-    "addedAt": "2026-05-19",
-    "addedBy": "Worker"
   }
 ]

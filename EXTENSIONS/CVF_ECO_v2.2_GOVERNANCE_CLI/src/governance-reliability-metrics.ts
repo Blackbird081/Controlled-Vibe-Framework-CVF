@@ -3,6 +3,9 @@ interface GenericAuditEvent {
   runId?: string;
   eventType?: string;
   type?: string;
+  evidenceMode?: "live" | "offline" | "fixture" | string;
+  provider?: string;
+  model?: string;
   timestamp?: string;
   at?: string;
   createdAt?: string;
@@ -100,6 +103,14 @@ export function retryRecoveryRate(events: AuditEvent[]): MetricResult {
   return ratio(recovered.length, withStatus.length);
 }
 
+export function retryCount(events: AuditEvent[]): number {
+  return events.filter((event) => {
+    const status = nonEmptyString(event.enforcement?.status);
+    const kind = eventKind(event);
+    return status === "retry" || status === "recovered" || kind === "retry" || kind === "retry_recovered";
+  }).length;
+}
+
 export function policyViolationRate(events: AuditEvent[]): MetricResult {
   return ratio(
     events.filter((event) => {
@@ -137,6 +148,10 @@ export function humanCorrectionRate(events: AuditEvent[]): MetricResult {
       .filter(Boolean),
   );
   return ratio(correctedExecutions.size, executions.size);
+}
+
+export function humanCorrectionCount(events: AuditEvent[]): number {
+  return events.filter((event) => eventKind(event) === "operator_correction").length;
 }
 
 export function longHorizonStabilityRate(events: AuditEvent[], windowDays: number): MetricResult {

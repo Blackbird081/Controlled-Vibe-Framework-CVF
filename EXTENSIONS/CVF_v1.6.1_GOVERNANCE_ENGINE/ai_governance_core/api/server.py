@@ -56,6 +56,8 @@ app = FastAPI(
     version="1.6.1",
 )
 
+CVF_API_RESPONSE_ADAPTER_VERSION = "phase2b-api-response-adapter-1"
+
 
 # ===========================
 # SINGLETON ORCHESTRATOR
@@ -116,6 +118,17 @@ class CVFResponse(BaseModel):
     status: str
     timestamp: str
     data: Dict[str, Any]
+
+
+def build_cvf_response(status: str, data: Dict[str, Any]) -> CVFResponse:
+    return CVFResponse(
+        status=status,
+        timestamp=datetime.utcnow().isoformat(),
+        data={
+            "adapterVersion": CVF_API_RESPONSE_ADAPTER_VERSION,
+            **data,
+        },
+    )
 
 
 # ===========================

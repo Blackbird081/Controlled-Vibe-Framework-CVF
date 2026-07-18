@@ -114,6 +114,12 @@ export function ResultViewer({ execution, output, onAccept, onReject, onRetry, o
 
     const generateEvidenceReceiptContent = useCallback(() => {
         if (!evidenceReceipt) return '';
+        const decision = evidenceReceipt.decision ?? 'UNKNOWN';
+        const provider = evidenceReceipt.provider ?? 'unknown provider';
+        const model = evidenceReceipt.model ?? 'unknown model';
+        const nextAction = decision === 'ALLOW'
+            ? 'Use the deliverable pack, review it with the accountable owner, and keep the receipt with the handoff.'
+            : 'Review the decision, revise the request or seek approval, and keep the receipt for traceability.';
         const fields = [
             ['Receipt', evidenceReceipt.receiptId],
             ['Evidence mode', evidenceReceipt.evidenceMode],
@@ -136,6 +142,18 @@ export function ResultViewer({ execution, output, onAccept, onReject, onRetry, o
         return [
             '## CVF Evidence Receipt',
             '',
+            '### What happened',
+            `CVF evaluated this run on \`${evidenceReceipt.routeId}\` and recorded decision \`${decision}\` using ${provider} / ${model}.`,
+            '',
+            '### Why this can be used',
+            evidenceReceipt.evidenceMode === 'live'
+                ? 'This receipt came from a live governed execution path, not a mock-only UI state.'
+                : `This receipt evidence mode is \`${evidenceReceipt.evidenceMode}\`; do not use it as live governance proof without a live rerun.`,
+            '',
+            '### What to do next',
+            nextAction,
+            '',
+            '### Receipt fields',
             ...fields.map(([label, value]) => `- **${label}:** ${value}`),
             '',
             '_No raw provider keys are included in this receipt._',

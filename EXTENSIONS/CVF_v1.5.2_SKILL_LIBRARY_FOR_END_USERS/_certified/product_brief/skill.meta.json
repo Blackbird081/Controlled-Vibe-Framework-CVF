@@ -1,0 +1,10 @@
+{
+  "id": "product_brief",
+  "name": "Product Brief",
+  "domain": "Product Management",
+  "version": "1.0.0",
+  "sourceSkillRef": "product_brief.skill.md",
+  "certificationDate": "2026-05-22",
+  "outcomeKey": "product_brief",
+  "description": "Turn product intent into a structured brief with audience, value, scope, and acceptance criteria."
+}

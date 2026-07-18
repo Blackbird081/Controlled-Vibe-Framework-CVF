@@ -123,6 +123,19 @@ export {
   REVIEW_CVF_PROVIDER_METHODS,
 } from "./provider-capability-registry";
 export type {
+  AlibabaFreeQuotaModelLedgerEntry,
+  AlibabaFreeQuotaStatus,
+} from "./alibaba-free-quota-model-ledger";
+export {
+  ALIBABA_DASHSCOPE_INTL_ENDPOINT,
+  ALIBABA_DASHSCOPE_MAINLAND_ENDPOINT,
+  ALIBABA_FREE_QUOTA_LEDGER_REFERENCE,
+  ALIBABA_FREE_QUOTA_MODELS,
+  getAlibabaFreeQuotaModel,
+  getAlibabaFreeQuotaStatus,
+  resolveAlibabaDashScopeEndpoint,
+} from "./alibaba-free-quota-model-ledger";
+export type {
   ProviderCapabilityLookup,
 } from "./provider-method-gate";
 export {
@@ -251,12 +264,100 @@ export type {
   RoutingDecision,
   RoutingPolicyContractSnapshot,
   RoutingRequest,
+  RoutingStageDecision,
 } from "./routing-policy";
 export {
   buildRoutingPolicyContractSnapshot,
   ROUTING_POLICY_CONTRACT_VERSION,
   RoutingPolicyEngine,
 } from "./routing-policy";
+export type {
+  RoutingCandidate,
+  RoutingPolicyPipelineRequest,
+  RoutingPolicyPipelineResult,
+} from "./routing-policy-pipeline";
+export {
+  collectAppliedRoutingPolicies,
+  modelSupportsRequiredCapabilities,
+  runRoutingPolicyPipeline,
+  selectCandidateModel,
+} from "./routing-policy-pipeline";
+
+export type {
+  DynamicModelRecord,
+  DynamicModelRegistryContract,
+  FindOptimalQuery,
+  ModelTier,
+} from "./dynamic-model-registry-contract";
+export { DYNAMIC_MODEL_REGISTRY_CONTRACT_VERSION } from "./dynamic-model-registry-contract";
+
+export type {
+  GatewayErrorClass,
+  GatewayErrorEnvelope,
+  GatewayExecuteRequest,
+  GatewayExecuteResponse,
+  GatewayStreamRequest,
+  GatewayStreamChunk,
+  GatewayEmbeddingRequest,
+  GatewayEmbeddingResponse,
+  GatewayHealthResponse,
+  UnifiedGatewayInterfaceContract,
+} from "./unified-gateway-interface-contract";
+export { UNIFIED_GATEWAY_INTERFACE_CONTRACT_VERSION } from "./unified-gateway-interface-contract";
+
+export type { UnifiedGatewaySkeletonOptions } from "./unified-gateway-skeleton";
+export { UnifiedGatewaySkeletonImpl } from "./unified-gateway-skeleton";
+
+export type {
+  ProviderExecutionAdapter,
+  ProviderExecutionAdapterInput,
+  ProviderExecutionAdapterResult,
+  ProviderExecutionBridgeOptions,
+  ProviderExecutionBridgeResult,
+} from "./provider-execution-bridge";
+export {
+  ProviderExecutionBridge,
+  PROVIDER_EXECUTION_BRIDGE_VERSION,
+} from "./provider-execution-bridge";
+
+export type {
+  ProviderAdapterConformanceStatus,
+  ProviderAdapterConformanceInput,
+  ProviderAdapterConformanceReport,
+} from "./provider-adapter-conformance";
+export {
+  evaluateProviderAdapterConformance,
+  PROVIDER_ADAPTER_CONFORMANCE_VERSION,
+} from "./provider-adapter-conformance";
+
+export type {
+  AdapterAdmissionOptions,
+  AdapterAdmissionReasonCode,
+  AdapterAdmissionRecord,
+  AdapterAdmissionStatus,
+} from "./provider-adapter-admission";
+export {
+  admitProviderAdapter,
+  PROVIDER_ADAPTER_ADMISSION_VERSION,
+} from "./provider-adapter-admission";
+
+export type {
+  CapabilityNegotiationResult,
+  CapabilityNegotiationStatus,
+} from "./provider-capability-negotiation";
+export {
+  negotiateProviderCapability,
+  PROVIDER_CAPABILITY_NEGOTIATION_VERSION,
+} from "./provider-capability-negotiation";
+
+export type {
+  BridgeAdmissionGuardResult,
+  BridgeAdmissionVerdict,
+} from "./provider-bridge-admission-guard";
+export {
+  checkBridgeAdmission,
+  BRIDGE_ADMISSION_BOUNDARY_VERSION,
+} from "./provider-bridge-admission-guard";
 
 export const MODEL_GATEWAY_WRAPPER = {
   executionClass: "wrapper/re-export merge",

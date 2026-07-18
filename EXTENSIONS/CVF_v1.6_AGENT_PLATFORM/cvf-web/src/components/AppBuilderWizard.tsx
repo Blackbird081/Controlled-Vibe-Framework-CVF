@@ -517,9 +517,10 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                         </div>
 
                         <div className="rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-4">
-                            <div className="text-sm font-semibold text-green-800 dark:text-green-200 mb-2">
-                                {language === 'vi' ? 'Freeze receipt' : 'Freeze receipt'}
+                            <div className="text-sm font-semibold text-green-800 dark:text-green-200 mb-0.5">
+                                {language === 'vi' ? 'Kết quả được khóa' : 'What gets locked'}
                             </div>
+                            <div className="text-xs text-green-600 dark:text-green-400 mb-2">Freeze receipt</div>
                             <div className="space-y-1 text-sm text-green-900 dark:text-green-100">
                                 <div><strong>{language === 'vi' ? 'Accepted output' : 'Accepted output'}:</strong> {governedLiveExecution.freezeReceipt.acceptedOutput}</div>
                                 <div><strong>{language === 'vi' ? 'Baseline artifact' : 'Baseline artifact'}:</strong> {governedLiveExecution.freezeReceipt.baselineArtifact}</div>
@@ -715,9 +716,10 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
 
                                     <div className="grid gap-4 lg:grid-cols-2">
                                         <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
-                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                                {language === 'vi' ? 'Approval checkpoints' : 'Approval checkpoints'}
+                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-0.5">
+                                                {language === 'vi' ? 'Ai cần phê duyệt' : 'Who needs to approve'}
                                             </h4>
+                                            <p className="text-xs text-gray-400 dark:text-gray-500 mb-2">Approval checkpoints</p>
                                             <div className="space-y-3">
                                                 {governedPacket.approvals.map(approval => (
                                                     <div key={approval.id} className="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
@@ -736,9 +738,10 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                                         </div>
 
                                         <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
-                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                                {language === 'vi' ? 'Freeze receipt' : 'Freeze receipt'}
+                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-0.5">
+                                                {language === 'vi' ? 'Kết quả được khóa' : 'What gets locked'}
                                             </h4>
+                                            <p className="text-xs text-gray-400 dark:text-gray-500 mb-2">Freeze receipt</p>
                                             <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
                                                 <div><strong>{language === 'vi' ? 'Accepted output' : 'Accepted output'}:</strong> {governedPacket.freezeReceipt.acceptedOutput}</div>
                                                 <div><strong>{language === 'vi' ? 'Baseline artifact' : 'Baseline artifact'}:</strong> {governedPacket.freezeReceipt.baselineArtifact}</div>
@@ -749,9 +752,10 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                                     </div>
 
                                     <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-900/40 p-4">
-                                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                            {language === 'vi' ? 'Execution handoff' : 'Execution handoff'}
+                                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-0.5">
+                                            {language === 'vi' ? 'AI tiếp tục như thế nào' : 'How the AI continues'}
                                         </h4>
+                                        <p className="text-xs text-gray-400 dark:text-gray-500 mb-2">Execution handoff</p>
                                         <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
                                             <div><strong>Mode:</strong> {governedPacket.executionHandoff.mode}</div>
                                             <div><strong>Intent:</strong> {governedPacket.executionHandoff.intent}</div>

@@ -1,0 +1,30 @@
+name: System Chain Map Freshness Weekly Reminder
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  system-chain-map-freshness-weekly:
+    name: System Chain Map Freshness Weekly Reminder
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce system chain map freshness guard
+        run: |
+          python governance/compat/check_system_chain_map_freshness.py --enforce

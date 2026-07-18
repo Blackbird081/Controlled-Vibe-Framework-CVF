@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "lpci2.ecT5.gateValueUpdateBlockDecision.v1",
+  "status": "CLOSED_BLOCKED_BOUNDED",
+  "executionBaseHead": "b815fcf9",
+  "decision": "DO_NOT_APPLY_QUERY_CLASS_GATED",
+  "blockedToken": "QUERY_CLASS_GATED",
+  "existingRetainedGate": "BLOCKED_UNTIL_2026-07-01",
+  "reasonCodes": [
+    "EC_T4_PARKED_PENDING_OPERATOR_METADATA",
+    "ALL_RECORDS_REQUIRE_OPERATOR_CONFIRMATION",
+    "FOUR_RECORDS_UNKNOWN_OR_AMBIGUOUS",
+    "RUNTIME_QUERY_CLASS_ROUTING_NOT_WIRED",
+    "CURRENT_APPLY_CONTRACT_BLOCKS_ONLY_BLOCKED_OR_PROHIBITED_VALUES"
+  ],
+  "sourceInputs": {
+    "ecT2Semantics": "docs/reference/CVF_EC02_GATE_SEMANTICS_2026-06-11.json",
+    "ecT4Completion": "docs/reviews/CVF_LPCI2_EC_T4_OPERATOR_DATE_EVIDENCE_BACKFILL_COMPLETION_2026-06-11.md",
+    "ecT4ProposedMetadata": "docs/reference/CVF_LPCI2_EC_T4_PROPOSED_METADATA_BACKFILL_2026-06-11.json",
+    "runtimeContract": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/dscp.domain.profile.contract.ts"
+  },
+  "recordSummary": {
+    "candidateCount": 6,
+    "retainedBlockedGateCount": 6,
+    "operatorConfirmationRequiredCount": 6,
+    "sourceEvidencedCount": 2,
+    "unknownOrAmbiguousCount": 4
+  },
+  "runtimeSourceState": {
+    "queryClassGatedObservedInExtensions": false,
+    "applyContractBlocksWhenRuleValueStartsWith": "BLOCKED",
+    "applyContractAlsoBlocksLiteral": "PROHIBITED",
+    "queryClassGatedWouldBeFlatCustomGateUnderCurrentApplyLogic": true
+  },
+  "forbiddenMutations": [
+    "EXTENSIONS/**",
+    "external Policy_Local workspace",
+    "DSCP profile ec02Gate value",
+    "corpus generated data",
+    "retrieval behavior",
+    "public-sync"
+  ],
+  "successorReopenConditions": [
+    "operator-confirmed metadata resolves EC-T4 gaps",
+    "source-verified runtime/query routing plan defines QUERY_CLASS_GATED behavior",
+    "fresh work order authorizes runtime/profile update scope"
+  ],
+  "claimBoundary": {
+    "currentLawClaim": false,
+    "legalAdviceQualityClaim": false,
+    "runtimeBehaviorClaim": false,
+    "policyLocalMutationClaim": false,
+    "ecT6Unlocked": false,
+    "t12Unlocked": false,
+    "productionReady": false,
+    "publicReady": false
+  }
+}

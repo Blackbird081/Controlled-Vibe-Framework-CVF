@@ -125,7 +125,7 @@ This is a separate implementation tranche — not in this wave.
 - GC-018: `docs/baselines/CVF_GC018_LHW20_CVF_IMPORTANT_DEEP_SCAN_WAVE_2026-05-31.md`
 - Source: `.private_reference/legacy/CVF_Important/ADDING_MODEL GATEWAY/CVF_EXECUTION_STRATEGY_MODEL.md`
 - Source: `.private_reference/legacy/CVF_Important/ADDING_MODEL GATEWAY/CVF_MODEL_GATEWAY_SPEC.md`
-- LHW17 T2: `docs/reference/CVF_LHW17_T2_MODEL_GATEWAY_UNIFICATION_ADVISORY_CONNECTOR_SPEC_2026-05-30.md`
+- LHW17 T2: `docs/reference/archive/CVF_LHW17_T2_MODEL_GATEWAY_UNIFICATION_ADVISORY_CONNECTOR_SPEC_2026-05-30.md`
 - Pipeline orchestrator: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/pipeline-chain-orchestrator.ts`
 
 ## Claim Boundary

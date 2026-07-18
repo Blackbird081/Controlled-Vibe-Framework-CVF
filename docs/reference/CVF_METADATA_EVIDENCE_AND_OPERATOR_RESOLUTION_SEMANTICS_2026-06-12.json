@@ -1,0 +1,215 @@
+{
+  "contractVersion": "cvf.metadataEvidenceResolution.meor.t1.v1",
+  "docType": "machine_semantics",
+  "observedStates": [
+    "PRESENT",
+    "MISSING",
+    "AMBIGUOUS",
+    "CONFLICTING",
+    "UNSUPPORTED",
+    "NOT_APPLICABLE"
+  ],
+  "evidenceBases": [
+    "SOURCE_EMBEDDED",
+    "OPERATOR_SUPPLIED",
+    "DERIVED_HINT",
+    "NONE"
+  ],
+  "resolutionStates": [
+    "RESOLVED",
+    "OPERATOR_ACTION_REQUIRED",
+    "BLOCKED"
+  ],
+  "downstreamDispositions": [
+    "RETAIN_BLOCK",
+    "ELIGIBLE_FOR_REEVALUATION"
+  ],
+  "failureTokens": [
+    "INVALID_REQUIREMENT_ID",
+    "INVALID_OWNER_PROFILE_ID",
+    "INVALID_STATE_COMBINATION",
+    "MISSING_EVIDENCE_POINTER",
+    "RAW_CONTENT_FORBIDDEN",
+    "UNDECLARED_REQUIREMENT",
+    "CROSS_PROFILE_REQUIREMENT_BLEED"
+  ],
+  "rules": [
+    {
+      "ruleId": "R1",
+      "observedStates": [
+        "NOT_APPLICABLE"
+      ],
+      "evidenceBases": [
+        "NONE"
+      ],
+      "resolutionState": "RESOLVED",
+      "downstreamDisposition": "ELIGIBLE_FOR_REEVALUATION",
+      "evidencePointerPolicy": "OPTIONAL",
+      "requiredActionPolicy": "MUST_BE_NULL"
+    },
+    {
+      "ruleId": "R2",
+      "observedStates": [
+        "PRESENT"
+      ],
+      "evidenceBases": [
+        "SOURCE_EMBEDDED"
+      ],
+      "resolutionState": "RESOLVED",
+      "downstreamDisposition": "ELIGIBLE_FOR_REEVALUATION",
+      "evidencePointerPolicy": "REQUIRED",
+      "requiredActionPolicy": "MUST_BE_NULL"
+    },
+    {
+      "ruleId": "R3",
+      "observedStates": [
+        "PRESENT"
+      ],
+      "evidenceBases": [
+        "OPERATOR_SUPPLIED"
+      ],
+      "resolutionState": "RESOLVED",
+      "downstreamDisposition": "ELIGIBLE_FOR_REEVALUATION",
+      "evidencePointerPolicy": "REQUIRED",
+      "requiredActionPolicy": "MUST_BE_NULL"
+    },
+    {
+      "ruleId": "R4",
+      "observedStates": [
+        "PRESENT"
+      ],
+      "evidenceBases": [
+        "DERIVED_HINT",
+        "NONE"
+      ],
+      "resolutionState": "OPERATOR_ACTION_REQUIRED",
+      "downstreamDisposition": "RETAIN_BLOCK",
+      "evidencePointerPolicy": "OPTIONAL",
+      "requiredActionPolicy": "REQUIRED"
+    },
+    {
+      "ruleId": "R5",
+      "observedStates": [
+        "MISSING",
+        "AMBIGUOUS"
+      ],
+      "evidenceBases": [
+        "SOURCE_EMBEDDED",
+        "OPERATOR_SUPPLIED",
+        "DERIVED_HINT",
+        "NONE"
+      ],
+      "resolutionState": "OPERATOR_ACTION_REQUIRED",
+      "downstreamDisposition": "RETAIN_BLOCK",
+      "evidencePointerPolicy": "REQUIRED_FOR_AUTHORITATIVE_BASIS",
+      "requiredActionPolicy": "REQUIRED"
+    },
+    {
+      "ruleId": "R6",
+      "observedStates": [
+        "CONFLICTING",
+        "UNSUPPORTED"
+      ],
+      "evidenceBases": [
+        "SOURCE_EMBEDDED",
+        "OPERATOR_SUPPLIED",
+        "DERIVED_HINT",
+        "NONE"
+      ],
+      "resolutionState": "BLOCKED",
+      "downstreamDisposition": "RETAIN_BLOCK",
+      "evidencePointerPolicy": "REQUIRED_FOR_AUTHORITATIVE_BASIS",
+      "requiredActionPolicy": "REQUIRED"
+    }
+  ],
+  "invalidCombinationRules": [
+    {
+      "ruleId": "I1",
+      "description": "NOT_APPLICABLE requires evidenceBasis NONE",
+      "failureToken": "INVALID_STATE_COMBINATION"
+    },
+    {
+      "ruleId": "I2",
+      "description": "RESOLVED cannot retain a downstream block",
+      "failureToken": "INVALID_STATE_COMBINATION"
+    },
+    {
+      "ruleId": "I3",
+      "description": "OPERATOR_ACTION_REQUIRED and BLOCKED cannot be eligible for re-evaluation",
+      "failureToken": "INVALID_STATE_COMBINATION"
+    },
+    {
+      "ruleId": "I4",
+      "description": "Authoritative evidence basis requires at least one evidence pointer",
+      "failureToken": "MISSING_EVIDENCE_POINTER"
+    },
+    {
+      "ruleId": "I5",
+      "description": "Raw source or sensitive content is forbidden in evidence pointers",
+      "failureToken": "RAW_CONTENT_FORBIDDEN"
+    },
+    {
+      "ruleId": "I6",
+      "description": "Requirement must be declared by its owner profile",
+      "failureToken": "UNDECLARED_REQUIREMENT"
+    },
+    {
+      "ruleId": "I7",
+      "description": "Requirement ownership cannot bleed across profiles",
+      "failureToken": "CROSS_PROFILE_REQUIREMENT_BLEED"
+    }
+  ],
+  "invariants": {
+    "sourceAndOperatorEvidenceRemainDistinct": true,
+    "derivedHintMayReleaseDownstream": false,
+    "reportGenerationMayMutateDownstream": false,
+    "rawSourceContentAllowed": false,
+    "autonomousMutationAuthorized": false,
+    "eligibleForReevaluationActivatesGate": false,
+    "requirementsAreProfileScoped": true
+  },
+  "examples": [
+    {
+      "exampleId": "legal-policy-missing-current-status",
+      "profileFamily": "legal_policy",
+      "record": {
+        "requirementId": "legal_policy.current_status",
+        "ownerProfileId": "legal_policy.vn_regulatory",
+        "observedState": "MISSING",
+        "evidenceBasis": "NONE",
+        "evidencePointers": [],
+        "resolutionState": "OPERATOR_ACTION_REQUIRED",
+        "downstreamDisposition": "RETAIN_BLOCK",
+        "requiredAction": "Provide attributable current-status evidence.",
+        "failureToken": null
+      }
+    },
+    {
+      "exampleId": "technical-project-present-target-runtime",
+      "profileFamily": "technical_project",
+      "record": {
+        "requirementId": "technical_project.target_runtime",
+        "ownerProfileId": "technical_project.software_delivery",
+        "observedState": "PRESENT",
+        "evidenceBasis": "SOURCE_EMBEDDED",
+        "evidencePointers": [
+          "artifact:project-manifest#runtime"
+        ],
+        "resolutionState": "RESOLVED",
+        "downstreamDisposition": "ELIGIBLE_FOR_REEVALUATION",
+        "requiredAction": null,
+        "failureToken": null
+      }
+    }
+  ],
+  "claimBoundary": [
+    "No metadata correctness claim",
+    "No source authenticity claim",
+    "No domain expertise claim",
+    "No downstream activation claim",
+    "No retrieval quality claim",
+    "No provider behavior claim",
+    "No production or public readiness claim",
+    "No autonomous correction claim"
+  ]
+}

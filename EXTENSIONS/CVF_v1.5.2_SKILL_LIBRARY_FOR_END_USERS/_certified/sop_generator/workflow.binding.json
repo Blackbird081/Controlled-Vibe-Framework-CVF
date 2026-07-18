@@ -1,0 +1,21 @@
+{
+  "workflowId": "workflow.sop_generator.v1",
+  "outcomeKey": "sop_generator",
+  "packId": "sop_generator",
+  "inputKeys": [
+    "process_name",
+    "actors",
+    "steps",
+    "controls"
+  ],
+  "outputSections": [
+    "Purpose",
+    "Procedure",
+    "Roles",
+    "Controls"
+  ],
+  "policyRefs": [
+    "CVF_CAPABILITY_INTAKE_PIPELINE_GUARD",
+    "CVF_F1_DIMINISHING_RETURNS_STOP_RULE"
+  ]
+}

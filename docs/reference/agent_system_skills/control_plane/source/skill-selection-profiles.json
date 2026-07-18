@@ -1,0 +1,1090 @@
+{
+  "claimBoundary": "Canonical Skill Control Plane selection guidance for package skill discovery only. These profiles help users and agents choose a relevant package from a spec. They do not activate, invoke, certify, or grant authority to execute a package.",
+  "profileOwner": "CVF Skill Control Plane",
+  "profiles": [
+    {
+      "agentUseCases": [
+        "design stable service APIs",
+        "define module boundaries",
+        "review schema contracts"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Clear API or interface contracts before implementation.",
+      "intendedUsers": [
+        "dispatcher",
+        "worker",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "task is mainly visual UI implementation",
+        "task is mainly runtime debugging"
+      ],
+      "outputGoals": [
+        "contract design",
+        "schema clarity",
+        "boundary decisions"
+      ],
+      "primaryDomain": "api-interface-design",
+      "recommendedWhen": [
+        "the spec names API endpoints, module contracts, schemas, or component interfaces"
+      ],
+      "secondaryDomains": [
+        "architecture",
+        "schema-design"
+      ],
+      "selectionKeywords": [
+        "api",
+        "interface",
+        "schema",
+        "contract",
+        "endpoint",
+        "module boundary"
+      ],
+      "selectionPriority": 70,
+      "skillId": "cvf-engineering-api-interface-design",
+      "specSignals": [
+        "api design",
+        "interface boundary",
+        "module contract",
+        "schema contract"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "verify browser behavior",
+        "inspect DOM and console evidence",
+        "capture visual runtime proof"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Browser runtime evidence for UI or web behavior.",
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "no browser surface exists",
+        "the request is only static documentation"
+      ],
+      "outputGoals": [
+        "browser proof",
+        "visual verification",
+        "console diagnostics"
+      ],
+      "primaryDomain": "browser-runtime-verification",
+      "recommendedWhen": [
+        "the spec requires verifying a web page, DOM behavior, console errors, or screenshots"
+      ],
+      "secondaryDomains": [
+        "frontend-ui",
+        "testing"
+      ],
+      "selectionKeywords": [
+        "browser",
+        "devtools",
+        "dom",
+        "console",
+        "screenshot",
+        "visual verification"
+      ],
+      "selectionPriority": 72,
+      "skillId": "cvf-engineering-browser-runtime-verification",
+      "specSignals": [
+        "browser test",
+        "dom inspection",
+        "console errors",
+        "visual verification"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "design CI checks",
+        "add pipeline quality gates",
+        "plan automation evidence"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Repeatable quality gates and pipeline evidence.",
+      "intendedUsers": [
+        "dispatcher",
+        "worker",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "task is a local-only code edit without automation impact"
+      ],
+      "outputGoals": [
+        "ci gate",
+        "automation check",
+        "release evidence"
+      ],
+      "primaryDomain": "ci-cd-quality-gates",
+      "recommendedWhen": [
+        "the spec mentions CI, Github Actions, pipeline checks, deployment gates, or automated verification"
+      ],
+      "secondaryDomains": [
+        "release",
+        "testing"
+      ],
+      "selectionKeywords": [
+        "ci",
+        "cd",
+        "pipeline",
+        "github actions",
+        "quality gate",
+        "automation"
+      ],
+      "selectionPriority": 70,
+      "skillId": "cvf-engineering-ci-cd-quality-gates",
+      "specSignals": [
+        "ci pipeline",
+        "quality gates",
+        "deployment pipeline",
+        "automation checks"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "review code quality",
+        "find correctness risks",
+        "prioritize review findings"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Finding-first code review across correctness, readability, architecture, security, and performance.",
+      "intendedUsers": [
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "the user asks for implementation without review"
+      ],
+      "outputGoals": [
+        "review findings",
+        "severity ranking",
+        "quality assessment"
+      ],
+      "primaryDomain": "code-review-quality",
+      "recommendedWhen": [
+        "the spec asks to review a diff, inspect another agent's work, or judge implementation quality"
+      ],
+      "secondaryDomains": [
+        "quality-assessment",
+        "reviewer-closure"
+      ],
+      "selectionKeywords": [
+        "code review",
+        "review",
+        "quality",
+        "pre-merge",
+        "implementation review"
+      ],
+      "selectionPriority": 82,
+      "skillId": "cvf-engineering-code-review-quality",
+      "specSignals": [
+        "code review",
+        "quality review",
+        "review another agent"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "simplify code",
+        "reduce duplication",
+        "lower complexity"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Behavior-preserving simplification with tests and local conventions.",
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "behavior is not understood",
+        "the user asks for new feature expansion"
+      ],
+      "outputGoals": [
+        "reduced complexity",
+        "clearer code",
+        "refactor plan"
+      ],
+      "primaryDomain": "code-simplification",
+      "recommendedWhen": [
+        "the spec asks to refactor, simplify, remove duplication, or improve maintainability"
+      ],
+      "secondaryDomains": [
+        "maintainability",
+        "refactoring"
+      ],
+      "selectionKeywords": [
+        "simplify",
+        "refactor",
+        "complexity",
+        "duplication",
+        "maintainability"
+      ],
+      "selectionPriority": 68,
+      "skillId": "cvf-engineering-code-simplification",
+      "specSignals": [
+        "simplify code",
+        "reduce complexity",
+        "remove duplication"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "debug failing tests",
+        "diagnose build errors",
+        "capture root cause"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Systematic root-cause diagnosis and recovery plan.",
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "there is no observed failure or diagnostic"
+      ],
+      "outputGoals": [
+        "root cause",
+        "reproduction",
+        "fix validation"
+      ],
+      "primaryDomain": "debugging-error-recovery",
+      "recommendedWhen": [
+        "the spec includes a failing test, broken build, exception, or unexpected behavior"
+      ],
+      "secondaryDomains": [
+        "testing",
+        "diagnostics"
+      ],
+      "selectionKeywords": [
+        "debug",
+        "error",
+        "failure",
+        "root cause",
+        "test failure",
+        "build break"
+      ],
+      "selectionPriority": 80,
+      "skillId": "cvf-engineering-debugging-error-recovery",
+      "specSignals": [
+        "debug failure",
+        "root cause",
+        "unexpected behavior"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "plan migrations",
+        "handle deprecations",
+        "preserve compatibility"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Migration plan with compatibility and rollback boundaries.",
+      "intendedUsers": [
+        "dispatcher",
+        "worker"
+      ],
+      "notRecommendedWhen": [
+        "the change is not replacing or retiring an existing surface"
+      ],
+      "outputGoals": [
+        "migration plan",
+        "compatibility boundary",
+        "rollback path"
+      ],
+      "primaryDomain": "deprecation-migration",
+      "recommendedWhen": [
+        "the spec names deprecation, migration, compatibility, or removing old APIs"
+      ],
+      "secondaryDomains": [
+        "release",
+        "architecture"
+      ],
+      "selectionKeywords": [
+        "migration",
+        "deprecation",
+        "compatibility",
+        "sunset",
+        "remove old",
+        "api removal"
+      ],
+      "selectionPriority": 68,
+      "skillId": "cvf-engineering-deprecation-migration",
+      "specSignals": [
+        "deprecation",
+        "migration",
+        "compatibility change"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "build frontend components",
+        "improve layout",
+        "apply design contract"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Production-quality UI implementation aligned with the project design contract.",
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "the task is backend-only or documentation-only"
+      ],
+      "outputGoals": [
+        "usable UI",
+        "responsive layout",
+        "accessibility"
+      ],
+      "primaryDomain": "frontend-ui",
+      "recommendedWhen": [
+        "the spec asks for UI, frontend components, layout, interaction, or visual polish"
+      ],
+      "secondaryDomains": [
+        "browser-runtime-verification",
+        "product-experience"
+      ],
+      "selectionKeywords": [
+        "frontend",
+        "ui",
+        "component",
+        "layout",
+        "responsive",
+        "accessibility"
+      ],
+      "selectionPriority": 78,
+      "skillId": "cvf-engineering-frontend-ui",
+      "specSignals": [
+        "frontend ui",
+        "component design",
+        "layout implementation",
+        "user interface"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "slice large work",
+        "ship incremental changes",
+        "define stop conditions"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Small, reviewable implementation slices with validation after each step.",
+      "intendedUsers": [
+        "dispatcher",
+        "worker"
+      ],
+      "notRecommendedWhen": [
+        "the task is a tiny single-file edit"
+      ],
+      "outputGoals": [
+        "incremental plan",
+        "small slices",
+        "validation steps"
+      ],
+      "primaryDomain": "incremental-implementation",
+      "recommendedWhen": [
+        "the spec is large, multi-file, risky, or needs phased implementation"
+      ],
+      "secondaryDomains": [
+        "planning",
+        "delivery"
+      ],
+      "selectionKeywords": [
+        "incremental",
+        "small slices",
+        "multi-file",
+        "stepwise",
+        "phase",
+        "large task"
+      ],
+      "selectionPriority": 74,
+      "skillId": "cvf-engineering-incremental-implementation",
+      "specSignals": [
+        "incremental implementation",
+        "large task",
+        "stepwise delivery"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "add logging",
+        "define metrics",
+        "plan traces and alerts"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Observability evidence for diagnosing runtime behavior.",
+      "intendedUsers": [
+        "dispatcher",
+        "worker"
+      ],
+      "notRecommendedWhen": [
+        "the task has no runtime or diagnostic surface"
+      ],
+      "outputGoals": [
+        "logging plan",
+        "metrics",
+        "tracing",
+        "alerts"
+      ],
+      "primaryDomain": "observability-instrumentation",
+      "recommendedWhen": [
+        "the spec mentions logs, metrics, traces, alerts, monitoring, or production diagnostics"
+      ],
+      "secondaryDomains": [
+        "runtime-diagnostics",
+        "operations"
+      ],
+      "selectionKeywords": [
+        "observability",
+        "instrumentation",
+        "logging",
+        "metrics",
+        "tracing",
+        "alerts",
+        "monitoring"
+      ],
+      "selectionPriority": 70,
+      "skillId": "cvf-engineering-observability-instrumentation",
+      "specSignals": [
+        "observability",
+        "instrumentation",
+        "logging",
+        "metrics"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "profile bottlenecks",
+        "improve slow pages",
+        "guard regressions"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Measurement-first performance improvement and regression control.",
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "there is no performance complaint or metric"
+      ],
+      "outputGoals": [
+        "performance baseline",
+        "bottleneck analysis",
+        "regression guard"
+      ],
+      "primaryDomain": "performance-optimization",
+      "recommendedWhen": [
+        "the spec mentions slow behavior, profiling, latency, Core Web Vitals, or bottlenecks"
+      ],
+      "secondaryDomains": [
+        "frontend-ui",
+        "runtime-diagnostics"
+      ],
+      "selectionKeywords": [
+        "performance",
+        "slow",
+        "latency",
+        "profiling",
+        "bottleneck",
+        "core web vitals"
+      ],
+      "selectionPriority": 72,
+      "skillId": "cvf-engineering-performance-optimization",
+      "specSignals": [
+        "performance optimization",
+        "slow page",
+        "profiling",
+        "bottleneck"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "turn requirements into tasks",
+        "sequence dependencies",
+        "build implementation plan"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Ordered, dependency-aware, testable task breakdown.",
+      "intendedUsers": [
+        "dispatcher",
+        "operator"
+      ],
+      "notRecommendedWhen": [
+        "implementation steps are already obvious and tiny"
+      ],
+      "outputGoals": [
+        "task breakdown",
+        "dependency order",
+        "execution plan"
+      ],
+      "primaryDomain": "planning-task-breakdown",
+      "recommendedWhen": [
+        "the spec asks for a roadmap, plan, task breakdown, or sequencing before execution"
+      ],
+      "secondaryDomains": [
+        "incremental-implementation",
+        "work-order-authoring"
+      ],
+      "selectionKeywords": [
+        "plan",
+        "task breakdown",
+        "roadmap",
+        "sequence",
+        "dependency",
+        "split work"
+      ],
+      "selectionPriority": 82,
+      "skillId": "cvf-engineering-planning-task-breakdown",
+      "specSignals": [
+        "task breakdown",
+        "implementation plan",
+        "plan from spec"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "harden auth",
+        "threat model changes",
+        "protect secrets and untrusted input"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Threat-model-first security hardening with explicit sensitive-data boundaries.",
+      "intendedUsers": [
+        "dispatcher",
+        "worker",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "the task has no auth, secrets, external input, or sensitive data concern"
+      ],
+      "outputGoals": [
+        "threat model",
+        "security hardening",
+        "secret handling",
+        "authorization boundary"
+      ],
+      "primaryDomain": "security-hardening",
+      "recommendedWhen": [
+        "the spec mentions auth, authorization, secrets, untrusted input, sensitive data, OWASP, or access control"
+      ],
+      "secondaryDomains": [
+        "risk-control",
+        "compliance"
+      ],
+      "selectionKeywords": [
+        "security",
+        "hardening",
+        "auth",
+        "authorization",
+        "secrets",
+        "untrusted input",
+        "owasp",
+        "sensitive data"
+      ],
+      "selectionPriority": 86,
+      "skillId": "cvf-engineering-security-hardening",
+      "specSignals": [
+        "security hardening",
+        "threat model",
+        "auth",
+        "secrets"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "prepare launch",
+        "plan rollout",
+        "define rollback readiness"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Launch readiness checklist with rollout and rollback evidence.",
+      "intendedUsers": [
+        "dispatcher",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "the task is not near release or rollout"
+      ],
+      "outputGoals": [
+        "release readiness",
+        "rollback plan",
+        "staged rollout"
+      ],
+      "primaryDomain": "shipping-launch",
+      "recommendedWhen": [
+        "the spec mentions shipping, launch, release readiness, staged rollout, monitoring, or rollback"
+      ],
+      "secondaryDomains": [
+        "ci-cd-quality-gates",
+        "observability-instrumentation"
+      ],
+      "selectionKeywords": [
+        "shipping",
+        "launch",
+        "release",
+        "rollback",
+        "staged rollout",
+        "release readiness"
+      ],
+      "selectionPriority": 70,
+      "skillId": "cvf-engineering-shipping-launch",
+      "specSignals": [
+        "shipping",
+        "launch",
+        "release readiness",
+        "rollback plan"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "verify official docs",
+        "avoid stale framework assumptions",
+        "source-backed implementation"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Source-backed decisions for framework, library, or API work.",
+      "intendedUsers": [
+        "dispatcher",
+        "worker"
+      ],
+      "notRecommendedWhen": [
+        "the needed source facts are already governed locally"
+      ],
+      "outputGoals": [
+        "source-backed decision",
+        "current documentation check",
+        "framework correctness"
+      ],
+      "primaryDomain": "source-driven-development",
+      "recommendedWhen": [
+        "the spec depends on current framework docs, library behavior, or official source correctness"
+      ],
+      "secondaryDomains": [
+        "research",
+        "implementation"
+      ],
+      "selectionKeywords": [
+        "official docs",
+        "source driven",
+        "framework",
+        "library",
+        "current best practices",
+        "documentation"
+      ],
+      "selectionPriority": 76,
+      "skillId": "cvf-engineering-source-driven-development",
+      "specSignals": [
+        "source driven development",
+        "official docs",
+        "framework docs"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "write implementation spec",
+        "clarify assumptions",
+        "define tests before code"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Source-backed spec before non-trivial implementation.",
+      "intendedUsers": [
+        "dispatcher",
+        "worker"
+      ],
+      "notRecommendedWhen": [
+        "the task is a direct tiny fix with clear acceptance criteria"
+      ],
+      "outputGoals": [
+        "implementation spec",
+        "assumptions",
+        "test plan",
+        "boundaries"
+      ],
+      "primaryDomain": "spec-driven-development",
+      "recommendedWhen": [
+        "the spec is ambiguous, high-risk, or needs a written implementation contract before code"
+      ],
+      "secondaryDomains": [
+        "planning-task-breakdown",
+        "source-driven-development"
+      ],
+      "selectionKeywords": [
+        "spec",
+        "requirements",
+        "assumptions",
+        "acceptance criteria",
+        "test plan",
+        "boundaries"
+      ],
+      "selectionPriority": 84,
+      "skillId": "cvf-engineering-spec-driven-development",
+      "specSignals": [
+        "spec driven development",
+        "write spec",
+        "requirements unclear",
+        "spec before code"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "write failing tests first",
+        "reproduce bugs",
+        "prove behavior"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "Regression coverage and behavior proof before closure.",
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "no executable test surface exists and no test harness is authorized"
+      ],
+      "outputGoals": [
+        "failing test",
+        "regression coverage",
+        "behavior proof"
+      ],
+      "primaryDomain": "test-driven-development",
+      "recommendedWhen": [
+        "the spec asks to fix behavior, reproduce a bug, or prove a change with tests"
+      ],
+      "secondaryDomains": [
+        "debugging-error-recovery",
+        "quality"
+      ],
+      "selectionKeywords": [
+        "test",
+        "failing test",
+        "regression",
+        "bug reproduction",
+        "prove it works",
+        "coverage"
+      ],
+      "selectionPriority": 84,
+      "skillId": "cvf-engineering-test-driven-development",
+      "specSignals": [
+        "test driven development",
+        "write failing test",
+        "regression test"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "set up agent context",
+        "discover rules",
+        "manage context budget"
+      ],
+      "domainGroup": "governance",
+      "expectedOutputContribution": "Correct startup and context handling without treating provider memory as CVF authority.",
+      "intendedUsers": [
+        "dispatcher",
+        "worker",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "the work already has all required context and no session risk"
+      ],
+      "outputGoals": [
+        "context setup",
+        "rule discovery",
+        "session boundary"
+      ],
+      "primaryDomain": "context-engineering",
+      "recommendedWhen": [
+        "the spec mentions agent context, startup rules, provider memory, or context degradation"
+      ],
+      "secondaryDomains": [
+        "agent-governance",
+        "session-continuity"
+      ],
+      "selectionKeywords": [
+        "context",
+        "rules",
+        "session",
+        "startup",
+        "memory",
+        "agent context"
+      ],
+      "selectionPriority": 78,
+      "skillId": "cvf-governance-context-engineering",
+      "specSignals": [
+        "context setup",
+        "agent context",
+        "rules files",
+        "session start"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "write ADRs",
+        "capture decisions",
+        "make durable documentation"
+      ],
+      "domainGroup": "governance",
+      "expectedOutputContribution": "Durable decision records and documentation for future agents.",
+      "intendedUsers": [
+        "dispatcher",
+        "reviewer"
+      ],
+      "notRecommendedWhen": [
+        "the task has no decision or documentation surface"
+      ],
+      "outputGoals": [
+        "ADR",
+        "decision record",
+        "documentation"
+      ],
+      "primaryDomain": "documentation-adrs",
+      "recommendedWhen": [
+        "the spec asks to document architecture decisions, standards, or long-lived rationale"
+      ],
+      "secondaryDomains": [
+        "knowledge-management",
+        "architecture"
+      ],
+      "selectionKeywords": [
+        "adr",
+        "documentation",
+        "decision record",
+        "rationale",
+        "standard",
+        "architecture decision"
+      ],
+      "selectionPriority": 72,
+      "skillId": "cvf-governance-documentation-adrs",
+      "specSignals": [
+        "architecture decision",
+        "documentation update",
+        "decision record"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "challenge assumptions",
+        "fresh-context review",
+        "reduce shallow pass decisions"
+      ],
+      "domainGroup": "governance",
+      "expectedOutputContribution": "Adversarial review of assumptions and high-stakes decisions.",
+      "intendedUsers": [
+        "reviewer",
+        "operator"
+      ],
+      "notRecommendedWhen": [
+        "the decision is low-risk and already source-verified"
+      ],
+      "outputGoals": [
+        "assumption audit",
+        "risk challenge",
+        "fresh-context review"
+      ],
+      "primaryDomain": "doubt-driven-development",
+      "recommendedWhen": [
+        "the spec involves high-risk decisions, uncertain assumptions, or possible overclaiming"
+      ],
+      "secondaryDomains": [
+        "review-quality",
+        "risk-control"
+      ],
+      "selectionKeywords": [
+        "doubt",
+        "assumption",
+        "adversarial review",
+        "fresh context",
+        "high stakes",
+        "verify assumptions"
+      ],
+      "selectionPriority": 76,
+      "skillId": "cvf-governance-doubt-driven-development",
+      "specSignals": [
+        "doubt-driven",
+        "fresh-context review",
+        "adversarial review",
+        "verify assumptions"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "manage commits",
+        "split material and session-sync work",
+        "handle branch/versioning discipline"
+      ],
+      "domainGroup": "governance",
+      "expectedOutputContribution": "Clean commit and versioning flow aligned with CVF choreography.",
+      "intendedUsers": [
+        "worker",
+        "reviewer",
+        "session-sync steward"
+      ],
+      "notRecommendedWhen": [
+        "no git, commit, branch, or versioning action is involved"
+      ],
+      "outputGoals": [
+        "commit plan",
+        "branch discipline",
+        "versioning"
+      ],
+      "primaryDomain": "git-workflow-versioning",
+      "recommendedWhen": [
+        "the spec mentions commits, branches, conflicts, versioning, or material/session-sync split"
+      ],
+      "secondaryDomains": [
+        "release",
+        "session-sync"
+      ],
+      "selectionKeywords": [
+        "git",
+        "commit",
+        "branch",
+        "merge conflict",
+        "versioning",
+        "session-sync"
+      ],
+      "selectionPriority": 74,
+      "skillId": "cvf-governance-git-workflow-versioning",
+      "specSignals": [
+        "git workflow",
+        "commit",
+        "branching",
+        "merge conflict"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "shape vague ideas",
+        "compare options",
+        "turn intent into next move"
+      ],
+      "domainGroup": "governance",
+      "expectedOutputContribution": "Early idea refinement into options, constraints, and a governed next move.",
+      "intendedUsers": [
+        "operator",
+        "dispatcher"
+      ],
+      "notRecommendedWhen": [
+        "the operator already gave an exact implementation request"
+      ],
+      "outputGoals": [
+        "options",
+        "constraints",
+        "next move"
+      ],
+      "primaryDomain": "idea-refinement",
+      "recommendedWhen": [
+        "the spec is an early concept, brainstorm, or unclear idea that needs shaping before execution"
+      ],
+      "secondaryDomains": [
+        "planning",
+        "operator-alignment"
+      ],
+      "selectionKeywords": [
+        "idea",
+        "brainstorm",
+        "options",
+        "unclear",
+        "shape request",
+        "next move"
+      ],
+      "selectionPriority": 70,
+      "skillId": "cvf-governance-idea-refinement",
+      "specSignals": [
+        "refine idea",
+        "brainstorm",
+        "unclear concept",
+        "options"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "clarify requirements",
+        "ask one question at a time",
+        "avoid risky assumptions"
+      ],
+      "domainGroup": "governance",
+      "expectedOutputContribution": "Operator clarification before risky implementation assumptions.",
+      "intendedUsers": [
+        "operator",
+        "dispatcher",
+        "worker"
+      ],
+      "notRecommendedWhen": [
+        "the operator request is already precise enough to execute safely"
+      ],
+      "outputGoals": [
+        "clarified requirements",
+        "operator answer",
+        "safe assumption boundary"
+      ],
+      "primaryDomain": "operator-interview",
+      "recommendedWhen": [
+        "the spec is underspecified and a reasonable assumption would materially change the work"
+      ],
+      "secondaryDomains": [
+        "operator-alignment",
+        "requirements"
+      ],
+      "selectionKeywords": [
+        "clarify",
+        "interview",
+        "question",
+        "requirements",
+        "underspecified",
+        "what do you want"
+      ],
+      "selectionPriority": 68,
+      "skillId": "cvf-governance-operator-interview",
+      "specSignals": [
+        "interview me",
+        "clarify request",
+        "underspecified task"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "choose relevant skills",
+        "inspect invocation boundaries",
+        "avoid loading all skill bodies"
+      ],
+      "domainGroup": "governance",
+      "expectedOutputContribution": "Metadata-first skill discovery and invocation boundary control.",
+      "intendedUsers": [
+        "operator",
+        "dispatcher",
+        "worker"
+      ],
+      "notRecommendedWhen": [
+        "the correct skill is already selected and receipt-backed"
+      ],
+      "outputGoals": [
+        "skill selection",
+        "invocation boundary",
+        "metadata-first discovery"
+      ],
+      "primaryDomain": "skill-discovery-invocation",
+      "recommendedWhen": [
+        "the spec asks which skill applies, how to choose skills, or how to avoid authority expansion during skill use"
+      ],
+      "secondaryDomains": [
+        "skill-control-plane",
+        "agent-governance"
+      ],
+      "selectionKeywords": [
+        "skill",
+        "skills",
+        "skill discovery",
+        "skill invocation",
+        "which skill",
+        "choose skill"
+      ],
+      "selectionPriority": 90,
+      "skillId": "cvf-governance-skill-discovery-invocation",
+      "specSignals": [
+        "using agent skills",
+        "skill discovery",
+        "skill invocation",
+        "which skill applies"
+      ]
+    }
+  ],
+  "schemaVersion": "skill-selection-profiles-v1"
+}

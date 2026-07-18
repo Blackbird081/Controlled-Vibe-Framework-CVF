@@ -242,6 +242,8 @@ export function shouldUseEnglishWorkingValues(
     lang: ExportLanguage,
     _mode: ExportMode,
 ): boolean {
+    void _mode;
+
     return SUPPORTED_ENGLISH_WORKING_TEMPLATE_IDS.has(template.id) && lang === 'en';
 }
 

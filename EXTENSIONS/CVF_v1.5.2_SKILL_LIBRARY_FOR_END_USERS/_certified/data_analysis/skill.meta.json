@@ -1,0 +1,10 @@
+{
+  "id": "data_analysis",
+  "name": "Data Analysis",
+  "domain": "Finance Analytics",
+  "version": "1.0.0",
+  "sourceSkillRef": "01_finance_analysis_system.skill.md",
+  "certificationDate": "2026-05-25",
+  "outcomeKey": "data_analysis",
+  "description": "Turn a bounded user-provided dataset or metric summary into findings, caveats, and action recommendations."
+}

@@ -16,8 +16,8 @@ describe('Edge security detectors', () => {
     })
 
     it('detectSecrets finds multiple secrets across same type', () => {
-        const s1 = `sk-${'a'.repeat(24)}`
-        const s2 = `sk-${'b'.repeat(24)}`
+        const s1 = 'sk-abcdefghijklmnopqrstuvwxyz1234' // fake test key
+        const s2 = 'sk-zyxwvutsrqponmlkjihgfedcba5678' // fake test key
         const matches = detectSecrets(`${s1} then ${s2}`)
         expect(matches.filter(m => m.type === 'apiKey')).toHaveLength(2)
     })
@@ -37,19 +37,18 @@ describe('Edge security proxy + vault', () => {
 
     it('masks all repeated sensitive occurrences and rehydrates response', () => {
         const proxy = new SecurityProxy()
-        const testKey = `sk-${'a'.repeat(24)}`
-        const input = `email a@b.com and again a@b.com with key ${testKey}`
+        const input = 'email a@b.com and again a@b.com with fake key sk-abcdefghijklmnopqrstuvwxyz1234'
         const processed = proxy.processRequest('sess-1', input)
 
         expect(processed.maskedInput.includes('a@b.com')).toBe(false)
-        expect(processed.maskedInput.includes(testKey)).toBe(false)
+        expect(processed.maskedInput.includes('sk-abcdefghijklmnopqrstuvwxyz1234')).toBe(false) // fake test key
         const maskMatches = processed.maskedInput.match(/__CVF_MASK__[_]?\d+/g) ?? []
         expect(maskMatches.length).toBeGreaterThanOrEqual(2)
 
         const response = `Echo: ${processed.maskedInput}`
         const restored = proxy.processResponse('sess-1', response)
         expect(restored).toContain('a@b.com')
-        expect(restored).toContain(testKey)
+        expect(restored).toContain('sk-abcdefghijklmnopqrstuvwxyz1234') // fake test key
     })
 
     it('writes security audit record for each processed request', () => {

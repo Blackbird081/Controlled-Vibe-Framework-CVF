@@ -11,6 +11,8 @@ import { createHash, randomUUID } from 'crypto';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import type { GuardPipelineResult, GuardRequestContext } from '../types';
+import type { Receipt } from '../contracts/receipt-envelope.contract';
+import { createReceiptEnvelope } from '../contracts/receipt-envelope.contract';
 
 export interface TraceEntry {
   traceId: string;
@@ -21,6 +23,8 @@ export interface TraceEntry {
   context: GuardRequestContext;
   pipelineResult: GuardPipelineResult;
 }
+
+export type TraceEntryEnvelope = Receipt<TraceEntry>;
 
 /**
  * Generates a deterministic trace hash from a pipeline result.
@@ -56,6 +60,27 @@ export function createTraceEntry(
     timestamp: result.executedAt,
     context,
     pipelineResult: result,
+  };
+}
+
+export function createTraceEntryEnvelope(entry: TraceEntry): TraceEntryEnvelope {
+  return createReceiptEnvelope({
+    id: entry.traceId,
+    issuedAt: entry.timestamp,
+    source: `guard-contract:trace-emitter:${entry.requestId}`,
+    payload: entry,
+    integrityHash: entry.traceHash,
+  });
+}
+
+export function createTraceEntryWithEnvelope(
+  context: GuardRequestContext,
+  result: GuardPipelineResult,
+): { entry: TraceEntry; envelope: TraceEntryEnvelope } {
+  const entry = createTraceEntry(context, result);
+  return {
+    entry,
+    envelope: createTraceEntryEnvelope(entry),
   };
 }
 

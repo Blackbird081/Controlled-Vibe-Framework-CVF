@@ -4,8 +4,8 @@ import {
     DURABLE_MEMORY_STORE_VERSION,
     type DurableMemoryReceipt,
     type DurableMemoryRecord,
-} from '../../../../CVF_LEARNING_PLANE_FOUNDATION/src/durable-memory-store';
-import type { RuntimeMemoryActorRole } from '../../../../CVF_LEARNING_PLANE_FOUNDATION/src/runtime-memory-hierarchy';
+    type RuntimeMemoryActorRole,
+} from 'cvf-learning-plane-foundation';
 
 import type { ExecutionRequest } from '@/lib/ai';
 

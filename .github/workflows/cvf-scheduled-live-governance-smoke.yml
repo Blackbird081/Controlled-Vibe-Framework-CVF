@@ -1,0 +1,94 @@
+name: CVF Scheduled Live Governance Smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_live_provider_cost:
+        description: "Type RUN_LIVE_SMOKE to confirm live provider quota/cost usage."
+        required: true
+        type: string
+  schedule:
+    - cron: "17 3 * * 1"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  scheduled-live-governance-smoke:
+    name: Scheduled Live Governance Smoke
+    if: ${{ github.event_name == 'schedule' || github.event.inputs.confirm_live_provider_cost == 'RUN_LIVE_SMOKE' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: cvf-live-release-gate
+    permissions:
+      contents: read
+    env:
+      DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+      ALIBABA_API_KEY: ${{ secrets.ALIBABA_API_KEY }}
+      CVF_ALIBABA_API_KEY: ${{ secrets.CVF_ALIBABA_API_KEY }}
+      CVF_BENCHMARK_ALIBABA_KEY: ${{ secrets.CVF_BENCHMARK_ALIBABA_KEY }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      CVF_PLAYWRIGHT_PORT: "3012"
+      PLAYWRIGHT_BASE_URL: "http://127.0.0.1:3012"
+      NEXT_DIST_DIR: ".next-cvf-live-smoke"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
+
+      - name: Install CVF Guard Contract dependencies
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+        run: npm install --no-audit --no-fund
+
+      - name: Install Web dependencies
+        working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+        run: npx playwright install --with-deps chromium
+
+      - name: Run scheduled live governance smoke
+        shell: bash
+        env:
+          CVF_AUDIT_SIGNING_KEY: ${{ secrets.CVF_AUDIT_SIGNING_KEY }}
+        run: |
+          python scripts/run_cvf_release_gate_bundle.py \
+            --e2e-live \
+            --json \
+            --output cvf-scheduled-live-governance-smoke-result.json \
+            --manifest-output cvf-scheduled-live-governance-smoke-manifest.json
+
+      - name: Upload live smoke result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cvf-scheduled-live-governance-smoke-result
+          path: |
+            cvf-scheduled-live-governance-smoke-result.json
+            cvf-scheduled-live-governance-smoke-manifest.json
+          if-no-files-found: warn
+
+      - name: Upload Playwright diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cvf-scheduled-live-playwright-diagnostics
+          path: |
+            EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/test-results
+            EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/playwright-report
+          if-no-files-found: warn

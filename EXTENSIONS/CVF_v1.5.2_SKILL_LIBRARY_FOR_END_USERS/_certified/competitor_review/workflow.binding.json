@@ -1,0 +1,22 @@
+{
+  "workflowId": "workflow.competitor_review.v1",
+  "outcomeKey": "competitor_review",
+  "packId": "competitor_review",
+  "inputKeys": [
+    "market",
+    "competitors",
+    "offering",
+    "audience",
+    "decision_goal"
+  ],
+  "outputSections": [
+    "Market frame",
+    "Competitor matrix",
+    "Positioning risks",
+    "Recommended next moves"
+  ],
+  "policyRefs": [
+    "CVF_CAPABILITY_INTAKE_PIPELINE_GUARD",
+    "CVF_F1_DIMINISHING_RETURNS_STOP_RULE"
+  ]
+}

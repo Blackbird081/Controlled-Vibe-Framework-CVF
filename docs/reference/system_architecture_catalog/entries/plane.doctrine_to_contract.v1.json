@@ -1,0 +1,39 @@
+{
+  "stableId": "cvf.asc.plane.doctrine_to_contract.v1",
+  "entityType": "PLANE",
+  "name": "Doctrine To Contract",
+  "authorityClass": "ACCEPTED_REVIEW_EVIDENCE",
+  "maturity": "ACTIVE",
+  "ownerPaths": [
+    "ECOSYSTEM/doctrine/",
+    "docs/reference/system_chain/CVF_SYSTEM_DEFINITION.md",
+    "AGENTS.md",
+    "ECOSYSTEM/operating-model/"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [
+    "cvf.asc.edge.doctrine_to_contract_to_contract_to_runtime.v1"
+  ],
+  "citations": [
+    {
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+      "lineOrSection": "lanes[0] laneId DOCTRINE_TO_CONTRACT",
+      "evidenceRole": "reviewer-accepted MSEA-R90 Audit A lane verdict, R91 machine map"
+    },
+    {
+      "path": "docs/reference/system_chain/CVF_DOCTRINE_TO_CONTRACT_ROUTE_MAP.md",
+      "lineOrSection": "L0-L6 Doctrine Route Table",
+      "evidenceRole": "R94-T2 active route consolidation"
+    }
+  ],
+  "claimBoundary": "Reuses R91 lane 1 verdict PARTIAL_CHAIN_WITH_DOCUMENTED_DRIFT as-is; does not re-derive or upgrade it. This PLANE record is a catalog pointer to the R91-owned finding, not a new semantic claim.",
+  "freshnessInputs": [
+    "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+    "docs/reference/system_chain/README.md",
+    "docs/reference/system_chain/CVF_DOCTRINE_TO_CONTRACT_ROUTE_MAP.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  }
+}

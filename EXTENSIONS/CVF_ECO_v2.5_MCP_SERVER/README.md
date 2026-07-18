@@ -7,7 +7,7 @@ CVF Guard Runtime exposed as MCP (Model Context Protocol) tools for IDE integrat
 **Status**: CANDIDATE (Phase A)  
 **Target Date**: 2026-05-01  
 **Blockers**: None  
-**Documentation**: [Export Surface Definition](../../docs/reference/CVF_PREPUBLIC_MCP_SERVER_EXPORT_SURFACE_2026-04-08.md)
+**Documentation**: [MCP Gateway Reference Front Door](../../docs/reference/mcp_gateway/README.md)
 
 This package is part of the CVF pre-public packaging lane. It is not yet published to a public registry.
 
@@ -36,6 +36,13 @@ This MCP server allows AI agents in Windsurf, Cursor, and other MCP-compatible I
 | `cvf_advance_phase` | Request phase advancement (DISCOVERY → REVIEW) |
 | `cvf_get_audit_log` | Retrieve session audit trail |
 | `cvf_evaluate_full` | Run full 6-guard pipeline on an action |
+| `cvf_get_session_memory` | Read `CVF_SESSION_MEMORY.md` with secret redaction |
+| `cvf_get_active_handoff` | Read the active handoff named by session state |
+| `cvf_get_session_state` | Read `CVF_SESSION/ACTIVE_SESSION_STATE.json` |
+| `cvf_get_startup_acknowledgment` | Build the mandatory startup acknowledgment |
+| `cvf_get_governance_rules` | Read selected governance rules by topic |
+| `cvf_check_governance_action` | Classify planned governed work before action |
+| `cvf_get_mcp_tool_audit_log` | Read the in-process Gamma MCP tool audit log |
 
 ## Quick Start
 
@@ -110,6 +117,8 @@ Unlike v1.6, guards now return **natural language guidance** when blocking or es
 ```bash
 npm test          # Watch mode
 npm run test:run  # Single run (416 tests)
+npm run build
+npm run verify:gamma  # Local SDK-client stdio verification for Gamma tools
 ```
 
 ## Architecture
@@ -142,6 +151,10 @@ src/
     confirmation-card.ts    — Structured confirmation cards
   memory/                   — Session Memory (40 tests)
     session-memory.ts       — Cross-request state persistence
+  startup/                  — Gamma startup memory bootstrap
+    startup-state.ts        — Repo session/handoff/rule readouts
+  audit/
+    mcp-tool-audit.ts       — Secret-safe in-process MCP tool-call audit
   integration/              — E2E Integration (23 tests)
     e2e-pipeline.test.ts    — Full pipeline tests
   sdk.ts                    — Barrel exports for consumers

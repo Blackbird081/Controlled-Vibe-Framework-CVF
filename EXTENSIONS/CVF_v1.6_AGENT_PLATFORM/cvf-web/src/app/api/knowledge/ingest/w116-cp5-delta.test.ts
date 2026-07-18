@@ -5,10 +5,16 @@
  * a measurable retrieval improvement for project-specific queries
  * over a baseline that knows nothing about the project.
  */
-import { describe, it, expect } from 'vitest';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { POST } from './route';
 import { queryKnowledgeChunks } from '@/lib/knowledge-retrieval';
 import { NextRequest } from 'next/server';
+
+const verifySessionCookieMock = vi.hoisted(() => vi.fn());
+
+vi.mock('@/lib/middleware-auth', () => ({
+  verifySessionCookie: verifySessionCookieMock,
+}));
 
 const PROJECT_COLLECTION_ID = 'w116-cp5-delta-project';
 
@@ -41,6 +47,12 @@ const PROJECT_CHUNKS = [
 ];
 
 describe('W116-CP5 — Positive delta: downstream knowledge improves project-specific retrieval', () => {
+  beforeEach(() => {
+    process.env.CVF_SERVICE_TOKEN = 'test-service-token';
+    verifySessionCookieMock.mockReset();
+    verifySessionCookieMock.mockResolvedValue(null);
+  });
+
   it('BASELINE: without ingest, NovaSpark-specific query returns zero chunks from project collection', async () => {
     const result = await queryKnowledgeChunks({
       intent: 'NovaSpark IoT Kafka ClickHouse ingestion pipeline',
@@ -52,7 +64,7 @@ describe('W116-CP5 — Positive delta: downstream knowledge improves project-spe
   it('INGEST: POST /api/knowledge/ingest accepts 5 project chunks', async () => {
     const req = new NextRequest('http://localhost/api/knowledge/ingest', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-cvf-service-token': 'test-service-token' },
       body: JSON.stringify({
         collectionId: PROJECT_COLLECTION_ID,
         collectionName: 'NovaSpark Project Docs',
@@ -64,6 +76,7 @@ describe('W116-CP5 — Positive delta: downstream knowledge improves project-spe
     const data = await res.json();
     expect(data.accepted).toBe(5);
     expect(data.collectionId).toBe(PROJECT_COLLECTION_ID);
+    expect(data.routeGovernanceProof.authMode).toBe('service_token');
   });
 
   it('DELTA: after ingest, project-specific query returns chunkCount > 0', async () => {

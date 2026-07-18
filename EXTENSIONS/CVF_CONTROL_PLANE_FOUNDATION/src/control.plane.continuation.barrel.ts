@@ -71,10 +71,13 @@ export type {
 } from "./rag.context.engine.convergence.batch.contract";
 
 export {
+  AGENT_DEFINITION_ADAPTER_VERSION,
   AgentDefinitionBoundaryContract,
+  buildAgentDefinitionAdapterSnapshot,
   createAgentDefinitionBoundaryContract,
 } from "./agent.definition.boundary.contract";
 export type {
+  AgentDefinitionAdapterSnapshot,
   AgentRole,
   CapabilityValidationStatus,
   ScopeResolutionStatus,
@@ -87,10 +90,13 @@ export type {
 } from "./agent.definition.boundary.contract";
 
 export {
+  AGENT_GOVERNED_SESSION_WORKING_MEMORY_ADAPTER_VERSION,
   AgentGovernedSessionContract,
+  buildAgentGovernedSessionWorkingMemoryAdapterSnapshot,
   createAgentGovernedSessionContract,
 } from "./agent.governed.session.contract";
 export type {
+  AgentGovernedSessionWorkingMemoryAdapterSnapshot,
   AgentGovernedRiskLevel,
   AgentPolicyDecision,
   AgentExecutionStatus,
@@ -108,6 +114,7 @@ export type {
   AgentHandoffValidation,
   AgentExecutionReceiptInput,
   AgentExecutionAuditReceipt,
+  AgentExecutionAuditReceiptEnvelope,
   AgentGovernedSessionContractDependencies,
 } from "./agent.governed.session.contract";
 
@@ -265,8 +272,14 @@ export type {
   ModelGatewayBoundaryBatchContractDependencies,
 } from "./model.gateway.boundary.batch.contract";
 
-export { validateCheckpoint } from "./continuity.checkpoint.contract";
+export {
+  CONTINUITY_CHECKPOINT_ADAPTER_VERSION,
+  buildContinuityCheckpointAdapterSnapshot,
+  validateCheckpoint,
+  validateCheckpointWithAdapter,
+} from "./continuity.checkpoint.contract";
 export type {
+  ContinuityCheckpointAdapterSnapshot,
   ContinuityArtifactRole,
   ContinuityCheckpoint,
   ContinuityCheckpointValidation,

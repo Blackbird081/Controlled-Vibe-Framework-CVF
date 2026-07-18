@@ -1,0 +1,105 @@
+{
+  "registryOrder": 8,
+  "skillId": "cvf-governance-evidence-receipt-review-freeze",
+  "name": "CVF Governance Evidence Receipt Review Freeze",
+  "version": "0.1.0",
+  "owner": "CVF evidence, worker-return, and closure governance surface",
+  "status": "CANDIDATE",
+  "canonicalRoot": "docs/reference/agent_system_skills/registry/entries/cvf-governance-evidence-receipt-review-freeze.json",
+  "originLane": "AGSK-T7",
+  "sourceArtifacts": [
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_AGSK_T7_PACKAGE_CANDIDATE_EXPANSION_FROM_SOURCE_PACK_2026-06-29.md",
+    "docs/reviews/CVF_AGSK_ABSORPTION_PACK_REABSORPTION_REVIEW_2026-06-29.md",
+    ".private_reference/legacy/CVF 28.06/CVF_Agent_Skills_Governance_Absorption_Pack/docs/absorptions/agent-skills-governance/10_VERIFICATION_AND_EVIDENCE_RECEIPT.md",
+    ".private_reference/legacy/CVF 28.06/CVF_Agent_Skills_Governance_Absorption_Pack/docs/absorptions/agent-skills-governance/05_SKILL_ACTIVATION_RESOLVER.md",
+    ".private_reference/legacy/CVF 28.06/CVF_Agent_Skills_Governance_Absorption_Pack/docs/absorptions/agent-skills-governance/11_ROADMAP_AND_ACCEPTANCE_CRITERIA.md"
+  ],
+  "legacyRows": [],
+  "license": "CVF_PRIVATE_GOVERNED",
+  "reviewArtifacts": [
+    "docs/reviews/CVF_AGSK_T7_PACKAGE_CANDIDATE_EXPANSION_FROM_SOURCE_PACK_WORKER_RETURN_2026-06-29.md"
+  ],
+  "purpose": "Preserve the rule that no package-like capability use becomes trusted closure without receipts, review gate evidence, and an explicit freeze or non-freeze decision.",
+  "triggerPatterns": [
+    "evidence receipt",
+    "review gate receipt",
+    "freeze condition",
+    "trusted closure",
+    "capability receipt"
+  ],
+  "taskClasses": [
+    "worker-return",
+    "reviewer",
+    "closure-review",
+    "worker-execution",
+    "package-candidate-triage"
+  ],
+  "useWhen": "A worker or reviewer must prove that a capability-like action has receipts, verification levels, review evidence, and a closure/freeze boundary.",
+  "doNotUseWhen": "No capability-like action is claimed, or evidence is already fully governed by a more specific closure packet.",
+  "riskTriggers": [
+    "closure claim without receipt",
+    "review gate evidence missing",
+    "freeze eligibility unclear",
+    "verification level unspecified"
+  ],
+  "roles": [
+    "worker",
+    "reviewer",
+    "closer"
+  ],
+  "phases": [
+    "WORKER_EXECUTION",
+    "WORKER_RETURN",
+    "REVIEWER_CLOSURE",
+    "PRE_COMMIT"
+  ],
+  "surfaces": [
+    "docs/reviews",
+    "docs/work_orders",
+    "docs/reference/agent_system_skills/registry"
+  ],
+  "riskCeiling": "R0",
+  "contextProfile": "evidence-receipt-metadata-only",
+  "inputs": [
+    "capability or package-like action claim",
+    "verification commands",
+    "worker return",
+    "review artifacts",
+    "closure boundary"
+  ],
+  "outputs": [
+    "receipt coverage statement",
+    "review gate evidence mapping",
+    "freeze or non-freeze disposition",
+    "trusted closure boundary"
+  ],
+  "executionConstraints": "metadata-only candidate; does not implement receipt schema validation or freeze automation",
+  "acceptanceEvidence": "future promotion requires package instance evidence and reviewer proof of receipt completeness",
+  "riskProfile": "R0",
+  "authorityCeiling": "metadata-only evidence guidance; cannot certify or freeze work without reviewer closure",
+  "sideEffects": "none from metadata loading",
+  "permissions": "read metadata and cited governed source artifacts only",
+  "rollback": "delete this registry entry and regenerate the skill index if reviewer rejects AGSK-T7",
+  "safeStop": "if receipts are missing for a trusted closure claim, stop and mark closure untrusted or blocked",
+  "candidateState": "CANDIDATE",
+  "approvalState": "AWAITING_REVIEW",
+  "uatState": "NOT_STARTED",
+  "certificationState": "NOT_STARTED",
+  "deprecation": "none",
+  "successor": "none",
+  "retirement": "none",
+  "dependencies": [],
+  "conflicts": [],
+  "compositionOrder": 8,
+  "capabilityBoundary": "no certification decision, no automatic freeze, no checker wiring, no runtime activation",
+  "internalAgentDisposition": "CANDIDATE",
+  "resolverBehavior": "metadata-only; resolver returns identity and selector fields; does not open any SKILL.md or instruction body",
+  "loaderBoundary": "loading this metadata never grants authority to certify, freeze, or close a capability claim",
+  "externalCliMcpDisposition": "DEFERRED_WITH_REASON",
+  "adapterContract": "N/A with reason: external CLI/MCP adapter not authored in AGSK-T7",
+  "adapterEvidence": "N/A with reason: no adapter implemented in AGSK-T7",
+  "externalMutationBoundary": "no external mutation permitted until a separate ASSF adapter work order is accepted",
+  "platformCompatibility": "cross-platform",
+  "shellAssumptions": "no shell execution required for metadata-only candidate",
+  "osConstraints": "none"
+}

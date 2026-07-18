@@ -2,16 +2,21 @@
   "name": "@cvf/governance-cli",
   "version": "2.2.0",
   "description": "CVF Governance CLI — Command-line interface for governance operations",
-  "main": "src/cli.ts",
+  "main": "src/index.ts",
+  "bin": {
+    "cvf": "dist/src/bin/cvf.js",
+    "cvf-guard": "dist/src/bin/cvf.js"
+  },
   "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "smoke:bin": "npm run build -- --pretty false && node dist/src/bin/cvf.js help --json",
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^20.19.41",
     "typescript": "^5.4.0",
-    "vite": "^5.1.0",
-    "vitest": "^1.3.0"
+    "vitest": "^1.3.0",
+    "vite": "^5.1.0"
   }
 }

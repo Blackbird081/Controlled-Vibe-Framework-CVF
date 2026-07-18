@@ -1,0 +1,27 @@
+{
+  "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+  "adapterEvidence": "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+  "certificationState": "CERTIFIED",
+  "claimBoundary": "source evidence for CVF-adapted ACTIVE package-root production execution through receipt-backed CVF adapters only; no automatic invocation, filesystem/git/browser authority, provider router mutation, public-sync, implementation authority, commit, or production action claim",
+  "cvfAdaptationBoundary": "CVF-owned adaptation of upstream frontend UI engineering skill; component architecture, accessibility, performance, and design-system adherence patterns extracted as advisory metadata; no UI deployment, browser automation, live rendering proof, or production change authorized",
+  "externalCliMcpDisposition": "IMPLEMENTED",
+  "internalAgentDisposition": "IMPLEMENTED",
+  "lifecycleState": "ACTIVE",
+  "originLane": "AGSK-R3",
+  "skillId": "cvf-engineering-frontend-ui",
+  "sourceArtifacts": [
+    ".private_reference/source_mirrors/addyosmani__agent-skills/skills/frontend-ui-engineering/SKILL.md",
+    "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+    "docs/baselines/CVF_GC018_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_2026-06-29.md",
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_FOR_WORKER_2026-06-29.md",
+    "docs/baselines/CVF_GC018_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_2026-06-30.md",
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_2026-06-30.md",
+    "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+  ],
+  "uatState": "PASSED",
+  "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+  "upstreamRepository": "https://github.com/addyosmani/agent-skills.git",
+  "upstreamSlug": "frontend-ui-engineering",
+  "workerReturnArtifact": "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md"
+}

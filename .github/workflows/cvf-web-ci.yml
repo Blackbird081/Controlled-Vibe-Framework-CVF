@@ -33,8 +33,22 @@ jobs:
         run: |
           python ../../../governance/compat/check_core_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --json --write-report ../../../governance/compat/last-report.json
           python ../../../governance/compat/check_core_compat.py --base "$BASE_SHA" --head "$HEAD_SHA"
+      - name: Install Control Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION
+        run: npm ci
+      - name: Install Model Gateway dependencies
+        working-directory: EXTENSIONS/CVF_MODEL_GATEWAY
+        run: npm install --no-audit --no-fund
+      - name: Install Learning Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION
+        run: npm ci
+      - name: Install CVF Guard Contract dependencies
+        working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
+        run: npm ci
       - name: Install
         run: npm ci
+      - name: Dependency audit
+        run: npm audit --audit-level=high
       - name: Lint
         run: npm run lint -- --max-warnings=0
       - name: Build

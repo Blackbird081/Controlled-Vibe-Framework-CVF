@@ -28,7 +28,7 @@ Status: canonical evidence-pack reference for enterprise, audit, and release app
 | Runtime remediation evidence | remediation receipts, remediation export log, multi-runtime evidence manifest | `docs/reviews/cvf_phase_governance/` |
 | Release state | release manifest, module inventory, maturity matrix | `docs/reference/` |
 | Decision authority | ADR log | `docs/CVF_ARCHITECTURE_DECISIONS.md` |
-| Traceability | requestId, trace batch, traceHash, remediation linkage | `docs/reviews/cvf_phase_governance/CVF_UPGRADE_TRACE_2026-03-07.md` or equivalent |
+| Traceability | requestId, trace batch, traceHash, remediation linkage | `docs/reviews/cvf_phase_governance/archive/CVF_UPGRADE_TRACE_2026-03-07.md` or equivalent |
 | Approval / exception | approval packet, override or local-only notes | packet-specific record |
 
 ## Control Families

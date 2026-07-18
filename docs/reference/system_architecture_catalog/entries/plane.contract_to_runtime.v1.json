@@ -1,0 +1,29 @@
+{
+  "stableId": "cvf.asc.plane.contract_to_runtime.v1",
+  "entityType": "PLANE",
+  "name": "Contract To Runtime",
+  "authorityClass": "ACCEPTED_REVIEW_EVIDENCE",
+  "maturity": "ACTIVE",
+  "ownerPaths": [
+    "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
+    "EXTENSIONS/CVF_GUARD_CONTRACT/"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+      "lineOrSection": "lanes[1]",
+      "evidenceRole": "reviewer-accepted MSEA-R90 Audit A lane verdict"
+    }
+  ],
+  "claimBoundary": "Catalog pointer to the R91-owned Contract To Runtime lane verdict. GC-001 through GC-050 governance control matrix rows and their runtime callers. Does not re-derive or upgrade the R91 finding.",
+  "freshnessInputs": [
+    "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+    "docs/reference/system_chain/README.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  }
+}

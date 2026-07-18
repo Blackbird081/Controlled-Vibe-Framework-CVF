@@ -17,6 +17,9 @@ Some CVF artifacts already use dedicated rotation or archive controls, such as:
 - `docs/CVF_INCREMENTAL_TEST_LOG.md`
 - governed conformance trace logs
 - governed Python automation covered by `check_python_automation_size.py`
+  (class-aware per-class thresholds for `python_checker`, `python_test`,
+  `python_library_helper`, and `python_cli_orchestrator`, wired into the local
+  hook chain and the autorun `pre-implementation` phase as of GFS-PY-T1)
 
 `GC-023` covers the remaining governed file surface that would otherwise lack a global maintainability boundary.
 
@@ -32,6 +35,16 @@ Default operating rule:
 - split before the file becomes a maintenance liability
 - do not keep adding new tranche logic into an already oversized file without an exception trail
 - preserve exceptions as tracked debt, never as silent drift
+- if a governed file is touched while it is within 25 lines of its hard
+  threshold, the same batch must rotate/split into a new file in the same
+  maintainability domain or shrink the touched file by at least 50 lines
+- if governed source, test, frontend, or active markdown is added or modified
+  inside a registered owner domain while its active owner entrypoint is within
+  25 lines of the hard threshold, the same batch must also split/rotate or
+  meaningfully shrink that owner entrypoint; leaving the owner untouched is not
+  a valid bypass
+- active front doors and handoffs should open a new pointer/archive/successor
+  file instead of compressing prose to pass the line-count guard
 
 ### File Classes And Thresholds
 
@@ -113,6 +126,31 @@ If a file is already above threshold and is touched in a new batch:
 - prefer reducing or extracting from it in the same batch
 - do not append new tranche logic into the oversized file unless the exception still truthfully covers that usage
 
+If a file is near the hard threshold and is touched in a new batch:
+
+1. rotate, archive, or split the file before adding more continuity or feature
+   content;
+2. keep the active entrypoint as a pointer file when the artifact is a front
+   door or handoff;
+3. record the new archive/successor path in the active state or handoff when
+   applicable;
+4. run `python governance/compat/check_governed_file_size.py --enforce`.
+
+Shortening wording just enough to stay under the hard threshold is not an
+acceptable primary remediation for near-threshold active files.
+
+If adjacent governed changes enter a registered owner domain while its active
+entrypoint is near the hard threshold:
+
+1. include the owner entrypoint in the same batch;
+2. split, rotate, archive, or shrink the owner by at least 50 lines;
+3. do not mark the owner as forbidden-touch to avoid cleanup;
+4. record the owner surface under `proactiveOwnerSurfaces` in
+   `governance/compat/CVF_GOVERNED_FILE_SIZE_EXCEPTION_REGISTRY.json`;
+5. include `domainFileClasses` when the owner domain covers non-code governed
+   files such as `active_markdown`;
+6. run `python governance/compat/check_governed_file_size.py --enforce`.
+
 ### Exception Model
 
 Approved exceptions are allowed only for:
@@ -151,6 +189,10 @@ Violations include:
 - a file exceeding its exception maximum
 - an incomplete exception entry
 - growing an oversized file without maintaining the exception trail
+- touching a near-hard-threshold governed file without a same-domain
+  rotation/split artifact or meaningful size reduction
+- adding or modifying adjacent governed files in a registered near-hard owner
+  domain while leaving the owner entrypoint untouched
 
 ## Related Artifacts
 

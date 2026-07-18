@@ -1,0 +1,36 @@
+{
+  "stableId": "cvf.asc.gap.web_checker_inventory_not_unified.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+  "targetPlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+  "sourceOwner": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts",
+  "targetOwner": "NONE_WITH_REASON: no unified Web inventory surface exists for all 186 governance/compat checkers",
+  "missingEdge": "Web Operations exposes only a bounded 5-job-type subset with exactly one checker (check_docs_governance_compat.py) wired directly into a job definition; the other 185 checkers have no Web-surfaced readout.",
+  "currentStatus": "EVIDENCED_NOT_OPERATOR_VISIBLE",
+  "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+  "citations": [
+    {
+      "path": "docs/audits/CVF_MSEA_R96_DOCTRINE_ROUTE_GAP_RECONCILIATION_2026-07-11.md",
+      "lineOrSection": "gap evidence",
+      "evidenceRole": "reviewer-accepted gap-owner search evidence"
+    }
+  ],
+  "impact": "CI_REPO_GATE class checkers remain CLI/receipt-visible only, not Web-operator-visible; this is a visibility gap, not an execution gap.",
+  "closeCondition": {
+    "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+    "conditionText": "A fresh Deliverable B or maintenance packet implements a unified Web readout surface covering all governance/compat checkers and is accepted by governed review."
+  },
+  "reopenCondition": {
+    "conditionKind": "OPERATOR_DECISION_RECORDED",
+    "conditionText": "Reopen only when (a) an operator-authorized product or release requirement names Web-surfaced visibility for a specific additional checker or checker family beyond the current bounded five-job-type subset, or (b) a governed packet materially expands the Web job-type registry (EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts) beyond its current five entries for reasons other than this GAP. Operator interest alone, without a named product/release requirement or a materially expanded job registry, is insufficient."
+  },
+  "actionOwner": "PARKED_WITH_REASON: explicit future gap per R91 Lane 5; not authorized by this wave; strengthened concrete reopen trigger recorded by SCLP-T5",
+  "freshnessInputs": [
+    "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-15",
+    "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_T5_FINAL_SEQUENCE_CLOSURE_COMPLETION_2026-07-15.md"
+  }
+}

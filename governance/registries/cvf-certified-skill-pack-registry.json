@@ -1,0 +1,126 @@
+{
+  "registryVersion": "cvf.certifiedSkillPacks.v1",
+  "generatedAt": "2026-05-25",
+  "entries": [
+    {
+      "id": "strategy_analysis",
+      "name": "Strategy Analysis",
+      "path": "EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/_certified/strategy_analysis",
+      "domain": "Business Analysis",
+      "riskLevel": "R1",
+      "status": "certified",
+      "certifiedAt": "2026-05-22",
+      "tranche": "T1",
+      "outcomeKey": "strategy_analysis",
+      "guided_mode_available": true
+    },
+    {
+      "id": "product_brief",
+      "name": "Product Brief",
+      "path": "EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/_certified/product_brief",
+      "domain": "Product Management",
+      "riskLevel": "R1",
+      "status": "certified",
+      "certifiedAt": "2026-05-22",
+      "tranche": "T2",
+      "outcomeKey": "product_brief",
+      "guided_mode_available": false
+    },
+    {
+      "id": "sop_generator",
+      "name": "SOP Generator",
+      "path": "EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/_certified/sop_generator",
+      "domain": "Operations",
+      "riskLevel": "R1",
+      "status": "certified",
+      "certifiedAt": "2026-05-22",
+      "tranche": "T2",
+      "outcomeKey": "sop_generator",
+      "guided_mode_available": false
+    },
+    {
+      "id": "proposal_writer",
+      "name": "Proposal Writer",
+      "path": "EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/_certified/proposal_writer",
+      "domain": "Sales Enablement",
+      "riskLevel": "R1",
+      "status": "certified",
+      "certifiedAt": "2026-05-22",
+      "tranche": "T2",
+      "outcomeKey": "proposal_writer",
+      "guided_mode_available": false
+    },
+    {
+      "id": "meeting_summarizer",
+      "name": "Meeting Summarizer",
+      "path": "EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/_certified/meeting_summarizer",
+      "domain": "Operations",
+      "riskLevel": "R1",
+      "status": "certified",
+      "certifiedAt": "2026-05-22",
+      "tranche": "T2",
+      "outcomeKey": "meeting_summarizer",
+      "guided_mode_available": false
+    },
+    {
+      "id": "contract_review",
+      "name": "Contract Review",
+      "path": "EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/_certified/contract_review",
+      "domain": "Legal Operations",
+      "riskLevel": "R2",
+      "status": "certified",
+      "certifiedAt": "2026-05-22",
+      "tranche": "T2",
+      "outcomeKey": "contract_review",
+      "guided_mode_available": false
+    },
+    {
+      "id": "landing_page_builder",
+      "name": "Landing Page Builder",
+      "path": "EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/_certified/landing_page_builder",
+      "domain": "Marketing",
+      "riskLevel": "R1",
+      "status": "certified",
+      "certifiedAt": "2026-05-22",
+      "tranche": "T2",
+      "outcomeKey": "landing_page_builder",
+      "guided_mode_available": false
+    },
+    {
+      "id": "competitor_review",
+      "name": "Competitor Review",
+      "path": "EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/_certified/competitor_review",
+      "domain": "Business Analysis",
+      "riskLevel": "R1",
+      "status": "certified",
+      "certifiedAt": "2026-05-25",
+      "tranche": "C7A",
+      "outcomeKey": "competitor_review",
+      "guided_mode_available": false
+    },
+    {
+      "id": "data_analysis",
+      "name": "Data Analysis",
+      "path": "EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/_certified/data_analysis",
+      "domain": "Finance Analytics",
+      "riskLevel": "R2",
+      "status": "certified",
+      "certifiedAt": "2026-05-25",
+      "tranche": "C7A",
+      "outcomeKey": "data_analysis",
+      "guided_mode_available": false
+    },
+    {
+      "id": "app_requirements_spec",
+      "name": "App Requirements Spec",
+      "path": "EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/_certified/app_requirements_spec",
+      "domain": "App Development",
+      "riskLevel": "R1",
+      "status": "certified",
+      "certifiedAt": "2026-05-25",
+      "tranche": "C7A",
+      "outcomeKey": "app_requirements_spec",
+      "guided_mode_available": false
+    }
+  ]
+}

@@ -44,6 +44,7 @@ class GovernedFileSizeTests(unittest.TestCase):
                     "nearHardRotationMarginLines": 5,
                     "nearHardMinShrinkLines": 10,
                     "nearHardMaxCompressedStatementLines": 0,
+                    "proactiveOwnerSurfaces": [],
                     "exceptions": [],
                 }
             ),
@@ -135,6 +136,79 @@ class GovernedFileSizeTests(unittest.TestCase):
             {
                 "src/app/api/execute/route.ts": {"M"},
                 "src/app/api/execute/route-response-readouts.ts": {"A"},
+            },
+            previous_lines=119,
+        )
+
+        self.assertTrue(report["compliant"])
+
+    def test_adjacent_domain_source_change_requires_near_hard_owner_rotation(self) -> None:
+        registry = json.loads(self.registry.read_text(encoding="utf-8"))
+        registry["proactiveOwnerSurfaces"] = [
+            {
+                "path": "src/index.ts",
+                "status": "ACTIVE",
+                "domainPrefixes": ["src/"],
+                "rationale": "test owner",
+            }
+        ]
+        self.registry.write_text(json.dumps(registry), encoding="utf-8")
+        self._write_lines("src/index.ts", 118)
+        self._write_lines("src/new-feature.ts", 10)
+
+        report = self._report_for({"src/new-feature.ts": {"A"}}, previous_lines=119)
+
+        self.assertFalse(report["compliant"])
+        self.assertEqual(
+            report["violations"][0]["type"],
+            "near_hard_owner_surface_adjacent_change_without_rotation",
+        )
+
+    def test_adjacent_domain_markdown_change_requires_near_hard_owner_rotation_when_registered(self) -> None:
+        registry = json.loads(self.registry.read_text(encoding="utf-8"))
+        registry["proactiveOwnerSurfaces"] = [
+            {
+                "path": "docs/reference/CVF_AGENT_WORK_ORDER_TEMPLATE_2026-05-19.md",
+                "status": "ACTIVE",
+                "domainPrefixes": ["docs/reference/CVF_AGENT_WORK_ORDER_"],
+                "domainFileClasses": ["active_markdown"],
+                "rationale": "test markdown owner",
+            }
+        ]
+        self.registry.write_text(json.dumps(registry), encoding="utf-8")
+        self._write_lines("docs/reference/CVF_AGENT_WORK_ORDER_TEMPLATE_2026-05-19.md", 118)
+        self._write_lines("docs/reference/CVF_AGENT_WORK_ORDER_ADDENDUM_TEST.md", 10)
+
+        report = self._report_for(
+            {"docs/reference/CVF_AGENT_WORK_ORDER_ADDENDUM_TEST.md": {"A"}},
+            previous_lines=119,
+        )
+
+        self.assertFalse(report["compliant"])
+        self.assertEqual(
+            report["violations"][0]["type"],
+            "near_hard_owner_surface_adjacent_change_without_rotation",
+        )
+
+    def test_adjacent_domain_markdown_change_passes_when_owner_is_rotated(self) -> None:
+        registry = json.loads(self.registry.read_text(encoding="utf-8"))
+        registry["proactiveOwnerSurfaces"] = [
+            {
+                "path": "docs/reference/CVF_AGENT_WORK_ORDER_TEMPLATE_2026-05-19.md",
+                "status": "ACTIVE",
+                "domainPrefixes": ["docs/reference/CVF_AGENT_WORK_ORDER_"],
+                "domainFileClasses": ["active_markdown"],
+                "rationale": "test markdown owner",
+            }
+        ]
+        self.registry.write_text(json.dumps(registry), encoding="utf-8")
+        self._write_lines("docs/reference/CVF_AGENT_WORK_ORDER_TEMPLATE_2026-05-19.md", 118)
+        self._write_lines("docs/reference/CVF_AGENT_WORK_ORDER_ADDENDUM_TEST.md", 10)
+
+        report = self._report_for(
+            {
+                "docs/reference/CVF_AGENT_WORK_ORDER_TEMPLATE_2026-05-19.md": {"M"},
+                "docs/reference/CVF_AGENT_WORK_ORDER_ADDENDUM_TEST.md": {"A"},
             },
             previous_lines=119,
         )

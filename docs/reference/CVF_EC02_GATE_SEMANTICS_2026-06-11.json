@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "ec02-gate-semantics.v1",
+  "authoredBy": "LPCI2-EC-T2",
+  "authoredAt": "2026-06-11",
+  "ec02GateToken": "QUERY_CLASS_GATED",
+  "runtimeNote": "EC-T5 must update dscp.domain.profile.contract.ts line 102 to handle QUERY_CLASS_GATED as a routing signal, not a flat block",
+  "documentStatusEnum": ["PROMULGATED", "IN_FORCE", "STATUS_UNKNOWN"],
+  "queryClassMatrix": [
+    {
+      "documentStatus": "PROMULGATED",
+      "queryClass": "content_query",
+      "requiredAnswerClass": "SUMMARY_WITH_SOURCE",
+      "disclosureRequired": true,
+      "ec02Fires": false,
+      "note": "document content may be cited with mandatory notYetInForceDisclosure"
+    },
+    {
+      "documentStatus": "PROMULGATED",
+      "queryClass": "applicability_query",
+      "requiredAnswerClass": "ESCALATE_OR_ABSTAIN",
+      "disclosureRequired": false,
+      "ec02Fires": true,
+      "note": "applicability claims blocked; EC-02 fires"
+    },
+    {
+      "documentStatus": "IN_FORCE",
+      "queryClass": "content_query",
+      "requiredAnswerClass": "SUMMARY_WITH_SOURCE",
+      "disclosureRequired": false,
+      "ec02Fires": false,
+      "note": "document is in force; content queries allowed"
+    },
+    {
+      "documentStatus": "IN_FORCE",
+      "queryClass": "applicability_query",
+      "requiredAnswerClass": "DIRECT_CITED_ANSWER",
+      "disclosureRequired": false,
+      "ec02Fires": false,
+      "note": "document is in force; applicability answers allowed with citation"
+    },
+    {
+      "documentStatus": "STATUS_UNKNOWN",
+      "queryClass": "any",
+      "requiredAnswerClass": "ESCALATE_OR_ABSTAIN",
+      "disclosureRequired": false,
+      "ec02Fires": true,
+      "note": "unknown status forces escalation; no content or applicability answer"
+    }
+  ],
+  "independentGates": ["EC-01", "EC-03", "EC-04"],
+  "independentGatesNote": "EC-01 legal_advice, EC-03 legal_interpretation, EC-04 compliance_determination fire regardless of documentStatus",
+  "boundaryConstraints": {
+    "ec02Boundary": "BLOCKED_UNTIL_2026-07-01",
+    "boundaryActiveThrough": "EC-T4_INCLUSIVE",
+    "noRecordMayReceive": "documentStatus=IN_FORCE before 2026-07-01",
+    "ec02GateTokenActiveFrom": "EC-T5_AFTER_OPERATOR_SUPPLIED_EFFECTIVE_DATES"
+  },
+  "collisionNote": {
+    "existingKey": "domainFacetFields.documentStatus",
+    "existingValue": "approved",
+    "existingSource": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/dscp.domain.profile.contract.test.ts line 70",
+    "existingPurpose": "company-docs test fixture facet metadata, NOT EC-02 lifecycle enum",
+    "ec02LifecycleField": "corpus-record-level documentStatus, not domainFacetFields subkey",
+    "resolution": "EC-T3 must isolate or rename this fixture key if schema collision causes runtime confusion"
+  },
+  "checkerNote": "Future checker must assert: (1) no corpus record carries documentStatus=IN_FORCE before effectiveDate passes; (2) all BLOCKED_UNTIL_* records carry documentStatus=PROMULGATED after EC-T3 migration; (3) ec02GateToken in domain profile matches this file ec02GateToken value"
+}

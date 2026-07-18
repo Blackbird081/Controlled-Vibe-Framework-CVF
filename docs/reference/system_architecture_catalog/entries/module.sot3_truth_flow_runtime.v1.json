@@ -1,0 +1,38 @@
+{
+  "stableId": "cvf.asc.module.sot3_truth_flow_runtime.v1",
+  "entityType": "MODULE",
+  "name": "SOT3 Truth Flow Runtime Owner",
+  "authorityClass": "ACCEPTED_REVIEW_EVIDENCE",
+  "maturity": "LOCAL_READY",
+  "ownerPaths": [
+    "EXTENSIONS/CVF_TRUTH_FLOW/src/distribution/distribution-engine.ts"
+  ],
+  "planeMembership": [
+    "cvf.asc.plane.contract_to_runtime.v1"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "EXTENSIONS/CVF_TRUTH_FLOW/src/distribution/distribution-engine.ts",
+      "lineOrSection": "line 57",
+      "evidenceRole": "DistributionEngine runtime symbol evidence"
+    },
+    {
+      "path": "docs/reviews/CVF_SOT3_T5_COMPLETION_REVIEW_2026-07-13.md",
+      "lineOrSection": "Disposition",
+      "evidenceRole": "reviewer-accepted post-Kernel Truth Flow acceptance"
+    }
+  ],
+  "claimBoundary": "ACCEPTED_REVIEW_EVIDENCE only. DistributionEngine exists as bounded local-ready package runtime that creates and transitions DistributionPackage records strictly post-Kernel, re-resolving bound Kernel authority references at each action time. This entry does not claim the Flow is globally activated, always invoked by any CVF Web or production request path, a provider boundary, publicly exported, or production-ready. Activation into a real product path is governed separately by the SOT3 activation architecture decision and its A1-A5 proof ladder, not by this catalog record.",
+  "freshnessInputs": [
+    "EXTENSIONS/CVF_TRUTH_FLOW/src/distribution/distribution-engine.ts",
+    "docs/reviews/CVF_SOT3_T5_COMPLETION_REVIEW_2026-07-13.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-18",
+    "acceptedArtifact": "docs/reviews/CVF_SOT3_T5_COMPLETION_REVIEW_2026-07-13.md"
+  },
+  "boundaryCaveat": "Does not claim universal activation, provider/live behavior, public export, or production readiness. Local-ready package existence only; wiring into any product request path remains governed by the separate SOT3 activation decision and roadmap.",
+  "priorDisposition": ""
+}

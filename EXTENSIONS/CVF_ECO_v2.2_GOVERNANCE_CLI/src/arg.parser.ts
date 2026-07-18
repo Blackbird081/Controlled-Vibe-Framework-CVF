@@ -5,7 +5,7 @@ const VALID_COMMANDS: CLICommand[] = [
   "benchmark", "session", "report", "audit", "status", "help", "version",
 ];
 
-const BOOLEAN_FLAGS = new Set(["stream"]);
+const BOOLEAN_FLAGS = new Set(["stream", "dry-run", "receipt", "verbose", "json", "certified", "count", "help"]);
 
 export class ArgParser {
   parse(argv: string[]): CLIArgs {

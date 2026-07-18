@@ -40,72 +40,80 @@
       "exposureClass": "INTERNAL_ONLY"
     },
     {
-      "path": ".gitattributes",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
       "path": ".gitignore",
       "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": ".mailmap",
-      "exposureClass": "PUBLIC_DOCS_ONLY"
     },
     {
       "path": ".markdownlintrc",
       "exposureClass": "INTERNAL_ONLY"
     },
     {
-      "path": "AGENT_HANDOFF_INTEGRATIONS_2026-05-17.md",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "AGENT_HANDOFF_LIVE_TEST_VARIANCE_2026-05-17.md",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "AGENT_HANDOFF_POST_RC2_GA_READINESS_2026-05-08.md",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "AGENT_HANDOFF_V2_2026-05-09.md",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "AGENT_HANDOFF_V3_2026-05-10.md",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "AGENT_HANDOFF_V4_2026-05-12.md",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "AGENT_HANDOFF_V5_2026-05-15.md",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "AGENT_HANDOFF_V6_2026-05-16.md",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "AGENT_HANDOFF_V7_2026-05-16.md",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "AGENT_HANDOFF_V8_2026-05-17.md",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "AGENT_HANDOFF.md",
-      "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "AGENT_PLATFORM_PROGRESS_2026-02-06.md",
+      "path": ".aider.conf.yml",
       "exposureClass": "INTERNAL_ONLY"
     },
     {
       "path": "AGENTS.md",
       "exposureClass": "PUBLIC_DOCS_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V14_2026-05-27.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V15_2026-05-29.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V17_2026-06-07.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V21_2026-06-22.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V23_2026-06-26.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V24_2026-06-27.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V25_2026-06-28.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V28_2026-06-30.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V36_2026-07-04.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V38_2026-07-06.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+        "path": "AGENT_HANDOFF_V41_2026-07-11.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V47_2026-07-18.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V9_2026-05-18.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V10_2026-05-19.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_PLATFORM_PROGRESS_2026-02-06.md",
+      "exposureClass": "INTERNAL_ONLY"
     },
     {
       "path": "ARCHITECTURE.md",
@@ -120,20 +128,40 @@
       "exposureClass": "INTERNAL_ONLY"
     },
     {
-      "path": "CODEOWNERS",
+      "path": "CONVENTIONS.md",
       "exposureClass": "INTERNAL_ONLY"
-    },
-    {
-      "path": "CONTRIBUTING.md",
-      "exposureClass": "PUBLIC_DOCS_ONLY"
     },
     {
       "path": "CONTRIBUTORS.md",
       "exposureClass": "PUBLIC_DOCS_ONLY"
     },
     {
-      "path": "COST_AND_QUOTA.md",
-      "exposureClass": "PUBLIC_DOCS_ONLY"
+      "path": "cvf-spec-app_builder_complete-full 2.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "cvf-spec-app_builder_complete-full new(1).md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "cvf-spec-app_builder_complete-full new.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "cvf-spec-app_builder_complete-full.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "cvf-spec-app_builder_complete-full_ (1).md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "cvf-spec-app_builder_complete-full_ (2).md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "CVF_SESSION_MEMORY.md",
+      "exposureClass": "INTERNAL_ONLY"
     },
     {
       "path": "CVF_ECOSYSTEM_ARCHITECTURE.md",
@@ -148,8 +176,12 @@
       "exposureClass": "PUBLIC_DOCS_ONLY"
     },
     {
-      "path": "GOVERNANCE.md",
-      "exposureClass": "PUBLIC_DOCS_ONLY"
+      "path": "GEMINI.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "Initialize-CVF-Operator-Workspace.ps1",
+      "exposureClass": "INTERNAL_ONLY"
     },
     {
       "path": "LICENSE",
@@ -168,12 +200,8 @@
       "exposureClass": "INTERNAL_ONLY"
     },
     {
-      "path": "PROVENANCE.md",
-      "exposureClass": "PUBLIC_DOCS_ONLY"
-    },
-    {
-      "path": "PROVIDERS.md",
-      "exposureClass": "PUBLIC_DOCS_ONLY"
+      "path": "preimpl2.log",
+      "exposureClass": "INTERNAL_ONLY"
     },
     {
       "path": "README.md",
@@ -186,6 +214,18 @@
     {
       "path": "START_HERE.md",
       "exposureClass": "PUBLIC_DOCS_ONLY"
+    },
+    {
+      "path": "START_CVF_WORKSPACE_SETUP.cmd",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "workspace_overlay_catalog.json",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V12_2026-05-23.md",
+      "exposureClass": "INTERNAL_ONLY"
     }
   ]
 }

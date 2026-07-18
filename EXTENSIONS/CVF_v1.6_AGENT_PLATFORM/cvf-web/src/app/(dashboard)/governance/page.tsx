@@ -12,6 +12,7 @@ import { GovernanceGuide } from '@/components/GovernanceGuide';
 
 type GovTab = 'overview' | 'ledger' | 'approval' | 'brand' | 'guide';
 
+// Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
 const LABELS = {
     vi: {
         title: '🛡️ Governance Engine',
@@ -27,6 +28,8 @@ const LABELS = {
         systemHealth: 'Runtime Health',
         runtimeModules: 'Runtime Modules',
         evidence: 'Evidence State',
+        sot3Evidence: 'Bằng chứng SOT3',
+        maoRuns: 'Lượt chạy MAO bền vững',
         operations: 'Web Operations',
         riskTrend: 'Xu hướng rủi ro',
         brandDrift: 'Brand Drift',
@@ -48,6 +51,8 @@ const LABELS = {
         systemHealth: 'Runtime Health',
         runtimeModules: 'Runtime Modules',
         evidence: 'Evidence State',
+        sot3Evidence: 'SOT3 Evidence',
+        maoRuns: 'MAO Durable Runs',
         operations: 'Web Operations',
         riskTrend: 'Risk Trend',
         brandDrift: 'Brand Drift',
@@ -147,6 +152,18 @@ export default function GovernancePage() {
                             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-white/[0.06] rounded-lg hover:bg-slate-200 dark:hover:bg-white/[0.1] transition-colors"
                         >
                             {l.evidence}
+                        </a>
+                        <a
+                            href="/governance/sot3-evidence"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-white/[0.06] rounded-lg hover:bg-slate-200 dark:hover:bg-white/[0.1] transition-colors"
+                        >
+                            {l.sot3Evidence}
+                        </a>
+                        <a
+                            href="/governance/mao-runs"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-white/[0.06] rounded-lg hover:bg-slate-200 dark:hover:bg-white/[0.1] transition-colors"
+                        >
+                            {l.maoRuns}
                         </a>
                         <a
                             href="/governance/operations"

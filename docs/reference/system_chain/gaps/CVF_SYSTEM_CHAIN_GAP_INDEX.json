@@ -1,0 +1,650 @@
+{
+  "schemaVersion": "cvf.system_chain_gap_index.v1",
+  "generatedBy": "governance/compat/generate_as_built_system_catalog.py",
+  "sourceDir": "docs/reference/system_chain/gaps/entries/",
+  "gapCount": 12,
+  "countsByStatus": {
+    "IMPLEMENTED_NOT_INVOCATION_PROVEN": 1,
+    "VALUE_PARKED_WITH_REOPEN_CONDITIONS": 1,
+    "PARTIAL_CHAIN_WITH_BOUNDARY": 1,
+    "CLOSED_WITH_EVIDENCE": 4,
+    "ACTIVE_OWNER_CREATED_WITH_BOUNDARY": 4,
+    "EVIDENCED_NOT_OPERATOR_VISIBLE": 1
+  },
+  "gaps": [
+    {
+      "stableId": "cvf.asc.gap.gc009_gc010_no_production_caller.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+      "targetPlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+      "sourceOwner": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts; EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts",
+      "targetOwner": "NONE_WITH_REASON: SCLP-X-T2's accepted repository-wide search (22,026 files, 16 queries, 500 raw hits, 329 unique path/line rows, zero ambiguous rows) found no non-test, non-type-only production caller connecting either MandatoryGateway/createMandatoryGateway (GC-009) or AgentExecutionRuntime (GC-010) to an execution channel; both symbols are constructed or invoked only inside their own co-located test files, and the package exports/files plus the root barrel module omit both.",
+      "missingEdge": "GC-009 and GC-010 each define a governed runtime helper (MandatoryGateway/createMandatoryGateway; AgentExecutionRuntime) inside the Contract To Runtime plane, but the edge from either helper to a non-test production execution channel is unproven: no non-test caller constructs or invokes either symbol anywhere in the accepted T2 search universe.",
+      "currentStatus": "IMPLEMENTED_NOT_INVOCATION_PROVEN",
+      "proofClass": "IMPLEMENTED_EDGE",
+      "citations": [
+        {
+          "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T2_CALLER_VERIFICATION.json",
+          "lineOrSection": "targetDecisions[0] (GC-009), near lines 3964-4003",
+          "evidenceRole": "accepted T2 target decision: callerVerificationDisposition NO_NON_TEST_PRODUCTION_CALLER_FOUND for MandatoryGateway/createMandatoryGateway"
+        },
+        {
+          "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T2_CALLER_VERIFICATION.json",
+          "lineOrSection": "targetDecisions[1] (GC-010), near lines 4015-4061",
+          "evidenceRole": "accepted T2 target decision: callerVerificationDisposition NO_NON_TEST_PRODUCTION_CALLER_FOUND for AgentExecutionRuntime"
+        },
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T2_CALLER_VERIFICATION_COMPLETION_2026-07-15.md",
+          "lineOrSection": "Contradiction Or Gap Disposition",
+          "evidenceRole": "reviewer-accepted closure routing a fresh paired architecture-GAP packet as the only released next move"
+        },
+        {
+          "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
+          "lineOrSection": "GC-009 row, line 46",
+          "evidenceRole": "control matrix already records GC-009 as IMPLEMENTED_NOT_INVOCATION_PROVEN with no proven non-test caller"
+        },
+        {
+          "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
+          "lineOrSection": "GC-010 row, line 47",
+          "evidenceRole": "control matrix already records GC-010 as IMPLEMENTED_NOT_INVOCATION_PROVEN with two provider files importing only its type"
+        },
+        {
+          "path": "docs/reference/system_architecture_catalog/entries/edge.gc009_gateway_no_caller.v1.json",
+          "lineOrSection": "full record",
+          "evidenceRole": "related, evidence-only sampled catalog edge for GC-009 (R90 Audit A Lane 2, 3-of-50 sample); cited as corroborating evidence, not promoted to a second or independent GAP branch"
+        }
+      ],
+      "impact": "Both MandatoryGateway/createMandatoryGateway (GC-009) and AgentExecutionRuntime (GC-010) exist and are implemented and unit-tested, but no non-test production caller connects either helper to an execution channel. This is an architecture-discoverability gap recorded from accepted repository-wide search evidence, not a runtime defect claim, an enforcement-coverage claim, or an invocation-behavior claim.",
+      "closeCondition": {
+        "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+        "conditionText": "OPEN: a governed accepted artifact must prove non-test production caller ownership AND bounded invocation evidence for BOTH MandatoryGateway/createMandatoryGateway (GC-009) and AgentExecutionRuntime (GC-010) to fully close this paired entry. If evidence emerges for only one of the two helpers, that requires a reviewer-authored entry split or targeted update naming the still-open helper -- not a false whole-entry closure recorded against this stableId."
+      },
+      "reopenCondition": {
+        "conditionKind": "PATTERN_OBSERVED_ON_NAMED_SURFACE",
+        "conditionText": "Reopen this entry, or any successor closure of it, if a future review finds the current non-test production caller or the current export/barrel surface removed or regressed on either EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts or EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts after a later closure has been accepted."
+      },
+      "actionOwner": "PARKED_WITH_REASON: this GAP entry records the accepted no-caller finding only; it does not create a runtime caller itself. A fresh source-verified work packet is required to propose, implement, and prove a non-test production caller for either or both helpers before this entry can close.",
+      "freshnessInputs": [
+        "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
+        "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts",
+        "EXTENSIONS/CVF_GUARD_CONTRACT/package.json",
+        "EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts",
+        "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-15",
+        "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T2_CALLER_VERIFICATION_COMPLETION_2026-07-15.md"
+      }
+    },
+    {
+      "stableId": "cvf.asc.gap.l4_product_implementation_unresolved.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+      "targetPlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+      "sourceOwner": "NONE_WITH_REASON: doctrine-named /cvf-core does not exist in the active tree",
+      "targetOwner": "EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/ (draft, pre-public, not doctrine-equivalent)",
+      "missingEdge": "L4 Product Implementation doctrine layer has no proven active-tree doctrine-equivalent owner.",
+      "currentStatus": "VALUE_PARKED_WITH_REOPEN_CONDITIONS",
+      "proofClass": "DECLARED_EDGE",
+      "citations": [
+        {
+          "path": "docs/audits/CVF_MSEA_R96_DOCTRINE_ROUTE_GAP_RECONCILIATION_2026-07-11.md",
+          "lineOrSection": "gap evidence",
+          "evidenceRole": "reviewer-accepted gap-owner search evidence"
+        }
+      ],
+      "impact": "Blocks L4 promotion claims only; does not block any other plane or module.",
+      "closeCondition": {
+        "conditionKind": "OPERATOR_DECISION_RECORDED",
+        "conditionText": "L4 module exits Pre-Public Status per its own README self-declaration and an operator-authorized promotion review accepts it as the doctrine-equivalent owner."
+      },
+      "reopenCondition": {
+        "conditionKind": "OPERATOR_DECISION_RECORDED",
+        "conditionText": "Operator authorizes a fresh L4 promotion review citing new evidence beyond the current draft/pre-public status."
+      },
+      "actionOwner": "PARKED_WITH_REASON: no current evidence supports promotion; tracked in MSEA-R96 and this catalog only",
+      "freshnessInputs": [
+        "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-11",
+        "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+      },
+      "rejectedCandidates": [
+        {
+          "candidatePath": "EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/",
+          "rejectionReason": "self-declared Pre-Public Status, not yet published, matches module inventory draft/future-facing status"
+        }
+      ]
+    },
+    {
+      "stableId": "cvf.asc.gap.l6_ecosystem_layer_partial.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+      "targetPlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+      "sourceOwner": "docs/",
+      "targetOwner": "EXTENSIONS/examples/; governance/toolkit/06_EXAMPLES/",
+      "missingEdge": "Doctrine L6 Ecosystem Layer responsibility is real but distributed across three unconsolidated active-tree locations; doctrine-named /examples root does not exist.",
+      "currentStatus": "PARTIAL_CHAIN_WITH_BOUNDARY",
+      "proofClass": "DECLARED_EDGE",
+      "citations": [
+        {
+          "path": "docs/audits/CVF_MSEA_R96_DOCTRINE_ROUTE_GAP_RECONCILIATION_2026-07-11.md",
+          "lineOrSection": "gap evidence",
+          "evidenceRole": "reviewer-accepted gap-owner search evidence"
+        }
+      ],
+      "impact": "No functional gap; consolidation/root-path alignment is cosmetic, not a missing capability.",
+      "closeCondition": {
+        "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+        "conditionText": "A governed L6 consolidation decision is accepted that either creates a root /examples path or formally records the three-location distribution as permanent."
+      },
+      "reopenCondition": {
+        "conditionKind": "OPERATOR_DECISION_RECORDED",
+        "conditionText": "Operator authorizes an L6 consolidation review."
+      },
+      "actionOwner": "PARKED_WITH_REASON: cosmetic path-alignment gap only, tracked by MSEA-R96/R97",
+      "freshnessInputs": [
+        "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-11",
+        "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+      },
+      "boundaryCaveat": "Distributed across docs/, EXTENSIONS/examples/, and governance/toolkit/06_EXAMPLES/; not consolidated into one root path; this is documented drift, not an error in any individual location."
+    },
+    {
+      "stableId": "cvf.asc.gap.packet_posture_bootstrap_archive_path_drift.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.runtime_to_enforcement.v1",
+      "targetPlaneId": "cvf.asc.plane.runtime_to_enforcement.v1",
+      "sourceOwner": "scripts/run_cvf_packet_posture_state_bootstrap.py",
+      "targetOwner": "scripts/export_cvf_release_packet.py; scripts/run_cvf_remediation_export_conformance.py; scripts/export_cvf_remediation_receipt_log.py; scripts/runtime_evidence_manifest/fixtures.py; scripts/runtime_evidence_manifest/baselines.py",
+      "missingEdge": "The packet-posture bootstrap is implemented, but current invocation cannot reach CF-076 through CF-084 because consumer scripts still require two phase-governance artifacts at former live paths after those artifacts were intentionally moved into archive.",
+      "currentStatus": "CLOSED_WITH_EVIDENCE",
+      "proofClass": "LOCAL_RUNTIME_VERIFIED_EDGE",
+      "citations": [
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_RUNTIME_TO_ENFORCEMENT_CURRENT_RUN_COMPLETION_2026-07-14.md",
+          "lineOrSection": "Findings / Position",
+          "evidenceRole": "reviewer-accepted current-run blocker and authority reconciliation"
+        },
+        {
+          "path": "scripts/cvf_archive_log_2026-03-11_225518.json",
+          "lineOrSection": "docs/reviews/cvf_phase_governance archive actions",
+          "evidenceRole": "evidence that both source artifacts were moved intentionally"
+        }
+      ],
+      "impact": "Closed: the repaired bootstrap passed once and the retained UC-02 runner recorded nine of nine scenario PASS results. The semantic registry-to-checker edge is operationally PROVEN bounded.",
+      "closeCondition": {
+        "conditionKind": "MEASURED_THRESHOLD_CROSSED",
+        "conditionText": "A governed repair reconciles the archive authority with all current consumers and the retained UC-02 proof runner then records bootstrap PASS and nine of nine scenario PASS results."
+      },
+      "reopenCondition": {
+        "conditionKind": "PATTERN_OBSERVED_ON_NAMED_SURFACE",
+        "conditionText": "Reopen if a later packet-posture bootstrap or release evidence consumer again resolves an archived phase-governance artifact through a nonexistent live path."
+      },
+      "actionOwner": "CLOSED_BY_SCLP_UC02_R2_CURRENT_RERUN",
+      "freshnessInputs": [
+        "docs/reviews/cvf_phase_governance/archive/CVF_ARCHIVE_INDEX.md",
+        "scripts/run_cvf_packet_posture_state_bootstrap.py",
+        "scripts/export_cvf_release_packet.py",
+        "scripts/run_cvf_remediation_export_conformance.py",
+        "scripts/export_cvf_remediation_receipt_log.py",
+        "scripts/runtime_evidence_manifest/fixtures.py",
+        "scripts/runtime_evidence_manifest/baselines.py"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-14",
+        "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_CURRENT_RERUN_COMPLETION_2026-07-14.md"
+      }
+    },
+    {
+      "stableId": "cvf.asc.gap.phase_governance_generated_markdown_conformance.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.enforcement_to_evidence.v1",
+      "targetPlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+      "sourceOwner": "scripts/export_cvf_remediation_receipt_log.py; scripts/runtime_evidence_manifest/manifest_builder.py; scripts/export_cvf_release_packet.py",
+      "targetOwner": "docs/reviews/cvf_phase_governance/*.md",
+      "missingEdge": "Closed: the three source-verified renderer owners now emit twelve governed-conformant Markdown outputs with current structural, checker-read-ahead, range, ASCII, finding-learning, and epistemic-process controls.",
+      "currentStatus": "CLOSED_WITH_EVIDENCE",
+      "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+      "citations": [
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_CURRENT_RERUN_COMPLETION_2026-07-14.md",
+          "lineOrSection": "Findings / Position",
+          "evidenceRole": "reviewer-reconciled downstream generator-conformance finding"
+        },
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_RUNTIME_TO_ENFORCEMENT_RERUN_WORKER_RETURN_2026-07-14.md",
+          "lineOrSection": "Command Evidence",
+          "evidenceRole": "worker-observed reviewer-fast failures after successful UC-02 execution"
+        },
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_RENDERER_CONFORMANCE_REPAIR_COMPLETION_2026-07-14.md",
+          "lineOrSection": "Findings / Position",
+          "evidenceRole": "reviewer-accepted renderer repair and twelve-output conformance closure"
+        }
+      ],
+      "impact": "Closed: all twenty generated outputs are current and all twelve governed Markdown outputs pass the applicable checker surface. The separately retained UC-02 9/9 runtime-to-enforcement receipt remains unchanged.",
+      "closeCondition": {
+        "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+        "conditionText": "A separate governed repair updates the three actual renderer owners, regenerates the twelve Markdown outputs without rerunning UC-02, and passes reviewer-fast plus closure gates."
+      },
+      "reopenCondition": {
+        "conditionKind": "PATTERN_OBSERVED_ON_NAMED_SURFACE",
+        "conditionText": "Reopen if a later phase-governance generator run emits a governed Markdown output that fails current structural, checker-read-ahead, range-fidelity, or ASCII controls."
+      },
+      "actionOwner": "CLOSED_BY_SCLP_UC02_R3_RENDERER_CONFORMANCE_REPAIR",
+      "freshnessInputs": [
+        "scripts/export_cvf_remediation_receipt_log.py",
+        "scripts/runtime_evidence_manifest/manifest_builder.py",
+        "scripts/export_cvf_release_packet.py",
+        "governance/compat/check_markdown_structural_completeness.py",
+        "governance/compat/check_governed_artifact_checker_read_ahead.py",
+        "governance/compat/check_work_order_dispatch_quality.py",
+        "governance/compat/check_agent_packet_authority_and_encoding.py",
+        "governance/compat/check_finding_to_governance_learning.py",
+        "governance/compat/check_epistemic_process_packet.py"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-14",
+        "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_RENDERER_CONFORMANCE_REPAIR_COMPLETION_2026-07-14.md"
+      }
+    },
+    {
+      "stableId": "cvf.asc.gap.sot3_independent_refinery_owner_unresolved.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+      "targetPlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+      "sourceOwner": "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md",
+      "targetOwner": "EXTENSIONS/CVF_REFINERY/",
+      "missingEdge": "The accepted SOT three-layer contract chain names an independent CVF Refinery layer (SourceEnvelope/RefineryPacket producer). SOT3-T3 built this as a deterministic local package (`RefineryEngine.run`, `REQUIRED_STAGE_CHAIN`); SOT3-T6 proved it executes as a real dependency inside the three-layer vertical slice.",
+      "currentStatus": "ACTIVE_OWNER_CREATED_WITH_BOUNDARY",
+      "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+      "citations": [
+        {
+          "path": "docs/reviews/CVF_SOT3_T1_OWNER_NOVELTY_MAP_2026-07-12.md",
+          "lineOrSection": "CAP-02/CAP-03 Refinery Core",
+          "evidenceRole": "reviewer-accepted NEW_OWNER_CANDIDATE disposition (superseded by T3/T6 owner creation)"
+        },
+        {
+          "path": "docs/reviews/CVF_SOT3_T3_COMPLETION_REVIEW_2026-07-12.md",
+          "lineOrSection": "Closure Checklist",
+          "evidenceRole": "reviewer acceptance of the Refinery Core package as deterministic runtime owner"
+        },
+        {
+          "path": "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md",
+          "lineOrSection": "Dependency-Closure Matrix, row `real three-layer instances`",
+          "evidenceRole": "reviewer acceptance that `RefineryEngine.run` executes as a real dependency, not a mock, inside the accepted vertical slice"
+        }
+      ],
+      "impact": "Was: blocked any as-built claim that CVF has an independent Refinery layer. Now: the layer has a private-provenance runtime owner; remaining impact is limited to activation, adapter, provider/live, and public-sync claims, none of which this GAP closure asserts.",
+      "closeCondition": {
+        "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+        "conditionText": "SATISFIED: `docs/reviews/CVF_SOT3_T3_COMPLETION_REVIEW_2026-07-12.md` accepts the Refinery Core package as owner; `docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md` accepts real-instance execution."
+      },
+      "reopenCondition": {
+        "conditionKind": "OPERATOR_DECISION_RECORDED",
+        "conditionText": "Reopen only if a future review finds the `EXTENSIONS/CVF_REFINERY/` owner path removed, superseded, or materially non-functional, or if an operator authorizes package activation/adapter/provider work that changes this GAP's boundary."
+      },
+      "actionOwner": "SOT3-T7 semantic value audit and closeout",
+      "freshnessInputs": [
+        "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md",
+        "docs/reviews/CVF_SOT3_T3_COMPLETION_REVIEW_2026-07-12.md",
+        "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-13",
+        "acceptedArtifact": "docs/reviews/CVF_SOT3_T7_WORKER_RETURN_2026-07-13.md"
+      },
+      "boundaryCaveat": "Does not claim package activation, an execution adapter, provider/live proof, public-sync readiness, or production readiness. Does not claim the Refinery-to-Kernel packet-binding hash is an owner-level shared contract (see the separately tracked packet-binding-hash GAP disposition). Private-provenance implementation only.",
+      "priorDisposition": "SOURCE_OWNER_UNRESOLVED_WITH_SEARCH_EVIDENCE"
+    },
+    {
+      "stableId": "cvf.asc.gap.sot3_post_kernel_truth_flow_owner_unresolved.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+      "targetPlaneId": "cvf.asc.plane.runtime_to_enforcement.v1",
+      "sourceOwner": "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md",
+      "targetOwner": "EXTENSIONS/CVF_TRUTH_FLOW/",
+      "missingEdge": "The accepted SOT three-layer contract chain names a post-Kernel Truth Flow layer (TruthReference lifecycle, DistributionPackage, FeedbackProposal). SOT3-T5 built this as a deterministic local package (`DistributionEngine`, `KernelAuthorityBoundary`, `FeedbackEngine`) bound only to the real Kernel's own `referenceState()` resolver; SOT3-T6 proved it executes as a real dependency through delivery, consumption, and terminal acknowledgement inside the three-layer vertical slice.",
+      "currentStatus": "ACTIVE_OWNER_CREATED_WITH_BOUNDARY",
+      "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+      "citations": [
+        {
+          "path": "docs/reviews/CVF_SOT3_T1_OWNER_NOVELTY_MAP_2026-07-12.md",
+          "lineOrSection": "CAP-06 Flow lifecycle",
+          "evidenceRole": "reviewer-accepted NEW_OWNER_CANDIDATE disposition (superseded by T5/T6 owner creation)"
+        },
+        {
+          "path": "docs/reviews/CVF_SOT3_T5_COMPLETION_REVIEW_2026-07-13.md",
+          "lineOrSection": "Closure Checklist",
+          "evidenceRole": "reviewer acceptance of the post-Kernel Truth Flow package as deterministic runtime owner"
+        },
+        {
+          "path": "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md",
+          "lineOrSection": "Dependency-Closure Matrix, rows `delivery and consumption` and `terminal lifecycle`",
+          "evidenceRole": "reviewer acceptance that `DistributionEngine` executes as a real dependency, not a mock, reaching terminal `ACKNOWLEDGED` state inside the accepted vertical slice"
+        }
+      ],
+      "impact": "Was: blocked any as-built claim that CVF has a post-Kernel Truth Flow lifecycle. Now: the layer has a private-provenance runtime owner; remaining impact is limited to activation, adapter, provider/live, and public-sync claims, none of which this GAP closure asserts.",
+      "closeCondition": {
+        "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+        "conditionText": "SATISFIED: `docs/reviews/CVF_SOT3_T5_COMPLETION_REVIEW_2026-07-13.md` accepts the post-Kernel Truth Flow package as owner; `docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md` accepts real-instance execution to terminal lifecycle."
+      },
+      "reopenCondition": {
+        "conditionKind": "OPERATOR_DECISION_RECORDED",
+        "conditionText": "Reopen only if a future review finds the `EXTENSIONS/CVF_TRUTH_FLOW/` owner path removed, superseded, or materially non-functional, or if an operator authorizes package activation/adapter/provider work that changes this GAP's boundary."
+      },
+      "actionOwner": "SOT3-T7 semantic value audit and closeout",
+      "freshnessInputs": [
+        "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md",
+        "docs/reviews/CVF_SOT3_T5_COMPLETION_REVIEW_2026-07-13.md",
+        "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-13",
+        "acceptedArtifact": "docs/reviews/CVF_SOT3_T7_WORKER_RETURN_2026-07-13.md"
+      },
+      "boundaryCaveat": "Does not claim package activation, an execution adapter, provider/live proof, public-sync readiness, or production readiness. Private-provenance implementation only.",
+      "priorDisposition": "SOURCE_OWNER_UNRESOLVED_WITH_SEARCH_EVIDENCE"
+    },
+    {
+      "stableId": "cvf.asc.gap.sot3_refinery_kernel_packet_binding_hash_owner_unresolved.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+      "targetPlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+      "sourceOwner": "EXTENSIONS/CVF_REFINERY/",
+      "targetOwner": "EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts",
+      "missingEdge": "The accepted T2 contract chain binds Kernel admission to a Refinery-produced packet via content_hash equality (RefineryPacketRef.content_hash == EvaluateInput.packetHash). SOT3-T8 implements the canonical algorithm as an owned, versioned Refinery export (cvf.sotThreeLayer.refineryPacketHash.v1, computeRefineryPacketHash) with a published fixed test vector, migrates the T6 integration slice to consume it directly, and documents the profile in the canonical SOT contract chain reference.",
+      "currentStatus": "ACTIVE_OWNER_CREATED_WITH_BOUNDARY",
+      "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+      "citations": [
+        {
+          "path": "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md",
+          "lineOrSection": "Findings / Position; Dependency-Closure Matrix row `packet binding`",
+          "evidenceRole": "reviewer finding that the T6 local hash helper was adequate for the bounded slice but did not create an owner-level Refinery-to-Kernel hash contract (superseded by T8 owner creation)"
+        },
+        {
+          "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SOT3_T8_REFINERY_KERNEL_PACKET_BINDING_CONTRACT_2026-07-13.md",
+          "lineOrSection": "Implementation Contract; Acceptance Criteria",
+          "evidenceRole": "authorized the bounded no-commit contract tranche this GAP update reflects"
+        },
+        {
+          "path": "EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts",
+          "lineOrSection": "computeRefineryPacketHash, buildRefineryPacketHashPreimage, REFINERY_PACKET_HASH_PROFILE",
+          "evidenceRole": "the new Refinery-owned canonical packet-binding hash implementation"
+        },
+        {
+          "path": "EXTENSIONS/CVF_REFINERY/tests/packet-hash-vector.test.ts",
+          "lineOrSection": "fixed 1337-byte preimage and SHA-256 digest vector; mutation, ordering, and unsupported-value rejection tests",
+          "evidenceRole": "proves deterministic, field-stable, fail-closed canonicalization; 11 tests pass"
+        },
+        {
+          "path": "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md",
+          "lineOrSection": "RefineryPacket Packet-Binding Hash Canonical Profile subsection",
+          "evidenceRole": "documents the owning package, field projection, canonicalization, digest format, rejection rule, versioning, and published vector"
+        }
+      ],
+      "impact": "Was: any future caller needed to independently invent or copy a packet-hash derivation, risking divergent, non-interoperable hash algorithms. Now: one Refinery-owned, versioned, tested algorithm exists and the T6 slice consumes it directly. Remaining impact is limited to activation, adapter, provider/live, and public-sync claims, none of which this GAP closure asserts.",
+      "closeCondition": {
+        "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+        "conditionText": "SATISFIED: a source-verified SOT3-T8 tranche defines the canonical Refinery-to-Kernel packet-binding hash contract (cvf.sotThreeLayer.refineryPacketHash.v1), implements it as a Refinery-owned export with a published fixed vector, migrates the T6 slice to the owner API, and a reviewer accepts a completion review naming its owner path."
+      },
+      "reopenCondition": {
+        "conditionKind": "OPERATOR_DECISION_RECORDED",
+        "conditionText": "Reopen only if a future review finds the EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts owner path removed, superseded, or materially non-functional, or if an operator authorizes a second competing hash profile or a field-projection change that requires a fresh reconciliation."
+      },
+      "actionOwner": "EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts",
+      "freshnessInputs": [
+        "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md",
+        "EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts",
+        "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-13",
+        "acceptedArtifact": "docs/reviews/CVF_SOT3_T8_REFINERY_KERNEL_PACKET_BINDING_CONTRACT_COMPLETION_2026-07-13.md"
+      },
+      "boundaryCaveat": "Does not claim package activation, an execution adapter, provider/live proof, public-sync readiness, or production readiness. Does not claim any change to Kernel or Flow source; Kernel admission equality semantics are unchanged and remain fail-closed on a genuine mismatch. Does not claim a second hash profile exists; exactly one profile (cvf.sotThreeLayer.refineryPacketHash.v1) is owned and callable. Private-provenance implementation only, pending reviewer acceptance.",
+      "priorDisposition": "OPEN_CONFIRMED_GAP",
+      "negativeSearchEvidence": [
+        {
+          "searchCommand": "rg -n \"packetContentHash|content_hash|packetHash\" EXTENSIONS/CVF_REFINERY/src EXTENSIONS/CVF_TRUTH_KERNEL/src EXTENSIONS/CVF_SOT_THREE_LAYER_SLICE/src",
+          "searchResult": "Prior to this tranche only a caller-local T6 helper existed; after this tranche, the sole packet-hash producer is EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts, exported by cvf-refinery and consumed directly by the T6 slice with no local re-implementation."
+        }
+      ]
+    },
+    {
+      "stableId": "cvf.asc.gap.sot3_truth_kernel_runtime_unresolved.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+      "targetPlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+      "sourceOwner": "docs/reference/truth_foundation/CVF_TRUTH_FOUNDATION_SOURCE_PROVENANCE_AND_VERIFICATION_CONTRACT.md",
+      "targetOwner": "EXTENSIONS/CVF_TRUTH_KERNEL/",
+      "missingEdge": "TKG-T1 (docs/reference/truth_foundation/) already owns the Truth Kernel doctrine language (evidence/obligation/provenance minimums). SOT3-T4 built the runtime verification gate, receipt hash-chain, and admission logic (`TruthKernel.evaluate`); SOT3-T4R1 repaired the current-reference-state authority gap; SOT3-T6 proved the runtime executes as a real dependency inside the three-layer vertical slice.",
+      "currentStatus": "ACTIVE_OWNER_CREATED_WITH_BOUNDARY",
+      "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+      "citations": [
+        {
+          "path": "docs/reviews/CVF_SOT3_T1_OWNER_NOVELTY_MAP_2026-07-12.md",
+          "lineOrSection": "CAP-05: kernel_receipt_gate_schema_implementation",
+          "evidenceRole": "reviewer-accepted NEW_OWNER_CANDIDATE runtime disposition (superseded by T4/T4R1/T6 owner creation); doctrine ENRICH_EXISTING_OWNER via CAP-04 unaffected"
+        },
+        {
+          "path": "docs/reviews/CVF_SOT3_T4R1_COMPLETION_REVIEW_2026-07-13.md",
+          "lineOrSection": "Closure Checklist",
+          "evidenceRole": "reviewer acceptance of the Truth Kernel runtime package, including the current-reference-state authority repair, as owner"
+        },
+        {
+          "path": "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md",
+          "lineOrSection": "Dependency-Closure Matrix, row `real three-layer instances`",
+          "evidenceRole": "reviewer acceptance that `TruthKernel.evaluate`/`issueReference` execute as a real dependency, not a mock, inside the accepted vertical slice"
+        },
+        {
+          "path": "docs/reference/truth_foundation/CVF_TRUTH_FOUNDATION_SOURCE_PROVENANCE_AND_VERIFICATION_CONTRACT.md",
+          "lineOrSection": "Evidence/Obligation/Verification Result Minimums",
+          "evidenceRole": "existing TKG-T1 doctrine owner, retained and enriched, not duplicated by the new runtime owner"
+        }
+      ],
+      "impact": "Was: blocked any as-built claim that CVF has a Truth Kernel runtime. Now: the runtime has a private-provenance owner; the existing TKG-T1 doctrine owner is unaffected and not duplicated. Remaining impact is limited to activation, adapter, provider/live, and public-sync claims, none of which this GAP closure asserts.",
+      "closeCondition": {
+        "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+        "conditionText": "SATISFIED: `docs/reviews/CVF_SOT3_T4R1_COMPLETION_REVIEW_2026-07-13.md` accepts the Truth Kernel runtime package as owner; `docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md` accepts real-instance execution."
+      },
+      "reopenCondition": {
+        "conditionKind": "OPERATOR_DECISION_RECORDED",
+        "conditionText": "Reopen only if a future review finds the `EXTENSIONS/CVF_TRUTH_KERNEL/` owner path removed, superseded, or materially non-functional, or if an operator authorizes package activation/adapter/provider work that changes this GAP's boundary."
+      },
+      "actionOwner": "SOT3-T7 semantic value audit and closeout",
+      "freshnessInputs": [
+        "docs/reference/truth_foundation/CVF_TRUTH_FOUNDATION_SOURCE_PROVENANCE_AND_VERIFICATION_CONTRACT.md",
+        "docs/reviews/CVF_SOT3_T4R1_COMPLETION_REVIEW_2026-07-13.md",
+        "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-13",
+        "acceptedArtifact": "docs/reviews/CVF_SOT3_T7_WORKER_RETURN_2026-07-13.md"
+      },
+      "boundaryCaveat": "Does not claim package activation, an execution adapter, provider/live proof, public-sync readiness, or production readiness. Does not create a second Truth Kernel doctrine owner; TKG-T1 remains the doctrine authority and this runtime owner is additive to it. Does not claim the Refinery-to-Kernel packet-binding hash is an owner-level shared contract (see the separately tracked packet-binding-hash GAP disposition). Private-provenance implementation only.",
+      "priorDisposition": "SOURCE_OWNER_UNRESOLVED_WITH_SEARCH_EVIDENCE",
+      "rejectedCandidates": [
+        {
+          "candidatePath": "EXTENSIONS/CVF_GUARD_CONTRACT/src/contracts/receipt-binding.contract.ts",
+          "rejectionReason": "T1 confirmed this is a workflow-step receipt, not a truth-verification receipt; different owner, collision reviewed and rejected as same-owner candidate"
+        }
+      ]
+    },
+    {
+      "stableId": "cvf.asc.gap.web_checker_inventory_not_unified.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+      "targetPlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+      "sourceOwner": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts",
+      "targetOwner": "NONE_WITH_REASON: no unified Web inventory surface exists for all 186 governance/compat checkers",
+      "missingEdge": "Web Operations exposes only a bounded 5-job-type subset with exactly one checker (check_docs_governance_compat.py) wired directly into a job definition; the other 185 checkers have no Web-surfaced readout.",
+      "currentStatus": "EVIDENCED_NOT_OPERATOR_VISIBLE",
+      "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+      "citations": [
+        {
+          "path": "docs/audits/CVF_MSEA_R96_DOCTRINE_ROUTE_GAP_RECONCILIATION_2026-07-11.md",
+          "lineOrSection": "gap evidence",
+          "evidenceRole": "reviewer-accepted gap-owner search evidence"
+        }
+      ],
+      "impact": "CI_REPO_GATE class checkers remain CLI/receipt-visible only, not Web-operator-visible; this is a visibility gap, not an execution gap.",
+      "closeCondition": {
+        "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+        "conditionText": "A fresh Deliverable B or maintenance packet implements a unified Web readout surface covering all governance/compat checkers and is accepted by governed review."
+      },
+      "reopenCondition": {
+        "conditionKind": "OPERATOR_DECISION_RECORDED",
+        "conditionText": "Reopen only when (a) an operator-authorized product or release requirement names Web-surfaced visibility for a specific additional checker or checker family beyond the current bounded five-job-type subset, or (b) a governed packet materially expands the Web job-type registry (EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts) beyond its current five entries for reasons other than this GAP. Operator interest alone, without a named product/release requirement or a materially expanded job registry, is insufficient."
+      },
+      "actionOwner": "PARKED_WITH_REASON: explicit future gap per R91 Lane 5; not authorized by this wave; strengthened concrete reopen trigger recorded by SCLP-T5",
+      "freshnessInputs": [
+        "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-15",
+        "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_T5_FINAL_SEQUENCE_CLOSURE_COMPLETION_2026-07-15.md"
+      }
+    },
+    {
+      "stableId": "cvf.asc.gap.web_nextauth_application_projection_split.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+      "targetPlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+      "sourceOwner": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/auth.ts; /api/auth/session",
+      "targetOwner": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/middleware-auth.ts; src/app/api/auth/me/route.ts; src/app/api/system/jobs/route.ts; Operations page",
+      "missingEdge": "CLOSED_WITH_EVIDENCE: R3R2 proves the server-derived reviewer bootstrap and retained /api/auth/me refresh; R3R3 then observes reviewer in the canonical-origin browser and reaches the expected policy-denial POST.",
+      "currentStatus": "CLOSED_WITH_EVIDENCE",
+      "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+      "citations": [
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R1_WEB_AUTH_AND_READOUT_RECOVERY_COMPLETION_2026-07-14.md",
+          "lineOrSection": "Evidence Reconciliation",
+          "evidenceRole": "reviewer-accepted bounded runtime blocker"
+        },
+        {
+          "path": "docs/reviews/evidence/system-chain-uc04b-r1-web-operations-proof-2026-07-14.json",
+          "lineOrSection": "cases[0]",
+          "evidenceRole": "one-invocation receipt showing developer session versus anonymous Operations projection"
+        },
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R2_WEB_AUTH_PROJECTION_REPAIR_COMPLETION_2026-07-14.md",
+          "lineOrSection": "Evidence Reconciliation",
+          "evidenceRole": "reviewer-accepted adapter repair and corrected dev-host/hydration blocker"
+        },
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R2R1_LOCALHOST_NORMALIZED_RECOVERY_COMPLETION_2026-07-15.md",
+          "lineOrSection": "Evidence Reconciliation",
+          "evidenceRole": "reviewer-accepted canonical-origin browser projection closure"
+        },
+        {
+          "path": "docs/reviews/evidence/system-chain-uc04b-r2r1-localhost-regression-2026-07-15.json",
+          "lineOrSection": "cases and projections",
+          "evidenceRole": "one-invocation two-case PASS receipt"
+        },
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R1_NEGATIVE_LOCATOR_RECOVERY_COMPLETION_2026-07-15.md",
+          "lineOrSection": "Evidence Reconciliation",
+          "evidenceRole": "fresh governed reviewer-role contradiction that satisfies the recorded reopen condition"
+        },
+        {
+          "path": "docs/reviews/evidence/system-chain-uc04b-r3r1-negative-diagnostic-2026-07-15.json",
+          "lineOrSection": "stage and invocationLedgerReconciliation",
+          "evidenceRole": "no client auth projection request before timeout and exact zero-submission counters"
+        },
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R2_REVIEWER_AUTH_PROJECTION_REPAIR_COMPLETION_2026-07-15.md",
+          "lineOrSection": "Evidence Reconciliation",
+          "evidenceRole": "accepted deterministic server bootstrap and client request-emission repair"
+        },
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R3_REVIEWER_NEGATIVE_PROOF_COMPLETION_2026-07-15.md",
+          "lineOrSection": "Evidence Reconciliation",
+          "evidenceRole": "accepted canonical-origin reviewer projection and policy-denial proof"
+        },
+        {
+          "path": "docs/reviews/evidence/system-chain-uc04b-r3r3-reviewer-negative-proof-2026-07-15.json",
+          "lineOrSection": "reviewerActor, visibleRoleProjection, request, auditSequence, and exactCounters",
+          "evidenceRole": "one-invocation receipt for reviewer projection, denial, audit, and zero runner/provider counters"
+        }
+      ],
+      "impact": "The selected developer-success and reviewer-denial Web pair is now proven bounded. This does not create a unified checker inventory or prove other roles, jobs, providers, or production behavior.",
+      "closeCondition": {
+        "conditionKind": "EXECUTED_PROOF_ACCEPTED",
+        "conditionText": "SATISFIED: the R3R2 repair proves coherent reviewer projection and request emission, and one R3R3 canonical-origin invocation reaches the expected policy-denial POST."
+      },
+      "reopenCondition": {
+        "conditionKind": "FRESH_EVIDENCE_CONTRADICTION",
+        "conditionText": "Reopen only if a fresh governed proof contradicts reviewer projection or the expected read-only denial path after a material auth or policy-owner change."
+      },
+      "actionOwner": "CLOSED: retain the selected-pair evidence; route materially broader Web inventory work through a separate value-assessed GAP",
+      "freshnessInputs": [
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/auth.ts",
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/middleware-auth.ts",
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/auth/me/route.ts",
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/system/jobs/route.ts"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-15",
+        "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R3_REVIEWER_NEGATIVE_PROOF_COMPLETION_2026-07-15.md"
+      }
+    },
+    {
+      "stableId": "cvf.asc.gap.web_reviewer_denial_proof_locator_ambiguity.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+      "targetPlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+      "sourceOwner": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/system-chain-uc04b-web-operations-readout.spec.ts",
+      "targetOwner": "reviewer-denial POST and blocked_by_policy audit proof for docs_governance_check",
+      "missingEdge": "CLOSED_WITH_EVIDENCE: the retained negative browser case now uses a scoped exact-match role locator and no longer produces the five-match strict-mode ambiguity. Browser-level reviewer denial remains unproven under the separately reopened auth-projection gap.",
+      "currentStatus": "CLOSED_WITH_EVIDENCE",
+      "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+      "citations": [
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3_BUSINESS_PROOF_WORKER_RETURN_2026-07-15.md",
+          "lineOrSection": "Findings / Position",
+          "evidenceRole": "one-invocation source-backed blocker classification"
+        },
+        {
+          "path": "docs/reviews/evidence/system-chain-uc04b-r3-business-diagnostic-2026-07-15.json",
+          "lineOrSection": "stage and invocationLedgerReconciliation",
+          "evidenceRole": "secret-safe failure stage and exact counters"
+        },
+        {
+          "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R1_NEGATIVE_LOCATOR_RECOVERY_COMPLETION_2026-07-15.md",
+          "lineOrSection": "Evidence Reconciliation",
+          "evidenceRole": "reviewer-accepted locator ambiguity closure and distinct auth-projection blocker"
+        },
+        {
+          "path": "docs/reviews/evidence/system-chain-uc04b-r3r1-negative-diagnostic-2026-07-15.json",
+          "lineOrSection": "stage and invocationLedgerReconciliation",
+          "evidenceRole": "zero-match post-repair diagnostic and exact counters"
+        }
+      ],
+      "impact": "The proof-harness ambiguity is resolved. This closure does not promote reviewer denial because the application role projection remained anonymous_local before POST.",
+      "closeCondition": {
+        "conditionKind": "EXECUTED_PROOF_ACCEPTED",
+        "conditionText": "SATISFIED: the exact scoped locator repair passed focused regression and one authorized negative invocation eliminated the prior five-match strict-mode ambiguity."
+      },
+      "reopenCondition": {
+        "conditionKind": "FRESH_EVIDENCE_CONTRADICTION",
+        "conditionText": "Reopen only if a fresh governed browser proof reproduces multiple matches for the scoped exact role locator or the Operations role-card markup materially changes."
+      },
+      "actionOwner": "CLOSED: retain the scoped locator; route reviewer role projection through the reopened auth-projection gap",
+      "freshnessInputs": [
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/system-chain-uc04b-web-operations-readout.spec.ts",
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts",
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/system/jobs/route.ts"
+      ],
+      "lastReviewed": {
+        "date": "2026-07-15",
+        "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R1_NEGATIVE_LOCATOR_RECOVERY_COMPLETION_2026-07-15.md"
+      }
+    }
+  ]
+}

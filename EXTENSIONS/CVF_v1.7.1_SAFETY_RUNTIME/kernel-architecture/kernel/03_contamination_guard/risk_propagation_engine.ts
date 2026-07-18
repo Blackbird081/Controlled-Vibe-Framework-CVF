@@ -53,4 +53,29 @@ export class RiskPropagationEngine {
       assumptions,
     }
   }
+
+  propagateWithAdapter(
+    base: RiskAssessment,
+    assumptions: string[],
+    driftDetected: boolean
+  ): RiskPropagationAdapterSnapshot {
+    const result = this.propagate(base, assumptions, driftDetected)
+    return {
+      version: "phase2b-risk-propagation-adapter-1",
+      source: "safety-runtime:risk-propagation-engine",
+      base,
+      result,
+      assumptions,
+      driftDetected,
+    }
+  }
+}
+
+export interface RiskPropagationAdapterSnapshot {
+  version: "phase2b-risk-propagation-adapter-1"
+  source: "safety-runtime:risk-propagation-engine"
+  base: RiskAssessment
+  result: RiskAssessment
+  assumptions: string[]
+  driftDetected: boolean
 }

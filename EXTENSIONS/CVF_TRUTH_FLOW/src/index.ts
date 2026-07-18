@@ -1,0 +1,33 @@
+export type { Clock, IdFactory } from "./deps.js";
+export { DeterministicClock, SequentialIdFactory } from "./deps.js";
+
+export type { DistributionPackage, AcknowledgementState } from "./types/distribution-package.js";
+export type { FeedbackProposal, FeedbackReviewStatus } from "./types/feedback-proposal.js";
+
+export { KernelAuthorityBoundary } from "./kernel-reference/kernel-authority.js";
+
+export { validateRoutingScope } from "./routing/routing-engine.js";
+export type { RoutingScope, RoutingScopeResult, RoutingRejectionReason } from "./routing/routing-engine.js";
+
+export { validateDose } from "./distribution/dose-engine.js";
+export type { DoseValidationResult, DoseRejectionReason } from "./distribution/dose-engine.js";
+
+export { DistributionEngine } from "./distribution/distribution-engine.js";
+export type {
+  DistributionCreationResult,
+  DistributionActionResult,
+  DistributionRejectionReason,
+  DistributionConsumptionBinding,
+} from "./distribution/distribution-engine.js";
+
+export {
+  ALLOWED_ACKNOWLEDGEMENT_TRANSITIONS,
+  isAllowedAcknowledgementTransition,
+} from "./lifecycle/lifecycle-transitions.js";
+
+export { FeedbackEngine } from "./feedback/feedback-engine.js";
+export type {
+  FeedbackSubmissionResult,
+  FeedbackActionResult,
+  FeedbackRejectionReason,
+} from "./feedback/feedback-engine.js";

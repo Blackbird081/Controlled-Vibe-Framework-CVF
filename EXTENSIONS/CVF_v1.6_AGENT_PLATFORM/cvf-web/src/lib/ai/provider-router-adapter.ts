@@ -65,58 +65,49 @@ function costWithinBudget(
   return tierOrder[providerTier] <= tierOrder[budgetTier];
 }
 
-// --- Web provider → ProviderDefinition mapping ---
+// --- ENV-overridable risk cap resolution (GAP 6) ---
 
-const WEB_PROVIDER_DEFINITIONS: Record<AIProvider, ProviderDefinition> = {
-  openai: {
-    providerId: 'openai',
-    providerName: 'OpenAI',
-    modelFamily: 'gpt',
-    maxRiskLevel: 'R2',
-    costTier: 'standard',
-    capabilities: ['chat', 'code', 'analysis'],
-  },
-  claude: {
-    providerId: 'claude',
-    providerName: 'Anthropic Claude',
-    modelFamily: 'claude',
-    maxRiskLevel: 'R2',
-    costTier: 'standard',
-    capabilities: ['chat', 'code', 'analysis', 'reasoning'],
-  },
-  gemini: {
-    providerId: 'gemini',
-    providerName: 'Google Gemini',
-    modelFamily: 'gemini',
-    maxRiskLevel: 'R2',
-    costTier: 'standard',
-    capabilities: ['chat', 'code', 'analysis', 'multimodal'],
-  },
-  alibaba: {
-    providerId: 'alibaba',
-    providerName: 'Alibaba DashScope',
-    modelFamily: 'qwen',
-    maxRiskLevel: 'R1',
-    costTier: 'free',
-    capabilities: ['chat', 'code'],
-  },
-  openrouter: {
-    providerId: 'openrouter',
-    providerName: 'OpenRouter',
-    modelFamily: 'multi',
-    maxRiskLevel: 'R1',
-    costTier: 'standard',
-    capabilities: ['chat', 'code', 'analysis'],
-  },
-  deepseek: {
-    providerId: 'deepseek',
-    providerName: 'DeepSeek',
-    modelFamily: 'deepseek',
-    maxRiskLevel: 'R1',
-    costTier: 'standard',
-    capabilities: ['chat', 'code', 'analysis'],
-  },
+const VALID_RISK_LEVELS = new Set<RiskLevel>(['R0', 'R1', 'R2', 'R3']);
+
+function resolveProviderRiskCap(providerId: string, defaultCap: RiskLevel): RiskLevel {
+  const envKey = `CVF_PROVIDER_RISK_CAP_${providerId.toUpperCase()}`;
+  const raw = process.env[envKey];
+  if (raw && VALID_RISK_LEVELS.has(raw as RiskLevel)) return raw as RiskLevel;
+  return defaultCap;
+}
+
+function resolveRiskCeiling(defaultCeiling: RiskLevel): RiskLevel {
+  const raw = process.env['CVF_PROVIDER_RISK_CEILING'];
+  if (raw && VALID_RISK_LEVELS.has(raw as RiskLevel)) return raw as RiskLevel;
+  return defaultCeiling;
+}
+
+// --- Static provider metadata (non-risk fields only) ---
+
+type ProviderBase = Omit<ProviderDefinition, 'maxRiskLevel'> & { defaultRiskCap: RiskLevel };
+
+const PROVIDER_BASE: Record<AIProvider, ProviderBase> = {
+  openai:    { providerId: 'openai',    providerName: 'OpenAI',             modelFamily: 'gpt',      defaultRiskCap: 'R2', costTier: 'standard', capabilities: ['chat', 'code', 'analysis'] },
+  claude:    { providerId: 'claude',    providerName: 'Anthropic Claude',   modelFamily: 'claude',   defaultRiskCap: 'R2', costTier: 'standard', capabilities: ['chat', 'code', 'analysis', 'reasoning'] },
+  gemini:    { providerId: 'gemini',    providerName: 'Google Gemini',      modelFamily: 'gemini',   defaultRiskCap: 'R2', costTier: 'standard', capabilities: ['chat', 'code', 'analysis', 'multimodal'] },
+  alibaba:   { providerId: 'alibaba',   providerName: 'Alibaba DashScope',  modelFamily: 'qwen',     defaultRiskCap: 'R1', costTier: 'free',     capabilities: ['chat', 'code'] },
+  openrouter:{ providerId: 'openrouter',providerName: 'OpenRouter',         modelFamily: 'multi',    defaultRiskCap: 'R1', costTier: 'standard', capabilities: ['chat', 'code', 'analysis'] },
+  deepseek:  { providerId: 'deepseek',  providerName: 'DeepSeek',           modelFamily: 'deepseek', defaultRiskCap: 'R1', costTier: 'standard', capabilities: ['chat', 'code', 'analysis'] },
 };
+
+// --- Web provider → ProviderDefinition mapping (lazy-resolved at call time) ---
+
+function buildProviderDefinitions(): Record<AIProvider, ProviderDefinition> {
+  return Object.fromEntries(
+    (Object.entries(PROVIDER_BASE) as [AIProvider, ProviderBase][]).map(([id, base]) => {
+      const { defaultRiskCap, ...rest } = base;
+      return [id, { ...rest, maxRiskLevel: resolveProviderRiskCap(id, defaultRiskCap) }];
+    }),
+  ) as Record<AIProvider, ProviderDefinition>;
+}
+
+// Exported for test introspection — reflects static defaults (env not applied at import time).
+const WEB_PROVIDER_DEFINITIONS: Record<AIProvider, ProviderDefinition> = buildProviderDefinitions();
 
 // --- Router logic (aligned with ProviderRouterContract.route()) ---
 
@@ -242,14 +233,15 @@ function normalizeRisk(raw?: string): RiskLevel {
  * conforming to Track 5A API from CVF_CONTROL_PLANE_FOUNDATION.
  */
 export function routeWebProvider(input: WebProviderRouterInput): WebProviderRoutingResult {
-  const available = input.configuredProviders ?? (Object.keys(WEB_PROVIDER_DEFINITIONS) as AIProvider[]);
-  const allowedProviders = available.map(id => WEB_PROVIDER_DEFINITIONS[id]).filter(Boolean);
+  const definitions = buildProviderDefinitions();
+  const available = input.configuredProviders ?? (Object.keys(definitions) as AIProvider[]);
+  const allowedProviders = available.map(id => definitions[id]).filter(Boolean);
   const requestRiskLevel = normalizeRisk(input.riskLevel);
 
   const policy: ProviderPolicy = {
     allowedProviders,
     defaultProviderId: input.requestedProvider,
-    riskCeiling: 'R2',
+    riskCeiling: resolveRiskCeiling('R2'),
     requireExplicitApproval: false,
     costBudgetTier: 'standard',
   };

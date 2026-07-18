@@ -172,4 +172,17 @@ describe("GatewayConsumerContract.consume", () => {
     expect(receipt.createdAt).toBe(FIXED_NOW);
     expect(receipt.stages).toHaveLength(3);
   });
+
+  it("wraps gateway consumption receipt in the canonical Phase 1.R envelope", () => {
+    const envelope = contract.consumeWithReceiptEnvelope(makeSignal({
+      consumerId: "consumer-envelope",
+      sessionId: "session-envelope",
+    }));
+
+    expect(envelope.schemaVersion).toBe("1.R.0");
+    expect(envelope.payload.receiptId).toBe(envelope.id);
+    expect(envelope.payload.consumerId).toBe("consumer-envelope");
+    expect(envelope.payload.sessionId).toBe("session-envelope");
+    expect(envelope.integrityHash).toBe(envelope.payload.consumptionHash);
+  });
 });

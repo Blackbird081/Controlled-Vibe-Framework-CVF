@@ -110,10 +110,13 @@ export type {
 } from "./boardroom.multi.round.contract";
 
 export {
+  DESIGN_PLAN_ADAPTER_VERSION,
   DesignContract,
+  buildDesignPlanAdapterSnapshot,
   createDesignContract,
 } from "./design.contract";
 export type {
+  DesignPlanAdapterSnapshot,
   DesignPlan,
   DesignTask,
   DesignAgentRole,
@@ -148,10 +151,13 @@ export type {
 } from "./boardroom.transition.gate.contract";
 
 export {
+  ORCHESTRATION_ADAPTER_VERSION,
   OrchestrationContract,
+  buildOrchestrationAdapterSnapshot,
   createOrchestrationContract,
 } from "./orchestration.contract";
 export type {
+  OrchestrationAdapterSnapshot,
   TaskAssignment,
   OrchestrationResult,
   OrchestrationContractDependencies,

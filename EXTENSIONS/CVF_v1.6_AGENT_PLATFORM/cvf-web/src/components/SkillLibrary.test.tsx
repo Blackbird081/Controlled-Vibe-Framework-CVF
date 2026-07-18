@@ -193,4 +193,34 @@ describe('SkillLibrary', () => {
             skillTitle: 'Test Skill',
         }));
     });
+
+    it('renders ASSF projection metadata only for projected package records', async () => {
+        render(<SkillLibrary />);
+        await waitFor(() => expect(screen.getByText('CVF Dispatch Quality Reviewer')).toBeTruthy());
+
+        fireEvent.click(screen.getByText('CVF Dispatch Quality Reviewer'));
+
+        await waitFor(() => {
+            expect(screen.getByText('Certified ASSF')).toBeTruthy();
+            expect(screen.getByText('ASSF package projection')).toBeTruthy();
+            expect(screen.getByText('Certification: CERTIFIED')).toBeTruthy();
+            expect(screen.getByText('UAT: PASSED')).toBeTruthy();
+            expect(screen.getByText('Adapter: DEFERRED_WITH_REASON')).toBeTruthy();
+        });
+    });
+
+    it('renders runtime package projection metadata from the Skill Control Plane', async () => {
+        render(<SkillLibrary />);
+        await waitFor(() => expect(screen.getByText('CVF Engineering API And Interface Design')).toBeTruthy());
+
+        fireEvent.click(screen.getByText('CVF Engineering API And Interface Design'));
+
+        await waitFor(() => {
+            expect(screen.getByText('Runtime package')).toBeTruthy();
+            expect(screen.getByText('Runtime eligible: YES')).toBeTruthy();
+            expect(screen.getByText('Activation: ACTIVATION_READY')).toBeTruthy();
+            expect(screen.getByText('Domain: api-interface-design')).toBeTruthy();
+            expect(screen.getByText('Adapter: IMPLEMENTED')).toBeTruthy();
+        });
+    });
 });

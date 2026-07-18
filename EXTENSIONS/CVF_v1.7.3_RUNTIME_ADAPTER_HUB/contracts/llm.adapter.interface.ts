@@ -42,4 +42,10 @@ export interface LLMAdapter {
         request: LLMRequest,
         onToken: (token: string) => void
     ): Promise<LLMResponse>
+
+    /**
+     * Optional vision support — describes image content
+     * If not implemented, adapter may throw NotImplementedError
+     */
+    vision?(request: LLMRequest & { imageUrl?: string; imageBase64?: string; mimeType?: string }): Promise<LLMResponse>
 }

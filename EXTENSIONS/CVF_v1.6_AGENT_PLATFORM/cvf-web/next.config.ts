@@ -35,12 +35,15 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || '.next',
   outputFileTracingRoot: path.resolve(__dirname, '../../..'),
+  serverExternalPackages: ['better-sqlite3', 'typescript'],
   transpilePackages: [
     'cvf-guard-contract',
     'cvf-control-plane-foundation',
     'cvf-learning-plane-foundation',
+    'cvf-refinery',
+    'cvf-truth-kernel',
+    'cvf-truth-flow',
   ],
-  serverExternalPackages: ['better-sqlite3', 'typescript'],
   turbopack: {
     // TypeScript ESM packages use explicit .js extensions in their internal
     // imports. Turbopack must try .ts/.tsx before .js when transpiling LPF.

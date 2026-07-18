@@ -102,6 +102,13 @@ export const AUTHORITY_MATRIX: Record<CVFRole, Record<CanonicalCVFPhase, Authori
     REVIEW:  { allowed: true,  allowedActions: ['explain', 'read'], maxRisk: 'R1' },
     FREEZE:  FORBIDDEN,
   },
+  SERVICE_AGENT: {
+    INTAKE:  FORBIDDEN,
+    DESIGN:  FORBIDDEN,
+    BUILD:   { allowed: true,  allowedActions: ['create', 'modify', 'build', 'implement', 'code', 'write', 'execute'], maxRisk: 'R2' },
+    REVIEW:  { allowed: true,  allowedActions: ['explain', 'read'], maxRisk: 'R1' },
+    FREEZE:  FORBIDDEN,
+  },
   OPERATOR: {
     INTAKE:  { allowed: true,  allowedActions: ['read', 'ask', 'analyze', 'approve'], maxRisk: 'R2' },
     DESIGN:  { allowed: true,  allowedActions: ['read', 'approve', 'analyze'], maxRisk: 'R2' },

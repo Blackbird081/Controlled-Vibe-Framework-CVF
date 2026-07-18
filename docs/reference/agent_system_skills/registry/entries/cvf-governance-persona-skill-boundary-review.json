@@ -1,0 +1,106 @@
+{
+  "registryOrder": 9,
+  "skillId": "cvf-governance-persona-skill-boundary-review",
+  "name": "CVF Governance Persona Skill Boundary Review",
+  "version": "0.1.0",
+  "owner": "CVF multi-agent role and handoff governance surface",
+  "status": "CANDIDATE",
+  "canonicalRoot": "docs/reference/agent_system_skills/registry/entries/cvf-governance-persona-skill-boundary-review.json",
+  "originLane": "AGSK-T7",
+  "sourceArtifacts": [
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_AGSK_T7_PACKAGE_CANDIDATE_EXPANSION_FROM_SOURCE_PACK_2026-06-29.md",
+    "docs/reviews/CVF_AGSK_ABSORPTION_PACK_REABSORPTION_REVIEW_2026-06-29.md",
+    "docs/reference/agent_system_skills/CVF_AGSG_AGENT_SKILLS_ASSF_CAPABILITY_ANATOMY_AND_RATIONALIZATION_ADVISORY.md",
+    ".private_reference/legacy/CVF 28.06/CVF_Agent_Skills_Governance_Absorption_Pack/docs/absorptions/agent-skills-governance/07_PERSONA_ORCHESTRATION_BOUNDARY.md",
+    ".private_reference/legacy/CVF 28.06/CVF_Agent_Skills_Governance_Absorption_Pack/docs/absorptions/agent-skills-governance/03_ABSORPTION_MAP.md"
+  ],
+  "legacyRows": [],
+  "license": "CVF_PRIVATE_GOVERNED",
+  "reviewArtifacts": [
+    "docs/reviews/CVF_AGSK_T7_PACKAGE_CANDIDATE_EXPANSION_FROM_SOURCE_PACK_WORKER_RETURN_2026-06-29.md"
+  ],
+  "purpose": "Review multi-agent or persona-like requests so skills, personas, commands, roles, fan-out, and merge decisions stay under CVF-owned handoff and review control.",
+  "triggerPatterns": [
+    "persona boundary",
+    "persona orchestrates persona",
+    "multi-agent fanout",
+    "skill command boundary",
+    "role lens review"
+  ],
+  "taskClasses": [
+    "multi-agent-review",
+    "source-review",
+    "package-candidate-triage",
+    "dispatch-authoring",
+    "reviewer"
+  ],
+  "useWhen": "A request, external skill, or worker packet uses persona, command, or skill concepts that might blur CVF role authority or orchestration ownership.",
+  "doNotUseWhen": "The work uses ordinary CVF role routing with no persona, command, skill, fan-out, or merge boundary issue.",
+  "riskTriggers": [
+    "persona spawns another persona",
+    "command bypasses work order",
+    "skill claims orchestration authority",
+    "merge decision lacks reviewer owner"
+  ],
+  "roles": [
+    "dispatcher",
+    "reviewer",
+    "closer"
+  ],
+  "phases": [
+    "DISPATCH_AUTHORING",
+    "MULTI_AGENT_ROUTING",
+    "WORKER_RETURN",
+    "REVIEWER_CLOSURE"
+  ],
+  "surfaces": [
+    "docs/work_orders",
+    "docs/reviews",
+    "docs/reference/agent_system_skills",
+    "docs/reference/agent_handoff"
+  ],
+  "riskCeiling": "R0",
+  "contextProfile": "persona-skill-boundary-metadata-only",
+  "inputs": [
+    "persona or command claim",
+    "role assignment",
+    "handoff contract route",
+    "fan-out or merge plan",
+    "reviewer owner"
+  ],
+  "outputs": [
+    "boundary review note",
+    "role or handoff route correction",
+    "forbidden orchestration finding",
+    "merge decision owner"
+  ],
+  "executionConstraints": "metadata-only candidate; does not spawn agents, create personas, install commands, or alter handoff runtime",
+  "acceptanceEvidence": "future promotion requires repeated boundary-defect evidence and reviewer proof",
+  "riskProfile": "R0",
+  "authorityCeiling": "metadata-only boundary guidance; cannot authorize persona orchestration or command execution",
+  "sideEffects": "none from metadata loading",
+  "permissions": "read metadata and cited governed source artifacts only",
+  "rollback": "delete this registry entry and regenerate the skill index if reviewer rejects AGSK-T7",
+  "safeStop": "if persona, command, or skill authority is ambiguous, stop and require CVF role/handoff owner decision",
+  "candidateState": "CANDIDATE",
+  "approvalState": "AWAITING_REVIEW",
+  "uatState": "NOT_STARTED",
+  "certificationState": "NOT_STARTED",
+  "deprecation": "none",
+  "successor": "none",
+  "retirement": "none",
+  "dependencies": [],
+  "conflicts": [],
+  "compositionOrder": 9,
+  "capabilityBoundary": "no persona creation, no agent spawning, no command import, no runtime orchestration, no package activation",
+  "internalAgentDisposition": "CANDIDATE",
+  "resolverBehavior": "metadata-only; resolver returns identity and selector fields; does not open any SKILL.md or instruction body",
+  "loaderBoundary": "loading this metadata never grants authority to spawn agents, execute commands, or bypass the handoff contract",
+  "externalCliMcpDisposition": "DEFERRED_WITH_REASON",
+  "adapterContract": "N/A with reason: external CLI/MCP adapter not authored in AGSK-T7",
+  "adapterEvidence": "N/A with reason: no adapter implemented in AGSK-T7",
+  "externalMutationBoundary": "no external mutation permitted until a separate ASSF adapter work order is accepted",
+  "platformCompatibility": "cross-platform",
+  "shellAssumptions": "no shell execution required for metadata-only candidate",
+  "osConstraints": "none"
+}

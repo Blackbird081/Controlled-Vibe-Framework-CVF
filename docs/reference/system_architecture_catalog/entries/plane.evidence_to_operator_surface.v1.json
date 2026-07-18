@@ -1,0 +1,31 @@
+{
+  "stableId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+  "entityType": "PLANE",
+  "name": "Evidence To Operator Surface",
+  "authorityClass": "ACCEPTED_REVIEW_EVIDENCE",
+  "maturity": "ACTIVE",
+  "ownerPaths": [
+    "scripts/cvf_doctor.py",
+    "governance/compat/run_agent_autorun_workflow_gate.py",
+    "governance/compat/run_local_governance_hook_chain.py",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+      "lineOrSection": "lanes[4]",
+      "evidenceRole": "reviewer-accepted MSEA-R90 Audit A lane verdict"
+    }
+  ],
+  "claimBoundary": "Catalog pointer to the R91-owned Evidence To Operator Surface lane verdict. RUNTIME_GUARD Web dashboard route and CI_REPO_GATE CLI/receipt surfaces for 186 governance/compat checkers. Does not re-derive or upgrade the R91 finding.",
+  "freshnessInputs": [
+    "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+    "docs/reference/system_chain/README.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  }
+}

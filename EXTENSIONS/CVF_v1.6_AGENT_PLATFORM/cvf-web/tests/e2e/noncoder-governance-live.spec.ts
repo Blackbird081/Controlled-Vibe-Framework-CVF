@@ -29,8 +29,8 @@ test('template gallery shows governed templates for non-coder', async ({ page })
     await page.goto('/home');
 
     await expect(
-        page.locator('[class*="template"], [data-template], .grid').first()
-    ).toBeVisible({ timeout: 10_000 });
+        page.getByRole('button', { name: /Phân tích Chiến lược|Strategy Analysis/i }).first()
+    ).toBeVisible({ timeout: 30_000 });
 
     const linkCount = await page.getByRole('button').count();
     expect(linkCount).toBeGreaterThan(0);

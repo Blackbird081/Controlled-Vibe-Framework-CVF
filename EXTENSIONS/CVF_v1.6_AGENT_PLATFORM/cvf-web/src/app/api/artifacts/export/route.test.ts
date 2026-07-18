@@ -1,7 +1,13 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
 
 import { POST } from './route';
+
+const verifySessionCookieMock = vi.hoisted(() => vi.fn());
+
+vi.mock('@/lib/middleware-auth', () => ({
+  verifySessionCookie: verifySessionCookieMock,
+}));
 
 const BASE_REQUEST = {
   title: 'New Knowledge Review Packet',
@@ -26,18 +32,25 @@ const BASE_REQUEST = {
 function makeRequest(body: Record<string, unknown>) {
   return new NextRequest('http://localhost/api/artifacts/export', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'x-cvf-service-token': 'test-service-token' },
     body: JSON.stringify(body),
   });
 }
 
 describe('/api/artifacts/export', () => {
+  beforeEach(() => {
+    process.env.CVF_SERVICE_TOKEN = 'test-service-token';
+    verifySessionCookieMock.mockReset();
+    verifySessionCookieMock.mockResolvedValue(null);
+  });
+
   it('returns a self-contained HTML presentation candidate with visible boundaries', async () => {
     const response = await POST(makeRequest(BASE_REQUEST));
     const payload = await response.json();
 
     expect(response.status).toBe(200);
     expect(payload.success).toBe(true);
+    expect(payload.routeGovernanceProof.authMode).toBe('service_token');
     expect(payload.data.filename).toBe('new-knowledge-review-packet.html');
     expect(payload.data.receiptAnchor).toBe('receipt-new-knowledge-review');
     expect(payload.data.html).toContain('CVF HTML Review Packet');

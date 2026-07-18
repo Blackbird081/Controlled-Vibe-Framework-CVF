@@ -157,6 +157,25 @@ class ReviewRetentionRegistryTests(unittest.TestCase):
         self.assertEqual(report["dynamicScanMode"], "skipped_no_retention_affecting_changes")
         self.assertEqual(report["dynamicCounts"]["status"], "skipped")
 
+    def test_build_report_fast_mode_skips_dynamic_scan_for_hook_chain(self) -> None:
+        self._write_registry([])
+
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root):
+            report = MODULE.build_report(
+                changed_paths={
+                    self.retain_path: ["M"],
+                    "docs/reference/CVF_RELEASE_MANIFEST.md": ["M"],
+                },
+                scan_mode="fast",
+            )
+
+        self.assertTrue(report["compliant"])
+        self.assertEqual(report["scanMode"], "fast")
+        self.assertTrue(report["detectedRetentionAffectingChanges"])
+        self.assertFalse(report["retentionAffectingChanges"])
+        self.assertEqual(report["dynamicScanMode"], "skipped_fast_hook_mode")
+        self.assertEqual(report["dynamicCounts"]["status"], "skipped")
+
     def test_build_report_skips_dynamic_scan_for_handoff_change_without_review_refs(self) -> None:
         self._write_registry([])
 

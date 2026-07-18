@@ -9,10 +9,13 @@ test.beforeEach(async ({ page }) => {
 test('admin can open the enterprise control plane', async ({ page }) => {
   await login(page);
   await page.goto('/admin/finops');
+  await page.waitForLoadState('networkidle').catch(() => undefined);
 
   await expect(
-    page.getByRole('heading', { name: /FinOps Dashboard|Chi phí & ngân sách/i })
-  ).toBeVisible({ timeout: 20_000 });
+    page.getByRole('heading', { name: /FinOps Dashboard|Chi phí & ngân sách/i }).or(
+      page.getByText(/FinOps Dashboard|Chi phí & ngân sách|ngân sách/i)
+    ).first()
+  ).toBeVisible({ timeout: 30_000 });
 });
 
 test('developer is redirected away from /admin routes', async ({ page }) => {

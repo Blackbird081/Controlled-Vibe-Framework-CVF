@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"EvidenceRecord","type":"object","required":["evidence_id","bound_packet_id","bound_source_id","provenance_label","status"],"properties":{"evidence_id":{"type":"string"},"bound_packet_id":{"type":"string"},"bound_source_id":{"type":"string"},"provenance_label":{"type":"string"},"status":{"type":"string"}}}

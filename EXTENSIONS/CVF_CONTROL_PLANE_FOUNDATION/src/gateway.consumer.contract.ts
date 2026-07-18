@@ -10,6 +10,8 @@ import type {
   ControlPlaneIntakeResult,
 } from "./intake.contract";
 import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
+import type { Receipt } from "../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract";
+import { createReceiptEnvelope as wrapReceiptEnvelope } from "../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract";
 
 // --- Types ---
 
@@ -35,6 +37,8 @@ export interface GatewayConsumptionReceipt {
   consumptionHash: string;
   warnings: string[];
 }
+
+export type GatewayConsumptionReceiptEnvelope = Receipt<GatewayConsumptionReceipt>;
 
 export interface GatewayConsumerContractDependencies {
   gateway?: AIGatewayContract;
@@ -125,6 +129,18 @@ export class GatewayConsumerContract {
       consumptionHash,
       warnings,
     };
+  }
+
+  consumeWithReceiptEnvelope(signal: GatewaySignalRequest): GatewayConsumptionReceiptEnvelope {
+    const receipt = this.consume(signal);
+
+    return wrapReceiptEnvelope({
+      id: receipt.receiptId,
+      issuedAt: receipt.createdAt,
+      source: `control-plane-foundation:gateway-consumer:${receipt.gatewayRequest.gatewayId}`,
+      payload: receipt,
+      integrityHash: receipt.consumptionHash,
+    });
   }
 }
 

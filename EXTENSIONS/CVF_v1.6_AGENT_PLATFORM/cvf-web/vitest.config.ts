@@ -17,12 +17,10 @@ export default defineConfig({
             provider: 'v8',
             reporter: ['text', 'json-summary', 'html'],
             thresholds: {
-                // Public-sync baseline floor. Raise this with focused coverage work;
-                // do not let the CI threshold drift above the measured public surface.
-                statements: 79,
-                branches: 69,
-                functions: 78,
-                lines: 80,
+                statements: 80,
+                branches: 70,
+                functions: 80,
+                lines: 82,
             },
             exclude: [
                 'node_modules/',

@@ -1,0 +1,32 @@
+{
+  "stableId": "cvf.asc.module.extensions_examples.v1",
+  "entityType": "MODULE",
+  "name": "EXTENSIONS Examples L6 Owner",
+  "authorityClass": "ACCEPTED_REVIEW_EVIDENCE",
+  "maturity": "ACTIVE",
+  "ownerPaths": [
+    "EXTENSIONS/examples/"
+  ],
+  "planeMembership": [
+    "cvf.asc.plane.doctrine_to_contract.v1"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "docs/reference/CVF_MODULE_INVENTORY.md",
+      "lineOrSection": "cited row",
+      "evidenceRole": "module owner/status evidence"
+    }
+  ],
+  "claimBoundary": "R97-inventoried active-reference L6 examples surface with 13 tracked files across four subdirectories.",
+  "freshnessInputs": [
+    "EXTENSIONS/examples/"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  },
+  "boundaryCaveat": "Distributed example owner, not a runtime or release package; does not consolidate L6 into one root path.",
+  "priorDisposition": ""
+}

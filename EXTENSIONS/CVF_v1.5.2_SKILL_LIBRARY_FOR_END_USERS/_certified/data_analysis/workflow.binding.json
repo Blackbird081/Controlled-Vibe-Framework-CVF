@@ -1,0 +1,22 @@
+{
+  "workflowId": "workflow.data_analysis.v1",
+  "outcomeKey": "data_analysis",
+  "packId": "data_analysis",
+  "inputKeys": [
+    "dataset_summary",
+    "question",
+    "metrics",
+    "timeframe",
+    "constraints"
+  ],
+  "outputSections": [
+    "Data frame",
+    "Key findings",
+    "Caveats",
+    "Recommended actions"
+  ],
+  "policyRefs": [
+    "CVF_CAPABILITY_INTAKE_PIPELINE_GUARD",
+    "CVF_F1_DIMINISHING_RETURNS_STOP_RULE"
+  ]
+}

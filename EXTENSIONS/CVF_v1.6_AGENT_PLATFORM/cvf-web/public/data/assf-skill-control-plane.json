@@ -1,0 +1,1392 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": "2026-06-30T09:39:00.283Z",
+  "sourceInventory": "../../../docs/reference/agent_system_skills/control_plane/generated/skill-inventory.json",
+  "sourceSkillIndex": "../../../docs/reference/agent_system_skills/generated/skill-index.json",
+  "dashboardContract": "Read-only CVF Web projection of Skill Control Plane inventory. Web dashboards may consume this file for display and filtering, but it is not runtime authority, activation authority, provider authority, or public certification authority.",
+  "summary": {
+    "assfRegistryEntries": 32,
+    "packageRoots": 24,
+    "runtimeEligiblePackages": 24,
+    "activeResolverReadyPackages": 24,
+    "cliMcpAdapterPackages": 24,
+    "selectionProfiledPackages": 24,
+    "webProjectionItems": 52,
+    "crossSurfaceDriftViolationCount": 0,
+    "projectedRuntimePackages": 24
+  },
+  "runtimePackages": [
+    {
+      "skillId": "cvf-engineering-api-interface-design",
+      "title": "CVF Engineering API And Interface Design",
+      "primaryDomain": "api-interface-design",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "architecture",
+        "schema-design"
+      ],
+      "recommendedWhen": [
+        "the spec names API endpoints, module contracts, schemas, or component interfaces"
+      ],
+      "notRecommendedWhen": [
+        "task is mainly visual UI implementation",
+        "task is mainly runtime debugging"
+      ],
+      "specSignals": [
+        "api design",
+        "interface boundary",
+        "module contract",
+        "schema contract"
+      ],
+      "selectionKeywords": [
+        "api",
+        "interface",
+        "schema",
+        "contract",
+        "endpoint",
+        "module boundary"
+      ],
+      "outputGoals": [
+        "contract design",
+        "schema clarity",
+        "boundary decisions"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "worker",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "design stable service APIs",
+        "define module boundaries",
+        "review schema contracts"
+      ],
+      "expectedOutputContribution": "Clear API or interface contracts before implementation.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-api-interface-design/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-api-interface-design/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-browser-runtime-verification",
+      "title": "CVF Engineering Browser Runtime Verification",
+      "primaryDomain": "browser-runtime-verification",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "frontend-ui",
+        "testing"
+      ],
+      "recommendedWhen": [
+        "the spec requires verifying a web page, DOM behavior, console errors, or screenshots"
+      ],
+      "notRecommendedWhen": [
+        "no browser surface exists",
+        "the request is only static documentation"
+      ],
+      "specSignals": [
+        "browser test",
+        "dom inspection",
+        "console errors",
+        "visual verification"
+      ],
+      "selectionKeywords": [
+        "browser",
+        "devtools",
+        "dom",
+        "console",
+        "screenshot",
+        "visual verification"
+      ],
+      "outputGoals": [
+        "browser proof",
+        "visual verification",
+        "console diagnostics"
+      ],
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "verify browser behavior",
+        "inspect DOM and console evidence",
+        "capture visual runtime proof"
+      ],
+      "expectedOutputContribution": "Browser runtime evidence for UI or web behavior.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-browser-runtime-verification/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-browser-runtime-verification/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-ci-cd-quality-gates",
+      "title": "CVF Engineering CI/CD Quality Gates",
+      "primaryDomain": "ci-cd-quality-gates",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "release",
+        "testing"
+      ],
+      "recommendedWhen": [
+        "the spec mentions CI, Github Actions, pipeline checks, deployment gates, or automated verification"
+      ],
+      "notRecommendedWhen": [
+        "task is a local-only code edit without automation impact"
+      ],
+      "specSignals": [
+        "ci pipeline",
+        "quality gates",
+        "deployment pipeline",
+        "automation checks"
+      ],
+      "selectionKeywords": [
+        "ci",
+        "cd",
+        "pipeline",
+        "github actions",
+        "quality gate",
+        "automation"
+      ],
+      "outputGoals": [
+        "ci gate",
+        "automation check",
+        "release evidence"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "worker",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "design CI checks",
+        "add pipeline quality gates",
+        "plan automation evidence"
+      ],
+      "expectedOutputContribution": "Repeatable quality gates and pipeline evidence.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-ci-cd-quality-gates/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-ci-cd-quality-gates/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-code-review-quality",
+      "title": "CVF Engineering Code Review Quality",
+      "primaryDomain": "code-review-quality",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "quality-assessment",
+        "reviewer-closure"
+      ],
+      "recommendedWhen": [
+        "the spec asks to review a diff, inspect another agent's work, or judge implementation quality"
+      ],
+      "notRecommendedWhen": [
+        "the user asks for implementation without review"
+      ],
+      "specSignals": [
+        "code review",
+        "quality review",
+        "review another agent"
+      ],
+      "selectionKeywords": [
+        "code review",
+        "review",
+        "quality",
+        "pre-merge",
+        "implementation review"
+      ],
+      "outputGoals": [
+        "review findings",
+        "severity ranking",
+        "quality assessment"
+      ],
+      "intendedUsers": [
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "review code quality",
+        "find correctness risks",
+        "prioritize review findings"
+      ],
+      "expectedOutputContribution": "Finding-first code review across correctness, readability, architecture, security, and performance.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-code-review-quality/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-code-review-quality/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-code-simplification",
+      "title": "CVF Engineering Code Simplification",
+      "primaryDomain": "code-simplification",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "maintainability",
+        "refactoring"
+      ],
+      "recommendedWhen": [
+        "the spec asks to refactor, simplify, remove duplication, or improve maintainability"
+      ],
+      "notRecommendedWhen": [
+        "behavior is not understood",
+        "the user asks for new feature expansion"
+      ],
+      "specSignals": [
+        "simplify code",
+        "reduce complexity",
+        "remove duplication"
+      ],
+      "selectionKeywords": [
+        "simplify",
+        "refactor",
+        "complexity",
+        "duplication",
+        "maintainability"
+      ],
+      "outputGoals": [
+        "reduced complexity",
+        "clearer code",
+        "refactor plan"
+      ],
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "simplify code",
+        "reduce duplication",
+        "lower complexity"
+      ],
+      "expectedOutputContribution": "Behavior-preserving simplification with tests and local conventions.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-code-simplification/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-code-simplification/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-debugging-error-recovery",
+      "title": "CVF Engineering Debugging And Error Recovery",
+      "primaryDomain": "debugging-error-recovery",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "testing",
+        "diagnostics"
+      ],
+      "recommendedWhen": [
+        "the spec includes a failing test, broken build, exception, or unexpected behavior"
+      ],
+      "notRecommendedWhen": [
+        "there is no observed failure or diagnostic"
+      ],
+      "specSignals": [
+        "debug failure",
+        "root cause",
+        "unexpected behavior"
+      ],
+      "selectionKeywords": [
+        "debug",
+        "error",
+        "failure",
+        "root cause",
+        "test failure",
+        "build break"
+      ],
+      "outputGoals": [
+        "root cause",
+        "reproduction",
+        "fix validation"
+      ],
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "debug failing tests",
+        "diagnose build errors",
+        "capture root cause"
+      ],
+      "expectedOutputContribution": "Systematic root-cause diagnosis and recovery plan.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-debugging-error-recovery/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-debugging-error-recovery/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-deprecation-migration",
+      "title": "CVF Engineering Deprecation And Migration",
+      "primaryDomain": "deprecation-migration",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "release",
+        "architecture"
+      ],
+      "recommendedWhen": [
+        "the spec names deprecation, migration, compatibility, or removing old APIs"
+      ],
+      "notRecommendedWhen": [
+        "the change is not replacing or retiring an existing surface"
+      ],
+      "specSignals": [
+        "deprecation",
+        "migration",
+        "compatibility change"
+      ],
+      "selectionKeywords": [
+        "migration",
+        "deprecation",
+        "compatibility",
+        "sunset",
+        "remove old",
+        "api removal"
+      ],
+      "outputGoals": [
+        "migration plan",
+        "compatibility boundary",
+        "rollback path"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "worker"
+      ],
+      "agentUseCases": [
+        "plan migrations",
+        "handle deprecations",
+        "preserve compatibility"
+      ],
+      "expectedOutputContribution": "Migration plan with compatibility and rollback boundaries.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-deprecation-migration/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-deprecation-migration/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-frontend-ui",
+      "title": "CVF Engineering Frontend UI",
+      "primaryDomain": "frontend-ui",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "browser-runtime-verification",
+        "product-experience"
+      ],
+      "recommendedWhen": [
+        "the spec asks for UI, frontend components, layout, interaction, or visual polish"
+      ],
+      "notRecommendedWhen": [
+        "the task is backend-only or documentation-only"
+      ],
+      "specSignals": [
+        "frontend ui",
+        "component design",
+        "layout implementation",
+        "user interface"
+      ],
+      "selectionKeywords": [
+        "frontend",
+        "ui",
+        "component",
+        "layout",
+        "responsive",
+        "accessibility"
+      ],
+      "outputGoals": [
+        "usable UI",
+        "responsive layout",
+        "accessibility"
+      ],
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "build frontend components",
+        "improve layout",
+        "apply design contract"
+      ],
+      "expectedOutputContribution": "Production-quality UI implementation aligned with the project design contract.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-frontend-ui/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-frontend-ui/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-incremental-implementation",
+      "title": "CVF Engineering Incremental Implementation",
+      "primaryDomain": "incremental-implementation",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "planning",
+        "delivery"
+      ],
+      "recommendedWhen": [
+        "the spec is large, multi-file, risky, or needs phased implementation"
+      ],
+      "notRecommendedWhen": [
+        "the task is a tiny single-file edit"
+      ],
+      "specSignals": [
+        "incremental implementation",
+        "large task",
+        "stepwise delivery"
+      ],
+      "selectionKeywords": [
+        "incremental",
+        "small slices",
+        "multi-file",
+        "stepwise",
+        "phase",
+        "large task"
+      ],
+      "outputGoals": [
+        "incremental plan",
+        "small slices",
+        "validation steps"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "worker"
+      ],
+      "agentUseCases": [
+        "slice large work",
+        "ship incremental changes",
+        "define stop conditions"
+      ],
+      "expectedOutputContribution": "Small, reviewable implementation slices with validation after each step.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-incremental-implementation/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-incremental-implementation/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-observability-instrumentation",
+      "title": "CVF Engineering Observability And Instrumentation",
+      "primaryDomain": "observability-instrumentation",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "runtime-diagnostics",
+        "operations"
+      ],
+      "recommendedWhen": [
+        "the spec mentions logs, metrics, traces, alerts, monitoring, or production diagnostics"
+      ],
+      "notRecommendedWhen": [
+        "the task has no runtime or diagnostic surface"
+      ],
+      "specSignals": [
+        "observability",
+        "instrumentation",
+        "logging",
+        "metrics"
+      ],
+      "selectionKeywords": [
+        "observability",
+        "instrumentation",
+        "logging",
+        "metrics",
+        "tracing",
+        "alerts",
+        "monitoring"
+      ],
+      "outputGoals": [
+        "logging plan",
+        "metrics",
+        "tracing",
+        "alerts"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "worker"
+      ],
+      "agentUseCases": [
+        "add logging",
+        "define metrics",
+        "plan traces and alerts"
+      ],
+      "expectedOutputContribution": "Observability evidence for diagnosing runtime behavior.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-observability-instrumentation/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-observability-instrumentation/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-performance-optimization",
+      "title": "CVF Engineering Performance Optimization",
+      "primaryDomain": "performance-optimization",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "frontend-ui",
+        "runtime-diagnostics"
+      ],
+      "recommendedWhen": [
+        "the spec mentions slow behavior, profiling, latency, Core Web Vitals, or bottlenecks"
+      ],
+      "notRecommendedWhen": [
+        "there is no performance complaint or metric"
+      ],
+      "specSignals": [
+        "performance optimization",
+        "slow page",
+        "profiling",
+        "bottleneck"
+      ],
+      "selectionKeywords": [
+        "performance",
+        "slow",
+        "latency",
+        "profiling",
+        "bottleneck",
+        "core web vitals"
+      ],
+      "outputGoals": [
+        "performance baseline",
+        "bottleneck analysis",
+        "regression guard"
+      ],
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "profile bottlenecks",
+        "improve slow pages",
+        "guard regressions"
+      ],
+      "expectedOutputContribution": "Measurement-first performance improvement and regression control.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-performance-optimization/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-performance-optimization/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-planning-task-breakdown",
+      "title": "CVF Engineering Planning And Task Breakdown",
+      "primaryDomain": "planning-task-breakdown",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "incremental-implementation",
+        "work-order-authoring"
+      ],
+      "recommendedWhen": [
+        "the spec asks for a roadmap, plan, task breakdown, or sequencing before execution"
+      ],
+      "notRecommendedWhen": [
+        "implementation steps are already obvious and tiny"
+      ],
+      "specSignals": [
+        "task breakdown",
+        "implementation plan",
+        "plan from spec"
+      ],
+      "selectionKeywords": [
+        "plan",
+        "task breakdown",
+        "roadmap",
+        "sequence",
+        "dependency",
+        "split work"
+      ],
+      "outputGoals": [
+        "task breakdown",
+        "dependency order",
+        "execution plan"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "operator"
+      ],
+      "agentUseCases": [
+        "turn requirements into tasks",
+        "sequence dependencies",
+        "build implementation plan"
+      ],
+      "expectedOutputContribution": "Ordered, dependency-aware, testable task breakdown.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-planning-task-breakdown/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-planning-task-breakdown/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-security-hardening",
+      "title": "CVF Engineering Security Hardening",
+      "primaryDomain": "security-hardening",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "risk-control",
+        "compliance"
+      ],
+      "recommendedWhen": [
+        "the spec mentions auth, authorization, secrets, untrusted input, sensitive data, OWASP, or access control"
+      ],
+      "notRecommendedWhen": [
+        "the task has no auth, secrets, external input, or sensitive data concern"
+      ],
+      "specSignals": [
+        "security hardening",
+        "threat model",
+        "auth",
+        "secrets"
+      ],
+      "selectionKeywords": [
+        "security",
+        "hardening",
+        "auth",
+        "authorization",
+        "secrets",
+        "untrusted input",
+        "owasp",
+        "sensitive data"
+      ],
+      "outputGoals": [
+        "threat model",
+        "security hardening",
+        "secret handling",
+        "authorization boundary"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "worker",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "harden auth",
+        "threat model changes",
+        "protect secrets and untrusted input"
+      ],
+      "expectedOutputContribution": "Threat-model-first security hardening with explicit sensitive-data boundaries.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-security-hardening/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-security-hardening/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-shipping-launch",
+      "title": "CVF Engineering Shipping And Launch",
+      "primaryDomain": "shipping-launch",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "ci-cd-quality-gates",
+        "observability-instrumentation"
+      ],
+      "recommendedWhen": [
+        "the spec mentions shipping, launch, release readiness, staged rollout, monitoring, or rollback"
+      ],
+      "notRecommendedWhen": [
+        "the task is not near release or rollout"
+      ],
+      "specSignals": [
+        "shipping",
+        "launch",
+        "release readiness",
+        "rollback plan"
+      ],
+      "selectionKeywords": [
+        "shipping",
+        "launch",
+        "release",
+        "rollback",
+        "staged rollout",
+        "release readiness"
+      ],
+      "outputGoals": [
+        "release readiness",
+        "rollback plan",
+        "staged rollout"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "prepare launch",
+        "plan rollout",
+        "define rollback readiness"
+      ],
+      "expectedOutputContribution": "Launch readiness checklist with rollout and rollback evidence.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-shipping-launch/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-shipping-launch/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-source-driven-development",
+      "title": "CVF Engineering Source-Driven Development",
+      "primaryDomain": "source-driven-development",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "research",
+        "implementation"
+      ],
+      "recommendedWhen": [
+        "the spec depends on current framework docs, library behavior, or official source correctness"
+      ],
+      "notRecommendedWhen": [
+        "the needed source facts are already governed locally"
+      ],
+      "specSignals": [
+        "source driven development",
+        "official docs",
+        "framework docs"
+      ],
+      "selectionKeywords": [
+        "official docs",
+        "source driven",
+        "framework",
+        "library",
+        "current best practices",
+        "documentation"
+      ],
+      "outputGoals": [
+        "source-backed decision",
+        "current documentation check",
+        "framework correctness"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "worker"
+      ],
+      "agentUseCases": [
+        "verify official docs",
+        "avoid stale framework assumptions",
+        "source-backed implementation"
+      ],
+      "expectedOutputContribution": "Source-backed decisions for framework, library, or API work.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-source-driven-development/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-source-driven-development/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-spec-driven-development",
+      "title": "CVF Engineering Spec-Driven Development",
+      "primaryDomain": "spec-driven-development",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "planning-task-breakdown",
+        "source-driven-development"
+      ],
+      "recommendedWhen": [
+        "the spec is ambiguous, high-risk, or needs a written implementation contract before code"
+      ],
+      "notRecommendedWhen": [
+        "the task is a direct tiny fix with clear acceptance criteria"
+      ],
+      "specSignals": [
+        "spec driven development",
+        "write spec",
+        "requirements unclear",
+        "spec before code"
+      ],
+      "selectionKeywords": [
+        "spec",
+        "requirements",
+        "assumptions",
+        "acceptance criteria",
+        "test plan",
+        "boundaries"
+      ],
+      "outputGoals": [
+        "implementation spec",
+        "assumptions",
+        "test plan",
+        "boundaries"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "worker"
+      ],
+      "agentUseCases": [
+        "write implementation spec",
+        "clarify assumptions",
+        "define tests before code"
+      ],
+      "expectedOutputContribution": "Source-backed spec before non-trivial implementation.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-spec-driven-development/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-spec-driven-development/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-engineering-test-driven-development",
+      "title": "CVF Engineering Test-Driven Development",
+      "primaryDomain": "test-driven-development",
+      "domainGroup": "engineering",
+      "secondaryDomains": [
+        "debugging-error-recovery",
+        "quality"
+      ],
+      "recommendedWhen": [
+        "the spec asks to fix behavior, reproduce a bug, or prove a change with tests"
+      ],
+      "notRecommendedWhen": [
+        "no executable test surface exists and no test harness is authorized"
+      ],
+      "specSignals": [
+        "test driven development",
+        "write failing test",
+        "regression test"
+      ],
+      "selectionKeywords": [
+        "test",
+        "failing test",
+        "regression",
+        "bug reproduction",
+        "prove it works",
+        "coverage"
+      ],
+      "outputGoals": [
+        "failing test",
+        "regression coverage",
+        "behavior proof"
+      ],
+      "intendedUsers": [
+        "worker",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "write failing tests first",
+        "reproduce bugs",
+        "prove behavior"
+      ],
+      "expectedOutputContribution": "Regression coverage and behavior proof before closure.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-test-driven-development/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-engineering-test-driven-development/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-governance-context-engineering",
+      "title": "CVF Governance Context Engineering",
+      "primaryDomain": "context-engineering",
+      "domainGroup": "governance",
+      "secondaryDomains": [
+        "agent-governance",
+        "session-continuity"
+      ],
+      "recommendedWhen": [
+        "the spec mentions agent context, startup rules, provider memory, or context degradation"
+      ],
+      "notRecommendedWhen": [
+        "the work already has all required context and no session risk"
+      ],
+      "specSignals": [
+        "context setup",
+        "agent context",
+        "rules files",
+        "session start"
+      ],
+      "selectionKeywords": [
+        "context",
+        "rules",
+        "session",
+        "startup",
+        "memory",
+        "agent context"
+      ],
+      "outputGoals": [
+        "context setup",
+        "rule discovery",
+        "session boundary"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "worker",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "set up agent context",
+        "discover rules",
+        "manage context budget"
+      ],
+      "expectedOutputContribution": "Correct startup and context handling without treating provider memory as CVF authority.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-governance-context-engineering/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-governance-context-engineering/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-governance-documentation-adrs",
+      "title": "CVF Governance Documentation And ADRs",
+      "primaryDomain": "documentation-adrs",
+      "domainGroup": "governance",
+      "secondaryDomains": [
+        "knowledge-management",
+        "architecture"
+      ],
+      "recommendedWhen": [
+        "the spec asks to document architecture decisions, standards, or long-lived rationale"
+      ],
+      "notRecommendedWhen": [
+        "the task has no decision or documentation surface"
+      ],
+      "specSignals": [
+        "architecture decision",
+        "documentation update",
+        "decision record"
+      ],
+      "selectionKeywords": [
+        "adr",
+        "documentation",
+        "decision record",
+        "rationale",
+        "standard",
+        "architecture decision"
+      ],
+      "outputGoals": [
+        "ADR",
+        "decision record",
+        "documentation"
+      ],
+      "intendedUsers": [
+        "dispatcher",
+        "reviewer"
+      ],
+      "agentUseCases": [
+        "write ADRs",
+        "capture decisions",
+        "make durable documentation"
+      ],
+      "expectedOutputContribution": "Durable decision records and documentation for future agents.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-governance-documentation-adrs/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-governance-documentation-adrs/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-governance-doubt-driven-development",
+      "title": "CVF Governance Doubt-Driven Development",
+      "primaryDomain": "doubt-driven-development",
+      "domainGroup": "governance",
+      "secondaryDomains": [
+        "review-quality",
+        "risk-control"
+      ],
+      "recommendedWhen": [
+        "the spec involves high-risk decisions, uncertain assumptions, or possible overclaiming"
+      ],
+      "notRecommendedWhen": [
+        "the decision is low-risk and already source-verified"
+      ],
+      "specSignals": [
+        "doubt-driven",
+        "fresh-context review",
+        "adversarial review",
+        "verify assumptions"
+      ],
+      "selectionKeywords": [
+        "doubt",
+        "assumption",
+        "adversarial review",
+        "fresh context",
+        "high stakes",
+        "verify assumptions"
+      ],
+      "outputGoals": [
+        "assumption audit",
+        "risk challenge",
+        "fresh-context review"
+      ],
+      "intendedUsers": [
+        "reviewer",
+        "operator"
+      ],
+      "agentUseCases": [
+        "challenge assumptions",
+        "fresh-context review",
+        "reduce shallow pass decisions"
+      ],
+      "expectedOutputContribution": "Adversarial review of assumptions and high-stakes decisions.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-governance-doubt-driven-development/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-governance-doubt-driven-development/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-governance-git-workflow-versioning",
+      "title": "CVF Governance Git Workflow And Versioning",
+      "primaryDomain": "git-workflow-versioning",
+      "domainGroup": "governance",
+      "secondaryDomains": [
+        "release",
+        "session-sync"
+      ],
+      "recommendedWhen": [
+        "the spec mentions commits, branches, conflicts, versioning, or material/session-sync split"
+      ],
+      "notRecommendedWhen": [
+        "no git, commit, branch, or versioning action is involved"
+      ],
+      "specSignals": [
+        "git workflow",
+        "commit",
+        "branching",
+        "merge conflict"
+      ],
+      "selectionKeywords": [
+        "git",
+        "commit",
+        "branch",
+        "merge conflict",
+        "versioning",
+        "session-sync"
+      ],
+      "outputGoals": [
+        "commit plan",
+        "branch discipline",
+        "versioning"
+      ],
+      "intendedUsers": [
+        "worker",
+        "reviewer",
+        "session-sync steward"
+      ],
+      "agentUseCases": [
+        "manage commits",
+        "split material and session-sync work",
+        "handle branch/versioning discipline"
+      ],
+      "expectedOutputContribution": "Clean commit and versioning flow aligned with CVF choreography.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-governance-git-workflow-versioning/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-governance-git-workflow-versioning/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-governance-idea-refinement",
+      "title": "CVF Governance Idea Refinement",
+      "primaryDomain": "idea-refinement",
+      "domainGroup": "governance",
+      "secondaryDomains": [
+        "planning",
+        "operator-alignment"
+      ],
+      "recommendedWhen": [
+        "the spec is an early concept, brainstorm, or unclear idea that needs shaping before execution"
+      ],
+      "notRecommendedWhen": [
+        "the operator already gave an exact implementation request"
+      ],
+      "specSignals": [
+        "refine idea",
+        "brainstorm",
+        "unclear concept",
+        "options"
+      ],
+      "selectionKeywords": [
+        "idea",
+        "brainstorm",
+        "options",
+        "unclear",
+        "shape request",
+        "next move"
+      ],
+      "outputGoals": [
+        "options",
+        "constraints",
+        "next move"
+      ],
+      "intendedUsers": [
+        "operator",
+        "dispatcher"
+      ],
+      "agentUseCases": [
+        "shape vague ideas",
+        "compare options",
+        "turn intent into next move"
+      ],
+      "expectedOutputContribution": "Early idea refinement into options, constraints, and a governed next move.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-governance-idea-refinement/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-governance-idea-refinement/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-governance-operator-interview",
+      "title": "CVF Governance Operator Interview",
+      "primaryDomain": "operator-interview",
+      "domainGroup": "governance",
+      "secondaryDomains": [
+        "operator-alignment",
+        "requirements"
+      ],
+      "recommendedWhen": [
+        "the spec is underspecified and a reasonable assumption would materially change the work"
+      ],
+      "notRecommendedWhen": [
+        "the operator request is already precise enough to execute safely"
+      ],
+      "specSignals": [
+        "interview me",
+        "clarify request",
+        "underspecified task"
+      ],
+      "selectionKeywords": [
+        "clarify",
+        "interview",
+        "question",
+        "requirements",
+        "underspecified",
+        "what do you want"
+      ],
+      "outputGoals": [
+        "clarified requirements",
+        "operator answer",
+        "safe assumption boundary"
+      ],
+      "intendedUsers": [
+        "operator",
+        "dispatcher",
+        "worker"
+      ],
+      "agentUseCases": [
+        "clarify requirements",
+        "ask one question at a time",
+        "avoid risky assumptions"
+      ],
+      "expectedOutputContribution": "Operator clarification before risky implementation assumptions.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-governance-operator-interview/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-governance-operator-interview/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    },
+    {
+      "skillId": "cvf-governance-skill-discovery-invocation",
+      "title": "CVF Governance Skill Discovery And Invocation",
+      "primaryDomain": "skill-discovery-invocation",
+      "domainGroup": "governance",
+      "secondaryDomains": [
+        "skill-control-plane",
+        "agent-governance"
+      ],
+      "recommendedWhen": [
+        "the spec asks which skill applies, how to choose skills, or how to avoid authority expansion during skill use"
+      ],
+      "notRecommendedWhen": [
+        "the correct skill is already selected and receipt-backed"
+      ],
+      "specSignals": [
+        "using agent skills",
+        "skill discovery",
+        "skill invocation",
+        "which skill applies"
+      ],
+      "selectionKeywords": [
+        "skill",
+        "skills",
+        "skill discovery",
+        "skill invocation",
+        "which skill",
+        "choose skill"
+      ],
+      "outputGoals": [
+        "skill selection",
+        "invocation boundary",
+        "metadata-first discovery"
+      ],
+      "intendedUsers": [
+        "operator",
+        "dispatcher",
+        "worker"
+      ],
+      "agentUseCases": [
+        "choose relevant skills",
+        "inspect invocation boundaries",
+        "avoid loading all skill bodies"
+      ],
+      "expectedOutputContribution": "Metadata-first skill discovery and invocation boundary control.",
+      "runtimeEligible": true,
+      "activationDecision": "ACTIVATION_READY",
+      "cliMcpDisposition": "IMPLEMENTED",
+      "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-governance-skill-discovery-invocation/SKILL.md",
+      "registryEntryPath": "docs/reference/agent_system_skills/packages/cvf-governance-skill-discovery-invocation/SKILL.md",
+      "certificationState": "CERTIFIED",
+      "uatState": "PASSED",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "authorityCeiling": null,
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    }
+  ],
+  "claimBoundary": "This inventory is a generated Skill Control Plane read model. It classifies skill surfaces for governance review only. It is not canonical certification authority, package body authority, provider runtime authority, Web runtime authority, public-sync evidence, or permission to activate, execute, commit, push, or bypass governed work-order scope."
+}

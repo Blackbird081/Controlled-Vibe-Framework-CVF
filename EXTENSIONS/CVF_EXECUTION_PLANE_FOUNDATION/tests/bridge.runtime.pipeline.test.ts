@@ -321,6 +321,25 @@ describe("ExecutionBridgeConsumerContract.bridge", () => {
     expect(r1.bridgeReceiptId).toBe(r2.bridgeReceiptId);
   });
 
+  it("wraps execution bridge receipt in the canonical Phase 1.R envelope", () => {
+    const result = contract.bridgeWithReceiptEnvelope(designReceipt);
+    expect(result.schemaVersion).toBe("1.R.0");
+    expect(result.payload.bridgeReceiptId).toBe(result.id);
+    expect(result.payload.designReceiptId).toBe(designReceipt.receiptId);
+    expect(result.source).toBe(`execution-plane-foundation:execution-bridge:${result.payload.orchestrationId}`);
+    expect(result.integrityHash).toBe(result.payload.bridgeHash);
+  });
+
+  it("creates immutable execution bridge task records without adding a store", () => {
+    const receipt = contract.bridge(designReceipt);
+    const record = contract.buildBridgeTaskRecord(receipt);
+
+    expect(record.taskKind).toBe("execution_bridge");
+    expect(record.taskId).toBe(receipt.bridgeReceiptId);
+    expect(record.immutable).toBe(true);
+    expect(record.envelope.payload).toBe(receipt);
+  });
+
   it("warnings is an Array (may contain bridge/dispatch/design messages)", () => {
     const result = contract.bridge(designReceipt);
     expect(Array.isArray(result.warnings)).toBe(true);
@@ -385,6 +404,25 @@ describe("ExecutionPipelineContract.run", () => {
     expect(r1.pipelineHash).toBeTruthy();
     expect(r1.pipelineHash).toBe(r2.pipelineHash);
     expect(r1.pipelineReceiptId).toBe(r2.pipelineReceiptId);
+  });
+
+  it("wraps execution pipeline receipts in the canonical Phase 1.R envelope", () => {
+    const result = contract.runWithReceiptEnvelope(bridgeReceipt);
+
+    expect(result.schemaVersion).toBe("1.R.0");
+    expect(result.payload.pipelineReceiptId).toBe(result.id);
+    expect(result.source).toBe(`execution-plane-foundation:execution-pipeline:${result.payload.orchestrationId}`);
+    expect(result.integrityHash).toBe(result.payload.pipelineHash);
+  });
+
+  it("creates immutable execution pipeline task records without adding a store", () => {
+    const receipt = contract.run(bridgeReceipt);
+    const record = contract.buildPipelineTaskRecord(receipt);
+
+    expect(record.taskKind).toBe("execution_pipeline");
+    expect(record.taskId).toBe(receipt.pipelineReceiptId);
+    expect(record.immutable).toBe(true);
+    expect(record.envelope.payload).toBe(receipt);
   });
 
   it("warnings from bridge receipt are prefixed [bridge]", () => {

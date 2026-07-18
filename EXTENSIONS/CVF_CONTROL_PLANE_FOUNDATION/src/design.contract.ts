@@ -13,6 +13,8 @@ export type DesignTaskRisk = "R0" | "R1" | "R2" | "R3";
 
 export type DesignTaskPhase = "DESIGN" | "BUILD" | "REVIEW";
 
+export const DESIGN_PLAN_ADAPTER_VERSION = "phase2b-design-plan-adapter-1" as const;
+
 export interface DesignTask {
   taskId: string;
   title: string;
@@ -41,6 +43,18 @@ export interface DesignPlan {
 
 export interface DesignContractDependencies {
   now?: () => string;
+}
+
+export interface DesignPlanAdapterSnapshot {
+  version: typeof DESIGN_PLAN_ADAPTER_VERSION;
+  source: "control-plane:design-contract";
+  planId: string;
+  intakeRequestId: string;
+  totalTasks: number;
+  riskSummary: Record<DesignTaskRisk, number>;
+  roleSummary: Record<DesignAgentRole, number>;
+  warningCount: number;
+  planHash: string;
 }
 
 // --- Risk Assessment ---
@@ -201,6 +215,17 @@ export class DesignContract {
     };
   }
 
+  designWithAdapter(intakeResult: ControlPlaneIntakeResult): {
+    plan: DesignPlan;
+    adapter: DesignPlanAdapterSnapshot;
+  } {
+    const plan = this.design(intakeResult);
+    return {
+      plan,
+      adapter: buildDesignPlanAdapterSnapshot(plan),
+    };
+  }
+
   private buildWarnings(
     intakeResult: ControlPlaneIntakeResult,
     tasks: DesignTask[],
@@ -236,6 +261,22 @@ export class DesignContract {
 
     return warnings;
   }
+}
+
+export function buildDesignPlanAdapterSnapshot(
+  plan: DesignPlan,
+): DesignPlanAdapterSnapshot {
+  return {
+    version: DESIGN_PLAN_ADAPTER_VERSION,
+    source: "control-plane:design-contract",
+    planId: plan.planId,
+    intakeRequestId: plan.intakeRequestId,
+    totalTasks: plan.totalTasks,
+    riskSummary: { ...plan.riskSummary },
+    roleSummary: { ...plan.roleSummary },
+    warningCount: plan.warnings.length,
+    planHash: plan.planHash,
+  };
 }
 
 export function createDesignContract(

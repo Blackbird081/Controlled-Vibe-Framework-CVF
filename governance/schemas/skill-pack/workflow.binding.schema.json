@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cvf.local/schemas/skill-pack/workflow.binding.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "workflowId",
+    "outcomeKey",
+    "packId",
+    "inputKeys",
+    "outputSections",
+    "policyRefs"
+  ],
+  "properties": {
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "outcomeKey": {
+      "type": "string",
+      "minLength": 1
+    },
+    "packId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputKeys": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "outputSections": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "policyRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    }
+  }
+}

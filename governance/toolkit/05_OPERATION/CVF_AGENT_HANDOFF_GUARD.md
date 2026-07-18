@@ -93,6 +93,54 @@ Not allowed:
 - claiming target-state completion when only a bounded slice landed
 - handing off with no commit or reference state when a clean commit exists
 
+### In-Place Update Rule
+
+When the active handoff is updated mid-session (without creating a new version),
+every edit must keep the following fields in sync with each other:
+
+- `Status:` line (top of file) — one-sentence current state
+- `Active Boundary` section — delivered vs. authorized vs. blocked
+- `HEAD` block in Current State — latest commit SHA and message
+- `Handoff History` table — the current version's summary cell must reflect the
+  full scope actually delivered, not only the scope that existed when the
+  handoff was first created
+
+The History table entry for the **active version** is a living summary. It must
+be updated whenever the Active Boundary changes. A History entry that reads
+"Phase X only" while the Active Boundary shows Phase X + Y + Z delivered is a
+sync violation — it misleads the next agent about what this session covered.
+
+Sync check before every commit that touches the active handoff:
+
+1. Does the `Status:` line match what Active Boundary says is done?
+2. Does the HEAD SHA match the latest committed SHA?
+3. Does the History table entry for the active version list every phase/batch
+   delivered so far in this session?
+
+If any answer is no, fix the mismatch in the same commit.
+
+### Handoff Archive Protocol
+
+When a new handoff supersedes a previous one, the worker must:
+
+1. Create the new handoff file (e.g., `AGENT_HANDOFF_Vn.md`) in the repo root.
+2. Update the previous handoff's `Status:` line to `SUPERSEDED by AGENT_HANDOFF_Vn.md`.
+3. **Use `git mv` — not `cp`** — to move the superseded handoff from the repo root
+   to `CVF_SESSION/handoffs/archive/`. This preserves git rename history.
+4. Update `CVF_SESSION/ACTIVE_SESSION_STATE.json`:
+   - `activeHandoff` → new handoff filename
+   - add old archive path to `supersededHandoffs` list
+5. Update `CVF_SESSION_MEMORY.md` active handoff pointer.
+6. Update `governance/compat/CVF_ROOT_FILE_EXPOSURE_REGISTRY.json`:
+   - remove the superseded handoff entry (it is no longer a root file)
+   - add the new handoff entry
+
+Using `cp` instead of `git mv` leaves a duplicate at root and breaks the
+git rename history. The `check_active_session_state.py` checker scans root
+for `Status: ACTIVE` — a leftover `cp` at root with `Status: SUPERSEDED` is
+tolerated but wastes exposure registry entries and clutters the root. Always
+use `git mv`.
+
 ### Pause / Resume Interpretation
 
 For governance purposes, an agent handoff should be treated like a human work handoff or a short break checkpoint:

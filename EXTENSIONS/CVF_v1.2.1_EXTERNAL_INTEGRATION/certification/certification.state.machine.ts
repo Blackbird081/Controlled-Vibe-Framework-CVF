@@ -37,6 +37,31 @@ export interface StateTransitionResult {
 
 }
 
+export const CERTIFICATION_STATE_MACHINE_ADAPTER_VERSION =
+  "phase2b-certification-state-machine-adapter-1";
+
+export interface CertificationStateMachineAdapterSnapshot {
+
+  version: typeof CERTIFICATION_STATE_MACHINE_ADAPTER_VERSION;
+
+  source: "external-integration:certification-state-machine";
+
+  skill_id: string;
+
+  current_state: CertificationState;
+
+  target_state: CertificationState;
+
+  allowed: boolean;
+
+  new_state?: CertificationState;
+
+  reason?: string;
+
+  manual_override: boolean;
+
+}
+
 const transitionMap: Record<CertificationState, CertificationState[]> = {
 
   raw: ["draft"],
@@ -107,6 +132,28 @@ export class CertificationStateMachine {
     return {
       allowed: true,
       new_state: target_state
+    };
+  }
+
+  static transitionWithAdapter(
+    ctx: StateTransitionContext
+  ): { result: StateTransitionResult; adapter: CertificationStateMachineAdapterSnapshot } {
+
+    const result = this.transition(ctx);
+
+    return {
+      result,
+      adapter: {
+        version: CERTIFICATION_STATE_MACHINE_ADAPTER_VERSION,
+        source: "external-integration:certification-state-machine",
+        skill_id: ctx.skill_id,
+        current_state: ctx.current_state,
+        target_state: ctx.target_state,
+        allowed: result.allowed,
+        new_state: result.new_state,
+        reason: result.reason,
+        manual_override: ctx.manual_override === true
+      }
     };
   }
 

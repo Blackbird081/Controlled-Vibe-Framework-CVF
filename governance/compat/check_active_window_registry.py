@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
-import fnmatch
 import json
 import re
 import sys
@@ -33,10 +32,10 @@ HOOK_CHAIN_PATH = REPO_ROOT / "governance" / "compat" / "run_local_governance_ho
 WORKFLOW_PATH = REPO_ROOT / ".github" / "workflows" / "documentation-testing.yml"
 WINDOW_CLASSIFICATION_PATH = REPO_ROOT / "docs" / "reference" / "CVF_ACTIVE_WINDOW_CLASSIFICATION.md"
 ROTATION_GUARD_DIR = REPO_ROOT / "governance" / "toolkit" / "05_OPERATION"
-PUBLIC_SURFACE_MANIFEST_PATH = REPO_ROOT / "governance" / "public-surface-manifest.json"
 
 ALLOWED_PROTECTION_MODES = {"PERMANENT_ACTIVE_WINDOW"}
 ALLOWED_STATUSES = {"ACTIVE", "SUPERSEDED", "RETIRED"}
+SHARED_ROTATION_GUARD_WINDOW_CLASSES = {"BINDING_REFERENCE_ACTIVE_WINDOW"}
 ROTATION_GUARD_GLOB = "CVF_*ROTATION_GUARD.md"
 ACTIVE_WINDOW_TRIGGER_MARKERS = (
     "canonical entrypoint",
@@ -57,25 +56,6 @@ def _read(path: Path) -> str:
 
 def _read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _load_public_private_blockers() -> tuple[list[str], set[str]]:
-    if not PUBLIC_SURFACE_MANIFEST_PATH.exists():
-        return [], set()
-    try:
-        manifest = _read_json(PUBLIC_SURFACE_MANIFEST_PATH)
-    except json.JSONDecodeError:
-        return [], set()
-    blockers = manifest.get("classes", {}).get("PRIVATE_PROVENANCE_BLOCKED", [])
-    allowlist = {item.get("path", "") for item in manifest.get("allowlist", []) if isinstance(item, dict)}
-    return [item for item in blockers if isinstance(item, str)], {item for item in allowlist if item}
-
-
-def _is_private_provenance_blocked_public_path(rel_path: str) -> bool:
-    blockers, allowlist = _load_public_private_blockers()
-    if rel_path in allowlist:
-        return False
-    return any(fnmatch.fnmatch(rel_path, pattern) or fnmatch.fnmatch(rel_path, pattern.rstrip("/**")) for pattern in blockers)
 
 
 def _extract_active_path_from_rotation_guard(guard_path: Path) -> str | None:
@@ -236,6 +216,7 @@ def build_report() -> dict[str, Any]:
         active_path = entry["activePath"]
         archive_pattern = entry["archivePattern"]
         rotation_guard = entry["rotationGuard"]
+        shared_rotation_guard_allowed = window_class in SHARED_ROTATION_GUARD_WINDOW_CLASSES
 
         if window_id in window_ids:
             violations.append(
@@ -257,7 +238,7 @@ def build_report() -> dict[str, Any]:
             )
         active_paths.add(active_path)
 
-        if rotation_guard in rotation_guards:
+        if not shared_rotation_guard_allowed and rotation_guard in rotation_guards:
             violations.append(
                 {
                     "type": "duplicate_rotation_guard",
@@ -265,8 +246,9 @@ def build_report() -> dict[str, Any]:
                     "message": f"Multiple active windows point to the same rotation guard `{rotation_guard}`.",
                 }
             )
-        rotation_guards.add(rotation_guard)
-        window_map_by_guard[rotation_guard] = entry
+        if not shared_rotation_guard_allowed:
+            rotation_guards.add(rotation_guard)
+            window_map_by_guard[rotation_guard] = entry
 
         if window_class not in class_ids:
             violations.append(
@@ -297,8 +279,6 @@ def build_report() -> dict[str, Any]:
 
         for ref in (entry["activePath"], entry["archiveDir"], entry["rotationGuard"], entry["rotationCheck"], entry["rotationScript"]):
             if not (REPO_ROOT / ref).exists():
-                if ref == entry["activePath"] and _is_private_provenance_blocked_public_path(ref):
-                    continue
                 violations.append(
                     {
                         "type": "missing_referenced_path",

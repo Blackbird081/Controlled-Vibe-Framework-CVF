@@ -1,0 +1,29 @@
+{
+  "stableId": "cvf.asc.plane.runtime_to_enforcement.v1",
+  "entityType": "PLANE",
+  "name": "Runtime To Enforcement",
+  "authorityClass": "ACCEPTED_REVIEW_EVIDENCE",
+  "maturity": "ACTIVE",
+  "ownerPaths": [
+    "governance/compat/",
+    "scripts/run_cvf_cross_extension_conformance.py"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+      "lineOrSection": "lanes[2]",
+      "evidenceRole": "reviewer-accepted MSEA-R90 Audit A lane verdict"
+    }
+  ],
+  "claimBoundary": "Catalog pointer to the R91-owned Runtime To Enforcement lane verdict. Nine deep-chain cross-family checkers (CF-076..CF-084) and their registry-driven CI invocation. Does not re-derive or upgrade the R91 finding.",
+  "freshnessInputs": [
+    "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
+    "docs/reference/system_chain/README.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  }
+}

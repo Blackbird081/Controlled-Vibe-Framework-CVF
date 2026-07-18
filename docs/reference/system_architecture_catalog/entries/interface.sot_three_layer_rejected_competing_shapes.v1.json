@@ -1,0 +1,28 @@
+{
+  "stableId": "cvf.asc.interface.sot_three_layer_rejected_competing_shapes.v1",
+  "entityType": "INTERFACE",
+  "name": "SOT Three-Layer Rejected Competing Shapes (Exclusion Record)",
+  "interfaceKind": "CONTRACT",
+  "authorityClass": "ACCEPTED_REVIEW_EVIDENCE",
+  "maturity": "LEGACY_REFERENCE",
+  "ownerPaths": [
+    "docs/reviews/CVF_SOT3_T2_CONTRACT_SOURCE_RECONCILIATION_2026-07-12.md"
+  ],
+  "citations": [
+    {
+      "path": "docs/reviews/CVF_SOT3_T2_CONTRACT_SOURCE_RECONCILIATION_2026-07-12.md",
+      "lineOrSection": "Compatibility/Exclusion Decision Summary",
+      "evidenceRole": "REJECT_DIRECT_IMPORT ledger for five retained competing shapes"
+    }
+  ],
+  "claimBoundary": "REJECTED_COMPETING_SHAPE. Records five retained-corpus shapes reviewed and excluded from direct import into the accepted SOT3 contract chain: Flow-embedded camelCase RefineryPacket (packetId, READY_FOR_VERIFICATION), attach-source.ts SourceAttachment/IntakeRecord, the open truth.packet.schema.json shape (additionalProperties: true), publish-gate.ts PublishGateInput.truthKernelAccepted boolean, and source-score.ts updateSourceScore() direct mutation. This entry is an exclusion record only; it does not import, implement, or grant runtime owner status to any of the five shapes.",
+  "freshnessInputs": [
+    "docs/reviews/CVF_SOT3_T2_CONTRACT_SOURCE_RECONCILIATION_2026-07-12.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-12",
+    "acceptedArtifact": "docs/reviews/CVF_SOT3_T2_COMPLETION_REVIEW_2026-07-12.md"
+  },
+  "boundaryCaveat": "Does not claim any of the five rejected shapes is a CVF-owned or CVF-implemented capability; this entry exists solely to make the exclusion decision discoverable without re-scanning the retained corpus.",
+  "priorDisposition": ""
+}

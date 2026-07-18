@@ -1,0 +1,20 @@
+{
+  "workflowId": "workflow.contract_review.v1",
+  "outcomeKey": "contract_review",
+  "packId": "contract_review",
+  "inputKeys": [
+    "contract_text",
+    "review_goal",
+    "jurisdiction_context"
+  ],
+  "outputSections": [
+    "Clause summary",
+    "Risk flags",
+    "Questions",
+    "Escalation note"
+  ],
+  "policyRefs": [
+    "CVF_CAPABILITY_INTAKE_PIPELINE_GUARD",
+    "CVF_F1_DIMINISHING_RETURNS_STOP_RULE"
+  ]
+}

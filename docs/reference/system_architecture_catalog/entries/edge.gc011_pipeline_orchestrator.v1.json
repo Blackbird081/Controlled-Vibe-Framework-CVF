@@ -1,0 +1,25 @@
+{
+  "stableId": "cvf.asc.edge.gc011_pipeline_orchestrator.v1",
+  "entityType": "EDGE",
+  "sourceId": "cvf.asc.module.guard_contract_runtime.v1",
+  "targetId": "cvf.asc.plane.contract_to_runtime.v1",
+  "edgeProofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+  "evidenceRecency": "HISTORICAL_TRACE",
+  "operatorVisibility": "CI_ONLY",
+  "citations": [
+    {
+      "path": "EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts",
+      "lineOrSection": "line 132 real production caller",
+      "evidenceRole": "R90 Audit A Lane 2 sampled caller evidence"
+    }
+  ],
+  "claimBoundary": "GC-011 Pipeline Orchestrator Caller: reused verbatim from R90 Audit A Lane 2 sampled finding (3-of-50 sample). Marked sampledOnly; must not be cited as proof for the full GC-001..GC-050 matrix.",
+  "freshnessInputs": [
+    "EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  },
+  "sampledOnly": true
+}

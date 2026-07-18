@@ -1,0 +1,10 @@
+{
+  "id": "landing_page_builder",
+  "name": "Landing Page Builder",
+  "domain": "Marketing",
+  "version": "1.0.0",
+  "sourceSkillRef": "landing_page_builder.skill.md",
+  "certificationDate": "2026-05-22",
+  "outcomeKey": "landing_page_builder",
+  "description": "Create governed landing-page copy and structure without publishing or deploying."
+}

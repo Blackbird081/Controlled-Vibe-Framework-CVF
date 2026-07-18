@@ -1,0 +1,49 @@
+{
+  "stableId": "cvf.asc.gap.sot3_independent_refinery_owner_unresolved.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+  "targetPlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+  "sourceOwner": "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md",
+  "targetOwner": "EXTENSIONS/CVF_REFINERY/",
+  "missingEdge": "The accepted SOT three-layer contract chain names an independent CVF Refinery layer (SourceEnvelope/RefineryPacket producer). SOT3-T3 built this as a deterministic local package (`RefineryEngine.run`, `REQUIRED_STAGE_CHAIN`); SOT3-T6 proved it executes as a real dependency inside the three-layer vertical slice.",
+  "currentStatus": "ACTIVE_OWNER_CREATED_WITH_BOUNDARY",
+  "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+  "citations": [
+    {
+      "path": "docs/reviews/CVF_SOT3_T1_OWNER_NOVELTY_MAP_2026-07-12.md",
+      "lineOrSection": "CAP-02/CAP-03 Refinery Core",
+      "evidenceRole": "reviewer-accepted NEW_OWNER_CANDIDATE disposition (superseded by T3/T6 owner creation)"
+    },
+    {
+      "path": "docs/reviews/CVF_SOT3_T3_COMPLETION_REVIEW_2026-07-12.md",
+      "lineOrSection": "Closure Checklist",
+      "evidenceRole": "reviewer acceptance of the Refinery Core package as deterministic runtime owner"
+    },
+    {
+      "path": "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md",
+      "lineOrSection": "Dependency-Closure Matrix, row `real three-layer instances`",
+      "evidenceRole": "reviewer acceptance that `RefineryEngine.run` executes as a real dependency, not a mock, inside the accepted vertical slice"
+    }
+  ],
+  "impact": "Was: blocked any as-built claim that CVF has an independent Refinery layer. Now: the layer has a private-provenance runtime owner; remaining impact is limited to activation, adapter, provider/live, and public-sync claims, none of which this GAP closure asserts.",
+  "closeCondition": {
+    "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+    "conditionText": "SATISFIED: `docs/reviews/CVF_SOT3_T3_COMPLETION_REVIEW_2026-07-12.md` accepts the Refinery Core package as owner; `docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md` accepts real-instance execution."
+  },
+  "reopenCondition": {
+    "conditionKind": "OPERATOR_DECISION_RECORDED",
+    "conditionText": "Reopen only if a future review finds the `EXTENSIONS/CVF_REFINERY/` owner path removed, superseded, or materially non-functional, or if an operator authorizes package activation/adapter/provider work that changes this GAP's boundary."
+  },
+  "actionOwner": "SOT3-T7 semantic value audit and closeout",
+  "freshnessInputs": [
+    "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md",
+    "docs/reviews/CVF_SOT3_T3_COMPLETION_REVIEW_2026-07-12.md",
+    "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-13",
+    "acceptedArtifact": "docs/reviews/CVF_SOT3_T7_WORKER_RETURN_2026-07-13.md"
+  },
+  "boundaryCaveat": "Does not claim package activation, an execution adapter, provider/live proof, public-sync readiness, or production readiness. Does not claim the Refinery-to-Kernel packet-binding hash is an owner-level shared contract (see the separately tracked packet-binding-hash GAP disposition). Private-provenance implementation only.",
+  "priorDisposition": "SOURCE_OWNER_UNRESOLVED_WITH_SEARCH_EVIDENCE"
+}

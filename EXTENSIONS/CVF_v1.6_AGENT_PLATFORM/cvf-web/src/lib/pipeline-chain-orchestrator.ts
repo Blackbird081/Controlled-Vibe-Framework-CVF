@@ -242,6 +242,8 @@ export function buildPipelineStageResult(params: {
 // --- Helper: create empty pipeline state ---
 
 export function createPipelineState(operatorPrompt: string): PipelineChainState {
+  void operatorPrompt;
+
   return {
     currentStage: 'intake_gate',
     running: true,
@@ -349,6 +351,8 @@ export function handleWorkerTimeout(
   state: PipelineChainState,
   timeoutMs: number = WORKER_TIMEOUT_DEFAULT_MS,
 ): WorkerTimeoutResult {
+  void timeoutMs;
+
   const retryCount = (state.workerRetryCount || 0) + 1;
   const canRetry = retryCount <= WORKER_TIMEOUT_MAX_RETRIES;
 

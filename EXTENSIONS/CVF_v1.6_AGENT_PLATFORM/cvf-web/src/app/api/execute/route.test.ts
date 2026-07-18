@@ -2,25 +2,26 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+
 const executeAIMock = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
 const appendAuditEventMock = vi.hoisted(() => vi.fn());
 const appendCostEventMock = vi.hoisted(() => vi.fn());
+
 vi.mock('@/lib/ai', () => ({
     executeAI: executeAIMock,
     CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
+
 vi.mock('@/lib/enforcement', () => ({
     evaluateEnforcement: evaluateEnforcementMock,
 }));
+
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
-    withSessionAuditPayload: (
-        session: { impersonation?: { realActorId: string, sessionId: string, impersonatedUserId: string } } | null | undefined,
-        payload?: Record<string, unknown>,
-    ) => {
+    withSessionAuditPayload: (session: { impersonation?: { realActorId: string; sessionId: string; impersonatedUserId: string } } | null | undefined, payload?: Record<string, unknown>) => {
         const nextPayload = { ...(payload ?? {}) };
         if (session?.impersonation) {
             nextPayload.impersonatedBy = session.impersonation.realActorId;
@@ -31,10 +32,12 @@ vi.mock('@/lib/middleware-auth', () => ({
         return Object.keys(nextPayload).length > 0 ? nextPayload : undefined;
     },
 }));
+
 vi.mock('@/lib/quota-guard', () => ({
     checkTeamQuota: checkTeamQuotaMock,
     hasSoftCapAuditEvent: vi.fn().mockResolvedValue(false),
 }));
+
 vi.mock('@/lib/control-plane-events', async () => {
     const actual = await vi.importActual<typeof import('@/lib/control-plane-events')>('@/lib/control-plane-events');
     return {
@@ -43,13 +46,16 @@ vi.mock('@/lib/control-plane-events', async () => {
         appendCostEvent: appendCostEventMock,
     };
 });
+
 import { POST } from './route';
 import { hasValidationRetryBudget, resolveExecutionMaxTokens } from '@/lib/execute-route-budget';
 import { getApprovalStore } from '../approvals/store';
+
 describe('/api/execute', () => {
     const originalEnv = { ...process.env };
     const validOutput = '## Governed Response\n\nThis response provides a structured recommendation with enough detail to satisfy output validation requirements.\n\n1. Review the request context carefully.\n2. Apply the governed execution plan.\n3. Return a concise, safe outcome for the operator.';
     let tempDir = '';
+
     beforeEach(async () => {
         tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-execute-route-'));
         executeAIMock.mockReset();
@@ -89,17 +95,20 @@ describe('/api/execute', () => {
             expiresAt: Date.now() + 1000 * 60 * 60,
         });
     });
+
     afterEach(async () => {
         process.env = { ...originalEnv };
         if (tempDir) {
             await rm(tempDir, { recursive: true, force: true });
         }
     });
+
     it('returns 400 when required fields are missing', async () => {
         const req = new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({ templateName: 'T', inputs: {} }),
         });
+
         const res = await POST(req as never);
         const data = await res.json();
         expect(res.status).toBe(400);
@@ -551,16 +560,7 @@ describe('/api/execute', () => {
         const res = await POST(req as never);
         const data = await res.json();
         expect(res.status).toBe(200);
-        expect(data.success).toBe(true);
-        expect(data.specFirstMediation).toMatchObject({
-            contractVersion: 'cvf.specFirstMediation.l1.v1',
-            entryMode: 'template_first',
-            workingLanguage: 'en',
-            originalPromptPreserved: true,
-            advisoryOutputIsSourceOnly: true,
-            rawTechnicalEvidenceAvailable: true,
-            implementationAuthorization: 'route_governance_required',
-        });
+        expect(data.success).toBe(true); expect(data.specFirstMediation).toMatchObject({ contractVersion: 'cvf.specFirstMediation.l1.v1', entryMode: 'template_first', workingLanguage: 'en', originalPromptPreserved: true, advisoryOutputIsSourceOnly: true, rawTechnicalEvidenceAvailable: true, implementationAuthorization: 'route_governance_required' });
         expect(executeAIMock).toHaveBeenCalledWith('claude', 'claude-key', expect.any(String), {
             model: undefined,
         });

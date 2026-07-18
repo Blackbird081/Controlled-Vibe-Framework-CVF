@@ -24,6 +24,20 @@ export interface RiskScoringResult {
 
 }
 
+export const EXTERNAL_RISK_SCORING_HOOK_ADAPTER_VERSION = "phase2b-external-risk-scoring-hook-adapter-1";
+
+export interface RiskScoringHookAdapterSnapshot {
+
+  version: typeof EXTERNAL_RISK_SCORING_HOOK_ADAPTER_VERSION;
+
+  source: "external-integration:risk-scoring-hook";
+
+  context: RiskScoringContext;
+
+  result: RiskScoringResult;
+
+}
+
 export class RiskScoringHook {
 
   static evaluate(ctx: RiskScoringContext): RiskScoringResult {
@@ -48,6 +62,16 @@ export class RiskScoringHook {
     return {
       risk_score: score,
       risk_level: level
+    };
+  }
+
+  static evaluateWithAdapter(ctx: RiskScoringContext): RiskScoringHookAdapterSnapshot {
+
+    return {
+      version: EXTERNAL_RISK_SCORING_HOOK_ADAPTER_VERSION,
+      source: "external-integration:risk-scoring-hook",
+      context: ctx,
+      result: this.evaluate(ctx)
     };
   }
 

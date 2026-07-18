@@ -1,0 +1,22 @@
+{
+  "workflowId": "workflow.app_requirements_spec.v1",
+  "outcomeKey": "app_requirements_spec",
+  "packId": "app_requirements_spec",
+  "inputKeys": [
+    "app_goal",
+    "users",
+    "core_workflows",
+    "constraints",
+    "success_criteria"
+  ],
+  "outputSections": [
+    "Product scope",
+    "User workflows",
+    "Functional requirements",
+    "Acceptance criteria"
+  ],
+  "policyRefs": [
+    "CVF_CAPABILITY_INTAKE_PIPELINE_GUARD",
+    "CVF_F1_DIMINISHING_RETURNS_STOP_RULE"
+  ]
+}

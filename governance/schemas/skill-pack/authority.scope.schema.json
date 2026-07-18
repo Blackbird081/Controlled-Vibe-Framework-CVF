@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cvf.local/schemas/skill-pack/authority.scope.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "allowedRoles",
+    "allowedPhases",
+    "authorityLevel",
+    "approvalRequiredFor"
+  ],
+  "properties": {
+    "allowedRoles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "allowedPhases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "authorityLevel": {
+      "enum": [
+        "informational",
+        "tactical",
+        "operational",
+        "strategic"
+      ]
+    },
+    "approvalRequiredFor": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

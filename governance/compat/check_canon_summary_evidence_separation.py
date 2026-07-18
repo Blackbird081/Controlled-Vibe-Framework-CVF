@@ -14,9 +14,9 @@ POLICY_PATH = "governance/toolkit/05_OPERATION/CVF_CANON_SUMMARY_EVIDENCE_SEPARA
 SUMMARY_SURFACES = [
     "docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md",
     "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
-    "README.md",
+    "CVF_SESSION_MEMORY.md",
     "docs/INDEX.md",
-    "docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md",
+    "docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md",
 ]
 FORBIDDEN_TOKENS = [
     "measurementId",

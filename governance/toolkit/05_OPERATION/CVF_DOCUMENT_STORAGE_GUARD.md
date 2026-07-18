@@ -34,10 +34,10 @@ This applies equally to:
 | `docs/reference/` | authoritative long-lived reference docs |
 | `docs/assessments/` | assessments, audits, verdict-driven evaluations |
 | `docs/audits/` | specialized audit packets for structural changes, execution preflight, or evidence-first merge reviews |
-| `docs/evidence/` | curated public evidence summaries and public-safe evidence pointers |
 | `docs/baselines/` | baseline snapshots and comparison anchors |
 | `docs/roadmaps/` | plans, remediation, rollout, upgrade sequencing |
 | `docs/reviews/` | review archives by scope or module |
+| `docs/work_orders/` | agent-facing execution orders issued after final roadmaps or operator lane decisions; tactical worker instructions with scope, ownership, evidence, review gate, and stop conditions |
 | `docs/logs/` | rotated log archives and long-lived operational log windows |
 | `docs/concepts/` | conceptual explanations |
 | `docs/guides/` | role and team guides |
@@ -53,6 +53,7 @@ Default relationship:
 
 - `docs/assessments/`, `docs/audits/`, `docs/reviews/` -> `FULL_RECORD`
 - `docs/baselines/`, `docs/roadmaps/`, `docs/logs/` -> `SUMMARY_RECORD`
+- `docs/work_orders/` -> `POINTER_RECORD`
 - `docs/reference/`, `docs/INDEX.md`, `docs/reference/README.md` -> `POINTER_RECORD`
 
 ### Root-Level Rule
@@ -62,6 +63,7 @@ Approved root-level files in `docs/` are currently:
 - `BUG_HISTORY.md`
 - `CHEAT_SHEET.md`
 - `CVF_ARCHITECTURE_DECISIONS.md`
+- `CVF_ARCHITECTURE_DECISIONS_ARCHIVE_ADR001-010.md`
 - `CVF_CORE_KNOWLEDGE_BASE.md`
 - `CVF_INCREMENTAL_TEST_LOG.md`
 - `GET_STARTED.md`

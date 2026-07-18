@@ -1,0 +1,108 @@
+{
+  "registryOrder": 3,
+  "skillId": "cvf-governance-external-absorption",
+  "name": "CVF Governance External Absorption",
+  "version": "0.1.0",
+  "owner": "CVF external absorption governance surface",
+  "status": "CANDIDATE",
+  "canonicalRoot": "docs/reference/agent_system_skills/registry/entries/cvf-governance-external-absorption.json",
+  "originLane": "AGSK-T5",
+  "sourceArtifacts": [
+    "docs/reviews/CVF_AGSK_ABSORPTION_PACK_REABSORPTION_REVIEW_2026-06-29.md",
+    "docs/roadmaps/CVF_AGSK_PACKAGE_CANDIDATE_TRIAGE_ROADMAP_2026-06-29.md",
+    "docs/reference/external_agent_review/CVF_EXTERNAL_ABSORPTION_CORE_STANDARD.md",
+    "docs/reference/external_agent_review/CVF_EXTERNAL_KNOWLEDGE_ABSORPTION_CHAIN_MAP.md"
+  ],
+  "legacyRows": [],
+  "license": "CVF_PRIVATE_GOVERNED",
+  "reviewArtifacts": [
+    "docs/reviews/CVF_AGSK_T4_ASSF_RISK_TRIGGERS_FIELD_PATCH_WORKER_RETURN_2026-06-29.md",
+    "docs/reviews/CVF_AGSK_T5_FIRST_EXTERNAL_ABSORPTION_PACKAGE_CANDIDATE_WORKER_RETURN_2026-06-29.md"
+  ],
+  "purpose": "Govern the structured intake, review, value-conversion, and owner-surface routing of external agent-skill knowledge into CVF-owned documentation, standards, and registry candidates.",
+  "triggerPatterns": [
+    "external absorption",
+    "knowledge intake",
+    "external agent review",
+    "absorption chain",
+    "external skill absorption",
+    "legacy source absorption",
+    "value conversion"
+  ],
+  "taskClasses": [
+    "external-absorption",
+    "knowledge-intake",
+    "source-review",
+    "package-candidate-triage"
+  ],
+  "useWhen": "A dispatcher, reviewer, or worker must absorb, review, or route external agent-skill knowledge into CVF-governed surfaces; or must trace external source evidence through the intake chain.",
+  "doNotUseWhen": "The content source is already CVF-owned and does not require external intake routing; or a runtime, provider, public-sync, or package activation claim is needed.",
+  "riskTriggers": [
+    "private reference source referenced",
+    "multi-file absorption change",
+    "external authority claim risk",
+    "provider routing or live-proof assertion"
+  ],
+  "roles": [
+    "dispatcher",
+    "reviewer",
+    "worker"
+  ],
+  "phases": [
+    "EXTERNAL_INTAKE",
+    "ABSORPTION_REVIEW",
+    "PACKAGE_CANDIDATE_TRIAGE",
+    "WORKER_EXECUTION",
+    "WORKER_RETURN"
+  ],
+  "surfaces": [
+    "docs/reference/external_agent_review",
+    "docs/reviews",
+    "docs/roadmaps",
+    "docs/reference/agent_system_skills/registry"
+  ],
+  "riskCeiling": "R0",
+  "contextProfile": "external-absorption-governance-only",
+  "inputs": [
+    "external agent-skill package path or repository",
+    "CVF absorption chain map route",
+    "operator-approved intake decision",
+    "active session next-move authorization"
+  ],
+  "outputs": [
+    "source review manifest and processing ledger",
+    "value-conversion matrix",
+    "package-candidate triage roadmap",
+    "ASSF registry candidate entry",
+    "worker return artifact with source verification and gate receipts"
+  ],
+  "executionConstraints": "read-only access to external source material; no runtime calls; no commits; no session-sync edits; no private reference mutation; governed chain-map route must be followed",
+  "acceptanceEvidence": "corpus manifest/ledger reconciliation PASS; value-conversion matrix present; drift checker PASS; worker return fast gate PASS; reviewer-fast gate PASS",
+  "riskProfile": "R0",
+  "authorityCeiling": "read-only authoring of governed documentation and metadata-only ASSF registry candidates under docs/; riskTriggers cannot raise authority above this ceiling",
+  "sideEffects": "creates governed review artifacts under docs/reviews/; creates ASSF registry candidate entry; regenerates metadata-only generated skill index; no runtime mutation",
+  "permissions": "read external source files; create docs/reviews/<review-artifact>.md; create docs/reference/agent_system_skills/registry/entries/<candidate>.json; regenerate docs/reference/agent_system_skills/generated/skill-index.json",
+  "rollback": "delete created review artifacts and registry entry if reviewer rejects; rerun generator to restore index",
+  "safeStop": "mark Status: BLOCKED_WITH_REASON in worker return and stop; do not commit",
+  "candidateState": "CANDIDATE",
+  "approvalState": "AWAITING_REVIEW",
+  "uatState": "NOT_STARTED",
+  "certificationState": "NOT_STARTED",
+  "deprecation": "none",
+  "successor": "none",
+  "retirement": "none",
+  "dependencies": [],
+  "conflicts": [],
+  "compositionOrder": 3,
+  "capabilityBoundary": "no commit, no provider call, no runtime activation, no external-agent CLI/MCP adapter, no session-sync, no private reference mutation",
+  "internalAgentDisposition": "CANDIDATE",
+  "resolverBehavior": "metadata-only; resolver returns identity and selector fields; does not open any SKILL.md or instruction body",
+  "loaderBoundary": "loading this metadata never grants authority to commit, activate, execute, expand external-agent scope, or raise authority above authorityCeiling",
+  "externalCliMcpDisposition": "DEFERRED_WITH_REASON",
+  "adapterContract": "N/A with reason: external CLI/MCP adapter not yet authored; separate ASSF adapter work order required",
+  "adapterEvidence": "N/A with reason: no adapter implemented in AGSK-T5",
+  "externalMutationBoundary": "no external mutation permitted until a separate ASSF adapter work order is accepted",
+  "platformCompatibility": "cross-platform; Python 3.11+",
+  "shellAssumptions": "no shell execution required for metadata-only candidate",
+  "osConstraints": "none"
+}

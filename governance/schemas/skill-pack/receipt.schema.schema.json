@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cvf.local/schemas/skill-pack/receipt.schema.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "receiptVersion",
+    "requiredFields",
+    "decisionValues",
+    "evidenceModeValues"
+  ],
+  "properties": {
+    "receiptVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requiredFields": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "decisionValues": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "evidenceModeValues": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "optionalFields": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

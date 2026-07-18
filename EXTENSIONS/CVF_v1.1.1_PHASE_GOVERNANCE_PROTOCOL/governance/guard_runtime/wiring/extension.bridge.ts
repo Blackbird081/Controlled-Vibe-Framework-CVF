@@ -13,10 +13,14 @@
  */
 
 import type { GuardPipelineResult } from '../guard.runtime.types.js';
+import type { Receipt } from '../../../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract';
+import { createReceiptEnvelope as wrapReceiptEnvelope } from '../../../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract';
 
 // --- Extension Descriptor ---
 
 export type ExtensionStatus = 'ACTIVE' | 'DEGRADED' | 'OFFLINE' | 'NOT_REGISTERED';
+
+export const EXTENSION_BRIDGE_ADAPTER_VERSION = 'phase2b-extension-bridge-adapter-1' as const;
 
 export interface ExtensionDescriptor {
   id: string;
@@ -65,6 +69,19 @@ export interface WorkflowStepReceipt {
   stepId: string;
   details?: Record<string, unknown>;
 }
+
+export interface ExtensionBridgeAdapterSnapshot {
+  version: typeof EXTENSION_BRIDGE_ADAPTER_VERSION;
+  source: 'phase-governance:extension-bridge';
+  extensionCount: number;
+  workflowCount: number;
+  activeExtensionCount: number;
+  degradedExtensionCount: number;
+  offlineExtensionCount: number;
+  workflowStatusCounts: Record<CrossWorkflowStatus, number>;
+}
+
+export type WorkflowStepReceiptEnvelope = Receipt<WorkflowStepReceipt>;
 
 export interface WorkflowStepResult {
   status: Extract<WorkflowStepStatus, 'COMPLETED' | 'FAILED' | 'SKIPPED'>;
@@ -508,6 +525,20 @@ export class ExtensionBridge {
     return this.workflows.size;
   }
 
+  buildAdapterSnapshot(): ExtensionBridgeAdapterSnapshot {
+    return buildExtensionBridgeAdapterSnapshot(this);
+  }
+
+  createWorkflowStepReceiptEnvelope(receipt: WorkflowStepReceipt): WorkflowStepReceiptEnvelope {
+    return wrapReceiptEnvelope({
+      id: `${receipt.workflowId}:${receipt.stepId}:${receipt.type}`,
+      issuedAt: receipt.timestamp,
+      source: `phase-governance:extension-bridge:${receipt.workflowId}:${receipt.stepId}:${receipt.type}`,
+      payload: receipt,
+      integrityHash: `${receipt.workflowId}:${receipt.stepId}:${receipt.type}:${receipt.timestamp}`,
+    });
+  }
+
   private recordExecutionEvent(
     workflow: CrossExtensionWorkflow,
     stepId: string,
@@ -543,4 +574,33 @@ export class ExtensionBridge {
   private getHandlerKey(extensionId: string, action: string): string {
     return `${extensionId}::${action}`;
   }
+}
+
+export function buildExtensionBridgeAdapterSnapshot(
+  bridge: ExtensionBridge,
+): ExtensionBridgeAdapterSnapshot {
+  const extensions = bridge.getAllExtensions();
+  const workflows = bridge.getAllWorkflows();
+  const workflowStatusCounts: Record<CrossWorkflowStatus, number> = {
+    CREATED: 0,
+    RUNNING: 0,
+    COMPLETED: 0,
+    FAILED: 0,
+    ROLLED_BACK: 0,
+  };
+
+  for (const workflow of workflows) {
+    workflowStatusCounts[workflow.status]++;
+  }
+
+  return {
+    version: EXTENSION_BRIDGE_ADAPTER_VERSION,
+    source: 'phase-governance:extension-bridge',
+    extensionCount: extensions.length,
+    workflowCount: workflows.length,
+    activeExtensionCount: extensions.filter((extension) => extension.status === 'ACTIVE').length,
+    degradedExtensionCount: extensions.filter((extension) => extension.status === 'DEGRADED').length,
+    offlineExtensionCount: extensions.filter((extension) => extension.status === 'OFFLINE').length,
+    workflowStatusCounts,
+  };
 }

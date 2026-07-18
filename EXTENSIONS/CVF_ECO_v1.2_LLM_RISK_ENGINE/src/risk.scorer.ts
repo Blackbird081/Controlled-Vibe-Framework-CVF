@@ -5,6 +5,15 @@ import {
   RiskDomain,
 } from "./types";
 
+export const ECO_RISK_SCORER_ADAPTER_VERSION = "phase2b-eco-risk-scorer-adapter-1";
+
+export interface EcoRiskScorerAdapterSnapshot {
+  version: typeof ECO_RISK_SCORER_ADAPTER_VERSION;
+  source: "eco-v1.2:llm-risk-scorer";
+  context: Pick<ActionContext, "domain" | "action" | "targetScope" | "dataClassification">;
+  score: BaseRiskScore;
+}
+
 const DOMAIN_BASE_RISK: Record<RiskDomain, number> = {
   infrastructure: 0.8,
   code_security: 0.75,
@@ -100,6 +109,20 @@ export class RiskScorer {
       domain: context.domain,
       action: context.action,
       factors,
+    };
+  }
+
+  scoreWithAdapter(context: ActionContext): EcoRiskScorerAdapterSnapshot {
+    return {
+      version: ECO_RISK_SCORER_ADAPTER_VERSION,
+      source: "eco-v1.2:llm-risk-scorer",
+      context: {
+        domain: context.domain,
+        action: context.action,
+        targetScope: context.targetScope,
+        dataClassification: context.dataClassification,
+      },
+      score: this.score(context),
     };
   }
 

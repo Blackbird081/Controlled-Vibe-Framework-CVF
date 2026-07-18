@@ -169,10 +169,14 @@ export type {
   ExecutionBridgeReceipt,
   GovernanceLedgerReceipt,
   ControlledMemoryReceipt,
+  ReceiptEnvelopeInput,
+  ReceiptEnvelopeReceiptRecord,
   ReceiptEnvelopeAdapterMeta,
 } from './receipt-envelope.contract';
 
 export {
+  createReceiptEnvelopeReceiptRecord,
+  createReceiptEnvelope,
   RECEIPT_SCHEMA_VERSION_1R,
 } from './receipt-envelope.contract';
 
@@ -217,6 +221,25 @@ export {
   PHASE_2B_WIREUP_VERSION,
   runPhase2BWireupFixture,
 } from './phase2b-wireup.contract';
+
+export type {
+  Phase2BPrimaryRowId,
+  Phase2BAdapterFamily,
+  Phase2BRuntimeEvidenceMode,
+  Phase2BAdapterNode,
+  Phase2BAdapterEdge,
+  Phase2BRuntimeCoherenceGraphInput,
+  Phase2BRuntimeCoherenceGraph,
+  Phase2BRuntimeCoherenceValidation,
+} from './phase2b-runtime-coherence.contract';
+
+export {
+  PHASE_2B_RUNTIME_COHERENCE_SCHEMA_VERSION,
+  PHASE_2B_PRIMARY_ROW_IDS,
+  buildPhase2BRuntimeCoherenceGraph,
+  validatePhase2BRuntimeCoherenceGraph,
+  buildPhase2BAdapterInventoryChecksum,
+} from './phase2b-runtime-coherence.contract';
 
 export type {
   MetricEmissionStatus,

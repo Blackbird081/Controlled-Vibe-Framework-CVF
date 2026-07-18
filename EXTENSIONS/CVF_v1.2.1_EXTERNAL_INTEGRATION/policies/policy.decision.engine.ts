@@ -34,6 +34,21 @@ interface LayerDecision {
   manual_override?: DecisionOutcome;
 }
 
+export const POLICY_DECISION_ENGINE_ADAPTER_VERSION =
+  "phase2b-external-policy-decision-engine-adapter-1";
+
+export interface PolicyDecisionEngineAdapterSnapshot {
+  version: typeof POLICY_DECISION_ENGINE_ADAPTER_VERSION;
+  source: "external-integration:policy-decision-engine";
+  decision: DecisionOutcome;
+  sourceTrust: SourceTrustLevel;
+  riskLevel: RiskLevel;
+  phase: CVFPhase;
+  domain: CVFDomain;
+  validationPassed: boolean;
+  manualOverride: boolean;
+}
+
 export class PolicyDecisionEngine {
 
   static evaluate(ctx: DecisionContext): DecisionOutcome {
@@ -97,6 +112,22 @@ export class PolicyDecisionEngine {
     }
 
     return this.resolve(results, ctx);
+  }
+
+  static evaluateWithAdapter(ctx: DecisionContext): PolicyDecisionEngineAdapterSnapshot {
+    const decision = this.evaluate(ctx);
+
+    return {
+      version: POLICY_DECISION_ENGINE_ADAPTER_VERSION,
+      source: "external-integration:policy-decision-engine",
+      decision,
+      sourceTrust: sourceTrustPolicy[ctx.source].trust_level,
+      riskLevel: ctx.risk_level,
+      phase: ctx.phase,
+      domain: ctx.domain,
+      validationPassed: ctx.validation_passed,
+      manualOverride: ctx.manual_override === true,
+    };
   }
 
   private static resolve(

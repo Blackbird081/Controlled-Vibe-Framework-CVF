@@ -57,6 +57,27 @@ CVF Full = CVF Core + Verification Plugins + Observability.
 
 ---
 
+## SOT3 Bounded Cross-Plane Overlay
+
+The SOT Three-Layer (SOT3) family is not a new frozen L0-L6 doctrine layer.
+It is projected using the existing contract-to-runtime plane vocabulary from
+the as-built system architecture catalog
+(`docs/reference/system_architecture_catalog/README.md`), as a bounded
+overlay across the Layer 0/1.5 module boundary above:
+
+| SOT3 owner | Role | Existing layer this overlays |
+|---|---|---|
+| `EXTENSIONS/CVF_REFINERY/` | deterministic source-bound prepare; no truth authority | Layer 1.5-equivalent contract-to-runtime module, outside the frozen Layer 0 primitives above |
+| `EXTENSIONS/CVF_TRUTH_KERNEL/` | sole decision/receipt/reference authority | same |
+| `EXTENSIONS/CVF_TRUTH_FLOW/` | post-Kernel distribution and lifecycle | same |
+| `EXTENSIONS/CVF_SOT_THREE_LAYER_SLICE/` | vertical-slice composition orchestrator | same |
+
+Each owner is `LOCAL_READY` and accepted-review-evidenced, not a frozen Layer
+0 primitive, not globally activated, and not production-ready. Full contract
+and proof-ladder detail: `docs/reference/sot_three_layer/README.md`.
+
+---
+
 ## CVF Core — Layer 0 Modules
 
 ### Primitive 1: AI Commit (`ai_commit/`)

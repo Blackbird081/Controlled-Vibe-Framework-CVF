@@ -6,7 +6,6 @@ CVF Conformance Trace Rotation Guard
 from __future__ import annotations
 
 import argparse
-import fnmatch
 import json
 import re
 import sys
@@ -18,7 +17,6 @@ ACTIVE_TRACE = REPO_ROOT / "docs" / "reviews" / "cvf_phase_governance" / "CVF_CO
 ARCHIVE_DIR = REPO_ROOT / "docs" / "reviews" / "cvf_phase_governance" / "logs"
 ARCHIVE_PATTERN = re.compile(r"^CVF_CONFORMANCE_TRACE_ARCHIVE_\d{4}_PART_\d{2}\.md$")
 POLICY_PATH = "governance/toolkit/05_OPERATION/CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md"
-PUBLIC_SURFACE_MANIFEST = REPO_ROOT / "governance" / "public-surface-manifest.json"
 MAX_ACTIVE_LINES = 1200
 MAX_ACTIVE_BATCHES = 60
 ARCHIVE_INDEX_MARKER = "## Archive Index"
@@ -41,53 +39,14 @@ def _collect_archives() -> list[Path]:
     )
 
 
-def _rel(path: Path) -> str:
-    return str(path.relative_to(REPO_ROOT)).replace("\\", "/")
-
-
-def _is_private_provenance_blocked_public_path(rel_path: str) -> bool:
-    if not PUBLIC_SURFACE_MANIFEST.exists():
-        return False
-    try:
-        manifest = json.loads(PUBLIC_SURFACE_MANIFEST.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return False
-    allowlist = {item.get("path", "") for item in manifest.get("allowlist", []) if isinstance(item, dict)}
-    if rel_path in allowlist:
-        return False
-    blockers = manifest.get("classes", {}).get("PRIVATE_PROVENANCE_BLOCKED", [])
-    return any(
-        isinstance(pattern, str)
-        and (fnmatch.fnmatch(rel_path, pattern) or fnmatch.fnmatch(rel_path, pattern.rstrip("/**")))
-        for pattern in blockers
-    )
-
-
 def _validate() -> dict[str, object]:
     violations: list[dict[str, str]] = []
-
-    active_trace_path = _rel(ACTIVE_TRACE)
-    archive_dir_path = _rel(ARCHIVE_DIR)
-
-    if not ACTIVE_TRACE.exists() and _is_private_provenance_blocked_public_path(active_trace_path):
-        return {
-            "activeTracePath": active_trace_path,
-            "archiveDir": archive_dir_path,
-            "activeLineCount": 0,
-            "activeBatchCount": 0,
-            "archiveCount": 0,
-            "archiveFiles": [],
-            "publicSyncDisposition": "OMITTED_PRIVATE_PROVENANCE_IN_PUBLIC_SYNC",
-            "violations": [],
-            "violationCount": 0,
-            "compliant": True,
-        }
 
     if not ACTIVE_TRACE.exists():
         violations.append({"type": "missing_active_trace", "message": "Active conformance trace is missing."})
         return {
-            "activeTracePath": active_trace_path,
-            "archiveDir": archive_dir_path,
+            "activeTracePath": str(ACTIVE_TRACE.relative_to(REPO_ROOT)).replace("\\", "/"),
+            "archiveDir": str(ARCHIVE_DIR.relative_to(REPO_ROOT)).replace("\\", "/"),
             "activeLineCount": 0,
             "activeBatchCount": 0,
             "archiveCount": 0,
@@ -138,8 +97,8 @@ def _validate() -> dict[str, object]:
             )
 
     return {
-        "activeTracePath": active_trace_path,
-        "archiveDir": archive_dir_path,
+        "activeTracePath": str(ACTIVE_TRACE.relative_to(REPO_ROOT)).replace("\\", "/"),
+        "archiveDir": str(ARCHIVE_DIR.relative_to(REPO_ROOT)).replace("\\", "/"),
         "activeLineCount": active_line_count,
         "activeBatchCount": active_batch_count,
         "archiveCount": len(archives),

@@ -10,6 +10,9 @@
  */
 
 import type { TraceEntry } from './trace-emitter';
+import type { TraceEntryEnvelope } from './trace-emitter';
+import type { Receipt } from '../contracts/receipt-envelope.contract';
+import { createReceiptEnvelope } from '../contracts/receipt-envelope.contract';
 
 /**
  * Minimal interface for better-sqlite3 to avoid hard dependency in tests.
@@ -28,6 +31,8 @@ export interface DatabaseRow {
   context_json: string;
   result_json: string;
 }
+
+export type AuditDatabaseRowEnvelope = Receipt<DatabaseRow>;
 
 export interface AuditQueryOptions {
   limit?: number;
@@ -122,6 +127,11 @@ export class AuditDatabase {
     });
   }
 
+  /** Insert a canonical trace-entry receipt envelope without changing DB schema. */
+  insertEnvelope(envelope: TraceEntryEnvelope): void {
+    this.insert(envelope.payload);
+  }
+
   /** Fetch audit entries with optional filters. */
   query(options: AuditQueryOptions = {}): DatabaseRow[] {
     this.init();
@@ -207,6 +217,16 @@ export class AuditDatabase {
       this.db = null;
     }
   }
+}
+
+export function wrapAuditDatabaseRow(row: DatabaseRow): AuditDatabaseRowEnvelope {
+  return createReceiptEnvelope({
+    id: row.trace_id,
+    issuedAt: row.timestamp,
+    source: `guard-contract:sqlite-audit:${row.request_id}`,
+    payload: row,
+    integrityHash: row.trace_hash,
+  });
 }
 
 /** Singleton instance for application use. */

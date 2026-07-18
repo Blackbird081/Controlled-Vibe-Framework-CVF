@@ -1,0 +1,364 @@
+{
+  "schemaVersion": "cvf.system_chain_exhaustive_proof_t1_value_selection.v1",
+  "recordId": "SCLP-X-T1-VALUE-SELECTION",
+  "workOrder": "docs/work_orders/CVF_AGENT_WORK_ORDER_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+  "baseline": "docs/baselines/CVF_GC018_SYSTEM_CHAIN_EXHAUSTIVE_E2E_PROOF_T1_VALUE_SELECTION_2026-07-15.md",
+  "executionBaseHead": "c1aaa4112",
+  "generatedDateUtc": "2026-07-15T09:31:23Z",
+  "commitMode": "WORKER_MUST_NOT_COMMIT",
+  "claimBoundary": "This is a repository-evidence RECONCILIATION AND VALUE-SELECTION record over exactly six decision rows drawn from the accepted T0 exhaustive claim inventory. It is NOT a re-derivation of the T0 inventory, NOT universal CVF end-to-end proof, NOT a live/provider/runtime execution record, and does not itself promote, create, or execute any T2-T4 live case. It performs zero live, provider, browser, business-CLI, runtime, or CI-job invocation. Any candidateDecision of SELECT_T2_CANDIDATE is a recommendation only, never an authorization.",
+
+  "acceptedClaimSetRef": {
+    "t0InventoryPath": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+    "t0CompletionPath": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T0_INVENTORY_COMPLETION_2026-07-15.md",
+    "t0CompletionStatus": "CLOSED_PASS_BOUNDED",
+    "t0MaterialCommitCitedByWorkOrder": "e6034224c",
+    "t0WorkerAndClosureBaseRecordedInArtifacts": "671cfe3bf",
+    "t0TotalSourceItems": 99,
+    "t0TotalNormalizedClaims": 99,
+    "t0DispositionDistribution": {
+      "PROVEN": 5,
+      "STATIC_NOT_APPLICABLE": 78,
+      "VALUE_PARKED": 13,
+      "MISSING_PROOF": 3
+    },
+    "t0DistributionSumCheck": "5+78+13+3=99 MATCH",
+    "t0SourceCorpusCounts": {
+      "map": 5,
+      "interlock": 20,
+      "control": 50,
+      "catalog": 24,
+      "total": 99
+    },
+    "t0OwnerGapCandidateCount": 2,
+    "t0ContradictionCount": 1,
+    "t0ContradictionIds": ["CTR-01"]
+  },
+
+  "sourceSnapshot": {
+    "inputs": [
+      {
+        "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_INVENTORY.json",
+        "sha256Claimed": "60f22f9fcf049c22f9cd6feb7ebb8e011023dcf93976744f518e0e5d187d0696",
+        "sha256ClaimedCharLength": 64,
+        "sha256Actual": "60f22f9fcf049c22f9cd6feb7ebb8e011023dcf93976744f518e0e5d187d0696",
+        "sha256ActualCharLength": 64,
+        "matchResult": "MATCH",
+        "note": "The work order flagged the baseline hash string as a possible transcription quirk (appearing to be 65 hex characters). Independent recomputation confirms both the claimed and actual strings are exactly 64 hex characters (standard SHA-256 length) and are character-for-character identical. No drift. The 65-character concern in the work order text did not materialize on direct inspection of this record.",
+        "verificationCommand": "python -c \"import hashlib; print(hashlib.sha256(open(path,'rb').read()).hexdigest())\""
+      },
+      {
+        "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T0_INVENTORY_COMPLETION_2026-07-15.md",
+        "sha256Claimed": "0a56ad1ffd6ab1571911c542731583d90596ccef4bab6b315176d81105c1dc58",
+        "sha256ClaimedCharLength": 64,
+        "sha256Actual": "0a56ad1ffd6ab1571911c542731583d90596ccef4bab6b315176d81105c1dc58",
+        "sha256ActualCharLength": 64,
+        "matchResult": "MATCH",
+        "note": "Same independent-verification result as the inventory JSON: claimed and actual are both exactly 64 hex characters and identical. No drift.",
+        "verificationCommand": "python -c \"import hashlib; print(hashlib.sha256(open(path,'rb').read()).hexdigest())\""
+      }
+    ],
+    "hashDriftStopCondition": "NOT_TRIGGERED",
+    "distributionRecheck": "5 PROVEN + 78 STATIC_NOT_APPLICABLE + 13 VALUE_PARKED + 3 MISSING_PROOF = 99; matches T0 completion and roadmap epistemic evidence comparison exactly"
+  },
+
+  "currentCallerFreshnessVerification": {
+    "searchesRun": [
+      {
+        "command": "rg -n 'new\\s+MandatoryGateway|createMandatoryGateway\\s*\\(' EXTENSIONS --glob '!**/*.test.ts' --glob '!**/*.spec.ts' --glob '!**/node_modules/**' --glob '!**/.next/**'",
+        "matches": [
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:219:export function createMandatoryGateway(",
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:223:  return new MandatoryGateway(engine, config);"
+        ],
+        "matchInterpretation": "Both matches are inside the defining module's own factory function (createMandatoryGateway at line 219, constructing MandatoryGateway at line 223). No external non-test caller found."
+      },
+      {
+        "command": "rg -n 'new\\s+AgentExecutionRuntime\\s*\\(' EXTENSIONS --glob '!**/*.test.ts' --glob '!**/*.spec.ts' --glob '!**/node_modules/**' --glob '!**/.next/**'",
+        "matches": [],
+        "matchInterpretation": "Zero matches. No construction site (test or non-test) found for AgentExecutionRuntime outside its own class definition."
+      },
+      {
+        "command": "rg -n 'MandatoryGateway' EXTENSIONS --glob '!**/*.test.ts' --glob '!**/*.spec.ts' --glob '!**/node_modules/**' --glob '!**/.next/**'",
+        "purpose": "general collision scan per baseline Negative Search And Collision Discipline",
+        "matches": [
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:66:export class MandatoryGateway {",
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:185:  assertAllowed(request: Parameters<MandatoryGateway['check']>[0]): void {",
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:219:export function createMandatoryGateway(",
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:222:): MandatoryGateway {",
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts:223:  return new MandatoryGateway(engine, config);"
+        ],
+        "matchInterpretation": "All five matches are definition, type-reference, or self-construction inside the defining module. No same-token production caller found outside it."
+      },
+      {
+        "command": "rg -n 'AgentExecutionRuntime' EXTENSIONS --glob '!**/*.test.ts' --glob '!**/*.spec.ts' --glob '!**/node_modules/**' --glob '!**/.next/**'",
+        "purpose": "general collision scan per baseline Negative Search And Collision Discipline",
+        "matches": [
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/gemini-provider.ts:5: * Implements the `ExecutionProvider` interface from AgentExecutionRuntime.",
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/providers/alibaba-dashscope-provider.ts:5: * Implements the `ExecutionProvider` interface from AgentExecutionRuntime.",
+          "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts:130:export class AgentExecutionRuntime {"
+        ],
+        "matchInterpretation": "Two comment-only references to the ExecutionProvider interface (not a construction call) in provider source files, plus the class definition itself. No production caller found."
+      }
+    ],
+    "newNonTestCallerFound": false,
+    "contradictsT0": false,
+    "stopConditionTriggered": false,
+    "sourceVerification": {
+      "MandatoryGateway_class_line": 66,
+      "createMandatoryGateway_factory_line": 219,
+      "AgentExecutionRuntime_class_line": 130,
+      "workOrderCitedAgentExecutionRuntimeLine": 129,
+      "lineCiteNote": "Work order cited line 129 for AgentExecutionRuntime; direct read confirms the export class declaration is on line 130 (line 129 is the closing brace of a preceding JSDoc comment). This one-line discrepancy is a citation artifact, not a source-fact discrepancy, and does not change any claim disposition."
+    }
+  },
+
+  "decisionLedger": [
+    {
+      "decisionRecordId": "T1-DEC-01",
+      "decisionClass": "MISSING_PROOF_CLAIM",
+      "t0ClaimKey": "MATRIX_ROW::GC-009",
+      "t0SourceItemIds": ["MATRIX-09-GC-009"],
+      "relatedClaimKeys": ["CATALOG_ENTITY::cvf.asc.edge.gc009_gateway_no_caller.v1"],
+      "relatedClaimRelationship": "SAME_UNDERLYING_GAP_DIFFERENT_OWNER_RECORD: the catalog EDGE entity cvf.asc.edge.gc009_gateway_no_caller.v1 cites the identical no-non-test-caller finding for MandatoryGateway (reused verbatim from an R90 sampled audit finding). Both rows are retained as distinct T0 claim keys with their own provenance per the T0 conservative no-merge rule, but they are treated here as one underlying decision unit (grouped, not independently ranked) so this ledger does not silently count the same missing-proof fact as two separate runtime branches.",
+      "rank": 1,
+      "decisionDimensions": {
+        "decisionValue": {
+          "score": "HIGH",
+          "rationale": "GC-009 is a GATEWAY_PRECONDITION control: its stated intended rule is that every execution channel must pass through guard evaluation first. If a real non-test caller is confirmed, that directly changes the admission/authority dimension named in the live-proof standard's Value And Branch Stop Rule (runtime invocation reachability). If no caller is ever confirmed, it changes whether GC-009 should be downgraded from an enforcement claim to a documented-gap/GAP-registry entry. Either outcome changes a governance-control disposition, which is the highest-value class of missing-proof claim in this six-row ledger."
+        },
+        "proofCost": {
+          "score": "LOW",
+          "rationale": "The next proof step is a source-verification search (already partially performed by this T1 packet and previously by the T0/baseline dispatcher) for a non-test, non-type-only caller of MandatoryGateway or createMandatoryGateway. This is a read-only repository search, not a live/provider call, and both this T1 packet and the T1 baseline's dispatch-time search already found zero external callers, so the smallest next step (confirm-negative or find-positive) is inexpensive to execute in a future T2 packet."
+        },
+        "novelty": {
+          "score": "LOW",
+          "rationale": "This exact gap (GC-009 implemented-but-uninvoked) has already been recorded three times: in the Governance Control Matrix row itself, in the T0 exhaustive inventory, and in the R90 Audit A Lane 2 catalog sampled finding referenced by the related catalog entity. It is a well-documented, already-triangulated gap, not a new discovery. Running a proof would confirm or refute a known, already-visible gap rather than surface new information."
+        },
+        "risk": {
+          "score": "MEDIUM",
+          "rationale": "GC-009 backs a GATEWAY_PRECONDITION enforcement class described as the mandatory single entry point for all channels. If it genuinely has zero production callers, CVF's actual runtime does not currently pass every execution channel through this guard, which is a governance-integrity risk if ever cited as enforced. The risk is not CRITICAL because the T0/T1 evidence already discloses this gap transparently (it is not a silent or hidden failure) and no downstream artifact currently claims GC-009 is invocation-proven; UC-03 explicitly excludes promoting GC-009 alongside the GC-011 bounded result."
+        }
+      },
+      "candidateDecision": "SELECT_T2_CANDIDATE",
+      "candidateDecisionRationale": "Highest combined decision value (governance-control admission/authority dimension) and lowest proof cost (read-only source search, already partially executed) of the three missing claims. This is the strongest candidate for a future bounded T2 source-verification-only step; it does not itself authorize execution.",
+      "recommendedNextAction": "Smallest next step: repeat and, if needed, broaden the non-test-caller source search for MandatoryGateway/createMandatoryGateway across the full repository (not just EXTENSIONS/) in a future T2 packet, with an explicit prerequisite that T2 remains READ-ONLY source verification (no runtime invocation) unless a real caller is found, in which case a separate governed decision would be needed before any live invocation.",
+      "reopenCondition": "N/A - this row is SELECT_T2_CANDIDATE, not VALUE_PARKED; no reopen condition required.",
+      "terminalStatus": "DECIDED"
+    },
+    {
+      "decisionRecordId": "T1-DEC-02",
+      "decisionClass": "MISSING_PROOF_CLAIM",
+      "t0ClaimKey": "MATRIX_ROW::GC-010",
+      "t0SourceItemIds": ["MATRIX-10-GC-010"],
+      "relatedClaimKeys": [],
+      "relatedClaimRelationship": "NO_RELATED_CATALOG_ENTITY_IN_THIS_CLAIM_SET: unlike GC-009, none of the three MISSING_PROOF claims or the two owner/GAP candidates cite a distinct catalog EDGE entity specifically for GC-010's AgentExecutionRuntime gap. GC-010 is grouped with GC-009 only at the OWNER-GAP-01 owner/GAP-candidate level (both are cited together in that proposal), not at the individual-claim level, so it is ranked here as its own standalone missing-proof row.",
+      "rank": 2,
+      "decisionDimensions": {
+        "decisionValue": {
+          "score": "HIGH",
+          "rationale": "GC-010 is also a GATEWAY_PRECONDITION control (AgentExecutionRuntime, intended rule: governed helper runtime must stop on approval-required escalations). Like GC-009, confirming or refuting a real caller changes the runtime invocation reachability and authority dimensions from the live-proof standard's stop rule. It is ranked second rather than first only because its own T0 evidence notes two provider source files import its ExecutionProvider type (a slightly closer-to-real-usage signal than GC-009 has), meaning the decision-changing question is marginally narrower (interface usage exists; construction does not) rather than a completely blank slate."
+        },
+        "proofCost": {
+          "score": "LOW",
+          "rationale": "Same class of cost as GC-009: a read-only repository search for a non-test AgentExecutionRuntime construction site. This T1 packet's own freshness search already executed this exact search and found zero matches, so a future T2 step would mainly be re-verification plus possibly widening the search root, which remains inexpensive."
+        },
+        "novelty": {
+          "score": "LOW",
+          "rationale": "Same as GC-009: already documented in the Governance Control Matrix as IMPLEMENTED_NOT_INVOCATION_PROVEN, and already excluded from promotion in UC-03's nextAction ('do not promote GC-009 or GC-010'). No new information would be surfaced by re-running the same search; the value is in confirming persistence of the gap over time, not discovery."
+        },
+        "risk": {
+          "score": "MEDIUM",
+          "rationale": "AgentExecutionRuntime backs an approval-checkpoint-adjacent stop-on-escalation rule. If genuinely uninvoked, escalation stopping is not currently enforced through this runtime path in production, which is a governance-integrity risk of the same class as GC-009. Not CRITICAL for the same reason: the gap is already transparently disclosed and no other artifact currently relies on GC-010 being invocation-proven."
+        }
+      },
+      "candidateDecision": "SELECT_T2_CANDIDATE",
+      "candidateDecisionRationale": "Same class of high value / low cost as GC-009, ranked second because its evidence trail (two provider files importing its type) is marginally closer to eventual real usage, making it slightly less urgent to re-verify from a completely blank state, but still clearly worth a bounded future source-verification step alongside GC-009 rather than being parked.",
+      "recommendedNextAction": "Smallest next step: in the same future T2 packet as GC-009, repeat and, if needed, broaden the non-test-caller source search for AgentExecutionRuntime construction sites, and separately confirm whether the two provider files that import only its ExecutionProvider type ever reach a production construction path through another intermediate module. Prerequisite: read-only source verification only; any live invocation needs its own governed decision.",
+      "reopenCondition": "N/A - this row is SELECT_T2_CANDIDATE, not VALUE_PARKED; no reopen condition required.",
+      "terminalStatus": "DECIDED"
+    },
+    {
+      "decisionRecordId": "T1-DEC-03",
+      "decisionClass": "MISSING_PROOF_CLAIM",
+      "t0ClaimKey": "CATALOG_ENTITY::cvf.asc.edge.gc009_gateway_no_caller.v1",
+      "t0SourceItemIds": ["CATALOG-08-gc009_gateway_no_caller"],
+      "relatedClaimKeys": ["MATRIX_ROW::GC-009"],
+      "relatedClaimRelationship": "SAME_UNDERLYING_GAP_DIFFERENT_OWNER_RECORD: this catalog EDGE entity is the architecture-catalog record of the identical GC-009 no-caller finding ranked as T1-DEC-01. Its own claimBoundary explicitly states it is a sampled-only (3-of-50 sample) finding reused verbatim from an R90 audit and must not be cited as proof for the full GC-001..GC-050 matrix. It is preserved here as its own T0 claim key (per the T0 conservative no-merge rule and this ledger's requirement not to lose provenance) but is NOT treated as an independent runtime branch beyond the matrix-row decision already made in T1-DEC-01.",
+      "rank": 3,
+      "decisionDimensions": {
+        "decisionValue": {
+          "score": "LOW",
+          "rationale": "This catalog entity's own claim boundary self-limits its evidentiary weight: it is explicitly sampledOnly and forbidden from being cited as full-matrix proof. Resolving it does not by itself change any admission, authority, reachability, visibility, evidence, or release decision beyond what resolving the GC-009 matrix row (T1-DEC-01) would already resolve, because it is the same fact recorded in a different owner surface. Independent decision value beyond T1-DEC-01 is therefore low."
+        },
+        "proofCost": {
+          "score": "LOW",
+          "rationale": "If T1-DEC-01's source-verification step is executed, this catalog entity's status is answered for free as a byproduct (same caller-search target: MandatoryGateway). No separate proof cost is required."
+        },
+        "novelty": {
+          "score": "LOW",
+          "rationale": "Zero novelty beyond T1-DEC-01: this is a verbatim-reused finding from an earlier audit (R90 Audit A Lane 2), already cross-referenced with the matrix row's IMPLEMENTED_NOT_INVOCATION_PROVEN status in the T0 inventory's own strongestObservedEvidence field."
+        },
+        "risk": {
+          "score": "LOW",
+          "rationale": "Because this entity's claim boundary already explicitly forbids over-generalizing it (sampledOnly, must not be cited as proof for the full matrix), there is low risk of this specific record being misused to claim broader coverage than it has. The underlying governance risk (GC-009 itself being unenforced) is already captured and rated at T1-DEC-01; this row does not add incremental risk."
+        }
+      },
+      "candidateDecision": "NOT_APPLICABLE_WITH_REASON",
+      "candidateDecisionRationale": "NOT_APPLICABLE_WITH_REASON: this claim is not an independent T2 candidate. Its underlying fact is the same MandatoryGateway no-caller gap already selected for a future bounded source-verification step under T1-DEC-01 (MATRIX_ROW::GC-009). Selecting it separately would double-count one runtime branch as two, which the work order's Required Decision Method step 5 explicitly forbids without an explicit reason. The explicit reason recorded here is: this catalog EDGE entity's own claim boundary self-limits it to a sampled, non-generalizable citation, and a future T2 search for a MandatoryGateway caller answers this entity's open question as a byproduct.",
+      "recommendedNextAction": "No independent next action. If a future T2 packet source-verifies a MandatoryGateway caller (per T1-DEC-01's recommendedNextAction), the reviewer/closer should reverse-project that same result into this catalog entity's disposition in the same governed batch, rather than opening a second search.",
+      "reopenCondition": "N/A - this row is NOT_APPLICABLE_WITH_REASON, not VALUE_PARKED; no reopen condition required. If a future architecture-catalog review wants to treat this entity as independently decision-changing (for example, if the sampledOnly scope is later expanded to a full non-sampled GC-001..GC-050 audit), that would be a new governed decision, not a reopen of this row.",
+      "terminalStatus": "DECIDED"
+    },
+    {
+      "decisionRecordId": "T1-DEC-04",
+      "decisionClass": "OWNER_GAP_CANDIDATE",
+      "t0CandidateId": "OWNER-GAP-01",
+      "t0ClaimKeys": [
+        "MATRIX_ROW::GC-009",
+        "MATRIX_ROW::GC-010",
+        "CATALOG_ENTITY::cvf.asc.edge.gc009_gateway_no_caller.v1"
+      ],
+      "t0Description": "GC-009 (MandatoryGateway) and GC-010 (AgentExecutionRuntime) are both explicitly recorded as IMPLEMENTED_NOT_INVOCATION_PROVEN in the Governance Control Matrix, with no proven non-test production caller. These are the two clearest MISSING_PROOF candidates in the entire 99-item corpus.",
+      "ownerGapDecision": "VALUE_PARKED",
+      "ownerGapDecisionRationale": "This candidate proposes a future bounded live-proof use case under the system-chain live-proof standard's use-case ladder. It is not yet an ADD_GAP_ENTRY or UPDATE_EXISTING decision because the smallest prerequisite step (source-verify whether a non-test caller exists, per T1-DEC-01/T1-DEC-02) has not yet been executed as its own governed T2 tranche. Deciding UPDATE_EXISTING or ADD_GAP_ENTRY now would be premature: if a future search finds a real caller, the correct route is UPDATE_EXISTING (promote the matrix rows toward invocation-proven); if it confirms zero callers persist, the correct route is more likely ADD_GAP_ENTRY (a formal architecture GAP for the two uninvoked gateway-precondition controls). This T1 packet does not have authority to pre-select between those two outcomes without the T2 evidence.",
+      "reopenCondition": "Reopen this owner/GAP decision once a governed T2 packet (per T1-DEC-01 and T1-DEC-02 recommendedNextAction) completes its source-verification step for MandatoryGateway and AgentExecutionRuntime callers. If a real non-test caller is found for either, the reopened decision should route toward UPDATE_EXISTING for that control's matrix row. If the search confirms zero callers persist after a broadened repository-wide (not just EXTENSIONS/) search, the reopened decision should route toward ADD_GAP_ENTRY for a formal GC-009/GC-010 no-caller architecture GAP entry.",
+      "recommendedNextAction": "Do not create a GAP or update an owner now. Route the underlying source-verification prerequisite through T1-DEC-01/T1-DEC-02's recommendedNextAction first; revisit this owner/GAP row only after that evidence exists.",
+      "terminalStatus": "DECIDED"
+    },
+    {
+      "decisionRecordId": "T1-DEC-05",
+      "decisionClass": "OWNER_GAP_CANDIDATE",
+      "t0CandidateId": "OWNER-GAP-02",
+      "t0ClaimKeys": [
+        "MAP_LANE::DOCTRINE_TO_CONTRACT",
+        "CATALOG_ENTITY::cvf.asc.plane.doctrine_to_contract.v1"
+      ],
+      "t0Description": "The DOCTRINE_TO_CONTRACT lane remains PARTIAL_CHAIN_WITH_DOCUMENTED_DRIFT in both the map and the coverage ledger (operationalProofStatus=NOT_APPLICABLE_STATIC_WITH_REASON), with an open nextReviewAction pointing at future L4/L6 promotion or consolidation review.",
+      "ownerGapDecision": "VALUE_PARKED",
+      "ownerGapDecisionRationale": "This lane is STATIC_RECOMPUTE_REQUIRED (not RUNTIME_LIVE_REQUIRED) per the coverage ledger, meaning no live/runtime proof applies to it at all; its open item is a documentation/semantic-mapping review, not a missing-proof runtime gap. The map's own nextReviewAction already names a correct future owner (a governed semantic review of doctrine source mapping) rather than a T2 live-proof candidate. Selecting UPDATE_EXISTING or ADD_GAP_ENTRY here would exceed T1's repository-evidence reconciliation scope (T1 is only authorized to rank the three missing-proof claims and decide these two owner/GAP proposals as proposal-only routes, not to perform the semantic doctrine-mapping review itself)."
+      ,
+      "reopenCondition": "Reopen this owner/GAP decision when a future governed semantic review (as already named in the map's own nextReviewAction for DOCTRINE_TO_CONTRACT) is authorized and either (a) confirms the drift is resolved, in which case route to UPDATE_EXISTING, or (b) confirms the drift is a genuine standing architecture gap needing a formal registry entry, in which case route to ADD_GAP_ENTRY. Not reopened merely because it would be convenient to review sooner.",
+      "recommendedNextAction": "No T1/T2 action. This candidate's next step is a separate governed semantic-mapping review (documentation-class, not live-proof-class), outside this roadmap's T1-T4 live-proof tranche sequence.",
+      "terminalStatus": "DECIDED"
+    },
+    {
+      "decisionRecordId": "T1-DEC-06",
+      "decisionClass": "CONTRADICTION",
+      "t0ContradictionId": "CTR-01",
+      "t0ClaimKeysInvolved": [
+        "MATRIX_ROW::GC-011",
+        "CATALOG_ENTITY::cvf.asc.edge.gc011_pipeline_orchestrator.v1"
+      ],
+      "t0Description": "The matrix row claim for GC-011 is disposed PROVEN (UC-03 coverage-ledger current-runtime receipt, PASS_TWO_OF_TWO_WITH_RECEIPT_CASE_IDENTITY_LIMITATION), while the catalog EDGE entity citing the same control (cvf.asc.edge.gc011_pipeline_orchestrator.v1) is disposed STATIC_NOT_APPLICABLE because its own asserted behavior is a narrower, explicitly sampledOnly, HISTORICAL_TRACE caller-existence citation that its own claimBoundary forbids treating as full invocation proof.",
+      "t0Resolution": "Not a true contradiction: the two claims have different owners, different asserted behaviors, and different evidence classes by design. Both dispositions are correct for their own narrow scope and are kept separate rather than merged, per the conservative claim-key rule.",
+      "t0Disposition": "RESOLVED_NOT_A_CONTRADICTION",
+      "ctr01Decision": "RETAIN_RESOLVED",
+      "ctr01DecisionEvidence": "This T1 packet's current-caller freshness search targeted GC-009 (MandatoryGateway) and GC-010 (AgentExecutionRuntime) per the work order's Current Runtime Freshness Verification section; GC-011 (PipelineOrchestrator) was not in scope for a fresh non-test-caller search this round. No new source evidence was found that touches GC-011, the matrix row's PROVEN disposition, the catalog edge's STATIC_NOT_APPLICABLE disposition, or the UC-03 coverage-ledger receipt (docs/reviews/evidence/system-chain-uc03-contract-runtime-proof-2026-07-14.json, PASS_TWO_OF_TWO_WITH_RECEIPT_CASE_IDENTITY_LIMITATION). The T0 resolution's own logic (different owner, different asserted behavior, different evidence class, both correct for their own narrow scope) remains internally consistent on direct re-reading of both claim records and the coverage ledger's RUNTIME_TO_ENFORCEMENT/CONTRACT_TO_RUNTIME lane entries. No contradiction-reopening evidence exists.",
+      "recommendedNextAction": "No action. Retain CTR-01 as RESOLVED_NOT_A_CONTRADICTION.",
+      "reopenCondition": "Reopen only if a future governed search finds a non-test production caller for PipelineOrchestrator whose evidence would upgrade the catalog edge cvf.asc.edge.gc011_pipeline_orchestrator.v1 beyond its current explicitly sampledOnly/HISTORICAL_TRACE scope, or if the UC-03 receipt (system-chain-uc03-contract-runtime-proof-2026-07-14.json) is invalidated or superseded by a materially different GC-011 result.",
+      "terminalStatus": "DECIDED"
+    }
+  ],
+
+  "reconciliation": {
+    "decisionCorpusReconciliation": {
+      "missing": 3,
+      "ownerGap": 2,
+      "contradiction": 1,
+      "total": 6,
+      "terminal": 6,
+      "aggregationCheck": "3+2+1=6 MATCH; all six rows carry terminalStatus=DECIDED"
+    },
+    "rankUniquenessCheck": {
+      "ranksAssigned": [1, 2, 3],
+      "claimKeysRanked": [
+        "MATRIX_ROW::GC-009",
+        "MATRIX_ROW::GC-010",
+        "CATALOG_ENTITY::cvf.asc.edge.gc009_gateway_no_caller.v1"
+      ],
+      "tieCheck": "PASS: ranks 1, 2, 3 are unique, no ties"
+    },
+    "corpusCompletenessAndReportIntegrity": {
+      "corpusTaskClass": "DERIVED_RECONCILIATION",
+      "corpusRoot": "accepted T0 inventory plus accepted T0 completion (exactly two input paths)",
+      "snapshotTimeUtc": "2026-07-15T09:31:23Z",
+      "enumerationCommand": "filesystem-backed direct reads of the explicit two-path input list",
+      "manifestArtifactOrInlineManifest": "this JSON sourceSnapshot block",
+      "manifestHash": "see sha256Actual per input in sourceSnapshot.inputs",
+      "processingLedgerArtifactOrInlineLedger": "this JSON decisionLedger",
+      "allowedTerminalStatuses": ["READ", "SKIPPED_WITH_REASON", "DEFERRED", "BLOCKED_UNREADABLE"],
+      "decisionTerminalStatuses": ["DECIDED", "BLOCKED_SOURCE_CONTRADICTION"],
+      "manifestReconciliation": {
+        "manifest": 2,
+        "ledgerTerminal": 2,
+        "exclusions": 0,
+        "unresolved": 0
+      },
+      "decisionReconciliation": {
+        "missing": 3,
+        "ownerGap": 2,
+        "contradiction": 1,
+        "total": 6,
+        "terminal": 6
+      },
+      "unresolvedFiles": 0,
+      "declaredExclusions": "none",
+      "unreadableOrUnsupportedFiles": "none",
+      "aggregationCheck": "PASS: 3+2+1=6 and every decision row terminal (six of six DECIDED)",
+      "driftCheck": "PASS: both accepted input hashes recomputed independently before this record was written; zero drift observed",
+      "outputTraceability": "every decision row cites its exact T0 claimKey / candidateId / contradictionId plus contributing source item IDs where applicable",
+      "adversarialVerification": "all six rows were individually inspected against their raw T0 inventory JSON records (claims array entries and ownerGapCandidatesProposedOnly/contradictions arrays); no sampling substitution was used because the corpus is exactly six rows",
+      "corpusVerdict": "COMPLETE_VERIFIED"
+    },
+    "corpusToKnowledgeMapReconciliation": {
+      "knowledgeTaskClass": "DERIVED_DECISION_VIEW",
+      "authorityAssets": 6,
+      "authorityAssetsNote": "T0 remains claim authority for the full 99-claim inventory; this T1 record's own authority scope is exactly the six decision records drawn from T0, not the full 99",
+      "mapped": 6,
+      "deferred": 0,
+      "unmapped": 0,
+      "orphanOrUnmappedAssets": "none",
+      "rebuildabilityCheck": "PASS: this record is deterministically re-derivable from the two accepted T0 inputs plus the current-caller freshness search commands recorded above; rerunning against the same commit and unchanged source would reproduce the same six decisions",
+      "driftCheck": "PASS: both input hashes recomputed independently; zero drift observed",
+      "retrievalBoundary": "this record can answer which of the six T0 decision rows exist, their rank/decision/dimensions, and their next-step/reopen condition; it cannot answer new semantic questions about the other 93 T0 claims without reopening T0 itself",
+      "adversarialVerification": "recomputed mapped=6/deferred=0/unmapped=0 by counting decisionLedger array length (6) against the expected 3+2+1 decomposition",
+      "knowledgeMapVerdict": "RECONCILED_VERIFIED"
+    }
+  },
+
+  "t2JustificationRecommendation": {
+    "recommended": true,
+    "recommendationStrength": "BOUNDED_RECOMMENDATION_NOT_AUTHORIZATION",
+    "recommendationScope": "A future T2 packet limited to READ-ONLY, repository-wide (not just EXTENSIONS/-scoped) source verification for non-test callers of MandatoryGateway/createMandatoryGateway and AgentExecutionRuntime is justified by decision value (governance-control admission/authority/reachability dimension under the live-proof standard's Value And Branch Stop Rule) and low proof cost (no live/provider/runtime invocation required for the source-verification step itself).",
+    "recommendationExclusions": "This recommendation explicitly excludes CATALOG_ENTITY::cvf.asc.edge.gc009_gateway_no_caller.v1 as an independent T2 candidate (see T1-DEC-03, NOT_APPLICABLE_WITH_REASON) and excludes both owner/GAP candidates from any T2 action until the source-verification prerequisite exists (see T1-DEC-04/T1-DEC-05, VALUE_PARKED).",
+    "authorizationStatement": "This is a recommendation only. It does not authorize any T2 packet, GC-018, or work order. A separate reviewer/closer must independently accept this recommendation, author a fresh source-verified GC-018 and work order per the roadmap's Work Plan table, and secure operator authorization before any T2 execution begins.",
+    "ifNotRecommendedFallback": "N/A - recommended=true"
+  },
+
+  "deltaExecutionClaimBoundaryControlBlock": {
+    "claimScope": "repository-evidence reconciliation and value selection over six T0 decision records",
+    "claimDisposition": "CLAIM_REJECTED: T1 does not claim new execution-control behavior or universal E2E proof",
+    "receiptEvidence": "CVF_RECEIPT_PRESENT: accepted T0 evidence is a read-only decision input",
+    "actionEvidence": "ACTION_EVIDENCE_PRESENT: hashing, source search, ranking, reconciliation, and local gates only",
+    "invocationBoundary": "zero live, provider, browser, business CLI, runtime, test, and CI invocation",
+    "interceptionBoundary": "no wrapper, proxy, runtime gate, or agent-control implementation",
+    "claimLanguage": "bounded value-selection recommendation, not execution authorization",
+    "forbiddenExpansion": "runtime implementation, owner/GAP mutation, T2 execution, provider calls, public, production, scale, certification, shipment, and user value"
+  },
+
+  "stopConditionsChecked": {
+    "hashDriftEitherInput": "NOT_TRIGGERED - both hashes matched exactly",
+    "anyOfSixDecisionRecordsAbsent": "NOT_TRIGGERED - all six present and verified in T0 inventory JSON",
+    "newNonTestCallerContradictsT0": "NOT_TRIGGERED - zero new non-test callers found for MandatoryGateway or AgentExecutionRuntime",
+    "decisionRequiresRuntimeExecution": "NOT_TRIGGERED - all six decisions were made using repository-evidence reasoning only",
+    "correctionWouldTouchFourthPath": "NOT_TRIGGERED - only the three authorized output paths were created or modified",
+    "overallStopVerdict": "NO_STOP_CONDITION_TRIGGERED"
+  },
+
+  "finalStatus": "COMPLETE_PENDING_REVIEW",
+
+  "publicExportDisposition": {
+    "status": "DEFERRED_PRIVATE_ONLY",
+    "reason": "private provenance value-selection record; no public-sync authorization"
+  }
+}

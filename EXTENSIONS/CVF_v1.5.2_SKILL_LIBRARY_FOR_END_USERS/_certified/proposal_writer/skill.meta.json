@@ -1,0 +1,10 @@
+{
+  "id": "proposal_writer",
+  "name": "Proposal Writer",
+  "domain": "Sales Enablement",
+  "version": "1.0.0",
+  "sourceSkillRef": "proposal_writer.skill.md",
+  "certificationDate": "2026-05-22",
+  "outcomeKey": "proposal_writer",
+  "description": "Draft a bounded proposal from customer need, scope, timeline, and terms."
+}

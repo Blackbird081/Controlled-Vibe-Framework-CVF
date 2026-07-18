@@ -36,13 +36,14 @@ POLICIES = [
 ]
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 ALLOWED_DOCS_FOLDERS = {
+    "corpus-intelligence",  # GC-051 Corpus Scan Registry folder
     "reference",
     "assessments",
     "audits",
     "baselines",
     "roadmaps",
     "reviews",
-    "evidence",
+    "work_orders",
     "logs",
     "concepts",
     "guides",
@@ -50,11 +51,21 @@ ALLOWED_DOCS_FOLDERS = {
     "cheatsheets",
     "case-studies",
 }
-GOVERNANCE_FOLDERS = {"reference", "assessments", "audits", "baselines", "roadmaps", "reviews", "logs"}
+GOVERNANCE_FOLDERS = {
+    "reference",
+    "assessments",
+    "audits",
+    "baselines",
+    "roadmaps",
+    "reviews",
+    "work_orders",
+    "logs",
+}
 APPROVED_ROOT_FILES = {
     "BUG_HISTORY.md",
     "CHEAT_SHEET.md",
     "CVF_ARCHITECTURE_DECISIONS.md",
+    "CVF_ARCHITECTURE_DECISIONS_ARCHIVE_ADR001-010.md",
     "CVF_CORE_KNOWLEDGE_BASE.md",
     "CVF_INCREMENTAL_TEST_LOG.md",
     "GET_STARTED.md",
@@ -63,7 +74,7 @@ APPROVED_ROOT_FILES = {
     "VERSIONING.md",
     "VERSION_COMPARISON.md",
 }
-APPROVED_GENERIC_FILENAMES = {"README.md", "INDEX.md"}
+APPROVED_GENERIC_FILENAMES = {"README.md", "INDEX.md", "SKILL.md"}
 PERFORMANCE_EVIDENCE_BATCH_RE = re.compile(
     r"^docs/baselines/CVF_W\d+_T\d+_CP\d+_FIRST_EVIDENCE_BATCH_\d{4}-\d{2}-\d{2}\.md$"
 )

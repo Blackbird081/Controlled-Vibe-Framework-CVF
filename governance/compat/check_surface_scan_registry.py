@@ -13,7 +13,7 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parents[2]
 REGISTRY_PATH = REPO_ROOT / "governance" / "compat" / "CVF_SURFACE_SCAN_REGISTRY.json"
 GUARD_PATH = REPO_ROOT / "governance" / "toolkit" / "05_OPERATION" / "CVF_SURFACE_SCAN_CONTINUITY_GUARD.md"
-HANDOFF_PATH = REPO_ROOT / "AGENT_HANDOFF.md"
+ACTIVE_STATE_PATH = REPO_ROOT / "CVF_SESSION" / "ACTIVE_SESSION_STATE.json"
 TRACKER_PATH = REPO_ROOT / "docs" / "reference" / "CVF_WHITEPAPER_PROGRESS_TRACKER.md"
 BOOTSTRAP_PATH = REPO_ROOT / "docs" / "reference" / "CVF_SESSION_GOVERNANCE_BOOTSTRAP.md"
 CONTEXT_MODEL_PATH = REPO_ROOT / "docs" / "reference" / "CVF_CONTEXT_CONTINUITY_MODEL.md"
@@ -53,7 +53,7 @@ def _required_files() -> tuple[Path, ...]:
     return (
         REGISTRY_PATH,
         GUARD_PATH,
-        HANDOFF_PATH,
+        ACTIVE_STATE_PATH,
         TRACKER_PATH,
         BOOTSTRAP_PATH,
         CONTEXT_MODEL_PATH,
@@ -67,14 +67,11 @@ def _required_markers() -> dict[Path, tuple[str, ...]]:
         GUARD_PATH: (
             "GC-041",
             "governance/compat/CVF_SURFACE_SCAN_REGISTRY.json",
-            "AGENT_HANDOFF.md",
+            "CVF_SESSION/ACTIVE_SESSION_STATE.json",
             "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
             THIS_SCRIPT_PATH,
         ),
-        HANDOFF_PATH: (
-            "governance/compat/CVF_SURFACE_SCAN_REGISTRY.json",
-            "Do not open a fresh tranche before consulting the canonical scan continuity registry.",
-        ),
+        ACTIVE_STATE_PATH: ("activeHandoff",),
         TRACKER_PATH: (
             "governance/compat/CVF_SURFACE_SCAN_REGISTRY.json",
             "Canonical scan continuity registry",

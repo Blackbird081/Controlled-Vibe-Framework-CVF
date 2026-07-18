@@ -1,0 +1,52 @@
+{
+  "stableId": "cvf.asc.gap.web_reviewer_denial_proof_locator_ambiguity.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+  "targetPlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+  "sourceOwner": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/system-chain-uc04b-web-operations-readout.spec.ts",
+  "targetOwner": "reviewer-denial POST and blocked_by_policy audit proof for docs_governance_check",
+  "missingEdge": "CLOSED_WITH_EVIDENCE: the retained negative browser case now uses a scoped exact-match role locator and no longer produces the five-match strict-mode ambiguity. Browser-level reviewer denial remains unproven under the separately reopened auth-projection gap.",
+  "currentStatus": "CLOSED_WITH_EVIDENCE",
+  "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+  "citations": [
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3_BUSINESS_PROOF_WORKER_RETURN_2026-07-15.md",
+      "lineOrSection": "Findings / Position",
+      "evidenceRole": "one-invocation source-backed blocker classification"
+    },
+    {
+      "path": "docs/reviews/evidence/system-chain-uc04b-r3-business-diagnostic-2026-07-15.json",
+      "lineOrSection": "stage and invocationLedgerReconciliation",
+      "evidenceRole": "secret-safe failure stage and exact counters"
+    },
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R1_NEGATIVE_LOCATOR_RECOVERY_COMPLETION_2026-07-15.md",
+      "lineOrSection": "Evidence Reconciliation",
+      "evidenceRole": "reviewer-accepted locator ambiguity closure and distinct auth-projection blocker"
+    },
+    {
+      "path": "docs/reviews/evidence/system-chain-uc04b-r3r1-negative-diagnostic-2026-07-15.json",
+      "lineOrSection": "stage and invocationLedgerReconciliation",
+      "evidenceRole": "zero-match post-repair diagnostic and exact counters"
+    }
+  ],
+  "impact": "The proof-harness ambiguity is resolved. This closure does not promote reviewer denial because the application role projection remained anonymous_local before POST.",
+  "closeCondition": {
+    "conditionKind": "EXECUTED_PROOF_ACCEPTED",
+    "conditionText": "SATISFIED: the exact scoped locator repair passed focused regression and one authorized negative invocation eliminated the prior five-match strict-mode ambiguity."
+  },
+  "reopenCondition": {
+    "conditionKind": "FRESH_EVIDENCE_CONTRADICTION",
+    "conditionText": "Reopen only if a fresh governed browser proof reproduces multiple matches for the scoped exact role locator or the Operations role-card markup materially changes."
+  },
+  "actionOwner": "CLOSED: retain the scoped locator; route reviewer role projection through the reopened auth-projection gap",
+  "freshnessInputs": [
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/system-chain-uc04b-web-operations-readout.spec.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/system/jobs/route.ts"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-15",
+    "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R1_NEGATIVE_LOCATOR_RECOVERY_COMPLETION_2026-07-15.md"
+  }
+}

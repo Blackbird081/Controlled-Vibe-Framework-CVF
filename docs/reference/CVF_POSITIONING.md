@@ -1,5 +1,7 @@
 # CVF Positioning — Identity & Definition
 
+Memory class: POINTER_RECORD
+
 > **Created:** Feb 08, 2026 | **Updated:** Feb 25, 2026  
 > **Purpose:** Answer the question "What is CVF?" clearly, avoiding confusion
 

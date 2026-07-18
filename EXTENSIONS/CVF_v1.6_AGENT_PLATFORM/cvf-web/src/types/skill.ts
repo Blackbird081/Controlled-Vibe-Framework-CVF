@@ -31,6 +31,24 @@ export interface Skill {
     hasRestrictedLinks?: boolean;
     linkedTemplates?: SkillLinkedTemplate[];
     corpusNote?: string;
+    assfProjectionClass?: string;
+    certificationState?: string;
+    uatState?: string;
+    reviewArtifacts?: string[];
+    canonicalRoot?: string;
+    externalCliMcpDisposition?: string;
+    adapterContract?: string;
+    runtimePackageProjection?: boolean;
+    runtimeEligible?: boolean;
+    activationDecision?: string;
+    primaryDomain?: string;
+    domainGroup?: string;
+    selectionKeywords?: string[];
+    specSignals?: string[];
+    recommendedWhen?: string[];
+    notRecommendedWhen?: string[];
+    outputGoals?: string[];
+    projectionClaimBoundary?: string;
 }
 
 export interface SkillCategory {
@@ -47,6 +65,10 @@ export interface SkillIndexMeta {
     reviewMappedSkills: number;
     trustedBenchmarkSkills: number;
     governanceSource: string[];
+    assfProjectedSkills?: number;
+    certifiedPackageProjections?: number;
+    runtimePackageProjections?: number;
+    skillControlPlaneProjection?: string;
 }
 
 export interface SkillIndexPayload {

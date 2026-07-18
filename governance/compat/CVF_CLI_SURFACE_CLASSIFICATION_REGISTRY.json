@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "0.1.0",
+  "standardPath": "docs/reference/CVF_CLI_SURFACE_CLASSIFICATION_STANDARD_2026-06-30.md",
+  "classificationValues": [
+    "CLI_REQUIRED",
+    "CLI_OPTIONAL",
+    "MODULE_ONLY"
+  ],
+  "entries": [
+    {
+      "path": "governance/compat/run_adif_defect_resolver.py",
+      "classification": "CLI_REQUIRED",
+      "status": "IMPLEMENTED_BY_ADIF_CLI_T1",
+      "ownerSurface": "docs/reference/agent_defect_intelligence/",
+      "reason": "ADIF disclosure is a governed, repeatable agent-facing readout and needs a direct command path.",
+      "evidence": [
+        "ADIF-CLI-T1"
+      ]
+    },
+    {
+      "path": "governance/compat/run_adif_preflight_readout.py",
+      "classification": "CLI_REQUIRED",
+      "status": "IMPLEMENTED_BY_ADIF_CLI_T1",
+      "ownerSurface": "docs/reference/agent_defect_intelligence/",
+      "reason": "Preflight readout is an agent-facing evidence command, not only a library API.",
+      "evidence": [
+        "ADIF-CLI-T1"
+      ]
+    },
+    {
+      "path": "governance/compat/run_adif_finding_intake_bridge.py",
+      "classification": "CLI_REQUIRED",
+      "status": "IMPLEMENTED_BY_ADIF_CLI_T1",
+      "ownerSurface": "docs/reference/agent_defect_intelligence/",
+      "reason": "Reviewer finding intake is a governed classification surface and should be command-runnable without ad hoc Python snippets.",
+      "evidence": [
+        "ADIF-CLI-T1"
+      ]
+    },
+    {
+      "path": "governance/compat/check_work_order_dispatch_quality_core.py",
+      "classification": "MODULE_ONLY",
+      "status": "INTENTIONAL_SPLIT_MODULE",
+      "ownerSurface": "governance/compat/check_work_order_dispatch_quality.py",
+      "reason": "Internal implementation module for the dispatch-quality checker; direct CLI would bypass the parent checker contract.",
+      "evidence": [
+        "ADIF-CLI-T1_SCAN"
+      ]
+    },
+    {
+      "path": "governance/compat/check_work_order_dispatch_quality_artifacts.py",
+      "classification": "MODULE_ONLY",
+      "status": "INTENTIONAL_SPLIT_MODULE",
+      "ownerSurface": "governance/compat/check_work_order_dispatch_quality.py",
+      "reason": "Internal implementation module for artifact checks under the parent dispatch-quality CLI.",
+      "evidence": [
+        "ADIF-CLI-T1_SCAN"
+      ]
+    },
+    {
+      "path": "governance/compat/check_work_order_dispatch_quality_lifecycle.py",
+      "classification": "MODULE_ONLY",
+      "status": "INTENTIONAL_SPLIT_MODULE",
+      "ownerSurface": "governance/compat/check_work_order_dispatch_quality.py",
+      "reason": "Internal implementation module for lifecycle checks under the parent dispatch-quality CLI.",
+      "evidence": [
+        "ADIF-CLI-T1_SCAN"
+      ]
+    },
+    {
+      "path": "governance/compat/check_work_order_dispatch_quality_range.py",
+      "classification": "MODULE_ONLY",
+      "status": "INTENTIONAL_SPLIT_MODULE",
+      "ownerSurface": "governance/compat/check_work_order_dispatch_quality.py",
+      "reason": "Internal implementation module for range checks under the parent dispatch-quality CLI.",
+      "evidence": [
+        "ADIF-CLI-T1_SCAN"
+      ]
+    },
+    {
+      "path": "governance/compat/check_work_order_dispatch_quality_source.py",
+      "classification": "MODULE_ONLY",
+      "status": "INTENTIONAL_SPLIT_MODULE",
+      "ownerSurface": "governance/compat/check_work_order_dispatch_quality.py",
+      "reason": "Internal implementation module for source checks under the parent dispatch-quality CLI.",
+      "evidence": [
+        "ADIF-CLI-T1_SCAN"
+      ]
+    },
+    {
+      "path": "governance/compat/check_work_order_dispatch_quality_tables.py",
+      "classification": "MODULE_ONLY",
+      "status": "INTENTIONAL_SPLIT_MODULE",
+      "ownerSurface": "governance/compat/check_work_order_dispatch_quality.py",
+      "reason": "Internal implementation module for table parsing under the parent dispatch-quality CLI.",
+      "evidence": [
+        "ADIF-CLI-T1_SCAN"
+      ]
+    }
+  ]
+}

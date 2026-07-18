@@ -10,6 +10,10 @@ const SKILLS_ROOT = path.resolve(BASE_DIR, '../../CVF_v1.5.2_SKILL_LIBRARY_FOR_E
 const UAT_ROOT = path.resolve(BASE_DIR, '../../../governance/skill-library/uat/results');
 const UAT_REPORT_PATH = path.resolve(BASE_DIR, '../../../governance/skill-library/uat/reports/uat_score_report.json');
 const SPEC_REPORT_PATH = path.resolve(BASE_DIR, '../../../governance/skill-library/registry/reports/spec_metrics_report.json');
+const ASSF_INDEX_PATH = path.resolve(BASE_DIR, '../../../docs/reference/agent_system_skills/generated/skill-index.json');
+const ASSF_CONTROL_PLANE_INVENTORY_PATH = path.resolve(BASE_DIR, '../../../docs/reference/agent_system_skills/control_plane/generated/skill-inventory.json');
+const PUBLIC_INDEX_PATH = path.resolve(BASE_DIR, 'public', 'data', 'skills-index.json');
+const PUBLIC_CONTROL_PLANE_PATH = path.resolve(BASE_DIR, 'public', 'data', 'assf-skill-control-plane.json');
 
 const DOMAIN_RISK_MAP = {
     ai_ml_evaluation: 'R1',
@@ -50,6 +54,10 @@ const RISK_AUTONOMY = {
     R3: 'Suggest-only',
     R4: 'Blocked',
 };
+
+function toPosixPath(value) {
+    return String(value || '').replace(/\\/g, '/');
+}
 
 function deriveTitleFromFilename(baseName) {
     return baseName
@@ -268,6 +276,232 @@ function loadSpecReportMap() {
     }
 }
 
+function loadExistingPublicSkillRecords() {
+    try {
+        if (!fs.existsSync(PUBLIC_INDEX_PATH)) {
+            return new Map();
+        }
+        const raw = fs.readFileSync(PUBLIC_INDEX_PATH, 'utf-8');
+        const data = JSON.parse(raw);
+        if (!data || !Array.isArray(data.categories)) {
+            return new Map();
+        }
+        const records = new Map();
+        for (const category of data.categories) {
+            if (!category || !Array.isArray(category.skills)) continue;
+            for (const skill of category.skills) {
+                if (!skill || !skill.id) continue;
+                records.set(`${category.id}::${skill.id}`, skill);
+            }
+        }
+        return records;
+    } catch (error) {
+        console.warn('Failed to load existing public skill records', error);
+        return new Map();
+    }
+}
+
+function loadAssfSkillIndex() {
+    try {
+        if (!fs.existsSync(ASSF_INDEX_PATH)) {
+            return { claimBoundary: '', skills: [] };
+        }
+        const raw = fs.readFileSync(ASSF_INDEX_PATH, 'utf-8');
+        const data = JSON.parse(raw);
+        if (!data || !Array.isArray(data.skills)) {
+            return { claimBoundary: '', skills: [] };
+        }
+        return {
+            claimBoundary: typeof data.claimBoundary === 'string' ? data.claimBoundary : '',
+            skills: data.skills,
+        };
+    } catch (error) {
+        console.error('Failed to load ASSF skill index', error);
+        return { claimBoundary: '', skills: [] };
+    }
+}
+
+function loadAssfControlPlaneInventory() {
+    try {
+        if (!fs.existsSync(ASSF_CONTROL_PLANE_INVENTORY_PATH)) {
+            return { claimBoundary: '', records: [], summary: {} };
+        }
+        const raw = fs.readFileSync(ASSF_CONTROL_PLANE_INVENTORY_PATH, 'utf-8');
+        const data = JSON.parse(raw);
+        if (!data || !Array.isArray(data.records)) {
+            return { claimBoundary: '', records: [], summary: {} };
+        }
+        return {
+            claimBoundary: typeof data.claimBoundary === 'string' ? data.claimBoundary : '',
+            records: data.records,
+            summary: data.summary || {},
+        };
+    } catch (error) {
+        console.error('Failed to load ASSF control plane inventory', error);
+        return { claimBoundary: '', records: [], summary: {} };
+    }
+}
+
+function buildControlPlaneProjectionRecord(record) {
+    const registry = record.registry || {};
+    const selection = record.selection || {};
+    const runtime = record.runtime || {};
+    const activation = record.activation || {};
+    const cliMcp = record.cliMcp || {};
+    const packageRoot = record.packageRoot || {};
+    const truth = record.truth || {};
+
+    return {
+        skillId: record.skillId,
+        title: registry.name || deriveTitleFromFilename(record.skillId || 'assf-package'),
+        primaryDomain: selection.primaryDomain || 'Agent System Skills',
+        domainGroup: selection.domainGroup || 'agent_system_skills',
+        secondaryDomains: Array.isArray(selection.secondaryDomains) ? selection.secondaryDomains : [],
+        recommendedWhen: Array.isArray(selection.recommendedWhen) ? selection.recommendedWhen : [],
+        notRecommendedWhen: Array.isArray(selection.notRecommendedWhen) ? selection.notRecommendedWhen : [],
+        specSignals: Array.isArray(selection.specSignals) ? selection.specSignals : [],
+        selectionKeywords: Array.isArray(selection.selectionKeywords) ? selection.selectionKeywords : [],
+        outputGoals: Array.isArray(selection.outputGoals) ? selection.outputGoals : [],
+        intendedUsers: Array.isArray(selection.intendedUsers) ? selection.intendedUsers : [],
+        agentUseCases: Array.isArray(selection.agentUseCases) ? selection.agentUseCases : [],
+        expectedOutputContribution: selection.expectedOutputContribution || null,
+        runtimeEligible: runtime.eligible === true,
+        activationDecision: activation.decision || null,
+        cliMcpDisposition: cliMcp.disposition || registry.externalCliMcpDisposition || null,
+        packageRootPath: packageRoot.rootPath || registry.canonicalRoot || null,
+        registryEntryPath: registry.canonicalRoot || null,
+        certificationState: registry.certificationState || null,
+        uatState: registry.uatState || null,
+        truthStatus: truth.truthStatus || null,
+        verificationMode: truth.verificationMode || null,
+        runtimeEligibility: truth.runtimeEligibility || null,
+        authorityCeiling: registry.authorityCeiling || null,
+        adapterContract: cliMcp.adapterContract || registry.adapterContract || null,
+    };
+}
+
+function buildAssfControlPlaneProjection(inventory) {
+    const runtimeRecords = inventory.records
+        .filter((record) => record && record.runtime && record.runtime.eligible === true)
+        .map(buildControlPlaneProjectionRecord)
+        .sort((a, b) => a.skillId.localeCompare(b.skillId));
+
+    return {
+        schemaVersion: '0.1.0',
+        generatedAt: new Date().toISOString(),
+        sourceInventory: toPosixPath(path.relative(BASE_DIR, ASSF_CONTROL_PLANE_INVENTORY_PATH)),
+        sourceSkillIndex: toPosixPath(path.relative(BASE_DIR, ASSF_INDEX_PATH)),
+        dashboardContract: 'Read-only CVF Web projection of Skill Control Plane inventory. Web dashboards may consume this file for display and filtering, but it is not runtime authority, activation authority, provider authority, or public certification authority.',
+        summary: {
+            assfRegistryEntries: inventory.summary.assfRegistryEntries || 0,
+            packageRoots: inventory.summary.packageRoots || 0,
+            runtimeEligiblePackages: inventory.summary.runtimeEligiblePackages || 0,
+            activeResolverReadyPackages: inventory.summary.activeResolverReadyPackages || 0,
+            cliMcpAdapterPackages: inventory.summary.cliMcpAdapterPackages || 0,
+            selectionProfiledPackages: inventory.summary.selectionProfiledPackages || 0,
+            webProjectionItems: inventory.summary.webProjectionItems || 0,
+            crossSurfaceDriftViolationCount: inventory.summary.crossSurfaceDriftViolationCount || 0,
+            projectedRuntimePackages: runtimeRecords.length,
+        },
+        runtimePackages: runtimeRecords,
+        claimBoundary: inventory.claimBoundary || 'Projection read model only; no runtime authority is granted.',
+    };
+}
+
+function buildAssfContent(skill, claimBoundary, controlPlaneRecord) {
+    const lines = [
+        `# ${skill.name || skill.skillId}`,
+        '',
+        skill.purpose || 'ASSF package metadata projection.',
+        '',
+        '## Projection Boundary',
+        claimBoundary || 'Metadata-only projection. No package activation or execution authority is granted.',
+        '',
+        '## Source Trace',
+        `- Canonical root: ${skill.canonicalRoot || 'N/A with reason: source root not declared'}`,
+        `- Certification state: ${skill.certificationState || 'UNKNOWN'}`,
+        `- UAT state: ${skill.uatState || 'UNKNOWN'}`,
+        `- External CLI/MCP disposition: ${skill.externalCliMcpDisposition || 'UNKNOWN'}`,
+    ];
+
+    if (controlPlaneRecord) {
+        lines.push(
+            `- Runtime eligible: ${controlPlaneRecord.runtimeEligible ? 'true' : 'false'}`,
+            `- Activation decision: ${controlPlaneRecord.activationDecision || 'UNKNOWN'}`,
+            `- Primary domain: ${controlPlaneRecord.primaryDomain || 'Agent System Skills'}`,
+        );
+    }
+
+    if (Array.isArray(skill.reviewArtifacts) && skill.reviewArtifacts.length > 0) {
+        lines.push('', '## Review Artifacts');
+        for (const artifact of skill.reviewArtifacts) {
+            lines.push(`- ${artifact}`);
+        }
+    }
+
+    return lines.join('\n');
+}
+
+function buildAssfProjectedSkills(controlPlaneProjection) {
+    const assfIndex = loadAssfSkillIndex();
+    const projectedSkills = [];
+    const controlPlaneById = new Map(
+        (controlPlaneProjection.runtimePackages || []).map((record) => [record.skillId, record]),
+    );
+
+    for (const skill of assfIndex.skills) {
+        if (!skill || skill.certificationState !== 'CERTIFIED' || skill.uatState !== 'PASSED') {
+            continue;
+        }
+        const controlPlaneRecord = controlPlaneById.get(skill.skillId);
+
+        projectedSkills.push({
+            id: skill.skillId,
+            title: skill.name || deriveTitleFromFilename(skill.skillId || 'assf-package'),
+            domain: (controlPlaneRecord && controlPlaneRecord.primaryDomain) || 'Agent System Skills',
+            difficulty: 'Governed',
+            summary: skill.purpose || 'Certified ASSF package metadata projection.',
+            path: skill.canonicalRoot || '',
+            content: buildAssfContent(skill, assfIndex.claimBoundary, controlPlaneRecord),
+            riskLevel: skill.riskProfile || skill.riskCeiling || 'R0',
+            allowedRoles: Array.isArray(skill.roles) ? skill.roles.join(', ') : 'User, Reviewer',
+            allowedPhases: Array.isArray(skill.phases) ? skill.phases.join(', ') : 'Discovery, Review',
+            authorityScope: skill.authorityCeiling || 'Read-only metadata projection',
+            autonomy: 'Read-only metadata projection',
+            uatStatus: skill.uatState,
+            uatQuality: 'Passed',
+            specGate: skill.certificationState,
+            corpusClass: 'AGENT_SYSTEM_SKILL_PACKAGE',
+            frontDoorVisible: true,
+            frontDoorTier: 'ASSF_CERTIFIED',
+            trustedBenchmarkSurface: false,
+            hasRestrictedLinks: false,
+            linkedTemplates: [],
+            corpusNote: 'ASSF certified package metadata projection; certificationState is separate from corpusClass.',
+            assfProjectionClass: 'CERTIFIED_PACKAGE_PROJECTION',
+            certificationState: skill.certificationState,
+            uatState: skill.uatState,
+            reviewArtifacts: Array.isArray(skill.reviewArtifacts) ? skill.reviewArtifacts : [],
+            canonicalRoot: skill.canonicalRoot,
+            externalCliMcpDisposition: skill.externalCliMcpDisposition,
+            adapterContract: skill.adapterContract,
+            runtimePackageProjection: Boolean(controlPlaneRecord),
+            runtimeEligible: controlPlaneRecord ? controlPlaneRecord.runtimeEligible : false,
+            activationDecision: controlPlaneRecord ? controlPlaneRecord.activationDecision : undefined,
+            primaryDomain: controlPlaneRecord ? controlPlaneRecord.primaryDomain : undefined,
+            domainGroup: controlPlaneRecord ? controlPlaneRecord.domainGroup : undefined,
+            selectionKeywords: controlPlaneRecord ? controlPlaneRecord.selectionKeywords : [],
+            specSignals: controlPlaneRecord ? controlPlaneRecord.specSignals : [],
+            recommendedWhen: controlPlaneRecord ? controlPlaneRecord.recommendedWhen : [],
+            notRecommendedWhen: controlPlaneRecord ? controlPlaneRecord.notRecommendedWhen : [],
+            outputGoals: controlPlaneRecord ? controlPlaneRecord.outputGoals : [],
+            projectionClaimBoundary: assfIndex.claimBoundary,
+        });
+    }
+
+    return projectedSkills;
+}
+
 function buildSkillIndex() {
     if (!fs.existsSync(SKILLS_ROOT)) {
         console.warn(`Skills root not found: ${SKILLS_ROOT}`);
@@ -280,6 +514,10 @@ function buildSkillIndex() {
     const categories = [];
     let totalScannedSkills = 0;
     let nonPublicSkills = 0;
+    const existingPublicSkillRecords = loadExistingPublicSkillRecords();
+    const assfControlPlaneInventory = loadAssfControlPlaneInventory();
+    const assfControlPlaneProjection = buildAssfControlPlaneProjection(assfControlPlaneInventory);
+    const assfProjectedSkills = buildAssfProjectedSkills(assfControlPlaneProjection);
 
     const entries = fs.readdirSync(SKILLS_ROOT, { withFileTypes: true });
     for (const entry of entries) {
@@ -362,6 +600,15 @@ function buildSkillIndex() {
                 linkedTemplates: governanceEntry ? governanceEntry.linkedTemplates : [],
                 corpusNote: governanceEntry ? governanceEntry.corpusNote : 'Unscreened legacy surface; excluded from front-door truth until classified.',
             };
+            const existingPublicSkill = existingPublicSkillRecords.get(`${folderName}::${skillId}`);
+            if (existingPublicSkill && typeof existingPublicSkill.content === 'string') {
+                // Keep this projection tranche from refreshing unrelated legacy
+                // skill markdown content in the generated public index.
+                skillRecord.content = existingPublicSkill.content;
+            }
+            if (existingPublicSkill && typeof existingPublicSkill.uatContent === 'string') {
+                skillRecord.uatContent = existingPublicSkill.uatContent;
+            }
 
             if (skillRecord.frontDoorVisible) {
                 visibleSkills.push(skillRecord);
@@ -384,6 +631,14 @@ function buildSkillIndex() {
         // only exposes agent-ready public skills with a governed template path.
     }
 
+    if (assfProjectedSkills.length > 0) {
+        categories.push({
+            id: 'agent_system_skills',
+            name: 'Agent System Skills',
+            skills: assfProjectedSkills,
+        });
+    }
+
     return {
         generatedAt: new Date().toISOString(),
         categories,
@@ -394,8 +649,13 @@ function buildSkillIndex() {
             trustedMappedSkills: corpusGovernance.summary.trustedSkills,
             reviewMappedSkills: corpusGovernance.summary.reviewSkills,
             trustedBenchmarkSkills: corpusGovernance.summary.trustedBenchmarkSkills,
-            governanceSource: corpusGovernance.sourcePaths,
+            governanceSource: [...corpusGovernance.sourcePaths, toPosixPath(path.relative(BASE_DIR, ASSF_INDEX_PATH))],
+            assfProjectedSkills: assfProjectedSkills.length,
+            certifiedPackageProjections: assfProjectedSkills.filter((skill) => skill.assfProjectionClass === 'CERTIFIED_PACKAGE_PROJECTION').length,
+            runtimePackageProjections: assfProjectedSkills.filter((skill) => skill.runtimePackageProjection === true).length,
+            skillControlPlaneProjection: toPosixPath(path.relative(BASE_DIR, PUBLIC_CONTROL_PLANE_PATH)),
         },
+        assfControlPlaneProjection,
     };
 }
 
@@ -412,7 +672,7 @@ function normalizeIndexPayload(payload) {
 function writeIndex(indexPayload) {
     const outDir = path.resolve(BASE_DIR, 'public', 'data');
     fs.mkdirSync(outDir, { recursive: true });
-    const outPath = path.join(outDir, 'skills-index.json');
+    const outPath = PUBLIC_INDEX_PATH;
     if (fs.existsSync(outPath)) {
         try {
             const existingRaw = fs.readFileSync(outPath, 'utf-8');
@@ -432,8 +692,33 @@ function writeIndex(indexPayload) {
     return { outPath, updated: true };
 }
 
+function writeControlPlaneProjection(projectionPayload) {
+    const outDir = path.resolve(BASE_DIR, 'public', 'data');
+    fs.mkdirSync(outDir, { recursive: true });
+    const outPath = PUBLIC_CONTROL_PLANE_PATH;
+    const normalizedPayload = normalizeIndexPayload(projectionPayload);
+    if (fs.existsSync(outPath)) {
+        try {
+            const existingRaw = fs.readFileSync(outPath, 'utf-8');
+            const existingPayload = JSON.parse(existingRaw);
+            if (JSON.stringify(normalizeIndexPayload(existingPayload)) === JSON.stringify(normalizedPayload)) {
+                return { outPath, updated: false };
+            }
+        } catch (error) {
+            console.warn(`Rewriting ASSF control plane projection after parse mismatch: ${outPath}`, error);
+        }
+    }
+
+    fs.writeFileSync(outPath, JSON.stringify(projectionPayload, null, 2));
+    return { outPath, updated: true };
+}
+
 const indexPayload = buildSkillIndex();
+const controlPlaneProjection = indexPayload.assfControlPlaneProjection;
+delete indexPayload.assfControlPlaneProjection;
+const { outPath: controlPlaneOutPath, updated: controlPlaneUpdated } = writeControlPlaneProjection(controlPlaneProjection);
 const { outPath, updated } = writeIndex(indexPayload);
+console.log(`${controlPlaneUpdated ? 'Generated' : 'Reused'} ASSF control plane projection: ${controlPlaneOutPath}`);
 console.log(`${updated ? 'Generated' : 'Reused'} skill index: ${outPath}`);
 console.log(`Front-door categories: ${indexPayload.categories.length}`);
 console.log(`Front-door skills: ${indexPayload.meta.frontDoorSkills}`);

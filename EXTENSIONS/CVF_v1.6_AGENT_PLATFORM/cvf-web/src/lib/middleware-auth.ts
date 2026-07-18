@@ -1,5 +1,6 @@
-import { auth } from '@/auth';
+import { auth, authSecret } from '@/auth';
 import { cookies } from 'next/headers';
+import { getToken } from 'next-auth/jwt';
 import type { NextRequest } from 'next/server';
 import type { TeamRole } from 'cvf-guard-contract/enterprise';
 
@@ -37,6 +38,16 @@ type SessionUser = {
     teamId?: string;
 };
 
+type AppToken = {
+    name?: string | null;
+    email?: string | null;
+    role?: TeamRole;
+    userId?: string;
+    orgId?: string;
+    teamId?: string;
+    exp?: number;
+};
+
 async function resolveCookieValue(request?: NextRequest | Request): Promise<string | undefined> {
     if (request) {
         const parsed = parseCookieHeader(request.headers.get('cookie'));
@@ -67,17 +78,27 @@ export function withSessionAuditPayload(
     return Object.keys(nextPayload).length > 0 ? nextPayload : undefined;
 }
 
-/**
- * Legacy wrapper for verifying session inside server components and API routes.
- * Now delegates internally to NextAuth.js App Router auth() function.
- * This prevents breaking the ~10 API routes that currently import it.
- */
-export async function verifySessionCookie(_request?: NextRequest | Request): Promise<SessionCookie | null> {
+async function resolveBaseSessionFromRequest(request: NextRequest | Request): Promise<SessionCookie | null> {
+    const token = await getToken({ req: request, secret: authSecret }) as AppToken | null;
+    if (!token) return null;
+
+    return {
+        userId: token.userId || 'unknown-user',
+        user: normalizeDisplayName(token.name) || token.email || 'unknown',
+        role: token.role || 'developer',
+        orgId: token.orgId || 'org_cvf',
+        teamId: token.teamId || 'team_eng',
+        expiresAt: (token.exp ?? 0) * 1000,
+        authMode: 'session',
+    };
+}
+
+async function resolveBaseSessionAmbient(): Promise<SessionCookie | null> {
     const session = await auth();
     if (!session?.user) return null;
     const sessionUser = session.user as SessionUser;
 
-    const baseSession: SessionCookie = {
+    return {
         userId: sessionUser.userId || 'unknown-user',
         user: normalizeDisplayName(sessionUser.name) || sessionUser.email || 'unknown',
         role: sessionUser.role || 'developer',
@@ -86,6 +107,19 @@ export async function verifySessionCookie(_request?: NextRequest | Request): Pro
         expiresAt: new Date(session.expires).getTime(),
         authMode: 'session',
     };
+}
+
+/**
+ * Legacy wrapper for verifying session inside server components and API routes.
+ * Delegates to the request-bound Auth.js JWT decoder when a request is supplied,
+ * and to the ambient App Router auth() function otherwise.
+ * This prevents breaking the ~10 API routes that currently import it.
+ */
+export async function verifySessionCookie(_request?: NextRequest | Request): Promise<SessionCookie | null> {
+    const baseSession = _request
+        ? await resolveBaseSessionFromRequest(_request)
+        : await resolveBaseSessionAmbient();
+    if (!baseSession) return null;
 
     const impersonationSessionId = await resolveCookieValue(_request);
     if (!impersonationSessionId) {

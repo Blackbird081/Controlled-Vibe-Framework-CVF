@@ -1,0 +1,32 @@
+{
+  "stableId": "cvf.asc.module.docs_root.v1",
+  "entityType": "MODULE",
+  "name": "Docs Root L6 Owner",
+  "authorityClass": "ACTIVE_GOVERNED_STANDARD",
+  "maturity": "ACTIVE",
+  "ownerPaths": [
+    "docs/"
+  ],
+  "planeMembership": [
+    "cvf.asc.plane.doctrine_to_contract.v1"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "docs/reference/system_chain/CVF_DOCTRINE_TO_CONTRACT_ROUTE_MAP.md",
+      "lineOrSection": "cited row",
+      "evidenceRole": "module owner/status evidence"
+    }
+  ],
+  "claimBoundary": "Owns documentation/onboarding responsibility for doctrine L6 Ecosystem Layer.",
+  "freshnessInputs": [
+    "docs/"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_ASC_T0_SOURCE_SCHEMA_AND_RECONCILIATION_CONTRACT_WORKER_RETURN_2026-07-11.md"
+  },
+  "boundaryCaveat": "Doctrine-named /examples does not exist as a root directory; L6 responsibility is distributed across docs/, EXTENSIONS/examples/, and governance/toolkit/06_EXAMPLES/.",
+  "priorDisposition": ""
+}

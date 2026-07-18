@@ -42,7 +42,7 @@ It is not marketing copy. Every claim here must be traceable to a receipt, a bas
 | Item | Detail |
 |---|---|
 | Claim | CVF's front-door (landing + wizard + template gallery) is a coherent, operable product surface |
-| Evidence | `docs/baselines/CVF_FRONT_DOOR_WAVE1_EXECUTION_NOTE_2026-04-21.md`, `CVF_FRONT_DOOR_WAVE2_EXECUTION_NOTE_2026-04-21.md` |
+| Evidence | `docs/baselines/archive/CVF_FRONT_DOOR_WAVE1_EXECUTION_NOTE_2026-04-21.md`, `CVF_FRONT_DOOR_WAVE2_EXECUTION_NOTE_2026-04-21.md` |
 | Surface | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/landing/` |
 | Date closed | 2026-04-21 |
 
@@ -82,7 +82,7 @@ It is not marketing copy. Every claim here must be traceable to a receipt, a bas
 | Item | Detail |
 |---|---|
 | Claim | Provider lane status (CERTIFIED / CANARY_PASS / EXPERIMENTAL / UNCONFIGURED / etc.) is visible in the product UI |
-| Evidence | `docs/baselines/CVF_W110_T3_PROVIDER_LANE_UX_RELEASE_READINESS_DELTA_2026-04-21.md` |
+| Evidence | `docs/baselines/archive/CVF_W110_T3_PROVIDER_LANE_UX_RELEASE_READINESS_DELTA_2026-04-21.md` |
 | Surface | Settings.tsx, ProviderSwitcher.tsx — lane badges with pass window |
 | Date closed | 2026-04-21 (W110-T3 CP1-CP4) |
 
@@ -121,9 +121,9 @@ These items are explicitly out of scope for this release candidate. They are not
 | Provider readiness matrix | `docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md` |
 | Alibaba canary receipts | `docs/audits/alibaba-canary/INDEX.md` |
 | DeepSeek canary receipts | `docs/audits/deepseek-canary/INDEX.md` |
-| W110-T3 baseline delta | `docs/baselines/CVF_W110_T3_PROVIDER_LANE_UX_RELEASE_READINESS_DELTA_2026-04-21.md` |
-| W110-T2 baseline delta | `docs/baselines/CVF_W110_T2_PROVIDER_LANE_CERTIFICATION_DELTA_2026-04-21.md` |
-| Front-door wave notes | `docs/baselines/CVF_FRONT_DOOR_WAVE1_EXECUTION_NOTE_2026-04-21.md`, `..WAVE2..` |
+| W110-T3 baseline delta | `docs/baselines/archive/CVF_W110_T3_PROVIDER_LANE_UX_RELEASE_READINESS_DELTA_2026-04-21.md` |
+| W110-T2 baseline delta | `docs/baselines/archive/CVF_W110_T2_PROVIDER_LANE_CERTIFICATION_DELTA_2026-04-21.md` |
+| Front-door wave notes | `docs/baselines/archive/CVF_FRONT_DOOR_WAVE1_EXECUTION_NOTE_2026-04-21.md`, `..WAVE2..` |
 | Operator runbook | `docs/reference/CVF_PROVIDER_LANE_OPERATOR_RUNBOOK.md` |
 | Known limitations register | `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md` |
 | Demo script | `docs/guides/CVF_DEMO_SCRIPT_2026-04-21.md` |

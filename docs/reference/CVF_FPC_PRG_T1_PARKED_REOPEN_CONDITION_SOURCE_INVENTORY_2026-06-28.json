@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "0.1.0",
+  "inventoryId": "cvf.fpcPrg.t1.parkedReopenConditionSourceInventory.v1",
+  "status": "ACTIVE_REFERENCE",
+  "date": "2026-06-28",
+  "docType": "parked_reopen_condition_source_inventory",
+  "owner": "Codex",
+  "sourceAuthority": [
+    "CVF_SESSION_MEMORY.md",
+    "CVF_SESSION/handoffs/archive/AGENT_HANDOFF_V25_2026-06-28.md",
+    "docs/baselines/CVF_GC018_FPC_DSD_T1_FOUNDATION_DOWNSTREAM_POST_PUBLIC_EXPORT_LANE_SELECTION_DECISION_2026-06-28.md",
+    "docs/reference/CVF_FPC_SCG_T7_FOUNDATION_SYSTEM_CHAIN_ACCEPTANCE_LEDGER_2026-06-27.json",
+    "docs/reference/CVF_VALUE_PARKED_LANE_REOPEN_DISCIPLINE_STANDARD_2026-06-25.md"
+  ],
+  "upstreamDecision": {
+    "trancheId": "FPC-PRG-T0",
+    "materialCommit": "8d4ed2f4",
+    "decision": "SYSTEMIZE_PARKED_REOPEN_GATE_BEFORE_DOWNSTREAM_IMPLEMENTATION",
+    "nextSequence": "T1 inventory before T2 checker"
+  },
+  "inventoryBoundary": {
+    "enforcementChangeAuthorized": false,
+    "runtimeWorkAuthorized": false,
+    "providerLiveProofAuthorized": false,
+    "publicSyncAuthorized": false,
+    "downstreamImplementationAuthorized": false,
+    "checkerImplementationAuthorized": false
+  },
+  "requiredLaneIds": [
+    "MPI-T6-runtime",
+    "runtime-provider-live",
+    "use-case-adapter-public"
+  ],
+  "laneInventories": [
+    {
+      "laneId": "MPI-T6-runtime",
+      "gateStatus": "PARKED",
+      "conditionText": "fresh GC-018 proves an operator-stated product requirement explicitly needs the MPI lane itself and current MPI contract/helper/durable surfaces are insufficient",
+      "owningArtifacts": [
+        "docs/baselines/CVF_GC018_FPC_DSD_T1_FOUNDATION_DOWNSTREAM_POST_PUBLIC_EXPORT_LANE_SELECTION_DECISION_2026-06-28.md",
+        "docs/baselines/CVF_GC018_MPI_T6_RUNTIME_CANDIDATE_DECISION_PACKET_2026-06-22.md",
+        "docs/reference/CVF_FPC_SCG_T7_FOUNDATION_SYSTEM_CHAIN_ACCEPTANCE_LEDGER_2026-06-27.json"
+      ],
+      "evidenceFields": [
+        "operator-stated product requirement explicitly names MPI lane",
+        "current MPI contract/helper or durable/reinjection surfaces are source-proven insufficient",
+        "fresh GC-018 baseline path",
+        "source-verified work order path",
+        "live/provider proof plan when governance behavior is claimed"
+      ],
+      "requiredConditions": [
+        "operator-stated product requirement explicitly needs the MPI lane itself",
+        "current MPI contract/helper or pre-existing durable/reinjection surfaces do not satisfy the requirement",
+        "fresh GC-018 baseline",
+        "source-verified work order",
+        "live/provider proof when governance behavior is claimed"
+      ],
+      "forbiddenUntilGatePasses": [
+        "live runtime memory read",
+        "vector-durable query",
+        "external-agent MCP-CLI memory read"
+      ],
+      "reproposalRule": "Do not re-propose unless every evidence field is source-backed in a fresh GC-018."
+    },
+    {
+      "laneId": "runtime-provider-live",
+      "gateStatus": "PARKED",
+      "conditionText": "fresh GC-018 proves a concrete runtime governance behavior claim needs live proof, with secret-safe diagnostics and quota/provider failure classification",
+      "owningArtifacts": [
+        "docs/baselines/CVF_GC018_FPC_DSD_T1_FOUNDATION_DOWNSTREAM_POST_PUBLIC_EXPORT_LANE_SELECTION_DECISION_2026-06-28.md",
+        "docs/reference/CVF_FPC_SCG_T7_FOUNDATION_SYSTEM_CHAIN_ACCEPTANCE_LEDGER_2026-06-27.json",
+        "docs/reference/archive/CVF_LIVE_RUN_DIAGNOSTIC_STANDARD_2026-05-24.md"
+      ],
+      "evidenceFields": [
+        "concrete runtime governance behavior claim",
+        "reason live proof is required",
+        "secret-safe diagnostic plan",
+        "quota/provider failure classification plan",
+        "fresh GC-018 baseline path",
+        "source-verified work order path"
+      ],
+      "requiredConditions": [
+        "fresh operator decision",
+        "fresh GC-018 baseline",
+        "source-verified work order",
+        "live governance proof when governance behavior is claimed",
+        "secrets and quota diagnostic plan"
+      ],
+      "forbiddenUntilGatePasses": [
+        "runtime/MCP/CLI/IDE bridge implementation",
+        "provider/live proof",
+        "Model Gateway/Sandbox runtime expansion"
+      ],
+      "reproposalRule": "Do not re-propose unless a concrete runtime governance behavior claim and diagnostic plan are source-backed."
+    },
+    {
+      "laneId": "use-case-adapter-public",
+      "gateStatus": "PARKED",
+      "conditionText": "fresh GC-018 proves a concrete adapter behavior or public-surface gap remains after UAP-T2, cites owner source files, and includes public/provenance boundary evidence",
+      "owningArtifacts": [
+        "docs/baselines/CVF_GC018_FPC_DSD_T1_FOUNDATION_DOWNSTREAM_POST_PUBLIC_EXPORT_LANE_SELECTION_DECISION_2026-06-28.md",
+        "docs/reviews/CVF_FPC_UAP_T2_USE_CASE_ADAPTER_PUBLIC_EXPORT_README_CATALOG_SNAPSHOT_REFRESH_COMPLETION_2026-06-27.md",
+        "docs/reference/CVF_FPC_SCG_T7_FOUNDATION_SYSTEM_CHAIN_ACCEPTANCE_LEDGER_2026-06-27.json"
+      ],
+      "evidenceFields": [
+        "adapter behavior or public-surface gap remains after UAP-T2",
+        "owner source files cited",
+        "public/provenance boundary evidence",
+        "fresh GC-018 baseline path",
+        "source-verified work order path"
+      ],
+      "requiredConditions": [
+        "fresh operator decision",
+        "fresh GC-018 baseline",
+        "source-verified work order",
+        "public/provenance boundary review before public-sync",
+        "adapter-specific evidence that foundation acceptance applies"
+      ],
+      "forbiddenUntilGatePasses": [
+        "Policy_Local implementation",
+        "Document Translator implementation",
+        "public-sync",
+        "push"
+      ],
+      "reproposalRule": "Do not re-propose unless the post-UAP-T2 gap and public/provenance boundary evidence are source-backed."
+    }
+  ],
+  "checkerCandidate": {
+    "nextTranche": "FPC-PRG-T2",
+    "expectedInput": "this inventory plus the T7 acceptance ledger and DSD-T1 reopen-condition table",
+    "mustReject": [
+      "missing lane inventory",
+      "lane not present in T7 downstreamReopenGates",
+      "gateStatus other than PARKED",
+      "condition text drift from DSD-T1",
+      "requiredConditions drift from T7",
+      "forbiddenUntilGatePasses drift from T7",
+      "missing owning artifact",
+      "empty evidence field list"
+    ]
+  },
+  "publicExportDisposition": "DEFERRED_PRIVATE_ONLY",
+  "rawMemoryReleased": false,
+  "claimBoundary": "This inventory is a private provenance source map for parked reopen conditions. It does not authorize checker wiring, runtime/provider/live work, public-sync, adapter implementation, package activation, certification, MPI-T6 runtime work, or downstream implementation."
+}

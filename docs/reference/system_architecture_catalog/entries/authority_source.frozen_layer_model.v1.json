@@ -1,0 +1,22 @@
+{
+  "stableId": "cvf.asc.authority_source.frozen_layer_model.v1",
+  "entityType": "AUTHORITY_SOURCE",
+  "name": "Frozen Layer Model",
+  "authorityClass": "FROZEN_DOCTRINE",
+  "frozen": true,
+  "ownerPaths": [
+    "ECOSYSTEM/doctrine/CVF_LAYER_MODEL.md"
+  ],
+  "citations": [
+    {
+      "path": "ECOSYSTEM/doctrine/CVF_LAYER_MODEL.md",
+      "lineOrSection": "whole document",
+      "evidenceRole": "authority source"
+    }
+  ],
+  "claimBoundary": "Supreme layer-naming and architectural-freeze authority for L0-L6.",
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_ASC_T0_SOURCE_SCHEMA_AND_RECONCILIATION_CONTRACT_WORKER_RETURN_2026-07-11.md"
+  }
+}

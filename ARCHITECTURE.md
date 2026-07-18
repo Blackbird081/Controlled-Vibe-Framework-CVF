@@ -2,10 +2,7 @@
 
 > Front-door architecture view for GitHub readers.
 >
-> Current readout: CVF is a governance-first AI/agent control framework with
-> live non-coder governance proof, certified provider lanes where listed in the
-> provider readiness matrix, and mandatory live API release evidence for
-> governance claims.
+> Current readout: CVF is a governance-first AI/agent control framework with live non-coder governance proof, certified Alibaba + DeepSeek provider lanes, and mandatory live API release evidence for governance claims.
 >
 > This page is one of the three root front-door entrypoints alongside `README.md` and `START_HERE.md`.
 
@@ -21,13 +18,11 @@ CVF is easiest to understand as a governance-first stack with four distinct role
 The current publication posture is live-first:
 
 - governance behavior is proven through real provider execution, not mock strings;
-- certified provider lanes are listed in `docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md`;
+- Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` are certified provider lanes;
 - mock mode is valid only for UI structure checks;
 - release-quality proof runs through `python scripts/run_cvf_release_gate_bundle.py --json`.
 - Web is governance-inherited on the active governed AI path, but is not the full CVF runtime.
 - Workspace bootstrap is now agent-enforcement-ready when generated artifacts and the workspace doctor pass.
-- public route files, CI badges, and connector specs must be read through
-  `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`.
 
 Current optimization posture:
 
@@ -166,10 +161,6 @@ flowchart TB
 
 Diagram note: this is the path that must reach a real provider API call before CVF can claim governance behavior. Alibaba/DashScope is the primary certified release lane; DeepSeek has certified canary evidence and bounded confirmatory coverage. Provider parity is not claimed.
 
-Source route existence is not part of this proof by itself. A public route must
-be linked to evidence, tests, or the release gate before it is cited as governed
-route coverage.
-
 ## 4. Interaction Model
 
 This is the practical governed loop that CVF currently proves on the active path. Mock UI tests do not count as governance evidence.
@@ -196,7 +187,41 @@ sequenceDiagram
 
 Diagram note: mock UI tests can validate screens and navigation, but this sequence only counts as governance proof when the provider call is live and the resulting receipt/evidence is captured.
 
-## 5. What This Means
+## 5. SOT3 Knowledge Authority Path
+
+The accepted SOT Three-Layer (SOT3) family governs how retrieved knowledge
+context earns truth authority before it can be injected into a governed
+request. It is a knowledge-authority path, not a replacement for the
+governed request path in Section 3 above; it sits before governed execution
+when a knowledge-context seam is activated.
+
+```mermaid
+flowchart LR
+    SRC["Source intake<br/>SourceEnvelope"]
+    REF["Refinery<br/>deterministic prepare, no truth authority"]
+    KER["Truth Kernel<br/>sole decision/receipt/reference authority"]
+    FLO["Truth Flow<br/>post-Kernel distribution/lifecycle"]
+    CTX["Governed context<br/>Flow-approved knowledge only"]
+    EXEC["Governed execution<br/>Section 3 active path"]
+    REV["Review / freeze"]
+    IMP["Impact / recall"]
+
+    SRC --> REF --> KER --> FLO --> CTX --> EXEC --> REV --> IMP
+```
+
+Diagram note: Refinery prepares source-bound material deterministically and
+holds no truth authority. Truth Kernel alone evaluates trust and issues
+decision, receipt, and reference authority. Truth Flow distributes only
+Flow-approved, post-Kernel context; provider output remains downstream
+content, not truth authority. This path is bounded: the four SOT3 module
+owners are `LOCAL_READY` and accepted-review-evidenced, not globally
+activated, always-invoked, a provider boundary, publicly exported, or
+production-ready. Activation and downstream-application proof are bounded to
+one seam (`docs/reference/sot_three_layer/CVF_SOT3_ACTIVATION_ARCHITECTURE_DECISION.md`),
+not universal CVF behavior. Full contract, implementation, and proof
+references live in `docs/reference/sot_three_layer/README.md`.
+
+## 6. What This Means
 
 The architecture should be read this way:
 
@@ -207,28 +232,23 @@ The architecture should be read this way:
 - deeper governance and evidence records matter, but they are not the preferred first-click path from the repository front door
 - provider choice is user-owned, but governance evidence remains CVF-owned
 - release-quality governance claims require live API-backed evidence; mock mode is UI-only
-- static CI/public-surface checks support public hygiene, but do not replace
-  protected live release-gate evidence
 
-## 6. Current Evidence Posture
+## 7. Current Evidence Posture
 
 | Claim | Current status | Evidence |
 | --- | --- | --- |
-| Governance kernel coherence | Audit-equivalent public reader baseline | `docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md` |
 | Non-coder governed AI path | Live-proven | W149 trusted-form corpus: Alibaba direct API `40/40`, Alibaba browser UI `40/40`, DeepSeek confirmatory subset `12/12` |
 | Non-coder adoption journey | Live-proven | W119 evidence pack `3/3` locked journeys pass: first governed output, project knowledge use, evidence handoff |
 | Multi-provider operability | Certified on 2 lanes | Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` both `CERTIFIED`; provider parity is not claimed |
 | Release gate | Mandatory live governance | W152 preserves `python scripts/run_cvf_release_gate_bundle.py --json` PASS, including live governance E2E |
 | Mock boundary | UI-only | `AGENTS.md` and live evidence packet |
-| Static CI boundary | Public hygiene only | `scripts/run_cvf_static_ci_gate.py` and CI workflows do not replace live provider proof |
-| Route coverage boundary | Evidence-linked only | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md` |
 | Provider parity | Not claimed | Speed, cost, quality, latency, and reliability remain provider economics |
 | Web CVF inheritance | Active path only | Web is governance-inherited on `/api/execute`; it does not claim full CVF runtime inheritance |
 | Workspace agent enforcement | Delivered | W112-T1 adds downstream `AGENTS.md`, `.cvf/` manifest/policy, and workspace doctor checks |
 | Downstream adoption proof | Repeatable across 3 tested kinds | W114-CP7 proves cli-productivity, web-app-planning, and data-analysis — all doctor 11/11 PASS, all tests pass, sample 3 includes a secret-free bridge to live Web evidence |
 | Trusted-form web front door | Live-usable under W149 boundary | 40-form corpus locked; Alibaba full matrix passed; DeepSeek subset passed |
 
-## 7. Current Control Boundaries
+## 8. Current Control Boundaries
 
 ### Web
 
@@ -280,7 +300,7 @@ Current posture: W119 closed delivered. Downstream adoption pattern is repeatabl
 
 Latest closed non-coder value roadmap: [W119-T1 Non-Coder Adoption Proof And Evidence UX](docs/roadmaps/CVF_W119_T1_NONCODER_ADOPTION_PROOF_AND_EVIDENCE_UX_ROADMAP_2026-04-23.md).
 
-## 8. Read Next
+## 9. Read Next
 
 ### General Orientation
 
@@ -301,9 +321,7 @@ Latest closed non-coder value roadmap: [W119-T1 Non-Coder Adoption Proof And Evi
 - [Release Candidate Truth Packet](docs/reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md)
 - [Provider Lane Readiness Matrix](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
 - [Known Limitations Register](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
-- [Public Evaluation Claim Boundary](docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md)
 - [Governance Control Matrix](docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md)
-- [Public Governance Kernel Coherence](docs/reference/CVF_PUBLIC_GOVERNANCE_KERNEL_COHERENCE_2026-05-22.md)
 - [W112-T1 Workspace Agent Enforcement And Web Control Uplift Roadmap](docs/roadmaps/CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md)
 - [W113-T1 First Downstream Project Proof Roadmap](docs/roadmaps/CVF_W113_T1_FIRST_DOWNSTREAM_PROJECT_PROOF_ROADMAP_2026-04-22.md)
 - [W114-T1 Non-Coder Value Maximization And Evidence Roadmap](docs/roadmaps/CVF_W114_T1_NONCODER_VALUE_MAXIMIZATION_AND_EVIDENCE_ROADMAP_2026-04-22.md)

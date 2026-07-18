@@ -25,6 +25,9 @@ export { generateClarifications } from './vibe-translator/clarification-engine.j
 export { generateConfirmationCard, formatCardAsText, RISK_LABELS, PHASE_LABELS, } from './vibe-translator/confirmation-card.js';
 // ─── Session Memory ───────────────────────────────────────────────────
 export { SessionMemory } from './memory/session-memory.js';
+// ─── Gamma Startup State ──────────────────────────────────────────────
+export { STARTUP_STATE_CONTRACT_VERSION, buildStartupAcknowledgment, checkGovernanceAction, getActiveHandoff, getGovernanceRules, getSessionMemory, getSessionState, readRedactedFile, redactSensitiveText, resolveCvfRepo, } from './startup/startup-state.js';
+export { getMcpToolAuditSnapshot, recordMcpToolCall, withMcpToolAudit, } from './audit/mcp-tool-audit.js';
 // ─── Non-coder: 5 Golden Screens ─────────────────────────────────────
 export { generateVibeBoxScreen, generateIntentionMapScreen, generateLiveDashboardScreen, generateHITLScreen, generateAuditLedgerScreen, } from './non-coder/golden-screens.js';
 // ─── Non-coder: Smart Onboarding ─────────────────────────────────────

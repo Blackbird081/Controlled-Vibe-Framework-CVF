@@ -22,6 +22,7 @@ export interface ProviderCapabilityModel {
   readonly modelId: string;
   readonly supportedMethods: readonly ProviderMethodName[];
   readonly defaultMethod: ProviderMethodName;
+  readonly metadata?: Record<string, unknown>;
 }
 
 export interface ProviderMethodContract {

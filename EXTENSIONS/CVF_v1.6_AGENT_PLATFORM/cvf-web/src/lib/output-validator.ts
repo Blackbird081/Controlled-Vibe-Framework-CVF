@@ -61,6 +61,30 @@ const UNSAFE_PATTERNS: RegExp[] = [
   /\bbypass\s+(?:2fa|access control|auth|authentication|authorization|login|mfa|permission|security)\b/i,
 ];
 
+// ─── ERH_SAF2_MARKER: GOVERNANCE_OUTPUT_SAFETY_ACTIVE ─────────────────────
+// Governance-specific output patterns detect AI responses that echo
+// governance-bypass instructions — indicating potential injection success.
+// Regex-only; no ML classifier; no "comprehensive output safety" claim.
+export const GOVERNANCE_OUTPUT_PATTERNS: RegExp[] = [
+  /\bdisable\s+governance\b/i,
+  /\boverride\s+policy\b/i,
+  /\bbypass\s+(security|governance|policy)\b/i,
+  /\bI\s+(am\s+)?(now\s+)?unrestricted\b/i,
+  /\boperating\s+without\s+(all\s+)?(restrictions|governance|policies)\b/i,
+  /\bignore\s+(all\s+)?previous\s+instructions?\b/i,
+  /\bact\s+as\s+if\s+(you\s+have\s+)?(no\s+)?restrictions?\b/i,
+  /\bdisable\s+(all\s+)?safety\b/i,
+];
+
+/**
+ * Returns true when the output text matches any governance-specific output
+ * safety pattern. Used by the route for OUTPUT_SAFETY_TRIGGERED audit gate.
+ * Claim boundary: regex-only detection; not a comprehensive output safety claim.
+ */
+export function isGovernanceOutputUnsafe(output: string): boolean {
+  return GOVERNANCE_OUTPUT_PATTERNS.some((p) => p.test(output));
+}
+
 const STRUCTURE_INDICATORS = [
   /^#{1,3}\s/m,           // Markdown headings
   /^\d+\.\s/m,            // Numbered lists
@@ -119,6 +143,12 @@ export function validateOutput(input: OutputValidationInput): ValidationResult {
       reasons.push('Response contains potentially unsafe content patterns.');
       break;
     }
+  }
+
+  // 4b. Governance output safety check (SAF2)
+  if (!issues.includes('UNSAFE_CONTENT') && isGovernanceOutputUnsafe(output)) {
+    issues.push('UNSAFE_CONTENT');
+    reasons.push('Response contains governance-specific output safety patterns.');
   }
 
   // 5. Intent alignment (basic keyword check)

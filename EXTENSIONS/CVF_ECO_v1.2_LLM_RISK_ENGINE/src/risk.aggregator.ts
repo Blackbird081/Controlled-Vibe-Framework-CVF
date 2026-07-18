@@ -1,6 +1,19 @@
 import { RiskAssessment, SessionRisk, RiskLevel } from "./types";
 import { scoreToLevel } from "./risk.scorer";
 
+export const ECO_RISK_AGGREGATOR_ADAPTER_VERSION = "phase2b-eco-risk-aggregator-adapter-1";
+
+export interface EcoRiskAggregatorAdapterSnapshot {
+  version: typeof ECO_RISK_AGGREGATOR_ADAPTER_VERSION;
+  source: "eco-v1.2:risk-aggregator";
+  sessionId: string;
+  totalActions: number;
+  cumulativeScore: number;
+  highestLevel: RiskLevel;
+  sessionLevel: RiskLevel;
+  escalated: boolean;
+}
+
 const RISK_ORDER: Record<RiskLevel, number> = { R0: 0, R1: 1, R2: 2, R3: 3 };
 const ESCALATION_THRESHOLD = 5.0;
 const MAX_SESSION_HISTORY = 100;
@@ -44,6 +57,17 @@ export class RiskAggregator {
     return this.recordToSession(sid, assessment);
   }
 
+  recordWithAdapter(
+    assessment: RiskAssessment,
+    sessionId?: string,
+  ): { session: SessionRisk; adapter: EcoRiskAggregatorAdapterSnapshot } {
+    const session = this.record(assessment, sessionId);
+    return {
+      session,
+      adapter: this.buildAdapterSnapshot(session.sessionId),
+    };
+  }
+
   getSessionRisk(sessionId?: string): SessionRisk | undefined {
     const sid = sessionId ?? this.activeSessionId;
     if (!sid) return undefined;
@@ -85,6 +109,24 @@ export class RiskAggregator {
   clearAll(): void {
     this.sessions.clear();
     this.activeSessionId = null;
+  }
+
+  buildAdapterSnapshot(sessionId?: string): EcoRiskAggregatorAdapterSnapshot {
+    const session = this.getSessionRisk(sessionId);
+    if (!session) {
+      throw new Error("No active risk session available for adapter snapshot");
+    }
+
+    return {
+      version: ECO_RISK_AGGREGATOR_ADAPTER_VERSION,
+      source: "eco-v1.2:risk-aggregator",
+      sessionId: session.sessionId,
+      totalActions: session.totalActions,
+      cumulativeScore: session.cumulativeScore,
+      highestLevel: session.highestLevel,
+      sessionLevel: this.getSessionLevel(session.sessionId),
+      escalated: session.escalated,
+    };
   }
 
   private recordToSession(sessionId: string, assessment: RiskAssessment): SessionRisk {

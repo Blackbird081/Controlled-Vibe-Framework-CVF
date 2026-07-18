@@ -129,8 +129,8 @@ under a dedicated W7MemoryRecord enrichment wave.
 
 ## 8. N2 Decision Record (W78-T1 — 2026-04-14)
 
-> Authority: `docs/baselines/CVF_W78_T1_BENCHMARK_EVIDENCE_PACKET_2026-04-14.md`
-> GC-026 sync: `docs/baselines/CVF_GC026_TRACKER_SYNC_W78_T1_N2_BENCHMARK_EVIDENCE_CLOSURE_2026-04-14.md`
+> Authority: `docs/baselines/archive/CVF_W78_T1_BENCHMARK_EVIDENCE_PACKET_2026-04-14.md`
+> GC-026 sync: `docs/baselines/archive/CVF_GC026_TRACKER_SYNC_W78_T1_N2_BENCHMARK_EVIDENCE_CLOSURE_2026-04-14.md`
 
 **Decision: HYBRID / NO SINGLE DEFAULT**
 

@@ -1,32 +1,38 @@
 {
   "name": "cvf-agent",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "private": true,
   "scripts": {
     "sync:risk-models": "node scripts/build-risk-models.js",
     "predev": "node scripts/build-risk-models.js && node scripts/build-skill-index.js",
     "prebuild": "node -e \"const fs=require('fs');const d=process.env.NEXT_DIST_DIR||'.next';try{fs.rmSync(d,{recursive:true,force:true})}catch(e){}\" && node scripts/build-risk-models.js && node scripts/build-skill-index.js",
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "check": "tsc --noEmit",
     "test": "vitest",
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "test:run": "vitest run --exclude \"src/**/*.live.test.ts\"",
+    "test:coverage": "vitest run --coverage --exclude \"src/**/*.live.test.ts\"",
+    "test:live": "vitest run \"src/**/*.live.test.ts\" --fileParallelism=false",
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@upstash/redis": "^1.38.0",
     "better-sqlite3": "^12.6.2",
     "clsx": "^2.1.1",
     "cvf-control-plane-foundation": "file:../../CVF_CONTROL_PLANE_FOUNDATION",
+    "cvf-execution-plane-foundation": "file:../../CVF_EXECUTION_PLANE_FOUNDATION",
     "cvf-guard-contract": "file:../../CVF_GUARD_CONTRACT",
     "cvf-learning-plane-foundation": "file:../../CVF_LEARNING_PLANE_FOUNDATION",
+    "cvf-refinery": "file:../../CVF_REFINERY",
+    "cvf-truth-flow": "file:../../CVF_TRUTH_FLOW",
+    "cvf-truth-kernel": "file:../../CVF_TRUTH_KERNEL",
     "docx": "^9.5.2",
     "file-saver": "^2.0.5",
-    "jspdf": "^4.1.0",
+    "jspdf": "^4.2.1",
     "lucide-react": "^0.563.0",
-    "next": "16.2.6",
+    "next": "16.2.7",
     "next-auth": "^5.0.0-beta.30",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -46,15 +52,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/coverage-v8": "^4.1.0",
     "eslint": "^9",
-    "eslint-config-next": "16.2.6",
+    "eslint-config-next": "16.2.7",
     "jsdom": "^28.0.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.0.18"
-  },
-  "overrides": {
-    "postcss": "8.5.15"
+    "vitest": "^4.1.0"
   }
 }

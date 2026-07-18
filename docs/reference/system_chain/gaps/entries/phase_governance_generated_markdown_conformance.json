@@ -1,0 +1,53 @@
+{
+  "stableId": "cvf.asc.gap.phase_governance_generated_markdown_conformance.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.enforcement_to_evidence.v1",
+  "targetPlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+  "sourceOwner": "scripts/export_cvf_remediation_receipt_log.py; scripts/runtime_evidence_manifest/manifest_builder.py; scripts/export_cvf_release_packet.py",
+  "targetOwner": "docs/reviews/cvf_phase_governance/*.md",
+  "missingEdge": "Closed: the three source-verified renderer owners now emit twelve governed-conformant Markdown outputs with current structural, checker-read-ahead, range, ASCII, finding-learning, and epistemic-process controls.",
+  "currentStatus": "CLOSED_WITH_EVIDENCE",
+  "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+  "citations": [
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_CURRENT_RERUN_COMPLETION_2026-07-14.md",
+      "lineOrSection": "Findings / Position",
+      "evidenceRole": "reviewer-reconciled downstream generator-conformance finding"
+    },
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_RUNTIME_TO_ENFORCEMENT_RERUN_WORKER_RETURN_2026-07-14.md",
+      "lineOrSection": "Command Evidence",
+      "evidenceRole": "worker-observed reviewer-fast failures after successful UC-02 execution"
+    },
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_RENDERER_CONFORMANCE_REPAIR_COMPLETION_2026-07-14.md",
+      "lineOrSection": "Findings / Position",
+      "evidenceRole": "reviewer-accepted renderer repair and twelve-output conformance closure"
+    }
+  ],
+  "impact": "Closed: all twenty generated outputs are current and all twelve governed Markdown outputs pass the applicable checker surface. The separately retained UC-02 9/9 runtime-to-enforcement receipt remains unchanged.",
+  "closeCondition": {
+    "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+    "conditionText": "A separate governed repair updates the three actual renderer owners, regenerates the twelve Markdown outputs without rerunning UC-02, and passes reviewer-fast plus closure gates."
+  },
+  "reopenCondition": {
+    "conditionKind": "PATTERN_OBSERVED_ON_NAMED_SURFACE",
+    "conditionText": "Reopen if a later phase-governance generator run emits a governed Markdown output that fails current structural, checker-read-ahead, range-fidelity, or ASCII controls."
+  },
+  "actionOwner": "CLOSED_BY_SCLP_UC02_R3_RENDERER_CONFORMANCE_REPAIR",
+  "freshnessInputs": [
+    "scripts/export_cvf_remediation_receipt_log.py",
+    "scripts/runtime_evidence_manifest/manifest_builder.py",
+    "scripts/export_cvf_release_packet.py",
+    "governance/compat/check_markdown_structural_completeness.py",
+    "governance/compat/check_governed_artifact_checker_read_ahead.py",
+    "governance/compat/check_work_order_dispatch_quality.py",
+    "governance/compat/check_agent_packet_authority_and_encoding.py",
+    "governance/compat/check_finding_to_governance_learning.py",
+    "governance/compat/check_epistemic_process_packet.py"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-14",
+    "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_RENDERER_CONFORMANCE_REPAIR_COMPLETION_2026-07-14.md"
+  }
+}

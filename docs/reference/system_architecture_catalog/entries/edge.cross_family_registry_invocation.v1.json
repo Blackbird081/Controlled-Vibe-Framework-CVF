@@ -1,0 +1,31 @@
+{
+  "stableId": "cvf.asc.edge.cross_family_registry_invocation.v1",
+  "entityType": "EDGE",
+  "sourceId": "cvf.asc.plane.runtime_to_enforcement.v1",
+  "targetId": "cvf.asc.plane.enforcement_to_evidence.v1",
+  "edgeProofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+  "evidenceRecency": "HISTORICAL_TRACE",
+  "operatorVisibility": "CI_ONLY",
+  "citations": [
+    {
+      "path": "docs/reference/CVF_CONFORMANCE_SCENARIOS.json",
+      "lineOrSection": "CF-076..CF-084 command arrays",
+      "evidenceRole": "registry-driven invocation source"
+    },
+    {
+      "path": ".github/workflows/documentation-testing.yml",
+      "lineOrSection": "conformance-artifact-consistency job",
+      "evidenceRole": "CI invocation site"
+    }
+  ],
+  "claimBoundary": "Nine cross-family checkers invoked via data-driven registry through CI only. CI_ONLY operatorVisibility per schema invariant (cannot be OPERATOR_VISIBLE_EDGE without OPERATOR_SURFACED).",
+  "freshnessInputs": [
+    "docs/reference/CVF_CONFORMANCE_SCENARIOS.json",
+    ".github/workflows/documentation-testing.yml"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  },
+  "sampledOnly": false
+}

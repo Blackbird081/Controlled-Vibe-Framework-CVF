@@ -11,9 +11,14 @@ function loadSkillIndex() {
   const raw = readFileSync(path.resolve(__dirname, '../../public/data/skills-index.json'), 'utf8');
   return JSON.parse(raw) as {
     archiveCategories?: unknown;
+    meta?: {
+      assfProjectedSkills?: number;
+      certifiedPackageProjections?: number;
+    };
     categories: Array<{
       skills: Array<{
         frontDoorVisible?: boolean;
+        assfProjectionClass?: string;
         linkedTemplates?: Array<{
           templateId: string;
           corpusClass: string;
@@ -77,8 +82,23 @@ describe('skill corpus governance', () => {
     expect(publicSkills.length).toBeGreaterThan(0);
     publicSkills.forEach((skill) => {
       expect(skill.frontDoorVisible).toBe(true);
-      expect(skill.linkedTemplates?.length ?? 0).toBeGreaterThan(0);
-      expect(skill.linkedTemplates?.every((item) => item.corpusClass === 'TRUSTED_FOR_VALUE_PROOF')).toBe(true);
+      if (skill.assfProjectionClass === 'CERTIFIED_PACKAGE_PROJECTION') {
+        expect(skill.linkedTemplates?.length ?? 0).toBe(0);
+      } else {
+        expect(skill.linkedTemplates?.length ?? 0).toBeGreaterThan(0);
+        expect(skill.linkedTemplates?.every((item) => item.corpusClass === 'TRUSTED_FOR_VALUE_PROOF')).toBe(true);
+      }
     });
+  });
+
+  it('publishes certified ASSF package projections without using corpusClass as certification state', () => {
+    const skillIndex = loadSkillIndex();
+    const publicSkills = skillIndex.categories.flatMap((category) => category.skills);
+    const assfSkill = publicSkills.find((skill) => skill.assfProjectionClass === 'CERTIFIED_PACKAGE_PROJECTION');
+
+    expect(skillIndex.meta?.assfProjectedSkills).toBeGreaterThan(0);
+    expect(skillIndex.meta?.certifiedPackageProjections).toBeGreaterThan(0);
+    expect(assfSkill).toBeDefined();
+    expect(assfSkill?.assfProjectionClass).toBe('CERTIFIED_PACKAGE_PROJECTION');
   });
 });

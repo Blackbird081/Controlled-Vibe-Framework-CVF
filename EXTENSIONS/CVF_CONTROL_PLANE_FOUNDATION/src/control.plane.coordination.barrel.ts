@@ -6,6 +6,7 @@ import type {
   SessionSnapshot,
 } from "../../CVF_ECO_v2.1_GOVERNANCE_CANVAS/src/types";
 import { ContextFreezer } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/context.freezer";
+import type { OrchestrationAdapterSnapshot } from "./orchestration.contract";
 
 export { IntentPipeline } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.pipeline";
 export { IntentParser } from "../../CVF_ECO_v1.0_INTENT_VALIDATION/src/intent.parser";
@@ -125,6 +126,14 @@ export type {
 } from "../../CVF_v1.7_CONTROLLED_INTELLIGENCE/intelligence/determinism_control/reproducibility.snapshot";
 
 export {
+  ORCHESTRATION_ADAPTER_VERSION,
+  buildOrchestrationAdapterSnapshot,
+} from "./orchestration.contract";
+export type {
+  OrchestrationAdapterSnapshot,
+} from "./orchestration.contract";
+
+export {
   createAgentHandoff,
   validateAgentHandoff,
   verifyPolicyContinuity,
@@ -191,11 +200,46 @@ export const CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT = {
     "Aligns selected v1.7 helper/type surfaces to the control-plane shell without absorbing runtime-critical reasoning execution.",
 } as const;
 
+export const CONTROL_PLANE_COORDINATION_ADAPTER_VERSION = "phase2b-control-plane-coordination-adapter-1" as const;
+
+export interface ControlPlaneCoordinationAdapterSnapshot {
+  version: typeof CONTROL_PLANE_COORDINATION_ADAPTER_VERSION;
+  source: "control-plane:coordination-barrel";
+  executionClass: typeof CONTROL_PLANE_FOUNDATION_COORDINATION.executionClass;
+  preservesLineage: boolean;
+  sourceLineageCount: number;
+  selectedReferenceCount: number;
+  selectedIntelligenceSurfaceCount: number;
+  deferredSurfaceCount: number;
+  orchestrationAdapterVersion?: OrchestrationAdapterSnapshot["version"];
+}
+
 export interface ControlPlaneFoundationShell {
   intent: IntentPipeline;
   knowledge: RAGPipeline;
   reporting: GovernanceCanvas;
   context: ContextFreezer;
+}
+
+export function buildControlPlaneCoordinationAdapterSnapshot(
+  orchestrationAdapter?: OrchestrationAdapterSnapshot,
+): ControlPlaneCoordinationAdapterSnapshot {
+  return {
+    version: CONTROL_PLANE_COORDINATION_ADAPTER_VERSION,
+    source: "control-plane:coordination-barrel",
+    executionClass: CONTROL_PLANE_FOUNDATION_COORDINATION.executionClass,
+    preservesLineage:
+      CONTROL_PLANE_FOUNDATION_COORDINATION.preservesLineage
+      && CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT.preservesLineage,
+    sourceLineageCount: buildLineageList().length,
+    selectedReferenceCount:
+      CONTROL_PLANE_FOUNDATION_COORDINATION.selectedControlledIntelligenceReferences.length,
+    selectedIntelligenceSurfaceCount:
+      CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT.includedSurfaces.length,
+    deferredSurfaceCount:
+      CONTROL_PLANE_SELECTED_INTELLIGENCE_ALIGNMENT.deferredSurfaces.length,
+    orchestrationAdapterVersion: orchestrationAdapter?.version,
+  };
 }
 
 export interface ControlPlaneEvidenceSurfaceOptions {

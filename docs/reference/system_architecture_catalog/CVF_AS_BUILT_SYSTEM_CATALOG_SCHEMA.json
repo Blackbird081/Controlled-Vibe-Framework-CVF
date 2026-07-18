@@ -1,0 +1,539 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cvf.as_built_system_catalog.schema.v0",
+  "schemaVersion": "cvf.as_built_system_catalog.schema.v0",
+  "batchId": "MSEA-ASC-T0",
+  "status": "DOC_ONLY_NEW",
+  "title": "CVF As-Built System Catalog Schema",
+  "description": "T0 schema contract only. No implementation, generator, checker, or populated record exists yet. Every entity, field, and enum below is DOC_ONLY_NEW unless explicitly marked as reusing an existing CVF-governed token. Round 2: every conditional invariant below is expressed with standard JSON Schema Draft 2020-12 keywords (if/then/allOf/not/anyOf/required/minItems/minLength/const) and is verified with jsonschema.Draft202012Validator against positive and negative fixtures recorded in the paired worker return; no invariant is claimed as machine-enforced without a negative fixture proving the validator rejects it.",
+  "claimBoundary": "This schema defines vocabulary, structure, and machine-enforced conditional invariants for EDGE, GAP, and AUTHORITY_SOURCE records. It does not certify that any record, aggregate, generator, or checker described here has been implemented. See CVF_AS_BUILT_SYSTEM_CATALOG_TOPOLOGY_DECISIONS.md for implementation-deferred status of every reserved path named in this file.",
+  "type": "object",
+  "definitions": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^cvf\\.asc\\.(plane|module|interface|edge|control|evidence_owner|operator_surface|gap|authority_source)\\.[a-z0-9][a-z0-9_-]*\\.v[0-9]+$",
+      "description": "Stable-ID grammar (DOC_ONLY_NEW): cvf.asc.<entityTypeLower>.<slug>.<versionTag>. The version tag increments only when a record's meaning changes incompatibly; a corrected typo or citation refresh does not increment it."
+    },
+    "authorityClass": {
+      "type": "string",
+      "enum": [
+        "FROZEN_DOCTRINE",
+        "ACTIVE_GOVERNED_STANDARD",
+        "ACTIVE_IMPLEMENTATION_SOURCE",
+        "ACCEPTED_REVIEW_EVIDENCE",
+        "HISTORICAL_NARRATION",
+        "LEGACY_EVIDENCE_ONLY"
+      ],
+      "description": "DOC_ONLY_NEW. Distinguishes authority weight for reconciliation precedence. FROZEN_DOCTRINE outranks all other classes for layer-naming/architectural claims per ECOSYSTEM/doctrine/CVF_LAYER_MODEL.md Repository Integrity Rule 3. LEGACY_EVIDENCE_ONLY (e.g. .private_reference/legacy/) is never promoted to a higher class by catalog admission alone."
+    },
+    "maturity": {
+      "type": "string",
+      "enum": [
+        "FROZEN",
+        "STABLE",
+        "ACTIVE",
+        "LOCAL_READY",
+        "DRAFT",
+        "LEGACY_REFERENCE",
+        "VALUE_PARKED"
+      ],
+      "description": "DOC_ONLY_NEW enum aligned to the vocabulary already used in docs/reference/CVF_MODULE_INVENTORY.md's Operational status column (frozen, active, local-ready, legacy-reference, draft) plus VALUE_PARKED for CVF_VALUE_PARKED_LANE_REOPEN_DISCIPLINE_STANDARD_2026-06-25.md-governed lanes."
+    },
+    "boundaryCaveat": {
+      "type": "string",
+      "minLength": 1,
+      "description": "DOC_ONLY_NEW field required whenever an owner is active but explicitly non-equivalent to a doctrine-named or otherwise expected location (the R98/R99 'active owner with boundary' pattern: ACTIVE_OWNER_CREATED_WITH_BOUNDARY, NAMED_DIFFERENTLY_ACTIVE_OWNER_WITH_BOUNDARY). Must state what the owner does NOT claim (e.g. does not claim the doctrine-named path, does not claim exact-text equivalence). minLength 1 rejects an empty-string placeholder; presence-when-required is enforced by GAP's allOf/if/then block below, not by prose alone."
+    },
+    "rejectedCandidates": {
+      "type": "array",
+      "description": "DOC_ONLY_NEW. Every plausible owner considered and rejected before the final owner (or SOURCE_OWNER_UNRESOLVED_WITH_SEARCH_EVIDENCE) was recorded, matching the R96/R97/R98/R99 candidate-search method.",
+      "items": {
+        "type": "object",
+        "required": ["candidatePath", "rejectionReason"],
+        "properties": {
+          "candidatePath": { "type": "string" },
+          "rejectionReason": { "type": "string" }
+        }
+      }
+    },
+    "negativeSearchEvidence": {
+      "type": "array",
+      "description": "DOC_ONLY_NEW. Record of an executed negative search (a check that something does NOT exist or is NOT the case), not merely an absence of a positive claim.",
+      "items": {
+        "type": "object",
+        "required": ["searchCommand", "searchResult"],
+        "properties": {
+          "searchCommand": { "type": "string" },
+          "searchResult": { "type": "string" }
+        }
+      }
+    },
+    "priorDisposition": {
+      "type": "string",
+      "description": "DOC_ONLY_NEW. The immediately preceding terminal disposition token for this record's subject, if one exists, e.g. LEGACY_ONLY_GAP, PARTIAL_ACTIVE_OWNER, SOURCE_OWNER_UNRESOLVED_WITH_SEARCH_EVIDENCE. Empty string or omitted when this is the first terminal disposition."
+    },
+    "supersededBy": {
+      "type": "string",
+      "description": "DOC_ONLY_NEW. The stableId of the record (or the accepted review artifact path) that superseded this one, if any. Empty string or omitted when this record is current."
+    },
+    "citation": {
+      "type": "object",
+      "required": ["path"],
+      "properties": {
+        "path": { "type": "string", "description": "Repo-relative path." },
+        "lineOrSection": { "type": "string" },
+        "evidenceRole": { "type": "string" }
+      }
+    },
+    "PLANE": {
+      "type": "object",
+      "description": "DOC_ONLY_NEW entity: a responsibility domain in the actual system chain (e.g. Doctrine-to-Contract, Contract-to-Runtime).",
+      "required": ["stableId", "entityType", "name", "authorityClass", "maturity", "ownerPaths", "claimBoundary", "freshnessInputs", "lastReviewed"],
+      "properties": {
+        "stableId": { "$ref": "#/definitions/stableId" },
+        "entityType": { "const": "PLANE" },
+        "name": { "type": "string" },
+        "authorityClass": { "$ref": "#/definitions/authorityClass" },
+        "maturity": { "$ref": "#/definitions/maturity" },
+        "ownerPaths": { "type": "array", "items": { "type": "string" } },
+        "planeMembership": { "type": "array", "items": { "type": "string" }, "description": "N/A for PLANE itself; present for schema symmetry with MODULE." },
+        "inboundEdgeIds": { "type": "array", "items": { "$ref": "#/definitions/stableId" } },
+        "outboundEdgeIds": { "type": "array", "items": { "$ref": "#/definitions/stableId" } },
+        "citations": { "type": "array", "items": { "$ref": "#/definitions/citation" } },
+        "claimBoundary": { "type": "string" },
+        "freshnessInputs": { "type": "array", "items": { "type": "string" }, "description": "Repo-relative paths whose drift requires a fresh review of this record." },
+        "lastReviewed": {
+          "type": "object",
+          "required": ["date", "acceptedArtifact"],
+          "properties": {
+            "date": { "type": "string", "format": "date" },
+            "acceptedArtifact": { "type": "string" }
+          }
+        },
+        "boundaryCaveat": { "$ref": "#/definitions/boundaryCaveat" },
+        "rejectedCandidates": { "$ref": "#/definitions/rejectedCandidates" },
+        "negativeSearchEvidence": { "$ref": "#/definitions/negativeSearchEvidence" },
+        "priorDisposition": { "$ref": "#/definitions/priorDisposition" },
+        "supersededBy": { "$ref": "#/definitions/supersededBy" }
+      }
+    },
+    "MODULE": {
+      "type": "object",
+      "description": "DOC_ONLY_NEW entity: a bounded implementation, governance, evidence, or operator owner (e.g. an EXTENSIONS/ package, a governance/ subfolder).",
+      "required": ["stableId", "entityType", "name", "authorityClass", "maturity", "ownerPaths", "planeMembership", "claimBoundary", "freshnessInputs", "lastReviewed"],
+      "properties": {
+        "stableId": { "$ref": "#/definitions/stableId" },
+        "entityType": { "const": "MODULE" },
+        "name": { "type": "string" },
+        "authorityClass": { "$ref": "#/definitions/authorityClass" },
+        "maturity": { "$ref": "#/definitions/maturity" },
+        "ownerPaths": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "planeMembership": { "type": "array", "items": { "$ref": "#/definitions/stableId" }, "minItems": 1 },
+        "inboundEdgeIds": { "type": "array", "items": { "$ref": "#/definitions/stableId" } },
+        "outboundEdgeIds": { "type": "array", "items": { "$ref": "#/definitions/stableId" } },
+        "citations": { "type": "array", "items": { "$ref": "#/definitions/citation" } },
+        "claimBoundary": { "type": "string" },
+        "freshnessInputs": { "type": "array", "items": { "type": "string" } },
+        "lastReviewed": {
+          "type": "object",
+          "required": ["date", "acceptedArtifact"],
+          "properties": {
+            "date": { "type": "string", "format": "date" },
+            "acceptedArtifact": { "type": "string" }
+          }
+        },
+        "boundaryCaveat": { "$ref": "#/definitions/boundaryCaveat" },
+        "rejectedCandidates": { "$ref": "#/definitions/rejectedCandidates" },
+        "negativeSearchEvidence": { "$ref": "#/definitions/negativeSearchEvidence" },
+        "priorDisposition": { "$ref": "#/definitions/priorDisposition" },
+        "supersededBy": { "$ref": "#/definitions/supersededBy" }
+      }
+    },
+    "INTERFACE": {
+      "type": "object",
+      "description": "DOC_ONLY_NEW entity: a contract, schema, registry, command, API, file protocol, or handoff boundary.",
+      "required": ["stableId", "entityType", "name", "interfaceKind", "authorityClass", "maturity", "ownerPaths", "claimBoundary", "freshnessInputs", "lastReviewed"],
+      "properties": {
+        "stableId": { "$ref": "#/definitions/stableId" },
+        "entityType": { "const": "INTERFACE" },
+        "name": { "type": "string" },
+        "interfaceKind": {
+          "type": "string",
+          "enum": ["CONTRACT", "SCHEMA", "REGISTRY", "CLI_COMMAND", "API", "FILE_PROTOCOL", "HANDOFF_BOUNDARY"]
+        },
+        "authorityClass": { "$ref": "#/definitions/authorityClass" },
+        "maturity": { "$ref": "#/definitions/maturity" },
+        "ownerPaths": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "citations": { "type": "array", "items": { "$ref": "#/definitions/citation" } },
+        "claimBoundary": { "type": "string" },
+        "freshnessInputs": { "type": "array", "items": { "type": "string" } },
+        "lastReviewed": {
+          "type": "object",
+          "required": ["date", "acceptedArtifact"],
+          "properties": {
+            "date": { "type": "string", "format": "date" },
+            "acceptedArtifact": { "type": "string" }
+          }
+        },
+        "boundaryCaveat": { "$ref": "#/definitions/boundaryCaveat" },
+        "priorDisposition": { "$ref": "#/definitions/priorDisposition" },
+        "supersededBy": { "$ref": "#/definitions/supersededBy" }
+      }
+    },
+    "edgeProofClass": {
+      "type": "string",
+      "enum": [
+        "DECLARED_EDGE",
+        "IMPLEMENTED_EDGE",
+        "INVOKED_EDGE",
+        "EXECUTED_AND_EVIDENCED_EDGE",
+        "OPERATOR_VISIBLE_EDGE",
+        "INTENTIONAL_SEPARATION"
+      ],
+      "description": "Reused from the roadmap's Edge Proof Taxonomy (docs/roadmaps/CVF_AS_BUILT_ARCHITECTURE_AND_SYSTEM_CATALOG_ROADMAP_2026-07-11.md, Edge Proof Taxonomy section), refined per F4 of the Claude rebuttal (evidenceRecency and operatorVisibility below). The three cross-field invariants for this enum are machine-enforced by EDGE's allOf/if/then block, not by this description."
+    },
+    "evidenceRecency": {
+      "type": "string",
+      "enum": ["LIVE_RECEIPT", "HISTORICAL_TRACE", "NOT_APPLICABLE"],
+      "description": "DOC_ONLY_NEW, added per Claude rebuttal F4. HISTORICAL_TRACE means the evidence is a past PASS record (e.g. a trace document's Status line), not a current live receipt; this qualifier prevents a stale trace from being silently read as a current live receipt (R90 Audit A Lane 3's exact distinction). EDGE's allOf/if/then block rejects NOT_APPLICABLE whenever edgeProofClass is EXECUTED_AND_EVIDENCED_EDGE or OPERATOR_VISIBLE_EDGE."
+    },
+    "operatorVisibility": {
+      "type": "string",
+      "enum": ["CI_ONLY", "RAW_EVIDENCE_ONLY", "OPERATOR_SURFACED", "ABSENT"],
+      "description": "DOC_ONLY_NEW, added per Claude rebuttal F4/F10. CI_ONLY means the edge executes only inside a CI job with no operator-facing readout (the RUNTIME_TO_ENFORCEMENT lane's exact posture: CVF_SYSTEM_CHAIN_MAP.json 'operatorSurface': 'GitHub Actions job log ... CI-only'). EDGE's allOf/if/then block rejects edgeProofClass OPERATOR_VISIBLE_EDGE unless operatorVisibility is exactly OPERATOR_SURFACED."
+    },
+    "EDGE": {
+      "type": "object",
+      "description": "DOC_ONLY_NEW entity: a directed relationship between owners or planes. Round 2: three cross-field invariants are machine-enforced below via allOf/if/then/not, verified against positive and negative fixtures in the paired worker return.",
+      "required": ["stableId", "entityType", "sourceId", "targetId", "edgeProofClass", "evidenceRecency", "operatorVisibility", "claimBoundary", "freshnessInputs", "lastReviewed"],
+      "properties": {
+        "stableId": { "$ref": "#/definitions/stableId" },
+        "entityType": { "const": "EDGE" },
+        "sourceId": { "$ref": "#/definitions/stableId" },
+        "targetId": { "$ref": "#/definitions/stableId" },
+        "edgeProofClass": { "$ref": "#/definitions/edgeProofClass" },
+        "evidenceRecency": { "$ref": "#/definitions/evidenceRecency" },
+        "operatorVisibility": { "$ref": "#/definitions/operatorVisibility" },
+        "citations": { "type": "array", "items": { "$ref": "#/definitions/citation" } },
+        "claimBoundary": { "type": "string" },
+        "freshnessInputs": { "type": "array", "items": { "type": "string" } },
+        "lastReviewed": {
+          "type": "object",
+          "required": ["date", "acceptedArtifact"],
+          "properties": {
+            "date": { "type": "string", "format": "date" },
+            "acceptedArtifact": { "type": "string" }
+          }
+        },
+        "sampledOnly": { "type": "boolean", "description": "DOC_ONLY_NEW. True when this edge's proof class was established via a bounded sample, not exhaustive verification (matching R90's explicit 3-of-50 sampling caveat). Must not be silently dropped when the edge is later cited in an aggregate claim." },
+        "boundaryCaveat": { "$ref": "#/definitions/boundaryCaveat" },
+        "priorDisposition": { "$ref": "#/definitions/priorDisposition" },
+        "supersededBy": { "$ref": "#/definitions/supersededBy" }
+      },
+      "allOf": [
+        {
+          "$comment": "Invariant 1 (Round 2 reviewer finding): OPERATOR_VISIBLE_EDGE is valid only when operatorVisibility is exactly OPERATOR_SURFACED. This is the exact case the reviewer's negative instance (edgeProofClass=OPERATOR_VISIBLE_EDGE, operatorVisibility=CI_ONLY) must now fail on.",
+          "if": {
+            "properties": { "edgeProofClass": { "const": "OPERATOR_VISIBLE_EDGE" } },
+            "required": ["edgeProofClass"]
+          },
+          "then": {
+            "properties": { "operatorVisibility": { "const": "OPERATOR_SURFACED" } },
+            "required": ["operatorVisibility"]
+          }
+        },
+        {
+          "$comment": "Invariant 2: EXECUTED_AND_EVIDENCED_EDGE and OPERATOR_VISIBLE_EDGE must not carry evidenceRecency NOT_APPLICABLE.",
+          "if": {
+            "properties": { "edgeProofClass": { "enum": ["EXECUTED_AND_EVIDENCED_EDGE", "OPERATOR_VISIBLE_EDGE"] } },
+            "required": ["edgeProofClass"]
+          },
+          "then": {
+            "properties": { "evidenceRecency": { "not": { "const": "NOT_APPLICABLE" } } },
+            "required": ["evidenceRecency"]
+          }
+        },
+        {
+          "$comment": "Invariant 3: any edgeProofClass other than DECLARED_EDGE requires at least one citation.",
+          "if": {
+            "properties": { "edgeProofClass": { "not": { "const": "DECLARED_EDGE" } } },
+            "required": ["edgeProofClass"]
+          },
+          "then": {
+            "properties": { "citations": { "type": "array", "minItems": 1 } },
+            "required": ["citations"]
+          }
+        }
+      ]
+    },
+    "CONTROL": {
+      "type": "object",
+      "description": "DOC_ONLY_NEW entity: blocking, advisory, informational, or documentation-only enforcement.",
+      "required": ["stableId", "entityType", "name", "controlKind", "authorityClass", "maturity", "ownerPaths", "claimBoundary", "freshnessInputs", "lastReviewed"],
+      "properties": {
+        "stableId": { "$ref": "#/definitions/stableId" },
+        "entityType": { "const": "CONTROL" },
+        "name": { "type": "string" },
+        "controlKind": {
+          "type": "string",
+          "enum": ["BLOCKING", "ADVISORY", "INFORMATIONAL", "DOCUMENTATION_ONLY"]
+        },
+        "authorityClass": { "$ref": "#/definitions/authorityClass" },
+        "maturity": { "$ref": "#/definitions/maturity" },
+        "ownerPaths": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "citations": { "type": "array", "items": { "$ref": "#/definitions/citation" } },
+        "claimBoundary": { "type": "string" },
+        "freshnessInputs": { "type": "array", "items": { "type": "string" } },
+        "lastReviewed": {
+          "type": "object",
+          "required": ["date", "acceptedArtifact"],
+          "properties": {
+            "date": { "type": "string", "format": "date" },
+            "acceptedArtifact": { "type": "string" }
+          }
+        },
+        "priorDisposition": { "$ref": "#/definitions/priorDisposition" },
+        "supersededBy": { "$ref": "#/definitions/supersededBy" }
+      }
+    },
+    "EVIDENCE_OWNER": {
+      "type": "object",
+      "description": "DOC_ONLY_NEW entity: receipt, test, audit, log, ledger, or review surface.",
+      "required": ["stableId", "entityType", "name", "evidenceKind", "authorityClass", "ownerPaths", "claimBoundary", "freshnessInputs", "lastReviewed"],
+      "properties": {
+        "stableId": { "$ref": "#/definitions/stableId" },
+        "entityType": { "const": "EVIDENCE_OWNER" },
+        "name": { "type": "string" },
+        "evidenceKind": {
+          "type": "string",
+          "enum": ["RECEIPT", "TEST", "AUDIT", "LOG", "LEDGER", "REVIEW"]
+        },
+        "authorityClass": { "$ref": "#/definitions/authorityClass" },
+        "ownerPaths": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "citations": { "type": "array", "items": { "$ref": "#/definitions/citation" } },
+        "claimBoundary": { "type": "string" },
+        "freshnessInputs": { "type": "array", "items": { "type": "string" } },
+        "lastReviewed": {
+          "type": "object",
+          "required": ["date", "acceptedArtifact"],
+          "properties": {
+            "date": { "type": "string", "format": "date" },
+            "acceptedArtifact": { "type": "string" }
+          }
+        }
+      }
+    },
+    "OPERATOR_SURFACE": {
+      "type": "object",
+      "description": "DOC_ONLY_NEW entity: where a human discovers, invokes, or interprets the result.",
+      "required": ["stableId", "entityType", "name", "surfaceKind", "ownerPaths", "claimBoundary", "freshnessInputs", "lastReviewed"],
+      "properties": {
+        "stableId": { "$ref": "#/definitions/stableId" },
+        "entityType": { "const": "OPERATOR_SURFACE" },
+        "name": { "type": "string" },
+        "surfaceKind": {
+          "type": "string",
+          "enum": ["CLI", "WEB_UI", "CI_JOB_LOG", "RAW_JSON_RECEIPT", "MARKDOWN_DOCUMENT"]
+        },
+        "ownerPaths": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "citations": { "type": "array", "items": { "$ref": "#/definitions/citation" } },
+        "claimBoundary": { "type": "string" },
+        "freshnessInputs": { "type": "array", "items": { "type": "string" } },
+        "lastReviewed": {
+          "type": "object",
+          "required": ["date", "acceptedArtifact"],
+          "properties": {
+            "date": { "type": "string", "format": "date" },
+            "acceptedArtifact": { "type": "string" }
+          }
+        }
+      }
+    },
+    "gapTerminalStatus": {
+      "type": "string",
+      "enum": [
+        "OPEN_CONFIRMED_GAP",
+        "PARTIAL_CHAIN_WITH_BOUNDARY",
+        "SOURCE_OWNER_UNRESOLVED_WITH_SEARCH_EVIDENCE",
+        "IMPLEMENTED_NOT_INVOCATION_PROVEN",
+        "EVIDENCED_NOT_OPERATOR_VISIBLE",
+        "INTENTIONAL_SEPARATION_WITH_REASON",
+        "VALUE_PARKED_WITH_REOPEN_CONDITIONS",
+        "ACTIVE_OWNER_CREATED_WITH_BOUNDARY",
+        "NAMED_DIFFERENTLY_ACTIVE_OWNER_WITH_BOUNDARY",
+        "CLOSED_WITH_EVIDENCE"
+      ],
+      "description": "Reused from the roadmap's Gap Ledger canonical statuses (first 8 values), with two values added per Claude rebuttal F2/F8 fold: ACTIVE_OWNER_CREATED_WITH_BOUNDARY (R99 L1 disposition) and NAMED_DIFFERENTLY_ACTIVE_OWNER_WITH_BOUNDARY (R98 L2 disposition, R96 L2 ADAPTATION_CANDIDATE terminology retired in favor of this ratified token). All three GAP cross-field invariants tied to these statuses are machine-enforced by GAP's allOf/if/then block, not by this description."
+    },
+    "GAP": {
+      "type": "object",
+      "description": "DOC_ONLY_NEW entity: missing, partial, intentionally separated, parked, or unresolved connection. gapId equals stableId for this entity type. Round 2: three cross-field invariants are machine-enforced below via allOf/if/then/anyOf, verified against positive and negative fixtures in the paired worker return.",
+      "required": ["stableId", "entityType", "sourcePlaneId", "targetPlaneId", "sourceOwner", "targetOwner", "missingEdge", "currentStatus", "proofClass", "citations", "impact", "closeCondition", "reopenCondition", "actionOwner", "freshnessInputs", "lastReviewed"],
+      "properties": {
+        "stableId": { "$ref": "#/definitions/stableId" },
+        "entityType": { "const": "GAP" },
+        "sourcePlaneId": { "$ref": "#/definitions/stableId" },
+        "targetPlaneId": { "$ref": "#/definitions/stableId" },
+        "sourceOwner": { "type": "string", "description": "Current governed path, or the literal string NONE_WITH_REASON followed by a reason." },
+        "targetOwner": { "type": "string", "description": "Current governed path, or the literal string NONE_WITH_REASON followed by a reason." },
+        "missingEdge": { "type": "string" },
+        "currentStatus": { "$ref": "#/definitions/gapTerminalStatus" },
+        "proofClass": { "$ref": "#/definitions/edgeProofClass" },
+        "citations": { "type": "array", "items": { "$ref": "#/definitions/citation" }, "minItems": 1 },
+        "impact": { "type": "string", "description": "Bounded consequence only, not speculative severity inflation (roadmap requirement, line 151)." },
+        "closeCondition": {
+          "type": "object",
+          "description": "DOC_ONLY_NEW, structured per Claude rebuttal F6 so a free-text field cannot trivially satisfy 'measurable'.",
+          "required": ["conditionKind", "conditionText"],
+          "properties": {
+            "conditionKind": { "type": "string", "enum": ["NAMED_ARTIFACT_ACCEPTED", "MEASURED_THRESHOLD_CROSSED", "PATTERN_OBSERVED_ON_NAMED_SURFACE", "OPERATOR_DECISION_RECORDED"] },
+            "conditionText": { "type": "string", "minLength": 1 }
+          }
+        },
+        "reopenCondition": {
+          "type": "object",
+          "description": "DOC_ONLY_NEW, structured identically to closeCondition and bound to CVF_VALUE_PARKED_LANE_REOPEN_DISCIPLINE_STANDARD_2026-06-25.md's checkable-condition bar. GAP's allOf/if/then block requires non-empty conditionText whenever currentStatus is VALUE_PARKED_WITH_REOPEN_CONDITIONS.",
+          "required": ["conditionKind", "conditionText"],
+          "properties": {
+            "conditionKind": { "type": "string", "enum": ["NAMED_ARTIFACT_ACCEPTED", "MEASURED_THRESHOLD_CROSSED", "PATTERN_OBSERVED_ON_NAMED_SURFACE", "OPERATOR_DECISION_RECORDED"] },
+            "conditionText": { "type": "string" }
+          }
+        },
+        "actionOwner": { "type": "string", "description": "A roadmap ID, tranche ID, role name, or the literal string PARKED_WITH_REASON followed by a reason." },
+        "freshnessInputs": { "type": "array", "items": { "type": "string" } },
+        "lastReviewed": {
+          "type": "object",
+          "required": ["date", "acceptedArtifact"],
+          "properties": {
+            "date": { "type": "string", "format": "date" },
+            "acceptedArtifact": { "type": "string" }
+          }
+        },
+        "boundaryCaveat": { "$ref": "#/definitions/boundaryCaveat" },
+        "rejectedCandidates": { "$ref": "#/definitions/rejectedCandidates" },
+        "negativeSearchEvidence": { "$ref": "#/definitions/negativeSearchEvidence" },
+        "priorDisposition": { "$ref": "#/definitions/priorDisposition" },
+        "supersededBy": { "$ref": "#/definitions/supersededBy" }
+      },
+      "allOf": [
+        {
+          "$comment": "Invariant 1 (Round 2): boundary-owner statuses require a non-empty boundaryCaveat.",
+          "if": {
+            "properties": { "currentStatus": { "enum": ["ACTIVE_OWNER_CREATED_WITH_BOUNDARY", "NAMED_DIFFERENTLY_ACTIVE_OWNER_WITH_BOUNDARY"] } },
+            "required": ["currentStatus"]
+          },
+          "then": {
+            "properties": { "boundaryCaveat": { "type": "string", "minLength": 1 } },
+            "required": ["boundaryCaveat"]
+          }
+        },
+        {
+          "$comment": "Invariant 2 (Round 2): VALUE_PARKED_WITH_REOPEN_CONDITIONS requires a non-empty reopenCondition.conditionText.",
+          "if": {
+            "properties": { "currentStatus": { "const": "VALUE_PARKED_WITH_REOPEN_CONDITIONS" } },
+            "required": ["currentStatus"]
+          },
+          "then": {
+            "properties": {
+              "reopenCondition": {
+                "type": "object",
+                "properties": { "conditionText": { "type": "string", "minLength": 1 } },
+                "required": ["conditionText"]
+              }
+            },
+            "required": ["reopenCondition"]
+          }
+        },
+        {
+          "$comment": "Invariant 3 (Round 2): SOURCE_OWNER_UNRESOLVED_WITH_SEARCH_EVIDENCE requires at least one of rejectedCandidates (non-empty) or negativeSearchEvidence (non-empty).",
+          "if": {
+            "properties": { "currentStatus": { "const": "SOURCE_OWNER_UNRESOLVED_WITH_SEARCH_EVIDENCE" } },
+            "required": ["currentStatus"]
+          },
+          "then": {
+            "anyOf": [
+              {
+                "properties": { "rejectedCandidates": { "type": "array", "minItems": 1 } },
+                "required": ["rejectedCandidates"]
+              },
+              {
+                "properties": { "negativeSearchEvidence": { "type": "array", "minItems": 1 } },
+                "required": ["negativeSearchEvidence"]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "AUTHORITY_SOURCE": {
+      "type": "object",
+      "description": "DOC_ONLY_NEW entity added per Claude rebuttal F3: a doctrine, standard, or accepted-review artifact whose authorityClass governs admission/precedence for other entities. Not modeled as a MODULE because MODULE does not carry freeze semantics. Round 2: the frozen-to-authorityClass invariant is machine-enforced below via if/then in one direction only (frozen=true REQUIRES authorityClass=FROZEN_DOCTRINE); the converse (authorityClass=FROZEN_DOCTRINE REQUIRES frozen=true) is deliberately NOT enforced, so the description below is worded to match that one-directional scope and does not overclaim a bidirectional guarantee.",
+      "required": ["stableId", "entityType", "name", "authorityClass", "frozen", "ownerPaths", "claimBoundary", "lastReviewed"],
+      "properties": {
+        "stableId": { "$ref": "#/definitions/stableId" },
+        "entityType": { "const": "AUTHORITY_SOURCE" },
+        "name": { "type": "string" },
+        "authorityClass": { "$ref": "#/definitions/authorityClass" },
+        "frozen": { "type": "boolean", "description": "One-directional invariant, machine-enforced: frozen=true REQUIRES authorityClass=FROZEN_DOCTRINE. The converse is not enforced - an authorityClass of FROZEN_DOCTRINE does not require frozen=true, since a doctrine-authority record could in principle describe a not-yet-frozen draft doctrine section. When true, this record's own content fields must not be described as catalog-editable; only the catalog's citation of it may be refreshed." },
+        "ownerPaths": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "citations": { "type": "array", "items": { "$ref": "#/definitions/citation" } },
+        "claimBoundary": { "type": "string" },
+        "lastReviewed": {
+          "type": "object",
+          "required": ["date", "acceptedArtifact"],
+          "properties": {
+            "date": { "type": "string", "format": "date" },
+            "acceptedArtifact": { "type": "string" }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "Invariant (Round 2, one-directional per this entity's own description): frozen=true REQUIRES authorityClass=FROZEN_DOCTRINE. The converse is intentionally not enforced.",
+          "if": {
+            "properties": { "frozen": { "const": true } },
+            "required": ["frozen"]
+          },
+          "then": {
+            "properties": { "authorityClass": { "const": "FROZEN_DOCTRINE" } },
+            "required": ["authorityClass"]
+          }
+        }
+      ]
+    },
+    "admissionDisposition": {
+      "type": "string",
+      "enum": [
+        "ENRICH_EXISTING_OWNER",
+        "NEW_OWNER_JUSTIFIED",
+        "REFERENCE_ONLY",
+        "IMPLEMENTATION_CANDIDATE",
+        "INTENTIONAL_SEPARATION",
+        "DUPLICATE_REJECTED",
+        "VALUE_PARKED_WITH_REOPEN_CONDITIONS"
+      ],
+      "description": "Reused verbatim from the roadmap's Catalog Admission Rules (docs/roadmaps/CVF_AS_BUILT_ARCHITECTURE_AND_SYSTEM_CATALOG_ROADMAP_2026-07-11.md lines 175-181)."
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "cvf.as_built_system_catalog.schema.v0" },
+    "entities": {
+      "type": "array",
+      "description": "DOC_ONLY_NEW. Reserved for future ASC-T1+ population. Empty in this T0 schema contract; see CVF_AS_BUILT_SYSTEM_CATALOG_TOPOLOGY_DECISIONS.md for the compact-source-plus-generated-aggregate layout this array will use once implemented.",
+      "items": {
+        "oneOf": [
+          { "$ref": "#/definitions/PLANE" },
+          { "$ref": "#/definitions/MODULE" },
+          { "$ref": "#/definitions/INTERFACE" },
+          { "$ref": "#/definitions/EDGE" },
+          { "$ref": "#/definitions/CONTROL" },
+          { "$ref": "#/definitions/EVIDENCE_OWNER" },
+          { "$ref": "#/definitions/OPERATOR_SURFACE" },
+          { "$ref": "#/definitions/GAP" },
+          { "$ref": "#/definitions/AUTHORITY_SOURCE" }
+        ]
+      }
+    }
+  },
+  "required": ["schemaVersion", "entities"]
+}

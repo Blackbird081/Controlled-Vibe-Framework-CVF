@@ -5,27 +5,14 @@ const fs = require('fs');
 const path = require('path');
 
 const BASE_DIR = path.resolve(__dirname, '..');
-const D2_MATRIX_PATH = path.resolve(BASE_DIR, '../../../docs/baselines/CVF_CORPUS_RESCREEN_D2_MATRIX_2026-04-15.md');
-const D3_TRUSTED_SUBSET_PATH = path.resolve(BASE_DIR, '../../../docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md');
+const D2_MATRIX_PATH = path.resolve(BASE_DIR, '../../../docs/baselines/archive/CVF_CORPUS_RESCREEN_D2_MATRIX_2026-04-15.md');
+const D3_TRUSTED_SUBSET_PATH = path.resolve(BASE_DIR, '../../../docs/baselines/archive/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md');
 const TEMPLATE_CLASS_OVERRIDE_PATHS = [
     path.resolve(BASE_DIR, '../../../docs/baselines/CVF_FRONT_DOOR_WAVE1_EXECUTION_NOTE_2026-04-21.md'),
     path.resolve(BASE_DIR, '../../../docs/baselines/CVF_FRONT_DOOR_WAVE2_EXECUTION_NOTE_2026-04-21.md'),
 ];
 const MAP_DATA_PATH = path.resolve(BASE_DIR, 'src/data/skill-template-map.json');
-const PUBLIC_BENCHMARK_WIZARD_IDS = new Set([
-    'app_builder_wizard',
-    'business_strategy_wizard',
-    'marketing_campaign_wizard',
-    'content_strategy_wizard',
-    'data_analysis_wizard',
-    'system_design_wizard',
-    'security_assessment_wizard',
-    'product_design_wizard',
-    'research_project_wizard',
-]);
-const PUBLIC_REVIEW_REQUIRED_TEMPLATE_IDS = new Set([
-    'architecture_review',
-]);
+const PUBLIC_CLASSIFICATION_PATH = path.resolve(BASE_DIR, 'src/data/skill-corpus-public-classification.json');
 
 const TRUSTED = 'TRUSTED_FOR_VALUE_PROOF';
 const REVIEW = 'REVIEW_REQUIRED';
@@ -107,19 +94,7 @@ function parseTemplateClassOverrides(section) {
 }
 
 function loadTemplateClassMap() {
-    const mapData = JSON.parse(readFile(MAP_DATA_PATH));
-    const publicFallbackMap = Object.fromEntries(
-        Object.keys(mapData.templateToSkillMap || {}).map((templateId) => [
-            templateId,
-            PUBLIC_REVIEW_REQUIRED_TEMPLATE_IDS.has(templateId) ? REVIEW : TRUSTED,
-        ]),
-    );
-
     const d2 = readFile(D2_MATRIX_PATH);
-    if (!d2) {
-        return publicFallbackMap;
-    }
-
     const sections = {
         [TRUSTED]: extractSection(d2, '## TRUSTED_FOR_VALUE_PROOF', [
             '## REVIEW_REQUIRED',
@@ -150,21 +125,25 @@ function loadTemplateClassMap() {
         Object.assign(map, parseTemplateClassOverrides(overrideSection));
     }
 
+    if (Object.keys(map).length === 0) {
+        const publicClassification = JSON.parse(readFile(PUBLIC_CLASSIFICATION_PATH) || '{}');
+        Object.assign(map, publicClassification.templateClassMap || {});
+    }
+
     return map;
 }
 
 function loadTrustedBenchmarkSet() {
     const d3 = readFile(D3_TRUSTED_SUBSET_PATH);
-    if (!d3) {
-        return new Set(PUBLIC_BENCHMARK_WIZARD_IDS);
-    }
-
     const section = extractSection(d3, '## Benchmark-Ready Subset', ['## §1']);
     const tableIds = collectTemplateIdsFromMarkdownTable(section);
     if (tableIds.size > 0) {
         return tableIds;
     }
-    return collectTemplateIdsFromSection(section);
+    const extracted = collectTemplateIdsFromSection(section);
+    if (extracted.size > 0) return extracted;
+    const publicClassification = JSON.parse(readFile(PUBLIC_CLASSIFICATION_PATH) || '{}');
+    return new Set(publicClassification.trustedBenchmarkSet || []);
 }
 
 function buildSkillGovernanceMap() {

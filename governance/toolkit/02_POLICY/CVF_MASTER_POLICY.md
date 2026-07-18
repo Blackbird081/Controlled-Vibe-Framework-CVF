@@ -264,6 +264,47 @@ Personal AI usage unrelated to company work is excluded.
      - canonical structural standard: `docs/reference/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_STANDARD.md`
      - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_GUARD.md`
      - automated enforcement reference: `governance/compat/check_markdown_structural_completeness.py`
+40. `GC-046` multi-agent absorption reviews must use Evidence Trace Blocks per claim, Adversarial Role Assignment, and a deterministic Convergence Algorithm before any convergence verdict is treated as implementation authorization:
+     - this rule applies to all AI agents participating in CVF knowledge absorption reviews, rebuttal cycles, or multi-agent audit chains
+     - PROPOSER argues for source value; REVIEWER argues for risk — roles are structurally assigned and reversed across review numbers
+     - every significant claim must include an Evidence Trace Block with exact command, result, key file path, and verdict
+     - doctrine evidence does not substitute for codebase evidence — both are required separately
+     - convergence algorithm resolves per-claim disagreements mechanically; operator only receives ESCALATED claims with structured options
+     - Phase 0.A (doctrine + template): authorized. Phase 0.B (manual checker + CI advisory): pending GC-018. Phase 0.C (hard enforcement): deferred.
+     - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_AGENT_REVIEW_ANTI_COLLUSION_GUARD.md`
+     - GC-018 template update: `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
+41. `GC-047` bounded-corpus reports, comparisons, audits, extractions, migrations, inventories, and knowledge-absorption decisions must prove corpus completeness before claiming a complete result:
+     - enumerate the actual source corpus from filesystem or structured source truth
+     - record a file-level processing ledger with visible exclusions and unreadable or unsupported formats
+     - reconcile manifest items against terminal ledger statuses before using `COMPLETE_VERIFIED`
+     - record aggregation, drift, output-traceability, and adversarial-verification evidence
+     - canonical standard: `docs/reference/CVF_CORPUS_COMPLETENESS_AND_REPORT_INTEGRITY_STANDARD_2026-06-01.md`
+     - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_CORPUS_COMPLETENESS_AND_REPORT_INTEGRITY_GUARD.md`
+     - automated enforcement reference: `governance/compat/check_corpus_completeness_report_integrity.py`
+42. `GC-048` corpus-derived knowledge maps, semantic-region ledgers, architecture reconciliations, Memory syntheses, graphification plans, and retrieval-readiness claims must preserve source authority and prove map reconciliation:
+     - distinguish authority assets from rebuildable graph, region, Palace, summary, cache, snapshot, and retrieval views
+     - reconcile `assets = mapped + deferred + unmapped`
+     - reject bare ignore-sensitive `rg --files` evidence, orphan-hidden maps, and reconciled claims with stale drift state
+     - keep retrieval claims bounded and require adversarial verification
+     - canonical method: `docs/reference/CVF_KNOWLEDGE_SYSTEM_METHOD_STANDARD_2026-06-01.md`
+     - canonical standard: `docs/reference/CVF_CORPUS_TO_KNOWLEDGE_MAP_RECONCILIATION_STANDARD_2026-06-01.md`
+     - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_CORPUS_TO_KNOWLEDGE_MAP_RECONCILIATION_GUARD.md`
+     - automated enforcement reference: `governance/compat/check_corpus_to_knowledge_map_reconciliation.py`
+43. `GC-049` core guard/control files are frozen by default and large agent change sets must be explicitly authorized:
+     - protected guard scripts, hook chains, guard docs, master policy, control matrix, and session startup files require a same-batch `Core Guard Self-Protection Authorization` block
+     - agents may not delete or rename protected guard/control files
+     - large change sets require a `Large-Scope Change Authorization` block before commit or closure
+     - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_CORE_GUARD_SELF_PROTECTION_GUARD.md`
+     - automated enforcement reference: `governance/compat/check_core_guard_self_protection.py`
+44. `GC-050` corpus-derived intelligence classification must use structural ledger discipline before chatbot, retrieval, legal/policy, internal-decision, or answer-surface claims:
+     - include a `Corpus Intelligence Classification` block and a `Corpus Intelligence Classification Ledger`
+     - each ledger row must carry source path, processing status, knowledge region, owner surface, disposition, and evidence pointer
+     - accepted dispositions require evidence pointers
+     - legal/policy corpora require jurisdiction, authority level, effective date, source authority, and answer boundary fields
+     - response boundaries must expose the four allowed answer classes
+     - canonical standard: `docs/reference/CVF_CORPUS_INTELLIGENCE_CLASSIFICATION_STANDARD_2026-06-01.md`
+     - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_CORPUS_INTELLIGENCE_CLASSIFICATION_GUARD.md`
+     - automated enforcement reference: `governance/compat/check_corpus_intelligence_classification.py`
 
 ---
 

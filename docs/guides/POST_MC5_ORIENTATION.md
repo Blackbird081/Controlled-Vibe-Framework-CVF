@@ -155,7 +155,7 @@ With MC1-MC5 complete, CVF follows a structured continuation path defined in the
 
 ### Status and Progress
 
-- [Public Continuation Pointer](../../AGENT_HANDOFF.md) - Public-safe continuation state
+- [Session Memory Front Door](../../CVF_SESSION_MEMORY.md) - Current continuation state
 - [Whitepaper Progress Tracker](../reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md) - Detailed progress
 - [Master Architecture Whitepaper](../reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md) - Architecture baseline
 
@@ -210,4 +210,4 @@ If you worked on CVF pre-MC5:
 
 ---
 
-*For questions or clarifications, refer to the [Public Continuation Pointer](../../AGENT_HANDOFF.md) or [Post-MC5 Continuation Strategy](../roadmaps/CVF_POST_MC5_CONTINUATION_STRATEGY_ROADMAP_2026-04-08.md).*
+*For questions or clarifications, refer to [Session Memory Front Door](../../CVF_SESSION_MEMORY.md) or [Post-MC5 Continuation Strategy](../roadmaps/CVF_POST_MC5_CONTINUATION_STRATEGY_ROADMAP_2026-04-08.md).*

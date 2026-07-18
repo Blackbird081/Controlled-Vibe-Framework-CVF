@@ -34,6 +34,16 @@ At minimum, each new governed Markdown file must declare:
 
 The document must also satisfy the required section set for its artifact type.
 
+Additional active requirements:
+
+- `docs/reference/` files may declare `docType: reference` and then satisfy the
+  reference section set: purpose, scope or applicability, and claim/final or
+  verification boundary.
+- New work orders must include `## Operator Checkpoint` or an explicit
+  `operator.checkpoint.waiver` line so fast multi-role execution has a visible
+  human checkpoint decision. Work orders already present at adoption commit
+  `c043fa33` are grandfathered.
+
 ## Enforcement Surface
 
 - local pre-commit and pre-push hook chains run

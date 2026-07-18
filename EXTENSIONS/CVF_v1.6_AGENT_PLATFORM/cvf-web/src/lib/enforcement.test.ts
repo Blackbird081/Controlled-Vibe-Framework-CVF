@@ -1,8 +1,21 @@
 import { describe, it, expect } from 'vitest';
 import { evaluateEnforcement } from './enforcement';
 import { SpecGateField } from './spec-gate';
+import {
+    MEMORY_READOUT_ELIGIBILITY_POLICY_VERSION,
+    type MemoryReadoutEligibilityResult,
+    type MemoryReadoutEligibilityState,
+} from 'cvf-learning-plane-foundation/memory-runtime';
 
 describe('evaluateEnforcement', () => {
+    const memoryEligibility = (state: MemoryReadoutEligibilityState): MemoryReadoutEligibilityResult => ({
+        contractVersion: MEMORY_READOUT_ELIGIBILITY_POLICY_VERSION,
+        state,
+        reason: `test:${state}`,
+        rawMemoryReleased: false,
+        canReinject: false,
+    });
+
     it('blocks when budget exceeded', () => {
         const result = evaluateEnforcement({
             mode: 'simple',
@@ -52,6 +65,40 @@ describe('evaluateEnforcement', () => {
         });
         expect(result.status).toBe('ALLOW');
         expect(result.governanceStateSnapshot.approval.status).toBe('NOT_REQUIRED');
+    });
+
+    it('blocks revoked memory eligibility before execution', () => {
+        const result = evaluateEnforcement({
+            mode: 'simple',
+            content: 'Risk level: R0',
+            budgetOk: true,
+            memoryEligibility: memoryEligibility('REVOKED'),
+        });
+        expect(result.status).toBe('BLOCK');
+        expect(result.reasons).toContain('memory_access_revoked');
+    });
+
+    it('blocks denied memory eligibility before execution', () => {
+        const result = evaluateEnforcement({
+            mode: 'simple',
+            content: 'Risk level: R0',
+            budgetOk: true,
+            memoryEligibility: memoryEligibility('READOUT_DENIED'),
+        });
+        expect(result.status).toBe('BLOCK');
+        expect(result.reasons).toContain('memory_readout_denied');
+    });
+
+    it.each(['NO_AUTHORITY_SOURCE', 'OUT_OF_SCOPE_FOR_ACTOR', 'STALE_NEEDS_REFRESH'] as const)('keeps %s memory eligibility advisory-only', (state) => {
+        const result = evaluateEnforcement({
+            mode: 'simple',
+            content: 'Risk level: R0',
+            budgetOk: true,
+            memoryEligibility: memoryEligibility(state),
+        });
+        expect(result.status).toBe('ALLOW');
+        expect(result.reasons).not.toContain('memory_access_revoked');
+        expect(result.reasons).not.toContain('memory_readout_denied');
     });
 
     it('returns CLARIFY when spec has optional missing fields', () => {

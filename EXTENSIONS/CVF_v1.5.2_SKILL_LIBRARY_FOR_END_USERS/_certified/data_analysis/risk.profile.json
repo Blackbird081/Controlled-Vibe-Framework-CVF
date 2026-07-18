@@ -1,0 +1,16 @@
+{
+  "riskLevel": "R2",
+  "riskRationale": "Static analytical deliverable may involve sensitive business or financial metrics and requires human review before operational or financial reliance.",
+  "allowedDataClasses": [
+    "business_context",
+    "user_provided_text",
+    "business_metrics",
+    "aggregated_financial_data"
+  ],
+  "disallowedDataClasses": [
+    "raw_secrets",
+    "payment_credentials",
+    "regulated_health_data"
+  ],
+  "humanReviewRequired": true
+}

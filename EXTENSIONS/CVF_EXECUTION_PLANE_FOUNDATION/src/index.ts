@@ -536,6 +536,8 @@ export type {
   ExecutionPipelineStage,
   ExecutionPipelineStageEntry,
   ExecutionPipelineReceipt,
+  ExecutionPipelineReceiptEnvelope,
+  ExecutionPipelineTaskReceiptRecord,
   ExecutionPipelineContractDependencies,
 } from "./execution.pipeline.contract";
 
@@ -548,6 +550,8 @@ export type {
   ExecutionBridgePipelineStage,
   ExecutionBridgePipelineStageEntry,
   ExecutionBridgeReceipt,
+  ExecutionBridgeReceiptEnvelope,
+  ExecutionBridgeTaskReceiptRecord,
   ExecutionBridgeConsumerContractDependencies,
 } from "./execution.bridge.consumer.contract";
 
@@ -1409,3 +1413,6 @@ function buildAuthorizationBoundaryMarkdownSurface(
     ),
   ].join("\n");
 }
+
+// MAO-OA-T1 - MAO local barrel root forwarding (package-root discoverability)
+export * from "./mao";

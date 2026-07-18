@@ -3,8 +3,10 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { generateTraceHash, createTraceEntry } from './trace-emitter';
+import { generateTraceHash, createTraceEntry, createTraceEntryEnvelope, createTraceEntryWithEnvelope } from './trace-emitter';
+import type { TraceEntryEnvelope } from './trace-emitter';
 import type { GuardRequestContext, GuardPipelineResult } from '../types';
+import type { GuardAuditEntryEnvelope, GuardPipelineResultEnvelope, GovernanceEvidenceReceiptEnvelope } from '../types';
 
 function mockContext(overrides?: Partial<GuardRequestContext>): GuardRequestContext {
   return {
@@ -73,5 +75,61 @@ describe('createTraceEntry', () => {
     const ctx = mockContext({ channel: undefined });
     const entry = createTraceEntry(ctx, mockResult());
     expect(entry.channel).toBe('unknown');
+  });
+
+  it('wraps trace entries in the canonical Phase 1.R receipt envelope', () => {
+    const entry = createTraceEntry(mockContext(), mockResult());
+    const envelope: TraceEntryEnvelope = createTraceEntryEnvelope(entry);
+
+    expect(envelope.schemaVersion).toBe('1.R.0');
+    expect(envelope.id).toBe(entry.traceId);
+    expect(envelope.source).toBe(`guard-contract:trace-emitter:${entry.requestId}`);
+    expect(envelope.payload).toBe(entry);
+    expect(envelope.integrityHash).toBe(entry.traceHash);
+  });
+
+  it('creates trace entry and envelope together without changing the trace payload', () => {
+    const result = createTraceEntryWithEnvelope(mockContext(), mockResult());
+
+    expect(result.envelope.payload).toBe(result.entry);
+    expect(result.envelope.payload.pipelineResult.finalDecision).toBe('ALLOW');
+  });
+
+  it('exposes typed guard receipt aliases without widening payloads to any', () => {
+    const resultEnvelope: GuardPipelineResultEnvelope = {
+      id: 'pipeline-result-envelope',
+      issuedAt: '2026-05-20T00:00:00.000Z',
+      source: 'guard-contract:test',
+      schemaVersion: '1.R.0',
+      payload: mockResult(),
+    };
+    const auditEnvelope: GuardAuditEntryEnvelope = {
+      id: 'audit-entry-envelope',
+      issuedAt: '2026-05-20T00:00:00.000Z',
+      source: 'guard-contract:test',
+      schemaVersion: '1.R.0',
+      payload: {
+        requestId: 'req-001',
+        timestamp: '2026-05-20T00:00:00.000Z',
+        context: mockContext(),
+        pipelineResult: mockResult(),
+      },
+    };
+    const governanceEnvelope: GovernanceEvidenceReceiptEnvelope = {
+      id: 'governance-evidence-envelope',
+      issuedAt: '2026-05-20T00:00:00.000Z',
+      source: 'guard-contract:test',
+      schemaVersion: '1.R.0',
+      payload: {
+        receiptId: 'evidence-001',
+        evidenceMode: 'static',
+        routeId: 'test-route',
+        generatedAt: '2026-05-20T00:00:00.000Z',
+      },
+    };
+
+    expect(resultEnvelope.payload.finalDecision).toBe('ALLOW');
+    expect(auditEnvelope.payload.context.requestId).toBe('req-001');
+    expect(governanceEnvelope.payload.evidenceMode).toBe('static');
   });
 });

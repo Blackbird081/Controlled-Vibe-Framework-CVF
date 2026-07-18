@@ -79,6 +79,7 @@ export {
   type CrossExtensionWorkflow,
   type WorkflowStep,
   type WorkflowStepReceipt,
+  type WorkflowStepReceiptEnvelope,
   type WorkflowStepReceiptType,
   type WorkflowStepResult,
   type ExtensionActionHandler,

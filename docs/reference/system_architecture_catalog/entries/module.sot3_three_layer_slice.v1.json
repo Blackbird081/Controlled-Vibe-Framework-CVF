@@ -1,0 +1,38 @@
+{
+  "stableId": "cvf.asc.module.sot3_three_layer_slice.v1",
+  "entityType": "MODULE",
+  "name": "SOT3 Three-Layer Vertical Slice Orchestrator",
+  "authorityClass": "ACCEPTED_REVIEW_EVIDENCE",
+  "maturity": "LOCAL_READY",
+  "ownerPaths": [
+    "EXTENSIONS/CVF_SOT_THREE_LAYER_SLICE/src/orchestrator.ts"
+  ],
+  "planeMembership": [
+    "cvf.asc.plane.contract_to_runtime.v1"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "EXTENSIONS/CVF_SOT_THREE_LAYER_SLICE/src/orchestrator.ts",
+      "lineOrSection": "lines 52 and 136",
+      "evidenceRole": "runThreeLayerScenario runtime behavior evidence"
+    },
+    {
+      "path": "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md",
+      "lineOrSection": "Disposition",
+      "evidenceRole": "reviewer-accepted real composition vertical-slice acceptance"
+    }
+  ],
+  "claimBoundary": "ACCEPTED_REVIEW_EVIDENCE only. runThreeLayerScenario is a thin bounded orchestrator that invokes the real RefineryEngine, TruthKernel, and DistributionEngine instances in sequence using each layer's own public API, proving real cross-package composition through a fixed test scenario lifecycle. This entry does not claim the slice is a product policy owner, globally activated, always invoked by any CVF Web or production request path, a provider boundary, publicly exported, or production-ready. Activation into a real product path is governed separately by the SOT3 activation architecture decision and its A1-A5 proof ladder, not by this catalog record.",
+  "freshnessInputs": [
+    "EXTENSIONS/CVF_SOT_THREE_LAYER_SLICE/src/orchestrator.ts",
+    "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-18",
+    "acceptedArtifact": "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md"
+  },
+  "boundaryCaveat": "Does not claim universal activation, provider/live behavior, public export, production readiness, or product-policy ownership. Local-ready scenario-composition existence only; wiring into any product request path remains governed by the separate SOT3 activation decision and roadmap.",
+  "priorDisposition": ""
+}

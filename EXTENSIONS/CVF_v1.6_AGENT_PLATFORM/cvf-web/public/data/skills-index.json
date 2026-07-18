@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-19T03:09:42.958Z",
+  "generatedAt": "2026-07-18T14:50:40.649Z",
   "categories": [
     {
       "id": "ai_ml_evaluation",
@@ -133,20 +133,15 @@
           "frontDoorVisible": true,
           "frontDoorTier": "TRUSTED_SUPPORTING",
           "trustedBenchmarkSurface": false,
-          "hasRestrictedLinks": false,
+          "hasRestrictedLinks": true,
           "linkedTemplates": [
             {
               "templateId": "vibe_logic_mapping",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
-            },
-            {
-              "templateId": "architecture_design",
-              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
-              "trustedBenchmarkSurface": false
             }
           ],
-          "corpusNote": "Trusted supporting front-door surface under GC-044."
+          "corpusNote": "Front-door trusted via at least one trusted template path; some linked template surfaces remain quarantined."
         },
         {
           "id": "05_api_design_spec",
@@ -206,20 +201,15 @@
           "frontDoorVisible": true,
           "frontDoorTier": "TRUSTED_SUPPORTING",
           "trustedBenchmarkSurface": false,
-          "hasRestrictedLinks": false,
+          "hasRestrictedLinks": true,
           "linkedTemplates": [
-            {
-              "templateId": "cli_tool_spec",
-              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
-              "trustedBenchmarkSurface": false
-            },
             {
               "templateId": "project_init_checklist",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
           ],
-          "corpusNote": "Trusted supporting front-door surface under GC-044."
+          "corpusNote": "Front-door trusted via at least one trusted template path; some linked template surfaces remain quarantined."
         }
       ]
     },
@@ -255,11 +245,6 @@
           "linkedTemplates": [
             {
               "templateId": "strategy_analysis",
-              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
-              "trustedBenchmarkSurface": false
-            },
-            {
-              "templateId": "decision_memo",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
@@ -364,11 +349,6 @@
               "templateId": "business_strategy_wizard",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": true
-            },
-            {
-              "templateId": "operator_plan",
-              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
-              "trustedBenchmarkSurface": false
             }
           ],
           "corpusNote": "Trusted benchmark surface under GC-044 / D3 trusted subset."
@@ -414,16 +394,6 @@
               "templateId": "documentation",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
-            },
-            {
-              "templateId": "faq_outline",
-              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
-              "trustedBenchmarkSurface": false
-            },
-            {
-              "templateId": "acceptance_criteria",
-              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
-              "trustedBenchmarkSurface": false
             }
           ],
           "corpusNote": "Trusted benchmark surface under GC-044 / D3 trusted subset."
@@ -456,21 +426,6 @@
           "linkedTemplates": [
             {
               "templateId": "email_template",
-              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
-              "trustedBenchmarkSurface": false
-            },
-            {
-              "templateId": "meeting_notes",
-              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
-              "trustedBenchmarkSurface": false
-            },
-            {
-              "templateId": "job_description",
-              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
-              "trustedBenchmarkSurface": false
-            },
-            {
-              "templateId": "performance_review",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
             }
@@ -910,11 +865,6 @@
               "templateId": "web_ux_redesign_system",
               "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
               "trustedBenchmarkSurface": false
-            },
-            {
-              "templateId": "web_build_handoff",
-              "corpusClass": "TRUSTED_FOR_VALUE_PROOF",
-              "trustedBenchmarkSurface": false
             }
           ],
           "corpusNote": "Trusted supporting front-door surface under GC-044."
@@ -1111,7 +1061,7 @@
           "frontDoorVisible": true,
           "frontDoorTier": "TRUSTED_BENCHMARK",
           "trustedBenchmarkSurface": true,
-          "hasRestrictedLinks": false,
+          "hasRestrictedLinks": true,
           "linkedTemplates": [
             {
               "templateId": "system_design_wizard",
@@ -1122,18 +1072,1683 @@
           "corpusNote": "Trusted benchmark surface under GC-044 / D3 trusted subset."
         }
       ]
+    },
+    {
+      "id": "agent_system_skills",
+      "name": "Agent System Skills",
+      "skills": [
+        {
+          "id": "cvf-dispatch-quality-reviewer",
+          "title": "CVF Dispatch Quality Reviewer",
+          "domain": "Agent System Skills",
+          "difficulty": "Governed",
+          "summary": "Provide deterministic dispatch-quality validation of work-order and baseline artifacts before worker execution begins.",
+          "path": "docs/reference/agent_system_skills/registry/entries/cvf-dispatch-quality-reviewer.json",
+          "content": "# CVF Dispatch Quality Reviewer\n\nProvide deterministic dispatch-quality validation of work-order and baseline artifacts before worker execution begins.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/registry/entries/cvf-dispatch-quality-reviewer.json\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: DEFERRED_WITH_REASON\n\n## Review Artifacts\n- docs/reviews/CVF_ASSF_REAL_MANUAL_UAT_EXECUTION_EVIDENCE_2026-06-26.md\n- docs/reviews/CVF_ASSF_CERT_T2_CERTIFICATION_DECISION_2026-06-26.md\n- docs/reviews/CVF_ASSF_PACKAGE_CERTIFICATION_DECISION_T0_T3_COMPLETION_2026-06-26.md",
+          "riskLevel": "R0",
+          "allowedRoles": "dispatcher, reviewer",
+          "allowedPhases": "DISPATCH_AUTHORING, PRE_DISPATCH",
+          "authorityScope": "read-only inspection of governed markdown files",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_ASSF_REAL_MANUAL_UAT_EXECUTION_EVIDENCE_2026-06-26.md",
+            "docs/reviews/CVF_ASSF_CERT_T2_CERTIFICATION_DECISION_2026-06-26.md",
+            "docs/reviews/CVF_ASSF_PACKAGE_CERTIFICATION_DECISION_T0_T3_COMPLETION_2026-06-26.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/registry/entries/cvf-dispatch-quality-reviewer.json",
+          "externalCliMcpDisposition": "DEFERRED_WITH_REASON",
+          "adapterContract": "N/A with reason: external CLI/MCP adapter not yet authored; separate ASSF adapter work order required",
+          "runtimePackageProjection": false,
+          "runtimeEligible": false,
+          "selectionKeywords": [],
+          "specSignals": [],
+          "recommendedWhen": [],
+          "notRecommendedWhen": [],
+          "outputGoals": [],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-spec-driven-development",
+          "title": "CVF Engineering Spec-Driven Development",
+          "domain": "spec-driven-development",
+          "difficulty": "Governed",
+          "summary": "Guide source-backed specification before non-trivial implementation, including assumptions, commands, structure, testing, and boundaries.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-spec-driven-development/SKILL.md",
+          "content": "# CVF Engineering Spec-Driven Development\n\nGuide source-backed specification before non-trivial implementation, including assumptions, commands, structure, testing, and boundaries.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-spec-driven-development/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: spec-driven-development\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory spec-development guidance only; loading this entry or package body cannot authorize implementation, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-spec-driven-development/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "spec-driven-development",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "spec",
+            "requirements",
+            "assumptions",
+            "acceptance criteria",
+            "test plan",
+            "boundaries"
+          ],
+          "specSignals": [
+            "spec driven development",
+            "write spec",
+            "requirements unclear",
+            "spec before code"
+          ],
+          "recommendedWhen": [
+            "the spec is ambiguous, high-risk, or needs a written implementation contract before code"
+          ],
+          "notRecommendedWhen": [
+            "the task is a direct tiny fix with clear acceptance criteria"
+          ],
+          "outputGoals": [
+            "implementation spec",
+            "assumptions",
+            "test plan",
+            "boundaries"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-planning-task-breakdown",
+          "title": "CVF Engineering Planning And Task Breakdown",
+          "domain": "planning-task-breakdown",
+          "difficulty": "Governed",
+          "summary": "Guide conversion of clear requirements into ordered, dependency-aware, testable tasks under CVF work-order and closure discipline.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-planning-task-breakdown/SKILL.md",
+          "content": "# CVF Engineering Planning And Task Breakdown\n\nGuide conversion of clear requirements into ordered, dependency-aware, testable tasks under CVF work-order and closure discipline.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-planning-task-breakdown/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: planning-task-breakdown\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory planning guidance only; loading this entry or package body cannot authorize implementation, automated task execution, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-planning-task-breakdown/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "planning-task-breakdown",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "plan",
+            "task breakdown",
+            "roadmap",
+            "sequence",
+            "dependency",
+            "split work"
+          ],
+          "specSignals": [
+            "task breakdown",
+            "implementation plan",
+            "plan from spec"
+          ],
+          "recommendedWhen": [
+            "the spec asks for a roadmap, plan, task breakdown, or sequencing before execution"
+          ],
+          "notRecommendedWhen": [
+            "implementation steps are already obvious and tiny"
+          ],
+          "outputGoals": [
+            "task breakdown",
+            "dependency order",
+            "execution plan"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-api-interface-design",
+          "title": "CVF Engineering API And Interface Design",
+          "domain": "api-interface-design",
+          "difficulty": "Governed",
+          "summary": "Guide contract-first API, module, schema, and component-boundary design while preserving CVF source verification and deprecation discipline.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-api-interface-design/SKILL.md",
+          "content": "# CVF Engineering API And Interface Design\n\nGuide contract-first API, module, schema, and component-boundary design while preserving CVF source verification and deprecation discipline.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-api-interface-design/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: api-interface-design\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-api-interface-design/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "api-interface-design",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "api",
+            "interface",
+            "schema",
+            "contract",
+            "endpoint",
+            "module boundary"
+          ],
+          "specSignals": [
+            "api design",
+            "interface boundary",
+            "module contract",
+            "schema contract"
+          ],
+          "recommendedWhen": [
+            "the spec names API endpoints, module contracts, schemas, or component interfaces"
+          ],
+          "notRecommendedWhen": [
+            "task is mainly visual UI implementation",
+            "task is mainly runtime debugging"
+          ],
+          "outputGoals": [
+            "contract design",
+            "schema clarity",
+            "boundary decisions"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-browser-runtime-verification",
+          "title": "CVF Engineering Browser Runtime Verification",
+          "domain": "browser-runtime-verification",
+          "difficulty": "Governed",
+          "summary": "Guide browser-based verification with DOM, console, network, accessibility, and screenshot evidence under CVF untrusted-data and profile-isolation boundaries.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-browser-runtime-verification/SKILL.md",
+          "content": "# CVF Engineering Browser Runtime Verification\n\nGuide browser-based verification with DOM, console, network, accessibility, and screenshot evidence under CVF untrusted-data and profile-isolation boundaries.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-browser-runtime-verification/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: browser-runtime-verification\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-browser-runtime-verification/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "browser-runtime-verification",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "browser",
+            "devtools",
+            "dom",
+            "console",
+            "screenshot",
+            "visual verification"
+          ],
+          "specSignals": [
+            "browser test",
+            "dom inspection",
+            "console errors",
+            "visual verification"
+          ],
+          "recommendedWhen": [
+            "the spec requires verifying a web page, DOM behavior, console errors, or screenshots"
+          ],
+          "notRecommendedWhen": [
+            "no browser surface exists",
+            "the request is only static documentation"
+          ],
+          "outputGoals": [
+            "browser proof",
+            "visual verification",
+            "console diagnostics"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-ci-cd-quality-gates",
+          "title": "CVF Engineering CI/CD Quality Gates",
+          "domain": "ci-cd-quality-gates",
+          "difficulty": "Governed",
+          "summary": "Guide CI/CD quality gate design, pipeline evidence, and deployment automation planning without authorizing production deployment by package load.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-ci-cd-quality-gates/SKILL.md",
+          "content": "# CVF Engineering CI/CD Quality Gates\n\nGuide CI/CD quality gate design, pipeline evidence, and deployment automation planning without authorizing production deployment by package load.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-ci-cd-quality-gates/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: ci-cd-quality-gates\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-ci-cd-quality-gates/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "ci-cd-quality-gates",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "ci",
+            "cd",
+            "pipeline",
+            "github actions",
+            "quality gate",
+            "automation"
+          ],
+          "specSignals": [
+            "ci pipeline",
+            "quality gates",
+            "deployment pipeline",
+            "automation checks"
+          ],
+          "recommendedWhen": [
+            "the spec mentions CI, Github Actions, pipeline checks, deployment gates, or automated verification"
+          ],
+          "notRecommendedWhen": [
+            "task is a local-only code edit without automation impact"
+          ],
+          "outputGoals": [
+            "ci gate",
+            "automation check",
+            "release evidence"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-code-review-quality",
+          "title": "CVF Engineering Code Review Quality",
+          "domain": "code-review-quality",
+          "difficulty": "Governed",
+          "summary": "Guide multi-axis code review across correctness, readability, architecture, security, and performance using CVF finding-first review discipline.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-code-review-quality/SKILL.md",
+          "content": "# CVF Engineering Code Review Quality\n\nGuide multi-axis code review across correctness, readability, architecture, security, and performance using CVF finding-first review discipline.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-code-review-quality/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: code-review-quality\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory review guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-code-review-quality/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "code-review-quality",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "code review",
+            "review",
+            "quality",
+            "pre-merge",
+            "implementation review"
+          ],
+          "specSignals": [
+            "code review",
+            "quality review",
+            "review another agent"
+          ],
+          "recommendedWhen": [
+            "the spec asks to review a diff, inspect another agent's work, or judge implementation quality"
+          ],
+          "notRecommendedWhen": [
+            "the user asks for implementation without review"
+          ],
+          "outputGoals": [
+            "review findings",
+            "severity ranking",
+            "quality assessment"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-code-simplification",
+          "title": "CVF Engineering Code Simplification",
+          "domain": "code-simplification",
+          "difficulty": "Governed",
+          "summary": "Guide behavior-preserving simplification and debt reduction while requiring comprehension, tests, and project-convention alignment before refactor.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-code-simplification/SKILL.md",
+          "content": "# CVF Engineering Code Simplification\n\nGuide behavior-preserving simplification and debt reduction while requiring comprehension, tests, and project-convention alignment before refactor.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-code-simplification/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: code-simplification\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-code-simplification/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "code-simplification",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "simplify",
+            "refactor",
+            "complexity",
+            "duplication",
+            "maintainability"
+          ],
+          "specSignals": [
+            "simplify code",
+            "reduce complexity",
+            "remove duplication"
+          ],
+          "recommendedWhen": [
+            "the spec asks to refactor, simplify, remove duplication, or improve maintainability"
+          ],
+          "notRecommendedWhen": [
+            "behavior is not understood",
+            "the user asks for new feature expansion"
+          ],
+          "outputGoals": [
+            "reduced complexity",
+            "clearer code",
+            "refactor plan"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-governance-context-engineering",
+          "title": "CVF Governance Context Engineering",
+          "domain": "context-engineering",
+          "difficulty": "Governed",
+          "summary": "Guide session/context setup, rule discovery, and context-budget discipline for agents without promoting provider-local memory to CVF authority.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-governance-context-engineering/SKILL.md",
+          "content": "# CVF Governance Context Engineering\n\nGuide session/context setup, rule discovery, and context-budget discipline for agents without promoting provider-local memory to CVF authority.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-governance-context-engineering/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: context-engineering\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R0",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-context-engineering/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "context-engineering",
+          "domainGroup": "governance",
+          "selectionKeywords": [
+            "context",
+            "rules",
+            "session",
+            "startup",
+            "memory",
+            "agent context"
+          ],
+          "specSignals": [
+            "context setup",
+            "agent context",
+            "rules files",
+            "session start"
+          ],
+          "recommendedWhen": [
+            "the spec mentions agent context, startup rules, provider memory, or context degradation"
+          ],
+          "notRecommendedWhen": [
+            "the work already has all required context and no session risk"
+          ],
+          "outputGoals": [
+            "context setup",
+            "rule discovery",
+            "session boundary"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-debugging-error-recovery",
+          "title": "CVF Engineering Debugging And Error Recovery",
+          "domain": "debugging-error-recovery",
+          "difficulty": "Governed",
+          "summary": "Guide systematic root-cause debugging, reproduction, and error recovery using CVF diagnostic and evidence discipline.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-debugging-error-recovery/SKILL.md",
+          "content": "# CVF Engineering Debugging And Error Recovery\n\nGuide systematic root-cause debugging, reproduction, and error recovery using CVF diagnostic and evidence discipline.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-debugging-error-recovery/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: debugging-error-recovery\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory debugging guidance only; loading this entry or package body cannot authorize implementation, repair execution, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-debugging-error-recovery/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "debugging-error-recovery",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "debug",
+            "error",
+            "failure",
+            "root cause",
+            "test failure",
+            "build break"
+          ],
+          "specSignals": [
+            "debug failure",
+            "root cause",
+            "unexpected behavior"
+          ],
+          "recommendedWhen": [
+            "the spec includes a failing test, broken build, exception, or unexpected behavior"
+          ],
+          "notRecommendedWhen": [
+            "there is no observed failure or diagnostic"
+          ],
+          "outputGoals": [
+            "root cause",
+            "reproduction",
+            "fix validation"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-deprecation-migration",
+          "title": "CVF Engineering Deprecation And Migration",
+          "domain": "deprecation-migration",
+          "difficulty": "Governed",
+          "summary": "Guide deprecation, migration, compatibility, and sunset planning with explicit consumer-impact and rollback boundaries.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-deprecation-migration/SKILL.md",
+          "content": "# CVF Engineering Deprecation And Migration\n\nGuide deprecation, migration, compatibility, and sunset planning with explicit consumer-impact and rollback boundaries.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-deprecation-migration/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: deprecation-migration\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-deprecation-migration/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "deprecation-migration",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "migration",
+            "deprecation",
+            "compatibility",
+            "sunset",
+            "remove old",
+            "api removal"
+          ],
+          "specSignals": [
+            "deprecation",
+            "migration",
+            "compatibility change"
+          ],
+          "recommendedWhen": [
+            "the spec names deprecation, migration, compatibility, or removing old APIs"
+          ],
+          "notRecommendedWhen": [
+            "the change is not replacing or retiring an existing surface"
+          ],
+          "outputGoals": [
+            "migration plan",
+            "compatibility boundary",
+            "rollback path"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-governance-documentation-adrs",
+          "title": "CVF Governance Documentation And ADRs",
+          "domain": "documentation-adrs",
+          "difficulty": "Governed",
+          "summary": "Guide decision records and durable documentation so future agents can understand why a governed change exists and how it should be used.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-governance-documentation-adrs/SKILL.md",
+          "content": "# CVF Governance Documentation And ADRs\n\nGuide decision records and durable documentation so future agents can understand why a governed change exists and how it should be used.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-governance-documentation-adrs/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: documentation-adrs\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R0",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-documentation-adrs/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "documentation-adrs",
+          "domainGroup": "governance",
+          "selectionKeywords": [
+            "adr",
+            "documentation",
+            "decision record",
+            "rationale",
+            "standard",
+            "architecture decision"
+          ],
+          "specSignals": [
+            "architecture decision",
+            "documentation update",
+            "decision record"
+          ],
+          "recommendedWhen": [
+            "the spec asks to document architecture decisions, standards, or long-lived rationale"
+          ],
+          "notRecommendedWhen": [
+            "the task has no decision or documentation surface"
+          ],
+          "outputGoals": [
+            "ADR",
+            "decision record",
+            "documentation"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-governance-doubt-driven-development",
+          "title": "CVF Governance Doubt-Driven Development",
+          "domain": "doubt-driven-development",
+          "difficulty": "Governed",
+          "summary": "Guide adversarial fresh-context review of non-trivial decisions to reduce hallucination, rationalization, and shallow PASS closeout.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-governance-doubt-driven-development/SKILL.md",
+          "content": "# CVF Governance Doubt-Driven Development\n\nGuide adversarial fresh-context review of non-trivial decisions to reduce hallucination, rationalization, and shallow PASS closeout.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-governance-doubt-driven-development/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: doubt-driven-development\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R0",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-doubt-driven-development/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "doubt-driven-development",
+          "domainGroup": "governance",
+          "selectionKeywords": [
+            "doubt",
+            "assumption",
+            "adversarial review",
+            "fresh context",
+            "high stakes",
+            "verify assumptions"
+          ],
+          "specSignals": [
+            "doubt-driven",
+            "fresh-context review",
+            "adversarial review",
+            "verify assumptions"
+          ],
+          "recommendedWhen": [
+            "the spec involves high-risk decisions, uncertain assumptions, or possible overclaiming"
+          ],
+          "notRecommendedWhen": [
+            "the decision is low-risk and already source-verified"
+          ],
+          "outputGoals": [
+            "assumption audit",
+            "risk challenge",
+            "fresh-context review"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-frontend-ui",
+          "title": "CVF Engineering Frontend UI",
+          "domain": "frontend-ui",
+          "difficulty": "Governed",
+          "summary": "Guide production-quality frontend UI work while binding output to CVF DESIGN.md, responsive layout, accessibility, and runtime verification requirements.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-frontend-ui/SKILL.md",
+          "content": "# CVF Engineering Frontend UI\n\nGuide production-quality frontend UI work while binding output to CVF DESIGN.md, responsive layout, accessibility, and runtime verification requirements.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-frontend-ui/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: frontend-ui\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-frontend-ui/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "frontend-ui",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "frontend",
+            "ui",
+            "component",
+            "layout",
+            "responsive",
+            "accessibility"
+          ],
+          "specSignals": [
+            "frontend ui",
+            "component design",
+            "layout implementation",
+            "user interface"
+          ],
+          "recommendedWhen": [
+            "the spec asks for UI, frontend components, layout, interaction, or visual polish"
+          ],
+          "notRecommendedWhen": [
+            "the task is backend-only or documentation-only"
+          ],
+          "outputGoals": [
+            "usable UI",
+            "responsive layout",
+            "accessibility"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-governance-git-workflow-versioning",
+          "title": "CVF Governance Git Workflow And Versioning",
+          "domain": "git-workflow-versioning",
+          "difficulty": "Governed",
+          "summary": "Guide disciplined branching, commits, conflict handling, and versioning while preserving CVF material/session-sync commit separation.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-governance-git-workflow-versioning/SKILL.md",
+          "content": "# CVF Governance Git Workflow And Versioning\n\nGuide disciplined branching, commits, conflict handling, and versioning while preserving CVF material/session-sync commit separation.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-governance-git-workflow-versioning/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: git-workflow-versioning\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R0",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-git-workflow-versioning/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "git-workflow-versioning",
+          "domainGroup": "governance",
+          "selectionKeywords": [
+            "git",
+            "commit",
+            "branch",
+            "merge conflict",
+            "versioning",
+            "session-sync"
+          ],
+          "specSignals": [
+            "git workflow",
+            "commit",
+            "branching",
+            "merge conflict"
+          ],
+          "recommendedWhen": [
+            "the spec mentions commits, branches, conflicts, versioning, or material/session-sync split"
+          ],
+          "notRecommendedWhen": [
+            "no git, commit, branch, or versioning action is involved"
+          ],
+          "outputGoals": [
+            "commit plan",
+            "branch discipline",
+            "versioning"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-governance-idea-refinement",
+          "title": "CVF Governance Idea Refinement",
+          "domain": "idea-refinement",
+          "difficulty": "Governed",
+          "summary": "Guide early idea refinement from vague intent into options, constraints, and an actionable governed next move.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-governance-idea-refinement/SKILL.md",
+          "content": "# CVF Governance Idea Refinement\n\nGuide early idea refinement from vague intent into options, constraints, and an actionable governed next move.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-governance-idea-refinement/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: idea-refinement\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R0",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-idea-refinement/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "idea-refinement",
+          "domainGroup": "governance",
+          "selectionKeywords": [
+            "idea",
+            "brainstorm",
+            "options",
+            "unclear",
+            "shape request",
+            "next move"
+          ],
+          "specSignals": [
+            "refine idea",
+            "brainstorm",
+            "unclear concept",
+            "options"
+          ],
+          "recommendedWhen": [
+            "the spec is an early concept, brainstorm, or unclear idea that needs shaping before execution"
+          ],
+          "notRecommendedWhen": [
+            "the operator already gave an exact implementation request"
+          ],
+          "outputGoals": [
+            "options",
+            "constraints",
+            "next move"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-incremental-implementation",
+          "title": "CVF Engineering Incremental Implementation",
+          "domain": "incremental-implementation",
+          "difficulty": "Governed",
+          "summary": "Guide small, reviewable implementation slices with validation after each slice and clear stop conditions for governed work.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-incremental-implementation/SKILL.md",
+          "content": "# CVF Engineering Incremental Implementation\n\nGuide small, reviewable implementation slices with validation after each slice and clear stop conditions for governed work.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-incremental-implementation/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: incremental-implementation\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-incremental-implementation/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "incremental-implementation",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "incremental",
+            "small slices",
+            "multi-file",
+            "stepwise",
+            "phase",
+            "large task"
+          ],
+          "specSignals": [
+            "incremental implementation",
+            "large task",
+            "stepwise delivery"
+          ],
+          "recommendedWhen": [
+            "the spec is large, multi-file, risky, or needs phased implementation"
+          ],
+          "notRecommendedWhen": [
+            "the task is a tiny single-file edit"
+          ],
+          "outputGoals": [
+            "incremental plan",
+            "small slices",
+            "validation steps"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-governance-operator-interview",
+          "title": "CVF Governance Operator Interview",
+          "domain": "operator-interview",
+          "difficulty": "Governed",
+          "summary": "Guide one-question-at-a-time clarification when operator intent is underspecified and a risky assumption would distort the work.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-governance-operator-interview/SKILL.md",
+          "content": "# CVF Governance Operator Interview\n\nGuide one-question-at-a-time clarification when operator intent is underspecified and a risky assumption would distort the work.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-governance-operator-interview/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: operator-interview\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R0",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-operator-interview/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "operator-interview",
+          "domainGroup": "governance",
+          "selectionKeywords": [
+            "clarify",
+            "interview",
+            "question",
+            "requirements",
+            "underspecified",
+            "what do you want"
+          ],
+          "specSignals": [
+            "interview me",
+            "clarify request",
+            "underspecified task"
+          ],
+          "recommendedWhen": [
+            "the spec is underspecified and a reasonable assumption would materially change the work"
+          ],
+          "notRecommendedWhen": [
+            "the operator request is already precise enough to execute safely"
+          ],
+          "outputGoals": [
+            "clarified requirements",
+            "operator answer",
+            "safe assumption boundary"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-observability-instrumentation",
+          "title": "CVF Engineering Observability And Instrumentation",
+          "domain": "observability-instrumentation",
+          "difficulty": "Governed",
+          "summary": "Guide logging, metrics, tracing, alerting, and production diagnostic evidence without claiming live/provider behavior unless separately proven.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-observability-instrumentation/SKILL.md",
+          "content": "# CVF Engineering Observability And Instrumentation\n\nGuide logging, metrics, tracing, alerting, and production diagnostic evidence without claiming live/provider behavior unless separately proven.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-observability-instrumentation/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: observability-instrumentation\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-observability-instrumentation/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "observability-instrumentation",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "observability",
+            "instrumentation",
+            "logging",
+            "metrics",
+            "tracing",
+            "alerts",
+            "monitoring"
+          ],
+          "specSignals": [
+            "observability",
+            "instrumentation",
+            "logging",
+            "metrics"
+          ],
+          "recommendedWhen": [
+            "the spec mentions logs, metrics, traces, alerts, monitoring, or production diagnostics"
+          ],
+          "notRecommendedWhen": [
+            "the task has no runtime or diagnostic surface"
+          ],
+          "outputGoals": [
+            "logging plan",
+            "metrics",
+            "tracing",
+            "alerts"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-performance-optimization",
+          "title": "CVF Engineering Performance Optimization",
+          "domain": "performance-optimization",
+          "difficulty": "Governed",
+          "summary": "Guide measurement-first performance optimization and regression control across frontend, backend, database, and build surfaces.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-performance-optimization/SKILL.md",
+          "content": "# CVF Engineering Performance Optimization\n\nGuide measurement-first performance optimization and regression control across frontend, backend, database, and build surfaces.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-performance-optimization/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: performance-optimization\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-performance-optimization/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "performance-optimization",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "performance",
+            "slow",
+            "latency",
+            "profiling",
+            "bottleneck",
+            "core web vitals"
+          ],
+          "specSignals": [
+            "performance optimization",
+            "slow page",
+            "profiling",
+            "bottleneck"
+          ],
+          "recommendedWhen": [
+            "the spec mentions slow behavior, profiling, latency, Core Web Vitals, or bottlenecks"
+          ],
+          "notRecommendedWhen": [
+            "there is no performance complaint or metric"
+          ],
+          "outputGoals": [
+            "performance baseline",
+            "bottleneck analysis",
+            "regression guard"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-security-hardening",
+          "title": "CVF Engineering Security Hardening",
+          "domain": "security-hardening",
+          "difficulty": "Governed",
+          "summary": "Guide threat-model-first hardening for authentication, authorization, untrusted input, secrets, external integrations, and sensitive data.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-security-hardening/SKILL.md",
+          "content": "# CVF Engineering Security Hardening\n\nGuide threat-model-first hardening for authentication, authorization, untrusted input, secrets, external integrations, and sensitive data.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-security-hardening/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: security-hardening\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md",
+          "riskLevel": "R2",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory security-hardening guidance only; loading this entry or package body cannot authorize implementation, security changes, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-security-hardening/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "security-hardening",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "security",
+            "hardening",
+            "auth",
+            "authorization",
+            "secrets",
+            "untrusted input",
+            "owasp",
+            "sensitive data"
+          ],
+          "specSignals": [
+            "security hardening",
+            "threat model",
+            "auth",
+            "secrets"
+          ],
+          "recommendedWhen": [
+            "the spec mentions auth, authorization, secrets, untrusted input, sensitive data, OWASP, or access control"
+          ],
+          "notRecommendedWhen": [
+            "the task has no auth, secrets, external input, or sensitive data concern"
+          ],
+          "outputGoals": [
+            "threat model",
+            "security hardening",
+            "secret handling",
+            "authorization boundary"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-shipping-launch",
+          "title": "CVF Engineering Shipping And Launch",
+          "domain": "shipping-launch",
+          "difficulty": "Governed",
+          "summary": "Guide launch readiness, rollback planning, staged rollout, monitoring, and release evidence without authorizing production deployment.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-shipping-launch/SKILL.md",
+          "content": "# CVF Engineering Shipping And Launch\n\nGuide launch readiness, rollback planning, staged rollout, monitoring, and release evidence without authorizing production deployment.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-shipping-launch/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: shipping-launch\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-shipping-launch/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "shipping-launch",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "shipping",
+            "launch",
+            "release",
+            "rollback",
+            "staged rollout",
+            "release readiness"
+          ],
+          "specSignals": [
+            "shipping",
+            "launch",
+            "release readiness",
+            "rollback plan"
+          ],
+          "recommendedWhen": [
+            "the spec mentions shipping, launch, release readiness, staged rollout, monitoring, or rollback"
+          ],
+          "notRecommendedWhen": [
+            "the task is not near release or rollout"
+          ],
+          "outputGoals": [
+            "release readiness",
+            "rollback plan",
+            "staged rollout"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-source-driven-development",
+          "title": "CVF Engineering Source-Driven Development",
+          "domain": "source-driven-development",
+          "difficulty": "Governed",
+          "summary": "Guide official-documentation-backed implementation decisions for framework or library work where current source correctness matters.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-source-driven-development/SKILL.md",
+          "content": "# CVF Engineering Source-Driven Development\n\nGuide official-documentation-backed implementation decisions for framework or library work where current source correctness matters.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-source-driven-development/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: source-driven-development\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R0",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-source-driven-development/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "source-driven-development",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "official docs",
+            "source driven",
+            "framework",
+            "library",
+            "current best practices",
+            "documentation"
+          ],
+          "specSignals": [
+            "source driven development",
+            "official docs",
+            "framework docs"
+          ],
+          "recommendedWhen": [
+            "the spec depends on current framework docs, library behavior, or official source correctness"
+          ],
+          "notRecommendedWhen": [
+            "the needed source facts are already governed locally"
+          ],
+          "outputGoals": [
+            "source-backed decision",
+            "current documentation check",
+            "framework correctness"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-test-driven-development",
+          "title": "CVF Engineering Test-Driven Development",
+          "domain": "test-driven-development",
+          "difficulty": "Governed",
+          "summary": "Guide failing-test-first implementation, bug reproduction, regression coverage, and proof that behavior works before closure.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-test-driven-development/SKILL.md",
+          "content": "# CVF Engineering Test-Driven Development\n\nGuide failing-test-first implementation, bug reproduction, regression coverage, and proof that behavior works before closure.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-test-driven-development/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: test-driven-development\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md",
+          "riskLevel": "R1",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory test-first guidance only; loading this entry or package body cannot authorize implementation, test execution, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-test-driven-development/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "test-driven-development",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "test",
+            "failing test",
+            "regression",
+            "bug reproduction",
+            "prove it works",
+            "coverage"
+          ],
+          "specSignals": [
+            "test driven development",
+            "write failing test",
+            "regression test"
+          ],
+          "recommendedWhen": [
+            "the spec asks to fix behavior, reproduce a bug, or prove a change with tests"
+          ],
+          "notRecommendedWhen": [
+            "no executable test surface exists and no test harness is authorized"
+          ],
+          "outputGoals": [
+            "failing test",
+            "regression coverage",
+            "behavior proof"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-governance-skill-discovery-invocation",
+          "title": "CVF Governance Skill Discovery And Invocation",
+          "domain": "skill-discovery-invocation",
+          "difficulty": "Governed",
+          "summary": "Guide metadata-first skill discovery, invocation boundaries, and skill selection without global instruction loading or authority expansion.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-governance-skill-discovery-invocation/SKILL.md",
+          "content": "# CVF Governance Skill Discovery And Invocation\n\nGuide metadata-first skill discovery, invocation boundaries, and skill selection without global instruction loading or authority expansion.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-governance-skill-discovery-invocation/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: skill-discovery-invocation\n\n## Review Artifacts\n- docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md\n- docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md\n- docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md\n- docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+          "riskLevel": "R0",
+          "allowedRoles": "dispatcher, worker, reviewer",
+          "allowedPhases": "INTAKE, DISPATCH_AUTHORING, WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory package guidance only; loading this entry or package body cannot authorize implementation, merge, commit, browser, network, provider, public, or production action beyond the active governed work order",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+            "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+            "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-skill-discovery-invocation/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "skill-discovery-invocation",
+          "domainGroup": "governance",
+          "selectionKeywords": [
+            "skill",
+            "skills",
+            "skill discovery",
+            "skill invocation",
+            "which skill",
+            "choose skill"
+          ],
+          "specSignals": [
+            "using agent skills",
+            "skill discovery",
+            "skill invocation",
+            "which skill applies"
+          ],
+          "recommendedWhen": [
+            "the spec asks which skill applies, how to choose skills, or how to avoid authority expansion during skill use"
+          ],
+          "notRecommendedWhen": [
+            "the correct skill is already selected and receipt-backed"
+          ],
+          "outputGoals": [
+            "skill selection",
+            "invocation boundary",
+            "metadata-first discovery"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        }
+      ]
     }
   ],
   "meta": {
     "totalScannedSkills": 62,
-    "frontDoorSkills": 27,
+    "frontDoorSkills": 52,
     "quarantinedSkills": 35,
     "trustedMappedSkills": 27,
     "reviewMappedSkills": 0,
     "trustedBenchmarkSkills": 9,
     "governanceSource": [
       "docs/baselines/CVF_CORPUS_RESCREEN_D2_MATRIX_2026-04-15.md",
-      "docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md"
-    ]
+      "docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md",
+      "../../../docs/reference/agent_system_skills/generated/skill-index.json"
+    ],
+    "assfProjectedSkills": 25,
+    "certifiedPackageProjections": 25,
+    "runtimePackageProjections": 24,
+    "skillControlPlaneProjection": "public/data/assf-skill-control-plane.json"
   }
 }

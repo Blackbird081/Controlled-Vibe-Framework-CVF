@@ -56,8 +56,8 @@ Canonical physical move set landed on canon:
 
 - `P3 / CP1` — retire `CVF Edit/`, `CVF_Important/`, and `CVF_Restructure/` from the visible repo root while preserving optional local recovery under `.private_reference/legacy/`
 - audit/review chain:
-  - `docs/audits/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
-  - `docs/reviews/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
+  - `docs/audits/archive/CVF_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_AUDIT_2026-04-02.md`
+  - `docs/reviews/archive/CVF_GC019_P3_CP1_RETIRED_REFERENCE_ROOT_RETIREMENT_REVIEW_2026-04-02.md`
 Isolated relocation evidence retained but not landed on canon:
 
 - `P3 / CP2` proposed relocating `CVF_SKILL_LIBRARY/` and `ui_governance_engine/` into `ECOSYSTEM/reference-roots/retained-internal/` on a dedicated `restructuring/p3-*` branch and secondary git worktree

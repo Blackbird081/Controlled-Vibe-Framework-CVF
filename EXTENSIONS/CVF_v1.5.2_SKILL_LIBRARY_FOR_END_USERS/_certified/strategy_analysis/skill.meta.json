@@ -1,0 +1,10 @@
+{
+  "id": "strategy_analysis",
+  "name": "Strategy Analysis",
+  "domain": "Business Analysis",
+  "version": "1.0.0",
+  "sourceSkillRef": "01_strategy_analysis.skill.md",
+  "certificationDate": "2026-05-22",
+  "outcomeKey": "strategy_analysis",
+  "description": "Compare strategic options with risks, recommendation, and next steps."
+}

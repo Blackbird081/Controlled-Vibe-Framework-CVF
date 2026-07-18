@@ -1,0 +1,21 @@
+{
+  "workflowId": "workflow.product_brief.v1",
+  "outcomeKey": "product_brief",
+  "packId": "product_brief",
+  "inputKeys": [
+    "product_goal",
+    "target_user",
+    "problem",
+    "constraints"
+  ],
+  "outputSections": [
+    "Product summary",
+    "User and problem",
+    "Scope",
+    "Acceptance criteria"
+  ],
+  "policyRefs": [
+    "CVF_CAPABILITY_INTAKE_PIPELINE_GUARD",
+    "CVF_F1_DIMINISHING_RETURNS_STOP_RULE"
+  ]
+}

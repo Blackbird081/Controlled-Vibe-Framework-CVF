@@ -1,0 +1,38 @@
+{
+  "stableId": "cvf.asc.module.sot3_refinery_runtime.v1",
+  "entityType": "MODULE",
+  "name": "SOT3 Refinery Runtime Owner",
+  "authorityClass": "ACCEPTED_REVIEW_EVIDENCE",
+  "maturity": "LOCAL_READY",
+  "ownerPaths": [
+    "EXTENSIONS/CVF_REFINERY/src/pipeline/engine.ts"
+  ],
+  "planeMembership": [
+    "cvf.asc.plane.contract_to_runtime.v1"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "EXTENSIONS/CVF_REFINERY/src/pipeline/engine.ts",
+      "lineOrSection": "lines 23 and 48",
+      "evidenceRole": "REQUIRED_STAGE_CHAIN and RefineryEngine runtime symbol evidence"
+    },
+    {
+      "path": "docs/reviews/CVF_SOT3_T3_COMPLETION_REVIEW_2026-07-12.md",
+      "lineOrSection": "Disposition",
+      "evidenceRole": "reviewer-accepted deterministic Refinery Core acceptance"
+    }
+  ],
+  "claimBoundary": "ACCEPTED_REVIEW_EVIDENCE only. RefineryEngine and its REQUIRED_STAGE_CHAIN exist as bounded local-ready package runtime that prepares SourceEnvelope input into a RefineryPacket through a fixed nine-stage deterministic chain. This entry does not claim the Refinery is globally activated, always invoked by any CVF Web or production request path, a provider boundary, publicly exported, or production-ready. Activation into a real product path is governed separately by the SOT3 activation architecture decision and its A1-A5 proof ladder, not by this catalog record.",
+  "freshnessInputs": [
+    "EXTENSIONS/CVF_REFINERY/src/pipeline/engine.ts",
+    "docs/reviews/CVF_SOT3_T3_COMPLETION_REVIEW_2026-07-12.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-18",
+    "acceptedArtifact": "docs/reviews/CVF_SOT3_T3_COMPLETION_REVIEW_2026-07-12.md"
+  },
+  "boundaryCaveat": "Does not claim universal activation, provider/live behavior, public export, or production readiness. Local-ready package existence only; wiring into any product request path remains governed by the separate SOT3 activation decision and roadmap.",
+  "priorDisposition": ""
+}

@@ -1,0 +1,45 @@
+{
+  "name": "cvf-truth-flow",
+  "version": "0.1.0",
+  "description": "CVF Truth Flow - deterministic, no-AI post-Kernel distribution package that routes, doses, delivers, and retires DistributionPackage material bound to Kernel-resolved TruthReference authority",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "README.md",
+    "src",
+    "schemas"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "cvf-truth-kernel": "file:../CVF_TRUTH_KERNEL"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  },
+  "keywords": [
+    "cvf",
+    "truth-flow",
+    "governance",
+    "deterministic"
+  ],
+  "license": "CC-BY-NC-ND-4.0",
+  "exportReadiness": {
+    "status": "NOT_PUBLIC",
+    "phase": "PRIVATE_PROVENANCE",
+    "blockers": [
+      "reviewer acceptance",
+      "public-sync authorization"
+    ]
+  }
+}

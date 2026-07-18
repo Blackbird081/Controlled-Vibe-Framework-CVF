@@ -1,0 +1,60 @@
+{
+  "stableId": "cvf.asc.gap.sot3_truth_kernel_runtime_unresolved.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+  "targetPlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+  "sourceOwner": "docs/reference/truth_foundation/CVF_TRUTH_FOUNDATION_SOURCE_PROVENANCE_AND_VERIFICATION_CONTRACT.md",
+  "targetOwner": "EXTENSIONS/CVF_TRUTH_KERNEL/",
+  "missingEdge": "TKG-T1 (docs/reference/truth_foundation/) already owns the Truth Kernel doctrine language (evidence/obligation/provenance minimums). SOT3-T4 built the runtime verification gate, receipt hash-chain, and admission logic (`TruthKernel.evaluate`); SOT3-T4R1 repaired the current-reference-state authority gap; SOT3-T6 proved the runtime executes as a real dependency inside the three-layer vertical slice.",
+  "currentStatus": "ACTIVE_OWNER_CREATED_WITH_BOUNDARY",
+  "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+  "citations": [
+    {
+      "path": "docs/reviews/CVF_SOT3_T1_OWNER_NOVELTY_MAP_2026-07-12.md",
+      "lineOrSection": "CAP-05: kernel_receipt_gate_schema_implementation",
+      "evidenceRole": "reviewer-accepted NEW_OWNER_CANDIDATE runtime disposition (superseded by T4/T4R1/T6 owner creation); doctrine ENRICH_EXISTING_OWNER via CAP-04 unaffected"
+    },
+    {
+      "path": "docs/reviews/CVF_SOT3_T4R1_COMPLETION_REVIEW_2026-07-13.md",
+      "lineOrSection": "Closure Checklist",
+      "evidenceRole": "reviewer acceptance of the Truth Kernel runtime package, including the current-reference-state authority repair, as owner"
+    },
+    {
+      "path": "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md",
+      "lineOrSection": "Dependency-Closure Matrix, row `real three-layer instances`",
+      "evidenceRole": "reviewer acceptance that `TruthKernel.evaluate`/`issueReference` execute as a real dependency, not a mock, inside the accepted vertical slice"
+    },
+    {
+      "path": "docs/reference/truth_foundation/CVF_TRUTH_FOUNDATION_SOURCE_PROVENANCE_AND_VERIFICATION_CONTRACT.md",
+      "lineOrSection": "Evidence/Obligation/Verification Result Minimums",
+      "evidenceRole": "existing TKG-T1 doctrine owner, retained and enriched, not duplicated by the new runtime owner"
+    }
+  ],
+  "impact": "Was: blocked any as-built claim that CVF has a Truth Kernel runtime. Now: the runtime has a private-provenance owner; the existing TKG-T1 doctrine owner is unaffected and not duplicated. Remaining impact is limited to activation, adapter, provider/live, and public-sync claims, none of which this GAP closure asserts.",
+  "closeCondition": {
+    "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+    "conditionText": "SATISFIED: `docs/reviews/CVF_SOT3_T4R1_COMPLETION_REVIEW_2026-07-13.md` accepts the Truth Kernel runtime package as owner; `docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md` accepts real-instance execution."
+  },
+  "reopenCondition": {
+    "conditionKind": "OPERATOR_DECISION_RECORDED",
+    "conditionText": "Reopen only if a future review finds the `EXTENSIONS/CVF_TRUTH_KERNEL/` owner path removed, superseded, or materially non-functional, or if an operator authorizes package activation/adapter/provider work that changes this GAP's boundary."
+  },
+  "actionOwner": "SOT3-T7 semantic value audit and closeout",
+  "freshnessInputs": [
+    "docs/reference/truth_foundation/CVF_TRUTH_FOUNDATION_SOURCE_PROVENANCE_AND_VERIFICATION_CONTRACT.md",
+    "docs/reviews/CVF_SOT3_T4R1_COMPLETION_REVIEW_2026-07-13.md",
+    "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-13",
+    "acceptedArtifact": "docs/reviews/CVF_SOT3_T7_WORKER_RETURN_2026-07-13.md"
+  },
+  "boundaryCaveat": "Does not claim package activation, an execution adapter, provider/live proof, public-sync readiness, or production readiness. Does not create a second Truth Kernel doctrine owner; TKG-T1 remains the doctrine authority and this runtime owner is additive to it. Does not claim the Refinery-to-Kernel packet-binding hash is an owner-level shared contract (see the separately tracked packet-binding-hash GAP disposition). Private-provenance implementation only.",
+  "priorDisposition": "SOURCE_OWNER_UNRESOLVED_WITH_SEARCH_EVIDENCE",
+  "rejectedCandidates": [
+    {
+      "candidatePath": "EXTENSIONS/CVF_GUARD_CONTRACT/src/contracts/receipt-binding.contract.ts",
+      "rejectionReason": "T1 confirmed this is a workflow-step receipt, not a truth-verification receipt; different owner, collision reviewed and rejected as same-owner candidate"
+    }
+  ]
+}

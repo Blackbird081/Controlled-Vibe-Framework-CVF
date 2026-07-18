@@ -1,6 +1,7 @@
 import type { StreamContract, StreamRequest } from "../../stream-contract";
 import type { ProviderCapabilityFile } from "../../provider-method-contract";
 import { assertProviderMethodSupported } from "../../provider-method-gate";
+import { resolveAlibabaDashScopeEndpoint } from "../../alibaba-free-quota-model-ledger";
 
 type FetchLike = (input: string, init: {
   method: "POST";
@@ -27,7 +28,7 @@ const ALIBABA_QWEN_TURBO_CAPABILITY: ProviderCapabilityFile = {
 
 export function createAlibabaQwenTurboStreamAdapter(options: AlibabaStreamAdapterOptions) {
   const modelId = options.modelId ?? "qwen-turbo";
-  const endpoint = options.endpoint ?? "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions";
+  const endpoint = options.endpoint ?? resolveAlibabaDashScopeEndpoint();
   const fetchImpl = options.fetchImpl ?? (globalThis.fetch as unknown as FetchLike);
 
   assertProviderMethodSupported(ALIBABA_QWEN_TURBO_CAPABILITY, modelId, "stream");

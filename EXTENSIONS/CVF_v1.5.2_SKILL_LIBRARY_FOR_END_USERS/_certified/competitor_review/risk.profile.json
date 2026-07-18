@@ -1,0 +1,15 @@
+{
+  "riskLevel": "R1",
+  "riskRationale": "Static market-analysis deliverable using user-provided business context and public-style competitor descriptions, with no external side effects.",
+  "allowedDataClasses": [
+    "business_context",
+    "user_provided_text",
+    "public_market_observations"
+  ],
+  "disallowedDataClasses": [
+    "raw_secrets",
+    "payment_credentials",
+    "regulated_health_data"
+  ],
+  "humanReviewRequired": false
+}

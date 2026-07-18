@@ -22,7 +22,9 @@ const _storeAutoSeeds = process.env.NODE_ENV !== 'test';
 let _storeSeeded = false;
 function ensureStoreSeeded(): void {
   if (_storeAutoSeeds) return;
-  if (_storeSeeded) return;
+  const collectionIds = new Set(knowledgeStore.getCollections().map(collection => collection.id));
+  const seedMissing = KNOWLEDGE_COLLECTIONS.some(collection => !collectionIds.has(collection.id));
+  if (_storeSeeded && !seedMissing) return;
   _storeSeeded = true;
   knowledgeStore.seed(KNOWLEDGE_COLLECTIONS);
 }

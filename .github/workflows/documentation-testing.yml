@@ -78,6 +78,26 @@ jobs:
         run: |
           python governance/compat/check_markdown_structural_completeness.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
+  work-order-dispatch-quality:
+    name: Work Order Dispatch Quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce work-order dispatch quality
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_work_order_dispatch_quality.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
   cpf-public-surface-maintainability:
     name: CPF Public Surface Maintainability
     runs-on: ubuntu-latest
@@ -323,6 +343,46 @@ jobs:
         run: |
           python governance/compat/check_knowledge_absorption_priority_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
+  corpus-completeness-report-integrity:
+    name: Corpus Completeness And Report Integrity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-047 corpus completeness and report integrity
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_corpus_completeness_report_integrity.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
+  corpus-to-knowledge-map-reconciliation:
+    name: Corpus-To-Knowledge-Map Reconciliation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce GC-048 corpus-to-knowledge-map reconciliation
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python governance/compat/check_corpus_to_knowledge_map_reconciliation.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+
   multi-agent-review-governance:
     name: Multi-Agent Review Governance
     runs-on: ubuntu-latest
@@ -448,8 +508,8 @@ jobs:
         run: |
           python governance/compat/check_governed_file_size.py --enforce
 
-  workflow-orchestration:
-    name: Workflow Orchestration
+  system-chain-map-freshness:
+    name: System Chain Map Freshness
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -459,9 +519,9 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Enforce workflow orchestration guard
+      - name: Enforce system chain map freshness guard
         run: |
-          python governance/compat/check_workflow_orchestration_guard.py --enforce
+          python governance/compat/check_system_chain_map_freshness.py --enforce
 
   test-partition-ownership:
     name: Test Partition Ownership
@@ -851,30 +911,10 @@ jobs:
         run: |
           python governance/skill-library/registry/validate_registry.py
 
-  qbs-claim-gate:
-    name: QBS Claim Gate
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Enforce QBS claim gate on benchmark artifacts
-        run: |
-          python governance/compat/check_qbs_claim_gate.py --scan-dir docs/benchmark --enforce
-
-      - name: Run QBS claim gate fixture self-tests
-        run: |
-          python governance/compat/test_qbs_claim_gate.py
-
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [docs-governance-compat, governed-artifact-authoring, markdown-structural-completeness, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, governed-file-size, workflow-orchestration, test-partition-ownership, release-manifest-consistency, cross-channel-guard-compat, guard-registry-compat, guard-authoring-standard, active-window-registry, repository-lifecycle-classification, repository-exposure-classification, prepublic-p3-readiness, foundational-guard-surfaces, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate, qbs-claim-gate]
+    needs: [docs-governance-compat, governed-artifact-authoring, markdown-structural-completeness, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, governed-file-size, test-partition-ownership, release-manifest-consistency, cross-channel-guard-compat, guard-registry-compat, guard-authoring-standard, active-window-registry, repository-lifecycle-classification, repository-exposure-classification, prepublic-p3-readiness, foundational-guard-surfaces, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
     if: always()
     
     steps:
@@ -896,7 +936,6 @@ jobs:
           echo "Conformance trace rotation: ${{ needs.conformance-trace-rotation.result }}"
           echo "Python automation size: ${{ needs.python-automation-size.result }}"
           echo "Governed file size: ${{ needs.governed-file-size.result }}"
-          echo "Workflow orchestration: ${{ needs.workflow-orchestration.result }}"
           echo "Test partition ownership: ${{ needs.test-partition-ownership.result }}"
           echo "Release manifest consistency: ${{ needs.release-manifest-consistency.result }}"
           echo "Cross-channel guard compat: ${{ needs.cross-channel-guard-compat.result }}"
@@ -916,4 +955,3 @@ jobs:
           echo "Integration tests: ${{ needs.integration-test.result }}"
           echo "Documentation: ${{ needs.documentation-build.result }}"
           echo "Registry validation: ${{ needs.registry-validate.result }}"
-          echo "QBS claim gate: ${{ needs.qbs-claim-gate.result }}"

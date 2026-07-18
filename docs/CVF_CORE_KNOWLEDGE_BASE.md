@@ -173,353 +173,110 @@ Khi đánh giá giá trị sản phẩm hiện tại của CVF, mặc định hi
 
 ## III. LỊCH SỬ CÁC VERSION (Chronological)
 
-| Version | Tên | Layer | Trạng thái | Folder trong EXTENSIONS/ |
-|---------|-----|-------|-----------|--------------------------|
-| v1.0 | Core Baseline | 1 | Active ✅ | `v1.0/` (root) |
-| v1.1 | Extended Control | 1 | Active ✅ | `v1.1/` (root) |
-| v1.1.1 | Phase Governance Protocol | 1.5 | **STABLE** 🔒 | `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` |
-| v1.1.2 | Phase Governance Hardening | 1.5 | **NEW** 🆕 | `CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` |
-| v1.2 | Skill Governance | 1 | Active ✅ | `CVF_v1.2_CAPABILITY_EXTENSION/` |
-| v1.2.1 | External Integration | 2 | **Implemented** ✅ | `CVF_v1.2.1_EXTERNAL_INTEGRATION/` |
-| v1.2.2 | Skill Governance Engine | 2 | **Implemented** ✅ | `CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/` |
-| v1.3 | SDK & Tooling | 2 | Active ✅ | `CVF_v1.3_IMPLEMENTATION_TOOLKIT/` |
-| v1.3.1 | Operator Edition | 2 | Active ✅ | `CVF_v1.3.1_OPERATOR_EDITION/` |
-| v1.4 | Usage Layer | 2 | Active ✅ | `CVF_v1.4_USAGE_LAYER/` |
-| v1.5 | UX Platform | 1 | **FROZEN** ❄️ | `CVF_v1.5_UX_PLATFORM/` |
-| v1.5.1 | End-User Orientation | 1 | Active ✅ | `CVF_v1.5.1_END_USER_ORIENTATION/` |
-| v1.5.2 | Skill Library (62 active skills) | 1 | Active ✅ | `CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` |
-| v1.6 | Agent Platform | 3 | Active ⭐ | `CVF_v1.6_AGENT_PLATFORM/` |
-| v1.6.1 | Governance Engine | 3 | Active 🔐 | `CVF_v1.6.1_GOVERNANCE_ENGINE/` |
-| v1.7 | Controlled Intelligence | 2.5 | Active 🧠 | `CVF_v1.7_CONTROLLED_INTELLIGENCE/` |
-| v1.7.1 | Safety Runtime | 2.5 | Active ⚙️ | `CVF_v1.7.1_SAFETY_RUNTIME/` |
-| v1.7.2 | Safety Dashboard | 4 | Active 🛡️ | `CVF_v1.7.2_SAFETY_DASHBOARD/` |
-| v1.7.3 | Runtime Adapter Hub | 5 | **CURRENT** 🔌 | *(integrated)* |
-| v1.8 | Safety Hardening | 2.5 | **Implemented** ✅ | `CVF_v1.8_SAFETY_HARDENING/` |
-| v1.8.1 | Adaptive Observability Runtime | 2.5+3 | **Implemented** ✅ | `CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/` |
-| v1.9 | Deterministic Reproducibility | 2.5 | **Implemented** ✅ | `CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` |
-| v2.0 | Non-Coder Safety Runtime | 4 | **Implemented** ✅ | `CVF_v2.0_NONCODER_SAFETY_RUNTIME/` |
-| v3.0 | Core Foundation — Git for AI | 0 | **DRAFT** 🔵 (cvf-next) | `CVF_v3.0_CORE_GIT_FOR_AI/` |
-| v1.0 | Intent Validation | 2 | **Implemented** ✅ | `CVF_ECO_v1.0_INTENT_VALIDATION/` |
-| v1.1 | NL Policy | 2 | **Implemented** ✅ | `CVF_ECO_v1.1_NL_POLICY/` |
-| v1.2 | LLM Risk Engine | 2 | **Implemented** ✅ | `CVF_ECO_v1.2_LLM_RISK_ENGINE/` |
-| v1.3 | Domain Guards | 2 | **Implemented** ✅ | `CVF_ECO_v1.3_DOMAIN_GUARDS/` |
-| v1.4 | RAG Pipeline | 2 | **Implemented** ✅ | `CVF_ECO_v1.4_RAG_PIPELINE/` |
-| v2.0 | Agent Guard SDK | 3 | **Implemented** ✅ | `CVF_ECO_v2.0_AGENT_GUARD_SDK/` |
-| v2.1 | Governance Canvas | 3 | **Implemented** ✅ | `CVF_ECO_v2.1_GOVERNANCE_CANVAS/` |
-| v2.2 | Governance CLI | 3 | **Implemented** ✅ | `CVF_ECO_v2.2_GOVERNANCE_CLI/` |
-| v2.3 | Agent Identity | 4 | **Implemented** ✅ | `CVF_ECO_v2.3_AGENT_IDENTITY/` |
-| v2.4 | Graph Governance | 4 | **Implemented** ✅ | `CVF_ECO_v2.4_GRAPH_GOVERNANCE/` |
-| v3.0 | Task Marketplace | 5 | **Implemented** ✅ | `CVF_ECO_v3.0_TASK_MARKETPLACE/` |
-| v3.1 | Reputation System | 5 | **Implemented** ✅ | `CVF_ECO_v3.1_REPUTATION/` |
+Authoritative inventory lives in:
+
+- `docs/reference/CVF_MODULE_INVENTORY.md`
+
+This Core KB keeps Section II as the placement map. Do not duplicate the full
+version table here; update the module inventory when version/folder/status facts
+change.
 
 ---
 
 ## IV. 4-PHASE PROCESS (CVF Core — Bất biến)
 
-```
-Phase A: Discovery  → Human quyết định requirements
-Phase B: Design     → Human quyết định architecture
-Phase C: Build      → AI executes (viết code theo spec)
-Phase D: Review     → Human validates, approve/fix
-```
+Canonical process rules live in:
 
-**Nguyên tắc cứng:**
-- Human luôn là authority cuối cùng ở Phase A, B, D
-- AI chỉ thực thi Phase C theo spec đã được approve
-- Không skip phase, không merge phase
+- `CLAUDE.md`
+
+Summary boundary:
+
+- Phase A: Discovery — Human decides requirements
+- Phase B: Design — Human decides architecture
+- Phase C: Build — AI executes approved spec
+- Phase D: Review — Human validates and approves/fixes
+
+Do not skip or merge phases.
 
 ---
 
 ## V. RISK MODEL CVF GỐC (R0–R3)
 
-**R0–R3** là risk model chính thức (nguồn: `CVF_POSITIONING.md`).
+Canonical risk model lives in:
 
-| Level | Tên | Nghĩa | Required Controls |
-|-------|-----|-------|-------------------|
-| R0 | Passive | No side effects — read/analyze only | Logging |
-| R1 | Controlled | Small, bounded changes — single file | Logging + Scope Guard |
-| R2 | Elevated | Has authority, may chain — module-level | Logging + Scope Guard + Approval + Audit |
-| R3 | Critical | System changes — cross-module/architecture | All above + Hard Gate + Human-in-the-loop |
+- `docs/concepts/risk-model.md`
 
-**Mapping Safety Dashboard:**
-```
-🟢 Safe      = R0
-🟡 Attention = R1
-🟠 Review    = R2
-🔴 Dangerous = R3
-```
+Quick orientation:
 
-**Mapping numeric (dành cho v1.8+ khi implement):**
-```
-0–5   = LOW      ≈ R0–R1
-6–10  = MODERATE ≈ R2
-11–15 = HIGH     ≈ R3
-16+   = CRITICAL ≈ R3+ (hard stop)
-```
-
-> ⚠️ Cần canonical mapping chính thức khi implement 1.8+
+| Dashboard | Risk |
+|---|---|
+| Safe | R0 |
+| Attention | R1 |
+| Review | R2 |
+| Dangerous | R3 |
 
 ---
 
 ## VI. 5-LAYER SAFETY KERNEL (v1.7.1 — Đang chạy)
 
-Pipeline xử lý mọi AI request, **không thể bypass:**
+Authoritative owner surfaces:
 
-```
-User Request
-  ↓
-[1] Domain Lock         → Kiểm tra scope, từ chối out-of-domain
-  ↓
-[2] Contract Runtime    → Validate input/output contract
-  ↓
-[3] Contamination Guard → Detect cross-domain pollution
-  ↓
-[4] Refusal Router      → Từ chối nếu vi phạm policy
-  ↓
-[5] Creative Control    → Giới hạn autonomy AI (Creative Mode toggle)
-  ↓
-Audit Logger → Decision logged với requestId + traceHash
-  ↓
-Output (Allow / Strip & Allow / Block)
-```
+- Section II of this file for layer placement.
+- `docs/reference/CVF_ARCHITECTURE_DIAGRAMS.md` for architecture diagrams.
 
-**Specs kỹ thuật:**
-- 12-step non-bypass pipeline
-- Symbol guard chống bypass
-- 51 kernel tests, 96.45% statement coverage, 91.41% branch coverage
-- requestId + traceHash cho mọi request (forensic)
+Kernel summary:
+
+`Domain Lock -> Contract Runtime -> Contamination Guard -> Refusal Router -> Creative Control -> Audit Logger`
 
 ---
 
 ## VII. GOVERNANCE SYSTEM
 
-### 3 Lớp thực thi:
+Authoritative owner surfaces:
 
-**Layer 1 — System Prompt (Rule 16)**
-- AI Agent được instruct gọi `governance_check` tool khi: fix bug, run test, change code
+- `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
+- `governance/toolkit/05_OPERATION/`
+- `governance/compat/`
 
-**Layer 2 — Post-Processing (`governance-post-check.ts`)**
-- Auto-scan AI responses, inject 🚨 enforcement message nếu thiếu documentation
-
-**Layer 3 — UI Governance Checker**
-- Interactive checklist trên Safety page + Tools page
-
-### Governance Guards (Mandatory):
-
-| Guard | Trigger | Required File |
-|-------|---------|---------------|
-| CVF_BUG_DOCUMENTATION_GUARD.md | `fix:` commits | `docs/BUG_HISTORY.md` |
-| CVF_TEST_DOCUMENTATION_GUARD.md | `test:` commits | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
-| CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md | active test log window exceeds threshold | `docs/CVF_INCREMENTAL_TEST_LOG.md` + `docs/logs/` |
-| CVF_ADR_GUARD.md | `feat(governance):`, `refactor(arch):`, `docs(policy):` | `docs/CVF_ARCHITECTURE_DECISIONS.md` |
-| CVF_DOCUMENT_NAMING_GUARD.md | New/migrated long-term governance docs | `CVF_` naming convention + approved exceptions |
-| CVF_DIAGRAM_VALIDATION_GUARD.md | Diagram changes | `docs/reference/CVF_ARCHITECTURE_DIAGRAMS.md` |
-| CVF_DOCUMENT_STORAGE_GUARD.md | New long-term docs in `docs/` | Correct taxonomy folder per `docs/INDEX.md` |
-| CVF_DEPTH_AUDIT_GUARD.md | Any roadmap deepening / new semantic layer | Explicit scoring before continuing deeper |
-| CVF_WORKSPACE_ISOLATION_GUARD.md | Opening projects in CVF root | Sibling workspace only |
-| CVF_TEST_DEPTH_CLASSIFICATION_GUARD.md | Any test count report in assessment/review/release | T1–T4 tier breakdown + Meaningful Assertion Rate |
-| CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md | Trace exceeds threshold | Rotate to `docs/reviews/*/logs/` |
-| CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD.md | Wave 1 closure | Sequential runner, shared bootstrap |
-| CVF_PYTHON_AUTOMATION_SIZE_GUARD.md | Scripts in `scripts/`, `governance/compat/` | Stay within size thresholds |
-| CVF_ARCHITECTURE_CHECK_GUARD.md | Any new version/layer/extension/module proposal | `docs/CVF_CORE_KNOWLEDGE_BASE.md` ← file này |
-| CVF_EXTENSION_VERSIONING_GUARD.md | New extension folder in `EXTENSIONS/` | `CVF_{STREAM}_v{major}.{minor}_{NAME}/` format |
-| CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md | Governed packets, evidence docs, or continuity docs being written | Source-truth first + typed evidence stays explicit + continuity surfaces move together |
-| CVF_PUBLIC_SURFACE_MAINTAINABILITY_GUARD.md | CPF public barrel changes | Keep `src/index.ts` thin and re-export-only |
-| CVF_BARREL_SMOKE_OWNERSHIP_GUARD.md | CPF barrel smoke changes | Keep `tests/index.test.ts` smoke-only and ownership-clean |
-| CVF_SHARED_BATCH_HELPER_ADOPTION_GUARD.md | Governed CPF batch family changes | Shared batch helper + shared fixture adoption required |
-| CVF_BATCH_CONTRACT_DETERMINISM_GUARD.md | Governed CPF/EPF batch contract changes | `batchId = hash(batchHash)` only + nested `now` propagation mandatory |
-| CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md | Canon summary doc changes | Summary docs must cite evidence, not inline typed evidence payloads |
-| CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md | Pre-public repository cleanup or root/extension lifecycle review | Visible roots and extension roots must be lifecycle-classified before relocation |
-| CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md | Pre-public publication or selective-distribution planning | Visible roots and extension roots must declare public/private exposure posture before publication decisions |
-| CVF_PREPUBLIC_P3_READINESS_GUARD.md | Pre-public `P3` relocation readiness review | `P3` stays blocked until phase-gates, root-file exposure, docs-root curation, export-readiness, and memo freshness are explicit |
-| CVF_GUARD_AUTHORING_STANDARD_GUARD.md | New or materially revised governance guard | Guard must satisfy the mandatory authoring contract before commit |
-| CVF_GUARD_REGISTRY_GUARD.md | New guard created | Register in README.md + KB |
-| CVF_ACTIVE_ARCHIVE_GUARD.md | Active archive maintenance | Keep active/archive split truthful and append-only |
-| CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md | New or revised active trace/log window with dedicated rotation guard | Register canonical active window + class + archive protection |
-| check_repository_lifecycle_classification.py | Pre-public restructure planning | Enforces lifecycle coverage before publish-facing folder cleanup |
-| check_repository_exposure_classification.py | Pre-public publication planning | Enforces private-by-default exposure coverage before any public-facing release posture is assumed |
-| CVF_AGENT_HANDOFF_GUARD.md | Governed pause/resume transfer | Canonical handoff packet before another worker continues; record tracked remote branch and derive exact remote SHA live when needed |
-| CVF_AGENT_HANDOFF_TRANSITION_GUARD.md | Pause/resume classification | Transition class chosen before handoff is written |
-| CVF_BASELINE_UPDATE_GUARD.md | Substantive repo change | Matching baseline/review artifact required |
-| CVF_BOARDROOM_RUNTIME_GUARD.md | Live boardroom decisions | Canonical boardroom runtime convergence packet |
-| CVF_EXTENSION_PACKAGE_CHECK_GUARD.md | Touched extension package changes | Package-level `check` script must pass before push |
-| CVF_FAST_LANE_GOVERNANCE_GUARD.md | Low-risk additive tranche work | Fast-lane packet and limits must remain truthful |
-| CVF_GOVERNED_FILE_SIZE_GUARD.md | Governed source/test/frontend/docs growth | File stays under threshold or carries approved exception |
-| CVF_MEMORY_GOVERNANCE_GUARD.md | Durable governance records | Correct memory class markers required |
-| CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md | Future knowledge absorption, repo-derived skill intake, or post-closure extension planning | Doctrine-first / governance-first absorption must complete before implementation-first expansion |
-| CVF_TEMPLATE_SKILL_STANDARD_GUARD.md | Future skill/template intake, corpus rescreen, or trusted-subset admission for public non-coder use | Deterministic CVF-standard screen required; only `TRUSTED_FOR_VALUE_PROOF` may enter benchmark truth |
-| CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md | Multi-agent intake/rebuttal/decision docs | Canonical review doc chain must be standardized |
-| CVF_PRODUCT_VALUE_VALIDATION_GUARD.md | Product-value proof, comparative validation, or Docker-sandbox justification claims | Frozen corpus + rubric + run manifest + no-spin assessment required |
-| CVF_PROGRESS_TRACKER_SYNC_GUARD.md | Tranche posture change | Canonical tracker and sync note must stay aligned |
-| CVF_SURFACE_SCAN_CONTINUITY_GUARD.md | Fresh tranche selection or scan-state change | Canonical scan registry must preserve what was already scanned |
-| CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md | New/resumed governed sessions | Canonical bootstrap must load first |
-| CVF_WORKFLOW_ORCHESTRATION_GUARD.md | GitHub workflow or CI runner changes | Workflows must route governed checks through canonical runner scripts |
-| CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md | Major structural merge or move | Audit -> review -> decision path required |
-
-Automated foundational surface gate:
-
-- `governance/compat/check_foundational_guard_surfaces.py` now enforces ADR update truth, architecture-baseline refresh, extension naming/versioning, GC-019 packet presence, test-depth reporting markers, and workspace-isolation drift within the same change range
-- local pre-push and CI both run this gate so these six foundational guards are no longer policy-only review checkpoints
-- `governance/compat/check_workflow_orchestration_guard.py` enforces the workflow orchestration contract so public-surface, static CI, web CI, and live release proof stay routed through canonical runners instead of duplicated YAML-local logic
-
-Archive protection note:
-
-- generic archive cleanup must never auto-archive canonical active windows owned by dedicated rotation guards
-- canonical source of truth is `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
-- grouped management map is `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`
-- historical `docs/audits/` and `docs/reviews/` now use explicit retain-evidence registries instead of one-off manual exceptions
-- canonical retention sources are `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json` and `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`
-- generic archive cleanup runs incrementally from `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`; full scans are bootstrap/recovery only
-| CVF_TEST_PARTITION_OWNERSHIP_GUARD.md | Extracted governed test surfaces | Canonical test home must remain exclusive |
-
-Guard management map:
-
-- `docs/reference/CVF_GUARD_SURFACE_CLASSIFICATION.md`
-
-Continuity truth note:
-
-- `GC-020` handoff stores stable transition truth, not volatile push-boundary trivia
-- record the tracked remote branch in `AGENT_HANDOFF.md` when the branch has an upstream
-- derive exact remote SHA live from git when a resume, comparison, or push decision depends on it
-- `docs/reference/CVF_MAINTAINABILITY_STANDARD.md` is the canonical rule for thin barrels, smoke ownership, shared batch helpers, shared test builders, and summary-vs-evidence separation
-- external memory remains convenience-only and must not override repo truth or handoff truth
-
-
-### Compatibility Gates (Chạy trước khi merge):
-```bash
-python governance/compat/check_core_compat.py --base <BASE_REF> --head <HEAD_REF>
-python governance/compat/check_bug_doc_compat.py --enforce
-python governance/compat/check_test_doc_compat.py --enforce
-python governance/compat/check_docs_governance_compat.py --enforce
-```
+This Core KB records only the governance-system pointer. Guard triggers,
+machine checks, active/archive registries, and compatibility commands must be
+read from the owner surfaces above.
 
 ---
 
 ## VIII. SKILL LIBRARY (v1.5.2)
 
-| Thuộc tính | Giá trị |
-|---|---|
-| Tổng số skills | **62 active skills** |
-| Số domains | **12 domains** |
-| Agent Tools | **34 tools** |
-| Location | `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` |
-| Linked với | 50 Templates trong Web UI |
+Authoritative skill-library facts live in:
 
-**12 Domains:** Application Development, Security/Compliance, AI/ML, Testing, Frontend, Backend, Database, Cloud/DevOps, Code Review, Product & UX, Marketing, Legal
+- `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/README.md`
 
-**34 Agent Tools (nhóm):** RAG, Data Viz, Agentic Loop, Browser Auto, MCP, Workflow Hooks, Scientific Research, Agent Teams, Context Engineering, Debugging, API Architecture, Testing, Security, Database, Frontend, Cloud Deployment, Code Review, MCP Builder, AI Multimodal, Operator Workflow & more
+Current orientation fact: 62 active skills across 12 domains.
 
 ---
 
 ## IX. CẤU TRÚC FILE HỆ THỐNG
 
-```
-Controlled-Vibe-Framework-CVF/
-├── v1.0/                        ← Core: Manifesto, 4-Phase, Governance
-├── v1.1/                        ← Core: Extended control
-├── EXTENSIONS/                  ← Tất cả extensions (v1.2 → v1.7.3)
-│   ├── CVF_v1.2_CAPABILITY_EXTENSION/
-│   ├── CVF_v1.2.1_EXTERNAL_INTEGRATION/     (Implemented ✅)
-│   ├── CVF_v1.3_IMPLEMENTATION_TOOLKIT/
-│   ├── CVF_v1.3.1_OPERATOR_EDITION/
-│   ├── CVF_v1.4_USAGE_LAYER/
-│   ├── CVF_v1.5_UX_PLATFORM/        (FROZEN)
-│   ├── CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/
-│   ├── CVF_v1.6_AGENT_PLATFORM/
-│   ├── CVF_v1.6.1_GOVERNANCE_ENGINE/
-│   ├── CVF_v1.7_CONTROLLED_INTELLIGENCE/
-│   ├── CVF_v1.7.1_SAFETY_RUNTIME/
-│   ├── CVF_v1.7.2_SAFETY_DASHBOARD/
-│   ├── CVF_v1.8_SAFETY_HARDENING/           (Implemented ✅)
-│   ├── CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/ (Implemented ✅)
-│   ├── CVF_v2.0_NONCODER_SAFETY_RUNTIME/    (Implemented ✅)
-│   ├── CVF_TOOLKIT_REFERENCE/       (Reference only)
-│   ├── CVF_STARTER_TEMPLATE_REFERENCE/ (Reference only)
-│   └── examples/
-│
-│   └── CVF_ECO Extensions (Track III)              ← 12 modules, 434 tests ✅
-│       ├── CVF_ECO_v1.0_INTENT_VALIDATION/         ← 41 tests
-│       ├── CVF_ECO_v1.1_NL_POLICY/                  ← 46 tests
-│       ├── CVF_ECO_v1.2_LLM_RISK_ENGINE/           ← 37 tests
-│       ├── CVF_ECO_v1.3_DOMAIN_GUARDS/            ← 39 tests
-│       ├── CVF_ECO_v1.4_RAG_PIPELINE/               ← 34 tests
-│       ├── CVF_ECO_v2.0_AGENT_GUARD_SDK/           ← 43 tests
-│       ├── CVF_ECO_v2.1_GOVERNANCE_CANVAS/         ← 30 tests
-│       ├── CVF_ECO_v2.2_GOVERNANCE_CLI/              ← 39 tests
-│       ├── CVF_ECO_v2.3_AGENT_IDENTITY/            ← 39 tests
-│       ├── CVF_ECO_v2.4_GRAPH_GOVERNANCE/           ← 27 tests
-│       ├── CVF_ECO_v3.0_TASK_MARKETPLACE/           ← 29 tests
-│       └── CVF_ECO_v3.1_REPUTATION/                ← 30 tests
-├── docs/                        ← Governance & Documentation hub
-│   ├── CVF_CORE_KNOWLEDGE_BASE.md   ← ★ FILE NÀY (Governance permanent)
-│   ├── reference/
-│   │   ├── CVF_POSITIONING.md           ← Định vị chiến lược
-│   │   ├── CVF_ARCHITECTURE_DIAGRAMS.md ← Mermaid diagrams
-│   │   ├── CVF_ARCHITECTURE_MAP.md
-│   │   ├── CVF_ADOPTION_STRATEGY.md
-│   │   ├── CVF_SKILL_LIFECYCLE.md
-│   │   ├── CVF_WEB_TOOLKIT_GUIDE.md
-│   │   ├── CVF_WHITEPAPER_GIT_FOR_AI.md
-│   │   └── CVF_v16_AGENT_PLATFORM.md
-│   ├── CVF_ARCHITECTURE_DECISIONS.md ← ADR records
-│   ├── baselines/
-│   │   ├── CVF_CORE_COMPAT_BASELINE.md  ← Official compat baseline
-│   │   └── CVF_TESTER_BASELINE_2026-02-25.md
-│   ├── assessments/
-│   │   ├── CVF_INDEPENDENT_ASSESSMENT_2026-02-25.md
-│   │   ├── CVF_INDEPENDENT_TESTER_ASSESSMENT_2026-03-06.md
-│   │   └── CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md
-│   ├── logs/
-│   │   └── CVF_INCREMENTAL_TEST_LOG_ARCHIVE_<YYYY>_PART_<NN>.md
-│   ├── BUG_HISTORY.md               ← Bug knowledge base
-│   ├── CVF_INCREMENTAL_TEST_LOG.md  ← Test history entrypoint + active window
-│   └── VERSIONING.md, VERSION_COMPARISON.md, GET_STARTED.md ...
-├── governance/
-│   ├── compat/                  ← Compatibility gate scripts
-│   ├── skill-library/registry/  ← Skill registry + agent skills
-│   └── toolkit/05_OPERATION/    ← Governance guards
-│       ├── CVF_ARCHITECTURE_CHECK_GUARD.md ← Guard dẫn đến file này
-│       ├── CVF_ADR_GUARD.md
-│       ├── CVF_BUG_DOCUMENTATION_GUARD.md
-│       ├── CVF_DEPTH_AUDIT_GUARD.md
-│       ├── CVF_TEST_DOCUMENTATION_GUARD.md
-│       ├── CVF_DOCUMENT_NAMING_GUARD.md
-│       └── CVF_DOCUMENT_STORAGE_GUARD.md
-├── tools/                       ← Python validation scripts
-├── README.md                    ← Main entry point
-├── CHANGELOG.md                 ← Version history
-└── CVF_LITE.md                  ← 5-min quick start
-```
+Authoritative repository-structure surfaces:
 
-> **REVIEW/ folder:** Chứa các review tạm thời về extensions đang được đánh giá.
-> Không có giá trị dài hạn — xóa sau khi extension được tích hợp vào CVF chính thức.
+- `ARCHITECTURE.md`
+- `CLAUDE.md`
+- `docs/reference/CVF_MODULE_INVENTORY.md`
+
+This Core KB does not duplicate the full tree. Use the owner files above before
+moving roots, adding extension folders, or making public/provenance claims.
 
 ---
 
-## X. QUALITY METRICS (Snapshot 2026-02-26)
+## X. QUALITY METRICS
 
-| Metric | Giá trị |
-|--------|---------|
-| CVF Core v3.0 Tests | 49 passing |
-| Kernel Tests (v1.7.1) | 51 passing |
-| v1.8 Safety Hardening Tests | **42 passing** (12 describe blocks) |
-| v1.9 Reproducibility Tests | **29 passing** |
-| v2.0 Non-Coder Runtime Tests | **32 passing** |
-| v1.2.1 External Integration Tests | **29 passing** |
-| **CVF_ECO Extensions Tests** | **434 passing** (12 modules) |
-| Legacy Extension Tests | **1764+ passing** (22 modules) |
-| **Total Tests** | **~2,430+ tests** |
-| Web Coverage | 93.05% Stmts |
-| Kernel Coverage | 96.45% Stmts · 91.41% Branch · 99.09% Fn · 97.01% Lines |
-| Skills | 62 active skills, 12 domains |
-| Agent Tools | 34 tools |
-| Overall Score | 9.4/10 (independent) · 8.5/10 (Antigravity) · **7.8/10** (system assessment 2026-03-09) |
-| **v1.7.3 addition** | Runtime Adapter Hub: 5 contracts + 4 adapters |
-| **CVF_ECO addition** | Track III: 12 extensions, 434 tests, 100% pass |
-| **Full Ecosystem** | CVF Core + Legacy + CVF_ECO: 34 extensions |
-| **Hardening Track I** | 76 new tests (Phase 1-4: UnifiedStateResolver, SkillRolloutEngine, WorkflowCoordinator) |
-| **Track IV Runtime Evolution** | ✅ COMPLETE: Phase A-E, 394 runtime tests, 453 total, governance-enforced runtime platform |
-| **Overall Score** | **9.2/10** (Runtime Evolution achieved) |
+Authoritative quality and release status surfaces:
+
+- `docs/reference/CVF_RELEASE_READINESS_STATUS_2026-03-20.md`
+- `docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
+- `CHANGELOG.md`
+
+Do not update quality, readiness, test-count, or score claims in this Core KB
+unless this file itself is the reviewed source for a structural release.
 
 ---
 
@@ -577,92 +334,15 @@ Tất cả 9 checkbox phải được check trước khi bắt đầu implement.
 
 ---
 
-## XIII. CVF MCP SERVER (M1-M7) — Complete Implementation
+## XIII. CVF MCP SERVER (M1-M7)
 
-> **Phiên bản:** v2.1.0 | **Cập nhật:** 2026-03-09  
-> **Location:** `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/`  
-> **Tests:** 476 passing across 14 test files  
-> **Status:** ✅ All milestones complete, pushed to `cvf-next`
+Authoritative MCP owner surface:
 
-### Architecture Overview
+- `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/README.md`
 
-```
-EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/
-├── guards/           — 6 guards + engine (102 tests)
-├── persistence/      — JSON file adapter (26 tests)
-├── prompt/          — System prompt generator (37 tests)
-├── cli/             — 9-command CLI wrapper (38 tests)
-├── registry/        — Unified guard registry + skill-guard wire (54 tests)
-├── vibe-translator/ — Vibe parser, clarification, confirmation card (96 tests)
-├── memory/          — Session memory with TTL (40 tests)
-├── non-coder/       — 5 Golden Screens + Smart Onboarding (60 tests)
-├── integration/     — E2E pipeline tests (23 tests)
-├── sdk.ts           — Barrel exports for consumers
-└── index.ts         — MCP server entry point (7 tools)
-```
-
-### Key Capabilities
-
-| Capability | Description | Tests |
-|------------|-------------|-------|
-| **MCP Server** | 7 tools: phase_gate, risk_gate, authority, validate_output, advance_phase, audit_log, evaluate_full | 102 |
-| **Guard Persistence** | JSON file audit log + session state | 26 |
-| **System Prompt** | Context-aware prompt with MCP tool references | 37 |
-| **CLI** | Terminal commands for non-IDE usage | 38 |
-| **Unified Registry** | Single source of truth for all guards | 54 |
-| **Skill-Guard Wire** | Map skills to required guards | 54 |
-| **Vibe Translator** | NL input → structured intent → guard evaluation (EN/VI) | 96 |
-| **Session Memory** | Cross-request state with TTL expiry | 40 |
-| **Non-coder Screens** | 5 Golden Screens data models + Smart Onboarding | 60 |
-| **E2E Tests** | Full pipeline integration tests | 23 |
-
-### MCP Tools (IDE Integration)
-
-| Tool | Usage |
-|------|-------|
-| `cvf_check_phase_gate` | Before starting work in a new phase |
-| `cvf_check_risk_gate` | Before any action with side effects |
-| `cvf_check_authority` | Before approve/merge/deploy actions |
-| `cvf_validate_output` | After generating output, before presenting |
-| `cvf_advance_phase` | When current phase work is complete |
-| `cvf_get_audit_log` | Retrieve session audit trail |
-| `cvf_evaluate_full` | Run full 6-guard pipeline on an action |
-
-### Non-coder First Product Features
-
-| Feature | Description |
-|---------|-------------|
-| **Vibe Box** | Single input + voice, phase-specific prompts |
-| **Intention Map** | Mindmap confirmation + auto-guardrails |
-| **Live Dashboard** | Progress + budget + pause controls |
-| **Human-in-the-Loop** | Push notifications for risk events |
-| **Audit Ledger** | Human-language daily summaries |
-| **Smart Onboarding** | Persona profiling + red lines + personal dictionary |
-
-### Quick Start
-
-```bash
-# Install
-cd EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER
-npm install
-
-# Run tests
-npm test          # 476 tests pass
-npm run test:run  # Single run
-
-# Start MCP server (stdio transport)
-npm start
-
-# CLI usage
-npx tsx src/cli.ts evaluate --phase BUILD --risk R0 --role HUMAN --action "write code"
-```
-
-### Integration Points
-
-- **IDEs**: Add to Windsurf/Cursor MCP settings to get guard tools
-- **CLI**: Use for CI/CD, shell scripts, Python integration
-- **SDK**: Import from `./sdk.ts` for TypeScript consumers
-- **Frontend**: Use `generateVibeBoxScreen()` etc. for UI data contracts
+This Core KB does not duplicate MCP tools, tests, quick-start commands, or
+feature tables. Read the MCP README before changing MCP behavior, CLI commands,
+or IDE integration claims.
 
 ---
 
@@ -670,12 +350,14 @@ npx tsx src/cli.ts evaluate --phase BUILD --risk R0 --role HUMAN --action "write
 
 | File | Khi nào đọc |
 |------|------------|
-| [`docs/reference/CVF_POSITIONING.md`](reference/CVF_POSITIONING.md) | Cần hiểu identity CVF, anti-patterns |
-| [`docs/reference/CVF_ARCHITECTURE_DIAGRAMS.md`](reference/CVF_ARCHITECTURE_DIAGRAMS.md) | Cần xem Mermaid diagrams đầy đủ |
-| [`docs/CVF_ARCHITECTURE_DECISIONS.md`](CVF_ARCHITECTURE_DECISIONS.md) | Xem ADR history, quyết định thiết kế |
-| [`docs/baselines/CVF_CORE_COMPAT_BASELINE.md`](baselines/CVF_CORE_COMPAT_BASELINE.md) | Chạy compat check |
-| [`EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md`](../EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md) | Hiểu reference vs production separation |
+| [`docs/reference/CVF_POSITIONING.md`](reference/CVF_POSITIONING.md) | Identity CVF, anti-patterns |
+| [`docs/reference/CVF_ARCHITECTURE_DIAGRAMS.md`](reference/CVF_ARCHITECTURE_DIAGRAMS.md) | Mermaid architecture diagrams |
+| [`docs/reference/CVF_MODULE_INVENTORY.md`](reference/CVF_MODULE_INVENTORY.md) | Version, module, folder, and owner inventory |
+| [`docs/CVF_ARCHITECTURE_DECISIONS.md`](CVF_ARCHITECTURE_DECISIONS.md) | ADR history |
 | [`EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/README.md`](../EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/README.md) | MCP Server usage guide |
+| [`governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md`](../governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md) | Doctrine-first / governance-first absorption |
+| [`governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md`](../governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md) | `TRUSTED_FOR_VALUE_PROOF` admission boundary |
+Guard registry marker set: `CVF_ACTIVE_ARCHIVE_GUARD.md`, `CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md`, `CVF_ADR_GUARD.md`, `CVF_AGENT_HANDOFF_GUARD.md`, `CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`, `CVF_AGENT_REVIEW_ANTI_COLLUSION_GUARD.md`, `CVF_ARCHITECTURE_CHECK_GUARD.md`, `CVF_BARREL_SMOKE_OWNERSHIP_GUARD.md`, `CVF_BASELINE_UPDATE_GUARD.md`, `CVF_BATCH_CONTRACT_DETERMINISM_GUARD.md`, `CVF_BOARDROOM_RUNTIME_GUARD.md`, `CVF_BUG_DOCUMENTATION_GUARD.md`, `CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md`, `CVF_CAPABILITY_INTAKE_PIPELINE_GUARD.md`, `CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD.md`, `CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`, `CVF_CONTINUATION_CHAIN_GUARD.md`, `CVF_CORE_GUARD_SELF_PROTECTION_GUARD.md`, `CVF_CORPUS_COMPLETENESS_AND_REPORT_INTEGRITY_GUARD.md`, `CVF_CORPUS_INTELLIGENCE_CLASSIFICATION_GUARD.md`, `CVF_CORPUS_TO_KNOWLEDGE_MAP_RECONCILIATION_GUARD.md`, `CVF_DEPTH_AUDIT_GUARD.md`, `CVF_DIAGRAM_VALIDATION_GUARD.md`, `CVF_DOCUMENT_NAMING_GUARD.md`, `CVF_DOCUMENT_STORAGE_GUARD.md`, `CVF_EXECUTE_ROUTE_STEP_SEQUENCE_GUARD.md`, `CVF_EXTENSION_PACKAGE_CHECK_GUARD.md`, `CVF_EXTENSION_VERSIONING_GUARD.md`, `CVF_FAST_LANE_GOVERNANCE_GUARD.md`, `CVF_GC051_CORPUS_SCAN_REGISTRY_GUARD.md`, `CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`, `CVF_GOVERNED_FILE_SIZE_GUARD.md`, `CVF_GOVERNED_PACK_CONTRACT_GUARD.md`, `CVF_GUARD_AUTHORING_STANDARD_GUARD.md`, `CVF_GUARD_REGISTRY_GUARD.md`, `CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`, `CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md`, `CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_GUARD.md`, `CVF_MEMORY_GOVERNANCE_GUARD.md`, `CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`, `CVF_PREPUBLIC_P3_READINESS_GUARD.md`, `CVF_PRODUCT_VALUE_VALIDATION_GUARD.md`, `CVF_PROGRESS_TRACKER_SYNC_GUARD.md`, `CVF_PUBLIC_SURFACE_MAINTAINABILITY_GUARD.md`, `CVF_PYTHON_AUTOMATION_SIZE_GUARD.md`, `CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`, `CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md`, `CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md`, `CVF_SHARED_BATCH_HELPER_ADOPTION_GUARD.md`, `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`, `CVF_SURFACE_SCAN_CONTINUITY_GUARD.md`, `CVF_TEMPLATE_SKILL_STANDARD_GUARD.md`, `CVF_TEST_DEPTH_CLASSIFICATION_GUARD.md`, `CVF_TEST_DOCUMENTATION_GUARD.md`, `CVF_TEST_PARTITION_OWNERSHIP_GUARD.md`, `CVF_WORKSPACE_ISOLATION_GUARD.md`
 
 ---
 
@@ -771,12 +453,12 @@ reviews/      = review archives by module or scope
 
 ### RULE 4 — KB Auto-Update sau mỗi nâng cấp (Bắt buộc)
 
-> **Quy tắc:** Mỗi khi version/layer mới được implement hoặc nâng cấp, **phải cập nhật** `CVF_CORE_KNOWLEDGE_BASE.md` ngay lập tức.
+> **Quy tắc:** Mỗi khi version/layer mới được implement hoặc nâng cấp, **phải cập nhật** Section II của `CVF_CORE_KNOWLEDGE_BASE.md` và `docs/reference/CVF_MODULE_INVENTORY.md` ngay lập tức.
 
 **Cụ thể phải update:**
 - **Section II** (Layer Diagram): thêm version mới vào đúng layer, ghi trạng thái (Spec/Implemented)
-- **Section III** (Version Table): cập nhật trạng thái, folder
-- **Section X** (Quality Metrics): thêm test count mới
+- **`docs/reference/CVF_MODULE_INVENTORY.md`**: cập nhật trạng thái, folder, owner
+- **Owner quality/release docs**: thêm test-count hoặc release evidence mới khi có
 - **Header**: cập nhật version hiện tại
 
 **Tại sao bắt buộc:**
@@ -786,7 +468,7 @@ reviews/      = review archives by module or scope
 
 ```
 ❌ SAI:  Implement v3.0 xong → quên update Knowledge Base → contributor sau không biết v3.0 tồn tại
-✅ ĐÚNG: Implement v3.0 xong → Update Section II, III, X ngay → Commit cùng lúc
+✅ ĐÚNG: Implement v3.0 xong → Update Section II + Module Inventory + owner evidence docs ngay → Commit cùng lúc
 ```
 
 ---
@@ -799,71 +481,62 @@ reviews/      = review archives by module or scope
 
 ## XV. QUALITY ASSESSMENT CANON
 
-> Từ nay mọi quality review cấp tranche, wave, hoặc architecture phải dùng chung một rubric, không chấm cảm tính theo từng agent.
+Canonical owner:
 
-- Canonical rubric:
-  - `docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
-- Current active quality snapshot for the post-W7 continuation line:
-  - `docs/assessments/CVF_POST_W32_CONTINUATION_QUALITY_ASSESSMENT_2026-04-01.md`
+- `docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
+- `governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`
 
-Rubric cố định gồm 6 chiều:
-
-- Governance Discipline
-- Contract / Architecture Quality
-- Evidence and Traceability
-- Test and Verification Confidence
-- Maintainability
-- Canonical Documentation Quality
-
-Quy tắc cứng:
-
-- quality claim phải bám governed evidence, không bám note riêng của agent
-- nếu bất kỳ dimension nào `< 6.0`, scope đó phải chuyển sang remediation-first
-- nếu Governance Discipline, Test and Verification Confidence, hoặc Canonical Documentation Quality `< 8.0`, không được coi scope đó là strong mà không có follow-up bắt buộc
-- trước mọi fresh `GC-018`, phải đọc active quality assessment và chốt rõ `REMEDIATE_FIRST` hoặc `EXPAND_NOW`
+Quality claims must use the canonical rubric and governed evidence, not
+agent-private scoring notes. Trước mọi fresh `GC-018`, phải đọc active quality
+assessment; trước mọi fresh `GC-018`, phải đọc active quality assessment.
 
 ---
 
 ## XVI. PRE-PUBLIC P3 EXECUTION ISOLATION
 
-> `P3` pre-public relocation is not allowed to execute directly on `cvf-next`.
-
-Canonical rule:
-
-- future physical `P3` relocation waves must run on a dedicated branch matching `restructuring/p3-*`
-- future physical `P3` relocation waves must run from a secondary git worktree
-- `cvf-next` remains the canonical integration branch; however, post-review landing semantics for isolated `P3` relocation branches remain unresolved under current `GC-039` until a separate governance clarification is approved
-
-This rule is additive to, not a replacement for:
-
-- fresh `GC-019` structural audit/review for the concrete move set
-- `GC-039` readiness pass for the same move set
-
-Canonical references:
+Canonical owner:
 
 - `docs/reference/CVF_PREPUBLIC_P3_READINESS.md`
-- `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md`
-- `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
-- `governance/toolkit/05_OPERATION/CVF_PREPUBLIC_P3_READINESS_GUARD.md`
-- `governance/compat/check_prepublic_p3_readiness.py`
+
+P3 relocation remains isolated from direct `cvf-next` execution until the owner
+standard and matching readiness gates say otherwise.
 
 ---
 
 ## XVII. MARKDOWN STRUCTURAL COMPLETENESS
 
-Markdown structural completeness is mandatory for new governed CVF documents.
-
-Canonical rule:
-
-- new governed Markdown files must include title, memory class, status, purpose,
-  scope or owner boundary, and final/claim/verification boundary
-- contracts, specs, policies, roadmaps, reviews, baselines, ADRs, and handoffs
-  must follow their artifact-specific section set
-- legacy dense files are not retroactively blocked, but material rewrites and
-  promotions should migrate into the standard
-
-Canonical references:
+Canonical owner:
 
 - `docs/reference/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_STANDARD.md`
 - `governance/toolkit/05_OPERATION/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_GUARD.md`
 - `governance/compat/check_markdown_structural_completeness.py`
+- `governance/compat/check_corpus_intelligence_classification.py`
+
+Markdown structural completeness requires new governed Markdown to satisfy its
+artifact-specific structural section set before ready, dispatch, closure, or
+public-sync claims.
+
+---
+
+## XVIII. SESSION MEMORY FRONT DOOR
+
+Canonical owners:
+
+- `CVF_SESSION_MEMORY.md`
+- `CVF_SESSION/ACTIVE_SESSION_STATE.json`
+- `governance/compat/check_active_session_state.py`
+
+Agents must resolve the active-state registry before treating a handoff as
+current.
+
+---
+
+## XIX. GOVERNED FILE MAINTAINABILITY PLANNING
+
+Canonical owners:
+
+- `governance/toolkit/05_OPERATION/CVF_GOVERNED_FILE_SIZE_GUARD.md`
+- `governance/compat/check_governed_file_size.py`
+
+Touched governed files near threshold must be split, rotated, archived, or
+materially reduced in the same batch before closure.

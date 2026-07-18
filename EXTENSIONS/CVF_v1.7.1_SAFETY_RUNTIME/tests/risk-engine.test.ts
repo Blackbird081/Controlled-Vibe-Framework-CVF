@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { RiskEngine } from "../policy/risk.engine"
+import { RiskEngine, buildRiskEngineAdapterSnapshot, mapRiskLevelToCVF } from "../policy/risk.engine"
 import type { RiskAssessmentInput, ArtifactChangeMeta } from "../policy/risk.engine"
 
 function makeChange(overrides: Partial<ArtifactChangeMeta> = {}): ArtifactChangeMeta {
@@ -108,5 +108,29 @@ describe("RiskEngine", () => {
     })
     // INFRA(20) + diff>500(10) + core(30) + dependency(20) = 80+ → HIGH or CRITICAL
     expect(["HIGH", "CRITICAL"]).toContain(result.level)
+  })
+
+  it("maps safety risk levels to bounded CVF risk levels", () => {
+    expect(mapRiskLevelToCVF("LOW")).toBe("R1")
+    expect(mapRiskLevelToCVF("MEDIUM")).toBe("R2")
+    expect(mapRiskLevelToCVF("HIGH")).toBe("R3")
+    expect(mapRiskLevelToCVF("CRITICAL")).toBe("R4")
+  })
+
+  it("builds a Phase 2.B adapter snapshot without changing assessment output", () => {
+    const input: RiskAssessmentInput = {
+      artifactType: "POLICY",
+      changes: [makeChange({ filePath: "policy/rules.ts", touchesPolicyFile: true })],
+    }
+
+    const result = RiskEngine.assess(input)
+    const snapshot = buildRiskEngineAdapterSnapshot(result)
+    const combined = RiskEngine.assessWithAdapter(input)
+
+    expect(snapshot.version).toBe("phase2b-risk-engine-adapter-1")
+    expect(snapshot.source).toBe("safety-runtime:policy-risk-engine")
+    expect(snapshot.score).toBe(result.score)
+    expect(combined.result).toEqual(result)
+    expect(combined.adapter.cvfRiskLevel).toBe(snapshot.cvfRiskLevel)
   })
 })

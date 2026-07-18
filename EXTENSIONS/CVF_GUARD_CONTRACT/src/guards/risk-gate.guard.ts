@@ -13,6 +13,21 @@ export const RISK_DESCRIPTIONS: Record<CVFRiskLevel, string> = {
   R3: 'Critical — high-risk action requiring human or governor oversight',
 };
 
+export const GUARD_CONTRACT_RISK_GATE_ADAPTER_VERSION = 'phase2b-guard-contract-risk-gate-adapter-1';
+
+export interface GuardContractRiskGateAdapterSnapshot {
+  version: typeof GUARD_CONTRACT_RISK_GATE_ADAPTER_VERSION;
+  source: 'guard-contract:risk-gate';
+  requestId: string;
+  riskLevel: CVFRiskLevel;
+  role: GuardRequestContext['role'];
+  userRole?: TeamRole;
+  riskNumeric: number | null;
+  decision: GuardResult['decision'];
+  severity: GuardResult['severity'];
+  suggestedAction?: string;
+}
+
 export class RiskGateGuard implements Guard {
   id = 'risk_gate';
   name = 'Risk Gate Guard';
@@ -138,6 +153,30 @@ export class RiskGateGuard implements Guard {
       severity: 'INFO',
       reason: `Risk level "${context.riskLevel}" (${RISK_DESCRIPTIONS[context.riskLevel]}) is within safe bounds for role "${context.role}".`,
       timestamp,
+    };
+  }
+
+  evaluateWithAdapter(
+    context: GuardRequestContext,
+  ): { result: GuardResult; adapter: GuardContractRiskGateAdapterSnapshot } {
+    const result = this.evaluate(context);
+    const userRole = context.metadata?.userRole as TeamRole | undefined;
+    const riskNum = RISK_NUMERIC[context.riskLevel];
+
+    return {
+      result,
+      adapter: {
+        version: GUARD_CONTRACT_RISK_GATE_ADAPTER_VERSION,
+        source: 'guard-contract:risk-gate',
+        requestId: context.requestId,
+        riskLevel: context.riskLevel,
+        role: context.role,
+        userRole,
+        riskNumeric: riskNum ?? null,
+        decision: result.decision,
+        severity: result.severity,
+        suggestedAction: result.suggestedAction,
+      },
     };
   }
 }

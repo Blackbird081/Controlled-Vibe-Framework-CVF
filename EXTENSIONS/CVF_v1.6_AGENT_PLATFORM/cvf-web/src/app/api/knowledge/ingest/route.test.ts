@@ -1,17 +1,29 @@
-import { describe, it, expect } from 'vitest';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { POST } from './route';
 import { queryKnowledgeChunks, getRegisteredCollectionIds } from '@/lib/knowledge-retrieval';
 import { NextRequest } from 'next/server';
 
+const verifySessionCookieMock = vi.hoisted(() => vi.fn());
+
+vi.mock('@/lib/middleware-auth', () => ({
+  verifySessionCookie: verifySessionCookieMock,
+}));
+
 function makeRequest(body: unknown): NextRequest {
   return new NextRequest('http://localhost/api/knowledge/ingest', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'x-cvf-service-token': 'test-service-token' },
     body: JSON.stringify(body),
   });
 }
 
 describe('POST /api/knowledge/ingest', () => {
+  beforeEach(() => {
+    process.env.CVF_SERVICE_TOKEN = 'test-service-token';
+    verifySessionCookieMock.mockReset();
+    verifySessionCookieMock.mockResolvedValue(null);
+  });
+
   it('returns 400 when collectionId is missing', async () => {
     const res = await POST(makeRequest({ chunks: [] }));
     expect(res.status).toBe(400);
@@ -49,6 +61,7 @@ describe('POST /api/knowledge/ingest', () => {
     const data = await res.json();
     expect(data.accepted).toBe(5);
     expect(data.collectionId).toBe('w116-test-col');
+    expect(data.routeGovernanceProof.authMode).toBe('service_token');
   });
 
   it('registers the collection so it is queryable', async () => {
@@ -101,7 +114,7 @@ describe('POST /api/knowledge/ingest', () => {
   it('returns 400 for invalid JSON body', async () => {
     const req = new NextRequest('http://localhost/api/knowledge/ingest', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-cvf-service-token': 'test-service-token' },
       body: 'not-json',
     });
     const res = await POST(req);

@@ -1,0 +1,106 @@
+{
+  "registryOrder": 6,
+  "skillId": "cvf-governance-anti-rationalization-guard",
+  "name": "CVF Governance Anti-Rationalization Guard",
+  "version": "0.1.0",
+  "owner": "CVF governance review and closure surface",
+  "status": "CANDIDATE",
+  "canonicalRoot": "docs/reference/agent_system_skills/registry/entries/cvf-governance-anti-rationalization-guard.json",
+  "originLane": "AGSK-T7",
+  "sourceArtifacts": [
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_AGSK_T7_PACKAGE_CANDIDATE_EXPANSION_FROM_SOURCE_PACK_2026-06-29.md",
+    "docs/reviews/CVF_AGSK_ABSORPTION_PACK_REABSORPTION_REVIEW_2026-06-29.md",
+    "docs/reference/agent_system_skills/CVF_AGSG_AGENT_SKILLS_ASSF_CAPABILITY_ANATOMY_AND_RATIONALIZATION_ADVISORY.md",
+    ".private_reference/legacy/CVF 28.06/CVF_Agent_Skills_Governance_Absorption_Pack/docs/reference/CVF_ANTI_RATIONALIZATION_GUARD_2026-06-28.md",
+    ".private_reference/legacy/CVF 28.06/CVF_Agent_Skills_Governance_Absorption_Pack/docs/absorptions/agent-skills-governance/06_ANTI_RATIONALIZATION_GUARD.md"
+  ],
+  "legacyRows": [],
+  "license": "CVF_PRIVATE_GOVERNED",
+  "reviewArtifacts": [
+    "docs/reviews/CVF_AGSK_T7_PACKAGE_CANDIDATE_EXPANSION_FROM_SOURCE_PACK_WORKER_RETURN_2026-06-29.md"
+  ],
+  "purpose": "Surface shortcut-claim patterns that require source verification, tests, review, or safe stop before a governed agent may close work.",
+  "triggerPatterns": [
+    "simple change no spec",
+    "obvious fix no test",
+    "trust me claim",
+    "completion without receipt",
+    "shortcut rationalization"
+  ],
+  "taskClasses": [
+    "worker-execution",
+    "worker-return",
+    "reviewer",
+    "source-review",
+    "closure-review"
+  ],
+  "useWhen": "A worker, reviewer, or closer sees language that minimizes source verification, testing, evidence, scope, or review requirements.",
+  "doNotUseWhen": "The claim is already backed by source verification, current gate receipts, and an explicit closure boundary.",
+  "riskTriggers": [
+    "no test needed",
+    "obvious fix",
+    "small change no work order",
+    "completion claim without receipt",
+    "external authority bypass"
+  ],
+  "roles": [
+    "worker",
+    "reviewer",
+    "closer"
+  ],
+  "phases": [
+    "WORKER_EXECUTION",
+    "WORKER_RETURN",
+    "REVIEWER_CLOSURE",
+    "PRE_COMMIT"
+  ],
+  "surfaces": [
+    "docs/reviews",
+    "docs/work_orders",
+    "docs/reference/agent_system_skills"
+  ],
+  "riskCeiling": "R0",
+  "contextProfile": "anti-rationalization-metadata-only",
+  "inputs": [
+    "worker claim",
+    "closure statement",
+    "evidence receipt list",
+    "gate output",
+    "source verification table"
+  ],
+  "outputs": [
+    "escalation or safe-stop note",
+    "required evidence correction",
+    "reviewer finding candidate",
+    "bounded claim update"
+  ],
+  "executionConstraints": "metadata-only candidate; does not implement a machine checker or auto-blocking runtime behavior",
+  "acceptanceEvidence": "future promotion requires repeated defect evidence, package instance proof, and reviewer acceptance",
+  "riskProfile": "R0",
+  "authorityCeiling": "metadata-only review signal; cannot block or pass work without existing CVF gates or reviewer decision",
+  "sideEffects": "none from metadata loading",
+  "permissions": "read metadata and cited governed source artifacts only",
+  "rollback": "delete this registry entry and regenerate the skill index if reviewer rejects AGSK-T7",
+  "safeStop": "if rationalization signals are present and evidence is absent, stop and require source verification or reviewer decision",
+  "candidateState": "CANDIDATE",
+  "approvalState": "AWAITING_REVIEW",
+  "uatState": "NOT_STARTED",
+  "certificationState": "NOT_STARTED",
+  "deprecation": "none",
+  "successor": "none",
+  "retirement": "none",
+  "dependencies": [],
+  "conflicts": [],
+  "compositionOrder": 6,
+  "capabilityBoundary": "no checker wiring, no runtime block, no package activation, no authority expansion beyond reviewer decision",
+  "internalAgentDisposition": "CANDIDATE",
+  "resolverBehavior": "metadata-only; resolver returns identity and selector fields; does not open any SKILL.md or instruction body",
+  "loaderBoundary": "loading this metadata never grants authority to skip evidence, override gates, or claim closure",
+  "externalCliMcpDisposition": "DEFERRED_WITH_REASON",
+  "adapterContract": "N/A with reason: external CLI/MCP adapter not authored in AGSK-T7",
+  "adapterEvidence": "N/A with reason: no adapter implemented in AGSK-T7",
+  "externalMutationBoundary": "no external mutation permitted until a separate ASSF adapter work order is accepted",
+  "platformCompatibility": "cross-platform",
+  "shellAssumptions": "no shell execution required for metadata-only candidate",
+  "osConstraints": "none"
+}

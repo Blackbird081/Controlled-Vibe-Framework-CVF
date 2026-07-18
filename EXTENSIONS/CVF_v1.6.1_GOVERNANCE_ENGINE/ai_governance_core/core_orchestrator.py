@@ -54,6 +54,26 @@ class GovernanceResult:
     brand_result: Optional[Dict[str, Any]] = None
 
 
+CVF_ORCHESTRATOR_ADAPTER_VERSION = "phase2b-orchestrator-adapter-1"
+
+
+def build_cvf_orchestration_snapshot(
+    request: GovernanceRequest,
+    result: GovernanceResult
+) -> Dict[str, Any]:
+    return {
+        "adapterVersion": CVF_ORCHESTRATOR_ADAPTER_VERSION,
+        "source": "governance-engine:core-orchestrator",
+        "requestId": request.request_id,
+        "artifactId": request.artifact_id,
+        "cvfPhase": request.cvf_phase,
+        "cvfRiskLevel": request.cvf_risk_level,
+        "finalDecision": result.execution_record.final_decision,
+        "riskScore": result.execution_record.risk_score,
+        "ledgerAttached": result.execution_record.ledger_attached,
+    }
+
+
 # =====================================
 # CORE ORCHESTRATOR
 # =====================================

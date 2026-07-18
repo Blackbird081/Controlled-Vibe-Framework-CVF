@@ -10,6 +10,8 @@
  *   5. cvf_advance_phase      — Request phase advancement
  *   6. cvf_get_audit_log      — Retrieve audit trail
  *   7. cvf_evaluate_full      — Run full guard pipeline
+ *   8. cvf_model_gateway_execute_preview - Preview Model Gateway execute mapping
+ *   9. cvf_model_gateway_execute - Call an injected Model Gateway executor
  *
  * @module index
  */

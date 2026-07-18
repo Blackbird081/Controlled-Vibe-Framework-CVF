@@ -1,6 +1,8 @@
 /**
  * Help page bilingual content.
  * Extracted from help/page.tsx to keep the component focused on rendering.
+ * Text Encoding Exception: localized Vietnamese user-facing copy is this
+ * file's entire purpose and existing convention.
  */
 
 export type Lang = 'vi' | 'en';
@@ -140,6 +142,20 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 link: '/help/toolkit',
                 linkText: 'Xem hướng dẫn chi tiết',
             },
+            {
+                icon: '📋',
+                title: 'Bằng chứng SOT3',
+                desc: 'Xem trạng thái chỉ-đọc của bằng chứng kích hoạt tri thức SOT3 đã lưu trữ. Không có nút thao tác.',
+                link: '/governance/sot3-evidence',
+                linkText: 'Xem Bằng chứng SOT3',
+            },
+            {
+                icon: '🔄',
+                title: 'Lượt chạy MAO bền vững',
+                desc: 'Xem chỉ-đọc các lượt chạy MAO bền vững: khám phá, trạng thái tác vụ, số lần timeout, và thời điểm sự kiện gần nhất. Không khởi chạy, hủy, hay thử lại.',
+                link: '/governance/mao-runs',
+                linkText: 'Xem Lượt chạy MAO',
+            },
         ],
         tips: [
             'Mục tiêu càng rõ → Kết quả càng tốt',
@@ -271,6 +287,20 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
                 desc: 'Authority Matrix, GovernanceBar, Self-UAT, SpecExport — explained step by step.',
                 link: '/help/toolkit',
                 linkText: 'View detailed guide',
+            },
+            {
+                icon: '📋',
+                title: 'SOT3 Evidence',
+                desc: 'Read-only status view over durable SOT3 knowledge-activation evidence. No action controls.',
+                link: '/governance/sot3-evidence',
+                linkText: 'View SOT3 Evidence',
+            },
+            {
+                icon: '🔄',
+                title: 'MAO Durable Runs',
+                desc: 'Read-only durable MAO run status: discovery, task state, timeout counts, and latest event time. No launch, cancel, or retry.',
+                link: '/governance/mao-runs',
+                linkText: 'View MAO Runs',
             },
         ],
         tips: [

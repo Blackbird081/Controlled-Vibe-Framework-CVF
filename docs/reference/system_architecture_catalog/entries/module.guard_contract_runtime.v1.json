@@ -1,0 +1,31 @@
+{
+  "stableId": "cvf.asc.module.guard_contract_runtime.v1",
+  "entityType": "MODULE",
+  "name": "Guard Contract Runtime Owner",
+  "authorityClass": "ACTIVE_GOVERNED_STANDARD",
+  "maturity": "ACTIVE",
+  "ownerPaths": [
+    "EXTENSIONS/CVF_GUARD_CONTRACT/"
+  ],
+  "planeMembership": [
+    "cvf.asc.plane.contract_to_runtime.v1"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "docs/reference/CVF_MODULE_INVENTORY.md",
+      "lineOrSection": "cited row",
+      "evidenceRole": "module owner/status evidence"
+    }
+  ],
+  "claimBoundary": "Active helper line implementing GC-001, GC-009, GC-011 and other mandatory-gateway/runtime-guard contract rows.",
+  "freshnessInputs": [
+    "EXTENSIONS/CVF_GUARD_CONTRACT/"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_ASC_T0_SOURCE_SCHEMA_AND_RECONCILIATION_CONTRACT_WORKER_RETURN_2026-07-11.md"
+  },
+  "priorDisposition": ""
+}

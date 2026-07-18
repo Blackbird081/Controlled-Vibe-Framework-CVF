@@ -1,0 +1,227 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cvf.internal/reference/operator_decision_value_readout/CVF_ODVR_T0_READOUT_SCHEMA.json",
+  "title": "CVF ODVR-T0 Doc-Only Proposed Readout Contract",
+  "description": "Doc-only proposed JSON shape for a future ODVR composer output. No implementation exists yet; this schema is a T0 authoring artifact only, per docs/reference/operator_decision_value_readout/CVF_ODVR_T0_SOURCE_OVERLAP_AND_READOUT_CONTRACT.md. Fields classified BLOCKED_SOURCE_NOT_FOUND or COMPOSE in that contract are represented here as proposed shape, not existing runtime behavior.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contractVersion",
+    "currentMode",
+    "activeHandoff",
+    "latestMaterialDecision",
+    "claimBoundary",
+    "canonicalNextAllowedMove",
+    "sourceAnchors",
+    "aggregateFreshness"
+  ],
+  "properties": {
+    "contractVersion": {
+      "type": "string",
+      "const": "cvf.odvrT0.readoutContract.doc.v1"
+    },
+    "currentMode": {
+      "type": "string",
+      "description": "REUSE - direct passthrough of active session generator's currentMode."
+    },
+    "activeHandoff": {
+      "type": "string",
+      "description": "REUSE - direct passthrough of active session generator's activeHandoff."
+    },
+    "latestMaterialDecision": {
+      "type": "object",
+      "description": "COMPOSE - identifies the newest-dated governed decision artifact.",
+      "additionalProperties": false,
+      "required": ["artifactPath", "status", "materialCommit", "stateOrder"],
+      "properties": {
+        "artifactPath": { "type": "string" },
+        "status": { "type": "string" },
+        "materialCommit": { "type": "string", "pattern": "^[0-9a-f]{8,40}$" },
+        "stateOrder": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "terminalValueVerdict": {
+      "type": ["string", "null"],
+      "description": "COMPOSE, optional - value-verdict token extracted from latestMaterialDecision's artifact when present."
+    },
+    "claimBoundary": {
+      "type": "string",
+      "description": "COMPOSE - Claim Boundary section body of the artifact identified by latestMaterialDecision."
+    },
+    "parkedOrBlockedConditions": {
+      "type": "array",
+      "description": "COMPOSE, optional - deduplicated union of parked/blocked sentences across contributing owners.",
+      "items": { "type": "string" }
+    },
+    "reopenCondition": {
+      "type": ["string", "null"],
+      "description": "COMPOSE, optional - explicit reopen-condition sentence from latestMaterialDecision's artifact."
+    },
+    "canonicalNextAllowedMove": {
+      "type": "string",
+      "description": "REUSE - direct passthrough of active session generator's nextAllowedMove."
+    },
+    "sourceAnchors": {
+      "type": "array",
+      "description": "Every source file consulted to answer this readout's fields.",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "aggregateFreshness": {
+      "type": "string",
+      "enum": ["CURRENT", "STALE", "CONTRADICTED", "MISSING_SOURCE"],
+      "description": "BLOCKED_SOURCE_NOT_FOUND in the T0 contract until a composer defines this deterministically; enum shape proposed here."
+    },
+    "staleSourceAnchors": {
+      "type": "array",
+      "description": "Populated only when aggregateFreshness is STALE; lists which source anchors were stale.",
+      "items": { "type": "string" }
+    },
+    "missingSourceAnchor": {
+      "type": ["string", "null"],
+      "description": "Populated only when aggregateFreshness is MISSING_SOURCE; names the missing canonical owner path."
+    },
+    "contradictions": {
+      "type": "array",
+      "description": "Populated only when aggregateFreshness is CONTRADICTED; each entry preserves both source anchors and their values, never a silently-chosen single value.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field", "anchors"],
+        "properties": {
+          "field": { "type": "string" },
+          "anchors": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["sourcePath", "value"],
+              "properties": {
+                "sourcePath": { "type": "string" },
+                "value": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "aggregateFreshness": { "const": "STALE" } } },
+      "then": { "required": ["staleSourceAnchors"], "properties": { "staleSourceAnchors": { "minItems": 1 } } },
+      "else": { "not": { "required": ["staleSourceAnchors"] } }
+    },
+    {
+      "if": { "properties": { "aggregateFreshness": { "const": "MISSING_SOURCE" } } },
+      "then": { "required": ["missingSourceAnchor"], "properties": { "missingSourceAnchor": { "type": "string", "minLength": 1 } } },
+      "else": { "not": { "required": ["missingSourceAnchor"] } }
+    },
+    {
+      "if": { "properties": { "aggregateFreshness": { "const": "CONTRADICTED" } } },
+      "then": { "required": ["contradictions"], "properties": { "contradictions": { "minItems": 1 } } },
+      "else": { "not": { "required": ["contradictions"] } }
+    }
+  ],
+  "examples": [
+    {
+      "contractVersion": "cvf.odvrT0.readoutContract.doc.v1",
+      "currentMode": "odvr_t0_dispatched",
+      "activeHandoff": "AGENT_HANDOFF_V41_2026-07-11.md",
+      "latestMaterialDecision": {
+        "artifactPath": "docs/roadmaps/CVF_OPERATOR_DECISION_AND_VALUE_READOUT_ROADMAP_2026-07-12.md",
+        "status": "PROPOSED",
+        "materialCommit": "7c6f13ab8",
+        "stateOrder": 1686
+      },
+      "terminalValueVerdict": null,
+      "claimBoundary": "Decision-first roadmap and ODVR-T0 packet-authoring authorization only.",
+      "parkedOrBlockedConditions": ["ODVR-T1/T2 and new-source absorption remain parked."],
+      "reopenCondition": null,
+      "canonicalNextAllowedMove": "Author a fresh ODVR-T0 GC-018 baseline and source-verified no-commit work order.",
+      "sourceAnchors": [
+        "CVF_SESSION/ACTIVE_SESSION_STATE.json",
+        "docs/roadmaps/CVF_OPERATOR_DECISION_AND_VALUE_READOUT_ROADMAP_2026-07-12.md"
+      ],
+      "aggregateFreshness": "CURRENT"
+    },
+    {
+      "contractVersion": "cvf.odvrT0.readoutContract.doc.v1",
+      "currentMode": "odvr_t0_dispatched",
+      "activeHandoff": "AGENT_HANDOFF_V41_2026-07-11.md",
+      "latestMaterialDecision": {
+        "artifactPath": "docs/roadmaps/CVF_MAO_LIVE_PROVIDER_ADAPTER_VALUE_PILOT_ROADMAP_2026-07-12.md",
+        "status": "REVIEWER_ACCEPTED_VALUE_NOT_PROVEN",
+        "materialCommit": "75f5c0b90",
+        "stateOrder": 1685
+      },
+      "terminalValueVerdict": "REVIEWER_ACCEPTED_VALUE_NOT_PROVEN",
+      "claimBoundary": "MAO-LIVE-T1 value-pilot claim boundary text.",
+      "parkedOrBlockedConditions": ["Concrete reopen condition not yet satisfied."],
+      "reopenCondition": "all named prerequisite conditions in the roadmap's Concrete reopen condition section must be true before a new MAO-LIVE tranche opens",
+      "canonicalNextAllowedMove": "Select next roadmap or satisfy the MAO-LIVE reopen condition.",
+      "sourceAnchors": [
+        "CVF_SESSION/ACTIVE_SESSION_STATE.json",
+        "docs/roadmaps/CVF_MAO_LIVE_PROVIDER_ADAPTER_VALUE_PILOT_ROADMAP_2026-07-12.md"
+      ],
+      "aggregateFreshness": "STALE",
+      "staleSourceAnchors": [
+        "docs/roadmaps/CVF_MAO_LIVE_PROVIDER_ADAPTER_VALUE_PILOT_ROADMAP_2026-07-12.md"
+      ]
+    },
+    {
+      "contractVersion": "cvf.odvrT0.readoutContract.doc.v1",
+      "currentMode": "odvr_t0_dispatched",
+      "activeHandoff": "AGENT_HANDOFF_V41_2026-07-11.md",
+      "latestMaterialDecision": {
+        "artifactPath": "docs/baselines/CVF_GC018_EXAMPLE_MISSING_2026-07-12.md",
+        "status": "UNKNOWN",
+        "materialCommit": "deadbeef",
+        "stateOrder": 1688
+      },
+      "terminalValueVerdict": null,
+      "claimBoundary": "UNKNOWN",
+      "canonicalNextAllowedMove": "UNKNOWN",
+      "sourceAnchors": [
+        "docs/baselines/CVF_GC018_EXAMPLE_MISSING_2026-07-12.md"
+      ],
+      "aggregateFreshness": "MISSING_SOURCE",
+      "missingSourceAnchor": "docs/baselines/CVF_GC018_EXAMPLE_MISSING_2026-07-12.md"
+    },
+    {
+      "contractVersion": "cvf.odvrT0.readoutContract.doc.v1",
+      "currentMode": "odvr_t0_dispatched",
+      "activeHandoff": "AGENT_HANDOFF_V41_2026-07-11.md",
+      "latestMaterialDecision": {
+        "artifactPath": "docs/roadmaps/CVF_EXAMPLE_ROADMAP_A_2026-07-01.md",
+        "status": "CLOSED_PASS_BOUNDED",
+        "materialCommit": "11111111",
+        "stateOrder": 1689
+      },
+      "terminalValueVerdict": null,
+      "claimBoundary": "Two roadmaps disagree on which is the latest material decision for the same date.",
+      "canonicalNextAllowedMove": "Resolve contradiction via operator disambiguation before trusting either next-move value.",
+      "sourceAnchors": [
+        "docs/roadmaps/CVF_EXAMPLE_ROADMAP_A_2026-07-01.md",
+        "docs/roadmaps/CVF_EXAMPLE_ROADMAP_B_2026-07-01.md"
+      ],
+      "aggregateFreshness": "CONTRADICTED",
+      "contradictions": [
+        {
+          "field": "latestMaterialDecision",
+          "anchors": [
+            {
+              "sourcePath": "docs/roadmaps/CVF_EXAMPLE_ROADMAP_A_2026-07-01.md",
+              "value": { "status": "CLOSED_PASS_BOUNDED", "materialCommit": "11111111", "stateOrder": 1689 }
+            },
+            {
+              "sourcePath": "docs/roadmaps/CVF_EXAMPLE_ROADMAP_B_2026-07-01.md",
+              "value": { "status": "PROPOSED", "materialCommit": "22222222", "stateOrder": 1689 }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

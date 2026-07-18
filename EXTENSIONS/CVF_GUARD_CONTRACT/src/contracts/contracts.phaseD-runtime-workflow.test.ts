@@ -105,13 +105,16 @@ describe('Phase D Runtime workflow contract', () => {
     });
   });
 
-  it('defines operational benchmark extensions without wiring live emission', () => {
+  it('defines operational benchmark extensions with only runtime_receipt_count live-wired', () => {
     expect(OPERATIONAL_BENCHMARK_EXTENSIONS.length).toBeGreaterThan(0);
 
     for (const metric of OPERATIONAL_BENCHMARK_EXTENSIONS) {
       expect(metric.metricId).toBeTruthy();
       expect(metric.receiptLinked).toBe(true);
-      expect(metric.liveEmissionWired).toBe(false);
+      expect(typeof metric.liveEmissionWired).toBe('boolean');
     }
+
+    const liveMetrics = OPERATIONAL_BENCHMARK_EXTENSIONS.filter((metric) => metric.liveEmissionWired);
+    expect(liveMetrics.map((metric) => metric.metricId)).toEqual(['runtime_receipt_count']);
   });
 });

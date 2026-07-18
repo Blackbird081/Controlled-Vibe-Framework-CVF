@@ -14,6 +14,8 @@
  * @module cvf-guard-contract/types
  */
 
+import type { Receipt } from './contracts/receipt-envelope.contract';
+
 // ─── Core Enums ───────────────────────────────────────────────────────
 
 export type CanonicalCVFPhase =
@@ -181,6 +183,8 @@ export interface GovernanceEvidenceReceipt {
   boundarySignals?: BoundarySignals;
 }
 
+export type GovernanceEvidenceReceiptEnvelope = Receipt<GovernanceEvidenceReceipt>;
+
 export interface HandoffTransitionContext {
   workActuallyClosed?: boolean;
   sameWorkerContinuesImmediately?: boolean;
@@ -217,6 +221,9 @@ export interface GuardAuditEntry {
   context: GuardRequestContext;
   pipelineResult: GuardPipelineResult;
 }
+
+export type GuardPipelineResultEnvelope = Receipt<GuardPipelineResult>;
+export type GuardAuditEntryEnvelope = Receipt<GuardAuditEntry>;
 
 /**
  * Runtime configuration for the guard engine.

@@ -49,6 +49,12 @@ describe("ArgParser", () => {
       const result = parser.parse(["audit", "--count"]);
       expect(result.flags.count).toBe(true);
     });
+
+    it("parses execute --stream as a boolean flag", () => {
+      const result = parser.parse(["execute", "--stream", "--template", "documentation"]);
+      expect(result.flags.stream).toBe(true);
+      expect(result.flags.template).toBe("documentation");
+    });
   });
 
   describe("positional arguments", () => {

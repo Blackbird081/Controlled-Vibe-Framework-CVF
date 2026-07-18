@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cvf.local/schemas/skill-pack/execution.boundary.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "executionMode",
+    "networkAccess",
+    "fileSystemAccess",
+    "externalSideEffects",
+    "blockedActions"
+  ],
+  "properties": {
+    "executionMode": {
+      "enum": [
+        "static_pack",
+        "governed_runtime"
+      ]
+    },
+    "networkAccess": {
+      "enum": [
+        "none",
+        "provider_only",
+        "declared_only"
+      ]
+    },
+    "fileSystemAccess": {
+      "enum": [
+        "none",
+        "read_only",
+        "declared_outputs_only"
+      ]
+    },
+    "externalSideEffects": {
+      "type": "boolean"
+    },
+    "blockedActions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    }
+  }
+}

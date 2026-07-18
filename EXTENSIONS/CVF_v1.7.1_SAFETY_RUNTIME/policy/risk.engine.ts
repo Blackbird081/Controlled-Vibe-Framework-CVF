@@ -22,6 +22,37 @@ export interface RiskAssessmentResult {
   reasons: string[]
 }
 
+export type CVFRiskLevel = "R0" | "R1" | "R2" | "R3" | "R4"
+
+export interface RiskEngineAdapterSnapshot {
+  version: "phase2b-risk-engine-adapter-1"
+  source: "safety-runtime:policy-risk-engine"
+  level: RiskLevel
+  cvfRiskLevel: CVFRiskLevel
+  score: number
+  reasons: string[]
+}
+
+export function mapRiskLevelToCVF(level: RiskLevel): CVFRiskLevel {
+  if (level === "CRITICAL") return "R4"
+  if (level === "HIGH") return "R3"
+  if (level === "MEDIUM") return "R2"
+  return "R1"
+}
+
+export function buildRiskEngineAdapterSnapshot(
+  result: RiskAssessmentResult
+): RiskEngineAdapterSnapshot {
+  return {
+    version: "phase2b-risk-engine-adapter-1",
+    source: "safety-runtime:policy-risk-engine",
+    level: result.level,
+    cvfRiskLevel: mapRiskLevelToCVF(result.level),
+    score: result.score,
+    reasons: result.reasons,
+  }
+}
+
 export class RiskEngine {
   static assess(input: RiskAssessmentInput): RiskAssessmentResult {
     let score = 0
@@ -108,6 +139,17 @@ export class RiskEngine {
       level,
       score,
       reasons,
+    }
+  }
+
+  static assessWithAdapter(input: RiskAssessmentInput): {
+    result: RiskAssessmentResult
+    adapter: RiskEngineAdapterSnapshot
+  } {
+    const result = RiskEngine.assess(input)
+    return {
+      result,
+      adapter: buildRiskEngineAdapterSnapshot(result),
     }
   }
 }

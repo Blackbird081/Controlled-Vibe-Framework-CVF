@@ -1,0 +1,41 @@
+{
+  "stableId": "cvf.asc.gap.l4_product_implementation_unresolved.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+  "targetPlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+  "sourceOwner": "NONE_WITH_REASON: doctrine-named /cvf-core does not exist in the active tree",
+  "targetOwner": "EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/ (draft, pre-public, not doctrine-equivalent)",
+  "missingEdge": "L4 Product Implementation doctrine layer has no proven active-tree doctrine-equivalent owner.",
+  "currentStatus": "VALUE_PARKED_WITH_REOPEN_CONDITIONS",
+  "proofClass": "DECLARED_EDGE",
+  "citations": [
+    {
+      "path": "docs/audits/CVF_MSEA_R96_DOCTRINE_ROUTE_GAP_RECONCILIATION_2026-07-11.md",
+      "lineOrSection": "gap evidence",
+      "evidenceRole": "reviewer-accepted gap-owner search evidence"
+    }
+  ],
+  "impact": "Blocks L4 promotion claims only; does not block any other plane or module.",
+  "closeCondition": {
+    "conditionKind": "OPERATOR_DECISION_RECORDED",
+    "conditionText": "L4 module exits Pre-Public Status per its own README self-declaration and an operator-authorized promotion review accepts it as the doctrine-equivalent owner."
+  },
+  "reopenCondition": {
+    "conditionKind": "OPERATOR_DECISION_RECORDED",
+    "conditionText": "Operator authorizes a fresh L4 promotion review citing new evidence beyond the current draft/pre-public status."
+  },
+  "actionOwner": "PARKED_WITH_REASON: no current evidence supports promotion; tracked in MSEA-R96 and this catalog only",
+  "freshnessInputs": [
+    "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  },
+  "rejectedCandidates": [
+    {
+      "candidatePath": "EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/",
+      "rejectionReason": "self-declared Pre-Public Status, not yet published, matches module inventory draft/future-facing status"
+    }
+  ]
+}

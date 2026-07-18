@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n';
 import clsx from 'clsx';
 import {
-    Sparkles, Home, Zap, Search, HelpCircle, BookOpen,
+    Sparkles, Home, LayoutDashboard, Zap, Search, HelpCircle, BookOpen,
     Bot, Network, Wrench, FlaskConical, Lightbulb,
     Activity, BarChart3, ShoppingBag, Shield, Building2, Lock, Gauge,
     UserCircle, Settings, Coins, LogOut, Globe, FileCheck2, ClipboardCheck,
@@ -148,8 +148,11 @@ export default function Sidebar({
                     {/* Workspace */}
                     <SidebarNavGroup id="workspace" title={t('sidebar.workspace') || 'Workspace'}>
                         <SidebarNavItem icon={Home} label={t('nav.home') || 'Home'}
-                            isActive={appState === 'home' || isRoute('/home')}
+                            isActive={(appState === 'home' && !isRoute('/workspace')) || isRoute('/home')}
                             onClick={() => handleNav('home')} />
+                        <SidebarNavItem icon={LayoutDashboard} label="CVF Workspace"
+                            isActive={appState === 'workspace' || isRoute('/workspace')}
+                            href="/workspace" onNavigate={onClose} />
                         <SidebarNavItem icon={Sparkles} label={t('nav.landing') || 'Landing Page'}
                             isActive={appState === 'landing' || isRoute('/landing')}
                             onClick={() => handleNav('landing')} />

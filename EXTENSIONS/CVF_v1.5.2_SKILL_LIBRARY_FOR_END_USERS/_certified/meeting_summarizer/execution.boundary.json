@@ -1,0 +1,12 @@
+{
+  "executionMode": "static_pack",
+  "networkAccess": "none",
+  "fileSystemAccess": "none",
+  "externalSideEffects": false,
+  "blockedActions": [
+    "provider_invocation",
+    "public_publish",
+    "credential_request",
+    "durable_memory_write"
+  ]
+}

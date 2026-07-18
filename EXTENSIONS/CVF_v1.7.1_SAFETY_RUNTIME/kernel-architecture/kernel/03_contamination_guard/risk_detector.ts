@@ -16,4 +16,21 @@ export class RiskDetector {
 
     return flags
   }
+
+  detectWithAdapter(text: string): RiskDetectorAdapterSnapshot {
+    const flags = this.detect(text)
+    return {
+      version: "phase2b-risk-detector-adapter-1",
+      source: "safety-runtime:contamination-risk-detector",
+      flags,
+      flagCount: flags.length,
+    }
+  }
+}
+
+export interface RiskDetectorAdapterSnapshot {
+  version: "phase2b-risk-detector-adapter-1"
+  source: "safety-runtime:contamination-risk-detector"
+  flags: string[]
+  flagCount: number
 }

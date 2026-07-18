@@ -1,6 +1,8 @@
 export type ContinuityArtifactRole = "input" | "output" | "evidence";
 export type ReinjectionPolicy = "always" | "on-request" | "expired";
 
+export const CONTINUITY_CHECKPOINT_ADAPTER_VERSION = "phase2b-continuity-checkpoint-adapter-1" as const;
+
 export interface ContinuityCheckpoint {
   checkpointId: string;
   taskId: string;
@@ -29,6 +31,22 @@ export interface ContinuityCheckpoint {
 export interface ContinuityCheckpointValidation {
   valid: boolean;
   violations: string[];
+}
+
+export interface ContinuityCheckpointAdapterSnapshot {
+  version: typeof CONTINUITY_CHECKPOINT_ADAPTER_VERSION;
+  source: "control-plane:continuity-checkpoint";
+  checkpointId: string;
+  taskId: string;
+  agentId: string;
+  phaseBoundary: string;
+  closedDecisionCount: number;
+  openItemCount: number;
+  artifactCount: number;
+  reinjectionPolicy: ReinjectionPolicy;
+  evidenceReceiptCount: number;
+  valid: boolean;
+  violationCount: number;
 }
 
 export function validateCheckpoint(
@@ -76,6 +94,40 @@ export function validateCheckpoint(
   return {
     valid: violations.length === 0,
     violations,
+  };
+}
+
+export function buildContinuityCheckpointAdapterSnapshot(
+  cp: ContinuityCheckpoint,
+  validation: ContinuityCheckpointValidation = validateCheckpoint(cp),
+): ContinuityCheckpointAdapterSnapshot {
+  return {
+    version: CONTINUITY_CHECKPOINT_ADAPTER_VERSION,
+    source: "control-plane:continuity-checkpoint",
+    checkpointId: cp.checkpointId,
+    taskId: cp.taskId,
+    agentId: cp.agentId,
+    phaseBoundary: cp.phaseBoundary,
+    closedDecisionCount: cp.closedDecisions.length,
+    openItemCount: cp.openItems.length,
+    artifactCount: cp.artifactMemory.length,
+    reinjectionPolicy: cp.reinjectionPolicy,
+    evidenceReceiptCount: cp.evidenceReceiptIds.length,
+    valid: validation.valid,
+    violationCount: validation.violations.length,
+  };
+}
+
+export function validateCheckpointWithAdapter(
+  cp: ContinuityCheckpoint,
+): {
+  validation: ContinuityCheckpointValidation;
+  adapter: ContinuityCheckpointAdapterSnapshot;
+} {
+  const validation = validateCheckpoint(cp);
+  return {
+    validation,
+    adapter: buildContinuityCheckpointAdapterSnapshot(cp, validation),
   };
 }
 

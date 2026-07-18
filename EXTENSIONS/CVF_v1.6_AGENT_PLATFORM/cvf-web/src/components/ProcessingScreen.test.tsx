@@ -187,6 +187,83 @@ describe('ProcessingScreen — guided response (W88-T1)', () => {
 
     expect(screen.queryByTestId('guided-response-panel')).toBeNull();
   });
+
+  it('renders execution diagnostic and does not fall back to mock output', async () => {
+    const onComplete = vi.fn();
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      json: async () => ({
+        success: false,
+        error: 'model unavailable',
+        provider: 'alibaba',
+        model: 'qwen-v3-diagnostic-intentionally-unavailable',
+        diagnostic: {
+          contractVersion: 'cvf.executionDiagnostic.v1',
+          stage: 'provider',
+          class: 'model_unavailable',
+          retryable: false,
+          userAction: 'change_model',
+          safeMessage: 'The selected model is unavailable for the current provider account or endpoint.',
+          provider: 'alibaba',
+          model: 'qwen-v3-diagnostic-intentionally-unavailable',
+          receiptId: 'rcpt-env-v3',
+          traceId: 'env-v3',
+        },
+        governanceEvidenceReceipt: {
+          receiptId: 'rcpt-env-v3',
+          evidenceMode: 'live',
+          routeId: '/api/execute',
+          decision: 'ALLOW',
+          provider: 'alibaba',
+          model: 'qwen-v3-diagnostic-intentionally-unavailable',
+          envelopeId: 'env-v3',
+          generatedAt: '2026-05-24T00:00:00.000Z',
+        },
+      }),
+    }));
+
+    render(<ProcessingScreen {...baseProps} onComplete={onComplete} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('execution-diagnostic-panel')).toBeDefined();
+    });
+
+    const panel = screen.getByTestId('execution-diagnostic-panel');
+    expect(panel.textContent).toContain('model_unavailable');
+    expect(panel.textContent).toContain('change_model');
+    expect(panel.textContent).toContain('rcpt-env-v3');
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  it('renders unclassified live failure without falling back to mock output', async () => {
+    const onComplete = vi.fn();
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      json: async () => ({
+        success: false,
+        error: 'Provider returned empty output',
+        provider: 'alibaba',
+        model: 'qwen-turbo',
+        governanceEvidenceReceipt: {
+          receiptId: 'rcpt-env-empty',
+          evidenceMode: 'live',
+          routeId: '/api/execute',
+          decision: 'ALLOW',
+          provider: 'alibaba',
+          model: 'qwen-turbo',
+          envelopeId: 'env-empty',
+          generatedAt: '2026-05-24T00:00:00.000Z',
+        },
+      }),
+    }));
+
+    render(<ProcessingScreen {...baseProps} onComplete={onComplete} />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert').textContent).toContain('Provider returned empty output');
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 4200));
+    expect(onComplete).not.toHaveBeenCalled();
+  }, 10000);
 });
 
 // ── W94-T1: Risk Badge Visibility ────────────────────────────────────────────

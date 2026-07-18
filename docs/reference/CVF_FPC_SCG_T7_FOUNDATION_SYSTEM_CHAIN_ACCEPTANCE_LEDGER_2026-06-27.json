@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "0.1.0",
+  "ledgerId": "cvf.fpcScg.t7.foundationSystemChainAcceptanceLedger.v1",
+  "status": "ACTIVE_REFERENCE",
+  "date": "2026-06-27",
+  "docType": "foundation_system_chain_acceptance_ledger",
+  "owner": "Codex",
+  "sourceAuthority": [
+    "docs/roadmaps/CVF_FPC_SCG_T0_FOUNDATION_SYSTEM_CHAIN_GAP_CLOSURE_ROADMAP_REFRESH_2026-06-27.md",
+    "docs/reviews/CVF_FPC_SCG_T0_FOUNDATION_SYSTEM_CHAIN_GAP_CLOSURE_ROADMAP_REFRESH_COMPLETION_2026-06-27.md",
+    "docs/reference/CVF_FOUNDATION_PLANE_SYSTEM_CHAIN_GAP_PRIORITY_GUIDANCE_2026-06-27.md",
+    "docs/reference/CVF_FPC_T3_C03_INTERLOCK_EXPECTED_CHAIN_MANIFEST_2026-06-27.json",
+    "docs/reference/CVF_SYSTEM_LOOP_INTERLOCK_REGISTRY_2026-06-02.json",
+    "governance/compat/check_system_loop_interlock.py"
+  ],
+  "acceptedClosureChain": [
+    {
+      "trancheId": "FPC-SCG-T1",
+      "gapId": "P0:FPC-T2-C01..C05",
+      "acceptanceLevel": "STRUCTURAL_GUARDED_ACCEPTED",
+      "materialCommit": "75fcad20",
+      "closureArtifact": "docs/reviews/CVF_FPC_SCG_T1_FOUNDATION_PLANE_SYSTEM_CHAIN_INTERLOCK_REGISTRY_DECISION_AND_EDIT_COMPLETION_2026-06-27.md",
+      "evidenceSurface": "docs/reference/CVF_SYSTEM_LOOP_INTERLOCK_REGISTRY_2026-06-02.json",
+      "reopenCondition": "Reopen only if any required FPC expected-chain registry id disappears, loses ACTIVE status, or loses STRUCTURAL_GUARDED automation."
+    },
+    {
+      "trancheId": "FPC-SCG-T2",
+      "gapId": "P1:FPC-T3-C06",
+      "acceptanceLevel": "MACHINE_CHECKED_BOUNDED_ACCEPTED",
+      "materialCommit": "be253923",
+      "closureArtifact": "docs/reviews/CVF_FPC_SCG_T2_RAW_MEMORY_RELEASE_INVARIANT_AUTORUN_COVERAGE_COMPLETION_2026-06-27.md",
+      "evidenceSurface": "governance/compat/check_raw_memory_release_invariant.py",
+      "reopenCondition": "Reopen only if raw-memory-release invariant checker, focused tests, autorun wiring, or reviewer-fast wiring regresses."
+    },
+    {
+      "trancheId": "FPC-SCG-T3",
+      "gapId": "P1:FPC-T3-C02",
+      "acceptanceLevel": "MACHINE_CHECKED_BOUNDED_ACCEPTED",
+      "materialCommit": "be253923",
+      "closureArtifact": "docs/reviews/CVF_FPC_SCG_T3_DICE_MACHINE_CANDIDATE_CHECKER_COMPLETION_2026-06-27.md",
+      "evidenceSurface": "governance/compat/check_dice_machine_candidates.py",
+      "reopenCondition": "Reopen only if DICE machine-candidate checker, focused tests, autorun wiring, or reviewer-fast wiring regresses."
+    },
+    {
+      "trancheId": "FPC-SCG-T4",
+      "gapId": "P1:FPC-T3-C05",
+      "acceptanceLevel": "MACHINE_CHECKED_BOUNDED_ACCEPTED",
+      "materialCommit": "be253923",
+      "closureArtifact": "docs/reviews/CVF_FPC_SCG_T4_WORKER_RETURN_FAST_GATE_EPISTEMIC_FIXTURE_COMPLETION_2026-06-27.md",
+      "evidenceSurface": "governance/compat/run_worker_return_fast_gate.py",
+      "reopenCondition": "Reopen only if worker-return fast gate stops invoking the epistemic process packet check or focused fixture coverage regresses."
+    },
+    {
+      "trancheId": "FPC-SCG-T5",
+      "gapId": "P1:FPC-T3-C03-MANIFEST",
+      "acceptanceLevel": "SOURCE_VERIFIED_MANIFEST_ACCEPTED",
+      "materialCommit": "be253923",
+      "closureArtifact": "docs/reviews/CVF_FPC_SCG_T5_INTERLOCK_EXPECTED_CHAIN_MANIFEST_SOURCE_VERIFICATION_COMPLETION_2026-06-27.md",
+      "evidenceSurface": "docs/reference/CVF_FPC_T3_C03_INTERLOCK_EXPECTED_CHAIN_MANIFEST_2026-06-27.json",
+      "reopenCondition": "Reopen only if the expected-chain manifest is missing, stops parsing, or loses one of the five source-verified expected ids."
+    },
+    {
+      "trancheId": "FPC-SCG-T6",
+      "gapId": "P1:FPC-T3-C03-CHECKER",
+      "acceptanceLevel": "MACHINE_CHECKED_BOUNDED_ACCEPTED",
+      "materialCommit": "be253923",
+      "closureArtifact": "docs/reviews/CVF_FPC_SCG_T6_INTERLOCK_EXPECTED_CHAIN_CHECKER_EXTENSION_COMPLETION_2026-06-27.md",
+      "evidenceSurface": "governance/compat/check_system_loop_interlock.py",
+      "reopenCondition": "Reopen only if the checker stops consuming the expected-chain manifest or focused missing-id/status/automation mismatch tests regress."
+    },
+    {
+      "trancheId": "FPC-SCG-T0",
+      "gapId": "ROUTING:FPC-SCG-ROADMAP-REFRESH",
+      "acceptanceLevel": "ROUTING_ACCEPTED",
+      "materialCommit": "be253923",
+      "closureArtifact": "docs/reviews/CVF_FPC_SCG_T0_FOUNDATION_SYSTEM_CHAIN_GAP_CLOSURE_ROADMAP_REFRESH_COMPLETION_2026-06-27.md",
+      "evidenceSurface": "docs/roadmaps/CVF_FPC_SCG_T0_FOUNDATION_SYSTEM_CHAIN_GAP_CLOSURE_ROADMAP_REFRESH_2026-06-27.md",
+      "reopenCondition": "Reopen only if T0 source evidence is superseded or a P0/P1 regression invalidates acceptance routing."
+    }
+  ],
+  "expectedRegistryIds": [
+    "governance-hook-chain-to-learning-intake",
+    "memory-consolidation-to-learning-signal",
+    "memory-knowledge-graph-to-retrieval",
+    "dir-dice-to-downstream-adapter-eligibility",
+    "epistemic-process-to-claim-update"
+  ],
+  "downstreamReopenGates": [
+    {
+      "laneId": "runtime-provider-live",
+      "gateStatus": "PARKED",
+      "requiredConditions": [
+        "fresh operator decision",
+        "fresh GC-018 baseline",
+        "source-verified work order",
+        "live governance proof when governance behavior is claimed",
+        "secrets and quota diagnostic plan"
+      ],
+      "forbiddenUntilGatePasses": [
+        "runtime/MCP/CLI/IDE bridge implementation",
+        "provider/live proof",
+        "Model Gateway/Sandbox runtime expansion"
+      ]
+    },
+    {
+      "laneId": "use-case-adapter-public",
+      "gateStatus": "PARKED",
+      "requiredConditions": [
+        "fresh operator decision",
+        "fresh GC-018 baseline",
+        "source-verified work order",
+        "public/provenance boundary review before public-sync",
+        "adapter-specific evidence that foundation acceptance applies"
+      ],
+      "forbiddenUntilGatePasses": [
+        "Policy_Local implementation",
+        "Document Translator implementation",
+        "public-sync",
+        "push"
+      ]
+    },
+    {
+      "laneId": "MPI-T6-runtime",
+      "gateStatus": "PARKED",
+      "requiredConditions": [
+        "operator-stated product requirement explicitly needs the MPI lane itself",
+        "current MPI contract/helper or pre-existing durable/reinjection surfaces do not satisfy the requirement",
+        "fresh GC-018 baseline",
+        "source-verified work order",
+        "live/provider proof when governance behavior is claimed"
+      ],
+      "forbiddenUntilGatePasses": [
+        "live runtime memory read",
+        "vector-durable query",
+        "external-agent MCP-CLI memory read"
+      ]
+    }
+  ],
+  "acceptanceVerdict": "FOUNDATION_SYSTEM_CHAIN_ACCEPTED_BOUNDED",
+  "nextDecision": "Operator may choose a fresh downstream lane only after this ledger checker passes and a new source-verified GC-018 records the chosen lane's gate conditions.",
+  "publicExportDisposition": "DEFERRED_PRIVATE_ONLY",
+  "rawMemoryReleased": false,
+  "claimBoundary": "This ledger accepts the P0/P1 foundation system-chain closure evidence at a bounded structural/machine-check level. It does not certify production readiness, public readiness, provider behavior, runtime execution, downstream adapter behavior, or MPI-T6 runtime value."
+}

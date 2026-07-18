@@ -119,6 +119,22 @@ Current local baseline is not yet justified for:
 - claiming that non-coder and coder-facing governed demo paths are equally mature everywhere
 - reopening roadmap breadth expansion without a fresh `GC-018` continuation score
 
+## Public-Facing Documentation Freshness Check
+
+Before any public-sync commit, release claim, or public catalog update, verify
+the following against current source:
+
+| Item | Source of truth | Check required |
+| --- | --- | --- |
+| `docs/GET_STARTED.md` version string (footer) | `CHANGELOG.md` — top-level version entry | Must match current GA version (e.g. v4.0.0) |
+| `docs/GET_STARTED.md` skill count | `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/README.md` — "Tổng Skills" row | Must match or use a stable pointer instead of a hardcoded number |
+| Public catalog capability rows | `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md` | Each row status and evidence path must be Test-Path verified in the public-sync clone |
+
+Failure to check these before a public-sync commit is the root cause of the
+version drift identified in the 2026-06-05 external review gap analysis
+(`docs/audits/CVF_EXTERNAL_REVIEW_GAP_ANALYSIS_AND_PROPOSED_SOLUTIONS_2026-06-05.md`,
+GAP 3).
+
 ---
 
 *Issued: March 20, 2026*

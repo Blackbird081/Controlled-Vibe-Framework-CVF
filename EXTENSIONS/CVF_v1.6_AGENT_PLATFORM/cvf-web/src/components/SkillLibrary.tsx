@@ -179,6 +179,16 @@ export function SkillLibrary() {
                                         <span className="px-2.5 py-1 text-[10px] font-bold tracking-wider bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 rounded-md uppercase">
                                             {selectedSkill.domain}
                                         </span>
+                                        {selectedSkill.assfProjectionClass === 'CERTIFIED_PACKAGE_PROJECTION' && (
+                                            <span className="px-2.5 py-1 text-[10px] font-bold tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 rounded-md uppercase">
+                                                Certified ASSF
+                                            </span>
+                                        )}
+                                        {selectedSkill.runtimePackageProjection && (
+                                            <span className="px-2.5 py-1 text-[10px] font-bold tracking-wider bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300 rounded-md uppercase">
+                                                Runtime package
+                                            </span>
+                                        )}
                                         <button 
                                             onClick={() => openSkillDetail(selectedSkill.domain?.toLowerCase().replace(/ /g, '-') || '', selectedSkill.id)}
                                             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -207,6 +217,22 @@ export function SkillLibrary() {
                             </div>
 
                             {/* Guided Forms */}
+                            {selectedSkill.assfProjectionClass === 'CERTIFIED_PACKAGE_PROJECTION' && (
+                                <div className="mb-4 grid gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/20 dark:text-emerald-200">
+                                    <div className="font-semibold">ASSF package projection</div>
+                                    <div>Certification: {selectedSkill.certificationState}</div>
+                                    <div>UAT: {selectedSkill.uatState}</div>
+                                    {selectedSkill.runtimePackageProjection && (
+                                        <>
+                                            <div>Runtime eligible: {selectedSkill.runtimeEligible ? 'YES' : 'NO'}</div>
+                                            <div>Activation: {selectedSkill.activationDecision}</div>
+                                            {selectedSkill.primaryDomain && <div>Domain: {selectedSkill.primaryDomain}</div>}
+                                        </>
+                                    )}
+                                    <div>Adapter: {selectedSkill.externalCliMcpDisposition}</div>
+                                    {selectedSkill.canonicalRoot && <div className="break-all">Source: {selectedSkill.canonicalRoot}</div>}
+                                </div>
+                            )}
                             <div className="mt-4 flex flex-wrap items-center gap-2">
                                 {linkedTemplates.length > 0 ? (
                                     <>

@@ -29,6 +29,15 @@ export interface RiskResult {
   factors: string[];
 }
 
+export const AGENT_GUARD_RISK_MODULE_ADAPTER_VERSION = "phase2b-agent-guard-risk-module-adapter-1";
+
+export interface RiskModuleAdapterSnapshot {
+  version: typeof AGENT_GUARD_RISK_MODULE_ADAPTER_VERSION;
+  source: "eco-v2.0:agent-guard-risk-module";
+  action: Pick<AgentAction, "agentId" | "action" | "target" | "domain">;
+  result: RiskResult;
+}
+
 export class RiskModule {
   evaluate(action: AgentAction): RiskResult {
     const factors: string[] = [];
@@ -56,5 +65,19 @@ export class RiskModule {
     score = Math.min(score, 1.0);
 
     return { score, level: scoreToLevel(score), factors };
+  }
+
+  evaluateWithAdapter(action: AgentAction): RiskModuleAdapterSnapshot {
+    return {
+      version: AGENT_GUARD_RISK_MODULE_ADAPTER_VERSION,
+      source: "eco-v2.0:agent-guard-risk-module",
+      action: {
+        agentId: action.agentId,
+        action: action.action,
+        target: action.target,
+        domain: action.domain,
+      },
+      result: this.evaluate(action),
+    };
   }
 }

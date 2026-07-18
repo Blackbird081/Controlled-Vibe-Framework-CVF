@@ -4,7 +4,7 @@ Memory class: POINTER_RECORD
 
 > Date: 2026-03-29
 > Status: `PROPOSAL ONLY` — thresholds declared as targets; not verified as current truth
-> Authorization: W8-T2 GC-018 — `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W8_T2_PERFORMANCE_BENCHMARK_HARNESS_2026-03-29.md`
+> Authorization: W8-T2 GC-018 — `docs/reviews/archive/CVF_GC018_CONTINUATION_CANDIDATE_W8_T2_PERFORMANCE_BENCHMARK_HARNESS_2026-03-29.md`
 > First evidence batch: committed in W8-T2 CP2 as deterministic contract-unit evidence; promotion gate still requires future trace-backed integration evidence
 
 ---
@@ -94,7 +94,7 @@ This document will be updated to `STATUS: BASELINE TRUTH (partial)` as individua
 
 The first harness-generated evidence batch is committed at:
 
-- `docs/baselines/CVF_W8_T2_CP2_FIRST_EVIDENCE_BATCH_2026-03-29.md`
+- `docs/baselines/archive/CVF_W8_T2_CP2_FIRST_EVIDENCE_BATCH_2026-03-29.md`
 - `reportId`: `07694a0023d8b6334a327a4622a7a8b8`
 - `reportHash`: `ee7820674da17bd1a6e86e411019c2e2`
 
@@ -105,5 +105,5 @@ This batch proves that the harness lifecycle and evidence-record model work corr
 ## Related Artifacts
 
 - Benchmark harness contract: `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/performance.benchmark.harness.contract.ts`
-- First evidence batch: `docs/baselines/CVF_W8_T2_CP2_FIRST_EVIDENCE_BATCH_2026-03-29.md`
-- Authorization: `docs/reviews/CVF_GC018_CONTINUATION_CANDIDATE_W8_T2_PERFORMANCE_BENCHMARK_HARNESS_2026-03-29.md`
+- First evidence batch: `docs/baselines/archive/CVF_W8_T2_CP2_FIRST_EVIDENCE_BATCH_2026-03-29.md`
+- Authorization: `docs/reviews/archive/CVF_GC018_CONTINUATION_CANDIDATE_W8_T2_PERFORMANCE_BENCHMARK_HARNESS_2026-03-29.md`

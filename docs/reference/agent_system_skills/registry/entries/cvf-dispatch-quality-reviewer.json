@@ -1,0 +1,91 @@
+{
+  "registryOrder": 1,
+  "skillId": "cvf-dispatch-quality-reviewer",
+  "name": "CVF Dispatch Quality Reviewer",
+  "version": "0.1.0",
+  "owner": "CVF governance/compat automation surface",
+  "status": "CANDIDATE",
+  "canonicalRoot": "docs/reference/agent_system_skills/registry/entries/cvf-dispatch-quality-reviewer.json",
+  "originLane": "ASSF-T2",
+  "sourceArtifacts": [
+    "docs/baselines/CVF_GC018_ASSF_T2_GENERATED_INDEX_AND_PROGRESSIVE_RESOLVER_2026-06-23.md",
+    "governance/compat/check_work_order_dispatch_quality.py",
+    "governance/compat/run_dispatch_packet_author_fast_gate.py"
+  ],
+  "legacyRows": [],
+  "license": "CVF_PRIVATE_GOVERNED",
+  "reviewArtifacts": [
+    "docs/reviews/CVF_ASSF_REAL_MANUAL_UAT_EXECUTION_EVIDENCE_2026-06-26.md",
+    "docs/reviews/CVF_ASSF_CERT_T2_CERTIFICATION_DECISION_2026-06-26.md",
+    "docs/reviews/CVF_ASSF_PACKAGE_CERTIFICATION_DECISION_T0_T3_COMPLETION_2026-06-26.md"
+  ],
+  "purpose": "Provide deterministic dispatch-quality validation of work-order and baseline artifacts before worker execution begins.",
+  "triggerPatterns": [
+    "dispatch review",
+    "work order review",
+    "baseline review",
+    "pre-dispatch gate",
+    "dispatch quality check"
+  ],
+  "taskClasses": [
+    "dispatch-authoring",
+    "reviewer"
+  ],
+  "useWhen": "A dispatcher or reviewer must verify that a work-order and baseline pair satisfy all dispatch-quality gates before worker execution.",
+  "doNotUseWhen": "Worker execution is already in progress; do not re-validate mid-execution. Do not use as a substitute for the full pre-implementation autorun gate.",
+  "riskTriggers": [],
+  "roles": [
+    "dispatcher",
+    "reviewer"
+  ],
+  "phases": [
+    "DISPATCH_AUTHORING",
+    "PRE_DISPATCH"
+  ],
+  "surfaces": [
+    "governance/compat"
+  ],
+  "riskCeiling": "R0",
+  "contextProfile": "governance-compat-only",
+  "inputs": [
+    "work order markdown path",
+    "baseline markdown path",
+    "base commit SHA"
+  ],
+  "outputs": [
+    "dispatch quality verdict",
+    "structural completeness result",
+    "authority and encoding result",
+    "agent operation trace result",
+    "dispatch prompt envelope result"
+  ],
+  "executionConstraints": "read-only filesystem access; no provider calls; no commits; no session-sync edits",
+  "acceptanceEvidence": "check_work_order_dispatch_quality.py PASS; run_dispatch_packet_author_fast_gate.py 5/5 PASS",
+  "riskProfile": "R0",
+  "authorityCeiling": "read-only inspection of governed markdown files",
+  "sideEffects": "none",
+  "permissions": "read governed markdown files under docs/ and governance/",
+  "rollback": "N/A with reason: read-only; no filesystem mutation",
+  "safeStop": "return failing gate verdict and exit non-zero; no cleanup required",
+  "candidateState": "CANDIDATE",
+  "approvalState": "AWAITING_REVIEW",
+  "uatState": "PASSED",
+  "certificationState": "CERTIFIED",
+  "deprecation": "none",
+  "successor": "none",
+  "retirement": "none",
+  "dependencies": [],
+  "conflicts": [],
+  "compositionOrder": 1,
+  "capabilityBoundary": "no commit, no provider call, no runtime activation, no external-agent adapter, no session-sync",
+  "internalAgentDisposition": "CANDIDATE",
+  "resolverBehavior": "metadata-only; resolver returns identity and selector fields; does not open any SKILL.md or instruction body",
+  "loaderBoundary": "loading this metadata never grants authority to commit, activate, execute, or expand external-agent scope",
+  "externalCliMcpDisposition": "DEFERRED_WITH_REASON",
+  "adapterContract": "N/A with reason: external CLI/MCP adapter not yet authored; separate ASSF adapter work order required",
+  "adapterEvidence": "N/A with reason: no adapter implemented in ASSF-T2",
+  "externalMutationBoundary": "no external mutation permitted until a separate ASSF adapter work order is accepted",
+  "platformCompatibility": "cross-platform; Python 3.11+",
+  "shellAssumptions": "no shell execution required; pure Python",
+  "osConstraints": "none"
+}

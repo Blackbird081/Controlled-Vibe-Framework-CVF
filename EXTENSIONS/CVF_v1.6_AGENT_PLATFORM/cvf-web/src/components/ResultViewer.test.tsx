@@ -145,6 +145,8 @@ describe('ResultViewer', () => {
 
         const copied = String((navigator.clipboard.writeText as unknown as { mock: { calls: unknown[][] } }).mock.calls.at(-1)?.[0] || '');
         expect(copied).toContain('CVF Evidence Receipt');
+        expect(copied).toContain('What happened');
+        expect(copied).toContain('What to do next');
         expect(copied).toContain('rcpt-env-w119-001');
         expect(copied).not.toMatch(/sk-|api[_-]?key\s*[:=]/i);
     });

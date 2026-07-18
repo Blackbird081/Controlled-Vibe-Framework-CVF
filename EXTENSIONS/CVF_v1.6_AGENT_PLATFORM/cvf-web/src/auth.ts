@@ -27,6 +27,8 @@ type AppJwt = JWT & {
   teamId?: string;
 };
 
+export const authSecret = process.env.NEXTAUTH_SECRET || "cvf-enterprise-secret-mock-2026";
+
 export const nextAuthConfig = {
   providers: [
     GitHubProvider({
@@ -106,7 +108,7 @@ export const nextAuthConfig = {
   pages: {
     signIn: '/login',
   },
-  secret: process.env.NEXTAUTH_SECRET || "cvf-enterprise-secret-mock-2026",
+  secret: authSecret,
   trustHost: true,
 } satisfies NextAuthConfig;
 

@@ -19,7 +19,7 @@ Before opening a fresh tranche or claiming a surface is the next open candidate:
 1. consult `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
 2. inherit the last canonical scan state from that registry instead of re-scanning by default
 3. update the same registry when scan posture materially changes
-4. keep `AGENT_HANDOFF.md` and `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` pointing to the registry as the continuity front door
+4. keep `CVF_SESSION/ACTIVE_SESSION_STATE.json` and `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` pointing to the registry as continuity front doors
 
 ### Mandatory Registry Fields
 
@@ -50,7 +50,7 @@ It records what has already been scanned and what the next worker should do, whi
 ## Related Artifacts
 
 - `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json`
-- `AGENT_HANDOFF.md`
+- `CVF_SESSION/ACTIVE_SESSION_STATE.json`
 - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`
 - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`

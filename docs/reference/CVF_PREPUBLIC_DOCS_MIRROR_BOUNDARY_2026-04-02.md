@@ -239,7 +239,7 @@ These files must remain in the private core and must never be publicly exposed. 
 - `docs/reference/CVF_INTERNAL_USER_GUIDE.md`
 - `docs/reference/CVF_BUILD_PROMPT_V01.md`
 - `docs/reference/CVF_PERFORMANCE_ACCEPTANCE_POLICY_BASELINE_2026-03-29.md`
-- `docs/reference/CVF_PUBLICATION_DECISION_RECORD_2026-04-03.md`
+- `docs/reference/archive/CVF_PUBLICATION_DECISION_RECORD_2026-04-03.md`
 
 ### Archives and Resources
 
@@ -280,4 +280,4 @@ Before any real docs mirror is created:
 - `docs/reference/CVF_PREPUBLIC_RESTRUCTURING_UNIFIED_AGENT_PROTOCOL.md`
 - `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`
 - `docs/roadmaps/CVF_PREPUBLIC_REPOSITORY_RESTRUCTURING_ROADMAP_2026-04-02.md`
-- `docs/roadmaps/CVF_GC018_W62_T1_DOCS_CURATION_ROADMAP_2026-04-08.md`
+- `docs/roadmaps/archive/CVF_GC018_W62_T1_DOCS_CURATION_ROADMAP_2026-04-08.md`

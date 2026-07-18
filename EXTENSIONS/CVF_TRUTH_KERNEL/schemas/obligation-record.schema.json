@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"ObligationRecord","type":"object","required":["obligation_id","bound_packet_id","hard_or_soft","status"],"properties":{"obligation_id":{"type":"string"},"bound_packet_id":{"type":"string"},"hard_or_soft":{"enum":["HARD","SOFT"]},"status":{"type":"string"}}}

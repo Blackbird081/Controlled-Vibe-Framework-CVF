@@ -6,6 +6,28 @@ import type { RiskObject } from '../../types/index.js'
 
 const _lockedRisks = new Map<string, Readonly<RiskObject>>()
 
+export const RISK_LOCK_ADAPTER_VERSION = 'phase2b-risk-lock-adapter-1'
+
+export interface RiskLockAdapterSnapshot {
+    version: typeof RISK_LOCK_ADAPTER_VERSION
+    source: 'safety-hardening:risk-lock'
+    executionId: string
+    locked: boolean
+    level: RiskObject['level']
+    hash: string
+}
+
+export function buildRiskLockAdapterSnapshot(risk: Readonly<RiskObject>): RiskLockAdapterSnapshot {
+    return {
+        version: RISK_LOCK_ADAPTER_VERSION,
+        source: 'safety-hardening:risk-lock',
+        executionId: risk.executionId,
+        locked: risk.locked,
+        level: risk.level,
+        hash: risk.hash,
+    }
+}
+
 export class RiskLock {
     /**
      * Lock a RiskObject to its executionId.
@@ -22,6 +44,14 @@ export class RiskLock {
         const locked: Readonly<RiskObject> = Object.freeze({ ...risk, locked: true })
         _lockedRisks.set(risk.executionId, locked)
         return locked
+    }
+
+    lockWithAdapter(risk: RiskObject): { locked: Readonly<RiskObject>; adapter: RiskLockAdapterSnapshot } {
+        const locked = this.lock(risk)
+        return {
+            locked,
+            adapter: buildRiskLockAdapterSnapshot(locked),
+        }
     }
 
     /**

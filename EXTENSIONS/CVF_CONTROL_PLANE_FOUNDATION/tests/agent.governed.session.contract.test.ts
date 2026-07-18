@@ -260,4 +260,25 @@ describe("AgentGovernedSessionContract.createReceipt", () => {
     const contract = createAgentGovernedSessionContract({ now: fixedNow });
     expect(contract).toBeInstanceOf(AgentGovernedSessionContract);
   });
+
+  it("wraps agent execution audit receipt in the canonical Phase 1.R envelope", () => {
+    const contract = createAgentGovernedSessionContract({ now: fixedNow });
+    const request = makeRequest();
+    const decision = contract.evaluateAction(request);
+
+    const envelope = contract.createReceiptEnvelope(request, {
+      decision,
+      outputType: "documentation",
+      outputSummary: "Updated docs guide and prepared handoff.",
+      validationRequired: false,
+      validationResult: "skipped",
+      providerName: "local-agent",
+    });
+
+    expect(envelope.schemaVersion).toBe("1.R.0");
+    expect(envelope.source).toBe("control-plane-foundation:agent-governed-session:session-1:task-1");
+    expect(envelope.payload.receiptId).toBe(envelope.id);
+    expect(envelope.payload.filesChanged).toEqual(["docs/guide.md"]);
+    expect(envelope.integrityHash).toBeTruthy();
+  });
 });

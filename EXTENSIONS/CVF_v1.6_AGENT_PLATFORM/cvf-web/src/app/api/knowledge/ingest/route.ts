@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { knowledgeStore } from '@/lib/knowledge-store';
 import type { KnowledgeChunk } from '@/lib/knowledge-retrieval';
+import { authorizeRouteGovernanceProof, getRouteGovernanceProofConfig } from '@/lib/route-governance-proof';
 
 export interface KnowledgeIngestRequest {
   collectionId: string;
@@ -14,21 +15,29 @@ export interface KnowledgeIngestResponse {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
+  const bodyText = await req.text();
+  const routeAuth = await authorizeRouteGovernanceProof(
+    req,
+    bodyText,
+    getRouteGovernanceProofConfig('/api/knowledge/ingest'),
+  );
+  if (!routeAuth.allowed && routeAuth.response) return routeAuth.response;
+
   let body: unknown;
   try {
-    body = await req.json();
+    body = JSON.parse(bodyText);
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid JSON body', routeGovernanceProof: routeAuth.proof }, { status: 400 });
   }
 
   const parsed = body as Partial<KnowledgeIngestRequest>;
 
   if (!parsed.collectionId || typeof parsed.collectionId !== 'string') {
-    return NextResponse.json({ error: 'collectionId is required' }, { status: 400 });
+    return NextResponse.json({ error: 'collectionId is required', routeGovernanceProof: routeAuth.proof }, { status: 400 });
   }
 
   if (!Array.isArray(parsed.chunks) || parsed.chunks.length === 0) {
-    return NextResponse.json({ error: 'chunks must be a non-empty array' }, { status: 400 });
+    return NextResponse.json({ error: 'chunks must be a non-empty array', routeGovernanceProof: routeAuth.proof }, { status: 400 });
   }
 
   const validChunks: KnowledgeChunk[] = [];
@@ -39,7 +48,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       !Array.isArray(chunk.keywords)
     ) {
       return NextResponse.json(
-        { error: 'Each chunk must have id (string), content (string), keywords (string[])' },
+        { error: 'Each chunk must have id (string), content (string), keywords (string[])', routeGovernanceProof: routeAuth.proof },
         { status: 400 },
       );
     }
@@ -60,5 +69,5 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     collectionId: parsed.collectionId,
   };
 
-  return NextResponse.json(response, { status: 200 });
+  return NextResponse.json({ ...response, routeGovernanceProof: routeAuth.proof }, { status: 200 });
 }

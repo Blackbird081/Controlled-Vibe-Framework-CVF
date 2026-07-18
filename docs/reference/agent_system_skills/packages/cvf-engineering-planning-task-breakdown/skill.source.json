@@ -1,0 +1,30 @@
+{
+  "skillId": "cvf-engineering-planning-task-breakdown",
+  "upstreamSlug": "planning-and-task-breakdown",
+  "upstreamRepository": "https://github.com/addyosmani/agent-skills.git",
+  "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+  "sourceArtifacts": [
+    ".private_reference/source_mirrors/addyosmani__agent-skills/skills/planning-and-task-breakdown/SKILL.md",
+    "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+    "docs/baselines/CVF_GC018_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_2026-06-29.md",
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_FOR_WORKER_2026-06-29.md",
+    "docs/baselines/CVF_GC018_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_2026-06-30.md",
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_2026-06-30.md",
+    "docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md",
+    "docs/baselines/CVF_GC018_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_2026-06-30.md",
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_2026-06-30.md",
+    "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md",
+    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md"
+  ],
+  "originLane": "AGSK-R3",
+  "cvfAdaptationBoundary": "CVF-owned adaptation of upstream planning/task-breakdown skill; dependency-aware decomposition, explicit acceptance criteria, parallelization identification, and verifiable-unit discipline extracted as advisory metadata; no automated task execution, commit gating, or dispatcher-role escalation authorized",
+  "lifecycleState": "ACTIVE",
+  "uatState": "PASSED",
+  "certificationState": "CERTIFIED",
+  "internalAgentDisposition": "IMPLEMENTED",
+  "workerReturnArtifact": "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+  "claimBoundary": "source evidence for CVF-adapted ACTIVE package-root production execution through receipt-backed CVF adapters only; no automatic invocation, filesystem/git/browser authority, provider router mutation, public-sync, implementation authority, commit, or production action claim",
+  "externalCliMcpDisposition": "IMPLEMENTED",
+  "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+  "adapterEvidence": "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md"
+}

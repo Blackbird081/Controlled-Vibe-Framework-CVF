@@ -23,7 +23,9 @@ export interface ProviderCapabilityLookup {
 }
 
 export function normalizeProviderMethodName(method: ProviderMethodName): ProviderMethodName {
-  return LEGACY_PROVIDER_METHOD_ALIASES[method] ?? method;
+  const aliases: Partial<Record<ProviderMethodName, ProviderMethodName>> =
+    LEGACY_PROVIDER_METHOD_ALIASES;
+  return aliases[method] ?? method;
 }
 
 export function assertProviderMethodSupported(

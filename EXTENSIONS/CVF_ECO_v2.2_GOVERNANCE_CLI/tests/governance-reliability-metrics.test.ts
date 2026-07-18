@@ -9,12 +9,14 @@ import {
   crossSessionContinuityRate,
   deterministicConsistencyRate,
   humanCorrectionRate,
+  humanCorrectionCount,
   longHorizonStabilityRate,
   parseAuditJsonl,
   policyDecisionRate,
   policyViolationRate,
   receiptIntegrityRate,
   rollbackSuccessRate,
+  retryCount,
   retryRecoveryRate,
   stepTraceCompletionRate,
   taskCompletionRate,
@@ -106,6 +108,14 @@ describe("governance reliability metrics", () => {
     expect(result).toEqual({ rate: 2 / 3, count: 2, total: 3 });
   });
 
+  it("computes retry count from retry and recovered statuses", () => {
+    expect(retryCount([
+      { enforcement: { status: "retry" } },
+      { enforcement: { status: "recovered" } },
+      { enforcement: { status: "allow" } },
+    ])).toBe(2);
+  });
+
   it("computes policy violation rate from deny and blocked statuses", () => {
     const result = policyViolationRate([
       { enforcement: { status: "deny" } },
@@ -144,6 +154,14 @@ describe("governance reliability metrics", () => {
     ]);
 
     expect(result).toEqual({ rate: 0.5, count: 1, total: 2 });
+  });
+
+  it("computes human correction count by event", () => {
+    expect(humanCorrectionCount([
+      { executionId: "exec-1", eventType: "operator_correction", correctedAt: "2026-05-20T00:00:00Z", correctionSource: "operator" },
+      { executionId: "exec-1", eventType: "operator_correction", correctedAt: "2026-05-21T00:00:00Z", correctionSource: "reviewer" },
+      { executionId: "exec-2", eventType: "execution_requested" },
+    ])).toBe(2);
   });
 
   it("does not count non-correction events as human corrections", () => {

@@ -57,6 +57,8 @@ const MCP_TOOL_DESCRIPTIONS = [
   { name: 'cvf_advance_phase', usage: 'When current phase work is complete' },
   { name: 'cvf_get_audit_log', usage: 'To review what has been done in the session' },
   { name: 'cvf_evaluate_full', usage: 'For comprehensive pre-action governance check' },
+  { name: 'cvf_preflight_governance_action', usage: 'Before any EDIT, RUN, or COMMIT action - returns a durable preflight receipt' },
+  { name: 'cvf_consume_governance_action_receipt', usage: 'After preflight and before the matching action - atomically consumes the receipt once' },
 ];
 
 export function generateSystemPrompt(context: PromptContext = {}): GeneratedPrompt {
@@ -273,10 +275,15 @@ function buildMcpToolsSection(): string {
 
   lines.push('');
   lines.push('MANDATORY tool usage:');
+  lines.push('- Call cvf_preflight_governance_action before any EDIT, RUN, or COMMIT action, and retain the returned receipt');
+  lines.push('- Call cvf_consume_governance_action_receipt with the exact matching action and targets before proceeding; a receipt may be consumed only once');
   lines.push('- Call cvf_evaluate_full before any action that modifies files');
   lines.push('- Call cvf_check_risk_gate before actions with side effects');
   lines.push('- Call cvf_validate_output before presenting results to user');
   lines.push('- Call cvf_advance_phase when transitioning between phases');
+  lines.push('');
+  lines.push('A cvf_preflight_governance_action receipt proves only that the preflight evaluated the planned action and durably recorded a secret-safe audit entry. It does not prove that the action was executed, or that any IDE, shell, git, or filesystem was intercepted.');
+  lines.push('A cvf_consume_governance_action_receipt result proves only that one matching fresh receipt was atomically consumed. It does not execute the action, make MCP invocation mandatory, or prove external interception.');
 
   return lines.join('\n');
 }

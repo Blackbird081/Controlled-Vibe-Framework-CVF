@@ -9,11 +9,26 @@ import {
   type BenchmarkGovernanceOptions,
 } from "./types";
 import { executeGovernedTemplateCommand } from "./execute.client";
+import { executeWorkflowChain, CLI_WORKFLOW_TEMPLATES, WORKFLOW_CHAIN_CONTRACT } from "./workflow.client";
 import {
   computeGovernanceReliabilityReport,
   parseAuditJsonl,
   type GovernanceReliabilityReport,
 } from "./governance-reliability-metrics";
+import {
+  buildOperationalBenchmarkReport,
+  formatOperationalBenchmarkReport,
+  parseOperationalBenchmarkInput,
+} from "./operational-benchmark-suite";
+import {
+  CERTIFIED_SKILL_PACK_REGISTRY_PATH,
+  assertProductOutcomeRuntimePlanFiles,
+  listProductOutcomeRuntimePlans,
+  resolveProductOutcomeRuntimePlan,
+  selectProductSkillPackForRequest,
+  type ProductSkillPackSelectionReadout,
+  type ProductOutcomeRuntimePlan,
+} from "./product-outcome.runtime";
 
 export class CommandRegistry {
   private handlers: Map<CLICommand, CLICommandHandler> = new Map();
@@ -33,7 +48,7 @@ export class CommandRegistry {
     if (!handler) {
       return {
         success: false,
-        message: `Unknown command: ${args.command}. Run 'cvf-guard help' for usage.`,
+        message: `Unknown command: ${args.command}. Run 'cvf help' for usage.`,
         exitCode: 1,
       };
     }
@@ -45,7 +60,7 @@ export class CommandRegistry {
     if (!handler) {
       return {
         success: false,
-        message: `Unknown command: ${args.command}. Run 'cvf-guard help' for usage.`,
+        message: `Unknown command: ${args.command}. Run 'cvf help' for usage.`,
         exitCode: 1,
       };
     }
@@ -70,14 +85,14 @@ export class CommandRegistry {
     this.register({
       name: "help",
       description: "Show available commands and usage",
-      usage: "cvf-guard help [command]",
+      usage: "cvf help [command]",
       execute: (args) => this.helpCommand(args),
     });
 
     this.register({
       name: "version",
       description: "Show CLI version",
-      usage: "cvf-guard version",
+      usage: "cvf version",
       execute: () => ({
         success: true,
         message: `${this.config.name} v${this.config.version}`,
@@ -89,7 +104,7 @@ export class CommandRegistry {
     this.register({
       name: "status",
       description: "Show governance system status",
-      usage: "cvf-guard status",
+      usage: "cvf status",
       execute: () => ({
         success: true,
         message: [
@@ -106,19 +121,19 @@ export class CommandRegistry {
     this.register({
       name: "evaluate",
       description: "Evaluate an agent action against governance rules",
-      usage: "cvf-guard evaluate --domain <domain> --action <action> --target <target> [--amount <n>]",
+      usage: "cvf evaluate --domain <domain> --action <action> --target <target> [--amount <n>]",
       execute: (args) => this.evaluateCommand(args),
     });
 
     this.register({
       name: "execute",
       description: "Execute a governed CVF template through the web execute route",
-      usage: "cvf execute --template <id> --role <role> [--input <json>] [--endpoint <url>] [--dry-run] [--receipt] [--verbose]",
+      usage: "cvf execute --template <id> --role <role> [--input <json>] [--endpoint <url>] [--providers <role:provider,...>] [--provider <name>] [--dry-run] [--receipt] [--verbose]",
       execute: (args) => {
         if (args.flags.help === true || args.flags.h === true) {
           return {
             success: true,
-            message: "execute: Execute a governed CVF template through the web execute route\nUsage: cvf execute --template <id> --role <role> [--input <json>] [--endpoint <url>] [--dry-run] [--receipt] [--verbose]",
+            message: "execute: Execute a governed CVF template through the web execute route\nUsage: cvf execute --template <id> --role <role> [--input <json>] [--endpoint <url>] [--providers <role:provider,...>] [--provider <name>] [--dry-run] [--receipt] [--verbose]",
             exitCode: 0,
           };
         }
@@ -132,6 +147,54 @@ export class CommandRegistry {
     });
 
     this.register({
+      name: "workflow",
+      description: "Run a multi-agent workflow pipeline (sequential O->A->B->R with governance receipts per step)",
+      usage: "cvf workflow --template <key> --input <json> [--role <role>] [--providers <role:provider,...>] [--endpoint <url>] [--receipt] [--verbose]",
+      execute: (args) => {
+        if (args.flags.help === true || args.flags.h === true) {
+          const keys = Object.keys(CLI_WORKFLOW_TEMPLATES).join(", ");
+          return {
+            success: true,
+            message: `workflow: Run a multi-agent pipeline\nUsage: cvf workflow --template <key> --input <json> [--providers role:provider,...]\nTemplates: ${keys}\nContract: ${WORKFLOW_CHAIN_CONTRACT}`,
+            exitCode: 0,
+          };
+        }
+        return {
+          success: false,
+          message: "The workflow command performs HTTP I/O. Use GovernanceCLI.runAsync() or the async CLI entrypoint.",
+          exitCode: 1,
+        };
+      },
+      executeAsync: async (args) => {
+        const templateKey = typeof args.flags.template === "string" ? args.flags.template : args.positional[0];
+        if (!templateKey) {
+          return { success: false, message: "Missing required --template <key>.", exitCode: 1 };
+        }
+        const rawInput = typeof args.flags.input === "string" ? args.flags.input : "{}";
+        const endpoint = typeof args.flags.endpoint === "string" ? args.flags.endpoint : (process.env.CVF_EXECUTE_ENDPOINT ?? "http://localhost:3000");
+        const verbose = args.flags.verbose === true || args.flags.v === true;
+        const receipt = args.flags.receipt === true || typeof args.flags.receipt === "string";
+
+        // Parse --providers flag: "orchestrator:deepseek,builder:gemini"
+        let providers: Record<string, string> | undefined;
+        const rawProviders = typeof args.flags.providers === "string" ? args.flags.providers : undefined;
+        if (rawProviders) {
+          providers = {};
+          for (const segment of rawProviders.split(",")) {
+            const idx = segment.indexOf(":");
+            if (idx > 0) {
+              providers[segment.slice(0, idx).trim().toLowerCase()] = segment.slice(idx + 1).trim();
+            }
+          }
+        }
+
+        const result = await executeWorkflowChain(templateKey, rawInput, { endpoint, receipt, verbose, providers });
+        const message = JSON.stringify(result, null, verbose ? 2 : 0);
+        return { success: result.success, message, data: result, exitCode: result.success ? 0 : 1 };
+      },
+    });
+
+    this.register({
       name: "run",
       description: "Alias to cvf execute --template <template>",
       usage: "cvf run <template> --role <role> [--input <json>] [--endpoint <url>] [--dry-run] [--receipt] [--verbose]",
@@ -142,7 +205,7 @@ export class CommandRegistry {
     this.register({
       name: "skill",
       description: "Read-only skill registry inspection",
-      usage: "cvf skill <list|show> [id] [--input <skills-index.json>]",
+      usage: "cvf skill <list|show|plan|select> [id|request] [--input <skills-index.json>] [--registry <certified-registry.json>] [--certified] [--json]",
       execute: (args) => this.skillCommand(args),
     });
 
@@ -170,28 +233,28 @@ export class CommandRegistry {
     this.register({
       name: "benchmark",
       description: "Run offline CVF benchmark computations",
-      usage: "cvf benchmark <governance|run> --input <audit.jsonl> [--format json|table]",
+      usage: "cvf benchmark <governance|run|operational> --input <audit.jsonl|release-gate.json> [--format json|table]",
       execute: (args) => this.benchmarkCommand(args),
     });
 
     this.register({
       name: "session",
       description: "Manage governance sessions",
-      usage: "cvf-guard session <start|end|list|summary> [--agent <id>] [--session <id>]",
+      usage: "cvf session <start|end|list|summary> [--agent <id>] [--session <id>]",
       execute: (args) => this.sessionCommand(args),
     });
 
     this.register({
       name: "report",
       description: "Generate governance report",
-      usage: "cvf-guard report [--format text|markdown] [--title <title>]",
+      usage: "cvf report [--format text|markdown] [--title <title>]",
       execute: (args) => this.reportCommand(args),
     });
 
     this.register({
       name: "audit",
       description: "Query audit log",
-      usage: "cvf-guard audit [--session <id>] [--verdict <verdict>] [--count]",
+      usage: "cvf audit [--input <audit.jsonl>] [--session <id>] [--verdict <verdict>] [--count]",
       execute: (args) => this.auditCommand(args),
     });
   }
@@ -293,28 +356,43 @@ export class CommandRegistry {
     const sessionFilter = args.flags.session as string | undefined;
     const verdictFilter = args.flags.verdict as string | undefined;
     const countOnly = args.flags.count === true;
+    const input = stringFlag(args, "input");
+
+    const entries = input ? readJsonlFile(input) : { records: [] };
+    if ("error" in entries) return entries.error;
+
+    const records = entries.records.filter((record) => {
+      const sessionMatches = sessionFilter ? recordContainsValue(record, sessionFilter) : true;
+      const verdictMatches = verdictFilter ? recordContainsValue(record, verdictFilter) : true;
+      return sessionMatches && verdictMatches;
+    });
 
     const filters: string[] = [];
+    if (input) filters.push(`input=${input}`);
     if (sessionFilter) filters.push(`session=${sessionFilter}`);
     if (verdictFilter) filters.push(`verdict=${verdictFilter}`);
 
     return {
       success: true,
       message: countOnly
-        ? `Audit entries: 0 (${filters.join(", ") || "no filters"})`
-        : `Audit log: 0 entries (${filters.join(", ") || "no filters"})`,
-      data: { entries: 0, filters },
+        ? `Audit entries: ${records.length} (${filters.join(", ") || "no filters"})`
+        : `Audit log: ${records.length} entries (${filters.join(", ") || "no filters"})${records.length ? `\n${records.map((record) => JSON.stringify(record)).join("\n")}` : ""}`,
+      data: { entries: records.length, filters, records },
       exitCode: 0,
     };
   }
 
   private runAliasArgs(args: CLIArgs): CLIArgs {
     const templateFromPositional = args.positional[0];
+    const runtimePlan = templateFromPositional
+      ? resolveProductOutcomeRuntimePlan(templateFromPositional)
+      : undefined;
     return {
       command: "execute",
       flags: {
         ...args.flags,
-        ...(templateFromPositional && !args.flags.template ? { template: templateFromPositional } : {}),
+        ...(runtimePlan && !args.flags.template ? this.runtimePlanExecuteFlags(runtimePlan, args.flags.input) : {}),
+        ...(templateFromPositional && !runtimePlan && !args.flags.template ? { template: templateFromPositional } : {}),
       },
       positional: [],
     };
@@ -322,6 +400,64 @@ export class CommandRegistry {
 
   private skillCommand(args: CLIArgs): CLIOutput {
     const subCommand = args.positional[0] ?? "list";
+    const registryPath = stringFlag(args, "registry") || CERTIFIED_SKILL_PACK_REGISTRY_PATH;
+
+    if (subCommand === "select") {
+      const request = args.positional.slice(1).join(" ").trim() || stringFlag(args, "request");
+      if (!request) return { success: false, message: "Missing required noncoder request.", exitCode: 1 };
+      const readout = selectProductSkillPackForRequest(request, registryPath);
+      return {
+        success: true,
+        message: args.flags.json === true
+          ? JSON.stringify(readout, null, 2)
+          : formatProductSkillPackSelectionReadout(readout),
+        data: readout,
+        exitCode: 0,
+      };
+    }
+
+    if (subCommand === "plan") {
+      const id = args.positional[1];
+      if (!id) return { success: false, message: "Missing required skill pack id or outcome key.", exitCode: 1 };
+      const plan = resolveProductOutcomeRuntimePlan(id, registryPath);
+      if (!plan) return { success: false, message: `Product outcome runtime plan not found: ${id}`, exitCode: 1 };
+      try {
+        assertProductOutcomeRuntimePlanFiles(plan);
+      } catch (error) {
+        return { success: false, message: error instanceof Error ? error.message : "Invalid product outcome runtime plan.", exitCode: 1 };
+      }
+      return {
+        success: true,
+        message: args.flags.json === true
+          ? JSON.stringify(plan, null, 2)
+          : [
+            `${plan.skillPackId} -> ${plan.templateId}`,
+            `outcome=${plan.outcomeKey}`,
+            `riskLevel=${plan.riskLevel}`,
+            `humanReviewRequired=${plan.humanReviewRequired}`,
+            `command=${plan.command}`,
+            `receiptSchema=${plan.receiptSchemaPath}`,
+            `failureRecovery=${plan.failureRecoveryPath}`,
+          ].join("\n"),
+        data: plan,
+        exitCode: 0,
+      };
+    }
+
+    if (subCommand === "list" && args.flags.certified === true) {
+      const plans = listProductOutcomeRuntimePlans(registryPath);
+      return {
+        success: true,
+        message: args.flags.json === true
+          ? JSON.stringify({ plans }, null, 2)
+          : ["id outcome template riskLevel status", ...plans.map((plan) => {
+            return `${plan.skillPackId} ${plan.outcomeKey} ${plan.templateId} ${plan.riskLevel} ${plan.status}`;
+          })].join("\n"),
+        data: { plans },
+        exitCode: 0,
+      };
+    }
+
     const skills = this.loadSkillRecords(stringFlag(args, "input") || DEFAULT_SKILL_INDEX_PATH);
     if ("error" in skills) return skills.error;
 
@@ -349,7 +485,19 @@ export class CommandRegistry {
       };
     }
 
-    return { success: false, message: "Unknown skill sub-command. Usage: cvf skill <list|show> [id]", exitCode: 1 };
+    return { success: false, message: "Unknown skill sub-command. Usage: cvf skill <list|show|plan|select> [id|request]", exitCode: 1 };
+  }
+
+  private runtimePlanExecuteFlags(
+    plan: ProductOutcomeRuntimePlan,
+    rawInput: string | boolean | undefined,
+  ): Record<string, string> {
+    return {
+      template: plan.templateId,
+      templateName: plan.name,
+      intent: `Execute certified product outcome ${plan.outcomeKey} via ${plan.skillPackId}.`,
+      input: mergeRuntimePlanInput(rawInput, plan),
+    };
   }
 
   private receiptCommand(args: CLIArgs): CLIOutput {
@@ -423,10 +571,10 @@ export class CommandRegistry {
 
   private benchmarkCommand(args: CLIArgs): CLIOutput {
     const subCommand = args.positional[0];
-    if (subCommand !== "governance" && subCommand !== "run") {
+    if (subCommand !== "governance" && subCommand !== "run" && subCommand !== "operational") {
       return {
         success: false,
-        message: "Unknown benchmark sub-command. Usage: cvf benchmark governance --input <audit.jsonl> [--format json|table] or cvf benchmark run --input <audit.jsonl> [--format json|table]",
+        message: "Unknown benchmark sub-command. Usage: cvf benchmark governance --input <audit.jsonl> [--format json|table] or cvf benchmark operational --input <audit.jsonl|release-gate.json> [--format json|table]",
         exitCode: 1,
       };
     }
@@ -445,7 +593,19 @@ export class CommandRegistry {
     const options: BenchmarkGovernanceOptions = { input: input.trim(), format };
 
     try {
-      const events = parseAuditJsonl(readFileSync(options.input, "utf8"));
+      const content = readFileSync(options.input, "utf8");
+      const events = subCommand === "operational"
+        ? parseOperationalBenchmarkInput(content)
+        : parseAuditJsonl(content);
+      if (subCommand === "operational") {
+        const report = buildOperationalBenchmarkReport(events, options.input);
+        return {
+          success: true,
+          message: formatOperationalBenchmarkReport(report, options.format),
+          data: report,
+          exitCode: 0,
+        };
+      }
       const report = computeGovernanceReliabilityReport(events);
       return {
         success: true,
@@ -568,7 +728,72 @@ function formatMetricRate(rate: number | null, fractionDigits: number): string {
   return rate === null ? "n/a" : rate.toFixed(fractionDigits);
 }
 
+function formatProductSkillPackSelectionReadout(readout: ProductSkillPackSelectionReadout): string {
+  if (readout.status === "no_certified_pack_match") {
+    return [
+      "status=no_certified_pack_match",
+      `reason=${readout.reason}`,
+      `requestReadiness=${readout.requestContext.readiness}`,
+      `contextBudgetTier=${readout.requestContext.budgetTier}`,
+      `missingSignals=${readout.requestContext.missingSignals.join(",")}`,
+      `contextAction=${readout.requestContext.recommendedNextAction}`,
+      `userAction=${readout.userAction}`,
+      `boundaries=${readout.boundaries.join(",")}`,
+    ].join("\n");
+  }
+  const plan = readout.selectedPlan;
+  return [
+    `status=${readout.status}`,
+    `selected=${plan?.skillPackId}`,
+    `outcome=${plan?.outcomeKey}`,
+    `template=${plan?.templateId}`,
+    `confidence=${readout.confidence}`,
+    `score=${readout.score}`,
+    `matchedTerms=${readout.matchedTerms.join(",")}`,
+    `riskLevel=${readout.riskLevel}`,
+    `humanReviewRequired=${readout.humanReviewRequired}`,
+    `requestReadiness=${readout.requestContext.readiness}`,
+    `contextBudgetTier=${readout.requestContext.budgetTier}`,
+    `missingSignals=${readout.requestContext.missingSignals.join(",")}`,
+    `contaminationFlags=${readout.requestContext.contaminationFlags.join(",")}`,
+    `noiseFlags=${readout.requestContext.noiseFlags.join(",")}`,
+    `contextAction=${readout.requestContext.recommendedNextAction}`,
+    `userAction=${readout.userAction}`,
+    `boundaries=${readout.boundaries.join(",")}`,
+  ].join("\n");
+}
+
 function stringFlag(args: CLIArgs, name: string): string | undefined {
   const value = args.flags[name];
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
+}
+
+function mergeRuntimePlanInput(
+  rawInput: string | boolean | undefined,
+  plan: ProductOutcomeRuntimePlan,
+): string {
+  const base = parseInputObject(rawInput);
+  return JSON.stringify({
+    ...base,
+    cvfProductOutcomeRuntime: {
+      planVersion: plan.planVersion,
+      skillPackId: plan.skillPackId,
+      outcomeKey: plan.outcomeKey,
+      templateId: plan.templateId,
+      receiptSchemaPath: plan.receiptSchemaPath,
+      failureRecoveryPath: plan.failureRecoveryPath,
+    },
+  });
+}
+
+function parseInputObject(rawInput: string | boolean | undefined): Record<string, unknown> {
+  if (!rawInput || rawInput === true) return {};
+  try {
+    const parsed = JSON.parse(rawInput);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? parsed as Record<string, unknown>
+      : {};
+  } catch {
+    return {};
+  }
 }

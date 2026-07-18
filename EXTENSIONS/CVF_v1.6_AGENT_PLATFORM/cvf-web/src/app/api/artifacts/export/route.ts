@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 
 import { NextRequest, NextResponse } from 'next/server';
 
+import { authorizeRouteGovernanceProof, getRouteGovernanceProofConfig } from '@/lib/route-governance-proof';
 import { fetchGovernanceReceipt } from './proof';
 
 type ArtifactMemoryClass = 'POINTER_RECORD' | 'FULL_RECORD';
@@ -232,7 +233,23 @@ function buildHtml(input: Required<ArtifactExportRequest>, generatedAt: string, 
 }
 
 export async function POST(request: NextRequest) {
-  const body = await request.json() as ArtifactExportRequest;
+  const bodyText = await request.text();
+  const routeAuth = await authorizeRouteGovernanceProof(
+    request,
+    bodyText,
+    getRouteGovernanceProofConfig('/api/artifacts/export'),
+  );
+  if (!routeAuth.allowed && routeAuth.response) return routeAuth.response;
+
+  let body: ArtifactExportRequest;
+  try {
+    body = JSON.parse(bodyText) as ArtifactExportRequest;
+  } catch {
+    return NextResponse.json(
+      { success: false, error: 'Invalid JSON body.', routeGovernanceProof: routeAuth.proof },
+      { status: 400 },
+    );
+  }
   const title = text(body.title);
   const sourcePath = text(body.sourcePath);
   const sourceContent = text(body.sourceContent);
@@ -242,14 +259,14 @@ export async function POST(request: NextRequest) {
 
   if (!title || !sourcePath || !sourceContent || !status || !claimBoundary || !receiptAnchor) {
     return NextResponse.json(
-      { success: false, error: 'Missing required artifact export fields.' },
+      { success: false, error: 'Missing required artifact export fields.', routeGovernanceProof: routeAuth.proof },
       { status: 400 },
     );
   }
 
   if (hasSecretPattern(sourceContent)) {
     return NextResponse.json(
-      { success: false, error: 'Potential secret-like value detected in source content.' },
+      { success: false, error: 'Potential secret-like value detected in source content.', routeGovernanceProof: routeAuth.proof },
       { status: 400 },
     );
   }
@@ -277,6 +294,7 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({
     success: true,
+    routeGovernanceProof: routeAuth.proof,
     data: {
       html,
       filename: filenameFrom(title),

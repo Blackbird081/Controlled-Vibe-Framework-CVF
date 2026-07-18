@@ -5,6 +5,14 @@
 import type { RiskDimensions, RiskLevel, RiskObject } from '../../types/index.js'
 import { createHash } from 'crypto'
 
+export const RISK_SCORER_ADAPTER_VERSION = 'phase2b-safety-hardening-risk-scorer-adapter-1'
+
+export interface RiskScorerAdapterSnapshot {
+    version: typeof RISK_SCORER_ADAPTER_VERSION
+    source: 'safety-hardening:risk-scorer'
+    risk: Omit<RiskObject, 'locked'> & { locked: false }
+}
+
 export function scoreToRiskLevel(score: number): RiskLevel {
     if (score <= 2) return 'R0'
     if (score <= 5) return 'R1'
@@ -45,6 +53,14 @@ export class RiskScorer {
             breakdown: dimensions,
             hash,
             locked: false,
+        }
+    }
+
+    scoreWithAdapter(executionId: string, dimensions: RiskDimensions): RiskScorerAdapterSnapshot {
+        return {
+            version: RISK_SCORER_ADAPTER_VERSION,
+            source: 'safety-hardening:risk-scorer',
+            risk: this.score(executionId, dimensions),
         }
     }
 }

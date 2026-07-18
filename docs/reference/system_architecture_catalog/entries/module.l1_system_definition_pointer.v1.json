@@ -1,0 +1,32 @@
+{
+  "stableId": "cvf.asc.module.l1_system_definition_pointer.v1",
+  "entityType": "MODULE",
+  "name": "L1 System Definition Pointer",
+  "authorityClass": "ACCEPTED_REVIEW_EVIDENCE",
+  "maturity": "STABLE",
+  "ownerPaths": [
+    "docs/reference/system_chain/CVF_SYSTEM_DEFINITION.md"
+  ],
+  "planeMembership": [
+    "cvf.asc.plane.doctrine_to_contract.v1"
+  ],
+  "inboundEdgeIds": [],
+  "outboundEdgeIds": [],
+  "citations": [
+    {
+      "path": "docs/reference/system_chain/CVF_DOCTRINE_TO_CONTRACT_ROUTE_MAP.md",
+      "lineOrSection": "cited row",
+      "evidenceRole": "module owner/status evidence"
+    }
+  ],
+  "claimBoundary": "MSEA-R99 compact pointer owner for doctrine L1 System Definition.",
+  "freshnessInputs": [
+    "docs/reference/system_chain/CVF_SYSTEM_DEFINITION.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  },
+  "boundaryCaveat": "Does not claim the doctrine-named /system path, does not copy legacy content, does not inherit frozen-doctrine status.",
+  "priorDisposition": ""
+}

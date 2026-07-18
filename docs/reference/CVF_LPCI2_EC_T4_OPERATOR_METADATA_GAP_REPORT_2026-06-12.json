@@ -1,0 +1,137 @@
+{
+  "_textEncodingException": "Text Encoding Exception: filename values preserve Unicode names from the verified operator corpus. Authorized per docs/reference/CVF_TEXT_ENCODING_AND_SYMBOL_DISCIPLINE_STANDARD_2026-06-07.md.",
+  "schemaVersion": "lpci2.ecT4.operatorMetadataGapReport.v1",
+  "status": "OPERATOR_ACTION_REQUIRED",
+  "trancheDisposition": "CLOSED_BLOCKED_BOUNDED",
+  "generatedAt": "2026-06-12",
+  "sourceArtifacts": [
+    "docs/reference/CVF_LPCI2_EC_T4_OPERATOR_DATE_EVIDENCE_LEDGER_2026-06-11.md",
+    "docs/reference/CVF_LPCI2_EC_T4_PROPOSED_METADATA_BACKFILL_2026-06-11.json",
+    "docs/reviews/CVF_LPCI2_EC_T4_OPERATOR_DATE_EVIDENCE_BACKFILL_COMPLETION_2026-06-11.md"
+  ],
+  "summary": {
+    "candidateCount": 6,
+    "sourceEvidencedNeedsConfirmationCount": 2,
+    "operatorActionRequiredCount": 4,
+    "blockedForHashOrPathCount": 0,
+    "blockedForConflictCount": 0
+  },
+  "releaseState": {
+    "ecT4ExecutionComplete": true,
+    "metadataResolutionComplete": false,
+    "ec02GateRetained": "BLOCKED_UNTIL_2026-07-01",
+    "ecT5Released": false,
+    "ecT6Released": false,
+    "t12Released": false
+  },
+  "records": [
+    {
+      "candidateId": "T11A-CAND-001",
+      "filename": "3094.pdf",
+      "outcome": "SOURCE_EVIDENCED_NEEDS_CONFIRMATION",
+      "errorClass": null,
+      "requiredFields": [
+        "documentType",
+        "documentStatus"
+      ],
+      "operatorAction": "Confirm whether the administrative advisory correspondence remains documentType=other and STATUS_UNKNOWN.",
+      "acceptableEvidence": [
+        "explicit operator classification with rationale"
+      ],
+      "unresolvedDisposition": "KEEP_STATUS_UNKNOWN"
+    },
+    {
+      "candidateId": "T11A-CAND-002",
+      "filename": "BC- Kết quả rà soát dự án chậm triển khai - Phú Xuyên 10.5.2026.pdf",
+      "outcome": "UNKNOWN_OR_AMBIGUOUS_OPERATOR_ACTION_REQUIRED",
+      "errorClass": "MISSING_FINAL_ISSUE_DATE",
+      "requiredFields": [
+        "promulgationDate",
+        "documentStatus"
+      ],
+      "operatorAction": "Provide the final signed or issued report date and status, or classify the file as draft/input-only.",
+      "acceptableEvidence": [
+        "final signed file with visible issue date",
+        "operator-supplied date and status with source rationale"
+      ],
+      "unresolvedDisposition": "KEEP_STATUS_UNKNOWN"
+    },
+    {
+      "candidateId": "T11A-CAND-003",
+      "filename": "Kien nghi thành ủy hà nội (1).docx",
+      "outcome": "SOURCE_EVIDENCED_NEEDS_CONFIRMATION",
+      "errorClass": null,
+      "requiredFields": [
+        "documentType",
+        "documentStatus"
+      ],
+      "operatorAction": "Confirm whether the petition remains documentType=other and STATUS_UNKNOWN.",
+      "acceptableEvidence": [
+        "explicit operator classification with rationale"
+      ],
+      "unresolvedDisposition": "KEEP_STATUS_UNKNOWN"
+    },
+    {
+      "candidateId": "T11A-CAND-004",
+      "filename": "Phu luc danh sach du an.pdf",
+      "outcome": "UNKNOWN_OR_AMBIGUOUS_OPERATOR_ACTION_REQUIRED",
+      "errorClass": "MISSING_PARENT_NOTICE_METADATA",
+      "requiredFields": [
+        "parentDocumentNumber",
+        "parentPromulgationDate",
+        "parentRelationship"
+      ],
+      "operatorAction": "Provide the parent notice number/date and confirm the annex relationship.",
+      "acceptableEvidence": [
+        "final parent notice",
+        "operator-confirmed parent linkage with source rationale"
+      ],
+      "unresolvedDisposition": "KEEP_STATUS_UNKNOWN"
+    },
+    {
+      "candidateId": "T11A-CAND-005",
+      "filename": "QD chấm dứt.pdf",
+      "outcome": "UNKNOWN_OR_AMBIGUOUS_OPERATOR_ACTION_REQUIRED",
+      "errorClass": "MISSING_SIGNED_DECISION_METADATA",
+      "requiredFields": [
+        "documentNumber",
+        "promulgationDate",
+        "effectiveDate",
+        "documentStatus"
+      ],
+      "operatorAction": "Provide the final signed decision number, signing date, and effective date if applicable.",
+      "acceptableEvidence": [
+        "final signed decision"
+      ],
+      "unresolvedDisposition": "KEEP_STATUS_UNKNOWN"
+    },
+    {
+      "candidateId": "T11A-CAND-006",
+      "filename": "Thong bao thu hoi 24 du an.pdf",
+      "outcome": "UNKNOWN_OR_AMBIGUOUS_OPERATOR_ACTION_REQUIRED",
+      "errorClass": "MISSING_FINAL_NOTICE_METADATA",
+      "requiredFields": [
+        "documentNumber",
+        "promulgationDate",
+        "parentRelationship",
+        "documentStatus"
+      ],
+      "operatorAction": "Provide the final notice number/date and confirm any relationship to TB 591/TB-UBND.",
+      "acceptableEvidence": [
+        "final signed notice",
+        "operator-confirmed relationship with source rationale"
+      ],
+      "unresolvedDisposition": "KEEP_STATUS_UNKNOWN"
+    }
+  ],
+  "claimBoundary": {
+    "currentLawClaim": false,
+    "legalAdviceQualityClaim": false,
+    "sourceAuthenticityClaim": false,
+    "corpusIngestionClaim": false,
+    "retrievalReadinessClaim": false,
+    "policyLocalMutationClaim": false,
+    "productionReady": false,
+    "publicReady": false
+  }
+}

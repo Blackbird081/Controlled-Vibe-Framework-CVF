@@ -5,6 +5,7 @@ Covers MPI-T5 requirements:
 - one true-positive per required overclaim class;
 - cited true-negative for matching claim language;
 - unrelated governed Markdown true-negative;
+- EVEROS-T4 source-derived memory claim guard extension;
 - CLI --base/--head/--enforce/--json behavior;
 - no write/network/provider mutation primitives in the checker implementation.
 """
@@ -27,6 +28,7 @@ from governance.compat import check_memory_access_claim as checker
 
 
 GOVERNED_PATH = "docs/reviews/test_memory_claim.md"
+ROADMAP_PATH = "docs/roadmaps/test_memory_claim.md"
 
 
 def _doc(body: str, source_block: str = "") -> str:
@@ -86,6 +88,30 @@ class TestMemoryAccessClaimTruePositives(unittest.TestCase):
         )
         self.assertIn("index_replaces_canonical_authority", types)
 
+    def test_derived_view_as_source_authority_detected(self) -> None:
+        types = self._types_for(
+            "The semantic index provides source authority for the memory decision."
+        )
+        self.assertIn("derived_view_as_source_authority", types)
+
+    def test_stale_derived_view_safe_use_detected(self) -> None:
+        types = self._types_for(
+            "A stale derived index may still authorize dispatch for this workflow."
+        )
+        self.assertIn("stale_or_conflicted_view_safe_to_use", types)
+
+    def test_derived_view_runtime_capability_detected(self) -> None:
+        types = self._types_for(
+            "The cache index is a live runtime memory capability for governed agents."
+        )
+        self.assertIn("derived_view_runtime_capability", types)
+
+    def test_retrieval_result_reinjection_detected(self) -> None:
+        types = self._types_for(
+            "A cache hit authorizes prompt reinjection for the next request."
+        )
+        self.assertIn("retrieval_result_allows_reinjection", types)
+
 
 class TestMemoryAccessClaimTrueNegatives(unittest.TestCase):
 
@@ -98,6 +124,18 @@ class TestMemoryAccessClaimTrueNegatives(unittest.TestCase):
         violations = checker.diagnose_memory_access_claims(
             GOVERNED_PATH,
             _doc("External agents can read CVF memory through the live runtime MCP route.", source),
+        )
+        self.assertEqual(violations, [])
+
+    def test_derived_runtime_claim_with_generated_source_verification_passes(self) -> None:
+        source = """\
+| Claimed item | Source file | Verified line/section | Verified path or symbol | Owning interface/function/schema | Source fact type | Disposition |
+|---|---|---|---|---|---|---|
+| Generated source layout exists | `governance/compat/generate_corpus_scan_registry.py` | generator entrypoint | `main` | corpus scan registry generator | RUNTIME_BEHAVIOR | ACCEPT |
+"""
+        violations = checker.diagnose_memory_access_claims(
+            GOVERNED_PATH,
+            _doc("The metadata index is a runtime memory surface for this generated read model.", source),
         )
         self.assertEqual(violations, [])
 
@@ -115,6 +153,21 @@ class TestMemoryAccessClaimTrueNegatives(unittest.TestCase):
         )
         violations = checker.diagnose_memory_access_claims(GOVERNED_PATH, text)
         self.assertEqual(violations, [])
+
+    def test_source_derived_guardrail_context_does_not_self_trigger(self) -> None:
+        text = _doc(
+            "The guard target is an overclaim where a semantic index provides source "
+            "authority without proof."
+        )
+        violations = checker.diagnose_memory_access_claims(GOVERNED_PATH, text)
+        self.assertEqual(violations, [])
+
+    def test_roadmap_path_is_applicable(self) -> None:
+        violations = checker.diagnose_memory_access_claims(
+            ROADMAP_PATH,
+            _doc("The semantic index provides source authority for the memory decision."),
+        )
+        self.assertEqual(violations[0]["type"], "derived_view_as_source_authority")
 
 
 class TestMemoryAccessClaimCliContract(unittest.TestCase):

@@ -1,0 +1,112 @@
+{
+  "registryOrder": 5,
+  "skillId": "cvf-engineering-planning-task-breakdown",
+  "name": "CVF Engineering Planning And Task Breakdown",
+  "version": "0.1.0",
+  "owner": "CVF ASSF registry and external absorption governance surface",
+  "status": "ACTIVE",
+  "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-planning-task-breakdown/SKILL.md",
+  "originLane": "AGSK-R2",
+  "sourceArtifacts": [
+    ".private_reference/source_mirrors/addyosmani__agent-skills/skills/planning-and-task-breakdown/SKILL.md",
+    ".private_reference/source_mirrors/addyosmani__agent-skills/README.md",
+    ".private_reference/source_mirrors/addyosmani__agent-skills/LICENSE",
+    "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+    ".private_reference/legacy/CVF 28.06/CVF_Agent_Skills_Governance_Absorption_Pack/docs/absorptions/agent-skills-governance/09_SPEC_TO_WORK_ORDER_MAPPING.md",
+    "docs/baselines/CVF_GC018_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_2026-06-30.md",
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_2026-06-30.md",
+    "docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md",
+    "docs/baselines/CVF_GC018_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_2026-06-30.md",
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_2026-06-30.md",
+    "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md",
+    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md"
+  ],
+  "legacyRows": [],
+  "license": "Apache-2.0 upstream; CVF_PRIVATE_GOVERNED adaptation metadata",
+  "reviewArtifacts": [
+    "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
+    "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+    "docs/reviews/CVF_AGSK_R6_CODE_REVIEW_QUALITY_PILOT_PROMOTION_COMPLETION_2026-06-30.md",
+    "docs/reviews/CVF_AGSK_R7_RUNTIME_PACKAGE_BATCH_PROMOTION_COMPLETION_2026-06-30.md",
+    "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md"
+  ],
+  "purpose": "Guide conversion of clear requirements into ordered, dependency-aware, testable tasks under CVF work-order and closure discipline.",
+  "triggerPatterns": [
+    "task breakdown",
+    "implementation plan",
+    "split work",
+    "plan from spec",
+    "dependency order"
+  ],
+  "taskClasses": [
+    "planning",
+    "dispatch-authoring",
+    "work-order-authoring"
+  ],
+  "useWhen": "Use when a governed CVF task matches the upstream `planning-and-task-breakdown` skill pattern and needs CVF-owned planning guidance after explicit runtime package-loader selection.",
+  "doNotUseWhen": "Do not use as autonomous runtime authority, external CLI/MCP authority, provider/live proof, public-sync proof, automated task execution, commit permission, or permission to bypass active CVF work-order, source-verification, session-sync, or commit-steward gates.",
+  "riskTriggers": [
+    "large task",
+    "dependency hidden",
+    "parallel work possible",
+    "acceptance criteria missing"
+  ],
+  "roles": [
+    "dispatcher",
+    "worker",
+    "reviewer"
+  ],
+  "phases": [
+    "INTAKE",
+    "DISPATCH_AUTHORING",
+    "WORKER_EXECUTION",
+    "REVIEWER_CLOSURE"
+  ],
+  "surfaces": [
+    "docs/reference/agent_system_skills/registry",
+    "docs/reference/external_agent_review",
+    "docs/reviews"
+  ],
+  "riskCeiling": "R1",
+  "contextProfile": "agent-skills-source-mirror-candidate:planning-and-task-breakdown",
+  "inputs": [
+    "operator request or governed task context",
+    "source mirror skill file .private_reference/source_mirrors/addyosmani__agent-skills/skills/planning-and-task-breakdown/SKILL.md",
+    "active CVF authority and allowed-scope boundaries"
+  ],
+  "outputs": [
+    "metadata-only candidate selection guidance",
+    "risk trigger notes",
+    "recommended CVF owner-surface routing",
+    "next governed action if promotion is needed"
+  ],
+  "executionConstraints": "ACTIVE production package generated from AGSK-R2/R3/R6/R7 evidence and ASCP-P1-P3 productionization; production executor may request receipt-backed package use only through CVF runtime adapters; no filesystem, git, browser, provider routing, public-sync, or action authority is granted by package loading alone",
+  "acceptanceEvidence": "AGSK-R2 review artifact, AGSK-R3 package-root worker return, AGSK-R6 pilot promotion pattern, AGSK-R7 batch promotion, runtime package-loader body-read smoke, ASSF certified metadata admission checker, ASSF anatomy checker, and generated skill-index drift check; ASCP-P1-P3 production executor tests, CLI/MCP wrapper tests, ACTIVE source promotion, generated index drift check, and live E2E proof",
+  "riskProfile": "R1",
+  "authorityCeiling": "bounded advisory planning guidance only; loading this entry or package body cannot authorize implementation, automated task execution, commit, browser, network, provider, public, or production action beyond the active governed work order",
+  "sideEffects": "none from metadata loading; any future use that edits files, runs tools, installs dependencies, opens browsers, uses providers, or affects production requires separate authorization",
+  "permissions": "read this metadata, cited CVF-governed artifacts, and the pinned local source mirror only",
+  "rollback": "restore this registry entry to the AGSK-R3 PROPOSED state, restore the paired package root metadata, then regenerate docs/reference/agent_system_skills/generated/skill-index.json",
+  "safeStop": "if ACTIVE source checks, receipt checks, provider diagnostics, or governed work-order authority are missing, stop and return a denied execution packet with source-truth trace",
+  "candidateState": "ACTIVE",
+  "approvalState": "APPROVED",
+  "uatState": "PASSED",
+  "certificationState": "CERTIFIED",
+  "deprecation": "none",
+  "successor": "none",
+  "retirement": "none",
+  "dependencies": [],
+  "conflicts": [],
+  "compositionOrder": 5,
+  "capabilityBoundary": "package root ACTIVE at docs/reference/agent_system_skills/packages/cvf-engineering-planning-task-breakdown/ for production-scoped receipt-backed package execution; production executor and CLI/MCP wrapper are implemented; no automatic invocation, filesystem/git/browser action authority, provider router mutation, public-sync, or production action beyond the active governed work order",
+  "internalAgentDisposition": "IMPLEMENTED",
+  "resolverBehavior": "metadata-only; resolver may return identity, trigger, risk, and source fields only, and must not treat APPROVED package metadata as automatic invocation or ACTIVE runtime authority",
+  "loaderBoundary": "loading this metadata or package body never grants authority; production execution requires ACTIVE source state, a skill usage receipt, activation policy receipt, package use-proof receipt, and production execution receipt",
+  "externalCliMcpDisposition": "IMPLEMENTED",
+  "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+  "adapterEvidence": "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md",
+  "externalMutationBoundary": "external CLI/MCP wrapper may return receipt-backed package execution envelopes only; no external mutation, daemon behavior, public API, provider routing, public-sync, commit, or merge authority is permitted",
+  "platformCompatibility": "cross-platform metadata; upstream skill content may contain tool-specific assumptions that require future normalization before activation",
+  "shellAssumptions": "no shell execution required for metadata-only candidate",
+  "osConstraints": "none for metadata; future package bodies must record platform constraints explicitly"
+}

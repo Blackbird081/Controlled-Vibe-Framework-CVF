@@ -1,0 +1,22 @@
+{
+  "workflowId": "workflow.strategy_analysis.v1",
+  "outcomeKey": "strategy_analysis",
+  "packId": "strategy_analysis",
+  "inputKeys": [
+    "situation",
+    "options",
+    "goal",
+    "constraints",
+    "industry_context"
+  ],
+  "outputSections": [
+    "Situation summary",
+    "Comparison matrix",
+    "Recommendation",
+    "Next steps"
+  ],
+  "policyRefs": [
+    "CVF_CAPABILITY_INTAKE_PIPELINE_GUARD",
+    "CVF_F1_DIMINISHING_RETURNS_STOP_RULE"
+  ]
+}

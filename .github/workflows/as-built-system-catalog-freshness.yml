@@ -1,0 +1,42 @@
+name: As-Built System Catalog Freshness
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'docs/reference/system_architecture_catalog/**'
+      - 'docs/reference/system_chain/gaps/**'
+      - 'governance/compat/generate_as_built_system_catalog.py'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'docs/reference/system_architecture_catalog/**'
+      - 'docs/reference/system_chain/gaps/**'
+      - 'governance/compat/generate_as_built_system_catalog.py'
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  as-built-system-catalog-drift:
+    name: As-Built System Catalog Drift
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce as-built system catalog drift guard
+        run: |
+          python governance/compat/check_as_built_system_catalog_drift.py --enforce

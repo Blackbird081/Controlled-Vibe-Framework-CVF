@@ -1,0 +1,86 @@
+[
+  {
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "method": "json_mode",
+    "http_status": 200,
+    "receipt_id": "rcpt-pm1-deepseek-9bef6e2a3cbd",
+    "response": {
+      "id": "b4d83bd8-4df4-4e32-9559-c67408c269ad",
+      "object": "chat.completion",
+      "created": 1780011053,
+      "model": "deepseek-v4-flash",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"provider\": \"deepseek\",\n  \"method\": \"json_mode\",\n  \"status\": \"ok\",\n  \"timestamp\": \"2025-04-09T12:34:56Z\"\n}"
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 77,
+        "completion_tokens": 44,
+        "total_tokens": 121,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 77
+      },
+      "system_fingerprint": "fp_8b330d02d0_prod0820_fp8_kvcache_20260402"
+    },
+    "rawSecretPrinted": false,
+    "decision": "ALLOW",
+    "evidenceMode": "live"
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-4o",
+    "method": "json_mode",
+    "http_status": 200,
+    "receipt_id": "rcpt-pm1-openai-15cc031a716b",
+    "response": {
+      "id": "chatcmpl-DkeTf6cMxziyL03TvQq3X5lZRoZjl",
+      "object": "chat.completion",
+      "created": 1780011055,
+      "model": "gpt-4o-2024-08-06",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"provider\": \"openai\",\n    \"method\": \"json_mode\",\n    \"status\": \"ok\",\n    \"timestamp\": \"2023-11-01T12:00:00Z\"\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 61,
+        "completion_tokens": 44,
+        "total_tokens": 105,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_b1e4007433"
+    },
+    "rawSecretPrinted": false,
+    "decision": "ALLOW",
+    "evidenceMode": "live"
+  }
+]

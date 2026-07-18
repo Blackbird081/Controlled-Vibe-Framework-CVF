@@ -18,10 +18,11 @@ jobs:
       contents: read
     env:
       BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before || 'HEAD' }}
-      HEAD_SHA: ${{ github.sha }}
+      HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
 
       - name: Setup Python
@@ -36,9 +37,27 @@ jobs:
           cache: npm
           cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
 
+      - name: Install Control Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION
+        run: npm ci
+
+      - name: Install Model Gateway dependencies
+        working-directory: EXTENSIONS/CVF_MODEL_GATEWAY
+        run: npm install --no-audit --no-fund
+
+      - name: Install Learning Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION
+        run: npm ci
+
       - name: Install CVF Guard Contract dependencies
         working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
         run: npm ci
+
+      - name: Install SOT3 package dependencies
+        run: |
+          npm ci --prefix EXTENSIONS/CVF_TRUTH_KERNEL
+          npm ci --prefix EXTENSIONS/CVF_TRUTH_FLOW
+          npm ci --prefix EXTENSIONS/CVF_REFINERY
 
       - name: Install Web dependencies
         working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web

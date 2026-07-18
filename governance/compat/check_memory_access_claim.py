@@ -4,10 +4,10 @@ CVF Memory Access Claim Gate
 
 Rejects forward-only Memory Plane overclaims in changed governed Markdown.
 
-Scope (MPI-T5):
+Scope (MPI-T5, extended by EVEROS-T4):
 - Scans changed Markdown under docs/baselines, docs/work_orders, docs/reviews,
-  and docs/reference.
-- Flags five Memory Plane overclaim classes when the changed file does not
+  docs/reference, and docs/roadmaps.
+- Flags Memory Plane overclaim classes when the changed file does not
   carry the required Source Verification citation, or when the claim is
   forbidden by current false-invariant source.
 - Mirrors sibling checker CLI behavior: --base, --head, --enforce, --json.
@@ -40,6 +40,7 @@ APPLICABLE_PREFIXES: tuple[str, ...] = (
     "docs/work_orders/",
     "docs/reviews/",
     "docs/reference/",
+    "docs/roadmaps/",
 )
 
 ARCHIVE_MARKER = "/archive/"
@@ -66,6 +67,8 @@ GUARDRAIL_CONTEXT_MARKERS: tuple[str, ...] = (
     "rejects claim",
     "reject claim",
     "fail condition",
+    "guard target",
+    "negative guardrail",
 )
 
 
@@ -114,6 +117,76 @@ CLAIM_RULES: tuple[ClaimRule, ...] = (
         ),
         required_citation="durable-store, vector-store, graph, or KGR source file in Source Verification Block",
         citation_family="durable_vector",
+    ),
+    ClaimRule(
+        claim_class="derived_view_as_source_authority",
+        pattern_name="derived view is treated as source authority, truth, proof, or evidence",
+        regex=re.compile(
+            r"\b(?:derived\s+(?:view|index|surface)|generated\s+aggregate|graph\s+view|"
+            r"semantic\s+(?:view|index)|vector\s+(?:view|index)|metadata\s+ledger|"
+            r"context\s+pack|cached\s+summary|cache\s+summary)\b.{0,120}"
+            r"\b(?:is|are|becomes|serve(?:s)?\s+as|acts?\s+as|proves?|provides?)\b"
+            r".{0,80}\b(?:source\s+authority|canonical\s+authority|truth|proof|evidence)\b|"
+            r"\b(?:source\s+authority|canonical\s+authority|truth|proof|evidence)\b"
+            r".{0,80}\b(?:comes\s+from|is\s+provided\s+by|is\s+proven\s+by)\b"
+            r".{0,120}\b(?:derived\s+(?:view|index|surface)|generated\s+aggregate|graph\s+view|"
+            r"semantic\s+(?:view|index)|vector\s+(?:view|index)|metadata\s+ledger|"
+            r"context\s+pack|cached\s+summary|cache\s+summary)\b",
+            re.IGNORECASE,
+        ),
+        required_citation="generated aggregate, generated-source layout, or runtime source file in Source Verification Block",
+        citation_family="generated_or_runtime_source",
+    ),
+    ClaimRule(
+        claim_class="stale_or_conflicted_view_safe_to_use",
+        pattern_name="stale/degraded/conflicted derived view is safe to answer, route, authorize, certify, or dispatch",
+        regex=re.compile(
+            r"\b(?:stale|degraded|conflicted)\b.{0,80}\b(?:derived\s+(?:view|index|surface)|"
+            r"generated\s+aggregate|graph\s+view|semantic\s+(?:view|index)|vector\s+(?:view|index)|"
+            r"metadata\s+ledger|context\s+pack|cached\s+summary|cache\s+summary)\b.{0,120}"
+            r"\b(?:may|can|is\s+allowed\s+to|is\s+safe\s+to|still)\b.{0,70}"
+            r"\b(?:answer|route|authorize|certify|dispatch|be\s+used|use)\b|"
+            r"\b(?:answer|route|authorize|certify|dispatch|be\s+used|use)\b.{0,70}"
+            r"\b(?:may|can|is\s+allowed\s+to|is\s+safe\s+to|still)\b.{0,120}"
+            r"\b(?:stale|degraded|conflicted)\b.{0,80}\b(?:derived\s+(?:view|index|surface)|"
+            r"generated\s+aggregate|graph\s+view|semantic\s+(?:view|index)|vector\s+(?:view|index)|"
+            r"metadata\s+ledger|context\s+pack|cached\s+summary|cache\s+summary)\b",
+            re.IGNORECASE,
+        ),
+        required_citation="source-derived replay contract requires rebuild, denial, or source fallback for stale/degraded/conflicted derived views",
+        citation_family=None,
+        always_forbidden=True,
+    ),
+    ClaimRule(
+        claim_class="derived_view_runtime_capability",
+        pattern_name="derived vector/graph/cache/semantic surface is claimed as live runtime memory capability",
+        regex=re.compile(
+            r"\b(?:vector|graph|semantic|cache|cached|metadata|derived)\s+"
+            r"(?:index|view|store|memory|cache|ledger|surface)\b.{0,120}"
+            r"\b(?:live|runtime|production)\b.{0,90}"
+            r"\b(?:memory\s+capability|memory\s+surface|memory\s+access|memory\s+system)\b|"
+            r"\b(?:live|runtime|production)\b.{0,90}"
+            r"\b(?:memory\s+capability|memory\s+surface|memory\s+access|memory\s+system)\b"
+            r".{0,120}\b(?:vector|graph|semantic|cache|cached|metadata|derived)\s+"
+            r"(?:index|view|store|memory|cache|ledger|surface)\b",
+            re.IGNORECASE,
+        ),
+        required_citation="runtime memory, generated-source, durable-store, vector-store, or graph source file in Source Verification Block",
+        citation_family="generated_or_runtime_source",
+    ),
+    ClaimRule(
+        claim_class="retrieval_result_allows_reinjection",
+        pattern_name="retrieval result, similarity, graph relation, or cache hit authorizes raw memory or prompt reinjection",
+        regex=re.compile(
+            r"\b(?:retrieval\s+(?:result|presence)|similarity|vector\s+similarity|"
+            r"graph\s+relation|cache\s+hit)\b.{0,120}"
+            r"\b(?:allows|authorizes|permits|enables)\b.{0,90}"
+            r"\b(?:prompt\s+reinjection|reinjection|raw\s+memory|raw\s+content|rawMemoryReleased)\b",
+            re.IGNORECASE,
+        ),
+        required_citation="current memory foundation and raw-memory invariants keep raw release and reinjection false",
+        citation_family=None,
+        always_forbidden=True,
     ),
     ClaimRule(
         claim_class="raw_memory_or_reinjection_permitted",
@@ -289,6 +362,22 @@ def _has_citation(citation_paths: tuple[str, ...], family: str | None) -> bool:
             or "kgr" in path
             or "store" in path
             or "database" in path
+            for path in lowered
+        )
+    if family == "generated_or_runtime_source":
+        return any(
+            "generated" in path
+            or "aggregate" in path
+            or "generator" in path
+            or "registry" in path
+            or "route.ts" in path
+            or "/route" in path
+            or "/api/" in path
+            or "store" in path
+            or "database" in path
+            or "vector" in path
+            or "graph" in path
+            or "cache" in path
             for path in lowered
         )
     return False

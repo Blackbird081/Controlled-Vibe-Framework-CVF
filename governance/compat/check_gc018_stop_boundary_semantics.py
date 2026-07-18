@@ -86,6 +86,8 @@ def _run_git(args: list[str]) -> tuple[int, str, str]:
         ["git", *args],
         cwd=REPO_ROOT,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
@@ -183,8 +185,59 @@ def _read_text(path: str) -> str:
     return abs_path.read_text(encoding="utf-8")
 
 
+def _git_diff_for_path(path: str) -> str:
+    code, out, _ = _run_git(["diff", "--", path])
+    if code != 0:
+        return ""
+    return out
+
+
+def _is_mechanical_archive_reference_rewrite(path: str) -> bool:
+    code, out, _ = _run_git(["ls-files", "--error-unmatch", path])
+    if code != 0 or not out:
+        return False
+
+    diff = _git_diff_for_path(path)
+    if not diff:
+        return False
+
+    changed_lines: list[str] = []
+    for line in diff.splitlines():
+        if line.startswith(("+++", "---", "@@", "diff --git", "index ")):
+            continue
+        if line.startswith(("+", "-")):
+            changed_lines.append(line)
+
+    if not changed_lines or not any("/archive/" in line for line in changed_lines):
+        return False
+
+    removed = [line[1:] for line in changed_lines if line.startswith("-")]
+    added = [line[1:] for line in changed_lines if line.startswith("+")]
+    if not removed or not added or len(removed) != len(added):
+        return False
+
+    unmatched_added = added.copy()
+    for before in removed:
+        matched_index: int | None = None
+        for index, after in enumerate(unmatched_added):
+            if "/archive/" not in after:
+                continue
+            if after.replace("/archive/", "/") == before:
+                matched_index = index
+                break
+        if matched_index is None:
+            return False
+        unmatched_added.pop(matched_index)
+    return not unmatched_added
+
+
 def _is_candidate_packet(path: str, statuses: list[str]) -> bool:
     if _is_deleted_only(statuses):
+        return False
+    normalized = path.replace("\\", "/")
+    if "/archive/" in f"/{normalized}":
+        return False
+    if _is_mechanical_archive_reference_rewrite(path):
         return False
     return path.startswith(PACKET_PREFIX) and path.endswith(PACKET_SUFFIX)
 

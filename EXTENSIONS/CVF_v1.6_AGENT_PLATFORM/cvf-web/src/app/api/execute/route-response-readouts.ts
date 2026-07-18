@@ -10,6 +10,7 @@ import { buildContextBudgetReadout } from '@/lib/context-budget-readout';
 import { buildOrchestratorFeedbackSummary } from '@/lib/orchestrator-feedback-bus';
 import { buildLearningPlaneReadout } from '@/lib/learning-plane-readout';
 import { buildFindingToLearningRecord } from '@/lib/finding-to-learning-bridge';
+import { buildMlwNextRuntimeDecisionReadout } from '@/lib/mlw-next-runtime-decision-readout';
 
 export function buildExecuteResponseReadouts(input: {
   request: Partial<ExecutionRequest>;
@@ -52,6 +53,7 @@ export function buildExecuteResponseReadouts(input: {
     contextBudgetReadout,
   );
   const learningPlaneReadout = buildLearningPlaneReadout(role);
+  const mlwNextRuntimeDecisionReadout = buildMlwNextRuntimeDecisionReadout();
   const findingToLearningReadout = buildFindingToLearningRecord({
     sourceId: `exec-${input.receipt.envelopeId}`,
     sourceArtifact: 'api/execute',
@@ -80,6 +82,7 @@ export function buildExecuteResponseReadouts(input: {
     contextBudgetReadout,
     orchestratorFeedback,
     learningPlaneReadout,
+    mlwNextRuntimeDecisionReadout,
     findingToLearningReadout,
   };
 }

@@ -1,6 +1,6 @@
 # CVF Provider Lane Readiness Matrix
 
-**Last updated:** 2026-07-07 (OpenAI `gpt-4o-mini` downgraded to EXPERIMENTAL; see Known Limitations L-007)<br>
+**Last updated:** 2026-05-09 (OpenAI `gpt-4o-mini` promoted to CERTIFIED)<br>
 **Computed by:** `scripts/evaluate_cvf_provider_lane_certification.py`  
 **Status taxonomy:** `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/provider-lane-status.ts`
 
@@ -26,7 +26,7 @@
 |---|---|---|---|---|---|
 | Alibaba | `qwen-turbo` | `CERTIFIED` | [20260421-072551-422037](../audits/alibaba-canary/CVF_RECEIPT_20260421-072551-422037.md) | 3 consecutive PASS 6/6 | Fast (7–12 s). User-paid DashScope billing. |
 | DeepSeek | `deepseek-chat` | `CERTIFIED` | [20260421-114125-19515e](../audits/deepseek-canary/CVF_RECEIPT_20260421-114125-19515e.md) | 3 consecutive PASS 6/6 | Slower (62–155 s observed). User-paid billing. |
-| OpenAI | `gpt-4o-mini` | `EXPERIMENTAL` | Not present in this repository; a 2026-05-09 PASS 6/6 canary run was previously recorded but the cited receipt file does not exist here | Not certified: receipt unverifiable | Operator-paid OpenAI billing; historical/model-specific evidence only, not a certification claim. See Known Limitations L-007. |
+| OpenAI | `gpt-4o-mini` | `CERTIFIED` | [20260509-141626-fa4465](../evidence/provider-lane-receipts/openai/RECEIPT_20260509-141626-fa4465.json) | 3 consecutive PASS 6/6 | Operator-paid OpenAI billing; certified lane is `gpt-4o-mini`, not every OpenAI model. |
 
 ---
 
@@ -34,7 +34,7 @@
 
 - Alibaba: [`docs/audits/alibaba-canary/INDEX.md`](../audits/alibaba-canary/INDEX.md)
 - DeepSeek: [`docs/audits/deepseek-canary/INDEX.md`](../audits/deepseek-canary/INDEX.md)
-- OpenAI: not present in this repository; see Known Limitations L-007
+- OpenAI: [`docs/audits/openai-canary/INDEX.md`](../audits/openai-canary/INDEX.md)
 
 ---
 

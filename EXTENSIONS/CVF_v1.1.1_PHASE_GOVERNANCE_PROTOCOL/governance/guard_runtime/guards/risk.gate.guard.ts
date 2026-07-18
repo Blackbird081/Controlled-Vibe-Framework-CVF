@@ -26,6 +26,19 @@ const RISK_NUMERIC: Record<CVFRiskLevel, number> = {
   R3: 3,
 };
 
+export const PHASE_GOVERNANCE_RISK_GATE_ADAPTER_VERSION = 'phase2b-phase-governance-risk-gate-adapter-1';
+
+export interface PhaseGovernanceRiskGateAdapterSnapshot {
+  version: typeof PHASE_GOVERNANCE_RISK_GATE_ADAPTER_VERSION;
+  source: 'phase-governance:risk-gate';
+  requestId: string;
+  riskLevel: CVFRiskLevel;
+  role: GuardRequestContext['role'];
+  riskNumeric: number | null;
+  decision: GuardResult['decision'];
+  severity: GuardResult['severity'];
+}
+
 export class RiskGateGuard implements Guard {
   id = 'risk_gate';
   name = 'Risk Gate Guard';
@@ -121,6 +134,27 @@ export class RiskGateGuard implements Guard {
       severity: 'INFO',
       reason: `Risk level "${context.riskLevel}" is within safe bounds for role "${context.role}".`,
       timestamp,
+    };
+  }
+
+  evaluateWithAdapter(
+    context: GuardRequestContext,
+  ): { result: GuardResult; adapter: PhaseGovernanceRiskGateAdapterSnapshot } {
+    const result = this.evaluate(context);
+    const riskNum = RISK_NUMERIC[context.riskLevel];
+
+    return {
+      result,
+      adapter: {
+        version: PHASE_GOVERNANCE_RISK_GATE_ADAPTER_VERSION,
+        source: 'phase-governance:risk-gate',
+        requestId: context.requestId,
+        riskLevel: context.riskLevel,
+        role: context.role,
+        riskNumeric: riskNum ?? null,
+        decision: result.decision,
+        severity: result.severity,
+      },
     };
   }
 }

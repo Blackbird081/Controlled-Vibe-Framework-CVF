@@ -189,20 +189,26 @@ def validate(registry_path: Path) -> dict[str, Any]:
             })
         elif baseline_entry is not None:
             baseline_approved_max = baseline_entry.get("approvedMaxLines")
-            try:
-                baseline_approved_max_int = int(baseline_approved_max)
-            except (TypeError, ValueError):
-                baseline_approved_max_int = None
-            if baseline_approved_max_int is not None and approved_max > baseline_approved_max_int:
-                violations.append({
-                    "type": "approved_max_changed_from_head",
-                    "path": label,
-                    "message": (
-                        f"approvedMaxLines changed from HEAD value {baseline_approved_max} "
-                        f"to {approved_max}. Existing governed exceptions are frozen in the "
-                        "normal commit path when the cap is raised and require explicit human-approved override."
-                    ),
-                })
+            if baseline_approved_max != approved_max:
+                baseline_status = baseline_entry.get("status")
+                is_resolved_tombstone = (
+                    baseline_status == "ACTIVE_EXCEPTION"
+                    and status == "RESOLVED"
+                    and hard
+                    and approved_max == hard + 1
+                    and int(baseline_approved_max) > approved_max
+                    and isinstance(baseline_entry.get("lockBoundary"), dict)
+                )
+                if not is_resolved_tombstone:
+                    violations.append({
+                        "type": "approved_max_changed_from_head",
+                        "path": label,
+                        "message": (
+                            f"approvedMaxLines changed from HEAD value {baseline_approved_max} "
+                            f"to {approved_max}. Existing governed exceptions are frozen in the "
+                            "normal commit path and require explicit human-approved override."
+                        ),
+                    })
 
         # Hard ceiling check: approvedMaxLines must not exceed maxApprovableLines
         if max_approvable and approved_max > max_approvable:

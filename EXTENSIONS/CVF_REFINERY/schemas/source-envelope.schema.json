@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cvf.local/schemas/source-envelope.schema.json",
+  "title": "CVF SourceEnvelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source_id",
+    "source_type",
+    "owner",
+    "captured_at_utc",
+    "scope",
+    "purpose",
+    "confidentiality",
+    "content_hash",
+    "raw_reference",
+    "status"
+  ],
+  "properties": {
+    "source_id": { "type": "string", "minLength": 1 },
+    "source_type": { "enum": ["INTERNAL", "PROJECT", "PARTNER", "POLICY", "MARKET", "PUBLIC", "OTHER"] },
+    "owner": { "type": "string", "minLength": 1 },
+    "captured_at_utc": { "type": "string", "pattern": "Z$" },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["organization"],
+      "properties": {
+        "organization": { "type": "string", "minLength": 1 },
+        "country": { "type": ["string", "null"] },
+        "project": { "type": ["string", "null"] },
+        "customer": { "type": ["string", "null"] }
+      }
+    },
+    "purpose": { "type": "array", "items": { "type": "string" } },
+    "confidentiality": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+    "content_hash": { "type": "string", "minLength": 1 },
+    "raw_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "location"],
+      "properties": {
+        "type": { "enum": ["file", "api", "object", "message", "extracted_record"] },
+        "location": { "type": "string", "minLength": 1 }
+      }
+    },
+    "status": { "enum": ["CAPTURED", "REJECTED_AT_INTAKE"] },
+    "declared_version": { "type": ["string", "null"] },
+    "valid_from_utc": { "type": ["string", "null"] },
+    "valid_until_utc": { "type": ["string", "null"] },
+    "metadata": { "type": "object" }
+  }
+}

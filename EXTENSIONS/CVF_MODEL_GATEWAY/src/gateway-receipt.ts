@@ -2,7 +2,7 @@ import type { GatewayPolicyContext, GatewayPolicyResult } from "./gateway-policy
 import type { GatewayRiskClass } from "./provider-registry";
 import type { MemoryTierId } from "../../CVF_GUARD_CONTRACT/src/contracts/memory-tier.contract";
 import type { Receipt } from "../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract";
-import { RECEIPT_SCHEMA_VERSION_1R } from "../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract";
+import { createReceiptEnvelope as wrapReceiptEnvelope } from "../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract";
 
 export interface GatewayReceiptInput {
   traceId: string;
@@ -104,14 +104,13 @@ export class GatewayReceiptBuilder {
   }
 
   wrapReceipt(receipt: GatewayReceipt): GatewayReceiptEnvelope {
-    return {
+    return wrapReceiptEnvelope({
       id: receipt.receiptId,
       issuedAt: receipt.createdAt,
       source: `model-gateway:gateway-receipt:${receipt.traceId}`,
-      schemaVersion: RECEIPT_SCHEMA_VERSION_1R,
       payload: receipt,
       integrityHash: `${receipt.receiptId}:${receipt.traceId}:${receipt.validationState}`,
-    };
+    });
   }
 }
 

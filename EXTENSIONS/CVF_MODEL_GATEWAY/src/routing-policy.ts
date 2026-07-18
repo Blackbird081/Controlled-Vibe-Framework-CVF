@@ -1,8 +1,15 @@
 import type { GatewayPolicyContext } from "./gateway-policy";
+import type { ProviderMethodName } from "./provider-method-contract";
 import type { ProviderRecord } from "./provider-registry";
+import { FallbackPolicy, type FallbackAttempt } from "./fallback-policy";
 import { ProviderHealthMonitor } from "./provider-health";
 import { ProviderRegistry } from "./provider-registry";
 import { QuotaLedger, type QuotaDecision } from "./quota-ledger";
+import {
+  collectAppliedRoutingPolicies,
+  runRoutingPolicyPipeline,
+  type RoutingStageDecision,
+} from "./routing-policy-pipeline";
 
 export interface RoutingRequest {
   traceId: string;
@@ -10,6 +17,12 @@ export interface RoutingRequest {
   requestedModelId?: string;
   preferredProviderId?: string;
   estimatedTokens?: number;
+  executionStage?: string;
+  complexityScore?: number;
+  riskScore?: number;
+  requiredCapabilities?: ProviderMethodName[];
+  costBudget?: number;
+  latencyBudgetMs?: number;
 }
 
 export type RoutingDecision =
@@ -21,6 +34,7 @@ export type RoutingDecision =
       reason: string;
       provider: ProviderRecord;
       quota: QuotaDecision;
+      fallbackChain?: Array<{ providerId: string; modelId: string }>;
     }
   | {
       status: "denied" | "requires_approval" | "no_candidate";
@@ -39,6 +53,8 @@ export interface RoutingPolicyContractSnapshot {
   selectedProviderId?: string;
   selectedModelId?: string;
   policyResult?: GatewayPolicyContext["policyResult"];
+  appliedPolicies?: string[];
+  fallbackChainLength?: number;
 }
 
 export function buildRoutingPolicyContractSnapshot(
@@ -54,6 +70,12 @@ export function buildRoutingPolicyContractSnapshot(
     selectedProviderId: decision.status === "selected" ? decision.providerId : undefined,
     selectedModelId: decision.status === "selected" ? decision.modelId : undefined,
     policyResult: request.policy?.policyResult,
+    appliedPolicies: collectAppliedRoutingPolicies(request).length
+      ? collectAppliedRoutingPolicies(request)
+      : undefined,
+    fallbackChainLength: decision.status === "selected" && decision.fallbackChain
+      ? decision.fallbackChain.length
+      : undefined,
   };
 }
 
@@ -62,6 +84,7 @@ export class RoutingPolicyEngine {
     private readonly registry: ProviderRegistry,
     private readonly health: ProviderHealthMonitor,
     private readonly quota: QuotaLedger,
+    private readonly fallback: FallbackPolicy = new FallbackPolicy(),
   ) {}
 
   decide(request: RoutingRequest): RoutingDecision {
@@ -87,14 +110,32 @@ export class RoutingPolicyEngine {
         allowExperimental: policy.allowExperimentalProviders,
       });
     });
+    const pipeline = runRoutingPolicyPipeline({
+      policy,
+      providers,
+      requestedModelId: request.requestedModelId,
+      executionStage: request.executionStage,
+      complexityScore: request.complexityScore,
+      riskScore: request.riskScore,
+      requiredCapabilities: request.requiredCapabilities,
+      costBudget: request.costBudget,
+      latencyBudgetMs: request.latencyBudgetMs,
+      estimatedTokens: request.estimatedTokens,
+    });
+    if (!pipeline.candidates.length) {
+      return { status: "no_candidate", traceId: request.traceId, reason: "no_provider_passed_routing_policy_pipeline" };
+    }
 
-    for (const provider of providers) {
+    const attempts: FallbackAttempt[] = [];
+    const fallbackChain: Array<{ providerId: string; modelId: string }> = [];
+    for (const candidate of pipeline.candidates) {
+      const provider = candidate.provider;
+      const modelId = candidate.modelId;
       if (!this.health.isUsable(provider.id)) {
+        this.recordFallbackAttempt(attempts, fallbackChain, provider.id, modelId, "provider_unusable");
         continue;
       }
-      const model = request.requestedModelId
-        ? provider.models.find((candidate) => candidate.id === request.requestedModelId)
-        : provider.models[0];
+      const model = provider.models.find((candidateModel) => candidateModel.id === modelId);
       if (!model) {
         continue;
       }
@@ -104,7 +145,11 @@ export class RoutingPolicyEngine {
         estimatedTokens: request.estimatedTokens,
       });
       if (!quota.allowed) {
+        this.recordFallbackAttempt(attempts, fallbackChain, provider.id, model.id, quota.reason);
         continue;
+      }
+      if (fallbackChain.length) {
+        fallbackChain.push({ providerId: provider.id, modelId: model.id });
       }
       return {
         status: "selected",
@@ -114,6 +159,7 @@ export class RoutingPolicyEngine {
         reason: "policy_health_quota_selected",
         provider,
         quota,
+        fallbackChain: fallbackChain.length ? fallbackChain : undefined,
       };
     }
 
@@ -141,4 +187,20 @@ export class RoutingPolicyEngine {
       ...all.filter((provider) => provider.id !== request.preferredProviderId),
     ];
   }
+
+  private recordFallbackAttempt(
+    attempts: FallbackAttempt[],
+    fallbackChain: Array<{ providerId: string; modelId: string }>,
+    providerId: string,
+    modelId: string,
+    reason: string,
+  ): void {
+    attempts.push(this.fallback.createAttempt(providerId, modelId, reason));
+    const decision = this.fallback.decide(attempts);
+    if (decision.shouldFallback) {
+      fallbackChain.push({ providerId, modelId });
+    }
+  }
 }
+
+export type { RoutingStageDecision };

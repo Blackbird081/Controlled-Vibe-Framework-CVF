@@ -1,0 +1,97 @@
+{
+  "contractVersion": "cvf.workflowPresentation.strategy_analysis.vi5.t1.v1",
+  "workflowId": "workflow.strategy.strategy_analysis.v1",
+  "templateId": "strategy_analysis",
+  "locale": "en",
+  "guidedModeAvailable": true,
+  "steps": [
+    {
+      "stepId": "intent_confirmation",
+      "stepNumber": 1,
+      "stepIntent": "strategy.type",
+      "question": "What kind of strategy analysis do you need?",
+      "captureKey": "strategy.type",
+      "selectionMode": "single",
+      "allowFreeformAlternative": true,
+      "userMustChoose": true,
+      "options": [
+        {
+          "id": "strategic_decision",
+          "label": "Strategic decision"
+        },
+        {
+          "id": "market_entry",
+          "label": "Market entry"
+        },
+        {
+          "id": "competitive_response",
+          "label": "Competitive response"
+        },
+        {
+          "id": "other",
+          "label": "Other"
+        }
+      ]
+    },
+    {
+      "stepId": "context_bounding",
+      "stepNumber": 2,
+      "stepIntent": "strategy.constraints",
+      "question": "What is the main constraint or risk to account for?",
+      "captureKey": "strategy.constraints",
+      "selectionMode": "single",
+      "allowFreeformAlternative": true,
+      "userMustChoose": true,
+      "options": [
+        {
+          "id": "budget_limited",
+          "label": "Budget limited"
+        },
+        {
+          "id": "time_constrained",
+          "label": "Time constrained"
+        },
+        {
+          "id": "regulatory_concern",
+          "label": "Regulatory concern"
+        },
+        {
+          "id": "no_major_constraint",
+          "label": "No major constraint"
+        },
+        {
+          "id": "other",
+          "label": "Other"
+        }
+      ]
+    },
+    {
+      "stepId": "output_preference",
+      "stepNumber": 3,
+      "stepIntent": "strategy.outputFormat",
+      "question": "Which output format is most useful?",
+      "captureKey": "strategy.outputFormat",
+      "selectionMode": "single",
+      "allowFreeformAlternative": true,
+      "userMustChoose": true,
+      "options": [
+        {
+          "id": "scoring_matrix",
+          "label": "Scoring matrix"
+        },
+        {
+          "id": "decision_tree",
+          "label": "Decision tree"
+        },
+        {
+          "id": "recommendation_with_rationale",
+          "label": "Recommendation with rationale"
+        },
+        {
+          "id": "executive_summary",
+          "label": "Executive summary"
+        }
+      ]
+    }
+  ]
+}

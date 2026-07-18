@@ -469,9 +469,10 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                         </div>
 
                         <div className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50/70 dark:bg-red-900/20 p-6">
-                            <h3 className="text-lg font-semibold text-red-900 dark:text-red-100 mb-3">
-                                Freeze receipt
+                            <h3 className="text-lg font-semibold text-red-900 dark:text-red-100 mb-0.5">
+                                {language === 'vi' ? 'Kết quả được khóa' : 'What gets locked'}
                             </h3>
+                            <p className="text-xs text-red-400 dark:text-red-500 mb-3">Freeze receipt</p>
                             <div className="space-y-2 text-sm text-red-900 dark:text-red-100">
                                 <div><strong>{language === 'vi' ? 'Accepted output' : 'Accepted output'}:</strong> {governedPacket.freezeReceipt.acceptedOutput}</div>
                                 <div><strong>{language === 'vi' ? 'Baseline artifact' : 'Baseline artifact'}:</strong> {governedPacket.freezeReceipt.baselineArtifact}</div>
@@ -615,19 +616,22 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
 
                             <div className="mt-4 grid gap-3 md:grid-cols-3 text-sm">
                                 <div className="rounded-lg bg-white/80 dark:bg-gray-900/40 border border-red-200 dark:border-red-800 p-3">
-                                    <div className="font-semibold text-red-900 dark:text-red-100">Approval checkpoints</div>
+                                    <div className="font-semibold text-red-900 dark:text-red-100">{language === 'vi' ? 'Ai cần phê duyệt' : 'Who needs to approve'}</div>
+                                    <div className="text-xs text-red-400 dark:text-red-500">Approval checkpoints</div>
                                     <div className="text-red-800 dark:text-red-200 mt-1">
                                         {governedPacket.approvals.map((approval) => `${approval.phase} -> ${approval.requiredFor}`).join(', ')}
                                     </div>
                                 </div>
                                 <div className="rounded-lg bg-white/80 dark:bg-gray-900/40 border border-red-200 dark:border-red-800 p-3">
-                                    <div className="font-semibold text-red-900 dark:text-red-100">Freeze receipt</div>
+                                    <div className="font-semibold text-red-900 dark:text-red-100">{language === 'vi' ? 'Kết quả được khóa' : 'What gets locked'}</div>
+                                    <div className="text-xs text-red-400 dark:text-red-500">Freeze receipt</div>
                                     <div className="text-red-800 dark:text-red-200 mt-1">
                                         {governedPacket.freezeReceipt.baselineArtifact}
                                     </div>
                                 </div>
                                 <div className="rounded-lg bg-white/80 dark:bg-gray-900/40 border border-red-200 dark:border-red-800 p-3">
-                                    <div className="font-semibold text-red-900 dark:text-red-100">Execution handoff</div>
+                                    <div className="font-semibold text-red-900 dark:text-red-100">{language === 'vi' ? 'AI tiếp tục như thế nào' : 'How the AI continues'}</div>
+                                    <div className="text-xs text-red-400 dark:text-red-500">Execution handoff</div>
                                     <div className="text-red-800 dark:text-red-200 mt-1">
                                         {governedLiveExecution.request.cvfPhase} / {governedLiveExecution.request.cvfRiskLevel}
                                     </div>

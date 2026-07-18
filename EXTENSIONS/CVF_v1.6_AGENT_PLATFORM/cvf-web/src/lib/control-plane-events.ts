@@ -1,7 +1,15 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import os from 'node:os';
+/**
+ * Control-Plane Event Store
+ *
+ * ERH_DUR1_MARKER: DURABLE_EVIDENCE_STORE_ACTIVE
+ * CVF_DURABLE_EVIDENCE_VERSION: 2026-06-05
+ * ERH_DUR2_MARKER: EXTERNAL_STORAGE_ADAPTER_ACTIVE
+ */
+
 import path from 'node:path';
 import { createHmac, randomUUID } from 'node:crypto';
+
+import { buildEventListAdapter, type EventListAdapter } from '@/lib/storage-adapter';
 
 import type { AIProvider } from '@/lib/ai';
 import { MOCK_TEAMS, MOCK_USERS } from '@/lib/mock-enterprise-db';
@@ -46,6 +54,8 @@ export interface CostEvent extends ControlPlaneEventBase {
 
 export type ControlPlaneEvent = UnifiedAuditEvent | CostEvent | PolicyControlPlaneEvent;
 
+const _eventAdapter: EventListAdapter<ControlPlaneEvent> = buildEventListAdapter<ControlPlaneEvent>();
+
 let appendQueue = Promise.resolve();
 
 function buildAuditCsvBody(auditEvents: UnifiedAuditEvent[]): string {
@@ -83,119 +93,19 @@ export function computeAuditCsvSignature(body: string, signingKey: string): stri
   return createHmac('sha256', signingKey).update(body, 'utf8').digest('hex');
 }
 
-function getStorePath() {
+function getStorePath(): string {
   return process.env.CVF_CONTROL_PLANE_EVENTS_PATH
     ? path.resolve(process.env.CVF_CONTROL_PLANE_EVENTS_PATH)
-    : path.join(os.tmpdir(), '.cvf-data', 'control-plane-events.json');
-}
-
-async function ensureStore(): Promise<void> {
-  const storePath = getStorePath();
-  try {
-    await mkdir(path.dirname(storePath), { recursive: true });
-  } catch {
-    // directory already exists or filesystem is read-only
-  }
-  try {
-    await readFile(storePath, 'utf8');
-  } catch {
-    try {
-      await writeFile(storePath, '[]', 'utf8');
-    } catch {
-      // read-only filesystem — store operates in empty/ephemeral mode
-    }
-  }
+    : path.join(process.cwd(), '.cvf', 'runtime', 'control-plane-events.json');
 }
 
 async function writeEvents(events: ControlPlaneEvent[]): Promise<void> {
-  const storePath = getStorePath();
-  await ensureStore();
-  await writeFile(storePath, JSON.stringify(events, null, 2), 'utf8');
-}
-
-function findTopLevelArrayEnd(raw: string): number | null {
-  let depth = 0;
-  let inString = false;
-  let escaped = false;
-
-  for (let index = 0; index < raw.length; index += 1) {
-    const char = raw[index];
-
-    if (inString) {
-      if (escaped) {
-        escaped = false;
-        continue;
-      }
-      if (char === '\\') {
-        escaped = true;
-        continue;
-      }
-      if (char === '"') {
-        inString = false;
-      }
-      continue;
-    }
-
-    if (char === '"') {
-      inString = true;
-      continue;
-    }
-
-    if (char === '[') {
-      depth += 1;
-      continue;
-    }
-
-    if (char === ']') {
-      depth -= 1;
-      if (depth === 0) {
-        return index;
-      }
-    }
-  }
-
-  return null;
-}
-
-async function repairCorruptedStore(raw: string, storePath: string): Promise<ControlPlaneEvent[]> {
-  const arrayEnd = findTopLevelArrayEnd(raw);
-  if (arrayEnd === null) {
-    await writeFile(storePath, '[]', 'utf8');
-    return [];
-  }
-
-  const recoveredRaw = raw.slice(0, arrayEnd + 1);
-
-  try {
-    const recovered = JSON.parse(recoveredRaw) as ControlPlaneEvent[];
-    const backupPath = `${storePath}.corrupt-${Date.now()}.json`;
-    await writeFile(backupPath, raw, 'utf8');
-    await writeFile(storePath, JSON.stringify(recovered, null, 2), 'utf8');
-    return recovered;
-  } catch {
-    await writeFile(storePath, '[]', 'utf8');
-    return [];
-  }
+  await _eventAdapter.writeAll(getStorePath(), events);
 }
 
 export async function readControlPlaneEvents(): Promise<ControlPlaneEvent[]> {
-  const storePath = getStorePath();
-  await ensureStore();
-  let raw: string;
-  try {
-    raw = await readFile(storePath, 'utf8');
-  } catch {
-    return [];
-  }
-  let parsed: ControlPlaneEvent[];
-
-  try {
-    parsed = JSON.parse(raw) as ControlPlaneEvent[];
-  } catch {
-    parsed = await repairCorruptedStore(raw, storePath);
-  }
-
-  return parsed.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+  const events = await _eventAdapter.readAll(getStorePath());
+  return events.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
 }
 
 async function appendEvent<T extends ControlPlaneEvent>(

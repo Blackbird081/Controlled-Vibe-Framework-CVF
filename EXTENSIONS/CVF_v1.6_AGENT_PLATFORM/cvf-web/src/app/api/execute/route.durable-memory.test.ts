@@ -267,6 +267,88 @@ describe('/api/execute durable memory route wiring', () => {
     expect(records[0].summary).toContain('truncated_summary_only');
   });
 
+  it('reads a summary written by a previous governed execution request', async () => {
+    executeAIMock
+      .mockResolvedValueOnce({
+        success: true,
+        output: 'MLW-RT1 durable chain anchor: preserve governed summary-only continuity.',
+        provider: 'openai',
+        model: 'gpt-4o-mini',
+      })
+      .mockResolvedValueOnce({
+        success: true,
+        output: validOutput,
+        provider: 'openai',
+        model: 'gpt-4o-mini',
+      });
+
+    const writeRes = await POST(new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateId: 'strategy_analysis',
+        templateName: 'Strategy Analysis',
+        intent: 'Write MLW-RT1 governed durable memory summary',
+        inputs: { topic: 'MLW-RT1', context: 'write first', options: 'continue', constraints: 'summary only', priority: 'R1' },
+        provider: 'openai',
+        durableMemoryWrite: {
+          enabled: true,
+          tier: 'skill',
+          scope: 'project:mlw-rt1-chain',
+          policy: { actorAuthorized: true },
+          maxSummaryLength: 160,
+        },
+      }),
+    }) as never);
+    const writeData = await writeRes.json();
+    const records = JSON.parse(await readFile(storePath, 'utf8')) as Array<{ id: string; summary: string; scope: string }>;
+
+    expect(writeData.durableMemoryWriteReceipt).toMatchObject({
+      operation: 'write',
+      decision: 'allowed',
+      scope: 'project:mlw-rt1-chain',
+      summaryOnly: true,
+      canReinject: false,
+      rawMemoryReleased: false,
+    });
+    expect(records).toHaveLength(1);
+    expect(records[0].summary).toContain('MLW-RT1 durable chain anchor');
+
+    const readRes = await POST(new Request('http://localhost/api/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        templateId: 'strategy_analysis',
+        templateName: 'Strategy Analysis',
+        intent: 'Read MLW-RT1 governed durable memory summary',
+        inputs: { topic: 'MLW-RT1', context: 'read second', options: 'continue', constraints: 'summary only', priority: 'R1' },
+        provider: 'openai',
+        durableMemory: {
+          enabled: true,
+          tier: 'skill',
+          scope: 'project:mlw-rt1-chain',
+          query: '',
+          policy: { actorAuthorized: true },
+        },
+      }),
+    }) as never);
+    const readData = await readRes.json();
+    const secondCallOptions = executeAIMock.mock.calls[1][3] as { systemPrompt?: string };
+
+    expect(readRes.status).toBe(200);
+    expect(readData.durableMemoryRead).toMatchObject({
+      operation: 'read',
+      decision: 'allowed',
+      memoryIds: [records[0].id],
+      summaryOnly: true,
+      canReinject: false,
+      rawMemoryReleased: false,
+    });
+    expect(readData.governanceEvidenceReceipt.durableMemoryRead.memoryIds).toEqual([records[0].id]);
+    expect(secondCallOptions.systemPrompt).toContain('## GOVERNED DURABLE MEMORY CONTEXT');
+    expect(secondCallOptions.systemPrompt).toContain(records[0].id);
+    expect(secondCallOptions.systemPrompt).toContain('MLW-RT1 durable chain anchor');
+    expect(secondCallOptions.systemPrompt).toContain('canReinject=false');
+  });
+
   it('denies durable memory write when actor policy is not authorized', async () => {
     const res = await POST(new Request('http://localhost/api/execute', {
       method: 'POST',

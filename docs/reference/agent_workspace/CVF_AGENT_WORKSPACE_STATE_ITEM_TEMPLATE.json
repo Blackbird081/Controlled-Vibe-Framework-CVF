@@ -1,0 +1,24 @@
+{
+  "stateOrder": 0,
+  "workspaceItemId": "replace-with-stable-item-id",
+  "lane": "parked",
+  "itemKind": "parked",
+  "status": "PARKED_PENDING_OPERATOR_DECISION",
+  "ownerRole": "operator",
+  "route": "SINGLE_AGENT_MULTI_ROLE",
+  "rolePattern": "operator_decision_to_future_dispatch",
+  "phase": "parked",
+  "baseHead": "replace-with-base-head-or-N/A-with-reason",
+  "changedSetScope": "replace-with-bounded-scope",
+  "traceScope": "replace-with-trace-or-evidence-scope",
+  "commitOwner": "replace-with-commit-owner-or-N/A-with-reason",
+  "sourceWorkOrder": "docs/work_orders/replace-with-work-order.md",
+  "evidencePaths": [
+    "docs/reference/agent_workspace/README.md"
+  ],
+  "claimBoundary": "No workspace build, runtime/product mutation, provider/live proof, public-sync, registry edit, production readiness, or public readiness unless separately authorized.",
+  "nextMoveImpact": "replace-with-next-move-impact",
+  "resumeCondition": "replace-with-resume-condition-or-N/A-with-reason",
+  "supersedes": [],
+  "archivePolicy": "replace-with-active-view-retention-and-archive-condition"
+}

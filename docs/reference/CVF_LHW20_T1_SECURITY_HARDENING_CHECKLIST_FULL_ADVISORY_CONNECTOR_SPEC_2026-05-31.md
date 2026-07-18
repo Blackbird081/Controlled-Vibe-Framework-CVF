@@ -158,7 +158,7 @@ Example: `{ expected: "file deleted", actual: "file still exists" }` → trigger
 ## Related Artifacts
 
 - GC-018: `docs/baselines/CVF_GC018_LHW20_CVF_IMPORTANT_DEEP_SCAN_WAVE_2026-05-31.md`
-- LHW17 T1: `docs/reference/CVF_LHW17_T1_TRUST_ISOLATION_HARDENING_ADVISORY_CONNECTOR_SPEC_2026-05-30.md`
+- LHW17 T1: `docs/reference/archive/CVF_LHW17_T1_TRUST_ISOLATION_HARDENING_ADVISORY_CONNECTOR_SPEC_2026-05-30.md`
 - Source: `.private_reference/legacy/CVF_Important/ADDING_TRUST & ISOLATION LAYER/CVF_SECURITY_HARDENING_CHECKLIST.md`
 
 ## Claim Boundary

@@ -26,6 +26,7 @@ from approval_layer.approval_workflow import ApprovalWorkflow
 from domain_layer.domain_registry import DomainRegistry
 from ledger_layer.immutable_ledger import ImmutableLedger
 from reports.report_formatter import ReportFormatter
+from core_orchestrator import build_cvf_orchestration_snapshot
 
 
 def bootstrap_orchestrator() -> CoreOrchestrator:
@@ -37,6 +38,13 @@ def bootstrap_orchestrator() -> CoreOrchestrator:
         registry=DomainRegistry(),
         ledger=ImmutableLedger()
     )
+
+
+def build_local_execution_summary(request: GovernanceRequest, result) -> dict:
+    return {
+        "entrypoint": "governance-engine:main",
+        "orchestration": build_cvf_orchestration_snapshot(request, result),
+    }
 
 
 def main():
@@ -56,6 +64,7 @@ def main():
     )
 
     result = orchestrator.execute(request)
+    local_summary = build_local_execution_summary(request, result)
 
     print("\n===== PRETTY JSON REPORT =====\n")
     print(formatter.format(result.report, "json_pretty"))
@@ -65,6 +74,9 @@ def main():
 
     print("\n===== TELEMETRY RECORD =====\n")
     print(json.dumps(result.execution_record.__dict__, indent=2))
+
+    print("\n===== CVF LOCAL EXECUTION SUMMARY =====\n")
+    print(json.dumps(local_summary, indent=2))
 
 
 if __name__ == "__main__":

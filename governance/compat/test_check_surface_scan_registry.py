@@ -33,6 +33,7 @@ class SurfaceScanRegistryTests(unittest.TestCase):
             "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src",
             "EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION",
             "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION",
+            "CVF_SESSION/handoffs/archive",
         ):
             (self.repo_root / rel_path).mkdir(parents=True, exist_ok=True)
 
@@ -42,11 +43,11 @@ class SurfaceScanRegistryTests(unittest.TestCase):
         for rel_path, text in (
             (
                 "governance/toolkit/05_OPERATION/CVF_SURFACE_SCAN_CONTINUITY_GUARD.md",
-                "GC-041\ngovernance/compat/CVF_SURFACE_SCAN_REGISTRY.json\nAGENT_HANDOFF.md\ndocs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md\ngovernance/compat/check_surface_scan_registry.py\n",
+                "GC-041\ngovernance/compat/CVF_SURFACE_SCAN_REGISTRY.json\nCVF_SESSION/ACTIVE_SESSION_STATE.json\ndocs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md\ngovernance/compat/check_surface_scan_registry.py\n",
             ),
             (
-                "AGENT_HANDOFF.md",
-                "governance/compat/CVF_SURFACE_SCAN_REGISTRY.json\nDo not open a fresh tranche before consulting the canonical scan continuity registry.\n",
+                "CVF_SESSION/ACTIVE_SESSION_STATE.json",
+                "{\"activeHandoff\":\"AGENT_HANDOFF_V8_2026-05-17.md\"}\n",
             ),
             (
                 "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
@@ -72,6 +73,7 @@ class SurfaceScanRegistryTests(unittest.TestCase):
             path = self.repo_root / rel_path
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(text, encoding="utf-8")
+        (self.repo_root / "CVF_SESSION/handoffs/archive/AGENT_HANDOFF.md").write_text("archived\n", encoding="utf-8")
 
         registry = {
             "classes": [
@@ -85,22 +87,22 @@ class SurfaceScanRegistryTests(unittest.TestCase):
                     "surfaceClass": "BATCH_BARREL_FAMILY",
                     "status": "FULLY_CLOSED",
                     "lastScannedAt": "2026-04-05",
-                    "scopePaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src", "AGENT_HANDOFF.md"],
-                    "canonicalSource": "AGENT_HANDOFF.md",
+                    "scopePaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src", "CVF_SESSION/handoffs/archive/AGENT_HANDOFF.md"],
+                    "canonicalSource": "CVF_SESSION/handoffs/archive/AGENT_HANDOFF.md",
                     "nextAction": "skip",
                     "reopenCondition": "gc-018",
-                    "evidenceRefs": ["AGENT_HANDOFF.md", "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"]
+                    "evidenceRefs": ["CVF_SESSION/handoffs/archive/AGENT_HANDOFF.md", "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"]
                 },
                 {
                     "id": "epf_dispatch_batch_wave",
                     "surfaceClass": "BATCH_BARREL_FAMILY",
                     "status": "FULLY_CLOSED",
                     "lastScannedAt": "2026-04-05",
-                    "scopePaths": ["EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/epf.dispatch.barrel.ts", "AGENT_HANDOFF.md"],
-                    "canonicalSource": "AGENT_HANDOFF.md",
+                    "scopePaths": ["EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/epf.dispatch.barrel.ts", "CVF_SESSION/handoffs/archive/AGENT_HANDOFF.md"],
+                    "canonicalSource": "CVF_SESSION/handoffs/archive/AGENT_HANDOFF.md",
                     "nextAction": "skip",
                     "reopenCondition": "gc-018",
-                    "evidenceRefs": ["AGENT_HANDOFF.md", "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"]
+                    "evidenceRefs": ["CVF_SESSION/handoffs/archive/AGENT_HANDOFF.md", "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"]
                 },
                 {
                     "id": "gef_plane_scan",
@@ -108,10 +110,10 @@ class SurfaceScanRegistryTests(unittest.TestCase):
                     "status": "NOT_YET_SCANNED",
                     "lastScannedAt": "2026-04-05",
                     "scopePaths": ["EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION", "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"],
-                    "canonicalSource": "AGENT_HANDOFF.md",
+                    "canonicalSource": "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
                     "nextAction": "scan",
                     "reopenCondition": "n/a",
-                    "evidenceRefs": ["AGENT_HANDOFF.md", "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"]
+                    "evidenceRefs": ["docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"]
                 },
                 {
                     "id": "lpf_plane_scan",
@@ -119,10 +121,10 @@ class SurfaceScanRegistryTests(unittest.TestCase):
                     "status": "NOT_YET_SCANNED",
                     "lastScannedAt": "2026-04-05",
                     "scopePaths": ["EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION", "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"],
-                    "canonicalSource": "AGENT_HANDOFF.md",
+                    "canonicalSource": "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
                     "nextAction": "scan",
                     "reopenCondition": "n/a",
-                    "evidenceRefs": ["AGENT_HANDOFF.md", "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"]
+                    "evidenceRefs": ["docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md"]
                 },
                 {
                     "id": "relocation_lane",
@@ -130,10 +132,10 @@ class SurfaceScanRegistryTests(unittest.TestCase):
                     "status": "CLOSED_BY_DEFAULT",
                     "lastScannedAt": "2026-04-05",
                     "scopePaths": ["docs/reference/CVF_PREPUBLIC_P3_READINESS.md", "docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md"],
-                    "canonicalSource": "AGENT_HANDOFF.md",
+                    "canonicalSource": "CVF_SESSION/handoffs/archive/AGENT_HANDOFF.md",
                     "nextAction": "closed",
                     "reopenCondition": "override",
-                    "evidenceRefs": ["AGENT_HANDOFF.md", "docs/reference/CVF_PREPUBLIC_P3_READINESS.md", "docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md"]
+                    "evidenceRefs": ["CVF_SESSION/handoffs/archive/AGENT_HANDOFF.md", "docs/reference/CVF_PREPUBLIC_P3_READINESS.md", "docs/reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md"]
                 }
             ]
         }
@@ -149,7 +151,7 @@ class SurfaceScanRegistryTests(unittest.TestCase):
         with patch.object(MODULE, "REPO_ROOT", self.repo_root):
             with patch.object(MODULE, "REGISTRY_PATH", self.repo_root / "governance" / "compat" / "CVF_SURFACE_SCAN_REGISTRY.json"):
                 with patch.object(MODULE, "GUARD_PATH", self.repo_root / "governance" / "toolkit" / "05_OPERATION" / "CVF_SURFACE_SCAN_CONTINUITY_GUARD.md"):
-                    with patch.object(MODULE, "HANDOFF_PATH", self.repo_root / "AGENT_HANDOFF.md"):
+                    with patch.object(MODULE, "ACTIVE_STATE_PATH", self.repo_root / "CVF_SESSION" / "ACTIVE_SESSION_STATE.json"):
                         with patch.object(MODULE, "TRACKER_PATH", self.repo_root / "docs" / "reference" / "CVF_WHITEPAPER_PROGRESS_TRACKER.md"):
                             with patch.object(MODULE, "BOOTSTRAP_PATH", self.repo_root / "docs" / "reference" / "CVF_SESSION_GOVERNANCE_BOOTSTRAP.md"):
                                 with patch.object(MODULE, "CONTEXT_MODEL_PATH", self.repo_root / "docs" / "reference" / "CVF_CONTEXT_CONTINUITY_MODEL.md"):
@@ -170,8 +172,8 @@ class SurfaceScanRegistryTests(unittest.TestCase):
         self.assertFalse(report["compliant"])
         self.assertIn("required_surface_missing", {v["type"] for v in report["violations"]})
 
-    def test_rejects_missing_handoff_marker(self) -> None:
-        (self.repo_root / "AGENT_HANDOFF.md").write_text("governance/compat/CVF_SURFACE_SCAN_REGISTRY.json\n", encoding="utf-8")
+    def test_rejects_missing_active_state_marker(self) -> None:
+        (self.repo_root / "CVF_SESSION/ACTIVE_SESSION_STATE.json").write_text("{}\n", encoding="utf-8")
         report = self._build_report()
         self.assertFalse(report["compliant"])
         self.assertIn("missing_marker", {v["type"] for v in report["violations"]})

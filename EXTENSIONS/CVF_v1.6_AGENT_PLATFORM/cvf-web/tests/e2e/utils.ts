@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test';
+import { createHmac } from 'node:crypto';
 
 const DEFAULT_SETTINGS = {
     providers: {
@@ -20,11 +21,44 @@ export async function seedStorage(page: Page) {
         localStorage.setItem('cvf_settings', JSON.stringify(settings));
         localStorage.setItem('cvf_onboarding_complete', 'true');
         localStorage.setItem('cvf_onboarding_seen', '1');
+        localStorage.setItem('cvf_setup_banner_dismissed', 'true');
     }, DEFAULT_SETTINGS);
 }
 
+async function signInViaNextAuth(page: Page, username: string, password: string): Promise<boolean> {
+    const csrfResponse = await page.request.get('/api/auth/csrf');
+    if (!csrfResponse.ok()) return false;
+
+    const csrfBody = await csrfResponse.json() as { csrfToken?: string };
+    if (!csrfBody.csrfToken) return false;
+
+    const signInResponse = await page.request.post('/api/auth/callback/credentials?redirect=false', {
+        form: {
+            username,
+            password,
+            csrfToken: csrfBody.csrfToken,
+            callbackUrl: '/home',
+            json: 'true',
+        },
+    });
+    if (!signInResponse.ok()) return false;
+
+    const sessionResponse = await page.request.get('/api/auth/session');
+    if (!sessionResponse.ok()) return false;
+
+    const sessionBody = await sessionResponse.json() as { user?: unknown };
+    return Boolean(sessionBody.user);
+}
+
 export async function loginAs(page: Page, username: string, password: string) {
-    await page.goto('/login');
+    const signedIn = await signInViaNextAuth(page, username, password);
+    if (signedIn) {
+        await page.goto('/home', { waitUntil: 'domcontentloaded', timeout: 15_000 });
+        await expect(page.getByRole('button', { name: /Phân tích Chiến lược|Strategy Analysis/i }).first()).toBeVisible({ timeout: 15_000 });
+        return;
+    }
+
+    await page.goto('/login', { waitUntil: 'domcontentloaded', timeout: 15_000 });
     await page.locator('input[type="text"][placeholder="admin"]').fill('admin');
     await page.locator('input[type="password"][placeholder="admin123"]').fill('admin123');
     await page.locator('input[type="text"][placeholder="admin"]').fill(username);
@@ -37,8 +71,11 @@ export async function loginAs(page: Page, username: string, password: string) {
         await roleSelect.first().selectOption('admin');
     }
 
-    await page.getByRole('button', { name: /Đăng nhập/i }).click();
-    await expect(page.getByRole('heading', { name: /Templates/i }).first()).toBeVisible({ timeout: 15_000 });
+    const loginButton = page.getByRole('button', { name: /Đăng nhập|Dang nhap|Sign in/i }).first();
+    await loginButton.click({ timeout: 10_000 }).catch(async () => {
+        await page.locator('input[type="password"][placeholder="admin123"]').press('Enter');
+    });
+    await expect(page.getByRole('button', { name: /Phân tích Chiến lược|Strategy Analysis/i }).first()).toBeVisible({ timeout: 15_000 });
 }
 
 export async function login(page: Page) {
@@ -86,6 +123,7 @@ export async function seedStorageWithAlibaba(page: Page) {
         }));
         localStorage.setItem('cvf_onboarding_complete', 'true');
         localStorage.setItem('cvf_onboarding_seen', '1');
+        localStorage.setItem('cvf_setup_banner_dismissed', 'true');
     }, key);
 }
 
@@ -105,6 +143,7 @@ export async function seedStorageWithDeepSeek(page: Page) {
         }));
         localStorage.setItem('cvf_onboarding_complete', 'true');
         localStorage.setItem('cvf_onboarding_seen', '1');
+        localStorage.setItem('cvf_setup_banner_dismissed', 'true');
     }, key);
 }
 
@@ -117,11 +156,10 @@ export async function openSettingsModal(page: Page) {
 }
 
 export async function postLiveGovernedExecution(page: Page, mode: 'simple' | 'governance' | 'full' = 'governance') {
-    const response = await page.request.post('/api/execute', {
-        data: {
-            templateId: 'strategy_analysis',
-            templateName: 'Phân tích Chiến lược',
-            intent: `INTENT:
+    const payload = {
+        templateId: 'strategy_analysis',
+        templateName: 'Phân tích Chiến lược',
+        intent: `INTENT:
 Tôi muốn phân tích chiến lược mở rộng thị trường miền Trung.
 
 CONTEXT:
@@ -139,18 +177,32 @@ SUCCESS CRITERIA:
 - Phân tích rõ ưu/nhược điểm
 - Xác định rủi ro chính
 - Đưa ra khuyến nghị có căn cứ`,
-            inputs: {
-                topic: 'Mở rộng thị trường miền Trung',
-                context: 'Công ty bán phần mềm quản lý kho cho SME Việt Nam.',
-                options: 'Mở đội sales tại Đà Nẵng\nHợp tác reseller\nChạy online trước',
-                constraints: 'Ngân sách 300 triệu VND, 6 tháng',
-                priority: 'Growth',
-            },
-            provider: 'alibaba',
-            model: 'qwen-turbo',
-            mode,
-            action: 'analyze',
+        inputs: {
+            topic: 'Mở rộng thị trường miền Trung',
+            context: 'Công ty bán phần mềm quản lý kho cho SME Việt Nam.',
+            options: 'Mở đội sales tại Đà Nẵng\nHợp tác reseller\nChạy online trước',
+            constraints: 'Ngân sách 300 triệu VND, 6 tháng',
+            priority: 'Growth',
         },
+        provider: 'alibaba',
+        model: 'qwen-turbo',
+        mode,
+        action: 'analyze',
+    };
+
+    const rawBody = JSON.stringify(payload);
+    const serviceToken = process.env.CVF_SERVICE_TOKEN ?? '';
+    const timestamp = String(Date.now());
+    const serviceHeaders: Record<string, string> = { 'content-type': 'application/json' };
+    if (serviceToken) {
+        serviceHeaders['x-cvf-service-token'] = serviceToken;
+        serviceHeaders['x-cvf-service-timestamp'] = timestamp;
+        serviceHeaders['x-cvf-service-signature'] = createHmac('sha256', serviceToken).update(`${timestamp}.${rawBody}`).digest('hex');
+    }
+
+    const response = await page.request.post('/api/execute', {
+        data: rawBody,
+        headers: serviceHeaders,
     });
 
     const body = await response.json();

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cvf.local/schemas/skill-pack/workflow.spec.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "inputContract",
+    "outputContract",
+    "deterministicFixturePath"
+  ],
+  "properties": {
+    "inputContract": {
+      "type": "string",
+      "minLength": 1
+    },
+    "outputContract": {
+      "type": "string",
+      "minLength": 1
+    },
+    "deterministicFixturePath": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

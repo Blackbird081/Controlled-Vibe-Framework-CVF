@@ -1,0 +1,160 @@
+{
+  "authorityBoundary": "Truth packet for ACTIVE package runtime only; production execution requires receipt-backed CVF adapters and active governed work-order authority. No automatic invocation, public sync, provider router, commit, merge, or filesystem action authority is granted.",
+  "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-source-driven-development.json",
+  "evidence": [
+    {
+      "evidenceId": "EV-REGISTRY",
+      "kind": "assf_registry_entry",
+      "sourcePath": "docs/reference/agent_system_skills/registry/entries/cvf-engineering-source-driven-development.json",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-PACKAGE",
+      "kind": "assf_package_root",
+      "sourcePath": "docs/reference/agent_system_skills/packages/cvf-engineering-source-driven-development/SKILL.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-R3-WORKER",
+      "kind": "runtime_package_worker_return",
+      "sourcePath": "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-R5-AUDIT",
+      "kind": "runtime_eligibility_audit",
+      "sourcePath": "docs/reviews/CVF_AGSK_R5_RUNTIME_ELIGIBILITY_AUDIT_COMPLETION_2026-06-30.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-SCPL-T2",
+      "kind": "skill_selection_guidance",
+      "sourcePath": "docs/reviews/CVF_SCPL_T2_SKILL_SELECTION_GUIDANCE_COMPLETION_2026-06-30.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-ASCP-P4-P6-STANDARD",
+      "kind": "production_scale_up_standard",
+      "sourcePath": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-ASCP-P4-P6-COMPLETION",
+      "kind": "production_scale_up_completion_review",
+      "sourcePath": "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
+      "status": "approved"
+    }
+  ],
+  "lifecycleSnapshot": {
+    "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-source-driven-development/SKILL.md",
+    "certificationState": "CERTIFIED",
+    "externalCliMcpDisposition": "IMPLEMENTED",
+    "internalAgentDisposition": "IMPLEMENTED",
+    "status": "ACTIVE",
+    "uatState": "PASSED"
+  },
+  "obligations": [
+    {
+      "obligationId": "OB-UAT",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-CERTIFICATION",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-INTERNAL-DISPOSITION",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-NO-AUTOMATIC-INVOCATION",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-PRODUCTION-EXECUTOR-RECEIPT",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-CLI-MCP-ADAPTER-RECEIPT",
+      "state": "satisfied",
+      "strength": "HARD"
+    }
+  ],
+  "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-source-driven-development/SKILL.md",
+  "provenanceLabels": [
+    {
+      "claimId": "CLAIM-LIFECYCLE",
+      "label": "MEASURED",
+      "sourceEvidenceIds": [
+        "EV-REGISTRY"
+      ]
+    },
+    {
+      "claimId": "CLAIM-RUNTIME-ELIGIBILITY",
+      "label": "COMPUTED",
+      "sourceEvidenceIds": [
+        "EV-REGISTRY",
+        "EV-PACKAGE",
+        "EV-R5-AUDIT"
+      ]
+    },
+    {
+      "claimId": "CLAIM-GOVERNED-APPROVAL",
+      "label": "HUMAN_APPROVED",
+      "sourceEvidenceIds": [
+        "EV-R3-WORKER",
+        "EV-SCPL-T2",
+        "EV-ASCP-P4-P6-COMPLETION"
+      ]
+    }
+  ],
+  "receipt": {
+    "hash": "sha256:c6870cf2bdbdbc4cd02226608faf77a19608a90e23a8c75a8595218a0bf47c9c",
+    "previousHash": "sha256:30b13f1f13eb7c59f4fcc75e480c45e9d867820038f15d9b62fcfe2a3856f2b3",
+    "receiptId": "RCPT-SKSOT-ASCP-P4-P6-cvf-engineering-source-driven-development",
+    "status": "issued"
+  },
+  "registryEntryPath": "docs/reference/agent_system_skills/registry/entries/cvf-engineering-source-driven-development.json",
+  "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+  "schemaVersion": "0.1.0",
+  "skillId": "cvf-engineering-source-driven-development",
+  "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-source-driven-development",
+  "truthStatus": "approved",
+  "verificationMode": "STRICT",
+  "verificationResults": [
+    {
+      "evidenceIds": [
+        "EV-REGISTRY",
+        "EV-PACKAGE",
+        "EV-R5-AUDIT"
+      ],
+      "method": "source",
+      "obligationIds": [
+        "OB-UAT",
+        "OB-CERTIFICATION",
+        "OB-INTERNAL-DISPOSITION"
+      ],
+      "resultId": "VR-LIFECYCLE-SOURCE",
+      "status": "pass"
+    },
+    {
+      "evidenceIds": [
+        "EV-ASCP-P4-P6-STANDARD",
+        "EV-ASCP-P4-P6-COMPLETION"
+      ],
+      "method": "test",
+      "obligationIds": [
+        "OB-NO-AUTOMATIC-INVOCATION",
+        "OB-PRODUCTION-EXECUTOR-RECEIPT",
+        "OB-CLI-MCP-ADAPTER-RECEIPT"
+      ],
+      "resultId": "VR-PRODUCTION-RUNTIME",
+      "status": "pass"
+    }
+  ]
+}

@@ -210,6 +210,30 @@ def _is_rotation_evidence(path_a: str, path_b: str, file_class: str) -> bool:
     return _classify(path_b) == file_class
 
 
+def _is_code_path(rel_path: str) -> bool:
+    return Path(rel_path).suffix.lower() in CODE_EXTENSIONS
+
+
+def _matches_domain_prefix(rel_path: str, prefixes: list[str]) -> bool:
+    normalized = rel_path.replace("\\", "/")
+    return any(normalized.startswith(prefix.replace("\\", "/")) for prefix in prefixes)
+
+
+def _is_owner_domain_change(rel_path: str, owner: dict[str, Any], prefixes: list[str]) -> bool:
+    if not _matches_domain_prefix(rel_path, prefixes):
+        return False
+
+    allowed_classes = [
+        str(file_class).strip()
+        for file_class in owner.get("domainFileClasses", [])
+        if str(file_class).strip()
+    ]
+    if allowed_classes:
+        return _classify(rel_path) in set(allowed_classes)
+
+    return _is_code_path(rel_path)
+
+
 def build_report(registry_path: Path) -> dict[str, Any]:
     if not registry_path.exists():
         return {
@@ -248,6 +272,7 @@ def build_report(registry_path: Path) -> dict[str, Any]:
     max_compressed_statement_lines = int(
         registry.get("nearHardMaxCompressedStatementLines", DEFAULT_MAX_COMPRESSED_STATEMENT_LINES)
     )
+    proactive_owner_surfaces = registry.get("proactiveOwnerSurfaces", [])
 
     for path in _iter_candidate_files():
         rel_path = _rel(path)
@@ -394,6 +419,52 @@ def build_report(registry_path: Path) -> dict[str, Any]:
             }
         )
 
+    for owner in proactive_owner_surfaces:
+        if not isinstance(owner, dict) or owner.get("status") != "ACTIVE":
+            continue
+        owner_path = str(owner.get("path", "")).replace("\\", "/").strip()
+        prefixes = [
+            str(prefix).replace("\\", "/").strip()
+            for prefix in owner.get("domainPrefixes", [])
+            if str(prefix).strip()
+        ]
+        full_owner_path = REPO_ROOT / owner_path
+        owner_class = _classify(owner_path)
+        if not owner_path or not prefixes or not full_owner_path.exists() or not owner_class:
+            violations.append(
+                {
+                    "type": "proactive_owner_surface_registry_invalid",
+                    "path": owner_path or "<missing-owner-path>",
+                    "message": "Proactive owner surface registry entry must cite an existing governed owner path and at least one domain prefix.",
+                }
+            )
+            continue
+        threshold = thresholds.get(owner_class, {})
+        hard = int(threshold.get("hardThresholdLines", 0) or 0)
+        owner_lines = _count_lines(full_owner_path)
+        if not hard or owner_lines < max(1, hard - near_hard_margin):
+            continue
+        adjacent_changes = sorted(
+            path
+            for path in changed_files
+            if path != owner_path and _is_owner_domain_change(path, owner, prefixes)
+        )
+        if adjacent_changes and owner_path not in changed_files:
+            sample = ", ".join(adjacent_changes[:5])
+            suffix = "" if len(adjacent_changes) <= 5 else f", ... (+{len(adjacent_changes) - 5} more)"
+            violations.append(
+                {
+                    "type": "near_hard_owner_surface_adjacent_change_without_rotation",
+                    "path": owner_path,
+                    "message": (
+                        f"Owner surface has {owner_lines} lines and is within {near_hard_margin} lines of hard threshold {hard}. "
+                        "Adjacent source changes in the same registered owner domain require this owner entrypoint to be "
+                        "split/rotated or meaningfully shrunk in the same batch. Adjacent change(s): "
+                        f"{sample}{suffix}."
+                    ),
+                }
+            )
+
     return {
         "policyPath": POLICY_PATH,
         "registryPath": _rel(registry_path),
@@ -407,6 +478,7 @@ def build_report(registry_path: Path) -> dict[str, Any]:
         "nearHardRotationMarginLines": near_hard_margin,
         "nearHardMinShrinkLines": min_shrink_lines,
         "nearHardMaxCompressedStatementLines": max_compressed_statement_lines,
+        "proactiveOwnerSurfaceCount": len(proactive_owner_surfaces),
         "compliant": len(violations) == 0,
     }
 

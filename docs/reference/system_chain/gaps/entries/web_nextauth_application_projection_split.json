@@ -1,0 +1,83 @@
+{
+  "stableId": "cvf.asc.gap.web_nextauth_application_projection_split.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+  "targetPlaneId": "cvf.asc.plane.evidence_to_operator_surface.v1",
+  "sourceOwner": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/auth.ts; /api/auth/session",
+  "targetOwner": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/middleware-auth.ts; src/app/api/auth/me/route.ts; src/app/api/system/jobs/route.ts; Operations page",
+  "missingEdge": "CLOSED_WITH_EVIDENCE: R3R2 proves the server-derived reviewer bootstrap and retained /api/auth/me refresh; R3R3 then observes reviewer in the canonical-origin browser and reaches the expected policy-denial POST.",
+  "currentStatus": "CLOSED_WITH_EVIDENCE",
+  "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+  "citations": [
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R1_WEB_AUTH_AND_READOUT_RECOVERY_COMPLETION_2026-07-14.md",
+      "lineOrSection": "Evidence Reconciliation",
+      "evidenceRole": "reviewer-accepted bounded runtime blocker"
+    },
+    {
+      "path": "docs/reviews/evidence/system-chain-uc04b-r1-web-operations-proof-2026-07-14.json",
+      "lineOrSection": "cases[0]",
+      "evidenceRole": "one-invocation receipt showing developer session versus anonymous Operations projection"
+    },
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R2_WEB_AUTH_PROJECTION_REPAIR_COMPLETION_2026-07-14.md",
+      "lineOrSection": "Evidence Reconciliation",
+      "evidenceRole": "reviewer-accepted adapter repair and corrected dev-host/hydration blocker"
+    },
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R2R1_LOCALHOST_NORMALIZED_RECOVERY_COMPLETION_2026-07-15.md",
+      "lineOrSection": "Evidence Reconciliation",
+      "evidenceRole": "reviewer-accepted canonical-origin browser projection closure"
+    },
+    {
+      "path": "docs/reviews/evidence/system-chain-uc04b-r2r1-localhost-regression-2026-07-15.json",
+      "lineOrSection": "cases and projections",
+      "evidenceRole": "one-invocation two-case PASS receipt"
+    },
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R1_NEGATIVE_LOCATOR_RECOVERY_COMPLETION_2026-07-15.md",
+      "lineOrSection": "Evidence Reconciliation",
+      "evidenceRole": "fresh governed reviewer-role contradiction that satisfies the recorded reopen condition"
+    },
+    {
+      "path": "docs/reviews/evidence/system-chain-uc04b-r3r1-negative-diagnostic-2026-07-15.json",
+      "lineOrSection": "stage and invocationLedgerReconciliation",
+      "evidenceRole": "no client auth projection request before timeout and exact zero-submission counters"
+    },
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R2_REVIEWER_AUTH_PROJECTION_REPAIR_COMPLETION_2026-07-15.md",
+      "lineOrSection": "Evidence Reconciliation",
+      "evidenceRole": "accepted deterministic server bootstrap and client request-emission repair"
+    },
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R3_REVIEWER_NEGATIVE_PROOF_COMPLETION_2026-07-15.md",
+      "lineOrSection": "Evidence Reconciliation",
+      "evidenceRole": "accepted canonical-origin reviewer projection and policy-denial proof"
+    },
+    {
+      "path": "docs/reviews/evidence/system-chain-uc04b-r3r3-reviewer-negative-proof-2026-07-15.json",
+      "lineOrSection": "reviewerActor, visibleRoleProjection, request, auditSequence, and exactCounters",
+      "evidenceRole": "one-invocation receipt for reviewer projection, denial, audit, and zero runner/provider counters"
+    }
+  ],
+  "impact": "The selected developer-success and reviewer-denial Web pair is now proven bounded. This does not create a unified checker inventory or prove other roles, jobs, providers, or production behavior.",
+  "closeCondition": {
+    "conditionKind": "EXECUTED_PROOF_ACCEPTED",
+    "conditionText": "SATISFIED: the R3R2 repair proves coherent reviewer projection and request emission, and one R3R3 canonical-origin invocation reaches the expected policy-denial POST."
+  },
+  "reopenCondition": {
+    "conditionKind": "FRESH_EVIDENCE_CONTRADICTION",
+    "conditionText": "Reopen only if a fresh governed proof contradicts reviewer projection or the expected read-only denial path after a material auth or policy-owner change."
+  },
+  "actionOwner": "CLOSED: retain the selected-pair evidence; route materially broader Web inventory work through a separate value-assessed GAP",
+  "freshnessInputs": [
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/auth.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/middleware-auth.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/auth/me/route.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/system/jobs/route.ts"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-15",
+    "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_UC04B_R3R3_REVIEWER_NEGATIVE_PROOF_COMPLETION_2026-07-15.md"
+  }
+}

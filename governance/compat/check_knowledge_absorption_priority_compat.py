@@ -4,7 +4,7 @@ CVF Knowledge Absorption Priority Compatibility Gate
 
 Ensures the GC-043 doctrine-first / governance-first knowledge-absorption
 chain stays aligned:
-- standard and guard exist
+- standard, executive note, and guard exist
 - policy, matrix, bootstrap, README, KB, and handoff reference the rule
 - hook chain and CI enforce the rule
 - changed knowledge-absorption roadmaps carry the standard reference and
@@ -27,6 +27,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 STANDARD_PATH = "docs/reference/CVF_KNOWLEDGE_ABSORPTION_AND_EXTENSION_PRIORITY_STANDARD_2026-04-13.md"
+EXEC_NOTE_PATH = "docs/assessments/CVF_EXECUTIVE_VALUE_PRIORITIZATION_NOTE_2026-04-13.md"
 GUARD_PATH = "governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md"
 MASTER_POLICY_PATH = "governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md"
 CONTROL_MATRIX_PATH = "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md"
@@ -35,7 +36,7 @@ DOCS_INDEX_PATH = "docs/INDEX.md"
 REFERENCE_README_PATH = "docs/reference/README.md"
 ROOT_README_PATH = "README.md"
 KB_PATH = "docs/CVF_CORE_KNOWLEDGE_BASE.md"
-HANDOFF_PATH = "AGENT_HANDOFF.md"
+SESSION_MEMORY_PATH = "CVF_SESSION_MEMORY.md"
 HOOK_CHAIN_PATH = "governance/compat/run_local_governance_hook_chain.py"
 WORKFLOW_PATH = ".github/workflows/documentation-testing.yml"
 GRAPHIFY_ROADMAP_PATH = "docs/roadmaps/CVF_GRAPHIFY_LLM_POWERED_PALACE_SYNTHESIS_ONLY_ROADMAP_2026-04-13.md"
@@ -43,6 +44,7 @@ THIS_SCRIPT_PATH = "governance/compat/check_knowledge_absorption_priority_compat
 
 REQUIRED_FILES = (
     STANDARD_PATH,
+    EXEC_NOTE_PATH,
     GUARD_PATH,
     MASTER_POLICY_PATH,
     CONTROL_MATRIX_PATH,
@@ -51,7 +53,7 @@ REQUIRED_FILES = (
     REFERENCE_README_PATH,
     ROOT_README_PATH,
     KB_PATH,
-    HANDOFF_PATH,
+    SESSION_MEMORY_PATH,
     HOOK_CHAIN_PATH,
     WORKFLOW_PATH,
     GRAPHIFY_ROADMAP_PATH,
@@ -64,10 +66,16 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         "Graphify / LLM-Powered / Palace",
         GRAPHIFY_ROADMAP_PATH,
     ),
+    EXEC_NOTE_PATH: (
+        "highest-value next step",
+        "doctrine-first / governance-first uplift",
+        STANDARD_PATH,
+    ),
     GUARD_PATH: (
         "Control ID:",
         "GC-043",
         STANDARD_PATH,
+        EXEC_NOTE_PATH,
         GRAPHIFY_ROADMAP_PATH,
         THIS_SCRIPT_PATH,
         "owner-surface mapping",
@@ -84,6 +92,7 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         "GC-043",
         GUARD_PATH,
         STANDARD_PATH,
+        EXEC_NOTE_PATH,
         THIS_SCRIPT_PATH,
     ),
     BOOTSTRAP_PATH: (
@@ -105,10 +114,10 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         Path(GUARD_PATH).name,
         "Doctrine-first / governance-first absorption",
     ),
-    HANDOFF_PATH: (
-        STANDARD_PATH,
-        Path(GUARD_PATH).name,
-        THIS_SCRIPT_PATH,
+    SESSION_MEMORY_PATH: (
+        "broad external knowledge absorption",
+        "blocked work classes",
+        "CVF_SESSION/ACTIVE_SESSION_STATE.json",
     ),
     HOOK_CHAIN_PATH: (
         THIS_SCRIPT_PATH,

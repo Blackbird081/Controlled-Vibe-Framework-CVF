@@ -1,13 +1,14 @@
+<!-- Text Encoding Exception: emoji headers, bullet separators, and localized Vietnamese copy follow this file's existing convention. -->
+
 <div align="center">
 
 # 🤖 CVF Agent Platform
 
 **AI-powered Prompt Engineering with Governance**
 
-[![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](./ROADMAP.md)
+[![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)](./ROADMAP.md)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](../../../LICENSE)
-[![Tests](https://img.shields.io/badge/tests-1412%2F1415%20passing-brightgreen.svg)](./src/lib)
-[![Coverage](https://img.shields.io/badge/coverage-89.77%25-yellowgreen.svg)](./coverage/coverage-summary.json)
+[![Tests](https://img.shields.io/badge/tests-3256%2F3258%20passing-brightgreen.svg)](./src/lib)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org)
 
 [Features](#-features) • [Quick Start](#-quick-start) • [CVF Governance](#-cvf-governance) • [Architecture](#-architecture)
@@ -33,21 +34,36 @@
 | **Có Quy tắc** | + Quality Score (0-100) + Accept/Reject |
 | **CVF Full** | + Phase Gates + Checklists + Compliance |
 
+### 🛡️ Governance Surfaces (read-only)
+| Surface | Route | Description |
+|---------|-------|-------------|
+| **Runtime Modules** | `/governance/runtime-modules` | Read-only registry of module Web-exposure state |
+| **SOT3 Evidence** | `/governance/sot3-evidence` | Read-only status view of durable SOT3 knowledge-activation evidence |
+| **MAO Durable Runs** | `/governance/mao-runs` | Read-only durable MAO run discovery, task state, timeout counts, and event recency |
+
+These three surfaces are strictly read-only: no launch, cancel, retry, or
+mutation control exists on any of them. A sibling application's Controlled
+Quotation, freeze, and impact/recall capability was evaluated for adoption
+and deferred (`DEFER_WITH_REASON`, see `docs/reviews/CVF_WEB_INHERITANCE_T4_CONTROLLED_QUOTATION_ADOPTION_DECISION_2026-07-18.md`
+in the governance repository) pending a concrete consumer route.
+
 ### 🛠️ Technical
 - 🌐 **i18n** - Vietnamese & English
 - 🌙 **Dark Mode** - System-aware themes
 - 📱 **Responsive** - Mobile-optimized
 - ⚡ **Fast** - Lazy loading, streaming responses
-- ✅ **Tested** - 1412/1415 tests passing (3 skipped)
+- ✅ **Tested** - 3256/3258 tests passing (2 skipped)
 
-## 📊 Quality Snapshot (2026-02-22 UTC)
+## 📊 Quality Snapshot (2026-07-18 UTC)
 
 | Metric | Value |
 |--------|-------|
-| Lint | 0 errors, 95 warnings |
-| Tests | 1412/1415 passing (3 skipped) |
-| Coverage | Statements 89.77% · Branches 76.42% · Functions 89.54% · Lines 91.07% |
-| Source Artifacts | `eslint-report.json`, `test-results.json`, `coverage/coverage-summary.json` |
+| Focused suite | 33/33 passing (help-content, governance overview, SOT3 evidence, MAO runs, runtime-modules) |
+| Full non-live suite | 3256/3258 passing (2 skipped), 280/280 test files |
+| TypeScript | `tsc --noEmit` clean |
+| Build | production build succeeds; one pre-existing unrelated warning (`source-map-support` resolution inside `CVF_LEARNING_PLANE_FOUNDATION`) |
+| Browser QA | 1 provider-free Playwright invocation (mock-config), 2/2 specs passing, zero retries, zero provider calls, zero business submissions |
+| Coverage | not measured this tranche; no coverage claim is made |
 
 ---
 
@@ -56,36 +72,24 @@
 ```bash
 # Install
 cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
-npm ci
+npm install
 
 # Run
 npm run dev
 # Open http://localhost:3000
 
 # Test
-npm run check
+npm run test:run
 ```
 
 ### ⚙️ Configure API Keys
 Go to **Settings** (⚙️) and add your keys:
 
-| Provider | Public proof posture |
-|----------|----------------------|
-| Alibaba/DashScope | Primary certified live release lane |
-| DeepSeek | Certified canary lane with bounded confirmatory coverage |
-| Other providers | Adapter or experimental surfaces only until separately certified |
-
-For release-quality governance proof, run from the repository root:
-
-```bash
-python scripts/run_cvf_release_gate_bundle.py --json
-```
-
-For a non-live developer check, run from the repository root after `npm ci`:
-
-```bash
-python scripts/run_cvf_static_ci_gate.py --json
-```
+| Provider | Format | Get Key |
+|----------|--------|---------|
+| Gemini | `AI...` | [Google AI Studio](https://aistudio.google.com) |
+| OpenAI | `sk-...` | [OpenAI Platform](https://platform.openai.com) |
+| Anthropic | `sk-ant-...` | [Anthropic Console](https://console.anthropic.com) |
 
 ### 🧭 API Key Wizard (NEW)
 Nếu chưa có API key, vào Home sẽ thấy banner **“API key chưa được cấu hình”**.  
@@ -125,17 +129,23 @@ The platform implements **Controlled Vibe Framework** governance rules:
 
 ```
 src/
-├── app/                    # Next.js pages
+├── app/
+│   ├── (dashboard)/governance/    # Runtime Modules, SOT3 Evidence, MAO Durable Runs (read-only)
+│   ├── (dashboard)/help/          # Bilingual Help center
+│   └── ...                        # Other Next.js pages
 ├── components/
 │   ├── AgentChat.tsx       # Main chat interface
 │   ├── PhaseGateModal.tsx  # Phase gate UI (CVF)
 │   ├── SpecExport.tsx      # Spec export with modes
 │   └── ...
+├── data/
+│   └── help-content.ts     # Bilingual Help content (HELP_CONTENT)
 ├── lib/
 │   ├── ai-providers.ts     # Gemini, OpenAI, Anthropic
 │   ├── governance.ts       # Quality scoring
 │   ├── cvf-checklists.ts   # Phase checklists
 │   ├── quota-manager.ts    # Usage tracking
+│   ├── server/              # Server-only readouts (SOT3 evidence, MAO durable runs, runtime module registry)
 │   └── *.test.ts           # Unit tests
 └── types/                  # TypeScript types
 ```
@@ -154,6 +164,18 @@ src/
 ---
 
 ## 📝 Changelog
+
+### v1.7.0 (2026-07-18)
+- ✅ **Governance Read-Only Surfaces** - `/governance/runtime-modules`,
+  `/governance/sot3-evidence`, and `/governance/mao-runs`; all three are
+  read-only status views with no mutation control
+- ✅ **Help Center Update** - bilingual link cards for SOT3 Evidence and
+  MAO Durable Runs with exact routes and bounded, read-only descriptions
+- 🧭 **Sibling Adoption Decision** - a retained sibling application's
+  Controlled Quotation, freeze, and impact/recall capability was evaluated
+  and deferred pending a concrete cvf-web consumer route; no sibling source
+  was copied or implemented
+- ℹ️ This is a private version alignment, not a public release
 
 ### v1.6.0 (2026-02-07)
 - ✅ **CVF Governance Integration**

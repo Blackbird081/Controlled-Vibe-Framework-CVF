@@ -1,8 +1,10 @@
 'use client';
 
+// Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
+
 import Link from 'next/link';
 import { useState } from 'react';
-import { BookOpen, LifeBuoy, Rocket, Users } from 'lucide-react';
+import { BookOpen, ClipboardList, LifeBuoy, RefreshCw, Rocket, Users } from 'lucide-react';
 import { SurfaceTopBar } from '@/components';
 import { HELP_CONTENT } from '@/data/help-content';
 import { useLanguage } from '@/lib/i18n';
@@ -17,6 +19,8 @@ export default function HelpPage() {
         { icon: Rocket, title: content.features[2]?.title, desc: content.features[2]?.desc, href: content.features[2]?.link, event: content.features[2]?.event },
         { icon: Users, title: content.features[5]?.title, desc: content.features[5]?.desc, href: content.features[5]?.link, event: content.features[5]?.event },
         { icon: LifeBuoy, title: content.features[6]?.title, desc: content.features[6]?.desc, href: content.features[6]?.link, event: content.features[6]?.event },
+        { icon: ClipboardList, title: content.features[7]?.title, desc: content.features[7]?.desc, href: content.features[7]?.link, event: content.features[7]?.event },
+        { icon: RefreshCw, title: content.features[8]?.title, desc: content.features[8]?.desc, href: content.features[8]?.link, event: content.features[8]?.event },
     ].filter(card => card.title && card.desc);
 
     return (

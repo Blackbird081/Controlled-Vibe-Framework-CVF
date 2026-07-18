@@ -1,0 +1,10 @@
+{
+  "id": "sop_generator",
+  "name": "SOP Generator",
+  "domain": "Operations",
+  "version": "1.0.0",
+  "sourceSkillRef": "sop_generator.skill.md",
+  "certificationDate": "2026-05-22",
+  "outcomeKey": "sop_generator",
+  "description": "Convert process notes into a governed standard operating procedure."
+}

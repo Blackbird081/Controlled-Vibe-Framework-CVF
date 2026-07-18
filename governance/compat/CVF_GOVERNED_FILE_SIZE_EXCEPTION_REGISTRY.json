@@ -24,10 +24,40 @@
       "softThresholdLines": 900,
       "hardThresholdLines": 1200,
       "maxApprovableLines": 2000,
-      "maxAllowedBumpPercent": 65,
-      "_note_active_markdown": "Allows bounded generated public manifests up to 1980 lines while preserving the absolute 2000-line approval ceiling."
+      "maxAllowedBumpPercent": 50
     }
   },
+  "nearHardRotationMarginLines": 25,
+  "nearHardMinShrinkLines": 50,
+  "proactiveOwnerSurfaces": [
+    {
+      "path": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/index.ts",
+      "status": "ACTIVE",
+      "domainPrefixes": [
+        "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/"
+      ],
+      "rationale": "LPF root barrel is an active owner entrypoint. Adjacent LPF source growth must not bypass barrel rotation while the owner remains near the hard threshold."
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts",
+      "status": "ACTIVE",
+      "domainPrefixes": [
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/"
+      ],
+      "rationale": "The execute route is an active cvf-web API owner entrypoint. New API route work must carry execute-route shrink or split evidence while this owner remains near the hard threshold."
+    },
+    {
+      "path": "docs/reference/CVF_AGENT_WORK_ORDER_TEMPLATE_2026-05-19.md",
+      "status": "ACTIVE",
+      "domainPrefixes": [
+        "docs/reference/CVF_AGENT_WORK_ORDER_"
+      ],
+      "domainFileClasses": [
+        "active_markdown"
+      ],
+      "rationale": "The work-order template is the active owner entrypoint for delegated-work authoring rules. Adjacent template addendum changes must not bypass GC-023 while the owner remains near the hard threshold; same-batch owner split, rotation, or meaningful shrink evidence is required."
+    }
+  ],
   "exceptions": [
     {
       "path": "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/index.test.ts",
@@ -130,22 +160,17 @@
       "fileClass": "general_source",
       "approvedMaxLines": 1001,
       "status": "RESOLVED",
-      "rationale": "Public-sync mirror of the provenance tombstone for the already-split /api/execute route. The file sits exactly at hardThresholdLines + 1 and this entry preserves audit continuity without creating a reusable expansion cap.",
-      "requiredFollowup": "Do not raise, clone, or re-activate this exception. The next substantive /api/execute route change must reduce the file below the hard threshold or extract additional logic before adding behavior.",
+      "rationale": "Phase 2.C bounded `Create Product Brief` vertical slice + Phase 3.E bounded emission pilot were grafted onto the existing /api/execute route handler by Codex without per-feature extraction. Route grew from ~870 to ~1020 lines in one tranche. Codex added the code; the exception is granted to unblock the legacy-audit commit but ownership of the split sits with Codex.",
+      "requiredFollowup": "MANDATORY for Codex on the FIRST step of the next continuation (Step 1 of `docs/reviews/archive/CVF_LEGACY_ABSORPTION_NEXT_ROADMAP_FOR_CODEX_2026-05-18.md`): extract Phase 2.C product-brief slice handling and Phase 3.E emission helper out of route.ts into dedicated modules (`phase2c-product-brief-slice.ts` and `phase3e-operational-emission.ts` already exist — wire them so route.ts only orchestrates). Target: route.ts back below 900 lines. This exception MUST be REMOVED (not extended, not relabeled, not bumped) once split is done. Once removed, the entry must be replaced with a tombstone whose status is `RESOLVED` and approvedMaxLines is hardThresholdLines + 1 to preserve the audit trail without creating a usable cap.",
       "lockBoundary": {
         "operatorApproved": true,
         "operatorApprovalDate": "2026-05-18",
-        "noBumpAllowed": "approvedMaxLines is frozen at hardThresholdLines + 1 (1001) as a resolved tombstone.",
-        "noExtensionAllowed": "This entry is not precedent for new route growth or other files."
+        "operatorApprovalContext": "Single one-shot bypass during legacy-audit commit. Operator's standing instruction (2026-05-18): 'việc bypass dùng exception chỉ cho lần này thôi, phải khóa lại, và quan trọng là bắt Codex phải split lại cho về đúng guard'.",
+        "noBumpAllowed": "approvedMaxLines is frozen at 1100. Any future attempt to raise it (suspicious_bump, approved_max_changed_from_head, or new exception entry for the same path) must fail the guard, not be re-authorized.",
+        "noExtensionAllowed": "This exception MUST NOT be cloned, renamed, or re-applied to other files as precedent. Each future GC-023 violation requires its own operator approval.",
+        "removalCondition": "route.ts is below 900 lines AND Phase 2.C / Phase 3.E logic has been extracted into the existing `phase2c-product-brief-slice.ts` and `phase3e-operational-emission.ts` modules.",
+        "removalProcedure": "Change `status` from `ACTIVE_EXCEPTION` to `RESOLVED`; set `approvedMaxLines` to `hardThresholdLines + 1` (i.e. 1001) so the entry remains as an audit-trail tombstone but provides no usable cap; do NOT delete the entry outright."
       }
-    },
-    {
-      "path": "docs/EXPORT_MANIFEST.md",
-      "fileClass": "active_markdown",
-      "approvedMaxLines": 1980,
-      "status": "ACTIVE_EXCEPTION",
-      "rationale": "Public export manifest is a generated provenance binding index listing exported public paths and hashes. The line count reflects repository surface size rather than narrative sprawl.",
-      "requiredFollowup": "Keep the manifest generated and bounded. If it exceeds 1980 lines, split into generated manifest volumes or compress the generated representation instead of raising the cap."
     }
   ]
 }

@@ -15,6 +15,7 @@ describe("GovernanceCLI", () => {
       const result = cli.run(["version"]);
       expect(result.success).toBe(true);
       expect(result.message).toContain("2.2.0");
+      expect(result.message).toContain("cvf");
     });
 
     it("runs status command", () => {
@@ -62,6 +63,7 @@ describe("GovernanceCLI", () => {
     it("queries audit log", () => {
       const result = cli.run(["audit", "--count"]);
       expect(result.success).toBe(true);
+      expect(result.message).toContain("Audit entries");
     });
   });
 

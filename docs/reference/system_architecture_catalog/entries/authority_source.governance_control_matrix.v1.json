@@ -1,0 +1,22 @@
+{
+  "stableId": "cvf.asc.authority_source.governance_control_matrix.v1",
+  "entityType": "AUTHORITY_SOURCE",
+  "name": "Governance Control Matrix",
+  "authorityClass": "ACTIVE_GOVERNED_STANDARD",
+  "frozen": false,
+  "ownerPaths": [
+    "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md"
+  ],
+  "citations": [
+    {
+      "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
+      "lineOrSection": "whole document",
+      "evidenceRole": "authority source"
+    }
+  ],
+  "claimBoundary": "Authority for GC-NNN rule-to-owner mapping; not frozen, may be amended by governed edit.",
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_ASC_T0_SOURCE_SCHEMA_AND_RECONCILIATION_CONTRACT_WORKER_RETURN_2026-07-11.md"
+  }
+}

@@ -2,10 +2,34 @@ import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from '
 import { dirname, join } from 'node:path';
 import { KNOWLEDGE_COLLECTIONS } from './knowledge-seed';
 
+/**
+ * Optional SOT3 provenance metadata for a knowledge chunk. Storage-optional
+ * for backward compatibility with existing chunks in `OFF`, but the full set
+ * of fields is mandatory before the chunk is eligible for SOT3 evaluation in
+ * `SHADOW` or `ENFORCE`. Field names deliberately mirror `SourceEnvelope`
+ * (`EXTENSIONS/CVF_REFINERY/src/types/source-envelope.ts`) so the SOT3
+ * knowledge adapter can construct a SourceEnvelope without inventing values.
+ */
+export interface Sot3KnowledgeSourceMetadata {
+  sourceId: string;
+  sourceType: 'INTERNAL' | 'PROJECT' | 'PARTNER' | 'POLICY' | 'MARKET' | 'PUBLIC' | 'OTHER';
+  owner: string;
+  capturedAtUtc: string;
+  purpose: string[];
+  confidentiality: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
+  expectedContentHash: string;
+  rawReference: { type: 'file' | 'api' | 'object' | 'message' | 'extracted_record'; location: string };
+  captureStatus: 'CAPTURED' | 'REJECTED_AT_INTAKE';
+  declaredVersion?: string | null;
+  validFromUtc?: string | null;
+  validUntilUtc?: string | null;
+}
+
 export interface KnowledgeChunk {
   id: string;
   content: string;
   keywords: string[];
+  sot3Source?: Sot3KnowledgeSourceMetadata;
 }
 
 export interface KnowledgeCollectionDefinition {

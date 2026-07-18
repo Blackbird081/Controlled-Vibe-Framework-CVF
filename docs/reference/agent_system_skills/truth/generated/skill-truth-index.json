@@ -1,0 +1,222 @@
+{
+  "entries": [
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-api-interface-design.json",
+      "receiptHash": "sha256:1969d50e13815de3115cb5a8f0aa6b169aa3d862bbc72466904f78511fa3702f",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-api-interface-design",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-api-interface-design",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-browser-runtime-verification.json",
+      "receiptHash": "sha256:9893135ee48f556d17dca26de2d04de09387927e018680b6d1e7d2e523ddd113",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-browser-runtime-verification",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-browser-runtime-verification",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-ci-cd-quality-gates.json",
+      "receiptHash": "sha256:6a17c24556f28c91d07168b2a4f5bb958da73c1edd2a29bdc29e747c5929bb59",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-ci-cd-quality-gates",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-ci-cd-quality-gates",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-code-review-quality.json",
+      "receiptHash": "sha256:9e34cd97796bc56552d3e7a7fe7699ab8dc262a503ab2726f683a388145ca069",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-code-review-quality",
+      "truthPacketId": "SKSOT-T1-cvf-engineering-code-review-quality",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-code-simplification.json",
+      "receiptHash": "sha256:34a397fcf03f960fd412f3c170cb422abc2f7f8d3da723e2d6c64d726d5b9dd6",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-code-simplification",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-code-simplification",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-debugging-error-recovery.json",
+      "receiptHash": "sha256:0e4c9f485a50242fe2b205994320d567ea0afe2d835155d143bfcf752694ec83",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-debugging-error-recovery",
+      "truthPacketId": "SKSOT-T1-cvf-engineering-debugging-error-recovery",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-deprecation-migration.json",
+      "receiptHash": "sha256:4e2b12cdb846133c67629ec87c90ad8afda1ff289dbebd43207823073fc6b375",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-deprecation-migration",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-deprecation-migration",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-frontend-ui.json",
+      "receiptHash": "sha256:2442e5bf520034fe8972e41ba03452d866eed74d668ad4c0673485b79d2b51ed",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-frontend-ui",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-frontend-ui",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-incremental-implementation.json",
+      "receiptHash": "sha256:c64002f76e64c38f3307e7b0fbec3633879bc1df47335756c5ac76fd97d8383e",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-incremental-implementation",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-incremental-implementation",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-observability-instrumentation.json",
+      "receiptHash": "sha256:6e1c9e895ad935ac2120b80fa63f8186cbcfc088c1d1501bc8a345685575fb5b",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-observability-instrumentation",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-observability-instrumentation",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-performance-optimization.json",
+      "receiptHash": "sha256:3886c18627177865fa5e6627133c0ca376ef1bdbafc7468de1132d388d8fc35a",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-performance-optimization",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-performance-optimization",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-planning-task-breakdown.json",
+      "receiptHash": "sha256:242c0bb0480bc16da404925222715ef7f08e324535904a34c8036d8e02d96205",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-planning-task-breakdown",
+      "truthPacketId": "SKSOT-T1-cvf-engineering-planning-task-breakdown",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-security-hardening.json",
+      "receiptHash": "sha256:ea978b9ac66e7c23846425d1e71543e676c03c8d97a74f79f7b46d727046b213",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-security-hardening",
+      "truthPacketId": "SKSOT-T1-cvf-engineering-security-hardening",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-shipping-launch.json",
+      "receiptHash": "sha256:45656235728f543b01ab5449e2e238dd514e1eedca3e5f053d0d4daef7f82bb9",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-shipping-launch",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-shipping-launch",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-source-driven-development.json",
+      "receiptHash": "sha256:c6870cf2bdbdbc4cd02226608faf77a19608a90e23a8c75a8595218a0bf47c9c",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-source-driven-development",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-engineering-source-driven-development",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-spec-driven-development.json",
+      "receiptHash": "sha256:36f9128e496d1670270515fc340dd4e2da4c165a9623bed1c68bb8bd08703c4e",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-spec-driven-development",
+      "truthPacketId": "SKSOT-T1-cvf-engineering-spec-driven-development",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-test-driven-development.json",
+      "receiptHash": "sha256:370ac1a26d2d45db4a56550e4ba7480c13c73a7427f5c5d664e6eda9fb73445d",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-test-driven-development",
+      "truthPacketId": "SKSOT-T1-cvf-engineering-test-driven-development",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-governance-context-engineering.json",
+      "receiptHash": "sha256:a593c70fe237517f918187d6a646cb0532517d2cc32e07d4eef0f59add2d9934",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-governance-context-engineering",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-governance-context-engineering",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-governance-documentation-adrs.json",
+      "receiptHash": "sha256:2f6f1226a6a97529a01dc45dbba46515a01bab423093b74e9cd64f2af2985d75",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-governance-documentation-adrs",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-governance-documentation-adrs",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-governance-doubt-driven-development.json",
+      "receiptHash": "sha256:f4dd67505cd4d083aa368be7409d9257ef0da02317233d9fd11daf041867c8dc",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-governance-doubt-driven-development",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-governance-doubt-driven-development",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-governance-git-workflow-versioning.json",
+      "receiptHash": "sha256:110c538509959157e21ec997093be7af36b23d00ffbeab5cd1ee788839c12953",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-governance-git-workflow-versioning",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-governance-git-workflow-versioning",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-governance-idea-refinement.json",
+      "receiptHash": "sha256:982389eea27103d8bbe989cffb5488028eb2077fb6e6f5da7870f7028f22e1c6",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-governance-idea-refinement",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-governance-idea-refinement",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-governance-operator-interview.json",
+      "receiptHash": "sha256:de62a10156a2585110cce0125c2d2daa7c0b1f81c5921a5075b26c91c536b41e",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-governance-operator-interview",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-governance-operator-interview",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-governance-skill-discovery-invocation.json",
+      "receiptHash": "sha256:a80c5564939ee44c487956336a884e23d5c11eeea79647b88568ae8418ef1e3e",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-governance-skill-discovery-invocation",
+      "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-governance-skill-discovery-invocation",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    }
+  ],
+  "generatedFrom": "docs/reference/agent_system_skills/truth/packets",
+  "schemaVersion": "0.1.0"
+}

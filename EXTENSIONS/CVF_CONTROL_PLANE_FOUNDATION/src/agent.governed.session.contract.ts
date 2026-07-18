@@ -1,4 +1,6 @@
 import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
+import type { Receipt } from "../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract";
+import { createReceiptEnvelope as wrapReceiptEnvelope } from "../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract";
 import type { AgentDefinitionRecord } from "./agent.definition.boundary.contract";
 
 export type AgentGovernedRiskLevel = "low" | "medium" | "high" | "critical";
@@ -169,6 +171,31 @@ export interface AgentExecutionAuditReceipt {
   outputType: AgentOutputType;
   outputHash: string;
   summary: string;
+}
+
+export type AgentExecutionAuditReceiptEnvelope = Receipt<AgentExecutionAuditReceipt>;
+
+export const AGENT_GOVERNED_SESSION_WORKING_MEMORY_ADAPTER_VERSION =
+  "phase2b-agent-governed-session-working-memory-adapter-1";
+
+export interface AgentGovernedSessionWorkingMemoryAdapterSnapshot {
+  version: typeof AGENT_GOVERNED_SESSION_WORKING_MEMORY_ADAPTER_VERSION;
+  source: "control-plane:agent-governed-session-working-memory";
+  memoryKind: "working";
+  sessionId: string;
+  taskId: string;
+  receiptId: string;
+  traceId: string;
+  outputType: AgentOutputType;
+  riskLevel: AgentGovernedRiskLevel;
+  policyDecision: AgentPolicyDecision;
+  approvalRequired: boolean;
+  validationResult: AgentValidationResult;
+  fileReadCount: number;
+  fileChangedCount: number;
+  toolRequestedCount: number;
+  persistentStoreCreated: false;
+  reinjectionRuntimeEnabled: false;
 }
 
 export interface AgentGovernedSessionContractDependencies {
@@ -356,6 +383,36 @@ export class AgentGovernedSessionContract {
     };
   }
 
+  createReceiptEnvelope(
+    request: AgentGovernedActionRequest,
+    input: AgentExecutionReceiptInput,
+  ): AgentExecutionAuditReceiptEnvelope {
+    const receipt = this.createReceipt(request, input);
+
+    return wrapReceiptEnvelope({
+      id: receipt.receiptId,
+      issuedAt: receipt.createdAt,
+      source: `control-plane-foundation:agent-governed-session:${receipt.sessionId}:${receipt.taskId}`,
+      payload: receipt,
+      integrityHash: computeDeterministicHash(
+        "cvf-agent-execution-receipt-envelope",
+        receipt.receiptId,
+        receipt.traceId,
+        receipt.inputHash,
+        receipt.outputHash,
+      ),
+    });
+  }
+
+  createWorkingMemoryAdapterSnapshot(
+    request: AgentGovernedActionRequest,
+    input: AgentExecutionReceiptInput,
+  ): AgentGovernedSessionWorkingMemoryAdapterSnapshot {
+    return buildAgentGovernedSessionWorkingMemoryAdapterSnapshot(
+      this.createReceipt(request, input),
+    );
+  }
+
   private derivePolicyDecision(
     request: AgentGovernedActionRequest,
     reasons: string[],
@@ -409,6 +466,30 @@ export function createAgentGovernedSessionContract(
   dependencies?: AgentGovernedSessionContractDependencies,
 ): AgentGovernedSessionContract {
   return new AgentGovernedSessionContract(dependencies);
+}
+
+export function buildAgentGovernedSessionWorkingMemoryAdapterSnapshot(
+  receipt: AgentExecutionAuditReceipt,
+): AgentGovernedSessionWorkingMemoryAdapterSnapshot {
+  return {
+    version: AGENT_GOVERNED_SESSION_WORKING_MEMORY_ADAPTER_VERSION,
+    source: "control-plane:agent-governed-session-working-memory",
+    memoryKind: "working",
+    sessionId: receipt.sessionId,
+    taskId: receipt.taskId,
+    receiptId: receipt.receiptId,
+    traceId: receipt.traceId,
+    outputType: receipt.outputType,
+    riskLevel: receipt.riskLevel,
+    policyDecision: receipt.policyDecision,
+    approvalRequired: receipt.approvalRequired,
+    validationResult: receipt.validationResult,
+    fileReadCount: receipt.filesRead.length,
+    fileChangedCount: receipt.filesChanged.length,
+    toolRequestedCount: receipt.toolsRequested.length,
+    persistentStoreCreated: false,
+    reinjectionRuntimeEnabled: false,
+  };
 }
 
 function matchesPathPattern(path: string, pattern: string): boolean {

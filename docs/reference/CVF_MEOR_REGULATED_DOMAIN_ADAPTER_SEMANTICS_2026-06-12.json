@@ -1,0 +1,165 @@
+{
+  "adapterVersion": "cvf.meor.regulatedDomainAdapter.rda.t1.v1",
+  "docType": "machine_semantics",
+  "meorContractVersion": "cvf.metadataEvidenceResolution.meor.t1.v1",
+  "profileEligibility": {
+    "requiresSupportsDocumentStatus": true,
+    "nonRegulatoryDefaultDisposition": "NOT_APPLICABLE",
+    "globalLifecycleFieldInjectionAllowed": false
+  },
+  "regulatedConceptMappings": [
+    {
+      "concept": "documentStatus",
+      "metadataKey": "documentStatus",
+      "requirementId": "regulated.document_status",
+      "allowedValues": ["PROMULGATED", "IN_FORCE", "STATUS_UNKNOWN"],
+      "acceptableEvidenceBases": ["SOURCE_EMBEDDED", "OPERATOR_SUPPLIED"],
+      "missingObservedState": "MISSING",
+      "unresolvedDownstreamDisposition": "RETAIN_BLOCK"
+    },
+    {
+      "concept": "promulgationDate",
+      "metadataKey": "promulgationDate",
+      "requirementId": "regulated.promulgation_date",
+      "valueFormat": "ISO_8601_DATE",
+      "acceptableEvidenceBases": ["SOURCE_EMBEDDED", "OPERATOR_SUPPLIED"],
+      "missingObservedState": "MISSING",
+      "unresolvedDownstreamDisposition": "RETAIN_BLOCK"
+    },
+    {
+      "concept": "effectiveDate",
+      "metadataKey": "effectiveDate",
+      "requirementId": "regulated.effective_date",
+      "valueFormat": "ISO_8601_DATE",
+      "acceptableEvidenceBases": ["SOURCE_EMBEDDED", "OPERATOR_SUPPLIED"],
+      "missingObservedState": "MISSING",
+      "unresolvedDownstreamDisposition": "RETAIN_BLOCK"
+    },
+    {
+      "concept": "jurisdiction",
+      "metadataKey": "jurisdiction",
+      "requirementId": "regulated.jurisdiction",
+      "acceptableEvidenceBases": ["SOURCE_EMBEDDED", "OPERATOR_SUPPLIED"],
+      "missingObservedState": "MISSING",
+      "unresolvedDownstreamDisposition": "RETAIN_BLOCK"
+    }
+  ],
+  "evidenceBasisRules": {
+    "SOURCE_EMBEDDED": {
+      "mayResolvePresent": true,
+      "requiresEvidencePointer": true
+    },
+    "OPERATOR_SUPPLIED": {
+      "mayResolvePresent": true,
+      "requiresEvidencePointer": true,
+      "mustRemainOperatorLabeled": true
+    },
+    "DERIVED_HINT": {
+      "mayResolvePresent": false,
+      "downstreamDisposition": "RETAIN_BLOCK"
+    },
+    "NONE": {
+      "mayResolvePresent": false,
+      "downstreamDisposition": "RETAIN_BLOCK"
+    }
+  },
+  "downstreamGateCandidate": {
+    "token": "QUERY_CLASS_GATED",
+    "runtimeActivationAuthorized": false,
+    "activationPrerequisite": "separate runtime implementation and operator or source evidence path"
+  },
+  "invalidCombinations": [
+    {
+      "id": "RDA-IC-001",
+      "failureToken": "REGULATED_FIELD_ON_NON_REGULATORY_PROFILE",
+      "condition": "regulated lifecycle field appears when supportsDocumentStatus is not true",
+      "downstreamDisposition": "RETAIN_BLOCK"
+    },
+    {
+      "id": "RDA-IC-002",
+      "failureToken": "IN_FORCE_WITHOUT_EFFECTIVE_DATE_EVIDENCE",
+      "condition": "documentStatus is IN_FORCE without authoritative effectiveDate evidence",
+      "downstreamDisposition": "RETAIN_BLOCK"
+    },
+    {
+      "id": "RDA-IC-003",
+      "failureToken": "DERIVED_HINT_CANNOT_RELEASE_DOWNSTREAM",
+      "condition": "DERIVED_HINT is paired with ELIGIBLE_FOR_REEVALUATION",
+      "downstreamDisposition": "RETAIN_BLOCK"
+    },
+    {
+      "id": "RDA-IC-004",
+      "failureToken": "CROSS_PROFILE_REGULATED_REQUIREMENT_BLEED",
+      "condition": "regulated requirement is consumed by a profile that did not declare it",
+      "downstreamDisposition": "RETAIN_BLOCK"
+    }
+  ],
+  "examples": [
+    {
+      "exampleId": "regulated-missing-effective-date",
+      "profileFamily": "legal_policy",
+      "record": {
+        "requirementId": "regulated.effective_date",
+        "ownerProfileId": "legal_policy.vn_regulatory",
+        "observedState": "MISSING",
+        "evidenceBasis": "NONE",
+        "evidencePointers": [],
+        "resolutionState": "OPERATOR_ACTION_REQUIRED",
+        "downstreamDisposition": "RETAIN_BLOCK",
+        "requiredAction": "Provide authoritative effective-date evidence.",
+        "failureToken": null
+      }
+    },
+    {
+      "exampleId": "regulated-operator-supplied-effective-date",
+      "profileFamily": "legal_policy",
+      "record": {
+        "requirementId": "regulated.effective_date",
+        "ownerProfileId": "legal_policy.vn_regulatory",
+        "observedState": "PRESENT",
+        "evidenceBasis": "OPERATOR_SUPPLIED",
+        "evidencePointers": ["operator-resolution:ec-t4#candidate-effective-date"],
+        "resolutionState": "RESOLVED",
+        "downstreamDisposition": "ELIGIBLE_FOR_REEVALUATION",
+        "requiredAction": null,
+        "failureToken": null
+      }
+    },
+    {
+      "exampleId": "non-regulatory-not-applicable",
+      "profileFamily": "technical_project",
+      "record": {
+        "requirementId": "regulated.document_status",
+        "ownerProfileId": "technical_project.software_delivery",
+        "observedState": "NOT_APPLICABLE",
+        "evidenceBasis": "NONE",
+        "evidencePointers": [],
+        "resolutionState": "RESOLVED",
+        "downstreamDisposition": "ELIGIBLE_FOR_REEVALUATION",
+        "requiredAction": null,
+        "failureToken": null
+      }
+    }
+  ],
+  "invariants": {
+    "runtimeImplementationAuthorized": false,
+    "policyLocalMutationAuthorized": false,
+    "ecActivationAuthorized": false,
+    "queryClassGatedWriteAuthorized": false,
+    "nonRegulatoryLifecycleDefaultsAllowed": false,
+    "operatorEvidenceRelabeledAsSourceEmbeddedAllowed": false,
+    "autonomousMutationAuthorized": false
+  },
+  "claimBoundary": [
+    "No metadata truth claim",
+    "No legal or current-status claim",
+    "No source authenticity claim",
+    "No runtime implementation claim",
+    "No EC activation claim",
+    "No retrieval readiness claim",
+    "No Policy_Local readiness claim",
+    "No provider behavior claim",
+    "No production or public readiness claim",
+    "No autonomous correction claim"
+  ]
+}

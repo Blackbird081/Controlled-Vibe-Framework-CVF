@@ -9,3 +9,4 @@ export * from "./control.plane.knowledge.barrel";
 export * from "./control.plane.gateway.barrel";
 export * from "./control.plane.design.boardroom.barrel";
 export * from "./control.plane.continuation.barrel";
+export * from "./control.plane.mao.barrel";

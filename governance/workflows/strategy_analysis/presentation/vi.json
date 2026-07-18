@@ -1,0 +1,97 @@
+{
+  "contractVersion": "cvf.workflowPresentation.strategy_analysis.vi5.t1.v1",
+  "workflowId": "workflow.strategy.strategy_analysis.v1",
+  "templateId": "strategy_analysis",
+  "locale": "vi",
+  "guidedModeAvailable": true,
+  "steps": [
+    {
+      "stepId": "intent_confirmation",
+      "stepNumber": 1,
+      "stepIntent": "strategy.type",
+      "question": "Bạn cần phân tích chiến lược theo hướng nào?",
+      "captureKey": "strategy.type",
+      "selectionMode": "single",
+      "allowFreeformAlternative": true,
+      "userMustChoose": true,
+      "options": [
+        {
+          "id": "strategic_decision",
+          "label": "Ra quyết định chiến lược"
+        },
+        {
+          "id": "market_entry",
+          "label": "Mở rộng thị trường"
+        },
+        {
+          "id": "competitive_response",
+          "label": "Phản ứng cạnh tranh"
+        },
+        {
+          "id": "other",
+          "label": "Khác"
+        }
+      ]
+    },
+    {
+      "stepId": "context_bounding",
+      "stepNumber": 2,
+      "stepIntent": "strategy.constraints",
+      "question": "Ràng buộc hoặc rủi ro chính cần tính đến là gì?",
+      "captureKey": "strategy.constraints",
+      "selectionMode": "single",
+      "allowFreeformAlternative": true,
+      "userMustChoose": true,
+      "options": [
+        {
+          "id": "budget_limited",
+          "label": "Hạn chế ngân sách"
+        },
+        {
+          "id": "time_constrained",
+          "label": "Hạn chế thời gian"
+        },
+        {
+          "id": "regulatory_concern",
+          "label": "Rủi ro pháp lý/quy định"
+        },
+        {
+          "id": "no_major_constraint",
+          "label": "Không có ràng buộc lớn"
+        },
+        {
+          "id": "other",
+          "label": "Khác"
+        }
+      ]
+    },
+    {
+      "stepId": "output_preference",
+      "stepNumber": 3,
+      "stepIntent": "strategy.outputFormat",
+      "question": "Định dạng kết quả nào hữu ích nhất?",
+      "captureKey": "strategy.outputFormat",
+      "selectionMode": "single",
+      "allowFreeformAlternative": true,
+      "userMustChoose": true,
+      "options": [
+        {
+          "id": "scoring_matrix",
+          "label": "Bảng chấm điểm"
+        },
+        {
+          "id": "decision_tree",
+          "label": "Cây quyết định"
+        },
+        {
+          "id": "recommendation_with_rationale",
+          "label": "Khuyến nghị kèm lý do"
+        },
+        {
+          "id": "executive_summary",
+          "label": "Tóm tắt điều hành"
+        }
+      ]
+    }
+  ]
+}

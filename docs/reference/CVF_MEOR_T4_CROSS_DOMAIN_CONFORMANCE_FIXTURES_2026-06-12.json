@@ -1,0 +1,105 @@
+{
+  "fixtureVersion": "cvf.meorCrossDomainConformance.t4.v1",
+  "contractVersion": "cvf.metadataEvidenceResolution.meor.t1.v1",
+  "profiles": [
+    {
+      "domainProfileId": "legal_policy.synthetic",
+      "domainFamily": "legal_policy",
+      "requirements": [
+        {
+          "requirementId": "legal_policy.current_status",
+          "ownerProfileId": "legal_policy.synthetic",
+          "metadataKey": "currentStatus",
+          "required": true,
+          "acceptableEvidenceBases": [
+            "SOURCE_EMBEDDED",
+            "OPERATOR_SUPPLIED"
+          ]
+        },
+        {
+          "requirementId": "legal_policy.jurisdiction",
+          "ownerProfileId": "legal_policy.synthetic",
+          "metadataKey": "jurisdiction",
+          "required": true,
+          "acceptableEvidenceBases": [
+            "SOURCE_EMBEDDED",
+            "OPERATOR_SUPPLIED"
+          ]
+        }
+      ]
+    },
+    {
+      "domainProfileId": "technical_project.synthetic",
+      "domainFamily": "technical_project",
+      "requirements": [
+        {
+          "requirementId": "technical_project.repository_ref",
+          "ownerProfileId": "technical_project.synthetic",
+          "metadataKey": "repositoryRef",
+          "required": false,
+          "acceptableEvidenceBases": [
+            "SOURCE_EMBEDDED",
+            "OPERATOR_SUPPLIED",
+            "NONE"
+          ]
+        },
+        {
+          "requirementId": "technical_project.target_runtime",
+          "ownerProfileId": "technical_project.synthetic",
+          "metadataKey": "targetRuntime",
+          "required": true,
+          "acceptableEvidenceBases": [
+            "SOURCE_EMBEDDED",
+            "OPERATOR_SUPPLIED"
+          ]
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "caseId": "resolved-source-evidence",
+      "requirementId": "legal_policy.current_status",
+      "ownerProfileId": "legal_policy.synthetic",
+      "observedState": "PRESENT",
+      "evidenceBasis": "SOURCE_EMBEDDED",
+      "evidencePointers": [
+        "artifact:synthetic-legal#status"
+      ],
+      "expectedResolutionState": "RESOLVED",
+      "expectedDownstreamDisposition": "ELIGIBLE_FOR_REEVALUATION"
+    },
+    {
+      "caseId": "unresolved-missing-evidence",
+      "requirementId": "technical_project.target_runtime",
+      "ownerProfileId": "technical_project.synthetic",
+      "observedState": "MISSING",
+      "evidenceBasis": "NONE",
+      "evidencePointers": [],
+      "expectedResolutionState": "OPERATOR_ACTION_REQUIRED",
+      "expectedDownstreamDisposition": "RETAIN_BLOCK"
+    },
+    {
+      "caseId": "conflicting-source-evidence",
+      "requirementId": "legal_policy.jurisdiction",
+      "ownerProfileId": "legal_policy.synthetic",
+      "observedState": "CONFLICTING",
+      "evidenceBasis": "SOURCE_EMBEDDED",
+      "evidencePointers": [
+        "artifact:synthetic-legal#jurisdiction"
+      ],
+      "expectedResolutionState": "BLOCKED",
+      "expectedDownstreamDisposition": "RETAIN_BLOCK"
+    },
+    {
+      "caseId": "not-applicable-optional-field",
+      "requirementId": "technical_project.repository_ref",
+      "ownerProfileId": "technical_project.synthetic",
+      "observedState": "NOT_APPLICABLE",
+      "evidenceBasis": "NONE",
+      "evidencePointers": [],
+      "expectedResolutionState": "RESOLVED",
+      "expectedDownstreamDisposition": "ELIGIBLE_FOR_REEVALUATION"
+    }
+  ]
+}

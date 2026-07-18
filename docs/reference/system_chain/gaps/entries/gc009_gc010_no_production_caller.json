@@ -1,0 +1,64 @@
+{
+  "stableId": "cvf.asc.gap.gc009_gc010_no_production_caller.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+  "targetPlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+  "sourceOwner": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts; EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts",
+  "targetOwner": "NONE_WITH_REASON: SCLP-X-T2's accepted repository-wide search (22,026 files, 16 queries, 500 raw hits, 329 unique path/line rows, zero ambiguous rows) found no non-test, non-type-only production caller connecting either MandatoryGateway/createMandatoryGateway (GC-009) or AgentExecutionRuntime (GC-010) to an execution channel; both symbols are constructed or invoked only inside their own co-located test files, and the package exports/files plus the root barrel module omit both.",
+  "missingEdge": "GC-009 and GC-010 each define a governed runtime helper (MandatoryGateway/createMandatoryGateway; AgentExecutionRuntime) inside the Contract To Runtime plane, but the edge from either helper to a non-test production execution channel is unproven: no non-test caller constructs or invokes either symbol anywhere in the accepted T2 search universe.",
+  "currentStatus": "IMPLEMENTED_NOT_INVOCATION_PROVEN",
+  "proofClass": "IMPLEMENTED_EDGE",
+  "citations": [
+    {
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T2_CALLER_VERIFICATION.json",
+      "lineOrSection": "targetDecisions[0] (GC-009), near lines 3964-4003",
+      "evidenceRole": "accepted T2 target decision: callerVerificationDisposition NO_NON_TEST_PRODUCTION_CALLER_FOUND for MandatoryGateway/createMandatoryGateway"
+    },
+    {
+      "path": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T2_CALLER_VERIFICATION.json",
+      "lineOrSection": "targetDecisions[1] (GC-010), near lines 4015-4061",
+      "evidenceRole": "accepted T2 target decision: callerVerificationDisposition NO_NON_TEST_PRODUCTION_CALLER_FOUND for AgentExecutionRuntime"
+    },
+    {
+      "path": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T2_CALLER_VERIFICATION_COMPLETION_2026-07-15.md",
+      "lineOrSection": "Contradiction Or Gap Disposition",
+      "evidenceRole": "reviewer-accepted closure routing a fresh paired architecture-GAP packet as the only released next move"
+    },
+    {
+      "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
+      "lineOrSection": "GC-009 row, line 46",
+      "evidenceRole": "control matrix already records GC-009 as IMPLEMENTED_NOT_INVOCATION_PROVEN with no proven non-test caller"
+    },
+    {
+      "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
+      "lineOrSection": "GC-010 row, line 47",
+      "evidenceRole": "control matrix already records GC-010 as IMPLEMENTED_NOT_INVOCATION_PROVEN with two provider files importing only its type"
+    },
+    {
+      "path": "docs/reference/system_architecture_catalog/entries/edge.gc009_gateway_no_caller.v1.json",
+      "lineOrSection": "full record",
+      "evidenceRole": "related, evidence-only sampled catalog edge for GC-009 (R90 Audit A Lane 2, 3-of-50 sample); cited as corroborating evidence, not promoted to a second or independent GAP branch"
+    }
+  ],
+  "impact": "Both MandatoryGateway/createMandatoryGateway (GC-009) and AgentExecutionRuntime (GC-010) exist and are implemented and unit-tested, but no non-test production caller connects either helper to an execution channel. This is an architecture-discoverability gap recorded from accepted repository-wide search evidence, not a runtime defect claim, an enforcement-coverage claim, or an invocation-behavior claim.",
+  "closeCondition": {
+    "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+    "conditionText": "OPEN: a governed accepted artifact must prove non-test production caller ownership AND bounded invocation evidence for BOTH MandatoryGateway/createMandatoryGateway (GC-009) and AgentExecutionRuntime (GC-010) to fully close this paired entry. If evidence emerges for only one of the two helpers, that requires a reviewer-authored entry split or targeted update naming the still-open helper -- not a false whole-entry closure recorded against this stableId."
+  },
+  "reopenCondition": {
+    "conditionKind": "PATTERN_OBSERVED_ON_NAMED_SURFACE",
+    "conditionText": "Reopen this entry, or any successor closure of it, if a future review finds the current non-test production caller or the current export/barrel surface removed or regressed on either EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts or EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts after a later closure has been accepted."
+  },
+  "actionOwner": "PARKED_WITH_REASON: this GAP entry records the accepted no-caller finding only; it does not create a runtime caller itself. A fresh source-verified work packet is required to propose, implement, and prove a non-test production caller for either or both helpers before this entry can close.",
+  "freshnessInputs": [
+    "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
+    "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts",
+    "EXTENSIONS/CVF_GUARD_CONTRACT/package.json",
+    "EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts",
+    "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-15",
+    "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T2_CALLER_VERIFICATION_COMPLETION_2026-07-15.md"
+  }
+}

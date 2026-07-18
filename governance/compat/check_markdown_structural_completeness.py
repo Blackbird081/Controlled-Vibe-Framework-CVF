@@ -19,11 +19,17 @@ import sys
 from pathlib import Path
 from typing import Any
 
+try:
+    from guard_binding_catalog import effective_binding_text
+except ModuleNotFoundError:
+    from governance.compat.guard_binding_catalog import effective_binding_text
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 STANDARD_PATH = "docs/reference/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_STANDARD.md"
+LIFECYCLE_STANDARD_PATH = "docs/reference/CVF_GOVERNED_WORK_LIFECYCLE_AND_DESIGN_CONTROL_STANDARD_2026-06-11.md"
 GUARD_PATH = "governance/toolkit/05_OPERATION/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_GUARD.md"
 MASTER_POLICY_PATH = "governance/toolkit/02_POLICY/CVF_MASTER_POLICY.md"
 CONTROL_MATRIX_PATH = "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md"
@@ -34,9 +40,11 @@ KB_PATH = "docs/CVF_CORE_KNOWLEDGE_BASE.md"
 HOOK_CHAIN_PATH = "governance/compat/run_local_governance_hook_chain.py"
 WORKFLOW_PATH = ".github/workflows/documentation-testing.yml"
 THIS_SCRIPT_PATH = "governance/compat/check_markdown_structural_completeness.py"
+OPERATOR_CHECKPOINT_GRANDFATHER_REF = "c043fa33"
 
 REQUIRED_FILES = (
     STANDARD_PATH,
+    LIFECYCLE_STANDARD_PATH,
     GUARD_PATH,
     MASTER_POLICY_PATH,
     CONTROL_MATRIX_PATH,
@@ -55,12 +63,28 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
         "Contract",
         "Spec",
         "Policy",
+        "SOP",
         "Roadmap",
+        "Work Order",
+        "Design Control Gate",
+        LIFECYCLE_STANDARD_PATH,
         "Review / Rebuttal / Response",
         "Baseline / Evidence / Authorization",
         "ADR",
         "Handoff",
         GUARD_PATH,
+        THIS_SCRIPT_PATH,
+    ),
+    LIFECYCLE_STANDARD_PATH: (
+        "INTAKE",
+        "DESIGN",
+        "SPEC",
+        "WORK ORDER",
+        "BUILD",
+        "REVIEW",
+        "FREEZE",
+        "Design Control Gate",
+        "Dispatch Boundary",
         THIS_SCRIPT_PATH,
     ),
     GUARD_PATH: (
@@ -78,6 +102,15 @@ REQUIRED_MARKERS: dict[str, tuple[str, ...]] = {
     KB_PATH: (Path(GUARD_PATH).name, "Markdown structural completeness"),
     HOOK_CHAIN_PATH: (THIS_SCRIPT_PATH,),
     WORKFLOW_PATH: (THIS_SCRIPT_PATH, "Markdown Structural Completeness"),
+}
+
+# Sealed archive files are exempt from structural completeness checks.
+# They are read-only historical records that cannot be modified to add structural sections.
+# Legacy corpus files pre-dating GC-045 are also exempt; they predate the standard.
+STRUCTURAL_CHECK_EXEMPT = {
+    "docs/CVF_ARCHITECTURE_DECISIONS_ARCHIVE_ADR001-010.md",
+    "docs/CVF_ARCHITECTURE_DECISIONS.md",
+    "docs/CVF_CORE_KNOWLEDGE_BASE.md",
 }
 
 COMMON_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (
@@ -111,22 +144,6 @@ COMMON_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ),
 )
 
-PUBLIC_FACING_MEMORY_MARKER_EXEMPT_PATHS = {
-    "AGENTS.md",
-    "AGENT_HANDOFF.md",
-    "CONTRIBUTING.md",
-    "COST_AND_QUOTA.md",
-    "GOVERNANCE.md",
-    "PROVIDERS.md",
-    "SECURITY.md",
-    "docs/guides/external-agent-review-guide.md",
-    "docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md",
-    "docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md",
-    "docs/reference/CVF_POSITIONING.md",
-    "docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md",
-    "docs/reviews/CVF_PUBLIC_SYNC_PR_SURFACE_CONTROL_REVIEW_2026-06-06.md",
-}
-
 SECTION_GROUPS: dict[str, tuple[tuple[str, tuple[str, ...]], ...]] = {
     "contract": (
         ("core principle", (r"^##\s+Core Principle\b",)),
@@ -152,14 +169,55 @@ SECTION_GROUPS: dict[str, tuple[tuple[str, tuple[str, ...]], ...]] = {
         ("enforcement surface", (r"^##\s+Enforcement Surface\b",)),
         ("related artifacts", (r"^##\s+Related",)),
     ),
+    "sop": (
+        ("scope", (r"^##\s+Scope\b",)),
+        ("owner/source", (r"^##\s+Owner", r"^##\s+Source")),
+        ("protocol/contract/requirements", (r"^##\s+Protocol", r"^##\s+Contract", r"^##\s+Requirements")),
+        ("inputs and outputs", (r"^##\s+Inputs", r"^##\s+.*Outputs")),
+        ("role workflow", (r"^##\s+Role Workflow\b", r"^##\s+Roles\b")),
+        ("standard workflow", (r"^##\s+Standard Workflow\b", r"^##\s+Workflow\b")),
+        ("enforcement/verification", (r"^##\s+Enforcement", r"^##\s+Verification")),
+        ("boundaries/non-goals", (r"^##\s+.*Boundary", r"^##\s+Non-Goals", r"^##\s+Boundaries")),
+        ("failure modes", (r"^##\s+Failure", r"^##\s+Escalation")),
+        ("related artifacts", (r"^##\s+Related",)),
+    ),
     "roadmap": (
         ("authorization/decision", (r"^##\s+Authorization", r"^##\s+Decision")),
         ("why/purpose", (r"^##\s+Why", r"^##\s+Purpose")),
         ("scope", (r"^##\s+Scope\b",)),
         ("non-goals", (r"^##\s+Non-Goals",)),
+        (
+            "design control gate",
+            (
+                r"^##\s+Design Control Gate\b",
+                r"^##\s+Dispatch Boundary\b",
+                r"^##\s+Governed Work Lifecycle\b",
+            ),
+        ),
         ("work plan", (r"^##\s+Work Plan",)),
         ("acceptance criteria", (r"^##\s+Acceptance Criteria",)),
         ("verification/evidence", (r"^##\s+Verification", r"^##\s+Evidence")),
+    ),
+    "work_order": (
+        ("authority chain", (r"^##\s+(?:\d+\.\s+)?Authority Chain\b",)),
+        ("agent roles", (r"^##\s+(?:\d+\.\s+)?Agent Roles\b", r"^##\s+(?:\d+\.\s+)?.*Roles\b")),
+        ("allowed/forbidden scope", (r"Allowed scope", r"Forbidden scope", r"^##\s+Scope\b")),
+        ("required first reads", (r"^##\s+(?:\d+\.\s+)?Required First Reads\b",)),
+        ("pre-flight checks", (r"^##\s+(?:\d+\.\s+)?.*Pre-Flight", r"^##\s+(?:\d+\.\s+)?Preflight")),
+        ("write ownership", (r"^##\s+(?:\d+\.\s+)?Write Ownership\b", r"^###\s+Write Ownership\b")),
+        ("execution plan", (r"^##\s+(?:\d+\.\s+)?Execution Plan\b", r"^##\s+(?:\d+\.\s+)?.*Execution Rules\b")),
+        ("evidence requirements", (r"^##\s+Evidence Requirements\b", r"Evidence Trace Block")),
+        ("acceptance criteria", (r"^##\s+Acceptance Criteria\b", r"Acceptance Criteria")),
+        ("review gate", (r"^##\s+(?:\d+\.\s+)?Review Gate\b",)),
+        ("closure checklist", (r"^##\s+(?:\d+\.\s+)?Closure Checklist\b", r"^##\s+(?:\d+\.\s+)?Completion Requirements\b")),
+        ("return conditions", (r"^##\s+(?:\d+\.\s+)?Return-To-Orchestrator Conditions\b", r"Return to orchestrator")),
+        (
+            "operator checkpoint",
+            (
+                r"^##\s+(?:\d+\.\s+)?Operator Checkpoint\b",
+                r"operator\.checkpoint\.waiver",
+            ),
+        ),
     ),
     "review": (
         ("target/source", (r"^##\s+Target", r"^##\s+Source", r"^##\s+Reviewed")),
@@ -172,6 +230,29 @@ SECTION_GROUPS: dict[str, tuple[tuple[str, tuple[str, ...]], ...]] = {
         ("source/predecessor evidence", (r"^##\s+Source", r"^##\s+Predecessor Evidence")),
         ("decision/baseline/proposed tranche", (r"^##\s+Decision", r"^##\s+Baseline", r"^##\s+Proposed Tranche")),
         ("evidence/verification", (r"^##\s+Evidence", r"^##\s+Verification", r"^##\s+Required Evidence")),
+    ),
+    "reference": (
+        ("purpose", (r"^##\s+Purpose\b",)),
+        (
+            "scope/applies-to",
+            (
+                r"^##\s+Scope\b",
+                r"^##\s+Applies To\b",
+                r"^##\s+Owner Surface",
+                r"^##\s+Source Lineage",
+                r"^##\s+Target",
+                r"\*\*Applies to:\*\*",
+            ),
+        ),
+        (
+            "claim/final/verification boundary",
+            (
+                r"^##\s+Claim Boundary\b",
+                r"^##\s+Final Clause\b",
+                r"^##\s+Verification\b",
+                r"^##\s+Current Closure Statement\b",
+            ),
+        ),
     ),
     "adr": (
         ("context", (r"^##\s+Context\b",)),
@@ -193,6 +274,13 @@ SECTION_GROUPS: dict[str, tuple[tuple[str, tuple[str, ...]], ...]] = {
     ),
 }
 
+DOC_TYPE_ALIASES: dict[str, str] = {
+    "audit": "review",
+    "completion_review": "review",
+    "rebuttal_review": "review",
+    "gc018": "baseline",
+}
+
 
 def _run_git(args: list[str]) -> tuple[int, str, str]:
     proc = subprocess.run(
@@ -207,6 +295,12 @@ def _run_git(args: list[str]) -> tuple[int, str, str]:
 
 def _ref_exists(ref: str) -> bool:
     code, _, _ = _run_git(["rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}"])
+    return code == 0
+
+
+def _path_exists_at_ref(path: str, ref: str) -> bool:
+    normalized = path.replace("\\", "/")
+    code, _, _ = _run_git(["cat-file", "-e", f"{ref}:{normalized}"])
     return code == 0
 
 
@@ -266,14 +360,24 @@ def _get_changed(base: str, head: str) -> dict[str, set[str]]:
 
 
 def _is_governed_markdown(path: str) -> bool:
-    if not path.endswith(".md"):
+    normalized = path.replace("\\", "/")
+    if not normalized.endswith(".md"):
+        return False
+    if _is_archive_markdown_path(normalized):
+        return False
+    if normalized.startswith("CVF_SESSION/handoffs/archive/"):
         return False
     return (
-        path.startswith("docs/")
-        or path.startswith("governance/toolkit/")
-        or re.match(r"^AGENT_HANDOFF.*\.md$", path) is not None
-        or re.match(r"^CVF_.+\.md$", path) is not None
+        normalized.startswith("docs/")
+        or normalized.startswith("governance/toolkit/")
+        or re.match(r"^AGENT_HANDOFF.*\.md$", normalized) is not None
+        or re.match(r"^CVF_.+\.md$", normalized) is not None
     )
+
+
+def _is_archive_markdown_path(path: str) -> bool:
+    normalized = path.replace("\\", "/")
+    return normalized.endswith(".md") and "/archive/" in f"/{normalized}/"
 
 
 def _is_new(statuses: set[str]) -> bool:
@@ -292,15 +396,38 @@ def _has_any(text: str, patterns: tuple[str, ...]) -> bool:
 
 
 def _classify(path: str, text: str) -> str:
+    normalized_path = path.replace("\\", "/")
+    doc_type_match = re.search(r"^docType:\s*([A-Za-z_ -]+)\s*$", text, re.M)
+    if doc_type_match:
+        declared = doc_type_match.group(1).strip().lower().replace("-", "_").replace(" ", "_")
+        declared = DOC_TYPE_ALIASES.get(declared, declared)
+        if declared in SECTION_GROUPS:
+            return declared
     name = Path(path).name.upper()
     title = "\n".join(text.splitlines()[:8]).upper()
     haystack = f"{path.upper()} {name} {title}"
+    if normalized_path.startswith("docs/work_orders/"):
+        return "work_order"
+    if normalized_path.startswith("docs/roadmaps/"):
+        return "roadmap"
+    if normalized_path.startswith("docs/reviews/"):
+        return "review"
+    if normalized_path.startswith("docs/audits/"):
+        return "review"
+    if normalized_path.startswith("docs/baselines/") or normalized_path.startswith("docs/assessments/"):
+        return "baseline"
+    if normalized_path.startswith("docs/reference/"):
+        return "reference"
     if "AGENT_HANDOFF" in haystack or "HANDOFF" in haystack:
         return "handoff"
     if path.startswith("governance/toolkit/") and name.endswith("_GUARD.MD"):
         return "guard"
     if "ADR" in haystack or "ARCHITECTURE DECISION" in haystack:
         return "adr"
+    if "SOP" in haystack or "STANDARD OPERATING PROCEDURE" in haystack:
+        return "sop"
+    if "WORK_ORDER" in haystack or "WORK ORDER" in haystack:
+        return "work_order"
     if "ROADMAP" in haystack:
         return "roadmap"
     if any(token in haystack for token in ("REVIEW", "REBUTTAL", "RESPONSE")):
@@ -317,17 +444,25 @@ def _classify(path: str, text: str) -> str:
 
 
 def _validate_markdown(path: str) -> list[str]:
+    normalized = path.replace("\\", "/")
+    if normalized in STRUCTURAL_CHECK_EXEMPT or _is_archive_markdown_path(normalized):
+        return []
     text = _read_rel(path)
     artifact_type = _classify(path, text)
     issues: list[str] = []
 
     for label, patterns in COMMON_GROUPS:
-        if label == "memory class" and path in PUBLIC_FACING_MEMORY_MARKER_EXEMPT_PATHS:
-            continue
         if not _has_any(text, patterns):
             issues.append(f"missing common element: {label}")
 
     for label, patterns in SECTION_GROUPS.get(artifact_type, ()):
+        if artifact_type == "work_order" and label == "operator checkpoint":
+            if _has_any(text, patterns):
+                continue
+            if _path_exists_at_ref(path, OPERATOR_CHECKPOINT_GRANDFATHER_REF):
+                continue
+            issues.append("missing work_order section: operator checkpoint")
+            continue
         if not _has_any(text, patterns):
             issues.append(f"missing {artifact_type} section: {label}")
 
@@ -337,7 +472,7 @@ def _validate_markdown(path: str) -> list[str]:
 def _check_required_markers() -> list[dict[str, Any]]:
     violations: list[dict[str, Any]] = []
     for path in REQUIRED_FILES:
-        text = _read_rel(path)
+        text = effective_binding_text(path, _read_rel(path))
         if not text:
             violations.append({"path": path, "issues": ["required file missing"]})
             continue

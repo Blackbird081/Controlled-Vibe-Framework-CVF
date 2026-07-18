@@ -165,7 +165,7 @@ No implementation of Truth Model or Reputation scoring should proceed without an
 ## Related Artifacts
 
 - GC-018: `docs/baselines/CVF_GC018_LHW20_CVF_IMPORTANT_DEEP_SCAN_WAVE_2026-05-31.md`
-- LHW17 T3: `docs/reference/CVF_LHW17_T3_LEARNING_PLANE_TRUTH_REPUTATION_ADVISORY_CONNECTOR_SPEC_2026-05-30.md`
+- LHW17 T3: `docs/reference/archive/CVF_LHW17_T3_LEARNING_PLANE_TRUTH_REPUTATION_ADVISORY_CONNECTOR_SPEC_2026-05-30.md`
 - Source: `.private_reference/legacy/CVF_Important/ADDING_LEARNING PLANE/CVF_ADAPTATION_POLICY.md`
 - Source: `.private_reference/legacy/CVF_Important/ADDING_LEARNING PLANE/CVF_LEARNING_PLANE.md`
 - OFB-1: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/orchestrator-feedback-bus.ts`

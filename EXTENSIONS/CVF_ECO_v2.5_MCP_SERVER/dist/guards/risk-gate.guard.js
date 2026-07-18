@@ -9,6 +9,7 @@ export const RISK_DESCRIPTIONS = {
     R2: 'Elevated — requires careful review, AI agents need human approval',
     R3: 'Critical — high-risk action, blocked for AI agents, requires explicit human sign-off',
 };
+export const MCP_RISK_GATE_ADAPTER_VERSION = 'phase2b-mcp-risk-gate-adapter-1';
 export class RiskGateGuard {
     id = 'risk_gate';
     name = 'Risk Gate Guard';
@@ -80,6 +81,24 @@ export class RiskGateGuard {
             severity: 'INFO',
             reason: `Risk level "${context.riskLevel}" (${RISK_DESCRIPTIONS[context.riskLevel]}) is within safe bounds for role "${context.role}".`,
             timestamp,
+        };
+    }
+    evaluateWithAdapter(context) {
+        const result = this.evaluate(context);
+        const riskNum = RISK_NUMERIC[context.riskLevel];
+        return {
+            result,
+            adapter: {
+                version: MCP_RISK_GATE_ADAPTER_VERSION,
+                source: 'eco-v2.5:mcp-risk-gate',
+                requestId: context.requestId,
+                riskLevel: context.riskLevel,
+                role: context.role,
+                riskNumeric: riskNum ?? null,
+                decision: result.decision,
+                severity: result.severity,
+                suggestedAction: result.suggestedAction,
+            },
         };
     }
 }

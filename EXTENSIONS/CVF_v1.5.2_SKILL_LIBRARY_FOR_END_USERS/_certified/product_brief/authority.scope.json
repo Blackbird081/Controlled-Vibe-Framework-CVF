@@ -1,0 +1,18 @@
+{
+  "allowedRoles": [
+    "OPERATOR",
+    "BUILDER",
+    "REVIEWER"
+  ],
+  "allowedPhases": [
+    "Discovery",
+    "Planning",
+    "Delivery"
+  ],
+  "authorityLevel": "tactical",
+  "approvalRequiredFor": [
+    "external_publication",
+    "binding_commitment",
+    "production_execution"
+  ]
+}

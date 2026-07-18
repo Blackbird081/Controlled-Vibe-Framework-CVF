@@ -5,6 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
+import { createTraceEntryEnvelope } from './trace-emitter';
 import type { TraceEntry } from './trace-emitter';
 
 // Import dynamically to handle environments where better-sqlite3 isn't compiled
@@ -65,6 +66,16 @@ describe.skipIf(!AuditDatabase)('AuditDatabase', () => {
     expect(rows.length).toBe(1);
     expect(rows[0].request_id).toBe('req-insert-test');
     expect(rows[0].channel).toBe('cli');
+  });
+
+  it('inserts canonical trace receipt envelopes without changing the stored row shape', () => {
+    const entry = mockEntry({ requestId: 'req-envelope-test', channel: 'api' });
+    db.insertEnvelope(createTraceEntryEnvelope(entry));
+
+    const row = db.getByRequestId('req-envelope-test');
+    expect(row).toBeDefined();
+    expect(row!.request_id).toBe('req-envelope-test');
+    expect(row!.channel).toBe('api');
   });
 
   it('inserts multiple entries', () => {
@@ -129,5 +140,20 @@ describe.skipIf(!AuditDatabase)('AuditDatabase', () => {
     expect(stats.allow).toBe(1);
     expect(stats.block).toBe(1);
     expect(stats.escalate).toBe(0);
+  });
+
+  it('wraps database rows in the canonical Phase 1.R receipt envelope', async () => {
+    const mod = await import('./sqlite-db.js');
+    const row = mockEntry({ traceId: 'trace-row-envelope', requestId: 'req-row-envelope' });
+    db.insert(row);
+
+    const stored = db.getByRequestId('req-row-envelope')!;
+    const envelope = mod.wrapAuditDatabaseRow(stored);
+
+    expect(envelope.schemaVersion).toBe('1.R.0');
+    expect(envelope.id).toBe('trace-row-envelope');
+    expect(envelope.source).toBe('guard-contract:sqlite-audit:req-row-envelope');
+    expect(envelope.payload.request_id).toBe('req-row-envelope');
+    expect(envelope.integrityHash).toBe(stored.trace_hash);
   });
 });

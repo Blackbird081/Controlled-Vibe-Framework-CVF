@@ -29,6 +29,10 @@ export { generateConfirmationCard, formatCardAsText, RISK_LABELS, PHASE_LABELS, 
 export type { ConfirmationCard, ConfirmationStep, } from './vibe-translator/confirmation-card.js';
 export { SessionMemory } from './memory/session-memory.js';
 export type { MemoryEntry, SessionMemoryConfig, SessionSnapshot, } from './memory/session-memory.js';
+export { STARTUP_STATE_CONTRACT_VERSION, buildStartupAcknowledgment, checkGovernanceAction, getActiveHandoff, getGovernanceRules, getSessionMemory, getSessionState, readRedactedFile, redactSensitiveText, resolveCvfRepo, } from './startup/startup-state.js';
+export type { GovernanceCheckReadout, RedactedFileReadout, ResolvedCvfRepo, StartupAcknowledgmentReadout, } from './startup/startup-state.js';
+export { getMcpToolAuditSnapshot, recordMcpToolCall, withMcpToolAudit, } from './audit/mcp-tool-audit.js';
+export type { McpToolAuditEntry, McpToolAuditSnapshot, } from './audit/mcp-tool-audit.js';
 export { generateVibeBoxScreen, generateIntentionMapScreen, generateLiveDashboardScreen, generateHITLScreen, generateAuditLedgerScreen, } from './non-coder/golden-screens.js';
 export type { VibeBoxScreen, IntentionMapScreen, IntentionMapNode, LiveDashboardScreen, HITLScreen, HITLNotification, AuditLedgerScreen, AuditLedgerEntry, } from './non-coder/golden-screens.js';
 export { getPersonaQuestions, buildPersonaProfile, getMaxRiskForAutonomy, getDefaultRedLines, mergeRedLines, checkRedLine, PersonalDictionary, completeOnboarding, } from './non-coder/smart-onboarding.js';

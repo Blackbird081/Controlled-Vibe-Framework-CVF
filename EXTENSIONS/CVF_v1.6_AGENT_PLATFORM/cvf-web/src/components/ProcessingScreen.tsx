@@ -8,6 +8,7 @@ import { trackEvent } from '@/lib/analytics';
 import { getSafetyStatus } from '@/lib/safety-status';
 import type { SafetyRiskLevel } from '@/lib/safety-status';
 import type { ExecutionRequest, GovernanceEvidenceReceipt } from '@/lib/ai';
+import type { ExecutionDiagnostic } from '@/lib/execution-diagnostics';
 
 export interface ProcessingExecutionOverrides {
     mode?: ExecutionRequest['mode'];
@@ -119,7 +120,7 @@ export function ProcessingScreen({
     const [status, setStatus] = useState(isVi ? 'Đang khởi tạo...' : 'Initializing...');
     const [error, setError] = useState<string | null>(null);
     const [guidedResponse, setGuidedResponse] = useState<string | null>(null);
-    const [isRealExecution, setIsRealExecution] = useState(() => Boolean(inputs && intent && Object.keys(inputs).length > 0));
+    const [isRealExecution] = useState(() => Boolean(inputs && intent && Object.keys(inputs).length > 0));
     // W92-T1: Approval request state
     const [approvalRequestId, setApprovalRequestId] = useState<string | null>(null);
     const [approvalSubmitting, setApprovalSubmitting] = useState(false);
@@ -131,6 +132,7 @@ export function ProcessingScreen({
     // W114-T1 CP5: user-visible governance evidence from the live execute route
     const [governanceEvidence, setGovernanceEvidence] = useState<GovernanceEvidenceState | null>(null);
     const [evidenceReceipt, setEvidenceReceipt] = useState<GovernanceEvidenceReceipt | undefined>(undefined);
+    const [executionDiagnostic, setExecutionDiagnostic] = useState<ExecutionDiagnostic | null>(null);
     // W96-T1: Completion state — set when success+riskLevel; suppresses 300ms path
     const [completedOutput, setCompletedOutput] = useState<string | null>(null);
     const executionProvider = mapSettingsProviderToExecutionProvider(settings.preferences?.defaultProvider);
@@ -177,6 +179,8 @@ export function ProcessingScreen({
             const data = await response.json();
             const enforcement = data.enforcement;
             const receipt = data.governanceEvidenceReceipt as GovernanceEvidenceReceipt | undefined;
+            const diagnostic = data.diagnostic as ExecutionDiagnostic | undefined;
+            setExecutionDiagnostic(diagnostic ?? null);
             setEvidenceReceipt(receipt);
             setFalsePositiveReportState('idle');
             setGovernanceEvidence({
@@ -263,12 +267,33 @@ export function ProcessingScreen({
                 return true;
             }
 
-            // If real execution fails, show error but fall back to mock
-            setError(data.error || (isVi ? 'Thực thi API thất bại' : 'API execution failed'));
-            return false;
+            // If real execution fails, render the classified failure truthfully.
+            if (diagnostic) {
+                const nextAction = diagnostic.userAction.replaceAll('_', ' ');
+                setError(isVi
+                    ? `${diagnostic.safeMessage} Bước tiếp theo: ${nextAction}.`
+                    : `${diagnostic.safeMessage} Next action: ${nextAction}.`);
+                trackEvent('task_recovery_prompted', {
+                    method: 'execution_diagnostic',
+                    class: diagnostic.class,
+                    userAction: diagnostic.userAction,
+                    receiptId: diagnostic.receiptId ?? receipt?.receiptId,
+                    templateId,
+                });
+                return true;
+            }
+
+            setError(data.error || (isVi
+                ? 'Thực thi API thất bại. Không tạo kết quả mẫu thay thế.'
+                : 'API execution failed. No mock output was generated.'));
+            return true;
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Network error');
-            return false;
+            setExecutionDiagnostic(null);
+            const message = err instanceof Error ? err.message : 'Network error';
+            setError(isVi
+                ? `${message}. Không tạo kết quả mẫu thay thế.`
+                : `${message}. No mock output was generated.`);
+            return true;
         }
     }, [templateId, templateName, inputs, intent, onComplete, settings.preferences.defaultExportMode, isVi, executionOverrides, executionProvider, selectedModel]);
 
@@ -413,9 +438,9 @@ export function ProcessingScreen({
             const runId = setTimeout(() => {
                 executeReal().then(success => {
                     if (!success) {
-                        // Fall back to mock on failure
-                        setIsRealExecution(false);
-                        runMockExecution();
+                        setError(isVi
+                            ? 'Không thể bắt đầu thực thi thật. Không tạo kết quả mẫu thay thế.'
+                            : 'Unable to start real execution. No mock output was generated.');
                     }
                 });
             }, 0);
@@ -424,7 +449,7 @@ export function ProcessingScreen({
             // No inputs provided, use mock
             runMockExecution();
         }
-    }, [inputs, intent, executeReal, runMockExecution, isLoaded]);
+    }, [inputs, intent, executeReal, runMockExecution, isLoaded, isVi]);
 
     return (
         <div className="min-h-[60vh] flex flex-col items-center justify-center">
@@ -480,6 +505,34 @@ export function ProcessingScreen({
                         <p className="text-sm text-blue-900 dark:text-blue-100 whitespace-pre-wrap">
                             {guidedResponse}
                         </p>
+                    </div>
+                )}
+
+                {executionDiagnostic && (
+                    <div
+                        className="mt-4 mb-4 mx-auto max-w-md rounded-lg border border-amber-200 bg-amber-50 p-4 text-left dark:border-amber-700 dark:bg-amber-950/40"
+                        role="alert"
+                        aria-live="assertive"
+                        data-testid="execution-diagnostic-panel"
+                    >
+                        <p className="text-sm font-semibold text-amber-900 dark:text-amber-100">
+                            {isVi ? 'Chẩn đoán lượt chạy' : 'Execution diagnostic'}
+                        </p>
+                        <p className="mt-2 text-sm text-amber-800 dark:text-amber-200">
+                            {executionDiagnostic.safeMessage}
+                        </p>
+                        <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-amber-700 dark:text-amber-300">
+                            <p><span className="font-medium">Stage:</span> {executionDiagnostic.stage}</p>
+                            <p><span className="font-medium">Class:</span> {executionDiagnostic.class}</p>
+                            <p><span className="font-medium">{isVi ? 'Retry:' : 'Retry:'}</span> {executionDiagnostic.retryable ? (isVi ? 'có thể' : 'possible') : (isVi ? 'không nên' : 'not advised')}</p>
+                            <p><span className="font-medium">{isVi ? 'Next:' : 'Next:'}</span> {executionDiagnostic.userAction}</p>
+                        </div>
+                        {(executionDiagnostic.receiptId || executionDiagnostic.traceId) && (
+                            <div className="mt-3 space-y-1 text-[11px] text-amber-700 dark:text-amber-300">
+                                {executionDiagnostic.receiptId && <p className="break-all"><span className="font-medium">Receipt:</span> {executionDiagnostic.receiptId}</p>}
+                                {executionDiagnostic.traceId && <p className="break-all"><span className="font-medium">Trace:</span> {executionDiagnostic.traceId}</p>}
+                            </div>
+                        )}
                     </div>
                 )}
 

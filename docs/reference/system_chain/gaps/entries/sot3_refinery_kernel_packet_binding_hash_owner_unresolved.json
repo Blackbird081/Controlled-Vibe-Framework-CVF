@@ -1,0 +1,65 @@
+{
+  "stableId": "cvf.asc.gap.sot3_refinery_kernel_packet_binding_hash_owner_unresolved.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+  "targetPlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+  "sourceOwner": "EXTENSIONS/CVF_REFINERY/",
+  "targetOwner": "EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts",
+  "missingEdge": "The accepted T2 contract chain binds Kernel admission to a Refinery-produced packet via content_hash equality (RefineryPacketRef.content_hash == EvaluateInput.packetHash). SOT3-T8 implements the canonical algorithm as an owned, versioned Refinery export (cvf.sotThreeLayer.refineryPacketHash.v1, computeRefineryPacketHash) with a published fixed test vector, migrates the T6 integration slice to consume it directly, and documents the profile in the canonical SOT contract chain reference.",
+  "currentStatus": "ACTIVE_OWNER_CREATED_WITH_BOUNDARY",
+  "proofClass": "EXECUTED_AND_EVIDENCED_EDGE",
+  "citations": [
+    {
+      "path": "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md",
+      "lineOrSection": "Findings / Position; Dependency-Closure Matrix row `packet binding`",
+      "evidenceRole": "reviewer finding that the T6 local hash helper was adequate for the bounded slice but did not create an owner-level Refinery-to-Kernel hash contract (superseded by T8 owner creation)"
+    },
+    {
+      "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_SOT3_T8_REFINERY_KERNEL_PACKET_BINDING_CONTRACT_2026-07-13.md",
+      "lineOrSection": "Implementation Contract; Acceptance Criteria",
+      "evidenceRole": "authorized the bounded no-commit contract tranche this GAP update reflects"
+    },
+    {
+      "path": "EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts",
+      "lineOrSection": "computeRefineryPacketHash, buildRefineryPacketHashPreimage, REFINERY_PACKET_HASH_PROFILE",
+      "evidenceRole": "the new Refinery-owned canonical packet-binding hash implementation"
+    },
+    {
+      "path": "EXTENSIONS/CVF_REFINERY/tests/packet-hash-vector.test.ts",
+      "lineOrSection": "fixed 1337-byte preimage and SHA-256 digest vector; mutation, ordering, and unsupported-value rejection tests",
+      "evidenceRole": "proves deterministic, field-stable, fail-closed canonicalization; 11 tests pass"
+    },
+    {
+      "path": "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md",
+      "lineOrSection": "RefineryPacket Packet-Binding Hash Canonical Profile subsection",
+      "evidenceRole": "documents the owning package, field projection, canonicalization, digest format, rejection rule, versioning, and published vector"
+    }
+  ],
+  "impact": "Was: any future caller needed to independently invent or copy a packet-hash derivation, risking divergent, non-interoperable hash algorithms. Now: one Refinery-owned, versioned, tested algorithm exists and the T6 slice consumes it directly. Remaining impact is limited to activation, adapter, provider/live, and public-sync claims, none of which this GAP closure asserts.",
+  "closeCondition": {
+    "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+    "conditionText": "SATISFIED: a source-verified SOT3-T8 tranche defines the canonical Refinery-to-Kernel packet-binding hash contract (cvf.sotThreeLayer.refineryPacketHash.v1), implements it as a Refinery-owned export with a published fixed vector, migrates the T6 slice to the owner API, and a reviewer accepts a completion review naming its owner path."
+  },
+  "reopenCondition": {
+    "conditionKind": "OPERATOR_DECISION_RECORDED",
+    "conditionText": "Reopen only if a future review finds the EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts owner path removed, superseded, or materially non-functional, or if an operator authorizes a second competing hash profile or a field-projection change that requires a fresh reconciliation."
+  },
+  "actionOwner": "EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts",
+  "freshnessInputs": [
+    "docs/reviews/CVF_SOT3_T6_COMPLETION_REVIEW_2026-07-13.md",
+    "EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts",
+    "docs/reference/sot_three_layer/CVF_SOT_THREE_LAYER_CONTRACT_CHAIN.md"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-13",
+    "acceptedArtifact": "docs/reviews/CVF_SOT3_T8_REFINERY_KERNEL_PACKET_BINDING_CONTRACT_COMPLETION_2026-07-13.md"
+  },
+  "boundaryCaveat": "Does not claim package activation, an execution adapter, provider/live proof, public-sync readiness, or production readiness. Does not claim any change to Kernel or Flow source; Kernel admission equality semantics are unchanged and remain fail-closed on a genuine mismatch. Does not claim a second hash profile exists; exactly one profile (cvf.sotThreeLayer.refineryPacketHash.v1) is owned and callable. Private-provenance implementation only, pending reviewer acceptance.",
+  "priorDisposition": "OPEN_CONFIRMED_GAP",
+  "negativeSearchEvidence": [
+    {
+      "searchCommand": "rg -n \"packetContentHash|content_hash|packetHash\" EXTENSIONS/CVF_REFINERY/src EXTENSIONS/CVF_TRUTH_KERNEL/src EXTENSIONS/CVF_SOT_THREE_LAYER_SLICE/src",
+      "searchResult": "Prior to this tranche only a caller-local T6 helper existed; after this tranche, the sole packet-hash producer is EXTENSIONS/CVF_REFINERY/src/packet-hash/packet-hash.ts, exported by cvf-refinery and consumed directly by the T6 slice with no local re-implementation."
+    }
+  ]
+}

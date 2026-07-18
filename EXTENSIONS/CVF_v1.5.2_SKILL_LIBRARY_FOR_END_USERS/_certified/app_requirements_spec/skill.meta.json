@@ -1,0 +1,10 @@
+{
+  "id": "app_requirements_spec",
+  "name": "App Requirements Spec",
+  "domain": "App Development",
+  "version": "1.0.0",
+  "sourceSkillRef": "01_app_requirements_spec.skill.md",
+  "certificationDate": "2026-05-25",
+  "outcomeKey": "app_requirements_spec",
+  "description": "Convert a noncoder app idea into a practical requirements specification, acceptance criteria, and implementation handoff."
+}

@@ -1,0 +1,10 @@
+{
+  "id": "meeting_summarizer",
+  "name": "Meeting Summarizer",
+  "domain": "Operations",
+  "version": "1.0.0",
+  "sourceSkillRef": "meeting_summarizer.skill.md",
+  "certificationDate": "2026-05-22",
+  "outcomeKey": "meeting_summarizer",
+  "description": "Summarize meeting notes into decisions, actions, owners, and follow-up risk."
+}

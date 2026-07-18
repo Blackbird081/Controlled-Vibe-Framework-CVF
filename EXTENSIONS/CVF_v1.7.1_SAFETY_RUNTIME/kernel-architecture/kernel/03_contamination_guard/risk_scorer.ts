@@ -40,6 +40,16 @@ export class RiskScorer {
     return { level, cvfRiskLevel, score: avg, reasons: flags }
   }
 
+  scoreWithAdapter(flags: string[]): RiskScorerAdapterSnapshot {
+    const assessment = this.score(flags)
+    return {
+      version: "phase2b-contamination-risk-scorer-adapter-1",
+      source: "safety-runtime:contamination-risk-scorer",
+      flags,
+      assessment,
+    }
+  }
+
   private mapRiskLevel(score: number): RiskLevel {
     if (score >= 90) return "critical"
     if (score >= 75) return "high"
@@ -55,4 +65,11 @@ export class RiskScorer {
     if (score > 0) return "R1"
     return "R0"
   }
+}
+
+export interface RiskScorerAdapterSnapshot {
+  version: "phase2b-contamination-risk-scorer-adapter-1"
+  source: "safety-runtime:contamination-risk-scorer"
+  flags: string[]
+  assessment: RiskAssessment
 }

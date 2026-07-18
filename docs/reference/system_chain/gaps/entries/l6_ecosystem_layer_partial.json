@@ -1,0 +1,36 @@
+{
+  "stableId": "cvf.asc.gap.l6_ecosystem_layer_partial.v1",
+  "entityType": "GAP",
+  "sourcePlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+  "targetPlaneId": "cvf.asc.plane.doctrine_to_contract.v1",
+  "sourceOwner": "docs/",
+  "targetOwner": "EXTENSIONS/examples/; governance/toolkit/06_EXAMPLES/",
+  "missingEdge": "Doctrine L6 Ecosystem Layer responsibility is real but distributed across three unconsolidated active-tree locations; doctrine-named /examples root does not exist.",
+  "currentStatus": "PARTIAL_CHAIN_WITH_BOUNDARY",
+  "proofClass": "DECLARED_EDGE",
+  "citations": [
+    {
+      "path": "docs/audits/CVF_MSEA_R96_DOCTRINE_ROUTE_GAP_RECONCILIATION_2026-07-11.md",
+      "lineOrSection": "gap evidence",
+      "evidenceRole": "reviewer-accepted gap-owner search evidence"
+    }
+  ],
+  "impact": "No functional gap; consolidation/root-path alignment is cosmetic, not a missing capability.",
+  "closeCondition": {
+    "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+    "conditionText": "A governed L6 consolidation decision is accepted that either creates a root /examples path or formally records the three-location distribution as permanent."
+  },
+  "reopenCondition": {
+    "conditionKind": "OPERATOR_DECISION_RECORDED",
+    "conditionText": "Operator authorizes an L6 consolidation review."
+  },
+  "actionOwner": "PARKED_WITH_REASON: cosmetic path-alignment gap only, tracked by MSEA-R96/R97",
+  "freshnessInputs": [
+    "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json"
+  ],
+  "lastReviewed": {
+    "date": "2026-07-11",
+    "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
+  },
+  "boundaryCaveat": "Distributed across docs/, EXTENSIONS/examples/, and governance/toolkit/06_EXAMPLES/; not consolidated into one root path; this is documented drift, not an error in any individual location."
+}

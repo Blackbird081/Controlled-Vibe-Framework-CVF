@@ -1,0 +1,14 @@
+{
+  "riskLevel": "R2",
+  "riskRationale": "Contract review is advisory and requires human/legal review before reliance.",
+  "allowedDataClasses": [
+    "business_context",
+    "user_provided_text"
+  ],
+  "disallowedDataClasses": [
+    "raw_secrets",
+    "payment_credentials",
+    "regulated_health_data"
+  ],
+  "humanReviewRequired": true
+}

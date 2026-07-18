@@ -1,0 +1,26 @@
+{
+  "_template_meta": {
+    "purpose": "Documentation-only field shape for a future Learning Signal Chain ledger entry. Not an active runtime schema, not a generated aggregate, not consumed by any current checker or service.",
+    "sourceContract": "docs/reference/learning_signal_chain/CVF_LSC_T1_SIGNAL_LEDGER_SOURCE_LAYOUT_AND_DEDUP_CONTRACT.md",
+    "intakeBridgeSource": "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/learning-signal-intake-bridge.ts",
+    "fieldGroups": ["existingIntakeOwnedFields", "lscExtensionFields"]
+  },
+  "existingIntakeOwnedFields": {
+    "sourceId": "placeholder-source-id",
+    "sourceArtifact": "placeholder/path/to/artifact.md",
+    "sourceSummary": "placeholder one-line summary of the captured signal",
+    "lane": "GOVERNANCE_CONTROL_PLANE",
+    "defectClass": "ORCHESTRATOR_PACKET_GAP",
+    "severity": "low",
+    "disposition": "DESIGN_REVIEW_REQUIRED",
+    "nextControlAction": "placeholder description of the next control action",
+    "evidenceBasis": "placeholder evidence basis text",
+    "autonomousMutationAuthorized": false
+  },
+  "lscExtensionFields": {
+    "sourceProjection": "AAF_T5_TOKEN",
+    "rootCauseGroupId": "placeholder-deterministic-root-cause-id",
+    "captureState": "CAPTURED",
+    "repeatRisk": "POSSIBLE"
+  }
+}

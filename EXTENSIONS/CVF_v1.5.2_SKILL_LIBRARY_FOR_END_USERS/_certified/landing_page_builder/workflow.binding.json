@@ -1,0 +1,21 @@
+{
+  "workflowId": "workflow.landing_page_builder.v1",
+  "outcomeKey": "landing_page_builder",
+  "packId": "landing_page_builder",
+  "inputKeys": [
+    "offer",
+    "audience",
+    "proof_points",
+    "constraints"
+  ],
+  "outputSections": [
+    "Hero copy",
+    "Sections",
+    "CTA",
+    "Review checklist"
+  ],
+  "policyRefs": [
+    "CVF_CAPABILITY_INTAKE_PIPELINE_GUARD",
+    "CVF_F1_DIMINISHING_RETURNS_STOP_RULE"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "competitor_review",
+  "name": "Competitor Review",
+  "domain": "Business Analysis",
+  "version": "1.0.0",
+  "sourceSkillRef": "03_market_research.skill.md",
+  "certificationDate": "2026-05-25",
+  "outcomeKey": "competitor_review",
+  "description": "Compare competitors, positioning, risks, and practical next moves for a bounded market question."
+}

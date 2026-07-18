@@ -1,5 +1,88 @@
 {
   "softThresholdLines": 600,
   "hardThresholdLines": 1200,
-  "exceptions": []
+  "classThresholds": {
+    "python_checker": {
+      "softThresholdLines": 700,
+      "hardThresholdLines": 1000
+    },
+    "python_test": {
+      "softThresholdLines": 900,
+      "hardThresholdLines": 1200
+    },
+    "python_library_helper": {
+      "softThresholdLines": 600,
+      "hardThresholdLines": 900
+    },
+    "python_cli_orchestrator": {
+      "softThresholdLines": 500,
+      "hardThresholdLines": 800
+    }
+  },
+  "_classThresholdsNote": "Per-class thresholds seeded by GFS-PY-T1 (operator-confirmed 2026-06-25). The flat softThresholdLines/hardThresholdLines fields are retained as a backward-compatible fallback for any in-scope file that resolves to no specific class.",
+  "exceptions": [
+    {
+      "path": "governance/compat/check_work_order_dispatch_quality.py",
+      "fileClass": "python_checker",
+      "approvedMaxLines": 313,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Dispatch-quality monolith is the central nervous system of work-order validation. It predates the class-aware Python size guard and must be split with order and evidence, not in one regression-prone rewrite.",
+      "requiredFollowup": "Split per the GFS-PY roadmap T1-T4 (docs/roadmaps/CVF_GOVERNED_PYTHON_FILE_SIZE_COVERAGE_ROADMAP_2026-06-25.md): T1 markdown table/source-verification helpers, T2 lifecycle/status validators, T3 source-verification/token-collision validators, T4 orchestrator shell. Do NOT add a new validator directly to this file; new validators go into a split module. Frozen at current line count: any touch must keep net line delta <= 0.",
+      "seedAuthorization": "docs/baselines/CVF_GC018_GFS_PY_T1_GOVERNED_PYTHON_FILE_SIZE_COVERAGE_2026-06-25.md"
+    },
+    {
+      "path": "governance/compat/test_check_work_order_dispatch_quality.py",
+      "fileClass": "python_test",
+      "approvedMaxLines": 2927,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Cumulative dispatch-quality test suite predates the class-aware Python size guard. It is the behavior-preserving regression anchor for the GFS-PY T1-T4 split and cannot be safely shrunk before those splits land.",
+      "requiredFollowup": "Mirror the GFS-PY T1-T4 split: as validators move into dedicated modules, move their tests into matching dedicated test files. Frozen at current line count: any touch must keep net line delta <= 0; new tranche tests go into dedicated files.",
+      "seedAuthorization": "docs/baselines/CVF_GC018_GFS_PY_T1_GOVERNED_PYTHON_FILE_SIZE_COVERAGE_2026-06-25.md"
+    },
+    {
+      "path": "scripts/cvf_active_archive.py",
+      "fileClass": "python_cli_orchestrator",
+      "approvedMaxLines": 1621,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Active-archive CLI orchestrator predates the class-aware Python size guard and concentrates multiple archive operations in one entrypoint.",
+      "requiredFollowup": "Extract archive operation groups (rotation, manifest, hygiene) into dedicated modules before the next substantive active-archive feature change. Frozen at current line count: any touch must keep net line delta <= 0.",
+      "seedAuthorization": "docs/baselines/CVF_GC018_GFS_PY_T1_GOVERNED_PYTHON_FILE_SIZE_COVERAGE_2026-06-25.md"
+    },
+    {
+      "path": "governance/compat/run_agent_automation_assist.py",
+      "fileClass": "python_cli_orchestrator",
+      "approvedMaxLines": 1320,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Agent automation assist helper predates the class-aware Python size guard and aggregates many early-diagnostic assemblers in one CLI surface.",
+      "requiredFollowup": "Extract diagnostic-assembly groups into dedicated helper modules before the next substantive automation-assist expansion. Frozen at current line count: any touch must keep net line delta <= 0.",
+      "seedAuthorization": "docs/baselines/CVF_GC018_GFS_PY_T1_GOVERNED_PYTHON_FILE_SIZE_COVERAGE_2026-06-25.md"
+    },
+    {
+      "path": "governance/compat/test_run_agent_automation_assist.py",
+      "fileClass": "python_test",
+      "approvedMaxLines": 1289,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Cumulative automation-assist test suite predates the class-aware Python size guard.",
+      "requiredFollowup": "As automation-assist helpers split into dedicated modules, move their tests into matching dedicated test files. Frozen at current line count: any touch must keep net line delta <= 0.",
+      "seedAuthorization": "docs/baselines/CVF_GC018_GFS_PY_T1_GOVERNED_PYTHON_FILE_SIZE_COVERAGE_2026-06-25.md"
+    },
+    {
+      "path": "governance/compat/run_agent_autorun_workflow_gate.py",
+      "fileClass": "python_cli_orchestrator",
+      "approvedMaxLines": 778,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Autorun workflow gate predates the class-aware Python size guard and sits near the 800-line cli orchestrator hard threshold. GFS-PY-T1 added the four-line wiring that registers this very Python size guard into the shared autorun command list, pushing it from 774 to 778 lines and into the near-hard band; this one-time +4 is the cost of self-registering the guard.",
+      "requiredFollowup": "Extract the phase-command builders into dedicated modules before the next substantive autorun gate expansion. Frozen at 778 lines: any further touch must keep net line delta <= 0; new phase commands that grow the file require a same-batch extraction.",
+      "seedAuthorization": "docs/baselines/CVF_GC018_GFS_PY_T1_GOVERNED_PYTHON_FILE_SIZE_COVERAGE_2026-06-25.md"
+    },
+    {
+      "path": "governance/compat/run_local_governance_hook_chain.py",
+      "fileClass": "python_cli_orchestrator",
+      "approvedMaxLines": 890,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Local governance hook-chain runner predates the class-aware Python size guard and is the registry plus parallel-runner for every local hook stage; it sits just above the 800-line cli orchestrator hard threshold. GFS-PY-T1 added the two-line-pair wiring that registers this very Python size guard into the local pre-commit and pre-push chains, raising the frozen line from 882 to 890; this one-time +8 is the cost of self-registering the guard and is the last allowed growth.",
+      "requiredFollowup": "Extract the check-registry tables (REVIEWER_FAST_CHECKS and siblings) and the parallel-runner mechanics into dedicated modules before the next substantive hook-chain expansion. Frozen at 890 lines: any further touch must keep net line delta <= 0; adding a new check entry that grows the file requires a same-batch extraction.",
+      "seedAuthorization": "docs/baselines/CVF_GC018_GFS_PY_T1_GOVERNED_PYTHON_FILE_SIZE_COVERAGE_2026-06-25.md"
+    }
+  ]
 }

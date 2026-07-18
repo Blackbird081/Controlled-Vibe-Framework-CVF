@@ -16,13 +16,17 @@
 
 Before governed work continues in a new session, new chat, or resumed thread, the worker must:
 
-1. load the canonical session bootstrap reference
-2. determine the active task class and transition state
-3. load only the guards that are relevant to that task and state
-4. avoid broad guard-loading when a bounded bootstrap plus routed controls is enough
+1. load `CVF_SESSION_MEMORY.md`
+2. resolve `CVF_SESSION/ACTIVE_SESSION_STATE.json`
+3. load the canonical session bootstrap reference
+4. determine the active task class and transition state
+5. load only the guards that are relevant to that task and state
+6. avoid broad guard-loading when a bounded bootstrap plus routed controls is enough
 
 Canonical bootstrap reference:
 
+- `CVF_SESSION_MEMORY.md`
+- `CVF_SESSION/ACTIVE_SESSION_STATE.json`
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
 
 ### Why This Exists
@@ -43,6 +47,8 @@ Every new or resumed governed session should load:
 
 #### Always-On Bootstrap
 
+- `CVF_SESSION_MEMORY.md`
+- `CVF_SESSION/ACTIVE_SESSION_STATE.json`
 - current canonical bootstrap reference
 - current canonical control matrix
 - current active roadmap or tracker for the active workline
@@ -90,6 +96,8 @@ This guard enforces canonical bootstrap structure and routing references. It doe
 ## Related Artifacts
 
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+- `CVF_SESSION_MEMORY.md`
+- `CVF_SESSION/ACTIVE_SESSION_STATE.json`
 - `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`

@@ -1,8 +1,6 @@
 # CVF Known Limitations Register
 
-Status: CURRENT PUBLIC LIMITATIONS REGISTER
-
-**Date:** 2026-04-21 (updated 2026-07-07 - reconfirmed L-007: OpenAI `gpt-4o-mini` remains `EXPERIMENTAL`, not `CERTIFIED`, and the cited canary receipt is not present in this repository)
+**Date:** 2026-04-21 (updated 2026-04-21 - L-003 + L-008 closed by E2E stabilization wave)
 **Scope:** CVF Release Candidate — post-provider-lane closure  
 **Classification:** Permanent boundary / Open gap  
 
@@ -23,38 +21,6 @@ Classification key:
 
 - **Permanent** — will not change without a deliberate architecture decision. Not a deficiency.
 - **Open** — known gap; may be closed in a future wave. Not hidden; just not yet addressed.
-
-## Scope / Target / Owner Boundary
-
-Target: public-safe limitations that affect GitHub readers, demos, external
-agents, and public capability claims.
-
-Owner boundary: this register is a curated public documentation surface. It
-does not mirror private provenance, raw handoffs, raw provider transcripts, or
-internal roadmap queues.
-
-## Owner / Source
-
-Owner: CVF public documentation surface.
-
-Source: public-safe evidence packets, public source paths, and public claim
-boundaries.
-
-## Protocol / Contract / Requirements
-
-Each limitation must state whether it is `Permanent`, `Open`, or `Closed`, name
-its affected area, and preserve an explicit impact or future-action boundary.
-New limitations must not create new runtime or provider claims by implication.
-
-## Enforcement / Verification
-
-Before publishing updates to this register, run the public documentation checks:
-
-```bash
-python governance/compat/check_docs_governance_compat.py
-python governance/compat/check_markdown_structural_completeness.py --all-changed --enforce
-python scripts/check_public_surface.py
-```
 
 ---
 
@@ -91,7 +57,7 @@ python scripts/check_public_surface.py
 | Classification | Closed |
 | Area | Test coverage |
 | Closure | `tests/e2e/provider-lane-ui.spec.ts` (4 tests) added — provider lane badges + no-parity-language assertions cover W110-T3 surfaces. Release-gate mock E2E now runs the current UI-structure specs under `playwright.config.mock.ts`; obsolete exact-mock-response agent flow checks are excluded from the gate. Drift repaired in CP1 (config split + drift audit). |
-| Evidence | E2E Proof & Regression Stabilization roadmap — CP1 + CP3 DELIVERED 2026-04-21. Delta: `docs/baselines/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`. |
+| Evidence | E2E Proof & Regression Stabilization roadmap — CP1 + CP3 DELIVERED 2026-04-21. Delta: `docs/baselines/archive/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`. |
 
 ---
 
@@ -150,119 +116,17 @@ python scripts/check_public_surface.py
 | Classification | Closed |
 | Area | Non-coder value validation |
 | Closure | `tests/e2e/noncoder-governance-live.spec.ts` covers landing → template gallery → intake wizard structure, then real Alibaba `qwen-turbo` output through `/api/execute`. The live proof asserts governance metadata (`guardResult`, `outputValidation`, `providerRouting`) rather than exact AI text. Phase-gated/full-mode UI behavior is not used as live-output proof because it can correctly stop before provider execution. |
-| Evidence | E2E Proof & Regression Stabilization roadmap — CP2 DELIVERED 2026-04-21. Delta: `docs/baselines/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`. |
-
----
-
-### L-009 — Public Route Coverage Is Evidence-Linked, Not File-Inferred
-
-| Field | Value |
-| --- | --- |
-| Classification | Open |
-| Area | Public route coverage / external review |
-| Statement | Public API route files may exist without a public evidence packet proving that each route is governed, authenticated, durable, or production-ready. Public review must classify route coverage by linked evidence, tests, and explicit claim text, not by file names or governance-related words inside a route. |
-| Impact | External agents should report missing route evidence as a bounded coverage gap instead of assuming every route is governed or production-ready. |
-| Future action | Add route-level public coverage evidence or caveats when a route is promoted into a public governance claim. |
-| Boundary | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`; `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md` |
-
----
-
-### L-010 — Static CI Is Public Hygiene, Not Live Governance Proof
-
-| Field | Value |
-| --- | --- |
-| Classification | Permanent |
-| Area | CI / release evidence |
-| Statement | Public CI and static gates can check docs, source hygiene, guard compatibility, and build posture without consuming provider secrets. They do not prove live governance behavior. Release-quality governance claims still require the protected live release gate with operator-supplied provider credentials. |
-| Why permanent | Live provider quota and keys must remain operator-controlled, while public CI should remain safe to run on ordinary pushes and pull requests. |
-| Operator path | `python scripts/run_cvf_release_gate_bundle.py --json` or the protected live release-gate workflow with explicit quota confirmation. |
-| Boundary | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`; `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md` |
-
----
-
-### L-011 — No Public Default Database Or Distributed Audit Backend Claim
-
-| Field | Value |
-| --- | --- |
-| Classification | Open |
-| Area | Evidence durability / audit storage |
-| Statement | Public CVF evidence durability claims are local-first and bounded unless a public evidence path names a live external backend, migration proof, and distributed recovery proof. The public repository must not be read as claiming a default production database, live Redis backend, multi-instance consensus, tamper-proof audit log, or distributed retention readiness. |
-| Impact | External agents should classify missing database/distributed audit proof as an open bounded limitation, not as hidden proof and not as a contradiction when docs say CVF is evidence-based. |
-| Future action | Publish a dedicated external-storage or database-backed evidence packet only if a later tranche implements and tests a live backend with migration and recovery evidence. |
-| Boundary | `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`; `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md` |
-
----
-
-### L-012 — Public Coverage Visibility Is Configured, Not A Standing Pass Claim
-
-| Field | Value |
-| --- | --- |
-| Classification | Open |
-| Area | CI / coverage discoverability |
-| Statement | Public workflow files expose coverage jobs, but the repository front door must not be read as claiming a current coverage pass unless a specific workflow run or artifact is inspected. |
-| Impact | External agents should distinguish configured coverage from latest-run evidence. |
-| Future action | Publish a small public evidence pointer when a release tag intentionally depends on a coverage artifact. |
-| Boundary | `.github/workflows/cvf-ci.yml`; `.github/workflows/cvf-web-ci.yml`; `.github/workflows/documentation-testing.yml`; `README.md` |
-
----
-
-### L-013 — CPF Source Surface Still Needs Product-Level Refactor Planning
-
-| Field | Value |
-| --- | --- |
-| Classification | Open |
-| Area | Control Plane Foundation maintainability |
-| Statement | The CPF public barrel is currently small and guard-protected, but the CPF source surface remains broad and should be grouped further only through a source-verified refactor plan. |
-| Impact | External agents should not report the current barrel as a large barrel, but may correctly report broad CPF source grouping as maintainability debt. |
-| Future action | Open a separate refactor work order if CPF source grouping becomes a priority. |
-| Boundary | `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts`; `governance/compat/check_cpf_public_surface_maintainability.py` |
-
----
-
-### L-014 — Package Naming And Five-Minute Demo Remain Product Clarity Debt
-
-| Field | Value |
-| --- | --- |
-| Classification | Open |
-| Area | Onboarding / package taxonomy |
-| Statement | Extension and package names still reflect CVF's historical evolution, and the fastest public demo path still assumes local setup plus optional provider keys rather than a hosted no-key demo. |
-| Impact | New reviewers may perceive naming and first-run setup as heavier than the core governance idea. |
-| Future action | Plan a public product-packaging pass covering extension naming, quick-demo flow, and hosted/no-key demo boundaries without weakening live-proof claims. |
-| Boundary | `README.md`; `docs/GET_STARTED.md`; `docs/START_WITH_CVF.md`; `EXTENSIONS/` |
+| Evidence | E2E Proof & Regression Stabilization roadmap — CP2 DELIVERED 2026-04-21. Delta: `docs/baselines/archive/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`. |
 
 ---
 
 ## How to Use This Register
 
-**For demo preparation:** acknowledge open gaps proactively; do not wait for them to be discovered. Be explicit that certified provider/model lanes are listed in `docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md` while other providers remain experimental until canary-run. L-003 and L-008 are now closed.
+**For demo preparation:** acknowledge open gaps proactively; do not wait for them to be discovered. Be explicit that Alibaba and DeepSeek are certified while other providers remain experimental until canary-run. L-003 and L-008 are now closed.
 
 **For agent handoff:** cite this register when scoping the next wave. Closed items such as L-003 and L-008 must not be reopened unless fresh evidence shows new drift.
 
 **For future waves:** when a limitation is closed, update its entry to `Closed` with a date and evidence pointer, or remove it from this register entirely. Do not let closed gaps accumulate here.
-
----
-
-## Boundaries / Non-Goals
-
-This register is not a complete private defect backlog, runtime hardening
-roadmap, CI implementation plan, provider SLA, legal assurance document, or
-production-readiness attestation.
-
-## Related Artifacts
-
-- `README.md`
-- `GOVERNANCE.md`
-- `ARCHITECTURE.md`
-- `docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md`
-- `docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md`
-- `docs/reference/CVF_PUBLIC_CATALOG_CLAIM_BOUNDARY_2026-05-18.md`
-- `docs/evidence/latest-release-gate.md`
-
-## Claim Boundary
-
-This register records public-safe limitations and claim boundaries. It does not
-prove runtime behavior, provider behavior, hosted freshness, route coverage, CI
-freshness, production readiness, or private provenance completeness.
 
 ---
 

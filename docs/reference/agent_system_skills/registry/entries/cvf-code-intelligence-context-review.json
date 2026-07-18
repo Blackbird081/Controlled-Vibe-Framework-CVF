@@ -1,0 +1,119 @@
+{
+  "registryOrder": 10,
+  "skillId": "cvf-code-intelligence-context-review",
+  "name": "CVF Code Intelligence Context Review",
+  "version": "0.1.0",
+  "owner": "CVF code-intelligence governance surface",
+  "status": "CANDIDATE",
+  "canonicalRoot": "docs/reference/agent_system_skills/registry/entries/cvf-code-intelligence-context-review.json",
+  "originLane": "CGE-R2",
+  "sourceArtifacts": [
+    "docs/reviews/CVF_CGE_R2_CODEGRAPH_RESCAN_VALUE_AUDIT_AND_CORRECTION_2026-06-29.md",
+    "docs/reference/CVF_CGE_R1_CODE_INTELLIGENCE_OWNER_SURFACE_MATRIX_2026-06-29.md",
+    "docs/reference/external_agent_review/CVF_EXTERNAL_ABSORPTION_CONDITIONAL_REOPEN_INDEX.md",
+    ".private_reference/legacy/CVF 28.06/CodeGraph/CVF_Code_Intelligence_Capability/EXTENSIONS/CVF_CODE_INTELLIGENCE_CAPABILITY/package.manifest.json"
+  ],
+  "legacyRows": [
+    "CGE-R1 package candidate cvf.code_intelligence",
+    "CGE-R2 query-planner and direct-read correction"
+  ],
+  "license": "CVF_PRIVATE_GOVERNED",
+  "reviewArtifacts": [
+    "docs/reviews/CVF_CGE_R2_CODEGRAPH_RESCAN_VALUE_AUDIT_AND_CORRECTION_2026-06-29.md"
+  ],
+  "purpose": "Provide a metadata-only candidate for bounded code-intelligence context planning, impact review, test-surface review, and stale-graph fallback discipline derived from the CodeGraph source pack.",
+  "triggerPatterns": [
+    "code intelligence",
+    "graph context",
+    "impact radius",
+    "test surface",
+    "stale index",
+    "dependency trace",
+    "route lookup",
+    "graph receipt"
+  ],
+  "taskClasses": [
+    "code-review",
+    "implementation-planning",
+    "change-risk-review",
+    "test-surface-review",
+    "debugging-orientation",
+    "repository-onboarding"
+  ],
+  "useWhen": "A dispatcher, worker, or reviewer needs scoped codebase context planning, impacted-file review, dependency or route orientation, test-surface review, or stale derived-view fallback discipline before making a code-change or review claim.",
+  "doNotUseWhen": "The task does not involve codebase structure, dependency, route, impact, or test-surface reasoning; or when a runtime graph engine, MCP adapter, package activation, provider/live proof, public claim, or automatic freeze decision is needed.",
+  "riskTriggers": [
+    "graph-derived evidence used for review or freeze claim",
+    "stale or unknown index status",
+    "low or unknown graph confidence",
+    "scope boundary includes broad repository paths",
+    "affected files exceed work-order allowed paths",
+    "direct-read fallback missing",
+    "receipt or work-order trace missing"
+  ],
+  "roles": [
+    "dispatcher",
+    "worker",
+    "reviewer"
+  ],
+  "phases": [
+    "DESIGN",
+    "SPEC",
+    "WORK_ORDER",
+    "BUILD",
+    "REVIEW"
+  ],
+  "surfaces": [
+    "docs/reference/CVF_CGE_R1_CODE_INTELLIGENCE_OWNER_SURFACE_MATRIX_2026-06-29.md",
+    "docs/work_orders",
+    "docs/reviews",
+    "docs/reference/agent_system_skills/registry"
+  ],
+  "riskCeiling": "R1",
+  "contextProfile": "metadata-only-code-intelligence-context-review",
+  "inputs": [
+    "active work-order scope boundary",
+    "target symbol, route, file, or change-risk surface",
+    "allowed paths and forbidden paths",
+    "graph index status when a graph exists",
+    "fallback direct-read evidence"
+  ],
+  "outputs": [
+    "graph query plan doctrine",
+    "impact-radius review checklist",
+    "test-surface review checklist",
+    "staleness warning and direct-read fallback requirement",
+    "receipt and trace field requirements"
+  ],
+  "executionConstraints": "metadata-only candidate; no graph query execution; no runtime engine; no MCP call; no file mutation; no automatic scope expansion; no freeze authority",
+  "acceptanceEvidence": "CGE-R2 rescan review accepted; ASSF package candidate anatomy checker PASS; generated skill index drift PASS; no runtime or package activation claimed",
+  "riskProfile": "R1",
+  "authorityCeiling": "read-only planning and review guidance; graph-derived evidence can never grant mutation, scope expansion, freeze, approval, commit, provider, public, or production authority",
+  "sideEffects": "creates governed metadata-only ASSF registry entry and regenerates generated skill index; no runtime mutation",
+  "permissions": "read governed work-order/review/reference artifacts and source-backed metadata; no external graph execution or adapter calls",
+  "rollback": "delete this registry entry and regenerate docs/reference/agent_system_skills/generated/skill-index.json if reviewer rejects",
+  "safeStop": "mark the CodeGraph rescan correction blocked with reason; do not activate package or runtime",
+  "candidateState": "CANDIDATE",
+  "approvalState": "AWAITING_REVIEW",
+  "uatState": "NOT_STARTED",
+  "certificationState": "NOT_STARTED",
+  "deprecation": "none",
+  "successor": "none",
+  "retirement": "none",
+  "dependencies": [
+    "cvf-governance-external-absorption"
+  ],
+  "conflicts": [],
+  "compositionOrder": 10,
+  "capabilityBoundary": "no package root, no SKILL.md, no resolver activation, no graph runtime, no CodeGraph install, no MCP adapter, no watcher, no daemon, no SQLite index, no provider/live proof, no automatic freeze, no public-sync, no production claim",
+  "internalAgentDisposition": "CANDIDATE",
+  "resolverBehavior": "metadata-only; resolver may expose identity, selector, risk, and boundary fields only after future authorization; it must not execute graph queries or open instruction bodies in this tranche",
+  "loaderBoundary": "loading this metadata never grants authority to run CodeGraph, create an index, call MCP, mutate files, expand scope, freeze a task, or raise authority above authorityCeiling",
+  "externalCliMcpDisposition": "DEFERRED_WITH_REASON",
+  "adapterContract": "N/A with reason: external CLI/MCP adapter not authored; CodeGraph runtime and MCP query adapter remain parked pending fresh GC-018 and source verification",
+  "adapterEvidence": "N/A with reason: no adapter implemented in CGE-R2",
+  "externalMutationBoundary": "no external mutation, graph execution, or MCP query is permitted by this metadata-only candidate",
+  "platformCompatibility": "cross-platform metadata; runtime compatibility not claimed",
+  "shellAssumptions": "no shell execution required for metadata-only candidate",
+  "osConstraints": "none for metadata; runtime graph engine constraints remain unverified"
+}

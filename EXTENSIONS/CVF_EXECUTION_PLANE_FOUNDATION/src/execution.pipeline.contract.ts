@@ -1,4 +1,6 @@
 import type { ExecutionBridgeReceipt } from "./execution.bridge.consumer.contract";
+import type { Receipt } from "../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract";
+import { createReceiptEnvelope as wrapReceiptEnvelope } from "../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract";
 import { CommandRuntimeContract, createCommandRuntimeContract } from "./command.runtime.contract";
 import type { CommandRuntimeResult, CommandRuntimeContractDependencies } from "./command.runtime.contract";
 import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
@@ -34,6 +36,15 @@ export interface ExecutionPipelineReceipt {
   pipelineStages: ExecutionPipelineStageEntry[];
   pipelineHash: string;
   warnings: string[];
+}
+
+export type ExecutionPipelineReceiptEnvelope = Receipt<ExecutionPipelineReceipt>;
+
+export interface ExecutionPipelineTaskReceiptRecord {
+  readonly taskKind: "execution_pipeline";
+  readonly taskId: string;
+  readonly immutable: true;
+  readonly envelope: ExecutionPipelineReceiptEnvelope;
 }
 
 export interface ExecutionPipelineContractDependencies {
@@ -139,6 +150,29 @@ export class ExecutionPipelineContract {
       pipelineHash,
       warnings,
     };
+  }
+
+  runWithReceiptEnvelope(bridgeReceipt: ExecutionBridgeReceipt): ExecutionPipelineReceiptEnvelope {
+    return this.wrapPipelineReceipt(this.run(bridgeReceipt));
+  }
+
+  buildPipelineTaskRecord(receipt: ExecutionPipelineReceipt): ExecutionPipelineTaskReceiptRecord {
+    return {
+      taskKind: "execution_pipeline",
+      taskId: receipt.pipelineReceiptId,
+      immutable: true,
+      envelope: this.wrapPipelineReceipt(receipt),
+    };
+  }
+
+  wrapPipelineReceipt(receipt: ExecutionPipelineReceipt): ExecutionPipelineReceiptEnvelope {
+    return wrapReceiptEnvelope({
+      id: receipt.pipelineReceiptId,
+      issuedAt: receipt.createdAt,
+      source: `execution-plane-foundation:execution-pipeline:${receipt.orchestrationId}`,
+      payload: receipt,
+      integrityHash: receipt.pipelineHash,
+    });
   }
 }
 

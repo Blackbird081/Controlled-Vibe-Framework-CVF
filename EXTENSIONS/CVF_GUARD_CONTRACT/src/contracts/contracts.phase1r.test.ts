@@ -11,12 +11,15 @@
 import { describe, it, expect } from 'vitest';
 
 import {
+  createReceiptEnvelopeReceiptRecord,
+  createReceiptEnvelope,
   RECEIPT_SCHEMA_VERSION_1R,
   RECEIPT_ENVELOPE_ADAPTER_MAP,
 } from './index';
 
 import type {
   Receipt,
+  ReceiptEnvelopeReceiptRecord,
   GatewayReceiptPayload,
   ExecutionBridgeReceiptPayload,
   GovernanceLedgerReceiptPayload,
@@ -61,6 +64,37 @@ describe('Receipt<TPayload> envelope shape', () => {
 
   it('RECEIPT_SCHEMA_VERSION_1R is the Phase 1.R marker', () => {
     expect(RECEIPT_SCHEMA_VERSION_1R).toBe('1.R.0');
+  });
+
+  it('createReceiptEnvelope preserves typed payload shape', () => {
+    const receipt = createReceiptEnvelope({
+      id: 'wrapped-001',
+      issuedAt: '2026-05-20T00:00:00Z',
+      source: 'test-wrapper',
+      payload: { legacyReceiptId: 'legacy-001', decision: 'allow' },
+      integrityHash: 'hash-001',
+    });
+
+    expect(receipt.schemaVersion).toBe(RECEIPT_SCHEMA_VERSION_1R);
+    expect(receipt.payload.legacyReceiptId).toBe('legacy-001');
+    expect(receipt.payload.decision).toBe('allow');
+    expect(receipt.integrityHash).toBe('hash-001');
+  });
+
+  it('createReceiptEnvelopeReceiptRecord marks envelopes as immutable receipt-tier records', () => {
+    const receipt = createReceiptEnvelope({
+      id: 'receipt-record-001',
+      issuedAt: '2026-05-20T00:00:00Z',
+      source: 'test-record',
+      payload: { legacyReceiptId: 'legacy-record-001' },
+    });
+
+    const record: ReceiptEnvelopeReceiptRecord<{ legacyReceiptId: string }> =
+      createReceiptEnvelopeReceiptRecord(receipt);
+
+    expect(record.tierId).toBe('receipt');
+    expect(record.immutable).toBe(true);
+    expect(record.envelope.payload.legacyReceiptId).toBe('legacy-record-001');
   });
 });
 

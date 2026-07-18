@@ -1,0 +1,15 @@
+{
+  "riskLevel": "R1",
+  "riskRationale": "Static planning deliverable for software requirements with no execution, deployment, or external side effects.",
+  "allowedDataClasses": [
+    "business_context",
+    "user_provided_text",
+    "product_requirements"
+  ],
+  "disallowedDataClasses": [
+    "raw_secrets",
+    "payment_credentials",
+    "regulated_health_data"
+  ],
+  "humanReviewRequired": false
+}

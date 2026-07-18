@@ -3,7 +3,7 @@
 **Guard Class:** `DOCS_AND_MEMORY_HYGIENE_GUARD`
 **Status:** Active archive-maintenance contract for dated operational documents.
 **Applies to:** Managed roots such as `docs/` and `ECOSYSTEM/strategy/` plus their local `archive/` subdirectories.
-**Enforced by:** `scripts/cvf_active_archive.py`, `governance/compat/check_active_window_registry.py`, `governance/compat/check_audit_retention_registry.py`, `governance/compat/check_review_retention_registry.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`, `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`, `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`
+**Enforced by:** `scripts/cvf_active_archive.py`, `governance/compat/check_active_archive_hygiene.py`, `governance/compat/check_active_window_registry.py`, `governance/compat/check_audit_retention_registry.py`, `governance/compat/check_review_retention_registry.py`, `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`, `governance/compat/CVF_ACTIVE_ARCHIVE_BASELINE.json`, `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`, `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`
 
 ## Purpose
 
@@ -54,8 +54,8 @@ Non-compliant examples:
 ### Active Zone
 
 - only files with a date suffix are eligible for auto-archive
-- dated files in the last 3 calendar days stay active
-- dated files older than 3 days become archive candidates and then pass screening rules before move
+- dated files in the last 5 calendar days stay active
+- dated files older than 5 days become archive candidates and then pass screening rules before move
 - non-dated files are treated as evergreen docs and remain active unless explicitly refactored
 
 ### Archive Zone
@@ -125,9 +125,24 @@ This script should be run:
 - after completing a sprint or upgrade wave
 - when safe-to-archive candidate count exceeds `10` files
 
+### Hook Automation
+
+Archive hygiene is no longer an optional manual reminder.
+
+- local pre-commit and pre-push chains MUST run
+  `governance/compat/check_active_archive_hygiene.py --max-stale 10 --fail-on-changed-stale --enforce`
+- the hook-safe checker is fast and does not move files
+- the checker treats baseline-blocked candidates as intentionally active and
+  only fails on actionable backlog
+- if the checker fails, run `python scripts/cvf_active_archive.py --execute`
+  before continuing the commit/push
+- `scripts/cvf_active_archive.py --status` must remain fast enough for routine
+  operator use; if it times out, the archive guard implementation is broken
+
 ## Enforcement Surface
 
 - active/archive maintenance runs through `scripts/cvf_active_archive.py`
+- hook-safe stale-doc drift detection runs through `governance/compat/check_active_archive_hygiene.py`
 - active-window classification and protected-set sync run through `governance/compat/check_active_window_registry.py`
 - audit retention classification completeness runs through `governance/compat/check_audit_retention_registry.py`
 - review retention classification completeness runs through `governance/compat/check_review_retention_registry.py`
@@ -148,6 +163,9 @@ Useful commands:
 | `python scripts/cvf_active_archive.py --restore` | restore all files from archive |
 | `python scripts/cvf_active_archive.py --status` | show current active vs archive counts |
 | `python scripts/cvf_active_archive.py --dry-run --full-scan` | force one full-repository screening pass |
+| `python governance/compat/check_active_archive_hygiene.py --max-stale 10 --fail-on-changed-stale --enforce` | hook-safe stale active-doc backlog gate |
+| `python governance/compat/check_review_retention_registry.py --scan-mode fast --enforce` | hook-safe registry validation without full review dynamic scan |
+| `python governance/compat/check_review_retention_registry.py --scan-mode full --enforce` | explicit full review retention re-derivation/audit |
 
 ## Related Artifacts
 

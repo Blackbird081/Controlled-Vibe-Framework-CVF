@@ -29,7 +29,23 @@ jobs:
           cache: 'npm'
           cache-dependency-path: EXTENSIONS/CVF_GUARD_CONTRACT/package-lock.json
 
-      - name: Install dependencies
+      - name: Install Control Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION
+        run: npm ci
+
+      - name: Install Intent Validation dependencies
+        working-directory: EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION
+        run: npm install --no-audit --no-fund
+
+      - name: Install Model Gateway dependencies
+        working-directory: EXTENSIONS/CVF_MODEL_GATEWAY
+        run: npm install --no-audit --no-fund
+
+      - name: Install Learning Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION
+        run: npm ci
+
+      - name: Install Guard Contract dependencies
         run: npm ci
 
       - name: Run unit tests
@@ -55,9 +71,27 @@ jobs:
           cache: 'npm'
           cache-dependency-path: EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/package-lock.json
 
+      - name: Install Control Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION
+        run: npm ci
+
+      - name: Install Model Gateway dependencies
+        working-directory: EXTENSIONS/CVF_MODEL_GATEWAY
+        run: npm install --no-audit --no-fund
+
+      - name: Install Learning Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION
+        run: npm ci
+
       - name: Install CVF Guard Contract (local dep)
         working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
         run: npm ci
+
+      - name: Install SOT3 package dependencies
+        run: |
+          npm ci --prefix ../../CVF_TRUTH_KERNEL
+          npm ci --prefix ../../CVF_TRUTH_FLOW
+          npm ci --prefix ../../CVF_REFINERY
 
       - name: Install MCP Server dependencies
         run: npm ci
@@ -82,6 +116,18 @@ jobs:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
+
+      - name: Install Control Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION
+        run: npm ci
+
+      - name: Install Model Gateway dependencies
+        working-directory: EXTENSIONS/CVF_MODEL_GATEWAY
+        run: npm install --no-audit --no-fund
+
+      - name: Install Learning Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION
+        run: npm ci
 
       - name: Install CVF Guard Contract (local dep)
         working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
@@ -141,7 +187,11 @@ jobs:
           cache: 'npm'
           cache-dependency-path: EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/package-lock.json
 
-      - name: Install dependencies
+      - name: Install Model Gateway dependencies
+        working-directory: EXTENSIONS/CVF_MODEL_GATEWAY
+        run: npm install --no-audit --no-fund
+
+      - name: Install Execution Plane Foundation dependencies
         run: npm ci
 
       - name: Type check
@@ -222,6 +272,18 @@ jobs:
           cache: 'npm'
           cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
 
+      - name: Install Control Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION
+        run: npm ci
+
+      - name: Install Model Gateway dependencies
+        working-directory: EXTENSIONS/CVF_MODEL_GATEWAY
+        run: npm install --no-audit --no-fund
+
+      - name: Install Learning Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION
+        run: npm ci
+
       - name: Install CVF Guard Contract (local dep)
         working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
         run: npm ci
@@ -253,6 +315,18 @@ jobs:
           cache: 'npm'
           cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
 
+      - name: Install Control Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION
+        run: npm ci
+
+      - name: Install Model Gateway dependencies
+        working-directory: EXTENSIONS/CVF_MODEL_GATEWAY
+        run: npm install --no-audit --no-fund
+
+      - name: Install Learning Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION
+        run: npm ci
+
       - name: Install CVF Guard Contract (local dep)
         working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
         run: npm ci
@@ -261,8 +335,7 @@ jobs:
         run: npm ci
 
       - name: Front-door governance smoke
-        working-directory: ${{ github.workspace }}
-        run: python scripts/run_cvf_static_ci_gate.py --json
+        run: python ../../../scripts/run_cvf_static_ci_gate.py --json
 
   # ─── Summary gate ────────────────────────────────────────────────────
   ci-passed:

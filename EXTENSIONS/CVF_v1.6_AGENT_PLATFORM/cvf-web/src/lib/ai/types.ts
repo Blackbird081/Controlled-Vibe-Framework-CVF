@@ -2,7 +2,7 @@ import type { EnforcementResult } from '@/lib/enforcement';
 import type { LaneStatus } from '@/lib/provider-lane-status';
 import type { WorkflowCompositionSummary } from '@/lib/workflow-composition';
 import type { AifMemoryReinjectionReceipt, AifMemoryReinjectionRequest } from '@/lib/aif-memory-reinjection';
-import type { DurableMemoryReceipt } from '../../../../../CVF_LEARNING_PLANE_FOUNDATION/src/durable-memory-store';
+import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation';
 import type { ExecutionDiagnostic } from '@/lib/execution-diagnostics';
 
 // AI Provider Types and Interfaces
@@ -21,7 +21,6 @@ export interface ExecutionRequest {
     templateName: string;
     inputs: Record<string, string>;
     intent: string;
-    qbsFamily?: string | null;
     provider?: AIProvider;
     model?: string;
     imageUrl?: string;
@@ -30,6 +29,7 @@ export interface ExecutionRequest {
     mode?: 'simple' | 'governance' | 'full';
     cvfPhase?: string;
     cvfRiskLevel?: string;
+    qbsFamily?: string;
     skillPreflightPassed?: boolean;
     skillPreflightDeclaration?: string;
     skillPreflightRecordRef?: string;
@@ -80,6 +80,54 @@ export interface ExecutionRequest {
     };
 }
 
+export type GovernanceTraceStage =
+    | 'enforcement'
+    | 'routing'
+    | 'knowledge'
+    | 'approval'
+    | 'memory'
+    | 'validation';
+
+export interface GovernanceTraceEntry {
+    stage: GovernanceTraceStage;
+    policyId: string;
+    decision: string;
+    summary: string;
+    parametersChecked: string[];
+    constraintsApplied: string[];
+}
+
+export interface RuntimeTelemetryReceipt {
+    schemaVersion: 'cvf.runtimeTelemetry.v1';
+    providerLatencyMs?: number;
+    routeElapsedMs: number;
+    tokenUsage?: {
+        inputTokens: number;
+        outputTokens: number;
+        totalTokens: number;
+    };
+    estimatedCostUSD?: number;
+    costEstimateSource?: 'cvf_model_pricing_table_or_fallback';
+    governanceTraceEntryCount: number;
+    redactionApplied: true;
+    claimBoundary: 'summary_only_no_raw_prompt_output_key_or_provider_payload';
+}
+
+export interface ReceiptIntegrityAnchor {
+    schemaVersion: 'cvf.receiptIntegrity.v1';
+    canonicalization: 'stable-json-v1';
+    digestAlgorithm: 'sha256';
+    receiptHash: string;
+    hmacAlgorithm: 'hmac-sha256';
+    signatureStatus: 'SIGNED' | 'UNSIGNED';
+    signatureDigest?: string;
+    externalAnchorStatus: 'PROVIDED' | 'NOT_PROVIDED';
+    externalAnchorId?: string;
+    externalAnchorUrl?: string;
+    redactionApplied: true;
+    claimBoundary: 'local_receipt_integrity_only_no_third_party_immutability_without_external_anchor';
+}
+
 export interface GovernanceEvidenceReceipt {
     receiptId: string;
     evidenceMode: 'live' | 'mock' | 'static';
@@ -102,6 +150,9 @@ export interface GovernanceEvidenceReceipt {
     durableMemoryRead?: DurableMemoryReceipt;
     durableMemoryWriteReceipt?: DurableMemoryReceipt;
     workflowComposition?: WorkflowCompositionSummary;
+    governanceTrace?: GovernanceTraceEntry[];
+    runtimeTelemetry?: RuntimeTelemetryReceipt;
+    receiptIntegrity?: ReceiptIntegrityAnchor;
     generatedAt: string;
 }
 

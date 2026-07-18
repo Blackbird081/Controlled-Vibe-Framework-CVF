@@ -66,6 +66,18 @@
     "data_analysis_wizard": { "domain": "finance_analytics", "skillId": "01_finance_analysis_system" },
     "data_analysis": { "domain": "finance_analytics", "skillId": "01_finance_analysis_system" }
   },
+  "exemptTemplateIds": {
+    "individual_skills_folder": {
+      "reason": "Folder-navigation surface with isFolder=true; child templates carry skill mappings.",
+      "exemptedAt": "2026-05-20",
+      "exemptedBy": "HN1 Fast-Lane audit"
+    },
+    "vibe_workflow_folder": {
+      "reason": "Folder-navigation surface with isFolder=true; child templates carry skill mappings.",
+      "exemptedAt": "2026-05-20",
+      "exemptedBy": "HN1 Fast-Lane audit"
+    }
+  },
   "categoryToDomainMap": {
     "business": "business_analysis",
     "technical": "technical_review",

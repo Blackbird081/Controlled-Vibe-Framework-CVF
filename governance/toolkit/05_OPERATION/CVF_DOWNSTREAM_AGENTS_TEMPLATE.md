@@ -66,6 +66,28 @@ Before performing ANY action on this project, you MUST:
 If you cannot complete steps 1-6 because a file is missing or unreadable:
 → **STOP. Report which file is missing. Do not proceed.**
 
+## Mandatory Continuity Rehydration
+
+The First-Request Protocol is not a one-time project bootstrap step. Run it
+again before material work whenever any of these triggers occurs:
+
+- a new or resumed chat/session starts;
+- context was compacted, lost, summarized, or transferred;
+- a new tranche or work order starts;
+- responsibility moves to another agent or role;
+- the active state or active handoff changed since the last acknowledgment.
+
+At every trigger, re-read the project continuity summary, active state, active
+handoff, implementation truth, and documentation index from the canonical
+paths above. Do not rely on chat history, provider-local memory, or a previous
+session declaration as a substitute.
+
+Before the first material action in that session or tranche, emit a fresh
+`CVF Agent Declaration` using current file values. For a tranche transition,
+also record the acknowledgment in the active handoff before BUILD begins.
+If the summary, state, and handoff disagree, stop at INTAKE and report
+`BLOCKED_CONTINUITY_DRIFT`; do not choose one silently.
+
 ## Phase Model
 
 This project uses the CVF phase model:

@@ -451,6 +451,33 @@ if (Test-Path -LiteralPath $agentsPath -PathType Leaf) {
     Add-Check "AGENTS contract defines roles and seven steps" $agentsContractValid $agentsContractDetail
 }
 
+# Check 22: startup and tranche transitions require fresh continuity reads.
+$continuityRehydrationValid = $false
+$continuityRehydrationDetail = "AGENTS.md unavailable"
+if (Test-Path -LiteralPath $agentsPath -PathType Leaf) {
+    if (-not $agentsText) {
+        $agentsText = Get-Content -LiteralPath $agentsPath -Raw -Encoding utf8
+    }
+    $rehydrationTokens = @(
+        "Mandatory Continuity Rehydration",
+        "new or resumed chat/session",
+        "new tranche or work order",
+        "Do not rely on chat history",
+        "BLOCKED_CONTINUITY_DRIFT"
+    )
+    $missingRehydrationTokens = @($rehydrationTokens | Where-Object {
+        $agentsText -notmatch [regex]::Escape($_)
+    })
+    $continuityRehydrationValid = ($missingRehydrationTokens.Count -eq 0)
+    $continuityRehydrationDetail = if ($continuityRehydrationValid) {
+        "Session/tranche continuity rehydration contract present"
+    }
+    else {
+        "Missing contract tokens: $($missingRehydrationTokens -join ', ')"
+    }
+}
+Add-Check "Session and tranche continuity rehydration required" $continuityRehydrationValid $continuityRehydrationDetail
+
 # Print results table
 Write-Host ""
 Write-Host ("  {0,-50} {1}" -f "Check", "Status") -ForegroundColor White

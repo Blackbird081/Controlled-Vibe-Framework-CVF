@@ -17,10 +17,27 @@ $requiredPublicCoreFiles = @(
     "scripts\check_cvf_workspace_agent_enforcement.ps1",
     "scripts\check_cvf_workspace_new_project_enforcement.ps1",
     "scripts\ingest_cvf_downstream_knowledge.ps1",
+    "scripts\initialize_cvf_project_clone.ps1",
+    "scripts\initialize_cvf_repository_clone.ps1",
     "scripts\new-cvf-workspace.ps1",
     "scripts\update_cvf_workspace_public_core.ps1",
     "scripts\write_cvf_workspace_web_evidence_bridge.ps1"
 )
+
+function Resolve-ProjectBoundPath {
+    param(
+        [string]$ProjectRoot,
+        [string]$RelativePath,
+        [string]$AbsolutePath
+    )
+    if (-not [string]::IsNullOrWhiteSpace($RelativePath)) {
+        return [System.IO.Path]::GetFullPath((Join-Path $ProjectRoot $RelativePath))
+    }
+    if (-not [string]::IsNullOrWhiteSpace($AbsolutePath)) {
+        return [System.IO.Path]::GetFullPath($AbsolutePath)
+    }
+    return $null
+}
 
 $projectResolved = [System.IO.Path]::GetFullPath($ProjectPath)
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -201,12 +218,32 @@ if ($manifestExists) {
     try {
         $manifestContent = Get-Content $manifestPath -Raw -Encoding utf8
         $manifestObj = $manifestContent | ConvertFrom-Json
-        $requiredFields = @("cvfCorePath","cvfCoreCommit","workspaceRoot","projectPath","phaseModel",
-                            "liveGovernanceEvidenceRequired","mockAllowedOnlyForUi","requiredDocs",
-                            "bootstrapDate","enforcementVersion")
+        $portableManifest = ($manifestObj.PSObject.Properties.Name -contains "cvfCoreRelativePath")
+        $requiredFields = if ($portableManifest) {
+            @("schemaVersion", "cvfCoreRepository", "cvfCoreCommit", "cvfCoreRelativePath",
+              "workspaceRulesRelativePath", "phaseModel", "liveGovernanceEvidenceRequired",
+              "mockAllowedOnlyForUi", "requiredDocs", "bootstrapDate", "enforcementVersion")
+        }
+        else {
+            @("cvfCorePath","cvfCoreCommit","workspaceRoot","projectPath","phaseModel",
+              "liveGovernanceEvidenceRequired","mockAllowedOnlyForUi","requiredDocs",
+              "bootstrapDate","enforcementVersion")
+        }
         $missing = $requiredFields | Where-Object { -not ($manifestObj.PSObject.Properties.Name -contains $_) }
-        $manifestValid = ($missing.Count -eq 0)
-        $manifestDetail = if ($manifestValid) { "All required fields present" } else { "Missing fields: $($missing -join ', ')" }
+        $absolutePortableFields = @()
+        if ($portableManifest) {
+            foreach ($field in @("cvfCoreRelativePath", "workspaceRulesRelativePath")) {
+                if ([System.IO.Path]::IsPathRooted([string]$manifestObj.$field)) {
+                    $absolutePortableFields += $field
+                }
+            }
+        }
+        $manifestValid = ($missing.Count -eq 0) -and ($absolutePortableFields.Count -eq 0)
+        $manifestDetail = if ($manifestValid) {
+            if ($portableManifest) { "Portable schema fields present; tracked paths are relative" } else { "Legacy schema fields present" }
+        }
+        elseif ($missing.Count -gt 0) { "Missing fields: $($missing -join ', ')" }
+        else { "Portable path fields must be relative: $($absolutePortableFields -join ', ')" }
     }
     catch {
         $manifestDetail = "JSON parse error: $_"
@@ -259,8 +296,17 @@ if ($bootstrapLogExists -and (Test-Path -LiteralPath (Join-Path $projectResolved
 
 # Check 9: CVF core path is reachable
 $cvfCorePath = $null
-if ($null -ne $manifestObj -and $manifestObj.cvfCorePath) {
-    $cvfCorePath = $manifestObj.cvfCorePath
+$localBindingPath = Join-Path $projectResolved ".cvf\local-binding.json"
+$localBinding = $null
+if (Test-Path -LiteralPath $localBindingPath -PathType Leaf) {
+    try { $localBinding = Get-Content -LiteralPath $localBindingPath -Raw -Encoding utf8 | ConvertFrom-Json }
+    catch { Add-Check "Local CVF binding is valid" $false "JSON parse error: $_" }
+}
+if ($null -ne $manifestObj) {
+    $boundCorePath = if ($null -ne $localBinding) { [string]$localBinding.cvfCorePath } else { "" }
+    $cvfCorePath = Resolve-ProjectBoundPath -ProjectRoot $projectResolved `
+        -RelativePath ([string]$manifestObj.cvfCoreRelativePath) `
+        -AbsolutePath $(if ($boundCorePath) { $boundCorePath } else { [string]$manifestObj.cvfCorePath })
 }
 $coreReachable = $false
 if ($cvfCorePath) {
@@ -268,12 +314,18 @@ if ($cvfCorePath) {
     Add-Check "CVF core path reachable" $coreReachable $cvfCorePath
 }
 else {
-    Add-Check "CVF core path reachable" $false "cvfCorePath not found in manifest"
+    Add-Check "CVF core path reachable" $false "No portable relative path or local/legacy binding found"
 }
 
 # Check 10: Workspace rules file exists at workspace root
 $workspaceRulesPath = $null
-if ($null -ne $manifestObj -and $manifestObj.workspaceRulesPath) {
+if ($null -ne $localBinding -and $localBinding.workspaceRulesPath) {
+    $workspaceRulesPath = $localBinding.workspaceRulesPath
+}
+elseif ($null -ne $manifestObj -and $manifestObj.workspaceRulesRelativePath) {
+    $workspaceRulesPath = Resolve-ProjectBoundPath -ProjectRoot $projectResolved -RelativePath ([string]$manifestObj.workspaceRulesRelativePath) -AbsolutePath ""
+}
+elseif ($null -ne $manifestObj -and $manifestObj.workspaceRulesPath) {
     $workspaceRulesPath = $manifestObj.workspaceRulesPath
 }
 elseif ($null -ne $manifestObj -and $manifestObj.workspaceRoot) {
@@ -286,14 +338,15 @@ if ($workspaceRulesPath) {
     Add-Check "Workspace rules file exists" $workspaceRulesExists $workspaceRulesPath
 }
 else {
-    Add-Check "Workspace rules file exists" $false "workspaceRoot/workspaceRulesPath not found in manifest"
+    Add-Check "Workspace rules file exists" $false "workspaceRulesRelativePath/local binding not found"
 }
 
 # Check 11: CVF core remote is the public CVF repository
 if ($coreReachable) {
     $actualRemote = (git -C $cvfCorePath remote get-url origin 2>$null | Out-String).Trim()
-    $remoteMatches = ($actualRemote -eq $expectedPublicRemote)
-    $remoteDetail = if ($remoteMatches) { $actualRemote } else { "Expected: $expectedPublicRemote / Actual: $actualRemote" }
+    $manifestRemote = if ($null -ne $manifestObj -and $manifestObj.cvfCoreRepository) { [string]$manifestObj.cvfCoreRepository } else { $expectedPublicRemote }
+    $remoteMatches = ($actualRemote -eq $manifestRemote)
+    $remoteDetail = if ($remoteMatches) { $actualRemote } else { "Expected: $manifestRemote / Actual: $actualRemote" }
     Add-Check "CVF core origin is public remote" $remoteMatches $remoteDetail
 }
 
@@ -343,15 +396,21 @@ if ($coreReachable) {
 # Check 14: CVF core commit matches manifest
 if ($coreReachable -and $manifestObj.cvfCoreCommit) {
     $ErrorActionPreference = "SilentlyContinue"
-    $actualCommit = git -C $cvfCorePath rev-parse --short HEAD 2>$null
+    $actualCommit = (git -C $cvfCorePath rev-parse HEAD 2>$null | Out-String).Trim()
     $ErrorActionPreference = "SilentlyContinue"
-    $commitMatch = ($actualCommit -eq $manifestObj.cvfCoreCommit)
+    $commitMatch = $actualCommit.StartsWith([string]$manifestObj.cvfCoreCommit, [System.StringComparison]::OrdinalIgnoreCase)
     $commitDetail = if ($commitMatch) { "Commit: $actualCommit" } else { "Manifest: $($manifestObj.cvfCoreCommit) / Actual: $actualCommit (warn only - core may have updated)" }
     Add-Check "CVF core commit matches manifest" $commitMatch $commitDetail
     if (-not $commitMatch) {
         # Commit mismatch is a warning, not a hard failure - decrement failCount
         $failCount--
     }
+}
+
+if ($coreReachable -and $manifestObj.cvfCoreCommit) {
+    git -C $cvfCorePath merge-base --is-ancestor $manifestObj.cvfCoreCommit origin/main 2>$null
+    $pinReachable = ($LASTEXITCODE -eq 0)
+    Add-Check "Pinned CVF core commit is public-remote reachable" $pinReachable $(if ($pinReachable) { [string]$manifestObj.cvfCoreCommit } else { "BLOCKED_CORE_COMMIT_NOT_REMOTE_REACHABLE: $($manifestObj.cvfCoreCommit)" })
 }
 
 # Check 15: Required docs in manifest exist

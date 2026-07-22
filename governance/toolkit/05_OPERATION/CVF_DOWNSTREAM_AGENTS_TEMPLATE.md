@@ -22,12 +22,15 @@ static badges, layout, RBAC pages) that do not assert AI governance behavior.
 Before performing ANY action on this project, you MUST:
 
 1. Read `.cvf/manifest.json` and extract:
-   - `cvfCorePath` — path to the CVF core repository
+   - `cvfCoreRepository` — public core Git remote
+   - `cvfCoreRelativePath` — portable sibling-core location
    - `cvfCoreCommit` — pinned CVF core commit
    - `phaseModel` — active phase model for this project
    - `requiredDocs` — docs you must read before proceeding
 
-2. Verify that `cvfCorePath` is reachable on disk.
+2. Resolve and verify the core path. On a fresh clone, run
+   `powershell -ExecutionPolicy Bypass -File scripts/initialize_cvf_clone.ps1`
+   to clone/pin the core and generate git-ignored local binding.
 
    Run the workspace doctor before material work. The doctor must confirm that
    the hidden core tracks the public CVF remote, carries the public-safe

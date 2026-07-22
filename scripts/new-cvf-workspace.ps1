@@ -51,6 +51,19 @@ function Write-ProjectFileIfMissing {
     Write-Ok "Created: $FilePath"
 }
 
+function Ensure-ProjectGitIgnoreLine {
+    param([string]$ProjectRoot, [string]$Line)
+    $ignorePath = Join-Path $ProjectRoot ".gitignore"
+    $existing = if (Test-Path -LiteralPath $ignorePath -PathType Leaf) {
+        Get-Content -LiteralPath $ignorePath -Encoding utf8
+    }
+    else { @() }
+    if ($existing -notcontains $Line) {
+        Add-Content -LiteralPath $ignorePath -Value $Line -Encoding utf8
+        Write-Ok "Updated: $ignorePath ($Line)"
+    }
+}
+
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     throw "git is required but was not found in PATH."
 }
@@ -69,6 +82,8 @@ $requiredPublicCoreFiles = @(
     "scripts\check_cvf_workspace_new_project_enforcement.ps1",
     "scripts\install_cvf_workspace_root_wrappers.ps1",
     "scripts\ingest_cvf_downstream_knowledge.ps1",
+    "scripts\initialize_cvf_project_clone.ps1",
+    "scripts\initialize_cvf_repository_clone.ps1",
     "scripts\update_cvf_workspace_public_core.ps1",
     "scripts\write_cvf_workspace_web_evidence_bridge.ps1"
 )
@@ -180,24 +195,27 @@ Ensure-Directory $docsDir
 $dateStamp = Get-Date -Format "yyyy-MM-dd"
 $recordIdDate = Get-Date -Format "yyyyMMdd"
 $bootstrapLogPath = Join-Path $docsDir "CVF_BOOTSTRAP_LOG_$recordIdDate.md"
-$cvfHead = git -C $cvfCorePath rev-parse --short HEAD
+$cvfHead = (git -C $cvfCorePath rev-parse HEAD | Out-String).Trim()
 
 # CP2: Generate .cvf/ enforcement manifest and policy
 $cvfManifestDir = Join-Path $projectPath ".cvf"
 Ensure-Directory $cvfManifestDir
 
 $manifestObj = [ordered]@{
-    cvfCorePath                  = $cvfCorePath
+    schemaVersion                = "2.0"
+    cvfCoreRepository            = "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git"
     cvfCoreCommit                = $cvfHead
-    workspaceRoot                = $workspaceRootResolved
-    workspaceRulesPath           = $workspaceRulesPath
-    projectPath                  = $projectPath
+    workspaceLayout              = "SIBLING_HIDDEN_CORE"
+    cvfCoreRelativePath          = "../.Controlled-Vibe-Framework-CVF"
+    workspaceRulesRelativePath   = "../WORKSPACE_RULES.md"
+    projectRelativePath          = "."
     phaseModel                   = @("INTAKE", "DESIGN", "SPEC", "WORK_ORDER", "BUILD", "REVIEW", "FREEZE")
     liveGovernanceEvidenceRequired = $true
     mockAllowedOnlyForUi         = $true
     requiredDocs                 = @(
         ".cvf/manifest.json",
         ".cvf/policy.json",
+        "scripts/initialize_cvf_clone.ps1",
         "..\WORKSPACE_RULES.md",
         "docs/CVF_BOOTSTRAP_LOG_$recordIdDate.md",
         "CVF_SESSION_MEMORY.md",
@@ -208,7 +226,7 @@ $manifestObj = [ordered]@{
         "IMPLEMENTATION_STATUS.json"
     )
     bootstrapDate                = $dateStamp
-    enforcementVersion           = "2.0"
+    enforcementVersion           = "3.0-portable-clone"
     bootstrapScript              = "scripts/new-cvf-workspace.ps1"
     w112TrancheRef               = "CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md"
     knowledgePath                = "knowledge/"
@@ -216,6 +234,7 @@ $manifestObj = [ordered]@{
 $manifestJson = $manifestObj | ConvertTo-Json -Depth 5
 Set-Content -Path (Join-Path $cvfManifestDir "manifest.json") -Value $manifestJson -Encoding utf8
 Write-Ok "Created: $cvfManifestDir\manifest.json"
+Ensure-ProjectGitIgnoreLine -ProjectRoot $projectPath -Line ".cvf/local-binding.json"
 
 $policyObj = [ordered]@{
     policyVersion                = "1.0"
@@ -235,11 +254,17 @@ $policyObj = [ordered]@{
         "Act outside the workspace isolation boundary",
         "Ignore CVF policy constraints"
     )
-    cvfCoreRef                   = $cvfCorePath
+    cvfCoreRef                   = "../.Controlled-Vibe-Framework-CVF"
 }
 $policyJson = $policyObj | ConvertTo-Json -Depth 5
 Set-Content -Path (Join-Path $cvfManifestDir "policy.json") -Value $policyJson -Encoding utf8
 Write-Ok "Created: $cvfManifestDir\policy.json"
+
+$projectScriptsDir = Join-Path $projectPath "scripts"
+Ensure-Directory $projectScriptsDir
+$portableInitializerSource = Join-Path $cvfCorePath "scripts\initialize_cvf_project_clone.ps1"
+$portableInitializerTarget = Join-Path $projectScriptsDir "initialize_cvf_clone.ps1"
+Write-ProjectFileIfMissing -FilePath $portableInitializerTarget -Content (Get-Content -LiteralPath $portableInitializerSource -Raw -Encoding utf8)
 
 # W116-CP1: Generate knowledge/ folder stub
 $knowledgeDir = Join-Path $projectPath "knowledge"
@@ -289,7 +314,7 @@ $agentInstructionsStatus = "MISSING"
 if (Test-Path -LiteralPath $agentsTemplatePath -PathType Leaf) {
     $templateContent = Get-Content -LiteralPath $agentsTemplatePath -Raw -Encoding utf8
     $agentContent = $templateContent
-    $agentContent = $agentContent -replace '\{\{CVF_CORE_PATH\}\}', $cvfCorePath
+    $agentContent = $agentContent -replace '\{\{CVF_CORE_PATH\}\}', '../.Controlled-Vibe-Framework-CVF (resolve through .cvf/manifest.json or .cvf/local-binding.json)'
     $agentContent = $agentContent -replace '\{\{CVF_CORE_COMMIT\}\}', $cvfHead
     $agentContent = $agentContent -replace '\{\{BOOTSTRAP_DATE\}\}', $dateStamp
     $agentContent = $agentContent -replace '\{\{PROJECT_NAME\}\}', $ProjectName
@@ -528,11 +553,12 @@ $logContent = @"
 - CVF Core Commit: $cvfHead
 
 ## 2. Workspace Topology
-- Workspace Root: $workspaceRootResolved
-- Workspace Rules: $workspaceRulesPath
-- CVF Core Path: $cvfCorePath
-- Project Path: $projectPath
-- VS Code Workspace File: $workspaceFilePath
+- Workspace Layout: SIBLING_HIDDEN_CORE
+- Workspace Rules: ../WORKSPACE_RULES.md
+- CVF Core: ../.Controlled-Vibe-Framework-CVF
+- Project Path: .
+- Local absolute paths: `.cvf/local-binding.json` (git-ignored, generated per machine)
+- VS Code workspace file: generated locally at workspace root and not required for continuity
 
 ## 3. Isolation Validation
 - [x] CVF core and downstream project are sibling folders

@@ -35,11 +35,12 @@ repository.
 
 Before material public-core work:
 
-1. read `AGENT_HANDOFF.md`;
-2. read `docs/GET_STARTED.md`;
-3. read `docs/reference/CVF_WORKSPACE_RULES.md`;
-4. inspect `git remote -v`, `git status --short`, and the current branch;
-5. keep downstream application work outside the CVF core folder.
+1. run `powershell -ExecutionPolicy Bypass -File scripts\initialize_cvf_repository_clone.ps1` after a fresh clone;
+2. read `AGENT_HANDOFF.md`;
+3. read `docs/GET_STARTED.md`;
+4. read `docs/reference/CVF_WORKSPACE_RULES.md`;
+5. inspect `git remote -v`, `git status --short`, and the current branch;
+6. keep downstream application work outside the CVF core folder.
 
 ## Workspace Rule
 

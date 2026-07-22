@@ -45,16 +45,30 @@ It helps answer four practical questions:
 3. **What evidence is required?** Tests, receipts, diffs, and claim boundaries travel with the work.
 4. **Can the work close?** Completion is accepted only when the evidence supports it.
 
+The canonical governed loop contains seven distinct control decisions:
+
 ```text
 REQUEST
    |
    v
-INTAKE -> DESIGN -> WORK ORDER -> BUILD -> REVIEW -> FREEZE
-   |                       |          |         |
- classify              bounded    evidence   accept,
- risk/scope            execution   + tests   return,
-                                               or block
+INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE
 ```
+
+| Stage | Decision preserved by CVF | Minimum governed output |
+| --- | --- | --- |
+| `INTAKE` | What outcome is requested, by whom, and under which risk, cost, data, and authority constraints? | Normalized intent, context, success criteria, risk signals, and approval needs. |
+| `DESIGN` | What solution shape may satisfy that intent without granting implementation authority? | Architecture, trust and mutation boundaries, reuse choices, evidence plan, and explicit non-goals. |
+| `SPEC` | What exact contract must be true, and what must fail closed? | Source-verifiable inputs, outputs, interfaces, invariants, negative cases, and acceptance criteria. |
+| `WORK ORDER` | Who may execute which bounded assignment, with which tools, paths, budget, stop rules, and handoff route? | Base anchors, allowed scope, forbidden actions, provider/credential envelope when applicable, required evidence, and commit ownership. |
+| `BUILD` | Was only the approved assignment executed? | Scoped changes plus tests, diffs, diagnostics, and receipts. |
+| `REVIEW` | Does the result satisfy the intent, design, specification, and authority grant? | Independent findings, bounded repairs or return, and an evidence-backed disposition. |
+| `FREEZE` | What result, limitations, evidence, public disposition, and next move are now durable? | Closure anchors, claim boundary, unresolved limits, export status, and reopen conditions. |
+
+`SPEC` is deliberately separate from `DESIGN`: a proposed solution is not yet
+a testable contract. `WORK ORDER` is deliberately separate from `BUILD`: a
+contract is not yet permission for an agent to mutate files, call a provider,
+or spend quota. CVF may prepare these controls for a non-coder, but it preserves
+the decisions and requests human approval where policy or risk requires it.
 
 CVF does not replace human judgment. It makes the decision path visible and
 keeps an agent from silently expanding its authority.
@@ -175,6 +189,13 @@ Before evaluating a strong claim, read:
 - [Provider Lane Readiness Matrix](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
 - [Known Limitations](docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
 - [Technical Product Catalog](docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md)
+
+Provider claim boundary: Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` are
+the two current public `CERTIFIED` lanes. OpenAI has historical,
+model-specific canary receipts but remains `EXPERIMENTAL` under the reviewed
+R65 Option B disposition and Known Limitations L-007. Receipt presence does
+not by itself authorize a certification badge, a parity claim, or a broader UI
+readiness claim.
 
 ## Live governance proof
 

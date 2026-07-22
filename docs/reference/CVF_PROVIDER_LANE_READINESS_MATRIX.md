@@ -1,8 +1,27 @@
 # CVF Provider Lane Readiness Matrix
 
-**Last updated:** 2026-05-09 (OpenAI `gpt-4o-mini` promoted to CERTIFIED)<br>
+Status: CURRENT_PUBLIC_REFERENCE
+Memory class: FULL_RECORD
+
+**Last updated:** 2026-07-23 (public disposition reconciled with R65 Option B and Known Limitations L-007)<br>
 **Computed by:** `scripts/evaluate_cvf_provider_lane_certification.py`  
 **Status taxonomy:** `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/provider-lane-status.ts`
+
+---
+
+## Purpose
+
+Provide the public, model-specific readiness disposition for provider lanes
+without converting adapter presence, one receipt, or historical evidence into
+a broader certification or provider-parity claim.
+
+## Scope And Claim Boundary
+
+This matrix governs public documentation wording for the listed model lanes.
+It does not certify every model from a provider, promise current credential
+availability, prove provider parity, or authorize UI badges beyond the exact
+status recorded here. Historical receipts remain evidence inputs; a reviewed
+public disposition controls until a fresh governed promotion changes it.
 
 ---
 
@@ -26,7 +45,7 @@
 |---|---|---|---|---|---|
 | Alibaba | `qwen-turbo` | `CERTIFIED` | [20260421-072551-422037](../audits/alibaba-canary/CVF_RECEIPT_20260421-072551-422037.md) | 3 consecutive PASS 6/6 | Fast (7–12 s). User-paid DashScope billing. |
 | DeepSeek | `deepseek-chat` | `CERTIFIED` | [20260421-114125-19515e](../audits/deepseek-canary/CVF_RECEIPT_20260421-114125-19515e.md) | 3 consecutive PASS 6/6 | Slower (62–155 s observed). User-paid billing. |
-| OpenAI | `gpt-4o-mini` | `CERTIFIED` | [20260509-141626-fa4465](../evidence/provider-lane-receipts/openai/RECEIPT_20260509-141626-fa4465.json) | 3 consecutive PASS 6/6 | Operator-paid OpenAI billing; certified lane is `gpt-4o-mini`, not every OpenAI model. |
+| OpenAI | `gpt-4o-mini` | `EXPERIMENTAL` | [Historical receipt 20260509-141626-fa4465](../evidence/provider-lane-receipts/openai/RECEIPT_20260509-141626-fa4465.json) | Historical 3-run PASS evidence exists; current public certification remains held | Operator-paid OpenAI billing; receipt projection does not itself reverse R65 Option B or Known Limitations L-007. Fresh governed promotion is required. |
 
 ---
 
@@ -34,7 +53,7 @@
 
 - Alibaba: [`docs/audits/alibaba-canary/INDEX.md`](../audits/alibaba-canary/INDEX.md)
 - DeepSeek: [`docs/audits/deepseek-canary/INDEX.md`](../audits/deepseek-canary/INDEX.md)
-- OpenAI: [`docs/audits/openai-canary/INDEX.md`](../audits/openai-canary/INDEX.md)
+- OpenAI: historical JSON receipts are present under `docs/evidence/provider-lane-receipts/openai/`; no public canary index or current certification promotion is claimed
 
 ---
 
@@ -42,6 +61,13 @@
 
 > Multi-provider operability is proven. Provider parity is not claimed.  
 > Provider economics (latency, cost, reliability) remain user-selected.
+
+Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` are the two current,
+unambiguous public `CERTIFIED` lanes. OpenAI has model-specific historical
+canary receipts, but receipt presence alone is not authority to reverse the
+reviewed R65 Option B disposition. Do not add an OpenAI certification badge or
+broader UI claim until a fresh governed promotion reconciles this matrix,
+Known Limitations L-007, provider documentation, and the intended public claim.
 
 CVF governs: policy routing, evidence receipts, status classification, approval flow, trace capture.  
 Provider-owned: model strength, latency, price, billing limits, outage behavior, rate limits.

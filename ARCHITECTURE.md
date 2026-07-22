@@ -133,7 +133,7 @@ flowchart TB
         INTENT["User intent<br/>coder / non-coder"]
         ENTRY["Entry surface<br/>SDK / wizard / API"]
         GUARDS["Guard contract<br/>phase / role / risk / scope"]
-        ORCH["Runtime orchestrator<br/>INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE"]
+        ORCH["Runtime orchestrator<br/>INTAKE -> DESIGN -> SPEC -> WORK ORDER<br/>-> BUILD -> REVIEW -> FREEZE"]
     end
 
     subgraph RUN["Approved execution"]
@@ -160,6 +160,23 @@ flowchart TB
 ```
 
 Diagram note: this is the path that must reach a real provider API call before CVF can claim governance behavior. Alibaba/DashScope is the primary certified release lane; DeepSeek has certified canary evidence and bounded confirmatory coverage. Provider parity is not claimed.
+
+The seven stages are separate control decisions, even when one interface makes
+them feel continuous to the user:
+
+| Stage | Architecture responsibility |
+| --- | --- |
+| `INTAKE` | Normalize intent, authority, context, risk, and approval needs. |
+| `DESIGN` | Select the solution shape, owners, trust boundaries, and evidence plan. |
+| `SPEC` | Freeze source-verifiable requirements, invariants, negative cases, and acceptance criteria. |
+| `WORK ORDER` | Grant bounded execution authority: role, base, paths, tools, budget, evidence, stop rules, and handoff. |
+| `BUILD` | Execute inside that grant and emit scoped implementation evidence. |
+| `REVIEW` | Independently compare intent, design, spec, authority, output, and evidence. |
+| `FREEZE` | Preserve the accepted result, limitations, export disposition, and next allowed move. |
+
+`SPEC` must not collapse into `DESIGN`, because a solution direction is not a
+testable contract. `WORK ORDER` must not collapse into `BUILD`, because a
+contract is not execution authority.
 
 ## 4. Interaction Model
 
@@ -276,7 +293,7 @@ Delivered W113-T1 proof:
 
 - bootstrap a real downstream sample project outside CVF core
 - record first-request agent declaration
-- execute `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`
+- execute `INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE`
 - capture live API-backed governance evidence
 
 ### Non-Coder Value

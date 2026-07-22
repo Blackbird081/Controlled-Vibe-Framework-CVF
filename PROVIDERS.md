@@ -27,7 +27,7 @@ being certified for parity, quality, cost, speed, reliability, or rate limits.
 |---|---|---|---|
 | Alibaba/DashScope | `qwen-turbo` / configured lane | `CERTIFIED`: latest governed live canary PASS 6/6 on 2026-05-09. | Requires operator-supplied key; active release-quality lane. |
 | DeepSeek | `deepseek-chat` | `CERTIFIED`: latest governed live canary PASS 6/6 on 2026-05-09. | Model-specific governed-path evidence; not a parity claim. |
-| OpenAI | `gpt-4o-mini` | Historical/model-specific: a 2026-05-09 governed live canary run was recorded as PASS 6/6, but the cited receipt is not present in this repository and the lane is not currently `CERTIFIED`. | Experimental/non-certified; not a blanket OpenAI parity claim; see Known Limitations L-007. |
+| OpenAI | `gpt-4o-mini` | Historical/model-specific: 2026-05-09 governed live canary receipts are present, but their later projection does not itself reverse the reviewed R65 Option B disposition. The lane is not currently `CERTIFIED`. | `EXPERIMENTAL`; no certification badge or blanket OpenAI parity claim. Fresh governed promotion must reconcile the readiness matrix and Known Limitations L-007. |
 | Gemini | operator-selected | Adapter-ready direction. | No public parity claim in this repo. |
 | Claude | operator-selected | Adapter-ready direction. | No public parity claim in this repo. |
 

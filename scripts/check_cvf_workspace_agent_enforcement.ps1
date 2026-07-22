@@ -385,6 +385,72 @@ if ($null -ne $manifestObj -and $manifestObj.knowledgePath) {
     })
 }
 
+# Check 17: canonical seven-step phase model is present and ordered.
+if ($null -ne $manifestObj -and $manifestObj.phaseModel) {
+    $expectedPhaseModel = @("INTAKE", "DESIGN", "SPEC", "WORK_ORDER", "BUILD", "REVIEW", "FREEZE")
+    $actualPhaseModel = @($manifestObj.phaseModel)
+    $phaseModelMatches = (($actualPhaseModel -join "|") -eq ($expectedPhaseModel -join "|"))
+    Add-Check "Seven-step phase model is canonical" $phaseModelMatches ($actualPhaseModel -join " -> ")
+}
+
+# Check 18: project continuity and discovery surfaces exist.
+$governanceFrontDoors = @(
+    "CVF_SESSION_MEMORY.md",
+    "CVF_SESSION\ACTIVE_SESSION_STATE.json",
+    "IMPLEMENTATION_STATUS.json",
+    "docs\INDEX.md",
+    "docs\catalog\MODULE_REGISTRY.json",
+    "docs\catalog\MODULE_CATALOG.md"
+)
+$missingFrontDoors = @($governanceFrontDoors | Where-Object {
+    -not (Test-Path -LiteralPath (Join-Path $projectResolved $_) -PathType Leaf)
+})
+Add-Check "Project continuity and catalog front doors exist" ($missingFrontDoors.Count -eq 0) $(if ($missingFrontDoors.Count -eq 0) { "All required front doors present" } else { "Missing: $($missingFrontDoors -join ', ')" })
+
+# Check 19: active state is valid and points to an existing handoff.
+$activeStatePath = Join-Path $projectResolved "CVF_SESSION\ACTIVE_SESSION_STATE.json"
+$activeStateValid = $false
+$activeHandoffDetail = "Active state unavailable"
+if (Test-Path -LiteralPath $activeStatePath -PathType Leaf) {
+    try {
+        $projectState = Get-Content -LiteralPath $activeStatePath -Raw -Encoding utf8 | ConvertFrom-Json
+        $stateFields = @("currentMode", "activePhase", "phaseModel", "activeHandoff", "nextAllowedMove", "activeRole", "roleRoute")
+        $missingStateFields = @($stateFields | Where-Object { -not ($projectState.PSObject.Properties.Name -contains $_) })
+        $handoffPath = if ($projectState.activeHandoff) { Join-Path $projectResolved $projectState.activeHandoff } else { "" }
+        $handoffExists = (-not [string]::IsNullOrWhiteSpace($handoffPath)) -and (Test-Path -LiteralPath $handoffPath -PathType Leaf)
+        $activeStateValid = ($missingStateFields.Count -eq 0) -and $handoffExists
+        $activeHandoffDetail = if ($activeStateValid) { $projectState.activeHandoff } else { "Missing fields: $($missingStateFields -join ', '); handoff exists: $handoffExists" }
+    }
+    catch {
+        $activeHandoffDetail = "JSON parse or pointer error: $_"
+    }
+}
+Add-Check "Active session state resolves its handoff" $activeStateValid $activeHandoffDetail
+
+# Check 20: machine-readable implementation and catalog files parse as JSON.
+$jsonTruthFiles = @("IMPLEMENTATION_STATUS.json", "docs\catalog\MODULE_REGISTRY.json")
+$invalidTruthFiles = @()
+foreach ($relativeJson in $jsonTruthFiles) {
+    try {
+        $null = Get-Content -LiteralPath (Join-Path $projectResolved $relativeJson) -Raw -Encoding utf8 | ConvertFrom-Json
+    }
+    catch {
+        $invalidTruthFiles += $relativeJson
+    }
+}
+Add-Check "Implementation status and module registry are valid JSON" ($invalidTruthFiles.Count -eq 0) $(if ($invalidTruthFiles.Count -eq 0) { "Both JSON truth surfaces parse" } else { "Invalid: $($invalidTruthFiles -join ', ')" })
+
+# Check 21: downstream agent contract is provider-neutral and role-aware.
+$agentsContractValid = $false
+if (Test-Path -LiteralPath $agentsPath -PathType Leaf) {
+    $agentsText = Get-Content -LiteralPath $agentsPath -Raw -Encoding utf8
+    $requiredRoleTokens = @("ORCHESTRATOR", "SPEC_AUTHOR", "WORK_ORDER_AUTHOR", "IMPLEMENTATION_WORKER", "REVIEWER", "CLOSER", "SESSION_SYNC_STEWARD")
+    $missingRoleTokens = @($requiredRoleTokens | Where-Object { $agentsText -notmatch [regex]::Escape($_) })
+    $agentsContractValid = ($missingRoleTokens.Count -eq 0) -and ($agentsText -match "INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE")
+    $agentsContractDetail = if ($agentsContractValid) { "Seven-step chain and provider-neutral roles present" } else { "Missing role tokens: $($missingRoleTokens -join ', ')" }
+    Add-Check "AGENTS contract defines roles and seven steps" $agentsContractValid $agentsContractDetail
+}
+
 # Print results table
 Write-Host ""
 Write-Host ("  {0,-50} {1}" -f "Check", "Status") -ForegroundColor White

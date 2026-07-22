@@ -5,7 +5,7 @@
 > CVF Commit: {{CVF_CORE_COMMIT}}
 > Bootstrap Date: {{BOOTSTRAP_DATE}}
 > Project: {{PROJECT_NAME}}
-> Enforcement Version: 1.0 (W112-T1)
+> Enforcement Version: 2.0
 
 ## Mandatory Governance Proof
 
@@ -41,7 +41,14 @@ Before performing ANY action on this project, you MUST:
 
 4. Read each document listed in `requiredDocs`.
 
-5. Declare your operating context before your first substantive action:
+5. Resolve project continuity in this order:
+   - `CVF_SESSION_MEMORY.md`
+   - `CVF_SESSION/ACTIVE_SESSION_STATE.json`
+   - the active handoff named by the state file
+   - `IMPLEMENTATION_STATUS.json`
+   - `docs/INDEX.md`
+
+6. Declare your operating context before your first substantive action:
 
    ```
    CVF Agent Declaration
@@ -50,9 +57,13 @@ Before performing ANY action on this project, you MUST:
    Phase: <current phase>
    Risk ceiling: <max risk level>
    Live evidence required: YES
+   Active handoff: <path>
+   Next allowed move: <summary>
+   Parked checkpoint: <none or summary>
+   Active role: <role>
    ```
 
-If you cannot complete steps 1–5 because a file is missing or unreadable:
+If you cannot complete steps 1-6 because a file is missing or unreadable:
 → **STOP. Report which file is missing. Do not proceed.**
 
 ## Phase Model
@@ -60,18 +71,42 @@ If you cannot complete steps 1–5 because a file is missing or unreadable:
 This project uses the CVF phase model:
 
 ```
-INTAKE → DESIGN → BUILD → REVIEW → FREEZE
+INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE
 ```
 
-| Phase   | Purpose                                    | Allowed actions                         |
-|---------|--------------------------------------------|-----------------------------------------|
-| INTAKE  | Capture intent, scope, risk classification | Read, classify, ask clarifying questions |
-| DESIGN  | Produce plans, architecture, specs         | Draft artifacts, get approval           |
-| BUILD   | Implement planned work                     | Code, test, integrate                   |
-| REVIEW  | Validate against spec + governance         | Review, audit, regression test          |
-| FREEZE  | Lock artifacts, prepare release            | Tag, document, close tranche            |
+| Phase | Purpose | Required control |
+|---|---|---|
+| INTAKE | Capture intent, context, constraints, risk, and authority | Do not design before the request boundary is explicit |
+| DESIGN | Define architecture, boundaries, acceptance approach, and alternatives | Record decisions and unresolved tradeoffs |
+| SPEC | Convert the approved design into testable requirements and contracts | Separate intended behavior from current implementation truth |
+| WORK_ORDER | Authorize a bounded changed set, roles, evidence, stop conditions, and commit ownership | No implementation from a loose chat instruction |
+| BUILD | Implement only the approved work order | Preserve scope and produce test evidence |
+| REVIEW | Independently compare requirements, source, output, tests, and evidence | Return defects for repair; do not self-approve silently |
+| FREEZE | Close with explicit disposition, receipts, catalog/status updates, and next-move continuity | Do not claim completion while open work or stale state remains |
 
 Do NOT skip phases. Do NOT assume a phase without reading the manifest.
+
+## Provider-Neutral Role Contract
+
+Roles are responsibilities and must never be hardcoded to Claude, Codex, or
+another provider. A single agent may hold multiple roles, but it must state and
+record each role transition before acting in the new role.
+
+Available roles:
+
+- ORCHESTRATOR: routes work, authority, dependencies, and next move.
+- SPEC_AUTHOR: writes testable requirements and contracts.
+- WORK_ORDER_AUTHOR: bounds scope, evidence, failure conditions, and ownership.
+- IMPLEMENTATION_WORKER: changes only the authorized implementation scope.
+- REVIEWER: checks source, tests, requirements, evidence, and claim boundaries.
+- REPAIR_WORKER: resolves accepted reviewer findings within repair scope.
+- CLOSER: decides final disposition and ensures no open-state residue.
+- COMMIT_STEWARD: verifies changed set and owns the authorized commit action.
+- SESSION_SYNC_STEWARD: synchronizes memory, active state, handoff, index, and catalog.
+
+For high-risk or governance-significant work, REVIEWER must be independent from
+IMPLEMENTATION_WORKER. For lower-risk work, one agent may transition between
+roles only with explicit evidence and without hiding dissent or failed checks.
 
 ## Live Governance Evidence Rule
 
@@ -125,14 +160,18 @@ Before taking action, read:
 
 When closing a tranche or handing off to another agent:
 
-1. Update or create a handoff record in `docs/` (e.g. `AGENT_HANDOFF.md`).
+1. Update the active handoff named by `CVF_SESSION/ACTIVE_SESSION_STATE.json`,
+   or create a successor under `CVF_SESSION/handoffs/` and update the pointer.
 2. Record:
    - Tranche id, status (CLOSED / IN_PROGRESS)
    - What was done and what was not done
    - Active risk and open decisions
    - Next governed move
-3. Commit all artifacts before declaring closure.
-4. Do NOT declare a tranche closed if tests are failing or artifacts are missing.
+3. Update `IMPLEMENTATION_STATUS.json` and the docs index/catalog when source
+   truth, active artifacts, or module status changed.
+4. Synchronize `CVF_SESSION_MEMORY.md`, active state, and active handoff.
+5. Commit all artifacts before declaring closure.
+6. Do NOT declare a tranche closed if tests are failing or artifacts are missing.
 
 ## Workspace-To-Web Evidence Bridge
 

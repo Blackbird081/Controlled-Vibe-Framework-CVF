@@ -21,9 +21,12 @@ $workspaceRulesPath = Resolve-FromProject $projectResolved $manifest.workspaceRu
 $workspaceRoot = Split-Path -Parent $workspaceRulesPath
 if (-not (Test-Path -LiteralPath $corePath -PathType Container)) {
     New-Item -ItemType Directory -Path $workspaceRoot -Force | Out-Null
-    git clone $manifest.cvfCoreRepository $corePath
+    git -c core.longpaths=true clone $manifest.cvfCoreRepository $corePath
     if ($LASTEXITCODE -ne 0) { throw "CVF core clone failed" }
 }
+
+git -C $corePath config core.longpaths true
+if ($LASTEXITCODE -ne 0) { throw "Unable to enable long-path support in the CVF core clone" }
 
 $pending = (git -C $corePath status --porcelain | Out-String).Trim()
 if (-not [string]::IsNullOrWhiteSpace($pending)) { throw "Hidden CVF core is dirty; reconcile it before initialization: $corePath" }

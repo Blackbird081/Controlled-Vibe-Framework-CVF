@@ -34,12 +34,7 @@ private provenance memory.
 
 The public core supports local-first runtime use and sibling downstream
 workspace bootstrap. The workspace kit includes bootstrap, doctor, knowledge
-ingest, evidence bridge, hooks, hidden-core reconciliation, portable downstream
-clone initialization, and public/provenance repository-clone continuity routing.
-
-Fresh downstream clones use a tracked relative-path manifest and a git-ignored
-`.cvf/local-binding.json`; machine-specific absolute paths are never portable
-source truth.
+ingest, evidence bridge, hooks, and hidden-core reconciliation scripts.
 
 ## Workspace Continuation
 
@@ -66,8 +61,6 @@ reconciliation.
 - `AGENTS.md`
 - `docs/reference/CVF_WORKSPACE_RULES.md`
 - `scripts/new-cvf-workspace.ps1`
-- `scripts/initialize_cvf_project_clone.ps1`
-- `scripts/initialize_cvf_repository_clone.ps1`
 - `scripts/update_cvf_workspace_public_core.ps1`
 
 ## Claim Boundary

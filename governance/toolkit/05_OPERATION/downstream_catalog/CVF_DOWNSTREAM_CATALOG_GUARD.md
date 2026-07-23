@@ -1,9 +1,14 @@
 # CVF Downstream Catalog Guard
 
+Memory class: POINTER_RECORD
+
 Status: Reference documentation for the golden-downstream bootstrap catalog
 kit. This is not yet a registered numbered `GC-xxx` control; it documents the
 behavior implemented by the bootstrap kit and enforced by the workspace
 doctor and the generated project's own catalog manager.
+
+Text Encoding Exception: preserve Unicode symbols in the imported public guard
+examples; no machine-readable token depends on them.
 
 **Applies to:** downstream projects bootstrapped by `scripts/new-cvf-workspace.ps1`
 with the governed downstream catalog kit (tranche `CVF-BSL-T1`, repair round
@@ -26,6 +31,12 @@ following independent review findings BSL-R1 through BSL-R7).
 - keep an empty Module Registry from ever implying roadmap or runtime
   capability that has not been source-verified
 - never overwrite a project's own pre-existing catalog-shaped content
+
+## Rule
+
+A governed downstream catalog must validate its source registries before
+writing derived views, preserve project-owned content, and fail closed when a
+declared governed kit is damaged.
 
 ## Catalog state before any write (BSL-R1)
 
@@ -149,6 +160,17 @@ state table above. Migrating an existing downstream catalog into the new
 schema is out of scope for this tranche and is an explicit, separate
 maintainer action.
 
+## Enforcement Surface
+
+- `scripts/lib/downstream_catalog/manage_cvf_downstream_catalog.ps1`
+- `scripts/check_cvf_workspace_agent_enforcement.ps1`
+- `scripts/test_cvf_golden_downstream_bootstrap.ps1`
+
+## Related Artifacts
+
+- `docs/reference/CVF_GOLDEN_DOWNSTREAM_BOOTSTRAP_SPEC_2026-07-23.md`
+- `docs/reference/CVF_WORKSPACE_RULES.md`
+
 ## Claim boundary
 
 This kit proves that a bootstrapped project's own generated authority
@@ -157,3 +179,9 @@ does not prove that any listed module is implemented, tested, or
 production-ready - a module's `status` and `evidence` are only as honest as
 the person who wrote them - and it does not run or require a live
 AI-provider call.
+
+## Final Clause
+
+The guard documents and routes the catalog checks implemented by the named
+scripts; it does not independently execute, migrate, or repair a downstream
+project.

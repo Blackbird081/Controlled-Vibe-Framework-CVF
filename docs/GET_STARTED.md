@@ -1,5 +1,8 @@
 # CVF - Bắt Đầu Trong 5 Phút
 
+Text Encoding Exception: this existing user-facing guide intentionally uses
+Vietnamese text.
+
 [🇬🇧 English guides](guides/) | 🇻🇳 Tiếng Việt
 
 > **🎯 Mục tiêu:** Giúp bạn hiểu và chạy được CVF project đầu tiên trong 5 phút

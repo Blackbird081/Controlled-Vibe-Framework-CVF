@@ -495,6 +495,18 @@ try {
     Add-Result "BSL-R7" "Public-core reconciler completeness list includes every new catalog/helper/schema/guard surface" `
         ($missingFromReconciler.Count -eq 0) ($missingFromReconciler -join ", ")
 
+    $publicMapperPath = Join-Path $repoRoot "scripts\cvf-public-sync.ps1"
+    if (Test-Path -LiteralPath $publicMapperPath -PathType Leaf) {
+        $publicMapperText = Get-Content -LiteralPath $publicMapperPath -Raw
+        $missingFromPublicMapper = @($newCoreHelperPaths | Where-Object { -not $publicMapperText.Contains($_) })
+        Add-Result "BSL-R7" "WorkspaceKitOnly public mapper includes every new catalog/helper/schema/guard surface" `
+            ($missingFromPublicMapper.Count -eq 0) ($missingFromPublicMapper -join ", ")
+    }
+    else {
+        Add-Result "BSL-R7" "WorkspaceKitOnly mapper check is provenance-only on the intentionally mapper-free public surface" `
+            $true "N/A_WITH_REASON: private projection control plane is not exported"
+    }
+
     $bootstrapListText = Get-Content -LiteralPath $bootstrapScript -Raw
     $doctorListText = Get-Content -LiteralPath (Join-Path $repoRoot "scripts\check_cvf_workspace_agent_enforcement.ps1") -Raw
     $missingFromBootstrapList = @($newCoreHelperPaths | Where-Object { -not $bootstrapListText.Contains($_) })

@@ -48,6 +48,31 @@ function Remove-CvfHermeticDirectory {
     return -not (Test-Path -LiteralPath $Path)
 }
 
+function Resolve-CvfPublicBaseRepoPath {
+    param([Parameter(Mandatory = $true)][string]$SourceRepoPath)
+
+    $publicInstaller = Join-Path $SourceRepoPath "scripts\install_cvf_workspace_root_wrappers.ps1"
+    $publicHandoff = Join-Path $SourceRepoPath "AGENT_HANDOFF.md"
+    if ((Test-Path -LiteralPath $publicInstaller -PathType Leaf) -and
+        (Test-Path -LiteralPath $publicHandoff -PathType Leaf)) {
+        return $SourceRepoPath
+    }
+
+    # In the private provenance checkout, public-only mapped filenames are
+    # intentionally absent. Use the sibling public-sync clone as the clean
+    # public-main anchor, then overlay the provenance candidate below.
+    $siblingPublicSync = "$SourceRepoPath-public-sync"
+    $siblingInstaller = Join-Path $siblingPublicSync "scripts\install_cvf_workspace_root_wrappers.ps1"
+    $siblingHandoff = Join-Path $siblingPublicSync "AGENT_HANDOFF.md"
+    if ((Test-Path -LiteralPath (Join-Path $siblingPublicSync ".git")) -and
+        (Test-Path -LiteralPath $siblingInstaller -PathType Leaf) -and
+        (Test-Path -LiteralPath $siblingHandoff -PathType Leaf)) {
+        return $siblingPublicSync
+    }
+
+    throw "PUBLIC_SYNC_BASE_NOT_FOUND: run this public-surface harness from the public clone or beside a synchronized '<provenance>-public-sync' clone."
+}
+
 function New-CvfCleanPublicMainClone {
     # Anchors HEAD at the same commit as (local) main / real origin/main, no
     # overlay. Used where a downstream flow (e.g. the fresh-clone
@@ -56,8 +81,9 @@ function New-CvfCleanPublicMainClone {
     # could never satisfy that honestly.
     param([Parameter(Mandatory = $true)][string]$SourceRepoPath, [Parameter(Mandatory = $true)][string]$DestCorePath)
 
-    git -c core.longpaths=true clone --quiet --single-branch --branch main $SourceRepoPath $DestCorePath 2>&1 | Out-Null
-    if ($LASTEXITCODE -ne 0) { throw "Local hermetic core clone failed from $SourceRepoPath" }
+    $publicBaseRepoPath = Resolve-CvfPublicBaseRepoPath -SourceRepoPath $SourceRepoPath
+    git -c core.longpaths=true clone --quiet --single-branch --branch main $publicBaseRepoPath $DestCorePath 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Local hermetic core clone failed from $publicBaseRepoPath" }
     git -C $DestCorePath config core.longpaths true
     git -C $DestCorePath remote set-url origin "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git"
 }
@@ -97,6 +123,27 @@ function New-CvfHermeticCoreClone {
             New-Item -ItemType Directory -Path $dstParent -Force | Out-Null
             Copy-Item -LiteralPath $src -Destination $dst -Force
         }
+    }
+
+    # Reproduce the canonical public-sync mapped exports when the source is
+    # the private provenance checkout. The public clone already has these
+    # destination names, but copying again is harmless and deterministic.
+    $mappedExports = @(
+        @{
+            Source = "governance\toolkit\05_OPERATION\CVF_PUBLIC_CORE_CONTINUATION.md"
+            Destination = "AGENT_HANDOFF.md"
+        },
+        @{
+            Source = "scripts\install_cvf_workspace_root_wrappers_public.ps1"
+            Destination = "scripts\install_cvf_workspace_root_wrappers.ps1"
+        }
+    )
+    foreach ($mapping in $mappedExports) {
+        $src = Join-Path $SourceRepoPath $mapping.Source
+        if (-not (Test-Path -LiteralPath $src -PathType Leaf)) { continue }
+        $dst = Join-Path $DestCorePath $mapping.Destination
+        New-Item -ItemType Directory -Path (Split-Path -Parent $dst) -Force | Out-Null
+        Copy-Item -LiteralPath $src -Destination $dst -Force
     }
 }
 

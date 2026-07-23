@@ -1,5 +1,24 @@
 # CVF Golden Downstream Bootstrap — Design
 
+Memory class: POINTER_RECORD
+
+Status: IMPORTED_PENDING_PROVENANCE_REVIEW
+
+docType: reference
+
+Text Encoding Exception: preserve Unicode punctuation from the imported
+public design title; no machine-readable token depends on it.
+
+## Purpose
+
+Record the originating design for a deterministic downstream catalog starter
+kit and its bootstrap validation boundary.
+
+## Scope / Applies To
+
+Applies to the golden-downstream bootstrap surfaces named in this document.
+It does not supersede private provenance governance or public-sync controls.
+
 - Tranche: `CVF-BSL-T1`
 - Date: 2026-07-23
 - Phase: DESIGN
@@ -78,6 +97,12 @@ invokes the manager in check mode when the governed catalog kit is present.
   bootstrap behavior, not AI governance behavior.
 
 ## Compatibility
+
+## Claim Boundary
+
+This design describes the intended bootstrap structure. Runtime and public
+claims require the independent tests and repository-boundary evidence recorded
+by the provenance recovery review.
 
 Existing downstream repositories without the new catalog-kit marker remain
 supported by the existing doctor checks. Re-running bootstrap must preserve

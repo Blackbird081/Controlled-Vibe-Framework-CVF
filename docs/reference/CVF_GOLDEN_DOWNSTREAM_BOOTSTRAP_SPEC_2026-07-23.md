@@ -1,5 +1,24 @@
 # CVF Golden Downstream Bootstrap — Specification
 
+Memory class: POINTER_RECORD
+
+Status: IMPORTED_PENDING_PROVENANCE_REVIEW
+
+docType: reference
+
+Text Encoding Exception: preserve Unicode punctuation from the imported
+public specification title; no machine-readable token depends on it.
+
+## Purpose
+
+Define the originating functional and evidence requirements for the
+golden-downstream bootstrap tranche.
+
+## Scope / Applies To
+
+Applies to the dated bootstrap implementation and its deterministic catalog
+surfaces. Private governance and public projection remain separately owned.
+
 - Spec ID: `CVF-BSL-T1-SPEC`
 - Date: 2026-07-23
 - Phase: SPEC
@@ -81,6 +100,11 @@ absolute-path/secret scan and file-size results. Failures and repairs must be
 retained in the build evidence.
 
 ## Non-goals
+
+## Claim Boundary
+
+This imported specification defines requirements only. Acceptance and export
+claims depend on fresh provenance and public-sync evidence.
 
 - Auto-committing or auto-pushing a downstream repository.
 - Creating product roadmaps or runtime modules for a new project.

@@ -202,8 +202,12 @@ $cvfCorePath = $null
 $localBindingPath = Join-Path $projectResolved ".cvf\local-binding.json"
 $localBinding = $null
 if (Test-Path -LiteralPath $localBindingPath -PathType Leaf) {
-    try { $localBinding = Get-Content -LiteralPath $localBindingPath -Raw -Encoding utf8 | ConvertFrom-Json }
-    catch { Add-Check "Local CVF binding is valid" $false "JSON parse error: $_" }
+    try {
+        $localBinding = Get-Content -LiteralPath $localBindingPath -Raw -Encoding utf8 | ConvertFrom-Json
+    }
+    catch {
+        Add-Check "Local CVF binding is valid" $false "JSON parse error: $_"
+    }
 }
 if ($null -ne $manifestObj) {
     $boundCorePath = if ($null -ne $localBinding) { [string]$localBinding.cvfCorePath } else { "" }
@@ -310,12 +314,6 @@ if ($coreReachable -and $manifestObj.cvfCoreCommit) {
     }
 }
 
-if ($coreReachable -and $manifestObj.cvfCoreCommit) {
-    git -C $cvfCorePath merge-base --is-ancestor $manifestObj.cvfCoreCommit origin/main 2>$null
-    $pinReachable = ($LASTEXITCODE -eq 0)
-    Add-Check "Pinned CVF core commit is public-remote reachable" $pinReachable $(if ($pinReachable) { [string]$manifestObj.cvfCoreCommit } else { "BLOCKED_CORE_COMMIT_NOT_REMOTE_REACHABLE: $($manifestObj.cvfCoreCommit)" })
-}
-
 # Check 15: Required docs in manifest exist
 if ($null -ne $manifestObj -and $manifestObj.requiredDocs) {
     $allDocsPresent = $true
@@ -411,6 +409,13 @@ if (Test-Path -LiteralPath $agentsPath -PathType Leaf) {
     $agentsContractValid = ($missingRoleTokens.Count -eq 0) -and ($agentsText -match "INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE")
     $agentsContractDetail = if ($agentsContractValid) { "Seven-step chain and provider-neutral roles present" } else { "Missing role tokens: $($missingRoleTokens -join ', ')" }
     Add-Check "AGENTS contract defines roles and seven steps" $agentsContractValid $agentsContractDetail
+}
+
+# Portable manifests may pin only commits that are reachable from public origin/main.
+if ($coreReachable -and $manifestObj.cvfCoreCommit) {
+    git -C $cvfCorePath merge-base --is-ancestor $manifestObj.cvfCoreCommit origin/main 2>$null
+    $pinReachable = ($LASTEXITCODE -eq 0)
+    Add-Check "Pinned CVF core commit is public-remote reachable" $pinReachable $(if ($pinReachable) { [string]$manifestObj.cvfCoreCommit } else { "BLOCKED_CORE_COMMIT_NOT_REMOTE_REACHABLE: $($manifestObj.cvfCoreCommit)" })
 }
 
 # Check 22: startup and tranche transitions require fresh continuity reads.

@@ -1,5 +1,24 @@
 # CVF Golden Downstream Bootstrap — Learning Intake
 
+Memory class: POINTER_RECORD
+
+Status: IMPORTED_PENDING_PROVENANCE_REVIEW
+
+docType: reference
+
+Text Encoding Exception: preserve Unicode punctuation from the imported
+public learning title; no machine-readable token depends on it.
+
+## Purpose
+
+Capture the originating downstream-bootstrap learning that motivated the
+golden project catalog kit.
+
+## Scope / Applies To
+
+Applies to downstream workspace bootstrap completeness and generated catalog
+integrity. It grants no repository or public-export authority.
+
 - Tranche: `CVF-BSL-T1`
 - Date: 2026-07-23
 - Phase: INTAKE
@@ -58,6 +77,11 @@ No provider call, API key, secret read or live governance claim is required or
 authorized. Evidence is structural and hermetic.
 
 ## Success boundary
+
+## Claim Boundary
+
+This intake records a learning need and success criteria. It is not standalone
+implementation, closure, or public-release authorization.
 
 The tranche succeeds when a temporary empty downstream repository can be
 bootstrapped into a portable, catalog-governed INTAKE state; the bootstrap is

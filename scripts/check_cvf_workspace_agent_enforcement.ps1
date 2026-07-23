@@ -21,7 +21,14 @@ $requiredPublicCoreFiles = @(
     "scripts\initialize_cvf_repository_clone.ps1",
     "scripts\new-cvf-workspace.ps1",
     "scripts\update_cvf_workspace_public_core.ps1",
-    "scripts\write_cvf_workspace_web_evidence_bridge.ps1"
+    "scripts\write_cvf_workspace_web_evidence_bridge.ps1",
+    "scripts\lib\downstream_catalog\CvfDownstreamCatalogLib.ps1",
+    "scripts\lib\downstream_catalog\CvfDownstreamBootstrapContent.ps1",
+    "scripts\lib\downstream_catalog\CvfWorkspaceDoctorLiveReadiness.ps1",
+    "scripts\lib\downstream_catalog\manage_cvf_downstream_catalog.ps1",
+    "scripts\lib\downstream_catalog\schemas\ARTIFACT_REGISTRY.schema.json",
+    "scripts\lib\downstream_catalog\schemas\MODULE_REGISTRY.schema.json",
+    "governance\toolkit\05_OPERATION\downstream_catalog\CVF_DOWNSTREAM_CATALOG_GUARD.md"
 )
 
 function Resolve-ProjectBoundPath {
@@ -68,111 +75,7 @@ function Add-Warn {
     })
 }
 
-function Normalize-EnvValue {
-    param([string]$Value)
-    if ([string]::IsNullOrWhiteSpace($Value)) {
-        return ""
-    }
-    $trimmed = $Value.Trim()
-    if (($trimmed.StartsWith('"') -and $trimmed.EndsWith('"')) -or
-        ($trimmed.StartsWith("'") -and $trimmed.EndsWith("'"))) {
-        return $trimmed.Substring(1, $trimmed.Length - 2).Trim()
-    }
-    return $trimmed
-}
-
-function Get-LocalEnvKeySource {
-    param(
-        [string]$CorePath,
-        [string[]]$KeyNames
-    )
-
-    if ([string]::IsNullOrWhiteSpace($CorePath) -or -not (Test-Path $CorePath -PathType Container)) {
-        return $null
-    }
-
-    $envFiles = @(
-        (Join-Path $CorePath "EXTENSIONS\CVF_v1.6_AGENT_PLATFORM\cvf-web\.env.local"),
-        (Join-Path $CorePath "EXTENSIONS\CVF_v1.6_AGENT_PLATFORM\cvf-web\.env"),
-        (Join-Path $CorePath ".env.local"),
-        (Join-Path $CorePath ".env")
-    )
-
-    foreach ($envFile in $envFiles) {
-        if (-not (Test-Path $envFile -PathType Leaf)) {
-            continue
-        }
-
-        $lines = Get-Content -Path $envFile -Encoding utf8
-        foreach ($line in $lines) {
-            $trimmed = $line.Trim()
-            if ([string]::IsNullOrWhiteSpace($trimmed) -or $trimmed.StartsWith("#")) {
-                continue
-            }
-            if ($trimmed.StartsWith("export ")) {
-                $trimmed = $trimmed.Substring(7).Trim()
-            }
-
-            foreach ($keyName in $KeyNames) {
-                if ($trimmed -match "^$([regex]::Escape($keyName))\s*=(.+)$") {
-                    $value = Normalize-EnvValue $Matches[1]
-                    if (-not [string]::IsNullOrWhiteSpace($value)) {
-                        return [PSCustomObject]@{
-                            KeyName = $keyName
-                            Source  = "ignored_local_env"
-                            Path    = $envFile
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return $null
-}
-
-function Get-LiveReadiness {
-    param([string]$CorePath)
-
-    $dashScopeAliases = @(
-        "DASHSCOPE_API_KEY",
-        "ALIBABA_API_KEY",
-        "CVF_ALIBABA_API_KEY",
-        "CVF_BENCHMARK_ALIBABA_KEY"
-    )
-
-    foreach ($alias in $dashScopeAliases) {
-        $value = [Environment]::GetEnvironmentVariable($alias)
-        if (-not [string]::IsNullOrWhiteSpace($value)) {
-            return [PSCustomObject]@{
-                LiveKeyAvailable = $true
-                ProviderLane     = "alibaba"
-                KeyName          = $alias
-                Source           = "process_env"
-                Path             = ""
-            }
-        }
-    }
-
-    $localSource = Get-LocalEnvKeySource -CorePath $CorePath -KeyNames $dashScopeAliases
-    if ($null -ne $localSource) {
-        return [PSCustomObject]@{
-            LiveKeyAvailable = $true
-            ProviderLane     = "alibaba"
-            KeyName          = $localSource.KeyName
-            Source           = $localSource.Source
-            Path             = $localSource.Path
-        }
-    }
-
-    return [PSCustomObject]@{
-        LiveKeyAvailable = $false
-        ProviderLane     = "none"
-        KeyName          = "none"
-        Source           = "none"
-        Path             = ""
-    }
-}
+. (Join-Path $PSScriptRoot "lib\downstream_catalog\CvfWorkspaceDoctorLiveReadiness.ps1")
 
 Write-Host ""
 Write-Host "CVF Workspace Agent Enforcement Doctor" -ForegroundColor Cyan
@@ -536,6 +439,40 @@ if (Test-Path -LiteralPath $agentsPath -PathType Leaf) {
     }
 }
 Add-Check "Session and tranche continuity rehydration required" $continuityRehydrationValid $continuityRehydrationDetail
+
+# Check 23: governed downstream catalog. BSL-R3: a project is "governed" if
+# ITS MANIFEST carries the catalogKitVersion marker OR ANY governed-catalog
+# surface exists on disk. A governed project must be COMPLETE - a partially
+# deleted/damaged kit is a blocking FAIL, never a silent fallback to legacy
+# compatibility. Only a project with NO governed marker and NO governed
+# surface at all gets the bounded legacy-compatibility warning below.
+$catalogManagerPath = Join-Path $projectResolved "scripts\manage_cvf_downstream_catalog.ps1"
+$governedCatalogSurfaces = @(
+    "scripts\manage_cvf_downstream_catalog.ps1",
+    "scripts\lib\downstream_catalog\CvfDownstreamCatalogLib.ps1",
+    "docs\catalog\ARTIFACT_REGISTRY.json",
+    "docs\catalog\schemas\ARTIFACT_REGISTRY.schema.json",
+    "docs\catalog\schemas\MODULE_REGISTRY.schema.json"
+)
+$manifestHasCatalogMarker = ($null -ne $manifestObj) -and ($manifestObj.PSObject.Properties.Name -contains "catalogKitVersion")
+$presentGovernedSurfaces = @($governedCatalogSurfaces | Where-Object { Test-Path -LiteralPath (Join-Path $projectResolved $_) -PathType Leaf })
+$anyGovernedSignal = $manifestHasCatalogMarker -or ($presentGovernedSurfaces.Count -gt 0)
+
+if ($anyGovernedSignal) {
+    $missingGovernedSurfaces = @($governedCatalogSurfaces | Where-Object { -not (Test-Path -LiteralPath (Join-Path $projectResolved $_) -PathType Leaf) })
+    if ($missingGovernedSurfaces.Count -gt 0) {
+        Add-Check "Governed downstream catalog kit is complete" $false "DAMAGED_GOVERNED_KIT: a governed marker or surface is present but the kit is incomplete. Missing: $($missingGovernedSurfaces -join ', ')"
+    }
+    else {
+        $catalogOutput = & powershell -ExecutionPolicy Bypass -File $catalogManagerPath -Check -ProjectPath $projectResolved 2>&1
+        $catalogOk = ($LASTEXITCODE -eq 0)
+        $catalogDetail = if ($catalogOk) { "manage_cvf_downstream_catalog.ps1 -Check passed" } else { ($catalogOutput | Out-String).Trim() }
+        Add-Check "Governed downstream catalog validates (--check)" $catalogOk $catalogDetail
+    }
+}
+else {
+    Add-Warn "Governed downstream catalog kit not present" "LEGACY_PROJECT: no governed-catalog manifest marker or surface found (manifest, manager, registry, or schemas); skipping governed catalog check for bounded legacy compatibility."
+}
 
 # Print results table
 Write-Host ""

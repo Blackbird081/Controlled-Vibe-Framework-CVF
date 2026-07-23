@@ -25,7 +25,14 @@ $requiredPublicCoreFiles = @(
     "scripts\ingest_cvf_downstream_knowledge.ps1",
     "scripts\new-cvf-workspace.ps1",
     "scripts\update_cvf_workspace_public_core.ps1",
-    "scripts\write_cvf_workspace_web_evidence_bridge.ps1"
+    "scripts\write_cvf_workspace_web_evidence_bridge.ps1",
+    "scripts\lib\downstream_catalog\CvfDownstreamCatalogLib.ps1",
+    "scripts\lib\downstream_catalog\CvfDownstreamBootstrapContent.ps1",
+    "scripts\lib\downstream_catalog\CvfWorkspaceDoctorLiveReadiness.ps1",
+    "scripts\lib\downstream_catalog\manage_cvf_downstream_catalog.ps1",
+    "scripts\lib\downstream_catalog\schemas\ARTIFACT_REGISTRY.schema.json",
+    "scripts\lib\downstream_catalog\schemas\MODULE_REGISTRY.schema.json",
+    "governance\toolkit\05_OPERATION\downstream_catalog\CVF_DOWNSTREAM_CATALOG_GUARD.md"
 )
 $overlayFiles = @(
     "README.md",

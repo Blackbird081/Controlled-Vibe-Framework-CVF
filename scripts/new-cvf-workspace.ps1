@@ -10,6 +10,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+. (Join-Path $PSScriptRoot "lib\downstream_catalog\CvfDownstreamCatalogLib.ps1")
+. (Join-Path $PSScriptRoot "lib\downstream_catalog\CvfDownstreamBootstrapContent.ps1")
+
 function Write-Info([string]$Message) {
     Write-Host "[INFO] $Message" -ForegroundColor Cyan
 }
@@ -85,7 +88,14 @@ $requiredPublicCoreFiles = @(
     "scripts\initialize_cvf_project_clone.ps1",
     "scripts\initialize_cvf_repository_clone.ps1",
     "scripts\update_cvf_workspace_public_core.ps1",
-    "scripts\write_cvf_workspace_web_evidence_bridge.ps1"
+    "scripts\write_cvf_workspace_web_evidence_bridge.ps1",
+    "scripts\lib\downstream_catalog\CvfDownstreamCatalogLib.ps1",
+    "scripts\lib\downstream_catalog\CvfDownstreamBootstrapContent.ps1",
+    "scripts\lib\downstream_catalog\CvfWorkspaceDoctorLiveReadiness.ps1",
+    "scripts\lib\downstream_catalog\manage_cvf_downstream_catalog.ps1",
+    "scripts\lib\downstream_catalog\schemas\ARTIFACT_REGISTRY.schema.json",
+    "scripts\lib\downstream_catalog\schemas\MODULE_REGISTRY.schema.json",
+    "governance\toolkit\05_OPERATION\downstream_catalog\CVF_DOWNSTREAM_CATALOG_GUARD.md"
 )
 
 Write-Info "Workspace root: $workspaceRootResolved"
@@ -201,6 +211,23 @@ $cvfHead = (git -C $cvfCorePath rev-parse HEAD | Out-String).Trim()
 $cvfManifestDir = Join-Path $projectPath ".cvf"
 Ensure-Directory $cvfManifestDir
 
+# BSL-R3: decide up front (read-only classification; nothing catalog-related
+# is written between here and Install-CvfDownstreamCatalogKit below) whether
+# this manifest may reference governed-catalog requiredDocs. A legacy/mixed
+# project never gets the catalog kit installed, so requiring those paths
+# here would make the doctor's "required docs exist" check fail forever.
+$earlyCatalogState = Get-CvfCatalogState -ProjectPath $projectPath
+$catalogRequiredDocs = if ($earlyCatalogState -ne "LEGACY_OR_MIXED") {
+    @(
+        "docs/catalog/ARTIFACT_REGISTRY.json",
+        "docs/catalog/schemas/ARTIFACT_REGISTRY.schema.json",
+        "docs/catalog/schemas/MODULE_REGISTRY.schema.json",
+        "scripts/manage_cvf_downstream_catalog.ps1",
+        "scripts/lib/downstream_catalog/CvfDownstreamCatalogLib.ps1"
+    )
+}
+else { @() }
+
 $manifestObj = [ordered]@{
     schemaVersion                = "2.0"
     cvfCoreRepository            = "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git"
@@ -224,12 +251,18 @@ $manifestObj = [ordered]@{
         "docs/catalog/MODULE_REGISTRY.json",
         "docs/catalog/MODULE_CATALOG.md",
         "IMPLEMENTATION_STATUS.json"
-    )
+    ) + $catalogRequiredDocs
     bootstrapDate                = $dateStamp
-    enforcementVersion           = "3.0-portable-clone"
+    enforcementVersion           = "3.1-governed-catalog"
     bootstrapScript              = "scripts/new-cvf-workspace.ps1"
     w112TrancheRef               = "CVF_W112_T1_WORKSPACE_AGENT_ENFORCEMENT_AND_WEB_CONTROL_UPLIFT_ROADMAP_2026-04-22.md"
     knowledgePath                = "knowledge/"
+}
+if ($earlyCatalogState -ne "LEGACY_OR_MIXED") {
+    # BSL-R3: explicit governed-catalog marker, present only when this
+    # manifest actually references a governed (or governable) catalog kit -
+    # never added for a legacy/mixed project the kit intentionally skipped.
+    $manifestObj.catalogKitVersion = $Script:CvfCatalogKitVersion
 }
 $manifestJson = $manifestObj | ConvertTo-Json -Depth 5
 Set-Content -Path (Join-Path $cvfManifestDir "manifest.json") -Value $manifestJson -Encoding utf8
@@ -383,157 +416,15 @@ foreach ($directory in @(
 $initialHandoffRelative = "CVF_SESSION/handoffs/AGENT_HANDOFF_V1_$dateStamp.md"
 $initialHandoffPath = Join-Path $projectPath ($initialHandoffRelative -replace '/', '\')
 
-$sessionMemoryContent = @"
-# Project Session Memory
+Write-ProjectFileIfMissing -FilePath (Join-Path $projectPath "CVF_SESSION_MEMORY.md") -Content (Get-CvfSessionMemoryContent -InitialHandoffRelative $initialHandoffRelative)
 
-Memory class: POINTER_RECORD
-
-This is the project continuity front door. It is CVF-governed project state,
-not provider-specific memory and not a chat transcript.
-
-## Startup Order
-
-1. Read `.cvf/manifest.json` and `.cvf/policy.json`.
-2. Read `CVF_SESSION/ACTIVE_SESSION_STATE.json`.
-3. Read the active handoff named by that state file.
-4. Read `IMPLEMENTATION_STATUS.json` and `docs/INDEX.md`.
-5. State current mode, active handoff, next allowed move, parked checkpoint,
-   and active role before material work.
-
-## Mandatory Continuity Rehydration
-
-Repeat the startup order before material work at every new or resumed
-chat/session, after context loss or compaction, at the start of every new
-tranche or work order, and whenever responsibility or the active handoff
-changes. Read current files again; do not rely on chat history,
-provider-local memory, or a declaration from a previous session.
-
-Emit a fresh `CVF Agent Declaration` before the first material action. At a
-tranche transition, also record the acknowledgment in the active handoff
-before BUILD. If continuity surfaces disagree, stop and report
-`BLOCKED_CONTINUITY_DRIFT`.
-
-Active state: `CVF_SESSION/ACTIVE_SESSION_STATE.json`
-
-Initial active handoff: `$initialHandoffRelative`
-
-Provider-local files may assist execution but are not project source authority.
-"@
-Write-ProjectFileIfMissing -FilePath (Join-Path $projectPath "CVF_SESSION_MEMORY.md") -Content $sessionMemoryContent
-
-$activeState = [ordered]@{
-    schemaVersion = "1.0"
-    projectName = $ProjectName
-    currentMode = "INTAKE"
-    activePhase = "INTAKE"
-    phaseModel = @("INTAKE", "DESIGN", "SPEC", "WORK_ORDER", "BUILD", "REVIEW", "FREEZE")
-    activeHandoff = $initialHandoffRelative
-    nextAllowedMove = "Complete INTAKE: record intent, context, constraints, risk, authority, and acceptance boundary."
-    parkedOperatorCheckpoint = $null
-    activeRole = "ORCHESTRATOR"
-    roleRoute = "SINGLE_AGENT_MULTI_ROLE_ALLOWED"
-    updatedAt = $dateStamp
-}
+$activeState = Get-CvfActiveStateObject -ProjectName $ProjectName -InitialHandoffRelative $initialHandoffRelative -DateStamp $dateStamp
 Write-ProjectFileIfMissing -FilePath (Join-Path $sessionDir "ACTIVE_SESSION_STATE.json") -Content ($activeState | ConvertTo-Json -Depth 6)
 
-$handoffContent = @"
-# Agent Handoff V1
+Write-ProjectFileIfMissing -FilePath $initialHandoffPath -Content (Get-CvfInitialHandoffContent -ProjectName $ProjectName)
 
-Status: ACTIVE
-
-## Current State
-
-- Project: $ProjectName
-- Current mode: INTAKE
-- Active phase: INTAKE
-- Active role: ORCHESTRATOR
-- Next allowed move: Complete INTAKE before DESIGN.
-- Parked operator checkpoint: none
-
-## Seven-Step Control Chain
-
-`INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE`
-
-## Role Assignment
-
-Roles are responsibilities, not provider names. One agent may hold several
-roles only when each transition is recorded. Available roles are ORCHESTRATOR,
-SPEC_AUTHOR, WORK_ORDER_AUTHOR, IMPLEMENTATION_WORKER, REVIEWER, REPAIR_WORKER,
-CLOSER, COMMIT_STEWARD, and SESSION_SYNC_STEWARD. High-risk work requires an
-independent reviewer.
-
-## Completed
-
-- Project governance bootstrap created the initial continuity surfaces.
-
-## Open Work
-
-- Capture the first governed request through INTAKE.
-
-## Claim Boundary
-
-This handoff records initial project state only. It does not claim that any
-feature, test, release, deployment, or provider integration is complete.
-"@
-Write-ProjectFileIfMissing -FilePath $initialHandoffPath -Content $handoffContent
-
-$implementationStatus = [ordered]@{
-    schemaVersion = "1.0"
-    projectName = $ProjectName
-    overallStatus = "BOOTSTRAPPED"
-    currentPhase = "INTAKE"
-    completedCapabilities = @()
-    activeWorkOrders = @()
-    knownLimitations = @("Project implementation status has not yet been assessed.")
-    evidence = @()
-    updatedAt = $dateStamp
-}
+$implementationStatus = Get-CvfImplementationStatusObject -ProjectName $ProjectName -DateStamp $dateStamp
 Write-ProjectFileIfMissing -FilePath (Join-Path $projectPath "IMPLEMENTATION_STATUS.json") -Content ($implementationStatus | ConvertTo-Json -Depth 6)
-
-$moduleRegistry = [ordered]@{
-    schemaVersion = "1.0"
-    projectName = $ProjectName
-    modules = @()
-    updatedAt = $dateStamp
-    claimBoundary = "Empty initial registry; add only source-verified modules."
-}
-Write-ProjectFileIfMissing -FilePath (Join-Path $catalogDir "MODULE_REGISTRY.json") -Content ($moduleRegistry | ConvertTo-Json -Depth 6)
-
-$moduleCatalogContent = @"
-# Module Catalog
-
-Status: BOOTSTRAPPED_EMPTY
-
-Machine-readable source: `docs/catalog/MODULE_REGISTRY.json`
-
-No modules have been source-verified and registered yet. Do not infer runtime
-capabilities from plans, handoffs, prompts, or provider-local memory.
-"@
-Write-ProjectFileIfMissing -FilePath (Join-Path $catalogDir "MODULE_CATALOG.md") -Content $moduleCatalogContent
-
-$docsIndexContent = @"
-# Project Documentation Index
-
-## Start Here
-
-- Session front door: `CVF_SESSION_MEMORY.md`
-- Active state: `CVF_SESSION/ACTIVE_SESSION_STATE.json`
-- Implementation truth: `IMPLEMENTATION_STATUS.json`
-- Machine module registry: `docs/catalog/MODULE_REGISTRY.json`
-- Human module catalog: `docs/catalog/MODULE_CATALOG.md`
-
-## Governed Artifact Families
-
-- Decisions: `docs/decisions/`
-- Roadmaps: `docs/roadmaps/`
-- Specifications: `docs/specs/`
-- Work orders: `docs/work_orders/`
-- Reviews and evidence: `docs/reviews/`
-
-Plans describe intended work. `IMPLEMENTATION_STATUS.json`, source, tests, and
-review evidence determine what is actually implemented.
-"@
-Write-ProjectFileIfMissing -FilePath (Join-Path $docsDir "INDEX.md") -Content $docsIndexContent
 
 foreach ($family in @("decisions", "roadmaps", "specs", "work_orders", "reviews")) {
     $familyTitle = (Get-Culture).TextInfo.ToTitleCase($family.Replace('_', ' '))
@@ -541,75 +432,36 @@ foreach ($family in @("decisions", "roadmaps", "specs", "work_orders", "reviews"
     Write-ProjectFileIfMissing -FilePath (Join-Path $docsDir "$family\README.md") -Content $familyContent
 }
 
+# Governed downstream catalog kit: Artifact Registry, Module Registry, schemas,
+# executable catalog manager, and deterministic Index/Module Catalog views.
+$catalogKitStatus = Install-CvfDownstreamCatalogKit -ProjectPath $projectPath -CvfCorePath $cvfCorePath `
+    -ProjectName $ProjectName -DateStamp $dateStamp -InitialHandoffRelative $initialHandoffRelative
+
 # Bootstrap Log
-$logContent = @"
-# CVF Project Bootstrap Log
-
-## 1. Record Metadata
-- Record ID: BOOTSTRAP-$recordIdDate-$ProjectName
-- Date: $dateStamp
-- Prepared By:
-- Reviewed By:
-- CVF Core Commit: $cvfHead
-
-## 2. Workspace Topology
-- Workspace Layout: SIBLING_HIDDEN_CORE
-- Workspace Rules: ../WORKSPACE_RULES.md
-- CVF Core: ../.Controlled-Vibe-Framework-CVF
-- Project Path: .
-- Local absolute paths: `.cvf/local-binding.json` (git-ignored, generated per machine)
-- VS Code workspace file: generated locally at workspace root and not required for continuity
-
-## 3. Isolation Validation
-- [x] CVF core and downstream project are sibling folders
-- [x] Workspace rules file exists at workspace root
-- [x] IDE/terminal target is project workspace
-- [x] terminal.integrated.cwd is `${workspaceFolder}`
-- [ ] Team acknowledgment recorded
-
-## 4. Bootstrap Actions
-- [x] CVF core available
-- [x] Project folder available
-- [x] VS Code terminal defaults configured
-- [x] Agent Instructions: $agentInstructionsStatus
-- [x] .cvf/manifest.json: PRESENT (knowledgePath: knowledge/)
-- [x] .cvf/policy.json: PRESENT
-- [x] WORKSPACE_RULES.md: PRESENT
-- [x] knowledge/ folder: PRESENT (add .md files and run ingest script to enable project-knowledge injection)
-- [x] Seven-step phase model: INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE
-- [x] Project continuity front doors: PRESENT
-- [x] Implementation status and docs index/catalog: PRESENT
-- [ ] Runtime artifacts migrated (if needed)
-- [ ] Toolchain baseline recorded (python, node, pnpm, optional uv)
-
-## 5. Post-Bootstrap Checks
-Run the workspace doctor to verify enforcement artifacts:
-  powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\check_cvf_workspace_agent_enforcement.ps1 -ProjectPath "$projectPath"
-
-Optional secret-free live readiness check:
-  powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\check_cvf_workspace_agent_enforcement.ps1 -ProjectPath "$projectPath" -CheckLiveReadiness
-
-Workspace-to-web evidence bridge receipt (run during REVIEW/FREEZE):
-  powershell -ExecutionPolicy Bypass -File <cvf-core>\scripts\write_cvf_workspace_web_evidence_bridge.ps1 -ProjectPath "$projectPath" -CheckLiveReadiness -ReleaseGateResult "ATTACH_LATEST_CVF_CORE_GATE_RESULT"
-
-- [ ] Workspace doctor: PASS
-- [ ] Optional live readiness: PASS / MISSING KEY / NOT RUN
-- [ ] Workspace-to-web evidence bridge receipt: PRESENT / NOT NEEDED
-- [ ] API health check
-- [ ] Frontend startup check
-- [ ] Critical workflow smoke check
-
-## 6. Approval
-- Result: PASS / PASS WITH NOTE / FAIL
-- Approved By:
-- Approval Date:
-"@
-
+$logContent = Get-CvfBootstrapLogContent -RecordIdDate $recordIdDate -ProjectName $ProjectName -DateStamp $dateStamp `
+    -CvfHead $cvfHead -AgentInstructionsStatus $agentInstructionsStatus -CatalogKitStatus $catalogKitStatus
 Set-Content -Path $bootstrapLogPath -Value $logContent -Encoding utf8
 Write-Ok "Created: $bootstrapLogPath"
 
+# BSL-R8: a fresh or already-governed bootstrap must not claim success when
+# the catalog installation itself failed. The log above is still written so
+# the failure is on record, but the script must stop here with a non-zero
+# exit and must never reach the "Workspace bootstrap complete." line below.
+if ($catalogKitStatus -eq "DAMAGED_GOVERNED_SKIPPED") {
+    throw "Bootstrap did NOT complete successfully: governed downstream catalog installation failed (status: DAMAGED_GOVERNED_SKIPPED). The catalog manager rejected the registries, or the governed source is structurally invalid. Run scripts/manage_cvf_downstream_catalog.ps1 -Check in the project, repair docs/catalog/ARTIFACT_REGISTRY.json, then re-run bootstrap. See $bootstrapLogPath for detail."
+}
+
 Write-Host ""
-Write-Ok "Workspace bootstrap complete."
+if ($catalogKitStatus -eq "MIGRATION_REQUIRED_SKIPPED") {
+    # Bounded, non-fatal - but this is explicitly NOT a governed-catalog
+    # success, so it must not print the same claim as a real success.
+    Write-Warn "Workspace bootstrap complete WITH NOTE - this is NOT a governed-catalog success."
+    Write-Warn "MIGRATION_REQUIRED: pre-existing legacy/mixed catalog content was detected; the governed downstream catalog kit was not installed. Review and adopt it deliberately."
+}
+else {
+    Write-Ok "Workspace bootstrap complete."
+}
+Write-Host "Governed downstream catalog kit status: $catalogKitStatus" -ForegroundColor Cyan
 Write-Host "Open this workspace file in VS Code:" -ForegroundColor Yellow
 Write-Host "  $workspaceFilePath"
 Write-Host ""

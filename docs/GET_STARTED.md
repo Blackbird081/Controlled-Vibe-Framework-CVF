@@ -43,15 +43,24 @@ Kết quả:
 - `D:\CVF-Workspace\Trading-Tools\.cvf\manifest.json`
 - `D:\CVF-Workspace\Trading-Tools\.cvf\policy.json`
 - `D:\CVF-Workspace\Trading-Tools\docs\CVF_BOOTSTRAP_LOG_YYYYMMDD.md`
+- `D:\CVF-Workspace\Trading-Tools\docs\catalog\ARTIFACT_REGISTRY.json` / `MODULE_REGISTRY.json` (governed catalog sources of truth, closed schemas under `docs\catalog\schemas\`)
+- `D:\CVF-Workspace\Trading-Tools\docs\INDEX.md` / `docs\catalog\MODULE_CATALOG.md` (generated views - do not hand-edit; regenerate with the catalog manager below)
+- `D:\CVF-Workspace\Trading-Tools\scripts\manage_cvf_downstream_catalog.ps1` (executable catalog manager: `-Check` / `-Write`)
 - `D:\CVF-Workspace\New-CVF-Governed-Project.ps1` (wrapper: bootstrap + doctor + gate in one command)
 - `D:\CVF-Workspace\Run-CVF-NewProject-Enforcement.ps1` (wrapper: workspace-wide enforcement gate)
 - `D:\CVF-Workspace\CVF_WORKSPACE_USER_GUIDE.md` / `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md` (workspace-root guides, EN and VI)
 
-Kiểm tra agent-enforcement artifacts:
+Kiểm tra agent-enforcement artifacts (bao gồm governed downstream catalog khi có):
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\check_cvf_workspace_agent_enforcement.ps1 `
   -ProjectPath "D:\CVF-Workspace\Trading-Tools"
+```
+
+Kiểm tra riêng catalog (Artifact Registry / Module Registry / generated views):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "D:\CVF-Workspace\Trading-Tools\scripts\manage_cvf_downstream_catalog.ps1" -Check
 ```
 
 Nếu `.Controlled-Vibe-Framework-CVF` đã tồn tại từ lịch sử cũ hoặc lệch với

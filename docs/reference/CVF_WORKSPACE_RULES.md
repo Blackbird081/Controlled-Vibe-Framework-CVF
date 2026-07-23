@@ -95,8 +95,35 @@ For new downstream projects, the bootstrap must produce:
 - `knowledge/` folder
 - bootstrap log under `docs/`
 - workspace-root `WORKSPACE_RULES.md`
+- a governed downstream catalog kit (tranche `CVF-BSL-T1`):
+  - machine sources of truth `docs/catalog/ARTIFACT_REGISTRY.json` and
+    `docs/catalog/MODULE_REGISTRY.json`, with closed-vocabulary schemas at
+    `docs/catalog/schemas/`
+  - generated human views `docs/INDEX.md` and `docs/catalog/MODULE_CATALOG.md`,
+    rendered only from the registries above - never hand-edit these
+  - an executable, standard-library catalog manager at
+    `scripts/manage_cvf_downstream_catalog.ps1` (`-Check` / `-Write`)
+  - an Artifact Registry populated with the bootstrap kit's own authority
+    surfaces (schemas, tool, manifest, policy, continuity, implementation
+    truth, generated views, governed artifact families) and an empty Module
+    Registry that makes no runtime-module claim
 
-The workspace doctor must verify that the generated project remains isolated from CVF core and that the workspace-root rules file is present.
+The workspace doctor must verify that the generated project remains isolated
+from CVF core and that the workspace-root rules file is present. A project is
+**governed** if its `.cvf/manifest.json` carries the `catalogKitVersion`
+marker **or** any governed-catalog surface exists on disk (the manager
+script, its library, the Artifact Registry, or either schema file) - not
+only when the manager script specifically is present. A governed project
+must be complete: the doctor runs the catalog manager in check mode and
+treats a failure as blocking, and if the marker or any surface is present
+while another required surface is missing, that is `DAMAGED_GOVERNED_KIT` -
+also a blocking failure, never a silent fallback to legacy compatibility.
+Only a project with **no** governed marker and **no** governed surface at
+all - one bootstrapped before this kit existed - keeps the pre-existing
+checks only, as a bounded legacy-compatibility path. See
+`governance/toolkit/05_OPERATION/downstream_catalog/CVF_DOWNSTREAM_CATALOG_GUARD.md`
+for the closed vocabulary, the full catalog-state classifier and the
+rejected-condition reference.
 
 Bootstrap and reconciliation also install (or refresh) a small set of
 workspace-root wrapper scripts and guides via

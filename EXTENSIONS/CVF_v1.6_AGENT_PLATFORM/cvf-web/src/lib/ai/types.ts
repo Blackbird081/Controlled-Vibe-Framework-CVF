@@ -29,6 +29,8 @@ export interface ExecutionRequest {
     mode?: 'simple' | 'governance' | 'full';
     cvfPhase?: string;
     cvfRiskLevel?: string;
+    /** Resolved governance family metadata; never a governance decision by itself. */
+    governanceFamily?: string;
     qbsFamily?: string;
     skillPreflightPassed?: boolean;
     skillPreflightDeclaration?: string;

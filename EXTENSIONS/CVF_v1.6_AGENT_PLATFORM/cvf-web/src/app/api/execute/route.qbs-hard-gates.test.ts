@@ -16,7 +16,7 @@ describe('/api/execute QBS hard-gate remediation', () => {
   beforeEach(() => {
     verifySessionCookieMock.mockResolvedValue({
       userId: 'qbs-test-user',
-      role: 'operator',
+      role: 'admin',
       teamId: 'qbs-test-team',
     });
   });

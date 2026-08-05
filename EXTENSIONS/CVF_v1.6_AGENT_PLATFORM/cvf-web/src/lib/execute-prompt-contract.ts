@@ -1,5 +1,6 @@
 import type { ExecutionRequest } from '@/lib/ai';
 import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
+import { resolveGovernanceFamily } from '@/lib/governance-family';
 import { getTemplateById } from '@/lib/templates';
 import { renderTemplateIntent } from '@/lib/template-intent';
 
@@ -418,10 +419,50 @@ function buildDeliverableContract(shape: DeliverableShape | undefined): string |
   }
 }
 
+function buildAllowFamilyOutputContract(governanceFamily: string | null): string {
+  if (governanceFamily === 'builder_handoff_technical_planning') {
+    return [
+      'This applies only if CVF allows generation; it does not override block, clarification, or approval decisions.',
+      'For builder handoffs, include these items explicitly:',
+      '- Files/modules likely to touch',
+      '- Tests to add or run',
+      '- Rollback step',
+      '- Verification step',
+      '- Security/data consideration',
+      'If repository inspection is needed, write "unknown - requires repo inspection" for that item instead of omitting it.',
+    ].join('\n');
+  }
+  if (governanceFamily === 'cost_quota_provider_selection') {
+    return [
+      'This applies only if CVF allows generation; it does not override block, clarification, or approval decisions.',
+      'For provider, quota, and cost tradeoffs, do not invent or assert a specific provider name, model name, latency number, accuracy number, benchmark number, quota number, or cost number unless the user supplied that exact candidate or measured data.',
+      'When measured data is missing, give decision criteria, tradeoff categories, and a verification plan.',
+      'Keep cost and quota guidance qualitative unless the prompt supplies exact numbers.',
+    ].join('\n');
+  }
+  if (governanceFamily === 'normal_productivity_app_planning') {
+    return [
+      'This applies only if CVF allows generation; it does not override block, clarification, or approval decisions.',
+      'For productivity app planning, preserve the user input language.',
+      'Include purpose, audience/users, scope, workflow, minimum useful features or steps, success measures, risks/constraints, and next actions.',
+      'Keep the brief non-technical unless the user explicitly asks for implementation details.',
+    ].join('\n');
+  }
+  return '';
+}
+
 export function buildExecutionPrompt(request: ExecutionRequest): string {
   const { templateName, inputs, intent } = request;
   const previousOutput = inputs._previousOutput;
   const template = request.templateId ? getTemplateById(request.templateId) : undefined;
+  const governanceFamily = resolveGovernanceFamily({
+    governanceFamily: request.governanceFamily,
+    qbsFamily: request.qbsFamily,
+    intent,
+    templateId: request.templateId,
+    templateCategory: template?.category,
+    riskLevel: request.cvfRiskLevel,
+  });
   const isTrustedNoncoderTemplate = Boolean(template?.id && TRUSTED_NONCODER_DEPTH_TEMPLATE_IDS.has(template.id));
   const deliverableShapes = isTrustedNoncoderTemplate ? resolveDeliverableShapes(request) : [];
   const usesShapeSpecificTemplate = Boolean(template?.id && SHAPE_SPECIFIC_TEMPLATE_IDS.has(template.id));
@@ -452,10 +493,11 @@ export function buildExecutionPrompt(request: ExecutionRequest): string {
 
   prompt += `\n---\n\n`;
 
-  if (request.cvfPhase || request.cvfRiskLevel) {
+  if (request.cvfPhase || request.cvfRiskLevel || governanceFamily) {
     prompt += `### Governance Context\n`;
     if (request.cvfPhase) prompt += `- Phase target: ${request.cvfPhase}\n`;
     if (request.cvfRiskLevel) prompt += `- Risk level: ${request.cvfRiskLevel}\n`;
+    if (governanceFamily) prompt += `- Governance family: ${governanceFamily} (metadata only; not a decision or score)\n`;
     prompt += `\n`;
   }
 
@@ -511,6 +553,11 @@ export function buildExecutionPrompt(request: ExecutionRequest): string {
       }
       prompt += `Do not let SWOT, risk, overview, or documentation-wrapper sections replace the requested plan, comparison, FAQ, prioritization, pricing, persona, or criteria deliverable.\n\n`;
     }
+  }
+
+  const allowFamilyOutputContract = buildAllowFamilyOutputContract(governanceFamily);
+  if (allowFamilyOutputContract) {
+    prompt += `### Family Output Contract\n${allowFamilyOutputContract}\n\n`;
   }
 
   if (request.fileScope?.length) {

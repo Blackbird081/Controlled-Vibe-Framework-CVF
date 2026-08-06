@@ -169,6 +169,23 @@ Before acting on any request, classify its risk level:
 Requests involving production data, external APIs, security changes, or
 governance-relevant behavior are at minimum R2.
 
+### Governance Latency and Approval Continuity
+
+- Continue dependent same-scope repairs under the existing authority while the
+  objective, allowed path or artifact class, risk, external-effect class, and
+  commit owner remain unchanged.
+- Escalate only at a real boundary change: objective or acceptance contract,
+  allowed path or artifact class, risk ceiling, external effect, secret or
+  credential use, provider or network use, destructive action, public release,
+  deployment, or commit ownership.
+- Before the first repair, perform one consolidated review of relevant records,
+  required fields, and dependency edges so predictable findings are handled in
+  one bounded pass.
+- At repair round three without an independent new root cause, stop and record
+  `REVIEW_COST_ESCALATION_REQUIRED` before continuing.
+- Classify repeated requests for confirmation without a boundary change as
+  avoidable operator wait and continue within the existing authority.
+
 ## Required First-Read Documents
 
 Before taking action, read:

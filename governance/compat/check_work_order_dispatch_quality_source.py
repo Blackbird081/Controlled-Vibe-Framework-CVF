@@ -73,8 +73,8 @@ NEGATIVE_SEARCH_TOKEN_STOPWORDS = {
 }
 VERIFIED_LINE_RE = re.compile(r"\bline\s+(\d+)\b", re.IGNORECASE)
 PATH_RE = re.compile(
-    r"`((?:docs|governance|EXTENSIONS|CVF_SESSION|scripts|sdk|\.github|\.private_reference)/[^`|)]+)`"
-    r"|((?:docs|governance|EXTENSIONS|CVF_SESSION|scripts|sdk|\.github|\.private_reference)/[^`\s|)]+)"
+    r"`((?:docs|governance|EXTENSIONS|CVF_SESSION|scripts|sdk|\.github|\.private_reference)/[^`|\r\n]+)`"
+    r"|((?:docs|governance|EXTENSIONS|CVF_SESSION|scripts|sdk|\.github|\.private_reference)/[^`\s|]+)"
 )
 ROOT_GOVERNANCE_PATH_RE = re.compile(
     r"`((?:AGENTS\.md|CLAUDE\.md|README\.md|\.gitignore|CVF_SESSION_MEMORY\.md|AGENT_HANDOFF[^`|)]+\.md))`"
@@ -101,6 +101,18 @@ def _extract_paths(text: str) -> list[str]:
         for match in path_pattern.finditer(text):
             path = (match.group(1) or match.group(2)).replace("\\", "/").rstrip(".,;:")
             if "*" in path or "<" in path or ">" in path:
+                continue
+            depth = 0
+            balanced = True
+            for char in path:
+                if char == "(":
+                    depth += 1
+                elif char == ")":
+                    depth -= 1
+                    if depth < 0:
+                        balanced = False
+                        break
+            if not balanced or depth != 0:
                 continue
             paths.append(path)
     return paths

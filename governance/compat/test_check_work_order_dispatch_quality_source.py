@@ -4,6 +4,8 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
+import pytest
+
 import check_work_order_dispatch_quality_source as MODULE
 
 
@@ -45,6 +47,90 @@ def test_accepted_source_row_missing_source_file_fails() -> None:
             issues = MODULE._validate_accepted_source_rows("docs/work_orders/test.md", text)
 
     assert "Source Verification ACCEPT cites missing source file `docs/reference/CVF_MISSING_SPEC.md`" in issues
+
+
+def test_parenthesized_source_path_is_extracted_and_accepted_when_present() -> None:
+    source_path = "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/lpci/page.tsx"
+    text = "\n".join(
+        [
+            "## Source Verification Block",
+            "| Claimed item | Source file | Verified line/section | Verified path or symbol | Owning interface/function/schema | Disposition |",
+            "|---|---|---|---|---|---|",
+            f"| Dashboard handler exists | `{source_path}` | full file | `handleQuery` | LPCI dashboard page | ACCEPT |",
+        ]
+    )
+
+    with TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        _write(root, source_path, "export function handleQuery() { return true; }\n")
+        with patch.object(MODULE, "REPO_ROOT", root):
+            assert MODULE._extract_paths(f"`{source_path}`") == [source_path]
+            issues = MODULE._validate_accepted_source_rows("docs/work_orders/test.md", text)
+
+    assert issues == []
+
+
+def test_parenthesized_source_path_still_fails_when_missing() -> None:
+    source_path = "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/lpci/page.tsx"
+    text = "\n".join(
+        [
+            "## Source Verification Block",
+            "| Claimed item | Source file | Verified line/section | Verified path or symbol | Owning interface/function/schema | Disposition |",
+            "|---|---|---|---|---|---|",
+            f"| Dashboard handler exists | `{source_path}` | full file | `handleQuery` | LPCI dashboard page | ACCEPT |",
+        ]
+    )
+
+    with TemporaryDirectory() as tmp:
+        with patch.object(MODULE, "REPO_ROOT", Path(tmp)):
+            issues = MODULE._validate_accepted_source_rows("docs/work_orders/test.md", text)
+
+    assert f"Source Verification ACCEPT cites missing source file `{source_path}`" in issues
+
+
+def test_ordinary_source_path_remains_accepted() -> None:
+    source_path = "governance/contracts/source.ts"
+    text = "\n".join(
+        [
+            "## Source Verification Block",
+            "| Claimed item | Source file | Verified line/section | Verified path or symbol | Owning interface/function/schema | Disposition |",
+            "|---|---|---|---|---|---|",
+            f"| SourceThing exists | `{source_path}` | full file | `SourceThing` | SourceThing | ACCEPT |",
+        ]
+    )
+
+    with TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        _write(root, source_path, "export interface SourceThing { value: string }\n")
+        with patch.object(MODULE, "REPO_ROOT", root):
+            issues = MODULE._validate_accepted_source_rows("docs/work_orders/test.md", text)
+
+    assert issues == []
+
+
+@pytest.mark.parametrize(
+    "malformed_path",
+    [
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard/lpci/page.tsx",
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/dashboard)/lpci/page.tsx",
+    ],
+)
+def test_unbalanced_parentheses_do_not_bypass_source_validation(malformed_path: str) -> None:
+    text = "\n".join(
+        [
+            "## Source Verification Block",
+            "| Claimed item | Source file | Verified line/section | Verified path or symbol | Owning interface/function/schema | Disposition |",
+            "|---|---|---|---|---|---|",
+            f"| Malformed source | `{malformed_path}` | full file | `handleQuery` | LPCI dashboard page | ACCEPT |",
+        ]
+    )
+
+    with TemporaryDirectory() as tmp:
+        with patch.object(MODULE, "REPO_ROOT", Path(tmp)):
+            assert MODULE._extract_paths(f"`{malformed_path}`") == []
+            issues = MODULE._validate_accepted_source_rows("docs/work_orders/test.md", text)
+
+    assert "Source Verification ACCEPT row lacks a concrete source file or canonical-contract marker" in issues
 
 
 def test_accepted_source_row_declared_values_must_all_be_listed() -> None:

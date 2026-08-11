@@ -31,6 +31,7 @@ export interface ProviderExecutionAdapterInput {
   prompt: string;
   systemPrompt?: string;
   metadata?: Record<string, unknown>;
+  signal?: AbortSignal;
 }
 export interface ProviderExecutionAdapterResult {
   text: string;
@@ -55,6 +56,9 @@ export interface ProviderExecutionBridgeResult {
   error?: GatewayErrorEnvelope;
   receipt: GatewayReceipt;
 }
+export interface ProviderExecutionBridgeExecuteOptions {
+  signal?: AbortSignal;
+}
 export const PROVIDER_EXECUTION_BRIDGE_VERSION = "cvf.providerExecutionBridge.p4bA.v1" as const;
 export class ProviderExecutionBridge {
   private readonly routing: RoutingPolicyEngine;
@@ -75,7 +79,10 @@ export class ProviderExecutionBridge {
     this.adapters = options.adapters;
     this.admissionRecords = options.admissionRecords;
   }
-  async execute(request: GatewayExecuteRequest): Promise<ProviderExecutionBridgeResult> {
+  async execute(
+    request: GatewayExecuteRequest,
+    options: ProviderExecutionBridgeExecuteOptions = {},
+  ): Promise<ProviderExecutionBridgeResult> {
     const traceId = request.traceId;
     const routingRequest: RoutingRequest = {
       traceId,
@@ -177,6 +184,7 @@ export class ProviderExecutionBridge {
         prompt: request.prompt,
         systemPrompt: request.systemPrompt,
         metadata: request.metadata,
+        signal: options.signal,
       });
       this.health.recordSuccess(providerId);
       this.quota.recordUse({

@@ -22,6 +22,7 @@ import {
 import type { LiveProofFetch } from "../src/p4b-b-live-proof-harness";
 import type { CredentialReference } from "../src/credential-boundary";
 import type { GatewayExecuteRequest } from "../src/unified-gateway-interface-contract";
+import { createOpenAiCompatibleExecuteAdapter as createNeutralAdapter } from "../src/openai-compatible-execute-adapter";
 
 const TRACE = "p4b-b-dry-run-trace-001";
 const PROVIDER = "alibaba";
@@ -69,6 +70,10 @@ function makeFetchDouble(): LiveProofFetch & { calls: number } {
 }
 
 describe("P4B-B live proof harness", () => {
+  it("re-exports the neutral OpenAI-compatible adapter", () => {
+    expect(createOpenAiCompatibleExecuteAdapter).toBe(createNeutralAdapter);
+  });
+
   it("exports the harness version constant", () => {
     expect(P4B_B_LIVE_PROOF_HARNESS_VERSION).toBe("cvf.p4bBLiveProofHarness.t2.v1");
   });

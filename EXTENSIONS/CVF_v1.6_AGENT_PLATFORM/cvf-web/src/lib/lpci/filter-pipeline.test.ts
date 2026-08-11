@@ -10,6 +10,7 @@ const makeRecord = (overrides: Partial<LpciIndexRecord> = {}): LpciIndexRecord =
   answerClass: 'DIRECT_CITED_ANSWER',
   rawDisposition: 'ACCEPT',
   dispositionAlias: 'ACCEPT',
+  sensitivityLevel: 'public',
   titleSnippet: 'Test document',
   contentSnippet: 'This is a test document about governance policy',
   ...overrides,
@@ -57,7 +58,7 @@ describe('filter-pipeline', () => {
   });
 
   describe('Stage 1 — sensitivity pre-filter', () => {
-    it('excludes classified records when no clearance', () => {
+    it('excludes every non-public record regardless of clearance', () => {
       const corpus = [
         makeRecord({ sensitivityLevel: 'classified', contentSnippet: 'classified governance' }),
         makeRecord({ sensitivityLevel: 'public', contentSnippet: 'public governance', normalizedPath: 'test/public.pdf' }),
@@ -68,15 +69,25 @@ describe('filter-pipeline', () => {
         expect(result.result.records.every((r) => r.sensitivityLevel !== 'classified')).toBe(true);
         expect(result.sensitivityApplied).toBe(true);
       }
+      const withClearance = runFilterPipeline(corpus, 'governance', { sensitivityClearance: true });
+      expect(withClearance).toEqual(result);
     });
 
-    it('returns FILTERED_OUT when all records are classified and no clearance', () => {
+    it('returns FILTERED_OUT when all records are non-public', () => {
       const corpus = [makeRecord({ sensitivityLevel: 'classified', contentSnippet: 'governance' })];
       const result = runFilterPipeline(corpus, 'governance', { sensitivityClearance: false });
       expect(result.type).toBe('NEGATIVE');
       if (result.type === 'NEGATIVE') {
         expect(result.receipt.receiptType).toBe('FILTERED_OUT');
       }
+    });
+
+    it('does not inspect malformed denied-row fields during Stage 1', () => {
+      const denied = makeRecord({ sensitivityLevel: 'restricted' });
+      Object.assign(denied, { normalizedPath: null, status: null, contentSnippet: null });
+      const result = runFilterPipeline([denied], 'governance', { sensitivityClearance: true });
+      expect(result.type).toBe('NEGATIVE');
+      if (result.type === 'NEGATIVE') expect(result.receipt.receiptType).toBe('FILTERED_OUT');
     });
   });
 

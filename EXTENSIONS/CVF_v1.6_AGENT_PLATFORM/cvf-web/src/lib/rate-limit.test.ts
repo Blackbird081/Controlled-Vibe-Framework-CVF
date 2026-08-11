@@ -280,4 +280,46 @@ describe('rate-limit', () => {
             claimBoundary: 'unsupported_rate_limit_store_no_distributed_rate_limit_claim',
         });
     });
+
+    it('keeps LPCI query admission and provider-attempt counters distinct', async () => {
+        const redisClient = new FakeRedisClient();
+        const limiter = getRateLimiter({
+            env: {
+                ...process.env,
+                CVF_RATE_LIMIT_STORE: 'redis', CVF_RATE_LIMIT: '1', CVF_PROVIDER_QUOTA_PER_MIN: '1',
+                UPSTASH_REDIS_REST_URL: 'https://example-upstash.test',
+                UPSTASH_REDIS_REST_TOKEN: 'not-emitted',
+            },
+            redisClient,
+            redisKeyPrefix: 'test:lpci',
+        });
+
+        expect((await limiter.consumeQuery('session', 'actor-hash')).allowed).toBe(true);
+        expect((await limiter.consumeProviderAttempt('session', 'actor-hash', 'openai/gpt-4o')).allowed).toBe(true);
+        expect((await limiter.consumeProviderAttempt('session', 'actor-hash', 'openai/gpt-4o')).allowed).toBe(false);
+        expect((await limiter.consumeQuery('session', 'actor-hash')).allowed).toBe(false);
+        expect([...redisClient.counts.keys()].some((key) => key.includes(':query:'))).toBe(true);
+        expect([...redisClient.counts.keys()].some((key) => key.includes(':provider:'))).toBe(true);
+    });
+
+    it('fails closed for ambiguous identity, invalid threshold, or store error', async () => {
+        const invalid = getRateLimiter({ env: { ...process.env, CVF_RATE_LIMIT: '0' } });
+        expect((await invalid.consumeQuery('session', '')).allowed).toBe(false);
+        expect((await invalid.consumeQuery('session', 'actor-hash')).allowed).toBe(false);
+
+        const failingClient: RateLimitRedisClient = {
+            incr: async () => { throw new Error('store unavailable'); },
+            expire: async () => 1,
+            ttl: async () => 60,
+        };
+        const distributed = getRateLimiter({
+            env: {
+                ...process.env,
+                CVF_RATE_LIMIT_STORE: 'redis', CVF_RATE_LIMIT: '2',
+                UPSTASH_REDIS_REST_URL: 'https://example-upstash.test', UPSTASH_REDIS_REST_TOKEN: 'hidden',
+            },
+            redisClient: failingClient,
+        });
+        expect((await distributed.consumeQuery('service', 'actor-hash')).allowed).toBe(false);
+    });
 });

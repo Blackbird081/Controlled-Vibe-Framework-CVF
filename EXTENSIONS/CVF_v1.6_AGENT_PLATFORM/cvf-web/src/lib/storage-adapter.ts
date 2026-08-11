@@ -4,18 +4,18 @@
  * Pluggable storage adapter interface for CVF durable evidence and snapshot stores.
  * DUR2 extends DUR1 by making the I/O backend selectable via CVF_STORAGE_ADAPTER_TYPE:
  *   - FileEventListAdapter / FileKeyValueAdapter: wraps DUR1 file-backed I/O (default)
- *   - RedisEventListAdapter / RedisKeyValueAdapter: stubs for future Redis backend
+ *   - RedisEventListAdapter: atomic distributed append with bounded retention
+ *   - RedisKeyValueAdapter: stub for a future Redis key-value backend
  *   - SQLiteEventListAdapter / SQLiteKeyValueAdapter: local durable SQLite backend
  *
  * ERH_DUR2_MARKER: EXTERNAL_STORAGE_ADAPTER_ACTIVE
  * CVF_STORAGE_ADAPTER_VERSION: 2026-06-05
  *
  * Claim boundary: adapter interface contract and file-backed implementation only.
- * Redis stubs throw CVF_NOT_IMPLEMENTED. SQLite is local process storage only.
- * No live Redis connection, production database, distributed durability, or
- * tamper-proof audit is claimed.
+ * Redis list capability is static and does not claim external liveness or
+ * writability. SQLite is local process storage only.
  *
- * Env: CVF_STORAGE_ADAPTER_TYPE — 'file' (default) | 'sqlite' | 'redis' (stub only)
+ * Env: CVF_STORAGE_ADAPTER_TYPE - 'file' (default) | 'sqlite' | 'redis'
  * Secret-safe: adapters carry structured governance records only; raw prompts,
  * raw AI output, API keys, provider secrets, and private memory payloads are
  * forbidden from adapter records.
@@ -24,6 +24,7 @@
 import { mkdirSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { Redis } from '@upstash/redis';
 
 // ─── Interfaces ────────────────────────────────────────────────────────────────
 
@@ -39,9 +40,26 @@ export interface EventListAdapter<T = unknown> {
   readAll(storeKey: string): Promise<T[]>;
   /** Replace all items in the store. */
   writeAll(storeKey: string, items: T[]): Promise<void>;
+  /** Append one item. Distributed implementations make retention atomic. */
+  append(storeKey: string, item: T, retentionSeconds?: number): Promise<void>;
   /** Write raw string content (used internally for corruption repair). */
   writeRaw(storeKey: string, content: string): Promise<void>;
+  /** Describe implementation capability without performing external I/O. */
+  describeCapability(): EventListAdapterCapability;
 }
+
+export type EventListAdapterCapability = {
+  schemaVersion: 'cvf.eventListCapability.v1';
+  adapterType: 'file' | 'sqlite' | 'redis';
+  implementationStatus: 'ACTIVE_LOCAL_ONLY' | 'ACTIVE_DISTRIBUTED' | 'BLOCKED_CONFIGURATION';
+  distributed: boolean;
+  atomicAppend: boolean;
+  retentionSeconds: number | null;
+  livenessChecked: false;
+  claimBoundary: string;
+};
+
+export const CONTROL_PLANE_RETENTION_SECONDS = 30 * 24 * 60 * 60;
 
 /**
  * Adapter for key-value stores (e.g. policy snapshot registry).
@@ -123,6 +141,12 @@ export class FileEventListAdapter<T = unknown> implements EventListAdapter<T> {
     await writeFile(storeKey, JSON.stringify(items, null, 2), 'utf8');
   }
 
+  async append(storeKey: string, item: T): Promise<void> {
+    const items = await this.readAll(storeKey);
+    items.push(item);
+    await this.writeAll(storeKey, items);
+  }
+
   async writeRaw(storeKey: string, content: string): Promise<void> {
     try {
       await mkdir(path.dirname(storeKey), { recursive: true });
@@ -130,6 +154,19 @@ export class FileEventListAdapter<T = unknown> implements EventListAdapter<T> {
       // directory exists or read-only
     }
     await writeFile(storeKey, content, 'utf8');
+  }
+
+  describeCapability(): EventListAdapterCapability {
+    return {
+      schemaVersion: 'cvf.eventListCapability.v1',
+      adapterType: 'file',
+      implementationStatus: 'ACTIVE_LOCAL_ONLY',
+      distributed: false,
+      atomicAppend: false,
+      retentionSeconds: null,
+      livenessChecked: false,
+      claimBoundary: 'file_event_list_is_process_local_and_does_not_claim_distributed_durability',
+    };
   }
 
   private async _repair(raw: string, storeKey: string): Promise<T[]> {
@@ -262,12 +299,39 @@ export class SQLiteEventListAdapter<T = unknown> implements EventListAdapter<T> 
     });
   }
 
+  async append(storeKey: string, item: T): Promise<void> {
+    await this.init(storeKey);
+    withSQLiteDatabase(storeKey, (db) => {
+      db.prepare(`
+        INSERT INTO event_list_store (store_key, position, item_json)
+        VALUES (
+          @storeKey,
+          COALESCE((SELECT MAX(position) + 1 FROM event_list_store WHERE store_key = @storeKey), 0),
+          @itemJson
+        )
+      `).run({ storeKey, itemJson: JSON.stringify(item) });
+    });
+  }
+
   async writeRaw(storeKey: string, content: string): Promise<void> {
     const parsed = JSON.parse(content) as T[];
     if (!Array.isArray(parsed)) {
       throw new Error('CVF_CONFIGURATION_ERROR: SQLiteEventListAdapter.writeRaw requires a JSON array.');
     }
     await this.writeAll(storeKey, parsed);
+  }
+
+  describeCapability(): EventListAdapterCapability {
+    return {
+      schemaVersion: 'cvf.eventListCapability.v1',
+      adapterType: 'sqlite',
+      implementationStatus: 'ACTIVE_LOCAL_ONLY',
+      distributed: false,
+      atomicAppend: true,
+      retentionSeconds: null,
+      livenessChecked: false,
+      claimBoundary: 'sqlite_event_list_is_atomic_local_storage_not_distributed_durability',
+    };
   }
 }
 
@@ -318,29 +382,97 @@ const CVF_NOT_IMPLEMENTED =
   'CVF_NOT_IMPLEMENTED: RedisStorageAdapter is a stub only. ' +
   'Set CVF_STORAGE_ADAPTER_TYPE=file or leave unset to use the file-backed adapter.';
 
+const CVF_REDIS_CONFIGURATION_ERROR =
+  'CVF_CONFIGURATION_ERROR: RedisEventListAdapter requires an injected client or complete Upstash REST configuration.';
+
+const REDIS_APPEND_WITH_RETENTION_SCRIPT = `
+redis.call('ZADD', KEYS[1], ARGV[1], ARGV[2])
+redis.call('ZREMRANGEBYSCORE', KEYS[1], '-inf', ARGV[3])
+redis.call('EXPIRE', KEYS[1], ARGV[4])
+return 1
+`;
+
+const REDIS_REPLACE_WITH_RETENTION_SCRIPT = `
+redis.call('DEL', KEYS[1])
+for i = 1, #ARGV - 1, 2 do
+  redis.call('ZADD', KEYS[1], ARGV[i], ARGV[i + 1])
+end
+redis.call('EXPIRE', KEYS[1], ARGV[#ARGV])
+return 1
+`;
+
+export interface RedisEventListClient {
+  eval<TData = unknown>(script: string, keys: string[], args: Array<string | number>): Promise<TData>;
+  zrange<TData = unknown>(key: string, start: number, end: number): Promise<TData[]>;
+}
+
 export class RedisEventListAdapter<T = unknown> implements EventListAdapter<T> {
   readonly adapterType = 'redis';
 
+  constructor(private readonly client: RedisEventListClient | null = null) {}
+
+  private requireClient(): RedisEventListClient {
+    if (!this.client) throw new Error(CVF_REDIS_CONFIGURATION_ERROR);
+    return this.client;
+  }
+
   async init(_storeKey: string): Promise<void> {
     void _storeKey;
-    throw new Error(CVF_NOT_IMPLEMENTED);
+    this.requireClient();
   }
 
-  async readAll(_storeKey: string): Promise<T[]> {
-    void _storeKey;
-    throw new Error(CVF_NOT_IMPLEMENTED);
+  async readAll(storeKey: string): Promise<T[]> {
+    const rows = await this.requireClient().zrange<string>(storeKey, 0, -1);
+    return rows.map((row) => typeof row === 'string' ? JSON.parse(row) as T : row as T);
   }
 
-  async writeAll(_storeKey: string, _items: T[]): Promise<void> {
-    void _storeKey;
-    void _items;
-    throw new Error(CVF_NOT_IMPLEMENTED);
+  async writeAll(storeKey: string, items: T[]): Promise<void> {
+    const args: Array<string | number> = [];
+    items.forEach((item, index) => {
+      const timestamp = typeof item === 'object' && item && 'timestamp' in item
+        ? Date.parse(String((item as { timestamp: unknown }).timestamp))
+        : Number.NaN;
+      args.push(Number.isFinite(timestamp) ? timestamp : Date.now() + index, JSON.stringify(item));
+    });
+    args.push(CONTROL_PLANE_RETENTION_SECONDS);
+    await this.requireClient().eval(REDIS_REPLACE_WITH_RETENTION_SCRIPT, [storeKey], args);
   }
 
-  async writeRaw(_storeKey: string, _content: string): Promise<void> {
-    void _storeKey;
-    void _content;
-    throw new Error(CVF_NOT_IMPLEMENTED);
+  async append(
+    storeKey: string,
+    item: T,
+    retentionSeconds = CONTROL_PLANE_RETENTION_SECONDS,
+  ): Promise<void> {
+    const now = Date.now();
+    await this.requireClient().eval(REDIS_APPEND_WITH_RETENTION_SCRIPT, [storeKey], [
+      now,
+      JSON.stringify(item),
+      now - retentionSeconds * 1000,
+      retentionSeconds,
+    ]);
+  }
+
+  async writeRaw(storeKey: string, content: string): Promise<void> {
+    const parsed = JSON.parse(content) as T[];
+    if (!Array.isArray(parsed)) {
+      throw new Error('CVF_CONFIGURATION_ERROR: RedisEventListAdapter.writeRaw requires a JSON array.');
+    }
+    await this.writeAll(storeKey, parsed);
+  }
+
+  describeCapability(): EventListAdapterCapability {
+    return {
+      schemaVersion: 'cvf.eventListCapability.v1',
+      adapterType: 'redis',
+      implementationStatus: this.client ? 'ACTIVE_DISTRIBUTED' : 'BLOCKED_CONFIGURATION',
+      distributed: true,
+      atomicAppend: Boolean(this.client),
+      retentionSeconds: this.client ? CONTROL_PLANE_RETENTION_SECONDS : null,
+      livenessChecked: false,
+      claimBoundary: this.client
+        ? 'static_redis_implementation_capability_only_external_liveness_and_writability_not_checked'
+        : 'redis_client_configuration_absent_no_distributed_durability_claim',
+    };
   }
 }
 
@@ -363,11 +495,37 @@ export class RedisKeyValueAdapter<T = unknown> implements KeyValueAdapter<T> {
 
 // ─── Factories ─────────────────────────────────────────────────────────────────
 
-export function buildEventListAdapter<T = unknown>(type?: string): EventListAdapter<T> {
-  const resolved = type ?? process.env.CVF_STORAGE_ADAPTER_TYPE ?? 'file';
+export type BuildEventListAdapterOptions = {
+  redisClient?: RedisEventListClient | null;
+  env?: NodeJS.ProcessEnv;
+};
+
+function createRedisEventListClient(env: NodeJS.ProcessEnv): RedisEventListClient | null {
+  const url = env.UPSTASH_REDIS_REST_URL?.trim();
+  const token = env.UPSTASH_REDIS_REST_TOKEN?.trim();
+  if (!url || !token) return null;
+  try {
+    new URL(url);
+  } catch {
+    return null;
+  }
+  return new Redis({ url, token }) as RedisEventListClient;
+}
+
+export function buildEventListAdapter<T = unknown>(
+  type?: string,
+  options: BuildEventListAdapterOptions = {},
+): EventListAdapter<T> {
+  const env = options.env ?? process.env;
+  const resolved = type ?? env.CVF_STORAGE_ADAPTER_TYPE ?? 'file';
   if (resolved === 'file') return new FileEventListAdapter<T>();
   if (resolved === 'sqlite') return new SQLiteEventListAdapter<T>();
-  if (resolved === 'redis') return new RedisEventListAdapter<T>();
+  if (resolved === 'redis') {
+    const client = options.redisClient === undefined
+      ? createRedisEventListClient(env)
+      : options.redisClient;
+    return new RedisEventListAdapter<T>(client);
+  }
   throw new Error(
     `CVF_CONFIGURATION_ERROR: unknown CVF_STORAGE_ADAPTER_TYPE "${resolved}". ` +
     'Supported values: file, sqlite, redis.',

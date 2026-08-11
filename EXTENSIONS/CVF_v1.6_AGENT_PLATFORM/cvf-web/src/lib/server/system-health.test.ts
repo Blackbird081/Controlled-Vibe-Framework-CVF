@@ -3,6 +3,7 @@ import { tmpdir } from 'os';
 import { join, resolve } from 'path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { getSystemHealth } from './system-health';
+import { resolveHostedConfigLifecycle } from '@/lib/lpci/release-policy';
 
 const roots: string[] = [];
 
@@ -100,5 +101,34 @@ describe('getSystemHealth', () => {
 
         expect(report.status).toBe('blocked');
         expect(report.checks.find((check) => check.id === 'release-gate-script')?.status).toBe('fail');
+    });
+
+    it('projects injected LPCI static health without external status claims', () => {
+        const workspace = makeWorkspace();
+        const report = getSystemHealth({
+            ...workspace,
+            lpciReleaseInput: {
+                authPolicy: { actualVersion: 'p1', acceptedVersion: 'p1' },
+                config: resolveHostedConfigLifecycle({
+                    apiKeyAvailable: true,
+                    model: 'openai/gpt-4o',
+                    endpoint: 'https://api.openai.com/v1/chat/completions',
+                    bundleVersion: 'b1',
+                }),
+                limiter: {
+                    backend: {
+                        schemaVersion: 'cvf.rateLimitBackend.v1', configuredStore: 'redis', activeStore: 'redis',
+                        distributed: true, configurationStatus: 'ACTIVE_REDIS_REST', claimBoundary: 'static only',
+                    },
+                    implementationCapable: true,
+                },
+                audit: { configured: true, distributed: true, atomicAppend: true, retentionDays: 30 },
+                routeComposition: { actualVersion: 'r1', acceptedVersion: 'r1' },
+                providerCapability: { exactPairRegistered: true, executableAdapterRegistered: true },
+            },
+        });
+
+        expect(report.lpciRelease?.state).toBe('STATIC_READY');
+        expect(report.lpciRelease?.claimBoundary).toBe('static_prerequisites_only_external_status_unproven');
     });
 });

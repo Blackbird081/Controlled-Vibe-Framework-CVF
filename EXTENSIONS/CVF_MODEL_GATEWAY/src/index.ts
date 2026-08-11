@@ -321,6 +321,16 @@ export {
 } from "./provider-execution-bridge";
 
 export type {
+  CredentialBoundOpenAiCompatibleAdapterOptions,
+  OpenAiCompatibleAdapterOptions,
+  OpenAiCompatibleFetch,
+} from "./openai-compatible-execute-adapter";
+export {
+  createCredentialBoundOpenAiCompatibleExecuteAdapter,
+  createOpenAiCompatibleExecuteAdapter,
+} from "./openai-compatible-execute-adapter";
+
+export type {
   ProviderAdapterConformanceStatus,
   ProviderAdapterConformanceInput,
   ProviderAdapterConformanceReport,

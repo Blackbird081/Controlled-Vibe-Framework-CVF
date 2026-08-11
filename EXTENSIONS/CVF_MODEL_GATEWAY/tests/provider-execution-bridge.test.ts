@@ -336,6 +336,18 @@ describe("ProviderExecutionBridge", () => {
         }),
       );
     });
+    it("forwards one caller AbortSignal to the selected adapter", async () => {
+      const adapter = makeMockAdapter();
+      const options = makeBridgeOptions({
+        adapters: new Map([[TEST_PROVIDER_ID, adapter]]),
+      });
+      const bridge = new ProviderExecutionBridge(options);
+      const controller = new AbortController();
+      await bridge.execute(makeRequest(), { signal: controller.signal });
+      expect(adapter.execute).toHaveBeenCalledWith(
+        expect.objectContaining({ signal: controller.signal }),
+      );
+    });
   });
   describe("success records health and quota", () => {
     it("records health success after adapter execution", async () => {

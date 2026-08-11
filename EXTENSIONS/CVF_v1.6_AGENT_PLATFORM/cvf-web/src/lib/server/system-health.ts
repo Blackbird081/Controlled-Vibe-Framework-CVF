@@ -1,5 +1,10 @@
 import { existsSync, accessSync, constants } from 'fs';
 import { basename, relative, resolve } from 'path';
+import {
+    evaluateLpciReleaseHealth,
+    type LpciReleaseHealthInput,
+    type LpciReleaseHealthReport,
+} from '@/lib/lpci/release-health';
 
 export type SystemHealthStatus = 'ready' | 'warning' | 'blocked';
 export type SystemHealthCheckStatus = 'pass' | 'warn' | 'fail' | 'info';
@@ -43,13 +48,15 @@ export interface SystemHealthReport {
         fail: number;
         info: number;
     };
+    lpciRelease?: LpciReleaseHealthReport;
 }
 
-interface SystemHealthOptions {
+export interface SystemHealthOptions {
     appRoot?: string;
     repoRoot?: string;
     env?: NodeJS.ProcessEnv;
     now?: () => string;
+    lpciReleaseInput?: LpciReleaseHealthInput;
 }
 
 const ALIBABA_KEY_ALIASES = [
@@ -289,5 +296,8 @@ export function getSystemHealth(options: SystemHealthOptions = {}): SystemHealth
         providers,
         checks,
         summary,
+        lpciRelease: options.lpciReleaseInput
+            ? evaluateLpciReleaseHealth(options.lpciReleaseInput)
+            : undefined,
     };
 }

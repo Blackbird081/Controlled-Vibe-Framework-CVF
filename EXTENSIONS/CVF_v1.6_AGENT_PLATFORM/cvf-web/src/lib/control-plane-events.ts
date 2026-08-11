@@ -9,7 +9,12 @@
 import path from 'node:path';
 import { createHmac, randomUUID } from 'node:crypto';
 
-import { buildEventListAdapter, type EventListAdapter } from '@/lib/storage-adapter';
+import {
+  buildEventListAdapter,
+  CONTROL_PLANE_RETENTION_SECONDS,
+  type EventListAdapter,
+  type EventListAdapterCapability,
+} from '@/lib/storage-adapter';
 
 import type { AIProvider } from '@/lib/ai';
 import { MOCK_TEAMS, MOCK_USERS } from '@/lib/mock-enterprise-db';
@@ -99,8 +104,8 @@ function getStorePath(): string {
     : path.join(process.cwd(), '.cvf', 'runtime', 'control-plane-events.json');
 }
 
-async function writeEvents(events: ControlPlaneEvent[]): Promise<void> {
-  await _eventAdapter.writeAll(getStorePath(), events);
+export function getControlPlaneEventStoreCapability(): EventListAdapterCapability {
+  return _eventAdapter.describeCapability();
 }
 
 export async function readControlPlaneEvents(): Promise<ControlPlaneEvent[]> {
@@ -112,14 +117,12 @@ async function appendEvent<T extends ControlPlaneEvent>(
   event: Omit<T, 'id' | 'timestamp'> & Partial<Pick<T, 'id' | 'timestamp'>>,
 ): Promise<T> {
   const run = async () => {
-    const events = await readControlPlaneEvents();
     const record = {
       ...event,
       id: event.id ?? randomUUID(),
       timestamp: event.timestamp ?? new Date().toISOString(),
     } as T;
-    events.push(record);
-    await writeEvents(events);
+    await _eventAdapter.append(getStorePath(), record, CONTROL_PLANE_RETENTION_SECONDS);
     return record;
   };
 

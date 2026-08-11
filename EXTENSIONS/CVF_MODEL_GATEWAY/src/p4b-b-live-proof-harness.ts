@@ -20,8 +20,6 @@
  */
 import type {
   ProviderExecutionAdapter,
-  ProviderExecutionAdapterInput,
-  ProviderExecutionAdapterResult,
   ProviderExecutionBridgeResult,
 } from "./provider-execution-bridge";
 import { ProviderExecutionBridge } from "./provider-execution-bridge";
@@ -39,6 +37,12 @@ import type { AdapterAdmissionRecord } from "./provider-adapter-admission";
 import { PROVIDER_CAPABILITY_REGISTRY } from "./provider-capability-registry";
 import type { ProviderMethodName } from "./provider-method-contract";
 import { resolveAlibabaDashScopeEndpoint } from "./alibaba-free-quota-model-ledger";
+import {
+  createOpenAiCompatibleExecuteAdapter,
+  type OpenAiCompatibleFetch,
+} from "./openai-compatible-execute-adapter";
+
+export { createOpenAiCompatibleExecuteAdapter } from "./openai-compatible-execute-adapter";
 
 export const P4B_B_LIVE_PROOF_HARNESS_VERSION =
   "cvf.p4bBLiveProofHarness.t2.v1" as const;
@@ -48,19 +52,7 @@ export const P4B_B_LIVE_PROOF_HARNESS_VERSION =
  * harness can be tested with an injected fetch double and never depends on a
  * real network in unit tests.
  */
-export type LiveProofFetch = (
-  input: string,
-  init: {
-    method: "POST";
-    headers: Record<string, string>;
-    body: string;
-  },
-) => Promise<{
-  ok: boolean;
-  status: number;
-  json: () => Promise<unknown>;
-  text?: () => Promise<string>;
-}>;
+export type LiveProofFetch = OpenAiCompatibleFetch;
 
 export interface LiveProofHarnessOptions {
   /** Operator-selected provider id (e.g. "alibaba"). Not canonical scope. */
@@ -99,82 +91,6 @@ export interface LiveProofResult {
 }
 
 export type HarnessRunResult = LiveProofDryRunResult | LiveProofResult;
-
-/**
- * Build a thin bridge-compatible ProviderExecutionAdapter for an
- * OpenAI-compatible chat completion endpoint. The secret is captured by
- * closure and used only inside execute(); it is never returned or logged.
- */
-export function createOpenAiCompatibleExecuteAdapter(params: {
-  providerId: string;
-  modelId: string;
-  endpoint: string;
-  secret: string;
-  fetchImpl: LiveProofFetch;
-}): ProviderExecutionAdapter {
-  const { providerId, modelId, endpoint, secret, fetchImpl } = params;
-  return {
-    providerId,
-    async execute(
-      input: ProviderExecutionAdapterInput,
-    ): Promise<ProviderExecutionAdapterResult> {
-      const response = await fetchImpl(endpoint, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${secret}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: modelId,
-          stream: false,
-          messages: [
-            ...(input.systemPrompt
-              ? [{ role: "system", content: input.systemPrompt }]
-              : []),
-            { role: "user", content: input.prompt },
-          ],
-        }),
-      });
-      if (!response.ok) {
-        const detail = response.text ? await response.text() : "";
-        throw new Error(
-          `live_proof_provider_error: status=${response.status}${detail ? ` body_len=${detail.length}` : ""}`,
-        );
-      }
-      const payload = (await response.json()) as Record<string, unknown>;
-      return {
-        text: readCompletionText(payload),
-        usage: readUsage(payload),
-      };
-    },
-  };
-}
-
-function readCompletionText(payload: Record<string, unknown>): string {
-  const choices = payload.choices as
-    | Array<{ message?: { content?: string } }>
-    | undefined;
-  const content = choices?.[0]?.message?.content;
-  if (typeof content === "string") {
-    return content;
-  }
-  const output = payload.output as { text?: string } | undefined;
-  return output?.text ?? "";
-}
-
-function readUsage(
-  payload: Record<string, unknown>,
-): { inputTokens: number; outputTokens: number } | undefined {
-  const usage = payload.usage as
-    | { prompt_tokens?: number; completion_tokens?: number; input_tokens?: number; output_tokens?: number }
-    | undefined;
-  if (!usage) {
-    return undefined;
-  }
-  const inputTokens = usage.prompt_tokens ?? usage.input_tokens ?? 0;
-  const outputTokens = usage.completion_tokens ?? usage.output_tokens ?? 0;
-  return { inputTokens, outputTokens };
-}
 
 /**
  * Run one bounded live proof through the governed bridge.

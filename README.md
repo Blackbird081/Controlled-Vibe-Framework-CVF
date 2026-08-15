@@ -139,6 +139,9 @@ The current system also includes:
 - **MAO** for bounded multi-agent role resolution, durable execution evidence,
   review convergence, and closer interlocks;
 - **CVF Web** for operator-facing workflows and read-only governance views;
+- **CADP** as a bounded internal foundation for capability admission,
+  repository-backed authority, execution eligibility, provider-neutral
+  constraints, and fail-closed external-readout preparation;
 - **Projection mapping** for detecting drift between provenance, public, and
   Web surfaces without unattended semantic edits.
 
@@ -180,6 +183,7 @@ CVF is a **local-first release candidate**, not a hosted SaaS product.
 | CLI, SDK, and agent bridges | Available in bounded surfaces | Each integration retains its own authentication and execution boundary. |
 | SOT3 knowledge flow | Source and application foundations available | Registered evidence is distinct from derived output and provider memory. |
 | Multi-agent orchestration | Bounded foundation available | No permissionless autonomous agent runtime is claimed. |
+| Capability admission and distribution (CADP) | Bounded internal foundation validated; not shipped as a public runtime surface | No public CADP endpoint, registry entry, MCP/CLI surface, or production deployment is claimed. External runtime remains demand-gated. |
 | Provider lanes | Configurable | Provider speed, quality, latency, and cost parity are not claimed. |
 | Public projection | Curated documentation and selected source | Private provenance and raw operational evidence stay outside this repository. |
 

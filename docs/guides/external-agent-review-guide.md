@@ -26,6 +26,12 @@ same-protocol representation and follow its companion-file startup order.
 Same-major metadata is compatible; on mismatch, report
 `PROTOCOL_REPRESENTATION_DRIFT` and retain the narrower boundary.
 
+Protocol `1.1` may add a generated task capsule, refresh receipt, and bounded
+`docs/reference/CVF_EXTERNAL_AGENT_OWNER_SURFACE_INDEX.json`. A task capsule is
+valid only for its named repo, objective, and immutable commit. Complete Gate A
+(source, license, owner, overlap) before Gate B (design/code/test), and require
+executed negative semantic evidence rather than schema-shape proof alone.
+
 ## Paste-Ready External Review Prompt
 
 Copy this prompt when asking another AI agent to review CVF from a public

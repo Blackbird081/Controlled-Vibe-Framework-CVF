@@ -6,7 +6,7 @@ Memory class: PUBLIC_REFERENCE
 
 Status: CURRENT PUBLIC GUIDE
 
-protocolVersion: 1.0.0
+protocolVersion: 1.1.0
 projectionOf: cvf.external-agent-round-trip
 compatibleWith: cvf.external-agent-portable-packet@1.x
 updatedAt: 2026-08-23
@@ -55,6 +55,11 @@ Compatibility requires the same protocol major version. If metadata is
 missing, major versions differ, or the representations materially disagree,
 report `PROTOCOL_REPRESENTATION_DRIFT`, reverify public source, and use the
 narrower authority and claim boundary until reconciled.
+
+The stable portable representation remains four files. It may also contain
+generated supplements: `CVF_PUBLIC_OWNER_SURFACE_INDEX.json`, a packet refresh
+receipt, and one `CVF_EXTERNAL_AGENT_TASK_CAPSULE.json` bound to an exact task
+and upstream commit. Never reuse a task capsule for another repository.
 
 ## Automatic startup instruction
 
@@ -162,6 +167,17 @@ owner, receipt owner, or lifecycle owner:
 4. prefer enrichment/adaptation over duplication;
 5. keep an unresolved owner gap explicit instead of inventing authority.
 
+Use `docs/reference/CVF_EXTERNAL_AGENT_OWNER_SURFACE_INDEX.json` as a bounded
+discovery aid. Reverify every listed path at the exact public commit; the index
+does not prove that a path is the complete or current owner for the task.
+
+## Gate A before design or code
+
+Before design or implementation, report Gate A (`SOURCE_OWNER_OVERLAP`) with
+immutable upstream identity and commit, immutable source links, structured
+license evidence, the CVF owner checked, overlap/novelty disposition, and one
+result: `PASS`, `RETURN_FOR_REPAIR`, or `BLOCKED`. Only `PASS` opens Gate B.
+
 ## Implementation rules
 
 For coding tasks:
@@ -178,6 +194,11 @@ For coding tasks:
   and limitations;
 - return no raw secrets or raw chain-of-thought;
 - make no claim stronger than the executed evidence.
+
+Gate B (`DESIGN_CODE_TEST`) requires executed negative semantic evidence where
+applicable. Positive examples and schema validation alone are insufficient;
+test invalid cross-field states, malformed input, authority widening, and
+source/license inconsistency.
 
 For design-only work, supply interfaces, invariants, negative cases, owner
 mapping, evidence plan, and implementation boundary without implying that the
@@ -238,22 +259,24 @@ alternatives, intended owner, and validation plan.
 6. Encode UTF-8 without BOM, LF line endings, with one trailing LF.
 7. Record every exclusion in `EXTERNAL_AGENT_RETURN_MANIFEST.json`.
 
-## Minimum JSON identity
+## Minimum JSON shape
 
-`EXTERNAL_AGENT_RETURN_MANIFEST.json` must be valid JSON and include at least:
+`EXTERNAL_AGENT_RETURN_MANIFEST.json` must be valid JSON and include at least
+this populated shape (replace the illustrative values with real evidence):
 
 ```json
 {
   "schema": "cvf.externalAgentReturn.v1",
   "artifactClass": "PROVENANCE_BACKED_DERIVED_SYNTHESIS_CANDIDATE",
   "authorityStatus": "NON_AUTHORITATIVE_UNTIL_REVIEWED",
-  "task": {},
-  "cvfPublicSource": {},
+  "task": {"title": "example", "objective": "example", "date": "2026-08-23", "nonGoals": []},
+  "cvfPublicSource": {"repository": "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git", "commit": "0000000000000000000000000000000000000000", "pathsRead": ["README.md"]},
+  "sources": [{"id": "SRC-001", "repository": "https://github.com/owner/repository.git", "commit": "0000000000000000000000000000000000000000", "immutableReference": "https://github.com/owner/repository/blob/0000000000000000000000000000000000000000/README.md", "licenseExpression": "NOASSERTION", "licenseSource": "https://github.com/owner/repository/blob/0000000000000000000000000000000000000000/LICENSE", "usageType": "REFERENCE_ONLY", "ownerSurface": "OWNER_SURFACE_NOT_FOUND", "overlapDisposition": "OWNER_SURFACE_NOT_FOUND"}],
   "origins": [],
   "files": [],
   "excludedPaths": [],
   "dependencies": [],
-  "verification": {},
+  "verification": {"commands": [{"command": "exact command", "executed": true, "result": "PASS", "testClass": "negative"}], "passed": 1, "failed": 0, "skipped": 0, "liveCalls": 0},
   "externalEffects": [],
   "secretsReturned": false,
   "knownLimitations": [],
@@ -261,6 +284,11 @@ alternatives, intended owner, and validation plan.
   "suggestedAbsorptionCandidates": []
 }
 ```
+
+Every `sources` row requires an exact commit, immutable source reference,
+license expression, immutable license source, usage type, checked owner
+surface, and overlap disposition. `verification.commands` must use structured
+records and include executed negative semantic evidence when applicable.
 
 Suggested absorption candidates are advisory. CVF independently decides
 `ABSORB`, `ADAPT`, `DEFER`, `REJECT`, `BLOCK`, or `NO_NEW_VALUE` after source,

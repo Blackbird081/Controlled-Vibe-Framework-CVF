@@ -6,6 +6,12 @@ Memory class: PUBLIC_REFERENCE
 
 Status: CURRENT PUBLIC GUIDE
 
+protocolVersion: 1.0.0
+projectionOf: cvf.external-agent-round-trip
+compatibleWith: cvf.external-agent-portable-packet@1.x
+updatedAt: 2026-08-23
+representation: PUBLIC_COMPACT_PROJECTION
+
 Use this guide when an external agent will review CVF, design a capability,
 write code, or create a repository/folder that may later be selectively
 absorbed into CVF.
@@ -26,6 +32,29 @@ governed CVF owner surface.
 This guide applies to external review, design, implementation, repository
 creation, and source-pack preparation performed from the public CVF surface.
 It does not expose private provenance or authorize direct changes to CVF.
+
+## Representation relationship
+
+This guide is the public compact projection of
+`cvf.external-agent-round-trip`, optimized for discovery from one repository
+link. A portable expanded representation may instead be supplied as these four
+files:
+
+- `CVF_EXTERNAL_AGENT_BOOTSTRAP_INSTRUCTIONS.md`
+- `CVF_CONTEXT_BRIEF.md`
+- `CVF_CURRENT_PUBLIC_SNAPSHOT.md`
+- `CVF_EXTERNAL_AGENT_RETURN_CONTRACT.md`
+
+When all four portable files are supplied, their bootstrap is the startup
+entrypoint and their specialized content provides the richer refreshable
+context. When only the public repository is supplied, use this compact guide.
+Neither representation overrides current CVF source, an explicit operator
+instruction, or a more restrictive safety or claim boundary.
+
+Compatibility requires the same protocol major version. If metadata is
+missing, major versions differ, or the representations materially disagree,
+report `PROTOCOL_REPRESENTATION_DRIFT`, reverify public source, and use the
+narrower authority and claim boundary until reconciled.
 
 ## Automatic startup instruction
 

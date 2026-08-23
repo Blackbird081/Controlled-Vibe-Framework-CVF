@@ -1,5 +1,9 @@
 # External Agent Review Guide
 
+docType: reference
+
+Memory class: PUBLIC_REFERENCE
+
 Status: CURRENT PUBLIC GUIDE
 
 Use this guide when a user pastes the CVF public repository link into another
@@ -15,6 +19,12 @@ for later CVF intake, use
 [`CVF_EXTERNAL_AGENT_ROUND_TRIP_KIT.md`](CVF_EXTERNAL_AGENT_ROUND_TRIP_KIT.md)
 as the reusable bootstrap and return contract. The operator then needs to add
 only a short task objective.
+
+If the operator supplies the four-file portable packet headed by
+`CVF_EXTERNAL_AGENT_BOOTSTRAP_INSTRUCTIONS.md`, treat it as the expanded
+same-protocol representation and follow its companion-file startup order.
+Same-major metadata is compatible; on mismatch, report
+`PROTOCOL_REPRESENTATION_DRIFT` and retain the narrower boundary.
 
 ## Paste-Ready External Review Prompt
 

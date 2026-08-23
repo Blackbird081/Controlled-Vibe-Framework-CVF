@@ -1,5 +1,6 @@
 'use client';
 
+// Text Encoding Exception: Vietnamese labels preserve the existing bilingual UI convention.
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n';
 
@@ -14,6 +15,7 @@ type AuditEvent = {
   outcome: string;
   riskLevel?: string;
   phase?: string;
+  payload?: Record<string, unknown>;
 };
 
 interface Props {
@@ -21,6 +23,63 @@ interface Props {
   actorFilter: string;
   outcomeFilter: string;
   riskFilter: string;
+}
+
+type GatewayDetails = {
+  decision?: string;
+  requestId?: string;
+  blockedBy?: string;
+};
+
+function readPayloadString(payload: Record<string, unknown> | undefined, key: string) {
+  const value = payload?.[key];
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  return trimmed || undefined;
+}
+
+function getGatewayDetails(event: AuditEvent): GatewayDetails | undefined {
+  if (event.eventType !== 'MANDATORY_GATEWAY_EVALUATED') return undefined;
+
+  const details = {
+    decision: readPayloadString(event.payload, 'gatewayDecision'),
+    requestId: readPayloadString(event.payload, 'gatewayRequestId'),
+    blockedBy: readPayloadString(event.payload, 'gatewayBlockedBy'),
+  };
+
+  return details.decision || details.requestId || details.blockedBy
+    ? details
+    : undefined;
+}
+
+function GatewayDetailsReadout({ details, vi }: { details: GatewayDetails; vi: boolean }) {
+  return (
+    <dl className="mt-3 space-y-1 border-t border-gray-200 pt-3 text-xs text-gray-600 dark:border-gray-700 dark:text-gray-300">
+      {details.decision && (
+        <div>
+          <dt className="inline font-medium">{vi ? 'Quyết định cổng:' : 'Gateway decision:'}</dt>{' '}
+          <dd className="inline font-semibold text-gray-900 dark:text-white">{details.decision}</dd>
+        </div>
+      )}
+      {details.requestId && (
+        <div>
+          <dt className="inline font-medium">{vi ? 'Mã yêu cầu:' : 'Request ID:'}</dt>{' '}
+          <dd className="inline font-mono text-gray-900 dark:text-white">{details.requestId}</dd>
+        </div>
+      )}
+      {details.blockedBy && (
+        <div>
+          <dt className="inline font-medium">{vi ? 'Bị chặn bởi:' : 'Blocked by:'}</dt>{' '}
+          <dd className="inline font-mono text-gray-900 dark:text-white">{details.blockedBy}</dd>
+        </div>
+      )}
+    </dl>
+  );
+}
+
+function GatewayDetailsForEvent({ event, vi }: { event: AuditEvent; vi: boolean }) {
+  const details = getGatewayDetails(event);
+  return details ? <GatewayDetailsReadout details={details} vi={vi} /> : null;
 }
 
 export function AdminAuditLogBody({ filteredEvents, actorFilter, outcomeFilter, riskFilter }: Props) {
@@ -103,6 +162,7 @@ export function AdminAuditLogBody({ filteredEvents, actorFilter, outcomeFilter, 
               <div><span className="font-medium">{vi ? 'Rủi ro:' : 'Risk:'}</span> {event.riskLevel || '-'}</div>
               <div><span className="font-medium">{vi ? 'Giai đoạn:' : 'Phase:'}</span> {event.phase || '-'}</div>
             </div>
+            <GatewayDetailsForEvent event={event} vi={vi} />
           </article>
         ))}
       </div>
@@ -133,6 +193,7 @@ export function AdminAuditLogBody({ filteredEvents, actorFilter, outcomeFilter, 
                 <td className="px-5 py-4">
                   <div className="font-medium text-gray-900 dark:text-white">{event.eventType}</div>
                   <div className="mt-1 text-sm text-gray-500">{event.action}</div>
+                  <GatewayDetailsForEvent event={event} vi={vi} />
                 </td>
                 <td className="px-5 py-4">
                   <div className="font-medium text-gray-900 dark:text-white">{event.actorId}</div>

@@ -89,7 +89,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
           intent: generateIntent(template!, inputs),
           inputs,
           provider: 'alibaba',
-          model: 'qwen-turbo',
+          model: 'qwen-flash',
           mode: 'simple',
           cvfRiskLevel: 'R1',
           action: 'analyze strategy_analysis rte1 runtime telemetry receipt proof request',

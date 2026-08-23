@@ -473,6 +473,30 @@ runtime/product code, and does not itself implement or modify any checker.
     first-run and final-run result captured after edits are complete, not
     left as the value the scaffold was generated with.
 
+45. **A manifest hash recipe must pin path form, ordering, encoding, separator,
+    and trailing-newline behavior.** A label such as
+    `sorted-paths-newline-joined-with-trailing-newline` is not independently
+    reproducible if one author used locale-sensitive PowerShell sorting and a
+    reviewer used ordinal code-point sorting, or if workspace-relative and
+    root-relative paths are both plausible. Record the exact path form,
+    forward-slash normalization, ordinal/code-point ordering, UTF-8/BOM
+    behavior, LF separator, and trailing LF. Prefer a cross-platform recipe
+    whose recomputed digest is checked before closure.
+
+46. **Canonical processing statuses are not the same field as planning
+    disposition or overlap labels.** If a compact ledger stores fields such as
+    `disposition` and `overlapClass`, do not describe those literal values as
+    the standard processing-status column. State the applied processing status
+    separately, then list the exact literal vocabulary for each stored field.
+
+47. **`COMPLETE_VERIFIED` requires exact zero-value corpus fields.** When using
+    this verdict, write `Declared exclusions: none` and
+    `Unreadable or unsupported files: none` as exact values. Put execution,
+    semantic-certification, upstream-mirror, and runtime limitations under a
+    separate scope-boundary field. Do not append explanatory prose to the
+    literal `none` value because the corpus checker treats any retained text as
+    evidence of an exclusion or unreadable item.
+
 ## When This Checklist Is Not Enough
 
 This file only captures gotchas already observed. It is not a substitute
@@ -514,7 +538,7 @@ Not authorized: no checker semantics change, hook catalog change, runtime
 behavior, source import, provider/live proof, public-sync, package activation,
 adapter behavior, generated state mutation, or worker execution.
 
-## Agent Operation Trace Block
+## Historical Agent Operation Trace Record - MSEA-R16-T1
 
 | Field | Evidence |
 |---|---|
@@ -536,3 +560,48 @@ adapter behavior, generated state mutation, or worker execution.
 | Actual changed set | `docs/reviews/CVF_MSEA_R16_T1_WORK_ORDER_LITERAL_SHAPE_HELPER_HARDENING_2026-07-03.md`; `docs/reference/CVF_GOVERNED_ARTIFACT_LITERAL_FORMAT_GOTCHAS_2026-06-25.md`; `docs/reference/guard_orientation/README.md`; `governance/compat/build_dispatch_packet_scaffold.py`; `governance/compat/test_build_dispatch_packet_scaffold.py`; `governance/compat/fixtures/woas_r2_source_intake_scaffold_golden.md` |
 | Manifest delta | MATCH |
 | Deletion or rename disposition | N/A with reason: no deletion or rename in this learning batch |
+
+## Core Guard Self-Protection Authorization - EAIC-KR-R1 Literal Learning
+
+Authorized guard-maintenance scope: add three observed artifact-authoring
+gotchas after independent review found a non-reproducible hash recipe, a
+processing-status versus planning-vocabulary collision, and ambiguous
+`COMPLETE_VERIFIED` zero-value fields.
+
+Protected path:
+
+- `docs/reference/CVF_GOVERNED_ARTIFACT_LITERAL_FORMAT_GOTCHAS_2026-06-25.md`.
+
+Operator authorization: proceed from the independently reviewed EAIC-KR-R1
+intake into a governed R1B worker dispatch, with reviewer-owned finding repair
+and learning capture before dispatch.
+
+Rollback boundary: revert checklist items 45-47 with the EAIC-KR-R1 intake
+review repair if rejected. Do not revert the earlier MSEA-R16-T1 checklist
+history.
+
+Not authorized: no checker change, hook wiring, runtime behavior, source import,
+provider/live proof, public-sync, package activation, or worker execution.
+
+## Agent Operation Trace Block
+
+| Field | Evidence |
+|---|---|
+| Actor | Codex reviewer/closer role |
+| Provider or surface | local provenance workspace |
+| Session or invocation | EAIC-KR-R1 adversarial finding repair, 2026-07-23 |
+| Working directory | repository root |
+| Command or tool surface | local file reads, hash recomputation, apply_patch, and governance gates |
+| Target paths | EAIC-KR-R1 intake audit/review/manifest/ledgers; corpus registry entry and aggregate; source mirror index; this gotchas reference; active handoff marker |
+| Allowed scope source | operator authorized continuation after independent Claude adversarial review |
+| Before status evidence | hash recipe depended on unstated sorting/path details; ledger vocabulary and corpus-verdict prose were ambiguous |
+| After status evidence | deterministic cross-platform hash recipe, literal ledger vocabulary separation, exact zero-value verdict fields, and reusable gotchas 45-47 |
+| Diff evidence | Git worktree status before material commit |
+| Approval boundary | intake evidence repair and documentation learning only |
+| Claim boundary | no runtime/provider/live/public/CLI/MCP/implementation claim |
+| Agent type | reviewer/closer |
+| Invocation ID | `eaic-kr-r1-adversarial-repair-2026-07-23` |
+| Expected manifest | `.private_reference/source_mirrors/INDEX.md`; `docs/audits/CVF_EAIC_KR_R1_ADVERSARIAL_REVIEW_2026-07-23.md`; `docs/audits/CVF_EAIC_KR_R1_CONVERSATION_RESILIENT_GOVERNANCE_FILE_LEDGER_2026-07-23.json`; `docs/audits/CVF_EAIC_KR_R1_CVF_23_07_EXTERNAL_REPOSITORY_INTAKE_AUDIT_2026-07-23.md`; `docs/audits/CVF_EAIC_KR_R1_CVF_23_07_EXTERNAL_REPOSITORY_INTAKE_MANIFEST_2026-07-23.json`; `docs/audits/CVF_EAIC_KR_R1_INTERACTION_PROJECTION_FILE_LEDGER_2026-07-23.json`; `docs/corpus-intelligence/CVF_CORPUS_SCAN_REGISTRY.json`; `docs/corpus-intelligence/registry/entries/eaic-kr-r1-cvf-23-07-external-repository-intake.json`; `docs/reference/CVF_GOVERNED_ARTIFACT_LITERAL_FORMAT_GOTCHAS_2026-06-25.md` |
+| Actual changed set | `.private_reference/source_mirrors/INDEX.md`; `docs/audits/CVF_EAIC_KR_R1_ADVERSARIAL_REVIEW_2026-07-23.md`; `docs/audits/CVF_EAIC_KR_R1_CONVERSATION_RESILIENT_GOVERNANCE_FILE_LEDGER_2026-07-23.json`; `docs/audits/CVF_EAIC_KR_R1_CVF_23_07_EXTERNAL_REPOSITORY_INTAKE_AUDIT_2026-07-23.md`; `docs/audits/CVF_EAIC_KR_R1_CVF_23_07_EXTERNAL_REPOSITORY_INTAKE_MANIFEST_2026-07-23.json`; `docs/audits/CVF_EAIC_KR_R1_INTERACTION_PROJECTION_FILE_LEDGER_2026-07-23.json`; `docs/corpus-intelligence/CVF_CORPUS_SCAN_REGISTRY.json`; `docs/corpus-intelligence/registry/entries/eaic-kr-r1-cvf-23-07-external-repository-intake.json`; `docs/reference/CVF_GOVERNED_ARTIFACT_LITERAL_FORMAT_GOTCHAS_2026-06-25.md` |
+| Manifest delta | MATCH |
+| Deletion or rename disposition | N/A with reason: no deletion or rename in this batch |

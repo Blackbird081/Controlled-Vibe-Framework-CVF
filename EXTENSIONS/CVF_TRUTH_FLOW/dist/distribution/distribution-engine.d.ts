@@ -1,7 +1,7 @@
 import type { KernelAuthorityBoundary } from "../kernel-reference/kernel-authority.js";
 import type { DistributionPackage } from "../types/distribution-package.js";
 import type { IdFactory } from "../deps.js";
-export type DistributionRejectionReason = "EMPTY_TRUTH_REFERENCES" | "REFERENCE_NOT_CURRENTLY_ACTIVE" | "PACKAGE_NOT_FOUND" | "PACKAGE_NOT_ACTIONABLE";
+export type DistributionRejectionReason = "EMPTY_TRUTH_REFERENCES" | "REFERENCE_NOT_CURRENTLY_ACTIVE" | "PACKAGE_NOT_FOUND" | "PACKAGE_NOT_ACTIONABLE" | "INCOMPLETE_ROUTING_SCOPE" | "INVALID_DOSE_OR_EXPIRY" | "PACKAGE_EXPIRED" | "PACKAGE_CONSUMER_BINDING_MISMATCH";
 export interface DistributionCreationResult {
     created: boolean;
     distributionPackage?: DistributionPackage;
@@ -11,6 +11,22 @@ export interface DistributionActionResult {
     succeeded: boolean;
     distributionPackage?: DistributionPackage;
     reasons: DistributionRejectionReason[];
+}
+/**
+ * The exact consumer identity a caller asserts when reading/consuming a
+ * package (A4). Every field is compared against the package's own immutable
+ * routing fields; dose is compared for exact equality because A4's product
+ * consumer always requests the single dose it was granted (no partial-dose
+ * consumption semantics exist). A mismatch on any field returns
+ * `PACKAGE_CONSUMER_BINDING_MISMATCH` before any lifecycle/expiry/reference
+ * check runs, so a wrong-binding caller never learns lifecycle state.
+ */
+export interface DistributionConsumptionBinding {
+    recipient: string;
+    role: string;
+    task: string;
+    phase: string;
+    dose: string;
 }
 /**
  * Creates and transitions DistributionPackage records. routing_decision is
@@ -42,6 +58,7 @@ export declare class DistributionEngine {
     get(packageId: string): DistributionPackage | undefined;
     private reResolveOrReject;
     private isReadActionable;
+    private isExpired;
     /**
      * Delivers/consumes the package. Re-resolves every bound reference at
      * actionTimeUtcIso; does not mutate acknowledgement_state (delivery and
@@ -49,6 +66,20 @@ export declare class DistributionEngine {
      * only while the package remains PENDING_ACKNOWLEDGEMENT).
      */
     deliverOrConsume(packageId: string, actionTimeUtcIso: string): DistributionActionResult;
+    /**
+     * Strict consumption-time binding check (A4). Compares the caller-asserted
+     * `binding` against the package's own immutable recipient/role/task/phase/
+     * dose fields before applying every existing `deliverOrConsume` check
+     * (read-actionable lifecycle state, expiry, and fresh Kernel reference
+     * resolution). A binding mismatch returns
+     * `PACKAGE_CONSUMER_BINDING_MISMATCH` and never mutates state or reveals
+     * lifecycle/expiry detail for a caller that does not match the package's
+     * own routing scope. Existing `deliverOrConsume` behavior for a correctly
+     * bound caller is unchanged: this method delegates to it once binding
+     * passes, so actionable/expiry/current-reference checks are not
+     * duplicated or weakened.
+     */
+    consumeFor(packageId: string, binding: DistributionConsumptionBinding, actionTimeUtcIso: string): DistributionActionResult;
     acknowledge(packageId: string, actionTimeUtcIso: string): DistributionActionResult;
     /**
      * Marks a PENDING_ACKNOWLEDGEMENT package EXPIRED when actionTimeUtcIso

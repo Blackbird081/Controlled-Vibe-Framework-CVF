@@ -46,6 +46,14 @@ ENCODING_EXACT_PATHS = {
     "CVF_SESSION_MEMORY.md",
     "DESIGN.md",
 }
+RAW_PREIMAGE_ARCHIVE_ENCODING_EXCEPTIONS = {
+    # ACRC-T2B preserves these historical instruction carriers byte-for-byte.
+    # Their content predates the ASCII-default rule and cannot be normalized
+    # without invalidating the pinned preimage hashes.
+    "docs/reference/archive/AGENTS_FULL_PRE_T2B_2026-08-11.md",
+    "docs/reference/archive/CLAUDE_FULL_PRE_T2B_2026-08-11.md",
+    "docs/reference/archive/CVF_DOWNSTREAM_AGENTS_TEMPLATE_FULL_PRE_T2B_2026-08-11.md",
+}
 EXCEPTION_MARKERS = (
     "Text Encoding Exception",
     "Unicode exception",
@@ -304,6 +312,8 @@ def _is_review_packet(path: str) -> bool:
 
 def _is_encoding_scoped(path: str) -> bool:
     normalized = path.replace("\\", "/")
+    if normalized in RAW_PREIMAGE_ARCHIVE_ENCODING_EXCEPTIONS:
+        return False
     if normalized in ENCODING_EXACT_PATHS:
         return True
     if Path(normalized).suffix not in ENCODING_EXTENSIONS:

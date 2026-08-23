@@ -160,7 +160,7 @@ Navigate to `http://localhost:3000/settings` or open Settings from the sidebar.
 
 Point out the provider cards:
 - Anthropic (default, always present)
-- Alibaba Cloud (qwen-turbo)
+- Alibaba Cloud (qwen-flash)
 - DeepSeek (deepseek-chat)
 
 **Step 3 — Show lane status badges**
@@ -227,7 +227,7 @@ Expected output: 6/6 scenarios PASS, receipt printed to console.
 
 **If asked about cost:**
 
-> "CVF itself has no usage cost. Live canary runs consume the operator's provider API credits. A 6-scenario Alibaba canary costs fractions of a cent at qwen-turbo rates."
+> "CVF itself has no usage cost. Live canary runs consume the operator's provider API credits; consult current Alibaba pricing before execution."
 
 ---
 

@@ -10,7 +10,7 @@
  *
  * Governance policy (AGENTS.md §Mandatory Live Governance Proof):
  *   Any claim about CVF governance behavior MUST use a real provider API call.
- *   Live lane: Alibaba qwen-turbo (DASHSCOPE_API_KEY / ALIBABA_API_KEY).
+ *   Live lane: Alibaba qwen-flash (DASHSCOPE_API_KEY / ALIBABA_API_KEY).
  *
  * Clarification journey strategy:
  *   Uses SHORT (<=5 char) vague inputs that produce weak_confidence from
@@ -326,7 +326,7 @@ test.describe('W129 Stage B signal capture — §8 Post-Closure Addendum', () =>
       // ── Evidence summary ─────────────────────────────────────────────────────
       const summary = {
         capturedAt: new Date().toISOString(),
-        provider: 'alibaba / qwen-turbo',
+        provider: 'alibaba / qwen-flash',
         stage: 'Stage B signal capture — §8 Post-Closure Addendum',
         attemptedJourneys: STAGE_B_JOURNEYS.length,
         clarifiedJourneys,

@@ -127,7 +127,7 @@ describe('spec-first mediation', () => {
       routeOutcome: {
         success: true,
         provider: 'alibaba',
-        model: 'qwen-turbo',
+        model: 'qwen-flash',
         decision: 'ALLOW',
         receipt: { receiptId: 'rcpt-test', envelopeId: 'env-test' },
       },

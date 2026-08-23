@@ -8,6 +8,8 @@ import {
 import {
   ALIBABA_FREE_QUOTA_LEDGER_REFERENCE,
   ALIBABA_FREE_QUOTA_MODELS,
+  ALIBABA_T6_FREE_QUOTA_TARGET_MODEL,
+  ALIBABA_T6_FREE_QUOTA_TARGET_SNAPSHOT,
   getAlibabaFreeQuotaStatus,
 } from "../src/alibaba-free-quota-model-ledger";
 import {
@@ -41,12 +43,12 @@ describe("provider capability registry", () => {
   });
 
   it("returns registry-backed method contracts for known provider models", () => {
-    expect(getProviderMethodContract(PROVIDER_CAPABILITY_REGISTRY, "alibaba", "qwen-turbo")).toEqual({
+    expect(getProviderMethodContract(PROVIDER_CAPABILITY_REGISTRY, "alibaba", "qwen-flash")).toEqual({
       providerId: "alibaba",
-      modelId: "qwen-turbo",
+      modelId: "qwen-flash",
       supportedMethods: ["complete", "chat", "stream"],
       defaultMethod: "complete",
-      capabilityRef: "provider-capability/alibaba/qwen-turbo",
+      capabilityRef: "provider-capability/alibaba/qwen-flash",
     });
     expect(listRegistrySupportedMethods(PROVIDER_CAPABILITY_REGISTRY, "deepseek", "deepseek-chat"))
       .toEqual(["complete", "chat", "json_mode"]);
@@ -64,13 +66,13 @@ describe("provider capability registry", () => {
     expect(() => assertRegistryProviderMethodSupported(
       PROVIDER_CAPABILITY_REGISTRY,
       "alibaba",
-      "qwen-turbo",
+      "qwen-flash",
       "chat",
     )).not.toThrow();
     expect(() => assertRegistryProviderMethodSupported(
       PROVIDER_CAPABILITY_REGISTRY,
       "alibaba",
-      "qwen-turbo",
+      "qwen-flash",
       "complete",
     )).not.toThrow();
   });
@@ -79,7 +81,7 @@ describe("provider capability registry", () => {
     expect(() => assertRegistryProviderMethodSupported(
       PROVIDER_CAPABILITY_REGISTRY,
       "alibaba",
-      "qwen-turbo",
+      "qwen-flash",
       "tool_call",
     )).toThrow(UnsupportedMethodError);
     expect(() => assertRegistryProviderMethodSupported(
@@ -199,13 +201,15 @@ describe("provider capability registry", () => {
   });
 
   it("classifies Alibaba free-quota model usability by expiration before live use", () => {
+    expect(ALIBABA_T6_FREE_QUOTA_TARGET_MODEL).toBe("qwen3.7-flash");
+    expect(ALIBABA_T6_FREE_QUOTA_TARGET_SNAPSHOT).toBe("qwen3.7-flash-2026-07-15");
     expect(getAlibabaFreeQuotaStatus(
-      "qwen3.7-plus",
-      new Date("2026-06-18T00:00:00Z"),
+      ALIBABA_T6_FREE_QUOTA_TARGET_MODEL,
+      new Date("2026-08-15T00:00:00Z"),
     )).toBe("usable");
     expect(getAlibabaFreeQuotaStatus(
-      "qwen3.7-plus",
-      new Date("2026-09-01T00:00:00Z"),
+      ALIBABA_T6_FREE_QUOTA_TARGET_MODEL,
+      new Date("2026-10-23T00:00:00Z"),
     )).toBe("expired");
     expect(getAlibabaFreeQuotaStatus(
       "unknown-model",

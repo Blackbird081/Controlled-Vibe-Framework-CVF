@@ -48,10 +48,6 @@ export function verifyServiceTokenRequest(input: {
     return false;
   }
 
-  if (process.env.NODE_ENV === 'test') {
-    return true;
-  }
-
   if (!signature || !timestamp) {
     return false;
   }

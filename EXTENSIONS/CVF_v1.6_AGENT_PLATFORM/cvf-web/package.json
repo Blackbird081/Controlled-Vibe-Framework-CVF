@@ -25,6 +25,7 @@
     "cvf-execution-plane-foundation": "file:../../CVF_EXECUTION_PLANE_FOUNDATION",
     "cvf-guard-contract": "file:../../CVF_GUARD_CONTRACT",
     "cvf-learning-plane-foundation": "file:../../CVF_LEARNING_PLANE_FOUNDATION",
+    "cvf-model-gateway": "file:../../CVF_MODEL_GATEWAY",
     "cvf-refinery": "file:../../CVF_REFINERY",
     "cvf-truth-flow": "file:../../CVF_TRUTH_FLOW",
     "cvf-truth-kernel": "file:../../CVF_TRUTH_KERNEL",

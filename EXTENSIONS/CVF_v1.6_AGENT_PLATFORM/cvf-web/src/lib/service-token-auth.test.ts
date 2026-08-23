@@ -50,4 +50,51 @@ describe('service-token-auth', () => {
       now: Number(timestamp),
     })).toBe(false);
   });
+
+  it('never bypasses signature/timestamp verification on token equality alone, in any NODE_ENV', () => {
+    const token = 'svc-secret';
+
+    for (const nodeEnv of ['test', 'production', 'development', undefined]) {
+      if (nodeEnv) {
+        vi.stubEnv('NODE_ENV', nodeEnv);
+      } else {
+        vi.unstubAllEnvs();
+      }
+
+      expect(verifyServiceTokenRequest({
+        configuredToken: token,
+        presentedToken: token,
+        signature: null,
+        timestamp: null,
+        body: '{"ok":true}',
+      })).toBe(false);
+    }
+  });
+
+  it('verifies hmac signatures using an injected time in test mode, matching production behavior', () => {
+    vi.stubEnv('NODE_ENV', 'test');
+
+    const token = 'svc-secret';
+    const timestamp = String(1_000_000_000_000);
+    const body = '{"templateName":"Strategy"}';
+    const signature = computeServiceRequestSignature(token, timestamp, body);
+
+    expect(verifyServiceTokenRequest({
+      configuredToken: token,
+      presentedToken: token,
+      signature,
+      timestamp,
+      body,
+      now: Number(timestamp),
+    })).toBe(true);
+
+    expect(verifyServiceTokenRequest({
+      configuredToken: token,
+      presentedToken: token,
+      signature: 'bad-signature',
+      timestamp,
+      body,
+      now: Number(timestamp),
+    })).toBe(false);
+  });
 });

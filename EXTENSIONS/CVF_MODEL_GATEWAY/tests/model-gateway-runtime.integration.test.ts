@@ -19,7 +19,7 @@ describe("Model Gateway runtime integration", () => {
         status: "enabled",
         riskClass: "medium",
         credentialKeyIds: ["dashscope-live"],
-        models: [{ id: "qwen-turbo", riskClass: "medium" }],
+        models: [{ id: "qwen-flash", riskClass: "medium" }],
       },
     ]);
     const health = new ProviderHealthMonitor(() => new Date("2026-05-16T00:00:00Z"));
@@ -72,18 +72,18 @@ describe("Model Gateway runtime integration", () => {
     expect(receipt).toMatchObject({
       traceId: "trace-live",
       providerId: "dashscope",
-      selectedModelId: "qwen-turbo",
+      selectedModelId: "qwen-flash",
       policyResult: "allow",
       quotaAllowed: true,
       validationState: "passed",
     });
-    expect(sticky.get("session-1")).toMatchObject({ providerId: "dashscope", modelId: "qwen-turbo" });
+    expect(sticky.get("session-1")).toMatchObject({ providerId: "dashscope", modelId: "qwen-flash" });
     expect(JSON.stringify(receipt)).not.toContain("sk-live-secret-value");
   });
 
   it("captures fallback reason and previous route in the receipt", () => {
     const fallback = new FallbackPolicy({ maxAttempts: 2 }, () => new Date("2026-05-16T00:00:00Z"));
-    const firstAttempt = fallback.createAttempt("dashscope", "qwen-turbo", "provider_timeout", 504);
+    const firstAttempt = fallback.createAttempt("dashscope", "qwen-flash", "provider_timeout", 504);
     const decision = fallback.decide([firstAttempt], 504);
 
     const receipt = new GatewayReceiptBuilder(
@@ -92,7 +92,7 @@ describe("Model Gateway runtime integration", () => {
     ).build({
       traceId: "trace-fallback",
       providerId: "deepseek",
-      requestedModelId: "qwen-turbo",
+      requestedModelId: "qwen-flash",
       selectedModelId: "deepseek-chat",
       decision: "fallback",
       reason: decision.reason,
@@ -107,13 +107,13 @@ describe("Model Gateway runtime integration", () => {
     expect(receipt).toMatchObject({
       decision: "fallback",
       reason: "retryable_or_unknown_failure",
-      requestedModelId: "qwen-turbo",
+      requestedModelId: "qwen-flash",
       selectedModelId: "deepseek-chat",
       healthState: "degraded",
       quotaAllowed: true,
       fallback: {
         fromProviderId: "dashscope",
-        fromModelId: "qwen-turbo",
+        fromModelId: "qwen-flash",
       },
     });
   });

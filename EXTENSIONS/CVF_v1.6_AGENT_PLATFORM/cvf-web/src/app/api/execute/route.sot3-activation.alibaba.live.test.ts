@@ -1,7 +1,7 @@
 /**
  * SOT3-ACT-A3 - Real Provider Approved Context Live Proof
  *
- * Calls the real Alibaba DashScope API (qwen-turbo) through the actual
+ * Calls the real Alibaba DashScope API (qwen3.7-flash) through the actual
  * `/api/execute` route to prove that SOT3 Flow-approved knowledge context in
  * `CVF_SOT3_KNOWLEDGE_ACTIVATION_MODE=ENFORCE` reaches the downstream
  * provider system prompt. Correlates the live result with the durable A2
@@ -218,7 +218,7 @@ declare global {
 }
 
 describe.skipIf(!RUNNER_PERMIT.authorized || !ALIBABA_API_KEY)(
-  '/api/execute SOT3-ACT-A3 real-provider approved-context live proof  -  Alibaba qwen-turbo',
+  '/api/execute SOT3-ACT-A3 real-provider approved-context live proof  -  Alibaba qwen3.7-flash',
   () => {
     const originalEnv = { ...process.env };
     const originalFetch = globalThis.fetch;
@@ -322,7 +322,7 @@ describe.skipIf(!RUNNER_PERMIT.authorized || !ALIBABA_API_KEY)(
               batchId: 'SOT3-ACT-A3R',
               observedCallCount: observedDashScopeCallCount,
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen3.7-flash',
             }), 'utf8');
           }
           try {
@@ -352,10 +352,10 @@ describe.skipIf(!RUNNER_PERMIT.authorized || !ALIBABA_API_KEY)(
     });
 
     it(
-      'ENFORCE mode injects only Flow-approved context into exactly one real Alibaba qwen-turbo call',
+      'ENFORCE mode injects only Flow-approved context into exactly one real Alibaba qwen3.7-flash call',
       async () => {
         // Requirement 7: call the real POST route once with provider
-        // alibaba and model qwen-turbo.
+        // alibaba and model qwen3.7-flash.
         const response = await POST(
           new Request('http://localhost/api/execute', {
             method: 'POST',
@@ -366,7 +366,7 @@ describe.skipIf(!RUNNER_PERMIT.authorized || !ALIBABA_API_KEY)(
                 topic: 'sot3 act a3 live proof controlled scenario',
               },
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen3.7-flash',
               knowledgeCollectionId: 'sot3-act-a3-collection',
             }),
           }) as never,
@@ -378,7 +378,7 @@ describe.skipIf(!RUNNER_PERMIT.authorized || !ALIBABA_API_KEY)(
         // receipt, knowledge injection, and exactly one provider call.
         expect(body.success).toBe(true);
         expect(body.provider).toBe('alibaba');
-        expect(body.model).toBe('qwen-turbo');
+        expect(body.model).toBe('qwen3.7-flash');
         expect(body.governanceEvidenceReceipt).toBeTruthy();
         const knowledgeInjection = body.knowledgeInjection as { injected?: boolean } | undefined;
         expect(knowledgeInjection?.injected).toBe(true);
@@ -421,7 +421,7 @@ describe.skipIf(!RUNNER_PERMIT.authorized || !ALIBABA_API_KEY)(
         globalThis.__CVF_SOT3_A3_OBSERVATION__ = {
           overall: 'PASS',
           provider: 'alibaba',
-          model: 'qwen-turbo',
+          model: 'qwen3.7-flash',
           keyAliasUsed: ALIBABA_KEY_ALIAS,
           httpStatus: observedHttpStatus,
           success: true,

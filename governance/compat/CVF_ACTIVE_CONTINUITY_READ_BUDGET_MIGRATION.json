@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "1.0",
+  "status": "ACTIVE_MIGRATION_DEBT",
+  "expiresOn": "2026-08-17",
+  "removalAction": "REMOVE_ROW_IN_T2_AFTER_SURFACE_COMPACTION",
+  "entries": []
+}

@@ -95,28 +95,12 @@ export class MandatoryGateway {
     // Check bypass list
     const normalizedAction = request.action.toLowerCase().trim();
     if (this.config.bypassActions.some(bp => normalizedAction.includes(bp))) {
-      const result: GatewayResult = {
-        allowed: true,
-        decision: 'BYPASS',
-        reason: `Action "${request.action}" is in bypass list`,
-        bypassed: true,
-        controlMode,
-      };
-      this.auditLog.push(result);
-      return result;
+      return this.buildBypassResult(request.action, controlMode);
     }
 
     // If gateway is disabled, allow everything
     if (!this.config.enforceAll) {
-      const result: GatewayResult = {
-        allowed: true,
-        decision: 'ALLOW',
-        reason: 'Gateway enforcement is disabled',
-        bypassed: false,
-        controlMode,
-      };
-      this.auditLog.push(result);
-      return result;
+      return this.buildDisabledResult(controlMode);
     }
 
     // Build guard context
@@ -136,7 +120,72 @@ export class MandatoryGateway {
       },
     };
 
-    // Run guard evaluation
+    return this.evaluateContext(context, controlMode);
+  }
+
+  /**
+   * Evaluate an already-built canonical GuardRequestContext exactly once,
+   * preserving every field (including requestId) with no normalization,
+   * default injection, or rebuild.
+   */
+  checkContext(context: GuardRequestContext): GatewayResult {
+    const controlMode = context.metadata?.controlMode === 'governed'
+      ? 'governed'
+      : this.config.defaultControlMode;
+
+    const normalizedAction = context.action.toLowerCase().trim();
+    if (this.config.bypassActions.some(bp => normalizedAction.includes(bp))) {
+      return this.buildBypassResult(context.action, controlMode, context.requestId);
+    }
+
+    if (!this.config.enforceAll) {
+      return this.buildDisabledResult(controlMode, context.requestId);
+    }
+
+    return this.evaluateContext(context, controlMode);
+  }
+
+  private buildBypassResult(
+    action: string,
+    controlMode: 'standard' | 'governed',
+    requestId?: string,
+  ): GatewayResult {
+    const result: GatewayResult = {
+      allowed: true,
+      decision: 'BYPASS',
+      reason: `Action "${action}" is in bypass list`,
+      bypassed: true,
+      controlMode,
+      ...(requestId !== undefined ? { evidence: { requestId } } : {}),
+    };
+    this.auditLog.push(result);
+    return result;
+  }
+
+  private buildDisabledResult(
+    controlMode: 'standard' | 'governed',
+    requestId?: string,
+  ): GatewayResult {
+    const result: GatewayResult = {
+      allowed: true,
+      decision: 'ALLOW',
+      reason: 'Gateway enforcement is disabled',
+      bypassed: false,
+      controlMode,
+      ...(requestId !== undefined ? { evidence: { requestId } } : {}),
+    };
+    this.auditLog.push(result);
+    return result;
+  }
+
+  /**
+   * Run guard evaluation exactly once against the exact context object
+   * supplied by the caller, then classify the pipeline decision.
+   */
+  private evaluateContext(
+    context: GuardRequestContext,
+    controlMode: 'standard' | 'governed',
+  ): GatewayResult {
     const guardResult = this.engine.evaluate(context);
 
     let allowed: boolean;

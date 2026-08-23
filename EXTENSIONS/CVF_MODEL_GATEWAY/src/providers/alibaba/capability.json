@@ -2,7 +2,7 @@
   "providerId": "alibaba",
   "models": [
     {
-      "modelId": "qwen-turbo",
+      "modelId": "qwen-flash",
       "supportedMethods": ["chat", "stream"],
       "defaultMethod": "chat"
     },

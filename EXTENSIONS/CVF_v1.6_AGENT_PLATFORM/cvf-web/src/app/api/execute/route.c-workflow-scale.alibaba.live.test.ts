@@ -161,7 +161,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
                 intent,
                 inputs: proofCase.inputs,
                 provider: 'alibaba',
-                model: 'qwen-turbo',
+                model: 'qwen-flash',
                 mode: 'simple',
                 cvfRiskLevel: 'R1',
                 action: `analyze ${proofCase.templateId} workflow scale proof request`,
@@ -197,12 +197,12 @@ describe.skipIf(!ALIBABA_API_KEY)(
           const evidencePackage = readout?.evidencePackage as Record<string, unknown> | undefined;
 
           expect(body.provider).toBe('alibaba');
-          expect(body.model).toBe('qwen-turbo');
+          expect(body.model).toBe('qwen-flash');
           expect(receipt).toMatchObject({
             evidenceMode: 'live',
             decision: 'ALLOW',
             provider: 'alibaba',
-            model: 'qwen-turbo',
+            model: 'qwen-flash',
           });
           expect(body).toMatchObject({
             workflowId: proofCase.workflowId,
@@ -263,7 +263,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
         console.info(JSON.stringify({
           cWorkflowScaleLiveReceipts: receipts,
           provider: 'alibaba',
-          model: 'qwen-turbo',
+          model: 'qwen-flash',
           rawSecretPrinted: false,
         }));
       },

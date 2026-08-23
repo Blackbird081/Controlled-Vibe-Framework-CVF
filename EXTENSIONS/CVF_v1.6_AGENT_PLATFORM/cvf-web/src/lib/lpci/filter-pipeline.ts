@@ -11,20 +11,11 @@ import type {
 
 const EFFECTIVE_STATUSES = new Set(['effective', 'amended']);
 
-// Stage 1: Sensitivity pre-filter — exclude classified records without clearance
+// Stage 1: exact public-only sensitivity admission. Client clearance is inert.
 function applySensitivityFilter(
   records: LpciIndexRecord[],
-  sensitivityClearance: boolean,
 ): { filtered: LpciIndexRecord[]; applied: boolean } {
-  const hasClassified = records.some((r) => r.sensitivityLevel === 'classified');
-  if (!hasClassified) return { filtered: records, applied: false };
-  if (!sensitivityClearance) {
-    return {
-      filtered: records.filter((r) => r.sensitivityLevel !== 'classified'),
-      applied: true,
-    };
-  }
-  return { filtered: records, applied: true };
+  return { filtered: records.filter((record) => record.sensitivityLevel === 'public'), applied: true };
 }
 
 // Stage 2: Status filter — default effective only; client may widen
@@ -44,10 +35,8 @@ function applySearch(records: LpciIndexRecord[], query: string): LpciIndexRecord
   const lower = query.toLowerCase();
   return records.filter(
     (r) =>
-      (r.titleSnippet && r.titleSnippet.toLowerCase().includes(lower)) ||
-      (r.contentSnippet && r.contentSnippet.toLowerCase().includes(lower)) ||
-      r.normalizedPath.toLowerCase().includes(lower) ||
-      (r.documentType && r.documentType.toLowerCase().includes(lower)),
+      (typeof r.titleSnippet === 'string' && r.titleSnippet.toLowerCase().includes(lower)) ||
+      (typeof r.contentSnippet === 'string' && r.contentSnippet.toLowerCase().includes(lower)),
   );
 }
 
@@ -111,13 +100,10 @@ export function runFilterPipeline(
   query: string,
   filters: FilterParams = {},
 ): FilterPipelineResult {
-  const appliedFilters: FilterParams = { ...filters };
+  const appliedFilters: FilterParams = { ...filters, sensitivityClearance: false };
 
   // Stage 1 — Sensitivity pre-filter
-  const { filtered: afterSensitivity, applied: sensitivityApplied } = applySensitivityFilter(
-    corpus,
-    filters.sensitivityClearance ?? false,
-  );
+  const { filtered: afterSensitivity, applied: sensitivityApplied } = applySensitivityFilter(corpus);
 
   if (afterSensitivity.length === 0 && corpus.length > 0) {
     return {
@@ -129,7 +115,7 @@ export function runFilterPipeline(
   }
 
   // Stage 2 — Status filter
-  const afterStatus = applyStatusFilter(afterSensitivity, filters.status?.map(String));
+  const afterStatus = applyStatusFilter(afterSensitivity, appliedFilters.status);
 
   // Stage 3 — Fulltext search
   const afterSearch = applySearch(afterStatus, query);
@@ -157,9 +143,9 @@ export function runFilterPipeline(
   }
 
   // Stage 5 — Client facet filters (applied to direct candidates only)
-  const afterFacet = applyFacetFilters(directCandidates, filters);
+  const afterFacet = applyFacetFilters(directCandidates, appliedFilters);
   // Also filter escalate-only through facets for context
-  const escalateFiltered = applyFacetFilters(escalateOnly, filters);
+  const escalateFiltered = applyFacetFilters(escalateOnly, appliedFilters);
 
   const ranked = rankRecords([...afterFacet, ...escalateFiltered]);
 

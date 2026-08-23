@@ -9,7 +9,7 @@
  *
  * Governance policy (AGENTS.md §Mandatory Live Governance Proof):
  *   Any claim about CVF governance behavior MUST use a real provider API call.
- *   Live lane: Alibaba qwen-turbo (DASHSCOPE_API_KEY / ALIBABA_API_KEY).
+ *   Live lane: Alibaba qwen-flash (DASHSCOPE_API_KEY / ALIBABA_API_KEY).
  *
  * Hard Boundaries (§7.2):
  *   - Real live provider calls only — mock mode is not valid evidence
@@ -279,7 +279,7 @@ test.describe('W129 Stage A volume capture — Stage B unlock evidence', () => {
 
       const summary = {
         capturedAt: new Date().toISOString(),
-        provider: 'alibaba / qwen-turbo',
+        provider: 'alibaba / qwen-flash',
         stage: 'Stage A volume pass — §7 Post-Closure Addendum',
         attemptedJourneys: VOLUME_JOURNEYS.length,
         successfulJourneys: successCount,
@@ -338,7 +338,7 @@ test.describe('W129 Stage A volume capture — Stage B unlock evidence', () => {
         '',
         `- Live governed execution status: \`${response.status()}\``,
         `- Governance decision: \`${body.governanceEvidenceReceipt?.decision ?? 'UNKNOWN'}\``,
-        `- Provider lane: \`alibaba / qwen-turbo\``,
+        `- Provider lane: \`alibaba / qwen-flash\``,
         '',
         '## Lane Readout',
         '',

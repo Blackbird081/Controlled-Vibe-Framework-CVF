@@ -18,7 +18,7 @@ CVF is easiest to understand as a governance-first stack with four distinct role
 The current publication posture is live-first:
 
 - governance behavior is proven through real provider execution, not mock strings;
-- Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` are certified provider lanes;
+- Alibaba has retained historical provider-lane evidence and now targets `qwen-flash`, pending fresh live compatibility proof; DeepSeek `deepseek-chat` remains certified;
 - mock mode is valid only for UI structure checks;
 - release-quality proof runs through `python scripts/run_cvf_release_gate_bundle.py --json`.
 - Web is governance-inherited on the active governed AI path, but is not the full CVF runtime.
@@ -256,7 +256,7 @@ The architecture should be read this way:
 | --- | --- | --- |
 | Non-coder governed AI path | Live-proven | W149 trusted-form corpus: Alibaba direct API `40/40`, Alibaba browser UI `40/40`, DeepSeek confirmatory subset `12/12` |
 | Non-coder adoption journey | Live-proven | W119 evidence pack `3/3` locked journeys pass: first governed output, project knowledge use, evidence handoff |
-| Multi-provider operability | Certified on 2 lanes | Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` both `CERTIFIED`; provider parity is not claimed |
+| Multi-provider operability | Historical 2-lane evidence; Alibaba revalidation open | Alibaba now targets `qwen-flash` pending fresh live proof; DeepSeek `deepseek-chat` remains `CERTIFIED`; provider parity is not claimed |
 | Release gate | Mandatory live governance | W152 preserves `python scripts/run_cvf_release_gate_bundle.py --json` PASS, including live governance E2E |
 | Mock boundary | UI-only | `AGENTS.md` and live evidence packet |
 | Provider parity | Not claimed | Speed, cost, quality, latency, and reliability remain provider economics |

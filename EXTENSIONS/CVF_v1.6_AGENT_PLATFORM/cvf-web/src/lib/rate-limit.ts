@@ -19,7 +19,7 @@ export type RateLimitBackendStatus = {
     claimBoundary: string;
 };
 
-type RateLimitResult = {
+export type RateLimitResult = {
     allowed: boolean;
     retryAfterSeconds: number;
     backendStatus: RateLimitBackendStatus;
@@ -96,6 +96,10 @@ function limits(env: NodeJS.ProcessEnv = process.env) {
         maxRequests: Number(env.CVF_RATE_LIMIT ?? 30),
         providerQuota: Number(env.CVF_PROVIDER_QUOTA_PER_MIN ?? 30),
     };
+}
+
+function isPositiveFiniteInteger(value: number): boolean {
+    return Number.isFinite(value) && Number.isInteger(value) && value > 0;
 }
 
 function getClientIp(headers: Headers): string {
@@ -210,6 +214,35 @@ function createRedisClientFromEnv(env: NodeJS.ProcessEnv): RateLimitRedisClient 
 
 export function getRateLimiter(options: RateLimiterOptions = {}) {
     const env = options.env ?? process.env;
+    const consumeScoped = async (
+        scope: 'query' | 'provider',
+        key: string,
+        limit: number,
+    ): Promise<RateLimitResult> => {
+        const backendStatus = getRateLimitBackendStatus(env);
+        if (
+            backendStatus.configurationStatus !== 'ACTIVE_MEMORY_PROCESS_LOCAL'
+            && backendStatus.configurationStatus !== 'ACTIVE_REDIS_REST'
+        ) {
+            return blockedResult(backendStatus);
+        }
+        if (!key.trim() || !isPositiveFiniteInteger(limit)) return blockedResult(backendStatus);
+        const redisClient = backendStatus.configurationStatus === 'ACTIVE_REDIS_REST'
+            ? options.redisClient ?? createRedisClientFromEnv(env)
+            : null;
+        const activeStore = redisClient
+            ? new UpstashRedisRateLimitStore(
+                redisClient,
+                backendStatus,
+                `${options.redisKeyPrefix ?? 'cvf:rate-limit'}:${scope}`,
+            )
+            : scope === 'query' ? userStore : providerStore;
+        try {
+            return await activeStore.consume(key, limit);
+        } catch {
+            return blockedResult(backendStatus);
+        }
+    };
     return {
         backendStatus() {
             return getRateLimitBackendStatus(env);
@@ -240,7 +273,20 @@ export function getRateLimiter(options: RateLimiterOptions = {}) {
                 if (!res2.allowed) return res2;
             }
             return { allowed: true, retryAfterSeconds: 0, backendStatus };
-        }
+        },
+        async consumeQuery(identityKind: 'session' | 'service', identityHash: string) {
+            const { maxRequests } = limits(env);
+            return consumeScoped('query', `lpci:query:${identityKind}:${identityHash}`, maxRequests);
+        },
+        async consumeProviderAttempt(
+            identityKind: 'session' | 'service',
+            identityHash: string,
+            providerModel: string,
+        ) {
+            const { providerQuota } = limits(env);
+            const queryKey = `lpci:query:${identityKind}:${identityHash}`;
+            return consumeScoped('provider', `${queryKey}:${providerModel}`, providerQuota);
+        },
     };
 }
 

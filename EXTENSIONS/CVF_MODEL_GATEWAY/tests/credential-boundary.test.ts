@@ -25,4 +25,44 @@ describe("CredentialBoundary", () => {
     expect(redactSecret("1234567890abcdef")).toBe("1234...cdef");
     expect(fingerprintSecret("same-secret")).toBe(fingerprintSecret("same-secret"));
   });
+
+  it.each([
+    ["missing", {}],
+    ["empty", { PRIMARY_KEY: "" }],
+    ["whitespace", { PRIMARY_KEY: " \t\r\n " }],
+  ])("treats %s credentials as unavailable", (_label, env) => {
+    const boundary = new CredentialBoundary(env);
+    const reference = {
+      providerId: "openai",
+      keyId: "lpci-openai",
+      envNames: ["PRIMARY_KEY"],
+    };
+
+    expect(boundary.resolveMetadata(reference)).toEqual({
+      providerId: "openai",
+      keyId: "lpci-openai",
+      available: false,
+      source: "env",
+      fingerprint: undefined,
+      redactedValue: undefined,
+    });
+    expect(boundary.resolveSecretForRuntime(reference)).toBeUndefined();
+  });
+
+  it("skips trim-empty aliases and preserves the original non-empty bytes", () => {
+    const original = "  sk-preserve-surrounding-bytes  ";
+    const boundary = new CredentialBoundary({
+      PRIMARY_KEY: "   ",
+      SECONDARY_KEY: original,
+    });
+    const reference = {
+      providerId: "openai",
+      keyId: "lpci-openai",
+      envNames: ["PRIMARY_KEY", "SECONDARY_KEY"],
+    };
+
+    expect(boundary.resolveMetadata(reference).available).toBe(true);
+    expect(JSON.stringify(boundary.resolveMetadata(reference))).not.toContain(original);
+    expect(boundary.resolveSecretForRuntime(reference)).toBe(original);
+  });
 });

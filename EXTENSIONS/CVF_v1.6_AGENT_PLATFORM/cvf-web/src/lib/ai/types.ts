@@ -195,7 +195,7 @@ export const DEFAULT_MODELS: Record<AIProvider, string> = {
     openai: 'gpt-4o-mini',
     claude: 'claude-sonnet-4-20250514',
     gemini: 'gemini-2.5-flash',
-    alibaba: 'qwen-turbo',
+    alibaba: 'qwen-flash',
     openrouter: 'meta-llama/llama-4-maverick',
     deepseek: 'deepseek-chat',
 };

@@ -1,10 +1,11 @@
 'use client';
+// Text Encoding Exception: Vietnamese UI
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Settings2, Sparkles, X } from 'lucide-react';
 import { SidebarToggle } from '@/components';
-import { ThemeToggle, useTheme } from '@/lib/theme';
+import { useTheme } from '@/lib/theme';
 import { LanguageToggle, useLanguage } from '@/lib/i18n';
 
 interface CompactHeaderProps {
@@ -66,7 +67,7 @@ function applyTweaks(next: TweaksState) {
 export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnabled }: CompactHeaderProps) {
     const { language } = useLanguage();
     const { theme, setTheme, mounted } = useTheme();
-    const [isTweaksOpen, setIsTweaksOpen] = useState(false);
+    const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
     const [tweaks, setTweaks] = useState<TweaksState>(() => loadTweaks());
 
     useEffect(() => {
@@ -76,7 +77,7 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
     const labels = useMemo(() => (
         language === 'vi'
             ? {
-                tweaks: 'Tweaks',
+                preferences: 'Cài đặt',
                 theme: 'Giao diện',
                 light: 'Sáng',
                 dark: 'Tối',
@@ -87,7 +88,7 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
                 compact: 'Gọn',
             }
             : {
-                tweaks: 'Tweaks',
+                preferences: 'Preferences',
                 theme: 'Theme',
                 light: 'Light',
                 dark: 'Dark',
@@ -108,27 +109,27 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
         applyTweaks(next);
     };
 
-    const tweaksButton = (
+    const preferencesButton = (
         <button
             type="button"
-            onClick={() => setIsTweaksOpen((value) => !value)}
-            className="cvf-control inline-flex items-center gap-2 border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-white/75 dark:hover:bg-white/[0.08]"
+            onClick={() => setIsPreferencesOpen((value) => !value)}
+            className="cvf-control inline-flex items-center gap-2 border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-white/75 dark:hover:bg-white/[0.08] rounded-xl"
+            aria-label={labels.preferences}
         >
-            <Settings2 size={15} />
-            <span>{labels.tweaks}</span>
+            <Settings2 size={16} />
         </button>
     );
 
     const versionBadge = (
-        <span className="rounded-full border border-white/[0.12] bg-white/[0.06] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/55">
+        <span className="rounded-full border border-current/15 bg-slate-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:bg-white/[0.04] dark:text-white/55">
             version 1.6
         </span>
     );
 
     return (
-        <div className="relative">
+        <div className="relative w-full">
             {/* Mobile Header */}
-            <header className="bg-[#0d0f1a] border-b border-white/[0.06] sticky top-0 z-50 md:hidden">
+            <header className="bg-[#0d0f1a] border-b border-white/[0.06] sticky top-0 z-50 md:hidden w-full overflow-hidden">
                 <div className="px-4 py-[11px]">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -146,47 +147,46 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
                             )}
                         </div>
                         <div className="flex items-center gap-2">
-                            {versionBadge}
-                            {tweaksButton}
                             <div id="tour-lang-switch">
                                 <LanguageToggle />
                             </div>
-                            <ThemeToggle />
+                            {preferencesButton}
                         </div>
                     </div>
                 </div>
             </header>
 
             {/* Desktop Top Bar */}
-            <div className="hidden md:flex items-center justify-end gap-3 px-6 py-[11px] bg-[#0d0f1a] border-b border-white/[0.06]">
+            <div className="hidden md:flex items-center justify-end gap-3 px-6 py-[11px] bg-[#0d0f1a] border-b border-white/[0.06] w-full overflow-hidden">
                 {mockAiEnabled && (
                     <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] rounded bg-amber-500/20 text-amber-300 border border-amber-500/20">
                         Demo
                     </span>
                 )}
-                {versionBadge}
-                {tweaksButton}
                 <div id="tour-lang-switch">
                     <LanguageToggle />
                 </div>
-                <ThemeToggle />
+                {preferencesButton}
             </div>
 
-            {isTweaksOpen && (
-                <div className="fixed right-4 top-20 z-[60] w-[320px] max-w-[calc(100vw-2rem)] cvf-surface border border-slate-200 bg-white p-5 shadow-[0_24px_60px_-30px_rgba(15,23,42,0.4)] dark:border-white/[0.08] dark:bg-[#171b29]">
+            {isPreferencesOpen && (
+                <div className="absolute right-4 top-16 z-[60] w-[320px] max-w-[calc(100vw-2rem)] cvf-surface border border-slate-200 bg-white p-5 shadow-[0_24px_60px_-30px_rgba(15,23,42,0.4)] dark:border-white/[0.08] dark:bg-[#171b29]">
                     <div className="mb-5 flex items-center justify-between">
                         <div className="flex items-center gap-2 text-lg font-semibold text-slate-950 dark:text-white">
                             <Settings2 size={18} className="cvf-accent-text" />
-                            <span>{labels.tweaks}</span>
+                            <span>{labels.preferences}</span>
                         </div>
-                        <button
-                            type="button"
-                            onClick={() => setIsTweaksOpen(false)}
-                            className="cvf-control rounded-xl p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-white/[0.08] dark:hover:text-white/80"
-                            aria-label="Close tweaks"
-                        >
-                            <X size={18} />
-                        </button>
+                        <div className="flex items-center gap-3">
+                            {versionBadge}
+                            <button
+                                type="button"
+                                onClick={() => setIsPreferencesOpen(false)}
+                                className="cvf-control rounded-xl p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-white/[0.08] dark:hover:text-white/80"
+                                aria-label="Close preferences"
+                            >
+                                <X size={18} />
+                            </button>
+                        </div>
                     </div>
 
                     <div className="space-y-5">

@@ -12,8 +12,8 @@ describe("GatewayReceiptBuilder", () => {
     const receipt = builder.build({
       traceId: "trace-1",
       providerId: "dashscope",
-      requestedModelId: "qwen-turbo",
-      selectedModelId: "qwen-turbo",
+      requestedModelId: "qwen-flash",
+      selectedModelId: "qwen-flash",
       decision: "selected",
       reason: "policy_health_quota_selected",
       policy: {
@@ -42,7 +42,7 @@ describe("GatewayReceiptBuilder", () => {
     const envelope: GatewayReceiptEnvelope = builder.buildEnvelope({
       traceId: "trace-envelope",
       providerId: "dashscope",
-      selectedModelId: "qwen-turbo",
+      selectedModelId: "qwen-flash",
       decision: "selected",
       reason: "policy_health_quota_selected",
       validationState: "passed",

@@ -383,6 +383,23 @@ jobs:
         run: |
           python governance/compat/check_corpus_to_knowledge_map_reconciliation.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
+  agent-instruction-carrier-compaction:
+    name: Agent Instruction Carrier Compaction
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce ACRC-T2B instruction carrier compaction contract
+        run: |
+          python governance/compat/check_agent_instruction_carriers.py --enforce
+
   multi-agent-review-governance:
     name: Multi-Agent Review Governance
     runs-on: ubuntu-latest

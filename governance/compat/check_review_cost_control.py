@@ -9,7 +9,8 @@ on every changed docs/reviews/*.md artifact declaring
 standalone declaration `Review-Cost Telemetry: REQUIRED`.
 
 This checker is intentionally narrow. It validates field presence, value
-shape, allowed `stopDisposition` tokens, and the round-three escalation rule.
+shape, controlled tokens, the round-three escalation rule, and the multi-commit
+exception reason.
 It never scores semantic review quality, root-cause independence, or value
 delta; those remain reviewer judgment. Applicability is artifact-shape based,
 not bare-substring based. Standards, work orders, tests, worker returns,
@@ -38,6 +39,8 @@ REQUIRED_INTEGER_FIELDS = (
     "newRootCauseCountThisRound",
     "dependentFindingCountThisRound",
     "providerCallCount",
+    "materialCommitCount",
+    "continuityCommitCount",
 )
 UNAVAILABLE_ALLOWED_FIELDS = (
     "elapsedReviewMinutes",
@@ -45,8 +48,19 @@ UNAVAILABLE_ALLOWED_FIELDS = (
 )
 NARRATIVE_FIELD = "valueDelta"
 STOP_FIELD = "stopDisposition"
+AUDIT_FIELD = "preRepairAuditDisposition"
+COMMIT_PLAN_FIELD = "commitPlanDisposition"
+LATENCY_FIELD = "latencyDisposition"
+DELAY_FIELD = "avoidableDelayClass"
 
-ALL_FIELDS = REQUIRED_INTEGER_FIELDS + UNAVAILABLE_ALLOWED_FIELDS + (NARRATIVE_FIELD, STOP_FIELD)
+ALL_FIELDS = REQUIRED_INTEGER_FIELDS + UNAVAILABLE_ALLOWED_FIELDS + (
+    NARRATIVE_FIELD,
+    STOP_FIELD,
+    AUDIT_FIELD,
+    COMMIT_PLAN_FIELD,
+    LATENCY_FIELD,
+    DELAY_FIELD,
+)
 
 ALLOWED_STOP_TOKENS = (
     "CONTINUE_NEW_CRITICAL_EVIDENCE",
@@ -60,6 +74,37 @@ ROUND_THREE_ALLOWED_TOKENS = (
     "CONTINUE_NEW_CRITICAL_EVIDENCE",
 )
 UNAVAILABLE_PREFIX = "NOT_AVAILABLE_WITH_REASON"
+
+ALLOWED_AUDIT_TOKENS = (
+    "COMPLETE_BEFORE_FIRST_REPAIR",
+    "NO_REPAIR_REQUIRED",
+    "BLOCKED_REVIEW_MATRIX_INCOMPLETE",
+)
+ALLOWED_COMMIT_PLAN_TOKENS = (
+    "DEFAULT_ONE_MATERIAL_ONE_CONTINUITY",
+    "MATERIAL_ONLY",
+    "NO_COMMIT_REVIEW",
+    "CONTINUITY_ONLY",
+)
+COMMIT_EXCEPTION_PREFIX = "EXCEPTION_WITH_REASON"
+ALLOWED_LATENCY_TOKENS = (
+    "WITHIN_FAST_PATH_TARGET",
+    "EXPECTED_LONG_RUNNING_PROOF",
+    "EXTERNAL_WAIT",
+)
+LATENCY_REASON_PREFIXES = (
+    "NOT_MEASURED_WITH_REASON",
+    "LATENCY_BUDGET_EXCEEDED_WITH_REASON",
+)
+ALLOWED_DELAY_TOKENS = (
+    "NONE",
+    "SEQUENTIAL_FINDING_CASCADE",
+    "PREMATURE_COMMIT",
+    "RANGE_RECOMPUTATION",
+    "GATE_DISCOVERY_LOOP",
+    "WORKTREE_CHURN",
+    "MULTIPLE_AVOIDABLE_DELAYS",
+)
 
 FIELD_VALUE_RE_TEMPLATE = r"(?m)^[ \t]*(?:[-*][ \t]+)?`?{field}`?:[ \t]*(.+)$"
 
@@ -162,6 +207,10 @@ def _is_non_negative_integer(value: str) -> bool:
     return bool(re.fullmatch(r"\d+", value))
 
 
+def _has_reason(value: str, prefix: str) -> bool:
+    return bool(re.fullmatch(rf"{re.escape(prefix)}:\s*\S.*", value))
+
+
 def diagnose(path: str, text: str) -> Diagnostic:
     if not is_applicable(path, text):
         return Diagnostic(path=path, applicable=False)
@@ -218,6 +267,51 @@ def diagnose(path: str, text: str) -> Diagnostic:
                 f"reviewRoundCount >= 3 requires `{STOP_FIELD}` to be one of "
                 f"{ROUND_THREE_ALLOWED_TOKENS}, got `{stop_value}`"
             )
+
+    audit_value = values.get(AUDIT_FIELD)
+    if audit_value is not None and audit_value not in ALLOWED_AUDIT_TOKENS:
+        issues.append(
+            f"field `{AUDIT_FIELD}` must be one of {ALLOWED_AUDIT_TOKENS}, got `{audit_value}`"
+        )
+
+    commit_plan_value = values.get(COMMIT_PLAN_FIELD)
+    commit_plan_valid = commit_plan_value in ALLOWED_COMMIT_PLAN_TOKENS
+    if commit_plan_value is not None and not commit_plan_valid:
+        commit_plan_valid = _has_reason(commit_plan_value, COMMIT_EXCEPTION_PREFIX)
+        if not commit_plan_valid:
+            issues.append(
+                f"field `{COMMIT_PLAN_FIELD}` must be one of {ALLOWED_COMMIT_PLAN_TOKENS} "
+                f"or `{COMMIT_EXCEPTION_PREFIX}` followed by a reason, got `{commit_plan_value}`"
+            )
+
+    latency_value = values.get(LATENCY_FIELD)
+    if latency_value is not None and latency_value not in ALLOWED_LATENCY_TOKENS:
+        if not any(_has_reason(latency_value, prefix) for prefix in LATENCY_REASON_PREFIXES):
+            issues.append(
+                f"field `{LATENCY_FIELD}` must be one of {ALLOWED_LATENCY_TOKENS} or a "
+                f"reason-bearing token from {LATENCY_REASON_PREFIXES}, got `{latency_value}`"
+            )
+
+    delay_value = values.get(DELAY_FIELD)
+    if delay_value is not None and delay_value not in ALLOWED_DELAY_TOKENS:
+        issues.append(
+            f"field `{DELAY_FIELD}` must be one of {ALLOWED_DELAY_TOKENS}, got `{delay_value}`"
+        )
+
+    material_count = values.get("materialCommitCount")
+    continuity_count = values.get("continuityCommitCount")
+    excessive_commits = any(
+        value is not None and _is_non_negative_integer(value) and int(value) > 1
+        for value in (material_count, continuity_count)
+    )
+    if excessive_commits and (
+        commit_plan_value is None
+        or not _has_reason(commit_plan_value, COMMIT_EXCEPTION_PREFIX)
+    ):
+        issues.append(
+            "materialCommitCount or continuityCommitCount > 1 requires "
+            f"`{COMMIT_PLAN_FIELD}` to use `{COMMIT_EXCEPTION_PREFIX}: <reason>`"
+        )
 
     return Diagnostic(path=path, applicable=True, issues=tuple(issues))
 

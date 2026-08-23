@@ -15,7 +15,7 @@ function buildEngine() {
       displayName: "DashScope",
       status: "enabled",
       riskClass: "medium",
-      models: [{ id: "qwen-turbo", riskClass: "medium" }],
+      models: [{ id: "qwen-flash", riskClass: "medium" }],
     },
     {
       id: "deepseek",
@@ -47,7 +47,7 @@ function buildPipelineEngine() {
       status: "enabled",
       riskClass: "medium",
       models: [
-        { id: "qwen-turbo", riskClass: "medium" },
+        { id: "qwen-flash", riskClass: "medium" },
         { id: "qwen-vl-plus", riskClass: "medium" },
       ],
     },
@@ -94,12 +94,12 @@ describe("RoutingPolicyEngine", () => {
 
   it("selects a provider only after policy, health, and quota pass", () => {
     const parts = buildEngine();
-    parts.quota.setLimit("dashscope", "qwen-turbo", { requestsPerDay: 1 });
+    parts.quota.setLimit("dashscope", "qwen-flash", { requestsPerDay: 1 });
     const engine = new RoutingPolicyEngine(parts.registry, parts.health, parts.quota);
 
     const decision = engine.decide({
       traceId: "trace-3",
-      requestedModelId: "qwen-turbo",
+      requestedModelId: "qwen-flash",
       estimatedTokens: 20,
       policy: { traceId: "trace-3", policyResult: "allow", allowedProviderIds: ["dashscope"] },
     });
@@ -107,7 +107,7 @@ describe("RoutingPolicyEngine", () => {
     expect(decision).toMatchObject({
       status: "selected",
       providerId: "dashscope",
-      modelId: "qwen-turbo",
+      modelId: "qwen-flash",
       reason: "policy_health_quota_selected",
     });
   });
@@ -129,7 +129,7 @@ describe("RoutingPolicyEngine", () => {
     const engine = new RoutingPolicyEngine(parts.registry, parts.health, parts.quota);
     const request = {
       traceId: "trace-snapshot",
-      requestedModelId: "qwen-turbo",
+      requestedModelId: "qwen-flash",
       policy: { traceId: "trace-snapshot", policyResult: "allow" as const },
     };
 
@@ -163,7 +163,7 @@ describe("RoutingPolicyEngine", () => {
 
     const decision = engine.decide({
       traceId: "trace-backward-compatible",
-      requestedModelId: "qwen-turbo",
+      requestedModelId: "qwen-flash",
       policy: { traceId: "trace-backward-compatible", policyResult: "allow" },
     });
 
@@ -171,21 +171,21 @@ describe("RoutingPolicyEngine", () => {
       status: "selected",
       traceId: "trace-backward-compatible",
       providerId: "dashscope",
-      modelId: "qwen-turbo",
+      modelId: "qwen-flash",
       reason: "policy_health_quota_selected",
       provider: {
         id: "dashscope",
         displayName: "DashScope",
         status: "enabled",
         riskClass: "medium",
-        models: [{ id: "qwen-turbo", riskClass: "medium" }],
+        models: [{ id: "qwen-flash", riskClass: "medium" }],
       },
       quota: {
         allowed: true,
         reason: "no_limit_configured",
         usage: {
           providerId: "dashscope",
-          modelId: "qwen-turbo",
+          modelId: "qwen-flash",
           day: "2026-05-16",
           requestCount: 0,
           estimatedTokenCount: 0,
@@ -255,7 +255,7 @@ describe("RoutingPolicyEngine", () => {
       providerId: "deepseek",
       modelId: "deepseek-chat",
       fallbackChain: [
-        { providerId: "alibaba", modelId: "qwen-turbo" },
+        { providerId: "alibaba", modelId: "qwen-flash" },
         { providerId: "deepseek", modelId: "deepseek-chat" },
       ],
     });

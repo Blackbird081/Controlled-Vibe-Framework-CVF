@@ -1,4 +1,5 @@
 {
+    "_textEncodingException": "Text Encoding Exception: Vietnamese labels are permitted in this dictionary per DESIGN.md section 8.",
     "nav.skills": "Skills",
     "nav.help": "Help",
     "nav.docs": "Docs",
@@ -23,6 +24,10 @@
     "sidebar.governance": "Governance",
     "sidebar.platform": "Platform",
     "sidebar.account": "Account",
+    "sidebar.home": "Home",
+    "sidebar.aiWork": "AI Work",
+    "sidebar.knowledgeReview": "Knowledge & Review",
+    "sidebar.advancedOperations": "Advanced Operations",
     "nav.governance": "Governance",
     "nav.simulation": "Simulation",
     "nav.knowledge": "Knowledge",

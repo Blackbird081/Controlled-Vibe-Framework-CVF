@@ -176,7 +176,7 @@ describe('web-governance-envelope', () => {
                 envelope: env,
                 decision: 'ALLOW',
                 provider: 'alibaba',
-                model: 'qwen-turbo',
+                model: 'qwen-flash',
                 routingDecision: 'alibaba',
                 knowledgeSource: 'project',
                 knowledgeInjected: true,
@@ -292,7 +292,7 @@ describe('web-governance-envelope', () => {
                 envelope: env,
                 decision: 'ALLOW',
                 provider: 'alibaba',
-                model: 'qwen-turbo',
+                model: 'qwen-flash',
                 runtimeTelemetry: {
                     schemaVersion: 'cvf.runtimeTelemetry.v1',
                     providerLatencyMs: 321,
@@ -341,7 +341,7 @@ describe('web-governance-envelope', () => {
                 decision: 'ALLOW',
                 riskLevel: 'R1',
                 provider: 'alibaba',
-                model: 'qwen-turbo',
+                model: 'qwen-flash',
                 routingDecision: 'ALLOW',
                 receiptIntegrity: {
                     signingSecret: 'builder-test-secret',

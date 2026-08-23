@@ -86,6 +86,12 @@ class GenerateActiveSessionStateTests(unittest.TestCase):
                 "activeSessionFrontDoor": "CVF_SESSION_MEMORY.md",
                 "freezePosture": "none",
                 "activeReviewQueue": "CVF_SESSION/ACTIVE_REVIEW_QUEUE.json",
+                "currentAuthority": {
+                    "baselinePath": "docs/baselines/TEST.md",
+                    "baselineSha256": "0" * 64,
+                    "workOrderPath": "docs/work_orders/TEST.md",
+                    "workOrderSha256": "0" * 64,
+                },
                 "extraField": "should not appear",
             }
             aggregate.write_text(render_json(state), encoding="utf-8")

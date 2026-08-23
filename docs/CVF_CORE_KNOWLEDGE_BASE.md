@@ -10,7 +10,7 @@
 > **Phiên bản hiện tại:** v4.0.0 Runtime | **Cập nhật:** 2026-04-21
 > **Nguồn xác minh:** GitHub repo + README.md + ARCHITECTURE.md + live evidence packet + provider lane receipts
 
-> **Current evidence posture:** CVF has live non-coder governance proof and two certified provider lanes: Alibaba `qwen-turbo` and DeepSeek `deepseek-chat`. Release-quality governance claims require `python scripts/run_cvf_release_gate_bundle.py --json`; mock mode is UI-only.
+> **Current evidence posture:** CVF retains historical Alibaba provider-lane proof, but the current `qwen-flash` target awaits fresh live compatibility proof; DeepSeek `deepseek-chat` remains certified. Release-quality governance claims require `python scripts/run_cvf_release_gate_bundle.py --json`; mock mode is UI-only.
 
 ---
 
@@ -54,7 +54,7 @@ Khi đánh giá giá trị sản phẩm hiện tại của CVF, mặc định hi
 - đổi API key / provider / model hợp lệ sẽ sinh ra lane mới trong validation matrix
 - muốn chứng minh CVF là model-agnostic hub, phải có evidence trên nhiều lanes
 - muốn chứng minh giá trị do governance của CVF, phải so direct vs governed trong cùng một lane
-- hiện tại Alibaba `qwen-turbo` và DeepSeek `deepseek-chat` là hai certified lanes; provider parity không được claim
+- Alibaba hiện target `qwen-flash` nhưng còn chờ live compatibility proof mới; DeepSeek `deepseek-chat` vẫn certified; không claim provider parity
 - mọi bằng chứng governance phải chạy live API; mock chỉ hợp lệ cho UI structure
 
 ---
@@ -540,3 +540,5 @@ Canonical owners:
 
 Touched governed files near threshold must be split, rotated, archived, or
 materially reduced in the same batch before closure.
+
+Text Encoding Exception: pre-existing non-ASCII text preserved unchanged; the QTDM-01 migration edited only the ASCII deprecated model identifier.

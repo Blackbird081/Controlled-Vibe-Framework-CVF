@@ -9,6 +9,7 @@ const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
 const appendAuditEventMock = vi.hoisted(() => vi.fn());
 const appendCostEventMock = vi.hoisted(() => vi.fn());
+let auditEventSequence = 0;
 
 vi.mock('@/lib/ai', () => ({
     executeAI: executeAIMock,
@@ -51,6 +52,10 @@ describe('/api/execute diagnostics', () => {
         verifySessionCookieMock.mockReset();
         checkTeamQuotaMock.mockReset();
         appendAuditEventMock.mockReset();
+        auditEventSequence = 0;
+        appendAuditEventMock.mockImplementation(async () => ({
+            id: `diagnostics-audit-${++auditEventSequence}`,
+        }));
         appendCostEventMock.mockReset();
         evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
         checkTeamQuotaMock.mockResolvedValue({

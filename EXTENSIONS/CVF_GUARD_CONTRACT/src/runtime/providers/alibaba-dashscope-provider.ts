@@ -34,7 +34,7 @@ interface DashScopeResponse {
 
 export interface AlibabaDashScopeConfig {
   apiKey: string;
-  /** Default: qwen-turbo (fast, cheap). Options: qwen-plus, qwen-max, qwen-long */
+  /** Default: qwen-flash (fast, cheap). Options: qwen-plus, qwen-max, qwen-long */
   model?: string;
   maxTokens?: number;
   temperature?: number;
@@ -60,7 +60,7 @@ export class AlibabaDashScopeProvider implements ExecutionProvider {
       throw new Error('AlibabaDashScopeProvider requires an API key.');
     }
     this.apiKey = config.apiKey;
-    this.model = config.model ?? 'qwen-turbo';
+    this.model = config.model ?? 'qwen-flash';
     this.maxTokens = config.maxTokens ?? 2048;
     this.temperature = config.temperature ?? 0.7;
     this.openAICompatible = config.openAICompatible ?? true;

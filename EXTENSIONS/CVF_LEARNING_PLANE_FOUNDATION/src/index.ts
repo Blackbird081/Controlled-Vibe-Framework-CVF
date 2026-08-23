@@ -845,6 +845,23 @@ export type {
   LearningSignalLane,
   LearningSignalSeverity,
 } from "./learning-signal-intake-bridge";
+// RSPB-AI-T6 - Capability Projection To Learning Candidate Intake Seam
+export {
+  CAPABILITY_LEARNING_CANDIDATE_PROJECTION_VERSION,
+  projectCapabilityLearningCandidate,
+} from "./capability-learning-candidate-projection";
+export type {
+  CapabilityLearningCandidate,
+  LearningCandidateContradictionStatus,
+  LearningCandidateDeduplicationStatus,
+  LearningCandidateEnvironmentSpecificity,
+  LearningCandidateIssue,
+  LearningCandidateIssueCode,
+  LearningCandidateProjectionResult,
+  LearningCandidateProjectionStatus,
+  LearningCandidateReviewStatus,
+  LearningObservationInput,
+} from "./capability-learning-candidate-projection";
 export {
   PatternDetectionContract,
   createPatternDetectionContract,

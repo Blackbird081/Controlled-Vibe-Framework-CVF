@@ -12,6 +12,7 @@ export type RouteGovernanceWorkflowStage =
   | 'SERVICE_TOKEN_EVALUATED'
   | 'SESSION_EVALUATED'
   | 'PROOF_EMITTED';
+export type RouteGovernanceInvalidTokenPrecedence = 'SESSION_FALLBACK' | 'FAIL_CLOSED';
 
 export const ROUTE_GOVERNANCE_PROOF_WORKFLOW_CHAIN_VERSION = 'cvf.routeGovernanceProofWorkflow.t2c.v1' as const;
 
@@ -95,6 +96,7 @@ function buildProof(input: {
   serviceTokenPresented: boolean;
   serviceSignaturePresented: boolean;
   actorId: string | null;
+  now?: number;
 }): RouteGovernanceProof {
   return {
     proofVersion: 'cvf.routeGovernanceProof.t2c.v1',
@@ -111,15 +113,33 @@ function buildProof(input: {
     serviceTokenPresented: input.serviceTokenPresented,
     serviceSignaturePresented: input.serviceSignaturePresented,
     actorId: input.actorId,
-    generatedAt: new Date().toISOString(),
+    generatedAt: new Date(input.now ?? Date.now()).toISOString(),
   };
+}
+
+export interface RouteGovernanceProofOptions {
+  /**
+   * Injectable millisecond timestamp used for both the service-token
+   * verification window and the proof's `generatedAt` value. Defaults to
+   * `Date.now()` for existing callers; no global clock stub is required.
+   */
+  now?: number;
+  /**
+   * Precedence for a presented-but-invalid service token. Existing non-CADP
+   * callers default to `SESSION_FALLBACK` to preserve current behavior; a
+   * CADP caller must pass `FAIL_CLOSED` so an invalid token denies before
+   * any session evaluation.
+   */
+  invalidTokenPrecedence?: RouteGovernanceInvalidTokenPrecedence;
 }
 
 export async function authorizeRouteGovernanceProof(
   request: NextRequest,
   bodyText: string,
   config: RouteGovernanceProofConfig,
+  options: RouteGovernanceProofOptions = {},
 ): Promise<RouteGovernanceAuthorization> {
+  const { now, invalidTokenPrecedence = 'SESSION_FALLBACK' } = options;
   const baseStages: RouteGovernanceWorkflowStage[] = ['BODY_CAPTURED', 'ROUTE_CONFIG_RESOLVED'];
   const serviceToken = request.headers.get('x-cvf-service-token');
   const configuredToken = process.env.CVF_SERVICE_TOKEN;
@@ -136,6 +156,7 @@ export async function authorizeRouteGovernanceProof(
       signature,
       timestamp,
       body: bodyText,
+      now,
     });
 
     if (isServiceAllowed) {
@@ -152,7 +173,37 @@ export async function authorizeRouteGovernanceProof(
           serviceTokenPresented,
           serviceSignaturePresented,
           actorId: deriveServiceTokenIdentity(serviceToken ?? ''),
+          now,
         }),
+      };
+    }
+
+    if (invalidTokenPrecedence === 'FAIL_CLOSED') {
+      const stages: RouteGovernanceWorkflowStage[] = [...baseStages, 'SERVICE_TOKEN_EVALUATED', 'PROOF_EMITTED'];
+      const proof = buildProof({
+        config,
+        stages,
+        authMode: 'unauthorized',
+        decision: 'DENY',
+        serviceTokenConfigured,
+        serviceTokenPresented,
+        serviceSignaturePresented,
+        actorId: null,
+        now,
+      });
+
+      return {
+        allowed: false,
+        session: null,
+        proof,
+        response: NextResponse.json(
+          {
+            success: false,
+            error: 'Unauthorized: invalid service token or signature.',
+            routeGovernanceProof: proof,
+          },
+          { status: 401 },
+        ),
       };
     }
   }
@@ -174,6 +225,7 @@ export async function authorizeRouteGovernanceProof(
         serviceTokenPresented,
         serviceSignaturePresented,
         actorId: session.userId,
+        now,
       }),
     };
   }
@@ -189,6 +241,7 @@ export async function authorizeRouteGovernanceProof(
     serviceTokenPresented,
     serviceSignaturePresented,
     actorId: null,
+    now,
   });
 
   return {

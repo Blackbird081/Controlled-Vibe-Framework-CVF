@@ -30,39 +30,6 @@ const STEPS: StepData[] = [
         },
     },
     {
-        icon: '🛡️',
-        title: {
-            vi: 'Q: CVF là gì?',
-            en: 'Q: What is CVF?',
-        },
-        description: {
-            vi: 'Là lớp governance điều hướng từ intent sang execute path có kiểm soát. CVF khóa phase, risk, approval và freeze evidence để kết quả có thể đối soát.',
-            en: 'It is the governance layer that routes intent into a controlled execute path. CVF locks phase, risk, approvals, and freeze evidence so outcomes stay reviewable.',
-        },
-    },
-    {
-        icon: '📝',
-        title: {
-            vi: 'Q: Tôi không biết prompt?',
-            en: "Q: I don't know how to write prompts?",
-        },
-        description: {
-            vi: 'Không sao. Bạn không cần prompt engineering phức tạp. Chỉ cần chọn wizard/template phù hợp và điền brief có cấu trúc để CVF bind đúng governed path.',
-            en: "That is fine. You do not need complex prompt engineering. Pick the right wizard/template and fill a structured brief so CVF can bind the correct governed path.",
-        },
-    },
-    {
-        icon: '🚀',
-        title: {
-            vi: 'Q: Làm sao để bắt đầu?',
-            en: 'Q: How do I get started?',
-        },
-        description: {
-            vi: 'Chọn wizard phù hợp, điền brief, review governed packet và chỉ launch live path khi bạn thấy đúng phạm vi. CVF giữ execution trong boundary đã khóa.',
-            en: 'Pick the right wizard, fill the brief, review the governed packet, and only launch the live path when the scope looks right. CVF keeps execution inside the locked boundary.',
-        },
-    },
-    {
         icon: '🎯',
         title: {
             vi: 'Governed starter path',

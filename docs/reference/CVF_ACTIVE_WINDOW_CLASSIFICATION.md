@@ -30,6 +30,7 @@ Generic archive consumer:
 |---|---|---|---|
 | `GLOBAL_APPEND_ONLY_LOG_WINDOW` | cross-cutting operational log window shared across repo-wide evidence workflows | active file at `docs/` root, archive chain in `docs/logs/` | `docs/CVF_INCREMENTAL_TEST_LOG.md` |
 | `SCOPED_APPEND_ONLY_TRACE_WINDOW` | scope-local trace window owned by one review or governance scope | active file near the scope, archive chain in scoped `logs/` folder | `docs/reviews/cvf_phase_governance/CVF_CONFORMANCE_TRACE_2026-03-07.md` |
+| `BINDING_REFERENCE_ACTIVE_WINDOW` | dated canonical reference whose exact active path remains a current authority dependency | active reference retained at its cited path and protected from generic archive cleanup | machine-readable registry is the current source for the complete member list |
 
 ## Registration Rule
 
@@ -54,6 +55,12 @@ Registration is not optional because the registry drives:
 - use for scope-local traces that belong to one review, plane, or module lineage
 - archive target should stay beside the active scope under a scoped `logs/` folder
 - these windows should not be mixed into unrelated global archive chains
+
+### `BINDING_REFERENCE_ACTIVE_WINDOW`
+
+- use only when current governance surfaces depend on the exact dated path;
+- retain the active path while it remains canonical and explicitly registered;
+- archive or supersede only through a reviewed authority-routing change.
 
 ## Related Artifacts
 

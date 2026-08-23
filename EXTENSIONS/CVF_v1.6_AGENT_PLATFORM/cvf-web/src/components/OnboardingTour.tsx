@@ -50,10 +50,12 @@ export function OnboardingTour({ onDismiss }: OnboardingTourProps) {
     const [step, setStep] = useState(0);
 
     useEffect(() => {
-        if (typeof window !== 'undefined' && localStorage.getItem(STORAGE_KEY) !== '1') {
-            const timer = setTimeout(() => setVisible(true), 600);
-            return () => clearTimeout(timer);
-        }
+        const handleOpen = () => {
+            setStep(0);
+            setVisible(true);
+        };
+        window.addEventListener('cvf:openTour', handleOpen);
+        return () => window.removeEventListener('cvf:openTour', handleOpen);
     }, []);
 
     const dismiss = useCallback(() => {

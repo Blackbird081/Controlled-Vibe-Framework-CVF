@@ -83,6 +83,24 @@
       "rationale": "Local governance hook-chain runner predates the class-aware Python size guard and is the registry plus parallel-runner for every local hook stage; it sits just above the 800-line cli orchestrator hard threshold. GFS-PY-T1 added the two-line-pair wiring that registers this very Python size guard into the local pre-commit and pre-push chains, raising the frozen line from 882 to 890; this one-time +8 is the cost of self-registering the guard and is the last allowed growth.",
       "requiredFollowup": "Extract the check-registry tables (REVIEWER_FAST_CHECKS and siblings) and the parallel-runner mechanics into dedicated modules before the next substantive hook-chain expansion. Frozen at 890 lines: any further touch must keep net line delta <= 0; adding a new check entry that grows the file requires a same-batch extraction.",
       "seedAuthorization": "docs/baselines/CVF_GC018_GFS_PY_T1_GOVERNED_PYTHON_FILE_SIZE_COVERAGE_2026-06-25.md"
+    },
+    {
+      "path": "governance/compat/run_public_projection_pre_push_gate.py",
+      "fileClass": "python_cli_orchestrator",
+      "approvedMaxLines": 724,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Freshly seeds the already-proven untracked PUBLIC-PROJECTION-PREPUSH-T1 runner preimage into the governed commit flow at its exact current physical line count. This bounded admission authorizes no growth and no semantic weakening.",
+      "requiredFollowup": "Perform the Amendment 2 structural refactor without semantic change, keep the runner at <= 800 physical lines (target <= 780), and ratchet only approvedMaxLines downward to the exact final physical line count. Do not remove this exception or change any other entry field.",
+      "seedAuthorization": "docs/baselines/CVF_GC018_PUBLIC_PROJECTION_PREPUSH_T1_PROFILE_OWNER_AND_GATE_AMENDMENT_2_2026-08-12.md"
+    },
+    {
+      "path": "governance/compat/test_run_public_projection_pre_push_gate.py",
+      "fileClass": "python_test",
+      "approvedMaxLines": 1191,
+      "status": "ACTIVE_EXCEPTION",
+      "rationale": "Freshly seeds the already-proven untracked PUBLIC-PROJECTION-PREPUSH-T1 focused-test preimage into the governed commit flow at its exact current physical line count. This bounded admission authorizes no growth and no semantic weakening.",
+      "requiredFollowup": "Complete the Amendment 2 structural refactor without weakening coverage, keep this test file at <= 1200 physical lines (target <= 1150), and ratchet only approvedMaxLines downward to the exact final physical line count. Do not remove this exception or change any other entry field.",
+      "seedAuthorization": "docs/baselines/CVF_GC018_PUBLIC_PROJECTION_PREPUSH_T1_PROFILE_OWNER_AND_GATE_AMENDMENT_2_2026-08-12.md"
     }
   ]
 }

@@ -8,6 +8,7 @@ const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
 const appendAuditEventMock = vi.hoisted(() => vi.fn());
+let auditEventSequence = 0;
 
 vi.mock('@/lib/ai', () => ({
   executeAI: executeAIMock,
@@ -51,6 +52,10 @@ describe('/api/execute VI5-T1 language state deterministic route readout', () =>
     verifySessionCookieMock.mockReset();
     checkTeamQuotaMock.mockReset();
     appendAuditEventMock.mockReset();
+    auditEventSequence = 0;
+    appendAuditEventMock.mockImplementation(async () => ({
+      id: `vi5-language-state-audit-${++auditEventSequence}`,
+    }));
     process.env = { ...originalEnv, OPENAI_API_KEY: 'test-key', CVF_FALSE_POSITIVE_REPORTS_PATH: path.join(tempDir, 'false-positive-events.jsonl') };
     evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
     checkTeamQuotaMock.mockResolvedValue({ exceeded: false, currentUSD: 0, softCapUSD: 0, hardCapUSD: 0, overrideActive: false });

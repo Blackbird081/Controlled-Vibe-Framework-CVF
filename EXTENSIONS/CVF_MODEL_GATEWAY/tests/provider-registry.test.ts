@@ -6,7 +6,7 @@ const enabledProvider: ProviderRecord = {
   displayName: "DashScope",
   status: "enabled",
   riskClass: "medium",
-  models: [{ id: "qwen-turbo", riskClass: "medium", supportsStreaming: true }],
+  models: [{ id: "qwen-flash", riskClass: "medium", supportsStreaming: true }],
 };
 
 describe("ProviderRegistry", () => {
@@ -16,7 +16,7 @@ describe("ProviderRegistry", () => {
     const first = registry.get("dashscope")!;
     first.models[0]!.id = "mutated";
 
-    expect(registry.get("dashscope")?.models[0]?.id).toBe("qwen-turbo");
+    expect(registry.get("dashscope")?.models[0]?.id).toBe("qwen-flash");
     expect(registry.listRoutable().map((provider) => provider.id)).toEqual(["dashscope"]);
   });
 
@@ -47,7 +47,7 @@ describe("ProviderRegistry", () => {
   it("asserts provider and model boundaries", () => {
     const registry = new ProviderRegistry([enabledProvider]);
 
-    expect(() => registry.assertAllowed("dashscope", "qwen-turbo")).not.toThrow();
+    expect(() => registry.assertAllowed("dashscope", "qwen-flash")).not.toThrow();
     expect(() => registry.assertAllowed("dashscope", "missing")).toThrow("model_not_registered");
     expect(() => registry.assertAllowed("missing")).toThrow("provider_not_registered");
   });

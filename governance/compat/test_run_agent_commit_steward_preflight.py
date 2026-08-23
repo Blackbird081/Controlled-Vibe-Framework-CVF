@@ -8,8 +8,34 @@ def test_protected_session_path_classification() -> None:
     assert steward._is_protected_session_path("CVF_SESSION_MEMORY.md")
     assert steward._is_protected_session_path("CVF_SESSION/ACTIVE_SESSION_STATE.json")
     assert steward._is_protected_session_path("AGENT_HANDOFF_V18_2026-06-12.md")
+    assert steward._is_protected_session_path(
+        "governance/compat/CVF_ACTIVE_CONTINUITY_READ_BUDGET_MIGRATION.json"
+    )
     assert not steward._is_protected_session_path("CVF_SESSION/agent_workspace/ACTIVE_AGENT_WORKSPACE_STATE.json")
     assert not steward._is_protected_session_path("docs/reference/example.md")
+
+
+def test_exact_hash_migration_registry_is_atomic_session_companion(monkeypatch) -> None:
+    paths = (
+        "AGENT_HANDOFF_V57_2026-08-10.md",
+        "CVF_SESSION/ACTIVE_SESSION_STATE.json",
+        "governance/compat/CVF_ACTIVE_CONTINUITY_READ_BUDGET_MIGRATION.json",
+    )
+    monkeypatch.setattr(steward, "_range_paths", lambda base, head: paths)
+    monkeypatch.setattr(steward, "_status_paths", lambda: ())
+    monkeypatch.setattr(
+        steward,
+        "_has_agent_operation_trace",
+        lambda path: path == "AGENT_HANDOFF_V57_2026-08-10.md",
+    )
+
+    plan = steward.build_path_plan("base", "head")
+
+    assert plan.material_paths == ()
+    assert plan.protected_session_paths == paths
+    assert not plan.mixed_material_and_session
+    assert not plan.exact_manifest_collision_risk
+    assert steward._recommended_mode(plan) == "session-sync"
 
 
 def test_agent_operation_trace_detection(tmp_path: Path, monkeypatch) -> None:
@@ -25,6 +51,64 @@ def test_agent_operation_trace_detection(tmp_path: Path, monkeypatch) -> None:
 
     assert steward._has_agent_operation_trace("docs/reviews/trace.md")
     assert not steward._has_agent_operation_trace("docs/reviews/plain.md")
+
+
+def test_exact_mixed_atomicity_authorization_requires_every_path(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    monkeypatch.setattr(steward, "REPO_ROOT", tmp_path)
+    review = tmp_path / "docs" / "reviews" / "atomic.md"
+    review.parent.mkdir(parents=True)
+    review.write_text(
+        "# Review\n\n"
+        "## Mixed Protected-Path Atomicity Authorization\n\n"
+        "Disposition: AUTHORIZED_EXACT_MANIFEST\n\n"
+        "Atomicity reason: exact pins and surfaces must change together.\n\n"
+        "Rollback boundary: revert the exact manifest together.\n\n"
+        "Exact changed manifest:\n\n"
+        "- `docs/reviews/atomic.md`\n"
+        "- `CVF_SESSION/ACTIVE_SESSION_STATE.json`\n",
+        encoding="utf-8",
+    )
+    paths = (
+        "CVF_SESSION/ACTIVE_SESSION_STATE.json",
+        "docs/reviews/atomic.md",
+    )
+
+    assert steward._has_exact_mixed_atomicity_authorization(
+        "docs/reviews/atomic.md", paths
+    )
+    assert not steward._has_exact_mixed_atomicity_authorization(
+        "docs/reviews/atomic.md", (*paths, "governance/compat/missing.py")
+    )
+
+
+def test_authorized_exact_mixed_manifest_uses_session_sync(monkeypatch) -> None:
+    paths = (
+        "AGENT_HANDOFF_V57_2026-08-10.md",
+        "docs/reviews/atomic.md",
+    )
+    monkeypatch.setattr(steward, "_range_paths", lambda base, head: paths)
+    monkeypatch.setattr(steward, "_status_paths", lambda: ())
+    monkeypatch.setattr(
+        steward,
+        "_has_agent_operation_trace",
+        lambda path: path == "docs/reviews/atomic.md",
+    )
+    monkeypatch.setattr(
+        steward,
+        "_has_exact_mixed_atomicity_authorization",
+        lambda path, changed: path == "docs/reviews/atomic.md" and changed == paths,
+    )
+
+    plan = steward.build_path_plan("base", "head")
+
+    assert plan.mixed_material_and_session
+    assert plan.mixed_atomicity_authorized
+    assert not plan.exact_manifest_collision_risk
+    assert steward._recommended_mode(plan) == "session-sync"
+    assert steward._validate_mode_shape("session-sync", "base", "head", plan, True) == 0
 
 
 def test_path_plan_collision_risk(monkeypatch) -> None:
@@ -138,6 +222,7 @@ def test_handoff_sync_rejects_session_state_mix(monkeypatch) -> None:
         ),
         trace_artifact_paths=(),
         mixed_material_and_session=False,
+        mixed_atomicity_authorized=False,
         exact_manifest_collision_risk=False,
         handoff_sync_only=False,
     )

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-18T14:50:40.649Z",
+  "generatedAt": "2026-06-30T09:31:57.002Z",
   "categories": [
     {
       "id": "ai_ml_evaluation",
@@ -2744,6 +2744,7 @@
     "governanceSource": [
       "docs/baselines/CVF_CORPUS_RESCREEN_D2_MATRIX_2026-04-15.md",
       "docs/baselines/CVF_CORPUS_RESCREEN_D3_TRUSTED_SUBSET_2026-04-15.md",
+      "docs/baselines/CVF_FRONT_DOOR_WAVE2_EXECUTION_NOTE_2026-04-21.md",
       "../../../docs/reference/agent_system_skills/generated/skill-index.json"
     ],
     "assfProjectedSkills": 25,

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastReviewed": "2026-07-14",
+  "lastReviewed": "2026-08-15",
   "classes": [
     {
       "id": "ACTIVE_DECISION_REVIEW",
@@ -17,11 +17,11 @@
   ],
   "summary": {
     "activeRecentCount": 50,
-    "retainEvidenceCount": 284,
+    "retainEvidenceCount": 289,
     "safeToArchiveCount": 77,
     "archivedCount": 335,
-    "derivedAt": "2026-07-14",
-    "derivationMethod": "Derived from scripts/cvf_active_archive.py full review screening and refreshed after live-reference reclassification for W2-T29 tranche closure evidence plus relocation/publication canon reviews still blocked by active references, including P4 CP6-CP12 review documents still pinned by live references, W57-T1/W59-T1/W61-T1/W64-T1/W65-T1 review artifacts still anchored by active execution plans, audits, baselines, and orientation docs, W105-T1 closure review retained by current handoff/front-door references, W123-W129 noncoder adoption and rollout evidence retained by W131 continuation references, and W130-W132 stability/export evidence retained by current handoff and roadmap boundary references. Re-derivation on 2026-05-16 added 55 dynamic retain-evidence entries surfaced by the pre-push retention guard for the 2026-05-07/08 RC2/WPR/W133-W152 tranche reviews. Refresh on 2026-06-27 retains review-scope DSCP-T11F completion evidence and five historical review artifacts surfaced by push-readiness preview dynamic retention scan. Refresh on 2026-07-14 retains the twenty current phase-governance outputs whose historical filename dates are stable runtime-evidence identifiers but whose contents were regenerated and admitted by SCLP-UC02-R3, plus two existing MinerU worker returns independently surfaced as live-reference-blocked by the mandatory full re-derivation; non-review baseline, roadmap, and work-order paths remain outside this review-only registry."
+    "derivedAt": "2026-08-15",
+    "derivationMethod": "Derived from scripts/cvf_active_archive.py full review screening and refreshed after live-reference reclassification for W2-T29 tranche closure evidence plus relocation/publication canon reviews still blocked by active references, including P4 CP6-CP12 review documents still pinned by live references, W57-T1/W59-T1/W61-T1/W64-T1/W65-T1 review artifacts still anchored by active execution plans, audits, baselines, and orientation docs, W105-T1 closure review retained by current handoff/front-door references, W123-W129 noncoder adoption and rollout evidence retained by W131 continuation references, and W130-W132 stability/export evidence retained by current handoff and roadmap boundary references. Re-derivation on 2026-05-16 added 55 dynamic retain-evidence entries surfaced by the pre-push retention guard for the 2026-05-07/08 RC2/WPR/W133-W152 tranche reviews. Refresh on 2026-06-27 retains review-scope DSCP-T11F completion evidence and five historical review artifacts surfaced by push-readiness preview dynamic retention scan. Refresh on 2026-07-14 retains the twenty current phase-governance outputs whose historical filename dates are stable runtime-evidence identifiers but whose contents were regenerated and admitted by SCLP-UC02-R3, plus two existing MinerU worker returns independently surfaced as live-reference-blocked by the mandatory full re-derivation. Refresh on 2026-08-04 retains four historical CVF Web inheritance and UX review artifacts surfaced as live-reference-blocked by the provenance push-readiness preview. Refresh on 2026-08-15 retains the SOT3 ACT-A4 deterministic negative receipt because current CADP T6 retry evidence and its proof runner still reference it; non-review baseline, roadmap, and work-order paths remain outside this review-only registry."
   },
   "retainEvidencePaths": [
     "docs/reviews/cvf_phase_governance/CVF_ENTERPRISE_ONBOARDING_PACKET_2026-03-07.md",
@@ -293,6 +293,10 @@
     "docs/reviews/CVF_WEB_GOVERNANCE_JOB_PERSISTENCE_ADR_2026-05-08.md",
     "docs/reviews/CVF_WEB_GOVERNANCE_JOB_THREAT_MODEL_2026-05-08.md",
     "docs/reviews/CVF_WEB_GOVERNANCE_RBAC_ACCESS_SPEC_2026-05-08.md",
+    "docs/reviews/CVF_WEB_INHERITANCE_T3A_MAO_WEB_ADOPTION_AND_SOURCE_SEAM_DECISION_2026-07-18.md",
+    "docs/reviews/CVF_WEB_INHERITANCE_T3P2_EVIDENCE_AND_LIVENESS_AVAILABILITY_DECISION_2026-07-18.md",
+    "docs/reviews/CVF_WEB_INHERITANCE_T4_CONTROLLED_QUOTATION_ADOPTION_DECISION_2026-07-18.md",
+    "docs/reviews/CVF_WEB_UX_CLARITY_T0_LIVE_AND_SOURCE_AUDIT_2026-07-18.md",
     "docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md",
     "docs/reviews/CVF_WHITEPAPER_FIRST_TRANCHE_PACKET_2026-03-21.md",
     "docs/reviews/CVF_WHITEPAPER_REALIZATION_RECONCILIATION_REVIEW_2026-03-22.md",
@@ -306,6 +310,7 @@
     "docs/reviews/CVF_LANE_C_EXECUTION_GATEWAY_COMPLETION_2026-05-19.md",
     "docs/reviews/CVF_LANE_H_MEMORY_RUNTIME_WIRING_COMPLETION_2026-05-19.md",
     "docs/reviews/CVF_REAL_NONCODER_USAGE_TEST_OPERATOR_SAMPLE_2026-05-25.md",
+    "docs/reviews/evidence/sot3-act-a4-failure-recovery-negative-receipt-2026-07-13.json",
     "docs/reviews/CVF_DSCP_T11F_PROFILE_SELECTION_ADAPTER_COMPLETION_2026-06-10.md",
     "docs/reviews/cvf_phase_governance/CVF_ROADMAP_HOAN_THIEN_TOAN_DIEN_2026-03-06.md"
   ]

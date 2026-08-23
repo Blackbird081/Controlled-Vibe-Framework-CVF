@@ -19,7 +19,7 @@ It is not marketing copy. Every claim here must be traceable to a receipt, a bas
 ## Claim Boundary (verbatim — copy-paste safe)
 
 > CVF proves governed AI-assisted software development.  
-> Multi-provider operability is proven for Alibaba (qwen-turbo) and DeepSeek (deepseek-chat), both CERTIFIED by three consecutive canary runs (PASS 6/6 each).  
+> Historical multi-provider operability evidence exists for Alibaba and DeepSeek. Alibaba now targets `qwen-flash` pending fresh T6 live proof; DeepSeek (`deepseek-chat`) retains current certification.
 > Provider parity — speed, cost, quality, reliability — is not claimed.  
 > Provider economics are user-selected.  
 > CVF is not a production SaaS product. It is a local governance framework with a web UI for development and demonstration.
@@ -59,10 +59,10 @@ It is not marketing copy. Every claim here must be traceable to a receipt, a bas
 
 | Item | Detail |
 |---|---|
-| Claim | CVF can route governed AI operations through Alibaba (DashScope / qwen-turbo) |
-| Status | `CERTIFIED` |
-| Certification window | 3 consecutive PASS 6/6 canary runs |
-| Latest receipt | `docs/audits/alibaba-canary/CVF_RECEIPT_20260421-072551-422037.md` |
+| Claim | CVF can route governed AI operations through Alibaba (DashScope / qwen-flash) |
+| Status | `EXPERIMENTAL_PENDING_LIVE_REVALIDATION` |
+| Certification window | Not established for `qwen-flash`; historical Alibaba evidence is not transferable |
+| Latest receipt | No `qwen-flash` receipt yet; historical receipt remains immutable at `docs/audits/alibaba-canary/CVF_RECEIPT_20260421-072551-422037.md` |
 | Receipt index | `docs/audits/alibaba-canary/INDEX.md` |
 | Date certified | 2026-04-21 (W110-T1 CP1) |
 
@@ -110,7 +110,7 @@ These items are explicitly out of scope for this release candidate. They are not
 | Legacy EXTENSIONS formal review | Open gap | Modules outside the core agent platform were not re-reviewed in W110 scope. |
 | SaaS hosting / deployment | Permanent boundary | CVF is a local governance framework. There is no hosted service. |
 | Token cost calibration | Open gap | Risk engine estimates token cost but does not calibrate against live provider billing data. |
-| Universal model compatibility | Open gap | Only qwen-turbo and deepseek-chat have certification evidence. Other models are `EXPERIMENTAL` until canary-run. |
+| Universal model compatibility | Open gap | DeepSeek `deepseek-chat` retains current certification; Alibaba `qwen-flash` and other models require fresh canary evidence. |
 
 ---
 

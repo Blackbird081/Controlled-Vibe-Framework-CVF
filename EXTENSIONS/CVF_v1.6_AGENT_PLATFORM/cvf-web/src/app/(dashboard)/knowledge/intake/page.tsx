@@ -1,9 +1,12 @@
 'use client';
 
+// Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
+
 import { useCallback, useMemo, useState } from 'react';
 import { ArrowRight, BookOpenCheck, CheckCircle2, CircleCheck, Loader2, TriangleAlert } from 'lucide-react';
 
 import { useLanguage } from '@/lib/i18n';
+import { KnowledgeJourneyNav } from '@/components/KnowledgeJourneyNav';
 
 const COPY = {
   en: {
@@ -40,35 +43,35 @@ const COPY = {
     ],
   },
   vi: {
-    label: 'Nạp kiến thức',
-    title: 'Đưa kiến thức mới vào CVF mà không làm mất dấu vết',
-    intro: 'Biến ghi chú, chính sách, dữ kiện khách hàng hoặc quy tắc sản phẩm thành packet dễ review, có nguồn, lý do và bước tiếp theo.',
+    label: 'Thu thập',
+    title: 'Đưa kiến thức mới vào hệ thống',
+    intro: 'Biến ghi chú, chính sách, dữ kiện khách hàng hoặc quy tắc sản phẩm thành gói dễ rà soát, có nguồn, lý do và bước tiếp theo.',
     source: 'Tiêu đề nguồn',
     sourcePlaceholder: 'Ví dụ: Ghi chú onboarding khách hàng',
     path: 'Đường dẫn hoặc link nguồn',
     pathPlaceholder: 'Ví dụ: docs/reviews/onboarding-notes.md',
     audience: 'Ai nên dùng phần này?',
-    audiencePlaceholder: 'Ví dụ: đội support, product owner, reviewer',
+    audiencePlaceholder: 'Ví dụ: đội hỗ trợ, chủ sản phẩm, người rà soát',
     note: 'Điều gì đã thay đổi?',
     notePlaceholder: 'Dán ghi chú đã duyệt bằng ngôn ngữ dễ hiểu.',
-    packet: 'Preview packet review',
-    empty: 'Điền các trường để xem người review tiếp theo cần thấy gì.',
+    packet: 'Xem trước gói rà soát',
+    empty: 'Điền các trường để xem người rà soát tiếp theo cần thấy gì.',
     submit: 'Gửi để nạp',
     submitting: 'Đang gửi',
     successTitle: 'Đã nạp thành công',
-    successBody: 'Gói kiến thức đã được gửi để review.',
+    successBody: 'Gói kiến thức đã được gửi để rà soát.',
     collectionId: 'ID bộ sưu tập',
-    exportPrompt: 'Tiếp theo: xuất gói này thành artifact HTML có quản trị',
-    goToExport: 'Mở Artifact Export',
+    exportPrompt: 'Tiếp theo: xuất gói này thành HTML có quản trị',
+    goToExport: 'Mở trang đóng gói',
     errorTitle: 'Gửi thất bại',
     reset: 'Gửi gói khác',
     stepsTitle: 'Kiến thức mới nên trở thành gì',
     benefitsTitle: 'Người dùng nhận được gì',
-    boundary: 'Trang này chỉ chuẩn bị ghi chú intake. Nó không tự chứng minh hành vi governance live.',
-    steps: ['Nguồn rõ ràng', 'Audience cụ thể', 'Ranh giới nhìn thấy được'],
+    boundary: 'Trang này chỉ chuẩn bị ghi chú đầu vào. Nó không tự chứng minh hành vi quản trị đang chạy thật.',
+    steps: ['Nguồn rõ ràng', 'Người dùng cụ thể', 'Ranh giới nhìn thấy được'],
     benefits: [
       'Người không viết code thấy được vì sao kiến thức mới quan trọng trước khi nó ảnh hưởng câu trả lời.',
-      'Packet review giữ nguồn gốc và receipt ở cùng một chỗ.',
+      'Gói rà soát giữ nguồn gốc và biên nhận ở cùng một chỗ.',
       'Công việc sau đó bắt đầu với ít giả định ẩn hơn và bước tiếp theo rõ hơn.',
     ],
   },
@@ -165,6 +168,9 @@ export default function KnowledgeIntakePage() {
           </div>
           <h1 className="text-3xl font-bold tracking-normal text-gray-950 dark:text-white">{copy.successTitle}</h1>
         </header>
+
+        <KnowledgeJourneyNav currentStep={2} />
+
         <div data-testid="intake-success" className="rounded-lg border border-emerald-200 bg-emerald-50 p-6 dark:border-emerald-900/60 dark:bg-emerald-950/30">
           <div className="flex items-start gap-3">
             <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-300" aria-hidden="true" />
@@ -209,6 +215,8 @@ export default function KnowledgeIntakePage() {
         <h1 className="text-3xl font-bold tracking-normal text-gray-950 dark:text-white">{copy.title}</h1>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-600 dark:text-gray-300">{copy.intro}</p>
       </header>
+
+      <KnowledgeJourneyNav currentStep={2} />
 
       <section className="grid gap-5 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">

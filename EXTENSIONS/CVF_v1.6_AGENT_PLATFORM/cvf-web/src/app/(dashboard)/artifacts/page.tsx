@@ -1,8 +1,11 @@
 'use client';
 
+// Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
+
 import { ArrowRight, FileCheck2, ShieldCheck, Sparkles } from 'lucide-react';
 
 import ArtifactExportPanel, { type ArtifactExportRequest } from '@/components/ArtifactExportPanel';
+import { KnowledgeJourneyNav } from '@/components/KnowledgeJourneyNav';
 import { useLanguage } from '@/lib/i18n';
 
 const COPY = {
@@ -21,7 +24,7 @@ const COPY = {
     ],
   },
   vi: {
-    label: 'Xuất gói rà soát',
+    label: 'Đóng gói',
     title: 'Biến phần đã duyệt thành gói HTML để rà soát',
     intro: 'Trang này dành cho người cần một bản dễ đọc của công việc có AI hỗ trợ. Nguồn, receipt, trạng thái rà soát và ranh giới được giữ rõ để người xem tiếp theo không phải đoán.',
     boundary: 'Chỉ là gói HTML để rà soát. PDF, xuất ảnh và bằng chứng cuối cùng được xử lý riêng.',
@@ -68,6 +71,7 @@ export default function ArtifactsPage() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 px-4 py-6">
+      <KnowledgeJourneyNav currentStep={4} />
       <header className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-3xl">

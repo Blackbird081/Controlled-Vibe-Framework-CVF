@@ -17,21 +17,21 @@ type FetchLike = (input: string, init: {
 export interface AlibabaStreamAdapterOptions {
   apiKey: string;
   endpoint?: string;
-  modelId?: "qwen-turbo";
+  modelId?: "qwen-flash";
   fetchImpl?: FetchLike;
 }
 
-const ALIBABA_QWEN_TURBO_CAPABILITY: ProviderCapabilityFile = {
+const ALIBABA_QWEN_FLASH_CAPABILITY: ProviderCapabilityFile = {
   providerId: "alibaba",
-  models: [{ modelId: "qwen-turbo", supportedMethods: ["complete", "chat", "stream"], defaultMethod: "complete" }],
+  models: [{ modelId: "qwen-flash", supportedMethods: ["complete", "chat", "stream"], defaultMethod: "complete" }],
 };
 
 export function createAlibabaQwenTurboStreamAdapter(options: AlibabaStreamAdapterOptions) {
-  const modelId = options.modelId ?? "qwen-turbo";
+  const modelId = options.modelId ?? "qwen-flash";
   const endpoint = options.endpoint ?? resolveAlibabaDashScopeEndpoint();
   const fetchImpl = options.fetchImpl ?? (globalThis.fetch as unknown as FetchLike);
 
-  assertProviderMethodSupported(ALIBABA_QWEN_TURBO_CAPABILITY, modelId, "stream");
+  assertProviderMethodSupported(ALIBABA_QWEN_FLASH_CAPABILITY, modelId, "stream");
 
   return {
     async *stream(request: StreamRequest): AsyncIterable<StreamContract> {

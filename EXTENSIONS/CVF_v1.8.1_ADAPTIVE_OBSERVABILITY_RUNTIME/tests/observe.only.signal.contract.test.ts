@@ -126,7 +126,7 @@ function baseTokenMeasurement(overrides: {
   return {
     sessionId: "session-alpha",
     provider: "dashscope",
-    model: "qwen-turbo",
+    model: "qwen-flash",
     inputTokens: overrides.inputTokens ?? 100,
     outputTokens: overrides.outputTokens ?? 50,
     contextWindowSize: 1000,

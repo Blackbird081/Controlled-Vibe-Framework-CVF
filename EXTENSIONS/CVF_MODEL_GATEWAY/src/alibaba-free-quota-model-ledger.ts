@@ -7,6 +7,9 @@ export const ALIBABA_DASHSCOPE_MAINLAND_ENDPOINT =
 export const ALIBABA_FREE_QUOTA_LEDGER_REFERENCE =
   "docs/reference/model_gateway/CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER.json" as const;
 
+export const ALIBABA_T6_FREE_QUOTA_TARGET_MODEL = "qwen3.7-flash" as const;
+export const ALIBABA_T6_FREE_QUOTA_TARGET_SNAPSHOT = "qwen3.7-flash-2026-07-15" as const;
+
 export type AlibabaFreeQuotaStatus = "usable" | "expired" | "unknown";
 
 export interface AlibabaFreeQuotaModelLedgerEntry {
@@ -20,88 +23,23 @@ export interface AlibabaFreeQuotaModelLedgerEntry {
 
 export const ALIBABA_FREE_QUOTA_MODELS = [
   {
-    modelId: "qwen3.6-plus-2026-04-02",
-    expirationDate: "2026-07-01",
+    modelId: "qwen3.7-flash-2026-07-15",
+    expirationDate: "2026-10-22",
     freeQuotaRemainingAtCapture: 1_000_000,
     freeQuotaTotalAtCapture: 1_000_000,
     statusAtCapture: "Enabled",
   },
   {
-    modelId: "qwen3.6-plus",
-    expirationDate: "2026-07-01",
-    freeQuotaRemainingAtCapture: 911_370,
+    modelId: "qwen3.7-plus",
+    expirationDate: "2026-08-31",
+    freeQuotaRemainingAtCapture: 989_246,
     freeQuotaTotalAtCapture: 1_000_000,
     statusAtCapture: "Enabled",
     diagnosticRerunResult: "PASS",
   },
   {
-    modelId: "qwen3.6-flash",
-    expirationDate: "2026-07-16",
-    freeQuotaRemainingAtCapture: 1_000_000,
-    freeQuotaTotalAtCapture: 1_000_000,
-    statusAtCapture: "Enabled",
-  },
-  {
-    modelId: "qwen3.6-flash-2026-04-16",
-    expirationDate: "2026-07-16",
-    freeQuotaRemainingAtCapture: 998_675,
-    freeQuotaTotalAtCapture: 1_000_000,
-    statusAtCapture: "Enabled",
-    diagnosticRerunResult: "PASS",
-  },
-  {
-    modelId: "qwen3.6-35b-a3b",
-    expirationDate: "2026-07-16",
-    freeQuotaRemainingAtCapture: 998_835,
-    freeQuotaTotalAtCapture: 1_000_000,
-    statusAtCapture: "Enabled",
-  },
-  {
-    modelId: "qwen3.6-max-preview",
-    expirationDate: "2026-07-19",
-    freeQuotaRemainingAtCapture: 1_000_000,
-    freeQuotaTotalAtCapture: 1_000_000,
-    statusAtCapture: "Enabled",
-  },
-  {
-    modelId: "qwen3.5-plus-2026-04-20",
-    expirationDate: "2026-07-22",
-    freeQuotaRemainingAtCapture: 1_000_000,
-    freeQuotaTotalAtCapture: 1_000_000,
-    statusAtCapture: "Enabled",
-  },
-  {
-    modelId: "qwen3.6-27b",
-    expirationDate: "2026-07-22",
-    freeQuotaRemainingAtCapture: 1_000_000,
-    freeQuotaTotalAtCapture: 1_000_000,
-    statusAtCapture: "Enabled",
-  },
-  {
-    modelId: "deepseek-v4-flash",
-    expirationDate: "2026-07-23",
-    freeQuotaRemainingAtCapture: 998_902,
-    freeQuotaTotalAtCapture: 1_000_000,
-    statusAtCapture: "Enabled",
-    diagnosticRerunResult: "PASS",
-  },
-  {
-    modelId: "deepseek-v4-pro",
-    expirationDate: "2026-07-23",
-    freeQuotaRemainingAtCapture: 1_000_000,
-    freeQuotaTotalAtCapture: 1_000_000,
-    statusAtCapture: "Enabled",
-  },
-  {
-    modelId: "qwen3.7-max",
-    expirationDate: "2026-08-19",
-    freeQuotaRemainingAtCapture: 1_000_000,
-    freeQuotaTotalAtCapture: 1_000_000,
-    statusAtCapture: "Enabled",
-  },
-  {
-    modelId: "qwen3.7-max-2026-05-20",
-    expirationDate: "2026-08-19",
+    modelId: "qwen3.7-flash",
+    expirationDate: "2026-10-22",
     freeQuotaRemainingAtCapture: 1_000_000,
     freeQuotaTotalAtCapture: 1_000_000,
     statusAtCapture: "Enabled",
@@ -114,8 +52,8 @@ export const ALIBABA_FREE_QUOTA_MODELS = [
     statusAtCapture: "Enabled",
   },
   {
-    modelId: "qwen3.7-max-preview",
-    expirationDate: "2026-08-23",
+    modelId: "qwen3.7-max-2026-06-08",
+    expirationDate: "2026-09-07",
     freeQuotaRemainingAtCapture: 1_000_000,
     freeQuotaTotalAtCapture: 1_000_000,
     statusAtCapture: "Enabled",
@@ -128,12 +66,53 @@ export const ALIBABA_FREE_QUOTA_MODELS = [
     statusAtCapture: "Enabled",
   },
   {
-    modelId: "qwen3.7-plus",
-    expirationDate: "2026-08-31",
-    freeQuotaRemainingAtCapture: 998_474,
+    modelId: "qwen3.7-max-preview",
+    expirationDate: "2026-08-23",
+    freeQuotaRemainingAtCapture: 1_000_000,
     freeQuotaTotalAtCapture: 1_000_000,
     statusAtCapture: "Enabled",
-    diagnosticRerunResult: "PASS",
+  },
+  {
+    modelId: "deepseek-v4-flash-0731",
+    expirationDate: "2026-10-30",
+    freeQuotaRemainingAtCapture: 1_000_000,
+    freeQuotaTotalAtCapture: 1_000_000,
+    statusAtCapture: "Enabled",
+  },
+  {
+    modelId: "qwen3.7-max",
+    expirationDate: "2026-08-19",
+    freeQuotaRemainingAtCapture: 951_277,
+    freeQuotaTotalAtCapture: 1_000_000,
+    statusAtCapture: "Enabled",
+  },
+  {
+    modelId: "glm-5.2",
+    expirationDate: "2026-09-23",
+    freeQuotaRemainingAtCapture: 1_000_000,
+    freeQuotaTotalAtCapture: 1_000_000,
+    statusAtCapture: "Enabled",
+  },
+  {
+    modelId: "kimi-k2.7-code",
+    expirationDate: "2026-09-23",
+    freeQuotaRemainingAtCapture: 1_000_000,
+    freeQuotaTotalAtCapture: 1_000_000,
+    statusAtCapture: "Enabled",
+  },
+  {
+    modelId: "deepseek-v4-pro-0813",
+    expirationDate: "2026-11-12",
+    freeQuotaRemainingAtCapture: 1_000_000,
+    freeQuotaTotalAtCapture: 1_000_000,
+    statusAtCapture: "Enabled",
+  },
+  {
+    modelId: "qwen3.7-max-2026-05-20",
+    expirationDate: "2026-08-19",
+    freeQuotaRemainingAtCapture: 1_000_000,
+    freeQuotaTotalAtCapture: 1_000_000,
+    statusAtCapture: "Enabled",
   },
   {
     modelId: "qwen3.7-plus-2026-05-26",
@@ -143,8 +122,15 @@ export const ALIBABA_FREE_QUOTA_MODELS = [
     statusAtCapture: "Enabled",
   },
   {
-    modelId: "qwen3.7-max-2026-06-08",
-    expirationDate: "2026-09-07",
+    modelId: "qwen3.8-2.4t-a95b",
+    expirationDate: "2026-11-11",
+    freeQuotaRemainingAtCapture: 1_000_000,
+    freeQuotaTotalAtCapture: 1_000_000,
+    statusAtCapture: "Enabled",
+  },
+  {
+    modelId: "qwen3.8-max",
+    expirationDate: "2026-10-31",
     freeQuotaRemainingAtCapture: 1_000_000,
     freeQuotaTotalAtCapture: 1_000_000,
     statusAtCapture: "Enabled",

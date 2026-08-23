@@ -40,6 +40,12 @@ def _telemetry_block(
     tokenOrQuotaUsage="NOT_AVAILABLE_WITH_REASON: not exposed",
     valueDelta="Closed one receipt-binding integrity gap.",
     stopDisposition="COMPLETE_REVIEW",
+    preRepairAuditDisposition="COMPLETE_BEFORE_FIRST_REPAIR",
+    materialCommitCount="1",
+    continuityCommitCount="1",
+    commitPlanDisposition="DEFAULT_ONE_MATERIAL_ONE_CONTINUITY",
+    latencyDisposition="WITHIN_FAST_PATH_TARGET",
+    avoidableDelayClass="NONE",
 ):
     return (
         "## Review Cost Telemetry And Stop Disposition\n\n"
@@ -52,6 +58,12 @@ def _telemetry_block(
         f"tokenOrQuotaUsage: {tokenOrQuotaUsage}\n"
         f"valueDelta: {valueDelta}\n"
         f"stopDisposition: {stopDisposition}\n"
+        f"preRepairAuditDisposition: {preRepairAuditDisposition}\n"
+        f"materialCommitCount: {materialCommitCount}\n"
+        f"continuityCommitCount: {continuityCommitCount}\n"
+        f"commitPlanDisposition: {commitPlanDisposition}\n"
+        f"latencyDisposition: {latencyDisposition}\n"
+        f"avoidableDelayClass: {avoidableDelayClass}\n"
     )
 
 
@@ -92,6 +104,13 @@ _ROUND_THREE_INVALID_COMPLETE = _HEADER + _telemetry_block(
 _ROUND_THREE_INVALID_PARK = _HEADER + _telemetry_block(
     reviewRoundCount="5", stopDisposition="PARK_LOW_INCREMENTAL_VALUE"
 )
+
+_MULTI_COMMIT_WITH_REASON = _HEADER + _telemetry_block(
+    materialCommitCount="2",
+    commitPlanDisposition="EXCEPTION_WITH_REASON: required split for protected guard repair",
+)
+
+_MULTI_COMMIT_WITHOUT_REASON = _HEADER + _telemetry_block(materialCommitCount="2")
 
 _NO_DECLARATION = (
     "# Historical Completion Review\n\n"
@@ -199,6 +218,39 @@ class DiagnoseTests(unittest.TestCase):
 class RoundThreeEscalationTests(unittest.TestCase):
     def test_round_three_escalation_token_is_clean(self):
         d = chk.diagnose("docs/reviews/x.md", _ROUND_THREE_VALID_ESCALATION)
+        self.assertTrue(d.is_clean)
+
+
+class SinglePassSopTests(unittest.TestCase):
+    def test_multi_commit_with_reason_is_clean(self):
+        d = chk.diagnose("docs/reviews/x.md", _MULTI_COMMIT_WITH_REASON)
+        self.assertTrue(d.is_clean)
+
+    def test_multi_commit_without_reason_is_rejected(self):
+        d = chk.diagnose("docs/reviews/x.md", _MULTI_COMMIT_WITHOUT_REASON)
+        self.assertFalse(d.is_clean)
+        self.assertTrue(any("requires" in issue for issue in d.issues))
+
+    def test_invalid_audit_token_is_rejected(self):
+        text = _HEADER + _telemetry_block(preRepairAuditDisposition="PARTIAL")
+        d = chk.diagnose("docs/reviews/x.md", text)
+        self.assertFalse(d.is_clean)
+        self.assertTrue(any("preRepairAuditDisposition" in issue for issue in d.issues))
+
+    def test_latency_exceeded_requires_reason(self):
+        text = _HEADER + _telemetry_block(
+            latencyDisposition="LATENCY_BUDGET_EXCEEDED_WITH_REASON"
+        )
+        d = chk.diagnose("docs/reviews/x.md", text)
+        self.assertFalse(d.is_clean)
+        self.assertTrue(any("latencyDisposition" in issue for issue in d.issues))
+
+    def test_latency_exceeded_with_reason_is_clean(self):
+        text = _HEADER + _telemetry_block(
+            latencyDisposition="LATENCY_BUDGET_EXCEEDED_WITH_REASON: sequential review loop",
+            avoidableDelayClass="MULTIPLE_AVOIDABLE_DELAYS",
+        )
+        d = chk.diagnose("docs/reviews/x.md", text)
         self.assertTrue(d.is_clean)
 
     def test_round_four_continue_token_is_clean(self):

@@ -1,7 +1,10 @@
 'use client';
 
+// Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
+
 import { useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
+import { KnowledgeJourneyNav } from '@/components/KnowledgeJourneyNav';
 
 type ArtifactType = 'concept' | 'entity' | 'summary';
 type GovChoice = 'none' | 'approved' | 'rejected';
@@ -43,22 +46,22 @@ const ACTION_BADGE: Record<string, string> = {
 
 const LABELS = {
     vi: {
-        title: '📚 Knowledge Governance', subtitle: 'Lifecycle: Compile → Govern → Maintain → Refactor → Load Project Knowledge',
-        step1: '1. Compile & Govern', step2: '2. Maintain', step3: '3. Refactor', step4: '4. Load Project Knowledge',
-        loadTitle: 'Load Project Knowledge', loadDesc: 'Nạp knowledge file từ downstream workspace vào session store để AI có thể sử dụng.',
-        collectionIdLabel: 'Collection ID', collectionNameLabel: 'Collection Name (tùy chọn)',
-        pasteJson: 'Dán nội dung _index.json ở đây', loadBtn: 'Load Knowledge', loading: 'Đang nạp...', loadOk: 'Đã nạp',
-        contextId: 'Context ID', artifactType: 'Artifact Type', sourceIds: 'Source IDs (phân cách bằng dấu phẩy)',
-        citationRef: 'Citation Ref', citationTrail: 'Citation Trail (mỗi dòng một bước)', compiledBy: 'Compiled By',
-        content: 'Content', govDecision: 'Govern Decision', govNone: 'Chưa govern (pending)',
-        govApprove: 'Approve', govReject: 'Reject', rejectionReason: 'Lý do từ chối',
-        compile: 'Compile', compiling: 'Đang compile...',
-        artifactResult: 'Artifact Result', proceedMaintain: 'Tiến hành Maintain →',
-        lintKeywords: 'Lint Keywords (phân cách bằng dấu phẩy, để trống = bỏ qua)', maxAgeDays: 'Max Age Days (để trống = bỏ qua)',
-        runMaintain: 'Run Maintain', maintaining: 'Đang maintain...',
-        signals: 'Quality Signals', noIssues: '✅ Không có issue',
-        runRefactor: 'Run Refactor', refactoring: 'Đang refactor...',
-        proposals: 'Refactor Proposals', noProposals: '✅ Không có đề xuất',
+        title: '🛡️ Kiểm duyệt', subtitle: 'Đánh giá và phê duyệt dữ liệu (Governance)',
+        step1: '1. Biên soạn và duyệt', step2: '2. Duy trì', step3: '3. Tái cấu trúc', step4: '4. Nạp tri thức dự án',
+        loadTitle: 'Nạp tri thức dự án', loadDesc: 'Nạp tệp tri thức từ không gian làm việc khác để AI có thể sử dụng.',
+        collectionIdLabel: 'Mã bộ sưu tập', collectionNameLabel: 'Tên bộ sưu tập (không bắt buộc)',
+        pasteJson: 'Dán nội dung _index.json ở đây', loadBtn: 'Nạp tri thức', loading: 'Đang nạp...', loadOk: 'Đã nạp',
+        contextId: 'Mã ngữ cảnh', artifactType: 'Loại nội dung', sourceIds: 'Mã nguồn (phân cách bằng dấu phẩy)',
+        citationRef: 'Tham chiếu trích dẫn', citationTrail: 'Dấu vết trích dẫn (mỗi dòng một bước)', compiledBy: 'Người biên soạn',
+        content: 'Nội dung', govDecision: 'Quyết định kiểm duyệt', govNone: 'Chờ kiểm duyệt',
+        govApprove: 'Chấp nhận', govReject: 'Từ chối', rejectionReason: 'Lý do từ chối',
+        compile: 'Biên soạn', compiling: 'Đang biên soạn...',
+        artifactResult: 'Kết quả biên soạn', proceedMaintain: 'Tiếp tục duy trì →',
+        lintKeywords: 'Từ khóa cần kiểm tra (phân cách bằng dấu phẩy)', maxAgeDays: 'Số ngày tối đa (để trống để bỏ qua)',
+        runMaintain: 'Chạy kiểm tra duy trì', maintaining: 'Đang kiểm tra...',
+        signals: 'Tín hiệu chất lượng', noIssues: '✅ Không phát hiện vấn đề',
+        runRefactor: 'Tạo đề xuất tái cấu trúc', refactoring: 'Đang phân tích...',
+        proposals: 'Đề xuất tái cấu trúc', noProposals: '✅ Không có đề xuất',
     },
     en: {
         title: '📚 Knowledge Governance', subtitle: 'Lifecycle: Compile → Govern → Maintain → Refactor → Load Project Knowledge',
@@ -212,11 +215,13 @@ export default function KnowledgeGovernancePage() {
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{l.subtitle}</p>
             </div>
 
+            <KnowledgeJourneyNav currentStep={3} />
+
             {/* Step tabs */}
             <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl overflow-x-auto">
                 {steps.map(s => (
                     <button key={s.key} onClick={() => s.enabled && setActiveStep(s.key)} disabled={!s.enabled}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${activeStep === s.key ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : s.enabled ? 'text-gray-500 dark:text-gray-400 hover:text-gray-700' : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'}`}>
+                        className={`shrink-0 px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${activeStep === s.key ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : s.enabled ? 'text-gray-500 dark:text-gray-400 hover:text-gray-700' : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'}`}>
                         {s.label}
                     </button>
                 ))}
@@ -245,7 +250,7 @@ export default function KnowledgeGovernancePage() {
                                 </select>
                             </div>
                             <div className="md:col-span-2"><label className={LABEL}>{l.citationTrail}</label><textarea className={FIELD} title="Citation Trail" rows={2} value={form.citationTrail} onChange={e => setForm(f => ({ ...f, citationTrail: e.target.value }))} /></div>
-                            <div className="md:col-span-2"><label className={LABEL}>{l.content}</label><textarea className={FIELD} rows={4} value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))} placeholder="Enter knowledge artifact content..." /></div>
+                            <div className="md:col-span-2"><label className={LABEL}>{l.content}</label><textarea className={FIELD} rows={4} value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))} placeholder={language === 'vi' ? 'Nhập nội dung tri thức...' : 'Enter knowledge artifact content...'} /></div>
                             {form.govChoice === 'rejected' && <div className="md:col-span-2"><label className={LABEL}>{l.rejectionReason}</label><input className={FIELD} title="Rejection Reason" value={form.rejectionReason} onChange={e => setForm(f => ({ ...f, rejectionReason: e.target.value }))} /></div>}
                         </div>
                         <button onClick={handleCompile} disabled={compiling || !form.content.trim()} className="mt-4 px-5 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg disabled:opacity-50 transition-colors">

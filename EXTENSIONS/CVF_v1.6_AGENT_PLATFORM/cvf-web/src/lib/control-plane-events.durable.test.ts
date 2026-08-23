@@ -109,7 +109,7 @@ describe('control-plane-events durability', () => {
                 teamId: 'team-dur1',
                 orgId: 'org-dur1',
                 provider: 'alibaba',
-                model: 'qwen-turbo',
+                model: 'qwen-flash',
                 inputTokens: 100,
                 outputTokens: 50,
                 estimatedCostUSD: 0.001,

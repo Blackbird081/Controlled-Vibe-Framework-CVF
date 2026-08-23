@@ -11,7 +11,7 @@ const baseReceipt = {
     decision: 'ALLOW',
     riskLevel: 'R1',
     provider: 'alibaba',
-    model: 'qwen-turbo',
+    model: 'qwen-flash',
     routingDecision: 'ALLOW',
     policySnapshotId: 'policy-snapshot-test',
     envelopeId: 'env-test',
@@ -23,7 +23,7 @@ describe('receipt integrity anchor', () => {
     it('canonicalizes object keys deterministically', () => {
         const canonicalA = canonicalizeReceiptForIntegrity(baseReceipt);
         const canonicalB = canonicalizeReceiptForIntegrity({
-            model: 'qwen-turbo',
+            model: 'qwen-flash',
             provider: 'alibaba',
             routeId: '/api/execute',
             evidenceMode: 'live',

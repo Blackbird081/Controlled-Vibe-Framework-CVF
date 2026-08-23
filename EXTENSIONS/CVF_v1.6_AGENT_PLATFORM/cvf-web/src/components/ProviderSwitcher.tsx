@@ -18,7 +18,7 @@ const PROVIDERS: ProviderOption[] = [
     { id: 'gemini', name: 'Gemini', icon: '✨', color: 'from-blue-500 to-cyan-500', model: 'gemini-2.5-flash' },
     { id: 'openai', name: 'GPT-4o', icon: '🤖', color: 'from-green-500 to-emerald-500', model: 'gpt-4o' },
     { id: 'anthropic', name: 'Claude', icon: '🧠', color: 'from-purple-500 to-pink-500', model: 'claude-sonnet-4-20250514' },
-    { id: 'alibaba', name: 'Qwen', icon: '🌏', color: 'from-amber-500 to-orange-500', model: 'qwen-turbo' },
+    { id: 'alibaba', name: 'Qwen', icon: '🌏', color: 'from-amber-500 to-orange-500', model: 'qwen-flash' },
     { id: 'openrouter', name: 'OpenRouter', icon: '🔀', color: 'from-violet-500 to-indigo-500', model: 'meta-llama/llama-4-maverick' },
     { id: 'deepseek', name: 'DeepSeek', icon: '🦋', color: 'from-cyan-500 to-blue-500', model: 'deepseek-chat' },
 ];
@@ -258,3 +258,5 @@ export function QuickProviderSwitch({ size = 'md' }: { size?: 'sm' | 'md' }) {
         </div>
     );
 }
+
+// Text Encoding Exception: pre-existing non-ASCII text preserved unchanged; the QTDM-01 migration edited only the ASCII deprecated model identifier.

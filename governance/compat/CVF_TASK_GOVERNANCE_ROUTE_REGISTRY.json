@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "cvf.taskGovernanceRouteRegistry.v1",
+  "activationMode": "SHADOW_FULL_GATE_FALLBACK",
+  "profiles": ["P0_OBSERVE", "P1_LIGHT", "P2_BOUNDED", "P3_ELEVATED", "P4_CRITICAL"],
+  "dimensions": {
+    "taskKind": ["READ_ONLY", "DOC_CHANGE", "PURE_LOCAL_IMPLEMENTATION", "STATEFUL_LOCAL_IMPLEMENTATION", "EXTERNAL_ABSORPTION", "RUNTIME_INTEGRATION", "LIVE_PROOF", "PUBLIC_RELEASE", "DESTRUCTIVE_OPERATION"],
+    "authorityImpact": ["NONE", "USES_EXISTING_OWNER", "ENRICHES_EXISTING_OWNER", "CREATES_OR_CHANGES_AUTHORITY"],
+    "externalEffect": ["NONE", "LOCAL_REVERSIBLE", "NETWORK_READ", "NETWORK_WRITE", "PUBLIC_WRITE", "DESTRUCTIVE"],
+    "dataSensitivity": ["PUBLIC", "PRIVATE_REPO", "CREDENTIAL_REFERENCE", "SECRET_VALUE", "REGULATED"],
+    "reversibility": ["READ_ONLY", "GIT_REVERSIBLE", "STATEFUL_REVERSIBLE", "PARTIALLY_REVERSIBLE", "IRREVERSIBLE"],
+    "sourceScale": ["NONE", "NAMED_FILES", "BOUNDED_CLUSTER", "CORPUS"],
+    "delegation": ["SINGLE_ROLE", "MULTI_ROLE_NO_COMMIT", "MULTI_ROLE_WITH_COMMIT"],
+    "novelty": ["KNOWN_PATTERN", "OWNER_COMPOSITION", "NEW_INTERFACE", "NEW_AUTHORITY"]
+  },
+  "bundles": ["CORE_INTEGRITY", "ARTIFACT_SHAPE", "SOURCE_PROVENANCE", "CORPUS_ACCOUNTING", "DELEGATION_HANDOFF", "CODE_QUALITY", "STATE_AND_SECURITY", "RUNTIME_LIVE", "PUBLIC_RELEASE", "CONTINUITY"],
+  "profileMinimums": {
+    "taskKind": {"READ_ONLY": "P0_OBSERVE", "DOC_CHANGE": "P1_LIGHT", "PURE_LOCAL_IMPLEMENTATION": "P1_LIGHT", "STATEFUL_LOCAL_IMPLEMENTATION": "P3_ELEVATED", "EXTERNAL_ABSORPTION": "P1_LIGHT", "RUNTIME_INTEGRATION": "P3_ELEVATED", "LIVE_PROOF": "P4_CRITICAL", "PUBLIC_RELEASE": "P4_CRITICAL", "DESTRUCTIVE_OPERATION": "P4_CRITICAL"},
+    "authorityImpact": {"CREATES_OR_CHANGES_AUTHORITY": "P3_ELEVATED"},
+    "externalEffect": {"NETWORK_READ": "P3_ELEVATED", "NETWORK_WRITE": "P3_ELEVATED", "PUBLIC_WRITE": "P4_CRITICAL", "DESTRUCTIVE": "P4_CRITICAL"},
+    "dataSensitivity": {"CREDENTIAL_REFERENCE": "P3_ELEVATED", "SECRET_VALUE": "P4_CRITICAL", "REGULATED": "P4_CRITICAL"},
+    "reversibility": {"STATEFUL_REVERSIBLE": "P3_ELEVATED", "PARTIALLY_REVERSIBLE": "P3_ELEVATED", "IRREVERSIBLE": "P4_CRITICAL"},
+    "sourceScale": {"CORPUS": "P2_BOUNDED"},
+    "delegation": {"MULTI_ROLE_NO_COMMIT": "P2_BOUNDED", "MULTI_ROLE_WITH_COMMIT": "P2_BOUNDED"},
+    "novelty": {"NEW_INTERFACE": "P3_ELEVATED", "NEW_AUTHORITY": "P3_ELEVATED"}
+  },
+  "protectedPathMinimums": [
+    {"prefix": "governance/compat/", "profile": "P3_ELEVATED", "trigger": "GOVERNANCE_MACHINE_SURFACE"},
+    {"prefix": "docs/reference/", "profile": "P3_ELEVATED", "trigger": "CANONICAL_STANDARD_SURFACE"},
+    {"prefix": "AGENTS.md", "profile": "P3_ELEVATED", "trigger": "AUTHORITY_CARRIER_SURFACE"},
+    {"prefix": "CVF_SESSION/", "profile": "P3_ELEVATED", "trigger": "CONTINUITY_STATE_SURFACE"},
+    {"prefix": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/", "profile": "P3_ELEVATED", "trigger": "RUNTIME_OWNER_SURFACE"},
+    {"prefix": ".github/workflows/", "profile": "P4_CRITICAL", "trigger": "PUBLIC_RELEASE_WORKFLOW_SURFACE"}
+  ],
+  "domainPathBundles": [
+    {"prefix": "CVF_SESSION/", "bundle": "CONTINUITY"},
+    {"prefix": "docs/", "bundle": "ARTIFACT_SHAPE"},
+    {"prefix": "EXTENSIONS/", "bundle": "CODE_QUALITY"},
+    {"prefix": "governance/compat/", "bundle": "CODE_QUALITY"}
+  ],
+  "legacyFallback": {
+    "profile": "P3_ELEVATED",
+    "receiptStatus": "LEGACY_FULL_GATE_FALLBACK",
+    "selectiveExecutionAuthorized": false
+  }
+}

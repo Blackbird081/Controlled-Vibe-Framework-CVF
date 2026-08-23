@@ -1,11 +1,14 @@
 'use client';
 
+// Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
+
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowRight, CheckCircle2, ClipboardCheck, FileCheck2, Loader2, ShieldCheck, TriangleAlert } from 'lucide-react';
 
 import { useLanguage } from '@/lib/i18n';
 import { validateHandoff, type HandoffDecision } from '@/lib/agent-handoff-validator';
 import { ArtifactExportPanel, type ArtifactExportRequest } from '@/components/ArtifactExportPanel';
+import { KnowledgeJourneyNav } from '@/components/KnowledgeJourneyNav';
 import type { AgentRole } from '@/lib/multi-agent';
 
 const COPY = {
@@ -40,8 +43,8 @@ const COPY = {
     ],
   },
   vi: {
-    label: 'Chuyển giao công việc',
-    title: 'Chuyển phần đã rà soát sang bước tiếp theo với ít phỏng đoán hơn',
+    label: 'Bàn giao',
+    title: 'Bàn giao công việc cho bước tiếp theo',
     intro: 'Kiểm tra gói đã rà soát có đủ ngữ cảnh để người hoặc trợ lý tiếp theo tiếp tục an toàn hay không.',
     from: 'Bước trước',
     to: 'Bước tiếp theo',
@@ -53,9 +56,9 @@ const COPY = {
     missing: 'Ngữ cảnh đã rà soát đang thiếu và chưa nên chuyển tiếp.',
     summary: 'Tóm tắt được chuyển tiếp',
     issues: 'Ghi chú rà soát',
-    noIssues: 'Không phát hiện vấn đề trong chuyển giao. Vẫn cần giữ nguồn, receipt và ranh giới rà soát.',
+    noIssues: 'Không phát hiện vấn đề trong chuyển giao. Vẫn cần giữ nguồn, biên nhận và ranh giới rà soát.',
     historyTitle: 'Lịch sử chuyển giao gần đây',
-    historyEmpty: 'Không tìm thấy bản ghi chuyển giao trong audit log.',
+    historyEmpty: 'Không tìm thấy bản ghi chuyển giao trong nhật ký kiểm tra.',
     historyLoading: 'Đang tải lịch sử…',
     historyError: 'Không thể tải lịch sử chuyển giao.',
     exportRecord: 'Xuất HTML',
@@ -65,7 +68,7 @@ const COPY = {
     boundary: 'Trang này kiểm tra bước tiếp theo có đủ ngữ cảnh hay chưa. Nó không phải bằng chứng cuối cùng.',
     benefits: [
       'Người tiếp theo thấy rõ phần nào đã rà soát và phần nào còn cần chú ý.',
-      'Receipt nhìn thấy được giúp gói nội dung dễ tin, dễ chia sẻ và dễ xem lại.',
+      'Biên nhận nhìn thấy được giúp gói nội dung dễ tin, dễ chia sẻ và dễ xem lại.',
       'Kiến thức mới trở thành ghi chú chuyển giao rõ ràng thay vì ngữ cảnh ẩn.',
     ],
   },
@@ -122,7 +125,9 @@ export default function WorkTransferPage() {
   const [fromAgent, setFromAgent] = useState<AgentRole>('architect');
   const [toAgent, setToAgent] = useState<AgentRole>('builder');
   const [status, setStatus] = useState<'completed' | 'running' | 'failed'>('completed');
-  const [output, setOutput] = useState('The new knowledge is ready for review. Keep the source note, receipt, and claim boundary together.');
+  const [output, setOutput] = useState(() => language === 'vi'
+    ? 'Kiến thức mới đã sẵn sàng để rà soát. Hãy giữ ghi chú nguồn, biên nhận và ranh giới khẳng định cùng nhau.'
+    : 'The new knowledge is ready for review. Keep the source note, receipt, and claim boundary together.');
 
   const [records, setRecords] = useState<AuditRecord[]>([]);
   const [historyState, setHistoryState] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -174,6 +179,8 @@ export default function WorkTransferPage() {
         <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-600 dark:text-gray-300">{copy.intro}</p>
       </header>
 
+      <KnowledgeJourneyNav currentStep={5} />
+
       <section className="grid gap-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
         <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
           <div className="flex items-center gap-2">
@@ -183,7 +190,7 @@ export default function WorkTransferPage() {
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <SelectField label={copy.from} value={fromAgent} onChange={v => setFromAgent(v as AgentRole)} options={roleLabels} />
             <SelectField label={copy.to} value={toAgent} onChange={v => setToAgent(v as AgentRole)} options={roleLabels} />
-            <SelectField label={copy.status} value={status} onChange={v => setStatus(v as 'completed' | 'running' | 'failed')} options={['completed', 'running', 'failed']} />
+            <SelectField label={copy.status} value={status} onChange={v => setStatus(v as 'completed' | 'running' | 'failed')} options={language === 'vi' ? { completed: 'Đã hoàn tất', running: 'Đang thực hiện', failed: 'Thất bại' } : ['completed', 'running', 'failed']} />
             <div className="hidden items-end justify-center sm:flex">
               <ArrowRight className="mb-3 h-5 w-5 text-gray-400" aria-hidden="true" />
             </div>
@@ -193,7 +200,7 @@ export default function WorkTransferPage() {
             </label>
           </div>
           <div className={`mt-4 rounded-lg border p-4 text-sm leading-6 ${DECISION_STYLE[result.decision]}`}>
-            <div className="font-semibold">Decision: {result.decision}</div>
+            <div className="font-semibold">{language === 'vi' ? 'Quyết định' : 'Decision'}: {result.decision}</div>
             <div className="mt-1">{result.contextCarried ? copy.carried : copy.missing}</div>
           </div>
         </div>

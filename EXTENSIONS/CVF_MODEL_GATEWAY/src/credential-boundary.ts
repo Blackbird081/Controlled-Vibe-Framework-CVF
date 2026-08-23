@@ -35,7 +35,9 @@ export class CredentialBoundary {
   }
 
   private resolveSecret(reference: CredentialReference): string | undefined {
-    return reference.envNames.map((name) => this.env[name]).find((value) => Boolean(value));
+    return reference.envNames
+      .map((name) => this.env[name])
+      .find((value): value is string => typeof value === "string" && value.trim().length > 0);
   }
 }
 

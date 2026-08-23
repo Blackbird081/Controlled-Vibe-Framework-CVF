@@ -185,7 +185,7 @@ SUCCESS CRITERIA:
             priority: 'Growth',
         },
         provider: 'alibaba',
-        model: 'qwen-turbo',
+        model: 'qwen-flash',
         mode,
         action: 'analyze',
     };

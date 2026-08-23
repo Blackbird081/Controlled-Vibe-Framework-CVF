@@ -25,7 +25,7 @@ function buildReceipt(): GovernanceEvidenceReceipt {
         decision: 'ALLOW',
         riskLevel: 'R1',
         provider: 'alibaba',
-        model: 'qwen-turbo',
+        model: 'qwen-flash',
         routingDecision: 'selected',
         policySnapshotId: 'pol-vi1-0001',
         envelopeId: 'env-vi1-test',
@@ -47,7 +47,7 @@ describe('vertical integration readout', () => {
             templateId: 'app_builder_complete',
             workflowId: workflowExecution.workflowId,
             provider: 'alibaba',
-            model: 'qwen-turbo',
+            model: 'qwen-flash',
             decision: 'ALLOW',
             stepTraceIds: workflowExecution.stepTraces.map(trace => trace.stepId),
         });

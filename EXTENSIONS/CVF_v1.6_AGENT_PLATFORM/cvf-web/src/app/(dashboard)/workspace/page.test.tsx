@@ -1,3 +1,4 @@
+// Text Encoding Exception: assertions quote the page's Vietnamese plain-language copy per DESIGN.md section 8.
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -101,15 +102,61 @@ describe('WorkspacePage', () => {
     it('renders the read-only operator workspace without mutation controls', () => {
         render(<WorkspacePage />);
 
-        expect(screen.getByRole('heading', { name: 'Operator Dashboard' })).toBeTruthy();
-        expect(screen.getByText('wwu_t2_web_workspace_read_model_dispatched_t3_parked')).toBeTruthy();
-        expect(screen.getByText('AGENT_HANDOFF_V19_2026-06-15.md')).toBeTruthy();
-        expect(screen.getByText('WWU-T3 Local Workspace Runtime/MCP remains parked.')).toBeTruthy();
+        expect(screen.getByRole('heading', { name: 'Trạng thái làm việc của bạn' })).toBeTruthy();
+        expect(screen.getAllByText('WWU-T3 Local Workspace Runtime/MCP remains parked.').length).toBeGreaterThan(0);
         expect(screen.getByText('Workspace State Lanes')).toBeTruthy();
         expect(screen.getByText('accepted_material')).toBeTruthy();
         expect(screen.getByText('wwu-t2-accepted-material-2026-06-18')).toBeTruthy();
         expect(screen.getByText('web_workspace_read_model')).toBeTruthy();
         expect(screen.getByRole('link', { name: /Evidence State/ }).getAttribute('href')).toBe('/governance/evidence');
         expect(screen.queryByRole('button')).toBeNull();
+    });
+
+    it('leads with a plain-language ordinary summary before internal detail', () => {
+        render(<WorkspacePage />);
+
+        const summary = screen.getByTestId('ordinary-summary');
+        expect(summary.textContent).toContain('Trạng thái hiện tại');
+        expect(summary.textContent).toContain('Tiếp tục công việc đang được giao');
+        expect(summary.textContent).toContain('Các bước chưa đến lượt vẫn được giữ nguyên');
+        expect(summary.textContent).not.toContain('COMPLETE_PENDING_REVIEW');
+        expect(summary.textContent).not.toContain('public-sync');
+        expect(summary.textContent).not.toContain('provider/live');
+        expect(summary.textContent).not.toContain('material dispatch commit');
+
+        const advanced = screen.getByTestId('advanced-detail');
+        expect(advanced.textContent).toContain('wwu_t2_web_workspace_read_model_dispatched_t3_parked');
+        expect(advanced.textContent).toContain('AGENT_HANDOFF_V19_2026-06-15.md');
+        expect(advanced.textContent).toContain('Execute the WWU-T2 work order as a read-only Web Workspace implementation.');
+
+        const summaryPosition = summary.compareDocumentPosition(advanced);
+        // eslint-disable-next-line no-bitwise
+        expect(summaryPosition & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    });
+
+    it('keeps advanced technical detail closed by default and exposes it as a native disclosure', () => {
+        render(<WorkspacePage />);
+
+        const advanced = screen.getByTestId('advanced-detail') as HTMLDetailsElement;
+        expect(advanced.tagName.toLowerCase()).toBe('details');
+        expect(advanced.open).toBe(false);
+    });
+
+    it('exposes exact technical values inside advanced detail without deleting or altering them', () => {
+        render(<WorkspacePage />);
+
+        const advanced = screen.getByTestId('advanced-detail');
+        expect(advanced.textContent).toContain('AGENT_HANDOFF_V19_2026-06-15.md');
+        expect(advanced.textContent).toContain('1bbf3046');
+        expect(advanced.textContent).toContain('docs/roadmaps/CVF_WEB_WORKSPACE_UPGRADE_ROADMAP_2026-06-18.md');
+        expect(advanced.textContent).toContain('docs/work_orders/CVF_AGENT_WORK_ORDER_WWU_T2_CVF_WEB_WORKSPACE_OPERATOR_DASHBOARD_READ_MODEL_FOR_CODEX_2026-06-18.md');
+        expect(advanced.textContent).toContain('CVF_SESSION/ACTIVE_SESSION_STATE.json');
+        expect(advanced.textContent).toContain('CVF_WEB_WORKSPACE read-only projection. No Local Runtime/MCP, provider/live call, public-sync, runtime mutation, or readiness claim.');
+    });
+
+    it('renders no mutation controls in either the ordinary summary or advanced detail', () => {
+        render(<WorkspacePage />);
+        expect(screen.queryByRole('button')).toBeNull();
+        expect(screen.queryAllByRole('textbox')).toHaveLength(0);
     });
 });

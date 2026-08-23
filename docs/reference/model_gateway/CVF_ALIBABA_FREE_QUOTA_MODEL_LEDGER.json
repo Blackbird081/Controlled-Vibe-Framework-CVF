@@ -2,8 +2,9 @@
   "schemaVersion": "0.1.0",
   "artifact": "CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER",
   "status": "ACTIVE_REFERENCE",
-  "lastUpdated": "2026-06-18",
-  "source": "operator-provided Alibaba Model Studio free-quota screenshots in the 2026-06-18 Codex session plus bounded secret-safe diagnostic rerun",
+  "lastUpdated": "2026-08-15",
+  "captureDate": "2026-08-15",
+  "source": "operator-provided Alibaba Model Studio free-quota screenshots in the 2026-08-15 session; historical diagnostic results remain dated 2026-06-18",
   "defaultEndpointHostForCurrentKey": "dashscope-intl.aliyuncs.com",
   "nonEquivalentEndpointObservation": {
     "endpointHost": "dashscope.aliyuncs.com",
@@ -17,16 +18,16 @@
   ],
   "models": [
     {
-      "modelCode": "qwen3.6-plus-2026-04-02",
-      "expirationDate": "2026-07-01",
+      "modelCode": "qwen3.7-flash-2026-07-15",
+      "expirationDate": "2026-10-22",
       "freeQuotaRemaining": 1000000,
       "freeQuotaTotal": 1000000,
       "statusAtCapture": "Enabled"
     },
     {
-      "modelCode": "qwen3.6-plus",
-      "expirationDate": "2026-07-01",
-      "freeQuotaRemaining": 911370,
+      "modelCode": "qwen3.7-plus",
+      "expirationDate": "2026-08-31",
+      "freeQuotaRemaining": 989246,
       "freeQuotaTotal": 1000000,
       "statusAtCapture": "Enabled",
       "diagnosticRerun": {
@@ -36,81 +37,8 @@
       }
     },
     {
-      "modelCode": "qwen3.6-flash",
-      "expirationDate": "2026-07-16",
-      "freeQuotaRemaining": 1000000,
-      "freeQuotaTotal": 1000000,
-      "statusAtCapture": "Enabled"
-    },
-    {
-      "modelCode": "qwen3.6-flash-2026-04-16",
-      "expirationDate": "2026-07-16",
-      "freeQuotaRemaining": 998675,
-      "freeQuotaTotal": 1000000,
-      "statusAtCapture": "Enabled",
-      "diagnosticRerun": {
-        "date": "2026-06-18",
-        "endpointHost": "dashscope-intl.aliyuncs.com",
-        "result": "PASS"
-      }
-    },
-    {
-      "modelCode": "qwen3.6-35b-a3b",
-      "expirationDate": "2026-07-16",
-      "freeQuotaRemaining": 998835,
-      "freeQuotaTotal": 1000000,
-      "statusAtCapture": "Enabled"
-    },
-    {
-      "modelCode": "qwen3.6-max-preview",
-      "expirationDate": "2026-07-19",
-      "freeQuotaRemaining": 1000000,
-      "freeQuotaTotal": 1000000,
-      "statusAtCapture": "Enabled"
-    },
-    {
-      "modelCode": "qwen3.5-plus-2026-04-20",
-      "expirationDate": "2026-07-22",
-      "freeQuotaRemaining": 1000000,
-      "freeQuotaTotal": 1000000,
-      "statusAtCapture": "Enabled"
-    },
-    {
-      "modelCode": "qwen3.6-27b",
-      "expirationDate": "2026-07-22",
-      "freeQuotaRemaining": 1000000,
-      "freeQuotaTotal": 1000000,
-      "statusAtCapture": "Enabled"
-    },
-    {
-      "modelCode": "deepseek-v4-flash",
-      "expirationDate": "2026-07-23",
-      "freeQuotaRemaining": 998902,
-      "freeQuotaTotal": 1000000,
-      "statusAtCapture": "Enabled",
-      "diagnosticRerun": {
-        "date": "2026-06-18",
-        "endpointHost": "dashscope-intl.aliyuncs.com",
-        "result": "PASS"
-      }
-    },
-    {
-      "modelCode": "deepseek-v4-pro",
-      "expirationDate": "2026-07-23",
-      "freeQuotaRemaining": 1000000,
-      "freeQuotaTotal": 1000000,
-      "statusAtCapture": "Enabled"
-    },
-    {
-      "modelCode": "qwen3.7-max",
-      "expirationDate": "2026-08-19",
-      "freeQuotaRemaining": 1000000,
-      "freeQuotaTotal": 1000000,
-      "statusAtCapture": "Enabled"
-    },
-    {
-      "modelCode": "qwen3.7-max-2026-05-20",
-      "expirationDate": "2026-08-19",
+      "modelCode": "qwen3.7-flash",
+      "expirationDate": "2026-10-22",
       "freeQuotaRemaining": 1000000,
       "freeQuotaTotal": 1000000,
       "statusAtCapture": "Enabled"
@@ -123,8 +51,8 @@
       "statusAtCapture": "Enabled"
     },
     {
-      "modelCode": "qwen3.7-max-preview",
-      "expirationDate": "2026-08-23",
+      "modelCode": "qwen3.7-max-2026-06-08",
+      "expirationDate": "2026-09-07",
       "freeQuotaRemaining": 1000000,
       "freeQuotaTotal": 1000000,
       "statusAtCapture": "Enabled"
@@ -137,16 +65,53 @@
       "statusAtCapture": "Enabled"
     },
     {
-      "modelCode": "qwen3.7-plus",
-      "expirationDate": "2026-08-31",
-      "freeQuotaRemaining": 998474,
+      "modelCode": "qwen3.7-max-preview",
+      "expirationDate": "2026-08-23",
+      "freeQuotaRemaining": 1000000,
       "freeQuotaTotal": 1000000,
-      "statusAtCapture": "Enabled",
-      "diagnosticRerun": {
-        "date": "2026-06-18",
-        "endpointHost": "dashscope-intl.aliyuncs.com",
-        "result": "PASS"
-      }
+      "statusAtCapture": "Enabled"
+    },
+    {
+      "modelCode": "deepseek-v4-flash-0731",
+      "expirationDate": "2026-10-30",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "statusAtCapture": "Enabled"
+    },
+    {
+      "modelCode": "qwen3.7-max",
+      "expirationDate": "2026-08-19",
+      "freeQuotaRemaining": 951277,
+      "freeQuotaTotal": 1000000,
+      "statusAtCapture": "Enabled"
+    },
+    {
+      "modelCode": "glm-5.2",
+      "expirationDate": "2026-09-23",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "statusAtCapture": "Enabled"
+    },
+    {
+      "modelCode": "kimi-k2.7-code",
+      "expirationDate": "2026-09-23",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "statusAtCapture": "Enabled"
+    },
+    {
+      "modelCode": "deepseek-v4-pro-0813",
+      "expirationDate": "2026-11-12",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "statusAtCapture": "Enabled"
+    },
+    {
+      "modelCode": "qwen3.7-max-2026-05-20",
+      "expirationDate": "2026-08-19",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "statusAtCapture": "Enabled"
     },
     {
       "modelCode": "qwen3.7-plus-2026-05-26",
@@ -156,8 +121,15 @@
       "statusAtCapture": "Enabled"
     },
     {
-      "modelCode": "qwen3.7-max-2026-06-08",
-      "expirationDate": "2026-09-07",
+      "modelCode": "qwen3.8-2.4t-a95b",
+      "expirationDate": "2026-11-11",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "statusAtCapture": "Enabled"
+    },
+    {
+      "modelCode": "qwen3.8-max",
+      "expirationDate": "2026-10-31",
       "freeQuotaRemaining": 1000000,
       "freeQuotaTotal": 1000000,
       "statusAtCapture": "Enabled"
@@ -165,9 +137,9 @@
   ],
   "diagnosticRerunSummary": [
     {
-      "modelCode": "qwen-turbo",
+      "modelCode": "qwen3.7-flash",
       "endpointHost": "dashscope-intl.aliyuncs.com",
-      "result": "PASS"
+      "result": "NOT_RUN_PENDING_T6"
     },
     {
       "modelCode": "qwen3.7-plus",

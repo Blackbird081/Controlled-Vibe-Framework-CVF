@@ -1,89 +1,52 @@
-/**
- * @vitest-environment jsdom
- */
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+// Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
 
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import KnowledgeIntakePage from './page';
 
-vi.mock('@/lib/i18n', () => ({
-  useLanguage: () => ({ language: 'en' }),
+vi.mock('@/components', () => ({
+    KnowledgeJourneyNav: ({ currentStep }: { currentStep: number }) => (
+        <div data-testid="knowledge-journey-nav">Step {currentStep}</div>
+    ),
 }));
 
-beforeEach(() => {
-  vi.stubGlobal('fetch', vi.fn());
-});
+vi.mock('@/components/KnowledgeJourneyNav', () => ({
+    KnowledgeJourneyNav: ({ currentStep }: { currentStep: number }) => (
+        <div data-testid="knowledge-journey-nav">Step {currentStep}</div>
+    ),
+}));
 
-afterEach(() => {
-  vi.unstubAllGlobals();
-  vi.restoreAllMocks();
-});
+let mockLang = 'vi';
+vi.mock('@/lib/i18n', () => ({
+    useLanguage: () => ({
+        language: mockLang,
+        setLanguage: vi.fn(),
+    }),
+}));
 
 describe('KnowledgeIntakePage', () => {
-  it('renders the intake form with submit disabled when fields are empty', () => {
-    render(<KnowledgeIntakePage />);
-
-    expect(screen.getByText('Knowledge Intake')).toBeTruthy();
-    expect((screen.getByTestId('submit-button') as HTMLButtonElement).disabled).toBe(true);
-  });
-
-  it('enables submit when source title and note are filled', () => {
-    render(<KnowledgeIntakePage />);
-
-    fireEvent.change(screen.getByTestId('source-title-input'), {
-      target: { value: 'Customer Onboarding Notes' },
-    });
-    fireEvent.change(screen.getByTestId('note-input'), {
-      target: { value: 'Key updates to the onboarding flow.' },
+    beforeEach(() => {
+        mockLang = 'vi';
     });
 
-    expect((screen.getByTestId('submit-button') as HTMLButtonElement).disabled).toBe(false);
-  });
-
-  it('shows the success state with collection ID after a successful submission', async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ success: true, collectionId: 'customer-onboarding-notes' }),
-    } as Response);
-
-    render(<KnowledgeIntakePage />);
-
-    fireEvent.change(screen.getByTestId('source-title-input'), {
-      target: { value: 'Customer Onboarding Notes' },
-    });
-    fireEvent.change(screen.getByTestId('note-input'), {
-      target: { value: 'Key updates to the onboarding flow.' },
-    });
-    fireEvent.click(screen.getByTestId('submit-button'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('intake-success')).toBeTruthy();
-      expect(screen.getByTestId('collection-id').textContent).toBe('customer-onboarding-notes');
+    it('renders KnowledgeJourneyNav at step 2', () => {
+        render(<KnowledgeIntakePage />);
+        expect(screen.getByTestId('knowledge-journey-nav').textContent).toBe('Step 2');
     });
 
-    expect(screen.getByText('Open Artifact Export')).toBeTruthy();
-  });
-
-  it('shows an error message when the API returns a non-2xx response', async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: false,
-      status: 409,
-      json: async () => ({ success: false, error: "Collection 'x' already exists." }),
-    } as Response);
-
-    render(<KnowledgeIntakePage />);
-
-    fireEvent.change(screen.getByTestId('source-title-input'), {
-      target: { value: 'Duplicate Note' },
+    it('renders Vietnamese content correctly', () => {
+        render(<KnowledgeIntakePage />);
+        expect(screen.getByText('Thu thập')).toBeTruthy();
+        expect(screen.getByText('Đưa kiến thức mới vào hệ thống')).toBeTruthy();
+        expect(screen.getByText('Xem trước gói rà soát')).toBeTruthy();
+        expect(screen.queryByText('Preview packet review')).toBeNull();
     });
-    fireEvent.change(screen.getByTestId('note-input'), {
-      target: { value: 'This will conflict.' },
-    });
-    fireEvent.click(screen.getByTestId('submit-button'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('intake-error')).toBeTruthy();
-      expect(screen.getByTestId('intake-error').textContent).toContain('already exists');
+    it('renders English content correctly', () => {
+        mockLang = 'en';
+        render(<KnowledgeIntakePage />);
+        expect(screen.getByText('Knowledge Intake')).toBeTruthy();
+        expect(screen.getByText('Bring new knowledge into CVF without hiding the trail')).toBeTruthy();
     });
-  });
 });

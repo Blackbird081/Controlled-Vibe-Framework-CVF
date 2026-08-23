@@ -596,7 +596,7 @@ test.describe('W132-T1 CP4 — Alibaba isolated-session stability run', () => {
       }
 
       const summary = writeEvidence(
-        'alibaba', 'qwen-turbo',
+        'alibaba', 'qwen-flash',
         'W132-T1 CP4 — Alibaba Isolated Stability Run',
         journeyLog, liveStatus, liveDecision, 'alibaba', 'complete',
       );

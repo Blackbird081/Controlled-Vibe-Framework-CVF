@@ -1,9 +1,9 @@
 /**
  * PM-1 Alibaba Streaming Method Live Proof
  *
- * Proves a live receipt is generated from an Alibaba qwen-turbo call,
+ * Proves a live receipt is generated from an Alibaba qwen-flash call,
  * confirming the stream method capability path is accessible per W5 contract.
- * W5 has qwen-turbo stream in PROVIDER_CAPABILITY_REGISTRY; this test
+ * W5 has qwen-flash stream in PROVIDER_CAPABILITY_REGISTRY; this test
  * confirms the Alibaba provider path is live and produces a valid receipt.
  *
  * Skipped automatically when no Alibaba/DashScope-compatible key is loaded.
@@ -80,14 +80,14 @@ describe.skipIf(!ALIBABA_API_KEY)(
     });
 
     it(
-      'produces a live receipt from Alibaba qwen-turbo confirming stream method capability path is accessible',
+      'produces a live receipt from Alibaba qwen-flash confirming stream method capability path is accessible',
       async () => {
         const template = getTemplateById('strategy_analysis');
         expect(template).toBeDefined();
 
         const inputs = {
           topic: 'CVF PM-1 stream method capability proof',
-          context: 'W5 PROVIDER_CAPABILITY_REGISTRY lists alibaba/qwen-turbo with supportedMethods: complete and stream. This live call confirms the Alibaba provider path is live and accessible.',
+          context: 'W5 PROVIDER_CAPABILITY_REGISTRY lists alibaba/qwen-flash with supportedMethods: complete and stream. This live call confirms the Alibaba provider path is live and accessible.',
           options: '1. Confirm live receipt from Alibaba provider\n2. Confirm evidenceMode=live',
           constraints: 'Bounded stream capability proof. No SSE delivery, no route change.',
           priority: 'Governance',
@@ -102,7 +102,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen-flash',
               mode: 'simple',
               cvfRiskLevel: 'R1',
               action: `analyze strategy_analysis pm1-alibaba-streaming proof request`,

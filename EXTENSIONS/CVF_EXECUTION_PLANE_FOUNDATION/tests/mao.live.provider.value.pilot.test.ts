@@ -26,7 +26,7 @@ import type { CredentialReference } from "../../CVF_MODEL_GATEWAY/src/credential
 import { checkSelfApproval } from "../src/mao/reviewer.isolation.contract";
 
 const PROVIDER = "alibaba";
-const MODEL = "qwen-turbo";
+const MODEL = "qwen-flash";
 
 function credentialRef(): CredentialReference {
   return { providerId: PROVIDER, keyId: "alibaba-live-t1", envNames: ["DASHSCOPE_API_KEY"] };

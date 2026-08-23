@@ -53,7 +53,7 @@ modelRegistryServiceAdvisoryType:
   "cvf.modelRegistryServiceAdvisory.lhw23.t1.v1"
 modelRegistrySpec: {
   models: Array<{
-    id: string // Model identifier (e.g. "qwen-turbo")
+    id: string // Model identifier (e.g. "qwen-flash")
     version: string // Model version tag
     provider: string // Provider name (e.g. "alibaba")
     capabilities: string[] // List of supported capabilities
@@ -93,3 +93,7 @@ DEFERRED_PRIVATE_ONLY - this connector spec remains in private provenance docume
 ## Claim Boundary
 
 This spec publishes a source-verified documentation schema only. It does not claim runtime model registry storage, dynamic latency checking, model fallback execution, public readiness, or production readiness.
+
+## Epistemic Process Block
+
+Epistemic Process Applicability: EPISTEMIC_PROCESS_NA_WITH_REASON: reference artifact with no empirical prediction; the QTDM-01 migration changes only the deprecated model identifier and makes no evidence comparison claim.

@@ -13,7 +13,7 @@ const receipt: GovernanceEvidenceReceipt = {
   decision: 'ALLOW',
   riskLevel: 'R1',
   provider: 'alibaba',
-  model: 'qwen-turbo',
+  model: 'qwen-flash',
   routingDecision: 'allow_requested_provider',
   policySnapshotId: 'policy-phase2c-test',
   envelopeId: 'env-phase2c-test',

@@ -31,7 +31,6 @@ const TEMPLATE_FAMILY_MAP: Record<string, GovernanceFamily> = {
   feature_prioritization: 'normal_productivity_app_planning',
   user_persona: 'normal_productivity_app_planning',
   web_build_handoff: 'normal_productivity_app_planning',
-
   api_design: 'builder_handoff_technical_planning',
   architecture_design: 'builder_handoff_technical_planning',
   architecture_review: 'builder_handoff_technical_planning',
@@ -39,7 +38,6 @@ const TEMPLATE_FAMILY_MAP: Record<string, GovernanceFamily> = {
   cli_tool_spec: 'builder_handoff_technical_planning',
   project_init_checklist: 'builder_handoff_technical_planning',
   non_coder_debug: 'builder_handoff_technical_planning',
-
   pricing_strategy: 'cost_quota_provider_selection',
 };
 
@@ -52,40 +50,27 @@ export function isGovernanceFamily(value?: string | null): value is GovernanceFa
 }
 
 function resolveByIntent(input: GovernanceFamilyInput): GovernanceFamily | null {
-  const text = [
-    input.intent,
-    input.templateId,
-    input.templateCategory,
-  ]
+  const text = [input.intent, input.templateId, input.templateCategory]
     .map(normalizeText)
     .filter(Boolean)
     .join(' ');
-
   if (!text) return null;
-
   if (/\b(cost|quota|budget|spend|pricing|price|provider|model lane|latency|retry policy|token|usage)\b/.test(text)) {
     return 'cost_quota_provider_selection';
   }
-
   if (/\b(api|architecture|code review|developer handoff|migration|rollback|feature flag|module boundary|test coverage|implementation plan|debug|cli tool)\b/.test(text)) {
     return 'builder_handoff_technical_planning';
   }
-
   if (/\b(app|mvp|product brief|feature idea|acceptance criteria|user persona|workflow|dashboard|requirements|builder-ready|non-technical)\b/.test(text)) {
     return 'normal_productivity_app_planning';
   }
-
   return null;
 }
 
 export function resolveGovernanceFamily(input: GovernanceFamilyInput): GovernanceFamily | null {
   if (isGovernanceFamily(input.governanceFamily)) return input.governanceFamily;
   if (isGovernanceFamily(input.qbsFamily)) return input.qbsFamily;
-
   const templateId = normalizeText(input.templateId);
-  if (templateId && TEMPLATE_FAMILY_MAP[templateId]) {
-    return TEMPLATE_FAMILY_MAP[templateId];
-  }
-
+  if (templateId && TEMPLATE_FAMILY_MAP[templateId]) return TEMPLATE_FAMILY_MAP[templateId];
   return resolveByIntent(input);
 }

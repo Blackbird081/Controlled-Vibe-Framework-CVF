@@ -138,3 +138,74 @@ export interface IntakeReport {
   gaps: string[];
   sourceHashSummary: string;
 }
+
+export type SensitivityLevel =
+  | 'public'
+  | 'restricted'
+  | 'confidential'
+  | 'classified'
+  | 'unknown';
+
+export type AuthorizationDecision = 'PUBLIC_ONLY';
+
+export type EvidenceOutcome =
+  | 'NOT_EVALUATED'
+  | 'NO_MATCHES'
+  | 'FILTERED_PUBLIC_ONLY'
+  | 'ABSTAINED'
+  | 'UNAVAILABLE'
+  | 'ELIGIBLE_NOT_SENT'
+  | 'PROVIDER_FAILED'
+  | 'ANSWER_EMITTED';
+
+export interface ModelEvidenceRecord {
+  normalizedPath: string;
+  effectiveDate: string;
+  status: RecordStatus;
+  answerClass: AnswerClass;
+  contentSnippet: string;
+}
+
+export interface ModelEvidenceProjection {
+  schemaVersion: 'cvf.lpci1Web.modelEvidence.v1';
+  records: ModelEvidenceRecord[];
+}
+
+export interface RouteGovernanceProofView {
+  actorId: string | null;
+  authMode: string;
+  decision: 'ALLOW' | 'DENY';
+}
+
+interface LpciUnauditedResponse {
+  message: string;
+  routeGovernanceProof: RouteGovernanceProofView;
+}
+
+interface LpciAuditedResponse {
+  query: string;
+  corpusId: string;
+  auditId: string;
+  authorizationDecision: AuthorizationDecision;
+  evidenceOutcome: EvidenceOutcome;
+  auditReceipt: AuditReceipt;
+  routeGovernanceProof: RouteGovernanceProofView;
+}
+
+export type LpciQueryResponse =
+  | ({ outcome: 'AUTHORIZATION_DENIED' } & LpciUnauditedResponse)
+  | ({ outcome: 'INVALID_REQUEST' } & LpciUnauditedResponse)
+  | ({ outcome: 'CORPUS_NOT_REGISTERED'; message: string } & LpciAuditedResponse)
+  | ({ outcome: 'PHASE1_NEGATIVE'; receiptType: Phase1ReceiptType; reason?: string } & LpciAuditedResponse)
+  | ({ outcome: 'ABSTAINED'; response: string; answerClass: 'ESCALATE_OR_ABSTAIN' } & LpciAuditedResponse)
+  | ({ outcome: 'GROUNDING_EVIDENCE_UNAVAILABLE'; message: string } & LpciAuditedResponse)
+  | ({ outcome: 'NO_PROVIDER_CONFIGURED'; message: string } & LpciAuditedResponse)
+  | ({ outcome: 'PROVIDER_ERROR'; message: string } & LpciAuditedResponse)
+  | ({
+      outcome: 'ANSWER_EMITTED';
+      response: string;
+      answerClass: AnswerClass;
+      matchedSources: string[];
+      freshnessFlag: boolean;
+      conflictFlag: boolean;
+    } & LpciAuditedResponse);

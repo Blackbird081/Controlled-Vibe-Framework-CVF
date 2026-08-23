@@ -16,18 +16,20 @@
 
 Before governed work continues in a new session, new chat, or resumed thread, the worker must:
 
-1. load `CVF_SESSION_MEMORY.md`
-2. resolve `CVF_SESSION/ACTIVE_SESSION_STATE.json`
-3. load the canonical session bootstrap reference
+1. load the bootstrap read model (`CVF_SESSION/ACTIVE_SESSION_BOOTSTRAP_READ_MODEL.json`) first for compact current-mode/active-handoff/next-allowed-move facts
+2. load `CVF_SESSION_MEMORY.md` and the canonical session bootstrap reference
+3. resolve `CVF_SESSION/ACTIVE_SESSION_STATE.json` only as a targeted lookup, when a current fact from steps 1-2 is missing, contradictory, or the task explicitly requires it
 4. determine the active task class and transition state
 5. load only the guards that are relevant to that task and state
-6. avoid broad guard-loading when a bounded bootstrap plus routed controls is enough
+6. avoid broad guard-loading and unconditional full-state reads when a bounded bootstrap plus routed controls is enough
 
 Canonical bootstrap reference:
 
+- `CVF_SESSION/ACTIVE_SESSION_BOOTSTRAP_READ_MODEL.json`
 - `CVF_SESSION_MEMORY.md`
-- `CVF_SESSION/ACTIVE_SESSION_STATE.json`
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+- `CVF_SESSION/ACTIVE_SESSION_STATE.json` (targeted lookup only; see
+  `docs/reference/CVF_ACTIVE_CONTINUITY_READ_BUDGET_STANDARD_2026-08-10.md`)
 
 ### Why This Exists
 
@@ -47,11 +49,15 @@ Every new or resumed governed session should load:
 
 #### Always-On Bootstrap
 
+- `CVF_SESSION/ACTIVE_SESSION_BOOTSTRAP_READ_MODEL.json`
 - `CVF_SESSION_MEMORY.md`
-- `CVF_SESSION/ACTIVE_SESSION_STATE.json`
 - current canonical bootstrap reference
 - current canonical control matrix
 - current active roadmap or tracker for the active workline
+
+`CVF_SESSION/ACTIVE_SESSION_STATE.json` is a targeted lookup, not part of the
+always-on bootstrap: resolve it only when a current fact above is missing,
+contradictory, or the task explicitly requires historical evidence.
 
 #### Trigger-Based Controls
 
@@ -93,15 +99,31 @@ This includes:
 
 This guard enforces canonical bootstrap structure and routing references. It does not claim to detect every live session start automatically.
 
+## Active Continuity Read-Budget Binding - 2026-08-10
+
+This guard's bootstrap-first, progressive-loading rule is bound to exact,
+machine-enforced line and byte budgets by:
+
+`docs/reference/CVF_ACTIVE_CONTINUITY_READ_BUDGET_STANDARD_2026-08-10.md`
+
+That standard defines the bootstrap/front-door/handoff read budgets, the
+exact-hash migration-debt contract for current oversized surfaces, and the
+downstream no-compaction-while-worker-active safety rule. It is enforced by
+`governance/compat/check_active_session_state.py` alongside this guard's
+existing session-start routing checks.
+
 ## Related Artifacts
 
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`
+- `docs/reference/CVF_ACTIVE_CONTINUITY_READ_BUDGET_STANDARD_2026-08-10.md`
 - `CVF_SESSION_MEMORY.md`
 - `CVF_SESSION/ACTIVE_SESSION_STATE.json`
+- `CVF_SESSION/ACTIVE_SESSION_BOOTSTRAP_READ_MODEL.json`
 - `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `governance/compat/check_session_governance_bootstrap.py`
+- `governance/compat/check_active_session_state.py`
 
 ## Final Clause
 

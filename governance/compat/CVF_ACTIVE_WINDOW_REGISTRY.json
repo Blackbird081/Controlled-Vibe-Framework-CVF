@@ -75,6 +75,30 @@
       "status": "ACTIVE"
     },
     {
+      "id": "agent_delegation_and_subagent_boundary_standard_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_AGENT_DELEGATION_AND_SUBAGENT_BOUNDARY_STANDARD_2026-05-19.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_AGENT_DELEGATION_AND_SUBAGENT_BOUNDARY_STANDARD_2026-05-19\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "dual_agent_surface_accounting_standard_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_DUAL_AGENT_SURFACE_ACCOUNTING_STANDARD_2026-06-23.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_DUAL_AGENT_SURFACE_ACCOUNTING_STANDARD_2026-06-23\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
       "id": "rescan_intelligence_hardening_standard_active_reference",
       "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
       "activePath": "docs/reference/CVF_RESCAN_INTELLIGENCE_HARDENING_STANDARD_2026-06-05.md",
@@ -104,6 +128,18 @@
       "activePath": "docs/reference/CVF_SYSTEM_LOOP_INTERLOCK_REGISTRY_2026-06-02.json",
       "archiveDir": "docs/reference/archive",
       "archivePattern": "^CVF_SYSTEM_LOOP_INTERLOCK_REGISTRY_2026-06-02\\.json$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "lhw23_model_registry_service_advisory_connector_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_LHW23_T1_MODEL_REGISTRY_SERVICE_ADVISORY_CONNECTOR_SPEC_2026-05-31.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_LHW23_T1_MODEL_REGISTRY_SERVICE_ADVISORY_CONNECTOR_SPEC_2026-05-31\\.md$",
       "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
       "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
       "rotationScript": "scripts/cvf_active_archive.py",

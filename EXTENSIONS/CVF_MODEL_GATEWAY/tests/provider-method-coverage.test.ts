@@ -10,7 +10,7 @@ import { createDeepSeekChatJsonModeAdapter } from "../src/providers/deepseek/jso
 
 const alibabaCapability: ProviderCapabilityFile = {
   providerId: "alibaba",
-  models: [{ modelId: "qwen-turbo", supportedMethods: ["complete", "chat", "stream"], defaultMethod: "complete" }],
+  models: [{ modelId: "qwen-flash", supportedMethods: ["complete", "chat", "stream"], defaultMethod: "complete" }],
 };
 
 const deepseekCapability: ProviderCapabilityFile = {
@@ -26,24 +26,24 @@ async function* bytes(lines: string[]) {
 }
 
 describe("provider method coverage", () => {
-  it("lists supported methods for Alibaba qwen-turbo and DeepSeek deepseek-chat", () => {
-    expect(listSupportedMethods(alibabaCapability, "qwen-turbo")).toEqual(["complete", "chat", "stream"]);
+  it("lists supported methods for Alibaba qwen-flash and DeepSeek deepseek-chat", () => {
+    expect(listSupportedMethods(alibabaCapability, "qwen-flash")).toEqual(["complete", "chat", "stream"]);
     expect(listSupportedMethods(deepseekCapability, "deepseek-chat")).toEqual(["complete", "chat", "json_mode"]);
   });
 
   it("keeps legacy chat as an accepted alias for complete", () => {
-    expect(() => assertProviderMethodSupported(alibabaCapability, "qwen-turbo", "complete")).not.toThrow();
-    expect(() => assertProviderMethodSupported(alibabaCapability, "qwen-turbo", "chat")).not.toThrow();
+    expect(() => assertProviderMethodSupported(alibabaCapability, "qwen-flash", "complete")).not.toThrow();
+    expect(() => assertProviderMethodSupported(alibabaCapability, "qwen-flash", "chat")).not.toThrow();
   });
 
   it("throws a typed error for unsupported methods", () => {
-    expect(() => assertProviderMethodSupported(alibabaCapability, "qwen-turbo", "json_mode"))
+    expect(() => assertProviderMethodSupported(alibabaCapability, "qwen-flash", "json_mode"))
       .toThrow(UnsupportedMethodError);
     expect(() => assertProviderMethodSupported(deepseekCapability, "deepseek-chat", "stream"))
       .toThrow("deepseek/deepseek-chat does not support stream");
   });
 
-  it("normalizes Alibaba qwen-turbo SSE chunks into StreamContract entries", async () => {
+  it("normalizes Alibaba qwen-flash SSE chunks into StreamContract entries", async () => {
     const fetchImpl = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,

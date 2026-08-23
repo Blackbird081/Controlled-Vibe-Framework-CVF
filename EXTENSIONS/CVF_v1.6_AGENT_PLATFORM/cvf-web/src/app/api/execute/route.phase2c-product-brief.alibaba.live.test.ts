@@ -101,7 +101,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen-flash',
               mode: 'simple',
               action: 'analyze template execution request',
               skillPreflightPassed: true,

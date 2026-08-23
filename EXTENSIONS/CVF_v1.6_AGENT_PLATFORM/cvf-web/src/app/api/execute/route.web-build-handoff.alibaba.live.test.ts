@@ -102,7 +102,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen-flash',
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-web-handoff-validation',

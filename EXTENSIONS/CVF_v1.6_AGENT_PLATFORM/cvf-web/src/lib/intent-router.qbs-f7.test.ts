@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { routeIntent } from './intent-router';
 import { startClarification } from './intent-router-clarification';
 
@@ -17,7 +17,7 @@ describe('QBS F7 ambiguous non-coder routing', () => {
     process.env.NEXT_PUBLIC_CVF_NONCODER_CLARIFICATION_LOOP = 'true';
   });
 
-  it('does not guess a governed target for the bounded F7 ambiguous prompt set', () => {
+  it('does not guess a governed target for the bounded prompt set', () => {
     for (const prompt of F7_PROMPTS) {
       const result = routeIntent(prompt);
       expect(result?.confidence).toBe('weak');
@@ -26,7 +26,7 @@ describe('QBS F7 ambiguous non-coder routing', () => {
     }
   });
 
-  it('starts the clarification loop for the bounded F7 ambiguous prompt set', () => {
+  it('starts clarification for the bounded prompt set', () => {
     for (const prompt of F7_PROMPTS) {
       const result = routeIntent(prompt);
       expect(result).not.toBeNull();

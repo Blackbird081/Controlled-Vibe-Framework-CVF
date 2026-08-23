@@ -8,7 +8,7 @@ import {
 
 const DASHSCOPE_URL =
   "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions";
-const MODEL = "qwen-turbo";
+const MODEL = "qwen-flash";
 const KEY_NAMES = [
   "DASHSCOPE_API_KEY",
   "ALIBABA_API_KEY",

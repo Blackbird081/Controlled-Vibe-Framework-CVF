@@ -108,7 +108,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen-flash',
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-app-brief',
@@ -161,7 +161,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen-flash',
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-integration',
@@ -211,7 +211,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen-flash',
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-code-review',
@@ -261,7 +261,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen-flash',
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-documentation',
@@ -316,7 +316,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen-flash',
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-ux-packet',
@@ -365,7 +365,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen-flash',
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-data-analysis',

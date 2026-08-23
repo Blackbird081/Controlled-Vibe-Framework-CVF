@@ -10,7 +10,7 @@ import {
 function attempt(reason = "timeout"): FallbackAttempt {
   return {
     providerId: "alibaba",
-    modelId: "qwen-turbo",
+    modelId: "qwen-flash",
     statusCode: 504,
     reason,
     at: "2026-05-24T00:00:00.000Z",
@@ -22,7 +22,7 @@ describe("provider method fallback normalization", () => {
     const result = evaluateProviderMethodFallback({
       registry: PROVIDER_CAPABILITY_REGISTRY,
       providerId: "alibaba",
-      modelId: "qwen-turbo",
+      modelId: "qwen-flash",
       method: "chat",
     });
 
@@ -78,7 +78,7 @@ describe("provider method fallback normalization", () => {
     const result = evaluateProviderMethodFallback({
       registry: PROVIDER_CAPABILITY_REGISTRY,
       providerId: "alibaba",
-      modelId: "qwen-turbo",
+      modelId: "qwen-flash",
       method: "complete",
       failure: {
         exitCode: PROVIDER_OUTPUT_EXIT_CODES.TIMEOUT,
@@ -106,7 +106,7 @@ describe("provider method fallback normalization", () => {
     const result = evaluateProviderMethodFallback({
       registry: PROVIDER_CAPABILITY_REGISTRY,
       providerId: "alibaba",
-      modelId: "qwen-turbo",
+      modelId: "qwen-flash",
       method: "complete",
       failure: {
         statusCode: 504,
@@ -181,7 +181,7 @@ describe("provider method fallback normalization", () => {
     const result = evaluateProviderMethodFallback({
       registry: PROVIDER_CAPABILITY_REGISTRY,
       providerId: "alibaba",
-      modelId: "qwen-turbo",
+      modelId: "qwen-flash",
       method: "stream",
       failure: {
         providerHealthState: "unavailable",

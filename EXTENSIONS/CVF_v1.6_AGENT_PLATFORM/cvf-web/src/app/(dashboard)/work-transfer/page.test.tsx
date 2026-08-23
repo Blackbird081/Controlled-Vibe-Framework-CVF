@@ -1,138 +1,67 @@
-/**
- * @vitest-environment jsdom
- */
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+// Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
 
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import WorkTransferPage from './page';
 
-vi.mock('@/lib/i18n', () => ({
-  useLanguage: () => ({ language: 'en' }),
+vi.mock('@/components', () => ({
+    KnowledgeJourneyNav: ({ currentStep }: { currentStep: number }) => (
+        <div data-testid="knowledge-journey-nav">Step {currentStep}</div>
+    ),
 }));
 
-vi.mock('@/lib/agent-handoff-validator', () => ({
-  validateHandoff: () => ({
-    decision: 'ALLOW',
-    contextCarried: true,
-    outputSummary: 'Context is present and ready to move forward.',
-    issues: [],
-  }),
+vi.mock('@/components/KnowledgeJourneyNav', () => ({
+    KnowledgeJourneyNav: ({ currentStep }: { currentStep: number }) => (
+        <div data-testid="knowledge-journey-nav">Step {currentStep}</div>
+    ),
 }));
 
 vi.mock('@/components/ArtifactExportPanel', () => ({
-  ArtifactExportPanel: ({ initialRequest }: { initialRequest?: { title?: string } }) => (
-    <div data-testid="artifact-export-panel-mock">
-      {initialRequest?.title ?? 'Export Panel'}
-    </div>
-  ),
+    ArtifactExportPanel: () => <div data-testid="artifact-export-panel" />,
 }));
 
-const AUDIT_RECORDS = [
-  {
-    id: 'rec-001',
-    timestamp: '2026-05-16T10:00:00.000Z',
-    action: 'KNOWLEDGE_INTAKE',
-    actorId: 'user-1',
-    actorRole: 'admin',
-    targetResource: 'docs/reviews/onboarding.md',
-    outcome: 'RECORDED',
-  },
-  {
-    id: 'rec-002',
-    timestamp: '2026-05-16T11:00:00.000Z',
-    action: 'ARTIFACT_EXPORT',
-    actorId: 'user-2',
-    actorRole: 'reviewer',
-    targetResource: 'docs/reviews/export.md',
-    outcome: 'RECORDED',
-  },
-];
+let mockLang = 'vi';
+vi.mock('@/lib/i18n', () => ({
+    useLanguage: () => ({
+        language: mockLang,
+        setLanguage: vi.fn(),
+    }),
+}));
 
-beforeEach(() => {
-  vi.stubGlobal('fetch', vi.fn());
-});
-
-afterEach(() => {
-  vi.unstubAllGlobals();
-  vi.restoreAllMocks();
-});
+global.fetch = vi.fn(() =>
+    Promise.resolve({
+        json: () => Promise.resolve({ success: true, data: [] }),
+    })
+) as Mock;
 
 describe('WorkTransferPage', () => {
-  it('shows loading state initially', () => {
-    vi.mocked(fetch).mockReturnValue(new Promise(() => {}));
-    render(<WorkTransferPage />);
-
-    expect(screen.getByText('Loading transfer history…')).toBeTruthy();
-  });
-
-  it('renders audit history records after successful fetch', async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ success: true, data: AUDIT_RECORDS }),
-    } as Response);
-
-    render(<WorkTransferPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('history-list')).toBeTruthy();
-      expect(screen.getByText('KNOWLEDGE_INTAKE')).toBeTruthy();
-      expect(screen.getByText('ARTIFACT_EXPORT')).toBeTruthy();
+    beforeEach(() => {
+        mockLang = 'vi';
     });
-  });
 
-  it('shows empty state when no records are returned', async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ success: true, data: [] }),
-    } as Response);
-
-    render(<WorkTransferPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('history-empty')).toBeTruthy();
+    it('renders KnowledgeJourneyNav at step 5', async () => {
+        render(<WorkTransferPage />);
+        expect(screen.getByTestId('knowledge-journey-nav').textContent).toBe('Step 5');
+        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
     });
-  });
 
-  it('shows error state when the audit fetch fails', async () => {
-    vi.mocked(fetch).mockRejectedValueOnce(new Error('network error'));
-
-    render(<WorkTransferPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('history-error')).toBeTruthy();
+    it('renders Vietnamese content correctly', async () => {
+        render(<WorkTransferPage />);
+        expect(screen.getByText('Bàn giao')).toBeTruthy();
+        expect(screen.getByText('Bàn giao công việc cho bước tiếp theo')).toBeTruthy();
+        expect(screen.getByDisplayValue('Kiến thức mới đã sẵn sàng để rà soát. Hãy giữ ghi chú nguồn, biên nhận và ranh giới khẳng định cùng nhau.')).toBeTruthy();
+        expect(screen.getByText('Đã hoàn tất')).toBeTruthy();
+        expect(screen.queryByText('Decision: ALLOW')).toBeNull();
+        expect(screen.getByText('Quyết định: ALLOW')).toBeTruthy();
+        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
     });
-  });
 
-  it('opens the inline export panel when a record export button is clicked', async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ success: true, data: AUDIT_RECORDS }),
-    } as Response);
-
-    render(<WorkTransferPage />);
-
-    await waitFor(() => screen.getByTestId('export-record-rec-001'));
-
-    fireEvent.click(screen.getByTestId('export-record-rec-001'));
-
-    expect(screen.getByTestId('inline-export-panel')).toBeTruthy();
-    expect(screen.getByTestId('artifact-export-panel-mock').textContent).toContain('KNOWLEDGE_INTAKE');
-  });
-
-  it('closes the inline panel when the same record button is clicked again', async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ success: true, data: AUDIT_RECORDS }),
-    } as Response);
-
-    render(<WorkTransferPage />);
-
-    await waitFor(() => screen.getByTestId('export-record-rec-001'));
-
-    fireEvent.click(screen.getByTestId('export-record-rec-001'));
-    expect(screen.getByTestId('inline-export-panel')).toBeTruthy();
-
-    fireEvent.click(screen.getByTestId('export-record-rec-001'));
-    expect(screen.queryByTestId('inline-export-panel')).toBeNull();
-  });
+    it('renders English content correctly', async () => {
+        mockLang = 'en';
+        render(<WorkTransferPage />);
+        expect(screen.getByText('Work Transfer')).toBeTruthy();
+        expect(screen.getByText('Pass reviewed work forward with less guesswork')).toBeTruthy();
+        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+    });
 });

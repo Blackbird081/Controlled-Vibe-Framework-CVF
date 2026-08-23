@@ -145,33 +145,21 @@ export default function Sidebar({
                 {/* ── Nav ─────────────────────────────────────── */}
                 <nav className="flex-1 overflow-y-auto px-[10px] py-2" aria-label="Main navigation">
 
-                    {/* Workspace */}
-                    <SidebarNavGroup id="workspace" title={t('sidebar.workspace') || 'Workspace'}>
+                    {/* Home */}
+                    <SidebarNavGroup id="home" title={t('sidebar.home') || 'Home'}>
                         <SidebarNavItem icon={Home} label={t('nav.home') || 'Home'}
                             isActive={(appState === 'home' && !isRoute('/workspace')) || isRoute('/home')}
                             onClick={() => handleNav('home')} />
-                        <SidebarNavItem icon={LayoutDashboard} label="CVF Workspace"
-                            isActive={appState === 'workspace' || isRoute('/workspace')}
-                            href="/workspace" onNavigate={onClose} />
                         <SidebarNavItem icon={Sparkles} label={t('nav.landing') || 'Landing Page'}
                             isActive={appState === 'landing' || isRoute('/landing')}
                             onClick={() => handleNav('landing')} />
-                        <SidebarNavItem icon={Zap} label={t('nav.skills') || 'Skills'}
-                            isActive={appState === 'skills' || (isRoute('/skills') && !isRoute('/skills/search'))}
-                            onClick={() => handleNav('skills')} />
-                        <SidebarNavItem icon={Search} label={t('nav.skillSearch') || 'Skill Search'}
-                            isActive={appState === 'skill-search' || isRoute('/skills/search')}
-                            onClick={() => handleNav('skill-search')} />
-                        <SidebarNavItem icon={HelpCircle} label={t('nav.help') || 'Help'}
-                            isActive={appState === 'help' || isRoute('/help')}
-                            onClick={() => handleNav('help')} />
-                        <SidebarNavItem icon={BookOpen} label={t('nav.docs') || 'Docs'}
-                            isActive={appState === 'docs' || isRoute('/docs')}
-                            onClick={() => handleNav('docs')} />
                     </SidebarNavGroup>
 
-                    {/* AI */}
-                    <SidebarNavGroup id="ai" title={t('sidebar.ai') || 'AI'}>
+                    {/* AI work */}
+                    <SidebarNavGroup id="ai-work" title={t('sidebar.aiWork') || 'AI Work'}>
+                        <SidebarNavItem icon={LayoutDashboard} label="CVF Workspace"
+                            isActive={appState === 'workspace' || isRoute('/workspace')}
+                            href="/workspace" onNavigate={onClose} />
                         {permissions.canUseAgent && (
                             <SidebarNavItem icon={Bot} label={t('nav.aiAgent') || 'AI Agent'}
                                 isActive={appState === 'agent'}
@@ -192,6 +180,10 @@ export default function Sidebar({
                                 isActive={appState === 'simulation' || isRoute('/simulation')}
                                 onClick={() => handleNav('simulation')} />
                         )}
+                    </SidebarNavGroup>
+
+                    {/* Knowledge and review */}
+                    <SidebarNavGroup id="knowledge-review" title={t('sidebar.knowledgeReview') || 'Knowledge & Review'}>
                         {userRole !== 'viewer' && (
                             <SidebarNavItem icon={Lightbulb} label={t('nav.knowledge') || 'Knowledge'}
                                 isActive={isRoute('/governance/knowledge')}
@@ -212,10 +204,22 @@ export default function Sidebar({
                                 isActive={isRoute('/work-transfer')}
                                 href="/work-transfer" onNavigate={onClose} />
                         )}
+                        <SidebarNavItem icon={Zap} label={t('nav.skills') || 'Skills'}
+                            isActive={appState === 'skills' || (isRoute('/skills') && !isRoute('/skills/search'))}
+                            onClick={() => handleNav('skills')} />
+                        <SidebarNavItem icon={Search} label={t('nav.skillSearch') || 'Skill Search'}
+                            isActive={appState === 'skill-search' || isRoute('/skills/search')}
+                            onClick={() => handleNav('skill-search')} />
+                        <SidebarNavItem icon={HelpCircle} label={t('nav.help') || 'Help'}
+                            isActive={appState === 'help' || isRoute('/help')}
+                            onClick={() => handleNav('help')} />
+                        <SidebarNavItem icon={BookOpen} label={t('nav.docs') || 'Docs'}
+                            isActive={appState === 'docs' || isRoute('/docs')}
+                            onClick={() => handleNav('docs')} />
                     </SidebarNavGroup>
 
-                    {/* Platform */}
-                    <SidebarNavGroup id="platform" title={t('sidebar.platform') || 'Platform'}>
+                    {/* Advanced operations */}
+                    <SidebarNavGroup id="advanced-operations" title={t('sidebar.advancedOperations') || 'Advanced Operations'}>
                         {userRole !== 'viewer' && (
                             <SidebarNavItem icon={Activity} label={t('nav.history') || 'History'}
                                 isActive={appState === 'history' || isRoute('/history')}

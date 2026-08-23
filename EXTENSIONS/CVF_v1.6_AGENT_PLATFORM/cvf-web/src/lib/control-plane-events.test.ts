@@ -9,6 +9,7 @@ import {
   computeAuditCsvSignature,
   exportAuditEventsToCsv,
   getFinOpsSummary,
+  getControlPlaneEventStoreCapability,
   readAuditEvents,
 } from './control-plane-events';
 
@@ -31,6 +32,16 @@ describe('control-plane-events', () => {
     if (tempDir) {
       await rm(tempDir, { recursive: true, force: true });
     }
+  });
+
+  it('reports static store capability without a liveness or writability claim', () => {
+    expect(getControlPlaneEventStoreCapability()).toEqual(expect.objectContaining({
+      schemaVersion: 'cvf.eventListCapability.v1',
+      adapterType: 'file',
+      implementationStatus: 'ACTIVE_LOCAL_ONLY',
+      distributed: false,
+      livenessChecked: false,
+    }));
   });
 
   it('stores audit events and exports them to csv', async () => {
@@ -81,7 +92,7 @@ describe('control-plane-events', () => {
       teamId: 'team_exec',
       orgId: 'org_cvf',
       provider: 'alibaba',
-      model: 'qwen-turbo',
+      model: 'qwen-flash',
       inputTokens: 100,
       outputTokens: 50,
       estimatedCostUSD: 0.12,
@@ -108,7 +119,7 @@ describe('control-plane-events', () => {
         teamId: 'team_exec',
         orgId: 'org_cvf',
         provider: 'alibaba',
-        model: 'qwen-turbo',
+        model: 'qwen-flash',
         inputTokens: null,
         outputTokens: 'oops',
         estimatedCostUSD: Number.NaN,

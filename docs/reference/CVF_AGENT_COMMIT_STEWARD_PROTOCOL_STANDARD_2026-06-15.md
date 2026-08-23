@@ -164,6 +164,12 @@ The worker must not claim committed-range closure from uncommitted artifacts.
 
 ## Latency Discipline
 
+Before the first material commit, the reviewer must complete the single-pass
+semantic audit and lock the exact material and continuity ranges. The commit
+steward is a preflight for an already-understood changed set, not a discovery
+loop for review findings or commit choreography. See the canonical review SOP:
+`docs/reference/review_cost_control/CVF_REVIEW_COST_AND_DIMINISHING_RETURN_CONTROL_STANDARD.md`.
+
 Run only the gate set that matches the phase:
 
 - dispatch packets: steward `dispatch`; do not also run `reviewer-fast` unless

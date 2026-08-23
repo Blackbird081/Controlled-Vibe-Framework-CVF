@@ -97,7 +97,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
             intent: generateIntent(template!, inputs),
             inputs,
             provider: 'alibaba',
-            model: 'qwen-turbo',
+            model: 'qwen-flash',
             mode: 'simple',
             cvfRiskLevel: 'R1',
             action: 'analyze a Vietnamese Strategy workflow request for VI5 T2 English Spec freeze proof',
@@ -136,7 +136,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
         evidenceMode: 'live',
         decision: 'ALLOW',
         provider: 'alibaba',
-        model: 'qwen-turbo',
+        model: 'qwen-flash',
       });
       expect(body.languageState).toMatchObject({
         contractVersion: 'cvf.languageState.vi5.t1.v1',
@@ -186,7 +186,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
       console.info(JSON.stringify({
         vi5T2EnglishSpecFreezeLiveReceipt: receipt?.receiptId,
         provider: 'alibaba',
-        model: 'qwen-turbo',
+        model: 'qwen-flash',
         englishSpecFreezeStatus: (body.englishSpecFreeze as Record<string, unknown>).status,
         observedSpecBodyLanguage: (body.specBoundary as Record<string, unknown>).observedSpecBodyLanguage,
         englishFreezeEnforced: (body.specBoundary as Record<string, unknown>).englishFreezeEnforced,

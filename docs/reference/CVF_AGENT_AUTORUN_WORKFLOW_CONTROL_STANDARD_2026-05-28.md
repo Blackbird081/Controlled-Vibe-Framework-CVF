@@ -19,6 +19,14 @@ not machine-checkable.
 
 ## Scope
 
+Task-proportional routing is governed by
+`docs/reference/CVF_TASK_PROPORTIONAL_GOVERNANCE_ROUTING_STANDARD_2026-08-17.md`.
+TPGR-T0 adds a mandatory shadow classification check for newly active work
+orders after its activation boundary. It does not remove, skip, or reorder any
+command in this standard; invalid or absent routing evidence falls back to the
+full legacy bundle. Selective execution remains unauthorized until TPGR-T2 and
+equivalence acceptance.
+
 This standard applies to every new or resumed CVF agent that drafts,
 dispatches, implements, reviews, closes, commits, pushes, or public-syncs
 governed work after 2026-05-28.

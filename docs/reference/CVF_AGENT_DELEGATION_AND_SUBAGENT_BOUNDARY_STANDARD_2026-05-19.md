@@ -4,6 +4,8 @@ Memory class: POINTER_RECORD
 
 Status: DEFINED - procedural standard for bounded delegation and subagent use.
 
+rawMemoryReleased=false
+
 ## Purpose
 
 Define when CVF may delegate work to a specialist worker or subagent, what that
@@ -26,6 +28,8 @@ In scope:
 Out of scope:
 
 - live subagent spawning;
+- provider-native internal reasoning, exploration, context management, and
+  task decomposition performed inside one already-authorized agent session;
 - autonomous parallel runtimes;
 - runtime worker registry implementation;
 - provider prompt reinjection;
@@ -67,6 +71,13 @@ A worker or subagent is subordinate to CVF governance. It may execute only the
 assigned task and may not self-upgrade, self-authorize, spawn unmanaged
 workers, write durable truth memory, or bypass policy gates.
 
+For this standard, `worker or subagent` means an execution actor separately
+dispatched by CVF or separately crossing an invocation, process, provider,
+credential, durable-action, or authority boundary. A provider-native Explore
+helper or internal subagent used inside one authorized agent session is an
+internal orchestration choice, not a separately delegated CVF worker, unless
+it crosses one of those boundaries.
+
 ## Rule
 
 No delegation may occur without a bounded task, explicit authority chain,
@@ -90,6 +101,11 @@ Forbidden:
 - spawn unmanaged nested workers;
 - write durable truth memory from a worker by default;
 - bypass policy, review, or operator escalation.
+
+The unmanaged-worker prohibition does not ban provider-native internal
+orchestration that remains within the parent session's scope and perimeter.
+CVF governs the parent assignment, external actions, aggregate envelope, and
+reviewable outcome; it does not micromanage internal reasoning steps.
 
 ## Exceptions
 
@@ -274,6 +290,17 @@ Do not use this standard to:
 - spawn nested workers by default;
 - make orchestrator convenience a reason to skip specialist routing;
 - treat worker output as durable memory without review.
+
+Do not use this standard to intercept or approve every internal helper, tool
+sequence, reasoning branch, or context-management action. Such deep
+interference reduces agent capability and adds governance latency without
+creating a stronger external-action boundary.
+
+## Revision Ledger
+
+| Date | Change | Reason |
+| --- | --- | --- |
+| 2026-07-22 | Distinguished CVF-dispatched workers from provider-native internal orchestration | Operator correction preserving agent autonomy while keeping external invocation and authority boundaries governed |
 
 ## Source Reuse Decisions
 

@@ -1,0 +1,353 @@
+{
+  "schemaVersion": "1.0.0",
+  "policyId": "CVF_PUBLIC_PROJECTION_PRE_PUSH_POLICY",
+  "owner": {
+    "role": "Public Projection Release Steward",
+    "fulfilledBy": "reviewer/closer",
+    "classificationOwner": "Public Projection Release Steward",
+    "standardPath": "docs/reference/CVF_PUBLIC_PROJECTION_PRE_PUSH_PROFILE_STANDARD_2026-08-11.md"
+  },
+  "expectedRemoteUrl": "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git",
+  "expectedBranch": "lpci1-ref-staging",
+  "pinnedBaseHead": "2103a38fda01ee827e9fc6c3be38a824fa5d54ad",
+  "authorizedCandidateHead": "021f8b852afc245a6383177dd69bf56caf488b02",
+  "candidateManifest": [
+    "EXTENSIONS/CVF_MODEL_GATEWAY/src/credential-boundary.ts",
+    "EXTENSIONS/CVF_MODEL_GATEWAY/src/index.ts",
+    "EXTENSIONS/CVF_MODEL_GATEWAY/src/openai-compatible-execute-adapter.ts",
+    "EXTENSIONS/CVF_MODEL_GATEWAY/src/p4b-b-live-proof-harness.ts",
+    "EXTENSIONS/CVF_MODEL_GATEWAY/src/provider-execution-bridge.ts",
+    "EXTENSIONS/CVF_MODEL_GATEWAY/tests/credential-boundary.test.ts",
+    "EXTENSIONS/CVF_MODEL_GATEWAY/tests/openai-compatible-execute-adapter.test.ts",
+    "EXTENSIONS/CVF_MODEL_GATEWAY/tests/p4b-b-dry-run-gate.test.ts",
+    "EXTENSIONS/CVF_MODEL_GATEWAY/tests/provider-execution-bridge.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/.env.example",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package.json",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/lpci/page.test.tsx",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/lpci/page.tsx",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/lpci/query/route.governance.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/lpci/query/route.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/lpci/query/route.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/control-plane-events.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/control-plane-events.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/audit-receipt.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/audit-receipt.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/filter-pipeline.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/filter-pipeline.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/provider-binding.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/provider-binding.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/query-conformance.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/query-conformance.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/release-audit.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/release-audit.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/release-health.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/release-health.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/release-policy.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/release-policy.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/retrieval.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/lpci/types.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/rate-limit.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/rate-limit.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/system-health.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/system-health.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/storage-adapter.test.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/storage-adapter.ts"
+  ],
+  "inheritedDebtFamilies": {
+    "governed_file_size": {
+      "subjectPath": "docs/EXPORT_MANIFEST.md",
+      "checkClass": "active_markdown",
+      "hardThresholdLines": 1200,
+      "pinnedLineCount": 1903,
+      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+    },
+    "governed_python_automation_size": {
+      "subjectPath": "scripts/score_qbs_model_assisted_reviewers.py",
+      "checkClass": "python_cli_orchestrator",
+      "hardThresholdLines": 800,
+      "pinnedLineCount": 879,
+      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+    },
+    "guard_registry_compatibility": {
+      "subjectPaths": [
+        "README.md",
+        "docs/CVF_CORE_KNOWLEDGE_BASE.md"
+      ],
+      "pinnedMissingGuardRegistrationRow": true,
+      "requiredMarker": "CVF_PUBLIC_PROJECTION_PRE_PUSH_GATE",
+      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+    },
+    "pre_public_p3_readiness": {
+      "subjectPaths": [
+        "CODEOWNERS",
+        "CONTRIBUTING.md",
+        "COST_AND_QUOTA.md",
+        "GOVERNANCE.md",
+        "PROVENANCE.md",
+        "PROVIDERS.md"
+      ],
+      "pinnedMissingExposureClassificationReference": true,
+      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+    }
+  },
+  "checks": [
+    {
+      "id": "public_root_containment",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "remote_url_match",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "branch_match",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "clean_worktree",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "head_match",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "non_empty_range",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "exact_manifest_match",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "sandbox_materialization",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "public_root_invariant_check",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "sandbox_teardown",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "governed_file_size",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "governed_file_size",
+      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+    },
+    {
+      "id": "governed_python_automation_size",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "governed_python_automation_size",
+      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+    },
+    {
+      "id": "guard_registry_compatibility",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "guard_registry_compatibility",
+      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+    },
+    {
+      "id": "pre_public_p3_readiness",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "pre_public_p3_readiness",
+      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+    },
+    {
+      "id": "external_command:model_gateway_test",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "external_command:model_gateway_check",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "external_command:cvf_web_check",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "external_command:cvf_web_lint",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "external_command:cvf_web_test",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "external_command:cvf_web_build",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "external_command:cvf_web_build_skill_index",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    },
+    {
+      "id": "external_command:cvf_web_next_build",
+      "ownerApplicability": "PUBLIC_OWNED",
+      "family": "AD_HOC_GATE",
+      "disposition": "GATE"
+    }
+  ],
+  "sandboxConfig": {
+    "note": "Amendment 1 resolves the read-only-vs-build contradiction by relocating every mutating package command to a disposable sandbox (see the standard's Sandbox Execution Contract) instead of weakening or omitting any command category. Every command below is 'sandboxed': true and executes against a hash-verified git-archive extraction of authorizedCandidateHead, never against the real public root. Per AC-03, the real public root and Core are read-only copy sources only and are never live dependency-link targets: every third-party node_modules entry is first physically copied from the real public root's installed store into a dedicated dependency-store subtree of the disposable temporary support directory, then junctioned (directories) or hard-linked (files) from that support-owned copy into the sandbox - never linked directly from either real repository. `next` is a documented exception: it is physically copied straight into the sandbox's own node_modules with no junction step anywhere in its path, because webpack's resolve.symlinks realpaths through any junction (including one targeting a support-owned copy) during module resolution, and only a zero-junction path resolves entirely inside the sandbox.",
+    "extractionMethod": "GIT_ARCHIVE",
+    "dependencyIsolationMethod": "SUPPORT_DIRECTORY_COPY_THEN_LINK_FROM_LOCAL_STORE",
+    "fullCopyDependencyEntries": ["next"],
+    "siblingPackagesRequiringSandboxRedirect": [
+      "cvf-control-plane-foundation",
+      "cvf-execution-plane-foundation",
+      "cvf-guard-contract",
+      "cvf-learning-plane-foundation",
+      "cvf-model-gateway",
+      "cvf-refinery",
+      "cvf-truth-flow",
+      "cvf-truth-kernel"
+    ],
+    "eightSiblingPackages": [
+      "cvf-control-plane-foundation",
+      "cvf-execution-plane-foundation",
+      "cvf-guard-contract",
+      "cvf-learning-plane-foundation",
+      "cvf-model-gateway",
+      "cvf-refinery",
+      "cvf-truth-flow",
+      "cvf-truth-kernel"
+    ],
+    "sandboxedPackageDirectories": [
+      "EXTENSIONS/CVF_MODEL_GATEWAY",
+      "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web"
+    ]
+  },
+  "externalCommands": {
+    "note": "Each command's argv[0] is resolved relative to its own workingDirectory inside the sandbox (never PATH, never an absolute path baked into this policy), so the policy stays portable across clones of the same candidate. Every command carries 'sandboxed': true and executes only inside the disposable sandbox described by sandboxConfig; none execute against the real public root. At the pinned candidate, `model_gateway_test` and `model_gateway_check` are expected to exit 0; `cvf_web_check` and `cvf_web_lint` are expected to exit nonzero on real, pre-existing defects (a package-linking TypeScript resolution failure caused by cvf-model-gateway not being sibling-redirected in the naive topology, corrected inside the sandbox by siblingPackagesRequiringSandboxRedirect, and pre-existing ESLint warnings scoped to the predecessor-accepted file) - actual results are recorded as evidence, not assumed. `cvf_web_test` and `cvf_web_build` were excluded from the prior, non-sandboxed T1 tranche because they write into the tracked worktree; inside the sandbox that write target is disposable, so both are restored to the full command set here.",
+    "commands": [
+      {
+        "id": "model_gateway_test",
+        "description": "CVF_MODEL_GATEWAY vitest unit/contract suite, sandboxed",
+        "sandboxed": true,
+        "workingDirectory": "EXTENSIONS/CVF_MODEL_GATEWAY",
+        "argv": ["node_modules/.bin/vitest.cmd", "run", "--config", "vitest.config.ts"],
+        "timeoutSeconds": 180,
+        "expectedEvidence": {"files": 30, "tests": 231}
+      },
+      {
+        "id": "model_gateway_check",
+        "description": "CVF_MODEL_GATEWAY TypeScript --noEmit type check, sandboxed",
+        "sandboxed": true,
+        "workingDirectory": "EXTENSIONS/CVF_MODEL_GATEWAY",
+        "argv": ["node_modules/.bin/tsc.cmd", "-p", "tsconfig.json", "--noEmit"],
+        "timeoutSeconds": 120
+      },
+      {
+        "id": "cvf_web_check",
+        "description": "cvf-web TypeScript --noEmit type check under the complete eight-package offline dependency topology, sandboxed",
+        "sandboxed": true,
+        "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
+        "argv": ["node_modules/.bin/tsc.cmd", "--noEmit", "-p", "tsconfig.json"],
+        "timeoutSeconds": 180
+      },
+      {
+        "id": "cvf_web_lint",
+        "description": "cvf-web ESLint scoped to exactly the predecessor-accepted file, sandboxed. timeoutSeconds raised from 120 to 300 during Amendment 1 continuation: a disposable sandbox has zero warm ESLint/TypeScript-parser caches on every run (by design - the sandbox is torn down after every command set), so cold-start elapsed time (measured directly at ~117s for this exact scoped command) leaves too little margin at 120s to distinguish a real hang from ordinary cold-cache latency.",
+        "sandboxed": true,
+        "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
+        "argv": ["node_modules/.bin/eslint.cmd", "src/app/api/lpci/query/route.governance.test.ts"],
+        "timeoutSeconds": 300
+      },
+      {
+        "id": "cvf_web_test",
+        "description": "cvf-web focused exact-15-file union-41 vitest suite, sandboxed",
+        "sandboxed": true,
+        "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
+        "argv": [
+          "node_modules/.bin/vitest.cmd", "run",
+          "src/app/(dashboard)/lpci/page.test.tsx",
+          "src/app/api/lpci/query/route.governance.test.ts",
+          "src/app/api/lpci/query/route.test.ts",
+          "src/lib/control-plane-events.test.ts",
+          "src/lib/lpci/audit-receipt.test.ts",
+          "src/lib/lpci/filter-pipeline.test.ts",
+          "src/lib/lpci/provider-binding.test.ts",
+          "src/lib/lpci/query-conformance.test.ts",
+          "src/lib/lpci/release-audit.test.ts",
+          "src/lib/lpci/release-health.test.ts",
+          "src/lib/lpci/release-policy.test.ts",
+          "src/lib/lpci/retrieval.test.ts",
+          "src/lib/rate-limit.test.ts",
+          "src/lib/server/system-health.test.ts",
+          "src/lib/storage-adapter.test.ts"
+        ],
+        "timeoutSeconds": 240,
+        "expectedEvidence": {"files": 15, "tests": 218}
+      },
+      {
+        "id": "cvf_web_build",
+        "description": "cvf-web risk-model generator step (1 of 3 in the pinned build sequence), sandboxed. argv[0] 'node' is resolved via the system PATH (resolveViaSystemPath), because the Node.js interpreter is a system-level build tool, not part of the candidate's own pinned node_modules/.bin dev dependencies.",
+        "sandboxed": true,
+        "resolveViaSystemPath": true,
+        "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
+        "argv": ["node", "scripts/build-risk-models.js"],
+        "timeoutSeconds": 60
+      },
+      {
+        "id": "cvf_web_build_skill_index",
+        "description": "cvf-web skill-index generator step, sandboxed, resolveViaSystemPath for the node interpreter",
+        "sandboxed": true,
+        "resolveViaSystemPath": true,
+        "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
+        "argv": ["node", "scripts/build-skill-index.js"],
+        "timeoutSeconds": 60
+      },
+      {
+        "id": "cvf_web_next_build",
+        "description": "cvf-web next build --webpack, sandboxed, resolveViaSystemPath for the node interpreter, expects 121 static pages",
+        "sandboxed": true,
+        "resolveViaSystemPath": true,
+        "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
+        "argv": ["node", "node_modules/next/dist/bin/next", "build", "--webpack"],
+        "timeoutSeconds": 300,
+        "expectedEvidence": {"staticPages": 121}
+      }
+    ],
+    "excludedCommands": []
+  },
+  "subprocessTimeoutSeconds": 60,
+  "claimBoundary": "This policy authorizes a local, provenance-run public-projection pre-push evaluation only. Git-level validation reads the real public root read-only. Every mutating package command executes only inside a disposable, hash-verified sandbox extracted from authorizedCandidateHead, never against the real public root. It does not authorize push, deploy, provider/store, secrets, network install, or any mutation of the real public clone."
+}

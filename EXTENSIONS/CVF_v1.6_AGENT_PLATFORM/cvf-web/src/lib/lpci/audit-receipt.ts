@@ -20,7 +20,7 @@ interface BuildAuditReceiptOptions {
   query: string;
   query_timestamp: string;
   retrieval?: RetrievalReceipt;
-  responseText?: string;
+  responseText: string;
   response_boundary_class: ResponseBoundaryClass;
   phase1_receipt_type?: Phase1ReceiptType;
   applied_filters: FilterParams;
@@ -43,9 +43,8 @@ export function buildAuditReceipt(opts: BuildAuditReceiptOptions): AuditReceipt 
     conflict_records,
   } = opts;
 
-  // model_response_hash: SHA-256 of response text or negative receipt payload (never null)
-  const hashInput = responseText ?? JSON.stringify({ receiptType: phase1_receipt_type ?? response_boundary_class, query });
-  const model_response_hash = sha256Hex(hashInput);
+  // The caller supplies the exact emitted text or canonical serialized negative payload.
+  const model_response_hash = sha256Hex(responseText);
 
   const receipt: AuditReceipt = {
     auditId: randomUUID(),

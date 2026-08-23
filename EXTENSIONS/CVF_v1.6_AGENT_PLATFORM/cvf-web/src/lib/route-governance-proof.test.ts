@@ -7,6 +7,7 @@ import {
   authorizeRouteGovernanceProof,
   getRouteGovernanceProofConfig,
 } from './route-governance-proof';
+import { computeServiceRequestSignature } from './service-token-auth';
 
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 
@@ -21,12 +22,23 @@ const CONFIG = {
   evidenceBasis: 'focused route governance proof test',
 };
 
+const SERVICE_TOKEN = 'test-service-token';
+
 function request(body: string, headers: Record<string, string> = {}) {
   return new NextRequest('http://localhost/api/test-governed', {
     method: 'POST',
     headers,
     body,
   });
+}
+
+function signedTokenHeaders(body: string, now: number, token: string = SERVICE_TOKEN): Record<string, string> {
+  const timestamp = String(now);
+  return {
+    'x-cvf-service-token': token,
+    'x-cvf-service-timestamp': timestamp,
+    'x-cvf-service-signature': computeServiceRequestSignature(token, timestamp, body),
+  };
 }
 
 describe('authorizeRouteGovernanceProof', () => {
@@ -36,11 +48,15 @@ describe('authorizeRouteGovernanceProof', () => {
     process.env.CVF_SERVICE_TOKEN = 'test-service-token';
   });
 
-  it('allows a valid service token without leaking the raw token', async () => {
+  it('allows a valid signed service token without leaking the raw token', async () => {
+    const body = '{"ok":true}';
+    const now = Date.now();
+
     const result = await authorizeRouteGovernanceProof(
-      request('{"ok":true}', { 'x-cvf-service-token': 'test-service-token' }),
-      '{"ok":true}',
+      request(body, signedTokenHeaders(body, now)),
+      body,
       CONFIG,
+      { now },
     );
 
     expect(result.allowed).toBe(true);
@@ -55,8 +71,20 @@ describe('authorizeRouteGovernanceProof', () => {
     expect(result.proof.authMode).toBe('service_token');
     expect(result.proof.decision).toBe('ALLOW');
     expect(result.proof.serviceTokenConfigured).toBe(true);
-    expect(JSON.stringify(result.proof)).not.toContain('test-service-token');
+    expect(JSON.stringify(result.proof)).not.toContain(SERVICE_TOKEN);
     expect(verifySessionCookieMock).not.toHaveBeenCalled();
+  });
+
+  it('denies a presented service token missing a signature, without a test-mode bypass', async () => {
+    const result = await authorizeRouteGovernanceProof(
+      request('{"ok":true}', { 'x-cvf-service-token': SERVICE_TOKEN }),
+      '{"ok":true}',
+      CONFIG,
+    );
+
+    expect(result.proof.serviceTokenPresented).toBe(true);
+    expect(result.proof.serviceSignaturePresented).toBe(false);
+    expect(result.proof.authMode).not.toBe('service_token');
   });
 
   it('allows a session when no valid service token is present', async () => {
@@ -97,5 +125,78 @@ describe('authorizeRouteGovernanceProof', () => {
       '/api/lpci/query',
     ]);
     expect(getRouteGovernanceProofConfig('/api/lpci/query').riskLevel).toBe('R2');
+  });
+
+  it('preserves existing session fallback for an invalid presented token when no precedence option is passed', async () => {
+    verifySessionCookieMock.mockResolvedValueOnce({
+      userId: 'user-1',
+      user: 'Tester',
+      role: 'admin',
+      orgId: 'org',
+      teamId: 'team',
+      expiresAt: Date.now() + 1000,
+      authMode: 'session',
+    });
+
+    const result = await authorizeRouteGovernanceProof(
+      request('{"ok":true}', { 'x-cvf-service-token': 'wrong-token' }),
+      '{"ok":true}',
+      CONFIG,
+    );
+
+    expect(result.allowed).toBe(true);
+    expect(result.proof.authMode).toBe('session');
+    expect(verifySessionCookieMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('denies before session evaluation when invalidTokenPrecedence is FAIL_CLOSED', async () => {
+    const result = await authorizeRouteGovernanceProof(
+      request('{"ok":true}', { 'x-cvf-service-token': 'wrong-token' }),
+      '{"ok":true}',
+      CONFIG,
+      { invalidTokenPrecedence: 'FAIL_CLOSED' },
+    );
+
+    expect(result.allowed).toBe(false);
+    expect(result.response?.status).toBe(401);
+    expect(result.proof.actorId).toBeNull();
+    expect(verifySessionCookieMock).not.toHaveBeenCalled();
+  });
+
+  it('allows session through the FAIL_CLOSED precedence when no token is presented', async () => {
+    verifySessionCookieMock.mockResolvedValueOnce({
+      userId: 'user-1',
+      user: 'Tester',
+      role: 'admin',
+      orgId: 'org',
+      teamId: 'team',
+      expiresAt: Date.now() + 1000,
+      authMode: 'session',
+    });
+
+    const result = await authorizeRouteGovernanceProof(
+      request('{"ok":true}'),
+      '{"ok":true}',
+      CONFIG,
+      { invalidTokenPrecedence: 'FAIL_CLOSED' },
+    );
+
+    expect(result.allowed).toBe(true);
+    expect(result.proof.authMode).toBe('session');
+  });
+
+  it('uses an injected time for deterministic generatedAt and the token verification window', async () => {
+    const fixedNow = 1_700_000_000_000;
+    const body = '{"ok":true}';
+
+    const result = await authorizeRouteGovernanceProof(
+      request(body, signedTokenHeaders(body, fixedNow)),
+      body,
+      CONFIG,
+      { now: fixedNow },
+    );
+
+    expect(result.allowed).toBe(true);
+    expect(result.proof.generatedAt).toBe(new Date(fixedNow).toISOString());
   });
 });

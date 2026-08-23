@@ -6,6 +6,7 @@ const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
 const appendAuditEventMock = vi.hoisted(() => vi.fn());
 const appendCostEventMock = vi.hoisted(() => vi.fn());
+let auditEventSequence = 0;
 
 vi.mock('@/lib/ai', () => ({
     executeAI: executeAIMock,
@@ -64,6 +65,10 @@ describe('/api/execute governanceTrace receipt enrichment', () => {
         verifySessionCookieMock.mockReset();
         checkTeamQuotaMock.mockReset();
         appendAuditEventMock.mockReset();
+        auditEventSequence = 0;
+        appendAuditEventMock.mockImplementation(async () => ({
+            id: `governance-trace-audit-${++auditEventSequence}`,
+        }));
         appendCostEventMock.mockReset();
         process.env = { ...originalEnv, OPENAI_API_KEY: 'test-key', CVF_RECEIPT_HMAC_SECRET: 'route-test-signing-secret' };
         evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [], riskGate: { riskLevel: 'R1' } });

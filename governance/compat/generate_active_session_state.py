@@ -18,7 +18,7 @@ CORE_PATH = SOURCE_DIR / "ACTIVE_SESSION_STATE_CORE.json"
 ENTRIES_DIR = SOURCE_DIR / "entries"
 BOOTSTRAP_PATH = REPO_ROOT / "CVF_SESSION" / "ACTIVE_SESSION_BOOTSTRAP_READ_MODEL.json"
 SOURCE_ONLY_ENTRY_FIELDS = {"stateOrder", "stateKey"}
-CORE_KEY_COUNT = 49
+CORE_KEY_COUNT = 50
 
 BOOTSTRAP_FIELDS = (
     "schemaVersion",
@@ -29,6 +29,7 @@ BOOTSTRAP_FIELDS = (
     "activeSessionFrontDoor",
     "freezePosture",
     "activeReviewQueue",
+    "currentAuthority",
 )
 BOOTSTRAP_CLAIM_BOUNDARY = (
     "Compact bootstrap read model for startup facts only. "

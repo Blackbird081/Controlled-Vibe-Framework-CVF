@@ -28,6 +28,22 @@ It does not authorize scope expansion, runtime edits outside ownership, live
 proof, public-sync, secrets/quota use, destructive action, or claim-boundary
 changes.
 
+## Native Internal Orchestration Autonomy
+
+An assigned agent remains free to choose its internal reasoning strategy,
+task decomposition, context-management method, read-only exploration helpers,
+and provider-native internal subagents while it stays inside the approved
+scope and action boundary. CVF must not require per-step approval for these
+internal choices or treat their mere use as a delegated-worker violation.
+
+This autonomy ends at the invocation perimeter. A separately launched agent
+session, external CLI/MCP process, new provider or account lane, paid service,
+secret use, destructive action, durable mutation outside Allowed scope, or
+other authority expansion still requires the applicable CVF authorization.
+Where internal orchestration contributes to measurable aggregate usage, it is
+accounted for inside the parent assignment envelope rather than permissioned
+one internal step at a time.
+
 ## Worker Autonomy Prompt
 
 Orchestrators must attach this block to worker prompts for READY/DISPATCHED
@@ -233,6 +249,62 @@ recorded in an artifact, so the prompt block remains mandatory at dispatch.
 - `docs/reference/CVF_AGENT_WORK_ORDER_TEMPLATE_2026-05-19.md`
 - `docs/reference/CVF_WORK_ORDER_CLOSURE_QUALITY_GATE_STANDARD_2026-05-28.md`
 - `governance/compat/check_work_order_dispatch_quality.py`
+
+## Revision Ledger
+
+| Date | Change | Reason |
+| --- | --- | --- |
+| 2026-07-22 | Clarified provider-native internal orchestration autonomy and the external invocation perimeter | Operator correction that CVF must preserve agent intelligence and avoid per-step latency while governing authority, aggregate resource use, and external actions |
+
+## Epistemic Process Block
+
+### Expected Result / Prediction
+
+The existing autonomy and delegation foundations were expected to support
+agent freedom inside an approved scope while retaining CVF control over
+external actions and authority expansion.
+
+### Evidence Comparison
+
+The standard already authorizes routine non-destructive action without
+operator questions. The EAIC-KR T0 packet nevertheless treated a
+provider-native Explore helper as a separate prohibited agent, creating a
+conflict between worker autonomy and an overbroad dispatch prohibition.
+
+### Contradiction Or Gap Disposition
+
+The operator resolved the conflict by distinguishing native internal
+orchestration from separately dispatched or perimeter-crossing invocation.
+The worker conduct finding is withdrawn; the parent scope and external-action
+boundary remain governed.
+
+### Claim Update
+
+CVF controls scope, authority, external perimeter, aggregate envelope,
+mutation, and evidence. It does not permission each internal reasoning,
+exploration, decomposition, or context-management step.
+
+## Agent Operation Trace Block
+
+| Field | Evidence |
+| --- | --- |
+| Actor | reviewer/closer applying operator boundary correction |
+| Provider or surface | local private provenance repository |
+| Session or invocation | EAIC-KR T0 internal-autonomy correction, 2026-07-22 |
+| Working directory | repository root |
+| Command or tool surface | local file reads, rg, Git, apply_patch, and governance checks |
+| Target paths | this standard, delegation boundary standard, dual-agent accounting standard, and EAIC-KR T0 artifact family |
+| Allowed scope source | operator instruction to preserve CVF core value, agent intelligence, and low-latency internal autonomy while parking insufficient knowledge |
+| Before status evidence | committed EAIC-KR T0 closure at `24a685b7f` classified one provider-native Explore helper as worker misconduct |
+| After status evidence | internal orchestration is parent-agent autonomy; separately dispatched and perimeter-crossing actions remain governed |
+| Diff evidence | `git diff --name-status` and `git diff --check` for the correction batch |
+| Approval boundary | documentation-only canonical clarification and T0 correction; no runtime or external action |
+| Claim boundary | procedural autonomy and invocation-perimeter semantics only |
+| Agent type | reviewer/closer |
+| Invocation ID | `eaic-kr-t0-internal-autonomy-boundary-correction-2026-07-22` |
+| Expected manifest | N/A with reason: this canonical clarification participates in a reviewer correction set rather than a delegated exact-output manifest |
+| Actual changed set | N/A with reason: the correction set is evidenced by Git and closure preflight |
+| Manifest delta | N/A with reason: no delegated exact-output manifest applies |
 
 ## Claim Boundary
 

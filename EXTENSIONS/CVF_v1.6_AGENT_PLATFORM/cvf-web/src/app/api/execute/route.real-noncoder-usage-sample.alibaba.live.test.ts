@@ -244,7 +244,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent,
               inputs: STRATEGY_INPUTS,
               provider: 'alibaba',
-              model: 'qwen-turbo',
+              model: 'qwen-flash',
               mode: 'simple',
               cvfRiskLevel: 'R1',
               action: 'analyze a real non-coder Strategy workflow usage sample',
@@ -278,12 +278,12 @@ describe.skipIf(!ALIBABA_API_KEY)(
         const callLevel = asRecord(evidencePackage.callLevel);
 
         expect(body.provider).toBe('alibaba');
-        expect(body.model).toBe('qwen-turbo');
+        expect(body.model).toBe('qwen-flash');
         expect(receipt).toMatchObject({
           evidenceMode: 'live',
           decision: 'ALLOW',
           provider: 'alibaba',
-          model: 'qwen-turbo',
+          model: 'qwen-flash',
         });
         expect(evidencePackage).toMatchObject({
           contractVersion: 'cvf.verticalEvidencePackage.vi4.v1',

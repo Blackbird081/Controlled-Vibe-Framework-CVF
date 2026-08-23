@@ -67,26 +67,3 @@ reconciliation.
 
 This pointer does not expose private session state and does not claim hosted
 readiness, production readiness, or hidden cross-agent memory transfer.
-
-## Core Guard Self-Protection Authorization - Parenthesized Source Paths
-
-Authorized guard-maintenance scope: export the bounded active PATH_RE repair
-that accepts balanced parenthesized repository path segments while retaining
-the existing root allowlist, missing-source validation, and malformed-path
-rejection.
-
-Protected paths:
-
-- `governance/compat/check_work_order_dispatch_quality_source.py`
-- `governance/compat/test_check_work_order_dispatch_quality_source.py`
-
-Operator authorization: explicit instruction on 2026-08-09 to clean the
-remaining governed state and push both the private provenance repository and
-the sibling public GitHub repository before roadmap work continues.
-
-Rollback boundary: revert only the parser/test public export and this handoff
-authorization block if regression, scope widening, or public-boundary leakage
-is detected.
-
-Public boundary: no private roadmap, baseline, work order, worker return,
-session state, provider credential, or operator-local evidence is exported.

@@ -18,8 +18,8 @@
       "sourcePlaneId": "cvf.asc.plane.contract_to_runtime.v1",
       "targetPlaneId": "cvf.asc.plane.contract_to_runtime.v1",
       "sourceOwner": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts; EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts",
-      "targetOwner": "NONE_WITH_REASON: SCLP-X-T2's accepted repository-wide search (22,026 files, 16 queries, 500 raw hits, 329 unique path/line rows, zero ambiguous rows) found no non-test, non-type-only production caller connecting either MandatoryGateway/createMandatoryGateway (GC-009) or AgentExecutionRuntime (GC-010) to an execution channel; both symbols are constructed or invoked only inside their own co-located test files, and the package exports/files plus the root barrel module omit both.",
-      "missingEdge": "GC-009 and GC-010 each define a governed runtime helper (MandatoryGateway/createMandatoryGateway; AgentExecutionRuntime) inside the Contract To Runtime plane, but the edge from either helper to a non-test production execution channel is unproven: no non-test caller constructs or invokes either symbol anywhere in the accepted T2 search universe.",
+      "targetOwner": "PARTIAL_OWNER_CREATED_WITH_BOUNDARY: GC-009 is composed by EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts through EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/route-guard-gateway.ts and the package export; GC-010 remains NONE_WITH_REASON because AgentExecutionRuntime still has no accepted non-test production caller or active package export.",
+      "missingEdge": "GC-009 now has accepted bounded local actual-route invocation proof through its non-test cvf-web production composition. GC-010 still has no non-test production caller or active package export. The paired edge therefore remains open for GC-010 and must not be falsely closed from GC-009-only evidence.",
       "currentStatus": "IMPLEMENTED_NOT_INVOCATION_PROVEN",
       "proofClass": "IMPLEMENTED_EDGE",
       "citations": [
@@ -52,9 +52,34 @@
           "path": "docs/reference/system_architecture_catalog/entries/edge.gc009_gateway_no_caller.v1.json",
           "lineOrSection": "full record",
           "evidenceRole": "related, evidence-only sampled catalog edge for GC-009 (R90 Audit A Lane 2, 3-of-50 sample); cited as corroborating evidence, not promoted to a second or independent GAP branch"
+        },
+        {
+          "path": "docs/reviews/CVF_GC009_GC010_PRODUCTION_CALLER_T1_RUNTIME_COMPOSITION_COMPLETION_2026-07-26.md",
+          "lineOrSection": "Findings / Position and Claim Boundary",
+          "evidenceRole": "reviewer-accepted bounded GC-009 production composition; T2 invocation proof and GC-010 remain held"
+        },
+        {
+          "path": "docs/reviews/CVF_GC009_GC010_PRODUCTION_CALLER_T2_DETERMINISTIC_INVOCATION_PROOF_COMPLETION_2026-07-26.md",
+          "lineOrSection": "Findings / Position and Claim Boundary",
+          "evidenceRole": "reviewer-accepted bounded local GC-009 actual-route invocation proof; GC-010 remains held"
+        },
+        {
+          "path": "docs/reviews/CVF_GC010_AGENT_EXECUTION_RUNTIME_T0_OWNER_PROVIDER_RECEIPT_DECISION_COMPLETION_2026-07-26.md",
+          "lineOrSection": "Findings / Position and Successor Boundary",
+          "evidenceRole": "reviewer-accepted GC-010 source decision: no current owner/export; package-native direction is partial-ready only after a separate interface/export/receipt design"
+        },
+        {
+          "path": "docs/reviews/CVF_GC010_AGENT_EXECUTION_RUNTIME_T1_INTERFACE_EXPORT_RECEIPT_DESIGN_COMPLETION_2026-07-26.md",
+          "lineOrSection": "Findings / Position and Successor Boundary",
+          "evidenceRole": "reviewer-accepted bounded package-native foundation design; exact non-test production caller and caller-level invocation proof remain unresolved"
+        },
+        {
+          "path": "docs/reviews/CVF_GC010_AGENT_EXECUTION_RUNTIME_T2_NON_TEST_CALLER_OWNERSHIP_INVOCATION_BOUNDARY_DECISION_COMPLETION_2026-07-26.md",
+          "lineOrSection": "Findings / Position and Reopen Condition",
+          "evidenceRole": "reviewer-accepted five-family caller comparison: no viable current caller; lane value-parked behind a four-fact current-source reopen condition"
         }
       ],
-      "impact": "Both MandatoryGateway/createMandatoryGateway (GC-009) and AgentExecutionRuntime (GC-010) exist and are implemented and unit-tested, but no non-test production caller connects either helper to an execution channel. This is an architecture-discoverability gap recorded from accepted repository-wide search evidence, not a runtime defect claim, an enforcement-coverage claim, or an invocation-behavior claim.",
+      "impact": "The original paired no-caller gap is further reduced: GC-009 has a bounded cvf-web production composition, package surface, durable audit linkage, and accepted local actual-route invocation proof. Every GC-010 caller/export edge remains unaccepted, so this is not whole-entry closure, production-readiness proof, or live governance proof.",
       "closeCondition": {
         "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
         "conditionText": "OPEN: a governed accepted artifact must prove non-test production caller ownership AND bounded invocation evidence for BOTH MandatoryGateway/createMandatoryGateway (GC-009) and AgentExecutionRuntime (GC-010) to fully close this paired entry. If evidence emerges for only one of the two helpers, that requires a reviewer-authored entry split or targeted update naming the still-open helper -- not a false whole-entry closure recorded against this stableId."
@@ -63,7 +88,7 @@
         "conditionKind": "PATTERN_OBSERVED_ON_NAMED_SURFACE",
         "conditionText": "Reopen this entry, or any successor closure of it, if a future review finds the current non-test production caller or the current export/barrel surface removed or regressed on either EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts or EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts after a later closure has been accepted."
       },
-      "actionOwner": "PARKED_WITH_REASON: this GAP entry records the accepted no-caller finding only; it does not create a runtime caller itself. A fresh source-verified work packet is required to propose, implement, and prove a non-test production caller for either or both helpers before this entry can close.",
+      "actionOwner": "GC010_VALUE_PARKED_SOURCE_REOPEN_REQUIRED: do not re-propose implementation or caller design until current source proves all four facts together on one named non-test path: AgentExecutionRuntime construction/import, a registered production trigger, real GuardRuntimeEngine plus ExecutionProvider wiring, and a durable receipt or audit consumer. A new work order or bare package export alone is insufficient.",
       "freshnessInputs": [
         "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
         "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/agent-execution-runtime.ts",
@@ -72,8 +97,8 @@
         "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md"
       ],
       "lastReviewed": {
-        "date": "2026-07-15",
-        "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_EXHAUSTIVE_PROOF_T2_CALLER_VERIFICATION_COMPLETION_2026-07-15.md"
+        "date": "2026-07-26",
+        "acceptedArtifact": "docs/reviews/CVF_GC010_AGENT_EXECUTION_RUNTIME_T2_NON_TEST_CALLER_OWNERSHIP_INVOCATION_BOUNDARY_DECISION_COMPLETION_2026-07-26.md"
       }
     },
     {

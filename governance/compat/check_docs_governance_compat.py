@@ -75,6 +75,11 @@ APPROVED_ROOT_FILES = {
     "VERSION_COMPARISON.md",
 }
 APPROVED_GENERIC_FILENAMES = {"README.md", "INDEX.md", "SKILL.md"}
+APPROVED_GOVERNANCE_PATH_EXCEPTIONS = {
+    # ACRC-T2B filenames are part of the exact archive preservation contract.
+    "docs/reference/archive/AGENTS_FULL_PRE_T2B_2026-08-11.md",
+    "docs/reference/archive/CLAUDE_FULL_PRE_T2B_2026-08-11.md",
+}
 PERFORMANCE_EVIDENCE_BATCH_RE = re.compile(
     r"^docs/baselines/CVF_W\d+_T\d+_CP\d+_FIRST_EVIDENCE_BATCH_\d{4}-\d{2}-\d{2}\.md$"
 )
@@ -229,7 +234,7 @@ def _validate_docs_path(path: str) -> list[dict[str, str]]:
         )
         return violations
 
-    if top_folder in GOVERNANCE_FOLDERS:
+    if top_folder in GOVERNANCE_FOLDERS and normalized not in APPROVED_GOVERNANCE_PATH_EXCEPTIONS:
         if filename not in APPROVED_GENERIC_FILENAMES and not filename.startswith("CVF_"):
             violations.append(
                 {

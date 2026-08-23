@@ -185,13 +185,13 @@ describe('generateDeliverablePack', () => {
       generatedAt: '2026-04-27T10:00:00Z',
       decision: 'ALLOWED',
       provider: 'alibaba',
-      model: 'qwen-turbo',
+      model: 'qwen-flash',
       policySnapshotId: 'snap_abc',
     };
     const pack = generateDeliverablePack(exec, receipt);
     expect(pack.governanceEvidence.receiptAvailable).toBe(true);
     expect(pack.governanceEvidence.provider).toBe('alibaba');
-    expect(pack.governanceEvidence.model).toBe('qwen-turbo');
+    expect(pack.governanceEvidence.model).toBe('qwen-flash');
     expect(pack.governanceEvidence.decision).toBe('ALLOWED');
     expect(pack.artifactVerification.status).toBe('PASS');
     expect(pack.artifactVerification.provenance.receiptId).toBe('rcpt_test_abc');
@@ -273,13 +273,13 @@ describe('serializePackToMarkdown', () => {
       generatedAt: '2026-04-27T10:00:00Z',
       decision: 'ALLOWED',
       provider: 'alibaba',
-      model: 'qwen-turbo',
+      model: 'qwen-flash',
       policySnapshotId: 'snap_xyz',
     };
     const pack = generateDeliverablePack(exec, receipt);
     const md = serializePackToMarkdown(pack);
     expect(md).toContain('alibaba');
-    expect(md).toContain('qwen-turbo');
+    expect(md).toContain('qwen-flash');
   });
 
   it('includes sourceExecutionId in footer', () => {

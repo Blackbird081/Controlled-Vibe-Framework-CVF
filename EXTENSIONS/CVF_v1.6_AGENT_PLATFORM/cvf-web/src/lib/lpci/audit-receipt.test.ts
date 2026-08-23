@@ -23,6 +23,7 @@ describe('audit-receipt', () => {
       query: 'what is the leave policy?',
       query_timestamp: '2026-06-03T10:00:00.000Z',
       response_boundary_class: 'NEGATIVE_RECEIPT' as const,
+      responseText: '{"outcome":"PHASE1_NEGATIVE"}',
       applied_filters: {},
       sensitivity_pre_filter_applied: false,
     };
@@ -48,11 +49,10 @@ describe('audit-receipt', () => {
       expect(receipt.model_response_hash).toBe(sha256Hex(responseText));
     });
 
-    it('model_response_hash is never null — falls back to receipt payload hash', () => {
-      // no responseText provided
-      const receipt = buildAuditReceipt({ ...baseOpts, phase1_receipt_type: 'NO_RESULTS' });
-      expect(receipt.model_response_hash).toHaveLength(64);
-      expect(receipt.model_response_hash).toBeTruthy();
+    it('hashes the caller supplied canonical negative payload bytes', () => {
+      const responseText = '{"outcome":"NO_PROVIDER_CONFIGURED","query":"q"}';
+      const receipt = buildAuditReceipt({ ...baseOpts, responseText });
+      expect(receipt.model_response_hash).toBe(sha256Hex(responseText));
     });
 
     it('includes stale_records when provided', () => {

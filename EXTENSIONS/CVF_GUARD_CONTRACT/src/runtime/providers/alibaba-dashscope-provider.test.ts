@@ -1,7 +1,7 @@
 /**
  * AlibabaDashScopeProvider Tests
  * ================================
- * Unit tests (always run) + Live tests (run when ALIBABA_API_KEY is set)
+ * Unit tests (always run) + Live tests (explicit CVF_ALIBABA_LIVE_TEST=true opt-in)
  */
 
 import { describe, it, expect } from 'vitest';
@@ -16,7 +16,7 @@ const API_KEY =
   process.env.CVF_BENCHMARK_ALIBABA_KEY ||
   process.env.CVF_ALIBABA_API_KEY ||
   'PLACEHOLDER_KEY';
-const LIVE = API_KEY !== 'PLACEHOLDER_KEY';
+const LIVE = process.env.CVF_ALIBABA_LIVE_TEST === 'true' && API_KEY !== 'PLACEHOLDER_KEY';
 
 // ─── Constructor (always run) ─────────────────────────────────────────
 
@@ -61,7 +61,7 @@ describe('AlibabaDashScopeProvider with guard blocking', () => {
   });
 });
 
-// ─── Live API Tests (only when an Alibaba API key env is set) ─────────
+// Live API tests: require explicit opt-in plus an Alibaba API key.
 
 describe.skipIf(!LIVE)('AlibabaDashScopeProvider live execution', () => {
   it('calls Qwen API and returns response', async () => {
@@ -81,7 +81,7 @@ describe.skipIf(!LIVE)('AlibabaDashScopeProvider live execution', () => {
   }, 15000);
 });
 
-// ─── E2E: Full governed pipeline (only when an Alibaba API key env is set)
+// E2E governed pipeline: require explicit opt-in plus an Alibaba API key.
 
 describe.skipIf(!LIVE)('Full governed pipeline with AlibabaDashScopeProvider', () => {
   it('executes safe HUMAN action end-to-end', async () => {

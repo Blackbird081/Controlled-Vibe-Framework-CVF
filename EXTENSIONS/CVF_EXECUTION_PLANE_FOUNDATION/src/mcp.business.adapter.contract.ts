@@ -12,6 +12,15 @@ export type MCPBusinessTransport = "stdio" | "http" | "cloudflare_worker" | "rem
 export type MCPBusinessApprovalDecision = "allow" | "allow_with_receipt" | "requires_approval" | "deny";
 export type MCPBusinessResultStatus = "success" | "failed" | "rejected";
 
+export interface MCPBusinessCallerSuppliedApprovalEvidence {
+  approvalReference: string;
+  boundRequestId: string;
+  decision: "APPROVE" | "DENY";
+  issuedAt: string;
+  expiresAt: string;
+  consumed: boolean;
+}
+
 export interface MCPBusinessToolContract {
   toolId: string;
   domain: string;
@@ -34,6 +43,7 @@ export interface MCPBusinessToolInvocationRequest {
   input: Record<string, unknown>;
   transport: MCPBusinessTransport;
   approvalReference?: string;
+  approvalEvidence?: MCPBusinessCallerSuppliedApprovalEvidence;
   approvalReason?: string;
 }
 
@@ -135,7 +145,7 @@ export class MCPBusinessAdapterContract {
     const evaluatedAt = this.now();
     const riskClass = this.classifyRisk(tool);
     const { approvalDecision, approvalRequired, reason } =
-      this.deriveApprovalDecision(request, tool, riskClass);
+      this.deriveApprovalDecision(request, tool, riskClass, evaluatedAt);
     const gateHash = computeDeterministicHash(
       "cvf-mcp-business-approval-gate",
       evaluatedAt,
@@ -144,6 +154,8 @@ export class MCPBusinessAdapterContract {
       riskClass,
       approvalDecision,
       reason,
+      request.approvalReference ?? "no-approval-reference",
+      stableStringify(request.approvalEvidence ?? null),
     );
 
     return {
@@ -230,6 +242,7 @@ export class MCPBusinessAdapterContract {
     request: MCPBusinessToolInvocationRequest,
     tool: MCPBusinessToolContract | undefined,
     riskClass: MCPBusinessRiskClass,
+    evaluatedAt: string,
   ): { approvalDecision: MCPBusinessApprovalDecision; approvalRequired: boolean; reason: string } {
     if (!tool) {
       return { approvalDecision: "deny", approvalRequired: false, reason: "tool is not registered" };
@@ -246,20 +259,24 @@ export class MCPBusinessAdapterContract {
     if (riskClass === "LOW_RISK_WRITE" && !tool.requiresApproval) {
       return { approvalDecision: "allow_with_receipt", approvalRequired: false, reason: "low-risk write allowed with receipt" };
     }
+    const evidenceIsValid = validateCallerSuppliedApprovalEvidence(request, evaluatedAt);
     if (riskClass === "HIGH_RISK_WRITE") {
-      if (!request.approvalReference) {
-        return { approvalDecision: "requires_approval", approvalRequired: true, reason: "high-risk business mutation requires approval" };
+      if (!evidenceIsValid) {
+        return { approvalDecision: "requires_approval", approvalRequired: true, reason: "high-risk business mutation requires valid bound approval evidence" };
       }
       return { approvalDecision: "allow_with_receipt", approvalRequired: true, reason: "high-risk business mutation approved" };
     }
     if (riskClass === "DESTRUCTIVE") {
-      if (!request.approvalReference || !request.approvalReason) {
+      if (!request.approvalReason) {
         return { approvalDecision: "requires_approval", approvalRequired: true, reason: "destructive business mutation requires approval and reason" };
+      }
+      if (!evidenceIsValid) {
+        return { approvalDecision: "requires_approval", approvalRequired: true, reason: "destructive business mutation requires valid bound approval evidence" };
       }
       return { approvalDecision: "allow_with_receipt", approvalRequired: true, reason: "destructive business mutation explicitly approved" };
     }
-    if (!request.approvalReference) {
-      return { approvalDecision: "requires_approval", approvalRequired: true, reason: "system configuration tool requires admin approval" };
+    if (!evidenceIsValid) {
+      return { approvalDecision: "requires_approval", approvalRequired: true, reason: "system configuration tool requires valid bound admin approval evidence" };
     }
     return { approvalDecision: "allow_with_receipt", approvalRequired: true, reason: "system configuration tool approved" };
   }
@@ -325,4 +342,71 @@ function stableStringify(value: unknown): string {
       .join(",")}}`;
   }
   return JSON.stringify(value);
+}
+
+const APPROVAL_EVIDENCE_KEYS = [
+  "approvalReference",
+  "boundRequestId",
+  "decision",
+  "issuedAt",
+  "expiresAt",
+  "consumed",
+] as const;
+const BOUNDED_METADATA_ID = /^[A-Za-z][A-Za-z0-9._:-]{0,127}$/;
+const ISO_UTC = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;
+const SECRET_SIGNAL = /(secret|token|password|credential\s*=|api[_-]?key)/i;
+
+function validateCallerSuppliedApprovalEvidence(
+  request: MCPBusinessToolInvocationRequest,
+  now: string,
+): boolean {
+  const candidate: unknown = request.approvalEvidence;
+  if (!isPlainRecord(candidate)) return false;
+  const keys = Object.keys(candidate);
+  if (
+    keys.length !== APPROVAL_EVIDENCE_KEYS.length
+    || keys.some((key) => !APPROVAL_EVIDENCE_KEYS.includes(
+      key as typeof APPROVAL_EVIDENCE_KEYS[number],
+    ))
+  ) return false;
+
+  const reference = validMetadataId(candidate.approvalReference);
+  const boundRequestId = validMetadataId(candidate.boundRequestId);
+  if (
+    reference === null
+    || boundRequestId === null
+    || reference !== request.approvalReference
+    || boundRequestId !== request.requestId
+    || candidate.decision !== "APPROVE"
+    || candidate.consumed !== false
+  ) return false;
+
+  const issuedAt = validUtcInstant(candidate.issuedAt);
+  const expiresAt = validUtcInstant(candidate.expiresAt);
+  const current = validUtcInstant(now);
+  if (issuedAt === null || expiresAt === null || current === null) return false;
+  return issuedAt <= current && current < expiresAt;
+}
+
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+}
+
+function validMetadataId(value: unknown): string | null {
+  if (
+    typeof value !== "string"
+    || !BOUNDED_METADATA_ID.test(value)
+    || SECRET_SIGNAL.test(value)
+  ) return null;
+  return value;
+}
+
+function validUtcInstant(value: unknown): number | null {
+  if (typeof value !== "string" || !ISO_UTC.test(value)) return null;
+  const instant = Date.parse(value);
+  if (!Number.isFinite(instant)) return null;
+  const normalized = value.includes(".") ? value : value.replace("Z", ".000Z");
+  return new Date(instant).toISOString() === normalized ? instant : null;
 }

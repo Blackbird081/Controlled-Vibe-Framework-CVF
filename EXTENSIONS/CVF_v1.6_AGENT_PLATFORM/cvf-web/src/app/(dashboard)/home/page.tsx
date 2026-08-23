@@ -43,6 +43,7 @@ import {
     OnboardingTour,
     IntentEntry,
 } from '@/components';
+import { HomeBrowseExperience } from '@/components/home/HomeBrowseExperience';
 
 type WorkflowState = 'browse' | 'form' | 'processing' | 'result' |
     'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' |
@@ -546,350 +547,36 @@ export default function HomePage() {
     return (
         <div className="pb-10">
             {workflowState === 'browse' && (
-                <>
-                    <SurfaceTopBar
-                        title={language === 'vi' ? 'Kết quả cần tạo' : 'Outcomes'}
-                        subtitle={language === 'vi'
-                            ? 'Chọn kết quả trước; CVF sẽ mở đúng workflow và giữ bằng chứng ở phía sau.'
-                            : 'Choose the outcome first; CVF opens the right workflow and keeps evidence behind it.'}
-                        actions={(
-                            <>
-                                <button
-                                    type="button"
-                                    onClick={() => document.getElementById('cvf-outcome-actions')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                                    className="cvf-control inline-flex items-center rounded-2xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
-                                >
-                                    {language === 'vi' ? 'Xem outcomes' : 'View outcomes'}
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => document.getElementById('tour-template-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                                    className="cvf-control inline-flex items-center rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/75 dark:hover:bg-white/[0.07]"
-                                >
-                                    {language === 'vi' ? 'Duyệt template' : 'Browse templates'}
-                                </button>
-                            </>
-                        )}
-                    />
-
-                    <div className="space-y-8 px-4 py-6 sm:px-6">
-                        {!currentFolder && (
-                            <OutcomeQuickActions
-                                id="cvf-outcome-actions"
-                                lang={language}
-                                onSelectTemplate={handleOutcomeQuickAction}
-                            />
-                        )}
-
-                        <section
-                            id="tour-welcome"
-                            className="cvf-surface cvf-density-section overflow-hidden rounded-[32px] border border-slate-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.16),_transparent_45%),linear-gradient(135deg,_#f8fafc,_#ffffff)] p-7 shadow-[0_20px_60px_-45px_rgba(79,70,229,0.35)] dark:border-white/[0.07] dark:bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.22),_transparent_40%),linear-gradient(135deg,_#141927,_#0f1320)] dark:shadow-none sm:p-8"
-                        >
-                            <div className="grid gap-8 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] xl:items-center">
-                                <div>
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300">
-                                        <Sparkles size={14} />
-                                        {language === 'vi' ? 'Workspace CVF' : 'CVF Workspace'}
-                                    </span>
-                                    <h2 className="mt-6 max-w-3xl text-balance text-4xl font-semibold tracking-[-0.05em] text-slate-950 dark:text-white sm:text-5xl">
-                                        {t('main.heroLine1')}{' '}
-                                        <span className="bg-gradient-to-r from-indigo-500 to-cyan-400 bg-clip-text text-transparent">
-                                            {t('main.heroLine2')}
-                                        </span>
-                                    </h2>
-                                    <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600 dark:text-white/55">
-                                        {currentFolder
-                                            ? `📂 ${templates.find(t => t.id === currentFolder)?.name || (language === 'vi' ? 'Thư mục' : 'Folder')}`
-                                            : t('main.heroDesc')}
-                                    </p>
-
-                                    <div className="mt-8 flex flex-wrap gap-3">
-                                        <Link
-                                            href="/landing"
-                                            className="cvf-control inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-500 px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_-18px_rgba(79,70,229,0.7)] transition hover:brightness-110"
-                                        >
-                                            {language === 'vi' ? 'Khám phá CVF' : 'Explore CVF'}
-                                        </Link>
-                                        <Link
-                                            href="/help"
-                                            className="cvf-control inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/75 dark:hover:bg-white/[0.07]"
-                                        >
-                                            {language === 'vi' ? 'Xem hướng dẫn' : 'See the guide'}
-                                        </Link>
-                                        {currentFolder && (
-                                            <button
-                                                onClick={() => setCurrentFolder(null)}
-                                                className="cvf-control inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/75 dark:hover:bg-white/[0.07]"
-                                            >
-                                                {t('main.backToAll')}
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
-                                    {statCards.map((card) => (
-                                        <SurfaceStatCard
-                                            key={card.label}
-                                            label={card.label}
-                                            value={card.value}
-                                            icon={card.icon}
-                                            tone={card.tone}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        </section>
-
-                        {isIntentFirstEnabled() && !currentFolder && (
-                            <IntentEntry
-                                onRoute={handleIntentRoute}
-                                language={language as 'vi' | 'en'}
-                            />
-                        )}
-
-                        {starterHandoff && !currentFolder && (
-                            <div className="cvf-surface cvf-density-section rounded-[28px] border border-indigo-200/80 bg-white p-6 shadow-[0_10px_30px_-24px_rgba(79,70,229,0.45)] dark:border-indigo-500/20 dark:bg-[#171b29] dark:shadow-none">
-                                <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                                    <div className="space-y-3">
-                                        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-500">
-                                            {language === 'vi' ? 'Bản giao starter' : 'Starter handoff'}
-                                        </div>
-                                        <h3 className="text-2xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-white">
-                                            {language === 'vi'
-                                                ? 'Starter path đã sẵn sàng từ onboarding'
-                                                : 'Your starter path is ready from onboarding'}
-                                        </h3>
-                                        <p className="max-w-3xl text-sm leading-7 text-slate-600 dark:text-white/58">
-                                            {starterHandoff.userInput}
-                                        </p>
-                                        <div className="grid gap-3 md:grid-cols-3">
-                                            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/[0.07] dark:bg-white/[0.04]">
-                                                <div className="text-xs uppercase tracking-[0.14em] text-slate-400 dark:text-white/35">
-                                                    {language === 'vi' ? 'Luồng khởi đầu' : 'Starter path'}
-                                                </div>
-                                                <div className="mt-2 font-semibold text-slate-950 dark:text-white">
-                                                    {starterHandoff.recommendedTemplateLabel}
-                                                </div>
-                                            </div>
-                                            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/[0.07] dark:bg-white/[0.04]">
-                                                <div className="text-xs uppercase tracking-[0.14em] text-slate-400 dark:text-white/35">
-                                                    {language === 'vi' ? 'Pha đã route' : 'Routed phase'}
-                                                </div>
-                                                <div className="mt-2 font-semibold text-slate-950 dark:text-white">
-                                                    {starterHandoff.friendlyPhase}
-                                                </div>
-                                            </div>
-                                            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/[0.07] dark:bg-white/[0.04]">
-                                                <div className="text-xs uppercase tracking-[0.14em] text-slate-400 dark:text-white/35">
-                                                    {language === 'vi' ? 'Mức rủi ro' : 'Risk'}
-                                                </div>
-                                                <div className="mt-2 font-semibold text-slate-950 dark:text-white">
-                                                    {starterHandoff.friendlyRisk}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex w-full flex-col gap-3 lg:w-60">
-                                        <button
-                                            onClick={handleOpenGovernedStarter}
-                                            className="cvf-control rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700"
-                                        >
-                                            {language === 'vi' ? 'Mở starter path' : 'Open starter path'}
-                                        </button>
-                                        <button
-                                            onClick={handleDismissGovernedStarter}
-                                            className="cvf-control rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/75 dark:hover:bg-white/[0.07]"
-                                        >
-                                            {language === 'vi' ? 'Ẩn handoff' : 'Dismiss handoff'}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {!mockAiEnabled && !hasAnyApiKey && !bannerDismissed && (
-                            <div
-                                id="cvf-setup-banner"
-                                className="cvf-surface cvf-density-section relative rounded-[28px] border border-amber-200 bg-amber-50/90 p-5 text-amber-950 dark:border-amber-500/20 dark:bg-amber-500/8 dark:text-amber-100"
-                            >
-                                <button
-                                    onClick={handleDismissBanner}
-                                    aria-label={language === 'en' ? 'Dismiss setup banner' : 'Ẩn thông báo cài đặt'}
-                                    className="cvf-control absolute right-4 top-4 rounded-xl p-1.5 text-amber-600 transition hover:bg-amber-200/60 dark:text-amber-300 dark:hover:bg-amber-500/20"
-                                >
-                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                                <div className="flex flex-col gap-4 pr-8 lg:flex-row lg:items-center lg:justify-between">
-                                    <div>
-                                        <div className="text-lg font-semibold">{t('main.apiKeyTitle')}</div>
-                                        <div className="mt-1 text-sm text-amber-700 dark:text-amber-200/80">{t('main.apiKeyDesc')}</div>
-                                    </div>
-                                    <div className="flex flex-wrap gap-3">
-                                        <button
-                                            onClick={handleDemoRun}
-                                            className="cvf-control rounded-2xl border border-amber-400/70 bg-white px-4 py-3 text-sm font-semibold text-amber-700 transition hover:bg-amber-100 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200 dark:hover:bg-amber-500/15"
-                                        >
-                                            {language === 'vi' ? 'Chạy demo ngay' : 'Run demo now'}
-                                        </button>
-                                        <button
-                                            onClick={() => window.dispatchEvent(new CustomEvent('cvf:openApiKeyWizard'))}
-                                            className="cvf-control rounded-2xl bg-amber-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-amber-700"
-                                        >
-                                            {t('main.apiKeyCta')}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {!bannerDismissed && (
-                            <section
-                                data-testid="w119-readiness-panel"
-                                className={`cvf-surface cvf-density-section rounded-[28px] border p-5 ${
-                                    setupConfidence.tone === 'emerald'
-                                        ? 'border-emerald-200 bg-emerald-50/80 text-emerald-950 dark:border-emerald-500/20 dark:bg-emerald-500/8 dark:text-emerald-100'
-                                        : 'border-amber-200 bg-amber-50/80 text-amber-950 dark:border-amber-500/20 dark:bg-amber-500/8 dark:text-amber-100'
-                                }`}
-                            >
-                                <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.45fr)] lg:items-center">
-                                    <div>
-                                        <div className="text-xs font-semibold uppercase tracking-[0.16em] opacity-70">
-                                            {language === 'vi' ? 'Trạng thái lần chạy đầu' : 'First-run confidence'}
-                                        </div>
-                                        <h3 className="mt-2 text-xl font-semibold tracking-[-0.02em]">
-                                            {setupConfidence.label}
-                                        </h3>
-                                        <p className="mt-2 text-sm leading-6 opacity-80">
-                                            {setupConfidence.description}
-                                        </p>
-                                    </div>
-                                    <div className="grid gap-2 text-sm">
-                                        <div className="flex items-center justify-between rounded-2xl border border-current/15 bg-white/55 px-4 py-3 dark:bg-white/[0.04]">
-                                            <span>{language === 'vi' ? 'Live task' : 'Live task'}</span>
-                                            <span className="font-semibold">{setupConfidence.liveTaskReady ? 'READY' : 'NEEDS KEY'}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between rounded-2xl border border-current/15 bg-white/55 px-4 py-3 dark:bg-white/[0.04]">
-                                            <span>{language === 'vi' ? 'Workspace enforcement' : 'Workspace enforcement'}</span>
-                                            <span className="font-semibold">ARTIFACT READY</span>
-                                        </div>
-                                        <button
-                                            type="button"
-                                            onClick={() => setupConfidence.liveTaskReady
-                                                ? document.getElementById('tour-template-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                                                : window.dispatchEvent(new CustomEvent('cvf:openApiKeyWizard'))}
-                                            className={`cvf-control rounded-2xl px-4 py-3 text-sm font-semibold text-white transition ${
-                                                setupConfidence.tone === 'emerald'
-                                                    ? 'bg-emerald-600 hover:bg-emerald-700'
-                                                    : 'bg-amber-600 hover:bg-amber-700'
-                                            }`}
-                                        >
-                                            {setupConfidence.nextAction}
-                                        </button>
-                                    </div>
-                                </div>
-                            </section>
-                        )}
-
-                        <div className="grid gap-3 sm:grid-cols-2">
-                            {[
-                                { href: '/knowledge/intake', icon: BookOpenCheck, tone: 'emerald', label: language === 'vi' ? 'Nạp kiến thức' : 'Knowledge Intake', desc: language === 'vi' ? 'Thêm tài liệu mới vào kho có quản trị' : 'Add new knowledge to the governed vault' },
-                                { href: '/artifacts', icon: FileOutput, tone: 'indigo', label: language === 'vi' ? 'Xuất artifact' : 'Artifact Export', desc: language === 'vi' ? 'Xuất gói review HTML có xác nhận kiểm soát' : 'Export an HTML review packet with an audit record' },
-                            ].map(({ href, icon: Icon, tone, label, desc }) => (
-                                <Link key={href} href={href} className={`flex items-start gap-4 rounded-[22px] border p-5 transition hover:shadow-md ${tone === 'emerald' ? 'border-emerald-200 bg-emerald-50/70 dark:border-emerald-500/20 dark:bg-emerald-500/8' : 'border-indigo-200 bg-indigo-50/70 dark:border-indigo-500/20 dark:bg-indigo-500/8'}`}>
-                                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${tone === 'emerald' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300' : 'bg-indigo-100 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300'}`}>
-                                        <Icon size={18} />
-                                    </div>
-                                    <div>
-                                        <div className={`text-sm font-semibold ${tone === 'emerald' ? 'text-emerald-900 dark:text-emerald-100' : 'text-indigo-900 dark:text-indigo-100'}`}>{label}</div>
-                                        <div className="mt-0.5 text-xs leading-5 text-slate-500 dark:text-white/45">{desc}</div>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-
-                        <section className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-white p-6 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none">
-                            <div className="flex flex-col gap-6">
-                                {!currentFolder && (
-                                    <div id="tour-category-tabs" className="space-y-4">
-                                        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                                            <div>
-                                                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-white/35">
-                                                    {language === 'vi' ? 'Duyệt theo nhóm' : 'Browse by category'}
-                                                </div>
-                                                <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-white">
-                                                    {language === 'vi' ? 'Mọi template trong cùng một front door' : 'Every template in one governed front door'}
-                                                </h3>
-                                            </div>
-                                            <div className="text-sm text-slate-500 dark:text-white/45">
-                                                {language === 'vi'
-                                                    ? `${filteredTemplates.length} items hiển thị`
-                                                    : `${filteredTemplates.length} items showing`}
-                                            </div>
-                                        </div>
-                                        <CategoryTabs
-                                            activeCategory={selectedCategory}
-                                            onCategoryChange={setSelectedCategory}
-                                            counts={categoryCounts}
-                                        />
-                                    </div>
-                                )}
-
-                                <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_240px] xl:items-center">
-                                    <div className="relative">
-                                        <svg className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                        </svg>
-                                        <input
-                                            type="text"
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                            placeholder={language === 'en' ? 'Search templates...' : 'Tìm kiếm template...'}
-                                            className="cvf-control cvf-density-input w-full rounded-[22px] border border-slate-200 bg-slate-50 py-4 pl-12 pr-12 text-sm text-slate-900 transition focus:border-indigo-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-white/[0.08] dark:bg-[#10131d] dark:text-white dark:placeholder:text-white/30 dark:focus:border-indigo-400"
-                                            aria-label={language === 'en' ? 'Search templates' : 'Tìm kiếm template'}
-                                        />
-                                        {searchQuery && (
-                                            <button
-                                                onClick={() => setSearchQuery('')}
-                                                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-700 dark:hover:text-white/80"
-                                                aria-label={language === 'en' ? 'Clear search' : 'Xóa tìm kiếm'}
-                                            >
-                                                ✕
-                                            </button>
-                                        )}
-                                    </div>
-                                    <div className="rounded-[24px] border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-500 dark:border-white/[0.08] dark:bg-[#10131d] dark:text-white/45">
-                                        <div className="font-semibold text-slate-900 dark:text-white">
-                                            {language === 'vi' ? `${categoryCounts.all} templates sẵn sàng` : `${categoryCounts.all} templates ready`}
-                                        </div>
-                                        <div className="mt-1 leading-6">
-                                            {language === 'vi'
-                                                ? 'Giữ nguyên flow, chỉ chọn đúng template và để CVF dẫn đường.'
-                                                : 'Keep the flow intact, just pick the right template and let CVF guide the path.'}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="tour-template-grid" className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-                                    {filteredTemplates.map((template, index) => (
-                                        <div key={template.id} id={index === 0 ? 'tour-template-card' : undefined}>
-                                            <TemplateCard
-                                                template={template}
-                                                onClick={() => handleSelectTemplate(template)}
-                                                onPreview={(e) => { e.stopPropagation(); setPreviewTemplate(template); }}
-                                                onTry={QUICK_TRY_CONFIGS[template.id]
-                                                    ? () => handleTryTemplate(template, QUICK_TRY_CONFIGS[template.id])
-                                                    : undefined}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </>
+                <HomeBrowseExperience
+                    language={language as 'vi' | 'en'}
+                    t={t}
+                    currentFolder={currentFolder}
+                    setCurrentFolder={setCurrentFolder}
+                    templates={templates}
+                    categoryCounts={categoryCounts}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    filteredTemplates={filteredTemplates}
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    handleOutcomeQuickAction={handleOutcomeQuickAction}
+                    handleSelectTemplate={handleSelectTemplate}
+                    handleTryTemplate={handleTryTemplate}
+                    QUICK_TRY_CONFIGS={QUICK_TRY_CONFIGS}
+                    setPreviewTemplate={setPreviewTemplate}
+                    statCards={statCards}
+                    isIntentFirstEnabled={isIntentFirstEnabled}
+                    handleIntentRoute={handleIntentRoute}
+                    starterHandoff={starterHandoff}
+                    handleOpenGovernedStarter={handleOpenGovernedStarter}
+                    handleDismissGovernedStarter={handleDismissGovernedStarter}
+                    mockAiEnabled={mockAiEnabled}
+                    hasAnyApiKey={hasAnyApiKey}
+                    bannerDismissed={bannerDismissed}
+                    handleDismissBanner={handleDismissBanner}
+                    handleDemoRun={handleDemoRun}
+                    setupConfidence={setupConfidence}
+                />
             )}
 
             {workflowState === 'form' && selectedTemplate && (

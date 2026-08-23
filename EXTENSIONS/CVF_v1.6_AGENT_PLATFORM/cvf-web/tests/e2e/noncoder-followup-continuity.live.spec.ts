@@ -159,7 +159,7 @@ test.describe('J3 — live governed follow-up continuity (Alibaba lane)', () => 
                     _previousOutput: prevOutput,
                 },
                 provider: 'alibaba',
-                model: 'qwen-turbo',
+                model: 'qwen-flash',
                 mode: 'governance',
                 action: 'analyze',
             },

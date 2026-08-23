@@ -1,8 +1,8 @@
 /**
  * Focused tests for storage-adapter.ts (ERH-DUR2)
  *
- * Verifies FileEventListAdapter, FileKeyValueAdapter, RedisEventListAdapter stub,
- * RedisKeyValueAdapter stub, buildEventListAdapter factory, buildKeyValueAdapter
+ * Verifies file/SQLite adapters, Redis event-list append, Redis key-value stub,
+ * buildEventListAdapter factory, buildKeyValueAdapter
  * factory, and CVF_STORAGE_ADAPTER_TYPE env routing.
  *
  * CVF_STORAGE_ADAPTER_VERSION: 2026-06-05
@@ -20,6 +20,8 @@ import {
   SQLiteKeyValueAdapter,
   RedisEventListAdapter,
   RedisKeyValueAdapter,
+  CONTROL_PLANE_RETENTION_SECONDS,
+  type RedisEventListClient,
   buildEventListAdapter,
   buildKeyValueAdapter,
 } from './storage-adapter';
@@ -75,6 +77,15 @@ describe('FileEventListAdapter', () => {
     const result = await adapter.readAll(storeKey);
     expect(result).toHaveLength(2);
     expect(result[0]).toMatchObject({ id: 'y' });
+  });
+
+  it('append adds one item through the list adapter contract', async () => {
+    await adapter.writeAll(storeKey, [{ id: 'x', val: 10 }]);
+    await adapter.append(storeKey, { id: 'y', val: 20 });
+    expect(await adapter.readAll(storeKey)).toEqual([
+      { id: 'x', val: 10 },
+      { id: 'y', val: 20 },
+    ]);
   });
 
   it('writeRaw writes raw string content to store key', async () => {
@@ -199,6 +210,15 @@ describe('SQLiteEventListAdapter', () => {
     const result = await adapter.readAll(storeKey);
     expect(result).toEqual([{ id: 'raw', val: 4 }]);
   });
+
+  it('append assigns the next ordered position atomically in local SQLite', async () => {
+    await adapter.append(storeKey, { id: 'a', val: 1 });
+    await adapter.append(storeKey, { id: 'b', val: 2 });
+    expect(await adapter.readAll(storeKey)).toEqual([
+      { id: 'a', val: 1 },
+      { id: 'b', val: 2 },
+    ]);
+  });
 });
 
 // ─── SQLiteKeyValueAdapter ────────────────────────────────────────────────────
@@ -233,38 +253,70 @@ describe('SQLiteKeyValueAdapter', () => {
 
 // ─── RedisEventListAdapter stub ───────────────────────────────────────────────
 
-describe('RedisEventListAdapter stub', () => {
+class FakeEventRedisClient implements RedisEventListClient {
+  evalCalls: Array<{ script: string; keys: string[]; args: Array<string | number> }> = [];
+  rows: string[] = [];
+
+  async eval<TData>(script: string, keys: string[], args: Array<string | number>): Promise<TData> {
+    this.evalCalls.push({ script, keys, args });
+    return 1 as TData;
+  }
+
+  async zrange<TData>(): Promise<TData[]> {
+    return this.rows as TData[];
+  }
+}
+
+describe('RedisEventListAdapter', () => {
   const adapter = new RedisEventListAdapter();
 
   it('has adapterType "redis"', () => {
     expect(adapter.adapterType).toBe('redis');
   });
 
-  it('init throws CVF_NOT_IMPLEMENTED', async () => {
-    await expect(adapter.init('any-key')).rejects.toThrow('CVF_NOT_IMPLEMENTED');
+  it('reports blocked capability without a client and performs no I/O', () => {
+    expect(adapter.describeCapability()).toEqual(expect.objectContaining({
+      implementationStatus: 'BLOCKED_CONFIGURATION',
+      distributed: true,
+      atomicAppend: false,
+      livenessChecked: false,
+    }));
   });
 
-  it('readAll throws CVF_NOT_IMPLEMENTED', async () => {
-    await expect(adapter.readAll('any-key')).rejects.toThrow('CVF_NOT_IMPLEMENTED');
+  it('fails closed when Redis configuration is absent', async () => {
+    await expect(adapter.append('events', { id: 'a' })).rejects.toThrow('CVF_CONFIGURATION_ERROR');
   });
 
-  it('writeAll throws CVF_NOT_IMPLEMENTED', async () => {
-    await expect(adapter.writeAll('any-key', [])).rejects.toThrow('CVF_NOT_IMPLEMENTED');
+  it('uses one atomic script for append, expiry, and expired-record removal', async () => {
+    const client = new FakeEventRedisClient();
+    const active = new RedisEventListAdapter(client);
+    await active.append('cvf:audit', { id: 'a', timestamp: '2026-08-10T00:00:00.000Z' });
+
+    expect(client.evalCalls).toHaveLength(1);
+    expect(client.evalCalls[0].keys).toEqual(['cvf:audit']);
+    expect(client.evalCalls[0].script).toContain("redis.call('ZADD'");
+    expect(client.evalCalls[0].script).toContain("redis.call('ZREMRANGEBYSCORE'");
+    expect(client.evalCalls[0].script).toContain("redis.call('EXPIRE'");
+    expect(client.evalCalls[0].args.at(-1)).toBe(CONTROL_PLANE_RETENTION_SECONDS);
   });
 
-  it('writeRaw throws CVF_NOT_IMPLEMENTED', async () => {
-    await expect(adapter.writeRaw('any-key', '[]')).rejects.toThrow('CVF_NOT_IMPLEMENTED');
+  it('reports static distributed capability without a probe', () => {
+    const client = new FakeEventRedisClient();
+    const active = new RedisEventListAdapter(client);
+    expect(active.describeCapability()).toEqual(expect.objectContaining({
+      implementationStatus: 'ACTIVE_DISTRIBUTED',
+      atomicAppend: true,
+      retentionSeconds: 2_592_000,
+      livenessChecked: false,
+    }));
+    expect(client.evalCalls).toHaveLength(0);
   });
 
-  it('stub does not silently corrupt file-backed data (throws, not swallows)', async () => {
-    const thrown: Error[] = [];
-    try {
-      await adapter.readAll('some-path');
-    } catch (err) {
-      if (err instanceof Error) thrown.push(err);
-    }
-    expect(thrown).toHaveLength(1);
-    expect(thrown[0].message).toContain('CVF_NOT_IMPLEMENTED');
+  it('reads deterministic sorted-set records through the injected client', async () => {
+    const client = new FakeEventRedisClient();
+    client.rows = [JSON.stringify({ id: 'a', val: 1 })];
+    const active = new RedisEventListAdapter<{ id: string; val: number }>(client);
+    expect(await active.readAll('cvf:audit')).toEqual([{ id: 'a', val: 1 }]);
   });
 });
 

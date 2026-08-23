@@ -253,8 +253,8 @@ class PackageUseProofAdapterTests(unittest.TestCase):
         self.assertEqual(packet["liveCall"]["providerTraceId"], "req-test")
         self.assertIsNone(packet["diagnostic"])
 
-    def test_qwen_turbo_is_denied_as_unverified_free_quota_model(self) -> None:
-        packet = self._packet(live=True, model="qwen-turbo")
+    def test_qwen_flash_is_denied_as_unverified_free_quota_model(self) -> None:
+        packet = self._packet(live=True, model="qwen-flash")
 
         self.assertEqual(
             packet["executionDisposition"],

@@ -1,4 +1,6 @@
 import { isAllowedAcknowledgementTransition } from "../lifecycle/lifecycle-transitions.js";
+import { validateRoutingScope } from "../routing/routing-engine.js";
+import { validateDose } from "./dose-engine.js";
 /**
  * Creates and transitions DistributionPackage records. routing_decision is
  * always computed internally from a fresh Kernel authority resolution; it
@@ -21,6 +23,10 @@ export class DistributionEngine {
         return referenceIds.every((referenceId) => this.authority.isCurrentlyActive(referenceId, actionTimeUtcIso));
     }
     create(input) {
+        if (!validateRoutingScope(input).valid)
+            return { created: false, reasons: ["INCOMPLETE_ROUTING_SCOPE"] };
+        if (!validateDose(input.dose, input.expiryUtc, input.actionTimeUtcIso).valid)
+            return { created: false, reasons: ["INVALID_DOSE_OR_EXPIRY"] };
         if (input.truthReferences.length === 0) {
             return { created: false, reasons: ["EMPTY_TRUTH_REFERENCES"] };
         }
@@ -64,6 +70,11 @@ export class DistributionEngine {
     isReadActionable(pkg) {
         return pkg.acknowledgement_state === "PENDING_ACKNOWLEDGEMENT";
     }
+    isExpired(pkg, actionTimeUtcIso) {
+        const actionMs = Date.parse(actionTimeUtcIso);
+        const expiryMs = Date.parse(pkg.expiry_utc);
+        return Number.isNaN(actionMs) || Number.isNaN(expiryMs) || actionMs >= expiryMs;
+    }
     /**
      * Delivers/consumes the package. Re-resolves every bound reference at
      * actionTimeUtcIso; does not mutate acknowledgement_state (delivery and
@@ -78,12 +89,45 @@ export class DistributionEngine {
         if (!this.isReadActionable(pkg)) {
             return { succeeded: false, reasons: ["PACKAGE_NOT_ACTIONABLE"] };
         }
+        if (this.isExpired(pkg, actionTimeUtcIso))
+            return { succeeded: false, reasons: ["PACKAGE_EXPIRED"] };
         if (!this.resolveAllActive(pkg.truth_references, actionTimeUtcIso)) {
             return { succeeded: false, reasons: ["REFERENCE_NOT_CURRENTLY_ACTIVE"] };
         }
         return { succeeded: true, distributionPackage: { ...pkg }, reasons: [] };
     }
+    /**
+     * Strict consumption-time binding check (A4). Compares the caller-asserted
+     * `binding` against the package's own immutable recipient/role/task/phase/
+     * dose fields before applying every existing `deliverOrConsume` check
+     * (read-actionable lifecycle state, expiry, and fresh Kernel reference
+     * resolution). A binding mismatch returns
+     * `PACKAGE_CONSUMER_BINDING_MISMATCH` and never mutates state or reveals
+     * lifecycle/expiry detail for a caller that does not match the package's
+     * own routing scope. Existing `deliverOrConsume` behavior for a correctly
+     * bound caller is unchanged: this method delegates to it once binding
+     * passes, so actionable/expiry/current-reference checks are not
+     * duplicated or weakened.
+     */
+    consumeFor(packageId, binding, actionTimeUtcIso) {
+        const pkg = this.packages.get(packageId);
+        if (!pkg) {
+            return { succeeded: false, reasons: ["PACKAGE_NOT_FOUND"] };
+        }
+        const bindingMatches = pkg.recipient === binding.recipient &&
+            pkg.role === binding.role &&
+            pkg.task === binding.task &&
+            pkg.phase === binding.phase &&
+            pkg.dose === binding.dose;
+        if (!bindingMatches) {
+            return { succeeded: false, reasons: ["PACKAGE_CONSUMER_BINDING_MISMATCH"] };
+        }
+        return this.deliverOrConsume(packageId, actionTimeUtcIso);
+    }
     acknowledge(packageId, actionTimeUtcIso) {
+        const current = this.packages.get(packageId);
+        if (current && this.isExpired(current, actionTimeUtcIso))
+            return { succeeded: false, reasons: ["PACKAGE_EXPIRED"] };
         const outcome = this.reResolveOrReject(packageId, "ACKNOWLEDGED", actionTimeUtcIso);
         if ("reasons" in outcome) {
             return { succeeded: false, reasons: outcome.reasons };

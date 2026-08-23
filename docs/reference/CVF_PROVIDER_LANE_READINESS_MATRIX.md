@@ -43,7 +43,7 @@ public disposition controls until a fresh governed promotion changes it.
 
 | Provider | Model | Status | Latest Receipt | Pass Window | Operator Note |
 |---|---|---|---|---|---|
-| Alibaba | `qwen-turbo` | `CERTIFIED` | [20260421-072551-422037](../audits/alibaba-canary/CVF_RECEIPT_20260421-072551-422037.md) | 3 consecutive PASS 6/6 | Fast (7–12 s). User-paid DashScope billing. |
+| Alibaba | `qwen-flash` | `EXPERIMENTAL` | Historical Alibaba receipt retained at [20260421-072551-422037](../audits/alibaba-canary/CVF_RECEIPT_20260421-072551-422037.md); not transferable to the new model | Fresh T6 live proof pending | Current target; user-paid DashScope billing. |
 | DeepSeek | `deepseek-chat` | `CERTIFIED` | [20260421-114125-19515e](../audits/deepseek-canary/CVF_RECEIPT_20260421-114125-19515e.md) | 3 consecutive PASS 6/6 | Slower (62–155 s observed). User-paid billing. |
 | OpenAI | `gpt-4o-mini` | `EXPERIMENTAL` | [Historical receipt 20260509-141626-fa4465](../evidence/provider-lane-receipts/openai/RECEIPT_20260509-141626-fa4465.json) | Historical 3-run PASS evidence exists; current public certification remains held | Operator-paid OpenAI billing; receipt projection does not itself reverse R65 Option B or Known Limitations L-007. Fresh governed promotion is required. |
 
@@ -62,8 +62,8 @@ public disposition controls until a fresh governed promotion changes it.
 > Multi-provider operability is proven. Provider parity is not claimed.  
 > Provider economics (latency, cost, reliability) remain user-selected.
 
-Alibaba `qwen-turbo` and DeepSeek `deepseek-chat` are the two current,
-unambiguous public `CERTIFIED` lanes. OpenAI has model-specific historical
+Alibaba `qwen-flash` is the current target pending fresh live proof; DeepSeek
+`deepseek-chat` is the current unambiguous public `CERTIFIED` lane. OpenAI has model-specific historical
 canary receipts, but receipt presence alone is not authority to reverse the
 reviewed R65 Option B disposition. Do not add an OpenAI certification badge or
 broader UI claim until a fresh governed promotion reconciles this matrix,
@@ -99,3 +99,5 @@ python scripts/check_cvf_provider_release_readiness.py
 Operator runbook (when to smoke, canary, save receipt, downgrade, certify):
 
 - [`docs/reference/CVF_PROVIDER_LANE_OPERATOR_RUNBOOK.md`](CVF_PROVIDER_LANE_OPERATOR_RUNBOOK.md)
+
+Text Encoding Exception: pre-existing non-ASCII text preserved unchanged; the QTDM-01 migration edited only the ASCII deprecated model identifier.

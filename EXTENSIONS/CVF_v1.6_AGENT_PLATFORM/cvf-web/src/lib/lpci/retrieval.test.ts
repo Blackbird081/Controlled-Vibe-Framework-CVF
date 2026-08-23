@@ -14,6 +14,7 @@ const makeRecord = (overrides: Partial<LpciIndexRecord> = {}): LpciIndexRecord =
   titleSnippet: 'Governance Policy',
   effectiveDate: '2026-01-01',
   authorityLevel: 'policy',
+  sensitivityLevel: 'public',
   ...overrides,
 });
 

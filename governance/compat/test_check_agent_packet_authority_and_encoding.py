@@ -66,6 +66,24 @@ def test_added_non_ascii_line_allows_recorded_exception_marker() -> None:
     assert issues == []
 
 
+def test_pinned_raw_preimage_archive_allows_historical_non_ascii() -> None:
+    issues = MODULE.find_non_ascii_line_violations(
+        "docs/reference/archive/AGENTS_FULL_PRE_T2B_2026-08-11.md",
+        [MODULE.AddedLine(7, "Historical text with smart dash \u2014 preserved")],
+        has_exception=False,
+    )
+    assert issues == []
+
+
+def test_other_archive_still_rejects_non_ascii_without_exception() -> None:
+    issues = MODULE.find_non_ascii_line_violations(
+        "docs/reference/archive/AGENTS_OTHER_ARCHIVE.md",
+        [MODULE.AddedLine(7, "Historical text with smart dash \u2014 unapproved")],
+        has_exception=False,
+    )
+    assert any("non-ASCII" in issue for issue in issues)
+
+
 def test_provider_specific_agent_file_rejected_as_source_authority() -> None:
     text = (
         "## Source Authority\n\n"

@@ -25,6 +25,7 @@ readiness.
 | Reference | Use |
 |---|---|
 | `CVF_MODEL_GATEWAY_MCP_RUNTIME_BRIDGE_BOUNDARY.md` | Central boundary contract for any future MCP tool that intends to call Model Gateway runtime surfaces. |
+| `CVF_MCP_NORMATIVE_INVARIANT_PROFILE.md` | CVF-native mapping of selected MCP 2026-07-28 fail-closed protocol invariants and local negative conformance evidence. |
 | `docs/reference/external_agent_review/README.md` | Review-context front door for external-agent MCP/workspace critique and non-canonical package absorption. |
 | `docs/reference/agent_workspace/CVF_WORKSPACE_LAYER_EXTERNAL_PACKAGE_ABSORPTION_MAP.md` | Selective absorption map for the operator-copied external workspace package. |
 

@@ -75,7 +75,7 @@ export const PROVIDER_CAPABILITY_REGISTRY = [
     ownerRefs: PROVIDER_CAPABILITY_OWNER_REFS,
     models: [
       {
-        modelId: "qwen-turbo",
+        modelId: "qwen-flash",
         supportedMethods: ["complete", "chat", "stream"],
         defaultMethod: "complete",
       },

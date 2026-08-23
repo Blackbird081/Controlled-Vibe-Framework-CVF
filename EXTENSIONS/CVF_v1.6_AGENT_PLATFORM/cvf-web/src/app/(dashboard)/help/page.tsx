@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { BookOpen, ClipboardList, LifeBuoy, RefreshCw, Rocket, Users } from 'lucide-react';
 import { SurfaceTopBar } from '@/components';
+import { KnowledgeJourneyNav } from '@/components/KnowledgeJourneyNav';
 import { HELP_CONTENT } from '@/data/help-content';
 import { useLanguage } from '@/lib/i18n';
 
@@ -28,19 +29,20 @@ export default function HelpPage() {
             <SurfaceTopBar
                 title={language === 'vi' ? 'Trung tâm trợ giúp' : 'Help Center'}
                 subtitle={language === 'vi'
-                    ? 'Hướng dẫn sử dụng từng tính năng — từ template đơn giản đến quy trình AI nâng cao.'
+                    ? 'Bắt đầu từ mục tiêu, rồi đi theo một luồng rõ ràng từ thu thập đến bàn giao.'
                     : 'Guides for every feature — from simple templates to advanced AI workflows.'}
                 actions={(
                     <Link
                         href="/docs"
                         className="cvf-control inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
                     >
-                        {language === 'vi' ? 'Mở docs' : 'Open docs'}
+                        {language === 'vi' ? 'Mở tài liệu' : 'Open docs'}
                     </Link>
                 )}
             />
 
             <div className="space-y-8 px-4 py-6 sm:px-6">
+                <KnowledgeJourneyNav currentStep={1} />
                 <section className="grid gap-5 md:grid-cols-2">
                     {supportCards.map((card) => {
                         const Icon = card.icon;

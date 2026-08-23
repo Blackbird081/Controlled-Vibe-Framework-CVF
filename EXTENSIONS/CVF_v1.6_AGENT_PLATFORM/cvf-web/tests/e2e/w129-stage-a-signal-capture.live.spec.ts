@@ -132,7 +132,7 @@ test.describe('W129 Stage A signal capture', () => {
       '',
       `- Live governed execution status: \`${response.status()}\``,
       `- Governance decision surfaced: \`${body.governanceEvidenceReceipt?.decision ?? 'UNKNOWN'}\``,
-      `- Provider lane: \`alibaba / qwen-turbo\``,
+      `- Provider lane: \`alibaba / qwen-flash\``,
       '',
       '## Browser-Local Analytics',
       '',

@@ -26,12 +26,17 @@ SESSION_PREFIXES = (
 MATERIAL_SESSION_SUBPREFIXES = (
     "CVF_SESSION/agent_workspace/",
 )
+ATOMIC_SESSION_COMPANION_PATHS = (
+    "governance/compat/CVF_ACTIVE_CONTINUITY_READ_BUDGET_MIGRATION.json",
+)
 HANDOFF_PREFIXES = (
     "AGENT_HANDOFF",
     "CVF_SESSION/handoffs/",
 )
 AGENTS_PATH = "AGENTS.md"
 HANDOFF_REFERENCE_RE = re.compile(r"AGENT_HANDOFF(?:_V\d+_\d{4}-\d{2}-\d{2})?\.md")
+MIXED_ATOMICITY_HEADING = "## Mixed Protected-Path Atomicity Authorization"
+MIXED_ATOMICITY_DISPOSITION = "Disposition: AUTHORIZED_EXACT_MANIFEST"
 
 
 @dataclass(frozen=True)
@@ -47,6 +52,7 @@ class PathPlan:
     protected_session_paths: tuple[str, ...]
     trace_artifact_paths: tuple[str, ...]
     mixed_material_and_session: bool
+    mixed_atomicity_authorized: bool
     exact_manifest_collision_risk: bool
     handoff_sync_only: bool
 
@@ -122,6 +128,8 @@ def _range_paths(base: str, head: str) -> tuple[str, ...]:
 
 
 def _is_protected_session_path(path: str) -> bool:
+    if path in ATOMIC_SESSION_COMPANION_PATHS:
+        return True
     if path.startswith(MATERIAL_SESSION_SUBPREFIXES):
         return False
     return path.startswith(SESSION_PREFIXES) or path.startswith(HANDOFF_PREFIXES)
@@ -153,6 +161,31 @@ def _has_agent_operation_trace(path: str) -> bool:
     return "## Agent Operation Trace Block" in text and "Actual changed set" in text
 
 
+def _has_exact_mixed_atomicity_authorization(
+    path: str, changed_paths: tuple[str, ...]
+) -> bool:
+    full = REPO_ROOT / path
+    if not full.exists() or full.is_dir() or not path.endswith(".md"):
+        return False
+    text = full.read_text(encoding="utf-8", errors="replace")
+    start = text.find(MIXED_ATOMICITY_HEADING)
+    if start < 0:
+        return False
+    section = text[start + len(MIXED_ATOMICITY_HEADING):]
+    next_heading = re.search(r"(?m)^## ", section)
+    if next_heading:
+        section = section[:next_heading.start()]
+    required_tokens = (
+        MIXED_ATOMICITY_DISPOSITION,
+        "Atomicity reason:",
+        "Rollback boundary:",
+        "Exact changed manifest:",
+    )
+    return all(token in section for token in required_tokens) and all(
+        f"`{path}`" in section for path in changed_paths
+    )
+
+
 def build_path_plan(base: str, head: str) -> PathPlan:
     changed = set(_range_paths(base, head))
     changed.update(_status_paths())
@@ -171,7 +204,13 @@ def build_path_plan(base: str, head: str) -> PathPlan:
     material = tuple(path for path in changed_paths if path not in protected)
     trace_artifacts = tuple(path for path in changed_paths if _has_agent_operation_trace(path))
     mixed = bool(protected and material)
-    exact_manifest_collision_risk = mixed and bool(trace_artifacts)
+    mixed_atomicity_authorized = mixed and any(
+        _has_exact_mixed_atomicity_authorization(path, changed_paths)
+        for path in trace_artifacts
+    )
+    exact_manifest_collision_risk = (
+        mixed and bool(trace_artifacts) and not mixed_atomicity_authorized
+    )
     handoff_sync_only = bool(changed_paths) and all(
         _is_active_handoff_path(path) for path in changed_paths
     )
@@ -181,6 +220,7 @@ def build_path_plan(base: str, head: str) -> PathPlan:
         protected_session_paths=protected,
         trace_artifact_paths=trace_artifacts,
         mixed_material_and_session=mixed,
+        mixed_atomicity_authorized=mixed_atomicity_authorized,
         exact_manifest_collision_risk=exact_manifest_collision_risk,
         handoff_sync_only=handoff_sync_only,
     )
@@ -190,6 +230,8 @@ def _recommended_mode(plan: PathPlan) -> str:
     if plan.handoff_sync_only:
         return "handoff-sync"
     if plan.protected_session_paths and not plan.material_paths:
+        return "session-sync"
+    if plan.mixed_material_and_session and plan.mixed_atomicity_authorized:
         return "session-sync"
     if plan.mixed_material_and_session:
         return "split: material first, session-sync/handoff-sync second"
@@ -212,8 +254,12 @@ def _print_path_plan(plan: PathPlan) -> None:
     print(f"Agent Operation Trace exact-manifest artifacts: {len(plan.trace_artifact_paths)}")
     for path in plan.trace_artifact_paths:
         print(f"  * {path}")
+    print(f"Exact mixed-manifest authorization: {plan.mixed_atomicity_authorized}")
     if plan.mixed_material_and_session:
-        print("Split recommendation: material commit first, session/handoff sync commit second.")
+        if plan.mixed_atomicity_authorized:
+            print("Split recommendation: N/A; exact atomic mixed manifest is authorized.")
+        else:
+            print("Split recommendation: material commit first, session/handoff sync commit second.")
     else:
         print("Split recommendation: N/A with reason: changed paths are not mixed material/session.")
     print(f"Recommended steward lane: {_recommended_mode(plan)}")
@@ -305,7 +351,11 @@ def _validate_mode_shape(mode: str, base: str, head: str, plan: PathPlan, enforc
                 "VIOLATION: closure/push stewardship requires a non-empty committed range."
             )
             failures += 1
-    if mode == "session-sync" and plan.material_paths:
+    if (
+        mode == "session-sync"
+        and plan.material_paths
+        and not plan.mixed_atomicity_authorized
+    ):
         print(
             "VIOLATION: session-sync mode has material paths. Use material mode first, "
             "then session-sync."

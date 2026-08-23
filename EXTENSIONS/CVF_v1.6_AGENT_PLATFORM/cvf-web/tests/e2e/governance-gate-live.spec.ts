@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { seedStorageWithAlibaba, login, postLiveGovernedExecution } from './utils';
 
-// All tests in this spec make real Alibaba (qwen-turbo) API calls.
+// All tests in this spec make real Alibaba (qwen-flash) API calls.
 // Assert governance BEHAVIOR — never assert exact AI response content.
 // AI output varies run-to-run; governance behavior must be deterministic.
 //
 // Run under: DASHSCOPE_API_KEY=<key> npx playwright test tests/e2e/governance-gate-live.spec.ts --reporter=line
-// Provider: Alibaba qwen-turbo | Timeout per test: 30s (plus 15s buffer)
+// Provider: Alibaba qwen-flash | Timeout per test: 30s (plus 15s buffer)
 
 test.beforeEach(async ({ page }) => {
     await seedStorageWithAlibaba(page);

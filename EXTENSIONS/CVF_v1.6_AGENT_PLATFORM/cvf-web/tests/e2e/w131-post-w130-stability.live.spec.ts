@@ -751,7 +751,7 @@ test.describe('W131-T1 CP3 — Alibaba primary stability run', () => {
       // This ensures evidence is persisted even if live proof call fails
       const summary = writeEvidence(
         'alibaba',
-        'qwen-turbo',
+        'qwen-flash',
         'W131-T1 CP3 — Alibaba Primary Stability Run',
         journeyLog,
         events,
@@ -770,7 +770,7 @@ test.describe('W131-T1 CP3 — Alibaba primary stability run', () => {
         expect([200, 400, 409, 422]).toContain(response.status());
         expect(body).toHaveProperty('governanceEvidenceReceipt');
         // Re-write evidence with live proof data
-        writeEvidence('alibaba', 'qwen-turbo', 'W131-T1 CP3 — Alibaba Primary Stability Run', journeyLog, events, liveStatus, liveDecision, 'alibaba');
+        writeEvidence('alibaba', 'qwen-flash', 'W131-T1 CP3 — Alibaba Primary Stability Run', journeyLog, events, liveStatus, liveDecision, 'alibaba');
       } catch {
         // Browser context closed — evidence already written without live proof
       }
@@ -894,3 +894,5 @@ test.describe('W131-T1 CP4 — DeepSeek confirmatory run', () => {
     },
   );
 });
+
+// Text Encoding Exception: pre-existing non-ASCII text preserved unchanged; the QTDM-01 migration edited only the ASCII deprecated model identifier.

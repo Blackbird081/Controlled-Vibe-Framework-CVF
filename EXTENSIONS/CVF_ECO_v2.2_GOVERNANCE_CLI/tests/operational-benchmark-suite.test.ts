@@ -18,7 +18,7 @@ describe("operational benchmark suite", () => {
         eventType: "execution_requested",
         evidenceMode: "live",
         provider: "alibaba",
-        model: "qwen-turbo",
+        model: "qwen-flash",
         receiptId: "receipt-live",
         decision: "allow",
         enforcement: { status: "allow" },
@@ -54,7 +54,7 @@ describe("operational benchmark suite", () => {
       eventCount: 4,
       evidenceModes: ["live", "offline"],
       providerLanes: ["alibaba"],
-      modelLanes: ["qwen-turbo"],
+      modelLanes: ["qwen-flash"],
     });
     expect(report.metrics.retryCount).toEqual({ count: 1, total: 4 });
     expect(report.metrics.humanCorrectionCount).toEqual({ count: 1, total: 3 });
@@ -80,7 +80,7 @@ describe("operational benchmark suite", () => {
             traceId: "trace-live",
             receiptId: "receipt-live",
             provider: "alibaba",
-            model: "qwen-turbo",
+            model: "qwen-flash",
             decision: "ALLOW",
           },
         },
@@ -109,7 +109,7 @@ describe("operational benchmark suite", () => {
           traceId: "trace-live-1",
           evidenceMode: "live",
           provider: "alibaba",
-          model: "qwen-turbo",
+          model: "qwen-flash",
         },
         {
           run: 2,
@@ -119,7 +119,7 @@ describe("operational benchmark suite", () => {
           traceId: "trace-live-2",
           evidenceMode: "live",
           provider: "alibaba",
-          model: "qwen-turbo",
+          model: "qwen-flash",
         },
       ],
     }));
@@ -131,7 +131,7 @@ describe("operational benchmark suite", () => {
       eventCount: 2,
       evidenceModes: ["live"],
       providerLanes: ["alibaba"],
-      modelLanes: ["qwen-turbo"],
+      modelLanes: ["qwen-flash"],
     });
     expect(report.scorecard.callLevel).toMatchObject({
       totalCalls: 2,
@@ -148,7 +148,7 @@ describe("operational benchmark suite", () => {
         eventType: "execution_completed",
         evidenceMode: "live",
         provider: "alibaba",
-        model: "qwen-turbo",
+        model: "qwen-flash",
         receiptId: "receipt-live-1",
         decision: "allow",
         enforcement: { status: "allow" },
@@ -158,7 +158,7 @@ describe("operational benchmark suite", () => {
         eventType: "receipt_emitted",
         evidenceMode: "live",
         provider: "alibaba",
-        model: "qwen-turbo",
+        model: "qwen-flash",
         receiptId: "receipt-live-1",
         decision: "captured",
         enforcement: { status: "allow" },
@@ -168,7 +168,7 @@ describe("operational benchmark suite", () => {
         eventType: "execution_completed",
         evidenceMode: "live",
         provider: "alibaba",
-        model: "qwen-turbo",
+        model: "qwen-flash",
         receiptId: "receipt-live-2",
         decision: "allow",
         enforcement: { status: "allow" },
@@ -178,7 +178,7 @@ describe("operational benchmark suite", () => {
         eventType: "receipt_emitted",
         evidenceMode: "live",
         provider: "alibaba",
-        model: "qwen-turbo",
+        model: "qwen-flash",
         receiptId: "receipt-live-2",
         decision: "captured",
         enforcement: { status: "allow" },
@@ -299,7 +299,7 @@ describe("operational benchmark suite", () => {
         eventType: "execution_requested",
         evidenceMode: "live",
         provider: "alibaba",
-        model: "qwen-turbo",
+        model: "qwen-flash",
         receiptId: "receipt-1",
         decision: "allow",
         enforcement: { status: "allow" },
@@ -319,7 +319,7 @@ describe("operational benchmark suite", () => {
         source: {
           evidenceModes: ["live"],
           providerLanes: ["alibaba"],
-          modelLanes: ["qwen-turbo"],
+          modelLanes: ["qwen-flash"],
         },
         metrics: {
           taskCompletionRate: { count: 1, total: 1 },

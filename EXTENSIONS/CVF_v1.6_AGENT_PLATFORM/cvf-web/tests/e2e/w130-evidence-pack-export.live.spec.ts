@@ -10,7 +10,7 @@
  *
  * Governance policy (AGENTS.md §Mandatory Live Governance Proof):
  *   Any claim about CVF governance behavior MUST use a real provider API call.
- *   Live lane: Alibaba qwen-turbo (DASHSCOPE_API_KEY / ALIBABA_API_KEY).
+ *   Live lane: Alibaba qwen-flash (DASHSCOPE_API_KEY / ALIBABA_API_KEY).
  *
  * Journey steps:
  *   1. IntentEntry → strong-confidence form route → CTA click → DynamicForm
@@ -299,7 +299,7 @@ test.describe('W130-T1 CP3 — evidence and pack export activation proof', () =>
       // ── Evidence files ────────────────────────────────────────────────────────
       const summary = {
         capturedAt: new Date().toISOString(),
-        provider: 'alibaba / qwen-turbo',
+        provider: 'alibaba / qwen-flash',
         tranche: 'W130-T1 CP3 — Evidence And Pack Export Activation Proof',
         flags: {
           NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR: true,

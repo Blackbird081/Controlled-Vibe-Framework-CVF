@@ -88,7 +88,7 @@ const mockEvidenceReceipt = {
     decision: 'ALLOW',
     riskLevel: 'R1',
     provider: 'alibaba',
-    model: 'qwen-turbo',
+    model: 'qwen-flash',
     routingDecision: 'ALLOW',
     policySnapshotId: 'pol-w119-001',
     envelopeId: 'env-w119-001',

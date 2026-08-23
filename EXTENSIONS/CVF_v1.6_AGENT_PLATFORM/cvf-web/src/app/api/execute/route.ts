@@ -8,7 +8,7 @@ import { runSafetyWorkflowChain } from '@/lib/safety-workflow-chain';
 import { getRateLimiter } from '@/lib/rate-limit';
 import { checkBudget } from '@/lib/budget';
 import { buildWebGuardContext, type GuardPipelineResult } from '@/lib/guard-runtime-adapter';
-import { getSharedGuardEngine } from '@/lib/guard-engine-singleton';
+import { runExecuteRouteMandatoryGateway } from '@/lib/route-guard-gateway';
 import { validateOutput, shouldRetry, type ValidationResult, type RetryState } from '@/lib/output-validator';
 import { routeWebProvider } from '@/lib/ai/provider-router-adapter';
 import { lookupGuidedResponse } from './guided.response.registry';
@@ -570,8 +570,7 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        // ── PRE-GUARDS: Run guard runtime pipeline (shared engine — Sprint 6) ──
-        const guardEngine = getSharedGuardEngine();
+        // -- PRE-GUARDS: Run mandatory gateway exactly once (T1 composition) --
         const guardContext = buildWebGuardContext({
             requestId: (rawBody as Record<string, unknown>).requestId as string || undefined,
             phase: body.cvfPhase,
@@ -588,21 +587,18 @@ export async function POST(request: NextRequest) {
                 description?: string;
             } | undefined,
         });
-        const guardResult: GuardPipelineResult = guardEngine.evaluate(guardContext);
-
-        if (guardResult.finalDecision === 'BLOCK') {
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: 'We need to adjust your request for better results.',
-                    provider,
-                    model: 'guard-blocked',
-                    enforcement,
-                    guardResult,
-                },
-                { status: 400 }
-            );
+        const gatewayOutcome = await runExecuteRouteMandatoryGateway({
+            context: guardContext,
+            envelope: govEnvelope,
+            actorId: session?.userId ?? (isServiceAllowed ? 'service-account' : 'unknown-actor'),
+            actorRole: session?.role ?? (isServiceAllowed ? 'service' : 'unknown-role'),
+            provider,
+            enforcementRiskLevel: enforcement.riskGate?.riskLevel,
+        });
+        if (gatewayOutcome.blockedResponse) {
+            return gatewayOutcome.blockedResponse;
         }
+        const guardResult: GuardPipelineResult = gatewayOutcome.guardResult;
 
         // ── PROVIDER ROUTER: Consult Track 5A canonical governance routing ──
         const configuredProviders = (Object.keys(apiKeyMap) as AIProvider[]).filter(

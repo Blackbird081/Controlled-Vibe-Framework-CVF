@@ -241,14 +241,14 @@ describe('ProcessingScreen — guided response (W88-T1)', () => {
         success: false,
         error: 'Provider returned empty output',
         provider: 'alibaba',
-        model: 'qwen-turbo',
+        model: 'qwen-flash',
         governanceEvidenceReceipt: {
           receiptId: 'rcpt-env-empty',
           evidenceMode: 'live',
           routeId: '/api/execute',
           decision: 'ALLOW',
           provider: 'alibaba',
-          model: 'qwen-turbo',
+          model: 'qwen-flash',
           envelopeId: 'env-empty',
           generatedAt: '2026-05-24T00:00:00.000Z',
         },
@@ -399,7 +399,7 @@ describe('ProcessingScreen — governance evidence visibility (W114-T1 CP5)', ()
         success: true,
         output: 'Governed output',
         provider: 'alibaba',
-        model: 'qwen-turbo',
+        model: 'qwen-flash',
         enforcement: { status: 'ALLOW', reasons: [], riskGate: { riskLevel: 'R1', status: 'ALLOW', reason: 'Allowed' } },
         providerRouting: { decision: 'ALLOW', selectedProvider: 'alibaba', requestedProvider: 'alibaba' },
         knowledgeInjection: { injected: true, source: 'inline-service', contextLength: 120, chunkCount: 0 },
@@ -413,7 +413,7 @@ describe('ProcessingScreen — governance evidence visibility (W114-T1 CP5)', ()
           decision: 'ALLOW',
           riskLevel: 'R1',
           provider: 'alibaba',
-          model: 'qwen-turbo',
+          model: 'qwen-flash',
           routingDecision: 'ALLOW',
           policySnapshotId: 'pol-test-001',
           envelopeId: 'env-test-001',
@@ -438,7 +438,7 @@ describe('ProcessingScreen — governance evidence visibility (W114-T1 CP5)', ()
     expect(panel.textContent).toContain('CVF governed this run');
     expect(panel.textContent).toContain('ALLOW');
     expect(panel.textContent).toContain('alibaba');
-    expect(panel.textContent).toContain('qwen-turbo');
+    expect(panel.textContent).toContain('qwen-flash');
     expect(panel.textContent).toContain('retrieval');
     expect(panel.textContent).toContain('rcpt-env-test-001');
     expect(panel.textContent).toContain('w119-lumencart-project');

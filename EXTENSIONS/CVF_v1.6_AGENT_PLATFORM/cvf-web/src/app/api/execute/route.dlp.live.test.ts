@@ -1,7 +1,7 @@
 /**
  * DLP Live Smoke Test — Phase D1.2 E2E validation
  *
- * Calls the real Alibaba DashScope API (qwen-turbo) to confirm that sensitive
+ * Calls the real Alibaba DashScope API (qwen-flash) to confirm that sensitive
  * data is redacted by the DLP pipeline BEFORE it reaches the AI provider and
  * that a DLP_REDACTION_APPLIED audit event is emitted.
  *
@@ -51,7 +51,7 @@ import { POST } from './route';
 const ALIBABA_API_KEY = resolveAlibabaApiKey();
 
 describe.skipIf(!ALIBABA_API_KEY)(
-  '/api/execute DLP live smoke — Alibaba qwen-turbo',
+  '/api/execute DLP live smoke — Alibaba qwen-flash',
   () => {
     const originalEnv = { ...process.env };
     let tempDir = '';
@@ -164,3 +164,5 @@ describe.skipIf(!ALIBABA_API_KEY)(
     );
   },
 );
+
+// Text Encoding Exception: pre-existing non-ASCII text preserved unchanged; the QTDM-01 migration edited only the ASCII deprecated model identifier.

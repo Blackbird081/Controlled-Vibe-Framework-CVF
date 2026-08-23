@@ -8,7 +8,7 @@ export type { RoutingScope, RoutingScopeResult, RoutingRejectionReason } from ".
 export { validateDose } from "./distribution/dose-engine.js";
 export type { DoseValidationResult, DoseRejectionReason } from "./distribution/dose-engine.js";
 export { DistributionEngine } from "./distribution/distribution-engine.js";
-export type { DistributionCreationResult, DistributionActionResult, DistributionRejectionReason, } from "./distribution/distribution-engine.js";
+export type { DistributionCreationResult, DistributionActionResult, DistributionRejectionReason, DistributionConsumptionBinding, } from "./distribution/distribution-engine.js";
 export { ALLOWED_ACKNOWLEDGEMENT_TRANSITIONS, isAllowedAcknowledgementTransition, } from "./lifecycle/lifecycle-transitions.js";
 export { FeedbackEngine } from "./feedback/feedback-engine.js";
 export type { FeedbackSubmissionResult, FeedbackActionResult, FeedbackRejectionReason, } from "./feedback/feedback-engine.js";

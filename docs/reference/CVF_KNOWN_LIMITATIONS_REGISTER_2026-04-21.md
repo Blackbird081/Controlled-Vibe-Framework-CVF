@@ -32,7 +32,7 @@ Classification key:
 | --- | --- |
 | Classification | Permanent |
 | Area | Multi-provider operability |
-| Statement | Alibaba (qwen-turbo) and DeepSeek (deepseek-chat) both pass CVF's governed canary suite. CVF does not assess or claim parity between providers on speed, cost, output quality, reliability, or rate limits. |
+| Statement | Alibaba retains historical governed-canary evidence, but its current `qwen-flash` target awaits fresh live proof; DeepSeek (`deepseek-chat`) remains certified. CVF does not assess or claim parity between providers on speed, cost, output quality, reliability, or rate limits. |
 | Why permanent | Provider economics are owned by the provider, not by CVF. Attempting to claim or enforce parity would misrepresent the architecture. |
 | Evidence | `docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md` — operator notes per provider |
 
@@ -103,7 +103,7 @@ Classification key:
 | --- | --- |
 | Classification | Open |
 | Area | Provider coverage |
-| Statement | Alibaba (qwen-turbo) and DeepSeek (deepseek-chat) are the only providers with `CERTIFIED` status. All other provider integrations that may exist (OpenAI, Gemini, etc.) are `EXPERIMENTAL` until a full CVF canary suite is run and receipts are saved. |
+| Statement | DeepSeek (`deepseek-chat`) retains current `CERTIFIED` status. Alibaba now targets `qwen-flash` and is pending fresh live recertification; other integrations remain `EXPERIMENTAL` until a full CVF canary suite is run and receipts are saved. |
 | Impact | Operators who wish to use other providers must run the canary suite against those providers before claiming CVF-governed operability. |
 | Path to certify | `python scripts/run_cvf_provider_live_canary.py --provider <name> --save-receipt` (3× consecutive PASS required) |
 
@@ -115,7 +115,7 @@ Classification key:
 | --- | --- |
 | Classification | Closed |
 | Area | Non-coder value validation |
-| Closure | `tests/e2e/noncoder-governance-live.spec.ts` covers landing → template gallery → intake wizard structure, then real Alibaba `qwen-turbo` output through `/api/execute`. The live proof asserts governance metadata (`guardResult`, `outputValidation`, `providerRouting`) rather than exact AI text. Phase-gated/full-mode UI behavior is not used as live-output proof because it can correctly stop before provider execution. |
+| Closure | Historical `tests/e2e/noncoder-governance-live.spec.ts` evidence covers landing → template gallery → intake wizard structure and real Alibaba output through `/api/execute`; the retired model identifier remains only in immutable receipts. This does not prove the new `qwen-flash` target, which requires fresh T6 live proof. |
 | Evidence | E2E Proof & Regression Stabilization roadmap — CP2 DELIVERED 2026-04-21. Delta: `docs/baselines/archive/CVF_E2E_PROOF_STABILIZATION_DELTA_2026-04-21.md`. |
 
 ---
@@ -147,3 +147,5 @@ When a limitation is closed:
 ---
 
 *Filed: 2026-04-21 — RC known limitations register, post-provider-lane closure*
+
+Text Encoding Exception: pre-existing non-ASCII text preserved unchanged; the QTDM-01 migration edited only the ASCII deprecated model identifier.

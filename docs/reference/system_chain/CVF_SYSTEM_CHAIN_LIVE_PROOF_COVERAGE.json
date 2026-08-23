@@ -3,7 +3,7 @@
   "ledgerId": "cvf-system-chain-live-proof-coverage-2026-07-14",
   "standard": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_LIVE_PROOF_AND_LEARNING_LOOP_STANDARD.md",
   "sourceMap": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
-  "lastReviewedDate": "2026-07-15",
+  "lastReviewedDate": "2026-08-16",
   "claimBoundary": "This ledger classifies live-proof applicability and current evidence for five generic CVF system-chain lanes. It preserves each source map verdict and does not treat SOT3 UC-01 as proof of any other lane. SCLP-T5 (2026-07-15) reconciled all four use cases and five lanes, retained their bounded evidence states, and retired the stale UC-03 next-use-case pointer after UC-03 closure.",
   "useCases": [
     {
@@ -111,9 +111,9 @@
       "requiredProofClass": "CURRENT_RUNTIME_INVOCATION",
       "observedProofClass": "CURRENT_RUNTIME_INVOCATION",
       "operationalProofStatus": "PROVEN",
-      "reason": "the CLI surface and selected Web pair are proven bounded: the developer path succeeds and the reviewer path is denied before runner/provider work with exact one-submission evidence; the lane remains semantically PARTIAL because no unified Web checker inventory is claimed",
+      "reason": "the CLI surface and selected Web pair are proven bounded: the developer path succeeds and the reviewer path is denied before runner/provider work with exact one-submission evidence. RSPB-AI-T2 adds a locally verified, secret-safe five-command capability snapshot and fail-closed release preflight, backed by 42/42 hermetic tests and 38/38 SOT3 integration regressions; this deterministic evidence does not add a provider/live claim. The lane remains semantically PARTIAL because no unified Web checker inventory is claimed",
       "nextUseCase": "NONE",
-      "nextAction": "retain bounded CLI and selected Web pair evidence; reopen only for a materially broader, value-assessed operator-surface claim"
+      "nextAction": "retain bounded CLI, capability-snapshot preflight, and selected Web pair evidence; reopen only for a materially broader, value-assessed operator-surface claim"
     }
   ]
 }

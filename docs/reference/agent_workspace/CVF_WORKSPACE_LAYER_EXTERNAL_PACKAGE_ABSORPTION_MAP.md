@@ -115,6 +115,16 @@ The package does not supersede:
 - public export disposition rules;
 - active session state and next-move freshness.
 
+## Per-File Semantic Coverage Cross-Reference (LRA-SA-T0, 2026-08-13)
+
+`docs/reference/agent_workspace/CVF_WORKSPACE_LAYER_V041_SEMANTIC_ABSORPTION_LEDGER.md`
+independently re-read all 56 files then classified `ARCHIVE_EVIDENCE_ONLY` in
+the pinned local retention ZIP and confirmed, file by file, that each one maps
+onto a row in this map's Useful Patterns, CVF Mapping, or Two-Layer Absorption
+tables above. No genuinely new CVF-uncovered concept was found; the ledger
+records `NO_CHANGE_EVIDENCE` against this map's doctrine content and exists as
+a per-file completeness companion, not a supersession of any row here.
+
 ## Claim Boundary
 
 This map is a selective absorption record. It does not import the package,

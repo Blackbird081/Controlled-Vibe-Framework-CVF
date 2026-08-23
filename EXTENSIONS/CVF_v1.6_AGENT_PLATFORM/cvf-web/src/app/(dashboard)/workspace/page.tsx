@@ -1,8 +1,10 @@
+// Text Encoding Exception: Vietnamese plain-language ordinary-summary copy is permitted here per DESIGN.md section 8.
 import Link from 'next/link';
 import {
     Activity,
     ArrowUpRight,
     CheckCircle2,
+    ChevronDown,
     FileCheck2,
     GitBranch,
     Layers3,
@@ -96,129 +98,190 @@ function LaneSummaryCard({ summary }: { summary: WorkspaceLaneSummary }) {
     );
 }
 
+function buildOrdinarySummary(dispatchStatus: string, handoffExists: boolean, hasParkedCheckpoints: boolean) {
+    const normalized = dispatchStatus.toLowerCase();
+    if (!handoffExists || normalized.includes('blocked') || normalized.includes('missing')) {
+        return {
+            tone: 'attention' as const,
+            statusLabel: 'Cần kiểm tra trước khi tiếp tục',
+            nextAction: 'Mở phần chi tiết kỹ thuật để xem thông tin nào đang thiếu hoặc bị chặn.',
+            recovery: 'Giữ nguyên công việc hiện tại và nhờ người phụ trách kiểm tra trước khi làm bước tiếp theo.',
+        };
+    }
+
+    return {
+        tone: 'good' as const,
+        statusLabel: 'Đã lưu trạng thái để tiếp tục',
+        nextAction: 'Tiếp tục công việc đang được giao, sau đó gửi kết quả để người phụ trách rà soát.',
+        recovery: hasParkedCheckpoints
+            ? 'Các bước chưa đến lượt vẫn được giữ nguyên và có thể tiếp tục sau khi công việc hiện tại được rà soát.'
+            : 'Trạng thái hiện tại đã được lưu; bạn có thể mở phần chi tiết kỹ thuật khi cần kiểm tra lại.',
+    };
+}
+
 export default function WorkspacePage() {
     const model = getCvfWorkspaceReadModel();
+    const ordinarySummary = buildOrdinarySummary(
+        model.dispatch.status,
+        model.activeHandoff.exists,
+        model.parkedCheckpoints.length > 0,
+    );
 
     return (
         <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 text-gray-900 dark:text-gray-100">
-            <header className="flex flex-col gap-4 border-b border-gray-200 pb-5 dark:border-white/[0.08] lg:flex-row lg:items-start lg:justify-between">
-                <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-300">
-                        <ShieldCheck className="h-4 w-4" aria-hidden="true" />
-                        CVF Web Workspace
-                    </div>
-                    <h1 className="text-2xl font-bold text-gray-950 dark:text-white">Operator Dashboard</h1>
-                    <p className="max-w-3xl text-sm leading-6 text-gray-600 dark:text-gray-300">
-                        Read-only view of current CVF continuity, handoff, roadmap, evidence, and parked checkpoints.
-                    </p>
+            <header className="space-y-2 border-b border-gray-200 pb-5 dark:border-white/[0.08]">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-300">
+                    <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+                    CVF Web Workspace
                 </div>
-                <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-700 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-200">
-                    <div className="font-bold uppercase tracking-wide">Boundary</div>
-                    <div className="mt-1 max-w-xl">{model.boundary}</div>
-                </div>
+                <h1 className="text-2xl font-bold text-gray-950 dark:text-white">Trạng thái làm việc của bạn</h1>
+                <p className="max-w-3xl text-sm leading-6 text-gray-600 dark:text-gray-300">
+                    Tóm tắt dễ hiểu về việc CVF đang làm, việc cần làm tiếp theo, và cách khôi phục nếu có sự cố.
+                </p>
             </header>
 
-            <section className="grid gap-4 md:grid-cols-3">
-                <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-white/[0.08] dark:bg-[#151827]">
-                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                        <Activity className="h-4 w-4 text-indigo-500" aria-hidden="true" />
-                        Active Mode
-                    </div>
-                    <div className="mt-3 break-all font-mono text-sm font-semibold leading-6 text-gray-950 dark:text-white">{model.activeSessionMode}</div>
-                    <div className="mt-3 break-all text-xs leading-5 text-gray-500 dark:text-gray-400">Previous: {model.previousMode}</div>
+            <section
+                data-testid="ordinary-summary"
+                className={
+                    ordinarySummary.tone === 'good'
+                        ? 'rounded-lg border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-900/60 dark:bg-emerald-950/30'
+                        : 'rounded-lg border border-amber-200 bg-amber-50 p-5 dark:border-amber-900/60 dark:bg-amber-950/30'
+                }
+            >
+                <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-gray-950 dark:text-white">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-300" aria-hidden="true" />
+                    Trạng thái hiện tại: {ordinarySummary.statusLabel}
                 </div>
-                <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-white/[0.08] dark:bg-[#151827]">
-                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                        <GitBranch className="h-4 w-4 text-sky-500" aria-hidden="true" />
-                        Active Handoff
-                    </div>
-                    <div className="mt-3 break-all font-mono text-sm font-semibold leading-6 text-gray-950 dark:text-white">{model.activeHandoff.path}</div>
-                    <div className="mt-3"><StatusBadge status={model.activeHandoff.exists ? 'ACTIVE' : 'MISSING'} /></div>
-                </div>
-                <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-white/[0.08] dark:bg-[#151827]">
-                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                        <FileCheck2 className="h-4 w-4 text-emerald-500" aria-hidden="true" />
-                        WWU-T2 Dispatch
-                    </div>
-                    <div className="mt-3 flex flex-wrap items-center gap-2">
-                        <StatusBadge status={model.dispatch.status} />
-                        <span className="font-mono text-xs text-gray-500 dark:text-gray-400">{model.dispatch.materialCommit}</span>
-                    </div>
-                    <div className="mt-3 text-xs leading-5 text-gray-500 dark:text-gray-400">{model.generatedAt}</div>
-                </div>
-            </section>
-
-            <section className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
-                <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-white/[0.08] dark:bg-[#151827]">
-                    <div className="flex items-center gap-2 text-sm font-semibold text-gray-950 dark:text-white">
-                        <ShieldCheck className="h-4 w-4 text-indigo-500" aria-hidden="true" />
-                        Next Allowed Move
-                    </div>
-                    <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300">{model.nextAllowedMove}</p>
-                </div>
-                <div className="rounded-lg border border-amber-200 bg-amber-50 p-5 dark:border-amber-900/60 dark:bg-amber-950/30">
-                    <div className="flex items-center gap-2 text-sm font-semibold text-amber-900 dark:text-amber-100">
-                        <LockKeyhole className="h-4 w-4" aria-hidden="true" />
-                        Parked Checkpoints
-                    </div>
-                    <div className="mt-4 space-y-3">
-                        {model.parkedCheckpoints.map((checkpoint) => (
-                            <div key={checkpoint} className="rounded-lg border border-amber-200 bg-white/70 p-3 text-xs leading-5 text-amber-900 dark:border-amber-900/60 dark:bg-black/10 dark:text-amber-100">
-                                {checkpoint}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <div className="mb-3 flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2 text-sm font-semibold text-gray-950 dark:text-white">
-                        <Layers3 className="h-4 w-4 text-indigo-500" aria-hidden="true" />
-                        Workspace State Lanes
-                    </div>
-                    <StatusBadge status={model.workspaceState.exists ? model.workspaceState.status : 'MISSING'} />
-                </div>
-                {model.laneSummaries.length > 0 ? (
-                    <div className="grid gap-4 lg:grid-cols-2">
-                        {model.laneSummaries.map((summary) => <LaneSummaryCard key={summary.lane} summary={summary} />)}
-                    </div>
-                ) : (
-                    <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-600 dark:border-white/[0.08] dark:bg-[#151827] dark:text-gray-300">
-                        No workspace lane items found.
-                    </div>
+                <p className="mt-3 text-sm leading-6 text-gray-700 dark:text-gray-200">
+                    <span className="font-semibold">Việc cần làm tiếp theo: </span>
+                    {ordinarySummary.nextAction}
+                </p>
+                {model.parkedCheckpoints.length > 0 && (
+                    <p className="mt-3 text-sm leading-6 text-gray-700 dark:text-gray-200">
+                        <span className="font-semibold">Nếu cần khôi phục: </span>
+                        {ordinarySummary.recovery}
+                    </p>
                 )}
             </section>
 
-            <section className="grid gap-4 lg:grid-cols-3">
-                {[model.roadmap, model.workOrder, model.gc018].map((source) => (
-                    <div key={source.path} className="rounded-lg border border-gray-200 bg-white p-4 dark:border-white/[0.08] dark:bg-[#151827]">
-                        <div className="text-sm font-semibold text-gray-950 dark:text-white">{source.label}</div>
-                        <div className="mt-3"><StatusBadge status={source.status} /></div>
-                        <div className="mt-3 break-all font-mono text-[11px] leading-5 text-gray-500 dark:text-gray-400">{source.path}</div>
+            <details data-testid="advanced-detail" className="group rounded-lg border border-gray-200 bg-white dark:border-white/[0.08] dark:bg-[#151827]">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-gray-950 dark:text-white">
+                    <span className="flex items-center gap-2">
+                        <LockKeyhole className="h-4 w-4 text-indigo-500" aria-hidden="true" />
+                        Chi tiết kỹ thuật nâng cao (mode, handoff, dispatch, lanes, nguồn)
+                    </span>
+                    <ChevronDown className="h-4 w-4 shrink-0 text-gray-400 transition-transform group-open:rotate-180" aria-hidden="true" />
+                </summary>
+
+                <div className="space-y-6 border-t border-gray-200 p-4 dark:border-white/[0.08]">
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-700 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-200">
+                        <div className="font-bold uppercase tracking-wide">Boundary</div>
+                        <div className="mt-1 max-w-xl">{model.boundary}</div>
                     </div>
-                ))}
-            </section>
 
-            <section>
-                <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-950 dark:text-white">
-                    <ArrowUpRight className="h-4 w-4 text-indigo-500" aria-hidden="true" />
-                    Related Governed Surfaces
-                </div>
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    {model.links.map((link) => <LinkCard key={link.href} link={link} />)}
-                </div>
-            </section>
+                    <section className="grid gap-4 md:grid-cols-3">
+                        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-white/[0.08] dark:bg-[#151827]">
+                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                <Activity className="h-4 w-4 text-indigo-500" aria-hidden="true" />
+                                Active Mode
+                            </div>
+                            <div className="mt-3 break-all font-mono text-sm font-semibold leading-6 text-gray-950 dark:text-white">{model.activeSessionMode}</div>
+                            <div className="mt-3 break-all text-xs leading-5 text-gray-500 dark:text-gray-400">Previous: {model.previousMode}</div>
+                        </div>
+                        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-white/[0.08] dark:bg-[#151827]">
+                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                <GitBranch className="h-4 w-4 text-sky-500" aria-hidden="true" />
+                                Active Handoff
+                            </div>
+                            <div className="mt-3 break-all font-mono text-sm font-semibold leading-6 text-gray-950 dark:text-white">{model.activeHandoff.path}</div>
+                            <div className="mt-3"><StatusBadge status={model.activeHandoff.exists ? 'ACTIVE' : 'MISSING'} /></div>
+                        </div>
+                        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-white/[0.08] dark:bg-[#151827]">
+                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                <FileCheck2 className="h-4 w-4 text-emerald-500" aria-hidden="true" />
+                                WWU-T2 Dispatch
+                            </div>
+                            <div className="mt-3 flex flex-wrap items-center gap-2">
+                                <StatusBadge status={model.dispatch.status} />
+                                <span className="font-mono text-xs text-gray-500 dark:text-gray-400">{model.dispatch.materialCommit}</span>
+                            </div>
+                            <div className="mt-3 text-xs leading-5 text-gray-500 dark:text-gray-400">{model.generatedAt}</div>
+                        </div>
+                    </section>
 
-            <section className="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-white/[0.08] dark:bg-[#151827]">
-                <div className="border-b border-gray-200 px-4 py-3 dark:border-white/[0.08]">
-                    <h2 className="text-sm font-semibold text-gray-950 dark:text-white">Source Authority</h2>
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Repo-local governed artifacts used by this read model.</p>
+                    <section className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
+                        <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-white/[0.08] dark:bg-[#151827]">
+                            <div className="flex items-center gap-2 text-sm font-semibold text-gray-950 dark:text-white">
+                                <ShieldCheck className="h-4 w-4 text-indigo-500" aria-hidden="true" />
+                                Next Allowed Move
+                            </div>
+                            <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300">{model.nextAllowedMove}</p>
+                        </div>
+                        <div className="rounded-lg border border-amber-200 bg-amber-50 p-5 dark:border-amber-900/60 dark:bg-amber-950/30">
+                            <div className="flex items-center gap-2 text-sm font-semibold text-amber-900 dark:text-amber-100">
+                                <LockKeyhole className="h-4 w-4" aria-hidden="true" />
+                                Parked Checkpoints
+                            </div>
+                            <div className="mt-4 space-y-3">
+                                {model.parkedCheckpoints.map((checkpoint) => (
+                                    <div key={checkpoint} className="rounded-lg border border-amber-200 bg-white/70 p-3 text-xs leading-5 text-amber-900 dark:border-amber-900/60 dark:bg-black/10 dark:text-amber-100">
+                                        {checkpoint}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div className="mb-3 flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-2 text-sm font-semibold text-gray-950 dark:text-white">
+                                <Layers3 className="h-4 w-4 text-indigo-500" aria-hidden="true" />
+                                Workspace State Lanes
+                            </div>
+                            <StatusBadge status={model.workspaceState.exists ? model.workspaceState.status : 'MISSING'} />
+                        </div>
+                        {model.laneSummaries.length > 0 ? (
+                            <div className="grid gap-4 lg:grid-cols-2">
+                                {model.laneSummaries.map((summary) => <LaneSummaryCard key={summary.lane} summary={summary} />)}
+                            </div>
+                        ) : (
+                            <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-600 dark:border-white/[0.08] dark:bg-[#151827] dark:text-gray-300">
+                                No workspace lane items found.
+                            </div>
+                        )}
+                    </section>
+
+                    <section className="grid gap-4 lg:grid-cols-3">
+                        {[model.roadmap, model.workOrder, model.gc018].map((source) => (
+                            <div key={source.path} className="rounded-lg border border-gray-200 bg-white p-4 dark:border-white/[0.08] dark:bg-[#151827]">
+                                <div className="text-sm font-semibold text-gray-950 dark:text-white">{source.label}</div>
+                                <div className="mt-3"><StatusBadge status={source.status} /></div>
+                                <div className="mt-3 break-all font-mono text-[11px] leading-5 text-gray-500 dark:text-gray-400">{source.path}</div>
+                            </div>
+                        ))}
+                    </section>
+
+                    <section>
+                        <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-950 dark:text-white">
+                            <ArrowUpRight className="h-4 w-4 text-indigo-500" aria-hidden="true" />
+                            Related Governed Surfaces
+                        </div>
+                        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                            {model.links.map((link) => <LinkCard key={link.href} link={link} />)}
+                        </div>
+                    </section>
+
+                    <section className="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-white/[0.08] dark:bg-[#151827]">
+                        <div className="border-b border-gray-200 px-4 py-3 dark:border-white/[0.08]">
+                            <h2 className="text-sm font-semibold text-gray-950 dark:text-white">Source Authority</h2>
+                            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Repo-local governed artifacts used by this read model.</p>
+                        </div>
+                        <div>
+                            {model.sources.map((source) => <SourceRow key={source.path} source={source} />)}
+                        </div>
+                    </section>
                 </div>
-                <div>
-                    {model.sources.map((source) => <SourceRow key={source.path} source={source} />)}
-                </div>
-            </section>
+            </details>
         </div>
     );
 }

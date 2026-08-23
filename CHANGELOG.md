@@ -2,20 +2,6 @@
 
 ---
 
-## Public catalog update — 2026-08-15
-
-- Added a public-safe CADP capability summary covering the accepted bounded
-  internal foundation: admission decisions, repository-backed authority,
-  execution eligibility, provider-neutral constraints, and fail-closed
-  external-readout preparation.
-- Preserved the distribution boundary: CADP implementation source and a public
-  endpoint are not shipped in this checkout; external runtime remains
-  demand-gated and no hosted or production readiness is claimed.
-
-Evidence: `docs/reference/CVF_CADP_CAPABILITY_ADMISSION_FOUNDATION_PUBLIC_SNAPSHOT_2026-08-15.md`.
-
----
-
 ## [v4.0.0] — GA Release — 2026-05-16
 
 Status: GA_LOCAL_FIRST_APPROVED

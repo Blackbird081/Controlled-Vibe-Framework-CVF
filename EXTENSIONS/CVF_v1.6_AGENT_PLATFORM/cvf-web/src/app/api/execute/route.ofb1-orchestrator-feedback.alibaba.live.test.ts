@@ -52,7 +52,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
       const req = new Request('http://localhost/api/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ templateId: 'strategy_analysis', templateName: template?.name, intent: generateIntent(template!, inputs), inputs, provider: 'alibaba', model: 'qwen-turbo', mode: 'simple', cvfRiskLevel: 'R1', action: 'analyze strategy_analysis ofb1-orchestrator-feedback advisory proof', skillPreflightPassed: true, skillPreflightDeclaration: 'SKILL PREFLIGHT PASS: OFB-1 advisory readout proof only.' }),
+        body: JSON.stringify({ templateId: 'strategy_analysis', templateName: template?.name, intent: generateIntent(template!, inputs), inputs, provider: 'alibaba', model: 'qwen-flash', mode: 'simple', cvfRiskLevel: 'R1', action: 'analyze strategy_analysis ofb1-orchestrator-feedback advisory proof', skillPreflightPassed: true, skillPreflightDeclaration: 'SKILL PREFLIGHT PASS: OFB-1 advisory readout proof only.' }),
       });
       const response = await POST(req as never);
       const data = await response.json();

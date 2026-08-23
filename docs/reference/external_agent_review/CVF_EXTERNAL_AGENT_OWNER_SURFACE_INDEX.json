@@ -1,0 +1,61 @@
+{
+  "claimBoundary": "Public-safe navigation aid only. A listed path is an owner-discovery surface, not proof of runtime, authority, acceptance, public HEAD, or production readiness.",
+  "domains": [
+    {
+      "domain": "external-agent-round-trip",
+      "ownerType": "PUBLIC_PROTOCOL_PROJECTION",
+      "paths": [
+        "docs/guides/CVF_EXTERNAL_AGENT_ROUND_TRIP_KIT.md",
+        "docs/guides/external-agent-review-guide.md"
+      ]
+    },
+    {
+      "domain": "public-claims-and-limitations",
+      "ownerType": "PUBLIC_CLAIM_BOUNDARY",
+      "paths": [
+        "docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md",
+        "docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md"
+      ]
+    },
+    {
+      "domain": "provider-readiness",
+      "ownerType": "PUBLIC_READINESS_MATRIX",
+      "paths": [
+        "docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md",
+        "PROVIDERS.md",
+        "COST_AND_QUOTA.md"
+      ]
+    },
+    {
+      "domain": "mcp-runtime-boundary",
+      "ownerType": "PUBLIC_BOUNDARY_AND_LOCAL_VIEW",
+      "paths": [
+        "docs/reference/mcp_gateway/CVF_MODEL_GATEWAY_MCP_RUNTIME_BRIDGE_BOUNDARY.md",
+        "docs/reference/CVF_DELTA_D2_MCP_WRITE_TOOLS_SECURITY_BOUNDARY_2026-05-29.md",
+        "docs/guides/CVF_GENERIC_MCP_ADAPTER_INTEGRATION_GUIDE_2026-05-31.md"
+      ]
+    },
+    {
+      "domain": "agent-and-system-skills",
+      "ownerType": "PUBLIC_OWNER_MATRIX",
+      "paths": [
+        "docs/reference/CVF_AECG_T2_AGENT_ENGINEERING_CONTROL_OWNER_SURFACE_MATRIX_2026-06-28.md",
+        "docs/reference/CVF_DSCP_T1_OWNER_SURFACE_MAP_2026-06-07.md"
+      ]
+    },
+    {
+      "domain": "truth-and-knowledge",
+      "ownerType": "PUBLIC_RECONCILIATION_MATRIX",
+      "paths": [
+        "docs/reference/truth_foundation/CVF_TRUTH_FOUNDATION_OWNER_SURFACE_RECONCILIATION_MATRIX.md",
+        "docs/reference/CVF_KNOWLEDGE_MAINTENANCE_AND_REFACTOR_OWNER_MAP_2026-04-14.md"
+      ]
+    }
+  ],
+  "projectionOf": "cvf.external-agent-round-trip",
+  "protocolVersion": "1.1.0",
+  "schema": "cvf.publicOwnerSurfaceIndex.v1",
+  "snapshotBinding": "Bind every use to the public commit in CVF_CURRENT_PUBLIC_SNAPSHOT.md or CVF_EXTERNAL_AGENT_TASK_CAPSULE.json; reverify each path at that commit.",
+  "status": "BOUNDED_PUBLIC_DISCOVERY_INDEX",
+  "updatedAt": "2026-08-23"
+}

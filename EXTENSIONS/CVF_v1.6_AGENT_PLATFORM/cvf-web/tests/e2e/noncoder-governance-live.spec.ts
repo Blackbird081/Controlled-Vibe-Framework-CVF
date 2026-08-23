@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { seedStorageWithAlibaba, login, postLiveGovernedExecution } from './utils';
 
-// All tests in this spec use a real Alibaba (qwen-turbo) API call.
+// All tests in this spec use a real Alibaba (qwen-flash) API call.
 // Assert governance behavior — never assert exact AI response content.
 // Provider: Alibaba, timeout per test: 30s (Tests 1-3 structural, no AI call)
 // L-008 closure: Tests 4 and 5 prove CVF governs real AI on behalf of non-coders.

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { AuditReceipt, FilterParams } from '@/lib/lpci/types';
+import type { FilterParams, LpciQueryResponse } from '@/lib/lpci/types';
 
 // Registered corpora pulled from status endpoint at query time.
 // For prototype: hardcoded known pilot corpus ID from CI2-T4.
@@ -14,16 +14,7 @@ const ANSWER_CLASS_LABELS: Record<string, { label: string; color: string }> = {
   ESCALATE_OR_ABSTAIN: { label: 'Escalate / Abstain', color: 'bg-red-100 text-red-800' },
 };
 
-interface QueryResult {
-  response?: string;
-  answerClass?: string;
-  matchedSources?: string[];
-  freshnessFlag?: boolean;
-  conflictFlag?: boolean;
-  receiptType?: string;
-  auditReceipt?: AuditReceipt;
-  error?: string;
-}
+type QueryResult = LpciQueryResponse | { outcome: 'CLIENT_ERROR'; message: string };
 
 export default function LpciPage() {
   const [corpusId, setCorpusId] = useState(PILOT_CORPUS_ID);
@@ -47,14 +38,14 @@ export default function LpciPage() {
       const data = await res.json() as QueryResult;
       setResult(data);
     } catch (err) {
-      setResult({ error: err instanceof Error ? err.message : String(err) });
+      setResult({ outcome: 'CLIENT_ERROR', message: err instanceof Error ? err.message : String(err) });
     } finally {
       setLoading(false);
     }
   }
 
   function exportAuditReceipt() {
-    if (!result?.auditReceipt) return;
+    if (!result || !('auditReceipt' in result)) return;
     const blob = new Blob([JSON.stringify(result.auditReceipt, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -64,7 +55,8 @@ export default function LpciPage() {
     URL.revokeObjectURL(url);
   }
 
-  const badge = result?.answerClass ? ANSWER_CLASS_LABELS[result.answerClass] : null;
+  const answerClass = result && 'answerClass' in result ? result.answerClass : undefined;
+  const badge = answerClass ? ANSWER_CLASS_LABELS[answerClass] : null;
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4 space-y-6">
@@ -80,8 +72,9 @@ export default function LpciPage() {
 
       {/* Corpus selector */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Corpus</label>
+        <label htmlFor="lpci-corpus" className="block text-sm font-medium text-gray-700 mb-1">Corpus</label>
         <select
+          id="lpci-corpus"
           value={corpusId}
           onChange={(e) => setCorpusId(e.target.value)}
           className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -93,8 +86,9 @@ export default function LpciPage() {
 
       {/* Query input */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Query</label>
+        <label htmlFor="lpci-query" className="block text-sm font-medium text-gray-700 mb-1">Query</label>
         <textarea
+          id="lpci-query"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           rows={3}
@@ -125,47 +119,52 @@ export default function LpciPage() {
           )}
 
           {/* NO_PROVIDER_CONFIGURED */}
-          {result.receiptType === 'NO_PROVIDER_CONFIGURED' && (
+          {result.outcome === 'NO_PROVIDER_CONFIGURED' && (
             <div className="text-sm text-amber-700 bg-amber-50 rounded p-3">
-              <strong>No LLM provider configured.</strong> Set the <code>LPCI_LLM_API_KEY</code> environment variable to enable answers.
-              {result.auditReceipt && (
-                <div className="mt-2 text-xs text-gray-500">
-                  Retrieval completed — {(result as QueryResult & { retrievalReceipt?: { matched_paths: string[] } }).retrievalReceipt?.matched_paths?.length ?? 0} source(s) matched. AuditReceipt available below.
-                </div>
-              )}
+              <strong>No answer provider configured.</strong> {result.message}
+              <div className="mt-2 text-xs text-gray-500">
+                Retrieval completed - {result.auditReceipt.matched_paths.length} source(s) matched. AuditReceipt available below.
+              </div>
             </div>
           )}
 
           {/* Negative receipts */}
-          {result.receiptType && result.receiptType !== 'NO_PROVIDER_CONFIGURED' && (
+          {result.outcome === 'PHASE1_NEGATIVE' && (
             <div className="text-sm text-gray-600 bg-gray-50 rounded p-3">
               <strong>Receipt type:</strong> {result.receiptType}
             </div>
           )}
 
+          {result.outcome !== 'ANSWER_EMITTED' && result.outcome !== 'ABSTAINED' &&
+            result.outcome !== 'PHASE1_NEGATIVE' && result.outcome !== 'NO_PROVIDER_CONFIGURED' && (
+            <div className="text-sm text-red-700 bg-red-50 rounded p-3" role="status">
+              {result.message}
+            </div>
+          )}
+
           {/* Answer text */}
-          {result.response && (
+          {(result.outcome === 'ANSWER_EMITTED' || result.outcome === 'ABSTAINED') && (
             <div className="text-sm text-gray-800 whitespace-pre-wrap bg-gray-50 rounded p-3">
               {result.response}
             </div>
           )}
 
           {/* Freshness warning */}
-          {result.freshnessFlag && (
+          {result.outcome === 'ANSWER_EMITTED' && result.freshnessFlag && (
             <div className="text-xs text-amber-700 bg-amber-50 rounded p-2">
               ⚠ FRESHNESS WARNING — one or more sources may not be current (status: amended or superseded).
             </div>
           )}
 
           {/* Conflict notice */}
-          {result.conflictFlag && (
+          {result.outcome === 'ANSWER_EMITTED' && result.conflictFlag && (
             <div className="text-xs text-red-700 bg-red-50 rounded p-2">
               ⚠ CONFLICT — two or more sources conflict on this topic. Resolution requires operator judgment.
             </div>
           )}
 
           {/* Matched sources */}
-          {result.matchedSources && result.matchedSources.length > 0 && (
+          {result.outcome === 'ANSWER_EMITTED' && result.matchedSources.length > 0 && (
             <div>
               <div className="text-xs font-medium text-gray-500 mb-1">Retrieved sources</div>
               <ul className="text-xs text-gray-600 space-y-0.5">
@@ -176,15 +175,8 @@ export default function LpciPage() {
             </div>
           )}
 
-          {/* Error */}
-          {result.error && (
-            <div className="text-sm text-red-700 bg-red-50 rounded p-3">
-              Error: {result.error}
-            </div>
-          )}
-
           {/* AuditReceipt */}
-          {result.auditReceipt && (
+          {'auditReceipt' in result && (
             <div className="border-t border-gray-100 pt-3">
               <div className="flex items-center gap-2">
                 <button

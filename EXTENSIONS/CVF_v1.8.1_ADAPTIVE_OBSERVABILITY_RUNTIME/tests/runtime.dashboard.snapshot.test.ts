@@ -112,7 +112,7 @@ function token(overrides: Partial<TokenContextPanelRecord> = {}): TokenContextPa
   return {
     sessionId: "session-1",
     provider: "dashscope",
-    model: "qwen-turbo",
+    model: "qwen-flash",
     inputTokens: 600,
     outputTokens: 200,
     totalTokens: 800,
@@ -131,7 +131,7 @@ function token(overrides: Partial<TokenContextPanelRecord> = {}): TokenContextPa
 function rate(overrides: Partial<RateLimitPanelRecord> = {}): RateLimitPanelRecord {
   return {
     provider: "dashscope",
-    model: "qwen-turbo",
+    model: "qwen-flash",
     requestLimitStatus: "NORMAL",
     tokenLimitStatus: "NOTICE",
     resetWindow: null,

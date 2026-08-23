@@ -366,9 +366,10 @@ describe('projectCapabilityLearningCandidate - secret-like value rejection', () 
   });
 
   it('rejects secret-like value in reusableLesson', () => {
+    const fakeSecret = ['sk', 'ABCDEFGHIJKLMNOPQRST'].join('-');
     const result = projectCapabilityLearningCandidate(
       makeProjection(),
-      makeObservation({ reusableLesson: 'Do not embed sk-ABCDEFGHIJKLMNOPQRST in logs' }),
+      makeObservation({ reusableLesson: `Do not embed ${fakeSecret} in logs` }),
       NOW,
     );
     expect(result.status).toBe('INVALID');
@@ -376,9 +377,10 @@ describe('projectCapabilityLearningCandidate - secret-like value rejection', () 
   });
 
   it('rejects secret-like scope item', () => {
+    const fakeSecret = ['sk', 'ABCDEFGHIJKL1234'].join('-');
     const result = projectCapabilityLearningCandidate(
       makeProjection(),
-      makeObservation({ packageScope: ['sk-ABCDEFGHIJKL1234'] }),
+      makeObservation({ packageScope: [fakeSecret] }),
       NOW,
     );
     expect(result.status).toBe('INVALID');

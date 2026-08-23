@@ -42,7 +42,7 @@ describe('KnowledgeJourneyNav', () => {
         render(<KnowledgeJourneyNav currentStep={3} />);
         const currentLink = screen.getByRole('link', { name: /Kiểm duyệt/i });
         expect(currentLink.getAttribute('aria-current')).toBe('step');
-        
+
         const nonCurrentLink = screen.getByRole('link', { name: /Thu thập/i });
         expect(nonCurrentLink.hasAttribute('aria-current')).toBe(false);
     });

@@ -10,6 +10,12 @@ AI system and asks for an independent review.
 Keep external review grounded in the public repository, current claim boundary,
 and reproducible evidence requirements.
 
+When the external agent will also design, write code, or create a repository
+for later CVF intake, use
+[`CVF_EXTERNAL_AGENT_ROUND_TRIP_KIT.md`](CVF_EXTERNAL_AGENT_ROUND_TRIP_KIT.md)
+as the reusable bootstrap and return contract. The operator then needs to add
+only a short task objective.
+
 ## Paste-Ready External Review Prompt
 
 Copy this prompt when asking another AI agent to review CVF from a public

@@ -28,6 +28,7 @@ and auditable evidence.
 | A developer | [Architecture](ARCHITECTURE.md) | System boundaries, extension points, setup, tests, and repository structure. |
 | An AI agent | [Agent Instructions](AGENTS.md) | Operating rules, source-of-truth routing, work-order boundaries, and evidence requirements. |
 | A reviewer or evaluator | [External Agent Review Guide](docs/guides/external-agent-review-guide.md) | A paste-ready review route plus public claim and evidence boundaries. |
+| An external builder | [External Agent Round-Trip Kit](docs/guides/CVF_EXTERNAL_AGENT_ROUND_TRIP_KIT.md) | Reusable build/return instructions for repositories intended for later CVF intake. |
 
 > The public repository is a product and integration front door. Historical
 > handoffs, private continuity records, and development provenance are not the

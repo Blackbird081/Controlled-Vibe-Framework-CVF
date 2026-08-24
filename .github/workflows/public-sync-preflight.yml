@@ -1,0 +1,26 @@
+name: Public Sync Preflight
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  public-sync-preflight:
+    name: public-sync-preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch protected baseline
+        run: git fetch origin main:refs/remotes/origin/main --force
+      - name: Validate public candidate
+        run: >-
+          python scripts/check_cvf_public_sync_candidate.py
+          --public-root .
+          --expected-remote https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
+          --baseline-ref origin/main
+          --json

@@ -25,6 +25,10 @@ FORBIDDEN_PENDING = (
 SOURCE_EXTENSIONS = (".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs")
 
 
+def normalize_remote(url: str) -> str:
+    return url.strip().rstrip("/").removesuffix(".git").lower()
+
+
 def git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         ["git", "-C", str(root), *args],
@@ -97,7 +101,7 @@ def check(args: argparse.Namespace) -> dict[str, object]:
         violations.append({"code": "WRONG_BRANCH", "detail": f"expected {args.expected_branch}; found {branch or 'detached'}"})
 
     remote = git(root, "remote", "get-url", "origin")
-    if remote.returncode != 0 or remote.stdout.strip() != args.expected_remote:
+    if remote.returncode != 0 or normalize_remote(remote.stdout) != normalize_remote(args.expected_remote):
         violations.append({"code": "WRONG_REMOTE", "detail": remote.stdout.strip() or remote.stderr.strip()})
 
     pending = pending_paths(root)

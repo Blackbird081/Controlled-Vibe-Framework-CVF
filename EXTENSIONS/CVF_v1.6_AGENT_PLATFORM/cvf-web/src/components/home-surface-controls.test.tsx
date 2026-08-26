@@ -67,4 +67,20 @@ describe('home surface controls', () => {
     expect(onRoute.mock.calls[0][0].recommendedTemplateId).toBe('app_builder_wizard');
     vi.unstubAllEnvs();
   });
+
+  it('continues an ambiguous short intent through clarification', () => {
+    const onRoute = vi.fn();
+    vi.stubEnv('NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR', 'true');
+    vi.stubEnv('NEXT_PUBLIC_CVF_NONCODER_CLARIFICATION_LOOP', 'true');
+    render(<IntentEntry onRoute={onRoute} language="en" />);
+
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'help' } });
+    fireEvent.click(screen.getByRole('button', { name: /Start with governed path/i }));
+
+    expect(screen.getByText('CVF needs a bit more context:')).toBeTruthy();
+    const clarificationOptions = screen.getAllByRole('button');
+    fireEvent.click(clarificationOptions[0]);
+    expect(onRoute).toHaveBeenCalledTimes(1);
+    vi.unstubAllEnvs();
+  });
 });

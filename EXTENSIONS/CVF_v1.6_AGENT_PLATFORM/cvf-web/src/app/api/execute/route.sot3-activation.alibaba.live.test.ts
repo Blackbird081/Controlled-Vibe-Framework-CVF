@@ -213,7 +213,6 @@ export interface Sot3A3LiveObservation {
  * Python process).
  */
 declare global {
-  // eslint-disable-next-line no-var
   var __CVF_SOT3_A3_OBSERVATION__: Sot3A3LiveObservation | undefined;
 }
 

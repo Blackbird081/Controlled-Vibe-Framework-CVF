@@ -1,12 +1,11 @@
 'use client';
 // Text Encoding Exception: Vietnamese UI
 
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { BookOpenCheck, FileOutput, Sparkles } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Template } from '@/types';
-import { GovernanceEvidenceReceipt } from '@/lib/ai';
 import { IntentRouteResult } from '@/lib/intent-router';
 import { GovernedStarterHandoff } from '@/lib/governed-starter-path';
 import {

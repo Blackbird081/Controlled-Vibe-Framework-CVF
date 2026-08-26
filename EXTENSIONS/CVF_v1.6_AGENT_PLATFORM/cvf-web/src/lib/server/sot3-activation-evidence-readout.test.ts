@@ -33,6 +33,7 @@ function buildRecord(overrides: Partial<Sot3ActivationEvidenceRecord> = {}): Sot
         ...overrides,
     };
     const { integrityHash: _ignored, ...rest } = base as Sot3ActivationEvidenceRecord;
+    void _ignored;
     const integrityHash = computeSot3EvidenceRecordIntegrityHash(rest);
     return { ...rest, integrityHash };
 }

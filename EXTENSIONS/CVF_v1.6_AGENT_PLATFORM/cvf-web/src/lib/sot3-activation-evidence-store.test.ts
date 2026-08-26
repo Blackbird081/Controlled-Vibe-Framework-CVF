@@ -39,6 +39,7 @@ function buildRecord(overrides: Partial<Sot3ActivationEvidenceRecord> = {}): Sot
     ...overrides,
   };
   const { integrityHash: _ignored, ...rest } = base as Sot3ActivationEvidenceRecord;
+  void _ignored;
   const integrityHash = computeSot3EvidenceRecordIntegrityHash(rest);
   return { ...rest, integrityHash };
 }
@@ -74,12 +75,14 @@ describe('sot3-activation-evidence-store', () => {
     it('is deterministic for identical record content', () => {
       const record = buildRecord();
       const { integrityHash: _ignored, ...rest } = record;
+      void _ignored;
       expect(computeSot3EvidenceRecordIntegrityHash(rest)).toBe(record.integrityHash);
     });
 
     it('changes when a semantic field changes', () => {
       const record = buildRecord();
       const { integrityHash: _ignored, ...rest } = record;
+      void _ignored;
       const changed = computeSot3EvidenceRecordIntegrityHash({ ...rest, terminalOutcome: 'REJECTED' });
       expect(changed).not.toBe(record.integrityHash);
     });
@@ -142,6 +145,7 @@ describe('sot3-activation-evidence-store', () => {
       const bytesBefore = readFileSync(storePath, 'utf8');
 
       const { integrityHash: _ignored, ...conflictingRest } = record;
+      void _ignored;
       const conflicting = { ...conflictingRest, terminalOutcome: 'REJECTED' as const, integrityHash: computeSot3EvidenceRecordIntegrityHash({ ...conflictingRest, terminalOutcome: 'REJECTED' as const }) };
       await expect(store.append(conflicting)).rejects.toBeInstanceOf(Sot3EvidenceDuplicateConflictError);
 
@@ -283,6 +287,7 @@ describe('sot3-activation-evidence-store', () => {
       const store = new Sot3ActivationEvidenceStore(storePath);
       const record = buildRecord();
       const { integrityHash: _ignored, ...rest } = record;
+      void _ignored;
       const extended = { ...rest, rawContent: 'RAW-CHUNK-CONTENT' };
       const withHash = {
         ...extended,

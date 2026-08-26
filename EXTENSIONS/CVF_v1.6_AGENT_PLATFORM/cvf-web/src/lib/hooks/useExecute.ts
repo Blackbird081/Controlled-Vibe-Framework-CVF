@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { AIProvider, ExecutionResponse } from '@/lib/ai';
 
 interface UseExecuteOptions {
@@ -9,6 +10,7 @@ interface UseExecuteOptions {
 }
 
 export function useExecute(options?: UseExecuteOptions) {
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [result, setResult] = useState<ExecutionResponse | null>(null);
@@ -40,7 +42,7 @@ export function useExecute(options?: UseExecuteOptions) {
             });
 
             if (response.status === 401) {
-                window.location.href = `/login?from=${encodeURIComponent(window.location.pathname)}`;
+                router.push(`/login?from=${encodeURIComponent(window.location.pathname)}`);
                 return null;
             }
 
@@ -64,7 +66,7 @@ export function useExecute(options?: UseExecuteOptions) {
         } finally {
             setIsLoading(false);
         }
-    }, [options]);
+    }, [options, router]);
 
     const reset = useCallback(() => {
         setIsLoading(false);

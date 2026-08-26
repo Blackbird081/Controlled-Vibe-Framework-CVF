@@ -130,7 +130,6 @@ describe('WorkspacePage', () => {
         expect(advanced.textContent).toContain('Execute the WWU-T2 work order as a read-only Web Workspace implementation.');
 
         const summaryPosition = summary.compareDocumentPosition(advanced);
-        // eslint-disable-next-line no-bitwise
         expect(summaryPosition & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     });
 

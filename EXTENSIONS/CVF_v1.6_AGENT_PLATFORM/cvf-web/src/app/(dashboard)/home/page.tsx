@@ -1,9 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { useState, useMemo, useCallback, useEffect, useRef, startTransition } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { BookOpenCheck, FileOutput, Layers3, ShieldCheck, Sparkles, Wand2 } from 'lucide-react';
+import { Layers3, ShieldCheck, Sparkles, Wand2 } from 'lucide-react';
 import { templates, generateIntent } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
 import { useProviders } from '@/lib/hooks/useExecute';
@@ -21,10 +20,7 @@ import {
 import { isIntentFirstEnabled, type IntentRouteResult } from '@/lib/intent-router';
 import { buildContinuationExecution, buildEvidenceSnapshot } from '@/lib/execution-continuity';
 import { OUTCOME_WORKFLOW_REGISTRY } from '@/lib/workflow-composition';
-import { OutcomeQuickActions } from '@/components/OutcomeQuickActions';
 import {
-    TemplateCard,
-    CategoryTabs,
     DynamicForm,
     ProcessingScreen,
     ResultViewer,
@@ -38,10 +34,7 @@ import {
     ContentStrategyWizard,
     DataAnalysisWizard,
     TemplatePreviewModal,
-    SurfaceStatCard,
-    SurfaceTopBar,
     OnboardingTour,
-    IntentEntry,
 } from '@/components';
 import { HomeBrowseExperience } from '@/components/home/HomeBrowseExperience';
 

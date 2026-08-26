@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n';
 
 type UserOption = {
@@ -12,6 +13,7 @@ type UserOption = {
 };
 
 export function AdminImpersonationControls({ users }: { users: UserOption[] }) {
+  const router = useRouter();
   const { language } = useLanguage();
   const vi = language === 'vi';
   const [selectedUserId, setSelectedUserId] = useState(users[0]?.id ?? '');
@@ -35,7 +37,7 @@ export function AdminImpersonationControls({ users }: { users: UserOption[] }) {
           throw new Error(payload?.error || (vi ? 'Không thể bắt đầu phiên xem như người dùng.' : 'Failed to start impersonation.'));
         }
 
-        window.location.href = '/home';
+        router.push('/home');
       } catch (startError) {
         setError(startError instanceof Error ? startError.message : (vi ? 'Không thể bắt đầu phiên xem như người dùng.' : 'Failed to start impersonation.'));
       }

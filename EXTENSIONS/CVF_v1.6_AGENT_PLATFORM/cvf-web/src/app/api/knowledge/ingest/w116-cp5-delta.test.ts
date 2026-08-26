@@ -8,6 +8,7 @@
 import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { POST } from './route';
 import { queryKnowledgeChunks } from '@/lib/knowledge-retrieval';
+import { computeServiceRequestSignature } from '@/lib/service-token-auth';
 import { NextRequest } from 'next/server';
 
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
@@ -62,14 +63,23 @@ describe('W116-CP5 — Positive delta: downstream knowledge improves project-spe
   });
 
   it('INGEST: POST /api/knowledge/ingest accepts 5 project chunks', async () => {
+    // The route authorizes through authorizeRouteGovernanceProof, which requires
+    // a signed service token over the exact body; a bare token is rejected 401.
+    const bodyText = JSON.stringify({
+      collectionId: PROJECT_COLLECTION_ID,
+      collectionName: 'NovaSpark Project Docs',
+      chunks: PROJECT_CHUNKS,
+    });
+    const timestamp = String(Date.now());
     const req = new NextRequest('http://localhost/api/knowledge/ingest', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-cvf-service-token': 'test-service-token' },
-      body: JSON.stringify({
-        collectionId: PROJECT_COLLECTION_ID,
-        collectionName: 'NovaSpark Project Docs',
-        chunks: PROJECT_CHUNKS,
-      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-cvf-service-token': 'test-service-token',
+        'x-cvf-service-timestamp': timestamp,
+        'x-cvf-service-signature': computeServiceRequestSignature('test-service-token', timestamp, bodyText),
+      },
+      body: bodyText,
     });
     const res = await POST(req);
     expect(res.status).toBe(200);

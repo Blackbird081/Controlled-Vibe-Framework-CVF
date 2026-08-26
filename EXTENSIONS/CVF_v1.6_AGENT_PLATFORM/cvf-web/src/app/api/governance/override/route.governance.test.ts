@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
+import { computeServiceRequestSignature } from '@/lib/service-token-auth';
 
 import { POST } from './route';
 
@@ -14,11 +15,20 @@ vi.mock('@/lib/governance-engine', () => ({
   governanceFetchDirect: governanceFetchDirectMock,
 }));
 
+// The route authorizes through authorizeRouteGovernanceProof, which requires a
+// signed service token over the exact body; a bare token is rejected with 401.
 function makeRequest(body: unknown) {
+  const bodyText = JSON.stringify(body);
+  const timestamp = String(Date.now());
   return new NextRequest('http://localhost/api/governance/override', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-cvf-service-token': 'test-service-token' },
-    body: JSON.stringify(body),
+    headers: {
+      'Content-Type': 'application/json',
+      'x-cvf-service-token': 'test-service-token',
+      'x-cvf-service-timestamp': timestamp,
+      'x-cvf-service-signature': computeServiceRequestSignature('test-service-token', timestamp, bodyText),
+    },
+    body: bodyText,
   });
 }
 

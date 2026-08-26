@@ -3,6 +3,8 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
+import { computeServiceRequestSignature } from '@/lib/service-token-auth';
+
 const executeAIMock = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
@@ -59,6 +61,23 @@ function makeExecuteRequest(body: Record<string, unknown>): Request {
     return new Request('http://localhost/api/execute', {
         method: 'POST',
         body: JSON.stringify(body),
+    });
+}
+
+// The route authorizes through authorizeRouteGovernanceProof, which requires a
+// signed service token (token + timestamp + HMAC over the exact body). A bare
+// token header is correctly rejected with 401.
+function makeSignedServiceRequest(body: Record<string, unknown>, token = 'svc'): Request {
+    const bodyText = JSON.stringify(body);
+    const timestamp = String(Date.now());
+    return new Request('http://localhost/api/execute', {
+        method: 'POST',
+        body: bodyText,
+        headers: {
+            'x-cvf-service-token': token,
+            'x-cvf-service-timestamp': timestamp,
+            'x-cvf-service-signature': computeServiceRequestSignature(token, timestamp, bodyText),
+        },
     });
 }
 
@@ -601,16 +620,12 @@ describe('/api/execute', () => {
             model: 'qvq-max',
         });
 
-        const req = new Request('http://localhost/api/execute', {
-            method: 'POST',
-            body: JSON.stringify({
-                templateName: 'Strategy',
-                intent: 'Analyze the market',
-                inputs: { targetMarket: 'SMBs' },
-                provider: 'alibaba',
-                model: 'qvq-max',
-            }),
-            headers: { 'x-cvf-service-token': 'svc' },
+        const req = makeSignedServiceRequest({
+            templateName: 'Strategy',
+            intent: 'Analyze the market',
+            inputs: { targetMarket: 'SMBs' },
+            provider: 'alibaba',
+            model: 'qvq-max',
         });
 
         const res = await POST(req as never);
@@ -631,15 +646,11 @@ describe('/api/execute', () => {
             model: 'qwen-flash',
         });
 
-        const req = new Request('http://localhost/api/execute', {
-            method: 'POST',
-            body: JSON.stringify({
-                templateName: 'Strategy',
-                intent: 'Analyze the market',
-                inputs: { targetMarket: 'SMBs' },
-                provider: 'alibaba',
-            }),
-            headers: { 'x-cvf-service-token': 'svc' },
+        const req = makeSignedServiceRequest({
+            templateName: 'Strategy',
+            intent: 'Analyze the market',
+            inputs: { targetMarket: 'SMBs' },
+            provider: 'alibaba',
         });
 
         const res = await POST(req as never);
@@ -677,15 +688,11 @@ describe('/api/execute', () => {
             provider: 'openai',
             model: 'gpt-4o',
         });
-        const req = new Request('http://localhost/api/execute', {
-            method: 'POST',
-            body: JSON.stringify({
-                templateName: 'Strategy',
-                intent: 'Analyze',
-                inputs: { goal: 'Test' },
-                provider: 'openai',
-            }),
-            headers: { 'x-cvf-service-token': 'svc' },
+        const req = makeSignedServiceRequest({
+            templateName: 'Strategy',
+            intent: 'Analyze',
+            inputs: { goal: 'Test' },
+            provider: 'openai',
         });
         const res = await POST(req as never);
         expect(res.status).toBe(200);

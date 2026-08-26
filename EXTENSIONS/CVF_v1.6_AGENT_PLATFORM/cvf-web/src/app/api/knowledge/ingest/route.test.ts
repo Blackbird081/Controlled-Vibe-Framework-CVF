@@ -1,6 +1,7 @@
 import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { POST } from './route';
 import { queryKnowledgeChunks, getRegisteredCollectionIds } from '@/lib/knowledge-retrieval';
+import { computeServiceRequestSignature } from '@/lib/service-token-auth';
 import { NextRequest } from 'next/server';
 
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
@@ -9,17 +10,30 @@ vi.mock('@/lib/middleware-auth', () => ({
   verifySessionCookie: verifySessionCookieMock,
 }));
 
+const SERVICE_TOKEN = 'test-service-token';
+
+function signedServiceHeaders(bodyText: string): Record<string, string> {
+  const timestamp = String(Date.now());
+  return {
+    'Content-Type': 'application/json',
+    'x-cvf-service-token': SERVICE_TOKEN,
+    'x-cvf-service-timestamp': timestamp,
+    'x-cvf-service-signature': computeServiceRequestSignature(SERVICE_TOKEN, timestamp, bodyText),
+  };
+}
+
 function makeRequest(body: unknown): NextRequest {
+  const bodyText = JSON.stringify(body);
   return new NextRequest('http://localhost/api/knowledge/ingest', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-cvf-service-token': 'test-service-token' },
-    body: JSON.stringify(body),
+    headers: signedServiceHeaders(bodyText),
+    body: bodyText,
   });
 }
 
 describe('POST /api/knowledge/ingest', () => {
   beforeEach(() => {
-    process.env.CVF_SERVICE_TOKEN = 'test-service-token';
+    process.env.CVF_SERVICE_TOKEN = SERVICE_TOKEN;
     verifySessionCookieMock.mockReset();
     verifySessionCookieMock.mockResolvedValue(null);
   });
@@ -112,10 +126,13 @@ describe('POST /api/knowledge/ingest', () => {
   });
 
   it('returns 400 for invalid JSON body', async () => {
+    // Sign the exact malformed body so authorization succeeds and the route
+    // reaches JSON parsing; this proves the 400 comes from the parser, not auth.
+    const bodyText = 'not-json';
     const req = new NextRequest('http://localhost/api/knowledge/ingest', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-cvf-service-token': 'test-service-token' },
-      body: 'not-json',
+      headers: signedServiceHeaders(bodyText),
+      body: bodyText,
     });
     const res = await POST(req);
     expect(res.status).toBe(400);

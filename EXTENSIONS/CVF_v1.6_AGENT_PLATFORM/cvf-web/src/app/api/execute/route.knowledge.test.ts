@@ -9,6 +9,7 @@ import os from 'node:os';
 import path from 'node:path';
 
 import { appendKnowledgeCollectionScopeEvent } from '@/lib/policy-events';
+import { computeServiceRequestSignature } from '@/lib/service-token-auth';
 import { readAuditEvents } from '@/lib/control-plane-events';
 import { knowledgeStore, type Sot3KnowledgeSourceMetadata } from '@/lib/knowledge-store';
 import { Sot3ActivationEvidenceStore } from '@/lib/sot3-activation-evidence-store';
@@ -218,16 +219,24 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     process.env.CVF_SERVICE_TOKEN = 'svc';
     verifySessionCookieMock.mockResolvedValueOnce(null);
 
+    // Sign the exact body so authorization succeeds and the route reaches the
+    // inline-knowledgeContext rejection; a bare token would 401 before that.
+    const bodyText = JSON.stringify({
+      templateName: 'Knowledge Query',
+      intent: 'Internal governed context handoff',
+      inputs: { question: 'What is the service-only context?' },
+      knowledgeContext: 'SERVICE-ONLY INLINE CONTEXT',
+      provider: 'openai',
+    });
+    const timestamp = String(Date.now());
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
-      headers: { 'x-cvf-service-token': 'svc' },
-      body: JSON.stringify({
-        templateName: 'Knowledge Query',
-        intent: 'Internal governed context handoff',
-        inputs: { question: 'What is the service-only context?' },
-        knowledgeContext: 'SERVICE-ONLY INLINE CONTEXT',
-        provider: 'openai',
-      }),
+      headers: {
+        'x-cvf-service-token': 'svc',
+        'x-cvf-service-timestamp': timestamp,
+        'x-cvf-service-signature': computeServiceRequestSignature('svc', timestamp, bodyText),
+      },
+      body: bodyText,
     });
 
     const res = await POST(req as never);

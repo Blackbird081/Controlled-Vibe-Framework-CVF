@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
 
 import { POST } from './route';
+import { computeServiceRequestSignature } from '@/lib/service-token-auth';
 
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 
@@ -29,17 +30,28 @@ const BASE_REQUEST = {
   receiptAnchor: 'receipt-new-knowledge-review',
 };
 
+const SERVICE_TOKEN = 'test-service-token';
+
+// The route authorizes through authorizeRouteGovernanceProof, which requires a
+// signed service token over the exact body; a bare token is rejected with 401.
 function makeRequest(body: Record<string, unknown>) {
+  const bodyText = JSON.stringify(body);
+  const timestamp = String(Date.now());
   return new NextRequest('http://localhost/api/artifacts/export', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-cvf-service-token': 'test-service-token' },
-    body: JSON.stringify(body),
+    headers: {
+      'Content-Type': 'application/json',
+      'x-cvf-service-token': SERVICE_TOKEN,
+      'x-cvf-service-timestamp': timestamp,
+      'x-cvf-service-signature': computeServiceRequestSignature(SERVICE_TOKEN, timestamp, bodyText),
+    },
+    body: bodyText,
   });
 }
 
 describe('/api/artifacts/export', () => {
   beforeEach(() => {
-    process.env.CVF_SERVICE_TOKEN = 'test-service-token';
+    process.env.CVF_SERVICE_TOKEN = SERVICE_TOKEN;
     verifySessionCookieMock.mockReset();
     verifySessionCookieMock.mockResolvedValue(null);
   });

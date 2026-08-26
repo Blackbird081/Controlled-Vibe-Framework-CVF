@@ -13,7 +13,8 @@
     "./guards/*": "./src/guards/*.ts",
     "./runtime/agent-handoff": "./src/runtime/agent-handoff.ts",
     "./runtime/agent-coordination": "./src/runtime/agent-coordination.ts",
-    "./runtime/mandatory-gateway": "./src/runtime/mandatory-gateway.ts"
+    "./runtime/mandatory-gateway": "./src/runtime/mandatory-gateway.ts",
+    "./receipt-identity": "./src/receipt-identity.ts"
   },
   "files": [
     "README.md",
@@ -25,7 +26,10 @@
     "src/enterprise",
     "src/runtime/agent-handoff.ts",
     "src/runtime/agent-coordination.ts",
-    "src/runtime/mandatory-gateway.ts"
+    "src/runtime/mandatory-gateway.ts",
+    "src/receipt-identity.ts",
+    "src/contracts/receipt-envelope.contract.ts",
+    "src/contracts/memory-tier.contract.ts"
   ],
   "sideEffects": false,
   "scripts": {

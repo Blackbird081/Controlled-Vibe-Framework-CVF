@@ -11,6 +11,9 @@
     "check": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": ["cvf", "execution-plane", "coordination-package", "foundation"],
+  "dependencies": {
+    "cvf-control-plane-foundation": "file:../CVF_CONTROL_PLANE_FOUNDATION"
+  },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@vitest/coverage-v8": "^1.6.1",

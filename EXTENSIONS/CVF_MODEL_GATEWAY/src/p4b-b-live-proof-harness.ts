@@ -11,13 +11,28 @@
  * adapter exists solely so a real provider response can flow through the
  * existing bridge for one bounded proof.
  *
- * Secret safety: the harness never returns, logs, or embeds a raw key value. It
- * resolves the secret only through CredentialBoundary.resolveSecretForRuntime
- * and only when liveAuthorized === true. When liveAuthorized === false it makes
- * no network call and reads no secret.
+ * EAFR-R12. `liveAuthorized` is a live-selection gate only, never sufficient
+ * authority on its own. Before any secret is resolved or the bridge is built,
+ * the harness requires the existing R1E `ProviderExecutionGrant` to pass
+ * `evaluateProviderExecutionAuthority` from `cvf-control-plane-foundation`,
+ * exactly as `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/test/
+ * provider-execution-guard.ts` already binds it for the fetch-level guard.
+ * This harness does not duplicate that evaluator or define a parallel grant
+ * type; it imports the same exported symbols through the package's public
+ * barrel.
  *
- * Contract version: cvf.p4bBLiveProofHarness.t2.v1
+ * Secret safety: the harness never returns, logs, or embeds a raw key value. It
+ * resolves the secret only through CredentialBoundary.resolveSecretForRuntime,
+ * and only after both liveAuthorized === true and the orchestrator grant is
+ * evaluated as allowed. When either condition fails, it makes no network call
+ * and reads no secret.
+ *
+ * Contract version: cvf.p4bBLiveProofHarness.t3.v1
  */
+import {
+  evaluateProviderExecutionAuthority,
+  type ProviderExecutionGrant,
+} from "cvf-control-plane-foundation";
 import type {
   ProviderExecutionAdapter,
   ProviderExecutionBridgeResult,
@@ -45,7 +60,7 @@ import {
 export { createOpenAiCompatibleExecuteAdapter } from "./openai-compatible-execute-adapter";
 
 export const P4B_B_LIVE_PROOF_HARNESS_VERSION =
-  "cvf.p4bBLiveProofHarness.t2.v1" as const;
+  "cvf.p4bBLiveProofHarness.t3.v1" as const;
 
 /**
  * Minimal POST shape mirroring the existing sample adapters' FetchLike so the
@@ -70,10 +85,29 @@ export interface LiveProofHarnessOptions {
   /** Injected fetch for tests; real fetch used only when liveAuthorized. */
   fetchImpl?: LiveProofFetch;
   /**
-   * Hard live gate. When false, the harness performs NO network call and reads
-   * NO secret; it returns a classified dry-run diagnostic instead.
+   * Live-selection gate only, from EAFR-R12. When false, the harness performs
+   * NO network call and reads NO secret; it returns a classified dry-run
+   * diagnostic instead. When true it is necessary but NOT sufficient: the
+   * orchestrator grant below must still evaluate as allowed before any
+   * secret is resolved.
    */
   liveAuthorized: boolean;
+  /**
+   * The existing R1E orchestrator-issued grant. Absent, malformed, or
+   * evaluated as not-allowed denies before secret resolution, regardless of
+   * `liveAuthorized`.
+   */
+  providerExecutionGrant?: ProviderExecutionGrant;
+  /** Requesting worker/agent identity bound against the grant subject. */
+  workerAgentId: string;
+  /** Requesting delegation identity bound against the grant delegation. */
+  delegationId: string;
+  /** Grant id presented by the caller, matched against the grant's own id. */
+  grantId: string;
+  /** Calls already consumed under this grant before this request. */
+  consumedCalls: number;
+  /** Current time as ISO-8601, injectable for deterministic tests. */
+  nowIso?: string;
 }
 
 export interface LiveProofDryRunResult {
@@ -84,13 +118,25 @@ export interface LiveProofDryRunResult {
   modelId: string;
 }
 
+export interface LiveProofGrantDeniedResult {
+  authorized: false;
+  diagnostic: "live_proof_grant_denied";
+  message: string;
+  reason: string;
+  providerId: string;
+  modelId: string;
+}
+
 export interface LiveProofResult {
   authorized: true;
   admissionStatus: AdapterAdmissionRecord["status"];
   bridgeResult: ProviderExecutionBridgeResult;
 }
 
-export type HarnessRunResult = LiveProofDryRunResult | LiveProofResult;
+export type HarnessRunResult =
+  | LiveProofDryRunResult
+  | LiveProofGrantDeniedResult
+  | LiveProofResult;
 
 /**
  * Run one bounded live proof through the governed bridge.
@@ -111,6 +157,32 @@ export async function runLiveProof(
       diagnostic: "live_proof_not_authorized",
       message:
         "liveAuthorized is false: no network call and no secret read were performed.",
+      providerId: options.providerId,
+      modelId: options.modelId,
+    };
+  }
+
+  // EAFR-R12. liveAuthorized alone is a selection signal, never authority.
+  // Every live-selected request must still pass the existing R1E evaluator
+  // before any secret is resolved or the bridge is built.
+  const authorityResult = evaluateProviderExecutionAuthority(
+    options.providerExecutionGrant,
+    {
+      workerAgentId: options.workerAgentId,
+      delegationId: options.delegationId,
+      grantId: options.grantId,
+      provider: options.providerId,
+      consumedCalls: options.consumedCalls,
+      nowIso: options.nowIso ?? new Date().toISOString(),
+    },
+  );
+  if (!authorityResult.allowed) {
+    return {
+      authorized: false,
+      diagnostic: "live_proof_grant_denied",
+      message:
+        "provider execution grant denied: no network call and no secret read were performed.",
+      reason: authorityResult.reason,
       providerId: options.providerId,
       modelId: options.modelId,
     };

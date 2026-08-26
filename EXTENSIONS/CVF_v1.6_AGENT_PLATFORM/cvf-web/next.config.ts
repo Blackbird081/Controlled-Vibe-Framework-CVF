@@ -43,6 +43,7 @@ const nextConfig: NextConfig = {
     'cvf-refinery',
     'cvf-truth-kernel',
     'cvf-truth-flow',
+    'cvf-model-gateway',
   ],
   turbopack: {
     // TypeScript ESM packages use explicit .js extensions in their internal

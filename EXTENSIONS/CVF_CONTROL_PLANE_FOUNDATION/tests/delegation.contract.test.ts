@@ -3,6 +3,7 @@ import {
   validateClosureReport,
   validateDelegationContract,
   validateWriteScope,
+  evaluateProviderExecutionAuthority,
   type DelegationContract,
 } from "../src/delegation.contract";
 
@@ -27,6 +28,16 @@ const contract = (overrides: Partial<DelegationContract> = {}): DelegationContra
     interimCheckpoints: "optional",
   },
   blockedActions: [{ action: "delete-repo", reason: "destructive" }],
+  providerExecution: {
+    authority: "FORBIDDEN",
+    grantId: null,
+    authorizedBy: null,
+    subjectAgentId: "worker-001",
+    delegationId: "delegation-001",
+    allowedProviders: [],
+    maxCalls: 0,
+    expiresAt: null,
+  },
   ...overrides,
 });
 
@@ -254,6 +265,77 @@ describe("DelegationContract", () => {
         ["receipt"],
       ).valid,
     ).toBe(true);
+  });
+
+  it("requires an explicit providerExecution boundary", () => {
+    const subject = contract() as Partial<DelegationContract>;
+    delete subject.providerExecution;
+    expect(validateDelegationContract(subject).violations).toContain(
+      "providerExecution is required and defaults to FORBIDDEN",
+    );
+  });
+
+  it("rejects grant capability attached to a forbidden provider boundary", () => {
+    const subject = contract({
+      providerExecution: {
+        ...contract().providerExecution,
+        grantId: "self-issued",
+      },
+    });
+    expect(validateDelegationContract(subject).violations).toContain(
+      "FORBIDDEN providerExecution must not carry grant capability",
+    );
+  });
+
+  it("allows one provider call only when every orchestrator grant binding matches", () => {
+    const grant = {
+      authority: "ORCHESTRATOR_GRANT_REQUIRED" as const,
+      grantId: "grant-001",
+      authorizedBy: "ORCHESTRATOR" as const,
+      subjectAgentId: "worker-001",
+      delegationId: "delegation-001",
+      allowedProviders: ["openai"],
+      maxCalls: 1,
+      expiresAt: "2026-08-26T00:00:00.000Z",
+    };
+    expect(evaluateProviderExecutionAuthority(grant, {
+      workerAgentId: "worker-001",
+      delegationId: "delegation-001",
+      grantId: "grant-001",
+      provider: "openai",
+      consumedCalls: 0,
+      nowIso: "2026-08-25T00:00:00.000Z",
+    }).allowed).toBe(true);
+  });
+
+  it.each([
+    ["wrong subject", { workerAgentId: "worker-002" }],
+    ["wrong delegation", { delegationId: "delegation-002" }],
+    ["wrong grant", { grantId: "grant-002" }],
+    ["wrong provider", { provider: "gemini" }],
+    ["budget exhausted", { consumedCalls: 1 }],
+    ["expired", { nowIso: "2026-08-27T00:00:00.000Z" }],
+  ])("rejects provider execution for %s", (_label, override) => {
+    const grant = {
+      authority: "ORCHESTRATOR_GRANT_REQUIRED" as const,
+      grantId: "grant-001",
+      authorizedBy: "ORCHESTRATOR" as const,
+      subjectAgentId: "worker-001",
+      delegationId: "delegation-001",
+      allowedProviders: ["openai"],
+      maxCalls: 1,
+      expiresAt: "2026-08-26T00:00:00.000Z",
+    };
+    const request = {
+      workerAgentId: "worker-001",
+      delegationId: "delegation-001",
+      grantId: "grant-001",
+      provider: "openai",
+      consumedCalls: 0,
+      nowIso: "2026-08-25T00:00:00.000Z",
+      ...override,
+    };
+    expect(evaluateProviderExecutionAuthority(grant, request).allowed).toBe(false);
   });
 
   it("keeps append-only as advisory in write-scope path validation", () => {

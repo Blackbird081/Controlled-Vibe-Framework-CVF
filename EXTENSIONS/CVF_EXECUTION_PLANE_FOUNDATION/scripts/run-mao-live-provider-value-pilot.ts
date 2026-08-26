@@ -7,10 +7,25 @@
  * ceiling via `MaoLiveCallLedger` and writes a secret-safe comparative
  * evidence artifact.
  *
+ * EAFR-R12 / LPCI1-WEB-R2. Direct invocation of this script is not itself
+ * authority. Before `loadEnvLocal` (or any key-bearing local environment
+ * load), endpoint resolution, or harness call, the runner parses a
+ * `CVF_PROVIDER_EXECUTION_GRANT_JSON` environment value into the existing
+ * R1E `ProviderExecutionGrant` shape using secret-safe JSON parsing
+ * (malformed input yields `undefined`, never a thrown parse error
+ * containing raw content) and requires the exact bounded evaluator to
+ * accept the one Alibaba/DashScope candidate this runner uses. If parsing
+ * fails, the grant is absent, or the grant does not authorize this
+ * provider, the runner fails closed before any environment is loaded, no
+ * key presence is checked, and no endpoint is resolved. This mirrors, and
+ * does not duplicate, the identical pattern in
+ * `EXTENSIONS/CVF_MODEL_GATEWAY/scripts/run-p4b-b-live-proof.ts`.
+ *
  * Secret safety: this script never prints, logs, or writes a raw key value.
  * It reports only key-alias presence as a boolean. The provider endpoint
  * receives the secret only inside the existing Model Gateway harness
- * adapter, exactly as in the prior P4B-B live proof runner.
+ * adapter, exactly as in the prior P4B-B live proof runner. It never
+ * prints, logs, or writes the raw grant JSON.
  *
  * Provider neutrality: one operator-available-key provider lane
  * (Alibaba/DashScope) is used; this is not a canonical provider choice or a
@@ -18,7 +33,7 @@
  *
  * Usage (operator-authorized only, under
  * docs/baselines/CVF_GC018_MAO_LIVE_T1_PROVIDER_ADAPTER_VALUE_PILOT_2026-07-12.md):
- *   npx tsx EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/scripts/run-mao-live-provider-value-pilot.ts
+ *   CVF_PROVIDER_EXECUTION_GRANT_JSON='{...}' npx tsx EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/scripts/run-mao-live-provider-value-pilot.ts
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
@@ -28,6 +43,7 @@ import {
   runMaoLane,
   decideValueVerdict,
   LIVE_PILOT_TASK_PROMPT,
+  type MaoLiveGrantContext,
 } from "../src/mao/live.provider.value.pilot";
 import type { CredentialReference } from "../../CVF_MODEL_GATEWAY/src/credential-boundary";
 import {
@@ -35,6 +51,10 @@ import {
   getAlibabaFreeQuotaStatus,
   resolveAlibabaDashScopeEndpoint,
 } from "../../CVF_MODEL_GATEWAY/src/alibaba-free-quota-model-ledger";
+import {
+  evaluateProviderExecutionAuthority,
+  type ProviderExecutionGrant,
+} from "cvf-control-plane-foundation";
 
 const REPO_ROOT = resolve(__dirname, "..", "..", "..");
 const ENV_LOCAL = resolve(
@@ -96,13 +116,97 @@ function writeArtifact(payload: Record<string, unknown>, path: string): void {
   writeFileSync(path, `${JSON.stringify(payload, null, 2)}\n`, "utf-8");
 }
 
+/**
+ * Secret-safe grant parsing: malformed or absent input yields `undefined`,
+ * never a thrown error that could echo raw content. The grant itself
+ * carries no secret value; it is identity/authority metadata only. Mirrors
+ * `parseProviderExecutionGrant` in
+ * `EXTENSIONS/CVF_MODEL_GATEWAY/scripts/run-p4b-b-live-proof.ts`.
+ */
+function parseProviderExecutionGrant(
+  raw: string | undefined,
+): ProviderExecutionGrant | undefined {
+  if (!raw) return undefined;
+  try {
+    return JSON.parse(raw) as ProviderExecutionGrant;
+  } catch {
+    return undefined;
+  }
+}
+
 async function main(): Promise<number> {
   const startedAt = new Date().toISOString();
+  const authorityEnv = process.env as Record<string, string | undefined>;
+  const outputPath = resultPath(authorityEnv);
+
+  // EAFR-R12 / LPCI1-WEB-R2. Fail closed before any key-bearing local
+  // environment is loaded: direct invocation of this script is not itself
+  // authority. A malformed or absent grant, or a grant that does not
+  // authorize this runner's one provider candidate, stops the run here,
+  // before `loadEnvLocal`, before any key presence check, and before any
+  // endpoint resolution.
+  const providerExecutionGrant = parseProviderExecutionGrant(
+    authorityEnv.CVF_PROVIDER_EXECUTION_GRANT_JSON,
+  );
+  const workerAgentId = authorityEnv.CVF_AGENT_ID ?? "";
+  const delegationId = authorityEnv.CVF_DELEGATION_ID ?? "";
+  const grantId = authorityEnv.CVF_PROVIDER_EXECUTION_GRANT_ID ?? "";
+  const grantContext: MaoLiveGrantContext = {
+    providerExecutionGrant,
+    workerAgentId,
+    delegationId,
+    grantId,
+  };
+
+  if (!providerExecutionGrant) {
+    writeArtifact(
+      {
+        pilot: "mao-live-t1-provider-adapter-value-pilot",
+        startedAt,
+        finishedAt: new Date().toISOString(),
+        verdict: "BLOCKED_LIVE_PROVIDER",
+        reason: "missing or malformed CVF_PROVIDER_EXECUTION_GRANT_JSON: no orchestrator provider execution grant was parsed",
+        totalCallsSpent: 0,
+      },
+      outputPath,
+    );
+    console.log(
+      "MAO-LIVE-T1: BLOCKED_LIVE_PROVIDER (no orchestrator provider execution grant parsed; no environment loaded, no candidate attempted)",
+    );
+    return 1;
+  }
+
+  const preflightNowIso = new Date().toISOString();
+  const authorityResult = evaluateProviderExecutionAuthority(providerExecutionGrant, {
+    workerAgentId,
+    delegationId,
+    grantId,
+    provider: PROVIDER_ID,
+    consumedCalls: 0,
+    nowIso: preflightNowIso,
+  });
+  if (!authorityResult.allowed) {
+    writeArtifact(
+      {
+        pilot: "mao-live-t1-provider-adapter-value-pilot",
+        startedAt,
+        finishedAt: new Date().toISOString(),
+        verdict: "BLOCKED_LIVE_PROVIDER",
+        reason: `provider execution grant did not authorize ${PROVIDER_ID}: ${authorityResult.reason}`,
+        totalCallsSpent: 0,
+      },
+      outputPath,
+    );
+    console.log(
+      `MAO-LIVE-T1: BLOCKED_LIVE_PROVIDER (grant denied for ${PROVIDER_ID}; no key-bearing environment loaded, no candidate attempted)`,
+    );
+    return 1;
+  }
+
   const env: Record<string, string | undefined> = {
     ...loadEnvLocal(ENV_LOCAL),
-    ...process.env,
+    ...authorityEnv,
   };
-  const outputPath = resultPath(env);
 
   const keyAlias = firstPresentAlias(env, KEY_ALIASES);
   if (!keyAlias) {
@@ -158,6 +262,7 @@ async function main(): Promise<number> {
     credentialReference,
     env,
     traceId: `mao-live-t1-direct-${Date.now()}`,
+    grantContext,
   });
 
   let mao;
@@ -191,6 +296,7 @@ async function main(): Promise<number> {
       env,
       traceId: `mao-live-t1-mao-${Date.now()}`,
       recordedAt,
+      grantContext,
     });
   }
 

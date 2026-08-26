@@ -1,5 +1,17 @@
 export type DelegationRiskCeiling = "R0" | "R1" | "R2" | "R3";
 export type DelegationWriteScope = "append-only" | "modify-listed" | "create-only";
+export type ProviderExecutionAuthority = "FORBIDDEN" | "ORCHESTRATOR_GRANT_REQUIRED";
+
+export interface ProviderExecutionGrant {
+  authority: ProviderExecutionAuthority;
+  grantId: string | null;
+  authorizedBy: "ORCHESTRATOR" | null;
+  subjectAgentId: string;
+  delegationId: string;
+  allowedProviders: string[];
+  maxCalls: number;
+  expiresAt: string | null;
+}
 
 export interface DelegationContract {
   parentTaskId: string;
@@ -25,11 +37,57 @@ export interface DelegationContract {
     action: string;
     reason: string;
   }>;
+  providerExecution: ProviderExecutionGrant;
 }
 
 export interface DelegationValidationResult {
   valid: boolean;
   violations: string[];
+}
+
+export interface ProviderExecutionRequest {
+  workerAgentId: string;
+  delegationId: string;
+  grantId: string;
+  provider: string;
+  consumedCalls: number;
+  nowIso: string;
+}
+
+export function evaluateProviderExecutionAuthority(
+  grant: ProviderExecutionGrant | undefined,
+  request: ProviderExecutionRequest,
+): { allowed: boolean; reason: string } {
+  if (!grant || grant.authority === "FORBIDDEN") {
+    return { allowed: false, reason: "provider execution is forbidden without an orchestrator grant" };
+  }
+  if (grant.authorizedBy !== "ORCHESTRATOR") {
+    return { allowed: false, reason: "provider execution grant must be authorized by ORCHESTRATOR" };
+  }
+  if (!grant.grantId || grant.grantId !== request.grantId) {
+    return { allowed: false, reason: "provider execution grant id mismatch" };
+  }
+  if (grant.subjectAgentId !== request.workerAgentId) {
+    return { allowed: false, reason: "provider execution grant subject mismatch" };
+  }
+  if (grant.delegationId !== request.delegationId) {
+    return { allowed: false, reason: "provider execution delegation mismatch" };
+  }
+  if (!grant.allowedProviders.includes(request.provider)) {
+    return { allowed: false, reason: `provider ${request.provider} is outside the orchestrator grant` };
+  }
+  if (!Number.isInteger(request.consumedCalls) || request.consumedCalls < 0) {
+    return { allowed: false, reason: "provider execution consumedCalls is invalid" };
+  }
+  if (!Number.isInteger(grant.maxCalls) || grant.maxCalls < 1 || request.consumedCalls >= grant.maxCalls) {
+    return { allowed: false, reason: "provider execution call budget exhausted" };
+  }
+  const expiresAt = grant.expiresAt ? Date.parse(grant.expiresAt) : Number.NaN;
+  const now = Date.parse(request.nowIso);
+  if (!Number.isFinite(expiresAt) || !Number.isFinite(now) || expiresAt <= now) {
+    return { allowed: false, reason: "provider execution grant is expired or malformed" };
+  }
+  return { allowed: true, reason: "provider execution allowed by bounded orchestrator grant" };
 }
 
 export function validateWriteScope(
@@ -152,6 +210,35 @@ export function validateDelegationContract(
 
   if (!contract.reportRequirement) {
     violations.push("reportRequirement is required");
+  }
+
+  if (!contract.providerExecution) {
+    violations.push("providerExecution is required and defaults to FORBIDDEN");
+  } else if (contract.providerExecution.authority === "FORBIDDEN") {
+    if (
+      contract.providerExecution.grantId !== null ||
+      contract.providerExecution.authorizedBy !== null ||
+      contract.providerExecution.allowedProviders.length !== 0 ||
+      contract.providerExecution.maxCalls !== 0 ||
+      contract.providerExecution.expiresAt !== null
+    ) {
+      violations.push("FORBIDDEN providerExecution must not carry grant capability");
+    }
+  } else if (contract.providerExecution.authority === "ORCHESTRATOR_GRANT_REQUIRED") {
+    if (
+      !isNonEmptyString(contract.providerExecution.grantId) ||
+      contract.providerExecution.authorizedBy !== "ORCHESTRATOR" ||
+      !isNonEmptyString(contract.providerExecution.subjectAgentId) ||
+      !isNonEmptyString(contract.providerExecution.delegationId) ||
+      contract.providerExecution.allowedProviders.length === 0 ||
+      !Number.isInteger(contract.providerExecution.maxCalls) ||
+      contract.providerExecution.maxCalls < 1 ||
+      !isNonEmptyString(contract.providerExecution.expiresAt)
+    ) {
+      violations.push("ORCHESTRATOR_GRANT_REQUIRED providerExecution is malformed");
+    }
+  } else {
+    violations.push("providerExecution.authority is invalid");
   }
 
   return {

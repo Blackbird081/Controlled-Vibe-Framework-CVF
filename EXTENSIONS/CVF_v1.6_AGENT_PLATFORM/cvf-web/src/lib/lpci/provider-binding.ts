@@ -13,7 +13,7 @@ import {
   type GatewayExecuteRequest,
   type OpenAiCompatibleFetch,
   type ProviderExecutionBridgeResult,
-} from 'cvf-model-gateway';
+} from 'cvf-model-gateway/lpci-safe';
 
 const OPENAI_PROVIDER_ID = 'openai';
 const OPENAI_MODEL_ID = 'gpt-4o';

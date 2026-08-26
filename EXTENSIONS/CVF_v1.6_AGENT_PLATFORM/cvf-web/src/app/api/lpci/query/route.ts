@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
-import { CredentialBoundary } from 'cvf-model-gateway';
+import { CredentialBoundary } from 'cvf-model-gateway/lpci-safe';
 
 import { buildAuditReceipt } from '@/lib/lpci/audit-receipt';
 import {

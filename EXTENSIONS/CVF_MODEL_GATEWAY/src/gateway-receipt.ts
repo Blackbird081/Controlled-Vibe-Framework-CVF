@@ -1,8 +1,7 @@
 import type { GatewayPolicyContext, GatewayPolicyResult } from "./gateway-policy";
 import type { GatewayRiskClass } from "./provider-registry";
-import type { MemoryTierId } from "../../CVF_GUARD_CONTRACT/src/contracts/memory-tier.contract";
-import type { Receipt } from "../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract";
-import { createReceiptEnvelope as wrapReceiptEnvelope } from "../../CVF_GUARD_CONTRACT/src/contracts/receipt-envelope.contract";
+import type { MemoryTierId, Receipt } from "cvf-guard-contract/receipt-identity";
+import { createReceiptEnvelope as wrapReceiptEnvelope } from "cvf-guard-contract/receipt-identity";
 
 export interface GatewayReceiptInput {
   traceId: string;

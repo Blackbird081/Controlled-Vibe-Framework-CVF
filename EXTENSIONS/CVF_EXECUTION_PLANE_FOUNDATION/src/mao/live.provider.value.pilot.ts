@@ -25,6 +25,10 @@ import type {
 } from "../../../CVF_MODEL_GATEWAY/src/p4b-b-live-proof-harness";
 import { runLiveProof } from "../../../CVF_MODEL_GATEWAY/src/p4b-b-live-proof-harness";
 import {
+  evaluateProviderExecutionAuthority,
+  type ProviderExecutionGrant,
+} from "cvf-control-plane-foundation";
+import {
   checkSelfApproval,
   buildIsolatedSourcePacket,
 } from "./reviewer.isolation.contract";
@@ -114,7 +118,8 @@ export type MaoLiveCallDiagnosticClass =
   | "PROVIDER_ERROR"
   | "MALFORMED_OUTPUT"
   | "TRANSPORT_ERROR"
-  | "DRY_RUN_NOT_AUTHORIZED";
+  | "DRY_RUN_NOT_AUTHORIZED"
+  | "GRANT_DENIED";
 
 export interface MaoLiveCallDiagnostic {
   readonly stage: "live_call";
@@ -196,6 +201,70 @@ export class MaoLiveCallLedger {
   }
 }
 
+// --- Authority-context grant binding (EAFR-R12 propagation) ---
+
+/**
+ * Caller-supplied provider execution grant identity, mirroring
+ * `RunnerGrantContext` in
+ * `EXTENSIONS/CVF_MODEL_GATEWAY/scripts/run-p4b-b-live-proof.ts`. Every
+ * direct, MAO-worker, and MAO-revision harness call in this module requires
+ * this context and forwards it unchanged into `runLiveProof`, which itself
+ * still independently re-evaluates authority (this context is defense in
+ * depth, not a bypass of the harness's own R1E evaluator). `consumedCalls`
+ * is not caller-tracked; it is derived from `ledger.spentCount` at each call
+ * site immediately before the harness call, so the pre-call ordinal always
+ * matches the shared ledger's own claimed-call count and a denied attempt
+ * never advances it (denial happens before `ledger.claim` in every call
+ * site below).
+ */
+export interface MaoLiveGrantContext {
+  readonly providerExecutionGrant: ProviderExecutionGrant | undefined;
+  readonly workerAgentId: string;
+  readonly delegationId: string;
+  readonly grantId: string;
+  readonly nowIso?: string;
+}
+
+/**
+ * Caller-side authority preflight, run before `ledger.claim(...)`. Returns
+ * `null` when the exact bounded orchestrator grant is currently allowed for
+ * `providerId` at the ledger's current `spentCount`; returns a
+ * `GRANT_DENIED`-classified diagnostic otherwise. This is defense in depth:
+ * `runLiveProof` itself still independently re-evaluates the same grant
+ * before any secret is resolved, so a caller cannot bypass authority by
+ * calling the harness directly. A denied preflight never calls
+ * `ledger.claim`, so it consumes neither the live-call ledger nor (via the
+ * harness's own gate) any provider-call budget.
+ */
+function preflightGrant(
+  ledger: MaoLiveCallLedger,
+  providerId: string,
+  grantContext: MaoLiveGrantContext,
+): MaoLiveCallDiagnostic | null {
+  const nowIso = grantContext.nowIso ?? new Date().toISOString();
+  const authorityResult = evaluateProviderExecutionAuthority(
+    grantContext.providerExecutionGrant,
+    {
+      workerAgentId: grantContext.workerAgentId,
+      delegationId: grantContext.delegationId,
+      grantId: grantContext.grantId,
+      provider: providerId,
+      consumedCalls: ledger.spentCount,
+      nowIso,
+    },
+  );
+  if (authorityResult.allowed) {
+    return null;
+  }
+  return {
+    stage: "live_call",
+    class: "GRANT_DENIED",
+    retryable: false,
+    userAction: "obtain a valid orchestrator provider execution grant before retrying",
+    message: authorityResult.reason,
+  };
+}
+
 // --- Direct lane ---
 
 export interface MaoLiveDirectLaneResult {
@@ -221,7 +290,19 @@ export async function runDirectLane(params: {
   env: Record<string, string | undefined>;
   fetchImpl?: LiveProofFetch;
   traceId: string;
+  grantContext: MaoLiveGrantContext;
 }): Promise<MaoLiveDirectLaneResult> {
+  const denial = preflightGrant(params.ledger, params.providerId, params.grantContext);
+  if (denial) {
+    return {
+      ok: false,
+      latencyMs: 0,
+      responseText: null,
+      usage: null,
+      rubric: null,
+      diagnostic: denial,
+    };
+  }
   params.ledger.claim("direct-lane-call");
   const request: GatewayExecuteRequest = {
     traceId: params.traceId,
@@ -251,6 +332,12 @@ export async function runDirectLane(params: {
         endpoint: params.endpoint,
         fetchImpl: params.fetchImpl,
         liveAuthorized: true,
+        providerExecutionGrant: params.grantContext.providerExecutionGrant,
+        workerAgentId: params.grantContext.workerAgentId,
+        delegationId: params.grantContext.delegationId,
+        grantId: params.grantContext.grantId,
+        consumedCalls: params.ledger.spentCount - 1,
+        nowIso: params.grantContext.nowIso,
       },
       request,
     );
@@ -338,7 +425,18 @@ async function runMaoWorkerCall(params: {
   traceId: string;
   prompt: string;
   callLabel: string;
+  grantContext: MaoLiveGrantContext;
 }): Promise<MaoLiveWorkerAttempt> {
+  const denial = preflightGrant(params.ledger, params.providerId, params.grantContext);
+  if (denial) {
+    return {
+      ok: false,
+      latencyMs: 0,
+      responseText: null,
+      usage: null,
+      diagnostic: denial,
+    };
+  }
   params.ledger.claim(params.callLabel);
   const request: GatewayExecuteRequest = {
     traceId: params.traceId,
@@ -368,6 +466,12 @@ async function runMaoWorkerCall(params: {
         endpoint: params.endpoint,
         fetchImpl: params.fetchImpl,
         liveAuthorized: true,
+        providerExecutionGrant: params.grantContext.providerExecutionGrant,
+        workerAgentId: params.grantContext.workerAgentId,
+        delegationId: params.grantContext.delegationId,
+        grantId: params.grantContext.grantId,
+        consumedCalls: params.ledger.spentCount - 1,
+        nowIso: params.grantContext.nowIso,
       },
       request,
     );
@@ -509,6 +613,7 @@ export async function runMaoLane(params: {
   fetchImpl?: LiveProofFetch;
   traceId: string;
   recordedAt: string;
+  grantContext: MaoLiveGrantContext;
 }): Promise<MaoLiveLaneResult> {
   const evidenceLedger = new MaoEvidenceLedger(LIVE_PILOT_TASK_GRAPH_ID);
   let revisionLedgerState = createRevisionLedger(LIVE_PILOT_MAX_REVISION_DEPTH);
@@ -516,6 +621,7 @@ export async function runMaoLane(params: {
   let totalLatencyMs = 0;
   let totalUsage = { inputTokens: 0, outputTokens: 0 };
 
+  const spentBeforeFirstAttempt = params.ledger.spentCount;
   const firstAttempt = await runMaoWorkerCall({
     ledger: params.ledger,
     providerId: params.providerId,
@@ -527,6 +633,7 @@ export async function runMaoLane(params: {
     traceId: `${params.traceId}-worker`,
     prompt: LIVE_PILOT_TASK_PROMPT,
     callLabel: "mao-worker-call",
+    grantContext: params.grantContext,
   });
   totalLatencyMs += firstAttempt.latencyMs;
   if (firstAttempt.usage) {
@@ -537,7 +644,7 @@ export async function runMaoLane(params: {
     return {
       ok: false,
       totalLatencyMs,
-      callsSpent: 1,
+      callsSpent: params.ledger.spentCount - spentBeforeFirstAttempt,
       revisionUsed: false,
       finalResponseText: null,
       finalRubric: null,
@@ -580,13 +687,14 @@ export async function runMaoLane(params: {
       traceId: `${params.traceId}-revision`,
       prompt: repairPrompt,
       callLabel: "mao-revision-call",
+      grantContext: params.grantContext,
     });
     totalLatencyMs += secondAttempt.latencyMs;
     if (secondAttempt.usage) {
       totalUsage.inputTokens += secondAttempt.usage.inputTokens;
       totalUsage.outputTokens += secondAttempt.usage.outputTokens;
     }
-    callsSpent = 2;
+    callsSpent = params.ledger.spentCount - spentBeforeFirstAttempt;
     if (!secondAttempt.ok || !secondAttempt.responseText) {
       return {
         ok: false,

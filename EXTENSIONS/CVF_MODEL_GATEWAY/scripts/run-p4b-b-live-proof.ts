@@ -10,18 +10,36 @@
  * preferred, or ranked. A 401 on one candidate is recorded and the runner falls
  * through to the next available-key candidate.
  *
+ * EAFR-R12. Direct invocation of this script is not itself authority. Before
+ * any candidate is attempted, the runner parses a
+ * `CVF_PROVIDER_EXECUTION_GRANT_JSON` environment value into the existing R1E
+ * `ProviderExecutionGrant` shape using secret-safe JSON parsing (malformed
+ * input yields `undefined`, never a thrown parse error containing raw
+ * content). If that parse fails, or the grant is absent, the runner fails
+ * closed before any candidate loop begins: no key presence is checked, no
+ * endpoint is resolved, and no harness call is made. This mirrors, and does
+ * not duplicate, the binding pattern in `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/
+ * cvf-web/src/test/provider-execution-guard.ts`.
+ *
  * Secret safety: this script never prints, logs, or writes a raw key value. It
  * reports only key presence as a boolean and the alias used. The provider
- * endpoint receives the secret only inside the harness adapter.
+ * endpoint receives the secret only inside the harness adapter. It never
+ * prints, logs, or writes the raw grant JSON.
  *
  * Usage (operator-authorized only):
- *   npx tsx EXTENSIONS/CVF_MODEL_GATEWAY/scripts/run-p4b-b-live-proof.ts
+ *   CVF_PROVIDER_EXECUTION_GRANT_JSON='{...}' npx tsx EXTENSIONS/CVF_MODEL_GATEWAY/scripts/run-p4b-b-live-proof.ts
  *
  * Invocation itself is the operator-authorized act under GC-018
  * CVF_GC018_MODEL_GATEWAY_C02_P4B_B_LIVE_PROOF_T2_AUTHORIZED_2026-06-15.md.
+ * Invocation is no longer sufficient on its own: the parsed grant must also
+ * pass `evaluateProviderExecutionAuthority` for each candidate attempted.
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
+import {
+  evaluateProviderExecutionAuthority,
+  type ProviderExecutionGrant,
+} from "cvf-control-plane-foundation";
 import { runLiveProof } from "../src/p4b-b-live-proof-harness";
 import type { CredentialReference } from "../src/credential-boundary";
 import type { GatewayExecuteRequest } from "../src/unified-gateway-interface-contract";
@@ -45,7 +63,7 @@ function resolveReceiptPath(env: Record<string, string | undefined>): string {
   );
 }
 
-interface ProviderCandidate {
+export interface ProviderCandidate {
   providerId: string;
   modelId: string;
   method: ProviderMethodName;
@@ -106,6 +124,22 @@ function firstPresentAlias(
   return aliases.find((alias) => Boolean(env[alias]?.trim()));
 }
 
+/**
+ * Secret-safe grant parsing: malformed or absent input yields `undefined`,
+ * never a thrown error that could echo raw content. The grant itself carries
+ * no secret value; it is identity/authority metadata only.
+ */
+function parseProviderExecutionGrant(
+  raw: string | undefined,
+): ProviderExecutionGrant | undefined {
+  if (!raw) return undefined;
+  try {
+    return JSON.parse(raw) as ProviderExecutionGrant;
+  } catch {
+    return undefined;
+  }
+}
+
 function safeMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message.split(":")[0] ?? "live_proof_error";
@@ -113,7 +147,7 @@ function safeMessage(error: unknown): string {
   return "live_proof_unknown_error";
 }
 
-interface AttemptOutcome {
+export interface AttemptOutcome {
   providerId: string;
   modelId: string;
   endpointHost: string | null;
@@ -133,10 +167,71 @@ interface AttemptOutcome {
   detail: Record<string, unknown> | null;
 }
 
-async function attemptCandidate(
+export interface RunnerGrantContext {
+  providerExecutionGrant: ProviderExecutionGrant | undefined;
+  workerAgentId: string;
+  delegationId: string;
+  grantId: string;
+  consumedCalls: number;
+  nowIso?: string;
+}
+
+export function consumesProviderCall(outcome: AttemptOutcome): boolean {
+  if (outcome.latencyMs === null) return false;
+  const diagnostic = outcome.detail?.diagnostic;
+  return !(
+    typeof diagnostic === "object" &&
+    diagnostic !== null &&
+    "stage" in diagnostic &&
+    diagnostic.stage === "grant_evaluation"
+  );
+}
+
+export async function attemptCandidate(
   candidate: ProviderCandidate,
   env: Record<string, string | undefined>,
+  grantContext: RunnerGrantContext,
 ): Promise<AttemptOutcome> {
+  // Reviewer repair: the runner owns a pre-environment authority gate too.
+  // Do not inspect candidate aliases or resolve endpoints until the existing
+  // R1E evaluator accepts this exact provider/request binding.
+  const authorityResult = evaluateProviderExecutionAuthority(
+    grantContext.providerExecutionGrant,
+    {
+      workerAgentId: grantContext.workerAgentId,
+      delegationId: grantContext.delegationId,
+      grantId: grantContext.grantId,
+      provider: candidate.providerId,
+      consumedCalls: grantContext.consumedCalls,
+      nowIso: grantContext.nowIso ?? new Date().toISOString(),
+    },
+  );
+  if (!authorityResult.allowed) {
+    return {
+      providerId: candidate.providerId,
+      modelId: candidate.modelId,
+      endpointHost: null,
+      keyAliasUsed: null,
+      keyPresent: false,
+      freeQuotaStatus: "not_applicable",
+      outcome: "FAIL",
+      latencyMs: null,
+      admissionStatus: null,
+      bridgeErrorClass: null,
+      detail: {
+        diagnostic: {
+          stage: "grant_evaluation",
+          class: "live_proof_grant_denied",
+          retryable: false,
+          userAction: "obtain a valid orchestrator provider execution grant before retrying",
+          provider: candidate.providerId,
+          model: candidate.modelId,
+          message: authorityResult.reason,
+        },
+      },
+    };
+  }
+
   const aliasUsed = firstPresentAlias(env, candidate.aliases);
   const endpoint =
     candidate.endpoint ??
@@ -222,10 +317,39 @@ async function attemptCandidate(
         env,
         endpoint,
         liveAuthorized: true,
+        providerExecutionGrant: grantContext.providerExecutionGrant,
+        workerAgentId: grantContext.workerAgentId,
+        delegationId: grantContext.delegationId,
+        grantId: grantContext.grantId,
+        consumedCalls: grantContext.consumedCalls,
+        nowIso: grantContext.nowIso,
       },
       request,
     );
     const latencyMs = Date.now() - callStart;
+    if (
+      !result.authorized &&
+      "diagnostic" in result &&
+      result.diagnostic === "live_proof_grant_denied"
+    ) {
+      return {
+        ...base,
+        outcome: "FAIL",
+        latencyMs,
+        detail: {
+          diagnostic: {
+            stage: "grant_evaluation",
+            class: "live_proof_grant_denied",
+            retryable: false,
+            userAction: "obtain a valid orchestrator provider execution grant before retrying",
+            provider: candidate.providerId,
+            model: candidate.modelId,
+            traceId,
+            message: result.reason,
+          },
+        },
+      };
+    }
     if (result.authorized && result.bridgeResult.response) {
       const r = result.bridgeResult;
       return {
@@ -294,17 +418,98 @@ async function attemptCandidate(
 
 async function main(): Promise<number> {
   const startedAt = new Date().toISOString();
+  const authorityEnv = process.env as Record<string, string | undefined>;
+  const receiptPath = resolveReceiptPath(authorityEnv);
+
+  // EAFR-R12. Fail closed before any candidate is attempted: direct
+  // invocation of this script is not itself authority. A malformed or absent
+  // grant stops the run here, with no key presence check, no endpoint
+  // resolution, and no harness call for any candidate.
+  const providerExecutionGrant = parseProviderExecutionGrant(
+    authorityEnv.CVF_PROVIDER_EXECUTION_GRANT_JSON,
+  );
+  const workerAgentId = authorityEnv.CVF_AGENT_ID ?? "";
+  const delegationId = authorityEnv.CVF_DELEGATION_ID ?? "";
+  const grantId = authorityEnv.CVF_PROVIDER_EXECUTION_GRANT_ID ?? "";
+
+  if (!providerExecutionGrant) {
+    writeArtifact({
+      proof: "model-gateway-c02-p4b-b-live-proof",
+      contractVersion: "cvf.p4bBLiveProofHarness.t3.v1",
+      startedAt,
+      finishedAt: new Date().toISOString(),
+      overall: "BLOCKED_OR_PARTIAL",
+      governedChain: ["grant_parsing"],
+      providerNeutralityNote:
+        "no candidate was attempted; no key presence was checked and no endpoint was resolved",
+      selectedProof: null,
+      attempts: [],
+      blockedReason:
+        "missing or malformed CVF_PROVIDER_EXECUTION_GRANT_JSON: no orchestrator provider execution grant was parsed",
+    }, receiptPath);
+    console.log(
+      "P4B-B live proof overall: BLOCKED_OR_PARTIAL (no orchestrator provider execution grant parsed; no candidate attempted)",
+    );
+    return 1;
+  }
+
+  // A parseable grant is not enough. Require at least one candidate-specific
+  // evaluator acceptance before loading the key-bearing local environment.
+  // Each candidate is evaluated again inside attemptCandidate before its own
+  // aliases or endpoint are inspected.
+  const preflightNowIso = new Date().toISOString();
+  const hasAuthorizedCandidate = CANDIDATES.some((candidate) =>
+    evaluateProviderExecutionAuthority(providerExecutionGrant, {
+      workerAgentId,
+      delegationId,
+      grantId,
+      provider: candidate.providerId,
+      consumedCalls: 0,
+      nowIso: preflightNowIso,
+    }).allowed,
+  );
+  if (!hasAuthorizedCandidate) {
+    writeArtifact({
+      proof: "model-gateway-c02-p4b-b-live-proof",
+      contractVersion: "cvf.p4bBLiveProofHarness.t3.v1",
+      startedAt,
+      finishedAt: new Date().toISOString(),
+      overall: "BLOCKED_OR_PARTIAL",
+      governedChain: ["grant_evaluation"],
+      providerNeutralityNote:
+        "no candidate was authorized; no key-bearing local environment was loaded and no endpoint was resolved",
+      selectedProof: null,
+      attempts: [],
+      blockedReason:
+        "provider execution grant did not authorize any configured candidate",
+    }, receiptPath);
+    console.log(
+      "P4B-B live proof overall: BLOCKED_OR_PARTIAL (grant authorized no configured candidate; no key-bearing environment loaded)",
+    );
+    return 1;
+  }
+
   const env: Record<string, string | undefined> = {
     ...loadEnvLocal(ENV_LOCAL),
-    ...process.env,
+    ...authorityEnv,
   };
-  const receiptPath = resolveReceiptPath(env);
 
   const attempts: AttemptOutcome[] = [];
   let proof: AttemptOutcome | null = null;
+  let consumedCalls = 0;
   for (const candidate of CANDIDATES) {
-    const outcome = await attemptCandidate(candidate, env);
+    const outcome = await attemptCandidate(candidate, env, {
+      providerExecutionGrant,
+      workerAgentId,
+      delegationId,
+      grantId,
+      consumedCalls,
+      nowIso: new Date().toISOString(),
+    });
     attempts.push(outcome);
+    if (consumesProviderCall(outcome)) {
+      consumedCalls += 1;
+    }
     if (outcome.outcome === "PASS") {
       proof = outcome;
       break;
@@ -314,7 +519,7 @@ async function main(): Promise<number> {
   const overall = proof ? "PASS" : "BLOCKED_OR_PARTIAL";
   writeArtifact({
     proof: "model-gateway-c02-p4b-b-live-proof",
-    contractVersion: "cvf.p4bBLiveProofHarness.t2.v1",
+    contractVersion: "cvf.p4bBLiveProofHarness.t3.v1",
     startedAt,
     finishedAt: new Date().toISOString(),
     overall,
@@ -330,7 +535,12 @@ async function main(): Promise<number> {
     providerNeutralityNote:
       "candidates are operator-available-key live-test adapters only; none is canonical CVF product scope, preferred, or ranked",
     alibabaEndpointHandling: {
-      defaultEndpointHost: new URL(resolveAlibabaDashScopeEndpoint(env)).host,
+      // Reuse the already-authorized candidate result. Do not perform a fresh
+      // Alibaba endpoint resolution while writing a receipt when the grant
+      // authorized only another provider.
+      defaultEndpointHost:
+        attempts.find((attempt) => attempt.providerId === "alibaba")
+          ?.endpointHost ?? null,
       overrideEnvNames: [
         "DASHSCOPE_COMPAT_ENDPOINT",
         "ALIBABA_DASHSCOPE_ENDPOINT",
@@ -363,9 +573,11 @@ function writeArtifact(payload: Record<string, unknown>, receiptPath: string): v
   writeFileSync(receiptPath, `${JSON.stringify(payload, null, 2)}\n`, "utf-8");
 }
 
-main()
-  .then((code) => process.exit(code))
-  .catch((error: unknown) => {
-    console.log(`P4B-B live proof harness error: ${safeMessage(error)}`);
-    process.exit(1);
-  });
+if (require.main === module) {
+  main()
+    .then((code) => process.exit(code))
+    .catch((error: unknown) => {
+      console.log(`P4B-B live proof harness error: ${safeMessage(error)}`);
+      process.exit(1);
+    });
+}

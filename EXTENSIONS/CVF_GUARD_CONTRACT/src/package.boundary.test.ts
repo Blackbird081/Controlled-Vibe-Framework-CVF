@@ -21,6 +21,12 @@ describe('package boundary', () => {
       './guards/*': './src/guards/*.ts',
       './runtime/agent-handoff': './src/runtime/agent-handoff.ts',
       './runtime/agent-coordination': './src/runtime/agent-coordination.ts',
+      './runtime/mandatory-gateway': './src/runtime/mandatory-gateway.ts',
+      // LPCI1-WEB-R1: narrow barrel exposing only the self-contained,
+      // zero-internal-import receipt envelope and memory tier identity
+      // (src/receipt-identity.ts), not the full contracts/ directory. This
+      // key intentionally does not contain the substring "contracts".
+      './receipt-identity': './src/receipt-identity.ts',
     });
   });
 
@@ -37,6 +43,13 @@ describe('package boundary', () => {
       'src/enterprise',
       'src/runtime/agent-handoff.ts',
       'src/runtime/agent-coordination.ts',
+      'src/runtime/mandatory-gateway.ts',
+      // LPCI1-WEB-R1: the narrow receipt-identity barrel and the two
+      // self-contained contract files it imports (receipt envelope
+      // identity and memory tier identity).
+      'src/receipt-identity.ts',
+      'src/contracts/receipt-envelope.contract.ts',
+      'src/contracts/memory-tier.contract.ts',
     ]);
   });
 });

@@ -6,9 +6,16 @@
 // direct-lane and MAO-lane happy paths with fake responses, negative
 // scenarios (credential absent, malformed output, provider error,
 // self-approval, ceiling exceeded, revision-then-pass, revision-then-fail),
-// and the terminal verdict decision function.
+// the terminal verdict decision function, and (LPCI1-WEB-R2) the EAFR-R12
+// orchestrator-grant authority context every direct/MAO-worker/MAO-revision
+// call site now requires: missing, malformed (via TypeScript, an
+// intentionally omitted grant), mismatched, expired, and exhausted grants
+// all deny before any environment, endpoint, secret, ledger, or fetch
+// effect, and a denied attempt never advances the shared ledger.
 
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import {
   scoreAgainstRubric,
   MaoLiveCallLedger,
@@ -20,16 +27,49 @@ import {
   LIVE_PILOT_REVIEWER_IDENTITY,
   type MaoLiveDirectLaneResult,
   type MaoLiveLaneResult,
+  type MaoLiveGrantContext,
 } from "../src/mao/live.provider.value.pilot";
 import type { LiveProofFetch } from "../../CVF_MODEL_GATEWAY/src/p4b-b-live-proof-harness";
 import type { CredentialReference } from "../../CVF_MODEL_GATEWAY/src/credential-boundary";
 import { checkSelfApproval } from "../src/mao/reviewer.isolation.contract";
+import type { ProviderExecutionGrant } from "cvf-control-plane-foundation";
 
 const PROVIDER = "alibaba";
 const MODEL = "qwen-flash";
+const WORKER_AGENT_ID = "test-worker-agent";
+const DELEGATION_ID = "test-delegation-id";
+const GRANT_ID = "test-grant-id";
+const FIXED_NOW_ISO = "2026-08-26T00:00:00.000Z";
 
 function credentialRef(): CredentialReference {
   return { providerId: PROVIDER, keyId: "alibaba-live-t1", envNames: ["DASHSCOPE_API_KEY"] };
+}
+
+/** A valid synthetic orchestrator grant. Fixed metadata only; never a real credential. */
+function validGrant(overrides: Partial<ProviderExecutionGrant> = {}): ProviderExecutionGrant {
+  return {
+    authority: "ORCHESTRATOR_GRANT_REQUIRED",
+    grantId: GRANT_ID,
+    authorizedBy: "ORCHESTRATOR",
+    subjectAgentId: WORKER_AGENT_ID,
+    delegationId: DELEGATION_ID,
+    allowedProviders: [PROVIDER],
+    maxCalls: 4,
+    expiresAt: "2099-01-01T00:00:00.000Z",
+    ...overrides,
+  };
+}
+
+/** A valid synthetic grant context binding, matching `validGrant()`'s identities. */
+function validGrantContext(overrides: Partial<MaoLiveGrantContext> = {}): MaoLiveGrantContext {
+  return {
+    providerExecutionGrant: validGrant(),
+    workerAgentId: WORKER_AGENT_ID,
+    delegationId: DELEGATION_ID,
+    grantId: GRANT_ID,
+    nowIso: FIXED_NOW_ISO,
+    ...overrides,
+  };
 }
 
 function fakeFetchWithText(text: string): LiveProofFetch {
@@ -152,6 +192,7 @@ describe("runDirectLane", () => {
       env: { DASHSCOPE_API_KEY: "fake-test-secret" },
       fetchImpl: fakeFetchWithText(GOOD_TEXT),
       traceId: "test-direct-1",
+      grantContext: validGrantContext(),
     });
     expect(ledger.spentCount).toBe(1);
     expect(result.ok).toBe(true);
@@ -169,6 +210,7 @@ describe("runDirectLane", () => {
       env: {},
       fetchImpl: fakeFetchWithText(GOOD_TEXT),
       traceId: "test-direct-2",
+      grantContext: validGrantContext(),
     });
     expect(result.ok).toBe(false);
     expect(result.diagnostic?.class).toBe("CREDENTIAL_ABSENT");
@@ -185,6 +227,7 @@ describe("runDirectLane", () => {
       env: { DASHSCOPE_API_KEY: "fake-test-secret" },
       fetchImpl: fakeFetchWithText(""),
       traceId: "test-direct-3",
+      grantContext: validGrantContext(),
     });
     expect(result.ok).toBe(false);
     expect(result.diagnostic?.class).toBe("MALFORMED_OUTPUT");
@@ -200,6 +243,7 @@ describe("runDirectLane", () => {
       env: { DASHSCOPE_API_KEY: "fake-test-secret" },
       fetchImpl: fakeFetchHttpError(500),
       traceId: "test-direct-4",
+      grantContext: validGrantContext(),
     });
     expect(result.ok).toBe(false);
     expect(result.diagnostic?.class).toBe("PROVIDER_ERROR");
@@ -219,6 +263,7 @@ describe("runMaoLane", () => {
       fetchImpl: fakeFetchWithText(GOOD_TEXT),
       traceId: "usage-proof",
       recordedAt: "2026-07-12T00:00:00.000Z",
+      grantContext: validGrantContext(),
     });
     expect(result).toHaveProperty("usage");
   });
@@ -233,6 +278,7 @@ describe("runMaoLane", () => {
       fetchImpl: fakeFetchWithText(GOOD_TEXT),
       traceId: "test-mao-1",
       recordedAt: new Date().toISOString(),
+      grantContext: validGrantContext(),
     });
     expect(result.ok).toBe(true);
     expect(result.revisionUsed).toBe(false);
@@ -253,6 +299,7 @@ describe("runMaoLane", () => {
       fetchImpl: fakeFetchSequence([BAD_TEXT, GOOD_TEXT]),
       traceId: "test-mao-2",
       recordedAt: new Date().toISOString(),
+      grantContext: validGrantContext(),
     });
     expect(result.ok).toBe(true);
     expect(result.revisionUsed).toBe(true);
@@ -275,6 +322,7 @@ describe("runMaoLane", () => {
       fetchImpl: fakeFetchSequence([BAD_TEXT, BAD_TEXT]),
       traceId: "test-mao-3",
       recordedAt: new Date().toISOString(),
+      grantContext: validGrantContext(),
     });
     expect(result.callsSpent).toBe(2);
     expect(ledger.spentCount).toBe(2);
@@ -295,6 +343,7 @@ describe("runMaoLane", () => {
       fetchImpl: fakeFetchWithText(GOOD_TEXT),
       traceId: "test-mao-4",
       recordedAt: new Date().toISOString(),
+      grantContext: validGrantContext(),
     });
     expect(result.ok).toBe(false);
     expect(result.diagnostic?.class).toBe("CREDENTIAL_ABSENT");
@@ -313,10 +362,282 @@ describe("runMaoLane", () => {
       fetchImpl: fakeFetchSequence([BAD_TEXT, GOOD_TEXT]),
       traceId: "test-mao-5",
       recordedAt: new Date().toISOString(),
+      grantContext: validGrantContext(),
     });
     expect(ledger.spentCount).toBe(2);
     expect(ledger.remaining).toBe(0);
     expect(result.callsSpent).toBe(2);
+  });
+});
+
+describe("negative scenario: EAFR-R12 orchestrator-grant authority context (LPCI1-WEB-R2)", () => {
+  /**
+   * A fetch double that throws if ever invoked. Every case in this suite
+   * must deny before the harness reaches `fetchImpl`, so this proves zero
+   * real (or fake) network attempt occurred, not merely that the returned
+   * diagnostic looked correct.
+   */
+  function fetchImplThatMustNeverBeCalled(): LiveProofFetch {
+    return async () => {
+      throw new Error("fetchImplThatMustNeverBeCalled: fetch was invoked on a denied grant");
+    };
+  }
+
+  it("runDirectLane denies before any fetch when providerExecutionGrant is missing (undefined)", async () => {
+    const ledger = new MaoLiveCallLedger(4);
+    const result = await runDirectLane({
+      ledger,
+      providerId: PROVIDER,
+      modelId: MODEL,
+      credentialReference: credentialRef(),
+      env: { DASHSCOPE_API_KEY: "fake-test-secret" },
+      fetchImpl: fetchImplThatMustNeverBeCalled(),
+      traceId: "test-grant-missing",
+      grantContext: validGrantContext({ providerExecutionGrant: undefined }),
+    });
+    expect(result.ok).toBe(false);
+    expect(result.diagnostic?.class).toBe("GRANT_DENIED");
+    expect(ledger.spentCount).toBe(0);
+  });
+
+  it("runDirectLane denies before any fetch when the grant subject does not match the caller's workerAgentId", async () => {
+    const ledger = new MaoLiveCallLedger(4);
+    const result = await runDirectLane({
+      ledger,
+      providerId: PROVIDER,
+      modelId: MODEL,
+      credentialReference: credentialRef(),
+      env: { DASHSCOPE_API_KEY: "fake-test-secret" },
+      fetchImpl: fetchImplThatMustNeverBeCalled(),
+      traceId: "test-grant-subject-mismatch",
+      grantContext: validGrantContext({ workerAgentId: "a-different-agent" }),
+    });
+    expect(result.ok).toBe(false);
+    expect(result.diagnostic?.class).toBe("GRANT_DENIED");
+    expect(ledger.spentCount).toBe(0);
+  });
+
+  it("runDirectLane denies before any fetch when the grant delegationId does not match", async () => {
+    const ledger = new MaoLiveCallLedger(4);
+    const result = await runDirectLane({
+      ledger,
+      providerId: PROVIDER,
+      modelId: MODEL,
+      credentialReference: credentialRef(),
+      env: { DASHSCOPE_API_KEY: "fake-test-secret" },
+      fetchImpl: fetchImplThatMustNeverBeCalled(),
+      traceId: "test-grant-delegation-mismatch",
+      grantContext: validGrantContext({ delegationId: "a-different-delegation" }),
+    });
+    expect(result.ok).toBe(false);
+    expect(result.diagnostic?.class).toBe("GRANT_DENIED");
+    expect(ledger.spentCount).toBe(0);
+  });
+
+  it("runDirectLane denies before any fetch when the caller-presented grantId does not match the grant's own id", async () => {
+    const ledger = new MaoLiveCallLedger(4);
+    const result = await runDirectLane({
+      ledger,
+      providerId: PROVIDER,
+      modelId: MODEL,
+      credentialReference: credentialRef(),
+      env: { DASHSCOPE_API_KEY: "fake-test-secret" },
+      fetchImpl: fetchImplThatMustNeverBeCalled(),
+      traceId: "test-grant-id-mismatch",
+      grantContext: validGrantContext({ grantId: "a-different-grant-id" }),
+    });
+    expect(result.ok).toBe(false);
+    expect(result.diagnostic?.class).toBe("GRANT_DENIED");
+    expect(ledger.spentCount).toBe(0);
+  });
+
+  it("runDirectLane denies before any fetch when the provider is outside allowedProviders", async () => {
+    const ledger = new MaoLiveCallLedger(4);
+    const result = await runDirectLane({
+      ledger,
+      providerId: PROVIDER,
+      modelId: MODEL,
+      credentialReference: credentialRef(),
+      env: { DASHSCOPE_API_KEY: "fake-test-secret" },
+      fetchImpl: fetchImplThatMustNeverBeCalled(),
+      traceId: "test-grant-provider-mismatch",
+      grantContext: validGrantContext({
+        providerExecutionGrant: validGrant({ allowedProviders: ["deepseek"] }),
+      }),
+    });
+    expect(result.ok).toBe(false);
+    expect(result.diagnostic?.class).toBe("GRANT_DENIED");
+    expect(ledger.spentCount).toBe(0);
+  });
+
+  it("runDirectLane denies before any fetch when the grant is expired relative to nowIso", async () => {
+    const ledger = new MaoLiveCallLedger(4);
+    const result = await runDirectLane({
+      ledger,
+      providerId: PROVIDER,
+      modelId: MODEL,
+      credentialReference: credentialRef(),
+      env: { DASHSCOPE_API_KEY: "fake-test-secret" },
+      fetchImpl: fetchImplThatMustNeverBeCalled(),
+      traceId: "test-grant-expired",
+      grantContext: validGrantContext({
+        providerExecutionGrant: validGrant({ expiresAt: "2020-01-01T00:00:00.000Z" }),
+      }),
+    });
+    expect(result.ok).toBe(false);
+    expect(result.diagnostic?.class).toBe("GRANT_DENIED");
+    expect(ledger.spentCount).toBe(0);
+  });
+
+  it("runDirectLane denies before any fetch when authorizedBy is not ORCHESTRATOR (self-issued grant rejected)", async () => {
+    const ledger = new MaoLiveCallLedger(4);
+    const result = await runDirectLane({
+      ledger,
+      providerId: PROVIDER,
+      modelId: MODEL,
+      credentialReference: credentialRef(),
+      env: { DASHSCOPE_API_KEY: "fake-test-secret" },
+      fetchImpl: fetchImplThatMustNeverBeCalled(),
+      traceId: "test-grant-not-orchestrator",
+      grantContext: validGrantContext({
+        providerExecutionGrant: validGrant({ authorizedBy: null }),
+      }),
+    });
+    expect(result.ok).toBe(false);
+    expect(result.diagnostic?.class).toBe("GRANT_DENIED");
+    expect(ledger.spentCount).toBe(0);
+  });
+
+  it("runDirectLane denies before any fetch once the grant's call budget is exhausted at the current ledger position", async () => {
+    // maxCalls: 1 means consumedCalls (== ledger.spentCount before this
+    // attempt) must be < 1 to pass; spend the one allowed call first via a
+    // separate authorized ledger position, then prove the *next* attempt on
+    // a fresh ledger already at spentCount=1 is denied without a fetch.
+    const ledger = new MaoLiveCallLedger(4);
+    // Simulate one already-consumed call by claiming a slot directly
+    // (bypassing runDirectLane) so spentCount reflects prior consumption
+    // without depending on this suite's own grant-authorized path.
+    ledger.claim("pre-existing-consumed-call");
+    const result = await runDirectLane({
+      ledger,
+      providerId: PROVIDER,
+      modelId: MODEL,
+      credentialReference: credentialRef(),
+      env: { DASHSCOPE_API_KEY: "fake-test-secret" },
+      fetchImpl: fetchImplThatMustNeverBeCalled(),
+      traceId: "test-grant-budget-exhausted",
+      grantContext: validGrantContext({
+        providerExecutionGrant: validGrant({ maxCalls: 1 }),
+      }),
+    });
+    expect(result.ok).toBe(false);
+    expect(result.diagnostic?.class).toBe("GRANT_DENIED");
+    expect(ledger.spentCount).toBe(1);
+  });
+
+  it("runMaoWorkerCall (via runMaoLane) denies the worker attempt before any fetch when the grant is missing", async () => {
+    const ledger = new MaoLiveCallLedger(4);
+    const result = await runMaoLane({
+      ledger,
+      providerId: PROVIDER,
+      modelId: MODEL,
+      credentialReference: credentialRef(),
+      env: { DASHSCOPE_API_KEY: "fake-test-secret" },
+      fetchImpl: fetchImplThatMustNeverBeCalled(),
+      traceId: "test-mao-grant-missing",
+      recordedAt: FIXED_NOW_ISO,
+      grantContext: validGrantContext({ providerExecutionGrant: undefined }),
+    });
+    expect(result.ok).toBe(false);
+    expect(result.diagnostic?.class).toBe("GRANT_DENIED");
+    expect(result.callsSpent).toBe(0);
+    expect(ledger.spentCount).toBe(0);
+  });
+
+  it("runMaoLane denies the revision before a second fetch when the first attempt exhausts the grant call budget", async () => {
+    // maxCalls=1 authorizes the first attempt at consumedCalls=0. Its rubric
+    // failure triggers a revision whose own preflight sees consumedCalls=1
+    // and denies before a second fetch or ledger claim.
+    const ledger = new MaoLiveCallLedger(4);
+    let fetchCallCount = 0;
+    const countingFetch: LiveProofFetch = async () => {
+      fetchCallCount += 1;
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          choices: [{ message: { content: BAD_TEXT } }],
+          usage: { prompt_tokens: 8, completion_tokens: 4 },
+        }),
+      };
+    };
+    const result = await runMaoLane({
+      ledger,
+      providerId: PROVIDER,
+      modelId: MODEL,
+      credentialReference: credentialRef(),
+      env: { DASHSCOPE_API_KEY: "fake-test-secret" },
+      fetchImpl: countingFetch,
+      traceId: "test-mao-grant-budget-exhausted-before-revision",
+      recordedAt: FIXED_NOW_ISO,
+      grantContext: validGrantContext({
+        providerExecutionGrant: validGrant({ maxCalls: 1 }),
+      }),
+    });
+    expect(fetchCallCount).toBe(1);
+    expect(result.ok).toBe(false);
+    expect(result.diagnostic?.class).toBe("GRANT_DENIED");
+    expect(result.callsSpent).toBe(1);
+    expect(ledger.spentCount).toBe(1);
+  });
+
+  it("a caller-preflight denial and the harness's own independent re-evaluation agree (defense in depth, not a bypass)", async () => {
+    // Directly prove the same denied grant, if it somehow reached the
+    // harness's own evaluator (e.g. via a future refactor bypassing
+    // preflightGrant), would still be denied by evaluateProviderExecutionAuthority
+    // itself: this test asserts on the exported denial classification only,
+    // since the module does not export the harness call directly, but
+    // confirms preflightGrant's result is not the caller inventing leniency -
+    // it uses the identical evaluator contract shape.
+    const ledger = new MaoLiveCallLedger(4);
+    const result = await runDirectLane({
+      ledger,
+      providerId: PROVIDER,
+      modelId: MODEL,
+      credentialReference: credentialRef(),
+      env: { DASHSCOPE_API_KEY: "fake-test-secret" },
+      fetchImpl: fetchImplThatMustNeverBeCalled(),
+      traceId: "test-grant-defense-in-depth",
+      grantContext: validGrantContext({
+        providerExecutionGrant: validGrant({ authority: "FORBIDDEN" }),
+      }),
+    });
+    expect(result.ok).toBe(false);
+    expect(result.diagnostic?.class).toBe("GRANT_DENIED");
+    expect(ledger.spentCount).toBe(0);
+  });
+});
+
+describe("MAO live runner grant gate source ordering (LPCI1-WEB-R2)", () => {
+  it("parses and evaluates authority before environment load, key inspection, or endpoint resolution", () => {
+    const source = readFileSync(
+      resolve(__dirname, "../scripts/run-mao-live-provider-value-pilot.ts"),
+      "utf8",
+    );
+    const mainStart = source.indexOf("async function main(): Promise<number>");
+    const parseGrant = source.indexOf("const providerExecutionGrant = parseProviderExecutionGrant(", mainStart);
+    const evaluateGrant = source.indexOf("const authorityResult = evaluateProviderExecutionAuthority(", mainStart);
+    const loadEnvironment = source.indexOf("...loadEnvLocal(ENV_LOCAL)", mainStart);
+    const inspectKeyAlias = source.indexOf("const keyAlias = firstPresentAlias(", mainStart);
+    const resolveEndpoint = source.indexOf("resolveAlibabaDashScopeEndpoint(", mainStart);
+
+    expect(mainStart).toBeGreaterThanOrEqual(0);
+    expect(parseGrant).toBeGreaterThan(mainStart);
+    expect(evaluateGrant).toBeGreaterThan(parseGrant);
+    expect(loadEnvironment).toBeGreaterThan(evaluateGrant);
+    expect(inspectKeyAlias).toBeGreaterThan(loadEnvironment);
+    expect(resolveEndpoint).toBeGreaterThan(inspectKeyAlias);
+    expect(source).toMatch(/catch\s*\{\s*return undefined;\s*\}/u);
   });
 });
 
@@ -343,6 +664,7 @@ describe("negative scenario: duplicate/fifth-call ceiling interaction", () => {
       env: { DASHSCOPE_API_KEY: "fake-test-secret" },
       fetchImpl: fakeFetchWithText(GOOD_TEXT),
       traceId: "test-shared-1",
+      grantContext: validGrantContext(),
     });
     await runMaoLane({
       ledger,
@@ -353,6 +675,7 @@ describe("negative scenario: duplicate/fifth-call ceiling interaction", () => {
       fetchImpl: fakeFetchSequence([BAD_TEXT, GOOD_TEXT]),
       traceId: "test-shared-2",
       recordedAt: new Date().toISOString(),
+      grantContext: validGrantContext(),
     });
     expect(ledger.spentCount).toBe(3);
     expect(ledger.remaining).toBe(1);

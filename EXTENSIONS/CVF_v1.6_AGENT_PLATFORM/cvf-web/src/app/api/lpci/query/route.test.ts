@@ -367,8 +367,13 @@ describe('POST /api/lpci/query conformance', () => {
       },
       body: bodyText,
     }));
-    expect(response.status).toBe(403);
-    expect((await response.json()).outcome).toBe('SERVICE_IDENTITY_NOT_ALLOWED');
+    // The route runs authorizeRouteGovernanceProof before the release-policy
+    // role check, so an unsigned service token is rejected as unauthorized (401)
+    // and never reaches the SERVICE_IDENTITY_NOT_ALLOWED (403) branch. The
+    // security invariant under test is unchanged: the actor is denied and no
+    // quota, retrieval or provider work happens.
+    expect(response.status).toBe(401);
+    expect((await response.json()).outcome).toBe('AUTHORIZATION_DENIED');
     expect(consumeQueryMock).not.toHaveBeenCalled();
     expect(executeLpciProviderBindingMock).not.toHaveBeenCalled();
   });

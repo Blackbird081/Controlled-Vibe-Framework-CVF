@@ -1,8 +1,8 @@
 # USR-005: Cost Optimization
 
-> **Type:** User Skill  
-> **Domain:** Ai Ml Evaluation  
-> **Difficulty:** Medium  
+> **Type:** User Skill
+> **Domain:** Ai Ml Evaluation
+> **Difficulty:** Medium
 > **Status:** Active
 
 ---

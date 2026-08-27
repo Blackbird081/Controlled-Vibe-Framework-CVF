@@ -1,15 +1,15 @@
-# USR-006: AI Use Case Fit
+# USR-049: CVF Web UX Redesign System
 
 > **Type:** User Skill
-> **Domain:** Ai Ml Evaluation
-> **Difficulty:** Medium
+> **Domain:** Product Ux
+> **Difficulty:** Advanced
 > **Status:** Active
 
 ---
 
 ## Source
 
-→ [06_ai_use_case_fit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ai_ml_evaluation/06_ai_use_case_fit.skill.md)
+→ [cvf_web_ux_redesign_system.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/cvf_web_ux_redesign_system.skill.md)
 
 ---
 

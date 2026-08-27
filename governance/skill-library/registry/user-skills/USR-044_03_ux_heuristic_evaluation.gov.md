@@ -1,7 +1,7 @@
-# USR-006: AI Use Case Fit
+# USR-044: UX Heuristic Evaluation
 
 > **Type:** User Skill
-> **Domain:** Ai Ml Evaluation
+> **Domain:** Product Ux
 > **Difficulty:** Medium
 > **Status:** Active
 
@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [06_ai_use_case_fit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ai_ml_evaluation/06_ai_use_case_fit.skill.md)
+→ [03_ux_heuristic_evaluation.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/03_ux_heuristic_evaluation.skill.md)
 
 ---
 

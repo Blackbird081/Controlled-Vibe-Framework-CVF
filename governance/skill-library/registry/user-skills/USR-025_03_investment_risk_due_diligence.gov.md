@@ -1,7 +1,7 @@
-# USR-006: AI Use Case Fit
+# USR-025: Investment & Risk Due Diligence
 
 > **Type:** User Skill
-> **Domain:** Ai Ml Evaluation
+> **Domain:** Finance Analytics
 > **Difficulty:** Medium
 > **Status:** Active
 
@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [06_ai_use_case_fit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ai_ml_evaluation/06_ai_use_case_fit.skill.md)
+→ [03_investment_risk_due_diligence.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/finance_analytics/03_investment_risk_due_diligence.skill.md)
 
 ---
 
@@ -17,11 +17,11 @@
 
 | Field | Value |
 |-------|-------|
-| Risk Level | R1 |
+| Risk Level | R2 |
 | Allowed Roles | User, Reviewer |
-| Allowed Phases | Discovery, Design, Review |
+| Allowed Phases | Discovery, Review |
 | Decision Scope | Tactical |
-| Autonomy | Auto + Audit |
+| Autonomy | Human confirmation required |
 
 ---
 

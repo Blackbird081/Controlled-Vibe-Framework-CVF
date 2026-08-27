@@ -1,15 +1,15 @@
-# USR-006: AI Use Case Fit
+# USR-047: Ux Writing
 
 > **Type:** User Skill
-> **Domain:** Ai Ml Evaluation
-> **Difficulty:** Medium
+> **Domain:** Product Ux
+> **Difficulty:** Easy
 > **Status:** Active
 
 ---
 
 ## Source
 
-→ [06_ai_use_case_fit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ai_ml_evaluation/06_ai_use_case_fit.skill.md)
+→ [06_ux_writing.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/06_ux_writing.skill.md)
 
 ---
 

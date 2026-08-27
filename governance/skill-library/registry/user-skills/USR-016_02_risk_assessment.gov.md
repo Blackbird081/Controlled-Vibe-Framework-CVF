@@ -1,15 +1,15 @@
-# USR-006: AI Use Case Fit
+# USR-016: Risk Assessment
 
 > **Type:** User Skill
-> **Domain:** Ai Ml Evaluation
-> **Difficulty:** Medium
+> **Domain:** Business Analysis
+> **Difficulty:** Advanced
 > **Status:** Active
 
 ---
 
 ## Source
 
-→ [06_ai_use_case_fit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ai_ml_evaluation/06_ai_use_case_fit.skill.md)
+→ [02_risk_assessment.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/business_analysis/02_risk_assessment.skill.md)
 
 ---
 
@@ -19,7 +19,7 @@
 |-------|-------|
 | Risk Level | R1 |
 | Allowed Roles | User, Reviewer |
-| Allowed Phases | Discovery, Design, Review |
+| Allowed Phases | Discovery |
 | Decision Scope | Tactical |
 | Autonomy | Auto + Audit |
 

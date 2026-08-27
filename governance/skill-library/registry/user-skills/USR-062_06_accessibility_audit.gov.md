@@ -1,15 +1,15 @@
-# USR-006: AI Use Case Fit
+# USR-062: Web ARIA & Keyboard Audit
 
 > **Type:** User Skill
-> **Domain:** Ai Ml Evaluation
-> **Difficulty:** Medium
+> **Domain:** Web Development
+> **Difficulty:** Advanced
 > **Status:** Active
 
 ---
 
 ## Source
 
-→ [06_ai_use_case_fit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ai_ml_evaluation/06_ai_use_case_fit.skill.md)
+→ [06_accessibility_audit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/web_development/06_accessibility_audit.skill.md)
 
 ---
 
@@ -19,7 +19,7 @@
 |-------|-------|
 | Risk Level | R1 |
 | Allowed Roles | User, Reviewer |
-| Allowed Phases | Discovery, Design, Review |
+| Allowed Phases | Design, Build |
 | Decision Scope | Tactical |
 | Autonomy | Auto + Audit |
 

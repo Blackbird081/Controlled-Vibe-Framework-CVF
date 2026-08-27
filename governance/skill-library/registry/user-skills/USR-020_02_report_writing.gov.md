@@ -1,7 +1,7 @@
-# USR-006: AI Use Case Fit
+# USR-020: Report Writing
 
 > **Type:** User Skill
-> **Domain:** Ai Ml Evaluation
+> **Domain:** Content Creation
 > **Difficulty:** Medium
 > **Status:** Active
 
@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [06_ai_use_case_fit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ai_ml_evaluation/06_ai_use_case_fit.skill.md)
+→ [02_report_writing.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/content_creation/02_report_writing.skill.md)
 
 ---
 
@@ -17,11 +17,11 @@
 
 | Field | Value |
 |-------|-------|
-| Risk Level | R1 |
+| Risk Level | R0 |
 | Allowed Roles | User, Reviewer |
-| Allowed Phases | Discovery, Design, Review |
-| Decision Scope | Tactical |
-| Autonomy | Auto + Audit |
+| Allowed Phases | Discovery, Design, Build |
+| Decision Scope | Informational |
+| Autonomy | Auto |
 
 ---
 

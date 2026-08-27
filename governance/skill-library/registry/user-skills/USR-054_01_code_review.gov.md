@@ -1,7 +1,7 @@
-# USR-006: AI Use Case Fit
+# USR-054: Code Review
 
 > **Type:** User Skill
-> **Domain:** Ai Ml Evaluation
+> **Domain:** Technical Review
 > **Difficulty:** Medium
 > **Status:** Active
 
@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [06_ai_use_case_fit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ai_ml_evaluation/06_ai_use_case_fit.skill.md)
+→ [01_code_review.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/technical_review/01_code_review.skill.md)
 
 ---
 
@@ -19,7 +19,7 @@
 |-------|-------|
 | Risk Level | R1 |
 | Allowed Roles | User, Reviewer |
-| Allowed Phases | Discovery, Design, Review |
+| Allowed Phases | Build, Review |
 | Decision Scope | Tactical |
 | Autonomy | Auto + Audit |
 

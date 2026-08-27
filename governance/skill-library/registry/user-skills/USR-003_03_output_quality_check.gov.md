@@ -1,8 +1,8 @@
 # USR-003: Output Quality Check
 
-> **Type:** User Skill  
-> **Domain:** Ai Ml Evaluation  
-> **Difficulty:** Easy  
+> **Type:** User Skill
+> **Domain:** Ai Ml Evaluation
+> **Difficulty:** Easy
 > **Status:** Active
 
 ---

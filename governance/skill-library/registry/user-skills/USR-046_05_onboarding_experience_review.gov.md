@@ -1,7 +1,7 @@
-# USR-006: AI Use Case Fit
+# USR-046: Onboarding Experience Review
 
 > **Type:** User Skill
-> **Domain:** Ai Ml Evaluation
+> **Domain:** Product Ux
 > **Difficulty:** Medium
 > **Status:** Active
 
@@ -9,7 +9,7 @@
 
 ## Source
 
-→ [06_ai_use_case_fit.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ai_ml_evaluation/06_ai_use_case_fit.skill.md)
+→ [05_onboarding_experience_review.skill.md](../../../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/product_ux/05_onboarding_experience_review.skill.md)
 
 ---
 

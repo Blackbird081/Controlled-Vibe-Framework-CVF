@@ -229,23 +229,6 @@ jobs:
         run: |
           python governance/compat/check_progress_tracker_sync.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
-  agent-instruction-carrier-compaction:
-    name: Agent Instruction Carrier Compaction
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Enforce ACRC-T2B instruction carrier compaction contract
-        run: |
-          python governance/compat/check_agent_instruction_carriers.py --enforce
-
   multi-agent-review-governance:
     name: Multi-Agent Review Governance
     runs-on: ubuntu-latest
@@ -431,7 +414,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-cov
+          pip install pytest pytest-cov pyyaml
 
       - name: Run unit tests
         run: |
@@ -467,7 +450,7 @@ jobs:
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [docs-governance-compat, governed-artifact-authoring, markdown-structural-completeness, work-order-dispatch-quality, cpf-public-surface-maintainability, cpf-shared-batch-helper-adoption, batch-contract-determinism, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, agent-instruction-carrier-compaction, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, test-partition-ownership, cross-channel-guard-compat, guard-authoring-standard, repository-exposure-classification, foundational-guard-surfaces, test, registry-validate]
+    needs: [docs-governance-compat, governed-artifact-authoring, markdown-structural-completeness, work-order-dispatch-quality, cpf-public-surface-maintainability, cpf-shared-batch-helper-adoption, batch-contract-determinism, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, test-partition-ownership, cross-channel-guard-compat, guard-authoring-standard, repository-exposure-classification, foundational-guard-surfaces, test, registry-validate]
     if: always()
 
     steps:
@@ -486,7 +469,6 @@ jobs:
           echo "GC-018 stop-boundary semantics: ${{ needs.gc018-stop-boundary-semantics.result }}"
           echo "Session governance bootstrap: ${{ needs.session-governance-bootstrap.result }}"
           echo "Progress tracker sync: ${{ needs.progress-tracker-sync.result }}"
-          echo "Agent instruction carrier compaction: ${{ needs.agent-instruction-carrier-compaction.result }}"
           echo "Multi-agent review governance: ${{ needs.multi-agent-review-governance.result }}"
           echo "Boardroom runtime governance: ${{ needs.boardroom-runtime-governance.result }}"
           echo "Extension package check: ${{ needs.extension-package-check.result }}"

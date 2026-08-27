@@ -1,23 +1,29 @@
 # AGT-029: Frontend Component Forge
 
-> **Version:** 1.0.0  
-> **Status:** Active  
-> **Risk Level:** R1 – Low  
-> **Autonomy:** Auto + Audit  
-> **Category:** App Development — Frontend  
+Text Encoding Exception: preserves pre-existing Unicode punctuation and symbols during semantic-preserving structural normalization.
+
+> **Version:** 1.0.0
+> **Status:** Active
+> **Category:** App Development — Frontend
 > **Provenance:** claudekit-skills/frontend-development + ui-styling + aesthetic (mrgoonie/claudekit-skills)
 
 ---
 
-## 📋 Overview
+## Source
+
+- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — frontend-development (React patterns), ui-styling (shadcn/Tailwind), aesthetic (design principles)
+- **Source:** [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) — frontend agents and component patterns
+- **Pattern Type:** Framework-level frontend architecture methodology
+- **CVF Adaptation:** Added governance constraints, anti-patterns, performance checklist, decision trees
+- **License:** MIT (sources) → CC BY-NC-ND 4.0 (CVF adaptation)
+
+---
+
+## Capability
 
 Frontend architecture methodology that guides agents through **component design, feature organization, Suspense-based data fetching, and performance optimization**. Not a React tutorial — a decision framework for building scalable, maintainable frontend applications with modern patterns (React 19+, Server Components, lazy loading).
 
 **Key Principle:** Components are the unit of UI architecture. Design the component tree before writing code.
-
----
-
-## 🎯 Capabilities
 
 ### Component Architecture Decision Tree
 
@@ -262,7 +268,13 @@ Accessibility:
 
 ---
 
-## 🔐 CVF Governance
+## Governance
+
+| Field | Value |
+|-------|-------|
+| Risk Level | **R1 – Low** |
+| Autonomy | Auto + Audit |
+| Category | App Development — Frontend |
 
 ### Authority Mapping
 
@@ -282,7 +294,21 @@ Accessibility:
 | C – Build | Implement components and features |
 | D – Review | Review code quality, accessibility, performance |
 
-### Constraints
+---
+
+## Risk Justification
+
+- R1 classification: design guidance, generates UI code
+- MUST use feature directory pattern for domain code
+- MUST use Suspense boundaries (no early return loading)
+- MUST lazy load all routes and heavy components
+- MUST extract business logic to hooks (not in components)
+- MUST meet Core Web Vitals thresholds
+- MUST NOT use useEffect for data fetching
+
+---
+
+## Constraints
 
 - MUST use feature directory pattern for domain code
 - MUST use Suspense boundaries (no early return loading)
@@ -294,7 +320,7 @@ Accessibility:
 
 ---
 
-## 🔗 Dependencies
+## Dependencies
 
 - **AGT-025** (API Architecture) — API layer that frontend consumes
 - **AGT-026** (Testing Engine) — Component and E2E testing
@@ -302,7 +328,7 @@ Accessibility:
 
 ---
 
-## 📊 Validation
+## Validation
 
 ### Success Criteria
 
@@ -315,19 +341,24 @@ Accessibility:
 | Component size | No component >300 lines |
 | Accessibility | WCAG AA compliance |
 
-### UAT Link
-
-`governance/skill-library/uat/results/UAT-AGT-029.md`
-
 ---
 
-## 📚 Attribution
+## UAT Binding
 
-- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — frontend-development (React patterns), ui-styling (shadcn/Tailwind), aesthetic (design principles)
-- **Source:** [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) — frontend agents and component patterns
-- **Pattern Type:** Framework-level frontend architecture methodology
-- **CVF Adaptation:** Added governance constraints, anti-patterns, performance checklist, decision trees
-- **License:** MIT (sources) → CC BY-NC-ND 4.0 (CVF adaptation)
+**UAT Link:** `governance/skill-library/uat/results/UAT-AGT-029.md`
+
+**PASS criteria:**
+- [ ] 100% domain code organized under features/
+- [ ] 100% data-fetching uses Suspense (no early-return spinners)
+- [ ] 100% routes lazy loaded
+- [ ] All Core Web Vitals metrics green
+- [ ] WCAG AA compliance verified
+
+**FAIL criteria:**
+- [ ] useEffect used for data fetching
+- [ ] Component exceeds 300 lines
+- [ ] Route not lazy loaded
+- [ ] Business logic left inline in a component instead of extracted to a hook
 
 ---
 

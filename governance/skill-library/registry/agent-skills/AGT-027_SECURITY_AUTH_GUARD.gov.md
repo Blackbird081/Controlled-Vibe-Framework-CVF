@@ -1,23 +1,29 @@
 # AGT-027: Security & Auth Guard
 
-> **Version:** 1.0.0  
-> **Status:** Active  
-> **Risk Level:** R2 – Medium  
-> **Autonomy:** Supervised  
-> **Category:** App Development — Security  
+Text Encoding Exception: preserves pre-existing Unicode punctuation and symbols during semantic-preserving structural normalization.
+
+> **Version:** 1.0.0
+> **Status:** Active
+> **Category:** App Development — Security
 > **Provenance:** claudekit-skills/better-auth + backend-security (mrgoonie/claudekit-skills)
 
 ---
 
-## 📋 Overview
+## Source
+
+- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — better-auth (auth patterns), backend-development/security (OWASP)
+- **Source:** [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) — security agents and hooks
+- **Pattern Type:** Framework-level security methodology with auth decision engine
+- **CVF Adaptation:** Added governance constraints, OWASP defense matrix, decision trees, audit checklists
+- **License:** MIT (sources) → CC BY-NC-ND 4.0 (CVF adaptation)
+
+---
+
+## Capability
 
 Security methodology that combines **OWASP Top 10 defense** with **authentication architecture design**. Guides agents through auth method selection, security hardening, and vulnerability prevention — not by listing vulnerabilities, but by providing decision frameworks and implementation checklists.
 
 **Key Principle:** Security is not a feature — it's a constraint on every feature. Apply OWASP Top 10 as a checklist on every endpoint.
-
----
-
-## 🎯 Capabilities
 
 ### Auth Method Selection Decision Tree
 
@@ -89,7 +95,7 @@ const refreshToken = crypto.randomBytes(64).toString('hex');
 function authenticate(req, res, next) {
   const token = req.headers.authorization?.replace('Bearer ', '');
   if (!token) return res.status(401).json({ error: 'Authentication required' });
-  
+
   try {
     const payload = jwt.verify(token, publicKey, {
       algorithms: ['RS256'],
@@ -178,7 +184,13 @@ Infrastructure:
 
 ---
 
-## 🔐 CVF Governance
+## Governance
+
+| Field | Value |
+|-------|-------|
+| Risk Level | **R2 – Medium** |
+| Autonomy | Supervised |
+| Category | App Development — Security |
 
 ### Authority Mapping
 
@@ -198,7 +210,21 @@ Infrastructure:
 | C – Build | Implement auth and security controls |
 | D – Review | Security audit, vulnerability scanning |
 
-### Constraints
+---
+
+## Risk Justification
+
+- R2 classification: implements security controls, requires supervision
+- MUST use battle-tested libraries (never custom crypto)
+- MUST apply OWASP Top 10 checklist on every public endpoint
+- MUST NOT store plaintext passwords or secrets in code
+- MUST implement rate limiting on all auth endpoints
+- MUST use parameterized queries (zero raw SQL with user input)
+- MUST log all authentication events for audit trail
+
+---
+
+## Constraints
 
 - MUST use battle-tested libraries (never custom crypto)
 - MUST apply OWASP Top 10 checklist on every public endpoint
@@ -210,7 +236,7 @@ Infrastructure:
 
 ---
 
-## 🔗 Dependencies
+## Dependencies
 
 - **AGT-025** (API Architecture) — API endpoint security
 - **AGT-023** (Systematic Debugging) — Debug auth issues
@@ -219,7 +245,7 @@ Infrastructure:
 
 ---
 
-## 📊 Validation
+## Validation
 
 ### Success Criteria
 
@@ -231,19 +257,23 @@ Infrastructure:
 | JWT configuration | RS256, ≤15 min expiry, refresh rotation |
 | Security header score | A+ on securityheaders.com |
 
-### UAT Link
-
-`governance/skill-library/uat/results/UAT-AGT-027.md`
-
 ---
 
-## 📚 Attribution
+## UAT Binding
 
-- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — better-auth (auth patterns), backend-development/security (OWASP)
-- **Source:** [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) — security agents and hooks
-- **Pattern Type:** Framework-level security methodology with auth decision engine
-- **CVF Adaptation:** Added governance constraints, OWASP defense matrix, decision trees, audit checklists
-- **License:** MIT (sources) → CC BY-NC-ND 4.0 (CVF adaptation)
+**UAT Link:** `governance/skill-library/uat/results/UAT-AGT-027.md`
+
+**PASS criteria:**
+- [ ] 100% OWASP Top 10 vulnerabilities addressed
+- [ ] All auth endpoints protected by rate limiting
+- [ ] Passwords stored via Argon2id or bcrypt (≥12 rounds)
+- [ ] JWT configured RS256, ≤15 min expiry, with refresh rotation
+
+**FAIL criteria:**
+- [ ] Plaintext password or secret found in code
+- [ ] Custom/home-rolled cryptography used
+- [ ] Auth endpoint missing rate limiting
+- [ ] Raw SQL built from unvalidated user input
 
 ---
 

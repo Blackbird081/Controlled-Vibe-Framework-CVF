@@ -1,23 +1,29 @@
 # AGT-026: Full-Stack Testing Engine
 
-> **Version:** 1.0.0  
-> **Status:** Active  
-> **Risk Level:** R2 – Medium  
-> **Autonomy:** Supervised  
-> **Category:** Quality Assurance  
+Text Encoding Exception: preserves pre-existing Unicode punctuation and symbols during semantic-preserving structural normalization.
+
+> **Version:** 1.0.0
+> **Status:** Active
+> **Category:** Quality Assurance
 > **Provenance:** claudekit-skills/web-testing + claude-code-templates/testing (davila7/claude-code-templates, mrgoonie/claudekit-skills)
 
 ---
 
-## 📋 Overview
+## Source
+
+- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — web-testing (Playwright, Vitest, k6, testing pyramid)
+- **Source:** [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) — testing commands and hooks
+- **Pattern Type:** Framework-level testing strategy with automated gate enforcement
+- **CVF Adaptation:** Added CI gate system, flakiness protocol, governance constraints, pyramid enforcement
+- **License:** MIT/Apache-2.0 (sources) → CC BY-NC-ND 4.0 (CVF adaptation)
+
+---
+
+## Capability
 
 Complete testing methodology that implements the **70-20-10 Testing Pyramid** with automated CI gate enforcement. Covers unit, integration, E2E, load, security, visual regression, and accessibility testing. Not a tool reference — a strategic framework that tells the agent **what to test, when, and how much**.
 
 **Key Principle:** Tests are a CI pipeline with gates. Fast tests gate slow tests. No E2E without unit coverage first.
-
----
-
-## 🎯 Capabilities
 
 ### Testing Pyramid (70-20-10)
 
@@ -163,7 +169,13 @@ export const options = {
 
 ---
 
-## 🔐 CVF Governance
+## Governance
+
+| Field | Value |
+|-------|-------|
+| Risk Level | **R2 – Medium** |
+| Autonomy | Supervised |
+| Category | Quality Assurance |
 
 ### Authority Mapping
 
@@ -182,7 +194,20 @@ export const options = {
 | C – Build | Write and run tests (primary use) |
 | D – Review | Audit test coverage and quality |
 
-### Constraints
+---
+
+## Risk Justification
+
+- R2 classification: can execute tests (external processes), requires supervision
+- MUST follow 70-20-10 pyramid ratios (±10%)
+- MUST NOT skip Gate 1 (unit) to run Gate 3 (E2E)
+- MUST fix flaky tests immediately, never quarantine
+- MUST achieve minimum 60% unit coverage before merge
+- MUST test all critical E2E scenarios before deploy
+
+---
+
+## Constraints
 
 - MUST follow 70-20-10 pyramid ratios (±10%)
 - MUST NOT skip Gate 1 (unit) to run Gate 3 (E2E)
@@ -193,7 +218,7 @@ export const options = {
 
 ---
 
-## 🔗 Dependencies
+## Dependencies
 
 - **AGT-023** (Systematic Debugging) — Debug failing tests
 - **AGT-002** (Code Execute) — Run test commands
@@ -202,7 +227,7 @@ export const options = {
 
 ---
 
-## 📊 Validation
+## Validation
 
 ### Success Criteria
 
@@ -214,19 +239,23 @@ export const options = {
 | Critical E2E coverage | 100% of critical paths tested |
 | Performance baseline | P95 latency within thresholds |
 
-### UAT Link
-
-`governance/skill-library/uat/results/UAT-AGT-026.md`
-
 ---
 
-## 📚 Attribution
+## UAT Binding
 
-- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — web-testing (Playwright, Vitest, k6, testing pyramid)
-- **Source:** [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) — testing commands and hooks
-- **Pattern Type:** Framework-level testing strategy with automated gate enforcement
-- **CVF Adaptation:** Added CI gate system, flakiness protocol, governance constraints, pyramid enforcement
-- **License:** MIT/Apache-2.0 (sources) → CC BY-NC-ND 4.0 (CVF adaptation)
+**UAT Link:** `governance/skill-library/uat/results/UAT-AGT-026.md`
+
+**PASS criteria:**
+- [ ] Test pyramid adherence within 70±10% unit, 20±10% integration, 10±5% E2E
+- [ ] Flaky test rate <2% of total tests
+- [ ] CI gate pass rate ≥95% of builds
+- [ ] 100% of critical E2E paths tested
+
+**FAIL criteria:**
+- [ ] Gate 1 (unit) skipped to run Gate 3 (E2E)
+- [ ] Flaky test quarantined instead of fixed
+- [ ] Merge allowed below 60% unit coverage
+- [ ] Critical E2E scenario untested before deploy
 
 ---
 

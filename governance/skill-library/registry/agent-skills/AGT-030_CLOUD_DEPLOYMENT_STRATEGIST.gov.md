@@ -1,24 +1,24 @@
 # AGT-030: Cloud Deployment Strategist
 
-## Governance Metadata
-- **ID:** AGT-030
-- **Name:** Cloud Deployment Strategist
-- **Version:** 1.0.0
-- **Risk Level:** R2 — Supervised (infrastructure changes, cost implications)
-- **Authority:** Orchestrator, DevOps Builder
-- **Phase:** Deployment, Operations
-- **Dependencies:** AGT-025 (API Architecture), AGT-026 (Testing — CI gates), AGT-027 (Security)
+Text Encoding Exception: preserves pre-existing Unicode punctuation and symbols during semantic-preserving structural normalization.
+
+> **Version:** 1.0.0
+> **Name:** Cloud Deployment Strategist
+> **Phase:** Deployment, Operations
+
+---
+
+## Source
+
 - **Provenance:** Extracted from claudekit-skills/devops (Cloudflare/Docker/GCP/K8s patterns), rewritten to CVF governance
 
 ---
 
-## Purpose
+## Capability
 
 Comprehensive deployment methodology covering **platform selection**, **containerization**, **orchestration**, and **GitOps workflows**. Provides decision trees for choosing the right infrastructure and deployment patterns for any application.
 
----
-
-## Platform Selection Decision Tree
+### Platform Selection Decision Tree
 
 ```
 Need sub-50ms global latency? ──Yes──→ Cloudflare Workers (Edge)
@@ -36,9 +36,7 @@ Managed database needed? ──Yes──→ Cloud SQL / RDS
 Key-value/cache? ──Yes──→ Cloudflare KV / Redis
 ```
 
----
-
-## Platform Comparison Matrix
+### Platform Comparison Matrix
 
 | Need | Platform | Latency | Cost Model | Scaling |
 |------|----------|---------|-----------|---------|
@@ -51,11 +49,9 @@ Key-value/cache? ──Yes──→ Cloudflare KV / Redis
 | Static site + API | Cloudflare Pages | <50ms | Free tier generous | Automatic |
 | Package management (K8s) | Helm | N/A | Free | N/A |
 
----
+### Containerization Strategy
 
-## Containerization Strategy
-
-### Dockerfile Decision Tree
+#### Dockerfile Decision Tree
 ```
 Is it a Node.js/Python app?
 ├─ Yes → Multi-stage build (builder + runtime)
@@ -69,7 +65,7 @@ Need system deps?
 └─ No  → Use alpine or distroless
 ```
 
-### Multi-Stage Build Pattern (Node.js)
+#### Multi-Stage Build Pattern (Node.js)
 ```dockerfile
 # Stage 1: Build
 FROM node:20-alpine AS builder
@@ -93,7 +89,7 @@ HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:3000/heal
 CMD ["node", "dist/index.js"]
 ```
 
-### Docker Security Checklist
+#### Docker Security Checklist
 - [ ] Non-root user in final stage
 - [ ] No secrets in image layers (use runtime env vars)
 - [ ] Pin base image versions (e.g., `node:20.11-alpine`)
@@ -101,11 +97,9 @@ CMD ["node", "dist/index.js"]
 - [ ] Read-only filesystem where possible
 - [ ] Resource limits defined (CPU, memory)
 
----
+### Kubernetes Deployment Patterns
 
-## Kubernetes Deployment Patterns
-
-### Deployment Strategy Selection
+#### Deployment Strategy Selection
 | Strategy | When | Risk | Rollback |
 |----------|------|------|----------|
 | **Rolling Update** | Default, most apps | Low | Automatic |
@@ -113,7 +107,7 @@ CMD ["node", "dist/index.js"]
 | **Canary** | High-risk changes, gradual validation | Low | Stop canary |
 | **Recreate** | Non-critical, accepts downtime | High | Manual redeploy |
 
-### Essential K8s Resources
+#### Essential K8s Resources
 ```yaml
 # deployment.yaml
 apiVersion: apps/v1
@@ -154,11 +148,9 @@ spec:
           initialDelaySeconds: 5
 ```
 
----
+### GitOps Workflow
 
-## GitOps Workflow
-
-### GitOps Decision Tree
+#### GitOps Decision Tree
 ```
 Team size > 5 developers? ──Yes──→ ArgoCD (UI, RBAC, multi-cluster)
          │No
@@ -167,7 +159,7 @@ Simple single-cluster? ──Yes──→ Flux (lightweight, Git-native)
 Need approval gates? ──Yes──→ ArgoCD with sync policies
 ```
 
-### GitOps Repository Structure
+#### GitOps Repository Structure
 ```
 infra/
 ├── base/                    # Base manifests
@@ -190,11 +182,9 @@ infra/
     └── application.yaml     # ArgoCD app definition
 ```
 
----
+### CI/CD Pipeline Integration
 
-## CI/CD Pipeline Integration
-
-### Pipeline Stages
+#### Pipeline Stages
 ```
 Code Push → Lint → Test → Build Image → Scan → Push Registry → Update Manifest → Deploy
            Gate 1   Gate 2   Gate 3      Gate 4                  Gate 5           Gate 6
@@ -209,11 +199,9 @@ Code Push → Lint → Test → Build Image → Scan → Push Registry → Updat
 | Gate 5 | Image pushed, tag immutable | Manifest update |
 | Gate 6 | Health check passes in target env | Traffic switch |
 
----
+### Edge Deployment (Cloudflare Workers)
 
-## Edge Deployment (Cloudflare Workers)
-
-### Worker Pattern
+#### Worker Pattern
 ```typescript
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -236,9 +224,7 @@ export default {
 };
 ```
 
----
-
-## Anti-Patterns
+### Anti-Patterns
 
 | ❌ Don't | ✅ Do Instead |
 |----------|--------------|
@@ -249,9 +235,7 @@ export default {
 | Single replica in production | Minimum 2 replicas with PDB |
 | Manual kubectl apply in prod | GitOps with automated sync |
 
----
-
-## Implementation Checklist
+### Implementation Checklist
 
 - [ ] Choose platform based on decision tree
 - [ ] Create multi-stage Dockerfile with security best practices
@@ -267,8 +251,56 @@ export default {
 
 ---
 
-## Constraints
+## Governance
+
+| Field | Value |
+|-------|-------|
+| Risk Level | **R2 — Supervised** (infrastructure changes, cost implications) |
+| Autonomy | Supervised |
+| Authority | Orchestrator, DevOps Builder |
+| Phase | Deployment, Operations |
+
+---
+
+## Risk Justification
+
+- R2 — infrastructure changes and cost implications require supervision
 - Infrastructure changes MUST be reviewed by Orchestrator (R2)
 - Production deployments require passing ALL CI gates
 - Cost implications must be estimated before scaling decisions
 - Secrets must NEVER be committed to Git or baked into images
+
+---
+
+## Constraints
+
+- Infrastructure changes MUST be reviewed by Orchestrator (R2)
+- Production deployments require passing ALL CI gates
+- Cost implications must be estimated before scaling decisions
+- Secrets must NEVER be committed to Git or baked into images
+
+---
+
+## Dependencies
+
+- **AGT-025** (API Architecture)
+- **AGT-026** (Testing — CI gates)
+- **AGT-027** (Security)
+
+---
+
+## UAT Binding
+
+**PASS criteria:**
+- [ ] Platform selected via decision tree, not ad hoc preference
+- [ ] Dockerfile follows multi-stage + non-root security checklist
+- [ ] Production deployment passes all 6 CI/CD pipeline gates
+- [ ] Health checks (liveness + readiness probes) defined
+- [ ] Rollback procedure documented before deploy
+
+**FAIL criteria:**
+- [ ] Secret committed to Git or baked into an image layer
+- [ ] Production deployment bypasses a CI gate
+- [ ] `latest` tag used in production
+- [ ] Single replica in production without a PodDisruptionBudget
+- [ ] Manual `kubectl apply` used in production instead of GitOps sync

@@ -4,6 +4,8 @@ Contract and Registry Validators
 Provides validation utilities for CVF contracts and registry entries.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Dict, Any, Optional

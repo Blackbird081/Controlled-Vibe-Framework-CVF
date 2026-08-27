@@ -9,8 +9,38 @@ Test coverage:
 - Deny-first policy enforcement
 """
 
+import sys
+from pathlib import Path
+
 import pytest
 from typing import Dict, Any
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from models.risk import RiskLevel
+from models.skill_contract import (
+    AuditRequirements,
+    ExecutionProperties,
+    GovernanceConstraints,
+    InputField,
+    OutputField,
+    SkillContract,
+)
+
+
+def _build_contract(*, domain: str = "data", input_spec=None, output_spec=None, risk_level: RiskLevel = RiskLevel.R0) -> SkillContract:
+    """Build a minimal SkillContract using the real model interface."""
+    return SkillContract(
+        capability_id="test-skill",
+        domain=domain,
+        description="Test",
+        risk_level=risk_level,
+        governance=GovernanceConstraints(),
+        input_spec=input_spec if input_spec is not None else [InputField(name="query", type="string")],
+        output_spec=output_spec if output_spec is not None else [OutputField(name="result", type="string")],
+        execution=ExecutionProperties(),
+        audit=AuditRequirements(),
+    )
 
 
 class TestSkillContractCreation:
@@ -49,34 +79,30 @@ class TestSkillContractValidation:
     
     def test_deny_first_policy_missing_domain(self):
         """Should deny contract missing DOMAIN (deny-first policy)."""
-        incomplete_contract = {
-            "CAPABILITY_ID": "test-skill",
-            # Missing DOMAIN
-            "DESCRIPTION": "Test"
-        }
-        
-        # This test assumes SkillContract validator exists
-        # Expected: validation fails with MissingFieldError
-        with pytest.raises(Exception):  # Replace with actual validator
-            # Pseudo-code: SkillContract.validate(incomplete_contract)
-            pass
-    
-    def test_deny_first_policy_missing_input_spec(self, valid_skill_contract_r0):
+        with pytest.raises(ValueError, match="domain is required"):
+            _build_contract(domain="")
+
+    def test_deny_first_policy_missing_input_spec(self):
         """Should deny contract if INPUT_FIELDS missing."""
-        contract = valid_skill_contract_r0.copy()
-        del contract["INPUT_FIELDS"]  # Remove required field
-        
-        # Expected: validation fails
-        with pytest.raises(Exception):  # Replace with actual validator
-            pass
-    
-    def test_invalid_risk_level(self, invalid_skill_contract_bad_risk):
+        with pytest.raises(ValueError, match="At least one input field is required"):
+            _build_contract(input_spec=[])
+
+    def test_invalid_risk_level(self):
         """Should reject invalid RISK_LEVEL."""
-        contract = invalid_skill_contract_bad_risk
-        
-        # Expected: validation fails with InvalidRiskLevelError
-        with pytest.raises(Exception):
-            pass
+        contract = {
+            "capability_id": "test-skill",
+            "domain": "data",
+            "description": "Test",
+            "risk_level": "INVALID",
+            "governance": {},
+            "input_spec": [{"name": "query", "type": "string"}],
+            "output_spec": [{"name": "result", "type": "string"}],
+            "execution": {},
+            "audit": {},
+        }
+
+        with pytest.raises(ValueError, match="is not a valid RiskLevel"):
+            SkillContract.from_dict(contract)
     
     @pytest.mark.parametrize("invalid_risk", [
         "Unknown",
@@ -221,8 +247,9 @@ class TestRollbackPossibility:
     def test_r1_has_rollback_plan(self, valid_skill_contract_r1):
         """R1 write operations should have rollback capability."""
         contract = valid_skill_contract_r1
-        
-        assert "rollback" in contract["ROLLBACK_POSSIBILITY"].lower()
+
+        assert contract["ROLLBACK_POSSIBILITY"].lower().startswith("yes")
+        assert contract["ROLLBACK_POSSIBILITY"] != "N/A"
     
     def test_r2_has_detailed_rollback(self, valid_skill_contract_r2):
         """R2 critical operations must have explicit rollback."""

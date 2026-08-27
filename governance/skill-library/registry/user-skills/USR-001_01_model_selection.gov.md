@@ -1,8 +1,8 @@
 # USR-001: Model Selection
 
-> **Type:** User Skill  
-> **Domain:** Ai Ml Evaluation  
-> **Difficulty:** Medium  
+> **Type:** User Skill
+> **Domain:** Ai Ml Evaluation
+> **Difficulty:** Medium
 > **Status:** Active
 
 ---

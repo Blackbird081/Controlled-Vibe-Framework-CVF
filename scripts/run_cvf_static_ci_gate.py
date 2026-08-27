@@ -37,6 +37,21 @@ STATIC_GOVERNANCE_TESTS = [
     "src/app/api/system/jobs/route.test.ts",
 ]
 
+PUBLIC_WORKFLOW_REQUIREMENTS = {
+    ".github/workflows/ci.yml": ("npm run test:run", "npm run build"),
+    ".github/workflows/cvf-ci.yml": (
+        "python ../../../scripts/run_cvf_static_ci_gate.py --json",
+        "npm run test:run",
+        "npm run build",
+    ),
+    ".github/workflows/cvf-static-ci.yml": ("python scripts/run_cvf_static_ci_gate.py --json",),
+    ".github/workflows/cvf-web-ci.yml": ("npm run test:run", "npm run build"),
+    ".github/workflows/public-sync-preflight.yml": ("check_cvf_public_sync_candidate.py",),
+    ".github/workflows/public-surface.yml": ("python scripts/check_public_surface.py",),
+}
+
+PRIVATE_ONLY_WORKFLOW_MARKERS = ("run_local_governance_hook_chain.py",)
+
 
 def run_cmd(cmd: list[str], cwd: Path | None = None, timeout: int = 300) -> tuple[int, str, str]:
     try:
@@ -92,14 +107,24 @@ def check_public_surface() -> CheckResult:
     return CheckResult(name, "FAIL", "Public surface guard failed", output[-12:])
 
 
-def check_workflow_orchestration_guard() -> CheckResult:
-    name = "Workflow orchestration guard"
-    script = REPO_ROOT / "governance" / "compat" / "check_workflow_orchestration_guard.py"
-    code, stdout, stderr = run_cmd([sys.executable, str(script), "--enforce"], cwd=REPO_ROOT, timeout=120)
-    output = (stdout + stderr).splitlines()
-    if code == 0:
-        return CheckResult(name, "PASS", "Workflow orchestration guard passed", output[-4:])
-    return CheckResult(name, "FAIL", "Workflow orchestration guard failed", output[-12:])
+def check_public_workflow_orchestration() -> CheckResult:
+    name = "Public workflow orchestration guard"
+    violations: list[str] = []
+    for relative_path, required_fragments in PUBLIC_WORKFLOW_REQUIREMENTS.items():
+        workflow_path = REPO_ROOT / relative_path
+        if not workflow_path.is_file():
+            violations.append(f"{relative_path}: workflow missing")
+            continue
+        text = workflow_path.read_text(encoding="utf-8")
+        for marker in PRIVATE_ONLY_WORKFLOW_MARKERS:
+            if marker in text:
+                violations.append(f"{relative_path}: private-only marker present: {marker}")
+        for fragment in required_fragments:
+            if fragment not in text:
+                violations.append(f"{relative_path}: missing public command fragment: {fragment}")
+    if violations:
+        return CheckResult(name, "FAIL", "Public workflow orchestration failed", violations[:12])
+    return CheckResult(name, "PASS", "Public workflow orchestration passed", [f"Validated {len(PUBLIC_WORKFLOW_REQUIREMENTS)} public workflow owners"])
 
 
 def check_static_governance_tests() -> CheckResult:
@@ -126,7 +151,7 @@ def check_provider_receipt_link_integrity() -> CheckResult:
 def run_checks() -> list[CheckResult]:
     return [
         check_public_surface(),
-        check_workflow_orchestration_guard(),
+        check_public_workflow_orchestration(),
         check_web_build(False),
         check_web_typecheck(),
         check_secrets(False),

@@ -1,40 +1,38 @@
 # AGT-033: AI Multimodal Processor
 
-## Governance Metadata
-- **ID:** AGT-033
-- **Name:** AI Multimodal Processor
-- **Version:** 1.0.0
-- **Risk Level:** R2 — Supervised (external API calls, cost implications, data processing)
-- **Authority:** Orchestrator, Builder
-- **Phase:** Implementation, Integration, Data Processing
-- **Dependencies:** AGT-025 (API Architecture), AGT-028 (Database for storage patterns)
+Text Encoding Exception: preserves pre-existing Unicode punctuation and symbols during semantic-preserving structural normalization.
+
+> **Version:** 1.0.0
+> **Name:** AI Multimodal Processor
+> **Phase:** Implementation, Integration, Data Processing
+
+---
+
+## Source
+
 - **Provenance:** Extracted from claudekit-skills/ai-multimodal (Gemini API multimodal processing), rewritten to CVF governance
 
 ---
 
-## Purpose
+## Capability
 
 Structured methodology for processing **audio, images, video, and documents** using multimodal AI APIs. Provides capability selection, model decision trees, cost optimization strategies, and quality assurance patterns for multimedia content understanding and generation.
 
----
-
-## Capability Matrix
+### Capability Matrix
 
 | Task | Audio | Image | Video | Document | Generation |
 |------|:-----:|:-----:|:-----:|:--------:|:----------:|
-| Transcription | ✅ | — | ✅ | — | — |
-| Summarization | ✅ | ✅ | ✅ | ✅ | — |
-| Q&A | ✅ | ✅ | ✅ | ✅ | — |
-| Object Detection | — | ✅ | ✅ | — | — |
-| Text Extraction (OCR) | — | ✅ | — | ✅ | — |
-| Structured Output | ✅ | ✅ | ✅ | ✅ | — |
-| Creation/Generation | TTS | — | — | — | ✅ |
-| Timestamps | ✅ | — | ✅ | — | — |
-| Segmentation | — | ✅ | — | — | — |
+| Transcription | Yes | — | Yes | — | — |
+| Summarization | Yes | Yes | Yes | Yes | — |
+| Q&A | Yes | Yes | Yes | Yes | — |
+| Object Detection | — | Yes | Yes | — | — |
+| Text Extraction (OCR) | — | Yes | — | Yes | — |
+| Structured Output | Yes | Yes | Yes | Yes | — |
+| Creation/Generation | TTS | — | — | — | Yes |
+| Timestamps | Yes | — | Yes | — | — |
+| Segmentation | — | Yes | — | — | — |
 
----
-
-## Modality Selection Decision Tree
+### Modality Selection Decision Tree
 
 ```
 What content type are you processing?
@@ -66,11 +64,8 @@ What content type are you processing?
    └─ Image editing? → Image Editing pipeline
 ```
 
----
+### Model Selection Guide
 
-## Model Selection Guide
-
-### Decision Tree
 ```
 Need highest quality/accuracy? ──Yes──→ gemini-2.5-pro (most capable)
          │No
@@ -83,7 +78,8 @@ Budget-sensitive / high volume? ──Yes──→ gemini-2.5-flash-lite (cheape
 Standard multimodal task ──→ gemini-2.5-flash (best balance)
 ```
 
-### Model Comparison
+**Model Comparison**
+
 | Model | Quality | Speed | Cost (input) | Context | Best For |
 |-------|---------|-------|-------------|---------|----------|
 | gemini-2.5-pro | Highest | Slow | $3.00/1M | 2M | Complex analysis, critical accuracy |
@@ -91,9 +87,7 @@ Standard multimodal task ──→ gemini-2.5-flash (best balance)
 | gemini-2.5-flash-lite | Good | Fastest | $0.50/1M | 1M | High volume, simple tasks |
 | gemini-2.5-flash-image | N/A | Medium | $1.00/1M | N/A | Image generation only |
 
----
-
-## Token Cost Reference
+### Token Cost Reference
 
 | Content Type | Token Rate | Example |
 |-------------|-----------|---------|
@@ -104,17 +98,16 @@ Standard multimodal task ──→ gemini-2.5-flash (best balance)
 | Image (small ≤384px) | 258 tokens fixed | — |
 | Image (large) | Up to 1,548 tokens | Tiled based on size |
 
-### Context Window Capacity
+**Context Window Capacity**
+
 | Window | Video (default) | Video (low-res) | Audio | PDF |
 |--------|----------------|-----------------|-------|-----|
 | 2M tokens | ~2 hours | ~6 hours | ~17 hours | ~7,750 pages |
 | 1M tokens | ~1 hour | ~3 hours | ~8.5 hours | ~3,875 pages |
 
----
+### Implementation Patterns
 
-## Implementation Patterns
-
-### Pattern 1: Audio Transcription
+Pattern 1 — Audio Transcription:
 ```python
 import google.genai as genai
 
@@ -133,7 +126,7 @@ response = client.models.generate_content(
 print(response.text)
 ```
 
-### Pattern 2: Document Table Extraction
+Pattern 2 — Document Table Extraction:
 ```python
 # Extract structured data from PDF
 pdf_file = client.files.upload(file="invoice.pdf")
@@ -148,7 +141,7 @@ response = client.models.generate_content(
 )
 ```
 
-### Pattern 3: Video Scene Analysis
+Pattern 3 — Video Scene Analysis:
 ```python
 video_file = client.files.upload(file="product_demo.mp4")
 
@@ -167,7 +160,7 @@ response = client.models.generate_content(
 )
 ```
 
-### Pattern 4: Image Generation
+Pattern 4 — Image Generation:
 ```python
 response = client.models.generate_content(
     model="gemini-2.5-flash-image",
@@ -185,11 +178,10 @@ for part in response.candidates[0].content.parts:
             f.write(part.inline_data.data)
 ```
 
----
+### Cost Optimization Strategy
 
-## Cost Optimization Strategy
+**Tier System**
 
-### Tier System
 | Tier | Budget | Strategy |
 |------|--------|----------|
 | **Free** | $0 | 10-15 RPM, use flash-lite, optimize file sizes |
@@ -197,7 +189,7 @@ for part in response.candidates[0].content.parts:
 | **Medium** | $10-100/mo | Flash default, Pro for critical only, parallel batch |
 | **High** | >$100/mo | Pro for quality, caching layer, preprocess media |
 
-### Optimization Checklist
+**Optimization Checklist**
 - [ ] Use `gemini-2.5-flash` as default (best price/performance)
 - [ ] Use File API for files >20MB (avoids repeated upload)
 - [ ] Compress media before upload (target reasonable quality)
@@ -208,9 +200,7 @@ for part in response.candidates[0].content.parts:
 - [ ] Set appropriate character limits on responses
 - [ ] Use `concise` format by default, `detailed` on request
 
----
-
-## Size Limits Reference
+### Size Limits Reference
 
 | Method | Max Size | Retention |
 |--------|---------|-----------|
@@ -218,7 +208,8 @@ for part in response.candidates[0].content.parts:
 | File API | 2GB per file | 48 hours |
 | Project quota | 20GB total | Rolling |
 
-### Format Support
+**Format Support**
+
 | Type | Formats | Limits |
 |------|---------|--------|
 | Audio | WAV, MP3, AAC, FLAC, OGG, AIFF | Max 9.5 hours |
@@ -226,9 +217,7 @@ for part in response.candidates[0].content.parts:
 | Video | MP4, MOV, AVI, WebM, MKV, FLV | Max 6 hours (low-res) |
 | Document | PDF (vision), TXT, HTML, MD (text) | Max 1,000 pages |
 
----
-
-## Error Handling Strategy
+### Error Handling Strategy
 
 | Error Code | Meaning | Action |
 |-----------|---------|--------|
@@ -239,7 +228,7 @@ for part in response.candidates[0].content.parts:
 | 429 | Rate limit exceeded | Implement exponential backoff (2^n seconds) |
 | 500 | Server error | Retry with backoff, max 3 attempts |
 
-### Retry Pattern
+Retry Pattern:
 ```python
 import time
 
@@ -255,9 +244,7 @@ async def api_call_with_retry(func, *args, max_retries=3):
             raise
 ```
 
----
-
-## Anti-Patterns
+### Anti-Patterns
 
 | ❌ Don't | ✅ Do Instead |
 |----------|--------------|
@@ -271,10 +258,60 @@ async def api_call_with_retry(func, *args, max_retries=3):
 
 ---
 
-## Constraints
+## Governance
+
+| Field | Value |
+|-------|-------|
+| Risk Level | **R2 — Supervised** (external API calls, cost implications, data processing) |
+| Autonomy | Supervised |
+| Authority | Orchestrator, Builder |
+| Phase | Implementation, Integration, Data Processing |
+
+---
+
+## Risk Justification
+
+- R2 classification: external API calls, cost implications, data processing — requires supervision
 - External API usage requires Orchestrator/Builder supervision (R2)
 - Cost must be estimated BEFORE batch processing large media sets
 - API keys must NEVER be hardcoded — use environment variable chain
 - File API uploads expire after 48 hours — plan for re-upload if needed
 - Rate limits must be respected — implement exponential backoff
 - Generated content must pass safety filters before use
+
+---
+
+## Constraints
+
+- External API usage requires Orchestrator/Builder supervision (R2)
+- Cost must be estimated BEFORE batch processing large media sets
+- API keys must NEVER be hardcoded — use environment variable chain
+- File API uploads expire after 48 hours — plan for re-upload if needed
+- Rate limits must be respected — implement exponential backoff
+- Generated content must pass safety filters before use
+
+---
+
+## Dependencies
+
+- **AGT-025** (API Architecture)
+- **AGT-028** (Database — storage patterns)
+
+---
+
+## UAT Binding
+
+**PASS criteria:**
+- [ ] API keys sourced from environment variable chain, never hardcoded
+- [ ] Cost estimated before any batch processing of large media sets
+- [ ] File API used for files >20MB
+- [ ] Rate-limit errors handled with exponential backoff
+- [ ] Generated content passes safety filters before use
+
+**FAIL criteria:**
+- [ ] Hardcoded API key found in code
+- [ ] Large media batch processed without cost estimate
+- [ ] 429 rate-limit error not retried with backoff
+- [ ] Generated content used without a safety filter pass
+
+---

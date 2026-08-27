@@ -1,23 +1,29 @@
 # AGT-025: API Architecture Designer
 
-> **Version:** 1.0.0  
-> **Status:** Active  
-> **Risk Level:** R1 – Low  
-> **Autonomy:** Auto + Audit  
-> **Category:** App Development  
+Text Encoding Exception: preserves pre-existing Unicode punctuation and symbols during semantic-preserving structural normalization.
+
+> **Version:** 1.0.0
+> **Status:** Active
+> **Category:** App Development
 > **Provenance:** claudekit-skills/backend-development + claude-code-templates/agents (davila7/claude-code-templates, mrgoonie/claudekit-skills)
 
 ---
 
-## 📋 Overview
+## Source
+
+- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — backend-development (API design, architecture)
+- **Source:** [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) — API agents and patterns
+- **Pattern Type:** Framework-level API architecture methodology
+- **CVF Adaptation:** Added governance constraints, decision matrices, risk classification, implementation checklists
+- **License:** MIT (sources) → CC BY-NC-ND 4.0 (CVF adaptation)
+
+---
+
+## Capability
 
 Framework-level methodology for **designing production-grade APIs** — choosing the right style (REST/GraphQL/gRPC), structuring endpoints, defining error contracts, and applying microservices patterns. Not a reference doc — a decision engine that guides the agent through architecture choices with trade-off analysis.
 
 **Key Principle:** API design is a set of irreversible decisions. Get the architecture right before writing code.
-
----
-
-## 🎯 Capabilities
 
 ### API Style Decision Matrix
 
@@ -132,7 +138,13 @@ Quality:
 
 ---
 
-## 🔐 CVF Governance
+## Governance
+
+| Field | Value |
+|-------|-------|
+| Risk Level | **R1 – Low** |
+| Autonomy | Auto + Audit |
+| Category | App Development |
 
 ### Authority Mapping
 
@@ -152,7 +164,19 @@ Quality:
 | C – Build | Implement APIs following design |
 | D – Review | Audit API quality, security |
 
-### Constraints
+---
+
+## Risk Justification
+
+- R1 classification: design guidance, no external I/O
+- MUST choose API style based on decision matrix, not preference
+- MUST define error contract before implementation
+- MUST include rate limiting for all public APIs
+- MUST document all endpoints (OpenAPI/GraphQL introspection)
+
+---
+
+## Constraints
 
 - MUST choose API style based on decision matrix, not preference
 - MUST define error contract before implementation
@@ -162,7 +186,7 @@ Quality:
 
 ---
 
-## 🔗 Dependencies
+## Dependencies
 
 - **AGT-023** (Systematic Debugging) — Debug API issues
 - **AGT-027** (Security & Auth Guard) — Authentication patterns
@@ -170,7 +194,7 @@ Quality:
 
 ---
 
-## 📊 Validation
+## Validation
 
 ### Success Criteria
 
@@ -181,19 +205,23 @@ Quality:
 | Documentation coverage | 100% endpoints documented |
 | Breaking change prevention | Version strategy in place |
 
-### UAT Link
-
-`governance/skill-library/uat/results/UAT-AGT-025.md`
-
 ---
 
-## 📚 Attribution
+## UAT Binding
 
-- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — backend-development (API design, architecture)
-- **Source:** [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) — API agents and patterns
-- **Pattern Type:** Framework-level API architecture methodology
-- **CVF Adaptation:** Added governance constraints, decision matrices, risk classification, implementation checklists
-- **License:** MIT (sources) → CC BY-NC-ND 4.0 (CVF adaptation)
+**UAT Link:** `governance/skill-library/uat/results/UAT-AGT-025.md`
+
+**PASS criteria:**
+- [ ] API consistency score ≥90% adherence to chosen style guide
+- [ ] 100% endpoints have error contracts
+- [ ] 100% endpoints documented
+- [ ] Versioning strategy in place before breaking changes ship
+
+**FAIL criteria:**
+- [ ] API style chosen by preference instead of decision matrix
+- [ ] Public API shipped without rate limiting
+- [ ] Endpoints undocumented
+- [ ] No error contract defined before implementation
 
 ---
 

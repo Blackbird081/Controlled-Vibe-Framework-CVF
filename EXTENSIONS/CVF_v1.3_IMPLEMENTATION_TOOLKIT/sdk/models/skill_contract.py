@@ -5,6 +5,8 @@ Defines the structure and validation rules for CVF Skill Contracts.
 Based on CVF v1.2 SKILL_CONTRACT_SPEC.md
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
 from enum import Enum

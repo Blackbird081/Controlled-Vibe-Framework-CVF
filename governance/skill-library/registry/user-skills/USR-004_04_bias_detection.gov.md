@@ -1,8 +1,8 @@
 # USR-004: Bias Detection
 
-> **Type:** User Skill  
-> **Domain:** Ai Ml Evaluation  
-> **Difficulty:** Advanced  
+> **Type:** User Skill
+> **Domain:** Ai Ml Evaluation
+> **Difficulty:** Advanced
 > **Status:** Active
 
 ---

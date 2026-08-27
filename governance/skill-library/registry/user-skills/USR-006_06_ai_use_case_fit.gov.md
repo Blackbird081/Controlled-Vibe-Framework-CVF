@@ -1,8 +1,8 @@
 # USR-006: AI Use Case Fit
 
-> **Type:** User Skill  
-> **Domain:** Ai Ml Evaluation  
-> **Difficulty:** Medium  
+> **Type:** User Skill
+> **Domain:** Ai Ml Evaluation
+> **Difficulty:** Medium
 > **Status:** Active
 
 ---

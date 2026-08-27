@@ -1,23 +1,29 @@
 # AGT-028: Database Schema Architect
 
-> **Version:** 1.0.0  
-> **Status:** Active  
-> **Risk Level:** R1 – Low  
-> **Autonomy:** Auto + Audit  
-> **Category:** App Development — Data Layer  
+Text Encoding Exception: preserves pre-existing Unicode punctuation and symbols during semantic-preserving structural normalization.
+
+> **Version:** 1.0.0
+> **Status:** Active
+> **Category:** App Development — Data Layer
 > **Provenance:** claudekit-skills/databases (mrgoonie/claudekit-skills)
 
 ---
 
-## 📋 Overview
+## Source
+
+- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — databases (MongoDB, PostgreSQL, schema design, optimization)
+- **Source:** [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) — database agents and migration patterns
+- **Pattern Type:** Framework-level database architecture methodology
+- **CVF Adaptation:** Added governance constraints, decision trees, migration workflow, optimization protocol
+- **License:** MIT (sources) → CC BY-NC-ND 4.0 (CVF adaptation)
+
+---
+
+## Capability
 
 Database design methodology that guides agents through **schema design, database selection, migration strategy, and query optimization**. Provides decision frameworks not reference docs — the agent uses trade-off analysis to choose between relational vs document models, design indexes, and plan migrations.
 
 **Key Principle:** Schema design is the foundation. A bad schema choice creates performance debt that compounds with scale.
-
----
-
-## 🎯 Capabilities
 
 ### Database Selection Decision Tree
 
@@ -59,7 +65,7 @@ Normalization Levels:
   1NF → Eliminate repeating groups → Atomic values
   2NF → Remove partial dependencies → Full key dependency
   3NF → Remove transitive dependencies → Direct key dependency
-  
+
   Rule: Normalize to 3NF, then selectively denormalize for performance
 
 Common Patterns:
@@ -139,7 +145,7 @@ Indexing Rules:
   □ Compound index: filter fields first, sort fields last
   □ Cover queries when possible (include all selected fields)
   □ Monitor with EXPLAIN ANALYZE (PG) / explain() (Mongo)
-  
+
 Anti-Patterns:
   ✗ Index every field (write overhead)
   ✗ Unused indexes (bloat, slower writes)
@@ -153,16 +159,16 @@ Anti-Patterns:
 Migration Workflow:
   1. Generate migration file (timestamped)
      └─ 20260217_001_add_user_avatar.sql
-  
+
   2. Write UP migration (forward)
      └─ ALTER TABLE users ADD COLUMN avatar_url TEXT;
-  
+
   3. Write DOWN migration (rollback)
      └─ ALTER TABLE users DROP COLUMN avatar_url;
-  
+
   4. Test migration on staging (ALWAYS)
      └─ Run UP → verify → run DOWN → verify → run UP again
-  
+
   5. Apply to production
      └─ During low-traffic window
      └─ With application backward-compatible
@@ -216,7 +222,13 @@ SLOW QUERY DETECTED?
 
 ---
 
-## 🔐 CVF Governance
+## Governance
+
+| Field | Value |
+|-------|-------|
+| Risk Level | **R1 – Low** |
+| Autonomy | Auto + Audit |
+| Category | App Development — Data Layer |
 
 ### Authority Mapping
 
@@ -236,7 +248,21 @@ SLOW QUERY DETECTED?
 | C – Build | Implement schema, write migrations |
 | D – Review | Audit schema quality, query performance |
 
-### Constraints
+---
+
+## Risk Justification
+
+- R1 classification: design guidance, no direct database access
+- MUST use decision tree for database selection (not preference)
+- MUST normalize to 3NF before considering denormalization
+- MUST write rollback for every migration
+- MUST test migrations on staging before production
+- MUST index all foreign keys and common query fields
+- MUST NOT run data mutations in schema migrations
+
+---
+
+## Constraints
 
 - MUST use decision tree for database selection (not preference)
 - MUST normalize to 3NF before considering denormalization
@@ -248,7 +274,7 @@ SLOW QUERY DETECTED?
 
 ---
 
-## 🔗 Dependencies
+## Dependencies
 
 - **AGT-025** (API Architecture) — API ↔ database alignment
 - **AGT-023** (Systematic Debugging) — Debug query issues
@@ -256,7 +282,7 @@ SLOW QUERY DETECTED?
 
 ---
 
-## 📊 Validation
+## Validation
 
 ### Success Criteria
 
@@ -268,19 +294,23 @@ SLOW QUERY DETECTED?
 | Query performance | P95 <100ms for standard queries |
 | Migration test coverage | 100% tested on staging |
 
-### UAT Link
-
-`governance/skill-library/uat/results/UAT-AGT-028.md`
-
 ---
 
-## 📚 Attribution
+## UAT Binding
 
-- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — databases (MongoDB, PostgreSQL, schema design, optimization)
-- **Source:** [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) — database agents and migration patterns
-- **Pattern Type:** Framework-level database architecture methodology
-- **CVF Adaptation:** Added governance constraints, decision trees, migration workflow, optimization protocol
-- **License:** MIT (sources) → CC BY-NC-ND 4.0 (CVF adaptation)
+**UAT Link:** `governance/skill-library/uat/results/UAT-AGT-028.md`
+
+**PASS criteria:**
+- [ ] Schema normalized to 3NF baseline
+- [ ] 100% of migrations have a DOWN/rollback
+- [ ] All foreign keys and common query fields indexed
+- [ ] 100% of migrations tested on staging before production
+
+**FAIL criteria:**
+- [ ] Migration deployed without a rollback path
+- [ ] Migration applied to production without staging test
+- [ ] Data mutation bundled into a schema migration
+- [ ] Foreign key missing an index
 
 ---
 

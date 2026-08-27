@@ -53,6 +53,10 @@ jobs:
         working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
         run: npm ci
 
+      - name: Install Execution Plane Foundation dependencies
+        working-directory: EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION
+        run: npm ci
+
       - name: Install SOT3 package dependencies
         run: |
           npm ci --prefix EXTENSIONS/CVF_TRUTH_KERNEL
@@ -64,4 +68,11 @@ jobs:
         run: npm ci
 
       - name: Run static CI gate
+        env:
+          NEXTAUTH_SECRET: cvf-ci-build-only-secret
+          NEXTAUTH_URL: http://localhost:3000
+          GITHUB_ID: cvf-ci-github-id
+          GITHUB_SECRET: cvf-ci-github-secret
+          GOOGLE_ID: cvf-ci-google-id
+          GOOGLE_SECRET: cvf-ci-google-secret
         run: python scripts/run_cvf_static_ci_gate.py --json

@@ -1,23 +1,29 @@
 # AGT-023: Systematic Debugging Engine
 
-> **Version:** 1.0.0  
-> **Status:** Active  
-> **Risk Level:** R2 – Medium  
-> **Autonomy:** Supervised  
-> **Category:** Quality Assurance  
+Text Encoding Exception: preserves pre-existing Unicode punctuation and symbols during semantic-preserving structural normalization.
+
+> **Version:** 1.0.0
+> **Status:** Active
+> **Category:** Quality Assurance
 > **Provenance:** claudekit-skills/debugging (mrgoonie/claudekit-skills)
 
 ---
 
-## 📋 Overview
+## Source
+
+- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — debugging/ (4 sub-skills)
+- **Sub-Skills:** systematic-debugging, defense-in-depth, root-cause-tracing, verification-before-completion
+- **Pattern Type:** Framework-level debugging methodology with verification gates
+- **CVF Adaptation:** Added governance constraints, risk classification, escalation rules, architecture questioning threshold
+- **License:** MIT (source) → CC BY-NC-ND 4.0 (CVF adaptation)
+
+---
+
+## Capability
 
 4-phase debugging methodology that ensures root cause investigation BEFORE any fix attempts. Prevents the common AI anti-pattern of "guess-and-fix" cycles that waste time and introduce new bugs.
 
 **Iron Law:** NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST.
-
----
-
-## 🎯 Capabilities
 
 ### The Four Phases
 
@@ -29,8 +35,6 @@ Phase 1: Root Cause     →  Phase 2: Pattern      →  Phase 3: Hypothesis   �
  Check recent changes     Identify gaps             One variable at a time  Verify fix
  Trace data flow          Understand dependencies   Confirm or reject       Document
 ```
-
-### Phase Details
 
 **Phase 1 — Root Cause Investigation**
 1. Read error messages COMPLETELY (don't skip stack traces)
@@ -71,32 +75,8 @@ Phase 1: Root Cause     →  Phase 2: Pattern      →  Phase 3: Hypothesis   �
 - Build succeeds: build command exit 0
 - NEVER trust cached/stale results
 
----
-
-## 🔐 CVF Governance
-
-### Authority Mapping
-| Role | Permission |
-|------|-----------|
-| Orchestrator | Full: apply debugging methodology, approve architecture changes |
-| Builder | Execute: run phases 1-3, propose fixes |
-| Reviewer | Audit: verify debugging process was followed |
-| Architect | Approve: architecture-level changes (when 3+ fixes fail) |
-
-### Phase Applicability
-| Phase | Usage |
-|-------|-------|
-| C – Build | Primary: debug during development |
-| D – Review | Verify fixes, audit process compliance |
-
-### Constraints
-- MUST complete Phase 1 before proposing any fix
-- MUST NOT stack multiple fixes without verifying each
-- MUST escalate to HITL after 3 failed fix attempts (architectural issue)
-- MUST run verification commands, not just claim success
-- R2 classification: can modify code, requires supervision for production fixes
-
 ### Sub-Skills Integrated
+
 | Sub-Skill | Purpose |
 |-----------|---------|
 | Defense-in-Depth | Validate at every layer after fix |
@@ -105,16 +85,64 @@ Phase 1: Root Cause     →  Phase 2: Pattern      →  Phase 3: Hypothesis   �
 
 ---
 
-## 🔗 Dependencies
+## Governance
+
+| Field | Value |
+|-------|-------|
+| Risk Level | **R2 – Medium** |
+| Autonomy | Supervised |
+| Category | Quality Assurance |
+
+### Authority Mapping
+
+| Role | Permission |
+|------|-----------|
+| Orchestrator | Full: apply debugging methodology, approve architecture changes |
+| Builder | Execute: run phases 1-3, propose fixes |
+| Reviewer | Audit: verify debugging process was followed |
+| Architect | Approve: architecture-level changes (when 3+ fixes fail) |
+
+### Phase Applicability
+
+| Phase | Usage |
+|-------|-------|
+| C – Build | Primary: debug during development |
+| D – Review | Verify fixes, audit process compliance |
+
+---
+
+## Risk Justification
+
+- R2 classification: can modify code, requires supervision for production fixes
+- MUST complete Phase 1 before proposing any fix
+- MUST NOT stack multiple fixes without verifying each
+- MUST escalate to HITL after 3 failed fix attempts (architectural issue)
+- MUST run verification commands, not just claim success
+
+---
+
+## Constraints
+
+- MUST complete Phase 1 before proposing any fix
+- MUST NOT stack multiple fixes without verifying each
+- MUST escalate to HITL after 3 failed fix attempts (architectural issue)
+- MUST run verification commands, not just claim success
+- R2 classification: can modify code, requires supervision for production fixes
+
+---
+
+## Dependencies
+
 - **AGT-022** (Problem-Solving Framework) — Dispatched from "code broken" stuck-type
 - **AGT-002** (Code Execute) — Run diagnostic commands
 - **AGT-007** (File Read) — Examine source code and logs
 
 ---
 
-## 📊 Validation
+## Validation
 
 ### Success Criteria
+
 | Criterion | Target | ClaudeKit Reported |
 |-----------|--------|-------------------|
 | First-time fix rate | ≥85% | 95% (systematic) vs 40% (random) |
@@ -122,17 +150,23 @@ Phase 1: Root Cause     →  Phase 2: Pattern      →  Phase 3: Hypothesis   �
 | New bugs introduced | Near zero | Near zero vs common |
 | Root cause identified before fix | 100% | Required by Iron Law |
 
-### UAT Link
-`governance/skill-library/uat/results/UAT-AGT-023.md`
-
 ---
 
-## 📚 Attribution
-- **Source:** [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — debugging/ (4 sub-skills)
-- **Sub-Skills:** systematic-debugging, defense-in-depth, root-cause-tracing, verification-before-completion
-- **Pattern Type:** Framework-level debugging methodology with verification gates
-- **CVF Adaptation:** Added governance constraints, risk classification, escalation rules, architecture questioning threshold
-- **License:** MIT (source) → CC BY-NC-ND 4.0 (CVF adaptation)
+## UAT Binding
+
+**UAT Link:** `governance/skill-library/uat/results/UAT-AGT-023.md`
+
+**PASS criteria:**
+- [ ] First-time fix rate ≥85%
+- [ ] Time-to-resolution ≤30 min avg
+- [ ] Root cause identified before fix in 100% of cases
+- [ ] No completion claims without fresh verification evidence
+
+**FAIL criteria:**
+- [ ] Fix proposed before Phase 1 root cause investigation completed
+- [ ] Multiple fixes stacked without individual verification
+- [ ] More than 3 failed fix attempts without HITL escalation
+- [ ] Success claimed without fresh verification output
 
 ---
 

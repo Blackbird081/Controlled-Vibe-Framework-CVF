@@ -1,35 +1,34 @@
 # AGT-032: MCP Server Builder
 
-## Governance Metadata
-- **ID:** AGT-032
-- **Name:** MCP Server Builder
-- **Version:** 1.0.0
-- **Risk Level:** R2 — Supervised (creates server code, external API integration)
-- **Authority:** Orchestrator, Builder
-- **Phase:** Implementation, Integration
-- **Dependencies:** AGT-014 (MCP Server Connector), AGT-024 (MCP Context Isolation), AGT-025 (API Architecture)
+Text Encoding Exception: preserves pre-existing Unicode punctuation and symbols during semantic-preserving structural normalization.
+
+> **Version:** 1.0.0
+> **Name:** MCP Server Builder
+> **Phase:** Implementation, Integration
+
+---
+
+## Source
+
 - **Provenance:** Extracted from claudekit-skills/mcp-builder (4-phase MCP development workflow), rewritten to CVF governance
 
 ---
 
-## Purpose
+## Capability
 
 Structured methodology for building **production-quality MCP (Model Context Protocol) servers** that enable LLMs to interact with external services. Covers agent-centric design principles, 4-phase development workflow, and evaluation-driven quality assurance.
 
----
-
-## When to Use
+### When to Use
 
 - Building MCP servers to integrate external APIs for Claude/LLMs
 - Creating custom tool servers (Python FastMCP or TypeScript SDK)
 - Designing tool interfaces optimized for agent consumption
 - Testing MCP servers with evaluation harnesses
 
----
+### Agent-Centric Design Principles
 
-## Agent-Centric Design Principles
+**Build for Workflows, Not API Endpoints**
 
-### Build for Workflows, Not API Endpoints
 | ❌ API-Centric | ✅ Agent-Centric |
 |---------------|-----------------|
 | `get_user`, `get_user_orders`, `get_order_items` | `get_user_with_recent_activity` (consolidated) |
@@ -37,16 +36,14 @@ Structured methodology for building **production-quality MCP (Model Context Prot
 | Technical IDs everywhere | Human-readable names by default |
 | Generic error messages | Actionable error with next-step suggestion |
 
-### Design Principles Checklist
+**Design Principles Checklist**
 - [ ] **Workflow-oriented**: Tools enable complete tasks, not just API calls
 - [ ] **Context-efficient**: Every token counts — concise default, detailed on request
 - [ ] **Actionable errors**: "Try using filter='active_only' to reduce results"
 - [ ] **Natural naming**: Tool names reflect how humans think about tasks
 - [ ] **Consistent prefixes**: Related tools grouped (e.g., `project_list`, `project_get`, `project_create`)
 
----
-
-## 4-Phase Development Workflow
+### 4-Phase Development Workflow
 
 ```
 Phase 1: Research & Plan    Phase 2: Implement    Phase 3: Review & Refine    Phase 4: Evaluate
@@ -57,13 +54,10 @@ Plan tool selection         Implement tools       Type safety audit           XM
 Design I/O schemas          Add annotations       Build & syntax check        Agent testing
 ```
 
----
+#### Phase 1: Research & Planning
 
-## Phase 1: Research & Planning
-
-### 1.1 MCP Protocol Essentials
-```
 MCP Server Architecture:
+```
 ┌─────────────┐    stdio/SSE    ┌─────────────┐
 │  LLM Client │ ◄────────────► │  MCP Server  │
 │  (Claude)   │    JSON-RPC    │  (Your Code) │
@@ -75,8 +69,7 @@ MCP Server Architecture:
                                 └───────────┘
 ```
 
-### 1.2 Tool Design Template
-For each tool, define:
+Tool Design Template — for each tool, define:
 ```
 Tool Name: [verb_noun format, e.g., search_issues]
 Description: [One-line: what it does]
@@ -91,7 +84,7 @@ Annotations:
   - openWorldHint: [true/false]
 ```
 
-### 1.3 Implementation Plan Checklist
+Implementation Plan Checklist:
 - [ ] List all tools to implement (prioritized by use case frequency)
 - [ ] Identify shared utilities (auth, pagination, formatting, error handling)
 - [ ] Define input validation models (Pydantic v2 / Zod strict)
@@ -99,11 +92,9 @@ Annotations:
 - [ ] Plan character limits and truncation (e.g., 25K token max)
 - [ ] Plan error handling strategy (auth errors, rate limits, timeouts)
 
----
+#### Phase 2: Implementation
 
-## Phase 2: Implementation
-
-### Python (FastMCP) Pattern
+Python (FastMCP) pattern:
 ```python
 from mcp.server.fastmcp import FastMCP
 from pydantic import BaseModel, Field
@@ -143,7 +134,7 @@ async def search_items(params: SearchParams) -> str:
     return format_results(data, params.format)
 ```
 
-### TypeScript (MCP SDK) Pattern
+TypeScript (MCP SDK) pattern:
 ```typescript
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
@@ -168,25 +159,24 @@ server.registerTool("search_items", {
 });
 ```
 
----
+#### Phase 3: Review & Refine
 
-## Phase 3: Review & Refine
+Quality Checklist:
 
-### Quality Checklist
 | Category | Check | Required |
 |----------|-------|----------|
-| **DRY** | No duplicated API call logic between tools | ✅ |
-| **Types** | Full type coverage (no `any` in TS, type hints in Python) | ✅ |
-| **Validation** | All inputs validated with constraints (min, max, regex) | ✅ |
-| **Errors** | All external calls wrapped with error handling | ✅ |
-| **Docs** | Every tool has description + when to use + examples | ✅ |
-| **Annotations** | readOnlyHint, destructiveHint set on all tools | ✅ |
-| **Limits** | Character limit enforced on responses | ✅ |
-| **Pagination** | Large result sets paginated or capped | ✅ |
-| **Auth** | API keys from env vars, never hardcoded | ✅ |
-| **Async** | All I/O operations use async/await | ✅ |
+| **DRY** | No duplicated API call logic between tools | Yes |
+| **Types** | Full type coverage (no `any` in TS, type hints in Python) | Yes |
+| **Validation** | All inputs validated with constraints (min, max, regex) | Yes |
+| **Errors** | All external calls wrapped with error handling | Yes |
+| **Docs** | Every tool has description + when to use + examples | Yes |
+| **Annotations** | readOnlyHint, destructiveHint set on all tools | Yes |
+| **Limits** | Character limit enforced on responses | Yes |
+| **Pagination** | Large result sets paginated or capped | Yes |
+| **Auth** | API keys from env vars, never hardcoded | Yes |
+| **Async** | All I/O operations use async/await | Yes |
 
-### Build Verification
+Build Verification:
 ```bash
 # Python
 python -m py_compile your_server.py    # Syntax check
@@ -197,14 +187,11 @@ npm run build                           # Compile
 npx tsc --noEmit                       # Type check only
 ```
 
-⚠️ **WARNING**: MCP servers are long-running processes. Never run directly in main process for testing — use evaluation harness or tmux.
+**WARNING:** MCP servers are long-running processes. Never run directly in main process for testing — use evaluation harness or tmux.
 
----
+#### Phase 4: Evaluation
 
-## Phase 4: Evaluation
-
-### Create 10 Evaluation Questions
-Each question MUST be:
+Create 10 evaluation questions. Each question MUST be:
 - **Independent**: No dependency on other questions
 - **Read-only**: Only non-destructive tools required
 - **Complex**: Requires multiple tool calls
@@ -212,7 +199,7 @@ Each question MUST be:
 - **Verifiable**: Single clear answer, string-comparable
 - **Stable**: Answer won't change over time
 
-### Evaluation File Format
+Evaluation File Format:
 ```xml
 <evaluation>
   <qa_pair>
@@ -224,9 +211,7 @@ Each question MUST be:
 </evaluation>
 ```
 
----
-
-## Tool Annotation Reference
+### Tool Annotation Reference
 
 | Annotation | Meaning | Example |
 |------------|---------|---------|
@@ -235,9 +220,7 @@ Each question MUST be:
 | `idempotentHint: true` | Repeated calls = same result | update with full payload |
 | `openWorldHint: true` | Interacts with external systems | API calls, web requests |
 
----
-
-## Anti-Patterns
+### Anti-Patterns
 
 | ❌ Don't | ✅ Do Instead |
 |----------|--------------|
@@ -250,9 +233,56 @@ Each question MUST be:
 
 ---
 
-## Constraints
+## Governance
+
+| Field | Value |
+|-------|-------|
+| Risk Level | **R2 — Supervised** (creates server code, external API integration) |
+| Autonomy | Supervised |
+| Authority | Orchestrator, Builder |
+| Phase | Implementation, Integration |
+
+---
+
+## Risk Justification
+
+- R2 classification: creates server code with external API integration, requires supervision
 - MCP server creation requires Builder or Orchestrator role (R2)
 - All external API integrations must handle rate limiting gracefully
 - Tool descriptions must be clear enough for LLM to self-select correctly
 - Evaluation must be created and pass before server is considered production-ready
 - Secrets (API keys) must NEVER be hardcoded — use environment variables
+
+---
+
+## Constraints
+
+- MCP server creation requires Builder or Orchestrator role (R2)
+- All external API integrations must handle rate limiting gracefully
+- Tool descriptions must be clear enough for LLM to self-select correctly
+- Evaluation must be created and pass before server is considered production-ready
+- Secrets (API keys) must NEVER be hardcoded — use environment variables
+
+---
+
+## Dependencies
+
+- **AGT-014** (MCP Server Connector)
+- **AGT-024** (MCP Context Isolation)
+- **AGT-025** (API Architecture)
+
+---
+
+## UAT Binding
+
+**PASS criteria:**
+- [ ] All tools have readOnlyHint/destructiveHint/idempotentHint annotations set
+- [ ] API keys sourced from environment variables, never hardcoded
+- [ ] 10-question evaluation file created and passing before production use
+- [ ] All external calls wrapped with error handling and rate-limit backoff
+
+**FAIL criteria:**
+- [ ] Hardcoded API key or secret found in server code
+- [ ] Tool missing required annotations
+- [ ] Server deployed to production without a passing evaluation
+- [ ] Raw API JSON returned to the LLM without formatting

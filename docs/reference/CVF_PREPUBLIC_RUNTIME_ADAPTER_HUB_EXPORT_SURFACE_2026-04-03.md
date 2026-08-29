@@ -35,6 +35,24 @@ Explicit subpaths currently allowed:
 - `READY_FOR_EXPORT` uplift
 - public package publication
 
+## Isolation Guarantee Claim Boundary (RFR-R5 / F9)
+
+`WorkerThreadSandboxAdapter` (`./adapters`) declares
+`WORKER_THREAD_GUARANTEE_PROFILE`: every one of the eight canonical isolation
+dimensions (`filesystem`, `network`, `process`, `environment`, `credential`,
+`ipc`, `persistence`, `host`) is `false`. Node `worker_threads` share the host
+process's memory space, filesystem access, and network stack; they are not a
+security boundary for any of these dimensions. `SandboxIsolationContract`
+(Safety Runtime) evaluates a caller's `isolationRequirement` against this
+profile before the adapter, worker, or child process is ever created, so a
+`SECURITY_BOUNDARY_REQUIRED` requirement can never select this adapter; only
+an explicit `BEST_EFFORT_EXPLICIT` requirement with zero required dimensions
+may execute on `worker_threads`, and the resulting admission evidence never
+describes that execution as a guaranteed containment boundary. This package's
+export surface makes no physical-isolation, container, or production-security
+claim for `worker_threads`; a real security boundary requires a different
+platform (`docker`, `v8_isolate`) behind the same `SandboxExecutor` interface.
+
 ## Packet Consequences
 
 - package now has a real canonical root barrel

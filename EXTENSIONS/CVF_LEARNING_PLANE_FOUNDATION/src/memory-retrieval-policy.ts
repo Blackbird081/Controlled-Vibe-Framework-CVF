@@ -51,6 +51,15 @@ export interface MemoryRetrievalResult {
 
 const BLOCKED_STATES = new Set(["expired", "disputed"]);
 
+export const INVALID_AUDIT_TRUST_REASON = "invalid_audit_trust";
+
+// EAFR-R5 admission rule: auditTrust is bounded ranking metadata only. A candidate
+// may enter a selected evidence set only when its trust is a finite number inside
+// the closed interval [0,1]. Invalid trust is excluded, never clamped or coerced.
+export function isValidAuditTrust(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 1;
+}
+
 function graphConfidenceToAuditTrust(confidence: GraphNode["confidence"]): number {
   if (confidence === "high") return 0.95;
   if (confidence === "medium") return 0.75;
@@ -146,6 +155,8 @@ export function evaluateRetrievalRequest(
         const candidate = kgrNodeToMemoryCandidate(node, request.scope);
         if (BLOCKED_STATES.has(candidate.lifecycleState)) {
           excluded.push({ id: candidate.id, reason: candidate.lifecycleState });
+        } else if (!isValidAuditTrust(candidate.auditTrust)) {
+          excluded.push({ id: candidate.id, reason: INVALID_AUDIT_TRUST_REASON });
         } else {
           selected.push(candidate);
         }
@@ -183,7 +194,7 @@ export function evaluateRetrievalRequest(
       targetSymbols,
       maxDepth: 1,
     });
-    const selected = [...graphResult.resolvedNodes]
+    const graphCandidates = [...graphResult.resolvedNodes]
       .sort((a, b) => {
         const aExact = targetSymbols.includes(a.name) ? 0 : 1;
         const bExact = targetSymbols.includes(b.name) ? 0 : 1;
@@ -194,26 +205,38 @@ export function evaluateRetrievalRequest(
       })
       .map((node) => graphNodeToMemoryCandidate(node, request.scope));
 
+    const graphExcluded: { id: string; reason: string }[] = [];
+    const selected = graphCandidates.filter((candidate) => {
+      if (!isValidAuditTrust(candidate.auditTrust)) {
+        graphExcluded.push({ id: candidate.id, reason: INVALID_AUDIT_TRUST_REASON });
+        return false;
+      }
+      return true;
+    });
+
     return {
       contractVersion: MEMORY_RETRIEVAL_POLICY_VERSION,
       method: request.method,
       status: "allowed",
       reason: "graph_search_policy_applied_advisory_only",
       selected: selected.slice(0, request.maxResults ?? 5),
-      excluded: request.candidates
-        .filter((candidate) =>
-          candidate.scope !== request.scope ||
-          candidate.containsSecret === true ||
-          BLOCKED_STATES.has(candidate.lifecycleState)
-        )
-        .map((candidate) => ({
-          id: candidate.id,
-          reason: candidate.scope !== request.scope
-            ? "out_of_scope"
-            : candidate.containsSecret === true
-              ? "privacy_filtered"
-              : candidate.lifecycleState,
-        })),
+      excluded: [
+        ...request.candidates
+          .filter((candidate) =>
+            candidate.scope !== request.scope ||
+            candidate.containsSecret === true ||
+            BLOCKED_STATES.has(candidate.lifecycleState)
+          )
+          .map((candidate) => ({
+            id: candidate.id,
+            reason: candidate.scope !== request.scope
+              ? "out_of_scope"
+              : candidate.containsSecret === true
+                ? "privacy_filtered"
+                : candidate.lifecycleState,
+          })),
+        ...graphExcluded,
+      ],
       rawMemoryReleased: false,
     };
   }
@@ -231,6 +254,11 @@ export function evaluateRetrievalRequest(
     }
     if (BLOCKED_STATES.has(candidate.lifecycleState)) {
       excluded.push({ id: candidate.id, reason: candidate.lifecycleState });
+      return false;
+    }
+    // EAFR-R5 admission rule: invalid trust never reaches relevance, ranking, or packaging.
+    if (!isValidAuditTrust(candidate.auditTrust)) {
+      excluded.push({ id: candidate.id, reason: INVALID_AUDIT_TRUST_REASON });
       return false;
     }
     if ((request.method === "keyword" || request.method === "semantic") &&

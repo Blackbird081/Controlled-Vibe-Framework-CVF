@@ -1,4 +1,5 @@
 # USR-028: Interview Evaluation
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Hr Operations

@@ -5,6 +5,12 @@ import type { RoutingRequest } from "./routing-policy";
 
 export const UNIFIED_GATEWAY_INTERFACE_CONTRACT_VERSION = "cvf.unifiedGatewayInterface.v1" as const;
 
+/** Truthful bridge-level disposition; absence of a manifest is never implicit. */
+export type GatewayMaterialContextManifestDisposition =
+  | "attached"
+  | "invalid"
+  | "not_built_precondition_stopped";
+
 export type GatewayErrorClass =
   | "policy_denied"
   | "no_candidate"

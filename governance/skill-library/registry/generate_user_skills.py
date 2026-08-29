@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 """
 Generate governance registry files for v1.5.2 user skills.
 Each .gov.md file is a lightweight governance metadata record.
@@ -142,6 +143,7 @@ def render_gov_content(record: SkillRecord) -> str:
 
     header = (
         f"# USR-{record.skill_id:03d}: {record.skill_name}\n"
+        "Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.\n"
         "\n"
         "> **Type:** User Skill\n"
         f"> **Domain:** {record.domain.replace('_', ' ').title()}\n"
@@ -188,6 +190,7 @@ def render_index_content(records: List[SkillRecord]) -> str:
     """Render the exact INDEX.md content for the given (ordered) records."""
     index_content = (
         "# User Skills Registry Index\n"
+        "Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.\n"
         "\n"
         f"> **Total Skills:** {len(records)}\n"
         "> **Generated:** Auto-generated from v1.5.2 SKILL_LIBRARY\n"

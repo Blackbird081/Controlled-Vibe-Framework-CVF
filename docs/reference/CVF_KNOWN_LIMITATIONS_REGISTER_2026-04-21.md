@@ -122,7 +122,7 @@ Classification key:
 
 ## How to Use This Register
 
-**For demo preparation:** acknowledge open gaps proactively; do not wait for them to be discovered. Be explicit that Alibaba and DeepSeek are certified while other providers remain experimental until canary-run. L-003 and L-008 are now closed.
+**For demo preparation:** acknowledge open gaps proactively; do not wait for them to be discovered. Be explicit that DeepSeek is certified, that Alibaba's current `qwen-flash` target is experimental pending fresh live proof, and that other providers remain experimental until canary-run. L-003 and L-008 are now closed.
 
 **For agent handoff:** cite this register when scoping the next wave. Closed items such as L-003 and L-008 must not be reopened unless fresh evidence shows new drift.
 

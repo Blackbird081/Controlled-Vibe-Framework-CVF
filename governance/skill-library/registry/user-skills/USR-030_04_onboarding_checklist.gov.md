@@ -1,4 +1,5 @@
 # USR-030: Onboarding Checklist
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Hr Operations

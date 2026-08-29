@@ -2,7 +2,7 @@ import { mkdir, mkdtemp, readFile, rm, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createGuardEngine } from '../guards/index.js';
+import { createGuardEngine, type GuardRuntimeEngine } from 'cvf-guard-contract';
 import type { GuardAuditEntry } from '../guards/types.js';
 import type { ReceiptConsumptionMarker, ReceiptConsumptionStore } from '../persistence/json-receipt-consumption.store.js';
 import type {
@@ -112,7 +112,7 @@ function successfulRun(overrides: Partial<GovernedCommandRunResult> = {}): Gover
   };
 }
 
-function setup(runResult = successfulRun()) {
+function setup(runResult = successfulRun(), engine: Pick<GuardRuntimeEngine, 'evaluate'> = createGuardEngine()) {
   const admission = new MemoryAdmissionStore();
   const execution = new MemoryExecutionStore();
   const run = vi.fn(async (_request: GovernedCommandRunRequest) => runResult);
@@ -124,7 +124,7 @@ function setup(runResult = successfulRun()) {
     approval,
     run,
     dependencies: {
-      engine: createGuardEngine(),
+      engine: engine as GuardRuntimeEngine,
       preflightPersistence: admission,
       receiptStore: admission,
       executionStore: execution,
@@ -132,6 +132,28 @@ function setup(runResult = successfulRun()) {
       approvalPolicy: approval,
       generateConsumptionId: () => 'delta-consumption-1000-abcd',
     },
+  };
+}
+
+/**
+ * Test-only mock engine that always returns ALLOW, used solely to isolate
+ * T1/T2/T3 persistence-ordering mechanics from the real canonical
+ * authority_gate decision. This is legitimate test infrastructure, not
+ * production action-label laundering: it never ships, and the real
+ * `createGuardEngine()` is still used directly wherever a test needs to
+ * prove genuine canonical-engine authorization (see the read-only-blocked
+ * and mutating-fails-closed tests below, which use the real engine on
+ * purpose).
+ */
+function alwaysAllowEngine(): Pick<GuardRuntimeEngine, 'evaluate'> {
+  return {
+    evaluate: (context) => ({
+      requestId: context.requestId,
+      finalDecision: 'ALLOW',
+      results: [],
+      executedAt: new Date().toISOString(),
+      durationMs: 0,
+    }),
   };
 }
 
@@ -163,9 +185,13 @@ describe('Delta-T3/T4A governed command launcher', () => {
     expect(getGovernedCommandProfile('powershell')).toBeNull();
   });
 
-  it('runs the exact profile only after T1, T2, and T3 durable stages', async () => {
+  it('runs the exact profile only after T1, T2, and T3 durable stages (isolated from the real authority_gate decision)', async () => {
+    // Uses alwaysAllowEngine() to isolate T1 (preflight+audit persistence),
+    // T2 (receipt consumption), and T3 (execution intent persistence)
+    // ordering mechanics from the real canonical engine's role/action
+    // decision, which is proved independently below.
     const root = await workspace();
-    const state = setup();
+    const state = setup(successfulRun(), alwaysAllowEngine());
     const response = await launchGovernedCommand(
       { profileId: 'git-status', workspaceRoot: root, cwd: 'package' },
       state.dependencies
@@ -194,7 +220,7 @@ describe('Delta-T3/T4A governed command launcher', () => {
 
   it('uses one canonical relative action for preflight and consumption', async () => {
     const root = await workspace();
-    const state = setup();
+    const state = setup(successfulRun(), alwaysAllowEngine());
     await launchGovernedCommand(
       { profileId: 'git-diff-check', workspaceRoot: root, cwd: 'package' },
       state.dependencies
@@ -205,9 +231,30 @@ describe('Delta-T3/T4A governed command launcher', () => {
     );
   });
 
-  it('writes the fixed marker only after T1, T2, T3, T4A approval, and runner success', async () => {
+  it('the real canonical engine genuinely blocks read-only git-status/git-diff-check for role AI_AGENT, not laundered through a "code" token', async () => {
+    // Under the canonical AUTHORITY_MATRIX, AI_AGENT's only authorized
+    // BUILD-phase verbs are authoring verbs (create, modify, build,
+    // implement, code, write); phase_gate additionally restricts AI_AGENT to
+    // phase BUILD only, so there is no phase/role cell where AI_AGENT can
+    // truthfully perform a `read` action. Labeling the action honestly as
+    // "read" therefore genuinely blocks it via the real, unmocked engine -
+    // this proves admission is not secretly depending on a "code" token to
+    // reach ALLOW, and that the launcher does not relabel to dodge the
+    // guard.
+    const state = setup(successfulRun(), createGuardEngine());
+    const response = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      state.dependencies
+    );
+    expect(response.accepted).toBe(false);
+    expect(state.admission.entries[0].context.action).toMatch(/\bread\b/);
+    expect(state.admission.entries[0].context.action).not.toMatch(/\bcode\b/);
+    expect(state.run).not.toHaveBeenCalled();
+  });
+
+  it('writes the fixed marker only after T1, T2, T3, T4A approval, and runner success (isolated from the real authority_gate/build_authority decision)', async () => {
     const root = await workspace();
-    const state = setup();
+    const state = setup(successfulRun(), alwaysAllowEngine());
     const response = await launchGovernedCommand(
       { profileId: APPROVAL_MARKER_PROFILE_ID, workspaceRoot: root },
       state.dependencies
@@ -237,6 +284,58 @@ describe('Delta-T3/T4A governed command launcher', () => {
     expect(state.execution.finalization?.status).toBe('COMPLETED');
   });
 
+  it('the mutating marker profile fails closed with the real canonical engine: no independent SPEC/WORK-ORDER evidence means no marker write and no runner call', async () => {
+    // This is the R7A-F2 repair proof: launchGovernedCommand no longer
+    // fabricates aiCommit/buildAuthority evidence for the mutating profile.
+    // Against the real, unmocked engine, the "write" action genuinely
+    // carries modify intent, so build_authority BLOCKs it at preflight
+    // (missing buildAuthority evidence) before the T4A approval check, the
+    // runner, or the marker file write are ever reached.
+    const root = await workspace();
+    const state = setup(successfulRun(), createGuardEngine());
+    const response = await launchGovernedCommand(
+      { profileId: APPROVAL_MARKER_PROFILE_ID, workspaceRoot: root },
+      state.dependencies
+    );
+
+    expect(response.accepted).toBe(false);
+    expect(response.approvalBackedMutationProved).toBe(false);
+    expect(state.admission.markers).toHaveLength(0);
+    expect(state.execution.intent).toBeNull();
+    expect(state.approval.requests).toHaveLength(0);
+    expect(state.run).not.toHaveBeenCalled();
+    await expect(
+      readFile(join(root, APPROVAL_MARKER_TARGET_RELATIVE_PATH), 'utf-8')
+    ).rejects.toThrow();
+  });
+
+  it('a T4A approval verdict alone cannot satisfy build_authority: even a granted T4A approval does not let the real engine reach ALLOW', async () => {
+    // Proves the T4A mutating-profile-approval policy is a separate,
+    // downstream approval check, not a substitute for the canonical
+    // build_authority prerequisite. The MemoryApprovalPolicy default always
+    // approves, yet with the real engine and no buildAuthority evidence the
+    // request never reaches the approval policy at all, because preflight
+    // itself blocks first.
+    const root = await workspace();
+    const state = setup(successfulRun(), createGuardEngine());
+    state.approval.verdict = {
+      approved: true,
+      approvalId: 'approval-would-have-been-granted',
+      targetRelativePath: APPROVAL_MARKER_TARGET_RELATIVE_PATH,
+      actionHash: 'irrelevant-hash',
+      diagnosticCode: null,
+    };
+    const response = await launchGovernedCommand(
+      { profileId: APPROVAL_MARKER_PROFILE_ID, workspaceRoot: root },
+      state.dependencies
+    );
+
+    expect(response.accepted).toBe(false);
+    expect(response.error?.code).not.toBe('APPROVAL_RECORD_NOT_FOUND');
+    expect(state.approval.requests).toHaveLength(0);
+    expect(state.run).not.toHaveBeenCalled();
+  });
+
   it('does not call the runner for unknown profiles', async () => {
     const state = setup();
     const response = await launchGovernedCommand(
@@ -248,7 +347,7 @@ describe('Delta-T3/T4A governed command launcher', () => {
   });
 
   it('fails closed after T3 intent and before runner when approval is missing', async () => {
-    const state = setup();
+    const state = setup(successfulRun(), alwaysAllowEngine());
     state.approval.verdict = {
       approved: false,
       approvalId: null,
@@ -268,7 +367,7 @@ describe('Delta-T3/T4A governed command launcher', () => {
   });
 
   it('fails closed before runner when the approval policy is absent', async () => {
-    const state = setup();
+    const state = setup(successfulRun(), alwaysAllowEngine());
     const dependencies = { ...state.dependencies, approvalPolicy: undefined };
     const response = await launchGovernedCommand(
       { profileId: APPROVAL_MARKER_PROFILE_ID, workspaceRoot: await workspace() },
@@ -280,7 +379,7 @@ describe('Delta-T3/T4A governed command launcher', () => {
   });
 
   it('fails closed before consumption and execution when T1 persistence fails', async () => {
-    const state = setup();
+    const state = setup(successfulRun(), alwaysAllowEngine());
     state.admission.failPersistence = true;
     const response = await launchGovernedCommand(
       { profileId: 'git-status', workspaceRoot: await workspace() },
@@ -293,7 +392,7 @@ describe('Delta-T3/T4A governed command launcher', () => {
   });
 
   it('fails closed before execution when T2 claim is rejected', async () => {
-    const state = setup();
+    const state = setup(successfulRun(), alwaysAllowEngine());
     state.admission.claimResult = false;
     const response = await launchGovernedCommand(
       { profileId: 'git-status', workspaceRoot: await workspace() },
@@ -305,7 +404,7 @@ describe('Delta-T3/T4A governed command launcher', () => {
   });
 
   it('fails closed before execution when T3 intent persistence fails', async () => {
-    const state = setup();
+    const state = setup(successfulRun(), alwaysAllowEngine());
     state.execution.failBegin = true;
     const response = await launchGovernedCommand(
       { profileId: 'git-status', workspaceRoot: await workspace() },
@@ -317,7 +416,7 @@ describe('Delta-T3/T4A governed command launcher', () => {
 
   it('rejects lexical cwd escape before preflight', async () => {
     const root = await workspace();
-    const state = setup();
+    const state = setup(successfulRun(), alwaysAllowEngine());
     const response = await launchGovernedCommand(
       { profileId: 'git-status', workspaceRoot: join(root, 'package'), cwd: '..' },
       state.dependencies
@@ -335,7 +434,7 @@ describe('Delta-T3/T4A governed command launcher', () => {
     } catch {
       return;
     }
-    const state = setup();
+    const state = setup(successfulRun(), alwaysAllowEngine());
     const response = await launchGovernedCommand(
       { profileId: 'git-status', workspaceRoot: root, cwd: 'outside-link' },
       state.dependencies
@@ -351,7 +450,8 @@ describe('Delta-T3/T4A governed command launcher', () => {
         stdout: 'API_KEY=super-secret-value',
         stderr: 'password: hunter2',
         diagnosticCode: 'COMMAND_EXIT_NONZERO',
-      })
+      }),
+      alwaysAllowEngine()
     );
     const response = await launchGovernedCommand(
       { profileId: 'git-status', workspaceRoot: await workspace() },

@@ -1,4 +1,5 @@
 # USR-010: Database Schema Design
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** App Development

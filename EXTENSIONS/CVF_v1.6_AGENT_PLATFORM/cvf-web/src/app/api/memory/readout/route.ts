@@ -52,6 +52,13 @@ const allowedLifecycleStates = new Set<MemoryRuntimeReadoutBody['candidates'][nu
   'expired',
   'disputed',
 ]);
+// EAFR-R5 admission rule: candidate auditTrust is bounded ranking metadata only and must be
+// a finite number inside the closed interval [0,1] before any workflow projection is built.
+// Malformed or out-of-range trust rejects the whole request; it is never clamped or coerced.
+function isValidAuditTrust(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 1;
+}
+
 const allowedPolicies = new Set<MemoryRuntimeReadoutBody['policyDecision']>([
   'allow',
   'allow_limited',
@@ -87,7 +94,7 @@ function validateBody(raw: unknown): MemoryRuntimeReadoutBody | null {
       typeof cand.scope !== 'string' ||
       typeof cand.summary !== 'string' ||
       typeof cand.createdAt !== 'number' ||
-      typeof cand.auditTrust !== 'number' ||
+      !isValidAuditTrust(cand.auditTrust) ||
       typeof cand.lifecycleState !== 'string' ||
       !allowedLifecycleStates.has(cand.lifecycleState as MemoryRuntimeReadoutBody['candidates'][number]['lifecycleState'])
     ) return null;

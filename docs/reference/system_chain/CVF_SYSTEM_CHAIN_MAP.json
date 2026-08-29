@@ -5,7 +5,7 @@
   "sourceAuditEvidence": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_EVIDENCE_2026-07-10.json",
   "reviewerCompletion": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md",
   "reviewerCompletionMaterialCommit": "645df8b83",
-  "lastVerifiedDate": "2026-08-17",
+  "lastVerifiedDate": "2026-08-25",
   "maxAgeDays": 30,
   "reminderPolicy": "This machine map and its human companion record reviewer-accepted MSEA-R90 Audit A findings. Source-file drift and review age are detected automatically by governance/compat/check_system_chain_map_freshness.py. Detecting drift or age expiry never rewrites a lane's currentPosture or verdict automatically; only a fresh governed review may change those fields.",
   "lanes": [
@@ -30,7 +30,7 @@
         },
         {
           "path": "ARCHITECTURE.md",
-          "sha256": "0bd351c1d2ba6d769f9370d429d15b48e000ce0b3ee4bec747570a739dd890e2",
+          "sha256": "90c861768b39cc00517e06399a1e6305c1e71725834b78ea8ac4a30721862d70",
           "evidenceRole": "non-doctrine master-architecture narration, including the bounded SOT3 knowledge-authority path"
         },
         {
@@ -62,8 +62,8 @@
       "currentPosture": "PARTIAL",
       "verdict": "PARTIAL_RUNTIME_CONNECTION_FULL_INVENTORY",
       "implementedBy": "EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/phase-gate.guard.ts (GC-001); EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts (GC-009); EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts (GC-011)",
-      "invokedBy": "GC-001 invoked at EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts:122; GC-009 invoked by the cvf-web execute route through route-guard-gateway.ts and MandatoryGateway.checkContext with accepted bounded local T2 proof; GC-010 has no accepted production caller or package export; GC-011 invoked at EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts:132",
-      "testedBy": "MSEA-R94-T0 inventoried all 50 rows. GC-009 T1 adds 15 mandatory-gateway tests plus cvf-web singleton, adapter, audit-projection, fail-closed, and existing route coverage; T2 adds 2/2 actual-POST invocation cases, with 33/33 combined route and 20/20 T1 regression results. Twelve other invoked rows remain bounded without standalone tests.",
+      "invokedBy": "GC-001 invoked at EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts:387; GC-009 invoked by the cvf-web execute route through route-guard-gateway.ts and MandatoryGateway.checkContext with accepted bounded local T2 proof; GC-010 has no accepted production caller or package export; GC-011 invoked at EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts:132",
+      "testedBy": "MSEA-R94-T0 inventoried all 50 rows. GC-009 T1 adds 15 mandatory-gateway tests plus cvf-web singleton, adapter, audit-projection, fail-closed, and existing route coverage; T2 adds 2/2 actual-POST invocation cases, with 33/33 combined route and 20/20 T1 regression results. RFR-R2 hardens GC-001 with defensive registered-guard-reference immutability (F2) and GC-009 with a defensively frozen immutable bootstrap configuration plus exact canonical whole-value bypass matching (F3-F4); bounded reviewer repair makes malformed actions BLOCK without engine execution. Focused proof is 62/62 (src/index.test.ts plus src/runtime/mandatory-gateway.test.ts); final full-package proof is recorded by the RFR-R2 completion review. Twelve other invoked rows remain bounded without standalone tests.",
       "evidenceOwner": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
       "operatorSurface": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/governance (Web governance dashboard route, confirmed present)",
       "knownGaps": "GC-009 has accepted bounded local invocation proof but no live-provider or production-readiness proof. GC-010 remains without a production caller or active package export. Their paired gap remains open for GC-010; GC-019 and GC-046 remain contract-only with reason.",
@@ -81,18 +81,18 @@
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts",
-          "sha256": "8ccb4473b295ec4440fda22d80440ce5a46963c64fce636bbaec7bae6fb265e4",
+          "sha256": "c9e251414eefccc9add8ab08796add3f3fafe0439d1a8af3e4e4689f2c9d8c5f",
           "evidenceRole": "GC-001 real production caller (registerGuard) and GC-009 package barrel export"
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
-          "sha256": "12e513c836f1fd258417be2d9ced2424df6926210a10b02bce0e88fb9235c204",
-          "evidenceRole": "GC-009 cited implementation with context-preserving checkContext"
+          "sha256": "1415340eff20b284461bc895a00115acb2ac185152eafd79a32b2561c707d617",
+          "evidenceRole": "GC-009 cited implementation with context-preserving checkContext, RFR-R2 frozen bootstrap configuration, exact canonical bypass matching, and malformed-action fail-closed admission"
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
-          "sha256": "6f9519ea039500272cb52d08454bc0ed77b8c952315c062b8b7faa3592116201",
-          "evidenceRole": "GC-009 cited test with checkContext coverage, valid source pairing"
+          "sha256": "cc3677547b58bdb929b6fb6cf17371c4573395722eec81e3c529a55e5c021e04",
+          "evidenceRole": "GC-009 cited test with checkContext coverage, valid source pairing, and RFR-R2 F3-F4 adversarial matrix including zero-engine malformed-action rejection"
         },
         {
           "path": "EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts",
@@ -106,8 +106,8 @@
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/index.test.ts",
-          "sha256": "65dc42971b52e66098b7d36bf07ec3b630e2e33d5673ef782611a14cf0fe8c05",
-          "evidenceRole": "direct contract tests for GC-001 through GC-008 guard implementations"
+          "sha256": "5a9fc09fe3653b419a29ecf785c2d4b87641da2652eb904164dae9614b11cbb8",
+          "evidenceRole": "direct contract tests for canonical shared guard composition, including build_authority and RFR-R2 F2 registered-guard immutability"
         },
         {
           "path": "EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/pipeline.orchestrator.test.ts",
@@ -132,7 +132,7 @@
       "sourceFingerprints": [
         {
           "path": ".github/workflows/documentation-testing.yml",
-          "sha256": "860c72611a9f830b46c056f0e6ce1d347ad480928e953e52fc1e0e52741a92ed",
+          "sha256": "26d0ab30e1b7a31c41ec57734a0dde2944d25ede62e2c867d6e66e033025efe7",
           "evidenceRole": "CI job invoking the conformance runner"
         },
         {

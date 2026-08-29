@@ -428,22 +428,28 @@ describe('AuditTrailGuard', () => {
 // ═══════════════════════════════════════════════════════════════════════
 
 describe('createWebGuardEngine', () => {
-  test('creates engine with 8 guards', () => {
+  // The Guard Contract SDK registers nine guards in createGuardEngine():
+  // AiCommit, PhaseGate, RiskGate, AuthorityGate, BuildAuthority, MutationBudget,
+  // FileScope, Scope and AuditTrail. BuildAuthorityGuard is mandatory and is
+  // asserted as present by its own SDK test, so nine is the verified count.
+  const EXPECTED_WEB_GUARD_COUNT = 9;
+
+  test('creates engine with the full registered guard set', () => {
     const engine = createWebGuardEngine();
-    expect(engine.getGuardCount()).toBe(8);
+    expect(engine.getGuardCount()).toBe(EXPECTED_WEB_GUARD_COUNT);
   });
 
   test('all guards have unique IDs', () => {
     const engine = createWebGuardEngine();
     const ids = engine.getRegisteredGuards().map((g) => g.id);
-    expect(new Set(ids).size).toBe(8);
+    expect(new Set(ids).size).toBe(EXPECTED_WEB_GUARD_COUNT);
   });
 
   test('full pipeline ALLOW for safe HUMAN request', () => {
     const engine = createWebGuardEngine();
     const result = engine.evaluate(ctx({ phase: 'INTAKE', action: 'analyze request' }));
     expect(result.finalDecision).toBe('ALLOW');
-    expect(result.results).toHaveLength(8);
+    expect(result.results).toHaveLength(EXPECTED_WEB_GUARD_COUNT);
   });
 
   test('full pipeline BLOCK for AI in DISCOVERY', () => {

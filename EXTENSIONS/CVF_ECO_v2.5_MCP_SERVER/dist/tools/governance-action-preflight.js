@@ -137,7 +137,12 @@ export async function preflightGovernanceAction(input, engine, persistence) {
         mutationCount: input.mutationCount,
         traceHash: input.traceHash,
         scope: input.scope,
-        metadata: { actionClass, contract: PREFLIGHT_CONTRACT },
+        metadata: {
+            actionClass,
+            contract: PREFLIGHT_CONTRACT,
+            ...(input.aiCommit ? { ai_commit: input.aiCommit } : {}),
+        },
+        buildAuthority: input.buildAuthority,
     };
     const pipelineResult = engine.evaluate(context);
     const decision = pipelineResult.finalDecision;

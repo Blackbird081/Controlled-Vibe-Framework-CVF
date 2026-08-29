@@ -488,6 +488,120 @@ describe("ProviderExecutionBridge", () => {
       expect(quotaIdx).toBeLessThan(adapterIdx);
     });
   });
+  describe("material context manifest binding", () => {
+    it("binds a manifest to the successful response and receipt call order precedes the adapter", async () => {
+      const callOrder: string[] = [];
+      const adapter = makeMockAdapter();
+      adapter.execute.mockImplementation(async () => {
+        callOrder.push("adapter.execute");
+        return { text: "test", usage: { inputTokens: 1, outputTokens: 1 } };
+      });
+      const options = makeBridgeOptions({
+        adapters: new Map([[TEST_PROVIDER_ID, adapter]]),
+      });
+      const bridge = new ProviderExecutionBridge(options);
+      const result = await bridge.execute(makeRequest());
+      expect(result.materialContextManifest).toBeDefined();
+      expect(result.materialContextManifest!.traceId).toBe(TEST_TRACE_ID);
+      expect(result.materialContextManifest!.selectedProviderId).toBe(TEST_PROVIDER_ID);
+      expect(result.materialContextManifest!.selectedModelId).toBe(TEST_MODEL_ID);
+      expect(result.materialContextManifestDisposition).toBe("attached");
+      expect(result.receipt.metadata.materialContextManifestDigest).toBe(
+        result.materialContextManifest!.manifestDigest,
+      );
+      expect(result.receipt.traceId).toBe(result.materialContextManifest!.traceId);
+      expect(result.receipt.providerId).toBe(result.materialContextManifest!.selectedProviderId);
+      expect(result.receipt.selectedModelId).toBe(result.materialContextManifest!.selectedModelId);
+      const classes = result.materialContextManifest!.entries.map((e) => e.contextClass).sort();
+      expect(classes).toEqual(["metadata", "policy", "prompt", "routing", "systemPrompt"]);
+      expect(adapter.execute).toHaveBeenCalledTimes(1);
+    });
+    it("attaches a manifest to a shielded adapter-throw error result", async () => {
+      const adapter = makeMockAdapter();
+      adapter.execute.mockRejectedValueOnce(new Error("boom"));
+      const options = makeBridgeOptions({
+        adapters: new Map([[TEST_PROVIDER_ID, adapter]]),
+      });
+      const bridge = new ProviderExecutionBridge(options);
+      const result = await bridge.execute(makeRequest());
+      expect(result.error).toBeDefined();
+      expect(result.materialContextManifest).toBeDefined();
+      expect(result.materialContextManifest!.traceId).toBe(TEST_TRACE_ID);
+      expect(result.materialContextManifestDisposition).toBe("attached");
+      expect(result.receipt.metadata.materialContextManifestDigest).toBe(
+        result.materialContextManifest!.manifestDigest,
+      );
+    });
+    it("does not build or attach a manifest for a routing-stopped request, and never calls the adapter", async () => {
+      const adapter = makeMockAdapter();
+      const options = makeBridgeOptions({
+        adapters: new Map([[TEST_PROVIDER_ID, adapter]]),
+      });
+      const bridge = new ProviderExecutionBridge(options);
+      const request = makeRequest({
+        policy: {
+          traceId: TEST_TRACE_ID,
+          policyResult: "deny",
+          reason: "test_denied",
+        },
+      });
+      const result = await bridge.execute(request);
+      expect(result.materialContextManifest).toBeUndefined();
+      expect(result.materialContextManifestDisposition).toBe("not_built_precondition_stopped");
+      expect(result.receipt.metadata.materialContextManifestDisposition).toBe(
+        "not_built_precondition_stopped",
+      );
+      expect(adapter.execute).not.toHaveBeenCalled();
+    });
+    it("rejects a request whose canonicalization is hostile before the adapter is ever called", async () => {
+      const adapter = makeMockAdapter();
+      const options = makeBridgeOptions({
+        adapters: new Map([[TEST_PROVIDER_ID, adapter]]),
+      });
+      const bridge = new ProviderExecutionBridge(options);
+      const cyclic: Record<string, unknown> = {};
+      cyclic.self = cyclic;
+      const request = makeRequest({ metadata: cyclic });
+      const result = await bridge.execute(request);
+      expect(result.error).toBeDefined();
+      expect(result.error!.errorClass).toBe("invalid_request");
+      expect(result.error!.credentialShielded).toBe(true);
+      expect(result.receipt.validationState).toBe("failed");
+      expect(result.response).toBeUndefined();
+      expect(result.materialContextManifestDisposition).toBe("invalid");
+      expect(result.receipt.metadata.materialContextManifestDisposition).toBe("invalid");
+      expect(adapter.execute).not.toHaveBeenCalled();
+    });
+    it("rejects a request carrying a raw credential-like metadata key before the adapter is ever called", async () => {
+      const adapter = makeMockAdapter();
+      const options = makeBridgeOptions({
+        adapters: new Map([[TEST_PROVIDER_ID, adapter]]),
+      });
+      const bridge = new ProviderExecutionBridge(options);
+      const request = makeRequest({ metadata: { apiKey: "sk-should-never-cross-the-bridge" } });
+      const result = await bridge.execute(request);
+      expect(result.error).toBeDefined();
+      expect(result.error!.errorClass).toBe("invalid_request");
+      expect(result.materialContextManifestDisposition).toBe("invalid");
+      expect(adapter.execute).not.toHaveBeenCalled();
+      const serialized = JSON.stringify(result);
+      expect(serialized).not.toContain("sk-should-never-cross-the-bridge");
+    });
+    it("manifest never contains raw prompt, systemPrompt, or metadata material in a successful response", async () => {
+      const secretPrompt = "the exact raw prompt text";
+      const adapter = makeMockAdapter();
+      const options = makeBridgeOptions({
+        adapters: new Map([[TEST_PROVIDER_ID, adapter]]),
+      });
+      const bridge = new ProviderExecutionBridge(options);
+      const result = await bridge.execute(
+        makeRequest({ prompt: secretPrompt, systemPrompt: "the exact raw system prompt" }),
+      );
+      const serialized = JSON.stringify(result.materialContextManifest);
+      expect(serialized).not.toContain(secretPrompt);
+      expect(serialized).not.toContain("the exact raw system prompt");
+    });
+  });
   describe("negative source assertions", () => {
     it("bridge source does not reference concrete adapters or network", async () => {
       const fs = await import("node:fs");

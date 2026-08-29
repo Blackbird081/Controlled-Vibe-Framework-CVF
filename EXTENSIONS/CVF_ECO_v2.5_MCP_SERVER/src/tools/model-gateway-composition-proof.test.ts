@@ -5,6 +5,7 @@ import {
   MODEL_GATEWAY_EXECUTE_TOOL,
   type ModelGatewayExecutorPort,
 } from './model-gateway-execute';
+import { createGuardEngine } from 'cvf-guard-contract';
 import { CredentialBoundary, type CredentialReference } from '../../../CVF_MODEL_GATEWAY/src/credential-boundary';
 import { GatewayReceiptBuilder } from '../../../CVF_MODEL_GATEWAY/src/gateway-receipt';
 import { ProviderHealthMonitor } from '../../../CVF_MODEL_GATEWAY/src/provider-health';
@@ -24,12 +25,36 @@ const VALID_INPUT = {
   traceId: TRACE_ID,
   prompt: 'Execute through the bounded composition proof.',
   agentRole: 'AI_AGENT',
-  policyResult: 'allow' as const,
   preferredProviderId: PROVIDER_ID,
   requestedModelId: MODEL_ID,
   estimatedTokens: 42,
   metadata: { proof: 'mcp-model-gateway-composition' },
 };
+
+function allowAdmission() {
+  return {
+    evaluate: vi.fn((context: { requestId: string }) => ({
+      requestId: context.requestId,
+      finalDecision: 'ALLOW' as const,
+      results: [],
+      executedAt: new Date().toISOString(),
+      durationMs: 1,
+    })),
+  };
+}
+
+function blockAdmission(blockedBy = 'mock_guard') {
+  return {
+    evaluate: vi.fn((context: { requestId: string }) => ({
+      requestId: context.requestId,
+      finalDecision: 'BLOCK' as const,
+      results: [],
+      executedAt: new Date().toISOString(),
+      durationMs: 1,
+      blockedBy,
+    })),
+  };
+}
 
 function makeCredentialRef(): CredentialReference {
   return {
@@ -88,9 +113,10 @@ function makeCompositionExecutor(adapterExecute = vi.fn(async () => ({
 }
 
 describe('MCP to Model Gateway composition proof', () => {
-  it('passes MCP input through the injected Model Gateway bridge and returns receipt evidence', async () => {
+  it('passes MCP input through the injected Model Gateway bridge only after a native ALLOW, and returns receipt evidence', async () => {
     const { executor, adapterExecute } = makeCompositionExecutor();
-    const result = await executeModelGatewayAdapter(VALID_INPUT, executor);
+    const admission = allowAdmission();
+    const result = await executeModelGatewayAdapter(VALID_INPUT, admission, executor);
 
     expect(result).toMatchObject({
       contractVersion: MODEL_GATEWAY_EXECUTE_ADAPTER_CONTRACT,
@@ -99,6 +125,7 @@ describe('MCP to Model Gateway composition proof', () => {
       executorCalled: true,
       liveProviderCallClaimed: false,
       rawSecretPrinted: false,
+      admissionEvidence: { traceId: TRACE_ID, decision: 'ALLOW' },
       gatewayResult: {
         response: {
           traceId: TRACE_ID,
@@ -112,6 +139,7 @@ describe('MCP to Model Gateway composition proof', () => {
         },
       },
     });
+    expect(admission.evaluate).toHaveBeenCalledOnce();
     expect(adapterExecute).toHaveBeenCalledOnce();
     expect(adapterExecute).toHaveBeenCalledWith(expect.objectContaining({
       traceId: TRACE_ID,
@@ -122,50 +150,89 @@ describe('MCP to Model Gateway composition proof', () => {
     expect(JSON.stringify(result)).not.toContain(TEST_SECRET);
   });
 
-  it('preserves policy-denied Model Gateway receipt without calling the provider adapter', async () => {
+  it('rejects a native BLOCK before the Model Gateway bridge or provider adapter ever runs', async () => {
     const { executor, adapterExecute } = makeCompositionExecutor();
-    const result = await executeModelGatewayAdapter(
-      { ...VALID_INPUT, policyResult: 'deny' },
-      executor
-    );
+    const admission = blockAdmission('authority_gate');
+    const result = await executeModelGatewayAdapter(VALID_INPUT, admission, executor);
 
-    expect(result.accepted).toBe(true);
-    expect(result.executorCalled).toBe(true);
-    expect(result.gatewayResult).toMatchObject({
-      error: {
-        errorClass: 'policy_denied',
-        credentialShielded: true,
-        retryable: false,
-      },
-      receipt: {
-        decision: 'denied',
-        validationState: 'not_run',
-      },
-    });
+    expect(result.accepted).toBe(false);
+    expect(result.executorCalled).toBe(false);
+    expect(result.errorEnvelope?.code).toBe('NATIVE_ADMISSION_BLOCKED');
+    expect(result.admissionEvidence).toMatchObject({ decision: 'BLOCK', blockedBy: 'authority_gate' });
     expect(adapterExecute).not.toHaveBeenCalled();
     expect(JSON.stringify(result)).not.toContain(TEST_SECRET);
   });
 
-  it('blocks raw credential input at the MCP boundary before Model Gateway execution', async () => {
+  it('a caller-supplied policyResult cannot forward a hostile allow into the Model Gateway bridge', async () => {
+    const { executor, adapterExecute } = makeCompositionExecutor();
+    const admission = blockAdmission();
+    const hostileInput = { ...VALID_INPUT, policyResult: 'allow' as const };
+    const result = await executeModelGatewayAdapter(hostileInput, admission, executor);
+
+    expect(result.accepted).toBe(false);
+    expect(result.executorCalled).toBe(false);
+    expect(adapterExecute).not.toHaveBeenCalled();
+  });
+
+  it('wires the real server-owned native engine end to end and reaches the bridge only on ALLOW', async () => {
+    // OPERATOR is genuinely authorized to `execute` in phase BUILD under the
+    // canonical authority_gate matrix (AUTHORITY_MATRIX.OPERATOR.BUILD
+    // includes 'execute'), matching the precedent already proved in
+    // model-gateway-execute.test.ts. VALID_INPUT itself intentionally carries
+    // agentRole: 'AI_AGENT' for the other cases in this file that exercise
+    // AI-agent/orchestrator BLOCK behavior, so this case uses a case-local
+    // override rather than mutating the shared fixture.
+    const { executor, adapterExecute } = makeCompositionExecutor();
+    const engine = createGuardEngine();
+    const operatorInput = { ...VALID_INPUT, agentRole: 'OPERATOR' as const };
+    const result = await executeModelGatewayAdapter(operatorInput, engine, executor);
+
+    expect(result.accepted).toBe(true);
+    expect(result.executorCalled).toBe(true);
+    expect(result.admissionEvidence?.decision).toBe('ALLOW');
+    expect(adapterExecute).toHaveBeenCalledOnce();
+  });
+
+  it('wires the real server-owned native engine so a real R3 BLOCK stops before the bridge', async () => {
+    const { executor, adapterExecute } = makeCompositionExecutor();
+    const engine = createGuardEngine();
+    const result = await executeModelGatewayAdapter(
+      { ...VALID_INPUT, requestRiskClass: 'critical' },
+      engine,
+      executor
+    );
+
+    expect(result.accepted).toBe(false);
+    expect(result.executorCalled).toBe(false);
+    expect(result.admissionEvidence?.decision).toBe('BLOCK');
+    expect(result.admissionEvidence?.blockedBy).toBe('risk_gate');
+    expect(adapterExecute).not.toHaveBeenCalled();
+  });
+
+  it('blocks raw credential input at the MCP boundary before native admission or Model Gateway execution', async () => {
+    const admission = allowAdmission();
     const execute = vi.fn();
     const result = await executeModelGatewayAdapter(
       { ...VALID_INPUT, metadata: { apiKey: TEST_SECRET } },
+      admission,
       { execute }
     );
 
     expect(result.accepted).toBe(false);
     expect(result.executorCalled).toBe(false);
     expect(result.errorEnvelope?.code).toBe('RAW_CREDENTIAL_INPUT_REJECTED');
+    expect(admission.evaluate).not.toHaveBeenCalled();
     expect(execute).not.toHaveBeenCalled();
     expect(JSON.stringify(result)).not.toContain(TEST_SECRET);
   });
 
-  it('returns shielded Model Gateway adapter errors without leaking thrown details', async () => {
+  it('returns shielded Model Gateway adapter errors without leaking thrown details, after a native ALLOW', async () => {
     const adapterExecute = vi.fn(async () => {
       throw new Error(`provider failed with ${TEST_SECRET}`);
     });
     const { executor } = makeCompositionExecutor(adapterExecute);
-    const result = await executeModelGatewayAdapter(VALID_INPUT, executor);
+    const admission = allowAdmission();
+    const result = await executeModelGatewayAdapter(VALID_INPUT, admission, executor);
 
     expect(result.accepted).toBe(true);
     expect(result.executorCalled).toBe(true);

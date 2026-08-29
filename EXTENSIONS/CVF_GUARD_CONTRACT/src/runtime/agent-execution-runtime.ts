@@ -14,6 +14,7 @@ import type {
   CVFRiskLevel,
   CVFRole,
   HandoffCheckpoint,
+  BuildAuthorityEvidence,
 } from '../types';
 import { GuardRuntimeEngine } from '../engine';
 import type { SkillDefinition } from './skill-registry';
@@ -105,6 +106,8 @@ export interface RuntimeConfig {
   fileScope?: string[];
   /** Optional default metadata passed to guard evaluation. */
   metadata?: Record<string, unknown>;
+  /** Explicit authority evidence required for mutating BUILD evaluation. */
+  buildAuthority?: BuildAuthorityEvidence;
 }
 
 // ─── Execution Provider Interface ─────────────────────────────────────
@@ -198,6 +201,7 @@ export class AgentExecutionRuntime {
       action: intent.action,
       targetFiles: intent.targetFiles,
       fileScope: this.config.fileScope,
+      buildAuthority: this.config.buildAuthority,
       channel: this.config.channel,
       metadata: {
         ...this.config.metadata,

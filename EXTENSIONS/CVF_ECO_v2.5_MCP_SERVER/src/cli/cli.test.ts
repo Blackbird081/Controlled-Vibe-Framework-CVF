@@ -98,35 +98,45 @@ describe('executeCommand', () => {
   });
 
   describe('check-authority', () => {
+    // Canonical authority_gate authorizes by phase x role x action, unlike the
+    // prior local-fork guard which was a phase-independent deny-list. These
+    // tests explicitly set phase: 'BUILD' so the authorization check exercises
+    // a concrete, realistic phase rather than the CLI's un-set session-phase
+    // default.
     it('allows AI_AGENT for safe actions', () => {
-      const result = executeCommand('check-authority', { role: 'AI_AGENT', action: 'write code' });
+      const result = executeCommand('check-authority', { phase: 'BUILD', role: 'AI_AGENT', action: 'write code' });
       expect(result.success).toBe(true);
     });
 
     it('blocks AI_AGENT from deploy', () => {
-      const result = executeCommand('check-authority', { role: 'AI_AGENT', action: 'deploy to prod' });
+      const result = executeCommand('check-authority', { phase: 'BUILD', role: 'AI_AGENT', action: 'deploy to prod' });
       expect(result.success).toBe(false);
     });
 
     it('allows HUMAN for anything', () => {
-      const result = executeCommand('check-authority', { role: 'HUMAN', action: 'deploy to prod' });
+      const result = executeCommand('check-authority', { phase: 'BUILD', role: 'HUMAN', action: 'deploy to prod' });
       expect(result.success).toBe(true);
     });
 
     it('allows alias "authority"', () => {
-      const result = executeCommand('authority', { role: 'HUMAN', action: 'test' });
+      const result = executeCommand('authority', { phase: 'BUILD', role: 'HUMAN', action: 'read code' });
       expect(result.success).toBe(true);
     });
   });
 
   describe('evaluate (full pipeline)', () => {
     it('allows safe action', () => {
+      // Non-modifying wording: the canonical mandatory ai_commit/build_authority
+      // guards fail closed on a BUILD-phase modifying action without evidence
+      // this CLI surface does not collect (see the canonical-guard-contract
+      // adoption regression test for that fail-closed proof). This test's
+      // purpose is the general phase/role/risk pipeline plumbing.
       const result = executeCommand('evaluate', {
-        phase: 'BUILD', risk: 'R0', role: 'HUMAN', action: 'write code',
+        phase: 'BUILD', risk: 'R0', role: 'HUMAN', action: 'read code',
       });
       expect(result.success).toBe(true);
       expect(result.exitCode).toBe(0);
-      expect((result.output as any).guardCount).toBe(6);
+      expect((result.output as any).guardCount).toBe(9);
     });
 
     it('blocks AI_AGENT in DISCOVERY', () => {
@@ -145,14 +155,15 @@ describe('executeCommand', () => {
     });
 
     it('handles comma-separated files', () => {
+      // Non-modifying wording for the same reason as 'allows safe action' above.
       const result = executeCommand('evaluate', {
-        phase: 'BUILD', role: 'HUMAN', action: 'edit', files: 'a.ts,b.ts',
+        phase: 'BUILD', role: 'HUMAN', action: 'read code', files: 'a.ts,b.ts',
       });
       expect(result.success).toBe(true);
     });
 
     it('allows alias "eval"', () => {
-      const result = executeCommand('eval', { phase: 'BUILD', role: 'HUMAN', action: 'test' });
+      const result = executeCommand('eval', { phase: 'BUILD', role: 'HUMAN', action: 'read code' });
       expect(result.success).toBe(true);
     });
   });
@@ -214,14 +225,14 @@ describe('executeCommand', () => {
       const result = executeCommand('status', {});
       expect(result.success).toBe(true);
       expect((result.output as any).version).toBe('1.7.0');
-      expect((result.output as any).guardCount).toBe(6);
+      expect((result.output as any).guardCount).toBe(9);
     });
   });
 });
 
 describe('runCli', () => {
   it('runs full pipeline from argv', () => {
-    const result = runCli(['evaluate', '--phase', 'BUILD', '--role', 'HUMAN', '--action', 'test']);
+    const result = runCli(['evaluate', '--phase', 'BUILD', '--role', 'HUMAN', '--action', 'read code']);
     expect(result.success).toBe(true);
   });
 

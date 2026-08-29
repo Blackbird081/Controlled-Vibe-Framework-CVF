@@ -33,6 +33,90 @@
         "corpusReceiptRef": {"type": ["string", "null"]},
         "completenessClaimChanged": {"type": "boolean"}
       }
+    },
+    "trancheValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outcomeConsumer", "severity", "findingEvidenceState", "rootCauseIdentity", "marginalValue", "valueEvidenceState", "costEnvelope", "consolidationKey", "stopCondition", "successorAuthority", "decisionReason", "reviewerIdentity", "freshness", "overrideAppealEvidence"],
+      "properties": {
+        "outcomeConsumer": {"type": "string", "minLength": 1, "maxLength": 512},
+        "severity": {"enum": ["P0", "P1", "P2", "P3", "NONE"]},
+        "findingEvidenceState": {"enum": ["OBSERVED", "HISTORICAL_BOUNDED", "PROJECTED", "UNKNOWN"]},
+        "rootCauseIdentity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["relation", "causalInvariant", "ownerSurface", "evidenceReferences"],
+          "properties": {
+            "relation": {"enum": ["INDEPENDENT", "DEPENDENT", "DUPLICATE"]},
+            "causalInvariant": {"type": "string", "minLength": 1, "maxLength": 512},
+            "ownerSurface": {"type": "string", "minLength": 1, "maxLength": 256},
+            "evidenceReferences": {"type": "array", "minItems": 1, "maxItems": 32, "items": {"type": "string", "minLength": 1, "maxLength": 256}}
+          }
+        },
+        "marginalValue": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "valueEvidenceState": {"enum": ["OBSERVED", "HISTORICAL_BOUNDED", "PROJECTED", "UNKNOWN"]},
+        "costEnvelope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["workerTime", "reviewerTime", "latency", "tokenOrQuotaUsage", "providerCallCost", "opportunityCost"],
+          "properties": {
+            "workerTime": {"$ref": "#/$defs/costField"},
+            "reviewerTime": {"$ref": "#/$defs/costField"},
+            "latency": {"$ref": "#/$defs/costField"},
+            "tokenOrQuotaUsage": {"$ref": "#/$defs/costField"},
+            "providerCallCost": {"$ref": "#/$defs/costField"},
+            "opportunityCost": {"$ref": "#/$defs/costField"}
+          }
+        },
+        "consolidationKey": {"type": "string", "minLength": 1, "maxLength": 256},
+        "stopCondition": {"type": "string", "minLength": 1, "maxLength": 512},
+        "successorAuthority": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["authorityPath", "authorityHash", "authorityCommit", "declaredCap", "currentOrdinal"],
+          "properties": {
+            "authorityPath": {"type": "string", "minLength": 1, "maxLength": 256},
+            "authorityHash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "authorityCommit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            "declaredCap": {"type": "integer", "minimum": 1, "maximum": 32},
+            "currentOrdinal": {"type": "integer", "minimum": 1, "maximum": 32}
+          }
+        },
+        "decisionReason": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "reviewerIdentity": {"type": "string", "minLength": 1, "maxLength": 512},
+        "freshness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["capturedAt", "expiresAt"],
+          "properties": {
+            "capturedAt": {"type": "string", "minLength": 1, "maxLength": 64},
+            "expiresAt": {"type": ["string", "null"], "minLength": 1, "maxLength": 64},
+            "noExpiryReason": {"type": "string", "minLength": 1, "maxLength": 256}
+          }
+        },
+        "overrideAppealEvidence": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["operatorAuthorityReference", "reason", "originalToken"],
+          "properties": {
+            "operatorAuthorityReference": {"type": "string", "minLength": 1, "maxLength": 256},
+            "reason": {"type": "string", "minLength": 1, "maxLength": 512},
+            "originalToken": {"enum": ["CONTINUE_HIGH_VALUE", "CONSOLIDATE", "PARK_LOW_VALUE", "STOP_NO_INCREMENTAL_VALUE"]}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "costField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidenceState", "value"],
+      "properties": {
+        "evidenceState": {"enum": ["OBSERVED", "HISTORICAL_BOUNDED", "PROJECTED", "UNKNOWN"]},
+        "value": {"type": "string", "minLength": 1, "maxLength": 128}
+      },
+      "allOf": [{"if": {"properties": {"evidenceState": {"const": "UNKNOWN"}}}, "then": {"properties": {"value": {"const": "UNKNOWN"}}}}]
     }
   }
 }

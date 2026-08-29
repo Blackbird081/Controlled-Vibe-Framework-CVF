@@ -90,6 +90,68 @@ export function evaluateProviderExecutionAuthority(
   return { allowed: true, reason: "provider execution allowed by bounded orchestrator grant" };
 }
 
+// EAFR-R10. Sibling contract to ProviderExecutionGrant/ProviderExecutionRequest/
+// evaluateProviderExecutionAuthority above, scoped to external-store execution
+// instead of provider execution. This is a contract-and-evaluator design only:
+// no grant is issued and no runtime consumer wires it to a live external store.
+export type ExternalStoreExecutionAuthority = "FORBIDDEN" | "ORCHESTRATOR_GRANT_REQUIRED";
+
+export interface ExternalStoreExecutionGrant {
+  authority: ExternalStoreExecutionAuthority;
+  grantId: string | null;
+  authorizedBy: "ORCHESTRATOR" | null;
+  subjectAgentId: string;
+  delegationId: string;
+  allowedStores: string[];
+  maxCalls: number;
+  expiresAt: string | null;
+}
+
+export interface ExternalStoreExecutionRequest {
+  workerAgentId: string;
+  delegationId: string;
+  grantId: string;
+  store: string;
+  consumedCalls: number;
+  nowIso: string;
+}
+
+export function evaluateExternalStoreExecutionAuthority(
+  grant: ExternalStoreExecutionGrant | undefined,
+  request: ExternalStoreExecutionRequest,
+): { allowed: boolean; reason: string } {
+  if (!grant || grant.authority === "FORBIDDEN") {
+    return { allowed: false, reason: "external-store execution is forbidden without an orchestrator grant" };
+  }
+  if (grant.authorizedBy !== "ORCHESTRATOR") {
+    return { allowed: false, reason: "external-store execution grant must be authorized by ORCHESTRATOR" };
+  }
+  if (!grant.grantId || grant.grantId !== request.grantId) {
+    return { allowed: false, reason: "external-store execution grant id mismatch" };
+  }
+  if (grant.subjectAgentId !== request.workerAgentId) {
+    return { allowed: false, reason: "external-store execution grant subject mismatch" };
+  }
+  if (grant.delegationId !== request.delegationId) {
+    return { allowed: false, reason: "external-store execution delegation mismatch" };
+  }
+  if (!grant.allowedStores.includes(request.store)) {
+    return { allowed: false, reason: `store ${request.store} is outside the orchestrator grant` };
+  }
+  if (!Number.isInteger(request.consumedCalls) || request.consumedCalls < 0) {
+    return { allowed: false, reason: "external-store execution consumedCalls is invalid" };
+  }
+  if (!Number.isInteger(grant.maxCalls) || grant.maxCalls < 1 || request.consumedCalls >= grant.maxCalls) {
+    return { allowed: false, reason: "external-store execution call budget exhausted" };
+  }
+  const expiresAt = grant.expiresAt ? Date.parse(grant.expiresAt) : Number.NaN;
+  const now = Date.parse(request.nowIso);
+  if (!Number.isFinite(expiresAt) || !Number.isFinite(now) || expiresAt <= now) {
+    return { allowed: false, reason: "external-store execution grant is expired or malformed" };
+  }
+  return { allowed: true, reason: "external-store execution allowed by bounded orchestrator grant" };
+}
+
 export function validateWriteScope(
   path: string,
   contract: DelegationContract,

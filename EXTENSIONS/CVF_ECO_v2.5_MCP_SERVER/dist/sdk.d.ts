@@ -8,7 +8,8 @@
  *
  * @module sdk
  */
-export { GuardRuntimeEngine, createGuardEngine, PhaseGateGuard, RiskGateGuard, AuthorityGateGuard, MutationBudgetGuard, ScopeGuard, AuditTrailGuard, PHASE_ROLE_MATRIX, PHASE_DESCRIPTIONS, RISK_DESCRIPTIONS, RESTRICTED_ACTIONS, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD, PROTECTED_PATHS, CVF_ROOT_INDICATORS, PHASE_ORDER, RISK_NUMERIC, DEFAULT_GUARD_RUNTIME_CONFIG, } from './guards/index.js';
+export { GuardRuntimeEngine, createGuardEngine } from 'cvf-guard-contract';
+export { PhaseGateGuard, RiskGateGuard, AuthorityGateGuard, MutationBudgetGuard, ScopeGuard, AuditTrailGuard, PHASE_ROLE_MATRIX, PHASE_DESCRIPTIONS, RISK_DESCRIPTIONS, RESTRICTED_ACTIONS, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD, PROTECTED_PATHS, CVF_ROOT_INDICATORS, PHASE_ORDER, RISK_NUMERIC, DEFAULT_GUARD_RUNTIME_CONFIG, } from './guards/index.js';
 export type { Guard, GuardResult, GuardRequestContext, GuardPipelineResult, GuardAuditEntry, GuardRuntimeConfig, GuardDecision, GuardSeverity, CVFPhase, CVFRiskLevel, CVFRole, } from './guards/types.js';
 export { JsonFileAdapter } from './persistence/json-file.adapter.js';
 export type { PersistenceAdapter, SessionState, } from './persistence/persistence.interface.js';

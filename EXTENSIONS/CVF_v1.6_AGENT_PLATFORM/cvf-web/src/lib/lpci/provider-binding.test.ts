@@ -50,6 +50,7 @@ function bridgeResult(
       model: { providerId: 'openai', modelId: 'gpt-4o' },
     },
     receipt: receipt(traceId),
+    materialContextManifestDisposition: 'attached',
     ...overrides,
   };
 }
@@ -155,6 +156,7 @@ describe('LPCI Model Gateway provider binding', () => {
       receipt: new GatewayReceiptBuilder().build({
         traceId: request.traceId, decision: 'no_candidate', reason: 'internal', validationState: 'not_run',
       }),
+      materialContextManifestDisposition: 'not_built_precondition_stopped',
     }));
     expect(await executeLpciProviderBinding(bindingInput, {
       env: validEnv, bridge: { execute }, traceId: () => 'sp-06',
@@ -168,6 +170,7 @@ describe('LPCI Model Gateway provider binding', () => {
         message: 'credential detail', credentialShielded: true, retryable: false,
       },
       receipt: receipt(request.traceId),
+      materialContextManifestDisposition: 'not_built_precondition_stopped',
     }));
     const result = await executeLpciProviderBinding(bindingInput, {
       env: validEnv, bridge: { execute }, traceId: () => 'sp-07',
@@ -208,6 +211,7 @@ describe('LPCI Model Gateway provider binding', () => {
       receipt: new GatewayReceiptBuilder().build({
         traceId: request.traceId, decision: 'no_candidate', reason: 'unavailable', validationState: 'not_run',
       }),
+      materialContextManifestDisposition: 'not_built_precondition_stopped',
     }));
     await executeLpciProviderBinding(bindingInput, {
       env: validEnv, bridge: { execute }, traceId: () => 'sp-11',

@@ -1,4 +1,5 @@
 # User Skills Registry Index
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Total Skills:** 62
 > **Generated:** Auto-generated from v1.5.2 SKILL_LIBRARY

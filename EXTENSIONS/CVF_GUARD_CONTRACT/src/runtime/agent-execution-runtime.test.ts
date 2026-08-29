@@ -18,10 +18,20 @@ import {
   type SkillDefinition,
 } from './skill-registry';
 import { createGuardEngine } from '../index';
+import type { BuildAuthorityEvidence } from '../types';
 
 // ─── Helpers ──────────────────────────────────────────────────────────
 
 function defaultConfig(overrides?: Partial<RuntimeConfig>): RuntimeConfig {
+  const buildAuthority: BuildAuthorityEvidence = {
+    specStatus: 'ACCEPTED',
+    acceptedSpecRef: 'docs/specs/runtime-test.md',
+    workOrderStatus: 'VALID',
+    workOrderRef: 'docs/work_orders/runtime-test.md',
+    revoked: false,
+    allowedScope: ['src'],
+  };
+
   return {
     phase: 'BUILD',
     riskLevel: 'R0',
@@ -29,6 +39,7 @@ function defaultConfig(overrides?: Partial<RuntimeConfig>): RuntimeConfig {
     agentId: 'test-agent',
     channel: 'cli',
     liveExecution: false,
+    buildAuthority,
     metadata: {
       ai_commit: {
         commitId: 'runtime-test-commit',
@@ -111,16 +122,24 @@ describe('AgentExecutionRuntime.parseIntent', () => {
 describe('AgentExecutionRuntime.preCheck', () => {
   it('allows HUMAN in BUILD phase', () => {
     const runtime = createRuntime({ phase: 'BUILD', role: 'HUMAN' });
-    const intent = runtime.parseIntent('write some code');
+    const intent = runtime.parseIntent('write src/app.ts');
     const result = runtime.preCheck(intent);
     expect(result.finalDecision).toBe('ALLOW');
   });
 
   it('allows AI_AGENT in BUILD phase with low risk', () => {
     const runtime = createRuntime({ phase: 'BUILD', role: 'AI_AGENT', riskLevel: 'R0' });
-    const intent = runtime.parseIntent('write some code');
+    const intent = runtime.parseIntent('write src/app.ts');
     const result = runtime.preCheck(intent);
     expect(result.finalDecision).toBe('ALLOW');
+  });
+
+  it('blocks mutating BUILD when runtime authority evidence is omitted', () => {
+    const runtime = createRuntime({ phase: 'BUILD', role: 'HUMAN', buildAuthority: undefined });
+    const intent = runtime.parseIntent('write src/app.ts');
+    const result = runtime.preCheck(intent);
+    expect(result.finalDecision).toBe('BLOCK');
+    expect(result.blockedBy).toBe('build_authority');
   });
 
   it('blocks AI_AGENT in INTAKE phase', () => {
@@ -183,7 +202,7 @@ describe('AgentExecutionRuntime.preCheck', () => {
 describe('AgentExecutionRuntime.execute', () => {
   it('completes when guard allows', async () => {
     const runtime = createRuntime({ phase: 'BUILD', role: 'HUMAN' });
-    const intent = runtime.parseIntent('write code');
+    const intent = runtime.parseIntent('write src/app.ts');
     const guardResult = runtime.preCheck(intent);
     const result = await runtime.execute(intent, guardResult);
     expect(result.status).toBe('COMPLETED');
@@ -192,7 +211,7 @@ describe('AgentExecutionRuntime.execute', () => {
 
   it('blocks when guard blocks', async () => {
     const runtime = createRuntime({ phase: 'INTAKE', role: 'AI_AGENT' });
-    const intent = runtime.parseIntent('write code');
+    const intent = runtime.parseIntent('write src/app.ts');
     const guardResult = runtime.preCheck(intent);
     const result = await runtime.execute(intent, guardResult);
     expect(result.status).toBe('BLOCKED');
@@ -206,7 +225,7 @@ describe('AgentExecutionRuntime.execute', () => {
       riskLevel: 'R2',
       controlMode: 'governed',
     });
-    const intent = runtime.parseIntent('write code');
+    const intent = runtime.parseIntent('write src/app.ts');
     const guardResult = runtime.preCheck(intent);
     const result = await runtime.execute(intent, guardResult);
     expect(result.status).toBe('NEEDS_APPROVAL');
@@ -222,7 +241,7 @@ describe('AgentExecutionRuntime.execute', () => {
       execute: async () => { throw new Error('Provider crash'); },
     };
     const runtime = createRuntime({ phase: 'BUILD', role: 'HUMAN' }, failingProvider);
-    const intent = runtime.parseIntent('write code');
+    const intent = runtime.parseIntent('write src/app.ts');
     const guardResult = runtime.preCheck(intent);
     const result = await runtime.execute(intent, guardResult);
     expect(result.status).toBe('FAILED');
@@ -231,7 +250,7 @@ describe('AgentExecutionRuntime.execute', () => {
 
   it('tracks execution time', async () => {
     const runtime = createRuntime({ phase: 'BUILD', role: 'HUMAN' });
-    const intent = runtime.parseIntent('write code');
+    const intent = runtime.parseIntent('write src/app.ts');
     const guardResult = runtime.preCheck(intent);
     const result = await runtime.execute(intent, guardResult);
     expect(result.durationMs).toBeDefined();
@@ -240,7 +259,7 @@ describe('AgentExecutionRuntime.execute', () => {
 
   it('stores guard decision in result', async () => {
     const runtime = createRuntime({ phase: 'BUILD', role: 'HUMAN' });
-    const intent = runtime.parseIntent('write code');
+    const intent = runtime.parseIntent('write src/app.ts');
     const guardResult = runtime.preCheck(intent);
     const result = await runtime.execute(intent, guardResult);
     expect(result.guardDecision).toBeDefined();
@@ -249,7 +268,7 @@ describe('AgentExecutionRuntime.execute', () => {
 
   it('records governed execution lineage in metadata', async () => {
     const runtime = createRuntime({ phase: 'BUILD', role: 'HUMAN', controlMode: 'governed' });
-    const intent = runtime.parseIntent('write code');
+    const intent = runtime.parseIntent('write src/app.ts');
     const guardResult = runtime.preCheck(intent);
     const result = await runtime.execute(intent, guardResult);
     const governance = result.metadata?.governance as any;
@@ -264,7 +283,7 @@ describe('AgentExecutionRuntime.execute', () => {
 describe('AgentExecutionRuntime.postCheck', () => {
   it('valid for completed execution', async () => {
     const runtime = createRuntime({ phase: 'BUILD', role: 'HUMAN' });
-    const result = await runtime.run('write code');
+    const result = await runtime.run('write src/app.ts');
     const check = runtime.postCheck(result);
     expect(check.valid).toBe(true);
     expect(check.issues).toHaveLength(0);
@@ -272,7 +291,7 @@ describe('AgentExecutionRuntime.postCheck', () => {
 
   it('invalid for blocked execution', async () => {
     const runtime = createRuntime({ phase: 'INTAKE', role: 'AI_AGENT' });
-    const result = await runtime.run('write code');
+    const result = await runtime.run('write src/app.ts');
     const check = runtime.postCheck(result);
     expect(check.valid).toBe(false);
     expect(check.issues.length).toBeGreaterThan(0);
@@ -285,7 +304,7 @@ describe('AgentExecutionRuntime.postCheck', () => {
       riskLevel: 'R2',
       controlMode: 'governed',
     });
-    const result = await runtime.run('write code');
+    const result = await runtime.run('write src/app.ts');
     const check = runtime.postCheck(result);
     expect(result.status).toBe('NEEDS_APPROVAL');
     expect(check.valid).toBe(false);
@@ -310,7 +329,7 @@ describe('AgentExecutionRuntime.postCheck', () => {
 describe('AgentExecutionRuntime.run (full pipeline)', () => {
   it('completes full pipeline for safe HUMAN action', async () => {
     const runtime = createRuntime({ phase: 'BUILD', role: 'HUMAN', riskLevel: 'R0' });
-    const result = await runtime.run('create a new component');
+    const result = await runtime.run('create src/component.ts');
     expect(result.status).toBe('COMPLETED');
     expect(result.output).toContain('[DRY-RUN]');
   });

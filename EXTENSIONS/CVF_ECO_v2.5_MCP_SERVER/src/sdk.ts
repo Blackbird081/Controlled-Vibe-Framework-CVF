@@ -10,9 +10,12 @@
  */
 
 // ─── Guards ───────────────────────────────────────────────────────────
+// The engine/factory are the canonical cvf-guard-contract implementation.
+// MCP-local UX constants (phase/risk descriptions, ordering, and the
+// non-mandatory local guard classes) remain re-exported from the
+// package-local guards module for backward-compatible SDK consumers.
+export { GuardRuntimeEngine, createGuardEngine } from 'cvf-guard-contract';
 export {
-  GuardRuntimeEngine,
-  createGuardEngine,
   PhaseGateGuard,
   RiskGateGuard,
   AuthorityGateGuard,

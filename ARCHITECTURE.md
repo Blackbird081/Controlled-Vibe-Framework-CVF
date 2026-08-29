@@ -2,7 +2,7 @@
 
 > Front-door architecture view for GitHub readers.
 >
-> Current readout: CVF is a governance-first AI/agent control framework with live non-coder governance proof, certified Alibaba + DeepSeek provider lanes, and mandatory live API release evidence for governance claims.
+> Current readout: CVF is a governance-first AI/agent control framework with live non-coder governance proof, a certified DeepSeek provider lane (Alibaba `qwen-flash` is the current target, `EXPERIMENTAL` pending fresh live proof), and mandatory live API release evidence for governance claims.
 >
 > This page is one of the three root front-door entrypoints alongside `README.md` and `START_HERE.md`.
 
@@ -140,7 +140,7 @@ flowchart TB
         direction LR
         APPROVAL["Approval checkpoints"]
         EXEC["Execution<br/>inside approved boundary"]
-        PROVIDER["Certified provider lane<br/>Alibaba primary<br/>DeepSeek bounded"]
+        PROVIDER["Provider lane<br/>DeepSeek certified<br/>Alibaba experimental (fresh proof pending)"]
     end
 
     subgraph CLOSE["Evidence closure"]
@@ -159,7 +159,7 @@ flowchart TB
     REVIEW --> FREEZE
 ```
 
-Diagram note: this is the path that must reach a real provider API call before CVF can claim governance behavior. Alibaba/DashScope is the primary certified release lane; DeepSeek has certified canary evidence and bounded confirmatory coverage. Provider parity is not claimed.
+Diagram note: this is the path that must reach a real provider API call before CVF can claim governance behavior. DeepSeek is the current certified release lane with canary evidence and bounded confirmatory coverage; Alibaba/DashScope's `qwen-flash` target is historically certified on a prior model but is `EXPERIMENTAL` pending fresh live proof on the current model. Provider parity is not claimed.
 
 The seven stages are separate control decisions, even when one interface makes
 them feel continuous to the user:

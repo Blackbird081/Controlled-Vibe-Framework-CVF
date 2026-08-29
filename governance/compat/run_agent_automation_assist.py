@@ -22,9 +22,9 @@ edits an existing file, stages, commits, applies a diff, or makes a closure
 decision. No L2 patch preview or L3 apply behavior exists in this helper.
 
 It reuses the canonical commit-steward path classification
-(`run_agent_commit_steward_preflight.build_path_plan`) instead of duplicating it,
-and mirrors the machine-enforced worker-return packet-shape vocabulary from
-`check_work_order_dispatch_quality` so its diagnostics match the real gate.
+(`run_agent_commit_steward_preflight.build_path_plan`) instead of duplicating it.
+Its own packet-shape terms are an early advisory diagnostic, not a mirror of
+`check_work_order_dispatch_quality`'s compact profile; only the marker is shared.
 """
 
 from __future__ import annotations
@@ -54,10 +54,10 @@ except ModuleNotFoundError:  # imported as governance.compat.run_agent_automatio
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-# Mirror of the machine-enforced contract vocabulary in
-# check_work_order_dispatch_quality.py. Kept as a local mirror so this advisory
-# helper has no hard import-time dependency on that gate's heavy module, but the
-# terms must stay aligned with the gate.
+# This helper's own advisory diagnostic, not a mirror of dispatch-quality's
+# compact profile; only the marker is shared. The machine-owned term subset
+# (all but executionBaseHead/Machine Closure Package) tracks REQUIRED_HEADINGS
+# in check_worker_return_quality_gate.py.
 WORKER_RETURN_PACKET_SHAPE_CONTRACT_MARKER = "Worker Return Packet Shape Contract"
 WORKER_RETURN_PACKET_SHAPE_REQUIRED_TERMS = (
     "Purpose",
@@ -242,7 +242,7 @@ class CorpusDiagnostic:
 
 
 def diagnose_no_commit_work_order(path: str, text: str) -> WorkOrderDiagnostic:
-    """Mirror the dispatch-quality gate's packet-shape contract check."""
+    """This helper's own early advisory packet-shape contract check."""
     section = _extract_section(text, WORKER_RETURN_PACKET_SHAPE_CONTRACT_MARKER)
     if not section:
         return WorkOrderDiagnostic(

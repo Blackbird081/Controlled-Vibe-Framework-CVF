@@ -20,11 +20,31 @@ REQUIRED_KEYS = {
     "schemaVersion", "taskId", "requestedProfile", "classification", "pathFamilies",
     "claims", "requiredProof", "operatorCheckpoints", "forbiddenEffects", "sourceEvidence",
 }
+OPTIONAL_KEYS = {"trancheValue"}
 CLASSIFICATION_KEYS = {
     "taskKind", "authorityImpact", "externalEffect", "dataSensitivity",
     "reversibility", "sourceScale", "delegation", "novelty",
 }
 SOURCE_EVIDENCE_KEYS = {"selectedFilesFullyRead", "corpusReceiptRef", "completenessClaimChanged"}
+
+TRANCHE_VALUE_KEYS = {
+    "outcomeConsumer", "severity", "findingEvidenceState", "rootCauseIdentity",
+    "marginalValue", "valueEvidenceState", "costEnvelope", "consolidationKey",
+    "stopCondition", "successorAuthority", "decisionReason", "reviewerIdentity",
+    "freshness", "overrideAppealEvidence",
+}
+ROOT_CAUSE_IDENTITY_KEYS = {"relation", "causalInvariant", "ownerSurface", "evidenceReferences"}
+COST_ENVELOPE_KEYS = {"workerTime", "reviewerTime", "latency", "tokenOrQuotaUsage", "providerCallCost", "opportunityCost"}
+COST_FIELD_KEYS = {"evidenceState", "value"}
+SUCCESSOR_AUTHORITY_KEYS = {"authorityPath", "authorityHash", "authorityCommit", "declaredCap", "currentOrdinal"}
+FRESHNESS_KEYS = {"capturedAt", "expiresAt"}
+OVERRIDE_KEYS = {"operatorAuthorityReference", "reason", "originalToken"}
+EVIDENCE_STATES = {"OBSERVED", "HISTORICAL_BOUNDED", "PROJECTED", "UNKNOWN"}
+SEVERITIES = {"P0", "P1", "P2", "P3", "NONE"}
+ROOT_CAUSE_RELATIONS = {"INDEPENDENT", "DEPENDENT", "DUPLICATE"}
+VALUE_TOKENS = ("CONTINUE_HIGH_VALUE", "CONSOLIDATE", "PARK_LOW_VALUE", "STOP_NO_INCREMENTAL_VALUE")
+AUTHORITY_HASH_RE = re.compile(r"^[0-9a-f]{64}$")
+AUTHORITY_COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 
 
 def load_registry(path: Path = REGISTRY_PATH) -> dict[str, Any]:
@@ -61,8 +81,11 @@ def validate_manifest(manifest: Any, registry: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if not isinstance(manifest, dict):
         return ["manifest must be an object"]
-    if set(manifest) != REQUIRED_KEYS:
-        errors.append("manifest keys do not match the v1 closed shape")
+    present_keys = set(manifest)
+    if not REQUIRED_KEYS.issubset(present_keys) or not present_keys.issubset(REQUIRED_KEYS | OPTIONAL_KEYS):
+        errors.append("manifest keys do not match the v1 closed shape plus optional trancheValue")
+    if "trancheValue" in manifest:
+        errors.extend(_validate_tranche_value(manifest["trancheValue"]))
     if manifest.get("schemaVersion") != MANIFEST_VERSION:
         errors.append("unsupported manifest schemaVersion")
     task_id = manifest.get("taskId")
@@ -99,7 +122,185 @@ def validate_manifest(manifest: Any, registry: dict[str, Any]) -> list[str]:
     return sorted(set(errors))
 
 
-def route_manifest(manifest: Any, registry: dict[str, Any] | None = None) -> dict[str, Any]:
+def _validate_cost_field(value: Any, name: str) -> list[str]:
+    if not isinstance(value, dict) or set(value) != COST_FIELD_KEYS:
+        return [f"trancheValue.costEnvelope.{name} keys do not match the closed cost-field shape"]
+    errors: list[str] = []
+    if value.get("evidenceState") not in EVIDENCE_STATES:
+        errors.append(f"trancheValue.costEnvelope.{name}.evidenceState is invalid")
+    if not isinstance(value.get("value"), str) or not value.get("value"):
+        errors.append(f"trancheValue.costEnvelope.{name}.value must be a non-empty string")
+    elif value.get("evidenceState") == "UNKNOWN" and value.get("value") not in {"UNKNOWN"}:
+        errors.append(f"trancheValue.costEnvelope.{name}.value must be the literal UNKNOWN when evidenceState is UNKNOWN")
+    return errors
+
+
+def _validate_tranche_value(record: Any) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(record, dict) or set(record) != TRANCHE_VALUE_KEYS:
+        return ["trancheValue keys do not match the closed fourteen-field shape"]
+    if not isinstance(record.get("outcomeConsumer"), str) or not record["outcomeConsumer"]:
+        errors.append("trancheValue.outcomeConsumer must be a non-empty string")
+    if record.get("severity") not in SEVERITIES:
+        errors.append("trancheValue.severity is invalid")
+    if record.get("findingEvidenceState") not in EVIDENCE_STATES:
+        errors.append("trancheValue.findingEvidenceState is invalid")
+    root_cause = record.get("rootCauseIdentity")
+    if not isinstance(root_cause, dict) or set(root_cause) != ROOT_CAUSE_IDENTITY_KEYS:
+        errors.append("trancheValue.rootCauseIdentity keys do not match the closed shape")
+    else:
+        if root_cause.get("relation") not in ROOT_CAUSE_RELATIONS:
+            errors.append("trancheValue.rootCauseIdentity.relation is invalid")
+        if not isinstance(root_cause.get("causalInvariant"), str) or not root_cause["causalInvariant"]:
+            errors.append("trancheValue.rootCauseIdentity.causalInvariant must be a non-empty string")
+        if not isinstance(root_cause.get("ownerSurface"), str) or not root_cause["ownerSurface"]:
+            errors.append("trancheValue.rootCauseIdentity.ownerSurface must be a non-empty string")
+        refs = root_cause.get("evidenceReferences")
+        if not isinstance(refs, list) or not refs or any(not isinstance(r, str) or not r for r in refs):
+            errors.append("trancheValue.rootCauseIdentity.evidenceReferences must be a non-empty list of non-empty strings")
+    if not isinstance(record.get("marginalValue"), str) or not record["marginalValue"]:
+        errors.append("trancheValue.marginalValue must be a non-empty string")
+    if record.get("valueEvidenceState") not in EVIDENCE_STATES:
+        errors.append("trancheValue.valueEvidenceState is invalid")
+    cost_envelope = record.get("costEnvelope")
+    if not isinstance(cost_envelope, dict) or set(cost_envelope) != COST_ENVELOPE_KEYS:
+        errors.append("trancheValue.costEnvelope keys do not match the closed six-field shape")
+    else:
+        for name in COST_ENVELOPE_KEYS:
+            errors.extend(_validate_cost_field(cost_envelope.get(name), name))
+    if not isinstance(record.get("consolidationKey"), str) or not record["consolidationKey"]:
+        errors.append("trancheValue.consolidationKey must be a non-empty string")
+    if not isinstance(record.get("stopCondition"), str) or not record["stopCondition"]:
+        errors.append("trancheValue.stopCondition must be a non-empty string")
+    authority = record.get("successorAuthority")
+    if not isinstance(authority, dict) or set(authority) != SUCCESSOR_AUTHORITY_KEYS:
+        errors.append("trancheValue.successorAuthority keys do not match the closed shape")
+    else:
+        if not isinstance(authority.get("authorityPath"), str) or not authority["authorityPath"]:
+            errors.append("trancheValue.successorAuthority.authorityPath must be a non-empty string")
+        if not isinstance(authority.get("authorityHash"), str) or not AUTHORITY_HASH_RE.fullmatch(authority["authorityHash"]):
+            errors.append("trancheValue.successorAuthority.authorityHash must be a lowercase SHA-256 digest")
+        if not isinstance(authority.get("authorityCommit"), str) or not AUTHORITY_COMMIT_RE.fullmatch(authority["authorityCommit"]):
+            errors.append("trancheValue.successorAuthority.authorityCommit must be a full lowercase commit hash")
+        if not isinstance(authority.get("declaredCap"), int) or isinstance(authority.get("declaredCap"), bool) or not (1 <= authority.get("declaredCap", 0) <= 32):
+            errors.append("trancheValue.successorAuthority.declaredCap must be a bounded positive integer")
+        if not isinstance(authority.get("currentOrdinal"), int) or isinstance(authority.get("currentOrdinal"), bool) or not (1 <= authority.get("currentOrdinal", 0) <= 32):
+            errors.append("trancheValue.successorAuthority.currentOrdinal must be a bounded positive integer")
+    if not isinstance(record.get("decisionReason"), str) or not record["decisionReason"]:
+        errors.append("trancheValue.decisionReason must be a non-empty string")
+    if not isinstance(record.get("reviewerIdentity"), str) or not record["reviewerIdentity"]:
+        errors.append("trancheValue.reviewerIdentity must be a non-empty string")
+    freshness = record.get("freshness")
+    if not isinstance(freshness, dict) or not FRESHNESS_KEYS.issubset(set(freshness)) or not set(freshness).issubset(FRESHNESS_KEYS | {"noExpiryReason"}):
+        errors.append("trancheValue.freshness keys do not match the closed shape")
+    else:
+        if not isinstance(freshness.get("capturedAt"), str) or not freshness["capturedAt"]:
+            errors.append("trancheValue.freshness.capturedAt must be a non-empty string")
+        expires_at = freshness.get("expiresAt")
+        if expires_at is None:
+            if not isinstance(freshness.get("noExpiryReason"), str) or not freshness.get("noExpiryReason"):
+                errors.append("trancheValue.freshness with null expiresAt requires a non-empty noExpiryReason")
+        elif not isinstance(expires_at, str) or not expires_at:
+            errors.append("trancheValue.freshness.expiresAt must be a non-empty string or null")
+    override = record.get("overrideAppealEvidence")
+    if override is not None:
+        if not isinstance(override, dict) or set(override) != OVERRIDE_KEYS:
+            errors.append("trancheValue.overrideAppealEvidence keys do not match the closed shape")
+        else:
+            if not isinstance(override.get("operatorAuthorityReference"), str) or not override["operatorAuthorityReference"]:
+                errors.append("trancheValue.overrideAppealEvidence.operatorAuthorityReference must be a non-empty string")
+            if not isinstance(override.get("reason"), str) or not override["reason"]:
+                errors.append("trancheValue.overrideAppealEvidence.reason must be a non-empty string")
+            if override.get("originalToken") not in VALUE_TOKENS:
+                errors.append("trancheValue.overrideAppealEvidence.originalToken is invalid")
+    return errors
+
+
+def evaluate_tranche_value(record: dict[str, Any], trusted_authority: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Pure deterministic tranche-value decision.
+
+    `trusted_authority` must be resolved by the caller from a committed,
+    hash-verified roadmap successor-authority block. A candidate record's own
+    `successorAuthority` fields are never trusted on their own; absent or
+    mismatched trusted authority fails closed to a shadow park explanation.
+    """
+    reason_codes: list[str] = []
+
+    if not isinstance(record, dict) or set(record) != TRANCHE_VALUE_KEYS or _validate_tranche_value(record):
+        return _tranche_value_result("PARK_LOW_VALUE", ["MALFORMED_OR_MISSING_DECLARED_FIELDS"])
+
+    authority = record["successorAuthority"]
+    if trusted_authority is None:
+        return _tranche_value_result("PARK_LOW_VALUE", ["UNVERIFIED_AUTHORITY_SHADOW_ONLY"])
+    if (
+        authority.get("authorityPath") != trusted_authority.get("authorityPath")
+        or authority.get("authorityHash") != trusted_authority.get("authorityHash")
+        or authority.get("authorityCommit") != trusted_authority.get("authorityCommit")
+        or authority.get("declaredCap") != trusted_authority.get("declaredCap")
+        or authority.get("currentOrdinal") != trusted_authority.get("currentOrdinal")
+    ):
+        return _tranche_value_result("PARK_LOW_VALUE", ["AUTHORITY_MISMATCH_FAILS_CLOSED"])
+
+    root_cause = record["rootCauseIdentity"]
+    if _is_stale(record["freshness"]):
+        return _tranche_value_result("PARK_LOW_VALUE", ["STALE_OR_EXPIRED_FRESHNESS"])
+
+    if root_cause["relation"] in {"DEPENDENT", "DUPLICATE"}:
+        return _tranche_value_result("STOP_NO_INCREMENTAL_VALUE", ["DEPENDENT_OR_DUPLICATE_ROOT_CAUSE"])
+
+    cap_exhausted = trusted_authority.get("currentOrdinal", 0) > trusted_authority.get("declaredCap", 0)
+    severity = record["severity"]
+    finding_state = record["findingEvidenceState"]
+    value_state = record["valueEvidenceState"]
+    source_backed_finding = finding_state in {"OBSERVED", "HISTORICAL_BOUNDED"}
+    source_backed_value = value_state in {"OBSERVED", "HISTORICAL_BOUNDED"}
+    serious = severity in {"P0", "P1"}
+
+    if cap_exhausted:
+        if serious and source_backed_finding:
+            reason_codes.append("CAP_EXHAUSTED_SERIOUS_FINDING_REQUIRES_NEW_ROADMAP")
+            return _tranche_value_result("CONSOLIDATE", reason_codes)
+        return _tranche_value_result("STOP_NO_INCREMENTAL_VALUE", ["CAP_EXHAUSTED_NO_TV4"])
+
+    if serious and not source_backed_finding:
+        return _tranche_value_result("PARK_LOW_VALUE", ["SERIOUS_SEVERITY_WITHOUT_OBSERVED_OR_HISTORICAL_FINDING_PROOF"])
+
+    if serious:
+        if root_cause["relation"] == "INDEPENDENT" and source_backed_value:
+            return _tranche_value_result("CONTINUE_HIGH_VALUE", ["SOURCE_BACKED_P0_P1_INDEPENDENT_ROOT_CAUSE_OBSERVED_VALUE"])
+        return _tranche_value_result("CONSOLIDATE", ["SOURCE_BACKED_P0_P1_BOUNDED_REPAIR_UNKNOWN_OR_PROJECTED_ECONOMICS"])
+
+    if root_cause["relation"] == "INDEPENDENT" and source_backed_value:
+        return _tranche_value_result("CONTINUE_HIGH_VALUE", ["NON_SERIOUS_INDEPENDENT_ROOT_CAUSE_OBSERVED_OR_HISTORICAL_VALUE"])
+
+    return _tranche_value_result("PARK_LOW_VALUE", ["PROJECTED_OR_UNKNOWN_VALUE_NEVER_CONTINUES"])
+
+
+def _is_stale(freshness: dict[str, Any]) -> bool:
+    expires_at = freshness.get("expiresAt")
+    if expires_at is None:
+        return False
+    try:
+        import datetime as _dt
+
+        expiry = _dt.datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
+        now = _dt.datetime.now(_dt.timezone.utc)
+        if expiry.tzinfo is None:
+            expiry = expiry.replace(tzinfo=_dt.timezone.utc)
+        return now >= expiry
+    except (ValueError, AttributeError):
+        return True
+
+
+def _tranche_value_result(disposition: str, reason_codes: list[str]) -> dict[str, Any]:
+    return {
+        "valueDisposition": disposition,
+        "valueDispositionAuthoritative": False,
+        "valueDispositionReasonCodes": sorted(set(reason_codes)),
+    }
+
+
+def route_manifest(manifest: Any, registry: dict[str, Any] | None = None, trusted_authority: dict[str, Any] | None = None) -> dict[str, Any]:
     registry = registry or load_registry()
     errors = validate_manifest(manifest, registry)
     if errors:
@@ -172,7 +373,7 @@ def route_manifest(manifest: Any, registry: dict[str, Any] | None = None) -> dic
         bundle: _skip_reason(bundle, classification)
         for bundle in registry["bundles"] if bundle not in selected
     }
-    return {
+    receipt = {
         "schemaVersion": RECEIPT_VERSION,
         "taskId": manifest["taskId"],
         "profile": profile,
@@ -187,6 +388,9 @@ def route_manifest(manifest: Any, registry: dict[str, Any] | None = None) -> dic
         "receiptStatus": "ROUTED_SHADOW",
         "validationErrors": [],
     }
+    if "trancheValue" in manifest:
+        receipt.update(evaluate_tranche_value(manifest["trancheValue"], trusted_authority))
+    return receipt
 
 
 def _skip_reason(bundle: str, classification: dict[str, str]) -> str:

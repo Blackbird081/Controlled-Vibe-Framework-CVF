@@ -102,12 +102,57 @@ describe('mandatory-gateway', () => {
     expect(() => gateway.assertAllowed({ action: 'deploy' })).toThrow(/CVF Gateway BLOCK/);
   });
 
-  it('updateConfig changes behavior', () => {
+  it('updateConfig rejects post-bootstrap authority-changing updates and leaves behavior unchanged', () => {
     const engine = { evaluate: vi.fn().mockReturnValue(makePipelineResult('BLOCK')) } as any;
     const gateway = new MandatoryGateway(engine, { hardBlock: true });
     expect(gateway.check({ action: 'deploy' }).allowed).toBe(false);
-    gateway.updateConfig({ hardBlock: false });
-    expect(gateway.check({ action: 'deploy' }).allowed).toBe(true);
+
+    expect(() => gateway.updateConfig({ hardBlock: false })).toThrow(/immutable/i);
+    expect(() => gateway.updateConfig({ enforceAll: false })).toThrow(/immutable/i);
+    expect(() => gateway.updateConfig({ hardEscalate: false })).toThrow(/immutable/i);
+    expect(() => gateway.updateConfig({ bypassActions: ['deploy'] })).toThrow(/immutable/i);
+
+    // Behavior is unchanged after every rejected update attempt.
+    expect(gateway.check({ action: 'deploy' }).allowed).toBe(false);
+  });
+
+  it('getConfig returns a defensively frozen snapshot whose mutation cannot affect gateway behavior', () => {
+    const engine = { evaluate: vi.fn().mockReturnValue(makePipelineResult('ALLOW')) } as any;
+    const gateway = new MandatoryGateway(engine, { bypassActions: ['deploy'] });
+
+    const snapshot = gateway.getConfig();
+    expect(Object.isFrozen(snapshot)).toBe(true);
+    expect(Object.isFrozen(snapshot.bypassActions)).toBe(true);
+    expect(() => {
+      (snapshot as { hardBlock: boolean }).hardBlock = false;
+    }).toThrow();
+    expect(() => {
+      (snapshot.bypassActions as string[]).push('hacked');
+    }).toThrow();
+
+    // A fresh snapshot after the rejected mutation attempts is unaffected.
+    const secondSnapshot = gateway.getConfig();
+    expect(secondSnapshot.bypassActions).toEqual(['deploy']);
+    expect(gateway.check({ action: 'deploy' }).decision).toBe('BYPASS');
+  });
+
+  it('mutating the caller-supplied constructor config object and bypass array after construction has no effect', () => {
+    const engine = { evaluate: vi.fn().mockReturnValue(makePipelineResult('ALLOW')) } as any;
+    const callerBypass = ['deploy'];
+    const callerConfig = { hardBlock: true, bypassActions: callerBypass };
+
+    const gateway = new MandatoryGateway(engine, callerConfig);
+
+    // Mutate the caller's own objects after construction.
+    callerConfig.hardBlock = false;
+    callerBypass.push('anything-else');
+    callerBypass[0] = 'tampered';
+
+    expect(gateway.getConfig().hardBlock).toBe(true);
+    expect(gateway.getConfig().bypassActions).toEqual(['deploy']);
+    expect(gateway.check({ action: 'deploy' }).decision).toBe('BYPASS');
+    expect(gateway.check({ action: 'tampered' }).decision).not.toBe('BYPASS');
+    expect(gateway.check({ action: 'anything-else' }).decision).not.toBe('BYPASS');
   });
 
   describe('checkContext', () => {
@@ -138,10 +183,10 @@ describe('mandatory-gateway', () => {
       expect(context).toEqual(snapshot);
     });
 
-    it('returns BYPASS with preserved requestId when bypassActions matches, without evaluating', () => {
+    it('returns BYPASS with preserved requestId on an exact canonical bypassActions match, without evaluating', () => {
       const engine = { evaluate: vi.fn() } as any;
       const gateway = new MandatoryGateway(engine, { bypassActions: ['health-check'] });
-      const context = makeCanonicalContext({ action: 'health-check-ping', requestId: 'bypass-req' });
+      const context = makeCanonicalContext({ action: 'health-check', requestId: 'bypass-req' });
 
       const result = gateway.checkContext(context);
 
@@ -149,6 +194,18 @@ describe('mandatory-gateway', () => {
       expect(result.allowed).toBe(true);
       expect(result.evidence?.requestId).toBe('bypass-req');
       expect(engine.evaluate).not.toHaveBeenCalled();
+    });
+
+    it('does not bypass a prefix/suffix/segment collision against a configured bypass value', () => {
+      const engine = { evaluate: vi.fn().mockReturnValue(makePipelineResult('ALLOW')) } as any;
+      const gateway = new MandatoryGateway(engine, { bypassActions: ['health-check'] });
+
+      const collisions = ['health-check-ping', 'pre-health-check', 'health-check:admin', 'healthcheck'];
+      for (const action of collisions) {
+        const result = gateway.checkContext(makeCanonicalContext({ action, requestId: `req-${action}` }));
+        expect(result.decision).not.toBe('BYPASS');
+      }
+      expect(engine.evaluate).toHaveBeenCalledTimes(collisions.length);
     });
 
     it('returns ALLOW with preserved requestId when enforcement is disabled, without evaluating', () => {
@@ -193,5 +250,77 @@ describe('mandatory-gateway', () => {
       }
       expect(engine.evaluate).toHaveBeenCalledTimes(4);
     });
+  });
+});
+
+describe('mandatory-gateway -- F4 exact canonical bypass matching', () => {
+  it('matches exact case-fold and whitespace-trimmed variants of a configured bypass value', () => {
+    const engine = { evaluate: vi.fn() } as any;
+    const gateway = new MandatoryGateway(engine, { bypassActions: ['Health-Check'] });
+
+    for (const action of ['health-check', 'HEALTH-CHECK', '  health-check  ', 'Health-Check']) {
+      const result = gateway.check({ action });
+      expect(result.decision).toBe('BYPASS');
+    }
+    expect(engine.evaluate).not.toHaveBeenCalled();
+  });
+
+  it('rejects prefix, suffix, delimiter, and substring collisions for openapi-v2 and pre/post health-check', () => {
+    const engine = { evaluate: vi.fn().mockReturnValue(makePipelineResult('ALLOW')) } as any;
+    const gateway = new MandatoryGateway(engine, { bypassActions: ['openapi', 'health-check'] });
+
+    const collisions = ['openapi-v2', 'v2-openapi', 'openapi:v2', 'health-check-ping', 'pre-health-check', 'health-check:admin'];
+    for (const action of collisions) {
+      const result = gateway.check({ action });
+      expect(result.decision).not.toBe('BYPASS');
+    }
+    expect(engine.evaluate).toHaveBeenCalledTimes(collisions.length);
+  });
+
+  it('deterministically ignores empty and whitespace-only configured bypass entries', () => {
+    const engine = { evaluate: vi.fn().mockReturnValue(makePipelineResult('ALLOW')) } as any;
+    const gateway = new MandatoryGateway(engine, { bypassActions: ['', '   ', 'ping'] });
+
+    expect(gateway.check({ action: '' }).decision).not.toBe('BYPASS');
+    expect(gateway.check({ action: '   ' }).decision).not.toBe('BYPASS');
+    expect(gateway.check({ action: 'ping' }).decision).toBe('BYPASS');
+  });
+
+  it('fails closed without engine execution on a malformed action passed through an untyped caller', () => {
+    const engine = { evaluate: vi.fn().mockReturnValue(makePipelineResult('ALLOW')) } as any;
+    const gateway = new MandatoryGateway(engine, { bypassActions: ['ping'] });
+
+    const malformedActions: unknown[] = [null, undefined, 123, {}, [], '', '   '];
+
+    for (const action of malformedActions) {
+      const direct = gateway.check({ action } as { action: string });
+      expect(direct.allowed).toBe(false);
+      expect(direct.decision).toBe('BLOCK');
+      expect(direct.bypassed).toBe(false);
+
+      const context = makeCanonicalContext({ action: action as string, requestId: 'malformed-req' });
+      const contextual = gateway.checkContext(context);
+      expect(contextual.allowed).toBe(false);
+      expect(contextual.decision).toBe('BLOCK');
+      expect(contextual.bypassed).toBe(false);
+      expect(contextual.evidence?.requestId).toBe('malformed-req');
+    }
+
+    expect(engine.evaluate).not.toHaveBeenCalled();
+  });
+
+  it('applies identical exact-match bypass behavior across check() and checkContext()', () => {
+    const engine = { evaluate: vi.fn().mockReturnValue(makePipelineResult('ALLOW')) } as any;
+    const gateway = new MandatoryGateway(engine, { bypassActions: ['ping'] });
+
+    const exactResult = gateway.check({ action: 'ping' });
+    const exactContextResult = gateway.checkContext(makeCanonicalContext({ action: 'ping' }));
+    expect(exactResult.decision).toBe('BYPASS');
+    expect(exactContextResult.decision).toBe('BYPASS');
+
+    const collisionResult = gateway.check({ action: 'pinging' });
+    const collisionContextResult = gateway.checkContext(makeCanonicalContext({ action: 'pinging' }));
+    expect(collisionResult.decision).not.toBe('BYPASS');
+    expect(collisionContextResult.decision).not.toBe('BYPASS');
   });
 });

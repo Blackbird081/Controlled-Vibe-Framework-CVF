@@ -106,4 +106,125 @@ describe('AIF memory reinjection gate', () => {
       { id: 'low', reason: 'low_provenance_score' },
     ]);
   });
+
+  it('excludes an item with an omitted provenanceScore property as missing_provenance_score', () => {
+    const decision = evaluateAifMemoryReinjection({
+      enabled: true,
+      policy: { actorAuthorized: true, canReinject: true },
+      memory: [{ id: 'omitted', summary: 'No provenance field at all.' }],
+    });
+
+    expect(decision.status).toBe('denied');
+    expect(decision.receipt.excluded).toEqual([{ id: 'omitted', reason: 'missing_provenance_score' }]);
+  });
+
+  it('excludes an item with an explicit undefined provenanceScore as missing_provenance_score', () => {
+    const decision = evaluateAifMemoryReinjection({
+      enabled: true,
+      policy: { actorAuthorized: true, canReinject: true },
+      memory: [{ id: 'explicit-undefined', summary: 'Explicitly undefined.', provenanceScore: undefined }],
+    });
+
+    expect(decision.status).toBe('denied');
+    expect(decision.receipt.excluded).toEqual([{ id: 'explicit-undefined', reason: 'missing_provenance_score' }]);
+  });
+
+  it('excludes NaN provenanceScore as invalid_provenance_score', () => {
+    const decision = evaluateAifMemoryReinjection({
+      enabled: true,
+      policy: { actorAuthorized: true, canReinject: true },
+      memory: [{ id: 'nan', summary: 'NaN provenance.', provenanceScore: NaN }],
+    });
+
+    expect(decision.status).toBe('denied');
+    expect(decision.receipt.excluded).toEqual([{ id: 'nan', reason: 'invalid_provenance_score' }]);
+  });
+
+  it('excludes positive Infinity provenanceScore as invalid_provenance_score', () => {
+    const decision = evaluateAifMemoryReinjection({
+      enabled: true,
+      policy: { actorAuthorized: true, canReinject: true },
+      memory: [{ id: 'pos-inf', summary: 'Positive infinity provenance.', provenanceScore: Infinity }],
+    });
+
+    expect(decision.status).toBe('denied');
+    expect(decision.receipt.excluded).toEqual([{ id: 'pos-inf', reason: 'invalid_provenance_score' }]);
+  });
+
+  it('excludes negative Infinity provenanceScore as invalid_provenance_score', () => {
+    const decision = evaluateAifMemoryReinjection({
+      enabled: true,
+      policy: { actorAuthorized: true, canReinject: true },
+      memory: [{ id: 'neg-inf', summary: 'Negative infinity provenance.', provenanceScore: -Infinity }],
+    });
+
+    expect(decision.status).toBe('denied');
+    expect(decision.receipt.excluded).toEqual([{ id: 'neg-inf', reason: 'invalid_provenance_score' }]);
+  });
+
+  it('retains low_provenance_score for a finite score of zero, below threshold', () => {
+    const decision = evaluateAifMemoryReinjection({
+      enabled: true,
+      policy: { actorAuthorized: true, canReinject: true },
+      memory: [{ id: 'zero', summary: 'Zero provenance.', provenanceScore: 0 }],
+    });
+
+    expect(decision.status).toBe('denied');
+    expect(decision.receipt.excluded).toEqual([{ id: 'zero', reason: 'low_provenance_score' }]);
+  });
+
+  it('treats the exact 0.7 boundary as eligible', () => {
+    const decision = evaluateAifMemoryReinjection({
+      enabled: true,
+      policy: { actorAuthorized: true, canReinject: true },
+      memory: [{ id: 'boundary', summary: 'Exactly at threshold.', provenanceScore: 0.7 }],
+    });
+
+    expect(decision.status).toBe('allowed');
+    expect(decision.receipt.memoryIds).toEqual(['boundary']);
+    expect(decision.receipt.excluded).toEqual([]);
+  });
+
+  it('selects only eligible items from a mixed batch and leaks no excluded item into selected, memoryIds, or promptBlock', () => {
+    const decision = evaluateAifMemoryReinjection({
+      enabled: true,
+      policy: { actorAuthorized: true, canReinject: true, maxItems: 5 },
+      memory: [
+        { id: 'mixed-missing', summary: 'Missing score summary text.' },
+        { id: 'mixed-nan', summary: 'NaN score summary text.', provenanceScore: NaN },
+        { id: 'mixed-low', summary: 'Low score summary text.', provenanceScore: 0.1 },
+        { id: 'mixed-boundary', summary: 'Boundary score summary text.', provenanceScore: 0.7 },
+        { id: 'mixed-high', summary: 'High score summary text.', provenanceScore: 0.99 },
+      ],
+    });
+
+    expect(decision.status).toBe('allowed');
+    expect(decision.receipt.memoryIds).toEqual(['mixed-boundary', 'mixed-high']);
+    expect(decision.receipt.excluded).toEqual([
+      { id: 'mixed-missing', reason: 'missing_provenance_score' },
+      { id: 'mixed-nan', reason: 'invalid_provenance_score' },
+      { id: 'mixed-low', reason: 'low_provenance_score' },
+    ]);
+
+    const promptBlock = decision.promptBlock ?? '';
+    const approvedSection = promptBlock.slice(
+      promptBlock.indexOf('approved_memory:'),
+      promptBlock.indexOf('excluded_memory:'),
+    );
+
+    // Excluded item ids/reasons are intentionally listed in the pre-existing
+    // excluded_memory transparency ledger (unchanged behavior, matching how
+    // max_items_exceeded already worked before this fix). The security
+    // property under test is that excluded items never enter the trusted
+    // approved_memory section, and their summary/content text never leaks
+    // into the prompt block at all.
+    expect(approvedSection).toContain('mixed-boundary');
+    expect(approvedSection).toContain('mixed-high');
+    expect(approvedSection).not.toContain('mixed-missing');
+    expect(approvedSection).not.toContain('mixed-nan');
+    expect(approvedSection).not.toContain('mixed-low');
+    expect(promptBlock).not.toContain('Missing score summary text.');
+    expect(promptBlock).not.toContain('NaN score summary text.');
+    expect(promptBlock).not.toContain('Low score summary text.');
+  });
 });

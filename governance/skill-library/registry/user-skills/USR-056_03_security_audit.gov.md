@@ -1,4 +1,5 @@
 # USR-056: Security Audit
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Technical Review

@@ -41,7 +41,8 @@
     ".codex",
     "node_modules",
     ".cache",
-    ".pytest_cache"
+    ".pytest_cache",
+    "logs"
   ],
   "roots": [
     { "path": ".agents", "lifecycleClass": "ACTIVE_CANONICAL", "exposureClass": "INTERNAL_ONLY" },

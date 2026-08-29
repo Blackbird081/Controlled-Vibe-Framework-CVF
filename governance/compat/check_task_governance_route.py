@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -21,6 +22,68 @@ ACTIVE_STATUSES = {"DISPATCH_READY", "READY", "ACTIVE", "APPROVED_FOR_EXECUTION"
 MANIFEST_HEADING = "## Task Governance Routing Manifest"
 JSON_BLOCK = re.compile(r"## Task Governance Routing Manifest\s*```json\s*(\{.*?\})\s*```", re.DOTALL)
 STATUS = re.compile(r"(?m)^Status:\s*([A-Z0-9_]+)\s*$")
+SUCCESSOR_AUTHORITY_BLOCK = re.compile(
+    r"## Tranche Successor Authority\s*```json\s*(\{.*?\})\s*```", re.DOTALL
+)
+SUCCESSOR_AUTHORITY_SCHEMA = "cvf.trancheSuccessorAuthority.v1"
+
+
+def resolve_trusted_authority(authority_path: str, declared_hash: str, authority_commit: str) -> dict | None:
+    """Resolve a candidate-cited roadmap successor-authority block from committed source.
+
+    Returns None (fail closed) on any missing file, unreadable content, hash
+    mismatch, missing/invalid authority JSON block, or schema mismatch. The
+    candidate manifest's own successorAuthority fields are never trusted as
+    the source of this resolution. The exact blob is read from a full commit
+    hash that must be an ancestor of HEAD.
+    """
+    normalized = authority_path.replace("\\", "/").strip()
+    if not normalized or not normalized.startswith("docs/roadmaps/"):
+        return None
+    if not re.fullmatch(r"[0-9a-f]{40}", authority_commit or ""):
+        return None
+    if _run_git("merge-base", "--is-ancestor", authority_commit, "HEAD").returncode != 0:
+        return None
+    blob = subprocess.run(
+        ["git", "show", f"{authority_commit}:{normalized}"],
+        cwd=REPO_ROOT,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if blob.returncode != 0:
+        return None
+    actual_hash = hashlib.sha256(blob.stdout).hexdigest()
+    if actual_hash != declared_hash:
+        return None
+    try:
+        text = blob.stdout.decode("utf-8", errors="strict")
+    except UnicodeDecodeError:
+        return None
+    match = SUCCESSOR_AUTHORITY_BLOCK.search(text)
+    if not match:
+        return None
+    try:
+        payload = json.loads(match.group(1))
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(payload, dict) or payload.get("schemaVersion") != SUCCESSOR_AUTHORITY_SCHEMA:
+        return None
+    declared_cap = payload.get("declaredCap")
+    current_ordinal = payload.get("currentAuthorizedOrdinal")
+    if not isinstance(declared_cap, int) or isinstance(declared_cap, bool):
+        return None
+    if not isinstance(current_ordinal, int) or isinstance(current_ordinal, bool):
+        return None
+    authorized_ordinals = payload.get("authorizedOrdinals")
+    if not isinstance(authorized_ordinals, list) or current_ordinal not in authorized_ordinals:
+        return None
+    return {
+        "authorityPath": normalized,
+        "authorityHash": actual_hash,
+        "authorityCommit": authority_commit,
+        "declaredCap": declared_cap,
+        "currentOrdinal": current_ordinal,
+    }
 
 
 def _run_git(*args: str) -> subprocess.CompletedProcess[str]:
@@ -85,7 +148,16 @@ def evaluate(base: str, head: str) -> dict:
             continue
         try:
             manifest = _manifest_from_markdown(text)
-            receipt = route_manifest(manifest, registry)
+            trusted_authority = None
+            if isinstance(manifest.get("trancheValue"), dict):
+                candidate_authority = manifest["trancheValue"].get("successorAuthority")
+                if isinstance(candidate_authority, dict):
+                    trusted_authority = resolve_trusted_authority(
+                        candidate_authority.get("authorityPath", ""),
+                        candidate_authority.get("authorityHash", ""),
+                        candidate_authority.get("authorityCommit", ""),
+                    )
+            receipt = route_manifest(manifest, registry, trusted_authority)
             checked.append({"path": path, "status": status, "receipt": receipt})
             if receipt["receiptStatus"] != "ROUTED_SHADOW":
                 violations.append(f"{path}: invalid route manifest: {'; '.join(receipt['validationErrors'])}")

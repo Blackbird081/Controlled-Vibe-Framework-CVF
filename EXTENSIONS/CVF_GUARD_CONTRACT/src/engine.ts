@@ -16,8 +16,64 @@ import type {
 } from './types';
 import { DEFAULT_GUARD_RUNTIME_CONFIG, MANDATORY_GUARD_IDS } from './types';
 
+/**
+ * Engine-owned defensive record of a registered guard. Identity, priority,
+ * and evaluation behavior are captured once at registration time and never
+ * shared by reference with the caller's original object or with any value
+ * returned by a public accessor.
+ */
+interface RegisteredGuardHandle {
+  readonly id: string;
+  readonly name: string;
+  readonly description: string;
+  readonly priority: number;
+  enabled: boolean;
+  readonly evaluate: (context: GuardRequestContext) => ReturnType<Guard['evaluate']>;
+}
+
+function snapshotGuard(guard: Guard): RegisteredGuardHandle {
+  // Capture the unbound evaluation function and a frozen `this` snapshot
+  // separately. A guard implementation's `evaluate` typically reads `this.id`
+  // and other own fields; binding to the caller's live `guard` object would
+  // let a later mutation of that object leak into every future evaluation
+  // through `this`, even though the call site never touches it again.
+  const rawEvaluate = guard.evaluate;
+  const thisSnapshot = Object.freeze({
+    id: guard.id,
+    name: guard.name,
+    description: guard.description,
+    priority: guard.priority,
+    enabled: guard.enabled,
+  }) as Guard;
+
+  return {
+    id: guard.id,
+    name: guard.name,
+    description: guard.description,
+    priority: guard.priority,
+    enabled: guard.enabled,
+    evaluate: (context: GuardRequestContext) => rawEvaluate.call(thisSnapshot, context),
+  };
+}
+
+/**
+ * Builds a frozen, engine-owned clone safe to return from a public accessor.
+ * Mutating the returned object (or its `evaluate` function reference) can
+ * never affect engine identity, priority, ordering, or evaluation behavior.
+ */
+function freezeGuardView(handle: RegisteredGuardHandle): Guard {
+  return Object.freeze({
+    id: handle.id,
+    name: handle.name,
+    description: handle.description,
+    priority: handle.priority,
+    enabled: handle.enabled,
+    evaluate: (context: GuardRequestContext) => handle.evaluate(context),
+  });
+}
+
 export class GuardRuntimeEngine {
-  private guards: Map<string, Guard> = new Map();
+  private guards: Map<string, RegisteredGuardHandle> = new Map();
   private auditLog: GuardAuditEntry[] = [];
   private config: GuardRuntimeConfig;
 
@@ -34,7 +90,7 @@ export class GuardRuntimeEngine {
     if (this.guards.has(guard.id)) {
       throw new Error(`Guard "${guard.id}" is already registered.`);
     }
-    this.guards.set(guard.id, guard);
+    this.guards.set(guard.id, snapshotGuard(guard));
   }
 
   /**
@@ -68,11 +124,12 @@ export class GuardRuntimeEngine {
   }
 
   getGuard(guardId: string): Guard | undefined {
-    return this.guards.get(guardId);
+    const handle = this.guards.get(guardId);
+    return handle ? freezeGuardView(handle) : undefined;
   }
 
   getRegisteredGuards(): Guard[] {
-    return Array.from(this.guards.values());
+    return Array.from(this.guards.values()).map(freezeGuardView);
   }
 
   getGuardCount(): number {
@@ -164,7 +221,7 @@ export class GuardRuntimeEngine {
     this.config = { ...this.config, ...updates };
   }
 
-  private getSortedEnabledGuards(): Guard[] {
+  private getSortedEnabledGuards(): RegisteredGuardHandle[] {
     return Array.from(this.guards.values())
       .filter((g) => g.enabled)
       .sort((a, b) => a.priority - b.priority);

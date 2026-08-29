@@ -20,11 +20,25 @@
  * @module cli/cli
  */
 
-import { createGuardEngine } from '../guards/index.js';
+import { createGuardEngine } from 'cvf-guard-contract';
 import { generateSystemPrompt } from '../prompt/system-prompt.js';
 import type { CVFPhase, CVFRiskLevel, CVFRole } from '../guards/types.js';
 
 const engine = createGuardEngine();
+
+// The canonical cvf-guard-contract engine has no session-phase concept.
+// Session phase is owner-local CLI UX state, tracked here rather than on
+// the engine, so it cannot register/unregister/disable/wrap/proxy any
+// canonical guard.
+let cliSessionPhase: string = 'DISCOVERY';
+
+function getCliSessionPhase(): string {
+  return cliSessionPhase;
+}
+
+function setCliSessionPhase(phase: string): void {
+  cliSessionPhase = phase;
+}
 
 export interface CliResult {
   success: boolean;
@@ -54,7 +68,7 @@ export function parseArgs(argv: string[]): { command: string; flags: Record<stri
 }
 
 function normalizePhase(raw?: string): CVFPhase {
-  if (!raw) return engine.getSessionPhase() as CVFPhase || 'DISCOVERY';
+  if (!raw) return getCliSessionPhase() as CVFPhase || 'DISCOVERY';
   const upper = raw.trim().toUpperCase();
   if (['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'].includes(upper)) return upper as CVFPhase;
   return 'BUILD';
@@ -198,7 +212,7 @@ export function executeCommand(command: string, flags: Record<string, string>): 
     }
 
     case 'advance': {
-      const currentPhase = engine.getSessionPhase();
+      const currentPhase = getCliSessionPhase();
       const phases: CVFPhase[] = ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'];
       const idx = phases.indexOf(currentPhase as CVFPhase);
       if (idx >= phases.length - 1) {
@@ -210,7 +224,7 @@ export function executeCommand(command: string, flags: Record<string, string>): 
         };
       }
       const nextPhase = phases[idx + 1];
-      engine.setSessionPhase(nextPhase);
+      setCliSessionPhase(nextPhase);
       return {
         success: true,
         command,
@@ -252,7 +266,7 @@ export function executeCommand(command: string, flags: Record<string, string>): 
         command,
         output: {
           version: '1.7.0',
-          sessionPhase: engine.getSessionPhase(),
+          sessionPhase: getCliSessionPhase(),
           guards: guards.map((g) => ({ id: g.id, enabled: g.enabled, priority: g.priority })),
           guardCount: guards.length,
           auditEntries: log.length,

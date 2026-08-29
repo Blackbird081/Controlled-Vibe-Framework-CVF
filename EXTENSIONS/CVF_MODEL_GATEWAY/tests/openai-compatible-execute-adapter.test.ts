@@ -149,4 +149,113 @@ describe("OpenAI-compatible execute adapter", () => {
       prompt: "question",
     })).rejects.toThrow("OpenAI-compatible provider request failed");
   });
+
+  // EAFR-R10. Closes the EAFR-R8 adapter boundary residual: the adapter now
+  // classifies its configured endpoint through the shared, gateway-owned
+  // classifyAdapterDestination policy before ever invoking the injected
+  // fetchImpl, so an unrecognised or external-store destination is denied
+  // before any network I/O regardless of which fetch implementation the
+  // caller supplies.
+  it("[EAFR-R10] denies an unrecognised endpoint before the injected fetch is called", async () => {
+    const unrecognisedEndpoint = "https://not-a-recognised-provider.example.invalid/v1/chat/completions";
+    const fetchImpl = successFetch("must not be reached");
+    const adapter = createOpenAiCompatibleExecuteAdapter({
+      providerId: "openai",
+      modelId: "gpt-4o",
+      endpoint: unrecognisedEndpoint,
+      secret: "fake-test-secret",
+      fetchImpl,
+    });
+
+    await expect(adapter.execute({
+      traceId: "trace-r10-deny",
+      providerId: "openai",
+      modelId: "gpt-4o",
+      prompt: "question",
+    })).rejects.toThrow("CVF_ADAPTER_DESTINATION_DENIED");
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("[EAFR-R10] denies an external-store endpoint before the injected fetch is called", async () => {
+    const upstashEndpoint = "https://balanced-shrew-118656.upstash.io/some/path";
+    const fetchImpl = successFetch("must not be reached");
+    const adapter = createOpenAiCompatibleExecuteAdapter({
+      providerId: "openai",
+      modelId: "gpt-4o",
+      endpoint: upstashEndpoint,
+      secret: "fake-test-secret",
+      fetchImpl,
+    });
+
+    await expect(adapter.execute({
+      traceId: "trace-r10-store-deny",
+      providerId: "openai",
+      modelId: "gpt-4o",
+      prompt: "question",
+    })).rejects.toThrow("CVF_ADAPTER_DESTINATION_DENIED");
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("[EAFR-R10] denies a covered provider endpoint whose identity does not match configured providerId, before fetch", async () => {
+    const fetchImpl = successFetch("must not be reached");
+    const adapter = createOpenAiCompatibleExecuteAdapter({
+      providerId: "openai",
+      modelId: "gpt-4o",
+      // A real, recognised provider endpoint, but for a different provider
+      // than the adapter is configured with.
+      endpoint: "https://api.anthropic.com/v1/chat/completions",
+      secret: "fake-test-secret",
+      fetchImpl,
+    });
+
+    await expect(adapter.execute({
+      traceId: "trace-r10-provider-mismatch",
+      providerId: "openai",
+      modelId: "gpt-4o",
+      prompt: "question",
+    })).rejects.toThrow("CVF_ADAPTER_DESTINATION_DENIED");
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("[EAFR-R10] permits a matching provider endpoint through to the injected fetch", async () => {
+    const fetchImpl = successFetch("matching provider permitted");
+    const adapter = createOpenAiCompatibleExecuteAdapter({
+      providerId: "openai",
+      modelId: "gpt-4o",
+      endpoint: "https://api.openai.com/v1/chat/completions",
+      secret: "fake-test-secret",
+      fetchImpl,
+    });
+
+    const result = await adapter.execute({
+      traceId: "trace-r10-provider-match",
+      providerId: "openai",
+      modelId: "gpt-4o",
+      prompt: "question",
+    });
+
+    expect(fetchImpl).toHaveBeenCalledOnce();
+    expect(result.text).toBe("matching provider permitted");
+  });
+
+  it("[EAFR-R10] permits a non-provider (relative path) compatibility endpoint through to the injected fetch", async () => {
+    const fetchImpl = successFetch("non-provider permitted");
+    const adapter = createOpenAiCompatibleExecuteAdapter({
+      providerId: "openai",
+      modelId: "gpt-4o",
+      endpoint: "/api/local-openai-compatible-proxy",
+      secret: "fake-test-secret",
+      fetchImpl,
+    });
+
+    const result = await adapter.execute({
+      traceId: "trace-r10-non-provider",
+      providerId: "openai",
+      modelId: "gpt-4o",
+      prompt: "question",
+    });
+
+    expect(fetchImpl).toHaveBeenCalledOnce();
+    expect(result.text).toBe("non-provider permitted");
+  });
 });

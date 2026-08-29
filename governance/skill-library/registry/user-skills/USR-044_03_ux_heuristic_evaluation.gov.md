@@ -1,4 +1,5 @@
 # USR-044: UX Heuristic Evaluation
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Product Ux

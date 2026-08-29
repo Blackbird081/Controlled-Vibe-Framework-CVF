@@ -97,14 +97,14 @@ describe('/api/providers', () => {
         }
     });
 
-    it('returns CERTIFIED lane status for Alibaba when configured', async () => {
+    it('returns EXPERIMENTAL lane status for Alibaba when configured (fresh live proof pending, not certified)', async () => {
         process.env.ALIBABA_API_KEY = 'ali-key';
 
         const res = await GET();
         const data = await res.json();
         const alibaba = data.providers.find((p: { provider: string }) => p.provider === 'alibaba');
 
-        expect(alibaba.laneStatus).toBe('CERTIFIED');
+        expect(alibaba.laneStatus).toBe('EXPERIMENTAL');
     });
 
     it('returns CERTIFIED lane status for DeepSeek when configured', async () => {
@@ -117,13 +117,39 @@ describe('/api/providers', () => {
         expect(deepseek.laneStatus).toBe('CERTIFIED');
     });
 
-    it('returns CERTIFIED lane status for OpenAI when configured', async () => {
+    it('returns EXPERIMENTAL lane status for OpenAI when configured (historical receipts do not reverse R65 Option B)', async () => {
         process.env.OPENAI_API_KEY = 'openai-key';
 
         const res = await GET();
         const data = await res.json();
         const openai = data.providers.find((p: { provider: string }) => p.provider === 'openai');
 
-        expect(openai.laneStatus).toBe('CERTIFIED');
+        expect(openai.laneStatus).toBe('EXPERIMENTAL');
+    });
+
+    it('proves configured readiness does not imply certified status for any provider', async () => {
+        process.env.ALIBABA_API_KEY = 'ali-key';
+        process.env.OPENAI_API_KEY = 'openai-key';
+        process.env.DEEPSEEK_API_KEY = 'ds-key';
+        process.env.GOOGLE_AI_API_KEY = 'gemini-key';
+        process.env.ANTHROPIC_API_KEY = 'claude-key';
+        process.env.OPENROUTER_API_KEY = 'openrouter-key';
+
+        const res = await GET();
+        const data = await res.json();
+
+        for (const p of data.providers as Array<{ provider: string; configured: boolean; laneStatus: string; readiness: string }>) {
+            expect(p.configured).toBe(true);
+            expect(p.readiness).toBe('live_task_ready');
+            if (p.provider !== 'deepseek') {
+                expect(p.laneStatus).not.toBe('CERTIFIED');
+            }
+        }
+
+        const deepseek = data.providers.find((p: { provider: string }) => p.provider === 'deepseek');
+        expect(deepseek.laneStatus).toBe('CERTIFIED');
+
+        const openrouter = data.providers.find((p: { provider: string }) => p.provider === 'openrouter');
+        expect(openrouter.laneStatus).toBe('EXPERIMENTAL');
     });
 });

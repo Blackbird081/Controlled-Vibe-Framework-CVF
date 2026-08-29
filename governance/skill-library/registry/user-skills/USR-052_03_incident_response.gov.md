@@ -1,4 +1,5 @@
 # USR-052: Incident Response Plan
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Security Compliance

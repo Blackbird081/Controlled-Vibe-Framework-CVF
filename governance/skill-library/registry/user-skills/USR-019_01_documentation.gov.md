@@ -1,4 +1,5 @@
 # USR-019: Documentation
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Content Creation

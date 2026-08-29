@@ -4,7 +4,7 @@
 import { homedir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { createGuardEngine } from '../guards/index.js';
+import { createGuardEngine } from 'cvf-guard-contract';
 import { JsonFileAdapter } from '../persistence/json-file.adapter.js';
 import { JsonReceiptConsumptionStore } from '../persistence/json-receipt-consumption.store.js';
 import { JsonGovernedExecutionStore } from '../persistence/json-governed-execution.store.js';

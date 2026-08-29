@@ -1,4 +1,5 @@
 # USR-012: Desktop App Spec
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** App Development

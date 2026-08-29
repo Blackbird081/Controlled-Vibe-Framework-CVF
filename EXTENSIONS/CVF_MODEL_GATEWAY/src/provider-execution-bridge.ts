@@ -13,6 +13,7 @@ import type {
   GatewayExecuteResponse,
   GatewayErrorEnvelope,
   GatewayErrorClass,
+  GatewayMaterialContextManifestDisposition,
 } from "./unified-gateway-interface-contract";
 import type { AdapterAdmissionRecord } from "./provider-adapter-admission";
 import { checkBridgeAdmission } from "./provider-bridge-admission-guard";
@@ -24,6 +25,8 @@ import { CredentialBoundary } from "./credential-boundary";
 import { ProviderHealthMonitor } from "./provider-health";
 import { QuotaLedger } from "./quota-ledger";
 import { GatewayReceiptBuilder } from "./gateway-receipt";
+import type { MaterialContextManifest } from "./material-context-manifest";
+import { buildMaterialContextManifest, validateMaterialContextManifest } from "./material-context-manifest";
 export interface ProviderExecutionAdapterInput {
   traceId: string;
   providerId: string;
@@ -55,6 +58,8 @@ export interface ProviderExecutionBridgeResult {
   response?: GatewayExecuteResponse;
   error?: GatewayErrorEnvelope;
   receipt: GatewayReceipt;
+  materialContextManifest?: MaterialContextManifest;
+  materialContextManifestDisposition: GatewayMaterialContextManifestDisposition;
 }
 export interface ProviderExecutionBridgeExecuteOptions {
   signal?: AbortSignal;
@@ -176,6 +181,15 @@ export class ProviderExecutionBridge {
         }
       }
     }
+    const invocationBinding = { providerId, modelId };
+    const manifestBuildResult = buildMaterialContextManifest(request, invocationBinding);
+    if (!manifestBuildResult.ok) {
+      return this.buildManifestFailureResult(traceId, providerId, modelId, credentialMeta);
+    }
+    const materialContextManifest = manifestBuildResult.manifest;
+    if (!validateMaterialContextManifest(materialContextManifest, request, invocationBinding)) {
+      return this.buildManifestFailureResult(traceId, providerId, modelId, credentialMeta);
+    }
     try {
       const adapterResult = await adapter.execute({
         traceId,
@@ -207,6 +221,7 @@ export class ProviderExecutionBridge {
         credentialKeyId: credentialMeta.keyId,
         credentialFingerprint: credentialMeta.fingerprint,
         validationState: "passed",
+        metadata: { materialContextManifestDigest: materialContextManifest.manifestDigest },
       });
       const response: GatewayExecuteResponse = {
         traceId,
@@ -214,7 +229,12 @@ export class ProviderExecutionBridge {
         usage: adapterResult.usage,
         model: { providerId, modelId },
       };
-      return { response, receipt };
+      return {
+        response,
+        receipt,
+        materialContextManifest,
+        materialContextManifestDisposition: "attached",
+      };
     } catch (caught: unknown) {
       this.health.recordFailure(providerId, undefined, "adapter_execution_error");
       const receipt = this.receipt.build({
@@ -229,6 +249,7 @@ export class ProviderExecutionBridge {
         credentialKeyId: credentialMeta.keyId,
         credentialFingerprint: credentialMeta.fingerprint,
         validationState: "failed",
+        metadata: { materialContextManifestDigest: materialContextManifest.manifestDigest },
       });
       const error: GatewayErrorEnvelope = {
         errorClass: "internal_error",
@@ -237,8 +258,41 @@ export class ProviderExecutionBridge {
         credentialShielded: true,
         retryable: true,
       };
-      return { error, receipt };
+      return {
+        error,
+        receipt,
+        materialContextManifest,
+        materialContextManifestDisposition: "attached",
+      };
     }
+  }
+  private buildManifestFailureResult(
+    traceId: string,
+    providerId: string,
+    modelId: string,
+    credentialMeta: CredentialMetadata,
+  ): ProviderExecutionBridgeResult {
+    const error: GatewayErrorEnvelope = {
+      errorClass: "invalid_request",
+      traceId,
+      message: "Material context manifest missing, invalid, or trace-mismatched",
+      credentialShielded: true,
+      retryable: false,
+    };
+    const receipt = this.receipt.build({
+      traceId,
+      providerId,
+      selectedModelId: modelId,
+      decision: "selected",
+      reason: "material_context_manifest_invalid",
+      healthState: "degraded",
+      quotaAllowed: true,
+      credentialKeyId: credentialMeta.keyId,
+      credentialFingerprint: credentialMeta.fingerprint,
+      validationState: "failed",
+      metadata: { materialContextManifestDisposition: "invalid" },
+    });
+    return { error, receipt, materialContextManifestDisposition: "invalid" };
   }
   private buildStoppedResult(
     traceId: string,
@@ -266,8 +320,13 @@ export class ProviderExecutionBridge {
       decision: receiptDecisionMap[decision.status],
       reason: decision.reason,
       validationState: "not_run",
+      metadata: { materialContextManifestDisposition: "not_built_precondition_stopped" },
     });
-    return { error, receipt };
+    return {
+      error,
+      receipt,
+      materialContextManifestDisposition: "not_built_precondition_stopped",
+    };
   }
   private buildShieldedErrorResult(
     traceId: string,
@@ -291,7 +350,12 @@ export class ProviderExecutionBridge {
       decision: "selected",
       reason: message,
       validationState: "failed",
+      metadata: { materialContextManifestDisposition: "not_built_precondition_stopped" },
     });
-    return { error, receipt };
+    return {
+      error,
+      receipt,
+      materialContextManifestDisposition: "not_built_precondition_stopped",
+    };
   }
 }

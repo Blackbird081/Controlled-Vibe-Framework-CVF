@@ -1,4 +1,5 @@
 # USR-001: Model Selection
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Ai Ml Evaluation

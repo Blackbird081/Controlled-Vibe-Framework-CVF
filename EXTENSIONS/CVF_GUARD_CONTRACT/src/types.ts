@@ -106,7 +106,31 @@ export interface GuardRequestContext {
   traceHash?: string;
   /** Channel from which this request originated */
   channel?: 'web' | 'ide' | 'cli' | 'mcp' | 'api';
+  /** Typed BUILD-phase mutation prerequisite evidence (RFR-R1). */
+  buildAuthority?: BuildAuthorityEvidence;
   metadata?: Record<string, unknown>;
+}
+
+export type BuildAuthoritySpecStatus = 'ACCEPTED' | 'REJECTED' | 'PENDING';
+
+export type BuildAuthorityWorkOrderStatus = 'VALID' | 'INVALID' | 'EXPIRED' | 'REVOKED';
+
+/**
+ * Typed BUILD-phase mutation prerequisite evidence (RFR-R1).
+ * Represents an accepted SPEC and a valid, non-revoked, non-expired
+ * WORK ORDER with an explicit bounded file scope. This is evidence only;
+ * it carries no issuer, signature, or storage behavior.
+ */
+export interface BuildAuthorityEvidence {
+  specStatus: BuildAuthoritySpecStatus;
+  acceptedSpecRef: string;
+  workOrderStatus: BuildAuthorityWorkOrderStatus;
+  workOrderRef: string;
+  revoked: boolean;
+  /** ISO-8601 timestamp; must parse and be strictly after evaluation time to remain valid. */
+  expiresAt?: string;
+  /** Explicit repo-relative file/directory scopes this WORK ORDER authorizes. */
+  allowedScope: string[];
 }
 
 /**
@@ -259,7 +283,7 @@ export const DEFAULT_GUARD_RUNTIME_CONFIG: GuardRuntimeConfig = {
  * Guards that form the non-bypassable governance core.
  * Shared factories should always register these by default.
  */
-export const MANDATORY_GUARD_IDS = ['authority_gate', 'phase_gate', 'ai_commit'] as const;
+export const MANDATORY_GUARD_IDS = ['authority_gate', 'phase_gate', 'ai_commit', 'build_authority'] as const;
 
 export type MandatoryGuardId = (typeof MANDATORY_GUARD_IDS)[number];
 

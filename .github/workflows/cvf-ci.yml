@@ -89,9 +89,9 @@ jobs:
 
       - name: Install SOT3 package dependencies
         run: |
-          npm ci --prefix ../CVF_TRUTH_KERNEL
-          npm ci --prefix ../CVF_TRUTH_FLOW
-          npm ci --prefix ../CVF_REFINERY
+          npm ci --prefix ../../CVF_TRUTH_KERNEL
+          npm ci --prefix ../../CVF_TRUTH_FLOW
+          npm ci --prefix ../../CVF_REFINERY
 
       - name: Install MCP Server dependencies
         run: npm ci
@@ -133,10 +133,6 @@ jobs:
         working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
         run: npm ci
 
-      - name: Install Execution Plane Foundation dependencies
-        working-directory: EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION
-        run: npm ci
-
       - name: Install Web UI dependencies
         run: npm ci
 
@@ -144,13 +140,6 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Build verification
-        env:
-          NEXTAUTH_SECRET: cvf-ci-build-only-secret
-          NEXTAUTH_URL: http://localhost:3000
-          GITHUB_ID: cvf-ci-github-id
-          GITHUB_SECRET: cvf-ci-github-secret
-          GOOGLE_ID: cvf-ci-google-id
-          GOOGLE_SECRET: cvf-ci-google-secret
         run: npm run build
 
   # ─── Control Plane Foundation Tests ──────────────────────────────────
@@ -299,10 +288,6 @@ jobs:
         working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
         run: npm ci
 
-      - name: Install Execution Plane Foundation dependencies
-        working-directory: EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION
-        run: npm ci
-
       - name: Install Web UI dependencies
         run: npm ci
 
@@ -310,13 +295,6 @@ jobs:
         run: npm run test:run
 
       - name: Build verification
-        env:
-          NEXTAUTH_SECRET: cvf-ci-build-only-secret
-          NEXTAUTH_URL: http://localhost:3000
-          GITHUB_ID: cvf-ci-github-id
-          GITHUB_SECRET: cvf-ci-github-secret
-          GOOGLE_ID: cvf-ci-google-id
-          GOOGLE_SECRET: cvf-ci-google-secret
         run: npm run build
 
   # ─── Front-Door Static Smoke ─────────────────────────────────────────
@@ -353,21 +331,10 @@ jobs:
         working-directory: EXTENSIONS/CVF_GUARD_CONTRACT
         run: npm ci
 
-      - name: Install Execution Plane Foundation dependencies
-        working-directory: EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION
-        run: npm ci
-
       - name: Install Web UI dependencies
         run: npm ci
 
       - name: Front-door governance smoke
-        env:
-          NEXTAUTH_SECRET: cvf-ci-build-only-secret
-          NEXTAUTH_URL: http://localhost:3000
-          GITHUB_ID: cvf-ci-github-id
-          GITHUB_SECRET: cvf-ci-github-secret
-          GOOGLE_ID: cvf-ci-google-id
-          GOOGLE_SECRET: cvf-ci-google-secret
         run: python ../../../scripts/run_cvf_static_ci_gate.py --json
 
   # ─── Summary gate ────────────────────────────────────────────────────

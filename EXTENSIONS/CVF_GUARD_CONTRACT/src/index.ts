@@ -47,6 +47,7 @@ export { MutationBudgetGuard, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD } f
 export { FileScopeGuard, PROTECTED_PATHS as FILE_SCOPE_PROTECTED_PATHS, READ_ONLY_ROLES, BUILDER_CLASS_ROLES } from './guards/file-scope.guard';
 export { ScopeGuard, PROTECTED_PATHS, CVF_ROOT_INDICATORS } from './guards/scope.guard';
 export { AuditTrailGuard } from './guards/audit-trail.guard';
+export { BuildAuthorityGuard } from './guards/build-authority.guard';
 
 // Phase D role-permission contract
 export type {
@@ -148,6 +149,7 @@ import { MutationBudgetGuard } from './guards/mutation-budget.guard';
 import { FileScopeGuard } from './guards/file-scope.guard';
 import { ScopeGuard } from './guards/scope.guard';
 import { AuditTrailGuard } from './guards/audit-trail.guard';
+import { BuildAuthorityGuard } from './guards/build-authority.guard';
 
 /**
  * Creates a GuardRuntimeEngine pre-loaded with the hardened default guard stack.
@@ -164,6 +166,7 @@ export function createGuardEngine(
   engine.registerGuard(new PhaseGateGuard());
   engine.registerGuard(new RiskGateGuard());
   engine.registerGuard(new AuthorityGateGuard());
+  engine.registerGuard(new BuildAuthorityGuard());
   engine.registerGuard(new MutationBudgetGuard());
   engine.registerGuard(new FileScopeGuard());
   engine.registerGuard(new ScopeGuard());

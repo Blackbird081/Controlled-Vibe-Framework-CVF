@@ -5,6 +5,7 @@ import type {
 } from "./provider-execution-bridge";
 import type { CredentialReference } from "./credential-boundary";
 import { CredentialBoundary } from "./credential-boundary";
+import { classifyAdapterDestination } from "./adapter-destination-policy";
 
 export type OpenAiCompatibleFetch = (
   input: string,
@@ -50,6 +51,28 @@ export function createOpenAiCompatibleExecuteAdapter(
       if (input.providerId !== providerId || input.modelId !== modelId) {
         throw new Error("OpenAI-compatible adapter identity mismatch");
       }
+
+      // EAFR-R10. Classify the configured endpoint through the single
+      // gateway-owned destination policy before ever invoking the injected
+      // fetchImpl, so an unrecognised or external-store destination cannot
+      // reach the network regardless of what fetch implementation the caller
+      // supplies. A provider match whose identity differs from the adapter's
+      // own configured providerId is also denied before fetch: identity
+      // validation is not destination validation.
+      const destination = classifyAdapterDestination(endpoint);
+      if (destination.kind === "deny") {
+        throw new Error(
+          `CVF_ADAPTER_DESTINATION_DENIED: ${destination.reason}`,
+        );
+      }
+      if (destination.kind === "provider" && destination.provider !== providerId) {
+        throw new Error(
+          `CVF_ADAPTER_DESTINATION_DENIED: endpoint resolves to provider `
+          + `${destination.provider}, which does not match configured `
+          + `providerId ${providerId}`,
+        );
+      }
+
       const response = await fetchImpl(endpoint, {
         method: "POST",
         headers: {

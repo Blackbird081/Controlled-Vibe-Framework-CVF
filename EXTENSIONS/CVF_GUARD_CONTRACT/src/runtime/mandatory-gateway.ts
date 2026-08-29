@@ -22,7 +22,7 @@ export interface GatewayConfig {
   /** If true, ESCALATE stops execution. If false, ESCALATE is logged but execution continues. Default: true */
   hardEscalate: boolean;
   /** Actions that bypass the gateway (e.g., health checks) */
-  bypassActions: string[];
+  bypassActions: readonly string[];
   /** Default phase if not specified */
   defaultPhase: CVFPhase;
   /** Default risk if not specified */
@@ -61,16 +61,70 @@ export const DEFAULT_GATEWAY_CONFIG: GatewayConfig = {
   defaultControlMode: 'standard',
 };
 
+/**
+ * Normalizes a bypass entry (or an incoming action) to the canonical form
+ * used for exact whole-value bypass comparison: trimmed and case-folded.
+ * A prefix, suffix, delimiter, or substring relationship never matches.
+ */
+function canonicalizeBypassValue(value: unknown): string | undefined {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+  const normalized = value.trim().toLowerCase();
+  return normalized.length > 0 ? normalized : undefined;
+}
+
+function buildCanonicalBypassSet(bypassActions: readonly unknown[]): ReadonlySet<string> {
+  const canonical = new Set<string>();
+  for (const entry of bypassActions) {
+    const normalized = canonicalizeBypassValue(entry);
+    if (normalized !== undefined) {
+      canonical.add(normalized);
+    }
+  }
+  return canonical;
+}
+
+/**
+ * Authority-changing runtime configuration keys. These fields control
+ * whether enforcement, hard blocking, or hard escalation is active, and
+ * which actions bypass evaluation entirely. They may only be set once, at
+ * construction; no post-bootstrap update may alter them.
+ */
+const AUTHORITY_CONFIG_KEYS = [
+  'enforceAll',
+  'hardBlock',
+  'hardEscalate',
+  'bypassActions',
+] as const;
+
 // ─── Mandatory Gateway ───────────────────────────────────────────────
 
 export class MandatoryGateway {
   private engine: GuardRuntimeEngine;
-  private config: GatewayConfig;
+  /** Defensively frozen bootstrap configuration; never mutated after construction. */
+  private readonly config: Readonly<GatewayConfig>;
+  /** Canonical (trimmed, case-folded) bypass set derived once at bootstrap. */
+  private readonly canonicalBypassActions: ReadonlySet<string>;
   private auditLog: GatewayResult[] = [];
 
   constructor(engine: GuardRuntimeEngine, config: Partial<GatewayConfig> = {}) {
     this.engine = engine;
-    this.config = { ...DEFAULT_GATEWAY_CONFIG, ...config };
+
+    const merged: GatewayConfig = { ...DEFAULT_GATEWAY_CONFIG, ...config };
+    const bypassActionsSource = Array.isArray(config.bypassActions)
+      ? config.bypassActions
+      : DEFAULT_GATEWAY_CONFIG.bypassActions;
+
+    // Defensive snapshot: copy the bypass array by value so neither the
+    // caller's original array nor any later mutation of it can change
+    // bootstrap authority. The frozen config object is the sole source of
+    // truth for the lifetime of this gateway instance.
+    this.config = Object.freeze({
+      ...merged,
+      bypassActions: Object.freeze([...bypassActionsSource]),
+    });
+    this.canonicalBypassActions = buildCanonicalBypassSet(this.config.bypassActions);
   }
 
   /**
@@ -92,9 +146,12 @@ export class MandatoryGateway {
       ? 'governed'
       : this.config.defaultControlMode;
 
-    // Check bypass list
-    const normalizedAction = request.action.toLowerCase().trim();
-    if (this.config.bypassActions.some(bp => normalizedAction.includes(bp))) {
+    if (canonicalizeBypassValue(request.action) === undefined) {
+      return this.buildMalformedActionResult(controlMode);
+    }
+
+    // Check bypass list: exact canonical whole-value match only.
+    if (this.isExactBypassMatch(request.action)) {
       return this.buildBypassResult(request.action, controlMode);
     }
 
@@ -133,8 +190,11 @@ export class MandatoryGateway {
       ? 'governed'
       : this.config.defaultControlMode;
 
-    const normalizedAction = context.action.toLowerCase().trim();
-    if (this.config.bypassActions.some(bp => normalizedAction.includes(bp))) {
+    if (canonicalizeBypassValue(context.action) === undefined) {
+      return this.buildMalformedActionResult(controlMode, context.requestId);
+    }
+
+    if (this.isExactBypassMatch(context.action)) {
       return this.buildBypassResult(context.action, controlMode, context.requestId);
     }
 
@@ -143,6 +203,38 @@ export class MandatoryGateway {
     }
 
     return this.evaluateContext(context, controlMode);
+  }
+
+  /**
+   * Exact canonical whole-value bypass match. A malformed (non-string,
+   * empty, or whitespace-only) action never matches and never throws.
+   */
+  private isExactBypassMatch(action: unknown): boolean {
+    const normalizedAction = canonicalizeBypassValue(action);
+    if (normalizedAction === undefined) {
+      return false;
+    }
+    return this.canonicalBypassActions.has(normalizedAction);
+  }
+
+  /**
+   * Malformed or empty actions cannot be authorized or sent into the engine.
+   * This keeps the untyped runtime boundary deterministic and fail-closed.
+   */
+  private buildMalformedActionResult(
+    controlMode: 'standard' | 'governed',
+    requestId?: string,
+  ): GatewayResult {
+    const result: GatewayResult = {
+      allowed: false,
+      decision: 'BLOCK',
+      reason: 'Action must be a non-empty string',
+      bypassed: false,
+      controlMode,
+      ...(requestId !== undefined ? { evidence: { requestId } } : {}),
+    };
+    this.auditLog.push(result);
+    return result;
   }
 
   private buildBypassResult(
@@ -246,17 +338,37 @@ export class MandatoryGateway {
   }
 
   /**
-   * Get current config.
+   * Get current config. Returns a frozen defensive copy; the nested
+   * `bypassActions` array is also frozen, so no caller mutation of the
+   * returned value can affect gateway behavior.
    */
   getConfig(): Readonly<GatewayConfig> {
-    return { ...this.config };
+    return Object.freeze({
+      ...this.config,
+      bypassActions: Object.freeze([...this.config.bypassActions]),
+    });
   }
 
   /**
-   * Update config at runtime.
+   * Rejects any post-bootstrap attempt to change authority-bearing
+   * configuration (`enforceAll`, `hardBlock`, `hardEscalate`,
+   * `bypassActions`). Non-authority defaults (`defaultPhase`, `defaultRisk`,
+   * `defaultRole`, `defaultControlMode`) are not authority-bearing and are
+   * intentionally out of scope for this deterministic rejection: this
+   * gateway exposes no API to change them either, so `updateConfig` always
+   * rejects.
    */
   updateConfig(updates: Partial<GatewayConfig>): void {
-    this.config = { ...this.config, ...updates };
+    const attemptedKeys = Object.keys(updates) as (keyof GatewayConfig)[];
+    const authorityKeysAttempted = attemptedKeys.filter((key) =>
+      (AUTHORITY_CONFIG_KEYS as readonly string[]).includes(key),
+    );
+
+    throw new Error(
+      `[CVF Gateway] Runtime configuration is immutable after bootstrap. ` +
+      `Rejected update to: [${(authorityKeysAttempted.length > 0 ? authorityKeysAttempted : attemptedKeys).join(', ')}]. ` +
+      `Construct a new MandatoryGateway with the desired configuration instead.`
+    );
   }
 }
 

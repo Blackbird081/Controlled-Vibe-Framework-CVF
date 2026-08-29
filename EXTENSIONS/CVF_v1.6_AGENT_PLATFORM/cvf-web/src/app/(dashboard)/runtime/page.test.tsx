@@ -108,7 +108,7 @@ describe('RuntimeMonitorPage', () => {
 
         expect(await screen.findByText('Bảng theo dõi runtime')).toBeTruthy();
         expect(screen.getByText('Chỉ xem')).toBeTruthy();
-        expect(await screen.findByText(/Trang này không phê duyệt việc AI/)).toBeTruthy();
+        expect(screen.getByText(/Trang này không phê duyệt việc AI/)).toBeTruthy();
     });
 
     it('refreshes the runtime snapshot on demand', async () => {

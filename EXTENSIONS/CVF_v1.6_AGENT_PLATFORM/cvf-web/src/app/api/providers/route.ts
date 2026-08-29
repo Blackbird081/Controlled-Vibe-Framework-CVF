@@ -7,9 +7,9 @@ import type { LaneStatus } from '@/lib/provider-lane-status';
 
 /** Canary certification status per provider — updated by evaluate_cvf_provider_lane_certification.py */
 const KNOWN_LANE_STATUS: Partial<Record<AIProvider, LaneStatus>> = {
-    alibaba: 'CERTIFIED',  // 3 consecutive PASS 6/6 — 2026-04-21
-    deepseek: 'CERTIFIED', // 3 consecutive PASS 6/6 — 2026-04-21
-    openai: 'CERTIFIED',   // 3 consecutive PASS 6/6 — 2026-05-09, gpt-4o-mini
+    alibaba: 'EXPERIMENTAL', // current target qwen-flash; fresh live proof pending, historical receipt does not transfer
+    deepseek: 'CERTIFIED',   // 3 consecutive PASS 6/6 - 2026-04-21
+    openai: 'EXPERIMENTAL',  // historical 3 consecutive PASS 6/6 - 2026-05-09, gpt-4o-mini; current promotion held under R65 Option B
 };
 
 function laneStatusFor(provider: AIProvider, configured: boolean): LaneStatus {

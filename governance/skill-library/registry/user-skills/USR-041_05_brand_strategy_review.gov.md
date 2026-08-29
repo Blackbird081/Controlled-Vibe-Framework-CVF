@@ -1,4 +1,5 @@
 # USR-041: Brand Voice Consistency
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Marketing Seo

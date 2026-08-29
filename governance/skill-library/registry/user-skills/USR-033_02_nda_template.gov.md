@@ -1,4 +1,5 @@
 # USR-033: NDA Template
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Legal Contracts

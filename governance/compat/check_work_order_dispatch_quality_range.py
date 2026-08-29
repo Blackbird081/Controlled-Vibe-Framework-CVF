@@ -6,6 +6,85 @@ Loaded by check_work_order_dispatch_quality.py into its module globals.
 
 from __future__ import annotations
 
+_DISPATCH_BASE_FIELD_RE = re.compile(
+    r"(?im)^\s*(?:[-*]\s*)?Dispatch base head:\s*`?([0-9a-f]{6,40})`?\s*$"
+)
+_DISPATCH_BASE_HEAD_INLINE_RE = re.compile(
+    r"(?i)\bdispatchBaseHead\s*=\s*`?([0-9a-f]{6,40})`?"
+)
+_PRECLOSURE_COMMAND_RE = re.compile(
+    r"(?im)^[^\n]*run_agent_autorun_workflow_gate\.py[^\n]*--phase\s+pre-closure[^\n]*$"
+)
+_COMMAND_BASE_ARG_RE = re.compile(r"--base\s+(\S+)")
+_COMMAND_HEAD_ARG_RE = re.compile(r"--head\s+(\S+)")
+
+
+def _extract_dispatch_base_values(text: str) -> set[str]:
+    """Return every literal commit-hash value bound to this work order's
+    dispatch base, from both the top-level `Dispatch base head:` field and
+    any inline `dispatchBaseHead=<sha>` occurrence (for example inside a
+    `baseHeadFor(phase)` table cell). Symbolic uses of the bare word
+    `dispatchBaseHead` as a command argument are handled separately in
+    `_validate_stale_preclosure_dispatch_base`, since that is not a literal
+    hash value."""
+    primary_values = {
+        match.group(1).lower() for match in _DISPATCH_BASE_FIELD_RE.finditer(text)
+    }
+    if primary_values:
+        return primary_values
+    return {
+        match.group(1).lower()
+        for match in _DISPATCH_BASE_HEAD_INLINE_RE.finditer(text)
+    }
+
+
+def _validate_stale_preclosure_dispatch_base(text: str) -> list[str]:
+    """Reject an executable pre-closure `run_agent_autorun_workflow_gate.py`
+    command whose `--base` reuses this work order's own dispatch base
+    together with `--head HEAD`, because a session-sync or continuity commit
+    landing after the material worker/reviewer commit makes that pinned
+    range invalid by construction (literal-format gotcha 12; the runtime
+    committed-range shape preflight already rejects the mixed range at
+    execution time, but nothing previously stopped a work order from
+    dispatching with that command pre-pinned as if it were valid closure
+    proof). Only the real `## Verification Commands` section is scanned, so
+    the same unsafe string appearing in explanatory prose elsewhere is not
+    flagged."""
+    commands_section = _extract_section(text, "Verification Commands")
+    if not commands_section:
+        return []
+
+    dispatch_base_values = _extract_dispatch_base_values(text)
+    issues: list[str] = []
+    for command_match in _PRECLOSURE_COMMAND_RE.finditer(commands_section):
+        command = command_match.group(0)
+        head_match = _COMMAND_HEAD_ARG_RE.search(command)
+        if not head_match or head_match.group(1).strip("`") != "HEAD":
+            continue
+        base_match = _COMMAND_BASE_ARG_RE.search(command)
+        if not base_match:
+            continue
+        base_value = base_match.group(1)
+        stripped_base = base_value.strip("`")
+        is_literal_reuse = stripped_base.lower() in dispatch_base_values
+        is_symbolic_reuse = stripped_base.lower() in (
+            "dispatchbasehead",
+            "<dispatchbasehead>",
+        )
+        if is_literal_reuse or is_symbolic_reuse:
+            issues.append(
+                "`## Verification Commands` pins an executable pre-closure "
+                "`run_agent_autorun_workflow_gate.py --phase pre-closure ... --head HEAD` "
+                "command to this work order's own dispatch base "
+                f"(`{base_value}`); a later session-sync or continuity commit can make "
+                "that range invalid as closure proof (literal-format gotcha 12) - use a "
+                "distinct material/reviewer closure anchor instead, or record the "
+                "material-only sub-range separately from the full range"
+            )
+            break
+    return issues
+
+
 def _validate_work_order(path: str, text: str) -> list[str]:
     issues: list[str] = []
     status = _extract_status(text)
@@ -23,6 +102,9 @@ def _validate_work_order(path: str, text: str) -> list[str]:
 
     if dispatching and not _has_worker_autonomy_clause(text):
         issues.append("dispatch/ready work order lacks Worker Autonomy / No-Question Rule")
+
+    if dispatching:
+        issues.extend(_validate_stale_preclosure_dispatch_base(text))
 
     if dispatching:
         issues.extend(_validate_commit_mode_and_anchor_lifecycle(text))

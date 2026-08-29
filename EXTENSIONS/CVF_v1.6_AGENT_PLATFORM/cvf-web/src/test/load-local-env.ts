@@ -2,6 +2,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const DEFAULT_ENV_FILES = ['.env.local', '.env'];
+const ORCHESTRATOR_ONLY_KEYS = new Set([
+  'CVF_AGENT_ID',
+  'CVF_DELEGATION_ID',
+  'CVF_PROVIDER_EXECUTION_GRANT_ID',
+  'CVF_PROVIDER_EXECUTION_GRANT_JSON',
+]);
 
 function normalizeEnvValue(rawValue: string): string {
   const trimmed = rawValue.trim();
@@ -58,6 +64,9 @@ export function loadLocalEnvFiles(
       }
 
       const [key, value] = parsed;
+      if (ORCHESTRATOR_ONLY_KEYS.has(key)) {
+        continue;
+      }
       const currentValue = process.env[key];
       if (currentValue === undefined || currentValue.trim() === '') {
         process.env[key] = value;

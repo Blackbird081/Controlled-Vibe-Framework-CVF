@@ -18,7 +18,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { withMcpToolAudit } from '../audit/mcp-tool-audit.js';
-import type { GuardRuntimeEngine } from '../guards/engine.js';
+import type { BuildAuthorityEvidence, GuardRuntimeEngine } from 'cvf-guard-contract';
 import type {
   CVFPhase,
   CVFRiskLevel,
@@ -56,6 +56,19 @@ const SECRET_TEXT_PATTERNS: RegExp[] = [
   /\bBearer\s+[A-Za-z0-9._-]{12,}/gi,
 ];
 
+/**
+ * Caller-supplied ai_commit provenance for a modifying action. Optional: the
+ * canonical mandatory `ai_commit` guard fails closed (BLOCK) on a modifying
+ * action when this is absent, exactly as intended - this input does not
+ * relax that requirement, it is the evidence channel for satisfying it.
+ */
+export interface PreflightAiCommitInput {
+  commitId: string;
+  agentId: string;
+  timestamp: number;
+  description?: string;
+}
+
 export interface PreflightInput {
   actionClass: PreflightActionClass;
   action: string;
@@ -67,6 +80,15 @@ export interface PreflightInput {
   mutationCount?: number;
   traceHash?: string;
   scope?: string;
+  /** ai_commit provenance for a modifying action; see PreflightAiCommitInput. */
+  aiCommit?: PreflightAiCommitInput;
+  /**
+   * Typed BUILD-phase mutation prerequisite evidence for the canonical
+   * mandatory `build_authority` guard. Optional: omitting this leaves a
+   * mutating BUILD action blocked, exactly as intended - this input is the
+   * evidence channel, not a permissive default.
+   */
+  buildAuthority?: BuildAuthorityEvidence;
 }
 
 export interface PreflightReceipt {
@@ -212,7 +234,7 @@ export async function preflightGovernanceAction(
   const action = redactText(rawAction);
   const requestId = generateRequestId();
 
-  const context: GuardRequestContext = {
+  const context: GuardRequestContext & { buildAuthority?: BuildAuthorityEvidence } = {
     requestId,
     phase: input.phase ?? 'BUILD',
     riskLevel: input.riskLevel ?? 'R2',
@@ -223,7 +245,12 @@ export async function preflightGovernanceAction(
     mutationCount: input.mutationCount,
     traceHash: input.traceHash,
     scope: input.scope,
-    metadata: { actionClass, contract: PREFLIGHT_CONTRACT },
+    metadata: {
+      actionClass,
+      contract: PREFLIGHT_CONTRACT,
+      ...(input.aiCommit ? { ai_commit: input.aiCommit } : {}),
+    },
+    buildAuthority: input.buildAuthority,
   };
 
   const pipelineResult = engine.evaluate(context);

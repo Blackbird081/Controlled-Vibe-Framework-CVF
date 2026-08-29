@@ -1,4 +1,5 @@
 # USR-018: Business Plan
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Business Analysis

@@ -1,4 +1,5 @@
 # USR-014: Local Deployment Spec
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** App Development

@@ -1,5 +1,7 @@
 # CVF Project Role And Provider Delegation Envelope
 
+rawMemoryReleased=false
+
 Memory class: POINTER_RECORD
 
 Status: ACTIVE_REFERENCE
@@ -81,6 +83,14 @@ authority chain, task objective, completion and refusal criteria, allowed and
 forbidden tools, allowed and prohibited artifact classes, result contract,
 escalation route, review gate, and memory-write authority defaulting to none),
 per the delegation boundary standard in Related Surfaces.
+
+Provider execution is excluded from a worker's general tool allowance. The
+packet must state `providerExecutionAuthority: FORBIDDEN` unless the
+orchestrator supplies a subject-bound, delegation-bound, provider-limited,
+call-limited and expiring grant. An API key, local environment, live test mode,
+or provider-capable command is never an authority substitute. CVF-owned
+provider adapters must deny before network I/O when the grant is absent or
+mismatched.
 
 ## Provider Lane Selection Boundary
 

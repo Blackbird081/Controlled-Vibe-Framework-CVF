@@ -19,9 +19,20 @@
  *
  * @module cli/cli
  */
-import { createGuardEngine } from '../guards/index.js';
+import { createGuardEngine } from 'cvf-guard-contract';
 import { generateSystemPrompt } from '../prompt/system-prompt.js';
 const engine = createGuardEngine();
+// The canonical cvf-guard-contract engine has no session-phase concept.
+// Session phase is owner-local CLI UX state, tracked here rather than on
+// the engine, so it cannot register/unregister/disable/wrap/proxy any
+// canonical guard.
+let cliSessionPhase = 'DISCOVERY';
+function getCliSessionPhase() {
+    return cliSessionPhase;
+}
+function setCliSessionPhase(phase) {
+    cliSessionPhase = phase;
+}
 export function parseArgs(argv) {
     const command = argv[0] || 'help';
     const flags = {};
@@ -42,7 +53,7 @@ export function parseArgs(argv) {
 }
 function normalizePhase(raw) {
     if (!raw)
-        return engine.getSessionPhase() || 'DISCOVERY';
+        return getCliSessionPhase() || 'DISCOVERY';
     const upper = raw.trim().toUpperCase();
     if (['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'].includes(upper))
         return upper;
@@ -184,7 +195,7 @@ export function executeCommand(command, flags) {
             };
         }
         case 'advance': {
-            const currentPhase = engine.getSessionPhase();
+            const currentPhase = getCliSessionPhase();
             const phases = ['DISCOVERY', 'DESIGN', 'BUILD', 'REVIEW'];
             const idx = phases.indexOf(currentPhase);
             if (idx >= phases.length - 1) {
@@ -196,7 +207,7 @@ export function executeCommand(command, flags) {
                 };
             }
             const nextPhase = phases[idx + 1];
-            engine.setSessionPhase(nextPhase);
+            setCliSessionPhase(nextPhase);
             return {
                 success: true,
                 command,
@@ -236,7 +247,7 @@ export function executeCommand(command, flags) {
                 command,
                 output: {
                     version: '1.7.0',
-                    sessionPhase: engine.getSessionPhase(),
+                    sessionPhase: getCliSessionPhase(),
                     guards: guards.map((g) => ({ id: g.id, enabled: g.enabled, priority: g.priority })),
                     guardCount: guards.length,
                     auditEntries: log.length,

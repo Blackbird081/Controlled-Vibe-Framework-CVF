@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 """
 Focused tests for generate_user_skills.py.
 
@@ -103,6 +104,16 @@ class GenerateUserSkillsTests(unittest.TestCase):
             )
 
         index_text = (self.out / "INDEX.md").read_text(encoding="utf-8")
+        exception_marker = (
+            "Text Encoding Exception: preserves source-faithful Unicode "
+            "from accepted skill metadata."
+        )
+        self.assertIn(exception_marker, index_text)
+        for name in expected_names:
+            self.assertIn(
+                exception_marker,
+                (self.out / name).read_text(encoding="utf-8"),
+            )
         self.assertIn("**Total Skills:** 3", index_text)
         self.assertIn("Alpha Skill", index_text)
         self.assertIn("Beta Skill", index_text)

@@ -4,6 +4,7 @@ import {
   validateDelegationContract,
   validateWriteScope,
   evaluateProviderExecutionAuthority,
+  evaluateExternalStoreExecutionAuthority,
   type DelegationContract,
 } from "../src/delegation.contract";
 
@@ -345,5 +346,174 @@ describe("DelegationContract", () => {
     );
 
     expect(result.allowed).toBe(true);
+  });
+
+  it("allows one external-store call only when every orchestrator grant binding matches", () => {
+    const grant = {
+      authority: "ORCHESTRATOR_GRANT_REQUIRED" as const,
+      grantId: "grant-001",
+      authorizedBy: "ORCHESTRATOR" as const,
+      subjectAgentId: "worker-001",
+      delegationId: "delegation-001",
+      allowedStores: ["upstash"],
+      maxCalls: 1,
+      expiresAt: "2026-08-26T00:00:00.000Z",
+    };
+    expect(evaluateExternalStoreExecutionAuthority(grant, {
+      workerAgentId: "worker-001",
+      delegationId: "delegation-001",
+      grantId: "grant-001",
+      store: "upstash",
+      consumedCalls: 0,
+      nowIso: "2026-08-25T00:00:00.000Z",
+    }).allowed).toBe(true);
+  });
+
+  it("denies external-store execution when no grant is present", () => {
+    expect(evaluateExternalStoreExecutionAuthority(undefined, {
+      workerAgentId: "worker-001",
+      delegationId: "delegation-001",
+      grantId: "grant-001",
+      store: "upstash",
+      consumedCalls: 0,
+      nowIso: "2026-08-25T00:00:00.000Z",
+    }).allowed).toBe(false);
+  });
+
+  it("denies external-store execution when authority is FORBIDDEN", () => {
+    const grant = {
+      authority: "FORBIDDEN" as const,
+      grantId: null,
+      authorizedBy: null,
+      subjectAgentId: "worker-001",
+      delegationId: "delegation-001",
+      allowedStores: [],
+      maxCalls: 0,
+      expiresAt: null,
+    };
+    expect(evaluateExternalStoreExecutionAuthority(grant, {
+      workerAgentId: "worker-001",
+      delegationId: "delegation-001",
+      grantId: "grant-001",
+      store: "upstash",
+      consumedCalls: 0,
+      nowIso: "2026-08-25T00:00:00.000Z",
+    }).allowed).toBe(false);
+  });
+
+  it("denies external-store execution when authorizedBy is not ORCHESTRATOR", () => {
+    const grant = {
+      authority: "ORCHESTRATOR_GRANT_REQUIRED" as const,
+      grantId: "grant-001",
+      authorizedBy: null,
+      subjectAgentId: "worker-001",
+      delegationId: "delegation-001",
+      allowedStores: ["upstash"],
+      maxCalls: 1,
+      expiresAt: "2026-08-26T00:00:00.000Z",
+    };
+    expect(evaluateExternalStoreExecutionAuthority(grant, {
+      workerAgentId: "worker-001",
+      delegationId: "delegation-001",
+      grantId: "grant-001",
+      store: "upstash",
+      consumedCalls: 0,
+      nowIso: "2026-08-25T00:00:00.000Z",
+    }).allowed).toBe(false);
+  });
+
+  it.each([
+    ["wrong subject", { workerAgentId: "worker-002" }],
+    ["wrong delegation", { delegationId: "delegation-002" }],
+    ["wrong grant", { grantId: "grant-002" }],
+    ["wrong store", { store: "s3" }],
+    ["budget exhausted", { consumedCalls: 1 }],
+    ["expired", { nowIso: "2026-08-27T00:00:00.000Z" }],
+    ["non-integer consumedCalls", { consumedCalls: 0.5 }],
+    ["negative consumedCalls", { consumedCalls: -1 }],
+  ])("rejects external-store execution for %s", (_label, override) => {
+    const grant = {
+      authority: "ORCHESTRATOR_GRANT_REQUIRED" as const,
+      grantId: "grant-001",
+      authorizedBy: "ORCHESTRATOR" as const,
+      subjectAgentId: "worker-001",
+      delegationId: "delegation-001",
+      allowedStores: ["upstash"],
+      maxCalls: 1,
+      expiresAt: "2026-08-26T00:00:00.000Z",
+    };
+    const request = {
+      workerAgentId: "worker-001",
+      delegationId: "delegation-001",
+      grantId: "grant-001",
+      store: "upstash",
+      consumedCalls: 0,
+      nowIso: "2026-08-25T00:00:00.000Z",
+      ...override,
+    };
+    expect(evaluateExternalStoreExecutionAuthority(grant, request).allowed).toBe(false);
+  });
+
+  it("rejects external-store execution when maxCalls is non-positive", () => {
+    const grant = {
+      authority: "ORCHESTRATOR_GRANT_REQUIRED" as const,
+      grantId: "grant-001",
+      authorizedBy: "ORCHESTRATOR" as const,
+      subjectAgentId: "worker-001",
+      delegationId: "delegation-001",
+      allowedStores: ["upstash"],
+      maxCalls: 0,
+      expiresAt: "2026-08-26T00:00:00.000Z",
+    };
+    expect(evaluateExternalStoreExecutionAuthority(grant, {
+      workerAgentId: "worker-001",
+      delegationId: "delegation-001",
+      grantId: "grant-001",
+      store: "upstash",
+      consumedCalls: 0,
+      nowIso: "2026-08-25T00:00:00.000Z",
+    }).allowed).toBe(false);
+  });
+
+  it("rejects external-store execution when expiresAt is missing", () => {
+    const grant = {
+      authority: "ORCHESTRATOR_GRANT_REQUIRED" as const,
+      grantId: "grant-001",
+      authorizedBy: "ORCHESTRATOR" as const,
+      subjectAgentId: "worker-001",
+      delegationId: "delegation-001",
+      allowedStores: ["upstash"],
+      maxCalls: 1,
+      expiresAt: null,
+    };
+    expect(evaluateExternalStoreExecutionAuthority(grant, {
+      workerAgentId: "worker-001",
+      delegationId: "delegation-001",
+      grantId: "grant-001",
+      store: "upstash",
+      consumedCalls: 0,
+      nowIso: "2026-08-25T00:00:00.000Z",
+    }).allowed).toBe(false);
+  });
+
+  it("rejects external-store execution when expiresAt is unparseable", () => {
+    const grant = {
+      authority: "ORCHESTRATOR_GRANT_REQUIRED" as const,
+      grantId: "grant-001",
+      authorizedBy: "ORCHESTRATOR" as const,
+      subjectAgentId: "worker-001",
+      delegationId: "delegation-001",
+      allowedStores: ["upstash"],
+      maxCalls: 1,
+      expiresAt: "not-a-date",
+    };
+    expect(evaluateExternalStoreExecutionAuthority(grant, {
+      workerAgentId: "worker-001",
+      delegationId: "delegation-001",
+      grantId: "grant-001",
+      store: "upstash",
+      consumedCalls: 0,
+      nowIso: "2026-08-25T00:00:00.000Z",
+    }).allowed).toBe(false);
   });
 });

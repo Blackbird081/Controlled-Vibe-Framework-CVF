@@ -1,4 +1,5 @@
 # USR-017: Market Research
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Business Analysis

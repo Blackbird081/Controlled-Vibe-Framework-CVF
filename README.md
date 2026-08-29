@@ -11,7 +11,7 @@
 [![Guard Contract](https://img.shields.io/badge/Guard%20Contract-187%20tests%20pass-brightgreen.svg)](EXTENSIONS/CVF_GUARD_CONTRACT/)
 [![MCP Bridge](https://img.shields.io/badge/MCP%20Bridge-4%20endpoints%20active-blue.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/)
 [![Non-Coder Value](https://img.shields.io/badge/non--coder%20value-1%20provider%20proven-brightgreen.svg)](docs/reference/archive/CVF_PUBLIC_NONCODER_VALUE_STATEMENT_2026-04-17.md)
-[![Multi Provider](https://img.shields.io/badge/multi--provider-Alibaba%20CERTIFIED%20%7C%20DeepSeek%20CERTIFIED-brightgreen.svg)](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
+[![Multi Provider](https://img.shields.io/badge/multi--provider-Alibaba%20EXPERIMENTAL%20%7C%20DeepSeek%20CERTIFIED-brightgreen.svg)](docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md)
 [![Knowledge Benefit](https://img.shields.io/badge/knowledge%20benefit-%2B0.775%20delta-brightgreen.svg)](docs/assessments/CVF_W102_T1_POST_RUN_QUALITY_ASSESSMENT_2026-04-17.md)
 [![AI Safety](https://img.shields.io/badge/AI%20Safety-Kernel%20Active-green.svg)](docs/assessments/CVF_ANTIGRAVITY_INDEPENDENT_ASSESSMENT_2026-02-26.md)
 [![CI](https://img.shields.io/badge/CI-governed%20verification%20active-brightgreen.svg)](.github/workflows/cvf-ci.yml)
@@ -108,7 +108,7 @@ The gate runs UI-only mock E2E plus live governance E2E, and it must fail if no 
 
 ## Current Live-Proof Boundary
 
-> Current live proof: Alibaba/DashScope is the primary certified release lane, with W149 proving the 40-form trusted corpus through direct API and browser UI journeys and W152 preserving a `7/7` release gate PASS. DeepSeek is a certified provider lane with canary evidence and W149 confirmatory subset coverage (`12/12`), but full provider parity is not claimed. Other providers may have adapter contracts or experimental integration surfaces, but they are not certified until their own live canary receipts are saved.
+> Historical live proof: Alibaba/DashScope was the certified release lane on its prior model, with W149 proving the 40-form trusted corpus through direct API and browser UI journeys and W152 preserving a `7/7` release gate PASS; those receipts do not transfer to the current `qwen-flash` target, which is `EXPERIMENTAL` pending fresh live proof. DeepSeek is the current certified provider lane, with canary evidence and W149 confirmatory subset coverage (`12/12`), but full provider parity is not claimed. Other providers may have adapter contracts or experimental integration surfaces, but they are not certified until their own live canary receipts are saved.
 
 ## What CVF Is
 
@@ -269,7 +269,7 @@ npm run dev
 
 Then open `http://localhost:3000`.
 
-Provider proof note: the current certified release lane is Alibaba/DashScope; DeepSeek has certified canary evidence and bounded confirmatory coverage, but CVF does not claim provider parity. See [Current Live-Proof Boundary](#current-live-proof-boundary).
+Provider proof note: the current certified release lane is DeepSeek; Alibaba/DashScope's `qwen-flash` target is `EXPERIMENTAL` pending fresh live proof, and CVF does not claim provider parity. See [Current Live-Proof Boundary](#current-live-proof-boundary).
 
 In `Settings`, enable the provider keys you want to use. Each admitted `provider + model` pair is treated as a governed run lane for future Product Value Validation.
 

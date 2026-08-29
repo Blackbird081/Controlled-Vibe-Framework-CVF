@@ -10,10 +10,10 @@ export interface LaneEvidence {
 /** Static lane evidence — updated by evaluate_cvf_provider_lane_certification.py */
 export const PROVIDER_LANE_EVIDENCE: Partial<Record<string, LaneEvidence>> = {
   alibaba: {
-    status: 'CERTIFIED',
-    label: 'Certified',
-    passWindow: '3/3 PASS',
-    note: 'Certified by repeated CVF canary',
+    status: 'EXPERIMENTAL',
+    label: 'Experimental',
+    passWindow: 'Fresh live proof pending',
+    note: 'Current target qwen-flash; historical Alibaba receipts do not transfer to this model',
   },
   deepseek: {
     status: 'CERTIFIED',
@@ -22,10 +22,10 @@ export const PROVIDER_LANE_EVIDENCE: Partial<Record<string, LaneEvidence>> = {
     note: 'Certified by repeated CVF canary',
   },
   openai: {
-    status: 'CERTIFIED',
-    label: 'Certified',
-    passWindow: '3/3 PASS',
-    note: 'Certified by repeated CVF canary on gpt-4o-mini',
+    status: 'EXPERIMENTAL',
+    label: 'Experimental',
+    passWindow: 'Historical 3/3 PASS (not current)',
+    note: 'Historical canary receipt retained on gpt-4o-mini; current promotion held under R65 Option B',
   },
 };
 

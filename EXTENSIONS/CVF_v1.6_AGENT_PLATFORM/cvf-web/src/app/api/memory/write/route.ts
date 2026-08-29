@@ -11,7 +11,8 @@ import {
 } from 'cvf-learning-plane-foundation/web-runtime';
 
 import { verifySessionCookie } from '@/lib/middleware-auth';
-import { verifyServiceTokenRequest } from '@/lib/service-token-auth';
+import { deriveServiceTokenIdentity, verifyServiceTokenRequest } from '@/lib/service-token-auth';
+import { resolveExecutionCVFRole } from '@/lib/execute-role-resolver';
 import { MEMORY_DURABLE_WRITE_ROUTE_VERSION } from './route-constants';
 
 interface MemoryDurableWriteBody {
@@ -21,7 +22,7 @@ interface MemoryDurableWriteBody {
   scope: string;
   tier: DurableMemoryTier;
   summary: string;
-  provenanceScore?: number;
+  provenanceScore: number;
   policyDecision: 'allow' | 'deny' | 'require_human_approval';
   actorAuthorized: boolean;
   lifecycleState?: DurableMemoryLifecycleState;
@@ -108,15 +109,17 @@ function validateBody(raw: unknown): MemoryDurableWriteBody | null {
     typeof b.policyDecision !== 'string' ||
     typeof b.actorAuthorized !== 'boolean'
   ) return null;
+  if (b.id.trim() === '' || b.scope.trim() === '' || b.summary.trim() === '' || b.actorId.trim() === '') return null;
   if (!allowedActorRoles.has(b.actorRole as RuntimeMemoryActorRole)) return null;
   if (!allowedTiers.has(b.tier as DurableMemoryTier)) return null;
   if (!allowedPolicies.has(b.policyDecision as MemoryDurableWriteBody['policyDecision'])) return null;
-  if (b.provenanceScore !== undefined && typeof b.provenanceScore !== 'number') return null;
-  if (typeof b.provenanceScore === 'number' && !Number.isFinite(b.provenanceScore)) return null;
+  if (typeof b.provenanceScore !== 'number' || !Number.isFinite(b.provenanceScore)) return null;
+  if (b.provenanceScore < 0 || b.provenanceScore > 1) return null;
   if (b.lifecycleState !== undefined) {
     if (typeof b.lifecycleState !== 'string') return null;
     if (!allowedLifecycleStates.has(b.lifecycleState as DurableMemoryLifecycleState)) return null;
   }
+  if (b.containsSecret !== undefined && typeof b.containsSecret !== 'boolean') return null;
   if (b.sensitivity !== undefined) {
     if (typeof b.sensitivity !== 'string') return null;
     if (!allowedSensitivities.has(b.sensitivity as RuntimeMemorySensitivity)) return null;
@@ -129,7 +132,7 @@ function validateBody(raw: unknown): MemoryDurableWriteBody | null {
     scope: b.scope,
     tier: b.tier as DurableMemoryTier,
     summary: b.summary,
-    provenanceScore: typeof b.provenanceScore === 'number' ? b.provenanceScore : undefined,
+    provenanceScore: b.provenanceScore,
     policyDecision: b.policyDecision as MemoryDurableWriteBody['policyDecision'],
     actorAuthorized: b.actorAuthorized,
     lifecycleState: b.lifecycleState as DurableMemoryLifecycleState | undefined,
@@ -199,7 +202,32 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'Missing or invalid fields.' }, { status: 400 });
   }
 
-  if (!body.actorAuthorized || body.policyDecision !== 'allow') {
+  const resolvedRole = resolveExecutionCVFRole(session, isServiceAllowed);
+  if (!resolvedRole.allowed || !resolvedRole.role) {
+    return writeResponse(emptyReceipt({
+      reason: 'durable_memory_policy_denied',
+      scope: body.scope,
+      tier: body.tier,
+      id: body.id,
+    }));
+  }
+
+  const boundActorId = isServiceAllowed
+    ? deriveServiceTokenIdentity(serviceToken ?? '')
+    : session?.userId;
+
+  if (!boundActorId || body.actorId !== boundActorId || body.actorRole !== resolvedRole.role) {
+    return writeResponse(emptyReceipt({
+      reason: 'durable_memory_policy_denied',
+      scope: body.scope,
+      tier: body.tier,
+      id: body.id,
+    }));
+  }
+
+  const serverAuthorized = body.actorAuthorized === true && body.policyDecision === 'allow';
+
+  if (!serverAuthorized) {
     return writeResponse(emptyReceipt({
       reason: 'durable_memory_policy_denied',
       scope: body.scope,
@@ -223,14 +251,14 @@ export async function POST(request: NextRequest) {
     id: body.id,
     tier: body.tier,
     scope: body.scope,
-    actorId: body.actorId,
-    actorRole: body.actorRole,
+    actorId: boundActorId,
+    actorRole: resolvedRole.role,
     summary: body.summary,
     lifecycleState: body.lifecycleState ?? 'semantic',
     provenanceScore: body.provenanceScore,
     containsSecret: body.containsSecret,
     policyDecision: body.policyDecision,
-    actorAuthorized: body.actorAuthorized,
+    actorAuthorized: serverAuthorized,
     sensitivity: body.sensitivity ?? 'internal',
   });
 

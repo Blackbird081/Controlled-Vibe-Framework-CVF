@@ -5,6 +5,14 @@
 // for filesystem/network/process containment. Pre-execution policy checks
 // enforce governance constraints; physical containment requires a real
 // sandbox platform (docker, v8_isolate) behind the SandboxExecutor interface.
+// RFR-R5 / F9: this adapter declares WORKER_THREAD_GUARANTEE_PROFILE, which
+// is false for every one of the eight canonical isolation dimensions.
+// SandboxIsolationContract evaluates that profile before this adapter is
+// ever invoked, so a caller requiring SECURITY_BOUNDARY_REQUIRED never
+// reaches worker_threads at all; only an explicit BEST_EFFORT_EXPLICIT
+// requirement (empty requiredDimensions) can select this adapter. It also
+// never spreads host process.env into the worker or child process -- only
+// the caller's explicitly supplied command.env crosses the boundary.
 // Doctrine basis: CVF_ARCHITECTURE_PRINCIPLES.md §7 (Isolation), §11 (Composability)
 // Wiring target: SandboxIsolationContract executor interface
 
@@ -16,17 +24,65 @@ import type {
     SandboxResult,
     ContainmentViolation,
     ContainmentViolationType,
+    IsolationGuaranteeProfile,
 } from './sandbox.types.js'
+import { evaluateIsolationAdmission } from './sandbox.types.js'
 
 let workerIdCounter = 0
 
+/**
+ * worker_threads share the host process's memory space, filesystem access,
+ * network stack, and syscall surface. None of the eight canonical isolation
+ * dimensions are guaranteed by this platform; every entry is truthfully
+ * false. Advisory pre/post-execution policy checks below remain useful
+ * governance signals, but they are not a substitute for any of these
+ * guarantees and must never be described as one.
+ */
+export const WORKER_THREAD_GUARANTEE_PROFILE: IsolationGuaranteeProfile = Object.freeze({
+    filesystem: false,
+    network: false,
+    process: false,
+    environment: false,
+    credential: false,
+    ipc: false,
+    persistence: false,
+    host: false,
+})
+
 export class WorkerThreadSandboxAdapter implements SandboxExecutor {
     readonly platform = 'worker_threads' as const
+    readonly guaranteeProfile = WORKER_THREAD_GUARANTEE_PROFILE
 
     async execute(command: SandboxCommand, config: SandboxConfig): Promise<SandboxResult> {
         const sandboxId = `wt-${++workerIdCounter}-${Date.now()}`
         const startedAt = new Date().toISOString()
         const violations: ContainmentViolation[] = []
+        const isolationAdmission = evaluateIsolationAdmission(
+            config.isolationRequirement,
+            WORKER_THREAD_GUARANTEE_PROFILE,
+            { requestedPlatform: config.platform, executorPlatform: this.platform },
+        )
+
+        // Fail closed at the adapter itself (not only the calling contract):
+        // an unsupported isolation requirement rejects before any worker or
+        // child process is created, even when this adapter is invoked
+        // directly without going through SandboxIsolationContract.
+        if (isolationAdmission.verdict === 'REJECTED') {
+            const now = new Date().toISOString()
+            return {
+                sandboxId,
+                status: 'CONTAINMENT_VIOLATION',
+                startedAt,
+                completedAt: now,
+                exitCode: -1,
+                stdout: '',
+                stderr: `Isolation admission rejected: ${isolationAdmission.detail}`,
+                containmentViolations: [],
+                resourceUsage: { cpuTimeMs: 0, memoryPeakMb: 0, outputBytes: 0 },
+                platform: 'worker_threads',
+                isolationAdmission,
+            }
+        }
 
         // Pre-execution policy checks (synchronous governance validation)
         if (config.networkPolicy.allowEgress && config.networkPolicy.allowedHosts.length === 0) {
@@ -81,6 +137,7 @@ export class WorkerThreadSandboxAdapter implements SandboxExecutor {
                 containmentViolations: violations,
                 resourceUsage: { cpuTimeMs: 0, memoryPeakMb: 0, outputBytes: 0 },
                 platform: 'worker_threads',
+                isolationAdmission,
             }
         }
 
@@ -111,6 +168,7 @@ export class WorkerThreadSandboxAdapter implements SandboxExecutor {
                 containmentViolations: violations,
                 status: violations.length > 0 ? 'CONTAINMENT_VIOLATION' : result.status,
                 platform: 'worker_threads',
+                isolationAdmission,
             }
         } catch (err: unknown) {
             const message = err instanceof Error ? err.message : String(err)
@@ -133,11 +191,15 @@ export class WorkerThreadSandboxAdapter implements SandboxExecutor {
                     : [],
                 resourceUsage: { cpuTimeMs: 0, memoryPeakMb: 0, outputBytes: 0 },
                 platform: 'worker_threads',
+                isolationAdmission,
             }
         }
     }
 
-    private runInWorker(command: SandboxCommand, config: SandboxConfig): Promise<SandboxResult> {
+    private runInWorker(
+        command: SandboxCommand,
+        config: SandboxConfig,
+    ): Promise<Omit<SandboxResult, 'isolationAdmission'>> {
         return new Promise((resolve, reject) => {
             const startTime = Date.now()
             const startedAt = new Date().toISOString()
@@ -145,6 +207,10 @@ export class WorkerThreadSandboxAdapter implements SandboxExecutor {
             // Worker inline script: executes command in an isolated thread
             // Uses execFileSync (non-shell) to prevent shell injection.
             // Command and args are passed as separate array elements, never concatenated.
+            // RFR-R5 / F9: the child process environment is constructed only
+            // from the explicit command environment; the host process.env is
+            // never spread in, so no ambient credential or host variable can
+            // cross into the child unless the caller supplied it explicitly.
             const workerCode = `
                 const { parentPort, workerData } = require('worker_threads');
                 const { execFileSync } = require('child_process');
@@ -153,7 +219,7 @@ export class WorkerThreadSandboxAdapter implements SandboxExecutor {
                     const options = {
                         timeout: workerData.timeoutMs,
                         maxBuffer: workerData.maxOutputBytes,
-                        env: { ...process.env, ...workerData.env },
+                        env: { ...workerData.env },
                     };
 
                     if (workerData.workingDir) {
@@ -181,6 +247,7 @@ export class WorkerThreadSandboxAdapter implements SandboxExecutor {
 
             const worker = new Worker(workerCode, {
                 eval: true,
+                env: { ...(command.env ?? {}) },
                 workerData: {
                     command: command.command,
                     args: command.args ?? [],

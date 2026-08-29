@@ -455,9 +455,9 @@ def _reviewer_closure_conversion_block(batch_id: str, date: str) -> str:
     )
 
 
-def _work_order_fulfillment_manifest() -> str:
+def _required_artifact_manifest() -> str:
     return (
-        "## Work-Order Fulfillment Manifest\n\n"
+        "## Required Artifact Manifest\n\n"
         "| Artifact | Required worker action |\n"
         "| --- | --- |\n"
         "| FILL_ME | FILL_ME |\n"
@@ -472,6 +472,18 @@ def _worker_return_packet_shape_contract(worker_return_path: str) -> str:
         "requiredGate: `python governance/compat/run_worker_return_fast_gate.py`\n"
         "individualCheckerSubstitution: FORBIDDEN\n"
         "workerReturnSkeleton: CHECKER_SAFE_SKELETON_REQUIRED\n"
+        "\n"
+        "Required terms: Purpose; Scope / Methodology; Findings / Position; "
+        "Risk / Corrective Action; Claim Boundary; Agent Operation Trace "
+        "Block; Delta Execution Claim Boundary Control Block; Public Export "
+        "Disposition; executionBaseHead; git status --short.\n"
+        "\n"
+        "Conditional terms: External Knowledge Intake Routing; Rescan "
+        "Intelligence Hardening; Corpus Completeness And Report Integrity; "
+        "Finding-To-Governance Learning Disposition; Epistemic Process "
+        "Block; Machine Closure Package.\n"
+        "\n"
+        "Use `N/A with reason` for every non-applicable conditional block.\n"
         "\n"
         "Shape-list rule: when listing required worker-output sections, write "
         "section names without the `##` prefix. Reserve actual heading syntax "
@@ -503,7 +515,7 @@ def _verification_commands_block(args: ScaffoldArgs) -> str:
         "",
         "```powershell",
         "python governance/compat/run_agent_autorun_workflow_gate.py "
-        f"--phase pre-implementation --base {args.base} --head HEAD",
+        "--phase pre-implementation --base <executionBaseHead> --head HEAD",
     ]
     if args.commit_mode == "WORKER_MUST_NOT_COMMIT":
         lines.append("python governance/compat/run_worker_return_fast_gate.py")
@@ -731,7 +743,7 @@ def build_work_order(args: ScaffoldArgs, active: dict[str, bool]) -> str:
         lines.append("")
         lines.append(_worker_output_checker_read_ahead_mandate())
         lines.append("")
-    lines.append(_work_order_fulfillment_manifest())
+    lines.append(_required_artifact_manifest())
     lines.append("")
     lines.append(_worker_return_packet_shape_contract(worker_return_path))
     lines.append("")

@@ -1,4 +1,5 @@
 # USR-061: Chart & Data Visualization
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Web Development

@@ -5,7 +5,7 @@
 > **Cập nhật:** 2026-04-21 (W111 live evidence publication sync)
 >
 > **Trạng thái hiện tại (2026-04-21):** CVF đã đạt Release Candidate. Các mốc lớn đã đóng:
-> non-coder value proven with live governance E2E · Alibaba CERTIFIED · DeepSeek CERTIFIED · provider UX delivered · front-door product proof passed.
+> non-coder value proven with live governance E2E · DeepSeek CERTIFIED · Alibaba EXPERIMENTAL (qwen-flash, fresh live proof pending) · provider UX delivered · front-door product proof passed.
 > Xem: [Live Evidence Packet](../reference/CVF_LIVE_EVIDENCE_PUBLICATION_PACKET_2026-04-21.md) · [RC Truth Packet](../reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md) · [Demo Script](CVF_DEMO_SCRIPT_2026-04-21.md) · [Known Limitations](../reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md)
 
 ---
@@ -90,7 +90,7 @@ Quick glance vào trạng thái hệ thống hiện tại:
 | Phase 0 | Baseline freeze | ✅ Done | Mốc đối soát đã ổn |
 | Phase 1 | Unified control plane | ✅ Closed on active path | Guard contract + runtime gates wired into current web/API path |
 | Phase 2 | E2E conformance | ✅ Live-gated | Release gate includes UI mock `6 passed` + live governance `7 passed` |
-| Phase 3 | Skill/provider governance | ✅ Current scope proven | Alibaba + DeepSeek certified lanes; mock is UI-only |
+| Phase 3 | Skill/provider governance | ✅ Current scope proven | DeepSeek certified lane; Alibaba `qwen-flash` experimental pending fresh proof; mock is UI-only |
 | Phase 4 | Durable execution | 🟡 Mostly done | Rollback/replay/recovery exist; full SaaS durability not claimed |
 | Phase 5 | Release discipline | ✅ Done | Manifest/inventory/matrix + live evidence packet |
 | Phase 6 | Enterprise evidence | 🟡 Bounded | Enterprise/admin evidence exists; hosted production SaaS not claimed |
@@ -114,3 +114,9 @@ Quick glance vào trạng thái hệ thống hiện tại:
 ---
 
 > **Cập nhật file này khi:** Phase status thay đổi, hoặc sau mỗi đợt nâng cấp lớn.
+
+Text Encoding Exception: this bilingual guide preserves pre-existing Vietnamese
+text and status symbols (including the middle-dot separator and checkmark used
+throughout) unchanged; the EAFR-R4 provider-status edit reused the file's
+existing separator/marker style rather than introducing a new non-ASCII
+character class.

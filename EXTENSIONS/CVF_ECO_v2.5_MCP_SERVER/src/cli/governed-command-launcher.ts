@@ -3,7 +3,7 @@
 import { spawn } from 'node:child_process';
 import { realpath } from 'node:fs/promises';
 import { isAbsolute, relative, resolve } from 'node:path';
-import type { GuardRuntimeEngine } from '../guards/engine.js';
+import type { GuardRuntimeEngine } from 'cvf-guard-contract';
 import type { CVFRiskLevel } from '../guards/types.js';
 import type { PreflightPersistencePort } from '../tools/governance-action-preflight.js';
 import {
@@ -244,6 +244,42 @@ async function resolveWorkspaceCwd(workspaceRoot: string, cwd?: string): Promise
   return { workspace, cwd: resolvedCwd, relativeCwd: relativeCwd || '.' };
 }
 
+/**
+ * Truthful CVF phase/role pairing for this profile's declared action intent.
+ *
+ * Read-only profiles (git-status, git-diff-check) genuinely inspect and
+ * produce no mutation, so they are labeled with the canonical read-only
+ * action-intent vocabulary (`read`) rather than an allow-listed authoring
+ * verb chosen only to dodge ai_commit/build_authority. Role AI_AGENT is
+ * canonically restricted by phase_gate.PHASE_ROLE_MATRIX to phase BUILD
+ * only (AI_AGENT does not appear in the REVIEW phase's allowed-role list),
+ * and authority_gate's AI_AGENT.BUILD cell authorizes only authoring verbs
+ * (create, modify, build, implement, code, write) - it does not include
+ * `read`. So under the current canonical contract there is no phase/role
+ * cell where AI_AGENT can truthfully perform a `read` action: labeling it
+ * honestly means phase_gate or authority_gate genuinely BLOCKs it. That is
+ * the correct, intended outcome here, not a defect: a real read-only
+ * inspection command must remain blocked for this role rather than be
+ * relabeled to something the guard happens to allow.
+ *
+ * The one profile with a fixed mutatingTargetRelativePath genuinely mutates,
+ * so it is labeled "write" at role AI_AGENT in phase BUILD - the truthful
+ * phase/role cell for a BUILD-phase mutation
+ * (AUTHORITY_MATRIX.AI_AGENT.BUILD includes 'write'). "write" carries modify
+ * intent, so it correctly requires ai_commit and build_authority evidence.
+ * This launcher does not fabricate that evidence (see launchGovernedCommand):
+ * without an independently sourced accepted SPEC and valid WORK ORDER, the
+ * mutating profile fails closed at the guard, before the runner is invoked
+ * or the marker file is written.
+ */
+export function buildGovernedCommandPhaseAndRole(
+  profile: GovernedCommandProfile
+): { phase: 'BUILD'; role: 'AI_AGENT'; verb: 'read' | 'write' } {
+  return profile.mutatingTargetRelativePath
+    ? { phase: 'BUILD', role: 'AI_AGENT', verb: 'write' }
+    : { phase: 'BUILD', role: 'AI_AGENT', verb: 'read' };
+}
+
 export function buildGovernedCommandAction(
   profile: GovernedCommandProfile,
   relativeCwd: string
@@ -251,7 +287,8 @@ export function buildGovernedCommandAction(
   const target = profile.mutatingTargetRelativePath
     ? `; target=${profile.mutatingTargetRelativePath}`
     : '';
-  return `profile=${profile.id}; executable=${profile.executable}; args=${JSON.stringify(profile.args)}; cwd=${relativeCwd}${target}`;
+  const { verb } = buildGovernedCommandPhaseAndRole(profile);
+  return `${verb}: profile=${profile.id}; executable=${profile.executable}; args=${JSON.stringify(profile.args)}; cwd=${relativeCwd}${target}`;
 }
 
 async function finalizeFailedIntent(
@@ -292,17 +329,29 @@ export async function launchGovernedCommand(
   }
 
   const action = buildGovernedCommandAction(profile, paths.relativeCwd);
+  const { phase, role } = buildGovernedCommandPhaseAndRole(profile);
   const targetFiles = profile.mutatingTargetRelativePath
     ? [profile.mutatingTargetRelativePath]
     : undefined;
+  const agentId = input.agentId?.trim() || 'cvf-governed-exec';
+  // This launcher is a composition root, not an authority source: it has no
+  // independently bound channel to an accepted SPEC or a valid WORK ORDER,
+  // so it must never construct its own `aiCommit`/`buildAuthority` evidence
+  // objects here. A launcher-internal constant, a frozen profile, a fixed
+  // target, or the separate T4A approvalPolicy verdict below is evidence
+  // that this specific write is approved - none of them is, or can stand in
+  // for, an accepted SPEC or a valid WORK ORDER. Without that independently
+  // sourced evidence, the canonical `build_authority` guard fails the
+  // mutating profile's "write" action closed right here, before the T4A
+  // approval check, the runner, or the marker file write are ever reached.
   const preflight = await preflightGovernanceAction(
     {
       actionClass: 'RUN',
       action,
-      phase: 'BUILD',
+      phase,
       riskLevel: profile.riskLevel,
-      role: 'AI_AGENT',
-      agentId: input.agentId?.trim() || 'cvf-governed-exec',
+      role,
+      agentId,
       scope: `workspace:${paths.relativeCwd}`,
       targetFiles,
       mutationCount: profile.mutatingTargetRelativePath ? 1 : undefined,

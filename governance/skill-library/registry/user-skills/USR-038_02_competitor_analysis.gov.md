@@ -1,4 +1,5 @@
 # USR-038: Competitor Analysis
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Marketing Seo

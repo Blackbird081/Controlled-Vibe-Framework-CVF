@@ -145,6 +145,7 @@ export type {
 } from "./agent.handoff.contract";
 
 export {
+  evaluateExternalStoreExecutionAuthority,
   evaluateProviderExecutionAuthority,
   validateClosureReport,
   validateDelegationContract,
@@ -155,6 +156,9 @@ export type {
   DelegationRiskCeiling,
   DelegationValidationResult,
   DelegationWriteScope,
+  ExternalStoreExecutionAuthority,
+  ExternalStoreExecutionGrant,
+  ExternalStoreExecutionRequest,
   ProviderExecutionAuthority,
   ProviderExecutionGrant,
   ProviderExecutionRequest,

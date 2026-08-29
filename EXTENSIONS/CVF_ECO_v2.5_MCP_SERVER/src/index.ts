@@ -35,13 +35,8 @@ import { JsonFileAdapter } from './persistence/json-file.adapter.js';
 import { JsonReceiptConsumptionStore } from './persistence/json-receipt-consumption.store.js';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
-import {
-  createGuardEngine,
-  GuardRuntimeEngine,
-  PHASE_ORDER,
-  PHASE_DESCRIPTIONS,
-  RISK_DESCRIPTIONS,
-} from './guards/index.js';
+import { createGuardEngine, GuardRuntimeEngine } from 'cvf-guard-contract';
+import { PHASE_ORDER, PHASE_DESCRIPTIONS, RISK_DESCRIPTIONS } from './guards/index.js';
 import type { CVFPhase, CVFRiskLevel, CVFRole, GuardRequestContext } from './guards/types.js';
 import {
   buildStartupAcknowledgment,
@@ -54,8 +49,22 @@ import {
 import { runCli } from './cli/cli.js';
 
 // ─── Singleton Guard Engine ───────────────────────────────────────────
+// The canonical cvf-guard-contract engine has no session-phase concept.
+// Session phase is owner-local MCP/CLI UX state, tracked here rather than
+// on the engine, so it cannot register/unregister/disable/wrap/proxy any
+// canonical guard.
 
 const engine: GuardRuntimeEngine = createGuardEngine();
+
+let mcpSessionPhase: string = 'DISCOVERY';
+
+function getMcpSessionPhase(): string {
+  return mcpSessionPhase;
+}
+
+function setMcpSessionPhase(phase: string): void {
+  mcpSessionPhase = phase;
+}
 
 // ─── Helper: Build context from tool arguments ────────────────────────
 
@@ -83,7 +92,7 @@ function buildContext(args: {
 }
 
 function normalizePhase(raw?: string): CVFPhase {
-  if (!raw) return engine.getSessionPhase() as CVFPhase || 'DISCOVERY';
+  if (!raw) return getMcpSessionPhase() as CVFPhase || 'DISCOVERY';
   const upper = raw.trim().toUpperCase();
   if (upper === 'DISCOVERY' || upper === 'PHASE A' || upper === 'A') return 'DISCOVERY';
   if (upper === 'DESIGN' || upper === 'PHASE B' || upper === 'B') return 'DESIGN';
@@ -297,7 +306,7 @@ server.tool(
     completionEvidence: z.string().describe('Evidence that current phase is complete'),
   },
   async (args) => {
-    const currentPhase = normalizePhase(args.currentPhase || engine.getSessionPhase());
+    const currentPhase = normalizePhase(args.currentPhase || getMcpSessionPhase());
     const currentIndex = PHASE_ORDER.indexOf(currentPhase);
 
     if (currentIndex === PHASE_ORDER.length - 1) {
@@ -315,7 +324,7 @@ server.tool(
     }
 
     const nextPhase = PHASE_ORDER[currentIndex + 1];
-    engine.setSessionPhase(nextPhase);
+    setMcpSessionPhase(nextPhase);
 
     const response = {
       decision: 'ADVANCED',
@@ -363,7 +372,7 @@ server.tool(
     const response = {
       totalEntries: log.length,
       returnedEntries: entries.length,
-      sessionPhase: engine.getSessionPhase(),
+      sessionPhase: getMcpSessionPhase(),
       entries: entries.map((e) => ({
         requestId: e.requestId,
         timestamp: e.timestamp,
@@ -440,7 +449,7 @@ server.tool(
 );
 
 registerModelGatewayExecutePreviewTool(server);
-registerModelGatewayExecuteTool(server);
+registerModelGatewayExecuteTool(server, engine);
 
 // --- Delta-T1: cvf_preflight_governance_action -----------------------
 // Durable, secret-safe pre-action governance receipt. The audit JSON is
@@ -912,7 +921,7 @@ async function main() {
   console.error('CVF MCP Server v1.7.0 running on stdio');
   console.error(`Guards loaded: ${engine.getGuardCount()}`);
   console.error('Gamma startup memory tools loaded: 7');
-  console.error(`Session phase: ${engine.getSessionPhase()}`);
+  console.error(`Session phase: ${getMcpSessionPhase()}`);
 }
 
 main().catch((error) => {

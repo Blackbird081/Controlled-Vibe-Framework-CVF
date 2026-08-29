@@ -1,4 +1,5 @@
 # USR-045: Accessibility Audit (WCAG)
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Product Ux

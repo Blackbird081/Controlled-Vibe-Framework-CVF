@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { createGuardEngine } from '../guards/index.js';
+import { createGuardEngine } from 'cvf-guard-contract';
 import { generateSystemPrompt } from '../prompt/system-prompt.js';
 import { createUnifiedRegistry } from '../registry/guard-registry.js';
 import { createDefaultSkillGuardWire } from '../registry/skill-guard-wire.js';
@@ -47,13 +47,33 @@ describe('E2E: Full Pipeline', () => {
     expect(card.status).toBe('ready');
     expect(card.steps.length).toBeGreaterThan(0);
 
-    // Step 4: Guard evaluation
-    const context: GuardRequestContext = {
+    // Step 4: Guard evaluation. Phase is BUILD rather than the vibe
+    // parser's suggested DESIGN: the canonical authority matrix authorizes
+    // HUMAN 'create' actions in BUILD, not DESIGN (DESIGN is
+    // analyze/approve-only), so this exercises the real ALLOW path a
+    // create request takes once guard-gated. ai_commit and buildAuthority
+    // evidence are required because "create" is a canonical mandatory
+    // ai_commit/build_authority modify-intent token; see the
+    // canonical-guard-contract adoption regression test for the
+    // fail-closed proof when either is absent.
+    const context: GuardRequestContext & { buildAuthority?: unknown } = {
       requestId: 'e2e-001',
-      phase: vibe.suggestedPhase as any,
+      phase: 'BUILD',
       riskLevel: vibe.suggestedRisk as any,
       role: 'HUMAN',
       action: 'create landing page',
+      targetFiles: ['src/pages/landing.tsx'],
+      metadata: {
+        ai_commit: { commitId: 'e2e-001-commit', agentId: 'e2e-suite', timestamp: Date.now() },
+      },
+      buildAuthority: {
+        specStatus: 'ACCEPTED',
+        acceptedSpecRef: 'docs/specs/e2e-001-spec.md',
+        workOrderStatus: 'VALID',
+        workOrderRef: 'docs/work_orders/e2e-001-work-order.md',
+        revoked: false,
+        allowedScope: ['src/pages'],
+      },
     };
     const result = engine.evaluate(context);
     expect(result.finalDecision).toBe('ALLOW');
@@ -102,7 +122,11 @@ describe('E2E: Full Pipeline', () => {
   });
 
   it('AI agent in BUILD phase is allowed for safe coding', () => {
-    const context: GuardRequestContext = {
+    // "write" is a canonical mandatory ai_commit/build_authority
+    // modify-intent token, so this real-code-authoring scenario supplies
+    // genuine ai_commit and buildAuthority provenance rather than relying
+    // on a permissive default.
+    const context: GuardRequestContext & { buildAuthority?: unknown } = {
       requestId: 'e2e-003',
       phase: 'BUILD',
       riskLevel: 'R0',
@@ -110,6 +134,18 @@ describe('E2E: Full Pipeline', () => {
       agentId: 'cascade-agent',
       action: 'write component code',
       mutationCount: 3,
+      targetFiles: ['src/components/widget.tsx'],
+      metadata: {
+        ai_commit: { commitId: 'e2e-003-commit', agentId: 'cascade-agent', timestamp: Date.now() },
+      },
+      buildAuthority: {
+        specStatus: 'ACCEPTED',
+        acceptedSpecRef: 'docs/specs/e2e-003-spec.md',
+        workOrderStatus: 'VALID',
+        workOrderRef: 'docs/work_orders/e2e-003-work-order.md',
+        revoked: false,
+        allowedScope: ['src/components'],
+      },
     };
     const result = engine.evaluate(context);
     expect(result.finalDecision).toBe('ALLOW');
@@ -130,14 +166,31 @@ describe('E2E: Full Pipeline', () => {
   });
 
   it('mutation budget exhaustion blocks further changes', () => {
-    const context: GuardRequestContext = {
+    // This test proves mutation_budget specifically blocks, so the action,
+    // ai_commit provenance, and buildAuthority evidence below satisfy every
+    // earlier-priority canonical mandatory guard (ai_commit, phase_gate,
+    // risk_gate, authority_gate, build_authority) so evaluation actually
+    // reaches mutation_budget rather than being blocked earlier.
+    const context: GuardRequestContext & { buildAuthority?: unknown } = {
       requestId: 'e2e-005',
       phase: 'BUILD',
       riskLevel: 'R2',
       role: 'HUMAN',
-      action: 'bulk edit files',
+      action: 'modify: bulk edit files',
       mutationCount: 15,
       traceHash: 'abc123',
+      targetFiles: ['src/feature/bulk-edit-target.ts'],
+      metadata: {
+        ai_commit: { commitId: 'e2e-005-commit', agentId: 'e2e-suite', timestamp: Date.now() },
+      },
+      buildAuthority: {
+        specStatus: 'ACCEPTED',
+        acceptedSpecRef: 'docs/specs/e2e-005-spec.md',
+        workOrderStatus: 'VALID',
+        workOrderRef: 'docs/work_orders/e2e-005-work-order.md',
+        revoked: false,
+        allowedScope: ['src/feature'],
+      },
     };
     const result = engine.evaluate(context);
     expect(result.finalDecision).toBe('BLOCK');
@@ -145,18 +198,43 @@ describe('E2E: Full Pipeline', () => {
   });
 
   it('protected governance file blocks AI modification', () => {
-    const context: GuardRequestContext = {
+    // This test proves a protected-path write is blocked, so ai_commit and
+    // build_authority (both earlier-priority mandatory guards) are
+    // satisfied with real evidence - including a buildAuthority WORK
+    // ORDER that legitimately declares "governance" in its own
+    // allowedScope - precisely so evaluation reaches the canonical
+    // engine's independent, non-overridable protected-path rules rather
+    // than being blocked earlier for an unrelated reason. The canonical
+    // engine protects "governance/" via two independent guards:
+    // file_scope (priority 35) blocks first here for AI_AGENT (a
+    // BUILDER_CLASS_ROLE) writing into a protected path; scope_guard
+    // (priority 50) is a second, later-priority protected-path guard that
+    // would also block if file_scope somehow did not. Neither has an
+    // authorization escape hatch: even a WORK ORDER that names this path
+    // in scope is still blocked.
+    const context: GuardRequestContext & { buildAuthority?: unknown } = {
       requestId: 'e2e-006',
       phase: 'BUILD',
       riskLevel: 'R0',
       role: 'AI_AGENT',
       agentId: 'cascade-agent',
-      action: 'edit governance rules',
+      action: 'modify governance rules',
       targetFiles: ['governance/guard_runtime/guard.runtime.engine.ts'],
+      metadata: {
+        ai_commit: { commitId: 'e2e-006-commit', agentId: 'cascade-agent', timestamp: Date.now() },
+      },
+      buildAuthority: {
+        specStatus: 'ACCEPTED',
+        acceptedSpecRef: 'docs/specs/e2e-006-spec.md',
+        workOrderStatus: 'VALID',
+        workOrderRef: 'docs/work_orders/e2e-006-work-order.md',
+        revoked: false,
+        allowedScope: ['governance'],
+      },
     };
     const result = engine.evaluate(context);
     expect(result.finalDecision).toBe('BLOCK');
-    expect(result.blockedBy).toBe('scope_guard');
+    expect(result.blockedBy).toBe('file_scope');
   });
 });
 
@@ -274,12 +352,17 @@ describe('E2E: System Prompt', () => {
 
 describe('E2E: CLI', () => {
   it('evaluate command returns full pipeline result', () => {
+    // Non-modifying wording: the CLI's evaluate command has no flag to
+    // supply ai_commit provenance, and the canonical mandatory ai_commit
+    // guard fails closed on a modifying action without it (proven
+    // separately by the canonical-guard-contract adoption regression
+    // test). This test's purpose is general pipeline plumbing.
     const result = runCli([
-      'evaluate', '--phase', 'BUILD', '--risk', 'R0', '--role', 'HUMAN', '--action', 'write code',
+      'evaluate', '--phase', 'BUILD', '--risk', 'R0', '--role', 'HUMAN', '--action', 'read code',
     ]);
     expect(result.success).toBe(true);
     expect((result.output as any).finalDecision).toBe('ALLOW');
-    expect((result.output as any).guardCount).toBe(6);
+    expect((result.output as any).guardCount).toBe(9);
   });
 
   it('prompt command generates system prompt', () => {
@@ -295,7 +378,7 @@ describe('E2E: CLI', () => {
     const result = runCli(['status']);
     expect(result.success).toBe(true);
     expect((result.output as any).version).toBe('1.7.0');
-    expect((result.output as any).guardCount).toBe(6);
+    expect((result.output as any).guardCount).toBe(9);
   });
 });
 
@@ -317,13 +400,16 @@ describe('E2E: Persistence', () => {
   });
 
   it('guard decisions persist across sessions', async () => {
+    // "read" satisfies the canonical authority_gate allow-list match for
+    // HUMAN in BUILD; this test's purpose is proving audit persistence,
+    // not authority semantics.
     const engine = createGuardEngine();
     const context: GuardRequestContext = {
       requestId: 'persist-001',
       phase: 'BUILD',
       riskLevel: 'R0',
       role: 'HUMAN',
-      action: 'test persistence',
+      action: 'read persistence test',
     };
     const result = engine.evaluate(context);
     const auditEntry = engine.getAuditLog()[0];
@@ -369,14 +455,35 @@ describe('E2E: Vibe → Guard', () => {
     expect(text).toContain('Goal:');
     expect(text).toContain('Steps:');
 
+    // Guard evaluation uses phase: 'BUILD' and an English "create" prefix
+    // rather than the raw Vietnamese goal text or vibe.suggestedPhase
+    // ('DESIGN'): the canonical authority_gate allow-list matches against
+    // an English action-verb vocabulary and does not recognize Vietnamese
+    // text, and DESIGN does not authorize HUMAN 'create' actions at all
+    // (see the 'safe create request' test above for the same reasoning).
+    // ai_commit and buildAuthority evidence are supplied because "create"
+    // is a canonical mandatory ai_commit/build_authority modify-intent
+    // token.
     const engine = createGuardEngine();
     const result = engine.evaluate({
       requestId: 'vi-001',
-      phase: vibe.suggestedPhase as any,
+      phase: 'BUILD',
       riskLevel: vibe.suggestedRisk as any,
       role: 'HUMAN',
-      action: vibe.goal,
-    });
+      action: `create: ${vibe.goal}`,
+      targetFiles: ['src/pages/vi-landing.tsx'],
+      metadata: {
+        ai_commit: { commitId: 'vi-001-commit', agentId: 'e2e-suite', timestamp: Date.now() },
+      },
+      buildAuthority: {
+        specStatus: 'ACCEPTED',
+        acceptedSpecRef: 'docs/specs/vi-001-spec.md',
+        workOrderStatus: 'VALID',
+        workOrderRef: 'docs/work_orders/vi-001-work-order.md',
+        revoked: false,
+        allowedScope: ['src/pages'],
+      },
+    } as GuardRequestContext);
     expect(result.finalDecision).toBe('ALLOW');
   });
 
@@ -400,14 +507,25 @@ describe('E2E: Vibe → Guard', () => {
 // ─── Registry + Engine Consistency ────────────────────────────────────
 
 describe('E2E: Registry-Engine Consistency', () => {
-  it('registry guards match engine guards', () => {
+  it('every registry guard ID is also present in the canonical engine', () => {
+    // createUnifiedRegistry (MCP-local skill-to-guard mapping, out of R7A
+    // scope) and createGuardEngine (now the canonical cvf-guard-contract
+    // factory) are no longer sourced from the same local fork, so an exact
+    // set-equality is not the right invariant any more: the canonical
+    // engine additionally carries ai_commit, build_authority, and
+    // file_scope, which the local registry does not track. What remains
+    // true, and worth proving, is that every guard the registry maps to a
+    // skill is still a real, registered guard on the live canonical
+    // engine - i.e. the registry never references a stale/unknown ID.
     const registry = createUnifiedRegistry();
     const engine = createGuardEngine();
 
     const registryIds = registry.getAll().map((g) => g.guard.id).sort();
-    const engineIds = engine.getRegisteredGuards().map((g) => g.id).sort();
+    const engineIds = new Set(engine.getRegisteredGuards().map((g) => g.id));
 
-    expect(registryIds).toEqual(engineIds);
+    for (const id of registryIds) {
+      expect(engineIds.has(id)).toBe(true);
+    }
   });
 
   it('all registry guards are enabled by default', () => {

@@ -9,7 +9,12 @@
  * @module sdk
  */
 // ─── Guards ───────────────────────────────────────────────────────────
-export { GuardRuntimeEngine, createGuardEngine, PhaseGateGuard, RiskGateGuard, AuthorityGateGuard, MutationBudgetGuard, ScopeGuard, AuditTrailGuard, PHASE_ROLE_MATRIX, PHASE_DESCRIPTIONS, RISK_DESCRIPTIONS, RESTRICTED_ACTIONS, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD, PROTECTED_PATHS, CVF_ROOT_INDICATORS, PHASE_ORDER, RISK_NUMERIC, DEFAULT_GUARD_RUNTIME_CONFIG, } from './guards/index.js';
+// The engine/factory are the canonical cvf-guard-contract implementation.
+// MCP-local UX constants (phase/risk descriptions, ordering, and the
+// non-mandatory local guard classes) remain re-exported from the
+// package-local guards module for backward-compatible SDK consumers.
+export { GuardRuntimeEngine, createGuardEngine } from 'cvf-guard-contract';
+export { PhaseGateGuard, RiskGateGuard, AuthorityGateGuard, MutationBudgetGuard, ScopeGuard, AuditTrailGuard, PHASE_ROLE_MATRIX, PHASE_DESCRIPTIONS, RISK_DESCRIPTIONS, RESTRICTED_ACTIONS, DEFAULT_MUTATION_BUDGETS, ESCALATION_THRESHOLD, PROTECTED_PATHS, CVF_ROOT_INDICATORS, PHASE_ORDER, RISK_NUMERIC, DEFAULT_GUARD_RUNTIME_CONFIG, } from './guards/index.js';
 // ─── Persistence ──────────────────────────────────────────────────────
 export { JsonFileAdapter } from './persistence/json-file.adapter.js';
 // ─── System Prompt ────────────────────────────────────────────────────

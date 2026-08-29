@@ -16,7 +16,7 @@
  * @module index
  */
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { GuardRuntimeEngine } from './guards/index.js';
+import { GuardRuntimeEngine } from 'cvf-guard-contract';
 import type { CVFPhase, CVFRiskLevel, CVFRole, GuardRequestContext } from './guards/types.js';
 declare const engine: GuardRuntimeEngine;
 declare function buildContext(args: {

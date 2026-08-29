@@ -1,4 +1,5 @@
 # USR-050: API Security Checklist
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Security Compliance

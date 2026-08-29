@@ -130,6 +130,114 @@ corpus, runtime, provider, public, or destructive evidence unless a manifest
 trigger selects those risks. During T0, this is a packet-authoring rule and
 routing receipt; legacy gates still execute.
 
+## Tranche Admission And Continuation Value
+
+An optional, additive `trancheValue` object may be declared on the manifest
+without changing the closed `cvf.taskGovernanceManifest.v1` shape. Its
+purpose is a pre-dispatch and continuation-value decision that sits beside
+risk classification: risk continues to set the minimum governance profile;
+value only ever narrows toward stopping, parking, or consolidating a
+proposed tranche, and never relaxes, skips, reorders, or shortens a
+risk-required guard.
+
+This record is scoped first to the remediation/finding-repair task class,
+where the accepted TPGR-TV1 design and its predecessor evidence (EAFR-R11's
+Tranche Admission And Continuation Value Learning section, the RFR final
+reconciliation review) supplied concrete before/after evidence. External
+repository absorption and app/project delivery are named future consumers of
+the same record shape; extending this section to either requires its own
+independently accepted design and predecessor evidence before the record is
+declared for that class.
+
+### Closed Record Shape
+
+When present, `trancheValue` is a closed object with exactly fourteen
+top-level fields: `outcomeConsumer`, `severity`, `findingEvidenceState`,
+`rootCauseIdentity`, `marginalValue`, `valueEvidenceState`, `costEnvelope`,
+`consolidationKey`, `stopCondition`, `successorAuthority`, `decisionReason`,
+`reviewerIdentity`, `freshness`, `overrideAppealEvidence`. The exact JSON
+Schema shape is canonical in
+`governance/compat/CVF_TASK_GOVERNANCE_ROUTE_MANIFEST.schema.json`.
+
+Finding evidence and value evidence are two separate labeled fields
+(`findingEvidenceState`, `valueEvidenceState`), each one of `OBSERVED`,
+`HISTORICAL_BOUNDED`, `PROJECTED`, `UNKNOWN`. A strong finding must never be
+inferred from strong economics, or vice versa. `costEnvelope` separates six
+sub-fields (`workerTime`, `reviewerTime`, `latency`, `tokenOrQuotaUsage`,
+`providerCallCost`, `opportunityCost`), each independently evidence-labeled;
+an unmeasured sub-field is the literal string `UNKNOWN`, never a numeric
+zero. `rootCauseIdentity` is a typed causal identity (`relation` one of
+`INDEPENDENT`, `DEPENDENT`, `DUPLICATE`, plus a causal invariant, owner
+surface, and non-empty evidence references) rather than a bare boolean, so a
+renamed or retitled duplicate cannot escape detection by title-text
+comparison alone.
+
+### Authority-Sourced Successor Cap
+
+A declared record's `successorAuthority` (authority path, authority hash,
+full authority commit, declared cap, current ordinal) is never the trust source for cap or ordinal
+by itself. The route checker
+(`governance/compat/check_task_governance_route.py`) resolves the cited path
+from the cited commit only after proving that commit is an ancestor of HEAD,
+recomputes its SHA-256, and compares it against the declared hash before
+treating any cap or ordinal value as trusted. A missing file, unreadable
+content, non-ancestor commit, hash mismatch, missing or
+malformed successor-authority JSON block, or a candidate/authority
+disagreement fails closed: the router
+(`governance/compat/route_task_governance.py`) never returns
+`CONTINUE_HIGH_VALUE` for an unverified or mismatched authority.
+
+Direct CLI evaluation of the router without an explicitly supplied trusted
+authority argument remains shadow-only: it returns a fail-closed park
+explanation for a declared record and never trusts candidate-controlled cap
+fields. Only the checker's authority-resolution seam may compose a trusted
+authority object into the router call, and only from currently committed
+roadmap content.
+
+### Decision Vocabulary And Precedence
+
+The value decision returns exactly one of four tokens: `CONTINUE_HIGH_VALUE`,
+`CONSOLIDATE`, `PARK_LOW_VALUE`, `STOP_NO_INCREMENTAL_VALUE`. This is a
+distinct vocabulary from the Review Cost standard's five-token
+`stopDisposition`
+(`docs/reference/review_cost_control/CVF_REVIEW_COST_AND_DIMINISHING_RETURN_CONTROL_STANDARD.md`):
+this section's tokens answer whether a tranche should be dispatched or
+continued at all, decided once per tranche before or during work; the Review
+Cost standard's tokens answer whether an already-open review round should
+stop repairing. The two vocabularies compose sequentially and are not
+merged.
+
+Decision precedence, evaluated in order:
+
+1. malformed or missing declared fields, or an unverified/mismatched
+   authority, park;
+2. a stale or expired record parks before it can continue or consolidate;
+3. a proved dependent or duplicate root cause with no new evidence, stop;
+4. cap exhausted: a source-backed P0/P1 consolidates into a new-roadmap
+   successor candidate; otherwise stop. No fourth ordinal is ever executed
+   under an exhausted cap;
+5. P0/P1 severity without observed or historical-bounded finding evidence,
+   park;
+6. source-backed P0/P1 with an independent root cause and observed or
+   historical-bounded marginal value, continue; otherwise consolidate one
+   bounded repair;
+7. P2/P3/NONE severity continues only for an independent root cause plus
+   observed or historical-bounded marginal value; projected or unknown value
+   parks;
+8. an override never overwrites the computed token and never becomes
+   authoritative; it is preserved as
+   additional evidence requiring a valid governed authority reference and
+   independent reviewer confirmation.
+
+Every receipt emitted for a declared record carries
+`valueDispositionAuthoritative: false`; this field is a shadow explanation,
+never a permission, waiver, or execution instruction. Risk-profile
+computation happens first and is immutable; value output never changes
+profile, selected/skipped bundles, escalation triggers, selective execution,
+or legacy gate disposition. Omitted `trancheValue` manifests emit none of the
+`valueDisposition*` receipt fields and retain byte-equivalent prior routing
+semantics.
+
 ## Verification
 
 ```powershell
@@ -145,8 +253,20 @@ Never roll back by accepting an invalid manifest or by silently authorizing
 selective execution. Registry/schema/router changes require `P3_ELEVATED`,
 independent review, focused tests, and the current guard-maintenance controls.
 
+Rolling back the Tranche Admission And Continuation Value section removes
+only the optional `trancheValue` schema property, its router evaluation
+function, its checker authority-resolution seam, and their focused tests. It
+must leave the prior `cvf.taskGovernanceManifest.v1` manifest and full legacy
+gate valid for every manifest that omits `trancheValue`; no migration of
+historical work orders is required or authorized.
+
 ## Claim Boundary
 
 This standard activates classification and shadow receipts only. It grants no
 task authority, runtime authority, provider call, public write, deployment, or
 destructive action. It does not yet reduce the executed legacy guard bundle.
+The optional Tranche Admission And Continuation Value record and its
+`valueDisposition*` receipt fields are non-authoritative shadow explanations;
+they authorize no selective execution, legacy suppression, or governance-
+floor reduction, and grant no TV3, TV4, or successor-tranche authority by
+themselves.

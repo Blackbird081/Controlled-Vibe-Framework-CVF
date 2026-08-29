@@ -1,4 +1,5 @@
 # USR-062: Web ARIA & Keyboard Audit
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Web Development

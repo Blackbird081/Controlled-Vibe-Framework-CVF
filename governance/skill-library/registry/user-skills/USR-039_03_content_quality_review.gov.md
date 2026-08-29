@@ -1,4 +1,5 @@
 # USR-039: Content Quality Checklist
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Marketing Seo

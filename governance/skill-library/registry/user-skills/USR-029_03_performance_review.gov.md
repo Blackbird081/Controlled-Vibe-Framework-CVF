@@ -1,4 +1,5 @@
 # USR-029: Performance Review
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Hr Operations

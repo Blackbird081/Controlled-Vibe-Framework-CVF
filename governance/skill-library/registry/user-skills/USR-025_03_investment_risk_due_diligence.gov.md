@@ -1,4 +1,5 @@
 # USR-025: Investment & Risk Due Diligence
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Finance Analytics

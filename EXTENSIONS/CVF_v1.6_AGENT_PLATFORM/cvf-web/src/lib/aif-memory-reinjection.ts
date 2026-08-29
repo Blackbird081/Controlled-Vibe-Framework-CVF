@@ -96,7 +96,15 @@ export function evaluateAifMemoryReinjection(
             excluded.push({ id: item.id, reason: `lifecycle_${item.lifecycleState}` });
             continue;
         }
-        if ((item.provenanceScore ?? 1) < threshold) {
+        if (item.provenanceScore === undefined) {
+            excluded.push({ id: item.id, reason: 'missing_provenance_score' });
+            continue;
+        }
+        if (!Number.isFinite(item.provenanceScore)) {
+            excluded.push({ id: item.id, reason: 'invalid_provenance_score' });
+            continue;
+        }
+        if (item.provenanceScore < threshold) {
             excluded.push({ id: item.id, reason: 'low_provenance_score' });
             continue;
         }

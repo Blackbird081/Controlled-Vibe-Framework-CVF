@@ -1,4 +1,5 @@
 # USR-007: App Requirements Spec
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** App Development

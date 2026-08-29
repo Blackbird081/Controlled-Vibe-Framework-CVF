@@ -15,13 +15,25 @@
  * @module tools/governance-action-preflight
  */
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { GuardRuntimeEngine } from '../guards/engine.js';
+import type { BuildAuthorityEvidence, GuardRuntimeEngine } from 'cvf-guard-contract';
 import type { CVFPhase, CVFRiskLevel, CVFRole, GuardAuditEntry } from '../guards/types.js';
 export declare const PREFLIGHT_TOOL: "cvf_preflight_governance_action";
 export declare const PREFLIGHT_CONTRACT: "cvf.delta.governanceActionPreflight.v1";
 export declare const PREFLIGHT_ACTION_CLASSES: readonly ["EDIT", "RUN", "COMMIT"];
 export type PreflightActionClass = (typeof PREFLIGHT_ACTION_CLASSES)[number];
 export declare const REDACTED_PLACEHOLDER = "[REDACTED]";
+/**
+ * Caller-supplied ai_commit provenance for a modifying action. Optional: the
+ * canonical mandatory `ai_commit` guard fails closed (BLOCK) on a modifying
+ * action when this is absent, exactly as intended - this input does not
+ * relax that requirement, it is the evidence channel for satisfying it.
+ */
+export interface PreflightAiCommitInput {
+    commitId: string;
+    agentId: string;
+    timestamp: number;
+    description?: string;
+}
 export interface PreflightInput {
     actionClass: PreflightActionClass;
     action: string;
@@ -33,6 +45,15 @@ export interface PreflightInput {
     mutationCount?: number;
     traceHash?: string;
     scope?: string;
+    /** ai_commit provenance for a modifying action; see PreflightAiCommitInput. */
+    aiCommit?: PreflightAiCommitInput;
+    /**
+     * Typed BUILD-phase mutation prerequisite evidence for the canonical
+     * mandatory `build_authority` guard. Optional: omitting this leaves a
+     * mutating BUILD action blocked, exactly as intended - this input is the
+     * evidence channel, not a permissive default.
+     */
+    buildAuthority?: BuildAuthorityEvidence;
 }
 export interface PreflightReceipt {
     contractVersion: typeof PREFLIGHT_CONTRACT;

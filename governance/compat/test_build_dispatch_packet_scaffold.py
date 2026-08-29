@@ -19,6 +19,11 @@ from build_dispatch_packet_scaffold import (
     main,
     TRIGGER_FAMILIES,
 )
+from run_agent_automation_assist import (
+    diagnose_no_commit_work_order,
+    WORKER_RETURN_PACKET_SHAPE_CONDITIONAL_TERMS,
+    WORKER_RETURN_PACKET_SHAPE_REQUIRED_TERMS,
+)
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 SOURCE_INTAKE_GOLDEN_FIXTURE = FIXTURES_DIR / "woas_r2_source_intake_scaffold_golden.md"
@@ -80,7 +85,7 @@ class TestGenericWorkerDispatch(unittest.TestCase):
             "## Checker Source Read-Ahead Block",
             "## Source Verification Block",
             "## Negative Search And Collision Discipline",
-            "## Work-Order Fulfillment Manifest",
+            "## Required Artifact Manifest",
             "## Worker Return Packet Shape Contract",
             "## Agent Operation Trace Block",
             "## Delta Execution Claim Boundary Control Block",
@@ -714,6 +719,116 @@ class TestCliBehavior(unittest.TestCase):
             ]
         )
         self.assertEqual(exit_code, 0)
+
+
+class TestEacqFvL2ExecutionBasePacketShapeHardening(unittest.TestCase):
+    """EACQ-FV-L2: execution-base command literal, complete scoped
+    packet-shape contract, and canonical Required Artifact Manifest heading
+    for generated no-commit work orders (Focused Case Matrix rows 1-7)."""
+
+    def test_no_commit_generated_command_uses_execution_base_placeholder(self) -> None:
+        """Case 1: no-commit generated command contains <executionBaseHead>
+        and not the dispatch-base literal in the pre-implementation command."""
+        args = _base_args(commit_mode="WORKER_MUST_NOT_COMMIT", base="abc1234")
+        active = detect_triggers(args)
+        work_order = build_work_order(args, active)
+        pre_impl_line = next(
+            line
+            for line in work_order.splitlines()
+            if "--phase pre-implementation" in line
+        )
+        self.assertIn("<executionBaseHead>", pre_impl_line)
+        self.assertNotIn("abc1234", pre_impl_line)
+        self.assertIn("--head HEAD", pre_impl_line)
+
+    def test_scoped_contract_contains_every_required_term(self) -> None:
+        """Case 2: every current required term is present inside the
+        Worker Return Packet Shape Contract section."""
+        args = _base_args(commit_mode="WORKER_MUST_NOT_COMMIT")
+        active = detect_triggers(args)
+        work_order = build_work_order(args, active)
+        section = work_order.split("## Worker Return Packet Shape Contract", 1)[1]
+        section = section.split("\n## ", 1)[0]
+        for term in WORKER_RETURN_PACKET_SHAPE_REQUIRED_TERMS:
+            self.assertIn(term, section, f"missing required term: {term}")
+
+    def test_scoped_contract_contains_every_conditional_term(self) -> None:
+        """Case 3: every current conditional term is present inside the
+        Worker Return Packet Shape Contract section."""
+        args = _base_args(commit_mode="WORKER_MUST_NOT_COMMIT")
+        active = detect_triggers(args)
+        work_order = build_work_order(args, active)
+        section = work_order.split("## Worker Return Packet Shape Contract", 1)[1]
+        section = section.split("\n## ", 1)[0]
+        for term in WORKER_RETURN_PACKET_SHAPE_CONDITIONAL_TERMS:
+            self.assertIn(term, section, f"missing conditional term: {term}")
+
+    def test_scoped_contract_contains_na_with_reason_instruction(self) -> None:
+        """Case 4: the N/A with reason instruction is present inside the
+        contract section."""
+        args = _base_args(commit_mode="WORKER_MUST_NOT_COMMIT")
+        active = detect_triggers(args)
+        work_order = build_work_order(args, active)
+        section = work_order.split("## Worker Return Packet Shape Contract", 1)[1]
+        section = section.split("\n## ", 1)[0]
+        self.assertIn("N/A with reason", section)
+
+    def test_generated_work_order_has_exactly_one_canonical_manifest_heading(self) -> None:
+        """Case 5: exactly one canonical heading; old heading absent."""
+        args = _base_args(commit_mode="WORKER_MUST_NOT_COMMIT")
+        active = detect_triggers(args)
+        work_order = build_work_order(args, active)
+        self.assertEqual(work_order.count("## Required Artifact Manifest"), 1)
+        self.assertEqual(work_order.count("## Work-Order Fulfillment Manifest"), 0)
+        self.assertIn("| Artifact | Required worker action |", work_order)
+        self.assertNotIn("| Path | Required at handoff | Purpose |", work_order)
+
+    def test_automation_assist_diagnostic_reports_clean_contract(self) -> None:
+        """Case 6: automation-assist reports has_contract=true, no missing
+        required/conditional terms, no missing N/A instruction."""
+        args = _base_args(commit_mode="WORKER_MUST_NOT_COMMIT")
+        active = detect_triggers(args)
+        work_order = build_work_order(args, active)
+        diagnostic = diagnose_no_commit_work_order("generated-work-order.md", work_order)
+        self.assertTrue(diagnostic.has_contract)
+        self.assertEqual(diagnostic.missing_required, ())
+        self.assertEqual(diagnostic.missing_conditional, ())
+        self.assertFalse(diagnostic.missing_na_instruction)
+        self.assertTrue(diagnostic.is_clean)
+
+    def test_existing_packet_kind_and_commit_mode_variants_remain_passing(self) -> None:
+        """Case 7: existing packet-kind/commit-mode variants still generate
+        and the WORKER_MAY_COMMIT variant omits the no-commit-only contract
+        while still using the canonical manifest heading."""
+        for packet_kind in ("generic-worker-dispatch", "held-dependency", "protected-governance-path"):
+            for commit_mode in ("WORKER_MUST_NOT_COMMIT", "WORKER_MAY_COMMIT"):
+                args = _base_args(packet_kind=packet_kind, commit_mode=commit_mode)
+                active = detect_triggers(args)
+                work_order = build_work_order(args, active)
+                self.assertEqual(work_order.count("## Required Artifact Manifest"), 1)
+                self.assertEqual(work_order.count("## Work-Order Fulfillment Manifest"), 0)
+                pre_impl_line = next(
+                    line
+                    for line in work_order.splitlines()
+                    if "--phase pre-implementation" in line
+                )
+                self.assertIn("<executionBaseHead>", pre_impl_line)
+                self.assertNotIn(args.base, pre_impl_line)
+
+    def test_worker_may_commit_generated_command_also_uses_execution_base(self) -> None:
+        """Boundary: commit-capable packet-kind generation still passes and
+        uses the worker-captured execution-base placeholder, not the
+        dispatch-base literal, in the pre-implementation command."""
+        args = _base_args(commit_mode="WORKER_MAY_COMMIT", base="deadbeef")
+        active = detect_triggers(args)
+        work_order = build_work_order(args, active)
+        pre_impl_line = next(
+            line
+            for line in work_order.splitlines()
+            if "--phase pre-implementation" in line
+        )
+        self.assertIn("<executionBaseHead>", pre_impl_line)
+        self.assertNotIn("deadbeef", pre_impl_line)
 
 
 if __name__ == "__main__":

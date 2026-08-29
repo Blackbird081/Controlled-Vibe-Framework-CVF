@@ -1,4 +1,5 @@
 # USR-023: Finance Analysis System
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Finance Analytics

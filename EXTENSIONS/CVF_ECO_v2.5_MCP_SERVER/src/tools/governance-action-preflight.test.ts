@@ -13,19 +13,40 @@ import {
   type PreflightInput,
   type PreflightPersistencePort,
 } from './governance-action-preflight';
-import { createGuardEngine } from '../guards/index.js';
+import { createGuardEngine } from 'cvf-guard-contract';
 import { JsonFileAdapter } from '../persistence/json-file.adapter.js';
 import type { GuardAuditEntry } from '../guards/types.js';
 
+// Every EDIT/COMMIT actionClass is prefixed into the guard-evaluated action
+// text (e.g. "EDIT: ..."), which the canonical mandatory ai_commit guard
+// tokenizes and treats as expressing modify intent. ALLOW_INPUT therefore
+// carries real ai_commit and buildAuthority (BUILD-phase mutation
+// prerequisite) evidence so the ALLOW-path tests below exercise a genuine
+// ALLOW under the canonical mandatory core, not a permissive default -
+// omitting either still blocks, as proven by the dedicated
+// canonical-guard-contract adoption regression test.
 const ALLOW_INPUT: PreflightInput = {
   actionClass: 'EDIT',
-  action: 'update a non-protected source file',
+  action: 'modify a non-protected source file',
   phase: 'BUILD',
   riskLevel: 'R1',
   role: 'AI_AGENT',
   agentId: 'claude-worker',
   targetFiles: ['src/feature/widget.ts'],
   mutationCount: 0,
+  aiCommit: {
+    commitId: 'preflight-test-commit-1',
+    agentId: 'claude-worker',
+    timestamp: Date.now(),
+  },
+  buildAuthority: {
+    specStatus: 'ACCEPTED',
+    acceptedSpecRef: 'docs/specs/preflight-test-spec.md',
+    workOrderStatus: 'VALID',
+    workOrderRef: 'docs/work_orders/preflight-test-work-order.md',
+    revoked: false,
+    allowedScope: ['src/feature'],
+  },
 };
 
 describe('cvf_preflight_governance_action', () => {

@@ -45,6 +45,7 @@ def _plan(
         protected_session_paths=tuple(protected),
         trace_artifact_paths=tuple(trace),
         mixed_material_and_session=mixed,
+        mixed_atomicity_authorized=False,
         exact_manifest_collision_risk=collision,
         handoff_sync_only=handoff_only,
     )
@@ -501,43 +502,36 @@ class BuildReportCorpusTests(unittest.TestCase):
 
 
 class PacketShapeConstantDriftTests(unittest.TestCase):
-    """AC6 drift tests: helper mirrors must match canonical dispatch-quality constants."""
+    """AC6: dispatch-quality owns the compact profile and shared marker;
+    worker-return-quality owns detailed headings; this helper owns its own
+    advisory required/conditional terms, only the machine-owned subset of
+    which must still align with a current worker-return-quality heading."""
 
     @classmethod
-    def _load_dispatch_quality(cls):
-        spec = importlib.util.spec_from_file_location(
-            "check_work_order_dispatch_quality",
-            _COMPAT_DIR / "check_work_order_dispatch_quality.py",
-        )
-        if spec is None or spec.loader is None:
-            return None
+    def _load(cls, module_name):
+        spec = importlib.util.spec_from_file_location(module_name, _COMPAT_DIR / f"{module_name}.py")
         mod = importlib.util.module_from_spec(spec)
+        sys.modules[module_name] = mod
         spec.loader.exec_module(mod)
         return mod
 
-    def test_required_terms_mirror_matches_canonical(self):
-        dq = self._load_dispatch_quality()
-        self.assertIsNotNone(dq, "check_work_order_dispatch_quality could not be loaded")
-        self.assertEqual(
-            assist.WORKER_RETURN_PACKET_SHAPE_REQUIRED_TERMS,
-            dq.WORKER_RETURN_PACKET_SHAPE_REQUIRED_TERMS,
-        )
+    def test_required_terms_machine_owned_subset_matches_worker_return_quality(self):
+        wrq = self._load("check_worker_return_quality_gate")
+        heading_texts = {h.lstrip("#").strip() for h in wrq.REQUIRED_HEADINGS}
+        for term in assist.WORKER_RETURN_PACKET_SHAPE_REQUIRED_TERMS:
+            if term != "executionBaseHead":
+                self.assertIn(term, heading_texts, f"term `{term}` has no current worker-return-quality heading")
 
-    def test_conditional_terms_mirror_matches_canonical(self):
-        dq = self._load_dispatch_quality()
-        self.assertIsNotNone(dq)
-        self.assertEqual(
-            assist.WORKER_RETURN_PACKET_SHAPE_CONDITIONAL_TERMS,
-            dq.WORKER_RETURN_PACKET_SHAPE_CONDITIONAL_TERMS,
-        )
+    def test_conditional_terms_machine_owned_subset_matches_worker_return_quality(self):
+        wrq = self._load("check_worker_return_quality_gate")
+        heading_texts = {h.lstrip("#").strip() for h in wrq.REQUIRED_HEADINGS}
+        for term in assist.WORKER_RETURN_PACKET_SHAPE_CONDITIONAL_TERMS:
+            if term != "Machine Closure Package":
+                self.assertIn(term, heading_texts, f"term `{term}` has no current worker-return-quality heading")
 
     def test_contract_marker_mirror_matches_canonical(self):
-        dq = self._load_dispatch_quality()
-        self.assertIsNotNone(dq)
-        self.assertEqual(
-            assist.WORKER_RETURN_PACKET_SHAPE_CONTRACT_MARKER,
-            dq.WORKER_RETURN_PACKET_SHAPE_CONTRACT_MARKER,
-        )
+        dq = self._load("check_work_order_dispatch_quality")
+        self.assertEqual(assist.WORKER_RETURN_PACKET_SHAPE_CONTRACT_MARKER, dq.WORKER_RETURN_PACKET_SHAPE_CONTRACT_MARKER)
 
 
 class CorpusConstantDriftTests(unittest.TestCase):

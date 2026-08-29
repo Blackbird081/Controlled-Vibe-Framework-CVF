@@ -1,4 +1,5 @@
 # USR-058: SaaS App
+Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
 > **Domain:** Web Development

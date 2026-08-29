@@ -133,6 +133,53 @@ OWNER_SURFACE_NOT_FOUND
 
         self.assertEqual([], violations)
 
+    # --- EARTR-ESC-R1 Amendment 1: exact-path non-execution-owner exemption -
+
+    def test_canonical_workflow_specification_is_non_applicable(self) -> None:
+        """The finding-workflow specification owner is exempt by exact path:
+        it classifies/routes returned external-agent output, it never records
+        a real bounded external-repository or copied-folder absorption, so it
+        must not be forced to carry a fabricated overlap/novelty
+        classification table merely because its path and a pre-existing
+        machine-check marker phrase coincidentally satisfy the general
+        heuristic."""
+        text = (
+            "# CVF External Agent Finding Absorption Workflow\n\n"
+            "Status: ACTIVE_WORKFLOW\n\n"
+            "This workflow classifies external absorption findings returned "
+            "from an external repository review.\n\n"
+            "## Machine Check\n\n"
+            "`External absorption review: REQUIRED`\n"
+        )
+
+        violations = MODULE.check_text(
+            "docs/reference/external_agent_review/CVF_EXTERNAL_AGENT_FINDING_ABSORPTION_WORKFLOW.md",
+            text,
+        )
+
+        self.assertEqual([], violations)
+
+    def test_genuine_external_repository_absorption_artifact_remains_applicable(self) -> None:
+        """A real absorption artifact at a different path must still be
+        caught missing its overlap classification section, proving the
+        exemption did not weaken detection generally (only the one named
+        exact path is exempt)."""
+        text = VALID_ARTIFACT.replace("## Overlap And Novelty Classification", "## Removed Overlap")
+
+        violations = MODULE.check_text("docs/reviews/CVF_GENUINE_ABSORPTION_REVIEW.md", text)
+
+        self.assertTrue(any(item["type"] == "external_absorption_overlap_section_missing" for item in violations))
+
+    def test_canonical_absorption_standard_remains_applicable(self) -> None:
+        """The standard path itself must remain applicable and still be
+        validated against its own required markers after adding the
+        exemption, since the exemption targets only the finding-workflow
+        specification's exact path."""
+        violations = MODULE.check_text(MODULE.STANDARD_PATH, "# Incomplete Standard\n")
+
+        self.assertTrue(any(item["type"] == "external_absorption_overlap_standard_marker_missing" for item in violations))
+        self.assertTrue(len(violations) > 0)
+
 
 if __name__ == "__main__":
     unittest.main()

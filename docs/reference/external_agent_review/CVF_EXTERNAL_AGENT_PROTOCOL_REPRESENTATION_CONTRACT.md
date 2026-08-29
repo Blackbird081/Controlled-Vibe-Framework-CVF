@@ -8,8 +8,9 @@ docType: reference
 
 ## Purpose
 
-Keep the public single-file guide and the operator-portable four-file packet
-aligned as representations of one external-agent round-trip protocol.
+Keep the public single-file guide and the operator-portable core packet plus
+generated supplements aligned as representations of one external-agent
+round-trip protocol.
 
 ## Scope / Owner Boundary
 
@@ -56,7 +57,7 @@ The portable companion set is:
 - `CVF_CURRENT_PUBLIC_SNAPSHOT.md`;
 - `CVF_EXTERNAL_AGENT_RETURN_CONTRACT.md`.
 
-Two generated supplements may accompany the stable four-file set:
+Generated supplements may accompany the stable core packet:
 
 - `CVF_PUBLIC_OWNER_SURFACE_INDEX.json`, copied from the public-safe owner
   projection for bounded owner discovery;
@@ -66,7 +67,7 @@ Two generated supplements may accompany the stable four-file set:
 
 `CVF_EXTERNAL_AGENT_PACKET_REFRESH_RECEIPT.json` records the public commit and
 hashes produced by the latest packet refresh. These supplements do not become
-CVF authority and do not change the four stable entry files.
+CVF authority and do not change the stable core files.
 
 ## Gate A And Gate B
 
@@ -105,6 +106,13 @@ facts across commits without labeling both identities.
 Cached browser, search, or commit-history surfaces are discovery aids, not
 sufficient proof of live `HEAD`; use an exact Git ref query when available.
 
+When a task capsule is present, its `cvfPublicSource.commit` is the normative
+reproducible comparison baseline for that task. A different live public HEAD is
+recorded as `PUBLIC_CVF_PIN_DRIFT_RECORDED`; it does not silently replace the
+capsule pin. Continue public-CVF pre-mapping against the capsule pin and report
+the newer HEAD as freshness context. A return that claims the capsule commit
+while actually mapping against another commit fails provenance reconciliation.
+
 The governed refresh command is:
 
 ```powershell
@@ -136,6 +144,48 @@ obligations:
 - `1.1.0` returns remain readable; their untyped, non-empty candidate rows
   are preserved as historical evidence and are never silently promoted to
   typed candidate status by later revalidation.
+
+## Portable Source-Pack Operational Profile
+
+When a task capsule selects `SOURCE_PACK_PREPARATION`, the portable Bootstrap
+must make the following existing protocol route executable without prior-chat
+knowledge:
+
+```text
+verify packet and task capsule
+-> pin source commit, license, and immutable evidence
+-> audit the external source before comparing it with CVF
+-> extract atomic patterns
+-> use public CVF only for preliminary owner/overlap navigation
+-> emit strict candidateContractVersion 1 rows with separate provenance lanes
+-> validate the complete return
+-> stop at COMPLETE_PENDING_LOCAL_RECONCILIATION
+```
+
+The per-repository task capsule binds the short operator objective, public CVF
+commit, audited-source commit, license expression and immutable evidence,
+expected return status, and non-effect authority envelope. It does not repeat
+the typed producer contract owned by the Return Contract and Finding
+Absorption Workflow.
+
+The External Agent stops after the validated return. Local CVF resolves actual
+current ownership, attempts to disprove novelty, and produces reconciliation;
+the Operator decides disposition and whether later governed work should be
+considered. `NO_NEW_VALUE` is a successful reconciliation result. Candidate
+production, Local reconciliation, Operator selection, owner binding, and Work
+Order existence do not independently authorize implementation.
+
+`task.outputRoot` is the Operator-preferred destination, not foreign-host
+filesystem authority. If it is unavailable or belongs to another host, the
+External Agent may rebind only to an authorized writable task/artifact root and
+must preserve requested root, actual root, `OUTPUT_ROOT_REBOUND`, and reason in
+the return. Rebinding neither causes task-capsule drift nor widens write scope.
+
+Task-capsule drift is material, not textual. The capsule owns task identity,
+source pins, working mode, protocol binding, and effect authority. A short
+Operator objective controls focus and analysis depth only within that envelope;
+wording differences are not compared for equality. A different source, commit,
+mode, or requested forbidden effect is material drift.
 
 ## Public/Portable Projection Release Boundary
 

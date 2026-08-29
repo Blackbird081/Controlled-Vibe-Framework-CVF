@@ -27,6 +27,19 @@ CHAIN_MAP_PATH = "docs/reference/external_agent_review/CVF_EXTERNAL_KNOWLEDGE_AB
 THIS_SCRIPT_PATH = "governance/compat/check_external_absorption_value_conversion.py"
 CORE_SCRIPT_PATH = "governance/compat/check_external_absorption_core.py"
 
+# Exact-path non-execution-owner exemption (EARTR-ESC-R1 Amendment 1, 2026-08-29):
+# this file is the protocol classification/workflow specification owner for
+# returned external-agent output, not a record of a real bounded
+# external-repository or copied-folder absorption. Its path and a pre-existing
+# machine-check marker phrase satisfy this guard's general applicability
+# heuristic by coincidence, independent of whether any repository was ever
+# absorbed. The exemption is exact-path only and must not be widened to a
+# prefix, glob, or text-pattern match, so it cannot silently exempt a future
+# real absorption artifact placed nearby.
+NON_EXECUTION_OWNER_EXEMPT_PATHS = (
+    "docs/reference/external_agent_review/CVF_EXTERNAL_AGENT_FINDING_ABSORPTION_WORKFLOW.md",
+)
+
 CORE_SECTION = "## External Absorption Core"
 VALUE_SECTION = "## External Absorption Value Conversion Matrix"
 EXPLICIT_REQUIRED_MARKER = "External absorption core: REQUIRED"
@@ -205,6 +218,8 @@ def _is_applicable(path: str, text: str) -> bool:
     if not _is_governed_markdown(normalized):
         return False
     if normalized == CHAIN_MAP_PATH:
+        return False
+    if normalized in NON_EXECUTION_OWNER_EXEMPT_PATHS:
         return False
     if normalized == STANDARD_PATH:
         return True

@@ -21,9 +21,13 @@ CVF authority, publish private provenance, or authorize external effects.
 
 Canonical protocol identifier: `cvf.external-agent-round-trip`.
 
-Current version: `1.1.0`.
+Current version: `1.2.0`.
 
 Current compatible major: `1`.
+
+Return schema `cvf.externalAgentReturn.v1` is retained unchanged: the
+candidate-contract discriminator is an additive collection-level field, not a
+return-schema major change.
 
 Every representation must expose these fields:
 
@@ -112,6 +116,36 @@ HEAD equals live `origin/main`, then refreshes the operator-local snapshot,
 owner index, and receipt. A local public candidate that has not been pushed is
 therefore rejected instead of being labeled live public state.
 
+## Candidate Contract Discriminator And Receipt Binding (1.2.0)
+
+Protocol `1.2.0` adds an optional collection-level `candidateContractVersion`
+field read alongside `suggestedAbsorptionCandidates`. The normative candidate
+shape, provenance-lane separation, and dual-reader compatibility table are
+owned by
+`docs/reference/external_agent_review/CVF_EXTERNAL_AGENT_FINDING_ABSORPTION_WORKFLOW.md`;
+this contract records only the version-compatibility and receipt-evidence
+obligations:
+
+- every new `1.2.0` producer must emit `candidateContractVersion: 1`,
+  including when the candidate array is empty;
+- a validation receipt binding candidate-aware `PASS` must expose
+  `validatedReturnManifestSha256`, `validatedProtocolVersion: "1.2.0"`, and
+  `validatedCandidateContractVersion: 1`;
+- a legacy or candidate-unaware `PASS` receipt is valid historical evidence
+  but is insufficient to open typed Local reconciliation;
+- `1.1.0` returns remain readable; their untyped, non-empty candidate rows
+  are preserved as historical evidence and are never silently promoted to
+  typed candidate status by later revalidation.
+
+## Public/Portable Projection Release Boundary
+
+Protocol `1.2.0` is released to the public compact projection and the
+operator-portable packet only as documentation and return-validation contract
+semantics. The synchronized release updates both representations'
+`protocolVersion`, `compatibleWith`, and `updatedAt` fields together. Release
+does not imply that an External Agent read the new packet, that any candidate
+was accepted, or that runtime/provider/implementation authority was granted.
+
 ## Update Rule
 
 Any change to protocol semantics must update every affected representation's
@@ -130,6 +164,38 @@ not change required behavior, return shape, authority, or claim boundaries.
 | Owner surface | `docs/reference/external_agent_review/CVF_EXTERNAL_AGENT_PROTOCOL_REPRESENTATION_CONTRACT.md` |
 | Disposition | ADAPT existing external-agent packet routing with explicit representation identity and drift handling |
 | Claim boundary | documentation and compatibility contract only; no runtime, provider, deployment, or production claim |
+
+## Epistemic Process Block
+
+### Expected Result / Prediction
+
+Bumping the private protocol owner to `1.2.0` for the accepted candidate
+discriminator and receipt-binding enrichment was expected to require no
+return-schema-major change and no break in `1.1.0` read compatibility, since
+the accepted design treats the discriminator as additive.
+
+### Evidence Comparison
+
+The implemented and synchronized dual-reader table (`LEGACY_EMPTY`,
+`LEGACY_UNTYPED_NOT_PROMOTABLE`, `STRICT_V1`, `UNSUPPORTED_OR_MALFORMED`) and
+the focused test matrix confirm that pre-existing `1.1.0` returns with empty
+or non-empty untyped candidate arrays continue to validate under the
+existing `PASS`/`RETURN_FOR_REPAIR` semantics, matching the prediction.
+
+### Contradiction Or Gap Disposition
+
+No contradiction was found in the version-compatibility design itself. This
+enrichment does surface a separate, unrelated governance-checker/owner-surface
+mismatch on a sibling material path
+(`CVF_EXTERNAL_AGENT_FINDING_ABSORPTION_WORKFLOW.md`), recorded in the paired
+worker return rather than here, since it does not affect this contract's own
+version-compatibility content.
+
+### Claim Update
+
+This contract now documents `1.2.0` as the synchronized private, public
+compact, and operator-portable protocol version. External receipt of or
+conformance to that release still requires separate evidence.
 
 ## Claim Boundary
 

@@ -317,6 +317,83 @@ The lanes are provenance-exclusive. An internal-defect row must not contain
 forbidden because the parent manifest remains
 `NON_AUTHORITATIVE_UNTIL_REVIEWED`.
 
+Candidate rows have a closed top-level field set: undeclared fields and a
+per-row `authorityStatus` fail strict-v1 validation. `candidateId` is non-blank
+and unique within the return; `questionsForLocalAgent` is a non-empty list of
+non-blank strings. Optional `sourceEvidence` must be a non-blank bounded
+summary. For an internal-defect row it may describe only cited public-CVF
+evidence, never external-source credit.
+
+Use these producer-complete minimal examples:
+
+```json
+{
+  "candidateId": "ESC-001",
+  "preliminaryLane": "EXTERNAL_SOURCE_VALUE_CANDIDATE",
+  "sourceRefs": ["SRC-001"],
+  "sourceLocations": [
+    {"sourceRef": "SRC-001", "path": "src/file.py", "symbols": ["SymbolName"]}
+  ],
+  "candidateSummary": "atomic reusable source pattern",
+  "claimedValue": "source-bounded reason the pattern may matter",
+  "publicOwnerSearch": {
+    "status": "OWNER_CANDIDATES_FOUND",
+    "candidates": [
+      {"path": "docs/reference/owner.md", "symbol": "Owner heading", "basis": "public evidence"}
+    ]
+  },
+  "publicOverlap": {
+    "status": "PUBLIC_SUGGESTS_ENRICHMENT",
+    "basis": "public-evidence-only comparison"
+  },
+  "preliminaryValueDisposition": "ADAPT",
+  "questionsForLocalAgent": ["Which current local owner actually governs this?"]
+}
+```
+
+```json
+{
+  "candidateId": "ESC-002",
+  "preliminaryLane": "CVF_INTERNAL_DEFECT_CANDIDATE",
+  "cvfPublicLocations": [
+    {"path": "docs/reference/public-owner.md", "symbols": ["Owner heading"]}
+  ],
+  "triggerContextSourceRefs": ["SRC-001"],
+  "candidateSummary": "bounded public-CVF defect hypothesis",
+  "publicOwnerSearch": {
+    "status": "PUBLIC_OWNER_SURFACE_NOT_FOUND"
+  },
+  "questionsForLocalAgent": ["Does current private/local CVF already resolve this?"]
+}
+```
+
+Exact bounded values:
+
+- `publicOwnerSearch.status`: `OWNER_CANDIDATES_FOUND`,
+  `PUBLIC_OWNER_SURFACE_NOT_FOUND`, `PUBLIC_INSUFFICIENT_EVIDENCE`, or
+  `NOT_APPLICABLE`. `candidates` must be non-empty only for
+  `OWNER_CANDIDATES_FOUND`; each row requires safe relative `path`, non-blank
+  `symbol`, and non-blank `basis`. Otherwise `candidates` is absent or empty.
+- `publicOverlap.status`: `PUBLIC_CONFIRMED_EXISTING`,
+  `PUBLIC_SUGGESTS_ENRICHMENT`, `PUBLIC_OWNER_SURFACE_NOT_FOUND`,
+  `PUBLIC_INSUFFICIENT_EVIDENCE`, or `NOT_APPLICABLE`; `basis` is always
+  required and non-blank.
+- `preliminaryValueDisposition`: `ABSORB`, `ADAPT`, `DEFER`, `REJECT`,
+  `BLOCK`, or `NO_NEW_VALUE`.
+
+For source-value rows, `sourceRefs` and `sourceLocations` are non-empty, every
+reference resolves to a unique top-level `sources[].id`, and
+`set(sourceRefs) == set(sourceLocations[].sourceRef)`. Each location requires a
+safe relative `path` and non-empty non-blank `symbols`. The only optional field
+is `sourceEvidence`; `cvfPublicLocations` and `triggerContextSourceRefs` are
+forbidden.
+
+For internal-defect rows, `cvfPublicLocations` is non-empty and binds to
+top-level `cvfPublicSource`. `triggerContextSourceRefs` and `sourceEvidence`
+are optional; trigger refs must resolve to `sources[].id` and remain
+non-evidentiary. `sourceRefs`, `sourceLocations`, `claimedValue`,
+`publicOverlap`, and `preliminaryValueDisposition` are forbidden.
+
 External candidates are discovery input only. Local CVF must reverify current
 owners, actively try to disprove novelty, and classify the real delta. Operator
 acceptance still does not authorize implementation; that requires a separate

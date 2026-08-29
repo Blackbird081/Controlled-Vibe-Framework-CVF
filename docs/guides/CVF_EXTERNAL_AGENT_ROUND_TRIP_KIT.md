@@ -6,10 +6,10 @@ Memory class: PUBLIC_REFERENCE
 
 Status: CURRENT PUBLIC GUIDE
 
-protocolVersion: 1.1.0
+protocolVersion: 1.2.0
 projectionOf: cvf.external-agent-round-trip
 compatibleWith: cvf.external-agent-portable-packet@1.x
-updatedAt: 2026-08-23
+updatedAt: 2026-08-29
 representation: PUBLIC_COMPACT_PROJECTION
 
 Use this guide when an external agent will review CVF, design a capability,
@@ -281,6 +281,7 @@ this populated shape (replace the illustrative values with real evidence):
   "secretsReturned": false,
   "knownLimitations": [],
   "unresolvedQuestions": [],
+  "candidateContractVersion": 1,
   "suggestedAbsorptionCandidates": []
 }
 ```
@@ -293,6 +294,33 @@ records and include executed negative semantic evidence when applicable.
 Suggested absorption candidates are advisory. CVF independently decides
 `ABSORB`, `ADAPT`, `DEFER`, `REJECT`, `BLOCK`, or `NO_NEW_VALUE` after source,
 owner, overlap, and evidence review.
+
+## Typed absorption candidates (1.2.0)
+
+Every new 1.2 return must include `candidateContractVersion: 1`, even when
+`suggestedAbsorptionCandidates` is empty. Each non-empty row selects exactly
+one preliminary lane:
+
+- `EXTERNAL_SOURCE_VALUE_CANDIDATE`: an atomic reusable source pattern with
+  normalized `sourceRefs`, exact `sourceLocations`, neutral summary, claimed
+  value, public-owner search, public-only overlap, preliminary value
+  disposition, and questions for Local verification;
+- `CVF_INTERNAL_DEFECT_CANDIDATE`: an incidental public-CVF defect hypothesis
+  with `cvfPublicLocations`, public-owner search, and questions for Local
+  verification. Optional `triggerContextSourceRefs` record discovery context
+  only and never attribute the defect to the audited source.
+
+The lanes are provenance-exclusive. An internal-defect row must not contain
+`sourceLocations`, `claimedValue`, `publicOverlap`, or
+`preliminaryValueDisposition`; an external-value row must not contain
+`cvfPublicLocations` or `triggerContextSourceRefs`. Per-row authority is
+forbidden because the parent manifest remains
+`NON_AUTHORITATIVE_UNTIL_REVIEWED`.
+
+External candidates are discovery input only. Local CVF must reverify current
+owners, actively try to disprove novelty, and classify the real delta. Operator
+acceptance still does not authorize implementation; that requires a separate
+governed CVF Work Order.
 
 ## Verification report
 

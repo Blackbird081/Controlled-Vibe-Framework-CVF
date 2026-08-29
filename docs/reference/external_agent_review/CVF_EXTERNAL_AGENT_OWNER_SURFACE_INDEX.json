@@ -53,9 +53,9 @@
     }
   ],
   "projectionOf": "cvf.external-agent-round-trip",
-  "protocolVersion": "1.1.0",
+  "protocolVersion": "1.2.0",
   "schema": "cvf.publicOwnerSurfaceIndex.v1",
   "snapshotBinding": "Bind every use to the public commit in CVF_CURRENT_PUBLIC_SNAPSHOT.md or CVF_EXTERNAL_AGENT_TASK_CAPSULE.json; reverify each path at that commit.",
   "status": "BOUNDED_PUBLIC_DISCOVERY_INDEX",
-  "updatedAt": "2026-08-23"
+  "updatedAt": "2026-08-29"
 }

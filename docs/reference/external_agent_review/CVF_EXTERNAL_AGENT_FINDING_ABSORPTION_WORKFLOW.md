@@ -127,6 +127,30 @@ Every row's `preliminaryLane` selects exactly one of:
 The parent manifest's `authorityStatus` governs every candidate row; no
 per-row authority status is permitted.
 
+Strict-v1 candidate rows use a closed top-level field set: undeclared fields
+fail validation. `candidateId` must be a non-blank string unique within the
+parent return, and `questionsForLocalAgent` must be a non-empty list of
+non-blank strings. Optional `sourceEvidence`, when present on either lane,
+must be a non-blank bounded summary; on an internal-defect row it may describe
+only the cited public-CVF evidence, never external-source credit.
+
+Both lanes use this exact public-owner search shape:
+
+```json
+{
+  "status": "OWNER_CANDIDATES_FOUND",
+  "candidates": [
+    {"path": "docs/reference/owner.md", "symbol": "Owner heading", "basis": "public evidence"}
+  ]
+}
+```
+
+`status` must be one of `OWNER_CANDIDATES_FOUND`,
+`PUBLIC_OWNER_SURFACE_NOT_FOUND`, `PUBLIC_INSUFFICIENT_EVIDENCE`, or
+`NOT_APPLICABLE`. `candidates` is required and non-empty only for
+`OWNER_CANDIDATES_FOUND`; otherwise it must be absent or empty. Candidate
+paths must be safe relative paths, and `symbol` and `basis` must be non-blank.
+
 ### External Source Value Candidate
 
 Requires: unique `candidateId` (unique within the return), non-empty
@@ -134,6 +158,18 @@ Requires: unique `candidateId` (unique within the return), non-empty
 safe path and non-blank symbols, a neutral `candidateSummary`, `claimedValue`,
 a bounded `publicOwnerSearch` status, a bounded `publicOverlap` status, a
 `preliminaryValueDisposition`, and `questionsForLocalAgent`.
+
+The exact allowed top-level fields are the required fields above plus optional
+`sourceEvidence`; `cvfPublicLocations`, `triggerContextSourceRefs`,
+`authorityStatus`, and every undeclared field are forbidden. Each
+`sourceLocations` row requires `sourceRef`, safe relative `path`, and a
+non-empty `symbols` list of non-blank strings. `publicOverlap` requires a
+non-blank `basis` and one of: `PUBLIC_CONFIRMED_EXISTING`,
+`PUBLIC_SUGGESTS_ENRICHMENT`, `PUBLIC_OWNER_SURFACE_NOT_FOUND`,
+`PUBLIC_INSUFFICIENT_EVIDENCE`, or `NOT_APPLICABLE`.
+
+`preliminaryValueDisposition` must be one of `ABSORB`, `ADAPT`, `DEFER`,
+`REJECT`, `BLOCK`, or `NO_NEW_VALUE`.
 
 Every `sourceRefs` entry must resolve to an existing manifest `sources[].id`.
 `set(sourceRefs)` must exactly equal `set(sourceLocations[].sourceRef)` so a
@@ -157,6 +193,13 @@ credit for the defect.
 This variant forbids `sourceLocations`, `claimedValue`, `publicOverlap`, and
 `preliminaryValueDisposition`. Mixing these fields into an internal-defect row
 is a contamination error and fails validation.
+
+Its exact allowed top-level fields are `candidateId`, `preliminaryLane`,
+`cvfPublicLocations`, `candidateSummary`, `publicOwnerSearch`,
+`questionsForLocalAgent`, and the optional `triggerContextSourceRefs` and
+`sourceEvidence`. `sourceRefs`, `authorityStatus`, and every undeclared field
+are also forbidden. Each `cvfPublicLocations` row requires a safe relative
+`path` and a non-empty `symbols` list of non-blank strings.
 
 ### Provenance Lane Separation
 

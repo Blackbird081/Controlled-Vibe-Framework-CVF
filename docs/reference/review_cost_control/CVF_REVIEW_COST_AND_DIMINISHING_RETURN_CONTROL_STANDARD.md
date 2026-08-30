@@ -6,7 +6,7 @@ Status: ACTIVE_STANDARD
 
 docType: reference
 
-Date: 2026-07-12
+Date: 2026-08-29
 
 Batch ID: SOT3-RCS-T1
 
@@ -15,9 +15,10 @@ Batch ID: SOT3-RCS-T1
 Convert the machine-safe part of ADIF-0026 (sequential reviewer finding
 cascade) into a provider-neutral, forward-only evidence-shape contract for
 review-cost telemetry, without automating semantic value judgment. This
-standard defines what every changed completion review must record; it
-does not decide whether a review's findings are correct, whether a root
-cause is truly independent, or whether continuing repair is worthwhile.
+standard defines what every changed completion review must record and what
+every changed work order must prove before dispatch. It does not decide
+whether a review's findings are correct or whether a root cause is truly
+independent.
 
 ## Scope / Applies To
 
@@ -26,9 +27,83 @@ Applies to every changed `docs/reviews/*.md` artifact declaring
 declaration line `Review-Cost Telemetry: REQUIRED`. Unchanged historical
 reviews and archived reviews are not reopened.
 
-This standard does not apply to work orders, baselines, roadmaps,
-standards, tests, or this checker's own source file, even if any of those
-mention the declaration token in prose or as a quoted example.
+The completion-review telemetry declaration does not apply to work orders,
+baselines, roadmaps, standards, tests, or this checker's own source file. The
+separate dispatch control below applies forward-only to every changed,
+non-archived work order declaring `docType: work_order`.
+
+## Review Dispatch Convergence And Invocation Budget Control
+
+Every changed work order must carry the exact standalone declaration
+`Review-Dispatch Convergence Control: REQUIRED` and these scalar fields:
+
+- `dispatchKind`, `dispatchSurface`, and `parentAssignmentId`;
+- `reviewRoundCount` and `priorFindingSetDigest`;
+- `dependencyAuditDisposition`, `reworkFindingDisposition`,
+  `newIndependentCriticalEvidence`, and `regressionGuardDisposition`;
+- `cumulativeExternalInvocationCount`, `externalInvocationCeiling`,
+  `usageAvailability`, and `quotaAdmissionDisposition`;
+- `nextDispatchDisposition`.
+- `rootCauseClusterId`, `reworkGeneration`, and
+  `consolidatedDefectClassSweep`;
+- `successorTrancheOpened` and `implementationAutonomyDisposition`.
+
+An `INITIAL` dispatch uses round zero, a complete initial acceptance matrix,
+baseline negative-test planning, and no prior finding digest. A `REWORK`
+dispatch requires a SHA-256 binding to one consolidated finding set, a full
+dependency audit completed before the first repair, and a regression guard for
+every targeted defect. Round two additionally requires exact evidence IDs for
+a genuinely new independent critical root cause. Round three and later are not
+eligible for automatic re-dispatch.
+
+For `EXTERNAL_AGENT_CLI_MCP`, the parent-assignment cumulative invocation count
+must be strictly below its ceiling before the next invocation, and admission
+usage must be known. Unknown usage, a reached ceiling, or a missing cumulative
+envelope fails closed. `INTERNAL_AGENT` uses the explicit not-applicable
+posture because provider-native helpers inside one already-authorized parent
+session are outside this separately-dispatched invocation count.
+
+This is a pre-dispatch evidence and admission interlock. It does not intercept
+an out-of-band shell, IDE, MCP server, or provider call that bypasses CVF's
+governed work-order/autorun path.
+
+`successorTrancheOpened` is always `NO` at dispatch and worker return. A
+dependent repair remains inside the current root-cause cluster; only the
+reviewer/orchestrator may authorize a successor after identifying independent
+critical evidence or a changed authority boundary. `reworkGeneration` equals
+the review round for rework and is zero for initial dispatch.
+
+## Worker Return Convergence Self-Proof
+
+Every changed self-declared worker return must record one compact, observable
+self-proof envelope before claiming readiness:
+
+- stable `rootCauseClusterId`, non-negative `reworkGeneration`, and
+  `consolidatedDefectClassSweep: COMPLETE_ALL_KNOWN_DEPENDENCIES`;
+- non-placeholder `productionBindingEvidence` and
+  `adversarialRegressionDisposition: PASS_TARGETED_DEFECT_CLASS`;
+- `successorTrancheOpened: NO` and
+  `implementationAutonomyDisposition: CONTRACT_AUTHORITY_EVIDENCE_OUTCOME_ONLY`;
+- non-negative internal-agent, external-agent, and provider invocation counts,
+  plus numeric quota usage or an explicit unavailable reason;
+- `terminalReadinessVerdict: READY_FOR_REVIEW` or a reason-bearing blocked
+  verdict.
+
+This is not a reasoning trace and does not prescribe algorithms, prompts,
+tool order, code structure, or provider-specific working style. CVF governs
+authority, observable contracts, invariants, evidence, budgets, and outcomes.
+The worker retains implementation autonomy inside those boundaries. The
+reviewer remains the independent safety net, not the first party expected to
+discover predictable dependent cases.
+
+The canonical local helper is
+`governance/compat/build_dispatch_packet_scaffold.py`. It emits checker-ready
+INITIAL or REWORK envelopes and can include the paired worker-return skeleton.
+It is deterministic, local-only, has zero provider/network calls, and rejects
+round-three rework, malformed finding digests, or external invocation counts
+at/above their ceiling before emitting a packet. The separate
+`run_worker_return_scaffold.py` emits the same self-proof envelope so the two
+worker-return generators cannot silently drift on this contract.
 
 ## Declaration
 
@@ -204,6 +279,12 @@ is truly a new critical contradiction remains reviewer judgment; this
 standard only fixes the two allowed exit tokens once the round threshold is
 crossed.
 
+`CONTINUE_NEW_CRITICAL_EVIDENCE` additionally requires
+`newRootCauseCountThisRound > 0`. At round two or later,
+`CONSOLIDATE_SINGLE_REPAIR` also requires a new independent root cause; a
+dependent-only finding at that point is review-by-drip and cannot open another
+automatic repair dispatch.
+
 ## Machine-Enforceable Boundary
 
 | Control | Machine disposition |
@@ -215,6 +296,11 @@ crossed.
 | round-three escalation token restriction | ENFORCE |
 | audit, commit-plan, latency, and delay vocabularies | ENFORCE |
 | multi-commit exception-reason requirement | ENFORCE |
+| changed work-order dispatch kind, convergence fields, and cross-field rules | ENFORCE |
+| parent-assignment invocation-count ceiling before external dispatch | ENFORCE |
+| round-two new-critical-evidence requirement and round-three dispatch stop | ENFORCE |
+| worker-return consolidated sweep, production binding, adversarial regression, cost ledger, and terminal verdict | ENFORCE |
+| implementation-autonomy boundary and closed successor-tranche flag | ENFORCE |
 | eligibility for the 10-minute fast path | REVIEWER_JUDGMENT |
 | whether a root cause is truly independent | REVIEWER_JUDGMENT |
 | whether `valueDelta` is substantively high or low | REVIEWER_JUDGMENT |
@@ -243,7 +329,8 @@ unchanged and archived history outside the forward-only gate.
 
 ### Claim Update
 
-The standard machine-enforces evidence presence and shape only. Root-cause
+The standard machine-enforces review evidence shape plus forward-only work-order
+dispatch convergence and cumulative invocation admission. Root-cause
 independence, criticality, and incremental value remain reviewer judgment.
 
 ## Agent Operation Trace Block
@@ -270,8 +357,9 @@ independence, criticality, and incremental value remain reviewer judgment.
 
 ## Non-Goals
 
-- This standard does not implement live provider/quota accounting; token and
-  wall-clock fields may be declared `NOT_AVAILABLE_WITH_REASON`.
+- This standard does not implement token-level live provider accounting. It
+  enforces a provider-neutral cumulative external-invocation ceiling and fails
+  closed when admission usage is unavailable.
 - This standard does not implement semantic scoring, automatic review
   closure, or automatic criticality judgment.
 - This standard does not reopen unchanged or archived historical reviews.
@@ -299,9 +387,19 @@ Protected paths:
 
 - `governance/compat/check_review_cost_control.py`
 - `governance/compat/test_check_review_cost_control.py`
+- `governance/compat/agent_autorun_command_catalog.py`
+- `governance/compat/test_run_agent_autorun_workflow_gate.py`
+- `governance/compat/build_dispatch_packet_scaffold.py`
+- `governance/compat/test_build_dispatch_packet_scaffold.py`
+- `governance/compat/build_worker_return_skeleton_scaffold.py`
+- `governance/compat/run_worker_return_scaffold.py`
+- `governance/compat/test_run_worker_return_scaffold.py`
+- `governance/compat/review_convergence_scaffold.py`
 
 Operator authorization: the operator explicitly requested that this become the
-common CVF foundation and SOP for all future agents using CVF.
+common CVF foundation and SOP for all future agents using CVF, and later
+required the same control to prevent review-by-drip and unbounded external
+MCP/CLI re-dispatch cost.
 
 Rollback boundary: revert this SOP addendum, checker/test changes, ADIF update,
 orientation update, commit-steward cross-reference, and completion review as one
@@ -338,10 +436,11 @@ eligibility remain reviewer-owned judgments.
 
 ## Claim Boundary
 
-This standard defines an evidence-shape contract only. It does not certify
+This standard defines an evidence-shape and cooperative pre-dispatch contract.
+It does not certify
 that a review's findings are correct, that its root-cause classification is
 accurate, that its `valueDelta` narrative is substantively true, or that its
 `stopDisposition` choice was the right call. Semantic review quality,
 criticality judgment, and the decision to continue or stop repair remain
 exclusively reviewer-owned. This standard does not authorize SOT3 runtime,
-provider/live quota integration, or public-sync.
+provider/live token metering, out-of-band launcher interception, or public-sync.

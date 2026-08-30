@@ -32,7 +32,13 @@ External absorption core: REQUIRED
 | Disposition taxonomy | ABSORB, ADAPT, DEFER, REJECT, BLOCK, NO_NEW_VALUE |
 | Owner-surface map | inline table mapping accepted rows to docs/reference/example.md |
 | Unresolved items | 0 |
-| Completion claim boundary | bounded documentation-only absorption; no runtime/provider/public/production claim |
+| Absorption maturity | KNOWLEDGE_NORMALIZED_RUNTIME_PENDING |
+| Named runtime consumer | PENDING_NOT_NAMED |
+| Integration evidence | PENDING_RUNTIME_INTEGRATION |
+| Use proof | PENDING_OPERATOR_AUTHORIZED_RUNTIME_PROOF |
+| Operator checkpoint | REQUIRED_BEFORE_RUNTIME_EXECUTION |
+| Absorption completion status | ABSORPTION_NOT_COMPLETE |
+| Completion claim boundary | knowledge normalized only; ABSORPTION_NOT_COMPLETE; no runtime/provider/public/production claim |
 
 ## Corpus Completeness And Report Integrity
 
@@ -114,6 +120,57 @@ This absorbs `.private_reference/legacy/CVF 28.06/Pack`.
         violations = MODULE.check_text("docs/reviews/CVF_SAMPLE.md", text)
 
         self.assertTrue(any(item["type"] == "external_absorption_core_status_missing" for item in violations))
+
+    def test_documentation_only_cannot_claim_absorption_complete(self) -> None:
+        text = VALID_ARTIFACT.replace(
+            "| Absorption completion status | ABSORPTION_NOT_COMPLETE |",
+            "| Absorption completion status | ABSORPTION_COMPLETE_USE_PROVEN |",
+        )
+
+        violations = MODULE.check_text("docs/reviews/CVF_SAMPLE.md", text)
+
+        self.assertTrue(any(item["type"] == "external_absorption_core_complete_without_use_proven" for item in violations))
+        self.assertTrue(any(item["type"] == "external_absorption_core_premature_completion" for item in violations))
+
+    def test_use_proven_requires_consumer_evidence_and_operator_checkpoint(self) -> None:
+        text = VALID_ARTIFACT.replace(
+            "| Absorption maturity | KNOWLEDGE_NORMALIZED_RUNTIME_PENDING |",
+            "| Absorption maturity | USE_PROVEN |",
+        ).replace(
+            "| Absorption completion status | ABSORPTION_NOT_COMPLETE |",
+            "| Absorption completion status | ABSORPTION_COMPLETE_USE_PROVEN |",
+        )
+
+        violations = MODULE.check_text("docs/reviews/CVF_SAMPLE.md", text)
+
+        types = {item["type"] for item in violations}
+        self.assertIn("external_absorption_core_runtime_consumer_missing", types)
+        self.assertIn("external_absorption_core_integration_evidence_missing", types)
+        self.assertIn("external_absorption_core_use_proof_missing", types)
+        self.assertIn("external_absorption_core_operator_checkpoint_missing", types)
+
+    def test_use_proven_with_runtime_evidence_passes(self) -> None:
+        text = VALID_ARTIFACT.replace(
+            "| Absorption maturity | KNOWLEDGE_NORMALIZED_RUNTIME_PENDING |",
+            "| Absorption maturity | USE_PROVEN |",
+        ).replace(
+            "| Named runtime consumer | PENDING_NOT_NAMED |",
+            "| Named runtime consumer | EXTENSIONS/example/src/runtime.consumer.ts |",
+        ).replace(
+            "| Integration evidence | PENDING_RUNTIME_INTEGRATION |",
+            "| Integration evidence | docs/reviews/runtime-integration.md |",
+        ).replace(
+            "| Use proof | PENDING_OPERATOR_AUTHORIZED_RUNTIME_PROOF |",
+            "| Use proof | docs/evidence/runtime-use-receipt.json |",
+        ).replace(
+            "| Operator checkpoint | REQUIRED_BEFORE_RUNTIME_EXECUTION |",
+            "| Operator checkpoint | OPERATOR_CHECKPOINT_SATISFIED: operator approved runtime proof |",
+        ).replace(
+            "| Absorption completion status | ABSORPTION_NOT_COMPLETE |",
+            "| Absorption completion status | ABSORPTION_COMPLETE_USE_PROVEN |",
+        )
+
+        self.assertEqual([], MODULE.check_text("docs/reviews/CVF_SAMPLE.md", text))
 
     def test_unrelated_internal_doc_is_ignored(self) -> None:
         violations = MODULE.check_text(

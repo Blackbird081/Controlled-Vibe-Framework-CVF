@@ -47,6 +47,19 @@ describe('execution diagnostics', () => {
         });
     });
 
+    it('preserves a bounded structured provider HTTP status without parsing messages', () => {
+        const error = Object.assign(new Error('opaque provider failure'), { httpStatus: 429 });
+        expect(buildProviderExecutionDiagnostic({
+            provider: 'alibaba',
+            model: 'qwen-flash',
+            error,
+            latencyMs: 12,
+        })).toMatchObject({
+            httpStatus: 429,
+            latencyMs: 12,
+        });
+    });
+
     it('redacts obvious key and bearer token fragments', () => {
         const redacted = redactDiagnosticMessage('Bearer abc.def.ghi api_key=sk-live-secret-token');
         expect(redacted).not.toContain('abc.def.ghi');

@@ -14,6 +14,15 @@ export {
   ContextPackagerContract,
   createContextPackagerContract,
 } from "./context.packager.contract";
+
+export { compactToolResultsForContext } from "./context.tool-result.compaction.contract";
+export type {
+  ToolResultCompactionDisposition,
+  ToolResultCompactionOptions,
+  ToolResultCompactionReceipt,
+  ToolResultCompactionResult,
+  ToolResultContextInput,
+} from "./context.tool-result.compaction.contract";
 export type {
   ExtendedSegmentType,
   TypedContextSegment,

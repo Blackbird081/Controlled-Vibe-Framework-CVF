@@ -93,6 +93,35 @@ class TestGenericWorkerDispatch(unittest.TestCase):
         ):
             self.assertIn(marker, work_order)
 
+    def test_generated_work_order_opts_into_convergence_checker(self) -> None:
+        args = _base_args()
+        work_order = build_work_order(args, detect_triggers(args))
+        self.assertIn("docType: work_order", work_order)
+        self.assertIn("Review-Dispatch Convergence Control: REQUIRED", work_order)
+        self.assertIn("dispatchKind: INITIAL", work_order)
+        self.assertIn("consolidatedDefectClassSweep: COMPLETE_INITIAL_ACCEPTANCE_MATRIX", work_order)
+        self.assertIn("successorTrancheOpened: NO", work_order)
+        self.assertIn(
+            "implementationAutonomyDisposition: CONTRACT_AUTHORITY_EVIDENCE_OUTCOME_ONLY",
+            work_order,
+        )
+
+    def test_rework_scaffold_emits_one_consolidated_packet(self) -> None:
+        args = _base_args(
+            dispatch_kind="REWORK",
+            dispatch_surface="EXTERNAL_AGENT_CLI_MCP",
+            review_round_count=1,
+            root_cause_cluster_id="cluster-lock-identity",
+            prior_finding_set_digest="a" * 64,
+            cumulative_external_invocation_count=1,
+            external_invocation_ceiling=2,
+        )
+        work_order = build_work_order(args, detect_triggers(args))
+        self.assertIn("reworkGeneration: 1", work_order)
+        self.assertIn("rootCauseClusterId: cluster-lock-identity", work_order)
+        self.assertIn("consolidatedDefectClassSweep: COMPLETE_BEFORE_REWORK_DISPATCH", work_order)
+        self.assertIn("nextDispatchDisposition: ONE_CONSOLIDATED_REWORK", work_order)
+
     def test_dispatch_prompt_envelope_is_first_section(self) -> None:
         args = _base_args()
         active = detect_triggers(args)

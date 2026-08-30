@@ -1,6 +1,9 @@
 import { expect, Page } from '@playwright/test';
 import { createHmac } from 'node:crypto';
 
+// Text Encoding Exception: localized Vietnamese UI labels are intentional
+// selector fixtures required to verify the bilingual operator surface.
+
 const DEFAULT_SETTINGS = {
     providers: {
         gemini: { apiKey: 'mock-key', enabled: true, selectedModel: 'gemini-2.5-flash' },
@@ -50,6 +53,36 @@ async function signInViaNextAuth(page: Page, username: string, password: string)
     return Boolean(sessionBody.user);
 }
 
+/**
+ * Bounded login-form readiness gate. The login page's submit button reads
+ * "Checking session..." / "Đang kiểm tra phiên..." and is `disabled` while
+ * NextAuth's `useSession()` client-side bootstrap (`status === 'loading'`)
+ * is still in flight -- a same-origin `/api/auth/session` check, not a
+ * provider/AI call. Clicking (or Enter-submitting) the form before that
+ * settles either misses the button entirely (its accessible name has not
+ * yet changed to Sign in / Đăng nhập) or submits against a still-disabled
+ * control, both of which are a likely source of the flaky "browser context
+ * closed" failures observed on this login path. This helper waits for the
+ * button to reach one of its two terminal, submittable states before ever
+ * touching it, and throws a specific, named diagnostic instead of a bare
+ * Playwright timeout when the bounded wait is exceeded.
+ */
+async function waitForLoginButtonReady(page: Page, timeoutMs: number) {
+    const loginButton = page.getByRole('button', { name: /Đăng nhập|Dang nhap|Sign in/i }).first();
+    try {
+        await loginButton.waitFor({ state: 'visible', timeout: timeoutMs });
+        await expect(loginButton).toBeEnabled({ timeout: timeoutMs });
+    } catch (cause) {
+        throw new Error(
+            'LOGIN_READINESS_TIMEOUT: the Sign in / Đăng nhập button did not become visible and '
+            + `enabled within ${timeoutMs}ms (session bootstrap likely still in a "Checking session..." `
+            + '/ "Đang kiểm tra phiên..." state). Not clicking or Enter-submitting a still-disabled form.',
+            { cause },
+        );
+    }
+    return loginButton;
+}
+
 export async function loginAs(page: Page, username: string, password: string) {
     const signedIn = await signInViaNextAuth(page, username, password);
     if (signedIn) {
@@ -71,10 +104,11 @@ export async function loginAs(page: Page, username: string, password: string) {
         await roleSelect.first().selectOption('admin');
     }
 
-    const loginButton = page.getByRole('button', { name: /Đăng nhập|Dang nhap|Sign in/i }).first();
-    await loginButton.click({ timeout: 10_000 }).catch(async () => {
-        await page.locator('input[type="password"][placeholder="admin123"]').press('Enter');
-    });
+    // Wait for the session-bootstrap-gated button to reach a terminal,
+    // enabled state before clicking. Never press Enter against a
+    // still-disabled/checking form as a fallback.
+    const loginButton = await waitForLoginButtonReady(page, 10_000);
+    await loginButton.click({ timeout: 10_000 });
     await expect(page.getByRole('button', { name: /Phân tích Chiến lược|Strategy Analysis/i }).first()).toBeVisible({ timeout: 15_000 });
 }
 

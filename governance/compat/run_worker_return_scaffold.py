@@ -24,6 +24,7 @@ FAST_DOC_PROFILE = "WORKER_RETURN_FAST_DOC_V1"
 
 WORKER_RETURN_SCAFFOLD_SECTIONS = (
     "Source Inventory",
+    "Rework Convergence Self-Proof",
     "Purpose",
     "Scope / Methodology",
     "Findings / Position",
@@ -65,6 +66,21 @@ FAST_DOC_SCAFFOLD_SECTIONS = tuple(
 def _section_body(section: str) -> list[str]:
     if section == "Source Inventory":
         return ["| File | Action |", "|---|---|", f"| {SCAFFOLD_TABLE_TODO} | READ |"]
+    if section == "Rework Convergence Self-Proof":
+        return [
+            "rootCauseClusterId: INITIAL_SCOPE_PENDING_WORK_ORDER_BINDING",
+            "reworkGeneration: 0",
+            "consolidatedDefectClassSweep: PENDING_BEFORE_READY",
+            "productionBindingEvidence: PENDING_BEFORE_READY",
+            "adversarialRegressionDisposition: PENDING_BEFORE_READY",
+            "successorTrancheOpened: NO",
+            "implementationAutonomyDisposition: CONTRACT_AUTHORITY_EVIDENCE_OUTCOME_ONLY",
+            "internalAgentInvocationCount: 0",
+            "externalAgentInvocationCount: 0",
+            "providerCallCount: 0",
+            "tokenOrQuotaUsage: NOT_AVAILABLE_WITH_REASON: provider-neutral scaffold has no usage meter",
+            "terminalReadinessVerdict: BLOCKED_WITH_REASON: generated scaffold pending worker evidence",
+        ]
     if section == "Gate Evidence":
         return [
             "| Command | Result |",

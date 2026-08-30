@@ -154,8 +154,22 @@ export interface GovernanceEvidenceReceipt {
     workflowComposition?: WorkflowCompositionSummary;
     governanceTrace?: GovernanceTraceEntry[];
     runtimeTelemetry?: RuntimeTelemetryReceipt;
+    providerAttemptReconciliation?: ProviderAttemptReconciliationReceipt;
     receiptIntegrity?: ReceiptIntegrityAnchor;
     generatedAt: string;
+}
+
+export interface ProviderAttemptReconciliationReceipt {
+    schemaVersion: 'cvf.providerAttemptReconciliation.v1';
+    inboundRequestCount: number;
+    providerCallCount: number;
+    retryCount: number;
+    admittedAttemptCount: number;
+    deniedAttemptCount: number;
+    provider: string;
+    model: string;
+    reconciles: boolean;
+    claimBoundary: 'summary_counts_only_no_secret_provider_payload_or_raw_body';
 }
 
 export interface ExecutionResponse {

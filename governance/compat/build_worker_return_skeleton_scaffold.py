@@ -44,6 +44,19 @@ dispatchWorkOrder: `{work_order_path}`
 executionBaseHead: TO_FILL_capture with `git rev-parse --short HEAD` before edits
 rawMemoryReleased=false
 contractProfile: {profile}
+## Rework Convergence Self-Proof
+rootCauseClusterId: {args.root_cause_cluster_id if getattr(args, "dispatch_kind", "INITIAL") == "REWORK" else f"INITIAL_SCOPE_{args.batch_id}"}
+reworkGeneration: {getattr(args, "review_round_count", 0)}
+consolidatedDefectClassSweep: PENDING_BEFORE_READY
+productionBindingEvidence: PENDING_BEFORE_READY
+adversarialRegressionDisposition: PENDING_BEFORE_READY
+successorTrancheOpened: NO
+implementationAutonomyDisposition: CONTRACT_AUTHORITY_EVIDENCE_OUTCOME_ONLY
+internalAgentInvocationCount: 0
+externalAgentInvocationCount: {getattr(args, "cumulative_external_invocation_count", 0)}
+providerCallCount: 0
+tokenOrQuotaUsage: NOT_AVAILABLE_WITH_REASON: provider-neutral scaffold has no usage meter
+terminalReadinessVerdict: BLOCKED_WITH_REASON: generated scaffold pending worker evidence
 ## Purpose
 TO_FILL: state the mission prompt for this worker return.
 ## Scope / Methodology

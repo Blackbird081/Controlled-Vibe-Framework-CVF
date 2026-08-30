@@ -145,6 +145,18 @@
       "rotationScript": "scripts/cvf_active_archive.py",
       "protectionMode": "PERMANENT_ACTIVE_WINDOW",
       "status": "ACTIVE"
+    },
+    {
+      "id": "next_move_freshness_checker_standard_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_NEXT_MOVE_FRESHNESS_CHECKER_STANDARD_2026-06-16.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_NEXT_MOVE_FRESHNESS_CHECKER_STANDARD_2026-06-16\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
     }
   ]
 }

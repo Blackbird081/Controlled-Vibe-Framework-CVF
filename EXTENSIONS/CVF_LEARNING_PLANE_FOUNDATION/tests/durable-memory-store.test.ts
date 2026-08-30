@@ -110,6 +110,47 @@ describe("durable memory store m1", () => {
     });
   });
 
+  it("preserves exact principal-origin isolation across a file-backed restart", () => {
+    tempDir = mkdtempSync(join(tmpdir(), "cvf-m1-memory-origin-"));
+    const filePath = join(tempDir, "durable-memory.json");
+    createFileBackedDurableMemoryStore(filePath).write({
+      id: "principal-a-memory",
+      tier: "long-term",
+      scope: "shared-project",
+      actorId: "principal-a",
+      originPrincipalId: "principal-a",
+      actorRole: "OPERATOR",
+      summary: "Principal A private operating preference.",
+      policyDecision: "allow",
+      actorAuthorized: true,
+    });
+
+    const restarted = createFileBackedDurableMemoryStore(filePath);
+    const crossPrincipal = restarted.read({
+      tier: "long-term",
+      scope: "shared-project",
+      actorId: "principal-b",
+      originPrincipalId: "principal-b",
+      actorRole: "REVIEWER",
+      actorAuthorized: true,
+    });
+    const samePrincipal = restarted.read({
+      tier: "long-term",
+      scope: "shared-project",
+      actorId: "principal-a",
+      originPrincipalId: "principal-a",
+      actorRole: "REVIEWER",
+      actorAuthorized: true,
+    });
+
+    expect(crossPrincipal.records).toEqual([]);
+    expect(crossPrincipal.receipt.excluded).toContainEqual({
+      id: "principal-a-memory",
+      reason: "origin_principal_mismatch",
+    });
+    expect(samePrincipal.records.map((record) => record.id)).toEqual(["principal-a-memory"]);
+  });
+
   it("handles corrupt file-backed JSON without throwing", () => {
     tempDir = mkdtempSync(join(tmpdir(), "cvf-m1-memory-corrupt-"));
     const filePath = join(tempDir, "durable-memory.json");

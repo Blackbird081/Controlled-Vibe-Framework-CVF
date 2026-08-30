@@ -1,5 +1,10 @@
 import type { KnowledgeItem } from "./knowledge.query.contract";
 import { computeDeterministicHash } from "../../CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/core/deterministic.hash";
+import {
+  compactToolResultsForContext,
+  type ToolResultCompactionReceipt,
+  type ToolResultContextInput,
+} from "./context.tool-result.compaction.contract";
 
 // --- Types ---
 
@@ -35,6 +40,8 @@ export interface ContextPackagerRequest {
   metadata?: Record<string, string>;
   maxTokens?: number;
   segmentTypeConstraints?: SegmentTypeConstraints;
+  toolResults?: ToolResultContextInput[];
+  contextWindowTokens?: number;
 }
 
 export interface PerTypeTokenBreakdown {
@@ -56,6 +63,7 @@ export interface TypedContextPackage {
   estimatedTokens: number;
   perTypeTokens: PerTypeTokenBreakdown;
   packageHash: string;
+  toolResultCompaction?: ToolResultCompactionReceipt;
 }
 
 export interface ContextPackagerContractDependencies {
@@ -118,6 +126,7 @@ export class ContextPackagerContract {
     // Build candidate segments in priority order
     type CandidateSegment = Omit<TypedContextSegment, "priorityRank">;
     const candidates: CandidateSegment[] = [];
+    let toolResultCompaction: ToolResultCompactionReceipt | undefined;
 
     // QUERY (always attempt first)
     if (isAllowed("QUERY")) {
@@ -207,6 +216,24 @@ export class ContextPackagerContract {
       }
     }
 
+    if (request.toolResults?.length && isAllowed("STRUCTURED")) {
+      const basePromptTokens = candidates.reduce((sum, candidate) => sum + candidate.tokenEstimate, 0);
+      const compacted = compactToolResultsForContext(request.toolResults, {
+        contextWindowTokens: request.contextWindowTokens,
+        basePromptTokens,
+      });
+      for (const item of compacted.results) {
+        candidates.push({
+          segmentId: computeDeterministicHash("cvf-tool-result-context-segment", request.contextId, item.id),
+          segmentType: "STRUCTURED",
+          content: item.content,
+          tokenEstimate: this.estimateTokens(item.content),
+          source: item.source ?? `tool-result:${item.id}`,
+        });
+      }
+      toolResultCompaction = compacted.receipt;
+    }
+
     // Sort candidates by priority order
     candidates.sort(
       (a, b) =>
@@ -277,6 +304,7 @@ export class ContextPackagerContract {
       estimatedTokens,
       perTypeTokens,
       packageHash,
+      toolResultCompaction,
     };
   }
 }

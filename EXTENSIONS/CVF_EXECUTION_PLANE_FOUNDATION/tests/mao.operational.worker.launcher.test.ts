@@ -403,7 +403,7 @@ describe("MaoOperationalWorkerLauncher", () => {
     const { adapter, callCount } = countingAdapter(createMaoDelegationAdapter());
     const launcher = new MaoOperationalWorkerLauncher(store, adapter, lifecycle);
 
-    const requested = launcher.requestCancellation("t1");
+    const requested = await launcher.requestCancellation(graph.taskGraphId, "t1");
     expect(requested.ok).toBe(true);
 
     const result = await launcher.launch(launchRequestFor(graph));
@@ -419,7 +419,7 @@ describe("MaoOperationalWorkerLauncher", () => {
     await driveToRunningState(store, graph, lifecycle.clock.now());
     const launcher = new MaoOperationalWorkerLauncher(store, createMaoDelegationAdapter(), lifecycle);
 
-    launcher.requestCancellation("t1");
+    await launcher.requestCancellation(graph.taskGraphId, "t1");
     const first = await launcher.acceptCancellation(graph.taskGraphId, "t1");
     expect(first.ok).toBe(true);
     if (first.ok) expect(first.alreadyCancelled).toBe(false);
@@ -442,7 +442,7 @@ describe("MaoOperationalWorkerLauncher", () => {
     const lifecycle = new MaoLifecycleController("2026-07-17T00:00:00.000Z");
     await driveToRunningState(store, graph, lifecycle.clock.now());
     const launcher = new MaoOperationalWorkerLauncher(store, createMaoDelegationAdapter(), lifecycle);
-    launcher.requestCancellation("t1");
+    await launcher.requestCancellation(graph.taskGraphId, "t1");
     await launcher.acceptCancellation(graph.taskGraphId, "t1");
 
     const newLauncher = new MaoOperationalWorkerLauncher(

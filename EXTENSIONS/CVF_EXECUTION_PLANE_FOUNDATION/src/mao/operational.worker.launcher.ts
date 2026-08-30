@@ -1,18 +1,12 @@
 // CVF MAO-OA-T3 - Operational Worker Launcher And Liveness Wiring
 //
-// Implements one bounded local composition owner that resumes an accepted
-// MAO-OA-T2 durable run, invokes the existing MAO-T3 fake/local delegation
-// adapter exactly once per launch idempotency key, and uses the existing
-// MAO-T6 lifecycle controller for heartbeat/timeout/cancellation, per
-// docs/reference/multi_agent_orchestration/CVF_MAO_RUNTIME_FOUNDATION_CONTRACT.md
-// and
-// docs/work_orders/CVF_AGENT_WORK_ORDER_MAO_OA_T3_OPERATIONAL_WORKER_LAUNCHER_AND_LIVENESS_WIRING_2026-07-17.md.
+// Bounded composition of durable run state, provider-neutral adapter,
+// lifecycle control, and atomic delegation. Deterministic reconciliation
+// helpers live in operational.worker.launcher.reconciliation.ts.
 //
-// This module owns launch/heartbeat/timeout/cancel composition only. It does
-// not implement a second durable store, adapter, or lifecycle owner, does
-// not import the control-plane provider router, and makes no real
-// provider/network/process/queue call. Local execution-plane module only;
-// no CLI/MCP/UI/runtime caller.
+// Canonical semantics and review history:
+// docs/reference/multi_agent_orchestration/CVF_MAO_RUNTIME_FOUNDATION_CONTRACT.md
+// docs/reviews/CVF_BRIGADE_EARTR_LOCAL_RECONCILIATION_AND_ABSORPTION_CLOSURE_2026-08-29.md
 
 import type { MaoFileRunStore, MaoDurableRunStoreFailure } from "./durable.run.store";
 import type {
@@ -23,6 +17,16 @@ import type {
 import type { MaoLifecycleController, MaoTimeoutResult } from "./lifecycle.controller.contract";
 import type { MaoEventLedgerEntry, MaoTaskState } from "./event.ledger.contract";
 import type { MaoTaskGraph } from "./task.graph.contract";
+import type {
+  MaoDelegationAbortCascadeReceipt,
+  MaoDelegationCompletionReceipt,
+  MaoDelegationJoinPolicy,
+  MaoDelegationReservationReceipt,
+  MaoDelegationReservationRequest,
+} from "./atomic.delegation.lifecycle.coordinator";
+import type { MaoDurableDelegationPort } from "./durable.delegation.ledger.store";
+
+import { currentStateOf, findTask, hasIdempotencyKeyPrefix, latestEventFor, latestInvocationStartedAt, milestoneIdempotencyKey, reconcileOutcomeFor, reconcileOutcomeForAttempt, terminalEventOwnedByAttempt } from "./operational.worker.launcher.reconciliation";
 
 // --- Types ---
 
@@ -45,12 +49,22 @@ export interface MaoOperationalLaunchRequest {
   /** Caller-supplied key binding this launch attempt; deterministically derives every durable milestone's idempotency key for this attempt. */
   launchIdempotencyKey: string;
   timeoutCeilingMs?: number | null;
+  /** Enables durable atomic child-capacity reservation when a delegation port is injected. */
+  delegation?: {
+    parentTaskId: string;
+    depth: number;
+    reservationKey: string;
+    joinPolicy?: MaoDelegationJoinPolicy;
+  };
 }
 
 export type MaoOperationalLaunchFailureReason =
   | "DURABLE_STORE_REJECTED"
   | "UNKNOWN_OR_NON_RUNNABLE_TASK"
   | "CANCELLATION_BLOCKS_NEW_CHILD"
+  | "DELEGATION_RESERVATION_REJECTED"
+  | "DELEGATION_PORT_FAILED"
+  | "DELEGATION_SETTLEMENT_PENDING"
   | "DUPLICATE_LAUNCH_ADAPTER_NOT_CALLED"
   | "ADAPTER_REJECTED"
   | "LIFECYCLE_MILESTONE_PERSISTENCE_FAILED";
@@ -63,6 +77,8 @@ export interface MaoOperationalLaunchFailure {
   adapterRejectionReason?: MaoInvocationRejectionReason;
   /** Durable milestones written before this failure was detected, if any. */
   durableEvidence: readonly MaoEventLedgerEntry[];
+  reservationReceipt?: MaoDelegationReservationReceipt;
+  completionReceipt?: MaoDelegationCompletionReceipt;
 }
 
 export interface MaoOperationalLaunchSuccess {
@@ -71,6 +87,8 @@ export interface MaoOperationalLaunchSuccess {
   replayed: boolean;
   invocationResult: Extract<MaoInvocationResult, { ok: true }>;
   durableEvidence: readonly MaoEventLedgerEntry[];
+  reservationReceipt?: MaoDelegationReservationReceipt;
+  completionReceipt?: MaoDelegationCompletionReceipt;
 }
 
 export type MaoOperationalLaunchResult = MaoOperationalLaunchFailure | MaoOperationalLaunchSuccess;
@@ -123,7 +141,8 @@ export type MaoOperationalCancelFailureReason =
   | "UNKNOWN_TASK"
   | "NO_CANCEL_REQUEST_PENDING"
   | "TASK_NOT_RUNNING"
-  | "LIFECYCLE_MILESTONE_PERSISTENCE_FAILED";
+  | "LIFECYCLE_MILESTONE_PERSISTENCE_FAILED"
+  | "DURABLE_ABORT_PERSISTENCE_FAILED";
 
 export interface MaoOperationalCancelFailure {
   ok: false;
@@ -134,6 +153,7 @@ export interface MaoOperationalCancelFailure {
 export interface MaoOperationalCancelRequestSuccess {
   ok: true;
   blocksNewChildren: true;
+  cascadeReceipt?: MaoDelegationAbortCascadeReceipt;
 }
 
 export interface MaoOperationalCancelAcceptSuccess {
@@ -146,38 +166,54 @@ export interface MaoOperationalCancelAcceptSuccess {
 export type MaoOperationalCancelRequestResult = MaoOperationalCancelFailure | MaoOperationalCancelRequestSuccess;
 export type MaoOperationalCancelAcceptResult = MaoOperationalCancelFailure | MaoOperationalCancelAcceptSuccess;
 
+export type MaoOperationalReconcileFailureReason = "DURABLE_STORE_REJECTED" | "DELEGATION_PORT_FAILED";
+
+export interface MaoOperationalReconcileFailure {
+  ok: false;
+  reason: MaoOperationalReconcileFailureReason;
+  detail: string;
+}
+
+export interface MaoOperationalReconcileSuccess {
+  ok: true;
+  /** True when a durably-terminal task's still-open reservation was durably settled by this call. */
+  reconciled: boolean;
+  completionReceipt?: MaoDelegationCompletionReceipt;
+  /**
+   * Present and true ONLY when a caller-supplied `launchIdempotencyKey` was
+   * rejected because it does not match the reservation's own durably bound
+   * launch identity (requirement 2/3). `reconciled` is always `false` in
+   * this case and capacity is left untouched - this is a typed, explicit
+   * signal distinguishing "wrong/stale/unrelated caller identity" from the
+   * ordinary "nothing to reconcile yet" case.
+   */
+  identityMismatch?: true;
+}
+
+export type MaoOperationalReconcileResult = MaoOperationalReconcileFailure | MaoOperationalReconcileSuccess;
+
+/**
+ * Discriminated outcome of attempting a durable delegation settlement.
+ * `settled` is the only case in which a caller may treat the delegation
+ * side of a launch as durably closed:
+ *  - `notApplicable`: there was no reservation to settle (no `delegation`
+ *    metadata on this launch, or no port injected) - not a failure.
+ *  - `settled`: the durable port confirmed the settlement (fresh or
+ *    replayed) and returned a receipt.
+ *  - `pending`: a reservation exists but durable settlement did not
+ *    confirm - either the port call itself failed (`DELEGATION_PORT_FAILED`,
+ *    carrying the port's own failure reason/detail) or the port succeeded
+ *    at the transport level but the coordinator rejected the settlement
+ *    (`reason` carries the coordinator's own rejection reason, e.g.
+ *    `UNKNOWN_RESERVATION`). Either way the underlying durable run may
+ *    already be terminal; `reconcileDelegation` is the recovery path.
+ */
+type DurableSettlementOutcome =
+  | { kind: "notApplicable" }
+  | { kind: "settled"; receipt: MaoDelegationCompletionReceipt }
+  | { kind: "pending"; reason: string; detail: string };
+
 // --- Deterministic per-milestone idempotency key derivation ---
-
-function milestoneIdempotencyKey(launchIdempotencyKey: string, milestone: string): string {
-  return `${launchIdempotencyKey}::${milestone}`;
-}
-
-function findTask(graph: MaoTaskGraph, taskId: string) {
-  return graph.tasks.find((task) => task.taskId === taskId) ?? null;
-}
-
-function latestInvocationStartedAt(events: readonly MaoEventLedgerEntry[], taskId: string): string | null {
-  let latest: string | null = null;
-  for (const event of events) {
-    if (event.taskId === taskId && event.eventType === "INVOCATION_STARTED") {
-      latest = event.occurredAt;
-    }
-  }
-  return latest;
-}
-
-function currentStateOf(events: readonly MaoEventLedgerEntry[], taskId: string): MaoTaskState | null {
-  let state: MaoTaskState | null = null;
-  for (const event of events) {
-    if (event.taskId === taskId) state = event.resultingState;
-  }
-  return state;
-}
-
-function hasIdempotencyKeyPrefix(events: readonly MaoEventLedgerEntry[], taskId: string, launchIdempotencyKey: string): boolean {
-  const admittedKey = milestoneIdempotencyKey(launchIdempotencyKey, "TASK_ADMITTED");
-  return events.some((event) => event.taskId === taskId && event.idempotencyKey === admittedKey);
-}
 
 /**
  * Bounded operational worker launcher. Composes the existing MAO-OA-T2
@@ -191,11 +227,18 @@ export class MaoOperationalWorkerLauncher {
   private readonly store: MaoFileRunStore;
   private readonly adapter: MaoOperationalAdapterPort;
   private readonly lifecycle: MaoLifecycleController;
+  private readonly delegationPort: MaoDurableDelegationPort | null;
 
-  constructor(store: MaoFileRunStore, adapter: MaoOperationalAdapterPort, lifecycle: MaoLifecycleController) {
+  constructor(
+    store: MaoFileRunStore,
+    adapter: MaoOperationalAdapterPort,
+    lifecycle: MaoLifecycleController,
+    delegationPort: MaoDurableDelegationPort | null = null,
+  ) {
     this.store = store;
     this.adapter = adapter;
     this.lifecycle = lifecycle;
+    this.delegationPort = delegationPort;
   }
 
   /**
@@ -267,6 +310,53 @@ export class MaoOperationalWorkerLauncher {
       };
     }
 
+    // Durable reservation is awaited BEFORE the adapter is ever invoked
+    // (requirement 2): a rejected or failed reservation attempt must never
+    // reach the adapter.
+    let reservationReceipt: MaoDelegationReservationReceipt | undefined;
+    if (request.delegation) {
+      if (!this.delegationPort) {
+        return {
+          ok: false,
+          reason: "DELEGATION_RESERVATION_REJECTED",
+          detail: "delegation metadata requires an injected durable delegation port",
+          durableEvidence: [],
+        };
+      }
+      const durableReservation = await this.delegationPort.reserveDurable(request.taskGraphId, {
+        taskGraphId: request.taskGraphId,
+        parentTaskId: request.delegation.parentTaskId,
+        childTaskId: request.taskId,
+        depth: request.delegation.depth,
+        reservationKey: request.delegation.reservationKey,
+        authorityHash: graph.authorityEnvelope.authorityHash,
+        invocationBudgetCeiling: graph.authorityEnvelope.budget.maxInvocations,
+        // Durably bind the launch identity to the reservation at the
+        // reservation boundary itself (requirement 1), so recovery can
+        // later VERIFY a caller-supplied launchIdempotencyKey against what
+        // was actually reserved, rather than merely trusting it.
+        launchIdempotencyKey: request.launchIdempotencyKey,
+        joinPolicy: request.delegation.joinPolicy,
+      });
+      if (!durableReservation.ok) {
+        return {
+          ok: false,
+          reason: "DELEGATION_PORT_FAILED",
+          detail: `${durableReservation.reason}: ${durableReservation.detail}`,
+          durableEvidence: [],
+        };
+      }
+      if (!durableReservation.result.ok) {
+        return {
+          ok: false,
+          reason: "DELEGATION_RESERVATION_REJECTED",
+          detail: `${durableReservation.result.reason}: ${durableReservation.result.detail}`,
+          durableEvidence: [],
+        };
+      }
+      reservationReceipt = durableReservation.result.receipt;
+    }
+
     const durableEvidence: MaoEventLedgerEntry[] = [];
 
     // A task with no prior durable event has no recorded `planned` state to
@@ -287,7 +377,7 @@ export class MaoOperationalWorkerLauncher {
         idempotencyKey: milestoneIdempotencyKey(request.launchIdempotencyKey, "TASK_PLANNED"),
       });
       if (!plannedAppend.ok) {
-        return this.storeFailureAsLaunchFailure(plannedAppend, durableEvidence);
+        return this.releaseAfterLaunchFailure(plannedAppend, durableEvidence, reservationReceipt, request.taskGraphId);
       }
       durableEvidence.push(plannedAppend.appendedEntry);
     }
@@ -301,7 +391,7 @@ export class MaoOperationalWorkerLauncher {
       idempotencyKey: milestoneIdempotencyKey(request.launchIdempotencyKey, "TASK_ADMITTED"),
     });
     if (!admittedAppend.ok) {
-      return this.storeFailureAsLaunchFailure(admittedAppend, durableEvidence);
+      return this.releaseAfterLaunchFailure(admittedAppend, durableEvidence, reservationReceipt, request.taskGraphId);
     }
     durableEvidence.push(admittedAppend.appendedEntry);
     this.lifecycle.recordInvocation(request.launchIdempotencyKey);
@@ -326,12 +416,20 @@ export class MaoOperationalWorkerLauncher {
         idempotencyKey: milestoneIdempotencyKey(request.launchIdempotencyKey, "ADAPTER_REJECTED"),
       });
       if (blockedAppend.ok) durableEvidence.push(blockedAppend.appendedEntry);
+      // Requirement 5 (adapter-rejection recovery path): the settlement
+      // outcome is captured but ADAPTER_REJECTED remains the reported
+      // reason regardless of whether the durable release itself confirmed,
+      // because the adapter rejection is the actual, more specific cause of
+      // this failure; reconcileDelegation recovers a `pending` release the
+      // same way it recovers a crash after INVOCATION_COMPLETED.
+      const settlementOutcome = await this.settleReservationDurable(request.taskGraphId, reservationReceipt, "rejected");
       return {
         ok: false,
         reason: "ADAPTER_REJECTED",
         detail: invocationResult.detail,
         adapterRejectionReason: invocationResult.reason,
         durableEvidence,
+        ...this.settlementReceiptFields(reservationReceipt, settlementOutcome),
       };
     }
 
@@ -344,7 +442,7 @@ export class MaoOperationalWorkerLauncher {
       idempotencyKey: milestoneIdempotencyKey(request.launchIdempotencyKey, "INVOCATION_STARTED"),
     });
     if (!runningAppend.ok) {
-      return this.storeFailureAsLaunchFailure(runningAppend, durableEvidence);
+      return this.releaseAfterLaunchFailure(runningAppend, durableEvidence, reservationReceipt, request.taskGraphId);
     }
     durableEvidence.push(runningAppend.appendedEntry);
 
@@ -357,11 +455,212 @@ export class MaoOperationalWorkerLauncher {
       idempotencyKey: milestoneIdempotencyKey(request.launchIdempotencyKey, "INVOCATION_COMPLETED"),
     });
     if (!succeededAppend.ok) {
-      return this.storeFailureAsLaunchFailure(succeededAppend, durableEvidence);
+      return this.releaseAfterLaunchFailure(succeededAppend, durableEvidence, reservationReceipt, request.taskGraphId);
     }
     durableEvidence.push(succeededAppend.appendedEntry);
 
-    return { ok: true, replayed: invocationResult.replayed, invocationResult, durableEvidence };
+    // Durable settlement is awaited BEFORE launch() returns its terminal
+    // success (requirement 3). A crash between the INVOCATION_COMPLETED
+    // append above and this settlement is exactly the window
+    // reconcileDelegation() (requirement 4) is built to recover from.
+    const settlementOutcome = await this.settleReservationDurable(request.taskGraphId, reservationReceipt, "succeeded");
+
+    // Requirement 2: launch() must never report ok:true for a DELEGATED
+    // launch (reservationReceipt present) without a durable completion
+    // receipt. The durable run itself already succeeded (INVOCATION_STARTED
+    // and INVOCATION_COMPLETED are both durably appended above), so this is
+    // not a run failure - it is specifically an unconfirmed delegation
+    // settlement, reported as its own failure reason so the caller can
+    // drive reconcileDelegation() rather than believe the delegation side
+    // is closed.
+    if (reservationReceipt && settlementOutcome.kind !== "settled") {
+      const pendingDetail =
+        settlementOutcome.kind === "pending"
+          ? `${settlementOutcome.reason}: ${settlementOutcome.detail}`
+          : "durable settlement was not attempted";
+      return {
+        ok: false,
+        reason: "DELEGATION_SETTLEMENT_PENDING",
+        detail: `task ${request.taskId} durably succeeded but delegation settlement is unconfirmed: ${pendingDetail}`,
+        durableEvidence,
+        reservationReceipt,
+        completionReceipt: undefined,
+      };
+    }
+
+    return {
+      ok: true,
+      replayed: invocationResult.replayed,
+      invocationResult,
+      durableEvidence,
+      ...this.settlementReceiptFields(reservationReceipt, settlementOutcome),
+    };
+  }
+
+  /**
+   * Recover-and-reconcile (requirement 4, extended per reviewer
+   * RETURN_FOR_REWORK / RETURN_FOR_REWORK_R4): resume the durable run and,
+   * for the given task, durably close a still-open reservation using ONLY
+   * durable evidence, so a restarted worker process can recover any
+   * dangling reservation before resuming new work. This is the sole public
+   * recovery path; callers - including tests - must drive recovery through
+   * this method, never through the delegation port's `settleDurable`
+   * directly.
+   *
+   * Two independent evidence sources decide WHICH outcome to attempt:
+   *
+   * 1. Terminal task state (`reconcileOutcomeFor`): the run reached a
+   *    durably TERMINAL state for `taskId`. Covers the success-path crash
+   *    window between INVOCATION_COMPLETED and durable settlement.
+   * 2. Attempt-scoped evidence (`reconcileOutcomeForAttempt`), used ONLY
+   *    when the caller supplies `launchIdempotencyKey`: covers the
+   *    adapter-rejection window and the post-reservation
+   *    run-store-failure window.
+   *
+   * Neither evidence source is, by itself, authorization to settle
+   * (requirement 2). When `launchIdempotencyKey` is supplied, the actual
+   * settlement attempt is gated by the durable store's own identity
+   * verification: `settleDurable` is called with `expectedIdentity`
+   * (`{ launchIdempotencyKey, childTaskId: taskId }`), which the store
+   * checks against the reservation's OWN durably persisted launch identity
+   * (requirement 1) BEFORE any state changes. A wrong, stale, or unrelated
+   * `launchIdempotencyKey` - or a `taskId`/`reservationKey` pair that does
+   * not actually belong together - fails this check with
+   * `IDENTITY_MISMATCH`; this method then returns
+   * `{ ok: true, reconciled: false, identityMismatch: true }` and changes
+   * NOTHING: capacity remains reserved (requirement 2/3). When no
+   * `launchIdempotencyKey` is supplied, recovery is limited to the
+   * terminal-state path only (which needs no caller-supplied identity to
+   * verify, since it is driven entirely by the task's own durable state)
+   * and no unverified settlement is ever attempted.
+   *
+   * A reservation that is not open, or neither evidence source yielding an
+   * outcome, is reported as `reconciled: false` without any write.
+   * Idempotent: a repeated call after successful reconciliation finds the
+   * reservation already closed (`isReservationOpen` returns `open: false`)
+   * and is a safe no-op.
+   */
+  async reconcileDelegation(
+    taskGraphId: string,
+    taskId: string,
+    reservationKey: string,
+    launchIdempotencyKey?: string,
+  ): Promise<MaoOperationalReconcileResult> {
+    if (!this.delegationPort) {
+      return { ok: true, reconciled: false };
+    }
+
+    const resumed = await this.store.resumeRun(taskGraphId);
+    if (!resumed.ok) {
+      return { ok: false, reason: "DURABLE_STORE_REJECTED", detail: `${resumed.reason}: ${resumed.detail}` };
+    }
+
+    const latestEvent = latestEventFor(resumed.events, taskId);
+    const currentState = latestEvent?.resultingState ?? null;
+    const terminalOutcome = currentState === null ? null : reconcileOutcomeFor(currentState);
+
+    // Requirement 2 (reviewer FINAL STABILIZATION PACKET, closing the R6
+    // gap): resolving childTaskId alone is insufficient to prove terminal
+    // evidence belongs to the OPEN reservation being recovered - two
+    // different launch attempts can share the same taskId, e.g. reservation
+    // OLD (task-a/launch-old) is still open while a LATER, different
+    // attempt NEW (task-a/launch-new) is the one that actually reached the
+    // durably terminal state. The R6 fix for this (`launchIdempotencyKeyOfEvent`,
+    // reversing an event's own idempotencyKey by splitting at the first
+    // "::") was itself unsound: a real launchIdempotencyKey containing "::"
+    // (e.g. "launch-old::different-attempt") would be misread as merely its
+    // own prefix before the first "::", producing a false match against an
+    // unrelated reservation bound to that prefix. There is no reverse-
+    // parsing here any more. `terminalEventOwnedByAttempt` instead proves
+    // ownership by FULL, EXACT comparison against the one and only
+    // correctly-encoded milestone key a genuine attempt with the
+    // reservation's own bound launchIdempotencyKey would have produced -
+    // per eventType (INVOCATION_COMPLETED compared directly; TIMEOUT_DETECTED
+    // and CANCEL_ACCEPTED proven through their own preceding
+    // INVOCATION_STARTED event, located by `sequence`, never by array
+    // position). If ownership cannot be proven, recovery fails closed with
+    // no settlement - it never falls back to trusting taskId-only aggregate
+    // state.
+    if (terminalOutcome !== null) {
+      const openCheck = await this.delegationPort.isReservationOpen(taskGraphId, reservationKey);
+      if (!openCheck.ok) {
+        return { ok: false, reason: "DELEGATION_PORT_FAILED", detail: `${openCheck.reason}: ${openCheck.detail}` };
+      }
+      if (!openCheck.open) {
+        return { ok: true, reconciled: false };
+      }
+
+      const identityLookup = await this.delegationPort.getReservationIdentity(taskGraphId, reservationKey);
+      if (!identityLookup.ok) {
+        return { ok: false, reason: "DELEGATION_PORT_FAILED", detail: `${identityLookup.reason}: ${identityLookup.detail}` };
+      }
+      if (
+        identityLookup.identity === null ||
+        identityLookup.identity.childTaskId !== taskId ||
+        !terminalEventOwnedByAttempt(resumed.events, taskId, identityLookup.identity.launchIdempotencyKey)
+      ) {
+        // Either the reservation does not belong to this task, or the
+        // terminal evidence cannot be PROVEN to belong to the exact launch
+        // attempt this reservation was opened for. Either way, a terminal
+        // outcome must never provide the settlement for a reservation it
+        // cannot be proven to belong to. Typed mismatch, no write, capacity
+        // remains reserved.
+        return { ok: true, reconciled: false, identityMismatch: true };
+      }
+
+      const settled = await this.delegationPort.settleDurable(taskGraphId, reservationKey, terminalOutcome, identityLookup.identity);
+      if (!settled.ok) {
+        return { ok: false, reason: "DELEGATION_PORT_FAILED", detail: `${settled.reason}: ${settled.detail}` };
+      }
+      if (!settled.result.ok) {
+        if (settled.result.reason === "IDENTITY_MISMATCH") {
+          return { ok: true, reconciled: false, identityMismatch: true };
+        }
+        return { ok: false, reason: "DELEGATION_PORT_FAILED", detail: `${settled.result.reason}: ${settled.result.detail}` };
+      }
+      return { ok: true, reconciled: true, completionReceipt: settled.result.receipt };
+    }
+
+    // No terminal state. Recovery is only possible when the caller names
+    // the exact attempt it asserts will not proceed further, AND that
+    // assertion is verified against the reservation's own durably bound
+    // identity before anything settles (requirement 1/2/3).
+    if (launchIdempotencyKey === undefined) {
+      return { ok: true, reconciled: false };
+    }
+
+    const attemptOutcome = reconcileOutcomeForAttempt(resumed.events, taskId, launchIdempotencyKey);
+    if (attemptOutcome === null) {
+      return { ok: true, reconciled: false };
+    }
+
+    const openCheck = await this.delegationPort.isReservationOpen(taskGraphId, reservationKey);
+    if (!openCheck.ok) {
+      return { ok: false, reason: "DELEGATION_PORT_FAILED", detail: `${openCheck.reason}: ${openCheck.detail}` };
+    }
+    if (!openCheck.open) {
+      return { ok: true, reconciled: false };
+    }
+
+    const settled = await this.delegationPort.settleDurable(taskGraphId, reservationKey, attemptOutcome, {
+      launchIdempotencyKey,
+      childTaskId: taskId,
+    });
+    if (!settled.ok) {
+      return { ok: false, reason: "DELEGATION_PORT_FAILED", detail: `${settled.reason}: ${settled.detail}` };
+    }
+    if (!settled.result.ok) {
+      if (settled.result.reason === "IDENTITY_MISMATCH") {
+        // Requirement 2/3: a wrong/stale/unrelated caller-supplied identity
+        // must return a typed mismatch result and leave capacity reserved
+        // - never imply outcome=failed by mere absence of contrary
+        // evidence. No write occurred; the reservation remains open.
+        return { ok: true, reconciled: false, identityMismatch: true };
+      }
+      return { ok: false, reason: "DELEGATION_PORT_FAILED", detail: `${settled.result.reason}: ${settled.result.detail}` };
+    }
+
+    return { ok: true, reconciled: true, completionReceipt: settled.result.receipt };
   }
 
   /**
@@ -431,12 +730,35 @@ export class MaoOperationalWorkerLauncher {
    * Request cooperative cancellation through the existing lifecycle
    * controller. Blocks new-child admission in that controller instance
    * immediately; writes no durable event by itself (acceptance is the
-   * durable milestone).
+   * durable milestone). The abort cascade itself is now durable: it is
+   * awaited through the injected delegation port before this call resolves,
+   * and a durable persistence failure is reported as a typed failure
+   * (`DURABLE_ABORT_PERSISTENCE_FAILED`) rather than as success - the
+   * in-memory `mayStartNewChild` block is real for this process instance,
+   * but it is not durable proof the abort survived a restart, and a
+   * restarted launcher replaying the durable delegation ledger would not
+   * see an abort that failed to persist (requirement 6).
    */
-  requestCancellation(taskId: string): MaoOperationalCancelRequestResult {
+  async requestCancellation(taskGraphId: string, taskId: string): Promise<MaoOperationalCancelRequestResult> {
     this.lifecycle.requestCancel(taskId);
     if (!this.lifecycle.mayStartNewChild(taskId)) {
-      return { ok: true, blocksNewChildren: true };
+      let cascadeReceipt: MaoDelegationAbortCascadeReceipt | undefined;
+      if (this.delegationPort) {
+        const durableCascade = await this.delegationPort.abortCascadeDurable(taskGraphId, taskId);
+        if (!durableCascade.ok) {
+          return {
+            ok: false,
+            reason: "DURABLE_ABORT_PERSISTENCE_FAILED",
+            detail: `${durableCascade.reason}: ${durableCascade.detail}`,
+          };
+        }
+        cascadeReceipt = durableCascade.receipt;
+      }
+      return {
+        ok: true,
+        blocksNewChildren: true,
+        cascadeReceipt,
+      };
     }
     return { ok: false, reason: "NO_CANCEL_REQUEST_PENDING", detail: `cancellation request for task ${taskId} did not block new children` };
   }
@@ -493,6 +815,85 @@ export class MaoOperationalWorkerLauncher {
       reason: "DURABLE_STORE_REJECTED",
       detail: `${failure.reason}: ${failure.detail}`,
       durableEvidence: priorEvidence,
+    };
+  }
+
+  /**
+   * Attempt a durable settlement and report which of the three
+   * `DurableSettlementOutcome` cases actually happened. Never throws for a
+   * typed port failure (`IO_FAILURE`, `CONCURRENT_WRITE_LOST_RACE`, etc.) or
+   * a coordinator-level rejection (`UNKNOWN_RESERVATION`): both surface as
+   * `pending` so the caller can decide how to fail closed rather than
+   * silently discarding the outcome.
+   *
+   * Requirement 1 (reviewer RETURN_FOR_REWORK R5): this inline launcher
+   * settlement now passes `expectedIdentity` sourced directly from the
+   * reservation receipt this same `launch()` call durably obtained moments
+   * earlier - `reservation.launchIdempotencyKey` and
+   * `reservation.childTaskId` are exactly the identity this reservation is
+   * bound to, so this settlement is inherently self-consistent (the
+   * launcher is closing the exact reservation it just opened), and passing
+   * that identity through the now-required port parameter makes that
+   * self-consistency verified by the store, not merely assumed by this
+   * method.
+   */
+  private async settleReservationDurable(
+    taskGraphId: string,
+    reservation: MaoDelegationReservationReceipt | undefined,
+    outcome: "succeeded" | "failed" | "rejected",
+  ): Promise<DurableSettlementOutcome> {
+    if (!reservation || !this.delegationPort) return { kind: "notApplicable" };
+    const settled = await this.delegationPort.settleDurable(taskGraphId, reservation.reservationKey, outcome, {
+      launchIdempotencyKey: reservation.launchIdempotencyKey,
+      childTaskId: reservation.childTaskId,
+    });
+    if (!settled.ok) {
+      return { kind: "pending", reason: settled.reason, detail: settled.detail };
+    }
+    if (!settled.result.ok) {
+      return { kind: "pending", reason: settled.result.reason, detail: settled.result.detail };
+    }
+    return { kind: "settled", receipt: settled.result.receipt };
+  }
+
+  /**
+   * Turn a `DurableSettlementOutcome` into the `reservationReceipt` /
+   * `completionReceipt` pair the public result shapes carry, plus whether
+   * this outcome durably closed the delegation side (`settled` or
+   * `notApplicable` - both are fine to report as launch success/failure
+   * proceeding normally; only `pending` must block an `ok: true` launch
+   * result, per requirement 2).
+   */
+  private settlementReceiptFields(
+    reservation: MaoDelegationReservationReceipt | undefined,
+    outcome: DurableSettlementOutcome,
+  ): {
+    reservationReceipt: MaoDelegationReservationReceipt | undefined;
+    completionReceipt: MaoDelegationCompletionReceipt | undefined;
+  } {
+    return {
+      reservationReceipt: reservation,
+      completionReceipt: outcome.kind === "settled" ? outcome.receipt : undefined,
+    };
+  }
+
+  private async releaseAfterLaunchFailure(
+    failure: MaoDurableRunStoreFailure,
+    priorEvidence: readonly MaoEventLedgerEntry[],
+    reservation: MaoDelegationReservationReceipt | undefined,
+    taskGraphId: string,
+  ): Promise<MaoOperationalLaunchFailure> {
+    // A pre-dispatch/run-store failure (e.g. the durable event append
+    // itself was rejected) still attempts to durably release any
+    // reservation already taken, but this path's own failure reason
+    // (DURABLE_STORE_REJECTED) takes precedence in the returned result even
+    // if the settlement attempt itself also could not be confirmed; the
+    // caller has durableEvidence and reservationReceipt to drive
+    // reconcileDelegation regardless of which failure is reported.
+    const settlementOutcome = await this.settleReservationDurable(taskGraphId, reservation, "failed");
+    return {
+      ...this.storeFailureAsLaunchFailure(failure, priorEvidence),
+      ...this.settlementReceiptFields(reservation, settlementOutcome),
     };
   }
 }

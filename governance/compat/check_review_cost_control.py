@@ -6,15 +6,20 @@ Enforces the forward-only evidence-shape contract defined by
 docs/reference/review_cost_control/CVF_REVIEW_COST_AND_DIMINISHING_RETURN_CONTROL_STANDARD.md
 on every changed docs/reviews/*.md artifact declaring
 `docType: completion_review`; that artifact must also carry the exact
-standalone declaration `Review-Cost Telemetry: REQUIRED`.
+standalone declaration `Review-Cost Telemetry: REQUIRED`. It also enforces a
+pre-dispatch convergence and cumulative-invocation interlock on every changed
+docs/work_orders/*.md artifact declaring `docType: work_order`, plus the
+bounded convergence/self-proof envelope of changed self-declared worker
+returns.
 
 This checker is intentionally narrow. It validates field presence, value
 shape, controlled tokens, the round-three escalation rule, and the multi-commit
 exception reason.
 It never scores semantic review quality, root-cause independence, or value
 delta; those remain reviewer judgment. Applicability is artifact-shape based,
-not bare-substring based. Standards, work orders, tests, worker returns,
-archived reviews, and unchanged historical reviews do not trigger the gate.
+not bare-substring based. Standards, tests, archived artifacts, and unchanged
+historical artifacts do not trigger the gate. Implementation mechanics and
+reasoning traces remain outside its jurisdiction.
 """
 
 from __future__ import annotations
@@ -30,8 +35,16 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 THIS_CHECKER_PATH = "governance/compat/check_review_cost_control.py"
 
 ELIGIBLE_PREFIX = "docs/reviews/"
+WORK_ORDER_PREFIX = "docs/work_orders/"
 DECLARATION_LINE_RE = re.compile(r"(?m)^Review-Cost Telemetry:\s*REQUIRED\s*$")
 COMPLETION_REVIEW_RE = re.compile(r"(?mi)^docType:\s*completion_review\s*$")
+WORK_ORDER_RE = re.compile(r"(?mi)^docType:\s*work_order\s*$")
+WORKER_RETURN_RE = re.compile(
+    r"(?mi)^Self-declared worker-return artifact:\s*yes\s*$"
+)
+DISPATCH_DECLARATION_LINE_RE = re.compile(
+    r"(?m)^Review-Dispatch Convergence Control:\s*REQUIRED\s*$"
+)
 
 REQUIRED_INTEGER_FIELDS = (
     "reviewRoundCount",
@@ -52,6 +65,43 @@ AUDIT_FIELD = "preRepairAuditDisposition"
 COMMIT_PLAN_FIELD = "commitPlanDisposition"
 LATENCY_FIELD = "latencyDisposition"
 DELAY_FIELD = "avoidableDelayClass"
+
+WORK_ORDER_FIELDS = (
+    "dispatchKind",
+    "dispatchSurface",
+    "parentAssignmentId",
+    "reviewRoundCount",
+    "priorFindingSetDigest",
+    "dependencyAuditDisposition",
+    "reworkFindingDisposition",
+    "newIndependentCriticalEvidence",
+    "regressionGuardDisposition",
+    "cumulativeExternalInvocationCount",
+    "externalInvocationCeiling",
+    "usageAvailability",
+    "quotaAdmissionDisposition",
+    "nextDispatchDisposition",
+    "rootCauseClusterId",
+    "reworkGeneration",
+    "consolidatedDefectClassSweep",
+    "successorTrancheOpened",
+    "implementationAutonomyDisposition",
+)
+
+WORKER_RETURN_FIELDS = (
+    "rootCauseClusterId",
+    "reworkGeneration",
+    "consolidatedDefectClassSweep",
+    "productionBindingEvidence",
+    "adversarialRegressionDisposition",
+    "successorTrancheOpened",
+    "implementationAutonomyDisposition",
+    "internalAgentInvocationCount",
+    "externalAgentInvocationCount",
+    "providerCallCount",
+    "tokenOrQuotaUsage",
+    "terminalReadinessVerdict",
+)
 
 ALL_FIELDS = REQUIRED_INTEGER_FIELDS + UNAVAILABLE_ALLOWED_FIELDS + (
     NARRATIVE_FIELD,
@@ -184,6 +234,14 @@ def _has_real_declaration(text: str) -> bool:
     return False
 
 
+def _has_dispatch_declaration(text: str) -> bool:
+    stripped = _strip_code_fences(text)
+    return any(
+        DISPATCH_DECLARATION_LINE_RE.match(line.strip()) and "`" not in line
+        for line in stripped.splitlines()
+    )
+
+
 def is_applicable(path: str, text: str) -> bool:
     normalized = _normalize(path)
     if not normalized.startswith(ELIGIBLE_PREFIX) or not normalized.endswith(".md"):
@@ -193,6 +251,24 @@ def is_applicable(path: str, text: str) -> bool:
     if normalized == THIS_CHECKER_PATH:
         return False
     return bool(COMPLETION_REVIEW_RE.search(_strip_code_fences(text)))
+
+
+def is_work_order_applicable(path: str, text: str) -> bool:
+    normalized = _normalize(path)
+    if not normalized.startswith(WORK_ORDER_PREFIX) or not normalized.endswith(".md"):
+        return False
+    if "/archive/" in normalized:
+        return False
+    return bool(WORK_ORDER_RE.search(_strip_code_fences(text)))
+
+
+def is_worker_return_applicable(path: str, text: str) -> bool:
+    normalized = _normalize(path)
+    if not normalized.startswith(ELIGIBLE_PREFIX) or not normalized.endswith(".md"):
+        return False
+    if "/archive/" in normalized:
+        return False
+    return bool(WORKER_RETURN_RE.search(_strip_code_fences(text)))
 
 
 def _field_value(text: str, field_name: str) -> str | None:
@@ -212,6 +288,10 @@ def _has_reason(value: str, prefix: str) -> bool:
 
 
 def diagnose(path: str, text: str) -> Diagnostic:
+    if is_work_order_applicable(path, text):
+        return diagnose_work_order(path, text)
+    if is_worker_return_applicable(path, text):
+        return diagnose_worker_return(path, text)
     if not is_applicable(path, text):
         return Diagnostic(path=path, applicable=False)
 
@@ -267,6 +347,25 @@ def diagnose(path: str, text: str) -> Diagnostic:
                 f"reviewRoundCount >= 3 requires `{STOP_FIELD}` to be one of "
                 f"{ROUND_THREE_ALLOWED_TOKENS}, got `{stop_value}`"
             )
+        elif stop_value == "CONTINUE_NEW_CRITICAL_EVIDENCE":
+            root_count = values.get("newRootCauseCountThisRound")
+            if root_count is not None and _is_non_negative_integer(root_count) and int(root_count) == 0:
+                issues.append(
+                    "`CONTINUE_NEW_CRITICAL_EVIDENCE` requires "
+                    "`newRootCauseCountThisRound` > 0"
+                )
+        elif (
+            stop_value == "CONSOLIDATE_SINGLE_REPAIR"
+            and review_round_value is not None
+            and _is_non_negative_integer(review_round_value)
+            and int(review_round_value) >= 2
+        ):
+            root_count = values.get("newRootCauseCountThisRound")
+            if root_count is not None and _is_non_negative_integer(root_count) and int(root_count) == 0:
+                issues.append(
+                    "reviewRoundCount >= 2 cannot open another consolidated repair "
+                    "without a new independent root cause"
+                )
 
     audit_value = values.get(AUDIT_FIELD)
     if audit_value is not None and audit_value not in ALLOWED_AUDIT_TOKENS:
@@ -316,6 +415,223 @@ def diagnose(path: str, text: str) -> Diagnostic:
     return Diagnostic(path=path, applicable=True, issues=tuple(issues))
 
 
+def diagnose_work_order(path: str, text: str) -> Diagnostic:
+    issues: list[str] = []
+    if not _has_dispatch_declaration(text):
+        issues.append(
+            "missing exact standalone declaration "
+            "`Review-Dispatch Convergence Control: REQUIRED`"
+        )
+    values: dict[str, str] = {}
+    for field_name in WORK_ORDER_FIELDS:
+        value = _field_value(text, field_name)
+        if value is None or value == "":
+            issues.append(f"missing required review-dispatch field `{field_name}`")
+        else:
+            values[field_name] = value
+
+    integer_fields = (
+        "reviewRoundCount",
+        "reworkGeneration",
+        "cumulativeExternalInvocationCount",
+        "externalInvocationCeiling",
+    )
+    for field_name in integer_fields:
+        value = values.get(field_name)
+        if value is not None and not _is_non_negative_integer(value):
+            issues.append(f"field `{field_name}` must be a non-negative integer, got `{value}`")
+
+    dispatch_kind = values.get("dispatchKind")
+    dispatch_surface = values.get("dispatchSurface")
+    review_round = values.get("reviewRoundCount")
+    round_number = int(review_round) if review_round and _is_non_negative_integer(review_round) else None
+    rework_generation = values.get("reworkGeneration")
+    generation_number = int(rework_generation) if rework_generation and _is_non_negative_integer(rework_generation) else None
+
+    if values.get("successorTrancheOpened") != "NO":
+        issues.append("pre-dispatch packets require `successorTrancheOpened: NO`")
+    if values.get("implementationAutonomyDisposition") != "CONTRACT_AUTHORITY_EVIDENCE_OUTCOME_ONLY":
+        issues.append(
+            "`implementationAutonomyDisposition` must be "
+            "`CONTRACT_AUTHORITY_EVIDENCE_OUTCOME_ONLY`"
+        )
+
+    if dispatch_kind not in ("INITIAL", "REWORK"):
+        issues.append("field `dispatchKind` must be `INITIAL` or `REWORK`")
+    if dispatch_surface not in ("INTERNAL_AGENT", "EXTERNAL_AGENT_CLI_MCP"):
+        issues.append(
+            "field `dispatchSurface` must be `INTERNAL_AGENT` or `EXTERNAL_AGENT_CLI_MCP`"
+        )
+    if dispatch_kind == "INITIAL":
+        expected = {
+            "priorFindingSetDigest": "NOT_APPLICABLE_INITIAL_DISPATCH",
+            "dependencyAuditDisposition": "COMPLETE_INITIAL_ACCEPTANCE_MATRIX",
+            "reworkFindingDisposition": "NOT_APPLICABLE_INITIAL_DISPATCH",
+            "newIndependentCriticalEvidence": "NONE",
+            "regressionGuardDisposition": "BASELINE_NEGATIVE_TESTS_PLANNED",
+            "nextDispatchDisposition": "INITIAL_DISPATCH",
+        }
+        if round_number is not None and round_number != 0:
+            issues.append("`INITIAL` dispatch requires `reviewRoundCount: 0`")
+        if generation_number is not None and generation_number != 0:
+            issues.append("`INITIAL` dispatch requires `reworkGeneration: 0`")
+        if values.get("rootCauseClusterId") != "NOT_APPLICABLE_INITIAL_DISPATCH":
+            issues.append(
+                "`INITIAL` dispatch requires `rootCauseClusterId: "
+                "NOT_APPLICABLE_INITIAL_DISPATCH`"
+            )
+        if values.get("consolidatedDefectClassSweep") != "COMPLETE_INITIAL_ACCEPTANCE_MATRIX":
+            issues.append(
+                "`INITIAL` dispatch requires `consolidatedDefectClassSweep: "
+                "COMPLETE_INITIAL_ACCEPTANCE_MATRIX`"
+            )
+        for field_name, expected_value in expected.items():
+            if values.get(field_name) != expected_value:
+                issues.append(f"`INITIAL` dispatch requires `{field_name}: {expected_value}`")
+    elif dispatch_kind == "REWORK":
+        if round_number is not None and round_number < 1:
+            issues.append("`REWORK` dispatch requires `reviewRoundCount` >= 1")
+        if round_number is not None and generation_number is not None and generation_number != round_number:
+            issues.append("`REWORK` requires `reworkGeneration` == `reviewRoundCount`")
+        root_cluster = values.get("rootCauseClusterId", "")
+        if not root_cluster or root_cluster.startswith("NOT_APPLICABLE"):
+            issues.append("`REWORK` dispatch requires a stable non-placeholder `rootCauseClusterId`")
+        if values.get("consolidatedDefectClassSweep") != "COMPLETE_BEFORE_REWORK_DISPATCH":
+            issues.append(
+                "`REWORK` dispatch requires `consolidatedDefectClassSweep: "
+                "COMPLETE_BEFORE_REWORK_DISPATCH`"
+            )
+        if round_number is not None and round_number >= 3:
+            issues.append(
+                "reviewRoundCount >= 3 is not eligible for automatic re-dispatch; "
+                "operator escalation is required"
+            )
+        digest = values.get("priorFindingSetDigest", "")
+        if not re.fullmatch(r"[0-9a-f]{64}", digest):
+            issues.append("`REWORK` dispatch requires a lowercase SHA-256 `priorFindingSetDigest`")
+        required_values = {
+            "dependencyAuditDisposition": "COMPLETE_BEFORE_FIRST_REPAIR",
+            "reworkFindingDisposition": "CONSOLIDATED_ALL_DEPENDENT_FINDINGS",
+            "regressionGuardDisposition": "REQUIRED_AND_PLANNED_FOR_EACH_TARGETED_DEFECT",
+            "nextDispatchDisposition": "ONE_CONSOLIDATED_REWORK",
+        }
+        for field_name, expected_value in required_values.items():
+            if values.get(field_name) != expected_value:
+                issues.append(f"`REWORK` dispatch requires `{field_name}: {expected_value}`")
+        critical_evidence = values.get("newIndependentCriticalEvidence", "")
+        if round_number is not None and round_number >= 2 and (
+            critical_evidence in ("", "NONE")
+            or re.search(r"(?i)(?:TODO|TO_FILL|FILL_ME)", critical_evidence)
+        ):
+            issues.append(
+                "reviewRoundCount >= 2 requires exact new independent critical evidence IDs"
+            )
+
+    cumulative = values.get("cumulativeExternalInvocationCount")
+    ceiling = values.get("externalInvocationCeiling")
+    cumulative_number = int(cumulative) if cumulative and _is_non_negative_integer(cumulative) else None
+    ceiling_number = int(ceiling) if ceiling and _is_non_negative_integer(ceiling) else None
+    if dispatch_surface == "INTERNAL_AGENT":
+        expected = {
+            "usageAvailability": "NOT_APPLICABLE_INTERNAL_AGENT",
+            "quotaAdmissionDisposition": "NOT_APPLICABLE_INTERNAL_AGENT",
+        }
+        for field_name, expected_value in expected.items():
+            if values.get(field_name) != expected_value:
+                issues.append(f"internal dispatch requires `{field_name}: {expected_value}`")
+    elif dispatch_surface == "EXTERNAL_AGENT_CLI_MCP":
+        if values.get("usageAvailability") != "KNOWN_FOR_ADMISSION":
+            issues.append(
+                "automatic external dispatch requires `usageAvailability: KNOWN_FOR_ADMISSION`"
+            )
+        if values.get("quotaAdmissionDisposition") != "ADMITTED_WITHIN_CUMULATIVE_CEILING":
+            issues.append(
+                "automatic external dispatch requires "
+                "`quotaAdmissionDisposition: ADMITTED_WITHIN_CUMULATIVE_CEILING`"
+            )
+        if cumulative_number is not None and ceiling_number is not None and cumulative_number >= ceiling_number:
+            issues.append(
+                "external dispatch requires cumulativeExternalInvocationCount < "
+                "externalInvocationCeiling before the next invocation"
+            )
+
+    return Diagnostic(path=path, applicable=True, issues=tuple(issues))
+
+
+def diagnose_worker_return(path: str, text: str) -> Diagnostic:
+    """Validate observable convergence evidence, never worker internals."""
+    issues: list[str] = []
+    values: dict[str, str] = {}
+    for field_name in WORKER_RETURN_FIELDS:
+        value = _field_value(text, field_name)
+        if value is None or value == "":
+            issues.append(f"missing required worker-return convergence field `{field_name}`")
+        else:
+            values[field_name] = value
+
+    for field_name in (
+        "reworkGeneration",
+        "internalAgentInvocationCount",
+        "externalAgentInvocationCount",
+        "providerCallCount",
+    ):
+        value = values.get(field_name)
+        if value is not None and not _is_non_negative_integer(value):
+            issues.append(f"field `{field_name}` must be a non-negative integer, got `{value}`")
+
+    usage = values.get("tokenOrQuotaUsage")
+    if usage is not None and not _is_non_negative_integer(usage) and not _has_reason(
+        usage, UNAVAILABLE_PREFIX
+    ):
+        issues.append(
+            "field `tokenOrQuotaUsage` must be a non-negative integer or a "
+            "reason-bearing `NOT_AVAILABLE_WITH_REASON: ...` value"
+        )
+
+    exact_values = {
+        "successorTrancheOpened": "NO",
+        "implementationAutonomyDisposition": "CONTRACT_AUTHORITY_EVIDENCE_OUTCOME_ONLY",
+    }
+    for field_name, expected in exact_values.items():
+        if values.get(field_name) != expected:
+            issues.append(f"worker return requires `{field_name}: {expected}`")
+
+    for field_name in ("rootCauseClusterId", "productionBindingEvidence"):
+        value = values.get(field_name, "")
+        if not value or re.search(r"(?i)(?:TODO|TO_FILL|FILL_ME)", value):
+            issues.append(f"worker return requires non-placeholder `{field_name}`")
+
+    verdict = values.get("terminalReadinessVerdict", "")
+    is_blocked = _has_reason(verdict, "BLOCKED_WITH_REASON")
+    if verdict != "READY_FOR_REVIEW" and not is_blocked:
+        issues.append(
+            "`terminalReadinessVerdict` must be `READY_FOR_REVIEW` or "
+            "`BLOCKED_WITH_REASON: <reason>`"
+        )
+    if verdict == "READY_FOR_REVIEW":
+        ready_values = {
+            "consolidatedDefectClassSweep": "COMPLETE_ALL_KNOWN_DEPENDENCIES",
+            "adversarialRegressionDisposition": "PASS_TARGETED_DEFECT_CLASS",
+        }
+        for field_name, expected in ready_values.items():
+            if values.get(field_name) != expected:
+                issues.append(f"ready worker return requires `{field_name}: {expected}`")
+        if values.get("productionBindingEvidence") == "PENDING_BEFORE_READY":
+            issues.append("ready worker return cannot use pending production-binding evidence")
+    elif is_blocked:
+        for field_name in (
+            "consolidatedDefectClassSweep",
+            "adversarialRegressionDisposition",
+            "productionBindingEvidence",
+        ):
+            if values.get(field_name) != "PENDING_BEFORE_READY":
+                issues.append(
+                    f"blocked scaffold/return requires `{field_name}: PENDING_BEFORE_READY`"
+                )
+
+    return Diagnostic(path=path, applicable=True, issues=tuple(issues))
+
+
 def run(base: str, head: str) -> list[Diagnostic]:
     results: list[Diagnostic] = []
     for path in _changed_md_paths(base, head):
@@ -339,9 +655,9 @@ def main(argv: list[str] | None = None) -> int:
     diagnostics = run(args.base, args.head)
     violations = [d for d in diagnostics if not d.is_clean]
 
-    print(f"Applicable completion reviews checked: {len(diagnostics)}")
+    print(f"Applicable completion reviews/work orders/worker returns checked: {len(diagnostics)}")
     if not violations:
-        print("PASS: all applicable completion reviews carry valid review-cost telemetry.")
+        print("PASS: all applicable completion reviews, work orders, and worker returns carry valid review-cost/convergence control.")
         return 0
 
     print(f"Violations: {len(violations)}")

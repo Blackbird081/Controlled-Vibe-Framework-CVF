@@ -15,6 +15,7 @@ def test_range_shape_preflight_blocks_exact_manifest_session_mix(monkeypatch) ->
         protected_session_paths=("AGENT_HANDOFF_V19_2026-06-15.md",),
         trace_artifact_paths=("docs/reviews/example.md",),
         mixed_material_and_session=True,
+        mixed_atomicity_authorized=False,
         exact_manifest_collision_risk=True,
         handoff_sync_only=False,
     )
@@ -30,6 +31,7 @@ def test_range_shape_preflight_allows_split_material_range(monkeypatch) -> None:
         protected_session_paths=(),
         trace_artifact_paths=("docs/reviews/example.md",),
         mixed_material_and_session=False,
+        mixed_atomicity_authorized=False,
         exact_manifest_collision_risk=False,
         handoff_sync_only=False,
     )
@@ -135,6 +137,7 @@ def test_worktree_fingerprint_changes_with_file_content(tmp_path: Path, monkeypa
         protected_session_paths=(),
         trace_artifact_paths=(),
         mixed_material_and_session=False,
+        mixed_atomicity_authorized=False,
         exact_manifest_collision_risk=False,
         handoff_sync_only=False,
     )

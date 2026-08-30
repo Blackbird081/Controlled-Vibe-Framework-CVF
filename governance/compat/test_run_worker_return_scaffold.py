@@ -38,6 +38,19 @@ class WorkerReturnScaffoldTests(unittest.TestCase):
         self.assertIn("| TODO: fill before review | READ |", text)
         self.assertIn("python governance/compat/run_worker_return_fast_gate.py", text)
         self.assertIn("Corpus verdict: NOT_APPLICABLE_WITH_REASON - N/A with reason", text)
+        self.assertIn("## Rework Convergence Self-Proof", text)
+        self.assertIn("consolidatedDefectClassSweep: PENDING_BEFORE_READY", text)
+        self.assertIn("successorTrancheOpened: NO", text)
+        self.assertIn("terminalReadinessVerdict: BLOCKED_WITH_REASON:", text)
+
+    def test_scaffold_governs_contract_without_worker_micromanagement(self):
+        text = scaffold.build_scaffold("Example Worker Return")
+        self.assertIn(
+            "implementationAutonomyDisposition: CONTRACT_AUTHORITY_EVIDENCE_OUTCOME_ONLY",
+            text,
+        )
+        for forbidden in ("chain of thought", "internal reasoning", "required algorithm"):
+            self.assertNotIn(forbidden, text.casefold())
 
     def test_full_scaffold_has_shared_checker_required_envelope(self):
         """Both profiles must open with the exact shared marker/heading envelope

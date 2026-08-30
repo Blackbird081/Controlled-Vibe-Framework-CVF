@@ -293,12 +293,14 @@ describe('ai/providers', () => {
         it('handles Alibaba API error', async () => {
             fetchMock.mockResolvedValueOnce({
                 ok: false,
+                status: 403,
                 json: async () => ({ error: { message: 'Alibaba error' } }),
             });
 
             const result = await executeAI('alibaba', 'ali-key', 'Hello');
             expect(result.success).toBe(false);
             expect(result.error).toContain('Alibaba error');
+            expect(result.diagnostic?.httpStatus).toBe(403);
         });
 
         it('handles Alibaba API error without message', async () => {

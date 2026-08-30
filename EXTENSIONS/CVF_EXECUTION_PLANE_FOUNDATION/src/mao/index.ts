@@ -316,9 +316,71 @@ export type {
   MaoOperationalCancelAcceptSuccess,
   MaoOperationalCancelRequestResult,
   MaoOperationalCancelAcceptResult,
+  MaoOperationalReconcileFailureReason,
+  MaoOperationalReconcileFailure,
+  MaoOperationalReconcileSuccess,
+  MaoOperationalReconcileResult,
 } from "./operational.worker.launcher";
 
 export { MaoOperationalWorkerLauncher } from "./operational.worker.launcher";
+
+// --- BRIGADE-MAO-R1 atomic delegation lifecycle composition ---
+
+export type {
+  MaoAtomicDelegationPolicy,
+  MaoDelegationJoinPolicy,
+  MaoDelegationReservationRequest,
+  MaoDelegationReservationFailureReason,
+  MaoDelegationReservationReceipt,
+  MaoDelegationReservationResult,
+  MaoDelegationSettlementOutcome,
+  MaoDelegationSettlementFailureReason,
+  MaoDelegationCompletionReceipt,
+  MaoDelegationSettlementResult,
+  MaoDelegationSettlementIdentity,
+  MaoDelegationAbortCascadeReceipt,
+} from "./atomic.delegation.lifecycle.coordinator";
+
+export { MaoAtomicDelegationLifecycleCoordinator } from "./atomic.delegation.lifecycle.coordinator";
+
+export type {
+  MaoDurableDelegationPort,
+  MaoDelegationLedgerOperation,
+  MaoDelegationLedgerEntry,
+  MaoDelegationLedgerSnapshot,
+  MaoDelegationLedgerStoreFailureReason,
+  MaoDelegationLedgerStoreFailure,
+  MaoDelegationLedgerCreateSuccess,
+  MaoDelegationLedgerReplaySuccess,
+  LockAcquireFailureReason,
+  LockAcquireResult,
+  LockReleaseResult,
+  LockFileContent,
+} from "./durable.delegation.ledger.store";
+
+// NOTE (reviewer RETURN_FOR_REWORK R5, requirement 5): earlier rounds (R3,
+// R4) kept an admin-only, offline-maintenance lock-recovery function in
+// durable.delegation.ledger.store.ts, first excluded from this barrel, then
+// additionally gated behind a required boolean acknowledgment argument. The
+// reviewer correctly rejected that boolean as enforcement of stopped-world
+// state - it proves only that the caller typed the word `true`, not that
+// any writer is actually stopped. That function has been REMOVED FROM THE
+// SOURCE MODULE ENTIRELY (not merely left unexported here); see that
+// module's own header comment for the manual, human-supervised filesystem
+// recovery procedure it documents in its place. A source-boundary test in
+// tests/mao.atomic.delegation.fail.closed.rework.test.ts asserts neither
+// this barrel's nor the store module's own source text contains any
+// force-unlock-shaped export or definition.
+export {
+  MAO_DELEGATION_LEDGER_SNAPSHOT_SCHEMA_VERSION,
+  MAO_DELEGATION_LOCK_STALE_AFTER_MS,
+  MaoFileDelegationLedgerStore,
+  delegationLockFilePathFor,
+  acquireLock,
+  releaseLock,
+  readLockFileContent,
+  writeLockFileContentForTest,
+} from "./durable.delegation.ledger.store";
 
 // --- MAO-OA-T4 operational review convergence and commit/session interlock ---
 

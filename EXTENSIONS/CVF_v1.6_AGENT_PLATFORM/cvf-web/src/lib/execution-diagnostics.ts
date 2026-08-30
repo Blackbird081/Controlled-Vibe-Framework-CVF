@@ -178,10 +178,20 @@ export function buildProviderExecutionDiagnostic(params: {
     latencyMs?: number;
 }): ExecutionDiagnostic {
     const classified = classifyProviderError(params.error);
+    const candidateStatus = params.error && typeof params.error === 'object'
+        ? (params.error as { httpStatus?: unknown }).httpStatus
+        : undefined;
+    const httpStatus = typeof candidateStatus === 'number'
+        && Number.isInteger(candidateStatus)
+        && candidateStatus >= 100
+        && candidateStatus <= 599
+        ? candidateStatus
+        : undefined;
     return buildExecutionDiagnostic({
         stage: 'provider',
         provider: params.provider,
         model: params.model,
+        ...(httpStatus !== undefined ? { httpStatus } : {}),
         latencyMs: params.latencyMs,
         ...classified,
     });

@@ -4,6 +4,15 @@ import {
   isApprovedMemoryCaptureSource,
   resolveMemoryRetention,
 } from "./controlled.memory.subcontracts";
+import {
+  buildControlledMemoryOriginKey,
+  deriveMemorySourceTrust,
+  validateMemoryTrustAdmission,
+  type ControlledMemoryLink,
+  type ControlledMemoryOrigin,
+  type ControlledMemorySegmentClass,
+  type ControlledMemorySourceTrust,
+} from "./controlled.memory.trust.contract";
 
 export type ControlledMemoryKind = "working" | "episodic" | "semantic" | "procedural";
 export type ControlledMemoryScope = "session" | "project" | "user" | "global";
@@ -45,6 +54,11 @@ export interface ControlledMemoryRecord {
     summary: string;
   };
   privacyReport: ControlledMemoryPrivacyReport;
+  origin: ControlledMemoryOrigin;
+  originKey: string;
+  segmentClass: ControlledMemorySegmentClass;
+  sourceTrust: ControlledMemorySourceTrust;
+  links: ControlledMemoryLink[];
 }
 
 export interface ControlledMemoryPrivacyReport {
@@ -65,6 +79,10 @@ export interface ControlledMemoryCaptureRequest {
   ttlDays?: number;
   policy: ControlledMemoryPolicyContext;
   provenance: ControlledMemoryRecord["provenance"];
+  origin?: Pick<ControlledMemoryOrigin, "principalId">;
+  segmentClass?: ControlledMemorySegmentClass;
+  sourceTrust?: ControlledMemorySourceTrust;
+  links?: ControlledMemoryLink[];
 }
 
 export interface ControlledMemoryQueryRequest {
@@ -74,6 +92,7 @@ export interface ControlledMemoryQueryRequest {
   sessionId?: string;
   includeKinds?: ControlledMemoryKind[];
   maxTokens?: number;
+  origin?: Pick<ControlledMemoryOrigin, "principalId">;
 }
 
 export interface ControlledMemoryReinjectionRequest extends ControlledMemoryQueryRequest {
@@ -168,6 +187,25 @@ export class ControlledMemoryGatewayContract {
       return { receipt: this.buildReceipt(request.policy, blocked.decision, blocked.reason, []) };
     }
 
+    const segmentClass = request.segmentClass ?? "general";
+    const sourceTrust = request.sourceTrust ?? deriveMemorySourceTrust(request.sourceEvent, request.policy.actorRole);
+    const links = request.links ?? [];
+    const trustBlock = validateMemoryTrustAdmission({ segmentClass, sourceTrust, links });
+    if (trustBlock) {
+      return { receipt: this.buildReceipt(request.policy, "denied", trustBlock, []) };
+    }
+    const origin = this.resolveOrigin(request);
+    const originKey = buildControlledMemoryOriginKey(origin);
+    for (const link of links) {
+      const target = this.records.get(link.targetMemoryId);
+      if (!target) {
+        return { receipt: this.buildReceipt(request.policy, "denied", "memory_link_target_not_found", []) };
+      }
+      if (target.originKey !== originKey) {
+        return { receipt: this.buildReceipt(request.policy, "denied", "memory_link_cross_origin_denied", []) };
+      }
+    }
+
     const capturedAt = this.now();
     const { content, report } = applyMemoryPrivacyFilter(request.content);
     const retention = resolveMemoryRetention({
@@ -203,8 +241,19 @@ export class ControlledMemoryGatewayContract {
       expiresAt: retention.expiresAt,
       provenance: request.provenance,
       privacyReport: report,
+      origin,
+      originKey,
+      segmentClass,
+      sourceTrust,
+      links: links.map((link) => ({ ...link })),
     };
     this.records.set(memoryId, record);
+    for (const link of links) {
+      if (link.type === "supersedes" || link.type === "corrects") {
+        const target = this.records.get(link.targetMemoryId)!;
+        this.records.set(target.memoryId, { ...target, lifecycleState: "contradicted" });
+      }
+    }
     return {
       record,
       receipt: this.buildReceipt(request.policy, "captured", "memory_captured_after_policy_and_privacy", [record]),
@@ -302,8 +351,12 @@ export class ControlledMemoryGatewayContract {
     let tokens = 0;
     const loweredQuery = request.query.toLowerCase();
     const selected: ControlledMemoryRecord[] = [];
+    const originKey = buildControlledMemoryOriginKey(this.resolveOrigin(request));
 
     for (const record of this.records.values()) {
+      if (record.originKey !== originKey) {
+        continue;
+      }
       const lifecycle = this.resolveLifecycle(record);
       if (lifecycle !== "active") {
         continue;
@@ -336,6 +389,23 @@ export class ControlledMemoryGatewayContract {
       selected.push({ ...record, lifecycleState: lifecycle });
     }
     return selected;
+  }
+
+  private resolveOrigin(request: {
+    policy: ControlledMemoryPolicyContext;
+    scope?: ControlledMemoryScope;
+    projectId?: string;
+    sessionId?: string;
+    origin?: Pick<ControlledMemoryOrigin, "principalId">;
+  }): ControlledMemoryOrigin {
+    const scope = request.scope
+      ?? (request.sessionId ? "session" : request.projectId ? "project" : request.policy.allowedScopes[0] ?? "session");
+    return {
+      principalId: request.origin?.principalId ?? request.policy.actorId,
+      scope,
+      projectId: request.projectId,
+      sessionId: request.sessionId,
+    };
   }
 
   private matchesQuery(record: ControlledMemoryRecord, loweredQuery: string): boolean {

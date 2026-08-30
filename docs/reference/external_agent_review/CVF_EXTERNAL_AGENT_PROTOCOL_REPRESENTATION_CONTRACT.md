@@ -22,13 +22,51 @@ CVF authority, publish private provenance, or authorize external effects.
 
 Canonical protocol identifier: `cvf.external-agent-round-trip`.
 
-Current version: `1.2.0`.
+Current version: `1.3.0`.
 
 Current compatible major: `1`.
 
 Return schema `cvf.externalAgentReturn.v1` is retained unchanged: the
 candidate-contract discriminator is an additive collection-level field, not a
 return-schema major change.
+
+## Detached Implementation-Proposal Mode And Local Promotion (1.3.0)
+
+Protocol `1.3.0` is `ADDITIVE_MINOR_WITH_LEGACY_READ_ALIAS`. It adds one new
+task-capsule working mode, `DETACHED_IMPLEMENTATION_PROPOSAL`, and a
+mode-scoped required `executionClass` field distinguishing
+`SHARED_WORKSPACE_DELEGATED_WORKER` from `DETACHED_EXTERNAL_AGENT`. Existing
+`1.2.0` modes, their fixed `expectedReturnStatus` of
+`COMPLETE_PENDING_LOCAL_RECONCILIATION`, and every existing return-manifest
+field remain unchanged and fully compatible; no existing required field,
+schema constraint, or validator behavior was removed or narrowed.
+
+For the new mode only, `expectedReturnStatus` is
+`EXTERNAL_RETURN_READY_FOR_LOCAL_VERIFICATION`. New detached implementation
+producers must never emit `COMPLETE_PENDING_LOCAL_RECONCILIATION`; that
+status remains readable only as a legacy-1.2 producer alias and normalizes to
+external-return readiness, never to local completion.
+
+The detached-return authority object, proposed-target-map contract, path and
+inventory safety rules, independent state vector, and derived completion
+projection are owned by `scripts/external_agent_return_contract.py` and
+summarized in
+`docs/reference/external_agent_review/CVF_EXTERNAL_ABSORPTION_CORE_STANDARD.md`
+and the DEAR-LP roadmap. A detached return's strongest possible validator
+result is `EXTERNAL_RETURN_READY_FOR_LOCAL_VERIFICATION`; it is `NOT_CVF_SOT`
+and `ABSORPTION_NOT_COMPLETE` until a local reviewer performs semantic review
+and issues a separate, local-only `LOCAL_PROMOTION_RECEIPT.json`. That receipt
+name is reserved and fails closed as authority forgery if found inside any
+detached return root.
+
+Detached implementation capsules also require all four governed context groups
+(`protectedPaths`, `ownerMap`, `invariants`, and `verification`) and an explicit
+execution class. Their return manifest carries a strict `dispatchBinding` with
+the exact task-capsule SHA-256, task/protocol identity, source repository/commit,
+and public-CVF repository/commit. `validate-detached-return` requires the local
+task capsule, recomputes every binding, inventories hidden files, and rejects
+symlinks, secret-like content, normalization collisions, undeclared target-map
+fields, or any local-authority receipt alias before returning readiness.
 
 Every representation must expose these fields:
 

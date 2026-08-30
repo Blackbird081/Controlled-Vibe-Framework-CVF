@@ -1,6 +1,16 @@
 import { AIConfig, ExecutionResponse, AIProvider, DEFAULT_MODELS, CVF_SYSTEM_PROMPT } from './types';
 import { buildProviderExecutionDiagnostic } from '@/lib/execution-diagnostics';
 
+class ProviderHttpStatusError extends Error {
+    readonly httpStatus: number;
+
+    constructor(message: string, httpStatus: number) {
+        super(message);
+        this.name = 'ProviderHttpStatusError';
+        this.httpStatus = httpStatus;
+    }
+}
+
 function isAlibabaStreamingOnlyModel(model: string): boolean {
     return /^qvq-/i.test(model);
 }
@@ -306,7 +316,7 @@ async function executeAlibaba(
                     'Try qvq-max or use a provider-specific endpoint/adapter that supports this snapshot model.'
                 );
             }
-            throw new Error(message);
+            throw new ProviderHttpStatusError(message, response.status);
         }
 
         if (isStreamingOnly) {

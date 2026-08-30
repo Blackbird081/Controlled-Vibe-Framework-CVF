@@ -20,6 +20,8 @@ import { buildWorkflowExecutionProjection } from '@/lib/workflows/workflow-resol
 import { withSessionAuditPayload } from '@/lib/middleware-auth';
 import { calculateTokenCost } from '@/lib/model-pricing';
 import { buildExecuteResponseReadouts } from './route-response-readouts';
+import { buildProviderAttemptReconciliation } from '@/lib/provider-attempt-admission';
+import type { ProviderAttemptLedger } from '@/lib/provider-attempt-admission';
 import type { AIProvider, ExecutionRequest, ExecutionResponse } from '@/lib/ai';
 import type { GuardPipelineResult } from '@/lib/guard-runtime-adapter';
 import type { ValidationResult, RetryState } from '@/lib/output-validator';
@@ -36,6 +38,88 @@ import type { KnowledgeQueryResult } from '@/lib/knowledge-retrieval';
 import type { ExecutionIdentityDecision } from '@/lib/execution-identity';
 import type { AifMemoryReinjectionDecision } from '@/lib/aif-memory-reinjection';
 import type { DurableMemoryRouteResult } from '@/lib/durable-memory-route';
+import type { ProviderAttemptReconciliationReceipt } from '@/lib/ai';
+
+interface BuildOutputValidationExhaustedResponseParams {
+    session: SessionCookie | null;
+    isServiceAllowed: boolean;
+    serviceIdentity: string | null;
+    body: { templateName?: string; templateId?: string; cvfRiskLevel?: string; cvfPhase?: string; model?: string };
+    outputValidation: ValidationResult;
+    retryState: RetryState;
+    routedProvider: AIProvider;
+    aiResult: ExecutionResponse;
+    enforcement: EnforcementResult;
+    guardResult: GuardPipelineResult;
+    govEnvelope: WebGovernanceEnvelope;
+    routingResult: WebProviderRoutingResult;
+    knowledgeSource: string;
+    knowledgeInjected: boolean;
+    requestedKnowledgeCollectionId: string | null;
+    retrievalResult: KnowledgeQueryResult;
+    approvedRequestRecord: ApprovalRequestRecord | null;
+    aifMemoryReinjection: AifMemoryReinjectionDecision;
+    durableMemoryRoute: DurableMemoryRouteResult;
+    providerAttemptLedger: ProviderAttemptLedger;
+}
+
+/**
+ * Build the 422 response returned when output-validation retries are
+ * exhausted. Extracted from route.ts (DSH-WRA-R1-RV-F01 rework) as a pure
+ * response builder alongside its sibling final-response/denied-response
+ * builders, to keep route.ts's own line count within the governed
+ * maintainability threshold without changing this path's behavior.
+ */
+export async function buildOutputValidationExhaustedResponse(params: BuildOutputValidationExhaustedResponseParams) {
+    const {
+        session, isServiceAllowed, serviceIdentity, body, outputValidation, retryState, routedProvider, aiResult,
+        enforcement, guardResult, govEnvelope, routingResult, knowledgeSource, knowledgeInjected,
+        requestedKnowledgeCollectionId, retrievalResult, approvedRequestRecord, aifMemoryReinjection,
+        durableMemoryRoute, providerAttemptLedger,
+    } = params;
+
+    await appendAuditEvent({
+        eventType: 'OUTPUT_VALIDATION_EXHAUSTED',
+        actorId: session?.userId ?? 'service-account',
+        actorRole: session?.role ?? 'service',
+        targetResource: body.templateName || body.templateId || 'unknown-template',
+        action: 'BLOCK_INVALID_OUTPUT',
+        riskLevel: body.cvfRiskLevel ?? enforcement.riskGate?.riskLevel ?? 'R1',
+        phase: body.cvfPhase ?? 'PHASE D',
+        outcome: 'BLOCKED',
+        payload: withSessionAuditPayload(session, {
+            issues: outputValidation.issues,
+            qualityHint: outputValidation.qualityHint,
+            retryAttempts: retryState.attempt,
+            provider: routedProvider,
+            model: body.model ?? aiResult.model ?? routedProvider,
+        }),
+    });
+
+    const validationExhaustedReconciliation = buildProviderAttemptReconciliation(providerAttemptLedger, routedProvider, body.model ?? 'default');
+    return NextResponse.json(
+        {
+            success: false,
+            error: 'Generated response failed output validation after retry attempts.',
+            provider: routedProvider,
+            model: body.model ?? aiResult.model ?? routedProvider,
+            enforcement,
+            guardResult,
+            outputValidation: { qualityHint: outputValidation.qualityHint, issues: outputValidation.issues, retryAttempts: retryState.attempt },
+            governanceEnvelope: govEnvelope,
+            policySnapshotId: govEnvelope.policySnapshotId,
+            governanceEvidenceReceipt: buildEvidenceReceipt({
+                envelope: govEnvelope, decision: 'BLOCK', riskLevel: enforcement.riskGate?.riskLevel, provider: routedProvider,
+                model: body.model ?? aiResult.model ?? routedProvider, routingDecision: routingResult.decision, knowledgeSource, knowledgeInjected,
+                knowledgeCollectionId: requestedKnowledgeCollectionId, knowledgeChunkCount: retrievalResult.allowedChunkCount,
+                approvalId: approvedRequestRecord?.id, validationHint: outputValidation.qualityHint, aifMemoryReinjection: aifMemoryReinjection.receipt,
+                durableMemoryRead: durableMemoryRoute.receipt, providerAttemptReconciliation: validationExhaustedReconciliation,
+            }),
+            providerAttemptReconciliation: validationExhaustedReconciliation,
+        },
+        { status: 422 },
+    );
+}
 
 interface BuildExecuteFinalResponseParams {
     aiResult: ExecutionResponse;
@@ -69,6 +153,7 @@ interface BuildExecuteFinalResponseParams {
     requestedProvider: AIProvider;
     filteredPrompt: string;
     actorRoleGate: ActorRoleGateResult;
+    providerAttemptReconciliation: ProviderAttemptReconciliationReceipt;
 }
 
 export async function buildExecuteFinalResponse(params: BuildExecuteFinalResponseParams) {
@@ -104,6 +189,7 @@ export async function buildExecuteFinalResponse(params: BuildExecuteFinalRespons
         requestedProvider,
         filteredPrompt,
         actorRoleGate,
+        providerAttemptReconciliation,
     } = params;
 
     const model = request.model ?? aiResult.model ?? routedProvider;
@@ -161,6 +247,7 @@ export async function buildExecuteFinalResponse(params: BuildExecuteFinalRespons
         durableMemoryRead: durableMemoryRoute.receipt,
         durableMemoryWriteReceipt,
         runtimeTelemetry,
+        providerAttemptReconciliation,
         receiptIntegrity: {
             signingSecret: process.env.CVF_RECEIPT_HMAC_SECRET ?? process.env.CVF_AUDIT_SIGNING_KEY,
             externalAnchorId: process.env.CVF_RECEIPT_EXTERNAL_ANCHOR_ID,
@@ -416,6 +503,7 @@ export async function buildExecuteFinalResponse(params: BuildExecuteFinalRespons
         governanceEnvelope: govEnvelope,
         policySnapshotId: govEnvelope.policySnapshotId,
         governanceEvidenceReceipt,
+        providerAttemptReconciliation,
         ...(executionDiagnostic ? { diagnostic: executionDiagnostic } : {}),
         auditMemoryReceipt,
         requestContextReadout,

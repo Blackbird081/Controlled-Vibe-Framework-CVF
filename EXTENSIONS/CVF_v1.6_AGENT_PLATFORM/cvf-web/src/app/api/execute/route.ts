@@ -32,10 +32,12 @@ import { buildExecutionIdentityDecision } from '@/lib/execution-identity';
 import { evaluateExecutionActorRoleGate, resolveExecutionCVFRole, resolveExecutionOutputClass } from '@/lib/execute-role-resolver';
 import { buildOutputBypassGuardResult, checkRoleOutputPermission, detectBypassInOutput, resolveGuardAction, shouldRequireSkillPreflight } from '@/lib/execute-route-guards';
 import { buildExecutionDiagnostic } from '@/lib/execution-diagnostics';
+import { admitAndInvokeProvider, buildProviderAttemptDeniedResponse, buildProviderAttemptReconciliation, createProviderAttemptLedger } from '@/lib/provider-attempt-admission';
+import type { ProviderAttemptLedger } from '@/lib/provider-attempt-admission';
 import { getApprovalStore, type ApprovalRequestRecord } from '../approvals/store';
 import { approvalRecordMatchesActor, buildApprovalActorBinding, buildApprovalRequestSnapshot, computeApprovalRequestHash } from '../approvals/approval-binding';
 import { executeVisionRouteRequest, prepareVisionRouteRequest } from './vision-route-helper';
-import { buildExecuteFinalResponse } from './route-final-response';
+import { buildExecuteFinalResponse, buildOutputValidationExhaustedResponse } from './route-final-response';
 import { buildMemoryAdvisoryReadout } from './route-memory-advisory';
 import { buildGovernedStopOutput } from './route-governed-stop-output';
 
@@ -96,6 +98,8 @@ async function buildDlpRedactedReadoutRequest(
 
 export async function POST(request: NextRequest) {
     const routeStartedAtMs = Date.now();
+    // F01: hoisted so the outer catch can carry reconciliation evidence too.
+    let providerAttemptLedgerForCatch: ProviderAttemptLedger | undefined;
     try {
         const rawBodyText = await request.text();
         let rawBody: unknown;
@@ -132,7 +136,7 @@ export async function POST(request: NextRequest) {
         body.inputs = Object.fromEntries(Object.entries(body.inputs || {}).map(([k, v]) => [k, String(v ?? '').trim()]));
         if (typeof body.model === 'string') body.model = body.model.trim() || undefined;
         const isVisionExecution = prepareVisionRouteRequest(body).isVisionExecution;
-        // ── CP7/CP8: Build governance envelope + policy snapshot id ──────────
+        // -- CP7/CP8: Build governance envelope + policy snapshot id ----------
         const govEnvelope = buildGovernanceEnvelope({
             routeId: '/api/execute',
             surfaceClass: 'governance-execution',
@@ -600,7 +604,7 @@ export async function POST(request: NextRequest) {
         }
         const guardResult: GuardPipelineResult = gatewayOutcome.guardResult;
 
-        // ── PROVIDER ROUTER: Consult Track 5A canonical governance routing ──
+        // -- PROVIDER ROUTER: Consult Track 5A canonical governance routing --
         const configuredProviders = (Object.keys(apiKeyMap) as AIProvider[]).filter(
             p => !!apiKeyMap[p]
         );
@@ -754,40 +758,55 @@ export async function POST(request: NextRequest) {
 
         if (!routedApiKey) {
             const governanceEvidenceReceipt = buildEvidenceReceipt({
-                envelope: govEnvelope,
-                decision: enforcement.status,
-                riskLevel: enforcement.riskGate?.riskLevel,
-                provider: routedProvider,
-                model: 'not configured',
-                routingDecision: routingResult.decision,
-                knowledgeSource,
-                knowledgeInjected,
-                knowledgeCollectionId: requestedKnowledgeCollectionId,
-                knowledgeChunkCount: retrievalResult.allowedChunkCount,
-                aifMemoryReinjection: aifMemoryReinjection.receipt,
-                durableMemoryRead: durableMemoryRoute.receipt,
+                envelope: govEnvelope, decision: enforcement.status, riskLevel: enforcement.riskGate?.riskLevel, provider: routedProvider,
+                model: 'not configured', routingDecision: routingResult.decision, knowledgeSource, knowledgeInjected,
+                knowledgeCollectionId: requestedKnowledgeCollectionId, knowledgeChunkCount: retrievalResult.allowedChunkCount,
+                aifMemoryReinjection: aifMemoryReinjection.receipt, durableMemoryRead: durableMemoryRoute.receipt,
             });
             return NextResponse.json(
-                {
-                    success: false,
-                    error: `API key not configured for provider: ${routedProvider}. Please set the corresponding environment variable.`,
-                    provider: routedProvider,
-                    model: 'not configured',
-                    governanceEnvelope: govEnvelope,
-                    policySnapshotId: govEnvelope.policySnapshotId,
-                    governanceEvidenceReceipt,
-                },
+                { success: false, error: `API key not configured for provider: ${routedProvider}. Please set the corresponding environment variable.`, provider: routedProvider, model: 'not configured', governanceEnvelope: govEnvelope, policySnapshotId: govEnvelope.policySnapshotId, governanceEvidenceReceipt },
                 { status: 400 }
             );
         }
 
-        // ── EXECUTE AI with auto-retry on output validation failure ──
+        // -- PRE-PROVIDER VALIDATION before attempt admission (DSH-WRA-R1-RV-F01):
+        // an invalid vision-provider request is rejected here so it never
+        // consumes attempt quota or counts as a provider call. --
+        if (isVisionExecution && routedProvider !== 'alibaba') {
+            return NextResponse.json({ success: false, error: 'Vision execution requires the Alibaba qwen-vl-plus provider lane.', provider: routedProvider, model: body.model ?? 'vision-router-error', enforcement, guardResult }, { status: 409 });
+        }
+
+        // -- PROVIDER-ATTEMPT ADMISSION: admission happens before every call;
+        // providerCallCount is recorded only at the real invocation boundary
+        // (recordProviderCallStart), see lib/provider-attempt-admission.ts. --
+        const providerAttemptLedger = createProviderAttemptLedger({
+            identityKind: session?.userId ? 'session' : 'service',
+            identityHash: limitIdentity,
+            providerModel: `${routedProvider}:${body.model ?? 'default'}`,
+        });
+        providerAttemptLedgerForCatch = providerAttemptLedger;
+        const denyProviderAttempt = (retryAfterSeconds: number) => buildProviderAttemptDeniedResponse({
+            ledger: providerAttemptLedger, retryAfterSeconds, routedProvider, requestedModel: body.model,
+            govEnvelope, enforcementRiskLevel: enforcement.riskGate?.riskLevel, routingDecision: routingResult.decision,
+            knowledgeSource, knowledgeInjected, requestedKnowledgeCollectionId, knowledgeChunkCount: retrievalResult.allowedChunkCount,
+            aifMemoryReinjectionReceipt: aifMemoryReinjection.receipt, durableMemoryReadReceipt: durableMemoryRoute.receipt,
+            enforcement, guardResult,
+        });
+
+        // -- EXECUTE AI with auto-retry on output validation failure. F01:
+        // admitAndInvokeProvider composes admission, call-start accounting,
+        // invocation, and reconciliation-bearing error handling in one call. --
         let aiResult: ExecutionResponse;
-        if (isVisionExecution) {
-            if (routedProvider !== 'alibaba') return NextResponse.json({ success: false, error: 'Vision execution requires the Alibaba qwen-vl-plus provider lane.', provider: routedProvider, model: body.model ?? 'vision-router-error', enforcement, guardResult }, { status: 409 });
-            aiResult = await executeVisionRouteRequest({ apiKey: routedApiKey, body, prompt: filteredPrompt, traceId: govEnvelope.envelopeId });
-        } else {
-            aiResult = await executeAI(routedProvider, routedApiKey, filteredPrompt, { model: body.model, maxTokens: executionMaxTokens, ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}) });
+        {
+            const outcome = await admitAndInvokeProvider({
+                ledger: providerAttemptLedger, purpose: 'initial', routedProvider, requestedModel: body.model,
+                onDenied: denyProviderAttempt, errorLogLabel: 'Provider invocation error:', errorFallbackMessage: 'Provider invocation failed.',
+                invoke: () => isVisionExecution
+                    ? executeVisionRouteRequest({ apiKey: routedApiKey, body, prompt: filteredPrompt, traceId: govEnvelope.envelopeId })
+                    : executeAI(routedProvider, routedApiKey, filteredPrompt, { model: body.model, maxTokens: executionMaxTokens, ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}) }),
+            });
+            if (!outcome.ok) return outcome.response;
+            aiResult = outcome.result;
         }
         let outputValidation: ValidationResult | undefined;
         const retryState: RetryState = { attempt: 0, previousIssues: [] };
@@ -821,7 +840,7 @@ export async function POST(request: NextRequest) {
                 templateCategory: template?.category,
             });
 
-            // ── OUTPUT_SAFETY_TRIGGERED: fire on first UNSAFE_CONTENT detection ──
+            // -- OUTPUT_SAFETY_TRIGGERED: fire on first UNSAFE_CONTENT detection --
             await emitOutputSafetyTriggered(outputValidation, aiResult);
 
             // Auto-retry loop (max 2 retries, invisible to user)
@@ -837,11 +856,13 @@ export async function POST(request: NextRequest) {
                     ? `${filteredPrompt}\n\n[Improvement note: ${retryDecision.adjustedHint}]`
                     : filteredPrompt;
 
-                aiResult = await executeAI(routedProvider, routedApiKey, retryPrompt, {
-                    model: body.model,
-                    maxTokens: executionMaxTokens,
-                    ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}),
+                const retryOutcome = await admitAndInvokeProvider({
+                    ledger: providerAttemptLedger, purpose: 'retry', routedProvider, requestedModel: body.model,
+                    onDenied: denyProviderAttempt, errorLogLabel: 'Provider retry invocation error:', errorFallbackMessage: 'Provider retry invocation failed.',
+                    invoke: () => executeAI(routedProvider, routedApiKey, retryPrompt, { model: body.model, maxTokens: executionMaxTokens, ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}) }),
                 });
+                if (!retryOutcome.ok) return retryOutcome.response;
+                aiResult = retryOutcome.result;
                 if (!aiResult.success) break;
 
                 outputValidation = validateOutput({
@@ -855,65 +876,24 @@ export async function POST(request: NextRequest) {
         }
 
         if (aiResult.success && outputValidation?.decision === 'RETRY') {
-            await appendAuditEvent({
-                eventType: 'OUTPUT_VALIDATION_EXHAUSTED',
-                actorId: session?.userId ?? 'service-account',
-                actorRole: session?.role ?? 'service',
-                targetResource: body.templateName || body.templateId || 'unknown-template',
-                action: 'BLOCK_INVALID_OUTPUT',
-                riskLevel: body.cvfRiskLevel ?? enforcement.riskGate?.riskLevel ?? 'R1',
-                phase: body.cvfPhase ?? 'PHASE D',
-                outcome: 'BLOCKED',
-                payload: withSessionAuditPayload(session, {
-                    issues: outputValidation.issues,
-                    qualityHint: outputValidation.qualityHint,
-                    retryAttempts: retryState.attempt,
-                    provider: routedProvider,
-                    model: body.model ?? aiResult.model ?? routedProvider,
-                }),
+            // F01/file-size rework: the OUTPUT_VALIDATION_EXHAUSTED audit event
+            // and 422 response are now built by buildOutputValidationExhaustedResponse
+            // in route-final-response.ts, called from this exact branch.
+            return buildOutputValidationExhaustedResponse({
+                session, isServiceAllowed, serviceIdentity: serviceIdentity ?? null, body, outputValidation, retryState,
+                routedProvider, aiResult, enforcement, guardResult, govEnvelope, routingResult, knowledgeSource,
+                knowledgeInjected, requestedKnowledgeCollectionId, retrievalResult, approvedRequestRecord,
+                aifMemoryReinjection, durableMemoryRoute, providerAttemptLedger,
             });
-
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: 'Generated response failed output validation after retry attempts.',
-                    provider: routedProvider,
-                    model: body.model ?? aiResult.model ?? routedProvider,
-                    enforcement,
-                    guardResult,
-                    outputValidation: {
-                        qualityHint: outputValidation.qualityHint,
-                        issues: outputValidation.issues,
-                        retryAttempts: retryState.attempt,
-                    },
-                    governanceEnvelope: govEnvelope,
-                    policySnapshotId: govEnvelope.policySnapshotId,
-                    governanceEvidenceReceipt: buildEvidenceReceipt({
-                        envelope: govEnvelope,
-                        decision: 'BLOCK',
-                        riskLevel: enforcement.riskGate?.riskLevel,
-                        provider: routedProvider,
-                        model: body.model ?? aiResult.model ?? routedProvider,
-                        routingDecision: routingResult.decision,
-                        knowledgeSource,
-                        knowledgeInjected,
-                        knowledgeCollectionId: requestedKnowledgeCollectionId,
-                        knowledgeChunkCount: retrievalResult.allowedChunkCount,
-                        approvalId: approvedRequestRecord?.id,
-                        validationHint: outputValidation.qualityHint,
-                        aifMemoryReinjection: aifMemoryReinjection.receipt,
-                        durableMemoryRead: durableMemoryRoute.receipt,
-                    }),
-                },
-                { status: 422 },
-            );
         }
 
-        // ── POST-EXECUTION BYPASS DETECTION GUARD ──────────────────────────────
+        // -- POST-EXECUTION BYPASS DETECTION GUARD ------------------------------
         if (aiResult.success && aiResult.output) {
             const bypassCheck = detectBypassInOutput(aiResult.output);
             if (bypassCheck.detected) {
                 const bypassGuardResult = buildOutputBypassGuardResult(guardResult, bypassCheck.matchedPattern);
+                // F01: this terminal path also needs reconciliation evidence.
+                const bypassReconciliation = buildProviderAttemptReconciliation(providerAttemptLedger, routedProvider, body.model ?? 'default');
                 return NextResponse.json(
                     {
                         success: false,
@@ -922,6 +902,7 @@ export async function POST(request: NextRequest) {
                         model: body.model ?? aiResult.model ?? 'unknown',
                         enforcement,
                         guardResult: bypassGuardResult,
+                        providerAttemptReconciliation: bypassReconciliation,
                     },
                     { status: 400 },
                 );
@@ -960,9 +941,24 @@ export async function POST(request: NextRequest) {
             requestedProvider: provider,
             filteredPrompt,
             actorRoleGate,
+            providerAttemptReconciliation: buildProviderAttemptReconciliation(providerAttemptLedger, routedProvider, body.model ?? 'default'),
         });
     } catch (error) {
         console.error('Execute API error:', error);
-        return NextResponse.json({ success: false, error: error instanceof Error ? error.message : 'Internal server error', provider: 'unknown', model: 'unknown' }, { status: 500 });
+        // F01: carry reconciliation evidence here too when admission had
+        // already started; omit it when the error predates admission.
+        const catchReconciliation = providerAttemptLedgerForCatch
+            ? buildProviderAttemptReconciliation(providerAttemptLedgerForCatch, 'unknown', 'unknown')
+            : undefined;
+        return NextResponse.json(
+            {
+                success: false,
+                error: error instanceof Error ? error.message : 'Internal server error',
+                provider: 'unknown',
+                model: 'unknown',
+                ...(catchReconciliation ? { providerAttemptReconciliation: catchReconciliation } : {}),
+            },
+            { status: 500 },
+        );
     }
 }

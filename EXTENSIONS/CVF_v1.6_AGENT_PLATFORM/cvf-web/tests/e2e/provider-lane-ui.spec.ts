@@ -2,26 +2,29 @@ import { test, expect } from '@playwright/test';
 import { seedStorage, login, openSettingsModal } from './utils';
 
 // All tests in this spec use mock mode (NEXT_PUBLIC_CVF_MOCK_AI=1).
-// Badge data comes from static PROVIDER_LANE_EVIDENCE — no live API call needed.
+// Badge data comes from static PROVIDER_LANE_EVIDENCE; no live API call needed.
 // Run under: npx playwright test --config playwright.config.mock.ts tests/e2e/provider-lane-ui.spec.ts
 // L-003 closure: provider lane badge rendering and no-parity-language assertions.
+// Alibaba lane evidence was reconciled to EXPERIMENTAL by EAFR-R4 (commit
+// 55d485166): the target model moved to qwen-flash and historical receipts do
+// not transfer, so only DeepSeek currently carries a Certified badge.
 
 test.beforeEach(async ({ page }) => {
     await seedStorage(page);
 });
 
-test('Settings shows Certified badge for Alibaba', async ({ page }) => {
+test('Settings shows Experimental badge for Alibaba', async ({ page }) => {
     await login(page);
     await openSettingsModal(page);
 
-    // Certified badge must be visible in the Alibaba provider card area
+    // Alibaba's current evidence-based status is Experimental, not Certified.
     await expect(
-        page.getByText('Certified').first()
+        page.getByText('Experimental').first()
     ).toBeVisible({ timeout: 20_000 });
 
-    // 3/3 PASS evidence note must be present
+    // Fresh live proof pending note must be present for the Alibaba lane
     await expect(
-        page.getByText(/3\/3\s*PASS/i).first()
+        page.getByText(/Fresh live proof pending/i).first()
     ).toBeVisible({ timeout: 5_000 });
 
     // No parity language in provider section
@@ -34,10 +37,10 @@ test('Settings shows Certified badge for DeepSeek', async ({ page }) => {
     await login(page);
     await openSettingsModal(page);
 
-    // Both Alibaba and DeepSeek should have Certified — get all occurrences
+    // Only DeepSeek currently carries Certified evidence: exactly one badge.
     const certifiedBadges = page.getByText('Certified');
     const count = await certifiedBadges.count();
-    expect(count).toBeGreaterThanOrEqual(2);
+    expect(count).toBeGreaterThanOrEqual(1);
 
     // DeepSeek row visible
     await expect(
@@ -49,7 +52,7 @@ test('ProviderSwitcher shows at least one lane badge', async ({ page }) => {
     await login(page);
     await openSettingsModal(page);
 
-    // Open ProviderSwitcher — look for the button that triggers provider switching
+    // Open ProviderSwitcher and look for the button that triggers provider switching
     const switcherBtn = page.locator(
         'button[aria-label*="provider"], button[title*="provider"], [data-testid="provider-switcher"]'
     ).first();

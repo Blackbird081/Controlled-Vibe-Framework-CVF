@@ -30,6 +30,13 @@ import sys
 from dataclasses import dataclass, field
 
 from build_worker_return_skeleton_scaffold import build_worker_return_skeleton
+from review_convergence_scaffold import (
+    add_arguments as add_convergence_arguments,
+    build_block as build_convergence_block,
+    build_provenance_block,
+    kwargs as convergence_kwargs,
+    validate as validate_convergence,
+)
 
 PACKET_KINDS = (
     "generic-worker-dispatch",
@@ -141,6 +148,14 @@ class ScaffoldArgs:
     commit_mode: str
     dependencies: list[str] = field(default_factory=list)
     include_worker_return_skeleton: bool = False
+    dispatch_kind: str = "INITIAL"
+    dispatch_surface: str = "INTERNAL_AGENT"
+    review_round_count: int = 0
+    root_cause_cluster_id: str = "NOT_APPLICABLE_INITIAL_DISPATCH"
+    prior_finding_set_digest: str = "NOT_APPLICABLE_INITIAL_DISPATCH"
+    cumulative_external_invocation_count: int = 0
+    external_invocation_ceiling: int = 0
+    new_independent_critical_evidence: str = "NONE"
 
 
 def detect_triggers(args: ScaffoldArgs) -> dict[str, bool]:
@@ -361,33 +376,6 @@ def _evidence_reuse_stub() -> str:
         "Author reminder: keep these scalar field lines. The dispatch-quality "
         "checker reads them with a field-line parser and does not treat table "
         "cells as substitutes."
-    )
-
-
-def _scaffold_provenance_block(args: ScaffoldArgs) -> str:
-    helper_cmd = (
-        f"python governance/compat/build_dispatch_packet_scaffold.py"
-        f" --packet-kind {args.packet_kind}"
-        f" --batch-id {args.batch_id}"
-        f' --title "{args.title}"'
-        f" --date {args.date}"
-        f" --base {args.base}"
-        f" --commit-mode {args.commit_mode}"
-    )
-    if args.include_worker_return_skeleton:
-        helper_cmd += " --include-worker-return-skeleton"
-    helper_cmd += " --stdout"
-    return (
-        "## Scaffold Provenance Block\n\n"
-        "| Field | Value |\n"
-        "| --- | --- |\n"
-        f"| scaffoldHelperCommand | `{helper_cmd}` |\n"
-        f"| generatedProfile | {args.packet_kind} plus {args.commit_mode} no-commit worker profile |\n"
-        "| generatedSkeletonStatus | USED_AS_STARTING_POINT |\n"
-        "| manualEditsAfterScaffold | FILL_ME (describe manual edits made after scaffold generation) |\n"
-        "| checkerReadAheadConfirmation | FILL_ME (list `governance/compat/check_*.py` paths read before authoring) |\n"
-        "| docOnlyNewFields | FILL_ME (list new doc-only field names introduced by this dispatch) |\n"
-        "| claimBoundary | Dispatch authoring provenance only; no runtime/provider/live/public/Web/MCP/model-router behavior claim. |\n"
     )
 
 
@@ -616,7 +604,7 @@ def build_gc018_baseline(args: ScaffoldArgs, active: dict[str, bool]) -> str:
         "sentences.",
         "",
     ]
-    lines.append(_scaffold_provenance_block(args))
+    lines.append(build_provenance_block(args))
     lines.append("")
     if active.get("held_dependency"):
         lines.append(_dependency_release_block(args.dependencies))
@@ -671,6 +659,8 @@ def build_work_order(args: ScaffoldArgs, active: dict[str, bool]) -> str:
         "",
         "Memory class: governed-worker-dispatch",
         "",
+        "docType: work_order",
+        "",
         "Status: HOLD_PENDING_OPERATOR_DECISION",
         "",
         f"Batch ID: {args.batch_id}",
@@ -714,7 +704,9 @@ def build_work_order(args: ScaffoldArgs, active: dict[str, bool]) -> str:
         "FILL_ME: state the mission prompt for this work order.",
         "",
     ]
-    lines.append(_scaffold_provenance_block(args))
+    lines.append(build_provenance_block(args))
+    lines.append("")
+    lines.append(build_convergence_block(args))
     lines.append("")
     if active.get("held_dependency"):
         lines.append(_dependency_release_block(args.dependencies))
@@ -800,6 +792,7 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser.add_argument("--dependency", action="append", default=[], dest="dependencies")
     parser.add_argument("--stdout", action="store_true")
     parser.add_argument("--include-worker-return-skeleton", action="store_true")
+    add_convergence_arguments(parser)
     parser.add_argument("--explain-trigger-map", action="store_true")
     return parser.parse_args(argv)
 
@@ -836,6 +829,11 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 2
 
+    convergence_error = validate_convergence(args)
+    if convergence_error:
+        print(f"ERROR: {convergence_error}", file=sys.stderr)
+        return 2
+
     scaffold_args = ScaffoldArgs(
         packet_kind=args.packet_kind,
         batch_id=args.batch_id,
@@ -845,6 +843,7 @@ def main(argv: list[str] | None = None) -> int:
         commit_mode=args.commit_mode,
         dependencies=list(args.dependencies),
         include_worker_return_skeleton=args.include_worker_return_skeleton,
+        **convergence_kwargs(args),
     )
     active = detect_triggers(scaffold_args)
     baseline_md = build_gc018_baseline(scaffold_args, active)

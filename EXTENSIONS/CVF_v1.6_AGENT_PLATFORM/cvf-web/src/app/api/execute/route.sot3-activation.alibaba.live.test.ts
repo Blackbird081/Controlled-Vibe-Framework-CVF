@@ -1,7 +1,7 @@
 /**
  * SOT3-ACT-A3 - Real Provider Approved Context Live Proof
  *
- * Calls the real Alibaba DashScope API (qwen3.7-flash) through the actual
+ * Calls the real Alibaba DashScope API (qwen-flash) through the actual
  * `/api/execute` route to prove that SOT3 Flow-approved knowledge context in
  * `CVF_SOT3_KNOWLEDGE_ACTIVATION_MODE=ENFORCE` reaches the downstream
  * provider system prompt. Correlates the live result with the durable A2
@@ -18,7 +18,8 @@
  * store, `executeAI`, and the real DashScope network response are never
  * mocked.
  *
- * Skipped unless the governed Python runner supplies a valid, one-use permit.
+ * Skipped unless the governed Python runner supplies a valid, one-use permit;
+ * the shared setup independently requires a bounded provider-execution grant.
  * Run with: python scripts/run_cvf_sot3_a3_live_proof.py
  *
  * Authorization: docs/work_orders/CVF_AGENT_WORK_ORDER_SOT3_ACT_A3_REAL_PROVIDER_APPROVED_CONTEXT_PROOF_2026-07-13.md
@@ -36,6 +37,12 @@ import { resolveAlibabaApiKey, resolveAlibabaApiKeySourceName } from '@/lib/alib
 import { knowledgeStore } from '@/lib/knowledge-store';
 import type { Sot3KnowledgeSourceMetadata } from '@/lib/knowledge-store';
 import { Sot3ActivationEvidenceStore } from '@/lib/sot3-activation-evidence-store';
+import {
+  projectSot3A3ProviderDiagnostic,
+  runSot3A3FailureBoundary,
+  writeObservationAtomic,
+  type Sot3A3LiveObservation,
+} from '@/lib/sot3-a3-blocked-observation';
 
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
@@ -157,55 +164,6 @@ function buildProvenance(sourceId: string, content: string): Sot3KnowledgeSource
 }
 
 /**
- * Interface for the outbound-observation record written to the receipt.
- * Every field is a hash, boolean, length, ID, or timing value  -  never raw
- * prompt/body/key content.
- */
-export interface Sot3A3LiveObservation {
-  overall: 'PASS' | 'BLOCKED';
-  provider: string;
-  model: string;
-  keyAliasUsed: string | null;
-  httpStatus: number | null;
-  success: boolean;
-  latencyMs: number | null;
-  observedCallCount: number;
-  providerRequestObserved: boolean;
-  approvedContextHash: string | null;
-  providerSystemPromptHash: string | null;
-  approvedContextIncluded: boolean;
-  approvedContextLength: number | null;
-  providerSystemPromptLength: number | null;
-  governanceReceiptId: string | null;
-  envelopeId: string | null;
-  sot3RecordId: string | null;
-  sot3IntegrityHash: string | null;
-  sot3RequestId: string | null;
-  traceCount: number | null;
-  packetIds: string[];
-  kernelDecisionIds: string[];
-  truthReceiptIds: string[];
-  truthReferenceIds: string[];
-  flowPackageIds: string[];
-  outputLength: number | null;
-  rawKeyPersisted: false;
-  rawProviderBodyPersisted: false;
-  rawOutputPersisted: false;
-  fullPromptPersisted: false;
-  diagnostic: {
-    stage: string;
-    class: string;
-    retryable: boolean;
-    userAction: string;
-    safeMessage: string;
-    provider?: string;
-    model?: string;
-    httpStatus?: number;
-    latencyMs?: number;
-  } | null;
-}
-
-/**
  * Global observation slot the Python runner reads via a written JSON side
  * file after the vitest process exits. Kept as a module-level mutable
  * object so a single `it()` can populate it and the runner script can pick
@@ -217,7 +175,7 @@ declare global {
 }
 
 describe.skipIf(!RUNNER_PERMIT.authorized || !ALIBABA_API_KEY)(
-  '/api/execute SOT3-ACT-A3 real-provider approved-context live proof  -  Alibaba qwen3.7-flash',
+  '/api/execute SOT3-ACT-A3 real-provider approved-context live proof  -  Alibaba qwen-flash',
   () => {
     const originalEnv = { ...process.env };
     const originalFetch = globalThis.fetch;
@@ -228,6 +186,7 @@ describe.skipIf(!RUNNER_PERMIT.authorized || !ALIBABA_API_KEY)(
     let observedRequestBodySystemPrompt: string | undefined;
     let observedHttpStatus: number | null = null;
     let observedLatencyMs: number | null = null;
+    let providerFailureDiagnostic: ReturnType<typeof projectSot3A3ProviderDiagnostic> = null;
 
     const SOURCE_ID = 'sot3-act-a3-live-source';
     const APPROVED_CONTENT = 'SOT3-ACT-A3 approved controlled knowledge chunk for live proof.';
@@ -247,6 +206,7 @@ describe.skipIf(!RUNNER_PERMIT.authorized || !ALIBABA_API_KEY)(
       observedRequestBodySystemPrompt = undefined;
       observedHttpStatus = null;
       observedLatencyMs = null;
+      providerFailureDiagnostic = null;
 
       // Requirement 3: seed exactly one in-scope collection containing one
       // safe controlled chunk with valid SOT3 provenance.
@@ -321,7 +281,7 @@ describe.skipIf(!RUNNER_PERMIT.authorized || !ALIBABA_API_KEY)(
               batchId: 'SOT3-ACT-A3R',
               observedCallCount: observedDashScopeCallCount,
               provider: 'alibaba',
-              model: 'qwen3.7-flash',
+              model: 'qwen-flash',
             }), 'utf8');
           }
           try {
@@ -351,110 +311,146 @@ describe.skipIf(!RUNNER_PERMIT.authorized || !ALIBABA_API_KEY)(
     });
 
     it(
-      'ENFORCE mode injects only Flow-approved context into exactly one real Alibaba qwen3.7-flash call',
+      'ENFORCE mode injects only Flow-approved context into exactly one real Alibaba qwen-flash call',
       async () => {
-        // Requirement 7: call the real POST route once with provider
-        // alibaba and model qwen3.7-flash.
-        const response = await POST(
-          new Request('http://localhost/api/execute', {
-            method: 'POST',
-            body: JSON.stringify({
-              templateName: 'Data Quality Review',
-              intent: 'Summarize the governance proof knowledge chunk',
-              inputs: {
-                topic: 'sot3 act a3 live proof controlled scenario',
-              },
-              provider: 'alibaba',
-              model: 'qwen3.7-flash',
-              knowledgeCollectionId: 'sot3-act-a3-collection',
-            }),
-          }) as never,
-        );
-
-        const body = await response.json() as Record<string, unknown>;
-
-        // Requirement 8: assert success, provider/model, one governance
-        // receipt, knowledge injection, and exactly one provider call.
-        expect(body.success).toBe(true);
-        expect(body.provider).toBe('alibaba');
-        expect(body.model).toBe('qwen3.7-flash');
-        expect(body.governanceEvidenceReceipt).toBeTruthy();
-        const knowledgeInjection = body.knowledgeInjection as { injected?: boolean } | undefined;
-        expect(knowledgeInjection?.injected).toBe(true);
-        expect(observedDashScopeCallCount).toBe(1);
-
-        const governanceReceipt = body.governanceEvidenceReceipt as { receiptId?: string; envelopeId?: string } | undefined;
-
-        // Requirement 9: read the A2 record and audit events from fresh
-        // readers; prove one full acknowledged trace and collect owner
-        // identifiers.
-        const freshEvidenceStore = new Sot3ActivationEvidenceStore(sot3EvidencePath);
-        const persistedRecords = freshEvidenceStore.list();
-        expect(persistedRecords).toHaveLength(1);
-        const sot3Record = persistedRecords[0];
-        expect(sot3Record.terminalOutcome).toBe('APPROVED');
-        expect(sot3Record.traces).toHaveLength(1);
-        const trace = sot3Record.traces[0];
-        expect(trace.terminalOutcome).toBe('APPROVED');
-        expect(trace.flowPackage?.acknowledgement_state).toBeTruthy();
-
-        const auditEvents = await readAuditEvents();
-        const activationEvaluatedEvent = auditEvents.find((event) => event.eventType === 'SOT3_KNOWLEDGE_ACTIVATION_EVALUATED');
-        const evidencePersistedEvent = auditEvents.find((event) => event.eventType === 'SOT3_ACTIVATION_EVIDENCE_PERSISTED');
-        expect(activationEvaluatedEvent).toBeTruthy();
-        expect(evidencePersistedEvent).toBeTruthy();
-        expect((evidencePersistedEvent?.payload as { diagnosticClass?: string } | undefined)?.diagnosticClass).toBe('PERSISTED');
-
-        // Requirement 10: verify the observed provider system prompt
-        // contains the approved context via hash comparison, never raw
-        // content, then write only hashes/booleans/lengths/IDs/timing to
-        // the explicit receipt path (handled by the Python runner reading
-        // this global observation object).
-        const approvedContextHash = sha256Hex(APPROVED_CONTENT);
-        const providerSystemPromptHash = observedRequestBodySystemPrompt ? sha256Hex(observedRequestBodySystemPrompt) : null;
-        const approvedContextIncluded = Boolean(
-          observedRequestBodySystemPrompt && observedRequestBodySystemPrompt.includes(APPROVED_CONTENT),
-        );
-        expect(approvedContextIncluded).toBe(true);
-
-        globalThis.__CVF_SOT3_A3_OBSERVATION__ = {
-          overall: 'PASS',
-          provider: 'alibaba',
-          model: 'qwen3.7-flash',
-          keyAliasUsed: ALIBABA_KEY_ALIAS,
-          httpStatus: observedHttpStatus,
-          success: true,
-          latencyMs: observedLatencyMs,
-          observedCallCount: observedDashScopeCallCount,
-          providerRequestObserved: observedRequestBodySystemPrompt !== undefined,
-          approvedContextHash,
-          providerSystemPromptHash,
-          approvedContextIncluded,
-          approvedContextLength: APPROVED_CONTENT.length,
-          providerSystemPromptLength: observedRequestBodySystemPrompt?.length ?? null,
-          governanceReceiptId: governanceReceipt?.receiptId ?? null,
-          envelopeId: governanceReceipt?.envelopeId ?? null,
-          sot3RecordId: sot3Record.recordId,
-          sot3IntegrityHash: sot3Record.integrityHash,
-          sot3RequestId: sot3Record.requestId,
-          traceCount: sot3Record.traces.length,
-          packetIds: sot3Record.traces.map((item) => item.refineryPacketId).filter((id): id is string => Boolean(id)),
-          kernelDecisionIds: sot3Record.traces.map((item) => item.kernelDecision?.decision_id).filter((id): id is string => Boolean(id)),
-          truthReceiptIds: sot3Record.traces.map((item) => item.truthReceipt?.receipt_id).filter((id): id is string => Boolean(id)),
-          truthReferenceIds: sot3Record.traces.map((item) => item.truthReference?.reference_id).filter((id): id is string => Boolean(id)),
-          flowPackageIds: sot3Record.traces.map((item) => item.flowPackage?.package_id).filter((id): id is string => Boolean(id)),
-          outputLength: typeof body.output === 'string' ? body.output.length : null,
-          rawKeyPersisted: false,
-          rawProviderBodyPersisted: false,
-          rawOutputPersisted: false,
-          fullPromptPersisted: false,
-          diagnostic: null,
-        };
-
         const observationPath = process.env.CVF_SOT3_A3_OBSERVATION_OUTPUT_PATH;
-        if (observationPath) {
-          await writeFile(observationPath, JSON.stringify(globalThis.__CVF_SOT3_A3_OBSERVATION__, null, 2), 'utf8');
-        }
+
+        // Persistence boundary: the entire body below runs inside the
+        // shared `runSot3A3FailureBoundary` executor so that ANY thrown
+        // error after permit consumption -- including a failed expect()
+        // assertion anywhere below, not only a network/provider error --
+        // reaches its catch and persists a structured BLOCKED observation
+        // before re-throwing. This is the exact same executor
+        // `sot3-a3-blocked-observation.test.ts` exercises directly, so a
+        // future edit that removes or bypasses this call site changes
+        // production behavior in a way its own dedicated tests would catch.
+        // This does not change PASS behavior: on the success path the
+        // executor never enters its catch, and the PASS observation below
+        // is unchanged except that its write is now atomic.
+        await runSot3A3FailureBoundary(
+          async () => {
+            // Requirement 7: call the real POST route once with provider
+            // alibaba and model qwen-flash.
+            const response = await POST(
+              new Request('http://localhost/api/execute', {
+                method: 'POST',
+                body: JSON.stringify({
+                  templateName: 'Data Quality Review',
+                  intent: 'Summarize the governance proof knowledge chunk',
+                  inputs: {
+                    topic: 'sot3 act a3 live proof controlled scenario',
+                  },
+                  provider: 'alibaba',
+                  model: 'qwen-flash',
+                  knowledgeCollectionId: 'sot3-act-a3-collection',
+                }),
+              }) as never,
+            );
+
+            const body = await response.json() as Record<string, unknown>;
+            // The route already emits a governed, secret-safe diagnostic on
+            // provider failure. Project only its closed class through CVF's
+            // canonical diagnostic table before any assertion can throw.
+            providerFailureDiagnostic = projectSot3A3ProviderDiagnostic(body.diagnostic);
+
+            // Requirement 8: assert success, provider/model, one governance
+            // receipt, knowledge injection, and exactly one provider call.
+            expect(body.success).toBe(true);
+            expect(body.provider).toBe('alibaba');
+            expect(body.model).toBe('qwen-flash');
+            expect(body.governanceEvidenceReceipt).toBeTruthy();
+            const knowledgeInjection = body.knowledgeInjection as { injected?: boolean } | undefined;
+            expect(knowledgeInjection?.injected).toBe(true);
+            expect(observedDashScopeCallCount).toBe(1);
+
+            const governanceReceipt = body.governanceEvidenceReceipt as { receiptId?: string; envelopeId?: string } | undefined;
+
+            // Requirement 9: read the A2 record and audit events from fresh
+            // readers; prove one full acknowledged trace and collect owner
+            // identifiers.
+            const freshEvidenceStore = new Sot3ActivationEvidenceStore(sot3EvidencePath);
+            const persistedRecords = freshEvidenceStore.list();
+            expect(persistedRecords).toHaveLength(1);
+            const sot3Record = persistedRecords[0];
+            expect(sot3Record.terminalOutcome).toBe('APPROVED');
+            expect(sot3Record.traces).toHaveLength(1);
+            const trace = sot3Record.traces[0];
+            expect(trace.terminalOutcome).toBe('APPROVED');
+            expect(trace.flowPackage?.acknowledgement_state).toBeTruthy();
+
+            const auditEvents = await readAuditEvents();
+            const activationEvaluatedEvent = auditEvents.find((event) => event.eventType === 'SOT3_KNOWLEDGE_ACTIVATION_EVALUATED');
+            const evidencePersistedEvent = auditEvents.find((event) => event.eventType === 'SOT3_ACTIVATION_EVIDENCE_PERSISTED');
+            expect(activationEvaluatedEvent).toBeTruthy();
+            expect(evidencePersistedEvent).toBeTruthy();
+            expect((evidencePersistedEvent?.payload as { diagnosticClass?: string } | undefined)?.diagnosticClass).toBe('PERSISTED');
+
+            // Requirement 10: verify the observed provider system prompt
+            // contains the approved context via hash comparison, never raw
+            // content, then write only hashes/booleans/lengths/IDs/timing to
+            // the explicit receipt path (handled by the Python runner reading
+            // this global observation object).
+            const approvedContextHash = sha256Hex(APPROVED_CONTENT);
+            const providerSystemPromptHash = observedRequestBodySystemPrompt ? sha256Hex(observedRequestBodySystemPrompt) : null;
+            const approvedContextIncluded = Boolean(
+              observedRequestBodySystemPrompt && observedRequestBodySystemPrompt.includes(APPROVED_CONTENT),
+            );
+            expect(approvedContextIncluded).toBe(true);
+
+            globalThis.__CVF_SOT3_A3_OBSERVATION__ = {
+              overall: 'PASS',
+              provider: 'alibaba',
+              model: 'qwen-flash',
+              keyAliasUsed: ALIBABA_KEY_ALIAS,
+              httpStatus: observedHttpStatus,
+              success: true,
+              latencyMs: observedLatencyMs,
+              observedCallCount: observedDashScopeCallCount,
+              providerRequestObserved: observedRequestBodySystemPrompt !== undefined,
+              approvedContextHash,
+              providerSystemPromptHash,
+              approvedContextIncluded,
+              approvedContextLength: APPROVED_CONTENT.length,
+              providerSystemPromptLength: observedRequestBodySystemPrompt?.length ?? null,
+              governanceReceiptId: governanceReceipt?.receiptId ?? null,
+              envelopeId: governanceReceipt?.envelopeId ?? null,
+              sot3RecordId: sot3Record.recordId,
+              sot3IntegrityHash: sot3Record.integrityHash,
+              sot3RequestId: sot3Record.requestId,
+              traceCount: sot3Record.traces.length,
+              packetIds: sot3Record.traces.map((item) => item.refineryPacketId).filter((id): id is string => Boolean(id)),
+              kernelDecisionIds: sot3Record.traces.map((item) => item.kernelDecision?.decision_id).filter((id): id is string => Boolean(id)),
+              truthReceiptIds: sot3Record.traces.map((item) => item.truthReceipt?.receipt_id).filter((id): id is string => Boolean(id)),
+              truthReferenceIds: sot3Record.traces.map((item) => item.truthReference?.reference_id).filter((id): id is string => Boolean(id)),
+              flowPackageIds: sot3Record.traces.map((item) => item.flowPackage?.package_id).filter((id): id is string => Boolean(id)),
+              outputLength: typeof body.output === 'string' ? body.output.length : null,
+              rawKeyPersisted: false,
+              rawProviderBodyPersisted: false,
+              rawOutputPersisted: false,
+              fullPromptPersisted: false,
+              diagnostic: null,
+            };
+
+            if (observationPath) {
+              await writeObservationAtomic(observationPath, globalThis.__CVF_SOT3_A3_OBSERVATION__);
+            }
+          },
+          observationPath,
+          // Called only at throw-time by the executor, so it always reads
+          // whatever the fetch observer had actually counted at the moment
+          // of failure -- never a stale snapshot. Never issues a second
+          // provider request: this is a pure read of already-set in-memory
+          // counters, never a network call.
+          () => ({
+            provider: 'alibaba',
+            model: 'qwen-flash',
+            keyAliasUsed: ALIBABA_KEY_ALIAS,
+            httpStatus: observedHttpStatus,
+            latencyMs: observedLatencyMs,
+            observedCallCount: observedDashScopeCallCount,
+            diagnostic: providerFailureDiagnostic,
+          }),
+        );
       },
       60_000,
     );

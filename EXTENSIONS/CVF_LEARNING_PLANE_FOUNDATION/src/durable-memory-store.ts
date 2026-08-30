@@ -25,6 +25,7 @@ export interface DurableMemoryRecord {
   tier: DurableMemoryTier;
   scope: string;
   actorId: string;
+  originPrincipalId?: string;
   summary: string;
   lifecycleState: DurableMemoryLifecycleState;
   provenanceScore: number;
@@ -54,6 +55,7 @@ export interface DurableMemoryWriteInput {
   tier?: string;
   scope: string;
   actorId: string;
+  originPrincipalId?: string;
   actorRole: RuntimeMemoryActorRole;
   summary: string;
   lifecycleState?: DurableMemoryLifecycleState;
@@ -68,6 +70,7 @@ export interface DurableMemoryWriteInput {
 export interface DurableMemoryReadInput {
   scope: string;
   actorId: string;
+  originPrincipalId?: string;
   actorRole: RuntimeMemoryActorRole;
   tier?: string;
   query?: string;
@@ -123,6 +126,7 @@ function isDurableMemoryRecord(value: unknown): value is DurableMemoryRecord {
     (record.tier === "skill" || record.tier === "long-term") &&
     typeof record.scope === "string" &&
     typeof record.actorId === "string" &&
+    (record.originPrincipalId === undefined || typeof record.originPrincipalId === "string") &&
     typeof record.summary === "string" &&
     typeof record.lifecycleState === "string" &&
     ALLOWED_LIFECYCLE_STATES.has(record.lifecycleState) &&
@@ -282,6 +286,7 @@ abstract class BaseDurableMemoryStore implements DurableMemoryStore {
       tier,
       scope,
       actorId: input.actorId,
+      originPrincipalId: input.originPrincipalId,
       summary,
       lifecycleState,
       provenanceScore,
@@ -361,6 +366,10 @@ abstract class BaseDurableMemoryStore implements DurableMemoryStore {
     const selected = this.list()
       .filter((record) => {
         if (record.tier !== tier) return false;
+        if (record.originPrincipalId !== undefined && record.originPrincipalId !== input.originPrincipalId) {
+          excluded.push({ id: record.id, reason: "origin_principal_mismatch" });
+          return false;
+        }
         if (record.scope !== scope) {
           excluded.push({ id: record.id, reason: "out_of_scope" });
           return false;

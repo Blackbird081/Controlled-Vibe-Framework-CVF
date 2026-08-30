@@ -138,6 +138,18 @@ export {
   bindStepReceipts,
 } from './contracts/receipt-binding.contract';
 
+export {
+  ApprovalExecutionBridge,
+  createApprovalExecutionBridge,
+} from './runtime/approval-execution-bridge';
+export type {
+  ApprovalExecutionBinding,
+  ApprovalExecutionBridgeDependencies,
+  ApprovalSettlement,
+  ApprovalSettlementDecision,
+  PendingExecutionApproval,
+} from './runtime/approval-execution-bridge';
+
 // Factory
 import type { GuardRuntimeConfig } from './types';
 import { GuardRuntimeEngine } from './engine';

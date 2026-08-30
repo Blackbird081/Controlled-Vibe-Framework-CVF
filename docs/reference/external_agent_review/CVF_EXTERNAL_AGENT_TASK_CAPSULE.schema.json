@@ -8,10 +8,26 @@
   "allOf": [
     {
       "if": {
-        "properties": {"task": {"properties": {"workingMode": {"enum": ["BUILD_NEW_REPOSITORY", "EXTEND_SUPPLIED_REPOSITORY"]}}}}
+        "properties": {"task": {"properties": {"workingMode": {"enum": ["BUILD_NEW_REPOSITORY", "EXTEND_SUPPLIED_REPOSITORY", "DETACHED_IMPLEMENTATION_PROPOSAL"]}}}}
       },
       "then": {
         "required": ["protectedPaths", "ownerMap", "invariants", "verification"]
+      }
+    },
+    {
+      "if": {
+        "properties": {"task": {"properties": {"workingMode": {"const": "DETACHED_IMPLEMENTATION_PROPOSAL"}}}}
+      },
+      "then": {
+        "properties": {
+          "task": {
+            "properties": {"expectedReturnStatus": {"const": "EXTERNAL_RETURN_READY_FOR_LOCAL_VERIFICATION"}},
+            "required": ["executionClass"]
+          }
+        }
+      },
+      "else": {
+        "properties": {"task": {"properties": {"expectedReturnStatus": {"const": "COMPLETE_PENDING_LOCAL_RECONCILIATION"}}}}
       }
     }
   ],
@@ -54,8 +70,9 @@
         "id": {"type": "string", "minLength": 1},
         "title": {"type": "string", "minLength": 1},
         "objective": {"type": "string", "minLength": 1},
-        "workingMode": {"enum": ["REVIEW_ONLY", "DESIGN_ONLY", "BUILD_NEW_REPOSITORY", "EXTEND_SUPPLIED_REPOSITORY", "SOURCE_PACK_PREPARATION"]},
-        "expectedReturnStatus": {"const": "COMPLETE_PENDING_LOCAL_RECONCILIATION"},
+        "workingMode": {"enum": ["REVIEW_ONLY", "DESIGN_ONLY", "BUILD_NEW_REPOSITORY", "EXTEND_SUPPLIED_REPOSITORY", "SOURCE_PACK_PREPARATION", "DETACHED_IMPLEMENTATION_PROPOSAL"]},
+        "expectedReturnStatus": {"enum": ["COMPLETE_PENDING_LOCAL_RECONCILIATION", "EXTERNAL_RETURN_READY_FOR_LOCAL_VERIFICATION"]},
+        "executionClass": {"enum": ["SHARED_WORKSPACE_DELEGATED_WORKER", "DETACHED_EXTERNAL_AGENT"]},
         "outputRoot": {"type": "string", "minLength": 1},
         "outputRootPolicy": {
           "type": "object",

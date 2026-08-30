@@ -19,6 +19,10 @@ import type {
 import { GuardRuntimeEngine } from '../engine';
 import type { SkillDefinition } from './skill-registry';
 import { createHandoffCheckpoint } from './agent-handoff';
+import {
+  type ApprovalExecutionBinding,
+  ApprovalExecutionBridge,
+} from './approval-execution-bridge';
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -48,6 +52,8 @@ export interface ExecutionApprovalCheckpoint {
   requiredBy: string;
   reason: string;
   createdAt: string;
+  bindingHash?: string;
+  expiresAt?: string;
 }
 
 export interface ExecutionGovernanceState {
@@ -108,6 +114,15 @@ export interface RuntimeConfig {
   metadata?: Record<string, unknown>;
   /** Explicit authority evidence required for mutating BUILD evaluation. */
   buildAuthority?: BuildAuthorityEvidence;
+  /** Stable execution identity used to bind approvals to the exact session. */
+  sessionId?: string;
+  /** Execution working directory included in the approval binding. */
+  cwd?: string;
+  /** Explicit non-secret environment identity included in the approval binding. */
+  environment?: Record<string, string>;
+  /** Optional exactly-once settlement bridge used by runAwaitingApproval. */
+  approvalBridge?: ApprovalExecutionBridge;
+  approvalTimeoutMs?: number;
 }
 
 // ─── Execution Provider Interface ─────────────────────────────────────
@@ -375,6 +390,47 @@ export class AgentExecutionRuntime {
     return execResult;
   }
 
+  /**
+   * Governed execution entry point that waits for a real approval settlement.
+   * Approval is bound to command meaning, cwd, environment, actor, and session;
+   * any change while pending fails closed before the provider can run.
+   */
+  async runAwaitingApproval(
+    userInput: string,
+    options: { skill?: SkillDefinition; signal?: AbortSignal } = {},
+  ): Promise<ExecutionResult> {
+    const intent = this.parseIntent(userInput);
+    const guardResult = this.preCheck(intent, options.skill);
+    if (guardResult.finalDecision !== 'ESCALATE' || this.getControlMode() !== 'governed') {
+      return this.execute(intent, guardResult);
+    }
+    const bridge = this.config.approvalBridge;
+    if (!bridge) return this.execute(intent, guardResult);
+
+    const initialBinding = this.buildApprovalBinding(intent);
+    const pending = bridge.request(initialBinding, {
+      timeoutMs: this.config.approvalTimeoutMs,
+      signal: options.signal,
+    });
+    const settlement = await pending.result;
+    const currentBindingHash = bridge.hashBinding(this.buildApprovalBinding(intent));
+    if (settlement.decision !== 'approved' || settlement.bindingHash !== currentBindingHash) {
+      return this.approvalBlockedResult(
+        guardResult,
+        settlement.bindingHash !== currentBindingHash ? 'approval_execution_binding_changed' : settlement.reason,
+        settlement,
+      );
+    }
+
+    const result = await this.execute(intent, { ...guardResult, finalDecision: 'ALLOW' });
+    result.metadata = {
+      ...result.metadata,
+      approvalSettlement: settlement,
+      approvalBindingHash: currentBindingHash,
+    };
+    return result;
+  }
+
   // ─── Getters ──────────────────────────────────────────────────────
 
   getExecutionLog(): readonly ExecutionResult[] {
@@ -394,6 +450,37 @@ export class AgentExecutionRuntime {
       return this.config.controlMode;
     }
     return this.config.metadata?.controlMode === 'governed' ? 'governed' : 'standard';
+  }
+
+  private buildApprovalBinding(intent: ParsedIntent): ApprovalExecutionBinding {
+    return {
+      command: intent.action,
+      parameters: intent.parameters,
+      cwd: this.config.cwd ?? '',
+      environment: { ...(this.config.environment ?? {}) },
+      actorId: this.config.agentId,
+      sessionId: this.config.sessionId ?? '',
+    };
+  }
+
+  private approvalBlockedResult(
+    guardResult: GuardPipelineResult,
+    reason: string,
+    settlement: { requestId: string; decision: string; bindingHash: string },
+  ): ExecutionResult {
+    const now = new Date().toISOString();
+    const result: ExecutionResult = {
+      requestId: guardResult.requestId,
+      status: 'BLOCKED',
+      error: `Approval settlement blocked execution: ${reason}`,
+      startedAt: now,
+      completedAt: now,
+      durationMs: 0,
+      guardDecision: guardResult,
+      metadata: { approvalSettlement: settlement },
+    };
+    this.executionLog.push(result);
+    return result;
   }
 
   private createArtifact(

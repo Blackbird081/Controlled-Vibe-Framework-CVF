@@ -1,4 +1,4 @@
-import type { GovernanceEvidenceReceipt, GovernanceTraceEntry, GovernanceTraceStage, RuntimeTelemetryReceipt } from '@/lib/ai';
+import type { GovernanceEvidenceReceipt, GovernanceTraceEntry, GovernanceTraceStage, RuntimeTelemetryReceipt, ProviderAttemptReconciliationReceipt } from '@/lib/ai';
 import { generatePolicySnapshotId } from '@/lib/policy-snapshot-registry';
 import type { AifMemoryReinjectionReceipt } from '@/lib/aif-memory-reinjection';
 import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation/web-runtime';
@@ -70,6 +70,7 @@ export interface BuildGovernanceEvidenceReceiptInput {
     durableMemoryWriteReceipt?: DurableMemoryReceipt;
     governanceTrace?: GovernanceTraceEntry[];
     runtimeTelemetry?: Omit<RuntimeTelemetryReceipt, 'governanceTraceEntryCount'>;
+    providerAttemptReconciliation?: ProviderAttemptReconciliationReceipt;
     receiptIntegrity?: {
         signingSecret?: string | null;
         externalAnchorId?: string | null;
@@ -271,6 +272,7 @@ export function buildEvidenceReceipt(
         durableMemoryWriteReceipt: input.durableMemoryWriteReceipt,
         governanceTrace,
         runtimeTelemetry,
+        providerAttemptReconciliation: input.providerAttemptReconciliation,
         generatedAt: input.envelope.requestTimestamp,
     };
     const receiptIntegrity = input.receiptIntegrity

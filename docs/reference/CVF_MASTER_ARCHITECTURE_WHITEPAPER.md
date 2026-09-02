@@ -28,6 +28,13 @@ Memory class: POINTER_RECORD
 
 ## 1. Mô hình Thực thi Chính thức — CURRENT BASELINE (Đã xác minh bằng Code)
 
+> **Lifecycle/runtime distinction:** CVF's canonical governed lifecycle is
+> `INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE`. The code
+> excerpt below is the current five-value runtime phase projection. `SPEC` and
+> `WORK ORDER` are governed contract and authority boundaries between runtime
+> `DESIGN` and `BUILD`; they are not claimed as additional values in this
+> frozen runtime enum.
+
 ```
 INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 ```
@@ -359,9 +366,10 @@ The external-asset governance lane (semantic policy intent, intake profile, plan
 ### 7.1 Current Frozen Invariants
 > Những điều **đã đúng** trong codebase và governance hiện tại. Vi phạm = vi phạm kiến trúc hiện hành.
 
-1. **Canonical 5-Phase Loop**
+1. **Canonical Runtime 5-Phase Projection**
    - `INTAKE → DESIGN → BUILD → REVIEW → FREEZE`
    - Source: `CVF_GUARD_CONTRACT/src/types.ts:19-28`
+   - Governed lifecycle: `INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE`; `SPEC` and `WORK ORDER` are control boundaries, not values in this frozen runtime enum.
 
 2. **Current Risk Model**
    - `R0 → R3`

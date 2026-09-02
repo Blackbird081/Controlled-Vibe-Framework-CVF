@@ -33,7 +33,8 @@ What changed later is that CVF needed:
 - a real governed closure state after review
 - stronger runtime and audit semantics across channels
 
-Those needs led to the canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` loop.
+Those needs led to the canonical
+`INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE` loop.
 
 ---
 
@@ -42,14 +43,15 @@ Those needs led to the canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`
 | Legacy phase | Current canonical meaning |
 |---|---|
 | `DISCOVERY` | closest to `INTAKE` |
-| `DESIGN` | `DESIGN` |
+| `DESIGN` | `DESIGN`, followed by a distinct `SPEC` contract decision |
 | `BUILD` | `BUILD` |
-| `REVIEW` | `REVIEW` plus later closure into `FREEZE` |
+| `REVIEW` | `REVIEW` plus later closure into `FREEZE`; authorization now has a distinct `WORK ORDER` stage before `BUILD` |
 
 Important:
 
 - `DISCOVERY` may still appear as a compatibility alias in some inputs or older docs.
 - Active runtime logic should treat `INTAKE` as canonical.
+- `SPEC` and `WORK ORDER` have no distinct equivalents in the original model.
 - `FREEZE` has no equivalent in the original 4-phase model.
 
 ---

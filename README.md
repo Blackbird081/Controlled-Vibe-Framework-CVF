@@ -133,6 +133,19 @@ Each step answers a different control question:
 | `REVIEW` | Does the result satisfy the intent, design, specification, and authority grant? | Independent findings, bounded repairs or return, and an evidence-backed disposition. |
 | `FREEZE` | What result, limitations, evidence, public disposition, and next move are now durable? | Closure anchors, claim boundary, unresolved limits, export status, and reopen conditions. |
 
+Roadmaps normally divide work into bounded tranches. A tranche does not restart
+all seven stages from zero: it may inherit accepted upstream `INTAKE`, `DESIGN`,
+or `SPEC` evidence and enter at the earliest stage authorized for that tranche.
+Each stage must return enough evidence for a transition gate, but that gate does
+not always require a separate independent-review artifact. Machines verify
+deterministic facts such as paths, hashes, manifests, schemas, and test results;
+reviewers retain semantic judgment and authority to advance, return, or block.
+`REVIEW` is the formal result-evaluation stage before `FREEZE`, and `FREEZE`
+records the durable closure. The seven-stage lifecycle vocabulary by itself
+does not prove that every downstream workspace or integration machine-enforces
+every gate; use the current roadmap, work order, receipts, and accepted review
+to determine actual enforcement and authority.
+
 `SPEC` is deliberately separate from `DESIGN`: a proposed solution is not yet
 a testable contract. `WORK ORDER` is deliberately separate from `BUILD`: a
 contract is not yet permission for an agent to mutate files, call a provider,

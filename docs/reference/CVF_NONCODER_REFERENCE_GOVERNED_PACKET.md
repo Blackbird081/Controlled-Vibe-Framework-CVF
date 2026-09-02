@@ -49,7 +49,7 @@ Primary user-facing entrypoint:
 The governed packet shows:
 
 1. one governed onboarding starter handoff carrying user goal, routed phase, routed risk, and recommended starter wizard
-2. canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`
+2. canonical `INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE`
 3. human approval checkpoints before build and freeze
 4. one governed execution handoff payload for the Web execution path
 5. live launch paths from App Builder Wizard, Business Strategy Wizard, Research Project Wizard, Product Design Wizard, Data Analysis Wizard, Content Strategy Wizard, Marketing Campaign Wizard, System Design Wizard, and Security Assessment Wizard into the Web `execute` pipeline
@@ -58,6 +58,11 @@ The governed packet shows:
    - baseline artifact
    - locked scope
    - follow-up items
+
+The seven-stage line is the governed lifecycle. A named Web/runtime surface may
+still expose the current five-phase runtime projection; this packet does not
+promote `SPEC` or `WORK ORDER` into runtime enum values or prove every
+transition is machine-enforced.
 
 ## Why It Matters
 

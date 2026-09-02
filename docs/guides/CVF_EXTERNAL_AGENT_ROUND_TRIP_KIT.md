@@ -124,6 +124,16 @@ Preserve the seven distinct control decisions:
 INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE
 ```
 
+This is a governed decision lifecycle. It does not require every roadmap
+tranche to recreate seven standalone artifacts. A tranche may inherit accepted
+evidence and enter at the earliest still-open stage when that inheritance and
+entry decision are recorded. Every applicable transition still needs enough
+evidence for its gate, but a gate is not automatically a separate independent-
+review artifact. `REVIEW` is the formal result evaluation before `FREEZE`.
+Do not infer universal machine enforcement from lifecycle traceability; some
+current runtime surfaces still project `SPEC` and `WORK ORDER` as governance
+boundaries inside a five-value runtime enum.
+
 Do not treat:
 
 - design as a testable specification;

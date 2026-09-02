@@ -7,7 +7,7 @@ CVF's risk model classifies every AI interaction by its potential impact. Higher
 Current note:
 
 - the risk doctrine here is still valid
-- however, the active reference path now couples it to the canonical `INTAKE → DESIGN → BUILD → REVIEW → FREEZE` controlled loop
+- however, the active reference path now couples it to the canonical `INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE` controlled loop
 - where this document mentions the older 4-phase structure, read it as historical foundation rather than the active instructional default
 
 ---

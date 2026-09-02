@@ -88,7 +88,10 @@ npm run dev
 
 Open http://localhost:3000 → Pick a template → Fill the form → Review the plan → Export → Give to AI.
 
-The web UI now guides you through the canonical `INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE` flow.
+The governed lifecycle is
+`INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE`.
+Individual Web surfaces may project a bounded subset; check their current
+receipts and accepted review before treating every stage as runtime-enforced.
 
 > **Note:** You need at least one AI API key (OpenAI, Anthropic, or Google AI). Copy `.env.example` to `.env.local` and add your key.
 

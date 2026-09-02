@@ -103,8 +103,13 @@ and non-coders.
 The core operating loop remains:
 
 ```text
-INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE
+INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE
 ```
+
+This is the governed lifecycle. Existing runtime implementations may project
+it through the five-value phase enum `INTAKE -> DESIGN -> BUILD -> REVIEW ->
+FREEZE`; `SPEC` and `WORK ORDER` remain contract and authority boundaries unless
+a named accepted adoption artifact proves a broader runtime state model.
 
 ## Product Catalog
 

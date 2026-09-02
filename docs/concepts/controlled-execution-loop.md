@@ -2,13 +2,16 @@
 
 [🇻🇳 Tiếng Việt](../GET_STARTED.md) | 🇬🇧 English
 
-CVF's current canonical runtime model is a **5-phase controlled execution loop**:
+CVF's current canonical governed lifecycle is a **seven-stage controlled execution loop**:
 
 ```
-INTAKE  →  DESIGN  →  BUILD  →  REVIEW  →  FREEZE
+INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE
 ```
 
-This is the model used by the remediated governance runtime, the shared guard contract, and the aligned Web/UI surfaces.
+This is the active reference model for governed planning, authorization,
+execution, review, and closure. Runtime enforcement remains surface-specific:
+the lifecycle vocabulary alone is not proof that every workspace, integration,
+or provider lane enforces every transition.
 
 ---
 
@@ -18,6 +21,8 @@ This is the model used by the remediated governance runtime, the shared guard co
 |---|---|---|---|
 | `INTAKE` | What is being asked? | clarify scope, capture intent, refuse premature coding | human + analyst |
 | `DESIGN` | What is the approach? | synthesize plan, identify risks, define checkpoints | human + analyst |
+| `SPEC` | What exact contract must hold? | define invariants, negative cases, and acceptance criteria | spec author + reviewer |
+| `WORK ORDER` | Who may do what, where, and under which limits? | bind authority, scope, tools, evidence, and stop rules | dispatcher + operator |
 | `BUILD` | How is the approved plan executed? | governed implementation inside scope | builder + runtime |
 | `REVIEW` | Does the output satisfy the intent? | verify evidence, test against acceptance criteria | reviewer + human |
 | `FREEZE` | Can this result be closed and locked? | finalize evidence, lock closure state, preserve audit trail | governor + human |
@@ -36,7 +41,12 @@ The single official CVF execution loop is:
 6. review and validation
 7. freeze and evidence closure
 
-The 5 phases are the visible state machine for that loop.
+The seven stages preserve seven distinct control decisions. They must not be
+collapsed merely to reduce paperwork.
+
+Roadmaps usually divide work into bounded tranches. A tranche may inherit
+accepted evidence from earlier stages and begin at the earliest stage released
+for its scope; it does not mechanically rerun the whole lifecycle from zero.
 
 ---
 
@@ -50,7 +60,28 @@ Current rules:
 
 - `DISCOVERY` is treated only as a legacy compatibility alias at some input boundaries.
 - `INTAKE` is the canonical entry phase inside active runtime logic.
+- `SPEC` separates a proposed design from a source-verifiable contract.
+- `WORK ORDER` separates a contract from permission to mutate files, invoke
+  tools, call providers, or spend quota.
 - `FREEZE` is a real operational closure phase, not just a label.
+
+---
+
+## Phase Gates And Review
+
+Every stage must produce or inherit enough evidence for the next transition.
+A gate may combine deterministic machine checks with bounded reviewer judgment;
+it does not require a new standalone review document after every stage.
+
+- machines may decide path, hash, manifest, schema, coverage, and test-result
+  facts;
+- reviewers decide semantic adequacy, relevance, contradictions, risk, waivers,
+  and whether the next stage is authorized;
+- `REVIEW` is the formal result-evaluation stage before `FREEZE`;
+- high-risk or authority-changing transitions may also require an operator
+  checkpoint;
+- a failed gate returns work to the earliest affected stage rather than opening
+  a successor automatically.
 
 ---
 
@@ -72,7 +103,7 @@ Entering `FREEZE` means:
 ## Practical Rules
 
 - AI should not code in `INTAKE`.
-- Planning and implementation should stay separable.
+- Design, specification, authorization, and implementation should stay separable.
 - High-risk or broad-scope changes should surface approval checkpoints before `BUILD`.
 - `REVIEW` should compare outputs to intent and acceptance criteria, not just code style.
 - `FREEZE` should preserve evidence, not merely mark the workflow "done."
@@ -81,15 +112,18 @@ Entering `FREEZE` means:
 
 ## Current Reality
 
-As of `2026-03-20`, CVF has aligned its active runtime, shared guard contract, and major Web reference flows to this canonical loop.
+The public front door, downstream carrier contract, and current Core governance
+work use this seven-stage reference model.
 
 Current truthful reading:
 
-- the active reference path is materially delivered against this loop
+- the active reference path preserves the seven control decisions
 - coder-facing and non-coder governed reference paths both exist on the active baseline
 - broader ecosystem parity and future breadth deepening are no longer open-by-default roadmap work; they are continuation candidates gated by `GC-018`
 
-That means the loop is now both the canonical design truth and the active reference-path runtime truth, while future whole-system broadening remains governed continuation work rather than an already-authorized active batch.
+That does not make seven-stage machine enforcement universal. Consult the
+current roadmap, work order, phase-return receipts, accepted review, and freeze
+evidence for the exact surface being evaluated.
 
 ---
 
@@ -102,4 +136,4 @@ That means the loop is now both the canonical design truth and the active refere
 
 ---
 
-*Last updated: March 20, 2026 | Canonical runtime concept*
+*Last updated: September 2, 2026 | Canonical governed lifecycle concept*

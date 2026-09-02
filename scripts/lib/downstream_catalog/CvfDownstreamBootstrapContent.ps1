@@ -67,6 +67,13 @@ Status: ACTIVE
 
 ``INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE``
 
+This chain preserves seven governed decisions. A roadmap tranche may inherit
+accepted evidence and enter at the earliest still-open stage; it does not need
+to recreate all seven artifacts from zero. Record the inheritance and require
+evidence for each applicable transition. A transition gate is not necessarily
+a standalone independent-review artifact. ``REVIEW`` is the formal result
+evaluation before ``FREEZE``.
+
 ## Role Assignment
 
 Roles are responsibilities, not provider names. One agent may hold several
@@ -193,6 +200,7 @@ function Get-CvfBootstrapLogContent {
 - [x] WORKSPACE_RULES.md: PRESENT
 - [x] knowledge/ folder: PRESENT (add .md files and run ingest script to enable project-knowledge injection)
 - [x] Seven-step phase model: INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE
+- [x] Tranche inheritance rule: reuse accepted evidence, record the entry stage, and gate every applicable transition
 - [x] Project continuity front doors: PRESENT
 - [x] Implementation status and docs index/catalog: PRESENT
 - [$catalogKitCheckbox] Governed downstream catalog kit (Artifact Registry, Module Registry, schemas, catalog manager): $catalogKitLabel$catalogKitNote

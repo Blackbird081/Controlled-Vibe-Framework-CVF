@@ -108,6 +108,22 @@ For new downstream projects, the bootstrap must produce:
     truth, generated views, governed artifact families) and an empty Module
     Registry that makes no runtime-module claim
 
+The generated downstream instructions must carry the canonical seven-stage
+decision lifecycle:
+
+```text
+INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE
+```
+
+For roadmap work, a tranche may inherit accepted evidence and enter at the
+earliest still-open stage. Bootstrap must not teach agents to recreate all
+seven artifacts for every tranche. It must require the inherited evidence and
+entry decision to be recorded, require enough evidence at every applicable
+transition, and distinguish a transition gate from a standalone independent
+review artifact. `REVIEW` remains the formal result evaluation before
+`FREEZE`. Lifecycle traceability alone does not prove that every transition is
+machine-enforced.
+
 The workspace doctor must verify that the generated project remains isolated
 from CVF core and that the workspace-root rules file is present. A project is
 **governed** if its `.cvf/manifest.json` carries the `catalogKitVersion`

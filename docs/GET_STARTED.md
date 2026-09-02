@@ -194,9 +194,9 @@ Khi bạn dùng AI (ChatGPT/Claude/Copilot) để code:
 #### CVF Solution: Controlled Execution Loop
 
 ```
-INTAKE  →  DESIGN  →  BUILD  →  REVIEW  →  FREEZE
-   ↓         ↓         ↓         ↓          ↓
-Scope      Plan     Execute    Validate   Close + lock evidence
+INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE
+  ↓        ↓       ↓         ↓          ↓        ↓        ↓
+Scope     Plan   Contract  Authority   Execute  Validate  Close
 ```
 
 **Nguyên tắc vàng:** AI là executor, BẠN là decision maker.
@@ -235,7 +235,7 @@ Console này chỉ chạy các job governance được allowlist, hiển thị r
 **What to try:**
 1. Click "Templates" → Chọn "Simple Todo App"
 2. Fill form → Click "Generate"
-3. See canonical 5-phase breakdown
+3. See the canonical seven-stage breakdown
 4. Export prompt to use with AI
 
 #### Option B: Manual (Core CVF)

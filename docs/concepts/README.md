@@ -7,7 +7,7 @@ Deep dives into CVF's principles, architecture, and design decisions.
 | Concept | What It Covers |
 |---------|---------------|
 | [Core Philosophy](core-philosophy.md) | The 7 non-negotiable principles behind CVF |
-| [Controlled Execution Loop](controlled-execution-loop.md) | The canonical `INTAKE → DESIGN → BUILD → REVIEW → FREEZE` model |
+| [Controlled Execution Loop](controlled-execution-loop.md) | The canonical `INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE` model |
 | [4-Phase Process](4-phase-process.md) | Legacy Discovery → Design → Build → Review foundation |
 | [Governance Model](governance-model.md) | Roles, authority matrix, agents, commands |
 | [Skill System](skill-system.md) | Skill structure, 114-skill library, lifecycle |

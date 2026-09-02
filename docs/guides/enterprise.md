@@ -133,7 +133,7 @@ Edit `governance/toolkit/03_CONTROL/CVF_PHASE_AUTHORITY_MATRIX.md`:
 4. **Train pilot team** (4-hour workshop)
 
 **Workshop agenda:**
-- Hour 1: CVF philosophy ("Outcome > Code", 5-phase controlled loop)
+- Hour 1: CVF philosophy ("Outcome > Code", seven-stage controlled loop)
 - Hour 2: Hands-on: Write first INPUT_SPEC + use Phase D checklist
 - Hour 3: Risk levels, governance, roles
 - Hour 4: Web UI demo + Skill Library walkthrough

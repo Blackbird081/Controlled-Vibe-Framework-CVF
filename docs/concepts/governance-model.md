@@ -7,7 +7,7 @@ CVF's governance model defines **who** can do **what**, **when**, and **how** �
 Current note:
 
 - this document explains the foundational governance doctrine that originated in earlier CVF versions
-- the active reference path now uses the canonical `INTAKE → DESIGN → BUILD → REVIEW → FREEZE` controlled loop
+- the active reference path now uses the canonical `INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE` controlled loop
 - use [Controlled Execution Loop](controlled-execution-loop.md) together with the latest readiness/reassessment artifacts when you need the current runtime posture
 
 ---

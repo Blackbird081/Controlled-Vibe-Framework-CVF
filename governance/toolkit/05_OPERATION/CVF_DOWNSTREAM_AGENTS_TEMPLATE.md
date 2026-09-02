@@ -70,13 +70,13 @@ summary, state, and handoff disagree, stop at INTAKE and report
 INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE
 ```
 
-Required control per phase: INTAKE - request boundary must be explicit before
-design; DESIGN - record decisions and unresolved tradeoffs; SPEC - separate
-intended behavior from current implementation truth; WORK_ORDER - no
-implementation from a loose chat instruction; BUILD - preserve scope and
-produce test evidence; REVIEW - return defects for repair, no silent
-self-approval; FREEZE - no completion claim while open work or stale state
-remains. Do NOT skip phases or assume one without reading the manifest.
+Required control: INTAKE bounds the request; DESIGN records decisions; SPEC
+separates intended behavior from implementation truth; WORK_ORDER grants
+bounded execution; BUILD preserves scope and produces evidence; REVIEW returns
+defects without silent self-approval; FREEZE closes only settled work.
+A tranche may inherit accepted evidence and enter at its earliest open stage
+when that decision is recorded. Gate every applicable transition, but do not
+require a standalone review artifact after each stage. REVIEW is formal result evaluation before FREEZE; lifecycle traceability is not universal machine enforcement.
 
 ## Provider-Neutral Role Contract
 

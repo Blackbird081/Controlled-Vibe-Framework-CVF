@@ -93,7 +93,7 @@ CVF's discipline (phases, specs, checklists) creates space for creativity. Witho
 | Structure, not micro | Phase gates + checklists | Checklist: `[x] Meets spec` |
 | AI = executor | AI gets frozen specs, can't expand scope | "Follow this design. Do not add features." |
 | Non-coders welcome | Skill forms guide input; no code needed | Fill a form → get structured output |
-| Discipline = creativity | Phases free you from "what do I do next?" | Clear path: Intake → Design → Build → Review → Freeze |
+| Discipline = creativity | Stages free you from "what do I do next?" | Clear path: Intake -> Design -> Spec -> Work Order -> Build -> Review -> Freeze |
 
 ---
 

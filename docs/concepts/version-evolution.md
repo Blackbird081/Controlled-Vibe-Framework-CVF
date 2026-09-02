@@ -7,7 +7,7 @@ CVF has evolved through 6 versions, each adding a layer of capability while pres
 Current note:
 
 - the original CVF foundation introduced a `4-phase` model
-- the active reference path now teaches the canonical `INTAKE → DESIGN → BUILD → REVIEW → FREEZE` controlled loop
+- the active reference path now teaches the canonical `INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE` controlled loop
 - older versions are still important historically, but they should not be mistaken for the current canonical execution posture
 
 ---

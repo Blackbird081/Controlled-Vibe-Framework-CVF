@@ -9,7 +9,7 @@
 
 | Use case | Recommended version | Why |
 |---|---|---|
-| Coding in VS Code, no web UI | v1.1 + governance tools | Clear 5-phase controlled loop + risk model + audit mindset |
+| Coding in VS Code, no web UI | v1.1 + governance tools | Clear seven-stage controlled loop + risk model + audit mindset |
 | Need templates and spec export | v1.5.2 (skills) + v1.1 core | Best spec coverage, still lightweight |
 | Need agent UI + multi-agent | v1.6 Agent Platform | Full app with chat, tools, workflows |
 
@@ -61,7 +61,8 @@ See: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../
 
 ## 2) CVF Core Workflow (Applies to All Versions)
 
-CVF is a **5-phase controlled execution loop**. You can run it in VS Code by enforcing these phases in your prompt.
+CVF uses a **seven-stage controlled execution loop**. You can run it in VS Code
+by preserving each stage's decision and evidence boundary in your prompt.
 
 ### Phase A: Intake
 - Restate the request
@@ -74,19 +75,29 @@ CVF is a **5-phase controlled execution loop**. You can run it in VS Code by enf
 - Make technical decisions
 - Define steps + deliverables
 
-### Phase C: Build
+### Phase C: Spec
+- Define exact inputs, outputs, invariants, and negative cases
+- Make acceptance criteria source-verifiable
+
+### Phase D: Work Order
+- Bind scope, authority, allowed paths/tools, evidence, and stop rules
+- Do not treat the specification itself as execution permission
+
+### Phase E: Build
 - Implement with approved plan
 - Produce complete output
 
-### Phase D: Review
+### Phase F: Review
 - Verify success criteria
 - List deviations
-- Ask for acceptance
+- Record an evidence-backed disposition
 
-### Phase E: Freeze
+### Phase G: Freeze
 - Record final accepted state
 - Lock scope and evidence
 - Close with explicit freeze receipt
+
+Each transition needs evidence for a gate. A tranche may inherit accepted evidence instead of restarting all seven stages. A gate may combine deterministic checks with reviewer judgment; it does not require a separate review document after every stage.
 
 ---
 
@@ -96,13 +107,13 @@ Use this in VS Code with your AI assistant:
 
 ```text
 You are operating under CVF (Controlled Vibe Framework).
-Mode: FULL (5-phase controlled loop).
+Mode: FULL (seven-stage controlled loop).
 Rules:
-- Follow Phase A -> B -> C -> D -> E in order.
-- Stop and ask for confirmation before moving from A to B and B to C.
-- No coding in Phase A or B.
+- Follow Phase A -> B -> C -> D -> E -> F -> G in order.
+- Preserve evidence for every transition; request human confirmation when risk, policy, or authority changes require it.
+- No coding in Phase A, B, C, or D.
 - If required inputs are missing, stop and ask for clarification.
-- Provide deliverables in Phase C, self-review in Phase D, and freeze record in Phase E.
+- Provide implementation in Phase E, independent result evaluation in Phase F, and the durable closure record in Phase G.
 
 Start with Phase A now.
 ```
@@ -117,7 +128,7 @@ Start with Phase A now.
 **Profile: Full Mode (default for complex work)**
 ```text
 CVF MODE: FULL
-PHASE FLOW: A -> B -> C -> D -> E
+PHASE FLOW: A -> B -> C -> D -> E -> F -> G
 STOP CONDITIONS:
 - Missing required inputs
 - Unclear acceptance criteria
@@ -166,13 +177,19 @@ Start Phase A.
 ### Step 2: Phase B approval
 You should approve or correct the design plan.
 
-### Step 3: Phase C build
-Agent writes the code and explains how to run it.
+### Step 3: Phase C specification
+Define the exact contract, negative cases, and acceptance criteria.
 
-### Step 4: Phase D review
-Agent checks success criteria and asks for acceptance.
+### Step 4: Phase D work order
+Bind scope, authority, files/tools, evidence, and stop rules.
 
-### Step 5: Phase E freeze
+### Step 5: Phase E build
+Agent writes the code and explains how to run it inside the approved scope.
+
+### Step 6: Phase F review
+Reviewer checks success criteria and records an evidence-backed disposition.
+
+### Step 7: Phase G freeze
 Agent records the accepted result, scope boundary, and closure notes.
 
 ---
@@ -182,9 +199,11 @@ Agent records the accepted result, scope boundary, and closure notes.
 ### Example: Feature build
 1. **Phase A**: Restate goal, scope, assumptions
 2. **Phase B**: Design plan + decisions + checklist
-3. **Phase C**: Implement code + tests
-4. **Phase D**: Review, list risks, ask for acceptance
-5. **Phase E**: Freeze the accepted result and capture closure evidence
+3. **Phase C**: Define the specification, invariants, and acceptance criteria
+4. **Phase D**: Bind the work order, authority, evidence, and stop rules
+5. **Phase E**: Implement code + tests
+6. **Phase F**: Review, list risks, and record a disposition
+7. **Phase G**: Freeze the accepted result and capture closure evidence
 
 **Tip:** Use the same format for every task. The consistency is the governance.
 
@@ -216,7 +235,7 @@ Guardrails:
 - Always cite assumptions
 ```
 
-### Enforcement checklist (use before Phase C)
+### Enforcement checklist (use before Phase E)
 - [ ] All required inputs captured
 - [ ] Scope defined (IN/OUT)
 - [ ] Acceptance criteria are explicit
@@ -231,7 +250,7 @@ Guardrails:
 |---|---|---|
 | Simple | Quick tasks | Minimal governance, fast output |
 | Governance | Most work | Enforces stop conditions + guardrails |
-| Full | Complex or risky work | 5-phase controlled loop with checkpoints |
+| Full | Complex or risky work | seven-stage controlled loop with checkpoints |
 
 ---
 
@@ -239,7 +258,7 @@ Guardrails:
 
 ### v1.0 / v1.1 (Core + Execution)
 - Use docs in [v1.0/](../../v1.0/) and [v1.1/](../../v1.1/)
-- Always run the 5-phase controlled loop
+- Always preserve the seven-stage controlled loop
 - Use checklists under v1.0/governance or v1.1/execution
 
 ### v1.5.2 (Skill Library)
@@ -308,7 +327,7 @@ Begin Phase A only. Do not propose solutions in Phase A.
 |---|---|
 | Agent jumps to code | Explicitly say: "No code in Phase A/B" |
 | Missing assumptions | Require a list of assumptions |
-| Over-confident output | Require self-review in Phase D |
+| Over-confident output | Require self-review in Phase F |
 | Scope creep | Define IN/OUT scope in Phase A |
 
 ---
@@ -349,8 +368,10 @@ Scope: Review only. Do not modify code.
 Rules:
 - Phase A: restate the goal, list risks and assumptions.
 - Phase B: define review criteria and prioritization.
-- Phase C: produce findings with file/line references.
-- Phase D: summarize risks and recommend next steps.
+- Phase C: define evidence requirements and finding acceptance criteria.
+- Phase D: bind read-only scope and forbidden mutations.
+- Phase E: produce findings with file/line references.
+- Phase F: summarize risks and record the review disposition.
 
 Task:
 Review the following codebase/module for bugs, security issues, and regressions.
@@ -388,8 +409,10 @@ Mode: FULL.
 Rules:
 - Phase A: define threat model scope and assumptions.
 - Phase B: audit plan and areas to inspect.
-- Phase C: findings with evidence and exploitability.
-- Phase D: remediation roadmap with priorities.
+- Phase C: define security invariants and evidence thresholds.
+- Phase D: bind read-only audit authority and stop rules.
+- Phase E: produce findings with evidence and exploitability.
+- Phase F: record the disposition and remediation priorities.
 
 Task:
 Perform a security audit on [system/module].
@@ -408,8 +431,10 @@ Mode: FULL.
 Rules:
 - Phase A: clarify current state and target state.
 - Phase B: migration strategy with rollback plan.
-- Phase C: step-by-step migration tasks.
-- Phase D: verification checklist.
+- Phase C: define migration invariants and acceptance criteria.
+- Phase D: bind mutation authority and rollback stops.
+- Phase E: execute the approved migration tasks.
+- Phase F: verify the migration against the specification.
 
 Task:
 Migrate from [old stack/version] to [new stack/version].
@@ -445,8 +470,10 @@ Mode: FULL.
 Rules:
 - Phase A: define baseline and metrics.
 - Phase B: plan measurement and optimization steps.
-- Phase C: implement changes.
-- Phase D: report gains and regressions.
+- Phase C: define metric and regression acceptance criteria.
+- Phase D: bind implementation scope and stop rules.
+- Phase E: implement changes.
+- Phase F: report gains, regressions, and disposition.
 
 Task:
 Optimize [system/module] for [metric].
@@ -478,8 +505,10 @@ Mode: FULL.
 Rules:
 - Phase A: confirm data sources and target schema.
 - Phase B: migration and rollback plan.
-- Phase C: step-by-step tasks.
-- Phase D: validation checklist.
+- Phase C: define schema, integrity invariants, and acceptance criteria.
+- Phase D: bind data-mutation authority and rollback stops.
+- Phase E: execute the approved migration tasks.
+- Phase F: run validation queries and record the disposition.
 
 Task:
 Migrate data from [source] to [target].
@@ -515,6 +544,10 @@ CURRENT DECLARATION:
 VALID PHASES: INTAKE | DESIGN | BUILD | REVIEW | FREEZE
 VALID ROLES: OBSERVER | ANALYST | BUILDER | REVIEWER | GOVERNOR
 VALID RISKS: R0 (None) | R1 (Low) | R2 (Medium) | R3 (High)
+
+LIFECYCLE CONTROL BOUNDARIES:
+  SPEC: a governed contract decision after DESIGN; not a current runtime phase enum
+  WORK_ORDER: a governed authority decision before BUILD; not a current runtime phase enum
 
 AUTHORITY MATRIX — ALLOWED ACTIONS:
   INTAKE + ANALYST: read context, ask clarification, analyze inputs, summarize scope
@@ -643,7 +676,7 @@ ALL changes are LOCKED.
 
 | Nhu cau | Version goi y | Ly do |
 |---|---|---|
-| Lam viec trong VS Code, khong can UI | v1.1 + governance tools | 5-phase controlled loop + risk model |
+| Lam viec trong VS Code, khong can UI | v1.1 + governance tools | seven-stage controlled loop + risk model |
 | Can templates va spec export | v1.5.2 (skills) + v1.1 core | Day du spec, giam moi phai tu viet |
 | Can UI + multi-agent | v1.6 Agent Platform | UI day du, tools va workflow |
 
@@ -693,7 +726,7 @@ Xem: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../
 
 ---
 
-## 2) Quy trinh core (5 phase)
+## 2) Quy trinh core (7 stage)
 
 ### Phase A: Intake
 - Dien giai lai yeu cau
@@ -706,19 +739,29 @@ Xem: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../
 - Tu quyet dinh ky thuat
 - Dinh nghia buoc lam + deliverables
 
-### Phase C: Thuc thi
+### Phase C: Spec
+- Dinh nghia input, output, invariant, negative case va acceptance criteria
+- Bien thiet ke thanh contract co the kiem chung
+
+### Phase D: Work Order
+- Rang buoc scope, authority, path/tool duoc phep, evidence va stop rules
+- Khong coi spec la quyen tu dong de thuc thi
+
+### Phase E: Thuc thi
 - Lam theo plan da duyet
 - Tao output hoan chinh
 
-### Phase D: Review
+### Phase F: Review
 - Kiem tra success criteria
 - Neu sai lech, neu ro
-- Xin acceptance
+- Ghi disposition dua tren evidence
 
-### Phase E: Freeze
+### Phase G: Freeze
 - Chot ket qua da duoc chap nhan
 - Khoa scope va bang chung
 - Dong task voi freeze receipt ro rang
+
+Moi transition can evidence du cho gate. Mot tranche co the ke thua accepted evidence thay vi chay lai ca bay stage. Gate co the ket hop machine check va reviewer judgment; khong bat buoc tao review document rieng sau tung stage.
 
 ---
 
@@ -726,13 +769,13 @@ Xem: [EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/vscode-extension/README.md](../
 
 ```text
 Ban dang van hanh theo CVF (Controlled Vibe Framework).
-Mode: FULL (5-phase controlled loop).
+Mode: FULL (seven-stage controlled loop).
 Rules:
-- Follow Phase A -> B -> C -> D -> E theo thu tu.
-- Dung lai de xin xac nhan truoc khi tu A->B va B->C.
-- Khong viet code o Phase A/B.
+- Follow Phase A -> B -> C -> D -> E -> F -> G theo thu tu.
+- Luu evidence cho moi transition; xin xac nhan khi risk, policy hoac authority thay doi.
+- Khong viet code o Phase A/B/C/D.
 - Neu thieu input bat buoc, dung lai va hoi.
-- Phase C tao deliverables, Phase D tu review, Phase E chot va khoa ket qua.
+- Phase E thuc thi, Phase F danh gia ket qua doc lap, Phase G chot va khoa ket qua.
 
 Bat dau Phase A ngay.
 ```
@@ -744,7 +787,7 @@ Bat dau Phase A ngay.
 **Full Mode (mac dinh cho viec phuc tap)**
 ```text
 CVF MODE: FULL
-PHASE FLOW: A -> B -> C -> D
+PHASE FLOW: A -> B -> C -> D -> E -> F -> G
 STOP CONDITIONS:
 - Thieu input bat buoc
 - Tieu chi chap nhan chua ro
@@ -792,10 +835,19 @@ Bat dau Phase A.
 Xac nhan ke hoach hoac yeu cau dieu chinh.
 
 ### Buoc 3: Phase C
-Agent viet code + huong dan chay.
+Dinh nghia spec, invariant, negative case va acceptance criteria.
 
 ### Buoc 4: Phase D
-Agent tu review va hoi acceptance.
+Rang buoc work order, scope, authority, evidence va stop rules.
+
+### Buoc 5: Phase E
+Agent viet code + huong dan chay trong scope da duyet.
+
+### Buoc 6: Phase F
+Reviewer kiem tra evidence va ghi disposition.
+
+### Buoc 7: Phase G
+Closer chot ket qua, claim boundary va freeze evidence.
 
 ---
 
@@ -825,7 +877,7 @@ Guardrails:
 - Luon liet ke gia dinh
 ```
 
-### Checklist enforcement (truoc Phase C)
+### Checklist enforcement (truoc Phase E)
 - [ ] Du input bat buoc
 - [ ] Scope IN/OUT ro rang
 - [ ] Tieu chi chap nhan ro
@@ -840,7 +892,7 @@ Guardrails:
 |---|---|---|
 | Simple | Viec nho, nhanh | Governance toi thieu |
 | Governance | Phan lon cong viec | Stop conditions + guardrails |
-| Full | Viec phuc tap/rui ro | 5-phase + checkpoints |
+| Full | Viec phuc tap/rui ro | seven-stage + checkpoints |
 
 ---
 
@@ -848,7 +900,7 @@ Guardrails:
 
 ### v1.0 / v1.1 (Core + Execution)
 - Dung docs: [v1.0/](../../v1.0/) va [v1.1/](../../v1.1/)
-- Luon chay 5-phase controlled loop
+- Luon bao toan seven-stage controlled loop
 - Dung checklist trong v1.0/governance hoac v1.1/execution
 
 ### v1.5.2 (Skill Library)
@@ -914,9 +966,9 @@ Bat dau Phase A thoi. Khong de xuat giai phap o Phase A.
 
 | Loi | Cach sua |
 |---|---|
-| Agent nhay vao code som | Noi ro: "Khong viet code o Phase A/B" |
+| Agent nhay vao code som | Noi ro: "Khong viet code o Phase A/B/C/D" |
 | Thieu gia dinh | Bat buoc liet ke gia dinh |
-| Output qua tu tin | Yeu cau tu review Phase D |
+| Output qua tu tin | Yeu cau review evidence o Phase F |
 | Scope lech | Dinh nghia IN/OUT tu Phase A |
 
 ---
@@ -956,8 +1008,10 @@ Scope: chi review, khong sua code.
 Rules:
 - Phase A: muc tieu, gia dinh, rui ro.
 - Phase B: tieu chi review + muc do uu tien.
-- Phase C: findings co file/line.
-- Phase D: tong ket rui ro + next steps.
+- Phase C: evidence requirements + acceptance criteria cho finding.
+- Phase D: khoa read-only scope va forbidden mutations.
+- Phase E: findings co file/line.
+- Phase F: tong ket rui ro + review disposition.
 
 Task:
 Review [module] cho bugs/security/regressions.
@@ -991,8 +1045,10 @@ Mode: FULL.
 Rules:
 - Phase A: threat model + scope.
 - Phase B: ke hoach audit.
-- Phase C: findings co bang chung.
-- Phase D: roadmap khac phuc.
+- Phase C: security invariants + evidence thresholds.
+- Phase D: khoa read-only authority va stop rules.
+- Phase E: findings co bang chung.
+- Phase F: disposition + uu tien khac phuc.
 
 Task:
 Audit bao mat cho [system/module].
@@ -1010,8 +1066,10 @@ Mode: FULL.
 Rules:
 - Phase A: hien trang vs muc tieu.
 - Phase B: strategy + rollback.
-- Phase C: tung buoc thuc thi.
-- Phase D: checklist verify.
+- Phase C: migration invariants + acceptance criteria.
+- Phase D: mutation authority + rollback stops.
+- Phase E: tung buoc thuc thi da duyet.
+- Phase F: verify theo spec.
 
 Task:
 Migrate tu [old] sang [new].
@@ -1045,8 +1103,10 @@ Mode: FULL.
 Rules:
 - Phase A: baseline + metrics.
 - Phase B: ke hoach do va toi uu.
-- Phase C: implement.
-- Phase D: bao cao gains/regressions.
+- Phase C: metric + regression acceptance criteria.
+- Phase D: implementation scope + stop rules.
+- Phase E: implement.
+- Phase F: bao cao gains/regressions + disposition.
 
 Task:
 Toi uu [module] cho [metric].
@@ -1076,8 +1136,10 @@ Mode: FULL.
 Rules:
 - Phase A: xac nhan source/target schema.
 - Phase B: migration + rollback.
-- Phase C: step-by-step.
-- Phase D: validation queries/checks.
+- Phase C: schema + integrity invariants + acceptance criteria.
+- Phase D: data-mutation authority + rollback stops.
+- Phase E: step-by-step da duyet.
+- Phase F: validation queries/checks + disposition.
 
 Task:
 Migrate data tu [source] sang [target].
@@ -1113,6 +1175,10 @@ KHAI BÁO HIỆN TẠI:
 PHASE HỢP LỆ: INTAKE | DESIGN | BUILD | REVIEW | FREEZE
 ROLE HỢP LỆ: OBSERVER | ANALYST | BUILDER | REVIEWER | GOVERNOR
 RISK HỢP LỆ: R0 (Không) | R1 (Thấp) | R2 (Trung bình) | R3 (Cao)
+
+RANH GIOI KIEM SOAT LIFECYCLE:
+  SPEC: quyet dinh contract sau DESIGN; chua phai runtime phase enum hien hanh
+  WORK_ORDER: quyet dinh authority truoc BUILD; chua phai runtime phase enum hien hanh
 
 AUTHORITY MATRIX — HÀNH ĐỘNG ĐƯỢC PHÉP:
   INTAKE + ANALYST: read context, ask clarification, analyze inputs, summarize scope

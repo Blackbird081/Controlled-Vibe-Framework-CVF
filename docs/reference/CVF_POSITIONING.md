@@ -57,7 +57,8 @@ CVF has 5 distinct layers (not a monolith):
 
 ### Layer 1: Core (Required)
 - **Principles:** Outcome > Code, Spec-first, Risk-aware
-- **Canonical loop:** INTAKE → DESIGN → BUILD → REVIEW → FREEZE
+- **Canonical loop:** INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE
+- **Current runtime projection:** some surfaces use INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE; SPEC and WORK ORDER remain governance boundaries unless an accepted adoption artifact makes them runtime states
 - **Risk Model:** R0 (Auto) → R1 (Audit) → R2 (Review) → R3 (Manual)
 - **Skill Library:** 62 active skills across 12 domains
 

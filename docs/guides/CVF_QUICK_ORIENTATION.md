@@ -25,17 +25,23 @@
 | Cộng tác Human + AI | Tự động hóa hoàn toàn |
 | Hoạt động với mọi AI (Claude, GPT, Gemini...) | Gắn riêng với một AI nào |
 
-### 5-Phase Controlled Loop — Trái tim của CVF
+### Seven-Stage Controlled Loop — Trái tim của CVF
 
 ```
-Phase A: Intake     → Làm rõ yêu cầu, scope, assumptions
-Phase B: Design     → Chốt hướng đi và kế hoạch
-Phase C: Build      → AI thực thi trong phạm vi đã duyệt
-Phase D: Review     → Kiểm tra kết quả và acceptance
-Phase E: Freeze     → Chốt trạng thái cuối và khóa phạm vi
+Stage A: Intake       → Làm rõ yêu cầu, scope, assumptions
+Stage B: Design       → Chốt hướng đi và kiến trúc
+Stage C: Spec         → Chuyển thiết kế thành contract kiểm chứng được
+Stage D: Work Order   → Cấp quyền, phạm vi, công cụ và stop rules
+Stage E: Build        → AI thực thi trong phạm vi đã duyệt
+Stage F: Review       → Kiểm tra kết quả và acceptance
+Stage G: Freeze       → Chốt trạng thái cuối và khóa bằng chứng
 ```
 
-**Quy tắc cứng:** Không skip phase, không merge phase. Con người luôn là authority cuối cùng.
+**Quy tắc cứng:** Không bỏ qua hay nhập nhằng các quyết định kiểm soát. Một
+tranche có thể kế thừa evidence đã được chấp nhận từ stage trước, nên không cần
+chạy lại cả bảy stage từ đầu. Mỗi transition phải có evidence/gate, nhưng không
+bắt buộc tạo một independent-review document riêng sau từng stage. Máy kiểm tra
+fact xác định được; reviewer giữ semantic judgment và quyền chuyển tiếp.
 
 ### Risk Model R0–R3
 
@@ -60,7 +66,7 @@ Phase E: Freeze     → Chốt trạng thái cuối và khóa phạm vi
    └── AnotherApp/                        ← Project khác
    ```
 
-2. **Cho AI đọc CVF rules** khi bắt đầu phiên làm việc — AI sẽ tự tuân thủ 5-phase controlled loop, risk model, governance guards.
+2. **Cho AI đọc CVF rules** khi bắt đầu phiên làm việc — AI phải tuân thủ seven-stage controlled loop, risk model và governance guards trong phạm vi mà workspace hiện hành thực sự enforce.
 
 3. **Dùng Skill Library** (62 active skills, 12 domains) — chọn skill phù hợp trước khi code.
 

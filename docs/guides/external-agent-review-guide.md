@@ -49,17 +49,19 @@ Before making findings, record:
 
 Read these files first, in order:
 1. README.md
-2. docs/guides/external-agent-review-guide.md
-3. docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md (durable catalog: system shape, capabilities, and boundaries)
-4. docs/evidence/public-external-review-snapshot-2026-06-19.md (dated evidence snapshot, point-in-time 2026-06-19; not the catalog)
-5. docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md
-6. docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md
-7. docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md
-8. docs/GET_STARTED.md
-9. CHANGELOG.md
-10. SECURITY.md
-11. PROVIDERS.md
-12. COST_AND_QUOTA.md
+2. docs/concepts/controlled-execution-loop.md
+3. docs/reference/external_agent_review/CVF_WORKFLOW_CHAIN_PUBLIC_REVIEW_CONTEXT.md
+4. docs/guides/external-agent-review-guide.md
+5. docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md (durable catalog: system shape, capabilities, and boundaries)
+6. docs/evidence/public-external-review-snapshot-2026-06-19.md (dated evidence snapshot, point-in-time 2026-06-19; not the catalog)
+7. docs/reference/CVF_PUBLIC_EVALUATION_CLAIM_BOUNDARY_2026-06-04.md
+8. docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md
+9. docs/reference/CVF_ERH_PUBLIC_SYNC_SUMMARY_2026-06-04.md
+10. docs/GET_STARTED.md
+11. CHANGELOG.md
+12. SECURITY.md
+13. PROVIDERS.md
+14. COST_AND_QUOTA.md
 
 Evaluate CVF with these rules:
 - Treat this repository as the public CVF product/evidence surface, not the

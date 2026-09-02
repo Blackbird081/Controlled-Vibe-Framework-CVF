@@ -13,14 +13,18 @@ Date: 2026-06-11
 This standard turns the public CVF lifecycle shorthand into an internal control
 model for orchestrators, reviewers, and worker agents.
 
-The public shorthand is:
+The canonical governed lifecycle is:
 
 ```text
-INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE
+INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE
 ```
 
-For governed work, CVF must expand that shorthand before implementation so an
-agent cannot jump from a broad request directly into build.
+For governed work, CVF must preserve these seven decisions so an agent cannot
+jump from a broad request or design directly into build. Existing runtime
+surfaces may still project the lifecycle through the five-value phase enum
+`INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE`; in that projection, `SPEC`
+and `WORK ORDER` remain mandatory governance artifact/authority boundaries,
+not additional runtime enum values.
 
 ## Scope
 
@@ -149,6 +153,9 @@ design controls needed before dispatch.
 - `docs/reference/CVF_AGENT_AUTORUN_WORKFLOW_CONTROL_STANDARD_2026-05-28.md`
 
 ## Claim Boundary
+
+EPISTEMIC_PROCESS_NA_WITH_REASON: normative lifecycle clarification only; no
+new evidence comparison, runtime execution, or provider claim.
 
 This standard is a design-control and documentation-quality rule. It does not
 implement runtime orchestration, provider routing, automatic design review,

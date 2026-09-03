@@ -42,6 +42,7 @@ try:
         build_path_plan,
     )
     import check_worker_experience_retrospective as worker_experience
+    import agent_automation_machine_verification_readout as machine_readout
 except ModuleNotFoundError:  # imported as governance.compat.run_agent_automation_assist
     import sys as _sys
 
@@ -51,6 +52,11 @@ except ModuleNotFoundError:  # imported as governance.compat.run_agent_automatio
         build_path_plan,
     )
     import check_worker_experience_retrospective as worker_experience
+    import agent_automation_machine_verification_readout as machine_readout
+
+DETERMINISTIC_PREFLIGHT_COMPLETE = machine_readout.DETERMINISTIC_PREFLIGHT_COMPLETE
+MachineVerificationReadout = machine_readout.MachineVerificationReadout
+_build_machine_verification_readout = machine_readout.build_machine_verification_readout
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -167,13 +173,11 @@ _WORKER_RETURN_RE = re.compile(
     re.IGNORECASE,
 )
 
-
 def _configure_stdout() -> None:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if hasattr(sys.stderr, "reconfigure"):
         sys.stderr.reconfigure(encoding="utf-8", errors="replace")
-
 
 def _extract_section(text: str, heading_fragment: str) -> str:
     pattern = re.compile(
@@ -183,19 +187,16 @@ def _extract_section(text: str, heading_fragment: str) -> str:
     match = pattern.search(text)
     return match.group(1) if match else ""
 
-
 def _is_no_commit_work_order(path: str, text: str) -> bool:
     return bool(_WORK_ORDER_RE.search(path)) and bool(
         _WORKER_MUST_NOT_COMMIT_RE.search(text)
     )
-
 
 def _read_changed_text(path: str) -> str:
     full = REPO_ROOT / path
     if not full.exists() or full.is_dir():
         return ""
     return full.read_text(encoding="utf-8", errors="replace")
-
 
 @dataclass(frozen=True)
 class WorkOrderDiagnostic:
@@ -213,7 +214,6 @@ class WorkOrderDiagnostic:
             and not self.missing_conditional
             and not self.missing_na_instruction
         )
-
 
 @dataclass(frozen=True)
 class CorpusDiagnostic:
@@ -239,7 +239,6 @@ class CorpusDiagnostic:
             and not self.missing_reconciliation_markers
             and not self.extra_violations
         )
-
 
 def diagnose_no_commit_work_order(path: str, text: str) -> WorkOrderDiagnostic:
     """This helper's own early advisory packet-shape contract check."""
@@ -272,7 +271,6 @@ def diagnose_no_commit_work_order(path: str, text: str) -> WorkOrderDiagnostic:
         missing_na_instruction=missing_na,
     )
 
-
 def _is_applicable_corpus_output(path: str, text: str) -> bool:
     """Mirror check_corpus_completeness_report_integrity._is_applicable_output."""
     normalized = path.replace("\\", "/")
@@ -289,7 +287,6 @@ def _is_applicable_corpus_output(path: str, text: str) -> bool:
     lowered = text.lower()
     return any(pattern.search(lowered) for pattern in _CORPUS_COMPLETE_CLAIM_PATTERNS)
 
-
 def _extract_unresolved_count(section: str) -> int | None:
     match = re.search(r"\bunresolved\s*=\s*(\d+)\b", section, re.I)
     if match:
@@ -297,15 +294,12 @@ def _extract_unresolved_count(section: str) -> int | None:
     match = re.search(r"^\s*-\s*Unresolved files:\s*(\d+)\s*$", section, re.I | re.M)
     return int(match.group(1)) if match else None
 
-
 def _field_value(section: str, label: str) -> str:
     match = re.search(rf"^\s*-\s*{re.escape(label)}\s*(.+?)\s*$", section, re.I | re.M)
     return match.group(1).strip() if match else ""
 
-
 def _is_none_like(value: str) -> bool:
     return value.strip().lower() in {"none", "n/a", "0", "none.", "n/a."}
-
 
 def _is_safe_enumeration(value: str) -> bool:
     lowered = value.lower()
@@ -314,7 +308,6 @@ def _is_safe_enumeration(value: str) -> bool:
     if any(marker in lowered for marker in ("get-childitem", "filesystem", "structured complete api")):
         return True
     return bool(re.search(r"(?:^|[;&|]\s*)find\s+(?:[/.\-~]|[A-Za-z]:\\)", value, re.I))
-
 
 def diagnose_corpus_completeness(path: str, text: str) -> CorpusDiagnostic:
     """Early local diagnostic for the Corpus Completeness And Report Integrity block shape."""
@@ -392,7 +385,6 @@ def diagnose_corpus_completeness(path: str, text: str) -> CorpusDiagnostic:
         extra_violations=tuple(extra_violations),
     )
 
-
 def recommend_mode(plan: PathPlan) -> str:
     """Map the changed-path plan to one of the supported steward modes."""
     if plan.handoff_sync_only:
@@ -409,7 +401,6 @@ def recommend_mode(plan: PathPlan) -> str:
         return "implementation"
     return "none"
 
-
 def _has_dispatch_packet(paths: tuple[str, ...]) -> bool:
     for path in paths:
         if not (_WORK_ORDER_RE.search(path) or _BASELINE_RE.search(path)):
@@ -419,7 +410,6 @@ def _has_dispatch_packet(paths: tuple[str, ...]) -> bool:
             return True
     return False
 
-
 def _has_worker_return_packet(paths: tuple[str, ...]) -> bool:
     for path in paths:
         if not _REVIEW_RE.search(path):
@@ -428,7 +418,6 @@ def _has_worker_return_packet(paths: tuple[str, ...]) -> bool:
         if _WORKER_RETURN_RE.search(text):
             return True
     return False
-
 
 def _next_command(mode: str, base: str, head: str) -> str:
     if mode in {"dispatch", "implementation", "closure"}:
@@ -461,7 +450,6 @@ def _next_command(mode: str, base: str, head: str) -> str:
         )
     return "No changed paths detected; no steward command required."
 
-
 @dataclass(frozen=True)
 class SignalReadoutItem:
     """LSC-T3 advisory signal readout item derived from helper-detectable diagnostics.
@@ -481,7 +469,6 @@ class SignalReadoutItem:
     reason: str
     latency_guard_disposition: str = ""
 
-
 @dataclass(frozen=True)
 class ReviewerReadoutItem:
     """AAF-T7A.1 L0 read-only reviewer/closer acceleration advisory item.
@@ -497,7 +484,6 @@ class ReviewerReadoutItem:
     suggested_action: str
     accelerator_disposition: str
     reason: str
-
 
 @dataclass(frozen=True)
 class JurisdictionReadoutItem:
@@ -517,7 +503,6 @@ class JurisdictionReadoutItem:
     routing_disposition: str
     reason: str
 
-
 @dataclass
 class AssistReport:
     base: str
@@ -535,6 +520,7 @@ class AssistReport:
     signal_readout: tuple[SignalReadoutItem, ...] = field(default_factory=tuple)
     reviewer_readout: tuple[ReviewerReadoutItem, ...] = field(default_factory=tuple)
     jurisdiction_readout: tuple[JurisdictionReadoutItem, ...] = field(default_factory=tuple)
+    machine_verification_readout: "MachineVerificationReadout | None" = None
 
     def to_dict(self) -> dict:
         return {
@@ -608,8 +594,20 @@ class AssistReport:
                 }
                 for item in self.jurisdiction_readout
             ],
+            "machineVerificationReadout": self._machine_readout_to_dict(),
         }
 
+    def _machine_readout_to_dict(self) -> dict | None:
+        return machine_readout.machine_readout_to_dict(
+            self.machine_verification_readout
+        )
+
+# ---------------------------------------------------------------------------
+# MFRP-P2 integration: mechanics live in the bounded readout module.
+# ---------------------------------------------------------------------------
+
+def _read_receipt_readonly(receipt_path: str) -> tuple[bool, object | None, str]:
+    return machine_readout.read_receipt_readonly(receipt_path, REPO_ROOT)
 
 # LSC-T3: outcome vocabulary constants used in advisory signal readout items.
 _LSC_T4_READOUT_ONLY = "READOUT_ONLY"
@@ -621,7 +619,6 @@ _LSC_T5_T7_GOVERNED_PROMOTION = "GOVERNED_PROMOTION"
 _LSC_T5_T7_BLOCKER_PENDING_EVIDENCE = "BLOCKER_PENDING_EVIDENCE"
 _LSC_T5_T7_FAST_OUTCOMES = frozenset({_LSC_T4_READOUT_ONLY, "WATCH_FOR_REPEAT"})
 _LSC_T5_T7_BLOCKER_OUTCOMES = frozenset({"CLOSURE_BLOCKER"})
-
 
 def _derive_latency_guard_disposition(recommended_outcome: str) -> str:
     """LSC-T5/T7: derive latencyGuardDisposition from LSC-T4 recommendedOutcome.
@@ -636,7 +633,6 @@ def _derive_latency_guard_disposition(recommended_outcome: str) -> str:
     if recommended_outcome in _LSC_T5_T7_BLOCKER_OUTCOMES:
         return _LSC_T5_T7_BLOCKER_PENDING_EVIDENCE
     return _LSC_T5_T7_GOVERNED_PROMOTION
-
 
 def _build_signal_readout(
     work_order_diagnostics: list[WorkOrderDiagnostic],
@@ -730,11 +726,9 @@ def _build_signal_readout(
         for item in items
     )
 
-
 # AAF-T7A.1: L2A acceleration disposition constants for the reviewer readout.
 _L2A_ACCELERATOR_CANDIDATE = "ACCELERATOR_CANDIDATE"
 _L2A_READOUT_ONLY = "READOUT_ONLY"
-
 
 def _build_reviewer_readout(
     resolved_mode: str,
@@ -786,7 +780,6 @@ def _build_reviewer_readout(
         ))
     return tuple(items)
 
-
 # RSE-T3: jurisdiction-block diagnostic constants.
 # The block heading defined by the RSE-T2 addendum.
 _RSE_JURISDICTION_BLOCK_RE = re.compile(
@@ -802,7 +795,6 @@ _RSE_FINDING_LANGUAGE_RE = re.compile(
     r"jurisdiction (?:block|owner))\b"
 )
 _RSE_T3_ROUTING_DISPOSITION = "ROUTE_TO_REVIEWER"
-
 
 def _build_jurisdiction_readout(
     resolved_mode: str,
@@ -842,7 +834,6 @@ def _build_jurisdiction_readout(
         ))
     return tuple(items)
 
-
 # ---------------------------------------------------------------------------
 # AAF-T7B: L1 reviewer-completion scaffold generation.
 #
@@ -879,7 +870,6 @@ REVIEWER_COMPLETION_SCAFFOLD_SECTIONS = (
 
 _SCAFFOLD_TODO = "TODO: reviewer/closer fills this section before completion."
 _SCAFFOLD_TABLE_TODO = "TODO: fill before completion"
-
 
 def _reviewer_completion_scaffold_section_body(section: str) -> list[str]:
     """Return an empty but gate-shaped skeleton body for a scaffold section."""
@@ -941,7 +931,6 @@ def _reviewer_completion_scaffold_section_body(section: str) -> list[str]:
         ]
     return [_SCAFFOLD_TODO]
 
-
 def build_reviewer_completion_scaffold(title: str = "") -> str:
     """Build the AAF-T7B L1 reviewer-completion scaffold text (pure, no I/O).
 
@@ -972,7 +961,6 @@ def build_reviewer_completion_scaffold(title: str = "") -> str:
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"
 
-
 def _scaffold_path_is_allowed(path: Path) -> bool:
     """True only when path resolves inside the repo's docs/reviews/ directory."""
     allowed_root = (REPO_ROOT / REVIEWER_COMPLETION_SCAFFOLD_ALLOWED_DIR).resolve()
@@ -983,7 +971,6 @@ def _scaffold_path_is_allowed(path: Path) -> bool:
     if resolved == allowed_root:
         return False
     return allowed_root in resolved.parents
-
 
 def write_reviewer_completion_scaffold(target: str, title: str = "") -> Path:
     """Write one new L1 scaffold markdown file under docs/reviews/.
@@ -1014,8 +1001,9 @@ def write_reviewer_completion_scaffold(target: str, title: str = "") -> Path:
         handle.write(build_reviewer_completion_scaffold(derived_title))
     return candidate
 
-
-def build_report(base: str, head: str, requested_mode: str) -> AssistReport:
+def build_report(
+    base: str, head: str, requested_mode: str, consume_receipt: str | None = None
+) -> AssistReport:
     if requested_mode not in ALLOWED_MODES:
         raise ValueError(f"unsupported mode: {requested_mode}")
 
@@ -1122,6 +1110,12 @@ def build_report(base: str, head: str, requested_mode: str) -> AssistReport:
     jurisdiction_readout_items = _build_jurisdiction_readout(
         resolved, worker_return_texts
     )
+
+    machine_readout: MachineVerificationReadout | None = None
+    if consume_receipt is not None:
+        valid, payload, reason = _read_receipt_readonly(consume_receipt)
+        machine_readout = _build_machine_verification_readout(valid, payload, reason)
+
     return AssistReport(
         base=base,
         head=head,
@@ -1138,6 +1132,7 @@ def build_report(base: str, head: str, requested_mode: str) -> AssistReport:
         signal_readout=signal_readout_items,
         reviewer_readout=reviewer_readout_items,
         jurisdiction_readout=jurisdiction_readout_items,
+        machine_verification_readout=machine_readout,
     )
 
 
@@ -1230,6 +1225,10 @@ def _print_human(report: AssistReport) -> None:
                 "no worker-return with finding or gate-trap language is missing the block."
             )
 
+    machine_readout.print_machine_verification_readout(
+        report.machine_verification_readout
+    )
+
 
 def main(argv: list[str] | None = None) -> int:
     _configure_stdout()
@@ -1273,6 +1272,7 @@ def main(argv: list[str] | None = None) -> int:
         default="",
         help="Optional heading for the generated reviewer-completion scaffold.",
     )
+    machine_readout.add_consume_receipt_argument(parser)
     args = parser.parse_args(argv)
 
     # AAF-T7B L1 scaffold modes short-circuit the read-only report. They are the
@@ -1292,7 +1292,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Wrote reviewer-completion scaffold: {written}")
         return 0
     try:
-        report = build_report(args.base, args.head, args.mode)
+        report = build_report(args.base, args.head, args.mode, args.consume_receipt)
     except ValueError as exc:
         print(f"VIOLATION: {exc}", file=sys.stderr)
         return 2

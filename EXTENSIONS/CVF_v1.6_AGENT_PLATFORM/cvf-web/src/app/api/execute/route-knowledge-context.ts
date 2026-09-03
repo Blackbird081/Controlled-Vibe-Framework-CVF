@@ -50,6 +50,14 @@ export interface KnowledgeContextParams {
         requestIdFactory: () => string;
         nowUtcIso: () => string;
     };
+    /**
+     * CSCC-R1-T2 additive optional canonical identity, seeded from the
+     * caller's `WebGovernanceEnvelope.envelopeId` and passed into the SOT3
+     * lane (which precedes the port in the canonical Web chain) before any
+     * provider call. Never a new identity generator; SOT3's own `requestId`
+     * is retained unchanged alongside it.
+     */
+    canonicalExecutionId?: string;
 }
 
 export interface KnowledgeContextResult {
@@ -185,8 +193,9 @@ async function persistSot3ActivationEvidence(params: {
     templateLabel: string;
     evidenceStore: Sot3ActivationEvidenceStore;
     createdAtUtc: string;
+    canonicalExecutionId?: string;
 }): Promise<Sot3EvidenceDiagnosticClass> {
-    const { mode, result, requestId, actorId, organization, team, session, templateLabel, evidenceStore, createdAtUtc } = params;
+    const { mode, result, requestId, actorId, organization, team, session, templateLabel, evidenceStore, createdAtUtc, canonicalExecutionId } = params;
 
     const recordId = deriveSot3EvidenceRecordId({ requestId, actorId, organization, team, mode });
     const recordWithoutHash = {
@@ -202,6 +211,7 @@ async function persistSot3ActivationEvidence(params: {
         diagnosticClass: 'PERSISTED' as const,
         schemaVersion: SOT3_ACTIVATION_EVIDENCE_SCHEMA_VERSION as typeof SOT3_ACTIVATION_EVIDENCE_SCHEMA_VERSION,
         traces: result.traces,
+        ...(canonicalExecutionId !== undefined ? { canonicalExecutionId } : {}),
     };
     const integrityHash = computeSot3EvidenceRecordIntegrityHash(recordWithoutHash);
     const record: Sot3ActivationEvidenceRecord = { ...recordWithoutHash, integrityHash };
@@ -268,7 +278,7 @@ export async function blockInlineKnowledgeContextBypass(params: {
  * provider execution in the caller.
  */
 export async function resolveKnowledgeContext(params: KnowledgeContextParams): Promise<KnowledgeContextResult> {
-    const { intent, orgId, teamId, requestedCollectionId, templateLabel, session, evidenceStore, activationRuntime } = params;
+    const { intent, orgId, teamId, requestedCollectionId, templateLabel, session, evidenceStore, activationRuntime, canonicalExecutionId } = params;
 
     const retrievalResult = await queryKnowledgeChunks({
         intent,
@@ -312,6 +322,7 @@ export async function resolveKnowledgeContext(params: KnowledgeContextParams): P
                 ruleVersion: 'cvf-web-knowledge-context-v1',
                 clock: new DeterministicClock(activationTimeUtc, 1000),
                 ids: new SequentialIdFactory(),
+                ...(canonicalExecutionId !== undefined ? { canonicalExecutionId } : {}),
             },
             mode,
         );
@@ -329,6 +340,7 @@ export async function resolveKnowledgeContext(params: KnowledgeContextParams): P
             templateLabel,
             evidenceStore: evidenceStore ?? new Sot3ActivationEvidenceStore(process.env.CVF_SOT3_ACTIVATION_EVIDENCE_PATH),
             createdAtUtc: activationTimeUtc,
+            canonicalExecutionId,
         });
 
         if (mode === 'ENFORCE') {

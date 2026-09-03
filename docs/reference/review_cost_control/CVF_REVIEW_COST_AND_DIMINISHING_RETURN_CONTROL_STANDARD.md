@@ -47,6 +47,8 @@ Every changed work order must carry the exact standalone declaration
 - `rootCauseClusterId`, `reworkGeneration`, and
   `consolidatedDefectClassSweep`;
 - `successorTrancheOpened` and `implementationAutonomyDisposition`.
+- `preExecutionReviewAdmission`, `preExecutionReviewTrigger`,
+  `nextRoutineReviewBoundary`, and `reviewerWorkBoundary`.
 
 An `INITIAL` dispatch uses round zero, a complete initial acceptance matrix,
 baseline negative-test planning, and no prior finding digest. A `REWORK`
@@ -217,6 +219,113 @@ ignore an explicit numerical cap, perform a forbidden action, or self-authorize
 live/provider/public/destructive work. The current checker does not infer these
 semantic facts; reviewers and closers must apply them from evidence.
 
+## Trigger-Based Review Admission Boundary
+
+Review is admitted by a control event, not by the number of artifacts, roles,
+steps, commits, or handoffs in a workflow. A routine independent review belongs
+at the returned-result boundary where the reviewer owns a disposition such as
+accept, return to design, freeze, or closure. Pre-execution review is admitted
+only when at least one of these triggers is present:
+
+- a frozen identity mismatch or unresolved source/authority contradiction;
+- a new independent critical integrity, fail-open, secret, irreversible, live,
+  provider, public, destructive, or production-risk boundary;
+- a requested scope or authority expansion beyond the accepted design;
+- machine evidence is incomplete or materially `UNCLASSIFIED` for the decision
+  being requested; or
+- the operator explicitly requests that specific review.
+
+The following events do not independently admit another review:
+
+- authoring a work order from an already accepted design;
+- changing agent, provider, role label, or single/multi-agent topology;
+- a worker handoff, material commit, continuity sync, or session resume;
+- passing deterministic machine gates; or
+- correcting dependent findings inside the same accepted objective, path
+  classes, risk ceiling, external-effect class, role route, and commit owner.
+
+When no admission trigger exists, successful mechanical preflight moves the
+packet directly to dispatch readiness. Do not add a just-in-case reviewer and
+do not split one authority transition into packet review plus a second operator
+micro-checkpoint. If an unplanned review has already occurred, consume its
+valid evidence without converting that historical event into a mandatory stage
+for the current or future workflow.
+
+Reviewers inspect and challenge returned evidence; they do not recreate the
+worker's implementation or repeat every upstream role's work. A later terminal
+review may verify that earlier mechanical corrections were applied as part of
+its bounded evidence sample, without opening a separate review cycle.
+
+Review-admission trigger classification remains reviewer/orchestrator judgment.
+Machine checks may enforce declared evidence shape and objective trigger facts,
+but must not manufacture semantic criticality or require review merely because
+a new artifact or role boundary exists.
+
+The forward-only machine contract uses these exact values:
+
+- `preExecutionReviewAdmission` is either
+  `NOT_REQUIRED_BEFORE_EXECUTION` or `REQUIRED_TRIGGERED`;
+- `preExecutionReviewTrigger` is `NONE`,
+  `FROZEN_IDENTITY_MISMATCH`, `SOURCE_AUTHORITY_CONTRADICTION`,
+  `NEW_INDEPENDENT_CRITICAL_RISK`, `AUTHORITY_SCOPE_EXPANSION`,
+  `MATERIAL_UNCLASSIFIED`, or `OPERATOR_EXPLICIT_REQUEST`;
+- `nextRoutineReviewBoundary` is `WORKER_RETURN`, `TERMINAL_RESULT`, or
+  `PRE_EXECUTION_REVIEW`; and
+- `reviewerWorkBoundary` is
+  `EVALUATE_RETURNED_EVIDENCE_NOT_RECREATE_IMPLEMENTATION`.
+
+`NOT_REQUIRED_BEFORE_EXECUTION` requires trigger `NONE` and cannot route to
+`PRE_EXECUTION_REVIEW`. `REQUIRED_TRIGGERED` requires a non-`NONE` trigger and
+routes to `PRE_EXECUTION_REVIEW`. The checker also rejects the obvious
+contradiction where a packet declares review unnecessary but its status or
+prose still requires independent review before worker execution. This is a
+closed contradiction check, not semantic inference over arbitrary prose.
+
+## Reviewer-Local Repair Versus Worker Return Routing
+
+A reviewer does not return every defect to the worker merely because the
+worker authored the implementation. Agent or role purity is not a control
+objective. Once the result and its evidence are at the ordinary review
+boundary, the default is one consolidated reviewer-local correction when all
+of these conditions hold:
+
+- the objective, accepted design, allowed path set, authority ceiling,
+  external-effect class and commit owner remain unchanged;
+- the correction is localized and fully determined by evidence already read
+  during review;
+- the correction does not redesign the algorithm, recreate the deliverable,
+  acquire new source evidence or require hidden worker context;
+- focused tests or existing deterministic evidence can verify it; and
+- applying the correction is cheaper than making another agent reload the
+  controlling authority, sources, changed set and finding context.
+
+Return the finding set to a worker only when at least one of these boundaries
+is crossed:
+
+- algorithm, architecture, design, source-of-truth interpretation or semantic
+  implementation must materially change;
+- allowed paths, risk, authority or external effects must expand;
+- new evidence must be acquired or the reviewer cannot determine the repair
+  from the closed review input set;
+- the correction is broad enough that reviewer implementation would recreate
+  the worker's work rather than repair its returned evidence; or
+- a controlling work order expressly forbids reviewer repair.
+
+Context reload is governance tax. Its cost includes the additional agent
+invocation and the repeated reading needed to reconstruct authority, source
+identity, changed-set intent and prior findings. Do not incur that tax solely
+to preserve role labels. In multi-agent or multi-role work, changing the actor
+does not itself increase independence; independence comes from source-bound
+evidence, deterministic checks and reviewer-owned disposition.
+
+The reviewer must still consolidate connected findings before the first
+repair and must not silently widen scope. A reviewer-local correction remains
+disclosed in the existing return or completion evidence and is verified with
+the narrowest sufficient tests. This rule adds no mandatory packet, field,
+checker invocation or separate review round. Machine checks do not attempt to
+infer whether a semantic repair is small; the reviewer applies this routing
+boundary from the evidence and the operator may override it explicitly.
+
 ## Audit, Commit, Latency, And Delay Vocabularies
 
 `preRepairAuditDisposition` must be exactly one of:
@@ -301,11 +410,13 @@ automatic repair dispatch.
 | round-two new-critical-evidence requirement and round-three dispatch stop | ENFORCE |
 | worker-return consolidated sweep, production binding, adversarial regression, cost ledger, and terminal verdict | ENFORCE |
 | implementation-autonomy boundary and closed successor-tranche flag | ENFORCE |
+| review-admission field shape, cross-field consistency, and obvious pre-execution-review contradiction | ENFORCE |
 | eligibility for the 10-minute fast path | REVIEWER_JUDGMENT |
 | whether a root cause is truly independent | REVIEWER_JUDGMENT |
 | whether `valueDelta` is substantively high or low | REVIEWER_JUDGMENT |
 | whether a critical contradiction justifies continuation past round three | REVIEWER_JUDGMENT |
 | whether the chosen `stopDisposition` token is the semantically correct one | REVIEWER_JUDGMENT |
+| whether a review-admission trigger is semantically present | REVIEWER_ORCHESTRATOR_JUDGMENT |
 
 ## Epistemic Process Block
 
@@ -385,26 +496,30 @@ completion reviews.
 
 Protected paths:
 
+- `docs/reference/review_cost_control/CVF_REVIEW_COST_AND_DIMINISHING_RETURN_CONTROL_STANDARD.md`
 - `governance/compat/check_review_cost_control.py`
 - `governance/compat/test_check_review_cost_control.py`
 - `governance/compat/agent_autorun_command_catalog.py`
 - `governance/compat/test_run_agent_autorun_workflow_gate.py`
 - `governance/compat/build_dispatch_packet_scaffold.py`
 - `governance/compat/test_build_dispatch_packet_scaffold.py`
+- `governance/compat/fixtures/woas_r2_source_intake_scaffold_golden.md`
 - `governance/compat/build_worker_return_skeleton_scaffold.py`
 - `governance/compat/run_worker_return_scaffold.py`
 - `governance/compat/test_run_worker_return_scaffold.py`
 - `governance/compat/review_convergence_scaffold.py`
 
 Operator authorization: the operator explicitly requested that this become the
-common CVF foundation and SOP for all future agents using CVF, and later
-required the same control to prevent review-by-drip and unbounded external
-MCP/CLI re-dispatch cost.
+common CVF foundation and SOP for all future agents using CVF, later required
+the same control to prevent review-by-drip and unbounded external MCP/CLI
+re-dispatch cost, on 2026-09-02 rejected step-by-step review admission after an
+R1B authoring checkpoint recreated the governance tax being removed, and then
+directed reviewer-local repair for bounded findings because returning work to
+another agent forces a fresh authority/source/changed-set context reload.
 
-Rollback boundary: revert this SOP addendum, checker/test changes, ADIF update,
-orientation update, commit-steward cross-reference, and completion review as one
-material governance batch. Do not alter Continuous Projection T1 material or
-closure commits.
+Rollback boundary: revert only the trigger-based review-admission addendum if
+it conflicts with higher authority; preserve earlier SOP, checker/test, ADIF,
+orientation, commit-steward, completion-review, R1B review, and packet evidence.
 
 ## Single-Pass SOP Epistemic Process Block - 2026-07-20
 

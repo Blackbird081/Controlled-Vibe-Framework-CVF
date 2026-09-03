@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused tests for the AAF read-only agent automation assist helper (AAF-T1 + AAF-T2)."""
+"""Focused AAF tests; MFRP-P2 readout cases live in the extracted test module."""
 
 from __future__ import annotations
 

@@ -86,6 +86,10 @@ WORK_ORDER_FIELDS = (
     "consolidatedDefectClassSweep",
     "successorTrancheOpened",
     "implementationAutonomyDisposition",
+    "preExecutionReviewAdmission",
+    "preExecutionReviewTrigger",
+    "nextRoutineReviewBoundary",
+    "reviewerWorkBoundary",
 )
 
 WORKER_RETURN_FIELDS = (
@@ -154,6 +158,31 @@ ALLOWED_DELAY_TOKENS = (
     "GATE_DISCOVERY_LOOP",
     "WORKTREE_CHURN",
     "MULTIPLE_AVOIDABLE_DELAYS",
+)
+
+ALLOWED_PRE_EXECUTION_REVIEW_ADMISSIONS = (
+    "NOT_REQUIRED_BEFORE_EXECUTION",
+    "REQUIRED_TRIGGERED",
+)
+ALLOWED_PRE_EXECUTION_REVIEW_TRIGGERS = (
+    "NONE",
+    "FROZEN_IDENTITY_MISMATCH",
+    "SOURCE_AUTHORITY_CONTRADICTION",
+    "NEW_INDEPENDENT_CRITICAL_RISK",
+    "AUTHORITY_SCOPE_EXPANSION",
+    "MATERIAL_UNCLASSIFIED",
+    "OPERATOR_EXPLICIT_REQUEST",
+)
+ALLOWED_NEXT_ROUTINE_REVIEW_BOUNDARIES = (
+    "WORKER_RETURN",
+    "TERMINAL_RESULT",
+    "PRE_EXECUTION_REVIEW",
+)
+REVIEWER_WORK_BOUNDARY = "EVALUATE_RETURNED_EVIDENCE_NOT_RECREATE_IMPLEMENTATION"
+PRE_EXECUTION_REVIEW_LANGUAGE_RE = re.compile(
+    r"(?i)(?:pending(?:[ _]+)independent(?:[ _]+)review|independent (?:packet )?review[^\n]{0,100}"
+    r"required before (?:worker )?execution|independent acceptance[^\n]{0,100}"
+    r"required before (?:worker )?execution)"
 )
 
 FIELD_VALUE_RE_TEMPLATE = r"(?m)^[ \t]*(?:[-*][ \t]+)?`?{field}`?:[ \t]*(.+)$"
@@ -455,6 +484,57 @@ def diagnose_work_order(path: str, text: str) -> Diagnostic:
             "`implementationAutonomyDisposition` must be "
             "`CONTRACT_AUTHORITY_EVIDENCE_OUTCOME_ONLY`"
         )
+
+    review_admission = values.get("preExecutionReviewAdmission")
+    review_trigger = values.get("preExecutionReviewTrigger")
+    next_review_boundary = values.get("nextRoutineReviewBoundary")
+    reviewer_work_boundary = values.get("reviewerWorkBoundary")
+    if review_admission not in ALLOWED_PRE_EXECUTION_REVIEW_ADMISSIONS:
+        issues.append(
+            "`preExecutionReviewAdmission` must be one of "
+            f"{ALLOWED_PRE_EXECUTION_REVIEW_ADMISSIONS}"
+        )
+    if review_trigger not in ALLOWED_PRE_EXECUTION_REVIEW_TRIGGERS:
+        issues.append(
+            "`preExecutionReviewTrigger` must be one of "
+            f"{ALLOWED_PRE_EXECUTION_REVIEW_TRIGGERS}"
+        )
+    if next_review_boundary not in ALLOWED_NEXT_ROUTINE_REVIEW_BOUNDARIES:
+        issues.append(
+            "`nextRoutineReviewBoundary` must be one of "
+            f"{ALLOWED_NEXT_ROUTINE_REVIEW_BOUNDARIES}"
+        )
+    if reviewer_work_boundary != REVIEWER_WORK_BOUNDARY:
+        issues.append(
+            f"`reviewerWorkBoundary` must be `{REVIEWER_WORK_BOUNDARY}`"
+        )
+    if review_admission == "NOT_REQUIRED_BEFORE_EXECUTION":
+        if review_trigger != "NONE":
+            issues.append(
+                "`NOT_REQUIRED_BEFORE_EXECUTION` requires "
+                "`preExecutionReviewTrigger: NONE`"
+            )
+        if next_review_boundary == "PRE_EXECUTION_REVIEW":
+            issues.append(
+                "`NOT_REQUIRED_BEFORE_EXECUTION` cannot route the next routine "
+                "review boundary to `PRE_EXECUTION_REVIEW`"
+            )
+        if PRE_EXECUTION_REVIEW_LANGUAGE_RE.search(text):
+            issues.append(
+                "packet language requires pre-execution independent review but "
+                "`preExecutionReviewAdmission` says it is not required"
+            )
+    elif review_admission == "REQUIRED_TRIGGERED":
+        if review_trigger in (None, "NONE"):
+            issues.append(
+                "`REQUIRED_TRIGGERED` requires a non-`NONE` "
+                "`preExecutionReviewTrigger`"
+            )
+        if next_review_boundary != "PRE_EXECUTION_REVIEW":
+            issues.append(
+                "`REQUIRED_TRIGGERED` requires "
+                "`nextRoutineReviewBoundary: PRE_EXECUTION_REVIEW`"
+            )
 
     if dispatch_kind not in ("INITIAL", "REWORK"):
         issues.append("field `dispatchKind` must be `INITIAL` or `REWORK`")

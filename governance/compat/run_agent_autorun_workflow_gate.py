@@ -24,10 +24,21 @@ try:
 except ModuleNotFoundError:  # imported as governance.compat.run_agent_autorun_workflow_gate
     from governance.compat import run_agent_commit_steward_preflight as steward
 
+try:
+    import agent_autorun_machine_verification as machine_verification
+except ModuleNotFoundError:
+    from governance.compat import agent_autorun_machine_verification as machine_verification
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_RECEIPT_DIR = REPO_ROOT / ".cvf" / "runtime" / "autorun-receipts"
-RECEIPT_SCHEMA = "cvf.autorun.pass-receipt.v1"
+RECEIPT_SCHEMA = machine_verification.RECEIPT_SCHEMA
+VERIFIER_IDENTITY_PROFILE = machine_verification.VERIFIER_IDENTITY_PROFILE
+MACHINE_VERIFICATION_PROFILE = machine_verification.MACHINE_VERIFICATION_PROFILE
+VerifierIdentityUnavailable = machine_verification.VerifierIdentityUnavailable
+_jcs_bytes = machine_verification._jcs_bytes
+_machine_verification_object = machine_verification._machine_verification_object
+_machine_verification_digest = machine_verification._machine_verification_digest
 
 try:
     from agent_autorun_command_catalog import (
@@ -140,6 +151,197 @@ def _receipt_path(phase: str, receipt_dir: Path) -> Path:
     return receipt_dir / f"{phase}.json"
 
 
+# --- MFRP-H0: conservative verifier-input snapshot and interpreter identity ---
+#
+# The v1 receipt bound only command argv (_command_manifest_hash) and the
+# current path-plan's changed files (_worktree_fingerprint). Neither binds the
+# byte content of a checker script edited in an earlier batch, a shared
+# imported module, a tracked config/registry/fixture, or the Python
+# interpreter executing the commands. H0 replaces those two fields with one
+# canonicalized snapshot of every Git-tracked file plus every untracked
+# non-ignored regular file, plus an explicit interpreter identity record. Any
+# unsafe, unreadable, non-regular, or unstable-during-read input makes reuse
+# unavailable rather than silently narrowing the snapshot.
+
+
+def _normalize_repo_relative_path(raw: str) -> str | None:
+    """Return a safe, forward-slash-normalized, repository-relative path, or
+    None if the path is absolute, escapes the repository root, or is
+    otherwise unsafe."""
+    if not raw:
+        return None
+    candidate = raw.replace("\\", "/")
+    if candidate.startswith("/") or ":" in candidate:
+        return None
+    parts = candidate.split("/")
+    if any(part in ("", ".", "..") for part in parts):
+        return None
+    return candidate
+
+
+def _git_ls_files(args: tuple[str, ...]) -> tuple[str, ...]:
+    proc = subprocess.run(
+        ["git", "ls-files", "-z", *args],
+        cwd=REPO_ROOT,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if proc.returncode != 0:
+        raise VerifierIdentityUnavailable(
+            f"git ls-files failed (exit {proc.returncode})"
+        )
+    raw = proc.stdout.decode("utf-8", errors="strict")
+    return tuple(part for part in raw.split("\0") if part)
+
+
+def _snapshot_membership(command_argv_paths: frozenset[str]) -> frozenset[str]:
+    """Union of every Git-tracked path and every untracked non-ignored
+    regular-file path. Every repository-relative path directly named in
+    selected command argv must already occur in that union; an ignored or
+    unresolved command input makes identity unavailable rather than silently
+    narrowing the snapshot or hashing ignored material."""
+    try:
+        tracked = _git_ls_files(())
+        untracked = _git_ls_files(("--others", "--exclude-standard"))
+    except VerifierIdentityUnavailable:
+        raise
+    members: set[str] = set()
+    for raw in (*tracked, *untracked):
+        normalized = _normalize_repo_relative_path(raw)
+        if normalized is None:
+            raise VerifierIdentityUnavailable(f"unsafe tracked path: {raw!r}")
+        members.add(normalized)
+    missing_argv = command_argv_paths - members
+    if missing_argv:
+        raise VerifierIdentityUnavailable(
+            f"command file(s) absent from safe snapshot: {sorted(missing_argv)}"
+        )
+    return frozenset(members)
+
+
+def _file_identity_record(path: str) -> dict[str, str]:
+    """Hash one snapshot member with a read-instability guard: compare file
+    size/mtime before and after the byte read; a change during read makes the
+    input unavailable rather than silently accepted."""
+    full = REPO_ROOT / path
+    try:
+        before = full.stat()
+    except OSError as exc:
+        raise VerifierIdentityUnavailable(f"missing or unreadable path: {path} ({exc})")
+    if full.is_symlink() or not full.is_file():
+        raise VerifierIdentityUnavailable(f"non-regular snapshot member: {path}")
+    try:
+        data = full.read_bytes()
+        after = full.stat()
+    except OSError as exc:
+        raise VerifierIdentityUnavailable(f"unreadable path during read: {path} ({exc})")
+    if (
+        before.st_dev != after.st_dev
+        or before.st_ino != after.st_ino
+        or before.st_size != after.st_size
+        or before.st_mtime_ns != after.st_mtime_ns
+    ):
+        raise VerifierIdentityUnavailable(f"unstable input during read: {path}")
+    if len(data) != after.st_size:
+        raise VerifierIdentityUnavailable(f"unstable input during read: {path}")
+    return {"path": path, "sha256": hashlib.sha256(data).hexdigest()}
+
+
+_MISSING_TRACKED_MARKER = "MISSING_TRACKED_PATH"
+
+
+def _tracked_missing_record(path: str) -> dict[str, str]:
+    return {"path": path, "sha256": _MISSING_TRACKED_MARKER}
+
+
+def _command_argv_repo_paths(commands: tuple[GateCommand, ...]) -> frozenset[str]:
+    """Every argv token across the selected commands that resolves to a real
+    repository-relative file path. Each must become a safe snapshot member;
+    an ignored or unresolved command file makes reuse unavailable."""
+    candidates: set[str] = set()
+    for command in commands:
+        for token in command.command:
+            normalized = _normalize_repo_relative_path(token)
+            if normalized is None:
+                continue
+            full = REPO_ROOT / normalized
+            if full.is_file():
+                candidates.add(normalized)
+                continue
+            file_like = "/" in normalized or bool(Path(normalized).suffix)
+            if file_like:
+                state = "non-regular" if full.exists() else "missing"
+                raise VerifierIdentityUnavailable(
+                    f"{state} repository-relative command input: {normalized}"
+                )
+    return frozenset(candidates)
+
+
+def _interpreter_identity() -> dict[str, str]:
+    executable_raw = sys.executable
+    if not executable_raw:
+        raise VerifierIdentityUnavailable("no resolved sys.executable")
+    try:
+        executable = Path(executable_raw).resolve(strict=True)
+        if not executable.is_file():
+            raise VerifierIdentityUnavailable("interpreter executable is not a file")
+        executable_bytes = executable.read_bytes()
+    except OSError as exc:
+        raise VerifierIdentityUnavailable(f"unreadable interpreter executable: {exc}")
+    executable_path = executable.as_posix()
+    version_info = sys.version_info
+    version = (
+        f"{version_info.major}.{version_info.minor}.{version_info.micro}."
+        f"{version_info.releaselevel}.{version_info.serial}"
+    )
+    cache_tag = getattr(sys.implementation, "cache_tag", None) or ""
+    return {
+        "implementation": sys.implementation.name,
+        "cacheTag": cache_tag,
+        "version": version,
+        "executablePath": executable_path,
+        "executableSha256": hashlib.sha256(executable_bytes).hexdigest(),
+    }
+
+
+def _verifier_identity_preimage(
+    commands: tuple[GateCommand, ...],
+) -> dict[str, object]:
+    """Build the canonical preimage object. Raises VerifierIdentityUnavailable
+    on any unsafe, unresolved, non-regular, unreadable or unstable input."""
+    argv_paths = _command_argv_repo_paths(commands)
+    members = _snapshot_membership(argv_paths)
+    missing_argv = argv_paths - members
+    if missing_argv:
+        raise VerifierIdentityUnavailable(
+            f"command file(s) not resolvable as safe snapshot members: {sorted(missing_argv)}"
+        )
+    files: list[dict[str, str]] = []
+    for path in sorted(members):
+        full = REPO_ROOT / path
+        if not full.exists():
+            files.append(_tracked_missing_record(path))
+            continue
+        files.append(_file_identity_record(path))
+    return {
+        "profile": VERIFIER_IDENTITY_PROFILE,
+        "digestAlgorithm": "sha256",
+        "files": files,
+        "interpreter": _interpreter_identity(),
+    }
+
+
+def _verifier_identity_digest(commands: tuple[GateCommand, ...]) -> str:
+    """Return the verifier-identity digest, or raise
+    VerifierIdentityUnavailable on any incomplete/unsafe/unstable input."""
+    preimage = _verifier_identity_preimage(commands)
+    return hashlib.sha256(_jcs_bytes(preimage)).hexdigest()
+
+
+def _validate_receipt_integrity(payload: dict) -> tuple[bool, str]:
+    return machine_verification._validate_receipt_integrity(payload)
+
+
 def _receipt_context(
     phase: str,
     base: str,
@@ -156,6 +358,7 @@ def _receipt_context(
         "headSha": head_sha,
         "commandManifestHash": _command_manifest_hash(commands),
         "worktreeFingerprint": _worktree_fingerprint(base, head),
+        "verifierIdentityProfile": VERIFIER_IDENTITY_PROFILE,
     }
 
 
@@ -166,8 +369,9 @@ def _load_valid_receipt(path: Path, expected: dict[str, str]) -> tuple[bool, str
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         return False, f"receipt unreadable: {exc}"
-    if payload.get("schema") != RECEIPT_SCHEMA or payload.get("status") != "PASS":
-        return False, "receipt schema or status mismatch"
+    valid, reason = _validate_receipt_integrity(payload)
+    if not valid:
+        return False, reason
     for key, value in expected.items():
         if payload.get(key) != value:
             return False, f"receipt {key} mismatch"
@@ -179,12 +383,20 @@ def _write_receipt(
     context: dict[str, str],
     results: tuple[GateResult, ...],
     total_duration_s: float,
+    verifier_identity_digest: str,
 ) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    machine_verification = _machine_verification_object(
+        context, verifier_identity_digest, results
+    )
+    receipt_digest = _machine_verification_digest(machine_verification)
     payload = {
         "schema": RECEIPT_SCHEMA,
         "status": "PASS",
         **context,
+        "verifierIdentityDigest": verifier_identity_digest,
+        "machineVerification": machine_verification,
+        "receiptDigest": receipt_digest,
         "totalDurationSeconds": round(total_duration_s, 3),
         "checks": [
             {
@@ -365,13 +577,29 @@ def _run_phase(
         all_commands,
     )
     receipt_path = _receipt_path(phase, receipt_dir)
+    pre_run_identity_digest: str | None
+    pre_run_identity_error: str | None
+    try:
+        pre_run_identity_digest = _verifier_identity_digest(all_commands)
+        pre_run_identity_error = None
+    except VerifierIdentityUnavailable as exc:
+        pre_run_identity_digest = None
+        pre_run_identity_error = str(exc)
+
     if reuse_valid_receipt:
-        valid, reason = _load_valid_receipt(receipt_path, context)
-        if valid:
-            print(f"\nREUSED: {reason}: {receipt_path}")
-            print(f"COMPLIANT: {phase} autorun gate passed from exact local PASS receipt.")
-            return 0
-        print(f"\nReceipt reuse unavailable ({reason}); running full autorun bundle.")
+        if pre_run_identity_digest is None:
+            print(
+                f"\nReceipt reuse unavailable (verifier identity: {pre_run_identity_error}); "
+                "running full autorun bundle."
+            )
+        else:
+            expected = {**context, "verifierIdentityDigest": pre_run_identity_digest}
+            valid, reason = _load_valid_receipt(receipt_path, expected)
+            if valid:
+                print(f"\nREUSED: {reason}: {receipt_path}")
+                print(f"COMPLIANT: {phase} autorun gate passed from exact local PASS receipt.")
+                return 0
+            print(f"\nReceipt reuse unavailable ({reason}); running full autorun bundle.")
 
     results = _run_commands(
         common_tuple,
@@ -400,7 +628,30 @@ def _run_phase(
         return 1
 
     elapsed = time.perf_counter() - total_started
-    _write_receipt(receipt_path, context, all_results, elapsed)
+    if pre_run_identity_digest is None:
+        print(
+            f"\nNo reusable receipt written (verifier identity unavailable pre-run: "
+            f"{pre_run_identity_error})."
+        )
+        print(f"COMPLIANT: {phase} autorun gate passed in {elapsed:.2f}s.")
+        return 0
+
+    try:
+        post_run_identity_digest = _verifier_identity_digest(all_commands)
+    except VerifierIdentityUnavailable as exc:
+        print(f"\nNo reusable receipt written (verifier identity unavailable post-run: {exc}).")
+        print(f"COMPLIANT: {phase} autorun gate passed in {elapsed:.2f}s.")
+        return 0
+
+    if pre_run_identity_digest != post_run_identity_digest:
+        print(
+            "\nNo reusable receipt written (verifier identity drifted during "
+            "execution; PASS reflects only the commands that ran)."
+        )
+        print(f"COMPLIANT: {phase} autorun gate passed in {elapsed:.2f}s.")
+        return 0
+
+    _write_receipt(receipt_path, context, all_results, elapsed, post_run_identity_digest)
     print(f"\nReceipt: {receipt_path}")
     print(f"COMPLIANT: {phase} autorun gate passed in {elapsed:.2f}s.")
     return 0

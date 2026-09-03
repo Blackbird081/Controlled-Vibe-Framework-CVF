@@ -1,0 +1,213 @@
+{
+  "admissionMetrics": {
+    "admissionFalseNegatives": 0,
+    "preExecutionReviewCount": 0,
+    "routineReviewBoundaryCount": 0,
+    "safetyTriggerReviewCount": 0
+  },
+  "blindSpots": {
+    "c15": "FALSE_NEGATIVE",
+    "excludedFromSuccessDenominators": true,
+    "nonRepresentable": [
+      "C07",
+      "C08",
+      "C18"
+    ]
+  },
+  "checkpoint": "initialization",
+  "claimBoundary": "Bounded P4 shadow evidence only. The trusted route remains controlling. No reviewer acceptance, P5 readiness, route replacement, correctness, recall preservation, or observed cost-saving claim is made by this evidence.",
+  "designIdentity": {
+    "path": "docs/assessments/CVF_MFRP_P4_SHADOW_CANARY_AND_GOVERNANCE_TAX_BUDGET_DESIGN_2026-09-02.md",
+    "sha256": "65698a95dc7bb7f437fe061a81559701b91a3e611c445f5122ad8145c5f13df5"
+  },
+  "eligibleCount": 0,
+  "invariant": {
+    "checks": {
+      "1_authorityEvidenceBytesMatchPinnedIdentity": true,
+      "2_hardObligationLocatorPresentOnce": true,
+      "3_noAcceptanceClaimOverAbsentObligation": true,
+      "4_limitationsSurviveIntoClassification": true,
+      "5_trustedDispositionAncestorOfDisclosure": true
+    },
+    "closedManifest": {
+      "declaredEvidencePaths": [
+        {
+          "expectedSha256": "0842f9e275eaf2e44db79f265e8e9301bd7942eda2c2c9008ae3e8a0495f17c1",
+          "gitBlobSha": "32154bdf225e600ca0622ebb5e25c6c97c9678eb",
+          "path": "docs\\reviews\\CVF_MFRP_P3_R1B_R2_ACTUAL_SEAM_REPLAY_REPAIR_WORKER_RETURN_2026-09-02.md"
+        }
+      ],
+      "hardObligationLocator": "Independent Reviewer Adjudication section retains C15 FALSE_NEGATIVE, C07/C08/C18 exclusions, and P4 non-opening",
+      "hardObligationLocatorPattern": "`C07, C08, C15, C18`. C15 is classified `FALSE_NEGATIVE`",
+      "returnBlobGitSha": "32154bdf225e600ca0622ebb5e25c6c97c9678eb",
+      "returnBlobPath": "docs\\reviews\\CVF_MFRP_P3_R1B_R2_ACTUAL_SEAM_REPLAY_REPAIR_WORKER_RETURN_2026-09-02.md",
+      "returnBlobReadFromCommittedBlob": true
+    },
+    "invariantId": "P4-I1-DECLARED-AUTHORITY-AND-HARD-OBLIGATION-SURVIVAL",
+    "locatorOccurrenceCount": 1,
+    "result": "PASS"
+  },
+  "limitations": [
+    "C07, C08 and C18 are not representable by current P2 and are excluded from safety/recall denominators.",
+    "C15 remains FALSE_NEGATIVE and is never counted as PASS.",
+    "No saved cost is claimed during shadow mode.",
+    "Consistency (ENVELOPE_CONSISTENT_WITH_TRUSTED) is never correctness or route equivalence.",
+    "The initial R1B-R2 pair has no explicitly linked receipt; it is recorded ineligible (BLOCKED_NO_ELIGIBLE_NATURAL_PAIR) rather than substituted with an unrelated current receipt."
+  ],
+  "openingDate": "2026-09-02",
+  "phaseCoverage": {
+    "BUILD": 0,
+    "DESIGN": 0,
+    "FREEZE": 0,
+    "INTAKE": 0,
+    "REVIEW": 0,
+    "SPEC": 0,
+    "WORK_ORDER": 0
+  },
+  "p5ReopenSampleGate": {
+    "calendarWaitRequiredAfterSampleSatisfied": false,
+    "claimBoundary": "This is a necessary sample gate only. Safety, audit, recall and evidence-quality gates remain controlling in a separate P5 decision.",
+    "day30AloneAuthorizesReopen": false,
+    "day30InsufficientSampleDisposition": "INSUFFICIENT_EVIDENCE",
+    "observedEligibleCount": 0,
+    "requiredEligibleCount": 20,
+    "sampleSatisfied": false,
+    "status": "P5_CLOSED_SAMPLE_INCOMPLETE"
+  },
+  "populationCount": 1,
+  "profile": "cvf.mfrp.p4ShadowCanary.evidence.v1",
+  "r1bR2Identity": {
+    "blob": "32154bdf225e600ca0622ebb5e25c6c97c9678eb",
+    "commit": "040ebfcff081062956c543f2b1d7e9cc04533b62",
+    "returnPath": "docs/reviews/CVF_MFRP_P3_R1B_R2_ACTUAL_SEAM_REPLAY_REPAIR_WORKER_RETURN_2026-09-02.md",
+    "trustedOutcome": "REVIEWER_ACCEPTED_EVIDENCE_RETURN_TO_DESIGN_BOUNDED"
+  },
+  "rollbackResult": {
+    "headAfter": "d276cf4cd9b5bedb26b86625f42bfcbcb98afdea",
+    "headBefore": "d276cf4cd9b5bedb26b86625f42bfcbcb98afdea",
+    "headUnchanged": true,
+    "markerCreated": true,
+    "markerRemoved": true,
+    "providerCallsDuringRollback": 0,
+    "repositoryStatusAfter": "M  docs/baselines/CVF_GC018_MFRP_P4_SHADOW_CANARY_AND_GOVERNANCE_TAX_MEASUREMENT_2026-09-02.md\nM  docs/work_orders/CVF_AGENT_WORK_ORDER_MFRP_P4_SHADOW_CANARY_AND_GOVERNANCE_TAX_MEASUREMENT_2026-09-02.md\n?? docs/reviews/CVF_MFRP_P4_SHADOW_CANARY_WORKER_RETURN_2026-09-02.md\n?? governance/compat/fixtures/mfrp_p4_shadow_canary_evidence.json\n?? governance/compat/mfrp_shadow_canary.py\n?? governance/compat/mfrp_shadow_canary_core.py\n?? governance/compat/test_mfrp_shadow_canary.py\n?? governance/compat/test_mfrp_shadow_canary_core.py",
+    "repositoryStatusBefore": "M  docs/baselines/CVF_GC018_MFRP_P4_SHADOW_CANARY_AND_GOVERNANCE_TAX_MEASUREMENT_2026-09-02.md\nM  docs/work_orders/CVF_AGENT_WORK_ORDER_MFRP_P4_SHADOW_CANARY_AND_GOVERNANCE_TAX_MEASUREMENT_2026-09-02.md\n?? docs/reviews/CVF_MFRP_P4_SHADOW_CANARY_WORKER_RETURN_2026-09-02.md\n?? governance/compat/fixtures/mfrp_p4_shadow_canary_evidence.json\n?? governance/compat/mfrp_shadow_canary.py\n?? governance/compat/mfrp_shadow_canary_core.py\n?? governance/compat/test_mfrp_shadow_canary.py\n?? governance/compat/test_mfrp_shadow_canary_core.py",
+    "runtimeDirectory": ".cvf\\runtime\\mfrp-p4-shadow-canary",
+    "trustedBlobAfter": "32154bdf225e600ca0622ebb5e25c6c97c9678eb",
+    "trustedBlobBefore": "32154bdf225e600ca0622ebb5e25c6c97c9678eb",
+    "trustedBlobUnchanged": true,
+    "trustedDispositionUnchanged": true
+  },
+  "rows": [
+    {
+      "auditDisposition": "NOT_APPLICABLE_INELIGIBLE_ROW",
+      "auditReason": "none",
+      "blindSpotDisposition": {
+        "c15": "FALSE_NEGATIVE",
+        "excludedFromSuccessDenominators": true,
+        "hardObligationLocator": "Independent Reviewer Adjudication section retains C15 FALSE_NEGATIVE, C07/C08/C18 exclusions, and P4 non-opening",
+        "nonRepresentable": [
+          "C07",
+          "C08",
+          "C18"
+        ]
+      },
+      "closedAuditManifestPins": {
+        "hardObligationLocator": "Independent Reviewer Adjudication section retains C15 FALSE_NEGATIVE, C07/C08/C18 exclusions, and P4 non-opening",
+        "hardObligationLocatorPattern": "`C07, C08, C15, C18`. C15 is classified `FALSE_NEGATIVE`",
+        "returnBlobExpectedSha256": "0842f9e275eaf2e44db79f265e8e9301bd7942eda2c2c9008ae3e8a0495f17c1",
+        "returnBlobGitSha": "32154bdf225e600ca0622ebb5e25c6c97c9678eb",
+        "returnBlobPath": "docs/reviews/CVF_MFRP_P3_R1B_R2_ACTUAL_SEAM_REPLAY_REPAIR_WORKER_RETURN_2026-09-02.md",
+        "returnBlobReadableFromCommittedObject": true,
+        "sourceAuthorityLocator": "docs/reviews/CVF_MFRP_P3_R1B_R2_ACTUAL_SEAM_REPLAY_REPAIR_WORKER_RETURN_2026-09-02.md#independent-reviewer-adjudication"
+      },
+      "controllingOutcome": "REVIEWER_ACCEPTED_EVIDENCE_RETURN_TO_DESIGN_BOUNDED",
+      "costEvidence": {
+        "cacheReuse": "NOT_APPLICABLE",
+        "externalCalls": 0,
+        "shadowCommandCount": 0,
+        "shadowDurationSeconds": null
+      },
+      "divergenceClass": "COMPARISON_OBJECT_MISMATCH",
+      "ineligibleClass": "BLOCKED_NO_ELIGIBLE_NATURAL_PAIR",
+      "machineOutcome": null,
+      "pairLinkageEvidence": {
+        "checkedIgnoredReceiptCount": 4,
+        "linked": false,
+        "reason": "no linkage manifest supplied"
+      },
+      "phase": "REVIEW",
+      "phaseReturnIdentity": {
+        "blob": "32154bdf225e600ca0622ebb5e25c6c97c9678eb",
+        "commit": "040ebfcff081062956c543f2b1d7e9cc04533b62",
+        "path": "docs/reviews/CVF_MFRP_P3_R1B_R2_ACTUAL_SEAM_REPLAY_REPAIR_WORKER_RETURN_2026-09-02.md"
+      },
+      "receiptIdentity": null,
+      "rowId": "R1B-R2-INITIAL",
+      "samePayloadEvidence": null,
+      "samplingDigest": "5c0cacc093c83aefd98b425c4c4076904f990fa3d6f1df3739496c01d14915a0",
+      "trustedOutcome": {
+        "disposition": "REVIEWER_ACCEPTED_EVIDENCE_RETURN_TO_DESIGN_BOUNDED",
+        "evidenceReference": "docs/reviews/CVF_MFRP_P3_R1B_R2_ACTUAL_SEAM_REPLAY_REPAIR_WORKER_RETURN_2026-09-02.md Independent Reviewer Adjudication, lines 758-759"
+      },
+      "trustedRecordOrderEvidence": {
+        "commitExists": true,
+        "isAncestor": true,
+        "orderOfRecordStatus": "PROVEN",
+        "shadowDisclosureBase": "d276cf4cd9b5bedb26b86625f42bfcbcb98afdea",
+        "trustedCommit": "040ebfcff081062956c543f2b1d7e9cc04533b62"
+      }
+    }
+  ],
+  "safetyTriggers": {
+    "auditScopeExcess": false,
+    "externalEffect": false,
+    "hiddenLimitationOrUnclassified": false,
+    "identityOrSourceDrift": false,
+    "independentInvariantFailure": false,
+    "machineClosureWhereTrustedBlocks": false,
+    "orderOfRecordFailure": false,
+    "unexplainedDivergence": false
+  },
+  "sampling": {
+    "formula": "k = min(4, max(1, ceil(0.20 * n))) for n >= 1, else k = 0",
+    "k": 0,
+    "n": 0,
+    "selectedRowIds": []
+  },
+  "schema": "cvf.mfrp.p4ShadowCanary.v1",
+  "sunsetDate": "2026-10-02",
+  "sunsetRule": "earlier of 20 eligible natural returns or 30 calendar days from opening",
+  "taxMetrics": {
+    "initialObservation": {
+      "auditScopeExceededCount": 0,
+      "externalCalls": 0,
+      "shadowCommandCount": 0
+    },
+    "m0": {
+      "description": "earliest historical admission measurement in this MFRP chain: the original (rejected) R1B actual-seam replay return",
+      "implementationDefectsFoundAtReturnBoundary": 3,
+      "preExecutionReviewCount": 0,
+      "recallConclusion": "NOT_YET_ESTIMABLE",
+      "reviewerDisposition": "RETURN_TO_DESIGN",
+      "source": "docs/reviews/CVF_MFRP_P3_R1B_ACTUAL_SEAM_REPLAY_WORKER_RETURN_2026-09-02.md"
+    },
+    "m1": {
+      "description": "second historical admission measurement: the R1B-R2 repair round's first-pass independent adjudication, before its own in-place repair (distinct from M2, which is the same return's final post-repair adjudication)",
+      "implementationDefectsFoundAtReturnBoundary": 3,
+      "preExecutionReviewCount": 0,
+      "recallConclusion": "NOT_YET_ESTIMABLE",
+      "reviewerDisposition": "REVISE_IN_PLACE_CONSOLIDATED",
+      "source": "docs/reviews/CVF_MFRP_P3_R1B_R2_ACTUAL_SEAM_REPLAY_REPAIR_WORKER_RETURN_2026-09-02.md"
+    },
+    "m2": {
+      "description": "third historical admission measurement: the same R1B-R2 return's final post-repair adjudication and acceptance",
+      "implementationDefectsFoundAtReturnBoundary": 3,
+      "preExecutionReviewCount": 0,
+      "recallConclusion": "NOT_YET_ESTIMABLE",
+      "reviewerDisposition": "REVIEWER_ACCEPTED_EVIDENCE_RETURN_TO_DESIGN_BOUNDED",
+      "source": "docs/reviews/CVF_MFRP_P3_R1B_R2_ACTUAL_SEAM_REPLAY_REPAIR_WORKER_RETURN_2026-09-02.md"
+    },
+    "positiveTriggerDenominator": 0,
+    "recall": "NOT_YET_ESTIMABLE"
+  }
+}

@@ -78,4 +78,34 @@ describe("GatewayReceiptBuilder", () => {
       nested: { secret: "[REDACTED]", value: 1 },
     });
   });
+
+  describe("CSCC-R1-T2 canonicalExecutionId (additive, legacy-compatible)", () => {
+    it("omits canonicalExecutionId when the input omits it (legacy caller)", () => {
+      const builder = new GatewayReceiptBuilder(
+        () => new Date("2026-09-03T00:00:00Z"),
+        () => "abc123",
+      );
+      const receipt = builder.build({
+        traceId: "trace-legacy",
+        decision: "selected",
+        reason: "test",
+      });
+      expect(receipt.canonicalExecutionId).toBeUndefined();
+    });
+
+    it("carries canonicalExecutionId through to the built receipt when present", () => {
+      const builder = new GatewayReceiptBuilder(
+        () => new Date("2026-09-03T00:00:00Z"),
+        () => "abc123",
+      );
+      const receipt = builder.build({
+        traceId: "trace-canonical",
+        canonicalExecutionId: "env-canonical-001",
+        decision: "selected",
+        reason: "test",
+      });
+      expect(receipt.canonicalExecutionId).toBe("env-canonical-001");
+      expect(receipt.traceId).toBe("trace-canonical");
+    });
+  });
 });

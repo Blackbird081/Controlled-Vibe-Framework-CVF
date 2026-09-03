@@ -141,6 +141,14 @@ export interface GovernanceEvidenceReceipt {
     routingDecision?: string;
     policySnapshotId?: string;
     envelopeId?: string;
+    /**
+     * CSCC-R1-T2 additive identity join field, always equal to this same
+     * receipt's `envelopeId` at construction time (both are the same
+     * underlying value under two field names during the transition window;
+     * see `docs/reference/CVF_CANONICAL_EXECUTION_IDENTITY_AND_RECEIPT_JOIN_CONTRACT_2026-09-03.md`).
+     * `envelopeId` is retained unchanged; no existing consumer is broken.
+     */
+    canonicalExecutionId?: string;
     knowledgeSource?: string;
     knowledgeInjected?: boolean;
     knowledgeCollectionId?: string | null;

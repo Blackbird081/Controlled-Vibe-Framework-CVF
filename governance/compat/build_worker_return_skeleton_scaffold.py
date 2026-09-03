@@ -3,7 +3,115 @@
 
 from __future__ import annotations
 
+import json
 from typing import Any
+
+SCEC_SCHEMA_VERSION = "cvf.semanticConvergenceControl.v1"
+SCEC_UNRESOLVED_PREDECESSOR_SENTINEL = "SCEC_PREDECESSOR_HASH_UNRESOLVED"
+
+
+def render_scec_outcome_block(
+    *,
+    problem_key: str,
+    chain_mode: str,
+    chain_ordinal: int,
+    predecessor_path: str | None,
+    predecessor_sha256: str | None,
+    required_disposition: str,
+    successor_scope: str,
+    reminder: str,
+) -> str:
+    predecessor = None if chain_mode == "INITIAL" else {
+        "path": predecessor_path or SCEC_UNRESOLVED_PREDECESSOR_SENTINEL,
+        "sha256": predecessor_sha256 or SCEC_UNRESOLVED_PREDECESSOR_SENTINEL,
+    }
+    block = {
+        "schemaVersion": SCEC_SCHEMA_VERSION,
+        "problemKey": problem_key,
+        "chainMode": chain_mode,
+        "chainOrdinal": chain_ordinal,
+        "predecessor": predecessor,
+        "blockerDelta": {name: [] for name in ("prior", "resolved", "retained", "new", "reopened", "current")},
+        "resolutionEvidence": {},
+        "counters": {
+            "partialReadyClosures": 0, "reviewerScopeExpansions": 0,
+            "sameClaimCorrections": 0, "nonDecreasingBlockerTransitions": 0,
+        },
+        "claims": [],
+        "requiredDisposition": required_disposition,
+        "successorScope": successor_scope,
+    }
+    return (
+        "## Semantic Convergence Outcome\n\n"
+        "Standard: `docs/reference/semantic_convergence_control/"
+        "CVF_SEMANTIC_CONVERGENCE_AND_ESCALATION_CONTROL_STANDARD.md`\n\n"
+        f"```json\n{json.dumps(block, indent=2)}\n```\n\n{reminder}"
+    )
+
+
+def render_p4_observation_block() -> str:
+    """Render the optional P4-C1 automatic evidence observation block.
+
+    Must stay byte-identical (as its own standalone rendered text) to
+    ``run_worker_return_scaffold``'s equivalent section. Default ``NO``
+    eligibility prevents ordinary worker returns from accidentally
+    enrolling; this block carries no trusted-disposition field of its own --
+    the reviewer/closer-owned disposition elsewhere in the return remains
+    the sole trusted-disposition source.
+    """
+    return (
+        "## P4 Automatic Evidence Observation Block\n\n"
+        f"{FIELD_ELIGIBILITY}: NO\n"
+        f"{FIELD_PHASE}: N/A with reason: not a natural P4 observation candidate\n"
+        f"{FIELD_HARD_OBLIGATION_LOCATOR}: N/A with reason: not a natural P4 observation candidate\n"
+        f"{FIELD_HARD_OBLIGATION_PATTERN}: N/A with reason: not a natural P4 observation candidate\n"
+        f"{FIELD_SOURCE_AUTHORITY_LOCATOR}: N/A with reason: not a natural P4 observation candidate\n"
+    )
+
+
+def p4_observation_block_fields() -> str:
+    """The field-only body (no heading), for cross-generator byte-equality
+    comparison against ``run_worker_return_scaffold``'s section body."""
+    return (
+        f"{FIELD_ELIGIBILITY}: NO\n"
+        f"{FIELD_PHASE}: N/A with reason: not a natural P4 observation candidate\n"
+        f"{FIELD_HARD_OBLIGATION_LOCATOR}: N/A with reason: not a natural P4 observation candidate\n"
+        f"{FIELD_HARD_OBLIGATION_PATTERN}: N/A with reason: not a natural P4 observation candidate\n"
+        f"{FIELD_SOURCE_AUTHORITY_LOCATOR}: N/A with reason: not a natural P4 observation candidate\n"
+    )
+
+
+FIELD_ELIGIBILITY = "p4ObservationEligibility"
+FIELD_PHASE = "p4ObservationPhase"
+FIELD_HARD_OBLIGATION_LOCATOR = "p4HardObligationLocator"
+FIELD_HARD_OBLIGATION_PATTERN = "p4HardObligationPattern"
+FIELD_SOURCE_AUTHORITY_LOCATOR = "p4SourceAuthorityLocator"
+
+
+def build_scec_outcome_block(args: Any) -> str:
+    """Emit an outcome-shaped SCEC block for a worker-return skeleton.
+
+    Mirrors `build_dispatch_packet_scaffold._scec_block`'s no-fabrication
+    rule: a SUCCESSOR outcome without an explicit predecessor hash emits the
+    explicit unresolved sentinel rather than inventing readiness evidence.
+    """
+    problem_key = getattr(args, "scec_problem_key", None) or f"{args.batch_id.lower()}-problem"
+    # A worker return is always the successor outcome of its dispatch packet.
+    # Emit an unresolved predecessor rather than a fresh valid INITIAL block;
+    # the author must bind the real work-order path/hash before return.
+    chain_mode = "SUCCESSOR"
+    return render_scec_outcome_block(
+        problem_key=problem_key,
+        chain_mode=chain_mode,
+        chain_ordinal=getattr(args, "scec_chain_ordinal", 0) + 1,
+        predecessor_path=None,
+        predecessor_sha256=None,
+        required_disposition=getattr(args, "scec_required_disposition", "CONTINUE_BOUNDED"),
+        successor_scope=getattr(args, "scec_successor_scope", "INITIAL_BOUNDED"),
+        reminder="Author reminder: fill `blockerDelta`, `counters`, and `claims` with real "
+        "declared outcome evidence before returning for review; never replace an unresolved "
+        f"`{SCEC_UNRESOLVED_PREDECESSOR_SENTINEL}` with a fabricated path or hash.",
+    )
 
 
 def build_worker_return_skeleton(args: Any) -> str:
@@ -65,6 +173,8 @@ TO_FILL: state the scope and methodology of this worker execution.
 TO_FILL: state findings and position with evidence.
 ## Risk / Corrective Action
 TO_FILL: state risks and corrective actions if any.
+{render_p4_observation_block()}
+{build_scec_outcome_block(args)}
 ## Checker Source Read-Ahead Block
 | Field | Value |
 | --- | --- |

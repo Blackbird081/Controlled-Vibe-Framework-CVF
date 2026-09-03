@@ -396,6 +396,94 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
         });
     });
 
+    // -- CSCC-R1-T2: exactly-once provider invocation and exclusive path
+    // selection. The route must call the real provider path (`executeAI`)
+    // exactly once per admitted attempt, and must never construct or invoke
+    // the canonical port-backed alternative in the same request - proving
+    // the two paths are never dual-active on this route build. -------------
+    describe('CSCC-R1-T2: exactly-once invocation and exclusive direct/port wiring', () => {
+        it('calls executeAI exactly once per admitted attempt with no duplicate invocation for the same attempt', async () => {
+            process.env.OPENAI_API_KEY = 'test-key';
+            process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
+            executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
+
+            const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
+            const data = await res.json();
+
+            expect(executeAIMock).toHaveBeenCalledTimes(1);
+            expect(data.providerAttemptReconciliation.admittedAttemptCount).toBe(
+                data.providerAttemptReconciliation.providerCallCount,
+            );
+        });
+
+        it('imports only the exclusivity assertion from the canonical port module, never the executor/factory that would actually invoke the port', async () => {
+            // Static-import-graph assertion: route.ts may import the
+            // exclusivity invariant helper (assertNonVisionExecutionPathIsDirect)
+            // from the canonical port composition module, but must not import
+            // CanonicalWebGatewayExecutor or createCanonicalWebGatewayExecutor -
+            // the symbols that would actually construct and call the port -
+            // while NON_VISION_EXECUTION_PATH_SELECTION is 'direct'. This
+            // proves the exclusivity rule structurally: the port composition
+            // is reachable as a module but never actually wired/invoked here.
+            const fs = await import('node:fs');
+            const path = await import('node:path');
+            const routeSrc = fs.readFileSync(path.resolve(__dirname, './route.ts'), 'utf-8');
+            const canonicalPortImportLine = routeSrc
+                .split('\n')
+                .find((line) => line.trim().startsWith('import ') && line.includes('canonical-web-gateway-execution'));
+            expect(canonicalPortImportLine).toBeDefined();
+            expect(canonicalPortImportLine).toContain('assertNonVisionExecutionPathIsDirect');
+            expect(canonicalPortImportLine).not.toContain('CanonicalWebGatewayExecutor');
+            expect(canonicalPortImportLine).not.toContain('createCanonicalWebGatewayExecutor');
+            expect(routeSrc).not.toMatch(/\bCanonicalWebGatewayExecutor\b/);
+            expect(routeSrc).not.toMatch(/\bcreateCanonicalWebGatewayExecutor\b/);
+        });
+
+        it('CSCC-R1-T2 rework (Finding 4): only stamps canonicalExecutionId into the SOT3 knowledge-context call when the request will actually continue through the canonical port, never unconditionally from the Web envelope', async () => {
+            // Static-source assertion: route.ts must gate the
+            // resolveKnowledgeContext() canonicalExecutionId argument through
+            // sot3CanonicalExecutionIdFanoutArg() (which itself checks
+            // NON_VISION_EXECUTION_PATH_SELECTION === 'port' in
+            // canonical-web-gateway-execution.ts) rather than stamping
+            // govEnvelope.envelopeId onto the call unconditionally. Today
+            // NON_VISION_EXECUTION_PATH_SELECTION is 'direct', so this
+            // request never reaches the port and
+            // Sot3ActivationEvidenceRecord.canonicalExecutionId must never be
+            // populated for it.
+            const fs = await import('node:fs');
+            const path = await import('node:path');
+            const routeSrc = fs.readFileSync(path.resolve(__dirname, './route.ts'), 'utf-8');
+            expect(routeSrc).toMatch(/import\s*\{[^}]*sot3CanonicalExecutionIdFanoutArg[^}]*\}\s*from\s*'@\/lib\/canonical-web-gateway-execution'/);
+            const resolveCallStart = routeSrc.indexOf('await resolveKnowledgeContext({');
+            expect(resolveCallStart).toBeGreaterThan(-1);
+            const resolveCallEnd = routeSrc.indexOf('});', resolveCallStart);
+            const resolveCallSrc = routeSrc.slice(resolveCallStart, resolveCallEnd);
+            expect(resolveCallSrc).toContain('sot3CanonicalExecutionIdFanoutArg(govEnvelope.envelopeId)');
+            // The unconditional legacy form (bare field assignment with no
+            // guard) must not reappear.
+            expect(resolveCallSrc).not.toMatch(/^\s*canonicalExecutionId:\s*govEnvelope\.envelopeId,\s*$/m);
+
+            const fanoutFnSrc = fs.readFileSync(path.resolve(__dirname, '../../../lib/canonical-web-gateway-execution.ts'), 'utf-8');
+            const fanoutFnStart = fanoutFnSrc.indexOf('export function sot3CanonicalExecutionIdFanoutArg');
+            expect(fanoutFnStart).toBeGreaterThan(-1);
+            const fanoutFnBody = fanoutFnSrc.slice(fanoutFnStart, fanoutFnSrc.indexOf('\n}', fanoutFnStart));
+            expect(fanoutFnBody).toContain("NON_VISION_EXECUTION_PATH_SELECTION === 'port'");
+        });
+
+        it('the direct executeAI invocation and the canonical port composition are never both reachable in the same admitted-attempt call', async () => {
+            process.env.OPENAI_API_KEY = 'test-key';
+            process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
+            executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
+
+            const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
+            expect(res.status).toBe(200);
+            // Exactly one provider-shaped invocation occurred (the direct
+            // mock); no second, port-shaped invocation path exists to fire
+            // in parallel on this build.
+            expect(executeAIMock).toHaveBeenCalledTimes(1);
+        });
+    });
+
     // -- DSH-WRA-R1-RV-F01: the post-provider output-bypass denial path must
     // also carry providerAttemptReconciliation, since it fires after at
     // least one admitted and started provider invocation. --------------------

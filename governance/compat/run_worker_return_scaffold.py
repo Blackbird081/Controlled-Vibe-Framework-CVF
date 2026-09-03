@@ -11,6 +11,7 @@ decision.
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -21,14 +22,24 @@ SCAFFOLD_TODO = "TODO: worker fills this section before returning for review."
 SCAFFOLD_TABLE_TODO = "TODO: fill before review"
 FULL_PROFILE = "WORKER_RETURN_FULL_GATE_V1"
 FAST_DOC_PROFILE = "WORKER_RETURN_FAST_DOC_V1"
+SCEC_SCHEMA_VERSION = "cvf.semanticConvergenceControl.v1"
+SCEC_UNRESOLVED_PREDECESSOR_SENTINEL = "SCEC_PREDECESSOR_HASH_UNRESOLVED"
+
+FIELD_ELIGIBILITY = "p4ObservationEligibility"
+FIELD_PHASE = "p4ObservationPhase"
+FIELD_HARD_OBLIGATION_LOCATOR = "p4HardObligationLocator"
+FIELD_HARD_OBLIGATION_PATTERN = "p4HardObligationPattern"
+FIELD_SOURCE_AUTHORITY_LOCATOR = "p4SourceAuthorityLocator"
 
 WORKER_RETURN_SCAFFOLD_SECTIONS = (
     "Source Inventory",
     "Rework Convergence Self-Proof",
+    "Semantic Convergence Outcome",
     "Purpose",
     "Scope / Methodology",
     "Findings / Position",
     "Risk / Corrective Action",
+    "P4 Automatic Evidence Observation Block",
     "Claim Boundary",
     "Checker Source Read-Ahead Block",
     "Gate Evidence",
@@ -80,6 +91,60 @@ def _section_body(section: str) -> list[str]:
             "providerCallCount: 0",
             "tokenOrQuotaUsage: NOT_AVAILABLE_WITH_REASON: provider-neutral scaffold has no usage meter",
             "terminalReadinessVerdict: BLOCKED_WITH_REASON: generated scaffold pending worker evidence",
+        ]
+    if section == "Semantic Convergence Outcome":
+        block = {
+            "schemaVersion": SCEC_SCHEMA_VERSION,
+            "problemKey": "TODO-stable-problem-key",
+            "chainMode": "SUCCESSOR",
+            "chainOrdinal": 1,
+            "predecessor": {
+                "path": SCEC_UNRESOLVED_PREDECESSOR_SENTINEL,
+                "sha256": SCEC_UNRESOLVED_PREDECESSOR_SENTINEL,
+            },
+            "blockerDelta": {
+                "prior": [],
+                "resolved": [],
+                "retained": [],
+                "new": [],
+                "reopened": [],
+                "current": [],
+            },
+            "resolutionEvidence": {},
+            "counters": {
+                "partialReadyClosures": 0,
+                "reviewerScopeExpansions": 0,
+                "sameClaimCorrections": 0,
+                "nonDecreasingBlockerTransitions": 0,
+            },
+            "claims": [],
+            "requiredDisposition": "CONTINUE_BOUNDED",
+            "successorScope": "INITIAL_BOUNDED",
+        }
+        rendered = json.dumps(block, indent=2)
+        return [
+            "Standard: `docs/reference/semantic_convergence_control/"
+            "CVF_SEMANTIC_CONVERGENCE_AND_ESCALATION_CONTROL_STANDARD.md`",
+            "",
+            "```json",
+            rendered,
+            "```",
+            "",
+            "TODO: replace `problemKey`, `chainMode`, `chainOrdinal`, "
+            "`predecessor`, `blockerDelta`, `counters`, `claims`, "
+            "`requiredDisposition`, and `successorScope` with the real "
+            "declared outcome for this worker return. A `SUCCESSOR` block "
+            f"must never resolve `{SCEC_UNRESOLVED_PREDECESSOR_SENTINEL}` "
+            "with a fabricated hash; leave the sentinel until the real "
+            "predecessor path/hash is known.",
+        ]
+    if section == "P4 Automatic Evidence Observation Block":
+        return [
+            f"{FIELD_ELIGIBILITY}: NO",
+            f"{FIELD_PHASE}: N/A with reason: not a natural P4 observation candidate",
+            f"{FIELD_HARD_OBLIGATION_LOCATOR}: N/A with reason: not a natural P4 observation candidate",
+            f"{FIELD_HARD_OBLIGATION_PATTERN}: N/A with reason: not a natural P4 observation candidate",
+            f"{FIELD_SOURCE_AUTHORITY_LOCATOR}: N/A with reason: not a natural P4 observation candidate",
         ]
     if section == "Gate Evidence":
         return [

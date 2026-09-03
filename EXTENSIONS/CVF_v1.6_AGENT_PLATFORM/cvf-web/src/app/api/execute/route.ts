@@ -34,6 +34,7 @@ import { buildOutputBypassGuardResult, checkRoleOutputPermission, detectBypassIn
 import { buildExecutionDiagnostic } from '@/lib/execution-diagnostics';
 import { admitAndInvokeProvider, buildProviderAttemptDeniedResponse, buildProviderAttemptReconciliation, createProviderAttemptLedger } from '@/lib/provider-attempt-admission';
 import type { ProviderAttemptLedger } from '@/lib/provider-attempt-admission';
+import { assertNonVisionExecutionPathIsDirect, sot3CanonicalExecutionIdFanoutArg } from '@/lib/canonical-web-gateway-execution';
 import { getApprovalStore, type ApprovalRequestRecord } from '../approvals/store';
 import { approvalRecordMatchesActor, buildApprovalActorBinding, buildApprovalRequestSnapshot, computeApprovalRequestHash } from '../approvals/approval-binding';
 import { executeVisionRouteRequest, prepareVisionRouteRequest } from './vision-route-helper';
@@ -704,6 +705,7 @@ export async function POST(request: NextRequest) {
             requestedCollectionId: typeof body.knowledgeCollectionId === 'string' ? body.knowledgeCollectionId : undefined,
             templateLabel: body.templateName || body.templateId || 'unknown-template',
             session,
+            ...sot3CanonicalExecutionIdFanoutArg(govEnvelope.envelopeId), // CSCC-R1-T2 Finding 4: conditional on actual port usage
         });
 
         // SOT3-ACT-A4: fail closed before any provider call. In ENFORCE mode a
@@ -795,7 +797,9 @@ export async function POST(request: NextRequest) {
 
         // -- EXECUTE AI with auto-retry on output validation failure. F01:
         // admitAndInvokeProvider composes admission, call-start accounting,
-        // invocation, and reconciliation-bearing error handling in one call. --
+        // invocation, and reconciliation-bearing error handling in one call.
+        // CSCC-R1-T2: exactly the direct executeAI path per the selection above. --
+        assertNonVisionExecutionPathIsDirect();
         let aiResult: ExecutionResponse;
         {
             const outcome = await admitAndInvokeProvider({
@@ -856,6 +860,7 @@ export async function POST(request: NextRequest) {
                     ? `${filteredPrompt}\n\n[Improvement note: ${retryDecision.adjustedHint}]`
                     : filteredPrompt;
 
+                assertNonVisionExecutionPathIsDirect(); // CSCC-R1-T2: same selected path as initial call
                 const retryOutcome = await admitAndInvokeProvider({
                     ledger: providerAttemptLedger, purpose: 'retry', routedProvider, requestedModel: body.model,
                     onDenied: denyProviderAttempt, errorLogLabel: 'Provider retry invocation error:', errorFallbackMessage: 'Provider retry invocation failed.',

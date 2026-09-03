@@ -110,6 +110,27 @@ describe('evaluateSot3KnowledgeActivation', () => {
     expect(result.injectionPermitted).toBe(false);
   });
 
+  describe('CSCC-R1-T2: canonicalExecutionId input (additive, legacy-compatible)', () => {
+    it('accepts an evaluation input with canonicalExecutionId present and evaluates identically to one without it', () => {
+      const chunk = buildValidChunk();
+      const withId = evaluateSot3KnowledgeActivation(
+        { ...buildInputBase(), chunks: [chunk], canonicalExecutionId: 'env-canonical-adapter-001' },
+        'ENFORCE',
+      );
+      const withoutId = evaluateSot3KnowledgeActivation({ ...buildInputBase(), chunks: [chunk] }, 'ENFORCE');
+      expect(withId.terminalOutcome).toBe('APPROVED');
+      expect(withId.terminalOutcome).toBe(withoutId.terminalOutcome);
+      expect(withId.injectionPermitted).toBe(withoutId.injectionPermitted);
+      expect(withId.approvedContext).toBe(withoutId.approvedContext);
+    });
+
+    it('remains a legacy caller when canonicalExecutionId is omitted entirely', () => {
+      const chunk = buildValidChunk();
+      const result = evaluateSot3KnowledgeActivation({ ...buildInputBase(), chunks: [chunk] }, 'ENFORCE');
+      expect(result.terminalOutcome).toBe('APPROVED');
+    });
+  });
+
   it('rejects with REFINERY_NOT_READY on incorrect expected content hash', () => {
     const chunk = buildValidChunk({ expectedContentHash: 'sha256:0000000000000000000000000000000000000000000000000000000000000000' });
     const result = evaluateSot3KnowledgeActivation({ ...buildInputBase(), chunks: [chunk] }, 'ENFORCE');

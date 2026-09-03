@@ -5,7 +5,7 @@
   "sourceAuditEvidence": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_EVIDENCE_2026-07-10.json",
   "reviewerCompletion": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md",
   "reviewerCompletionMaterialCommit": "645df8b83",
-  "lastVerifiedDate": "2026-08-30",
+  "lastVerifiedDate": "2026-09-01",
   "maxAgeDays": 30,
   "reminderPolicy": "This machine map and its human companion record reviewer-accepted MSEA-R90 Audit A findings. Source-file drift and review age are detected automatically by governance/compat/check_system_chain_map_freshness.py. Detecting drift or age expiry never rewrites a lane's currentPosture or verdict automatically; only a fresh governed review may change those fields.",
   "lanes": [
@@ -194,10 +194,10 @@
       "planeRange": "RUNTIME_GUARD class (GC-001..GC-014) and CI_REPO_GATE class (186 governance/compat/check_*.py checkers)",
       "currentPosture": "PARTIAL",
       "verdict": "PARTIAL_OPERATOR_VISIBILITY_BY_ENFORCEMENT_CLASS",
-      "implementedBy": "scripts/cvf_doctor.py; scripts/run_cvf_release_gate_bundle.py; governance/compat/run_agent_autorun_workflow_gate.py; governance/compat/run_local_governance_hook_chain.py; EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts",
-      "invokedBy": "operator runs scripts/cvf_doctor.py directly; the release bundle consumes its bounded capability snapshot before expensive checks; autorun receipts are written by run_agent_autorun_workflow_gate.py at each phase run; Web Operations dispatches jobs from web-governance-jobs.ts JOB_DEFINITIONS",
-      "testedBy": "42/42 hermetic snapshot and release short-circuit tests; 38/38 existing SOT3 release integration tests; direct secret-safe capability-snapshot CLI invocation; CLI aggregate/per-check human-readable PASS/FAIL output confirmed by direct source read for both the autorun gate and the hook chain; Web job registry confirmed to expose exactly 5 job types with exactly 1 named governance/compat checker wired directly (docs_governance_check -> check_docs_governance_compat.py)",
-      "evidenceOwner": "the receipt file itself; scripts/cvf_doctor.py source; scripts/test_cvf_doctor_snapshot.py; web-governance-jobs.ts JOB_DEFINITIONS",
+      "implementedBy": "scripts/cvf_doctor.py; scripts/run_cvf_release_gate_bundle.py; governance/compat/run_agent_autorun_workflow_gate.py; governance/compat/agent_autorun_machine_verification.py; governance/compat/run_agent_automation_assist.py; governance/compat/agent_automation_machine_verification_readout.py; governance/compat/run_local_governance_hook_chain.py; EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts",
+      "invokedBy": "operator runs scripts/cvf_doctor.py directly; the release bundle consumes its bounded capability snapshot before expensive checks; the autorun receipt owner imports the canonical machine-verification composition and integrity helper; AAF optionally consumes one repository-bounded receipt through the read-only composition helper; Web Operations dispatches jobs from web-governance-jobs.ts JOB_DEFINITIONS",
+      "testedBy": "146/146 focused autorun, hostile receipt, AAF, and readout tests; 42/42 hermetic snapshot and release short-circuit tests; 38/38 existing SOT3 release integration tests; direct secret-safe capability-snapshot CLI invocation; CLI aggregate/per-check human-readable PASS/FAIL output confirmed by direct source read for both the autorun gate and the hook chain; Web job registry confirmed to expose exactly 5 job types with exactly 1 named governance/compat checker wired directly (docs_governance_check -> check_docs_governance_compat.py)",
+      "evidenceOwner": "the receipt file itself; governance/compat/agent_autorun_machine_verification.py; governance/compat/agent_automation_machine_verification_readout.py; scripts/cvf_doctor.py source; scripts/test_cvf_doctor_snapshot.py; web-governance-jobs.ts JOB_DEFINITIONS",
       "operatorSurface": "MIXED: CI_REPO_GATE class evidence surfaces via CI job logs, local terminal stdout, and raw JSON receipt files; RUNTIME_GUARD class evidence surfaces via the confirmed Web governance dashboard route",
       "knownGaps": "No unified Web inventory/readout exists for all 186 governance/compat checker scripts; only a bounded 5-job-type subset is exposed, with exactly one checker wired directly into a job definition.",
       "nextReviewAction": "Any unified readout belongs in a fresh Deliverable B or maintenance packet after separate operator authorization; not authorized by this map.",
@@ -209,8 +209,23 @@
         },
         {
           "path": "governance/compat/run_agent_autorun_workflow_gate.py",
-          "sha256": "0af53a656933ba783412707de3f78b869030b0f992d2d027ec4b6af4f3dbcb04",
-          "evidenceRole": "per-checker PASS/FAIL CLI print plus JSON receipt"
+          "sha256": "cee3f8e20f626f2105219d8aa7189b92ef03f646a67e0f7eebb85ce3d284a77b",
+          "evidenceRole": "per-checker PASS/FAIL CLI print plus v3 JSON receipt owner"
+        },
+        {
+          "path": "governance/compat/agent_autorun_machine_verification.py",
+          "sha256": "8280a95e0985bd1273aa359afff455be1d18346e8b49cb92e9746922d835d022",
+          "evidenceRole": "canonical v3 machine-verification receipt composition, digest, and integrity validation"
+        },
+        {
+          "path": "governance/compat/run_agent_automation_assist.py",
+          "sha256": "c58c424a2754d5183db05ae2489d59d8a6c59351c04c3813d7cee74cbbd1ad30",
+          "evidenceRole": "optional repository-bounded receipt consumption integration"
+        },
+        {
+          "path": "governance/compat/agent_automation_machine_verification_readout.py",
+          "sha256": "ff6088bf8144deec4582ce9faf62384b314346c9cbbb87f6b3349a2d23f7e7c3",
+          "evidenceRole": "exception-first mechanical reviewer readout composition without semantic authorization"
         },
         {
           "path": "governance/compat/run_local_governance_hook_chain.py",

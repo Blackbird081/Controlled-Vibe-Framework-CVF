@@ -38,6 +38,15 @@ export interface GatewayExecuteRequest {
   routing?: RoutingRequest;
   preferredModel?: DynamicModelRecord;
   metadata?: Record<string, unknown>;
+  /**
+   * CSCC-R1-T2 additive identity carrier. Optional so every legacy Gateway
+   * caller that omits it remains fully source- and behavior-compatible. Set
+   * by `CanonicalExecutionAdapter` equal to the canonical port request's
+   * `canonicalExecutionId` (itself seeded from `WebGovernanceEnvelope.envelopeId`);
+   * never inferred from an arbitrary legacy `traceId`. See
+   * `docs/reference/CVF_CANONICAL_EXECUTION_IDENTITY_AND_RECEIPT_JOIN_CONTRACT_2026-09-03.md`.
+   */
+  canonicalExecutionId?: string;
 }
 
 export interface GatewayExecuteResponse {

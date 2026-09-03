@@ -5,6 +5,15 @@ import { createReceiptEnvelope as wrapReceiptEnvelope } from "cvf-guard-contract
 
 export interface GatewayReceiptInput {
   traceId: string;
+  /**
+   * CSCC-R1-T2 additive identity join field. Present only when the
+   * originating `GatewayExecuteRequest.canonicalExecutionId` carrier was
+   * present (port-composed calls); absent for legacy requests. Populated
+   * identically on every terminal branch (stopped, shielded-error,
+   * manifest-failure, adapter-success, adapter-error) because identity is
+   * attached at request entry, never derived from outcome.
+   */
+  canonicalExecutionId?: string;
   providerId?: string;
   requestedModelId?: string;
   selectedModelId?: string;
@@ -25,6 +34,8 @@ export interface GatewayReceiptInput {
 export interface GatewayReceipt {
   receiptId: string;
   traceId: string;
+  /** CSCC-R1-T2 additive identity join field; see `GatewayReceiptInput.canonicalExecutionId`. */
+  canonicalExecutionId?: string;
   createdAt: string;
   providerId?: string;
   requestedModelId?: string;
@@ -65,6 +76,7 @@ export class GatewayReceiptBuilder {
     return {
       receiptId: `gw_${this.now().toISOString().replace(/[-:.TZ]/g, "")}_${this.nonce()}`,
       traceId: input.traceId,
+      canonicalExecutionId: input.canonicalExecutionId,
       createdAt: this.now().toISOString(),
       providerId: input.providerId,
       requestedModelId: input.requestedModelId,

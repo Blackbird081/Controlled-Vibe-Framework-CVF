@@ -64,6 +64,15 @@ export interface MaterialContextInvocationBinding {
 export interface MaterialContextManifest {
   readonly manifestVersion: typeof MATERIAL_CONTEXT_MANIFEST_VERSION;
   readonly traceId: string;
+  /**
+   * CSCC-R1-T2 additive identity join field. Present only when the
+   * originating `GatewayExecuteRequest.canonicalExecutionId` carrier was
+   * present; absent otherwise. Included in the same canonicalization path as
+   * every other manifest field so `manifestDigest` and
+   * `validateMaterialContextManifest`'s rebuild-and-compare check stay
+   * authoritative over this field.
+   */
+  readonly canonicalExecutionId?: string;
   readonly selectedProviderId: string;
   readonly selectedModelId: string;
   readonly adapterInputDigest: string;
@@ -250,10 +259,12 @@ function unsignedManifest(
   binding: MaterialContextInvocationBinding,
   adapterInputDigest: string,
   entries: readonly MaterialContextEntry[],
+  canonicalExecutionId: string | undefined,
 ): Omit<MaterialContextManifest, "manifestDigest"> {
   return {
     manifestVersion: MATERIAL_CONTEXT_MANIFEST_VERSION,
     traceId,
+    ...(canonicalExecutionId !== undefined ? { canonicalExecutionId } : {}),
     selectedProviderId: binding.providerId,
     selectedModelId: binding.modelId,
     adapterInputDigest,
@@ -267,6 +278,13 @@ export function buildMaterialContextManifest(
 ): MaterialContextManifestBuildResult {
   try {
     const traceId = requireString(readDataField(request, "traceId", true).value, "traceId");
+    const canonicalExecutionIdField = readDataField(request, "canonicalExecutionId", false);
+    if (canonicalExecutionIdField.present && typeof canonicalExecutionIdField.value !== "string") {
+      reject("invalid_string_field:canonicalExecutionId");
+    }
+    const canonicalExecutionId = canonicalExecutionIdField.present
+      ? (canonicalExecutionIdField.value as string)
+      : undefined;
     const prompt = readDataField(request, "prompt", true);
     if (typeof prompt.value !== "string") reject("invalid_string_field:prompt");
     const systemPrompt = readDataField(request, "systemPrompt", false);
@@ -300,7 +318,7 @@ export function buildMaterialContextManifest(
       systemPrompt: systemPrompt.value,
       metadata: metadata.value,
     });
-    const unsigned = unsignedManifest(traceId, normalizedBinding, adapterInputDigest, entries);
+    const unsigned = unsignedManifest(traceId, normalizedBinding, adapterInputDigest, entries, canonicalExecutionId);
     return { ok: true, manifest: { ...unsigned, manifestDigest: digestOf(unsigned) } };
   } catch (caught: unknown) {
     const detail = caught instanceof CanonicalizationRejected ? caught.message : "unknown_error";

@@ -83,6 +83,9 @@ def _work_order_block(
     nextDispatchDisposition="INITIAL_DISPATCH",
     rootCauseClusterId="NOT_APPLICABLE_INITIAL_DISPATCH", reworkGeneration="0",
     consolidatedDefectClassSweep="COMPLETE_INITIAL_ACCEPTANCE_MATRIX",
+    preExecutionReviewAdmission="NOT_REQUIRED_BEFORE_EXECUTION",
+    preExecutionReviewTrigger="NONE",
+    nextRoutineReviewBoundary="WORKER_RETURN",
 ):
     return (
         "# Example Work Order\n\ndocType: work_order\n\n"
@@ -106,6 +109,10 @@ def _work_order_block(
         f"consolidatedDefectClassSweep: {consolidatedDefectClassSweep}\n"
         "successorTrancheOpened: NO\n"
         "implementationAutonomyDisposition: CONTRACT_AUTHORITY_EVIDENCE_OUTCOME_ONLY\n"
+        f"preExecutionReviewAdmission: {preExecutionReviewAdmission}\n"
+        f"preExecutionReviewTrigger: {preExecutionReviewTrigger}\n"
+        f"nextRoutineReviewBoundary: {nextRoutineReviewBoundary}\n"
+        "reviewerWorkBoundary: EVALUATE_RETURNED_EVIDENCE_NOT_RECREATE_IMPLEMENTATION\n"
     )
 
 
@@ -383,6 +390,52 @@ class ReworkDispatchControlTests(unittest.TestCase):
     def test_successor_tranche_must_remain_closed(self):
         text = _VALID_REWORK.replace("successorTrancheOpened: NO", "successorTrancheOpened: YES")
         self.assertFalse(chk.diagnose("docs/work_orders/x.md", text).is_clean)
+
+    def test_no_pre_execution_review_routes_to_worker_return(self):
+        self.assertTrue(chk.diagnose("docs/work_orders/x.md", _VALID_INITIAL_WORK_ORDER).is_clean)
+
+    def test_triggered_review_requires_named_trigger(self):
+        text = _work_order_block(
+            preExecutionReviewAdmission="REQUIRED_TRIGGERED",
+            preExecutionReviewTrigger="NONE",
+            nextRoutineReviewBoundary="PRE_EXECUTION_REVIEW",
+        )
+        d = chk.diagnose("docs/work_orders/x.md", text)
+        self.assertFalse(d.is_clean)
+        self.assertTrue(any("non-`NONE`" in issue for issue in d.issues))
+
+    def test_triggered_review_with_operator_request_is_clean(self):
+        text = _work_order_block(
+            preExecutionReviewAdmission="REQUIRED_TRIGGERED",
+            preExecutionReviewTrigger="OPERATOR_EXPLICIT_REQUEST",
+            nextRoutineReviewBoundary="PRE_EXECUTION_REVIEW",
+        )
+        self.assertTrue(chk.diagnose("docs/work_orders/x.md", text).is_clean)
+
+    def test_no_review_admission_rejects_pending_review_status(self):
+        text = _VALID_INITIAL_WORK_ORDER.replace(
+            "# Example Work Order", "# Example Work Order\n\nStatus: DISPATCH_READY_PENDING_INDEPENDENT_REVIEW"
+        )
+        d = chk.diagnose("docs/work_orders/x.md", text)
+        self.assertFalse(d.is_clean)
+        self.assertTrue(any("packet language requires" in issue for issue in d.issues))
+
+    def test_no_review_admission_rejects_prose_micro_checkpoint(self):
+        text = _VALID_INITIAL_WORK_ORDER + (
+            "\nIndependent packet review is required before worker execution.\n"
+        )
+        d = chk.diagnose("docs/work_orders/x.md", text)
+        self.assertFalse(d.is_clean)
+        self.assertTrue(any("packet language requires" in issue for issue in d.issues))
+
+    def test_reviewer_must_not_recreate_implementation(self):
+        text = _VALID_INITIAL_WORK_ORDER.replace(
+            "reviewerWorkBoundary: EVALUATE_RETURNED_EVIDENCE_NOT_RECREATE_IMPLEMENTATION",
+            "reviewerWorkBoundary: REBUILD_WORKER_IMPLEMENTATION",
+        )
+        d = chk.diagnose("docs/work_orders/x.md", text)
+        self.assertFalse(d.is_clean)
+        self.assertTrue(any("reviewerWorkBoundary" in issue for issue in d.issues))
 
 
 class WorkerReturnConvergenceTests(unittest.TestCase):

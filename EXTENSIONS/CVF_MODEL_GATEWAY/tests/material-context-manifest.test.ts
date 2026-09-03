@@ -578,6 +578,37 @@ describe("validateMaterialContextManifest", () => {
     }
   });
 
+  describe("CSCC-R1-T2 canonicalExecutionId (additive, legacy-compatible)", () => {
+    it("omits canonicalExecutionId from the manifest when the request omits it (legacy shape)", () => {
+      const result = buildMaterialContextManifest(makeRequest());
+      expect(result.ok).toBe(true);
+      if (!result.ok) return;
+      expect(result.manifest.canonicalExecutionId).toBeUndefined();
+    });
+
+    it("carries canonicalExecutionId into the manifest and covers it in manifestDigest", () => {
+      const withId = buildMaterialContextManifest(
+        makeRequest({ canonicalExecutionId: "env-canonical-mcm-001" } as Partial<GatewayExecuteRequest>),
+      );
+      const withoutId = buildMaterialContextManifest(makeRequest());
+      expect(withId.ok).toBe(true);
+      expect(withoutId.ok).toBe(true);
+      if (!withId.ok || !withoutId.ok) return;
+      expect(withId.manifest.canonicalExecutionId).toBe("env-canonical-mcm-001");
+      expect(withId.manifest.manifestDigest).not.toBe(withoutId.manifest.manifestDigest);
+    });
+
+    it("validateMaterialContextManifest stays authoritative over canonicalExecutionId (rejects a tampered value)", () => {
+      const request = makeRequest({ canonicalExecutionId: "env-canonical-valid" } as Partial<GatewayExecuteRequest>);
+      const result = buildBoundMaterialContextManifest(request, INVOCATION_BINDING);
+      expect(result.ok).toBe(true);
+      if (!result.ok) return;
+      expect(validateBoundMaterialContextManifest(result.manifest, request, INVOCATION_BINDING)).toBe(true);
+      const tampered = { ...result.manifest, canonicalExecutionId: "env-canonical-spoofed" };
+      expect(validateBoundMaterialContextManifest(tampered, request, INVOCATION_BINDING)).toBe(false);
+    });
+  });
+
   it("fails closed on a hostile manifest accessor without invoking it", () => {
     const manifest = buildValidManifest() as unknown as Record<string, unknown>;
     let getterCalls = 0;

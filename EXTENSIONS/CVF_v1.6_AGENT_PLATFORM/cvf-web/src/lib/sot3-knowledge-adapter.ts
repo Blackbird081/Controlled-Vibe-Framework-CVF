@@ -75,6 +75,13 @@ export interface Sot3KnowledgeEvaluationInput {
   ruleVersion: string;
   clock: Clock;
   ids: IdFactory;
+  /**
+   * CSCC-R1-T2 additive optional canonical identity input, seeded from
+   * `WebGovernanceEnvelope.envelopeId` by the caller. Purely a passthrough
+   * value at this layer: `evaluateSot3KnowledgeActivation` does not use it
+   * for any decision and never re-derives or reformats it.
+   */
+  canonicalExecutionId?: string;
 }
 
 export interface Sot3KnowledgeActivationResult {

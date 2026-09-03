@@ -63,6 +63,16 @@ export interface Sot3ActivationEvidenceRecord {
   schemaVersion: typeof SOT3_ACTIVATION_EVIDENCE_SCHEMA_VERSION;
   traces: Sot3KnowledgeLifecycleTrace[];
   integrityHash: string;
+  /**
+   * CSCC-R1-T2 additive identity join field. `requestId` is retained
+   * unchanged and is not renamed, removed, or superseded; this field is
+   * present only when the record's originating request flowed through the
+   * canonical port, and when present must be a non-empty string (dual-shape
+   * rule: the existing thirteen-key v1 shape remains valid, and the
+   * fourteen-key shape is valid only with this field populated). See
+   * `docs/reference/CVF_CANONICAL_EXECUTION_IDENTITY_AND_RECEIPT_JOIN_CONTRACT_2026-09-03.md`.
+   */
+  canonicalExecutionId?: string;
 }
 
 interface Sot3ActivationEvidenceDocument {
@@ -167,14 +177,30 @@ const FAILURE_STAGES = [
   'EVIDENCE_PERSISTENCE_FAILED',
 ] as const;
 
+const V1_RECORD_KEYS = [
+  'recordId', 'requestId', 'actorId', 'organization', 'team', 'mode',
+  'terminalOutcome', 'failureStage', 'createdAtUtc', 'diagnosticClass',
+  'schemaVersion', 'traces', 'integrityHash',
+] as const;
+
+/**
+ * CSCC-R1-T2 dual-shape record key check: the existing thirteen-key v1
+ * shape remains valid; the fourteen-key shape (v1 plus `canonicalExecutionId`)
+ * is valid only when that additive field is present. No `null` placeholder
+ * and no schema-version split is introduced.
+ */
+function hasValidRecordKeys(candidate: Record<string, unknown>): boolean {
+  if (hasExactKeys(candidate, [...V1_RECORD_KEYS])) return true;
+  return hasExactKeys(candidate, [...V1_RECORD_KEYS, 'canonicalExecutionId']);
+}
+
 function recordSchemaIssue(record: unknown): string | null {
   if (typeof record !== 'object' || record === null || Array.isArray(record)) return 'record is not an object';
   const candidate = record as Record<string, unknown>;
-  if (!hasExactKeys(candidate, [
-    'recordId', 'requestId', 'actorId', 'organization', 'team', 'mode',
-    'terminalOutcome', 'failureStage', 'createdAtUtc', 'diagnosticClass',
-    'schemaVersion', 'traces', 'integrityHash',
-  ])) return 'record keys do not match the v1 schema';
+  if (!hasValidRecordKeys(candidate)) return 'record keys do not match the v1 schema or the v1-plus-canonicalExecutionId schema';
+  if ('canonicalExecutionId' in candidate && (typeof candidate.canonicalExecutionId !== 'string' || candidate.canonicalExecutionId.length === 0)) {
+    return 'canonicalExecutionId must be a non-empty string when present';
+  }
   if (typeof candidate.recordId !== 'string' || typeof candidate.requestId !== 'string' ||
       typeof candidate.actorId !== 'string' || typeof candidate.organization !== 'string') return 'record identity or scope field is invalid';
   if (candidate.team !== null && typeof candidate.team !== 'string') return 'team must be a string or null';

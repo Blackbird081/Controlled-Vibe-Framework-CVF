@@ -1,58 +1,27 @@
 #!/usr/bin/env python3
-"""
-CVF Dispatch Packet Authoring Scaffold Helper (WOAS-R1).
-
-Generates prefilled GC-018 baseline and work-order markdown skeletons so a
-dispatch author starts from a form that already contains the machine-shape
-sections several `governance/compat/check_*.py` gates require, instead of
-blank-page authoring that discovers required literal tokens one gate failure
-at a time.
-
-Standard: docs/reference/work_order_authoring/CVF_WOAS_R1_DISPATCH_PACKET_AUTHORING_SCAFFOLD_STANDARD.md
-
-This helper does not write files, does not call any live provider, does not
-mutate git, session state, or any governed artifact. It only prints generated
-markdown text to stdout when explicitly invoked. Generated output still
-requires the dispatching agent to fill in real source-verified evidence,
-run the ADIF resolver, and read applicable checker source before authoring
-the final artifact.
-
-Claim boundary: scaffold/text-generation helper only. No runtime, provider,
-live-proof, Web, MCP, CLI, package-lifecycle, model-router, public-sync,
-action-authority, or automatic-invocation behavior is implemented or claimed.
-"""
+"""WOAS-R1 non-mutating governed dispatch packet scaffold."""
 
 from __future__ import annotations
-
 import argparse
 import re
 import sys
 from dataclasses import dataclass, field
-
-from build_worker_return_skeleton_scaffold import build_worker_return_skeleton
-from review_convergence_scaffold import (
-    add_arguments as add_convergence_arguments,
-    build_block as build_convergence_block,
-    build_provenance_block,
-    kwargs as convergence_kwargs,
-    validate as validate_convergence,
+from build_worker_return_skeleton_scaffold import (
+    SCEC_UNRESOLVED_PREDECESSOR_SENTINEL, build_worker_return_skeleton,
+    render_scec_outcome_block,
 )
-
+from review_convergence_scaffold import (
+    add_arguments as add_convergence_arguments, build_block as build_convergence_block,
+    build_provenance_block, kwargs as convergence_kwargs, validate as validate_convergence,
+)
 PACKET_KINDS = (
-    "generic-worker-dispatch",
-    "held-dependency",
-    "source-intake",
-    "runtime-provider-live",
-    "package-skill",
-    "web-ui-dashboard",
-    "mcp-cli-adapter",
-    "public-sync",
-    "protected-governance-path",
+    "generic-worker-dispatch", "held-dependency", "source-intake",
+    "runtime-provider-live", "package-skill", "web-ui-dashboard",
+    "mcp-cli-adapter", "public-sync", "protected-governance-path",
 )
 
 COMMIT_MODES = ("WORKER_MUST_NOT_COMMIT", "WORKER_MAY_COMMIT")
 
-# Each trigger family: (key, family label, indicator examples, required generated stub label)
 TRIGGER_FAMILIES: tuple[tuple[str, str, tuple[str, ...], str], ...] = (
     (
         "held_dependency",
@@ -148,6 +117,7 @@ class ScaffoldArgs:
     commit_mode: str
     dependencies: list[str] = field(default_factory=list)
     include_worker_return_skeleton: bool = False
+    include_scec_block: bool = True
     dispatch_kind: str = "INITIAL"
     dispatch_surface: str = "INTERNAL_AGENT"
     review_round_count: int = 0
@@ -156,10 +126,13 @@ class ScaffoldArgs:
     cumulative_external_invocation_count: int = 0
     external_invocation_ceiling: int = 0
     new_independent_critical_evidence: str = "NONE"
+    scec_problem_key: str | None = None; scec_chain_mode: str = "INITIAL"
+    scec_chain_ordinal: int = 0; scec_predecessor_path: str | None = None
+    scec_predecessor_sha256: str | None = None
+    scec_required_disposition: str = "CONTINUE_BOUNDED"; scec_successor_scope: str = "INITIAL_BOUNDED"
 
 
 def detect_triggers(args: ScaffoldArgs) -> dict[str, bool]:
-    """Return which trigger families are active for this invocation."""
     combined = " ".join([args.title, args.packet_kind, *args.dependencies])
     active: dict[str, bool] = {}
     for key, _name, indicators, _stub in TRIGGER_FAMILIES:
@@ -174,7 +147,6 @@ def detect_triggers(args: ScaffoldArgs) -> dict[str, bool]:
 
 
 def build_trigger_map_table(active: dict[str, bool] | None = None) -> str:
-    """Print an explainable, always-available reference table of trigger families."""
     lines = [
         "=== CVF Dispatch Packet Scaffold Trigger Map ===",
         "",
@@ -563,6 +535,22 @@ def _agent_operation_trace_block(args: ScaffoldArgs) -> str:
     )
 
 
+def _scec_block(args: ScaffoldArgs) -> str:
+    return render_scec_outcome_block(
+        problem_key=args.scec_problem_key or f"{args.batch_id.lower()}-problem",
+        chain_mode=args.scec_chain_mode,
+        chain_ordinal=args.scec_chain_ordinal,
+        predecessor_path=args.scec_predecessor_path,
+        predecessor_sha256=args.scec_predecessor_sha256,
+        required_disposition=args.scec_required_disposition,
+        successor_scope=args.scec_successor_scope,
+        reminder="Author reminder: fill `blockerDelta`, `counters`, and `claims` with real "
+        "evidence before dispatch. Replace any unresolved "
+        f"`{SCEC_UNRESOLVED_PREDECESSOR_SENTINEL}` with a real predecessor path/hash; "
+        "the checker fails closed on the sentinel.",
+    )
+
+
 def _foundation_storage_layout_block() -> str:
     return (
         "## Foundation Storage Layout Block\n\n"
@@ -708,6 +696,9 @@ def build_work_order(args: ScaffoldArgs, active: dict[str, bool]) -> str:
     lines.append("")
     lines.append(build_convergence_block(args))
     lines.append("")
+    if args.include_scec_block:
+        lines.append(_scec_block(args))
+        lines.append("")
     if active.get("held_dependency"):
         lines.append(_dependency_release_block(args.dependencies))
         lines.append("")
@@ -793,6 +784,13 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser.add_argument("--stdout", action="store_true")
     parser.add_argument("--include-worker-return-skeleton", action="store_true")
     add_convergence_arguments(parser)
+    parser.add_argument("--scec-problem-key")
+    parser.add_argument("--scec-chain-mode", choices=("INITIAL", "SUCCESSOR"), default="INITIAL")
+    parser.add_argument("--scec-chain-ordinal", type=int, default=0)
+    parser.add_argument("--scec-predecessor-path")
+    parser.add_argument("--scec-predecessor-sha256")
+    parser.add_argument("--scec-required-disposition", choices=("CONTINUE_BOUNDED", "ROOT_CONTRACT_REQUIRED", "STOP_REASSESS_ARCHITECTURE", "READY_WITH_EXECUTABLE_PROOF"), default="CONTINUE_BOUNDED")
+    parser.add_argument("--scec-successor-scope", choices=("INITIAL_BOUNDED", "INTEGRATED_ROOT_CONTRACT", "NO_SUCCESSOR", "EXECUTABLE_IMPLEMENTATION"), default="INITIAL_BOUNDED")
     parser.add_argument("--explain-trigger-map", action="store_true")
     return parser.parse_args(argv)
 
@@ -843,6 +841,14 @@ def main(argv: list[str] | None = None) -> int:
         commit_mode=args.commit_mode,
         dependencies=list(args.dependencies),
         include_worker_return_skeleton=args.include_worker_return_skeleton,
+        include_scec_block=True,
+        scec_problem_key=args.scec_problem_key,
+        scec_chain_mode=args.scec_chain_mode,
+        scec_chain_ordinal=args.scec_chain_ordinal,
+        scec_predecessor_path=args.scec_predecessor_path,
+        scec_predecessor_sha256=args.scec_predecessor_sha256,
+        scec_required_disposition=args.scec_required_disposition,
+        scec_successor_scope=args.scec_successor_scope,
         **convergence_kwargs(args),
     )
     active = detect_triggers(scaffold_args)

@@ -551,6 +551,55 @@ describe('route-knowledge-context', () => {
       expect(events.some((event) => event.eventType === 'SOT3_ACTIVATION_EVIDENCE_PERSISTED')).toBe(false);
     });
 
+    it('CSCC-R1-T2: propagates canonicalExecutionId into the persisted SOT3 evidence record when supplied', async () => {
+      process.env.CVF_SOT3_KNOWLEDGE_ACTIVATION_MODE = 'ENFORCE';
+      const provenance = buildProvenance('src-canonical-id', 'canonical-id governed content');
+      knowledgeStore.seed([
+        { id: 'col-1', name: 'Col', description: 'd', orgId: 'org_a', teamId: 'team_a', chunks: [{ id: 'src-canonical-id', content: 'canonical-id governed content', keywords: ['governance'], sot3Source: provenance }] },
+      ]);
+      const evidenceStore = new Sot3ActivationEvidenceStore(path.join(tempDir, 'evidence.json'));
+
+      await resolveKnowledgeContext({
+        intent: 'governance content question',
+        orgId: 'org_a',
+        teamId: 'team_a',
+        requestedCollectionId: undefined,
+        templateLabel: 'tmpl',
+        session: null,
+        evidenceStore,
+        canonicalExecutionId: 'env-canonical-route-001',
+      });
+
+      const persisted = evidenceStore.list();
+      expect(persisted).toHaveLength(1);
+      expect(persisted[0].canonicalExecutionId).toBe('env-canonical-route-001');
+      // requestId is retained unchanged alongside the additive field.
+      expect(typeof persisted[0].requestId).toBe('string');
+    });
+
+    it('CSCC-R1-T2: omits canonicalExecutionId from the persisted record when the caller does not supply one (legacy shape)', async () => {
+      process.env.CVF_SOT3_KNOWLEDGE_ACTIVATION_MODE = 'ENFORCE';
+      const provenance = buildProvenance('src-legacy-id', 'legacy-id governed content');
+      knowledgeStore.seed([
+        { id: 'col-1', name: 'Col', description: 'd', orgId: 'org_a', teamId: 'team_a', chunks: [{ id: 'src-legacy-id', content: 'legacy-id governed content', keywords: ['governance'], sot3Source: provenance }] },
+      ]);
+      const evidenceStore = new Sot3ActivationEvidenceStore(path.join(tempDir, 'evidence.json'));
+
+      await resolveKnowledgeContext({
+        intent: 'governance content question',
+        orgId: 'org_a',
+        teamId: 'team_a',
+        requestedCollectionId: undefined,
+        templateLabel: 'tmpl',
+        session: null,
+        evidenceStore,
+      });
+
+      const persisted = evidenceStore.list();
+      expect(persisted).toHaveLength(1);
+      expect(persisted[0].canonicalExecutionId).toBeUndefined();
+    });
+
     it('audit inspection: no raw content or secret in the persistence audit payload', async () => {
       process.env.CVF_SOT3_KNOWLEDGE_ACTIVATION_MODE = 'ENFORCE';
       const provenance = buildProvenance('src-evidence-audit', 'EVIDENCE-AUDIT-SECRET-MARKER content');

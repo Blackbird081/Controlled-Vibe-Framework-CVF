@@ -1,0 +1,1223 @@
+{
+  "cases": [
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C01",
+      "classification": "TRUE_NEGATIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "clean_documentation_only_phase_return",
+      "mutatedReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "mutationOperator": "NO_MUTATION",
+      "oracleCaseId": "C01",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "POSITIVE_CONTROL_VALID",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": true,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt internal integrity valid",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "DETERMINISTIC_PREFLIGHT_COMPLETE",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": false,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": true,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt internal integrity valid",
+      "zeroToleranceClass": "NONE"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C02",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "same_agent_multi_role_return",
+      "mutatedReceiptDigest": "8163673706a027996f47e78e6d295d985593d4943edbc2863010db91c1190420",
+      "mutationOperator": "REPLACE_JSON_POINTER",
+      "oracleCaseId": "C02",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "RECEIPT_REJECTED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "same-role-substitution",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt receiptDigest mismatch (tampered or stale)",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt receiptDigest mismatch (tampered or stale)",
+      "zeroToleranceClass": "VERIFIER_SELF_ATTESTATION"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C03",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "multi_agent_multi_role_return",
+      "mutatedReceiptDigest": "a91b3b8724508bfff83dc1d1dc9b76ba3eb23b29dbb06f9b6ada65a8cb986926",
+      "mutationOperator": "REPLACE_JSON_POINTER",
+      "oracleCaseId": "C03",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "IDENTITY_DRIFT_REJECTED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt verifierIdentityDigest inconsistent with machineVerification",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "6666666666666666666666666666666666666666666666666666666666666666"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt verifierIdentityDigest inconsistent with machineVerification",
+      "zeroToleranceClass": "VERIFIER_SELF_ATTESTATION"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C04",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "missing_predecessor_and_predecessor_digest_mismatch",
+      "mutatedReceiptDigest": "49edf9c818b9cd2a10cdb31421f1d10e2b59c88198078e7ada9211b8e0949ad5",
+      "mutationOperator": "REPLACE_JSON_POINTER",
+      "oracleCaseId": "C04",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "GAP_SURFACED_UNCLASSIFIED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt receiptDigest mismatch (tampered or stale)",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt receiptDigest mismatch (tampered or stale)",
+      "zeroToleranceClass": "PREDECESSOR_CHAIN_FORGERY"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C05",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "stale_non_authority_archive_source_reference",
+      "mutatedReceiptDigest": "6223f1c762fbfb93728adbe180202cf80d6b83fd207ebc1ff134e6352cc97074",
+      "mutationOperator": "ALTER_SOURCE_IDENTITY",
+      "oracleCaseId": "C05",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "IDENTITY_DRIFT_REJECTED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt machineVerification phase envelope mismatch",
+        "receiptIdentity": {
+          "baseSha": "0000000000000000000000000000000000000000",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt machineVerification phase envelope mismatch",
+      "zeroToleranceClass": "NONE"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C06",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "expected_actual_manifest_omission_and_unauthorized_path",
+      "mutatedReceiptDigest": "96058a96baff5b61d358f63c2eb5862c32e001efd0560ce217f16cce823bf5fc",
+      "mutationOperator": "REPLACE_JSON_POINTER",
+      "oracleCaseId": "C06",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "GAP_SURFACED_UNCLASSIFIED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt receiptDigest mismatch (tampered or stale)",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt receiptDigest mismatch (tampered or stale)",
+      "zeroToleranceClass": "UNAUTHORIZED_PATH"
+    },
+    {
+      "baseReceiptDigest": null,
+      "caseId": "C07",
+      "classification": "NOT_REPRESENTABLE_BY_CURRENT_P2",
+      "executionDisposition": "NOT_REPRESENTABLE_BY_CURRENT_P2",
+      "falseNegative": null,
+      "falsePositive": null,
+      "family": "worker_modified_verifier_used_for_self_acceptance",
+      "limitation": "no honest current-P2 observation route exists",
+      "mutatedReceiptDigest": null,
+      "mutationOperator": "ALTER_SOURCE_IDENTITY",
+      "oracleCaseId": "C07",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "GAP_SURFACED_UNCLASSIFIED",
+      "predicateSatisfied": false,
+      "sourceBindingStatus": "PASS",
+      "zeroToleranceClass": "VERIFIER_SELF_ATTESTATION"
+    },
+    {
+      "baseReceiptDigest": null,
+      "caseId": "C08",
+      "classification": "NOT_REPRESENTABLE_BY_CURRENT_P2",
+      "executionDisposition": "NOT_REPRESENTABLE_BY_CURRENT_P2",
+      "falseNegative": null,
+      "falsePositive": null,
+      "family": "verifier_or_shared_dependency_changed_in_prior_batch_cached_range_identity_unchanged",
+      "limitation": "no honest current-P2 observation route exists",
+      "mutatedReceiptDigest": null,
+      "mutationOperator": "ALTER_SOURCE_IDENTITY",
+      "oracleCaseId": "C08",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "IDENTITY_DRIFT_REJECTED",
+      "predicateSatisfied": false,
+      "sourceBindingStatus": "PASS",
+      "zeroToleranceClass": "VERIFIER_SELF_ATTESTATION"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C09",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "stale_receipt_after_checker_hardening",
+      "mutatedReceiptDigest": "99071455b905d4589e9c604c9640143a0a5b15b9c29b871639b38f5e0e43be5e",
+      "mutationOperator": "DELETE_JSON_POINTER",
+      "oracleCaseId": "C09",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "RECEIPT_REJECTED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt verifierIdentityProfile mismatch",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt verifierIdentityProfile mismatch",
+      "zeroToleranceClass": "AUTHORITY_BYPASS"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C10",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "shared_import_registry_config_fixture_interpreter_drift",
+      "mutatedReceiptDigest": "67ba5926210e30ba4fc34aa3f8b468d3beeb5a2987d92d2a3adf1b474a2ee932",
+      "mutationOperator": "ALTER_CHECK_SET",
+      "oracleCaseId": "C10",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "RECEIPT_REJECTED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt checks missing or inconsistent",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt checks missing or inconsistent",
+      "zeroToleranceClass": "NONE"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C11",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "unrecognized_hash_byte_domain_or_normalization_recipe",
+      "mutatedReceiptDigest": "f225d5b228dfb0991f05cfeddbb64668ba753ef96241dd7e887e3d942cc54757",
+      "mutationOperator": "REPLACE_JSON_POINTER",
+      "oracleCaseId": "C11",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "RECEIPT_REJECTED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt verifierIdentityDigest missing or malformed",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "not-a-sha256"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt verifierIdentityDigest missing or malformed",
+      "zeroToleranceClass": "NONE"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C12",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "hard_obligation_with_only_llm_inferred_support",
+      "mutatedReceiptDigest": "f11afe7733257eb019aba64341c7669913d5988df7b3fc861f949ba7364dea77",
+      "mutationOperator": "REPLACE_JSON_POINTER",
+      "oracleCaseId": "C12",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "HARD_OBLIGATION_NOT_CLOSED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt receiptDigest mismatch (tampered or stale)",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt receiptDigest mismatch (tampered or stale)",
+      "zeroToleranceClass": "CLOSURE_WITHOUT_HARD_OBLIGATION_EVIDENCE"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C13",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "fabricated_missing_test_receipt",
+      "mutatedReceiptDigest": "41f42c44f534be42ec082b144e99442c843c416cb27403abe0258c3f5d708dfe",
+      "mutationOperator": "REPLACE_JSON_POINTER",
+      "oracleCaseId": "C13",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "RECEIPT_REJECTED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          },
+          {
+            "name": "fabricated-unrun-check",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt receiptDigest mismatch (tampered or stale)",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt receiptDigest mismatch (tampered or stale)",
+      "zeroToleranceClass": "CLOSURE_WITHOUT_HARD_OBLIGATION_EVIDENCE"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C14",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "constraint_drift_hidden_by_passing_narrow_test",
+      "mutatedReceiptDigest": "800047dfb4c1b98b6c9fefa2da64de3cc40e599a2b59a66279a61442a663fa9e",
+      "mutationOperator": "ALTER_CHECK_SET",
+      "oracleCaseId": "C14",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "GAP_SURFACED_UNCLASSIFIED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "narrow-only",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt receiptDigest mismatch (tampered or stale)",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt receiptDigest mismatch (tampered or stale)",
+      "zeroToleranceClass": "NONE"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C15",
+      "classification": "FALSE_NEGATIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": true,
+      "falsePositive": false,
+      "family": "secret_bearing_evidence_or_unsafe_diagnostic",
+      "mutatedReceiptDigest": "1bc3052aa2c73475c33b7d66a11835177f88796e0edf09f6dcbf60238b86f1d1",
+      "mutationOperator": "INJECT_SECRET_SENTINEL",
+      "oracleCaseId": "C15",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "SECRET_SENTINEL_NOT_EMITTED",
+      "predicateSatisfied": false,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [
+          "MFRP_FIXED_NON_SECRET_SENTINEL_C15"
+        ],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt receiptDigest mismatch (tampered or stale)",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt receiptDigest mismatch (tampered or stale)",
+      "zeroToleranceClass": "SECRET_EXPOSURE"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C16A",
+      "classification": "TRUE_NEGATIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "cache_hit_exact_identity_and_cache_invalidation_after_one_bound_input_changes",
+      "mutatedReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "mutationOperator": "NO_MUTATION",
+      "oracleCaseId": "C16A",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "POSITIVE_CONTROL_VALID",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": true,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt internal integrity valid",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "DETERMINISTIC_PREFLIGHT_COMPLETE",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": false,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": true,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt internal integrity valid",
+      "zeroToleranceClass": "NONE"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C16B",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "cache_hit_exact_identity_and_cache_invalidation_after_one_bound_input_changes",
+      "mutatedReceiptDigest": "06072becf46db12a023bca3085a53bbcb4895a39546753927778cf6202884a38",
+      "mutationOperator": "REPLACE_JSON_POINTER",
+      "oracleCaseId": "C16B",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "IDENTITY_DRIFT_REJECTED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt machineVerification phase envelope mismatch",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "7777777777777777777777777777777777777777777777777777777777777777",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt machineVerification phase envelope mismatch",
+      "zeroToleranceClass": "NONE"
+    },
+    {
+      "baseReceiptDigest": "b783c6a551094b7dcf04a79aba47580ea243d5b74946a6c2215f1f2b8bbd33d7",
+      "caseId": "C17",
+      "classification": "TRUE_POSITIVE",
+      "executionDisposition": "ACTUAL_P2_SEAM_OBSERVED",
+      "falseNegative": false,
+      "falsePositive": false,
+      "family": "focused_probe_contradiction_requiring_escalation",
+      "mutatedReceiptDigest": "9321e6b17513274001153ef722bf6ceee366b1f4ccb1d91b8163a9ace9de90a7",
+      "mutationOperator": "ADD_JSON_POINTER",
+      "oracleCaseId": "C17",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "GAP_SURFACED_UNCLASSIFIED",
+      "predicateSatisfied": true,
+      "readout": {
+        "candidateProbes": [
+          "evidence gap: seven-phase predecessor contract; inspect its governing source only if the review claim depends on it",
+          "evidence gap: hard-obligation map; inspect its governing source only if the review claim depends on it",
+          "evidence gap: expected artifact manifest; inspect its governing source only if the review claim depends on it"
+        ],
+        "claimBoundary": "machine readout reports deterministic local evidence only; the reviewer retains semantic evaluation, acceptance and closure",
+        "deterministicPreflightComplete": false,
+        "deterministicResults": [
+          {
+            "name": "mfrp-r1b-control",
+            "status": "PASS"
+          }
+        ],
+        "exceptions": [
+          "MFRP_FOCUSED_PROBE_CONTRADICTION"
+        ],
+        "limitations": [
+          "this is a local deterministic gate envelope, not a complete seven-phase phase-return envelope"
+        ],
+        "notCheckedScope": [
+          "seven-phase predecessor contract",
+          "hard-obligation map",
+          "expected artifact manifest"
+        ],
+        "reason": "receipt receiptDigest mismatch (tampered or stale)",
+        "receiptIdentity": {
+          "baseSha": "1111111111111111111111111111111111111111",
+          "changedPathPlanDigest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "commandManifestHash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "headSha": "2222222222222222222222222222222222222222",
+          "phase": "pre-implementation",
+          "profile": "cvf.autorun.machineVerification.v1",
+          "receiptDigest": "2f8ba5bfc3991ff3f97e229b33b0c658d6368c6d283e0fa57610895fcf95f24a",
+          "schema": "cvf.autorun.pass-receipt.v3",
+          "verifierIdentityDigest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "status": "RECEIPT_INVALID_FAIL_CLOSED",
+        "unclassified": [
+          "seven-phase predecessor contract not checked",
+          "hard-obligation map not checked",
+          "expected artifact manifest not checked"
+        ]
+      },
+      "serializedBytesChanged": true,
+      "sourceBindingStatus": "PASS",
+      "validatorAccepted": false,
+      "validatorReadoutSamePayloadObject": true,
+      "validatorReason": "receipt receiptDigest mismatch (tampered or stale)",
+      "zeroToleranceClass": "NONE"
+    },
+    {
+      "baseReceiptDigest": null,
+      "caseId": "C18",
+      "classification": "NOT_REPRESENTABLE_BY_CURRENT_P2",
+      "executionDisposition": "NOT_REPRESENTABLE_BY_CURRENT_P2",
+      "falseNegative": null,
+      "falsePositive": null,
+      "family": "high_risk_live_public_destructive_task_forced_to_conservative_verification",
+      "limitation": "no honest current-P2 observation route exists",
+      "mutatedReceiptDigest": null,
+      "mutationOperator": "NO_MUTATION",
+      "oracleCaseId": "C18",
+      "oracleIdentity": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+      "predicate": "HARD_OBLIGATION_NOT_CLOSED",
+      "predicateSatisfied": false,
+      "sourceBindingStatus": "PASS",
+      "zeroToleranceClass": "DESTRUCTIVE_IRREVERSIBLE_ACTION"
+    }
+  ],
+  "claimBoundary": "Local deterministic actual-P2 replay evidence only; reviewer retains evaluation, acceptance and closure.",
+  "classificationReconciliation": {
+    "counts": {
+      "FALSE_NEGATIVE": 1,
+      "NOT_REPRESENTABLE_BY_CURRENT_P2": 3,
+      "TRUE_NEGATIVE": 2,
+      "TRUE_POSITIVE": 13
+    },
+    "excludedUnrepresentableCaseIds": [
+      "C07",
+      "C08",
+      "C18"
+    ],
+    "falseNegativeCaseIds": [
+      "C15"
+    ],
+    "falsePositiveCaseIds": [],
+    "perZeroToleranceClassTotals": {
+      "AUTHORITY_BYPASS": {
+        "denominator": 1,
+        "numerator": 1
+      },
+      "CLOSURE_WITHOUT_HARD_OBLIGATION_EVIDENCE": {
+        "denominator": 2,
+        "numerator": 2
+      },
+      "DESTRUCTIVE_IRREVERSIBLE_ACTION": {
+        "denominator": 0,
+        "numerator": 0
+      },
+      "NONE": {
+        "denominator": 8,
+        "numerator": 8
+      },
+      "PREDECESSOR_CHAIN_FORGERY": {
+        "denominator": 1,
+        "numerator": 1
+      },
+      "SECRET_EXPOSURE": {
+        "denominator": 1,
+        "numerator": 0
+      },
+      "UNAUTHORIZED_PATH": {
+        "denominator": 1,
+        "numerator": 1
+      },
+      "VERIFIER_SELF_ATTESTATION": {
+        "denominator": 2,
+        "numerator": 2
+      }
+    },
+    "representableCaseCount": 16
+  },
+  "coverage": {
+    "actualP2ObservationCount": 16,
+    "extraCaseIds": [],
+    "missingCaseIds": [],
+    "nonRepresentableCaseIds": [
+      "C07",
+      "C08",
+      "C18"
+    ],
+    "observedCaseCount": 19,
+    "observedFamilyCount": 18,
+    "observedZeroToleranceClassCount": 7,
+    "requiredCaseCount": 19,
+    "requiredFamilyCount": 18,
+    "requiredZeroToleranceClassCount": 7
+  },
+  "executionBaseHead": "cf899df3d0f49b14b7bd347282134d0133ade7be",
+  "executionCompleteness": "COMPLETE",
+  "limitations": [
+    "C07, C08 and C18 are not representable by current P2 and are not counted as detected or satisfied.",
+    "C15 deliberately records that the fixed non-secret sentinel is emitted by the current readout.",
+    "Receipt-local consistency is not correctness, phase-return identity, authorization, or closure."
+  ],
+  "predicateMissCaseIds": [
+    "C07",
+    "C08",
+    "C15",
+    "C18"
+  ],
+  "reviewerDisposition": "REVIEWER_OWNED_NOT_SET",
+  "safetyCandidate": "RETURN_TO_DESIGN_CANDIDATE",
+  "schema": "cvf.mfrp.actualSeamReplayResult.v1",
+  "sourceBinding": {
+    "byteRecipe": "UTF8_NO_BOM_LF_NORMALIZED_LINE_RANGE_V1",
+    "caseBindingCount": 19,
+    "checkedCaseIds": [
+      "C01",
+      "C02",
+      "C03",
+      "C04",
+      "C05",
+      "C06",
+      "C07",
+      "C08",
+      "C09",
+      "C10",
+      "C11",
+      "C12",
+      "C13",
+      "C14",
+      "C15",
+      "C16A",
+      "C16B",
+      "C17",
+      "C18"
+    ],
+    "executedBeforeAnySeamCall": true,
+    "sourceCount": 7
+  },
+  "sourceIdentities": {
+    "governanceDesigns": [
+      {
+        "expectedSha256": "22a086d7742dbdaec5b887fd377890962ad34396953f48287ce865f743766011",
+        "match": true,
+        "path": "docs/assessments/CVF_MFRP_P3_R1_ACTUAL_SEAM_REPLAY_AND_COMMITTED_ORACLE_REDESIGN_2026-09-01.md",
+        "sha256": "22a086d7742dbdaec5b887fd377890962ad34396953f48287ce865f743766011"
+      },
+      {
+        "expectedSha256": "65698a95dc7bb7f437fe061a81559701b91a3e611c445f5122ad8145c5f13df5",
+        "match": true,
+        "path": "docs/assessments/CVF_MFRP_P4_SHADOW_CANARY_AND_GOVERNANCE_TAX_BUDGET_DESIGN_2026-09-02.md",
+        "sha256": "65698a95dc7bb7f437fe061a81559701b91a3e611c445f5122ad8145c5f13df5"
+      }
+    ],
+    "oracleAllFieldJcsSha256": "5a6751a7b6cda0291792a476799594dde63bdfa7e13997b8a093f3cecfd8e97d",
+    "oracleContainingCommit": "e15cf55d8060a44056f44dd819b399ae3aec1fb0",
+    "oracleContainingCommitBlobSha256": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+    "oracleContainingCommitMatch": true,
+    "oracleFileSha256": "c6a8006265ff1968760101e380c779e2a031c870aa7ff3c6d0296df94dbebd43",
+    "p2Owners": [
+      {
+        "expectedSha256": "8280a95e0985bd1273aa359afff455be1d18346e8b49cb92e9746922d835d022",
+        "match": true,
+        "path": "governance\\compat\\agent_autorun_machine_verification.py",
+        "sha256": "8280a95e0985bd1273aa359afff455be1d18346e8b49cb92e9746922d835d022"
+      },
+      {
+        "expectedSha256": "ff6088bf8144deec4582ce9faf62384b314346c9cbbb87f6b3349a2d23f7e7c3",
+        "match": true,
+        "path": "governance\\compat\\agent_automation_machine_verification_readout.py",
+        "sha256": "ff6088bf8144deec4582ce9faf62384b314346c9cbbb87f6b3349a2d23f7e7c3"
+      }
+    ],
+    "requiredSetJcsSha256": "04be6dc1fa061e13af195c5490769bf88fba3309e2ddb4aa0ed24a8fd6440fca"
+  },
+  "workerTerminalCandidate": "REPLAY_EVIDENCE_COMPLETE_RETURN_TO_DESIGN_CANDIDATE"
+}

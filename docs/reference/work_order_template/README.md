@@ -66,6 +66,16 @@ When an addendum is materially revised:
 | `CVF_WORK_ORDER_SOURCE_VERIFICATION_ADDENDUM.md` | Source-fidelity pass rules, negative search discipline, intake role routing, single-agent multi-role block, source verification table rules, MA1 section lock | Conditional: required when work order names runtime or source facts |
 | `CVF_WORK_ORDER_MACHINE_CLOSURE_PACKAGE_ADDENDUM.md` | Machine Closure Package table, Acceptance Receipt Assertion Matrix, External Artifact Hash Manifest, closure rules | Conditional: required for scan/classify/route/close/handoff work orders |
 
+## Semantic Convergence And Escalation Control
+
+Every new or changed governed work order must declare exactly one Semantic
+Convergence Outcome block per
+`docs/reference/semantic_convergence_control/CVF_SEMANTIC_CONVERGENCE_AND_ESCALATION_CONTROL_STANDARD.md`.
+`governance/compat/build_dispatch_packet_scaffold.py` emits this block by
+default; `governance/compat/check_semantic_convergence_control.py` validates
+missing blocks, predecessor state, and counter continuity fail-closed. This
+routing note does not restate the standard's schema or invariants.
+
 ## Related Dated Addenda (In `docs/reference/`)
 
 These were created before the stable folder existed. They remain authoritative

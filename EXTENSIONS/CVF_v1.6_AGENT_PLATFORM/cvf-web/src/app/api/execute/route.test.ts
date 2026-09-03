@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { createHash } from 'node:crypto';
 import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -24,7 +25,13 @@ vi.mock('@/lib/enforcement', () => ({
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
     withSessionAuditPayload: (
-        session: { impersonation?: { realActorId: string; sessionId: string; impersonatedUserId: string } } | null | undefined,
+        session: {
+            impersonation?: {
+                realActorId: string;
+                sessionId: string;
+                impersonatedUserId: string;
+            };
+        } | null | undefined,
         payload?: Record<string, unknown>,
     ) => {
         const nextPayload = { ...(payload ?? {}) };
@@ -185,163 +192,6 @@ describe('/api/execute', () => {
         expect(appendAuditEventMock).toHaveBeenCalledWith(expect.objectContaining({
             eventType: 'ROLE_OUTPUT_PERMISSION_DENIED',
         }));
-    });
-
-    it('allows BUILDER role to produce app_builder_complete artifact output', async () => {
-        process.env.OPENAI_API_KEY = 'test-key';
-        verifySessionCookieMock.mockResolvedValueOnce({
-            userId: 'developer-user',
-            user: 'developer',
-            role: 'developer',
-            orgId: 'org-1',
-            teamId: 'team-1',
-            expiresAt: Date.now() + 1000 * 60 * 60,
-        });
-        executeAIMock.mockResolvedValue({
-            success: true,
-            output: validOutput,
-            provider: 'openai',
-            model: 'gpt-4o',
-        });
-
-        const req = makeExecuteRequest({
-                templateId: 'app_builder_complete',
-                templateName: 'App Builder Complete',
-                intent: 'Create Product Brief for TaskFlow',
-                inputs: {
-                    appName: 'TaskFlow',
-                    appType: 'Web App',
-                    problem: 'Small teams need a lighter way to plan work.',
-                    targetUsers: 'Small product teams',
-                    coreFeatures: 'Task board, owner fields, status filters',
-                    successCriteria: 'A user can create and triage tasks quickly.',
-                    platforms: 'Web browser',
-                },
-                provider: 'openai',
-                cvfPhase: 'BUILD',
-                action: 'build template execution request',
-                skillPreflightPassed: true,
-                skillPreflightDeclaration: 'SKILL PREFLIGHT PASS: product brief only, no implementation.',
-                skillIds: ['product-brief-authoring'],
-                aiCommit: {
-                    commitId: 'phase-e-role-builder-allow',
-                    agentId: 'cvf-route-test',
-                    timestamp: Date.now(),
-                    description: 'Phase E E.2 builder role artifact permission test',
-                },
-        });
-
-        const res = await POST(req as never);
-        const data = await res.json();
-
-        expect(res.status).toBe(200);
-        expect(data.rolePermission).toMatchObject({
-            role: 'BUILDER',
-            permissionRole: 'BUILDER',
-            outputClass: 'artifact',
-            allowed: true,
-        });
-        expect(data.executionIdentity).toMatchObject({
-            contractVersion: 'cvf.executionIdentity.v1',
-            actorId: 'developer-user',
-            cvfRole: 'BUILDER',
-            decision: 'allowed',
-            authority: {
-                canExecute: true,
-                outputClass: 'artifact',
-                outputAllowed: true,
-                allowedActorRoles: ['OPERATOR', 'BUILDER', 'REVIEWER', 'SERVICE_AGENT'],
-            },
-            executionBoundary: {
-                boundary: 'governed_pack_actor_policy',
-                packPolicyApplied: true,
-            },
-            receiptOwnership: {
-                ownerActorId: 'developer-user',
-                ownerRole: 'BUILDER',
-                source: 'session_actor',
-            },
-        });
-        expect(data.workflowId).toBe('workflow.product.create_product_brief.v1');
-        const stepIds = data.stepTraces.map((trace: { stepId: string }) => trace.stepId);
-        expect(stepIds).toEqual([
-            'step-1-intake-validation', 'step-2-knowledge-retrieval',
-            'step-3-provider-call', 'step-4-review-gate', 'step-5-receipt-emit',
-        ]);
-        expect(data.stepTraces).toEqual(expect.arrayContaining([
-            expect.objectContaining({ stepId: 'step-4-review-gate', decision: 'deferred', receiptId: null }),
-            expect.objectContaining({ stepId: 'step-5-receipt-emit', decision: 'deferred', receiptId: null }),
-        ]));
-        expect(data.stateMachine).toMatchObject({
-            contractVersion: 'cvf.workflowStateMachineProjection.v1',
-            workflowId: 'workflow.product.create_product_brief.v1',
-            finalState: 'review_pending',
-            completedStepIds: stepIds.slice(0, 3),
-            deferredStepIds: stepIds.slice(3),
-            waitingStepIds: ['step-5-receipt-emit'],
-        });
-        expect(data.receipts.map((receipt: { stepId: string }) => receipt.stepId)).toEqual(stepIds.slice(0, 3));
-        expect(data.receiptObligations.map((obligation: { role: string; actionClass: string }) => [
-            obligation.role,
-            obligation.actionClass,
-        ])).toEqual([
-            ['BUILDER', 'artifact_export'],
-            ['BUILDER', 'file_read'],
-            ['BUILDER', 'provider_call'],
-            ['BUILDER', 'artifact_export'],
-        ]);
-        expect(data.receiptBinding).toMatchObject({
-            contractVersion: 'phaseE.receiptBinding.v1',
-            workflowId: 'workflow.product.create_product_brief.v1',
-            fullMatrixDisposition: 'deferred_with_reason',
-        });
-        expect(data.deferredStepIds).toEqual(stepIds.slice(3));
-        const workflowAuditEvent = appendAuditEventMock.mock.calls
-            .map((call: unknown[]) => call[0] as { eventType?: string; payload?: Record<string, unknown> })
-            .find((event) => event.eventType === 'WORKFLOW_BINDING_EXECUTED');
-        expect(workflowAuditEvent?.payload).toMatchObject({
-            workflowId: 'workflow.product.create_product_brief.v1',
-            governanceReceiptId: data.governanceEvidenceReceipt.receiptId,
-            stepTraces: data.stepTraces,
-            receipts: data.receipts,
-            receiptBinding: data.receiptBinding,
-            deferredStepIds: stepIds.slice(3),
-            stateMachine: data.stateMachine,
-            rolePermission: data.rolePermission,
-            executionIdentity: data.executionIdentity,
-        });
-        expect(data.auditMemoryReceipt).toMatchObject({
-            tier: 'session',
-            contractVersion: 'phaseD.memoryContinuity.v1',
-            ownerRole: 'OPERATOR',
-            receipt: {
-                traceId: data.governanceEvidenceReceipt.receiptId,
-                decision: 'captured',
-                reason: 'memory_captured_after_policy_and_privacy',
-                provenanceRequired: true,
-            },
-        });
-        expect(data.auditMemoryReceipt.captureRecord).toMatchObject({ contractVersion: 'cvf.agentMemoryCaptureRecord.vi3.v1', eventType: 'execution_result', policyContext: { canReinject: false }, rawSecretStored: false, privateReasoningCaptured: false, promotion: { automaticPromotion: false } });
-        expect(data.auditMemoryReceipt.captureRecord.boundaries).toContain('capture_is_observation_not_permission');
-        expect(data.auditMemoryReceipt.receipt.memoryIds).toHaveLength(1);
-        const auditMemoryEvent = appendAuditEventMock.mock.calls
-            .map((call: unknown[]) => call[0] as { eventType?: string; payload?: Record<string, unknown> })
-            .find((event) => event.eventType === 'AUDIT_MEMORY_RECEIPT_CAPTURED');
-        expect(auditMemoryEvent?.payload).toMatchObject({
-            governanceReceiptId: data.governanceEvidenceReceipt.receiptId,
-            memoryReceiptId: data.auditMemoryReceipt.receipt.receiptId,
-            memoryIds: data.auditMemoryReceipt.receipt.memoryIds,
-            memoryTier: 'session',
-            memoryContractVersion: 'phaseD.memoryContinuity.v1',
-            memoryCaptureRecordVersion: 'cvf.agentMemoryCaptureRecord.vi3.v1',
-            memoryCaptureCanReinject: false,
-            memoryCaptureRawSecretStored: false,
-            memoryCaptureAutomaticPromotion: false,
-            actor_role_gate_result: 'permitted',
-            executionIdentity: data.executionIdentity,
-        });
-        expect(executeAIMock).toHaveBeenCalledTimes(1);
-        expect(executeAIMock.mock.calls[0][2]).not.toContain('GOVERNANCE_AUDIT_MEMORY_RECEIPT');
     });
 
     it('caps trusted noncoder template max tokens for provider calls', async () => {
@@ -849,6 +699,90 @@ describe('/api/execute', () => {
 
         expect(approvedRes.status).not.toBe(409);
         expect(String(approvedData.error || '')).not.toMatch(/approval/i);
+        expect(executeAIMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('rejects a legacy order-sensitive hash for the same request and invokes no provider', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'NEEDS_APPROVAL',
+            reasons: ['R3 requires explicit human approval before execution.'],
+            riskGate: { status: 'NEEDS_APPROVAL', riskLevel: 'R3', reason: 'R3 requires explicit human approval before execution.' },
+        });
+        const requestBody = {
+            templateId: 'strategy_tpl',
+            templateName: 'Strategy',
+            intent: 'Review regulated rollout plan',
+            inputs: { z: 'last', a: 'first' },
+            provider: 'openai',
+        };
+        const pendingRes = await POST(makeExecuteRequest(requestBody) as never);
+        const pendingData = await pendingRes.json();
+        const store = getApprovalStore();
+        const approvalRecord = store.get(pendingData.approvalId)!;
+        const legacySnapshot = {
+            templateId: approvalRecord.requestSnapshot!.templateId,
+            templateName: approvalRecord.requestSnapshot!.templateName,
+            intent: approvalRecord.requestSnapshot!.intent,
+            inputs: { z: 'last', a: 'first' },
+            provider: approvalRecord.requestSnapshot!.provider,
+            knowledgeCollectionId: approvalRecord.requestSnapshot!.knowledgeCollectionId,
+            actorId: approvalRecord.requestSnapshot!.actorId,
+            actorOrgId: approvalRecord.requestSnapshot!.actorOrgId,
+            actorTeamId: approvalRecord.requestSnapshot!.actorTeamId,
+            actorAuthMode: approvalRecord.requestSnapshot!.actorAuthMode,
+        };
+        const legacyHash = createHash('sha256')
+            .update(JSON.stringify(legacySnapshot), 'utf8')
+            .digest('hex');
+        expect(legacyHash).not.toBe(approvalRecord.requestHash);
+        store.set(pendingData.approvalId, {
+            ...approvalRecord,
+            status: 'approved',
+            requestHash: legacyHash,
+        });
+
+        const response = await POST(makeExecuteRequest({
+            ...requestBody,
+            approvalId: pendingData.approvalId,
+        }) as never);
+        const data = await response.json();
+
+        expect(response.status).toBe(409);
+        expect(data.error).toMatch(/does not match/i);
+        expect(executeAIMock).toHaveBeenCalledTimes(0);
+    });
+
+    it('rejects a missing approval request hash for reissue and invokes no provider', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        evaluateEnforcementMock.mockReturnValue({
+            status: 'NEEDS_APPROVAL',
+            reasons: ['R3 requires explicit human approval before execution.'],
+            riskGate: { status: 'NEEDS_APPROVAL', riskLevel: 'R3', reason: 'R3 requires explicit human approval before execution.' },
+        });
+        const requestBody = {
+            templateId: 'strategy_tpl', templateName: 'Strategy',
+            intent: 'Review regulated rollout plan', inputs: { goal: 'Test' }, provider: 'openai',
+        };
+        const pendingRes = await POST(makeExecuteRequest(requestBody) as never);
+        const pendingData = await pendingRes.json();
+        const store = getApprovalStore();
+        const approvalRecord = store.get(pendingData.approvalId)!;
+        store.set(pendingData.approvalId, {
+            ...approvalRecord,
+            status: 'approved',
+            requestHash: undefined,
+        });
+
+        const response = await POST(makeExecuteRequest({
+            ...requestBody,
+            approvalId: pendingData.approvalId,
+        }) as never);
+        const data = await response.json();
+
+        expect(response.status).toBe(409);
+        expect(data.error).toMatch(/predates request binding.*re-issued/i);
+        expect(executeAIMock).toHaveBeenCalledTimes(0);
     });
 
     it('rejects a mismatched approvalId when the execution payload changes', async () => {

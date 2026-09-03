@@ -88,6 +88,61 @@ describe('sot3-activation-evidence-store', () => {
     });
   });
 
+  describe('CSCC-R1-T2: canonicalExecutionId dual-shape validation, stable ID, and integrity', () => {
+    it('accepts the legacy thirteen-key shape (canonicalExecutionId absent) and persists it unchanged', async () => {
+      const store = new Sot3ActivationEvidenceStore(storePath);
+      const record = buildRecord();
+      expect(record.canonicalExecutionId).toBeUndefined();
+      const outcome = await store.append(record);
+      expect(outcome.diagnosticClass).toBe('PERSISTED');
+      expect(store.findByRecordId(record.recordId)?.canonicalExecutionId).toBeUndefined();
+    });
+
+    it('accepts the fourteen-key shape with a non-empty canonicalExecutionId and persists it', async () => {
+      const store = new Sot3ActivationEvidenceStore(storePath);
+      const record = buildRecord({ canonicalExecutionId: 'env-canonical-store-001' });
+      const outcome = await store.append(record);
+      expect(outcome.diagnosticClass).toBe('PERSISTED');
+      expect(store.findByRecordId(record.recordId)?.canonicalExecutionId).toBe('env-canonical-store-001');
+    });
+
+    it('rejects a record whose canonicalExecutionId is an empty string', async () => {
+      const store = new Sot3ActivationEvidenceStore(storePath);
+      const record = buildRecord({ canonicalExecutionId: '' });
+      await expect(store.append(record)).rejects.toThrow(Sot3EvidenceRecordIntegrityError);
+    });
+
+    it('does not change the stable recordId when canonicalExecutionId is added (deriveSot3EvidenceRecordId is unaffected)', () => {
+      const withoutId = deriveSot3EvidenceRecordId({ requestId: 'req-stable', actorId: 'usr_a', organization: 'org_a', team: 'team_a', mode: 'ENFORCE' });
+      // deriveSot3EvidenceRecordId's own input shape intentionally has no
+      // canonicalExecutionId parameter - this proves the identity
+      // projection is untouched by the additive field's introduction.
+      const again = deriveSot3EvidenceRecordId({ requestId: 'req-stable', actorId: 'usr_a', organization: 'org_a', team: 'team_a', mode: 'ENFORCE' });
+      expect(withoutId).toBe(again);
+    });
+
+    it('includes canonicalExecutionId in the integrity hash preimage whenever present, and excludes it when absent', () => {
+      const withId = buildRecord({ canonicalExecutionId: 'env-canonical-hash-001' });
+      const withoutId = buildRecord();
+      expect(withId.integrityHash).not.toBe(withoutId.integrityHash);
+      // Tampering the additive field alone must invalidate the hash.
+      const { integrityHash: _drop, ...restWithId } = withId;
+      void _drop;
+      const tamperedHash = computeSot3EvidenceRecordIntegrityHash({ ...restWithId, canonicalExecutionId: 'env-canonical-tampered' });
+      expect(tamperedHash).not.toBe(withId.integrityHash);
+    });
+
+    it('round-trips a persisted fourteen-key record through a fresh store instance without corruption', async () => {
+      const store = new Sot3ActivationEvidenceStore(storePath);
+      const record = buildRecord({ canonicalExecutionId: 'env-canonical-roundtrip-001' });
+      await store.append(record);
+      const reopened = new Sot3ActivationEvidenceStore(storePath);
+      const found = reopened.findByRecordId(record.recordId);
+      expect(found?.canonicalExecutionId).toBe('env-canonical-roundtrip-001');
+      expect(found?.integrityHash).toBe(record.integrityHash);
+    });
+  });
+
   describe('atomic first write and restart lookup', () => {
     it('writes a valid versioned document only at the main path after replace', async () => {
       const store = new Sot3ActivationEvidenceStore(storePath);

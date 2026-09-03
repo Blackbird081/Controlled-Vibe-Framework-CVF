@@ -261,6 +261,11 @@ export function buildEvidenceReceipt(
         routingDecision: input.routingDecision,
         policySnapshotId: input.envelope.policySnapshotId,
         envelopeId: input.envelope.envelopeId,
+        // CSCC-R1-T2: canonicalExecutionId is set from the same source value
+        // as envelopeId, on every branch (no separate terminal-only
+        // assignment), so a denial-path receipt and a success-path receipt
+        // both carry the identity identically.
+        canonicalExecutionId: input.envelope.envelopeId,
         knowledgeSource: input.knowledgeSource,
         knowledgeInjected: input.knowledgeInjected,
         knowledgeCollectionId: input.knowledgeCollectionId ?? null,

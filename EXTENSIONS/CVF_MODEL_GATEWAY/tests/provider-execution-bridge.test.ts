@@ -602,6 +602,112 @@ describe("ProviderExecutionBridge", () => {
       expect(serialized).not.toContain("the exact raw system prompt");
     });
   });
+  describe("CSCC-R1-T2 canonicalExecutionId propagation (additive, legacy-compatible)", () => {
+    it("omits canonicalExecutionId on the receipt when the request omits the carrier (legacy caller)", async () => {
+      const options = makeBridgeOptions();
+      const bridge = new ProviderExecutionBridge(options);
+      const result = await bridge.execute(makeRequest());
+      expect(result.receipt.canonicalExecutionId).toBeUndefined();
+      expect(result.materialContextManifest?.canonicalExecutionId).toBeUndefined();
+      expect(result.attemptOutcome).toBeUndefined();
+    });
+
+    it("propagates canonicalExecutionId onto the receipt and manifest for a successful call", async () => {
+      const options = makeBridgeOptions();
+      const bridge = new ProviderExecutionBridge(options);
+      const result = await bridge.execute(makeRequest({ canonicalExecutionId: "env-canonical-success" }));
+      expect(result.receipt.canonicalExecutionId).toBe("env-canonical-success");
+      expect(result.materialContextManifest?.canonicalExecutionId).toBe("env-canonical-success");
+    });
+
+    it("propagates canonicalExecutionId identically on a pre-adapter-stopped receipt", async () => {
+      const options = makeBridgeOptions();
+      const bridge = new ProviderExecutionBridge(options);
+      const request = makeRequest({
+        canonicalExecutionId: "env-canonical-stopped",
+        policy: { traceId: TEST_TRACE_ID, policyResult: "deny", reason: "test_denied" },
+      });
+      const result = await bridge.execute(request);
+      expect(result.receipt.canonicalExecutionId).toBe("env-canonical-stopped");
+    });
+  });
+
+  describe("CSCC-R1-T2 beforeProviderInvoke atomic attempt boundary", () => {
+    it("legacy callers that omit beforeProviderInvoke see unchanged behavior (byte-identical call sequence)", async () => {
+      const adapter = makeMockAdapter();
+      const options = makeBridgeOptions({ adapters: new Map([[TEST_PROVIDER_ID, adapter]]) });
+      const bridge = new ProviderExecutionBridge(options);
+      const result = await bridge.execute(makeRequest(), {});
+      expect(adapter.execute).toHaveBeenCalledTimes(1);
+      expect(result.response).toBeDefined();
+      expect(result.attemptOutcome).toBeUndefined();
+    });
+
+    it("invokes the callback exactly once immediately before the single adapter.execute call, only after every pre-adapter stop passed", async () => {
+      const callOrder: string[] = [];
+      const adapter = makeMockAdapter();
+      adapter.execute.mockImplementation(async () => {
+        callOrder.push("adapter.execute");
+        return { text: "test", usage: { inputTokens: 1, outputTokens: 1 } };
+      });
+      const options = makeBridgeOptions({ adapters: new Map([[TEST_PROVIDER_ID, adapter]]) });
+      const bridge = new ProviderExecutionBridge(options);
+      const beforeProviderInvoke = vi.fn(async () => {
+        callOrder.push("beforeProviderInvoke");
+        return { decision: "allow" as const, attemptIndex: 0 };
+      });
+      const result = await bridge.execute(makeRequest(), { beforeProviderInvoke });
+      expect(beforeProviderInvoke).toHaveBeenCalledTimes(1);
+      expect(callOrder).toEqual(["beforeProviderInvoke", "adapter.execute"]);
+      expect(result.attemptOutcome).toBe("invoked");
+    });
+
+    it("a callback denial never invokes the adapter and reports attemptOutcome 'denied'", async () => {
+      const adapter = makeMockAdapter();
+      const options = makeBridgeOptions({ adapters: new Map([[TEST_PROVIDER_ID, adapter]]) });
+      const bridge = new ProviderExecutionBridge(options);
+      const beforeProviderInvoke = vi.fn(async () => ({
+        decision: "deny" as const,
+        attemptIndex: 0,
+        reason: "quota_exhausted",
+      }));
+      const result = await bridge.execute(makeRequest(), { beforeProviderInvoke });
+      expect(adapter.execute).not.toHaveBeenCalled();
+      expect(result.attemptOutcome).toBe("denied");
+      // CSCC-R1-T2 rework: the frozen T1 Callback Outcome Table maps a
+      // callback denial to errorClass "admission_blocked" (the same class
+      // the pre-adapter checkBridgeAdmission stop uses), not "internal_error".
+      expect(result.error?.errorClass).toBe("admission_blocked");
+    });
+
+    it("a callback throw never invokes the adapter and reports attemptOutcome 'callback_error'", async () => {
+      const adapter = makeMockAdapter();
+      const options = makeBridgeOptions({ adapters: new Map([[TEST_PROVIDER_ID, adapter]]) });
+      const bridge = new ProviderExecutionBridge(options);
+      const beforeProviderInvoke = vi.fn(async () => {
+        throw new Error("simulated admission rejection");
+      });
+      const result = await bridge.execute(makeRequest(), { beforeProviderInvoke });
+      expect(adapter.execute).not.toHaveBeenCalled();
+      expect(result.attemptOutcome).toBe("callback_error");
+      expect(result.error?.errorClass).toBe("internal_error");
+    });
+
+    it("every pre-adapter stop never invokes the callback and reports attemptOutcome 'not_reached'", async () => {
+      const adapter = makeMockAdapter();
+      const options = makeBridgeOptions({ adapters: new Map([[TEST_PROVIDER_ID, adapter]]) });
+      const bridge = new ProviderExecutionBridge(options);
+      const beforeProviderInvoke = vi.fn(async () => ({ decision: "allow" as const, attemptIndex: 0 }));
+      const request = makeRequest({
+        policy: { traceId: TEST_TRACE_ID, policyResult: "deny", reason: "test_denied" },
+      });
+      const result = await bridge.execute(request, { beforeProviderInvoke });
+      expect(beforeProviderInvoke).not.toHaveBeenCalled();
+      expect(adapter.execute).not.toHaveBeenCalled();
+      expect(result.attemptOutcome).toBe("not_reached");
+    });
+  });
+
   describe("negative source assertions", () => {
     it("bridge source does not reference concrete adapters or network", async () => {
       const fs = await import("node:fs");

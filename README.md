@@ -152,6 +152,10 @@ contract is not yet permission for an agent to mutate files, call a provider,
 or spend quota. CVF may prepare these controls for a non-coder, but it preserves
 the decisions and requests human approval where policy or risk requires it.
 
+See [Seven-Step Shared-Workspace Agent Model](docs/concepts/seven-step-shared-workspace-agent-model.md)
+for role ownership, exact-path coordination, commit choreography, and the
+boundary between Internal Agent authority and external-agent advisory input.
+
 What CVF is good at:
 
 - keeping human approval — a person or policy checkpoint before sensitive work proceeds — and audit evidence inside the delivery loop

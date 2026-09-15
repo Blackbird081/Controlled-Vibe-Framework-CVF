@@ -7,13 +7,15 @@ import re
 import sys
 from dataclasses import dataclass, field
 from build_worker_return_skeleton_scaffold import (
-    SCEC_UNRESOLVED_PREDECESSOR_SENTINEL, build_worker_return_skeleton,
-    render_scec_outcome_block,
+    SCEC_UNRESOLVED_PREDECESSOR_SENTINEL, build_worker_return_skeleton, render_scec_outcome_block,
+    render_evidence_readiness_binding_block)
+from worker_evidence_readiness import (
+    EVIDENCE_READINESS_CONTRACT_TOKEN,
+    resolve_evidence_readiness_applicable as _resolve_evidence_readiness_applicable,
 )
 from review_convergence_scaffold import (
-    add_arguments as add_convergence_arguments, build_block as build_convergence_block,
-    build_provenance_block, kwargs as convergence_kwargs, validate as validate_convergence,
-)
+    add_arguments as add_convergence_arguments, build_block as build_convergence_block, build_provenance_block, kwargs as convergence_kwargs, validate as validate_convergence)
+from build_dispatch_packet_architecture_readiness import architecture_readiness_section
 PACKET_KINDS = (
     "generic-worker-dispatch", "held-dependency", "source-intake",
     "runtime-provider-live", "package-skill", "web-ui-dashboard",
@@ -23,71 +25,34 @@ PACKET_KINDS = (
 COMMIT_MODES = ("WORKER_MUST_NOT_COMMIT", "WORKER_MAY_COMMIT")
 
 TRIGGER_FAMILIES: tuple[tuple[str, str, tuple[str, ...], str], ...] = (
-    (
-        "held_dependency",
-        "held dependency",
-        ("dependency text", "--status HOLD_*", "held-dependency"),
-        "## Dependency Release Evidence",
-    ),
-    (
-        "no_commit_worker",
-        "no-commit worker",
-        ("--commit-mode WORKER_MUST_NOT_COMMIT",),
-        "## Agent Handoff Contract Control Block; ## Reviewer Closure Conversion; "
-        "## Worker Return Packet Shape Contract",
-    ),
-    (
-        "source_intake",
-        "source-intake",
-        ("source intake", "outside-source", "repo folder review", "copied folder", "source-intake"),
-        "source-intake decision packet fields and negative-search rows",
-    ),
-    (
-        "runtime_provider_live",
-        "runtime/provider/live",
-        ("runtime", "provider", "live proof", "model gateway"),
-        "live-proof boundary and diagnostic reminder",
-    ),
-    (
-        "package_skill",
-        "package-skill",
-        ("package skill", "ASSF", "skill registry"),
-        "package-skill productionization boundary stub",
-    ),
-    (
-        "web_ui_dashboard",
-        "Web/UI/dashboard",
-        ("Web", "UI", "dashboard", "frontend"),
-        "DESIGN.md read reminder and UI claim boundary",
-    ),
-    (
-        "mcp_cli",
-        "MCP/CLI",
-        ("MCP", "CLI", "adapter"),
-        "adapter boundary and no-runtime-overclaim stub",
-    ),
-    (
-        "public_sync",
-        "public-sync",
-        ("public export", "public-sync"),
-        "public/provenance boundary and export disposition stub",
-    ),
-    (
-        "unicode_evidence_reuse",
-        "Unicode/evidence reuse",
-        ("Unicode", "encoding", "prior evidence", "receipt reuse"),
-        "evidence-reuse and encoding plan stub",
-    ),
-    (
-        "protected_governance_path",
-        "protected governance path",
-        ("checker", "hook catalog", "autorun catalog", "session state"),
-        "core guard self-protection authorization stub",
-    ),
+    ("held_dependency", "held dependency",
+     ("dependency text", "--status HOLD_*", "held-dependency"), "## Dependency Release Evidence"),
+    ("no_commit_worker", "no-commit worker", ("--commit-mode WORKER_MUST_NOT_COMMIT",),
+     "## Agent Handoff Contract Control Block; ## Reviewer Closure Conversion; "
+     "## Worker Return Packet Shape Contract"),
+    ("source_intake", "source-intake",
+     ("source intake", "outside-source", "repo folder review", "copied folder", "source-intake"),
+     "source-intake decision packet fields and negative-search rows"),
+    ("runtime_provider_live", "runtime/provider/live",
+     ("runtime", "provider", "live proof", "model gateway"),
+     "live-proof boundary and diagnostic reminder"),
+    ("package_skill", "package-skill", ("package skill", "ASSF", "skill registry"),
+     "package-skill productionization boundary stub"),
+    ("web_ui_dashboard", "Web/UI/dashboard", ("Web", "UI", "dashboard", "frontend"),
+     "DESIGN.md read reminder and UI claim boundary"),
+    ("mcp_cli", "MCP/CLI", ("MCP", "CLI", "adapter"),
+     "adapter boundary and no-runtime-overclaim stub"),
+    ("public_sync", "public-sync", ("public export", "public-sync"),
+     "public/provenance boundary and export disposition stub"),
+    ("unicode_evidence_reuse", "Unicode/evidence reuse",
+     ("Unicode", "encoding", "prior evidence", "receipt reuse"),
+     "evidence-reuse and encoding plan stub"),
+    ("protected_governance_path", "protected governance path",
+     ("checker", "hook catalog", "autorun catalog", "session state"),
+     "core guard self-protection authorization stub"),
 )
 
 _WORD_INDICATOR_RE_CACHE: dict[str, re.Pattern[str]] = {}
-
 
 def _word_pattern(indicator: str) -> re.Pattern[str]:
     pattern = _WORD_INDICATOR_RE_CACHE.get(indicator)
@@ -95,7 +60,6 @@ def _word_pattern(indicator: str) -> re.Pattern[str]:
         pattern = re.compile(r"\b" + re.escape(indicator.lower()) + r"\b")
         _WORD_INDICATOR_RE_CACHE[indicator] = pattern
     return pattern
-
 
 def _matches_any_indicator(text: str, indicators: tuple[str, ...]) -> bool:
     lowered = text.lower()
@@ -105,7 +69,6 @@ def _matches_any_indicator(text: str, indicators: tuple[str, ...]) -> bool:
         if _word_pattern(indicator).search(lowered):
             return True
     return False
-
 
 @dataclass
 class ScaffoldArgs:
@@ -130,6 +93,28 @@ class ScaffoldArgs:
     scec_chain_ordinal: int = 0; scec_predecessor_path: str | None = None
     scec_predecessor_sha256: str | None = None
     scec_required_disposition: str = "CONTINUE_BOUNDED"; scec_successor_scope: str = "INITIAL_BOUNDED"
+    include_architecture_readiness_block: bool = True
+    include_architecture_readiness_echo: bool = True
+    include_p4_observation_block: bool = True
+    # F4 rework fix: tri-state, not a bool defaulting off. `None` (the
+    # default) means "derive automatically from trusted scope/contract
+    # signals" (requirement 6); an explicit `True`/`False` is a deliberate
+    # author override. A worker can no longer silently ship uncovered by
+    # simply not knowing to pass a flag -- the *default* path now actively
+    # inspects the packet shape instead of doing nothing.
+    evidence_readiness_applicable: bool | None = None
+
+def resolve_evidence_readiness_applicable(args: "ScaffoldArgs") -> bool:
+    """Resolve the effective applicability: an explicit override (`True` or
+    `False`) always wins; otherwise auto-detect from trusted packet shape
+    via the single shared implementation in `worker_evidence_readiness.py`
+    (also used by `build_worker_return_skeleton_scaffold.py`, so both
+    scaffold owners cannot drift into two different applicability rules).
+    There is no code path left where "nobody thought to pass a flag"
+    quietly resolves to uncovered -- the unset (`None`) state actively
+    inspects the packet instead of defaulting to `False`."""
+
+    return _resolve_evidence_readiness_applicable(args)
 
 
 def detect_triggers(args: ScaffoldArgs) -> dict[str, bool]:
@@ -144,7 +129,6 @@ def detect_triggers(args: ScaffoldArgs) -> dict[str, bool]:
             continue
         active[key] = _matches_any_indicator(combined, indicators)
     return active
-
 
 def build_trigger_map_table(active: dict[str, bool] | None = None) -> str:
     lines = [
@@ -166,7 +150,6 @@ def build_trigger_map_table(active: dict[str, bool] | None = None) -> str:
     )
     return "\n".join(lines)
 
-
 def _adif_disclosure_block() -> str:
     return (
         "## ADIF Defect Registry Disclosure\n\n"
@@ -184,7 +167,6 @@ def _adif_disclosure_block() -> str:
         "list every defectId it actually returns."
     )
 
-
 def _checker_read_ahead_block() -> str:
     return (
         "## Checker Source Read-Ahead Block\n\n"
@@ -199,7 +181,6 @@ def _checker_read_ahead_block() -> str:
         "governed line, then fill this block as confirmation evidence."
     )
 
-
 def _source_verification_block() -> str:
     return (
         "## Source Verification Block\n\n"
@@ -211,7 +192,6 @@ def _source_verification_block() -> str:
         "Author reminder: every claimed item needs a real source file and "
         "line/section; do not leave placeholder rows in the dispatched artifact."
     )
-
 
 def _negative_search_block(title: str, date: str) -> str:
     return (
@@ -225,7 +205,6 @@ def _negative_search_block(title: str, date: str) -> str:
         "placeholder rows."
     )
 
-
 def _public_export_disposition_block() -> str:
     return (
         "## Public Export Disposition\n\n"
@@ -234,7 +213,6 @@ def _public_export_disposition_block() -> str:
         "EXPORTED or BLOCKED_MISSING_PUBLIC_ARTIFACTS evidence only if this packet "
         "genuinely changes public-sync scope)."
     )
-
 
 def _dependency_release_block(dependencies: list[str]) -> str:
     lines = [
@@ -255,7 +233,6 @@ def _dependency_release_block(dependencies: list[str]) -> str:
     )
     return "\n".join(lines)
 
-
 def _runtime_freshness_block() -> str:
     return (
         "## Current Runtime Freshness Verification\n\n"
@@ -274,7 +251,6 @@ def _runtime_freshness_block() -> str:
         "`docs/reference/CVF_LIVE_RUN_DIAGNOSTIC_STANDARD_2026-05-24.md`."
     )
 
-
 def _package_skill_block() -> str:
     return (
         "## Package Skill Productionization Control Block\n\n"
@@ -290,7 +266,6 @@ def _package_skill_block() -> str:
         "Claim boundary: FILL_ME."
     )
 
-
 def _web_ui_stub() -> str:
     return (
         "## Web/UI Claim Boundary (trigger stub)\n\n"
@@ -302,7 +277,6 @@ def _web_ui_stub() -> str:
         "live-data claim without separate evidence |\n"
     )
 
-
 def _mcp_cli_stub() -> str:
     return (
         "## MCP/CLI Adapter Boundary (trigger stub)\n\n"
@@ -312,7 +286,6 @@ def _mcp_cli_stub() -> str:
         "| No-runtime-overclaim | This packet does not claim the adapter executes, "
         "intercepts, or wraps any runtime command unless separately proven. |\n"
     )
-
 
 def _public_sync_stub() -> str:
     return (
@@ -325,7 +298,6 @@ def _public_sync_stub() -> str:
         "the public repository |\n"
         "| Export disposition | see `## Public Export Disposition` below |\n"
     )
-
 
 def _evidence_reuse_stub() -> str:
     return (
@@ -350,7 +322,6 @@ def _evidence_reuse_stub() -> str:
         "cells as substitutes."
     )
 
-
 def _protected_governance_stub() -> str:
     return (
         "## Core Guard Self-Protection Authorization (trigger stub)\n\n"
@@ -365,7 +336,6 @@ def _protected_governance_stub() -> str:
         "| Not authorized | FILL_ME |\n"
     )
 
-
 def _source_intake_stub() -> str:
     return (
         "## Source-Intake Decision Packet Fields (trigger stub)\n\n"
@@ -379,7 +349,6 @@ def _source_intake_stub() -> str:
         "PACKAGE_CANDIDATE/RUNTIME_CANDIDATE/CHECKER_CANDIDATE/"
         "NO_PACKAGE_OR_RUNTIME_VALUE) |\n"
     )
-
 
 def _agent_handoff_control_block(args: ScaffoldArgs) -> str:
     return (
@@ -401,7 +370,6 @@ def _agent_handoff_control_block(args: ScaffoldArgs) -> str:
         "| nextMoveSurfaces | FILL_ME |\n"
     )
 
-
 def _reviewer_closure_conversion_block(batch_id: str, date: str) -> str:
     return (
         "## Reviewer Closure Conversion\n\n"
@@ -414,7 +382,6 @@ def _reviewer_closure_conversion_block(batch_id: str, date: str) -> str:
         "| workerCommitPermission | FORBIDDEN |\n"
     )
 
-
 def _required_artifact_manifest() -> str:
     return (
         "## Required Artifact Manifest\n\n"
@@ -422,7 +389,6 @@ def _required_artifact_manifest() -> str:
         "| --- | --- |\n"
         "| FILL_ME | FILL_ME |\n"
     )
-
 
 def _worker_return_packet_shape_contract(worker_return_path: str) -> str:
     return (
@@ -451,7 +417,6 @@ def _worker_return_packet_shape_contract(worker_return_path: str) -> str:
         "as the artifact section body.\n"
     )
 
-
 def _worker_output_checker_read_ahead_mandate() -> str:
     return (
         "## Worker Output Checker Read-Ahead Mandate\n\n"
@@ -467,7 +432,6 @@ def _worker_output_checker_read_ahead_mandate() -> str:
         "literalTokensReviewed; avoid `after ... closure` wording unless a "
         "dependency-release row cites the accepted artifact path and commit."
     )
-
 
 def _verification_commands_block(args: ScaffoldArgs) -> str:
     lines = [
@@ -486,7 +450,6 @@ def _verification_commands_block(args: ScaffoldArgs) -> str:
         ]
     )
     return "\n".join(lines)
-
 
 def _delta_claim_boundary_block() -> str:
     return (
@@ -508,7 +471,6 @@ def _delta_claim_boundary_block() -> str:
         "public/package/Web/MCP/model-router behavior without a fresh "
         "source-verified authorization. |\n"
     )
-
 
 def _agent_operation_trace_block(args: ScaffoldArgs) -> str:
     return (
@@ -534,7 +496,6 @@ def _agent_operation_trace_block(args: ScaffoldArgs) -> str:
         "| Manifest delta | FILL_ME |\n"
     )
 
-
 def _scec_block(args: ScaffoldArgs) -> str:
     return render_scec_outcome_block(
         problem_key=args.scec_problem_key or f"{args.batch_id.lower()}-problem",
@@ -548,6 +509,29 @@ def _scec_block(args: ScaffoldArgs) -> str:
         "evidence before dispatch. Replace any unresolved "
         f"`{SCEC_UNRESOLVED_PREDECESSOR_SENTINEL}` with a real predecessor path/hash; "
         "the checker fails closed on the sentinel.",
+    )
+
+def _evidence_readiness_contract_block() -> str:
+    """Compact evidence-readiness acceptance/binding block for a dispatch
+    work order, included automatically when the task is applicable (worker
+    order requirement 6) so a future worker cannot omit it by forgetting.
+
+    Declaring `EVIDENCE_READINESS_CONTRACT_TOKEN` here is the sole trusted
+    applicability source the return-time checker reads; the worker return's
+    own `## Evidence Readiness Binding` section is validated against it
+    automatically through the existing `check_worker_return_quality_gate.py`
+    call, never through a second checker invocation.
+    """
+    return (
+        "## Evidence Readiness Acceptance Contract\n\n"
+        f"{EVIDENCE_READINESS_CONTRACT_TOKEN}\n\n"
+        "This task's worker return must include the compact evidence-binding "
+        "block below, filled with real evidence. The worker-return quality "
+        "gate reaches `governance/compat/worker_evidence_readiness.py` "
+        "automatically for any return whose dispatch work order carries the "
+        "token above; the worker cannot opt out by omitting or tampering "
+        "with its own return.\n\n"
+        f"{render_evidence_readiness_binding_block()}"
     )
 
 
@@ -564,7 +548,6 @@ def _foundation_storage_layout_block() -> str:
         "| Owner surface | FILL_ME |\n"
         "| Claim boundary | FILL_ME |\n"
     )
-
 
 def build_gc018_baseline(args: ScaffoldArgs, active: dict[str, bool]) -> str:
     lines = [
@@ -638,7 +621,6 @@ def build_gc018_baseline(args: ScaffoldArgs, active: dict[str, bool]) -> str:
     lines.append("")
     lines.append(_public_export_disposition_block())
     return "\n".join(lines) + "\n"
-
 
 def build_work_order(args: ScaffoldArgs, active: dict[str, bool]) -> str:
     worker_return_path = f"docs/reviews/CVF_{args.batch_id}_WORKER_RETURN_{args.date}.md"
@@ -726,6 +708,10 @@ def build_work_order(args: ScaffoldArgs, active: dict[str, bool]) -> str:
         lines.append("")
         lines.append(_worker_output_checker_read_ahead_mandate())
         lines.append("")
+    lines += architecture_readiness_section(args)
+    if resolve_evidence_readiness_applicable(args):
+        lines.append(_evidence_readiness_contract_block())
+        lines.append("")
     lines.append(_required_artifact_manifest())
     lines.append("")
     lines.append(_worker_return_packet_shape_contract(worker_return_path))
@@ -769,7 +755,6 @@ def build_work_order(args: ScaffoldArgs, active: dict[str, bool]) -> str:
     lines.append(_public_export_disposition_block())
     return "\n".join(lines) + "\n"
 
-
 def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Generate prefilled CVF GC-018 baseline and work-order scaffold forms."
@@ -783,6 +768,21 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser.add_argument("--dependency", action="append", default=[], dest="dependencies")
     parser.add_argument("--stdout", action="store_true")
     parser.add_argument("--include-worker-return-skeleton", action="store_true")
+    # Tri-state (F4 fix): omitting both flags auto-derives applicability
+    # from trusted packet-kind/title/dependency signals
+    # (`resolve_evidence_readiness_applicable`) rather than defaulting to
+    # the uncovered state. `--evidence-readiness-applicable` forces it on;
+    # `--no-evidence-readiness-applicable` is a deliberate, explicit opt-out
+    # for a real false positive -- it does not change what the default does
+    # when neither flag is passed.
+    parser.add_argument(
+        "--evidence-readiness-applicable", dest="evidence_readiness_applicable",
+        action="store_true", default=None,
+    )
+    parser.add_argument(
+        "--no-evidence-readiness-applicable", dest="evidence_readiness_applicable",
+        action="store_false",
+    )
     add_convergence_arguments(parser)
     parser.add_argument("--scec-problem-key")
     parser.add_argument("--scec-chain-mode", choices=("INITIAL", "SUCCESSOR"), default="INITIAL")
@@ -793,7 +793,6 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser.add_argument("--scec-successor-scope", choices=("INITIAL_BOUNDED", "INTEGRATED_ROOT_CONTRACT", "NO_SUCCESSOR", "EXECUTABLE_IMPLEMENTATION"), default="INITIAL_BOUNDED")
     parser.add_argument("--explain-trigger-map", action="store_true")
     return parser.parse_args(argv)
-
 
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
@@ -841,6 +840,7 @@ def main(argv: list[str] | None = None) -> int:
         commit_mode=args.commit_mode,
         dependencies=list(args.dependencies),
         include_worker_return_skeleton=args.include_worker_return_skeleton,
+        evidence_readiness_applicable=args.evidence_readiness_applicable,
         include_scec_block=True,
         scec_problem_key=args.scec_problem_key,
         scec_chain_mode=args.scec_chain_mode,

@@ -31,6 +31,13 @@ FIELD_HARD_OBLIGATION_LOCATOR = "p4HardObligationLocator"
 FIELD_HARD_OBLIGATION_PATTERN = "p4HardObligationPattern"
 FIELD_SOURCE_AUTHORITY_LOCATOR = "p4SourceAuthorityLocator"
 
+ARCH_ECHO_SCHEMA = "architectureMatrixSchema"
+ARCH_ECHO_DIGEST = "architectureMatrixCanonicalDigest"
+ARCH_ECHO_REVIEW_PATH = "architectureSemanticReviewPath"
+ARCH_ECHO_REVIEW_COMMIT = "architectureSemanticReviewCommit"
+ARCH_ECHO_REVIEW_SHA = "architectureSemanticReviewFileSha256"
+ARCH_ECHO_DISPOSITION = "architectureBindingEchoDisposition"
+
 WORKER_RETURN_SCAFFOLD_SECTIONS = (
     "Source Inventory",
     "Rework Convergence Self-Proof",
@@ -40,6 +47,7 @@ WORKER_RETURN_SCAFFOLD_SECTIONS = (
     "Findings / Position",
     "Risk / Corrective Action",
     "P4 Automatic Evidence Observation Block",
+    "Architecture Readiness Echo",
     "Claim Boundary",
     "Checker Source Read-Ahead Block",
     "Gate Evidence",
@@ -140,11 +148,20 @@ def _section_body(section: str) -> list[str]:
         ]
     if section == "P4 Automatic Evidence Observation Block":
         return [
-            f"{FIELD_ELIGIBILITY}: NO",
+            f"{FIELD_ELIGIBILITY}: AUTO",
             f"{FIELD_PHASE}: N/A with reason: not a natural P4 observation candidate",
             f"{FIELD_HARD_OBLIGATION_LOCATOR}: N/A with reason: not a natural P4 observation candidate",
             f"{FIELD_HARD_OBLIGATION_PATTERN}: N/A with reason: not a natural P4 observation candidate",
             f"{FIELD_SOURCE_AUTHORITY_LOCATOR}: N/A with reason: not a natural P4 observation candidate",
+        ]
+    if section == "Architecture Readiness Echo":
+        return [
+            f"{ARCH_ECHO_SCHEMA}: NOT_APPLICABLE_WITH_REASON: dispatching work order did not declare Architecture-Readiness Admission: REQUIRED",
+            f"{ARCH_ECHO_DIGEST}: N/A with reason: no accepted architecture matrix to echo",
+            f"{ARCH_ECHO_REVIEW_PATH}: N/A with reason: no accepted architecture matrix to echo",
+            f"{ARCH_ECHO_REVIEW_COMMIT}: N/A with reason: no accepted architecture matrix to echo",
+            f"{ARCH_ECHO_REVIEW_SHA}: N/A with reason: no accepted architecture matrix to echo",
+            f"{ARCH_ECHO_DISPOSITION}: N/A with reason: no accepted architecture matrix to echo",
         ]
     if section == "Gate Evidence":
         return [

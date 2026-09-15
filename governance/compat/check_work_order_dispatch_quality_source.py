@@ -670,3 +670,280 @@ def _validate_accepted_source_rows(path: str, text: str) -> list[str]:
     issues.extend(_validate_false_invariant_prose(text, rows))
     issues.extend(_validate_known_false_invariant_claims(text))
     return issues
+
+
+# --- DARA-T2 Architecture Readiness Admission (cvf.dara.architectureBindingMatrix.v1) ---
+# Constants and schema-level helpers extracted to check_work_order_dispatch_quality_architecture_schema.py
+# at DARA-T2-R1. All names re-exported here for backward compatibility with callers.
+
+from check_work_order_dispatch_quality_architecture_schema import (
+    ARCHITECTURE_AUTHORITY_REJECT_PATH_RE, ARCHITECTURE_BINDING_MATRIX_HEADING,
+    ARCHITECTURE_ECHO_DISPOSITION_VALUES, ARCHITECTURE_ECHO_FIELDS,
+    ARCHITECTURE_IMPLEMENTATION_DISPOSITIONS, ARCHITECTURE_MACHINE_PASS,
+    ARCHITECTURE_MATRIX_DERIVED_COLUMNS, ARCHITECTURE_MATRIX_DIGEST_PREIMAGE_COLUMNS,
+    ARCHITECTURE_MATRIX_ROW_COLUMNS, ARCHITECTURE_MATRIX_SCALAR_FIELDS,
+    ARCHITECTURE_MATRIX_SCHEMA, ARCHITECTURE_NONE_CONTRACT_ONLY_PREFIX,
+    ARCHITECTURE_NONE_WITH_REASON_PREFIX, ARCHITECTURE_PLACEHOLDER_RE,
+    ARCHITECTURE_READINESS_ALLOWED_DECLARATIONS, ARCHITECTURE_READINESS_BLOCKED_UNCLASSIFIED,
+    ARCHITECTURE_READINESS_LOW_RISK_PREFIX, ARCHITECTURE_READINESS_MARKER,
+    ARCHITECTURE_READINESS_NOT_APPLICABLE_TOKENS, ARCHITECTURE_READINESS_REQUIRED,
+    ARCHITECTURE_RISK_CLASSES, ARCHITECTURE_SEMANTIC_ACCEPTANCE_VALUES,
+    _architecture_matrix_canonical_digest, _architecture_matrix_rows,
+    _architecture_readiness_declaration, _extract_scalar_field,
+    _is_contract_only_none, _is_none_with_reason,
+)
+
+
+def _validate_architecture_matrix_row_identity(
+    row: dict[str, str],
+    writable_manifest: set[str] | None = None,
+) -> list[str]:
+    """Resolve path/symbol pairs named by one matrix row against the
+    committed workspace, reusing the exact source-verification primitives
+    (`_exists_rel`, `_source_has_verified_symbol`) already owned by this
+    module. Returns issue strings; an empty list means this row's identity
+    resolves (machine coverage only, never a semantic-correctness claim)."""
+    issues: list[str] = []
+    criterion_id = row.get("criterionId", "").strip()
+    label = criterion_id or "<missing criterionId>"
+
+    # These path fields are legitimately empty when their paired symbol
+    # field carries a NONE_WITH_REASON exemption (validated separately
+    # below); the generic required-field loop must not double-flag them.
+    optional_path_fields_with_none_pair = {
+        "registrationPath": "registrationSymbol",
+        "runtimeConsumerPath": "runtimeConsumerSymbol",
+    }
+
+    for field_name in ARCHITECTURE_MATRIX_ROW_COLUMNS:
+        value = row.get(field_name, "").strip()
+        if field_name in ARCHITECTURE_MATRIX_DERIVED_COLUMNS:
+            continue
+        paired_symbol_field = optional_path_fields_with_none_pair.get(field_name)
+        if not value:
+            if paired_symbol_field and _is_none_with_reason(row.get(paired_symbol_field, "").strip()):
+                continue
+            issues.append(f"architecture matrix row `{label}` is missing required field `{field_name}`")
+            continue
+        if ARCHITECTURE_PLACEHOLDER_RE.search(value) and not _is_none_with_reason(value):
+            issues.append(
+                f"architecture matrix row `{label}` field `{field_name}` uses placeholder/worker-selection language: `{value}`"
+            )
+
+    if not criterion_id:
+        issues.append("architecture matrix row is missing `criterionId`")
+
+    risk_class = row.get("riskClass", "").strip()
+    if risk_class and risk_class not in ARCHITECTURE_RISK_CLASSES:
+        issues.append(f"architecture matrix row `{label}` has invalid `riskClass`: `{risk_class}`")
+
+    disposition = row.get("implementationDisposition", "").strip()
+    if disposition and disposition not in ARCHITECTURE_IMPLEMENTATION_DISPOSITIONS:
+        issues.append(
+            f"architecture matrix row `{label}` has invalid `implementationDisposition`: `{disposition}`"
+        )
+
+    # Path/symbol existence pairs. Each pair either both resolve, or the
+    # symbol cell legitimately carries a NONE_WITH_REASON exemption.
+    resolvable_pairs = (
+        ("canonicalOwnerPath", "canonicalOwnerLocator"),
+        ("implementationPath", "implementationSymbol"),
+        ("producerPath", "producerSymbol"),
+        ("exportPath", "exportSymbol"),
+        ("compositionRootPath", "compositionRootSymbol"),
+    )
+    for path_field, symbol_field in resolvable_pairs:
+        path_value = row.get(path_field, "").strip().strip("`")
+        symbol_value = row.get(symbol_field, "").strip().strip("`")
+        if not path_value or not symbol_value:
+            continue
+        if _is_none_with_reason(symbol_value):
+            continue
+        if disposition == "CREATE_NEW" and path_field in ("implementationPath",):
+            # A newly created path need not exist yet; its parent must.
+            parent = Path(path_value).parent.as_posix()
+            if parent and parent != "." and not _exists_rel(parent):
+                issues.append(
+                    f"architecture matrix row `{label}` field `{path_field}` names a new path whose parent does not exist: `{path_value}`"
+                )
+            continue
+        if not _exists_rel(path_value):
+            issues.append(
+                f"architecture matrix row `{label}` field `{path_field}` cites a nonexistent path: `{path_value}`"
+            )
+            continue
+        source_text = _read_rel(path_value)
+        if _is_code_source(path_value) and not _source_has_verified_symbol(source_text, symbol_value):
+            issues.append(
+                f"architecture matrix row `{label}` field `{symbol_field}` cites `{symbol_value}` "
+                f"but `{path_value}` does not contain that symbol"
+            )
+
+    # registrationPath/Symbol: real pair or NONE_WITH_REASON.
+    registration_path = row.get("registrationPath", "").strip().strip("`")
+    registration_symbol = row.get("registrationSymbol", "").strip().strip("`")
+    if registration_symbol and not _is_none_with_reason(registration_symbol):
+        if not registration_path or not _exists_rel(registration_path):
+            issues.append(
+                f"architecture matrix row `{label}` field `registrationPath` cites a nonexistent path: `{registration_path}`"
+            )
+        else:
+            source_text = _read_rel(registration_path)
+            if _is_code_source(registration_path) and not _source_has_verified_symbol(source_text, registration_symbol):
+                issues.append(
+                    f"architecture matrix row `{label}` field `registrationSymbol` cites `{registration_symbol}` "
+                    f"but `{registration_path}` does not contain that symbol"
+                )
+    elif registration_symbol and _is_none_with_reason(registration_symbol) and _is_contract_only_none(registration_symbol):
+        issues.append(
+            f"architecture matrix row `{label}` field `registrationSymbol` uses a contract-only exemption reserved for `runtimeConsumerSymbol`"
+        )
+
+    # runtimeConsumerPath/Symbol: real non-test pair or NONE_WITH_REASON:CONTRACT_ONLY_.
+    consumer_path = row.get("runtimeConsumerPath", "").strip().strip("`")
+    consumer_symbol = row.get("runtimeConsumerSymbol", "").strip().strip("`")
+    if consumer_symbol and _is_none_with_reason(consumer_symbol):
+        if not _is_contract_only_none(consumer_symbol):
+            issues.append(
+                f"architecture matrix row `{label}` field `runtimeConsumerSymbol` exemption must start with `{ARCHITECTURE_NONE_CONTRACT_ONLY_PREFIX}`"
+            )
+    elif consumer_symbol:
+        if not consumer_path or not _exists_rel(consumer_path):
+            issues.append(
+                f"architecture matrix row `{label}` field `runtimeConsumerPath` cites a nonexistent path: `{consumer_path}`"
+            )
+        else:
+            normalized_consumer = consumer_path.replace("\\", "/")
+            if re.search(r"\.test\.|_test\.|/tests?/", normalized_consumer, re.IGNORECASE):
+                issues.append(
+                    f"architecture matrix row `{label}` field `runtimeConsumerPath` cites a test file, "
+                    "not a non-test runtime consumer: use an explicit `NONE_WITH_REASON:CONTRACT_ONLY_` "
+                    "exemption instead if there is truly no non-test consumer"
+                )
+            else:
+                source_text = _read_rel(consumer_path)
+                if _is_code_source(consumer_path) and not _source_has_verified_symbol(source_text, consumer_symbol):
+                    issues.append(
+                        f"architecture matrix row `{label}` field `runtimeConsumerSymbol` cites `{consumer_symbol}` "
+                        f"but `{consumer_path}` does not contain that symbol"
+                    )
+
+    # Test path fields: existing file, or parent exists for planned creation.
+    for test_field in ("positiveTestPath", "negativeTestPath", "bypassTestPath", "compositionTestPath"):
+        test_value = row.get(test_field, "").strip().strip("`")
+        if not test_value or _is_none_with_reason(test_value):
+            continue
+        if _exists_rel(test_value):
+            continue
+        parent = Path(test_value).parent.as_posix()
+        # A root-level new path (parent == ".") always has an existing
+        # parent (the repository root itself).
+        if parent == "." or _exists_rel(parent):
+            continue
+        issues.append(
+            f"architecture matrix row `{label}` field `{test_field}` names a path whose parent directory does not exist: `{test_value}`"
+        )
+
+    # machineDisposition must never be worker-authored as the PASS token in
+    # the matrix itself before the gate has run; a worker may only leave it
+    # for the gate to fill, not hand-write PASS_IDENTITY_AND_COVERAGE.
+    machine_disposition = row.get("machineDisposition", "").strip()
+    if machine_disposition == ARCHITECTURE_MACHINE_PASS:
+        issues.append(
+            f"architecture matrix row `{label}` field `machineDisposition` is worker-authored as "
+            f"`{ARCHITECTURE_MACHINE_PASS}`; only the gate may write this value"
+        )
+
+    semantic_acceptance = row.get("semanticAcceptance", "").strip()
+    if semantic_acceptance and semantic_acceptance not in ARCHITECTURE_SEMANTIC_ACCEPTANCE_VALUES:
+        issues.append(
+            f"architecture matrix row `{label}` field `semanticAcceptance` has invalid value: `{semantic_acceptance}`"
+        )
+
+    # R3-02 fix 3: normalize private/archive authority rejection helper.
+    def _is_private_authority(p: str) -> bool:
+        """Return True if the path matches the private/archive/legacy rejection pattern."""
+        return bool(ARCHITECTURE_AUTHORITY_REJECT_PATH_RE.search(p))
+
+    # canonicalOwnerPath and canonicalAuthorityPath must not be private/archive.
+    for _auth_field in ("canonicalOwnerPath", "canonicalAuthorityPath"):
+        _auth_value = row.get(_auth_field, "").strip().strip("`")
+        if _auth_value and not _is_none_with_reason(_auth_value) and _is_private_authority(_auth_value):
+            issues.append(
+                f"architecture matrix row `{label}` `{_auth_field}` path is rejected "
+                f"(private/archive/legacy): `{_auth_value}`"
+            )
+
+    trust_source = row.get("trustSource", "").strip()
+    if trust_source and not _is_none_with_reason(trust_source):
+        _ts = trust_source.split(":", 1)
+        _tsp = _ts[0].strip() if len(_ts) == 2 else ""
+        if len(_ts) != 2 or not _tsp or not _ts[1].strip():
+            issues.append(f"architecture matrix row `{label}` `trustSource` must be `<path>:<locator>`: `{trust_source}`")
+        elif ARCHITECTURE_AUTHORITY_REJECT_PATH_RE.search(_tsp):
+            issues.append(f"architecture matrix row `{label}` `trustSource` path is rejected (archive/traversal/absolute): `{_tsp}`")
+        elif not _exists_rel(_tsp):
+            issues.append(f"architecture matrix row `{label}` `trustSource` path does not exist: `{_tsp}`")
+        else:
+            # R3-02 fix 1: resolve trust locator against cited authority bytes.
+            _ts_locator = _ts[1].strip()
+            _ts_bytes = _read_rel(_tsp)
+            if _ts_locator not in _ts_bytes:
+                issues.append(
+                    f"architecture matrix row `{label}` `trustSource` locator `{_ts_locator}` "
+                    f"is not found in the cited authority bytes of `{_tsp}` "
+                    "(`BLOCKED_LOCATOR_NOT_IN_AUTHORITY`)"
+                )
+    _cp = row.get("contextCarrierPath", "").strip().strip("`")
+    _cf = row.get("contextField", "").strip()
+    if _cp and _cf and not _is_none_with_reason(_cp):
+        if not _exists_rel(_cp):
+            issues.append(f"architecture matrix row `{label}` `contextCarrierPath` does not exist: `{_cp}`")
+        elif _cf not in _read_rel(_cp):
+            issues.append(f"architecture matrix row `{label}` `contextField` `{_cf}` not found in `{_cp}`")
+    _ep = row.get("evidenceOutputPath", "").strip().strip("`")
+    if _ep and not _is_none_with_reason(_ep):
+        if not any(_ep.replace("\\", "/").startswith(d) for d in ("docs/reviews/", "docs/assessments/", "docs/baselines/", "docs/work_orders/", "docs/audits/")):
+            issues.append(f"architecture matrix row `{label}` `evidenceOutputPath` must be under an authorized directory: `{_ep}`")
+        elif not re.search(r"\d{4}-\d{2}-\d{2}", _ep):
+            issues.append(f"architecture matrix row `{label}` `evidenceOutputPath` must contain a YYYY-MM-DD date: `{_ep}`")
+        elif not _exists_rel(str(Path(_ep).parent)):
+            issues.append(f"architecture matrix row `{label}` `evidenceOutputPath` parent directory does not exist: `{_ep}`")
+    # R3-02 fix 2: rollback paths must be repo-relative AND in the writable manifest.
+    for _rp in ([] if _is_none_with_reason(row.get("rollbackPaths", "")) else [p.strip() for p in row.get("rollbackPaths", "").split(";") if p.strip()]):
+        if re.search(r"\.\.", _rp) or re.match(r"^(?:[A-Za-z]:\\|/|\\\\)", _rp):
+            issues.append(f"architecture matrix row `{label}` `rollbackPaths` entry is absolute or traversal: `{_rp}`")
+        elif writable_manifest is not None:
+            _rp_norm = _rp.replace("\\", "/").strip("/")
+            _manifest_norm = {p.replace("\\", "/").strip("/") for p in writable_manifest}
+            if _rp_norm not in _manifest_norm:
+                issues.append(
+                    f"architecture matrix row `{label}` `rollbackPaths` entry `{_rp}` "
+                    "is outside the exact writable manifest "
+                    "(`BLOCKED_ROLLBACK_OUTSIDE_WRITABLE_MANIFEST`)"
+                )
+    return issues
+
+
+def _extract_writable_manifest_paths(text: str) -> set[str]:
+    """Delegate to architecture_schema; re-exported here for source_validation.* callers."""
+    from check_work_order_dispatch_quality_architecture_schema import (
+        _extract_writable_manifest_paths as _f,
+    )
+    return _f(text)
+
+
+def _validate_immutable_review_identity_fields(
+    review_path: str | None,
+    review_commit: str | None,
+    review_sha: str | None,
+    digest: str | None,
+    criterion_ids: list[str] | None = None,
+    context_label: str = "",
+) -> list[str]:
+    """Delegate to architecture_schema; re-exported here for source_validation.* callers."""
+    from check_work_order_dispatch_quality_architecture_schema import (
+        _validate_immutable_review_identity_fields as _f,
+    )
+    return _f(review_path, review_commit, review_sha, digest, _exists_rel,
+              criterion_ids, context_label)

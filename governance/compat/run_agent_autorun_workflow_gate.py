@@ -29,6 +29,11 @@ try:
 except ModuleNotFoundError:
     from governance.compat import agent_autorun_machine_verification as machine_verification
 
+try:
+    import committed_evidence_fingerprint as committed_evidence
+except ModuleNotFoundError:
+    from governance.compat import committed_evidence_fingerprint as committed_evidence
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_RECEIPT_DIR = REPO_ROOT / ".cvf" / "runtime" / "autorun-receipts"
@@ -651,7 +656,79 @@ def _run_phase(
         print(f"COMPLIANT: {phase} autorun gate passed in {elapsed:.2f}s.")
         return 0
 
-    _write_receipt(receipt_path, context, all_results, elapsed, post_run_identity_digest)
+    receipt_context = context
+    if phase == "pre-closure" and base_sha != head_sha:
+        try:
+            full_base_sha = committed_evidence.resolve_full_sha(resolved_base)
+            full_head_sha = committed_evidence.resolve_full_sha(head)
+            # Guard against ref/state movement between the short-SHA capture
+            # taken before the gate commands ran (base_sha/head_sha, used to
+            # decide *what to run*) and this post-run resolution (used to
+            # decide *what to certify*). A mismatch means the ref moved
+            # during execution -- e.g. a concurrent commit landed on a
+            # mutable ref such as literal HEAD -- and the just-run gate
+            # commands can no longer be trusted to have exercised exactly
+            # this resolved range. Git-object identity alone never proves
+            # this contract's gate commands executed against that identity;
+            # this equality check is the deterministic substitute available
+            # to a purely local producer, and any mismatch must skip the
+            # binding rather than certify a target the gate did not verify.
+            if not full_base_sha.startswith(base_sha) or not full_head_sha.startswith(head_sha):
+                raise committed_evidence.CommittedEvidenceUnavailable(
+                    "base/head ref moved between gate execution and "
+                    "committedEvidence resolution; refusing to certify a "
+                    "target the just-run gate commands did not verify"
+                )
+            # During-run drift guard: prove the worktree stayed stable across
+            # this one execution (two nearby _worktree_fingerprint reads of
+            # the same base..head range must agree). This alone is NOT
+            # sufficient admission evidence -- see the historical-target
+            # check immediately below -- because a worktree can be
+            # perfectly stable throughout this run while nonetheless being
+            # parked at a commit whose evidence paths have already drifted
+            # away from headSha's own committed content (the A -> B -> C
+            # counterexample: worktree stable at C for the whole run, while
+            # the request asks to certify A..B). Stability across this run
+            # proves only "nothing else touched the worktree meanwhile", not
+            # "the worktree reflects headSha".
+            observed_fingerprint = context["worktreeFingerprint"]
+            replay_fingerprint = _worktree_fingerprint(resolved_base, head)
+            if observed_fingerprint != replay_fingerprint:
+                raise committed_evidence.CommittedEvidenceUnavailable(
+                    "evidence paths changed content or existence between the "
+                    "gate run's worktree fingerprint and committedEvidence "
+                    "resolution; refusing to certify semantic drift as "
+                    "execution against the original target"
+                )
+            # Historical-target admission guard: prove the worktree content
+            # the gate commands actually read for every base..head changed
+            # path is equivalent to headSha's own committed blob for that
+            # path -- not merely that two nearby worktree reads agreed with
+            # each other. Equivalence is decided by git hash-object (see
+            # committed_evidence_fingerprint.verify_worktree_matches_committed_target),
+            # which is CRLF/line-ending-tolerant exactly as Git's own
+            # checkout/commit filter is and binary-safe, never a hand-rolled
+            # text normalization that could mask a genuine difference. A
+            # later continuity-only HEAD remains admissible here precisely
+            # because it does not change any base..head evidence path's
+            # committed content, so the worktree (parked at the later
+            # commit) still matches headSha's blob for every changed path.
+            target_matches, target_reason = committed_evidence.verify_worktree_matches_committed_target(
+                full_base_sha, full_head_sha, cwd=REPO_ROOT
+            )
+            if not target_matches:
+                raise committed_evidence.CommittedEvidenceUnavailable(
+                    f"worktree does not match the historical target committed "
+                    f"at headSha; refusing to certify unverified content ({target_reason})"
+                )
+            committed_evidence_object = committed_evidence.build_committed_evidence(
+                full_base_sha, full_head_sha
+            )
+            receipt_context = {**context, "committedEvidence": committed_evidence_object}
+        except committed_evidence.CommittedEvidenceUnavailable as exc:
+            print(f"\nNo committedEvidence binding produced ({exc}); receipt carries raw fingerprint only.")
+
+    _write_receipt(receipt_path, receipt_context, all_results, elapsed, post_run_identity_digest)
     print(f"\nReceipt: {receipt_path}")
     print(f"COMPLIANT: {phase} autorun gate passed in {elapsed:.2f}s.")
     return 0

@@ -1,8 +1,37 @@
 from __future__ import annotations
 
 import copy
+import importlib.util
+import subprocess
+import sys
+from pathlib import Path
 
 from governance.compat.route_task_governance import evaluate_tranche_value, load_registry, route_manifest
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+# executionBaseHead captured by the TPGR-INITIAL-INTAKE-T1 worker before any
+# edit in this tranche (git rev-parse HEAD at dispatch, clean worktree).
+EXECUTION_BASE_HEAD = "9066340e776b57072123b425038bf13470371849"
+
+
+def _load_route_manifest_at_ref(ref: str):
+    """Load the real committed route_task_governance module at `ref` via git show.
+
+    This proves backward-compatibility against the actual prior-implementation
+    source, not against the current module compared with itself.
+    """
+    proc = subprocess.run(
+        ["git", "show", f"{ref}:governance/compat/route_task_governance.py"],
+        cwd=REPO_ROOT, capture_output=True, text=True, check=True,
+    )
+    spec = importlib.util.spec_from_loader(f"_tpgr_baseline_{ref}", loader=None)
+    module = importlib.util.module_from_spec(spec)
+    module.__file__ = str(REPO_ROOT / "governance" / "compat" / "route_task_governance.py")
+    exec(compile(proc.stdout, f"<git:{ref}:route_task_governance.py>", "exec"), module.__dict__)
+    sys.modules[spec.name] = module
+    return module.route_manifest
+
 
 TEST_AUTHORITY = {
     "authorityPath": "docs/roadmaps/CVF_TPGR_TRANCHE_VALUE_ADMISSION_GOVERNANCE_ROADMAP_2026-08-26.md",
@@ -417,3 +446,337 @@ def test_same_declared_record_produces_same_receipt_deterministically():
     first = route_manifest(copy.deepcopy(value), trusted_authority=TEST_AUTHORITY)
     second = route_manifest(copy.deepcopy(value), trusted_authority=TEST_AUTHORITY)
     assert first == second
+
+
+# --- TPGR-INITIAL-INTAKE-T1 initial-acquisition-survey admission coverage ---
+
+
+def initial_intake_admission(**overrides):
+    record = {
+        "stage": "INITIAL_ACQUISITION_SURVEY",
+        "plannedReceiptPath": "docs/reviews/CVF_EXAMPLE_INITIAL_SURVEY_2026-09-11.md",
+        "acceptanceDisposition": "NO_ABSORPTION_ACCEPTANCE",
+        "nextStageAuthority": "SEPARATE_REVIEWED_WORK_ORDER",
+        "unknownEvidencePolicy": "PRESERVE_UNKNOWN",
+    }
+    record.update(overrides)
+    return record
+
+
+def initial_intake_manifest(*, source_scale="BOUNDED_CLUSTER", path_families=None, **classification_overrides):
+    classification = {
+        "taskKind": "EXTERNAL_ABSORPTION",
+        "authorityImpact": "USES_EXISTING_OWNER",
+        "externalEffect": "NONE",
+        "dataSensitivity": "PRIVATE_REPO",
+        "reversibility": "GIT_REVERSIBLE",
+        "sourceScale": source_scale,
+        "delegation": "MULTI_ROLE_NO_COMMIT",
+        "novelty": "OWNER_COMPOSITION",
+    }
+    classification.update(classification_overrides)
+    value = manifest(**classification)
+    value["requestedProfile"] = "P3_ELEVATED"
+    value["pathFamilies"] = path_families or ["docs/reviews/"]
+    value["initialIntakeAdmission"] = initial_intake_admission()
+    return value
+
+
+def test_old_selected_file_task_without_full_read_evidence_still_rejects():
+    value = manifest(taskKind="EXTERNAL_ABSORPTION", sourceScale="BOUNDED_CLUSTER", delegation="MULTI_ROLE_NO_COMMIT")
+    value["requestedProfile"] = "P3_ELEVATED"
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "REJECTED_ESCALATED"
+    assert "selected-file absorption requires full semantic read confirmation" in result["validationErrors"]
+
+
+def test_old_corpus_task_without_receipt_still_rejects():
+    value = manifest(taskKind="EXTERNAL_ABSORPTION", sourceScale="CORPUS")
+    value["requestedProfile"] = "P3_ELEVATED"
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "REJECTED_ESCALATED"
+    assert "corpus routing requires a corpus receipt reference" in result["validationErrors"]
+
+
+def test_old_valid_manifests_match_the_real_pre_implementation_baseline_receipt():
+    """Compare current receipts against the actually-committed pre-change router.
+
+    Loads governance/compat/route_task_governance.py as it existed at the
+    worker's recorded executionBaseHead (9066340e7, before any edit in this
+    tranche) and asserts the full receipt is identical for representative
+    ordinary manifests that omit initialIntakeAdmission. This is a real
+    before/after comparison, not the current module compared with itself.
+    """
+    baseline_route_manifest = _load_route_manifest_at_ref(EXECUTION_BASE_HEAD)
+
+    representative_manifests = [
+        manifest(),
+        manifest(taskKind="EXTERNAL_ABSORPTION", sourceScale="BOUNDED_CLUSTER", delegation="MULTI_ROLE_NO_COMMIT"),
+    ]
+    delegated = representative_manifests[1]
+    delegated["requestedProfile"] = "P2_BOUNDED"
+    delegated["sourceEvidence"]["selectedFilesFullyRead"] = True
+
+    corpus_value = manifest(taskKind="EXTERNAL_ABSORPTION", sourceScale="CORPUS")
+    corpus_value["requestedProfile"] = "P2_BOUNDED"
+    corpus_value["sourceEvidence"]["corpusReceiptRef"] = "ledger:immutable-v1"
+    representative_manifests.append(corpus_value)
+
+    governance_path_value = manifest(taskKind="DOC_CHANGE")
+    governance_path_value["pathFamilies"] = ["governance/compat/example.py"]
+    governance_path_value["requestedProfile"] = "P3_ELEVATED"
+    representative_manifests.append(governance_path_value)
+
+    for value in representative_manifests:
+        expected = baseline_route_manifest(copy.deepcopy(value), load_registry())
+        actual = route_manifest(copy.deepcopy(value))
+        assert actual == expected, value
+        assert "initialIntakeDisposition" not in actual
+        assert "absorptionAcceptanceAuthorized" not in actual
+
+
+def test_old_selected_and_corpus_rejections_match_the_real_pre_implementation_baseline_receipt():
+    """Compare the two originally-reproduced rejections against the committed baseline."""
+    baseline_route_manifest = _load_route_manifest_at_ref(EXECUTION_BASE_HEAD)
+
+    selected_reject = manifest(taskKind="EXTERNAL_ABSORPTION", sourceScale="BOUNDED_CLUSTER", delegation="MULTI_ROLE_NO_COMMIT")
+    selected_reject["requestedProfile"] = "P3_ELEVATED"
+
+    corpus_reject = manifest(taskKind="EXTERNAL_ABSORPTION", sourceScale="CORPUS")
+    corpus_reject["requestedProfile"] = "P3_ELEVATED"
+
+    for value in (selected_reject, corpus_reject):
+        expected = baseline_route_manifest(copy.deepcopy(value), load_registry())
+        actual = route_manifest(copy.deepcopy(value))
+        assert actual == expected, value
+        assert expected["receiptStatus"] == "REJECTED_ESCALATED"
+
+
+def test_explicit_initial_stage_routes_shadow_for_each_source_scale():
+    for scale in ("NAMED_FILES", "BOUNDED_CLUSTER", "CORPUS"):
+        value = initial_intake_manifest(source_scale=scale)
+        result = route_manifest(value)
+        assert result["receiptStatus"] == "ROUTED_SHADOW", (scale, result)
+        assert result["profile"] == "P3_ELEVATED"
+        assert result["initialIntakeDisposition"] == "INITIAL_EVIDENCE_COLLECTION_ONLY"
+        assert result["absorptionAcceptanceAuthorized"] is False
+        assert {"SOURCE_PROVENANCE", "CORPUS_ACCOUNTING"}.issubset(result["selectedBundles"])
+        assert result["selectiveExecutionAuthorized"] is False
+        assert result["legacyGateDisposition"] == "RUN_FULL_LEGACY_BUNDLE"
+        second = route_manifest(copy.deepcopy(value))
+        assert second == result
+
+
+def test_initial_record_malformed_null_boolean_extra_missing_or_unknown_enum_rejects():
+    for override in (
+        None,
+        True,
+        {},
+        initial_intake_admission(stage="WRONG_STAGE"),
+        initial_intake_admission(acceptanceDisposition="ABSORPTION_ACCEPTED"),
+        initial_intake_admission(nextStageAuthority="THIS_WORK_ORDER"),
+        initial_intake_admission(unknownEvidencePolicy="DROP_UNKNOWN"),
+        dict(initial_intake_admission(), extraField="x"),
+        {k: v for k, v in initial_intake_admission().items() if k != "plannedReceiptPath"},
+    ):
+        value = initial_intake_manifest()
+        value["initialIntakeAdmission"] = override
+        result = route_manifest(value)
+        assert result["receiptStatus"] == "REJECTED_ESCALATED", override
+        assert result["profile"] == "P3_ELEVATED"
+        assert result["selectedBundles"] == load_registry()["bundles"]
+
+
+def test_unsafe_or_out_of_family_planned_output_rejects():
+    for bad_path in (
+        "../escape.md",
+        "/absolute/docs/reviews/x.md",
+        "C:/docs/reviews/x.md",
+        "docs\\reviews\\x.md",
+        "docs/reviews/",
+        "docs/reviews/x.txt",
+        "docs/audits/x",
+        "docs/work_orders/x.md",
+        "docs/x.md",
+        "governance/compat/x.md",
+        "x" * 300 + ".md",
+    ):
+        value = initial_intake_manifest()
+        value["initialIntakeAdmission"] = initial_intake_admission(plannedReceiptPath=bad_path)
+        result = route_manifest(value)
+        assert result["receiptStatus"] == "REJECTED_ESCALATED", bad_path
+
+
+def test_product_code_or_broad_root_path_family_rejects_even_with_valid_initial_classification():
+    for bad_family in (
+        "docs/",
+        ".private_reference/",
+        "governance/compat/route_task_governance.py",
+        "EXTENSIONS/example/src/",
+        ".github/workflows/release.yml",
+        "scripts/example.py",
+    ):
+        value = initial_intake_manifest(path_families=[bad_family])
+        result = route_manifest(value)
+        assert result["receiptStatus"] == "REJECTED_ESCALATED", bad_family
+
+
+def test_declared_continuity_paths_are_permitted_initial_stage_families():
+    for continuity_path in ("CVF_SESSION_MEMORY.md", "AGENT_HANDOFF_V60_2026-09-08.md", "CVF_SESSION/ACTIVE_SESSION_STATE.json"):
+        value = initial_intake_manifest(path_families=[continuity_path, "docs/reviews/"])
+        result = route_manifest(value)
+        assert result["receiptStatus"] == "ROUTED_SHADOW", continuity_path
+
+
+def test_future_planned_output_absent_from_disk_is_allowed():
+    import os
+
+    value = initial_intake_manifest()
+    planned = value["initialIntakeAdmission"]["plannedReceiptPath"]
+    assert not os.path.exists(planned)
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "ROUTED_SHADOW"
+
+
+def test_full_read_or_completeness_true_with_initial_stage_rejects():
+    full_read = initial_intake_manifest()
+    full_read["sourceEvidence"]["selectedFilesFullyRead"] = True
+    assert route_manifest(full_read)["receiptStatus"] == "REJECTED_ESCALATED"
+
+    completeness = initial_intake_manifest(source_scale="CORPUS")
+    completeness["sourceEvidence"]["completenessClaimChanged"] = True
+    assert route_manifest(completeness)["receiptStatus"] == "REJECTED_ESCALATED"
+
+
+def test_blank_prior_receipt_value_rejects_in_initial_object_path():
+    value = initial_intake_manifest(source_scale="CORPUS")
+    value["sourceEvidence"]["corpusReceiptRef"] = ""
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "REJECTED_ESCALATED"
+
+
+def test_whitespace_only_prior_receipt_value_rejects_in_initial_object_path():
+    for whitespace_value in ("   ", "\t", "\n", "  \t \n "):
+        value = initial_intake_manifest(source_scale="CORPUS")
+        value["sourceEvidence"]["corpusReceiptRef"] = whitespace_value
+        result = route_manifest(value)
+        assert result["receiptStatus"] == "REJECTED_ESCALATED", repr(whitespace_value)
+
+
+def test_whitespace_only_receipt_is_unaffected_for_ordinary_manifests():
+    value = manifest(taskKind="EXTERNAL_ABSORPTION", sourceScale="CORPUS")
+    value["requestedProfile"] = "P3_ELEVATED"
+    value["sourceEvidence"]["corpusReceiptRef"] = "   "
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "ROUTED_SHADOW"
+
+
+def test_planned_receipt_path_must_fall_within_a_declared_path_family():
+    value = initial_intake_manifest(path_families=["docs/reviews/"])
+    value["initialIntakeAdmission"] = initial_intake_admission(
+        plannedReceiptPath="docs/audits/outside-owned-scope.json"
+    )
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "REJECTED_ESCALATED"
+    assert any("must fall within a declared pathFamilies entry" in error for error in result["validationErrors"])
+
+
+def test_planned_receipt_path_within_declared_family_is_accepted():
+    value = initial_intake_manifest(path_families=["docs/reviews/"])
+    value["initialIntakeAdmission"] = initial_intake_admission(
+        plannedReceiptPath="docs/reviews/nested/CVF_INITIAL_SURVEY.md"
+    )
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "ROUTED_SHADOW"
+
+
+def test_planned_receipt_path_matches_exact_file_path_family():
+    exact_file = "docs/reviews/CVF_EXACT_FILE_SURVEY.md"
+    value = initial_intake_manifest(path_families=[exact_file])
+    value["initialIntakeAdmission"] = initial_intake_admission(plannedReceiptPath=exact_file)
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "ROUTED_SHADOW"
+
+
+def test_planned_receipt_path_rejects_sibling_prefix_collision_family():
+    value = initial_intake_manifest(path_families=["docs/reviews-extra-family/"])
+    value["initialIntakeAdmission"] = initial_intake_admission(
+        plannedReceiptPath="docs/reviews/CVF_EXAMPLE_INITIAL_SURVEY_2026-09-11.md"
+    )
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "REJECTED_ESCALATED"
+    assert any("must fall within a declared pathFamilies entry" in error for error in result["validationErrors"])
+
+
+def test_planned_receipt_path_rejects_exact_file_prefix_collision():
+    value = initial_intake_manifest(path_families=["docs/reviews/CVF_OTHER_FILE.md"])
+    value["initialIntakeAdmission"] = initial_intake_admission(
+        plannedReceiptPath="docs/reviews/CVF_OTHER_FILE.md.json"
+    )
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "REJECTED_ESCALATED"
+
+
+def test_forbidden_task_shape_or_effect_rejects_initial_intake():
+    for overrides in (
+        {"taskKind": "RUNTIME_INTEGRATION"},
+        {"taskKind": "LIVE_PROOF"},
+        {"taskKind": "PUBLIC_RELEASE"},
+        {"taskKind": "DESTRUCTIVE_OPERATION"},
+        {"externalEffect": "PUBLIC_WRITE"},
+        {"externalEffect": "DESTRUCTIVE"},
+        {"dataSensitivity": "SECRET_VALUE"},
+        {"dataSensitivity": "CREDENTIAL_REFERENCE"},
+        {"authorityImpact": "CREATES_OR_CHANGES_AUTHORITY"},
+        {"novelty": "NEW_INTERFACE"},
+        {"novelty": "NEW_AUTHORITY"},
+        {"delegation": "MULTI_ROLE_WITH_COMMIT"},
+    ):
+        value = initial_intake_manifest(**overrides)
+        result = route_manifest(value)
+        assert result["receiptStatus"] == "REJECTED_ESCALATED", overrides
+
+
+def test_initial_record_combined_with_tranche_value_rejects():
+    value = initial_intake_manifest()
+    value["trancheValue"] = tranche_value_record()
+    result = route_manifest(value, trusted_authority=TEST_AUTHORITY)
+    assert result["receiptStatus"] == "REJECTED_ESCALATED"
+
+
+def test_initial_intake_p0_p1_p2_self_downgrade_rejects():
+    for profile in ("P0_OBSERVE", "P1_LIGHT", "P2_BOUNDED"):
+        value = initial_intake_manifest()
+        value["requestedProfile"] = profile
+        result = route_manifest(value)
+        assert result["receiptStatus"] == "REJECTED_ESCALATED", profile
+
+
+def test_malformed_ordinary_manifest_plus_valid_looking_initial_object_rejects_no_short_circuit():
+    value = initial_intake_manifest()
+    value["classification"]["taskKind"] = "TINY_SAFE_TRUST_ME"
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "REJECTED_ESCALATED"
+    assert result["selectedBundles"] == load_registry()["bundles"]
+
+
+def test_initial_intake_schema_and_router_agree_on_field_types_and_enums():
+    import json as _json
+    from pathlib import Path as _Path
+
+    schema = _json.loads(
+        (_Path(__file__).with_name("CVF_TASK_GOVERNANCE_ROUTE_MANIFEST.schema.json")).read_text(encoding="utf-8")
+    )
+    record_schema = schema["properties"]["initialIntakeAdmission"]
+    assert set(record_schema["required"]) == {
+        "stage", "plannedReceiptPath", "acceptanceDisposition", "nextStageAuthority", "unknownEvidencePolicy",
+    }
+    assert record_schema["properties"]["stage"]["const"] == "INITIAL_ACQUISITION_SURVEY"
+    assert record_schema["properties"]["acceptanceDisposition"]["const"] == "NO_ABSORPTION_ACCEPTANCE"
+    assert record_schema["properties"]["nextStageAuthority"]["const"] == "SEPARATE_REVIEWED_WORK_ORDER"
+    assert record_schema["properties"]["unknownEvidencePolicy"]["const"] == "PRESERVE_UNKNOWN"
+    assert record_schema["additionalProperties"] is False
+
+    value = initial_intake_manifest()
+    result = route_manifest(value)
+    assert result["receiptStatus"] == "ROUTED_SHADOW"

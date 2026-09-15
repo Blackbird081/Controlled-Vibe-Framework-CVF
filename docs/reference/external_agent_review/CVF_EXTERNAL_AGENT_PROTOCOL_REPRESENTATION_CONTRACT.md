@@ -208,10 +208,11 @@ Absorption Workflow.
 
 The External Agent stops after the validated return. Local CVF resolves actual
 current ownership, attempts to disprove novelty, and produces reconciliation;
-the Operator decides disposition and whether later governed work should be
-considered. `NO_NEW_VALUE` is a successful reconciliation result. Candidate
-production, Local reconciliation, Operator selection, owner binding, and Work
-Order existence do not independently authorize implementation.
+the Local Agent issues the final technical disposition against current private
+CVF. The Operator separately controls scope, checkpoints, and external effects.
+`NO_NEW_VALUE` is a successful reconciliation result. Candidate production,
+Local reconciliation, a technical disposition, owner binding, and Work Order
+existence do not independently authorize implementation.
 
 `task.outputRoot` is the Operator-preferred destination, not foreign-host
 filesystem authority. If it is unavailable or belongs to another host, the
@@ -224,6 +225,34 @@ source pins, working mode, protocol binding, and effect authority. A short
 Operator objective controls focus and analysis depth only within that envelope;
 wording differences are not compared for equality. A different source, commit,
 mode, or requested forbidden effect is material drift.
+
+## Cross-Workspace Evidence Relay Profile
+
+When the remote research surface and Local Agent do not share a filesystem,
+Git state, or private continuity, apply
+`CVF_CROSS_WORKSPACE_EVIDENCE_RELAY_METHOD.md`.
+
+Under this profile, the Operator relays packets, questions, repair requests,
+and returns without becoming the semantic reviewer. The Local Agent validates
+the return against current private CVF and owns the final technical absorption
+disposition. The Operator retains separately exercised authority for scope,
+checkpoints, and external effects; transporting content does not itself exercise
+that authority.
+
+The profile permits one or more remote research agents. Agent cardinality,
+provider, model, and chat identity do not change source authority or evidence
+requirements. A task may still require independent returns, in which case each
+return remains separate until the task's independence condition is satisfied.
+
+This profile adds no protocol field, return status, schema, or validator
+behavior. Existing task-capsule and return bindings remain unchanged.
+
+When an umbrella program begins with multiple repositories, use
+`CVF_CROSS_WORKSPACE_DOMAIN_FUNNEL_ABSORPTION_METHOD.md` before issuing the
+shortlisted task capsules. Domain grouping, repeated source-evidence filters,
+and cross-repository mechanism deduplication happen before public-CVF pre-map
+and Local private-CVF comparison. A capsule bound to one repository produces a
+correctly narrow child return; it does not narrow or close the umbrella program.
 
 ## Public/Portable Projection Release Boundary
 

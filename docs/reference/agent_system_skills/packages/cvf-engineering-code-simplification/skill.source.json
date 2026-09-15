@@ -3,7 +3,7 @@
   "adapterEvidence": "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
   "certificationState": "CERTIFIED",
   "claimBoundary": "source evidence for CVF-adapted ACTIVE package-root production execution through receipt-backed CVF adapters only; no automatic invocation, filesystem/git/browser authority, provider router mutation, public-sync, implementation authority, commit, or production action claim",
-  "cvfAdaptationBoundary": "CVF-owned adaptation of upstream code simplification skill; five simplification principles and behavior-preservation invariant extracted as advisory metadata; no autonomous refactoring execution, automated file edits, or commit authority authorized",
+  "cvfAdaptationBoundary": "CVF-owned adaptation of upstream code simplification skill; five simplification principles and behavior-preservation invariant extracted as advisory metadata; no autonomous refactoring execution, automated file edits, or commit authority authorized. Supplemental: one additive consumer-evidence procedure adapted from the DeepSeek deepseek-harness source at pinned commit cd5ef8148158c3a752a658978873241fdf8e2bbc under DSH UC01 Track B; advisory guidance only, no DSH directory taxonomy or framework-specific deletion policy imported, no new runtime or commit authority.",
   "externalCliMcpDisposition": "IMPLEMENTED",
   "internalAgentDisposition": "IMPLEMENTED",
   "lifecycleState": "ACTIVE",
@@ -17,7 +17,11 @@
     "docs/baselines/CVF_GC018_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_2026-06-30.md",
     "docs/work_orders/CVF_AGENT_WORK_ORDER_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_2026-06-30.md",
     "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
-    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+    "docs/baselines/CVF_GC018_DSH_UC01_TRACK_B_CONSUMER_EVIDENCE_2026-09-13.md",
+    "docs/reviews/CVF_DSH_UC01_TRACK_B_NOVELTY_DECISION_2026-09-13.md",
+    ".private_reference/source_mirrors/deepseek-ai__deepseek-harness/.agents/skills/dsh-find-simplifications/SKILL.md",
+    ".private_reference/source_mirrors/deepseek-ai__deepseek-harness/LICENSE"
   ],
   "uatState": "PASSED",
   "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",

@@ -18,10 +18,14 @@
     "docs/baselines/CVF_GC018_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_2026-06-30.md",
     "docs/work_orders/CVF_AGENT_WORK_ORDER_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_2026-06-30.md",
     "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md",
-    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md"
+    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+    "docs/baselines/CVF_GC018_DSH_CODE_REVIEW_QUALITY_T1_2026-09-14.md",
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_DSH_CODE_REVIEW_QUALITY_T1_2026-09-14.md",
+    ".private_reference/source_mirrors/deepseek-ai__deepseek-harness/.agents/skills/dsh-code-review/SKILL.md",
+    ".private_reference/source_mirrors/deepseek-ai__deepseek-harness/LICENSE"
   ],
   "legacyRows": [],
-  "license": "Apache-2.0 upstream; CVF_PRIVATE_GOVERNED adaptation metadata",
+  "license": "MIT upstream; CVF_PRIVATE_GOVERNED adaptation metadata",
   "reviewArtifacts": [
     "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",
     "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md",

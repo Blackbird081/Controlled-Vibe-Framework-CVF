@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 
 import governance.compat.check_task_governance_route as check
 
@@ -117,3 +118,142 @@ def test_checker_composes_resolved_authority_into_route_manifest():
     assert receipt["receiptStatus"] == "ROUTED_SHADOW"
     assert receipt["valueDisposition"] == "CONTINUE_HIGH_VALUE"
     assert receipt["valueDispositionAuthoritative"] is False
+
+
+# --- TPGR-INITIAL-INTAKE-T1 active work-order checker integration coverage ---
+#
+# The tests below drive the real `check.evaluate(base, head)` entrypoint used
+# by the active work-order checker at dispatch/CI time, not only the parser
+# and router in isolation. They build a disposable local git repository,
+# monkeypatch `check.REPO_ROOT` to point at it, and commit a real
+# `docs/work_orders/*.md` file so `_changed_paths`, file-read, manifest
+# extraction, `route_manifest`, and `_uncovered_paths` all execute through
+# the actual git-diff-driven code path.
+
+
+def _init_git_repo(path):
+    subprocess.run(["git", "init", "-q"], cwd=path, check=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test"], cwd=path, check=True)
+
+
+def _commit_all(path, message):
+    subprocess.run(["git", "add", "-A"], cwd=path, check=True)
+    subprocess.run(["git", "commit", "-q", "-m", message], cwd=path, check=True)
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=path, check=True, capture_output=True, text=True
+    ).stdout.strip()
+
+
+def _initial_intake_work_order_text(*, path_families, planned_receipt_path):
+    payload = {
+        "schemaVersion": "cvf.taskGovernanceManifest.v1", "taskId": "initial-intake-checker-smoke",
+        "requestedProfile": "P3_ELEVATED",
+        "classification": {
+            "taskKind": "EXTERNAL_ABSORPTION", "authorityImpact": "USES_EXISTING_OWNER",
+            "externalEffect": "NONE", "dataSensitivity": "PRIVATE_REPO",
+            "reversibility": "GIT_REVERSIBLE", "sourceScale": "BOUNDED_CLUSTER",
+            "delegation": "MULTI_ROLE_NO_COMMIT", "novelty": "OWNER_COMPOSITION",
+        },
+        "pathFamilies": path_families, "claims": ["initial survey"],
+        "requiredProof": ["focused tests"], "operatorCheckpoints": [],
+        "forbiddenEffects": ["network"],
+        "sourceEvidence": {"selectedFilesFullyRead": False, "corpusReceiptRef": None, "completenessClaimChanged": False},
+        "initialIntakeAdmission": {
+            "stage": "INITIAL_ACQUISITION_SURVEY",
+            "plannedReceiptPath": planned_receipt_path,
+            "acceptanceDisposition": "NO_ABSORPTION_ACCEPTANCE",
+            "nextStageAuthority": "SEPARATE_REVIEWED_WORK_ORDER",
+            "unknownEvidencePolicy": "PRESERVE_UNKNOWN",
+        },
+    }
+    return f"# Work order\n\nStatus: DISPATCH_READY\n\n{check.MANIFEST_HEADING}\n\n```json\n{json.dumps(payload)}\n```\n"
+
+
+def test_evaluate_end_to_end_accepts_active_work_order_with_valid_initial_intake_object(tmp_path, monkeypatch):
+    _init_git_repo(tmp_path)
+    standard_dir = tmp_path / "docs" / "reference"
+    standard_dir.mkdir(parents=True)
+    (standard_dir / check.STANDARD_PATH.split("/")[-1]).write_text("activated\n", encoding="utf-8")
+    base_head = _commit_all(tmp_path, "activate standard")
+
+    work_orders_dir = tmp_path / "docs" / "work_orders"
+    work_orders_dir.mkdir(parents=True)
+    reviews_dir = tmp_path / "docs" / "reviews"
+    reviews_dir.mkdir(parents=True)
+    (reviews_dir / "companion.md").write_text("companion evidence\n", encoding="utf-8")
+    (work_orders_dir / "task.md").write_text(
+        _initial_intake_work_order_text(
+            path_families=["docs/reviews/"],
+            planned_receipt_path="docs/reviews/CVF_EXAMPLE_INITIAL_SURVEY_2026-09-11.md",
+        ),
+        encoding="utf-8",
+    )
+    head = _commit_all(tmp_path, "dispatch initial-intake work order")
+
+    monkeypatch.setattr(check, "REPO_ROOT", tmp_path)
+    report = check.evaluate(base_head, head)
+
+    assert report["status"] == "COMPLIANT"
+    assert report["violations"] == []
+    assert len(report["workOrdersChecked"]) == 1
+    checked = report["workOrdersChecked"][0]
+    assert checked["receipt"]["receiptStatus"] == "ROUTED_SHADOW"
+    assert checked["receipt"]["initialIntakeDisposition"] == "INITIAL_EVIDENCE_COLLECTION_ONLY"
+    assert checked["receipt"]["absorptionAcceptanceAuthorized"] is False
+    assert set(report["changedPaths"]) == {"docs/reviews/companion.md", "docs/work_orders/task.md"}
+
+
+def test_evaluate_end_to_end_rejects_active_work_order_with_malformed_initial_intake_object(tmp_path, monkeypatch):
+    _init_git_repo(tmp_path)
+    standard_dir = tmp_path / "docs" / "reference"
+    standard_dir.mkdir(parents=True)
+    (standard_dir / check.STANDARD_PATH.split("/")[-1]).write_text("activated\n", encoding="utf-8")
+    base_head = _commit_all(tmp_path, "activate standard")
+
+    work_orders_dir = tmp_path / "docs" / "work_orders"
+    work_orders_dir.mkdir(parents=True)
+    text = _initial_intake_work_order_text(
+        path_families=["docs/reviews/"],
+        planned_receipt_path="docs/reviews/CVF_EXAMPLE_INITIAL_SURVEY_2026-09-11.md",
+    ).replace("INITIAL_ACQUISITION_SURVEY", "WRONG_STAGE")
+    (work_orders_dir / "task.md").write_text(text, encoding="utf-8")
+    head = _commit_all(tmp_path, "dispatch malformed initial-intake work order")
+
+    monkeypatch.setattr(check, "REPO_ROOT", tmp_path)
+    report = check.evaluate(base_head, head)
+
+    assert report["status"] == "VIOLATION"
+    assert len(report["violations"]) == 1
+    assert "invalid route manifest" in report["violations"][0]
+    assert report["workOrdersChecked"][0]["receipt"]["receiptStatus"] == "REJECTED_ESCALATED"
+
+
+def test_evaluate_end_to_end_flags_changed_paths_outside_declared_path_families(tmp_path, monkeypatch):
+    _init_git_repo(tmp_path)
+    standard_dir = tmp_path / "docs" / "reference"
+    standard_dir.mkdir(parents=True)
+    (standard_dir / check.STANDARD_PATH.split("/")[-1]).write_text("activated\n", encoding="utf-8")
+    base_head = _commit_all(tmp_path, "activate standard")
+
+    work_orders_dir = tmp_path / "docs" / "work_orders"
+    work_orders_dir.mkdir(parents=True)
+    (work_orders_dir / "task.md").write_text(
+        _initial_intake_work_order_text(
+            path_families=["docs/reviews/"],
+            planned_receipt_path="docs/reviews/CVF_EXAMPLE_INITIAL_SURVEY_2026-09-11.md",
+        ),
+        encoding="utf-8",
+    )
+    (tmp_path / "src").mkdir()
+    (tmp_path / "src" / "unrelated.py").write_text("# not covered by pathFamilies\n", encoding="utf-8")
+    head = _commit_all(tmp_path, "dispatch work order plus an uncovered change")
+
+    monkeypatch.setattr(check, "REPO_ROOT", tmp_path)
+    report = check.evaluate(base_head, head)
+
+    assert report["status"] == "VIOLATION"
+    assert len(report["violations"]) == 1
+    assert "changed paths not covered by pathFamilies" in report["violations"][0]
+    assert "src/unrelated.py" in report["violations"][0]
+    assert report["workOrdersChecked"][0]["receipt"]["receiptStatus"] == "ROUTED_SHADOW"

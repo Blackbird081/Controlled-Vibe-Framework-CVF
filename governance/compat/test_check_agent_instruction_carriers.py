@@ -143,12 +143,51 @@ class CompliantFixtureTests(unittest.TestCase):
         kinds = {kind for _, kind, _ in violations}
         self.assertIn("direct_literal_missing", kinds)
 
+    def test_missing_mfrp_reviewer_boundary_in_agents_is_flagged(self) -> None:
+        stripped = _minimal_agents_text().replace(
+            "EVALUATE_RETURNED_EVIDENCE_NOT_RECREATE_IMPLEMENTATION", ""
+        )
+        _write(self._root, checker.AGENTS_PATH, stripped)
+        violations = checker.run()
+        messages = [message for _, kind, message in violations if kind == "direct_literal_missing"]
+        self.assertTrue(any("EVALUATE_RETURNED_EVIDENCE" in message for message in messages))
+
     def test_missing_claude_not_cvf_source_is_flagged(self) -> None:
         stripped = _minimal_claude_text().replace("NOT_CVF_SOURCE", "")
         _write(self._root, checker.CLAUDE_PATH, stripped)
         violations = checker.run()
         kinds = {kind for _, kind, _ in violations}
         self.assertIn("direct_literal_missing", kinds)
+
+    def test_coordination_startup_routes_cannot_be_dropped(self) -> None:
+        # Exercise the production run entrypoint, retaining every unrelated rule.
+        required = (
+            "Before answering, planning, dispatching or resuming external research, repository absorption or agent coordination, read the existing owners without operator reminder:",
+            "docs/reference/external_agent_review/CVF_CROSS_WORKSPACE_EVIDENCE_RELAY_METHOD.md",
+            "docs/reference/external_agent_review/CVF_CROSS_WORKSPACE_DOMAIN_FUNNEL_ABSORPTION_METHOD.md",
+            "A shared-workspace worker is INTERNAL_AGENT regardless of provider/model; external research ends before internal implementation/review/closure.",
+            "Include role, phase and decision owner in the existing acknowledgment or task artifact; reuse it until that boundary changes.",
+        )
+        for removed in required:
+            with self.subTest(removed=removed):
+                _write(self._root, checker.AGENTS_PATH,
+                       _minimal_agents_text().replace(removed, ""))
+                violations = checker.run()
+                self.assertTrue(any(
+                    path == checker.AGENTS_PATH and kind == "direct_literal_missing"
+                    and removed in message
+                    for path, kind, message in violations
+                ))
+
+    def test_provider_startup_cannot_omit_coordination_route(self) -> None:
+        removed = "Apply `AGENTS.md` Mandatory External-Local Role Rehydration before related answers, plans or work;"
+        _write(self._root, checker.CLAUDE_PATH,
+               _minimal_claude_text().replace(removed, ""))
+        self.assertTrue(any(
+            path == checker.CLAUDE_PATH and kind == "direct_literal_missing"
+            and removed in message
+            for path, kind, message in checker.run()
+        ))
 
     def test_missing_template_role_token_is_flagged(self) -> None:
         stripped = _minimal_template_text().replace("ORCHESTRATOR", "")

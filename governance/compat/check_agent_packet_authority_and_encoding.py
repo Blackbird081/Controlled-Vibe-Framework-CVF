@@ -101,6 +101,25 @@ class AddedLine:
     text: str
 
 
+@dataclass(frozen=True)
+class ChangeLayer:
+    name: str
+    statuses: frozenset[str]
+    rename_source: str | None = None
+
+
+@dataclass(frozen=True)
+class ChangeRecord:
+    statuses: set[str]
+    rename_source: str | None = None
+    malformed: bool = False
+    layers: tuple[ChangeLayer, ...] = ()
+
+
+DECODE_FAILURE_MARKER = "\ufffd"
+NAME_STATUS_RE = re.compile(r"^(?:[ACDMRTUXB]|[RC]\d{1,3})$")
+
+
 def _run_git(args: list[str]) -> tuple[int, str, str]:
     proc = subprocess.run(
         ["git", *args],
@@ -114,44 +133,127 @@ def _run_git(args: list[str]) -> tuple[int, str, str]:
     return proc.returncode, proc.stdout, proc.stderr
 
 
-def _parse_name_status(output: str) -> dict[str, set[str]]:
-    changed: dict[str, set[str]] = {}
-    for raw in output.splitlines():
-        parts = raw.split("\t")
-        if len(parts) < 2:
-            continue
-        status = parts[0].strip()
-        path = parts[2] if status.startswith(("R", "C")) and len(parts) > 2 else parts[1]
-        normalized = path.replace("\\", "/").strip()
-        if normalized:
-            changed.setdefault(normalized, set()).add(status)
+def _parse_name_status_z(output: str) -> dict[str, ChangeRecord]:
+    """Parse `git diff --name-status -z [-M]` output losslessly.
+
+    NUL-delimited fields survive spaces and non-ASCII path names without
+    quoting ambiguity. Rename/copy records carry three fields
+    (status, source, destination); every other status carries two.
+    """
+    if not output:
+        return {}
+    if not output.endswith("\0"):
+        raise ValueError("malformed name-status stream: missing trailing NUL")
+
+    changed: dict[str, ChangeRecord] = {}
+    fields = output.split("\0")
+    index = 0
+    terminal = len(fields) - 1
+    while index < terminal:
+        raw_status = fields[index]
+        if not raw_status:
+            raise ValueError(f"malformed name-status stream: empty status at field {index}")
+        status = raw_status
+        score_invalid = (
+            status.startswith(("R", "C"))
+            and status[1:].isdigit()
+            and int(status[1:]) > 100
+        )
+        if not NAME_STATUS_RE.fullmatch(status) or score_invalid:
+            raise ValueError(f"malformed name-status stream: invalid status {status!r}")
+        index += 1
+        if status.startswith(("R", "C")):
+            if index + 1 >= terminal:
+                raise ValueError(
+                    f"malformed name-status stream: truncated {status} record at field {index - 1}"
+                )
+            source = fields[index].replace("\\", "/")
+            dest = fields[index + 1].replace("\\", "/")
+            index += 2
+            if not source or not dest:
+                raise ValueError(
+                    f"malformed name-status stream: empty path in {status} record"
+                )
+            existing = changed.get(dest)
+            merged_statuses = ({status} | existing.statuses) if existing else {status}
+            changed[dest] = ChangeRecord(statuses=merged_statuses, rename_source=source)
+        else:
+            if index >= terminal:
+                raise ValueError(
+                    f"malformed name-status stream: truncated {status} record at field {index - 1}"
+                )
+            dest = fields[index].replace("\\", "/")
+            index += 1
+            if not dest:
+                raise ValueError(
+                    f"malformed name-status stream: empty path in {status} record"
+                )
+            existing = changed.get(dest)
+            if existing:
+                changed[dest] = ChangeRecord(
+                    statuses=existing.statuses | {status},
+                    rename_source=existing.rename_source,
+                    malformed=existing.malformed,
+                )
+            else:
+                changed[dest] = ChangeRecord(statuses={status})
     return changed
 
 
-def _merge_status(target: dict[str, set[str]], source: dict[str, set[str]]) -> None:
-    for path, statuses in source.items():
-        target.setdefault(path, set()).update(statuses)
+def _merge_records(
+    target: dict[str, ChangeRecord], source: dict[str, ChangeRecord], layer_name: str
+) -> None:
+    for path, record in source.items():
+        layer = ChangeLayer(layer_name, frozenset(record.statuses), record.rename_source)
+        existing = target.get(path)
+        if existing is None:
+            target[path] = ChangeRecord(
+                statuses=record.statuses,
+                rename_source=record.rename_source,
+                malformed=record.malformed,
+                layers=(layer,),
+            )
+            continue
+        target[path] = ChangeRecord(
+            statuses=existing.statuses | record.statuses,
+            rename_source=existing.rename_source or record.rename_source,
+            malformed=existing.malformed or record.malformed,
+            layers=existing.layers + (layer,),
+        )
 
 
-def _get_changed(base: str | None, head: str | None) -> dict[str, set[str]]:
-    changed: dict[str, set[str]] = {}
+def _get_changed(base: str | None, head: str | None) -> dict[str, ChangeRecord]:
+    changed: dict[str, ChangeRecord] = {}
     if base and head:
-        code, out, err = _run_git(["diff", "--name-status", f"{base}..{head}"])
+        code, out, err = _run_git(["diff", "--name-status", "-z", "-M", f"{base}..{head}"])
         if code != 0:
             raise RuntimeError(f"git diff failed for range {base}..{head}: {err or out}")
-        _merge_status(changed, _parse_name_status(out))
+        _merge_records(changed, _parse_name_status_z(out), "range")
 
-    for args in (["diff", "--name-status"], ["diff", "--name-status", "--cached"]):
-        code, out, _ = _run_git(args)
-        if code == 0 and out:
-            _merge_status(changed, _parse_name_status(out))
+    for layer_name, args in (
+        ("worktree", ["diff", "--name-status", "-z", "-M"]),
+        ("index", ["diff", "--name-status", "-z", "-M", "--cached"]),
+    ):
+        code, out, err = _run_git(args)
+        if code != 0:
+            raise RuntimeError(f"git {' '.join(args)} failed: {err or out}")
+        if out:
+            _merge_records(changed, _parse_name_status_z(out), layer_name)
 
-    code, out, _ = _run_git(["ls-files", "--others", "--exclude-standard"])
-    if code == 0 and out:
-        for raw in out.splitlines():
-            path = raw.replace("\\", "/").strip()
+    code, out, err = _run_git(["ls-files", "--others", "--exclude-standard", "-z"])
+    if code != 0:
+        raise RuntimeError(f"git ls-files failed: {err or out}")
+    if out:
+        if not out.endswith("\0"):
+            raise ValueError("malformed untracked-path stream: missing trailing NUL")
+        for raw in out.split("\0")[:-1]:
+            path = raw.replace("\\", "/")
             if path:
-                changed.setdefault(path, set()).add("A")
+                _merge_records(
+                    changed,
+                    {path: ChangeRecord(statuses={"A"})},
+                    "untracked",
+                )
     return changed
 
 
@@ -160,6 +262,29 @@ def _read_rel(path: str) -> str:
     if not full.exists() or full.is_dir():
         return ""
     return full.read_text(encoding="utf-8", errors="replace")
+
+
+def _has_decode_failure(path: str) -> bool:
+    """True only for a genuine strict-UTF-8 decode failure on disk content.
+
+    Detecting this from the presence of the U+FFFD replacement character in
+    already-lossy-decoded text would false-positive on any file that
+    legitimately contains that literal glyph (for example, this checker's
+    own source defining it as a string constant). Re-reading the raw bytes
+    with strict decoding isolates a real decode failure from that case.
+    """
+    full = REPO_ROOT / path
+    if not full.exists() or full.is_dir():
+        return False
+    try:
+        raw = full.read_bytes()
+    except OSError:
+        return False
+    try:
+        raw.decode("utf-8", errors="strict")
+    except UnicodeDecodeError:
+        return True
+    return False
 
 
 def _extract_heading_section(text: str, heading_fragment: str) -> str:
@@ -428,6 +553,10 @@ def _all_file_lines(path: str) -> list[AddedLine]:
     return [AddedLine(index, line) for index, line in enumerate(text.splitlines(), start=1)]
 
 
+def _diff_is_binary(diff_text: str) -> bool:
+    return bool(re.search(r"(?m)^Binary files .+ differ$", diff_text))
+
+
 def _parse_added_lines_from_diff(diff_text: str) -> list[AddedLine]:
     added: list[AddedLine] = []
     next_line: int | None = None
@@ -450,49 +579,223 @@ def _parse_added_lines_from_diff(diff_text: str) -> list[AddedLine]:
     return added
 
 
-def _added_lines_from_git_diff(args: list[str]) -> list[AddedLine]:
-    code, out, _ = _run_git(args)
-    if code != 0 or not out:
-        return []
-    return _parse_added_lines_from_diff(out)
+def _added_lines_from_git_diff(args: list[str], context: str) -> ProvenanceResult:
+    """Return added-line provenance and fail closed when Git cannot provide it."""
+    code, out, err = _run_git(args)
+    if code != 0:
+        detail = (err or out).strip() or "no diagnostic from Git"
+        return ProvenanceResult(
+            added_lines=[], diagnostic=f"Git diff failed for {context}: {detail}"
+        )
+    if not out:
+        return ProvenanceResult(added_lines=[])
+    if _diff_is_binary(out):
+        return ProvenanceResult(added_lines=[], is_binary=True)
+    return ProvenanceResult(added_lines=_parse_added_lines_from_diff(out))
 
 
-def _added_lines(path: str, statuses: set[str], base: str | None, head: str | None) -> list[AddedLine]:
-    if statuses == {"D"}:
-        return []
-    if statuses == {"A"} and not (base and head):
-        return _all_file_lines(path)
+@dataclass(frozen=True)
+class ProvenanceResult:
+    added_lines: list[AddedLine]
+    is_binary: bool = False
+    diagnostic: str | None = None
 
+
+def _blob_readable(spec: str) -> bool:
+    code, _, _ = _run_git(["cat-file", "-e", spec])
+    return code == 0
+
+
+def _rename_aware_added_lines(
+    path: str, record: ChangeRecord, base: str | None, head: str | None
+) -> ProvenanceResult:
+    """Resolve added lines for a renamed/copied destination using paired provenance.
+
+    Diffing is done blob-to-blob (`<rev>:<source>` against `<rev>:<dest>`)
+    rather than through a destination-only or pathspec-restricted tree diff.
+    A pathspec limited to the destination alone cannot be paired with its
+    source at all, and even a pathspec naming both paths can make Git
+    recompute a lower similarity than the original whole-tree rename
+    detection and silently fall back to reporting every destination line as
+    newly added; comparing the two known blobs directly sidesteps both
+    failure modes and always reports only the true content delta.
+    """
+    layers = record.layers or (
+        ChangeLayer(
+            "range" if base and head else "index",
+            frozenset(record.statuses),
+            record.rename_source,
+        ),
+    )
     lines: list[AddedLine] = []
-    if base and head:
-        if any(status.startswith("A") for status in statuses):
-            lines.extend(_all_file_lines(path))
+    diagnostics: list[str] = []
+    saw_binary = False
+    for layer in layers:
+        rename_status = next(
+            (status for status in layer.statuses if status.startswith(("R", "C"))), None
+        )
+        if not rename_status:
+            continue
+        source = layer.rename_source
+        if not source:
+            diagnostics.append("rename record missing source path")
+            continue
+        if layer.name == "range":
+            if not (base and head):
+                diagnostics.append("range rename missing base/head provenance")
+                continue
+            source_spec, dest_spec = f"{base}:{source}", f"{head}:{path}"
+        elif layer.name == "index":
+            source_spec, dest_spec = f"{head or 'HEAD'}:{source}", f":{path}"
         else:
-            lines.extend(
-                _added_lines_from_git_diff(
-                    ["diff", "--unified=0", "--no-ext-diff", f"{base}..{head}", "--", path]
-                )
+            # Git normally represents a filesystem-only move as delete plus
+            # untracked add. If it reports a worktree rename, retain both
+            # paths in the diff so rename detection has the paired source.
+            result = _added_lines_from_git_diff(
+                ["diff", "--unified=0", "--no-ext-diff", "-M", "--", source, path],
+                f"worktree rename `{source}` -> `{path}`",
             )
+            lines.extend(result.added_lines)
+            saw_binary = saw_binary or result.is_binary
+            if result.diagnostic:
+                diagnostics.append(result.diagnostic)
+            continue
+        if not _blob_readable(source_spec):
+            diagnostics.append(
+                f"rename source blob unreadable for provenance: `{source}`"
+            )
+            continue
+        if not _blob_readable(dest_spec):
+            diagnostics.append(
+                f"rename destination blob unreadable for provenance: `{path}`"
+            )
+            continue
+        result = _added_lines_from_git_diff(
+            ["diff", "--unified=0", "--no-ext-diff", source_spec, dest_spec],
+            f"rename `{source}` -> `{path}`",
+        )
+        lines.extend(result.added_lines)
+        saw_binary = saw_binary or result.is_binary
+        if result.diagnostic:
+            diagnostics.append(result.diagnostic)
+    unique = list(dict.fromkeys((line.line_number, line.text) for line in lines))
+    return ProvenanceResult(
+        added_lines=[AddedLine(number, text) for number, text in unique],
+        is_binary=saw_binary and not lines,
+        diagnostic="; ".join(diagnostics) or None,
+    )
 
-    for diff_args in (
-        ["diff", "--unified=0", "--no-ext-diff", "--", path],
-        ["diff", "--cached", "--unified=0", "--no-ext-diff", "--", path],
-    ):
-        lines.extend(_added_lines_from_git_diff(diff_args))
 
-    if not lines and any(status.startswith("A") for status in statuses):
-        lines.extend(_all_file_lines(path))
-    return lines
+def _added_lines(
+    path: str, record: ChangeRecord, base: str | None, head: str | None
+) -> ProvenanceResult:
+    statuses = record.statuses
+    if statuses == {"D"}:
+        return ProvenanceResult(added_lines=[])
+
+    if record.malformed:
+        return ProvenanceResult(
+            added_lines=[], diagnostic=f"malformed name-status record for `{path}`"
+        )
+
+    layers = record.layers or (
+        ChangeLayer(
+            "range" if base and head else "untracked",
+            frozenset(statuses),
+            record.rename_source,
+        ),
+    )
+    rename_result = _rename_aware_added_lines(path, record, base, head)
+    lines = list(rename_result.added_lines)
+    diagnostics = [rename_result.diagnostic] if rename_result.diagnostic else []
+    saw_binary = rename_result.is_binary
+
+    for layer in layers:
+        ordinary = {
+            status
+            for status in layer.statuses
+            if not status.startswith(("R", "C", "D"))
+        }
+        if not ordinary:
+            continue
+        if layer.name == "untracked":
+            lines.extend(_all_file_lines(path))
+            continue
+        if layer.name == "range":
+            args = [
+                "diff",
+                "--unified=0",
+                "--no-ext-diff",
+                f"{base}..{head}",
+                "--",
+                path,
+            ]
+        elif layer.name == "index":
+            args = ["diff", "--cached", "--unified=0", "--no-ext-diff", "--", path]
+        else:
+            args = ["diff", "--unified=0", "--no-ext-diff", "--", path]
+        result = _added_lines_from_git_diff(args, f"{layer.name} path `{path}`")
+        lines.extend(result.added_lines)
+        saw_binary = saw_binary or result.is_binary
+        if result.diagnostic:
+            diagnostics.append(result.diagnostic)
+
+    unique = list(dict.fromkeys((line.line_number, line.text) for line in lines))
+    return ProvenanceResult(
+        added_lines=[AddedLine(number, text) for number, text in unique],
+        is_binary=saw_binary and not lines,
+        diagnostic="; ".join(diagnostics) or None,
+    )
+
+
+def _decode_failure_diagnostic(path: str, text: str) -> str | None:
+    if DECODE_FAILURE_MARKER in text:
+        return f"decode failure reading `{path}`: replacement character present in read text"
+    return None
 
 
 def _run_check(base: str | None, head: str | None) -> dict[str, Any]:
-    changed = _get_changed(base, head)
+    try:
+        changed = _get_changed(base, head)
+    except ValueError as exc:
+        return {
+            "policy": STANDARD_PATH,
+            "additionalPolicies": [CLOSURE_STANDARD_PATH],
+            "script": THIS_SCRIPT,
+            "changedFileCount": 0,
+            "violationCount": 1,
+            "violations": [
+                {"path": "<git-name-status>", "issues": [str(exc)]}
+            ],
+            "compliant": False,
+        }
     violations: list[dict[str, Any]] = []
 
-    for path, statuses in sorted(changed.items()):
-        text = _read_rel(path)
+    for path, record in sorted(changed.items()):
         path_issues: list[str] = []
+        if record.malformed:
+            path_issues.append(f"malformed name-status record for `{path}`")
+            violations.append({"path": path, "issues": path_issues})
+            continue
+
+        provenance = _added_lines(path, record, base, head)
+        if provenance.is_binary:
+            # explicit binary classification: never a text encoding violation
+            if path_issues:
+                violations.append({"path": path, "issues": path_issues})
+            continue
+        if provenance.diagnostic:
+            path_issues.append(provenance.diagnostic)
+
+        text = _read_rel(path)
         if text:
+            decode_issue = (
+                _decode_failure_diagnostic(path, text)
+                if _is_encoding_scoped(path) and _has_decode_failure(path)
+                else None
+            )
+            if decode_issue:
+                path_issues.append(decode_issue)
             path_issues.extend(find_authority_reference_violations(path, text))
             path_issues.extend(find_provider_specific_authority_violations(path, text))
             path_issues.extend(find_source_verification_fidelity_violations(path, text))
@@ -500,7 +803,7 @@ def _run_check(base: str | None, head: str | None) -> dict[str, Any]:
             path_issues.extend(
                 find_non_ascii_line_violations(
                     path,
-                    _added_lines(path, statuses, base, head),
+                    provenance.added_lines,
                     has_exception=_has_encoding_exception(text),
                 )
             )

@@ -14,10 +14,14 @@
     "docs/baselines/CVF_GC018_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_2026-06-30.md",
     "docs/work_orders/CVF_AGENT_WORK_ORDER_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_2026-06-30.md",
     "docs/reviews/CVF_ASCP_P1_P3_RUNTIME_PACKAGE_SKILLS_PRODUCTIONIZATION_COMPLETION_2026-06-30.md",
-    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md"
+    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+    "docs/baselines/CVF_GC018_DSH_CODE_REVIEW_QUALITY_T1_2026-09-14.md",
+    "docs/work_orders/CVF_AGENT_WORK_ORDER_DSH_CODE_REVIEW_QUALITY_T1_2026-09-14.md",
+    ".private_reference/source_mirrors/deepseek-ai__deepseek-harness/.agents/skills/dsh-code-review/SKILL.md",
+    ".private_reference/source_mirrors/deepseek-ai__deepseek-harness/LICENSE"
   ],
   "originLane": "AGSK-R3",
-  "cvfAdaptationBoundary": "CVF-owned adaptation of upstream code review skill; five-axis review framework (correctness, readability, architecture, security, performance) and severity classification discipline extracted as advisory metadata; no autonomous merge execution, commit authority, or automated PR action authorized",
+  "cvfAdaptationBoundary": "CVF-owned adaptation of upstream code review skill; five-axis review framework (correctness, readability, architecture, security, performance) and severity classification discipline extracted as advisory metadata; DSH-CODE-REVIEW-QUALITY-T1 adds one bounded supplemental enforcement-path/alternate-caller bypass tracing concept from deepseek-ai/deepseek-harness dsh-code-review, source-independent and repository-specific-command-excluded only; no autonomous merge execution, commit authority, or automated PR action authorized",
   "lifecycleState": "ACTIVE",
   "uatState": "PASSED",
   "certificationState": "CERTIFIED",

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 import tempfile
 import unittest
@@ -312,6 +313,561 @@ class WoasR7GeneratedSkeletonQualityGateTests(unittest.TestCase):
         self.assertTrue(d.is_clean, d.issues)
 
 
+class EvidenceReadinessIntegrationTests(unittest.TestCase):
+    """EVIDENCE-READINESS-T1: prove the *existing* checker call (`diagnose`/
+    `run`) reaches the new evidence-readiness validator automatically, and
+    that a worker cannot opt a covered task out by omission or tampering
+    with the return alone -- applicability is derived from the trusted
+    dispatch work order only."""
+
+    def _write_repo(self, tmp: str) -> Path:
+        repo_root = Path(tmp)
+        (repo_root / "docs/work_orders").mkdir(parents=True)
+        (repo_root / "docs/audits").mkdir(parents=True)
+        return repo_root
+
+    def test_diagnose_reaches_validator_and_blocks_missing_binding(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = self._write_repo(tmp)
+            work_order = repo_root / "docs/work_orders/CVF_AGENT_WORK_ORDER_X_2026-07-01.md"
+            work_order.write_text(
+                "# Work Order\nevidenceReadinessContract: REQUIRED_V1\n", encoding="utf-8"
+            )
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            try:
+                d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", VALID_RETURN)
+            finally:
+                chk.REPO_ROOT = original_root
+            self.assertFalse(d.is_clean)
+            self.assertTrue(any("evidence readiness" in issue for issue in d.issues))
+
+    def test_diagnose_is_unaffected_when_work_order_has_no_contract(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = self._write_repo(tmp)
+            work_order = repo_root / "docs/work_orders/CVF_AGENT_WORK_ORDER_X_2026-07-01.md"
+            work_order.write_text("# Work Order\nNo evidence readiness contract.\n", encoding="utf-8")
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            try:
+                d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", VALID_RETURN)
+            finally:
+                chk.REPO_ROOT = original_root
+            self.assertTrue(d.is_clean, d.issues)
+
+    def test_omission_in_return_cannot_opt_out_of_applicable_contract(self) -> None:
+        """The return does not mention evidence readiness at all; the
+        dispatch work order alone determines applicability, so omission in
+        the return is caught, not silently accepted."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = self._write_repo(tmp)
+            work_order = repo_root / "docs/work_orders/CVF_AGENT_WORK_ORDER_X_2026-07-01.md"
+            work_order.write_text(
+                "# Work Order\nevidenceReadinessContract: REQUIRED_V1\n", encoding="utf-8"
+            )
+            text_without_binding = VALID_RETURN  # no Evidence Readiness Binding section
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            try:
+                d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", text_without_binding)
+            finally:
+                chk.REPO_ROOT = original_root
+            self.assertFalse(d.is_clean)
+            self.assertTrue(
+                any("Evidence Readiness Binding" in issue for issue in d.issues)
+            )
+
+    def test_valid_binding_with_matching_digest_is_clean(self) -> None:
+        """Rework note (F1): the source row must now resolve to a REAL
+        source blob through the wired resolver, not a fabricated `blobA`
+        against a fabricated pin -- so this fixture writes a genuine
+        snapshot file under `<sourceRoot>/<sourcePin>/a.ts` and uses its
+        real sha256 digest, proving the fix through this same integration
+        test rather than loosening the assertion."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = self._write_repo(tmp)
+            work_order = repo_root / "docs/work_orders/CVF_AGENT_WORK_ORDER_X_2026-07-01.md"
+            work_order.write_text(
+                "# Work Order\nevidenceReadinessContract: REQUIRED_V1\n", encoding="utf-8"
+            )
+            audit_bytes = b'{"schemaVersion": "cvf.evidenceAudit.v1"}'
+            (repo_root / "docs/audits/fixture_audit.json").write_bytes(audit_bytes)
+            (repo_root / "docs/manifests").mkdir(parents=True)
+            (repo_root / "docs/manifests/fixture_manifest.txt").write_text("a.ts\n", encoding="utf-8")
+            import hashlib
+
+            source_pin = "snapshot-2026-09-14"
+            snapshot_dir = repo_root / "fixture_source" / source_pin
+            snapshot_dir.mkdir(parents=True)
+            source_bytes = b"real content\n"
+            (snapshot_dir / "a.ts").write_bytes(source_bytes)
+            blob_sha = hashlib.sha256(source_bytes).hexdigest()
+
+            digest = hashlib.sha256(audit_bytes).hexdigest()
+            binding = (
+                "\n## Evidence Readiness Binding\n\n"
+                "evidenceBindingSchema: cvf.workerEvidenceReadiness.v1\n"
+                "auditPath: docs/audits/fixture_audit.json\n"
+                f"auditSha256: {digest}\n"
+                "discoveryManifestPath: docs/manifests/fixture_manifest.txt\n"
+                "sourceRoot: fixture_source\n"
+                f"sourcePin: {source_pin}\n\n"
+                "| path | blobSha256 | lineCount | readSpans | status |\n"
+                "| --- | --- | --- | --- | --- |\n"
+                f"| a.ts | {blob_sha} | 1 | 1-1 | READ |\n"
+            )
+            text = VALID_RETURN + binding
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            try:
+                d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", text)
+            finally:
+                chk.REPO_ROOT = original_root
+            self.assertTrue(d.is_clean, d.issues)
+
+    def test_fabricated_source_identity_is_rejected_through_diagnose(self) -> None:
+        """F1 proof at the checker-integration level: a row with a
+        fabricated blobSha256 against a nonexistent sourceRoot/sourcePin
+        must be rejected by `diagnose()`, the real checker entrypoint --
+        this is the exact shape the reviewer's probe found passing clean."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = self._write_repo(tmp)
+            work_order = repo_root / "docs/work_orders/CVF_AGENT_WORK_ORDER_X_2026-07-01.md"
+            work_order.write_text(
+                "# Work Order\nevidenceReadinessContract: REQUIRED_V1\n", encoding="utf-8"
+            )
+            audit_bytes = b'{"schemaVersion": "cvf.evidenceAudit.v1"}'
+            (repo_root / "docs/audits/fixture_audit.json").write_bytes(audit_bytes)
+            (repo_root / "docs/manifests").mkdir(parents=True)
+            (repo_root / "docs/manifests/fixture_manifest.txt").write_text("a.ts\n", encoding="utf-8")
+            import hashlib
+
+            digest = hashlib.sha256(audit_bytes).hexdigest()
+            binding = (
+                "\n## Evidence Readiness Binding\n\n"
+                "evidenceBindingSchema: cvf.workerEvidenceReadiness.v1\n"
+                "auditPath: docs/audits/fixture_audit.json\n"
+                f"auditSha256: {digest}\n"
+                "discoveryManifestPath: docs/manifests/fixture_manifest.txt\n"
+                "sourceRoot: fixture_source_does_not_exist\n"
+                "sourcePin: fabricated-pin-never-existed\n\n"
+                "| path | blobSha256 | lineCount | readSpans | status |\n"
+                "| --- | --- | --- | --- | --- |\n"
+                "| a.ts | " + ("f" * 64) + " | 1 | 1-1 | READ |\n"
+            )
+            text = VALID_RETURN + binding
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            try:
+                d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", text)
+            finally:
+                chk.REPO_ROOT = original_root
+            self.assertFalse(d.is_clean)
+            self.assertTrue(any("could not be resolved" in issue for issue in d.issues))
+
+    def test_audit_only_drift_reaches_unchanged_bound_return_via_index(self) -> None:
+        """Requirement 7: an audit-only change must not bypass validation
+        even though the bound Markdown return itself did not change. The
+        bounded declared index maps the audit path back to the worker
+        return path so `run()` re-diagnoses it."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = self._write_repo(tmp)
+            (repo_root / ".git").mkdir()
+            work_order = repo_root / "docs/work_orders/CVF_AGENT_WORK_ORDER_X_2026-07-01.md"
+            work_order.write_text(
+                "# Work Order\nevidenceReadinessContract: REQUIRED_V1\n", encoding="utf-8"
+            )
+            audit_bytes = b'{"schemaVersion": "cvf.evidenceAudit.v1"}'
+            audit_path = repo_root / "docs/audits/fixture_audit.json"
+            audit_path.write_bytes(audit_bytes)
+            (repo_root / "docs/manifests").mkdir(parents=True)
+            (repo_root / "docs/manifests/fixture_manifest.txt").write_text("a.ts\n", encoding="utf-8")
+
+            import hashlib
+
+            stale_digest = "0" * 64  # deliberately stale vs current audit bytes
+            binding = (
+                "\n## Evidence Readiness Binding\n\n"
+                "evidenceBindingSchema: cvf.workerEvidenceReadiness.v1\n"
+                "auditPath: docs/audits/fixture_audit.json\n"
+                f"auditSha256: {stale_digest}\n"
+                "discoveryManifestPath: docs/manifests/fixture_manifest.txt\n"
+                "sourceRoot: fixture_source\n"
+                "sourcePin: 0000000000000000000000000000000000000\n\n"
+                "| path | blobSha256 | lineCount | readSpans | status |\n"
+                "| --- | --- | --- | --- | --- |\n"
+                "| a.ts | blobA | 1 | 1-1 | READ |\n"
+            )
+            return_path = repo_root / "docs/reviews/CVF_X_WORKER_RETURN.md"
+            return_path.parent.mkdir(parents=True, exist_ok=True)
+            return_path.write_text(VALID_RETURN + binding, encoding="utf-8")
+
+            index_dir = repo_root / "governance/compat"
+            index_dir.mkdir(parents=True, exist_ok=True)
+            (index_dir / "evidence_readiness_audit_index.json").write_text(
+                json.dumps({"docs/audits/fixture_audit.json": ["docs/reviews/CVF_X_WORKER_RETURN.md"]}),
+                encoding="utf-8",
+            )
+
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            try:
+                changed = {"docs/audits/fixture_audit.json": {"M"}}
+                drift = chk._audit_only_drift_paths(changed)
+                self.assertIn("docs/reviews/CVF_X_WORKER_RETURN.md", drift)
+                d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", return_path.read_text(encoding="utf-8"))
+            finally:
+                chk.REPO_ROOT = original_root
+            self.assertFalse(d.is_clean)
+            self.assertTrue(any("stale digest" in issue for issue in d.issues))
+
+    def test_index_is_populated_automatically_without_hand_maintenance(self) -> None:
+        """F4 proof, entrypoint-level: no `evidence_readiness_audit_index.json`
+        exists beforehand at all. A first `diagnose()` call over an
+        applicable, otherwise-clean binding must register the reverse
+        `auditPath -> workerReturnPath` mapping itself as a side effect.
+        Then, WITHOUT any human touching the index, changing only the bound
+        audit file's bytes and re-running the real `run()` flow over that
+        changed-file set must pull the worker return back into
+        re-diagnosis and flag the resulting stale-digest drift -- proving
+        the audit-only-drift path works with zero pre-seeded index state."""
+        import hashlib
+        import subprocess
+
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = self._write_repo(tmp)
+            subprocess.run(["git", "init", "-q"], cwd=repo_root, check=True)
+            subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=repo_root, check=True)
+            subprocess.run(["git", "config", "user.name", "Test"], cwd=repo_root, check=True)
+
+            work_order = repo_root / "docs/work_orders/CVF_AGENT_WORK_ORDER_X_2026-07-01.md"
+            work_order.write_text(
+                "# Work Order\nevidenceReadinessContract: REQUIRED_V1\n", encoding="utf-8"
+            )
+            audit_bytes = b'{"schemaVersion": "cvf.evidenceAudit.v1"}'
+            audit_rel = "docs/audits/fixture_audit.json"
+            (repo_root / audit_rel).write_bytes(audit_bytes)
+            (repo_root / "docs/manifests").mkdir(parents=True)
+            (repo_root / "docs/manifests/fixture_manifest.txt").write_text("a.ts\n", encoding="utf-8")
+
+            source_pin = "snapshot-index-test"
+            snapshot_dir = repo_root / "fixture_source" / source_pin
+            snapshot_dir.mkdir(parents=True)
+            source_bytes = b"stable content\n"
+            (snapshot_dir / "a.ts").write_bytes(source_bytes)
+            blob_sha = hashlib.sha256(source_bytes).hexdigest()
+
+            digest = hashlib.sha256(audit_bytes).hexdigest()
+            binding = (
+                "\n## Evidence Readiness Binding\n\n"
+                "evidenceBindingSchema: cvf.workerEvidenceReadiness.v1\n"
+                f"auditPath: {audit_rel}\n"
+                f"auditSha256: {digest}\n"
+                "discoveryManifestPath: docs/manifests/fixture_manifest.txt\n"
+                "sourceRoot: fixture_source\n"
+                f"sourcePin: {source_pin}\n\n"
+                "| path | blobSha256 | lineCount | readSpans | status |\n"
+                "| --- | --- | --- | --- | --- |\n"
+                f"| a.ts | {blob_sha} | 1 | 1-1 | READ |\n"
+            )
+            return_rel = "docs/reviews/CVF_X_WORKER_RETURN.md"
+            return_path = repo_root / return_rel
+            return_path.parent.mkdir(parents=True, exist_ok=True)
+            return_path.write_text(VALID_RETURN + binding, encoding="utf-8")
+
+            index_path = repo_root / chk.EVIDENCE_READINESS_AUDIT_INDEX_PATH
+            self.assertFalse(index_path.is_file(), "precondition: no index file must exist yet")
+
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            try:
+                # First diagnose call: registers the binding automatically.
+                d = chk.diagnose(return_rel, return_path.read_text(encoding="utf-8"))
+                self.assertTrue(d.is_clean, d.issues)
+                self.assertTrue(index_path.is_file(), "index must be auto-created as a side effect")
+                index_data = json.loads(index_path.read_text(encoding="utf-8"))
+                self.assertIn(audit_rel, index_data)
+                self.assertIn(return_rel, index_data[audit_rel])
+
+                # Now mutate ONLY the bound audit file's bytes; the worker
+                # return Markdown stays untouched.
+                (repo_root / audit_rel).write_bytes(b'{"schemaVersion": "fixture.v2-drifted"}')
+
+                changed = {audit_rel: {"M"}}
+                drift = chk._audit_only_drift_paths(changed)
+                self.assertIn(return_rel, drift)
+
+                d2 = chk.diagnose(return_rel, return_path.read_text(encoding="utf-8"))
+                self.assertFalse(d2.is_clean)
+                self.assertTrue(any("stale digest" in issue for issue in d2.issues))
+            finally:
+                chk.REPO_ROOT = original_root
+
+    def test_frozen_r4_files_are_not_in_the_audit_index(self) -> None:
+        """Migration rule (requirement 10): historical/parked packets like
+        the frozen R4 outputs have no entry in the bounded index, so they
+        are never swept into evidence-readiness re-diagnosis by the
+        audit-only-drift path."""
+        index_path = (
+            Path(__file__).resolve().parent / "evidence_readiness_audit_index.json"
+        )
+        if not index_path.is_file():
+            return  # no index shipped yet is itself a valid empty-index state
+        data = json.loads(index_path.read_text(encoding="utf-8"))
+        self.assertNotIn("docs/audits/CVF_QM_RUNTIME_VALUE_R4_2026-09-14.json", data)
+
+
+def _write_evidence_readiness_fixture(
+    repo_root: Path,
+    *,
+    return_rel: str = "docs/reviews/CVF_X_WORKER_RETURN.md",
+    audit_rel: str = "docs/audits/fixture_audit.json",
+    source_pin: str = "snapshot-index-test",
+) -> None:
+    """Shared fixture builder for F4/F5 generation-2 tests: one applicable,
+    otherwise-clean evidence-readiness binding with a real resolvable
+    snapshot source, so `diagnose()`/`run()` reaches the real validator
+    end to end."""
+
+    import hashlib
+
+    (repo_root / "docs/work_orders").mkdir(parents=True, exist_ok=True)
+    work_order = repo_root / "docs/work_orders/CVF_AGENT_WORK_ORDER_X_2026-07-01.md"
+    work_order.write_text("# Work Order\nevidenceReadinessContract: REQUIRED_V1\n", encoding="utf-8")
+
+    audit_bytes = b'{"schemaVersion": "cvf.evidenceAudit.v1"}'
+    (repo_root / audit_rel).parent.mkdir(parents=True, exist_ok=True)
+    (repo_root / audit_rel).write_bytes(audit_bytes)
+    (repo_root / "docs/manifests").mkdir(parents=True, exist_ok=True)
+    (repo_root / "docs/manifests/fixture_manifest.txt").write_text("a.ts\n", encoding="utf-8")
+
+    snapshot_dir = repo_root / "fixture_source" / source_pin
+    snapshot_dir.mkdir(parents=True, exist_ok=True)
+    source_bytes = b"stable content\n"
+    (snapshot_dir / "a.ts").write_bytes(source_bytes)
+    blob_sha = hashlib.sha256(source_bytes).hexdigest()
+
+    digest = hashlib.sha256(audit_bytes).hexdigest()
+    binding = (
+        "\n## Evidence Readiness Binding\n\n"
+        "evidenceBindingSchema: cvf.workerEvidenceReadiness.v1\n"
+        f"auditPath: {audit_rel}\n"
+        f"auditSha256: {digest}\n"
+        "discoveryManifestPath: docs/manifests/fixture_manifest.txt\n"
+        "sourceRoot: fixture_source\n"
+        f"sourcePin: {source_pin}\n\n"
+        "| path | blobSha256 | lineCount | readSpans | status |\n"
+        "| --- | --- | --- | --- | --- |\n"
+        f"| a.ts | {blob_sha} | 1 | 1-1 | READ |\n"
+    )
+    return_path = repo_root / return_rel
+    return_path.parent.mkdir(parents=True, exist_ok=True)
+    return_path.write_text(VALID_RETURN + binding, encoding="utf-8")
+
+
+class EvidenceReadinessIndexIntegrityTests(unittest.TestCase):
+    """F4 (generation 2): a malformed or unwritable audit-readiness index
+    must surface as a visible diagnostic instead of silently behaving like a
+    normal empty index."""
+
+    def test_malformed_index_file_surfaces_as_issue_not_silent_empty(self) -> None:
+        """A PRESENT-but-malformed index (not valid JSON) must produce a
+        visible issue through the real diagnose()/run() path, not silently
+        degrade to 'no bindings registered' indistinguishable from a
+        legitimately missing/empty index."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = Path(tmp)
+            _write_evidence_readiness_fixture(repo_root)
+
+            index_path = repo_root / chk.EVIDENCE_READINESS_AUDIT_INDEX_PATH
+            index_path.parent.mkdir(parents=True, exist_ok=True)
+            index_path.write_text("{ this is not valid JSON !!!", encoding="utf-8")
+
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            try:
+                return_path = repo_root / "docs/reviews/CVF_X_WORKER_RETURN.md"
+                d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", return_path.read_text(encoding="utf-8"))
+            finally:
+                chk.REPO_ROOT = original_root
+            self.assertFalse(d.is_clean)
+            self.assertTrue(
+                any("audit-readiness index could not be read" in issue for issue in d.issues)
+            )
+
+    def test_missing_index_file_is_not_flagged_as_malformed(self) -> None:
+        """Counter-proof: a MISSING index file (the ordinary, expected first-
+        use state) must NOT be flagged as an integrity problem -- only a
+        present-but-malformed file is."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = Path(tmp)
+            _write_evidence_readiness_fixture(repo_root)
+            index_path = repo_root / chk.EVIDENCE_READINESS_AUDIT_INDEX_PATH
+            self.assertFalse(index_path.is_file())
+
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            try:
+                return_path = repo_root / "docs/reviews/CVF_X_WORKER_RETURN.md"
+                d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", return_path.read_text(encoding="utf-8"))
+            finally:
+                chk.REPO_ROOT = original_root
+            self.assertTrue(d.is_clean, d.issues)
+            self.assertFalse(any("could not be read" in issue for issue in d.issues))
+
+    def test_run_surfaces_malformed_index_as_issue_on_diagnosed_return(self) -> None:
+        """Entrypoint-level (`run()`) proof: a malformed index is surfaced as
+        a visible issue attached to a return diagnosed during that `run()`
+        invocation, not merely at the direct `diagnose()` call level."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = Path(tmp)
+            subprocess_init(repo_root)
+            _write_evidence_readiness_fixture(repo_root)
+
+            index_path = repo_root / chk.EVIDENCE_READINESS_AUDIT_INDEX_PATH
+            index_path.parent.mkdir(parents=True, exist_ok=True)
+            index_path.write_text("not json", encoding="utf-8")
+
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            try:
+                diagnostics = chk.run(None, None)
+            finally:
+                chk.REPO_ROOT = original_root
+            matches = [d for d in diagnostics if d.path == "docs/reviews/CVF_X_WORKER_RETURN.md"]
+            self.assertEqual(len(matches), 1)
+            self.assertTrue(
+                any("audit-readiness index could not be read" in issue for issue in matches[0].issues)
+            )
+
+    def test_index_write_failure_surfaces_as_issue_not_swallowed(self) -> None:
+        """A failed index WRITE (simulated via a monkeypatched writer that
+        raises OSError) must surface as a visible issue on the return being
+        diagnosed, not be silently swallowed as a 'non-fatal convenience
+        side effect'."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = Path(tmp)
+            _write_evidence_readiness_fixture(repo_root)
+
+            original_root = chk.REPO_ROOT
+            original_writer = chk._write_evidence_readiness_audit_index
+            chk.REPO_ROOT = repo_root
+
+            def _raise_os_error(index):
+                raise OSError("simulated disk full")
+
+            chk._write_evidence_readiness_audit_index = _raise_os_error
+            try:
+                return_path = repo_root / "docs/reviews/CVF_X_WORKER_RETURN.md"
+                d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", return_path.read_text(encoding="utf-8"))
+            finally:
+                chk.REPO_ROOT = original_root
+                chk._write_evidence_readiness_audit_index = original_writer
+            self.assertFalse(d.is_clean)
+            self.assertTrue(
+                any("audit-readiness index could not be written" in issue for issue in d.issues)
+            )
+            # The index file must not exist / not silently appear correct --
+            # the write genuinely failed, so no partial or stale file should
+            # be mistaken for a successful registration.
+            index_path = repo_root / chk.EVIDENCE_READINESS_AUDIT_INDEX_PATH
+            self.assertFalse(index_path.is_file())
+
+
+def subprocess_init(repo_root: Path) -> None:
+    import subprocess
+
+    subprocess.run(["git", "init", "-q"], cwd=repo_root, check=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=repo_root, check=True)
+    subprocess.run(["git", "config", "user.name", "Test"], cwd=repo_root, check=True)
+
+
+class SharedResolverWiringTests(unittest.TestCase):
+    """F5 (generation 2): the real `run()`/`diagnose()` code path must
+    construct and reuse ONE shared resolver per (sourceRoot, sourcePin)
+    across multiple worker returns diagnosed within a single `run()`
+    invocation -- not merely when a test manually passes the same resolver
+    instance to two direct `evaluate_worker_return()` calls."""
+
+    def test_run_reuses_one_resolver_across_two_returns_sharing_same_pin(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = Path(tmp)
+            subprocess_init(repo_root)
+
+            shared_pin = "snapshot-shared-2026-09-14"
+            _write_evidence_readiness_fixture(
+                repo_root,
+                return_rel="docs/reviews/CVF_X_WORKER_RETURN.md",
+                audit_rel="docs/audits/fixture_audit_x.json",
+                source_pin=shared_pin,
+            )
+            _write_evidence_readiness_fixture(
+                repo_root,
+                return_rel="docs/reviews/CVF_Y_WORKER_RETURN.md",
+                audit_rel="docs/audits/fixture_audit_y.json",
+                source_pin=shared_pin,
+            )
+
+            constructed_resolvers: list[object] = []
+            original_default_resolver_for = chk._default_resolver_for
+
+            def _tracking_default_resolver_for(source_pin, repo_root_arg):
+                resolver = original_default_resolver_for(source_pin, repo_root_arg)
+                constructed_resolvers.append(resolver)
+                return resolver
+
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            chk._default_resolver_for = _tracking_default_resolver_for
+            try:
+                diagnostics = chk.run(None, None)
+            finally:
+                chk.REPO_ROOT = original_root
+                chk._default_resolver_for = original_default_resolver_for
+
+            matched = {d.path: d for d in diagnostics if d.path.startswith("docs/reviews/CVF_")}
+            self.assertIn("docs/reviews/CVF_X_WORKER_RETURN.md", matched)
+            self.assertIn("docs/reviews/CVF_Y_WORKER_RETURN.md", matched)
+            self.assertTrue(matched["docs/reviews/CVF_X_WORKER_RETURN.md"].is_clean, matched["docs/reviews/CVF_X_WORKER_RETURN.md"].issues)
+            self.assertTrue(matched["docs/reviews/CVF_Y_WORKER_RETURN.md"].is_clean, matched["docs/reviews/CVF_Y_WORKER_RETURN.md"].issues)
+
+            # The real fix: exactly ONE resolver was constructed for the
+            # shared (sourceRoot, sourcePin) pair across BOTH diagnosed
+            # returns in this one run() invocation -- not one per return.
+            same_pin_resolvers = [
+                r for r in constructed_resolvers
+                if getattr(r, "repo_root", None) == repo_root
+            ]
+            self.assertEqual(
+                len(same_pin_resolvers),
+                1,
+                f"expected exactly one resolver constructed for the shared pin, got {len(same_pin_resolvers)}",
+            )
+            # And that one resolver's underlying read was only ever
+            # performed once (its cache was populated once, reused by the
+            # second diagnose() call), proving real cache reuse through
+            # run(), not just "a resolver was constructed once by accident".
+            resolver = same_pin_resolvers[0]
+            self.assertEqual(resolver.call_count, 1)
+
+    def test_diagnose_without_registry_still_works_standalone(self) -> None:
+        """Backward-compatible: a direct `diagnose()` call with no
+        `resolver_registry` (e.g. from a script or a test) still constructs
+        a resolver per call and evaluates correctly -- the registry is an
+        optional performance wiring, not a required parameter."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = Path(tmp)
+            _write_evidence_readiness_fixture(repo_root)
+            original_root = chk.REPO_ROOT
+            chk.REPO_ROOT = repo_root
+            try:
+                return_path = repo_root / "docs/reviews/CVF_X_WORKER_RETURN.md"
+                d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", return_path.read_text(encoding="utf-8"))
+            finally:
+                chk.REPO_ROOT = original_root
+            self.assertTrue(d.is_clean, d.issues)
+
+
 class StandardParityTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -345,6 +901,68 @@ class StandardParityTests(unittest.TestCase):
         for token in expected_tokens:
             with self.subTest(token=token):
                 self.assertIn(token, self.standard_text)
+
+
+class AuditOnlyIndexRegressionTests(unittest.TestCase):
+    def test_noop_does_not_load_validator_or_start_subprocess(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(chk, "REPO_ROOT", Path(tmp)), patch.object(chk, "get_changed_paths", return_value={}), patch.object(chk, "_evidence_module") as load, patch.object(chk.subprocess, "run") as process:
+                self.assertEqual(chk.run(None, None), [])
+                load.assert_not_called()
+                process.assert_not_called()
+
+    def test_deleted_index_recovery_and_missing_locator_block(self):
+        from unittest.mock import patch
+        import hashlib
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_evidence_readiness_fixture(root)
+            audit = "docs/audits/fixture_audit.json"
+            ret = "docs/reviews/CVF_X_WORKER_RETURN.md"
+            # Resolve actual audit locator from the existing fixture binding.
+            return_text = (root / ret).read_text()
+            import re
+            audit = re.search(r"(?m)^auditPath: (.+)$", return_text).group(1)
+            old = (root / audit).read_bytes()
+            raw = json.dumps({"schemaVersion": "cvf.evidenceAudit.v1", "workerReturnPath": ret}).encode()
+            (root / audit).write_bytes(raw)
+            (root / ret).write_text(return_text.replace(hashlib.sha256(old).hexdigest(), hashlib.sha256(raw).hexdigest()))
+            with patch.object(chk, "REPO_ROOT", root), patch.object(chk, "get_changed_paths", return_value={audit: {"M"}}):
+                self.assertTrue(all(d.is_clean for d in chk.run(None, None)))
+                (root / chk.EVIDENCE_READINESS_AUDIT_INDEX_PATH).unlink()
+                (root / audit).write_bytes(raw + b" ")
+                diagnostics = chk.run(None, None)
+                self.assertTrue(any("stale digest" in str(d.issues) for d in diagnostics))
+                (root / chk.EVIDENCE_READINESS_AUDIT_INDEX_PATH).unlink()
+                (root / audit).write_text('{"schemaVersion":"cvf.evidenceAudit.v1"}')
+                diagnostics = chk.run(None, None)
+                self.assertTrue(any("no verified reverse binding" in str(d.issues) for d in diagnostics))
+
+    def test_invalid_index_entry_type_is_blocking(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            index = root / chk.EVIDENCE_READINESS_AUDIT_INDEX_PATH
+            index.parent.mkdir(parents=True)
+            for content in ('{"audit.json": 5}', '{"audit.json":[null]}', '{"a":[],"a":[]}'):
+                index.write_text(content)
+                with patch.object(chk, "REPO_ROOT", root), patch.object(chk, "get_changed_paths", return_value={}):
+                    self.assertTrue(any(not d.is_clean for d in chk.run(None, None)))
+
+    def test_run_reports_corruption_without_changed_return(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            index = root / chk.EVIDENCE_READINESS_AUDIT_INDEX_PATH
+            index.parent.mkdir(parents=True)
+            index.write_text("{broken")
+            with patch.object(chk, "REPO_ROOT", root), patch.object(chk, "get_changed_paths", return_value={"audit.json": {"M"}}):
+                diagnostics = chk.run(None, None)
+            self.assertEqual(len(diagnostics), 1)
+            self.assertTrue(diagnostics[0].eligible)
+            self.assertFalse(diagnostics[0].is_clean)
+            self.assertEqual(diagnostics[0].path, chk.EVIDENCE_READINESS_AUDIT_INDEX_PATH)
 
 
 if __name__ == "__main__":

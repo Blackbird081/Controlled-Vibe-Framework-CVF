@@ -24,7 +24,7 @@
   ],
   "internalAgentDisposition": "IMPLEMENTED",
   "legacyRows": [],
-  "license": "Apache-2.0 upstream; CVF_PRIVATE_GOVERNED adaptation metadata",
+  "license": "MIT upstream; CVF_PRIVATE_GOVERNED adaptation metadata",
   "loaderBoundary": "loading this metadata or package body never grants authority; production execution requires ACTIVE source state, a skill usage receipt, activation policy receipt, package use-proof receipt, and production execution receipt",
   "name": "CVF Engineering Code Simplification",
   "originLane": "AGSK-R2",
@@ -80,7 +80,11 @@
     "docs/baselines/CVF_GC018_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_2026-06-30.md",
     "docs/work_orders/CVF_AGENT_WORK_ORDER_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_2026-06-30.md",
     "docs/reviews/CVF_ASCP_P4_P6_REMAINING_PACKAGE_PRODUCTION_SCALE_UP_COMPLETION_2026-06-30.md",
-    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md"
+    "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_SCALE_UP_STANDARD.md",
+    "docs/baselines/CVF_GC018_DSH_UC01_TRACK_B_CONSUMER_EVIDENCE_2026-09-13.md",
+    "docs/reviews/CVF_DSH_UC01_TRACK_B_NOVELTY_DECISION_2026-09-13.md",
+    ".private_reference/source_mirrors/deepseek-ai__deepseek-harness/.agents/skills/dsh-find-simplifications/SKILL.md",
+    ".private_reference/source_mirrors/deepseek-ai__deepseek-harness/LICENSE"
   ],
   "status": "ACTIVE",
   "successor": "none",

@@ -11,7 +11,14 @@ from __future__ import annotations
 
 import hashlib
 import json
-from typing import Protocol, Sequence
+from typing import Any, Protocol, Sequence
+
+try:
+    from committed_evidence_fingerprint import validate_committed_evidence_shape
+except ModuleNotFoundError:
+    from governance.compat.committed_evidence_fingerprint import (
+        validate_committed_evidence_shape,
+    )
 
 
 RECEIPT_SCHEMA = "cvf.autorun.pass-receipt.v3"
@@ -76,12 +83,20 @@ def _jcs_bytes(obj: object) -> bytes:
 
 
 def _machine_verification_object(
-    context: dict[str, str],
+    context: dict[str, Any],
     verifier_identity_digest: str,
     results: Sequence[GateResultLike],
 ) -> dict[str, object]:
-    """Build the duration-free canonical preimage for ``receiptDigest``."""
-    return {
+    """Build the duration-free canonical preimage for ``receiptDigest``.
+
+    ``context`` may carry an optional closed ``committedEvidence`` object
+    (``cvf.committedEvidenceFingerprint.v1``, see
+    ``committed_evidence_fingerprint.py``). When present, it is bound into
+    this preimage as an additional top-level field so it participates in
+    ``receiptDigest``; when absent, the emitted object is byte-identical to
+    the prior shape with no new key.
+    """
+    machine_verification: dict[str, object] = {
         "profile": MACHINE_VERIFICATION_PROFILE,
         "schema": RECEIPT_SCHEMA,
         "digestAlgorithm": "sha256",
@@ -122,6 +137,9 @@ def _machine_verification_object(
         "limitations": [_LOCAL_COMPOSITION_LIMITATION],
         "cacheDisposition": "PRODUCED_FROM_FULL_PASS",
     }
+    if context.get("committedEvidence") is not None:
+        machine_verification["committedEvidence"] = context["committedEvidence"]
+    return machine_verification
 
 
 def _machine_verification_digest(machine_verification: dict[str, object]) -> str:
@@ -180,6 +198,40 @@ def _validate_receipt_integrity(payload: object) -> tuple[bool, str]:
         return False, "receipt machineVerification digest algorithm mismatch"
     if machine_verification.get("phaseEnvelope") != expected_envelope:
         return False, "receipt machineVerification phase envelope mismatch"
+
+    top_has_key = "committedEvidence" in payload
+    nested_has_key = "committedEvidence" in machine_verification
+    top_committed_evidence = payload.get("committedEvidence")
+    nested_committed_evidence = machine_verification.get("committedEvidence")
+    if not top_has_key and not nested_has_key:
+        # Legacy omission: both locations genuinely lack the key. This is
+        # the only shape that keeps old v3 receipt validation unchanged.
+        pass
+    elif top_has_key != nested_has_key:
+        return False, "receipt committedEvidence is one-sided between top level and machineVerification"
+    elif top_committed_evidence is None or nested_committed_evidence is None:
+        # The key is present at (at least) one location but its value is
+        # null -- this is a malformed declaration, never a benign legacy
+        # omission, so it must fail closed rather than fall through to the
+        # "absent" branch above.
+        return False, "receipt committedEvidence key present with null value"
+    else:
+        if top_committed_evidence != nested_committed_evidence:
+            return False, "receipt committedEvidence top-level/nested mismatch"
+        valid_shape, shape_reason = validate_committed_evidence_shape(top_committed_evidence)
+        if not valid_shape:
+            return False, f"receipt committedEvidence invalid: {shape_reason}"
+        receipt_base = str(payload["baseSha"])
+        receipt_head = str(payload["headSha"])
+        evidence_base = top_committed_evidence.get("baseSha")
+        evidence_head = top_committed_evidence.get("headSha")
+        if (
+            not isinstance(evidence_base, str)
+            or not isinstance(evidence_head, str)
+            or not evidence_base.startswith(receipt_base)
+            or not evidence_head.startswith(receipt_head)
+        ):
+            return False, "receipt committedEvidence baseSha/headSha does not match receipt context"
 
     predecessor = machine_verification.get("predecessor")
     if not isinstance(predecessor, dict) or predecessor.get("availability") != _NOT_CHECKED:

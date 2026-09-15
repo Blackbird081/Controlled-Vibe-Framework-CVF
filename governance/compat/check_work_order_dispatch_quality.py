@@ -219,8 +219,6 @@ ROOT_GOVERNANCE_PATH_RE = re.compile(
 LHW_RE = re.compile(r"LHW[-_]?(\d+)(?!\d)", re.IGNORECASE)
 IMPORTANT_FULL_SCAN_AUDIT_PATH = "docs/audits/CVF_IMPORTANT_FULL_FILE_SCAN_BLINDSPOT_RECORD_2026-05-31.md"
 
-
-
 IMPLEMENTATION_MODULES = (
     "check_work_order_dispatch_quality_core.py",
     "check_work_order_dispatch_quality_artifacts.py",

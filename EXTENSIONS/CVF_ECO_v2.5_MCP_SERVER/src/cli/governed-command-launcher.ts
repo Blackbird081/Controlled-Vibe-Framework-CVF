@@ -10,6 +10,7 @@ import {
   preflightGovernanceAction,
   redactText,
 } from '../tools/governance-action-preflight.js';
+import { maskKnownValues, snapshotKnownValues } from '../tools/known-value-redaction.js';
 import type { ReceiptConsumptionStore } from '../persistence/json-receipt-consumption.store.js';
 import { consumeGovernanceActionReceipt } from '../tools/governance-action-receipt-consumer.js';
 import {
@@ -181,6 +182,14 @@ export interface GovernedCommandLauncherDependencies {
   approvalPolicy?: MutatingProfileApprovalPolicy;
   now?: () => number;
   generateConsumptionId?: () => string;
+  /**
+   * Optional, opt-in exact-value output masking for a trusted in-process
+   * caller that already holds concrete secret values. Never sourced from
+   * process.env, CLI flags, MCP schema, serialized requests or persistence:
+   * only a caller wiring dependencies directly may supply it. See
+   * ../tools/known-value-redaction.ts. Not part of GovernedCommandLauncherInput.
+   */
+  knownSecretValues?: readonly string[];
 }
 
 export interface GovernedCommandLauncherResponse {
@@ -316,6 +325,16 @@ export async function launchGovernedCommand(
   if (!profile) {
     return rejected('UNKNOWN_COMMAND_PROFILE', 'Only registered CVF command profiles may run.');
   }
+
+  const knownValueSnapshot = snapshotKnownValues(dependencies.knownSecretValues);
+  if (!knownValueSnapshot.ok) {
+    return rejected(
+      knownValueSnapshot.error!.code,
+      'The known-value redaction configuration was rejected before execution.',
+      profile.id
+    );
+  }
+  const knownValueVariants = knownValueSnapshot.variants!;
 
   let paths;
   try {
@@ -537,8 +556,14 @@ export async function launchGovernedCommand(
     };
   }
 
-  const stdout = redactText(runResult.stdout).slice(0, MAX_CAPTURE_BYTES);
-  const stderr = redactText(runResult.stderr).slice(0, MAX_CAPTURE_BYTES);
+  const stdout = redactText(maskKnownValues(runResult.stdout, knownValueVariants)).slice(
+    0,
+    MAX_CAPTURE_BYTES
+  );
+  const stderr = redactText(maskKnownValues(runResult.stderr, knownValueVariants)).slice(
+    0,
+    MAX_CAPTURE_BYTES
+  );
   return {
     contractVersion: GOVERNED_COMMAND_LAUNCHER_CONTRACT,
     accepted: finalSuccess,

@@ -4,10 +4,10 @@ Status: ACTIVE_REFERENCE
 
 Memory class: GOVERNED_REFERENCE_LEDGER
 
-Last updated: 2026-08-15
+Last updated: 2026-09-10
 
 Source: operator-provided Alibaba Model Studio free-quota screenshots in the
-2026-08-15 session. Diagnostic results dated 2026-06-18 remain historical.
+2026-09-10 session. Diagnostic results dated 2026-06-18 remain historical.
 
 ## Purpose
 
@@ -49,8 +49,9 @@ fresh diagnostic before interpreting failures.
 
 The current free-quota target for the next governed T6 dispatch is the
 `qwen3.7-flash` alias. The operator screenshot also shows the dated snapshot
-`qwen3.7-flash-2026-07-15`; both rows are enabled, have 1,000,000 of 1,000,000
-quota remaining, and expire on 2026-10-22. This is quota-selection evidence,
+`qwen3.7-flash-2026-07-15`; both rows are enabled, the dated snapshot has
+1,000,000 of 1,000,000 and the alias has 997,560 of 1,000,000 remaining, and
+both expire on 2026-10-22. This is quota-selection evidence,
 not live compatibility proof.
 
 ## Use-Before-Live-Test Rule
@@ -72,20 +73,24 @@ not live compatibility proof.
 |---|---:|---:|---|---|
 | `qwen3.7-flash-2026-07-15` | 2026-10-22 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
 | `qwen3.7-plus` | 2026-08-31 | 989,246 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.7-flash` | 2026-10-22 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source; selected T6 alias. |
+| `qwen3.7-flash` | 2026-10-22 | 997,560 / 1,000,000 | Enabled | Current screenshot source; selected T6 alias. |
 | `qwen3.7-max-2026-05-17` | 2026-08-23 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
 | `qwen3.7-max-2026-06-08` | 2026-09-07 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
 | `glm-5.1` | 2026-08-25 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
 | `qwen3.7-max-preview` | 2026-08-23 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
 | `deepseek-v4-flash-0731` | 2026-10-30 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
 | `qwen3.7-max` | 2026-08-19 | 951,277 / 1,000,000 | Enabled | Current screenshot source. |
-| `glm-5.2` | 2026-09-23 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
+| `glm-5.2` | 2026-09-23 | 798,158 / 1,000,000 | Enabled | Current screenshot source. |
 | `kimi-k2.7-code` | 2026-09-23 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `deepseek-v4-pro-0813` | 2026-11-12 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
+| `deepseek-v4-pro-0813` | 2026-11-12 | 999,908 / 1,000,000 | Enabled | Current screenshot source. |
 | `qwen3.7-max-2026-05-20` | 2026-08-19 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
 | `qwen3.7-plus-2026-05-26` | 2026-08-31 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
 | `qwen3.8-2.4t-a95b` | 2026-11-11 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.8-max` | 2026-10-31 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
+| `qwen3.8-max` | 2026-10-31 | 999,836 / 1,000,000 | Enabled | Current screenshot source. |
+| `qwen3.8-27b` | 2026-11-16 | 999,933 / 1,000,000 | Enabled | Added from 2026-09-10 screenshot. |
+| `kimi-k3` | 2026-11-16 | 1,000,000 / 1,000,000 | Enabled | Added from 2026-09-10 screenshot. |
+| `qwen3.8-flash` | 2026-11-24 | 1,000,000 / 1,000,000 | Enabled | Added from 2026-09-10 screenshot. |
+| `qwen3.8-max-0902` | 2026-11-30 | 1,000,000 / 1,000,000 | Enabled | Added from 2026-09-10 screenshot. |
 
 ## Diagnostic Rerun Summary
 

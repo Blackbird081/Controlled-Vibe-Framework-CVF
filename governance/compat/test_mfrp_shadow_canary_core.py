@@ -11,8 +11,10 @@ from __future__ import annotations
 
 import json
 import hashlib
+import os
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -775,23 +777,32 @@ class P4RV4CreationOrderDerivationTests(unittest.TestCase):
         self.assertIn("derive_creation_after_trusted_commit", source)
 
     def test_stale_receipt_before_trusted_commit_is_ineligible_end_to_end(self):
-        """Causal end-to-end proof: the real on-disk pre-implementation
-        receipt (mtime well before the pinned TRUSTED_COMMIT's committer
-        time) must now be recorded ineligible when paired against
-        TRUSTED_COMMIT specifically on creation-order grounds -- not merely
-        unit-tested in isolation."""
-        receipt_path = REPO_ROOT / ".cvf/runtime/autorun-receipts/pre-implementation.json"
-        receipt_mtime = receipt_path.stat().st_mtime
+        """Real filesystem/Git timestamp seam, not full collector proof.
+
+        Only a disposable receipt is timestamped. Never depend on or alter
+        the operator's current production receipt to establish stale input.
+        """
         trusted_time = canary.git_commit_time(canary.TRUSTED_COMMIT)
         self.assertIsNotNone(trusted_time)
-        self.assertLess(
-            receipt_mtime, trusted_time,
-            msg="fixture assumption: pre-implementation receipt predates TRUSTED_COMMIT",
-        )
-        after, _evidence = canary.derive_creation_after_trusted_commit(
-            receipt_path, canary.TRUSTED_COMMIT
-        )
-        self.assertFalse(after)
+        with tempfile.TemporaryDirectory(prefix="cvf-creation-order-") as scratch:
+            receipt_path = Path(scratch) / "receipt.json"
+            receipt_path.write_text("{}", encoding="utf-8")
+            for offset, expected in ((-60, False), (60, True)):
+                with self.subTest(offset=offset):
+                    timestamp = trusted_time + offset
+                    os.utime(receipt_path, (timestamp, timestamp))
+                    observed_mtime = receipt_path.stat().st_mtime
+                    if offset < 0:
+                        self.assertLess(observed_mtime, trusted_time)
+                    else:
+                        self.assertGreater(observed_mtime, trusted_time)
+                    after, evidence = canary.derive_creation_after_trusted_commit(
+                        receipt_path, canary.TRUSTED_COMMIT
+                    )
+                    self.assertTrue(evidence["derived"])
+                    self.assertEqual(evidence["receiptMtimeEpoch"], observed_mtime)
+                    self.assertEqual(evidence["trustedCommitTimeEpoch"], trusted_time)
+                    self.assertEqual(after, expected)
 
 
 class P4RV5PerRowAuditManifestTests(unittest.TestCase):

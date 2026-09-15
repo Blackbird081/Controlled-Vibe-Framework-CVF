@@ -209,12 +209,12 @@
         },
         {
           "path": "governance/compat/run_agent_autorun_workflow_gate.py",
-          "sha256": "cee3f8e20f626f2105219d8aa7189b92ef03f646a67e0f7eebb85ce3d284a77b",
+          "sha256": "e0384bd3e188a3020c736ceb80d0d1a7a53725b14fa2f5ecfaad2fab560a3403",
           "evidenceRole": "per-checker PASS/FAIL CLI print plus v3 JSON receipt owner"
         },
         {
           "path": "governance/compat/agent_autorun_machine_verification.py",
-          "sha256": "8280a95e0985bd1273aa359afff455be1d18346e8b49cb92e9746922d835d022",
+          "sha256": "e3686ee11d7d52e644a7d68eea47dd744ec3a6e9970d503aed704f4e9c3cc9d5",
           "evidenceRole": "canonical v3 machine-verification receipt composition, digest, and integrity validation"
         },
         {

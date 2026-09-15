@@ -22,6 +22,8 @@ import {
   buildGovernedCommandAction,
   getGovernedCommandProfile,
   launchGovernedCommand,
+  MAX_CAPTURE_BYTES,
+  type GovernedCommandLauncherDependencies,
   type GovernedCommandRunRequest,
   type GovernedCommandRunResult,
   type GovernedCommandRunner,
@@ -463,6 +465,226 @@ describe('Delta-T3/T4A governed command launcher', () => {
     expect(response.stdout).not.toContain('super-secret-value');
     expect(response.stderr).not.toContain('hunter2');
     expect(state.execution.finalization?.status).toBe('FAILED');
+  });
+
+  it('masks a trusted caller-supplied known value composed through launchGovernedCommand', async () => {
+    const state = setup(
+      successfulRun({ stdout: 'deploy token abcdefgh12345 accepted', stderr: 'retry abcdefgh12345 later' }),
+      alwaysAllowEngine()
+    );
+    const response = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      { ...state.dependencies, knownSecretValues: ['abcdefgh12345'] }
+    );
+    expect(response.accepted).toBe(true);
+    expect(response.stdout).toContain('[REDACTED]');
+    expect(response.stderr).toContain('[REDACTED]');
+    expect(response.stdout).not.toContain('abcdefgh12345');
+    expect(response.stderr).not.toContain('abcdefgh12345');
+  });
+
+  it('masks an encoded occurrence of a known value composed through launchGovernedCommand', async () => {
+    const raw = 'secret value/with space';
+    const encoded = encodeURIComponent(raw);
+    const state = setup(successfulRun({ stdout: `query=${encoded}`, stderr: '' }), alwaysAllowEngine());
+    const response = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      { ...state.dependencies, knownSecretValues: [raw] }
+    );
+    expect(response.stdout).toContain('[REDACTED]');
+    expect(response.stdout).not.toContain(encoded);
+  });
+
+  it('preserves prior behavior when knownSecretValues is missing', async () => {
+    const state = setup(successfulRun({ stdout: 'plain ok output', stderr: '' }), alwaysAllowEngine());
+    const response = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      state.dependencies
+    );
+    expect(response.accepted).toBe(true);
+    expect(response.stdout).toBe('plain ok output');
+  });
+
+  it('preserves prior behavior when knownSecretValues is an empty list', async () => {
+    const state = setup(successfulRun({ stdout: 'plain ok output', stderr: '' }), alwaysAllowEngine());
+    const response = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      { ...state.dependencies, knownSecretValues: [] }
+    );
+    expect(response.accepted).toBe(true);
+    expect(response.stdout).toBe('plain ok output');
+  });
+
+  it('rejects an invalid knownSecretValues configuration before the runner executes, without echoing values, and before any persistence side effect', async () => {
+    const state = setup(successfulRun(), alwaysAllowEngine());
+    const response = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      { ...state.dependencies, knownSecretValues: ['short'] }
+    );
+    expect(response.accepted).toBe(false);
+    expect(response.error?.code).toBe('KNOWN_VALUE_TOO_SHORT');
+    expect(state.run).not.toHaveBeenCalled();
+    expect(JSON.stringify(response)).not.toContain('short');
+    // Rejected before ANY side effect: no preflight audit entry persisted,
+    // no receipt marker claimed, no execution intent begun. This is the
+    // "before side effects/runner execution" ordering the work order's
+    // Required Implementation Contract item 2 requires, not merely
+    // "runner not called".
+    expect(state.admission.entries).toHaveLength(0);
+    expect(state.admission.markers).toHaveLength(0);
+    expect(state.execution.intent).toBeNull();
+  });
+
+  it('masks known-value occurrences at the exact MAX_CAPTURE_BYTES capture boundary, both fully inside and truncated by the runner', async () => {
+    // The response is redactText(maskKnownValues(runResult.stdout, ...)).slice(0, MAX_CAPTURE_BYTES).
+    // In real use, `runResult.stdout` itself is already runner-truncated to
+    // at most MAX_CAPTURE_BYTES BEFORE masking ever sees it (DirectGovernedCommandRunner's
+    // appendBounded enforces this at the child-process pipe). The test
+    // fixture bypasses the real runner, so it must reproduce that same
+    // pre-truncation explicitly to exercise the real boundary, rather than
+    // handing the launcher a longer string than any real runner would ever
+    // produce (which would let masking see bytes that never actually reach
+    // it in production, silently proving nothing about the ceiling).
+    const knownValue = 'boundary-secret-value-9x'; // 24 chars
+    const prefixLength = MAX_CAPTURE_BYTES - knownValue.length - 5;
+    const runnerTruncatedInside = ('p'.repeat(prefixLength) + knownValue + 'TAIL').slice(0, MAX_CAPTURE_BYTES);
+    const stateInside = setup(
+      successfulRun({ stdout: runnerTruncatedInside, stderr: '' }),
+      alwaysAllowEngine()
+    );
+    const responseInside = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      { ...stateInside.dependencies, knownSecretValues: [knownValue] }
+    );
+    expect(responseInside.stdout.length).toBeLessThanOrEqual(MAX_CAPTURE_BYTES);
+    expect(responseInside.stdout).toContain('[REDACTED]');
+    expect(responseInside.stdout).not.toContain(knownValue);
+    expect(responseInside.stdout.endsWith('TAIL')).toBe(true);
+
+    // The value's occurrence starts 12 characters before the runner's own
+    // MAX_CAPTURE_BYTES cutoff, so only its first 12 characters are ever
+    // captured; the runner-truncated fragment the launcher actually
+    // receives never contains the complete value.
+    const halfValueLength = Math.floor(knownValue.length / 2);
+    const straddlePrefixLength = MAX_CAPTURE_BYTES - halfValueLength;
+    const runnerTruncatedStraddle = ('q'.repeat(straddlePrefixLength) + knownValue).slice(0, MAX_CAPTURE_BYTES);
+    expect(runnerTruncatedStraddle.length).toBe(MAX_CAPTURE_BYTES);
+    expect(runnerTruncatedStraddle).not.toContain(knownValue); // sanity: fixture itself is truncated mid-value
+    const stateStraddle = setup(
+      successfulRun({ stdout: runnerTruncatedStraddle, stderr: '' }),
+      alwaysAllowEngine()
+    );
+    const responseStraddle = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      { ...stateStraddle.dependencies, knownSecretValues: [knownValue] }
+    );
+    // A value whose occurrence is only partially captured (the runner cut
+    // if off mid-value) is not a complete represented value within the
+    // captured output, so it is not masked and passes through unchanged --
+    // exactly the work order's stated limit ("Limits cover complete
+    // represented values ... A capture-truncated fragment is not
+    // automatically covered"), not a silently missed guarantee.
+    expect(responseStraddle.stdout.length).toBe(MAX_CAPTURE_BYTES);
+    expect(responseStraddle.stdout).toBe(runnerTruncatedStraddle);
+    expect(responseStraddle.stdout).not.toContain('[REDACTED]');
+  });
+
+  it('is unaffected by caller mutation of the knownSecretValues array while the launcher invocation is in flight', async () => {
+    // Required Implementation Contract item 2: "Caller-owned array mutation
+    // after entry cannot change this invocation." A prior test proved this
+    // for the synchronous snapshot step; this test proves it holds across
+    // a real awaited invocation, by mutating the SAME array reference the
+    // caller passed in while the runner's promise is still pending.
+    const knownValue = 'in-flight-mutation-secret1';
+    let markRunnerEntered!: () => void;
+    const runnerEntered = new Promise<void>(resolve => { markRunnerEntered = resolve; });
+    let releaseRunner: (() => void) | null = null;
+    const pendingRun = new Promise<void>((resolve) => {
+      releaseRunner = resolve;
+    });
+    const admission = new MemoryAdmissionStore();
+    const execution = new MemoryExecutionStore();
+    const approval = new MemoryApprovalPolicy();
+    const run = vi.fn(async (_request: GovernedCommandRunRequest) => {
+      markRunnerEntered();
+      await pendingRun;
+      return successfulRun({ stdout: `plain ${knownValue} end`, stderr: 'plain a-second-value-added-later end' });
+    });
+    const runner: GovernedCommandRunner = { run };
+    const dependencies: GovernedCommandLauncherDependencies = {
+      engine: alwaysAllowEngine() as GuardRuntimeEngine,
+      preflightPersistence: admission,
+      receiptStore: admission,
+      executionStore: execution,
+      runner,
+      approvalPolicy: approval,
+      generateConsumptionId: () => 'in-flight-mutation-consumption',
+    };
+
+    const callerArray = [knownValue];
+    const responsePromise = launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      { ...dependencies, knownSecretValues: callerArray }
+    );
+
+    // Mutate the array the launcher was handed WHILE its invocation is
+    // still pending on the runner.
+    await runnerEntered;
+    expect(run).toHaveBeenCalledOnce();
+    callerArray.push('a-second-value-added-later');
+    callerArray[0] = 'mutated-out-from-under-the-call';
+
+    releaseRunner!();
+    const response = await responsePromise;
+
+    expect(response.stdout).toContain('[REDACTED]');
+    expect(response.stdout).not.toContain(knownValue);
+    expect(response.stdout).toBe('plain [REDACTED] end');
+    expect(response.stderr).toBe('plain a-second-value-added-later end');
+  });
+
+  it('applies known-value masking before existing shape-based credential redaction (composed order, not either pass alone)', async () => {
+    // The known value is masked first (abcdefgh12345 -> [REDACTED]); the
+    // existing shape pass then runs SECOND against that already-masked
+    // text and additionally collapses the whole `API_KEY=[REDACTED]` span
+    // per its own key=value pattern. Both passes ran, in the required
+    // order, on real launcher output -- this is what the acceptance table's
+    // "known-value masking FIRST, redactText SECOND" row requires evidence
+    // for, not string-inclusion helper timings.
+    const state = setup(
+      successfulRun({
+        exitCode: 1,
+        stdout: 'API_KEY=abcdefgh12345',
+        stderr: '',
+        diagnosticCode: 'COMMAND_EXIT_NONZERO',
+      }),
+      alwaysAllowEngine()
+    );
+    const response = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      { ...state.dependencies, knownSecretValues: ['abcdefgh12345'] }
+    );
+    expect(response.stdout).toBe('[REDACTED]');
+    expect(response.stdout).not.toContain('abcdefgh12345');
+  });
+
+  it('masks a known value that shape-based redaction alone would miss (no key= prefix)', async () => {
+    const state = setup(
+      successfulRun({ stdout: 'plain: abcdefgh12345 with no key prefix', stderr: '' }),
+      alwaysAllowEngine()
+    );
+    const withoutKnownValue = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      state.dependencies
+    );
+    expect(withoutKnownValue.stdout).toContain('abcdefgh12345');
+
+    const withKnownValue = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      { ...state.dependencies, knownSecretValues: ['abcdefgh12345'] }
+    );
+    expect(withKnownValue.stdout).not.toContain('abcdefgh12345');
+    expect(withKnownValue.stdout).toContain('[REDACTED]');
   });
 });
 

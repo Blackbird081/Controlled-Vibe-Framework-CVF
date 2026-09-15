@@ -377,6 +377,8 @@ def _validate_commit_mode_and_anchor_lifecycle(text: str) -> list[str]:
                 "dispatch/ready work order has non-commit `dispatchBaseHead`; "
                 "the orchestrator must set a real git commit hash before dispatch"
             )
+    issues.extend(_validate_execution_anchor_substitution(text))
+    issues.extend(_validate_dated_owner_dependency_discovery(text))
     return issues
 
 
@@ -589,3 +591,265 @@ def _validate_negative_search_collision_discipline(
 ) -> list[str]:
     _sync_source_validation_repo_root()
     return source_validation._validate_negative_search_collision_discipline(path, text, artifact_label)
+
+
+_WORKER_CAPTURE_ANCHOR_RE = re.compile(
+    r"(?im)^\s*(?:[-*]\s*)?executionBaseHead:\s*`?WORKER_MUST_CAPTURE_AT_START`?\s*$"
+)
+_PREIMPLEMENTATION_COMMAND_RE = re.compile(
+    r"(?im)^[^\n]*run_agent_autorun_workflow_gate\.py[^\n]*--phase\s+pre-implementation[^\n]*$"
+)
+_EXECUTION_ANCHOR_ACCEPTED_BASES = (
+    "<executionbasehead>",
+    "$executionbasehead",
+)
+_SYMBOLIC_DISPATCH_BASES = (
+    "dispatchbasehead",
+    "<dispatchbasehead>",
+    "$dispatchbasehead",
+)
+_DISPATCH_ANCHOR_VALUE_RE = re.compile(
+    r"(?im)^\s*(?:[-*]\s*)?(?:Dispatch base head|dispatchBaseHead):\s*`?([0-9a-f]{6,40})`?\s*$"
+)
+DATED_OWNER_DISCOVERY_MARKER = "Dated Owner Dependency Discovery"
+ACTIVE_WINDOW_REGISTRY_PATH = "governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json"
+BINDING_REFERENCE_ACTIVE_WINDOW = "BINDING_REFERENCE_ACTIVE_WINDOW"
+NOT_BINDING_REFERENCE_PREFIX = "NOT_BINDING_REFERENCE_WITH_REASON:"
+_DATED_REFERENCE_PATH_RE = re.compile(
+    r"docs/reference/[A-Za-z0-9_./-]*_\d{4}-\d{2}-\d{2}\.md"
+)
+_DATED_OWNER_SECTIONS = (
+    "Write Ownership",
+    "Required Artifact Manifest",
+    "Allowed Scope",
+    "Scope / Target / Owner Boundary",
+)
+
+
+def _validate_execution_anchor_substitution(text: str) -> list[str]:
+    """Reject an executable pre-implementation autorun command that consumes
+    the packet's own dispatch anchor when the packet declares that the worker
+    captures `executionBaseHead` at start.
+
+    ADIF-0056 recorded the live defect: a packet declared worker capture but
+    pinned an older dispatch anchor, so the worker's supposedly fresh range
+    silently replayed it. Only the real `## Verification Commands` section is
+    scanned, so the same string in explanatory prose or an example block is
+    not flagged. `<executionBaseHead>` and `$executionBaseHead` are the
+    accepted substitutable forms.
+    """
+    if not _WORKER_CAPTURE_ANCHOR_RE.search(text):
+        return []
+    commands_section = _extract_section(text, "Verification Commands")
+    if not commands_section:
+        return []
+
+    dispatch_base_values = {
+        match.group(1).lower() for match in _DISPATCH_ANCHOR_VALUE_RE.finditer(text)
+    }
+    issues: list[str] = []
+    for command_match in _PREIMPLEMENTATION_COMMAND_RE.finditer(commands_section):
+        command = command_match.group(0)
+        # A commented-out line is not an executable command; this validator
+        # only rejects commands a worker would actually run.
+        if command.lstrip().startswith(("#", "//", "<!--", "REM ", "rem ")):
+            continue
+        base_match = re.search(r"--base\s+(\S+)", command)
+        if not base_match:
+            continue
+        base_value = base_match.group(1)
+        lowered = base_value.strip("`").strip().lower()
+        if lowered in _EXECUTION_ANCHOR_ACCEPTED_BASES:
+            continue
+        if lowered in dispatch_base_values or lowered in _SYMBOLIC_DISPATCH_BASES:
+            issues.append(
+                "`## Verification Commands` pins an executable pre-implementation "
+                "`run_agent_autorun_workflow_gate.py --phase pre-implementation` command "
+                f"to the packet's dispatch anchor (`{base_value}`) while `executionBaseHead` "
+                "is `WORKER_MUST_CAPTURE_AT_START`; the worker range would silently replay "
+                "the stale dispatch anchor (ADIF-0056) - use `<executionBaseHead>` or "
+                "`$executionBaseHead` so the captured execution anchor is substituted"
+            )
+            break
+    return issues
+
+
+def _load_active_window_active_paths() -> tuple[set[str], str]:
+    """Return (activePaths, error). A malformed or unreadable registry yields
+    an error string so callers fail closed instead of accepting an
+    unverifiable binding claim."""
+    raw = _read_rel(ACTIVE_WINDOW_REGISTRY_PATH)
+    if not raw.strip():
+        return set(), f"`{ACTIVE_WINDOW_REGISTRY_PATH}` is missing or empty"
+    try:
+        data = json.loads(raw)
+    except (ValueError, TypeError) as exc:
+        return set(), f"`{ACTIVE_WINDOW_REGISTRY_PATH}` is not valid JSON ({exc})"
+    windows = data.get("windows") if isinstance(data, dict) else None
+    if not isinstance(windows, list):
+        return set(), f"`{ACTIVE_WINDOW_REGISTRY_PATH}` has no `windows` list"
+    active_paths: set[str] = set()
+    for index, window in enumerate(windows):
+        # Fail closed on any malformed entry. Skipping bad rows would let a
+        # registry with one valid row certify a binding claim while the rest
+        # of its content is unverifiable.
+        if not isinstance(window, dict):
+            return set(), (
+                f"`{ACTIVE_WINDOW_REGISTRY_PATH}` window {index} is not an object"
+            )
+        if "activePath" not in window:
+            return set(), (
+                f"`{ACTIVE_WINDOW_REGISTRY_PATH}` window {index} lacks `activePath`"
+            )
+        active_path = window.get("activePath")
+        if not isinstance(active_path, str) or not active_path.strip():
+            return set(), (
+                f"`{ACTIVE_WINDOW_REGISTRY_PATH}` window {index} has a non-string or "
+                "empty `activePath`"
+            )
+        active_paths.add(active_path.strip().replace("\\", "/"))
+    if not active_paths:
+        return set(), f"`{ACTIVE_WINDOW_REGISTRY_PATH}` declares no `activePath` entries"
+    return active_paths, ""
+
+
+def _owned_section_bodies(text: str) -> list[str]:
+    """Return the body of every heading that confers write ownership.
+
+    Headings are matched on their exact normalized title, not by substring,
+    so `Allowed Scope` does not also capture `Scope / Target / Owner
+    Boundary` (and vice versa) and unrelated sections such as
+    `Required First Reads` are never treated as ownership.
+    """
+    wanted = {heading.strip().lower() for heading in _DATED_OWNER_SECTIONS}
+    bodies: list[str] = []
+    current: list[str] | None = None
+    for line in text.splitlines():
+        heading_match = re.match(r"^(#{1,6})\s+(.*?)\s*$", line)
+        if heading_match:
+            if current is not None:
+                bodies.append("\n".join(current))
+                current = None
+            title = heading_match.group(2).strip().strip("#").strip()
+            title = re.sub(r"<!--.*?-->", "", title).strip()
+            if title.lower() in wanted:
+                current = []
+            continue
+        if current is not None:
+            current.append(line)
+    if current is not None:
+        bodies.append("\n".join(current))
+    return bodies
+
+
+def _owned_dated_reference_paths(text: str) -> list[str]:
+    """Collect dated `docs/reference/` owners named by any write-ownership or
+    allowed-scope section, deduplicated and in first-seen order."""
+    ordered: list[str] = []
+    seen: set[str] = set()
+    for section in _owned_section_bodies(text):
+        for match in _DATED_REFERENCE_PATH_RE.finditer(section):
+            candidate = match.group(0).replace("\\", "/")
+            if candidate not in seen:
+                seen.add(candidate)
+                ordered.append(candidate)
+    return ordered
+
+
+def _validate_dated_owner_dependency_discovery(text: str) -> list[str]:
+    """Require every dated `docs/reference/` owner in write ownership to be
+    reconciled exactly once in a `Dated Owner Dependency Discovery` table.
+
+    A `BINDING_REFERENCE_ACTIVE_WINDOW` row must match an `activePath` in the
+    active-window registry. Missing rows, duplicate contradictory rows, empty
+    non-binding reasons, and malformed registry data all fail closed. This
+    validator never mutates the registry.
+    """
+    owned = _owned_dated_reference_paths(text)
+    if not owned:
+        return []
+
+    section = _extract_section(text, DATED_OWNER_DISCOVERY_MARKER)
+    if not section.strip():
+        return [
+            "work order owns dated `docs/reference/` path(s) "
+            + ", ".join(f"`{path}`" for path in owned)
+            + f" but lacks a `## {DATED_OWNER_DISCOVERY_MARKER}` table; classify each "
+            f"owner as `{BINDING_REFERENCE_ACTIVE_WINDOW}` or "
+            f"`{NOT_BINDING_REFERENCE_PREFIX} <reason>` before manifest freeze"
+        ]
+
+    classifications: dict[str, set[str]] = {}
+    reasons: dict[str, set[str]] = {}
+    # Row counts are tracked separately from classification values so two
+    # identical rows are still rejected; a set of values alone cannot tell
+    # "declared once" from "declared twice the same way".
+    row_counts: dict[str, int] = {}
+    for row_line in section.splitlines():
+        if "|" not in row_line:
+            continue
+        path_match = _DATED_REFERENCE_PATH_RE.search(row_line)
+        if not path_match:
+            continue
+        row_path = path_match.group(0).replace("\\", "/")
+        row_counts[row_path] = row_counts.get(row_path, 0) + 1
+        if BINDING_REFERENCE_ACTIVE_WINDOW in row_line:
+            classifications.setdefault(row_path, set()).add(BINDING_REFERENCE_ACTIVE_WINDOW)
+        if NOT_BINDING_REFERENCE_PREFIX in row_line:
+            classifications.setdefault(row_path, set()).add(NOT_BINDING_REFERENCE_PREFIX)
+            _, _, tail = row_line.partition(NOT_BINDING_REFERENCE_PREFIX)
+            reasons.setdefault(row_path, set()).add(tail.split("|")[0].strip().strip("`").strip())
+
+    issues: list[str] = []
+    active_paths, registry_error = _load_active_window_active_paths()
+    if registry_error:
+        # The registry is the only source that can settle a dated-owner
+        # classification, so a malformed registry fails the whole discovery
+        # regardless of how individual rows are classified. Emitted once at
+        # packet level so multiple owners cannot multiply the same message.
+        issues.append(
+            f"`## {DATED_OWNER_DISCOVERY_MARKER}` cannot be verified because the "
+            f"active-window registry is unusable: {registry_error}; repair the registry "
+            "before freezing the write manifest"
+        )
+    for path in owned:
+        row_count = row_counts.get(path, 0)
+        found = classifications.get(path)
+        if row_count == 0 or not found:
+            issues.append(
+                f"`## {DATED_OWNER_DISCOVERY_MARKER}` omits owned dated reference `{path}`; "
+                f"add exactly one row classifying it `{BINDING_REFERENCE_ACTIVE_WINDOW}` or "
+                f"`{NOT_BINDING_REFERENCE_PREFIX} <reason>`"
+            )
+            continue
+        if row_count > 1:
+            issues.append(
+                f"`## {DATED_OWNER_DISCOVERY_MARKER}` declares `{path}` in {row_count} rows; "
+                "each owned dated reference needs exactly one row, including when the "
+                "duplicate rows carry the same classification"
+            )
+            continue
+        if len(found) > 1:
+            issues.append(
+                f"`## {DATED_OWNER_DISCOVERY_MARKER}` classifies `{path}` as both "
+                f"`{BINDING_REFERENCE_ACTIVE_WINDOW}` and `{NOT_BINDING_REFERENCE_PREFIX}`; "
+                "each dated owner needs exactly one non-contradictory classification"
+            )
+            continue
+        if BINDING_REFERENCE_ACTIVE_WINDOW in found:
+            if registry_error:
+                # Already reported once at packet level above; do not repeat
+                # the same registry error for every binding owner.
+                continue
+            if path not in active_paths:
+                issues.append(
+                    f"`{path}` is classified `{BINDING_REFERENCE_ACTIVE_WINDOW}` but is not an "
+                    f"`activePath` in `{ACTIVE_WINDOW_REGISTRY_PATH}`; register the owner first "
+                    "or classify it non-binding with a reason"
+                )
+        elif not any(reason for reason in reasons.get(path, set())):
+            issues.append(
+                f"`{path}` uses `{NOT_BINDING_REFERENCE_PREFIX}` with an empty reason; "
+                "state why the dated owner is outside the binding-reference active window"
+            )
+    return issues

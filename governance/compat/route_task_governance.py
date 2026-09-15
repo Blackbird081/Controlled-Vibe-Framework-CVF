@@ -20,12 +20,43 @@ REQUIRED_KEYS = {
     "schemaVersion", "taskId", "requestedProfile", "classification", "pathFamilies",
     "claims", "requiredProof", "operatorCheckpoints", "forbiddenEffects", "sourceEvidence",
 }
-OPTIONAL_KEYS = {"trancheValue"}
+OPTIONAL_KEYS = {"trancheValue", "initialIntakeAdmission"}
 CLASSIFICATION_KEYS = {
     "taskKind", "authorityImpact", "externalEffect", "dataSensitivity",
     "reversibility", "sourceScale", "delegation", "novelty",
 }
 SOURCE_EVIDENCE_KEYS = {"selectedFilesFullyRead", "corpusReceiptRef", "completenessClaimChanged"}
+
+INITIAL_INTAKE_ADMISSION_KEYS = {
+    "stage", "plannedReceiptPath", "acceptanceDisposition", "nextStageAuthority", "unknownEvidencePolicy",
+}
+INITIAL_INTAKE_STAGE = "INITIAL_ACQUISITION_SURVEY"
+INITIAL_INTAKE_ACCEPTANCE_DISPOSITION = "NO_ABSORPTION_ACCEPTANCE"
+INITIAL_INTAKE_NEXT_STAGE_AUTHORITY = "SEPARATE_REVIEWED_WORK_ORDER"
+INITIAL_INTAKE_UNKNOWN_EVIDENCE_POLICY = "PRESERVE_UNKNOWN"
+INITIAL_INTAKE_PATH_FAMILIES = (
+    "docs/audits/",
+    "docs/reviews/",
+    "docs/work_orders/",
+    "docs/baselines/",
+    ".private_reference/source_mirrors/",
+)
+INITIAL_INTAKE_CONTINUITY_PATHS = {
+    "CVF_SESSION",
+    "CVF_SESSION_MEMORY.md",
+    "AGENT_HANDOFF_V60_2026-09-08.md",
+}
+INITIAL_INTAKE_VALID_CLASSIFICATION = {
+    "taskKind": {"EXTERNAL_ABSORPTION"},
+    "authorityImpact": {"NONE", "USES_EXISTING_OWNER"},
+    "externalEffect": {"NONE", "LOCAL_REVERSIBLE", "NETWORK_READ"},
+    "dataSensitivity": {"PUBLIC", "PRIVATE_REPO"},
+    "reversibility": {"READ_ONLY", "GIT_REVERSIBLE"},
+    "sourceScale": {"NAMED_FILES", "BOUNDED_CLUSTER", "CORPUS"},
+    "delegation": {"SINGLE_ROLE", "MULTI_ROLE_NO_COMMIT"},
+    "novelty": {"KNOWN_PATTERN", "OWNER_COMPOSITION"},
+}
+INITIAL_INTAKE_MIN_PROFILE = "P3_ELEVATED"
 
 TRANCHE_VALUE_KEYS = {
     "outcomeConsumer", "severity", "findingEvidenceState", "rootCauseIdentity",
@@ -77,15 +108,67 @@ def _safe_repo_path_family(value: str) -> bool:
     return bool(parts) and all(part not in {"", ".", ".."} for part in parts)
 
 
+def _safe_planned_receipt_path(value: Any) -> bool:
+    if not isinstance(value, str) or not value or len(value) > 256:
+        return False
+    if any(ord(char) < 32 for char in value):
+        return False
+    if "\\" in value or value.startswith("/") or "//" in value or re.match(r"^[A-Za-z]:", value):
+        return False
+    if not _safe_repo_path_family(value):
+        return False
+    if not (value.endswith(".json") or value.endswith(".md")):
+        return False
+    return any(value == family.rstrip("/") or value.startswith(family) for family in ("docs/audits/", "docs/reviews/"))
+
+
+def _within_declared_path_families(path: str, path_families: list[str]) -> bool:
+    return any(
+        isinstance(family, str) and (path == family.rstrip("/") or path.startswith(family.rstrip("/") + "/"))
+        for family in path_families
+    )
+
+
+def _validate_initial_intake_admission(record: Any) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(record, dict) or set(record) != INITIAL_INTAKE_ADMISSION_KEYS:
+        return ["initialIntakeAdmission keys do not match the closed five-field shape"]
+    if record.get("stage") != INITIAL_INTAKE_STAGE:
+        errors.append("initialIntakeAdmission.stage must be INITIAL_ACQUISITION_SURVEY")
+    if not _safe_planned_receipt_path(record.get("plannedReceiptPath")):
+        errors.append("initialIntakeAdmission.plannedReceiptPath must be a safe docs/audits or docs/reviews .json or .md path")
+    if record.get("acceptanceDisposition") != INITIAL_INTAKE_ACCEPTANCE_DISPOSITION:
+        errors.append("initialIntakeAdmission.acceptanceDisposition must be NO_ABSORPTION_ACCEPTANCE")
+    if record.get("nextStageAuthority") != INITIAL_INTAKE_NEXT_STAGE_AUTHORITY:
+        errors.append("initialIntakeAdmission.nextStageAuthority must be SEPARATE_REVIEWED_WORK_ORDER")
+    if record.get("unknownEvidencePolicy") != INITIAL_INTAKE_UNKNOWN_EVIDENCE_POLICY:
+        errors.append("initialIntakeAdmission.unknownEvidencePolicy must be PRESERVE_UNKNOWN")
+    return errors
+
+
+def _is_valid_initial_intake_classification(classification: dict[str, Any]) -> bool:
+    return all(classification.get(key) in values for key, values in INITIAL_INTAKE_VALID_CLASSIFICATION.items())
+
+
+def _within_initial_intake_path_families(path: str) -> bool:
+    if path in INITIAL_INTAKE_CONTINUITY_PATHS or path.startswith("CVF_SESSION/"):
+        return True
+    return any(path == family.rstrip("/") or path.startswith(family) for family in INITIAL_INTAKE_PATH_FAMILIES)
+
+
 def validate_manifest(manifest: Any, registry: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if not isinstance(manifest, dict):
         return ["manifest must be an object"]
     present_keys = set(manifest)
     if not REQUIRED_KEYS.issubset(present_keys) or not present_keys.issubset(REQUIRED_KEYS | OPTIONAL_KEYS):
-        errors.append("manifest keys do not match the v1 closed shape plus optional trancheValue")
+        errors.append("manifest keys do not match the v1 closed shape plus optional trancheValue or initialIntakeAdmission")
     if "trancheValue" in manifest:
         errors.extend(_validate_tranche_value(manifest["trancheValue"]))
+    if "initialIntakeAdmission" in manifest:
+        if "trancheValue" in manifest:
+            errors.append("initialIntakeAdmission must not be combined with trancheValue")
+        errors.extend(_validate_initial_intake_admission(manifest["initialIntakeAdmission"]))
     if manifest.get("schemaVersion") != MANIFEST_VERSION:
         errors.append("unsupported manifest schemaVersion")
     task_id = manifest.get("taskId")
@@ -320,6 +403,34 @@ def route_manifest(manifest: Any, registry: dict[str, Any] | None = None, truste
             minimum = _profile_max(minimum, rule["profile"])
             triggers.append(rule["trigger"])
 
+    initial_intake = manifest.get("initialIntakeAdmission")
+    initial_intake_active = False
+    if initial_intake is not None:
+        initial_intake_errors: list[str] = []
+        if not _is_valid_initial_intake_classification(classification):
+            initial_intake_errors.append("initialIntakeAdmission classification is outside the permitted initial-stage set")
+        if manifest["sourceEvidence"]["selectedFilesFullyRead"] or manifest["sourceEvidence"]["completenessClaimChanged"]:
+            initial_intake_errors.append("initialIntakeAdmission cannot combine with full-read or completeness-claim-changed evidence")
+        if not all(_within_initial_intake_path_families(path) for path in manifest["pathFamilies"]):
+            initial_intake_errors.append("initialIntakeAdmission pathFamilies must be confined to the declared initial-stage path families")
+        if PROFILE_ORDER.index(manifest["requestedProfile"]) < PROFILE_ORDER.index(INITIAL_INTAKE_MIN_PROFILE):
+            initial_intake_errors.append("initialIntakeAdmission requires requestedProfile at least P3_ELEVATED")
+        corpus_receipt_ref = manifest["sourceEvidence"]["corpusReceiptRef"]
+        if isinstance(corpus_receipt_ref, str) and corpus_receipt_ref.strip() == "":
+            initial_intake_errors.append("initialIntakeAdmission rejects a blank or whitespace-only corpusReceiptRef")
+        if (
+            isinstance(initial_intake, dict)
+            and isinstance(initial_intake.get("plannedReceiptPath"), str)
+            and _safe_planned_receipt_path(initial_intake.get("plannedReceiptPath"))
+            and not _within_declared_path_families(initial_intake["plannedReceiptPath"], manifest["pathFamilies"])
+        ):
+            initial_intake_errors.append("initialIntakeAdmission.plannedReceiptPath must fall within a declared pathFamilies entry")
+        if initial_intake_errors:
+            return _rejected_receipt(manifest, initial_intake_errors, registry)
+        initial_intake_active = True
+        minimum = _profile_max(minimum, INITIAL_INTAKE_MIN_PROFILE)
+        triggers.append("INITIAL_INTAKE_ADMISSION_P3_FLOOR")
+
     contradiction_errors: list[str] = []
     risky_path = any(
         any(token in path.lower() for token in ("runtime/", "provider", "deploy", "workflow", "installer", "migration"))
@@ -327,9 +438,14 @@ def route_manifest(manifest: Any, registry: dict[str, Any] | None = None, truste
     )
     if risky_path and classification["externalEffect"] == "NONE" and classification["taskKind"] not in {"DOC_CHANGE", "EXTERNAL_ABSORPTION"}:
         contradiction_errors.append("declared NONE externalEffect contradicts a runtime/provider/deploy path family")
-    if classification["taskKind"] == "EXTERNAL_ABSORPTION" and classification["sourceScale"] in {"NAMED_FILES", "BOUNDED_CLUSTER"} and not manifest["sourceEvidence"]["selectedFilesFullyRead"]:
+    if (
+        not initial_intake_active
+        and classification["taskKind"] == "EXTERNAL_ABSORPTION"
+        and classification["sourceScale"] in {"NAMED_FILES", "BOUNDED_CLUSTER"}
+        and not manifest["sourceEvidence"]["selectedFilesFullyRead"]
+    ):
         contradiction_errors.append("selected-file absorption requires full semantic read confirmation")
-    if classification["sourceScale"] == "CORPUS" and not manifest["sourceEvidence"]["corpusReceiptRef"]:
+    if not initial_intake_active and classification["sourceScale"] == "CORPUS" and not manifest["sourceEvidence"]["corpusReceiptRef"]:
         contradiction_errors.append("corpus routing requires a corpus receipt reference")
     if classification["sourceScale"] != "CORPUS" and manifest["sourceEvidence"]["completenessClaimChanged"]:
         contradiction_errors.append("completenessClaimChanged requires sourceScale CORPUS")
@@ -367,6 +483,9 @@ def route_manifest(manifest: Any, registry: dict[str, Any] | None = None, truste
     for rule in registry["domainPathBundles"]:
         if any(path == rule["prefix"] or path.startswith(rule["prefix"]) for path in manifest["pathFamilies"]):
             selected.add(rule["bundle"])
+    if initial_intake_active:
+        selected.add("SOURCE_PROVENANCE")
+        selected.add("CORPUS_ACCOUNTING")
 
     selected_ordered = [bundle for bundle in registry["bundles"] if bundle in selected]
     skipped = {
@@ -390,6 +509,9 @@ def route_manifest(manifest: Any, registry: dict[str, Any] | None = None, truste
     }
     if "trancheValue" in manifest:
         receipt.update(evaluate_tranche_value(manifest["trancheValue"], trusted_authority))
+    if initial_intake_active:
+        receipt["initialIntakeDisposition"] = "INITIAL_EVIDENCE_COLLECTION_ONLY"
+        receipt["absorptionAcceptanceAuthorized"] = False
     return receipt
 
 

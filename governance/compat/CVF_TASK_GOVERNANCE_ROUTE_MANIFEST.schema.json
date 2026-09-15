@@ -105,6 +105,18 @@
           }
         }
       }
+    },
+    "initialIntakeAdmission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage", "plannedReceiptPath", "acceptanceDisposition", "nextStageAuthority", "unknownEvidencePolicy"],
+      "properties": {
+        "stage": {"const": "INITIAL_ACQUISITION_SURVEY"},
+        "plannedReceiptPath": {"type": "string", "minLength": 1, "maxLength": 256},
+        "acceptanceDisposition": {"const": "NO_ABSORPTION_ACCEPTANCE"},
+        "nextStageAuthority": {"const": "SEPARATE_REVIEWED_WORK_ORDER"},
+        "unknownEvidencePolicy": {"const": "PRESERVE_UNKNOWN"}
+      }
     }
   },
   "$defs": {

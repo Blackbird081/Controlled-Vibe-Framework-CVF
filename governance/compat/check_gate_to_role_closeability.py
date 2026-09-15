@@ -1,0 +1,335 @@
+#!/usr/bin/env python3
+"""Fail closed on uncloseable declared gate-to-role responsibility graphs.
+
+This checker validates packet topology, not implementation design. It applies
+to changed active work orders and to changed self-declared worker returns or
+completion reviews. Historical unchanged artifacts are not migrated.
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import subprocess
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+CONTRACT_HEADING = "## Gate-To-Role Closeability Contract"
+RECHECK_HEADING = "## Return-Time Closeability Recheck"
+ACTIVE_STATUSES = {"DISPATCH_READY", "READY", "ACTIVE", "APPROVED_FOR_EXECUTION"}
+REQUIRED_GATE_IDS = {
+    "authorization_review", "pre_dispatch_gate", "dispatch_continuity", "focused_checker_tests",
+    "adif_integrity", "pre_implementation_autorun", "worker_return_fast",
+    "reviewer_fast", "pre_commit", "terminal_completion_review",
+    "committed_range_closure", "continuity",
+}
+PHASE_ORDER = {
+    "PRE_DISPATCH": 0, "IMPLEMENTATION": 1, "WORKER_RETURN": 2,
+    "REVIEW": 3, "PRE_MATERIAL_COMMIT": 4, "POST_MATERIAL": 5,
+    "CONTINUITY_COMMIT": 6, "POST_MATERIAL_CLOSURE": 7,
+}
+TOPOLOGY_POLICIES = {
+    "BOUNDED_PATH_FAMILIES": "COVERED_BY_BOUNDED_PATH_FAMILY",
+    "EXACT_PATHS_WITH_NO_FORESEEABLE_SPLIT": "NOT_REQUIRED_UNDER_SIZE_BUDGET",
+}
+COMMIT_PHASES = {
+    "DISPATCH_COMMIT", "DISPATCH_CONTINUITY_COMMIT", "MATERIAL_COMMIT", "CORRECTIVE_MATERIAL_COMMIT",
+    "CONTINUITY_COMMIT",
+}
+
+
+@dataclass(frozen=True)
+class Violation:
+    path: str
+    code: str
+    message: str
+
+
+def _git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", *args], cwd=root, text=True, encoding="utf-8",
+        errors="replace", stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    )
+
+
+def changed_paths(base: str, head: str, root: Path = REPO_ROOT) -> tuple[str, ...]:
+    paths: set[str] = set()
+    if base and head:
+        result = _git(root, "diff", "--name-only", f"{base}..{head}")
+        if result.returncode:
+            raise RuntimeError(result.stderr.strip() or "git diff failed")
+        paths.update(result.stdout.splitlines())
+    for args in (("diff", "--name-only"), ("diff", "--cached", "--name-only"),
+                 ("ls-files", "--others", "--exclude-standard")):
+        result = _git(root, *args)
+        if result.returncode == 0:
+            paths.update(result.stdout.splitlines())
+    return tuple(sorted(p.replace("\\", "/") for p in paths if p.strip()))
+
+
+def _section(text: str, heading: str) -> str:
+    match = re.search(
+        rf"^{re.escape(heading)}\s*$([\s\S]*?)(?=^##\s+|\Z)", text,
+        re.MULTILINE,
+    )
+    return match.group(1).strip() if match else ""
+
+
+def _scalar(section: str, field: str) -> str:
+    match = re.search(rf"(?m)^\s*{re.escape(field)}:\s*(\S.*?)\s*$", section)
+    return match.group(1).strip().strip("`") if match else ""
+
+
+def _tables(section: str) -> list[list[list[str]]]:
+    tables: list[list[list[str]]] = []
+    current: list[list[str]] = []
+    for line in section.splitlines() + [""]:
+        if line.strip().startswith("|"):
+            current.append([cell.strip().strip("`") for cell in line.strip().strip("|").split("|")])
+        elif current:
+            if len(current) >= 2:
+                tables.append(current)
+            current = []
+    return tables
+
+
+def _graph_rows(section: str) -> tuple[list[dict[str, str]], list[str]]:
+    issues: list[str] = []
+    expected = ["gateId", "mustPassBy", "repairOwner", "repairPhase",
+                "mutationSurface", "topology", "commitOwner", "commitPhase",
+                "dependsOn"]
+    for table in _tables(section):
+        if table[0] != expected:
+            continue
+        rows: list[dict[str, str]] = []
+        for cells in table[2:]:
+            if len(cells) != len(expected):
+                issues.append("graph row has the wrong column count")
+                continue
+            rows.append(dict(zip(expected, cells)))
+        return rows, issues
+    return [], ["exact gate-to-role graph table is missing"]
+
+
+def _cycle(ids: set[str], dependencies: dict[str, list[str]]) -> bool:
+    visiting: set[str] = set()
+    visited: set[str] = set()
+
+    def visit(node: str) -> bool:
+        if node in visiting:
+            return True
+        if node in visited:
+            return False
+        visiting.add(node)
+        if any(visit(dep) for dep in dependencies.get(node, []) if dep in ids):
+            return True
+        visiting.remove(node)
+        visited.add(node)
+        return False
+
+    return any(visit(node) for node in ids)
+
+
+def check_work_order(path: str, text: str) -> list[Violation]:
+    violations: list[Violation] = []
+    status = re.search(r"(?m)^Status:\s*([A-Z0-9_]+)\s*$", text)
+    if not status or status.group(1) not in ACTIVE_STATUSES:
+        return violations
+    section = _section(text, CONTRACT_HEADING)
+    if not section:
+        return [Violation(path, "contract_missing", f"missing `{CONTRACT_HEADING}`")]
+    expected_scalars = {
+        "closeabilityContractVersion": "cvf.gate-role-closeability@1.0.0",
+        "closeabilityDisposition": "CLOSEABLE",
+        "returnTimeRecheck": "REQUIRED_BEFORE_REPAIR",
+    }
+    for field, expected in expected_scalars.items():
+        actual = _scalar(section, field)
+        if actual != expected:
+            violations.append(Violation(path, "contract_scalar_invalid", f"{field} must be {expected}"))
+    policy = _scalar(section, "implementationTopologyPolicy")
+    split = _scalar(section, "foreseeableFileSplitDisposition")
+    if policy not in TOPOLOGY_POLICIES or TOPOLOGY_POLICIES.get(policy) != split:
+        violations.append(Violation(path, "topology_policy_invalid", "topology policy and foreseeable split disposition are inconsistent"))
+
+    rows, row_issues = _graph_rows(section)
+    violations.extend(Violation(path, "graph_invalid", issue) for issue in row_issues)
+    ids = {row["gateId"] for row in rows if row.get("gateId")}
+    missing = sorted(REQUIRED_GATE_IDS - ids)
+    if missing:
+        violations.append(Violation(path, "mandatory_gates_missing", "missing mandatory gate ids: " + ", ".join(missing)))
+    if len(ids) != len(rows):
+        violations.append(Violation(path, "gate_id_duplicate", "gateId values must be non-empty and unique"))
+    dependencies: dict[str, list[str]] = {}
+    for row in rows:
+        gate = row["gateId"]
+        deadline = PHASE_ORDER.get(row["mustPassBy"])
+        repair_phase = PHASE_ORDER.get(row["repairPhase"])
+        if deadline is None or repair_phase is None:
+            violations.append(Violation(path, "phase_invalid", f"{gate} uses an unknown phase"))
+        elif repair_phase > deadline:
+            violations.append(Violation(path, "late_repair_owner", f"{gate} can be repaired only after its pass deadline"))
+        for field in ("repairOwner", "mutationSurface", "topology", "commitOwner"):
+            if not row[field] or row[field].upper() in {"NONE", "N/A", "TBD"}:
+                violations.append(Violation(path, "owner_surface_missing", f"{gate} has no usable {field}"))
+        if row["commitPhase"] not in COMMIT_PHASES:
+            violations.append(Violation(path, "commit_phase_invalid", f"{gate} has unknown commitPhase"))
+        deps = [] if row["dependsOn"].upper() == "NONE" else [d.strip() for d in re.split(r"[,;]", row["dependsOn"]) if d.strip()]
+        dependencies[gate] = deps
+        unknown = sorted(set(deps) - ids)
+        if unknown:
+            violations.append(Violation(path, "dependency_unknown", f"{gate} depends on unknown gate(s): " + ", ".join(unknown)))
+
+    dispatch_continuity = next(
+        (row for row in rows if row.get("gateId") == "dispatch_continuity"),
+        None,
+    )
+    if dispatch_continuity is not None:
+        exact_fields = {
+            "mustPassBy": "IMPLEMENTATION",
+            "repairOwner": "session-sync-steward",
+            "repairPhase": "IMPLEMENTATION",
+            "topology": "EXACT_PATHS",
+            "commitOwner": "session-sync-steward",
+            "commitPhase": "DISPATCH_CONTINUITY_COMMIT",
+        }
+        for field, expected in exact_fields.items():
+            if dispatch_continuity.get(field) != expected:
+                violations.append(
+                    Violation(
+                        path,
+                        "dispatch_continuity_invalid",
+                        f"dispatch_continuity {field} must be {expected}",
+                    )
+                )
+        surface = dispatch_continuity.get("mutationSurface", "")
+        if not re.search(r"AGENT_HANDOFF[^\s;`]*\.md.*material-SHA marker", surface):
+            violations.append(
+                Violation(
+                    path,
+                    "dispatch_continuity_invalid",
+                    "dispatch_continuity mutationSurface must name an exact AGENT_HANDOFF material-SHA marker",
+                )
+            )
+        if dependencies.get("dispatch_continuity") != ["pre_dispatch_gate"]:
+            violations.append(
+                Violation(
+                    path,
+                    "dispatch_continuity_invalid",
+                    "dispatch_continuity must depend directly on pre_dispatch_gate",
+                )
+            )
+
+    if "focused_checker_tests" in dependencies and "dispatch_continuity" not in dependencies["focused_checker_tests"]:
+        violations.append(
+            Violation(
+                path,
+                "dispatch_continuity_bypassed",
+                "focused_checker_tests must depend on dispatch_continuity before implementation proof proceeds",
+            )
+        )
+
+    continuity = next((row for row in rows if row.get("gateId") == "continuity"), None)
+    if continuity is not None:
+        exact_fields = {
+            "mustPassBy": "CONTINUITY_COMMIT",
+            "repairOwner": "session-sync-steward",
+            "repairPhase": "CONTINUITY_COMMIT",
+            "commitOwner": "session-sync-steward",
+            "commitPhase": "CONTINUITY_COMMIT",
+        }
+        for field, expected in exact_fields.items():
+            if continuity.get(field) != expected:
+                violations.append(Violation(path, "terminal_continuity_invalid", f"continuity {field} must be {expected}"))
+        if dependencies.get("continuity") != ["terminal_completion_review"]:
+            violations.append(Violation(path, "terminal_continuity_invalid", "continuity must depend directly on terminal_completion_review"))
+
+    if "committed_range_closure" in dependencies and dependencies["committed_range_closure"] != ["continuity"]:
+        violations.append(
+            Violation(
+                path,
+                "post_material_continuity_bypassed",
+                "committed_range_closure must depend directly on continuity so GC-020 can record the material SHA before clean split-range closure",
+            )
+        )
+    if _cycle(ids, dependencies):
+        violations.append(Violation(path, "dependency_cycle", "gate dependency graph contains a cycle"))
+    return violations
+
+
+def check_recheck(path: str, text: str) -> list[Violation]:
+    applicable = (
+        re.search(r"(?mi)^Self-declared worker-return artifact:\s*yes\s*$", text)
+        or re.search(r"(?mi)^docType:\s*completion_review\s*$", text)
+    )
+    if not applicable:
+        return []
+    section = _section(text, RECHECK_HEADING)
+    if not section:
+        return [Violation(path, "return_recheck_missing", f"missing `{RECHECK_HEADING}`")]
+    disposition = _scalar(section, "closeabilityDisposition")
+    blockers = _scalar(section, "outsideAuthorityBlockers")
+    route = _scalar(section, "nextRepairRoute")
+    redispatch = _scalar(section, "workerRedispatchAllowed")
+    issues: list[Violation] = []
+    if disposition not in {"CLOSEABLE", "UNCLOSEABLE_PACKET_CONTRADICTION"}:
+        issues.append(Violation(path, "return_disposition_invalid", "closeabilityDisposition is invalid"))
+    if disposition == "CLOSEABLE" and blockers != "NONE":
+        issues.append(Violation(path, "closeable_has_blockers", "CLOSEABLE requires outsideAuthorityBlockers: NONE"))
+    if disposition == "UNCLOSEABLE_PACKET_CONTRADICTION":
+        if blockers in {"", "NONE"}:
+            issues.append(Violation(path, "contradiction_without_blocker", "packet contradiction requires a named blocker"))
+        if redispatch != "NO":
+            issues.append(Violation(path, "contradictory_redispatch", "worker redispatch must be NO for an uncloseable packet"))
+        if route not in {"CONSOLIDATED_ORCHESTRATOR_AMENDMENT", "OPERATOR_ESCALATION", "REVIEWER_LOCAL_REPAIR"}:
+            issues.append(Violation(path, "repair_route_invalid", "uncloseable packet requires one controlled repair route"))
+    if redispatch not in {"YES", "NO"}:
+        issues.append(Violation(path, "redispatch_value_invalid", "workerRedispatchAllowed must be YES or NO"))
+    return issues
+
+
+def evaluate(base: str, head: str, root: Path = REPO_ROOT) -> list[Violation]:
+    violations: list[Violation] = []
+    for path in changed_paths(base, head, root):
+        full = root / path
+        if not full.is_file() or not path.endswith(".md"):
+            continue
+        text = full.read_text(encoding="utf-8", errors="replace")
+        if path.startswith("docs/work_orders/"):
+            violations.extend(check_work_order(path, text))
+        if path.startswith("docs/reviews/"):
+            violations.extend(check_recheck(path, text))
+    return sorted(violations, key=lambda item: (item.path, item.code, item.message))
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--base", default="HEAD")
+    parser.add_argument("--head", default="HEAD")
+    parser.add_argument(
+        "--repo-root",
+        type=Path,
+        default=REPO_ROOT,
+        help="Git worktree to evaluate (defaults to the checker repository).",
+    )
+    parser.add_argument("--enforce", action="store_true")
+    args = parser.parse_args()
+    repo_root = args.repo_root.resolve()
+    if not (repo_root / ".git").exists():
+        parser.error(f"--repo-root is not a Git worktree: {repo_root}")
+    violations = evaluate(args.base, args.head, repo_root)
+    print("=== CVF Gate-To-Role Closeability Guard ===")
+    print(f"Violations: {len(violations)}")
+    for item in violations:
+        print(f"- {item.path} [{item.code}]: {item.message}")
+    if violations and args.enforce:
+        print("VIOLATION - repair responsibility topology before dispatch or redispatch.")
+        return 2
+    print("COMPLIANT" if not violations else "ADVISORY")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

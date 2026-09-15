@@ -108,7 +108,7 @@ these columns:
 - Runtime, provider, public, production, release, MCP, or workspace readiness
   claims require current CVF proof.
 
-## Typed Absorption Candidate Contract (Protocol 1.2.0)
+## Typed Absorption Candidate Contract (Protocol 1.2.0, Compatible Through 1.3.0)
 
 The return manifest's `suggestedAbsorptionCandidates` array may carry two
 mutually exclusive, discriminated candidate variants once the manifest
@@ -239,15 +239,26 @@ externalReturnBinding.returnManifestSha256
 externalReturnBinding.candidateContractVersion
   == receipt.validatedCandidateContractVersion
 receipt.status == PASS
-receipt.validatedProtocolVersion == 1.2.0
+receipt.validatedProtocolVersion in {1.2.0, 1.3.0}
 receipt.validatedCandidateContractVersion == 1
 ```
 
+Protocol `1.3.0` is `ADDITIVE_MINOR_WITH_LEGACY_READ_ALIAS` over `1.2.0` per
+`CVF_EXTERNAL_AGENT_PROTOCOL_REPRESENTATION_CONTRACT.md`: it adds the detached
+`DETACHED_IMPLEMENTATION_PROPOSAL` working mode and `executionClass` field
+without changing this candidate contract, the return schema
+`cvf.externalAgentReturn.v1`, or any existing required field. A validated
+`1.3.0` receipt therefore satisfies this binding exactly as a `1.2.0` receipt
+does; the strict `candidateContractVersion == 1` and exact
+`returnManifestSha256` equality requirements are unchanged and unweakened.
+
 A legacy or candidate-unaware `PASS` receipt remains historical evidence but
-cannot open typed Local reconciliation. `implementationAuthorized: false` is
-an artifact invariant of every reconciliation row; Operator selection, owner
-binding, and Work Order existence remain distinct from implementation
-authority and do not themselves authorize implementation.
+cannot open typed Local reconciliation. A receipt whose
+`validatedProtocolVersion` is outside `{1.2.0, 1.3.0}` also cannot open typed
+Local reconciliation. `implementationAuthorized: false` is an artifact
+invariant of every reconciliation row; Operator selection, owner binding, and
+Work Order existence remain distinct from implementation authority and do not
+themselves authorize implementation.
 
 ## External Knowledge Intake Routing
 

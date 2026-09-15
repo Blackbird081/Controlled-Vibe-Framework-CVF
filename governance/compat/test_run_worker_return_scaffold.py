@@ -233,7 +233,7 @@ class WorkerReturnScaffoldTests(unittest.TestCase):
         section_start = text.index("## P4 Automatic Evidence Observation Block")
         section_end = text.index("## Claim Boundary", section_start)
         section = text[section_start:section_end]
-        self.assertIn("p4ObservationEligibility: NO", section)
+        self.assertIn("p4ObservationEligibility: AUTO", section)
         for field in (
             "p4ObservationPhase",
             "p4HardObligationLocator",
@@ -245,7 +245,7 @@ class WorkerReturnScaffoldTests(unittest.TestCase):
     def test_p4_observation_block_appears_in_fast_doc_profile_too(self):
         text = scaffold.build_scaffold("Fast Doc Worker Return", scaffold.FAST_DOC_PROFILE)
         self.assertIn("## P4 Automatic Evidence Observation Block", text)
-        self.assertIn("p4ObservationEligibility: NO", text)
+        self.assertIn("p4ObservationEligibility: AUTO", text)
 
     def test_p4_observation_block_is_byte_identical_across_generators(self):
         """Both worker-return generators must emit byte-equivalent optional
@@ -256,10 +256,85 @@ class WorkerReturnScaffoldTests(unittest.TestCase):
         text = scaffold.build_scaffold("Example Worker Return")
         heading = "## P4 Automatic Evidence Observation Block\n"
         start = text.index(heading) + len(heading)
-        end = text.index("## Claim Boundary", start)
+        end = text.index("## Architecture Readiness Echo", start)
         run_scaffold_fields = text[start:end].strip("\n") + "\n"
         skeleton_fields = skeleton.p4_observation_block_fields().strip("\n") + "\n"
         self.assertEqual(run_scaffold_fields, skeleton_fields)
+
+    def test_architecture_readiness_echo_present_with_default_not_applicable(self):
+        text = scaffold.build_scaffold("Example Worker Return")
+        self.assertIn("## Architecture Readiness Echo", text)
+        section_start = text.index("## Architecture Readiness Echo")
+        section_end = text.index("## Claim Boundary", section_start)
+        section = text[section_start:section_end]
+        self.assertIn(
+            "architectureMatrixSchema: NOT_APPLICABLE_WITH_REASON:", section
+        )
+        for field in (
+            "architectureMatrixCanonicalDigest",
+            "architectureSemanticReviewPath",
+            "architectureSemanticReviewCommit",
+            "architectureSemanticReviewFileSha256",
+            "architectureBindingEchoDisposition",
+        ):
+            self.assertIn(f"{field}: N/A with reason", section)
+
+    def test_architecture_readiness_echo_appears_in_fast_doc_profile_too(self):
+        text = scaffold.build_scaffold("Fast Doc Worker Return", scaffold.FAST_DOC_PROFILE)
+        self.assertIn("## Architecture Readiness Echo", text)
+        self.assertIn("architectureMatrixSchema: NOT_APPLICABLE_WITH_REASON:", text)
+
+    def test_architecture_readiness_echo_is_byte_identical_across_generators(self):
+        """DARA-T2: both worker-return generators must emit byte-equivalent
+        optional Architecture Readiness Echo field bodies, mirroring the
+        P4-C1 Scaffold Metadata Contract pattern for the new echo block."""
+        import build_worker_return_skeleton_scaffold as skeleton
+
+        text = scaffold.build_scaffold("Example Worker Return")
+        heading = "## Architecture Readiness Echo\n"
+        start = text.index(heading) + len(heading)
+        end = text.index("## Claim Boundary", start)
+        run_scaffold_fields = text[start:end].strip("\n") + "\n"
+        skeleton_fields = skeleton.architecture_echo_block_fields().strip("\n") + "\n"
+        self.assertEqual(run_scaffold_fields, skeleton_fields)
+
+    def test_architecture_readiness_echo_never_fabricates_accepted_state(self):
+        """The default scaffold echo must never claim an accepted matrix
+        exists; it must use NOT_APPLICABLE/N/A tokens only, never EXACT_MATCH
+        or a fabricated digest/commit/sha value."""
+        text = scaffold.build_scaffold("Example Worker Return")
+        section_start = text.index("## Architecture Readiness Echo")
+        section_end = text.index("## Claim Boundary", section_start)
+        section = text[section_start:section_end]
+        self.assertNotIn("EXACT_MATCH", section)
+        self.assertNotIn("architectureMatrixCanonicalDigest: PLACEHOLDER", section)
+
+    def test_blocked_identity_drift_echo_disposition_rejects_dispatch(self) -> None:
+        """DARA-T2 echo contract: a work order carrying
+        architectureBindingEchoDisposition: BLOCKED_IDENTITY_DRIFT (via
+        NOT_APPLICABLE_ACCEPTED_DESIGN_ECHO) must be rejected by the dispatch-quality
+        validator, proving that drift blocks dispatch rather than silently passing."""
+        import sys
+        import os
+        sys.path.insert(0, os.path.dirname(__file__))
+        import check_work_order_dispatch_quality as dispatch_quality
+
+        drift_text = (
+            "dispatchSurface: EXTERNAL_AGENT_CLI_MCP\n"
+            "Architecture-Readiness Admission: NOT_APPLICABLE_ACCEPTED_DESIGN_ECHO\n"
+            "architectureMatrixCanonicalDigest: aaaa1111bbbb2222cccc3333dddd4444eeee5555ffff6666aaaa1111bbbb2222\n"
+            "architectureSemanticReviewPath: docs/reviews/CVF_DARA_T2_R1_ROOT_CONTRACT_AND_MANIFEST_AMENDMENT_REVIEW_2026-09-07.md\n"
+            "architectureSemanticReviewCommit: 1316ea7340541ab8e675c5b1965f5a1ff3ef52d0\n"
+            "architectureBindingEchoDisposition: BLOCKED_IDENTITY_DRIFT\n"
+        )
+        issues = dispatch_quality._validate_architecture_readiness_admission(
+            "docs/work_orders/test.md", drift_text
+        )
+        self.assertTrue(issues, "expected BLOCKED_IDENTITY_DRIFT to produce a blocking issue")
+        self.assertTrue(
+            any("BLOCKED_IDENTITY_DRIFT" in i for i in issues),
+            f"expected BLOCKED_IDENTITY_DRIFT mention in issues, got: {issues}",
+        )
 
     def test_cli_requires_exactly_one_action(self):
         self.assertEqual(scaffold.main([]), 2)

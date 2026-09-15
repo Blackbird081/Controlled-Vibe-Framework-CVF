@@ -83,6 +83,12 @@ class ActiveArchiveHygieneTests(unittest.TestCase):
             / "reference"
             / "CVF_WORKER_AUTONOMY_DISPATCH_PROMPT_STANDARD_2026-06-01.md"
         ).write_text("active standard\n", encoding="utf-8")
+        (
+            self.repo_root
+            / "docs"
+            / "reference"
+            / "CVF_AGENT_INSTRUCTION_CARRIER_ROUTING_INDEX_2026-08-11.md"
+        ).write_text("active routing index\n", encoding="utf-8")
 
     def tearDown(self) -> None:
         self.temp_dir.cleanup()
@@ -167,6 +173,24 @@ class ActiveArchiveHygieneTests(unittest.TestCase):
         ), patch.object(
             MODULE, "ACTIVE_ARCHIVE_BASELINE_PATH", self.repo_root / "governance" / "compat" / "CVF_ACTIVE_ARCHIVE_BASELINE.json"
         ), patch.object(MODULE, "_changed_paths", return_value={active_standard}):
+            report = MODULE.build_report(max_stale=10, fail_on_changed_stale=True)
+
+        self.assertTrue(report["compliant"])
+        self.assertEqual(report["changedStaleCount"], 0)
+
+    def test_instruction_carrier_routing_index_is_permanent_active_reference(self) -> None:
+        active_index = (
+            "docs/reference/CVF_AGENT_INSTRUCTION_CARRIER_ROUTING_INDEX_2026-08-11.md"
+        )
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root), patch.object(
+            MODULE, "ACTIVE_WINDOW_REGISTRY_PATH", self.repo_root / "governance" / "compat" / "CVF_ACTIVE_WINDOW_REGISTRY.json"
+        ), patch.object(
+            MODULE, "AUDIT_RETENTION_REGISTRY_PATH", self.repo_root / "governance" / "compat" / "CVF_AUDIT_RETENTION_REGISTRY.json"
+        ), patch.object(
+            MODULE, "REVIEW_RETENTION_REGISTRY_PATH", self.repo_root / "governance" / "compat" / "CVF_REVIEW_RETENTION_REGISTRY.json"
+        ), patch.object(
+            MODULE, "ACTIVE_ARCHIVE_BASELINE_PATH", self.repo_root / "governance" / "compat" / "CVF_ACTIVE_ARCHIVE_BASELINE.json"
+        ), patch.object(MODULE, "_changed_paths", return_value={active_index}):
             report = MODULE.build_report(max_stale=10, fail_on_changed_stale=True)
 
         self.assertTrue(report["compliant"])

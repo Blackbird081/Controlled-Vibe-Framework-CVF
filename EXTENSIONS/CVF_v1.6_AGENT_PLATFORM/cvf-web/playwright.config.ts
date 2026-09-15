@@ -28,7 +28,11 @@ export default defineConfig({
         timeout: 30_000,
     },
     use: {
-        baseURL: process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${PLAYWRIGHT_PORT}`,
+        // ADIF-0035: keep browser navigation, Auth.js callbacks, and the
+        // Playwright request context on one canonical host. Mixing localhost
+        // and 127.0.0.1 splits cookies/origins and can strand useSession() in
+        // its client bootstrap path under the live release suite.
+        baseURL: process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${PLAYWRIGHT_PORT}`,
         trace: 'retain-on-failure',
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',

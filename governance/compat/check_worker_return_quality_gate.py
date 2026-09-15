@@ -16,6 +16,36 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
+# Keep the ordinary/legacy checker startup free of the evidence module.
+# Import once, only after an applicable packet or a registered index is seen.
+EvidenceReadinessError = ValueError
+
+def _evidence_module():
+    import importlib
+    sys.path.insert(0, str(Path(__file__).resolve().parent)) if str(Path(__file__).resolve().parent) not in sys.path else None
+    return importlib.import_module("worker_evidence_readiness")
+
+def evaluate_worker_return(**kwargs):
+    return _evidence_module().evaluate_worker_return(**kwargs)
+
+def binding_sections(text):
+    return _evidence_module().binding_sections(text)
+
+def parse_binding_fields(text):
+    return _evidence_module().parse_binding_fields(text)
+
+def parse_strict_json(text, **kwargs):
+    return _evidence_module().parse_strict_json(text, **kwargs)
+
+def resolve_contained_path(root, path):
+    return _evidence_module().resolve_contained_path(root, path)
+
+def _default_resolver_for(pin, root):
+    return _evidence_module()._default_resolver_for(pin, root)
+
+def _wer_section(text, heading):
+    return _evidence_module()._section(text, heading)
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 STANDARD_PATH = (
@@ -24,6 +54,14 @@ STANDARD_PATH = (
 )
 
 ELIGIBLE_PREFIX = "docs/reviews/"
+# Bounded declared index for the audit-only-drift reverse binding lookup
+# (requirement 7): maps a bound audit artifact path to the worker-return
+# path(s) whose evidence-readiness binding references it. This is a small,
+# self-declared sidecar -- never scanned/rebuilt from a full repository
+# search -- populated by `evaluate_worker_return` callers (or by hand) when
+# an evidence-readiness-applicable return is authored. Reading it costs one
+# bounded JSON read, not 3000+ Markdown reads.
+EVIDENCE_READINESS_AUDIT_INDEX_PATH = "governance/compat/evidence_readiness_audit_index.json"
 EXCLUDED_PATH_MARKERS = (
     "_COMPLETION_",
     "_CODEX_REBUTTAL_",
@@ -261,7 +299,24 @@ def _fast_doc_dispatch_issues(text: str) -> list[str]:
     ]
 
 
-def diagnose(path: str, text: str) -> Diagnostic:
+def diagnose(
+    path: str,
+    text: str,
+    *,
+    resolver_registry: "dict[tuple[str, str], object] | None" = None,
+) -> Diagnostic:
+    """Diagnose one worker-return path.
+
+    `resolver_registry` (F5 fix) is an optional shared `{(sourceRoot,
+    sourcePin): resolver}` map threaded down from `run()`. When supplied,
+    `_evidence_readiness_issues` reuses (or lazily constructs once and
+    caches) a resolver per distinct `(sourceRoot, sourcePin)` pair instead of
+    constructing a brand-new resolver -- with an empty cache -- on every
+    call. When omitted (e.g. a standalone `diagnose()` call from a test or
+    script), a fresh resolver is constructed per call exactly as before,
+    which stays correct, just not reused across a `run()` invocation.
+    """
+
     if not is_eligible_worker_return(path, text):
         return Diagnostic(path=path, eligible=False)
 
@@ -330,19 +385,355 @@ def diagnose(path: str, text: str) -> Diagnostic:
     if "WORKER_MUST_NOT_COMMIT honored" not in text and "BLOCKED_WITH_REASON" not in text:
         issues.append("no-commit statement must say `WORKER_MUST_NOT_COMMIT honored`")
 
+    issues.extend(_evidence_readiness_issues(text, path=path, resolver_registry=resolver_registry))
+
     return Diagnostic(path=path, eligible=True, issues=tuple(issues))
+
+
+def _dispatch_work_order_path(text: str) -> str | None:
+    match = re.search(r"(?m)^dispatchWorkOrder:\s*`([^`]+)`\s*$", text)
+    if not match:
+        return None
+    return _normalize(match.group(1))
+
+
+def _resolver_for_registry(
+    resolver_registry: "dict[tuple[str, str], object] | None", source_root: str, source_pin: str
+) -> object:
+    """Return a resolver for `(source_root, source_pin)`, reusing one already
+    in `resolver_registry` if present (F5 fix), or constructing a fresh one
+    and caching it into the registry when supplied. Without a registry,
+    constructs a fresh resolver every call (unchanged legacy behavior for
+    direct `evaluate_worker_return`/standalone `diagnose()` callers)."""
+
+    if resolver_registry is None:
+        return _default_resolver_for(source_pin, REPO_ROOT)
+    key = (source_root, source_pin)
+    resolver = resolver_registry.get(key)
+    if resolver is None:
+        resolver = _default_resolver_for(source_pin, REPO_ROOT)
+        resolver_registry[key] = resolver
+    return resolver
+
+
+def _source_pin_and_root_for_resolver(text: str) -> tuple[str, str] | None:
+    """Cheaply peek the binding's `sourceRoot`/`sourcePin` without running
+    the full validator, so `_evidence_readiness_issues` can pick (or build)
+    the correctly-keyed shared resolver before calling
+    `evaluate_worker_return`."""
+
+    binding_section = _wer_section(text, "## Evidence Readiness Binding")
+    if not binding_section:
+        return None
+    fields = parse_binding_fields(binding_section)
+    source_root = fields.get("sourceRoot", "")
+    source_pin = fields.get("sourcePin", "")
+    if not source_pin:
+        return None
+    return source_root, source_pin
+
+
+def _evidence_readiness_issues(
+    text: str,
+    *,
+    path: str | None = None,
+    resolver_registry: "dict[tuple[str, str], object] | None" = None,
+) -> list[str]:
+    """Reach the evidence-readiness validator for applicable returns.
+
+    Applicability is derived entirely from the cited dispatch work order
+    (a trusted upstream file), never from anything the return itself
+    asserts, so a worker cannot opt a covered task out by omission or by
+    tampering with its own return. Not applicable (no evidence-readiness
+    contract declared by the dispatch work order) costs one already-required
+    file read and zero extra Git calls.
+
+    F4 fix: whenever this successfully parses an applicable binding that
+    declares an `auditPath`, it registers the reverse `auditPath ->
+    workerReturnPath` mapping into the bounded audit index as a side effect
+    (see `_register_evidence_readiness_binding`), so a later audit-only
+    change automatically pulls this return back into re-diagnosis without
+    any hand-maintained index entry existing beforehand.
+
+    F5 fix: when the caller (`run()`, via `diagnose()`) supplies a shared
+    `resolver_registry`, the resolver for this binding's `(sourceRoot,
+    sourcePin)` is looked up/constructed-once in that registry and passed
+    through to `evaluate_worker_return` as `source_resolver`, so multiple
+    worker returns sharing the same `(sourceRoot, sourcePin)` within one
+    `run()` invocation reuse a single resolution pass instead of each
+    constructing its own resolver with an empty cache.
+    """
+
+    work_order_path = _dispatch_work_order_path(text)
+    if not work_order_path:
+        return []
+    work_order_text = _read(work_order_path)
+    if "evidenceReadinessContract: REQUIRED_V1" not in work_order_text:
+        return []
+
+    result = evaluate_worker_return(
+        return_text=text, work_order_text=work_order_text, repo_root=REPO_ROOT,
+        source_resolver_factory=lambda root, pin: _resolver_for_registry(resolver_registry, root, pin),
+    )
+    if not result.applicable:
+        return []
+    issues = [f"evidence readiness: {rendered}" for rendered in result.render_issues()]
+    if path:
+        registration_failures = [_register_evidence_readiness_binding(path, section) for section in binding_sections(text)]
+        registration_failure = "; ".join(f for f in registration_failures if f)
+        if registration_failure:
+            # F4 fix: a failed index read/write is no longer silently
+            # swallowed as a "non-fatal convenience side effect" -- it is
+            # surfaced as a visible issue on the return being diagnosed so a
+            # human sees the audit-only-drift coverage gap.
+            issues.append(f"evidence readiness: {registration_failure}")
+    return issues
+
+
+class _EvidenceReadinessIndexCorrupt(Exception):
+    """Raised internally when the audit index file exists but is malformed
+    (not valid JSON, or not a JSON object) -- distinct from the file simply
+    not existing yet (F4 fix)."""
+
+
+def _load_evidence_readiness_audit_index() -> dict[str, list[str]]:
+    """Read the small bounded audit-path -> worker-return-path(s) index.
+
+    A MISSING index file is legitimate and expected on first use -- returns
+    `{}` with no diagnostic. A PRESENT-BUT-MALFORMED index file (not valid
+    JSON, or a JSON value that is not an object) is a real integrity problem
+    (F4 fix): this raises `_EvidenceReadinessIndexCorrupt` instead of
+    silently returning `{}` indistinguishably from "no bindings registered",
+    so a caller that needs to know the difference (registration,
+    audit-only-drift lookup, or the top-level integrity check) can decide
+    how to react rather than losing the distinction entirely.
+    """
+
+    full = REPO_ROOT / EVIDENCE_READINESS_AUDIT_INDEX_PATH
+    if not full.is_file():
+        return {}
+    text = _read(EVIDENCE_READINESS_AUDIT_INDEX_PATH)
+    if not text.strip():
+        # An existing-but-empty file is ambiguous; treat as corrupt rather
+        # than silently equivalent to "file absent" -- a zero-byte index is
+        # never something this module itself writes (the writer always
+        # emits at least `{}\n`), so an empty file signals external damage.
+        raise _EvidenceReadinessIndexCorrupt("index file exists but is empty")
+    try:
+        import json
+
+        data = parse_strict_json(text, source_label="audit index")
+    except (ValueError, EvidenceReadinessError) as exc:
+        raise _EvidenceReadinessIndexCorrupt(f"index file is not valid JSON: {exc}") from exc
+    if not isinstance(data, dict):
+        raise _EvidenceReadinessIndexCorrupt("index file JSON top level is not an object")
+    result: dict[str, list[str]] = {}
+    for key, value in data.items():
+        if isinstance(value, str):
+            value = [value]
+        if not isinstance(value, list) or not value or any(not isinstance(v, str) for v in value):
+            raise _EvidenceReadinessIndexCorrupt("index entries must contain nonempty return-path lists")
+        try:
+            resolve_contained_path(REPO_ROOT, key)
+            for v in value:
+                resolve_contained_path(REPO_ROOT, v)
+        except EvidenceReadinessError as exc:
+            raise _EvidenceReadinessIndexCorrupt(str(exc)) from exc
+        result[key] = value
+    return result
+
+
+def _load_evidence_readiness_audit_index_safe() -> tuple[dict[str, list[str]], str | None]:
+    """Wrap `_load_evidence_readiness_audit_index`, converting a malformed
+    index into an explicit `(empty_dict, reason)` pair instead of letting the
+    exception propagate to every caller. Callers that must surface the
+    integrity problem (rather than merely proceed with empty coverage) use
+    the returned `reason`."""
+
+    try:
+        return _load_evidence_readiness_audit_index(), None
+    except _EvidenceReadinessIndexCorrupt as exc:
+        return {}, str(exc)
+
+
+def _evidence_readiness_audit_index_integrity() -> str | None:
+    """Return a diagnostic-ready issue string if the audit-readiness index
+    is present but malformed, else `None` (missing file or valid file both
+    return `None` -- neither is an integrity problem). Called once per
+    `run()` invocation so the malformed-index case is surfaced as a visible
+    issue on every diagnosed return in that run, rather than disappearing
+    silently (F4 fix)."""
+
+    _, reason = _load_evidence_readiness_audit_index_safe()
+    if reason is None:
+        return None
+    return (
+        "evidence readiness: audit-readiness index "
+        f"`{EVIDENCE_READINESS_AUDIT_INDEX_PATH}` could not be read ({reason}); "
+        "audit-only-drift coverage for this run may be incomplete"
+    )
+
+
+def _write_evidence_readiness_audit_index(index: dict[str, list[str]]) -> None:
+    """Persist the small bounded audit-path -> worker-return-path(s) index.
+
+    Deterministic JSON (sorted keys, sorted value lists) so repeated runs
+    produce a stable diff. This is the ONLY writer of this file; it is never
+    hand-maintained, closing F4's gap directly (a return whose author never
+    manually edited this file still gets audit-only-drift coverage).
+
+    Raises `OSError` on a write failure (disk full, permission denied,
+    concurrent-write race); the caller (`_register_evidence_readiness_binding`)
+    is responsible for turning that into a visible issue rather than
+    swallowing it (F4 fix) -- this function itself no longer decides that
+    policy so it stays a plain, honest write primitive.
+    """
+
+    import json
+
+    full = REPO_ROOT / EVIDENCE_READINESS_AUDIT_INDEX_PATH
+    full.parent.mkdir(parents=True, exist_ok=True)
+    serializable = {key: sorted(set(values)) for key, values in sorted(index.items())}
+    full.write_text(json.dumps(serializable, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _register_evidence_readiness_binding(worker_return_path: str, text: str) -> str | None:
+    """Side effect of evaluating an applicable evidence-readiness binding
+    (requirement 7): register `auditPath -> [workerReturnPath, ...]` in the
+    bounded declared index automatically, so the audit-only-drift reverse
+    lookup works without any human hand-maintaining the index file first.
+
+    Bounded: this only ever touches the one small index file plus the one
+    binding section already being diagnosed -- never a full-repository scan.
+
+    F4 fix: a read or write failure here is no longer silently swallowed.
+    Returns `None` on success (or a legitimate no-op, e.g. no `auditPath`
+    declared), or a human-readable reason string when the index could not be
+    read (malformed) or written (`OSError`) -- the caller
+    (`_evidence_readiness_issues`) surfaces that reason as a visible issue on
+    the return being diagnosed, so a human sees the coverage gap instead of
+    it being invisible.
+    """
+
+    binding_section = _wer_section(text, "## Evidence Readiness Binding")
+    if not binding_section:
+        return None
+    fields = parse_binding_fields(binding_section)
+    audit_path = fields.get("auditPath", "")
+    if not audit_path or "N/A" in audit_path.upper() or "TO_FILL" in audit_path.upper():
+        return None
+    audit_path = _normalize(audit_path)
+    worker_return_path = _normalize(worker_return_path)
+
+    index, load_reason = _load_evidence_readiness_audit_index_safe()
+    if load_reason is not None:
+        return f"audit-readiness index could not be read ({load_reason})"
+
+    existing = set(index.get(audit_path, []))
+    if worker_return_path in existing:
+        return None  # already registered; no write needed
+    existing.add(worker_return_path)
+    index[audit_path] = sorted(existing)
+    try:
+        _write_evidence_readiness_audit_index(index)
+    except OSError as exc:
+        return f"audit-readiness index could not be written ({exc})"
+    return None
+
+
+def _audit_only_drift_paths(changed: dict[str, set[str]]) -> set[str]:
+    """Bounded reverse-binding lookup (requirement 7): for every changed path
+    that is NOT itself an eligible worker return, check the small declared
+    index for worker-return paths bound to it as an audit artifact. Returns
+    the set of worker-return paths that must be re-diagnosed even though
+    their own Markdown bytes did not change this run.
+
+    F4 fix: uses the safe loader so a malformed index degrades to "no drift
+    hits this call" (bounded, same as before) rather than raising out of
+    this lookup; the malformed-index condition itself is surfaced separately
+    and once per `run()` via `_evidence_readiness_audit_index_integrity`, not
+    duplicated here per changed-path scan.
+    """
+
+    index, _reason = _load_evidence_readiness_audit_index_safe()
+    hits: set[str] = set()
+    for path in changed:
+        hits.update(index.get(path, ()))
+        if not path.endswith(".json"):
+            continue
+        try:
+            raw = _read(path)
+            if "workerReturnPath" not in raw:
+                continue
+            data = parse_strict_json(raw, source_label=path)
+            if isinstance(data, dict) and isinstance(data.get("workerReturnPath"), str):
+                target = data["workerReturnPath"]
+                resolve_contained_path(REPO_ROOT, target)
+                # Locator is routing data only: require the return to bind this audit.
+                if any(parse_binding_fields(s).get("auditPath") == path for s in binding_sections(_read(target))):
+                    hits.add(target)
+        except (ValueError, EvidenceReadinessError):
+            pass
+    return hits
 
 
 def run(base: str | None, head: str | None) -> list[Diagnostic]:
     diagnostics: list[Diagnostic] = []
     changed = get_changed_paths(base, head)
+    diagnosed_paths: set[str] = set()
+
+    # F5 fix: construct ONE resolver registry for this whole `run()`
+    # invocation and thread it through every `diagnose()` call below, so two
+    # (or more) worker returns sharing the same (sourceRoot, sourcePin)
+    # within this invocation reuse a single resolution pass instead of each
+    # `diagnose()` call constructing its own fresh, empty-cache resolver.
+    resolver_registry: dict[tuple[str, str], object] = {}
+
+    # F4 fix: surface a malformed/unwritable audit-readiness index as a
+    # visible diagnostic instead of it silently degrading to "no coverage".
+    # Read once for this invocation so every path below shares the same
+    # disclosed integrity status.
+    index_state = _evidence_readiness_audit_index_integrity()
+    if index_state is not None:
+        diagnostics.append(Diagnostic(path=EVIDENCE_READINESS_AUDIT_INDEX_PATH, eligible=True, issues=(index_state,)))
+
     for path, statuses in sorted(changed.items()):
         if not any(status.startswith(("A", "M", "R")) for status in statuses):
             continue
         text = _read(path)
-        d = diagnose(path, text)
+        d = diagnose(path, text, resolver_registry=resolver_registry)
+        diagnosed_paths.add(path)
         if d.eligible:
             diagnostics.append(d)
+
+    # Audit-only drift: the bound Markdown return did not change this run,
+    # but the audit artifact it references did. Re-diagnose those returns so
+    # a stale-digest / drifted-count defect cannot bypass validation just
+    # because the review packet's own bytes are untouched.
+    for worker_return_path in sorted(_audit_only_drift_paths(changed) - diagnosed_paths):
+        text = _read(worker_return_path)
+        if not text:
+            continue
+        d = diagnose(worker_return_path, text, resolver_registry=resolver_registry)
+        if d.eligible:
+            diagnostics.append(d)
+
+    # An opted-in audit cannot disappear when its index is removed. Recover
+    # through its reciprocal locator or emit a blocking coverage diagnostic.
+    index, _ = _load_evidence_readiness_audit_index_safe()
+    for path in changed:
+        if not path.endswith(".json") or path in index:
+            continue
+        try:
+            raw = _read(path)
+            if "cvf.evidenceAudit.v1" not in raw:
+                continue
+            data = parse_strict_json(raw, source_label=path)
+        except (ValueError, EvidenceReadinessError):
+            continue
+        if isinstance(data, dict) and data.get("schemaVersion") == "cvf.evidenceAudit.v1":
+            diagnostics.append(Diagnostic(path=path, eligible=True, issues=(
+                "evidence readiness: audit has no verified reverse binding; restore its workerReturnPath receipt or index",)))
     return diagnostics
 
 

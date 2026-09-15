@@ -154,6 +154,7 @@ def _validate_work_order(path: str, text: str) -> list[str]:
     issues.extend(_validate_no_empty_range_commands(text))
     issues.extend(_validate_accept_owner_map_coverage(text))
     issues.extend(_validate_runtime_freshness_claims(text))
+    issues.extend(_validate_architecture_readiness_admission(path, text))
 
     if re.search(r"install[\s\S]{0,120}always blocked|always blocked[\s\S]{0,120}install", text, re.IGNORECASE):
         issues.append("work order asserts `install` is always blocked; cite a source policy or map it to approval/escalation")
@@ -748,4 +749,207 @@ def _classify(changed_files: list[str], base_ref: str | None = None) -> dict[str
         "markerViolationCount": len(marker_violations),
         "compliant": not violations and not marker_violations,
     }
+
+def _validate_architecture_readiness_admission(path: str, text: str) -> list[str]:
+    """Applicability-gated pre-invocation architecture-readiness validator.
+
+    Fails closed on: missing/unclassified applicability declaration,
+    incomplete or malformed matrix rows, worker-authored machine
+    disposition, missing/stale semantic review binding, digest drift, and
+    the reviewer-recreation contradiction. Never itself decides semantic
+    correctness -- that remains reviewer-owned per DARA-T1.
+    """
+    _sync_source_validation_repo_root()
+    declaration = source_validation._architecture_readiness_declaration(text)
+    if declaration is None:
+        dispatch_surface = source_validation._extract_scalar_field(text, "dispatchSurface") or ""
+        if dispatch_surface == "EXTERNAL_AGENT_CLI_MCP":
+            return [
+                f"`{source_validation.ARCHITECTURE_READINESS_MARKER}` is absent from this "
+                "`EXTERNAL_AGENT_CLI_MCP` work order; dispatch requires exactly one declaration "
+                "(`BLOCKED_ARCHITECTURE_APPLICABILITY_UNCLASSIFIED`)"
+            ]
+        return []
+    _low_risk_prefix = source_validation.ARCHITECTURE_READINESS_LOW_RISK_PREFIX
+    if (declaration not in source_validation.ARCHITECTURE_READINESS_ALLOWED_DECLARATIONS
+            and not declaration.startswith(_low_risk_prefix)):
+        return [
+            f"`{source_validation.ARCHITECTURE_READINESS_MARKER}` has an unrecognized value `{declaration}`; "
+            f"use one of {', '.join(source_validation.ARCHITECTURE_READINESS_ALLOWED_DECLARATIONS)}"
+        ]
+
+    issues: list[str] = []
+
+    if declaration == source_validation.ARCHITECTURE_READINESS_BLOCKED_UNCLASSIFIED:
+        issues.append(
+            "work order declares `BLOCKED_ARCHITECTURE_APPLICABILITY_UNCLASSIFIED`; "
+            "resolve applicability before dispatch"
+        )
+        return issues
+
+    if declaration in source_validation.ARCHITECTURE_READINESS_NOT_APPLICABLE_TOKENS:
+        if declaration == "NOT_APPLICABLE_ACCEPTED_DESIGN_ECHO":
+            digest = source_validation._extract_scalar_field(text, "architectureMatrixCanonicalDigest")
+            review_path = source_validation._extract_scalar_field(text, "architectureSemanticReviewPath")
+            review_commit = source_validation._extract_scalar_field(text, "architectureSemanticReviewCommit")
+            review_sha = source_validation._extract_scalar_field(text, "architectureSemanticReviewFileSha256")
+            issues.extend(source_validation._validate_immutable_review_identity_fields(
+                review_path=review_path, review_commit=review_commit, review_sha=review_sha,
+                digest=digest, context_label="NOT_APPLICABLE_ACCEPTED_DESIGN_ECHO",
+            ))
+            echo_disposition = source_validation._extract_scalar_field(text, "architectureBindingEchoDisposition")
+            if not echo_disposition:
+                issues.append(
+                    "`NOT_APPLICABLE_ACCEPTED_DESIGN_ECHO` requires "
+                    "`architectureBindingEchoDisposition`"
+                )
+            elif echo_disposition not in source_validation.ARCHITECTURE_ECHO_DISPOSITION_VALUES:
+                issues.append(
+                    f"`architectureBindingEchoDisposition` has invalid value `{echo_disposition}`; "
+                    f"use one of {', '.join(sorted(source_validation.ARCHITECTURE_ECHO_DISPOSITION_VALUES))}"
+                )
+            elif echo_disposition != "EXACT_MATCH":
+                issues.append(
+                    f"work order echoes `architectureBindingEchoDisposition: {echo_disposition}`; "
+                    "the accepted architecture identity no longer matches and dispatch must not proceed"
+                )
+        return issues
+
+    if declaration.startswith(_low_risk_prefix):
+        reason = declaration[len(_low_risk_prefix):]
+        if not reason:
+            issues.append(
+                f"`{_low_risk_prefix}` requires a non-empty reason after the colon"
+            )
+        return issues
+
+    # declaration == REQUIRED: full matrix identity/coverage validation.
+    rows = source_validation._architecture_matrix_rows(text)
+    if not rows:
+        issues.append(
+            f"`{source_validation.ARCHITECTURE_READINESS_MARKER} {source_validation.ARCHITECTURE_READINESS_REQUIRED}` "
+            f"but no `## {source_validation.ARCHITECTURE_BINDING_MATRIX_HEADING}` table with the required "
+            f"`{source_validation.ARCHITECTURE_MATRIX_SCHEMA}` columns was found"
+        )
+        return issues
+
+    # R3-02: extract the writable manifest so row validation can constrain rollback paths.
+    writable_manifest = source_validation._extract_writable_manifest_paths(text) or None
+
+    seen_behavior_owner: dict[str, set[str]] = {}
+    for row in rows:
+        issues.extend(
+            source_validation._validate_architecture_matrix_row_identity(row, writable_manifest=writable_manifest)
+        )
+        behavior = row.get("behaviorIdentity", "").strip()
+        owner = row.get("canonicalOwnerPath", "").strip()
+        if behavior:
+            owners_for_behavior = seen_behavior_owner.setdefault(behavior, set())
+            if owner:
+                owners_for_behavior.add(owner)
+
+    for behavior, owners in seen_behavior_owner.items():
+        if len(owners) > 1:
+            issues.append(
+                f"architecture matrix declares duplicate `behaviorIdentity` `{behavior}` across "
+                f"distinct canonical owner paths: {', '.join(sorted(owners))}; one behavior must "
+                "have exactly one canonical owner"
+            )
+
+    declared_schema = source_validation._extract_scalar_field(text, "architectureMatrixSchema")
+    if declared_schema and declared_schema != source_validation.ARCHITECTURE_MATRIX_SCHEMA:
+        issues.append(
+            f"`architectureMatrixSchema` is `{declared_schema}`, expected `{source_validation.ARCHITECTURE_MATRIX_SCHEMA}`"
+        )
+
+    declared_row_count = source_validation._extract_scalar_field(text, "architectureMatrixRowCount")
+    if declared_row_count is not None:
+        try:
+            if int(declared_row_count) != len(rows):
+                issues.append(
+                    f"`architectureMatrixRowCount` is `{declared_row_count}` but the matrix has {len(rows)} row(s)"
+                )
+        except ValueError:
+            issues.append(f"`architectureMatrixRowCount` is not an integer: `{declared_row_count}`")
+
+    declared_digest = source_validation._extract_scalar_field(text, "architectureMatrixCanonicalDigest")
+    if declared_digest:
+        recomputed_digest = source_validation._architecture_matrix_canonical_digest(rows)
+        if declared_digest.lower() != recomputed_digest:
+            issues.append(
+                "`architectureMatrixCanonicalDigest` does not match the recomputed digest over the "
+                "immutable authoring preimage (criterionId..evidenceOutputPath); the matrix content "
+                "changed after the digest was bound"
+            )
+
+    for field_name in source_validation.ARCHITECTURE_MATRIX_SCALAR_FIELDS:
+        if source_validation._extract_scalar_field(text, field_name) is None:
+            issues.append(f"work order with `{source_validation.ARCHITECTURE_READINESS_REQUIRED}` matrix is missing scalar `{field_name}`")
+
+    semantic_disposition = source_validation._extract_scalar_field(text, "architectureSemanticDisposition")
+    review_path = source_validation._extract_scalar_field(text, "architectureSemanticReviewPath")
+    review_commit = source_validation._extract_scalar_field(text, "architectureSemanticReviewCommit")
+    review_sha = source_validation._extract_scalar_field(text, "architectureSemanticReviewFileSha256")
+
+    if semantic_disposition == "ACCEPTED_BOUNDED":
+        criterion_ids_for_review = [
+            row.get("criterionId", "").strip() for row in rows
+            if row.get("criterionId", "").strip()
+        ]
+        issues.extend(source_validation._validate_immutable_review_identity_fields(
+            review_path=review_path, review_commit=review_commit,
+            review_sha=review_sha,
+            digest=source_validation._extract_scalar_field(text, "architectureMatrixCanonicalDigest"),
+            criterion_ids=criterion_ids_for_review,
+            context_label="architectureSemanticDisposition: ACCEPTED_BOUNDED",
+        ))
+    elif semantic_disposition in (None, "", "PENDING_REVIEW"):
+        issues.append(
+            "work order declares `Architecture-Readiness Admission: REQUIRED` but "
+            "`architectureSemanticDisposition` is not `ACCEPTED_BOUNDED`; dispatch is blocked "
+            "(`BLOCKED_SEMANTIC_REVIEW_MISSING_OR_STALE`)"
+        )
+    elif semantic_disposition and semantic_disposition.startswith("REJECTED"):
+        issues.append(
+            f"work order declares `Architecture-Readiness Admission: REQUIRED` but "
+            f"`architectureSemanticDisposition` is `{semantic_disposition}`; dispatch is blocked"
+        )
+
+    usage_count = source_validation._extract_scalar_field(text, "cumulativeExternalInvocationCount")
+    ceiling = source_validation._extract_scalar_field(text, "externalInvocationCeiling")
+    if usage_count is None or ceiling is None:
+        issues.append(
+            "work order requires architecture readiness but is missing known "
+            "`cumulativeExternalInvocationCount`/`externalInvocationCeiling` usage evidence "
+            "(`BLOCKED_USAGE_UNKNOWN`)"
+        )
+    else:
+        try:
+            if int(usage_count) >= int(ceiling):
+                issues.append(
+                    f"`cumulativeExternalInvocationCount` ({usage_count}) is not strictly below "
+                    f"`externalInvocationCeiling` ({ceiling}) (`BLOCKED_INVOCATION_CEILING_REACHED`)"
+                )
+        except ValueError:
+            issues.append("`cumulativeExternalInvocationCount`/`externalInvocationCeiling` must be integers")
+
+    reviewer_boundary = source_validation._extract_scalar_field(text, "reviewerWorkBoundary")
+    if reviewer_boundary and reviewer_boundary != "EVALUATE_RETURNED_EVIDENCE_NOT_RECREATE_IMPLEMENTATION":
+        issues.append(
+            f"`reviewerWorkBoundary` is `{reviewer_boundary}`, expected "
+            "`EVALUATE_RETURNED_EVIDENCE_NOT_RECREATE_IMPLEMENTATION`"
+        )
+
+    if re.search(
+        r"machine\s+(?:PASS|pass)[\s\S]{0,200}\b(?:reviewer|human)\s+(?:will\s+)?re-?(?:create|do|implement|verify)",
+        text,
+        re.IGNORECASE,
+    ):
+        issues.append(
+            "work order combines a machine-PASS claim with reviewer-recreation language; "
+            "the reviewer must evaluate returned evidence, not recreate implementation "
+            "(`HT-12` forbidden pattern)"
+        )
+
+    return issues
 

@@ -17,6 +17,7 @@ from build_dispatch_packet_scaffold import (
     build_worker_return_skeleton,
     detect_triggers,
     main,
+    resolve_evidence_readiness_applicable,
     TRIGGER_FAMILIES,
 )
 from run_agent_automation_assist import (
@@ -366,6 +367,11 @@ class TestSourceIntakeGoldenFixture(unittest.TestCase):
     `check_semantic_convergence_control.py`'s own tests keeps the class
     default `include_scec_block=True`, so new work orders still emit a valid
     SCEC block by default per the SCEC-T1 scaffold requirement.
+
+    DARA-T2 note: `include_architecture_readiness_block=False` follows the
+    same established out-of-manifest-fixture pattern for this tranche's new
+    `## Architecture Readiness Admission` block; every other construction
+    site keeps the class default `True`.
     """
 
     GOLDEN_ARGS = dict(
@@ -377,6 +383,7 @@ class TestSourceIntakeGoldenFixture(unittest.TestCase):
         commit_mode="WORKER_MUST_NOT_COMMIT",
         dependencies=[],
         include_scec_block=False,
+        include_architecture_readiness_block=False,
     )
 
     def _golden_work_order(self) -> str:
@@ -470,7 +477,21 @@ class TestSourceIntakeGoldenFixture(unittest.TestCase):
 
 class TestWorkerReturnSkeleton(unittest.TestCase):
     """WOAS-R3: worker-return skeleton generation, golden fixture, CLI opt-in,
-    default-output stability, and KIOD-R8 marker-overmatch avoidance."""
+    default-output stability, and KIOD-R8 marker-overmatch avoidance.
+
+    DARA-T2 note: `include_architecture_readiness_echo=False` follows the
+    same established out-of-manifest-fixture pattern SCEC-T1 set for this
+    class's checked-in golden fixture
+    (`governance/compat/fixtures/woas_r3_worker_return_skeleton_golden.md`,
+    which this tranche's Required Artifact Manifest does not authorize
+    touching). Every other construction site keeps the default `True`, so
+    new worker-return skeletons still emit the echo block by default.
+
+    DARA-T2B note: `include_p4_observation_block=False` extends the same
+    out-of-manifest-fixture pattern to the P4 Automatic Evidence Observation
+    Block, which the checked-in golden fixture predates and does not
+    contain. Every other construction site keeps the default `True`.
+    """
 
     GOLDEN_ARGS = dict(
         packet_kind="generic-worker-dispatch",
@@ -480,6 +501,8 @@ class TestWorkerReturnSkeleton(unittest.TestCase):
         base="GOLDENFIXTUREBASEHEAD",
         commit_mode="WORKER_MUST_NOT_COMMIT",
         dependencies=[],
+        include_architecture_readiness_echo=False,
+        include_p4_observation_block=False,
     )
 
     def _golden_skeleton(self) -> str:
@@ -953,6 +976,75 @@ class TestScecBlockEmission(unittest.TestCase):
         work_order = build_work_order(args, detect_triggers(args))
         self.assertIn('"requiredDisposition": "ROOT_CONTRACT_REQUIRED"', work_order)
         self.assertIn('"successorScope": "INTEGRATED_ROOT_CONTRACT"', work_order)
+
+
+class TestArchitectureReadinessAdmissionScaffold(unittest.TestCase):
+    """DARA-T2: the dispatch scaffold must emit a checker-safe blocked
+    default for `Architecture-Readiness Admission` and never invent an
+    architecture matrix row for the author. External-surface dispatches get
+    the fail-closed unclassified default; internal-agent dispatches get the
+    excluded-from-ceiling default. Neither default may accidentally pass
+    the dispatch-quality architecture validator on its own."""
+
+    def test_external_agent_dispatch_gets_blocked_unclassified_default(self) -> None:
+        args = _base_args(dispatch_surface="EXTERNAL_AGENT_CLI_MCP")
+        work_order = build_work_order(args, detect_triggers(args))
+        self.assertIn("## Architecture Readiness Admission", work_order)
+        self.assertIn(
+            "Architecture-Readiness Admission: BLOCKED_ARCHITECTURE_APPLICABILITY_UNCLASSIFIED",
+            work_order,
+        )
+
+    def test_internal_agent_dispatch_gets_excluded_default(self) -> None:
+        args = _base_args(dispatch_surface="INTERNAL_AGENT")
+        work_order = build_work_order(args, detect_triggers(args))
+        self.assertIn(
+            "Architecture-Readiness Admission: NOT_APPLICABLE_INTERNAL_AGENT_WITH_REASON",
+            work_order,
+        )
+
+    def test_scaffold_never_emits_a_fabricated_architecture_binding_matrix(self) -> None:
+        """HT-08 at scaffold level: the generated packet must not contain a
+        real `## Architecture Binding Matrix` heading (a worker-selected or
+        invented matrix table); the reason prose may still name the heading
+        in backticks as documentation. The author must add a real matrix
+        deliberately after proving applicability."""
+        heading_pattern = re.compile(r"^##\s+Architecture Binding Matrix\s*$", re.MULTILINE)
+        for surface in ("EXTERNAL_AGENT_CLI_MCP", "INTERNAL_AGENT"):
+            args = _base_args(dispatch_surface=surface)
+            work_order = build_work_order(args, detect_triggers(args))
+            self.assertIsNone(heading_pattern.search(work_order))
+
+    def test_architecture_readiness_section_extracted_to_helper(self) -> None:
+        """R1-05 extraction regression: architecture_readiness_section must be importable
+        from build_dispatch_packet_architecture_readiness and must produce output identical
+        to the previously inlined _architecture_readiness_block function. The scaffold
+        must not define _architecture_readiness_block itself after extraction."""
+        import build_dispatch_packet_architecture_readiness as ar_helper
+        import build_dispatch_packet_scaffold as scaffold_mod
+
+        self.assertTrue(
+            hasattr(ar_helper, "architecture_readiness_section"),
+            "architecture_readiness_section must be exported from the helper module",
+        )
+        self.assertFalse(
+            hasattr(scaffold_mod, "_architecture_readiness_block"),
+            "_architecture_readiness_block must not remain in build_dispatch_packet_scaffold after extraction",
+        )
+        external_args = _base_args(dispatch_surface="EXTERNAL_AGENT_CLI_MCP")
+        section_lines = ar_helper.architecture_readiness_section(external_args)
+        self.assertTrue(section_lines, "helper must return non-empty list for external dispatch")
+        self.assertTrue(
+            any("BLOCKED_ARCHITECTURE_APPLICABILITY_UNCLASSIFIED" in line for line in section_lines)
+        )
+        excluded_args = _base_args(include_architecture_readiness_block=False)
+        self.assertEqual(
+            ar_helper.architecture_readiness_section(excluded_args),
+            [],
+            "helper must return [] when include_architecture_readiness_block=False",
+        )
+
+
 
 if __name__ == "__main__":
     unittest.main()

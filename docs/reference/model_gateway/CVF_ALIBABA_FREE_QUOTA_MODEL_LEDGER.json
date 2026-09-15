@@ -2,9 +2,9 @@
   "schemaVersion": "0.1.0",
   "artifact": "CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER",
   "status": "ACTIVE_REFERENCE",
-  "lastUpdated": "2026-08-15",
-  "captureDate": "2026-08-15",
-  "source": "operator-provided Alibaba Model Studio free-quota screenshots in the 2026-08-15 session; historical diagnostic results remain dated 2026-06-18",
+  "lastUpdated": "2026-09-10",
+  "captureDate": "2026-09-10",
+  "source": "operator-provided Alibaba Model Studio free-quota screenshots in the 2026-09-10 session; historical diagnostic results remain dated 2026-06-18",
   "defaultEndpointHostForCurrentKey": "dashscope-intl.aliyuncs.com",
   "nonEquivalentEndpointObservation": {
     "endpointHost": "dashscope.aliyuncs.com",
@@ -39,7 +39,7 @@
     {
       "modelCode": "qwen3.7-flash",
       "expirationDate": "2026-10-22",
-      "freeQuotaRemaining": 1000000,
+      "freeQuotaRemaining": 997560,
       "freeQuotaTotal": 1000000,
       "statusAtCapture": "Enabled"
     },
@@ -88,7 +88,7 @@
     {
       "modelCode": "glm-5.2",
       "expirationDate": "2026-09-23",
-      "freeQuotaRemaining": 1000000,
+      "freeQuotaRemaining": 798158,
       "freeQuotaTotal": 1000000,
       "statusAtCapture": "Enabled"
     },
@@ -102,7 +102,7 @@
     {
       "modelCode": "deepseek-v4-pro-0813",
       "expirationDate": "2026-11-12",
-      "freeQuotaRemaining": 1000000,
+      "freeQuotaRemaining": 999908,
       "freeQuotaTotal": 1000000,
       "statusAtCapture": "Enabled"
     },
@@ -130,6 +130,34 @@
     {
       "modelCode": "qwen3.8-max",
       "expirationDate": "2026-10-31",
+      "freeQuotaRemaining": 999836,
+      "freeQuotaTotal": 1000000,
+      "statusAtCapture": "Enabled"
+    },
+    {
+      "modelCode": "qwen3.8-27b",
+      "expirationDate": "2026-11-16",
+      "freeQuotaRemaining": 999933,
+      "freeQuotaTotal": 1000000,
+      "statusAtCapture": "Enabled"
+    },
+    {
+      "modelCode": "kimi-k3",
+      "expirationDate": "2026-11-16",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "statusAtCapture": "Enabled"
+    },
+    {
+      "modelCode": "qwen3.8-flash",
+      "expirationDate": "2026-11-24",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "statusAtCapture": "Enabled"
+    },
+    {
+      "modelCode": "qwen3.8-max-0902",
+      "expirationDate": "2026-11-30",
       "freeQuotaRemaining": 1000000,
       "freeQuotaTotal": 1000000,
       "statusAtCapture": "Enabled"

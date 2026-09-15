@@ -238,6 +238,113 @@ or legacy gate disposition. Omitted `trancheValue` manifests emit none of the
 `valueDisposition*` receipt fields and retain byte-equivalent prior routing
 semantics.
 
+## Initial-Acquisition-Survey Admission
+
+An optional, additive `initialIntakeAdmission` object may be declared on the
+manifest without changing the closed `cvf.taskGovernanceManifest.v1` shape.
+Its purpose is to remove the evidence-bootstrap contradiction that otherwise
+blocks the very first identity/acquisition pass over an external source: the
+ordinary selected-file rule requires `selectedFilesFullyRead: true` and the
+ordinary corpus rule requires a prior `corpusReceiptRef`, but neither can be
+true before any source has been read at all. This section grants no
+absorption acceptance and does not weaken either ordinary rule when the
+object is absent.
+
+### Closed Record Shape
+
+When present, `initialIntakeAdmission` is a closed object with exactly five
+top-level fields, each a fixed literal value: `stage`
+(`INITIAL_ACQUISITION_SURVEY`), `plannedReceiptPath` (a normalized
+repo-relative `.json` or `.md` output under `docs/audits/` or
+`docs/reviews/`, maximum 256 characters, no traversal, drive letter,
+backslash, control character or empty path segment), `acceptanceDisposition`
+(`NO_ABSORPTION_ACCEPTANCE`), `nextStageAuthority`
+(`SEPARATE_REVIEWED_WORK_ORDER`), and `unknownEvidencePolicy`
+(`PRESERVE_UNKNOWN`). Extra keys, missing keys, wrong types, or any other
+value reject the whole manifest. The exact JSON Schema shape is canonical in
+`governance/compat/CVF_TASK_GOVERNANCE_ROUTE_MANIFEST.schema.json`.
+
+`plannedReceiptPath` names a planned future output, not existing evidence;
+its existence on disk is never required at dispatch and it is never copied
+into `corpusReceiptRef` or treated as a prior receipt. It must also fall
+within at least one of the manifest's own declared `pathFamilies` entries
+(exact-file or segment-aware prefix match); a syntactically safe path under
+`docs/audits/` or `docs/reviews/` that the manifest did not itself declare as
+a path family is still rejected, so a receipt cannot be planned outside the
+scope the dispatching work order actually owns.
+
+### Admission Conditions
+
+The record activates the initial-stage bypass only when every one of these
+also holds on the same manifest: `taskKind` is `EXTERNAL_ABSORPTION`;
+`authorityImpact` is `NONE` or `USES_EXISTING_OWNER`; `externalEffect` is
+`NONE`, `LOCAL_REVERSIBLE`, or `NETWORK_READ`; `dataSensitivity` is `PUBLIC`
+or `PRIVATE_REPO`; `reversibility` is `READ_ONLY` or `GIT_REVERSIBLE`;
+`sourceScale` is `NAMED_FILES`, `BOUNDED_CLUSTER`, or `CORPUS`; `delegation`
+is `SINGLE_ROLE` or `MULTI_ROLE_NO_COMMIT`; `novelty` is `KNOWN_PATTERN` or
+`OWNER_COMPOSITION`; no `trancheValue` record is present; and
+`requestedProfile` is at least `P3_ELEVATED`. Any dimension outside this set,
+a declared `trancheValue`, a sub-`P3_ELEVATED` request, or a blank
+`corpusReceiptRef` string fails the manifest closed to `REJECTED_ESCALATED`
+rather than falling back to the more permissive ordinary-rule path.
+
+Every `pathFamilies` entry on an active initial-stage manifest must fall
+within `docs/audits/`, `docs/reviews/`, `docs/work_orders/`,
+`docs/baselines/`, `.private_reference/source_mirrors/`, or the explicit
+continuity paths `CVF_SESSION/`, `CVF_SESSION_MEMORY.md`, and
+`AGENT_HANDOFF_V60_2026-09-08.md`. The prefix check is segment-aware: a
+broader root such as bare `docs/` or `.private_reference/`, or any
+product-source, governance-code, hook, scripts, SDK, or public-workflow
+family, rejects the manifest even though the classification is otherwise a
+valid initial stage. Declaring a continuity path does not authorize a
+worker to mutate it; those paths remain dispatcher-owned.
+
+Truthful source evidence is still required: `selectedFilesFullyRead` must
+remain `false` and `completenessClaimChanged` must remain `false` on an
+active initial-stage manifest; either being `true` rejects rather than
+blending acquisition with acceptance. `corpusReceiptRef` may be `null` or a
+non-blank, non-whitespace-only prior reference retained for reuse; a blank
+string or a string containing only whitespace characters rejects the
+manifest inside the initial-stage admission path. This whitespace check is
+scoped to the initial-stage admission branch only; it does not change the
+existing plain-truthiness `corpusReceiptRef` check that ordinary manifests
+without `initialIntakeAdmission` have always used. No new interpretation of
+an old historical receipt is granted.
+
+### Receipt And Scope Limitation
+
+A successful initial-stage receipt carries `initialIntakeDisposition:
+INITIAL_EVIDENCE_COLLECTION_ONLY` and `absorptionAcceptanceAuthorized:
+false`, alongside the unchanged `selectiveExecutionAuthorized: false` and
+`legacyGateDisposition: RUN_FULL_LEGACY_BUNDLE`. The computed minimum
+profile is forced to at least `P3_ELEVATED`, and `SOURCE_PROVENANCE` and
+`CORPUS_ACCOUNTING` are always selected regardless of `sourceScale`.
+
+The initial stage permits only source identity/acquisition, immutable
+pinning, freshness/license evidence, inventory, and bounded representative
+reading. It cannot certify complete absorption, whole-repository semantic
+reading, final novelty/NO_NEW_VALUE, or authorize integration; the planned
+receipt at `plannedReceiptPath` must later record actual read depth,
+source/manifest/ledger evidence, exclusions, unknowns, and the next
+decision. Named observations and follow-up recommendations from the initial
+pass remain advisory until independent reviewer acceptance under a separate
+selected-absorption work order.
+
+This is a declaration validator, not a natural-language semantic verifier or
+a process sandbox: the schema and router cannot prove that a cited source was
+actually read, cannot prevent arbitrary shell operations outside this
+metadata contract, and cannot establish that a proposed receipt will in fact
+be produced. They validate only the shape and internal consistency of the
+declared manifest.
+
+### Rollback
+
+Removing this section removes only the optional `initialIntakeAdmission`
+schema property, its router validation/bypass branch, and its focused tests.
+It must leave the prior `cvf.taskGovernanceManifest.v1` manifest, the
+ordinary selected-file and corpus rejection rules, and the full legacy gate
+valid and unchanged for every manifest that omits `initialIntakeAdmission`.
+
 ## Verification
 
 ```powershell

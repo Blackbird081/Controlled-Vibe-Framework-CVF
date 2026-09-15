@@ -98,6 +98,58 @@ implementation begins. The declaration may live in an Agent Work Order, GC-018,
 roadmap, review packet, or completion packet, but it must be inspectable before
 closure.
 
+## Topology Invariance Rule
+
+The operator chooses execution topology. CVF does not mandate one agent, many
+agents, one model, many models, or a fixed role-to-model mapping. A role's
+responsibility, authority inputs, expected evidence/output, forbidden actions,
+transition gate, and escalation owner do not change because one actor holds
+several roles instead of several actors each holding one. Combining roles in
+one actor does not merge, erase, or weaken any individual role's duties or
+boundaries; it only changes how evidence separation and self-review disclosure
+are recorded, per
+`docs/reference/CVF_SINGLE_AGENT_MULTI_ROLE_CONTROL_STANDARD_2026-06-11.md`.
+
+A role may carry an operator-selected model assignment, but model identity is
+execution metadata, not canonical source authority. Shared CVF SOT - named
+paths, immutable anchors, receipts, diffs, tests, and accepted evidence in the
+shared workspace - does not force different models or agents to reach the same
+conclusion; CVF supplies common evidence and claim boundaries, not homogenized
+reasoning or output. Review validity comes from reconstructing the reviewed
+claim against current sources, receipts, diffs, tests, and authority
+boundaries; actor count alone neither proves nor disproves semantic validity.
+Review independence - same actor with phase-separated evidence, or different
+actor - is disclosed separately as assurance metadata and must never be
+silently inferred from a role label. If a governing risk rule, work order, or
+operator decision specifically requires a different actor, same-actor review
+cannot satisfy that routing gate; the same-actor evidence may remain candidate
+input, but the restriction itself is not a claim that actor count creates
+truth. No text under this matrix may claim universal runtime enforcement,
+model equivalence, automatic role routing, provider behavior, public
+readiness, or production readiness from these role-assignment rules alone.
+
+## Seven-Step Role Responsibility Matrix
+
+Every active role assignment for a task that uses the canonical seven-step
+loop (`README.md`, section `What CVF Is`) records responsibility, authority
+input, expected evidence/output, forbidden action, transition gate, and
+escalation owner for each stage the role participates in. An inactive role for
+a given stage is explicitly N/A with reason rather than omitted. `INTAKE`,
+`DESIGN`, `SPEC`, `WORK ORDER`, `BUILD`, `REVIEW`, and `FREEZE` remain distinct
+evidence phases even when one actor performs several of them in the same
+tranche; the matrix below is stage-first so a same-actor tranche can still show
+each phase's evidence separately.
+
+| Stage | Responsibility | Authority input | Evidence / output | Forbidden action | Transition gate | Escalation owner |
+|---|---|---|---|---|---|---|
+| `INTAKE` | Normalize the requested outcome, requester, and risk/cost/data/authority constraints | Operator request, prior accepted evidence, active handoff | Normalized intent, context, success criteria, risk signals, approval needs | Starting implementation before scope and risk are named | Risk and scope are classified and an owner is assigned per role lane | Operator |
+| `DESIGN` | Propose a solution shape without granting implementation authority | Accepted `INTAKE` evidence, architecture/design standards, reuse inventory | Architecture, trust/mutation boundaries, reuse choices, evidence plan, non-goals | Treating a design proposal as authorization to mutate files or call a provider | Design is inspectable and does not silently expand scope | Orchestrator, escalate to Operator for scope change |
+| `SPEC` | Turn the accepted design into a testable contract | Accepted `DESIGN` evidence, existing owner standards | Source-verifiable inputs/outputs/interfaces, invariants, negative cases, acceptance criteria | Leaving acceptance criteria implicit or unverifiable | Contract is falsifiable and traceable to source | Orchestrator |
+| `WORK ORDER` | Fix who may execute which bounded assignment and under what stop rules | Accepted `SPEC`, role assignment, write-ownership boundary | Base anchors, allowed scope, forbidden actions, provider/credential envelope when applicable, required evidence, commit ownership | Dispatching without base anchors, owned paths, or a return contract | Work order is dispatch-ready and gate-checked | Dispatcher, escalate to Operator for topology or risk change |
+| `BUILD` | Execute only the approved assignment inside owned paths | Dispatched work order, captured `executionBaseHead` | Scoped changes plus tests, diffs, diagnostics, receipts | Expanding scope, self-approving, committing when the dispatched commit mode forbids it, deploying without authorization | Required gates pass or a `BLOCKED_WITH_REASON` return is issued | Implementer/worker, escalate to Orchestrator/Reviewer on any stop condition |
+| `REVIEW` | Reconstruct the claim from source, diff, test, and gate evidence and issue a disposition | Worker return or implementation evidence, owned-path diff, gate receipts | Independent findings, bounded repair or return, evidence-backed disposition | Recreating the implementation instead of evaluating it; silently approving without evidence | One consolidated accept, bounded-repair, or return decision is recorded | Reviewer/closer, escalate to Operator for risk-routing conflicts |
+| `FREEZE` | Record the durable closure, limitations, and next move | Accepted `REVIEW` disposition, committed-range evidence | Closure anchors, claim boundary, unresolved limits, export status, reopen conditions | Claiming closure without committed-range evidence or without stating unresolved limits | Closure package is committed and inspectable, or explicitly parked | Reviewer/closer, escalate to Operator for successor-tranche authorization |
+
 ## Allowed And Forbidden Requirements
 
 Allowed:
@@ -229,6 +281,19 @@ A role assignment must stop or return to orchestrator if the assigned actor:
 - `docs/work_orders/CVF_AGENT_WORK_ORDER_AGENT_ROLE_ASSIGNMENT_2026-05-19.md`
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/delegation.contract.ts`
 - `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/agent.handoff.contract.ts`
+
+## Delta Execution Claim Boundary Control Block
+
+| Field | Disposition |
+|---|---|
+| claimScope | role-assignment and topology-invariance documentation standard only |
+| claimDisposition | `CLAIM_REJECTED`: no execution-control or runtime-enforcement claim |
+| receiptEvidence | `CLAIM_REJECTED_NO_RECEIPT`: no runtime receipt is created or consumed by this matrix |
+| actionEvidence | `CLAIM_REJECTED_NO_ACTION`: no protected action is executed or observed by this matrix |
+| invocationBoundary | N/A with reason: this is a role-assignment reference standard, not an execution invocation record |
+| interceptionBoundary | no IDE, shell, Git, filesystem, provider, CLI, MCP, or Web runtime interception claim |
+| claimLanguage | role-assignment and topology-invariance procedural rules only |
+| forbiddenExpansion | automatic role routing, model selection, universal runtime enforcement, provider/live/public/deploy claims |
 
 ## Claim Boundary
 

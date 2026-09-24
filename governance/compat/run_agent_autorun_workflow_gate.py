@@ -88,7 +88,13 @@ def _execute(index: int, command: GateCommand) -> GateResult:
 def _print_result(result: GateResult, *, show_success_output: bool) -> None:
     status = "PASS" if result.returncode == 0 else "FAIL"
     print(f"[{status}] {result.name} ({result.duration_s:.2f}s)")
-    if result.output and (show_success_output or result.returncode != 0):
+    bound_probe_findings = (
+        "governance/compat/check_independent_review_probe_admission.py" in result.command
+        and "--changed-lane-only" in result.command
+        and "--active-work-order" in result.command
+        and "Known findings outside the current changed lane:" in result.output
+    )
+    if result.output and (show_success_output or result.returncode != 0 or bound_probe_findings):
         print(result.output.rstrip())
 
 
@@ -156,19 +162,8 @@ def _receipt_path(phase: str, receipt_dir: Path) -> Path:
     return receipt_dir / f"{phase}.json"
 
 
-# --- MFRP-H0: conservative verifier-input snapshot and interpreter identity ---
-#
-# The v1 receipt bound only command argv (_command_manifest_hash) and the
-# current path-plan's changed files (_worktree_fingerprint). Neither binds the
-# byte content of a checker script edited in an earlier batch, a shared
-# imported module, a tracked config/registry/fixture, or the Python
-# interpreter executing the commands. H0 replaces those two fields with one
-# canonicalized snapshot of every Git-tracked file plus every untracked
-# non-ignored regular file, plus an explicit interpreter identity record. Any
-# unsafe, unreadable, non-regular, or unstable-during-read input makes reuse
-# unavailable rather than silently narrowing the snapshot.
-
-
+# MFRP-H0 binds tracked and untracked non-ignored inputs plus the interpreter.
+# Unsafe, unreadable, non-regular or unstable inputs disable receipt reuse.
 def _normalize_repo_relative_path(raw: str) -> str | None:
     """Return a safe, forward-slash-normalized, repository-relative path, or
     None if the path is absolute, escapes the repository root, or is
@@ -520,7 +515,11 @@ def _run_phase(
     max_workers: int = 6,
     reuse_valid_receipt: bool = False,
     receipt_dir: Path = DEFAULT_RECEIPT_DIR,
+    active_work_order: str | None = None,
 ) -> int:
+    if active_work_order is not None and (phase != "pre-implementation" or not active_work_order.strip()):
+        print("FAIL: --active-work-order requires a nonempty binding at pre-implementation only.")
+        return 1
     total_started = time.perf_counter()
     resolved_base = base or _default_base_for_phase(phase)
     print("=== CVF Agent Autorun Workflow Gate ===")
@@ -538,7 +537,10 @@ def _run_phase(
     print(f"Head anchor: {head_sha}")
 
     failures = 0
-    common_commands: list[GateCommand] = list(_common_commands(resolved_base, head))
+    common_commands: list[GateCommand] = list(
+        _common_commands(resolved_base, head, active_work_order=active_work_order)
+        if active_work_order is not None else _common_commands(resolved_base, head)
+    )
 
     # At pre-implementation, prepend phase-specific early-diagnostic commands
     # (forbidden filesystem state plus the AAF early diagnostics wire-in) so a
@@ -679,18 +681,9 @@ def _run_phase(
                     "committedEvidence resolution; refusing to certify a "
                     "target the just-run gate commands did not verify"
                 )
-            # During-run drift guard: prove the worktree stayed stable across
-            # this one execution (two nearby _worktree_fingerprint reads of
-            # the same base..head range must agree). This alone is NOT
-            # sufficient admission evidence -- see the historical-target
-            # check immediately below -- because a worktree can be
-            # perfectly stable throughout this run while nonetheless being
-            # parked at a commit whose evidence paths have already drifted
-            # away from headSha's own committed content (the A -> B -> C
-            # counterexample: worktree stable at C for the whole run, while
-            # the request asks to certify A..B). Stability across this run
-            # proves only "nothing else touched the worktree meanwhile", not
-            # "the worktree reflects headSha".
+            # During-run stability does not establish historical-target
+            # equivalence: a stable worktree at C may differ from requested B.
+            # The separate committed-target check below proves that equality.
             observed_fingerprint = context["worktreeFingerprint"]
             replay_fingerprint = _worktree_fingerprint(resolved_base, head)
             if observed_fingerprint != replay_fingerprint:
@@ -747,6 +740,8 @@ def main() -> int:
         help="Base commit/ref for range-aware gates. Defaults to HEAD for pre-dispatch/pre-implementation and HEAD~1 for pre-closure/pre-push.",
     )
     parser.add_argument("--head", default="HEAD", help="Head commit/ref for range-aware gates.")
+    parser.add_argument("--active-work-order", default=None,
+                        help="Bind the current work order for independent-probe admission at pre-implementation only.")
     parser.add_argument("--serial", action="store_true", help="Run commands serially for debugging.")
     parser.add_argument("--max-workers", type=int, default=6, help="Maximum parallel common checks.")
     parser.add_argument(
@@ -769,6 +764,7 @@ def main() -> int:
         max_workers=args.max_workers,
         reuse_valid_receipt=args.reuse_valid_receipt,
         receipt_dir=args.receipt_dir,
+        active_work_order=args.active_work_order,
     )
 
 

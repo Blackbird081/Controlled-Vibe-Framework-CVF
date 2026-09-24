@@ -2,10 +2,10 @@
   "schemaVersion": "cvf.system_chain_gap_index.v1",
   "generatedBy": "governance/compat/generate_as_built_system_catalog.py",
   "sourceDir": "docs/reference/system_chain/gaps/entries/",
-  "gapCount": 12,
+  "gapCount": 13,
   "countsByStatus": {
     "IMPLEMENTED_NOT_INVOCATION_PROVEN": 1,
-    "VALUE_PARKED_WITH_REOPEN_CONDITIONS": 1,
+    "VALUE_PARKED_WITH_REOPEN_CONDITIONS": 2,
     "PARTIAL_CHAIN_WITH_BOUNDARY": 1,
     "CLOSED_WITH_EVIDENCE": 4,
     "ACTIVE_OWNER_CREATED_WITH_BOUNDARY": 4,
@@ -275,6 +275,57 @@
       "lastReviewed": {
         "date": "2026-07-14",
         "acceptedArtifact": "docs/reviews/CVF_SYSTEM_CHAIN_UC02_RENDERER_CONFORMANCE_REPAIR_COMPLETION_2026-07-14.md"
+      }
+    },
+    {
+      "stableId": "cvf.asc.gap.qm_known_value_redaction_no_truthful_consumer.v1",
+      "entityType": "GAP",
+      "sourcePlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+      "targetPlaneId": "cvf.asc.plane.contract_to_runtime.v1",
+      "sourceOwner": "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/cli/governed-command-launcher.ts",
+      "targetOwner": "NONE_WITH_REASON: the sole non-test caller of launchGovernedCommand, EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/cli/governed-exec.ts, constructs its GovernedCommandLauncherDependencies without knownSecretValues, so no current production path supplies a legitimate in-process value source for the opt-in redaction feature.",
+      "missingEdge": "GovernedCommandLauncherDependencies.knownSecretValues is a real, implemented, opt-in dependency (governed-command-launcher.ts lines 176-192) consumed for exact-value output masking (snapshot line 329), but no accepted non-test caller wires a trusted in-process value source into it. The feature is implemented and unit-tested; it has no truthful production consumer.",
+      "currentStatus": "VALUE_PARKED_WITH_REOPEN_CONDITIONS",
+      "proofClass": "IMPLEMENTED_EDGE",
+      "citations": [
+        {
+          "path": "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/cli/governed-command-launcher.ts",
+          "lineOrSection": "dependency contract lines 176-192; snapshot line 329",
+          "evidenceRole": "knownSecretValues declared as trusted-caller-only, never sourced from process.env, CLI flags, MCP schema, serialized requests, or persistence"
+        },
+        {
+          "path": "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/cli/governed-exec.ts",
+          "lineOrSection": "launcher dependency-object construction, lines 79-86",
+          "evidenceRole": "sole identified non-test production caller omits knownSecretValues from the dependency object it passes to launchGovernedCommand"
+        },
+        {
+          "path": "docs/reviews/CVF_THREE_REPO_PILOT_FINAL_ASSESSMENT_AND_RECOVERY_2026-09-15.md",
+          "lineOrSection": "Three-repository operational state table, QM known-value redaction row",
+          "evidenceRole": "accepted recovery assessment records IMPLEMENTATION_NO_CONSUMER for this opt-in feature and forbids sourcing values from ambient environment, CLI flags, MCP input, or persistence to manufacture activation"
+        },
+        {
+          "path": "docs/reviews/CVF_OUTPUT-REDACTION-T1_COMPLETION_2026-09-14.md",
+          "lineOrSection": "Findings / Position; Risk / Corrective Action",
+          "evidenceRole": "accepted completion for the bounded opt-in known-value masking feature itself: Findings / Position records that default CLI callers still do not supply known values, and Risk / Corrective Action records that values come from trusted in-process dependencies only, with no ambient credential collection, cache, provider call, upstream execution, or deployment authorized"
+        }
+      ],
+      "impact": "The known-value redaction feature is implemented and unit-tested in the MCP launcher but has no truthful non-test production consumer today; no output currently benefits from this masking in a real invocation. This is a discoverability/consumer gap only, not a defect in the implemented masking logic itself.",
+      "closeCondition": {
+        "conditionKind": "NAMED_ARTIFACT_ACCEPTED",
+        "conditionText": "OPEN: a governed accepted artifact must identify or construct a trusted non-test in-process caller that both (a) legitimately possesses concrete secret values without sourcing them from process.env, CLI flags, MCP schema, serialized requests, or persistence, and (b) wires those values into GovernedCommandLauncherDependencies.knownSecretValues, with bounded evidence the masking is exercised on a real invocation path."
+      },
+      "reopenCondition": {
+        "conditionKind": "PATTERN_OBSERVED_ON_NAMED_SURFACE",
+        "conditionText": "Reopen this entry if a future accepted review names a specific trusted in-process caller (not governed-exec.ts as it exists today) that legitimately holds concrete secret values through a lawful, non-forbidden ingress path, and demonstrates that caller supplying knownSecretValues to launchGovernedCommand on a real non-test invocation."
+      },
+      "actionOwner": "PARKED_WITH_REASON: no trusted non-test in-process caller with a lawful known-value source currently exists; manufacturing one via ambient environment, CLI flags, MCP input, or persistence is expressly forbidden by the existing contract, so this GAP stays parked until a legitimate caller and value source are identified in a future tranche.",
+      "freshnessInputs": [
+        "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/cli/governed-command-launcher.ts",
+        "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/cli/governed-exec.ts"
+      ],
+      "lastReviewed": {
+        "date": "2026-09-15",
+        "acceptedArtifact": "docs/reviews/CVF_THREE_REPO_PILOT_FINAL_ASSESSMENT_AND_RECOVERY_2026-09-15.md"
       }
     },
     {

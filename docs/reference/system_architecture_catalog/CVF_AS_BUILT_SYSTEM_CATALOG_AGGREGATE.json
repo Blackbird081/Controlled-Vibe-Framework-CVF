@@ -2,7 +2,7 @@
   "schemaVersion": "cvf.as_built_system_catalog.schema.v0",
   "generatedBy": "governance/compat/generate_as_built_system_catalog.py",
   "sourceDir": "docs/reference/system_architecture_catalog/entries/",
-  "entityCount": 28,
+  "entityCount": 30,
   "entities": [
     {
       "stableId": "cvf.asc.authority_source.frozen_layer_model.v1",
@@ -47,6 +47,38 @@
         "date": "2026-07-11",
         "acceptedArtifact": "docs/reviews/CVF_MSEA_ASC_T0_SOURCE_SCHEMA_AND_RECONCILIATION_CONTRACT_WORKER_RETURN_2026-07-11.md"
       }
+    },
+    {
+      "stableId": "cvf.asc.control.qm_service_token_replay_dedupe.v1",
+      "entityType": "CONTROL",
+      "name": "QM Service-Token Replay Rejection",
+      "controlKind": "BLOCKING",
+      "authorityClass": "ACTIVE_IMPLEMENTATION_SOURCE",
+      "maturity": "ACTIVE",
+      "ownerPaths": [
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/service-token-auth.ts"
+      ],
+      "citations": [
+        {
+          "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/service-token-auth.ts",
+          "lineOrSection": "lines 38-49",
+          "evidenceRole": "process-local replayLedger Map and capacity/enabled state declaration"
+        },
+        {
+          "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/service-token-auth.ts",
+          "lineOrSection": "lines 117-142",
+          "evidenceRole": "verifyServiceTokenRequest deriveReplayKey/ledger lookup and exact-replay rejection at exact match, fail-closed at capacity"
+        }
+      ],
+      "claimBoundary": "QM-derived control: verifyServiceTokenRequest rejects an exact-match replayed (token-identity-hash, timestamp, signature) tuple within one Node.js process's in-memory Map, bounded to the signature validity window. This control does not claim restart survival, multi-process or multi-instance coordination, distributed replay protection, or durable/persisted replay state; the ledger is a plain module-scope Map with no timer, daemon, or external IO.",
+      "freshnessInputs": [
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/service-token-auth.ts"
+      ],
+      "lastReviewed": {
+        "date": "2026-09-15",
+        "acceptedArtifact": "docs/reviews/CVF_THREE_REPO_PILOT_FINAL_ASSESSMENT_AND_RECOVERY_2026-09-15.md"
+      },
+      "priorDisposition": ""
     },
     {
       "stableId": "cvf.asc.edge.contract_to_runtime_to_runtime_to_enforcement.v1",
@@ -210,6 +242,37 @@
         "acceptedArtifact": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md"
       },
       "sampledOnly": true
+    },
+    {
+      "stableId": "cvf.asc.edge.qm_service_token_replay_consumers.v1",
+      "entityType": "EDGE",
+      "sourceId": "cvf.asc.control.qm_service_token_replay_dedupe.v1",
+      "targetId": "cvf.asc.module.web_agent_platform.v1",
+      "edgeProofClass": "INVOKED_EDGE",
+      "evidenceRecency": "NOT_APPLICABLE",
+      "operatorVisibility": "ABSENT",
+      "citations": [
+        {
+          "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts",
+          "lineOrSection": "import line 25; invocation line 117",
+          "evidenceRole": "execute route POST handler calls verifyServiceTokenRequest for service-token authentication before session/route processing"
+        },
+        {
+          "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/qbs/front-door-clarification/route.ts",
+          "lineOrSection": "import line 5; invocation line 26",
+          "evidenceRole": "QBS front-door-clarification route POST handler calls verifyServiceTokenRequest as its sole authentication gate"
+        }
+      ],
+      "claimBoundary": "Records that two non-test Web routes invoke the QM replay-dedupe control. Does not claim production traffic volume, live receipt, operator-visible readout, restart persistence, multi-process coordination, or distributed replay protection; both consumers share the same single-process ledger instance per Node.js runtime.",
+      "freshnessInputs": [
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts",
+        "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/qbs/front-door-clarification/route.ts"
+      ],
+      "lastReviewed": {
+        "date": "2026-09-15",
+        "acceptedArtifact": "docs/reviews/CVF_THREE_REPO_PILOT_FINAL_ASSESSMENT_AND_RECOVERY_2026-09-15.md"
+      },
+      "priorDisposition": ""
     },
     {
       "stableId": "cvf.asc.edge.runtime_to_enforcement_to_enforcement_to_evidence.v1",
@@ -653,7 +716,9 @@
       "planeMembership": [
         "cvf.asc.plane.evidence_to_operator_surface.v1"
       ],
-      "inboundEdgeIds": [],
+      "inboundEdgeIds": [
+        "cvf.asc.edge.qm_service_token_replay_consumers.v1"
+      ],
       "outboundEdgeIds": [],
       "citations": [
         {
@@ -667,8 +732,8 @@
         "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/"
       ],
       "lastReviewed": {
-        "date": "2026-07-11",
-        "acceptedArtifact": "docs/reviews/CVF_MSEA_ASC_T0_SOURCE_SCHEMA_AND_RECONCILIATION_CONTRACT_WORKER_RETURN_2026-07-11.md"
+        "date": "2026-09-15",
+        "acceptedArtifact": "docs/reviews/CVF_THREE_REPO_PILOT_FINAL_ASSESSMENT_AND_RECOVERY_2026-09-15.md"
       },
       "priorDisposition": ""
     },

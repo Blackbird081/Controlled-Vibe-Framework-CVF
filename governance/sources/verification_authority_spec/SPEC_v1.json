@@ -1,0 +1,10 @@
+{
+  "profile": "cvf.source-record-canonicalization@1",
+  "domain": "cvf.specFile",
+  "specVersion": 1,
+  "canonicalBytesBase64": "eyJhZG1pc3Npb25SZXF1aXJlZExvb2t1cFJlc3VsdCI6IklERU5USVRZX0NPTkZJUk1FRCIsImF1dGhvcml0eUlkIjoiQUNFTF9HMV9ERUNJU0lPTl9PV05FUiIsImF1dGhvcml0eVNwZWNTY2hlbWEiOiJjdmYuYWNlbC5nMS52ZXJpZmljYXRpb25BdXRob3JpdHlTcGVjQDEiLCJmcmVzaG5lc3NUaHJlc2hvbGRTZWNvbmRzIjo4NjQwMCwiaXNzdWVyVmVyaWZpY2F0aW9uUmVxdWlyZW1lbnQiOiJWRVJJRklFRF9CWV9MSVZFX1JFR0lTVFJZX0xPT0tVUCIsInJlY2VpcHREb21haW4iOiJjdmYudmVyaWZpZXJSZWNlaXB0IiwicmVjZWlwdFByb2ZpbGVWZXJzaW9uIjoidjEifQ",
+  "authorId": "S-1-5-21-1644666849-912006174-747199667-1006",
+  "proposedAt": "2026-09-21T04:05:45.4393129Z",
+  "specHashHex": "e571ec25e17d8c3fd3f24a865be40777c63862c6aa695444acaa3bc54b599c6b",
+  "specFileRecordHashHex": "176c6450a0462a36686fdd1efa3fe2aa9c3ecf734598704483c2bcc66e26dd7e"
+}

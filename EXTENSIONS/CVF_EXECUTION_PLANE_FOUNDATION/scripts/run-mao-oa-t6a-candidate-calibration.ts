@@ -17,8 +17,15 @@
  * (Alibaba/DashScope) is used; this is not a canonical provider choice or a
  * provider-parity claim.
  *
+ * G2-T2 fresh direct calibration retarget (2026-09-16, under
+ * docs/baselines/CVF_GC018_ACEL_G2_T2_FRESH_DIRECT_CALIBRATION_T1_2026-09-16.md
+ * and its paired work order): model retargeted to the ledger-eligible
+ * `qwen3.7-flash` (the prior `qwen3.7-plus` free quota expired 2026-08-31),
+ * output retargeted to a new dated T1 receipt path. The 2026-07-17 historical
+ * receipt remains untouched and rejected; no other behavior changed.
+ *
  * Usage (operator-authorized only, under
- * docs/baselines/CVF_GC018_MAO_OA_T6A_HARDER_CANDIDATE_DIRECT_BASELINE_CALIBRATION_2026-07-17.md):
+ * docs/baselines/CVF_GC018_ACEL_G2_T2_FRESH_DIRECT_CALIBRATION_T1_2026-09-16.md):
  *   npx tsx EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/scripts/run-mao-oa-t6a-candidate-calibration.ts
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
@@ -32,6 +39,7 @@ import {
   parseHarderCandidateResponse,
 } from "../src/mao/harder.value.candidate.contract";
 import type { CredentialReference } from "../../CVF_MODEL_GATEWAY/src/credential-boundary";
+import type { ProviderExecutionGrant } from "../../CVF_CONTROL_PLANE_FOUNDATION/src/delegation.contract";
 import { runLiveProof } from "../../CVF_MODEL_GATEWAY/src/p4b-b-live-proof-harness";
 import type { HarnessRunResult } from "../../CVF_MODEL_GATEWAY/src/p4b-b-live-proof-harness";
 import { resolveAlibabaDashScopeEndpoint, getAlibabaFreeQuotaStatus } from "../../CVF_MODEL_GATEWAY/src/alibaba-free-quota-model-ledger";
@@ -40,9 +48,24 @@ import type { GatewayExecuteRequest } from "../../CVF_MODEL_GATEWAY/src/unified-
 const REPO_ROOT = resolve(__dirname, "..", "..", "..");
 const ENV_LOCAL = resolve(REPO_ROOT, "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/.env.local");
 const PROVIDER_ID = "alibaba";
-// Same free-quota-ledger-verified model MAO-LIVE-T1 used (docs/reference/model_gateway/CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER.json),
-// not a new provider/model-lane choice.
-const MODEL_ID = "qwen3.7-plus";
+// G2-T2 T1 retarget: qwen3.7-plus free quota expired 2026-08-31
+// (docs/reference/model_gateway/CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER.json);
+// qwen3.7-flash is the current ledger-eligible model, not a new
+// provider/model-lane choice.
+const MODEL_ID = "qwen3.7-flash";
+// Operator resumed the zero-call T1 checkpoint on 2026-09-16 and authorized
+// exactly one live Alibaba call. This grant is not a credential.
+const GRANT_ID = "acel-g2-t2-direct-calibration-live-2026-09-16";
+const providerExecutionGrant: ProviderExecutionGrant = {
+  authority: "ORCHESTRATOR_GRANT_REQUIRED",
+  grantId: GRANT_ID,
+  authorizedBy: "ORCHESTRATOR",
+  subjectAgentId: "ACEL-G2-T2-FRESH-DIRECT-CALIBRATION-T1",
+  delegationId: "ACEL-G2-T2-FRESH-DIRECT-CALIBRATION-T1",
+  allowedProviders: [PROVIDER_ID],
+  maxCalls: 1,
+  expiresAt: "2026-09-18T23:59:59+07:00",
+};
 const KEY_ALIASES = [
   "DASHSCOPE_API_KEY",
   "ALIBABA_API_KEY",
@@ -51,7 +74,7 @@ const KEY_ALIASES = [
 ] as const;
 const RESULT_PATH = resolve(
   REPO_ROOT,
-  "docs/reviews/evidence/mao-oa-t6a-direct-candidate-calibration-2026-07-17.json",
+  "docs/reviews/evidence/acel-g2-t2-fresh-direct-calibration-t1-live-2026-09-16.json",
 );
 
 type MaoOaT6aDiagnosticClass =
@@ -135,6 +158,12 @@ function classifyError(error: unknown, latencyMs: number): MaoOaT6aDiagnostic {
 }
 
 async function main(): Promise<number> {
+  // A persisted receipt consumes this one-call calibration slot. Never let a
+  // later invocation overwrite the evidence or present consumedCalls=0 again.
+  if (existsSync(RESULT_PATH)) {
+    console.log("MAO-OA-T6A: BLOCKED_EXISTING_RECEIPT (no provider call)");
+    return 1;
+  }
   const startedAt = new Date().toISOString();
   const env: Record<string, string | undefined> = {
     ...loadEnvLocal(ENV_LOCAL),
@@ -222,6 +251,11 @@ async function main(): Promise<number> {
         env,
         endpoint,
         liveAuthorized: true,
+        providerExecutionGrant,
+        workerAgentId: providerExecutionGrant.subjectAgentId,
+        delegationId: providerExecutionGrant.delegationId,
+        grantId: GRANT_ID,
+        consumedCalls: 0,
       },
       request,
     );

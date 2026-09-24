@@ -1,3 +1,9 @@
+import {
+  isProviderApiKeyConfiguredFromEnv,
+  resolveProviderApiKeyFromEnv,
+  resolveProviderApiKeySourceNameFromEnv,
+} from './provider-api-key-env';
+
 export const ALIBABA_API_KEY_ENV_NAMES = [
   'ALIBABA_API_KEY',
   'DASHSCOPE_API_KEY',
@@ -8,31 +14,17 @@ export const ALIBABA_API_KEY_ENV_NAMES = [
 export function resolveAlibabaApiKey(
   env: NodeJS.ProcessEnv = process.env,
 ): string | undefined {
-  for (const envName of ALIBABA_API_KEY_ENV_NAMES) {
-    const raw = env[envName];
-    if (typeof raw === 'string' && raw.trim()) {
-      return raw.trim();
-    }
-  }
-
-  return undefined;
+  return resolveProviderApiKeyFromEnv(ALIBABA_API_KEY_ENV_NAMES, env);
 }
 
 export function resolveAlibabaApiKeySourceName(
   env: NodeJS.ProcessEnv = process.env,
 ): string | null {
-  for (const envName of ALIBABA_API_KEY_ENV_NAMES) {
-    const raw = env[envName];
-    if (typeof raw === 'string' && raw.trim()) {
-      return envName;
-    }
-  }
-
-  return null;
+  return resolveProviderApiKeySourceNameFromEnv(ALIBABA_API_KEY_ENV_NAMES, env);
 }
 
 export function isAlibabaApiKeyConfigured(
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
-  return typeof resolveAlibabaApiKey(env) === 'string';
+  return isProviderApiKeyConfiguredFromEnv(ALIBABA_API_KEY_ENV_NAMES, env);
 }

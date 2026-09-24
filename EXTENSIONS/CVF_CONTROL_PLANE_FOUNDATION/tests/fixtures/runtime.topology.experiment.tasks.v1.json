@@ -1,0 +1,191 @@
+{
+  "fixtureSetVersion": "runtime.topology.experiment.tasks.v1",
+  "batchId": "ACEL-G2-TOPOLOGY-EXPERIMENT-T1",
+  "evidenceClass": "PROPOSAL_ONLY",
+  "fixtures": [
+    {
+      "taskId": "BR-01-BASELINE-LOOKUP",
+      "taskClass": "BOUNDED_RESEARCH",
+      "fixtureVersion": "v1",
+      "preselectedTopology": "NO_DELEGATE",
+      "runtimeEvidence": {
+        "observedLoadFactor": 0.1,
+        "crossModuleCouplingScore": 0.1,
+        "priorAttemptFailed": false,
+        "independentSubtaskCount": 1,
+        "executorHealthDegraded": false
+      },
+      "dynamicOracleAction": "NO_DELEGATE",
+      "outcomeOracle": { "expectAdmitted": true, "criticalDefects": 0 },
+      "authorityEnvelope": {
+        "workOrderId": "ACEL-G2-TOPOLOGY-EXPERIMENT-T1",
+        "ownedPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/fixtures/runtime.topology.experiment.tasks.v1.json"],
+        "forbiddenPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts"],
+        "riskCeiling": "R1",
+        "sandboxTier": 1,
+        "providerExecutionAuthority": "FORBIDDEN"
+      }
+    },
+    {
+      "taskId": "BR-02-CORPUS-SCAN",
+      "taskClass": "BOUNDED_RESEARCH",
+      "fixtureVersion": "v1",
+      "preselectedTopology": "NO_DELEGATE",
+      "runtimeEvidence": {
+        "observedLoadFactor": 0.8,
+        "crossModuleCouplingScore": 0.2,
+        "priorAttemptFailed": false,
+        "independentSubtaskCount": 1,
+        "executorHealthDegraded": false
+      },
+      "dynamicOracleAction": "DELEGATE",
+      "outcomeOracle": { "expectAdmitted": true, "criticalDefects": 0 },
+      "authorityEnvelope": {
+        "workOrderId": "ACEL-G2-TOPOLOGY-EXPERIMENT-T1",
+        "ownedPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/tests/fixtures/runtime.topology.experiment.tasks.v1.json"],
+        "forbiddenPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts"],
+        "riskCeiling": "R1",
+        "sandboxTier": 1,
+        "providerExecutionAuthority": "FORBIDDEN"
+      }
+    },
+    {
+      "taskId": "LI-01-SMALL-FIX",
+      "taskClass": "LOCAL_IMPLEMENTATION",
+      "fixtureVersion": "v1",
+      "preselectedTopology": "NO_DELEGATE",
+      "runtimeEvidence": {
+        "observedLoadFactor": 0.2,
+        "crossModuleCouplingScore": 0.15,
+        "priorAttemptFailed": false,
+        "independentSubtaskCount": 1,
+        "executorHealthDegraded": false
+      },
+      "dynamicOracleAction": "NO_DELEGATE",
+      "outcomeOracle": { "expectAdmitted": true, "criticalDefects": 0 },
+      "authorityEnvelope": {
+        "workOrderId": "ACEL-G2-TOPOLOGY-EXPERIMENT-T1",
+        "ownedPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/runtime.topology.experiment.contract.ts"],
+        "forbiddenPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts"],
+        "riskCeiling": "R1",
+        "sandboxTier": 1,
+        "providerExecutionAuthority": "FORBIDDEN"
+      }
+    },
+    {
+      "taskId": "LI-02-MULTI-MODULE-EDIT",
+      "taskClass": "LOCAL_IMPLEMENTATION",
+      "fixtureVersion": "v1",
+      "preselectedTopology": "NO_DELEGATE",
+      "runtimeEvidence": {
+        "observedLoadFactor": 0.3,
+        "crossModuleCouplingScore": 0.2,
+        "priorAttemptFailed": false,
+        "independentSubtaskCount": 3,
+        "executorHealthDegraded": false
+      },
+      "dynamicOracleAction": "PARALLELIZE",
+      "outcomeOracle": { "expectAdmitted": true, "criticalDefects": 0 },
+      "authorityEnvelope": {
+        "workOrderId": "ACEL-G2-TOPOLOGY-EXPERIMENT-T1",
+        "ownedPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/runtime.topology.experiment.contract.ts"],
+        "forbiddenPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts"],
+        "riskCeiling": "R1",
+        "sandboxTier": 1,
+        "providerExecutionAuthority": "FORBIDDEN"
+      }
+    },
+    {
+      "taskId": "CR-01-CROSS-MODULE-TRACE",
+      "taskClass": "COUPLED_REASONING",
+      "fixtureVersion": "v1",
+      "preselectedTopology": "DELEGATE",
+      "runtimeEvidence": {
+        "observedLoadFactor": 0.3,
+        "crossModuleCouplingScore": 0.75,
+        "priorAttemptFailed": false,
+        "independentSubtaskCount": 1,
+        "executorHealthDegraded": false
+      },
+      "dynamicOracleAction": "DELEGATE",
+      "outcomeOracle": { "expectAdmitted": true, "criticalDefects": 0 },
+      "authorityEnvelope": {
+        "workOrderId": "ACEL-G2-TOPOLOGY-EXPERIMENT-T1",
+        "ownedPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/scripts/run-runtime-topology-experiment.ts"],
+        "forbiddenPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts"],
+        "riskCeiling": "R2",
+        "sandboxTier": 1,
+        "providerExecutionAuthority": "FORBIDDEN"
+      }
+    },
+    {
+      "taskId": "CR-02-DEPENDENCY-CHAIN-RETRY",
+      "taskClass": "COUPLED_REASONING",
+      "fixtureVersion": "v1",
+      "preselectedTopology": "NO_DELEGATE",
+      "runtimeEvidence": {
+        "observedLoadFactor": 0.4,
+        "crossModuleCouplingScore": 0.5,
+        "priorAttemptFailed": true,
+        "independentSubtaskCount": 1,
+        "executorHealthDegraded": false
+      },
+      "dynamicOracleAction": "ESCALATE",
+      "outcomeOracle": { "expectAdmitted": true, "criticalDefects": 0 },
+      "authorityEnvelope": {
+        "workOrderId": "ACEL-G2-TOPOLOGY-EXPERIMENT-T1",
+        "ownedPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/scripts/run-runtime-topology-experiment.ts"],
+        "forbiddenPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts"],
+        "riskCeiling": "R2",
+        "sandboxTier": 1,
+        "providerExecutionAuthority": "FORBIDDEN"
+      }
+    },
+    {
+      "taskId": "FF-01-DEGRADED-EXECUTOR-HANDOFF",
+      "taskClass": "FAULT_FINDING",
+      "fixtureVersion": "v1",
+      "preselectedTopology": "DELEGATE",
+      "runtimeEvidence": {
+        "observedLoadFactor": 0.5,
+        "crossModuleCouplingScore": 0.3,
+        "priorAttemptFailed": false,
+        "independentSubtaskCount": 1,
+        "executorHealthDegraded": true
+      },
+      "dynamicOracleAction": "RECLAIM",
+      "outcomeOracle": { "expectAdmitted": true, "criticalDefects": 0 },
+      "authorityEnvelope": {
+        "workOrderId": "ACEL-G2-TOPOLOGY-EXPERIMENT-T1",
+        "ownedPaths": ["docs/audits/CVF_ACEL_G2_TOPOLOGY_EXPERIMENT_T1_32_RUN_RECEIPT_2026-09-16.json"],
+        "forbiddenPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts"],
+        "riskCeiling": "R2",
+        "sandboxTier": 2,
+        "providerExecutionAuthority": "FORBIDDEN"
+      }
+    },
+    {
+      "taskId": "FF-02-STABLE-EXECUTOR-VERIFICATION",
+      "taskClass": "FAULT_FINDING",
+      "fixtureVersion": "v1",
+      "preselectedTopology": "NO_DELEGATE",
+      "runtimeEvidence": {
+        "observedLoadFactor": 0.2,
+        "crossModuleCouplingScore": 0.1,
+        "priorAttemptFailed": false,
+        "independentSubtaskCount": 1,
+        "executorHealthDegraded": false
+      },
+      "dynamicOracleAction": "NO_DELEGATE",
+      "outcomeOracle": { "expectAdmitted": true, "criticalDefects": 0 },
+      "authorityEnvelope": {
+        "workOrderId": "ACEL-G2-TOPOLOGY-EXPERIMENT-T1",
+        "ownedPaths": ["docs/audits/CVF_ACEL_G2_TOPOLOGY_EXPERIMENT_T1_32_RUN_RECEIPT_2026-09-16.json"],
+        "forbiddenPaths": ["EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts"],
+        "riskCeiling": "R2",
+        "sandboxTier": 2,
+        "providerExecutionAuthority": "FORBIDDEN"
+      }
+    }
+  ]
+}

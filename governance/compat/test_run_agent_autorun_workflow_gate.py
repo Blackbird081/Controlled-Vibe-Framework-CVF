@@ -1,11 +1,129 @@
 # Text Encoding Exception: Unicode path fixture verifies repository filename handling.
 import json
+import hashlib
+import sys
 import subprocess
 from pathlib import Path
 import pytest
 import governance.compat.run_agent_autorun_workflow_gate as autorun
 import governance.compat.run_agent_commit_steward_preflight as steward
 import governance.compat.committed_evidence_fingerprint as committed_evidence
+
+RIPA_SCRIPT = 'governance/compat/check_independent_review_probe_admission.py'
+ACTIVE_ORDER = 'docs/work_orders/active.md'
+
+def test_active_binding_changes_only_unique_probe_command() -> None:
+    broad = autorun._common_commands('base', 'head')
+    bound = autorun._common_commands('base', 'head', ACTIVE_ORDER)
+    assert len(broad) == len(bound) == 83
+    changed = [(a, b) for a, b in zip(broad, bound) if a != b]
+    assert len(changed) == 1
+    a, b = changed[0]
+    assert a.name == b.name == 'independent review probe admission'
+    assert a.command == ('python', RIPA_SCRIPT, '--base', 'base', '--head', 'head', '--enforce')
+    assert b.command == a.command + ('--changed-lane-only', '--active-work-order', ACTIVE_ORDER)
+    assert sum(RIPA_SCRIPT in c.command for c in broad) == 1
+    assert all('--changed-lane-only' not in c.command and '--active-work-order' not in c.command for c in broad)
+    assert all('--active-work-order' not in c.command for c in autorun.PRE_PUSH_COMMANDS)
+
+@pytest.mark.parametrize('phase', ['pre-dispatch', 'pre-closure', 'pre-push'])
+def test_active_binding_rejected_before_any_phase_side_effect(monkeypatch, capsys, phase) -> None:
+    def forbidden(*args, **kwargs):
+        pytest.fail('forbidden phase reached Git, execution or receipt reuse')
+    for name in ('_git_rev_parse', '_run_commands', '_load_valid_receipt'):
+        monkeypatch.setattr(autorun, name, forbidden)
+    assert autorun._run_phase(phase, 'base', 'head', active_work_order=ACTIVE_ORDER, reuse_valid_receipt=True) == 1
+    assert 'pre-implementation only' in capsys.readouterr().out
+
+@pytest.mark.parametrize('binding', ['', '   '])
+def test_empty_explicit_binding_fails_closed(binding) -> None:
+    assert autorun._run_phase('pre-implementation', 'base', 'head', active_work_order=binding) == 1
+
+def test_main_forwards_exact_binding(monkeypatch) -> None:
+    captured = {}
+    def record(*args, **kwargs):
+        captured.update(kwargs)
+        return 7
+    monkeypatch.setattr(autorun, '_run_phase', record)
+    monkeypatch.setattr(sys, 'argv', ['gate', '--phase', 'pre-implementation', '--active-work-order', ACTIVE_ORDER])
+    assert autorun.main() == 7
+    assert captured['active_work_order'] == ACTIVE_ORDER
+
+def test_phase_forwards_bound_plan_and_preserves_other_commands(monkeypatch, tmp_path) -> None:
+    observed = []
+    monkeypatch.setattr(autorun, '_git_rev_parse', lambda ref: ref)
+    monkeypatch.setattr(autorun, '_worktree_fingerprint', lambda *args: 'fixed')
+    monkeypatch.setattr(autorun, '_verifier_identity_digest', lambda *args: 'a' * 64)
+    def execute(index, command):
+        observed.append(command)
+        return autorun.GateResult(index, command.name, command.command, 0, 0.01, '')
+    monkeypatch.setattr(autorun, '_execute', execute)
+    assert autorun._run_phase('pre-implementation', 'base', 'head', active_work_order=ACTIVE_ORDER, receipt_dir=tmp_path) == 0
+    probe = [c.command for c in observed if RIPA_SCRIPT in c.command]
+    assert probe == [('python', RIPA_SCRIPT, '--base', 'base', '--head', 'head', '--enforce', '--changed-lane-only', '--active-work-order', ACTIVE_ORDER)]
+    assert len(observed) == 85
+    assert sum('--active-work-order' in c.command for c in observed) == 1
+
+def test_parallel_bound_probe_findings_visible_without_other_pass_noise(monkeypatch, capsys) -> None:
+    commands = (autorun.GateCommand('probe', ('python', RIPA_SCRIPT, '--changed-lane-only', '--active-work-order', ACTIVE_ORDER)),
+                autorun.GateCommand('ordinary', ('python', 'other.py')))
+    diagnostic = 'Known findings outside the current changed lane: 1\n  (out-of-lane) docs/reviews/parked.md: violation\n'
+    def execute(index, command):
+        return autorun.GateResult(index, command.name, command.command, 0, .01, diagnostic if command.name == 'probe' else 'ordinary PASS detail')
+    monkeypatch.setattr(autorun, '_execute', execute)
+    autorun._run_commands(commands, parallel=True, max_workers=2)
+    out = capsys.readouterr().out
+    assert diagnostic.rstrip() in out
+    assert 'ordinary PASS detail' not in out
+
+@pytest.mark.parametrize('target', [None, 'docs/work_orders/different.md'])
+def test_binding_change_rejects_receipt_reuse(monkeypatch, tmp_path, target) -> None:
+    monkeypatch.setattr(autorun, '_worktree_fingerprint', lambda *args: 'same-worktree')
+    plans = [autorun._common_commands('base', 'head', binding) for binding in (ACTIVE_ORDER, target)]
+    contexts = [autorun._receipt_context('pre-implementation', 'base', 'head', 'abc', 'def', plan) for plan in plans]
+    for plan, context in zip(plans, contexts):
+        preimage = json.dumps([{'name': c.name, 'command': list(c.command)} for c in plan], sort_keys=True, separators=(',', ':')).encode()
+        assert context['commandManifestHash'] == hashlib.sha256(preimage).hexdigest()
+    assert contexts[0]['commandManifestHash'] != contexts[1]['commandManifestHash']
+    path = tmp_path / 'receipt.json'
+    results = tuple(autorun.GateResult(i, c.name, c.command, 0, .01, '') for i, c in enumerate(plans[0], 1))
+    autorun._write_receipt(path, contexts[0], results, 1.0, 'a' * 64)
+    assert autorun._load_valid_receipt(path, {**contexts[0], 'verifierIdentityDigest': 'a' * 64})[0]
+    valid, reason = autorun._load_valid_receipt(path, {**contexts[1], 'verifierIdentityDigest': 'a' * 64})
+    assert not valid and reason == 'receipt commandManifestHash mismatch'
+
+@pytest.fixture
+def lane_repo(temp_repo):
+    temp_repo.write(ACTIVE_ORDER, '# Order\n\ndocType: work_order\n\nindependentProbeRequired: NOT_APPLICABLE_WITH_REASON: fixture\n\nWorker return path: docs/reviews/current.md\n')
+    temp_repo.commit('dispatch fixture')
+    temp_repo.write('docs/reviews/parked.md', '# Parked\n\nStatus: COMPLETE_PENDING_REVIEW\n\nindependentProbeDisposition: INVALID\n')
+    return temp_repo
+
+def _invoke_real_probe(repo, binding):
+    command = next(c.command for c in autorun._common_commands('HEAD', 'HEAD', binding) if RIPA_SCRIPT in c.command)
+    # Exercise the real parser and Git lane discovery against a disposable repo.
+    code = 'import sys; from pathlib import Path; import governance.compat.check_independent_review_probe_admission as c; c.REPO_ROOT=Path(sys.argv[1]); raise SystemExit(c.main(sys.argv[2:]))'
+    return subprocess.run([sys.executable, '-c', code, str(repo.path), *command[2:]], capture_output=True, text=True)
+
+def test_real_probe_rejects_current_untracked_return_and_keeps_parked_diagnostic(lane_repo) -> None:
+    lane_repo.write('docs/reviews/current.md', '# Return\n\nStatus: COMPLETE_PENDING_REVIEW\n\nindependentProbeDisposition: INVALID\n')
+    failed = _invoke_real_probe(lane_repo, ACTIVE_ORDER)
+    assert failed.returncode == 1
+    assert '  - docs/reviews/current.md:' in failed.stdout
+    assert '(out-of-lane) docs/reviews/parked.md:' in failed.stdout
+    assert '?? docs/reviews/current.md' in lane_repo.git('status', '--short', '--untracked-files=all')
+    lane_repo.write('docs/reviews/current.md', '# Return\n\nStatus: COMPLETE_PENDING_REVIEW\n\nindependentProbeDisposition: PENDING_REVIEWER_EXECUTION\n')
+    passed = _invoke_real_probe(lane_repo, ACTIVE_ORDER)
+    assert passed.returncode == 0
+    assert '(out-of-lane) docs/reviews/parked.md:' in passed.stdout
+    assert _invoke_real_probe(lane_repo, None).returncode == 1
+
+@pytest.mark.parametrize('binding', ['../escape.md', '/absolute.md', 'docs/work_orders/missing.md', 'docs/reviews/parked.md', 'docs/work_orders/ambiguous.md'])
+def test_real_probe_rejects_invalid_binding(lane_repo, binding) -> None:
+    lane_repo.write('docs/work_orders/ambiguous.md', '# Order\n\ndocType: work_order\n\nWorker return path: docs/reviews/a.md\nWorker return path: docs/reviews/b.md\n')
+    result = _invoke_real_probe(lane_repo, binding)
+    assert result.returncode == 1
+    assert 'binding could not resolve exactly one' in result.stdout
 
 def test_range_shape_preflight_blocks_exact_manifest_session_mix(monkeypatch) -> None:
     plan = steward.PathPlan(changed_paths=('docs/reviews/example.md', 'AGENT_HANDOFF_V19_2026-06-15.md'), material_paths=('docs/reviews/example.md',), protected_session_paths=('AGENT_HANDOFF_V19_2026-06-15.md',), trace_artifact_paths=('docs/reviews/example.md',), mixed_material_and_session=True, mixed_atomicity_authorized=False, exact_manifest_collision_risk=True, handoff_sync_only=False)

@@ -209,7 +209,7 @@
         },
         {
           "path": "governance/compat/run_agent_autorun_workflow_gate.py",
-          "sha256": "e0384bd3e188a3020c736ceb80d0d1a7a53725b14fa2f5ecfaad2fab560a3403",
+          "sha256": "2a2aa6af2657de1e68518a0fe5e6534917068622f5b4e63da52ffc5a0ed28aea",
           "evidenceRole": "per-checker PASS/FAIL CLI print plus v3 JSON receipt owner"
         },
         {

@@ -1,0 +1,32 @@
+{
+  "stableId": "cvf.asc.control.qm_service_token_replay_dedupe.v1",
+  "entityType": "CONTROL",
+  "name": "QM Service-Token Replay Rejection",
+  "controlKind": "BLOCKING",
+  "authorityClass": "ACTIVE_IMPLEMENTATION_SOURCE",
+  "maturity": "ACTIVE",
+  "ownerPaths": [
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/service-token-auth.ts"
+  ],
+  "citations": [
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/service-token-auth.ts",
+      "lineOrSection": "lines 38-49",
+      "evidenceRole": "process-local replayLedger Map and capacity/enabled state declaration"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/service-token-auth.ts",
+      "lineOrSection": "lines 117-142",
+      "evidenceRole": "verifyServiceTokenRequest deriveReplayKey/ledger lookup and exact-replay rejection at exact match, fail-closed at capacity"
+    }
+  ],
+  "claimBoundary": "QM-derived control: verifyServiceTokenRequest rejects an exact-match replayed (token-identity-hash, timestamp, signature) tuple within one Node.js process's in-memory Map, bounded to the signature validity window. This control does not claim restart survival, multi-process or multi-instance coordination, distributed replay protection, or durable/persisted replay state; the ledger is a plain module-scope Map with no timer, daemon, or external IO.",
+  "freshnessInputs": [
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/service-token-auth.ts"
+  ],
+  "lastReviewed": {
+    "date": "2026-09-15",
+    "acceptedArtifact": "docs/reviews/CVF_THREE_REPO_PILOT_FINAL_ASSESSMENT_AND_RECOVERY_2026-09-15.md"
+  },
+  "priorDisposition": ""
+}

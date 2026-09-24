@@ -1,0 +1,19 @@
+{
+  "registrySnapshotId": "g1-registry-8c8bea8a01d442a49c6a6f51caf2cd14",
+  "registrySnapshotVersion": 1,
+  "writeTimestamp": "2026-09-20T01:17:10.1292599Z",
+  "rows": [
+    {
+      "keyId": "partya-44853ea9a690452c",
+      "publicKeyBytesBase64": "R5AsDnHQNXWgD5WQEpDi3VABiuPZ7E9U5Kir_bgiwNU",
+      "algorithm": "Ed25519",
+      "role": "verificationAuthority",
+      "issuedAt": "2026-09-19T06:41:05.5102754Z",
+      "expiresAt": "2027-09-19T06:41:05.5102754Z",
+      "revokedAt": null,
+      "status": "ACTIVE",
+      "rowHashHex": "4e94882407c73ab779ead5c2b05d6f67041ad5e9f138ef034e7c152dbe2229f9",
+      "rotatedFromKeyId": null
+    }
+  ]
+}

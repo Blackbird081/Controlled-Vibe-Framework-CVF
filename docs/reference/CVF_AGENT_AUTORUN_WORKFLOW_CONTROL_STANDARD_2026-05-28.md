@@ -222,6 +222,22 @@ The Worker confirms that dispatch artifacts pass the same checks immediately
 before editing. This prevents an agent from implementing from an obsolete or
 partially corrected work order.
 
+A worker may explicitly bind the current dispatch by adding
+`--active-work-order <repo-relative-work-order.md>` at `pre-implementation`
+only. The aggregate forwards `--changed-lane-only --active-work-order <path>`
+to exactly the independent review probe admission command. Its existing
+checker validates the path and unique declared worker return, keeps that
+return in the failing lane even when untracked, and diagnoses parked findings
+outside the lane. Successful parallel output must retain those diagnostics.
+An empty binding or a binding at any other phase is rejected. Invalid,
+missing or ambiguous work-order bindings fail through the existing checker.
+
+Without this option every command remains broad. Pre-dispatch, pre-closure,
+pre-push and hook behavior remain broad. No other command is narrowed; no
+checker semantics or receipt schema changes. Exact command argv, including
+the binding, remains part of command-manifest and receipt reuse identity, so
+bound and unbound receipts cannot be exchanged.
+
 Implementation is blocked when:
 
 - the current work order would fail `pre-dispatch`;

@@ -10,7 +10,9 @@
   "planeMembership": [
     "cvf.asc.plane.evidence_to_operator_surface.v1"
   ],
-  "inboundEdgeIds": [],
+  "inboundEdgeIds": [
+    "cvf.asc.edge.qm_service_token_replay_consumers.v1"
+  ],
   "outboundEdgeIds": [],
   "citations": [
     {
@@ -24,8 +26,8 @@
     "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/"
   ],
   "lastReviewed": {
-    "date": "2026-07-11",
-    "acceptedArtifact": "docs/reviews/CVF_MSEA_ASC_T0_SOURCE_SCHEMA_AND_RECONCILIATION_CONTRACT_WORKER_RETURN_2026-07-11.md"
+    "date": "2026-09-15",
+    "acceptedArtifact": "docs/reviews/CVF_THREE_REPO_PILOT_FINAL_ASSESSMENT_AND_RECOVERY_2026-09-15.md"
   },
   "priorDisposition": ""
 }

@@ -164,6 +164,9 @@ PUBLIC_EXPORT_TOKENS = (
 EXTERNAL_INPUT_CANONICAL = (
     "operator-provided external comparison, critique, or recommendation"
 )
+INTERNAL_ONLY_INPUT_CANONICAL = (
+    "| Input type | internal governed input (no external intake) |"
+)
 DELTA_RECEIPT_TOKENS = ("CLAIM_REJECTED_NO_RECEIPT", "CVF_RECEIPT_PRESENT")
 DELTA_ACTION_TOKENS = ("CLAIM_REJECTED_NO_ACTION", "ACTION_EVIDENCE_PRESENT")
 
@@ -371,7 +374,10 @@ def diagnose(
 
     if not fast_doc:
         external = _section(text, "## External Knowledge Intake Routing")
-        if external and EXTERNAL_INPUT_CANONICAL not in external:
+        if external and not any(
+            marker in external
+            for marker in (EXTERNAL_INPUT_CANONICAL, INTERNAL_ONLY_INPUT_CANONICAL)
+        ):
             issues.append("external knowledge input type is not canonical")
 
     public_export = _section(text, "## Public Export Disposition")
@@ -677,7 +683,82 @@ def _audit_only_drift_paths(changed: dict[str, set[str]]) -> set[str]:
     return hits
 
 
-def run(base: str | None, head: str | None) -> list[Diagnostic]:
+WORKER_RETURN_PATH_SCALAR_RE = re.compile(r"(?m)^\s*Worker return path:\s*(\S.*?)\s*$")
+WORKER_RETURN_PATH_FIELD_RE = re.compile(r"(?m)^\s*workerReturnPath:\s*(\S.*?)\s*$")
+ACTIVE_WORK_ORDER_PREFIX = "docs/work_orders/"
+
+
+def _clean_binding(value: str) -> str:
+    return _normalize(value).strip("`").rstrip(".,;:")
+
+
+def _contained_rel(path: str) -> str | None:
+    """Return the normalized repo-relative path if it resolves inside
+    REPO_ROOT, else None. Absolute paths and escapes are rejected."""
+
+    normalized = _normalize(path)
+    if not normalized or Path(normalized).is_absolute() or re.match(r"^[A-Za-z]:", normalized):
+        return None
+    root = REPO_ROOT.resolve()
+    try:
+        (root / normalized).resolve().relative_to(root)
+    except ValueError:
+        return None
+    return normalized
+
+
+def diagnose_active_work_order(
+    work_order_path: str,
+    *,
+    resolver_registry: "dict[tuple[str, str], object] | None" = None,
+) -> Diagnostic:
+    """DRC-04/DRC-05: resolve the exact worker return bound by the active work
+    order and diagnose it regardless of changed-path discovery. Only that exact
+    return can satisfy the active work order; any other eligible return is
+    irrelevant to this admission."""
+
+    label = f"active work order `{_normalize(work_order_path)}`"
+    wo_rel = _contained_rel(work_order_path)
+    if wo_rel is None or not wo_rel.startswith(ACTIVE_WORK_ORDER_PREFIX) or not wo_rel.endswith(".md"):
+        return Diagnostic(path=_normalize(work_order_path), eligible=True, issues=(
+            f"{label} must be a repo-contained `{ACTIVE_WORK_ORDER_PREFIX}*.md` path",))
+    wo_text = _read(wo_rel)
+    if not wo_text:
+        return Diagnostic(path=wo_rel, eligible=True, issues=(f"{label} is missing or unreadable",))
+
+    scalars = [_clean_binding(v) for v in WORKER_RETURN_PATH_SCALAR_RE.findall(wo_text)]
+    fields = [_clean_binding(v) for v in WORKER_RETURN_PATH_FIELD_RE.findall(wo_text)]
+    if len(scalars) != 1 or len(fields) != 1 or scalars[0] != fields[0]:
+        return Diagnostic(path=wo_rel, eligible=True, issues=(
+            f"{label} must bind exactly one agreeing `Worker return path:` and "
+            f"`workerReturnPath:` (found {scalars or 'none'} / {fields or 'none'})",))
+
+    return_rel = _contained_rel(scalars[0])
+    if return_rel is None:
+        return Diagnostic(path=scalars[0], eligible=True, issues=(
+            f"exact worker return bound by {label} is not repo-contained",))
+    return_text = _read(return_rel)
+    if not return_text:
+        return Diagnostic(path=return_rel, eligible=True, issues=(
+            f"exact worker return bound by {label} is absent; no other return can satisfy it",))
+
+    d = diagnose(return_rel, return_text, resolver_registry=resolver_registry)
+    if not d.eligible:
+        return Diagnostic(path=return_rel, eligible=True, issues=(
+            f"exact worker return bound by {label} is not an eligible worker-return artifact",))
+    issues = list(d.issues)
+    bound_back = _dispatch_work_order_path(return_text)
+    if bound_back != wo_rel:
+        issues.append(
+            f"exact worker return `dispatchWorkOrder` is `{bound_back or 'missing'}`, "
+            f"not the active work order `{wo_rel}`"
+        )
+    return Diagnostic(path=return_rel, eligible=True, issues=tuple(issues))
+
+
+def run(
+    base: str | None, head: str | None, active_work_order: str | None = None
+) -> list[Diagnostic]:
     diagnostics: list[Diagnostic] = []
     changed = get_changed_paths(base, head)
     diagnosed_paths: set[str] = set()
@@ -697,7 +778,17 @@ def run(base: str | None, head: str | None) -> list[Diagnostic]:
     if index_state is not None:
         diagnostics.append(Diagnostic(path=EVIDENCE_READINESS_AUDIT_INDEX_PATH, eligible=True, issues=(index_state,)))
 
+    # Active-work-order admission is rooted in the explicit order, not in Git
+    # discovery: the exact bound return is always diagnosed, even when the
+    # changed set selects zero returns.
+    if active_work_order:
+        active = diagnose_active_work_order(active_work_order, resolver_registry=resolver_registry)
+        diagnostics.append(active)
+        diagnosed_paths.add(active.path)
+
     for path, statuses in sorted(changed.items()):
+        if path in diagnosed_paths:
+            continue
         if not any(status.startswith(("A", "M", "R")) for status in statuses):
             continue
         text = _read(path)
@@ -743,15 +834,25 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--base", default=None)
     parser.add_argument("--head", default="HEAD")
     parser.add_argument("--enforce", action="store_true")
+    parser.add_argument(
+        "--active-work-order",
+        default=None,
+        help=(
+            "Repo-relative work order being executed. Its exact bound worker "
+            "return must exist and pass; zero eligible returns then fails."
+        ),
+    )
     args = parser.parse_args(argv)
 
     print("=== CVF Worker Return Quality Gate ===")
     print(f"Standard: {STANDARD_PATH}")
     if args.base:
         print(f"Range: {args.base}..{args.head}")
+    if args.active_work_order:
+        print(f"Active work order: {_normalize(args.active_work_order)}")
 
     try:
-        diagnostics = run(args.base, args.head)
+        diagnostics = run(args.base, args.head, args.active_work_order)
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL: {exc}")
         return 2 if args.enforce else 0

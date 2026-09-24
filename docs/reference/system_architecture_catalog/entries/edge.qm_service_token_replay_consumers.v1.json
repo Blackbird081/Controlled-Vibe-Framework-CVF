@@ -1,0 +1,31 @@
+{
+  "stableId": "cvf.asc.edge.qm_service_token_replay_consumers.v1",
+  "entityType": "EDGE",
+  "sourceId": "cvf.asc.control.qm_service_token_replay_dedupe.v1",
+  "targetId": "cvf.asc.module.web_agent_platform.v1",
+  "edgeProofClass": "INVOKED_EDGE",
+  "evidenceRecency": "NOT_APPLICABLE",
+  "operatorVisibility": "ABSENT",
+  "citations": [
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts",
+      "lineOrSection": "import line 25; invocation line 117",
+      "evidenceRole": "execute route POST handler calls verifyServiceTokenRequest for service-token authentication before session/route processing"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/qbs/front-door-clarification/route.ts",
+      "lineOrSection": "import line 5; invocation line 26",
+      "evidenceRole": "QBS front-door-clarification route POST handler calls verifyServiceTokenRequest as its sole authentication gate"
+    }
+  ],
+  "claimBoundary": "Records that two non-test Web routes invoke the QM replay-dedupe control. Does not claim production traffic volume, live receipt, operator-visible readout, restart persistence, multi-process coordination, or distributed replay protection; both consumers share the same single-process ledger instance per Node.js runtime.",
+  "freshnessInputs": [
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/execute/route.ts",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/qbs/front-door-clarification/route.ts"
+  ],
+  "lastReviewed": {
+    "date": "2026-09-15",
+    "acceptedArtifact": "docs/reviews/CVF_THREE_REPO_PILOT_FINAL_ASSESSMENT_AND_RECOVERY_2026-09-15.md"
+  },
+  "priorDisposition": ""
+}

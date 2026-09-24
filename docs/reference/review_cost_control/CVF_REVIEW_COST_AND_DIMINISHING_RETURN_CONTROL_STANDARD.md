@@ -272,6 +272,271 @@ ignore an explicit numerical cap, perform a forbidden action, or self-authorize
 live/provider/public/destructive work. The current checker does not infer these
 semantic facts; reviewers and closers must apply them from evidence.
 
+## Independent Review Probe Admission Boundary
+
+A recurring failure class exists across worker/model quality: a worker's own
+passing test suite, or a second assertion over the same implementation
+oracle, is not independent evidence for high-risk work. ACEL-G1-T3A-C2's R3-R1
+history is the concrete recurrence: worker self-tests reached 50/50 and 81/81
+green while an independent Local probe still found a caller-controlled
+authority-override path and a raw-text JSON duplicate-member defect that the
+worker's own suite never exercised. This section extends this standard's
+existing review-admission and dispatch-convergence ownership to close that
+gap without creating a parallel review system.
+
+### Trigger Vocabulary
+
+Work is `independentProbeRequired: YES` when it touches at least one of:
+high-risk authority, canonicalization, integrity, secret, irreversible, live,
+or public-effect surfaces. Work with none of these is
+`independentProbeRequired: NOT_APPLICABLE_WITH_REASON` followed by a
+non-empty reason. Every active changed work order (`docType: work_order`,
+outside `/archive/`) must declare exactly one `independentProbeRequired`
+occurrence; a work order that omits it entirely is not exempt by omission.
+
+A narrow, deterministic high-risk marker set makes the N/A choice illegal
+regardless of the dispatcher's own preference, so a risky packet cannot
+opt out by never writing `YES`: a literal `## Core Guard Self-Protection
+Authorization` heading (protected/authority-bearing path); a
+`providerExecutionAuthority` field whose value is not `FORBIDDEN` (an
+actually-granted provider/live surface); a literal `canonicaliz` substring
+(canonicalization surface); or a literal `Party A` mention (secret/
+irreversible key-ceremony surface). Any changed work order carrying one of
+these markers must declare `independentProbeRequired: YES`; declaring
+`NOT_APPLICABLE_WITH_REASON` next to a present marker is rejected. This
+marker set is a narrow, literal, low-false-positive floor, not a claim that
+absence of a marker proves the work is genuinely low-risk; a dispatcher may
+still and should still declare `YES` for a risk the marker set does not
+name. The machine boundary below enforces only marker-triggered token
+selection, field presence, and reason non-emptiness -- not that a `YES`
+declaration made without a marker present was the semantically correct
+call. Trigger classification beyond the marker floor remains reviewer/
+dispatcher judgment, consistent with the Trigger-Based Review Admission
+Boundary above.
+
+### Dispatch-Time Plan Requirement
+
+A changed work order (`docType: work_order`) declaring
+`independentProbeRequired: YES` must carry a complete
+`Independent Review Probe Admission Contract` block naming:
+`independentProbeRiskClass`, `independentProbeDispositionAtDispatch`,
+`probeExecutorRole`, `implementationOracleSeparation`, `positiveControl`,
+`negativeMutationClasses`, `expectedInformationGain`, `rerunCostReason`, and
+`reviewerDecisionOwner`. `probeExecutorRole` must name a non-worker role (for
+example `LOCAL_REVIEWER_NOT_IMPLEMENTATION_WORKER`), never the implementation
+worker itself. This is the minimal sufficient dispatch-time plan, not a
+broader mandatory review stage; it does not override the existing
+Trigger-Based Review Admission Boundary for when a *pre-execution* review is
+separately admitted.
+
+### Closure-Time Evidence Requirement
+
+A changed, closure-claiming review or completion artifact answering
+high-risk work carries `independentProbeDisposition`, one of:
+
+- `PENDING_REVIEWER_EXECUTION` -- valid only while the artifact's own status
+  is a non-terminal worker-return state (for example
+  `COMPLETE_PENDING_REVIEW` or `BLOCKED_WITH_REASON`); never valid on an
+  artifact whose status or disposition claims a terminal accepted/closed
+  outcome.
+- `PASS_INDEPENDENT_PROBE` -- valid only when the artifact also names a
+  `probeExecutorActor` distinct from the implementation worker, a
+  `probeCommandOrMethod`, a `probeObservedResult`, and an
+  `oracleSeparationBasis` stating why the probe used a different execution
+  and assertion path than the worker's own suite. A worker's own test suite
+  name, or a probe whose command or oracle is identical to the worker's own
+  implementation/test oracle, does not satisfy `oracleSeparationBasis`.
+- `FAIL_INDEPENDENT_PROBE` or `BLOCKED_INDEPENDENT_PROBE_WITH_REASON` --
+  reviewer-owned negative outcomes; both block a closure claim exactly as
+  `PENDING_REVIEWER_EXECUTION` does.
+
+Only `PASS_INDEPENDENT_PROBE` may accompany a terminal closed/accepted
+disposition on an artifact whose dispatch declared
+`independentProbeRequired: YES`. This is a structural evidence-shape and role-
+separation check. It does not judge whether the named probe was semantically
+sufficient, whether `oracleSeparationBasis` is truthfully independent in
+substance, or whether the reviewer's disposition was the correct call; those
+remain exclusively reviewer/orchestrator judgment, identical in kind to this
+standard's existing `stopDisposition` and review-admission-trigger boundaries.
+
+### Closure-Linkage Resolution
+
+Closure-time applicability is not limited to an artifact that already
+declares `independentProbeDisposition` on its own. An artifact carrying an
+exact repo-relative `dispatchWorkOrder` or `Responds to work order`
+reference is also applicable: the referenced active work order is loaded,
+and when it declares `independentProbeRequired: YES`, the referencing
+artifact must carry exactly one `independentProbeDisposition`. A reference
+that is missing, ambiguous (two disagreeing reference fields), empty,
+non-`.md`, traversal-bearing, pointing to a non-existent file, or pointing
+into an archived path fails closed as an admission-boundary violation, not
+as silently not-applicable; a document that plainly intends to link to a
+work order does not escape the control by linking incorrectly. This closes
+the class of defect where a terminal review omits the disposition field
+entirely while its linked work order required independent review.
+
+### Oracle Fingerprint And Evidence Binding
+
+A terminal `PASS_INDEPENDENT_PROBE` additionally carries exactly one each of
+`workerOracleSha256`, `probeOracleSha256`, `workerEvidenceRef`, and
+`probeEvidenceRef`. The two digests are canonical lowercase 64-hex SHA-256
+values and must be unequal; the two evidence references are normalized,
+non-empty, repo-relative, non-traversing paths and must be unequal. These
+fields bind the closure claim to concrete, distinguishable artifacts on both
+the worker and reviewer side, beyond the invocation-ID and command-
+fingerprint separation this standard already required, so an arbitrary
+label pair can no longer satisfy the machine shape. As with every other
+control in this section, the guard validates the declared binding's shape
+and distinctness only; whether the cited oracle and evidence artifacts are
+themselves the correct, substantively independent proof remains reviewer
+judgment.
+
+### Status Authority And Field Grammar
+
+Only the metadata preamble -- the document text before its first level-two
+(`## `) section heading -- is ever read for the authoritative `Status:`
+declaration. Exactly one preamble `Status:` occurrence is required; zero or
+more than one, even when every occurrence carries the identical value, is
+treated as missing/ambiguous and rejects an applicable closure evaluation.
+Body prose, tables, blockquotes, inline code, and fenced examples never
+count toward this or any other field's cardinality, including an empty
+duplicate declaration, which must be counted before value validation rather
+than silently dropped. Every reason-bearing token
+(`NOT_APPLICABLE_WITH_REASON`, `BLOCKED_INDEPENDENT_PROBE_WITH_REASON`)
+requires the token's exact `PREFIX`, `PREFIX: reason`, or `PREFIX-reason`
+grammar; a suffix token such as `NOT_APPLICABLE_WITH_REASONX` is not the
+same token and is rejected, not accepted as a reasoned variant.
+Dispatch-plan fields are read only from the
+text inside exactly one `## Independent Review Probe Admission Contract`
+section, never from unrelated historical or body prose elsewhere in the
+document; a second such heading is itself a violation. `probeExecutorRole`
+and `reviewerDecisionOwner` require their exact controlled tokens
+(`LOCAL_REVIEWER_NOT_IMPLEMENTATION_WORKER` and `LOCAL` respectively), not a
+substring match, so a malicious composite string naming the worker role
+inside a longer value cannot pass by containing the exempting phrase.
+
+### Integrated Root Contract: Shared Parsing Substrate
+
+Every dispatch-time, link-resolution, closure-time, and status-authority read
+in this boundary is served by one shared declaration-scanning primitive, not
+independent ad hoc parsing per call site; identical masking and cardinality
+semantics therefore apply everywhere a field is read. A fenced block is
+recognized whether it opens with three or more backtick characters or three
+or more tilde characters, and closes only on a line using the SAME delimiter
+character whose run length is at least as long as the opener's, per the
+CommonMark fence-closing rule; a `Status:` or any other field declaration
+appearing only inside such a fence, regardless of its delimiter length or
+character, never counts as a real declaration. A controlled scalar's
+cardinality (`EXACTLY_ONE` or `ZERO_OR_ONE`) is evaluated by counting
+declarations, including empty ones, before any value is interpreted, so an
+empty duplicate can never hide behind a valid later value.
+
+An HTML comment is masked through its closing `-->`, or through end of file
+when no closer exists, so an unterminated comment cannot manufacture a
+declaration. When a caller explicitly supplies `--active-work-order` under
+`--changed-lane-only`, failure to resolve that work order and exactly one valid
+declared worker-return path is itself a gate violation; an invalid binding is
+never silently treated as though no active binding had been requested.
+
+The two supported link field names (`dispatchWorkOrder` and `Responds to
+work order`) are resolved as aliases for one logical reference: cardinality
+is checked per field name (each may occur at most once), and when both are
+declared they must name the same target; declaring both once each with
+matching values -- this repository's own established template convention --
+is the normal case, not a duplicate, while a true duplicate (the same field
+name declared twice) or a disagreeing pair both fail closed.
+
+An evidence reference (`workerEvidenceRef`, `probeEvidenceRef`) must be a
+canonical repo-relative path: no URI scheme, no UNC or absolute or drive
+path, no backslashes, no empty/`.`/`..` segments, no repeated separators,
+and no path resolving outside the repository. A terminal `PASS_INDEPENDENT_
+PROBE`'s declared `workerOracleSha256`/`probeOracleSha256` is not merely
+checked for canonical hex syntax; it is independently recomputed as the
+SHA-256 of the actual bytes at its paired evidence reference on disk, and
+the declared digest must equal that recomputed value. An evidence reference
+that does not exist as a regular file, or that names the closure document
+itself, fails closed before any digest comparison is attempted.
+
+A CommonMark inline code span (a run of N backticks closed by the next run
+of exactly N, which may itself span multiple lines) is masked in full,
+except a single-line span sitting directly after a bare `fieldName:` prefix
+-- the one legitimate backtick-wrapped value shape. A declaration-shaped
+line (for example `Status: CLOSED_PASS_BOUNDED`) sitting only inside a
+multi-line inline code quote, regardless of delimiter length, never counts
+as a real declaration; only masking a single fixed backtick-and-colon
+pattern left this class of quote unmasked.
+
+Role separation under a terminal `PASS_INDEPENDENT_PROBE` is a structural
+contract, not a keyword blacklist against free-form actor prose: the
+closure carries exactly one controlled `probeExecutorRole` token (the same
+exact non-worker token a dispatch plan requires) plus two distinct
+canonically normalized actor IDs, `implementationWorkerActor` and
+`probeExecutorActor`. Canonicalization inserts a separator at camelCase word
+boundaries, collapses whitespace/hyphens/underscores to one underscore, and
+uppercases, so `Claude implementation worker`, `implementation_worker`, and
+`ImplementationWorker` all normalize identically; separation is judged by
+these two canonical IDs being unequal, never by scanning either actor
+string for a worker-identity keyword. A free-form phrase naming the worker
+without using any enumerated marker word (for example a plain provider or
+agent label) is therefore still caught when declared as both actors,
+because the two canonical IDs are then equal, not because the phrase itself
+was recognized.
+
+### Forward-Only Changed-Lane Boundary
+
+The admission gate always diagnoses every applicable artifact in the full
+working-tree surface (the requested base..head range, the live and staged
+diff, and every untracked file), so a real applicable artifact is never
+silently skipped. A separate, narrower changed-lane filter -- invoked by the
+worker-return fast gate as `--changed-lane-only` -- additionally restricts
+which violations can fail that gate to paths inside the base..head diff or
+the live/staged diff only, excluding the blanket untracked-file sweep. Git
+trackedness alone cannot distinguish an artifact the current dispatch is
+actively producing (necessarily untracked while `WORKER_MUST_NOT_COMMIT`
+holds) from a pre-existing untracked artifact abandoned by an unrelated,
+already-parked tranche; the caller therefore names the current dispatch's
+own work order explicitly via `--active-work-order`, and the checker reads
+that file's own `Worker return path:` declaration to add the artifact it
+names to the lane unconditionally, regardless of tracked status. A
+violation on a pre-existing untracked artifact not named this way is still
+printed as a known finding, but does not block an unrelated dispatcher's
+commit; a violation on a path actually inside the current lane -- including
+the active dispatch's own return -- still fails the gate exactly as before.
+This closes the class of defect where policing an entire repository
+snapshot let a stale, disconnected finding block unrelated work indefinitely,
+while also closing the narrower defect where the CURRENT dispatch's own
+untracked return could itself escape the lane it was meant to police.
+
+### Machine-Enforceable Boundary Addendum
+
+| Control | Machine disposition |
+|---|---|
+| dispatch-time plan field presence for `independentProbeRequired: YES` | ENFORCE |
+| `probeExecutorRole` and `reviewerDecisionOwner` use their exact controlled tokens | ENFORCE |
+| dispatch-plan fields are read only from exactly one contract section | ENFORCE |
+| closure-time `independentProbeDisposition` token shape and reason grammar | ENFORCE |
+| closure applicability resolves from an exact linked work-order reference | ENFORCE |
+| unresolvable linked work-order reference fails closed | ENFORCE |
+| `PENDING_REVIEWER_EXECUTION`/fail/blocked tokens rejected on a terminal closed/accepted disposition | ENFORCE |
+| exactly one authoritative metadata-preamble `Status:` declaration | ENFORCE |
+| fenced-block recognition covers any matching-delimiter backtick or tilde run | ENFORCE |
+| evidence references are canonical repo-relative paths to existing, non-self-referential files | ENFORCE |
+| declared oracle digests are recomputed against actual evidence-file bytes | ENFORCE |
+| worker-identity comparison is structural (camelCase/case/separator-normalized), not an enumerated substring list | ENFORCE |
+| a multi-line inline code span never creates a real declaration | ENFORCE |
+| `PASS_INDEPENDENT_PROBE` requires a controlled role token plus two distinct normalized actor IDs | ENFORCE |
+| changed-lane-only gate scope excludes pre-existing unrelated untracked findings | ENFORCE |
+| `--active-work-order`'s declared return path is always in the changed lane regardless of tracked status | ENFORCE |
+| an explicitly supplied invalid `--active-work-order` binding fails closed | ENFORCE |
+| closed and unterminated HTML comments cannot create declarations | ENFORCE |
+| `PASS_INDEPENDENT_PROBE` requires actor, command, result, and separation-basis fields | ENFORCE |
+| `PASS_INDEPENDENT_PROBE` requires distinct oracle digest and evidence-reference bindings | ENFORCE |
+| worker-identical actor or worker-identical command/oracle literal match under `PASS_INDEPENDENT_PROBE` | ENFORCE |
+| whether `independentProbeRequired` trigger classification is correct | REVIEWER_JUDGMENT |
+| whether a named probe was semantically sufficient | REVIEWER_JUDGMENT |
+| whether `oracleSeparationBasis` is truthfully independent in substance | REVIEWER_JUDGMENT |
+| whether a cited oracle/evidence artifact is substantively the correct proof | REVIEWER_JUDGMENT |
+
 ## Trigger-Based Review Admission Boundary
 
 Review is admitted by a control event, not by the number of artifacts, roles,

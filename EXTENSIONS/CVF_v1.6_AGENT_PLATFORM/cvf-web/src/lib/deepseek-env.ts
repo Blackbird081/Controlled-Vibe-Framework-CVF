@@ -1,3 +1,9 @@
+import {
+  isProviderApiKeyConfiguredFromEnv,
+  resolveProviderApiKeyFromEnv,
+  resolveProviderApiKeySourceNameFromEnv,
+} from './provider-api-key-env';
+
 export const DEEPSEEK_API_KEY_ENV_NAMES = [
   'DEEPSEEK_API_KEY',
   'CVF_BENCHMARK_DEEPSEEK_KEY',
@@ -7,31 +13,17 @@ export const DEEPSEEK_API_KEY_ENV_NAMES = [
 export function resolveDeepSeekApiKey(
   env: NodeJS.ProcessEnv = process.env,
 ): string | undefined {
-  for (const envName of DEEPSEEK_API_KEY_ENV_NAMES) {
-    const raw = env[envName];
-    if (typeof raw === 'string' && raw.trim()) {
-      return raw.trim();
-    }
-  }
-
-  return undefined;
+  return resolveProviderApiKeyFromEnv(DEEPSEEK_API_KEY_ENV_NAMES, env);
 }
 
 export function resolveDeepSeekApiKeySourceName(
   env: NodeJS.ProcessEnv = process.env,
 ): string | null {
-  for (const envName of DEEPSEEK_API_KEY_ENV_NAMES) {
-    const raw = env[envName];
-    if (typeof raw === 'string' && raw.trim()) {
-      return envName;
-    }
-  }
-
-  return null;
+  return resolveProviderApiKeySourceNameFromEnv(DEEPSEEK_API_KEY_ENV_NAMES, env);
 }
 
 export function isDeepSeekApiKeyConfigured(
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
-  return typeof resolveDeepSeekApiKey(env) === 'string';
+  return isProviderApiKeyConfiguredFromEnv(DEEPSEEK_API_KEY_ENV_NAMES, env);
 }

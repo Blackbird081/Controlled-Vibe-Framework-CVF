@@ -183,6 +183,14 @@ class DiagnoseTests(unittest.TestCase):
         self.assertFalse(d.is_clean)
         self.assertTrue(any("canonical" in issue for issue in d.issues))
 
+    def test_internal_only_input_type_is_accepted(self) -> None:
+        text = VALID_RETURN.replace(
+            "| Input type | operator-provided external comparison, critique, or recommendation |",
+            chk.INTERNAL_ONLY_INPUT_CANONICAL,
+        )
+        d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", text)
+        self.assertTrue(d.is_clean, d.issues)
+
     def test_dispatch_authorized_fast_doc_return_is_clean(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo_root = Path(tmp)
@@ -891,6 +899,7 @@ class StandardParityTests(unittest.TestCase):
         expected_tokens = (
             *chk.PLACEHOLDER_MARKERS,
             chk.EXTERNAL_INPUT_CANONICAL,
+            chk.INTERNAL_ONLY_INPUT_CANONICAL,
             *chk.DELTA_RECEIPT_TOKENS,
             *chk.DELTA_ACTION_TOKENS,
             *chk.PUBLIC_EXPORT_TOKENS,

@@ -10,10 +10,11 @@ _DISPATCH_BASE_FIELD_RE = re.compile(
     r"(?im)^\s*(?:[-*]\s*)?Dispatch base head:\s*`?([0-9a-f]{6,40})`?\s*$"
 )
 _DISPATCH_BASE_HEAD_INLINE_RE = re.compile(
-    r"(?i)\bdispatchBaseHead\s*=\s*`?([0-9a-f]{6,40})`?"
+    r"(?i)\bdispatchBaseHead\s*[:=]\s*`?([0-9a-f]{6,40})`?"
 )
 _PRECLOSURE_COMMAND_RE = re.compile(
-    r"(?im)^[^\n]*run_agent_autorun_workflow_gate\.py[^\n]*--phase\s+pre-closure[^\n]*$"
+    r"(?im)^[^\n]*(?:run_agent_autorun_workflow_gate\.py[^\n]*--phase\s+pre-closure|"
+    r"check_work_order_dispatch_quality\.py)[^\n]*$"
 )
 _COMMAND_BASE_ARG_RE = re.compile(r"--base\s+(\S+)")
 _COMMAND_HEAD_ARG_RE = re.compile(r"--head\s+(\S+)")
@@ -39,17 +40,11 @@ def _extract_dispatch_base_values(text: str) -> set[str]:
 
 
 def _validate_stale_preclosure_dispatch_base(text: str) -> list[str]:
-    """Reject an executable pre-closure `run_agent_autorun_workflow_gate.py`
-    command whose `--base` reuses this work order's own dispatch base
-    together with `--head HEAD`, because a session-sync or continuity commit
-    landing after the material worker/reviewer commit makes that pinned
-    range invalid by construction (literal-format gotcha 12; the runtime
-    committed-range shape preflight already rejects the mixed range at
-    execution time, but nothing previously stopped a work order from
-    dispatching with that command pre-pinned as if it were valid closure
-    proof). Only the real `## Verification Commands` section is scanned, so
-    the same unsafe string appearing in explanatory prose elsewhere is not
-    flagged."""
+    """Reject closure or dispatch-quality commands that reuse dispatch base with HEAD.
+
+    A later continuity commit makes that range include non-worker changes; pending
+    worker validation must start at executionBaseHead. Prose elsewhere is not scanned.
+    """
     commands_section = _extract_section(text, "Verification Commands")
     if not commands_section:
         return []
@@ -73,15 +68,53 @@ def _validate_stale_preclosure_dispatch_base(text: str) -> list[str]:
         )
         if is_literal_reuse or is_symbolic_reuse:
             issues.append(
-                "`## Verification Commands` pins an executable pre-closure "
-                "`run_agent_autorun_workflow_gate.py --phase pre-closure ... --head HEAD` "
-                "command to this work order's own dispatch base "
+                "`## Verification Commands` pins an executable closure/dispatch-quality "
+                "command ending at `HEAD` to this work order's own dispatch base "
                 f"(`{base_value}`); a later session-sync or continuity commit can make "
-                "that range invalid as closure proof (literal-format gotcha 12) - use a "
-                "distinct material/reviewer closure anchor instead, or record the "
-                "material-only sub-range separately from the full range"
+                "that range invalid as worker or closure proof (literal-format gotcha 12) - "
+                "use `executionBaseHead` for pending worker validation or a distinct "
+                "material/reviewer closure anchor for closure proof"
             )
             break
+    return issues
+
+
+_WORKER_RETURN_PATH_SCALAR_RE = re.compile(r"(?m)^\s*Worker return path:\s*(\S.*?)\s*$")
+_WORKER_RETURN_PATH_FIELD_RE = re.compile(r"(?m)^\s*workerReturnPath:\s*(\S.*?)\s*$")
+_REQUIRED_ARTIFACT_MANIFEST_HEADING_RE = re.compile(r"(?im)^##\s+Required Artifact Manifest\s*$")
+
+
+def _validate_ready_manifest_and_return_binding(text: str) -> list[str]:
+    """DRC-01/02: every ready no-commit order needs a parseable manifest and one agreeing return binding at dispatch."""
+    scalars = [_clean_manifest_path(v) for v in _WORKER_RETURN_PATH_SCALAR_RE.findall(text)]
+    fields = [_clean_manifest_path(v) for v in _WORKER_RETURN_PATH_FIELD_RE.findall(text)]
+    has_heading = _REQUIRED_ARTIFACT_MANIFEST_HEADING_RE.search(text) is not None
+    if not _is_worker_must_not_commit(text):
+        return []
+    prefix, issues = "ready WORKER_MUST_NOT_COMMIT work order", []
+    required = [
+        path
+        for table in (_section_tables(text, "Required Artifact Manifest") if has_heading else [])
+        for row in table
+        for path in [_clean_manifest_path(_row_value(row, "Path", "Artifact", "Required artifact"))]
+        if path and "FILL_ME" not in path and "/" in path
+        and (not any(_normalize_table_key(k) in {"requiredathandoff", "required", "mustexist"} for k in row)
+             or _truthy_cell(_row_value(row, "Required at handoff", "Required", "Must exist")))
+    ]
+    if not has_heading:
+        issues.append(f"{prefix} lacks `## Required Artifact Manifest`; declare exact worker paths before dispatch")
+    elif not required:
+        issues.append(f"{prefix} has a prose-only or unparseable `## Required Artifact Manifest`; use a Path table")
+    for label, values in (("Worker return path:", scalars), ("workerReturnPath:", fields)):
+        if not values:
+            issues.append(f"{prefix} lacks exact `{label}` binding")
+        elif len(values) > 1:
+            issues.append(f"{prefix} has {len(values)} `{label}` bindings; exactly one is allowed")
+    if len(scalars) == 1 and len(fields) == 1:
+        if scalars[0] != fields[0]:
+            issues.append(f"`Worker return path:` (`{scalars[0]}`) and `workerReturnPath:` (`{fields[0]}`) disagree")
+        elif required and scalars[0] not in required:
+            issues.append(f"worker return binding `{scalars[0]}` is not a required row of `## Required Artifact Manifest`")
     return issues
 
 
@@ -99,18 +132,14 @@ def _validate_work_order(path: str, text: str) -> list[str]:
 
     if dispatching:
         issues.extend(_validate_stale_roadmap_redispatch(path, text))
-
-    if dispatching and not _has_worker_autonomy_clause(text):
-        issues.append("dispatch/ready work order lacks Worker Autonomy / No-Question Rule")
-
-    if dispatching:
+        if not _has_worker_autonomy_clause(text):
+            issues.append("dispatch/ready work order lacks Worker Autonomy / No-Question Rule")
         issues.extend(_validate_stale_preclosure_dispatch_base(text))
-
-    if dispatching:
         issues.extend(_validate_commit_mode_and_anchor_lifecycle(text))
         issues.extend(_validate_worker_completion_review_boundary(text))
         issues.extend(_validate_no_commit_reviewer_closure_contract(text))
         issues.extend(_validate_worker_return_packet_shape_contract(text))
+        issues.extend(_validate_ready_manifest_and_return_binding(text))
         issues.extend(_validate_source_verification_table_shape(text))
         issues.extend(_validate_source_verification_disposition_discipline(text))
         issues.extend(_validate_intake_role_routing_decision(text, "work order"))
@@ -586,6 +615,10 @@ def _validate_path(path: str) -> list[str]:
     text = _read_rel(path)
     if not text:
         return ["changed governed dispatch artifact is missing from workspace"]
+    return _validate_text(path, text)
+
+
+def _validate_text(path: str, text: str) -> list[str]:
     normalized = path.replace("\\", "/")
     if normalized.startswith("docs/work_orders/"):
         return _validate_work_order(normalized, text)
@@ -634,23 +667,7 @@ def _classify(changed_files: list[str], base_ref: str | None = None) -> dict[str
         # committed (HEAD) version of the file, this commit did not introduce them.
         head_text = _read_rel_at("HEAD", path)
         if head_text:
-            from functools import reduce as _reduce
-            def _issues_for_text(p: str, t: str) -> list[str]:
-                n = p.replace("\\", "/")
-                if n.startswith("docs/work_orders/"):
-                    return _validate_work_order(n, t)
-                if n.startswith("docs/roadmaps/"):
-                    return _validate_roadmap(n, t)
-                if n.startswith("docs/baselines/"):
-                    return _validate_baseline(n, t)
-                if n.startswith("docs/reviews/") and "FAST_LANE_AUDIT" in n.upper():
-                    return _validate_fast_lane_audit(n, t)
-                if n.startswith("docs/reviews/") or (
-                    n.startswith("docs/reference/CVF_LHW") and "CONNECTOR_SPEC" in n.upper()
-                ):
-                    return _validate_completion_or_spec(n, t)
-                return []
-            head_issues = set(_issues_for_text(path, head_text))
+            head_issues = set(_validate_text(path, head_text))
             new_issues = [i for i in issues if i not in head_issues]
             if not new_issues:
                 continue
@@ -952,4 +969,3 @@ def _validate_architecture_readiness_admission(path: str, text: str) -> list[str
         )
 
     return issues
-

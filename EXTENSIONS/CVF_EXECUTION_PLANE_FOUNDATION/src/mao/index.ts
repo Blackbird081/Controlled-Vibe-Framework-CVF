@@ -419,3 +419,23 @@ export {
   buildOperationalOperatorProjection,
   MaoOperationalOperatorProjection,
 } from "./operational.operator.projection";
+
+// --- ACEL post-G7 HyperFrames P0 artifact completion and scope evidence ---
+
+export type {
+  MaoArtifactCompletionStatus,
+  MaoArtifactCompletionIssueCode,
+  MaoExpectedArtifact,
+  MaoObservedArtifact,
+  MaoWorkerCompletionNotification,
+  MaoArtifactCompletionScopeInput,
+  MaoArtifactCompletionScopeReceipt,
+  MaoArtifactCompletionScopeFailure,
+  MaoArtifactCompletionScopeSuccess,
+  MaoArtifactCompletionScopeResult,
+} from "./artifact.completion.scope.contract";
+
+export {
+  MAO_ARTIFACT_COMPLETION_SCOPE_VERSION,
+  evaluateArtifactCompletionScope,
+} from "./artifact.completion.scope.contract";

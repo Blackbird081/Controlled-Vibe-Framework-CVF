@@ -174,6 +174,18 @@ class DiagnoseTests(unittest.TestCase):
         self.assertFalse(d.is_clean)
         self.assertTrue(any("command evidence" in issue for issue in d.issues))
 
+    def test_complete_return_rejects_nonmatching_manifest_delta(self) -> None:
+        text = VALID_RETURN.replace("| Manifest delta | MATCH |", "| Manifest delta | two paths outside the manifest |")
+        d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", text)
+        self.assertFalse(d.is_clean)
+        self.assertTrue(any("Manifest delta" in issue for issue in d.issues))
+
+    def test_complete_return_rejects_self_declared_final_hash(self) -> None:
+        text = VALID_RETURN + "\nfinal frozen SHA-256 `" + ("a" * 64) + "`\n"
+        d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", text)
+        self.assertFalse(d.is_clean)
+        self.assertTrue(any("detached receipt" in issue for issue in d.issues))
+
     def test_noncanonical_external_input_fails(self) -> None:
         text = VALID_RETURN.replace(
             "operator-provided external comparison, critique, or recommendation",

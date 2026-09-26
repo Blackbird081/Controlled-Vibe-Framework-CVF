@@ -10,6 +10,8 @@ packet is filled enough to avoid late reviewer repair loops.
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import re
 import subprocess
 import sys
@@ -285,6 +287,79 @@ def _has_all(section: str, labels: tuple[str, ...]) -> list[str]:
     return [label for label in labels if label not in section]
 
 
+def _trace_field(text: str, field: str) -> str:
+    section = _section(text, "## Agent Operation Trace Block")
+    match = re.search(
+        rf"(?mi)^\|\s*{re.escape(field)}\s*\|\s*(.*?)\s*\|\s*$",
+        section,
+    )
+    return match.group(1).strip() if match else ""
+
+
+def _required_gate_consistency_issues(text: str) -> list[str]:
+    if not re.search(r"(?m)^Status:\s*COMPLETE_PENDING_REVIEW\s*$", text):
+        return []
+    issues: list[str] = []
+    manifest_delta = _trace_field(text, "Manifest delta")
+    if re.search(
+        r"(?i)(?:outside\s+(?:the\s+)?manifest|unauthori[sz]ed|partial[_ -]?match|mismatch)",
+        manifest_delta,
+    ):
+        issues.append("COMPLETE_PENDING_REVIEW cannot declare an out-of-manifest or unauthorized Agent Operation Trace `Manifest delta`")
+
+    work_order_path = _dispatch_work_order_path(text)
+    work_order = _read(work_order_path) if work_order_path else ""
+    if "requiredGate:" in work_order and "run_worker_return_fast_gate.py" in work_order:
+        command_evidence = _section(text, "## Command Evidence")
+        passing_line = re.search(
+            r"(?mi)^.*run_worker_return_fast_gate\.py.*\b(?:PASS|COMPLIANT)\b.*$",
+            command_evidence,
+        )
+        if not passing_line:
+            issues.append("COMPLETE_PENDING_REVIEW lacks PASS/COMPLIANT evidence for the required worker-return fast gate")
+
+    if re.search(r"(?i)final frozen SHA-256\s*`[0-9a-f]{64}`", text):
+        issues.append("final return-byte SHA-256 must be bound only by the detached receipt, not self-declared inside the hashed return")
+    return issues
+
+
+def _detached_receipt_issues(work_order_text: str, return_rel: str, return_text: str) -> list[str]:
+    receipt_paths = sorted(set(re.findall(
+        r"`(docs/reviews/evidence/[^`\r\n]*final-return-hash[^`\r\n]*\.json)`",
+        work_order_text,
+        flags=re.IGNORECASE,
+    )))
+    if not receipt_paths:
+        return []
+    if len(receipt_paths) != 1:
+        return ["active work order must bind exactly one detached final-return hash receipt"]
+    receipt_rel = _contained_rel(receipt_paths[0])
+    if receipt_rel is None:
+        return ["detached final-return hash receipt path is not repo-contained"]
+    receipt_text = _read(receipt_rel)
+    if not receipt_text:
+        return [f"detached final-return hash receipt is missing: `{receipt_rel}`"]
+    try:
+        receipt = json.loads(receipt_text)
+    except (json.JSONDecodeError, TypeError):
+        return [f"detached final-return hash receipt is invalid JSON: `{receipt_rel}`"]
+    if not isinstance(receipt, dict):
+        return [f"detached final-return hash receipt must be a JSON object: `{receipt_rel}`"]
+
+    actual = hashlib.sha256((REPO_ROOT / return_rel).read_bytes()).hexdigest()
+    issues: list[str] = []
+    if _normalize(str(receipt.get("workerReturnPath", ""))) != return_rel:
+        issues.append("detached receipt workerReturnPath does not bind the active worker return")
+    for field in ("beforeGateSha256", "afterGateSha256"):
+        if str(receipt.get(field, "")).lower() != actual:
+            issues.append(f"detached receipt {field} does not match the active worker-return bytes")
+    if receipt.get("equalityResult") != "MATCH":
+        issues.append("detached receipt equalityResult must be MATCH")
+    if receipt.get("postGateMutationResult") != "NO_POST_GATE_MUTATION":
+        issues.append("detached receipt postGateMutationResult must be NO_POST_GATE_MUTATION")
+    return issues
+
+
 def _fast_doc_dispatch_issues(text: str) -> list[str]:
     match = re.search(r"(?m)^dispatchWorkOrder:\s*`([^`]+)`\s*$", text)
     if not match:
@@ -390,6 +465,8 @@ def diagnose(
 
     if "WORKER_MUST_NOT_COMMIT honored" not in text and "BLOCKED_WITH_REASON" not in text:
         issues.append("no-commit statement must say `WORKER_MUST_NOT_COMMIT honored`")
+
+    issues.extend(_required_gate_consistency_issues(text))
 
     issues.extend(_evidence_readiness_issues(text, path=path, resolver_registry=resolver_registry))
 
@@ -753,6 +830,7 @@ def diagnose_active_work_order(
             f"exact worker return `dispatchWorkOrder` is `{bound_back or 'missing'}`, "
             f"not the active work order `{wo_rel}`"
         )
+    issues.extend(_detached_receipt_issues(wo_text, return_rel, return_text))
     return Diagnostic(path=return_rel, eligible=True, issues=tuple(issues))
 
 

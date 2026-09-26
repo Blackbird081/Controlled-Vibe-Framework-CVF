@@ -27,6 +27,7 @@ CONTRACT_CITATION = (
 )
 SOURCE_HASH = "a" * 64
 FIXTURE_HASH = "c" * 64
+DECISION_CONTEXT_HASH = "d" * 64
 
 
 def _package(**overrides) -> dict:
@@ -46,6 +47,10 @@ def _passing_evidence(**overrides) -> dict:
         "sourceContentHash": SOURCE_HASH,
         "fixtureContentHash": FIXTURE_HASH,
         "fixtureId": "fx-1",
+        "decisionContextHash": DECISION_CONTEXT_HASH,
+        "candidateSpaceMode": "COMPLETE",
+        "noMatchOutcome": None,
+        "judgmentAuthority": "EVIDENCE_ONLY",
         "repeatPolicy": "DETERMINISTIC",
         "repeatsObserved": 1,
         "repeatsRequired": 1,
@@ -388,6 +393,49 @@ class BehavioralEvaluationEvidenceAdmissionTests(unittest.TestCase):
         del evidence["fixtureId"]
         violations = check_evidence_admission(_package(), evidence)
         self.assertTrue(any("fixtureId is missing or malformed" in v for v in violations))
+
+    # --- post-G7 Jev-derived decision evidence boundaries ---
+    def test_missing_decision_context_hash_fails(self) -> None:
+        evidence = _passing_evidence()
+        del evidence["decisionContextHash"]
+        violations = check_evidence_admission(_package(), evidence)
+        self.assertTrue(any("decisionContextHash is missing or malformed" in v for v in violations))
+
+    def test_malformed_decision_context_hash_fails(self) -> None:
+        violations = check_evidence_admission(
+            _package(), _passing_evidence(decisionContextHash="not-a-hash")
+        )
+        self.assertTrue(any("decisionContextHash is missing or malformed" in v for v in violations))
+
+    def test_incomplete_candidate_space_requires_escape(self) -> None:
+        violations = check_evidence_admission(
+            _package(),
+            _passing_evidence(
+                candidateSpaceMode="INCOMPLETE_WITH_ESCAPE", noMatchOutcome=None
+            ),
+        )
+        self.assertTrue(any("requires a non-empty noMatchOutcome" in v for v in violations))
+
+    def test_incomplete_candidate_space_with_escape_passes(self) -> None:
+        violations = check_evidence_admission(
+            _package(),
+            _passing_evidence(
+                candidateSpaceMode="INCOMPLETE_WITH_ESCAPE",
+                noMatchOutcome="NO_MATCH_ESCALATE",
+            ),
+        )
+        self.assertEqual(violations, [])
+
+    def test_complete_candidate_space_requires_explicit_null_escape(self) -> None:
+        evidence = _passing_evidence(noMatchOutcome="NO_MATCH")
+        violations = check_evidence_admission(_package(), evidence)
+        self.assertTrue(any("requires explicit null noMatchOutcome" in v for v in violations))
+
+    def test_judgment_cannot_grant_action_authority(self) -> None:
+        violations = check_evidence_admission(
+            _package(), _passing_evidence(judgmentAuthority="MAY_ACT_AUTONOMOUSLY")
+        )
+        self.assertTrue(any("must be EVIDENCE_ONLY" in v for v in violations))
 
     # --- non-mutation ---
     def test_never_mutates_inputs(self) -> None:

@@ -95,3 +95,19 @@ export type {
   CalibrationSessionResult,
   TruthModelCalibrationDependencies,
 } from "./truth-model-calibration";
+
+// ACEL post-G7 WikiSkill P0 - proposal impact and rollback evidence.
+export {
+  PROPOSAL_IMPACT_ROLLBACK_EVIDENCE_VERSION,
+  evaluateProposalImpactRollback,
+} from "./proposal-impact-rollback.evidence.contract";
+export type {
+  ProposalImpactDecision,
+  ProposalImpactIssueCode,
+  ProposalImpactRollbackEvidenceInput,
+  ProposalRollbackImpact,
+  ProposalImpactRollbackReceipt,
+  ProposalImpactFailure,
+  ProposalImpactSuccess,
+  ProposalImpactRollbackResult,
+} from "./proposal-impact-rollback.evidence.contract";

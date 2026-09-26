@@ -416,6 +416,33 @@ describe('Delta-T3/T4A governed command launcher', () => {
     expect(state.run).not.toHaveBeenCalled();
   });
 
+  it('fails closed and never re-runs the command when the durable execution intent already exists for this identity (crash-then-retry replay proof)', async () => {
+    // ACEL-AKOE-P2 class 1 (crash after durable admission before effect
+    // dispatch): the real JsonGovernedExecutionStore.beginExecution() uses an
+    // atomic create-exclusive file open ('wx') keyed by consumptionId, so a
+    // process that crashed after T3 admission but before the runner started
+    // and is retried with the SAME identity finds `began === false` on
+    // resume. This proves launchGovernedCommand's existing EEXIST-style
+    // handling refuses to call the runner a second time for that identity,
+    // rather than silently re-executing (and potentially duplicating) the
+    // governed command.
+    const state = setup(successfulRun(), alwaysAllowEngine());
+    state.execution.beginResult = false;
+    const response = await launchGovernedCommand(
+      { profileId: 'git-status', workspaceRoot: await workspace() },
+      state.dependencies
+    );
+    expect(response.accepted).toBe(false);
+    expect(response.error?.code).toBe('EXECUTION_INTENT_ALREADY_EXISTS');
+    // The critical proof: `beginExecution` returning false (the real store's
+    // EEXIST-on-create-exclusive signal for an already-durably-admitted
+    // identity) stops the launcher before the runner is ever reached and
+    // before finalizeExecution is called, regardless of the mock's own
+    // bookkeeping of the attempted receipt shape.
+    expect(state.run).not.toHaveBeenCalled();
+    expect(state.execution.finalization).toBeNull();
+  });
+
   it('rejects lexical cwd escape before preflight', async () => {
     const root = await workspace();
     const state = setup(successfulRun(), alwaysAllowEngine());

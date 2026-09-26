@@ -82,6 +82,15 @@ def _scalar(section: str, field: str) -> str:
     return match.group(1).strip().strip("`") if match else ""
 
 
+def _trace_table_field(text: str, field: str) -> str:
+    section = _section(text, "## Agent Operation Trace Block")
+    for table in _tables(section):
+        for row in table[2:]:
+            if len(row) >= 2 and row[0] == field:
+                return row[1].strip()
+    return ""
+
+
 def _tables(section: str) -> list[list[list[str]]]:
     tables: list[list[list[str]]] = []
     current: list[list[str]] = []
@@ -273,18 +282,63 @@ def check_recheck(path: str, text: str) -> list[Violation]:
     blockers = _scalar(section, "outsideAuthorityBlockers")
     route = _scalar(section, "nextRepairRoute")
     redispatch = _scalar(section, "workerRedispatchAllowed")
+    status = _scalar(text, "Status")
+    manifest_delta = _trace_table_field(text, "Manifest delta")
     issues: list[Violation] = []
     if disposition not in {"CLOSEABLE", "UNCLOSEABLE_PACKET_CONTRADICTION"}:
         issues.append(Violation(path, "return_disposition_invalid", "closeabilityDisposition is invalid"))
     if disposition == "CLOSEABLE" and blockers != "NONE":
         issues.append(Violation(path, "closeable_has_blockers", "CLOSEABLE requires outsideAuthorityBlockers: NONE"))
     if disposition == "UNCLOSEABLE_PACKET_CONTRADICTION":
+        if status != "BLOCKED_WITH_REASON":
+            issues.append(
+                Violation(
+                    path,
+                    "uncloseable_status_mismatch",
+                    "UNCLOSEABLE_PACKET_CONTRADICTION requires top-level Status: BLOCKED_WITH_REASON",
+                )
+            )
         if blockers in {"", "NONE"}:
             issues.append(Violation(path, "contradiction_without_blocker", "packet contradiction requires a named blocker"))
         if redispatch != "NO":
             issues.append(Violation(path, "contradictory_redispatch", "worker redispatch must be NO for an uncloseable packet"))
         if route not in {"CONSOLIDATED_ORCHESTRATOR_AMENDMENT", "OPERATOR_ESCALATION", "REVIEWER_LOCAL_REPAIR"}:
             issues.append(Violation(path, "repair_route_invalid", "uncloseable packet requires one controlled repair route"))
+    if status == "COMPLETE_PENDING_REVIEW" and (disposition != "CLOSEABLE" or blockers != "NONE"):
+        issues.append(
+            Violation(
+                path,
+                "complete_status_not_closeable",
+                "COMPLETE_PENDING_REVIEW requires closeabilityDisposition: CLOSEABLE and outsideAuthorityBlockers: NONE",
+            )
+        )
+    if status == "COMPLETE_PENDING_REVIEW" and re.search(
+        r"(?i)(?:outside\s+(?:the\s+)?manifest|unauthori[sz]ed|partial[_ -]?match|mismatch)",
+        manifest_delta,
+    ):
+        issues.append(
+            Violation(
+                path,
+                "complete_status_manifest_delta",
+                "COMPLETE_PENDING_REVIEW cannot declare an out-of-manifest or unauthorized Manifest delta",
+            )
+        )
+    if status == "COMPLETE_PENDING_REVIEW" and "run_worker_return_fast_gate.py" in text:
+        limitation_sections = "\n".join(
+            match.group(0)
+            for match in re.finditer(
+                r"(?ims)^###\s+Known Machine-Gate Limitation[^\n]*run_worker_return_fast_gate\.py[\s\S]*?(?=^#{2,3}\s+|\Z)",
+                text,
+            )
+        )
+        if limitation_sections and re.search(r"(?i)\b(?:fail(?:ed|ure)?|cannot execute|did not pass)\b", limitation_sections):
+            issues.append(
+                Violation(
+                    path,
+                    "complete_status_required_gate_failed",
+                    "COMPLETE_PENDING_REVIEW cannot disclose a failed required worker-return gate",
+                )
+            )
     if redispatch not in {"YES", "NO"}:
         issues.append(Violation(path, "redispatch_value_invalid", "workerRedispatchAllowed must be YES or NO"))
     return issues

@@ -39,10 +39,15 @@ const VALID_CAPTURE_MODES: readonly BehavioralCaptureMode[] = [
 export type BehavioralFixtureClass = "POSITIVE" | "NEGATIVE";
 export type BehavioralRepeatPolicy = "DETERMINISTIC" | "STOCHASTIC";
 export type BehavioralBaselineRole = "WITH" | "WITHOUT" | "NONE";
+export type BehavioralCandidateSpaceMode = "COMPLETE" | "INCOMPLETE_WITH_ESCAPE";
 
 const VALID_FIXTURE_CLASSES: readonly BehavioralFixtureClass[] = ["POSITIVE", "NEGATIVE"];
 const VALID_REPEAT_POLICIES: readonly BehavioralRepeatPolicy[] = ["DETERMINISTIC", "STOCHASTIC"];
 const VALID_BASELINE_ROLES: readonly BehavioralBaselineRole[] = ["WITH", "WITHOUT", "NONE"];
+const VALID_CANDIDATE_SPACE_MODES: readonly BehavioralCandidateSpaceMode[] = [
+  "COMPLETE",
+  "INCOMPLETE_WITH_ESCAPE",
+];
 
 export interface BehavioralAllowedTransition {
   readonly from: string;
@@ -63,6 +68,10 @@ export interface BehavioralFixture {
   readonly canonicalInputBytes: string;
   readonly sourceContentHash: string;
   readonly fixtureContentHash: string;
+  readonly decisionContextHash: string;
+  readonly candidateSpaceMode: BehavioralCandidateSpaceMode;
+  readonly noMatchOutcome: string | null;
+  readonly judgmentAuthority: "EVIDENCE_ONLY";
   readonly allowedTransitions: readonly BehavioralAllowedTransition[];
   readonly requiredEvents: readonly string[];
   readonly requiredOutputObservations: readonly string[];
@@ -83,6 +92,7 @@ export interface BehavioralTrace {
   readonly fixtureId: string;
   readonly captureMode: BehavioralCaptureMode;
   readonly sourceContentHash: string;
+  readonly decisionContextHash: string;
   readonly provenanceSourceCommit: string | null;
   readonly provenanceExpiry: string | null;
   readonly events: readonly BehavioralTraceEvent[];
@@ -109,6 +119,7 @@ export type BehavioralDefectClass =
   | "NONEQUIVALENT_BASELINE_PAIR"
   | "INSUFFICIENT_REPEAT_EVIDENCE"
   | "SOURCE_HASH_MISMATCH"
+  | "DECISION_CONTEXT_MISMATCH"
   | "OUTCOME_ASSERTION_MISMATCH"
   | "MALFORMED_INPUT";
 
@@ -268,6 +279,34 @@ function validateFixtureStructure(fixture: unknown): string[] {
   if (!isCanonicalHash(fixture.fixtureContentHash)) {
     problems.push("fixtureContentHash must be a 64-character lowercase hex SHA-256 hash");
   }
+  if (!isCanonicalHash(fixture.decisionContextHash)) {
+    problems.push("decisionContextHash must be a 64-character lowercase hex SHA-256 hash");
+  }
+  if (
+    typeof fixture.candidateSpaceMode !== "string" ||
+    !VALID_CANDIDATE_SPACE_MODES.includes(
+      fixture.candidateSpaceMode as BehavioralCandidateSpaceMode,
+    )
+  ) {
+    problems.push(
+      `candidateSpaceMode must be one of ${VALID_CANDIDATE_SPACE_MODES.join(", ")}`,
+    );
+  } else if (
+    fixture.candidateSpaceMode === "COMPLETE" &&
+    fixture.noMatchOutcome !== null
+  ) {
+    problems.push("COMPLETE candidateSpaceMode requires noMatchOutcome to be null");
+  } else if (
+    fixture.candidateSpaceMode === "INCOMPLETE_WITH_ESCAPE" &&
+    !isNonEmptyString(fixture.noMatchOutcome)
+  ) {
+    problems.push(
+      "INCOMPLETE_WITH_ESCAPE candidateSpaceMode requires a non-empty noMatchOutcome",
+    );
+  }
+  if (fixture.judgmentAuthority !== "EVIDENCE_ONLY") {
+    problems.push("judgmentAuthority must be EVIDENCE_ONLY");
+  }
   if (
     !Array.isArray(fixture.allowedTransitions) ||
     !fixture.allowedTransitions.every(isValidTransition)
@@ -321,6 +360,9 @@ function validateTraceStructure(trace: unknown, fixtureId: string): string[] {
   }
   if (!isCanonicalHash(trace.sourceContentHash)) {
     problems.push("trace.sourceContentHash must be a 64-character lowercase hex SHA-256 hash");
+  }
+  if (!isCanonicalHash(trace.decisionContextHash)) {
+    problems.push("trace.decisionContextHash must be a 64-character lowercase hex SHA-256 hash");
   }
   if (
     trace.provenanceSourceCommit !== null &&
@@ -394,6 +436,13 @@ function evaluateSingleTrace(
     defects.push({
       defectClass: "SOURCE_HASH_MISMATCH",
       detail: `trace.sourceContentHash (${trace.sourceContentHash}) does not match fixture.sourceContentHash (${fixture.sourceContentHash}); prior evidence is invalidated`,
+    });
+  }
+
+  if (trace.decisionContextHash !== fixture.decisionContextHash) {
+    defects.push({
+      defectClass: "DECISION_CONTEXT_MISMATCH",
+      detail: `trace.decisionContextHash (${trace.decisionContextHash}) does not match fixture.decisionContextHash (${fixture.decisionContextHash}); judgment evidence must not be applied to different state`,
     });
   }
 
@@ -589,6 +638,7 @@ export function gradeBehavioralEvaluation(
       "NONEQUIVALENT_BASELINE_PAIR",
       "INCOMPLETE_TRACE",
       "SOURCE_HASH_MISMATCH",
+      "DECISION_CONTEXT_MISMATCH",
       "OUTCOME_ASSERTION_MISMATCH",
       "MALFORMED_INPUT",
     ];
@@ -650,6 +700,7 @@ export function produceBehavioralTrace(input: {
   readonly fixtureId: string;
   readonly captureMode: BehavioralCaptureMode;
   readonly sourceContentHash: string;
+  readonly decisionContextHash: string;
   readonly provenanceSourceCommit?: string | null;
   readonly provenanceExpiry?: string | null;
   readonly events: readonly BehavioralTraceEvent[];
@@ -662,6 +713,7 @@ export function produceBehavioralTrace(input: {
     fixtureId: input.fixtureId,
     captureMode: input.captureMode,
     sourceContentHash: input.sourceContentHash,
+    decisionContextHash: input.decisionContextHash,
     provenanceSourceCommit: input.provenanceSourceCommit ?? null,
     provenanceExpiry: input.provenanceExpiry ?? null,
     events: Object.freeze([...input.events]),

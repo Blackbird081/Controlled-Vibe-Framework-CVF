@@ -18,7 +18,6 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-
 try:
     import run_agent_commit_steward_preflight as steward
 except ModuleNotFoundError:  # imported as governance.compat.run_agent_autorun_workflow_gate
@@ -33,7 +32,6 @@ try:
     import committed_evidence_fingerprint as committed_evidence
 except ModuleNotFoundError:
     from governance.compat import committed_evidence_fingerprint as committed_evidence
-
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_RECEIPT_DIR = REPO_ROOT / ".cvf" / "runtime" / "autorun-receipts"
@@ -52,7 +50,9 @@ try:
         GitStatusResult,
         PRE_PUSH_COMMANDS,
         RANGE_GATE_NAMES,
+        _active_work_order_binding_error,
         _common_commands,
+        _dispatch_release_command,
         _pre_implementation_commands,
     )
 except ModuleNotFoundError:  # imported as governance.compat.run_agent_autorun_workflow_gate
@@ -62,7 +62,9 @@ except ModuleNotFoundError:  # imported as governance.compat.run_agent_autorun_w
         GitStatusResult,
         PRE_PUSH_COMMANDS,
         RANGE_GATE_NAMES,
+        _active_work_order_binding_error,
         _common_commands,
+        _dispatch_release_command,
         _pre_implementation_commands,
     )
 
@@ -517,8 +519,9 @@ def _run_phase(
     receipt_dir: Path = DEFAULT_RECEIPT_DIR,
     active_work_order: str | None = None,
 ) -> int:
-    if active_work_order is not None and (phase != "pre-implementation" or not active_work_order.strip()):
-        print("FAIL: --active-work-order requires a nonempty binding at pre-implementation only.")
+    binding_error = _active_work_order_binding_error(phase, active_work_order)
+    if binding_error:
+        print(f"FAIL: {binding_error}")
         return 1
     total_started = time.perf_counter()
     resolved_base = base or _default_base_for_phase(phase)
@@ -537,9 +540,10 @@ def _run_phase(
     print(f"Head anchor: {head_sha}")
 
     failures = 0
+    bind_probe = active_work_order if phase == "pre-implementation" else None
     common_commands: list[GateCommand] = list(
-        _common_commands(resolved_base, head, active_work_order=active_work_order)
-        if active_work_order is not None else _common_commands(resolved_base, head)
+        _common_commands(resolved_base, head, active_work_order=bind_probe)
+        if bind_probe is not None else _common_commands(resolved_base, head)
     )
 
     # At pre-implementation, prepend phase-specific early-diagnostic commands
@@ -549,6 +553,8 @@ def _run_phase(
     if phase == "pre-implementation":
         phase_commands = _pre_implementation_commands(resolved_base, head)
         common_commands[:0] = phase_commands
+    if phase in {"pre-dispatch", "pre-implementation"} and active_work_order is not None:
+        common_commands.insert(0, _dispatch_release_command(active_work_order, head))
 
     if phase in {"pre-closure", "pre-push"} and base_sha == head_sha:
         print(
@@ -741,7 +747,7 @@ def main() -> int:
     )
     parser.add_argument("--head", default="HEAD", help="Head commit/ref for range-aware gates.")
     parser.add_argument("--active-work-order", default=None,
-                        help="Bind the current work order for independent-probe admission at pre-implementation only.")
+                        help="Bind the current work order for final release readiness at pre-dispatch and revalidation plus independent-probe admission at pre-implementation.")
     parser.add_argument("--serial", action="store_true", help="Run commands serially for debugging.")
     parser.add_argument("--max-workers", type=int, default=6, help="Maximum parallel common checks.")
     parser.add_argument(

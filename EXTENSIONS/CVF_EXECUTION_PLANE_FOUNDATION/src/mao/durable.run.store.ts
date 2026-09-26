@@ -24,6 +24,7 @@ import type { MaoTaskGraph } from "./task.graph.contract";
 import { verifyAuthorityEnvelope } from "./task.graph.contract";
 import type { MaoAppendEventInput, MaoEventLedgerEntry } from "./event.ledger.contract";
 import { MaoEventLedger } from "./event.ledger.contract";
+import { acquireLock, releaseLock } from "./durable.delegation.ledger.persistence";
 
 // --- Types ---
 
@@ -44,7 +45,9 @@ export type MaoDurableRunStoreFailureReason =
   | "GRAPH_ID_MISMATCH"
   | "EVENT_SEQUENCE_INVALID"
   | "EVENT_REPLAY_REJECTED"
-  | "IO_FAILURE";
+  | "IO_FAILURE"
+  | "CONCURRENT_WRITE_LOST_RACE"
+  | "LOCK_HELD_PAST_STALE_THRESHOLD";
 
 export interface MaoDurableRunStoreFailure {
   ok: false;
@@ -122,6 +125,10 @@ export class MaoFileRunStore {
     return join(this.rootDirectory, snapshotFileNameFor(taskGraphId));
   }
 
+  private lockPathFor(taskGraphId: string): string {
+    return `${this.snapshotPathFor(taskGraphId)}.lock`;
+  }
+
   /**
    * Verify authority, create the root directory when needed, refuse an
    * existing run for the same graph identity, and atomically write the
@@ -182,37 +189,61 @@ export class MaoFileRunStore {
    * (including duplicate idempotency key, which append naturally rejects),
    * no write occurs and snapshot bytes/event count on disk remain
    * byte-identical to before the call.
+   *
+   * The entire load-replay-append-write sequence is held under one
+   * cross-instance, cross-process lockfile mutex keyed by this run's own
+   * deterministic snapshot identity (the same `acquireLock`/`releaseLock`
+   * primitive `MaoFileDelegationLedgerStore.withCas` already uses for the
+   * sibling durable store), so no other holder - in this process or another
+   * - can be mid-transaction against the same run concurrently. Because the
+   * lock is held for the whole cycle, the write itself needs no separate
+   * version check. Different taskGraphIds use different lock files and
+   * remain fully independent.
    */
   async appendEvent(
     taskGraphId: string,
     input: MaoAppendEventInput,
   ): Promise<MaoDurableRunAppendSuccess | MaoDurableRunStoreFailure> {
-    const replay = await this.loadAndReplay(taskGraphId);
-    if (!replay.ok) return replay;
+    const lockPath = this.lockPathFor(taskGraphId);
 
-    // Reuse the already-replayed ledger (its internal sequence counter,
-    // idempotency-key set, and per-task state already reflect every
-    // persisted event) so this append extends exactly that history without
-    // a second replay pass.
-    const ledger = replay.ledger;
-    const appendResult = ledger.append(input);
-    if (!appendResult.ok) {
-      return failure("EVENT_REPLAY_REJECTED", `append was rejected by the event ledger: ${appendResult.reason} - ${appendResult.detail}`);
+    const lockResult = await acquireLock(lockPath);
+    if (!lockResult.ok) {
+      const mappedReason: MaoDurableRunStoreFailureReason =
+        lockResult.reason === "LOCK_HELD_PAST_STALE_THRESHOLD" ? "LOCK_HELD_PAST_STALE_THRESHOLD" : "CONCURRENT_WRITE_LOST_RACE";
+      return failure(mappedReason, lockResult.detail);
     }
+    const ownerToken = lockResult.token;
 
-    const newSnapshot: MaoDurableRunSnapshot = {
-      schemaVersion: MAO_DURABLE_RUN_SNAPSHOT_SCHEMA_VERSION,
-      graph: replay.graph,
-      events: ledger.getEntries(),
-    };
+    try {
+      const replay = await this.loadAndReplay(taskGraphId);
+      if (!replay.ok) return replay;
 
-    const targetPath = this.snapshotPathFor(taskGraphId);
-    const writeResult = await atomicWriteJson(this.rootDirectory, targetPath, newSnapshot);
-    if (!writeResult.ok) {
-      return failure("IO_FAILURE", `failed to write updated run snapshot: ${writeResult.detail}`);
+      // Reuse the already-replayed ledger (its internal sequence counter,
+      // idempotency-key set, and per-task state already reflect every
+      // persisted event) so this append extends exactly that history without
+      // a second replay pass.
+      const ledger = replay.ledger;
+      const appendResult = ledger.append(input);
+      if (!appendResult.ok) {
+        return failure("EVENT_REPLAY_REJECTED", `append was rejected by the event ledger: ${appendResult.reason} - ${appendResult.detail}`);
+      }
+
+      const newSnapshot: MaoDurableRunSnapshot = {
+        schemaVersion: MAO_DURABLE_RUN_SNAPSHOT_SCHEMA_VERSION,
+        graph: replay.graph,
+        events: ledger.getEntries(),
+      };
+
+      const targetPath = this.snapshotPathFor(taskGraphId);
+      const writeResult = await atomicWriteJson(this.rootDirectory, targetPath, newSnapshot);
+      if (!writeResult.ok) {
+        return failure("IO_FAILURE", `failed to write updated run snapshot: ${writeResult.detail}`);
+      }
+
+      return { ok: true, appendedEntry: appendResult.entry, snapshot: newSnapshot };
+    } finally {
+      await releaseLock(lockPath, ownerToken);
     }
-
-    return { ok: true, appendedEntry: appendResult.entry, snapshot: newSnapshot };
   }
 
   /**

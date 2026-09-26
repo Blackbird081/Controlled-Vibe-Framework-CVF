@@ -60,14 +60,20 @@ Every changed self-declared worker return and completion review must include a
 packet names no outside-authority blocker. An uncloseable packet names the
 blocker, forbids worker redispatch, and selects one controlled route:
 reviewer-local repair, consolidated orchestrator amendment, or operator
-escalation. Independent implementation defects remain separate findings.
+escalation. Top-level status and the recheck must agree: a return declaring
+`COMPLETE_PENDING_REVIEW` must be `CLOSEABLE` with
+`outsideAuthorityBlockers: NONE`; an
+`UNCLOSEABLE_PACKET_CONTRADICTION` return must declare
+`Status: BLOCKED_WITH_REASON`. Independent implementation defects remain
+separate findings.
 
 ## Machine Enforcement
 
 `governance/compat/check_gate_to_role_closeability.py` enforces the contract.
 It is bound to common autorun phases, reviewer-fast, and pre-commit catalogs.
 Focused tests cover missing contracts/gates/owners, late repair authority,
-unknown dependencies, cycles, topology mismatch, and contradictory redispatch.
+unknown dependencies, cycles, topology mismatch, contradictory redispatch,
+and top-level status/recheck contradictions.
 
 For an operator-local downstream repository, invoke the materialized checker
 with `--repo-root <downstream-project-root>`. The checker resolves Git diffs

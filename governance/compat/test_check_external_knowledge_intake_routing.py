@@ -39,6 +39,20 @@ External knowledge intake routing: REQUIRED
 | Claim boundary | Bounded routing evidence only; no universal interception |
 """
 
+VALID_CLOSURE_BLOCK = """
+## Repository Absorption Closure Eligibility
+
+| Field | Value |
+| --- | --- |
+| Source verification basis | PINNED_SOURCE_AND_LOCAL_BEHAVIORAL_READS |
+| Architecture novelty | NO_NEW_ARCHITECTURE |
+| Existing-owner overlap | OWNER_EXISTS |
+| Practical adaptation value | ADAPTATION_VALUE_FOUND |
+| Selected value conversion | ALL_SELECTED_VALUES_IMPLEMENTED_OR_GOVERNED_DEFERRED |
+| Deferred or unreviewed scope | NONE |
+| Closure eligibility | ELIGIBLE_ALL_SOURCES_TERMINAL |
+"""
+
 
 class ExternalKnowledgeIntakeRoutingTests(unittest.TestCase):
     def test_valid_explicit_block_passes(self) -> None:
@@ -150,6 +164,45 @@ class ExternalKnowledgeIntakeRoutingTests(unittest.TestCase):
         )
 
         self.assertEqual([], violations)
+
+    def test_absorption_closure_requires_eligibility_block(self) -> None:
+        text = "Status: CLOSED_RECONCILED\n\n" + VALID_BLOCK
+        violations = MODULE.check_text(
+            "docs/reviews/CVF_REPOSITORY_ABSORPTION_CLOSURE.md", text
+        )
+        self.assertTrue(any("closure claim missing" in item for item in violations))
+
+    def test_source_verified_terminal_absorption_closure_passes(self) -> None:
+        text = "Status: CLOSED_RECONCILED\n\n" + VALID_BLOCK + VALID_CLOSURE_BLOCK
+        self.assertEqual([], MODULE.check_text(
+            "docs/reviews/CVF_REPOSITORY_ABSORPTION_CLOSURE.md", text
+        ))
+
+    def test_architecture_overlap_does_not_substitute_for_value_conversion(self) -> None:
+        text = (
+            "Status: CLOSED_RECONCILED\n\n" + VALID_BLOCK +
+            VALID_CLOSURE_BLOCK.replace(
+                "ALL_SELECTED_VALUES_IMPLEMENTED_OR_GOVERNED_DEFERRED", "INCOMPLETE"
+            )
+        )
+        violations = MODULE.check_text(
+            "docs/reviews/CVF_REPOSITORY_ABSORPTION_CLOSURE.md", text
+        )
+        self.assertTrue(any("terminal selected-value conversion" in item for item in violations))
+
+    def test_packet_only_incomplete_closure_fails_closed(self) -> None:
+        text = (
+            "Status: CLOSED_RECONCILED\n\n" + VALID_BLOCK +
+            VALID_CLOSURE_BLOCK
+            .replace("PINNED_SOURCE_AND_LOCAL_BEHAVIORAL_READS", "OPERATOR_SCOPE_EXIT_WITH_EVIDENCE")
+            .replace("ALL_SELECTED_VALUES_IMPLEMENTED_OR_GOVERNED_DEFERRED", "INCOMPLETE")
+            .replace("NONE", "43 deferred source paths")
+            .replace("ELIGIBLE_ALL_SOURCES_TERMINAL", "NOT_ELIGIBLE_SOURCE_REVIEW_INCOMPLETE")
+        )
+        violations = MODULE.check_text(
+            "docs/reviews/CVF_REPOSITORY_ABSORPTION_CLOSURE.md", text
+        )
+        self.assertTrue(any("ineligible source-review" in item for item in violations))
 
 
 class CoordinationBindingTests(unittest.TestCase):

@@ -7,9 +7,17 @@
 // cleanup. Every test creates its own isolated root directory under the OS
 // temp root via fs.mkdtemp and removes it in afterEach so no test artifact
 // remains in the repository or the OS temp root longer than the test run.
+//
+// ACEL-AKOE-P2-R1 adds a dedicated "appendEvent concurrency correction"
+// describe block covering same-run in-process serialization, post-acquire
+// failure cleanup, stale-lock fail-closed, and different-run independence
+// for the appendEvent lock introduced by that tranche. Real second-OS-process
+// cross-process exclusion proof lives in the separate
+// mao.durable.run.store.concurrent.peer.test.ts peer fixture.
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { mkdir, mkdtemp, readdir, readFile, rm, stat, symlink, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -19,6 +27,24 @@ import {
   MAO_DURABLE_RUN_SNAPSHOT_SCHEMA_VERSION,
   MaoFileRunStore,
 } from "../src/mao/durable.run.store";
+import {
+  MAO_DELEGATION_LOCK_STALE_AFTER_MS,
+  acquireLock,
+  readLockFileContent,
+  releaseLock,
+  writeLockFileContentForTest,
+} from "../src/mao/durable.delegation.ledger.persistence";
+
+/**
+ * Deterministic run-store lock-file path for a taskGraphId, mirroring
+ * MaoFileRunStore's own private snapshotPathFor/lockPathFor derivation
+ * (SHA-256 hex digest of the taskGraphId, `.json` snapshot suffix, `.lock`
+ * lock suffix) without requiring a new production export.
+ */
+function runStoreLockPathFor(root: string, taskGraphId: string): string {
+  const digest = createHash("sha256").update(taskGraphId, "utf8").digest("hex");
+  return join(root, `${digest}.json.lock`);
+}
 
 function authorityInput(overrides: Partial<MaoAuthorityEnvelopeInput> = {}): MaoAuthorityEnvelopeInput {
   return {
@@ -716,5 +742,247 @@ describe("MaoFileRunStore", () => {
       expect(bytesAfter).toBe(bytesBefore);
       expect(mtimeAfter).toBe(mtimeBefore);
     });
+  });
+
+  // --- ACEL-AKOE-P2-R1: appendEvent concurrency correction ---
+
+  describe("appendEvent concurrency correction", () => {
+    it("serializes two same-run concurrent appendEvent calls in-process: exactly one succeeds and durable replay contains exactly the winner", async () => {
+      const store = new MaoFileRunStore(root);
+      const graph = compileGraph();
+      await store.createRun(graph);
+      await store.appendEvent(graph.taskGraphId, {
+        taskGraphId: graph.taskGraphId,
+        taskId: "t1",
+        eventType: "GRAPH_COMPILED",
+        resultingState: "planned",
+        occurredAt: "2026-09-25T00:00:00.000Z",
+      });
+      await store.appendEvent(graph.taskGraphId, {
+        taskGraphId: graph.taskGraphId,
+        taskId: "t1",
+        eventType: "TASK_ADMITTED",
+        resultingState: "admitted",
+        occurredAt: "2026-09-25T00:00:01.000Z",
+      });
+      await store.appendEvent(graph.taskGraphId, {
+        taskGraphId: graph.taskGraphId,
+        taskId: "t1",
+        eventType: "INVOCATION_STARTED",
+        resultingState: "running",
+        occurredAt: "2026-09-25T00:00:02.000Z",
+      });
+
+      // Two conflicting terminal attempts issued concurrently from the same
+      // store instance, both individually legal transitions from "running".
+      const [succeeded, cancelled] = await Promise.all([
+        store.appendEvent(graph.taskGraphId, {
+          taskGraphId: graph.taskGraphId,
+          taskId: "t1",
+          eventType: "INVOCATION_COMPLETED",
+          resultingState: "succeeded",
+          occurredAt: "2026-09-25T00:00:03.000Z",
+        }),
+        store.appendEvent(graph.taskGraphId, {
+          taskGraphId: graph.taskGraphId,
+          taskId: "t1",
+          eventType: "CANCEL_ACCEPTED",
+          resultingState: "cancelled",
+          occurredAt: "2026-09-25T00:00:03.000Z",
+        }),
+      ]);
+
+      const outcomes = [succeeded.ok, cancelled.ok];
+      expect(outcomes.filter(Boolean)).toHaveLength(1);
+
+      const resumed = await store.resumeRun(graph.taskGraphId);
+      expect(resumed.ok).toBe(true);
+      if (!resumed.ok) return;
+      const terminalEvents = resumed.events.filter(
+        (e) => e.eventType === "INVOCATION_COMPLETED" || e.eventType === "CANCEL_ACCEPTED",
+      );
+      expect(terminalEvents).toHaveLength(1);
+      if (succeeded.ok) {
+        expect(terminalEvents[0]?.eventType).toBe("INVOCATION_COMPLETED");
+      } else {
+        expect(cancelled.ok).toBe(true);
+        expect(terminalEvents[0]?.eventType).toBe("CANCEL_ACCEPTED");
+      }
+    });
+
+    it("REJECT_ENTRY_BEFORE_PARENT_RELEASE: a second appendEvent call cannot enter its transaction while the first holds the lock", async () => {
+      const store = new MaoFileRunStore(root);
+      const graph = compileGraph();
+      await store.createRun(graph);
+
+      const lockPath = runStoreLockPathFor(root, graph.taskGraphId);
+      const heldByParent = await acquireLock(lockPath);
+      expect(heldByParent.ok).toBe(true);
+      if (!heldByParent.ok) return;
+
+      // With the lock already held externally (simulating a parent
+      // mid-transaction), appendEvent must not be able to enter its own
+      // critical section: it fails closed rather than silently proceeding.
+      const rejectedEntry = await store.appendEvent(graph.taskGraphId, {
+        taskGraphId: graph.taskGraphId,
+        taskId: "t1",
+        eventType: "GRAPH_COMPILED",
+        resultingState: "planned",
+        occurredAt: "2026-09-25T00:00:00.000Z",
+      });
+      expect(rejectedEntry.ok).toBe(false);
+      if (!rejectedEntry.ok) {
+        expect(rejectedEntry.reason).toBe("CONCURRENT_WRITE_LOST_RACE");
+      }
+
+      // PARENT_RELEASE: only after the external holder releases can the
+      // append actually enter and complete.
+      const parentReleased = await releaseLock(lockPath, heldByParent.token);
+      expect(parentReleased.ok).toBe(true);
+
+      const enteredAfterRelease = await store.appendEvent(graph.taskGraphId, {
+        taskGraphId: graph.taskGraphId,
+        taskId: "t1",
+        eventType: "GRAPH_COMPILED",
+        resultingState: "planned",
+        occurredAt: "2026-09-25T00:00:01.000Z",
+      });
+      expect(enteredAfterRelease.ok).toBe(true);
+    }, 15000);
+
+    it("SUBSEQUENT_PEER_ACQUIRES: post-acquire rejection leaves no stranded lock, so a later append acquires and succeeds", async () => {
+      const store = new MaoFileRunStore(root);
+      const graph = compileGraph();
+      await store.createRun(graph);
+
+      // A rejected append (duplicate idempotency key, rejected by the event
+      // ledger AFTER the lock is acquired but BEFORE any write) must still
+      // release the lock via the exception-safe finally path.
+      const firstAppend = await store.appendEvent(graph.taskGraphId, {
+        taskGraphId: graph.taskGraphId,
+        taskId: "t1",
+        eventType: "GRAPH_COMPILED",
+        resultingState: "planned",
+        occurredAt: "2026-09-25T00:00:00.000Z",
+        idempotencyKey: "peer-cleanup-key",
+      });
+      expect(firstAppend.ok).toBe(true);
+
+      const rejectedDuplicate = await store.appendEvent(graph.taskGraphId, {
+        taskGraphId: graph.taskGraphId,
+        taskId: "t1",
+        eventType: "GRAPH_COMPILED",
+        resultingState: "planned",
+        occurredAt: "2026-09-25T00:00:01.000Z",
+        idempotencyKey: "peer-cleanup-key",
+      });
+      expect(rejectedDuplicate.ok).toBe(false);
+      if (!rejectedDuplicate.ok) {
+        expect(rejectedDuplicate.reason).toBe("EVENT_REPLAY_REJECTED");
+      }
+
+      // A later, unrelated append against the same run must acquire the
+      // lock cleanly (no stranded lock left by the rejected attempt) and
+      // succeed.
+      const subsequentPeerAcquires = await store.appendEvent(graph.taskGraphId, {
+        taskGraphId: graph.taskGraphId,
+        taskId: "t1",
+        eventType: "TASK_ADMITTED",
+        resultingState: "admitted",
+        occurredAt: "2026-09-25T00:00:02.000Z",
+      });
+      expect(subsequentPeerAcquires.ok).toBe(true);
+
+      const lockPath = runStoreLockPathFor(root, graph.taskGraphId);
+      expect(await readLockFileContent(lockPath)).toBeNull();
+    });
+
+    it("LOCK_HELD_PAST_STALE_THRESHOLD: a stale run-store lock fails closed without automatic takeover or any snapshot mutation", async () => {
+      const store = new MaoFileRunStore(root);
+      const graph = compileGraph();
+      await store.createRun(graph);
+
+      const lockPath = runStoreLockPathFor(root, graph.taskGraphId);
+      const seeded = await acquireLock(lockPath);
+      expect(seeded.ok).toBe(true);
+      if (!seeded.ok) return;
+      await writeLockFileContentForTest(lockPath, {
+        token: seeded.token,
+        acquiredAtMs: Date.now() - MAO_DELEGATION_LOCK_STALE_AFTER_MS - 1000,
+      });
+
+      const files = await readdir(root);
+      const snapshotFile = files.find((name) => name.endsWith(".json")) as string;
+      const snapshotPath = join(root, snapshotFile);
+      const bytesBeforeStaleAttempt = await readFile(snapshotPath, "utf8");
+
+      const staleAttempt = await store.appendEvent(graph.taskGraphId, {
+        taskGraphId: graph.taskGraphId,
+        taskId: "t1",
+        eventType: "GRAPH_COMPILED",
+        resultingState: "planned",
+        occurredAt: "2026-09-25T00:00:00.000Z",
+      });
+      expect(staleAttempt.ok).toBe(false);
+      if (!staleAttempt.ok) {
+        expect(staleAttempt.reason).toBe("LOCK_HELD_PAST_STALE_THRESHOLD");
+      }
+
+      // No automatic takeover: the stale lock is untouched, and the
+      // snapshot on disk is byte-identical to before the failed attempt.
+      expect(await readLockFileContent(lockPath)).toMatchObject({ token: seeded.token });
+      const bytesAfterStaleAttempt = await readFile(snapshotPath, "utf8");
+      expect(bytesAfterStaleAttempt).toBe(bytesBeforeStaleAttempt);
+
+      // Repeated attempts all fail identically; no retry ever succeeds via
+      // an implicit steal.
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        const repeated = await store.appendEvent(graph.taskGraphId, {
+          taskGraphId: graph.taskGraphId,
+          taskId: "t1",
+          eventType: "GRAPH_COMPILED",
+          resultingState: "planned",
+          occurredAt: "2026-09-25T00:00:00.000Z",
+        });
+        expect(repeated).toMatchObject({ ok: false, reason: "LOCK_HELD_PAST_STALE_THRESHOLD" });
+      }
+    });
+
+    it("keeps different run identities independently writable: a held lock on one run never blocks appendEvent on a different run", async () => {
+      const store = new MaoFileRunStore(root);
+      const graphA = compileGraph({ workOrderId: "run-a" });
+      const graphB = compileGraph({ workOrderId: "run-b" });
+      await store.createRun(graphA);
+      await store.createRun(graphB);
+
+      const lockPathA = runStoreLockPathFor(root, graphA.taskGraphId);
+      const heldOnA = await acquireLock(lockPathA);
+      expect(heldOnA.ok).toBe(true);
+      if (!heldOnA.ok) return;
+
+      // Run B's append must succeed while run A's lock is held externally -
+      // different runs never share a lock identity.
+      const appendOnB = await store.appendEvent(graphB.taskGraphId, {
+        taskGraphId: graphB.taskGraphId,
+        taskId: "t1",
+        eventType: "GRAPH_COMPILED",
+        resultingState: "planned",
+        occurredAt: "2026-09-25T00:00:00.000Z",
+      });
+      expect(appendOnB.ok).toBe(true);
+
+      // Run A itself remains correctly blocked while its own lock is held.
+      const appendOnA = await store.appendEvent(graphA.taskGraphId, {
+        taskGraphId: graphA.taskGraphId,
+        taskId: "t1",
+        eventType: "GRAPH_COMPILED",
+        resultingState: "planned",
+        occurredAt: "2026-09-25T00:00:01.000Z",
+      });
+      expect(appendOnA.ok).toBe(false);
+
+      const releasedA = await releaseLock(lockPathA, heldOnA.token);
+      expect(releasedA.ok).toBe(true);
+    }, 15000);
   });
 });

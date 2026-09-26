@@ -26,14 +26,28 @@ def test_active_binding_changes_only_unique_probe_command() -> None:
     assert all('--changed-lane-only' not in c.command and '--active-work-order' not in c.command for c in broad)
     assert all('--active-work-order' not in c.command for c in autorun.PRE_PUSH_COMMANDS)
 
-@pytest.mark.parametrize('phase', ['pre-dispatch', 'pre-closure', 'pre-push'])
+@pytest.mark.parametrize('phase', ['pre-closure', 'pre-push'])
 def test_active_binding_rejected_before_any_phase_side_effect(monkeypatch, capsys, phase) -> None:
     def forbidden(*args, **kwargs):
         pytest.fail('forbidden phase reached Git, execution or receipt reuse')
     for name in ('_git_rev_parse', '_run_commands', '_load_valid_receipt'):
         monkeypatch.setattr(autorun, name, forbidden)
     assert autorun._run_phase(phase, 'base', 'head', active_work_order=ACTIVE_ORDER, reuse_valid_receipt=True) == 1
-    assert 'pre-implementation only' in capsys.readouterr().out
+    assert 'pre-dispatch or pre-implementation only' in capsys.readouterr().out
+
+def test_work_order_pre_dispatch_without_binding_fails_before_git(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(autorun, '_active_work_order_binding_error', lambda phase, binding: 'requires --active-work-order')
+    monkeypatch.setattr(autorun, '_git_rev_parse', lambda ref: pytest.fail('must fail before Git'))
+    assert autorun._run_phase('pre-dispatch', 'base', 'head') == 1
+    assert 'requires --active-work-order' in capsys.readouterr().out
+
+def test_non_work_order_pre_dispatch_can_run_without_binding(monkeypatch, tmp_path) -> None:
+    monkeypatch.setattr(autorun, '_active_work_order_binding_error', lambda phase, binding: None)
+    monkeypatch.setattr(autorun, '_git_rev_parse', lambda ref: ref)
+    monkeypatch.setattr(autorun, '_worktree_fingerprint', lambda *args: 'fixed')
+    monkeypatch.setattr(autorun, '_verifier_identity_digest', lambda *args: 'a' * 64)
+    monkeypatch.setattr(autorun, '_common_commands', lambda base, head: ())
+    assert autorun._run_phase('pre-dispatch', 'base', 'head', receipt_dir=tmp_path) == 0
 
 @pytest.mark.parametrize('binding', ['', '   '])
 def test_empty_explicit_binding_fails_closed(binding) -> None:
@@ -61,8 +75,21 @@ def test_phase_forwards_bound_plan_and_preserves_other_commands(monkeypatch, tmp
     assert autorun._run_phase('pre-implementation', 'base', 'head', active_work_order=ACTIVE_ORDER, receipt_dir=tmp_path) == 0
     probe = [c.command for c in observed if RIPA_SCRIPT in c.command]
     assert probe == [('python', RIPA_SCRIPT, '--base', 'base', '--head', 'head', '--enforce', '--changed-lane-only', '--active-work-order', ACTIVE_ORDER)]
-    assert len(observed) == 85
-    assert sum('--active-work-order' in c.command for c in observed) == 1
+    assert len(observed) == 86
+    assert sum('--active-work-order' in c.command for c in observed) == 2
+    release = [c.command for c in observed if c.name == 'dispatch release readiness']
+    assert release == [('python', 'governance/compat/check_dispatch_release_readiness.py', '--active-work-order', ACTIVE_ORDER, '--head', 'head', '--enforce')]
+
+def test_pre_dispatch_binding_adds_release_gate_not_probe_binding(monkeypatch, tmp_path) -> None:
+    observed = []
+    monkeypatch.setattr(autorun, '_git_rev_parse', lambda ref: ref)
+    monkeypatch.setattr(autorun, '_worktree_fingerprint', lambda *args: 'fixed')
+    monkeypatch.setattr(autorun, '_verifier_identity_digest', lambda *args: 'a' * 64)
+    monkeypatch.setattr(autorun, '_execute', lambda index, command: (observed.append(command) or autorun.GateResult(index, command.name, command.command, 0, 0.01, '')))
+    assert autorun._run_phase('pre-dispatch', 'base', 'head', active_work_order=ACTIVE_ORDER, receipt_dir=tmp_path) == 0
+    assert sum(c.name == 'dispatch release readiness' for c in observed) == 1
+    probe = next(c for c in observed if RIPA_SCRIPT in c.command)
+    assert '--active-work-order' not in probe.command
 
 def test_parallel_bound_probe_findings_visible_without_other_pass_noise(monkeypatch, capsys) -> None:
     commands = (autorun.GateCommand('probe', ('python', RIPA_SCRIPT, '--changed-lane-only', '--active-work-order', ACTIVE_ORDER)),

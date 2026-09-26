@@ -54,6 +54,7 @@ LIVE_OVERCLAIM_MODES = VALID_CAPTURE_MODES
 VALID_REPEAT_POLICIES = {"DETERMINISTIC", "STOCHASTIC"}
 REQUIRED_REPEATS_BY_POLICY = {"DETERMINISTIC": 1, "STOCHASTIC": 3}
 VALID_BASELINE_ROLES = {"WITH", "WITHOUT", "NONE"}
+VALID_CANDIDATE_SPACE_MODES = {"COMPLETE", "INCOMPLETE_WITH_ESCAPE"}
 
 _HASH_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 
@@ -218,6 +219,43 @@ def check_evidence_admission(
     fixture_id = _get(evidence, "fixtureId")
     if fixture_id is _MISSING or not isinstance(fixture_id, str) or not fixture_id:
         violations.append(f"{skill_id}: evidence fixtureId is missing or malformed")
+
+    # --- decision evidence boundary (post-G7 Jev absorption) ---
+    decision_context_hash = _get(evidence, "decisionContextHash")
+    if decision_context_hash is _MISSING or not _is_canonical_hash(decision_context_hash):
+        violations.append(f"{skill_id}: evidence decisionContextHash is missing or malformed")
+
+    candidate_space_mode = _get(evidence, "candidateSpaceMode")
+    no_match_outcome = _get(evidence, "noMatchOutcome")
+    if candidate_space_mode is _MISSING:
+        violations.append(f"{skill_id}: evidence candidateSpaceMode is missing")
+    elif (
+        not isinstance(candidate_space_mode, str)
+        or candidate_space_mode not in VALID_CANDIDATE_SPACE_MODES
+    ):
+        violations.append(
+            f"{skill_id}: evidence candidateSpaceMode is unknown: {candidate_space_mode!r}"
+        )
+    elif candidate_space_mode == "COMPLETE":
+        if no_match_outcome is _MISSING or no_match_outcome is not None:
+            violations.append(
+                f"{skill_id}: COMPLETE candidateSpaceMode requires explicit null noMatchOutcome"
+            )
+    elif (
+        no_match_outcome is _MISSING
+        or not isinstance(no_match_outcome, str)
+        or not no_match_outcome.strip()
+    ):
+        violations.append(
+            f"{skill_id}: INCOMPLETE_WITH_ESCAPE candidateSpaceMode requires a non-empty noMatchOutcome"
+        )
+
+    judgment_authority = _get(evidence, "judgmentAuthority")
+    if judgment_authority != "EVIDENCE_ONLY":
+        violations.append(
+            f"{skill_id}: evidence judgmentAuthority must be EVIDENCE_ONLY; "
+            "probability or confidence never grants action authority"
+        )
 
     # --- repeat policy and counts ---
     repeat_policy = _get(evidence, "repeatPolicy")

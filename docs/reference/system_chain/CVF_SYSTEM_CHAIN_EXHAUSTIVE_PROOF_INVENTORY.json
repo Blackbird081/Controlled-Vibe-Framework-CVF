@@ -137,7 +137,7 @@
       "sourceFamily": "SYSTEM_CHAIN_MAP",
       "sourceItemId": "MAP-LANE-05-EVIDENCE_TO_OPERATOR_SURFACE",
       "sourceLocator": "lanes[4] (laneId=EVIDENCE_TO_OPERATOR_SURFACE)",
-      "claimFragment": "Lane EVIDENCE_TO_OPERATOR_SURFACE (order 5) posture=PARTIAL verdict=PARTIAL_OPERATOR_VISIBILITY_BY_ENFORCEMENT_CLASS; planeRange=RUNTIME_GUARD class (GC-001..GC-014) and CI_REPO_GATE class (186 governance/compat/check_*.py checkers)",
+      "claimFragment": "Lane EVIDENCE_TO_OPERATOR_SURFACE (order 5) posture=PARTIAL verdict=PARTIAL_OPERATOR_VISIBILITY_BY_ENFORCEMENT_CLASS; planeRange=RUNTIME_GUARD class (GC-001..GC-014) and CI_REPO_GATE class (207 governance/compat/check_*.py checkers)",
       "terminalStatus": "READ",
       "proposedClaimKey": "MAP_LANE::EVIDENCE_TO_OPERATOR_SURFACE",
       "exclusionReason": null
@@ -1086,7 +1086,7 @@
       ],
       "sourceFamily": "SYSTEM_CHAIN_MAP",
       "owner": "the receipt file itself; scripts/cvf_doctor.py source; web-governance-jobs.ts JOB_DEFINITIONS",
-      "edgeOrBoundary": "RUNTIME_GUARD class (GC-001..GC-014) and CI_REPO_GATE class (186 governance/compat/check_*.py checkers)",
+      "edgeOrBoundary": "RUNTIME_GUARD class (GC-001..GC-014) and CI_REPO_GATE class (207 governance/compat/check_*.py checkers)",
       "assertedBehavior": "PARTIAL_OPERATOR_VISIBILITY_BY_ENFORCEMENT_CLASS",
       "semanticPosture": "PARTIAL",
       "liveApplicability": "OPERATOR_SURFACE_LIVE_REQUIRED",

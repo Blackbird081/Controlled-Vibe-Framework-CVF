@@ -56,6 +56,14 @@ export interface GovernedCommandLauncherDependencies {
     approvalPolicy?: MutatingProfileApprovalPolicy;
     now?: () => number;
     generateConsumptionId?: () => string;
+    /**
+     * Optional, opt-in exact-value output masking for a trusted in-process
+     * caller that already holds concrete secret values. Never sourced from
+     * process.env, CLI flags, MCP schema, serialized requests or persistence:
+     * only a caller wiring dependencies directly may supply it. See
+     * ../tools/known-value-redaction.ts. Not part of GovernedCommandLauncherInput.
+     */
+    knownSecretValues?: readonly string[];
 }
 export interface GovernedCommandLauncherResponse {
     contractVersion: typeof GOVERNED_COMMAND_LAUNCHER_CONTRACT;

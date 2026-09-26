@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import dataclass
+import os
 import subprocess
 import sys
 import time
@@ -32,19 +33,63 @@ def _configure_stdout() -> None:
 class FastGateCommand:
     name: str
     command: tuple[str, ...]
+    cwd: str | None = None
+
+
+def _focused_test_commands(targets: tuple[str, ...]) -> list[FastGateCommand]:
+    """Route Python targets to pytest and TypeScript targets to Vitest.
+
+    ``--pytest-target`` predates TypeScript worker packets.  Preserve the
+    public flag for compatibility, but do not send a ``.test.ts`` path to a
+    runner that cannot collect it.  TypeScript targets must share one package
+    root containing ``package.json`` so the command uses that package's
+    already-declared Vitest installation and configuration.
+    """
+
+    python_targets = tuple(target for target in targets if not target.lower().endswith((".ts", ".tsx")))
+    typescript_targets = tuple(target for target in targets if target.lower().endswith((".ts", ".tsx")))
+    commands: list[FastGateCommand] = []
+    if python_targets:
+        commands.append(
+            FastGateCommand(
+                "focused pytest targets",
+                ("python", "-m", "pytest", *python_targets, "-q"),
+            )
+        )
+    if typescript_targets:
+        package_roots: set[Path] = set()
+        relative_targets: list[str] = []
+        for raw_target in typescript_targets:
+            target = (REPO_ROOT / raw_target).resolve()
+            try:
+                target.relative_to(REPO_ROOT.resolve())
+            except ValueError as exc:
+                raise ValueError(f"focused TypeScript target escapes the repository: {raw_target}") from exc
+            package_root = next(
+                (parent for parent in (target.parent, *target.parents) if (parent / "package.json").is_file()),
+                None,
+            )
+            if package_root is None:
+                raise ValueError(f"focused TypeScript target has no package.json ancestor: {raw_target}")
+            package_roots.add(package_root)
+            relative_targets.append(target.relative_to(package_root).as_posix())
+        if len(package_roots) != 1:
+            raise ValueError("focused TypeScript targets must share one package root")
+        package_root = next(iter(package_roots))
+        commands.append(
+            FastGateCommand(
+                "focused vitest targets",
+                ("npx", "vitest", "run", *relative_targets),
+                package_root.relative_to(REPO_ROOT).as_posix(),
+            )
+        )
+    return commands
 
 
 def build_commands(
     pytest_targets: tuple[str, ...] = (), active_work_order: str | None = None
 ) -> tuple[FastGateCommand, ...]:
-    commands: list[FastGateCommand] = []
-    if pytest_targets:
-        commands.append(
-            FastGateCommand(
-                "focused pytest targets",
-                ("python", "-m", "pytest", *pytest_targets, "-q"),
-            )
-        )
+    commands: list[FastGateCommand] = _focused_test_commands(pytest_targets)
     probe_admission_command = [
         "python",
         "governance/compat/check_independent_review_probe_admission.py",
@@ -85,9 +130,12 @@ def _run(command: FastGateCommand) -> int:
     print(f"\n=== {command.name} ===")
     print(" ".join(command.command))
     start = time.perf_counter()
+    execution_command = list(command.command)
+    if os.name == "nt" and execution_command[0] in {"npm", "npx"}:
+        execution_command[0] += ".cmd"
     proc = subprocess.run(
-        list(command.command),
-        cwd=REPO_ROOT,
+        execution_command,
+        cwd=REPO_ROOT / command.cwd if command.cwd else REPO_ROOT,
         text=True,
         encoding="utf-8",
         errors="replace",
@@ -111,7 +159,7 @@ def main() -> int:
         "--pytest-target",
         action="append",
         default=[],
-        help="Focused pytest path/module to run before reviewer-fast. Repeat for multiple targets.",
+        help="Focused test path/module to run before reviewer-fast; .ts/.tsx targets route to their package Vitest runner. Repeat for multiple targets.",
     )
     parser.add_argument(
         "--active-work-order",

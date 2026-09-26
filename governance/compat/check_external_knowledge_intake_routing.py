@@ -40,6 +40,42 @@ REQUIRED_FIELDS = (
     "Disposition",
     "Claim boundary",
 )
+CLOSURE_SECTION = "## Repository Absorption Closure Eligibility"
+CLOSURE_FIELDS = (
+    "Source verification basis",
+    "Architecture novelty",
+    "Existing-owner overlap",
+    "Practical adaptation value",
+    "Selected value conversion",
+    "Deferred or unreviewed scope",
+    "Closure eligibility",
+)
+CLOSURE_ALLOWED = {
+    "Source verification basis": {
+        "PINNED_SOURCE_AND_LOCAL_BEHAVIORAL_READS",
+        "OPERATOR_SCOPE_EXIT_WITH_EVIDENCE",
+    },
+    "Architecture novelty": {
+        "NEW_ARCHITECTURE_REQUIRED",
+        "NO_NEW_ARCHITECTURE",
+    },
+    "Existing-owner overlap": {"OWNER_EXISTS", "OWNER_PARTIAL", "OWNER_NOT_FOUND"},
+    "Practical adaptation value": {
+        "ADAPTATION_VALUE_FOUND",
+        "NO_NEW_VALUE_WITH_EXACT_OWNER_EVIDENCE",
+        "DEFERRED_PENDING_SOURCE_REVIEW",
+    },
+    "Selected value conversion": {
+        "ALL_SELECTED_VALUES_IMPLEMENTED_OR_GOVERNED_DEFERRED",
+        "NO_SELECTED_VALUE_WITH_EXACT_OWNER_EVIDENCE",
+        "INCOMPLETE",
+    },
+    "Closure eligibility": {
+        "ELIGIBLE_ALL_SOURCES_TERMINAL",
+        "ELIGIBLE_OPERATOR_SCOPE_EXIT",
+        "NOT_ELIGIBLE_SOURCE_REVIEW_INCOMPLETE",
+    },
+}
 ALLOWED_INPUT_TYPES = {
     "internal governed input (no external intake)",
     "legacy source family",
@@ -539,6 +575,61 @@ def _has_local_view_guard(value: str) -> bool:
     return "governance/compat/" in normalized or "n/a with reason" in normalized
 
 
+def _is_repository_absorption_closure_claim(path: str, text: str) -> bool:
+    top_status = re.search(r"^Status:\s*([^\r\n]+)", text, re.MULTILINE | re.IGNORECASE)
+    if top_status and top_status.group(1).strip().upper().startswith("SUPERSEDED"):
+        return False
+    if top_status and top_status.group(1).strip().upper().startswith("CLOSED"):
+        return "ABSORPTION_CLOSURE" in path.replace("\\", "/").upper()
+    return any(marker in text for marker in (
+        "ABSORPTION_COMPLETE",
+        "NO_NEW_LOCAL_AUDIT_REQUIRED",
+        "TERMINAL_NO_NEW_VALUE",
+    ))
+
+
+def _check_repository_absorption_closure(path: str, text: str) -> list[str]:
+    if not _is_repository_absorption_closure_claim(path, text):
+        return []
+    pattern = re.compile(r"^##\s+Repository Absorption Closure Eligibility\s*$", re.MULTILINE)
+    match = pattern.search(text)
+    if not match:
+        return [f"{path}: closure claim missing `{CLOSURE_SECTION}`"]
+    next_match = NEXT_SECTION_PATTERN.search(text, match.end())
+    section = text[match.end():next_match.start() if next_match else len(text)]
+    fields = _field_rows(section)
+    violations: list[str] = []
+    for field in CLOSURE_FIELDS:
+        value = _clean_value(fields.get(_normalize_cell(field), ""))
+        if not value:
+            violations.append(f"{path}: `{CLOSURE_SECTION}` missing `{field}`")
+            continue
+        allowed = CLOSURE_ALLOWED.get(field)
+        if allowed and value not in allowed:
+            violations.append(
+                f"{path}: `{CLOSURE_SECTION}` `{field}` has unsupported disposition `{value}`"
+            )
+    basis = _clean_value(fields.get(_normalize_cell("Source verification basis"), ""))
+    conversion = _clean_value(fields.get(_normalize_cell("Selected value conversion"), ""))
+    deferred = _clean_value(fields.get(_normalize_cell("Deferred or unreviewed scope"), ""))
+    eligibility = _clean_value(fields.get(_normalize_cell("Closure eligibility"), ""))
+    if eligibility == "NOT_ELIGIBLE_SOURCE_REVIEW_INCOMPLETE":
+        violations.append(f"{path}: closure claim cannot use an ineligible source-review disposition")
+    if eligibility == "ELIGIBLE_ALL_SOURCES_TERMINAL":
+        if basis != "PINNED_SOURCE_AND_LOCAL_BEHAVIORAL_READS":
+            violations.append(f"{path}: ordinary closure requires pinned Local behavioral reads")
+        if conversion not in {
+            "ALL_SELECTED_VALUES_IMPLEMENTED_OR_GOVERNED_DEFERRED",
+            "NO_SELECTED_VALUE_WITH_EXACT_OWNER_EVIDENCE",
+        }:
+            violations.append(f"{path}: ordinary closure requires terminal selected-value conversion")
+        if deferred != "NONE":
+            violations.append(f"{path}: ordinary closure requires `Deferred or unreviewed scope` = `NONE`")
+    if eligibility == "ELIGIBLE_OPERATOR_SCOPE_EXIT" and basis != "OPERATOR_SCOPE_EXIT_WITH_EVIDENCE":
+        violations.append(f"{path}: operator scope exit requires matching source-verification basis")
+    return violations
+
+
 def check_text(path: str, text: str) -> list[str]:
     if not _is_applicable(path, text):
         return []
@@ -596,6 +687,8 @@ def check_text(path: str, text: str) -> list[str]:
             f"{path}: `Matching local-view guard` must cite `governance/compat/` "
             "or say `N/A with reason`"
         )
+
+    violations.extend(_check_repository_absorption_closure(path, text))
 
     return violations
 

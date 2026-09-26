@@ -465,6 +465,67 @@ describe("MaoOperationalWorkerLauncher", () => {
     if (!relaunch.ok) expect(relaunch.reason).toBe("UNKNOWN_OR_NON_RUNNABLE_TASK");
   });
 
+  // --- Cancel/completion race (ACEL-AKOE-P2 class 4) ---
+
+  it("ONE_DURABLE_TERMINAL_WINNER: acceptCancellation racing a concurrent completion append durably persists exactly one terminal event and fails the loser closed", async () => {
+    // ACEL-AKOE-P2-R1 correction: MaoFileRunStore.appendEvent now holds a
+    // cross-instance/cross-process lockfile mutex (reusing
+    // MaoFileDelegationLedgerStore's own acquireLock/releaseLock primitive)
+    // across its whole load-replay-append-write transaction, so two
+    // concurrent appendEvent calls against the SAME task can no longer both
+    // observe a stale pre-race replay and unconditionally clobber each
+    // other's write. This test drives the identical race the former P2
+    // defect probe used - a durable INVOCATION_COMPLETED append concurrent
+    // with acceptCancellation()'s own CANCEL_ACCEPTED append - and asserts
+    // the desired contract instead of the former known-bug tolerance:
+    // exactly one conflicting terminal attempt succeeds, the other fails
+    // closed (never both ok:true with a silently lost event), and durable
+    // replay contains exactly the durable winner's terminal event. This
+    // satisfies GC-018 Baseline Invariant 6 ("Cancellation and completion
+    // races must have one deterministic durable outcome and may not
+    // fabricate success").
+    const graph = compileGraph();
+    await store.createRun(graph);
+    const lifecycle = new MaoLifecycleController("2026-07-17T00:00:00.000Z");
+    await driveToRunningState(store, graph, lifecycle.clock.now());
+    const launcher = new MaoOperationalWorkerLauncher(store, createMaoDelegationAdapter(), lifecycle);
+    await launcher.requestCancellation(graph.taskGraphId, "t1");
+
+    const [acceptResult, completionAppend] = await Promise.all([
+      launcher.acceptCancellation(graph.taskGraphId, "t1"),
+      store.appendEvent(graph.taskGraphId, {
+        taskGraphId: graph.taskGraphId,
+        taskId: "t1",
+        eventType: "INVOCATION_COMPLETED",
+        resultingState: "succeeded",
+        occurredAt: "2026-07-17T00:00:01.000Z",
+      }),
+    ]);
+
+    // Exactly one conflicting terminal attempt succeeds; the loser must fail
+    // closed rather than fabricate an ok:true result for a write that never
+    // durably lands.
+    const outcomes = [acceptResult.ok, completionAppend.ok];
+    expect(outcomes.filter(Boolean)).toHaveLength(1);
+
+    const resumed = await store.resumeRun(graph.taskGraphId);
+    expect(resumed.ok).toBe(true);
+    if (!resumed.ok) return;
+    const terminalEvents = resumed.events.filter(
+      (e) => e.eventType === "CANCEL_ACCEPTED" || e.eventType === "INVOCATION_COMPLETED",
+    );
+
+    // Durable replay contains exactly the durable winner: one terminal
+    // event, and it matches whichever call actually reported ok:true.
+    expect(terminalEvents).toHaveLength(1);
+    if (acceptResult.ok) {
+      expect(terminalEvents[0]?.eventType).toBe("CANCEL_ACCEPTED");
+    } else {
+      expect(completionAppend.ok).toBe(true);
+      expect(terminalEvents[0]?.eventType).toBe("INVOCATION_COMPLETED");
+    }
+  });
+
   // --- Unknown graph/task and invalid state ---
 
   it("fails closed with DURABLE_STORE_REJECTED when the graph has never been created", async () => {

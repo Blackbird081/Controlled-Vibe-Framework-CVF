@@ -39,6 +39,24 @@ class WorkerReturnFastGateTests(unittest.TestCase):
             ("python", "-m", "pytest", "tests/example_test.py", "-q"),
         )
 
+    def test_typescript_targets_route_to_package_vitest(self) -> None:
+        targets = (
+            "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mao.durable.run.store.test.ts",
+            "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/tests/mao.operational.worker.launcher.test.ts",
+        )
+        commands = MODULE.build_commands(targets)
+
+        self.assertEqual(commands[0].name, "focused vitest targets")
+        self.assertEqual(commands[0].cwd, "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION")
+        self.assertEqual(
+            commands[0].command,
+            (
+                "npx", "vitest", "run",
+                "tests/mao.durable.run.store.test.ts",
+                "tests/mao.operational.worker.launcher.test.ts",
+            ),
+        )
+
     def test_epistemic_packet_check_runs_before_reviewer_fast(self) -> None:
         commands = MODULE.build_commands()
         labels = [command.name for command in commands]

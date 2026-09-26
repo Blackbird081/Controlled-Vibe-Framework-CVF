@@ -3,6 +3,7 @@ import { spawn } from 'node:child_process';
 import { realpath } from 'node:fs/promises';
 import { isAbsolute, relative, resolve } from 'node:path';
 import { preflightGovernanceAction, redactText, } from '../tools/governance-action-preflight.js';
+import { maskKnownValues, snapshotKnownValues } from '../tools/known-value-redaction.js';
 import { consumeGovernanceActionReceipt } from '../tools/governance-action-receipt-consumer.js';
 import { GOVERNED_EXECUTION_RECEIPT_CONTRACT, } from '../persistence/json-governed-execution.store.js';
 import { APPROVAL_MARKER_PROFILE_ID, APPROVAL_MARKER_TARGET_RELATIVE_PATH, validateApprovalMarkerTarget, writeApprovalMarkerFile, } from './mutating-profile-approval.js';
@@ -181,6 +182,11 @@ export async function launchGovernedCommand(input, dependencies) {
     if (!profile) {
         return rejected('UNKNOWN_COMMAND_PROFILE', 'Only registered CVF command profiles may run.');
     }
+    const knownValueSnapshot = snapshotKnownValues(dependencies.knownSecretValues);
+    if (!knownValueSnapshot.ok) {
+        return rejected(knownValueSnapshot.error.code, 'The known-value redaction configuration was rejected before execution.', profile.id);
+    }
+    const knownValueVariants = knownValueSnapshot.variants;
     let paths;
     try {
         paths = await resolveWorkspaceCwd(input.workspaceRoot, input.cwd);
@@ -346,8 +352,8 @@ export async function launchGovernedCommand(input, dependencies) {
             signal: runResult.signal,
         };
     }
-    const stdout = redactText(runResult.stdout).slice(0, MAX_CAPTURE_BYTES);
-    const stderr = redactText(runResult.stderr).slice(0, MAX_CAPTURE_BYTES);
+    const stdout = redactText(maskKnownValues(runResult.stdout, knownValueVariants)).slice(0, MAX_CAPTURE_BYTES);
+    const stderr = redactText(maskKnownValues(runResult.stderr, knownValueVariants)).slice(0, MAX_CAPTURE_BYTES);
     return {
         contractVersion: GOVERNED_COMMAND_LAUNCHER_CONTRACT,
         accepted: finalSuccess,

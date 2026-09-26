@@ -22,6 +22,7 @@ import {
 const SOURCE_HASH = "a".repeat(64);
 const OTHER_SOURCE_HASH = "b".repeat(64);
 const FIXTURE_HASH = "c".repeat(64);
+const DECISION_CONTEXT_HASH = "d".repeat(64);
 
 function deterministicFixture(overrides?: Partial<BehavioralFixture>): BehavioralFixture {
   return {
@@ -32,6 +33,10 @@ function deterministicFixture(overrides?: Partial<BehavioralFixture>): Behaviora
     canonicalInputBytes: "input-bytes-v1",
     sourceContentHash: SOURCE_HASH,
     fixtureContentHash: FIXTURE_HASH,
+    decisionContextHash: DECISION_CONTEXT_HASH,
+    candidateSpaceMode: "COMPLETE",
+    noMatchOutcome: null,
+    judgmentAuthority: "EVIDENCE_ONLY",
     allowedTransitions: [
       { from: "start", action: "read_file", to: "read" },
       { from: "read", action: "write_output", to: "done" },
@@ -53,6 +58,7 @@ function passingTrace(overrides?: Partial<BehavioralTrace>): BehavioralTrace {
     fixtureId: "fx-positive-1",
     captureMode: "OFFLINE_SYNTHETIC",
     sourceContentHash: SOURCE_HASH,
+    decisionContextHash: DECISION_CONTEXT_HASH,
     events: [
       { from: "start", action: "read_file", to: "read" },
       { from: "read", action: "write_output", to: "done" },
@@ -479,6 +485,55 @@ describe("gradeBehavioralEvaluation - source-hash invalidation (required contrac
   });
 });
 
+describe("gradeBehavioralEvaluation - Jev-derived decision evidence boundaries", () => {
+  it("fails closed when judgment evidence is applied to a different decision context", () => {
+    const evaluation = gradeBehavioralEvaluation(deterministicFixture(), [
+      passingTrace({ decisionContextHash: "e".repeat(64) }),
+    ]);
+    expect(evaluation.result).toBe("FAIL_WITH_DEFECTS");
+    expect(
+      evaluation.defects.some((d) => d.defectClass === "DECISION_CONTEXT_MISMATCH"),
+    ).toBe(true);
+  });
+
+  it("requires a no-match escape when the declared candidate space is incomplete", () => {
+    const fixture = deterministicFixture({
+      candidateSpaceMode: "INCOMPLETE_WITH_ESCAPE",
+      noMatchOutcome: null,
+    });
+    const evaluation = gradeBehavioralEvaluation(fixture, [passingTrace()]);
+    expect(evaluation.result).toBe("FAIL_WITH_DEFECTS");
+    expect(evaluation.defects[0].detail).toContain("noMatchOutcome");
+  });
+
+  it("admits an incomplete candidate space only with an explicit no-match outcome", () => {
+    const fixture = deterministicFixture({
+      candidateSpaceMode: "INCOMPLETE_WITH_ESCAPE",
+      noMatchOutcome: "NO_MATCH_ESCALATE",
+    });
+    expect(gradeBehavioralEvaluation(fixture, [passingTrace()]).result).toBe(
+      "PASS_WITH_EVIDENCE",
+    );
+  });
+
+  it("rejects a no-match outcome on a candidate space declared complete", () => {
+    const fixture = deterministicFixture({ noMatchOutcome: "NO_MATCH" });
+    const evaluation = gradeBehavioralEvaluation(fixture, [passingTrace()]);
+    expect(evaluation.result).toBe("FAIL_WITH_DEFECTS");
+    expect(evaluation.defects[0].detail).toContain("COMPLETE candidateSpaceMode");
+  });
+
+  it("requires judgment evidence to remain evidence-only rather than action authority", () => {
+    const fixture = {
+      ...deterministicFixture(),
+      judgmentAuthority: "MAY_ACT_AUTONOMOUSLY",
+    };
+    const evaluation = gradeBehavioralEvaluation(fixture, [passingTrace()]);
+    expect(evaluation.result).toBe("FAIL_WITH_DEFECTS");
+    expect(evaluation.defects[0].detail).toContain("judgmentAuthority");
+  });
+});
+
 describe("gradeBehavioralEvaluation - outcome assertion mismatch", () => {
   it("fails closed when an outcome assertion does not match the trace's outcome values", () => {
     const fixture = deterministicFixture();
@@ -655,6 +710,7 @@ describe("produceBehavioralTrace - runner/grader separation", () => {
       fixtureId: "fx-positive-1",
       captureMode: "OFFLINE_SYNTHETIC",
       sourceContentHash: SOURCE_HASH,
+      decisionContextHash: DECISION_CONTEXT_HASH,
       events: [],
       outputObservations: [],
       outcomeValues: {},

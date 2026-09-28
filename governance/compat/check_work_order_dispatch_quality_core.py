@@ -378,6 +378,7 @@ def _validate_commit_mode_and_anchor_lifecycle(text: str) -> list[str]:
                 "the orchestrator must set a real git commit hash before dispatch"
             )
     issues.extend(_validate_execution_anchor_substitution(text))
+    issues.extend(_validate_verification_command_script_paths(text))
     issues.extend(_validate_dated_owner_dependency_discovery(text))
     return issues
 
@@ -671,6 +672,36 @@ def _validate_execution_anchor_substitution(text: str) -> list[str]:
                 "`$executionBaseHead` so the captured execution anchor is substituted"
             )
             break
+    return issues
+
+
+_PYTHON_SCRIPT_COMMAND_RE = re.compile(
+    r"(?im)^\s*(?:python(?:3)?|py(?:\s+-\d(?:\.\d+)?)?)\s+([^\s`\"']+\.py)(?:\s|$)"
+)
+
+
+def _validate_verification_command_script_paths(text: str) -> list[str]:
+    """Fail dispatch when a Python script named by Verification Commands is absent.
+
+    Only concrete repository-relative script tokens are checked. Module-mode
+    invocations and placeholders remain outside this path-existence control.
+    """
+    commands_section = _extract_section(text, "Verification Commands")
+    if not commands_section:
+        return []
+    issues: list[str] = []
+    seen: set[str] = set()
+    for match in _PYTHON_SCRIPT_COMMAND_RE.finditer(commands_section):
+        raw = match.group(1).replace("\\", "/")
+        if raw in seen or raw.startswith(("/", "<", "$")) or ":" in raw or ".." in raw.split("/"):
+            continue
+        seen.add(raw)
+        target = REPO_ROOT / raw
+        if not target.is_file():
+            issues.append(
+                "`## Verification Commands` names a Python script that does not "
+                f"exist as a repository regular file: `{raw}`"
+            )
     return issues
 
 

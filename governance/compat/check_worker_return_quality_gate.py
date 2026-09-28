@@ -17,6 +17,10 @@ import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
+try:
+    from check_work_order_acceptance_ledger import EVIDENCE_RE, _classifier_event_issues, _json_block, git_observed_paths, validate_return as validate_acceptance_return
+except ModuleNotFoundError:
+    from governance.compat.check_work_order_acceptance_ledger import EVIDENCE_RE, _classifier_event_issues, _json_block, git_observed_paths, validate_return as validate_acceptance_return
 
 # Keep the ordinary/legacy checker startup free of the evidence module.
 # Import once, only after an applicable packet or a registered index is seen.
@@ -467,6 +471,7 @@ def diagnose(
         issues.append("no-commit statement must say `WORKER_MUST_NOT_COMMIT honored`")
 
     issues.extend(_required_gate_consistency_issues(text))
+    issues.extend(_classifier_event_issues(text))
 
     issues.extend(_evidence_readiness_issues(text, path=path, resolver_registry=resolver_registry))
 
@@ -831,6 +836,13 @@ def diagnose_active_work_order(
             f"not the active work order `{wo_rel}`"
         )
     issues.extend(_detached_receipt_issues(wo_text, return_rel, return_text))
+    if "```acceptance-ledger-json" in wo_text:
+        evidence, evidence_parse_issues = _json_block(return_text, EVIDENCE_RE, "acceptance-evidence-json")
+        issues.extend(evidence_parse_issues)
+        base = evidence.get("executionBaseHead") if evidence else None
+        observed = git_observed_paths(base) if isinstance(base, str) and re.fullmatch(r"[0-9a-f]{7,40}", base) else set()
+        if not evidence_parse_issues:
+            issues.extend(validate_acceptance_return(wo_text, return_text, observed))
     return Diagnostic(path=return_rel, eligible=True, issues=tuple(issues))
 
 

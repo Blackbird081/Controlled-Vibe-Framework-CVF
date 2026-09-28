@@ -28,6 +28,8 @@ from run_assf_production_package_executor import (
 
 
 class ProductionPackageExecutorTests(unittest.TestCase):
+    _POSITIVE_FIXTURE_EXPIRATION_DATE = "2099-12-31"
+
     def setUp(self) -> None:
         self.temp_dir = Path(tempfile.mkdtemp(prefix="assf-production-executor-"))
         self.repo_root = self.temp_dir / "repo"
@@ -115,7 +117,7 @@ class ProductionPackageExecutorTests(unittest.TestCase):
             "models": [
                 {
                     "diagnosticRerun": {"result": "PASS"},
-                    "expirationDate": "2026-07-16",
+                    "expirationDate": self._POSITIVE_FIXTURE_EXPIRATION_DATE,
                     "freeQuotaRemaining": 999999,
                     "modelCode": "qwen3.6-flash-2026-04-16",
                     "statusAtCapture": "Enabled",

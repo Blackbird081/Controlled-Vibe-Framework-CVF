@@ -6,13 +6,15 @@ One-command pre-return gate for authors producing GC-018 / work-order dispatch
 packets. Run this before setting a packet's status to DISPATCHED, DISPATCH_READY,
 or DISPATCHED_TO_WORKER.
 
-Runs the five checks that have historically blocked Claude-authored packets:
+Runs the seven checks that have historically blocked Claude-authored packets:
   1. check_work_order_dispatch_quality   -- Worker Autonomy, dispatchBaseHead,
                                            Source Verification columns, disposition vocab
   2. check_markdown_structural_completeness -- required section presence
   3. check_agent_packet_authority_and_encoding -- encoding / authority hygiene
   4. check_agent_operation_trace         -- Agent Operation Trace manifest
   5. check_dispatch_prompt_envelope      -- Dispatch Prompt Envelope required fields or N/A
+  6. run_agent_automation_assist         -- return-shape terms and N/A instructions
+  7. check_independent_review_probe_admission -- dispatch-time probe decision and plan
 
 Exit codes:
   0  all checks passed -- packet is authoring-quality
@@ -87,6 +89,24 @@ GATE_COMMANDS = [
             "Dispatch-ready work orders carry a Dispatch Prompt Envelope with required "
             "fields or explicit N/A with reason"
         ),
+    },
+    {
+        "label": "automation-assist-diagnostics",
+        "cmd": [
+            sys.executable,
+            "governance/compat/run_agent_automation_assist.py",
+            "--mode",
+            "dispatch",
+        ],
+        "description": "Worker-return packet-shape terms and explicit N/A-with-reason instructions",
+    },
+    {
+        "label": "independent-probe-admission",
+        "cmd": [
+            sys.executable,
+            "governance/compat/check_independent_review_probe_admission.py",
+        ],
+        "description": "Dispatch-time independent-probe decision and complete probe plan",
     },
 ]
 

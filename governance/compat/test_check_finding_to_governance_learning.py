@@ -1,5 +1,6 @@
 import importlib.util
 from pathlib import Path
+from unittest.mock import patch
 
 
 MODULE_PATH = Path(__file__).resolve().with_name("check_finding_to_governance_learning.py")
@@ -40,13 +41,36 @@ def test_finding_doc_without_disposition_fails() -> None:
     assert any("Finding-To-Governance" in message for message in _messages(issues))
 
 
-def test_worker_return_position_heading_alone_is_not_finding_marker() -> None:
+def test_worker_return_position_heading_alone_is_a_finding_marker() -> None:
+    # NCR-R1/S07-R1 root correction: `## Findings / Position` is the standard
+    # worker-return findings heading and must trigger the learning-disposition
+    # requirement directly, not rely on an incidental `| Finding |` table row
+    # as the only detection path (the prior bypass that let a worker return
+    # ship a `Findings / Position` section with no learning disposition).
     doc = """
 # Worker Return
 
 ## Findings / Position
 
 The worker completed the assigned source inventory and returned evidence.
+"""
+    issues = MODULE._validate_finding_doc("docs/reviews/CVF_TEST.md", doc)
+    assert any("Finding-To-Governance" in issue["message"] for issue in issues)
+
+
+def test_worker_return_position_heading_with_disposition_passes() -> None:
+    doc = """
+# Worker Return
+
+## Findings / Position
+
+The worker completed the assigned source inventory and returned evidence.
+
+## Finding-To-Governance Learning Disposition
+
+| Finding | Defect class | Learning lane | Disposition | Next control action |
+|---|---|---|---|---|
+| No defect found | WORKER_EXECUTION_ERROR | GOVERNANCE_CONTROL_PLANE | N/A_WITH_REASON - clean return | N/A |
 """
     assert MODULE._validate_finding_doc("docs/reviews/CVF_TEST.md", doc) == []
 
@@ -118,7 +142,11 @@ The audit exposed a handoff seam interpretation problem.
 
 
 def test_binding_check_requires_autorun_reference() -> None:
-    issues = MODULE._validate_binding(MODULE.AUTORUN_PATH, "no guard here")
+    # The real runner inherits its marker from the governed command catalog.
+    # Patch the effective binding oracle so this remains a true negative-unit
+    # test instead of accidentally consulting the live repository catalog.
+    with patch.object(MODULE, "has_binding_marker", return_value=False):
+        issues = MODULE._validate_binding(MODULE.AUTORUN_PATH, "no guard here")
     assert any(MODULE.THIS_SCRIPT_PATH in message for message in _messages(issues))
 
 
@@ -298,6 +326,174 @@ New gate lessons captured in memory (8 CCLV-T2 specifics beyond FPRC-T1 B1-B6).
     )
     types = [issue["type"] for issue in issues]
     assert "provider_memory_only_learning_escape" in types
+
+
+# --- NCR-R1/S07-R1: recurring blocked-return escalation guard tests ---
+
+_BLOCKED_RETURN_MISSING_RECURRENCE = """
+# Worker Return
+
+Status: BLOCKED_WITH_REASON
+rootCauseClusterId: isolated-missing-recurrence-test
+
+## Findings / Position
+
+The worker hit a dependent generator defect outside authorized scope.
+"""
+
+_BLOCKED_RETURN_FIRST_OCCURRENCE_COMPLETE = """
+# Worker Return
+
+Status: BLOCKED_WITH_REASON
+
+rootCauseClusterId: isolated-first-occurrence-test
+recurrenceDisposition: FIRST_OCCURRENCE
+priorRelatedFinding: NOT_APPLICABLE_WITH_REASON - no prior governed artifact records this defect class
+operatorNoticeDisposition: NOT_APPLICABLE_WITH_REASON - first occurrence
+successorFreezeDisposition: NOT_APPLICABLE_WITH_REASON - first occurrence
+
+## Findings / Position
+
+The worker hit a dependent generator defect outside authorized scope.
+"""
+
+_BLOCKED_RETURN_RECURRING_WITHOUT_ESCALATION = """
+# Worker Return
+
+Status: BLOCKED_WITH_REASON
+
+rootCauseClusterId: p5-p6-phase-gate-placement-gap
+recurrenceDisposition: RECURRING_CLUSTER_STOP
+priorRelatedFinding: NOT_APPLICABLE_WITH_REASON - not tracked
+operatorNoticeDisposition: NOT_APPLICABLE_WITH_REASON - not required
+successorFreezeDisposition: NOT_APPLICABLE_WITH_REASON - not required
+
+## Findings / Position
+
+This is the same defect class as a prior blocked return.
+"""
+
+_BLOCKED_RETURN_RECURRING_COMPLETE = """
+# Worker Return
+
+Status: BLOCKED_WITH_REASON
+
+rootCauseClusterId: p5-p6-phase-gate-placement-gap
+recurrenceDisposition: RECURRING_CLUSTER_STOP
+priorRelatedFinding: docs/reviews/CVF_CVF_NCR_R1_S06_R1_P5_PHASE_GATE_RECONCILIATION_WORKER_RETURN_2026-09-27.md
+operatorNoticeDisposition: OPERATOR_NOTICE_REQUIRED
+successorFreezeDisposition: FEATURE_SUCCESSORS_FROZEN
+
+## Findings / Position
+
+This is the same defect class as a prior blocked return.
+"""
+
+
+def test_blocked_return_missing_recurrence_fields_fails() -> None:
+    issues = MODULE._validate_recurring_blocked_return(
+        "docs/reviews/CVF_TEST_RETURN.md", _BLOCKED_RETURN_MISSING_RECURRENCE
+    )
+    types = [issue["type"] for issue in issues]
+    assert "recurrence_disposition_missing" in types
+
+
+def test_blocked_return_first_occurrence_complete_passes() -> None:
+    issues = MODULE._validate_recurring_blocked_return(
+        "docs/reviews/CVF_TEST_RETURN.md", _BLOCKED_RETURN_FIRST_OCCURRENCE_COMPLETE
+    )
+    assert issues == []
+
+
+def test_blocked_return_first_occurrence_proactive_escalation_passes() -> None:
+    doc = _BLOCKED_RETURN_FIRST_OCCURRENCE_COMPLETE.replace(
+        "operatorNoticeDisposition: NOT_APPLICABLE_WITH_REASON - first occurrence",
+        "operatorNoticeDisposition: OPERATOR_NOTICE_REQUIRED",
+    ).replace(
+        "successorFreezeDisposition: NOT_APPLICABLE_WITH_REASON - first occurrence",
+        "successorFreezeDisposition: FEATURE_SUCCESSORS_FROZEN",
+    )
+    issues = MODULE._validate_recurring_blocked_return(
+        "docs/reviews/CVF_TEST_RETURN.md", doc
+    )
+    assert issues == []
+
+
+def test_blocked_return_first_occurrence_partial_escalation_fails() -> None:
+    doc = _BLOCKED_RETURN_FIRST_OCCURRENCE_COMPLETE.replace(
+        "operatorNoticeDisposition: NOT_APPLICABLE_WITH_REASON - first occurrence",
+        "operatorNoticeDisposition: OPERATOR_NOTICE_REQUIRED",
+    )
+    issues = MODULE._validate_recurring_blocked_return(
+        "docs/reviews/CVF_TEST_RETURN.md", doc
+    )
+    assert "first_occurrence_disposition_invalid" in [issue["type"] for issue in issues]
+
+
+def test_blocked_return_recurring_without_escalation_fails() -> None:
+    issues = MODULE._validate_recurring_blocked_return(
+        "docs/reviews/CVF_TEST_RETURN.md", _BLOCKED_RETURN_RECURRING_WITHOUT_ESCALATION
+    )
+    types = [issue["type"] for issue in issues]
+    assert "recurring_cluster_missing_prior_finding" in types
+    assert "recurring_cluster_missing_operator_notice" in types
+    assert "recurring_cluster_missing_successor_freeze" in types
+
+
+def test_blocked_return_recurring_complete_passes() -> None:
+    issues = MODULE._validate_recurring_blocked_return(
+        "docs/reviews/CVF_TEST_RETURN.md", _BLOCKED_RETURN_RECURRING_COMPLETE
+    )
+    assert issues == []
+
+
+def test_recurring_return_rejects_non_path_prior_finding() -> None:
+    doc = _BLOCKED_RETURN_RECURRING_COMPLETE.replace(
+        "docs/reviews/CVF_CVF_NCR_R1_S06_R1_P5_PHASE_GATE_RECONCILIATION_WORKER_RETURN_2026-09-27.md",
+        "banana",
+    )
+    issues = MODULE._validate_recurring_blocked_return(
+        "docs/reviews/CVF_TEST_RETURN.md", doc
+    )
+    assert "recurring_cluster_missing_prior_finding" in [issue["type"] for issue in issues]
+
+
+def test_known_cluster_cannot_self_declare_first_occurrence() -> None:
+    doc = _BLOCKED_RETURN_FIRST_OCCURRENCE_COMPLETE.replace(
+        "isolated-first-occurrence-test", "p5-p6-phase-gate-placement-gap"
+    )
+    issues = MODULE._validate_recurring_blocked_return(
+        "docs/reviews/CVF_TEST_RETURN.md", doc
+    )
+    assert "recurring_cluster_misclassified_as_first_occurrence" in [
+        issue["type"] for issue in issues
+    ]
+
+
+def test_blocked_return_requires_non_placeholder_cluster_id() -> None:
+    doc = _BLOCKED_RETURN_FIRST_OCCURRENCE_COMPLETE.replace(
+        "isolated-first-occurrence-test", "NOT_APPLICABLE_INITIAL_DISPATCH"
+    )
+    issues = MODULE._validate_recurring_blocked_return(
+        "docs/reviews/CVF_TEST_RETURN.md", doc
+    )
+    assert "root_cause_cluster_id_missing_or_placeholder" in [
+        issue["type"] for issue in issues
+    ]
+
+
+def test_non_blocked_return_is_not_checked_for_recurrence() -> None:
+    doc = """
+# Worker Return
+
+Status: COMPLETE_PENDING_REVIEW
+
+## Findings / Position
+
+All clear.
+"""
+    issues = MODULE._validate_recurring_blocked_return("docs/reviews/CVF_TEST_RETURN.md", doc)
+    assert issues == []
 
 
 def test_provider_memory_escape_work_order_allows_governed_disposition() -> None:

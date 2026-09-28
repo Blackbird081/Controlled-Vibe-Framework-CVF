@@ -34,7 +34,20 @@ from check_dispatch_prompt_envelope import (  # noqa: E402
     _check_required_fields,
     _check_prohibited_content,
     _check_read_first_placement,
+    _classifier_recovery_issues,
+    RSE_REQUIRED,
 )
+
+
+def test_classifier_applicability_requires_exact_scalar() -> None:
+    assert _classifier_recovery_issues("toolClassifierBlockRecoveryApplicability: APPLICABLE_BOGUS")
+
+
+def test_classifier_applicable_contract_accepts_exact_values() -> None:
+    text = "toolClassifierBlockRecoveryApplicability: APPLICABLE\n" + "\n".join(
+        f"{field}: {value}" for field, value in RSE_REQUIRED.items()
+    )
+    assert _classifier_recovery_issues(text) == []
 
 # ---------------------------------------------------------------------------
 # Helpers

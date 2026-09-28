@@ -171,15 +171,19 @@ before the binding is produced (MFRP-FINGERPRINT-T1 rework-2, F1):
    hash identically to the committed target, so filtered blob equality is
    not semantic equivalence and must never be treated as this guard's
    proof.) Exact bytes are accepted without normalization. The sole
-   exception reproduces LF-to-CRLF checkout expansion: the index must
-   retain the target blob, effective attributes must not disable text or
+   exception admits only CRLF-to-LF normalization of raw worktree bytes
+   against an LF committed blob, including a worktree file with mixed LF and
+   CRLF lines (2026-09-27 correction for a real clean Windows checkout).
+   The index must retain the target blob; effective attributes must not disable text or
    declare a filter/encoding/ident transform, and `eol=crlf` or
    `core.autocrlf=true` must authorize CRLF checkout (explicit `eol=lf`
    overrides that setting). The target must contain no CR or binary/control
-   bytes other than tab/LF. The expanded target must match disk exactly.
-   Binary, `-text`, mixed endings, historical index drift and unsupported
-   metadata fail closed on byte differences. Fingerprint recipes are
-   unchanged; no generic normalization or external filter is executed.
+   bytes other than tab/LF. Replacing CRLF pairs in the worktree alone must
+   reproduce the committed blob exactly; a lone CR is never tolerated.
+   Binary, `-text`, historical index drift and unsupported metadata fail
+   closed on byte differences. Fingerprint recipes are unchanged; the raw
+   worktree fingerprint still detects every byte difference, and no generic
+   normalization or external filter is executed.
 
 Guard 2 alone cannot distinguish "the worktree reflects `headSha`" from "the
 worktree is stable at some later commit whose evidence paths have already

@@ -75,10 +75,12 @@ def test_phase_forwards_bound_plan_and_preserves_other_commands(monkeypatch, tmp
     assert autorun._run_phase('pre-implementation', 'base', 'head', active_work_order=ACTIVE_ORDER, receipt_dir=tmp_path) == 0
     probe = [c.command for c in observed if RIPA_SCRIPT in c.command]
     assert probe == [('python', RIPA_SCRIPT, '--base', 'base', '--head', 'head', '--enforce', '--changed-lane-only', '--active-work-order', ACTIVE_ORDER)]
-    assert len(observed) == 86
-    assert sum('--active-work-order' in c.command for c in observed) == 2
+    assert len(observed) == 87
+    assert sum('--active-work-order' in c.command for c in observed) == 3
     release = [c.command for c in observed if c.name == 'dispatch release readiness']
     assert release == [('python', 'governance/compat/check_dispatch_release_readiness.py', '--active-work-order', ACTIVE_ORDER, '--head', 'head', '--enforce')]
+    feasibility = [c.command for c in observed if c.name == 'package skill target-state feasibility']
+    assert feasibility == [('python', 'governance/compat/check_package_skill_target_state_feasibility.py', '--active-work-order', ACTIVE_ORDER, '--enforce')]
 
 def test_pre_dispatch_binding_adds_release_gate_not_probe_binding(monkeypatch, tmp_path) -> None:
     observed = []
@@ -88,6 +90,7 @@ def test_pre_dispatch_binding_adds_release_gate_not_probe_binding(monkeypatch, t
     monkeypatch.setattr(autorun, '_execute', lambda index, command: (observed.append(command) or autorun.GateResult(index, command.name, command.command, 0, 0.01, '')))
     assert autorun._run_phase('pre-dispatch', 'base', 'head', active_work_order=ACTIVE_ORDER, receipt_dir=tmp_path) == 0
     assert sum(c.name == 'dispatch release readiness' for c in observed) == 1
+    assert sum(c.name == 'package skill target-state feasibility' for c in observed) == 1
     probe = next(c for c in observed if RIPA_SCRIPT in c.command)
     assert '--active-work-order' not in probe.command
 

@@ -6,6 +6,11 @@ import argparse
 import re
 import sys
 from dataclasses import dataclass, field
+from build_dispatch_packet_acceptance_sections import (
+    acceptance_ledger_block as _acceptance_ledger_block, required_artifact_manifest as _required_artifact_manifest,
+    worker_output_checker_read_ahead_mandate as _worker_output_checker_read_ahead_mandate,
+    worker_return_packet_shape_contract as _worker_return_packet_shape_contract,
+)
 from build_worker_return_skeleton_scaffold import (
     SCEC_UNRESOLVED_PREDECESSOR_SENTINEL, build_worker_return_skeleton, render_scec_outcome_block,
     render_evidence_readiness_binding_block)
@@ -382,57 +387,6 @@ def _reviewer_closure_conversion_block(batch_id: str, date: str) -> str:
         "| workerCommitPermission | FORBIDDEN |\n"
     )
 
-def _required_artifact_manifest() -> str:
-    return (
-        "## Required Artifact Manifest\n\n"
-        "| Artifact | Required worker action |\n"
-        "| --- | --- |\n"
-        "| FILL_ME | FILL_ME |\n"
-    )
-
-def _worker_return_packet_shape_contract(worker_return_path: str) -> str:
-    return (
-        "## Worker Return Packet Shape Contract\n\n"
-        f"workerReturnPath: `{worker_return_path}`\n"
-        "contractProfile: WORKER_RETURN_FULL_GATE_V1\n"
-        "requiredGate: `python governance/compat/run_worker_return_fast_gate.py`\n"
-        "individualCheckerSubstitution: FORBIDDEN\n"
-        "workerReturnSkeleton: CHECKER_SAFE_SKELETON_REQUIRED\n"
-        "\n"
-        "Required terms: Purpose; Scope / Methodology; Findings / Position; "
-        "Risk / Corrective Action; Claim Boundary; Agent Operation Trace "
-        "Block; Delta Execution Claim Boundary Control Block; Public Export "
-        "Disposition; executionBaseHead; git status --short.\n"
-        "\n"
-        "Conditional terms: External Knowledge Intake Routing; Rescan "
-        "Intelligence Hardening; Corpus Completeness And Report Integrity; "
-        "Finding-To-Governance Learning Disposition; Epistemic Process "
-        "Block; Machine Closure Package.\n"
-        "\n"
-        "Use `N/A with reason` for every non-applicable conditional block.\n"
-        "\n"
-        "Shape-list rule: when listing required worker-output sections, write "
-        "section names without the `##` prefix. Reserve actual heading syntax "
-        "for real sections so structural checkers do not treat this checklist "
-        "as the artifact section body.\n"
-    )
-
-def _worker_output_checker_read_ahead_mandate() -> str:
-    return (
-        "## Worker Output Checker Read-Ahead Mandate\n\n"
-        "Before writing each worker-owned output artifact, read checker source "
-        "for that file's docType, path family, and conditional content class.\n\n"
-        "| Output artifact | Required read-ahead result |\n"
-        "| --- | --- |\n"
-        "| worker return under `docs/reviews/` | derive exact review headings, worker-return quality terms, trace labels, delta boundary labels, corpus/value/rescan tokens, and no-commit evidence shape before writing |\n"
-        "| companion reference under `docs/reference/` | derive exact reference headings such as Scope / Applies To, Target / Source, source verification, corpus/value/rescan, trace, and claim-boundary labels before writing |\n\n"
-        "Literal-shape reminders: do not list required headings as backticked "
-        "`## ...` strings before the real section; write source-not-found "
-        "disposition spelling instead of the exact blocked enum in "
-        "literalTokensReviewed; avoid `after ... closure` wording unless a "
-        "dependency-release row cites the accepted artifact path and commit."
-    )
-
 def _verification_commands_block(args: ScaffoldArgs) -> str:
     lines = [
         "## Verification Commands",
@@ -713,6 +667,8 @@ def build_work_order(args: ScaffoldArgs, active: dict[str, bool]) -> str:
         lines.append(_evidence_readiness_contract_block())
         lines.append("")
     lines.append(_required_artifact_manifest())
+    lines.append("")
+    lines.append(_acceptance_ledger_block())
     lines.append("")
     lines.append(_worker_return_packet_shape_contract(worker_return_path))
     lines.append("")

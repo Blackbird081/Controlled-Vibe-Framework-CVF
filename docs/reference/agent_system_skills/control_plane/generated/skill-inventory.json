@@ -24,7 +24,9 @@
     "skill-discovery-invocation": 1,
     "source-driven-development": 1,
     "spec-driven-development": 1,
-    "test-driven-development": 1
+    "test-driven-development": 1,
+    "test-evidence-disposition": 1,
+    "worker-return-review": 1
   },
   "driftSummary": {},
   "generatedBy": "governance/compat/generate_skill_control_plane_inventory.py",
@@ -3246,6 +3248,220 @@
         "present": true,
         "webKey": "cvf-governance-skill-discovery-invocation"
       }
+    },
+    {
+      "activation": {
+        "decision": "ACTIVATION_READY",
+        "truthPacketRequired": true
+      },
+      "cliMcp": {
+        "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+        "adapterEvidence": "docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_ACTIVE_COMPLETION_2026-09-27.md",
+        "disposition": "IMPLEMENTED"
+      },
+      "drift": {
+        "violations": []
+      },
+      "packageRoot": {
+        "exists": true,
+        "rootPath": "docs/reference/agent_system_skills/packages/cvf-governance-worker-return-review/SKILL.md",
+        "sourceJsonPath": "docs/reference/agent_system_skills/packages/cvf-governance-worker-return-review/skill.source.json",
+        "sourceLifecycleState": "ACTIVE"
+      },
+      "registry": {
+        "approvalState": "APPROVED",
+        "candidateState": "ACTIVE",
+        "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-worker-return-review/SKILL.md",
+        "certificationState": "CERTIFIED",
+        "internalAgentDisposition": "IMPLEMENTED",
+        "name": "CVF Governance Worker-Return Review",
+        "reviewArtifacts": [
+          "docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_UAT_2026-09-27.md"
+        ],
+        "skillId": "cvf-governance-worker-return-review",
+        "status": "ACTIVE",
+        "uatState": "PASSED"
+      },
+      "runtime": {
+        "eligible": true,
+        "ineligibilityReasons": []
+      },
+      "selection": {
+        "agentUseCases": [
+          "review an internal worker return",
+          "choose reviewer-local repair or REWORK",
+          "verify bounded closure evidence"
+        ],
+        "domainGroup": "governance",
+        "expectedOutputContribution": "Consolidated source-backed review findings and a justified repair or closure route.",
+        "intendedUsers": [
+          "reviewer",
+          "closer"
+        ],
+        "notRecommendedWhen": [
+          "the task is external Web research",
+          "the task is ordinary code-quality review without a CVF worker return"
+        ],
+        "outputGoals": [
+          "worker-return disposition",
+          "reviewer-local repair decision",
+          "closure evidence"
+        ],
+        "primaryDomain": "worker-return-review",
+        "recommendedWhen": [
+          "an internal worker has returned a governed CVF assignment for Local review"
+        ],
+        "secondaryDomains": [
+          "review-cost-control",
+          "rework-routing"
+        ],
+        "selectionKeywords": [
+          "worker return review",
+          "COMPLETE_PENDING_REVIEW",
+          "reviewer-local repair",
+          "REWORK",
+          "tranche closure"
+        ],
+        "selectionPriority": 85,
+        "specSignals": [
+          "review worker return",
+          "decide reviewer repair or rework",
+          "close CVF tranche"
+        ]
+      },
+      "skillId": "cvf-governance-worker-return-review",
+      "taxonomy": [
+        "ASSF_REGISTRY_ENTRY",
+        "ASSF_PACKAGE_ROOT",
+        "RUNTIME_ELIGIBLE_PACKAGE",
+        "ACTIVE_RESOLVER_READY_PACKAGE",
+        "CLI_MCP_ADAPTER_PACKAGE",
+        "ACTIVE_SOURCE_PACKAGE",
+        "WEB_PROJECTION_CATALOG_ITEM",
+        "SPEC_SELECTION_PROFILE"
+      ],
+      "truth": {
+        "exists": true,
+        "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+        "truthStatus": "approved",
+        "verificationMode": "STRICT"
+      },
+      "webProjection": {
+        "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+        "certificationState": "CERTIFIED",
+        "domain": "worker-return-review",
+        "present": true,
+        "webKey": "cvf-governance-worker-return-review"
+      }
+    },
+    {
+      "activation": {
+        "decision": "ACTIVATION_READY",
+        "truthPacketRequired": true
+      },
+      "cliMcp": {
+        "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+        "adapterEvidence": "docs/baselines/CVF_GC018_CVF_NCR_R1_S11_R1_TEST_EVIDENCE_AUDIT_PRODUCTION_RUNTIME_CORRECTIVE_2026-09-28.md",
+        "disposition": "IMPLEMENTED"
+      },
+      "drift": {
+        "violations": []
+      },
+      "packageRoot": {
+        "exists": true,
+        "rootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-test-evidence-audit/SKILL.md",
+        "sourceJsonPath": "docs/reference/agent_system_skills/packages/cvf-engineering-test-evidence-audit/skill.source.json",
+        "sourceLifecycleState": "ACTIVE"
+      },
+      "registry": {
+        "approvalState": "APPROVED",
+        "candidateState": "ACTIVE",
+        "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-test-evidence-audit/SKILL.md",
+        "certificationState": "CERTIFIED",
+        "internalAgentDisposition": "IMPLEMENTED",
+        "name": "CVF Engineering Test Evidence Audit",
+        "reviewArtifacts": [
+          "docs/reviews/CVF_CVF_NCR_R1_S02_TEST_EVIDENCE_AUDIT_CONTENT_COMPLETION_2026-09-27.md",
+          "docs/reviews/CVF_CVF_NCR_R1_S04_TEST_EVIDENCE_AUDIT_METADATA_CANDIDATE_COMPLETION_2026-09-27.md",
+          "docs/reviews/CVF_CVF_NCR_R1_S06_TEST_EVIDENCE_AUDIT_UAT_CERTIFICATION_2026-09-27.md"
+        ],
+        "skillId": "cvf-engineering-test-evidence-audit",
+        "status": "ACTIVE",
+        "uatState": "PASSED"
+      },
+      "runtime": {
+        "eligible": true,
+        "ineligibilityReasons": []
+      },
+      "selection": {
+        "agentUseCases": [
+          "check whether an asserted proof claim is actually tested",
+          "give a KEEP/REPAIR/CONSOLIDATE/ADD/DEFER_WITH_REASON disposition for one existing-proof claim",
+          "read actual test assertions instead of trusting a docstring or claim sentence"
+        ],
+        "domainGroup": "engineering",
+        "expectedOutputContribution": "One advisory row disposing an existing-proof claim, with cited evidence and a next-owner action, never a test PASS or deletion permission.",
+        "intendedUsers": [
+          "worker",
+          "reviewer",
+          "dispatcher"
+        ],
+        "notRecommendedWhen": [
+          "the task is authoring a new failing test before implementation exists (TDD's trigger)",
+          "the task is reviewing a diff or PR for correctness/simplification/efficiency defects (code-review's trigger)",
+          "the task requires actually running, evaluating, or deleting the named test"
+        ],
+        "outputGoals": [
+          "advisory disposition row",
+          "cited test-assertion evidence",
+          "next-owner action, not a test result"
+        ],
+        "primaryDomain": "test-evidence-disposition",
+        "recommendedWhen": [
+          "a comment, commit message, docstring, or prior review asserts a source file is tested or covered, and the claim needs an advisory check before being trusted or extended"
+        ],
+        "secondaryDomains": [
+          "test-driven-development",
+          "code-review-quality"
+        ],
+        "selectionKeywords": [
+          "is this tested",
+          "existing test coverage claim",
+          "test evidence audit",
+          "verify existing proof claim",
+          "advisory test disposition"
+        ],
+        "selectionPriority": 40,
+        "specSignals": [
+          "test evidence audit",
+          "advisory test disposition",
+          "keep repair consolidate add defer"
+        ]
+      },
+      "skillId": "cvf-engineering-test-evidence-audit",
+      "taxonomy": [
+        "ASSF_REGISTRY_ENTRY",
+        "ASSF_PACKAGE_ROOT",
+        "RUNTIME_ELIGIBLE_PACKAGE",
+        "ACTIVE_RESOLVER_READY_PACKAGE",
+        "CLI_MCP_ADAPTER_PACKAGE",
+        "ACTIVE_SOURCE_PACKAGE",
+        "WEB_PROJECTION_CATALOG_ITEM",
+        "SPEC_SELECTION_PROFILE"
+      ],
+      "truth": {
+        "exists": true,
+        "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+        "truthStatus": "approved",
+        "verificationMode": "STRICT"
+      },
+      "webProjection": {
+        "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+        "certificationState": "CERTIFIED",
+        "domain": "test-evidence-disposition",
+        "present": true,
+        "webKey": "cvf-engineering-test-evidence-audit"
+      }
     }
   ],
   "schemaVersion": "skill-control-plane-v1",
@@ -3260,39 +3476,39 @@
   },
   "statusCounts": {
     "candidateState": {
-      "ACTIVE": 24,
+      "ACTIVE": 26,
       "CANDIDATE": 8
     },
     "certificationState": {
-      "CERTIFIED": 25,
+      "CERTIFIED": 27,
       "NOT_STARTED": 7
     },
     "internalAgentDisposition": {
       "CANDIDATE": 8,
-      "IMPLEMENTED": 24
+      "IMPLEMENTED": 26
     },
     "status": {
-      "ACTIVE": 24,
+      "ACTIVE": 26,
       "CANDIDATE": 8
     },
     "uatState": {
       "NOT_STARTED": 7,
-      "PASSED": 25
+      "PASSED": 27
     }
   },
   "summary": {
-    "activeResolverReadyPackages": 24,
-    "activeSourcePackages": 24,
-    "assfRegistryEntries": 32,
-    "cliMcpAdapterPackages": 24,
+    "activeResolverReadyPackages": 26,
+    "activeSourcePackages": 26,
+    "assfRegistryEntries": 34,
+    "cliMcpAdapterPackages": 26,
     "crossSurfaceDriftViolationCount": 0,
     "externalProviderRuntimeSkillMappings": 0,
-    "packageRoots": 24,
+    "packageRoots": 26,
     "publicProdPackages": 0,
-    "runtimeEligiblePackages": 24,
-    "selectionProfiledPackages": 24,
+    "runtimeEligiblePackages": 26,
+    "selectionProfiledPackages": 26,
     "templateMapEntries": 58,
-    "webProjectionItems": 52,
+    "webProjectionItems": 54,
     "webProjectionOnlyItems": 27
   },
   "taxonomy": {

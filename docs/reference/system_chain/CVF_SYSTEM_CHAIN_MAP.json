@@ -5,7 +5,7 @@
   "sourceAuditEvidence": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_EVIDENCE_2026-07-10.json",
   "reviewerCompletion": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md",
   "reviewerCompletionMaterialCommit": "645df8b83",
-  "lastVerifiedDate": "2026-09-25",
+  "lastVerifiedDate": "2026-09-27",
   "maxAgeDays": 30,
   "reminderPolicy": "This machine map and its human companion record reviewer-accepted MSEA-R90 Audit A findings. Source-file drift and review age are detected automatically by governance/compat/check_system_chain_map_freshness.py. Detecting drift or age expiry never rewrites a lane's currentPosture or verdict automatically; only a fresh governed review may change those fields.",
   "lanes": [
@@ -209,8 +209,8 @@
         },
         {
           "path": "governance/compat/run_agent_autorun_workflow_gate.py",
-          "sha256": "be6261de0eea752c49f779360f7b59e02e8e4d73fac8cd9aeec3c0535845d489",
-          "evidenceRole": "per-checker PASS/FAIL CLI print, bound dispatch-release admission, plus v3 JSON receipt owner"
+          "sha256": "8d28ac306eb2d7569571b53a833478b59708e89860ef11ff06115ba8a8ea6a1e",
+          "evidenceRole": "per-checker PASS/FAIL CLI print, bound dispatch-release and package target-state feasibility admission, plus v3 JSON receipt owner"
         },
         {
           "path": "governance/compat/agent_autorun_machine_verification.py",

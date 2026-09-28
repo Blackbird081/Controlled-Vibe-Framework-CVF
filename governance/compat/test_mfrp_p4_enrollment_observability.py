@@ -198,6 +198,51 @@ class JournalProjectionTests(unittest.TestCase):
             "STARVED_ELIGIBLE_NOT_COLLECTED",
         )
 
+    def test_retry_queue_is_bounded_and_does_not_inflate_eligible_count(self):
+        original = subject.make_attempt(
+            "a" * 40,
+            "b" * 40,
+            outcome="UNSAFE_AUTORUN_RECEIPT_GENERATION_FAILED",
+            candidate_count=1,
+            eligible=True,
+            selected_path="docs/reviews/sample.md",
+        )
+        journal = subject.record_attempt({}, original)
+        self.assertEqual(journal["retryableCount"], 1)
+        self.assertEqual(journal["eligibleCount"], 1)
+
+        retry = subject.make_attempt(
+            "c" * 40,
+            "b" * 40,
+            outcome="UNSAFE_AUTORUN_RECEIPT_GENERATION_FAILED",
+            candidate_count=1,
+            eligible=True,
+            selected_path="docs/reviews/sample.md",
+        )
+        retry["retryOfTrustedCommit"] = "b" * 40
+        journal = subject.record_attempt(journal, retry)
+        self.assertEqual(journal["retryableCount"], 0)
+        self.assertEqual(journal["retryAttemptCount"], 1)
+        self.assertEqual(journal["eligibleCount"], 1)
+
+    def test_retry_queue_prefers_most_recent_prospective_failure(self):
+        journal = {}
+        for index, trusted in enumerate(("b" * 40, "c" * 40)):
+            journal = subject.record_attempt(
+                journal,
+                subject.make_attempt(
+                    f"{index + 1:040x}",
+                    trusted,
+                    outcome="SKIPPED_NO_COMMITTED_EVIDENCE",
+                    candidate_count=1,
+                    eligible=True,
+                    selected_path=f"docs/reviews/{index}.md",
+                ),
+            )
+        selected = subject.select_retryable_attempt(journal)
+        self.assertIsNotNone(selected)
+        self.assertEqual(selected["trustedCommit"], "c" * 40)
+
 
 if __name__ == "__main__":
     unittest.main()

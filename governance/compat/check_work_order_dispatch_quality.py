@@ -46,6 +46,10 @@ from check_work_order_dispatch_quality_lifecycle import (
     _validate_ready_dependency_release as _validate_ready_dependency_release_with_commit_check,
 )
 from guard_binding_catalog import effective_binding_text
+try:
+    from check_work_order_acceptance_ledger import validate_work_order as validate_acceptance_ledger
+except ModuleNotFoundError:
+    from governance.compat.check_work_order_acceptance_ledger import validate_work_order as validate_acceptance_ledger
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
@@ -218,14 +222,11 @@ ROOT_GOVERNANCE_PATH_RE = re.compile(
 )
 LHW_RE = re.compile(r"LHW[-_]?(\d+)(?!\d)", re.IGNORECASE)
 IMPORTANT_FULL_SCAN_AUDIT_PATH = "docs/audits/CVF_IMPORTANT_FULL_FILE_SCAN_BLINDSPOT_RECORD_2026-05-31.md"
-
 IMPLEMENTATION_MODULES = (
     "check_work_order_dispatch_quality_core.py",
     "check_work_order_dispatch_quality_artifacts.py",
     "check_work_order_dispatch_quality_range.py",
 )
-
-
 def _load_implementation_modules() -> None:
     """Load split implementation files into this module's public API."""
     module_dir = Path(__file__).resolve().parent
@@ -233,10 +234,7 @@ def _load_implementation_modules() -> None:
         module_path = module_dir / module_name
         source = module_path.read_text(encoding="utf-8")
         exec(compile(source, str(module_path), "exec"), globals())
-
-
 _load_implementation_modules()
-
 def _print_report(report: dict[str, Any], base: str, head: str, base_source: str) -> None:
     print("=== CVF Work Order Dispatch Quality Gate ===")
     print(f"Range: {base}..{head}")
@@ -245,67 +243,64 @@ def _print_report(report: dict[str, Any], base: str, head: str, base_source: str
     print(f"Files checked: {report['checkedFileCount']}")
     print(f"Violations: {report['violationCount']}")
     print(f"Marker violations: {report['markerViolationCount']}")
-
     if report["checkedFiles"]:
         print("\nChecked dispatch artifacts:")
         for path in report["checkedFiles"]:
             print(f"  - {path}")
     else:
         print("\nNo changed work-order, roadmap, or fast-lane review artifacts required dispatch-quality validation.")
-
     if report["violations"]:
         print("\nDispatch-quality violations:")
         for violation in report["violations"]:
             print(f"  - {violation['path']}")
             for issue in violation["issues"]:
                 print(f"    - {issue}")
-
     if report["markerViolations"]:
         print("\nGuard wiring marker violations:")
         for path, markers in report["markerViolations"].items():
             print(f"  - {path}")
             for marker in markers:
                 print(f"    - missing marker `{marker}`")
-
     if report["compliant"]:
         print("\nCOMPLIANT - dispatch-quality gates are satisfied for checked artifacts.")
     else:
         print("\nVIOLATION - keep the artifact in HOLD/DRAFT or fix the missing dispatch evidence before execution.")
-
-
 def _run_check(base: str | None, head: str | None) -> tuple[dict[str, Any], str, str, str]:
     resolved_base, resolved_head, base_source = _resolve_range(base, head)
     changed = _get_changed(resolved_base, resolved_head)
     report = _classify(sorted(changed), base_ref=resolved_base)
+    for path in report["checkedFiles"]:
+        if not path.startswith("docs/work_orders/"):
+            continue
+        text = (REPO_ROOT / path).read_text(encoding="utf-8", errors="replace")
+        if "```acceptance-ledger-json" not in text:
+            continue
+        _, ledger_issues = validate_acceptance_ledger(text)
+        if ledger_issues:
+            report["violations"].append({"path": path, "issues": ledger_issues})
+    report["violationCount"] = len(report["violations"])
+    report["compliant"] = report["violationCount"] == 0 and report["markerViolationCount"] == 0
     return report, resolved_base, resolved_head, base_source
-
-
 def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(errors="replace")
     if hasattr(sys.stderr, "reconfigure"):
         sys.stderr.reconfigure(errors="replace")
-
     parser = argparse.ArgumentParser(description="Enforce CVF work-order dispatch quality gates")
     parser.add_argument("--base", default=None)
     parser.add_argument("--head", default=None)
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--enforce", action="store_true")
     args = parser.parse_args()
-
     try:
         report, base, head, base_source = _run_check(args.base, args.head)
     except RuntimeError as exc:
         print(str(exc), file=sys.stderr)
         return 2
-
     if args.json:
         print(json.dumps(report, indent=2))
     else:
         _print_report(report, base, head, base_source)
-
     return 1 if args.enforce and not report["compliant"] else 0
-
-
 if __name__ == "__main__":
     raise SystemExit(main())

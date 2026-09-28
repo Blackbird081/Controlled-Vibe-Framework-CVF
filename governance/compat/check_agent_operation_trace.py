@@ -331,9 +331,11 @@ def _check_manifest_delta(
     expected_paths = _parse_path_list(expected_raw)
     actual_paths = _parse_path_list(actual_raw)
 
-    # If we cannot parse any paths from the expected manifest, skip delta check
+    # A non-N/A expected manifest that cannot yield a concrete repo path is a
+    # malformed oracle, not permission to skip reconciliation.
     if not expected_paths:
-        return []
+        violations.append(f"{path}: Expected manifest has no parsed repo-local paths")
+        return violations
 
     if _is_dispatch_work_order(path, text):
         future_manifest_paths = expected_paths & _future_execution_paths(text)

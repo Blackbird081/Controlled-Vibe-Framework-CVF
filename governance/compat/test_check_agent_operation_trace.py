@@ -40,6 +40,16 @@ VALID_TRACE = """
 
 
 class AgentOperationTraceTests(unittest.TestCase):
+    def test_unparseable_expected_manifest_fails_closed(self) -> None:
+        text = VALID_TRACE.replace(
+            "N/A with reason: unit test fixture not a worker return",
+            "the paths named in the work order",
+            1,
+        )
+        changed = {"docs/work_orders/CVF_AGENT_WORK_ORDER_EXAMPLE.md": {"M"}}
+        violations = MODULE.find_trace_violations(changed, {next(iter(changed)): text})
+        self.assertTrue(any("no parsed repo-local paths" in item for item in violations))
+
     def test_changed_work_order_without_trace_is_violation(self) -> None:
         changed = {"docs/work_orders/CVF_AGENT_WORK_ORDER_EXAMPLE.md": {"A"}}
         texts = {"docs/work_orders/CVF_AGENT_WORK_ORDER_EXAMPLE.md": "Status: DISPATCHED\n"}

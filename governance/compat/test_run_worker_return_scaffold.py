@@ -43,6 +43,13 @@ class WorkerReturnScaffoldTests(unittest.TestCase):
         self.assertIn("consolidatedDefectClassSweep: PENDING_BEFORE_READY", text)
         self.assertIn("successorTrancheOpened: NO", text)
         self.assertIn("terminalReadinessVerdict: BLOCKED_WITH_REASON:", text)
+        self.assertIn("## Tool / Classifier Block Recovery Event", text)
+        self.assertIn("recoveryDisposition: NO_EVENT", text)
+        self.assertIn("recoveryAttemptCount: 0", text)
+        self.assertIn("workerAuthoredOperatorQuestionCount: 0", text)
+        self.assertIn("## Work-Order Acceptance Evidence Ledger", text)
+        self.assertIn("```acceptance-evidence-json", text)
+        self.assertIn('"schemaVersion":"cvf.workOrderAcceptanceEvidence@1.0.0"', text)
 
     def test_scaffold_governs_contract_without_worker_micromanagement(self):
         text = scaffold.build_scaffold("Example Worker Return")

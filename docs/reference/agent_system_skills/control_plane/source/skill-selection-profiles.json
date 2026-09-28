@@ -4,6 +4,50 @@
   "profiles": [
     {
       "agentUseCases": [
+        "review an internal worker return",
+        "choose reviewer-local repair or REWORK",
+        "verify bounded closure evidence"
+      ],
+      "domainGroup": "governance",
+      "expectedOutputContribution": "Consolidated source-backed review findings and a justified repair or closure route.",
+      "intendedUsers": [
+        "reviewer",
+        "closer"
+      ],
+      "notRecommendedWhen": [
+        "the task is external Web research",
+        "the task is ordinary code-quality review without a CVF worker return"
+      ],
+      "outputGoals": [
+        "worker-return disposition",
+        "reviewer-local repair decision",
+        "closure evidence"
+      ],
+      "primaryDomain": "worker-return-review",
+      "recommendedWhen": [
+        "an internal worker has returned a governed CVF assignment for Local review"
+      ],
+      "secondaryDomains": [
+        "review-cost-control",
+        "rework-routing"
+      ],
+      "selectionKeywords": [
+        "worker return review",
+        "COMPLETE_PENDING_REVIEW",
+        "reviewer-local repair",
+        "REWORK",
+        "tranche closure"
+      ],
+      "selectionPriority": 85,
+      "skillId": "cvf-governance-worker-return-review",
+      "specSignals": [
+        "review worker return",
+        "decide reviewer repair or rework",
+        "close CVF tranche"
+      ]
+    },
+    {
+      "agentUseCases": [
         "design stable service APIs",
         "define module boundaries",
         "review schema contracts"
@@ -766,6 +810,52 @@
         "test driven development",
         "write failing test",
         "regression test"
+      ]
+    },
+    {
+      "agentUseCases": [
+        "check whether an asserted proof claim is actually tested",
+        "give a KEEP/REPAIR/CONSOLIDATE/ADD/DEFER_WITH_REASON disposition for one existing-proof claim",
+        "read actual test assertions instead of trusting a docstring or claim sentence"
+      ],
+      "domainGroup": "engineering",
+      "expectedOutputContribution": "One advisory row disposing an existing-proof claim, with cited evidence and a next-owner action, never a test PASS or deletion permission.",
+      "intendedUsers": [
+        "worker",
+        "reviewer",
+        "dispatcher"
+      ],
+      "notRecommendedWhen": [
+        "the task is authoring a new failing test before implementation exists (TDD's trigger)",
+        "the task is reviewing a diff or PR for correctness/simplification/efficiency defects (code-review's trigger)",
+        "the task requires actually running, evaluating, or deleting the named test"
+      ],
+      "outputGoals": [
+        "advisory disposition row",
+        "cited test-assertion evidence",
+        "next-owner action, not a test result"
+      ],
+      "primaryDomain": "test-evidence-disposition",
+      "recommendedWhen": [
+        "a comment, commit message, docstring, or prior review asserts a source file is tested or covered, and the claim needs an advisory check before being trusted or extended"
+      ],
+      "secondaryDomains": [
+        "test-driven-development",
+        "code-review-quality"
+      ],
+      "selectionKeywords": [
+        "is this tested",
+        "existing test coverage claim",
+        "test evidence audit",
+        "verify existing proof claim",
+        "advisory test disposition"
+      ],
+      "selectionPriority": 40,
+      "skillId": "cvf-engineering-test-evidence-audit",
+      "specSignals": [
+        "test evidence audit",
+        "advisory test disposition",
+        "keep repair consolidate add defer"
       ]
     },
     {

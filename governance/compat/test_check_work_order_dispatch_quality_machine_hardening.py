@@ -130,6 +130,42 @@ python governance/compat/run_agent_autorun_workflow_gate.py --phase pre-closure 
     assert MODULE._validate_execution_anchor_substitution(text) == []
 
 
+def test_verification_command_existing_python_script_passes() -> None:
+    text = """## Verification Commands
+
+```powershell
+python governance/compat/check_work_order_dispatch_quality.py --enforce
+```
+"""
+
+    assert MODULE._validate_verification_command_script_paths(text) == []
+
+
+def test_verification_command_missing_python_script_fails() -> None:
+    text = """## Verification Commands
+
+```powershell
+python governance/compat/does_not_exist_dispatch_gate.py --enforce
+```
+"""
+
+    issues = MODULE._validate_verification_command_script_paths(text)
+    assert len(issues) == 1
+    assert "does not exist" in issues[0]
+    assert "does_not_exist_dispatch_gate.py" in issues[0]
+
+
+def test_verification_command_module_mode_is_not_treated_as_script_path() -> None:
+    text = """## Verification Commands
+
+```powershell
+python -m unittest governance.compat.test_check_work_order_dispatch_quality_machine_hardening
+```
+"""
+
+    assert MODULE._validate_verification_command_script_paths(text) == []
+
+
 # --- Control 3: dated-owner dependency discovery ----------------------------
 
 

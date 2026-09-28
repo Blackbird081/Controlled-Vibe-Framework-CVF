@@ -91,6 +91,36 @@ READINESS_NEGATION_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+RSE_APPLICABILITY_RE = re.compile(r"(?m)^toolClassifierBlockRecoveryApplicability:\s*(.+?)\s*$")
+RSE_REQUIRED = {
+    "workerAuthoredOperatorQuestionAllowed": "NO",
+    "platformForcedPromptBoundary": "RECORD_NOT_SUPPRESS",
+    "atomicEditPreparationRequired": "YES",
+    "workerControlledEditRetryCeiling": "1",
+    "retryScope": "SAME_SEMANTIC_EDIT_NO_SCOPE_CHANGE",
+    "exhaustedRecoveryRoute": "BLOCKED_WITH_REASON_TO_LOCAL",
+    "classifierEventCaptureRequired": "YES",
+}
+
+
+def _classifier_recovery_issues(text: str) -> list[str]:
+    matches = RSE_APPLICABILITY_RE.findall(text)
+    if not matches:
+        return []
+    if len(matches) != 1:
+        return ["toolClassifierBlockRecoveryApplicability must occur exactly once"]
+    value = matches[0].strip()
+    if value.startswith("NOT_APPLICABLE_WITH_REASON - ") and value.removeprefix("NOT_APPLICABLE_WITH_REASON - ").strip():
+        return []
+    if value != "APPLICABLE":
+        return ["toolClassifierBlockRecoveryApplicability must be exactly APPLICABLE or reasoned N/A"]
+    issues: list[str] = []
+    for field, expected in RSE_REQUIRED.items():
+        found = re.findall(rf"(?m)^{re.escape(field)}:\s*(.+?)\s*$", text)
+        if found != [expected]:
+            issues.append(f"{field} must occur once with exact value {expected}")
+    return issues
+
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 
@@ -325,6 +355,8 @@ def check_work_order(path: str, text: str) -> list[str]:
     prohibited = _check_prohibited_content(section)
     for msg in prohibited:
         issues.append(f"{path}: {ENVELOPE_SECTION_MARKER} violation -- {msg}")
+
+    issues.extend(f"{path}: {msg}" for msg in _classifier_recovery_issues(text))
 
     return issues
 

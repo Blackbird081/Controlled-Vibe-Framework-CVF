@@ -1,0 +1,230 @@
+{
+  "authorityBoundary": "Truth packet for one bounded P10 ACTIVE production package. This packet records source truth and the governed production-adapter contract only. Receipt-backed internal or external use still requires explicit work-order and provider authority. It does not grant automatic invocation, test execution, downstream mutation, provider retry, public sync, deployment, merge, commit, or filesystem action authority.",
+  "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-test-evidence-audit.json",
+  "evidence": [
+    {
+      "evidenceId": "EV-REGISTRY",
+      "kind": "assf_registry_entry",
+      "sourcePath": "docs/reference/agent_system_skills/registry/entries/cvf-engineering-test-evidence-audit.json",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-PACKAGE",
+      "kind": "assf_package_root",
+      "sourcePath": "docs/reference/agent_system_skills/packages/cvf-engineering-test-evidence-audit/SKILL.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-S06-UAT",
+      "kind": "package_skill_uat_certification_review",
+      "sourcePath": "docs/reviews/CVF_CVF_NCR_R1_S06_TEST_EVIDENCE_AUDIT_UAT_CERTIFICATION_2026-09-27.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-S06R1-COMPLETION",
+      "kind": "phase_gate_reconciliation_completion_review",
+      "sourcePath": "docs/reviews/CVF_CVF_NCR_R1_S06_R1_P5_PHASE_GATE_RECONCILIATION_COMPLETION_2026-09-27.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-SOP",
+      "kind": "package_skill_productionization_sop",
+      "sourcePath": "docs/reference/agent_system_skills/CVF_PACKAGE_SKILL_PRODUCTIONIZATION_SOP.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-SKSOT-STANDARD",
+      "kind": "skill_truth_packet_standard",
+      "sourcePath": "docs/reference/agent_system_skills/CVF_SKILL_SOURCE_OF_TRUTH_PACKET_STANDARD.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-S09-P8-WORK-ORDER",
+      "kind": "package_skill_productionization_work_order",
+      "sourcePath": "docs/work_orders/CVF_AGENT_WORK_ORDER_CVF_NCR_R1_S09_TEST_EVIDENCE_AUDIT_ACTIVATION_READINESS_2026-09-27.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-PRODUCTION-RUNTIME-STANDARD",
+      "kind": "production_package_runtime_standard",
+      "sourcePath": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-S11-R1-P10-WORK-ORDER",
+      "kind": "package_skill_productionization_work_order",
+      "sourcePath": "docs/work_orders/CVF_AGENT_WORK_ORDER_CVF_NCR_R1_S11_R1_TEST_EVIDENCE_AUDIT_PRODUCTION_RUNTIME_CORRECTIVE_2026-09-28.md",
+      "status": "approved"
+    }
+  ],
+  "lifecycleSnapshot": {
+    "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-test-evidence-audit/SKILL.md",
+    "certificationState": "CERTIFIED",
+    "externalCliMcpDisposition": "IMPLEMENTED",
+    "internalAgentDisposition": "IMPLEMENTED",
+    "status": "ACTIVE",
+    "uatState": "PASSED"
+  },
+  "obligations": [
+    {
+      "obligationId": "OB-UAT",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-CERTIFICATION",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-INTERNAL-DISPOSITION",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-NO-AUTOMATIC-INVOCATION",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-NO-ACTIVATION-BEFORE-ACTIVE",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-EXTERNAL-ADAPTER-RECEIPT-BOUNDARY",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-P8-ACTIVATION-READINESS",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-P10-PRODUCTION-RUNTIME",
+      "state": "satisfied",
+      "strength": "HARD"
+    }
+  ],
+  "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-engineering-test-evidence-audit/SKILL.md",
+  "provenanceLabels": [
+    {
+      "claimId": "CLAIM-LIFECYCLE",
+      "label": "MEASURED",
+      "sourceEvidenceIds": [
+        "EV-REGISTRY"
+      ]
+    },
+    {
+      "claimId": "CLAIM-RUNTIME-ELIGIBILITY",
+      "label": "COMPUTED",
+      "sourceEvidenceIds": [
+        "EV-REGISTRY",
+        "EV-PACKAGE"
+      ]
+    },
+    {
+      "claimId": "CLAIM-GOVERNED-APPROVAL",
+      "label": "HUMAN_APPROVED",
+      "sourceEvidenceIds": [
+        "EV-S06-UAT",
+        "EV-S06R1-COMPLETION"
+      ]
+    },
+    {
+      "claimId": "CLAIM-P8-ACTIVATION",
+      "label": "HUMAN_APPROVED",
+      "sourceEvidenceIds": [
+        "EV-REGISTRY",
+        "EV-S09-P8-WORK-ORDER"
+      ]
+    },
+    {
+      "claimId": "CLAIM-P10-PRODUCTION-RUNTIME",
+      "label": "HUMAN_APPROVED",
+      "sourceEvidenceIds": [
+        "EV-PRODUCTION-RUNTIME-STANDARD",
+        "EV-S11-R1-P10-WORK-ORDER"
+      ]
+    }
+  ],
+  "receipt": {
+    "hash": "sha256:e295aaf9b9b7faa97f9331347ae441b37b69c28463f08a4f7c00a0d1c213698f",
+    "previousHash": "sha256:fefd9e542eb9830ca8774a1dd229c1929a6c0e2083417e17394c6406b6de598b",
+    "receiptId": "RCPT-SKSOT-T1-cvf-engineering-test-evidence-audit-R1-S11-R1",
+    "status": "issued"
+  },
+  "registryEntryPath": "docs/reference/agent_system_skills/registry/entries/cvf-engineering-test-evidence-audit.json",
+  "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+  "schemaVersion": "0.1.0",
+  "skillId": "cvf-engineering-test-evidence-audit",
+  "truthPacketId": "SKSOT-T1-cvf-engineering-test-evidence-audit",
+  "truthStatus": "approved",
+  "verificationMode": "STRICT",
+  "verificationResults": [
+    {
+      "evidenceIds": [
+        "EV-REGISTRY",
+        "EV-PACKAGE"
+      ],
+      "method": "source",
+      "obligationIds": [
+        "OB-UAT",
+        "OB-CERTIFICATION",
+        "OB-INTERNAL-DISPOSITION"
+      ],
+      "resultId": "VR-LIFECYCLE-SOURCE",
+      "status": "pass"
+    },
+    {
+      "evidenceIds": [
+        "EV-S06-UAT",
+        "EV-S06R1-COMPLETION"
+      ],
+      "method": "review",
+      "obligationIds": [
+        "OB-NO-AUTOMATIC-INVOCATION",
+        "OB-NO-ACTIVATION-BEFORE-ACTIVE"
+      ],
+      "resultId": "VR-ACTIVATION-BOUNDARY",
+      "status": "pass"
+    },
+    {
+      "evidenceIds": [
+        "EV-REGISTRY",
+        "EV-SOP"
+      ],
+      "method": "source",
+      "obligationIds": [
+        "OB-EXTERNAL-ADAPTER-RECEIPT-BOUNDARY"
+      ],
+      "resultId": "VR-EXTERNAL-ADAPTER-BOUNDARY",
+      "status": "pass"
+    },
+    {
+      "evidenceIds": [
+        "EV-REGISTRY",
+        "EV-S09-P8-WORK-ORDER"
+      ],
+      "method": "source",
+      "obligationIds": [
+        "OB-P8-ACTIVATION-READINESS"
+      ],
+      "resultId": "VR-P8-ACTIVATION-READINESS",
+      "status": "pass"
+    },
+    {
+      "evidenceIds": [
+        "EV-PRODUCTION-RUNTIME-STANDARD",
+        "EV-S11-R1-P10-WORK-ORDER"
+      ],
+      "method": "source",
+      "obligationIds": [
+        "OB-P10-PRODUCTION-RUNTIME"
+      ],
+      "resultId": "VR-P10-PRODUCTION-RUNTIME",
+      "status": "pass"
+    }
+  ]
+}

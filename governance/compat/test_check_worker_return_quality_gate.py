@@ -140,6 +140,31 @@ class EligibilityTests(unittest.TestCase):
 
 
 class DiagnoseTests(unittest.TestCase):
+    def test_classifier_event_invariants_reject_h1_false_negatives(self) -> None:
+        text = """## Tool / Classifier Block Event
+toolClassifierBlockEventCount: 1
+platformForcedOperatorPromptCount: 2
+workerAuthoredOperatorQuestionCount: 0
+recoveryAttemptCount: abc
+recoveryDisposition: NO_EVENT
+eventEvidence: observed
+"""
+        issues = chk._classifier_event_issues(text)
+        self.assertTrue(any("nonnegative integer" in issue for issue in issues))
+        self.assertTrue(any("cannot exceed" in issue for issue in issues))
+        self.assertTrue(any("cannot use NO_EVENT" in issue for issue in issues))
+
+    def test_classifier_zero_event_contract_passes(self) -> None:
+        text = """## Tool / Classifier Block Event
+toolClassifierBlockEventCount: 0
+platformForcedOperatorPromptCount: 0
+workerAuthoredOperatorQuestionCount: 0
+recoveryAttemptCount: 0
+recoveryDisposition: NO_EVENT
+eventEvidence: NOT_APPLICABLE_WITH_REASON - no event
+"""
+        self.assertEqual(chk._classifier_event_issues(text), [])
+
     def test_valid_return_is_clean(self) -> None:
         d = chk.diagnose("docs/reviews/CVF_X_WORKER_RETURN.md", VALID_RETURN)
         self.assertTrue(d.is_clean, d.issues)

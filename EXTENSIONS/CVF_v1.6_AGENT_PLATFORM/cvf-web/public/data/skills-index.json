@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T09:31:57.002Z",
+  "generatedAt": "2026-09-28T11:01:43.474Z",
   "categories": [
     {
       "id": "ai_ml_evaluation",
@@ -2730,13 +2730,142 @@
             "metadata-first discovery"
           ],
           "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-governance-worker-return-review",
+          "title": "CVF Governance Worker-Return Review",
+          "domain": "worker-return-review",
+          "difficulty": "Governed",
+          "summary": "Guide Local reviewer assessment of internal worker returns, reviewer-local repair routing, and evidence-supported bounded closure.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-governance-worker-return-review/SKILL.md",
+          "content": "# CVF Governance Worker-Return Review\n\nGuide Local reviewer assessment of internal worker returns, reviewer-local repair routing, and evidence-supported bounded closure.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-governance-worker-return-review/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: worker-return-review\n\n## Review Artifacts\n- docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_UAT_2026-09-27.md",
+          "riskLevel": "R1",
+          "allowedRoles": "reviewer, closer",
+          "allowedPhases": "REVIEWER_CLOSURE",
+          "authorityScope": "advisory review guidance under the current governed assignment; no independent mutation or commit grant",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_UAT_2026-09-27.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-worker-return-review/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "worker-return-review",
+          "domainGroup": "governance",
+          "selectionKeywords": [
+            "worker return review",
+            "COMPLETE_PENDING_REVIEW",
+            "reviewer-local repair",
+            "REWORK",
+            "tranche closure"
+          ],
+          "specSignals": [
+            "review worker return",
+            "decide reviewer repair or rework",
+            "close CVF tranche"
+          ],
+          "recommendedWhen": [
+            "an internal worker has returned a governed CVF assignment for Local review"
+          ],
+          "notRecommendedWhen": [
+            "the task is external Web research",
+            "the task is ordinary code-quality review without a CVF worker return"
+          ],
+          "outputGoals": [
+            "worker-return disposition",
+            "reviewer-local repair decision",
+            "closure evidence"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
+        },
+        {
+          "id": "cvf-engineering-test-evidence-audit",
+          "title": "CVF Engineering Test Evidence Audit",
+          "domain": "test-evidence-disposition",
+          "difficulty": "Governed",
+          "summary": "Give an advisory KEEP/REPAIR/CONSOLIDATE/ADD/DEFER_WITH_REASON disposition for one asserted existing-proof claim tied to a named source file and a named test file, by reading the actual test assertions rather than trusting the claim sentence or a docstring.",
+          "path": "docs/reference/agent_system_skills/packages/cvf-engineering-test-evidence-audit/SKILL.md",
+          "content": "# CVF Engineering Test Evidence Audit\n\nGive an advisory KEEP/REPAIR/CONSOLIDATE/ADD/DEFER_WITH_REASON disposition for one asserted existing-proof claim tied to a named source file and a named test file, by reading the actual test assertions rather than trusting the claim sentence or a docstring.\n\n## Projection Boundary\nThis index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope.\n\n## Source Trace\n- Canonical root: docs/reference/agent_system_skills/packages/cvf-engineering-test-evidence-audit/SKILL.md\n- Certification state: CERTIFIED\n- UAT state: PASSED\n- External CLI/MCP disposition: IMPLEMENTED\n- Runtime eligible: true\n- Activation decision: ACTIVATION_READY\n- Primary domain: test-evidence-disposition\n\n## Review Artifacts\n- docs/reviews/CVF_CVF_NCR_R1_S02_TEST_EVIDENCE_AUDIT_CONTENT_COMPLETION_2026-09-27.md\n- docs/reviews/CVF_CVF_NCR_R1_S04_TEST_EVIDENCE_AUDIT_METADATA_CANDIDATE_COMPLETION_2026-09-27.md\n- docs/reviews/CVF_CVF_NCR_R1_S06_TEST_EVIDENCE_AUDIT_UAT_CERTIFICATION_2026-09-27.md",
+          "riskLevel": "R0",
+          "allowedRoles": "worker, reviewer, dispatcher",
+          "allowedPhases": "WORKER_EXECUTION, REVIEWER_CLOSURE",
+          "authorityScope": "bounded advisory content guidance only; a label never mutates a test result, a checker verdict, or a file, and never authorizes deleting or skipping a test",
+          "autonomy": "Read-only metadata projection",
+          "uatStatus": "PASSED",
+          "uatQuality": "Passed",
+          "specGate": "CERTIFIED",
+          "corpusClass": "AGENT_SYSTEM_SKILL_PACKAGE",
+          "frontDoorVisible": true,
+          "frontDoorTier": "ASSF_CERTIFIED",
+          "trustedBenchmarkSurface": false,
+          "hasRestrictedLinks": false,
+          "linkedTemplates": [],
+          "corpusNote": "ASSF certified package metadata projection; certificationState is separate from corpusClass.",
+          "assfProjectionClass": "CERTIFIED_PACKAGE_PROJECTION",
+          "certificationState": "CERTIFIED",
+          "uatState": "PASSED",
+          "reviewArtifacts": [
+            "docs/reviews/CVF_CVF_NCR_R1_S02_TEST_EVIDENCE_AUDIT_CONTENT_COMPLETION_2026-09-27.md",
+            "docs/reviews/CVF_CVF_NCR_R1_S04_TEST_EVIDENCE_AUDIT_METADATA_CANDIDATE_COMPLETION_2026-09-27.md",
+            "docs/reviews/CVF_CVF_NCR_R1_S06_TEST_EVIDENCE_AUDIT_UAT_CERTIFICATION_2026-09-27.md"
+          ],
+          "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-test-evidence-audit/SKILL.md",
+          "externalCliMcpDisposition": "IMPLEMENTED",
+          "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+          "runtimePackageProjection": true,
+          "runtimeEligible": true,
+          "activationDecision": "ACTIVATION_READY",
+          "primaryDomain": "test-evidence-disposition",
+          "domainGroup": "engineering",
+          "selectionKeywords": [
+            "is this tested",
+            "existing test coverage claim",
+            "test evidence audit",
+            "verify existing proof claim",
+            "advisory test disposition"
+          ],
+          "specSignals": [
+            "test evidence audit",
+            "advisory test disposition",
+            "keep repair consolidate add defer"
+          ],
+          "recommendedWhen": [
+            "a comment, commit message, docstring, or prior review asserts a source file is tested or covered, and the claim needs an advisory check before being trusted or extended"
+          ],
+          "notRecommendedWhen": [
+            "the task is authoring a new failing test before implementation exists (TDD's trigger)",
+            "the task is reviewing a diff or PR for correctness/simplification/efficiency defects (code-review's trigger)",
+            "the task requires actually running, evaluating, or deleting the named test"
+          ],
+          "outputGoals": [
+            "advisory disposition row",
+            "cited test-assertion evidence",
+            "next-owner action, not a test result"
+          ],
+          "projectionClaimBoundary": "This index is metadata-only. It is not evidence of runtime activation, CLI/MCP adapter implementation, provider availability, or external-agent authorization. Loading this index never grants authority to commit, activate, execute a package instruction body, or expand external-agent scope."
         }
       ]
     }
   ],
   "meta": {
     "totalScannedSkills": 62,
-    "frontDoorSkills": 52,
+    "frontDoorSkills": 54,
     "quarantinedSkills": 35,
     "trustedMappedSkills": 27,
     "reviewMappedSkills": 0,
@@ -2747,9 +2876,9 @@
       "docs/baselines/CVF_FRONT_DOOR_WAVE2_EXECUTION_NOTE_2026-04-21.md",
       "../../../docs/reference/agent_system_skills/generated/skill-index.json"
     ],
-    "assfProjectedSkills": 25,
-    "certifiedPackageProjections": 25,
-    "runtimePackageProjections": 24,
+    "assfProjectedSkills": 27,
+    "certifiedPackageProjections": 27,
+    "runtimePackageProjections": 26,
     "skillControlPlaneProjection": "public/data/assf-skill-control-plane.json"
   }
 }

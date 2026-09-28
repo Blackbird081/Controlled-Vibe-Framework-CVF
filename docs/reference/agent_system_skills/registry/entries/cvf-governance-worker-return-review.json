@@ -1,0 +1,93 @@
+{
+  "registryOrder": 33,
+  "skillId": "cvf-governance-worker-return-review",
+  "name": "CVF Governance Worker-Return Review",
+  "version": "0.1.0",
+  "owner": "CVF Local reviewer governance",
+  "status": "ACTIVE",
+  "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-worker-return-review/SKILL.md",
+  "originLane": "NCR-R1-LOCAL-REVIEW-LEARNING",
+  "sourceArtifacts": [
+    "docs/reference/review_cost_control/CVF_REVIEW_COST_AND_DIMINISHING_RETURN_CONTROL_STANDARD.md",
+    "docs/reference/CVF_GATE_TO_ROLE_CLOSEABILITY_MACHINE_STANDARD.md",
+    "docs/reference/CVF_TRANCHE_COMMIT_CHOREOGRAPHY_STANDARD_2026-06-03.md",
+    "docs/reference/review_cost_control/CVF_COMMITTED_EVIDENCE_FINGERPRINT_CONTRACT.md",
+    "docs/reviews/CVF_CVF_NCR_R1_S01_SKILL_LIFECYCLE_BODY_COMPLETION_2026-09-27.md"
+  ],
+  "legacyRows": [],
+  "license": "CVF_PRIVATE_GOVERNED",
+  "reviewArtifacts": [
+    "docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_UAT_2026-09-27.md"
+  ],
+  "purpose": "Guide Local reviewer assessment of internal worker returns, reviewer-local repair routing, and evidence-supported bounded closure.",
+  "triggerPatterns": [
+    "review worker return",
+    "COMPLETE_PENDING_REVIEW review",
+    "reviewer-local repair or REWORK",
+    "CVF tranche closure review"
+  ],
+  "taskClasses": [
+    "worker-return-review",
+    "reviewer-closure",
+    "rework-routing"
+  ],
+  "useWhen": "A Local reviewer has an internal worker return and must decide findings, repair route, and closure evidence within an active governed assignment.",
+  "doNotUseWhen": "External Web research, initial worker execution, ordinary code-quality review without CVF return, or an unapproved runtime activation.",
+  "riskTriggers": [
+    "scope or effect expansion requires the governing authority route before action"
+  ],
+  "roles": [
+    "reviewer",
+    "closer"
+  ],
+  "phases": [
+    "REVIEWER_CLOSURE"
+  ],
+  "surfaces": [
+    "docs/reviews",
+    "docs/work_orders",
+    "governance/compat"
+  ],
+  "riskCeiling": "R1",
+  "contextProfile": "local-governed-review",
+  "inputs": [
+    "active work order and baseline",
+    "worker return and changed-set evidence",
+    "current bootstrap and handoff",
+    "gate receipts and Git range"
+  ],
+  "outputs": [
+    "source-backed consolidated findings",
+    "reviewer-local repair, REWORK, or stop disposition",
+    "bounded completion evidence when authorized"
+  ],
+  "executionConstraints": "read the current canonical owners; do not infer authority from package loading; do not rerun valid worker evidence without a named contradiction and cost reason",
+  "acceptanceEvidence": "docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_UAT_2026-09-27.md; docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_ACTIVE_COMPLETION_2026-09-27.md",
+  "riskProfile": "R1",
+  "authorityCeiling": "advisory review guidance under the current governed assignment; no independent mutation or commit grant",
+  "sideEffects": "none from skill loading; any reviewer edit or commit needs separate current authority",
+  "permissions": "read current governed sources and returned evidence within the active assignment",
+  "rollback": "revert only this proposed package, registry entry, and regenerated index/inventory if rejected",
+  "safeStop": "state the exact missing authority or evidence and stop the dependent review or dispatch action",
+  "candidateState": "ACTIVE",
+  "approvalState": "APPROVED",
+  "uatState": "PASSED",
+  "certificationState": "CERTIFIED",
+  "deprecation": "none",
+  "successor": "none",
+  "retirement": "none",
+  "dependencies": [],
+  "conflicts": [],
+  "compositionOrder": 33,
+  "capabilityBoundary": "ACTIVE in bounded CVF package executor and CLI/MCP envelope; no host installation or independent action authority",
+  "internalAgentDisposition": "IMPLEMENTED",
+  "resolverBehavior": "metadata-only until explicit receipt-backed ACTIVE package selection; no automatic invocation",
+  "loaderBoundary": "loading metadata never grants reviewer mutation, commit, provider, public, production, or external action authority",
+  "externalCliMcpDisposition": "IMPLEMENTED",
+  "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+  "adapterEvidence": "docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_ACTIVE_COMPLETION_2026-09-27.md",
+  "externalMutationBoundary": "no external mutation permitted from this package",
+  "platformCompatibility": "cross-platform guidance",
+  "shellAssumptions": "commands follow the current workspace and canonical checker instructions",
+  "osConstraints": "none"
+}

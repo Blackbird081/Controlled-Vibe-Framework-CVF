@@ -141,6 +141,14 @@ class PackageUseProofAdapterTests(unittest.TestCase):
         self.truth_index_path.parent.mkdir(parents=True, exist_ok=True)
         self.truth_index_path.write_text(json.dumps(payload), encoding="utf-8")
 
+    # Positive-fixture models use a fixed far-future test-only expiration date
+    # so this suite does not bit-rot as wall-clock time advances. This date is
+    # test-fixture-only and carries no relation to any real provider quota.
+    _POSITIVE_FIXTURE_EXPIRATION_DATE = "2099-12-31"
+    # Hostile fixture: an already-expired ledger entry used only to prove
+    # expiry enforcement still fails closed; never used as a positive case.
+    _HOSTILE_EXPIRED_FIXTURE_EXPIRATION_DATE = "2000-01-01"
+
     def _write_free_quota_ledger(self) -> None:
         payload = {
             "schemaVersion": "0.1.0",
@@ -148,14 +156,32 @@ class PackageUseProofAdapterTests(unittest.TestCase):
             "models": [
                 {
                     "modelCode": "qwen3.6-plus",
-                    "expirationDate": "2026-07-01",
+                    "expirationDate": self._POSITIVE_FIXTURE_EXPIRATION_DATE,
                     "freeQuotaRemaining": 911370,
                     "freeQuotaTotal": 1000000,
                     "statusAtCapture": "Enabled",
                 },
                 {
                     "modelCode": "qwen3.6-flash-2026-04-16",
-                    "expirationDate": "2026-07-16",
+                    "expirationDate": self._POSITIVE_FIXTURE_EXPIRATION_DATE,
+                    "freeQuotaRemaining": 998675,
+                    "freeQuotaTotal": 1000000,
+                    "statusAtCapture": "Enabled",
+                    "diagnosticRerun": {"result": "PASS"},
+                },
+            ],
+        }
+        self.free_quota_ledger_path.parent.mkdir(parents=True, exist_ok=True)
+        self.free_quota_ledger_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    def _write_expired_free_quota_ledger(self) -> None:
+        payload = {
+            "schemaVersion": "0.1.0",
+            "artifact": "CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER",
+            "models": [
+                {
+                    "modelCode": "qwen3.6-flash-2026-04-16",
+                    "expirationDate": self._HOSTILE_EXPIRED_FIXTURE_EXPIRATION_DATE,
                     "freeQuotaRemaining": 998675,
                     "freeQuotaTotal": 1000000,
                     "statusAtCapture": "Enabled",
@@ -212,6 +238,22 @@ class PackageUseProofAdapterTests(unittest.TestCase):
         self.assertFalse(packet["lifecycleMutation"])
         self.assertEqual(packet["sourceMutations"], [])
         self.assertNotIn('"instructionBody":', json.dumps(packet))
+
+    def test_expired_ledger_model_is_denied_before_package_or_provider_action(self) -> None:
+        self._write_expired_free_quota_ledger()
+        packet = self._packet(live=True, model="qwen3.6-flash-2026-04-16")
+
+        self.assertEqual(
+            packet["executionDisposition"],
+            "LIVE_PROVIDER_DENIED_MODEL_FREE_QUOTA",
+        )
+        self.assertEqual(
+            packet["modelSelection"]["status"],
+            "MODEL_FREE_QUOTA_EXPIRED",
+        )
+        self.assertEqual(packet["diagnostic"]["stage"], "model_selection")
+        self.assertNotIn("packageRead", packet)
+        self.assertNotIn("liveCall", packet)
 
     def test_live_fake_provider_emits_use_proof_receipt(self) -> None:
         def fake_caller(payload: dict, api_key: str, timeout_seconds: int):

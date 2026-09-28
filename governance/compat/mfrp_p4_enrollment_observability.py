@@ -10,7 +10,11 @@ from typing import Any, Iterable
 
 
 JOURNAL_SCHEMA = "cvf.mfrp.p4c1.pendingJournal.v2"
+FAILURE_DIAGNOSTIC_LIMIT = 12000
 STARVATION_ATTEMPT_THRESHOLD = 5
+RETRYABLE_OUTCOMES = frozenset(
+    {"UNSAFE_AUTORUN_RECEIPT_GENERATION_FAILED", "SKIPPED_NO_COMMITTED_EVIDENCE"}
+)
 
 _WORKER_RETURN = re.compile(
     r"(?mi)^Self-declared worker-return artifact:\s*yes\s*$"
@@ -51,6 +55,7 @@ class SelectionResult:
     candidate_count: int
     reason: str
     review_paths: tuple[str, ...]
+    retry_of_trusted_commit: str | None = None
 
     @property
     def eligible(self) -> bool:
@@ -250,10 +255,19 @@ def recompute_counters(journal: dict[str, Any]) -> dict[str, Any]:
     rows = list(journal.get("rows", []))
     collected = sum(1 for row in rows if not row.get("ineligibleClass"))
     journal["attemptCount"] = len(attempts)
+    original_attempts = [item for item in attempts if not item.get("retryOfTrustedCommit")]
     journal["candidateCount"] = sum(
-        max(0, int(item.get("candidateCount", 0))) for item in attempts
+        max(0, int(item.get("candidateCount", 0))) for item in original_attempts
     )
-    journal["eligibleCount"] = sum(bool(item.get("eligible")) for item in attempts)
+    journal["eligibleCount"] = sum(bool(item.get("eligible")) for item in original_attempts)
+    journal["retryAttemptCount"] = sum(
+        bool(item.get("retryOfTrustedCommit")) for item in attempts
+    )
+    journal["retryCollectedCount"] = sum(
+        bool(item.get("retryOfTrustedCommit")) and item.get("outcome") == "COLLECTED"
+        for item in attempts
+    )
+    journal["retryableCount"] = len(retryable_attempts(journal))
     journal["collectedCount"] = collected
     journal["populationCount"] = len(rows)
     if collected:
@@ -270,6 +284,70 @@ def recompute_counters(journal: dict[str, Any]) -> dict[str, Any]:
         "blocking": False,
     }
     return journal
+
+
+def retryable_attempts(journal: dict[str, Any]) -> tuple[dict[str, Any], ...]:
+    """Return prospective missed samples eligible for one bounded retry."""
+    attempts = list(journal.get("attempts", []))
+    retried = {
+        str(item.get("retryOfTrustedCommit"))
+        for item in attempts
+        if item.get("retryOfTrustedCommit")
+    }
+    collected = {
+        str(item.get("trustedCommit"))
+        for item in attempts
+        if item.get("outcome") == "COLLECTED" and item.get("trustedCommit")
+    }
+    eligible = []
+    seen = set()
+    for item in reversed(attempts):
+        trusted = str(item.get("trustedCommit") or "")
+        if (
+            not trusted
+            or trusted in seen
+            or trusted in retried
+            or trusted in collected
+            or item.get("historicalDiagnostic")
+            or not item.get("eligible")
+            or item.get("outcome") not in RETRYABLE_OUTCOMES
+        ):
+            continue
+        seen.add(trusted)
+        eligible.append(item)
+    return tuple(eligible)
+
+
+def select_retryable_attempt(journal: dict[str, Any]) -> dict[str, Any] | None:
+    candidates = retryable_attempts(journal)
+    return candidates[0] if candidates else None
+
+
+def bounded_failure_diagnostic(stdout: str, stderr: str) -> str:
+    """Preserve failure-bearing lines from both streams in a bounded detail."""
+    sections = []
+    if stdout.strip():
+        sections.append("=== stdout ===\n" + stdout.strip())
+    if stderr.strip():
+        sections.append("=== stderr ===\n" + stderr.strip())
+    combined = "\n\n".join(sections) or "no subprocess diagnostic output"
+    if len(combined) <= FAILURE_DIAGNOSTIC_LIMIT:
+        return combined
+
+    signal_pattern = re.compile(
+        r"(?:\[FAIL\]|\bFAIL:|\bVIOLATION:|\bERROR\b|Traceback)", re.IGNORECASE
+    )
+    signals = "\n".join(
+        line for line in combined.splitlines() if signal_pattern.search(line)
+    )
+    diagnostic = (
+        combined[:2000]
+        + "\n\n=== failure signal lines ===\n"
+        + (signals or "no explicit failure signal line found")
+        + "\n\n=== diagnostic tail ===\n"
+        + combined[-5000:]
+    )
+    return diagnostic[:FAILURE_DIAGNOSTIC_LIMIT]
 
 
 __all__ = [name for name in globals() if not name.startswith("__")]

@@ -28,6 +28,13 @@ class WorkOrderDispatchQualityTests(unittest.TestCase):
     def tearDown(self) -> None:
         self.temp_dir.cleanup()
 
+    def test_acceptance_ledger_rejects_duplicate_requirement_ids(self) -> None:
+        text = """```acceptance-ledger-json
+{"schemaVersion":"cvf.workOrderAcceptanceLedger@1.0.0","requirements":[{"requirementId":"REQ-X","mandatory":true,"expectedArtifacts":["a.md"],"requiredProofIds":["PROOF-X"]},{"requirementId":"REQ-X","mandatory":true,"expectedArtifacts":["b.md"],"requiredProofIds":["PROOF-X"]}],"proofCatalog":[{"proofId":"PROOF-X","kind":"COMMAND","locator":"pytest"}]}
+```"""
+        _, issues = MODULE.validate_acceptance_ledger(text)
+        self.assertTrue(any("requirementId must be unique" in issue for issue in issues), issues)
+
     def _write(self, rel_path: str, text: str) -> None:
         path = self.repo_root / rel_path
         path.parent.mkdir(parents=True, exist_ok=True)

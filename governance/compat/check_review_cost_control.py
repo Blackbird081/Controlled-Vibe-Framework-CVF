@@ -569,6 +569,26 @@ def diagnose_work_order(path: str, text: str) -> Diagnostic:
             if values.get(field_name) != expected_value:
                 issues.append(f"`INITIAL` dispatch requires `{field_name}: {expected_value}`")
     elif dispatch_kind == "REWORK":
+        local_boundary = _field_value(text, "reviewerLocalRepairBoundary")
+        allowed_local_boundaries = {
+            "MATERIAL_DESIGN_CHANGE",
+            "SCOPE_OR_AUTHORITY_EXPANSION",
+            "NEW_EVIDENCE_REQUIRED",
+            "BROAD_DELIVERABLE_RECREATION",
+            "WORK_ORDER_FORBIDS_REVIEWER_REPAIR",
+        }
+        if local_boundary not in allowed_local_boundaries:
+            issues.append(
+                "`REWORK` requires `reviewerLocalRepairBoundary` naming one "
+                "Review Cost standard worker-return boundary before re-dispatch"
+            )
+        local_basis = _field_value(text, "reviewerLocalRepairBasis")
+        if (not local_basis or len(local_basis) < 24
+                or re.search(r"(?i)(?:TODO|TO_FILL|FILL_ME|N/A)", local_basis)):
+            issues.append(
+                "`REWORK` requires `reviewerLocalRepairBasis` with a concrete "
+                "source-backed reason reviewer-local repair is insufficient"
+            )
         if round_number is not None and round_number < 1:
             issues.append("`REWORK` dispatch requires `reviewRoundCount` >= 1")
         if round_number is not None and generation_number is not None and generation_number != round_number:

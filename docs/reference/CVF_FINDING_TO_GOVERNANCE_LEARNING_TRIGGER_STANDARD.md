@@ -9,6 +9,10 @@ EPISTEMIC_PROCESS_NA_WITH_REASON: routing/trigger standard - it defines learning
 dispositions and enforcement, not an evidence comparison verdict; no epistemic
 process block is required.
 
+rawMemoryReleased=false. This standard's references to provider/Claude/Codex
+memory describe a detection and promotion boundary only; it does not release,
+reinject, or retrieve raw provider memory content itself.
+
 ## Purpose
 
 This standard removes the human-reminder dependency from CVF learning loops.
@@ -136,6 +140,54 @@ finding must become a machine check. Some findings are design-review items,
 some belong in runtime/data learning, and some are out of scope with an
 explicit reason.
 
+## Recurring Blocked-Return Escalation
+
+A blocked worker return (`Status: BLOCKED_WITH_REASON`) that names a defect
+class or root cause already recorded in a prior governed artifact (a prior
+worker return, ADIF entry, or completion review) is a recurring cluster, not a
+fresh finding. Recurring clusters must not rely on an operator noticing the
+repetition by reading prose; the return itself must classify the recurrence.
+
+Every blocked return must carry these four fields, adjacent to or inside its
+`## Finding-To-Governance Learning Disposition` section:
+
+- `rootCauseClusterId`: a stable, non-placeholder identifier reused by later
+  returns in the same defect/root-cause cluster; `NOT_APPLICABLE`, `UNKNOWN`,
+  and initial-dispatch placeholders are invalid on a blocked return;
+
+- `recurrenceDisposition`: `FIRST_OCCURRENCE` when no prior governed artifact
+  records the same defect class/root cause, or `RECURRING_CLUSTER_STOP` when
+  one does;
+- `priorRelatedFinding`: the exact path (and SHA-256 when available) of the
+  prior governed artifact this recurrence relates to, or
+  `NOT_APPLICABLE_WITH_REASON` only when `recurrenceDisposition` is
+  `FIRST_OCCURRENCE`;
+- `operatorNoticeDisposition`: `OPERATOR_NOTICE_REQUIRED` when
+  `recurrenceDisposition` is `RECURRING_CLUSTER_STOP`, or
+  `NOT_APPLICABLE_WITH_REASON` for a routine first occurrence. A first
+  occurrence may proactively use `OPERATOR_NOTICE_REQUIRED` when it exposes a
+  broader repeated control-plane pattern or decision-relevant safety gap;
+- `successorFreezeDisposition`: `FEATURE_SUCCESSORS_FROZEN` when
+  `recurrenceDisposition` is `RECURRING_CLUSTER_STOP`, or
+  `NOT_APPLICABLE_WITH_REASON` for a routine first occurrence. Proactive
+  first-occurrence escalation must pair `OPERATOR_NOTICE_REQUIRED` with
+  `FEATURE_SUCCESSORS_FROZEN`; partial escalation is invalid.
+
+A `RECURRING_CLUSTER_STOP` disposition without a governed `priorRelatedFinding`
+path, without `OPERATOR_NOTICE_REQUIRED`, or without
+`FEATURE_SUCCESSORS_FROZEN` is a learning escape: the recurring pattern
+reached a second (or later) blocked return without forcing operator visibility
+or halting new feature successors in the same defect cluster.
+
+The machine guard must not trust `FIRST_OCCURRENCE` as a self-attestation. It
+searches prior non-archived governed review returns for the same
+`rootCauseClusterId`; an earlier match forces `RECURRING_CLUSTER_STOP`. The
+named `priorRelatedFinding` must be an existing governed Markdown path carrying
+that same cluster identifier. This exact-cluster lookup does not claim semantic
+equivalence between differently named clusters; agents and reviewers still own
+the initial stable classification, while the guard prevents later exact-ID
+recurrence from being silently relabeled.
+
 ## Learning-To-Acceleration Extension
 
 F2G classifies the prevention direction of a finding. The Learning-To-
@@ -163,7 +215,12 @@ Closure is blocked when:
   phase-gate, orchestration, or machine-check finding is not promoted to a
   reusable CVF control or explicitly closed with `N/A_WITH_REASON`;
 - a reusable provider-memory lesson is not promoted into a CVF-governed
-  artifact or explicitly marked non-reusable/session-local.
+  artifact or explicitly marked non-reusable/session-local;
+- a `Status: BLOCKED_WITH_REASON` worker return is missing
+  a stable `rootCauseClusterId`, `recurrenceDisposition`, `priorRelatedFinding`, `operatorNoticeDisposition`,
+  or `successorFreezeDisposition`, or declares `RECURRING_CLUSTER_STOP`
+  without a governed `priorRelatedFinding`, `OPERATOR_NOTICE_REQUIRED`, and
+  `FEATURE_SUCCESSORS_FROZEN`.
 
 ## Related Artifacts
 

@@ -1,4 +1,6 @@
 {
+  "schemaVersion": "0.1.0",
+  "generatedFrom": "docs/reference/agent_system_skills/truth/packets",
   "entries": [
     {
       "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-api-interface-design.json",
@@ -154,6 +156,15 @@
       "verificationMode": "STRICT"
     },
     {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-engineering-test-evidence-audit.json",
+      "receiptHash": "sha256:e295aaf9b9b7faa97f9331347ae441b37b69c28463f08a4f7c00a0d1c213698f",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-engineering-test-evidence-audit",
+      "truthPacketId": "SKSOT-T1-cvf-engineering-test-evidence-audit",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
+    },
+    {
       "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-governance-context-engineering.json",
       "receiptHash": "sha256:a593c70fe237517f918187d6a646cb0532517d2cc32e07d4eef0f59add2d9934",
       "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
@@ -215,8 +226,15 @@
       "truthPacketId": "SKSOT-ASCP-P4-P6-cvf-governance-skill-discovery-invocation",
       "truthStatus": "approved",
       "verificationMode": "STRICT"
+    },
+    {
+      "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-governance-worker-return-review.json",
+      "receiptHash": "sha256:c324eb096e64af57f0d87860aae38f8a1c6d1daf0824a43884e26f2c79734356",
+      "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+      "skillId": "cvf-governance-worker-return-review",
+      "truthPacketId": "SKSOT-NCR-SRA1-cvf-governance-worker-return-review",
+      "truthStatus": "approved",
+      "verificationMode": "STRICT"
     }
-  ],
-  "generatedFrom": "docs/reference/agent_system_skills/truth/packets",
-  "schemaVersion": "0.1.0"
+  ]
 }

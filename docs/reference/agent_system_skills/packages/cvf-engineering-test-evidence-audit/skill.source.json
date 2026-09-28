@@ -1,0 +1,17 @@
+{
+  "skillId": "cvf-engineering-test-evidence-audit",
+  "originLane": "CVF-NCR-R1-S05",
+  "sourceArtifacts": [
+    "docs/audits/CVF_NCR_R1_S02_TEST_EVIDENCE_AUDIT_CONTENT_CANDIDATE_2026-09-27.md",
+    "docs/reviews/CVF_CVF_NCR_R1_S02_TEST_EVIDENCE_AUDIT_CONTENT_COMPLETION_2026-09-27.md",
+    "docs/reviews/CVF_CVF_NCR_R1_S04_TEST_EVIDENCE_AUDIT_METADATA_CANDIDATE_COMPLETION_2026-09-27.md",
+    "docs/reviews/CVF_CVF_NCR_R1_S06_TEST_EVIDENCE_AUDIT_UAT_CERTIFICATION_2026-09-27.md"
+  ],
+  "lifecycleState": "ACTIVE",
+  "uatState": "PASSED",
+  "certificationState": "CERTIFIED",
+  "internalAgentDisposition": "IMPLEMENTED",
+  "externalCliMcpDisposition": "IMPLEMENTED",
+  "cvfAdaptationBoundary": "CVF-owned advisory test-evidence-audit guidance compressed from the accepted R1/S02 content candidate; no third-party skill import",
+  "claimBoundary": "ACTIVE P10 package with approved STRICT truth and IMPLEMENTED internal plus external CLI/MCP dispositions. External use is available only through the receipt-backed production executor and adapter contract; package loading or advisory output grants no automatic invocation, test execution, filesystem/Git mutation, provider retry, public sync, deployment, or downstream action authority."
+}

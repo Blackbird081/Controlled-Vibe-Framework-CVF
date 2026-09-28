@@ -65,6 +65,7 @@ When an addendum is materially revised:
 |---|---|---|
 | `CVF_WORK_ORDER_SOURCE_VERIFICATION_ADDENDUM.md` | Source-fidelity pass rules, negative search discipline, intake role routing, single-agent multi-role block, source verification table rules, MA1 section lock | Conditional: required when work order names runtime or source facts |
 | `CVF_WORK_ORDER_MACHINE_CLOSURE_PACKAGE_ADDENDUM.md` | Machine Closure Package table, Acceptance Receipt Assertion Matrix, External Artifact Hash Manifest, closure rules | Conditional: required for scan/classify/route/close/handoff work orders |
+| `CVF_WORK_ORDER_ACCEPTANCE_LEDGER_ADDENDUM.md` | Strict required-deliverable, actual-artifact, proof and terminal-status join; fulfillment and near-threshold details | Mandatory for changed executable implementation work orders |
 
 ## Semantic Convergence And Escalation Control
 
@@ -96,6 +97,7 @@ at their current paths; they are not date-sprawled duplicates.
 | `## 6D. Pending Artifact Evidence Finality` | `CVF_AGENT_WORK_ORDER_FINALITY_AND_REVIEW_CONVERSION_ADDENDUM_2026-06-12.md` |
 | `## 6E. Self-Reported Gate Evidence Consistency` | `CVF_AGENT_WORK_ORDER_FINALITY_AND_REVIEW_CONVERSION_ADDENDUM_2026-06-12.md` |
 | `## 6E.1 Machine Closure Package` | `CVF_WORK_ORDER_MACHINE_CLOSURE_PACKAGE_ADDENDUM.md` |
+| `## 6F` and `## 6G` | `CVF_WORK_ORDER_ACCEPTANCE_LEDGER_ADDENDUM.md` |
 | `## 8C. Epistemic Process Block` | `CVF_AGENT_WORK_ORDER_EPISTEMIC_PROCESS_BLOCK_ADDENDUM_2026-06-13.md` |
 
 ## Mandatory vs Conditional Reads

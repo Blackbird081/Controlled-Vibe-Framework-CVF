@@ -86,6 +86,8 @@ def _work_order_block(
     preExecutionReviewAdmission="NOT_REQUIRED_BEFORE_EXECUTION",
     preExecutionReviewTrigger="NONE",
     nextRoutineReviewBoundary="WORKER_RETURN",
+    reviewerLocalRepairBoundary=None,
+    reviewerLocalRepairBasis=None,
 ):
     return (
         "# Example Work Order\n\ndocType: work_order\n\n"
@@ -113,6 +115,8 @@ def _work_order_block(
         f"preExecutionReviewTrigger: {preExecutionReviewTrigger}\n"
         f"nextRoutineReviewBoundary: {nextRoutineReviewBoundary}\n"
         "reviewerWorkBoundary: EVALUATE_RETURNED_EVIDENCE_NOT_RECREATE_IMPLEMENTATION\n"
+        + (f"reviewerLocalRepairBoundary: {reviewerLocalRepairBoundary}\n" if reviewerLocalRepairBoundary else "")
+        + (f"reviewerLocalRepairBasis: {reviewerLocalRepairBasis}\n" if reviewerLocalRepairBasis else "")
     )
 
 
@@ -129,6 +133,8 @@ _VALID_REWORK = _work_order_block(
     nextDispatchDisposition="ONE_CONSOLIDATED_REWORK",
     rootCauseClusterId="cluster-lock-identity", reworkGeneration="1",
     consolidatedDefectClassSweep="COMPLETE_BEFORE_REWORK_DISPATCH",
+    reviewerLocalRepairBoundary="NEW_EVIDENCE_REQUIRED",
+    reviewerLocalRepairBasis="Finding F1 requires new source evidence unavailable to the reviewer.",
 )
 
 _VALID_WORKER_RETURN = (
@@ -439,6 +445,26 @@ class ReworkDispatchControlTests(unittest.TestCase):
 
 
 class WorkerReturnConvergenceTests(unittest.TestCase):
+    def test_rework_without_reviewer_local_route_is_blocked(self):
+        text = _VALID_REWORK.replace(
+            "reviewerLocalRepairBoundary: NEW_EVIDENCE_REQUIRED\n", ""
+        ).replace(
+            "reviewerLocalRepairBasis: Finding F1 requires new source evidence unavailable to the reviewer.\n", ""
+        )
+        d = chk.diagnose("docs/work_orders/x.md", text)
+        self.assertFalse(d.is_clean)
+        self.assertTrue(any("reviewerLocalRepairBoundary" in issue for issue in d.issues))
+        self.assertTrue(any("reviewerLocalRepairBasis" in issue for issue in d.issues))
+
+    def test_rework_cannot_claim_local_repair_is_ineligible_with_placeholder_basis(self):
+        text = _VALID_REWORK.replace(
+            "reviewerLocalRepairBasis: Finding F1 requires new source evidence unavailable to the reviewer.",
+            "reviewerLocalRepairBasis: FILL_ME",
+        )
+        d = chk.diagnose("docs/work_orders/x.md", text)
+        self.assertFalse(d.is_clean)
+        self.assertTrue(any("reviewerLocalRepairBasis" in issue for issue in d.issues))
+
     def test_valid_worker_return_is_clean(self):
         self.assertTrue(chk.diagnose("docs/reviews/worker.md", _VALID_WORKER_RETURN).is_clean)
 

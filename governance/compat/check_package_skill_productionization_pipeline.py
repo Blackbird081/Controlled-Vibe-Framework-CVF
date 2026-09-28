@@ -358,20 +358,20 @@ def _check_active(
     violations = _check_approved(entry, repo_root)
     if _upper(entry.get("candidateState")) != "ACTIVE":
         violations.append(Violation(path, f"{skill_id}: ACTIVE requires candidateState ACTIVE"))
-    if _upper(entry.get("externalCliMcpDisposition")) != "IMPLEMENTED":
-        violations.append(Violation(path, f"{skill_id}: ACTIVE requires externalCliMcpDisposition IMPLEMENTED"))
-    for field in ("adapterContract", "adapterEvidence"):
-        if not _as_text(entry.get(field)) or _is_na_with_reason(entry.get(field)):
-            violations.append(Violation(path, f"{skill_id}: ACTIVE requires concrete {field}"))
-        elif not _repo_relative_path(_as_text(entry.get(field)), repo_root):
-            violations.append(Violation(path, f"{skill_id}: ACTIVE {field} path does not exist"))
+    external_disposition = _upper(entry.get("externalCliMcpDisposition"))
+    if external_disposition == "IMPLEMENTED":
+        for field in ("adapterContract", "adapterEvidence"):
+            if not _as_text(entry.get(field)) or _is_na_with_reason(entry.get(field)):
+                violations.append(Violation(path, f"{skill_id}: IMPLEMENTED external adapter requires concrete {field}"))
+            elif not _repo_relative_path(_as_text(entry.get(field)), repo_root):
+                violations.append(Violation(path, f"{skill_id}: IMPLEMENTED external adapter {field} path does not exist"))
     package_source, package_violations = _check_package_root(entry, repo_root)
     violations.extend(package_violations)
     if package_source:
         if _upper(package_source.get("lifecycleState")) != "ACTIVE":
             violations.append(Violation(path, f"{skill_id}: ACTIVE requires package source lifecycleState ACTIVE"))
-        if _upper(package_source.get("externalCliMcpDisposition")) != "IMPLEMENTED":
-            violations.append(Violation(path, f"{skill_id}: ACTIVE package source requires externalCliMcpDisposition IMPLEMENTED"))
+        if _upper(package_source.get("externalCliMcpDisposition")) != external_disposition:
+            violations.append(Violation(path, f"{skill_id}: ACTIVE package source externalCliMcpDisposition must match registry"))
     truth_ok, truth_message = _truth_packet_status(skill_id, truth_packets_dir, truth_index)
     if not truth_ok:
         violations.append(Violation(path, truth_message))

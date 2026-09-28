@@ -129,4 +129,9 @@ def build_block(args: Any) -> str:
         ("reviewerWorkBoundary", "EVALUATE_RETURNED_EVIDENCE_NOT_RECREATE_IMPLEMENTATION"),
     )
     body = "\n".join(f"{name}: {value}" for name, value in fields)
+    if not initial:
+        body += (
+            "\nreviewerLocalRepairBoundary: FILL_ME"
+            "\nreviewerLocalRepairBasis: FILL_ME (cite the finding and controlling boundary)"
+        )
     return "## Review Dispatch Convergence And Invocation Budget Control\n\nReview-Dispatch Convergence Control: REQUIRED\n\n" + body + "\n"

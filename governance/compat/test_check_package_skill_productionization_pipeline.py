@@ -90,14 +90,15 @@ def _entry(skill_id: str = "cvf-test-package", status: str = "CANDIDATE") -> dic
     }
 
 
-def _package_source(skill_id: str, state: str) -> dict:
+def _package_source(skill_id: str, state: str, external_disposition: str | None = None) -> dict:
+    external = external_disposition or ("IMPLEMENTED" if state == "ACTIVE" else "DEFERRED_WITH_REASON")
     return {
         "skillId": skill_id,
         "lifecycleState": state,
         "uatState": "PASSED" if state in {"APPROVED", "ACTIVE"} else "NOT_STARTED",
         "certificationState": "CERTIFIED" if state in {"APPROVED", "ACTIVE"} else "NOT_STARTED",
         "internalAgentDisposition": "IMPLEMENTED" if state in {"APPROVED", "ACTIVE"} else "CANDIDATE",
-        "externalCliMcpDisposition": "IMPLEMENTED" if state == "ACTIVE" else "DEFERRED_WITH_REASON",
+        "externalCliMcpDisposition": external,
     }
 
 
@@ -136,7 +137,10 @@ def _write_repo(root: Path, entry: dict, with_truth: bool = False) -> tuple[Path
         package_dir = root / "docs/reference/agent_system_skills/packages" / skill_id
         package_dir.mkdir(parents=True, exist_ok=True)
         (package_dir / "SKILL.md").write_text("# Skill\n", encoding="utf-8")
-        _write_json(package_dir / "skill.source.json", _package_source(skill_id, entry["status"]))
+        _write_json(
+            package_dir / "skill.source.json",
+            _package_source(skill_id, entry["status"], entry["externalCliMcpDisposition"]),
+        )
     generate_index(index_path, entries_dir)
     truth_index.parent.mkdir(parents=True, exist_ok=True)
     if with_truth:
@@ -208,6 +212,41 @@ class PackageSkillProductionizationPipelineTests(unittest.TestCase):
             violations = checker._check_lifecycle_snapshot(entries_dir, index_path, root, truth_packets, truth_index)
 
             self.assertEqual(violations, [])
+
+    def test_active_internal_only_deferred_adapter_with_truth_passes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            entry = _entry(status="ACTIVE")
+            entry["externalCliMcpDisposition"] = "DEFERRED_WITH_REASON"
+            entry["adapterContract"] = "N/A with reason: external adapter not implemented"
+            entry["adapterEvidence"] = "N/A with reason: external adapter not implemented"
+            entries_dir, index_path, truth_packets, truth_index = _write_repo(
+                root,
+                entry,
+                with_truth=True,
+            )
+
+            violations = checker._check_lifecycle_snapshot(entries_dir, index_path, root, truth_packets, truth_index)
+
+            self.assertEqual(violations, [])
+
+    def test_active_implemented_adapter_still_requires_concrete_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            entry = _entry(status="ACTIVE")
+            entry["adapterContract"] = "N/A with reason: missing contract"
+            entry["adapterEvidence"] = "N/A with reason: missing evidence"
+            entries_dir, index_path, truth_packets, truth_index = _write_repo(
+                root,
+                entry,
+                with_truth=True,
+            )
+
+            violations = checker._check_lifecycle_snapshot(entries_dir, index_path, root, truth_packets, truth_index)
+
+            messages = [item.message for item in violations]
+            self.assertTrue(any("concrete adapterContract" in item for item in messages))
+            self.assertTrue(any("concrete adapterEvidence" in item for item in messages))
 
     def test_changed_package_artifact_requires_control_block(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

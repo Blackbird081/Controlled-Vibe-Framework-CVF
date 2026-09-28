@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "0.1.0",
+  "truthPacketId": "SKSOT-NCR-SRA1-cvf-governance-worker-return-review",
+  "skillId": "cvf-governance-worker-return-review",
+  "canonicalPacketPath": "docs/reference/agent_system_skills/truth/packets/cvf-governance-worker-return-review.json",
+  "registryEntryPath": "docs/reference/agent_system_skills/registry/entries/cvf-governance-worker-return-review.json",
+  "packageRootPath": "docs/reference/agent_system_skills/packages/cvf-governance-worker-return-review/SKILL.md",
+  "truthStatus": "approved",
+  "verificationMode": "STRICT",
+  "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+  "lifecycleSnapshot": {
+    "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-worker-return-review/SKILL.md",
+    "status": "ACTIVE",
+    "uatState": "PASSED",
+    "certificationState": "CERTIFIED",
+    "internalAgentDisposition": "IMPLEMENTED",
+    "externalCliMcpDisposition": "IMPLEMENTED"
+  },
+  "authorityBoundary": "Receipt-backed CVF package selection only; no automatic invocation, host installation, public sync, filesystem, git, commit, merge or provider authority from package loading.",
+  "sourceContentHashes": {
+    "packageBodySha256": "748c1a6f79dc673637d4c085526cc51ef0dd54c30ff85bcedda7b9d51c3dede1",
+    "uatReviewSha256": "58c718c936e6b81cd45a3743416f727834f12c6a6ba0669791dac0f71f86049a"
+  },
+  "evidence": [
+    {
+      "evidenceId": "EV-REGISTRY",
+      "kind": "assf_registry_entry",
+      "sourcePath": "docs/reference/agent_system_skills/registry/entries/cvf-governance-worker-return-review.json",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-PACKAGE",
+      "kind": "assf_package_root",
+      "sourcePath": "docs/reference/agent_system_skills/packages/cvf-governance-worker-return-review/SKILL.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-UAT",
+      "kind": "local_reviewer_uat",
+      "sourcePath": "docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_UAT_2026-09-27.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-STANDARD",
+      "kind": "production_runtime_standard",
+      "sourcePath": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+      "status": "approved"
+    },
+    {
+      "evidenceId": "EV-COMPLETION",
+      "kind": "package_specific_runtime_review",
+      "sourcePath": "docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_ACTIVE_COMPLETION_2026-09-27.md",
+      "status": "approved"
+    }
+  ],
+  "provenanceLabels": [
+    {
+      "claimId": "CLAIM-LIFECYCLE",
+      "label": "MEASURED",
+      "sourceEvidenceIds": [
+        "EV-REGISTRY",
+        "EV-UAT"
+      ]
+    },
+    {
+      "claimId": "CLAIM-ELIGIBILITY",
+      "label": "COMPUTED",
+      "sourceEvidenceIds": [
+        "EV-REGISTRY",
+        "EV-PACKAGE",
+        "EV-UAT"
+      ]
+    },
+    {
+      "claimId": "CLAIM-REVIEW",
+      "label": "HUMAN_APPROVED",
+      "sourceEvidenceIds": [
+        "EV-UAT"
+      ]
+    }
+  ],
+  "obligations": [
+    {
+      "obligationId": "OB-UAT",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-CERTIFICATION",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-INTERNAL-DISPOSITION",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-NO-AUTOMATIC-INVOCATION",
+      "state": "satisfied",
+      "strength": "HARD"
+    },
+    {
+      "obligationId": "OB-RECEIPT-BOUNDARY",
+      "state": "satisfied",
+      "strength": "HARD"
+    }
+  ],
+  "verificationResults": [
+    {
+      "resultId": "VR-LIFECYCLE",
+      "method": "source",
+      "status": "pass",
+      "evidenceIds": [
+        "EV-REGISTRY",
+        "EV-PACKAGE",
+        "EV-UAT"
+      ],
+      "obligationIds": [
+        "OB-UAT",
+        "OB-CERTIFICATION",
+        "OB-INTERNAL-DISPOSITION"
+      ]
+    },
+    {
+      "resultId": "VR-RUNTIME-BOUNDARY",
+      "method": "test",
+      "status": "pass",
+      "evidenceIds": [
+        "EV-STANDARD",
+        "EV-COMPLETION"
+      ],
+      "obligationIds": [
+        "OB-NO-AUTOMATIC-INVOCATION",
+        "OB-RECEIPT-BOUNDARY"
+      ]
+    }
+  ],
+  "receipt": {
+    "receiptId": "RCPT-SKSOT-NCR-SRA1-cvf-governance-worker-return-review",
+    "hash": "sha256:c324eb096e64af57f0d87860aae38f8a1c6d1daf0824a43884e26f2c79734356",
+    "previousHash": "sha256:faebcecff9550c8fefd9f743c30881db6e7e093d62a034a47670400461067b59",
+    "status": "issued"
+  }
+}

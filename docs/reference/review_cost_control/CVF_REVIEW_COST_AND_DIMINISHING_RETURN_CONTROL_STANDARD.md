@@ -50,6 +50,15 @@ Every changed work order must carry the exact standalone declaration
 - `preExecutionReviewAdmission`, `preExecutionReviewTrigger`,
   `nextRoutineReviewBoundary`, and `reviewerWorkBoundary`.
 
+For `REWORK` only, the packet also declares `reviewerLocalRepairBoundary`
+and `reviewerLocalRepairBasis` before dispatch. The boundary must name one of
+`MATERIAL_DESIGN_CHANGE`, `SCOPE_OR_AUTHORITY_EXPANSION`,
+`NEW_EVIDENCE_REQUIRED`, `BROAD_DELIVERABLE_RECREATION`, or
+`WORK_ORDER_FORBIDS_REVIEWER_REPAIR`. The basis must cite the concrete finding
+and explain why the reviewer cannot make a bounded correction from the
+evidence already available. The checker validates presence, a bounded token,
+and a non-placeholder basis; it cannot establish that the judgment is true.
+
 An `INITIAL` dispatch uses round zero, a complete initial acceptance matrix,
 baseline negative-test planning, and no prior finding digest. A `REWORK`
 dispatch requires a SHA-256 binding to one consolidated finding set, a full
@@ -657,10 +666,11 @@ evidence, deterministic checks and reviewer-owned disposition.
 The reviewer must still consolidate connected findings before the first
 repair and must not silently widen scope. A reviewer-local correction remains
 disclosed in the existing return or completion evidence and is verified with
-the narrowest sufficient tests. This rule adds no mandatory packet, field,
-checker invocation or separate review round. Machine checks do not attempt to
-infer whether a semantic repair is small; the reviewer applies this routing
-boundary from the evidence and the operator may override it explicitly.
+the narrowest sufficient tests. This rule adds no separate review round or
+checker invocation. The `REWORK` work order alone must record the routing
+decision through the two fields above. Machine checks do not infer whether a
+semantic repair is small; the reviewer applies this routing boundary from the
+evidence and the operator may override it explicitly.
 
 ## Audit, Commit, Latency, And Delay Vocabularies
 

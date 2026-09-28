@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -103,7 +104,17 @@ class WorkerReturnFastGateTests(unittest.TestCase):
         # DRC-03: the exact-return admission must receive the active work
         # order whenever the fast gate is given one.
         work_order = "docs/work_orders/CVF_EXAMPLE_WORK_ORDER.md"
-        commands = MODULE.build_commands((), work_order)
+        original_root = MODULE.REPO_ROOT
+        with tempfile.TemporaryDirectory() as temp_dir:
+            MODULE.REPO_ROOT = Path(temp_dir)
+            path = MODULE.REPO_ROOT / work_order
+            path.parent.mkdir(parents=True)
+            path.write_text(
+                "workerReturnPath: `docs/reviews/CVF_EXAMPLE_WORKER_RETURN.md`\n",
+                encoding="utf-8",
+            )
+            commands = MODULE.build_commands((), work_order)
+        MODULE.REPO_ROOT = original_root
         by_name = {command.name: command.command for command in commands}
         self.assertEqual(
             by_name["worker-return quality gate"],
@@ -118,6 +129,18 @@ class WorkerReturnFastGateTests(unittest.TestCase):
         self.assertEqual(
             by_name["independent review probe admission"][-2:],
             ("--active-work-order", work_order),
+        )
+        self.assertEqual(
+            by_name["work-order acceptance ledger"],
+            (
+                "python",
+                "governance/compat/check_work_order_acceptance_ledger.py",
+                "--work-order",
+                work_order,
+                "--return",
+                "docs/reviews/CVF_EXAMPLE_WORKER_RETURN.md",
+                "--enforce",
+            ),
         )
 
 

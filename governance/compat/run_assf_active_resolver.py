@@ -59,6 +59,7 @@ READY_DECISION = "ACTIVATION_READY"
 DENIED_NOT_RUNTIME_ELIGIBLE = "DENIED_NOT_RUNTIME_ELIGIBLE"
 DENIED_MISSING_TRUTH_PACKET = "DENIED_MISSING_TRUTH_PACKET"
 DENIED_TRUTH_NOT_APPROVED = "DENIED_TRUTH_NOT_APPROVED"
+DENIED_SOURCE_NOT_ACTIVE = "DENIED_SOURCE_NOT_ACTIVE"
 DENIED_EXTERNAL_ADAPTER_NOT_IMPLEMENTED = "DENIED_EXTERNAL_ADAPTER_NOT_IMPLEMENTED"
 
 CONSUMER_INTERNAL = "INTERNAL_AGENT"
@@ -191,12 +192,15 @@ def _decision_for(
     runtime_eligible: bool,
     runtime_reasons: tuple[str, ...],
     truth: dict[str, Any] | None,
+    status: str | None,
 ) -> tuple[str, tuple[str, ...]]:
     if consumer == CONSUMER_EXTERNAL:
         return (
             DENIED_EXTERNAL_ADAPTER_NOT_IMPLEMENTED,
             ("EXTERNAL_ADAPTER_NOT_IMPLEMENTED",),
         )
+    if not runtime_eligible:
+        return (DENIED_NOT_RUNTIME_ELIGIBLE, runtime_reasons)
     truth_reasons = _truth_reasons(truth)
     if truth_reasons:
         decision = (
@@ -205,8 +209,8 @@ def _decision_for(
             else DENIED_TRUTH_NOT_APPROVED
         )
         return (decision, truth_reasons)
-    if not runtime_eligible:
-        return (DENIED_NOT_RUNTIME_ELIGIBLE, runtime_reasons)
+    if str(status or "").upper() != "ACTIVE":
+        return (DENIED_SOURCE_NOT_ACTIVE, ("SOURCE_STATUS_NOT_ACTIVE",))
     return (READY_DECISION, ())
 
 
@@ -281,6 +285,7 @@ def build_active_resolver_packet(
             runtime_eligible=runtime_item.runtime_eligible,
             runtime_reasons=runtime_item.ineligibility_reasons,
             truth=truth,
+            status=metadata.get("status"),
         )
         receipt = _receipt_for(
             skill_id=item_skill_id,

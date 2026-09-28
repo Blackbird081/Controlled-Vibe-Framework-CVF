@@ -66,6 +66,52 @@ When an agent makes a mistake, CVF must ask what control was missing:
 
 The answer becomes governance improvement work.
 
+## Chain-First Assessment For Novel Or Strange Findings
+
+A novel, surprising, or apparently isolated finding defaults to
+`SYSTEM_CHAIN_ASSESSMENT_REQUIRED` until the reviewer shows that the governing
+end-to-end chain is joined and functioning. Do not begin by shrinking the
+finding to the worker action or use case that exposed it.
+
+The first assessment maps this chain:
+
+`authority and required deliverable -> dispatch feasibility -> execution
+artifact -> machine-observed actual state -> proof -> terminal status ->
+closure and continuity`
+
+For each transition, determine whether the downstream value is derived from an
+independent owner or merely repeated from the worker's own report. In
+particular, inspect for:
+
+- a requirement that has no stable machine-readable identity;
+- an expected manifest parsed from worker prose instead of dispatcher-owned
+  authority;
+- an actual artifact list that is self-attested instead of derived from Git or
+  the governed execution surface;
+- proof that is present but not joined to the exact required deliverable;
+- a terminal status selected by the worker instead of reduced from all
+  mandatory requirement results;
+- fail-open parsing, lexical phrase matching, or a gate that checks document
+  shape without checking the chain's semantic joins;
+- a phase boundary where feasibility or failure could only be discovered after
+  implementation; and
+- manual Local review acting as a compensating control for a missing machine
+  join.
+
+The reviewer must also ask whether the complete production-like route has
+actually been exercised. Component tests, per-use-case fixes, and passing
+shape gates can leave a chain defect dormant when the full route has not run.
+Discovery during a real end-to-end run is therefore positive learning evidence:
+the run has made a latent system defect observable. It is not evidence that the
+foundation hardening itself was a mistake.
+
+Only after this assessment may the finding be classified as local. If any join
+is missing, the learning and corrective packet must name the system-chain gap,
+its earliest enforceable phase, and the end-to-end proof needed for closure.
+An acceptance-critical workflow should converge on a machine-readable ledger
+that joins each required deliverable to its actual artifact, proof, and
+deterministically reduced terminal status.
+
 ## Escalation Ladder
 
 Use this ladder when reviewing a meaningful or repeated agent defect:

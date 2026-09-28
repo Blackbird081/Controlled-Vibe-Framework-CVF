@@ -1,0 +1,19 @@
+{
+  "skillId": "cvf-governance-worker-return-review",
+  "originLane": "NCR-R1-LOCAL-REVIEW-LEARNING",
+  "sourceArtifacts": [
+    "docs/reference/review_cost_control/CVF_REVIEW_COST_AND_DIMINISHING_RETURN_CONTROL_STANDARD.md",
+    "docs/reference/CVF_GATE_TO_ROLE_CLOSEABILITY_MACHINE_STANDARD.md",
+    "docs/reference/CVF_TRANCHE_COMMIT_CHOREOGRAPHY_STANDARD_2026-06-03.md",
+    "docs/reference/review_cost_control/CVF_COMMITTED_EVIDENCE_FINGERPRINT_CONTRACT.md",
+    "docs/reviews/CVF_CVF_NCR_R1_S01_SKILL_LIFECYCLE_BODY_COMPLETION_2026-09-27.md",
+    "docs/reviews/CVF_MIXED_EOL_COMMITTED_EVIDENCE_CORRECTION_2026-09-27.md"
+  ],
+  "lifecycleState": "ACTIVE",
+  "uatState": "PASSED",
+  "certificationState": "CERTIFIED",
+  "internalAgentDisposition": "IMPLEMENTED",
+  "externalCliMcpDisposition": "IMPLEMENTED",
+  "cvfAdaptationBoundary": "CVF-owned reviewer routing and closure guidance derived from existing CVF standards and the NCR R1/S01 review finding; no third-party skill import",
+  "claimBoundary": "ACTIVE source for existing receipt-backed CVF package executor and CLI/MCP envelope; NCR-SRA1 completion must carry package-specific live proof; no host install or independent action authority"
+}

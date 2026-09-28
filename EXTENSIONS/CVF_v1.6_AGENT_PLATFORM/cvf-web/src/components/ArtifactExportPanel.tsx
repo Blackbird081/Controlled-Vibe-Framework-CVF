@@ -1,5 +1,7 @@
 'use client';
 
+// Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
+
 import { useCallback, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import {
@@ -110,6 +112,10 @@ const LABELS = {
     previewTitle: 'Preview',
     fullRecord: 'Complete record',
     pointerRecord: 'Reference record',
+    preGenerateDisclosure: "Building this packet may send a short excerpt of your text to a review-checking service. Whether that happens, and where the data goes, depends on this deployment's setup and is not shown here.",
+    receiptAbsentNote: 'No review-checking receipt was returned this time. This does not necessarily mean nothing was sent — see the note above.',
+    secretRefusalRecovery: 'This text looks like it may contain a private key or token. Remove that value and try again.',
+    missingFieldRecovery: 'Some required fields are empty. Check the form, fill in the missing fields, and try again.',
   },
   vi: {
     title: 'Xuất gói rà soát',
@@ -138,6 +144,10 @@ const LABELS = {
     previewTitle: 'Xem trước',
     fullRecord: 'Bản đầy đủ',
     pointerRecord: 'Bản tham chiếu',
+    preGenerateDisclosure: 'Việc tạo gói này có thể gửi một đoạn ngắn nội dung của bạn đến một dịch vụ kiểm tra rà soát. Việc này có xảy ra hay không, và dữ liệu đi đâu, phụ thuộc vào cấu hình triển khai và không hiển thị ở đây.',
+    receiptAbsentNote: 'Lần này không có biên nhận kiểm tra rà soát nào được trả về. Điều này không chắc có nghĩa là không có gì được gửi — xem ghi chú ở trên.',
+    secretRefusalRecovery: 'Nội dung này có vẻ chứa khóa riêng tư hoặc mã token. Hãy xóa giá trị đó rồi thử lại.',
+    missingFieldRecovery: 'Một số trường bắt buộc còn trống. Hãy kiểm tra biểu mẫu, điền các trường còn thiếu rồi thử lại.',
   },
 };
 
@@ -190,6 +200,16 @@ function FieldLabel({ children }: { children: string }) {
       {children}
     </label>
   );
+}
+
+function recoveryMessageFor(rawError: string, labels: typeof LABELS['en']): string | null {
+  if (rawError === 'Potential secret-like value detected in source content.') {
+    return labels.secretRefusalRecovery;
+  }
+  if (rawError === 'Missing required artifact export fields.') {
+    return labels.missingFieldRecovery;
+  }
+  return null;
 }
 
 function StatusPill({ children, tone }: { children: ReactNode; tone: 'info' | 'success' | 'warning' }) {
@@ -383,7 +403,14 @@ export function ArtifactExportPanel({
             </div>
           </div>
 
-          <div className="mt-5 flex flex-wrap items-center gap-3">
+          <p
+            data-testid="pre-generate-disclosure"
+            className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800 dark:border-amber-900/70 dark:bg-amber-950/30 dark:text-amber-200"
+          >
+            {labels.preGenerateDisclosure}
+          </p>
+
+          <div className="mt-3 flex flex-wrap items-center gap-3">
             <button
               type="button"
               onClick={() => void handleGenerate()}
@@ -394,10 +421,15 @@ export function ArtifactExportPanel({
               {loading ? labels.generating : labels.generate}
             </button>
             {error && (
-              <div className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700 dark:border-red-900/70 dark:bg-red-950/30 dark:text-red-200">
-                <TriangleAlert className="h-4 w-4" aria-hidden="true" />
-                <span className="font-semibold">{labels.failed}:</span>
-                <span>{error}</span>
+              <div className="inline-flex min-h-11 flex-col gap-1 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700 dark:border-red-900/70 dark:bg-red-950/30 dark:text-red-200">
+                <div className="flex items-center gap-2">
+                  <TriangleAlert className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  <span className="font-semibold">{labels.failed}</span>
+                </div>
+                <span data-testid="export-error-recovery">{recoveryMessageFor(error, labels) ?? error}</span>
+                {recoveryMessageFor(error, labels) && (
+                  <span data-testid="export-error-detail" className="text-red-600/80 dark:text-red-300/80">{error}</span>
+                )}
               </div>
             )}
           </div>
@@ -415,7 +447,7 @@ export function ArtifactExportPanel({
                   <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
                     <p className="break-all font-mono">#{result.receiptAnchor}</p>
                     <p>{new Date(result.generatedAt).toLocaleString()}</p>
-                    {result.governanceReceipt && (
+                    {result.governanceReceipt ? (
                       <div
                         data-testid="governance-receipt-badge"
                         className="mt-1 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200"
@@ -423,6 +455,10 @@ export function ArtifactExportPanel({
                         <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
                         Governed · {result.governanceReceipt.decision}
                       </div>
+                    ) : (
+                      <p data-testid="governance-receipt-absent-note" className="mt-1 text-amber-700 dark:text-amber-300">
+                        {labels.receiptAbsentNote}
+                      </p>
                     )}
                   </div>
                 ) : (

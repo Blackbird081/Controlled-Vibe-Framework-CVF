@@ -35,7 +35,9 @@ DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 APPLICABLE_PREFIXES = ("docs/logs/", "docs/reviews/", "docs/assessments/", "docs/audits/")
 PROVIDER_MEMORY_ESCAPE_PREFIXES = APPLICABLE_PREFIXES + ("docs/work_orders/",)
 ARCHIVE_PATH_MARKER = "/archive/"
-FINDING_HEADING_RE = re.compile(r"(?im)^##\s+(?:Quality Findings|Findings|Known Issues)\s*$")
+FINDING_HEADING_RE = re.compile(
+    r"(?im)^##\s+(?:Quality Findings|Findings(?:\s*/\s*Position)?|Known Issues)\s*$"
+)
 FINDING_TABLE_RE = re.compile(r"(?im)^\s*\|\s*Finding\s*\|")
 KNOWN_ISSUES_RE = re.compile(r"(?im)^Known Issues\s*$")
 REQUIRED_SECTION = "## Finding-To-Governance Learning Disposition"
@@ -93,6 +95,29 @@ GENERALIZABLE_FINDING_MARKERS = (
     "standardization",
     "canonical standard",
 )
+
+BLOCKED_WITH_REASON_RE = re.compile(r"(?im)^Status:\s*BLOCKED_WITH_REASON\s*$")
+ROOT_CAUSE_CLUSTER_RE = re.compile(r"(?im)^rootCauseClusterId:\s*(\S+)")
+RECURRENCE_DISPOSITION_RE = re.compile(r"(?im)^recurrenceDisposition:\s*(\S+)")
+PRIOR_RELATED_FINDING_RE = re.compile(r"(?im)^priorRelatedFinding:\s*(.+)$")
+OPERATOR_NOTICE_DISPOSITION_RE = re.compile(r"(?im)^operatorNoticeDisposition:\s*(\S+)")
+SUCCESSOR_FREEZE_DISPOSITION_RE = re.compile(r"(?im)^successorFreezeDisposition:\s*(\S+)")
+RECURRENCE_FIRST_OCCURRENCE = "FIRST_OCCURRENCE"
+RECURRENCE_CLUSTER_STOP = "RECURRING_CLUSTER_STOP"
+OPERATOR_NOTICE_REQUIRED = "OPERATOR_NOTICE_REQUIRED"
+FEATURE_SUCCESSORS_FROZEN = "FEATURE_SUCCESSORS_FROZEN"
+GOVERNED_FINDING_PATH_RE = re.compile(
+    r"`?(docs/(?:reviews|logs|assessments|audits)/[A-Za-z0-9_./-]+\.md)`?"
+)
+INVALID_CLUSTER_VALUES = {
+    "N/A",
+    "NA",
+    "NONE",
+    "NOT_APPLICABLE",
+    "NOT_APPLICABLE_INITIAL_DISPATCH",
+    "UNKNOWN",
+    "TO_FILL",
+}
 
 GENERALIZABLE_PROMOTION_DISPOSITIONS = (
     "RULE_EXISTS",
@@ -404,6 +429,162 @@ def _validate_provider_memory_learning_escape(path: str, text: str) -> list[dict
     return violations
 
 
+def _prior_cluster_paths(path: str, cluster_id: str) -> list[str]:
+    review_root = REPO_ROOT / "docs" / "reviews"
+    if not review_root.exists():
+        return []
+    matches: list[str] = []
+    for candidate in sorted(review_root.rglob("*.md")):
+        rel = candidate.relative_to(REPO_ROOT).as_posix()
+        if rel == path or ARCHIVE_PATH_MARKER in rel:
+            continue
+        try:
+            candidate_text = candidate.read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            continue
+        match = ROOT_CAUSE_CLUSTER_RE.search(candidate_text)
+        if match and match.group(1).strip().rstrip(".,;") == cluster_id:
+            matches.append(rel)
+    return matches
+
+
+def _governed_finding_path(value: str) -> str | None:
+    match = GOVERNED_FINDING_PATH_RE.search(value)
+    return match.group(1) if match else None
+
+
+def _validate_recurring_blocked_return(path: str, text: str) -> list[dict[str, str]]:
+    violations: list[dict[str, str]] = []
+    if not path.startswith("docs/reviews/") or ARCHIVE_PATH_MARKER in path:
+        return violations
+    if not BLOCKED_WITH_REASON_RE.search(text):
+        return violations
+
+    cluster_match = ROOT_CAUSE_CLUSTER_RE.search(text)
+    cluster_id = (
+        cluster_match.group(1).strip().rstrip(".,;") if cluster_match else ""
+    )
+    if not cluster_id or cluster_id.upper() in INVALID_CLUSTER_VALUES:
+        _add(
+            violations,
+            path,
+            "root_cause_cluster_id_missing_or_placeholder",
+            "a BLOCKED_WITH_REASON worker return must declare a stable, non-placeholder rootCauseClusterId",
+        )
+        prior_cluster_paths: list[str] = []
+    else:
+        prior_cluster_paths = _prior_cluster_paths(path, cluster_id)
+
+    recurrence_match = RECURRENCE_DISPOSITION_RE.search(text)
+    if not recurrence_match:
+        _add(
+            violations,
+            path,
+            "recurrence_disposition_missing",
+            "a BLOCKED_WITH_REASON worker return must declare recurrenceDisposition "
+            f"({RECURRENCE_FIRST_OCCURRENCE} or {RECURRENCE_CLUSTER_STOP})",
+        )
+        return violations
+
+    recurrence = recurrence_match.group(1).strip().rstrip(".,;")
+    prior_match = PRIOR_RELATED_FINDING_RE.search(text)
+    notice_match = OPERATOR_NOTICE_DISPOSITION_RE.search(text)
+    freeze_match = SUCCESSOR_FREEZE_DISPOSITION_RE.search(text)
+
+    if prior_match is None:
+        _add(violations, path, "prior_related_finding_missing", "a BLOCKED_WITH_REASON worker return must declare priorRelatedFinding")
+    if notice_match is None:
+        _add(violations, path, "operator_notice_disposition_missing", "a BLOCKED_WITH_REASON worker return must declare operatorNoticeDisposition")
+    if freeze_match is None:
+        _add(violations, path, "successor_freeze_disposition_missing", "a BLOCKED_WITH_REASON worker return must declare successorFreezeDisposition")
+
+    if recurrence == RECURRENCE_CLUSTER_STOP:
+        if prior_match is not None:
+            prior_value = prior_match.group(1).strip()
+            governed_path = _governed_finding_path(prior_value)
+            if not governed_path:
+                _add(
+                    violations,
+                    path,
+                    "recurring_cluster_missing_prior_finding",
+                    "RECURRING_CLUSTER_STOP requires a concrete governed priorRelatedFinding path",
+                )
+            elif not (REPO_ROOT / governed_path).is_file():
+                _add(
+                    violations,
+                    path,
+                    "recurring_cluster_prior_finding_not_found",
+                    f"priorRelatedFinding path does not exist: {governed_path}",
+                )
+            elif prior_cluster_paths and governed_path not in prior_cluster_paths:
+                _add(
+                    violations,
+                    path,
+                    "recurring_cluster_prior_finding_cluster_mismatch",
+                    "priorRelatedFinding does not carry the same rootCauseClusterId",
+                )
+            elif not prior_cluster_paths:
+                _add(
+                    violations,
+                    path,
+                    "recurring_cluster_has_no_prior_cluster_match",
+                    "RECURRING_CLUSTER_STOP requires an earlier governed return with the same rootCauseClusterId",
+                )
+        if notice_match is not None and notice_match.group(1).strip() != OPERATOR_NOTICE_REQUIRED:
+            _add(
+                violations,
+                path,
+                "recurring_cluster_missing_operator_notice",
+                f"RECURRING_CLUSTER_STOP requires operatorNoticeDisposition: {OPERATOR_NOTICE_REQUIRED}",
+            )
+        if freeze_match is not None and freeze_match.group(1).strip() != FEATURE_SUCCESSORS_FROZEN:
+            _add(
+                violations,
+                path,
+                "recurring_cluster_missing_successor_freeze",
+                f"RECURRING_CLUSTER_STOP requires successorFreezeDisposition: {FEATURE_SUCCESSORS_FROZEN}",
+            )
+    elif recurrence == RECURRENCE_FIRST_OCCURRENCE:
+        if prior_cluster_paths:
+            _add(
+                violations,
+                path,
+                "recurring_cluster_misclassified_as_first_occurrence",
+                "FIRST_OCCURRENCE is invalid because an earlier governed return carries the same rootCauseClusterId: "
+                + prior_cluster_paths[0],
+            )
+        if prior_match is not None:
+            prior_value = prior_match.group(1).strip().upper()
+            if not (prior_value.startswith("N/A") or "NOT_APPLICABLE_WITH_REASON" in prior_value):
+                _add(
+                    violations,
+                    path,
+                    "first_occurrence_disposition_invalid",
+                    "FIRST_OCCURRENCE requires priorRelatedFinding to use NOT_APPLICABLE_WITH_REASON",
+                )
+        notice_value = notice_match.group(1).strip() if notice_match is not None else ""
+        freeze_value = freeze_match.group(1).strip() if freeze_match is not None else ""
+        notice_na = notice_value.upper().startswith("N/A") or "NOT_APPLICABLE_WITH_REASON" in notice_value.upper()
+        freeze_na = freeze_value.upper().startswith("N/A") or "NOT_APPLICABLE_WITH_REASON" in freeze_value.upper()
+        proactive_pair = notice_value == OPERATOR_NOTICE_REQUIRED and freeze_value == FEATURE_SUCCESSORS_FROZEN
+        if not ((notice_na and freeze_na) or proactive_pair):
+            _add(
+                violations,
+                path,
+                "first_occurrence_disposition_invalid",
+                "FIRST_OCCURRENCE requires either two NOT_APPLICABLE_WITH_REASON dispositions or the paired proactive escalation OPERATOR_NOTICE_REQUIRED plus FEATURE_SUCCESSORS_FROZEN",
+            )
+    else:
+        _add(
+            violations,
+            path,
+            "recurrence_disposition_invalid",
+            f"recurrenceDisposition must be {RECURRENCE_FIRST_OCCURRENCE} or {RECURRENCE_CLUSTER_STOP}",
+        )
+
+    return violations
+
+
 def _validate_path_with_text(path: str, text: str) -> list[dict[str, str]]:
     violations: list[dict[str, str]] = []
     if path == STANDARD_PATH:
@@ -412,6 +593,7 @@ def _validate_path_with_text(path: str, text: str) -> list[dict[str, str]]:
         violations.extend(_validate_binding(path, text))
     violations.extend(_validate_provider_memory_learning_escape(path, text))
     violations.extend(_validate_finding_doc(path, text))
+    violations.extend(_validate_recurring_blocked_return(path, text))
     return violations
 
 

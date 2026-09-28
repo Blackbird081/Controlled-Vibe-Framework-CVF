@@ -3398,6 +3398,190 @@
       "uatState": "PASSED",
       "useWhen": "Use when a governed CVF task matches the upstream `using-agent-skills` skill pattern and needs CVF-owned production-scoped package guidance after explicit runtime package selection and receipt-backed execution.",
       "version": "0.1.0"
+    },
+    {
+      "acceptanceEvidence": "docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_UAT_2026-09-27.md; docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_ACTIVE_COMPLETION_2026-09-27.md",
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+      "adapterEvidence": "docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_ACTIVE_COMPLETION_2026-09-27.md",
+      "approvalState": "APPROVED",
+      "authorityCeiling": "advisory review guidance under the current governed assignment; no independent mutation or commit grant",
+      "candidateState": "ACTIVE",
+      "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-governance-worker-return-review/SKILL.md",
+      "capabilityBoundary": "ACTIVE in bounded CVF package executor and CLI/MCP envelope; no host installation or independent action authority",
+      "certificationState": "CERTIFIED",
+      "compositionOrder": 33,
+      "conflicts": [],
+      "contextProfile": "local-governed-review",
+      "dependencies": [],
+      "deprecation": "none",
+      "doNotUseWhen": "External Web research, initial worker execution, ordinary code-quality review without CVF return, or an unapproved runtime activation.",
+      "executionConstraints": "read the current canonical owners; do not infer authority from package loading; do not rerun valid worker evidence without a named contradiction and cost reason",
+      "externalCliMcpDisposition": "IMPLEMENTED",
+      "externalMutationBoundary": "no external mutation permitted from this package",
+      "inputs": [
+        "active work order and baseline",
+        "worker return and changed-set evidence",
+        "current bootstrap and handoff",
+        "gate receipts and Git range"
+      ],
+      "internalAgentDisposition": "IMPLEMENTED",
+      "legacyRows": [],
+      "license": "CVF_PRIVATE_GOVERNED",
+      "loaderBoundary": "loading metadata never grants reviewer mutation, commit, provider, public, production, or external action authority",
+      "name": "CVF Governance Worker-Return Review",
+      "originLane": "NCR-R1-LOCAL-REVIEW-LEARNING",
+      "osConstraints": "none",
+      "outputs": [
+        "source-backed consolidated findings",
+        "reviewer-local repair, REWORK, or stop disposition",
+        "bounded completion evidence when authorized"
+      ],
+      "owner": "CVF Local reviewer governance",
+      "permissions": "read current governed sources and returned evidence within the active assignment",
+      "phases": [
+        "REVIEWER_CLOSURE"
+      ],
+      "platformCompatibility": "cross-platform guidance",
+      "purpose": "Guide Local reviewer assessment of internal worker returns, reviewer-local repair routing, and evidence-supported bounded closure.",
+      "resolverBehavior": "metadata-only until explicit receipt-backed ACTIVE package selection; no automatic invocation",
+      "retirement": "none",
+      "reviewArtifacts": [
+        "docs/reviews/CVF_NCR_SRA1_WORKER_RETURN_REVIEW_SKILL_UAT_2026-09-27.md"
+      ],
+      "riskCeiling": "R1",
+      "riskProfile": "R1",
+      "riskTriggers": [
+        "scope or effect expansion requires the governing authority route before action"
+      ],
+      "roles": [
+        "reviewer",
+        "closer"
+      ],
+      "rollback": "revert only this proposed package, registry entry, and regenerated index/inventory if rejected",
+      "safeStop": "state the exact missing authority or evidence and stop the dependent review or dispatch action",
+      "shellAssumptions": "commands follow the current workspace and canonical checker instructions",
+      "sideEffects": "none from skill loading; any reviewer edit or commit needs separate current authority",
+      "skillId": "cvf-governance-worker-return-review",
+      "sourceArtifacts": [
+        "docs/reference/review_cost_control/CVF_REVIEW_COST_AND_DIMINISHING_RETURN_CONTROL_STANDARD.md",
+        "docs/reference/CVF_GATE_TO_ROLE_CLOSEABILITY_MACHINE_STANDARD.md",
+        "docs/reference/CVF_TRANCHE_COMMIT_CHOREOGRAPHY_STANDARD_2026-06-03.md",
+        "docs/reference/review_cost_control/CVF_COMMITTED_EVIDENCE_FINGERPRINT_CONTRACT.md",
+        "docs/reviews/CVF_CVF_NCR_R1_S01_SKILL_LIFECYCLE_BODY_COMPLETION_2026-09-27.md"
+      ],
+      "status": "ACTIVE",
+      "successor": "none",
+      "surfaces": [
+        "docs/reviews",
+        "docs/work_orders",
+        "governance/compat"
+      ],
+      "taskClasses": [
+        "worker-return-review",
+        "reviewer-closure",
+        "rework-routing"
+      ],
+      "triggerPatterns": [
+        "review worker return",
+        "COMPLETE_PENDING_REVIEW review",
+        "reviewer-local repair or REWORK",
+        "CVF tranche closure review"
+      ],
+      "uatState": "PASSED",
+      "useWhen": "A Local reviewer has an internal worker return and must decide findings, repair route, and closure evidence within an active governed assignment.",
+      "version": "0.1.0"
+    },
+    {
+      "acceptanceEvidence": "docs/reviews/CVF_CVF_NCR_R1_S02_TEST_EVIDENCE_AUDIT_CONTENT_COMPLETION_2026-09-27.md (content accepted; worker's prohibited fixture/pytest execution recorded as a disclosed scope violation and explicitly excluded from acceptance evidence); docs/reviews/CVF_CVF_NCR_R1_S04_TEST_EVIDENCE_AUDIT_METADATA_CANDIDATE_COMPLETION_2026-09-27.md (P3 metadata accepted with recorded worker scope violation for an unauthorized Git-mutation diagnostic, also excluded from acceptance evidence); docs/reviews/CVF_CVF_NCR_R1_S06_TEST_EVIDENCE_AUDIT_UAT_CERTIFICATION_2026-09-27.md (P5 five-case source-based UAT, all PASS, no audited test execution)",
+      "adapterContract": "docs/reference/agent_system_skills/CVF_ASSF_PRODUCTION_PACKAGE_RUNTIME_STANDARD.md",
+      "adapterEvidence": "docs/baselines/CVF_GC018_CVF_NCR_R1_S11_R1_TEST_EVIDENCE_AUDIT_PRODUCTION_RUNTIME_CORRECTIVE_2026-09-28.md",
+      "approvalState": "APPROVED",
+      "authorityCeiling": "bounded advisory content guidance only; a label never mutates a test result, a checker verdict, or a file, and never authorizes deleting or skipping a test",
+      "candidateState": "ACTIVE",
+      "canonicalRoot": "docs/reference/agent_system_skills/packages/cvf-engineering-test-evidence-audit/SKILL.md",
+      "capabilityBoundary": "P10 ACTIVE production package runtime for one bounded advisory package. Internal and external CLI/MCP body use require the existing receipt-backed production executor under separate work-order authority. Loading alone grants no test execution, filesystem, Git, browser, provider, public-sync, deployment, or downstream action authority.",
+      "certificationState": "CERTIFIED",
+      "compositionOrder": 34,
+      "conflicts": [],
+      "contextProfile": "documentation-only-advisory-candidate",
+      "dependencies": [],
+      "deprecation": "none",
+      "doNotUseWhen": "Do not use to author a new failing test before implementation exists (that is TDD's red-green-refactor trigger, a distinct task class). Do not use to review a diff or PR for correctness/simplification/efficiency defects in changed code (that is code-review's trigger). Do not use as a substitute for running the named test; this candidate does not execute, evaluate, or delete any test.",
+      "executionConstraints": "advisory only; loading or reading this metadata, the package body, or the accepted content source never authorizes running the named test, fixture creation, or any Git mutation; a KEEP/REPAIR/CONSOLIDATE/ADD/DEFER_WITH_REASON label is a recommendation attached to a target, evidence, and reason, never a test result",
+      "externalCliMcpDisposition": "IMPLEMENTED",
+      "externalMutationBoundary": "receipt-backed external readout and advisory output only; no audited-test execution, file mutation, deletion permission, downstream action, retry, public sync, or deployment authority follows from the adapter",
+      "inputs": [
+        "one asserted existing-proof claim sentence",
+        "the named source file path",
+        "the named test file path (or an explicit statement that no test file is known, which forces DEFER_WITH_REASON)"
+      ],
+      "internalAgentDisposition": "IMPLEMENTED",
+      "legacyRows": [],
+      "license": "CVF_PRIVATE_GOVERNED",
+      "loaderBoundary": "loading this metadata or the package body never grants authority to commit, activate, execute a test, delete a test, or expand any active work order",
+      "name": "CVF Engineering Test Evidence Audit",
+      "originLane": "CVF-NCR-R1-S04",
+      "osConstraints": "none",
+      "outputs": [
+        "one advisory artifact row: target, label, cited evidence, reason, confidence/unknowns, next owner/action",
+        "no test PASS, no deletion permission, no runtime receipt"
+      ],
+      "owner": "CVF NCR D013 engineering-skill-content surface",
+      "permissions": "read the named source file, the named test file, and any directly imported helper module the assertion depends on; no repository-wide read is claimed",
+      "phases": [
+        "WORKER_EXECUTION",
+        "REVIEWER_CLOSURE"
+      ],
+      "platformCompatibility": "cross-platform metadata; package body is prose-only and platform-neutral",
+      "purpose": "Give an advisory KEEP/REPAIR/CONSOLIDATE/ADD/DEFER_WITH_REASON disposition for one asserted existing-proof claim tied to a named source file and a named test file, by reading the actual test assertions rather than trusting the claim sentence or a docstring.",
+      "resolverBehavior": "metadata-only; resolver returns identity and selector fields only; opening the package body still requires an explicit, separately authorized selection under active governed work-order authority",
+      "retirement": "none",
+      "reviewArtifacts": [
+        "docs/reviews/CVF_CVF_NCR_R1_S02_TEST_EVIDENCE_AUDIT_CONTENT_COMPLETION_2026-09-27.md",
+        "docs/reviews/CVF_CVF_NCR_R1_S04_TEST_EVIDENCE_AUDIT_METADATA_CANDIDATE_COMPLETION_2026-09-27.md",
+        "docs/reviews/CVF_CVF_NCR_R1_S06_TEST_EVIDENCE_AUDIT_UAT_CERTIFICATION_2026-09-27.md"
+      ],
+      "riskCeiling": "R0",
+      "riskProfile": "R0",
+      "riskTriggers": [
+        "advisory label mistaken for a test PASS or deletion permission",
+        "named test file absent or not actually referencing the claimed source symbol",
+        "read authority over a file mistaken for execution authority"
+      ],
+      "roles": [
+        "worker",
+        "reviewer",
+        "dispatcher"
+      ],
+      "rollback": "restore this registry entry and package root to their pre-P4 PROPOSED-absent state, remove the P6 truth packet at docs/reference/agent_system_skills/truth/packets/cvf-engineering-test-evidence-audit.json, and regenerate all canonical projections",
+      "safeStop": "if the named test file is absent or does not reference the named source symbol, stop at DEFER_WITH_REASON with a no-match reason rather than substituting a different file",
+      "shellAssumptions": "no shell execution required or authorized for this contract-only PROPOSED package",
+      "sideEffects": "none from metadata or package-body loading; the compressed instruction body itself performs no execution; any future approval, UAT, certification, truth, or evaluation requires separate authorization",
+      "skillId": "cvf-engineering-test-evidence-audit",
+      "sourceArtifacts": [
+        "docs/audits/CVF_NCR_R1_S02_TEST_EVIDENCE_AUDIT_CONTENT_CANDIDATE_2026-09-27.md",
+        "docs/reviews/CVF_CVF_NCR_R1_S02_TEST_EVIDENCE_AUDIT_CONTENT_COMPLETION_2026-09-27.md",
+        "docs/reviews/CVF_CVF_NCR_R1_S04_TEST_EVIDENCE_AUDIT_METADATA_CANDIDATE_COMPLETION_2026-09-27.md"
+      ],
+      "status": "ACTIVE",
+      "successor": "none",
+      "surfaces": [
+        "docs/audits",
+        "docs/reviews"
+      ],
+      "taskClasses": [
+        "test-evidence-disposition"
+      ],
+      "triggerPatterns": [
+        "is this tested",
+        "existing test coverage claim",
+        "test evidence audit",
+        "verify existing proof claim",
+        "advisory test disposition"
+      ],
+      "uatState": "PASSED",
+      "useWhen": "A worker or reviewer holds an asserted existing-proof claim (a comment, commit message, docstring, or prior review stating a source file is tested or covered) tied to a specific source file and a specific test file or test function, and needs an advisory KEEP/REPAIR/CONSOLIDATE/ADD/DEFER_WITH_REASON disposition before trusting or extending that claim.",
+      "version": "0.1.0"
     }
   ]
 }

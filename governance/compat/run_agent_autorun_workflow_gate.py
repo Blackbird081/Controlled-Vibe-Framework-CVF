@@ -53,6 +53,7 @@ try:
         _active_work_order_binding_error,
         _common_commands,
         _dispatch_release_command,
+        _package_skill_target_state_command,
         _pre_implementation_commands,
     )
 except ModuleNotFoundError:  # imported as governance.compat.run_agent_autorun_workflow_gate
@@ -65,9 +66,9 @@ except ModuleNotFoundError:  # imported as governance.compat.run_agent_autorun_w
         _active_work_order_binding_error,
         _common_commands,
         _dispatch_release_command,
+        _package_skill_target_state_command,
         _pre_implementation_commands,
     )
-
 def _execute(index: int, command: GateCommand) -> GateResult:
     started = time.perf_counter()
     proc = subprocess.run(
@@ -503,9 +504,7 @@ def _range_shape_preflight(phase: str, base: str, head: str) -> int:
 
 
 def _default_base_for_phase(phase: str) -> str:
-    if phase in {"pre-closure", "pre-push"}:
-        return "HEAD~1"
-    return "HEAD"
+    return "HEAD~1" if phase in {"pre-closure", "pre-push"} else "HEAD"
 
 
 def _run_phase(
@@ -554,6 +553,7 @@ def _run_phase(
         phase_commands = _pre_implementation_commands(resolved_base, head)
         common_commands[:0] = phase_commands
     if phase in {"pre-dispatch", "pre-implementation"} and active_work_order is not None:
+        common_commands.insert(0, _package_skill_target_state_command(active_work_order))
         common_commands.insert(0, _dispatch_release_command(active_work_order, head))
 
     if phase in {"pre-closure", "pre-push"} and base_sha == head_sha:
@@ -703,11 +703,11 @@ def _run_phase(
             # the gate commands actually read for every base..head changed
             # path is equivalent to headSha's own committed blob for that
             # path -- not merely that two nearby worktree reads agreed with
-            # each other. Equivalence is decided by git hash-object (see
-            # committed_evidence_fingerprint.verify_worktree_matches_committed_target),
-            # which is CRLF/line-ending-tolerant exactly as Git's own
-            # checkout/commit filter is and binary-safe, never a hand-rolled
-            # text normalization that could mask a genuine difference. A
+            # each other. The helper compares raw disk and committed blob
+            # bytes; it admits only metadata-backed CRLF-to-LF normalization
+            # of the worktree, including mixed LF/CRLF files,
+            # with an unchanged index blob. It never invokes a clean filter
+            # or git hash-object, which could hide genuine drift. A
             # later continuity-only HEAD remains admissible here precisely
             # because it does not change any base..head evidence path's
             # committed content, so the worktree (parked at the later

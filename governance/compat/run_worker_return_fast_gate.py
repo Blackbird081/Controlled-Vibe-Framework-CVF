@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import dataclass
 import os
+import re
 import subprocess
 import sys
 import time
@@ -20,6 +21,19 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _worker_return_path(active_work_order: str) -> str:
+    work_order_path = (REPO_ROOT / active_work_order).resolve()
+    try:
+        work_order_path.relative_to(REPO_ROOT.resolve())
+    except ValueError as exc:
+        raise ValueError("active work order escapes the repository") from exc
+    text = work_order_path.read_text(encoding="utf-8")
+    match = re.search(r"(?m)^workerReturnPath:\s*`([^`]+)`\s*$", text)
+    if not match:
+        raise ValueError("active work order lacks an exact workerReturnPath")
+    return match.group(1)
 
 
 def _configure_stdout() -> None:
@@ -104,6 +118,20 @@ def build_commands(
     if active_work_order:
         probe_admission_command += ["--active-work-order", active_work_order]
         quality_command += ["--active-work-order", active_work_order]
+        acceptance_command = FastGateCommand(
+            "work-order acceptance ledger",
+            (
+                "python",
+                "governance/compat/check_work_order_acceptance_ledger.py",
+                "--work-order",
+                active_work_order,
+                "--return",
+                _worker_return_path(active_work_order),
+                "--enforce",
+            ),
+        )
+    else:
+        acceptance_command = None
     commands.extend(
         [
             FastGateCommand(
@@ -114,6 +142,7 @@ def build_commands(
                 "epistemic process packet",
                 ("python", "governance/compat/check_epistemic_process_packet.py", "--enforce"),
             ),
+            *([acceptance_command] if acceptance_command else []),
             FastGateCommand("worker-return quality gate", tuple(quality_command)),
             FastGateCommand("independent review probe admission", tuple(probe_admission_command)),
             FastGateCommand(

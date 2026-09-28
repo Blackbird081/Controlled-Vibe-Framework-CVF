@@ -128,7 +128,7 @@ class CertifiedMetadataAdmissionTests(unittest.TestCase):
             self.assertTrue(any("adapterContract" in v for v in violations))
             self.assertTrue(any("adapterEvidence" in v for v in violations))
 
-    def test_active_certified_entry_requires_concrete_adapter_evidence(self) -> None:
+    def test_active_certified_implemented_adapter_requires_evidence(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             entries_dir, index_path = _make_repo(root)
@@ -141,8 +141,22 @@ class CertifiedMetadataAdmissionTests(unittest.TestCase):
 
             violations = check(index_path, entries_dir, repo_root=root)
 
-            self.assertTrue(any("concrete adapterContract" in v for v in violations))
-            self.assertTrue(any("concrete adapterEvidence" in v for v in violations))
+            self.assertTrue(any("adapterContract" in v for v in violations))
+            self.assertTrue(any("adapterEvidence" in v for v in violations))
+
+    def test_active_certified_internal_only_deferred_adapter_passes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            entries_dir, index_path = _make_repo(root)
+            entry = _certified_entry()
+            entry["status"] = "ACTIVE"
+            entry["candidateState"] = "ACTIVE"
+            _write_entry(entries_dir, entry)
+            generate_index(index_path, entries_dir)
+
+            violations = check(index_path, entries_dir, repo_root=root)
+
+            self.assertEqual(violations, [])
 
     def test_active_certified_entry_passes_with_concrete_adapter_evidence(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

@@ -48,13 +48,18 @@ class ActivationPolicyResolverTests(unittest.TestCase):
     def tearDown(self) -> None:
         shutil.rmtree(self.temp_dir)
 
-    def _write_index(self, *, certification_state: str = "CERTIFIED") -> None:
+    def _write_index(
+        self,
+        *,
+        certification_state: str = "CERTIFIED",
+        status: str = "ACTIVE",
+    ) -> None:
         payload = {
             "skills": [
                 {
                     "approvalState": "APPROVED",
                     "authorityCeiling": "ADVISORY",
-                    "candidateState": "APPROVED",
+                    "candidateState": status,
                     "canonicalRoot": (
                         "docs/reference/agent_system_skills/packages/"
                         "ready-skill/SKILL.md"
@@ -70,7 +75,7 @@ class ActivationPolicyResolverTests(unittest.TestCase):
                     "phases": ["implementation"],
                     "roles": ["worker"],
                     "skillId": "ready-skill",
-                    "status": "APPROVED",
+                    "status": status,
                     "surfaces": ["governance/compat"],
                     "taskClasses": ["implementation"],
                     "uatState": "PASSED",
@@ -169,6 +174,16 @@ class ActivationPolicyResolverTests(unittest.TestCase):
         self.assertEqual(item.policy_state, STATE_SELECTED)
         self.assertFalse(item.activation_ready)
         self.assertFalse(item.body_read_allowed)
+
+    def test_approved_source_remains_selected_and_body_read_denied(self) -> None:
+        self._write_index(status="APPROVED")
+        selected = self._packet().items[0]
+        requested = self._packet(body_read_requested=True).items[0]
+        self.assertEqual(selected.policy_state, STATE_SELECTED)
+        self.assertFalse(selected.activation_ready)
+        self.assertFalse(selected.body_read_allowed)
+        self.assertEqual(requested.policy_state, STATE_BODY_READ_DENIED)
+        self.assertFalse(requested.body_read_allowed)
 
     def test_body_read_is_denied_when_activation_not_ready(self) -> None:
         self._write_index(certification_state="PENDING")

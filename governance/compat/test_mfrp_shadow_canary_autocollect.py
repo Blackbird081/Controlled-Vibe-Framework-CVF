@@ -138,6 +138,25 @@ class ReceiptCandidateDiscoveryTests(unittest.TestCase):
         with mock.patch.object(autocollect, 'generate_current_receipt', return_value=(current, 'parent-sha')):
             self.assertEqual(autocollect.find_receipt_candidate('trusted-sha', 'disclosure-sha'), (current, 'parent-sha'))
 
+    def test_validated_receipts_get_distinct_immutable_snapshot_paths(self):
+        commit = 'a' * 40
+        first = _build_fresh_real_receipt('snapshot-one', commit, commit)
+        second = _build_fresh_real_receipt('snapshot-two', commit, commit)
+        first_path = autocollect.receipt_snapshot.preserve(first['path'], self._scratch, commit, first['payload']['receiptDigest'])
+        second_path = autocollect.receipt_snapshot.preserve(second['path'], self._scratch, commit, second['payload']['receiptDigest'])
+        self.assertNotEqual(first_path, second_path)
+        self.assertEqual(first_path.read_bytes(), first['path'].read_bytes())
+        self.assertEqual(second_path.read_bytes(), second['path'].read_bytes())
+
+    def test_receipt_snapshot_collision_fails_closed(self):
+        commit = 'b' * 40
+        fixture = _build_fresh_real_receipt('snapshot-collision', commit, commit)
+        autocollect.receipt_snapshot.preserve(fixture['path'], self._scratch, commit, fixture['payload']['receiptDigest'])
+        fixture['path'].write_bytes(fixture['path'].read_bytes() + b'\n')
+        with self.assertRaises(autocollect.receipt_snapshot.ReceiptSnapshotUnsafe) as ctx:
+            autocollect.receipt_snapshot.preserve(fixture['path'], self._scratch, commit, fixture['payload']['receiptDigest'])
+        self.assertEqual(ctx.exception.code, 'UNSAFE_RECEIPT_SNAPSHOT_COLLISION')
+
     def test_generation_receipts_trusted_commit_without_disclosure_sync_paths(self):
         target = self._scratch / autocollect.GENERATED_RECEIPT_NAME
 
@@ -149,6 +168,19 @@ class ReceiptCandidateDiscoveryTests(unittest.TestCase):
         self.assertEqual((path, parent), (target, 'parent-sha'))
         command = runner.call_args.args[0]
         self.assertEqual(command[-6:], ['--phase', 'pre-closure', '--base', 'parent-sha', '--head', 'trusted-sha'])
+
+    def test_receipt_generation_failure_preserves_named_failure_before_long_tail(self):
+        stdout = '[FAIL] session mode consistency (0.20s)\nroot cause line\n' + ('later pass output\n' * 1000) + 'VIOLATION: pre-closure blocked by 1 failing gate(s).\n'
+        stderr = 'non-fatal warning from subprocess\n'
+        failed = subprocess.CompletedProcess(['gate'], 1, stdout, stderr)
+        with mock.patch.object(autocollect, '_single_parent', return_value='parent-sha'), mock.patch.object(autocollect.subprocess, 'run', return_value=failed):
+            with self.assertRaises(autocollect.CollectionUnsafe) as ctx:
+                autocollect.generate_current_receipt('trusted-sha', 'disclosure-sha')
+        self.assertEqual(ctx.exception.code, 'UNSAFE_AUTORUN_RECEIPT_GENERATION_FAILED')
+        self.assertIn('[FAIL] session mode consistency', ctx.exception.detail)
+        self.assertIn('VIOLATION: pre-closure blocked', ctx.exception.detail)
+        self.assertIn('non-fatal warning from subprocess', ctx.exception.detail)
+        self.assertLessEqual(len(ctx.exception.detail), autocollect.observability.FAILURE_DIAGNOSTIC_LIMIT)
 
     def test_tampered_receipt_is_rejected(self):
         base = canary_core.git_head()
@@ -456,6 +488,42 @@ defect class is about. A genuine checkout under each setting is what the CRLF/LF
         self.assertEqual(reconciled_true['reconstructedFingerprint'], expected_fingerprint)
         self.assertEqual(reconciled_false['reconstructedFingerprint'], expected_fingerprint)
         self.assertEqual(primary_receipt['committedEvidence']['fingerprint'], secondary_receipt['committedEvidence']['fingerprint'])
+
+    def test_real_producer_binds_multifile_markdown_crlf_checkout(self):
+        """A documentation-shaped range with several CRLF checkout files
+        must retain the committedEvidence binding through the real producer.
+        This is the relevant shape of the NCR R1/S01 receipt incident.
+        """
+        self._git('config', 'core.autocrlf', 'true')
+        paths = (
+            'docs/baselines/packet.md',
+            'docs/reference/agent_system_skills/packages/review/SKILL.md',
+            'docs/reviews/completion.md',
+        )
+        for path in paths:
+            self._write(path, b'base\r\n')
+        base = self._commit('base documentation')
+        for path in paths:
+            self._write(path, b'line one\r\nline two\r\n')
+        head = self._commit('material documentation')
+        self._git('rm', '-q', '-f', '--', *paths)
+        self._git('checkout', 'HEAD', '--', *paths)
+        for path in paths:
+            self.assertEqual((self._repo / path).read_bytes(), b'line one\r\nline two\r\n')
+            self.assertEqual(
+                self._git_bytes('cat-file', 'blob', self._git('rev-parse', f'{head}:{path}')),
+                b'line one\nline two\n',
+            )
+        self._write(paths[1], b'line one\r\nline two\n')
+        self._git('add', '--', paths[1])
+        self.assertEqual(self._git('status', '--short'), '')
+        receipt = self._run_real_pre_closure(base, head)
+        self.assertIn('committedEvidence', receipt)
+        reconciled = self._reconcile_through_real_collector(receipt, head)
+        self.assertEqual(
+            reconciled['reconstructedFingerprint'],
+            receipt['committedEvidence']['fingerprint'],
+        )
 
     def _run_in_fresh_clone_with_autocrlf(self, autocrlf_value: str, base: str, head: str) -> dict:
         """Clone this class's primary fixture repo into a fresh second repository configured with the requested core.autocrlf value *before* the clone's own
@@ -863,6 +931,58 @@ touched."""
         self.assertEqual(len(autocollect._candidate_receipt_files()), 0)
         status = autocollect.run_collection(canary_core.TRUSTED_COMMIT)
         self.assertEqual(status, 'P4-C1: SKIPPED_NO_ELIGIBLE_CANDIDATE')
+
+    def test_material_disclosure_defers_retry_without_consuming_candidate(self):
+        trusted = 'b' * 40
+        prior = autocollect.observability.record_attempt({}, autocollect.observability.make_attempt('a' * 40, trusted, outcome='UNSAFE_AUTORUN_RECEIPT_GENERATION_FAILED', candidate_count=1, eligible=True, selected_path='docs/reviews/retry.md'))
+        autocollect._atomic_write_json(self._journal, prior)
+        empty = autocollect.observability.SelectionResult(None, 0, 'SKIPPED_NO_ELIGIBLE_CANDIDATE', ())
+        with mock.patch.object(autocollect, '_single_parent', return_value='c' * 40), mock.patch.object(autocollect, '_discover_candidate', return_value=empty), mock.patch.object(autocollect, '_is_session_sync_disclosure', return_value=False):
+            status = autocollect.run_collection('d' * 40)
+        self.assertEqual(status, 'P4-C1: SKIPPED_NO_ELIGIBLE_CANDIDATE')
+        journal = autocollect._load_pending_journal()
+        self.assertEqual(journal['retryAttemptCount'], 0)
+        self.assertEqual(journal['retryableCount'], 1)
+        self.assertFalse(autocollect.safety_marker_present())
+
+    def test_empty_session_sync_commit_consumes_one_bounded_retry_candidate(self):
+        trusted = 'b' * 40
+        prior = autocollect.observability.record_attempt({}, autocollect.observability.make_attempt('a' * 40, trusted, outcome='UNSAFE_AUTORUN_RECEIPT_GENERATION_FAILED', candidate_count=1, eligible=True, selected_path='docs/reviews/retry.md'))
+        autocollect._atomic_write_json(self._journal, prior)
+        candidate = autocollect.observability.EnrollmentCandidate(path='docs/reviews/retry.md', trusted_outcome='CLOSED_PASS_BOUNDED', phase='REVIEW', hard_obligation_locator='retry#status', hard_obligation_pattern='Status: CLOSED_PASS_BOUNDED', source_authority_locator='docs/work_orders/retry.md', origin='COMPLETION_REVIEW', priority=1)
+        empty = autocollect.observability.SelectionResult(None, 0, 'SKIPPED_NO_ELIGIBLE_CANDIDATE', ())
+        retry = autocollect.observability.SelectionResult(candidate, 1, 'SELECTED', (candidate.path,))
+        with mock.patch.object(autocollect, '_single_parent', return_value='c' * 40), mock.patch.object(autocollect, '_discover_candidate', side_effect=[empty, retry]), mock.patch.object(autocollect, '_is_session_sync_disclosure', return_value=True), mock.patch.object(autocollect, '_select_replayable_retry_attempt', return_value=prior['attempts'][0]), mock.patch.object(autocollect, '_read_committed_text', return_value=None):
+            status = autocollect.run_collection('d' * 40)
+        self.assertEqual(status, 'P4-C1: SKIPPED_UNREADABLE_COMMITTED_RETURN')
+        journal = autocollect._load_pending_journal()
+        attempt = next(item for item in journal['attempts'] if item['disclosureCommit'] == 'd' * 40)
+        self.assertEqual(attempt['retryOfTrustedCommit'], trusted)
+        self.assertEqual(journal['retryAttemptCount'], 1)
+        self.assertEqual(journal['retryableCount'], 0)
+        self.assertEqual(journal['eligibleCount'], 1)
+
+    def test_retry_selection_skips_unreplayable_newest_candidate(self):
+        newest = {'trustedCommit': 'a' * 40}
+        older = {'trustedCommit': 'b' * 40}
+        with mock.patch.object(autocollect.observability, 'retryable_attempts', return_value=(newest, older)), mock.patch.object(autocollect, '_retry_is_replayable', side_effect=[False, True]):
+            selected = autocollect._select_replayable_retry_attempt({})
+        self.assertIs(selected, older)
+
+    def test_retry_rejected_by_current_gate_is_nonblocking_evidence(self):
+        trusted = 'b' * 40
+        prior = autocollect.observability.record_attempt({}, autocollect.observability.make_attempt('a' * 40, trusted, outcome='UNSAFE_AUTORUN_RECEIPT_GENERATION_FAILED', candidate_count=1, eligible=True, selected_path='docs/reviews/retry.md'))
+        autocollect._atomic_write_json(self._journal, prior)
+        candidate = autocollect.observability.EnrollmentCandidate(path='docs/reviews/retry.md', trusted_outcome='CLOSED_PASS_BOUNDED', phase='REVIEW', hard_obligation_locator='retry#status', hard_obligation_pattern='Status: CLOSED_PASS_BOUNDED', source_authority_locator='docs/work_orders/retry.md', origin='COMPLETION_REVIEW', priority=1)
+        empty = autocollect.observability.SelectionResult(None, 0, 'SKIPPED_NO_ELIGIBLE_CANDIDATE', ())
+        retry = autocollect.observability.SelectionResult(candidate, 1, 'SELECTED', (candidate.path,))
+        order = {'orderOfRecordStatus': 'PROVEN'}
+        with mock.patch.object(autocollect, '_single_parent', return_value='c' * 40), mock.patch.object(autocollect, '_discover_candidate', side_effect=[empty, retry]), mock.patch.object(autocollect, '_is_session_sync_disclosure', return_value=True), mock.patch.object(autocollect, '_select_replayable_retry_attempt', return_value=prior['attempts'][0]), mock.patch.object(autocollect, '_read_committed_text', return_value='docType: completion_review\nStatus: CLOSED_PASS_BOUNDED'), mock.patch.object(autocollect.canary_core, 'verify_trusted_record_order', return_value=order), mock.patch.object(autocollect, 'find_receipt_candidate', side_effect=autocollect.CollectionUnsafe('UNSAFE_AUTORUN_RECEIPT_GENERATION_FAILED', 'current gate rejected historical artifact')):
+            status = autocollect.run_collection('d' * 40)
+        self.assertEqual(status, 'P4-C1: RETRY_REJECTED_CURRENT_GATE')
+        self.assertFalse(autocollect.safety_marker_present())
+        journal = autocollect._load_pending_journal()
+        self.assertEqual(journal['attempts'][-1]['outcome'], 'RETRY_REJECTED_CURRENT_GATE')
 
     def test_successful_collection_never_writes_tracked_paths(self):
         """An honestly ineligible historical run touches no tracked path."""

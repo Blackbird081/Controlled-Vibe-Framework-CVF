@@ -26,6 +26,9 @@ class DispatchPacketAuthorFastGateTests(unittest.TestCase):
                 "structural-completeness",
                 "authority-and-encoding",
                 "agent-operation-trace",
+                "dispatch-prompt-envelope",
+                "automation-assist-diagnostics",
+                "independent-probe-admission",
             ],
         )
 

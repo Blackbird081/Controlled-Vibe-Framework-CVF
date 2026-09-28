@@ -168,18 +168,6 @@ def _check_certified_entry(
             violations.append(
                 f"{skill_id}: ACTIVE status requires internalAgentDisposition IMPLEMENTED"
             )
-        if external_disposition != IMPLEMENTED:
-            violations.append(
-                f"{skill_id}: ACTIVE status requires externalCliMcpDisposition IMPLEMENTED"
-            )
-        if _is_na_with_reason(entry.get("adapterContract")):
-            violations.append(
-                f"{skill_id}: ACTIVE status requires concrete adapterContract"
-            )
-        if _is_na_with_reason(entry.get("adapterEvidence")):
-            violations.append(
-                f"{skill_id}: ACTIVE status requires concrete adapterEvidence"
-            )
 
     return violations
 

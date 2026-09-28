@@ -508,9 +508,7 @@ class WorktreeMatchesCommittedTargetTests(_TempRepoTestCase):
     def test_crlf_checkout_representation_still_admits(self):
         """A worktree file whose bytes differ only by core.autocrlf's CRLF
         checkout conversion from the committed LF blob must still be
-        treated as matching -- git hash-object applies the same clean
-        filter git add would, so this is Git's own canonical equivalence,
-        not a hand-rolled normalization that could mask real drift.
+        treated as matching through the narrow metadata-backed exception.
         """
         self._git("config", "core.autocrlf", "true")
         self._write("evidence.txt", b"line1\r\nline2\r\n")
@@ -528,6 +526,48 @@ class WorktreeMatchesCommittedTargetTests(_TempRepoTestCase):
             commit_a, commit_b, cwd=self._repo
         )
         self.assertTrue(matches, reason)
+
+    def test_mixed_lf_crlf_worktree_matches_lf_blob_with_checkout_metadata(self):
+        self._git("config", "core.autocrlf", "true")
+        self._write("evidence.md", b"base\r\n")
+        commit_a = self._commit("A")
+        self._write("evidence.md", b"line1\r\nline2\r\nline3\r\n")
+        commit_b = self._commit("B")
+        self._write("evidence.md", b"line1\r\nline2\nline3\r\n")
+
+        matches, reason = cef.verify_worktree_matches_committed_target(
+            commit_a, commit_b, cwd=self._repo
+        )
+        self.assertTrue(matches, reason)
+
+    def test_crlf_shape_without_checkout_metadata_is_not_misreported_as_semantic_drift(self):
+        self._git("config", "core.autocrlf", "false")
+        self._write("evidence.txt", b"base\n")
+        commit_a = self._commit("A")
+        self._write("evidence.txt", b"line1\nline2\n")
+        commit_b = self._commit("B")
+        self._write("evidence.txt", b"line1\r\nline2\r\n")
+
+        matches, reason = cef.verify_worktree_matches_committed_target(
+            commit_a, commit_b, cwd=self._repo
+        )
+        self.assertFalse(matches, reason)
+        self.assertIn("CRLF-shaped bytes lack", reason)
+        self.assertIn("evidence.txt", reason)
+
+    def test_crlf_shape_with_binary_control_bytes_reports_text_ineligibility(self):
+        self._git("config", "core.autocrlf", "true")
+        self._write("evidence.bin", b"base\x00\n")
+        commit_a = self._commit("A")
+        self._write("evidence.bin", b"line1\x00\nline2\n")
+        commit_b = self._commit("B")
+        self._write("evidence.bin", b"line1\x00\r\nline2\r\n")
+
+        matches, reason = cef.verify_worktree_matches_committed_target(
+            commit_a, commit_b, cwd=self._repo
+        )
+        self.assertFalse(matches, reason)
+        self.assertIn("binary/control bytes", reason)
 
     def test_binary_semantic_change_at_head_target_is_rejected(self):
         """A binary file whose worktree bytes differ from the committed

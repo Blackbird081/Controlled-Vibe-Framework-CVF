@@ -18,6 +18,8 @@ from run_assf_active_resolver import (
     DENIED_EXTERNAL_ADAPTER_NOT_IMPLEMENTED,
     DENIED_MISSING_TRUTH_PACKET,
     DENIED_NOT_RUNTIME_ELIGIBLE,
+    DENIED_SOURCE_NOT_ACTIVE,
+    DENIED_TRUTH_NOT_APPROVED,
     READY_DECISION,
     build_active_resolver_packet,
 )
@@ -46,14 +48,14 @@ class ActiveResolverTests(unittest.TestCase):
     def tearDown(self) -> None:
         shutil.rmtree(self.temp_dir)
 
-    def _write_index(self, *, certification_state: str = "CERTIFIED") -> None:
+    def _write_index(self, *, certification_state: str = "CERTIFIED", status: str = "ACTIVE") -> None:
         payload = {
             "skills": [
                 {
                     "skillId": "ready-skill",
                     "name": "Ready Skill",
                     "version": "0.1.0",
-                    "status": "APPROVED",
+                    "status": status,
                     "canonicalRoot": "docs/reference/agent_system_skills/packages/ready-skill/SKILL.md",
                     "riskProfile": "R1",
                     "riskCeiling": "R1",
@@ -107,6 +109,61 @@ class ActiveResolverTests(unittest.TestCase):
         self.assertIn("--include-instruction-bodies", item.loader_command or "")
         self.assertIsNone(item.instruction_body if hasattr(item, "instruction_body") else None)
 
+    def test_approved_status_with_approved_truth_denies_source_not_active(self) -> None:
+        # Root-contract regression: a runtime-eligible, truth-approved package
+        # whose source lifecycle status is APPROVED (not ACTIVE) must be
+        # denied, not marked ACTIVATION_READY. Mirrors the P5/P6 phase-gate
+        # boundary already enforced in the Skill Control Plane inventory.
+        self._write_index(status="APPROVED")
+        packet = build_active_resolver_packet(
+            index_path=self.index_path,
+            truth_index_path=self.truth_index_path,
+            repo_root=self.repo_root,
+            skill_id="ready-skill",
+        )
+        item = packet.items[0]
+        self.assertEqual(item.activation_decision, DENIED_SOURCE_NOT_ACTIVE)
+        self.assertIn("SOURCE_STATUS_NOT_ACTIVE", item.decision_reasons)
+        self.assertIsNone(item.loader_command)
+
+    def test_active_status_with_approved_truth_is_ready(self) -> None:
+        self._write_index(status="ACTIVE")
+        packet = build_active_resolver_packet(
+            index_path=self.index_path,
+            truth_index_path=self.truth_index_path,
+            repo_root=self.repo_root,
+            skill_id="ready-skill",
+        )
+        item = packet.items[0]
+        self.assertEqual(item.activation_decision, READY_DECISION)
+
+    def test_invalid_truth_verification_mode_denies_not_approved(self) -> None:
+        self.truth_index_path.write_text(
+            json.dumps(
+                {
+                    "entries": [
+                        {
+                            "skillId": "ready-skill",
+                            "truthStatus": "approved",
+                            "verificationMode": "RELAXED",
+                            "runtimeEligibility": "RUNTIME_PACKAGE_ELIGIBLE",
+                        }
+                    ],
+                    "schemaVersion": "0.1.0",
+                }
+            ),
+            encoding="utf-8",
+        )
+        packet = build_active_resolver_packet(
+            index_path=self.index_path,
+            truth_index_path=self.truth_index_path,
+            repo_root=self.repo_root,
+            skill_id="ready-skill",
+        )
+        item = packet.items[0]
+        self.assertEqual(item.activation_decision, DENIED_TRUTH_NOT_APPROVED)
+        self.assertIn("TRUTH_VERIFICATION_NOT_STRICT", item.decision_reasons)
+
     def test_ready_packet_has_decision_receipt_not_usage_receipt(self) -> None:
         packet = build_active_resolver_packet(
             index_path=self.index_path,
@@ -145,6 +202,19 @@ class ActiveResolverTests(unittest.TestCase):
             "CERTIFICATION_NOT_CERTIFIED",
             packet.items[0].runtime_ineligibility_reasons,
         )
+
+    def test_runtime_ineligible_without_truth_still_denies_runtime_first(self) -> None:
+        self._write_index(certification_state="PENDING")
+        self.truth_index_path.write_text(
+            json.dumps({"entries": [], "schemaVersion": "0.1.0"}),
+            encoding="utf-8",
+        )
+        packet = build_active_resolver_packet(
+            index_path=self.index_path,
+            truth_index_path=self.truth_index_path,
+            repo_root=self.repo_root,
+        )
+        self.assertEqual(packet.items[0].activation_decision, DENIED_NOT_RUNTIME_ELIGIBLE)
 
     def test_external_consumer_denied_until_adapter(self) -> None:
         packet = build_active_resolver_packet(

@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cvf.downstreamContinuityContract@1.0.0 pinned downstream project schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "statePath",
+    "memoryPath",
+    "implementationPath",
+    "handoffDir",
+    "stateSchemaVersions",
+    "implementationSchemaVersions",
+    "phaseModel",
+    "modePhaseMap",
+    "stateRequired",
+    "stateOptional",
+    "implementationRequired",
+    "implementationOptional",
+    "memorySection",
+    "memoryLabels",
+    "handoffSection",
+    "handoffRequiredLabels",
+    "handoffOptionalLabels",
+    "extensionPrefixes"
+  ],
+  "properties": {
+    "id": {
+      "const": "cvf.downstreamContinuityContract@1.0.0"
+    },
+    "statePath": {
+      "const": "CVF_SESSION/ACTIVE_SESSION_STATE.json"
+    },
+    "memoryPath": {
+      "const": "CVF_SESSION_MEMORY.md"
+    },
+    "implementationPath": {
+      "const": "IMPLEMENTATION_STATUS.json"
+    },
+    "handoffDir": {
+      "type": "string"
+    },
+    "stateSchemaVersions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "implementationSchemaVersions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "phaseModel": {
+      "const": [
+        "INTAKE",
+        "DESIGN",
+        "SPEC",
+        "WORK_ORDER",
+        "BUILD",
+        "REVIEW",
+        "FREEZE"
+      ]
+    },
+    "modePhaseMap": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": [
+          "INTAKE",
+          "DESIGN",
+          "SPEC",
+          "WORK_ORDER",
+          "BUILD",
+          "REVIEW",
+          "FREEZE"
+        ]
+      },
+      "description": "REVIEW_PENDING maps to REVIEW; every phase maps to itself."
+    },
+    "stateRequired": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "stateOptional": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "implementationRequired": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "implementationOptional": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "memorySection": {
+      "const": "Current Truth"
+    },
+    "memoryLabels": {
+      "const": [
+        "Contract",
+        "Current mode",
+        "Active phase",
+        "Active handoff"
+      ]
+    },
+    "handoffSection": {
+      "const": "Current State"
+    },
+    "handoffRequiredLabels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "handoffOptionalLabels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "extensionPrefixes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ import type { NextAuthConfig, Session, User } from "next-auth"
 import type { JWT } from "next-auth/jwt"
 import type { TeamRole } from "cvf-guard-contract/enterprise"
 import { findMockUserByUsername, normalizeDisplayName } from "@/lib/mock-enterprise-db"
+import { findOAuthIdentityBinding, isOAuthProviderId, parseOAuthIdentityBindings, type OAuthProviderId } from '@/lib/oauth-identity-profile'
 
 type AuthenticatedUser = User & {
   role: TeamRole;
@@ -18,6 +19,9 @@ type SessionUser = NonNullable<Session["user"]> & {
   userId?: string;
   orgId?: string;
   teamId?: string;
+  authSource?: 'local_mock' | 'oauth_bound';
+  oauthProvider?: OAuthProviderId;
+  oauthSubject?: string;
 };
 
 type AppJwt = JWT & {
@@ -25,6 +29,9 @@ type AppJwt = JWT & {
   userId?: string;
   orgId?: string;
   teamId?: string;
+  authSource?: 'local_mock' | 'oauth_bound';
+  oauthProvider?: OAuthProviderId;
+  oauthSubject?: string;
 };
 
 /**
@@ -43,9 +50,8 @@ function isAuthMockDefaultAllowedEnvironment(nodeEnv: string | undefined): boole
 /**
  * Pure Auth.js environment invariant validator. Test and development may
  * rely on the existing mock/default values. Any other environment must
- * supply non-empty `NEXTAUTH_SECRET`, `GITHUB_ID`, `GITHUB_SECRET`,
- * `GOOGLE_ID`, and `GOOGLE_SECRET`; this function throws before Auth.js
- * configuration may be treated as accepted when one or more are missing.
+ * select one OAuth provider and supply its non-empty client pair, a session
+ * secret, a callback origin, and at least one explicit CVF identity binding.
  */
 export function validateAuthEnvironmentInvariants(
   env: NodeJS.ProcessEnv = process.env,
@@ -54,13 +60,23 @@ export function validateAuthEnvironmentInvariants(
     return;
   }
 
-  const required = ["NEXTAUTH_SECRET", "GITHUB_ID", "GITHUB_SECRET", "GOOGLE_ID", "GOOGLE_SECRET"] as const;
-  const missing = required.filter((key) => !env[key]);
+  if (!isOAuthProviderId(env.CVF_OAUTH_PROVIDER)) {
+    throw new Error('Auth.js environment invariant violated outside test/development: CVF_OAUTH_PROVIDER must be github or google.');
+  }
+
+  const required = env.CVF_OAUTH_PROVIDER === 'github'
+    ? ['NEXTAUTH_SECRET', 'NEXTAUTH_URL', 'GITHUB_ID', 'GITHUB_SECRET']
+    : ['NEXTAUTH_SECRET', 'NEXTAUTH_URL', 'GOOGLE_ID', 'GOOGLE_SECRET'];
+  const missing = required.filter((key) => !env[key]?.trim());
 
   if (missing.length > 0) {
     throw new Error(
       `Auth.js environment invariant violated outside test/development: missing ${missing.join(", ")}.`,
     );
+  }
+  const bindings = parseOAuthIdentityBindings(env.CVF_OAUTH_IDENTITY_BINDINGS_JSON);
+  if (!bindings.some((binding) => binding.provider === env.CVF_OAUTH_PROVIDER)) {
+    throw new Error('Auth.js environment invariant violated outside test/development: selected provider has no CVF identity binding.');
   }
 }
 
@@ -69,23 +85,35 @@ validateAuthEnvironmentInvariants();
 
 export const authSecret = process.env.NEXTAUTH_SECRET || "cvf-enterprise-secret-mock-2026";
 
+const localMockAllowed = isAuthMockDefaultAllowedEnvironment(process.env.NODE_ENV);
+const selectedOAuthProvider = process.env.CVF_OAUTH_PROVIDER;
+const oauthProviders: NextAuthConfig['providers'] = localMockAllowed || selectedOAuthProvider === 'github'
+  ? [GitHubProvider({
+      clientId: process.env.GITHUB_ID || 'mock-github-id',
+      clientSecret: process.env.GITHUB_SECRET || 'mock-github-secret',
+    })]
+  : [];
+if (localMockAllowed || selectedOAuthProvider === 'google') {
+  oauthProviders.push(GoogleProvider({
+    clientId: process.env.GOOGLE_ID || 'mock-google-id',
+    clientSecret: process.env.GOOGLE_SECRET || 'mock-google-secret',
+  }));
+}
+
 export const nextAuthConfig = {
   providers: [
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID ?? "mock-github-id",
-      clientSecret: process.env.GITHUB_SECRET ?? "mock-github-secret",
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_ID ?? "mock-google-id",
-      clientSecret: process.env.GOOGLE_SECRET ?? "mock-google-secret",
-    }),
-    CredentialsProvider({
+    ...oauthProviders,
+    ...(localMockAllowed ? [CredentialsProvider({
       name: "Mock Enterprise Login",
       credentials: {
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
+        // Mock enterprise users and the legacy admin fallback are local-only.
+        // A configured Auth.js secret/OAuth client must not make these demo
+        // credentials usable in a production session.
+        if (!isAuthMockDefaultAllowedEnvironment(process.env.NODE_ENV)) return null;
         if (!credentials?.username || !credentials?.password) return null;
 
         const username = credentials.username as string;
@@ -122,18 +150,56 @@ export const nextAuthConfig = {
 
         return null;
       }
-    })
+    })] : [])
   ],
   callbacks: {
-    jwt({ token, user }) {
+    signIn({ account }) {
+      if (account?.provider === 'credentials') return localMockAllowed;
+      return Boolean(findOAuthIdentityBinding(
+        process.env.CVF_OAUTH_IDENTITY_BINDINGS_JSON,
+        account?.provider,
+        account?.providerAccountId,
+      ));
+    },
+    jwt({ token, user, account }) {
+      const appToken = token as AppJwt;
       if (user) {
-        const appToken = token as AppJwt;
-        const authenticatedUser = user as AuthenticatedUser;
-        token.name = normalizeDisplayName(authenticatedUser.name) ?? token.name;
-        appToken.role = authenticatedUser.role ?? "developer";
-        appToken.userId = authenticatedUser.id;
-        appToken.orgId = authenticatedUser.orgId ?? "org_cvf";
-        appToken.teamId = authenticatedUser.teamId ?? "team_eng";
+        token.name = normalizeDisplayName(user.name) ?? token.name;
+        if (account?.provider === 'credentials' && localMockAllowed) {
+          const authenticatedUser = user as AuthenticatedUser;
+          appToken.role = authenticatedUser.role;
+          appToken.userId = authenticatedUser.id;
+          appToken.orgId = authenticatedUser.orgId;
+          appToken.teamId = authenticatedUser.teamId;
+          appToken.authSource = 'local_mock';
+        } else {
+          const binding = findOAuthIdentityBinding(
+            process.env.CVF_OAUTH_IDENTITY_BINDINGS_JSON,
+            account?.provider,
+            account?.providerAccountId,
+          );
+          if (!binding) return null;
+          appToken.role = binding.role;
+          appToken.userId = binding.userId;
+          appToken.orgId = binding.orgId;
+          appToken.teamId = binding.teamId;
+          appToken.authSource = 'oauth_bound';
+          appToken.oauthProvider = binding.provider;
+          appToken.oauthSubject = binding.providerAccountId;
+        }
+      } else if (appToken.authSource === 'oauth_bound') {
+        const binding = findOAuthIdentityBinding(
+          process.env.CVF_OAUTH_IDENTITY_BINDINGS_JSON,
+          appToken.oauthProvider,
+          appToken.oauthSubject,
+        );
+        if (!binding) return null;
+        appToken.role = binding.role;
+        appToken.userId = binding.userId;
+        appToken.orgId = binding.orgId;
+        appToken.teamId = binding.teamId;
+      } else if (!localMockAllowed || appToken.authSource !== 'local_mock') {
+        return null;
       }
       return token;
     },
@@ -142,10 +208,13 @@ export const nextAuthConfig = {
         const sessionUser = session.user as SessionUser;
         const appToken = token as AppJwt;
         sessionUser.name = normalizeDisplayName(token.name) ?? sessionUser.name;
-        sessionUser.role = appToken.role ?? "developer";
+        sessionUser.role = appToken.role;
         sessionUser.userId = appToken.userId;
         sessionUser.orgId = appToken.orgId;
         sessionUser.teamId = appToken.teamId;
+        sessionUser.authSource = appToken.authSource;
+        sessionUser.oauthProvider = appToken.oauthProvider;
+        sessionUser.oauthSubject = appToken.oauthSubject;
       }
       return session;
     }

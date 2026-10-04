@@ -17,6 +17,7 @@ EVIDENCE_SCHEMA = "cvf.workOrderAcceptanceEvidence@1.0.0"
 LEDGER_RE = re.compile(r"```acceptance-ledger-json\s*(\{.*?\})\s*```", re.S)
 EVIDENCE_RE = re.compile(r"```acceptance-evidence-json\s*(\{.*?\})\s*```", re.S)
 STATUS_RE = re.compile(r"(?m)^Status:\s*(COMPLETE_PENDING_REVIEW|BLOCKED_WITH_REASON)\s*$")
+FAST_GATE_RE = re.compile(r"(?m)^requiredGate:\s*[^\n]*\brun_worker_return_fast_gate\.py\b")
 
 
 def _path(value: Any) -> str | None:
@@ -128,6 +129,14 @@ def validate_work_order(text: str) -> tuple[dict[str, Any] | None, list[str]]:
         if not isinstance(required, list) or not required or any(pid not in proof_ids for pid in required):
             issues.append(f"requirement {rid!r} has missing or unknown requiredProofIds")
     return ledger, issues
+
+
+def validate_dispatch_ledger(text: str) -> list[str]:
+    """Require a valid ledger before dispatch when the worker fast gate is bound."""
+    if not FAST_GATE_RE.search(text) and "```acceptance-ledger-json" not in text:
+        return []
+    _, issues = validate_work_order(text)
+    return issues
 
 
 def validate_return(work_order_text: str, return_text: str, observed_paths: set[str] | None = None) -> list[str]:

@@ -35,6 +35,20 @@ class WorkOrderDispatchQualityTests(unittest.TestCase):
         _, issues = MODULE.validate_acceptance_ledger(text)
         self.assertTrue(any("requirementId must be unique" in issue for issue in issues), issues)
 
+    def test_changed_fast_gate_work_order_without_ledger_fails_authoring(self) -> None:
+        path = "docs/work_orders/CVF_FAST_GATE_LEDGER_TEST.md"
+        self._write(path, "requiredGate: `python governance/compat/run_worker_return_fast_gate.py`\n")
+        initial = {"checkedFiles": [path], "violations": [], "markerViolationCount": 0}
+        with (
+            patch.object(MODULE, "REPO_ROOT", self.repo_root),
+            patch.object(MODULE, "_resolve_range", return_value=("base", "head", "test")),
+            patch.object(MODULE, "_get_changed", return_value={path: {"A"}}),
+            patch.object(MODULE, "_classify", return_value=initial),
+        ):
+            report, _, _, _ = MODULE._run_check("base", "head")
+        self.assertFalse(report["compliant"])
+        self.assertTrue(any("found 0" in issue for item in report["violations"] for issue in item["issues"]))
+
     def _write(self, rel_path: str, text: str) -> None:
         path = self.repo_root / rel_path
         path.parent.mkdir(parents=True, exist_ok=True)

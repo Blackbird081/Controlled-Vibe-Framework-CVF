@@ -12,6 +12,11 @@ import sys
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+try:
+    from check_work_order_acceptance_ledger import validate_dispatch_ledger
+except ModuleNotFoundError:
+    from governance.compat.check_work_order_acceptance_ledger import validate_dispatch_ledger
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BOOTSTRAP_PATH = "CVF_SESSION/ACTIVE_SESSION_BOOTSTRAP_READ_MODEL.json"
 ACTIVE_STATE_PATH = "CVF_SESSION/ACTIVE_SESSION_STATE.json"
@@ -188,6 +193,8 @@ def evaluate(active_work_order: str, head: str = "HEAD") -> dict[str, Any]:
             _add(violations, "DR-04", "continuity sync is not an ancestor of the requested head")
 
     work_order_text = _read(work_order)
+    for issue in validate_dispatch_ledger(work_order_text):
+        _add(violations, "DR-07", issue)
     batch_match = BATCH_RE.search(work_order_text)
     batch_id = batch_match.group(1) if batch_match else ""
     handoff_text = _read(active_handoff) if active_handoff else ""

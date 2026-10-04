@@ -47,6 +47,15 @@ operational session logs.
 
 ## Protocol
 
+Project findings use the shared `docs/reviews/learnings/` home and conditional
+discovery under `downstream_gate_profile/CVF_PROJECT_LEARNING_LOOP_STANDARD.md`.
+Local parent admission requires source confidence, reusable mechanism, canonical
+owner/dedup comparison, incremental control value and bounded proof. Existing
+F2G classes/lanes/dispositions below remain authoritative. Track parent decision,
+implementation, returned receipt and source-project application independently;
+parent acceptance never implies application. Operator-parked adoption remains
+`PARKED_BY_OPERATOR`. Portable `docs/learning_intake/` remains generation-only.
+
 Any applicable artifact that contains a finding section must include:
 
 - `## Finding-To-Governance Learning Disposition`

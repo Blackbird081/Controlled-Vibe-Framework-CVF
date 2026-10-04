@@ -17,6 +17,7 @@ test('Artifacts page creates an English HTML review packet without provider call
           filename: 'customer-insight-review.html',
           receiptAnchor: 'receipt-customer-insight',
           generatedAt: '2026-05-16T10:00:00.000Z',
+          governanceState: 'DRAFT_UNACCEPTED',
           verification: [
             { label: 'Source reference recorded', passed: true, detail: 'docs/reviews/customer-insight.md' },
             { label: 'Review boundary visible', passed: true, detail: 'HTML review packet only.' },
@@ -42,6 +43,8 @@ test('Artifacts page creates an English HTML review packet without provider call
   await expect(page.getByText('#receipt-customer-insight')).toBeVisible();
   await expect(page.getByText('Source reference recorded')).toBeVisible();
   await expect(page.getByTitle('Preview')).toBeVisible();
+  await expect(page.getByTestId('artifact-draft-state')).toContainText('DRAFT / UNACCEPTED');
+  await expect(page.getByTestId('governance-receipt-absent-note')).toBeVisible();
 
   const artifactText = await page.getByTestId('artifact-export-panel').textContent();
   expect(artifactText).toContain('Review Packet Export');

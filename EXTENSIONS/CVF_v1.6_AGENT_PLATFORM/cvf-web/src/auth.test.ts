@@ -63,11 +63,15 @@ describe('validateAuthEnvironmentInvariants', () => {
       validateAuthEnvironmentInvariants(
         envWith({
           NODE_ENV: 'production',
+          CVF_OAUTH_PROVIDER: 'github',
+          CVF_OAUTH_IDENTITY_BINDINGS_JSON: JSON.stringify([{
+            provider: 'github', providerAccountId: 'subject-1', userId: 'cvf-user-1',
+            role: 'reviewer', orgId: 'org_cvf', teamId: 'team_sec',
+          }]),
           NEXTAUTH_SECRET: 'real-secret',
+          NEXTAUTH_URL: 'https://cvf.example.test',
           GITHUB_ID: 'real-github-id',
           GITHUB_SECRET: 'real-github-secret',
-          GOOGLE_ID: 'real-google-id',
-          GOOGLE_SECRET: 'real-google-secret',
         }),
       ),
     ).not.toThrow();
@@ -78,15 +82,40 @@ describe('validateAuthEnvironmentInvariants', () => {
       validateAuthEnvironmentInvariants(
         envWith({
           NODE_ENV: 'production',
+          CVF_OAUTH_PROVIDER: 'github',
           NEXTAUTH_SECRET: 'real-secret',
         }),
       ),
-    ).toThrow(/GITHUB_ID.*GITHUB_SECRET.*GOOGLE_ID.*GOOGLE_SECRET/);
+    ).toThrow(/NEXTAUTH_URL.*GITHUB_ID.*GITHUB_SECRET/);
+  });
+
+  it('rejects an invalid provider or a provider without an explicit CVF binding', () => {
+    expect(() => validateAuthEnvironmentInvariants(envWith({
+      NODE_ENV: 'production', CVF_OAUTH_PROVIDER: 'other',
+    }))).toThrow(/CVF_OAUTH_PROVIDER/);
+    expect(() => validateAuthEnvironmentInvariants(envWith({
+      NODE_ENV: 'production', CVF_OAUTH_PROVIDER: 'google',
+      NEXTAUTH_SECRET: 'real-secret', NEXTAUTH_URL: 'https://cvf.example.test',
+      GOOGLE_ID: 'real-google-id', GOOGLE_SECRET: 'real-google-secret',
+    }))).toThrow(/no CVF identity binding/);
+  });
+
+  it('accepts Google alone when its client pair and exact identity binding are configured', () => {
+    expect(() => validateAuthEnvironmentInvariants(envWith({
+      NODE_ENV: 'production', CVF_OAUTH_PROVIDER: 'google',
+      CVF_OAUTH_IDENTITY_BINDINGS_JSON: JSON.stringify([{
+        provider: 'google', providerAccountId: 'google-subject-1', userId: 'cvf-user-2',
+        role: 'viewer', orgId: 'org_cvf', teamId: 'team_ops',
+      }]),
+      NEXTAUTH_SECRET: 'synthetic-session-secret', NEXTAUTH_URL: 'https://cvf.example.test',
+      GOOGLE_ID: 'synthetic-client-id', GOOGLE_SECRET: 'synthetic-client-secret',
+    }))).not.toThrow();
   });
 
   it('rejects module initialization before Auth.js accepts defaults outside test/development', async () => {
     vi.resetModules();
     vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('CVF_OAUTH_PROVIDER', 'github');
     vi.stubEnv('NEXTAUTH_SECRET', '');
     vi.stubEnv('GITHUB_ID', '');
     vi.stubEnv('GITHUB_SECRET', '');
@@ -95,6 +124,32 @@ describe('validateAuthEnvironmentInvariants', () => {
 
     try {
       await expect(import('./auth')).rejects.toThrow(/Auth\.js environment invariant violated/);
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
+  it('registers only the selected production OAuth provider', async () => {
+    vi.resetModules();
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('CVF_OAUTH_PROVIDER', 'github');
+    vi.stubEnv('CVF_OAUTH_IDENTITY_BINDINGS_JSON', JSON.stringify([{
+      provider: 'github', providerAccountId: 'subject-1', userId: 'cvf-user-1',
+      role: 'reviewer', orgId: 'org_cvf', teamId: 'team_sec',
+    }]));
+    vi.stubEnv('NEXTAUTH_SECRET', 'synthetic-session-secret');
+    vi.stubEnv('NEXTAUTH_URL', 'https://cvf.example.test');
+    vi.stubEnv('GITHUB_ID', 'synthetic-client-id');
+    vi.stubEnv('GITHUB_SECRET', 'synthetic-client-secret');
+    vi.stubEnv('GOOGLE_ID', '');
+    vi.stubEnv('GOOGLE_SECRET', '');
+
+    try {
+      const productionAuth = await import('./auth');
+      expect(productionAuth.nextAuthConfig.providers).toHaveLength(1);
+      expect(productionAuth.nextAuthConfig.callbacks.signIn({
+        account: { provider: 'github', providerAccountId: 'other-subject' },
+      } as never)).toBe(false);
     } finally {
       vi.unstubAllEnvs();
     }
@@ -157,5 +212,62 @@ describe('legacy admin credentials fallback', () => {
     });
 
     expect(result).toBeNull();
+  });
+
+  it('rejects a known mock owner in production even when Auth.js configuration is present', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+
+    const result = await credentialsAuthorize()({
+      username: 'owner',
+      password: 'owner123',
+    });
+
+    expect(result).toBeNull();
+  });
+
+  it('retains the known mock owner in development for the local Q001 profile', async () => {
+    vi.stubEnv('NODE_ENV', 'development');
+
+    const result = await credentialsAuthorize()({
+      username: 'owner',
+      password: 'owner123',
+    });
+
+    expect(result).toMatchObject({ id: 'usr_1', role: 'owner' });
+  });
+});
+
+describe('OAuth identity callbacks', () => {
+  const binding = JSON.stringify([{
+    provider: 'github', providerAccountId: 'subject-1', userId: 'cvf-user-1',
+    role: 'reviewer', orgId: 'org_cvf', teamId: 'team_sec',
+  }]);
+
+  afterEach(() => vi.unstubAllEnvs());
+
+  it('denies unknown subjects and binds the selected subject without a default role', async () => {
+    vi.stubEnv('CVF_OAUTH_IDENTITY_BINDINGS_JSON', binding);
+    const signIn = nextAuthConfig.callbacks.signIn as unknown as (input: {
+      account: { provider: string; providerAccountId: string };
+    }) => boolean;
+    const jwt = nextAuthConfig.callbacks.jwt as unknown as (input: {
+      token: Record<string, unknown>;
+      user?: { name: string };
+      account?: { provider: string; providerAccountId: string };
+    }) => Record<string, unknown> | null;
+
+    expect(signIn({ account: { provider: 'github', providerAccountId: 'unknown' } })).toBe(false);
+    expect(signIn({ account: { provider: 'github', providerAccountId: 'subject-1' } })).toBe(true);
+    const token = jwt({
+      token: {}, user: { name: 'Review User' },
+      account: { provider: 'github', providerAccountId: 'subject-1' },
+    });
+    expect(token).toMatchObject({
+      authSource: 'oauth_bound', oauthProvider: 'github', oauthSubject: 'subject-1',
+      userId: 'cvf-user-1', role: 'reviewer', orgId: 'org_cvf', teamId: 'team_sec',
+    });
+
+    vi.stubEnv('CVF_OAUTH_IDENTITY_BINDINGS_JSON', '[]');
+    expect(jwt({ token: token ?? {} })).toBeNull();
   });
 });

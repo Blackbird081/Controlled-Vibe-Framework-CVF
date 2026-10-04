@@ -5,6 +5,12 @@
 # project guard. Depends on CvfDownstreamCatalogLib.ps1 being dot-sourced
 # in the caller's scope before Install-CvfDownstreamCatalogKit is invoked.
 
+# Downstream continuity contract pin (cvf.downstreamGateProfile@1.1.0). The state
+# file, handoff, memory front door and implementation status are compared field by
+# field by the portable gate runner; keep these values in one place.
+$Script:CvfContinuityContractId = "cvf.downstreamContinuityContract@1.0.0"
+$Script:CvfInitialNextAllowedMove = "Complete INTAKE: record intent, context, constraints, risk, authority, and acceptance boundary."
+
 function Get-CvfSessionMemoryContent {
     param([Parameter(Mandatory = $true)][string]$InitialHandoffRelative)
 
@@ -16,13 +22,25 @@ Memory class: POINTER_RECORD
 This is the project continuity front door. It is CVF-governed project state,
 not provider-specific memory and not a chat transcript.
 
+## Current Truth
+
+- Contract: $Script:CvfContinuityContractId
+- Current mode: INTAKE
+- Active phase: INTAKE
+- Active handoff: $InitialHandoffRelative
+
+Update these four lines together with ``CVF_SESSION/ACTIVE_SESSION_STATE.json``,
+the active handoff and ``IMPLEMENTATION_STATUS.json``. The portable gate runner
+reports any disagreement with a field-specific locator.
+
 ## Startup Order
 
 1. Read ``.cvf/manifest.json`` and ``.cvf/policy.json``.
 2. Read ``CVF_SESSION/ACTIVE_SESSION_STATE.json``.
 3. Read the active handoff named by that state file.
 4. Read ``IMPLEMENTATION_STATUS.json`` and ``docs/INDEX.md``.
-5. State current mode, active handoff, next allowed move, parked checkpoint,
+5. Read matching records from ``docs/reviews/learnings/README.md`` before similar work; the home indexes shared findings and parent feedback.
+6. State current mode, active handoff, next allowed move, parked checkpoint,
    and active role before material work.
 
 ## Mandatory Continuity Rehydration
@@ -60,7 +78,7 @@ Status: ACTIVE
 - Current mode: INTAKE
 - Active phase: INTAKE
 - Active role: ORCHESTRATOR
-- Next allowed move: Complete INTAKE before DESIGN.
+- Next allowed move: $Script:CvfInitialNextAllowedMove
 - Parked operator checkpoint: none
 
 ## Seven-Step Control Chain
@@ -105,12 +123,13 @@ function Get-CvfActiveStateObject {
     )
     return [ordered]@{
         schemaVersion            = "1.0"
+        continuityContract       = $Script:CvfContinuityContractId
         projectName              = $ProjectName
         currentMode              = "INTAKE"
         activePhase              = "INTAKE"
         phaseModel               = @("INTAKE", "DESIGN", "SPEC", "WORK_ORDER", "BUILD", "REVIEW", "FREEZE")
         activeHandoff            = $InitialHandoffRelative
-        nextAllowedMove          = "Complete INTAKE: record intent, context, constraints, risk, authority, and acceptance boundary."
+        nextAllowedMove          = $Script:CvfInitialNextAllowedMove
         parkedOperatorCheckpoint = $null
         activeRole               = "ORCHESTRATOR"
         roleRoute                = "SINGLE_AGENT_MULTI_ROLE_ALLOWED"
@@ -143,8 +162,14 @@ function Get-CvfBootstrapLogContent {
         [Parameter(Mandatory = $true)][string]$DateStamp,
         [Parameter(Mandatory = $true)][string]$CvfHead,
         [Parameter(Mandatory = $true)][string]$AgentInstructionsStatus,
-        [Parameter(Mandatory = $true)][string]$CatalogKitStatus
+        [Parameter(Mandatory = $true)][string]$CatalogKitStatus,
+        [string]$GateProfileStatus = "NOT_REPORTED"
     )
+
+    # FRESH_INSTALLED and ALREADY_INSTALLED render identically (idempotent log).
+    $gateInstalled = $GateProfileStatus -in @("FRESH_INSTALLED", "ALREADY_INSTALLED", "UPGRADED")
+    $gateCheckbox = if ($gateInstalled) { "x" } else { " " }
+    $gateLabel = if ($gateInstalled) { "INSTALLED (files pinned; invocation and CI execution are reported by the doctor coverage readout, not assumed)" } else { $GateProfileStatus }
 
     # AC-06: the bootstrap log is fully regenerated every run, so its content
     # must stay idempotent across repeated runs of an already-governed
@@ -204,6 +229,7 @@ function Get-CvfBootstrapLogContent {
 - [x] Project continuity front doors: PRESENT
 - [x] Implementation status and docs index/catalog: PRESENT
 - [$catalogKitCheckbox] Governed downstream catalog kit (Artifact Registry, Module Registry, schemas, catalog manager): $catalogKitLabel$catalogKitNote
+- [$gateCheckbox] Downstream gate profile ($Script:CvfGateProfileId): $gateLabel
 - [ ] Runtime artifacts migrated (if needed)
 - [ ] Toolchain baseline recorded (python, node, pnpm, optional uv)
 
@@ -284,7 +310,8 @@ function Install-CvfDownstreamCatalogKit {
     $artifactRegistryPath = Join-Path $ProjectPath "docs\catalog\ARTIFACT_REGISTRY.json"
     $moduleRegistryPath = Join-Path $ProjectPath "docs\catalog\MODULE_REGISTRY.json"
     if ($catalogState -eq "FRESH") {
-        $artifactRegistry = New-CvfArtifactRegistryObject -ProjectName $ProjectName -DateStamp $DateStamp -InitialHandoffRelative $InitialHandoffRelative
+        $hasLearningHome = Test-Path -LiteralPath (Join-Path $ProjectPath "docs\reviews\learnings") -PathType Container
+        $artifactRegistry = New-CvfArtifactRegistryObject -ProjectName $ProjectName -DateStamp $DateStamp -InitialHandoffRelative $InitialHandoffRelative -IncludeLearningHome:$hasLearningHome
         Set-Content -LiteralPath $artifactRegistryPath -Value ($artifactRegistry | ConvertTo-Json -Depth 6) -Encoding utf8
         Write-Host "[OK]   Created: $artifactRegistryPath" -ForegroundColor Green
         $moduleRegistry = New-CvfModuleRegistryObject -ProjectName $ProjectName -DateStamp $DateStamp

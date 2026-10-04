@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { afterEach, describe, it, expect, vi } from 'vitest';
 
 const authMock = vi.hoisted(() => vi.fn());
 const cookiesMock = vi.hoisted(() => vi.fn());
@@ -23,6 +23,8 @@ vi.mock('@/lib/policy-reader', () => ({
 }));
 
 import { verifySessionCookie } from './middleware-auth';
+
+afterEach(() => vi.unstubAllEnvs());
 
 function fakeRequest(cookieHeader = ''): Request {
     return new Request('http://localhost/api/auth/me', {
@@ -207,6 +209,54 @@ describe('middleware-auth', () => {
             expect(result!.realUserId).toBe('usr_1');
             expect(result!.realRole).toBe('owner');
             expect(result!.impersonation?.sessionId).toBe('imp-session-2');
+        });
+    });
+
+    describe('production OAuth binding', () => {
+        const binding = JSON.stringify([{
+            provider: 'github', providerAccountId: 'subject-1', userId: 'cvf-user-1',
+            role: 'reviewer', orgId: 'org_cvf', teamId: 'team_sec',
+        }]);
+
+        function productionProfile() {
+            vi.stubEnv('NODE_ENV', 'production');
+            vi.stubEnv('CVF_OAUTH_PROVIDER', 'github');
+            vi.stubEnv('CVF_OAUTH_IDENTITY_BINDINGS_JSON', binding);
+        }
+
+        it('rejects a legacy/default-bearing token without an OAuth binding marker', async () => {
+            productionProfile();
+            getTokenMock.mockResolvedValueOnce({ userId: 'usr_1', role: 'owner', exp: 9999999999 });
+            expect(await verifySessionCookie(fakeRequest())).toBeNull();
+        });
+
+        it('derives role and CVF identity from the current binding, not token claims', async () => {
+            productionProfile();
+            getTokenMock.mockResolvedValueOnce({
+                authSource: 'oauth_bound', oauthProvider: 'github', oauthSubject: 'subject-1',
+                userId: 'forged', role: 'owner', orgId: 'forged', teamId: 'forged', exp: 9999999999,
+            });
+            const result = await verifySessionCookie(fakeRequest());
+            expect(result).toMatchObject({
+                userId: 'cvf-user-1', role: 'reviewer', orgId: 'org_cvf', teamId: 'team_sec',
+            });
+        });
+
+        it('rejects a formerly bound subject after its binding is removed', async () => {
+            productionProfile();
+            vi.stubEnv('CVF_OAUTH_IDENTITY_BINDINGS_JSON', '[]');
+            getTokenMock.mockResolvedValueOnce({
+                authSource: 'oauth_bound', oauthProvider: 'github', oauthSubject: 'subject-1', exp: 9999999999,
+            });
+            expect(await verifySessionCookie(fakeRequest())).toBeNull();
+        });
+
+        it('rejects an ambient session without current OAuth binding metadata', async () => {
+            productionProfile();
+            authMock.mockResolvedValueOnce({
+                user: { userId: 'usr_1', role: 'owner' }, expires: new Date(Date.now() + 60000).toISOString(),
+            });
+            expect(await verifySessionCookie()).toBeNull();
         });
     });
 });

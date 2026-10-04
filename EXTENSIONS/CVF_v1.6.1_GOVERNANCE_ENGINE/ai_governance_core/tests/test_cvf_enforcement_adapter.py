@@ -113,3 +113,27 @@ class TestEnrichResult:
         )
         assert "cvf_enforcement" in result
         assert result["cvf_enforcement"]["phase"] == "C"
+
+    @pytest.mark.parametrize("decision,action", [
+        ("ALLOW", "ALLOW"),
+        ("DENY", "BLOCK"),
+        ("REVIEW", "NEEDS_APPROVAL"),
+    ])
+    def test_nested_rest_report_decision(self, decision, action):
+        report = {
+            "decision_analysis": {"final_decision": decision},
+            "cvf_risk_level": "R0",
+        }
+        enriched = CVFEnforcementAdapter.enrich_result(report, phase="REVIEW")
+        assert enriched["cvf_enforcement"]["action"] == action
+        assert enriched["cvf_enforcement"]["risk_level"] == "R0"
+        assert enriched["cvf_enforcement"]["override_allowed"] is False
+
+    def test_conflicting_flat_and_nested_decisions_fail_closed(self):
+        report = {
+            "final_decision": "ALLOW",
+            "decision_analysis": {"final_decision": "DENY"},
+            "cvf_risk_level": "R0",
+        }
+        enriched = CVFEnforcementAdapter.enrich_result(report)
+        assert enriched["cvf_enforcement"]["action"] == "LOG_ONLY"

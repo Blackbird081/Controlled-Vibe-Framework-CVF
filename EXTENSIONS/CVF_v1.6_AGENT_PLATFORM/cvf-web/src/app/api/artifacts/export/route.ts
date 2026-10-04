@@ -17,6 +17,26 @@ interface ArtifactExportRequest {
   receiptAnchor?: unknown;
 }
 
+type ValidatedExportRequest = {
+  title: string;
+  sourcePath: string;
+  sourceContent: string;
+  memoryClass: ArtifactMemoryClass;
+  status: string;
+  claimBoundary: string;
+  receiptAnchor: string;
+};
+
+const FIELD_LIMITS = {
+  title: 200,
+  sourcePath: 500,
+  sourceContent: 100_000,
+  status: 100,
+  claimBoundary: 2_000,
+  receiptAnchor: 150,
+} as const;
+const MAX_BODY_BYTES = 128_000;
+
 interface ArtifactVerificationItem {
   label: string;
   passed: boolean;
@@ -24,17 +44,17 @@ interface ArtifactVerificationItem {
 }
 
 const SECRET_PATTERNS = [
-  /\b(?:DASHSCOPE|ALIBABA|OPENAI|ANTHROPIC|DEEPSEEK|GEMINI|GOOGLE)_API_KEY\s*=/i,
+  /\b(?:DASHSCOPE|ALIBABA|OPENAI|ANTHROPIC|DEEPSEEK|GEMINI|GOOGLE)_API_KEY\s*[:=]/i,
+  /\b(?:API[_-]?KEY|ACCESS[_-]?TOKEN|SECRET[_-]?KEY|AUTH[_-]?TOKEN)\s*[:=]\s*\S{8,}/i,
+  /\bBearer\s+[A-Za-z0-9._~+/-]{16,}/i,
   /\bsk-[A-Za-z0-9_-]{16,}\b/,
   /\bAKIA[0-9A-Z]{16}\b/,
+  /\b(?:ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})\b/,
+  /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,
 ];
 
 function text(value: unknown): string {
   return typeof value === 'string' ? value.trim() : '';
-}
-
-function normalizeMemoryClass(value: unknown): ArtifactMemoryClass {
-  return value === 'POINTER_RECORD' ? 'POINTER_RECORD' : 'FULL_RECORD';
 }
 
 function formatRecordType(value: ArtifactMemoryClass): string {
@@ -124,12 +144,12 @@ function hasSecretPattern(sourceContent: string): boolean {
   return SECRET_PATTERNS.some(pattern => pattern.test(sourceContent));
 }
 
-function buildVerification(input: Required<ArtifactExportRequest>, html: string): ArtifactVerificationItem[] {
+function buildVerification(input: ValidatedExportRequest, html: string): ArtifactVerificationItem[] {
   const sourceContent = String(input.sourceContent);
   const claimBoundary = String(input.claimBoundary);
   const receiptAnchor = String(input.receiptAnchor);
   const receiptAnchorId = slugify(receiptAnchor);
-  const hasSecret = hasSecretPattern(sourceContent);
+  const hasSecret = Object.keys(FIELD_LIMITS).some(key => hasSecretPattern(input[key as keyof typeof FIELD_LIMITS]));
 
   return [
     {
@@ -153,19 +173,19 @@ function buildVerification(input: Required<ArtifactExportRequest>, html: string)
       detail: claimBoundary,
     },
     {
-      label: 'Receipt reference attached',
+      label: 'Receipt anchor rendered (not a governance receipt)',
       passed: receiptAnchorId.length > 0 && html.includes(`id="${escapeHtml(receiptAnchorId)}"`),
       detail: `#${receiptAnchorId}`,
     },
     {
-      label: 'No secret-like text detected',
+      label: 'No common secret pattern detected in rendered fields',
       passed: !hasSecret,
-      detail: hasSecret ? 'Potential secret-like value detected in source content.' : 'No common secret pattern detected.',
+      detail: hasSecret ? 'Potential secret-like value detected.' : 'Common-pattern scan only; not a full secret audit.',
     },
     {
-      label: 'Meaning preserved',
+      label: 'Review boundary source supplied',
       passed: hasRequiredSection(sourceContent, 'Claim Boundary') || hasRequiredSection(sourceContent, 'Review Boundary') || claimBoundary.length > 0,
-      detail: 'The packet adds presentation only and keeps the review boundary visible.',
+      detail: 'Presence check only; semantic equivalence requires separate review.',
     },
     {
       label: 'Self-contained HTML',
@@ -175,7 +195,7 @@ function buildVerification(input: Required<ArtifactExportRequest>, html: string)
   ];
 }
 
-function buildHtml(input: Required<ArtifactExportRequest>, generatedAt: string, sourceHash: string): string {
+function buildHtml(input: ValidatedExportRequest, generatedAt: string, sourceHash: string): string {
   const title = String(input.title);
   const receiptAnchor = slugify(String(input.receiptAnchor));
   const body = renderMarkdownLite(String(input.sourceContent));
@@ -207,6 +227,7 @@ function buildHtml(input: Required<ArtifactExportRequest>, generatedAt: string, 
   <main>
     <header>
       <span class="label">CVF HTML Review Packet</span>
+      <p class="boundary">DRAFT / UNACCEPTED. A receipt anchor and this presentation do not establish governance approval or final artifact acceptance.</p>
       <h1>${escapeHtml(title)}</h1>
       <div class="meta">
         <div><span class="label">Record type</span>${escapeHtml(formatRecordType(input.memoryClass as ArtifactMemoryClass))}</div>
@@ -233,6 +254,10 @@ function buildHtml(input: Required<ArtifactExportRequest>, generatedAt: string, 
 }
 
 export async function POST(request: NextRequest) {
+  const declaredLength = Number(request.headers.get('content-length'));
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_BYTES) {
+    return NextResponse.json({ success: false, error: 'Artifact export body exceeds size limit.' }, { status: 413 });
+  }
   const bodyText = await request.text();
   const routeAuth = await authorizeRouteGovernanceProof(
     request,
@@ -241,9 +266,17 @@ export async function POST(request: NextRequest) {
   );
   if (!routeAuth.allowed && routeAuth.response) return routeAuth.response;
 
+  if (Buffer.byteLength(bodyText, 'utf8') > MAX_BODY_BYTES) {
+    return NextResponse.json(
+      { success: false, error: 'Artifact export body exceeds size limit.', routeGovernanceProof: routeAuth.proof },
+      { status: 413 },
+    );
+  }
+
   let body: ArtifactExportRequest;
   try {
     body = JSON.parse(bodyText) as ArtifactExportRequest;
+    if (!body || typeof body !== 'object' || Array.isArray(body)) throw new Error('Invalid body');
   } catch {
     return NextResponse.json(
       { success: false, error: 'Invalid JSON body.', routeGovernanceProof: routeAuth.proof },
@@ -264,9 +297,30 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (hasSecretPattern(sourceContent)) {
+  const fields = { title, sourcePath, sourceContent, status, claimBoundary, receiptAnchor };
+  if (Object.entries(fields).some(([key, value]) => typeof body[key as keyof ArtifactExportRequest] !== 'string' || value.length > FIELD_LIMITS[key as keyof typeof FIELD_LIMITS])) {
     return NextResponse.json(
-      { success: false, error: 'Potential secret-like value detected in source content.', routeGovernanceProof: routeAuth.proof },
+      { success: false, error: 'Invalid artifact export field type or size.', routeGovernanceProof: routeAuth.proof },
+      { status: 400 },
+    );
+  }
+  if (body.memoryClass !== 'FULL_RECORD' && body.memoryClass !== 'POINTER_RECORD') {
+    return NextResponse.json(
+      { success: false, error: 'Invalid artifact memory class.', routeGovernanceProof: routeAuth.proof },
+      { status: 400 },
+    );
+  }
+  const allowedKeys = new Set([...Object.keys(FIELD_LIMITS), 'memoryClass']);
+  if (Object.keys(body).some(key => !allowedKeys.has(key))) {
+    return NextResponse.json(
+      { success: false, error: 'Unknown artifact export field.', routeGovernanceProof: routeAuth.proof },
+      { status: 400 },
+    );
+  }
+
+  if (Object.values(fields).some(hasSecretPattern)) {
+    return NextResponse.json(
+      { success: false, error: 'Potential secret-like value detected in artifact export fields.', routeGovernanceProof: routeAuth.proof },
       { status: 400 },
     );
   }
@@ -275,7 +329,7 @@ export async function POST(request: NextRequest) {
     title,
     sourcePath,
     sourceContent,
-    memoryClass: normalizeMemoryClass(body.memoryClass),
+    memoryClass: body.memoryClass as ArtifactMemoryClass,
     status,
     claimBoundary,
     receiptAnchor,
@@ -286,11 +340,12 @@ export async function POST(request: NextRequest) {
   const verification = buildVerification(input, html);
 
   const serviceToken = process.env.CVF_SERVICE_TOKEN;
-  const governanceReceipt = await fetchGovernanceReceipt(
+  const receiptCheck = await fetchGovernanceReceipt(
     slugify(receiptAnchor),
     sourceContent,
     serviceToken,
   );
+  const governanceReceipt = receiptCheck.receipt;
 
   return NextResponse.json({
     success: true,
@@ -301,6 +356,11 @@ export async function POST(request: NextRequest) {
       receiptAnchor: slugify(receiptAnchor),
       verification,
       generatedAt,
+      governanceReceiptStatus: receiptCheck.status,
+      ...(receiptCheck.requestId ? { governanceReceiptAttemptId: receiptCheck.requestId } : {}),
+      governanceState: governanceReceipt?.decision === 'APPROVED' && verification.every(item => item.passed)
+        ? 'RECEIPT_ALLOW_REVIEW_REQUIRED'
+        : 'DRAFT_UNACCEPTED',
       ...(governanceReceipt ? { governanceReceipt } : {}),
     },
   });

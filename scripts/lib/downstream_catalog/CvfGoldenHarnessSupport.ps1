@@ -106,6 +106,11 @@ function New-CvfHermeticCoreClone {
         "scripts\initialize_cvf_project_clone.ps1",
         "scripts\update_cvf_workspace_public_core.ps1",
         "scripts\lib\downstream_catalog",
+        "scripts\lib\downstream_governance",
+        "scripts\check_cvf_workspace_new_project_enforcement.ps1",
+        "scripts\write_cvf_workspace_web_evidence_bridge.ps1",
+        "governance\compat\check_gate_to_role_closeability.py",
+        "governance\toolkit\05_OPERATION\CVF_DOWNSTREAM_AGENTS_TEMPLATE.md",
         "governance\toolkit\05_OPERATION\downstream_catalog",
         "docs\GET_STARTED.md",
         "docs\reference\CVF_WORKSPACE_RULES.md"
@@ -213,5 +218,111 @@ function New-CvfValidModuleFixture {
         id = $Id; name = "M1"; path = "docs/INDEX.md"; status = $Status
         description = "fixture module"; evidence = "scripts/test_cvf_golden_downstream_bootstrap.ps1 fixture"
         controls = @(); dependencies = @()
+    }
+}
+
+# --- CVF-DGIP-T1: candidate-overlay hermetic core and gate-runner helpers ------------
+
+$Script:CvfDgDeclaredPaths = @(
+    "scripts/new-cvf-workspace.ps1", "scripts/check_cvf_workspace_agent_enforcement.ps1",
+    "scripts/check_cvf_workspace_new_project_enforcement.ps1", "scripts/write_cvf_workspace_web_evidence_bridge.ps1",
+    "scripts/sync_cvf_workspace_rule_pack.ps1", "scripts/lib/downstream_catalog/CvfDownstreamBootstrapContent.ps1",
+    "scripts/lib/downstream_catalog/CvfGoldenHarnessSupport.ps1", "scripts/test_cvf_golden_downstream_bootstrap.ps1",
+    "governance/toolkit/05_OPERATION/CVF_DOWNSTREAM_AGENTS_TEMPLATE.md", "governance/compat/check_gate_to_role_closeability.py",
+    "governance/compat/test_check_gate_to_role_closeability.py", "governance/compat/test_downstream_gate_profile.py",
+    "docs/reference/CVF_OPERATIONAL_REFERENCE_INDEX_2026-05-23.md", "scripts/test_cvf_downstream_gate_profile.ps1",
+    "scripts/lib/downstream_governance/", "docs/reference/downstream_gate_profile/"
+)
+
+function Get-CvfDgLfSha256([string]$Path) {
+    # LF-normalised identity (the gate profile's pin algorithm), computed independently of the Python code.
+    $bytes = [System.IO.File]::ReadAllBytes($Path)
+    $kept = [System.Collections.Generic.List[byte]]::new($bytes.Length)
+    for ($i = 0; $i -lt $bytes.Length; $i++) {
+        if ($bytes[$i] -eq 13 -and ($i + 1) -lt $bytes.Length -and $bytes[$i + 1] -eq 10) { continue }
+        $kept.Add($bytes[$i])
+    }
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try { return ([System.BitConverter]::ToString($sha.ComputeHash($kept.ToArray())) -replace '-', '').ToLowerInvariant() } finally { $sha.Dispose() }
+}
+
+function Get-CvfDgBundleSha256([string]$Directory) {
+    # Independent PowerShell twin of the Python bundle digest: every file, ordinal posix name, LF-normalised SHA-256.
+    $root = (Resolve-Path -LiteralPath $Directory).Path.TrimEnd('\')
+    $shaByName = @{}
+    Get-ChildItem -LiteralPath $root -Recurse -File -Force | ForEach-Object { $shaByName[$_.FullName.Substring($root.Length + 1).Replace('\', '/')] = Get-CvfDgLfSha256 $_.FullName }
+    $names = [string[]]@($shaByName.Keys)
+    [System.Array]::Sort($names, [System.StringComparer]::Ordinal)
+    $text = (($names | ForEach-Object { "${_}:$($shaByName[$_])`n" }) -join "")
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try { return ([System.BitConverter]::ToString($sha.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($text))) -replace '-', '').ToLowerInvariant() } finally { $sha.Dispose() }
+}
+
+function Get-CvfDgCandidateSet {
+    # Declared changed set = worktree-modified or untracked files inside the declared paths. Each entry
+    # records the worktree identity and whether it differs from the HEAD blob, so a HEAD-only clone can
+    # never be mistaken for the candidate.
+    param([Parameter(Mandatory = $true)][string]$RepoRoot)
+    $listed = git -C $RepoRoot ls-files -m -o --exclude-standard -- @($Script:CvfDgDeclaredPaths) 2>$null
+    $entries = foreach ($rel in @($listed | Sort-Object -Unique)) {
+        $full = Join-Path $RepoRoot $rel
+        if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { continue }
+        $headBlob = (git -C $RepoRoot rev-parse --verify --quiet "HEAD:$rel" 2>$null | Out-String).Trim()
+        $worktreeBlob = (git -C $RepoRoot hash-object -- $rel | Out-String).Trim()
+        [PSCustomObject]@{
+            Path = $rel.Replace('\', '/'); RawSha256 = (Get-FileHash -LiteralPath $full -Algorithm SHA256).Hash.ToLowerInvariant()
+            LfSha256 = Get-CvfDgLfSha256 $full; TrackedAtHead = [bool]$headBlob; DiffersFromHead = ($headBlob -ne $worktreeBlob)
+        }
+    }
+    return @($entries)
+}
+
+function New-CvfDgCandidateCore {
+    # Local fresh clone (public-main anchor) + the standard harness overlay + EVERY declared candidate file,
+    # then proves each overlaid file is byte-identical to the worktree candidate.
+    param([Parameter(Mandatory = $true)][string]$SourceRepoPath, [Parameter(Mandatory = $true)][string]$DestCorePath, [Parameter(Mandatory = $true)]$CandidateSet)
+    New-CvfHermeticCoreClone -SourceRepoPath $SourceRepoPath -DestCorePath $DestCorePath
+    foreach ($entry in $CandidateSet) {
+        $dst = Join-Path $DestCorePath ($entry.Path -replace '/', '\')
+        New-Item -ItemType Directory -Path (Split-Path -Parent $dst) -Force | Out-Null
+        Copy-Item -LiteralPath (Join-Path $SourceRepoPath ($entry.Path -replace '/', '\')) -Destination $dst -Force
+    }
+    $mismatch = @($CandidateSet | Where-Object {
+        (Get-FileHash -LiteralPath (Join-Path $DestCorePath ($_.Path -replace '/', '\')) -Algorithm SHA256).Hash.ToLowerInvariant() -ne $_.RawSha256 })
+    return $mismatch
+}
+
+function Invoke-CvfDgRunner {
+    param([Parameter(Mandatory = $true)][string]$Python, [Parameter(Mandatory = $true)][string]$Runner, [Parameter(Mandatory = $true)][string[]]$Arguments, [string]$WorkingDirectory = "")
+    $previous = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    $env:PYTHONDONTWRITEBYTECODE = "1"
+    try {
+        if ($WorkingDirectory) { Push-Location $WorkingDirectory }
+        $output = & $Python -B $Runner @Arguments 2>&1 | Out-String
+        return [PSCustomObject]@{ ExitCode = $LASTEXITCODE; Output = $output }
+    }
+    finally { if ($WorkingDirectory) { Pop-Location }; $ErrorActionPreference = $previous }
+}
+
+function Get-CvfDgPrCommand {
+    # Extracts the generated PR workflow's run command verbatim (the folded `run: >-` block).
+    param([Parameter(Mandatory = $true)][string]$WorkflowPath, [Parameter(Mandatory = $true)][string]$Python)
+    $lines = Get-Content -LiteralPath $WorkflowPath
+    $start = [Array]::FindIndex($lines, [Predicate[object]] { param($l) $l -match '^\s+run:\s*>-\s*$' })
+    if ($start -lt 0) { return $null }
+    $words = ($lines[($start + 1)..($lines.Count - 1)] | ForEach-Object { $_.Trim() }) -join ' '
+    $parts = @($words -split '\s+' | Where-Object { $_ })
+    if ($parts[0] -ne 'python') { return $null }
+    return @($Python) + @($parts[1..($parts.Count - 1)])
+}
+
+function Convert-CvfDgLineEndings {
+    param([Parameter(Mandatory = $true)][string]$Root, [Parameter(Mandatory = $true)][ValidateSet("CRLF", "LF")][string]$To)
+    $extensions = @(".md", ".json", ".py", ".ps1", ".yml", ".template", ".txt")
+    Get-ChildItem -LiteralPath $Root -Recurse -File -Force | Where-Object { $_.FullName -notlike '*\.git\*' -and $_.FullName -notlike '*\docs\catalog\*' -and $_.Name -ne 'INDEX.md' -and $extensions -contains $_.Extension } | ForEach-Object {
+        $text = [System.IO.File]::ReadAllText($_.FullName).Replace("`r`n", "`n")
+        if ($To -eq "CRLF") { $text = $text.Replace("`n", "`r`n") }
+        [System.IO.File]::WriteAllBytes($_.FullName, (New-Object System.Text.UTF8Encoding($false)).GetBytes($text))
     }
 }

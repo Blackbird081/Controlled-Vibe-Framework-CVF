@@ -76,6 +76,8 @@ function Add-Warn {
 }
 
 . (Join-Path $PSScriptRoot "lib\downstream_catalog\CvfWorkspaceDoctorLiveReadiness.ps1")
+. (Join-Path $PSScriptRoot "lib\downstream_governance\CvfDownstreamGateProfile.ps1")
+$requiredPublicCoreFiles = $requiredPublicCoreFiles + $Script:CvfGateProfileCoreFiles
 
 Write-Host ""
 Write-Host "CVF Workspace Agent Enforcement Doctor" -ForegroundColor Cyan
@@ -479,6 +481,15 @@ else {
     Add-Warn "Governed downstream catalog kit not present" "LEGACY_PROJECT: no governed-catalog manifest marker or surface found (manifest, manager, registry, or schemas); skipping governed catalog check for bounded legacy compatibility."
 }
 
+# Check 24 (DGIP): inherited downstream gate profile. A governed project must carry the
+# identity-pinned profile; the trusted Core runner re-verifies it and runs the bootstrap-phase
+# controls. A legacy project gets an explicit migration gap, never an implied pass.
+$gateDoctor = Get-CvfGateProfileDoctorChecks -ProjectPath $projectResolved -CorePath $cvfCoreCandidate -ManifestObj $manifestObj
+foreach ($gateCheck in $gateDoctor.Checks) {
+    if ($gateCheck.Kind -eq "WARN") { Add-Warn $gateCheck.Name $gateCheck.Detail }
+    else { Add-Check $gateCheck.Name $gateCheck.Passed $gateCheck.Detail }
+}
+
 # Print results table
 Write-Host ""
 Write-Host ("  {0,-50} {1}" -f "Check", "Status") -ForegroundColor White
@@ -515,17 +526,18 @@ if ($CheckLiveReadiness) {
     Write-Host ""
 }
 
+Write-Host "  $($gateDoctor.Summary)"
 $totalChecks = $results.Count
 $passCount = $totalChecks - $failCount - $warnCount
 
 if ($failCount -eq 0) {
     if ($warnCount -eq 0) {
         Write-Host "  RESULT: PASS ($passCount/$totalChecks checks passed)" -ForegroundColor Green
-        Write-Host "  This workspace is agent-enforcement-ready." -ForegroundColor Green
+        Write-Host "  Scope: the listed doctor checks only. Not a claim of hosted CI, real adoption or runtime AI enforcement." -ForegroundColor Green
     }
     else {
         Write-Host "  RESULT: PASS WITH NOTE ($passCount passed, $warnCount warning(s))" -ForegroundColor Yellow
-        Write-Host "  This workspace is agent-enforcement-ready with the bounded note above." -ForegroundColor Yellow
+        Write-Host "  Scope: the listed doctor checks only, with the bounded note above. Not a claim of hosted CI, real adoption or runtime AI enforcement." -ForegroundColor Yellow
     }
     exit 0
 }

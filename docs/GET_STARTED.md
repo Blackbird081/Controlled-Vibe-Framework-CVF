@@ -7,6 +7,8 @@ Vietnamese text.
 
 > **🎯 Mục tiêu:** Giúp bạn hiểu và chạy được CVF project đầu tiên trong 5 phút
 
+> **Mới với CVF?** Đọc [Quick Orientation](guides/CVF_QUICK_ORIENTATION.md) trước (tổng quan và ví dụ giao AI việc code). Lối vào cũ: [CVF_INTERNAL_USER_GUIDE](reference/CVF_INTERNAL_USER_GUIDE.md).
+
 ---
 
 ## 🧭 Workspace Rule (Mandatory)

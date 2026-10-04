@@ -27,15 +27,16 @@ const COPY = {
     summary: 'Carried summary',
     issues: 'Review notes',
     noIssues: 'No transfer issues were found. Keep the source, receipt, and review boundary visible.',
-    historyTitle: 'Recent transfers',
-    historyEmpty: 'No transfer records found in the audit log.',
-    historyLoading: 'Loading transfer history…',
-    historyError: 'Could not load transfer history.',
+    historyTitle: 'Recent audit events',
+    historyEmpty: 'No audit events found.',
+    historyLoading: 'Loading audit history...',
+    historyError: 'Could not load audit history.',
+    historyNote: 'These are audit events, not proof that a work transfer occurred.',
     exportRecord: 'Export as HTML',
     exportingRecord: 'Exporting',
     exportPanel: 'HTML Export',
     benefitsTitle: 'Why this helps people review work',
-    boundary: 'This page checks whether the next step has enough context. It is not final proof by itself.',
+    boundary: 'This page checks whether the next step has enough context. It is not final proof by itself. Checking context does not save or create a transfer record.',
     benefits: [
       'The next person can see what was reviewed and what still needs attention.',
       'The visible receipt makes the packet easier to trust, share, and revisit.',
@@ -57,15 +58,16 @@ const COPY = {
     summary: 'Tóm tắt được chuyển tiếp',
     issues: 'Ghi chú rà soát',
     noIssues: 'Không phát hiện vấn đề trong chuyển giao. Vẫn cần giữ nguồn, biên nhận và ranh giới rà soát.',
-    historyTitle: 'Lịch sử chuyển giao gần đây',
-    historyEmpty: 'Không tìm thấy bản ghi chuyển giao trong nhật ký kiểm tra.',
-    historyLoading: 'Đang tải lịch sử…',
-    historyError: 'Không thể tải lịch sử chuyển giao.',
+    historyTitle: 'Sự kiện nhật ký kiểm tra gần đây',
+    historyEmpty: 'Không tìm thấy sự kiện nào trong nhật ký kiểm tra.',
+    historyLoading: 'Đang tải nhật ký kiểm tra...',
+    historyError: 'Không thể tải nhật ký kiểm tra.',
+    historyNote: 'Đây là các sự kiện nhật ký kiểm tra, không phải bằng chứng rằng một lần bàn giao đã diễn ra.',
     exportRecord: 'Xuất HTML',
     exportingRecord: 'Đang xuất',
     exportPanel: 'Xuất HTML',
     benefitsTitle: 'Vì sao hữu ích cho người rà soát',
-    boundary: 'Trang này kiểm tra bước tiếp theo có đủ ngữ cảnh hay chưa. Nó không phải bằng chứng cuối cùng.',
+    boundary: 'Trang này kiểm tra bước tiếp theo có đủ ngữ cảnh hay chưa. Nó không phải bằng chứng cuối cùng. Việc kiểm tra ngữ cảnh không lưu hay tạo bản ghi bàn giao.',
     benefits: [
       'Người tiếp theo thấy rõ phần nào đã rà soát và phần nào còn cần chú ý.',
       'Biên nhận nhìn thấy được giúp gói nội dung dễ tin, dễ chia sẻ và dễ xem lại.',
@@ -97,10 +99,10 @@ const ROLE_LABELS = {
 
 function recordToExportRequest(record: AuditRecord): Partial<ArtifactExportRequest> {
   return {
-    title: `Work Transfer — ${record.action}`,
+    title: `Audit Record - ${record.action}`,
     sourcePath: record.targetResource,
     sourceContent: [
-      `# Work Transfer Record`,
+      `# Audit Record Draft`,
       '',
       `Action: ${record.action}`,
       `Actor: ${record.actorId} (${record.actorRole})`,
@@ -108,11 +110,11 @@ function recordToExportRequest(record: AuditRecord): Partial<ArtifactExportReque
       `Timestamp: ${record.timestamp}`,
       '',
       '## Claim Boundary',
-      'This is an HTML export of an audit record. It is not final governance proof by itself.',
+      'This is an editable draft derived from an audit event. It is not proof of a completed transfer and not an authoritative reproduction of the event. It is not final governance proof by itself.',
     ].join('\n'),
     memoryClass: 'FULL_RECORD',
     status: record.outcome,
-    claimBoundary: 'HTML export of an audit record. Not final governance proof by itself.',
+    claimBoundary: 'Editable draft derived from an audit event. Not proof of a completed transfer, not an authoritative event reproduction, and not final governance proof by itself.',
     receiptAnchor: `transfer-${record.id}`,
   };
 }
@@ -147,7 +149,9 @@ export default function WorkTransferPage() {
       .then(payload => {
         if (cancelled) return;
         if (payload.success && Array.isArray(payload.data)) {
-          setRecords(payload.data.slice(0, 8));
+          // The shared store returns ascending timestamps. Order a copy newest first (stable, so equal
+          // timestamps keep their upstream order) and only then cap, so "recent" shows the latest eight.
+          setRecords([...payload.data].sort((a, b) => b.timestamp.localeCompare(a.timestamp)).slice(0, 8));
           setHistoryState('ready');
         } else {
           setHistoryState('error');
@@ -234,6 +238,7 @@ export default function WorkTransferPage() {
           <FileCheck2 className="h-5 w-5 text-indigo-500" aria-hidden="true" />
           <h2 className="text-lg font-semibold text-gray-950 dark:text-white">{copy.historyTitle}</h2>
         </div>
+        <p data-testid="history-note" className="mt-2 text-xs leading-5 text-gray-500 dark:text-gray-400">{copy.historyNote}</p>
         <div className="mt-4">
           {historyState === 'loading' && (
             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">

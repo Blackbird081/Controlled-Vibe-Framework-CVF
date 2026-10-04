@@ -1,0 +1,27 @@
+{
+  "findingId": "REPLACE-with-project-local-finding-id",
+  "title": "REPLACE with a short generalizable title",
+  "sourceProject": "REPLACE with source project name",
+  "sourceSha": "0000000000000000000000000000000000000000",
+  "observed": "REPLACE with the observed behavior at the source SHA",
+  "expected": "REPLACE with the expected behavior",
+  "negativeEvidence": [
+    {
+      "locator": "REPLACE path#anchor",
+      "description": "REPLACE reproduction or negative evidence"
+    }
+  ],
+  "chainJoins": [
+    {
+      "join": "REPLACE governing-chain join",
+      "gap": "REPLACE observed gap",
+      "earliestControlPoint": "REPLACE earliest control point"
+    }
+  ],
+  "defectClass": "MACHINE_GATE_GAP",
+  "learningLane": "GOVERNANCE_CONTROL_PLANE",
+  "proposedDisposition": "DESIGN_REVIEW_REQUIRED",
+  "candidateControl": "REPLACE with candidate reusable control",
+  "claimLimits": "REPLACE with what this finding does not prove",
+  "dedupCandidates": []
+}

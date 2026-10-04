@@ -64,6 +64,7 @@ $projects = Get-ChildItem -LiteralPath $workspaceResolved -Directory -Force |
 $results = @()
 $failedProjects = @()
 $promotedProjects = @()
+$failureLines = @{}
 
 Write-Host ""
 Write-Host "CVF Workspace New-Project Enforcement Gate" -ForegroundColor Cyan
@@ -112,6 +113,10 @@ foreach ($project in $projects) {
         "Doctor finished without RESULT line"
     }
 
+    # DGIP: surface the doctor's honest gate coverage next to the pass/fail result.
+    $coverageLine = ($output | Select-String "GATE_COVERAGE:" | Select-Object -Last 1)
+    if ($null -ne $coverageLine) { $detail = $detail + " | " + $coverageLine.Line.Trim() }
+
     if ($exitCode -eq 0) {
         if ($promoteThisProject) {
             $status = "PROMOTED_PASS"
@@ -126,6 +131,7 @@ foreach ($project in $projects) {
         $status = if ($promoteThisProject) { "PROMOTION_FAIL" } else { "ENFORCED_FAIL" }
         $failedProjects += $project.Name
         $failLines = @($output | Select-String "\[FAIL\]" | ForEach-Object { $_.Line.Trim() })
+        $failureLines[$project.Name] = $failLines
         if ($failLines.Count -gt 0) {
             $detail = $detail + " | " + ($failLines -join " ; ")
         }
@@ -157,8 +163,10 @@ if ($promotedProjects.Count -gt 0) {
 if ($failedProjects.Count -gt 0) {
     Write-Host ("RESULT: FAIL - {0} enforced project(s) failed doctor" -f $failedProjects.Count) -ForegroundColor Red
     Write-Host ("Projects: {0}" -f ($failedProjects -join ", ")) -ForegroundColor Red
+    foreach ($name in $failedProjects) { foreach ($line in $failureLines[$name]) { Write-Host "  ${name}: $line" -ForegroundColor Red } }
     exit 1
 }
 
-Write-Ok "RESULT: PASS - all new/non-exempt projects passed doctor."
+Write-Ok "RESULT: PASS - all new/non-exempt projects passed doctor checks (including mandatory gate failures, which propagate here as ENFORCED_FAIL)."
+Write-Host "Scope: ENFORCED_PASS means the listed doctor checks passed; read GATE_COVERAGE per project. Hosted CI, real adoption and runtime AI enforcement are not claimed." -ForegroundColor Yellow
 exit 0

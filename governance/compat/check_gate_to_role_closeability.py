@@ -19,6 +19,30 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_HEADING = "## Gate-To-Role Closeability Contract"
 RECHECK_HEADING = "## Return-Time Closeability Recheck"
 ACTIVE_STATUSES = {"DISPATCH_READY", "READY", "ACTIVE", "APPROVED_FOR_EXECUTION"}
+# Prospective applicability grammar (cvf.workOrderStatusGrammar@1.0.0). A
+# candidate work order declares exactly one line `Status: TOKEN`, optionally
+# followed by one parenthetical annotation `Status: TOKEN (issue #12)`. Any
+# other shape is malformed and fails closed instead of being skipped.
+STATUS_GRAMMAR_ID = "cvf.workOrderStatusGrammar@1.0.0"
+STATUS_DECLARATION = re.compile(
+    r"(?im)^[ \t]*(?:\*\*)?status(?:\*\*)?[ \t]*:(?:\*\*)?(?P<value>[^\n]*)$"
+)
+STATUS_VALUE = re.compile(r"^(?P<token>[A-Z][A-Z0-9_]*)(?:[ \t]+\((?P<note>[^()\n]+)\))?$")
+FENCED_BLOCK = re.compile(r"(?ms)^[ \t]*(```|~~~).*?^[ \t]*\1[ \t]*$")
+# Dispatch-ready variants are checked (fail-closed bias); terminal, held and
+# reviewer-disposition families are explicitly not applicable. Anything else
+# is unknown and rejected rather than silently skipped.
+ACTIVE_VARIANT_PATTERNS = (re.compile(r"^READY_FOR_(?:RE)?DISPATCH$"), re.compile(r"DISPATCH_READY"))
+NOT_APPLICABLE_EXACT = {
+    "DRAFT", "COMPLETE_PENDING_REVIEW", "BLOCKED_WITH_REASON", "PUBLIC_SYNC_EXPORTED",
+    "IMPLEMENTATION_REVIEW_READY", "SUPERSEDED", "CANCELLED", "ARCHIVED", "PARKED",
+}
+NOT_APPLICABLE_PREFIXES = (
+    "CLOSED", "HOLD", "REVIEWER_ACCEPTED", "REVIEWED_", "DISPATCHED", "BACKLOG_",
+    "PROPOSED_", "IMPLEMENTED_", "SUPERSEDED_", "CANCELLED_", "DRAFT_", "BLOCKED_",
+)
+CONTROL_STATUS_GRAMMAR = "work_order_status_grammar"
+CONTROL_CONTRACT = "closeability_contract"
 REQUIRED_GATE_IDS = {
     "authorization_review", "pre_dispatch_gate", "dispatch_continuity", "focused_checker_tests",
     "adif_integrity", "pre_implementation_autorun", "worker_return_fast",
@@ -45,6 +69,18 @@ class Violation:
     path: str
     code: str
     message: str
+
+
+@dataclass(frozen=True)
+class StatusDecision:
+    """Applicability outcome: CHECK, NOT_APPLICABLE (reason + control IDs) or INVALID."""
+
+    outcome: str
+    code: str
+    token: str
+    reason: str
+    checked_control_ids: tuple[str, ...]
+    unchecked_control_ids: tuple[str, ...] = ()
 
 
 def _git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
@@ -141,10 +177,64 @@ def _cycle(ids: set[str], dependencies: dict[str, list[str]]) -> bool:
     return any(visit(node) for node in ids)
 
 
+def is_work_order_candidate(path: str, text: str) -> bool:
+    name = path.replace("\\", "/").rsplit("/", 1)[-1]
+    return bool(
+        name.startswith("CVF_AGENT_WORK_ORDER_")
+        or re.search(r"(?mi)^docType:\s*work_order\s*$", text)
+        or CONTRACT_HEADING in text
+        or STATUS_DECLARATION.search(FENCED_BLOCK.sub("", text))
+    )
+
+
+def classify_status(path: str, text: str) -> StatusDecision:
+    """Strictly classify a work-order status; never silently skip a candidate."""
+    grammar = (CONTROL_STATUS_GRAMMAR,)
+    both = (CONTROL_STATUS_GRAMMAR, CONTROL_CONTRACT)
+    declarations = [m.group("value").strip() for m in STATUS_DECLARATION.finditer(FENCED_BLOCK.sub("", text))]
+
+    def invalid(code: str, reason: str, token: str = "") -> StatusDecision:
+        return StatusDecision("INVALID", code, token, f"{reason} (grammar {STATUS_GRAMMAR_ID})", grammar, (CONTROL_CONTRACT,))
+
+    if not declarations:
+        if is_work_order_candidate(path, text):
+            return invalid("status_missing", "work-order candidate declares no `Status: TOKEN` line")
+        return StatusDecision(
+            "NOT_APPLICABLE", "not_work_order", "",
+            "not a work-order candidate: no Status declaration, work-order name, docType or contract heading",
+            grammar, (CONTROL_CONTRACT,),
+        )
+    if len(declarations) > 1:
+        if len(set(declarations)) == 1:
+            return invalid("status_duplicate", f"Status declared {len(declarations)} times")
+        return invalid("status_contradictory", "conflicting Status declarations: " + " / ".join(declarations))
+    value = declarations[0]
+    if not value:
+        return invalid("status_blank", "Status value is blank")
+    parsed = STATUS_VALUE.match(value)
+    if not parsed:
+        return invalid(
+            "status_malformed",
+            f"Status value {value!r} is not `TOKEN` or `TOKEN (annotation)`",
+        )
+    token = parsed.group("token")
+    if token in ACTIVE_STATUSES or any(p.search(token) for p in ACTIVE_VARIANT_PATTERNS):
+        return StatusDecision("CHECK", "active", token, f"active status {token}", both)
+    if token in NOT_APPLICABLE_EXACT or token.startswith(NOT_APPLICABLE_PREFIXES):
+        return StatusDecision(
+            "NOT_APPLICABLE", "status_not_applicable", token,
+            f"status {token} is explicitly not an active dispatch state; closeability contract was NOT checked",
+            grammar, (CONTROL_CONTRACT,),
+        )
+    return invalid("status_unknown", f"Status token {token} is not in the known active or not-applicable sets", token)
+
+
 def check_work_order(path: str, text: str) -> list[Violation]:
     violations: list[Violation] = []
-    status = re.search(r"(?m)^Status:\s*([A-Z0-9_]+)\s*$", text)
-    if not status or status.group(1) not in ACTIVE_STATUSES:
+    decision = classify_status(path, text)
+    if decision.outcome == "INVALID":
+        return [Violation(path, decision.code, decision.reason)]
+    if decision.outcome != "CHECK":
         return violations
     section = _section(text, CONTRACT_HEADING)
     if not section:
@@ -344,8 +434,11 @@ def check_recheck(path: str, text: str) -> list[Violation]:
     return issues
 
 
-def evaluate(base: str, head: str, root: Path = REPO_ROOT) -> list[Violation]:
+def evaluate_detailed(
+    base: str, head: str, root: Path = REPO_ROOT
+) -> tuple[list[Violation], list[tuple[str, StatusDecision]]]:
     violations: list[Violation] = []
+    not_applicable: list[tuple[str, StatusDecision]] = []
     for path in changed_paths(base, head, root):
         full = root / path
         if not full.is_file() or not path.endswith(".md"):
@@ -353,9 +446,16 @@ def evaluate(base: str, head: str, root: Path = REPO_ROOT) -> list[Violation]:
         text = full.read_text(encoding="utf-8", errors="replace")
         if path.startswith("docs/work_orders/"):
             violations.extend(check_work_order(path, text))
+            decision = classify_status(path, text)
+            if decision.outcome == "NOT_APPLICABLE":
+                not_applicable.append((path, decision))
         if path.startswith("docs/reviews/"):
             violations.extend(check_recheck(path, text))
-    return sorted(violations, key=lambda item: (item.path, item.code, item.message))
+    return sorted(violations, key=lambda item: (item.path, item.code, item.message)), not_applicable
+
+
+def evaluate(base: str, head: str, root: Path = REPO_ROOT) -> list[Violation]:
+    return evaluate_detailed(base, head, root)[0]
 
 
 def main() -> int:
@@ -373,11 +473,17 @@ def main() -> int:
     repo_root = args.repo_root.resolve()
     if not (repo_root / ".git").exists():
         parser.error(f"--repo-root is not a Git worktree: {repo_root}")
-    violations = evaluate(args.base, args.head, repo_root)
+    violations, not_applicable = evaluate_detailed(args.base, args.head, repo_root)
     print("=== CVF Gate-To-Role Closeability Guard ===")
     print(f"Violations: {len(violations)}")
     for item in violations:
         print(f"- {item.path} [{item.code}]: {item.message}")
+    for path, decision in not_applicable:
+        print(
+            f"NOT_APPLICABLE_WITH_REASON {path}: {decision.reason}; "
+            f"checkedControlIds={','.join(decision.checked_control_ids)}; "
+            f"uncheckedControlIds={','.join(decision.unchecked_control_ids)}"
+        )
     if violations and args.enforce:
         print("VIOLATION - repair responsibility topology before dispatch or redispatch.")
         return 2

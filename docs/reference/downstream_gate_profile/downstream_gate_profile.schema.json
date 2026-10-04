@@ -1,0 +1,221 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cvf.downstreamGateProfile@1.1.0 profile document",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profileId",
+    "profileVersion",
+    "ownerResponsibility",
+    "phases",
+    "outcomes",
+    "claimStates",
+    "controls",
+    "installedFiles",
+    "coreSources",
+    "projectPaths",
+    "continuityContract",
+    "reviewerRouting",
+    "reviewRoles",
+    "broadClaimPhrases",
+    "intake",
+    "candidateRange",
+    "trustAnchors",
+    "activeWorkOrderPrefix"
+  ],
+  "properties": {
+    "profileId": {
+      "const": "cvf.downstreamGateProfile@1.1.0"
+    },
+    "profileVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "ownerResponsibility": {
+      "type": "string",
+      "minLength": 8
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "bootstrap",
+          "pre-dispatch",
+          "worker-return",
+          "reviewer-fast",
+          "pre-commit",
+          "pr-ci"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "outcomes": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "PASS",
+          "FAIL",
+          "NOT_APPLICABLE_WITH_REASON",
+          "BLOCKED_MIGRATION_REQUIRED",
+          "BLOCKED_INVALID_INPUT"
+        ]
+      }
+    },
+    "claimStates": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "INSTALLED",
+          "INVOKED",
+          "PROVEN_HERMETIC",
+          "NOT_APPLICABLE_WITH_REASON",
+          "BLOCKED"
+        ]
+      }
+    },
+    "controls": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "mandatory",
+          "module",
+          "phases"
+        ],
+        "properties": {
+          "id": {
+            "pattern": "^CVF-DG-[A-Z]+-[0-9]{2}$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "mandatory": {
+            "const": true
+          },
+          "module": {
+            "type": "string"
+          },
+          "phases": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "enum": [
+                "bootstrap",
+                "pre-dispatch",
+                "worker-return",
+                "reviewer-fast",
+                "pre-commit",
+                "pr-ci"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "installedFiles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "coreSources": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "projectPaths": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "continuityContract": {
+      "$ref": "downstream_continuity_contract.schema.json"
+    },
+    "reviewerRouting": {
+      "type": "object"
+    },
+    "reviewRoles": {
+      "type": "object",
+      "required": [
+        "independentRiskLevels",
+        "validRiskLevels"
+      ],
+      "properties": {
+        "validRiskLevels": {
+          "const": [
+            "R0",
+            "R1",
+            "R2",
+            "R3"
+          ]
+        },
+        "independentRiskLevels": {
+          "const": [
+            "R2",
+            "R3"
+          ]
+        }
+      }
+    },
+    "broadClaimPhrases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "intake": {
+      "type": "object"
+    },
+    "candidateRange": {
+      "type": "object",
+      "required": [
+        "requiredPhases",
+        "emptyTree",
+        "baseEnvVar",
+        "dispositions"
+      ],
+      "properties": {
+        "requiredPhases": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "bootstrap",
+              "pre-dispatch",
+              "worker-return",
+              "reviewer-fast",
+              "pre-commit",
+              "pr-ci"
+            ]
+          }
+        },
+        "dispositions": {
+          "const": [
+            "RANGE_RESOLVED",
+            "RANGE_EMPTY_CHECKED",
+            "RANGE_INITIAL_ALL_FILES",
+            "WORKTREE_SCOPE",
+            "NO_GIT_NO_CANDIDATES"
+          ]
+        }
+      }
+    },
+    "trustAnchors": {
+      "type": "object",
+      "required": [
+        "INDEPENDENT_CORE",
+        "CI_BUNDLE_PIN"
+      ],
+      "description": "INDEPENDENT_CORE is the independent anchor; CI_BUNDLE_PIN is project-controlled tamper evidence."
+    },
+    "activeWorkOrderPrefix": {
+      "const": "docs/work_orders/"
+    }
+  }
+}

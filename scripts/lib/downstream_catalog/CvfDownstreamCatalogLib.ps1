@@ -102,7 +102,7 @@ function Test-CvfArrayField {
 }
 
 function Get-CvfDefaultArtifactRegistryEntries {
-    param([Parameter(Mandatory = $true)][string]$InitialHandoffRelative)
+    param([Parameter(Mandatory = $true)][string]$InitialHandoffRelative, [switch]$IncludeLearningHome)
 
     return @(
         [ordered]@{ id = "schema-artifact-registry"; family = "schema"; path = "docs/catalog/schemas/ARTIFACT_REGISTRY.schema.json"; status = "ACTIVE"; description = "Closed schema reference for the Artifact Registry." }
@@ -122,6 +122,9 @@ function Get-CvfDefaultArtifactRegistryEntries {
         [ordered]@{ id = "family-specs"; family = "governed_artifact_family"; path = "docs/specs"; status = "ACTIVE"; description = "Specifications." }
         [ordered]@{ id = "family-work-orders"; family = "governed_artifact_family"; path = "docs/work_orders"; status = "ACTIVE"; description = "Work orders." }
         [ordered]@{ id = "family-reviews"; family = "governed_artifact_family"; path = "docs/reviews"; status = "ACTIVE"; description = "Reviews and evidence." }
+        if ($IncludeLearningHome) {
+            [ordered]@{ id = "family-learnings"; family = "governed_artifact_family"; path = "docs/reviews/learnings"; status = "ACTIVE"; description = "Shared project learning, value-filtered parent intake and returned adoption." }
+        }
     )
 }
 
@@ -129,14 +132,15 @@ function New-CvfArtifactRegistryObject {
     param(
         [Parameter(Mandatory = $true)][string]$ProjectName,
         [Parameter(Mandatory = $true)][string]$DateStamp,
-        [Parameter(Mandatory = $true)][string]$InitialHandoffRelative
+        [Parameter(Mandatory = $true)][string]$InitialHandoffRelative,
+        [switch]$IncludeLearningHome
     )
     return [ordered]@{
         schemaVersion = "1.0"
         projectName   = $ProjectName
         updatedAt     = $DateStamp
         claimBoundary = "Registers generated bootstrap authority surfaces only; it does not claim runtime module capability."
-        artifacts     = @(Get-CvfDefaultArtifactRegistryEntries -InitialHandoffRelative $InitialHandoffRelative)
+        artifacts     = @(Get-CvfDefaultArtifactRegistryEntries -InitialHandoffRelative $InitialHandoffRelative -IncludeLearningHome:$IncludeLearningHome)
     }
 }
 

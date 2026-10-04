@@ -134,3 +134,25 @@ def test_stale_current_authority_rejects_requested_work_order(tmp_path, monkeypa
     report = checker.evaluate(other)
     assert not report["compliant"]
     assert "DR-01" in _rules(report)
+
+
+def test_fast_gate_without_ledger_fails_release(tmp_path, monkeypatch) -> None:
+    repo = Repo(tmp_path)
+    material = _write_packet(repo, "requiredGate: `python governance/compat/run_worker_return_fast_gate.py`")
+    _write_continuity(repo, material)
+    monkeypatch.setattr(checker, "REPO_ROOT", tmp_path)
+    report = checker.evaluate(WORK_ORDER)
+    assert "DR-07" in _rules(report)
+    assert any("found 0" in item["message"] for item in report["violations"] if item["rule"] == "DR-07")
+
+
+def test_fast_gate_with_valid_ledger_passes_release(tmp_path, monkeypatch) -> None:
+    repo = Repo(tmp_path)
+    ledger = '''requiredGate: `python governance/compat/run_worker_return_fast_gate.py`
+```acceptance-ledger-json
+{"schemaVersion":"cvf.workOrderAcceptanceLedger@1.0.0","requirements":[{"requirementId":"R1","mandatory":true,"expectedArtifacts":["a.txt"],"requiredProofIds":["P1"]}],"proofCatalog":[{"proofId":"P1","kind":"COMMAND","locator":"pytest"}]}
+```'''
+    material = _write_packet(repo, ledger)
+    _write_continuity(repo, material)
+    monkeypatch.setattr(checker, "REPO_ROOT", tmp_path)
+    assert checker.evaluate(WORK_ORDER)["compliant"]

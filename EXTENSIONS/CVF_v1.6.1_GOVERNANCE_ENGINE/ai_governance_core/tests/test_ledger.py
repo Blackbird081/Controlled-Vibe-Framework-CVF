@@ -94,8 +94,21 @@ class TestImmutableLedger:
         with open(ledger_path, "r") as f:
             chain = json.load(f)
         assert len(chain) == 2
+        assert ledger.read_chain() == chain
 
     def test_creates_file_if_missing(self, tmp_dir):
         ledger_path = os.path.join(tmp_dir, "subdir", "ledger.json")
         ledger = ImmutableLedger(ledger_path=ledger_path)
         assert os.path.exists(ledger_path)
+
+    def test_rejects_incompatible_existing_ledger_without_rewriting(self, tmp_dir):
+        ledger_path = os.path.join(tmp_dir, "ledger.json")
+        incompatible = {"ledger_version": "other-format", "blocks": []}
+        with open(ledger_path, "w") as f:
+            json.dump(incompatible, f)
+
+        with pytest.raises(ValueError, match="JSON block list"):
+            ImmutableLedger(ledger_path=ledger_path)
+
+        with open(ledger_path, "r") as f:
+            assert json.load(f) == incompatible

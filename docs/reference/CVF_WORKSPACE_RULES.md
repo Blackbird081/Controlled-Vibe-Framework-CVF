@@ -47,6 +47,13 @@ Rules:
 
 ## Application Projects
 
+Each governed project has a shared learning home at `docs/reviews/learnings/`,
+with README discovery and a record template. New profile1.1 bootstraps install it;
+existing projects migrate deliberately. Use
+`downstream_gate_profile/CVF_PROJECT_LEARNING_LOOP_STANDARD.md` for value-filtered
+use case -> CVF -> use case intake. Keep parent acceptance, return delivery and
+project application separate; parked projects receive no adoption mutation.
+
 Each application must live as a sibling of `.Controlled-Vibe-Framework-CVF`.
 
 Rules:
@@ -230,6 +237,19 @@ powershell -ExecutionPolicy Bypass -File ".\Update-CVF-Workspace-RulePack.ps1" -
 The active manifest should record `paid-user-safe` in
 `CVF_RULE_PACKS/ACTIVE_RULE_PACK.json`. This profile must not use
 `-AllowProvenanceContinuity`.
+
+Bootstrap and reconciliation also install (or refresh) a small set of
+workspace-root wrapper scripts and guides via
+`scripts/install_cvf_workspace_root_wrappers.ps1`:
+
+- `New-CVF-Governed-Project.ps1` - bootstrap + doctor + workspace gate in one command
+- `Run-CVF-NewProject-Enforcement.ps1` - workspace-wide enforcement gate
+- `CVF_WORKSPACE_USER_GUIDE.md` / `CVF_WORKSPACE_HUONG_DAN_SU_DUNG.md` - bilingual workspace-root guide
+
+These wrappers only cover the public-safe flow (new-project bootstrap,
+enforcement gate, and workspace-root guidance). Any local-only overlay
+tooling is a separate, provenance-side concern and is not part of this
+public-safe wrapper set.
 
 ## Update Flow
 

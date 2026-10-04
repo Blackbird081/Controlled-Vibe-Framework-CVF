@@ -168,12 +168,13 @@ Canonical CVF evidence references:
 
 This downstream project may claim:
 
-- the workspace is agent-enforcement-ready when the doctor status is PASS;
+- the doctor checks listed in section 5 passed when the doctor status is PASS (a scoped statement; it is not a blanket enforcement claim);
 - live provider readiness was checked secret-free only if -CheckLiveReadiness was used;
 - CVF Web governance proof is inherited by reference to the CVF core release gate and evidence records.
 
 This downstream project must not claim:
 
+- that doctor PASS means every mandatory gate is INVOKED or PROVEN_HERMETIC (see the GATE_COVERAGE line in section 5; INSTALLED is not INVOKED, and hosted CI is not observed here);
 - that provider API keys are stored or distributed by .cvf/;
 - that workspace doctor pass proves provider connectivity;
 - that mock UI checks prove governance behavior;

@@ -241,6 +241,18 @@
       "rotationScript": "scripts/cvf_active_archive.py",
       "protectionMode": "PERMANENT_ACTIVE_WINDOW",
       "status": "ACTIVE"
+    },
+    {
+      "id": "workspace_overlay_pipeline_standard_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_WORKSPACE_OVERLAY_PIPELINE_STANDARD_2026-07-07.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_WORKSPACE_OVERLAY_PIPELINE_STANDARD_2026-07-07\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
     }
   ]
 }

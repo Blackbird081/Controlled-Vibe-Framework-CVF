@@ -189,7 +189,17 @@ class CVFEnforcementAdapter:
         """
         Add CVF enforcement metadata to a governance result dict.
         """
-        decision = result.get("final_decision", result.get("final_status", "UNKNOWN"))
+        flat_decision = result.get("final_decision", result.get("final_status"))
+        analysis = result.get("decision_analysis")
+        nested_decision = analysis.get("final_decision") if isinstance(analysis, dict) else None
+        # The REST report uses decision_analysis; older callers use a flat
+        # decision. A disagreement must never be promoted to ALLOW.
+        if flat_decision and nested_decision and flat_decision != nested_decision:
+            decision = "UNKNOWN"
+        else:
+            decision = flat_decision or nested_decision or "UNKNOWN"
+        if not isinstance(decision, str):
+            decision = "UNKNOWN"
         risk_level = result.get("cvf_risk_level", "R2")
 
         response = CVFEnforcementAdapter.build_response(

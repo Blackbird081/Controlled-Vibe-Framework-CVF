@@ -112,7 +112,12 @@ The gate runs UI-only mock E2E plus live governance E2E, and it must fail if no 
 
 ## What CVF Is
 
-CVF is a governance-first control plane — a layer that decides whether an AI call may run, which provider lane it uses, and what evidence is recorded — for AI-assisted execution.
+CVF is AI Governance Infrastructure: a governance layer for AI-assisted work that decides whether an AI call may run, which provider lane it uses, and what evidence is recorded.
+It complements agent runtimes and AI tools rather than replacing them.
+
+CVF starts with the work a person wants done and the evidence needed to accept its result. It reuses suitable execution capabilities, controls, version history, and provenance from existing tools; a custom adapter or control needs a demonstrated gap in a named workflow. CVF retains responsibility for the job contract, authority, evidence, and acceptance within its supported boundary. A provider response, governance receipt, or `ALLOW` decision does not by itself accept an artifact.
+
+When work changes, evidence must be checked against the input, output version, scope, and freshness required by the next decision. Historical results remain intact. Version-aware continuity across a workflow is a design requirement; claim it as working behavior only for a consumer and profile with corresponding proof.
 
 CVF solves three problems in AI-assisted development: uncontrolled provider costs, ungoverned agent execution, and lack of verifiable audit trails. Without CVF, agents can call providers without budget enforcement, leak or repeat sensitive content in outputs, and leave weak evidence of what ran. CVF puts a governed control plane between your code and your AI providers.
 

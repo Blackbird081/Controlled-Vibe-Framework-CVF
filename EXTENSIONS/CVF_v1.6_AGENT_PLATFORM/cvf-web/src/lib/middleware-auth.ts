@@ -6,6 +6,7 @@ import type { TeamRole } from 'cvf-guard-contract/enterprise';
 
 import { CVF_IMPERSONATION_COOKIE, parseCookieHeader } from '@/lib/impersonation';
 import { findMockUserById, normalizeDisplayName } from '@/lib/mock-enterprise-db';
+import { findOAuthIdentityBinding, type OAuthProviderId } from '@/lib/oauth-identity-profile';
 import { getActiveImpersonationSession } from '@/lib/policy-reader';
 
 export type SessionImpersonation = {
@@ -36,6 +37,9 @@ type SessionUser = {
     userId?: string;
     orgId?: string;
     teamId?: string;
+    authSource?: 'local_mock' | 'oauth_bound';
+    oauthProvider?: OAuthProviderId;
+    oauthSubject?: string;
 };
 
 type AppToken = {
@@ -46,7 +50,15 @@ type AppToken = {
     orgId?: string;
     teamId?: string;
     exp?: number;
+    authSource?: 'local_mock' | 'oauth_bound';
+    oauthProvider?: OAuthProviderId;
+    oauthSubject?: string;
 };
+
+function productionBinding(source: unknown, provider: unknown, subject: unknown) {
+    if (source !== 'oauth_bound' || provider !== process.env.CVF_OAUTH_PROVIDER) return null;
+    return findOAuthIdentityBinding(process.env.CVF_OAUTH_IDENTITY_BINDINGS_JSON, provider, subject);
+}
 
 async function resolveCookieValue(request?: NextRequest | Request): Promise<string | undefined> {
     if (request) {
@@ -82,12 +94,16 @@ async function resolveBaseSessionFromRequest(request: NextRequest | Request): Pr
     const token = await getToken({ req: request, secret: authSecret }) as AppToken | null;
     if (!token) return null;
 
+    const binding = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development'
+        ? null : productionBinding(token.authSource, token.oauthProvider, token.oauthSubject);
+    if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development' && !binding) return null;
+
     return {
-        userId: token.userId || 'unknown-user',
+        userId: binding?.userId ?? token.userId ?? 'unknown-user',
         user: normalizeDisplayName(token.name) || token.email || 'unknown',
-        role: token.role || 'developer',
-        orgId: token.orgId || 'org_cvf',
-        teamId: token.teamId || 'team_eng',
+        role: binding?.role ?? token.role ?? 'developer',
+        orgId: binding?.orgId ?? token.orgId ?? 'org_cvf',
+        teamId: binding?.teamId ?? token.teamId ?? 'team_eng',
         expiresAt: (token.exp ?? 0) * 1000,
         authMode: 'session',
     };
@@ -98,12 +114,16 @@ async function resolveBaseSessionAmbient(): Promise<SessionCookie | null> {
     if (!session?.user) return null;
     const sessionUser = session.user as SessionUser;
 
+    const binding = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development'
+        ? null : productionBinding(sessionUser.authSource, sessionUser.oauthProvider, sessionUser.oauthSubject);
+    if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development' && !binding) return null;
+
     return {
-        userId: sessionUser.userId || 'unknown-user',
+        userId: binding?.userId ?? sessionUser.userId ?? 'unknown-user',
         user: normalizeDisplayName(sessionUser.name) || sessionUser.email || 'unknown',
-        role: sessionUser.role || 'developer',
-        orgId: sessionUser.orgId || 'org_cvf',
-        teamId: sessionUser.teamId || 'team_eng',
+        role: binding?.role ?? sessionUser.role ?? 'developer',
+        orgId: binding?.orgId ?? sessionUser.orgId ?? 'org_cvf',
+        teamId: binding?.teamId ?? sessionUser.teamId ?? 'team_eng',
         expiresAt: new Date(session.expires).getTime(),
         authMode: 'session',
     };

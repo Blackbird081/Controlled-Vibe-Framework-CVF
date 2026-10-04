@@ -5,13 +5,16 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$ProjectName,
 
-    [string]$ProjectRepo = ""
+    [string]$ProjectRepo = "",
+
+    [switch]$InstallGateProfile
 )
 
 $ErrorActionPreference = "Stop"
 
 . (Join-Path $PSScriptRoot "lib\downstream_catalog\CvfDownstreamCatalogLib.ps1")
 . (Join-Path $PSScriptRoot "lib\downstream_catalog\CvfDownstreamBootstrapContent.ps1")
+. (Join-Path $PSScriptRoot "lib\downstream_governance\CvfDownstreamGateProfile.ps1")
 
 function Write-Info([string]$Message) {
     Write-Host "[INFO] $Message" -ForegroundColor Cyan
@@ -76,6 +79,7 @@ $cvfCorePath = Join-Path $workspaceRootResolved ".Controlled-Vibe-Framework-CVF"
 $projectPath = Join-Path $workspaceRootResolved $ProjectName
 $workspaceFilePath = Join-Path $workspaceRootResolved "$ProjectName.code-workspace"
 $workspaceRulesPath = Join-Path $workspaceRootResolved "WORKSPACE_RULES.md"
+$workspaceWrapperInstallerPath = Join-Path $PSScriptRoot "install_cvf_workspace_root_wrappers.ps1"
 $requiredPublicCoreFiles = @(
     "AGENTS.md",
     "AGENT_HANDOFF.md",
@@ -96,7 +100,7 @@ $requiredPublicCoreFiles = @(
     "scripts\lib\downstream_catalog\schemas\ARTIFACT_REGISTRY.schema.json",
     "scripts\lib\downstream_catalog\schemas\MODULE_REGISTRY.schema.json",
     "governance\toolkit\05_OPERATION\downstream_catalog\CVF_DOWNSTREAM_CATALOG_GUARD.md"
-)
+) + $Script:CvfGateProfileCoreFiles
 
 Write-Info "Workspace root: $workspaceRootResolved"
 Ensure-Directory $workspaceRootResolved
@@ -228,6 +232,10 @@ $catalogRequiredDocs = if ($earlyCatalogState -ne "LEGACY_OR_MIXED") {
 }
 else { @() }
 
+# DGIP: decide the gate-profile mode BEFORE any continuity surface is written.
+$gateProfileMode = Get-CvfGateProfileMode -ProjectPath $projectPath -Explicit:$InstallGateProfile
+$gateRequiredDocs = if ($gateProfileMode -ne "SKIP") { @(".cvf/gate-profile.lock.json", "scripts/cvf_gates/cvf_downstream_gate_runner.py") } else { @() }
+
 $manifestObj = [ordered]@{
     schemaVersion                = "2.0"
     cvfCoreRepository            = "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git"
@@ -251,7 +259,7 @@ $manifestObj = [ordered]@{
         "docs/catalog/MODULE_REGISTRY.json",
         "docs/catalog/MODULE_CATALOG.md",
         "IMPLEMENTATION_STATUS.json"
-    ) + $catalogRequiredDocs
+    ) + $catalogRequiredDocs + $gateRequiredDocs
     bootstrapDate                = $dateStamp
     enforcementVersion           = "3.1-governed-catalog"
     bootstrapScript              = "scripts/new-cvf-workspace.ps1"
@@ -264,10 +272,15 @@ if ($earlyCatalogState -ne "LEGACY_OR_MIXED") {
     # never added for a legacy/mixed project the kit intentionally skipped.
     $manifestObj.catalogKitVersion = $Script:CvfCatalogKitVersion
 }
+if ($gateProfileMode -ne "SKIP") {
+    # Marker only when the profile is (or is being) installed; a skipped legacy project stays unmarked.
+    $manifestObj.downstreamGateProfile = $Script:CvfGateProfileId
+}
 $manifestJson = $manifestObj | ConvertTo-Json -Depth 5
 Set-Content -Path (Join-Path $cvfManifestDir "manifest.json") -Value $manifestJson -Encoding utf8
 Write-Ok "Created: $cvfManifestDir\manifest.json"
 Ensure-ProjectGitIgnoreLine -ProjectRoot $projectPath -Line ".cvf/local-binding.json"
+if ($gateProfileMode -ne "SKIP") { Ensure-ProjectGitIgnoreLine -ProjectRoot $projectPath -Line ".cvf/runtime/" }
 
 $policyObj = [ordered]@{
     policyVersion                = "1.0"
@@ -452,6 +465,10 @@ foreach ($family in @("decisions", "roadmaps", "specs", "work_orders", "reviews"
     Write-ProjectFileIfMissing -FilePath (Join-Path $docsDir "$family\README.md") -Content $familyContent
 }
 
+# The pinned installer prepares the learning home with boundary checks before catalog registration.
+# SKIP and drift-preserved existing profiles never acquire new learning content implicitly.
+$gateProfileStatus = Install-CvfDownstreamGateProfile -ProjectPath $projectPath -CvfCorePath $cvfCorePath -CvfHead $cvfHead -Mode $gateProfileMode
+
 # Governed downstream catalog kit: Artifact Registry, Module Registry, schemas,
 # executable catalog manager, and deterministic Index/Module Catalog views.
 $catalogKitStatus = Install-CvfDownstreamCatalogKit -ProjectPath $projectPath -CvfCorePath $cvfCorePath `
@@ -459,7 +476,7 @@ $catalogKitStatus = Install-CvfDownstreamCatalogKit -ProjectPath $projectPath -C
 
 # Bootstrap Log
 $logContent = Get-CvfBootstrapLogContent -RecordIdDate $recordIdDate -ProjectName $ProjectName -DateStamp $dateStamp `
-    -CvfHead $cvfHead -AgentInstructionsStatus $agentInstructionsStatus -CatalogKitStatus $catalogKitStatus
+    -CvfHead $cvfHead -AgentInstructionsStatus $agentInstructionsStatus -CatalogKitStatus $catalogKitStatus -GateProfileStatus $gateProfileStatus
 Set-Content -Path $bootstrapLogPath -Value $logContent -Encoding utf8
 Write-Ok "Created: $bootstrapLogPath"
 
@@ -469,6 +486,10 @@ Write-Ok "Created: $bootstrapLogPath"
 # exit and must never reach the "Workspace bootstrap complete." line below.
 if ($catalogKitStatus -eq "DAMAGED_GOVERNED_SKIPPED") {
     throw "Bootstrap did NOT complete successfully: governed downstream catalog installation failed (status: DAMAGED_GOVERNED_SKIPPED). The catalog manager rejected the registries, or the governed source is structurally invalid. Run scripts/manage_cvf_downstream_catalog.ps1 -Check in the project, repair docs/catalog/ARTIFACT_REGISTRY.json, then re-run bootstrap. See $bootstrapLogPath for detail."
+}
+
+if ($gateProfileStatus -notin @("FRESH_INSTALLED", "ALREADY_INSTALLED", "UPGRADED", "MIGRATION_REQUIRED_SKIPPED")) {
+    throw "Bootstrap did NOT complete successfully: downstream gate profile status $gateProfileStatus (no silent overwrite of project-owned or drifted gate files). See $bootstrapLogPath."
 }
 
 Write-Host ""
@@ -482,6 +503,7 @@ else {
     Write-Ok "Workspace bootstrap complete."
 }
 Write-Host "Governed downstream catalog kit status: $catalogKitStatus" -ForegroundColor Cyan
+Write-Host "Downstream gate profile status: $gateProfileStatus (INSTALLED is not INVOKED; run the doctor for coverage)" -ForegroundColor Cyan
 Write-Host "Open this workspace file in VS Code:" -ForegroundColor Yellow
 Write-Host "  $workspaceFilePath"
 Write-Host ""

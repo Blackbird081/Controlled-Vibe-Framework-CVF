@@ -245,3 +245,65 @@ def test_changed_paths_can_target_a_downstream_repository(tmp_path: Path) -> Non
     tracked.write_text("changed\n", encoding="utf-8")
 
     assert checker.changed_paths("HEAD", "HEAD", repo) == ("README.md",)
+
+
+def status_codes(text: str, path: str = "docs/work_orders/CVF_AGENT_WORK_ORDER_X.md") -> set[str]:
+    return {item.code for item in checker.check_work_order(path, text)}
+
+
+def test_status_applicability_fails_closed_on_unparseable_values() -> None:
+    assert "status_blank" in status_codes("Status:\n")
+    assert "status_duplicate" in status_codes("Status: DISPATCH_READY\nStatus: DISPATCH_READY\n")
+    assert "status_contradictory" in status_codes("Status: DISPATCH_READY\nStatus: HOLD\n")
+    assert "status_unknown" in status_codes("Status: DISPATCH_RDY\n")
+    assert "status_malformed" in status_codes("Status: DISPATCH_READY - issue #12\n")
+    assert "status_malformed" in status_codes("Status: dispatch_ready\n")
+    assert "status_missing" in status_codes("# work order without a status line\n")
+
+
+def test_inline_annotation_is_checked_not_skipped() -> None:
+    assert "contract_missing" in status_codes("Status: DISPATCH_READY (issue #12)\n")
+    assert "contract_missing" in status_codes("Status: READY_FOR_DISPATCH\n")
+
+
+def test_explicit_not_applicable_returns_reason_and_checked_control_ids() -> None:
+    decision = checker.classify_status("docs/work_orders/CVF_AGENT_WORK_ORDER_X.md", "Status: HOLD_PENDING_OPERATOR_DECISION\n")
+    assert decision.outcome == "NOT_APPLICABLE"
+    assert "closeability contract was NOT checked" in decision.reason
+    assert decision.checked_control_ids == ("work_order_status_grammar",)
+    assert decision.unchecked_control_ids == ("closeability_contract",)
+    assert status_codes("Status: HOLD\n") == set()
+
+
+def test_non_work_order_and_fenced_status_are_not_candidates() -> None:
+    assert checker.classify_status("docs/work_orders/README.md", "# Index\n").outcome == "NOT_APPLICABLE"
+    fenced = "Status: HOLD\n```\nStatus: DISPATCH_READY\n```\n"
+    assert status_codes(fenced) == set()
+
+
+def test_crlf_status_lines_are_parsed() -> None:
+    assert "status_blank" in status_codes("Status:\r\n")
+    assert status_codes("Status: HOLD\r\n") == set()
+
+
+def test_historical_work_orders_still_classify_without_error() -> None:
+    folder = Path(__file__).resolve().parents[2] / "docs" / "work_orders"
+    if not folder.is_dir():
+        return
+    tally: dict[str, int] = {}
+    for path in sorted(folder.glob("*.md")):
+        decision = checker.classify_status(f"docs/work_orders/{path.name}", path.read_text(encoding="utf-8", errors="replace"))
+        tally[decision.outcome] = tally.get(decision.outcome, 0) + 1
+    assert sum(tally.values()) > 100
+
+
+def test_checker_output_lists_not_applicable_with_reason(tmp_path: Path) -> None:
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    target = tmp_path / "docs" / "work_orders" / "CVF_AGENT_WORK_ORDER_H.md"
+    target.parent.mkdir(parents=True)
+    target.write_text("Status: HOLD\n", encoding="utf-8")
+    violations, not_applicable = checker.evaluate_detailed("", "", tmp_path)
+    assert violations == []
+    assert [path for path, _ in not_applicable] == ["docs/work_orders/CVF_AGENT_WORK_ORDER_H.md"]
+    assert not_applicable[0][1].checked_control_ids == ("work_order_status_grammar",)
+    assert not_applicable[0][1].unchecked_control_ids == ("closeability_contract",)

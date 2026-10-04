@@ -47,9 +47,9 @@ from check_work_order_dispatch_quality_lifecycle import (
 )
 from guard_binding_catalog import effective_binding_text
 try:
-    from check_work_order_acceptance_ledger import validate_work_order as validate_acceptance_ledger
+    from check_work_order_acceptance_ledger import validate_dispatch_ledger, validate_work_order as validate_acceptance_ledger
 except ModuleNotFoundError:
-    from governance.compat.check_work_order_acceptance_ledger import validate_work_order as validate_acceptance_ledger
+    from governance.compat.check_work_order_acceptance_ledger import validate_dispatch_ledger, validate_work_order as validate_acceptance_ledger
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
@@ -273,9 +273,7 @@ def _run_check(base: str | None, head: str | None) -> tuple[dict[str, Any], str,
         if not path.startswith("docs/work_orders/"):
             continue
         text = (REPO_ROOT / path).read_text(encoding="utf-8", errors="replace")
-        if "```acceptance-ledger-json" not in text:
-            continue
-        _, ledger_issues = validate_acceptance_ledger(text)
+        ledger_issues = validate_dispatch_ledger(text)
         if ledger_issues:
             report["violations"].append({"path": path, "issues": ledger_issues})
     report["violationCount"] = len(report["violations"])

@@ -23,7 +23,6 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import Dict, Any, Optional, List
 from datetime import datetime
-import json
 import os
 
 # Core
@@ -39,6 +38,7 @@ from approval_layer.approval_workflow import (
 )
 from domain_layer.domain_registry import DomainRegistry
 from ledger_layer.immutable_ledger import ImmutableLedger
+from ledger_layer.sqlite_ledger import SqliteLedger
 
 # Adapters
 from adapters.cvf_risk_adapter import CVFRiskAdapter
@@ -80,13 +80,18 @@ _default_approval_matrix = {
 
 _approval_workflow = ApprovalWorkflow(approval_matrix=_default_approval_matrix)
 
+_ledger_path = os.environ.get("CVF_GOVERNANCE_LEDGER_PATH", "ledger_layer/ledger_chain.json")
+_ledger = (SqliteLedger if os.path.splitext(_ledger_path)[1].lower() == ".sqlite" else ImmutableLedger)(
+    ledger_path=_ledger_path
+)
+
 _orchestrator = CoreOrchestrator(
     policy_engine=BasePolicyEngine(),
     decision_matrix=DecisionMatrix(rules=[]),
     action_router=ActionRouter(),
     approval_workflow=_approval_workflow,
     registry=DomainRegistry(),
-    ledger=ImmutableLedger(),
+    ledger=_ledger,
 )
 
 
@@ -224,13 +229,8 @@ async def approve(req: ApproveRequest):
 @app.get("/api/v1/ledger", response_model=CVFResponse)
 async def ledger(limit: int = 50):
     """Query the most recent ledger entries."""
-    ledger_path = "ledger_layer/ledger_chain.json"
     try:
-        if os.path.exists(ledger_path):
-            with open(ledger_path, "r") as f:
-                chain = json.load(f)
-        else:
-            chain = []
+        chain = _ledger.read_chain()
 
         entries = chain[-limit:] if len(chain) > limit else chain
 

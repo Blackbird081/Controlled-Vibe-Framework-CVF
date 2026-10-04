@@ -1,0 +1,214 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cvf.downstreamFindingIntake@1.0.0 emitted record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "profileId",
+    "findingId",
+    "title",
+    "sourceProject",
+    "sourceSha",
+    "observed",
+    "expected",
+    "negativeEvidence",
+    "chainJoins",
+    "defectClass",
+    "learningLane",
+    "proposedDisposition",
+    "candidateControl",
+    "claimLimits",
+    "dedupCandidates",
+    "parentOwner",
+    "acceptance",
+    "parentDisposition",
+    "parentLinks",
+    "sourceClaimStatus",
+    "contentSha256"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "cvf.downstreamFindingIntake@1.0.0"
+    },
+    "profileId": {
+      "const": "cvf.downstreamGateProfile@1.1.0"
+    },
+    "findingId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,63}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 8
+    },
+    "sourceProject": {
+      "type": "string",
+      "minLength": 8
+    },
+    "sourceSha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "observed": {
+      "type": "string",
+      "minLength": 8
+    },
+    "expected": {
+      "type": "string",
+      "minLength": 8
+    },
+    "negativeEvidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "locator",
+          "description"
+        ],
+        "properties": {
+          "locator": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "chainJoins": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "join",
+          "gap",
+          "earliestControlPoint"
+        ],
+        "properties": {
+          "join": {
+            "type": "string"
+          },
+          "gap": {
+            "type": "string"
+          },
+          "earliestControlPoint": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "defectClass": {
+      "enum": [
+        "WORKER_EXECUTION_ERROR",
+        "ORCHESTRATOR_PACKET_GAP",
+        "RULE_GAP",
+        "MACHINE_GATE_GAP",
+        "PHASE_GATE_PLACEMENT_GAP",
+        "OPERATOR_SCOPE_CLARITY_GAP",
+        "RUNTIME_SIGNAL_GAP"
+      ]
+    },
+    "learningLane": {
+      "enum": [
+        "GOVERNANCE_CONTROL_PLANE",
+        "RUNTIME_BEHAVIOR_LEARNING",
+        "PROVIDER_OUTPUT_LEARNING",
+        "COST_ECONOMICS_LEARNING",
+        "DOCUMENTATION_ONLY_LEARNING"
+      ]
+    },
+    "proposedDisposition": {
+      "enum": [
+        "MACHINE_CHECK_CANDIDATE",
+        "DESIGN_REVIEW_REQUIRED",
+        "RULE_EXISTS",
+        "RUNTIME_LEARNING_CANDIDATE",
+        "N/A_WITH_REASON"
+      ]
+    },
+    "candidateControl": {
+      "type": "string",
+      "minLength": 8
+    },
+    "claimLimits": {
+      "type": "string",
+      "minLength": 8
+    },
+    "dedupCandidates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "parentOwner": {
+      "const": "docs/reference/CVF_FINDING_TO_GOVERNANCE_LEARNING_TRIGGER_STANDARD.md"
+    },
+    "acceptance": {
+      "enum": [
+        "NOT_ACCEPTED_GENERATION_ONLY",
+        "ACCEPTED_BY_PARENT",
+        "DECLINED_BY_PARENT"
+      ]
+    },
+    "parentDisposition": {
+      "enum": [
+        "PENDING_PARENT_ADMISSION",
+        "ACCEPTED_BY_PARENT",
+        "DECLINED_BY_PARENT"
+      ]
+    },
+    "parentLinks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "admissionRecord",
+        "workOrder",
+        "checker",
+        "goldenProof"
+      ],
+      "properties": {
+        "admissionRecord": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "workOrder": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "checker": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "goldenProof": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      }
+    },
+    "sourceClaimStatus": {
+      "const": "UNVERIFIED_UNTIL_PROJECT_EVIDENCE_IS_SEPARATELY_ADMITTED"
+    },
+    "contentSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "description": "Coherence: a generated record is NOT_ACCEPTED_GENERATION_ONLY with PENDING_PARENT_ADMISSION and all parentLinks null; a parent decision sets acceptance equal to parentDisposition and a non-null admissionRecord. Enforced by cvf_dg_intake.validate_record."
+}

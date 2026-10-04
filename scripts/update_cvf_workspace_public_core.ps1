@@ -11,6 +11,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $publicRemote = "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git"
+$workspaceWrapperInstallerPath = Join-Path $PSScriptRoot "install_cvf_workspace_root_wrappers.ps1"
 $requiredPublicCoreFiles = @(
     "AGENTS.md",
     "AGENT_HANDOFF.md",
@@ -58,6 +59,7 @@ $overlayFiles = @(
     "scripts\w114_cp7_multi_sample_downstream_proof.ps1",
     "scripts\write_cvf_workspace_web_evidence_bridge.ps1"
 )
+$overlayManifestFile = "_cvf_overlay_export_manifest.json"
 
 function Write-Info([string]$Message) { Write-Host "[INFO] $Message" -ForegroundColor Cyan }
 function Write-Ok([string]$Message) { Write-Host "[OK]   $Message" -ForegroundColor Green }
@@ -72,8 +74,22 @@ function Assert-PathInsideWorkspace([string]$Path, [string]$Workspace) {
     return $resolved
 }
 
+function Get-OverlayRelativePaths([string]$SourceRoot) {
+    $manifestPath = Join-Path $SourceRoot $overlayManifestFile
+    if (Test-Path -LiteralPath $manifestPath -PathType Leaf) {
+        $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding utf8 | ConvertFrom-Json
+        if (-not $manifest.files) {
+            throw "Overlay manifest does not contain a files array: $manifestPath"
+        }
+        return @($manifest.files | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Sort-Object -Unique)
+    }
+
+    return $overlayFiles
+}
+
 function Copy-OverlayFiles([string]$SourceRoot, [string]$TargetRoot) {
-    foreach ($relativePath in $overlayFiles) {
+    $relativePaths = Get-OverlayRelativePaths -SourceRoot $SourceRoot
+    foreach ($relativePath in $relativePaths) {
         $source = Join-Path $SourceRoot $relativePath
         if (-not (Test-Path -LiteralPath $source -PathType Leaf)) {
             continue
@@ -218,7 +234,7 @@ try {
         if (-not (Test-Path -LiteralPath $overlayResolved -PathType Container)) {
             throw "Overlay source not found: $overlayResolved"
         }
-        Write-Warn "Applying reviewed local public-sync overlay: $overlayResolved"
+        Write-Warn "Applying reviewed local overlay: $overlayResolved"
         Copy-OverlayFiles -SourceRoot $overlayResolved -TargetRoot $corePath
     }
 
@@ -264,7 +280,6 @@ try {
     else {
         Write-Warn "Workspace wrapper installer not found: $workspaceWrapperInstallerPath"
     }
-
     if (Test-Path -LiteralPath $activeProfilePath -PathType Leaf) {
         $activeProfile = Get-Content -LiteralPath $activeProfilePath -Raw -Encoding utf8 | ConvertFrom-Json
         if (@("public-free", "paid-user-safe") -contains $activeProfile.activeProfile) {

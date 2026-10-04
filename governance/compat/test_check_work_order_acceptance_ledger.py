@@ -25,6 +25,13 @@ def test_positive_join():
     assert module.validate_return(work_order(), worker_return(), {"a.txt"}) == []
 
 
+def test_fast_gate_requires_dispatcher_ledger_before_worker_return():
+    gate = "requiredGate: `python governance/compat/run_worker_return_fast_gate.py`"
+    assert any("must occur exactly once; found 0" in issue for issue in module.validate_dispatch_ledger(gate))
+    assert module.validate_dispatch_ledger(gate + "\n" + work_order()) == []
+    assert module.validate_dispatch_ledger("requiredGate: `python another_gate.py`") == []
+
+
 def test_git_observed_unclaimed_artifact_fails():
     issues = module.validate_return(work_order(), worker_return(), {"a.txt", "extra.txt"})
     assert any("Git observed unclaimed artifact" in issue for issue in issues)

@@ -6,10 +6,10 @@ Memory class: PUBLIC_REFERENCE
 
 Status: CURRENT PUBLIC GUIDE
 
-protocolVersion: 1.2.0
+protocolVersion: 1.3.0
 projectionOf: cvf.external-agent-round-trip
 compatibleWith: cvf.external-agent-portable-packet@1.x
-updatedAt: 2026-08-29
+updatedAt: 2026-10-09
 representation: PUBLIC_COMPACT_PROJECTION
 
 Use this guide when an external agent will review CVF, design a capability,
@@ -26,6 +26,22 @@ return-shape requirements in every prompt.
 This guide is public context, not CVF execution authority. External output
 remains non-authoritative until independently reviewed and promoted through a
 governed CVF owner surface.
+
+## Apply Supplied Learning Controls
+
+When the operator or task capsule supplies a relevant learning rule, treat it
+as an input to the current task. Before work, state the concrete action that
+will apply it and the evidence that will show whether the action worked. In a
+review or return, identify the rule, describe what was done, link the result,
+and disclose any deviation or unverified step.
+
+A rule being present in a repository, guide, prompt, or agent memory does not
+show that it reached the worker or changed the result. Report application as
+verified only after the reviewer checks the actual task evidence against the
+rule. If the task does not provide the relevant learning source, mark that
+boundary instead of claiming access to private CVF learning records or
+inferring that all agents follow them. This protocol records evidence; it does
+not automatically enforce arbitrary agent behavior.
 
 ## Scope
 

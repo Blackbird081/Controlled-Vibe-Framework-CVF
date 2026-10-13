@@ -77,6 +77,11 @@ template/checklist, rather than treating every incident as a missing parent rule
 The parent decision/proof is recorded in the PLL-T1 review. Returned CCMA adoption
 is `PARKED_BY_OPERATOR`; no source project was modified or tested.
 
+For multi-output jobs or retries after an uncertain delivery result, use the
+companion [CVF Per-Output Delivery Evidence Checklist](CVF_PER_OUTPUT_DELIVERY_EVIDENCE_CHECKLIST.md)
+to review evidence separately for each output; it does not establish exactly-once
+external delivery.
+
 ## Claim Boundary
 
 Checklist for evidence declaration and review; no arbitrary-command interception,

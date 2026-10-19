@@ -39,6 +39,7 @@ from approval_layer.approval_workflow import (
 from domain_layer.domain_registry import DomainRegistry
 from ledger_layer.immutable_ledger import ImmutableLedger
 from ledger_layer.sqlite_ledger import SqliteLedger
+from api.artifact_receipts import create_router as create_bound_receipt_router
 
 # Adapters
 from adapters.cvf_risk_adapter import CVFRiskAdapter
@@ -93,6 +94,9 @@ _orchestrator = CoreOrchestrator(
     registry=DomainRegistry(),
     ledger=_ledger,
 )
+
+# Dedicated bound-receipt endpoints. The resolver supplies no activation context, so both deny; no environment value can create one.
+app.include_router(create_bound_receipt_router(lambda: None))
 
 
 # ===========================

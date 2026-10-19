@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSettings } from './Settings';
 import { useLanguage } from '@/lib/i18n';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
@@ -104,6 +104,61 @@ function resolveApprovalSafeHint(reasons: unknown, isVi: boolean): string | null
     return match ? (isVi ? match.vi : match.en) : null;
 }
 
+// One attempt per admitted logical task; Cancel, unmount or task replacement invalidates all of its
+// async work. Client abort is best effort: correctness never depends on the transport honouring it.
+interface Attempt {
+    active: boolean;
+    delivered: boolean;
+    cancelRequested: boolean;
+    controller: AbortController;
+    timeouts: Set<ReturnType<typeof setTimeout>>;
+    intervals: Set<ReturnType<typeof setInterval>>;
+}
+type CompleteArgs = [output: string, evidenceReceipt?: GovernanceEvidenceReceipt];
+function createAttempt(): Attempt {
+    return {
+        active: true,
+        delivered: false,
+        cancelRequested: false,
+        controller: new AbortController(),
+        timeouts: new Set(),
+        intervals: new Set(),
+    };
+}
+function stopAttempt(attempt: Attempt) {
+    attempt.active = false;
+    attempt.controller.abort();
+    attempt.timeouts.forEach(id => clearTimeout(id));
+    attempt.intervals.forEach(id => clearInterval(id));
+    attempt.timeouts.clear();
+    attempt.intervals.clear();
+}
+function scheduleInAttempt(attempt: Attempt, run: () => void, delay: number) {
+    const id = setTimeout(() => {
+        attempt.timeouts.delete(id);
+        if (attempt.active) run();
+    }, delay);
+    attempt.timeouts.add(id);
+    return id;
+}
+
+// At-most-once delivery per active attempt for both manual and automatic completion.
+function deliverOnce(attempt: Attempt, onComplete: (...args: CompleteArgs) => void, args: CompleteArgs) {
+    if (!attempt.active || attempt.delivered) return;
+    attempt.delivered = true;
+    onComplete(...args);
+}
+
+// Content key of the request-determining values, so object identity never restarts a task.
+function stableKey(value: unknown): string {
+    if (Array.isArray(value)) return `[${value.map(stableKey).join(',')}]`;
+    if (value && typeof value === 'object') {
+        const record = value as Record<string, unknown>;
+        return `{${Object.keys(record).sort().map(key => `${JSON.stringify(key)}:${stableKey(record[key])}`).join(',')}}`;
+    }
+    return JSON.stringify(value) ?? 'undefined';
+}
+
 export function ProcessingScreen({
     templateName,
     templateId,
@@ -131,23 +186,46 @@ export function ProcessingScreen({
     const [executionRiskLevel, setExecutionRiskLevel] = useState<SafetyRiskLevel | null>(null);
     // W114-T1 CP5: user-visible governance evidence from the live execute route
     const [governanceEvidence, setGovernanceEvidence] = useState<GovernanceEvidenceState | null>(null);
-    const [evidenceReceipt, setEvidenceReceipt] = useState<GovernanceEvidenceReceipt | undefined>(undefined);
     const [executionDiagnostic, setExecutionDiagnostic] = useState<ExecutionDiagnostic | null>(null);
     // W96-T1: Completion state — set when success+riskLevel; suppresses 300ms path
-    const [completedOutput, setCompletedOutput] = useState<string | null>(null);
+    const [completion, setCompletion] = useState<{ attempt: Attempt; output: string; receipt?: GovernanceEvidenceReceipt } | null>(null);
     const executionProvider = mapSettingsProviderToExecutionProvider(settings.preferences?.defaultProvider);
     const selectedModel = settings.preferences?.defaultProvider
         ? settings.providers?.[settings.preferences.defaultProvider]?.selectedModel
         : undefined;
 
-    // Real API execution
-    const executeReal = useCallback(async () => {
+    // Callbacks and presentation are read at use time so their identity never restarts a task.
+    const currentView = {
+        onComplete,
+        onCancel,
+        isVi,
+        request: {
+            templateId,
+            templateName,
+            inputs,
+            intent,
+            executionOverrides,
+            mode: settings.preferences.defaultExportMode || 'governance',
+            executionProvider,
+            selectedModel,
+        },
+    };
+    const latest = useRef(currentView);
+    useEffect(() => {
+        latest.current = currentView;
+    });
+    const attemptRef = useRef<Attempt | null>(null);
+    const taskKey = stableKey(currentView.request);
+
+    // Real API execution for one attempt; nothing from an abandoned attempt reaches the UI.
+    const executeReal = useCallback(async (attempt: Attempt) => {
+        const { request, isVi } = latest.current;
+        const { templateId, templateName, inputs, intent, executionOverrides, mode, executionProvider, selectedModel } = request;
         if (!inputs || !intent) return false;
 
         try {
             setStatus(isVi ? 'Đang kết nối AI...' : 'Connecting to AI provider...');
             setProgress(10);
-            const mode = settings.preferences.defaultExportMode || 'governance';
             const aiCommit = executionOverrides?.aiCommit || {
                 commitId: `web-ui-${templateId || templateName}-${Date.now()}`,
                 agentId: 'cvf-web-ui',
@@ -159,6 +237,7 @@ export function ProcessingScreen({
             const response = await fetch('/api/execute', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                signal: attempt.controller.signal,
                 body: JSON.stringify({
                     templateId: templateId || templateName,
                     templateName,
@@ -173,15 +252,16 @@ export function ProcessingScreen({
                 }),
             });
 
+            if (!attempt.active) return false;
             setProgress(50);
             setStatus(isVi ? 'Đang xử lý phản hồi...' : 'Processing response...');
 
             const data = await response.json();
+            if (!attempt.active) return false;
             const enforcement = data.enforcement;
             const receipt = data.governanceEvidenceReceipt as GovernanceEvidenceReceipt | undefined;
             const diagnostic = data.diagnostic as ExecutionDiagnostic | undefined;
             setExecutionDiagnostic(diagnostic ?? null);
-            setEvidenceReceipt(receipt);
             setFalsePositiveReportState('idle');
             setGovernanceEvidence({
                 provider: receipt?.provider || data.provider,
@@ -227,11 +307,9 @@ export function ProcessingScreen({
                 setProgress(100);
                 if (badgeLevel) {
                     // W96-T1: persist badge — completion-banner + useEffect auto-advance
-                    setCompletedOutput(data.output);
+                    setCompletion({ attempt, output: data.output, receipt });
                 } else {
-                    setTimeout(() => {
-                        onComplete(data.output, receipt);
-                    }, 300);
+                    scheduleInAttempt(attempt, () => deliverOnce(attempt, latest.current.onComplete, [data.output, receipt]), 300);
                 }
                 return true;
             }
@@ -288,6 +366,7 @@ export function ProcessingScreen({
                 : 'API execution failed. No mock output was generated.'));
             return true;
         } catch (err) {
+            if (!attempt.active) return false;
             setExecutionDiagnostic(null);
             const message = err instanceof Error ? err.message : 'Network error';
             setError(isVi
@@ -295,7 +374,7 @@ export function ProcessingScreen({
                 : `${message}. No mock output was generated.`);
             return true;
         }
-    }, [templateId, templateName, inputs, intent, onComplete, settings.preferences.defaultExportMode, isVi, executionOverrides, executionProvider, selectedModel]);
+    }, []);
 
     const canReportFalsePositive =
         Boolean(governanceEvidence?.receiptId) &&
@@ -314,6 +393,8 @@ export function ProcessingScreen({
     }, [governanceEvidence?.decision, governanceEvidence?.receiptId, governanceEvidence?.riskLevel, templateId]);
 
     const reportFalsePositive = useCallback(async () => {
+        const attempt = attemptRef.current;
+        if (!attempt?.active) return;
         if (!canReportFalsePositive || !governanceEvidence?.receiptId || !governanceEvidence.decision) return;
 
         setFalsePositiveReportState('submitting');
@@ -331,7 +412,9 @@ export function ProcessingScreen({
                     routeId: '/api/execute',
                 }),
             });
+            if (!attempt.active) return;
             const data = await response.json().catch(() => ({}));
+            if (!attempt.active) return;
             if (!response.ok || !data.success) {
                 throw new Error(typeof data.error === 'string' ? data.error : 'Unable to record report');
             }
@@ -344,12 +427,15 @@ export function ProcessingScreen({
                 templateId,
             });
         } catch {
+            if (!attempt.active) return;
             setFalsePositiveReportState('error');
         }
     }, [canReportFalsePositive, error, governanceEvidence, templateId, templateName]);
 
     // W92-T1: Submit approval request
     const submitApprovalRequest = useCallback(async () => {
+        const attempt = attemptRef.current;
+        if (!attempt?.active) return;
         if (!templateId || !intent) return;
         setApprovalSubmitting(true);
         try {
@@ -368,7 +454,9 @@ export function ProcessingScreen({
                     reason: error || '',
                 }),
             });
+            if (!attempt.active) return;
             const data = await response.json();
+            if (!attempt.active) return;
             if (data.success && data.id) {
                 setApprovalRequestId(data.id);
                 trackEvent('task_recovery_started', {
@@ -378,12 +466,15 @@ export function ProcessingScreen({
                     templateId,
                 });
             }
+        } catch (err) {
+            if (attempt.active) throw err;
         } finally {
-            setApprovalSubmitting(false);
+            if (attempt.active) setApprovalSubmitting(false);
         }
     }, [templateId, templateName, inputs, intent, error, executionOverrides?.cvfPhase, executionOverrides?.cvfRiskLevel, executionProvider, selectedModel]);
 
-    const runMockExecution = useCallback(() => {
+    const runMockExecution = useCallback((attempt: Attempt) => {
+        const { isVi, request } = latest.current;
         const statuses = isVi
             ? [
                 'Đang khởi tạo...',
@@ -400,56 +491,79 @@ export function ProcessingScreen({
                 'Finalizing output...',
             ];
 
+        // Progress is tracked locally so no side effect runs inside a state updater.
+        setStatus(statuses[0]);
+        let value = 0;
         const interval = setInterval(() => {
-            setProgress((prev) => {
-                const next = prev + Math.random() * 15;
+            value += Math.random() * 15;
+            setProgress(Math.min(value, 100));
+            setStatus(statuses[Math.min(Math.floor(value / 25), statuses.length - 1)]);
 
-                const statusIndex = Math.min(Math.floor(next / 25), statuses.length - 1);
-                setStatus(statuses[statusIndex]);
-
-                if (next >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        onComplete(generateMockOutput(templateName));
-                    }, 500);
-                    return 100;
-                }
-                return next;
-            });
+            if (value >= 100) {
+                clearInterval(interval);
+                attempt.intervals.delete(interval);
+                scheduleInAttempt(attempt, () => deliverOnce(attempt, latest.current.onComplete, [generateMockOutput(request.templateName)]), 500);
+            }
         }, 300);
-
-        return () => clearInterval(interval);
-    }, [isVi, onComplete, templateName]);
+        attempt.intervals.add(interval);
+    }, []);
 
     // W96-T1: auto-advance after 2000ms when completion state is set
     useEffect(() => {
-        if (!completedOutput) return;
-        const timer = setTimeout(() => onComplete(completedOutput, evidenceReceipt), 2000);
+        if (!completion) return;
+        const timer = scheduleInAttempt(completion.attempt, () => deliverOnce(completion.attempt, latest.current.onComplete, [completion.output, completion.receipt]), 2000);
         return () => clearTimeout(timer);
-    }, [completedOutput, evidenceReceipt, onComplete]);
+    }, [completion]);
 
+    // The attempt restarts only when the request content (taskKey) or settings readiness changes.
     useEffect(() => {
         if (!isLoaded) {
             return;
         }
 
-        // Try real execution first if we have the required data
-        if (inputs && intent && Object.keys(inputs).length > 0) {
-            const runId = setTimeout(() => {
-                executeReal().then(success => {
-                    if (!success) {
-                        setError(isVi
-                            ? 'Không thể bắt đầu thực thi thật. Không tạo kết quả mẫu thay thế.'
-                            : 'Unable to start real execution. No mock output was generated.');
-                    }
-                });
-            }, 0);
-            return () => clearTimeout(runId);
-        } else {
-            // No inputs provided, use mock
-            runMockExecution();
+        const attempt = createAttempt();
+        attemptRef.current = attempt;
+        scheduleInAttempt(attempt, () => {
+            // A replaced attempt must not leave its results visible as the current attempt's UI.
+            const { request } = latest.current;
+            setProgress(0);
+            setError(null);
+            setGuidedResponse(null);
+            setApprovalRequestId(null);
+            setApprovalSubmitting(false);
+            setEnforcementStatus(null);
+            setApprovalSafeHint(null);
+            setFalsePositiveReportState('idle');
+            setExecutionRiskLevel(null);
+            setGovernanceEvidence(null);
+            setExecutionDiagnostic(null);
+            setCompletion(null);
+
+            // Try real execution first if we have the required data
+            if (request.inputs && request.intent && Object.keys(request.inputs).length > 0) {
+                void executeReal(attempt);
+            } else {
+                // No inputs provided, use mock
+                runMockExecution(attempt);
+            }
+        }, 0);
+
+        return () => {
+            stopAttempt(attempt);
+            if (attemptRef.current === attempt) attemptRef.current = null;
+        };
+    }, [taskKey, isLoaded, executeReal, runMockExecution]);
+
+    // Cancel invalidates the attempt, then forwards onCancel once per attempt.
+    const handleCancel = useCallback(() => {
+        const attempt = attemptRef.current;
+        if (attempt) {
+            if (attempt.cancelRequested) return;
+            attempt.cancelRequested = true;
+            stopAttempt(attempt);
         }
-    }, [inputs, intent, executeReal, runMockExecution, isLoaded, isVi]);
+        latest.current.onCancel();
+    }, []);
 
     return (
         <div className="min-h-[60vh] flex flex-col items-center justify-center">
@@ -626,7 +740,7 @@ export function ProcessingScreen({
                 )}
 
                 {/* W96-T1: Completion banner — shown when success+riskLevel */}
-                {completedOutput && (
+                {completion && (
                     <div
                         data-testid="completion-banner"
                         className="mt-3 mb-4 mx-auto max-w-md rounded-lg border border-green-200
@@ -638,7 +752,7 @@ export function ProcessingScreen({
                         <button
                             type="button"
                             data-testid="view-results-btn"
-                            onClick={() => onComplete(completedOutput, evidenceReceipt)}
+                            onClick={() => deliverOnce(completion.attempt, latest.current.onComplete, [completion.output, completion.receipt])}
                             className="mt-1 px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white
                                 text-sm font-medium rounded-lg transition-colors"
                         >
@@ -749,7 +863,7 @@ export function ProcessingScreen({
 
                 <button
                     type="button"
-                    onClick={onCancel}
+                    onClick={handleCancel}
                     className="mt-8 px-6 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white
                      border border-gray-300 dark:border-gray-600 rounded-lg
                      hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"

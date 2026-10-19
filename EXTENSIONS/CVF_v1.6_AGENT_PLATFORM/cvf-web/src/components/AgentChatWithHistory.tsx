@@ -20,13 +20,16 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
         activeSessionId,
         createSession,
         updateSession,
+        deleteSession,
+        clearHistory,
         setActiveSession,
         isLoaded
-    } = useChatHistory();
+    } = useChatHistory(initialPrompt ? settings.preferences.defaultProvider : undefined);
 
     const [showSidebar, setShowSidebar] = useState(true);
     const [isMaximized, setIsMaximized] = useState(false);
-    const hasHandledInitialMount = useRef(false);
+    const emptySessionPending = useRef(false);
+    const [initialPromptSessionId] = useState(initialPrompt ? activeSessionId : null);
 
     // Sync messages to history
     const handleMessagesUpdate = useCallback((messages: ChatMessage[]) => {
@@ -38,7 +41,7 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
     // Start new chat
     const handleNewChat = useCallback(() => {
         const provider = settings.preferences.defaultProvider;
-        createSession(provider);
+        return createSession(provider);
     }, [createSession, settings.preferences.defaultProvider]);
 
     // Select existing session
@@ -46,25 +49,36 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
         setActiveSession(session.id);
     }, [setActiveSession]);
 
-    // Create session on first load if none exists
+    // This wrapper is the only history writer for the open panel: the sidebar reads these
+    // sessions and calls these actions. Deleting the open session or clearing history falls
+    // back to a survivor or one fresh empty session so the chat never keeps removed content.
+    const handleDeleteSession = useCallback((sessionId: string) => {
+        const survivors = sessions.filter(s => s.id !== sessionId);
+        deleteSession(sessionId);
+        if (sessionId !== activeSessionId) return;
+        if (survivors.length > 0) setActiveSession(survivors[0].id);
+        else createSession(settings.preferences.defaultProvider);
+    }, [sessions, activeSessionId, deleteSession, setActiveSession, createSession, settings.preferences.defaultProvider]);
+
+    const handleClearHistory = useCallback(() => {
+        clearHistory();
+        createSession(settings.preferences.defaultProvider);
+    }, [clearHistory, createSession, settings.preferences.defaultProvider]);
+
+    // Incoming prompts already own a session. Recover ordinary empty history
+    // without duplicating session creation when React replays this effect.
     useEffect(() => {
-        if (isLoaded && sessions.length === 0) {
-            handleNewChat();
-        } else if (isLoaded && !activeSessionId && sessions.length > 0) {
-            // Auto-select most recent session
-            setActiveSession(sessions[0].id);
+        if (!isLoaded) return;
+        if (sessions.length === 0) {
+            if (!emptySessionPending.current) {
+                emptySessionPending.current = true;
+                handleNewChat();
+            }
+        } else {
+            emptySessionPending.current = false;
+            if (!sessions.some(s => s.id === activeSessionId)) setActiveSession(sessions[0].id);
         }
     }, [isLoaded, sessions, activeSessionId, handleNewChat, setActiveSession]);
-
-    // Handle initial prompt - only on first mount with initialPrompt
-    useEffect(() => {
-        if (initialPrompt && isLoaded && !hasHandledInitialMount.current) {
-            console.log('[AgentChatWithHistory] Creating NEW session for initialPrompt');
-            hasHandledInitialMount.current = true;
-            // Create new session for initial prompt
-            handleNewChat();
-        }
-    }, [initialPrompt, isLoaded, handleNewChat]);
 
     // Listen for maximize event from AgentChat header
     useEffect(() => {
@@ -96,6 +110,9 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
                     onSelectSession={handleSelectSession}
                     onNewChat={handleNewChat}
                     currentSessionId={activeSessionId}
+                    sessions={sessions}
+                    onDeleteSession={handleDeleteSession}
+                    onClearHistory={handleClearHistory}
                 />
             </div>
 
@@ -121,15 +138,15 @@ export function AgentChatWithHistory({ initialPrompt, onClose, onMinimize, onCom
 
                 {/* Chat Component */}
                 <div className="flex-1 min-h-0">
-                    <AgentChat
-                        key={activeSessionId || 'new'}
-                        initialPrompt={initialPrompt}
+                    {isLoaded && activeSessionId && (!initialPrompt || initialPromptSessionId) && <AgentChat
+                        key={activeSessionId}
+                        initialPrompt={activeSessionId === initialPromptSessionId && activeSession?.messages.length === 0 ? initialPrompt : undefined}
                         onClose={onClose}
                         onMinimize={onMinimize}
                         onComplete={onComplete}
                         onMessagesChange={handleMessagesUpdate}
                         existingMessages={activeSession?.messages ?? []}
-                    />
+                    />}
                 </div>
             </div>
 

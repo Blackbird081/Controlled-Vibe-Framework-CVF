@@ -473,7 +473,7 @@ class IntakeTests(Tmp):
         self.assertEqual(intake.validate_record(decided, PROFILE), [], "a parent decision with its admission link is valid")
     def test_invalid_inputs_are_refused_and_never_overwrite(self) -> None:
         for over, code in (({"sourceSha": "abc"}, "INVALID_FIELD"), ({"defectClass": "MADE_UP"}, "INVALID_FIELD"), ({"negativeEvidence": []}, "INVALID_FIELD"),
-                           ({"extra": 1}, "UNKNOWN_FIELD"), ({"observed": "token = sk-abcdefghijklmnopqrstuvwxyz"}, "SECRET_LIKE_CONTENT")):
+                           ({"extra": 1}, "UNKNOWN_FIELD"), ({"observed": "token = sk-abcdefghijklmnopqrstuvwxyz"}, "SECRET_LIKE_CONTENT")):  # fake alphabet-only credential fixture
             target, problems = self.build(self.finding(**over))
             self.assertIsNone(target, over)
             self.assertIn(code, {p.code for p in problems}, over)

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getRateLimiter } from '@/lib/rate-limit';
 import { buildEvidenceReceipt } from '@/lib/web-governance-envelope';
 import { buildExecutionDiagnostic } from '@/lib/execution-diagnostics';
+import { REQUEST_CANCELLED_MESSAGE } from '@/lib/provider-request-cancellation';
 import type { WebGovernanceEnvelope } from '@/lib/web-governance-envelope';
 import type { AifMemoryReinjectionReceipt } from '@/lib/aif-memory-reinjection';
 import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation/web-runtime';
@@ -32,12 +33,10 @@ import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation/web-run
  *      the actual invocation, after any admission has already been checked
  *      and after every other pre-provider route validation has passed.
  *
- * Every terminal admitted attempt is call-started exactly once by design
- * (the route calls `recordProviderCallStart` unconditionally right before
- * every `executeAI`/vision call site, with no branch that can admit and then
- * skip invocation), so `providerCallCount` always equals the number of times
- * a provider was actually about to be invoked, never merely the number of
- * granted admissions.
+ * Every noncancelled admitted attempt is call-started exactly once. A request
+ * cancelled during awaited admission keeps its reservation but has no call
+ * start; the terminal reconciliation truthfully reports false for that path.
+ * `providerCallCount` counts actual invocation boundaries, not reservations.
  *
  * Concurrency: `consumeProviderAttempt` delegates to `RateLimitStore.consume`,
  * whose in-memory implementation performs a synchronous (non-awaited)
@@ -195,10 +194,9 @@ export interface ProviderAttemptReconciliation {
  *
  * Reconciliation invariant (post-R2-F01-repair): admitted attempts must
  * equal actual provider-call-start count exactly under success, retry, and
- * denial - not merely be less-than-or-equal. On route.ts's current design,
- * every admission call site is immediately followed by its matching
- * `recordProviderCallStart` call with no route branch in between, so
- * `providerCallCount` always equals `admittedCount` on every real path.
+ * denial - not merely be less-than-or-equal. Selected request cancellation
+ * during awaited admission is an intentional terminal exception: the
+ * reservation remains, no call starts, and reconciles is false.
  * A `<=` comparison would silently accept an admitted-but-never-call-started
  * attempt as "reconciled", hiding exactly the composition gap this receipt
  * exists to expose (DSH-WRA-R1-R2-F01). Exact equality makes that defect
@@ -338,6 +336,24 @@ export function buildProviderInvocationErrorResponse(params: {
     );
 }
 
+/** Fixed terminal response for the selected cancelled request, including truthful ledger counts. */
+export function buildProviderRequestCancelledResponse(params: {
+    ledger: ProviderAttemptLedger;
+    routedProvider: string;
+    requestedModel?: string;
+}) {
+    return NextResponse.json({
+        success: false, error: REQUEST_CANCELLED_MESSAGE,
+        provider: params.routedProvider, model: params.requestedModel ?? params.routedProvider,
+        providerAttemptReconciliation: buildProviderAttemptReconciliation(
+            params.ledger, params.routedProvider, params.requestedModel ?? 'default',
+        ),
+        diagnostic: buildExecutionDiagnostic({ stage: 'provider', class: 'request_cancelled',
+            provider: params.routedProvider, model: params.requestedModel ?? params.routedProvider,
+            httpStatus: 499 }),
+    }, { status: 499 });
+}
+
 export type AdmitAndInvokeProviderOutcome<TResult> =
     | { ok: true; result: TResult }
     | { ok: false; response: ReturnType<typeof NextResponse.json> };
@@ -358,16 +374,30 @@ export async function admitAndInvokeProvider<TResult>(params: {
     requestedModel?: string;
     errorLogLabel: string;
     errorFallbackMessage: string;
+    requestSignal?: AbortSignal;
+    onCancelled?: () => ReturnType<typeof NextResponse.json>;
 }): Promise<AdmitAndInvokeProviderOutcome<TResult>> {
+    const cancelled = () => params.requestSignal?.aborted && params.onCancelled
+        ? { ok: false as const, response: params.onCancelled() } : undefined;
+    const beforeAdmission = cancelled();
+    if (beforeAdmission) return beforeAdmission;
     const admission = await admitProviderAttempt(params.ledger, params.purpose);
+    const afterAdmission = cancelled();
+    if (afterAdmission) return afterAdmission;
     if (!admission.admitted) {
         return { ok: false, response: params.onDenied(admission.retryAfterSeconds) };
     }
     try {
+        const beforeCallStart = cancelled();
+        if (beforeCallStart) return beforeCallStart;
         recordProviderCallStart(params.ledger, admission.attemptIndex);
         const result = await params.invoke();
+        const afterInvocation = cancelled();
+        if (afterInvocation) return afterInvocation;
         return { ok: true, result };
     } catch (error) {
+        const afterError = cancelled();
+        if (afterError) return afterError;
         return {
             ok: false,
             response: buildProviderInvocationErrorResponse({

@@ -6,7 +6,12 @@ Status: ACTIVE_ADDENDUM
 
 docType: reference
 
+Epistemic Process Applicability: EPISTEMIC_PROCESS_NA_WITH_REASON: reusable authoring rules, not an execution or findings packet.
+providerExecutionAuthority: FORBIDDEN
+
 Owner: CVF orchestration and delegation surface
+
+Last revised: 2026-10-15 - constructive closeability before dispatch.
 
 rawMemoryReleased: false
 Text Encoding Exception: em dash and standard punctuation used in governance prose
@@ -43,6 +48,61 @@ Apply this addendum when a work order:
   IDs, policy enums, config keys, CLI/MCP tool names, or existing source paths;
 - claims a token or field is absent (`NOT FOUND` / `BLOCKED_SOURCE_NOT_FOUND`);
 - includes an Intake Role Routing Decision or Single-Agent Multi-Role block.
+
+## Orchestrator Source And Acceptance Clarification
+
+Before dispatch, the orchestrator/dispatcher MUST prepare the source-to-requirement
+mapping in the existing Required First Reads, source-verification and acceptance
+sections. This is the dispatch author's responsibility, not a new worker
+preparation deliverable or approval phase.
+
+For each task-specific required source, the orchestrator MUST specify:
+
+- the exact path and stable section/symbol or bounded read span, with full-file
+  reading required only when the task needs it;
+- whether the source scope is mandatory or optional context, and why;
+- the linked requirement, source-derived condition and observable acceptance
+  result, including a relevant negative assertion when needed;
+- the evidence that will establish that result and the failure condition that
+  would prevent fulfillment.
+
+The orchestrator MUST resolve material source ambiguity before dispatch and keep
+mandatory reading proportional to the selected outcome. Provide the derived
+condition directly in the packet; a bare reference must not leave the worker to
+guess why it controls acceptance. Reuse existing tables or concise rows rather
+than duplicating a plan or adding a new required section/schema. Observable
+conditions constrain the result while leaving implementation choices to the
+worker within the granted scope.
+
+Before dispatch, mandatory acceptance conditions MUST be jointly achievable by
+the assigned role and phase under the stated failure model. For a consequential
+irreversible transition, identify the point of no return, failures still possible
+after it, and the admissible terminal postcondition. Do not require preservation
+or recovery after destruction unless an authorized durable copy or compensation
+path can provide it. Resolve a contradictory contract before implementation;
+operator authorization does not make an impossible postcondition achievable.
+
+Bind acceptance to the boundary actually claimed: distinguish a modeled action,
+an operation request, its observed outcome and a durable artifact. Where relevant,
+specify case identities and expected outcomes rather than counts or hashes alone;
+compare serialized/read-back evidence rather than a mutable in-memory alias; and
+cover each consequential blocking operation, cancellation and deadline-exhaustion
+outcome rather than only the deadline helper. Include a later failure when it can
+invalidate an apparent success. Use the existing requirement/proof mapping and
+only task-relevant conditions; this adds no separate schema or blanket test suite.
+
+The worker follows the declared mandatory scope and reports actual evidence or
+an unmet requirement. It must not silently downgrade mandatory reads or claim
+full fulfillment with an admitted omission. Missing mandatory evidence prevents
+a complete worker return under the existing return contract. The reviewer checks
+decision-relevant mappings and attributes packet defects to the orchestrator;
+verified product value and procedure deviations remain separate.
+
+This clarification adds no routine worker-authored mapping, read quiz,
+pre-edit approval round, per-tool hook or duplicate verification. Existing
+required gates remain applicable. It is an authoring requirement; current
+structural PASS does not certify reading, comprehension or automatic enforcement
+of this mapping.
 
 ## Source-Fidelity Pass Rules
 

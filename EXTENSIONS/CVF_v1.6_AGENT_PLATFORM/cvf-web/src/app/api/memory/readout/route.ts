@@ -69,7 +69,7 @@ const allowedPolicies = new Set<MemoryRuntimeReadoutBody['policyDecision']>([
 ]);
 
 function validateBody(raw: unknown): MemoryRuntimeReadoutBody | null {
-  if (!raw || typeof raw !== 'object') return null;
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
   const b = raw as Record<string, unknown>;
   if (
     typeof b.operationId !== 'string' ||
@@ -81,23 +81,29 @@ function validateBody(raw: unknown): MemoryRuntimeReadoutBody | null {
     typeof b.riskLevel !== 'string' ||
     typeof b.query !== 'string' ||
     typeof b.tokenBudget !== 'number' ||
+    !Number.isFinite(b.tokenBudget) ||
     !Array.isArray(b.candidates)
   ) return null;
   if (!allowedActorRoles.has(b.actorRole as MemoryRuntimeReadoutBody['actorRole'])) return null;
   if (!allowedRiskLevels.has(b.riskLevel as MemoryRuntimeReadoutBody['riskLevel'])) return null;
+  if (b.containsSensitiveData !== undefined && typeof b.containsSensitiveData !== 'boolean') return null;
+  if (b.maxResults !== undefined && (typeof b.maxResults !== 'number' || !Number.isFinite(b.maxResults))) return null;
 
   const candidates = b.candidates.map((c) => {
-    if (!c || typeof c !== 'object') return null;
+    if (!c || typeof c !== 'object' || Array.isArray(c)) return null;
     const cand = c as Record<string, unknown>;
     if (
       typeof cand.id !== 'string' ||
       typeof cand.scope !== 'string' ||
       typeof cand.summary !== 'string' ||
       typeof cand.createdAt !== 'number' ||
+      !Number.isFinite(cand.createdAt) ||
       !isValidAuditTrust(cand.auditTrust) ||
       typeof cand.lifecycleState !== 'string' ||
       !allowedLifecycleStates.has(cand.lifecycleState as MemoryRuntimeReadoutBody['candidates'][number]['lifecycleState'])
     ) return null;
+    if (cand.containsSecret !== undefined && typeof cand.containsSecret !== 'boolean') return null;
+    if (cand.content !== undefined && typeof cand.content !== 'string') return null;
     return {
       id: cand.id,
       scope: cand.scope,
@@ -113,9 +119,9 @@ function validateBody(raw: unknown): MemoryRuntimeReadoutBody | null {
   if (candidates.some((c) => c === null)) return null;
 
   type PolicyDecision = MemoryRuntimeReadoutBody['policyDecision'];
-  const policyDecisionRaw = typeof b.policyDecision === 'string' ? b.policyDecision : undefined;
-  if (policyDecisionRaw && !allowedPolicies.has(policyDecisionRaw as PolicyDecision)) return null;
-  const policyDecision = policyDecisionRaw as PolicyDecision | undefined;
+  if (b.policyDecision !== undefined &&
+    (typeof b.policyDecision !== 'string' || !allowedPolicies.has(b.policyDecision as PolicyDecision))) return null;
+  const policyDecision = b.policyDecision as PolicyDecision | undefined;
 
   const riskLevel = b.riskLevel as MemoryRuntimeReadoutBody['riskLevel'];
   const actorRole = b.actorRole as MemoryRuntimeReadoutBody['actorRole'];

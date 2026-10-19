@@ -131,6 +131,7 @@ def _validate_work_order(path: str, text: str) -> list[str]:
         issues.append("roadmap-derived work order is dispatch/ready without Roadmap-To-Work-Order Trace Matrix")
 
     if dispatching:
+        issues.extend(_validate_declared_fast_gate_return_path(path, text, status))
         issues.extend(_validate_stale_roadmap_redispatch(path, text))
         if not _has_worker_autonomy_clause(text):
             issues.append("dispatch/ready work order lacks Worker Autonomy / No-Question Rule")

@@ -84,6 +84,18 @@
   },
   "allowlist": [
     {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/html-artifact-byte-handoff.ts",
+      "reason": "Pure synthetic artifact-byte custody helper already admitted by the public-sync projection exception; contains no private operator handoff or runtime receipt."
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/html-artifact-byte-handoff.test.ts",
+      "reason": "Unit coverage for the public synthetic artifact-byte custody helper; not private handoff evidence."
+    },
+    {
+      "path": "docs/evidence/ncr-offline-development-status-2026-10-19.md",
+      "reason": "Operator-authorized curated source status summary: preserves BLOCKED W05 findings and offline-only claim limits without private reviews, raw logs or session payload."
+    },
+    {
       "path": "AGENT_HANDOFF.md",
       "reason": "Public-core continuation pointer generated for public repository agents; not a private provenance or operator session handoff."
     },

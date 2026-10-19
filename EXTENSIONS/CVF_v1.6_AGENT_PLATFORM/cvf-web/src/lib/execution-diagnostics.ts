@@ -21,6 +21,7 @@ export type ExecutionDiagnosticClass =
     | 'quota_exceeded'
     | 'rate_limited'
     | 'provider_timeout'
+    | 'request_cancelled'
     | 'provider_http_error'
     | 'model_unavailable'
     | 'provider_empty_output'
@@ -95,6 +96,7 @@ const DEFAULT_BY_CLASS: Record<ExecutionDiagnosticClass, {
     quota_exceeded: { retryable: false, userAction: 'top_up_or_check_quota', safeMessage: 'The execution was blocked by quota limits.' },
     rate_limited: { retryable: true, userAction: 'wait_and_retry', safeMessage: 'The request was rate limited.' },
     provider_timeout: { retryable: true, userAction: 'wait_and_retry', safeMessage: 'The provider call exceeded the configured timeout.' },
+    request_cancelled: { retryable: false, userAction: 'none', safeMessage: 'The request was cancelled before execution completed.' },
     provider_http_error: { retryable: true, userAction: 'wait_and_retry', safeMessage: 'The provider returned an HTTP error.' },
     model_unavailable: { retryable: false, userAction: 'change_model', safeMessage: 'The selected model is unavailable for the current provider account or endpoint.' },
     provider_empty_output: { retryable: true, userAction: 'wait_and_retry', safeMessage: 'The provider returned no usable output.' },

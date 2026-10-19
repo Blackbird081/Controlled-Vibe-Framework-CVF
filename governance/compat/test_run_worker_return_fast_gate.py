@@ -4,6 +4,7 @@ import importlib.util
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 
@@ -16,6 +17,36 @@ SPEC.loader.exec_module(MODULE)
 
 
 class WorkerReturnFastGateTests(unittest.TestCase):
+    def test_selected_budget_uses_actual_bytes_and_normal_newline_counts(self):
+        for raw in (b'a\nb\n', b'a\r\nb\r\n', b'a\rb\r'):
+            self.assertEqual(MODULE.return_budget_issues(raw, 2, len(raw)), [])
+            self.assertIn('line budget exceeded', MODULE.return_budget_issues(raw, 1, None)[0])
+            self.assertIn('byte budget exceeded', MODULE.return_budget_issues(raw, None, len(raw)-1)[0])
+        self.assertEqual(MODULE.return_budget_issues(b'x\n' * 2000), [])
+        self.assertEqual(MODULE.return_budget_issues((chr(233) + '\n').encode(), 1, 3), [])
+        self.assertTrue(MODULE.return_budget_issues((chr(233) + '\n').encode(), 1, 2))
+
+    def test_budget_fails_before_any_gate_or_focused_test(self):
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(MODULE, 'REPO_ROOT', Path(tmp)), mock.patch.object(MODULE, '_run') as run:
+            wo = Path(tmp) / 'docs/work_orders/order.md'; wo.parent.mkdir(parents=True)
+            ret = Path(tmp) / 'docs/reviews/return.md'; ret.parent.mkdir(parents=True)
+            wo.write_text('workerReturnPath: `docs/reviews/return.md`\n')
+            ret.write_bytes(b'x\n' * 338)
+            argv = ['gate', '--active-work-order', 'docs/work_orders/order.md', '--max-return-lines', '300']
+            with mock.patch.object(sys, 'argv', argv):
+                self.assertEqual(MODULE.main(), 1)
+            run.assert_not_called()
+            # Exact-fit limits continue into the entire original command bundle.
+            run.return_value = 0
+            with mock.patch.object(sys, 'argv', argv[:-1] + ['338']):
+                self.assertEqual(MODULE.main(), 0)
+            self.assertEqual(run.call_count, len(MODULE.build_commands((), 'docs/work_orders/order.md')))
+            run.reset_mock()
+            wo.write_text('workerReturnPath: `../escape.md`\n')
+            with mock.patch.object(sys, 'argv', argv):
+                self.assertEqual(MODULE.main(), 1)
+            run.assert_not_called()
+
     def test_default_commands_include_reviewer_fast_and_registry_drift(self) -> None:
         labels = [command.name for command in MODULE.build_commands()]
 

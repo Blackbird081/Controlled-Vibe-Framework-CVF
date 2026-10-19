@@ -3,12 +3,18 @@
 
 from __future__ import annotations
 
+import hashlib
+import io
+import os
 import re
 import sys
+import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from test_check_review_cost_control import _DIGEST, _NOW, _grant, _grant_md, _ledger, _with, chk
 from build_dispatch_packet_scaffold import (
     ScaffoldArgs,
     build_gc018_baseline,
@@ -379,6 +385,9 @@ class TestSourceIntakeGoldenFixture(unittest.TestCase):
     same established out-of-manifest-fixture pattern for this tranche's new
     `## Architecture Readiness Admission` block; every other construction
     site keeps the class default `True`.
+
+    WRS-FR2 note: refreshed for independent rawMemoryReleased=false Claim
+    Boundary and explicit continuation Rule B mandatory completion guidance.
     """
 
     GOLDEN_ARGS = dict(
@@ -671,6 +680,24 @@ class TestWorkerReturnSkeleton(unittest.TestCase):
             KIOD_R8_REQUIRED_SECTION_HEADING_PATTERN.search(skeleton),
             "worker-return skeleton must not emit real KIOD-R8 required-section heading",
         )
+
+    def test_skeleton_batch_id_invariance(self) -> None:
+        """WRS-FR1-F1: verify uniform rendering regardless of batch_id string."""
+        args_golden = ScaffoldArgs(**self.GOLDEN_ARGS)
+        alt_args = dict(self.GOLDEN_ARGS)
+        alt_args["batch_id"] = "ARBITRARY-BATCH-123"
+        args_alt = ScaffoldArgs(**alt_args)
+        golden_out = build_worker_return_skeleton(args_golden)
+        alt_out = build_worker_return_skeleton(args_alt)
+        norm_golden = (
+            golden_out.replace("WOAS-R3-GOLDEN", "NORMALIZED_ID")
+            .replace("woas-r3-golden", "normalized_id")
+        )
+        norm_alt = (
+            alt_out.replace("ARBITRARY-BATCH-123", "NORMALIZED_ID")
+            .replace("arbitrary-batch-123", "normalized_id")
+        )
+        self.assertEqual(norm_golden, norm_alt)
 
     def test_cli_opt_in_produces_skeleton_section(self) -> None:
         import io
@@ -983,6 +1010,78 @@ class TestScecBlockEmission(unittest.TestCase):
         work_order = build_work_order(args, detect_triggers(args))
         self.assertIn('"requiredDisposition": "ROOT_CONTRACT_REQUIRED"', work_order)
         self.assertIn('"successorScope": "INTEGRATED_ROOT_CONTRACT"', work_order)
+
+
+class TestOperatorContinuationCli(unittest.TestCase):
+    """NCR_REVIEW_CONTINUATION_V1: real CLI -> kwargs -> ScaffoldArgs -> scope/provenance -> final checker."""
+
+    ARGS = ["--packet-kind", "generic-worker-dispatch", "--batch-id", "parent-1", "--title", "Continuation Probe",
+            "--date", "2026-10-15", "--base", "abc1234", "--commit-mode", "WORKER_MUST_NOT_COMMIT", "--stdout",
+            "--dispatch-kind", "REWORK", "--review-round-count", "3", "--root-cause-cluster-id", "cluster-lock-identity",
+            "--prior-finding-set-digest", _DIGEST]
+    GRANT = "docs/reviews/CVF_CLI_GRANT_2026-10-15.md"
+
+    def setUp(self) -> None:
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.root = Path(tmp.name)
+
+    def _flags(self, grant=None, raw=None) -> list[str]:
+        data = raw if raw is not None else _grant_md(grant or _grant()).encode("utf-8")
+        (self.root / self.GRANT).parent.mkdir(parents=True, exist_ok=True)
+        (self.root / self.GRANT).write_bytes(data)
+        return ["--operator-continuation-evidence-path", self.GRANT, "--operator-continuation-evidence-sha256", hashlib.sha256(data).hexdigest()]
+
+    def _cli(self, *extra: str) -> tuple[int, str, str]:
+        out, err, cwd = io.StringIO(), io.StringIO(), os.getcwd()
+        os.chdir(self.root)
+        try:
+            with redirect_stdout(out), redirect_stderr(err):
+                code = main([*self.ARGS, *extra])
+        finally:
+            os.chdir(cwd)
+        return code, out.getvalue(), err.getvalue()
+
+    def test_default_callers_and_no_clearance_stops_are_unchanged(self) -> None:
+        self.assertIsNone(_base_args().operator_continuation_evidence_path)
+        self.assertIsNone(_base_args().operator_continuation_evidence_sha256)
+        self.assertEqual(self._cli()[::2], (2, "ERROR: REWORK requires round 1-2, a root-cause cluster ID, and a lowercase SHA-256 digest.\n"))
+        self.assertIn("round-two REWORK requires exact new critical evidence IDs", self._cli("--review-round-count", "2")[2])
+
+    def test_cleared_cli_emits_scope_and_provenance_and_passes_the_final_checker(self) -> None:
+        flags = self._flags()
+        code, out, err = self._cli(*flags)
+        self.assertEqual(code, 0, err)
+        self.assertIn(f" {flags[0]} {flags[1]} {flags[2]} {flags[3]} --stdout", out)
+        order = out.split("=== Generated Work Order Skeleton ===", 1)[1]
+        self.assertIn(f"operatorContinuationEvidenceSha256: {flags[3]}\n\n```continuation-scope-json", order)
+        order = re.sub(r"```acceptance-ledger-json\n.*?\n```", _ledger().strip(), order, flags=re.S)
+        order = order.replace("reviewerLocalRepairBoundary: FILL_ME", "reviewerLocalRepairBoundary: NEW_EVIDENCE_REQUIRED")
+        order = order.replace("reviewerLocalRepairBasis: FILL_ME (cite the finding and controlling boundary)", "reviewerLocalRepairBasis: Finding F1 requires new source evidence unavailable to the reviewer.")
+        verdict = chk.diagnose("docs/work_orders/CVF_AGENT_WORK_ORDER_parent-1_2026-10-15.md", order, root=self.root, now=_NOW)
+        self.assertTrue(verdict.is_clean, verdict.issues)
+        self.assertFalse(chk.diagnose("docs/work_orders/x.md", order.replace(flags[3], "0" * 64), root=self.root, now=_NOW).is_clean)
+
+    def test_hostile_cli_sources_exit_nonzero_before_any_candidate(self) -> None:
+        timed = _with(_grant(), ("validityDisposition",), "UNTIL_UTC_EXPIRY")
+        initial = ["--dispatch-kind", "INITIAL", "--review-round-count", "0", "--root-cause-cluster-id", "NOT_APPLICABLE_INITIAL_DISPATCH", "--prior-finding-set-digest", "NOT_APPLICABLE_INITIAL_DISPATCH"]
+        cases = {
+            "one flag": (lambda: self._flags()[:2], "required together"),
+            "empty values": (lambda: ["--operator-continuation-evidence-path", "", "--operator-continuation-evidence-sha256", ""], "lowercase 64-hex"),
+            "wrong sha": (lambda: [*self._flags()[:3], "0" * 64], "sha256 mismatch"),
+            "missing source": (lambda: ["--operator-continuation-evidence-path", "docs/reviews/CVF_MISSING_2026-10-15.md", "--operator-continuation-evidence-sha256", "0" * 64], "source rejected"),
+            "binding mismatch": (lambda: self._flags(_with(_grant(), ("binding", "rootCauseClusterId"), "other")), "does not equal"),
+            "expired": (lambda: self._flags(_with(timed, ("expiresAtUtc",), "2000-01-01T00:00:00Z")), "expired"),
+            "duplicate key": (lambda: self._flags(raw=_grant_md(_grant()).replace('"status": "ACTIVE",', '"status": "ACTIVE", "status": "ACTIVE",').encode()), "duplicate JSON key"),
+            "initial dispatch": (lambda: [*self._flags(), *initial], "applies only to REWORK"),
+            "round one": (lambda: [*self._flags(), "--review-round-count", "1"], "applies only to REWORK"),
+        }
+        failures = []
+        for name, (make, expected) in cases.items():
+            code, out, err = self._cli(*make())
+            if (code, out) != (2, "") or "operator continuation rejected" not in err or expected not in err:
+                failures.append((name, code, err))
+        self.assertEqual(failures, [])
 
 
 class TestArchitectureReadinessAdmissionScaffold(unittest.TestCase):

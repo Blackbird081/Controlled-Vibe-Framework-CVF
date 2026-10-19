@@ -1,0 +1,1129 @@
+{
+  "schemaVersion": "cvf.ncrC1ManifestControlSourceProposal.v1",
+  "batchId": "CVF-NCR-C1-OFFLINE-PRODUCTION-READINESS-20261008",
+  "baseHead": "522877c9008491f3d2f4de8aa80e62a4acad65ee",
+  "status": "PROPOSED_PENDING_OPERATOR_FREEZE_DISPOSITION",
+  "approvalRecorded": false,
+  "sources": [
+    {
+      "path": "docs/reference/CVF_NCR_C1_E1_METADATA_RESULT_2026-10-08.json",
+      "sha256": "6d18bc82e25146be1e5b1217928c73b7914f57d8e66d4912c2efa3bc2ec16f02",
+      "bytes": 208141
+    },
+    {
+      "path": "docs/reference/CVF_NCR_C1_E1_EXECUTION_CONTRACT_2026-10-08.json",
+      "sha256": "6e10351e5dac793abbcdb0624c84705436fb1adc1ad976ea2841bc47b1ba15bc",
+      "bytes": 48096
+    },
+    {
+      "path": "docs/reference/CVF_NCR_C1_OFFLINE_PRODUCTION_READINESS_SPEC_2026-10-08.md",
+      "sha256": "ef7f433489e1da22135ed0d0f8130f3798e765418afa47e6933d7ab636747636",
+      "bytes": 38963
+    },
+    {
+      "path": "docs/reference/CVF_NCR_C1_METADATA_COMPLETION_SOURCE_DELTA_2026-10-03.md",
+      "sha256": "e94ea7abb7879be6cfb0a72a5a830a0a0ae6dff5fab8fe4565f0d116ab819269",
+      "bytes": 65031
+    },
+    {
+      "path": "docs/reviews/evidence/cvf-ncr-s05-s1-supervisor-source-r1-worker-2026-10-03.json",
+      "sha256": "b52f33717b0f6c948979e8566a5e1ff42137be9b80554263af50df2342458ce7",
+      "bytes": 34325
+    },
+    {
+      "path": "docs/reviews/CVF_CVF_NCR_S05_S1_SUPERVISOR_SOURCE_R1_WORKER_RETURN_2026-10-03.md",
+      "sha256": "12116c9c696752b487b74de9d6ec75bd3e53e90efad92b8f6a6f7f72512bd6ce",
+      "bytes": 30190
+    },
+    {
+      "path": "docs/reviews/CVF_CVF_NCR_S05_S1_SUPERVISOR_SOURCE_R1_LOCAL_REVIEW_2026-10-03.md",
+      "sha256": "eb3ab6d3be5e69654e2854dcefa316472ed4010827a394cce375efd26db0d0bd",
+      "bytes": 16513
+    },
+    {
+      "path": "docs/reviews/CVF_CVF_NCR_S05_S1_R1_EVIDENCE_RELAY_LOCAL_REVIEW_2026-10-03.md",
+      "sha256": "54630fcaace2eca4f1ed5d136e8d69a3846484f306929628221c0361656526de",
+      "bytes": 16266
+    },
+    {
+      "path": "docs/reference/CVF_NCR_S05_CONTROL_FIXTURE_DESIGN_2026-10-03.md",
+      "sha256": "7bc7a09bb5e4f67a25e8d3f92e156fbb9a8671b118408629af7acb2dc0538b52",
+      "bytes": 37531
+    }
+  ],
+  "sourceIdentityReadNow": [
+    {
+      "path": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/src/supervisor.py",
+      "sha256": "6c81e5dd4f16089a245859eddc816a48e5bba7fb97b025e9a3cdc43da8d668f3",
+      "bytes": 10671,
+      "method": "raw identity join and targeted interface source read; no source execution"
+    },
+    {
+      "path": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/src/envelope_contract.py",
+      "sha256": "995faa63e9ad88b718f6a09650ce13ba7db35fc6301af855c40273b9505b8841",
+      "bytes": 13282,
+      "method": "raw identity join and targeted interface source read; no source execution"
+    },
+    {
+      "path": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/src/windows_job.py",
+      "sha256": "d96fe1f9ebd7cb67f0c7c62f7415ca31d627d2be3b8c452a4945777ab0c615bd",
+      "bytes": 2875,
+      "method": "raw identity join and targeted interface source read; no source execution"
+    },
+    {
+      "path": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/src/boundary_admission.py",
+      "sha256": "4694079dc067db5facbbbc36c7d1f025447205a9d06cbc5b0fba92f3a7cbdb03",
+      "bytes": 6269,
+      "method": "raw identity join and targeted interface source read; no source execution"
+    }
+  ],
+  "npmRows": [
+    {
+      "originalLocator": "@hono/node-server",
+      "version": "2.0.12",
+      "declaredIntegrity": "sha512-eWpQYr67tqJLeaSUl0Q+TquuYfUdTibpOJlUMV2FfUP7+KqCC5TufnwnlXL6mobZBJbGAYRd7ZvEBDCbLInjhg==",
+      "canonicalName": "@hono/node-server",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        16
+      ]
+    },
+    {
+      "originalLocator": "@puppeteer/browsers",
+      "version": "3.2.2",
+      "declaredIntegrity": "sha512-q2BU4YfO9h/Wt7IcWPcggpOOqLk2Tbs1hDwolvKZrweRjy751OJBKMN9zO5bfD0pzU7X/tvKw/exQds4pM/LOg==",
+      "canonicalName": "@puppeteer/browsers",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        18
+      ]
+    },
+    {
+      "originalLocator": "modern-tar",
+      "version": "0.8.4",
+      "declaredIntegrity": "sha512-gN54ddmyzEg10orwZ2u4OOv+bjpMWdIl5jIkodK97bMq8QBSL5c0D7YX0lT1Ooz+99S7+PvFbnxzdjgHo1r41g==",
+      "canonicalName": "modern-tar",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        61
+      ]
+    },
+    {
+      "originalLocator": "@puppeteer/browsers/yargs",
+      "version": "18.0.0",
+      "declaredIntegrity": "sha512-4UEqdc2RYGHZc7Doyqkrqiln3p9X2DZVxaGbwhn2pi7MrRagKaOcIKe8L3OxYcbhXLgLFUS3zAYuQjKBQgmuNg==",
+      "canonicalName": null,
+      "candidateName": "yargs",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "@puppeteer/browsers/yargs/cliui",
+      "version": "9.0.1",
+      "declaredIntegrity": "sha512-k7ndgKhwoQveBL+/1tqGJYNz097I7WOvwbmmU2AR5+magtbjPWQTS1C5vzGkBC8Ym8UWRzfKUzUUqFLypY4Q+w==",
+      "canonicalName": null,
+      "candidateName": "cliui",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "@puppeteer/browsers/yargs/string-width",
+      "version": "7.2.0",
+      "declaredIntegrity": "sha512-tsaTIkKW9b4N+AEj+SVA+WhJzV7/zMhcSu78mLKWSk7cXMOSHsBKFWUs0fWwq8QyK3MgJBQRX6Gbi4kYbdvGkQ==",
+      "canonicalName": null,
+      "candidateName": "string-width",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "@puppeteer/browsers/yargs/string-width/emoji-regex",
+      "version": "10.6.0",
+      "declaredIntegrity": "sha512-toUI84YS5YmxW219erniWD0CIVOo46xGKColeNQRgOzDorgBi1v4D71/OFzgD9GO2UGKIv1C3Sp8DAn0+j5w7A==",
+      "canonicalName": null,
+      "candidateName": "emoji-regex",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "get-east-asian-width",
+      "version": "1.6.0",
+      "declaredIntegrity": "sha512-QRbvDIbx6YklUe6RxeTeleMR0yv3cYH6PsPZHcnVn7xv7zO1BHN8r0XETu8n6Ye3Q+ahtSarc3WgtNWmehIBfA==",
+      "canonicalName": "get-east-asian-width",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        52
+      ]
+    },
+    {
+      "originalLocator": "@puppeteer/browsers/yargs/string-width/strip-ansi",
+      "version": "7.2.0",
+      "declaredIntegrity": "sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==",
+      "canonicalName": null,
+      "candidateName": "strip-ansi",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "@puppeteer/browsers/yargs/string-width/strip-ansi/ansi-regex",
+      "version": "6.2.2",
+      "declaredIntegrity": "sha512-Bq3SmSpyFHaWjPk8If9yc6svM8c56dB5BAtW4Qbw5jHTwwXXcTLoRMkpDJp6VL0XzlWaCHTXrkFURMYmD0sLqg==",
+      "canonicalName": null,
+      "candidateName": "ansi-regex",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "@puppeteer/browsers/yargs/cliui/strip-ansi",
+      "version": "7.2.0",
+      "declaredIntegrity": "sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==",
+      "canonicalName": null,
+      "candidateName": "strip-ansi",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "@puppeteer/browsers/yargs/cliui/strip-ansi/ansi-regex",
+      "version": "6.2.2",
+      "declaredIntegrity": "sha512-Bq3SmSpyFHaWjPk8If9yc6svM8c56dB5BAtW4Qbw5jHTwwXXcTLoRMkpDJp6VL0XzlWaCHTXrkFURMYmD0sLqg==",
+      "canonicalName": null,
+      "candidateName": "ansi-regex",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "@puppeteer/browsers/yargs/cliui/wrap-ansi",
+      "version": "9.0.2",
+      "declaredIntegrity": "sha512-42AtmgqjV+X1VpdOfyTGOYRi0/zsoLqtXQckTmqTeybT+BDIbM/Guxo7x3pE2vtpr1ok6xRqM9OpBe+Jyoqyww==",
+      "canonicalName": null,
+      "candidateName": "wrap-ansi",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "@puppeteer/browsers/yargs/cliui/wrap-ansi/ansi-styles",
+      "version": "6.2.3",
+      "declaredIntegrity": "sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==",
+      "canonicalName": null,
+      "candidateName": "ansi-styles",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "escalade",
+      "version": "3.2.0",
+      "declaredIntegrity": "sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==",
+      "canonicalName": "escalade",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        48
+      ]
+    },
+    {
+      "originalLocator": "get-caller-file",
+      "version": "2.0.5",
+      "declaredIntegrity": "sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==",
+      "canonicalName": "get-caller-file",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        51
+      ]
+    },
+    {
+      "originalLocator": "y18n",
+      "version": "5.0.8",
+      "declaredIntegrity": "sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==",
+      "canonicalName": "y18n",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        82
+      ]
+    },
+    {
+      "originalLocator": "@puppeteer/browsers/yargs/yargs-parser",
+      "version": "22.0.0",
+      "declaredIntegrity": "sha512-rwu/ClNdSMpkSrUb+d6BRsSkLUq1fmfsY6TOpYzTwvwkg1/NRG85KBy3kq++A8LKQwX6lsu+aWad+2khvuXrqw==",
+      "canonicalName": null,
+      "candidateName": "yargs-parser",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "adm-zip",
+      "version": "0.6.0",
+      "declaredIntegrity": "sha512-XleryMhbuksdKtofnWZ9Sk+4CUTbms4Mb/EU32SZwToAyZ5RgVos/ki8n+yr0LWHOGKuakbXTuuYNHLQjhddgg==",
+      "canonicalName": "adm-zip",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        31
+      ]
+    },
+    {
+      "originalLocator": "citty",
+      "version": "0.2.2",
+      "declaredIntegrity": "sha512-+6vJA3L98yv+IdfKGZHBNiGW5KHn22e/JwID0Strsz8h4S/csAu/OuICwxrg44k5MRiZHWIo8XXuJgQTriRP4w==",
+      "canonicalName": "citty",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        37
+      ]
+    },
+    {
+      "originalLocator": "compare-versions",
+      "version": "6.1.1",
+      "declaredIntegrity": "sha512-4hm4VPpIecmlg59CHXnRDnqGplJFrbLG4aFEl5vl6cK1u76ws3LLvX7ikFnTDl5vo39sjWD6AaDPYodJp/NNHg==",
+      "canonicalName": "compare-versions",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        39
+      ]
+    },
+    {
+      "originalLocator": "css-tree",
+      "version": "3.2.1",
+      "declaredIntegrity": "sha512-X7sjQzceUhu1u7Y/ylrRZFU2FS6LRiFVp6rKLPg23y3x3c3DOKAwuXGDp+PAGjh6CSnCjYeAul8pcT8bAl+lSA==",
+      "canonicalName": "css-tree",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        40
+      ]
+    },
+    {
+      "originalLocator": "mdn-data",
+      "version": "2.27.1",
+      "declaredIntegrity": "sha512-9Yubnt3e8A0OKwxYSXyhLymGW4sCufcLG6VdiDdUGVkPhpqLxlvP5vl1983gQjJl3tqbrM731mjaZaP68AgosQ==",
+      "canonicalName": "mdn-data",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        59
+      ]
+    },
+    {
+      "originalLocator": "source-map-js",
+      "version": "1.2.1",
+      "declaredIntegrity": "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==",
+      "canonicalName": "source-map-js",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        74
+      ]
+    },
+    {
+      "originalLocator": "debug",
+      "version": "4.4.3",
+      "declaredIntegrity": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==",
+      "canonicalName": "debug",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        41
+      ]
+    },
+    {
+      "originalLocator": "ms",
+      "version": "2.1.3",
+      "declaredIntegrity": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==",
+      "canonicalName": "ms",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        62
+      ]
+    },
+    {
+      "originalLocator": "esbuild",
+      "version": "0.25.12",
+      "declaredIntegrity": "sha512-bbPBYYrtZbkt6Os6FiTLCTFxvq4tt3JKall1vRwshA3fdVztsLAatFaZobhkBC8/BrPetoa0oksYoKXoG4ryJg==",
+      "canonicalName": "esbuild",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        13
+      ]
+    },
+    {
+      "originalLocator": "@esbuild/win32-x64",
+      "version": "0.25.12",
+      "declaredIntegrity": "sha512-alJC0uCZpTFrSL0CCDjcgleBXPnCrEAhTBILpeAp7M/OFgoqtAetfBzX0xM00MUsVVPpVjlPuMbREqnZCXaTnA==",
+      "canonicalName": "@esbuild/win32-x64",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        15
+      ]
+    },
+    {
+      "originalLocator": "fontkit",
+      "version": "2.0.4",
+      "declaredIntegrity": "sha512-syetQadaUEDNdxdugga9CpEYVaQIxOwk7GlwZWWZ19//qW4zE5bknOKeMBDYAASwnpaSHKJITRLMF9m1fp3s6g==",
+      "canonicalName": "fontkit",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        50
+      ]
+    },
+    {
+      "originalLocator": "@swc/helpers",
+      "version": "0.5.21",
+      "declaredIntegrity": "sha512-jI/VAmtdjB/RnI8GTnokyX7Ug8c+g+ffD6QRLa6XQewtnGyukKkKSk3wLTM3b5cjt1jNh9x0jfVlagdN2gDKQg==",
+      "canonicalName": "@swc/helpers",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        30
+      ]
+    },
+    {
+      "originalLocator": "tslib",
+      "version": "2.8.1",
+      "declaredIntegrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==",
+      "canonicalName": "tslib",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        76
+      ]
+    },
+    {
+      "originalLocator": "brotli",
+      "version": "1.3.3",
+      "declaredIntegrity": "sha512-oTKjJdShmDuGW94SyyaoQvAjf30dZaHnjJ8uAF+u2/vGJkJbJPJAT1gDiOJP5v1Zb6f9KEyW/1HpuaWIXtGHPg==",
+      "canonicalName": "brotli",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        33
+      ]
+    },
+    {
+      "originalLocator": "base64-js",
+      "version": "1.5.1",
+      "declaredIntegrity": "sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==",
+      "canonicalName": "base64-js",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        32
+      ]
+    },
+    {
+      "originalLocator": "clone",
+      "version": "2.1.2",
+      "declaredIntegrity": "sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==",
+      "canonicalName": "clone",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        38
+      ]
+    },
+    {
+      "originalLocator": "dfa",
+      "version": "1.2.0",
+      "declaredIntegrity": "sha512-ED3jP8saaweFTjeGX8HQPjeC1YYyZs98jGNZx6IiBvxW7JG5v492kamAQB3m2wop07CvU/RQmzcKr6bgcC5D/Q==",
+      "canonicalName": "dfa",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        47
+      ]
+    },
+    {
+      "originalLocator": "fast-deep-equal",
+      "version": "3.1.3",
+      "declaredIntegrity": "sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==",
+      "canonicalName": "fast-deep-equal",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        49
+      ]
+    },
+    {
+      "originalLocator": "restructure",
+      "version": "3.0.2",
+      "declaredIntegrity": "sha512-gSfoiOEA0VPE6Tukkrr7I0RBdE0s7H1eFCDBk05l1KIQT1UIKNc5JZy6jdyW6eYH3aR3g5b3PuL77rq0hvwtAw==",
+      "canonicalName": "restructure",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        70
+      ]
+    },
+    {
+      "originalLocator": "tiny-inflate",
+      "version": "1.0.3",
+      "declaredIntegrity": "sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==",
+      "canonicalName": "tiny-inflate",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        75
+      ]
+    },
+    {
+      "originalLocator": "unicode-properties",
+      "version": "1.4.1",
+      "declaredIntegrity": "sha512-CLjCCLQ6UuMxWnbIylkisbRj31qxHPAurvena/0iwSVbQ2G1VY5/HjV0IRabOEbDHlzZlRdCrD4NhB0JtU40Pg==",
+      "canonicalName": "unicode-properties",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        78
+      ]
+    },
+    {
+      "originalLocator": "unicode-trie",
+      "version": "2.0.0",
+      "declaredIntegrity": "sha512-x7bc76x0bm4prf1VLg79uhAzKw8DVboClSN5VxJuQ+LKDOVEW9CdH+VY7SP+vX7xCYQqzzgQpFqz15zeLvAtZQ==",
+      "canonicalName": "unicode-trie",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        79
+      ]
+    },
+    {
+      "originalLocator": "pako",
+      "version": "0.2.9",
+      "declaredIntegrity": "sha512-NUcwaKxUxWrZLpDG+z/xZaCgQITkA/Dv4V/T6bw7VON6l1Xz/VnrBqrYjZQ12TamKHzITTfOEIYUj48y2KXImA==",
+      "canonicalName": "pako",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        14
+      ]
+    },
+    {
+      "originalLocator": "giget",
+      "version": "3.2.0",
+      "declaredIntegrity": "sha512-GvHTWcykIR/fP8cj8dMpuMMkvaeJfPvYnhq0oW+chSeIr+ldX21ifU2Ms6KBoyKZQZmVaUAAhQ2EZ68KJF8a7A==",
+      "canonicalName": "giget",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        53
+      ]
+    },
+    {
+      "originalLocator": "hono",
+      "version": "4.12.18",
+      "declaredIntegrity": "sha512-RWzP96k/yv0PQfyXnWjs6zot20TqfpfsNXhOnev8d1InAxubW93L11/oNUc3tQqn2G0bSdAOBpX+2uDFHV7kdQ==",
+      "canonicalName": "hono",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        54
+      ]
+    },
+    {
+      "originalLocator": "ignore",
+      "version": "5.3.2",
+      "declaredIntegrity": "sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==",
+      "canonicalName": "ignore",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        55
+      ]
+    },
+    {
+      "originalLocator": "open",
+      "version": "10.2.0",
+      "declaredIntegrity": "sha512-YgBpdJHPyQ2UE5x+hlSXcnejzAvD0b22U2OuAP+8OnlJT+PjWPxtgmGqKKc+RgTM63U9gN0YzrYc71R2WT/hTA==",
+      "canonicalName": "open",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        64
+      ]
+    },
+    {
+      "originalLocator": "default-browser",
+      "version": "5.5.0",
+      "declaredIntegrity": "sha512-H9LMLr5zwIbSxrmvikGuI/5KGhZ8E2zH3stkMgM5LpOWDutGM2JZaj460Udnf1a+946zc7YBgrqEWwbk7zHvGw==",
+      "canonicalName": "default-browser",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        42
+      ]
+    },
+    {
+      "originalLocator": "bundle-name",
+      "version": "4.1.0",
+      "declaredIntegrity": "sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==",
+      "canonicalName": "bundle-name",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        34
+      ]
+    },
+    {
+      "originalLocator": "run-applescript",
+      "version": "7.1.0",
+      "declaredIntegrity": "sha512-DPe5pVFaAsinSaV6QjQ6gdiedWDcRCbUuiQfQa2wmWV7+xC9bGulGI8+TdRmoFkAPaBXk8CrAbnlY2ISniJ47Q==",
+      "canonicalName": "run-applescript",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        71
+      ]
+    },
+    {
+      "originalLocator": "default-browser-id",
+      "version": "5.0.1",
+      "declaredIntegrity": "sha512-x1VCxdX4t+8wVfd1so/9w+vQ4vx7lKd2Qp5tDRutErwmR85OgmfX7RlLRMWafRMY7hbEiXIbudNrjOAPa/hL8Q==",
+      "canonicalName": "default-browser-id",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        43
+      ]
+    },
+    {
+      "originalLocator": "define-lazy-prop",
+      "version": "3.0.0",
+      "declaredIntegrity": "sha512-N+MeXYoqr3pOgn8xfyRPREN7gHakLYjhsHhWGT3fWAiL4IkAt0iDw14QiiEm2bE30c5XX5q0FtAA3CK5f9/BUg==",
+      "canonicalName": "define-lazy-prop",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        44
+      ]
+    },
+    {
+      "originalLocator": "is-inside-container",
+      "version": "1.0.0",
+      "declaredIntegrity": "sha512-KIYLCCJghfHZxqjYBE7rEy0OBuTd5xCHS7tHVgvCLkx7StIoaxwNW3hCALgEUjFfeRk+MG/Qxmp/vtETEF3tRA==",
+      "canonicalName": "is-inside-container",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        57
+      ]
+    },
+    {
+      "originalLocator": "is-docker",
+      "version": "3.0.0",
+      "declaredIntegrity": "sha512-eljcgEDlEns/7AXFosB5K/2nCM4P7FQPkGc/DWLy5rmFEWvZayGrik1d9/QIY5nJ4f9YsVvBkA6kJpHn9rISdQ==",
+      "canonicalName": "is-docker",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        56
+      ]
+    },
+    {
+      "originalLocator": "wsl-utils",
+      "version": "0.1.0",
+      "declaredIntegrity": "sha512-h3Fbisa2nKGPxCpm89Hk33lBLsnaGBvctQopaBSOW/uIs6FTe1ATyAnKFJrzVs9vpGdsTe73WF3V4lIsk4Gacw==",
+      "canonicalName": "wsl-utils",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        81
+      ]
+    },
+    {
+      "originalLocator": "is-wsl",
+      "version": "3.1.1",
+      "declaredIntegrity": "sha512-e6rvdUCiQCAuumZslxRJWR/Doq4VpPR82kqclvcS0efgt430SlGIk05vdCN58+VrzgtIcfNODjozVielycD4Sw==",
+      "canonicalName": "is-wsl",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        58
+      ]
+    },
+    {
+      "originalLocator": "postcss",
+      "version": "8.5.28",
+      "declaredIntegrity": "sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A==",
+      "canonicalName": "postcss",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        66
+      ]
+    },
+    {
+      "originalLocator": "nanoid",
+      "version": "3.3.18",
+      "declaredIntegrity": "sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==",
+      "canonicalName": "nanoid",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        63
+      ]
+    },
+    {
+      "originalLocator": "picocolors",
+      "version": "1.1.1",
+      "declaredIntegrity": "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==",
+      "canonicalName": "picocolors",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        65
+      ]
+    },
+    {
+      "originalLocator": "prettier",
+      "version": "3.8.3",
+      "declaredIntegrity": "sha512-7igPTM53cGHMW8xWuVTydi2KO233VFiTNyF5hLJqpilHfmn8C8gPf+PS7dUT64YcXFbiMGZxS9pCSxL/Dxm/Jw==",
+      "canonicalName": "prettier",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        67
+      ]
+    },
+    {
+      "originalLocator": "puppeteer-core",
+      "version": "25.11.0",
+      "declaredIntegrity": "sha512-Ujym7JbxoAqanaxGcHgmTomfhC01HfDCSuGZ8Hs9boHrDjzbNVMnFRJo2KtbDT9LCRgeJoFnkn9JQZ41eEUrLw==",
+      "canonicalName": "puppeteer-core",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        68
+      ]
+    },
+    {
+      "originalLocator": "chromium-bidi",
+      "version": "17.0.2",
+      "declaredIntegrity": "sha512-5v9GQFhTktFvotn/OFNJBmKLKRAb6n9r0bVCwf7sHgWc3/JryK0bj1nn93L3pHFrfgcsu6Be6EWsDi+1XHTGDg==",
+      "canonicalName": "chromium-bidi",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        35
+      ]
+    },
+    {
+      "originalLocator": "mitt",
+      "version": "3.0.1",
+      "declaredIntegrity": "sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==",
+      "canonicalName": "mitt",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        60
+      ]
+    },
+    {
+      "originalLocator": "chromium-bidi/zod",
+      "version": "3.25.76",
+      "declaredIntegrity": "sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==",
+      "canonicalName": null,
+      "candidateName": "zod",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "devtools-protocol",
+      "version": "0.0.1680125",
+      "declaredIntegrity": "sha512-rVARKAvOFJCFkvgX01VLvYqKIvt+cRCqvUxIhB2oAqVGPalxk3w3sb5TUGDagpow/EFblBpm/Zl/29QA2dd+jA==",
+      "canonicalName": "devtools-protocol",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        46
+      ]
+    },
+    {
+      "originalLocator": "typed-query-selector",
+      "version": "2.12.2",
+      "declaredIntegrity": "sha512-EOPFbyIub4ngnEdqi2yOcNeDLaX/0jcE1JoAXQDDMIthap7FoN795lc/SHfIq2d416VufXpM8z/lD+WRm2gfOQ==",
+      "canonicalName": "typed-query-selector",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        77
+      ]
+    },
+    {
+      "originalLocator": "webdriver-bidi-protocol",
+      "version": "0.4.3",
+      "declaredIntegrity": "sha512-uuN0goWfxP22B7J/uAgBpOYNPttC+XVseYE+rSY5+rQ+YBeVz/VORw8WbmLVcqW78zNg5A4qnjNXYUWR3il2ig==",
+      "canonicalName": "webdriver-bidi-protocol",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        80
+      ]
+    },
+    {
+      "originalLocator": "puppeteer-core/ws",
+      "version": "8.21.3",
+      "declaredIntegrity": "sha512-201TZ/kPWxoPr/OKWjquZR1SWKXcvxdH+e1xrx89b3YbmzLMFCLfnaG1HFIgWzJOEWZ7MvpK++odZufgYR50Rw==",
+      "canonicalName": null,
+      "candidateName": "ws",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "sharp",
+      "version": "0.35.3",
+      "declaredIntegrity": "sha512-ej0zVHuZGHCiABXcNxeYhpRnPNPAcvbG8RMdBAhDAxLKkCRVSpK3Iyu7qbqw3JMzoj0REeM6f3tJLtVwl0023Q==",
+      "canonicalName": "sharp",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        72
+      ]
+    },
+    {
+      "originalLocator": "@img/colour",
+      "version": "1.1.0",
+      "declaredIntegrity": "sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==",
+      "canonicalName": "@img/colour",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        17
+      ]
+    },
+    {
+      "originalLocator": "detect-libc",
+      "version": "2.1.2",
+      "declaredIntegrity": "sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==",
+      "canonicalName": "detect-libc",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        45
+      ]
+    },
+    {
+      "originalLocator": "sharp/semver",
+      "version": "7.8.5",
+      "declaredIntegrity": "sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==",
+      "canonicalName": null,
+      "candidateName": "semver",
+      "disposition": "UNVERIFIED_LOCATOR_LEAF_CANDIDATE",
+      "receiptOrdinals": []
+    },
+    {
+      "originalLocator": "@img/sharp-win32-x64",
+      "version": "0.35.3",
+      "declaredIntegrity": "sha512-D4y1vNeZrIIJCN+uHaWVtH86B+aCrdMYYjicy9pXHvbGZeGYLLSd3wdVuC37FxVXlU1ARsk84eKWfWMXGYEqvA==",
+      "canonicalName": "@img/sharp-win32-x64",
+      "candidateName": null,
+      "disposition": "REUSED_METADATA_IDENTITY_JOIN",
+      "receiptOrdinals": [
+        12
+      ]
+    }
+  ],
+  "npmReconciliation": {
+    "originalLocatorRows": 71,
+    "metadataJoinedRows": 57,
+    "unverifiedLocatorRows": 14,
+    "candidateUniqueNameVersionIntegrityRows": 69,
+    "verifiedRegistryUniqueRows": 57,
+    "remainingCandidateUniqueRows": 12,
+    "resolverValidated": false,
+    "networkRequestsThisTask": 0
+  },
+  "acquisitionManifestDisposition": "NOT_READY_NO_DOWNLOAD",
+  "requestedStage": "S1_SOURCE_ONLY_WITH_BOUNDED_FIRST_PARTY_DOCUMENTATION",
+  "sourceWriteManifest": [
+    {
+      "relativePath": "README.md",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/README.md",
+      "historicalSha256": "6425bfca1d9213b819c9e30dd7f8f557dab677073e999649d7c3288a5a7e681a",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/README.md",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "new prospective evidence/custody documentation",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "src/supervisor.py",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/src/supervisor.py",
+      "historicalSha256": "6c81e5dd4f16089a245859eddc816a48e5bba7fb97b025e9a3cdc43da8d668f3",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/src/supervisor.py",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "supervisor and admission composition",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "src/envelope_contract.py",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/src/envelope_contract.py",
+      "historicalSha256": "995faa63e9ad88b718f6a09650ce13ba7db35fc6301af855c40273b9505b8841",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/src/envelope_contract.py",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "supervisor and admission composition",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "src/windows_job.py",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/src/windows_job.py",
+      "historicalSha256": "d96fe1f9ebd7cb67f0c7c62f7415ca31d627d2be3b8c452a4945777ab0c615bd",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/src/windows_job.py",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "guarded backend source",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "src/boundary_admission.py",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/src/boundary_admission.py",
+      "historicalSha256": "4694079dc067db5facbbbc36c7d1f025447205a9d06cbc5b0fba92f3a7cbdb03",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/src/boundary_admission.py",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "supervisor and admission composition",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "fixtures/fx_d1.py",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/fixtures/fx_d1.py",
+      "historicalSha256": "4b9ca0e851a80c41cb012b518a110c99afbf2aa1f86233d37e91d1c15e25158a",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/fixtures/fx_d1.py",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "S2 fixture source only, not executed",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "fixtures/fx_m1.py",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/fixtures/fx_m1.py",
+      "historicalSha256": "2b4014a34f42cbab2c35a265387fc39be60e29e51cc3f0acc4d1a6e6823b1cdd",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/fixtures/fx_m1.py",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "S2 fixture source only, not executed",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "fixtures/fx_t1.py",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/fixtures/fx_t1.py",
+      "historicalSha256": "80ed447868bbb9a43e74a3c7e3ce6828a931d45358b39b342c804bfbbc8214b3",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/fixtures/fx_t1.py",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "S2 fixture source only, not executed",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "fixtures/fx_b1.py",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/fixtures/fx_b1.py",
+      "historicalSha256": "66769fcfef428d055241c0f3c47c32ff2698428a2ecf14afcb68cc3eb9a2f5ca",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/fixtures/fx_b1.py",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "S2 fixture source only, not executed",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "fixtures/fx_n1.py",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/fixtures/fx_n1.py",
+      "historicalSha256": "5f6ca9ffe3b96033d5c35798b72bb75d944c43a7720a6d1115452d2cf12e36e3",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/fixtures/fx_n1.py",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "S2 fixture source only, not executed",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "fixtures/fx_l1.py",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/fixtures/fx_l1.py",
+      "historicalSha256": "d4839a1233fbdaa0850a2e4fbf30c248589488e57d0428a0c3451fef37143b2f",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/fixtures/fx_l1.py",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "S2 fixture source only, not executed",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "evidence/source-manifest.json",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/evidence/source-manifest.json",
+      "historicalSha256": "8a1efd8a72511469752b88daff8c2ca54a9f60ae83725e569c5ff82ae6780b58",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/evidence/source-manifest.json",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "new prospective evidence/custody documentation",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "evidence/requirement-map.json",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/evidence/requirement-map.json",
+      "historicalSha256": "1e024ce7c14ef643b61cbd4c2fbdfe62a29f6bb9c4dc68f8f77849fd3c99647f",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/evidence/requirement-map.json",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "new prospective evidence/custody documentation",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    },
+    {
+      "relativePath": "WORKER_RETURN.md",
+      "historicalReadPath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003/WORKER_RETURN.md",
+      "historicalSha256": "3d3001978772a9cdbee251902e91efec92f1f6b19c1fc769837b05220b6f3fa7",
+      "proposedWritePath": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008/WORKER_RETURN.md",
+      "proposedAction": "EXCLUSIVE_CREATE_NEW_VERSION",
+      "role": "new prospective evidence/custody documentation",
+      "executionInS1": false,
+      "historicalRootMutation": false
+    }
+  ],
+  "sourceRootProposed": "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-C1-CONTROL-SOURCE-S1-20261008",
+  "historicalRootsFrozen": [
+    "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-R1-20261003",
+    "D:/UNG DUNG AI/TOOL AI 2026/CVF-NCR-S05-S1-SOURCE-20261003"
+  ],
+  "sourceLimitsProposed": {
+    "sourceBytes": 200000,
+    "evidenceBytes": 2097152,
+    "maxSourcePaths": 14,
+    "oneWorkerInvocation": true,
+    "automaticSuccessorAllowed": false,
+    "workerWallSeconds": 3600,
+    "reviewWallSeconds": 1200,
+    "paidSpend": 0,
+    "productionLimitsRetained": {
+      "aggregateDiskBytes": 10737418240,
+      "peakCommittedRamBytes": 8589934592
+    }
+  },
+  "firstPartyDocsProposed": {
+    "hosts": [
+      "learn.microsoft.com"
+    ],
+    "methods": [
+      "GET"
+    ],
+    "maxRequests": 20,
+    "maxDecodedBytes": 4194304,
+    "maxSeconds": 300,
+    "perRequestSeconds": 15,
+    "credentials": "NONE",
+    "followRedirects": false,
+    "automaticRetries": 0,
+    "candidateUrls": [
+      "https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects",
+      "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-createjobobjectw",
+      "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-setinformationjobobject",
+      "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-assignprocesstojobobject",
+      "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-queryinformationjobobject",
+      "https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob",
+      "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-terminatejobobject",
+      "https://learn.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-closehandle",
+      "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw",
+      "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-resumethread",
+      "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_extended_limit_information",
+      "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_accounting_information"
+    ],
+    "urlStatus": "CANDIDATE_NOT_REQUESTED_OR_ASSERTED_VALID",
+    "content": "public Microsoft API/structure documentation text/HTML only, no scripts/binaries; invalid URI stops and is routed locally, no guesses of ABI",
+    "admissionRequired": true
+  },
+  "sourceContinuationPlan": {
+    "problemKey": "local-supervisor-source-contract",
+    "currentOrdinal": 1,
+    "prospectiveOrdinal": 2,
+    "predecessorPath": "docs/reviews/CVF_CVF_NCR_S05_S1_SUPERVISOR_SOURCE_R1_WORKER_RETURN_2026-10-03.md",
+    "predecessorSha256": "12116c9c696752b487b74de9d6ec75bd3e53e90efad92b8f6a6f7f72512bd6ce",
+    "priorCounters": {
+      "partialReadyClosures": 0,
+      "reviewerScopeExpansions": 0,
+      "sameClaimCorrections": 1,
+      "nonDecreasingBlockerTransitions": 1
+    },
+    "priorBlockers": [
+      "SOURCE_CONTRACT_NOT_IMPLEMENTED",
+      "SOURCE_STATIC_REVIEW_PENDING",
+      "SOURCE_CONTRACT_STATIC_DEFECTS",
+      "SOURCE_CREATION_EVIDENCE_DEVIATIONS"
+    ],
+    "resolvedNow": [],
+    "successorScopeProposed": "INTEGRATED_ROOT_CONTRACT",
+    "freezeNow": "FEATURE_SUCCESSORS_FROZEN",
+    "requestedDisposition": "one explicitly approved prospective source-only attempt; exact integrated contract and gates before dispatch; no historical acceptance or counter reset",
+    "sourceGatePolicy": "if canonical SCEC/routing cannot lawfully admit prospective ordinal2, retain STOP and report the named conflict; operator permission never skips canonical gate",
+    "historicalCreationEvent": "NOT_RETAINED_NOT_RECREATED",
+    "furtherSuccessorAllowed": false
+  },
+  "S2FixturePlan": [
+    {
+      "fixture": "FX-D1",
+      "path": "fixtures/fx_d1.py",
+      "positive": "owned allocation below a selected physical bound",
+      "negative": "full allocation/outside-root/reparse escape",
+      "requires": "S2 disk mechanism/privilege selection; polling overshoot is not strict bound"
+    },
+    {
+      "fixture": "FX-M1",
+      "path": "fixtures/fx_m1.py",
+      "positive": "below-limit aggregate committed memory",
+      "negative": "child/grandchild aggregate breach; working-set false proof",
+      "requires": "S2 executable Job proof"
+    },
+    {
+      "fixture": "FX-T1",
+      "path": "fixtures/fx_t1.py",
+      "positive": "finite admitted task completes and exits",
+      "negative": "deadline/cancel/supervisor death leaves no orphan",
+      "requires": "S2 bounded owned process run"
+    },
+    {
+      "fixture": "FX-B1",
+      "path": "fixtures/fx_b1.py",
+      "positive": "child bound before first instruction",
+      "negative": "breakaway/unbound child cannot resume",
+      "requires": "S2 native launch/membership observation"
+    },
+    {
+      "fixture": "FX-N1",
+      "path": "fixtures/fx_n1.py",
+      "positive": "local offline operation without network dependency",
+      "negative": "DNS/TCP/UDP from parent/child/grandchild blocked, timeout not proof",
+      "requires": "S2 explicit egress mechanism/privilege/endpoint envelope"
+    },
+    {
+      "fixture": "FX-L1",
+      "path": "fixtures/fx_l1.py",
+      "positive": "bounded logs retained with exact custody",
+      "negative": "log flood/cancel/cleanup loses no required evidence",
+      "requires": "S2 owned-root and retention selection"
+    }
+  ],
+  "S2Admission": "NOT_REQUESTED_NOT_RELEASED",
+  "futureControlPolicy": {
+    "nativeWindows": "technical candidate matching existing Windows wheel lane; API semantics unverified until admitted first-party reads and later S2 fixtures",
+    "egress": "mechanism/privilege unresolved; no program-rule or timeout assumed to cover DNS/children",
+    "disk": "strict OS allocation bound unproven; fail closed rather than silently substitute polling/overshoot",
+    "otherNumericalLimits": "R1-R4,R7-R11 remain proposed; no hidden selection",
+    "host": "REPORTED_UNBOUND; fresh host-read only in admitted S2"
+  },
+  "productionAdmission": "NO_GO",
+  "obligationsOpen": 29,
+  "otherEffectsPerformed": {
+    "network": 0,
+    "helperWrites": 0,
+    "sourceExecution": 0,
+    "hostMutation": 0,
+    "acquisitionInstall": 0,
+    "voiceRender": 0
+  },
+  "publicExportDisposition": "DEFERRED_PRIVATE_ONLY"
+}

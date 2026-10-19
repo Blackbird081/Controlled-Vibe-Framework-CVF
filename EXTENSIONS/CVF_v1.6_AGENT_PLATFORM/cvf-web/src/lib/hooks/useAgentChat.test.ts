@@ -3,6 +3,7 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
+import { StrictMode, createElement } from 'react';
 import { useAgentChat } from './useAgentChat';
 
 let apiKey = '';
@@ -88,6 +89,34 @@ const baseLabels = {
 };
 
 describe('useAgentChat', () => {
+    it('cancels an initial send when the chat unmounts before its timer fires', async () => {
+        vi.useFakeTimers();
+        const settings = { ...baseSettings, providers: { ...baseSettings.providers,
+            gemini: { apiKey: 'fixture-key', selectedModel: 'gemini-2.5-flash' } } };
+        const hook = renderHook(() => useAgentChat({ initialPrompt: 'Synthetic intake',
+            language: 'en', settings, labels: baseLabels }));
+        hook.unmount();
+        await act(async () => { await vi.runAllTimersAsync(); });
+        expect(chatMock).not.toHaveBeenCalled();
+    });
+
+    it('dispatches exactly once under StrictMode and rerenders', async () => {
+        vi.useFakeTimers();
+        chatMock.mockResolvedValue({ text: 'INTAKE fixture result', usage: { totalTokens: 10 } });
+        const settings = { ...baseSettings, providers: { ...baseSettings.providers,
+            gemini: { apiKey: 'fixture-key', selectedModel: 'gemini-2.5-flash' } } };
+        const hook = renderHook(() => useAgentChat({ initialPrompt: 'Synthetic intake',
+            language: 'en', settings, labels: baseLabels }), {
+            wrapper: ({ children }) => createElement(StrictMode, null, children),
+        });
+        hook.rerender();
+        await act(async () => { await vi.runAllTimersAsync(); });
+        hook.rerender();
+        await act(async () => { await vi.runAllTimersAsync(); });
+        expect(chatMock).toHaveBeenCalledTimes(1);
+        expect(hook.result.current.messages.filter(m => m.role === 'user')).toHaveLength(1);
+    });
+
     beforeEach(() => {
         apiKey = '';
         chatMock.mockReset();

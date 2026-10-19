@@ -40,6 +40,10 @@
       "exposureClass": "INTERNAL_ONLY"
     },
     {
+      "path": ".gitattributes",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
       "path": ".gitignore",
       "exposureClass": "INTERNAL_ONLY"
     },

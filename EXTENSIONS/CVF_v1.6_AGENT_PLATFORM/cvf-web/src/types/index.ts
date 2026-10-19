@@ -1,4 +1,5 @@
 // Template types for CVF v1.5 UX Platform
+import type { ExecutionReceiptArchive } from '@/lib/execution-receipt-archive';
 
 export interface TemplateField {
     id: string;
@@ -64,6 +65,7 @@ export interface Execution {
     projectLabel?: string;
     knowledgeCollectionId?: string;
     evidenceReceiptSnapshot?: ExecutionEvidenceSnapshot;
+    savedReceiptArchive?: ExecutionReceiptArchive;
     starterSource?: 'template' | 'wizard' | 'intent-router' | 'history-followup';
 }
 

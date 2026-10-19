@@ -32,10 +32,19 @@ function normalizePhase(phase: CVFPhase): CanonicalCVFPhase {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    let payload: unknown;
+    try { payload = await request.json(); }
+    catch { return NextResponse.json({ success: false, error: 'Invalid JSON body.' }, { status: 400 }); }
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+      return NextResponse.json({ success: false, error: 'Payload must be a JSON object.' }, { status: 400 });
+    }
+    const body = payload as Record<string, unknown>;
+    if (['phase', 'role'].some(field => body[field] !== undefined && typeof body[field] !== 'string')) {
+      return NextResponse.json({ success: false, error: 'phase and role must be strings when supplied.' }, { status: 400 });
+    }
 
-    const rawPhase = (body.phase || 'BUILD') as CVFPhase;
-    const role = (body.role || 'AI_AGENT') as CVFRole;
+    const rawPhase = (body.phase ?? 'BUILD') as CVFPhase;
+    const role = (body.role ?? 'AI_AGENT') as CVFRole;
 
     if (!VALID_PHASES.includes(rawPhase)) {
       return NextResponse.json(

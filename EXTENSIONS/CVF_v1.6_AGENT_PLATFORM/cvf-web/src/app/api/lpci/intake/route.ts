@@ -64,9 +64,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON body', routeGovernanceProof: routeAuth.proof }, { status: 400 });
   }
 
-  const { corpusRoot, manifestPath } = body as { corpusRoot?: string; manifestPath?: string };
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return NextResponse.json({ error: 'Invalid input payload', routeGovernanceProof: routeAuth.proof }, { status: 400 });
+  }
+  const { corpusRoot, manifestPath } = body as Record<string, unknown>;
 
-  if (!corpusRoot || !manifestPath) {
+  if (typeof corpusRoot !== 'string' || typeof manifestPath !== 'string' || !corpusRoot.trim() || !manifestPath.trim()) {
     return NextResponse.json({ error: 'corpusRoot and manifestPath are required', routeGovernanceProof: routeAuth.proof }, { status: 400 });
   }
 

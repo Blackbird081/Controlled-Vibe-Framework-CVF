@@ -36,23 +36,26 @@ export function buildPortableAgentHandoffReadiness(
 
 ### Receiving Agent Mission
 
-- Treat this packet as the authoritative product brief for the first build plan.
+- Treat this packet as one source input for INTAKE; it grants no BUILD authority.
 - Convert the non-coder brief into implementation decisions inside the stated guardrails.
 - Prefer a simple, testable first version over broad platform expansion.
 - Do not ask the non-coder to choose frameworks, databases, hosting, or hidden architecture unless that choice materially changes cost, risk, privacy, or scope.
 
 ### Source Values Handling
 
-- This English packet uses agent-facing working values, not raw multilingual source text.
-- If any field says \`TRANSLATION_REQUIRED\`, stop before build work and request an approved translation.
-- Preserve product meaning, business terms, and acceptance criteria from the English Working Brief.
+- This English packet includes working wording and preserved multilingual source data.
+- \`TRANSLATION_REQUIRED\` indicates a local normalization limit, not an ambiguous idea. Interpret the preserved source during INTAKE; ask only when consequential meaning remains unclear and pause only dependent decisions.
+- Verify product meaning, business terms, qualifiers and acceptance criteria against original source values. Keep restriction strength exact: non-deletion does not imply immutability; an optional choice is not prohibited. Do not connect independent rules without source or accepted-owner support.
+- Use the summary for orientation and consult original values before dependent interpretations. Keep exact names/codes and the scope of restrictions, including automatic versus manual behavior and version limits.
+- Record and repair wording discrepancies during INTAKE; route consequential ambiguity to its decision owner. Do not treat English fluency as source confirmation or require the non-coder to review every English sentence.
 - Do not ask the non-coder to make hidden technical choices while resolving translation gaps.
 
 ### Implementation Decision Policy
 
-- If a technical detail is missing, choose a conservative default and explain why.
-- If a missing detail changes business risk, privacy, data retention, payment, authentication, or deployment scope, ask one concise clarification question before building.
-- If user-provided constraints conflict, stop and list the conflict instead of guessing.
+- Apply the Receiving Analysis And Question Discipline in this packet to the next permitted action.
+- Resolve ordinary technical unknowns through permitted sources or the existing technical owner; explain consequential defaults and alternatives. Separate identity/access business rules from authentication-mechanism selection.
+- Ask the decision owner only when unresolved source meaning affects that action; name the decision and its source-supported impact. Source-confirmed constraints stay in force; no necessary question for this action does not certify a complete specification.
+- For conflicts or deferred unknowns, name the specific blocked action and what permitted work can continue; do not hold all INTAKE or planning merely because questions remain. Accepted answers update derived analysis and retire old assumptions while preserving confirmed source/revision; conditional planning and building still require their own authority.
 
 ### Material Details To Reconfirm If Needed
 
@@ -63,8 +66,8 @@ ${unresolvedSummary}
 - Restate the product goal in one short paragraph.
 - List the first-version workflows the app must support.
 - Identify data objects or records implied by the source values.
-- Propose a practical build plan with milestones.
-- Define acceptance tests mapped to the user's success criteria.
+- Identify the next permitted action and unresolved decisions. When planning is permitted, propose tasks/milestones with source decisions, dependencies and validation links.
+- Separate actionable validation criteria from business outcome measures; flag missing coverage, unsupported tasks and terminology drift without inventing completeness.
 - Name assumptions and defaults separately from user-provided facts.
 - Keep out-of-scope items out of the first build unless the operator approves expansion.
 
@@ -72,7 +75,7 @@ ${unresolvedSummary}
 
 After the external agent responds, mark the packet:
 
-- PASS: the agent understood the product, made sensible defaults, and produced actionable build steps.
+- PASS: the agent understood the product, preserved source constraints, and proposed continuation sufficient for the next permitted action.
 - PASS_WITH_MINOR_FIX: the agent understood the product but needs small wording or scope corrections.
 - HOLD: the agent misunderstood the product, asked the non-coder to make hidden technical choices, lost source values, or expanded scope without approval.
 `;

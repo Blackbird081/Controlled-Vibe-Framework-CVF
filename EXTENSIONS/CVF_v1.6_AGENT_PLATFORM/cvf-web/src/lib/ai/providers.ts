@@ -1,5 +1,6 @@
 import { AIConfig, ExecutionResponse, AIProvider, DEFAULT_MODELS, CVF_SYSTEM_PROMPT } from './types';
-import { buildProviderExecutionDiagnostic } from '@/lib/execution-diagnostics';
+import { buildExecutionDiagnostic, buildProviderExecutionDiagnostic } from '@/lib/execution-diagnostics';
+import { composeProviderRequestSignal, PROVIDER_DEADLINE_MESSAGE, REQUEST_CANCELLED_MESSAGE } from '@/lib/provider-request-cancellation';
 
 class ProviderHttpStatusError extends Error {
     readonly httpStatus: number;
@@ -16,11 +17,11 @@ function isAlibabaStreamingOnlyModel(model: string): boolean {
 }
 
 function isQwen3Model(model: string): boolean {
-    return /^qwen3-/i.test(model);
+    return /^qwen3(?:\.\d+)?-/i.test(model);
 }
 
 function isQwen3ThinkingModel(model: string): boolean {
-    return /^qwen3-.*thinking/i.test(model);
+    return /^qwen3(?:\.\d+)?-.*thinking/i.test(model);
 }
 
 function usesOpenAICompletionTokenParam(model: string): boolean {
@@ -37,20 +38,23 @@ async function parseAlibabaStreamingResponse(response: Response): Promise<{
     output: string;
     tokensUsed?: number;
     finishReason?: string;
+    malformed: boolean;
+    usage: ExecutionResponse['usage'];
 }> {
     const raw = await response.text();
     const lines = raw
         .split('\n')
         .map(line => line.trim())
-        .filter(line => line.startsWith('data: '));
+        .filter(line => line.startsWith('data:'));
 
     let output = '';
-    let reasoning = '';
+    let malformed = false;
+    let usage: ExecutionResponse['usage'];
     let tokensUsed: number | undefined;
     let finishReason: string | undefined;
 
     for (const line of lines) {
-        const payload = line.slice(6);
+        const payload = line.slice(5).trimStart();
         if (payload === '[DONE]') continue;
 
         try {
@@ -59,24 +63,27 @@ async function parseAlibabaStreamingResponse(response: Response): Promise<{
             if (typeof delta?.content === 'string') {
                 output += delta.content;
             }
-            if (typeof delta?.reasoning_content === 'string') {
-                reasoning += delta.reasoning_content;
-            }
             if (typeof data.choices?.[0]?.finish_reason === 'string') {
                 finishReason = data.choices[0].finish_reason;
             }
             if (typeof data.usage?.total_tokens === 'number') {
                 tokensUsed = data.usage.total_tokens;
             }
+            if (data.usage) usage = {
+                inputTokens: data.usage.prompt_tokens, outputTokens: data.usage.completion_tokens,
+                totalTokens: data.usage.total_tokens,
+            };
         } catch {
-            // Ignore malformed SSE chunks and preserve the parsable output.
+            malformed = true;
         }
     }
 
     return {
-        output: output || reasoning,
+        output,
         tokensUsed,
         finishReason,
+        malformed,
+        usage,
     };
 }
 
@@ -268,6 +275,28 @@ async function executeGemini(
 }
 
 // Alibaba DashScope Client (OpenAI-compatible)
+function buildAlibabaTruncatedCompletion(
+    config: AIConfig,
+    executionTime: number,
+    usage: ExecutionResponse['usage'],
+    message = 'Alibaba output is incomplete because it reached the output-token limit. Revise the request or review the limit before another call.',
+): ExecutionResponse {
+    return {
+        success: false,
+        error: message,
+        provider: 'alibaba',
+        model: config.model,
+        tokensUsed: usage?.totalTokens,
+        usage,
+        executionTime,
+        diagnostic: buildExecutionDiagnostic({
+            stage: 'output_validation', class: 'output_validation_failed',
+            retryable: false, userAction: 'revise_request', safeMessage: message,
+            provider: 'alibaba', model: config.model, httpStatus: 200, latencyMs: executionTime,
+        }),
+    };
+}
+
 async function executeAlibaba(
     config: AIConfig,
     systemPrompt: string,
@@ -275,8 +304,10 @@ async function executeAlibaba(
 ): Promise<ExecutionResponse> {
     const startTime = Date.now();
     const isStreamingOnly = isAlibabaStreamingOnlyModel(config.model);
+    const cancellation = composeProviderRequestSignal(config.signal, resolveProviderTimeoutMs());
 
     try {
+        cancellation.throwIfTerminal();
         const response = await fetch('https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions', {
             method: 'POST',
             headers: {
@@ -304,11 +335,13 @@ async function executeAlibaba(
                     : {}),
             }),
             // W133 default remains 60s; EVT/model rebaselines may opt into a longer bounded timeout.
-            signal: AbortSignal.timeout(resolveProviderTimeoutMs()),
+            signal: cancellation.signal,
         });
+        cancellation.throwIfTerminal();
 
         if (!response.ok) {
             const error = await response.json();
+            cancellation.throwIfTerminal();
             const message = error.error?.message || 'Alibaba DashScope API error';
             if (isStreamingOnly && error.error?.code === 'model_not_supported') {
                 throw new Error(
@@ -321,23 +354,44 @@ async function executeAlibaba(
 
         if (isStreamingOnly) {
             const data = await parseAlibabaStreamingResponse(response);
+            cancellation.throwIfTerminal();
+            if (data.finishReason === 'length') {
+                return buildAlibabaTruncatedCompletion(config, Date.now() - startTime, data.usage);
+            }
+            if (data.malformed || data.finishReason !== 'stop' || !data.output.trim()) {
+                return buildAlibabaTruncatedCompletion(config, Date.now() - startTime, data.usage,
+                    'Alibaba did not return a complete usable answer. Review the request and response diagnostic before another call.');
+            }
             return {
                 success: true,
                 output: data.output,
                 provider: 'alibaba',
                 model: config.model,
                 tokensUsed: data.tokensUsed,
-                usage: {
-                    totalTokens: data.tokensUsed,
-                },
+                usage: data.usage,
                 executionTime: Date.now() - startTime,
             };
         }
 
         const data = await response.json();
+        cancellation.throwIfTerminal();
+        const usage = { inputTokens: data.usage?.prompt_tokens, outputTokens: data.usage?.completion_tokens, totalTokens: data.usage?.total_tokens };
+        if (data.choices?.[0]?.finish_reason === 'length') {
+            return buildAlibabaTruncatedCompletion(config, Date.now() - startTime, {
+                inputTokens: data.usage?.prompt_tokens,
+                outputTokens: data.usage?.completion_tokens,
+                totalTokens: data.usage?.total_tokens,
+            });
+        }
+        const output = data.choices?.[0]?.message?.content;
+        const finishReason = data.choices?.[0]?.finish_reason;
+        if (typeof output !== 'string' || !output.trim() || (finishReason != null && finishReason !== 'stop')) {
+            return buildAlibabaTruncatedCompletion(config, Date.now() - startTime, usage,
+                'Alibaba did not return a complete usable answer. Review the request and response diagnostic before another call.');
+        }
         return {
             success: true,
-            output: data.choices[0].message.content,
+            output,
             provider: 'alibaba',
             model: config.model,
             tokensUsed: data.usage?.total_tokens,
@@ -350,6 +404,16 @@ async function executeAlibaba(
         };
     } catch (error) {
         const executionTime = Date.now() - startTime;
+        if (cancellation.cause() === 'request') return {
+            success: false, error: REQUEST_CANCELLED_MESSAGE, provider: 'alibaba', model: config.model,
+            executionTime, diagnostic: buildExecutionDiagnostic({ stage: 'provider', class: 'request_cancelled',
+                provider: 'alibaba', model: config.model, httpStatus: 499, latencyMs: executionTime }),
+        };
+        if (cancellation.cause() === 'deadline') return {
+            success: false, error: PROVIDER_DEADLINE_MESSAGE, provider: 'alibaba', model: config.model,
+            executionTime, diagnostic: buildExecutionDiagnostic({ stage: 'provider', class: 'provider_timeout',
+                provider: 'alibaba', model: config.model, latencyMs: executionTime }),
+        };
         return {
             success: false,
             error: error instanceof Error ? error.message : 'Unknown error',
@@ -358,6 +422,8 @@ async function executeAlibaba(
             executionTime,
             diagnostic: buildProviderExecutionDiagnostic({ provider: 'alibaba', model: config.model, error, latencyMs: executionTime }),
         };
+    } finally {
+        cancellation.dispose();
     }
 }
 
@@ -496,6 +562,7 @@ export async function executeAI(
         model: options?.model || DEFAULT_MODELS[provider],
         maxTokens: options?.maxTokens,
         temperature: options?.temperature,
+        signal: options?.signal,
     };
 
     const systemPrompt = options?.systemPrompt ?? CVF_SYSTEM_PROMPT;

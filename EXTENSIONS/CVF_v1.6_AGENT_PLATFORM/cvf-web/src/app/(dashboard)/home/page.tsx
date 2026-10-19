@@ -19,6 +19,7 @@ import {
 } from '@/lib/governed-starter-path';
 import { isIntentFirstEnabled, type IntentRouteResult } from '@/lib/intent-router';
 import { buildContinuationExecution, buildEvidenceSnapshot } from '@/lib/execution-continuity';
+import { createReceiptArchive, restoreReceiptArchive } from '@/lib/execution-receipt-archive';
 import { OUTCOME_WORKFLOW_REGISTRY } from '@/lib/workflow-composition';
 import {
     DynamicForm,
@@ -90,17 +91,49 @@ export default function HomePage() {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [currentOutput, setCurrentOutput] = useState('');
     const [currentEvidenceReceipt, setCurrentEvidenceReceipt] = useState<GovernanceEvidenceReceipt | undefined>(undefined);
+    const [savedLocalHistory, setSavedLocalHistory] = useState(false);
+    const receiptEpoch = useRef(0);
     const [currentInput, setCurrentInput] = useState<Record<string, string>>({});
     const [currentIntent, setCurrentIntent] = useState('');
     const [currentFolder, setCurrentFolder] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [starterHandoff, setStarterHandoff] = useState<GovernedStarterHandoff | null>(null);
     const [iterationContext, setIterationContext] = useState<string | null>(null);
+    // Binding for the result view, local decisions and completion; never the ambient store selection.
+    const [activeExecutionId, setActiveExecutionId] = useState<string | null>(null);
+    // Editable draft returned to the form after a local stop, retry or reject; never persisted.
+    const [draftInput, setDraftInput] = useState<Record<string, string> | null>(null);
+    const [stopNotice, setStopNotice] = useState(false);
+    const [formRevision, setFormRevision] = useState(0);
+    const attemptSequence = useRef(0);
     const [bannerDismissed, setBannerDismissed] = useState(
         () => typeof window !== 'undefined' && localStorage.getItem('cvf_setup_banner_dismissed') === '1',
     );
 
-    const { addExecution, updateExecution, currentExecution, getExecutionById } = useExecutionStore();
+    const { addExecution, updateExecution, getExecutionById } = useExecutionStore();
+    const activeExecution = activeExecutionId ? getExecutionById(activeExecutionId) ?? null : null;
+
+    // Distinct id per attempt: the clock alone repeats within a millisecond, so a per-page
+    // sequence is added and any id already present in the store is skipped.
+    const newAttemptId = useCallback((prefix: string) => {
+        let id: string;
+        do {
+            id = `${prefix}_${Date.now()}_${(attemptSequence.current++).toString(36)}`;
+        } while (getExecutionById(id));
+        return id;
+    }, [getExecutionById]);
+
+    // A fresh template choice must not inherit a previous attempt's draft, notice or context.
+    const clearRecoveryContext = useCallback(() => {
+        receiptEpoch.current++;
+        setSavedLocalHistory(false);
+        setFormRevision(revision => revision + 1);
+        setDraftInput(null);
+        setStopNotice(false);
+        setIterationContext(null);
+    }, []);
+
+    useEffect(() => () => { receiptEpoch.current++; }, []);
 
     const allRunnableTemplates = useMemo(
         () => templates.filter(template => !template.isFolder),
@@ -229,12 +262,15 @@ export default function HomePage() {
             }
         });
 
+        clearRecoveryContext();
+        setCurrentOutput('');
+        setCurrentEvidenceReceipt(undefined);
         setSelectedTemplate(demoTemplate);
         setCurrentInput(demoValues);
         setCurrentIntent(`[DEMO] Auto-generated intent for ${demoTemplate.name}`);
 
         const execution: Execution = {
-            id: `exec_demo_${Date.now()}`,
+            id: newAttemptId('exec_demo'),
             templateId: demoTemplate.id,
             templateName: demoTemplate.name,
             category: demoTemplate.category,
@@ -244,16 +280,18 @@ export default function HomePage() {
             createdAt: new Date(),
         };
         addExecution(execution);
+        setActiveExecutionId(execution.id);
         setWorkflowState('processing');
-    }, [addExecution]);
+    }, [addExecution, clearRecoveryContext, newAttemptId]);
 
     const handleTryTemplate = useCallback((template: Template, prefilled: Record<string, string>) => {
         trackEvent('template_try_quick_path', { templateId: template.id });
+        clearRecoveryContext();
         setSelectedTemplate(template);
         setCurrentInput(prefilled);
         setCurrentIntent(generateIntent(template, prefilled));
         setWorkflowState('form');
-    }, []);
+    }, [clearRecoveryContext]);
 
     const handleSelectTemplate = useCallback((template: Template) => {
         if (template.isFolder) {
@@ -270,9 +308,10 @@ export default function HomePage() {
             setWorkflowState(wizardState);
             return;
         }
+        clearRecoveryContext();
         setSelectedTemplate(template);
         setWorkflowState('form');
-    }, []);
+    }, [clearRecoveryContext]);
 
     const handleOutcomeQuickAction = useCallback((templateId: string) => {
         const template = templates.find((item) => item.id === templateId);
@@ -298,6 +337,7 @@ export default function HomePage() {
             }
             startTransition(() => {
                 setCurrentFolder(null);
+                clearRecoveryContext();
                 setSelectedTemplate(template);
                 trackEvent('template_selected', {
                     templateId: template.id,
@@ -325,32 +365,66 @@ export default function HomePage() {
                 setWorkflowState('browse');
             });
         }
-    }, [searchParams]);
+    }, [searchParams, clearRecoveryContext]);
 
     // W123-T1: restore result state when navigating from history with ?continue=exec_id
+    // (accepted runs only) or ?result=exec_id (any completed saved run, viewing only).
+    // continue governs when both are present. The restored execution id is the binding;
+    // the ambient currentExecution is not consulted and nothing is re-executed.
     useEffect(() => {
-        const continueId = searchParams.get('continue')?.trim();
-        if (!continueId) return;
-        const exec = getExecutionById(continueId);
-        if (!exec || exec.result !== 'accepted' || !exec.output) return;
-        const output = exec.output;
-        const tpl = templates.find((t) => t.id === exec.templateId);
-        if (!tpl) return;
+        const hasContinue = searchParams.has('continue');
+        if (!hasContinue && !searchParams.has('result')) return;
+        const restoreId = searchParams.get(hasContinue ? 'continue' : 'result')?.trim();
+        const exec = restoreId ? getExecutionById(restoreId) : undefined;
+        const tpl = exec ? templates.find((t) => t.id === exec.templateId) : undefined;
         startTransition(() => {
+            clearRecoveryContext();
+            const generation = receiptEpoch.current;
+            if (!exec || exec.status !== 'completed' || !exec.output || !tpl
+                || (hasContinue && exec.result !== 'accepted')) {
+                // Invalid history query: drop any prior bound context and return to browse.
+                setActiveExecutionId(null);
+                setSelectedTemplate(null);
+                setCurrentOutput('');
+                setCurrentEvidenceReceipt(undefined);
+                setWorkflowState('browse');
+                return;
+            }
+            setActiveExecutionId(exec.id);
             setSelectedTemplate(tpl);
             setCurrentInput(exec.input);
             setCurrentIntent(exec.intent);
-            setCurrentOutput(output);
+            setCurrentOutput(exec.output);
             setCurrentEvidenceReceipt(undefined);
             setWorkflowState('result');
+            if (exec.savedReceiptArchive) {
+                void restoreReceiptArchive(exec.savedReceiptArchive, exec.id, exec.output, exec.evidenceReceiptSnapshot)
+                    .then(receipt => {
+                        if (!receipt || receiptEpoch.current !== generation) return;
+                        const selected = useExecutionStore.getState().getExecutionById(exec.id);
+                        if (!selected || selected.status !== 'completed' || selected.output !== exec.output ||
+                            selected.savedReceiptArchive !== exec.savedReceiptArchive ||
+                            selected.evidenceReceiptSnapshot?.receiptId !== receipt.receiptId ||
+                            selected.evidenceReceiptSnapshot?.provider !== receipt.provider ||
+                            selected.evidenceReceiptSnapshot?.model !== receipt.model) return;
+                        setCurrentEvidenceReceipt(receipt);
+                        setSavedLocalHistory(true);
+                    }).catch(() => { /* Saved output remains viewable without an archive. */ });
+            }
         });
-    }, [searchParams, getExecutionById]);
+        const currentReceiptEpoch = receiptEpoch;
+        return () => { currentReceiptEpoch.current++; };
+    }, [searchParams, getExecutionById, clearRecoveryContext]);
 
+    // An explicit submit starts a new attempt: no inherited result, receipt or continuation context.
     const handleFormSubmit = useCallback((values: Record<string, string>, intent: string) => {
+        clearRecoveryContext();
+        setCurrentOutput('');
+        setCurrentEvidenceReceipt(undefined);
         setCurrentInput(values);
         setCurrentIntent(intent);
         const execution: Execution = {
-            id: `exec_${Date.now()}`,
+            id: newAttemptId('exec'),
             templateId: selectedTemplate!.id,
             templateName: selectedTemplate!.name,
             category: selectedTemplate!.category,
@@ -360,16 +434,21 @@ export default function HomePage() {
             createdAt: new Date(),
         };
         addExecution(execution);
+        setActiveExecutionId(execution.id);
         setWorkflowState('processing');
-    }, [selectedTemplate, addExecution]);
+    }, [selectedTemplate, addExecution, clearRecoveryContext, newAttemptId]);
 
     const handleProcessingComplete = useCallback((output: string, evidenceReceipt?: GovernanceEvidenceReceipt) => {
+        // A stopped attempt has no binding left, so a late delivery can never reach a record.
+        if (!activeExecutionId) return;
+        receiptEpoch.current++;
         setCurrentOutput(output);
         setCurrentEvidenceReceipt(evidenceReceipt);
-        if (currentExecution) {
+        setSavedLocalHistory(false);
+        if (activeExecutionId) {
             // W123-T1: snapshot evidence receipt + knowledge collection into execution for continuity chain
             const snap = buildEvidenceSnapshot(evidenceReceipt as Record<string, unknown> | undefined);
-            updateExecution(currentExecution.id, {
+            updateExecution(activeExecutionId, {
                 status: 'completed',
                 output,
                 qualityScore: 8.2,
@@ -377,37 +456,81 @@ export default function HomePage() {
                 ...(snap ? { evidenceReceiptSnapshot: snap } : {}),
                 ...(snap?.knowledgeCollectionId ? { knowledgeCollectionId: snap.knowledgeCollectionId } : {}),
             });
+            if (evidenceReceipt) {
+                const completedId = activeExecutionId;
+                const receiptId = evidenceReceipt.receiptId;
+                void createReceiptArchive(completedId, output, evidenceReceipt).then(archive => {
+                    if (!archive) return;
+                    const selected = useExecutionStore.getState().getExecutionById(completedId);
+                    if (!selected || selected.status !== 'completed' || selected.output !== output ||
+                        selected.evidenceReceiptSnapshot?.receiptId !== receiptId ||
+                        selected.evidenceReceiptSnapshot?.provider !== archive.receipt.provider ||
+                        selected.evidenceReceiptSnapshot?.model !== archive.receipt.model) return;
+                    useExecutionStore.getState().updateExecution(completedId, { savedReceiptArchive: archive });
+                }).catch(() => { /* Missing WebCrypto leaves the ordinary result intact. */ });
+            }
         }
         setWorkflowState('result');
-    }, [currentExecution, updateExecution]);
+    }, [activeExecutionId, updateExecution]);
 
     const handleBack = useCallback(() => {
+        clearRecoveryContext();
         setSelectedTemplate(null);
+        setActiveExecutionId(null);
+        setCurrentOutput('');
+        setCurrentEvidenceReceipt(undefined);
+        setCurrentInput({});
+        setCurrentIntent('');
+        setWorkflowState('browse');
+    }, [clearRecoveryContext]);
+
+    // Return to the editable form with the exact submitted fields. Nothing is executed
+    // here; only an explicit submit starts a new attempt.
+    const returnToDraft = useCallback((stopped: boolean) => {
+        receiptEpoch.current++;
+        setSavedLocalHistory(false);
+        setDraftInput({ ...currentInput });
+        setStopNotice(stopped);
+        setActiveExecutionId(null);
         setCurrentOutput('');
         setCurrentEvidenceReceipt(undefined);
         setIterationContext(null);
-        setWorkflowState('browse');
-    }, []);
+        setWorkflowState('form');
+    }, [currentInput]);
+
+    // Cancel is a local stop only: the bound pending/processing attempt is recorded as
+    // unsuccessful (existing failed status), which does not prove the server stopped.
+    const handleStopProcessing = useCallback(() => {
+        const bound = activeExecutionId ? getExecutionById(activeExecutionId) : undefined;
+        if (bound && (bound.status === 'processing' || bound.status === 'pending')) {
+            updateExecution(bound.id, { status: 'failed' });
+        }
+        returnToDraft(true);
+    }, [activeExecutionId, getExecutionById, updateExecution, returnToDraft]);
+
+    const handleRetry = useCallback(() => returnToDraft(false), [returnToDraft]);
 
     const handleFollowUp = useCallback((refinement: string) => {
         if (!selectedTemplate || !currentOutput) return;
+        receiptEpoch.current++;
+        setSavedLocalHistory(false);
         const truncated = currentOutput.length > 600
             ? currentOutput.slice(0, 600) + '…'
             : currentOutput;
         setIterationContext(truncated);
         setCurrentIntent(refinement);
         // W123-T1: build durable continuation chain when a parent execution exists
-        const execution: Execution = currentExecution
+        const execution: Execution = activeExecution
             ? buildContinuationExecution({
                 templateId: selectedTemplate.id,
                 templateName: selectedTemplate.name,
                 category: selectedTemplate.category,
                 input: { ...currentInput, _previousOutput: truncated },
                 intent: refinement,
-                parentExecution: currentExecution,
+                parentExecution: activeExecution,
             })
             : {
-                id: `exec_followup_${Date.now()}`,
+                id: newAttemptId('exec_followup'),
                 templateId: selectedTemplate.id,
                 templateName: selectedTemplate.name,
                 category: selectedTemplate.category,
@@ -417,8 +540,9 @@ export default function HomePage() {
                 createdAt: new Date(),
             };
         addExecution(execution);
+        setActiveExecutionId(execution.id);
         setWorkflowState('processing');
-    }, [selectedTemplate, currentOutput, currentInput, currentExecution, addExecution]);
+    }, [selectedTemplate, currentOutput, currentInput, activeExecution, addExecution, newAttemptId]);
 
     const handleSendToAgent = useCallback((prompt: string) => {
         window.dispatchEvent(new CustomEvent('cvf:openAgent', {
@@ -460,18 +584,18 @@ export default function HomePage() {
     }, []);
 
     const handleAccept = useCallback(() => {
-        if (currentExecution) {
-            updateExecution(currentExecution.id, { result: 'accepted' });
+        if (activeExecutionId) {
+            updateExecution(activeExecutionId, { result: 'accepted' });
         }
         handleBack();
-    }, [currentExecution, updateExecution, handleBack]);
+    }, [activeExecutionId, updateExecution, handleBack]);
 
     const handleReject = useCallback(() => {
-        if (currentExecution) {
-            updateExecution(currentExecution.id, { result: 'rejected' });
+        if (activeExecutionId) {
+            updateExecution(activeExecutionId, { result: 'rejected' });
         }
-        setWorkflowState('form');
-    }, [currentExecution, updateExecution]);
+        returnToDraft(false);
+    }, [activeExecutionId, updateExecution, returnToDraft]);
 
     const handleOpenGovernedStarter = useCallback(() => {
         if (!starterHandoff) {
@@ -573,12 +697,28 @@ export default function HomePage() {
             )}
 
             {workflowState === 'form' && selectedTemplate && (
-                <DynamicForm
-                    template={selectedTemplate}
-                    onSubmit={handleFormSubmit}
-                    onBack={handleBack}
-                    onSendToAgent={handleSendToAgent}
-                />
+                <>
+                    {stopNotice && (
+                        <div
+                            role="status"
+                            data-testid="draft-stop-notice"
+                            className="max-w-3xl mx-auto mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100"
+                        >
+                            {/* Text Encoding Exception: Vietnamese user-facing local-stop notice. */}
+                            {language === 'vi'
+                                ? 'Đã dừng trên thiết bị này. Nội dung bạn nhập được giữ lại; nhà cung cấp AI có thể chưa dừng yêu cầu này. Chỉnh sửa rồi gửi lại khi sẵn sàng.'
+                                : 'Stopped on this device. Your inputs are kept; the AI provider may not have stopped this request. Edit and resubmit when ready.'}
+                        </div>
+                    )}
+                    <DynamicForm
+                        key={`${selectedTemplate.id}:${formRevision}`}
+                        template={selectedTemplate}
+                        initialValues={draftInput ?? undefined}
+                        onSubmit={handleFormSubmit}
+                        onBack={handleBack}
+                        onSendToAgent={handleSendToAgent}
+                    />
+                </>
             )}
 
             {workflowState === 'wizard' && <AppBuilderWizard onBack={handleBack} />}
@@ -600,21 +740,22 @@ export default function HomePage() {
                         : currentInput}
                     intent={currentIntent}
                     onComplete={handleProcessingComplete}
-                    onCancel={handleBack}
+                    onCancel={handleStopProcessing}
                 />
             )}
 
-            {workflowState === 'result' && currentExecution && (
+            {workflowState === 'result' && activeExecution && (
                 <ResultViewer
-                    execution={currentExecution}
+                    execution={activeExecution}
                     output={currentOutput}
                     onAccept={handleAccept}
                     onReject={handleReject}
-                    onRetry={() => setWorkflowState('form')}
+                    onRetry={handleRetry}
                     onBack={handleBack}
                     onSendToAgent={handleSendToAgent}
                     onFollowUp={handleFollowUp}
                     evidenceReceipt={currentEvidenceReceipt}
+                    savedLocalHistory={savedLocalHistory}
                 />
             )}
 

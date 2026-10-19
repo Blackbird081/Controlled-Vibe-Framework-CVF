@@ -75,8 +75,9 @@ export function LanguageToggle() {
     return (
         <button
             onClick={toggleLanguage}
-            className="px-3 py-1.5 text-sm font-bold rounded-lg transition-all
-                      bg-gray-100 dark:bg-gray-700 
+            className="inline-flex min-h-11 min-w-11 items-center justify-center px-3 py-1.5 text-sm font-bold rounded-lg transition-all
+                      focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgb(var(--cvf-accent-rgb))]
+                      bg-gray-100 dark:bg-gray-700
                       text-gray-700 dark:text-gray-200
                       hover:bg-blue-100 dark:hover:bg-blue-900 
                       hover:text-blue-600 dark:hover:text-blue-400

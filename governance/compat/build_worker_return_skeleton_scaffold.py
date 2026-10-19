@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -26,6 +27,64 @@ except ImportError:  # pragma: no cover - import path fallback for direct script
 
 SCEC_SCHEMA_VERSION = "cvf.semanticConvergenceControl.v1"
 SCEC_UNRESOLVED_PREDECESSOR_SENTINEL = "SCEC_PREDECESSOR_HASH_UNRESOLVED"
+
+
+def render_return_preparation_block(*, include_authorization: bool = False) -> str:
+    """Shared authoring fields; never evidence of execution or closeability."""
+    binding = {
+        "contractId": "cvf.external-local-absorption-coordination@1",
+        "invariants": {
+            "externalRole": "ADVISORY_RESEARCH_AND_PATTERN_MAPPING",
+            "externalContext": "PUBLIC_GITHUB_AND_REFRESHED_EXTERNAL_AGENT_READ",
+            "localRole": "SOURCE_RUNTIME_VALUE_AND_PRIVATE_CVF_VERIFICATION",
+            "finalDecisionOwner": "LOCAL",
+            "localCoverageBasis": "SOURCE_DERIVED_NOT_EXTERNAL_SHORTLIST",
+            "externalEvidenceAuthority": "INPUT_NOT_PRIVATE_CVF_PROOF",
+        },
+        "contractSha256": "92df8a7c9492e8c3cedf624cfaa79b8185ca31442ecaf96107fd88dfcb81800c",
+        "parentArtifact": None,
+    }
+    text = (
+        "## Independent Review Probe Disposition\n"
+        "independentProbeDisposition: PENDING_REVIEWER_EXECUTION\n"
+        "Guidance: verify work-order applicability; reviewer owns actual probe. "
+        "Remove this block only when the linked order does not require a probe.\n"
+        "## Return-Time Closeability Recheck\n"
+        "closeabilityDisposition: TO_FILL_FROM_ACTUAL_RECHECK\n"
+        "outsideAuthorityBlockers: TO_FILL_FROM_ACTUAL_RECHECK\n"
+        "nextRepairRoute: TO_FILL_FROM_ACTUAL_RECHECK\n"
+        "workerRedispatchAllowed: NO\n"
+        "Guidance: COMPLETE_PENDING_REVIEW requires CLOSEABLE and NONE; otherwise "
+        "use BLOCKED_WITH_REASON and the actual controlled repair route.\n"
+        "## External/Local Coordination Binding\n"
+        f"```json\n{json.dumps(binding, separators=(',', ':'))}\n```\n"
+    )
+    if include_authorization:
+        text += (
+            "## Core Guard Self-Protection Authorization\n"
+            "Authorized guard-maintenance scope: TO_FILL or N/A with reason\n"
+            "Protected paths: TO_FILL actual paths or N/A with reason\n"
+            "Operator authorization: TO_FILL actual grant or N/A with reason\n"
+            "Rollback boundary: TO_FILL or N/A with reason\n"
+        )
+    return text
+
+
+def preparation_shape_issues(text: str) -> list[str]:
+    """Check preparation presence only; unfinished values remain unaccepted."""
+    headings = (
+        "Independent Review Probe Disposition", "Return-Time Closeability Recheck",
+        "External/Local Coordination Binding", "Core Guard Self-Protection Authorization",
+    )
+    fields = (
+        "independentProbeDisposition", "closeabilityDisposition",
+        "outsideAuthorityBlockers", "nextRepairRoute", "workerRedispatchAllowed",
+    )
+    return [f"missing preparation heading: {h}" for h in headings
+            if not re.search(r"(?m)^## " + re.escape(h) + r"\s*$", text)] + [
+        f"missing preparation field: {f}" for f in fields
+        if not re.search(r"(?m)^" + re.escape(f) + r":\s*\S", text)
+    ]
 
 
 def render_scec_outcome_block(
@@ -281,6 +340,11 @@ eventEvidence: NOT_APPLICABLE_WITH_REASON - no classifier block event occurred
 ```acceptance-evidence-json
 {{"schemaVersion":"cvf.workOrderAcceptanceEvidence@1.0.0","executionBaseHead":"TO_FILL","results":[]}}
 ```
+Evidence completion guidance: each results row must contain exactly requirementId, actualArtifacts, proofRefs, status (PASS or BLOCKED), matching the dispatcher ledger; the empty array is an unfinished scaffold. Example row format:
+{{"requirementId": "REQ-1", "actualArtifacts": ["docs/reviews/x.md"], "proofRefs": ["PROOF-1"], "status": "PASS"}}
+
+Readiness completion guidance: READY_FOR_REVIEW requires completed dependency sweep, actual productionBindingEvidence and PASS_TARGETED_DEFECT_CLASS; otherwise keep BLOCKED_WITH_REASON and truthful pending fields. This skeleton grants no readiness or gate PASS.
+
 ## Rework Convergence Self-Proof
 rootCauseClusterId: {args.root_cause_cluster_id if getattr(args, "dispatch_kind", "INITIAL") == "REWORK" else f"INITIAL_SCOPE_{args.batch_id}"}
 reworkGeneration: {getattr(args, "review_round_count", 0)}
@@ -299,6 +363,7 @@ recurrenceDisposition: NOT_APPLICABLE_WITH_REASON - replace with FIRST_OCCURRENC
 priorRelatedFinding: NOT_APPLICABLE_WITH_REASON - replace with the exact governed prior path for a recurring cluster
 operatorNoticeDisposition: NOT_APPLICABLE_WITH_REASON - replace with OPERATOR_NOTICE_REQUIRED for a recurring cluster
 successorFreezeDisposition: NOT_APPLICABLE_WITH_REASON - replace with FEATURE_SUCCESSORS_FROZEN for a recurring cluster
+{render_return_preparation_block(include_authorization=True)}
 ## Purpose
 TO_FILL: state the mission prompt for this worker return.
 ## Scope / Methodology
@@ -379,7 +444,13 @@ TO_FILL: paste `git status --short` output here
 ## Changed Files
 TO_FILL: list changed files with `git diff --name-status` evidence.
 ## Worker Experience Retrospective
-WORKER_EXPERIENCE_RETRO_NA_WITH_REASON - no blocker in the generated skeleton; replace with concise retrospective if execution reveals worker friction.
+WORKER_EXPERIENCE_RETRO:
+frictionLevel: TO_FILL_FROM_ACTUAL_EXECUTION
+frictionType: TO_FILL_FROM_ACTUAL_EXECUTION
+observedStep: TO_FILL_FROM_ACTUAL_EXECUTION
+preventiveControlCandidate: TO_FILL_FROM_ACTUAL_EXECUTION
+
+Complete this structured branch with truthful observed fields. Only if actual execution had no friction, replace the entire branch using the checker RETRO_NA_TOKEN (WORKER_EXPERIENCE_RETRO_NA_WITH_REASON with colon) and exact reason 'no friction beyond normal gates; no gate surprise, no helper gap, no worktree contamination this return'; never keep both branches or assert no surprise before execution.
 ## Command Evidence
 - `python governance/compat/run_worker_return_fast_gate.py` - BLOCKED: generated skeleton pending worker execution evidence.
 - TO_FILL: paste focused test or smoke command evidence when applicable.

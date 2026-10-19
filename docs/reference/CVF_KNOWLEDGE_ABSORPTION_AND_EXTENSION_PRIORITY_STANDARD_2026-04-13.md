@@ -45,6 +45,18 @@ completing every plane before trying one bounded integration. Runtime evidence
 must feed back into existing chain owners; a successful run does not waive a
 missing authority or acceptance boundary.
 
+### Agent Continuation And Proportional Upstream Learning - 2026-10-06
+
+Apply Agent Continuation And Action Readiness in
+`docs/reference/CVF_GOVERNED_WORK_LIFECYCLE_AND_DESIGN_CONTROL_STANDARD_2026-06-11.md`.
+Evaluate Spec Kit and other upstream contributions across the CVF work chain by
+receiving consumer, existing owner and named gap. A generated spec is one intake
+input; receiving agents continue clarification within granted authority.
+Design process outputs for quick agent understanding as well as human use.
+Keep verification bounded with a stop condition, then return to the wider CVF
+upgrade backlog. Reuse existing evidence and owners; this clarification alone
+requires no new schema, checker, pilot, broad audit or runtime/provider action.
+
 ### Two Independent Reuse Decisions
 
 | Decision | Required question | Evidence boundary |

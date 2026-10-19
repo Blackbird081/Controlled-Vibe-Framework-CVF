@@ -15,7 +15,7 @@ ACTIVE_ORDER = 'docs/work_orders/active.md'
 def test_active_binding_changes_only_unique_probe_command() -> None:
     broad = autorun._common_commands('base', 'head')
     bound = autorun._common_commands('base', 'head', ACTIVE_ORDER)
-    assert len(broad) == len(bound) == 83
+    assert len(broad) == len(bound) == 84
     changed = [(a, b) for a, b in zip(broad, bound) if a != b]
     assert len(changed) == 1
     a, b = changed[0]
@@ -75,7 +75,7 @@ def test_phase_forwards_bound_plan_and_preserves_other_commands(monkeypatch, tmp
     assert autorun._run_phase('pre-implementation', 'base', 'head', active_work_order=ACTIVE_ORDER, receipt_dir=tmp_path) == 0
     probe = [c.command for c in observed if RIPA_SCRIPT in c.command]
     assert probe == [('python', RIPA_SCRIPT, '--base', 'base', '--head', 'head', '--enforce', '--changed-lane-only', '--active-work-order', ACTIVE_ORDER)]
-    assert len(observed) == 87
+    assert len(observed) == 88
     assert sum('--active-work-order' in c.command for c in observed) == 3
     release = [c.command for c in observed if c.name == 'dispatch release readiness']
     assert release == [('python', 'governance/compat/check_dispatch_release_readiness.py', '--active-work-order', ACTIVE_ORDER, '--head', 'head', '--enforce')]
@@ -299,6 +299,15 @@ def test_common_commands_include_semantic_convergence_control_checker() -> None:
     commands = autorun._common_commands('base', 'head')
     matches = [c for c in commands if any(('check_semantic_convergence_control.py' in part for part in c.command))]
     assert len(matches) == 1, 'SCEC checker must be bound exactly once in _common_commands'
+
+def test_common_commands_bind_preapproval_feasibility_once_after_scec() -> None:
+    commands = autorun._common_commands('base', 'head')
+    names = [c.name for c in commands]
+    guard = [i for i, c in enumerate(commands) if any(('check_preapproval_feasibility.py' in part for part in c.command))]
+    assert guard == [names.index('preapproval feasibility')]
+    assert 'check_semantic_convergence_control.py' in commands[guard[0] - 1].command[1]
+    assert commands[guard[0]].command == ('python', 'governance/compat/check_preapproval_feasibility.py', '--base', 'base', '--head', 'head', '--enforce')
+    assert all('--active-work-order' not in c.command for c in commands[guard[0]:guard[0] + 1])
 
 def test_pre_implementation_fails_when_aaf_helper_fails(monkeypatch) -> None:
     _stub_phase_environment(monkeypatch)

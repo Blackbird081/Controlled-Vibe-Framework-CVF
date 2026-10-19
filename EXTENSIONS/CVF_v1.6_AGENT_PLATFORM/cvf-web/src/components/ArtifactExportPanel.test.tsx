@@ -64,6 +64,19 @@ function makePopup(options: { detachable?: boolean } = {}) {
 }
 
 describe('ArtifactExportPanel', () => {
+  it.each(['en', 'vi'] as const)('binds visible %s labels to distinct controls across panel instances', language => {
+    mockLanguage = language;
+    const { container } = render(<><ArtifactExportPanel /><ArtifactExportPanel /></>);
+    const labels = Array.from(container.querySelectorAll('label'));
+    expect(labels).toHaveLength(14);
+    const ids = new Set<string>();
+    for (const label of labels) {
+      expect(label.control).not.toBeNull();
+      expect(label.control?.getAttribute('aria-label')).toBe(label.textContent);
+      expect(ids.has(label.htmlFor)).toBe(false);
+      ids.add(label.htmlFor);
+    }
+  });
   beforeEach(() => {
     mockLanguage = 'en';
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({

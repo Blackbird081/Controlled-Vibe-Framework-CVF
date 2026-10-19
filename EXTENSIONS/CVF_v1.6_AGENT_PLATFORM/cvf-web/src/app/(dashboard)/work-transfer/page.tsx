@@ -8,6 +8,8 @@ import { ArrowRight, CheckCircle2, ClipboardCheck, FileCheck2, Loader2, ShieldCh
 import { useLanguage } from '@/lib/i18n';
 import { validateHandoff, type HandoffDecision } from '@/lib/agent-handoff-validator';
 import { ArtifactExportPanel, type ArtifactExportRequest } from '@/components/ArtifactExportPanel';
+import { HtmlDraftRecovery } from '@/components/HtmlDraftRecovery';
+import { HtmlJobControls } from '@/components/HtmlJobControls';
 import { KnowledgeJourneyNav } from '@/components/KnowledgeJourneyNav';
 import type { AgentRole } from '@/lib/multi-agent';
 
@@ -32,7 +34,9 @@ const COPY = {
     historyLoading: 'Loading audit history...',
     historyError: 'Could not load audit history.',
     historyNote: 'These are audit events, not proof that a work transfer occurred.',
-    exportRecord: 'Export as HTML',
+    openRecord: 'Open HTML panel',
+    closeRecord: 'Close HTML panel',
+    recordPanelNote: 'Opening the panel does not build or save anything. Closing it before Build discards edits you have not submitted. Closing does not cancel, or confirm the stop of, a build that already started.',
     exportingRecord: 'Exporting',
     exportPanel: 'HTML Export',
     benefitsTitle: 'Why this helps people review work',
@@ -63,7 +67,9 @@ const COPY = {
     historyLoading: 'Đang tải nhật ký kiểm tra...',
     historyError: 'Không thể tải nhật ký kiểm tra.',
     historyNote: 'Đây là các sự kiện nhật ký kiểm tra, không phải bằng chứng rằng một lần bàn giao đã diễn ra.',
-    exportRecord: 'Xuất HTML',
+    openRecord: 'Mở bảng HTML',
+    closeRecord: 'Đóng bảng HTML',
+    recordPanelNote: 'Mở bảng không tạo hay lưu gì. Đóng bảng trước khi tạo sẽ bỏ các chỉnh sửa chưa gửi. Đóng bảng không hủy, cũng không xác nhận đã dừng, một lượt tạo đã bắt đầu.',
     exportingRecord: 'Đang xuất',
     exportPanel: 'Xuất HTML',
     benefitsTitle: 'Vì sao hữu ích cho người rà soát',
@@ -239,6 +245,7 @@ export default function WorkTransferPage() {
           <h2 className="text-lg font-semibold text-gray-950 dark:text-white">{copy.historyTitle}</h2>
         </div>
         <p data-testid="history-note" className="mt-2 text-xs leading-5 text-gray-500 dark:text-gray-400">{copy.historyNote}</p>
+        <p id="record-panel-note" data-testid="record-panel-note" className="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">{copy.recordPanelNote}</p>
         <div className="mt-4">
           {historyState === 'loading' && (
             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
@@ -266,16 +273,23 @@ export default function WorkTransferPage() {
                     <button
                       type="button"
                       data-testid={`export-record-${record.id}`}
+                      aria-expanded={selectedRecord?.id === record.id}
+                      aria-controls={selectedRecord?.id === record.id ? `record-panel-${record.id}` : undefined}
+                      aria-describedby="record-panel-note"
                       onClick={() => handleSelectRecord(record)}
-                      className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100 dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-200 dark:hover:bg-indigo-900/40"
+                      className="shrink-0 inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgb(var(--cvf-accent-rgb))] dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-200 dark:hover:bg-indigo-900/40"
                     >
                       <FileCheck2 className="h-3.5 w-3.5" aria-hidden="true" />
-                      {copy.exportRecord}
+                      {selectedRecord?.id === record.id ? copy.closeRecord : copy.openRecord}
                     </button>
                   </div>
                   {selectedRecord?.id === record.id && exportRequest && (
-                    <div className="border-t border-gray-200 px-4 pb-4 pt-4 dark:border-gray-800" data-testid="inline-export-panel">
-                      <ArtifactExportPanel initialRequest={exportRequest} />
+                    <div id={`record-panel-${record.id}`} className="border-t border-gray-200 px-4 pb-4 pt-4 dark:border-gray-800" data-testid="inline-export-panel">
+                      {record.id.startsWith('ncr-synthetic-')
+                        ? <HtmlJobControls key={record.id} sourceRecordId={record.id} initialRequest={exportRequest} />
+                        : <ArtifactExportPanel initialRequest={exportRequest} renderRecovery={(displayed, versionState) => (
+                          <HtmlDraftRecovery key={record.id} sourceRecordId={record.id} displayed={displayed} versionState={versionState} />
+                        )} />}
                     </div>
                   )}
                 </div>

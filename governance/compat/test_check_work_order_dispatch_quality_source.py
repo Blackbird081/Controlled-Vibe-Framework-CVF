@@ -245,3 +245,92 @@ def test_negative_search_claim_with_recorded_collision_passes() -> None:
             )
 
     assert issues == []
+
+
+def _anchor_row(source_path: str, cited_line: int) -> str:
+    return "\n".join(
+        [
+            "## Source Verification Block",
+            "| Claimed item | Source file | Verified line/section | Verified path or symbol | Owning interface/function/schema | Disposition |",
+            "|---|---|---|---|---|---|",
+            f"| Target declaration exists | `{source_path}` | line {cited_line} | `target` | declaration | ACCEPT |",
+        ]
+    )
+
+
+DEFINITION_FORMS = [
+    ("example.py", "def target(value):"),
+    ("example.py", "async def target(value):"),
+    ("example.py", "class target:"),
+    ("example.py", "    def target(self):"),
+    ("example.ts", "export function target(value: number) {"),
+    ("example.ts", "export default function target(value: number) {"),
+    ("example.ts", "export async function target(value: number) {"),
+    ("example.ts", "export interface target {"),
+    ("example.ts", "export type target = string;"),
+    ("example.tsx", "export const target = () => null;"),
+    ("example.jsx", "export class target {"),
+    ("example.js", "let target = 1;"),
+    ("example.mjs", "var target = 1;"),
+    ("example.cjs", "function target() {}"),
+]
+
+
+@pytest.mark.parametrize(("source_path", "declaration"), DEFINITION_FORMS)
+@pytest.mark.parametrize(
+    "blank_lines",
+    [[], ["", ""], ["   ", "\t"]],
+    ids=["no-blank-control", "lf-blank-lines", "space-and-tab-only-lines"],
+)
+@pytest.mark.parametrize("newline", ["\n", "\r\n"], ids=["lf", "crlf"])
+def test_symbol_definition_line_ignores_preceding_blank_lines(
+    source_path: str,
+    declaration: str,
+    blank_lines: list[str],
+    newline: str,
+) -> None:
+    header = "# header" if source_path.endswith(".py") else "// header"
+    source_text = newline.join([header, *blank_lines, declaration, "    body();", ""])
+    # header is line 1; each blank or whitespace-only line before the declaration adds one line
+    assert MODULE._symbol_definition_line(source_path, source_text, "target") == 2 + len(blank_lines)
+
+
+@pytest.mark.parametrize(
+    ("source_path", "header", "declaration"),
+    [
+        ("governance/compat/example_anchor.py", "# header", "def target(value):"),
+        ("governance/compat/example_anchor.ts", "// header", "export function target(value: number) {"),
+    ],
+)
+def test_source_verification_line_anchor_accepts_declaration_after_blank_lines(
+    source_path: str,
+    header: str,
+    declaration: str,
+) -> None:
+    # header is line 1, then an empty line, a spaces-only line and a tab-only line; declaration is line 5
+    source_text = "\n".join([header, "", "   ", "\t", declaration, "    body();", ""])
+    with TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        _write(root, source_path, source_text)
+        with patch.object(MODULE, "REPO_ROOT", root):
+            accepted = MODULE._validate_accepted_source_rows("docs/work_orders/test.md", _anchor_row(source_path, 5))
+            preceding_blank = MODULE._validate_accepted_source_rows(
+                "docs/work_orders/test.md",
+                _anchor_row(source_path, 2),
+            )
+
+    assert accepted == []
+    assert preceding_blank == [
+        f"Source Verification ACCEPT row cites `target` at line 2, but `{source_path}` defines it at line 5; "
+        "cite the symbol definition line, not a continuation or interior signature line"
+    ]
+
+
+def test_symbol_definition_line_exact_name_absent_and_unsupported_cases() -> None:
+    # target_helper must not satisfy target; the exact definition is on line 6
+    source_text = "\n".join(
+        ["", "def target_helper(value):", "    body()", "", "", "def target(value):", "    body()", ""]
+    )
+    assert MODULE._symbol_definition_line("example.py", source_text, "target") == 6
+    assert MODULE._symbol_definition_line("example.py", "\n\ndef other(value):\n", "target") is None
+    assert MODULE._symbol_definition_line("notes.md", "\n\ndef target(value):\n", "target") is None

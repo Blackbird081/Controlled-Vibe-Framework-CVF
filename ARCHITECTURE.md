@@ -161,6 +161,12 @@ flowchart TB
 
 Diagram note: this is the path that must reach a real provider API call before CVF can claim governance behavior. DeepSeek is the current certified release lane with canary evidence and bounded confirmatory coverage; Alibaba/DashScope's `qwen-flash` target is historically certified on a prior model but is `EXPERIMENTAL` pending fresh live proof on the current model. Provider parity is not claimed.
 
+Lifecycle legend: the seven stages in this diagram represent governance
+control decisions, not a claim of seven runtime enum values or machine-enforced
+transitions on every route. Runtime projections and enforcement claims must be
+bound to a named route and its evidence; see
+[`CVF Non-Coder Reference Governed Packet`](docs/reference/CVF_NONCODER_REFERENCE_GOVERNED_PACKET.md).
+
 The seven stages are separate control decisions, even when one interface makes
 them feel continuous to the user:
 

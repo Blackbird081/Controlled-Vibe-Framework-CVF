@@ -1,4 +1,5 @@
 'use client';
+// Text Encoding Exception: the visible Vietnamese submit label is required for localized UI.
 
 import { useState } from 'react';
 import { useForm, useWatch, type FieldErrors, type UseFormRegister } from 'react-hook-form';
@@ -20,6 +21,8 @@ interface DynamicFormProps {
     onSubmit: (values: Record<string, string>, intent: string) => void;
     onBack: () => void;
     onSendToAgent?: (spec: string) => void;
+    /** Optional draft restored into the editable fields; omitted by callers that start empty. */
+    initialValues?: Record<string, string>;
 }
 
 function FormField({ field, register, errors }: {
@@ -76,13 +79,48 @@ function FormField({ field, register, errors }: {
     }
 }
 
-export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: DynamicFormProps) {
+// Only values that belong to this template's own fields are restored, so context keys
+// such as a continuation's previous output can never re-enter a fresh submission.
+function pickDraftValues(template: Template, initialValues?: Record<string, string>) {
+    if (!initialValues) return undefined;
+    const entries = template.fields
+        .filter(field => typeof initialValues[field.id] === 'string')
+        .map(field => [field.id, initialValues[field.id]] as const);
+    return entries.length > 0 ? Object.fromEntries(entries) : undefined;
+}
+
+export function DynamicForm({ template, onSubmit, onBack, onSendToAgent, initialValues }: DynamicFormProps) {
     const { language, t } = useLanguage();
-    const [showAdvanced, setShowAdvanced] = useState(false);
+    const [draftValues] = useState(() => pickDraftValues(template, initialValues));
+    const [showAdvanced, setShowAdvanced] = useState(() => Boolean(draftValues
+        && template.fields.some(field => field.section === 'advanced' && draftValues[field.id])));
     const [showPreview, setShowPreview] = useState(false);
     const [showSpecExport, setShowSpecExport] = useState(false);
+    const [hasOpenedSpecExport, setHasOpenedSpecExport] = useState(false);
 
-    const { register, handleSubmit, control, formState: { errors } } = useForm<Record<string, string>>();
+    const openSpecExport = () => {
+        setHasOpenedSpecExport(true);
+        setShowSpecExport(true);
+    };
+
+    const toggleSpecExport = () => {
+        if (showSpecExport) {
+            setShowSpecExport(false);
+            return;
+        }
+        openSpecExport();
+    };
+
+    const handleSendToAgent = (spec: string) => {
+        // Clear the retained session only after the existing handoff callback succeeds.
+        onSendToAgent?.(spec);
+        setShowSpecExport(false);
+        setHasOpenedSpecExport(false);
+    };
+
+    const { register, handleSubmit, control, formState: { errors } } = useForm<Record<string, string>>({
+        defaultValues: draftValues,
+    });
     const watchedValues = useWatch({ control }) as Record<string, string | undefined> | undefined;
     const formValues = Object.fromEntries(
         Object.entries(watchedValues || {}).map(([key, value]) => [key, value || ''])
@@ -285,12 +323,19 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                     </a>
                 </div>
 
-                {/* Action Buttons */}
+                <button
+                    type="submit"
+                    className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                >
+                    {language === 'en' ? 'Generate result' : 'Tạo kết quả'}
+                </button>
+
+                {/* Spec actions stay separate from result submission. */}
                 <div className="flex gap-3">
                     {/* Export/Copy Spec Button */}
                     <button
                         type="button"
-                        onClick={() => setShowSpecExport(!showSpecExport)}
+                        onClick={toggleSpecExport}
                         className="flex-1 py-4 px-6 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 
                          text-gray-700 dark:text-gray-300 font-semibold rounded-lg
                          transition-all duration-200
@@ -300,10 +345,10 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
                         <span>{language === 'en' ? 'Export Spec' : 'Xuất Spec'}</span>
                     </button>
 
-                    {/* Submit Button - Opens SpecExport to choose mode first */}
+                    {/* Open the existing Agent Spec relay without submitting the result form. */}
                     <button
                         type="button"
-                        onClick={() => setShowSpecExport(true)}
+                        onClick={openSpecExport}
                         title={language === 'en' ? 'Submit this form to generate AI output' : 'Gửi form để AI tạo kết quả'}
                         className="flex-1 py-4 px-6 bg-blue-600 hover:bg-blue-700 
                          text-white font-semibold rounded-lg
@@ -318,13 +363,13 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent }: Dynam
             </form>
 
             {/* Spec Export Panel */}
-            {showSpecExport && (
-                <div className="mt-6">
+            {hasOpenedSpecExport && (
+                <div className="mt-6" hidden={!showSpecExport}>
                     <SpecExport
                         template={template}
                         values={formValues}
                         onClose={() => setShowSpecExport(false)}
-                        onSendToAgent={onSendToAgent}
+                        onSendToAgent={onSendToAgent ? handleSendToAgent : undefined}
                     />
                 </div>
             )}

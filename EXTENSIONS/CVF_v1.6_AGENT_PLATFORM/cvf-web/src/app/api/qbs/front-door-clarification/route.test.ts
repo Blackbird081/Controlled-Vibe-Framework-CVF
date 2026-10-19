@@ -1,8 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { POST } from './route';
 import { computeServiceRequestSignature, _testOnlyResetReplayLedger } from '@/lib/service-token-auth';
+import * as intentRouter from '@/lib/intent-router';
 
-// The route authorizes through authorizeRouteGovernanceProof, which requires a
+// The route authorizes through verifyServiceTokenRequest, which requires a
 // signed service token over the exact body; a bare token is rejected with 401.
 function signedQbsRequest(body: unknown, token = 'qbs-test-token'): Request {
   const bodyText = JSON.stringify(body);
@@ -44,6 +45,42 @@ describe('/api/qbs/front-door-clarification', () => {
     vi.stubEnv('NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR', 'true');
     vi.stubEnv('NEXT_PUBLIC_CVF_NONCODER_CLARIFICATION_LOOP', 'true');
     _testOnlyResetReplayLedger();
+  });
+
+  it.each([
+    { userPrompt: { idea: 'Make my app better' } },
+    { userPrompt: ['Make my app better'] },
+    { userPrompt: 42 },
+    { taskId: { id: 'task' } },
+    { taskId: ['task'] },
+    { expectedDecision: { decision: 'CLARIFY' } },
+    { repeat: '1' },
+    { repeat: null },
+  ])('rejects malformed field types before routing %#', async (override) => {
+    const routeSpy = vi.spyOn(intentRouter, 'routeIntent');
+    try {
+      const response = await POST(signedQbsRequest({ taskId: 'task', userPrompt: 'Make my app better', ...override }) as never);
+      expect(response.status).toBe(400);
+      expect(routeSpy).not.toHaveBeenCalled();
+    } finally { routeSpy.mockRestore(); }
+  });
+
+  it('rejects an overflowing JSON repeat number before routing', async () => {
+    const bodyText = '{"taskId":"task","userPrompt":"Make my app better","repeat":1e309}';
+    const timestamp = String(Date.now());
+    const routeSpy = vi.spyOn(intentRouter, 'routeIntent');
+    try {
+      const response = await POST(new Request('http://localhost/api/qbs/front-door-clarification', {
+        method: 'POST', body: bodyText,
+        headers: {
+          'x-cvf-service-token': 'qbs-test-token',
+          'x-cvf-service-timestamp': timestamp,
+          'x-cvf-service-signature': computeServiceRequestSignature('qbs-test-token', timestamp, bodyText),
+        },
+      }) as never);
+      expect(response.status).toBe(400);
+      expect(routeSpy).not.toHaveBeenCalled();
+    } finally { routeSpy.mockRestore(); }
   });
 
   it('returns useful clarification for weak-confidence prompts', async () => {

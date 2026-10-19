@@ -1,9 +1,17 @@
+import { InvalidRequestBodyEncodingError, readBoundedRequestBody } from '@/lib/bounded-request-body';
 import { createHash } from 'node:crypto';
 
 import { NextRequest, NextResponse } from 'next/server';
 
 import { authorizeRouteGovernanceProof, getRouteGovernanceProofConfig } from '@/lib/route-governance-proof';
-import { fetchGovernanceReceipt } from './proof';
+import { requireAdminApiSession } from '@/lib/admin-session';
+import { normalPrincipal } from '@/lib/server/html-draft-recovery-api';
+import { resolveHtmlJobSyntheticProfile } from '@/lib/server/html-job-synthetic-profile';
+import { fetchGovernanceReceipt, type GovernanceReceipt } from './proof';
+import { bindJobSelectors, parseJobSelectors, runBoundBranch, runControlledBranch, type RenderedExport } from './operation-branch';
+import type { DraftPrincipal } from '@/lib/html-draft-recovery-contract';
+import { HtmlDraftSnapshotStore } from '@/lib/server/html-draft-snapshot-store';
+import { decideReceiptOperationRoute, resolveReceiptOperation } from '@/lib/server/receipt-operation-profile';
 
 type ArtifactMemoryClass = 'POINTER_RECORD' | 'FULL_RECORD';
 
@@ -254,16 +262,49 @@ function buildHtml(input: ValidatedExportRequest, generatedAt: string, sourceHas
 }
 
 export async function POST(request: NextRequest) {
+  // The receipt-operation selector is recognized before any legacy resolution; a deny never falls back to the legacy path.
+  const posture = resolveReceiptOperation();
+  const selectors = parseJobSelectors(request.headers);
+  const localProfile = posture.posture === 'DENY' ? null : resolveHtmlJobSyntheticProfile();
+  const route = decideReceiptOperationRoute({ posture, selectors: selectors.kind, localProfilePresent: localProfile !== null });
+  if (route.route === 'DENY') {
+    return NextResponse.json({ success: false, error: 'RECEIPT_OPERATION_DENIED', reason: route.reason }, { status: route.status, headers: { 'Cache-Control': 'no-store' } });
+  }
+  const selectedJobProfile = route.route === 'LOCAL_ONLY' ? localProfile : null;
+  const controlledProfile = route.route === 'CONTROLLED' ? route.profile : null;
+  const boundProfile = route.route === 'BOUND' ? route.profile : null;
   const declaredLength = Number(request.headers.get('content-length'));
   if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_BYTES) {
     return NextResponse.json({ success: false, error: 'Artifact export body exceeds size limit.' }, { status: 413 });
   }
-  const bodyText = await request.text();
-  const routeAuth = await authorizeRouteGovernanceProof(
-    request,
-    bodyText,
-    getRouteGovernanceProofConfig('/api/artifacts/export'),
-  );
+  let bodyText: string | null;
+  try { bodyText = await readBoundedRequestBody(request, MAX_BODY_BYTES); }
+  catch (error) {
+    if (error instanceof InvalidRequestBodyEncodingError) return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+    throw error;
+  }
+  if (bodyText === null) {
+    return NextResponse.json({ success: false, error: 'Artifact export body exceeds size limit.' }, { status: 413 });
+  }
+  // The selected server fixture profile cannot enter the general proof helper: it
+  // reads CVF_SERVICE_TOKEN before its session branch, even when no token is sent.
+  let selectedPrincipal = false;
+  let principal: DraftPrincipal | null = null;
+  if (selectedJobProfile || controlledProfile || boundProfile) {
+    const origin = request.headers.get('origin');
+    const site = request.headers.get('sec-fetch-site');
+    if (!origin || origin !== new URL(request.url).origin || (site && site !== 'same-origin')) {
+      return NextResponse.json({ success: false, error: 'ORIGIN_REFUSED' }, { status: 403, headers: { 'Cache-Control': 'no-store' } });
+    }
+    const session = await requireAdminApiSession(request, '/api/artifacts/export', { allowBreakGlass: false });
+    if (session instanceof NextResponse) { session.headers.set('Cache-Control', 'no-store'); return session; }
+    principal = normalPrincipal(session, Date.now());
+    if (!principal) return NextResponse.json({ success: false, error: 'SESSION_REFUSED' }, { status: 403, headers: { 'Cache-Control': 'no-store' } });
+    selectedPrincipal = true;
+  }
+  const routeAuth = selectedPrincipal
+    ? { allowed: true, proof: undefined, response: undefined }
+    : await authorizeRouteGovernanceProof(request, bodyText, getRouteGovernanceProofConfig('/api/artifacts/export'));
   if (!routeAuth.allowed && routeAuth.response) return routeAuth.response;
 
   if (Buffer.byteLength(bodyText, 'utf8') > MAX_BODY_BYTES) {
@@ -334,34 +375,52 @@ export async function POST(request: NextRequest) {
     claimBoundary,
     receiptAnchor,
   };
-  const generatedAt = new Date().toISOString();
-  const sourceHash = createHash('sha256').update(sourceContent).digest('hex');
-  const html = buildHtml(input, generatedAt, sourceHash);
-  const verification = buildVerification(input, html);
+  const render = (): RenderedExport => {
+    const generatedAt = new Date().toISOString();
+    const sourceHash = createHash('sha256').update(sourceContent).digest('hex');
+    const html = buildHtml(input, generatedAt, sourceHash);
+    return { html, generatedAt, sourceHash, filename: filenameFrom(title), receiptAnchor: slugify(receiptAnchor), verification: buildVerification(input, html) };
+  };
+  // One response shape for the legacy and controlled paths. DRAFT_UNACCEPTED holds even for an ALLOW decision.
+  const composeData = (rendered: RenderedExport, check: { status: string; requestId?: string | null; receipt: GovernanceReceipt | null }) => ({
+    html: rendered.html,
+    filename: rendered.filename,
+    receiptAnchor: rendered.receiptAnchor,
+    verification: rendered.verification,
+    generatedAt: rendered.generatedAt,
+    governanceReceiptStatus: check.status,
+    ...(check.requestId ? { governanceReceiptAttemptId: check.requestId } : {}),
+    governanceState: check.receipt?.decision === 'APPROVED' && rendered.verification.every(item => item.passed)
+      ? 'RECEIPT_ALLOW_REVIEW_REQUIRED'
+      : 'DRAFT_UNACCEPTED',
+    ...(check.receipt ? { governanceReceipt: check.receipt } : {}),
+  });
 
-  const serviceToken = process.env.CVF_SERVICE_TOKEN;
-  const receiptCheck = await fetchGovernanceReceipt(
-    slugify(receiptAnchor),
-    sourceContent,
-    serviceToken,
-  );
-  const governanceReceipt = receiptCheck.receipt;
+  if (controlledProfile && principal) {
+    const outcome = await runControlledBranch({ headers: request.headers, owner: principal, fields: { ...input }, profile: controlledProfile,
+      seams: { render, compose: composeData }, signal: request.signal });
+    return NextResponse.json(outcome.body, { status: outcome.status, headers: { 'Cache-Control': 'no-store' } });
+  }
+  if (boundProfile && principal) {
+    // The bound profile comes only from the injected typed resolver; the browser body and headers carry no permit, config or destination.
+    const outcome = await runBoundBranch({ headers: request.headers, owner: principal, fields: { ...input }, profile: boundProfile,
+      seams: { render, compose: composeData }, signal: request.signal });
+    return NextResponse.json(outcome.body, { status: outcome.status, headers: { 'Cache-Control': 'no-store' } });
+  }
+  if (selectedJobProfile && principal && selectors.kind === 'VALID') {
+    // The local-only branch may bind a local job identity; it never grants a receipt.
+    const bound = await bindJobSelectors(new HtmlDraftSnapshotStore(selectedJobProfile.profile), selectors, principal, input);
+    if (!bound.ok) return NextResponse.json({ success: false, error: bound.error }, { status: bound.status, headers: { 'Cache-Control': 'no-store' } });
+  }
+
+  const rendered = render();
+  const receiptCheck = selectedPrincipal
+    ? { status: 'NOT_CONFIGURED' as const, receipt: null, requestId: null }
+    : await fetchGovernanceReceipt(rendered.receiptAnchor, sourceContent, process.env.CVF_SERVICE_TOKEN);
 
   return NextResponse.json({
     success: true,
     routeGovernanceProof: routeAuth.proof,
-    data: {
-      html,
-      filename: filenameFrom(title),
-      receiptAnchor: slugify(receiptAnchor),
-      verification,
-      generatedAt,
-      governanceReceiptStatus: receiptCheck.status,
-      ...(receiptCheck.requestId ? { governanceReceiptAttemptId: receiptCheck.requestId } : {}),
-      governanceState: governanceReceipt?.decision === 'APPROVED' && verification.every(item => item.passed)
-        ? 'RECEIPT_ALLOW_REVIEW_REQUIRED'
-        : 'DRAFT_UNACCEPTED',
-      ...(governanceReceipt ? { governanceReceipt } : {}),
-    },
-  });
+    data: composeData(rendered, receiptCheck),
+  }, selectedPrincipal ? { headers: { 'Cache-Control': 'no-store' } } : undefined);
 }

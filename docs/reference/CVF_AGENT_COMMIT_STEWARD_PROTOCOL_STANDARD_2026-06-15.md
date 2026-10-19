@@ -219,12 +219,13 @@ checked conditions it currently implements:
 - a worker in `WORKER_MUST_NOT_COMMIT` tries to commit or claim committed-range
   closure.
 
-Upstream push debt above the normal two-commit completed-tranche shape is an
-advisory disclosure condition in commit steward evidence. It is hard-enforced by
-push-readiness preview only when that preview is run with upstream checking and
-`--enforce`. Do not describe it as a commit-steward machine block unless the
-steward implementation has been updated and verified in the same source-backed
-checker tranche.
+Upstream ahead count is advisory disclosure in both commit-steward evidence and
+push-readiness preview (operator revision, 2026-10-11). The preview emits WARN,
+not a failure, above its configured disclosure threshold, including --enforce.
+One material/continuity pair describes a tranche's preferred shape, not a branch
+commit ceiling. Multiple admitted local tranches need no numeric exception or
+forced push. Actual scope, continuity and upstream reconciliation failures remain
+blocking for the action they affect; count alone never blocks local work.
 
 ## Related Artifacts
 
@@ -352,7 +353,7 @@ Rollback boundary: revert this standard and the steward script/test only. Do
 not revert Agent Dispatch Prompt Envelope Standardization material commit
 `b2654e2e` or session-sync commit `65496aec`.
 
-## Agent Operation Trace Block
+## Historical Agent Operation Trace Block
 
 | Field | Evidence |
 | --- | --- |
@@ -381,3 +382,25 @@ This standard does not reduce required governance coverage, authorize
 push, or claim production readiness. It standardizes the fastest governed path
 by making the correct preflight, split, and evidence sequence repeatable across
 agents.
+
+## Agent Operation Trace Block
+
+| Field | Evidence |
+|---|---|
+| Actor | Local Codex maintainer |
+| Provider or surface | private shared workspace |
+| Session or invocation | operator count-policy revision, 2026-10-11 |
+| Working directory | repository root |
+| Command or tool surface | source read, apply_patch, focused pytest and maintenance gates |
+| Target paths | `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`; `governance/compat/run_agent_push_readiness_preview.py`; `governance/compat/test_run_agent_push_readiness_preview.py`; `docs/reference/CVF_AGENT_PUSH_READINESS_PREVIEW_STANDARD_2026-06-27.md`; `docs/reference/CVF_AGENT_COMMIT_STEWARD_PROTOCOL_STANDARD_2026-06-15.md`; `docs/reference/guard_orientation/README.md`; `docs/reference/agent_defect_intelligence/entries/CVF_ADIF-0013.md`; `docs/baselines/CVF_GC018_PUSH_BACKLOG_ADVISORY_2026-10-11.md` |
+| Allowed scope source | direct operator request and that GC-018 authorization |
+| Before status evidence | clean HEAD 3700b4ee949af6a216b2f74b652fc027f7a72ba3, ahead 2 / behind 0 |
+| After status evidence | ahead-only WARN is nonblocking; 17 focused tests passed |
+| Diff evidence | exact named-owner policy/helper/test and active-window binding changes; historical trace retained above |
+| Approval boundary | authorized local maintenance, no push grant |
+| Claim boundary | static policy checks; no worker/provider/live/public proof |
+| Agent type | INTERNAL_AGENT maintainer |
+| Invocation ID | cvf-push-backlog-advisory-20261011 |
+| Expected manifest | `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`; `governance/compat/run_agent_push_readiness_preview.py`; `governance/compat/test_run_agent_push_readiness_preview.py`; `docs/reference/CVF_AGENT_PUSH_READINESS_PREVIEW_STANDARD_2026-06-27.md`; `docs/reference/CVF_AGENT_COMMIT_STEWARD_PROTOCOL_STANDARD_2026-06-15.md`; `docs/reference/guard_orientation/README.md`; `docs/reference/agent_defect_intelligence/entries/CVF_ADIF-0013.md`; `docs/baselines/CVF_GC018_PUSH_BACKLOG_ADVISORY_2026-10-11.md` |
+| Actual changed set | `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`; `governance/compat/run_agent_push_readiness_preview.py`; `governance/compat/test_run_agent_push_readiness_preview.py`; `docs/reference/CVF_AGENT_PUSH_READINESS_PREVIEW_STANDARD_2026-06-27.md`; `docs/reference/CVF_AGENT_COMMIT_STEWARD_PROTOCOL_STANDARD_2026-06-15.md`; `docs/reference/guard_orientation/README.md`; `docs/reference/agent_defect_intelligence/entries/CVF_ADIF-0013.md`; `docs/baselines/CVF_GC018_PUSH_BACKLOG_ADVISORY_2026-10-11.md` |
+| Manifest delta | MATCH |

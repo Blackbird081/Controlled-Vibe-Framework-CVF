@@ -10,6 +10,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
 import { generateIntent, getTemplateById } from '@/lib/templates';
+import { validateExecuteRequestShape } from '@/lib/execute-request-validation';
 
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
@@ -42,14 +43,50 @@ vi.mock('@/lib/quota-guard', () => ({
 import { POST } from './route';
 
 const ALIBABA_API_KEY = resolveAlibabaApiKey();
+const ALIBABA_CANARY_MODEL = process.env.CVF_CANARY_ALIBABA_MODEL?.trim() || 'qwen-flash';
+
+async function invokeLiveRoute(request: Request) {
+  const payload = await request.clone().json();
+  expect(validateExecuteRequestShape(payload)).toBeUndefined();
+  const startedAt = Date.now();
+  const response = await POST(request as never);
+  // Deliberately retain only status/timing and stable diagnostic fields.
+  const body = await response.clone().json();
+  console.info('CVF_CANARY_ROUTE', JSON.stringify({
+    templateId: payload.templateId,
+    status: response.status, latencyMs: Date.now() - startedAt,
+    stage: body.diagnostic?.stage ?? null, class: body.diagnostic?.class ?? null,
+  }));
+  return response;
+}
 
 describe.skipIf(!ALIBABA_API_KEY)(
   '/api/execute front-door rewrite live — Alibaba governed path',
   () => {
     const originalEnv = { ...process.env };
+    const guardedFetch = globalThis.fetch;
+    let fetchSpy: ReturnType<typeof vi.spyOn> | undefined;
+    let providerCalls: { state: string; latencyMs?: number; status?: number }[];
 
     beforeEach(() => {
       process.env.ALIBABA_API_KEY = ALIBABA_API_KEY;
+      providerCalls = [];
+      fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(async (...args) => {
+        const startedAt = Date.now();
+        const call: (typeof providerCalls)[number] = { state: 'pending' };
+        providerCalls.push(call);
+        try {
+          const response = await guardedFetch(...args);
+          call.state = 'response';
+          call.status = response.status;
+          return response;
+        } catch (error) {
+          call.state = 'rejected';
+          throw error;
+        } finally {
+          call.latencyMs = Date.now() - startedAt;
+        }
+      });
 
       evaluateEnforcementMock.mockReset();
       verifySessionCookieMock.mockReset();
@@ -75,6 +112,8 @@ describe.skipIf(!ALIBABA_API_KEY)(
     });
 
     afterEach(() => {
+      console.info('CVF_CANARY_FETCH', JSON.stringify(providerCalls));
+      fetchSpy?.mockRestore();
       process.env = { ...originalEnv };
     });
 
@@ -99,7 +138,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
           constraints: 'Rollout nội bộ trong 3 tuần, không phụ thuộc hạ tầng cloud bắt buộc',
         };
 
-        const response = await POST(
+        const response = await invokeLiveRoute(
           new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
@@ -108,7 +147,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-flash',
+              model: ALIBABA_CANARY_MODEL,
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-app-brief',
@@ -125,6 +164,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
 
         expect(response.status).toBe(200);
         expect(body.success).toBe(true);
+        expect(body.model).toBe(ALIBABA_CANARY_MODEL);
         expect(output.length).toBeGreaterThan(500);
         expect(output).toMatch(/TaskFlow/i);
         expect(output).toMatch(/Requirements Overview|Specification|Complete App Brief/i);
@@ -152,7 +192,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
           mustPreserve: 'Giữ nguyên CRM lead ID, webhook cũ, và log phê duyệt',
         };
 
-        const response = await POST(
+        const response = await invokeLiveRoute(
           new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
@@ -161,7 +201,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-flash',
+              model: ALIBABA_CANARY_MODEL,
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-integration',
@@ -178,6 +218,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
 
         expect(response.status).toBe(200);
         expect(body.success).toBe(true);
+        expect(body.model).toBe(ALIBABA_CANARY_MODEL);
         expect(output.length).toBeGreaterThan(450);
         expect(output).toMatch(/LeadSync|tích hợp/i);
         expect(output).toMatch(/Operations|Payloads|Giao thức|Hoạt động|Dữ liệu|Thông tin trao đổi/i);
@@ -199,10 +240,10 @@ describe.skipIf(!ALIBABA_API_KEY)(
           goal: 'Xử lý thanh toán và chỉ trả kết quả thành công khi giao dịch thật sự hoàn tất',
           worry: 'Thỉnh thoảng hệ thống báo thành công dù gateway timeout, không biết có bị thu tiền 2 lần không.',
           mustPreserve: 'Không đổi contract trả về cho mobile app, không bỏ logging phục vụ đối soát.',
-          focus: ['Sai logic nghiệp vụ', 'Rủi ro dữ liệu / bảo mật'],
+          focus: 'Sai logic nghi\u1ec7p v\u1ee5\nR\u1ee7i ro d\u1eef li\u1ec7u / b\u1ea3o m\u1eadt',
         };
 
-        const response = await POST(
+        const response = await invokeLiveRoute(
           new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
@@ -211,7 +252,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-flash',
+              model: ALIBABA_CANARY_MODEL,
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-code-review',
@@ -228,6 +269,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
 
         expect(response.status).toBe(200);
         expect(body.success).toBe(true);
+        expect(body.model).toBe(ALIBABA_CANARY_MODEL);
         expect(output.length).toBeGreaterThan(400);
         expect(output).toMatch(/Intended Outcome|What This Part|Mục tiêu/i);
         expect(output).toMatch(/Main Risks|Risk|Rủi ro/i);
@@ -252,7 +294,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
           mustPreserve: 'Giữ nguyên thứ tự leo thang ops -> SRE lead -> CTO và SLA 5 phút gọi lại.',
         };
 
-        const response = await POST(
+        const response = await invokeLiveRoute(
           new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
@@ -261,7 +303,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-flash',
+              model: ALIBABA_CANARY_MODEL,
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-documentation',
@@ -278,6 +320,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
 
         expect(response.status).toBe(200);
         expect(body.success).toBe(true);
+        expect(body.model).toBe(ALIBABA_CANARY_MODEL);
         expect(output.length).toBeGreaterThan(400);
         expect(output).toMatch(/What This Document Is For|Mục tiêu|For/i);
         expect(output).toMatch(/Main Flow|Steps|Bước/i);
@@ -307,7 +350,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
           references: 'Stat strip, pill filters, split-pane docs, structured cards',
         };
 
-        const response = await POST(
+        const response = await invokeLiveRoute(
           new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
@@ -316,7 +359,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-flash',
+              model: ALIBABA_CANARY_MODEL,
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-ux-packet',
@@ -333,6 +376,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
 
         expect(response.status).toBe(200);
         expect(body.success).toBe(true);
+        expect(body.model).toBe(ALIBABA_CANARY_MODEL);
         expect(output.length).toBeGreaterThan(600);
         expect(output).toMatch(/Review Gate/i);
         expect(output).toMatch(/QA Rules|QA checklist|Pre-Build Approval|Post-Build Validation|Release Process/i);
@@ -356,7 +400,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
           knownLimitations: 'Dữ liệu tháng 1 có thể thiếu vì CRM mới migrate, deal < 30 ngày chưa đủ cycle để kết luận.',
         };
 
-        const response = await POST(
+        const response = await invokeLiveRoute(
           new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
@@ -365,7 +409,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
               intent: generateIntent(template!, inputs),
               inputs,
               provider: 'alibaba',
-              model: 'qwen-flash',
+              model: ALIBABA_CANARY_MODEL,
               mode: 'simple',
               aiCommit: {
                 commitId: 'live-front-door-data-analysis',
@@ -382,6 +426,7 @@ describe.skipIf(!ALIBABA_API_KEY)(
 
         expect(response.status).toBe(200);
         expect(body.success).toBe(true);
+        expect(body.model).toBe(ALIBABA_CANARY_MODEL);
         expect(output.length).toBeGreaterThan(450);
         expect(output).toMatch(/What Data We Looked At|Data We|Nguồn Dữ Liệu/i);
         expect(output).toMatch(/Suggests|Clearly Suggests|Insight|Kết Luận/i);

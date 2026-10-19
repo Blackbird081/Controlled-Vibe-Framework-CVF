@@ -274,6 +274,98 @@ describe('ai/providers', () => {
     });
 
     describe('executeAI — Alibaba DashScope', () => {
+        it.each([
+            ['qwen3.8-27b', false],
+            ['qwen3.8-flash', false],
+            ['qwen3.5-plus', false],
+            ['QWEN3.8-27B', false],
+            ['qwen3.8-27b-thinking', true],
+            ['qwen3-next-80b-a3b-thinking', true],
+            ['qwen30-example', undefined],
+            ['qwen3.invalid-example', undefined],
+        ])('preserves thinking-mode intent for %s', async (model, thinking) => {
+            fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({
+                choices: [{ finish_reason: 'stop', message: { content: 'Synthetic response' } }],
+            }) });
+            const result = await executeAI('alibaba', 'synthetic-key', 'Synthetic input', { model });
+            expect(result.success).toBe(true);
+            const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+            expect(body.model).toBe(model);
+            expect(body.enable_thinking).toBe(thinking);
+            expect(body.stream).toBeUndefined();
+        });
+        it.each([
+            { choices: [{ finish_reason: 'stop', message: { content: '  ', reasoning_content: 'private thinking' } }] },
+            { choices: [{ finish_reason: 'tool_calls', message: { content: 'partial answer' } }] },
+            { choices: [{ finish_reason: 'content_filter', message: { content: 'partial answer' } }] },
+            { choices: [] },
+            { choices: [{ message: { content: { text: 'wrong shape' } } }] },
+        ])('rejects unusable JSON answer %# without dropping usage', async (payload) => {
+            fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ ...payload, usage: { prompt_tokens: 20, completion_tokens: 8, total_tokens: 28 } }) });
+            const result = await executeAI('alibaba', 'ali-key', 'Hello');
+            expect(result.success).toBe(false);
+            expect(result.output).toBeUndefined();
+            expect(result.usage).toEqual({ inputTokens: 20, outputTokens: 8, totalTokens: 28 });
+            expect(result.diagnostic?.retryable).toBe(false);
+            expect(fetchMock).toHaveBeenCalledOnce();
+        });
+
+        it.each([
+            'data: {"choices":[{"delta":{"content":"partial"}}]}\ndata: [DONE]',
+            'data: {"choices":[{"delta":{"reasoning_content":"private thinking"},"finish_reason":"stop"}]}',
+            'data: broken-json\ndata: {"choices":[{"delta":{"content":"partial"},"finish_reason":"stop"}]}',
+        ])('rejects incomplete or reasoning-only SSE %#', async (text) => {
+            fetchMock.mockResolvedValueOnce({ ok: true, text: async () => `${text}\ndata: {"choices":[],"usage":{"prompt_tokens":20,"completion_tokens":8,"total_tokens":28}}` });
+            const result = await executeAI('alibaba', 'ali-key', 'Hello', { model: 'qvq-max' });
+            expect(result.success).toBe(false);
+            expect(result.output).toBeUndefined();
+            expect(result.usage).toEqual({ inputTokens: 20, outputTokens: 8, totalTokens: 28 });
+            expect(fetchMock).toHaveBeenCalledOnce();
+        });
+
+        it('does not hand off a length-limited JSON response as completed output', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ finish_reason: 'length', message: { content: 'Incomplete answer...' } }],
+                    usage: { prompt_tokens: 20, completion_tokens: 8, total_tokens: 28 },
+                }),
+            });
+
+            const result = await executeAI('alibaba', 'ali-key', 'Hello', { maxTokens: 8 });
+
+            expect(result.success).toBe(false);
+            expect(result.output).toBeUndefined();
+            expect(result.error).toMatch(/incomplete/i);
+            expect(result.tokensUsed).toBe(28);
+            expect(result.usage).toEqual({ inputTokens: 20, outputTokens: 8, totalTokens: 28 });
+            expect(result.diagnostic).toMatchObject({
+                stage: 'output_validation', class: 'output_validation_failed',
+                retryable: false, userAction: 'revise_request', provider: 'alibaba', httpStatus: 200,
+            });
+            expect(fetchMock).toHaveBeenCalledOnce();
+        });
+
+        it('rejects explicitly truncated SSE output while retaining its reported usage', async () => {
+            fetchMock.mockResolvedValueOnce({
+                ok: true,
+                text: async () => [
+                    'data: {"choices":[{"delta":{"content":"Incomplete answer..."},"finish_reason":"length"}]}',
+                    'data: {"choices":[],"usage":{"total_tokens":28}}',
+                    'data: [DONE]',
+                ].join('\n'),
+            });
+
+            const result = await executeAI('alibaba', 'ali-key', 'Hello', { model: 'qvq-max', maxTokens: 8 });
+
+            expect(result.success).toBe(false);
+            expect(result.output).toBeUndefined();
+            expect(result.tokensUsed).toBe(28);
+            expect(result.usage?.totalTokens).toBe(28);
+            expect(result.diagnostic?.retryable).toBe(false);
+            expect(fetchMock).toHaveBeenCalledOnce();
+        });
+
         it('returns success with parsed response', async () => {
             fetchMock.mockResolvedValueOnce({
                 ok: true,

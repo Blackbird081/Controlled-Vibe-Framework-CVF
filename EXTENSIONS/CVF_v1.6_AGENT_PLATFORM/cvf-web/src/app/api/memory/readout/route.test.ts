@@ -1,6 +1,7 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { POST } from './route';
 import { MEMORY_RUNTIME_READOUT_ROUTE_VERSION } from './route-constants';
+import * as memoryReadout from '@/lib/memory-runtime-readout';
 
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/middleware-auth', () => ({
@@ -68,6 +69,44 @@ describe('/api/memory/readout', () => {
   it('returns 400 on invalid enum fields', async () => {
     const res = await POST(makeReq({ ...baseBody, riskLevel: 'R9' }) as never);
     expect(res.status).toBe(400);
+  });
+
+  it.each([
+    { policyDecision: null }, { policyDecision: false }, { policyDecision: {} },
+    { containsSensitiveData: 'true' }, { containsSensitiveData: null },
+    { maxResults: '2' }, { maxResults: null },
+    { candidates: [{ ...baseBody.candidates[0], containsSecret: 'true' }] },
+    { candidates: [{ ...baseBody.candidates[0], containsSecret: null }] },
+    { candidates: [{ ...baseBody.candidates[0], content: {} }] },
+    { candidates: [{ ...baseBody.candidates[0], content: null }] },
+  ])('rejects malformed optional fields before projection %#', async (override) => {
+    const projection = vi.spyOn(memoryReadout, 'buildMemoryRuntimeReadout');
+    try {
+      const response = await POST(makeReq({ ...baseBody, ...override }) as never);
+      expect(response.status).toBe(400);
+      expect(projection).not.toHaveBeenCalled();
+      expect((await response.json()).memoryRuntimeReadout).toBeUndefined();
+    } finally { projection.mockRestore(); }
+  });
+
+  it.each(['tokenBudget', 'maxResults', 'createdAt'])('rejects overflowing JSON %s before projection', async (field) => {
+    const candidate = field === 'createdAt' ? { ...baseBody.candidates[0], createdAt: '~' } : baseBody.candidates[0];
+    const payload = { ...baseBody, candidates: [candidate], ...(field === 'createdAt' ? {} : { [field]: '~' }) };
+    const rawBody = JSON.stringify(payload).replace('"~"', '1e309');
+    const projection = vi.spyOn(memoryReadout, 'buildMemoryRuntimeReadout');
+    try {
+      const response = await POST(makeReq(rawBody) as never);
+      expect(response.status).toBe(400);
+      expect(projection).not.toHaveBeenCalled();
+    } finally { projection.mockRestore(); }
+  });
+
+  it('preserves valid optional fields and explicit false flags', async () => {
+    const response = await POST(makeReq({ ...baseBody, maxResults: 1, policyDecision: 'allow', containsSensitiveData: false,
+      candidates: [{ ...baseBody.candidates[0], containsSecret: false }],
+    }) as never);
+    expect(response.status).toBe(200);
+    expect((await response.json()).rawMemoryReleased).toBe(false);
   });
 
   it('returns 200 with sanitized projection and route version', async () => {

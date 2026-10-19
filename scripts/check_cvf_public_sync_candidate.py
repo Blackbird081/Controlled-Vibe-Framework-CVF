@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import posixpath
 import re
@@ -34,7 +35,7 @@ def git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
         ["git", "-C", str(root), *args],
         text=True,
         encoding="utf-8",
-        errors="replace",
+        errors="strict",
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
@@ -42,26 +43,28 @@ def git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
 
 def pending_paths(root: Path) -> list[str]:
     paths: set[str] = set()
-    for args in (("diff", "--name-only"), ("diff", "--cached", "--name-only"), ("ls-files", "--others", "--exclude-standard")):
+    for args in (("diff", "--name-only", "-z"), ("diff", "--cached", "--name-only", "-z"), ("ls-files", "--others", "--exclude-standard", "-z")):
         result = git(root, *args)
         if result.returncode != 0:
             raise RuntimeError(result.stderr.strip() or f"git {' '.join(args)} failed")
-        paths.update(line.replace("\\", "/").strip() for line in result.stdout.splitlines() if line.strip())
+        paths.update(path for path in result.stdout.split("\0") if path)
     return sorted(paths)
 
 
-def module_exists(source: Path, specifier: str) -> bool:
-    target = source.parent / specifier
-    candidates = [target]
-    # Dots are common inside CVF module basenames (for example
-    # ``identity.manager``), so Path.suffix cannot decide whether a source
-    # extension was supplied. Always try source-extension and index forms.
-    candidates.extend(Path(f"{target}{ext}") for ext in SOURCE_EXTENSIONS)
-    candidates.extend(target / f"index{ext}" for ext in SOURCE_EXTENSIONS)
-    if target.suffix in {".js", ".jsx", ".mjs", ".cjs"}:
-        # TypeScript ESM commonly writes the emitted .js specifier in source.
-        candidates.extend(target.with_suffix(ext) for ext in (".ts", ".tsx"))
-    return any(candidate.is_file() for candidate in candidates)
+def module_exists(source: Path, specifier: str, root: Path, candidate_paths: set[str]) -> bool:
+    # Ambient ignored files are not part of the projected candidate.
+    source_rel = source.relative_to(root).as_posix()
+    return any(
+        candidate in candidate_paths and (root / candidate).is_file()
+        for candidate in module_candidate_paths(source_rel, specifier)
+    )
+
+
+def resolve_commit(root: Path, ref: str, label: str) -> str:
+    result = git(root, "rev-parse", "--verify", "--end-of-options", f"{ref}^{{commit}}")
+    if result.returncode != 0:
+        raise RuntimeError(f"unable to resolve {label} commit")
+    return result.stdout.strip()
 
 
 def module_candidate_paths(source_rel: str, specifier: str) -> list[str]:
@@ -96,6 +99,9 @@ def check(args: argparse.Namespace) -> dict[str, object]:
         violations.append({"code": "NOT_GIT_WORKTREE", "detail": str(root)})
         return {"status": "REJECT", "violations": violations, "pendingPaths": []}
 
+    head_sha = resolve_commit(root, "HEAD", "HEAD")
+    baseline_sha = resolve_commit(root, args.baseline_ref, "baseline")
+
     branch = git(root, "branch", "--show-current").stdout.strip()
     if args.expected_branch and branch != args.expected_branch:
         violations.append({"code": "WRONG_BRANCH", "detail": f"expected {args.expected_branch}; found {branch or 'detached'}"})
@@ -110,6 +116,8 @@ def check(args: argparse.Namespace) -> dict[str, object]:
         authorized_items = json.loads(
             Path(args.authorized_paths_json).read_text(encoding="utf-8-sig")
         )
+    if not isinstance(authorized_items, list) or not all(isinstance(item, str) and item.strip() for item in authorized_items):
+        raise RuntimeError("authorized paths must be a JSON string array")
     authorized = {item.replace("\\", "/") for item in authorized_items}
     for path in pending:
         if path not in authorized:
@@ -121,36 +129,44 @@ def check(args: argparse.Namespace) -> dict[str, object]:
     if whitespace.returncode != 0:
         violations.append({"code": "DIFF_HYGIENE", "detail": whitespace.stdout.strip() or whitespace.stderr.strip()})
 
-    tracked = git(root, "ls-files")
+    tracked = git(root, "ls-files", "-z")
     if tracked.returncode != 0:
         raise RuntimeError(tracked.stderr.strip() or "git ls-files failed")
-    source_paths = sorted(
-        {
-            rel.replace("\\", "/").strip()
-            for rel in [*tracked.stdout.splitlines(), *pending]
-            if rel.strip() and Path(rel.strip()).suffix.lower() in SOURCE_EXTENSIONS
-        }
-    )
+    candidate_paths = {rel for rel in [*tracked.stdout.split("\0"), *pending] if rel}
+    source_paths = sorted(rel for rel in candidate_paths if Path(rel).suffix.lower() in SOURCE_EXTENSIONS)
+    source_hashes: dict[str, str] = {}
     for rel in source_paths:
         source = root / rel
         if not source.is_file() or source.suffix.lower() not in SOURCE_EXTENSIONS:
             continue
-        text = source.read_text(encoding="utf-8", errors="replace")
+        raw = source.read_bytes()
+        try:
+            text = raw.decode("utf-8", errors="strict")
+        except UnicodeDecodeError:
+            violations.append({"code": "INVALID_SOURCE_ENCODING", "detail": rel})
+            continue
+        source_hashes[rel] = hashlib.sha256(raw).hexdigest()
         for match in RELATIVE_SPECIFIER.finditer(text):
             specifier = match.group("path")
-            if not module_exists(source, specifier):
+            if not module_exists(source, specifier, root, candidate_paths):
                 finding = {"code": "MISSING_RELATIVE_DEPENDENCY", "detail": f"{rel} -> {specifier}"}
-                if baseline_already_missing(root, args.baseline_ref, rel, specifier):
+                if baseline_already_missing(root, baseline_sha, rel, specifier):
                     baseline_debt.append(finding)
                 else:
                     violations.append(finding)
 
+    if resolve_commit(root, "HEAD", "HEAD") != head_sha:
+        raise RuntimeError("HEAD changed during candidate inspection")
     return {
         "status": "PASS" if not violations else "REJECT",
         "pendingPaths": pending,
         "pendingPathCount": len(pending),
-        "sourceFilesChecked": len(source_paths),
+        "sourceFilesChecked": len(source_hashes),
+        "sourceFilesConsidered": len(source_paths),
+        "sourceFileSha256": source_hashes,
         "baselineRef": args.baseline_ref,
+        "baselineSha": baseline_sha,
+        "headSha": head_sha,
         "baselineDebt": baseline_debt,
         "baselineDebtCount": len(baseline_debt),
         "violations": violations,
@@ -168,7 +184,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         result = check(args)
-    except (OSError, RuntimeError, json.JSONDecodeError) as exc:
+    except (OSError, RuntimeError, UnicodeError, json.JSONDecodeError) as exc:
         result = {"status": "ERROR", "violations": [{"code": "PREFLIGHT_ERROR", "detail": str(exc)}]}
     if args.json:
         print(json.dumps(result, indent=2, ensure_ascii=False))

@@ -19,9 +19,14 @@
       "path": "docs/reference/CVF_MODULE_INVENTORY.md",
       "lineOrSection": "cited row",
       "evidenceRole": "module owner/status evidence"
+    },
+    {
+      "path": "docs/reviews/CVF_NIS_T1B_D_INTEGRATED_REVIEW_PERSISTENCE_COMPLETION_2026-10-05.md",
+      "lineOrSection": "Findings / Position; Claim Boundary",
+      "evidenceRole": "NIS-T1B-D accepted bounded review persistence and Windows private-profile proof; no live activation"
     }
   ],
-  "claimBoundary": "Current main Web UI line; hosts the confirmed governance dashboard route and the bounded 5-job-type Web Operations registry.",
+  "claimBoundary": "Current main Web UI line; hosts the confirmed governance dashboard route and the bounded 5-job-type Web Operations registry. NIS-T1B-D adds current-actor saved review confirmation and an opt-in WINDOWS_SINGLE_HOST_PRIVATE_V1 adapter proved on LOCAL_TEST_SESSION fixtures; no real store activation, BUILD authority, power-loss or stale-lock recovery claim.",
   "freshnessInputs": [
     "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/"
   ],

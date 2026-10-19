@@ -65,7 +65,8 @@ dispatch requires a SHA-256 binding to one consolidated finding set, a full
 dependency audit completed before the first repair, and a regression guard for
 every targeted defect. Round two additionally requires exact evidence IDs for
 a genuinely new independent critical root cause. Round three and later are not
-eligible for automatic re-dispatch.
+eligible for automatic re-dispatch unless the declared operator-cleared route in
+Operator-Cleared Same-Scope Continuation validates.
 
 For `EXTERNAL_AGENT_CLI_MCP`, the parent-assignment cumulative invocation count
 must be strictly below its ceiling before the next invocation, and admission
@@ -280,6 +281,112 @@ This rule preserves fail-closed behavior. It does not let an agent widen scope,
 ignore an explicit numerical cap, perform a forbidden action, or self-authorize
 live/provider/public/destructive work. The current checker does not infer these
 semantic facts; reviewers and closers must apply them from evidence.
+
+## Operator-Cleared Same-Scope Continuation
+
+Specification version `NCR_REVIEW_CONTINUATION_V1`. The default stops above are
+unchanged. This route is an optional, closed-shape declaration for a dependent
+rework the operator has actually cleared. It never infers clearance from a
+finding, a round count or an earlier approval, and it is not a numerical
+allowance, a successor tranche or technical acceptance.
+
+### Opt-In And Failure Behavior
+
+A work order opts in only with all three of: the scalar
+`operatorContinuationEvidencePath`, the scalar
+`operatorContinuationEvidenceSha256`, and exactly one fenced
+`continuation-scope-json` object. All three absent means legacy mode. Any
+partial, duplicate, empty or malformed declaration fails closed, even on
+`INITIAL` or below round three. A present but invalid declaration never falls
+back to ordinary automatic mode: the default round-three and round-two stops
+still apply together with the invalid-declaration diagnostic. The route exists
+only for `REWORK` at `reviewRoundCount` >= 2 with `reworkGeneration` equal to
+it. Numeric zero, false, null or empty values are never treated as absent.
+
+### Grant Source
+
+The source is one existing UTF-8 Markdown file directly or below
+`docs/baselines/` or `docs/reviews/`, outside any archive path, named by a
+normalized repository-relative forward-slash path (no absolute, drive, dot,
+traversal, empty-segment, whitespace, symlinked or relinked form). The scaffold
+resolves it from its current working directory and the final checker from its
+own repository root; no packet-controlled root or clock exists. At most 65536
+bytes are read, and a limit violation or any read, decode or JSON failure
+rejects. The source must match the declared lowercase raw SHA-256 and must not
+be the work order, the worker return, the proof or any other artifact the
+admitted worker may write. There is no recursive grant or fallback search.
+
+The source holds exactly one fenced `operator-continuation-authorization-json`
+object. Duplicate members are rejected at every depth and only these top-level
+keys exist: `schemaVersion` (`cvf.reviewDispatchContinuationAuthorization@1.0.0`),
+`decisionOwner` (`OPERATOR`), `operatorInstructionEvidence` (a concrete
+non-placeholder reference of at least 24 characters), `status` (`ACTIVE`),
+`expiresAtUtc`, `validityDisposition`, `binding` and `scope`.
+`UNTIL_UTC_EXPIRY` requires a timezone-aware UTC `expiresAtUtc` strictly later
+than the actual UTC time; `UNTIL_REVOKED_OR_SCOPE_CHANGE` requires a null
+`expiresAtUtc`; every other pairing rejects. Revocation, a changed status or
+changed source bytes invalidate older references. Parsing proves a declaration
+only: Local must verify the real operator instruction before issuing the source.
+
+### Binding And Scope
+
+`binding` has exactly `parentAssignmentId`, `rootCauseClusterId`,
+`reviewRoundCount`, `reworkGeneration`, `priorFindingSetDigest`,
+`dispatchSurface` and `commitMode`, with strict integer rounds (no bool, float
+or string), a lowercase 64-hex digest and `WORKER_MUST_NOT_COMMIT`. Each value
+must equal the work order's single unambiguous scalar; `commitMode` joins the
+`Commit mode` line, whose identical repeats are allowed and conflicting ones
+reject. `scope` has exactly `objectiveId`, `acceptanceItems`,
+`allowedArtifacts`, `riskCeiling` (`SAME_AS_AUTHORIZED_PARENT`),
+`effectCeilings`, `numericalCeilings` and `commitOwner` (`reviewer-closer`). The
+seven effect ceilings (`providerCalls`, `networkCalls`, `publicWrites`,
+`deployments`, `realDataMutations`, `destructiveActions`,
+`productRuntimeStarts`) are strict nonnegative integers. `numericalCeilings` is
+a nonempty map of strict nonnegative integers with positive `workerMinutes` and
+`reviewerMinutes`; its `externalInvocationCeiling`, when present, equals the
+work-order ceiling and is required for `EXTERNAL_AGENT_CLI_MCP`. The work
+order's `continuation-scope-json` must be type-identical to `scope`, and
+`allowedArtifacts` must equal the union of the valid acceptance-ledger
+`expectedArtifacts`, which includes the worker return and proof. The checker
+validates declared bindings only; Local verifies objective, acceptance item,
+risk, effect, role and commit-owner semantics.
+
+### Effect On Dispatch And Completion Checks
+
+A valid route bypasses only the round-three automatic-redispatch rejection and
+the round-two missing-independent-critical-evidence rejection.
+`newIndependentCriticalEvidence: NONE` stays the truthful value for dependent
+repairs; a placeholder is still rejected and no independent critical finding is
+inferred from clearance. Every other control remains: exact digest and
+generation, dependency audit, full finding sweep, regression guard, no
+successor, autonomy boundary, review routing, source, role and protected-path
+gates, and the external usage and cumulative-invocation ceiling.
+
+A completion review may carry the pair `continuationWorkOrderPath` and
+`continuationWorkOrderSha256`. Both absent preserves the current rules.
+Otherwise exactly one of each must name a safe, existing, non-archive
+`docs/work_orders/` Markdown file with a matching raw SHA-256 and no self
+reference or authorization cycle, which the real work-order diagnostic accepts
+as a valid cleared dispatch, and the review's `reviewRoundCount` must equal that
+work order's round. At that boundary the existing `COMPLETE_REVIEW` or
+`CONSOLIDATE_SINGLE_REPAIR` token is permitted at round three and later, and
+dependent-only `CONSOLIDATE_SINGLE_REPAIR` at round two. This is a declaration
+disposition, not technical acceptance. No new stop token exists,
+`PARK_LOW_INCREMENTAL_VALUE` stays rejected at round three, and
+`CONTINUE_NEW_CRITICAL_EVIDENCE` always needs `newRootCauseCountThisRound` > 0.
+A missing or invalid link keeps the existing round and root restrictions and
+adds an invalid-binding diagnostic.
+
+### Same-Scope Authority Persistence
+
+The operator's continuing instruction persists for later consolidated
+dependent details while the objective, path and artifact classes, risk, effect
+ceilings and commit owner stay unchanged. Local may refresh a derived grant and
+bound packet for each actual round and digest without a new operator yes after
+verifying that none of those changed. A scope or effect change, a revocation or
+an exhausted explicit cap still stops the affected action. A grant never
+refills a retired profile or turns maintenance acceptance into native, browser
+or provider permission.
 
 ## Independent Review Probe Admission Boundary
 
@@ -740,6 +847,10 @@ crossed.
 dependent-only finding at that point is review-by-drip and cannot open another
 automatic repair dispatch.
 
+These round and root restrictions are the default. They change only at a valid
+operator-cleared boundary, as bounded by Operator-Cleared Same-Scope
+Continuation, and never for an unlinked or invalidly linked completion review.
+
 ## Machine-Enforceable Boundary
 
 | Control | Machine disposition |
@@ -754,6 +865,8 @@ automatic repair dispatch.
 | changed work-order dispatch kind, convergence fields, and cross-field rules | ENFORCE |
 | parent-assignment invocation-count ceiling before external dispatch | ENFORCE |
 | round-two new-critical-evidence requirement and round-three dispatch stop | ENFORCE |
+| operator-cleared declaration: grant source, hash, expiry, binding, scope, ledger union and completion-link joins | ENFORCE |
+| whether the operator actually gave the instruction and whether declared effect ceilings are honored | REVIEWER_ORCHESTRATOR_JUDGMENT |
 | worker-return consolidated sweep, production binding, adversarial regression, cost ledger, and terminal verdict | ENFORCE |
 | implementation-autonomy boundary and closed successor-tranche flag | ENFORCE |
 | review-admission field shape, cross-field consistency, and obvious pre-execution-review contradiction | ENFORCE |

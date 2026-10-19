@@ -37,12 +37,15 @@ INVARIANTS = {
 def changed_paths(base: str, head: str) -> set[str]:
     commands = (
         ["git", "diff", "--name-only", base, head],
-        ["git", "diff", "--name-only"],
-        ["git", "ls-files", "--others", "--exclude-standard"],
+        ["git", "diff", "--name-only", "--cached"],
+        ["git", "ls-files", "--modified", "--others", "--exclude-standard"],
     )
     paths: set[str] = set()
     for command in commands:
-        result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, check=False)
+        result = subprocess.run(
+            command, cwd=ROOT, capture_output=True, text=True,
+            encoding="utf-8", errors="replace", check=False,
+        )
         if result.returncode == 0:
             paths.update(line.strip().replace("\\", "/") for line in result.stdout.splitlines() if line.strip())
     return paths

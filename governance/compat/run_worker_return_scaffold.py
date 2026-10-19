@@ -5,7 +5,7 @@ Emit or create an L1 worker-return scaffold.
 Safety boundary: this helper only prints a skeleton or creates one new markdown
 file under docs/reviews/. It refuses overwrite and paths outside docs/reviews/.
 It does not stage, commit, apply patches, run provider calls, or make a closure
-decision.
+decision. WRS-FR1-R1: uniform guidance.
 """
 
 from __future__ import annotations
@@ -14,6 +14,10 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from build_worker_return_skeleton_scaffold import (
+    preparation_shape_issues, render_return_preparation_block,
+)
+from run_worker_return_fast_gate import return_budget_issues
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -233,7 +237,18 @@ def _section_body(section: str) -> list[str]:
         ]
     if section == "Worker Experience Retrospective":
         return [
-            "WORKER_EXPERIENCE_RETRO_NA_WITH_REASON - TODO or replace with concise retrospective.",
+            "WORKER_EXPERIENCE_RETRO:",
+            "frictionLevel: TO_FILL_FROM_ACTUAL_EXECUTION",
+            "frictionType: TO_FILL_FROM_ACTUAL_EXECUTION",
+            "observedStep: TO_FILL_FROM_ACTUAL_EXECUTION",
+            "preventiveControlCandidate: TO_FILL_FROM_ACTUAL_EXECUTION",
+            "",
+            "Complete this structured branch with truthful observed fields. "
+            "Only if actual execution had no friction, replace the entire branch using "
+            "the checker RETRO_NA_TOKEN (WORKER_EXPERIENCE_RETRO_NA_WITH_REASON with colon) and "
+            "exact reason 'no friction beyond normal gates; no gate surprise, no helper gap, "
+            "no worktree contamination this return'; never keep both branches or assert no surprise "
+            "before execution.",
         ]
     if section == "Worker Return Scaffold Effectiveness Measurement":
         return [
@@ -374,9 +389,15 @@ def build_scaffold(title: str = "", profile: str = FULL_PROFILE) -> str:
         '{"schemaVersion":"cvf.workOrderAcceptanceEvidence@1.0.0","executionBaseHead":"TO_FILL","results":[]}',
         "```",
         "",
+        "Evidence completion guidance: each results row must contain exactly requirementId, actualArtifacts, proofRefs, status (PASS or BLOCKED), matching the dispatcher ledger; the empty array is an unfinished scaffold. Example row format: "
+        '{"requirementId": "REQ-1", "actualArtifacts": ["docs/reviews/x.md"], "proofRefs": ["PROOF-1"], "status": "PASS"}',
+        "",
+        "Readiness completion guidance: READY_FOR_REVIEW requires completed dependency sweep, actual productionBindingEvidence and PASS_TARGETED_DEFECT_CLASS; otherwise keep BLOCKED_WITH_REASON and truthful pending fields. This skeleton grants no readiness or gate PASS.",
+        "",
         "NOTE: L1 scaffold only. Replace every TODO line before returning for review.",
         "",
     ]
+    lines.append(render_return_preparation_block())
     sections = WORKER_RETURN_SCAFFOLD_SECTIONS
     if profile == FAST_DOC_PROFILE:
         sections = FAST_DOC_SCAFFOLD_SECTIONS + ("Conditional Controls Disposition",)
@@ -409,7 +430,7 @@ def write_scaffold(target: str, title: str = "", profile: str = FULL_PROFILE) ->
         raise ValueError(f"refusing to overwrite existing file: {target}")
     candidate.parent.mkdir(parents=True, exist_ok=True)
     derived_title = title.strip() or candidate.stem.replace("_", " ")
-    with open(candidate, "x", encoding="utf-8") as handle:
+    with open(candidate, "x", encoding="utf-8", newline="\n") as handle:
         handle.write(build_scaffold(derived_title, profile))
     return candidate
 
@@ -421,6 +442,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--emit", action="store_true", help="Print scaffold to stdout")
     parser.add_argument("--write", metavar="PATH", help="Create one new scaffold file")
     parser.add_argument("--title", default="", help="Optional scaffold title")
+    parser.add_argument("--check-shape", action="store_true", help="Check preparation fields before drafting; no execution acceptance")
+    parser.add_argument("--max-lines", type=int, help="Optional dispatcher-selected preparation line budget")
+    parser.add_argument("--max-bytes", type=int, help="Optional dispatcher-selected preparation byte budget")
     parser.add_argument(
         "--profile",
         choices=(FULL_PROFILE, FAST_DOC_PROFILE),
@@ -428,9 +452,19 @@ def main(argv: list[str] | None = None) -> int:
         help="Worker-return contract profile",
     )
     args = parser.parse_args(argv)
+    if any(value is not None and value <= 0 for value in (args.max_lines, args.max_bytes)):
+        parser.error("selected budgets must be positive")
     if args.emit == bool(args.write):
         print("VIOLATION: choose exactly one of --emit or --write", file=sys.stderr)
         return 2
+    text = build_scaffold(args.title, args.profile)
+    issues = preparation_shape_issues(text) if args.check_shape else []
+    issues += return_budget_issues(text.encode("utf-8"), args.max_lines, args.max_bytes)
+    if issues:
+        print("PREPARATION_BLOCKED: " + "; ".join(issues), file=sys.stderr)
+        return 1
+    if args.check_shape:
+        print("PREPARATION_SHAPE_PRESENT: pending fields are not worker evidence or gate acceptance", file=sys.stderr)
     if args.emit:
         print(build_scaffold(args.title, args.profile), end="")
         return 0

@@ -136,13 +136,15 @@ def _head_line_count(rel_path: str) -> int | None:
         ["git", "show", f"HEAD:{rel_path}"],
         cwd=REPO_ROOT,
         capture_output=True,
-        text=True,
     )
     if proc.returncode != 0:
         return None
-    if proc.stdout == "":
+    # Physical line counts do not require decoding repository UTF-8 through
+    # the host locale. Preserve text mode's universal newline semantics.
+    content = proc.stdout.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    if content == b"":
         return 0
-    return proc.stdout.count("\n") + (0 if proc.stdout.endswith("\n") else 1)
+    return content.count(b"\n") + (0 if content.endswith(b"\n") else 1)
 
 
 def _iter_candidate_files() -> list[Path]:

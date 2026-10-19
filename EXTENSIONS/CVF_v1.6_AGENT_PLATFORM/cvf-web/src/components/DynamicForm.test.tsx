@@ -1,8 +1,9 @@
 /**
  * @vitest-environment jsdom
  */
+// Text Encoding Exception: these Vietnamese labels are exact localized UI assertions.
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { DynamicForm } from './DynamicForm';
 import type { Template } from '@/types';
 
@@ -63,7 +64,7 @@ describe('DynamicForm Surface 1 template i18n', () => {
         render(<DynamicForm {...defaultProps} />);
 
         expect(screen.getByText(/App Builder Complete/)).toBeTruthy();
-        expect(screen.getByText(/Create a full product brief/)).toBeTruthy();
+        expect(screen.getByText('Create a structured product brief for receiving-agent INTAKE without requiring the user to choose a technical stack.')).toBeTruthy();
         expect(screen.getByText('1. App / product name')).toBeTruthy();
         expect(screen.getByText('3. What problem does it solve?')).toBeTruthy();
         expect(screen.getByText(/Focus on the real-world problem/)).toBeTruthy();
@@ -101,5 +102,48 @@ describe('DynamicForm Surface 1 template i18n', () => {
         expect(preview).toContain('App tài chính cá nhân');
         expect(preview).toContain('Quản lý dòng tiền hàng ngày');
         expect(preview).not.toContain('Tôi muốn tạo một app brief');
+    });
+});
+
+describe('DynamicForm visible result submission', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        currentLanguage = 'en';
+    });
+
+    it.each([
+        ['en', 'Generate result'],
+        ['vi', 'Tạo kết quả'],
+    ] as const)('submits validated source fields once through the visible %s action', async (language, label) => {
+        currentLanguage = language;
+        const onSubmit = vi.fn();
+        render(<DynamicForm {...defaultProps} onSubmit={onSubmit} />);
+
+        fireEvent.change(screen.getByPlaceholderText(language === 'en' ? 'Example: TaskFlow' : 'VD: TaskFlow'), {
+            target: { value: 'Workshop Planner' },
+        });
+        fireEvent.change(screen.getByPlaceholderText(language === 'en' ? /Describe the pain point/ : /Mô tả pain point/), {
+            target: { value: 'Coordinate a weekend workshop' },
+        });
+        fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Web App' } });
+
+        fireEvent.click(screen.getByRole('button', { name: label }));
+        await waitFor(() => expect(onSubmit).toHaveBeenCalledOnce());
+        const [values, intent] = onSubmit.mock.calls[0];
+        expect(values).toMatchObject({ appName: 'Workshop Planner', appType: 'Web App', problem: 'Coordinate a weekend workshop' });
+        expect(intent).toContain('Workshop Planner');
+        expect(intent).toContain('Coordinate a weekend workshop');
+    });
+
+    it('blocks invalid required fields while keeping spec actions non-submitting', async () => {
+        const onSubmit = vi.fn();
+        render(<DynamicForm {...defaultProps} onSubmit={onSubmit} />);
+
+        fireEvent.click(screen.getByRole('button', { name: /Export Spec/ }));
+        fireEvent.click(screen.getByRole('button', { name: /Create Agent Spec/ }));
+        expect(onSubmit).not.toHaveBeenCalled();
+        fireEvent.click(screen.getByRole('button', { name: 'Generate result' }));
+        await waitFor(() => expect(screen.getAllByText('This field is required').length).toBeGreaterThan(0));
+        expect(onSubmit).not.toHaveBeenCalled();
     });
 });

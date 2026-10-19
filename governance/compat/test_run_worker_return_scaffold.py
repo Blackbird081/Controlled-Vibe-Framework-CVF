@@ -17,6 +17,24 @@ SPEC.loader.exec_module(scaffold)
 
 
 class WorkerReturnScaffoldTests(unittest.TestCase):
+    def test_preparation_check_and_budget_refuse_before_file_creation(self):
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(scaffold, 'REPO_ROOT', Path(tmp)):
+            target = Path(tmp) / 'docs/reviews/return.md'
+            self.assertEqual(scaffold.main(['--write', str(target), '--check-shape', '--max-lines', '1']), 1)
+            self.assertFalse(target.exists())
+            self.assertEqual(scaffold.main(['--write', str(target), '--check-shape', '--max-lines', '450', '--max-bytes', '64000']), 0)
+            raw = target.read_bytes()
+            self.assertNotIn(b'\r', raw)
+            self.assertLessEqual(len(raw), 64000)
+            self.assertIn(b'PENDING_REVIEWER_EXECUTION', raw)
+            self.assertEqual(scaffold.main(['--write', str(target), '--check-shape']), 2)
+
+    def test_missing_preparation_field_is_refused_before_output(self):
+        incomplete = scaffold.build_scaffold().replace('workerRedispatchAllowed: NO', '')
+        with mock.patch.object(scaffold, 'build_scaffold', return_value=incomplete), redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(scaffold.main(['--emit', '--check-shape']), 1)
+            self.assertEqual(out.getvalue(), '')
+
     def test_scaffold_text_has_required_headings(self):
         text = scaffold.build_scaffold("Example Worker Return")
         self.assertTrue(text.startswith("# Example Worker Return"))

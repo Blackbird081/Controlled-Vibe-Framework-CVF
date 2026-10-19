@@ -87,13 +87,14 @@ export async function loginAs(page: Page, username: string, password: string) {
     const signedIn = await signInViaNextAuth(page, username, password);
     if (signedIn) {
         await page.goto('/home', { waitUntil: 'domcontentloaded', timeout: 15_000 });
-        await expect(page.getByRole('button', { name: /Phân tích Chiến lược|Strategy Analysis/i }).first()).toBeVisible({ timeout: 15_000 });
+        await expect(page.getByRole('button', { name: /Phân tích Chiến lược|Strategy Analysis/i }).first()).toBeEnabled({ timeout: 15_000 });
         return;
     }
 
     await page.goto('/login', { waitUntil: 'domcontentloaded', timeout: 15_000 });
-    await page.locator('input[type="text"][placeholder="admin"]').fill('admin');
-    await page.locator('input[type="password"][placeholder="admin123"]').fill('admin123');
+    // Inputs in server HTML can be visible before React owns their values.
+    // Wait for the existing client session gate before filling, not only clicking.
+    const loginButton = await waitForLoginButtonReady(page, 10_000);
     await page.locator('input[type="text"][placeholder="admin"]').fill(username);
     await page.locator('input[type="password"][placeholder="admin123"]').fill(password);
 
@@ -107,9 +108,8 @@ export async function loginAs(page: Page, username: string, password: string) {
     // Wait for the session-bootstrap-gated button to reach a terminal,
     // enabled state before clicking. Never press Enter against a
     // still-disabled/checking form as a fallback.
-    const loginButton = await waitForLoginButtonReady(page, 10_000);
     await loginButton.click({ timeout: 10_000 });
-    await expect(page.getByRole('button', { name: /Phân tích Chiến lược|Strategy Analysis/i }).first()).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole('button', { name: /Phân tích Chiến lược|Strategy Analysis/i }).first()).toBeEnabled({ timeout: 15_000 });
 }
 
 export async function login(page: Page) {
@@ -141,12 +141,12 @@ export async function sendSpecToAgent(page: Page, mode: 'simple' | 'governance' 
     await page.getByRole('heading', { name: 'CVF Agent' }).waitFor();
 }
 
-export async function seedStorageWithAlibaba(page: Page) {
+export async function seedStorageWithAlibaba(page: Page, model = 'qwen-plus') {
     const key = process.env.DASHSCOPE_API_KEY ?? '';
-    await page.addInitScript((k) => {
+    await page.addInitScript(({ key: k, model: selectedModel }) => {
         localStorage.setItem('cvf_settings', JSON.stringify({
             providers: {
-                alibaba: { apiKey: k, enabled: true, selectedModel: 'qwen-plus' },
+                alibaba: { apiKey: k, enabled: true, selectedModel },
             },
             preferences: {
                 defaultProvider: 'alibaba',
@@ -158,7 +158,7 @@ export async function seedStorageWithAlibaba(page: Page) {
         localStorage.setItem('cvf_onboarding_complete', 'true');
         localStorage.setItem('cvf_onboarding_seen', '1');
         localStorage.setItem('cvf_setup_banner_dismissed', 'true');
-    }, key);
+    }, { key, model });
 }
 
 export async function seedStorageWithDeepSeek(page: Page) {
@@ -210,7 +210,13 @@ Ngân sách tối đa 300 triệu VND, cần kết quả trong 6 tháng.
 SUCCESS CRITERIA:
 - Phân tích rõ ưu/nhược điểm
 - Xác định rủi ro chính
-- Đưa ra khuyến nghị có căn cứ`,
+- Đưa ra khuyến nghị có căn cứ
+
+DELIVERABLE SCOPE:
+This synthetic governance fixture needs a concise Vietnamese decision brief,
+at most 180 words. Give one advantage and one risk for each of the three
+options, then one recommendation grounded in the budget and six-month limit.
+Label any material assumption. Do not expand into a full strategy report.`,
         inputs: {
             topic: 'Mở rộng thị trường miền Trung',
             context: 'Công ty bán phần mềm quản lý kho cho SME Việt Nam.',

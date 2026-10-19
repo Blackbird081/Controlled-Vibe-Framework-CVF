@@ -4,6 +4,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import sys
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -20,6 +21,34 @@ SPEC.loader.exec_module(MODULE)
 
 
 class GovernedFileSizeTests(unittest.TestCase):
+    def test_head_counts_real_git_blobs_without_windows_locale_decoding(self) -> None:
+        real_run = subprocess.run
+        with tempfile.TemporaryDirectory() as directory:
+            repo = Path(directory)
+            cases = {"unicode.md": ("\u1ec1\n\u1ebf\n".encode("utf-8"), 2),
+                     "crlf.md": ("\u1ec1\r\nend\r\n".encode("utf-8"), 2),
+                     "cr.md": ("\u1ec1\rend\r".encode("utf-8"), 2),
+                     "unterminated.md": ("\u1ec1".encode("utf-8"), 1),
+                     "empty.md": (b"", 0)}
+            real_run(["git", "init", "-q"], cwd=repo, check=True, capture_output=True)
+            real_run(["git", "config", "core.autocrlf", "false"], cwd=repo, check=True)
+            for name, (payload, _) in cases.items():
+                (repo / name).write_bytes(payload)
+            real_run(["git", "add", "--", *cases], cwd=repo, check=True)
+            real_run(["git", "-c", "user.name=CVF Synthetic Test", "-c", "user.email=cvf-test@example.invalid",
+                      "commit", "-qm", "synthetic UTF-8 blobs"], cwd=repo, check=True, capture_output=True)
+
+            def windows_locale(*args, **kwargs):
+                if kwargs.get("text"):
+                    kwargs["encoding"] = "cp1252"
+                return real_run(*args, **kwargs)
+
+            with patch.object(MODULE, "REPO_ROOT", repo), patch.object(MODULE.subprocess, "run", side_effect=windows_locale):
+                for name, (_, expected) in cases.items():
+                    with self.subTest(name=name):
+                        self.assertEqual(MODULE._head_line_count(name), expected)
+                self.assertIsNone(MODULE._head_line_count("missing.md"))
+
     def setUp(self) -> None:
         self.temp_dir = tempfile.TemporaryDirectory()
         self.repo_root = Path(self.temp_dir.name)

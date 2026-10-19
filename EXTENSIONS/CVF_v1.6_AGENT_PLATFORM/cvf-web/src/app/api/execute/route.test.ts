@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese data fixtures verify UTF-8 fidelity and accepted user input.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createHash } from 'node:crypto';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -482,7 +483,65 @@ describe('/api/execute', () => {
         expect(res.status).toBe(200);
         expect(executeAIMock).toHaveBeenCalledWith('alibaba', 'ali-key', expect.any(String), {
             model: 'qvq-max',
+            signal: expect.any(AbortSignal),
         });
+    });
+
+    it.each([undefined, '1'])('rejects streamed oversize before authorization/provider work (declared=%s)', async declared => {
+        const cancel = vi.fn();
+        let reads = 0;
+        const stream = new ReadableStream<Uint8Array>({
+            pull(controller) { reads++; if (reads === 1) controller.enqueue(new Uint8Array(16 * 1024 * 1024 + 1)); else controller.close(); }, cancel,
+        }, { highWaterMark: 0 });
+        const request = new Request('http://localhost/api/execute', { method: 'POST', body: stream, duplex: 'half' as const,
+            headers: declared ? { 'content-length': declared } : undefined } as RequestInit);
+        const res = await POST(request as never);
+        expect(res.status).toBe(413);
+        expect(reads).toBe(1);
+        expect(cancel).toHaveBeenCalledOnce();
+        expect(verifySessionCookieMock).not.toHaveBeenCalled();
+        expect(executeAIMock).not.toHaveBeenCalled();
+    });
+
+    it('preserves signed Vietnamese text through one-byte stream chunks', async () => {
+        process.env.ALIBABA_API_KEY = 'ali-key';
+        process.env.CVF_SERVICE_TOKEN = 'svc';
+        executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'alibaba', model: 'qwen3.8-flash' });
+        const text = `  ${JSON.stringify({ templateName: 'Strategy', intent: 'Phân tích lịch trực', inputs: { goal: 'Đặt lịch tiếng Việt' }, provider: 'alibaba' })}\r\n`;
+        const bytes = new TextEncoder().encode(text);
+        let index = 0;
+        const stream = new ReadableStream<Uint8Array>({ pull(controller) { if (index < bytes.length) controller.enqueue(bytes.slice(index, ++index)); else controller.close(); } });
+        const timestamp = String(Date.now());
+        const request = new Request('http://localhost/api/execute', { method: 'POST', body: stream, duplex: 'half' as const, headers: {
+            'x-cvf-service-token': 'svc', 'x-cvf-service-timestamp': timestamp,
+            'x-cvf-service-signature': computeServiceRequestSignature('svc', timestamp, text),
+        } } as RequestInit);
+        const res = await POST(request as never);
+        expect(res.status).toBe(200);
+        expect((await res.json()).success).toBe(true);
+        expect(executeAIMock).toHaveBeenCalledOnce();
+        expect(executeAIMock.mock.calls[0][2]).toContain('Đặt lịch tiếng Việt');
+    });
+
+    it('preserves failed-provider usage and diagnostic without completion side effects', async () => {
+        process.env.ALIBABA_API_KEY = 'ali-key';
+        process.env.CVF_SERVICE_TOKEN = 'svc';
+        executeAIMock.mockResolvedValue({
+            success: false, output: validOutput, error: 'Incomplete answer', provider: 'alibaba', model: 'qwen3.8-flash',
+            tokensUsed: 28, usage: { inputTokens: 20, outputTokens: 8, totalTokens: 28 },
+            diagnostic: { contractVersion: 'cvf.executionDiagnostic.v1', stage: 'output_validation', class: 'output_validation_failed', retryable: false, userAction: 'revise_request', safeMessage: 'Incomplete answer', provider: 'alibaba', model: 'qwen3.8-flash' },
+        });
+        const res = await POST(makeSignedServiceRequest({ templateName: 'Strategy', intent: 'Analyze', inputs: { goal: 'Test' }, provider: 'alibaba', model: 'qwen3.8-flash' }) as never);
+        const data = await res.json();
+        expect(data.success).toBe(false);
+        expect(data.output).toBeUndefined();
+        expect(data.usage).toEqual({ inputTokens: 20, outputTokens: 8, totalTokens: 28 });
+        expect(data.diagnostic).toMatchObject({ class: 'output_validation_failed', retryable: false, userAction: 'revise_request', receiptId: data.governanceEvidenceReceipt.receiptId });
+        expect(data.durableMemoryWriteReceipt).toBeUndefined();
+        expect(data.phase2cProductBrief).toBeUndefined();
+        expect(executeAIMock).toHaveBeenCalledOnce();
+        expect(appendCostEventMock).not.toHaveBeenCalled();
+        expect(appendAuditEventMock.mock.calls.some(([event]) => event.eventType === 'EXECUTION_COMPLETED')).toBe(false);
     });
 
     it('accepts Alibaba compatibility alias for execute path routing', async () => {
@@ -507,6 +566,7 @@ describe('/api/execute', () => {
         expect(res.status).toBe(200);
         expect(executeAIMock).toHaveBeenCalledWith('alibaba', 'ali-benchmark-key', expect.any(String), {
             model: undefined,
+            signal: expect.any(AbortSignal),
         });
     });
 
@@ -1044,6 +1104,7 @@ describe('/api/execute', () => {
             output: 'short',
             provider: 'openai',
             model: 'gpt-4o',
+            usage: { inputTokens: 20, outputTokens: 8, totalTokens: 28 },
         });
 
         const req = makeExecuteRequest({
@@ -1059,6 +1120,9 @@ describe('/api/execute', () => {
         expect(res.status).toBe(422);
         expect(data.success).toBe(false);
         expect(data.error).toMatch(/failed output validation/i);
+        expect(data.output).toBeUndefined();
+        expect(data.usage).toEqual({ inputTokens: 20, outputTokens: 8, totalTokens: 28 });
+        expect(data.diagnostic).toMatchObject({ class: 'output_validation_failed', retryable: false, receiptId: data.governanceEvidenceReceipt.receiptId });
         expect(data.outputValidation.issues).toContain('TOO_SHORT');
         expect(data.governanceEvidenceReceipt?.decision).toBe('BLOCK');
         expect(appendAuditEventMock).toHaveBeenCalledWith(expect.objectContaining({

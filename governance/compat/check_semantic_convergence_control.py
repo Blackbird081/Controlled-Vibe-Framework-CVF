@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse
 import hashlib
+from importlib import import_module
 import json
 import re
 import subprocess
@@ -10,6 +11,14 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 from typing import Any
+_module_prefix = f"{__package__}." if __package__ else ""
+_admission = import_module(_module_prefix + "semantic_convergence_root_admission")
+BlockViolation = _admission.BlockViolation
+_no_duplicates = _admission._no_duplicates
+_decode_json_unicode_escapes = _admission.decode_json_unicode_escapes
+validate_escalation_triggers, validate_root_admission = _admission.validate_escalation_triggers, _admission.validate_root_admission
+validate_runtime_readiness = _admission.validate_runtime_readiness
+validate_ready_scope_pairing, validate_work_order = _admission.validate_ready_scope_pairing, import_module(_module_prefix + "check_work_order_acceptance_ledger").validate_work_order
 REPO_ROOT = Path(__file__).resolve().parents[2]
 THIS_CHECKER_PATH = "governance/compat/check_semantic_convergence_control.py"
 STANDARD_PATH = (
@@ -61,20 +70,11 @@ REQUIRED_RESOLUTION_EVIDENCE_FIELDS = (
     "evidenceClass", "evidencePath", "sha256", "locator",
 )
 # Escalation trigger thresholds (invariants 5 and 6 of the standard).
-ROOT_CONTRACT_PARTIAL_READY_THRESHOLD = 2
-ROOT_CONTRACT_SCOPE_EXPANSION_THRESHOLD = 1
-ROOT_CONTRACT_SAME_CLAIM_CORRECTION_THRESHOLD = 2
-STOP_REASSESS_NON_DECREASING_THRESHOLD = 2
 UNRESOLVED_PREDECESSOR_SENTINEL = "SCEC_PREDECESSOR_HASH_UNRESOLVED"
 OPEN_FENCE_LINE_RE = re.compile(r"^ {0,3}(`{3,})([^`]*)$")
 CLOSE_FENCE_LINE_RE = re.compile(r"^ {0,3}(`{3,})[ \t]*$")
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 WINDOWS_DRIVE_RE = re.compile(r"^[A-Za-z]:")
-@dataclass(frozen=True)
-class BlockViolation:
-    """One structural or semantic violation of an active SCEC block."""
-    code: str
-    message: str
 @dataclass(frozen=True)
 class ValidationResult:
     """Outcome of validating a single parsed candidate JSON object."""
@@ -223,75 +223,8 @@ def _validate_set_reconciliation(block: dict) -> list[BlockViolation]:
         violations.append(BlockViolation('SILENT_BLOCKER_DISAPPEARANCE',
             f'blocker(s) present in `prior` but absent from both `resolved` and `retained`: {sorted(silently_disappeared)}'))
     return violations
-def _validate_escalation_triggers(block: dict) -> list[BlockViolation]:
-    """Invariants 5, 6, and 7."""
-    violations: list[BlockViolation] = []
-    counters = block.get("counters")
-    disposition = block.get("requiredDisposition")
-    successor_scope = block.get("successorScope")
-    if not isinstance(counters, dict):
-        return violations
-    partial_ready = counters.get("partialReadyClosures", 0)
-    scope_expansions = counters.get("reviewerScopeExpansions", 0)
-    same_claim = counters.get("sameClaimCorrections", 0)
-    non_decreasing = counters.get("nonDecreasingBlockerTransitions", 0)
-    root_contract_required = (
-        isinstance(partial_ready, int) and partial_ready >= ROOT_CONTRACT_PARTIAL_READY_THRESHOLD
-    ) or (
-        isinstance(scope_expansions, int) and scope_expansions >= ROOT_CONTRACT_SCOPE_EXPANSION_THRESHOLD
-    ) or (
-        isinstance(same_claim, int) and same_claim >= ROOT_CONTRACT_SAME_CLAIM_CORRECTION_THRESHOLD
-    )
-    stop_reassess_required = (
-        isinstance(non_decreasing, int) and non_decreasing >= STOP_REASSESS_NON_DECREASING_THRESHOLD
-    )
-    if stop_reassess_required and disposition != "STOP_REASSESS_ARCHITECTURE":
-        violations.append(
-            BlockViolation(
-                "MISSING_STOP_REASSESS_ESCALATION",
-                "two or more consecutive non-decreasing blocker transitions require "
-                "`requiredDisposition: STOP_REASSESS_ARCHITECTURE`",
-            )
-        )
-    elif root_contract_required and disposition not in ESCALATION_SATISFYING_DISPOSITIONS:
-        violations.append(
-            BlockViolation(
-                "MISSING_ROOT_CONTRACT_ESCALATION",
-                "two partial-ready closures, one reviewer scope expansion, or a repeated "
-                "same-claim correction requires `requiredDisposition` to be "
-                f"one of {ESCALATION_SATISFYING_DISPOSITIONS}",
-            )
-        )
-    escalated = disposition in ESCALATED_DISPOSITIONS or root_contract_required or stop_reassess_required
-    if escalated and successor_scope == "INITIAL_BOUNDED":
-        violations.append(
-            BlockViolation(
-                "NARROW_SUCCESSOR_AFTER_ESCALATION",
-                "once escalation is required, `successorScope` must not be `INITIAL_BOUNDED`; "
-                f"use one of {NON_NARROW_SUCCESSOR_SCOPES}",
-            )
-        )
-    return violations
-def _validate_runtime_readiness(block: dict) -> list[BlockViolation]:
-    """Invariant 8: no runtime readiness from documentation-only proof."""
-    violations: list[BlockViolation] = []
-    if block.get("requiredDisposition") != "READY_WITH_EXECUTABLE_PROOF":
-        return violations
-    claims = block.get("claims")
-    if not isinstance(claims, list):
-        return violations
-    for index, claim in enumerate(claims):
-        if not isinstance(claim, dict):
-            continue
-        if claim.get("proofClass") == DOCUMENTATION_ONLY_PROOF:
-            violations.append(
-                BlockViolation(
-                    "RUNTIME_READINESS_FROM_DOC_ONLY_PROOF",
-                    f"claims[{index}] uses `{DOCUMENTATION_ONLY_PROOF}` proof but "
-                    "`requiredDisposition` is `READY_WITH_EXECUTABLE_PROOF`",
-                )
-            )
-    return violations
+_validate_escalation_triggers = validate_escalation_triggers
+_validate_runtime_readiness = validate_runtime_readiness
 def _validate_claim_to_proof_mapping(block: dict) -> list[BlockViolation]:
     """Invariant 9."""
     violations: list[BlockViolation] = []
@@ -317,23 +250,7 @@ def _validate_claim_to_proof_mapping(block: dict) -> list[BlockViolation]:
             violations.append(BlockViolation('CLAIM_TO_PROOF_MAPPING_VIOLATION',
                 f'claims[{index}] with claimClass `{claim_class}` requires proofClass `{minimum}`, got {proof_class!r}'))
     return violations
-def _validate_ready_scope_pairing(block: dict) -> list[BlockViolation]:
-    """Prevent vacuous or mismatched executable-readiness declarations."""
-    violations: list[BlockViolation] = []
-    disposition = block.get("requiredDisposition")
-    scope = block.get("successorScope")
-    claims = block.get("claims")
-    if disposition == "READY_WITH_EXECUTABLE_PROOF":
-        if scope != "EXECUTABLE_IMPLEMENTATION":
-            violations.append(BlockViolation('READY_SCOPE_MISMATCH',
-                '`READY_WITH_EXECUTABLE_PROOF` requires `successorScope: EXECUTABLE_IMPLEMENTATION`'))
-        if not isinstance(claims, list) or not claims:
-            violations.append(BlockViolation('READY_WITHOUT_CLAIMS',
-                '`READY_WITH_EXECUTABLE_PROOF` requires at least one claim with executable proof'))
-    elif scope == "EXECUTABLE_IMPLEMENTATION":
-        violations.append(BlockViolation('EXECUTABLE_SCOPE_WITHOUT_READY_DISPOSITION',
-            '`successorScope: EXECUTABLE_IMPLEMENTATION` requires `READY_WITH_EXECUTABLE_PROOF`'))
-    return violations
+_validate_ready_scope_pairing = validate_ready_scope_pairing
 def _claim_ids(block: dict) -> set[str]:
     claims = block.get("claims")
     if not isinstance(claims, list):
@@ -630,7 +547,9 @@ def validate_block(
     predecessor_hash_resolver: Any = None,
     predecessor_block_resolver: Any = None,
     evidence_bytes_resolver: Any = None,
+    artifact_path: str | None = None,
     _evidence_snapshot_cache: dict[str, bytes | None] | None = None,
+    _admission_depth: int = 0,
 ) -> ValidationResult:
     """Validate one already-parsed candidate SCEC block.
     `predecessor_hash_resolver`, if given, is a callable
@@ -649,6 +568,9 @@ def validate_block(
     """
     if not is_active_block(block):
         return ValidationResult(is_active=False)
+    if "_scec_parse_error" in block:
+        return ValidationResult(is_active=True, violations=(BlockViolation(
+            "ROOT_ADMISSION_JSON_INVALID", str(block["_scec_parse_error"])),))
     if evidence_bytes_resolver is not None and _evidence_snapshot_cache is None:
         _evidence_snapshot_cache = {}
     violations: list[BlockViolation] = []
@@ -659,13 +581,16 @@ def validate_block(
     if violations:
         return ValidationResult(is_active=True, violations=tuple(violations))
     violations.extend(_validate_set_reconciliation(block))
-    violations.extend(_validate_escalation_triggers(block))
+    has_admission = "rootContractAdmission" in block
+    if not has_admission:
+        violations.extend(_validate_escalation_triggers(block))
     violations.extend(_validate_runtime_readiness(block))
     violations.extend(_validate_claim_to_proof_mapping(block))
     violations.extend(_validate_ready_scope_pairing(block))
     violations.extend(_validate_resolution_evidence(
         block, evidence_bytes_resolver, _evidence_snapshot_cache,
     ))
+    admission_checked = False
     if block.get("chainMode") == "SUCCESSOR" and predecessor_hash_resolver is not None:
         predecessor = block.get("predecessor")
         if isinstance(predecessor, dict):
@@ -696,10 +621,15 @@ def validate_block(
                     # Revalidate immutable resolution evidence when consuming a
                     # predecessor. Otherwise a later evidence-target change
                     # could inherit trust silently through the chain.
+                    predecessor_has_admission = "rootContractAdmission" in predecessor_blocks[0]
                     predecessor_result = validate_block(
                         predecessor_blocks[0],
+                        predecessor_hash_resolver=predecessor_hash_resolver if predecessor_has_admission and _admission_depth < 2 else None,
+                        predecessor_block_resolver=predecessor_block_resolver if predecessor_has_admission and _admission_depth < 2 else None,
                         evidence_bytes_resolver=evidence_bytes_resolver,
+                        artifact_path=path if predecessor_has_admission else None,
                         _evidence_snapshot_cache=_evidence_snapshot_cache,
+                        _admission_depth=_admission_depth + 1,
                     )
                     if predecessor_result.violations:
                         violations.append(
@@ -711,6 +641,18 @@ def validate_block(
                         )
                     else:
                         violations.extend(_validate_predecessor_state(block, predecessor_blocks[0]))
+                        if has_admission:
+                            admission_checked = True
+                            violations.extend(validate_root_admission(
+                                block, artifact_path, predecessor_blocks[0],
+                                evidence_bytes_resolver, validate_work_order=validate_work_order,
+                            ))
+    if has_admission:
+        if not admission_checked:
+            violations.append(BlockViolation("ROOT_ADMISSION_CONTEXT_MISSING",
+                "opt-in needs actual predecessor and repository resolvers"))
+        if not admission_checked or any(v.code.startswith("ROOT_ADMISSION_") for v in violations):
+            violations.extend(_validate_escalation_triggers(block))
     return ValidationResult(is_active=True, violations=tuple(violations))
 def _iter_fenced_blocks(text: str) -> list[tuple[str, str]]:
     """Yield `(language_tag, body)` per fenced block via an explicit
@@ -752,9 +694,16 @@ def find_active_blocks(text: str) -> list[dict]:
     for language, body in _iter_fenced_blocks(text):
         if language not in ("", "json"):
             continue
+        marker_body = _decode_json_unicode_escapes(body)
+        opt_in = SCEC_SCHEMA_VERSION in marker_body and '"rootContractAdmission"' in marker_body
         try:
-            candidate = json.loads(body)
-        except (json.JSONDecodeError, ValueError):
+            candidate = json.loads(body, object_pairs_hook=_no_duplicates) if opt_in else json.loads(body)
+        except (json.JSONDecodeError, ValueError) as exc:
+            # An attempted opt-in must remain an evaluated, failing object.
+            # Ordinary malformed examples retain historical marker immunity.
+            if opt_in:
+                active.append({"schemaVersion": SCEC_SCHEMA_VERSION,
+                               "_scec_parse_error": f"invalid or duplicate opt-in JSON: {exc}"})
             continue
         if is_active_block(candidate):
             active.append(candidate)
@@ -918,6 +867,7 @@ def diagnose_file(path: str, text: str, *, require_block: bool = False) -> FileD
             predecessor_hash_resolver=_repo_predecessor_hash_resolver,
             predecessor_block_resolver=_repo_predecessor_block_resolver,
             evidence_bytes_resolver=_repo_evidence_bytes_resolver,
+            artifact_path=path,
         )
         for violation in result.violations:
             violations.append((index, violation))

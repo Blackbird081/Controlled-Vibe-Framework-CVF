@@ -25,10 +25,12 @@ reasoning traces remain outside its jurisdiction.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import re
 import subprocess
 import sys
 from dataclasses import dataclass, field
+from datetime import datetime
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -45,6 +47,13 @@ WORKER_RETURN_RE = re.compile(
 DISPATCH_DECLARATION_LINE_RE = re.compile(
     r"(?m)^Review-Dispatch Convergence Control:\s*REQUIRED\s*$"
 )
+
+# NCR_REVIEW_CONTINUATION_V1: optional operator-cleared same-scope route. The strict
+# declaration validator is shared with the scaffold in review_convergence_scaffold.py.
+CONTINUATION_RE = re.compile(r"operatorContinuationEvidence(?:Path|Sha256)|continuation-scope-json")
+CLEARED_STOP_TOKENS = ("COMPLETE_REVIEW", "CONSOLIDATE_SINGLE_REPAIR")
+LINK_FIELDS = ("continuationWorkOrderPath", "continuationWorkOrderSha256")
+LINK_MAX_BYTES = 2 * 1024 * 1024
 
 REQUIRED_INTEGER_FIELDS = (
     "reviewRoundCount",
@@ -316,9 +325,80 @@ def _has_reason(value: str, prefix: str) -> bool:
     return bool(re.fullmatch(rf"{re.escape(prefix)}:\s*\S.*", value))
 
 
-def diagnose(path: str, text: str) -> Diagnostic:
+def _rcs():
+    try:
+        import review_convergence_scaffold as module
+    except ModuleNotFoundError:
+        from governance.compat import review_convergence_scaffold as module
+    return module
+
+
+def _ledger_union(text: str) -> set[str] | None:
+    try:
+        from check_work_order_acceptance_ledger import validate_work_order
+    except ModuleNotFoundError:
+        from governance.compat.check_work_order_acceptance_ledger import validate_work_order
+    ledger, problems = validate_work_order(text)
+    if ledger is None or problems:
+        return None
+    return {_normalize(item) for row in ledger["requirements"] for item in row["expectedArtifacts"]}
+
+
+def _clearance(path: str, text: str, values: dict[str, str], root: Path | None, now: datetime | None) -> tuple[bool, list[str]]:
+    """Strict operator-cleared route: source, binding, scope and ledger joins."""
+    rcs = _rcs()
+    target, found = rcs.work_order_target(text)
+    rounds = (target.get("reviewRoundCount"), target.get("reworkGeneration"))
+    if values.get("dispatchKind") != "REWORK" or type(rounds[0]) is not int or rounds[0] < 2 or rounds[0] != rounds[1]:
+        found.append("operator continuation applies only to REWORK at reviewRoundCount >= 2 with equal reworkGeneration")
+    union = _ledger_union(text)
+    state, more = rcs.evaluate(
+        text, REPO_ROOT if root is None else root, target=target,
+        forbidden={_normalize(path), *(union or ())}, ledger_union=union, now=now,
+    )
+    found.extend(more)
+    return state == "CLEARED" and not found, found
+
+
+def _completion_link(path: str, text: str, round_value: str | None, root: Path | None, now: datetime | None) -> tuple[bool, list[str]]:
+    """Optional completion-review link to a valid operator-cleared work order."""
+    rows = [re.findall(rf"(?m)^[ \t]*(?:[-*][ \t]+)?`?{name}`?:[ \t]*(.*)$", text) for name in LINK_FIELDS]
+    if not any(rows):
+        return False, []
+
+    def bad(reason: str) -> tuple[bool, list[str]]:
+        return False, [f"invalid continuation work-order binding: {reason}"]
+
+    if any(len(row) != 1 or not row[0].strip(" `\r\t") for row in rows):
+        return bad("exactly one non-empty path and sha256 are required together")
+    wo_path, sha = (row[0].strip(" `\r\t") for row in rows)
+    rcs = _rcs()
+    if not (rcs.safe_path(wo_path) and wo_path.startswith(WORK_ORDER_PREFIX) and wo_path.endswith(".md")
+            and "archive" not in (part.lower() for part in wo_path.split("/")) and wo_path != _normalize(path)):
+        return bad("path must be a safe non-archive docs/work_orders Markdown path distinct from this review")
+    data, error = rcs.read_bounded(REPO_ROOT if root is None else root, wo_path, LINK_MAX_BYTES)
+    if data is None:
+        return bad(error)
+    if hashlib.sha256(data).hexdigest() != sha:
+        return bad("raw sha256 mismatch")
+    try:
+        wo_text = data.decode("utf-8")
+    except UnicodeError:
+        return bad("referenced work order is not UTF-8")
+    issues, cleared = _work_order_state(wo_path, wo_text, root, now)
+    if issues or not cleared:
+        return bad("referenced work order is not a valid operator-cleared dispatch")
+    wo_round = _field_value(wo_text, "reviewRoundCount")
+    if not (wo_round and round_value and wo_round.isdigit() and round_value.isdigit() and int(wo_round) == int(round_value)):
+        return bad("reviewRoundCount must equal the referenced work order round")
+    if _normalize(path) in {*(_ledger_union(wo_text) or ()), *rcs.field_lines(wo_text, rcs.PATH_FIELD)}:
+        return bad("completion review belongs to the referenced authorization cycle")
+    return True, []
+
+
+def diagnose(path: str, text: str, *, root: Path | None = None, now: datetime | None = None) -> Diagnostic:
     if is_work_order_applicable(path, text):
-        return diagnose_work_order(path, text)
+        return diagnose_work_order(path, text, root=root, now=now)
     if is_worker_return_applicable(path, text):
         return diagnose_worker_return(path, text)
     if not is_applicable(path, text):
@@ -361,6 +441,8 @@ def diagnose(path: str, text: str) -> Diagnostic:
 
     stop_value = values.get(STOP_FIELD)
     review_round_value = values.get("reviewRoundCount")
+    linked, link_issues = _completion_link(path, text, review_round_value, root, now)
+    issues.extend(link_issues)
     if stop_value is not None:
         if stop_value not in ALLOWED_STOP_TOKENS:
             issues.append(
@@ -371,6 +453,7 @@ def diagnose(path: str, text: str) -> Diagnostic:
             and _is_non_negative_integer(review_round_value)
             and int(review_round_value) >= 3
             and stop_value not in ROUND_THREE_ALLOWED_TOKENS
+            and not (linked and stop_value in CLEARED_STOP_TOKENS)
         ):
             issues.append(
                 f"reviewRoundCount >= 3 requires `{STOP_FIELD}` to be one of "
@@ -385,6 +468,7 @@ def diagnose(path: str, text: str) -> Diagnostic:
                 )
         elif (
             stop_value == "CONSOLIDATE_SINGLE_REPAIR"
+            and not linked
             and review_round_value is not None
             and _is_non_negative_integer(review_round_value)
             and int(review_round_value) >= 2
@@ -444,7 +528,12 @@ def diagnose(path: str, text: str) -> Diagnostic:
     return Diagnostic(path=path, applicable=True, issues=tuple(issues))
 
 
-def diagnose_work_order(path: str, text: str) -> Diagnostic:
+def diagnose_work_order(path: str, text: str, *, root: Path | None = None, now: datetime | None = None) -> Diagnostic:
+    issues, _cleared = _work_order_state(path, text, root, now)
+    return Diagnostic(path=path, applicable=True, issues=tuple(issues))
+
+
+def _work_order_state(path: str, text: str, root: Path | None, now: datetime | None) -> tuple[list[str], bool]:
     issues: list[str] = []
     if not _has_dispatch_declaration(text):
         issues.append(
@@ -476,6 +565,10 @@ def diagnose_work_order(path: str, text: str) -> Diagnostic:
     round_number = int(review_round) if review_round and _is_non_negative_integer(review_round) else None
     rework_generation = values.get("reworkGeneration")
     generation_number = int(rework_generation) if rework_generation and _is_non_negative_integer(rework_generation) else None
+    cleared = False
+    if CONTINUATION_RE.search(text) and _rcs().declared(text):
+        cleared, clearance_issues = _clearance(path, text, values, root, now)
+        issues.extend(clearance_issues)
 
     if values.get("successorTrancheOpened") != "NO":
         issues.append("pre-dispatch packets require `successorTrancheOpened: NO`")
@@ -601,7 +694,7 @@ def diagnose_work_order(path: str, text: str) -> Diagnostic:
                 "`REWORK` dispatch requires `consolidatedDefectClassSweep: "
                 "COMPLETE_BEFORE_REWORK_DISPATCH`"
             )
-        if round_number is not None and round_number >= 3:
+        if round_number is not None and round_number >= 3 and not cleared:
             issues.append(
                 "reviewRoundCount >= 3 is not eligible for automatic re-dispatch; "
                 "operator escalation is required"
@@ -620,7 +713,8 @@ def diagnose_work_order(path: str, text: str) -> Diagnostic:
                 issues.append(f"`REWORK` dispatch requires `{field_name}: {expected_value}`")
         critical_evidence = values.get("newIndependentCriticalEvidence", "")
         if round_number is not None and round_number >= 2 and (
-            critical_evidence in ("", "NONE")
+            critical_evidence == ""
+            or (critical_evidence == "NONE" and not cleared)
             or re.search(r"(?i)(?:TODO|TO_FILL|FILL_ME)", critical_evidence)
         ):
             issues.append(
@@ -655,7 +749,7 @@ def diagnose_work_order(path: str, text: str) -> Diagnostic:
                 "externalInvocationCeiling before the next invocation"
             )
 
-    return Diagnostic(path=path, applicable=True, issues=tuple(issues))
+    return issues, cleared
 
 
 def diagnose_worker_return(path: str, text: str) -> Diagnostic:

@@ -24,7 +24,8 @@ except ModuleNotFoundError:  # imported as governance.compat.run_agent_push_read
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_UPSTREAM_AHEAD_LIMIT = 2
+# Disclosure threshold only; commit count never blocks local work or push.
+DEFAULT_UPSTREAM_AHEAD_WARNING = 2
 
 
 @dataclass(frozen=True)
@@ -128,19 +129,27 @@ def _upstream_status(ahead_limit: int) -> PreviewResult:
     if counts:
         output = f"{output}; behind_ahead={counts}"
         parsed = _parse_behind_ahead(counts)
-        if parsed:
-            _behind, ahead = parsed
-            if ahead > ahead_limit:
+        if counts_code == 0:
+            if parsed is None or min(parsed) < 0:
                 status = "FAIL"
-                output = (
-                    f"{output}; VIOLATION: upstream push debt exceeds "
-                    f"limit {ahead_limit}. Push or record the blocker before "
-                    "opening another governed tranche."
+                output += "; VIOLATION: unreadable upstream behind/ahead counts."
+            elif parsed[0] > 0:
+                status = "FAIL"
+                output += "; VIOLATION: upstream has unreconciled commits; reconcile before push."
+            elif parsed[1] > ahead_limit:
+                status = "WARN"
+                output += (
+                    f"; ADVISORY: local stack exceeds warning threshold {ahead_limit}. "
+                    "Commit count alone does not block another tranche or require a push exception. "
+                    "Review the intended sync scope when push is authorized."
                 )
+    elif counts_code == 0:
+        status = "FAIL"
+        output += "; VIOLATION: missing upstream behind/ahead counts."
     return PreviewResult(
         label="upstream tracking branch",
         command=("git", "rev-list", "--left-right", "--count", f"{upstream}...HEAD"),
-        returncode=counts_code if status == "PASS" else 1,
+        returncode=0 if status in {"PASS", "WARN"} else 1,
         duration_s=time.perf_counter() - started,
         status=status,
         output=output,
@@ -281,7 +290,7 @@ def _print_text(base: str, head: str, shape: ShapeResult, results: tuple[Preview
     failures = 0 if shape.status == "PASS" else 1
     for result in results:
         print(f"[{result.status}] {result.label} ({result.duration_s:.2f}s)")
-        if result.output and result.status == "FAIL":
+        if result.output and result.status in {"FAIL", "WARN"}:
             print(result.output)
         if result.status == "FAIL":
             failures += 1
@@ -304,12 +313,14 @@ def main() -> int:
         help="Skip upstream tracking readout when previewing an untracked branch.",
     )
     parser.add_argument(
+        "--upstream-ahead-warning",
         "--upstream-ahead-limit",
+        dest="upstream_ahead_limit",
         type=int,
-        default=DEFAULT_UPSTREAM_AHEAD_LIMIT,
+        default=DEFAULT_UPSTREAM_AHEAD_WARNING,
         help=(
-            "Maximum allowed local commits ahead of upstream before preview fails. "
-            "Default: 2, matching one material commit plus one session-sync commit."
+            "Advisory ahead-count threshold; never a blocking commit limit. "
+            "Default: 2. --upstream-ahead-limit is a compatibility alias."
         ),
     )
     args = parser.parse_args()

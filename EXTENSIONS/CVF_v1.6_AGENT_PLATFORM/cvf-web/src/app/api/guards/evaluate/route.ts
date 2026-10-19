@@ -41,10 +41,16 @@ export async function POST(request: NextRequest) {
     const rateLimitErr = guardsRateLimiter.middleware(request);
     if (rateLimitErr) return rateLimitErr;
 
-    const body = await request.json();
+    let payload: unknown;
+    try { payload = await request.json(); }
+    catch { return NextResponse.json({ success: false, error: 'Invalid JSON body.' }, { status: 400 }); }
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+      return NextResponse.json({ success: false, error: 'Payload must be a JSON object.' }, { status: 400 });
+    }
+    const body = payload as Record<string, unknown>;
 
     // Validate required fields
-    if (!body.requestId || !body.action) {
+    if (typeof body.requestId !== 'string' || !body.requestId.trim() || typeof body.action !== 'string' || !body.action.trim()) {
       return NextResponse.json(
         {
           success: false,
@@ -55,8 +61,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const invalidText = ['phase', 'riskLevel', 'role', 'agentId', 'traceHash']
+      .some(field => body[field] !== undefined && typeof body[field] !== 'string');
+    const invalidLists = ['targetFiles', 'fileScope'].some(field => body[field] !== undefined &&
+      (!Array.isArray(body[field]) || (body[field] as unknown[]).some(value => typeof value !== 'string')));
+    const invalidNumbers = ['mutationCount', 'mutationBudget'].some(field => body[field] !== undefined &&
+      (typeof body[field] !== 'number' || !Number.isFinite(body[field])));
+    const invalidMetadata = body.metadata !== undefined &&
+      (!body.metadata || typeof body.metadata !== 'object' || Array.isArray(body.metadata));
+    if (invalidText || invalidLists || invalidNumbers || invalidMetadata) {
+      return NextResponse.json({ success: false, error: 'Invalid guard context field types.' }, { status: 400 });
+    }
+    const fields = body as unknown as GuardRequestContext;
+
     // Validate enum values
-    const phase = normalizePhase((body.phase || 'BUILD') as CVFPhase);
+    const phase = normalizePhase((body.phase ?? 'BUILD') as CVFPhase);
     if (!VALID_PHASES.includes(phase)) {
       return NextResponse.json(
         { success: false, error: `Invalid phase: "${body.phase}". Valid: ${VALID_PHASES.join(', ')}` },
@@ -64,7 +83,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const riskLevel = (body.riskLevel || 'R0') as CVFRiskLevel;
+    const riskLevel = (body.riskLevel ?? 'R0') as CVFRiskLevel;
     if (!VALID_RISK_LEVELS.includes(riskLevel)) {
       return NextResponse.json(
         { success: false, error: `Invalid riskLevel: "${body.riskLevel}". Valid: ${VALID_RISK_LEVELS.join(', ')}` },
@@ -72,7 +91,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const role = (body.role || 'AI_AGENT') as CVFRole;
+    const role = (body.role ?? 'AI_AGENT') as CVFRole;
     if (!VALID_ROLES.includes(role)) {
       return NextResponse.json(
         { success: false, error: `Invalid role: "${body.role}". Valid: ${VALID_ROLES.join(', ')}` },
@@ -85,15 +104,15 @@ export async function POST(request: NextRequest) {
       phase,
       riskLevel,
       role,
-      agentId: body.agentId,
+      agentId: fields.agentId,
       action: body.action,
-      targetFiles: body.targetFiles,
-      fileScope: body.fileScope,
-      mutationCount: body.mutationCount,
-      mutationBudget: body.mutationBudget,
-      traceHash: body.traceHash,
+      targetFiles: fields.targetFiles,
+      fileScope: fields.fileScope,
+      mutationCount: fields.mutationCount,
+      mutationBudget: fields.mutationBudget,
+      traceHash: fields.traceHash,
       channel: 'mcp',
-      metadata: body.metadata,
+      metadata: fields.metadata,
     };
 
     // ── Task 6.5: Shared guard engine ──

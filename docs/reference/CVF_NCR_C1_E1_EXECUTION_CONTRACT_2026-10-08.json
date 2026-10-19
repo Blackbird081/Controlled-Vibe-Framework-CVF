@@ -1,0 +1,1223 @@
+{
+  "schemaVersion": "cvf.ncrC1E1ExecutionContract.v1",
+  "batchId": "CVF-NCR-C1-OFFLINE-PRODUCTION-READINESS-20261008",
+  "baseHead": "6e1302dbf410373262573b1b2363a51bfdb356d4",
+  "status": "APPROVED_E1_ONLY",
+  "proposalPath": "docs/reference/CVF_NCR_C1_GROUPED_EFFECT_PROPOSAL_2026-10-08.json",
+  "proposalRawSha256": "f4c3b525102fa839f5647b8be7821ac818cc2f7a600883a4d9dc4b6c30ca2db5",
+  "operatorAuthority": {
+    "response": "\u0111\u1ed3ng \u00fd",
+    "context": "direct answer to approve E1 exact scope 160 requests /16 MiB /20 minutes in grouped proposal",
+    "observedDate": "2026-10-08",
+    "authorityScope": "E1 public metadata/text only; no helper paths or other stages",
+    "newApprovalRequiredForSameEnvelope": false
+  },
+  "role": "LOCAL_INTERNAL_AGENT_SINGLE_SESSION",
+  "delegation": "NONE",
+  "requestEnvelope": {
+    "stage": "E1",
+    "purpose": "one grouped evidence intake for exact artifact manifest and future control admission",
+    "allowedMethods": [
+      "GET",
+      "HEAD"
+    ],
+    "allowedHosts": [
+      "huggingface.co",
+      "pypi.org",
+      "registry.npmjs.org",
+      "api.github.com",
+      "raw.githubusercontent.com",
+      "storage.googleapis.com"
+    ],
+    "maxRequests": 160,
+    "maxDecodedBytes": 16777216,
+    "maxEncodedBodyBytes": 16777216,
+    "maxSeconds": 1200,
+    "perRequestTimeoutSeconds": 15,
+    "maxAutomaticRetries": 0,
+    "followRedirects": false,
+    "credentials": "NONE",
+    "bodyTypes": [
+      "application/json",
+      "text/plain",
+      "text/markdown"
+    ],
+    "initialUrls": [
+      "https://huggingface.co/api/models/pnnbao-ump/VieNeu-TTS-v3-Turbo/revision/61b85e3d937fbbacb387714180e8182823512523?blobs=true",
+      "https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo/raw/61b85e3d937fbbacb387714180e8182823512523/README.md",
+      "https://huggingface.co/api/models/OpenMOSS-Team/MOSS-Audio-Tokenizer-Nano-ONNX/revision/ceff0d0749bfb3fa2d61149794ec6feef0d1e1ae?blobs=true",
+      "https://huggingface.co/OpenMOSS-Team/MOSS-Audio-Tokenizer-Nano-ONNX/raw/ceff0d0749bfb3fa2d61149794ec6feef0d1e1ae/README.md",
+      "https://api.github.com/repos/pnnbao97/VieNeu-TTS/commits/85344322b7258b4e25479b692e8e3396baf9db34",
+      "https://api.github.com/repos/heygen-com/hyperframes/commits/5c52f72399e21f8dcf3ede2bf2d24978c6522a94",
+      "https://api.github.com/repos/heygen-com/hyperframes/commits/main",
+      "https://registry.npmjs.org/hyperframes/0.8.113",
+      "https://registry.npmjs.org/@hyperframes/cli/0.8.113",
+      "https://pypi.org/pypi/vieneu/3.8.3/json",
+      "https://api.github.com/repos/BtbN/FFmpeg-Builds/releases/latest"
+    ],
+    "additionalUrlRule": "pinned metadata/text paths on allowed hosts derived only from these responses and the hash-bound 82-wheel/71-row source tables; every added URL logged before request; no package/model/font/browser/FFmpeg archives",
+    "stopRule": "stop on any exceeded cap, unexpected redirect/type/host or credential demand; retain partial ledger; no silent retry, cap increase or repin",
+    "retention": "decoded public metadata plus URL/status/time/raw SHA/byte counters inside an owned ignored E1 receipt directory; no secrets; at most 16 MiB bodies; proposed directory .cvf/runtime/cvf-video-storyboard-review-20261008/e1-metadata; governed result will reference hashes"
+  },
+  "queue": [
+    {
+      "url": "https://huggingface.co/api/models/pnnbao-ump/VieNeu-TTS-v3-Turbo/revision/61b85e3d937fbbacb387714180e8182823512523?blobs=true",
+      "purpose": "core_identity_or_rights_metadata"
+    },
+    {
+      "url": "https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo/raw/61b85e3d937fbbacb387714180e8182823512523/README.md",
+      "purpose": "core_identity_or_rights_metadata"
+    },
+    {
+      "url": "https://huggingface.co/api/models/OpenMOSS-Team/MOSS-Audio-Tokenizer-Nano-ONNX/revision/ceff0d0749bfb3fa2d61149794ec6feef0d1e1ae?blobs=true",
+      "purpose": "core_identity_or_rights_metadata"
+    },
+    {
+      "url": "https://huggingface.co/OpenMOSS-Team/MOSS-Audio-Tokenizer-Nano-ONNX/raw/ceff0d0749bfb3fa2d61149794ec6feef0d1e1ae/README.md",
+      "purpose": "core_identity_or_rights_metadata"
+    },
+    {
+      "url": "https://api.github.com/repos/pnnbao97/VieNeu-TTS/commits/85344322b7258b4e25479b692e8e3396baf9db34",
+      "purpose": "core_identity_or_rights_metadata"
+    },
+    {
+      "url": "https://api.github.com/repos/heygen-com/hyperframes/commits/5c52f72399e21f8dcf3ede2bf2d24978c6522a94",
+      "purpose": "core_identity_or_rights_metadata"
+    },
+    {
+      "url": "https://api.github.com/repos/heygen-com/hyperframes/commits/main",
+      "purpose": "core_identity_or_rights_metadata"
+    },
+    {
+      "url": "https://registry.npmjs.org/hyperframes/0.8.113",
+      "purpose": "core_identity_or_rights_metadata"
+    },
+    {
+      "url": "https://registry.npmjs.org/@hyperframes/cli/0.8.113",
+      "purpose": "core_identity_or_rights_metadata"
+    },
+    {
+      "url": "https://pypi.org/pypi/vieneu/3.8.3/json",
+      "purpose": "core_identity_or_rights_metadata"
+    },
+    {
+      "url": "https://api.github.com/repos/BtbN/FFmpeg-Builds/releases/latest",
+      "purpose": "core_identity_or_rights_metadata"
+    },
+    {
+      "url": "https://registry.npmjs.org/@img%2Fsharp-win32-x64/0.35.3",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@img/sharp-win32-x64",
+      "version": "0.35.3"
+    },
+    {
+      "url": "https://registry.npmjs.org/esbuild/0.25.12",
+      "purpose": "npm_exact_version_metadata",
+      "package": "esbuild",
+      "version": "0.25.12"
+    },
+    {
+      "url": "https://registry.npmjs.org/pako/0.2.9",
+      "purpose": "npm_exact_version_metadata",
+      "package": "pako",
+      "version": "0.2.9"
+    },
+    {
+      "url": "https://registry.npmjs.org/@esbuild%2Fwin32-x64/0.25.12",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@esbuild/win32-x64",
+      "version": "0.25.12"
+    },
+    {
+      "url": "https://registry.npmjs.org/@hono%2Fnode-server/2.0.12",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@hono/node-server",
+      "version": "2.0.12"
+    },
+    {
+      "url": "https://registry.npmjs.org/@img%2Fcolour/1.1.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@img/colour",
+      "version": "1.1.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers/3.2.2",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers",
+      "version": "3.2.2"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers%2Fyargs/18.0.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers/yargs",
+      "version": "18.0.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers%2Fyargs%2Fcliui/9.0.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers/yargs/cliui",
+      "version": "9.0.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers%2Fyargs%2Fcliui%2Fstrip-ansi/7.2.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers/yargs/cliui/strip-ansi",
+      "version": "7.2.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers%2Fyargs%2Fcliui%2Fstrip-ansi%2Fansi-regex/6.2.2",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers/yargs/cliui/strip-ansi/ansi-regex",
+      "version": "6.2.2"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers%2Fyargs%2Fcliui%2Fwrap-ansi/9.0.2",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers/yargs/cliui/wrap-ansi",
+      "version": "9.0.2"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers%2Fyargs%2Fcliui%2Fwrap-ansi%2Fansi-styles/6.2.3",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers/yargs/cliui/wrap-ansi/ansi-styles",
+      "version": "6.2.3"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers%2Fyargs%2Fstring-width/7.2.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers/yargs/string-width",
+      "version": "7.2.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers%2Fyargs%2Fstring-width%2Femoji-regex/10.6.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers/yargs/string-width/emoji-regex",
+      "version": "10.6.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers%2Fyargs%2Fstring-width%2Fstrip-ansi/7.2.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers/yargs/string-width/strip-ansi",
+      "version": "7.2.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers%2Fyargs%2Fstring-width%2Fstrip-ansi%2Fansi-regex/6.2.2",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers/yargs/string-width/strip-ansi/ansi-regex",
+      "version": "6.2.2"
+    },
+    {
+      "url": "https://registry.npmjs.org/@puppeteer%2Fbrowsers%2Fyargs%2Fyargs-parser/22.0.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@puppeteer/browsers/yargs/yargs-parser",
+      "version": "22.0.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/@swc%2Fhelpers/0.5.21",
+      "purpose": "npm_exact_version_metadata",
+      "package": "@swc/helpers",
+      "version": "0.5.21"
+    },
+    {
+      "url": "https://registry.npmjs.org/adm-zip/0.6.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "adm-zip",
+      "version": "0.6.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/base64-js/1.5.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "base64-js",
+      "version": "1.5.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/brotli/1.3.3",
+      "purpose": "npm_exact_version_metadata",
+      "package": "brotli",
+      "version": "1.3.3"
+    },
+    {
+      "url": "https://registry.npmjs.org/bundle-name/4.1.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "bundle-name",
+      "version": "4.1.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/chromium-bidi/17.0.2",
+      "purpose": "npm_exact_version_metadata",
+      "package": "chromium-bidi",
+      "version": "17.0.2"
+    },
+    {
+      "url": "https://registry.npmjs.org/chromium-bidi%2Fzod/3.25.76",
+      "purpose": "npm_exact_version_metadata",
+      "package": "chromium-bidi/zod",
+      "version": "3.25.76"
+    },
+    {
+      "url": "https://registry.npmjs.org/citty/0.2.2",
+      "purpose": "npm_exact_version_metadata",
+      "package": "citty",
+      "version": "0.2.2"
+    },
+    {
+      "url": "https://registry.npmjs.org/clone/2.1.2",
+      "purpose": "npm_exact_version_metadata",
+      "package": "clone",
+      "version": "2.1.2"
+    },
+    {
+      "url": "https://registry.npmjs.org/compare-versions/6.1.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "compare-versions",
+      "version": "6.1.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/css-tree/3.2.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "css-tree",
+      "version": "3.2.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/debug/4.4.3",
+      "purpose": "npm_exact_version_metadata",
+      "package": "debug",
+      "version": "4.4.3"
+    },
+    {
+      "url": "https://registry.npmjs.org/default-browser/5.5.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "default-browser",
+      "version": "5.5.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/default-browser-id/5.0.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "default-browser-id",
+      "version": "5.0.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/define-lazy-prop/3.0.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "define-lazy-prop",
+      "version": "3.0.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/detect-libc/2.1.2",
+      "purpose": "npm_exact_version_metadata",
+      "package": "detect-libc",
+      "version": "2.1.2"
+    },
+    {
+      "url": "https://registry.npmjs.org/devtools-protocol/0.0.1680125",
+      "purpose": "npm_exact_version_metadata",
+      "package": "devtools-protocol",
+      "version": "0.0.1680125"
+    },
+    {
+      "url": "https://registry.npmjs.org/dfa/1.2.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "dfa",
+      "version": "1.2.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/escalade/3.2.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "escalade",
+      "version": "3.2.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/fast-deep-equal/3.1.3",
+      "purpose": "npm_exact_version_metadata",
+      "package": "fast-deep-equal",
+      "version": "3.1.3"
+    },
+    {
+      "url": "https://registry.npmjs.org/fontkit/2.0.4",
+      "purpose": "npm_exact_version_metadata",
+      "package": "fontkit",
+      "version": "2.0.4"
+    },
+    {
+      "url": "https://registry.npmjs.org/get-caller-file/2.0.5",
+      "purpose": "npm_exact_version_metadata",
+      "package": "get-caller-file",
+      "version": "2.0.5"
+    },
+    {
+      "url": "https://registry.npmjs.org/get-east-asian-width/1.6.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "get-east-asian-width",
+      "version": "1.6.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/giget/3.2.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "giget",
+      "version": "3.2.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/hono/4.12.18",
+      "purpose": "npm_exact_version_metadata",
+      "package": "hono",
+      "version": "4.12.18"
+    },
+    {
+      "url": "https://registry.npmjs.org/ignore/5.3.2",
+      "purpose": "npm_exact_version_metadata",
+      "package": "ignore",
+      "version": "5.3.2"
+    },
+    {
+      "url": "https://registry.npmjs.org/is-docker/3.0.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "is-docker",
+      "version": "3.0.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/is-inside-container/1.0.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "is-inside-container",
+      "version": "1.0.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/is-wsl/3.1.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "is-wsl",
+      "version": "3.1.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/mdn-data/2.27.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "mdn-data",
+      "version": "2.27.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/mitt/3.0.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "mitt",
+      "version": "3.0.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/modern-tar/0.8.4",
+      "purpose": "npm_exact_version_metadata",
+      "package": "modern-tar",
+      "version": "0.8.4"
+    },
+    {
+      "url": "https://registry.npmjs.org/ms/2.1.3",
+      "purpose": "npm_exact_version_metadata",
+      "package": "ms",
+      "version": "2.1.3"
+    },
+    {
+      "url": "https://registry.npmjs.org/nanoid/3.3.18",
+      "purpose": "npm_exact_version_metadata",
+      "package": "nanoid",
+      "version": "3.3.18"
+    },
+    {
+      "url": "https://registry.npmjs.org/open/10.2.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "open",
+      "version": "10.2.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/picocolors/1.1.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "picocolors",
+      "version": "1.1.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/postcss/8.5.28",
+      "purpose": "npm_exact_version_metadata",
+      "package": "postcss",
+      "version": "8.5.28"
+    },
+    {
+      "url": "https://registry.npmjs.org/prettier/3.8.3",
+      "purpose": "npm_exact_version_metadata",
+      "package": "prettier",
+      "version": "3.8.3"
+    },
+    {
+      "url": "https://registry.npmjs.org/puppeteer-core/25.11.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "puppeteer-core",
+      "version": "25.11.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/puppeteer-core%2Fws/8.21.3",
+      "purpose": "npm_exact_version_metadata",
+      "package": "puppeteer-core/ws",
+      "version": "8.21.3"
+    },
+    {
+      "url": "https://registry.npmjs.org/restructure/3.0.2",
+      "purpose": "npm_exact_version_metadata",
+      "package": "restructure",
+      "version": "3.0.2"
+    },
+    {
+      "url": "https://registry.npmjs.org/run-applescript/7.1.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "run-applescript",
+      "version": "7.1.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/sharp/0.35.3",
+      "purpose": "npm_exact_version_metadata",
+      "package": "sharp",
+      "version": "0.35.3"
+    },
+    {
+      "url": "https://registry.npmjs.org/sharp%2Fsemver/7.8.5",
+      "purpose": "npm_exact_version_metadata",
+      "package": "sharp/semver",
+      "version": "7.8.5"
+    },
+    {
+      "url": "https://registry.npmjs.org/source-map-js/1.2.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "source-map-js",
+      "version": "1.2.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/tiny-inflate/1.0.3",
+      "purpose": "npm_exact_version_metadata",
+      "package": "tiny-inflate",
+      "version": "1.0.3"
+    },
+    {
+      "url": "https://registry.npmjs.org/tslib/2.8.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "tslib",
+      "version": "2.8.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/typed-query-selector/2.12.2",
+      "purpose": "npm_exact_version_metadata",
+      "package": "typed-query-selector",
+      "version": "2.12.2"
+    },
+    {
+      "url": "https://registry.npmjs.org/unicode-properties/1.4.1",
+      "purpose": "npm_exact_version_metadata",
+      "package": "unicode-properties",
+      "version": "1.4.1"
+    },
+    {
+      "url": "https://registry.npmjs.org/unicode-trie/2.0.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "unicode-trie",
+      "version": "2.0.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/webdriver-bidi-protocol/0.4.3",
+      "purpose": "npm_exact_version_metadata",
+      "package": "webdriver-bidi-protocol",
+      "version": "0.4.3"
+    },
+    {
+      "url": "https://registry.npmjs.org/wsl-utils/0.1.0",
+      "purpose": "npm_exact_version_metadata",
+      "package": "wsl-utils",
+      "version": "0.1.0"
+    },
+    {
+      "url": "https://registry.npmjs.org/y18n/5.0.8",
+      "purpose": "npm_exact_version_metadata",
+      "package": "y18n",
+      "version": "5.0.8"
+    },
+    {
+      "url": "https://pypi.org/pypi/huggingface-hub/1.13.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "huggingface-hub",
+      "version": "1.13.0",
+      "expectedFilename": "huggingface_hub-1.13.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "e942cb50d6a08dd5306688b1ac05bda157fd2fcc88b63dae405f7bd0d3234005"
+    },
+    {
+      "url": "https://pypi.org/pypi/sea-g2p/0.9.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "sea-g2p",
+      "version": "0.9.1",
+      "expectedFilename": "sea_g2p-0.9.1-cp310-abi3-win_amd64.whl",
+      "expectedDeclaredSha256": "b6d7c09afb83750abe61735ad2e60f5c20b4cdfac30b1b9b1904de9f64f10c32"
+    },
+    {
+      "url": "https://pypi.org/pypi/soxr/1.0.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "soxr",
+      "version": "1.0.0",
+      "expectedFilename": "soxr-1.0.0-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "9f417c3d69236051cf5a1a7bad7c4bff04eb3d8fcaa24ac1cb06e26c8d48d8dc"
+    },
+    {
+      "url": "https://pypi.org/pypi/aiofiles/24.1.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "aiofiles",
+      "version": "24.1.0",
+      "expectedFilename": "aiofiles-24.1.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "b4ec55f4195e3eb5d7abd1bf7e061763e864dd4954231fb8539a0ef8bb8260e5"
+    },
+    {
+      "url": "https://pypi.org/pypi/annotated-doc/0.0.3/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "annotated-doc",
+      "version": "0.0.3",
+      "expectedFilename": "annotated_doc-0.0.3-py3-none-any.whl",
+      "expectedDeclaredSha256": "348ec6664a76f1fd3be81f43dffbee4c7e8ce931ba71ec67cc7f4ade7fbbb580"
+    },
+    {
+      "url": "https://pypi.org/pypi/annotated-types/0.7.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "annotated-types",
+      "version": "0.7.0",
+      "expectedFilename": "annotated_types-0.7.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "1f02e8b43a8fbbc3f3e0d4f0f4bfc8131bcb4eebe8849b8e5c773f3a1c582a53"
+    },
+    {
+      "url": "https://pypi.org/pypi/anyio/4.11.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "anyio",
+      "version": "4.11.0",
+      "expectedFilename": "anyio-4.11.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "0287e96f4d26d4149305414d4e3bc32f0dcd0862365a4bddea19d7a1ec38c4fc"
+    },
+    {
+      "url": "https://pypi.org/pypi/audioread/3.1.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "audioread",
+      "version": "3.1.0",
+      "expectedFilename": "audioread-3.1.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "b30d1df6c5d3de5dcef0fb0e256f6ea17bdcf5f979408df0297d8a408e2971b4"
+    },
+    {
+      "url": "https://pypi.org/pypi/brotli/1.1.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "brotli",
+      "version": "1.1.0",
+      "expectedFilename": "Brotli-1.1.0-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "aac0411d20e345dc0920bdec5548e438e999ff68d77564d5e9463a7ca9d3e7b1"
+    },
+    {
+      "url": "https://pypi.org/pypi/certifi/2025.10.5/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "certifi",
+      "version": "2025.10.5",
+      "expectedFilename": "certifi-2025.10.5-py3-none-any.whl",
+      "expectedDeclaredSha256": "0f212c2744a9bb6de0c56639a6f68afe01ecd92d91f14ae897c4fe7bbeeef0de"
+    },
+    {
+      "url": "https://pypi.org/pypi/cffi/2.0.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "cffi",
+      "version": "2.0.0",
+      "expectedFilename": "cffi-2.0.0-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "66f011380d0e49ed280c789fbd08ff0d40968ee7b665575489afa95c98196ab5"
+    },
+    {
+      "url": "https://pypi.org/pypi/charset-normalizer/3.4.4/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "charset-normalizer",
+      "version": "3.4.4",
+      "expectedFilename": "charset_normalizer-3.4.4-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "5ae497466c7901d54b639cf42d5b8c1b6a4fead55215500d2f486d34db48d016"
+    },
+    {
+      "url": "https://pypi.org/pypi/click/8.2.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "click",
+      "version": "8.2.1",
+      "expectedFilename": "click-8.2.1-py3-none-any.whl",
+      "expectedDeclaredSha256": "61a3265b914e850b85317d0b3109c7f8cd35a670f963866005d6ef1d5175a12b"
+    },
+    {
+      "url": "https://pypi.org/pypi/colorama/0.4.6/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "colorama",
+      "version": "0.4.6",
+      "expectedFilename": "colorama-0.4.6-py2.py3-none-any.whl",
+      "expectedDeclaredSha256": "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"
+    },
+    {
+      "url": "https://pypi.org/pypi/decorator/5.2.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "decorator",
+      "version": "5.2.1",
+      "expectedFilename": "decorator-5.2.1-py3-none-any.whl",
+      "expectedDeclaredSha256": "d316bb415a2d9e2d2b3abcc4084c6502fc09240e292cd76a76afc106a1c8e04a"
+    },
+    {
+      "url": "https://pypi.org/pypi/fastapi/0.120.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "fastapi",
+      "version": "0.120.2",
+      "expectedFilename": "fastapi-0.120.2-py3-none-any.whl",
+      "expectedDeclaredSha256": "bedcf2c14240e43d56cb9a339b32bcf15104fe6b5897c0222603cb7ec416c8eb"
+    },
+    {
+      "url": "https://pypi.org/pypi/ffmpy/0.6.4/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "ffmpy",
+      "version": "0.6.4",
+      "expectedFilename": "ffmpy-0.6.4-py3-none-any.whl",
+      "expectedDeclaredSha256": "21fbf9cd3116279e0629e0f2bf5892306b3336d588165c8db1b5f6361118d811"
+    },
+    {
+      "url": "https://pypi.org/pypi/filelock/3.20.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "filelock",
+      "version": "3.20.0",
+      "expectedFilename": "filelock-3.20.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "339b4732ffda5cd79b13f4e2711a31b0365ce445d95d243bb996273d072546a2"
+    },
+    {
+      "url": "https://pypi.org/pypi/flatbuffers/25.9.23/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "flatbuffers",
+      "version": "25.9.23",
+      "expectedFilename": "flatbuffers-25.9.23-py2.py3-none-any.whl",
+      "expectedDeclaredSha256": "255538574d6cb6d0a79a17ec8bc0d30985913b87513a01cce8bcdb6b4c44d0e2"
+    },
+    {
+      "url": "https://pypi.org/pypi/fsspec/2025.9.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "fsspec",
+      "version": "2025.9.0",
+      "expectedFilename": "fsspec-2025.9.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "530dc2a2af60a414a832059574df4a6e10cce927f6f4a78209390fe38955cfb7"
+    },
+    {
+      "url": "https://pypi.org/pypi/gradio-client/1.13.3/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "gradio-client",
+      "version": "1.13.3",
+      "expectedFilename": "gradio_client-1.13.3-py3-none-any.whl",
+      "expectedDeclaredSha256": "3f63e4d33a2899c1a12b10fe3cf77b82a6919ff1a1fb6391f6aa225811aa390c"
+    },
+    {
+      "url": "https://pypi.org/pypi/gradio/5.49.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "gradio",
+      "version": "5.49.1",
+      "expectedFilename": "gradio-5.49.1-py3-none-any.whl",
+      "expectedDeclaredSha256": "1b19369387801a26a6ba7fd2f74d46c5b0e2ac9ddef14f24ddc0d11fb19421b7"
+    },
+    {
+      "url": "https://pypi.org/pypi/groovy/0.1.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "groovy",
+      "version": "0.1.2",
+      "expectedFilename": "groovy-0.1.2-py3-none-any.whl",
+      "expectedDeclaredSha256": "7f7975bab18c729a257a8b1ae9dcd70b7cafb1720481beae47719af57c35fa64"
+    },
+    {
+      "url": "https://pypi.org/pypi/h11/0.16.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "h11",
+      "version": "0.16.0",
+      "expectedFilename": "h11-0.16.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86"
+    },
+    {
+      "url": "https://pypi.org/pypi/hf-xet/1.4.3/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "hf-xet",
+      "version": "1.4.3",
+      "expectedFilename": "hf_xet-1.4.3-cp37-abi3-win_amd64.whl",
+      "expectedDeclaredSha256": "6b591fcad34e272a5b02607485e4f2a1334aebf1bc6d16ce8eb1eb8978ac2021"
+    },
+    {
+      "url": "https://pypi.org/pypi/httpcore/1.0.9/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "httpcore",
+      "version": "1.0.9",
+      "expectedFilename": "httpcore-1.0.9-py3-none-any.whl",
+      "expectedDeclaredSha256": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55"
+    },
+    {
+      "url": "https://pypi.org/pypi/httpx/0.28.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "httpx",
+      "version": "0.28.1",
+      "expectedFilename": "httpx-0.28.1-py3-none-any.whl",
+      "expectedDeclaredSha256": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad"
+    },
+    {
+      "url": "https://pypi.org/pypi/idna/3.11/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "idna",
+      "version": "3.11",
+      "expectedFilename": "idna-3.11-py3-none-any.whl",
+      "expectedDeclaredSha256": "771a87f49d9defaf64091e6e6fe9c18d4833f140bd19464795bc32d966ca37ea"
+    },
+    {
+      "url": "https://pypi.org/pypi/jinja2/3.1.6/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "jinja2",
+      "version": "3.1.6",
+      "expectedFilename": "jinja2-3.1.6-py3-none-any.whl",
+      "expectedDeclaredSha256": "85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67"
+    },
+    {
+      "url": "https://pypi.org/pypi/joblib/1.5.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "joblib",
+      "version": "1.5.2",
+      "expectedFilename": "joblib-1.5.2-py3-none-any.whl",
+      "expectedDeclaredSha256": "4e1f0bdbb987e6d843c70cf43714cb276623def372df3c22fe5266b2670bc241"
+    },
+    {
+      "url": "https://pypi.org/pypi/kaldi-native-fbank/1.22.3/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "kaldi-native-fbank",
+      "version": "1.22.3",
+      "expectedFilename": "kaldi_native_fbank-1.22.3-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "bd225d0624d45b533c1780094b3c59666276a6e9f20222943441212cdf301c9e"
+    },
+    {
+      "url": "https://pypi.org/pypi/lazy-loader/0.4/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "lazy-loader",
+      "version": "0.4",
+      "expectedFilename": "lazy_loader-0.4-py3-none-any.whl",
+      "expectedDeclaredSha256": "342aa8e14d543a154047afb4ba8ef17f5563baad3fc610d7b15b213b0f119efc"
+    },
+    {
+      "url": "https://pypi.org/pypi/librosa/0.11.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "librosa",
+      "version": "0.11.0",
+      "expectedFilename": "librosa-0.11.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "0b6415c4fd68bff4c29288abe67c6d80b587e0e1e2cfb0aad23e4559504a7fa1"
+    },
+    {
+      "url": "https://pypi.org/pypi/llvmlite/0.45.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "llvmlite",
+      "version": "0.45.1",
+      "expectedFilename": "llvmlite-0.45.1-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "f9c272682d91e0d57f2a76c6d9ebdfccc603a01828cdbe3d15273bdca0c3363a"
+    },
+    {
+      "url": "https://pypi.org/pypi/markdown-it-py/4.0.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "markdown-it-py",
+      "version": "4.0.0",
+      "expectedFilename": "markdown_it_py-4.0.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "87327c59b172c5011896038353a81343b6754500a08cd7a4973bb48c6d578147"
+    },
+    {
+      "url": "https://pypi.org/pypi/markupsafe/3.0.3/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "markupsafe",
+      "version": "3.0.3",
+      "expectedFilename": "markupsafe-3.0.3-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "de8a88e63464af587c950061a5e6a67d3632e36df62b986892331d4620a35c01"
+    },
+    {
+      "url": "https://pypi.org/pypi/mdurl/0.1.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "mdurl",
+      "version": "0.1.2",
+      "expectedFilename": "mdurl-0.1.2-py3-none-any.whl",
+      "expectedDeclaredSha256": "84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"
+    },
+    {
+      "url": "https://pypi.org/pypi/mpmath/1.3.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "mpmath",
+      "version": "1.3.0",
+      "expectedFilename": "mpmath-1.3.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c"
+    },
+    {
+      "url": "https://pypi.org/pypi/msgpack/1.1.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "msgpack",
+      "version": "1.1.2",
+      "expectedFilename": "msgpack-1.1.2-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "d198d275222dc54244bf3327eb8cbe00307d220241d9cec4d306d49a44e85f68"
+    },
+    {
+      "url": "https://pypi.org/pypi/numba/0.62.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "numba",
+      "version": "0.62.1",
+      "expectedFilename": "numba-0.62.1-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "03de6d691d6b6e2b76660ba0f38f37b81ece8b2cc524a62f2a0cfae2bfb6f9da"
+    },
+    {
+      "url": "https://pypi.org/pypi/numpy/2.3.4/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "numpy",
+      "version": "2.3.4",
+      "expectedFilename": "numpy-2.3.4-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "faba246fb30ea2a526c2e9645f61612341de1a83fb1e0c5edf4ddda5a9c10996"
+    },
+    {
+      "url": "https://pypi.org/pypi/onnxruntime/1.24.4/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "onnxruntime",
+      "version": "1.24.4",
+      "expectedFilename": "onnxruntime-1.24.4-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "b43b63eb24a2bc8fc77a09be67587a570967a412cccb837b6245ccb546691153"
+    },
+    {
+      "url": "https://pypi.org/pypi/orjson/3.11.4/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "orjson",
+      "version": "3.11.4",
+      "expectedFilename": "orjson-3.11.4-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "e2d5d5d798aba9a0e1fede8d853fa899ce2cb930ec0857365f700dffc2c7af6a"
+    },
+    {
+      "url": "https://pypi.org/pypi/packaging/25.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "packaging",
+      "version": "25.0",
+      "expectedFilename": "packaging-25.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484"
+    },
+    {
+      "url": "https://pypi.org/pypi/pandas/2.3.3/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "pandas",
+      "version": "2.3.3",
+      "expectedFilename": "pandas-2.3.3-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "f086f6fe114e19d92014a1966f43a3e62285109afe874f067f5abbdcbb10e59c"
+    },
+    {
+      "url": "https://pypi.org/pypi/pillow/11.3.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "pillow",
+      "version": "11.3.0",
+      "expectedFilename": "pillow-11.3.0-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "1a992e86b0dd7aeb1f053cd506508c0999d710a8f07b4c791c63843fc6a807ac"
+    },
+    {
+      "url": "https://pypi.org/pypi/platformdirs/4.5.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "platformdirs",
+      "version": "4.5.0",
+      "expectedFilename": "platformdirs-4.5.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "e578a81bb873cbb89a41fcc904c7ef523cc18284b7e3b3ccf06aca1403b7ebd3"
+    },
+    {
+      "url": "https://pypi.org/pypi/pooch/1.8.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "pooch",
+      "version": "1.8.2",
+      "expectedFilename": "pooch-1.8.2-py3-none-any.whl",
+      "expectedDeclaredSha256": "3529a57096f7198778a5ceefd5ac3ef0e4d06a6ddaf9fc2d609b806f25302c47"
+    },
+    {
+      "url": "https://pypi.org/pypi/protobuf/6.33.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "protobuf",
+      "version": "6.33.2",
+      "expectedFilename": "protobuf-6.33.2-cp310-abi3-win_amd64.whl",
+      "expectedDeclaredSha256": "fc2a0e8b05b180e5fc0dd1559fe8ebdae21a27e81ac77728fb6c42b12c7419b4"
+    },
+    {
+      "url": "https://pypi.org/pypi/pycparser/2.23/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "pycparser",
+      "version": "2.23",
+      "expectedFilename": "pycparser-2.23-py3-none-any.whl",
+      "expectedDeclaredSha256": "e5c6e8d3fbad53479cab09ac03729e0a9faf2bee3db8208a550daf5af81a5934"
+    },
+    {
+      "url": "https://pypi.org/pypi/pydantic-core/2.33.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "pydantic-core",
+      "version": "2.33.2",
+      "expectedFilename": "pydantic_core-2.33.2-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "1e063337ef9e9820c77acc768546325ebe04ee38b08703244c1309cccc4f1bab"
+    },
+    {
+      "url": "https://pypi.org/pypi/pydantic/2.11.10/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "pydantic",
+      "version": "2.11.10",
+      "expectedFilename": "pydantic-2.11.10-py3-none-any.whl",
+      "expectedDeclaredSha256": "802a655709d49bd004c31e865ef37da30b540786a46bfce02333e0e24b5fe29a"
+    },
+    {
+      "url": "https://pypi.org/pypi/pydub/0.25.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "pydub",
+      "version": "0.25.1",
+      "expectedFilename": "pydub-0.25.1-py2.py3-none-any.whl",
+      "expectedDeclaredSha256": "65617e33033874b59d87db603aa1ed450633288aefead953b30bded59cb599a6"
+    },
+    {
+      "url": "https://pypi.org/pypi/pygments/2.19.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "pygments",
+      "version": "2.19.2",
+      "expectedFilename": "pygments-2.19.2-py3-none-any.whl",
+      "expectedDeclaredSha256": "86540386c03d588bb81d44bc3928634ff26449851e99741617ecb9037ee5ec0b"
+    },
+    {
+      "url": "https://pypi.org/pypi/python-dateutil/2.9.0.post0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "python-dateutil",
+      "version": "2.9.0.post0",
+      "expectedFilename": "python_dateutil-2.9.0.post0-py2.py3-none-any.whl",
+      "expectedDeclaredSha256": "a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"
+    },
+    {
+      "url": "https://pypi.org/pypi/python-multipart/0.0.20/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "python-multipart",
+      "version": "0.0.20",
+      "expectedFilename": "python_multipart-0.0.20-py3-none-any.whl",
+      "expectedDeclaredSha256": "8a62d3a8335e06589fe01f2a3e178cdcc632f3fbe0d492ad9ee0ec35aab1f104"
+    },
+    {
+      "url": "https://pypi.org/pypi/pytz/2025.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "pytz",
+      "version": "2025.2",
+      "expectedFilename": "pytz-2025.2-py2.py3-none-any.whl",
+      "expectedDeclaredSha256": "5ddf76296dd8c44c26eb8f4b6f35488f3ccbf6fbbd7adee0b7262d43f0ec2f00"
+    },
+    {
+      "url": "https://pypi.org/pypi/pyyaml/6.0.3/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "pyyaml",
+      "version": "6.0.3",
+      "expectedFilename": "pyyaml-6.0.3-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "9f3bfb4965eb874431221a3ff3fdcddc7e74e3b07799e0e84ca4a0f867d449bf"
+    },
+    {
+      "url": "https://pypi.org/pypi/requests/2.32.5/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "requests",
+      "version": "2.32.5",
+      "expectedFilename": "requests-2.32.5-py3-none-any.whl",
+      "expectedDeclaredSha256": "2462f94637a34fd532264295e186976db0f5d453d1cdd31473c85a6a161affb6"
+    },
+    {
+      "url": "https://pypi.org/pypi/rich/14.2.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "rich",
+      "version": "14.2.0",
+      "expectedFilename": "rich-14.2.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "76bc51fe2e57d2b1be1f96c524b890b816e334ab4c1e45888799bfaab0021edd"
+    },
+    {
+      "url": "https://pypi.org/pypi/ruff/0.14.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "ruff",
+      "version": "0.14.2",
+      "expectedFilename": "ruff-0.14.2-py3-none-win_amd64.whl",
+      "expectedDeclaredSha256": "0df3424aa5c3c08b34ed8ce099df1021e3adaca6e90229273496b839e5a7e1af"
+    },
+    {
+      "url": "https://pypi.org/pypi/safehttpx/0.1.7/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "safehttpx",
+      "version": "0.1.7",
+      "expectedFilename": "safehttpx-0.1.7-py3-none-any.whl",
+      "expectedDeclaredSha256": "c4f4a162db6993464d7ca3d7cc4af0ffc6515a606dfd220b9f82c6945d869cde"
+    },
+    {
+      "url": "https://pypi.org/pypi/scikit-learn/1.7.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "scikit-learn",
+      "version": "1.7.2",
+      "expectedFilename": "scikit_learn-1.7.2-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "9b7ed8d58725030568523e937c43e56bc01cadb478fc43c042a9aca1dacb3ba1"
+    },
+    {
+      "url": "https://pypi.org/pypi/scipy/1.16.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "scipy",
+      "version": "1.16.2",
+      "expectedFilename": "scipy-1.16.2-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "91e9e8a37befa5a69e9cacbe0bcb79ae5afb4a0b130fd6db6ee6cc0d491695fa"
+    },
+    {
+      "url": "https://pypi.org/pypi/semantic-version/2.10.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "semantic-version",
+      "version": "2.10.0",
+      "expectedFilename": "semantic_version-2.10.0-py2.py3-none-any.whl",
+      "expectedDeclaredSha256": "de78a3b8e0feda74cabc54aab2da702113e33ac9d9eb9d2389bcf1f58b7d9177"
+    },
+    {
+      "url": "https://pypi.org/pypi/shellingham/1.5.4/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "shellingham",
+      "version": "1.5.4",
+      "expectedFilename": "shellingham-1.5.4-py2.py3-none-any.whl",
+      "expectedDeclaredSha256": "7ecfff8f2fd72616f7481040475a65b2bf8af90a56c89140852d1120324e8686"
+    },
+    {
+      "url": "https://pypi.org/pypi/six/1.17.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "six",
+      "version": "1.17.0",
+      "expectedFilename": "six-1.17.0-py2.py3-none-any.whl",
+      "expectedDeclaredSha256": "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
+    },
+    {
+      "url": "https://pypi.org/pypi/sniffio/1.3.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "sniffio",
+      "version": "1.3.1",
+      "expectedFilename": "sniffio-1.3.1-py3-none-any.whl",
+      "expectedDeclaredSha256": "2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2"
+    },
+    {
+      "url": "https://pypi.org/pypi/soundfile/0.13.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "soundfile",
+      "version": "0.13.1",
+      "expectedFilename": "soundfile-0.13.1-py2.py3-none-win_amd64.whl",
+      "expectedDeclaredSha256": "1e70a05a0626524a69e9f0f4dd2ec174b4e9567f4d8b6c11d38b5c289be36ee9"
+    },
+    {
+      "url": "https://pypi.org/pypi/starlette/0.49.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "starlette",
+      "version": "0.49.1",
+      "expectedFilename": "starlette-0.49.1-py3-none-any.whl",
+      "expectedDeclaredSha256": "d92ce9f07e4a3caa3ac13a79523bd18e3bc0042bb8ff2d759a8e7dd0e1859875"
+    },
+    {
+      "url": "https://pypi.org/pypi/sympy/1.14.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "sympy",
+      "version": "1.14.0",
+      "expectedFilename": "sympy-1.14.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5"
+    },
+    {
+      "url": "https://pypi.org/pypi/threadpoolctl/3.6.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "threadpoolctl",
+      "version": "3.6.0",
+      "expectedFilename": "threadpoolctl-3.6.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "43a0b8fd5a2928500110039e43a5eed8480b918967083ea48dc3ab9f13c4a7fb"
+    },
+    {
+      "url": "https://pypi.org/pypi/tokenizers/0.22.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "tokenizers",
+      "version": "0.22.2",
+      "expectedFilename": "tokenizers-0.22.2-cp39-abi3-win_amd64.whl",
+      "expectedDeclaredSha256": "c9ea31edff2968b44a88f97d784c2f16dc0729b8b143ed004699ebca91f05c48"
+    },
+    {
+      "url": "https://pypi.org/pypi/tomlkit/0.13.3/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "tomlkit",
+      "version": "0.13.3",
+      "expectedFilename": "tomlkit-0.13.3-py3-none-any.whl",
+      "expectedDeclaredSha256": "c89c649d79ee40629a9fda55f8ace8c6a1b42deb912b2a8fd8d942ddadb606b0"
+    },
+    {
+      "url": "https://pypi.org/pypi/tqdm/4.67.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "tqdm",
+      "version": "4.67.1",
+      "expectedFilename": "tqdm-4.67.1-py3-none-any.whl",
+      "expectedDeclaredSha256": "26445eca388f82e72884e0d580d5464cd801a3ea01e63e5601bdff9ba6a48de2"
+    },
+    {
+      "url": "https://pypi.org/pypi/typer/0.20.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "typer",
+      "version": "0.20.0",
+      "expectedFilename": "typer-0.20.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "5b463df6793ec1dca6213a3cf4c0f03bc6e322ac5e16e13ddd622a889489784a"
+    },
+    {
+      "url": "https://pypi.org/pypi/typing-extensions/4.15.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "typing-extensions",
+      "version": "4.15.0",
+      "expectedFilename": "typing_extensions-4.15.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548"
+    },
+    {
+      "url": "https://pypi.org/pypi/typing-inspection/0.4.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "typing-inspection",
+      "version": "0.4.2",
+      "expectedFilename": "typing_inspection-0.4.2-py3-none-any.whl",
+      "expectedDeclaredSha256": "4ed1cacbdc298c220f1bd249ed5287caa16f34d44ef4e9c3d0cbad5b521545e7"
+    },
+    {
+      "url": "https://pypi.org/pypi/tzdata/2025.2/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "tzdata",
+      "version": "2025.2",
+      "expectedFilename": "tzdata-2025.2-py2.py3-none-any.whl",
+      "expectedDeclaredSha256": "1a403fada01ff9221ca8044d701868fa132215d84beb92242d9acd2147f667a8"
+    },
+    {
+      "url": "https://pypi.org/pypi/urllib3/2.5.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "urllib3",
+      "version": "2.5.0",
+      "expectedFilename": "urllib3-2.5.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "e6b01673c0fa6a13e374b50871808eb3bf7046c4b125b216f6bf1cc604cff0dc"
+    },
+    {
+      "url": "https://pypi.org/pypi/uvicorn/0.38.0/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "uvicorn",
+      "version": "0.38.0",
+      "expectedFilename": "uvicorn-0.38.0-py3-none-any.whl",
+      "expectedDeclaredSha256": "48c0afd214ceb59340075b4a052ea1ee91c16fbc2a9b1469cca0e54566977b02"
+    },
+    {
+      "url": "https://pypi.org/pypi/websockets/15.0.1/json",
+      "purpose": "wheel_exact_version_metadata",
+      "package": "websockets",
+      "version": "15.0.1",
+      "expectedFilename": "websockets-15.0.1-cp311-cp311-win_amd64.whl",
+      "expectedDeclaredSha256": "27ccee0071a0e75d22cb35849b1db43f2ecd3e161041ac1ee9d2352ddf72f065"
+    }
+  ],
+  "queueSha256": "65fcae512af19178a51f0bbb49389dcd913f662f6c968a4a644f4b0d7e6d81b1",
+  "queueCount": 164,
+  "allowPartialQueue": true,
+  "outputRoot": ".cvf/runtime/cvf-video-storyboard-review-20261008/e1-metadata/attempt-01",
+  "command": "python -B .cvf/runtime/cvf-video-storyboard-review-20261008/e1_collect.py",
+  "collectorPath": ".cvf/runtime/cvf-video-storyboard-review-20261008/e1_collect.py",
+  "collectorSha256": "487e33eb40366b33ff7b5a2e7a488b9f728318eecf74c0b9df1831a1da667ebc",
+  "productionRuntimeAdmission": "NO_GO",
+  "supervisorBoundary": {
+    "disposition": "FEATURE_SUCCESSORS_FROZEN",
+    "helperPathsRequested": [],
+    "sourceAcceptance": "WITHHELD",
+    "decisionNeededBeforeS1": true,
+    "historicalWriterEvidence": "MISSING_NOT_RECREATED"
+  },
+  "historicalStop": {
+    "problemKey": "cvf-ncr-c1-metadata-footprint",
+    "ordinal": 2,
+    "counters": [
+      0,
+      0,
+      1,
+      2
+    ],
+    "blocker": "C1_DEPENDENCY_FOOTPRINT_CACHE_SEMANTICS_UNSPECIFIED",
+    "sourceContractChain": "SUCCESSOR 1, FEATURE_SUCCESSORS_FROZEN, workerRedispatchAllowed NO"
+  },
+  "otherStages": "S1-S9 HELD_NOT_RELEASED",
+  "evidenceOutputs": [
+    "docs/reference/CVF_NCR_C1_E1_METADATA_RESULT_2026-10-08.json",
+    "docs/reference/CVF_NCR_C1_E1_METADATA_RESULT_2026-10-08.md"
+  ],
+  "claimBoundary": "bounded metadata observations only; no payload/install/rights consent/OS control/live governance or production readiness"
+}

@@ -38,11 +38,18 @@ export async function POST(request: NextRequest) {
   } catch {
     return NextResponse.json({ success: false, error: 'Invalid input payload.' }, { status: 400 });
   }
-  if (!rawBody || typeof rawBody !== 'object') return NextResponse.json({ success: false, error: 'Invalid input payload.' }, { status: 400 });
+  if (!rawBody || typeof rawBody !== 'object' || Array.isArray(rawBody)) return NextResponse.json({ success: false, error: 'Invalid input payload.' }, { status: 400 });
+
+  const fields = rawBody as Record<string, unknown>;
+  if (
+    typeof fields.userPrompt !== 'string' || typeof fields.taskId !== 'string' ||
+    (fields.expectedDecision !== undefined && typeof fields.expectedDecision !== 'string') ||
+    (fields.repeat !== undefined && (typeof fields.repeat !== 'number' || !Number.isFinite(fields.repeat)))
+  ) return NextResponse.json({ success: false, error: 'Invalid input payload.' }, { status: 400 });
 
   const body = rawBody as { userPrompt?: string; taskId?: string; expectedDecision?: string; repeat?: number };
-  const userPrompt = String(body.userPrompt || '').trim();
-  const taskId = String(body.taskId || '').trim();
+  const userPrompt = fields.userPrompt.trim();
+  const taskId = fields.taskId.trim();
   if (!userPrompt || !taskId) return NextResponse.json({ success: false, error: 'Missing required fields: userPrompt, taskId' }, { status: 400 });
 
   const routeResult = routeIntent(userPrompt);

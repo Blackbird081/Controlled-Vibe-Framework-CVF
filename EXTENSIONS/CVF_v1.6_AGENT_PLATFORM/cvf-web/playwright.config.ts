@@ -1,21 +1,13 @@
 import { defineConfig } from '@playwright/test';
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
+import { loadEnvConfig } from '@next/env';
 
 // Load .env.local into test process env (gitignored — safe for local secrets).
 // This makes NEXT_PUBLIC_* and API keys visible to test file module-level code.
-const envLocalPath = join(__dirname, '.env.local');
-if (existsSync(envLocalPath)) {
-  for (const line of readFileSync(envLocalPath, 'utf8').split('\n')) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const eqIdx = trimmed.indexOf('=');
-    if (eqIdx === -1) continue;
-    const key = trimmed.slice(0, eqIdx).trim();
-    const val = trimmed.slice(eqIdx + 1).trim();
-    if (key && !process.env[key]) process.env[key] = val;
-  }
-}
+// Use the same quote/expansion/precedence rules as the Next dev server. Copying
+// raw quoted values into its inherited env can make a valid Redis URL invalid.
+loadEnvConfig(__dirname, true, { info: () => {}, error: () => {
+  throw new Error('CVF_PLAYWRIGHT_ENV_LOAD_FAILED: inspect local env syntax without printing secrets');
+} });
 
 const PLAYWRIGHT_PORT = Number(process.env.CVF_PLAYWRIGHT_PORT ?? 3001);
 
@@ -23,6 +15,10 @@ const PLAYWRIGHT_PORT = Number(process.env.CVF_PLAYWRIGHT_PORT ?? 3001);
 // For mock/CI-safe runs use: playwright.config.mock.ts
 export default defineConfig({
     testDir: './tests/e2e',
+    // Local live proof uses one Next dev compiler and controlled provider flow.
+    // Parallel cold compilation can consume the readiness budget before handlers
+    // exist; this is a sequential proof, not a concurrent-load certification.
+    workers: 1,
     timeout: 180_000,
     expect: {
         timeout: 30_000,

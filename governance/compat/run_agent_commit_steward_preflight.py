@@ -265,7 +265,9 @@ def _print_path_plan(plan: PathPlan) -> None:
     print(f"Recommended steward lane: {_recommended_mode(plan)}")
 
 
-def _mode_commands(mode: str, base: str, head: str) -> tuple[Command, ...]:
+def _mode_commands(
+    mode: str, base: str, head: str, active_work_order: str | None = None
+) -> tuple[Command, ...]:
     phase_by_mode = {
         "dispatch": "pre-dispatch",
         "implementation": "pre-implementation",
@@ -291,10 +293,13 @@ def _mode_commands(mode: str, base: str, head: str) -> tuple[Command, ...]:
             Command("diff hygiene", ("git", "diff", "--check")),
         )
     if mode == "reviewer-return":
+        fast_gate = ("python", "governance/compat/run_worker_return_fast_gate.py")
+        if active_work_order is not None:
+            fast_gate += ("--active-work-order", active_work_order)
         return (
             Command(
                 "worker return fast gate",
-                ("python", "governance/compat/run_worker_return_fast_gate.py"),
+                fast_gate,
             ),
             Command("diff hygiene", ("git", "diff", "--check")),
         )
@@ -401,7 +406,16 @@ def main() -> int:
     parser.add_argument("--head", default="HEAD", help="Head ref for range-aware checks.")
     parser.add_argument("--enforce", action="store_true", help="Fail high-risk commit-shape conflicts.")
     parser.add_argument("--plan-only", action="store_true", help="Print shape plan without running gates.")
+    parser.add_argument(
+        "--active-work-order",
+        help="Explicit work order forwarded to the reviewer-return fast gate only.",
+    )
     args = parser.parse_args()
+    if args.active_work_order is not None:
+        if args.mode != "reviewer-return":
+            parser.error("--active-work-order requires --mode reviewer-return")
+        if not args.active_work_order.strip():
+            parser.error("--active-work-order must be nonblank")
 
     print("=== CVF Agent Commit Steward Preflight ===")
     print(f"Standard: {STANDARD_PATH}")
@@ -410,6 +424,8 @@ def main() -> int:
     print(f"Base anchor: {_short_ref(args.base)}")
     print(f"Head anchor: {_short_ref(args.head)}")
     print(f"Enforce shape: {args.enforce}")
+    if args.active_work_order is not None:
+        print(f"Active work order: {args.active_work_order}")
 
     plan = build_path_plan(args.base, args.head)
     _print_path_plan(plan)
@@ -422,7 +438,7 @@ def main() -> int:
         print("\nCOMPLIANT: commit steward plan-only check completed.")
         return 0
 
-    for command in _mode_commands(args.mode, args.base, args.head):
+    for command in _mode_commands(args.mode, args.base, args.head, args.active_work_order):
         if _run(command) != 0:
             failures += 1
 

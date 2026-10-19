@@ -1,3 +1,4 @@
+// Text Encoding Exception: bilingual template metadata and preserved multilingual labels.
 /**
  * Bilingual template name/description translations.
  * template.name / template.description = Vietnamese (default)
@@ -62,7 +63,7 @@ export const templateEnglish: Record<string, { name: string; description?: strin
     // Development
     app_builder_wizard: { name: '🧙 App Builder Wizard', description: 'Multi-step wizard to create a governed app spec with packet review and live path. Recommended for complex apps.' },
     build_my_app: { name: '🚀 Build My App', description: 'Describe your app idea and let CVF route it into a governed starter path for non-coders.' },
-    app_builder_complete: { name: '📦 App Builder Complete', description: 'Create a full product brief and builder-ready handoff without exposing stack choices to the user.' },
+    app_builder_complete: { name: '📦 App Builder Complete', description: 'Create a structured product brief for receiving-agent INTAKE without requiring the user to choose a technical stack.' },
     individual_skills_folder: { name: '📂 Skill Templates (8)', description: '8 individual templates for each step: Requirements, Tech Stack, Architecture, Database, API, Desktop/CLI, Deployment.' },
     app_requirements_spec: { name: 'App Requirements Spec', description: 'Gather requirements for new app, define scope and success criteria' },
     tech_stack_selection: { name: 'Tech Stack Selection', description: 'Choose suitable technology for app based on requirements' },
@@ -412,7 +413,7 @@ CONSTRAINTS:
 OUTPUT REQUIREMENTS:
 - Ask only for business intent, user outcomes, constraints, and preservation rules
 - Do not ask the end user to choose frameworks, databases, or hidden technical patterns
-- Translate this into a builder-ready governed packet
+- Organize this as structured input for receiving-agent INTAKE; do not assert BUILD readiness
 - Include acceptance criteria and handoff boundaries`,
 };
 

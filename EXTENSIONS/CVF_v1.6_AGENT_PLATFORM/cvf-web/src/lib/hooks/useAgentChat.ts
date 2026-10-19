@@ -1,5 +1,7 @@
 'use client';
 
+// Text Encoding Exception: existing bilingual user-facing mode labels are preserved.
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createAIProvider, AIMessage, AIProvider } from '@/lib/ai-providers';
 import { useQuotaManager, ProviderKey } from '@/lib/quota-manager';
@@ -453,29 +455,30 @@ ${attachedFile.content}
 
     useEffect(() => {
         if (initialPrompt && handledPromptRef.current !== initialPrompt) {
-            handledPromptRef.current = initialPrompt;
+            const timer = setTimeout(() => {
+                handledPromptRef.current = initialPrompt;
 
-            const detectedMode = detectSpecMode(initialPrompt);
-            currentModeRef.current = detectedMode;
-            setCurrentMode(detectedMode);
+                const detectedMode = detectSpecMode(initialPrompt);
+                currentModeRef.current = detectedMode;
+                setCurrentMode(detectedMode);
 
-            const modeInfo = language === 'vi'
-                ? MODE_CONFIG[detectedMode].label
-                : MODE_CONFIG[detectedMode].labelEn;
+                const modeInfo = language === 'vi'
+                    ? MODE_CONFIG[detectedMode].label
+                    : MODE_CONFIG[detectedMode].labelEn;
 
-            const systemMessage: ChatMessage = {
-                id: `msg_${Date.now()}`,
-                role: 'system',
-                content: language === 'vi'
-                    ? `🚀 CVF Agent Mode bắt đầu | ${MODE_CONFIG[detectedMode].icon} ${modeInfo}`
-                    : `🚀 CVF Agent Mode started | ${MODE_CONFIG[detectedMode].icon} ${modeInfo}`,
-                timestamp: new Date(),
-            };
-            setMessages((prev) => [...prev, systemMessage]);
+                const systemMessage: ChatMessage = {
+                    id: `msg_${Date.now()}`,
+                    role: 'system',
+                    content: language === 'vi'
+                        ? `🚀 CVF Agent Mode bắt đầu | ${MODE_CONFIG[detectedMode].icon} ${modeInfo}`
+                        : `🚀 CVF Agent Mode started | ${MODE_CONFIG[detectedMode].icon} ${modeInfo}`,
+                    timestamp: new Date(),
+                };
+                setMessages((prev) => [...prev, systemMessage]);
 
-            setTimeout(() => {
-                handleSendMessage(initialPrompt);
+                void handleSendMessage(initialPrompt);
             }, 500);
+            return () => clearTimeout(timer);
         }
     }, [initialPrompt, language, handleSendMessage]);
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { useSyncExternalStore } from 'react';
 import { Template, CATEGORY_INFO, Category } from '@/types';
 import { useLanguage } from '@/lib/i18n';
 import { getTemplateName, getTemplateDescription } from '@/lib/template-i18n';
@@ -11,7 +12,13 @@ interface TemplateCardProps {
     onTry?: () => void;
 }
 
+const subscribeToHydration = () => () => {};
+const clientReady = () => true;
+const serverReady = () => false;
+
 export function TemplateCard({ template, onClick, onPreview, onTry }: TemplateCardProps) {
+    // Visible server HTML must not promise an action before its handlers exist.
+    const ready = useSyncExternalStore(subscribeToHydration, clientReady, serverReady);
     const { language } = useLanguage();
     const categoryInfo = CATEGORY_INFO[template.category as Category];
     const categoryDisplayName = language === 'en' ? categoryInfo.nameEn : categoryInfo.name;
@@ -48,10 +55,11 @@ export function TemplateCard({ template, onClick, onPreview, onTry }: TemplateCa
 
     return (
         <div
-            onClick={onClick}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
+            onClick={ready ? onClick : undefined}
+            onKeyDown={(e) => { if (ready && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onClick(); } }}
             role="button"
-            tabIndex={0}
+            aria-disabled={!ready}
+            tabIndex={ready ? 0 : -1}
             title={language === 'en' ? 'Click to use this template' : 'Click để sử dụng template này'}
             className="group relative cvf-surface cursor-pointer rounded-[28px] border border-slate-200/80 bg-white p-7
                  shadow-[0_2px_10px_rgba(15,23,42,0.05)] transition-all duration-200
@@ -94,6 +102,7 @@ export function TemplateCard({ template, onClick, onPreview, onTry }: TemplateCa
                 <div className="flex items-center gap-1.5">
                     {onTry && (
                         <button
+                            disabled={!ready}
                             onClick={(e) => { e.stopPropagation(); onTry(); }}
                             className="cvf-control rounded-2xl border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
                             title={language === 'en' ? 'Try with sample data' : 'Thử với dữ liệu mẫu'}
@@ -103,6 +112,7 @@ export function TemplateCard({ template, onClick, onPreview, onTry }: TemplateCa
                     )}
                     {onPreview && template.sampleOutput && (
                         <button
+                            disabled={!ready}
                             onClick={onPreview}
                             className="cvf-control rounded-2xl p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-indigo-600 dark:hover:bg-white/[0.06] dark:hover:text-indigo-300"
                             title={language === 'en' ? 'Preview output' : 'Xem trước kết quả'}

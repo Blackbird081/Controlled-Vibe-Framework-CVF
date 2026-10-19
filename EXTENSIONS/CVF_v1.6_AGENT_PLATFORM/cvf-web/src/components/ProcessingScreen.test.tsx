@@ -234,6 +234,22 @@ describe('ProcessingScreen — guided response (W88-T1)', () => {
     expect(onComplete).not.toHaveBeenCalled();
   });
 
+  it('keeps incomplete output out of completion and displays its non-retryable diagnostic', async () => {
+    const onComplete = vi.fn();
+    const fetchMock = vi.fn().mockResolvedValue({ json: async () => ({
+      success: false, output: 'Incomplete answer', provider: 'alibaba', model: 'qwen3.8-flash',
+      usage: { inputTokens: 20, outputTokens: 8, totalTokens: 28 },
+      diagnostic: { contractVersion: 'cvf.executionDiagnostic.v1', stage: 'output_validation', class: 'output_validation_failed', retryable: false, userAction: 'revise_request', safeMessage: 'Alibaba did not return a complete usable answer.', provider: 'alibaba', model: 'qwen3.8-flash' },
+    }) });
+    vi.stubGlobal('fetch', fetchMock);
+    render(<ProcessingScreen {...baseProps} onComplete={onComplete} />);
+    await waitFor(() => expect(screen.getByTestId('execution-diagnostic-panel')).toBeDefined());
+    expect(screen.getByTestId('execution-diagnostic-panel').textContent).toContain('revise_request');
+    expect(screen.getByTestId('execution-diagnostic-panel').textContent).toContain('output_validation_failed');
+    expect(onComplete).not.toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalledOnce();
+  });
+
   it('renders unclassified live failure without falling back to mock output', async () => {
     const onComplete = vi.fn();
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({

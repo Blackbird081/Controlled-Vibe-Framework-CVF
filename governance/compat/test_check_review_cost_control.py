@@ -3,9 +3,18 @@
 
 from __future__ import annotations
 
+import contextlib
+import copy
+import hashlib
 import importlib.util
+import json
+import os
+import re
+import subprocess
 import sys
+import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 
 _COMPAT_DIR = Path(__file__).resolve().parent
@@ -544,6 +553,321 @@ class RunIntegrationTests(unittest.TestCase):
             p for p, t in paths_and_texts.items() if chk.is_applicable(p, t)
         ]
         self.assertEqual(applicable, ["docs/reviews/a.md", "docs/reviews/b.md"])
+
+
+# ---- NCR_REVIEW_CONTINUATION_V1: operator-cleared same-scope continuation (synthetic fixtures) ----
+_NOW = datetime(2026, 10, 15, 6, 0, tzinfo=timezone.utc)
+_DIGEST = "b" * 64
+_GRANT_PATH = "docs/reviews/CVF_EXAMPLE_OPERATOR_GRANT_2026-10-15.md"
+_ARTIFACTS = [
+    "governance/compat/example_owner.py",
+    "docs/reviews/CVF_EXAMPLE_WORKER_RETURN_2026-10-15.md",
+    "docs/reviews/evidence/example-worker.json",
+]
+_EFFECTS = ("providerCalls", "networkCalls", "publicWrites", "deployments", "realDataMutations", "destructiveActions", "productRuntimeStarts")
+_DROP = object()
+_CLEARED = dict(
+    dispatchKind="REWORK", reviewRoundCount="3", reworkGeneration="3", priorFindingSetDigest=_DIGEST,
+    dependencyAuditDisposition="COMPLETE_BEFORE_FIRST_REPAIR", reworkFindingDisposition="CONSOLIDATED_ALL_DEPENDENT_FINDINGS",
+    regressionGuardDisposition="REQUIRED_AND_PLANNED_FOR_EACH_TARGETED_DEFECT", nextDispatchDisposition="ONE_CONSOLIDATED_REWORK",
+    rootCauseClusterId="cluster-lock-identity", consolidatedDefectClassSweep="COMPLETE_BEFORE_REWORK_DISPATCH",
+    reviewerLocalRepairBoundary="NEW_EVIDENCE_REQUIRED",
+    reviewerLocalRepairBasis="Finding F1 requires new source evidence unavailable to the reviewer.",
+)
+_EXTERNAL = dict(
+    dispatchSurface="EXTERNAL_AGENT_CLI_MCP", usageAvailability="KNOWN_FOR_ADMISSION",
+    quotaAdmissionDisposition="ADMITTED_WITHIN_CUMULATIVE_CEILING", cumulativeExternalInvocationCount="1", externalInvocationCeiling="2",
+)
+
+
+def _scope():
+    return {
+        "objectiveId": "OBJ-EXAMPLE", "acceptanceItems": ["AC-1", "AC-2"], "allowedArtifacts": list(_ARTIFACTS),
+        "riskCeiling": "SAME_AS_AUTHORIZED_PARENT", "effectCeilings": {key: 0 for key in _EFFECTS},
+        "numericalCeilings": {"workerMinutes": 120, "reviewerMinutes": 40}, "commitOwner": "reviewer-closer",
+    }
+
+
+def _grant(**binding):
+    return {
+        "schemaVersion": "cvf.reviewDispatchContinuationAuthorization@1.0.0", "decisionOwner": "OPERATOR",
+        "operatorInstructionEvidence": "Operator instruction 2026-10-15: continue this same scope.",
+        "status": "ACTIVE", "expiresAtUtc": None, "validityDisposition": "UNTIL_REVOKED_OR_SCOPE_CHANGE",
+        "binding": {
+            "parentAssignmentId": "parent-1", "rootCauseClusterId": "cluster-lock-identity", "reviewRoundCount": 3,
+            "reworkGeneration": 3, "priorFindingSetDigest": _DIGEST, "dispatchSurface": "INTERNAL_AGENT",
+            "commitMode": "WORKER_MUST_NOT_COMMIT", **binding,
+        },
+        "scope": _scope(),
+    }
+
+
+def _with(grant, keys, value):
+    out = copy.deepcopy(grant)
+    node = out
+    for key in keys[:-1]:
+        node = node[key]
+    if value is _DROP:
+        del node[keys[-1]]
+    else:
+        node[keys[-1]] = value
+    return out
+
+
+def _grant_md(grant):
+    return "# Example operator grant\n\n```operator-continuation-authorization-json\n" + json.dumps(grant, indent=2) + "\n```\n"
+
+
+def _ledger(artifacts=_ARTIFACTS):
+    ledger = {
+        "schemaVersion": "cvf.workOrderAcceptanceLedger@1.0.0",
+        "requirements": [{"requirementId": "REQ-1", "mandatory": True, "expectedArtifacts": list(artifacts), "requiredProofIds": ["P-1"]}],
+        "proofCatalog": [{"proofId": "P-1", "kind": "ARTIFACT", "locator": "example#1"}],
+    }
+    return "\n```acceptance-ledger-json\n" + json.dumps(ledger) + "\n```\n"
+
+
+def _cleared_work_order(path, sha, scope=None, ledger=None, **over):
+    return (
+        _work_order_block(**{**_CLEARED, **over}) + "Commit mode: WORKER_MUST_NOT_COMMIT\n"
+        f"operatorContinuationEvidencePath: {path}\noperatorContinuationEvidenceSha256: {sha}\n\n"
+        "```continuation-scope-json\n" + json.dumps(scope or _scope(), indent=2) + "\n```\n"
+        + (_ledger() if ledger is None else ledger)
+    )
+
+
+class OperatorClearedContinuationTests(unittest.TestCase):
+    """Production diagnostics against isolated synthetic grants; never live consent or effects."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.root = Path(tmp.name)
+        self.failures = []
+        self.addCleanup(lambda: self.assertEqual(self.failures, []))
+
+    @contextlib.contextmanager
+    def sub(self, *label, **labels):
+        """Collect per-case failures so plain pytest (no subtests plugin) cannot swallow them."""
+        try:
+            yield
+        except AssertionError as exc:
+            self.failures.append(f"{label}{labels}: {exc}")
+
+    def put(self, rel, data):
+        target = self.root / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(data)
+
+    def case(self, grant=None, *, raw=None, claimed=_GRANT_PATH, sha=None, now=_NOW, edit=None, write=True, **work_order):
+        data = raw if raw is not None else _grant_md(grant or _grant()).encode("utf-8")
+        self.put(_GRANT_PATH, data)
+        if write and not re.search(r"\.\.|^/|:", claimed):
+            self.put(claimed.replace("\\", "/"), data)
+        text = _cleared_work_order(claimed, sha or hashlib.sha256(data).hexdigest(), **work_order)
+        return chk.diagnose("docs/work_orders/x.md", edit(text) if edit else text, root=self.root, now=now)
+
+    def assertRejected(self, diagnostic, expected):
+        self.assertFalse(diagnostic.is_clean, expected)
+        self.assertTrue(any(expected in issue for issue in diagnostic.issues), diagnostic.issues)
+        return diagnostic
+
+    def test_valid_cleared_round_three_with_honest_none_is_clean(self):
+        d = self.case()
+        self.assertTrue(d.applicable and d.is_clean, d.issues)
+        self.assertTrue(self.case(_grant(reviewRoundCount=2, reworkGeneration=2), reviewRoundCount="2", reworkGeneration="2").is_clean)
+
+    def test_numeric_text_binding_scalars_remain_strings(self):
+        cases = [
+            (_grant(priorFindingSetDigest="1" * 64), dict(priorFindingSetDigest="1" * 64)),
+            (_grant(rootCauseClusterId="00456"), dict(rootCauseClusterId="00456")),
+            (_grant(parentAssignmentId="00123"), dict(edit=lambda text: text.replace("parentAssignmentId: parent-1", "parentAssignmentId: 00123"))),
+        ]
+        for grant, fields in cases:
+            diagnostic = self.case(grant, **fields)
+            self.assertTrue(diagnostic.is_clean, diagnostic.issues)
+
+    def test_valid_timed_and_external_variants_are_clean(self):
+        timed = _with(_with(_grant(), ("validityDisposition",), "UNTIL_UTC_EXPIRY"), ("expiresAtUtc",), "2026-10-16T00:00:00Z")
+        self.assertTrue(self.case(timed).is_clean)
+        external = _grant(dispatchSurface="EXTERNAL_AGENT_CLI_MCP")
+        external["scope"]["numericalCeilings"]["externalInvocationCeiling"] = 2
+        self.assertTrue(self.case(external, scope=external["scope"], **_EXTERNAL).is_clean)
+
+    def test_default_stops_are_unchanged_without_a_declaration(self):
+        def legacy(text):
+            return re.sub(r"(?m)^operatorContinuation.*\n", "", text).replace("continuation-scope-json", "json")
+
+        self.assertRejected(self.case(edit=legacy), "operator escalation")
+        self.assertRejected(self.case(_grant(reviewRoundCount=2, reworkGeneration=2), reviewRoundCount="2", reworkGeneration="2", edit=legacy), "critical evidence IDs")
+
+    def test_hostile_grant_sources_are_rejected_without_ordinary_fallback(self):
+        good = _grant_md(_grant())
+        cases = {
+            "missing source": dict(claimed="docs/reviews/CVF_MISSING_2026-10-15.md", write=False, expected="source rejected"),
+            "hash mismatch": dict(sha="0" * 64, expected="sha256 mismatch"),
+            "uppercase hash": dict(sha="A" * 64, expected="lowercase 64-hex"),
+            "not utf8": dict(raw=b"\xff\xfe\x00bad", expected="invalid"),
+            "no fence": dict(raw=b"# no grant here\n", expected="exactly one"),
+            "two fences": dict(raw=(good + good).encode(), expected="exactly one"),
+            "bad json": dict(raw=good.replace('"status": "ACTIVE"', '"status": ').encode(), expected="invalid"),
+            "duplicate top key": dict(raw=good.replace('"status": "ACTIVE",', '"status": "ACTIVE", "status": "ACTIVE",').encode(), expected="duplicate JSON key"),
+            "duplicate nested key": dict(raw=good.replace('"reviewRoundCount": 3,', '"reviewRoundCount": 3, "reviewRoundCount": 3,').encode(), expected="duplicate JSON key"),
+            "non finite": dict(raw=good.replace('"expiresAtUtc": null', '"expiresAtUtc": NaN').encode(), expected="non-finite"),
+            "oversize": dict(raw=(good + "x" * 70000).encode(), expected="exceeds"),
+            "tilde grant fence": dict(raw=good.replace("```operator-continuation-authorization-json", "~~~operator-continuation-authorization-json").encode(), expected="exactly one"),
+            "four backtick fence": dict(raw=good.replace("```operator-continuation-authorization-json", "````operator-continuation-authorization-json").encode(), expected="exactly one"),
+            "archive path": dict(claimed="docs/reviews/archive/grant.md", expected="safe non-archive"),
+            "wrong prefix": dict(claimed="docs/work_orders/grant.md", expected="safe non-archive"),
+            "not markdown": dict(claimed="docs/reviews/grant.txt", expected="safe non-archive"),
+            "backslash": dict(claimed="docs\\reviews\\grant.md", expected="safe non-archive"),
+            "absolute": dict(claimed="/docs/reviews/grant.md", expected="safe non-archive"),
+            "drive": dict(claimed="C:/docs/reviews/grant.md", expected="safe non-archive"),
+            "dot segment": dict(claimed="./docs/reviews/grant.md", expected="safe non-archive"),
+            "traversal": dict(claimed="docs/reviews/../reviews/grant.md", expected="safe non-archive"),
+            "empty segment": dict(claimed="docs/reviews//grant.md", expected="safe non-archive"),
+            "whitespace": dict(claimed="docs/reviews/grant x.md", expected="safe non-archive"),
+            "worker writable return": dict(claimed=_ARTIFACTS[1], expected="self-referenced"),
+        }
+        for name, spec in cases.items():
+            with self.sub(name):
+                spec = dict(spec)
+                expected = spec.pop("expected")
+                d = self.assertRejected(self.case(**spec), expected)
+                self.assertTrue(any("operator escalation" in issue for issue in d.issues), "invalid grant must not fall back to ordinary automatic mode")
+
+    def test_linked_directory_grant_source_is_rejected(self):
+        data = _grant_md(_grant()).encode("utf-8")
+        self.put("docs/reviews/real/grant.md", data)
+        link, real = self.root / "docs/reviews/linked", self.root / "docs/reviews/real"
+        try:
+            link.symlink_to(real, target_is_directory=True)
+        except (OSError, NotImplementedError):
+            junction = ["cmd", "/c", "mklink", "/J", str(link), str(real)]
+            if os.name != "nt" or subprocess.run(junction, capture_output=True).returncode != 0:
+                self.skipTest("neither a symlink nor a junction can be created here")
+        text = _cleared_work_order("docs/reviews/linked/grant.md", hashlib.sha256(data).hexdigest())
+        d = chk.diagnose("docs/work_orders/x.md", text, root=self.root, now=_NOW)
+        self.assertRejected(d, "operator continuation source rejected")
+
+    def test_hostile_grant_members_and_type_substitutions_are_rejected(self):
+        timed = _with(_grant(), ("validityDisposition",), "UNTIL_UTC_EXPIRY")
+        cases = [
+            (("schemaVersion",), "cvf.other@1.0.0", "schemaVersion"), (("decisionOwner",), "AGENT", "decisionOwner"),
+            (("status",), "REVOKED", "status"), (("operatorInstructionEvidence",), "too short", "operatorInstructionEvidence"),
+            (("operatorInstructionEvidence",), {"ref": "nested authorization substitute"}, "operatorInstructionEvidence"),
+            (("operatorInstructionEvidence",), "TODO fill the operator instruction reference", "operatorInstructionEvidence"),
+            (("validityDisposition",), "FOREVER", "validityDisposition"), (("expiresAtUtc",), "2099-01-01T00:00:00Z", "requires expiresAtUtc null"),
+            (("extra",), 1, "exactly"), (("scope",), _DROP, "exactly"),
+            (("binding", "reviewRoundCount"), "3", "binding.reviewRoundCount"), (("binding", "reviewRoundCount"), True, "binding.reviewRoundCount"),
+            (("binding", "reworkGeneration"), 3.0, "binding.reworkGeneration"), (("binding", "priorFindingSetDigest"), "B" * 64, "SHA-256"),
+            (("binding", "commitMode"), "WORKER_MAY_COMMIT", "binding.commitMode"), (("binding", "dispatchSurface"), "OTHER", "dispatchSurface"),
+            (("binding", "parentAssignmentId"), "other-parent", "does not equal"), (("binding", "rootCauseClusterId"), "other-cluster", "does not equal"),
+            (("binding", "reviewRoundCount"), 2, "does not equal"), (("binding", "priorFindingSetDigest"), "c" * 64, "does not equal"),
+            (("binding", "dispatchSurface"), "EXTERNAL_AGENT_CLI_MCP", "does not equal"),
+            (("scope", "objectiveId"), "TODO", "objectiveId"), (("scope", "acceptanceItems"), [], "acceptanceItems"),
+            (("scope", "acceptanceItems"), ["AC-1", "AC-1"], "acceptanceItems"), (("scope", "allowedArtifacts"), [_ARTIFACTS[0], _ARTIFACTS[0]], "allowedArtifacts"),
+            (("scope", "allowedArtifacts"), ["../escape.py"], "allowedArtifacts"), (("scope", "riskCeiling"), "HIGHER", "riskCeiling"),
+            (("scope", "commitOwner"), "worker", "commitOwner"), (("scope", "effectCeilings", "providerCalls"), True, "effectCeilings"),
+            (("scope", "effectCeilings", "networkCalls"), -1, "effectCeilings"), (("scope", "effectCeilings", "extra"), 0, "effectCeilings"),
+            (("scope", "numericalCeilings"), {}, "numericalCeilings"), (("scope", "numericalCeilings", "workerMinutes"), 0, "workerMinutes"),
+            (("scope", "numericalCeilings", "reviewerMinutes"), _DROP, "reviewerMinutes"), (("scope", "numericalCeilings", "workerMinutes"), 1.5, "numericalCeilings"),
+        ]
+        for keys, value, expected in cases:
+            with self.sub(keys=keys, value=value):
+                self.assertRejected(self.case(_with(_grant(), keys, value)), expected)
+        for value, expected in (
+            (None, "timezone-aware UTC"), ("2026-10-16T00:00:00", "timezone-aware UTC"), ("2026-10-16T07:00:00+07:00", "timezone-aware UTC"),
+            ("2026-10-14T00:00:00Z", "expired"), ("2026-10-15T06:00:00Z", "expired"),
+        ):
+            with self.sub(expires=value):
+                self.assertRejected(self.case(_with(timed, ("expiresAtUtc",), value)), expected)
+
+    def test_declaration_cardinality_and_route_restrictions_fail_closed(self):
+        cases = {
+            "path only": dict(edit=lambda t: re.sub(r"(?m)^operatorContinuationEvidenceSha256.*\n", "", t), expected="exactly one"),
+            "sha only": dict(edit=lambda t: re.sub(r"(?m)^operatorContinuationEvidencePath.*\n", "", t), expected="exactly one"),
+            "scope only": dict(edit=lambda t: re.sub(r"(?m)^operatorContinuationEvidence.*\n", "", t), expected="exactly one"),
+            "no scope": dict(edit=lambda t: t.replace("continuation-scope-json", "json"), expected="exactly one"),
+            "tilde scope fence": dict(edit=lambda t: t.replace("```continuation-scope-json", "~~~continuation-scope-json"), expected="exactly one"),
+            "empty path": dict(edit=lambda t: re.sub(r"(?m)^(operatorContinuationEvidencePath:).*$", r"\1", t), expected="exactly one"),
+            "duplicate path": dict(edit=lambda t: t + f"operatorContinuationEvidencePath: {_GRANT_PATH}\n", expected="exactly one"),
+            "duplicate scope": dict(edit=lambda t: t + "\n```continuation-scope-json\n{}\n```\n", expected="exactly one"),
+            "initial dispatch": dict(dispatchKind="INITIAL", reviewRoundCount="0", reworkGeneration="0", expected="applies only to REWORK"),
+            "rework round one": dict(reviewRoundCount="1", reworkGeneration="1", expected="applies only to REWORK"),
+            "generation mismatch": dict(reworkGeneration="2", expected="applies only to REWORK"),
+            "ambiguous scalar": dict(edit=lambda t: t + "reviewRoundCount: 3\n", expected="exactly one reviewRoundCount"),
+            "conflicting commit mode": dict(edit=lambda t: t + "Commit mode: WORKER_MAY_COMMIT\n", expected="unambiguous Commit mode"),
+            "placeholder critical evidence": dict(newIndependentCriticalEvidence="FILL_ME", expected="critical evidence IDs"),
+            "no ledger": dict(ledger="\n", expected="valid acceptance ledger"),
+            "ledger extra artifact": dict(ledger=_ledger([*_ARTIFACTS, "docs/reviews/extra.md"]), expected="acceptance-ledger"),
+            "ledger missing artifact": dict(ledger=_ledger(_ARTIFACTS[:2]), expected="acceptance-ledger"),
+            "scope extra artifact": dict(scope={**_scope(), "allowedArtifacts": [*_ARTIFACTS, "docs/reviews/extra.md"]}, expected="type-identical"),
+            "scope type substitution": dict(scope={**_scope(), "numericalCeilings": {"workerMinutes": 120.0, "reviewerMinutes": 40}}, expected="type-identical"),
+        }
+        for name, spec in cases.items():
+            with self.sub(name):
+                spec = dict(spec)
+                expected = spec.pop("expected")
+                self.assertRejected(self.case(**spec), expected)
+
+    def test_external_ceiling_and_usage_controls_survive_clearance(self):
+        external = _grant(dispatchSurface="EXTERNAL_AGENT_CLI_MCP")
+        self.assertRejected(self.case(external, **_EXTERNAL), "externalInvocationCeiling is required")
+        external["scope"]["numericalCeilings"]["externalInvocationCeiling"] = 3
+        self.assertRejected(self.case(external, scope=external["scope"], **_EXTERNAL), "must equal the work-order ceiling")
+        external["scope"]["numericalCeilings"]["externalInvocationCeiling"] = 2
+        for over, expected in (
+            (dict(cumulativeExternalInvocationCount="2"), "cumulativeExternalInvocationCount <"),
+            (dict(usageAvailability="UNKNOWN"), "KNOWN_FOR_ADMISSION"),
+        ):
+            with self.sub(over=over):
+                self.assertRejected(self.case(external, scope=external["scope"], **{**_EXTERNAL, **over}), expected)
+
+    def _completion(self, *, round_="3", stop="COMPLETE_REVIEW", roots="0", wo_round="3", wo_rel="docs/work_orders/CVF_EXAMPLE_ORDER_2026-10-15.md",
+                    claimed=None, sha=None, link="both", legacy=False, expires=None, now=_NOW, path="docs/reviews/CVF_EXAMPLE_COMPLETION_2026-10-15.md"):
+        grant = _grant(reviewRoundCount=int(wo_round), reworkGeneration=int(wo_round))
+        if expires:
+            grant = _with(_with(grant, ("validityDisposition",), "UNTIL_UTC_EXPIRY"), ("expiresAtUtc",), expires)
+        data = _grant_md(grant).encode("utf-8")
+        self.put(_GRANT_PATH, data)
+        order = _work_order_block() if legacy else _cleared_work_order(_GRANT_PATH, hashlib.sha256(data).hexdigest(), reviewRoundCount=wo_round, reworkGeneration=wo_round)
+        self.put(wo_rel, order.encode("utf-8"))
+        fields = {
+            "both": f"continuationWorkOrderPath: {claimed or wo_rel}\ncontinuationWorkOrderSha256: {sha or hashlib.sha256(order.encode()).hexdigest()}\n",
+            "path only": f"continuationWorkOrderPath: {wo_rel}\n", "none": "",
+        }[link]
+        text = _HEADER + _telemetry_block(reviewRoundCount=round_, newRootCauseCountThisRound=roots, stopDisposition=stop) + fields
+        return chk.diagnose(path, text, root=self.root, now=now)
+
+    def test_linked_completion_permits_only_existing_tokens_at_cleared_boundary(self):
+        for kwargs in (dict(), dict(stop="CONSOLIDATE_SINGLE_REPAIR"), dict(round_="2", wo_round="2", stop="CONSOLIDATE_SINGLE_REPAIR"),
+                       dict(round_="4", wo_round="4"), dict(stop="REVIEW_COST_ESCALATION_REQUIRED")):
+            with self.sub(kwargs):
+                d = self._completion(**kwargs)
+                self.assertTrue(d.is_clean, d.issues)
+        self.assertRejected(self._completion(stop="PARK_LOW_INCREMENTAL_VALUE"), "reviewRoundCount >= 3")
+        self.assertRejected(self._completion(stop="CONTINUE_NEW_CRITICAL_EVIDENCE"), "`CONTINUE_NEW_CRITICAL_EVIDENCE` requires")
+        self.assertTrue(self._completion(stop="CONTINUE_NEW_CRITICAL_EVIDENCE", roots="1").is_clean)
+
+    def test_completion_without_valid_link_keeps_round_and_root_restrictions(self):
+        cases = {
+            "no link": (dict(link="none"), None), "one sided": (dict(link="path only"), "invalid continuation work-order binding"),
+            "wrong sha": (dict(sha="0" * 64), "sha256 mismatch"), "uppercase sha": (dict(sha="A" * 64), "sha256 mismatch"),
+            "round mismatch": (dict(round_="4"), "must equal the referenced work order round"),
+            "legacy order": (dict(legacy=True), "not a valid operator-cleared dispatch"),
+            "outside work orders": (dict(claimed=_GRANT_PATH), "docs/work_orders"),
+            "traversal": (dict(claimed="docs/work_orders/../reviews/x.md"), "docs/work_orders"),
+            "archive": (dict(claimed="docs/work_orders/archive/x.md"), "docs/work_orders"),
+            "missing order": (dict(claimed="docs/work_orders/CVF_MISSING_2026-10-15.md"), "invalid continuation"),
+            "expired grant": (dict(expires="2026-10-16T00:00:00Z", now=datetime(2026, 10, 17, tzinfo=timezone.utc)), "not a valid operator-cleared dispatch"),
+            "authorization cycle": (dict(path=_GRANT_PATH), "authorization cycle"),
+        }
+        for name, (kwargs, expected) in cases.items():
+            with self.sub(name):
+                d = self.assertRejected(self._completion(**kwargs), expected or "reviewRoundCount >= 3")
+                self.assertTrue(any("reviewRoundCount >= 3" in issue for issue in d.issues), "round restriction must be retained")
+        self.assertRejected(self._completion(round_="2", wo_round="2", stop="CONSOLIDATE_SINGLE_REPAIR", link="none"), "independent root cause")
 
 
 if __name__ == "__main__":

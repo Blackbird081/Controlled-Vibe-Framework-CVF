@@ -1,6 +1,8 @@
 import json
 import subprocess
 
+import pytest
+
 import governance.compat.run_agent_push_readiness_preview as preview
 import governance.compat.run_agent_commit_steward_preflight as steward
 
@@ -46,6 +48,7 @@ def test_shape_result_fails_mixed_material_and_session(monkeypatch) -> None:
         protected_session_paths=("AGENT_HANDOFF_V23_2026-06-26.md",),
         trace_artifact_paths=(),
         mixed_material_and_session=True,
+        mixed_atomicity_authorized=False,
         exact_manifest_collision_risk=False,
         handoff_sync_only=False,
     )
@@ -69,21 +72,23 @@ def test_upstream_status_reports_missing_tracking_branch(monkeypatch) -> None:
     assert "no upstream" in result.output
 
 
-def test_upstream_status_fails_when_push_debt_exceeds_limit(monkeypatch) -> None:
+@pytest.mark.parametrize("ahead", [3, 32, 200])
+def test_upstream_ahead_count_is_advisory(monkeypatch, ahead) -> None:
     def fake_git_output(*args, check=False):
         if args[:4] == ("rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"):
             return 0, "origin/main"
         if args[:3] == ("rev-list", "--left-right", "--count"):
-            return 0, "0\t3"
+            return 0, f"0\t{ahead}"
         return 1, "unexpected git call"
 
     monkeypatch.setattr(preview, "_git_output", fake_git_output)
 
     result = preview._upstream_status(ahead_limit=2)
 
-    assert result.status == "FAIL"
-    assert result.returncode == 1
-    assert "upstream push debt exceeds limit 2" in result.output
+    assert result.status == "WARN"
+    assert result.returncode == 0
+    assert "ADVISORY" in result.output
+    assert f"behind_ahead=0\t{ahead}" in result.output
 
 
 def test_upstream_status_passes_within_push_debt_limit(monkeypatch) -> None:
@@ -152,3 +157,42 @@ def test_run_command_uses_utf8_replace(monkeypatch) -> None:
     assert result.status == "PASS"
     assert observed["encoding"] == "utf-8"
     assert observed["errors"] == "replace"
+
+
+@pytest.mark.parametrize("counts", ["1\t0", "1\t32", "invalid", "-1\t3", ""])
+def test_upstream_unreconciled_or_invalid_state_still_fails(monkeypatch, counts) -> None:
+    monkeypatch.setattr(preview, "_git_output", lambda *args, **kwargs:
+                        (0, "origin/main") if args[0] == "rev-parse" else (0, counts))
+    result = preview._upstream_status(ahead_limit=2)
+    assert result.status == "FAIL"
+    assert result.returncode != 0
+
+
+def test_advisory_visible_and_does_not_fail_enforced_cli(monkeypatch, capsys) -> None:
+    shape = preview.ShapeResult((), (), (), (), False, False, "no changed paths detected", "PASS")
+    warning = preview.PreviewResult("upstream tracking branch", ("git",), 0, 0.01,
+                                    "WARN", "ADVISORY: ahead=32; local work may continue")
+    monkeypatch.setattr(preview, "_run_preview", lambda *args, **kwargs: (shape, (warning,)))
+    monkeypatch.setattr(preview.sys, "argv", ["prog", "--enforce"])
+    assert preview.main() == 0
+    assert "ADVISORY: ahead=32" in capsys.readouterr().out
+    monkeypatch.setattr(preview.sys, "argv", ["prog", "--enforce", "--json"])
+    assert preview.main() == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["status"] == "PASS"
+    assert payload["checks"][0]["status"] == "WARN"
+
+
+@pytest.mark.parametrize("flag", ["--upstream-ahead-warning", "--upstream-ahead-limit"])
+def test_warning_threshold_cli_and_compatibility_alias(monkeypatch, flag) -> None:
+    observed = {}
+    shape = preview.ShapeResult((), (), (), (), False, False, "no changed paths detected", "PASS")
+
+    def fake_preview(base, head, include_upstream, upstream_ahead_limit):
+        observed["threshold"] = upstream_ahead_limit
+        return shape, ()
+
+    monkeypatch.setattr(preview, "_run_preview", fake_preview)
+    monkeypatch.setattr(preview.sys, "argv", ["prog", flag, "12", "--enforce"])
+    assert preview.main() == 0
+    assert observed["threshold"] == 12

@@ -28,8 +28,8 @@ export default function HistoryPage() {
                 executions={executions}
                 onSelect={(exec) => {
                     setCurrentExecution(exec);
-                    // Navigate to result via home page workflow
-                    router.push('/home');
+                    // Saved-result identity travels in the URL; Home never infers it from the ambient selection.
+                    router.push(`/home?result=${encodeURIComponent(exec.id)}`);
                 }}
                 onBrowse={() => router.push('/home')}
                 // W123-T1: continue-work CTA navigates home with continue param

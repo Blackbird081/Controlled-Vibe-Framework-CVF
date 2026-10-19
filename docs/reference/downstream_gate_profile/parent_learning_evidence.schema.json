@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cvf.parentLearningEvidence@1.0.0",
+  "title": "CVF parent learning evidence (optional parentEvidence member of a parent registry finding)",
+  "description": "Closed-shape structural contract. Conformance proves declarations and local byte identity only; it is not semantic acceptance. Joins, byte hashes, locator safety, duplicate JSON keys and lifecycle coherence are enforced by governance/compat/parent_learning_evidence.py, not by this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "findingId", "source", "valueChecks", "decision", "implementation", "projectResolution", "returnDelivery", "projectApplication", "claimLimits"],
+  "properties": {
+    "schemaVersion": {"const": "cvf.parentLearningEvidence@1.0.0"},
+    "findingId": {"$ref": "#/$defs/text"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceProject", "evidence"],
+      "properties": {
+        "sourceProject": {"$ref": "#/$defs/text"},
+        "evidence": {"$ref": "#/$defs/ref"}
+      }
+    },
+    "valueChecks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceConfidence", "reusableMechanism", "existingCoverage", "incrementalValue", "boundedProof"],
+      "properties": {
+        "sourceConfidence": {"$ref": "#/$defs/valueCheck"},
+        "reusableMechanism": {"$ref": "#/$defs/valueCheck"},
+        "existingCoverage": {"$ref": "#/$defs/valueCheck"},
+        "incrementalValue": {"$ref": "#/$defs/valueCheck"},
+        "boundedProof": {"$ref": "#/$defs/valueCheck"}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "reason", "reviewer", "owner", "f2gDisposition", "evidence"],
+      "properties": {
+        "state": {"enum": ["PENDING", "ACCEPT", "MERGE", "DEFER", "DECLINE"]},
+        "reason": {"$ref": "#/$defs/text"},
+        "reviewer": {"anyOf": [{"$ref": "#/$defs/text"}, {"type": "null"}]},
+        "owner": {"$ref": "#/$defs/text"},
+        "f2gDisposition": {"$ref": "#/$defs/text"},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/ref"}}
+      }
+    },
+    "implementation": {"$ref": "#/$defs/lifecycle", "properties": {"state": {"enum": ["NOT_IMPLEMENTED", "IMPLEMENTED_BOUNDED"]}}},
+    "projectResolution": {"$ref": "#/$defs/lifecycle", "properties": {"state": {"enum": ["UNKNOWN", "OPEN", "RESOLVED", "PARKED_BY_OPERATOR"]}}},
+    "returnDelivery": {"$ref": "#/$defs/lifecycle", "properties": {"state": {"enum": ["NOT_RETURNED", "RETURNED", "PARKED_BY_OPERATOR"]}}},
+    "projectApplication": {"$ref": "#/$defs/lifecycle", "properties": {"state": {"enum": ["NOT_APPLIED", "APPLIED", "PARKED_BY_OPERATOR"]}}},
+    "claimLimits": {"$ref": "#/$defs/text"}
+  },
+  "$defs": {
+    "text": {"type": "string", "pattern": "\\S"},
+    "ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "fragment", "evidenceClass"],
+      "properties": {
+        "path": {"$ref": "#/$defs/text"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "fragment": {"$ref": "#/$defs/text"},
+        "evidenceClass": {"enum": ["OBSERVED_LOCAL", "ATTRIBUTED_SOURCE", "SYNTHETIC_OFFLINE"]}
+      }
+    },
+    "valueCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reason", "evidence", "limits"],
+      "properties": {
+        "status": {"enum": ["SUPPORTED", "INCONCLUSIVE", "NOT_ASSESSED"]},
+        "reason": {"$ref": "#/$defs/text"},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/ref"}},
+        "limits": {"$ref": "#/$defs/text"}
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "reason", "evidence"],
+      "properties": {
+        "state": {"$ref": "#/$defs/text"},
+        "reason": {"$ref": "#/$defs/text"},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/ref"}}
+      }
+    },
+    "receipt": {
+      "description": "Raw JSON receipt file referenced from returnDelivery/projectApplication evidence (cvf.learningLoopReceipt@1.0.0).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "findingId", "sourceProject", "control", "actor", "authorization", "verification", "claimLimits"],
+      "properties": {
+        "schemaVersion": {"const": "cvf.learningLoopReceipt@1.0.0"},
+        "kind": {"enum": ["DELIVERY", "APPLICATION"]},
+        "findingId": {"$ref": "#/$defs/text"},
+        "sourceProject": {"$ref": "#/$defs/text"},
+        "control": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256"],
+          "properties": {
+            "path": {"$ref": "#/$defs/text"},
+            "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          }
+        },
+        "actor": {"$ref": "#/$defs/text"},
+        "authorization": {"$ref": "#/$defs/ref"},
+        "verification": {"$ref": "#/$defs/ref"},
+        "claimLimits": {"$ref": "#/$defs/text"}
+      }
+    }
+  }
+}

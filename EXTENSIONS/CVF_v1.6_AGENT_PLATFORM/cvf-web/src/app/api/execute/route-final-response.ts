@@ -97,24 +97,33 @@ export async function buildOutputValidationExhaustedResponse(params: BuildOutput
     });
 
     const validationExhaustedReconciliation = buildProviderAttemptReconciliation(providerAttemptLedger, routedProvider, body.model ?? 'default');
+    const validationReceipt = buildEvidenceReceipt({
+        envelope: govEnvelope, decision: 'BLOCK', riskLevel: enforcement.riskGate?.riskLevel, provider: routedProvider,
+        model: body.model ?? aiResult.model ?? routedProvider, routingDecision: routingResult.decision, knowledgeSource, knowledgeInjected,
+        knowledgeCollectionId: requestedKnowledgeCollectionId, knowledgeChunkCount: retrievalResult.allowedChunkCount,
+        approvalId: approvedRequestRecord?.id, validationHint: outputValidation.qualityHint, aifMemoryReinjection: aifMemoryReinjection.receipt,
+        durableMemoryRead: durableMemoryRoute.receipt, providerAttemptReconciliation: validationExhaustedReconciliation,
+    });
     return NextResponse.json(
         {
             success: false,
             error: 'Generated response failed output validation after retry attempts.',
             provider: routedProvider,
             model: body.model ?? aiResult.model ?? routedProvider,
+            usage: aiResult.usage,
+            tokensUsed: aiResult.tokensUsed,
+            executionTime: aiResult.executionTime,
+            diagnostic: buildExecutionDiagnostic({
+                stage: 'output_validation', class: 'output_validation_failed', provider: routedProvider,
+                model: body.model ?? aiResult.model ?? routedProvider, httpStatus: 422,
+                receiptId: validationReceipt.receiptId, traceId: validationReceipt.envelopeId,
+            }),
             enforcement,
             guardResult,
             outputValidation: { qualityHint: outputValidation.qualityHint, issues: outputValidation.issues, retryAttempts: retryState.attempt },
             governanceEnvelope: govEnvelope,
             policySnapshotId: govEnvelope.policySnapshotId,
-            governanceEvidenceReceipt: buildEvidenceReceipt({
-                envelope: govEnvelope, decision: 'BLOCK', riskLevel: enforcement.riskGate?.riskLevel, provider: routedProvider,
-                model: body.model ?? aiResult.model ?? routedProvider, routingDecision: routingResult.decision, knowledgeSource, knowledgeInjected,
-                knowledgeCollectionId: requestedKnowledgeCollectionId, knowledgeChunkCount: retrievalResult.allowedChunkCount,
-                approvalId: approvedRequestRecord?.id, validationHint: outputValidation.qualityHint, aifMemoryReinjection: aifMemoryReinjection.receipt,
-                durableMemoryRead: durableMemoryRoute.receipt, providerAttemptReconciliation: validationExhaustedReconciliation,
-            }),
+            governanceEvidenceReceipt: validationReceipt,
             providerAttemptReconciliation: validationExhaustedReconciliation,
         },
         { status: 422 },
@@ -158,7 +167,7 @@ interface BuildExecuteFinalResponseParams {
 
 export async function buildExecuteFinalResponse(params: BuildExecuteFinalResponseParams) {
     const {
-        aiResult,
+        aiResult: providerResult,
         outputValidation,
         retryState,
         request,
@@ -192,6 +201,16 @@ export async function buildExecuteFinalResponse(params: BuildExecuteFinalRespons
         providerAttemptReconciliation,
     } = params;
 
+    // A failed or empty response cannot become a completed artifact downstream.
+    const aiResult: ExecutionResponse = providerResult.success && typeof providerResult.output === 'string' && providerResult.output.trim()
+        ? providerResult
+        : {
+            ...providerResult, success: false, output: undefined,
+            error: providerResult.error || 'The provider returned no usable output.',
+            diagnostic: providerResult.diagnostic ?? (providerResult.success
+                ? buildExecutionDiagnostic({ stage: 'provider', class: 'provider_empty_output', provider: routedProvider, model: providerResult.model, latencyMs: providerResult.executionTime })
+                : undefined),
+        };
     const model = request.model ?? aiResult.model ?? routedProvider;
     const actorId = session?.userId ?? (isServiceAllowed ? 'service-account' : 'unknown-actor');
     const actorRole = resolvedExecutionRole.role ?? (isServiceAllowed ? 'service' : 'unknown');
@@ -212,18 +231,19 @@ export async function buildExecuteFinalResponse(params: BuildExecuteFinalRespons
         }
     }
 
-    const usage = aiResult.success && aiResult.output ? resolveTokenUsage(filteredPrompt, aiResult.output, aiResult) : undefined;
+    const resolvedUsage = aiResult.success && aiResult.output ? resolveTokenUsage(filteredPrompt, aiResult.output, aiResult) : undefined;
+    const usage = resolvedUsage ?? aiResult.usage;
     const durableMemoryWriteReceipt = aiResult.success && aiResult.output
         ? evaluateDurableMemoryWrite({ request, actorId, actorRole: resolveDurableMemoryActorRole(resolvedExecutionRole.role), output: aiResult.output })
         : undefined;
     const routeElapsedMs = Math.max(0, Date.now() - routeStartedAtMs);
-    const runtimeTelemetry = usage
+    const runtimeTelemetry = resolvedUsage
         ? {
             schemaVersion: 'cvf.runtimeTelemetry.v1' as const,
             providerLatencyMs: aiResult.executionTime,
             routeElapsedMs,
-            tokenUsage: usage,
-            estimatedCostUSD: calculateTokenCost(model, usage.inputTokens, usage.outputTokens),
+            tokenUsage: resolvedUsage,
+            estimatedCostUSD: calculateTokenCost(model, resolvedUsage.inputTokens, resolvedUsage.outputTokens),
             costEstimateSource: 'cvf_model_pricing_table_or_fallback' as const,
             redactionApplied: true as const,
             claimBoundary: 'summary_only_no_raw_prompt_output_key_or_provider_payload' as const,

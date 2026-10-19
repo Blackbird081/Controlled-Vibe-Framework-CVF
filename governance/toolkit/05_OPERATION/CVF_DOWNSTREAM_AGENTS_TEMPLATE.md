@@ -57,12 +57,13 @@ the active handoff before BUILD begins. If summary, state, and handoff disagree,
 INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE
 ```
 
-Required control: INTAKE bounds the request; DESIGN records decisions; SPEC separates intended behavior from
-implementation truth; WORK_ORDER grants bounded execution; BUILD preserves scope and produces evidence; REVIEW returns
-defects without silent self-approval; FREEZE closes only settled work. A tranche may inherit accepted evidence and
-enter at its earliest open stage when that decision is recorded. Gate every applicable transition, but do not require
-a standalone review artifact after each stage. REVIEW is formal result evaluation before FREEZE; lifecycle
-traceability is not universal machine enforcement.
+Required control: INTAKE bounds the request; DESIGN records decisions; SPEC separates intended behavior from implementation truth; WORK_ORDER grants bounded execution; BUILD preserves scope and produces evidence; REVIEW returns defects without silent self-approval; FREEZE closes only settled work.
+A tranche may inherit accepted evidence and enter at its earliest open stage when recorded. Gate applicable transitions without requiring a standalone review artifact after each stage. REVIEW evaluates results before FREEZE; lifecycle traceability is not universal machine enforcement.
+
+## Agent Continuation And Action Readiness
+
+Before intake, planning, producing or receiving work, apply the pinned core's `docs/reference/CVF_GOVERNED_WORK_LIFECYCLE_AND_DESIGN_CONTROL_STANDARD_2026-06-11.md`, Agent Continuation And Action Readiness, without reminder.
+Design outputs for quick agent and human continuation; accept incomplete inputs for permitted clarification, read sources before asking, resolve ordinary authorized details, route consequential unknowns to the right owner and pause only dependent actions. Preserve governed SPEC/WORK_ORDER and locked design/authority; reuse existing artifact structure.
 
 ## Provider-Neutral Role Contract
 

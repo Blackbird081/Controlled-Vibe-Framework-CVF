@@ -1,4 +1,5 @@
 'use client';
+// Text Encoding Exception: bilingual Vietnamese skip-link copy follows the existing language owner.
 
 import { useState, useEffect, startTransition, Suspense } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -51,6 +52,10 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
+    // Each explicit prompt-bearing cvf:openAgent event gets a fresh identity so the
+    // chat wrapper binds that prompt to its own new session. Minimize/restore and
+    // unrelated rerenders keep the identity, so a delivered prompt is never replayed.
+    const [agentHandoffId, setAgentHandoffId] = useState(0);
     const [isAgentMinimized, setIsAgentMinimized] = useState(false);
     // Seed from URL so the correct modal renders on the first frame (no flash).
     // After mount, state is the sole rendering driver — URL changes are synced
@@ -71,6 +76,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             const detail = (event as CustomEvent<{ prompt?: string }>).detail;
             modals.closeAllModals();
             setAgentPrompt(detail?.prompt);
+            if (detail?.prompt) setAgentHandoffId(id => id + 1);
             setActiveModal('agent');
             setIsAgentMinimized(false);
         };
@@ -199,6 +205,16 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+            {/* Skip link: first in tab order, visible only on keyboard focus; hidden behind blocking overlays. */}
+            {!hasBlockingOverlay && (
+                <a
+                    href="#cvf-dashboard-main"
+                    data-testid="skip-to-main"
+                    className="fixed left-3 top-3 z-[100] inline-flex min-h-11 -translate-y-24 items-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-gray-950 shadow-lg focus:translate-y-0 focus:outline-2 focus:outline-offset-2 focus:outline-[color:rgb(var(--cvf-accent-rgb))] dark:bg-gray-900 dark:text-white"
+                >
+                    {language === 'vi' ? 'Bỏ qua đến nội dung chính' : 'Skip to main content'}
+                </a>
+            )}
             {/* Onboarding */}
             {modals.showOnboarding && (
                 <OnboardingWizard onComplete={modals.handleOnboardingComplete} />
@@ -241,7 +257,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             />
 
             {/* Main Content — children are the individual page routes */}
-            <main className="md:ml-[220px] min-h-screen">
+            <main id="cvf-dashboard-main" tabIndex={-1} className="md:ml-[220px] min-h-screen focus:outline-none">
                 {impersonation && (
                     <div className="border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/40 dark:text-amber-100">
                         <div className="mx-auto flex max-w-6xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -320,10 +336,16 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             )}
 
             {/* Agent Chat */}
-            {visibleModal === 'agent' && !isAgentMinimized && (
-                <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-0 md:p-4">
+            {/* Stays mounted while minimized (hidden, not unmounted) so the session,
+                draft and already-delivered prompt survive restore. */}
+            {visibleModal === 'agent' && (
+                <div
+                    hidden={isAgentMinimized}
+                    className={isAgentMinimized ? 'hidden' : 'fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-0 md:p-4'}
+                >
                     <div className="w-full h-full md:h-[85vh] md:max-w-5xl rounded-none md:rounded-xl overflow-hidden shadow-2xl">
                         <AgentChatWithHistory
+                            key={agentHandoffId}
                             initialPrompt={agentPrompt}
                             onClose={closeActiveModal}
                             onComplete={closeActiveModal}

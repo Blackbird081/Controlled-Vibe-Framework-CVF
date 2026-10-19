@@ -14,7 +14,11 @@ def worker_return_packet_shape_contract(path: str) -> str:
             "contractProfile: WORKER_RETURN_FULL_GATE_V1\nrequiredGate: `python governance/compat/run_worker_return_fast_gate.py`\nindividualCheckerSubstitution: FORBIDDEN\nworkerReturnSkeleton: CHECKER_SAFE_SKELETON_REQUIRED\n\n"
             "Required terms: Purpose; Scope / Methodology; Findings / Position; Risk / Corrective Action; Claim Boundary; Agent Operation Trace Block; Delta Execution Claim Boundary Control Block; Public Export Disposition; executionBaseHead; git status --short.\n\n"
             "Conditional terms: External Knowledge Intake Routing; Rescan Intelligence Hardening; Corpus Completeness And Report Integrity; Finding-To-Governance Learning Disposition; Epistemic Process Block; Machine Closure Package.\n\nUse `N/A with reason` for every non-applicable conditional block.\n\n"
-            "Shape-list rule: when listing required worker-output sections, write section names without the `##` prefix. Reserve actual heading syntax for real sections so structural checkers do not treat this checklist as the artifact section body.\n")
+            "Shape-list rule: when listing required worker-output sections, write section names without the `##` prefix. Reserve actual heading syntax for real sections so structural checkers do not treat this checklist as the artifact section body.\n\n"
+            f"scaffoldPreparationCommand: `python governance/compat/run_worker_return_scaffold.py --write {path} --check-shape`\n"
+            "Run before long prose; helper refuses overwrite. Record the actual command/profile under scaffold effectiveness. Read applicable checker pointers before filling fields.\n"
+            "Required preparation: pending independent probe; Return-Time Closeability Recheck; coordination binding; applicable Core authorization. Preparation shape is not execution evidence.\n"
+            "Budget fit: generate/count before dispatch. Choose feasible per-task line/byte limits; no universal cap. When selected, append --max-lines/--max-bytes to preparation and --max-return-lines/--max-return-bytes to required fast gate with --active-work-order.\n")
 
 def worker_output_checker_read_ahead_mandate() -> str:
     return ("## Worker Output Checker Read-Ahead Mandate\n\nBefore writing each worker-owned output artifact, read checker source for that file's docType, path family, and conditional content class.\n\n"

@@ -286,3 +286,76 @@ def test_git_output_does_not_mix_stderr_warning_into_paths(monkeypatch) -> None:
     )
 
     assert steward._git_output("status", "--short") == "M docs/reference/example.md"
+
+
+def _isolated_cli(monkeypatch, arguments, failed_child=False):
+    monkeypatch.setattr(steward.sys, "argv", ["steward", *arguments])
+    monkeypatch.setattr(steward, "_short_ref", lambda ref: ref)
+    monkeypatch.setattr(steward, "_range_paths", lambda base, head: ())
+    monkeypatch.setattr(steward, "_status_paths", lambda: ())
+    commands = []
+
+    def run(command):
+        commands.append(command)
+        return int(failed_child and command.name == "worker return fast gate")
+
+    monkeypatch.setattr(steward, "_run", run)
+    return commands
+
+
+def test_reviewer_cli_forwards_exact_work_order_and_child_failure(monkeypatch) -> None:
+    path = "docs/work_orders/owned packet.md"
+    commands = _isolated_cli(monkeypatch, [
+        "--mode", "reviewer-return", "--active-work-order", path,
+    ], failed_child=True)
+    assert steward.main() == 1
+    assert commands[0].args == (
+        "python", "governance/compat/run_worker_return_fast_gate.py",
+        "--active-work-order", path,
+    )
+    assert commands[1].args == ("git", "diff", "--check")
+
+
+def test_reviewer_cli_bound_success_and_legacy_default(monkeypatch) -> None:
+    for arguments, suffix in [
+        (["--mode", "reviewer-return"], ()),
+        (["--mode", "reviewer-return", "--active-work-order", "owned.md"],
+         ("--active-work-order", "owned.md")),
+    ]:
+        commands = _isolated_cli(monkeypatch, arguments)
+        assert steward.main() == 0
+        assert commands[0].args == (
+            "python", "governance/compat/run_worker_return_fast_gate.py", *suffix,
+        )
+
+
+def test_work_order_option_rejected_before_execution_in_other_modes(monkeypatch) -> None:
+    import pytest
+    for mode in ["dispatch", "implementation", "closure", "push", "session-sync", "handoff-sync"]:
+        commands = _isolated_cli(monkeypatch, [
+            "--mode", mode, "--active-work-order", "owned.md",
+        ])
+        with pytest.raises(SystemExit) as error:
+            steward.main()
+        assert error.value.code == 2
+        assert commands == []
+
+
+def test_blank_work_order_rejected_before_execution(monkeypatch) -> None:
+    import pytest
+    commands = _isolated_cli(monkeypatch, [
+        "--mode", "reviewer-return", "--active-work-order", "  ",
+    ])
+    with pytest.raises(SystemExit) as error:
+        steward.main()
+    assert error.value.code == 2
+    assert commands == []
+
+
+def test_bound_plan_displays_binding_without_running_gate(monkeypatch, capsys) -> None:
+    commands = _isolated_cli(monkeypatch, [
+        "--mode", "reviewer-return", "--active-work-order", "owned.md", "--plan-only",
+    ])
+    assert steward.main() == 0
+    assert commands == []
+    assert "Active work order: owned.md" in capsys.readouterr().out

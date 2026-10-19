@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese noncoder template copy and English handoff wording.
 import { Template } from '@/types';
 
 export const developmentTemplates: Template[] = [
@@ -60,7 +61,7 @@ SUCCESS CRITERIA:
         id: 'app_builder_complete',
         name: '📦 Tạo Ứng dụng Hoàn chỉnh',
         icon: '📦',
-        description: 'Biến brief sản phẩm đầy đủ thành packet build-ready để non-coder vẫn mô tả rõ mục tiêu, phạm vi và ranh giới mà không phải chọn stack hay hạ tầng.',
+        description: 'Tạo brief có cấu trúc để agent tiếp nhận phân tích INTAKE; non-coder mô tả mục tiêu, phạm vi và ranh giới mà không phải chọn stack hay hạ tầng.',
         category: 'development',
         difficulty: 'advanced',
         fields: [
@@ -116,7 +117,7 @@ CONSTRAINTS:
 OUTPUT REQUIREMENTS:
 - Ask only for business intent, user outcomes, constraints, and preservation rules
 - Do not ask the end user to choose frameworks, databases, or hidden technical patterns
-- Translate this into a builder-ready governed packet
+- Organize this as structured input for receiving-agent INTAKE; do not assert BUILD readiness
 - Include acceptance criteria and handoff boundaries`,
         outputExpected: [
             'Product Brief',

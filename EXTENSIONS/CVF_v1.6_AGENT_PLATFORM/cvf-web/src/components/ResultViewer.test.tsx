@@ -420,6 +420,10 @@ Regular **bold** text`;
             await waitFor(() => {
                 expect(consoleSpy).toHaveBeenCalledWith('PDF export failed:', expect.any(Error));
             });
+            expect(screen.getByRole('alert').textContent).toMatch(/PDF export failed/);
+            expect(screen.getByRole('alert').textContent).not.toContain('Save failed');
+            expect(screen.getByRole('button', { name: /Retry PDF export/ })).toBeTruthy();
+            expect(screen.getByText('This is a test output.')).toBeTruthy();
             consoleSpy.mockRestore();
         });
 
@@ -484,6 +488,10 @@ Regular **bold** text`;
             await waitFor(() => {
                 expect(consoleSpy).toHaveBeenCalledWith('Word export failed:', expect.any(Error));
             });
+            expect(screen.getByRole('alert').textContent).toMatch(/Word export failed/);
+            expect(screen.getByRole('alert').textContent).not.toContain('Blob failed');
+            expect(screen.getByRole('button', { name: /Retry Word export/ })).toBeTruthy();
+            expect(screen.getByText('This is a test output.')).toBeTruthy();
             consoleSpy.mockRestore();
         });
 

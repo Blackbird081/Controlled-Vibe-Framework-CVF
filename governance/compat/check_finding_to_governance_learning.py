@@ -21,8 +21,12 @@ from typing import Any
 
 try:
     from guard_binding_catalog import has_binding_marker
+    from parent_learning_evidence import classify_registry
+    from learning_application_binding import validate_changed as validate_learning_application
 except ModuleNotFoundError:
     from governance.compat.guard_binding_catalog import has_binding_marker
+    from governance.compat.parent_learning_evidence import classify_registry
+    from governance.compat.learning_application_binding import validate_changed as validate_learning_application
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -30,6 +34,7 @@ STANDARD_PATH = "docs/reference/CVF_FINDING_TO_GOVERNANCE_LEARNING_TRIGGER_STAND
 THIS_SCRIPT_PATH = "governance/compat/check_finding_to_governance_learning.py"
 AUTORUN_PATH = "governance/compat/run_agent_autorun_workflow_gate.py"
 HOOK_CHAIN_PATH = "governance/compat/run_local_governance_hook_chain.py"
+PARENT_REGISTRY_PATH = "docs/reference/downstream_gate_profile/downstream_finding_intake_registry.json"
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 APPLICABLE_PREFIXES = ("docs/logs/", "docs/reviews/", "docs/assessments/", "docs/audits/")
@@ -459,6 +464,17 @@ def _validate_recurring_blocked_return(path: str, text: str) -> list[dict[str, s
         return violations
     if not BLOCKED_WITH_REASON_RE.search(text):
         return violations
+    # The escalation contract governs worker returns, not the reviewer's
+    # disposition of that same event. Require an unambiguous explicit type;
+    # untyped/ambiguous blocked reviews retain the existing fail-closed checks.
+    preamble = re.split(r"(?m)^##\s+", text, maxsplit=1)[0]
+    doc_types = re.findall(r"(?im)^docType:[ \t]*(\S+)[ \t]*$", preamble)
+    worker_return = re.search(
+        r"(?im)^(?:Self-declared worker-return artifact:[ \t]*yes|"
+        r"contractProfile:[ \t]*WORKER_RETURN\S*)[ \t]*$", preamble
+    )
+    if doc_types == ["completion_review"] and not worker_return:
+        return violations
 
     cluster_match = ROOT_CAUSE_CLUSTER_RE.search(text)
     cluster_id = (
@@ -643,6 +659,14 @@ def _classify(changed_paths: dict[str, list[str]]) -> dict[str, Any]:
                 if (v["type"], v["message"]) not in head_violations
             ]
         violations.extend(new_violations)
+    # Application contracts are forward-only on actual content changes. They are
+    # not suppressed against HEAD: omitting a newly required plan is precisely
+    # what the dispatch boundary must reject, even on a modified old order.
+    for path, statuses in changed_paths.items():
+        if all(s.startswith('D') for s in statuses) or not path.endswith('.md'):
+            continue
+        if (REPO_ROOT / path).is_file():
+            violations.extend(validate_learning_application(REPO_ROOT, path, _read_rel(path)))
     return {
         "filesChecked": scoped_paths,
         "fileCount": len(scoped_paths),
@@ -650,6 +674,18 @@ def _classify(changed_paths: dict[str, list[str]]) -> dict[str, Any]:
         "violations": violations,
         "compliant": len(violations) == 0,
     }
+
+
+def _parent_evidence_report(root: Path = REPO_ROOT) -> dict[str, Any]:
+    """Read-only typed/legacy/invalid parentEvidence counts for the parent registry."""
+    return classify_registry(root, PARENT_REGISTRY_PATH, DISPOSITIONS)
+
+
+def _with_parent_evidence(classified: dict[str, Any], parent: dict[str, Any]) -> dict[str, Any]:
+    """Attach the parent evidence report; typed-invalid findings are violations, legacy ones are not."""
+    violations = classified["violations"] + parent["issues"]
+    return {**classified, "parentEvidence": parent, "violations": violations,
+            "violationCount": len(violations), "compliant": not violations}
 
 
 def _print_report(report: dict[str, Any], base: str, head: str, base_source: str) -> None:
@@ -662,6 +698,12 @@ def _print_report(report: dict[str, Any], base: str, head: str, base_source: str
         print("\nFiles checked:")
         for path in report["filesChecked"]:
             print(f"  - {path}")
+    parent = report.get("parentEvidence")
+    if parent:
+        print(f"\nParent evidence (typed/legacy/invalid): "
+              f"{parent['typedValid']}/{parent['legacyUntyped']}/{parent['invalid']}")
+        print("Learning lifecycle counts (valid typed declarations only): " +
+              json.dumps(parent.get('lifecycleCounts', {}), sort_keys=True))
     if report["violations"]:
         print("\nViolations:")
         for violation in report["violations"]:
@@ -691,7 +733,7 @@ def main() -> int:
         print(str(exc), file=sys.stderr)
         return 1
     changed_paths = _merge_changed_maps(range_changes, _get_worktree_name_status())
-    classified = _classify(changed_paths)
+    classified = _with_parent_evidence(_classify(changed_paths), _parent_evidence_report())
     report = {
         "timestamp": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "range": {"base": base, "head": head, "baseSource": base_source},

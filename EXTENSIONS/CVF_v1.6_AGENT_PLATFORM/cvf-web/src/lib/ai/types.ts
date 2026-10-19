@@ -14,6 +14,8 @@ export interface AIConfig {
     model: string;
     maxTokens?: number;
     temperature?: number;
+    /** Server-only incoming request cancellation; never serialized into the browser. */
+    signal?: AbortSignal;
 }
 
 export interface ExecutionRequest {

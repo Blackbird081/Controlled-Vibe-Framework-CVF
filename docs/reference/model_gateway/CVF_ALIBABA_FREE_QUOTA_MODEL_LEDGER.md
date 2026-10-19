@@ -4,10 +4,12 @@ Status: ACTIVE_REFERENCE
 
 Memory class: GOVERNED_REFERENCE_LEDGER
 
-Last updated: 2026-09-10
+Last updated: 2026-10-06
 
 Source: operator-provided Alibaba Model Studio free-quota screenshots in the
-2026-09-10 session. Diagnostic results dated 2026-06-18 remain historical.
+2026-10-06 session. Screenshot capture date is not established; 2026-10-06
+is the source-received date. Diagnostic results dated 2026-06-18 and the prior
+2026-09-10 quota snapshot remain historical.
 
 ## Purpose
 
@@ -45,14 +47,11 @@ For the current operator key alias used in the 2026-06-18 diagnostic rerun,
 should not assume endpoint equivalence. If endpoint selection changes, record a
 fresh diagnostic before interpreting failures.
 
-## Current T6 Target Note
+## Historical T6 Target Note
 
-The current free-quota target for the next governed T6 dispatch is the
-`qwen3.7-flash` alias. The operator screenshot also shows the dated snapshot
-`qwen3.7-flash-2026-07-15`; both rows are enabled, the dated snapshot has
-1,000,000 of 1,000,000 and the alias has 997,560 of 1,000,000 remaining, and
-both expire on 2026-10-22. This is quota-selection evidence,
-not live compatibility proof.
+The prior T6 target was the `qwen3.7-flash` alias. This is historical selection
+context, not a current dispatch instruction or model-default decision. The alias
+and `qwen3.7-flash-2026-07-15` snapshot have separate quota rows below.
 
 ## Use-Before-Live-Test Rule
 
@@ -69,28 +68,63 @@ not live compatibility proof.
 
 ## Model List
 
-| Model code | Expiration date | Free quota remaining at capture | Status at capture | Notes |
-|---|---:|---:|---|---|
-| `qwen3.7-flash-2026-07-15` | 2026-10-22 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.7-plus` | 2026-08-31 | 989,246 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.7-flash` | 2026-10-22 | 997,560 / 1,000,000 | Enabled | Current screenshot source; selected T6 alias. |
-| `qwen3.7-max-2026-05-17` | 2026-08-23 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.7-max-2026-06-08` | 2026-09-07 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `glm-5.1` | 2026-08-25 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.7-max-preview` | 2026-08-23 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `deepseek-v4-flash-0731` | 2026-10-30 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.7-max` | 2026-08-19 | 951,277 / 1,000,000 | Enabled | Current screenshot source. |
-| `glm-5.2` | 2026-09-23 | 798,158 / 1,000,000 | Enabled | Current screenshot source. |
-| `kimi-k2.7-code` | 2026-09-23 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `deepseek-v4-pro-0813` | 2026-11-12 | 999,908 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.7-max-2026-05-20` | 2026-08-19 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.7-plus-2026-05-26` | 2026-08-31 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.8-2.4t-a95b` | 2026-11-11 | 1,000,000 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.8-max` | 2026-10-31 | 999,836 / 1,000,000 | Enabled | Current screenshot source. |
-| `qwen3.8-27b` | 2026-11-16 | 999,933 / 1,000,000 | Enabled | Added from 2026-09-10 screenshot. |
-| `kimi-k3` | 2026-11-16 | 1,000,000 / 1,000,000 | Enabled | Added from 2026-09-10 screenshot. |
-| `qwen3.8-flash` | 2026-11-24 | 1,000,000 / 1,000,000 | Enabled | Added from 2026-09-10 screenshot. |
-| `qwen3.8-max-0902` | 2026-11-30 | 1,000,000 / 1,000,000 | Enabled | Added from 2026-09-10 screenshot. |
+Latest supplied screenshots: 17 distinct visible models (12 language models and
+5 rows labeled Vision Model). The repeated `qwen3.8-max-0902` row is counted once.
+All visible rows show Enabled and Stop-on-Exhaust switched on. These are console
+observations, not runtime compatibility, billing or provider enforcement proof.
+Balances retain the console display: K/M values are rounded, not exact counters.
+The JSON numeric equivalents are approximate expansions. Vision balances use
+console units; they are not asserted to be text-token balances.
+Use absolute expiration dates; do not derive dates from relative days-left text.
+
+| Model code | Model type at capture | Expiration date | Quota display remaining / total | Status | Stop-on-Exhaust |
+|---|---|---:|---:|---|---|
+| `qwen3.8-27b` | Large Language Model | 2026-11-16 | 999.93K / 1M | Enabled | On |
+| `qwen3.7-flash-2026-07-15` | Large Language Model | 2026-10-22 | 992.79K / 1M | Enabled | On |
+| `qwen3.8-flash` | Large Language Model | 2026-11-24 | 989.24K / 1M | Enabled | On |
+| `kimi-k3` | Large Language Model | 2026-11-16 | 1M / 1M | Enabled | On |
+| `deepseek-v4-flash-0731` | Large Language Model | 2026-10-30 | 1M / 1M | Enabled | On |
+| `qwen3.8-max-0902` | Large Language Model | 2026-11-30 | 994.63K / 1M | Enabled | On |
+| `deepseek-v4.1-flash` | Large Language Model | 2026-12-12 | 1M / 1M | Enabled | On |
+| `glm-5.3` | Large Language Model | 2026-11-22 | 1M / 1M | Enabled | On |
+| `deepseek-v4-pro-0813` | Large Language Model | 2026-11-12 | 998.37K / 1M | Enabled | On |
+| `qwen3.8-2.4t-a95b` | Large Language Model | 2026-11-11 | 1M / 1M | Enabled | On |
+| `qwen3.8-max` | Large Language Model | 2026-10-31 | 998.39K / 1M | Enabled | On |
+| `qwen3.7-flash` | Large Language Model | 2026-10-22 | 992.25K / 1M | Enabled | On |
+| `qwen-image-2.1-pro` | Vision Model | 2026-12-31 | 10 / 10 | Enabled | On |
+| `qwen-image-3.0` | Vision Model | 2026-11-02 | 10 / 10 | Enabled | On |
+| `wan3.0-video` | Vision Model | 2026-11-04 | 30 / 30 | Enabled | On |
+| `qwen-image-3.0-pro` | Vision Model | 2026-11-02 | 10 / 10 | Enabled | On |
+| `qwen-mt-image-2.0` | Vision Model | 2026-11-25 | 100 / 100 | Enabled | On |
+
+### Historical-only rows from the 2026-09-10 snapshot
+
+Rows absent from the latest supplied images are historical observations, not
+proof of provider removal or complete account inventory. The JSON retains the
+entire prior snapshot under `historicalSnapshots`; current `models` contains only
+the latest visible rows. Historical diagnostics remain separate.
+
+| Model code | Historical expiration | Historical remaining / total |
+|---|---:|---:|
+| `qwen3.7-plus` | 2026-08-31 | 989,246 / 1,000,000 |
+| `qwen3.7-max-2026-05-17` | 2026-08-23 | 1,000,000 / 1,000,000 |
+| `qwen3.7-max-2026-06-08` | 2026-09-07 | 1,000,000 / 1,000,000 |
+| `glm-5.1` | 2026-08-25 | 1,000,000 / 1,000,000 |
+| `qwen3.7-max-preview` | 2026-08-23 | 1,000,000 / 1,000,000 |
+| `qwen3.7-max` | 2026-08-19 | 951,277 / 1,000,000 |
+| `glm-5.2` | 2026-09-23 | 798,158 / 1,000,000 |
+| `kimi-k2.7-code` | 2026-09-23 | 1,000,000 / 1,000,000 |
+| `qwen3.7-max-2026-05-20` | 2026-08-19 | 1,000,000 / 1,000,000 |
+| `qwen3.7-plus-2026-05-26` | 2026-08-31 | 1,000,000 / 1,000,000 |
+
+## Live-Test Evidence Use
+
+Bounded model calls supply evidence to improve the idea-review, export and
+INTAKE workflow. Preserve actual requested/returned model identities and receipt
+dates. Extract workflow risks such as lost qualifiers, shifted terminology,
+unsupported assumptions and authority confusion; do not turn this evidence into
+model rankings, preferred providers or default-model selection. Updating this
+quota ledger does not authorize additional calls or change production routing.
 
 ## Diagnostic Rerun Summary
 

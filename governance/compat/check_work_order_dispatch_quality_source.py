@@ -298,12 +298,12 @@ def _symbol_definition_line(source_path: str, source_text: str, symbol: str) -> 
     suffix = Path(source_path).suffix.lower()
     if suffix == ".py":
         pattern = re.compile(
-            rf"^\s*(?:async\s+def|def|class)\s+{re.escape(name)}\b",
+            rf"^[ \t]*(?:async\s+def|def|class)\s+{re.escape(name)}\b",
             re.MULTILINE,
         )
     elif suffix in {".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs"}:
         pattern = re.compile(
-            rf"^\s*(?:export\s+)?(?:default\s+)?(?:(?:async\s+)?function|class|interface|type|const|let|var)\s+{re.escape(name)}\b",
+            rf"^[ \t]*(?:export\s+)?(?:default\s+)?(?:(?:async\s+)?function|class|interface|type|const|let|var)\s+{re.escape(name)}\b",
             re.MULTILINE,
         )
     else:

@@ -6,6 +6,70 @@ Loaded by check_work_order_dispatch_quality.py into its module globals.
 
 from __future__ import annotations
 
+try:
+    import run_worker_return_fast_gate as runner
+except ModuleNotFoundError:
+    from governance.compat import run_worker_return_fast_gate as runner
+
+
+def _validate_declared_fast_gate_return_path(path: str, text: str, status: str) -> list[str]:
+    normalized_status = status.upper()
+    if (
+        _is_hold_status(status)
+        or _is_closed_status(status)
+        or not ("DISPATCHED" in normalized_status or "READY" in normalized_status)
+    ):
+        return []
+
+    section = _extract_section(_without_markdown_fenced_blocks(text), WORKER_RETURN_PACKET_SHAPE_CONTRACT_MARKER)
+    if not section:
+        return []
+
+    declares_fast_gate = False
+    for line in section.splitlines():
+        field = re.fullmatch(r"requiredGate:[ \t]*(.+?)[ \t]*", line)
+        if field and "governance/compat/run_worker_return_fast_gate.py" in field.group(1):
+            declares_fast_gate = True
+            break
+    if not declares_fast_gate:
+        return []
+
+    try:
+        runner.build_commands((), path, repo_root=REPO_ROOT, work_order_text=text)
+    except ValueError as exc:
+        return [f"declared requiredGate cannot build the worker-return fast gate: {exc}"]
+    return []
+
+
+def _without_markdown_fenced_blocks(text: str) -> str:
+    fence_character: str | None = None
+    fence_length = 0
+    fence_marker_re = re.compile(r"^[ \t]*(?P<marker>`{3,}|~{3,})(?P<tail>.*)$")
+    visible_lines: list[str] = []
+    for line in text.splitlines(keepends=True):
+        content = line.rstrip("\r\n")
+        line_ending = line[len(content):]
+        fence_marker = fence_marker_re.match(content)
+        if fence_character is not None:
+            if fence_marker:
+                marker = fence_marker.group("marker")
+                tail = fence_marker.group("tail")
+                if marker[0] == fence_character and len(marker) >= fence_length and not tail.strip(" \t"):
+                    fence_character = None
+                    fence_length = 0
+            visible_lines.append(line_ending)
+            continue
+        if fence_marker:
+            marker = fence_marker.group("marker")
+            tail = fence_marker.group("tail")
+            if marker[0] != "`" or "`" not in tail:
+                fence_character = marker[0]
+                fence_length = len(marker)
+            visible_lines.append(line_ending)
+            continue
+        visible_lines.append(line)
+    return "".join(visible_lines)
+
 def _is_future_work_order_output_reference(text: str, work_order_path: str) -> bool:
     for line in text.splitlines():
         if work_order_path not in line:

@@ -94,6 +94,8 @@ class ScaffoldArgs:
     cumulative_external_invocation_count: int = 0
     external_invocation_ceiling: int = 0
     new_independent_critical_evidence: str = "NONE"
+    operator_continuation_evidence_path: str | None = None
+    operator_continuation_evidence_sha256: str | None = None
     scec_problem_key: str | None = None; scec_chain_mode: str = "INITIAL"
     scec_chain_ordinal: int = 0; scec_predecessor_path: str | None = None
     scec_predecessor_sha256: str | None = None
@@ -381,7 +383,8 @@ def _reviewer_closure_conversion_block(batch_id: str, date: str) -> str:
         "| Field | Value |\n"
         "| --- | --- |\n"
         f"| completionReviewPath | `docs/reviews/CVF_{batch_id}_COMPLETION_{date}.md` "
-        "(optional; prefer repairing evidence in the worker return per gotcha 30) |\n"
+        "(required for CLOSED non-exempt work orders under continuation Rule B; "
+        "exemption applies only from existing registry) |\n"
         "| reviewerOwnedClosurePaths | FILL_ME |\n"
         "| closureOwner | FILL_ME |\n"
         "| workerCommitPermission | FORBIDDEN |\n"
@@ -568,7 +571,7 @@ def build_gc018_baseline(args: ScaffoldArgs, active: dict[str, bool]) -> str:
         lines.append("")
     lines.append(
         "## Claim Boundary\n\n"
-        "FILL_ME: state exactly what this baseline authorizes and what it does "
+        "rawMemoryReleased=false. Offline authoring guidance only; FILL_ME: state exactly what this baseline authorizes and what it does "
         "not (runtime, provider, public, package, Web, MCP behavior claims "
         "require explicit evidence, not silence)."
     )
@@ -704,7 +707,7 @@ def build_work_order(args: ScaffoldArgs, active: dict[str, bool]) -> str:
     lines.append("")
     lines.append(
         "## Claim Boundary\n\n"
-        "FILL_ME: state exactly what this work order authorizes and what it "
+        "rawMemoryReleased=false. Offline authoring guidance only; FILL_ME: state exactly what this work order authorizes and what it "
         "does not."
     )
     lines.append("")

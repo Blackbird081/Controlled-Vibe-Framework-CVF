@@ -4,6 +4,9 @@ Memory class: POINTER_RECORD
 
 Status: canonical operating workflow for roadmap-to-agent execution.
 
+EPISTEMIC_PROCESS_NA_WITH_REASON: operating instructions and preparation
+reminders; this SOP reports no empirical execution or acceptance result.
+
 ## Purpose
 
 This SOP defines the standard operating workflow for CVF when a strategic
@@ -23,7 +26,9 @@ This SOP applies when any of the following happens:
 - an orchestrator or CEO-style agent delegates work to implementers;
 - a reviewer asks another agent to perform scoped remediation;
 - a task touches runtime, public claims, catalog rows, governance proofs,
-  handoff state, or cross-agent coordination.
+  handoff state, or cross-agent coordination;
+- an agent starts or creates task-specific temporary tools, processes,
+  browsers, servers, worktrees, folders, or files.
 
 This SOP does not replace GC-018, GC-020, handoff, active session state,
 roadmaps, decision packs, or reviewer records. It defines how those artifacts
@@ -129,6 +134,21 @@ roadmap has not locked source facts, dependency posture, lane boundaries, or
 machine-readable semantics, the next work order must be a source-verification,
 design-audit, or spec task, not an implementation task.
 
+Requirement 13: agents must clean up task-specific temporary resources after
+the task completes and before final handoff. This includes closing browser tabs
+and windows, stopping browser processes started for the task, removing
+temporary browser profiles/user-data directories, stopping preview/dev servers
+and child processes, removing temporary worktrees, folders, scripts, and files,
+and releasing task-owned listeners. Before removing a worktree or folder, verify
+it is task-owned, inactive, and has no unpreserved changes. Preserve required
+deliverables, canonical or accepted evidence, and resources explicitly handed
+to an active owner; record the owner and reason for any retained temporary
+resource. Do not remove pre-existing or shared resources, user data, installed
+dependencies, or resources whose ownership is unclear. Verify that task-owned
+processes and paths are gone; if cleanup is unsafe or incomplete, report the
+exact remaining process/path/port, reason, and responsible owner in the return
+or handoff.
+
 ## Inputs And Outputs
 
 Input artifacts:
@@ -173,7 +193,9 @@ Responsibilities:
 - define stop conditions;
 - ensure pre-flight checks are present;
 - assign implementer and reviewer;
-- prevent parallel work unless explicitly authorized.
+- prevent parallel work unless explicitly authorized;
+- include this SOP's Worker Preparation Reminder in the required first
+  reads of future implementation dispatches.
 
 ### Planner
 
@@ -193,6 +215,45 @@ Responsibilities:
 - touch only owned files/modules;
 - run evidence commands and tests;
 - stop on return-to-orchestrator conditions.
+
+#### Worker Preparation Reminder
+
+Use this checklist before the first edit, within the current work order. It
+reinforces existing preparation and evidence rules; it adds no machine gate.
+
+1. List and finish every mandatory mapped first-read scope before edits and
+   tests. Include the lifecycle Agent Continuation section, review-cost
+   Same-Scope/probe boundaries and work-order template source-verification
+   addendum when applicable. A late or skipped mandatory read remains partial
+   preparation even if a later gate passes; disclose it without rewriting history.
+2. Inspect each target file's encoding and line endings before patching. Preserve
+   them per file; do not assume the whole manifest uses LF or CRLF.
+3. For large or quoting-sensitive patches, use a file-backed patch/script in an
+   owned temporary location admitted by the work order. Verify scope before
+   writing and clean up that resource under Requirement 13.
+4. Read applicable output-checker predicates and exact headings, fields and
+   status tokens before drafting; generate the required return scaffold first.
+   Use the gate to confirm prepared artifacts, not to discover known literals.
+5. Check consequential fixture assumptions against the canonical owner before
+   encoding them as assertions. Preserve locked SPEC semantics; route a material
+   interpretation conflict to Local instead of silently tightening the contract.
+   Follow the mapped observable boundary: a receipt count is not case coverage,
+   a mutable saved object is not persisted bytes, and a timeout helper is not a
+   bounded wait. Test doubles must preserve the relevant failure behavior. Route
+   impossible postconditions or insufficient scope before encoding a weaker oracle.
+6. Report actual failures, requirement dispositions and repair counts with a
+   stated counting unit. For a final-byte gate, freeze tracked outputs first and
+   keep the subsequent actual result/log in the admitted evidence custody; a
+   prewritten PASS line alone is not proof. Do not append tracked bytes afterward.
+7. Keep worker self-tests distinct from a required Local independent probe.
+   Leave its disposition pending until the designated reviewer executes it.
+
+Owners: the lifecycle standard named in Source Lineage;
+`docs/reference/review_cost_control/CVF_REVIEW_COST_AND_DIMINISHING_RETURN_CONTROL_STANDARD.md`;
+`docs/reference/CVF_AGENT_WORK_ORDER_TEMPLATE_2026-05-19.md`;
+`docs/reference/CVF_GOVERNED_ARTIFACT_LITERAL_FORMAT_GOTCHAS_2026-06-25.md`;
+`docs/reference/CVF_TEXT_ENCODING_AND_SYMBOL_DISCIPLINE_STANDARD_2026-06-07.md`.
+These owners and the current packet retain their scope, authority and budgets.
 
 ### Reviewer
 
@@ -397,6 +458,7 @@ Closure records:
 - fail-condition review result;
 - closure checklist finalization with no open checkbox residue;
 - changed files;
+- task-specific temporary-resource cleanup disposition and verification;
 - evidence commands/results;
 - reviewer disposition;
 - catalog update or N/A;
@@ -522,6 +584,19 @@ remains subject to future scoped implementation work.
 - `docs/reference/CVF_AGENT_AUTORUN_WORKFLOW_CONTROL_STANDARD_2026-05-28.md`
 - `CVF_SESSION/ACTIVE_SESSION_STATE.json`
 - `AGENT_HANDOFF_V9_2026-05-18.md`
+
+## Delta Execution Claim Boundary Control Block
+
+| Field | Disposition |
+|---|---|
+| claimScope | operating workflow, preparation reminders and resource cleanup instructions |
+| claimDisposition | CLAIM_REJECTED: this SOP establishes no runtime interception or automatic execution control |
+| receiptEvidence | CLAIM_REJECTED_NO_RECEIPT: instructions are not an execution receipt |
+| actionEvidence | CLAIM_REJECTED_NO_ACTION: no runtime action proof is asserted |
+| invocationBoundary | apply within the admitted current work order and role |
+| interceptionBoundary | no tool, filesystem or provider interception is established |
+| claimLanguage | required procedure, with implementation coverage governed separately |
+| forbiddenExpansion | no additional path, effect, provider, public or deployment authority |
 
 ## Claim Boundary
 

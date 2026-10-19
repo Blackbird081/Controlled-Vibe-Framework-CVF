@@ -2,7 +2,7 @@
 
 // Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
 
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useId, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import {
   CheckCircle2,
@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 
 import { useLanguage } from '@/lib/i18n';
+import { useHtmlBuildAttempts, type HtmlJobReference, type SupersededOutcome } from './useHtmlBuildAttempts';
 
 export type ArtifactMemoryClass = 'POINTER_RECORD' | 'FULL_RECORD';
 
@@ -54,36 +55,22 @@ export interface ArtifactExportResult {
   governanceState?: 'DRAFT_UNACCEPTED' | 'RECEIPT_ALLOW_REVIEW_REQUIRED';
 }
 
-interface ArtifactExportApiResponse {
-  success: boolean;
-  data?: ArtifactExportResult;
-  error?: string;
-}
-
 interface ArtifactExportPanelProps {
   initialRequest?: Partial<ArtifactExportRequest>;
   initialResult?: ArtifactExportResult | null;
   exportEndpoint?: string;
   onGenerated?: (result: ArtifactExportResult) => void;
+  prepareJob?: (request: ArtifactExportRequest) => Promise<HtmlJobReference>;
+  renderRecovery?: (snapshot: DisplayedResult | null, versionState: 'current' | 'stale' | 'unknown' | null) => ReactNode;
+  profileDisclosure?: 'LOCAL_SYNTHETIC';
 }
 
-interface DisplayedResult {
+export interface DisplayedResult {
   result: ArtifactExportResult;
   // Full request snapshot taken at submit; null when provenance is unknown (initialResult).
   submitted: ArtifactExportRequest | null;
   attempt: number | null;
-}
-
-interface AttemptError {
-  attempt: number;
-  message: string;
-}
-
-// Outcome of an attempt that a newer attempt replaced; it is never shown as a result.
-interface SupersededOutcome {
-  attempt: number;
-  status: 'pending' | 'success' | 'failure';
-  id?: string;
+  job?: HtmlJobReference;
 }
 
 const REQUEST_FIELDS: ReadonlyArray<keyof ArtifactExportRequest> = [
@@ -95,6 +82,8 @@ const REQUEST_FIELDS: ReadonlyArray<keyof ArtifactExportRequest> = [
   'claimBoundary',
   'receiptAnchor',
 ];
+
+const DISCLOSURE_GROUPS = ['output', 'destination', 'cost', 'save', 'decline'] as const;
 
 const DEFAULT_REQUEST: ArtifactExportRequest = {
   title: 'CVF HTML Review Packet',
@@ -121,6 +110,7 @@ const LABELS = {
     title: 'Review Packet Export',
     subtitle: 'Build a self-contained HTML review packet with a visible receipt reference.',
     boundary: 'HTML only. PDF, PNG, PPTX, and final proof are handled separately.',
+    candidate: 'Candidate',
     sourceTitle: 'Review Source',
     outputTitle: 'HTML Review Packet',
     verificationTitle: 'Readiness Checks',
@@ -140,11 +130,38 @@ const LABELS = {
     noOutput: 'Build an HTML review packet to preview it here.',
     noChecks: 'Readiness checks will appear after the packet is built.',
     failed: 'Export failed',
+    genericFailure: 'This build could not be confirmed. Check the details before deciding what to do next.',
+    completeGoalCriteria: 'Enter the goal and all criteria before building.',
+    pendingOperationRecovery: 'A pending operation could not be recorded. Reconcile it before another write.',
+    technicalDetail: 'Technical detail',
+    stop: 'Stop locally',
+    stoppedUnknown: 'Stopped locally. Remote completion and cost are unknown. This exact request cannot be sent again in this session.',
     sourceHint: 'Paste approved source text. The packet should make review easier without changing the meaning.',
     previewTitle: 'Preview',
     fullRecord: 'Complete record',
     pointerRecord: 'Reference record',
-    preGenerateDisclosure: "Building this packet may send a short excerpt of your text to a review-checking service. Whether that happens, and where the data goes, depends on this deployment's setup and is not shown here.",
+    disclosureTitle: 'Before you build',
+    disclosureGroupTitles: {
+      output: 'Output and inputs',
+      destination: 'Data destination and access',
+      cost: 'Cost',
+      save: 'Save and review status',
+      decline: 'Decline and Stop limits',
+    },
+    genericDisclosure: {
+      output: 'Build uses the source fields below to make one HTML review packet.',
+      destination: "Building this packet may send a short excerpt of your text to a review-checking service. Whether that happens, and where the data goes, depends on this deployment's setup and is not shown here. Who can access that data is also unknown here.",
+      cost: 'Cost is unknown here. Do not assume it is free.',
+      save: 'The built packet is a draft that is unverified and unaccepted. Saving a draft, if offered, is a separate step that you choose.',
+      decline: 'You can decline before Build: do not click Build, or ask an operator about the setup first. Stop only acts on this page; it cannot prove that a remote task stopped or what it cost.',
+    },
+    selectedDisclosure: {
+      output: 'Build uses the source fields below to make one HTML review packet. The server response reports a local test profile for this session: HTML is rendered on this device.',
+      destination: 'This profile does not show where data goes or who can access it, and it does not grant any access or permission. HTML export configuration is resolved separately, so a later export may use a different profile.',
+      cost: 'This profile does not establish a price. Cost is not shown here; do not assume it is zero.',
+      save: 'A draft is saved to local test storage only when you choose Save; no review receipt is requested. The draft remains unverified and unaccepted, even after a separate local test review by the same user; that review is not trusted evidence or business acceptance.',
+      decline: 'You can decline before Build: do not click Build, or ask an operator first. Opening or closing the panel does not start a build. Stop only acts on this page; it does not confirm that a remote task stopped or determine cost.',
+    },
     receiptAbsentNote: 'No review-checking receipt was returned this time. This does not necessarily mean nothing was sent — see the note above.',
     receiptTimedOutNote: 'The review check timed out. No receipt was received, but the service may still have processed the request. Ask an operator to check the attempt ID before trying again.',
     receiptUnavailableNote: 'The review check was unavailable. No receipt was received; the request may still have reached the service. Check the attempt ID before trying again.',
@@ -177,6 +194,7 @@ const LABELS = {
     title: 'Xuất gói rà soát',
     subtitle: 'Tạo gói HTML tự chứa, có receipt rõ ràng để người xem biết nguồn và ranh giới.',
     boundary: 'Chỉ HTML. PDF, PNG, PPTX và bằng chứng cuối cùng được xử lý riêng.',
+    candidate: 'Bản nháp chờ rà soát',
     sourceTitle: 'Nguồn rà soát',
     outputTitle: 'Gói HTML',
     verificationTitle: 'Kiểm tra sẵn sàng',
@@ -196,11 +214,38 @@ const LABELS = {
     noOutput: 'Tạo gói HTML để xem trước tại đây.',
     noChecks: 'Các kiểm tra sẵn sàng sẽ hiện sau khi tạo.',
     failed: 'Xuất thất bại',
+    genericFailure: 'Chưa xác nhận được kết quả tạo. Hãy xem chi tiết trước khi quyết định bước tiếp theo.',
+    completeGoalCriteria: 'Hãy nhập mục tiêu và đầy đủ tiêu chí trước khi tạo HTML.',
+    pendingOperationRecovery: 'Chưa ghi nhận được thao tác đang chờ. Hãy đối soát thao tác đó trước khi ghi thêm.',
+    technicalDetail: 'Chi tiết kỹ thuật',
+    stop: 'Dừng tại đây',
+    stoppedUnknown: 'Đã dừng tại đây. Thao tác từ xa có thể vẫn tiếp tục và chi phí chưa rõ. Không thể gửi lại đúng yêu cầu này trong phiên hiện tại.',
     sourceHint: 'Dán nội dung đã được duyệt. Gói này giúp review dễ hơn mà không đổi ý nghĩa.',
     previewTitle: 'Xem trước',
     fullRecord: 'Bản đầy đủ',
     pointerRecord: 'Bản tham chiếu',
-    preGenerateDisclosure: 'Việc tạo gói này có thể gửi một đoạn ngắn nội dung của bạn đến một dịch vụ kiểm tra rà soát. Việc này có xảy ra hay không, và dữ liệu đi đâu, phụ thuộc vào cấu hình triển khai và không hiển thị ở đây.',
+    disclosureTitle: 'Trước khi tạo',
+    disclosureGroupTitles: {
+      output: 'Kết quả và đầu vào',
+      destination: 'Nơi dữ liệu đi và quyền truy cập',
+      cost: 'Chi phí',
+      save: 'Trạng thái lưu và rà soát',
+      decline: 'Từ chối và giới hạn của Dừng',
+    },
+    genericDisclosure: {
+      output: 'Tạo HTML dùng các trường nguồn bên dưới để tạo một gói HTML rà soát.',
+      destination: 'Việc tạo gói này có thể gửi một đoạn ngắn nội dung của bạn đến một dịch vụ kiểm tra rà soát. Việc này có xảy ra hay không, và dữ liệu đi đâu, phụ thuộc vào cấu hình triển khai và không hiển thị ở đây. Ai được truy cập dữ liệu đó cũng chưa rõ ở đây.',
+      cost: 'Chi phí chưa rõ ở đây. Đừng mặc định là miễn phí.',
+      save: 'Gói đã tạo là bản nháp, chưa được xác minh và chưa được chấp nhận. Việc lưu bản nháp, nếu có, là một bước riêng do bạn chọn.',
+      decline: 'Bạn có thể từ chối trước khi tạo: không bấm Tạo HTML, hoặc hỏi người vận hành về cấu hình trước. Dừng chỉ tác động trên trang này; không chứng minh được thao tác từ xa đã dừng hay chi phí là bao nhiêu.',
+    },
+    selectedDisclosure: {
+      output: 'Tạo HTML dùng các trường nguồn bên dưới để tạo một gói HTML rà soát. Phản hồi máy chủ cho biết phiên này dùng chế độ thử nghiệm cục bộ: HTML được tạo trên máy này.',
+      destination: 'Chế độ này không cho biết dữ liệu đi đâu hay ai được truy cập, và không cấp quyền truy cập nào. Cấu hình tạo HTML được xác định riêng; lần tạo sau có thể dùng chế độ khác.',
+      cost: 'Chế độ này không xác lập giá. Chi phí không hiển thị ở đây; đừng mặc định là bằng không.',
+      save: 'Bản nháp chỉ được lưu vào kho thử nghiệm cục bộ khi bạn chọn Lưu; không có yêu cầu lấy biên nhận kiểm tra. Bản nháp vẫn chưa được xác minh và chưa được chấp nhận, kể cả sau một lượt rà soát thử nghiệm cục bộ riêng của cùng người dùng; lượt rà soát này không phải bằng chứng đáng tin cậy hay sự chấp nhận trong nghiệp vụ.',
+      decline: 'Bạn có thể từ chối trước khi tạo: không bấm Tạo HTML, hoặc hỏi người vận hành trước. Mở hay đóng bảng không bắt đầu lượt tạo. Dừng chỉ tác động trên trang này; không xác nhận thao tác từ xa đã dừng và chi phí vẫn chưa rõ.',
+    },
     receiptAbsentNote: 'Lần này không có biên nhận kiểm tra rà soát nào được trả về. Điều này không chắc có nghĩa là không có gì được gửi — xem ghi chú ở trên.',
     receiptTimedOutNote: 'Kiểm tra rà soát đã hết thời gian chờ. Chưa nhận được receipt, nhưng dịch vụ có thể vẫn đã xử lý yêu cầu. Hãy nhờ người vận hành kiểm tra mã lần thử trước khi thử lại.',
     receiptUnavailableNote: 'Dịch vụ kiểm tra rà soát không sẵn sàng. Chưa nhận được receipt; yêu cầu vẫn có thể đã tới dịch vụ. Hãy kiểm tra mã lần thử trước khi thử lại.',
@@ -372,15 +417,20 @@ async function writeText(text: string): Promise<boolean> {
   }
 }
 
-function FieldLabel({ children }: { children: string }) {
+const FOCUS_RING = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgb(var(--cvf-accent-rgb))]';
+const FIELD_CLASS = `mt-1 min-h-11 w-full min-w-0 max-w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 transition focus-visible:border-[color:rgb(var(--cvf-accent-rgb))] ${FOCUS_RING} dark:border-gray-700 dark:bg-gray-950 dark:text-white`;
+
+function FieldLabel({ children, htmlFor }: { children: string; htmlFor: string }) {
   return (
-    <label className="text-[11px] font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+    <label htmlFor={htmlFor} className="text-[11px] font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
       {children}
     </label>
   );
 }
 
 function recoveryMessageFor(rawError: string, labels: typeof LABELS['en']): string | null {
+  if (rawError === 'Complete the goal and criteria first.') return labels.completeGoalCriteria;
+  if (rawError === 'Resolve the pending operation before another write.') return labels.pendingOperationRecovery;
   if (
     rawError === 'Potential secret-like value detected in artifact export fields.'
     || rawError === 'Potential secret-like value detected in source content.'
@@ -412,24 +462,26 @@ export function ArtifactExportPanel({
   initialResult = null,
   exportEndpoint = '/api/artifacts/export',
   onGenerated,
+  prepareJob,
+  renderRecovery,
+  profileDisclosure,
 }: ArtifactExportPanelProps) {
   const { language } = useLanguage();
   const labels = LABELS[language === 'vi' ? 'vi' : 'en'];
+  const fieldId = useId();
   const [request, setRequest] = useState<ArtifactExportRequest>(() => normalizeRequest(initialRequest));
-  const [displayed, setDisplayed] = useState<DisplayedResult | null>(
-    () => (initialResult ? { result: initialResult, submitted: null, attempt: null } : null),
-  );
-  const [pendingAttempt, setPendingAttempt] = useState<number | null>(null);
+  const { displayed, pendingAttempt, attemptError, superseded, stoppedUnknown, generate, stop } = useHtmlBuildAttempts({
+    initialResult, exportEndpoint, prepareJob, onGenerated, sameRequest,
+  });
   const [copied, setCopied] = useState(false);
   const [printBlocked, setPrintBlocked] = useState(false);
-  const [attemptError, setAttemptError] = useState<AttemptError | null>(null);
-  const [superseded, setSuperseded] = useState<SupersededOutcome[]>([]);
-  const latestAttempt = useRef(0);
-  const pendingRequest = useRef<{ attempt: number; snapshot: ArtifactExportRequest } | null>(null);
-  const inFlightRequests = useRef<Map<number, ArtifactExportRequest>>(new Map());
   const loading = pendingAttempt !== null;
   const result = displayed?.result ?? null;
   const error = attemptError?.message ?? null;
+  const friendlyError = error ? recoveryMessageFor(error, labels) ?? labels.genericFailure : null;
+  const disclosureText = profileDisclosure === 'LOCAL_SYNTHETIC'
+    ? labels.selectedDisclosure
+    : labels.genericDisclosure;
   const versionState: 'current' | 'stale' | 'unknown' | null = !displayed
     ? null
     : !displayed.submitted
@@ -479,53 +531,7 @@ export function ArtifactExportPanel({
     [],
   );
 
-  const handleGenerate = useCallback(async () => {
-    const submitted: ArtifactExportRequest = { ...request };
-    const inFlight = pendingRequest.current;
-    // A superseded request may still be in flight; never resend its snapshot.
-    if ([...inFlightRequests.current.values()].some(snapshot => sameRequest(snapshot, submitted))) return;
-    const attempt = latestAttempt.current + 1;
-    latestAttempt.current = attempt;
-    pendingRequest.current = { attempt, snapshot: submitted };
-    inFlightRequests.current.set(attempt, submitted);
-    const isLatest = () => latestAttempt.current === attempt;
-    const recordSuperseded = (status: 'success' | 'failure', id?: string) => {
-      setSuperseded(list => list.map(item => (item.attempt === attempt ? { ...item, status, id } : item)));
-    };
-    if (inFlight) setSuperseded(list => [...list, { attempt: inFlight.attempt, status: 'pending' }]);
-    setPendingAttempt(attempt);
-    setAttemptError(null);
-    try {
-      const response = await fetch(exportEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(submitted),
-      });
-      const payload = await response.json() as ArtifactExportApiResponse;
-      if (!response.ok || !payload.success || !payload.data) {
-        throw new Error(payload.error || `HTTP ${response.status}`);
-      }
-      // A superseded attempt may not replace or announce output for a newer attempt.
-      if (!isLatest()) {
-        recordSuperseded('success', payload.data.governanceReceiptAttemptId || payload.data.governanceReceipt?.receiptId || undefined);
-        return;
-      }
-      setDisplayed({ result: payload.data, submitted, attempt });
-      onGenerated?.(payload.data);
-    } catch (err) {
-      if (!isLatest()) {
-        recordSuperseded('failure');
-        return;
-      }
-      setAttemptError({ attempt, message: err instanceof Error ? err.message : 'Unknown export error' });
-    } finally {
-      inFlightRequests.current.delete(attempt);
-      if (isLatest()) {
-        pendingRequest.current = null;
-        setPendingAttempt(null);
-      }
-    }
-  }, [exportEndpoint, onGenerated, request]);
+  const handleGenerate = useCallback(() => generate(request), [generate, request]);
 
   const handleCopy = useCallback(async () => {
     if (!result) return;
@@ -623,7 +629,7 @@ export function ArtifactExportPanel({
           <div className="min-w-0">
             <div className="mb-2 flex flex-wrap items-center gap-2">
               <StatusPill tone="info">HTML</StatusPill>
-              <StatusPill tone="warning">Candidate</StatusPill>
+              <StatusPill tone="warning">{labels.candidate}</StatusPill>
             </div>
             <h2 className="text-2xl font-bold tracking-normal text-gray-950 dark:text-white">
               {labels.title}
@@ -647,84 +653,110 @@ export function ArtifactExportPanel({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <FieldLabel>{labels.titleLabel}</FieldLabel>
+              <FieldLabel htmlFor={`${fieldId}-title`}>{labels.titleLabel}</FieldLabel>
               <input
+                id={`${fieldId}-title`}
                 aria-label={labels.titleLabel}
                 value={request.title}
                 onChange={event => updateRequest('title', event.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+                className={`${FIELD_CLASS} text-sm`}
               />
             </div>
             <div className="sm:col-span-2">
-              <FieldLabel>{labels.pathLabel}</FieldLabel>
+              <FieldLabel htmlFor={`${fieldId}-path`}>{labels.pathLabel}</FieldLabel>
               <input
+                id={`${fieldId}-path`}
                 aria-label={labels.pathLabel}
                 value={request.sourcePath}
                 onChange={event => updateRequest('sourcePath', event.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 font-mono text-xs outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+                className={`${FIELD_CLASS} font-mono text-xs`}
               />
             </div>
             <div>
-              <FieldLabel>{labels.memoryLabel}</FieldLabel>
+              <FieldLabel htmlFor={`${fieldId}-memory`}>{labels.memoryLabel}</FieldLabel>
               <select
+                id={`${fieldId}-memory`}
                 aria-label={labels.memoryLabel}
                 value={request.memoryClass}
                 onChange={event => updateRequest('memoryClass', event.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+                className={`${FIELD_CLASS} text-sm`}
               >
                 <option value="FULL_RECORD">{labels.fullRecord}</option>
                 <option value="POINTER_RECORD">{labels.pointerRecord}</option>
               </select>
             </div>
             <div>
-              <FieldLabel>{labels.statusLabel}</FieldLabel>
+              <FieldLabel htmlFor={`${fieldId}-status`}>{labels.statusLabel}</FieldLabel>
               <input
+                id={`${fieldId}-status`}
                 aria-label={labels.statusLabel}
                 value={request.status}
                 onChange={event => updateRequest('status', event.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+                className={`${FIELD_CLASS} text-sm`}
               />
             </div>
             <div className="sm:col-span-2">
-              <FieldLabel>{labels.receiptLabel}</FieldLabel>
+              <FieldLabel htmlFor={`${fieldId}-receipt`}>{labels.receiptLabel}</FieldLabel>
               <input
+                id={`${fieldId}-receipt`}
                 aria-label={labels.receiptLabel}
                 value={request.receiptAnchor}
                 onChange={event => updateRequest('receiptAnchor', event.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 font-mono text-xs outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+                className={`${FIELD_CLASS} font-mono text-xs`}
               />
             </div>
             <div className="sm:col-span-2">
-              <FieldLabel>{labels.boundaryLabel}</FieldLabel>
+              <FieldLabel htmlFor={`${fieldId}-boundary`}>{labels.boundaryLabel}</FieldLabel>
               <textarea
+                id={`${fieldId}-boundary`}
                 aria-label={labels.boundaryLabel}
                 value={request.claimBoundary}
                 onChange={event => updateRequest('claimBoundary', event.target.value)}
                 rows={3}
-                className="mt-1 w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm leading-6 outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+                className={`${FIELD_CLASS} resize-none text-sm leading-6`}
               />
             </div>
             <div className="sm:col-span-2">
               <div className="flex items-end justify-between gap-3">
-                <FieldLabel>{labels.contentLabel}</FieldLabel>
+                <FieldLabel htmlFor={`${fieldId}-content`}>{labels.contentLabel}</FieldLabel>
                 <span className="text-[11px] text-gray-500 dark:text-gray-500">{labels.sourceHint}</span>
               </div>
               <textarea
+                id={`${fieldId}-content`}
                 aria-label={labels.contentLabel}
                 value={request.sourceContent}
                 onChange={event => updateRequest('sourceContent', event.target.value)}
+                onFocus={event => {
+                  const field = event.currentTarget;
+                  requestAnimationFrame(() => {
+                    if (field.isConnected && field.getBoundingClientRect().height + 8 <= window.innerHeight) {
+                      field.scrollIntoView({ block: 'center', inline: 'nearest' });
+                    }
+                  });
+                }}
                 rows={12}
-                className="mt-1 w-full resize-y rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 font-mono text-xs leading-5 outline-none transition focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+                className={`${FIELD_CLASS} resize-y font-mono text-xs leading-5`}
               />
             </div>
           </div>
 
-          <p
+          <div
             data-testid="pre-generate-disclosure"
-            className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800 dark:border-amber-900/70 dark:bg-amber-950/30 dark:text-amber-200"
+            data-disclosure={profileDisclosure === 'LOCAL_SYNTHETIC' ? 'selected-profile' : 'generic'}
+            role="group"
+            aria-labelledby={`${fieldId}-disclosure-title`}
+            className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-3 text-xs leading-5 text-amber-800 dark:border-amber-900/70 dark:bg-amber-950/30 dark:text-amber-200"
           >
-            {labels.preGenerateDisclosure}
-          </p>
+            <p id={`${fieldId}-disclosure-title`} className="font-semibold">{labels.disclosureTitle}</p>
+            <div className="mt-2 grid gap-3 sm:grid-cols-2">
+              {DISCLOSURE_GROUPS.map(group => (
+                <div key={group} data-disclosure-group={group} className={group === 'save' ? 'sm:col-span-2' : undefined}>
+                  <h4 className="font-semibold">{labels.disclosureGroupTitles[group]}</h4>
+                  <p className="mt-0.5">{disclosureText[group]}</p>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <button
@@ -732,11 +764,16 @@ export function ArtifactExportPanel({
               onClick={() => void handleGenerate()}
               disabled={!request.sourceContent.trim() || !request.receiptAnchor.trim()}
               aria-busy={loading}
-              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className={`inline-flex min-h-11 items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50 ${FOCUS_RING}`}
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <ShieldCheck className="h-4 w-4" aria-hidden="true" />}
               {loading ? labels.generating : labels.generate}
             </button>
+            {loading && <button type="button" onClick={stop} data-testid="stop-html-build"
+              className="inline-flex min-h-11 items-center rounded-lg border border-amber-500 px-4 py-2 text-sm text-amber-800 dark:text-amber-200">{labels.stop}</button>}
+            {stoppedUnknown && <p role="status" data-testid="stopped-unknown" className="w-full text-xs text-amber-800 dark:text-amber-200">
+              {labels.stoppedUnknown}
+            </p>}
             {superseded.length > 0 && (
               <div role="status" data-testid="superseded-attempts" className="flex w-full flex-col gap-2">
                 {superseded.map(item => (
@@ -761,13 +798,14 @@ export function ArtifactExportPanel({
                     <span data-testid="export-error-build" className="font-mono">{labels.errorBuild.replace('{n}', String(attemptError.attempt))}</span>
                   )}
                 </div>
-                <span data-testid="export-error-recovery">{recoveryMessageFor(error, labels) ?? error}</span>
+                <span data-testid="export-error-recovery">{friendlyError}</span>
                 {errorPreviewNote && (
                   <span data-testid="export-error-preview-note">{errorPreviewNote}</span>
                 )}
-                {recoveryMessageFor(error, labels) && (
-                  <span data-testid="export-error-detail" className="text-red-600/80 dark:text-red-300/80">{error}</span>
-                )}
+                <details className="text-red-600/80 dark:text-red-300/80">
+                  <summary>{labels.technicalDetail}</summary>
+                  <span data-testid="export-error-detail" className="font-mono">{error}</span>
+                </details>
               </div>
             )}
           </div>
@@ -895,6 +933,7 @@ export function ArtifactExportPanel({
                 </div>
               )}
             </div>
+            {renderRecovery?.(displayed, versionState)}
           </div>
 
           <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">

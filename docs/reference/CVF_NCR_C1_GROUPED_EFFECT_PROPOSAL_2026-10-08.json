@@ -1,0 +1,435 @@
+{
+  "schemaVersion": "cvf.ncrC1GroupedEffectProposal.v1",
+  "batchId": "CVF-NCR-C1-OFFLINE-PRODUCTION-READINESS-20261008",
+  "status": "PROPOSED_PENDING_OPERATOR",
+  "baseHead": "8b1e8f421982d76986b8e1a48b9d1ece868c9687",
+  "approvalRecorded": false,
+  "runtimeAdmission": "NO_GO",
+  "sources": [
+    {
+      "path": "docs/reference/CVF_NCR_C1_OFFLINE_PRODUCTION_READINESS_SPEC_2026-10-08.md",
+      "sha256": "ef7f433489e1da22135ed0d0f8130f3798e765418afa47e6933d7ab636747636",
+      "bytes": 38963
+    },
+    {
+      "path": "docs/reviews/CVF_NCR_C1_OFFLINE_PRODUCTION_READINESS_COMPLETION_2026-10-08.md",
+      "sha256": "68044f414a25ab827161730d241f3c4fac24d60b35df3d774c0bd83d42b050ee",
+      "bytes": 21575
+    },
+    {
+      "path": "docs/reviews/evidence/cvf-ncr-c1-offline-production-readiness-worker-2026-10-08.json",
+      "sha256": "fa24126d13a743f5e8edf72e4257d158029bc3f1f5592a6a06e39bc62c80d6f8",
+      "bytes": 57111
+    },
+    {
+      "path": "docs/reviews/evidence/cvf-ncr-c1-offline-production-readiness-local-review-2026-10-08.json",
+      "sha256": "fb0332928fb70a138377c1261bf56fceb8f420b67d7a21d293e7e1617c4bc707",
+      "bytes": 169968
+    },
+    {
+      "path": "docs/reviews/evidence/cvf-ncr-c1-offline-production-selection-2026-10-08.json",
+      "sha256": "95d32b48ef418c5e107c7b4857f30107235f24c448b773de3e0935a29bd8b49d",
+      "bytes": 8442
+    },
+    {
+      "path": "docs/reviews/CVF_CVF_NCR_S05_S1_SUPERVISOR_SOURCE_R1_LOCAL_REVIEW_2026-10-03.md",
+      "sha256": "eb3ab6d3be5e69654e2854dcefa316472ed4010827a394cce375efd26db0d0bd",
+      "bytes": 16513
+    }
+  ],
+  "selectedLimits": {
+    "aggregateDiskBytes": 10737418240,
+    "peakCommittedRamBytes": 8589934592
+  },
+  "request": {
+    "stage": "E1",
+    "purpose": "one grouped evidence intake for exact artifact manifest and future control admission",
+    "allowedMethods": [
+      "GET",
+      "HEAD"
+    ],
+    "allowedHosts": [
+      "huggingface.co",
+      "pypi.org",
+      "registry.npmjs.org",
+      "api.github.com",
+      "raw.githubusercontent.com",
+      "storage.googleapis.com"
+    ],
+    "maxRequests": 160,
+    "maxDecodedBytes": 16777216,
+    "maxEncodedBodyBytes": 16777216,
+    "maxSeconds": 1200,
+    "perRequestTimeoutSeconds": 15,
+    "maxAutomaticRetries": 0,
+    "followRedirects": false,
+    "credentials": "NONE",
+    "bodyTypes": [
+      "application/json",
+      "text/plain",
+      "text/markdown"
+    ],
+    "initialUrls": [
+      "https://huggingface.co/api/models/pnnbao-ump/VieNeu-TTS-v3-Turbo/revision/61b85e3d937fbbacb387714180e8182823512523?blobs=true",
+      "https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo/raw/61b85e3d937fbbacb387714180e8182823512523/README.md",
+      "https://huggingface.co/api/models/OpenMOSS-Team/MOSS-Audio-Tokenizer-Nano-ONNX/revision/ceff0d0749bfb3fa2d61149794ec6feef0d1e1ae?blobs=true",
+      "https://huggingface.co/OpenMOSS-Team/MOSS-Audio-Tokenizer-Nano-ONNX/raw/ceff0d0749bfb3fa2d61149794ec6feef0d1e1ae/README.md",
+      "https://api.github.com/repos/pnnbao97/VieNeu-TTS/commits/85344322b7258b4e25479b692e8e3396baf9db34",
+      "https://api.github.com/repos/heygen-com/hyperframes/commits/5c52f72399e21f8dcf3ede2bf2d24978c6522a94",
+      "https://api.github.com/repos/heygen-com/hyperframes/commits/main",
+      "https://registry.npmjs.org/hyperframes/0.8.113",
+      "https://registry.npmjs.org/@hyperframes/cli/0.8.113",
+      "https://pypi.org/pypi/vieneu/3.8.3/json",
+      "https://api.github.com/repos/BtbN/FFmpeg-Builds/releases/latest"
+    ],
+    "additionalUrlRule": "pinned metadata/text paths on allowed hosts derived only from these responses and the hash-bound 82-wheel/71-row source tables; every added URL logged before request; no package/model/font/browser/FFmpeg archives",
+    "stopRule": "stop on any exceeded cap, unexpected redirect/type/host or credential demand; retain partial ledger; no silent retry, cap increase or repin",
+    "retention": "decoded public metadata plus URL/status/time/raw SHA/byte counters inside an owned ignored E1 receipt directory; no secrets; at most 16 MiB bodies; proposed directory .cvf/runtime/cvf-video-storyboard-review-20261008/e1-metadata; governed result will reference hashes"
+  },
+  "stageStates": [
+    {
+      "stage": "S1",
+      "effect": "control helper source authoring and independent review",
+      "scope": "source files only, no host effect, no execution; exact new paths to be named by the admission",
+      "owner": "operator (admission, boundary disposition); Local reviewer",
+      "releaseCondition": "OB-22 boundary disposition",
+      "state": "HELD_NOT_RELEASED"
+    },
+    {
+      "stage": "E1",
+      "effect": "public metadata and text reads (GET or HEAD)",
+      "scope": "candidate hosts huggingface.co, files.pythonhosted.org, registry.npmjs.org, storage.googleapis.com, api.github.com, raw.githubusercontent.com; proposed caps 160 requests and 16 MiB decoded, no credentials, no redirect following; closes OB-05, 06, 09, 10, 11, 12, 13, 17",
+      "owner": "operator (admission); Local",
+      "releaseCondition": "exact host list and caps in an admission",
+      "state": "HELD_NOT_RELEASED"
+    },
+    {
+      "stage": "S2",
+      "effect": "owned root, control fixtures, optional outbound rule",
+      "scope": "creates the owned root, runs fixtures FX-D1, FX-M1, FX-T1, FX-B1, FX-N1, FX-L1; may change security or network state; privileges unknown; rollback from a verified before-state",
+      "owner": "operator (effects, privileges, root path); Local",
+      "releaseCondition": "OB-19, OB-20, OB-21, OB-22, OB-24, OB-26",
+      "state": "HELD_NOT_RELEASED"
+    },
+    {
+      "stage": "S3",
+      "effect": "acquisition of exact manifest artifacts",
+      "scope": "URLs, revisions, byte ceilings, hashes and redirect map per artifact; ingress ceiling proposal 2 GiB; zero paid spend; staged cache tree for O1",
+      "owner": "operator (admission); Local",
+      "releaseCondition": "S2 proof, E1 result, OB-02, OB-03, OB-07, OB-08 dispositions",
+      "state": "HELD_NOT_RELEASED"
+    },
+    {
+      "stage": "S4",
+      "effect": "offline setup and archive listing",
+      "scope": "extraction-only into the owned root, lifecycle scripts disabled, venv from the existing interpreter, hash-pinned offline wheel install",
+      "owner": "operator; Local",
+      "releaseCondition": "S3 completed; OB-10, OB-17 reviewed",
+      "state": "HELD_NOT_RELEASED"
+    },
+    {
+      "stage": "S5",
+      "effect": "binary identity inspection",
+      "scope": "FFmpeg encoder list and browser version run under the S2 controls",
+      "owner": "operator; Local",
+      "releaseCondition": "S4 completed; OB-11, OB-12 dispositions",
+      "state": "HELD_NOT_RELEASED"
+    },
+    {
+      "stage": "S6",
+      "effect": "one fixed-preset WAV",
+      "scope": "one sequential voice attempt; needs preset consent disposition and a nominated Vietnamese listener",
+      "owner": "operator",
+      "releaseCondition": "OB-07, OB-08, OB-14; O1 proof OB-01",
+      "state": "HELD_NOT_RELEASED"
+    },
+    {
+      "stage": "S7",
+      "effect": "one S05 render",
+      "scope": "one attempt after the voice process tree has exited; retiming approval if narration exceeds 19.5 s",
+      "owner": "operator",
+      "releaseCondition": "S6 accepted; OB-13, OB-14",
+      "state": "HELD_NOT_RELEASED"
+    },
+    {
+      "stage": "S8",
+      "effect": "joined human acceptance (CF-63)",
+      "scope": "human review of the joined MP4",
+      "owner": "operator",
+      "releaseCondition": "S7 completed",
+      "state": "HELD_NOT_RELEASED"
+    },
+    {
+      "stage": "S9",
+      "effect": "publication",
+      "scope": "not admitted; separate rights and public-export review",
+      "owner": "operator",
+      "releaseCondition": "not applicable now",
+      "state": "HELD_NOT_RELEASED"
+    }
+  ],
+  "obligationRouting": [
+    {
+      "id": "OB-01",
+      "route": "FUTURE_ADMITTED_LOCAL_PROOF",
+      "state": "OPEN",
+      "dependentAction": "S3 cache staging; S6 voice",
+      "releaseCondition": "S2 control proof passed, then a staged tree exists under an admitted stage",
+      "autoClose": false
+    },
+    {
+      "id": "OB-02",
+      "route": "OPERATOR_DECISION_OR_EVIDENCE",
+      "state": "OPEN",
+      "dependentAction": "any offline wording; S6",
+      "releaseCondition": "operator selection line; O3 only after a failed O1 proof and its own admission",
+      "autoClose": false
+    },
+    {
+      "id": "OB-03",
+      "route": "OPERATOR_DECISION_OR_EVIDENCE",
+      "state": "OPEN",
+      "dependentAction": "S3 manifest; S6",
+      "releaseCondition": "decision row inside the admission",
+      "autoClose": false
+    },
+    {
+      "id": "OB-04",
+      "route": "FUTURE_ADMITTED_LOCAL_PROOF",
+      "state": "OPEN",
+      "dependentAction": "S4; S6",
+      "releaseCondition": "S4 archive listing admitted, then reviewed",
+      "autoClose": false
+    },
+    {
+      "id": "OB-05",
+      "route": "E1_EVIDENCE_INTAKE",
+      "state": "OPEN",
+      "dependentAction": "S3",
+      "releaseCondition": "E1 metadata admission; no silent repin",
+      "autoClose": false
+    },
+    {
+      "id": "OB-06",
+      "route": "E1_EVIDENCE_INTAKE",
+      "state": "OPEN",
+      "dependentAction": "S3",
+      "releaseCondition": "E1 metadata read or S3 acquired bytes",
+      "autoClose": false
+    },
+    {
+      "id": "OB-07",
+      "route": "OPERATOR_DECISION_OR_EVIDENCE",
+      "state": "OPEN",
+      "dependentAction": "S6",
+      "releaseCondition": "operator names one preset; Local binds the entry hash actually loaded",
+      "autoClose": false
+    },
+    {
+      "id": "OB-08",
+      "route": "OPERATOR_DECISION_OR_EVIDENCE",
+      "state": "OPEN",
+      "dependentAction": "S6",
+      "releaseCondition": "evidence plus disposition",
+      "autoClose": false
+    },
+    {
+      "id": "OB-09",
+      "route": "E1_EVIDENCE_INTAKE",
+      "state": "OPEN",
+      "dependentAction": "S3 use",
+      "releaseCondition": "E1 text read admitted and reviewed",
+      "autoClose": false
+    },
+    {
+      "id": "OB-10",
+      "route": "E1_EVIDENCE_INTAKE",
+      "state": "OPEN",
+      "dependentAction": "S4",
+      "releaseCondition": "E1 or S4 metadata read",
+      "autoClose": false
+    },
+    {
+      "id": "OB-11",
+      "route": "E1_EVIDENCE_INTAKE",
+      "state": "OPEN",
+      "dependentAction": "S3; S5; S7",
+      "releaseCondition": "operator disposition; S5 identity inspection",
+      "autoClose": false
+    },
+    {
+      "id": "OB-12",
+      "route": "E1_EVIDENCE_INTAKE",
+      "state": "OPEN",
+      "dependentAction": "S3; S7",
+      "releaseCondition": "operator choice; E1 read",
+      "autoClose": false
+    },
+    {
+      "id": "OB-13",
+      "route": "E1_EVIDENCE_INTAKE",
+      "state": "OPEN",
+      "dependentAction": "S7",
+      "releaseCondition": "operator choice; E1 read; S7 render check",
+      "autoClose": false
+    },
+    {
+      "id": "OB-14",
+      "route": "OPERATOR_DECISION_OR_EVIDENCE",
+      "state": "OPEN",
+      "dependentAction": "S6; S7; S8",
+      "releaseCondition": "operator input at the voice stage",
+      "autoClose": false
+    },
+    {
+      "id": "OB-15",
+      "route": "FUTURE_ADMITTED_LOCAL_PROOF",
+      "state": "OPEN",
+      "dependentAction": "S4",
+      "releaseCondition": "S3 acquisition admitted and completed",
+      "autoClose": false
+    },
+    {
+      "id": "OB-16",
+      "route": "FUTURE_ADMITTED_LOCAL_PROOF",
+      "state": "OPEN",
+      "dependentAction": "aggregate accounting; S6",
+      "releaseCondition": "S4 admitted",
+      "autoClose": false
+    },
+    {
+      "id": "OB-17",
+      "route": "E1_EVIDENCE_INTAKE",
+      "state": "OPEN",
+      "dependentAction": "S4; S7",
+      "releaseCondition": "E1, S3, S4",
+      "autoClose": false
+    },
+    {
+      "id": "OB-18",
+      "route": "FUTURE_ADMITTED_LOCAL_PROOF",
+      "state": "OPEN",
+      "dependentAction": "S6",
+      "releaseCondition": "S3 or S4 admitted",
+      "autoClose": false
+    },
+    {
+      "id": "OB-19",
+      "route": "FUTURE_ADMITTED_LOCAL_PROOF",
+      "state": "OPEN",
+      "dependentAction": "S2; S4",
+      "releaseCondition": "S2 precondition snapshot",
+      "autoClose": false
+    },
+    {
+      "id": "OB-20",
+      "route": "FUTURE_ADMITTED_LOCAL_PROOF",
+      "state": "OPEN",
+      "dependentAction": "S3 onward",
+      "releaseCondition": "S2 proof passed",
+      "autoClose": false
+    },
+    {
+      "id": "OB-21",
+      "route": "FUTURE_ADMITTED_LOCAL_PROOF",
+      "state": "OPEN",
+      "dependentAction": "S3 onward",
+      "releaseCondition": "S2 proof passed",
+      "autoClose": false
+    },
+    {
+      "id": "OB-22",
+      "route": "OPERATOR_DECISION_OR_EVIDENCE",
+      "state": "OPEN",
+      "dependentAction": "S2",
+      "releaseCondition": "S1 admission carrying the boundary disposition",
+      "autoClose": false
+    },
+    {
+      "id": "OB-23",
+      "route": "OPERATOR_DECISION_OR_EVIDENCE",
+      "state": "OPEN",
+      "dependentAction": "S2 onward",
+      "releaseCondition": "admission row",
+      "autoClose": false
+    },
+    {
+      "id": "OB-24",
+      "route": "OPERATOR_DECISION_OR_EVIDENCE",
+      "state": "OPEN",
+      "dependentAction": "S2",
+      "releaseCondition": "admission row",
+      "autoClose": false
+    },
+    {
+      "id": "OB-25",
+      "route": "FUTURE_ADMITTED_LOCAL_PROOF",
+      "state": "OPEN",
+      "dependentAction": "S6; S7",
+      "releaseCondition": "after S2 controls",
+      "autoClose": false
+    },
+    {
+      "id": "OB-26",
+      "route": "FUTURE_ADMITTED_LOCAL_PROOF",
+      "state": "OPEN",
+      "dependentAction": "S2",
+      "releaseCondition": "host-read inside the S2 preflight",
+      "autoClose": false
+    },
+    {
+      "id": "OB-27",
+      "route": "OPERATOR_DECISION_OR_EVIDENCE",
+      "state": "OPEN",
+      "dependentAction": "S3 onward",
+      "releaseCondition": "admission row",
+      "autoClose": false
+    },
+    {
+      "id": "OB-28",
+      "route": "HISTORICAL_STOP_RETAINED",
+      "state": "OPEN",
+      "dependentAction": "any successor",
+      "releaseCondition": "only an explicit new Local and operator disposition; outside S0",
+      "autoClose": false
+    },
+    {
+      "id": "OB-29",
+      "route": "OPERATOR_DECISION_OR_EVIDENCE",
+      "state": "OPEN",
+      "dependentAction": "S8; S9",
+      "releaseCondition": "operator acceptance after S7",
+      "autoClose": false
+    }
+  ],
+  "historicalStop": {
+    "problemKey": "cvf-ncr-c1-metadata-footprint",
+    "ordinal": 2,
+    "counters": [
+      0,
+      0,
+      1,
+      2
+    ],
+    "blocker": "C1_DEPENDENCY_FOOTPRINT_CACHE_SEMANTICS_UNSPECIFIED",
+    "sourceContractChain": "SUCCESSOR 1, FEATURE_SUCCESSORS_FROZEN, workerRedispatchAllowed NO"
+  },
+  "supervisorBoundary": {
+    "disposition": "FEATURE_SUCCESSORS_FROZEN",
+    "helperPathsRequested": [],
+    "sourceAcceptance": "WITHHELD",
+    "decisionNeededBeforeS1": true,
+    "historicalWriterEvidence": "MISSING_NOT_RECREATED"
+  },
+  "executionContract": "required before E1 execution; proposal is no work order or dispatch",
+  "effectsObserved": {
+    "networkRequests": 0,
+    "acquisition": 0,
+    "installs": 0,
+    "hostMutations": 0,
+    "helperSourceChanges": 0,
+    "providerCalls": 0,
+    "mediaRuns": 0
+  },
+  "publicExportDisposition": "DEFERRED_PRIVATE_ONLY"
+}

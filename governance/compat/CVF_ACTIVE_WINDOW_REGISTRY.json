@@ -15,6 +15,18 @@
   ],
   "windows": [
     {
+      "id": "agent_dispatch_prompt_envelope_standard_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_AGENT_DISPATCH_PROMPT_ENVELOPE_STANDARD_2026-06-15.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_AGENT_DISPATCH_PROMPT_ENVELOPE_STANDARD_2026-06-15\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
       "id": "incremental_test_log_active_window",
       "windowClass": "GLOBAL_APPEND_ONLY_LOG_WINDOW",
       "activePath": "docs/CVF_INCREMENTAL_TEST_LOG.md",
@@ -253,6 +265,31 @@
       "rotationScript": "scripts/cvf_active_archive.py",
       "protectionMode": "PERMANENT_ACTIVE_WINDOW",
       "status": "ACTIVE"
+    },
+    {
+      "id": "agent_push_readiness_preview_standard_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/reference/CVF_AGENT_PUSH_READINESS_PREVIEW_STANDARD_2026-06-27.md",
+      "archiveDir": "docs/reference/archive",
+      "archivePattern": "^CVF_AGENT_PUSH_READINESS_PREVIEW_STANDARD_2026-06-27\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "ncr_runtime_roadmap_binding_active_reference",
+      "windowClass": "BINDING_REFERENCE_ACTIVE_WINDOW",
+      "activePath": "docs/roadmaps/CVF_NONCODER_CONTROLLED_CAPABILITY_RUNTIME_ROADMAP_2026-09-26.md",
+      "archiveDir": "docs/roadmaps/archive",
+      "archivePattern": "^CVF_NONCODER_CONTROLLED_CAPABILITY_RUNTIME_ROADMAP_2026-09-26\\.md$",
+      "rotationGuard": "governance/compat/check_active_archive_hygiene.py",
+      "rotationCheck": "governance/compat/check_active_archive_hygiene.py",
+      "rotationScript": "scripts/cvf_active_archive.py",
+      "protectionMode": "PERMANENT_ACTIVE_WINDOW",
+      "status": "ACTIVE",
+      "rationale": "Current governed NCR baseline/work-order and model-selection roadmap depend on this exact path. Operator2026-10-12 requests active-roadmap reconciliation; retain while canonical, archive/supersede only through reviewed routing change."
     }
   ]
 }

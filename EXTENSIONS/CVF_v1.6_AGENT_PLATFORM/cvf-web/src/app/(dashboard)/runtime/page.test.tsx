@@ -97,7 +97,7 @@ describe('RuntimeMonitorPage', () => {
 
         expect(await screen.findByText('Runtime Monitor')).toBeTruthy();
         expect(screen.getByText('Read-only')).toBeTruthy();
-        expect(screen.getByText('job-1')).toBeTruthy();
+        expect(await screen.findByText('job-1')).toBeTruthy();
         expect(screen.getAllByText(/CVF_TOKEN_CONTEXT_METER/).length).toBeGreaterThan(0);
         expect(screen.getByText(/It will not approve AI work/)).toBeTruthy();
     });
@@ -108,7 +108,7 @@ describe('RuntimeMonitorPage', () => {
 
         expect(await screen.findByText('Bảng theo dõi runtime')).toBeTruthy();
         expect(screen.getByText('Chỉ xem')).toBeTruthy();
-        expect(screen.getByText(/Trang này không phê duyệt việc AI/)).toBeTruthy();
+        expect(await screen.findByText(/Trang này không phê duyệt việc AI/)).toBeTruthy();
     });
 
     it('refreshes the runtime snapshot on demand', async () => {
@@ -122,3 +122,4 @@ describe('RuntimeMonitorPage', () => {
         });
     });
 });
+// Text Encoding Exception: assertions verify the Vietnamese runtime-monitor copy.

@@ -67,6 +67,10 @@ jobs:
         working-directory: EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER
         run: npm ci
 
+      - name: Install Execution Plane dependencies for imported runtime sources
+        working-directory: EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION
+        run: npm ci
+
       - name: Run static CI gate
         run: python scripts/run_cvf_static_ci_gate.py --json
         env:

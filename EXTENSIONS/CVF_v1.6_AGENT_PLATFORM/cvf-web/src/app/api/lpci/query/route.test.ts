@@ -57,9 +57,12 @@ const baseRecord = (overrides: Record<string, unknown> = {}) => ({
   ...overrides,
 });
 
+let lastSignedTimestamp = 0;
 function request(body: unknown) {
   const bodyText = typeof body === 'string' ? body : JSON.stringify(body);
-  const timestamp = String(Date.now());
+  // Distinct legitimate requests must not become exact HMAC replays in one clock tick.
+  lastSignedTimestamp = Math.max(Date.now(), lastSignedTimestamp + 1);
+  const timestamp = String(lastSignedTimestamp);
   return new NextRequest('http://localhost/api/lpci/query', {
     method: 'POST',
     headers: {

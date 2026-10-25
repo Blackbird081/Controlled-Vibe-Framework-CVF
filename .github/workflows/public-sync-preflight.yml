@@ -10,6 +10,9 @@ permissions:
 jobs:
   public-sync-preflight:
     name: public-sync-preflight
+    # This check validates the public projection's remote and promotion contract.
+    # Provenance retains its own CI; its remote must never pass as public.
+    if: github.repository == 'Blackbird081/Controlled-Vibe-Framework-CVF'
     runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v4

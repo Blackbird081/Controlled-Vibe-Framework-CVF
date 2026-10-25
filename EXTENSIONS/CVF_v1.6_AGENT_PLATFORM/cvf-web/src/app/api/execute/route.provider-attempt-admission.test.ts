@@ -441,7 +441,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
 
         it('CSCC-R1-T2 rework (Finding 4): only stamps canonicalExecutionId into the SOT3 knowledge-context call when the request will actually continue through the canonical port, never unconditionally from the Web envelope', async () => {
             // Static-source assertion: route.ts must gate the
-            // resolveKnowledgeContext() canonicalExecutionId argument through
+            // selectKnowledgeContext() canonicalExecutionId argument through
             // sot3CanonicalExecutionIdFanoutArg() (which itself checks
             // NON_VISION_EXECUTION_PATH_SELECTION === 'port' in
             // canonical-web-gateway-execution.ts) rather than stamping
@@ -454,7 +454,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
             const path = await import('node:path');
             const routeSrc = fs.readFileSync(path.resolve(__dirname, './route.ts'), 'utf-8');
             expect(routeSrc).toMatch(/import\s*\{[^}]*sot3CanonicalExecutionIdFanoutArg[^}]*\}\s*from\s*'@\/lib\/canonical-web-gateway-execution'/);
-            const resolveCallStart = routeSrc.indexOf('await resolveKnowledgeContext({');
+            const resolveCallStart = routeSrc.indexOf('await selectKnowledgeContext(!!htmlPilotPrepared, {');
             expect(resolveCallStart).toBeGreaterThan(-1);
             const resolveCallEnd = routeSrc.indexOf('});', resolveCallStart);
             const resolveCallSrc = routeSrc.slice(resolveCallStart, resolveCallEnd);

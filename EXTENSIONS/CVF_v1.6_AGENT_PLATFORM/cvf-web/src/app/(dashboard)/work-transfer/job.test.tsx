@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import WorkTransferPage from './page';
+vi.mock('next/navigation', () => ({ useSearchParams: () => new URLSearchParams() }));
 vi.mock('@/lib/i18n', () => ({ useLanguage: () => ({ language: 'en' }) }));
 vi.mock('@/components/KnowledgeJourneyNav', () => ({ KnowledgeJourneyNav: () => null }));
 vi.mock('@/components/HtmlJobControls', () => ({ HtmlJobControls: ({ sourceRecordId, initialRequest }: {

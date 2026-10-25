@@ -6,7 +6,7 @@
 
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
-[![Version](https://img.shields.io/badge/version-4.0.0--rc.1-9e6b2b.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0-9e6b2b.svg)](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/releases/tag/v4.0.0)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--ND%204.0-blue.svg)](LICENSE)
 [![Guard Contract](https://img.shields.io/badge/Guard%20Contract-187%20tests%20pass-brightgreen.svg)](EXTENSIONS/CVF_GUARD_CONTRACT/)
 [![MCP Bridge](https://img.shields.io/badge/MCP%20Bridge-4%20endpoints%20active-blue.svg)](EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/guards/)
@@ -45,6 +45,10 @@ repository maintenance, and verification support. See
 </table>
 
 ## Front-Door Path
+
+The published v4.0.0 release retains its **GA_LOCAL_FIRST_APPROVED** scope from
+2026-05-16. Current `main` includes unreleased changes; that historical approval
+does not certify the current commit's CI or new adapters. See [Unreleased](CHANGELOG.md#unreleased).
 
 Use the root front door in this order:
 

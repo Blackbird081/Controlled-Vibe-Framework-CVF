@@ -297,16 +297,16 @@ describe('ArtifactExportPanel', () => {
     expect(screen.getByTestId('export-error-detail').textContent).toBe('Missing required artifact export fields.');
   });
 
-  it('keeps an unrelated or network error generic, without a secondary detail line', async () => {
+  it('keeps an unrelated or network error generic, with the original diagnostic in technical details', async () => {
     (fetch as unknown as { mockRejectedValue: (v: unknown) => void }).mockRejectedValue(new Error('Failed to fetch'));
     render(<ArtifactExportPanel />);
 
     fireEvent.click(screen.getByText('Build HTML'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('export-error-recovery').textContent).toBe('Failed to fetch');
+      expect(screen.getByTestId('export-error-recovery').textContent).toBe('This build could not be confirmed. Check the details before deciding what to do next.');
     });
-    expect(screen.queryByTestId('export-error-detail')).toBeNull();
+    expect(screen.getByTestId('export-error-detail').textContent).toBe('Failed to fetch');
   });
 
   describe('F-01 secret refusal recovery', () => {
@@ -372,15 +372,15 @@ describe('ArtifactExportPanel', () => {
       });
       expect(screen.getByTestId('export-error-detail').textContent).toBe(LEGACY);
     });
-    it('SR-05 leaves an unrelated error that only mentions secrets as the raw fallback', async () => {
+    it('SR-05 keeps an unrelated error that only mentions secrets generic', async () => {
       const unrelated = 'Possible secret-like private key text elsewhere.';
       refuseWith(unrelated);
       render(<ArtifactExportPanel />);
       fireEvent.click(screen.getByText('Build HTML'));
       await waitFor(() => {
-        expect(screen.getByTestId('export-error-recovery').textContent).toBe(unrelated);
+        expect(screen.getByTestId('export-error-recovery').textContent).toBe('This build could not be confirmed. Check the details before deciding what to do next.');
       });
-      expect(screen.queryByTestId('export-error-detail')).toBeNull();
+      expect(screen.getByTestId('export-error-detail').textContent).toBe(unrelated);
     });
   });
   describe('B1 version binding', () => {
@@ -553,7 +553,7 @@ describe('ArtifactExportPanel', () => {
       await waitFor(() => expect(iframeHtml()).toContain('synthetic A'));
       fireEvent.change(screen.getByLabelText('Title'), { target: { value: 'Synthetic B' } });
       fireEvent.click(buildButton());
-      await waitFor(() => expect(screen.getByTestId('export-error-recovery').textContent).toBe('synthetic outage'));
+      await waitFor(() => expect(screen.getByTestId('export-error-recovery').textContent).toBe('This build could not be confirmed. Check the details before deciding what to do next.'));
       expect(iframeHtml()).toContain('synthetic A');
       expect(noticeState()).toBe('stale');
       expect(screen.getByTestId('artifact-version-notice').textContent).toMatch(/build #1/);
@@ -839,7 +839,7 @@ describe('ArtifactExportPanel', () => {
       await waitFor(() => expect(iframeHtml()).toContain('synthetic A'));
       fireEvent.change(screen.getByLabelText('Title'), { target: { value: 'Synthetic B' } });
       fireEvent.click(buildButton());
-      await waitFor(() => expect(screen.getByTestId('export-error-recovery').textContent).toBe('synthetic outage'));
+      await waitFor(() => expect(screen.getByTestId('export-error-recovery').textContent).toBe('This build could not be confirmed. Check the details before deciding what to do next.'));
       expect(screen.getByTestId('export-error-build').textContent).toBe('Build #2');
       expect(screen.getByTestId('export-error-preview-note').textContent).toMatch(/still shows build #1, not this build/);
       expect(screen.getByTestId('artifact-version-tag').textContent).toMatch(/Build #1 · earlier version/);

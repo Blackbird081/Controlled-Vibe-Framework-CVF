@@ -148,14 +148,12 @@ export async function POST(request: NextRequest) {
             const approvalId = String(body.approvalId);
             const approvalStore = getApprovalStore();
             const approvalRecord = approvalStore.get(approvalId);
-
             if (!approvalRecord) {
                 return NextResponse.json(
                     { success: false, error: 'Approval request not found.', approvalId },
                     { status: 404 },
                 );
             }
-
             if (!approvalRecord.requestHash) {
                 return NextResponse.json(
                     {
@@ -166,7 +164,6 @@ export async function POST(request: NextRequest) {
                     { status: 409 },
                 );
             }
-
             if (!approvalRecord.requestSnapshot?.actorId || !approvalRecord.submittedByActorId || !approvalRecord.submittedByAuthMode) {
                 return NextResponse.json(
                     {
@@ -177,7 +174,6 @@ export async function POST(request: NextRequest) {
                     { status: 409 },
                 );
             }
-
             if (!approvalRecordMatchesActor(approvalRecord, approvalActor)) {
                 return NextResponse.json(
                     {
@@ -188,7 +184,6 @@ export async function POST(request: NextRequest) {
                     { status: 403 },
                 );
             }
-
             if (approvalRecord.requestHash !== approvalRequestHash) {
                 return NextResponse.json(
                     {
@@ -199,7 +194,6 @@ export async function POST(request: NextRequest) {
                     { status: 409 },
                 );
             }
-
             if (new Date(approvalRecord.expiresAt).getTime() <= Date.now()) {
                 approvalStore.set(approvalRecord.id, {
                     ...approvalRecord,
@@ -214,7 +208,6 @@ export async function POST(request: NextRequest) {
                     { status: 409 },
                 );
             }
-
             if (approvalRecord.status !== 'approved') {
                 return NextResponse.json(
                     {
@@ -226,7 +219,6 @@ export async function POST(request: NextRequest) {
                     { status: 409 },
                 );
             }
-
             approvedRequestRecord = approvalRecord;
         }
         // Get API key from environment
@@ -244,7 +236,6 @@ export async function POST(request: NextRequest) {
         const dlpResult = await applyDLPFilter(userPrompt);
         let filteredPrompt = dlpResult.redacted;
         const readoutRequest = await buildDlpRedactedReadoutRequest(body, dlpResult.wasRedacted);
-
         if (dlpResult.wasRedacted) {
             await appendAuditEvent({
                 eventType: 'DLP_REDACTION_APPLIED',
@@ -330,7 +321,6 @@ export async function POST(request: NextRequest) {
             } catch (quotaAuditError) {
                 console.warn('Quota block audit degraded:', quotaAuditError);
             }
-
             return NextResponse.json(
                 {
                     success: false,
@@ -340,7 +330,6 @@ export async function POST(request: NextRequest) {
                 { status: 429 },
             );
         }
-
         const mode = body.mode || 'simple';
         const template = body.templateId ? getTemplateById(body.templateId) : undefined;
         const executionTemplateId = template?.id ?? body.templateId;
@@ -364,12 +353,10 @@ export async function POST(request: NextRequest) {
             resolvedOutputClass.outputClass,
         );
         const executionIdentity = buildExecutionIdentityDecision({ ...executionIdentityBase, actorRoleGate, rolePermission });
-
         if (!rolePermission.allowed) {
             return buildRoleOutputDeniedResponse({ session, body, provider, envelope: govEnvelope, resolvedRole: resolvedExecutionRole, resolvedOutputClass, rolePermission, executionIdentity });
         }
         const workflowBinding = resolveWorkflowBindingForExecution(executionTemplateId);
-
         const specFields = htmlPilotPrepared
             ? (template?.fields || []).filter(field => field.id === 'websiteGoal' && field.required)
             : template?.fields || [];

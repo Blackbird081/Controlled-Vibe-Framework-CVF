@@ -82,7 +82,7 @@ describe('/api/execute governanceTrace receipt enrichment', () => {
         verifySessionCookieMock.mockResolvedValue({
             userId: 'developer-user',
             user: 'developer',
-            role: 'developer',
+            role: 'owner',
             orgId: 'org-1',
             teamId: 'team-1',
             expiresAt: Date.now() + 1000 * 60 * 60,
@@ -122,9 +122,10 @@ describe('/api/execute governanceTrace receipt enrichment', () => {
                     platforms: 'Web browser',
                 },
                 provider: 'openai',
-                cvfPhase: 'BUILD',
+                cvfPhase: 'INTAKE',
                 cvfRiskLevel: 'R1',
-                action: 'build template execution request',
+                // Product brief generation belongs to INTAKE, without BUILD mutation authority.
+                action: 'analyze product brief',
                 skillPreflightPassed: true,
                 skillPreflightDeclaration: 'SKILL PREFLIGHT PASS: product brief only, no implementation.',
                 skillIds: ['product-brief-authoring'],
@@ -139,7 +140,7 @@ describe('/api/execute governanceTrace receipt enrichment', () => {
 
         const data = await res.json();
 
-        expect(res.status).toBe(200);
+        expect(res.status, JSON.stringify({ error: data.error, diagnostic: data.diagnostic })).toBe(200);
         expect(data.success).toBe(true);
         expect(data.governanceEvidenceReceipt?.governanceTrace).toEqual(
             expect.arrayContaining([

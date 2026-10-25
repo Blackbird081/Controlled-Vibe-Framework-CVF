@@ -26,7 +26,7 @@ export function reviewBindingKey(state: IntentSpecReviewState, language: ReviewL
 
 async function sha256(bytes: Uint8Array): Promise<string> {
     const owned = new Uint8Array(bytes);
-    const digest = await globalThis.crypto.subtle.digest('SHA-256', owned.buffer);
+    const digest = await globalThis.crypto.subtle.digest('SHA-256', owned);
     return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
 }
 

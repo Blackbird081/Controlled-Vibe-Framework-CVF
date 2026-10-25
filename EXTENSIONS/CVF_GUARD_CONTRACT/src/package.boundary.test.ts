@@ -22,6 +22,7 @@ describe('package boundary', () => {
       './runtime/agent-handoff': './src/runtime/agent-handoff.ts',
       './runtime/agent-coordination': './src/runtime/agent-coordination.ts',
       './runtime/mandatory-gateway': './src/runtime/mandatory-gateway.ts',
+      './runtime/approval-execution-bridge': './src/runtime/approval-execution-bridge.ts',
       // LPCI1-WEB-R1: narrow barrel exposing only the self-contained,
       // zero-internal-import receipt envelope and memory tier identity
       // (src/receipt-identity.ts), not the full contracts/ directory. This
@@ -44,6 +45,7 @@ describe('package boundary', () => {
       'src/runtime/agent-handoff.ts',
       'src/runtime/agent-coordination.ts',
       'src/runtime/mandatory-gateway.ts',
+      'src/runtime/approval-execution-bridge.ts',
       // LPCI1-WEB-R1: the narrow receipt-identity barrel and the two
       // self-contained contract files it imports (receipt envelope
       // identity and memory tier identity).

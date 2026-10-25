@@ -1,7 +1,8 @@
 // Text Encoding Exception: Vietnamese user-facing copy and matching localization fixtures.
 /** @vitest-environment jsdom */
-// Frozen legacy controls: the expected values below come from docs/reviews/evidence/cvf-nis-t1e-frozen-legacy-2026-10-05.json,
-// captured from the UNMODIFIED producers at a27c13fa7 before any tracked edit. They are never regenerated from this code.
+// Frozen synthetic controls copied unchanged from a historical private capture.
+// The fixture pins that source's raw hash; its chronology metadata is a historical
+// claim, not independent public verification. Never regenerate outputs from this code.
 import { createHash, webcrypto } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -24,8 +25,8 @@ interface Control {
     actor: { userId: string; orgId: string; teamId: string; role: string; assurance: string }; preparedAtMs: number;
 }
 const frozen = JSON.parse(readFileSync(
-    path.resolve(__dirname, '../../../../../docs/reviews/evidence/cvf-nis-t1e-frozen-legacy-2026-10-05.json'), 'utf-8')) as {
-    legacyProducerBase: string; capturedBeforeAnyTrackedEdit: boolean; controls: Record<'LG1' | 'LG2' | 'LG3', Control>;
+    path.resolve(__dirname, '../test/fixtures/intent-spec-legacy-controls.json'), 'utf-8')) as {
+    sourceRawSha256: string; legacyProducerBase: string; capturedBeforeAnyTrackedEdit: boolean; controls: Record<'LG1' | 'LG2' | 'LG3', Control>;
 };
 const sha = (value: string | Uint8Array) => createHash('sha256').update(value).digest('hex');
 const bytes = (value: string) => new TextEncoder().encode(value);
@@ -52,7 +53,8 @@ function legacyState(control: Control, acknowledge = true): IntentSpecReviewStat
 const ids = ['LG1', 'LG2', 'LG3'] as const;
 
 describe('frozen legacy v1 controls captured from the unmodified producers', () => {
-    it('records its own provenance: legacy base, captured before any tracked edit, three controls', () => {
+    it('pins historical capture metadata and three unchanged synthetic controls', () => {
+        expect(frozen.sourceRawSha256).toBe('98a1d469d8ca5166ca5d44bedb19518d0e249aa8cc515af3861ae15312e6c554');
         expect(frozen.legacyProducerBase).toBe('a27c13fa7a30fbc76b755aac539ec65e6dcae49d');
         expect(frozen.capturedBeforeAnyTrackedEdit).toBe(true);
         expect(Object.keys(frozen.controls)).toEqual(['LG1', 'LG2', 'LG3']);

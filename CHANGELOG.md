@@ -2,6 +2,15 @@
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Scope the public-sync preflight to the public distribution repository,
+  retaining strict remote validation for public pushes and pull requests.
+- Align the README badge with the published v4.0.0 release. Historical
+  GA_LOCAL_FIRST_APPROVED evidence does not certify unreleased `main` changes.
+
 ## [v4.0.0] — GA Release — 2026-05-16
 
 Status: GA_LOCAL_FIRST_APPROVED

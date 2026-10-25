@@ -21,12 +21,15 @@ export default defineConfig(({ mode }) => {
 
     return {
         resolve: {
-            alias: {
-                '@': path.resolve(__dirname, './src'),
-            },
+            alias: [
+                { find: '@', replacement: path.resolve(__dirname, './src') },
+                { find: /^next\/server$/, replacement: path.resolve(__dirname, './node_modules/next/server.js') },
+            ],
         },
         test: {
             environment: 'jsdom',
+            // Auth.js imports next/server without an extension; resolve it through Vite.
+            server: { deps: { inline: ['next-auth'] } },
             setupFiles: ['./src/test/setup.ts'],
             include: ['src/**/*.{test,spec}.{ts,tsx}'],
             // EAFR-R1D selection barrier. Real-provider and other live tests must

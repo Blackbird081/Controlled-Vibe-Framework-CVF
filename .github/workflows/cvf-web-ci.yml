@@ -95,6 +95,21 @@ jobs:
           GOOGLE_SECRET: 'release-gate-structural-build-placeholder'
           CVF_OAUTH_PROVIDER: 'github'
           CVF_OAUTH_IDENTITY_BINDINGS_JSON: '[{"provider":"github","providerAccountId":"structural-build-subject","userId":"structural-build-user","role":"viewer","orgId":"structural-build-org","teamId":"structural-build-team"}]'
+      - name: Setup Python for cross-process receipt tests
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Governance Engine test dependencies
+        run: python -m pip install -r ../../CVF_v1.6.1_GOVERNANCE_ENGINE/ai_governance_core/requirements.txt
+
+      - name: Prepare owned offline test parents
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/cvf-ncr-r1-fixtures" "$RUNNER_TEMP/cvf-ncr-tests"
+          echo "CVF_NCR_R1_FIXTURE_ROOT=$RUNNER_TEMP/cvf-ncr-r1-fixtures" >> "$GITHUB_ENV"
+          echo "CVF_NCR_TEST_ROOT=$RUNNER_TEMP/cvf-ncr-tests" >> "$GITHUB_ENV"
+
       - name: Unit tests
         run: npm run test:run
       - name: Coverage (threshold gate)

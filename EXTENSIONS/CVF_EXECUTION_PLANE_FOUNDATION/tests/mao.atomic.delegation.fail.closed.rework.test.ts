@@ -14,8 +14,7 @@ import {
   reservation,
   pilotGraph,
   launchRequestFor,
-  makeRunStoreSnapshotReadOnly,
-  restoreRunStoreSnapshotWritable,
+  obstructRunStoreSnapshot,
   withTypedSettleFailure,
 } from "./mao.atomic.delegation.fail.closed.helpers";
 
@@ -234,20 +233,32 @@ describe("BRIGADE-MAO-R1 R3: public recovery consumes durable failure evidence",
     const store = new MaoFileDelegationLedgerStore(delegationRoot);
     await store.createLedger(graph.taskGraphId, { globalMaxChildren: 2, parentMaxChildren: 2, maxDepth: 2 });
     const launchKey = "launch-run-store-io-failure";
-    const snapshotPath = await makeRunStoreSnapshotReadOnly(runStoreRoot, graph.taskGraphId);
+    const settlementUnavailable = withTypedSettleFailure(store, { reason: "IO_FAILURE", detail: "settlement unavailable" });
+    let restoreSnapshot: (() => Promise<void>) | undefined;
     try {
       const launcher = new MaoOperationalWorkerLauncher(
         runStore,
         createMaoDelegationAdapter(),
         new MaoLifecycleController("2026-08-29T00:00:00.000Z"),
-        withTypedSettleFailure(store, { reason: "IO_FAILURE", detail: "settlement unavailable" }),
+        {
+          ...settlementUnavailable,
+          reserveDurable: async (...args) => {
+            const reserved = await settlementUnavailable.reserveDurable(...args);
+            if (reserved.ok && reserved.result.ok) {
+              restoreSnapshot = await obstructRunStoreSnapshot(runStoreRoot, graph.taskGraphId);
+            }
+            return reserved;
+          },
+        },
       );
       const failed = await launcher.launch(launchRequestFor(graph, launchKey, "root:child-1"));
+      expect(restoreSnapshot).toBeTypeOf("function");
       expect(failed).toMatchObject({ ok: false, reason: "DURABLE_STORE_REJECTED" });
+      expect(failed.ok ? undefined : failed.detail).toMatch(/^IO_FAILURE:/);
       expect(failed.completionReceipt).toBeUndefined();
       expect(await store.isReservationOpen(graph.taskGraphId, "root:child-1")).toMatchObject({ ok: true, open: true });
     } finally {
-      await restoreRunStoreSnapshotWritable(snapshotPath);
+      if (restoreSnapshot) await restoreSnapshot();
     }
 
     const recoveredLauncher = new MaoOperationalWorkerLauncher(

@@ -1,6 +1,6 @@
 // Shared fixtures for atomic delegation fail-closed adversarial suites.
 
-import { mkdtemp, rm, chmod } from "node:fs/promises";
+import { mkdtemp, rm, chmod, mkdir, rename, rmdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
@@ -218,6 +218,35 @@ export async function makeRunStoreSnapshotReadOnly(runStoreRoot: string, taskGra
 
 export async function restoreRunStoreSnapshotWritable(snapshotPath: string): Promise<void> {
   await chmod(snapshotPath, 0o666);
+}
+
+/**
+ * Preserve the real snapshot, then put a directory at its filename. Unlike
+ * file permissions, this makes the real store read fail on Windows and POSIX.
+ * Install only after durable reservation; restore before public recovery.
+ */
+export async function obstructRunStoreSnapshot(runStoreRoot: string, taskGraphId: string): Promise<() => Promise<void>> {
+  const snapshotPath = join(runStoreRoot, runStoreSnapshotFileNameFor(taskGraphId));
+  const backupRoot = await mkdtemp(join(runStoreRoot, "snapshot-io-fault-"));
+  const backupPath = join(backupRoot, "snapshot.json");
+  try {
+    await rename(snapshotPath, backupPath);
+  } catch (error) {
+    await rmdir(backupRoot);
+    throw error;
+  }
+  try {
+    await mkdir(snapshotPath);
+  } catch (error) {
+    await rename(backupPath, snapshotPath);
+    await rmdir(backupRoot);
+    throw error;
+  }
+  return async () => {
+    await rmdir(snapshotPath);
+    await rename(backupPath, snapshotPath);
+    await rmdir(backupRoot);
+  };
 }
 
 /**

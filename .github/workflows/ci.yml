@@ -57,9 +57,11 @@ jobs:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
-      - name: Governance Hook Chain
+      - name: Public candidate contract
         working-directory: ${{ github.workspace }}
-        run: python governance/compat/run_local_governance_hook_chain.py --hook pre-commit
+        run: |
+          git fetch origin main:refs/remotes/origin/main --force
+          python scripts/check_cvf_public_sync_candidate.py --public-root . --expected-remote https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git --baseline-ref origin/main --json
       - name: Install Control Plane Foundation dependencies
         working-directory: EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION
         run: npm ci
@@ -89,6 +91,21 @@ jobs:
         run: npm ci
       - name: Install Web UI dependencies
         run: npm ci
+      - name: Setup Python for cross-process receipt tests
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Governance Engine test dependencies
+        run: python -m pip install -r ../../CVF_v1.6.1_GOVERNANCE_ENGINE/ai_governance_core/requirements.txt
+
+      - name: Prepare owned offline test parents
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/cvf-ncr-r1-fixtures" "$RUNNER_TEMP/cvf-ncr-tests"
+          echo "CVF_NCR_R1_FIXTURE_ROOT=$RUNNER_TEMP/cvf-ncr-r1-fixtures" >> "$GITHUB_ENV"
+          echo "CVF_NCR_TEST_ROOT=$RUNNER_TEMP/cvf-ncr-tests" >> "$GITHUB_ENV"
+
       - run: npm run test:run
       - name: Coverage Check
         run: npm run test:coverage

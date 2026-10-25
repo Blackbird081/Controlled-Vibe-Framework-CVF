@@ -131,6 +131,7 @@ export function HtmlJobControls({ sourceRecordId, initialRequest }: Props) {
       } })
       .catch(() => { if (still(token, key)) setCapability('disabled'); });
     return () => { epoch.current += 1; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- capability fetch is keyed by the scope key; owner/active/sourceRecordId are inputs of that key
   }, [scope]);
   useEffect(() => {
     if (!Number.isFinite(expires) || expires <= Date.now()) return;
@@ -156,6 +157,7 @@ export function HtmlJobControls({ sourceRecordId, initialRequest }: Props) {
       return { jobId, sourceRecordId };
     } catch (error) { if (still(token, key)) setNotice('jobOutcomeUnknown'); throw error; }
     finally { if (still(token, key)) busy.current = false; }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- owner is read through its three id fields, which are listed; `still` is a stable epoch/scope check
   }, [active, expires, enabled, goal, criteria, owner.userId, owner.orgId, owner.teamId, sourceRecordId, scope]);
 
   const loadJob = async (jobId: string) => data<HtmlJob>(await fetch(url({ kind: 'job', jobId, sourceRecordId }), { cache: 'no-store' }));
@@ -301,3 +303,5 @@ export function HtmlJobControls({ sourceRecordId, initialRequest }: Props) {
     </section>}
   </div>;
 }
+
+export { PilotHtmlJobControls } from './PilotHtmlJobControls';

@@ -9,7 +9,11 @@ import { useLanguage } from '@/lib/i18n';
 import { validateHandoff, type HandoffDecision } from '@/lib/agent-handoff-validator';
 import { ArtifactExportPanel, type ArtifactExportRequest } from '@/components/ArtifactExportPanel';
 import { HtmlDraftRecovery } from '@/components/HtmlDraftRecovery';
-import { HtmlJobControls } from '@/components/HtmlJobControls';
+import { HtmlJobControls, PilotHtmlJobControls } from '@/components/HtmlJobControls';
+import { useSearchParams } from 'next/navigation';
+import { useExecutionStore } from '@/lib/store';
+import { restoreReceiptArchive } from '@/lib/execution-receipt-archive';
+import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 import { KnowledgeJourneyNav } from '@/components/KnowledgeJourneyNav';
 import type { AgentRole } from '@/lib/multi-agent';
 
@@ -126,6 +130,30 @@ function recordToExportRequest(record: AuditRecord): Partial<ArtifactExportReque
 }
 
 export default function WorkTransferPage() {
+  const searchParams = useSearchParams();
+  const pilotExecutionId = searchParams.get('source');
+  const executions = useExecutionStore(state => state.executions);
+  const pilotExecution = pilotExecutionId ? executions.find(item => item.id === pilotExecutionId) : undefined;
+  const [pilotReceiptBinding, setPilotReceiptBinding] = useState<{ id: string; archive: unknown; output: string;
+    receipt: GovernanceEvidenceReceipt } | null>(null);
+  const pilotReceipt = pilotReceiptBinding?.id === pilotExecutionId
+    && pilotReceiptBinding.archive === pilotExecution?.savedReceiptArchive
+    && pilotReceiptBinding.output === pilotExecution?.output ? pilotReceiptBinding.receipt : null;
+  useEffect(() => {
+    let active = true;
+    if (pilotExecution?.templateId === 'web_build_handoff' && pilotExecution.status === 'completed'
+      && pilotExecution.output && pilotExecution.savedReceiptArchive) {
+      void restoreReceiptArchive(pilotExecution.savedReceiptArchive, pilotExecution.id, pilotExecution.output,
+        pilotExecution.evidenceReceiptSnapshot).then(receipt => {
+          if (active && receipt && receipt.htmlPilotEvidence?.runId === pilotExecution.htmlPilot?.runId)
+            setPilotReceiptBinding({ id: pilotExecution.id, archive: pilotExecution.savedReceiptArchive,
+              output: pilotExecution.output!, receipt });
+        });
+    }
+    return () => { active = false; };
+  }, [pilotExecutionId, pilotExecution?.id, pilotExecution?.templateId, pilotExecution?.status,
+    pilotExecution?.savedReceiptArchive, pilotExecution?.output, pilotExecution?.evidenceReceiptSnapshot,
+    pilotExecution?.htmlPilot?.runId]);
   const { language } = useLanguage();
   const copy = COPY[language === 'vi' ? 'vi' : 'en'];
   const roleLabels = ROLE_LABELS[language === 'vi' ? 'vi' : 'en'];
@@ -190,6 +218,15 @@ export default function WorkTransferPage() {
       </header>
 
       <KnowledgeJourneyNav currentStep={5} />
+
+      {pilotExecutionId && <section data-testid="home-html-pilot-transfer" className="rounded-lg border border-indigo-300 bg-white p-5 dark:bg-gray-900">
+        <h2 className="text-lg font-semibold">Home result to exact HTML job</h2>
+        {pilotReceipt && pilotExecution?.output
+          ? <PilotHtmlJobControls key={`${pilotExecution.id}:${pilotReceipt.htmlPilotEvidence?.runId}:${pilotReceipt.htmlPilotEvidence?.outputSha256}`}
+              sourceExecutionId={pilotExecution.id} output={pilotExecution.output}
+              receipt={pilotReceipt} existingJobId={pilotExecution.htmlPilot?.jobId} />
+          : <p role="status">Signed completed Home source is unavailable. No job or AI attempt was started.</p>}
+      </section>}
 
       <section className="grid gap-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
         <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">

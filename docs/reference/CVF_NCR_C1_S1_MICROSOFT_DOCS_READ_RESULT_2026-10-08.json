@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "cvf.ncrC1S1DocsReadResult.v1",
+  "contract": {
+    "path": "docs/reference/CVF_NCR_C1_S1_MICROSOFT_DOCS_EXECUTION_CONTRACT_2026-10-08.json",
+    "sha256": "966729278464f0928f9ff4924a4fdd7b12595daf61cbae98a623da6272a4ea63"
+  },
+  "approval": {
+    "path": "docs/reference/CVF_NCR_C1_S1_APPROVAL_DISPATCH_DISPOSITION_2026-10-08.json",
+    "sha256": "25e7d4149f6ce97b94317aaf34400adcf451dac838d1f01522d38b1b5e2a4b4b"
+  },
+  "rows": [
+    {
+      "ordinal": 1,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects",
+      "seconds": 0.875,
+      "status": 200,
+      "error": null,
+      "bytes": 61690,
+      "sha256": "7af288ed752f20281460066dc1160f0437203e94071776a4721fc8390ed53d0f",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/01.html"
+    },
+    {
+      "ordinal": 2,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-createjobobjectw",
+      "seconds": 0.797,
+      "status": 200,
+      "error": null,
+      "bytes": 55478,
+      "sha256": "91d5d84c894a57093a7b55a35f21488c5abf6037398a3e51e6148fce53786390",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/02.html"
+    },
+    {
+      "ordinal": 3,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-setinformationjobobject",
+      "seconds": 0.687,
+      "status": 200,
+      "error": null,
+      "bytes": 64849,
+      "sha256": "fb817f85433434c6be901f1fb0b72b1e838c43484d98542b15bea1dfb9c00f58",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/03.html"
+    },
+    {
+      "ordinal": 4,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-assignprocesstojobobject",
+      "seconds": 0.625,
+      "status": 200,
+      "error": null,
+      "bytes": 58056,
+      "sha256": "e9ba24d0d0c6ff0980cd81878221530ea8afdb08b12259486a868d4bc233e6cf",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/04.html"
+    },
+    {
+      "ordinal": 5,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-queryinformationjobobject",
+      "seconds": 0.735,
+      "status": 200,
+      "error": null,
+      "bytes": 66460,
+      "sha256": "56319d48e12c8c752e99a8d64f053c8590dc6f50bdd6568bfb11089293cad8ec",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/05.html"
+    },
+    {
+      "ordinal": 6,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob",
+      "seconds": 0.593,
+      "status": 200,
+      "error": null,
+      "bytes": 52615,
+      "sha256": "060f1bc2c1b3f5e27913a511106b4cfb49501de4020c6295b4fedd3e49aaa64c",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/06.html"
+    },
+    {
+      "ordinal": 7,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-terminatejobobject",
+      "seconds": 0.735,
+      "status": 200,
+      "error": null,
+      "bytes": 53268,
+      "sha256": "490f0b520a8cc83adab65934cda96fc724eefbff9cd1a2b9d8ea2ba2cecfb3d3",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/07.html"
+    },
+    {
+      "ordinal": 8,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-closehandle",
+      "seconds": 0.703,
+      "status": 200,
+      "error": null,
+      "bytes": 56082,
+      "sha256": "4a986295ed81c688a82e5dc3db784b78e93bd6d61248204392f402d7f2493bdc",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/08.html"
+    },
+    {
+      "ordinal": 9,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw",
+      "seconds": 0.469,
+      "status": 200,
+      "error": null,
+      "bytes": 76648,
+      "sha256": "73de589caccfc13de6f68d6322542b7e0de7464d650be165e02ef4c784f75ced",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/09.html"
+    },
+    {
+      "ordinal": 10,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-resumethread",
+      "seconds": 0.515,
+      "status": 200,
+      "error": null,
+      "bytes": 54322,
+      "sha256": "00cf35225b08394d968fd20f2432b5c28b2b5a5d8764e58392e348132176491e",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/10.html"
+    },
+    {
+      "ordinal": 11,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_extended_limit_information",
+      "seconds": 0.688,
+      "status": 200,
+      "error": null,
+      "bytes": 53215,
+      "sha256": "382b76bdc433fda8f99431d1b2733eec111a1307db3834dc55050fb6a4ae91c3",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/11.html"
+    },
+    {
+      "ordinal": 12,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_accounting_information",
+      "seconds": 0.609,
+      "status": 200,
+      "error": null,
+      "bytes": 52750,
+      "sha256": "3f96064b21895406c6d94df4ed55ec3097d415a1d433429dbc9476410b399868",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/12.html"
+    }
+  ],
+  "requestsAttempted": 12,
+  "decodedBytes": 705433,
+  "wallSeconds": 8.031,
+  "paidSpend": 0,
+  "sourceExecutionCount": 0,
+  "workerNetworkRequestsAdmitted": 0,
+  "claimBoundary": "actual bounded documentation reads;no OS/backend proof;raw bodies retained in ignored runtime",
+  "disposition": "READ_COMPLETE",
+  "requestsUnused": 8
+}

@@ -210,8 +210,11 @@ describe('CVF Plane Facades', () => {
 
     const knowledge = createKnowledgeFacade({ shell });
 
+    const syntheticOpenAiStyleKey = 'sk-' + 'A'.repeat(32);
     const filtered = knowledge.filterPII(
-      'Contact me at alice@example.com with fake api_key_sk-12345678901234567890 and -----BEGIN PRIVATE KEY-----',
+      'Contact me at alice@example.com with fake api_key_'
+        syntheticOpenAiStyleKey +
+        ' and -----BEGIN PRIVATE KEY-----',
     );
     const retrieved = knowledge.retrieveContext('cvf governance', {
       maxChunks: 3,

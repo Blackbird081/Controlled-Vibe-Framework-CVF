@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "cvf.ncrC1S1DocsReadResult.v1",
+  "contract": {
+    "path": "docs/reference/CVF_NCR_C1_S1_MICROSOFT_DOCS_EXECUTION_CONTRACT_2026-10-08.json",
+    "sha256": "966729278464f0928f9ff4924a4fdd7b12595daf61cbae98a623da6272a4ea63"
+  },
+  "approval": {
+    "path": "docs/reference/CVF_NCR_C1_S1_APPROVAL_DISPATCH_DISPOSITION_2026-10-08.json",
+    "sha256": "25e7d4149f6ce97b94317aaf34400adcf451dac838d1f01522d38b1b5e2a4b4b"
+  },
+  "rows": [
+    {
+      "ordinal": 1,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_limit_information",
+      "seconds": 0.594,
+      "status": 200,
+      "error": null,
+      "bytes": 67933,
+      "sha256": "80f14988240942cd7e72359a21b70de328f5e2d86ae460e4f33fd5f30e90cd40",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/01.html"
+    },
+    {
+      "ordinal": 2,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-io_counters",
+      "seconds": 0.547,
+      "status": 200,
+      "error": null,
+      "bytes": 50266,
+      "sha256": "1b5353e26d87a2da038db77e34c2318b3eb5527c893747fb21cdc5e144ee6879",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/02.html"
+    },
+    {
+      "ordinal": 3,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-startupinfow",
+      "seconds": 0.578,
+      "status": 200,
+      "error": null,
+      "bytes": 70058,
+      "sha256": "26a81257575f40c1fb4ab2396747fd3d85ec4ec4d09ec9f343c6a0078900969f",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/03.html"
+    },
+    {
+      "ordinal": 4,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-process_information",
+      "seconds": 0.687,
+      "status": 200,
+      "error": null,
+      "bytes": 53688,
+      "sha256": "2ca3157c7548954f0676b0ad73e81e3282cb0b17ba3eb8986730791524db30b3",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/04.html"
+    },
+    {
+      "ordinal": 5,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags",
+      "seconds": 0.594,
+      "status": 200,
+      "error": null,
+      "bytes": 61374,
+      "sha256": "6fc260fae512530908555ceeb1a86d6ea3624983304a5150a466a2168cffc93e",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/05.html"
+    },
+    {
+      "ordinal": 6,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminateprocess",
+      "seconds": 0.609,
+      "status": 200,
+      "error": null,
+      "bytes": 54843,
+      "sha256": "98ca85fc84591efdb450bb6953920b579fced6422b19a5412fccc30921a1fff6",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/06.html"
+    },
+    {
+      "ordinal": 7,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject",
+      "seconds": 0.563,
+      "status": 200,
+      "error": null,
+      "bytes": 55997,
+      "sha256": "f504e7ec9b9ae35d859e41f3b41787609a5e6d9afaa3615975fd1affcc7bc8b9",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/07.html"
+    },
+    {
+      "ordinal": 8,
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_process_id_list",
+      "seconds": 0.578,
+      "status": 200,
+      "error": null,
+      "bytes": 50750,
+      "sha256": "28ba6d32d5086e1e018013b368f7272a8bf2767fee27c1aa003b9ea3b21b59fb",
+      "contentType": "text/html",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/08.html"
+    }
+  ],
+  "requestsAttempted": 8,
+  "decodedBytes": 464909,
+  "wallSeconds": 4.75,
+  "paidSpend": 0,
+  "sourceExecutionCount": 0,
+  "workerNetworkRequestsAdmitted": 0,
+  "claimBoundary": "actual bounded documentation reads;no OS/backend proof;raw bodies retained in ignored runtime",
+  "continuationQueue": {
+    "path": "docs/reference/CVF_NCR_C1_S1_MICROSOFT_DOCS_ABI_QUEUE_2026-10-08.json",
+    "sha256": "fd43ea669e04081e9aaed85daf22fd74c65cbabcc6042ec4b59d39d96e03afbd"
+  },
+  "priorCumulative": {
+    "requests": 12,
+    "bytes": 705433,
+    "seconds": 8.031
+  },
+  "disposition": "READ_COMPLETE",
+  "requestsUnused": 0,
+  "cumulative": {
+    "requests": 20,
+    "decodedBytes": 1170342,
+    "wallSeconds": 12.781
+  }
+}

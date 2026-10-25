@@ -25,4 +25,14 @@ describe('draft contract', () => {
     expect(parseDraftInput({ ...input, filename: 'Bearer abcdefghijklmnop' })).toBeNull();
     expect(parseDraftInput({ ...input, request: { ...input.request, sourceContent: 'OPENAI_API_KEY=abc' } })).toBeNull();
   });
+  it('round-trips a pilot evidence reference without accepting browser trust flags', () => {
+    const sourceRecordId = 'a'.repeat(32);
+    const pilot = { ...input, sourceRecordId, pilotSource: { receipt: {
+      htmlPilotEvidence: { runId: sourceRecordId, rootRunId: sourceRecordId } } } };
+    const parsed = parseDraftInput(pilot);
+    expect(parsed?.pilotSource?.receipt.htmlPilotEvidence?.runId).toBe(sourceRecordId);
+    const saved = makeSnapshot(parsed!, owner, Date.parse('2026-10-18T00:01:00Z'));
+    expect(validateSnapshot(saved, owner, Date.parse('2026-10-18T00:02:00Z'))?.pilotSource).toEqual(pilot.pilotSource);
+    expect(parseDraftInput({ ...pilot, sourceVerified: true })).toBeNull();
+  });
 });

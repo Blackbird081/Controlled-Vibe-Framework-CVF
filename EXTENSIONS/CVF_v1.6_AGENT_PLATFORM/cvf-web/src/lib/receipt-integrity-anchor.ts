@@ -1,4 +1,4 @@
-import { createHash, createHmac } from 'crypto';
+import { createHash, createHmac, timingSafeEqual } from 'crypto';
 import type { GovernanceEvidenceReceipt, ReceiptIntegrityAnchor } from '@/lib/ai';
 
 export interface BuildReceiptIntegrityAnchorInput {
@@ -75,4 +75,16 @@ export function buildReceiptIntegrityAnchor(
         redactionApplied: true,
         claimBoundary: 'local_receipt_integrity_only_no_third_party_immutability_without_external_anchor',
     };
+}
+
+/** Exact local-HMAC verification for a saved pilot receipt; external immutability is a separate claim. */
+export function verifySignedReceiptIntegrity(receipt: GovernanceEvidenceReceipt, signingSecret: string): boolean {
+    if (!signingSecret?.trim() || receipt.receiptIntegrity?.signatureStatus !== 'SIGNED') return false;
+    const { receiptIntegrity, htmlPilotEvidence: _pilot, ...unsigned } = receipt;
+    const canonical = canonicalizeReceiptForIntegrity(unsigned);
+    const expectedHash = sha256Hex(canonical);
+    const expectedHmac = hmacSha256Hex(signingSecret.trim(), canonical);
+    const equal = (actual: string | undefined, expected: string) => typeof actual === 'string'
+        && /^[a-f0-9]{64}$/.test(actual) && timingSafeEqual(Buffer.from(actual, 'hex'), Buffer.from(expected, 'hex'));
+    return equal(receiptIntegrity.receiptHash, expectedHash) && equal(receiptIntegrity.signatureDigest, expectedHmac);
 }

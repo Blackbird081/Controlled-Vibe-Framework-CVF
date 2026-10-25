@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { JOB_EFFECTS, makeJob, parseAcceptVersion, parseCreateJob, parseLinkVersion, validateJob } from './html-job-contract';
+import { JOB_EFFECTS, PILOT_JOB_EFFECTS, makeJob, parseAcceptVersion, parseCreateJob, parseLinkVersion,
+  parseProductDecision, validateJob } from './html-job-contract';
 
 const id = '123e4567-e89b-42d3-a456-426614174001';
 const request = { title: 't', sourcePath: 'p', sourceContent: 's', memoryClass: 'FULL_RECORD', status: 'DRAFT', claimBoundary: 'local', receiptAnchor: 'r' };
@@ -25,5 +26,21 @@ describe('HTML job contract', () => {
     expect(parseAcceptVersion(base)).not.toBeNull();
     expect(parseAcceptVersion({ ...base, reviewedVersionConfirmed: false })).toBeNull();
     expect(parseAcceptVersion({ ...base, criteriaReview: [{ criterionId: 'c1', passed: true, reviewNote: '' }] })).toBeNull();
+  });
+  it('keeps a pilot job separate from synthetic review and binds exact product-decision hashes', () => {
+    const sourceRecordId = 'a'.repeat(32);
+    const pilotSource = { receipt: { htmlPilotEvidence: { rootRunId: sourceRecordId, parentRunId: null,
+      outputSha256: 'b'.repeat(64), profileDigest: 'c'.repeat(64) } } };
+    const created = parseCreateJob({ jobId: id, sourceRecordId, goal: 'Fictional HTML',
+      criteria: [{ criterionId: 'source', text: 'Exact source' }], expectedOutput: 'HTML', allowedEffects: PILOT_JOB_EFFECTS,
+      request, pilotSource });
+    expect(created).not.toBeNull();
+    expect(makeJob(created!, owner, Date.parse('2026-10-18T00:00:00Z')).pilotRootRunId).toBe(sourceRecordId);
+    expect(parseCreateJob({ ...created, allowedEffects: JOB_EFFECTS })).toBeNull();
+    const decision = { jobId: id, sourceRecordId, versionId: id, decisionId: id, htmlSha256: 'd'.repeat(64),
+      sourceEvidenceSha256: 'e'.repeat(64), decision: 'ACCEPTED', reviewedVersionConfirmed: true };
+    expect(parseProductDecision(decision)).not.toBeNull();
+    expect(parseProductDecision({ ...decision, reviewedVersionConfirmed: false })).toBeNull();
+    expect(parseProductDecision({ ...decision, htmlSha256: 'f'.repeat(63) })).toBeNull();
   });
 });

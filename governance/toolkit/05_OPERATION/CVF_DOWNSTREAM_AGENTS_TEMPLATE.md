@@ -62,8 +62,8 @@ A tranche may inherit accepted evidence and enter at its earliest open stage whe
 
 ## Agent Continuation And Action Readiness
 
-Before intake, planning, producing or receiving work, apply the pinned core's `docs/reference/CVF_GOVERNED_WORK_LIFECYCLE_AND_DESIGN_CONTROL_STANDARD_2026-06-11.md`, Agent Continuation And Action Readiness, without reminder.
-Design outputs for quick agent and human continuation; accept incomplete inputs for permitted clarification, read sources before asking, resolve ordinary authorized details, route consequential unknowns to the right owner and pause only dependent actions. Preserve governed SPEC/WORK_ORDER and locked design/authority; reuse existing artifact structure.
+Before intake, planning, producing or receiving work, apply the pinned core's `docs/reference/CVF_GOVERNED_WORK_LIFECYCLE_AND_DESIGN_CONTROL_STANDARD_2026-06-11.md`, including its mandatory `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`: roadmap outcomes/checkpoints, complete milestone coverage, owned remainder, bounded supporting work and separate tranche/product conclusions. Apply `docs/reference/downstream_gate_profile/CVF_MILESTONE_COVERAGE_MACHINE_CONTRACT.md`: Local admits `docs/milestone-coverage-authority.json` before implementation; missing/unknown coverage permits finite verification only.
+Design outputs for quick agent and human continuation; accept incomplete inputs for permitted clarification, read sources before asking, resolve ordinary authorized details and pause only dependent actions. Apply these rules for every role and resumed agent without operator reminder. Verification questions do not change approved direction. Preserve native capability reuse; identify only missing CVF adapter work. Preserve governed SPEC/WORK_ORDER and locked design/authority; reuse existing artifact structure.
 
 ## Provider-Neutral Role Contract
 
@@ -127,7 +127,7 @@ envelope only, never semantic smallness, and names no provider or commit role.
 
 ## Inherited Downstream Gate Profile
 
-This project carries the pinned profile `cvf.downstreamGateProfile@1.0.0` (`.cvf/gate-profile.lock.json`, runner in
+This project carries the pinned profile `cvf.downstreamGateProfile@1.2.0` (`.cvf/gate-profile.lock.json`, runner in
 `scripts/cvf_gates/`). Mandatory controls run at bootstrap/doctor, pre-dispatch, worker-return, reviewer-fast, pre-commit and PR CI
 via `python scripts/cvf_gates/cvf_downstream_gate_runner.py run --phase <phase>`; never edit, empty or bypass them (a
 local profile may only add `LOCAL-*` controls). State gate coverage per control as INSTALLED, INVOKED or

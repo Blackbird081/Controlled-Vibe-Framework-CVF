@@ -32,7 +32,7 @@
       "const": "cvf.downstreamFindingIntake@1.0.0"
     },
     "profileId": {
-      "const": "cvf.downstreamGateProfile@1.1.0"
+      "const": "cvf.downstreamGateProfile@1.2.0"
     },
     "findingId": {
       "type": "string",

@@ -1,0 +1,252 @@
+{
+  "schemaVersion": "cvf.ncrC1S1NativeAbiBindings.v1",
+  "phase": "S1_SOURCE_SPECIFICATION",
+  "readResultPins": [
+    {
+      "path": "docs/reference/CVF_NCR_C1_S1_MICROSOFT_DOCS_EXECUTION_CONTRACT_2026-10-08.json",
+      "sha256": "966729278464f0928f9ff4924a4fdd7b12595daf61cbae98a623da6272a4ea63"
+    },
+    {
+      "path": "docs/reference/CVF_NCR_C1_S1_MICROSOFT_DOCS_READ_RESULT_2026-10-08.json",
+      "sha256": "46ed356ebb2a77864aac46572a9e0fdd5050a86bc0066e9a8e8afc3d07e23bfd"
+    },
+    {
+      "path": "docs/reference/CVF_NCR_C1_S1_MICROSOFT_DOCS_ABI_QUEUE_2026-10-08.json",
+      "sha256": "fd43ea669e04081e9aaed85daf22fd74c65cbabcc6042ec4b59d39d96e03afbd"
+    },
+    {
+      "path": "docs/reference/CVF_NCR_C1_S1_MICROSOFT_DOCS_ABI_RESULT_2026-10-08.json",
+      "sha256": "b044270bfb42bc20150c5bff4e0a3c78001c33db99f7fd8708e7c3be3fccf131"
+    }
+  ],
+  "cumulativeRead": {
+    "requests": 20,
+    "decodedBytes": 1170342,
+    "wallSeconds": 12.781
+  },
+  "remainingRequests": 0,
+  "documents": [
+    {
+      "docId": "MS-01",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects",
+      "status": 200,
+      "decodedBytes": 61690,
+      "rawBodySha256": "7af288ed752f20281460066dc1160f0437203e94071776a4721fc8390ed53d0f",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/01.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": false,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-02",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-createjobobjectw",
+      "status": 200,
+      "decodedBytes": 55478,
+      "rawBodySha256": "91d5d84c894a57093a7b55a35f21488c5abf6037398a3e51e6148fce53786390",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/02.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-03",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-setinformationjobobject",
+      "status": 200,
+      "decodedBytes": 64849,
+      "rawBodySha256": "fb817f85433434c6be901f1fb0b72b1e838c43484d98542b15bea1dfb9c00f58",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/03.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-04",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-assignprocesstojobobject",
+      "status": 200,
+      "decodedBytes": 58056,
+      "rawBodySha256": "e9ba24d0d0c6ff0980cd81878221530ea8afdb08b12259486a868d4bc233e6cf",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/04.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-05",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-queryinformationjobobject",
+      "status": 200,
+      "decodedBytes": 66460,
+      "rawBodySha256": "56319d48e12c8c752e99a8d64f053c8590dc6f50bdd6568bfb11089293cad8ec",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/05.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-06",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob",
+      "status": 200,
+      "decodedBytes": 52615,
+      "rawBodySha256": "060f1bc2c1b3f5e27913a511106b4cfb49501de4020c6295b4fedd3e49aaa64c",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/06.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-07",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-terminatejobobject",
+      "status": 200,
+      "decodedBytes": 53268,
+      "rawBodySha256": "490f0b520a8cc83adab65934cda96fc724eefbff9cd1a2b9d8ea2ba2cecfb3d3",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/07.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-08",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-closehandle",
+      "status": 200,
+      "decodedBytes": 56082,
+      "rawBodySha256": "4a986295ed81c688a82e5dc3db784b78e93bd6d61248204392f402d7f2493bdc",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/08.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-09",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw",
+      "status": 200,
+      "decodedBytes": 76648,
+      "rawBodySha256": "73de589caccfc13de6f68d6322542b7e0de7464d650be165e02ef4c784f75ced",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/09.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-10",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-resumethread",
+      "status": 200,
+      "decodedBytes": 54322,
+      "rawBodySha256": "00cf35225b08394d968fd20f2432b5c28b2b5a5d8764e58392e348132176491e",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/10.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-11",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_extended_limit_information",
+      "status": 200,
+      "decodedBytes": 53215,
+      "rawBodySha256": "382b76bdc433fda8f99431d1b2733eec111a1307db3834dc55050fb6a4ae91c3",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/11.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-12",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_accounting_information",
+      "status": 200,
+      "decodedBytes": 52750,
+      "rawBodySha256": "3f96064b21895406c6d94df4ed55ec3097d415a1d433429dbc9476410b399868",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs/12.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-13",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_limit_information",
+      "status": 200,
+      "decodedBytes": 67933,
+      "rawBodySha256": "80f14988240942cd7e72359a21b70de328f5e2d86ae460e4f33fd5f30e90cd40",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/01.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-14",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-io_counters",
+      "status": 200,
+      "decodedBytes": 50266,
+      "rawBodySha256": "1b5353e26d87a2da038db77e34c2318b3eb5527c893747fb21cdc5e144ee6879",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/02.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-15",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-startupinfow",
+      "status": 200,
+      "decodedBytes": 70058,
+      "rawBodySha256": "26a81257575f40c1fb4ab2396747fd3d85ec4ec4d09ec9f343c6a0078900969f",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/03.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-16",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-process_information",
+      "status": 200,
+      "decodedBytes": 53688,
+      "rawBodySha256": "2ca3157c7548954f0676b0ad73e81e3282cb0b17ba3eb8986730791524db30b3",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/04.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-17",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags",
+      "status": 200,
+      "decodedBytes": 61374,
+      "rawBodySha256": "6fc260fae512530908555ceeb1a86d6ea3624983304a5150a466a2168cffc93e",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/05.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-18",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminateprocess",
+      "status": 200,
+      "decodedBytes": 54843,
+      "rawBodySha256": "98ca85fc84591efdb450bb6953920b579fced6422b19a5412fccc30921a1fff6",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/06.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-19",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject",
+      "status": 200,
+      "decodedBytes": 55997,
+      "rawBodySha256": "f504e7ec9b9ae35d859e41f3b41787609a5e6d9afaa3615975fd1affcc7bc8b9",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/07.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    },
+    {
+      "docId": "MS-20",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_process_id_list",
+      "status": 200,
+      "decodedBytes": 50750,
+      "rawBodySha256": "28ba6d32d5086e1e018013b368f7272a8bf2767fee27c1aa003b9ea3b21b59fb",
+      "runtimeBodyPath": ".cvf/runtime/ncr-s1-microsoft-docs-abi/08.html",
+      "sourceClass": "OBSERVED_FIRST_PARTY_DOCUMENTATION_NOT_OS_PROOF",
+      "syntaxPresent": true,
+      "scope": "API signature/field order/return semantics only;full raw HTML remains ignored runtime"
+    }
+  ],
+  "abiTarget": "Windows x64 LLP64 candidate only;host compatibility NOT_MEASURED",
+  "claimBoundary": "documentary API/layout derivation,not DLL availability or executable compatibility proof"
+}

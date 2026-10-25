@@ -1,9 +1,11 @@
+// Text Encoding Exception: Vietnamese fictional-content fixtures use UTF-8.
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { HtmlDraftSnapshotStore } from './html-draft-snapshot-store';
-import { JOB_EFFECTS, type CreateJobInput, type AcceptVersionInput } from '../html-job-contract';
+import { JOB_EFFECTS, PILOT_JOB_EFFECTS, type CreateJobInput, type AcceptVersionInput } from '../html-job-contract';
 import type { DraftInput } from '../html-draft-recovery-contract';
+import { htmlPilotFilename, renderLockedHtmlPilotSource } from '../html-cta-rendering';
 
 const now = Date.parse('2026-10-18T00:00:00.000Z');
 const jobId = '123e4567-e89b-42d3-a456-426614174001';
@@ -25,6 +27,45 @@ async function cleanup(root: string) {
   await fs.rmdir(root);
 }
 describe('job sidecars in draft owner namespace', () => {
+  it('restores exact pilot job/version bytes to a new directory at the same path', async () => {
+    const root = await fs.mkdtemp(path.join(process.env.CVF_NCR_R1_FIXTURE_ROOT!, 'cvf-pilot-restore-'));
+    const backup = `${root}-retained`;
+    const source = 'a'.repeat(32);
+    const output = '  # Không gian đọc Ánh Sao  \n## Giới thiệu\nThư viện hư cấu.\n## Hoạt động\nĐọc sách cùng nhau.\n## Liên hệ\nGặp tại khu sinh hoạt.\nCTA: Đăng ký tham gia -> Liên hệ';
+    const rendered = renderLockedHtmlPilotSource(output, null)!;
+    const pilotReceipt = { htmlPilotEvidence: { rootRunId: source, runId: source, parentRunId: null,
+      receiptId: 'receipt-pilot', outputSha256: 'b'.repeat(64), profileDigest: 'c'.repeat(64) } } as NonNullable<DraftInput['pilotSource']>['receipt'];
+    const pilotRequest = { ...request, title: rendered.title, sourcePath: `pilot:${source}`, sourceContent: output,
+      status: 'DRAFT_UNACCEPTED', receiptAnchor: 'receipt-pilot',
+      claimBoundary: 'Signed fictional-content pilot draft. Exact version awaits operator acceptance.' };
+    const pilotJob: CreateJobInput = { ...create, sourceRecordId: source, request: pilotRequest,
+      allowedEffects: PILOT_JOB_EFFECTS, pilotSource: { receipt: pilotReceipt } };
+    const pilotDraft: DraftInput = { ...draft, sourceRecordId: source, request: pilotRequest, html: rendered.html,
+      filename: htmlPilotFilename(rendered.title), pilotSource: { receipt: pilotReceipt } };
+    try {
+      const store = new HtmlDraftSnapshotStore({ kind: 'real-provider-fictional-content', root, production: false, jobDecisions: true }, () => now);
+      expect(await store.save({ ...pilotDraft, html: '<h1>client replacement</h1>' }, owner)).toBe('UNAVAILABLE');
+      expect(await store.createJob({ ...pilotJob, request: { ...pilotRequest, title: 'Wrong title' } }, owner)).toBe('UNAVAILABLE');
+      expect(await store.createJob(pilotJob, owner)).toBe('SAVED');
+      expect((await store.getJob(jobId, source, owner))?.pilotRootRunId).toBe(source);
+      expect(await store.save(pilotDraft, owner)).toBe('SAVED');
+      expect(await store.linkVersion({ jobId, sourceRecordId: source, versionId }, owner)).toBe('SAVED');
+      const original = await store.get(versionId, source, owner);
+      expect(original?.request.sourceContent).toBe(output);
+      const link = await store.getVersion(jobId, source, versionId, owner);
+      expect(link?.pilotSourceRunId).toBe(source);
+      await fs.rename(root, backup);
+      await fs.mkdir(root);
+      await fs.cp(backup, root, { recursive: true });
+      const recovered = new HtmlDraftSnapshotStore({ kind: 'real-provider-fictional-content', root, production: false, jobDecisions: true }, () => now);
+      expect(await recovered.get(versionId, source, owner)).toEqual(original);
+      expect(await recovered.getVersion(jobId, source, versionId, owner)).toEqual(link);
+      expect(await recovered.acceptVersion({ decisionId, jobId, sourceRecordId: source, versionId,
+        requestSha256: link!.requestSha256, htmlSha256: link!.htmlSha256,
+        criteriaReview: [{ criterionId: 'c1', passed: true, reviewNote: 'Checked' }], reviewedVersionConfirmed: true }, owner)).toBe('UNAVAILABLE');
+    } finally { try { await cleanup(root); } catch { /* owned root may not have been created yet */ }
+      try { await cleanup(backup); } catch { /* rename may not have occurred */ } }
+  });
   it('joins immutable job, exact snapshot and one person decision without changing draft trust', async () => {
     const root = await fs.mkdtemp(path.join(process.env.CVF_NCR_R1_FIXTURE_ROOT!, 'cvf-job-sidecar-'));
     try {

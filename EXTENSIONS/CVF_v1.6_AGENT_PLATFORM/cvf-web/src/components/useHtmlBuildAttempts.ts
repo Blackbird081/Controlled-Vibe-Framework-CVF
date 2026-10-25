@@ -1,6 +1,15 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ArtifactExportRequest, ArtifactExportResult, DisplayedResult } from './ArtifactExportPanel';
+import type { GovernanceEvidenceReceipt } from '@/lib/ai';
+
+/** A late or cross-run browser receipt never selects another pilot source for a saved version. */
+export function pilotAttemptMatchesSource(receipt: GovernanceEvidenceReceipt | undefined, runId: string,
+  rootRunId: string, outputSha256: string): boolean {
+  const selected = receipt?.htmlPilotEvidence;
+  return !!selected && selected.runId === runId && selected.rootRunId === rootRunId
+    && selected.outputSha256 === outputSha256;
+}
 
 export interface HtmlJobReference { jobId: string; sourceRecordId: string }
 export interface SupersededOutcome { attempt: number; status: 'pending' | 'success' | 'failure'; id?: string }

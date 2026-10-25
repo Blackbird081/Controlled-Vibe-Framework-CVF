@@ -86,12 +86,12 @@
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
-          "sha256": "1415340eff20b284461bc895a00115acb2ac185152eafd79a32b2561c707d617",
+          "sha256": "b024986015de1e7645ca478c8d1d29d994150de26ec7cc9917960d632c174997",
           "evidenceRole": "GC-009 cited implementation with context-preserving checkContext, RFR-R2 frozen bootstrap configuration, exact canonical bypass matching, and malformed-action fail-closed admission"
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
-          "sha256": "cc3677547b58bdb929b6fb6cf17371c4573395722eec81e3c529a55e5c021e04",
+          "sha256": "05d97f3b6057740d73730d3ad0b8c4230ea4ff2953c43f376f0dd0cd428a859e",
           "evidenceRole": "GC-009 cited test with checkContext coverage, valid source pairing, and RFR-R2 F3-F4 adversarial matrix including zero-engine malformed-action rejection"
         },
         {

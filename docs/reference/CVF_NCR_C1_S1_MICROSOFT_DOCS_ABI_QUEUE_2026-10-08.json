@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "cvf.ncrC1S1DocsAbiQueue.v1",
+  "parentContract": {
+    "path": "docs/reference/CVF_NCR_C1_S1_MICROSOFT_DOCS_EXECUTION_CONTRACT_2026-10-08.json",
+    "sha256": "966729278464f0928f9ff4924a4fdd7b12595daf61cbae98a623da6272a4ea63"
+  },
+  "priorResult": {
+    "path": "docs/reference/CVF_NCR_C1_S1_MICROSOFT_DOCS_READ_RESULT_2026-10-08.json",
+    "sha256": "46ed356ebb2a77864aac46572a9e0fdd5050a86bc0066e9a8e8afc3d07e23bfd"
+  },
+  "urls": [
+    "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_limit_information",
+    "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-io_counters",
+    "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-startupinfow",
+    "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-process_information",
+    "https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags",
+    "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminateprocess",
+    "https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject",
+    "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_process_id_list"
+  ],
+  "reason": "basic limit/IO/startup/process ABI dependencies and termination/wait/process-list cleanup;canonical win32 URI candidates under existing approved host;no redirect/retry",
+  "maxRemainingRequests": 8,
+  "maxRemainingDecodedBytes": 3488871,
+  "maxRemainingSeconds": 291.969
+}

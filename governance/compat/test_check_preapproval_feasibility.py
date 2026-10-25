@@ -3,12 +3,14 @@
 Fixtures are disposable temp directories or temp Git repositories; the real
 frozen S1 predecessor is only read and copied, never edited.
 """
+import atexit
 import copy
 import hashlib
 import json
 import os
 import subprocess
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -30,6 +32,20 @@ PRED = "docs/reviews/CVF_CVF_NCR_S05_S1_SUPERVISOR_SOURCE_R1_WORKER_RETURN_2026-
 PRED_SHA = "12116c9c696752b487b74de9d6ec75bd3e53e90efad92b8f6a6f7f72512bd6ce"
 EVID = "docs/reviews/evidence/resolution-evidence.md"
 GOOD_EVID = "# Evidence\n\nresolution-locator-unique\n"
+_CHILD_INVOCATIONS = []
+
+def recorded_run(command, **kwargs):
+    done = subprocess.run(command, **kwargs)
+    _CHILD_INVOCATIONS.append({"category": Path(command[1] if command[0] == "git" else command[2] if len(command) > 2 else command[0]).name,
+                               "exitCode": done.returncode})
+    return done
+
+@atexit.register
+def _write_child_count():
+    path = os.environ.get("CVF_PREFEAS_CHILD_LOG")
+    if path:
+        Path(path).write_text(json.dumps({"completed": len(_CHILD_INVOCATIONS),
+                                          "invocations": _CHILD_INVOCATIONS}), encoding="utf-8")
 
 def sha(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
@@ -116,11 +132,11 @@ def cli(root, prop, target="__same__", script=RUNNER):
     cmd = [sys.executable, "-B", script, "--repo-root", str(root), "--json"]
     if prop is not None:
         cmd += ["--proposal", prop, "--approval-target", prop if target == "__same__" else target]
-    done = subprocess.run(cmd, cwd=REPO, capture_output=True, text=True, encoding="utf-8")
+    done = recorded_run(cmd, cwd=REPO, capture_output=True, text=True, encoding="utf-8")
     return done.returncode, json.loads(done.stdout)
 
 def git(root, *args):
-    subprocess.run(["git", "-c", "user.email=t@example.invalid", "-c", "user.name=t", "-c", "commit.gpgsign=false", *args], cwd=root, check=True, capture_output=True)
+    recorded_run(["git", "-c", "user.email=t@example.invalid", "-c", "user.name=t", "-c", "commit.gpgsign=false", *args], cwd=root, check=True, capture_output=True)
 
 def git_fixture(root):
     git(root, "init", "-q")
@@ -130,7 +146,7 @@ def git_fixture(root):
 
 def range_cli(root, base="HEAD", head="HEAD", extra=()):
     cmd = [sys.executable, "-B", CHECKER, "--base", base, "--head", head, "--enforce", "--repo-root", str(root), *extra]
-    done = subprocess.run(cmd, cwd=REPO, capture_output=True, text=True, encoding="utf-8")
+    done = recorded_run(cmd, cwd=REPO, capture_output=True, text=True, encoding="utf-8")
     return done.returncode, done.stdout
 
 # Class 1: real hash-bound frozen predecessor with all four retained blockers.
@@ -217,7 +233,7 @@ def _link_dir(link: Path, target: Path) -> bool:
     except (OSError, NotImplementedError):
         pass
     if os.name == "nt":
-        done = subprocess.run(["cmd", "/c", "mklink", "/J", str(link), str(target)], capture_output=True)
+        done = recorded_run(["cmd", "/c", "mklink", "/J", str(link), str(target)], capture_output=True)
         return done.returncode == 0
     return False
 
@@ -410,7 +426,7 @@ def test_class7_catalog_routes_execute_against_disposable_git_fixture(root):
     prop, comp = make(root, reducing())
 
     def run_routes():
-        return [subprocess.run([sys.executable, "-B", *c[1:], "--repo-root", str(root)], cwd=REPO, capture_output=True, text=True, encoding="utf-8") for c in commands]
+        return [recorded_run([sys.executable, "-B", *c[1:], "--repo-root", str(root)], cwd=REPO, capture_output=True, text=True, encoding="utf-8") for c in commands]
 
     assert all(d.returncode == 0 and "evaluatedMarked=1" in d.stdout for d in run_routes())
     write(root, comp, (root / comp).read_text(encoding="utf-8").replace('"CONTINUE_BOUNDED"', '"STOP_REASSESS_ARCHITECTURE"'))
@@ -500,7 +516,7 @@ def test_bound_return_parser_rejects_before_feasible(root, field):
 
 def test_actual_released_s1_order_fails_route_and_corrected_copy_passes(root):
     rel = "docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_C1_S1_INTEGRATED_SOURCE_2026-10-08.md"
-    raw = subprocess.run(
+    raw = recorded_run(
         ["git", "show", f"4eb79b34ca4422f598cd2a052ca2698283b71230:{rel}"],
         cwd=REPO, capture_output=True, check=True,
     ).stdout
@@ -604,7 +620,7 @@ def other_scope_root() -> dict:
 
 def cli_text(root, prop):
     cmd = [sys.executable, "-B", RUNNER, "--repo-root", str(root), "--proposal", prop, "--approval-target", prop]
-    done = subprocess.run(cmd, cwd=REPO, capture_output=True, text=True, encoding="utf-8")
+    done = recorded_run(cmd, cwd=REPO, capture_output=True, text=True, encoding="utf-8")
     return done.returncode, done.stdout.splitlines()[0]
 
 def test_root_build_valid_action_yields_only_scoped_result(root):
@@ -773,3 +789,221 @@ def test_root_build_range_fails_on_companion_only_drift_and_invalid_action(tmp_p
     write(tmp_path, comp, json.dumps(data))
     code, out = range_cli(tmp_path)
     assert code == 1 and "companionReferencingProposals=1" in out and "ACTION_READINESS_CLAIM_INVALID" in out
+
+
+# Actual post-STOP v2 dispatch, with isolated authority bytes and a real Git/CLI route.
+V2_STOP = "docs/reviews/CVF_NCR_R2_W05_BOUND_SOURCE_LOCAL_COMPLETION_REVIEW_2026-10-19.md"
+V2_STOP_SHA = "37d2905184e28fe2e27d574241a69200c49e5338a094b8b2826809e8ce797a42"
+V2_LOCATORS = {
+    "BOUND_DESTINATION_NOT_ENFORCED": "| LR1 | HIGH | Signed challenge at foreign-web.invalid",
+    "BOUND_ISSUED_AUTHORITY_NOT_IMMUTABLE": "| LR2 | HIGH | Unissued profile invokes once",
+    "BOUND_ACTUAL_LEDGER_OWNER_JOIN_MISSING": "| LR3 | CRITICAL | After challenge, swapping the actual orchestrator.ledger",
+}
+V2_SOURCE = "docs/baselines/CVF_GC018_TEST_V2_SOURCE.md"
+V2_OPERATOR = "docs/baselines/CVF_TEST_V2_OPERATOR.md"
+V2_REASSESS = "docs/reviews/CVF_TEST_V2_REASSESSMENT.md"
+V2_GRANT = "docs/baselines/CVF_TEST_V2_GRANT.md"
+V2_PROP = "docs/work_orders/strict-v2.md"
+V2_COMP = "docs/reviews/evidence/strict-v2.json"
+V2_RETURN = "docs/reviews/CVF_TEST_V2_RETURN.md"
+V2_PROOF = "governance/compat/test_fixture_v2_proof.py"
+V2_EFFECTS = ("providerCalls", "networkCalls", "publicWrites", "deployments",
+              "realDataMutations", "destructiveActions", "productRuntimeStarts")
+
+
+def _v2_fence(tag, value):
+    return "# Authority\n\n```" + tag + "\n" + json.dumps(value) + "\n```\n"
+
+
+def _v2_companion(root, fixture):
+    comp = json.loads((root / V2_COMP).read_text(encoding="utf-8"))
+    data = (root / fixture["prop"]).read_bytes()
+    comp["proposal"]["sha256"] = comp["approvalTarget"]["sha256"] = sha(data)
+    comp["prospectiveOutcome"] = fixture["outcome"]
+    comp["approvalTarget"]["prospectiveOutcomeSha256"] = digest(fixture["outcome"])
+    write(root, V2_COMP, json.dumps(comp))
+
+
+def _v2_grant_refresh(root, fixture):
+    raw = _v2_fence("post-stop-root-admission-json", fixture["grant"])
+    write(root, V2_GRANT, raw)
+    fixture["outcome"]["rootContractAdmission"]["sha256"] = sha(raw.encode())
+    _v2_companion(root, fixture)
+
+
+def v2_dispatch_fixture(root):
+    stop_bytes = (REPO / V2_STOP).read_bytes()
+    assert sha(stop_bytes) == V2_STOP_SHA
+    write(root, V2_STOP, stop_bytes)
+    stop = scec.find_active_blocks(stop_bytes.decode("utf-8"))[0]
+    blockers = list(stop["blockerDelta"]["current"])
+    assert set(blockers) == set(V2_LOCATORS) and stop["counters"] == {
+        "partialReadyClosures": 0, "reviewerScopeExpansions": 0,
+        "sameClaimCorrections": 0, "nonDecreasingBlockerTransitions": 2,
+    }
+    source = "# Fixture source\n\nroot-build-baseline-locator\nroot-build-scope-locator\n" + "".join(
+        f"DESIGN-OBLIGATION {blocker}: fixture design\n" for blocker in blockers)
+    operator = "# Operator\n\nFIXTURE OPERATOR INSTRUCTION RECORD: bounded pair approved.\n"
+    write(root, V2_SOURCE, source)
+    write(root, V2_OPERATOR, operator)
+    write(root, V2_PROOF, "fixture proof assertion\n")
+    source_ref = {"path": V2_SOURCE, "sha256": sha(source.encode())}
+    stop_ref = {"path": V2_STOP, "sha256": V2_STOP_SHA}
+    reassess = {
+        "schemaVersion": "cvf.scecIntegratedRootReassessment@1.0.0",
+        "status": "ACCEPTED_BY_LOCAL", "decisionOwner": "LOCAL",
+        "scope": "INTEGRATED_ROOT_CONTRACT", "problemKey": stop["problemKey"],
+        "stoppedPredecessor": stop_ref, "sourceContract": source_ref,
+        "obligations": [{
+            "blockerId": b,
+            "designEvidence": {**source_ref, "locator": f"DESIGN-OBLIGATION {b}"},
+            "sourceEvidence": {**stop_ref, "locator": V2_LOCATORS[b]},
+        } for b in blockers],
+    }
+    reassess_text = _v2_fence("root-reassessment-json", reassess)
+    write(root, V2_REASSESS, reassess_text)
+    ledger = {
+        "schemaVersion": "cvf.workOrderAcceptanceLedger@1.0.0",
+        "requirements": [{"requirementId": "R1", "mandatory": True,
+                          "expectedArtifacts": [V2_RETURN, V2_PROOF], "requiredProofIds": ["P1"]}],
+        "proofCatalog": [{"proofId": "P1", "kind": "COMMAND", "locator": "fixture proof assertion"}],
+    }
+    body = ("# Work order\ndocType: work_order\nPreapproval-Feasibility: REQUIRED\n"
+            f"Preapproval-Feasibility-Companion: {V2_COMP}\n"
+            f"workerReturnPath: `{V2_RETURN}`\n"
+            "```acceptance-ledger-json\n" + json.dumps(ledger) + "\n```\n")
+    write(root, V2_PROP, body)
+    grant = {
+        "schemaVersion": "cvf.scecPostStopRootAdmission@2.0.0",
+        "status": "ACCEPTED_FOR_ONE_BOUNDED_POST_STOP_ROOT_PAIR", "decisionOwner": "LOCAL",
+        "operatorInstructionEvidence": {"path": V2_OPERATOR, "sha256": sha(operator.encode()),
+                                        "locator": "FIXTURE OPERATOR INSTRUCTION RECORD"},
+        "problemKey": stop["problemKey"],
+        "predecessor": {**stop_ref, "chainOrdinal": stop["chainOrdinal"],
+                        "blockers": blockers, "counters": dict(stop["counters"])},
+        "rootReassessment": {"path": V2_REASSESS, "sha256": sha(reassess_text.encode())},
+        "sourceContract": source_ref, "workOrderPath": V2_PROP, "workerReturnPath": V2_RETURN,
+        "allowedArtifacts": [V2_RETURN, V2_PROOF],
+        "effectCeilings": {name: 0 for name in V2_EFFECTS},
+        "expiresAtUtc": (datetime.now(timezone.utc) + timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
+    grant_text = _v2_fence("post-stop-root-admission-json", grant)
+    write(root, V2_GRANT, grant_text)
+    outcome = {
+        "schemaVersion": scec.SCEC_SCHEMA_VERSION, "problemKey": stop["problemKey"],
+        "chainMode": "SUCCESSOR", "chainOrdinal": stop["chainOrdinal"] + 1,
+        "predecessor": stop_ref,
+        "blockerDelta": {"prior": blockers, "resolved": [], "retained": blockers,
+                         "new": [], "reopened": [], "current": blockers},
+        "resolutionEvidence": {}, "counters": {**stop["counters"], "nonDecreasingBlockerTransitions": 3},
+        "claims": [], "requiredDisposition": "ROOT_CONTRACT_REQUIRED",
+        "successorScope": "INTEGRATED_ROOT_CONTRACT",
+        "rootContractAdmission": {"schemaVersion": "cvf.scecPostStopRootAdmissionPointer@2.0.0",
+                                  "path": V2_GRANT, "sha256": sha(grant_text.encode()), "stage": "DISPATCH"},
+    }
+    rows = [rb_row("ROOT_BUILD_BASELINE", path=V2_SOURCE, data=source),
+            rb_row("ROOT_BUILD_SCOPE", path=V2_SOURCE, data=source)]
+    comp = {
+        "schemaVersion": pf.COMPANION_SCHEMA,
+        "proposal": {"path": V2_PROP, "sha256": sha(body.encode())},
+        "approvalTarget": {"path": V2_PROP, "sha256": sha(body.encode()),
+                           "prospectiveOutcomeSha256": digest(outcome)},
+        "prospectiveOutcome": outcome,
+        "phasePrerequisites": {"phase": pf.ROOT_BUILD_PHASE, "rows": rows},
+        "requestQueue": None, "requestedAction": RB_ACTION,
+    }
+    write(root, V2_COMP, json.dumps(comp))
+    return {"prop": V2_PROP, "outcome": outcome, "grant": grant}
+
+
+def test_v2_actual_identity_passes_dedicated_cli_and_git_range(tmp_path):
+    git_fixture(tmp_path)
+    fixture = v2_dispatch_fixture(tmp_path)
+    prop = fixture["prop"]
+    code, receipt = cli(tmp_path, prop)
+    assert code == 0 and receipt["technicalDisposition"] == RB_SCOPED
+    assert receipt["canonicalBlockCount"] == 1 and receipt["canonicalViolations"] == []
+    assert receipt["proposal"] == {"path": prop, "sha256": sha((tmp_path / prop).read_bytes())}
+    assert receipt["approvalTarget"]["sha256"] == receipt["proposal"]["sha256"]
+    assert receipt["runtimeReadiness"] is False and receipt["effectAdmission"] is False
+    assert receipt["prerequisites"] == {"examined": 2, "deferred": 0}
+    code, output = range_cli(tmp_path, extra=("--json",))
+    report = json.loads(output)
+    assert code == 0 and report["coverage"]["evaluatedMarked"] == 1
+    assert report["counts"][RB_SCOPED] == 1 and report["receipts"][0] == receipt
+
+
+def test_v2_same_outcome_wrong_actual_artifact_identity_is_invalid(tmp_path):
+    fixture = v2_dispatch_fixture(tmp_path)
+    wrong = "docs/work_orders/wrong-identity.md"
+    write(tmp_path, wrong, (tmp_path / V2_PROP).read_bytes())
+    comp = json.loads((tmp_path / V2_COMP).read_text(encoding="utf-8"))
+    comp["proposal"]["path"] = comp["approvalTarget"]["path"] = wrong
+    write(tmp_path, V2_COMP, json.dumps(comp))
+    code, receipt = cli(tmp_path, wrong)
+    assert code == 1 and receipt["canonicalBlockCount"] == 1
+    assert "ROOT_ADMISSION_V2_DISPATCH" in codes(receipt) and receipt["technicalDisposition"] == "INVALID"
+    assert receipt["effectAdmission"] is False
+
+
+def test_v2_missing_artifact_context_rejects_with_real_snapshot_resolvers(tmp_path):
+    fixture = v2_dispatch_fixture(tmp_path)
+    snap = pf.Snapshot(tmp_path)
+    result = scec.validate_block(
+        fixture["outcome"], predecessor_hash_resolver=snap.sha256,
+        predecessor_block_resolver=snap.blocks, evidence_bytes_resolver=snap.read,
+    )
+    assert result.is_active and "ROOT_ADMISSION_V2_CONTEXT" in {v.code for v in result.violations}
+
+
+@pytest.mark.parametrize("mutation,expected", [
+    ("grant-missing", "ROOT_ADMISSION_V2_GRANT"),
+    ("grant-drift", "ROOT_ADMISSION_V2_GRANT"),
+    ("grant-malformed", "ROOT_ADMISSION_V2_GRANT"),
+    ("pointer-hash-drift", "ROOT_ADMISSION_V2_GRANT"),
+    ("pointer-unsafe", "ROOT_ADMISSION_V2_POINTER"),
+    ("source-drift", "ROOT_ADMISSION_V2_SOURCE"),
+    ("reassessment-drift", "ROOT_ADMISSION_V2_REASSESSMENT"),
+    ("operator-drift", "ROOT_ADMISSION_V2_EVIDENCE"),
+    ("ledger-invalid", "ROOT_ADMISSION_V2_WORK_ORDER"),
+    ("manifest-wrong", "ROOT_ADMISSION_V2_MANIFEST"),
+    ("writable-authority", "ROOT_ADMISSION_V2_MANIFEST"),
+    ("expired", "ROOT_ADMISSION_V2_EXPIRED"),
+    ("ordinary-stop", "SUCCESSOR_AFTER_STOP_REASSESS"),
+])
+def test_v2_authority_and_stop_mutations_reject_real_cli(tmp_path, mutation, expected):
+    fixture = v2_dispatch_fixture(tmp_path)
+    if mutation == "grant-missing":
+        (tmp_path / V2_GRANT).unlink()
+    elif mutation in {"grant-drift", "source-drift", "reassessment-drift", "operator-drift"}:
+        path = {"grant-drift": V2_GRANT, "source-drift": V2_SOURCE,
+                "reassessment-drift": V2_REASSESS, "operator-drift": V2_OPERATOR}[mutation]
+        write(tmp_path, path, (tmp_path / path).read_bytes() + b"drift\n")
+    elif mutation == "grant-malformed":
+        raw = (tmp_path / V2_GRANT).read_text(encoding="utf-8")
+        write(tmp_path, V2_GRANT, raw.replace('"status":', '"status": "X", "status":', 1))
+        fixture["outcome"]["rootContractAdmission"]["sha256"] = sha((tmp_path / V2_GRANT).read_bytes())
+        _v2_companion(tmp_path, fixture)
+    elif mutation == "pointer-hash-drift":
+        fixture["outcome"]["rootContractAdmission"]["sha256"] = "f" * 64
+        _v2_companion(tmp_path, fixture)
+    elif mutation == "pointer-unsafe":
+        fixture["outcome"]["rootContractAdmission"]["path"] = "../escape.md"
+        _v2_companion(tmp_path, fixture)
+    elif mutation == "ledger-invalid":
+        write(tmp_path, V2_PROP, (tmp_path / V2_PROP).read_bytes().replace(b'"mandatory": true', b'"mandatory": "yes"'))
+        _v2_companion(tmp_path, fixture)
+    elif mutation in {"manifest-wrong", "writable-authority"}:
+        fixture["grant"]["allowedArtifacts"].append(
+            "docs/reviews/unlisted.md" if mutation == "manifest-wrong" else V2_SOURCE)
+        _v2_grant_refresh(tmp_path, fixture)
+    elif mutation == "expired":
+        fixture["grant"]["expiresAtUtc"] = "2000-01-01T00:00:00Z"
+        _v2_grant_refresh(tmp_path, fixture)
+    else:
+        fixture["outcome"].pop("rootContractAdmission")
+        _v2_companion(tmp_path, fixture)
+    code, receipt = cli(tmp_path, fixture["prop"])
+    assert code == 1 and receipt["canonicalBlockCount"] == 1
+    assert expected in codes(receipt), (mutation, codes(receipt))
+    assert receipt["technicalDisposition"] == "INVALID" and receipt["effectAdmission"] is False

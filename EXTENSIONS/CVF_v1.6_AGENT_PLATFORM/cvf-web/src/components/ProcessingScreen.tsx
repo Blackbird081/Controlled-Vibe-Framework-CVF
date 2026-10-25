@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese fictional-content labels and existing localized text use UTF-8.
 'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
@@ -9,6 +10,7 @@ import { getSafetyStatus } from '@/lib/safety-status';
 import type { SafetyRiskLevel } from '@/lib/safety-status';
 import type { ExecutionRequest, GovernanceEvidenceReceipt } from '@/lib/ai';
 import type { ExecutionDiagnostic } from '@/lib/execution-diagnostics';
+import { HtmlPilotEffectDisclosure, useHtmlPilotPublicDisclosure } from './ReceiptEffectDisclosure';
 
 export interface ProcessingExecutionOverrides {
     mode?: ExecutionRequest['mode'];
@@ -27,6 +29,7 @@ interface ProcessingScreenProps {
     inputs?: Record<string, string>;
     intent?: string;
     executionOverrides?: ProcessingExecutionOverrides;
+    htmlPilotIntent?: ExecutionRequest['htmlPilotIntent'];
     onComplete: (output: string, evidenceReceipt?: GovernanceEvidenceReceipt) => void;
     onCancel: () => void;
 }
@@ -165,6 +168,7 @@ export function ProcessingScreen({
     inputs,
     intent,
     executionOverrides,
+    htmlPilotIntent,
     onComplete,
     onCancel
 }: ProcessingScreenProps) {
@@ -176,6 +180,8 @@ export function ProcessingScreen({
     const [error, setError] = useState<string | null>(null);
     const [guidedResponse, setGuidedResponse] = useState<string | null>(null);
     const [isRealExecution] = useState(() => Boolean(inputs && intent && Object.keys(inputs).length > 0));
+    const { pilotDisclosure, pilotDisclosureError } = useHtmlPilotPublicDisclosure(htmlPilotIntent);
+    const [pilotConfirmed, setPilotConfirmed] = useState(false);
     // W92-T1: Approval request state
     const [approvalRequestId, setApprovalRequestId] = useState<string | null>(null);
     const [approvalSubmitting, setApprovalSubmitting] = useState(false);
@@ -208,6 +214,7 @@ export function ProcessingScreen({
             mode: settings.preferences.defaultExportMode || 'governance',
             executionProvider,
             selectedModel,
+            htmlPilotIntent,
         },
     };
     const latest = useRef(currentView);
@@ -220,7 +227,7 @@ export function ProcessingScreen({
     // Real API execution for one attempt; nothing from an abandoned attempt reaches the UI.
     const executeReal = useCallback(async (attempt: Attempt) => {
         const { request, isVi } = latest.current;
-        const { templateId, templateName, inputs, intent, executionOverrides, mode, executionProvider, selectedModel } = request;
+        const { templateId, templateName, inputs, intent, executionOverrides, mode, executionProvider, selectedModel, htmlPilotIntent } = request;
         if (!inputs || !intent) return false;
 
         try {
@@ -245,8 +252,9 @@ export function ProcessingScreen({
                     intent,
                     mode,
                     action,
-                    ...(executionProvider ? { provider: executionProvider } : {}),
-                    ...(selectedModel ? { model: selectedModel } : {}),
+                    ...(!htmlPilotIntent && executionProvider ? { provider: executionProvider } : {}),
+                    ...(!htmlPilotIntent && selectedModel ? { model: selectedModel } : {}),
+                    ...(htmlPilotIntent ? { htmlPilotIntent } : {}),
                     ...executionOverrides,
                     aiCommit,
                 }),
@@ -520,6 +528,7 @@ export function ProcessingScreen({
         if (!isLoaded) {
             return;
         }
+        if (htmlPilotIntent && (!pilotDisclosure || !pilotConfirmed)) return;
 
         const attempt = createAttempt();
         attemptRef.current = attempt;
@@ -552,7 +561,7 @@ export function ProcessingScreen({
             stopAttempt(attempt);
             if (attemptRef.current === attempt) attemptRef.current = null;
         };
-    }, [taskKey, isLoaded, executeReal, runMockExecution]);
+    }, [taskKey, isLoaded, executeReal, runMockExecution, pilotDisclosure, pilotConfirmed, htmlPilotIntent?.operationKey]);
 
     // Cancel invalidates the attempt, then forwards onCancel once per attempt.
     const handleCancel = useCallback(() => {
@@ -567,6 +576,12 @@ export function ProcessingScreen({
 
     return (
         <div className="min-h-[60vh] flex flex-col items-center justify-center">
+            {htmlPilotIntent && !pilotConfirmed && <div className="mx-auto mb-6 max-w-xl">
+                {pilotDisclosure && <><HtmlPilotEffectDisclosure disclosure={pilotDisclosure} language={isVi ? 'vi' : 'en'} />
+                    <button type="button" data-testid="html-pilot-confirm-effect" onClick={() => setPilotConfirmed(true)}
+                        className="mt-3 rounded bg-blue-700 px-5 py-3 text-white">{isVi ? 'Tôi hiểu, bắt đầu một lượt có phí' : 'I understand, start one paid attempt'}</button></>}
+                {pilotDisclosureError && <p role="alert">{isVi ? 'Không thể xác nhận phạm vi tác động. Chưa gửi AI.' : 'Effect scope unavailable. No AI request sent.'}</p>}
+            </div>}
             <div className="text-center">
                 {/* Spinning icon */}
                 <div className="w-20 h-20 mx-auto mb-8 relative">

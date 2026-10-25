@@ -1,5 +1,6 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import * as fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import { NextRequest, NextResponse } from 'next/server';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -19,7 +20,7 @@ vi.mock('@/lib/server/receipt-operation-profile', async importOriginal => {
   return { ...actual, resolveReceiptOperation: vi.fn(() => state.operation) };
 });
 
-const WORKER = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-source-20261019', 'worker');
+const WORKER = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-authority-repair-20261020', 'worker');
 const ROOTS = path.join(WORKER, 'roots');
 const ENGINE_DIR = path.resolve(process.cwd(), '..', '..', 'CVF_v1.6.1_GOVERNANCE_ENGINE', 'ai_governance_core');
 const PEER = path.join(ENGINE_DIR, 'tests', 'artifact_receipt_peer.py');
@@ -41,6 +42,7 @@ class Bridge {
   private readonly waiters: Array<(frame: Record<string, unknown>) => void> = [];
   private nextId = 1;
   stderr = '';
+  asgiEntries = 0;
   readonly exited: Promise<number>;
   constructor(readonly child: ChildProcessWithoutNullStreams) {
     child.stdout.setEncoding('utf8');
@@ -65,11 +67,13 @@ class Bridge {
     });
   }
   send(frame: Record<string, unknown>) { this.child.stdin.write(`${JSON.stringify(frame)}\n`); }
-  async request(requestPath: string, headers: Record<string, string>, body: Uint8Array): Promise<WireResponse> {
+  async request(request: WireRequest): Promise<WireResponse> {
     const id = this.nextId++;
-    this.send({ kind: 'REQUEST', id, path: requestPath, headers, bodyHex: Buffer.from(body).toString('hex') });
+    this.send({ kind: 'REQUEST', id, origin: request.origin, method: request.method, path: request.path, remainingMs: request.deadline.remainingMs(),
+      headers: request.headers, bodyHex: Buffer.from(request.body).toString('hex') });
     const frame = await this.next();
     if (frame.kind !== 'RESPONSE' || frame.id !== id) throw new Error(`unexpected frame ${JSON.stringify(frame)}`);
+    this.asgiEntries += Number(frame.asgiEntries ?? 0);
     return { status: frame.status as number, headers: new Headers(frame.headers as Record<string, string>), body: Buffer.from(frame.bodyHex as string, 'hex') };
   }
   async ledger() {
@@ -93,7 +97,11 @@ const keyBundle = (engineKey: Uint8Array = ENGINE_KEY) => ({ authReference: 'pee
   hops: { EXPORT_PROXY: { keyReference: 'export-key-1', key: EXPORT_KEY }, PROXY_ENGINE: { keyReference: 'peer-engine-key-1', key: engineKey } } });
 
 beforeAll(async () => {
-  const child = spawn('python', [PEER, 'bridge', await newRoot('bridge-db')], { cwd: ENGINE_DIR, env: { ...process.env, PYTHONPATH: ENGINE_DIR }, stdio: ['pipe', 'pipe', 'pipe'] });
+  const bridgeRoot = await newRoot('bridge-db');
+  const childTmp = await fs.mkdtemp(path.join(os.tmpdir(), 'cvf-ncr-r2-w05-bound-bridge-'));
+  const child = spawn('python', [PEER, 'bridge', bridgeRoot], { cwd: ENGINE_DIR,
+    env: { ...process.env, PYTHONPATH: ENGINE_DIR, CVF_GOVERNANCE_LEDGER_PATH: path.join(bridgeRoot, 'default-ledger.json'),
+      TMP: childTmp, TEMP: childTmp, TMPDIR: childTmp }, stdio: ['pipe', 'pipe', 'pipe'] });
   bridge = new Bridge(child);
   const first = await bridge.next();
   if (first.kind !== 'MEASURED') throw new Error(`bridge did not start: ${JSON.stringify(first)} ${bridge.stderr}`);
@@ -113,11 +121,12 @@ interface Wiring { engineWrap?: (request: WireRequest, real: (request: WireReque
   engineKey?: Buffer; config?: Partial<BoundConfigInput> }
 async function wire(opts: Wiring = {}) {
   const root = await newRoot('export');
-  const real = (request: WireRequest) => bridge.request(request.path, request.headers, request.body);
+  const real = (request: WireRequest) => bridge.request(request);
   const late: { handlers?: ReturnType<typeof createBoundReceiptHandlers> } = {};
   const profile = createBoundReceiptFixtureProfile({ root, config: { ...configInput(), ...opts.config }, keyBundle: keyBundle(opts.engineKey), now: opts.now ?? (() => realNow()),
     engineSend: request => (opts.engineWrap ? opts.engineWrap(request, real) : real(request)), webSend: async request => {
-      const response = await late.handlers!.POST(new Request(`http://web.invalid:3000${request.path}`, { method: 'POST', headers: request.headers, body: request.body as unknown as BodyInit }));
+      const response = await late.handlers!.POST(new Request(`${request.origin}${request.path}`, { method: request.method,
+        headers: request.headers, body: request.body as unknown as BodyInit }), request.deadline);
       return { status: response.status, headers: response.headers, body: new Uint8Array(await response.arrayBuffer()) };
     } });
   late.handlers = createBoundReceiptHandlers({ context: profile.webContext });
@@ -229,6 +238,29 @@ describe('actual export POST -> Web handler -> Python handler -> bound SQLite', 
     const before = (await bridge.ledger()).appended;
     const result = await json(await exportPost(selector));
     expect(seen[0]).toEqual({ status: 401, error: code });
+    expect(result.operation).toMatchObject({ outcome: 'OUTCOME_UNKNOWN', persisted: true });
+    expect(profile.counters.engineEvaluateSends).toBe(0);
+    expect((await bridge.ledger()).appended).toBe(before);
+  }, 60_000);
+
+  it.each([
+    ['foreign origin', (request: WireRequest) => ({ ...request, origin: 'http://foreign.invalid:8100' })],
+    ['foreign path', (request: WireRequest) => ({ ...request, path: '/api/v1/foreign-receipts' })],
+    ['foreign method', (request: WireRequest) => ({ ...request, method: 'PUT' as 'POST' })],
+    ['query', (request: WireRequest) => ({ ...request, path: request.path + '?foreign=1' })],
+  ])('refuses %s before a real engine ledger effect', async (_name, redirect) => {
+    const seen: number[] = [];
+    const { profile, store } = await wire({ engineWrap: async (request, real) => {
+      const response = await real(redirect(request));
+      seen.push(response.status);
+      return response;
+    } });
+    const selector = await job(store);
+    const before = (await bridge.ledger()).appended;
+    const entriesBefore = bridge.asgiEntries;
+    const result = await json(await exportPost(selector));
+    expect(seen[0]).toBeGreaterThanOrEqual(400);
+    expect(bridge.asgiEntries).toBe(entriesBefore);
     expect(result.operation).toMatchObject({ outcome: 'OUTCOME_UNKNOWN', persisted: true });
     expect(profile.counters.engineEvaluateSends).toBe(0);
     expect((await bridge.ledger()).appended).toBe(before);

@@ -10,6 +10,7 @@ import hmac
 import json
 import os
 import secrets
+import sqlite3
 import subprocess
 import sys
 import tempfile
@@ -21,12 +22,13 @@ from fastapi import FastAPI
 from starlette.datastructures import Headers
 
 from api import artifact_receipt_contract as c
-from api.artifact_receipts import BoundReceiptContext, create_fixture_orchestrator, create_router, handle_bound_request
+from api.artifact_receipts import BoundReceiptContext, create_bound_receipt_context, create_fixture_orchestrator, create_router, handle_bound_request
+from ledger_layer import artifact_receipt_binding as binding
 from ledger_layer.artifact_receipt_binding import BindingError, open_bound_ledger
 from tests import artifact_receipt_peer as peer
 
 CORE = Path(__file__).resolve().parents[1]
-ROOTS = Path(__file__).resolve().parents[4] / ".cvf" / "runtime" / "ncr-r2-w05-bound-source-20261019" / "worker" / "py-roots"
+ROOTS = Path(__file__).resolve().parents[4] / ".cvf" / "runtime" / "ncr-r2-w05-bound-authority-repair-20261020" / "worker" / "py-roots"
 KEY = b"cvf-bound-test-engine-key-000001"
 OWNER = {"userId": "u1", "orgId": "o1", "teamId": "t1"}
 NOW = 1_760_000_000_000
@@ -48,14 +50,14 @@ class Env:
         self.root = Path(tempfile.mkdtemp(prefix=f"{label}-", dir=ROOTS)).resolve()
         self.clock = Clock()
         self.ledger = open_bound_ledger(self.root)
-        self.ctx = BoundReceiptContext(config=peer.make_config(self.ledger), key_reference="engine-key-1", key=KEY, ledger=self.ledger,
-                                       orchestrator=create_fixture_orchestrator(self.ledger), clock_ms=self.clock, challenge_capacity=capacity)
         self.executed = []
         self.payloads = []
-        orchestrator = self.ctx._orchestrator
+        orchestrator = create_fixture_orchestrator(self.ledger)
         execute, evaluate = orchestrator.execute, orchestrator.policy_engine.evaluate
         orchestrator.execute = lambda request: (self.executed.append(request.request_id), execute(request))[1]
         orchestrator.policy_engine.evaluate = lambda payload: (self.payloads.append(dict(payload)), evaluate(payload))[1]
+        self.ctx = create_bound_receipt_context(config=peer.make_config(self.ledger), key_reference="engine-key-1", key=KEY, ledger=self.ledger,
+                                                orchestrator=orchestrator, clock_ms=self.clock, challenge_capacity=capacity)
 
     @property
     def config(self):
@@ -82,7 +84,8 @@ class Env:
         headers.update(patch or {})
         for name in drop:
             headers.pop(name, None)
-        reply = asyncio.run(handle_bound_request(self.ctx, path, Headers(headers=headers), body))
+        reply = asyncio.run(handle_bound_request(self.ctx, path, Headers(headers=headers), body, origin=self.config["engineOrigin"], method="POST",
+                                                 deadline_remaining_ms=self.config["timeoutMs"]))
         reply.nonce = headers.get("x-cvf-bound-nonce")
         reply.path = path
         reply.signed = (headers, body)
@@ -136,8 +139,10 @@ def test_context_is_built_only_from_a_measured_ledger_with_a_matching_config_and
     base = dict(config=env.config, key_reference="engine-key-1", key=KEY, ledger=env.ledger, orchestrator=env.ctx._orchestrator)
 
     def rebuilt(**patch):
-        return BoundReceiptContext(**dict(base, **patch))
+        return create_bound_receipt_context(**dict(base, **patch))
     assert rebuilt() is not None
+    with pytest.raises(c.ContractError, match="CONTEXT_UNISSUED"):
+        BoundReceiptContext(**base)
 
     def with_config(**patch):
         body = {k: v for k, v in dict(env.config, **patch).items() if k != "configDigest"}
@@ -152,6 +157,45 @@ def test_context_is_built_only_from_a_measured_ledger_with_a_matching_config_and
         with pytest.raises(c.ContractError):
             rebuilt(**patch)
         assert name
+
+
+def test_destination_and_deadline_precede_auth_and_ledger_effect(make_env):
+    env = make_env("destination")
+    challenge, _ = env.wires()
+    path, headers, body = peer.signed_request(env.config, challenge, key=KEY)
+    for origin, method, remaining, code in (("http://foreign.invalid:8100", "POST", 4000, "DESTINATION"),
+                                            (env.config["engineOrigin"], "GET", 4000, "DESTINATION"),
+                                            (env.config["engineOrigin"], "POST", 0, "DEADLINE")):
+        reply = asyncio.run(handle_bound_request(env.ctx, path, Headers(headers=headers), body, origin=origin, method=method,
+                                                  deadline_remaining_ms=remaining))
+        assert (reply.status, error_of(reply)) == (422, code)
+    assert env.ctx.counters == {"challenges": 0, "evaluates": 0} and env.chain() == []
+
+
+def test_sealed_orchestrator_rejects_mid_execute_foreign_writer(make_env):
+    env = make_env("sealed-home")
+    foreign = make_env("sealed-foreign")
+    challenge, evaluate = env.wires(attempt="ncr-bound-sealed-attempt-01")
+    assert env.send(challenge).status == 200
+    orchestrator = env.ctx._orchestrator
+    original = orchestrator.policy_engine.evaluate
+    entered = []
+
+    def hostile(payload):
+        entered.append("ncr-bound-sealed-attempt-01")
+        orchestrator._ledger_sealed = False
+        with pytest.raises(BindingError, match="CONTEXT_LEDGER_SEALED"):
+            orchestrator.ledger = foreign.ledger
+        with pytest.raises(c.ContractError, match="CONTEXT_SEALED"):
+            env.ctx._sealed = False
+        with pytest.raises(c.ContractError, match="CONTEXT_SEALED"):
+            env.ctx._ledger = foreign.ledger
+        return original(payload)
+
+    orchestrator.policy_engine.evaluate = hostile
+    assert env.send(evaluate).status == 200
+    assert entered == ["ncr-bound-sealed-attempt-01"]
+    assert len(env.chain()) == 1 and foreign.chain() == [] and foreign.ledger.appended == 0
 
 
 def test_challenge_issues_a_signed_measured_challenge_without_touching_the_ledger(make_env):
@@ -289,11 +333,12 @@ def test_a_replayed_signed_request_is_refused_with_no_second_effect(make_env):
     first = env.send(challenge)
     assert first.status == 200
     headers, body = first.signed
-    replay = asyncio.run(handle_bound_request(env.ctx, first.path, Headers(headers=headers), body))
+    replay = asyncio.run(handle_bound_request(env.ctx, first.path, Headers(headers=headers), body, origin=env.config["engineOrigin"],
+                                              method="POST", deadline_remaining_ms=env.config["timeoutMs"]))
     assert (replay.status, error_of(replay)) == (409, "REPLAY")
 
 
-def test_a_closed_or_changed_binding_denies_and_a_commit_without_a_response_is_visible_as_unknown(make_env):
+def test_a_closed_or_changed_binding_denies_and_a_commit_without_a_response_is_visible_as_unknown(make_env, monkeypatch):
     closed = make_env("closed")
     closed.ledger.close_binding()
     reply = closed.send(closed.wires()[0])
@@ -306,8 +351,9 @@ def test_a_closed_or_changed_binding_denies_and_a_commit_without_a_response_is_v
 
     def changed(*_args):
         raise BindingError("BINDING_CHANGED")
-    pre.ledger.verify_binding = changed
-    denied = pre.send(evaluate)
+    with monkeypatch.context() as scoped:
+        scoped.setattr(binding.BoundSqliteLedger, "verify_binding", changed)
+        denied = pre.send(evaluate)
     assert (denied.status, error_of(denied)) == (409, "BINDING_CHANGED") and pre.executed == [] and pre.ledger.appended == 0
     # The binding fails after the commit and before signing: the effect exists, the response does not, so the caller must treat the outcome as unknown.
     post = make_env("changed-post")
@@ -315,15 +361,15 @@ def test_a_closed_or_changed_binding_denies_and_a_commit_without_a_response_is_v
     assert post.send(challenge).status == 200
     verify, calls = post.ledger.verify_binding, []
 
-    def fail_on_final(*args):
+    def fail_on_final(_ledger, *args):
         calls.append(1)
-        if len(calls) >= 4:
+        if len(calls) >= 5:
             raise BindingError("BINDING_CHANGED")
         return verify(*args)
-    post.ledger.verify_binding = fail_on_final
-    lost = post.send(evaluate)
-    assert (lost.status, error_of(lost)) == (409, "BINDING_CHANGED")
-    del post.ledger.verify_binding
+    with monkeypatch.context() as scoped:
+        scoped.setattr(binding.BoundSqliteLedger, "verify_binding", fail_on_final)
+        lost = post.send(evaluate)
+    assert (lost.status, error_of(lost)) == (409, "BINDING_CHANGED") and len(calls) == 5
     assert [block["event"]["request_id"] for block in post.chain()] == [ATTEMPT] and post.ledger.appended == 1
 
 
@@ -334,7 +380,10 @@ def test_asgi_router_serves_both_endpoints_and_refuses_wrong_methods_and_oversiz
     async def run():
         app = FastAPI()
         app.include_router(create_router(lambda: env.ctx))
-        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://engine.invalid") as client:
+        async def admitted(scope, receive, send):
+            scope["state"] = {"bound_deadline_remaining_ms": env.config["timeoutMs"]}
+            await app(scope, receive, send)
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=admitted), base_url="http://engine.invalid:8100") as client:
             results = []
             for wire, path in ((challenge, CHALLENGE_PATH), (evaluate, EVALUATE_PATH)):
                 body = c.canonical_bytes(wire)
@@ -353,11 +402,203 @@ def test_default_server_denies_both_routes_and_never_initializes_active_data(mak
     env = make_env("server-default")
     active = CORE / "ledger_layer" / "ledger_chain.json"
     before = hashlib.sha256(active.read_bytes()).hexdigest() if active.exists() else None
+    child_tmp = tempfile.mkdtemp(prefix="cvf-ncr-r2-w05-bound-default-")
     done = subprocess.run([sys.executable, str(Path(__file__).with_name("artifact_receipt_peer.py")), "server-default", str(env.root)], capture_output=True, text=True,
-                          timeout=120, cwd=str(CORE), env={**os.environ, "PYTHONPATH": str(CORE)})
+                          timeout=120, cwd=str(CORE), env={**os.environ, "PYTHONPATH": str(CORE),
+                          "CVF_GOVERNANCE_LEDGER_PATH": str(env.root / "default-ledger.json"), "TMP": child_tmp, "TEMP": child_tmp, "TMPDIR": child_tmp})
     assert done.returncode == 0, done.stderr
     report = json.loads(done.stdout.strip().splitlines()[-1])
     assert report["statuses"] == {CHALLENGE_PATH: [503, "BOUND_RECEIPT_NOT_ACTIVATED"], EVALUATE_PATH: [503, "BOUND_RECEIPT_NOT_ACTIVATED"]}
     assert report["routes"] == [CHALLENGE_PATH, EVALUATE_PATH] and report["restored"] is True and report["generic"] is True
     assert Path(report["ledgerPath"]).parent == env.root
     assert (hashlib.sha256(active.read_bytes()).hexdigest() if active.exists() else None) == before
+
+
+def test_exact_context_issuance_precedes_structural_properties_and_hash():
+    touched = []
+    class Forged:
+        def __getattribute__(self, name):
+            touched.append(name)
+            raise AssertionError("STRUCTURAL_ACCESS")
+        def __hash__(self):
+            raise AssertionError("HOSTILE_HASH")
+    reply = asyncio.run(handle_bound_request(Forged(), CHALLENGE_PATH, Headers(), b"{}", origin="http://engine.invalid:8100",
+                                             method="POST", deadline_remaining_ms=1000))
+    assert (reply.status, error_of(reply)) == (422, "CONTEXT_UNISSUED")
+    assert touched == []
+
+
+def test_unseal_config_clock_and_orchestrator_aliases_cannot_change_issued_authority(make_env):
+    env = make_env("private-aliases")
+    foreign = make_env("private-aliases-foreign")
+    for name, value in (("_sealed", False), ("config", foreign.config), ("_clock", lambda: NOW - 90000),
+                        ("_orchestrator", foreign.ctx._orchestrator), ("_ledger", foreign.ledger)):
+        with pytest.raises(c.ContractError, match="CONTEXT_SEALED"):
+            setattr(env.ctx, name, value)
+        with pytest.raises(c.ContractError, match="CONTEXT_SEALED"):
+            delattr(env.ctx, name)
+    challenge, evaluate = env.wires()
+    assert env.send(challenge).status == 200 and env.send(evaluate).status == 200
+    assert len(env.chain()) == 1 and foreign.chain() == []
+
+
+@pytest.mark.parametrize("remaining", [True, False, float("nan"), float("inf"), -float("inf"), None, 0, -1, "1000"])
+def test_strict_budget_refused_before_auth_challenge_or_body(make_env, remaining):
+    env = make_env("strict-budget")
+    challenge, _ = env.wires()
+    path, headers, body = peer.signed_request(env.config, challenge, key=KEY)
+    reply = asyncio.run(handle_bound_request(env.ctx, path, Headers(headers=headers), body, origin=env.config["engineOrigin"],
+                                             method="POST", deadline_remaining_ms=remaining))
+    assert (reply.status, error_of(reply)) == (422, "DEADLINE")
+    assert env.ctx.counters == {"challenges": 0, "evaluates": 0} and env.executed == [] and env.chain() == []
+
+
+def test_asgi_admission_precedes_receive_and_ingress_time_is_not_refilled(make_env):
+    env = make_env("prebody")
+    challenge, _ = env.wires()
+    path, headers, body = peer.signed_request(env.config, challenge, key=KEY)
+
+    async def run(origin, remaining=1000, query="", stall=False, delay=0):
+        app = FastAPI()
+        app.include_router(create_router(lambda: env.ctx))
+        receives, messages = [], []
+        async def receive():
+            receives.append(1)
+            if stall:
+                await asyncio.Event().wait()
+            if delay:
+                await asyncio.sleep(delay)
+            return {"type": "http.request", "body": body, "more_body": False}
+        async def send(message):
+            messages.append(message)
+        from urllib.parse import urlsplit
+        url = urlsplit(origin)
+        scope = {"type": "http", "asgi": {"version": "3.0"}, "http_version": "1.1", "scheme": url.scheme,
+                 "server": (url.hostname, url.port), "client": ("fixture", 1), "method": "POST", "path": path, "raw_path": path.encode(),
+                 "query_string": query.encode(), "headers": [(k.encode(), v.encode()) for k, v in headers.items()],
+                 "state": {"bound_deadline_remaining_ms": remaining}}
+        await app(scope, receive, send)
+        status = next(message["status"] for message in messages if message["type"] == "http.response.start")
+        return status, len(receives)
+
+    assert asyncio.run(run("http://foreign.invalid:8100")) == (422, 0)
+    assert asyncio.run(run(env.config["engineOrigin"], query="x=1")) == (422, 0)
+    for invalid in (True, float("nan"), float("inf"), None):
+        assert asyncio.run(run(env.config["engineOrigin"], remaining=invalid)) == (422, 0)
+    assert asyncio.run(run(env.config["engineOrigin"], remaining=25, stall=True)) == (422, 1)
+    assert asyncio.run(run(env.config["engineOrigin"], remaining=25, delay=0.06)) == (422, 1)
+    assert env.ctx.counters == {"challenges": 0, "evaluates": 0} and env.chain() == []
+
+
+def test_asgi_completed_body_consumes_budget_through_actual_policy_callback(make_env):
+    import time
+    observations = []
+    for budget, expected in ((80, 422), (300, 200)):
+        env = make_env("total-body-budget")
+        challenge, evaluate = env.wires(attempt=f"total-body-budget-{budget}")
+        assert env.send(challenge).status == 200
+        core = env.ctx._orchestrator
+        original = core.policy_engine.evaluate
+        entered = []
+        def slow_policy(payload):
+            entered.append(1)
+            time.sleep(0.06)
+            return original(payload)
+        core.policy_engine.evaluate = slow_policy
+        path, headers, body = peer.signed_request(env.config, evaluate, key=KEY)
+        headers = c.sign_message(KEY, 'PROXY_ENGINE', 'REQUEST', path, body, env.clock(), secrets.token_hex(32), env.config['configDigest'])
+        async def run():
+            app = FastAPI()
+            app.include_router(create_router(lambda: env.ctx))
+            async def admitted(scope, receive, send):
+                scope["state"] = {"bound_deadline_remaining_ms": budget}
+                await app(scope, receive, send)
+            async def ingress():
+                await asyncio.sleep(0.04)
+                yield body
+            async with httpx.AsyncClient(transport=httpx.ASGITransport(app=admitted), base_url=env.config["engineOrigin"]) as client:
+                return await client.post(path, content=ingress(), headers=headers)
+        started = time.monotonic()
+        response = asyncio.run(run())
+        assert response.status_code == expected
+        assert entered == [1] and len(env.chain()) == 1 and env.ledger.appended == 1
+        observations.append({"budgetMs": budget, "elapsedMs": (time.monotonic() - started) * 1000,
+                             "status": response.status_code, "callbackEntries": len(entered), "boundPhysicalBlocks": len(env.chain())})
+    destination = os.environ.get("CVF_NCR_CAPTURE_EVIDENCE_ROOT")
+    if destination:
+        Path(destination, "asgi-total-body-budget.json").write_text(json.dumps(observations), encoding="utf-8")
+
+
+MUTATION_NAMES = ("_connect", "append_event", "read_chain", "lookup_request_id", "committed_block", "verify_binding",
+                  "bind_event_context", "close_binding", "ledger_path", "builder", "_conn", "_pinned_connection",
+                  "_pid", "_thread", "_closed", "_baseline", "_context", "_store_binding_id")
+MUTATION_CASES = [("assign", name) for name in MUTATION_NAMES] + [("delete", name) for name in MUTATION_NAMES[:8]] + [
+    ("dictionary", "append_event"), ("nested", "builder"), ("native", "_connect"), ("native", "_pinned_connection"), ("native", "_conn")]
+
+
+def physical_chain(root):
+    # An ordinary independent reader, never the bound handle's lookup/read methods.
+    conn = sqlite3.connect(str(root / binding.LEDGER_FILE_NAME))
+    try:
+        return [json.loads(row[0]) for row in conn.execute("SELECT block_json FROM blocks ORDER BY ordinal")]
+    finally:
+        conn.close()
+
+
+@pytest.mark.parametrize("mode,name", MUTATION_CASES, ids=[f"{mode}-{name}" for mode, name in MUTATION_CASES])
+def test_actual_callback_cannot_redirect_write_readback_or_signing(make_env, mode, name):
+    env, foreign = make_env("native-hostile"), make_env("native-foreign")
+    challenge, evaluate = env.wires()
+    assert env.send(challenge).status == 200
+    before = (len(physical_chain(env.root)), len(physical_chain(foreign.root)))
+    entered, attempted, refused, redirected = [], [], [], []
+    core = env.ctx._orchestrator
+    original = core.policy_engine.evaluate
+    def evil(*args, **kwargs):
+        redirected.append(1)
+        return foreign.ledger.read_chain()
+    def hostile(payload):
+        entered.append(1)
+        attempted.append([mode, name])
+        try:
+            if mode == "assign":
+                setattr(env.ledger, name, str(foreign.root / binding.LEDGER_FILE_NAME) if name == "ledger_path" else evil)
+            elif mode == "delete":
+                delattr(env.ledger, name)
+            elif mode == "dictionary":
+                env.ledger.__dict__[name] = evil
+            elif mode == "nested":
+                env.ledger.builder.build_block = evil
+            else:
+                capability = getattr(env.ledger, name)
+                if capability is None:
+                    refused.append("NO_NATIVE_CAPABILITY")
+                else:
+                    capability().execute("SELECT 1")
+        except (BindingError, AttributeError) as exc:
+            refused.append(getattr(exc, "code", type(exc).__name__))
+        return original(payload)
+    core.policy_engine.evaluate = hostile
+    reply = env.send(evaluate)
+    assert reply.status == 200, reply.body
+    body = verified_body(env, reply)
+    home, away = physical_chain(env.root), physical_chain(foreign.root)
+    assert entered == [1] and attempted == [[mode, name]] and len(refused) == 1 and redirected == []
+    assert (len(home) - before[0], len(away) - before[1]) == (1, 0)
+    assert home == env.chain() and away == [] and foreign.ledger.appended == 0
+    block, metadata = home[0], home[0]["event"]["bound_receipt"]
+    assert block["event"]["request_id"] == ATTEMPT and env.ledger.appended == 1
+    assert metadata == {"operationKey": evaluate["operationKey"], "attemptId": ATTEMPT,
+        "envelopeSha256": evaluate["envelopeSha256"], "ownerSha256": c.owner_sha256(OWNER),
+        "configDigest": env.config["configDigest"], "storeBindingId": env.ledger.store_binding_id,
+        "instanceId": env.ledger.instance_id, "payloadSha256": evaluate["payloadSha256"]}
+    assert body["ledgerReference"] == {"requestId": ATTEMPT, "blockHash": block["hash"]}
+    assert body["storeBindingId"] == env.ledger.store_binding_id != foreign.ledger.store_binding_id
+    assert (body["operationKey"], body["owner"], body["envelopeSha256"], body["payloadSha256"]) == (
+        evaluate["operationKey"], OWNER, evaluate["envelopeSha256"], evaluate["payloadSha256"])
+    assert env.ledger.committed_block(ATTEMPT, metadata) == block and foreign.ledger.lookup_request_id(ATTEMPT) is None
+    destination = os.environ.get("CVF_NCR_CAPTURE_EVIDENCE_ROOT")
+    if destination:
+        Path(destination, f"native-{mode}-{name}.json").write_text(json.dumps({"case": [mode, name], "callbackEntries": len(entered),
+            "attempted": attempted, "refused": refused, "redirectedCalls": len(redirected), "boundDelta": 1, "foreignDelta": 0,
+            "status": reply.status, "blockHash": block["hash"], "ledgerJoin": body["ledgerReference"] == {"requestId": ATTEMPT, "blockHash": block["hash"]}}), encoding="utf-8")

@@ -520,7 +520,7 @@ describe('PE/REQ-STORE no expiry, retained facts and separate draft TTL', () => 
 const SKIP_PROCESSES = process.env.CVF_W05_SKIP_PROCESS === '1';
 const CHILD_DIR = path.join(WORKER, 'child');
 const SPAWN_LOG = path.join(WORKER, 'spawn-log.jsonl');
-const SOURCES = ['lib/server/html-draft-snapshot-store', 'lib/artifacts-receipt-operation-contract', 'lib/html-draft-recovery-contract', 'lib/html-job-contract'];
+const SOURCES = ['lib/server/html-draft-snapshot-store', 'lib/artifacts-receipt-operation-contract', 'lib/html-draft-recovery-contract', 'lib/html-job-contract', 'lib/html-cta-rendering'];
 const CHILD_SOURCE = `'use strict';
 const fs = require('node:fs');
 const path = require('node:path');

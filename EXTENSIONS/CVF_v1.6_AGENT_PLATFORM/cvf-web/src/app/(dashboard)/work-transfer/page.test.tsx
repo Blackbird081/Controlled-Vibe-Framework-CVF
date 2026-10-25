@@ -4,6 +4,16 @@ import React from 'react';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
 import WorkTransferPage from './page';
+let mockSearch = '';
+let mockExecutions: Array<Record<string, unknown>> = [];
+const mockRestoreReceiptArchive = vi.fn();
+vi.mock('next/navigation', () => ({ useSearchParams: () => new URLSearchParams(mockSearch) }));
+vi.mock('@/lib/store', () => ({ useExecutionStore: (selector: (value: { executions: Array<Record<string, unknown>> }) => unknown) =>
+    selector({ executions: mockExecutions }) }));
+vi.mock('@/lib/execution-receipt-archive', () => ({ restoreReceiptArchive: (...args: unknown[]) => mockRestoreReceiptArchive(...args) }));
+vi.mock('@/components/HtmlJobControls', () => ({ HtmlJobControls: () => <div />,
+    PilotHtmlJobControls: ({ sourceExecutionId, output }: { sourceExecutionId: string; output: string }) =>
+        <div data-testid="bound-pilot-controls" data-source={sourceExecutionId} data-output={output} /> }));
 
 vi.mock('@/components', () => ({
     KnowledgeJourneyNav: ({ currentStep }: { currentStep: number }) => (
@@ -94,6 +104,9 @@ const NEWEST_EIGHT_OF_TWELVE = ['evt-12', 'evt-11', 'evt-10', 'evt-09', 'evt-08'
 describe('WorkTransferPage', () => {
     beforeEach(() => {
         mockLang = 'vi';
+        mockSearch = '';
+        mockExecutions = [];
+        mockRestoreReceiptArchive.mockReset();
         fetchMock.mockReset();
         respondWith({ success: true, data: [] });
     });
@@ -106,6 +119,57 @@ describe('WorkTransferPage', () => {
         render(<WorkTransferPage />);
         expect(screen.getByTestId('knowledge-journey-nav').textContent).toBe('Step 5');
         await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+    });
+
+    it('opens only the exact completed source whose archived pilot receipt matches the run', async () => {
+        mockSearch = 'source=exec-exact';
+        mockExecutions = [{ id: 'exec-exact', templateId: 'web_build_handoff', status: 'completed',
+            output: '# Exact output', savedReceiptArchive: { schema: 'test' },
+            htmlPilot: { runId: 'a'.repeat(32) } }];
+        mockRestoreReceiptArchive.mockResolvedValue({ htmlPilotEvidence: { runId: 'b'.repeat(32) } });
+        const view = render(<WorkTransferPage />);
+        await waitFor(() => expect(mockRestoreReceiptArchive).toHaveBeenCalled());
+        expect(screen.queryByTestId('bound-pilot-controls')).toBeNull();
+        view.unmount();
+        mockRestoreReceiptArchive.mockResolvedValue({ htmlPilotEvidence: { runId: 'a'.repeat(32) } });
+        render(<WorkTransferPage />);
+        const controls = await screen.findByTestId('bound-pilot-controls');
+        expect(controls.getAttribute('data-source')).toBe('exec-exact');
+        expect(controls.getAttribute('data-output')).toBe('# Exact output');
+    });
+
+    it('keeps a stale or unarchived Home selector out of the HTML controls', async () => {
+        mockSearch = 'source=exec-exact';
+        const archived = { schema: 'test' };
+        mockExecutions = [{ id: 'exec-exact', templateId: 'web_build_handoff', status: 'completed',
+            output: '# Exact output', savedReceiptArchive: archived,
+            htmlPilot: { runId: 'a'.repeat(32) } }];
+        let release!: (receipt: unknown) => void;
+        mockRestoreReceiptArchive.mockImplementation(() => new Promise(resolve => { release = resolve; }));
+        const stale = render(<WorkTransferPage />);
+        await waitFor(() => expect(mockRestoreReceiptArchive).toHaveBeenCalled());
+        stale.unmount();
+        release({ htmlPilotEvidence: { runId: 'a'.repeat(32) } });
+        mockRestoreReceiptArchive.mockReset();
+        mockExecutions = [{ ...mockExecutions[0], status: 'running' }];
+        const incomplete = render(<WorkTransferPage />);
+        expect(screen.queryByTestId('bound-pilot-controls')).toBeNull();
+        expect(mockRestoreReceiptArchive).not.toHaveBeenCalled();
+        incomplete.unmount();
+        mockExecutions = [{ ...mockExecutions[0], status: 'completed', savedReceiptArchive: null }];
+        render(<WorkTransferPage />);
+        expect(screen.queryByTestId('bound-pilot-controls')).toBeNull();
+        expect(mockRestoreReceiptArchive).not.toHaveBeenCalled();
+    });
+
+    it('does not select a different execution even when its signed run matches', async () => {
+        mockSearch = 'source=exec-requested';
+        mockExecutions = [{ id: 'exec-other', templateId: 'web_build_handoff', status: 'completed',
+            output: '# Other output', savedReceiptArchive: { schema: 'test' },
+            htmlPilot: { runId: 'a'.repeat(32) } }];
+        render(<WorkTransferPage />);
+        expect(screen.queryByTestId('bound-pilot-controls')).toBeNull();
+        expect(mockRestoreReceiptArchive).not.toHaveBeenCalled();
     });
 
     it('renders Vietnamese content correctly', async () => {

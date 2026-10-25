@@ -4,11 +4,21 @@
  * An issued profile is fixture execution authority for in-process transports only; it is not a real-network, provider or release grant.
  */
 import path from 'node:path';
-import { BOUND_EFFECT, IDENTITY_TRUST, boundDisclosureOf, boundEnvelopeSha256, makeBoundConfig, type BoundConfig, type BoundConfigInput, type BoundDisclosure,
+import { BOUND_EFFECT, IDENTITY_TRUST, boundDisclosureOf, boundEnvelopeSha256, makeBoundConfig, parseBoundEnvelope, type BoundConfig, type BoundConfigInput, type BoundDisclosure,
   type BoundEnvelope } from '../artifacts-bound-receipt-contract';
 import { SYNTHETIC_SOURCE_PREFIX } from '../artifacts-receipt-operation-contract';
 import type { SyntheticDraftProfile } from './html-draft-snapshot-store';
 import { createBoundInvoker, createKeyring, newCounters, type BoundCounters, type BoundInvoker, type Keyring, type WireSend } from './bound-receipt-transport';
+
+const issuedProfiles = new WeakSet<object>();
+const issuedContexts = new WeakSet<object>();
+const issuedDisclosures = new WeakMap<object, BoundReceiptFixtureProfile>();
+export const isIssuedBoundProfile = (value: unknown): value is BoundReceiptFixtureProfile =>
+  !!value && typeof value === 'object' && issuedProfiles.has(value);
+export const isIssuedBoundContext = (value: unknown): value is BoundWebContext =>
+  !!value && typeof value === 'object' && issuedContexts.has(value);
+export const issuedProfileForDisclosure = (value: unknown): BoundReceiptFixtureProfile | null =>
+  value && typeof value === 'object' ? issuedDisclosures.get(value) ?? null : null;
 
 /** Everything the dedicated Web handler needs. Key bytes stay inside the keyring closure. */
 export interface BoundWebContext {
@@ -55,20 +65,36 @@ const rootValid = (root: unknown): root is string => typeof root === 'string' &&
 export function createBoundReceiptFixtureProfile(input: BoundFixtureProfileInput): BoundReceiptFixtureProfile {
   if (input === null || typeof input !== 'object' || !rootValid(input.root) || typeof input.webSend !== 'function' || typeof input.engineSend !== 'function'
     || (input.now !== undefined && typeof input.now !== 'function')) throw new Error('BOUND_PROFILE_INVALID');
-  const config = makeBoundConfig({ ...input.config });
+  const parsed = makeBoundConfig({ ...input.config });
   // The key bundle is captured (cloned) once, here, before anything is awaited. Rotation needs a new bundle and a new config; it cannot revive an old operation.
-  const keyring = config ? createKeyring(input.keyBundle, config) : null;
-  if (!config || !keyring) throw new Error('BOUND_PROFILE_INVALID');
+  const keyring = parsed ? createKeyring(input.keyBundle, parsed) : null;
+  if (!parsed || !keyring) throw new Error('BOUND_PROFILE_INVALID');
+  const config = Object.freeze({ ...parsed });
   const now = input.now ?? Date.now;
   const counters = newCounters();
   const webSend = input.webSend;
   const webContext: BoundWebContext = Object.freeze({ config, keyring, engineSend: input.engineSend, now, counters });
+  issuedContexts.add(webContext);
+  const store: SyntheticDraftProfile = Object.freeze({ kind: 'local-synthetic', root: input.root, production: false,
+    jobDecisions: true, boundReceiptOperations: true });
   const profile: BoundReceiptFixtureProfile = {
     kind: 'BOUND_ENGINE_RECEIPT_FIXTURE', effect: BOUND_EFFECT, identityTrust: IDENTITY_TRUST, production: false, sourcePrefix: SYNTHETIC_SOURCE_PREFIX,
-    config, store: { kind: 'local-synthetic', root: input.root, production: false, jobDecisions: true, boundReceiptOperations: true },
+    config, store,
     timeoutMs: config.timeoutMs, counters, webContext,
-    createInvoker: (envelope: BoundEnvelope) => createBoundInvoker({ config, envelope, envelopeSha256: boundEnvelopeSha256(envelope), keyring, send: webSend, now, counters }),
-    disclosure: () => boundDisclosureOf(config),
+    createInvoker: (envelope: BoundEnvelope) => {
+      const captured = parseBoundEnvelope(envelope);
+      if (!captured || captured.config.configDigest !== config.configDigest || captured.config.instanceId !== config.instanceId
+        || captured.config.storeBindingId !== config.storeBindingId) throw new Error('BOUND_ENVELOPE_AUTHORITY_MISMATCH');
+      return createBoundInvoker({ config, envelope: captured, envelopeSha256: boundEnvelopeSha256(captured), keyring, send: webSend, now, counters });
+    },
+    disclosure: () => {
+      const value = boundDisclosureOf(config);
+      const disclosure = Object.freeze({ ...value, destination: Object.freeze({ ...value.destination }), sent: Object.freeze([...value.sent]) });
+      issuedDisclosures.set(disclosure, profile);
+      return disclosure;
+    },
   };
-  return Object.freeze(profile);
+  Object.freeze(profile);
+  issuedProfiles.add(profile);
+  return profile;
 }

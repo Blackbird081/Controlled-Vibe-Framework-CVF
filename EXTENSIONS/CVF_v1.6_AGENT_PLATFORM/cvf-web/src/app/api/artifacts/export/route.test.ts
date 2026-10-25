@@ -177,9 +177,10 @@ describe('/api/artifacts/export', () => {
     },
   );
 
+  const syntheticGitHubPat = 'github_pat_' + 'A'.repeat(32);
   it.each([
     'Authorization: Bearer synthetic-secret-token',
-    'github_pat_abcdefghijklmnopqrstuvwxyz012345',
+    syntheticGitHubPat,
     '-----BEGIN PRIVATE KEY-----',
     'ACCESS_TOKEN: synthetic-long-token',
   ])('rejects another common credential shape in source before the receipt hop', async sourceContent => {

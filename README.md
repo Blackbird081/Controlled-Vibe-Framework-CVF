@@ -1,7 +1,5 @@
 # Controlled Vibe Framework (CVF)
 
-> Development status (2026-10-19): the new offline bound-receipt source is blocked pending architecture reassessment. See [current development limits](docs/evidence/ncr-offline-development-status-2026-10-19.md). Publication does not activate runtime or production.
-
 > **Developed by Tien - Tan Thuan Port@2026**
 >
 > **Controlled vibe coding. Not faster, but safer and more governable.**

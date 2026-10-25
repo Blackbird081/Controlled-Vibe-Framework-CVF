@@ -12,6 +12,12 @@ import { bindJobSelectors, parseJobSelectors, runBoundBranch, runControlledBranc
 import type { DraftPrincipal } from '@/lib/html-draft-recovery-contract';
 import { HtmlDraftSnapshotStore } from '@/lib/server/html-draft-snapshot-store';
 import { decideReceiptOperationRoute, resolveReceiptOperation } from '@/lib/server/receipt-operation-profile';
+import { loadHtmlPilotRuntimeProfile } from '@/lib/server/ncr-html-pilot-runtime-profile';
+import { requireHtmlPilotOwner, htmlPilotSameOwner } from '@/lib/server/ncr-html-pilot-auth';
+import { verifyHtmlPilotSource } from '@/lib/server/html-execution-evidence';
+import { renderHtmlPilotPage } from '@/lib/html-cta-rendering';
+import { VERSION_ID } from '@/lib/html-draft-recovery-contract';
+import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 
 type ArtifactMemoryClass = 'POINTER_RECORD' | 'FULL_RECORD';
 
@@ -23,6 +29,7 @@ interface ArtifactExportRequest {
   status?: unknown;
   claimBoundary?: unknown;
   receiptAnchor?: unknown;
+  pilotSource?: unknown;
 }
 
 type ValidatedExportRequest = {
@@ -262,6 +269,7 @@ function buildHtml(input: ValidatedExportRequest, generatedAt: string, sourceHas
 }
 
 export async function POST(request: NextRequest) {
+  if (request.headers.get('x-cvf-html-pilot') === '1') return pilotExport(request);
   // The receipt-operation selector is recognized before any legacy resolution; a deny never falls back to the legacy path.
   const posture = resolveReceiptOperation();
   const selectors = parseJobSelectors(request.headers);
@@ -423,4 +431,49 @@ export async function POST(request: NextRequest) {
     routeGovernanceProof: routeAuth.proof,
     data: composeData(rendered, receiptCheck),
   }, selectedPrincipal ? { headers: { 'Cache-Control': 'no-store' } } : undefined);
+}
+
+async function pilotExport(request: NextRequest): Promise<NextResponse> {
+  const fail = (status: number, error: string) => NextResponse.json({ success: false, error },
+    { status, headers: { 'Cache-Control': 'no-store' } });
+  const profile = await loadHtmlPilotRuntimeProfile();
+  if (!profile) return fail(503, 'PILOT_PROFILE_UNAVAILABLE');
+  const origin = request.headers.get('origin');
+  if (origin !== new URL(request.url).origin || !['same-origin', null].includes(request.headers.get('sec-fetch-site'))) return fail(403, 'ORIGIN_REFUSED');
+  const selected = await requireHtmlPilotOwner(request);
+  if (selected instanceof NextResponse) return selected;
+  if (!htmlPilotSameOwner(selected, profile.owner)) return fail(403, 'PILOT_OWNER_REFUSED');
+  const jobId = request.headers.get('x-cvf-job-id');
+  const sourceRecordId = request.headers.get('x-cvf-source-record-id');
+  if (!jobId || !VERSION_ID.test(jobId) || !sourceRecordId || !/^[a-f0-9]{32}$/.test(sourceRecordId)) return fail(422, 'PILOT_JOB_SELECTOR_REQUIRED');
+  let body: ArtifactExportRequest;
+  try {
+    const encoded = await readBoundedRequestBody(request, MAX_BODY_BYTES);
+    if (!encoded) return fail(413, 'BODY_TOO_LARGE');
+    body = JSON.parse(encoded) as ArtifactExportRequest;
+  } catch { return fail(422, 'INVALID_BODY'); }
+  if (!body || typeof body !== 'object' || Array.isArray(body)
+    || Object.keys(body).sort().join(',') !== 'claimBoundary,memoryClass,pilotSource,receiptAnchor,sourceContent,sourcePath,status,title'
+    || typeof body.title !== 'string' || body.title.length < 1 || body.title.length > 200
+    || typeof body.sourceContent !== 'string' || typeof body.sourcePath !== 'string'
+    || body.memoryClass !== 'FULL_RECORD' || body.status !== 'DRAFT_UNACCEPTED'
+    || typeof body.claimBoundary !== 'string' || body.claimBoundary.length < 1 || body.claimBoundary.length > 2000
+    || typeof body.receiptAnchor !== 'string' || !body.pilotSource || typeof body.pilotSource !== 'object') return fail(422, 'INVALID_PILOT_EXPORT');
+  const receipt = (body.pilotSource as { receipt?: GovernanceEvidenceReceipt }).receipt;
+  if (!receipt) return fail(422, 'PILOT_SOURCE_REQUIRED');
+  const evidence = await verifyHtmlPilotSource({ receipt, output: body.sourceContent, owner: selected,
+    profile, expectedJobId: receipt.htmlPilotEvidence?.parentRunId ? jobId : null });
+  if (!evidence || evidence.rootRunId !== sourceRecordId || body.sourcePath !== `pilot:${evidence.runId}`
+    || body.receiptAnchor !== evidence.receiptId) return fail(403, 'PILOT_SOURCE_REFUSED');
+  const store = new HtmlDraftSnapshotStore(profile.store);
+  const job = await store.getJob(jobId, sourceRecordId, selected);
+  if (!job?.pilotRootRunId || job.pilotProfileDigest !== profile.manifestSha256) return fail(404, 'PILOT_JOB_NOT_FOUND');
+  const rendered = renderHtmlPilotPage(body.sourceContent, body.title);
+  if (!rendered) return fail(422, 'PILOT_HTML_GRAMMAR_REFUSED');
+  const generatedAt = new Date().toISOString();
+  return NextResponse.json({ success: true, data: { html: rendered.html, filename: filenameFrom(body.title),
+    receiptAnchor: body.receiptAnchor, verification: [{ label: 'Signed source and same-document CTA', passed: true }],
+    generatedAt, governanceState: 'DRAFT_UNACCEPTED', governanceReceiptStatus: 'PRESENT',
+    pilotSource: { receipt }, pilotRunId: evidence.runId, pilotOutputSha256: evidence.outputSha256,
+    productDisposition: 'PENDING_OPERATOR_ACCEPTANCE' } }, { headers: { 'Cache-Control': 'no-store' } });
 }

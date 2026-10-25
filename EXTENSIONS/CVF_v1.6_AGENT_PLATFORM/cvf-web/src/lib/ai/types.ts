@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese fictional-content labels and existing localized text use UTF-8.
 import type { EnforcementResult } from '@/lib/enforcement';
 import type { LaneStatus } from '@/lib/provider-lane-status';
 import type { WorkflowCompositionSummary } from '@/lib/workflow-composition';
@@ -23,6 +24,16 @@ export interface ExecutionRequest {
     templateName: string;
     inputs: Record<string, string>;
     intent: string;
+    /** Pilot-only request hints. The server derives authority from its admitted profile and owned ledger. */
+    htmlPilotIntent?: {
+        operationKey: string;
+        parentRunId?: string;
+        rootRunId?: string;
+        parentOutputSha256?: string;
+        htmlJobId?: string;
+        parentReceipt?: GovernanceEvidenceReceipt;
+        parentOutput?: string;
+    };
     provider?: AIProvider;
     model?: string;
     imageUrl?: string;
@@ -136,6 +147,11 @@ export interface GovernanceEvidenceReceipt {
     receiptId: string;
     evidenceMode: 'live' | 'mock' | 'static';
     routeId: string;
+    /** Server-issued pilot-only output/owner/run anchor; never a client trust flag. */
+    htmlPilotEvidence?: import('@/lib/server/html-execution-evidence').HtmlExecutionEvidence;
+    /** Monotonic full provider await and post-provider local governance through final response. */
+    htmlPilotTiming?: { schema: 'cvf.htmlPilotTiming.v1'; providerAwaitMs: number;
+        localGovernanceMs: number; routeElapsedMs: number };
     decision?: string;
     riskLevel?: string;
     provider?: AIProvider | string;

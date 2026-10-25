@@ -2,6 +2,8 @@ import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 import type { ExecutionEvidenceSnapshot } from '@/types';
 
 export const RECEIPT_ARCHIVE_VERSION = 'cvf.executionReceiptArchive.v1' as const;
+export const PILOT_RECEIPT_ARCHIVE_VERSION = 'cvf.executionReceiptArchive.pilot.v2' as const;
+const MAX_PILOT_RECEIPT_BYTES = 128 * 1024;
 
 const requiredStringFields = ['receiptId', 'routeId', 'generatedAt'] as const;
 const optionalStringFields = [
@@ -24,12 +26,21 @@ export type SavedReceiptProjection = Pick<GovernanceEvidenceReceipt,
     'knowledgeSource' | 'knowledgeInjected' | 'knowledgeCollectionId' |
     'knowledgeChunkCount' | 'approvalId' | 'validationHint' | 'vision'>>;
 
-export interface ExecutionReceiptArchive {
+interface ScalarExecutionReceiptArchive {
     schemaVersion: typeof RECEIPT_ARCHIVE_VERSION;
     executionId: string;
     outputSha256: string;
     receipt: SavedReceiptProjection;
 }
+
+interface PilotExecutionReceiptArchive {
+    schemaVersion: typeof PILOT_RECEIPT_ARCHIVE_VERSION;
+    executionId: string;
+    outputSha256: string;
+    receipt: GovernanceEvidenceReceipt;
+}
+
+export type ExecutionReceiptArchive = ScalarExecutionReceiptArchive | PilotExecutionReceiptArchive;
 
 function record(value: unknown): value is Record<string, unknown> {
     return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -70,6 +81,17 @@ export async function createReceiptArchive(
     executionId: string, output: string, routeReceipt: GovernanceEvidenceReceipt,
 ): Promise<ExecutionReceiptArchive | undefined> {
     if (!executionId || typeof output !== 'string') return undefined;
+    if (routeReceipt.htmlPilotEvidence) {
+        const evidence = routeReceipt.htmlPilotEvidence;
+        const outputSha256 = await hashExactOutput(output);
+        if (routeReceipt.evidenceMode !== 'live' || routeReceipt.routeId !== '/api/execute'
+            || routeReceipt.receiptIntegrity?.signatureStatus !== 'SIGNED'
+            || evidence.receiptId !== routeReceipt.receiptId || evidence.outputSha256 !== outputSha256) return undefined;
+        const encoded = JSON.stringify(routeReceipt);
+        if (new TextEncoder().encode(encoded).byteLength > MAX_PILOT_RECEIPT_BYTES) return undefined;
+        return { schemaVersion: PILOT_RECEIPT_ARCHIVE_VERSION, executionId, outputSha256,
+            receipt: JSON.parse(encoded) as GovernanceEvidenceReceipt };
+    }
     const receipt = projectReceipt(routeReceipt, false);
     if (!receipt) return undefined;
     return {
@@ -85,9 +107,17 @@ export async function restoreReceiptArchive(
     snapshot: ExecutionEvidenceSnapshot | undefined,
 ): Promise<GovernanceEvidenceReceipt | undefined> {
     if (!record(archive) || Object.keys(archive).some(key => !['schemaVersion', 'executionId', 'outputSha256', 'receipt'].includes(key))) return undefined;
-    if (archive.schemaVersion !== RECEIPT_ARCHIVE_VERSION || archive.executionId !== executionId ||
+    if (![RECEIPT_ARCHIVE_VERSION, PILOT_RECEIPT_ARCHIVE_VERSION].includes(archive.schemaVersion as typeof RECEIPT_ARCHIVE_VERSION)
+        || archive.executionId !== executionId ||
         typeof archive.outputSha256 !== 'string' || !/^[a-f0-9]{64}$/.test(archive.outputSha256)) return undefined;
-    const receipt = projectReceipt(archive.receipt, true);
+    const pilot = archive.schemaVersion === PILOT_RECEIPT_ARCHIVE_VERSION;
+    const receipt = pilot ? archive.receipt as GovernanceEvidenceReceipt : projectReceipt(archive.receipt, true);
+    if (pilot && (!record(archive.receipt) || !record(archive.receipt.htmlPilotEvidence)
+        || !record(archive.receipt.receiptIntegrity)
+        || archive.receipt.receiptIntegrity.signatureStatus !== 'SIGNED'
+        || archive.receipt.htmlPilotEvidence.receiptId !== archive.receipt.receiptId
+        || archive.receipt.htmlPilotEvidence.outputSha256 !== archive.outputSha256
+        || new TextEncoder().encode(JSON.stringify(archive.receipt)).byteLength > MAX_PILOT_RECEIPT_BYTES)) return undefined;
     if (!receipt || !snapshot?.receiptId || snapshot.receiptId !== receipt.receiptId) return undefined;
     if (snapshot.provider !== receipt.provider || snapshot.model !== receipt.model) return undefined;
     try {

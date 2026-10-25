@@ -9,7 +9,7 @@ import { HtmlDraftSnapshotStore } from '@/lib/server/html-draft-snapshot-store';
 import { BoundTransportError, EXPECTED_ACTION, type BoundInvoker } from '@/lib/server/bound-receipt-transport';
 import { boundReceiptFromResult, invokeBoundWithGrant, runBoundReceipt, type BoundReceiptOptions } from './proof';
 
-const ROOTS = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-source-20261019', 'worker', 'roots');
+const ROOTS = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-authority-repair-20261020', 'worker', 'roots');
 const T0 = Date.parse('2026-10-19T01:00:00.000Z');
 const sha = (text: string) => createHash('sha256').update(text).digest('hex');
 const owner = { userId: 'u1', orgId: 'o1', teamId: 't1' };

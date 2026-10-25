@@ -4,16 +4,20 @@ import { NextRequest, NextResponse } from 'next/server';
 import { describe, expect, it, vi } from 'vitest';
 import type { AdminSession } from '@/lib/admin-session';
 import { boundDisclosureOf, makeBoundConfig, type BoundDisclosure } from '@/lib/artifacts-bound-receipt-contract';
+import { createBoundReceiptFixtureProfile } from './bound-receipt-profile';
 import { jobRouteHandlers } from './html-job-api';
 
 vi.mock('@/lib/admin-session', () => ({ requireAdminApiSession: vi.fn() }));
-const ROOTS = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-source-20261019', 'worker', 'roots');
+const ROOTS = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-authority-repair-20261020', 'worker', 'roots');
 const now = Date.parse('2026-10-19T01:00:00.000Z');
 const session: Extract<AdminSession, { authMode: 'session' }> = { authMode: 'session', expiresAt: now + 60_000, userId: 'u1', orgId: 'o1', teamId: 't1', role: 'owner', user: 'fixture' };
 const config = makeBoundConfig({ policyRevision: 'policy-r1', transformRevision: 'transform-1', endpointId: 'fixture-endpoint', storeId: 'fixture-store', authReference: 'bundle-1',
   authScope: 'two-hop', webOrigin: 'http://web.invalid:3000', engineOrigin: 'http://engine.invalid:8100', instanceId: '123e4567-e89b-42d3-a456-426614174000',
   storeBindingId: 'ab'.repeat(32), timeoutMs: 4000 })!;
 const disclosure = boundDisclosureOf(config);
+const issuedFor = (root: string) => createBoundReceiptFixtureProfile({ root, config, keyBundle: { authReference: config.authReference, authScope: config.authScope,
+  hops: { EXPORT_PROXY: { keyReference: 'test-export', key: Buffer.alloc(32, 1) }, PROXY_ENGINE: { keyReference: 'test-engine', key: Buffer.alloc(32, 2) } } },
+  webSend: async () => { throw new Error('unused'); }, engineSend: async () => { throw new Error('unused'); } });
 const url = 'http://localhost/api/artifacts/jobs';
 const capabilities = (extra = '', headers: Record<string, string> = {}) => new NextRequest(`${url}?kind=capabilities${extra}`, { headers });
 async function profileFor(label: string) {
@@ -34,12 +38,15 @@ describe('capability disclosure comes only from explicit injection (BC09/BC10)',
     }
   });
   it('emits a nonsecret bound disclosure only for the injected, exactly labelled case', async () => {
-    const route = jobRouteHandlers({ profile: await profileFor('cap-bound'), auth: auth(), clock: () => now, bound: disclosure });
+    const local = await profileFor('cap-bound');
+    const issued = issuedFor(local.profile.root);
+    const bound = issued.disclosure();
+    const route = jobRouteHandlers({ profile: local, auth: auth(), clock: () => now, bound, boundProfile: issued });
     const response = await route.GET(capabilities());
     expect(response.status).toBe(200);
     expect(response.headers.get('cache-control')).toBe('no-store');
     const body = await data(response);
-    expect(body).toEqual({ success: true, data: { jobDecisions: true, effectBoundary: 'BOUND_ENGINE_RECEIPT', boundDisclosure: disclosure } });
+    expect(body).toEqual({ success: true, data: { jobDecisions: true, effectBoundary: 'BOUND_ENGINE_RECEIPT', boundDisclosure: bound } });
     expect(JSON.stringify(body)).not.toMatch(/authReference|authScope|keyReference|secret|token|storeBindingId|instanceId|\.sqlite|password/i);
     expect(disclosure.cost).toBe('UNKNOWN_NOT_AUTHORIZED');
     expect(disclosure.requestedRisk).toBe('R1');
@@ -63,12 +70,17 @@ describe('capability disclosure comes only from explicit injection (BC09/BC10)',
       body: JSON.stringify({ action: 'CREATE_JOB', boundDisclosure: disclosure }) });
     expect((await route.POST(post)).status).toBe(422);
   });
-  it('snapshots the injected disclosure at construction so later mutation cannot change what is disclosed', async () => {
-    const mutable = JSON.parse(JSON.stringify(disclosure)) as BoundDisclosure & { destination: { engineOrigin: string } };
-    const route = jobRouteHandlers({ profile: await profileFor('cap-snapshot'), auth: auth(), clock: () => now, bound: mutable });
+  it('refuses a copied disclosure and keeps an issued disclosure immutable', async () => {
+    const local = await profileFor('cap-snapshot');
+    const issued = issuedFor(local.profile.root);
+    const bound = issued.disclosure();
+    const mutable = JSON.parse(JSON.stringify(bound)) as BoundDisclosure & { destination: { engineOrigin: string } };
+    const denied = jobRouteHandlers({ profile: local, auth: auth(), clock: () => now, bound: mutable, boundProfile: issued });
+    expect((await data(await denied.GET(capabilities()))).data?.effectBoundary).toBe('LOCAL_SYNTHETIC');
+    const route = jobRouteHandlers({ profile: local, auth: auth(), clock: () => now, bound, boundProfile: issued });
     mutable.destination.engineOrigin = 'http://changed.invalid:1';
     mutable.cost = 'FREE' as never;
-    expect((await data(await route.GET(capabilities()))).data?.boundDisclosure).toEqual(disclosure);
+    expect((await data(await route.GET(capabilities()))).data?.boundDisclosure).toEqual(bound);
   });
   it('adds no capability without the job profile, without a session and without the exact query', async () => {
     const disabled = jobRouteHandlers({ auth: auth(), clock: () => now, bound: disclosure });

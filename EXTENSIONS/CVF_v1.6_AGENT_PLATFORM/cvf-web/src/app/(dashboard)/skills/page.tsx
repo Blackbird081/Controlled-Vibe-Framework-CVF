@@ -1,4 +1,5 @@
 'use client';
+// Text Encoding Exception: this user-facing Vietnamese navigation copy follows the existing Skills UI language.
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -153,6 +154,10 @@ export default function SkillsPage() {
                         </Link>
                     </div>
                 )}
+
+                <Link href="/skills/suggest" className="inline-flex w-fit items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm font-semibold text-indigo-700 hover:bg-indigo-100 dark:border-indigo-500/25 dark:bg-indigo-500/10 dark:text-indigo-200 dark:hover:bg-indigo-500/20">
+                    <Sparkles size={16} /> {language === 'vi' ? 'Gợi ý kỹ năng từ mục tiêu của tôi' : 'Suggest a skill for my goal'}
+                </Link>
 
                 <section className="cvf-surface cvf-density-section rounded-[32px] border border-slate-200/80 bg-white p-4 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.35)] dark:border-white/[0.07] dark:bg-[#171b29] dark:shadow-none sm:p-6">
                     <SkillLibrary />

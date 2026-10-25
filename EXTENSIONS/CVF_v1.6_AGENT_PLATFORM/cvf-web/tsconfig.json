@@ -29,7 +29,15 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    ".next-cvf-release-gate-build/types/**/*.ts",
+    ".next-cvf-release-gate-build/dev/types/**/*.ts",
+    ".next-cvf-release-gate-e2e-mock/dev/types/**/*.ts",
+    ".next-cvf-release-gate-e2e-mock/dev/dev/types/**/*.ts",
+    ".next-cvf-release-gate-e2e-live/dev/types/**/*.ts",
+    ".next-cvf-release-gate-e2e-live/dev/dev/types/**/*.ts",
+    ".next-ncr-html-pilot-root/dev/types/**/*.ts",
+    ".next-ncr-html-pilot-root/dev/dev/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

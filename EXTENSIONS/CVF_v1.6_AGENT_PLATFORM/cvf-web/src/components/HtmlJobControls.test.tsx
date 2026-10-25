@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { HtmlJobControls } from './HtmlJobControls';
+vi.mock('@/lib/i18n', () => ({ useLanguage: () => ({ language: 'en' }) }));
 const sessionView = vi.hoisted(() => ({ userId: 'u1', expires: '2999-01-01T00:00:00.000Z' }));
 vi.mock('next-auth/react', () => ({ useSession: () => ({ status: 'authenticated', data: { user: { userId: sessionView.userId, orgId: 'o1', teamId: 't1' }, expires: sessionView.expires } }) }));
 afterEach(() => { sessionView.userId = 'u1'; sessionView.expires = '2999-01-01T00:00:00.000Z'; });

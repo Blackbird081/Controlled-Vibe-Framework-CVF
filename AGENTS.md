@@ -80,6 +80,8 @@ keys.
 
 ## Protocol / Contract / Requirements
 
+Every role and resumed agent applies `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md` without operator reminder. Verification questions preserve approved direction. Bind work to user outcomes, complete milestone coverage, owned remainder, bounded supporting tasks and distinct tranche/product conclusions. Reuse native provider/repository capability and existing CVF owners; implement only demonstrated adapter gaps.
+
 Agents must honor the startup order, workspace isolation rule, public claim
 boundary, and live-proof requirement above.
 

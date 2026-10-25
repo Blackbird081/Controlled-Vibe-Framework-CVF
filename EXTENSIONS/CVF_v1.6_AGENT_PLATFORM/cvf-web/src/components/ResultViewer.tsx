@@ -754,7 +754,7 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
             )}
 
             {/* W97-T1: Follow-up section — only shown when onFollowUp prop is provided */}
-            {onFollowUp && output && (
+            {onFollowUp && output && (!execution.htmlPilot || (execution.htmlPilot.jobId && evidenceReceipt?.htmlPilotEvidence)) && (
                 <div
                     data-testid="followup-section"
                     className="mt-6 rounded-xl border border-blue-200 dark:border-blue-700
@@ -802,6 +802,12 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
 
             {/* Action Buttons */}
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                {execution.htmlPilot?.runId && <a data-testid="html-pilot-transfer-exact-run"
+                    href={`/work-transfer?source=${encodeURIComponent(execution.id)}`}
+                    className="rounded-lg bg-indigo-700 px-6 py-3 font-semibold text-white">
+                    {language === 'vi' ? 'Chuyển đúng kết quả sang HTML' : 'Transfer exact result to HTML'}
+                </a>}
+                {!execution.htmlPilot && <>
                 <button
                     onClick={onAccept}
                     className="w-full sm:w-auto px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg
@@ -829,6 +835,7 @@ ${evidenceReceipt ? generateEvidenceReceiptContent() : ''}
                     <span>↻</span>
                     <span>Retry</span>
                 </button>
+                </>}
 
                 {onSendToAgent && (
                     <button

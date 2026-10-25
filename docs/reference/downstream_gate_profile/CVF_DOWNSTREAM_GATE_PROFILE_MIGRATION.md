@@ -13,7 +13,7 @@ Batch ID: CVF-DGIP-T1
 ## Purpose
 
 Define how projects receive, pin, upgrade and migrate to
-`cvf.downstreamGateProfile@1.1.0` without rewriting history or project-owned content.
+`cvf.downstreamGateProfile@1.2.0` without rewriting history or project-owned content.
 
 ## Scope / Applies To
 
@@ -47,8 +47,8 @@ and the runner `install` subcommand.
 
 ## Upgrade
 
-Profile1.0 historical locks and proofs remain valid within their original scope.
-Core1.1 verification of an old lock returns `LOCK_INVALID`; repeated bootstrap
+Profile1.0/1.1 historical locks and proofs remain valid within their original scope.
+Core1.2 verification of an old lock returns `LOCK_INVALID`; repeated bootstrap
 reports `DRIFT_PRESERVED` and leaves the lock and learning content unchanged.
 Upgrade explicitly through the trusted Core runner:
 
@@ -63,12 +63,27 @@ Empty/conflicting content or a resolved path outside the project returns
 catalog is preserved, register the learning family deliberately and regenerate
 its views with the project catalog manager. No bulk update or parked-project
 adoption is authorized by this standard. The continuity/intake schema versions
-stay1.0; new generated intake records identify profile1.1 and require parent admission.
+stay1.0; new generated intake records identify profile1.2 and require parent admission.
 
 A new profile version is a new `profileId`. `install --upgrade` replaces the
 inherited files and rewrites the lock only on explicit operator action; the old
 lock is never edited in place by bootstrap. The Core doctor reports a project
 whose copy differs from the Core source as `TRUSTED_MISMATCH`.
+
+## Coverage And CI Upgrade To Profile1.2
+
+The new coverage control requires Local to admit the project criterion pointers in
+`docs/milestone-coverage-authority.json` before first implementation dispatch.
+The installer does not import Core product criteria or rewrite project roadmaps.
+Missing authority permits only finite VERIFY with null authority; see
+`CVF_MILESTONE_COVERAGE_MACHINE_CONTRACT.md` for the exact block and registry.
+
+An unchanged previously generated workflow is regenerated with current pins on
+explicit upgrade. An edited/project-owned workflow is preserved. If its three
+new pins are absent, status UPGRADED_CI_RECONCILIATION_REQUIRED exits nonzero;
+the new bundle/lock may already be installed. Verification refuses until the owner
+reconciles the preserved workflow. This is a partial upgrade, not rollback or
+hosted CI proof. Project-owned source and learning content remain untouched.
 
 ## Rollout Evidence
 

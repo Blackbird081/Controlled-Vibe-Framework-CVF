@@ -6,7 +6,7 @@ import { boundAttemptIdFor, boundOperationKey, boundRecordBytes, buildBoundEnvel
 import { attemptIdFor, buildEnvelope, makeOperationConfig, operationKey, type OperationEnvelope } from '../artifacts-receipt-operation-contract';
 import { HtmlDraftSnapshotStore, type BoundAdmitResult } from './html-draft-snapshot-store';
 
-const ROOTS = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-source-20261019', 'worker', 'roots');
+const ROOTS = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-authority-repair-20261020', 'worker', 'roots');
 const T0 = Date.parse('2026-10-19T01:00:00.000Z');
 const owner = { userId: 'u1', orgId: 'o1', teamId: 't1' };
 const hex = (text: string) => createHash('sha256').update(text).digest('hex');

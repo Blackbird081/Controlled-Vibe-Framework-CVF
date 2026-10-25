@@ -52,4 +52,18 @@ describe('saved receipt archive', () => {
         vi.stubGlobal('crypto', {});
         expect(await restoreReceiptArchive(archive, 'exec-1', 'ordinary output', snapshot)).toBeUndefined();
     });
+
+    it('round-trips the complete signed pilot source rather than projecting its signature away', async () => {
+        const output = '# Không gian đọc Ánh Sao\n';
+        const pilot = { ...receipt, receiptIntegrity: { ...receipt.receiptIntegrity!, signatureStatus: 'SIGNED' as const },
+            htmlPilotEvidence: { receiptId: receipt.receiptId, outputSha256: await hashExactOutput(output),
+                runId: 'a'.repeat(32) } } as GovernanceEvidenceReceipt;
+        const archive = await createReceiptArchive('exec-pilot', output, pilot);
+        expect(archive?.schemaVersion).toBe('cvf.executionReceiptArchive.pilot.v2');
+        expect(archive?.receipt).toEqual(pilot);
+        expect(await restoreReceiptArchive(archive, 'exec-pilot', output, snapshot)).toEqual(pilot);
+        expect(await restoreReceiptArchive(archive, 'exec-pilot', `${output}changed`, snapshot)).toBeUndefined();
+        expect(await restoreReceiptArchive({ ...archive, receipt: { ...pilot, htmlPilotEvidence: {
+            ...pilot.htmlPilotEvidence, outputSha256: '0'.repeat(64) } } }, 'exec-pilot', output, snapshot)).toBeUndefined();
+    });
 });

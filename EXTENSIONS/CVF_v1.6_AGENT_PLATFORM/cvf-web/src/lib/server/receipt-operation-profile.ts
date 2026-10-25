@@ -3,10 +3,14 @@ import path from 'node:path';
 import { OPERATION_EFFECT, SYNTHETIC_SOURCE_PREFIX, makeOperationConfig,
   type ControlledInvoker, type OperationConfig, type PresenceLookup } from '../artifacts-receipt-operation-contract';
 import { BOUND_EFFECT } from '../artifacts-bound-receipt-contract';
-import type { BoundReceiptFixtureProfile } from './bound-receipt-profile';
+import { isIssuedBoundProfile, type BoundReceiptFixtureProfile } from './bound-receipt-profile';
 import type { SyntheticDraftProfile } from './html-draft-snapshot-store';
 
 export const RECEIPT_OPERATION_SELECTOR = 'CVF_NCR_RECEIPT_OPERATION_PROFILE';
+/** The real fictional-content pilot has its own authority; no receipt fixture selector may coexist. */
+export function receiptOperationIsolatedForHtmlPilot(env: Record<string, string | undefined>): boolean {
+  return env.NODE_ENV !== 'production' && env[RECEIPT_OPERATION_SELECTOR] === undefined;
+}
 /** The sole explicit non-production server value that reaches the retained R0 legacy helper. Trusted server configuration, not a client permit or a controlled receipt permission. */
 export const LEGACY_COMPATIBILITY_VALUE = 'LEGACY_COMPATIBILITY_ONLY';
 export const FIXTURE_TIMEOUT_MS = 4000;
@@ -98,7 +102,10 @@ export function decideReceiptOperationRoute(input: { posture: ReceiptOperationPo
   if (posture.posture === 'DENY') return deny(posture.reason, 403);
   if (selectors === 'INVALID') return deny('SELECTOR_INVALID', 400);
   if (posture.posture === 'CONTROLLED') return selectors === 'VALID' ? { route: 'CONTROLLED', profile: posture.profile } : deny('SELECTOR_REQUIRED', 400);
-  if (posture.posture === 'BOUND_CONTROLLED') return selectors === 'VALID' ? { route: 'BOUND', profile: posture.profile } : deny('SELECTOR_REQUIRED', 400);
+  if (posture.posture === 'BOUND_CONTROLLED') {
+    if (!isIssuedBoundProfile(posture.profile)) return deny('BOUND_PROFILE_UNISSUED', 403);
+    return selectors === 'VALID' ? { route: 'BOUND', profile: posture.profile } : deny('SELECTOR_REQUIRED', 400);
+  }
   if (posture.posture === 'LOCAL_SYNTHETIC') return localProfilePresent ? { route: 'LOCAL_ONLY' } : deny('LOCAL_PROFILE_UNAVAILABLE', 403);
   if (posture.posture === 'LEGACY_COMPATIBILITY_ONLY') {
     if (selectors !== 'NONE') return deny('LEGACY_SELECTORS_CONFLICT', 403);

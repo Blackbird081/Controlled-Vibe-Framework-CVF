@@ -1,7 +1,6 @@
 import { buildDlpRedactedReadoutRequest } from './route-dlp-readout';
-import { hasBlockedGovernedContext } from './governed-context-egress';
 import { NextRequest, NextResponse } from 'next/server';
-import { InvalidRequestBodyEncodingError, readBoundedRequestBody } from '@/lib/bounded-request-body';
+import { readBoundedRequestBody } from '@/lib/bounded-request-body';
 import { validateExecuteRequestShape } from '@/lib/execute-request-validation';
 import { executeAI, type AIProvider, type ExecutionRequest, type ExecutionResponse } from '@/lib/ai';
 import { evaluateEnforcement } from '@/lib/enforcement';
@@ -16,21 +15,19 @@ import { runExecuteRouteMandatoryGateway } from '@/lib/route-guard-gateway';
 import { validateOutput, shouldRetry, type ValidationResult, type RetryState } from '@/lib/output-validator';
 import { routeWebProvider } from '@/lib/ai/provider-router-adapter';
 import { lookupGuidedResponse } from './guided.response.registry';
-import { buildAifMemoryReinjectionSystemPrompt, evaluateAifMemoryReinjection } from '@/lib/aif-memory-reinjection';
-import { appendAifMemoryReinjectionAudit, buildAifMemoryReinjectionDeniedResponse } from '@/lib/aif-memory-reinjection-route';
 import { buildExecutionPrompt } from '@/lib/execute-prompt-contract';
 import { checkTeamQuota } from '@/lib/quota-guard';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { applyDLPFilter } from '@/lib/dlp-filter';
 import { withSessionAuditPayload } from '@/lib/middleware-auth';
 import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
-import { blockInlineKnowledgeContextBypass, resolveKnowledgeContext } from './route-knowledge-context';
+import { blockInlineKnowledgeContextBypass } from './route-knowledge-context';
+import { resolveMemoryContext, selectKnowledgeContext, sot3RejectionResponse } from './route-context-selection';
 import { buildEvidenceReceipt, buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
 import { deriveServiceTokenIdentity, verifyServiceTokenRequest } from '@/lib/service-token-auth';
 import { hasValidationRetryBudget, resolveExecutionMaxTokens } from '@/lib/execute-route-budget';
 import { recordReportableDecisionObserved } from '@/lib/false-positive-report';
 import { resolveWorkflowBindingForExecution } from '@/lib/workflows/workflow-resolver';
-import { buildDurableMemorySystemPrompt, evaluateDurableMemoryRoute, resolveDurableMemoryActorRole } from '@/lib/durable-memory-route';
 import { buildRoleOutputDeniedResponse, buildRolePermissionDeniedResponse } from '@/lib/execute-role-permission-gate';
 import { buildExecutionIdentityDecision } from '@/lib/execution-identity';
 import { evaluateExecutionActorRoleGate, resolveExecutionCVFRole, resolveExecutionOutputClass } from '@/lib/execute-role-resolver';
@@ -42,12 +39,19 @@ import { assertNonVisionExecutionPathIsDirect, sot3CanonicalExecutionIdFanoutArg
 import { getApprovalStore, type ApprovalRequestRecord } from '../approvals/store';
 import { approvalRecordMatchesActor, buildApprovalActorBinding, buildApprovalRequestSnapshot, computeApprovalRequestHash } from '../approvals/approval-binding';
 import { executeVisionRouteRequest, prepareVisionRouteRequest } from './vision-route-helper';
-import { buildExecuteFinalResponse, buildOutputValidationExhaustedResponse } from './route-final-response';
+import { buildExecuteFinalResponse, buildOutputValidationExhaustedResponse, buildExecuteRouteFailure } from './route-final-response';
 import { buildMemoryAdvisoryReadout } from './route-memory-advisory';
 import { buildGovernedStopOutput } from './route-governed-stop-output';
+import { prepareHtmlPilotExecution, claimHtmlPilotExecution, measurePilotProvider, htmlPilotDisclosureGet } from './route-html-pilot';
+import { htmlPilotSystemPrompt } from '@/lib/server/html-execution-evidence';
+
+export async function GET(request: NextRequest) {
+    return htmlPilotDisclosureGet(request);
+}
 
 export async function POST(request: NextRequest) {
     const routeStartedAtMs = Date.now();
+    const routeStartedMonotonicMs = performance.now();
     // F01: hoisted so the outer catch can carry reconciliation evidence too.
     let providerAttemptLedgerForCatch: ProviderAttemptLedger | undefined;
     let selectedCancellationSignalForCatch: AbortSignal | undefined;
@@ -88,6 +92,8 @@ export async function POST(request: NextRequest) {
         const body = rawBody as Partial<ExecutionRequest>;
         body.inputs = Object.fromEntries(Object.entries(body.inputs || {}).map(([k, v]) => [k, String(v ?? '').trim()]));
         if (typeof body.model === 'string') body.model = body.model.trim() || undefined;
+        const htmlPilotPrepared = await prepareHtmlPilotExecution(body, session, isServiceAllowed);
+        if (htmlPilotPrepared instanceof NextResponse) return htmlPilotPrepared;
         const isVisionExecution = prepareVisionRouteRequest(body).isVisionExecution;
         if (body.provider === 'alibaba' && !isVisionExecution) {
             selectedCancellationSignalForCatch = request.signal;
@@ -233,7 +239,8 @@ export async function POST(request: NextRequest) {
             deepseek: process.env.DEEPSEEK_API_KEY,
         };
         // Build the prompt from template inputs
-        const userPrompt = buildExecutionPrompt(body as ExecutionRequest);
+        const userPrompt = buildExecutionPrompt(body as ExecutionRequest,
+            htmlPilotPrepared ? { htmlPilot: htmlPilotPrepared.mode } : undefined);
         const dlpResult = await applyDLPFilter(userPrompt);
         let filteredPrompt = dlpResult.redacted;
         const readoutRequest = await buildDlpRedactedReadoutRequest(body, dlpResult.wasRedacted);
@@ -363,7 +370,12 @@ export async function POST(request: NextRequest) {
         }
         const workflowBinding = resolveWorkflowBindingForExecution(executionTemplateId);
 
-        const specFields = template?.fields || [];
+        const specFields = htmlPilotPrepared
+            ? (template?.fields || []).filter(field => field.id === 'websiteGoal' && field.required)
+            : template?.fields || [];
+        if (htmlPilotPrepared && specFields.length !== 1) {
+            return NextResponse.json({ success: false, error: 'PILOT_SPEC_SCHEMA_REFUSED' }, { status: 403 });
+        }
         const requiresSkillPreflight = shouldRequireSkillPreflight({
             phase: body.cvfPhase,
             templateCategory: template?.category,
@@ -539,9 +551,15 @@ export async function POST(request: NextRequest) {
             riskLevel: body.cvfRiskLevel,
             role: resolvedExecutionRole.permissionRole,
             userRole: isServiceAllowed ? 'admin' : session?.role,
-            action: resolveGuardAction(rawBody as Record<string, unknown>),
+            actorId: session?.userId ?? (isServiceAllowed ? 'service-account' : undefined),
+            action: htmlPilotPrepared?.build.action ?? resolveGuardAction(rawBody as Record<string, unknown>),
             intent: body.intent,
-            fileScope: (rawBody as Record<string, unknown>).fileScope as string[] | undefined,
+            fileScope: htmlPilotPrepared?.build.fileScope ?? (rawBody as Record<string, unknown>).fileScope as string[] | undefined,
+            targetFiles: htmlPilotPrepared?.build.targetFiles,
+            traceHash: htmlPilotPrepared?.build.traceHash,
+            approvalBinding: htmlPilotPrepared?.build.approvalBinding,
+            riskApproval: htmlPilotPrepared?.build.riskApproval,
+            buildAuthority: htmlPilotPrepared?.build.buildAuthority,
             aiCommit: (rawBody as Record<string, unknown>).aiCommit as {
                 commitId: string;
                 agentId: string;
@@ -651,11 +669,18 @@ export async function POST(request: NextRequest) {
 
         govEnvelope.providerLane = routingResult.selectedProvider;
         const routedProvider: AIProvider = routingResult.selectedProvider;
+        if (htmlPilotPrepared && (routedProvider !== htmlPilotPrepared.profile.provider || body.model !== htmlPilotPrepared.profile.model)) {
+            return NextResponse.json({ success: false, error: 'PILOT_ROUTE_PIN_REFUSED' }, { status: 403 });
+        }
         const routedApiKey = apiKeyMap[routedProvider];
-        const executionMaxTokens = resolveExecutionMaxTokens(executionTemplateId, routedProvider, body.model);
+        const executionMaxTokens = htmlPilotPrepared
+            ? Math.min(resolveExecutionMaxTokens(executionTemplateId, routedProvider, body.model) ?? htmlPilotPrepared.profile.maxTokens,
+                htmlPilotPrepared.profile.maxTokens)
+            : resolveExecutionMaxTokens(executionTemplateId, routedProvider, body.model);
 
         // -- KNOWLEDGE RETRIEVAL + TENANT PARTITION ENFORCEMENT + SOT3 ACTIVATION --
-        const { retrievalResult, finalKnowledgeContext, knowledgeInjected, knowledgeSource, knowledgeSystemPrompt, requestedKnowledgeCollectionId, sot3 } = await resolveKnowledgeContext({
+        // A verified server-side pilot binding selects the no-ambient-lookup path; no request field can.
+        const knowledgeContext = await selectKnowledgeContext(!!htmlPilotPrepared, {
             intent: body.intent!,
             orgId: session?.orgId,
             teamId: session?.teamId,
@@ -664,63 +689,18 @@ export async function POST(request: NextRequest) {
             session,
             ...sot3CanonicalExecutionIdFanoutArg(govEnvelope.envelopeId), // CSCC-R1-T2 Finding 4: conditional on actual port usage
         });
+        const { retrievalResult, finalKnowledgeContext, knowledgeInjected, knowledgeSource, requestedKnowledgeCollectionId } = knowledgeContext;
 
-        // SOT3-ACT-A4: fail closed before any provider call. In ENFORCE mode a
-        // SOT3-rejected activation must never fall through to raw/legacy
-        // context or reach `executeAI`. An explicitly requested governed
-        // collection (requestedKnowledgeCollectionId is non-null) that
-        // resolves to NO_CONTEXT is also rejected here, because the caller
-        // named a specific collection and got nothing governed back; an
-        // unrequested empty retrieval (requestedKnowledgeCollectionId is
-        // null) is not SOT3's concern and preserves ordinary route behavior.
-        const sot3ExplicitNoContext = sot3 !== null && sot3.terminalOutcome === 'NO_CONTEXT' && requestedKnowledgeCollectionId !== null;
-        if (sot3 !== null && (sot3.terminalOutcome === 'REJECTED' || sot3ExplicitNoContext)) {
-            const governanceEvidenceReceipt = buildEvidenceReceipt({
-                envelope: govEnvelope,
-                decision: 'DENY',
-                riskLevel: enforcement.riskGate?.riskLevel,
-                provider: routedProvider,
-                model: 'sot3-rejected',
-                routingDecision: routingResult.decision,
-                knowledgeSource,
-                knowledgeInjected,
-                knowledgeCollectionId: requestedKnowledgeCollectionId,
-                knowledgeChunkCount: retrievalResult.allowedChunkCount,
-            });
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: 'Governed knowledge activation rejected this request before provider execution.',
-                    provider: routedProvider,
-                    model: 'sot3-rejected',
-                    enforcement,
-                    guardResult,
-                    governanceEnvelope: govEnvelope,
-                    policySnapshotId: govEnvelope.policySnapshotId,
-                    governanceEvidenceReceipt,
-                    diagnostic: buildExecutionDiagnostic({ stage: 'governance', class: 'policy_blocked', provider: routedProvider, model: 'sot3-rejected', httpStatus: 409 }),
-                },
-                { status: 409 }
-            );
-        }
+        // SOT3-ACT-A4: fail closed before any provider call; see route-context-selection.ts.
+        const sot3Rejection = sot3RejectionResponse({ knowledge: knowledgeContext, envelope: govEnvelope, enforcement, guardResult,
+            provider: routedProvider, routingResult });
+        if (sot3Rejection) return sot3Rejection;
 
-        const durableMemoryRoute = evaluateDurableMemoryRoute({ request: body, actorId: executionActorId, actorRole: resolveDurableMemoryActorRole(resolvedExecutionRole.role), defaultQuery: body.intent! });
-        const durableMemorySystemPrompt = durableMemoryRoute.promptBlock ? buildDurableMemorySystemPrompt(knowledgeSystemPrompt, durableMemoryRoute.promptBlock) : knowledgeSystemPrompt;
-        const aifMemoryReinjection = evaluateAifMemoryReinjection(body.aifMemoryReinjection);
-        await appendAifMemoryReinjectionAudit({ decision: aifMemoryReinjection, request: body, session });
-
-        if (aifMemoryReinjection.status === 'denied') {
-            return buildAifMemoryReinjectionDeniedResponse({ decision: aifMemoryReinjection, envelope: govEnvelope, enforcement, guardResult, provider: routedProvider, routingResult, knowledgeSource, knowledgeInjected, knowledgeCollectionId: requestedKnowledgeCollectionId, knowledgeChunkCount: retrievalResult.allowedChunkCount });
-        }
-
-        if (await hasBlockedGovernedContext({
-            contexts: [knowledgeInjected ? finalKnowledgeContext : undefined, durableMemoryRoute.promptBlock, aifMemoryReinjection.promptBlock],
-            actorId: executionActorId, actorRole: session?.role ?? 'service', targetResource: executionTargetResource,
-        })) {
-            return NextResponse.json({ success: false, error: 'Governed context requires correction before provider execution.', provider: routedProvider, model: 'blocked' }, { status: 400 });
-        }
-
-        const enrichedSystemPrompt = aifMemoryReinjection.promptBlock ? buildAifMemoryReinjectionSystemPrompt(durableMemorySystemPrompt, aifMemoryReinjection.promptBlock) : knowledgeInjected || durableMemoryRoute.injected ? durableMemorySystemPrompt : undefined;
+        const memoryContext = await resolveMemoryContext({ body, session, knowledge: knowledgeContext,
+            actor: { id: executionActorId, executionRole: resolvedExecutionRole.role, targetResource: executionTargetResource },
+            envelope: govEnvelope, enforcement, guardResult, routedProvider, routingResult, htmlPilotPrepared: !!htmlPilotPrepared });
+        if (memoryContext.response) return memoryContext.response;
+        const { durableMemoryRoute, aifMemoryReinjection, enrichedSystemPrompt } = memoryContext;
 
         if (!routedApiKey) {
             const governanceEvidenceReceipt = buildEvidenceReceipt({
@@ -751,12 +731,16 @@ export async function POST(request: NextRequest) {
             providerModel: `${routedProvider}:${body.model ?? 'default'}`,
         });
         providerAttemptLedgerForCatch = providerAttemptLedger;
-        const selectedRequestSignal = routedProvider === 'alibaba' && !isVisionExecution ? request.signal : undefined;
+        const selectedRequestSignal = htmlPilotPrepared
+            ? AbortSignal.any([request.signal, AbortSignal.timeout(htmlPilotPrepared.profile.maxSeconds * 1000)])
+            : routedProvider === 'alibaba' && !isVisionExecution ? request.signal : undefined;
         selectedCancellationSignalForCatch = selectedRequestSignal;
         selectedProviderForCatch = routedProvider;
         selectedModelForCatch = body.model;
         const cancelled = () => selectedRequestSignal?.aborted === true;
         const cancellationResponse = () => buildProviderRequestCancelledResponse({ ledger: providerAttemptLedger, routedProvider, requestedModel: body.model });
+        const htmlPilotClaim = htmlPilotPrepared ? await claimHtmlPilotExecution(htmlPilotPrepared) : null;
+        if (htmlPilotClaim instanceof NextResponse) return htmlPilotClaim;
         const denyProviderAttempt = (retryAfterSeconds: number) => buildProviderAttemptDeniedResponse({
             ledger: providerAttemptLedger, retryAfterSeconds, routedProvider, requestedModel: body.model,
             govEnvelope, enforcementRiskLevel: enforcement.riskGate?.riskLevel, routingDecision: routingResult.decision,
@@ -772,6 +756,7 @@ export async function POST(request: NextRequest) {
         assertNonVisionExecutionPathIsDirect();
         if (cancelled()) return cancellationResponse();
         let aiResult: ExecutionResponse;
+        let pilotProviderElapsedMs = 0;
         {
             const outcome = await admitAndInvokeProvider({
                 ledger: providerAttemptLedger, purpose: 'initial', routedProvider, requestedModel: body.model,
@@ -779,7 +764,12 @@ export async function POST(request: NextRequest) {
                 requestSignal: selectedRequestSignal, onCancelled: cancellationResponse,
                 invoke: () => isVisionExecution
                     ? executeVisionRouteRequest({ apiKey: routedApiKey, body, prompt: filteredPrompt, traceId: govEnvelope.envelopeId })
-                    : executeAI(routedProvider, routedApiKey, filteredPrompt, { model: body.model, maxTokens: executionMaxTokens, signal: selectedRequestSignal, ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}) }),
+                    : htmlPilotPrepared
+                        ? measurePilotProvider(() => executeAI(routedProvider, routedApiKey, filteredPrompt,
+                            { model: body.model, maxTokens: executionMaxTokens, signal: selectedRequestSignal,
+                                systemPrompt: htmlPilotSystemPrompt(htmlPilotPrepared.parentRunId) }),
+                            elapsed => { pilotProviderElapsedMs = elapsed; })
+                        : executeAI(routedProvider, routedApiKey, filteredPrompt, { model: body.model, maxTokens: executionMaxTokens, signal: selectedRequestSignal, ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}) }),
             });
             if (!outcome.ok) return outcome.response;
             aiResult = outcome.result;
@@ -822,7 +812,7 @@ export async function POST(request: NextRequest) {
             if (cancelled()) return cancellationResponse();
 
             // Auto-retry loop (max 2 retries, invisible to user)
-            while (outputValidation.decision === 'RETRY') {
+            while (!htmlPilotPrepared && outputValidation.decision === 'RETRY') {
                 if (cancelled()) return cancellationResponse();
                 if (!hasValidationRetryBudget(routeStartedAtMs)) break;
                 const retryDecision = shouldRetry(outputValidation, retryState);
@@ -908,6 +898,8 @@ export async function POST(request: NextRequest) {
             request: readoutRequest,
             template,
             routeStartedAtMs,
+            routeStartedMonotonicMs,
+            pilotProviderElapsedMs,
             session,
             serviceIdentity: serviceIdentity ?? null,
             isServiceAllowed,
@@ -934,33 +926,11 @@ export async function POST(request: NextRequest) {
             filteredPrompt,
             actorRoleGate,
             providerAttemptReconciliation: buildProviderAttemptReconciliation(providerAttemptLedger, routedProvider, body.model ?? 'default'),
+            htmlPilotClaim: htmlPilotClaim ?? undefined,
         });
         if (cancelled()) return cancellationResponse();
         return finalResponse;
     } catch (error) {
-        if (selectedCancellationSignalForCatch?.aborted) {
-            const ledger = providerAttemptLedgerForCatch ?? createProviderAttemptLedger({ identityKind: 'service', identityHash: 'pre-admission-cancelled', providerModel: `alibaba:${selectedModelForCatch ?? 'default'}` });
-            return buildProviderRequestCancelledResponse({ ledger,
-                routedProvider: selectedProviderForCatch, requestedModel: selectedModelForCatch });
-        }
-        if (error instanceof InvalidRequestBodyEncodingError) {
-            return NextResponse.json({ success: false, error: error.message }, { status: 400 });
-        }
-        console.error('Execute API error:', error);
-        // F01: carry reconciliation evidence here too when admission had
-        // already started; omit it when the error predates admission.
-        const catchReconciliation = providerAttemptLedgerForCatch
-            ? buildProviderAttemptReconciliation(providerAttemptLedgerForCatch, 'unknown', 'unknown')
-            : undefined;
-        return NextResponse.json(
-            {
-                success: false,
-                error: error instanceof Error ? error.message : 'Internal server error',
-                provider: 'unknown',
-                model: 'unknown',
-                ...(catchReconciliation ? { providerAttemptReconciliation: catchReconciliation } : {}),
-            },
-            { status: 500 },
-        );
+        return buildExecuteRouteFailure(error, providerAttemptLedgerForCatch, selectedCancellationSignalForCatch, selectedProviderForCatch, selectedModelForCatch);
     }
 }

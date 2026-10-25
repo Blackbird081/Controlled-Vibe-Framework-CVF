@@ -6,6 +6,13 @@ import { useSession } from 'next-auth/react';
 import { useLanguage } from '@/lib/i18n';
 import { buildPreviewDocument, containPreviewNavigation, type DisplayedResult } from './ArtifactExportPanel';
 import type { DraftInput, DraftSnapshot } from '@/lib/html-draft-recovery-contract';
+import { pilotCopy, type PilotLanguage } from './html-pilot-copy';
+
+export function PilotSavedVersionBadge({ snapshot, language = 'en' }: { snapshot: DraftSnapshot; language?: PilotLanguage }) {
+  const source = snapshot.pilotSource?.receipt.htmlPilotEvidence;
+  return <p data-testid="html-pilot-saved-version" data-version-id={snapshot.versionId} data-html-sha256={snapshot.htmlSha256}
+    data-run-id={source?.runId ?? ''}>{pilotCopy(language).badge(snapshot.versionId, source?.runId ?? pilotCopy(language).summary.unavailable, snapshot.htmlSha256)}</p>;
+}
 import { clearPendingJobJournal, readPendingJobJournal, writePendingJobJournal, type PendingJobJournal } from './useHtmlBuildAttempts';
 
 type Metadata = Pick<DraftSnapshot, 'versionId' | 'filename' | 'createdAt' | 'state' | 'acceptance'>;
@@ -60,6 +67,7 @@ export function HtmlDraftRecovery({ sourceRecordId, displayed, versionState, end
     if (jobMode && active) { const pending = readPendingJobJournal({ owner, sourceRecordId });
       if (pending?.operation === 'SAVE_DRAFT' && pending.versionId) { setPendingId(pending.versionId); setUncertain(true); } }
     return () => { epoch.current += 1; sequence.current += 1; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- state resets only when the owner/record scope key changes; owner/active/jobMode are inputs of that key
   }, [scope]);
   useEffect(() => {
     if (!Number.isFinite(expires) || expires <= Date.now()) return;
@@ -90,6 +98,7 @@ export function HtmlDraftRecovery({ sourceRecordId, displayed, versionState, end
       if (scopeEpoch !== epoch.current || serial !== sequence.current) return;
       if (!response.ok || !payload.success || payload.data?.versionId !== versionId || payload.data?.sourceRecordId !== sourceRecordId
         || payload.data?.state !== 'CLIENT_SUBMITTED_UNVERIFIED' || payload.data?.acceptance !== 'DRAFT_UNACCEPTED') throw new Error('UNAVAILABLE');
+      if (payload.data?.pilotSource && payload.data.pilotSource.receipt?.htmlPilotEvidence?.rootRunId !== sourceRecordId) throw new Error('PILOT_JOIN_REFUSED');
       setRestored(payload.data as DraftSnapshot); setNotice('');
       if (knownSave.current?.id === versionId) setUncertain(false);
       let targetJobId = knownSave.current?.id === versionId ? displayed?.job?.jobId : undefined;

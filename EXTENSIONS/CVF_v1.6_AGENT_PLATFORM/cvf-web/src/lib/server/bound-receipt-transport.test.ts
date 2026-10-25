@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import path from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { WIRE_SCHEMA, boundAttemptIdFor, boundEnvelopeSha256, boundOperationKey, boundRequestSha256, buildBoundEnvelope, canonicalBytes, makeBoundConfig, parseCanonicalJson,
   parseEvaluateResult, parseWireRequest, type BoundConfig, type BoundConfigInput, type BoundHop, type BoundMessageKind } from '../artifacts-bound-receipt-contract';
 import type { ControlledEvaluateRequest } from '../artifacts-receipt-operation-contract';
@@ -11,7 +11,7 @@ import { BoundTransportError, EXPECTED_ACTION, checkChallengeResult, checkEvalua
 
 const sha = (text: string) => createHash('sha256').update(text).digest('hex');
 const NOW = 1_760_000_000_000;
-const ROOT = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-source-20261019', 'worker', 'roots', 'transport-unit');
+const ROOT = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-authority-repair-20261020', 'worker', 'roots', 'transport-unit');
 const owner = { userId: 'u1', orgId: 'o1', teamId: 't1' };
 const CONFIG_INPUT: BoundConfigInput = { policyRevision: 'fixture-policy-r1', transformRevision: 'fixture-transform-1', endpointId: 'fixture-endpoint', storeId: 'fixture-store',
   authReference: 'fixture-bundle-1', authScope: 'two-hop-fixture', webOrigin: 'http://web.invalid:3000', engineOrigin: 'http://engine.invalid:8100',
@@ -75,9 +75,16 @@ describe('keyring: signature, hop, freshness and replay (BC04)', () => {
 });
 
 describe('deadline and bounded send', () => {
-  const request = { path: '/p', headers: {}, body: Buffer.from('x') };
+  const request = { origin: 'http://web.invalid:3000', method: 'POST' as const, path: '/p', headers: {}, body: Buffer.from('x') };
   const okResponse = (patch: Partial<WireResponse> = {}): WireResponse => ({ status: 200, headers: new Headers(), body: Buffer.from('{}'), ...patch });
   const run = (response: WireSend, deadline = createDeadline(1000)) => sendBounded(response, request, deadline, 100).finally(() => deadline.dispose());
+  it('uses one monotonic budget even if the signing wall clock jumps', () => {
+    const deadline = createDeadline(1000);
+    const before = deadline.remainingMs();
+    const wall = vi.spyOn(Date, 'now').mockReturnValue(Date.now() + 3_600_000);
+    try { expect(deadline.remainingMs()).toBeLessThanOrEqual(before); expect(deadline.remainingMs()).toBeGreaterThan(0); }
+    finally { wall.mockRestore(); deadline.dispose(); }
+  });
   it('accepts one in-limit 200 response and refuses redirect, status, empty, oversize and sender failure', async () => {
     await expect(run(async () => okResponse())).resolves.toMatchObject({ status: 200 });
     await expect(run(async () => okResponse({ redirected: true }))).rejects.toMatchObject({ code: 'REDIRECT' });
@@ -137,7 +144,8 @@ function kit(hooks: EngineHooks = {}, webHook?: WebHook, clock = { t: NOW }) {
   const late: { handlers?: ReturnType<typeof createBoundReceiptHandlers>; engine?: WireSend } = {};
   const now = () => clock.t;
   const profile = createBoundReceiptFixtureProfile({ root: ROOT, config: CONFIG_INPUT, keyBundle: keyBundle(), now, engineSend: req => late.engine!(req), webSend: async req => {
-    const response = await late.handlers!.POST(new Request(`${CONFIG_INPUT.webOrigin}${req.path}`, { method: 'POST', headers: req.headers, body: req.body as unknown as BodyInit }));
+    const response = await late.handlers!.POST(new Request(`${req.origin}${req.path}`, { method: req.method,
+      headers: req.headers, body: req.body as unknown as BodyInit }), req.deadline);
     const bytes = new Uint8Array(await response.arrayBuffer());
     trace.text = Buffer.from(bytes).toString('ascii');
     const phase: Phase = trace.text.length > 0 && Buffer.from(req.body).toString('ascii').includes('"kind":"EVALUATE"') ? 'EVALUATE' : 'CHALLENGE';
@@ -298,5 +306,38 @@ describe('joins are exact', () => {
     expect(checkEvaluateResult({ ...evaluateOk, executionRecord: { final_decision: 'ALLOW', ledger_attached: true } }, expectation, config)).toBe('DECISION_JOIN_MISMATCH');
     expect(Object.keys(EXPECTED_ACTION).sort()).toEqual(['ALLOW', 'DENY', 'ESCALATE', 'REVIEW', 'SANDBOX']);
     expect(boundEnvelopeSha256(operation(config).envelope)).toMatch(/^[a-f0-9]{64}$/);
+  });
+});
+
+
+describe('opaque deadline ownership', () => {
+  it('gives injected senders a frozen view without disposal and rejects structural state', async () => {
+    const owner = createDeadline(1000);
+    const request = { origin: config.webOrigin, method: 'POST' as const, path: config.proxyPath, headers: {}, body: Buffer.from('{}') };
+    let calls = 0;
+    try {
+      await sendBounded(async sent => {
+        calls += 1;
+        expect(sent.deadline).toBe(owner.view);
+        expect(Object.isFrozen(sent.deadline)).toBe(true);
+        expect('dispose' in sent.deadline).toBe(false);
+        return { status: 200, headers: new Headers(), body: Buffer.from('{}') };
+      }, request, owner, 100);
+      for (const fake of [{ ...owner.view }, { expired: () => false, remainingMs: () => 9999, signal: owner.signal }]) {
+        await expect(sendBounded(async () => { calls += 1; throw new Error('entered'); }, request, fake, 100))
+          .rejects.toMatchObject({ code: 'DEADLINE_UNISSUED' });
+      }
+      expect(calls).toBe(1);
+    } finally { owner.dispose(); }
+  });
+  it('refuses invalid durations and carries one deadline across cumulative hops', async () => {
+    for (const invalid of [NaN, Infinity, -Infinity, 0, -1]) expect(() => createDeadline(invalid)).toThrow('DEADLINE_INVALID');
+    const owner = createDeadline(90);
+    const request = { origin: config.webOrigin, method: 'POST' as const, path: config.proxyPath, headers: {}, body: Buffer.from('{}') };
+    const slow: WireSend = async () => { await new Promise(resolve => setTimeout(resolve, 55)); return { status: 200, headers: new Headers(), body: Buffer.from('{}') }; };
+    try {
+      await sendBounded(slow, request, owner, 100);
+      await expect(sendBounded(slow, request, owner, 100)).rejects.toMatchObject({ code: 'TIMED_OUT' });
+    } finally { owner.dispose(); }
   });
 });

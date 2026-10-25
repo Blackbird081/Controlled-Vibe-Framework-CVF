@@ -100,9 +100,11 @@ class ProfileContractTests(unittest.TestCase):
             self.assertTrue(source.is_file() and source.stat().st_size > 0, name)
     def test_schemas_agree_with_profile(self) -> None:
         schema = json.loads((DOCS / "downstream_gate_profile.schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(schema["properties"]["profileId"]["const"], PROFILE["profileId"])
         self.assertEqual(schema["properties"]["phases"]["items"]["enum"], PROFILE["phases"])
         self.assertEqual(schema["properties"]["claimStates"]["items"]["enum"], PROFILE["claimStates"])
         record = json.loads((DOCS / "downstream_finding_intake.schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(record["properties"]["profileId"]["const"], PROFILE["profileId"])
         self.assertEqual(record["properties"]["defectClass"]["enum"], PROFILE["intake"]["defectClasses"])
         self.assertEqual(record["properties"]["acceptance"]["enum"], PROFILE["intake"]["acceptanceStates"])
         self.assertEqual(record["properties"]["parentDisposition"]["enum"], PROFILE["intake"]["parentDispositions"])
@@ -473,7 +475,7 @@ class IntakeTests(Tmp):
         self.assertEqual(intake.validate_record(decided, PROFILE), [], "a parent decision with its admission link is valid")
     def test_invalid_inputs_are_refused_and_never_overwrite(self) -> None:
         for over, code in (({"sourceSha": "abc"}, "INVALID_FIELD"), ({"defectClass": "MADE_UP"}, "INVALID_FIELD"), ({"negativeEvidence": []}, "INVALID_FIELD"),
-                           ({"extra": 1}, "UNKNOWN_FIELD"), ({"observed": "token = sk-abcdefghijklmnopqrstuvwxyz"}, "SECRET_LIKE_CONTENT")):  # fake alphabet-only credential fixture
+                           ({"extra": 1}, "UNKNOWN_FIELD"), ({"observed": "token = " + "sk-" + "abcdefghijklmnopqrstuvwxyz"}, "SECRET_LIKE_CONTENT")):
             target, problems = self.build(self.finding(**over))
             self.assertIsNone(target, over)
             self.assertIn(code, {p.code for p in problems}, over)

@@ -3,7 +3,7 @@ import { BOUND_DISCLOSURE, BOUND_EFFECT, boundAttemptIdFor, boundOperationKey, b
 import { SYNTHETIC_SOURCE_PREFIX, attemptIdFor, buildEnvelope, operationKey, type OperationReceipt } from '@/lib/artifacts-receipt-operation-contract';
 import { SOURCE_ID, VERSION_ID, requestIdentity, sha256, type DraftPrincipal, type DraftRequest } from '@/lib/html-draft-recovery-contract';
 import { HtmlDraftSnapshotStore } from '@/lib/server/html-draft-snapshot-store';
-import type { BoundReceiptFixtureProfile } from '../../../../lib/server/bound-receipt-profile';
+import { isIssuedBoundProfile, type BoundReceiptFixtureProfile } from '../../../../lib/server/bound-receipt-profile';
 import type { ReceiptOperationFixtureProfile } from '@/lib/server/receipt-operation-profile';
 import { buildControlledEvaluateRequest, controlledRequestSha256, runBoundReceipt, runControlledReceipt } from './proof';
 
@@ -117,6 +117,7 @@ const projectReceipt = (receipt: BoundReceipt): OperationReceipt => ({ receiptId
 /** Bound counterpart of runControlledBranch: owner-scoped job and recomputed request hash first, then one admitted two-hop operation. */
 export async function runBoundBranch(args: BoundBranchArgs): Promise<BranchResponse> {
   const { owner, fields, profile, seams } = args;
+  if (!isIssuedBoundProfile(profile)) return fail(503, 'BOUND_PROFILE_UNISSUED');
   const selectors = parseJobSelectors(args.headers);
   if (selectors.kind !== 'VALID') return fail(400, selectors.kind === 'NONE' ? 'SELECTOR_REQUIRED' : selectors.reason);
   let store: HtmlDraftSnapshotStore;

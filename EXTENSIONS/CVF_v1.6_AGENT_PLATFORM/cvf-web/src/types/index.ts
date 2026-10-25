@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese fictional-content labels and existing localized text use UTF-8.
 // Template types for CVF v1.5 UX Platform
 import type { ExecutionReceiptArchive } from '@/lib/execution-receipt-archive';
 
@@ -66,6 +67,8 @@ export interface Execution {
     knowledgeCollectionId?: string;
     evidenceReceiptSnapshot?: ExecutionEvidenceSnapshot;
     savedReceiptArchive?: ExecutionReceiptArchive;
+    htmlPilot?: { runId?: string; rootRunId?: string; parentRunId?: string | null;
+        outputSha256?: string; jobId?: string; operationKey: string; profileDigest?: string };
     starterSource?: 'template' | 'wizard' | 'intent-router' | 'history-followup';
 }
 

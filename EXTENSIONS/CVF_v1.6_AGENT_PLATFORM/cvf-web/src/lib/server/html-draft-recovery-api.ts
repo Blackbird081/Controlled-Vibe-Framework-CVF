@@ -3,6 +3,9 @@ import { NextResponse } from 'next/server';
 import { requireAdminApiSession, type AdminSession } from '@/lib/admin-session';
 import { parseDraftInput, SOURCE_ID, VERSION_ID, type DraftPrincipal } from '@/lib/html-draft-recovery-contract';
 import { HtmlDraftSnapshotStore, type SyntheticDraftProfile } from './html-draft-snapshot-store';
+import { requireHtmlPilotOwner, htmlPilotSameOwner } from './ncr-html-pilot-auth';
+import type { HtmlPilotRuntimeProfile } from './ncr-html-pilot-runtime-profile';
+import { verifyHtmlPilotSource } from './html-execution-evidence';
 
 const reply = (status: number, body: Record<string, unknown>) => NextResponse.json(body, {
   status, headers: { 'Cache-Control': 'no-store', Pragma: 'no-cache', 'X-Content-Type-Options': 'nosniff', Vary: 'Cookie, Origin' },
@@ -27,13 +30,20 @@ type Dependencies = {
   recordPrefix?: string;
   auth?: typeof requireAdminApiSession;
   clock?: () => number;
+  pilot?: HtmlPilotRuntimeProfile | null;
 };
 // Explicit injection is the only enabling path. Deployed route exports below remain disabled.
 export function draftRouteHandlers(deps: Dependencies = {}) {
   const clock = deps.clock ?? Date.now;
   const auth = deps.auth ?? requireAdminApiSession;
-  const store = deps.profile ? new HtmlDraftSnapshotStore(deps.profile, clock) : null;
+  const store = deps.pilot ? new HtmlDraftSnapshotStore(deps.pilot.store, clock)
+    : deps.profile ? new HtmlDraftSnapshotStore(deps.profile, clock) : null;
   async function principal(request: NextRequest): Promise<DraftPrincipal | NextResponse> {
+    if (deps.pilot) {
+      const selected = await requireHtmlPilotOwner(request, clock());
+      return selected instanceof NextResponse || htmlPilotSameOwner(selected, deps.pilot.owner)
+        ? selected : fail(403, 'PILOT_OWNER_REFUSED');
+    }
     const session = await auth(request, '/api/artifacts/drafts', { allowBreakGlass: false });
     if (session instanceof NextResponse) {
       session.headers.set('Cache-Control', 'no-store');
@@ -68,6 +78,11 @@ export function draftRouteHandlers(deps: Dependencies = {}) {
       } catch { return fail(400, 'INVALID_BODY'); }
       const input = parseDraftInput(body);
       if (!input) return fail(422, 'INVALID_DRAFT');
+      if (deps.pilot && (!input.pilotSource || !(await verifyHtmlPilotSource({ receipt: input.pilotSource.receipt,
+        output: input.request.sourceContent, owner, profile: deps.pilot,
+        expectedJobId: input.pilotSource.receipt.htmlPilotEvidence?.parentRunId
+          ? input.pilotSource.receipt.htmlPilotEvidence.htmlJobId : null }))
+        || input.pilotSource.receipt.htmlPilotEvidence?.rootRunId !== input.sourceRecordId)) return fail(403, 'PILOT_SOURCE_REFUSED');
       if (deps.recordPrefix && !input.sourceRecordId.startsWith(deps.recordPrefix)) return fail(404, 'NOT_FOUND');
       const outcome = await store.save(input, owner);
       if (outcome === 'SAVED') return reply(201, { success: true, state: 'SAVED', versionId: input.versionId });
@@ -84,10 +99,20 @@ export function draftRouteHandlers(deps: Dependencies = {}) {
       if (query.has('id')) {
         if (query.getAll('id').length !== 1 || !VERSION_ID.test(query.get('id') ?? '')) return fail(404, 'NOT_FOUND');
         const snapshot = await store.get(query.get('id')!, sourceRecordId, owner);
+        if (deps.pilot && snapshot && (!snapshot.pilotSource || !(await verifyHtmlPilotSource({ receipt: snapshot.pilotSource.receipt,
+          output: snapshot.request.sourceContent, owner, profile: deps.pilot })))) return fail(404, 'NOT_FOUND');
         return snapshot ? reply(200, { success: true, data: snapshot }) : fail(404, 'NOT_FOUND');
       }
       if (!query.has('list') || query.get('list') !== '1') return fail(400, 'INVALID_QUERY');
-      return reply(200, { success: true, data: await store.list(sourceRecordId, owner) });
+      const rows = await store.list(sourceRecordId, owner);
+      if (!deps.pilot) return reply(200, { success: true, data: rows });
+      const verified = [];
+      for (const row of rows) {
+        const snapshot = await store.get(row.versionId, sourceRecordId, owner);
+        if (snapshot?.pilotSource && await verifyHtmlPilotSource({ receipt: snapshot.pilotSource.receipt,
+          output: snapshot.request.sourceContent, owner, profile: deps.pilot })) verified.push(row);
+      }
+      return reply(200, { success: true, data: verified });
     },
   };
 }

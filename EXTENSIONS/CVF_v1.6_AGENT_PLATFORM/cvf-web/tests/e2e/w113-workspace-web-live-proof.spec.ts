@@ -9,6 +9,28 @@ test('W113 live proof includes W112 governance envelope and provider metadata', 
     await login(page);
     const { response, body } = await postLiveGovernedExecution(page, 'simple');
 
+    // The release runner retains only selected assertion lines. On a failed
+    // provider result, emit enum fields and counts so a later diagnosis does
+    // not require blind paid replay. Never log error text, output or keys.
+    if (!body.success) {
+        const stages = new Set(['request_validation', 'auth', 'rate_limit', 'governance', 'routing', 'provider',
+            'output_validation', 'storage', 'network', 'benchmark_model', 'unknown']);
+        const classes = new Set(['invalid_api_key', 'insufficient_balance', 'quota_exceeded', 'rate_limited',
+            'provider_timeout', 'provider_http_error', 'provider_empty_output', 'provider_parse_error',
+            'output_validation_failed', 'network_error', 'unknown_error']);
+        const stage = body.diagnostic?.stage;
+        const failureClass = body.diagnostic?.class;
+        const providerHttpStatus = body.diagnostic?.httpStatus;
+        const providerCallCount = body.providerAttemptReconciliation?.providerCallCount;
+        console.log('CVF_SAFE_LIVE_FAILURE ' + JSON.stringify({
+            routeHttpStatus: response.status(),
+            stage: stages.has(stage) ? stage : 'unclassified',
+            class: classes.has(failureClass) ? failureClass : 'unclassified',
+            providerHttpStatus: Number.isInteger(providerHttpStatus) ? providerHttpStatus : null,
+            providerCallCount: Number.isInteger(providerCallCount) ? providerCallCount : null,
+        }));
+    }
+
     expect(response.status()).toBe(200);
     expect(body.success).toBe(true);
     expect(String(body.output ?? '')).not.toContain('MOCK_');

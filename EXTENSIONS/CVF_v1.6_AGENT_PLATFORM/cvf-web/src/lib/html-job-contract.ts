@@ -4,9 +4,11 @@ import { DRAFT_TTL_MS, SOURCE_ID, VERSION_ID, requestIdentity, safeText, sha256,
 export const JOB_SCHEMA = 'cvf.htmlJob.v1' as const;
 export const VERSION_SCHEMA = 'cvf.htmlJobVersion.v1' as const;
 export const DECISION_SCHEMA = 'cvf.htmlJobDecision.v1' as const;
+export const PRODUCT_DECISION_SCHEMA = 'cvf.htmlPilotProductDecision.v1' as const;
 export const MAX_JOB_METADATA_BYTES = 16_384;
 export const MAX_JOB_BODY_BYTES = 280_000;
 export const JOB_EFFECTS = ['LOCAL_HTML_BUILD', 'LOCAL_DRAFT_SAVE', 'LOCAL_SYNTHETIC_REVIEW'] as const;
+export const PILOT_JOB_EFFECTS = ['REAL_PROVIDER_FICTIONAL_CONTENT', 'LOCAL_HTML_BUILD', 'LOCAL_DRAFT_SAVE'] as const;
 export const CRITERION_ID = /^[a-z0-9][a-z0-9_-]{0,31}$/;
 const HASH = /^[a-f0-9]{64}$/;
 const record = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -28,26 +30,58 @@ const requestValid = (v: unknown): v is DraftRequest => {
 export interface JobCriterion { criterionId: string; text: string }
 export interface CriteriaReview { criterionId: string; passed: true; reviewNote: string }
 export interface CreateJobInput { jobId: string; sourceRecordId: string; goal: string; criteria: JobCriterion[];
-  expectedOutput: 'HTML'; allowedEffects: typeof JOB_EFFECTS; request: DraftRequest }
+  expectedOutput: 'HTML'; allowedEffects: typeof JOB_EFFECTS | typeof PILOT_JOB_EFFECTS; request: DraftRequest;
+  pilotSource?: DraftSnapshot['pilotSource'] }
 export interface HtmlJob { schema: typeof JOB_SCHEMA; jobId: string; owner: DraftPrincipal; sourceRecordId: string;
-  goal: string; criteria: JobCriterion[]; expectedOutput: 'HTML'; allowedEffects: typeof JOB_EFFECTS;
-  requestSha256: string; createdAt: string; expiresAt: string }
+  goal: string; criteria: JobCriterion[]; expectedOutput: 'HTML'; allowedEffects: typeof JOB_EFFECTS | typeof PILOT_JOB_EFFECTS;
+  requestSha256: string; createdAt: string; expiresAt: string;
+  pilotRootRunId?: string; pilotRootOutputSha256?: string; pilotProfileDigest?: string }
 export interface LinkVersionInput { jobId: string; sourceRecordId: string; versionId: string }
 export interface HtmlJobVersion { schema: typeof VERSION_SCHEMA; jobId: string; owner: DraftPrincipal; sourceRecordId: string;
-  versionId: string; requestSha256: string; htmlSha256: string; createdAt: string; expiresAt: string }
+  versionId: string; requestSha256: string; htmlSha256: string; createdAt: string; expiresAt: string;
+  pilotSourceRunId?: string; pilotOutputSha256?: string; pilotEvidenceSha256?: string }
 export interface AcceptVersionInput extends LinkVersionInput { decisionId: string; requestSha256: string; htmlSha256: string;
   criteriaReview: CriteriaReview[]; reviewedVersionConfirmed: true }
 export interface HtmlJobDecision { schema: typeof DECISION_SCHEMA; decisionId: string; jobId: string; owner: DraftPrincipal;
   actor: DraftPrincipal; sourceRecordId: string; versionId: string; requestSha256: string; htmlSha256: string;
   criteriaReview: CriteriaReview[]; evidence: { jobId: string; versionId: string; requestSha256: string; htmlSha256: string };
   decision: 'ACCEPT_FOR_LOCAL_SYNTHETIC_REVIEW'; decidedAt: string; expiresAt: string }
+export interface ProductDecisionInput extends LinkVersionInput { decisionId: string; htmlSha256: string;
+  sourceEvidenceSha256: string; decision: 'ACCEPTED' | 'REJECTED'; reviewedVersionConfirmed: true }
+export interface HtmlPilotProductDecision extends ProductDecisionInput {
+  schema: typeof PRODUCT_DECISION_SCHEMA; owner: DraftPrincipal; actor: DraftPrincipal; decidedAt: string; expiresAt: string;
+}
+export function parseProductDecision(value: unknown): ProductDecisionInput | null {
+  if (!record(value) || !exact(value, ['jobId', 'sourceRecordId', 'versionId', 'decisionId', 'htmlSha256',
+    'sourceEvidenceSha256', 'decision', 'reviewedVersionConfirmed'])
+    || ![value.jobId, value.versionId, value.decisionId].every(x => typeof x === 'string' && VERSION_ID.test(x))
+    || typeof value.sourceRecordId !== 'string' || !SOURCE_ID.test(value.sourceRecordId)
+    || typeof value.htmlSha256 !== 'string' || !HASH.test(value.htmlSha256)
+    || typeof value.sourceEvidenceSha256 !== 'string' || !HASH.test(value.sourceEvidenceSha256)
+    || !['ACCEPTED', 'REJECTED'].includes(value.decision as string) || value.reviewedVersionConfirmed !== true) return null;
+  return value as unknown as ProductDecisionInput;
+}
+export function validateProductDecision(value: unknown, owner: DraftPrincipal, now: number): HtmlPilotProductDecision | null {
+  if (!record(value) || !exact(value, ['schema', 'jobId', 'sourceRecordId', 'versionId', 'decisionId', 'htmlSha256',
+    'sourceEvidenceSha256', 'decision', 'reviewedVersionConfirmed', 'owner', 'actor', 'decidedAt', 'expiresAt'])
+    || value.schema !== PRODUCT_DECISION_SCHEMA || !ownerValid(value.owner) || !sameOwner(value.owner, owner)
+    || !ownerValid(value.actor) || !sameOwner(value.actor, owner) || !utc(value.decidedAt) || !utc(value.expiresAt)
+    || now >= Date.parse(value.expiresAt) || !sized(value)) return null;
+  return parseProductDecision(Object.fromEntries(['jobId', 'sourceRecordId', 'versionId', 'decisionId', 'htmlSha256',
+    'sourceEvidenceSha256', 'decision', 'reviewedVersionConfirmed'].map(k => [k, value[k]])))
+    ? value as unknown as HtmlPilotProductDecision : null;
+}
 
 export function parseCreateJob(v: unknown): CreateJobInput | null {
-  if (!record(v) || !exact(v, ['jobId', 'sourceRecordId', 'goal', 'criteria', 'expectedOutput', 'allowedEffects', 'request'])
+  if (!record(v) || !(exact(v, ['jobId', 'sourceRecordId', 'goal', 'criteria', 'expectedOutput', 'allowedEffects', 'request'])
+    || exact(v, ['jobId', 'sourceRecordId', 'goal', 'criteria', 'expectedOutput', 'allowedEffects', 'request', 'pilotSource']))
     || typeof v.jobId !== 'string' || !VERSION_ID.test(v.jobId) || typeof v.sourceRecordId !== 'string' || !SOURCE_ID.test(v.sourceRecordId)
     || !safeText(v.goal, 2000) || !criteriaValid(v.criteria) || v.expectedOutput !== 'HTML'
-    || !Array.isArray(v.allowedEffects) || JSON.stringify(v.allowedEffects) !== JSON.stringify(JOB_EFFECTS)
-    || !requestValid(v.request)) return null;
+    || !Array.isArray(v.allowedEffects) || JSON.stringify(v.allowedEffects) !== JSON.stringify(Object.hasOwn(v, 'pilotSource') ? PILOT_JOB_EFFECTS : JOB_EFFECTS)
+    || !requestValid(v.request) || (Object.hasOwn(v, 'pilotSource') && (!record(v.pilotSource)
+      || !record(v.pilotSource.receipt) || !record(v.pilotSource.receipt.htmlPilotEvidence)
+      || v.pilotSource.receipt.htmlPilotEvidence.rootRunId !== v.sourceRecordId
+      || v.pilotSource.receipt.htmlPilotEvidence.parentRunId !== null))) return null;
   return v as unknown as CreateJobInput;
 }
 export function parseLinkVersion(v: unknown): LinkVersionInput | null {
@@ -67,32 +101,46 @@ export function parseAcceptVersion(v: unknown): AcceptVersionInput | null {
   return v as unknown as AcceptVersionInput;
 }
 export function makeJob(v: CreateJobInput, owner: DraftPrincipal, now: number): HtmlJob {
+  const pilot = v.pilotSource?.receipt.htmlPilotEvidence;
   return { schema: JOB_SCHEMA, jobId: v.jobId, owner: { ...owner }, sourceRecordId: v.sourceRecordId,
-    goal: v.goal, criteria: v.criteria, expectedOutput: 'HTML', allowedEffects: JOB_EFFECTS,
-    requestSha256: sha256(requestIdentity(v.request)), createdAt: new Date(now).toISOString(), expiresAt: new Date(now + DRAFT_TTL_MS).toISOString() };
+    goal: v.goal, criteria: v.criteria, expectedOutput: 'HTML', allowedEffects: v.pilotSource ? PILOT_JOB_EFFECTS : JOB_EFFECTS,
+    requestSha256: sha256(requestIdentity(v.request)), createdAt: new Date(now).toISOString(), expiresAt: new Date(now + DRAFT_TTL_MS).toISOString(),
+    ...(pilot ? { pilotRootRunId: pilot.rootRunId, pilotRootOutputSha256: pilot.outputSha256,
+      pilotProfileDigest: pilot.profileDigest } : {}) };
 }
 export function validateJob(v: unknown, owner: DraftPrincipal, now: number): HtmlJob | null {
-  if (!record(v) || !exact(v, ['schema', 'jobId', 'owner', 'sourceRecordId', 'goal', 'criteria', 'expectedOutput', 'allowedEffects', 'requestSha256', 'createdAt', 'expiresAt'])
+  const baseKeys = ['schema', 'jobId', 'owner', 'sourceRecordId', 'goal', 'criteria', 'expectedOutput', 'allowedEffects', 'requestSha256', 'createdAt', 'expiresAt'];
+  if (!record(v) || !(exact(v, baseKeys) || exact(v, [...baseKeys, 'pilotRootRunId', 'pilotRootOutputSha256', 'pilotProfileDigest']))
     || v.schema !== JOB_SCHEMA || typeof v.jobId !== 'string' || !VERSION_ID.test(v.jobId)
     || typeof v.sourceRecordId !== 'string' || !SOURCE_ID.test(v.sourceRecordId) || !ownerValid(v.owner) || !sameOwner(v.owner, owner)
     || !safeText(v.goal, 2000) || !criteriaValid(v.criteria) || v.expectedOutput !== 'HTML'
-    || JSON.stringify(v.allowedEffects) !== JSON.stringify(JOB_EFFECTS) || typeof v.requestSha256 !== 'string' || !HASH.test(v.requestSha256)
+    || JSON.stringify(v.allowedEffects) !== JSON.stringify(Object.hasOwn(v, 'pilotRootRunId') ? PILOT_JOB_EFFECTS : JOB_EFFECTS)
+    || typeof v.requestSha256 !== 'string' || !HASH.test(v.requestSha256)
     || !utc(v.createdAt) || !utc(v.expiresAt) || now >= Date.parse(v.expiresAt)
-    || Date.parse(v.expiresAt) - Date.parse(v.createdAt) !== DRAFT_TTL_MS || !sized(v)) return null;
+    || Date.parse(v.expiresAt) - Date.parse(v.createdAt) !== DRAFT_TTL_MS || !sized(v)
+    || (Object.hasOwn(v, 'pilotRootRunId') && (v.pilotRootRunId !== v.sourceRecordId
+      || typeof v.pilotRootOutputSha256 !== 'string' || !HASH.test(v.pilotRootOutputSha256)
+      || typeof v.pilotProfileDigest !== 'string' || !HASH.test(v.pilotProfileDigest)))) return null;
   return v as unknown as HtmlJob;
 }
 export function makeVersion(job: HtmlJob, snapshot: DraftSnapshot, now: number): HtmlJobVersion {
+  const pilot = snapshot.pilotSource?.receipt.htmlPilotEvidence;
   return { schema: VERSION_SCHEMA, jobId: job.jobId, owner: { ...job.owner }, sourceRecordId: job.sourceRecordId,
     versionId: snapshot.versionId, requestSha256: snapshot.requestSha256, htmlSha256: snapshot.htmlSha256,
-    createdAt: new Date(now).toISOString(), expiresAt: new Date(Math.min(Date.parse(job.expiresAt), Date.parse(snapshot.expiresAt))).toISOString() };
+    createdAt: new Date(now).toISOString(), expiresAt: new Date(Math.min(Date.parse(job.expiresAt), Date.parse(snapshot.expiresAt))).toISOString(),
+    ...(pilot ? { pilotSourceRunId: pilot.runId, pilotOutputSha256: pilot.outputSha256,
+      pilotEvidenceSha256: sha256(JSON.stringify(pilot)) } : {}) };
 }
 export function validateVersion(v: unknown, owner: DraftPrincipal, now: number): HtmlJobVersion | null {
-  if (!record(v) || !exact(v, ['schema', 'jobId', 'owner', 'sourceRecordId', 'versionId', 'requestSha256', 'htmlSha256', 'createdAt', 'expiresAt'])
+  const baseKeys = ['schema', 'jobId', 'owner', 'sourceRecordId', 'versionId', 'requestSha256', 'htmlSha256', 'createdAt', 'expiresAt'];
+  if (!record(v) || !(exact(v, baseKeys) || exact(v, [...baseKeys, 'pilotSourceRunId', 'pilotOutputSha256', 'pilotEvidenceSha256']))
     || v.schema !== VERSION_SCHEMA || [v.jobId, v.versionId].some(x => typeof x !== 'string' || !VERSION_ID.test(x))
     || typeof v.sourceRecordId !== 'string' || !SOURCE_ID.test(v.sourceRecordId) || !ownerValid(v.owner) || !sameOwner(v.owner, owner)
     || [v.requestSha256, v.htmlSha256].some(x => typeof x !== 'string' || !HASH.test(x))
     || !utc(v.createdAt) || !utc(v.expiresAt) || now >= Date.parse(v.expiresAt)
-    || Date.parse(v.expiresAt) < Date.parse(v.createdAt) || !sized(v)) return null;
+    || Date.parse(v.expiresAt) < Date.parse(v.createdAt) || !sized(v)
+    || (Object.hasOwn(v, 'pilotSourceRunId') && (![v.pilotOutputSha256, v.pilotEvidenceSha256].every(x => typeof x === 'string' && HASH.test(x))
+      || typeof v.pilotSourceRunId !== 'string' || !SOURCE_ID.test(v.pilotSourceRunId)))) return null;
   return v as unknown as HtmlJobVersion;
 }
 export function reviewMatches(criteria: JobCriterion[], reviews: CriteriaReview[]) {

@@ -17,6 +17,8 @@ import {
 
 import { useLanguage } from '@/lib/i18n';
 import { useHtmlBuildAttempts, type HtmlJobReference, type SupersededOutcome } from './useHtmlBuildAttempts';
+import { ARTIFACT_DISCLOSURE_GROUPS } from './ReceiptEffectDisclosure';
+export { PilotArtifactSourceSummary } from './ReceiptEffectDisclosure';
 
 export type ArtifactMemoryClass = 'POINTER_RECORD' | 'FULL_RECORD';
 
@@ -82,8 +84,6 @@ const REQUEST_FIELDS: ReadonlyArray<keyof ArtifactExportRequest> = [
   'claimBoundary',
   'receiptAnchor',
 ];
-
-const DISCLOSURE_GROUPS = ['output', 'destination', 'cost', 'save', 'decline'] as const;
 
 const DEFAULT_REQUEST: ArtifactExportRequest = {
   title: 'CVF HTML Review Packet',
@@ -749,7 +749,7 @@ export function ArtifactExportPanel({
           >
             <p id={`${fieldId}-disclosure-title`} className="font-semibold">{labels.disclosureTitle}</p>
             <div className="mt-2 grid gap-3 sm:grid-cols-2">
-              {DISCLOSURE_GROUPS.map(group => (
+              {ARTIFACT_DISCLOSURE_GROUPS.map(group => (
                 <div key={group} data-disclosure-group={group} className={group === 'save' ? 'sm:col-span-2' : undefined}>
                   <h4 className="font-semibold">{labels.disclosureGroupTitles[group]}</h4>
                   <p className="mt-0.5">{disclosureText[group]}</p>

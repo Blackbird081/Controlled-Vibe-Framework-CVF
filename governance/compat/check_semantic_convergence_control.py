@@ -472,7 +472,9 @@ def _validate_resolution_evidence(
                                 )
                             )
     return violations
-def _validate_predecessor_state(block: dict, predecessor_block: dict) -> list[BlockViolation]:
+def _validate_predecessor_state(
+    block: dict, predecessor_block: dict, *, stop_successor_admitted: bool = False,
+) -> list[BlockViolation]:
     """Validate state continuity against the actual predecessor SCEC block."""
     violations: list[BlockViolation] = []
     if predecessor_block.get("problemKey") != block.get("problemKey"):
@@ -531,8 +533,9 @@ def _validate_predecessor_state(block: dict, predecessor_block: dict) -> list[Bl
                 )
     predecessor_disposition = predecessor_block.get("requiredDisposition")
     if predecessor_disposition == "STOP_REASSESS_ARCHITECTURE":
-        violations.append(BlockViolation('SUCCESSOR_AFTER_STOP_REASSESS',
-            'a `STOP_REASSESS_ARCHITECTURE` predecessor cannot have a successor in the same problem chain'))
+        if not stop_successor_admitted:
+            violations.append(BlockViolation('SUCCESSOR_AFTER_STOP_REASSESS',
+                'a `STOP_REASSESS_ARCHITECTURE` predecessor cannot have a successor in the same problem chain'))
     elif predecessor_disposition == "ROOT_CONTRACT_REQUIRED":
         if block.get("requiredDisposition") not in ESCALATION_SATISFYING_DISPOSITIONS:
             violations.append(BlockViolation('PREDECESSOR_ESCALATION_DROPPED',
@@ -582,7 +585,8 @@ def validate_block(
         return ValidationResult(is_active=True, violations=tuple(violations))
     violations.extend(_validate_set_reconciliation(block))
     has_admission = "rootContractAdmission" in block
-    if not has_admission:
+    ordinary_triggers = not has_admission or _admission.is_post_stop_return(block)
+    if ordinary_triggers:
         violations.extend(_validate_escalation_triggers(block))
     violations.extend(_validate_runtime_readiness(block))
     violations.extend(_validate_claim_to_proof_mapping(block))
@@ -640,18 +644,23 @@ def validate_block(
                             )
                         )
                     else:
-                        violations.extend(_validate_predecessor_state(block, predecessor_blocks[0]))
+                        admission: list[BlockViolation] = []
                         if has_admission:
                             admission_checked = True
-                            violations.extend(validate_root_admission(
+                            admission = validate_root_admission(
                                 block, artifact_path, predecessor_blocks[0],
                                 evidence_bytes_resolver, validate_work_order=validate_work_order,
-                            ))
+                            )
+                        violations.extend(_validate_predecessor_state(
+                            block, predecessor_blocks[0],
+                            stop_successor_admitted=has_admission and _admission.post_stop_dispatch_admitted(block, admission),
+                        ))
+                        violations.extend(admission)
     if has_admission:
         if not admission_checked:
             violations.append(BlockViolation("ROOT_ADMISSION_CONTEXT_MISSING",
                 "opt-in needs actual predecessor and repository resolvers"))
-        if not admission_checked or any(v.code.startswith("ROOT_ADMISSION_") for v in violations):
+        if not ordinary_triggers and (not admission_checked or any(v.code.startswith("ROOT_ADMISSION_") for v in violations)):
             violations.extend(_validate_escalation_triggers(block))
     return ValidationResult(is_active=True, violations=tuple(violations))
 def _iter_fenced_blocks(text: str) -> list[tuple[str, str]]:

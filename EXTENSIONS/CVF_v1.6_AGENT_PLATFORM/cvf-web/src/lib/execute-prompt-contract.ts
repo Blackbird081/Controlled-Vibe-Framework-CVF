@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese fictional-content labels and existing localized text use UTF-8.
 import type { ExecutionRequest } from '@/lib/ai';
 import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/lib/cvf-web-redesign-dna';
 import { resolveGovernanceFamily } from '@/lib/governance-family';
@@ -451,7 +452,21 @@ function buildAllowFamilyOutputContract(governanceFamily: string | null): string
   return '';
 }
 
-export function buildExecutionPrompt(request: ExecutionRequest): string {
+export function buildExecutionPrompt(request: ExecutionRequest, trusted?: { htmlPilot: 'CREATE' | 'REVISION' }): string {
+  if (trusted?.htmlPilot && request.templateId === 'web_build_handoff') {
+    const title = trusted.htmlPilot === 'REVISION' ? 'Ngày hội đọc Ánh Sao' : 'Không gian đọc Ánh Sao';
+    return [
+      'Viết nội dung Markdown tiếng Việt cho một trang đích cộng đồng hoàn toàn hư cấu.',
+      `Dòng đầu tiên phải là: # ${title}`,
+      'Sau đó dùng đúng ba tiêu đề cấp hai theo thứ tự: ## Giới thiệu, ## Hoạt động, ## Liên hệ.',
+      'Mỗi mục phải có ít nhất một đoạn văn ngắn. Không quá 180 từ cho toàn bộ phản hồi.',
+      'Dòng cuối phải là chính xác: CTA: Đăng ký tham gia -> Liên hệ',
+      'Không thêm tiêu đề khác, checklist, hướng dẫn agent, lời mở/đóng, HTML thô, liên kết ngoài, ảnh, script, URL, biểu mẫu hay dữ liệu cá nhân.',
+      'Không nêu địa chỉ, người, điện thoại, email hoặc khẳng định về tổ chức có thật.',
+      trusted.htmlPilot === 'REVISION' ? 'Thêm một hoạt động cuối tuần hư cấu và giữ nguyên ba mục cùng CTA.' : 'Mô tả một không gian đọc sách cộng đồng hư cấu.',
+      `Mục tiêu người dùng: ${request.intent}`,
+    ].join('\n');
+  }
   const { templateName, inputs, intent } = request;
   const previousOutput = inputs._previousOutput;
   const template = request.templateId ? getTemplateById(request.templateId) : undefined;

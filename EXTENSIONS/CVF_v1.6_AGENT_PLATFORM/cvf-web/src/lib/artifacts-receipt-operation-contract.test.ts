@@ -149,8 +149,9 @@ describe('PA/REQ-IDENTITY strict envelope and config', () => {
       expect(parseOperationConfig(copy)).toBeNull();
     }
   });
+  const syntheticOpenAiStyleKey = 'sk-' + 'A'.repeat(32);
   it('rejects secret-like values in config and output text', () => {
-    expect(makeOperationConfig({ policyRevision: 'sk-abcdefghijklmnopqrstuvwxyz', transformRevision: 't', endpointId: 'synthetic-e', storeId: 'synthetic-s', authReference: 'a', authScope: 'NONE' })).toBeNull(); // fake alphabet-only credential fixture
+    expect(makeOperationConfig({ policyRevision: syntheticOpenAiStyleKey, transformRevision: 't', endpointId: 'synthetic-e', storeId: 'synthetic-s', authReference: 'a', authScope: 'NONE' })).toBeNull();
     expect(buildEnvelope({ ...parts(), output: { ...output, filename: 'OPENAI_API_KEY=hidden-value.html' } })).toBeNull();
     expect(buildEnvelope({ ...parts(), output: { ...output, artifactId: 'Bearer abcdefghijklmnopqrstuvwxyz' } })).toBeNull();
   });

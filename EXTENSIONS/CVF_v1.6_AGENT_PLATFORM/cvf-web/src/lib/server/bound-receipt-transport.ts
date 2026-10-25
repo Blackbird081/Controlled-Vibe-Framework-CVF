@@ -11,7 +11,8 @@ import type { ControlledEvaluateRequest } from '../artifacts-receipt-operation-c
 import type { DraftPrincipal } from '../html-draft-recovery-contract';
 
 export type HeadersLike = HeadersLikeInput;
-export interface WireRequest { path: string; headers: Record<string, string>; body: Uint8Array; signal: AbortSignal }
+export interface WireRequest { origin: string; method: 'POST'; path: string; headers: Record<string, string>; body: Uint8Array;
+  signal: AbortSignal; deadline: Deadline }
 export interface WireResponse { status: number; headers: HeadersLike; body: Uint8Array; redirected?: boolean }
 /** Injected sender. The offline profile supplies in-process functions; there is no default and no network implementation. */
 export type WireSend = (request: WireRequest) => Promise<WireResponse>;
@@ -98,26 +99,62 @@ export function createKeyring(input: unknown, config: Pick<BoundConfig, 'authRef
 }
 
 // ---- One absolute deadline for the whole logical operation ----
-export interface Deadline { readonly signal: AbortSignal; readonly expired: () => boolean; readonly dispose: () => void }
-export function createDeadline(timeoutMs: number, external?: AbortSignal): Deadline {
+export interface Deadline { readonly signal: AbortSignal; readonly expired: () => boolean; readonly remainingMs: () => number }
+export interface OwnedDeadline extends Deadline { readonly view: Deadline; readonly dispose: () => void }
+interface DeadlineState { view: Deadline; disposed: boolean }
+const issuedDeadlines = new WeakMap<object, DeadlineState>();
+export const isIssuedDeadline = (value: unknown): value is Deadline =>
+  !!value && typeof value === 'object' && issuedDeadlines.has(value);
+
+export function createDeadline(timeoutMs: number, external?: AbortSignal): OwnedDeadline {
+  if (!Number.isFinite(timeoutMs) || timeoutMs <= 0 || timeoutMs > 30_000) throw new BoundTransportError('DEADLINE_INVALID');
   const controller = new AbortController();
-  const startedAt = Date.now();
-  let disposed = false;
+  const expiresAt = performance.now() + timeoutMs;
+  const state: DeadlineState = { view: undefined as unknown as Deadline, disposed: false };
   const abort = () => controller.abort();
   const timer = setTimeout(abort, timeoutMs);
   external?.addEventListener('abort', abort, { once: true });
   if (external?.aborted) abort();
-  return { signal: controller.signal, expired: () => controller.signal.aborted || Date.now() - startedAt >= timeoutMs,
-    dispose: () => { if (disposed) return; disposed = true; clearTimeout(timer); external?.removeEventListener('abort', abort); } };
+  const remainingMs = () => state.disposed ? 0 : Math.max(0, expiresAt - performance.now());
+  const view: Deadline = Object.freeze({ signal: controller.signal, remainingMs,
+    expired: () => state.disposed || controller.signal.aborted || remainingMs() <= 0 });
+  state.view = view;
+  const owner: OwnedDeadline = Object.freeze({ ...view, view, dispose: () => {
+    if (state.disposed) return;
+    state.disposed = true;
+    clearTimeout(timer);
+    external?.removeEventListener('abort', abort);
+    controller.abort();
+  } });
+  issuedDeadlines.set(view, state);
+  issuedDeadlines.set(owner, state);
+  return owner;
 }
-/** Races one send against the deadline; the deadline outcome is the same whether the sender was slow, hung or ignored the signal. */
-export async function sendBounded(send: WireSend, request: Omit<WireRequest, 'signal'>, deadline: Deadline, maxResponseBytes: number): Promise<WireResponse> {
-  if (deadline.expired()) throw new BoundTransportError(deadline.signal.aborted ? 'ABORTED' : 'TIMED_OUT');
-  const abort = new Promise<never>((_, reject) => {
-    deadline.signal.addEventListener('abort', () => reject(new BoundTransportError('TIMED_OUT')), { once: true });
+
+/** Only issued state is consulted; a sender never receives the owner's disposal capability. */
+export async function waitBounded<T>(work: () => Promise<T>, deadline: Deadline): Promise<T> {
+  if (!isIssuedDeadline(deadline)) throw new BoundTransportError('DEADLINE_UNISSUED');
+  const state = issuedDeadlines.get(deadline)!;
+  const view = state.view;
+  if (view.expired()) throw new BoundTransportError(view.signal.aborted ? 'ABORTED' : 'TIMED_OUT');
+  let onAbort: () => void = () => undefined;
+  const aborted = new Promise<never>((_, reject) => {
+    onAbort = () => reject(new BoundTransportError('TIMED_OUT'));
+    view.signal.addEventListener('abort', onAbort, { once: true });
   });
+  try {
+    const value = await Promise.race([Promise.resolve().then(work), aborted]);
+    if (view.expired()) throw new BoundTransportError('TIMED_OUT');
+    return value;
+  } finally { view.signal.removeEventListener('abort', onAbort); }
+}
+
+/** Races one send against the original operation deadline, including uncooperative senders. */
+export async function sendBounded(send: WireSend, request: Omit<WireRequest, 'signal' | 'deadline'>, deadline: Deadline, maxResponseBytes: number): Promise<WireResponse> {
+  if (!isIssuedDeadline(deadline)) throw new BoundTransportError('DEADLINE_UNISSUED');
+  const view = issuedDeadlines.get(deadline)!.view;
   let response: WireResponse;
-  try { response = await Promise.race([send({ ...request, signal: deadline.signal }), abort]); }
+  try { response = await waitBounded(() => send({ ...request, signal: view.signal, deadline: view }), view); }
   catch (error) { throw error instanceof BoundTransportError ? error : new BoundTransportError('SEND_FAILED'); }
   if (response.redirected === true || (response.status >= 300 && response.status < 400)) throw new BoundTransportError('REDIRECT');
   if (response.status !== 200) throw new BoundTransportError('STATUS');
@@ -184,7 +221,8 @@ export function createBoundInvoker(options: InvokerOptions): BoundInvoker {
     const signed = keyring.sign('EXPORT_PROXY', 'REQUEST', config.proxyPath, body, issuedAt);
     // Counted only when the sender is actually invoked, so a request refused before the send never inflates the count.
     const counted: WireSend = request => { if (wire.kind === 'CHALLENGE') counters.challengeSent += 1; else counters.evaluateSent += 1; return send(request); };
-    const response = await sendBounded(counted, { path: config.proxyPath, headers: signed.headers, body }, deadline, config.maxResponseBytes);
+    const response = await sendBounded(counted, { origin: config.webOrigin, method: 'POST', path: config.proxyPath, headers: signed.headers, body }, deadline, config.maxResponseBytes);
+    if (deadline.expired()) throw new BoundTransportError('TIMED_OUT');
     const verified = keyring.verify({ hop: 'EXPORT_PROXY', kind: 'RESPONSE', path: config.proxyPath }, response.headers, response.body, now());
     if (!verified.ok) throw new BoundTransportError(`RESPONSE_${verified.reason}`);
     const parsed = parseCanonicalJson(response.body, config.maxResponseBytes);
@@ -218,6 +256,7 @@ export function createBoundInvoker(options: InvokerOptions): BoundInvoker {
       const failure = checkEvaluateResult(result, { operationKey: envelope.operationKey, attemptId: envelope.attemptId, artifactId: envelope.artifactId,
         payloadSha256: envelope.payloadSha256, envelopeSha256, owner: envelope.owner }, config, second.nonce);
       if (failure) throw new BoundTransportError(`EVALUATE_${failure}`);
+      if (deadline.expired()) throw new BoundTransportError('TIMED_OUT');
       return result;
     } finally { deadline.dispose(); }
   };

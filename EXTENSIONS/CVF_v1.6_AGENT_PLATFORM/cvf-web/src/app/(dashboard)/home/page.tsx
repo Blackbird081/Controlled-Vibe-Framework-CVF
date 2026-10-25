@@ -10,6 +10,7 @@ import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 import { useSettings } from '@/components/Settings';
 import { Template, Execution } from '@/types';
 import { useLanguage } from '@/lib/i18n';
+import { pilotCopy } from '@/components/html-pilot-copy';
 import { trackEvent } from '@/lib/analytics';
 import {
     clearGovernedStarterHandoff,
@@ -95,6 +96,7 @@ export default function HomePage() {
     const receiptEpoch = useRef(0);
     const [currentInput, setCurrentInput] = useState<Record<string, string>>({});
     const [currentIntent, setCurrentIntent] = useState('');
+    const [pilotGoal, setPilotGoal] = useState('');
     const [currentFolder, setCurrentFolder] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [starterHandoff, setStarterHandoff] = useState<GovernedStarterHandoff | null>(null);
@@ -418,25 +420,29 @@ export default function HomePage() {
 
     // An explicit submit starts a new attempt: no inherited result, receipt or continuation context.
     const handleFormSubmit = useCallback((values: Record<string, string>, intent: string) => {
+        const pilot = selectedTemplate!.id === 'web_build_handoff' && searchParams.get('htmlPilot') === '1';
+        const selectedIntent = pilot ? (values.websiteGoal?.trim() ?? '') : intent;
         clearRecoveryContext();
         setCurrentOutput('');
         setCurrentEvidenceReceipt(undefined);
         setCurrentInput(values);
-        setCurrentIntent(intent);
+        setCurrentIntent(selectedIntent);
         const execution: Execution = {
             id: newAttemptId('exec'),
             templateId: selectedTemplate!.id,
             templateName: selectedTemplate!.name,
             category: selectedTemplate!.category,
             input: values,
-            intent,
+            intent: selectedIntent,
             status: 'processing',
             createdAt: new Date(),
+            ...(pilot
+                ? { htmlPilot: { operationKey: crypto.randomUUID() } } : {}),
         };
         addExecution(execution);
         setActiveExecutionId(execution.id);
         setWorkflowState('processing');
-    }, [selectedTemplate, addExecution, clearRecoveryContext, newAttemptId]);
+    }, [selectedTemplate, addExecution, clearRecoveryContext, newAttemptId, searchParams]);
 
     const handleProcessingComplete = useCallback((output: string, evidenceReceipt?: GovernanceEvidenceReceipt) => {
         // A stopped attempt has no binding left, so a late delivery can never reach a record.
@@ -455,6 +461,15 @@ export default function HomePage() {
                 completedAt: new Date(),
                 ...(snap ? { evidenceReceiptSnapshot: snap } : {}),
                 ...(snap?.knowledgeCollectionId ? { knowledgeCollectionId: snap.knowledgeCollectionId } : {}),
+                ...(evidenceReceipt?.htmlPilotEvidence ? { htmlPilot: {
+                    operationKey: evidenceReceipt.htmlPilotEvidence.operationKey,
+                    runId: evidenceReceipt.htmlPilotEvidence.runId,
+                    rootRunId: evidenceReceipt.htmlPilotEvidence.rootRunId,
+                    parentRunId: evidenceReceipt.htmlPilotEvidence.parentRunId,
+                    outputSha256: evidenceReceipt.htmlPilotEvidence.outputSha256,
+                    jobId: evidenceReceipt.htmlPilotEvidence.htmlJobId ?? activeExecution?.htmlPilot?.jobId,
+                    profileDigest: evidenceReceipt.htmlPilotEvidence.profileDigest,
+                } } : {}),
             });
             if (evidenceReceipt) {
                 const completedId = activeExecutionId;
@@ -471,7 +486,7 @@ export default function HomePage() {
             }
         }
         setWorkflowState('result');
-    }, [activeExecutionId, updateExecution]);
+    }, [activeExecutionId, activeExecution, updateExecution]);
 
     const handleBack = useCallback(() => {
         clearRecoveryContext();
@@ -512,6 +527,7 @@ export default function HomePage() {
 
     const handleFollowUp = useCallback((refinement: string) => {
         if (!selectedTemplate || !currentOutput) return;
+        if (activeExecution?.htmlPilot && !activeExecution.htmlPilot.jobId) return;
         receiptEpoch.current++;
         setSavedLocalHistory(false);
         const truncated = currentOutput.length > 600
@@ -705,19 +721,33 @@ export default function HomePage() {
                             className="max-w-3xl mx-auto mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100"
                         >
                             {/* Text Encoding Exception: Vietnamese user-facing local-stop notice. */}
-                            {language === 'vi'
-                                ? 'Đã dừng trên thiết bị này. Nội dung bạn nhập được giữ lại; nhà cung cấp AI có thể chưa dừng yêu cầu này. Chỉnh sửa rồi gửi lại khi sẵn sàng.'
-                                : 'Stopped on this device. Your inputs are kept; the AI provider may not have stopped this request. Edit and resubmit when ready.'}
+                            {selectedTemplate.id === 'web_build_handoff' && searchParams.get('htmlPilot') === '1'
+                                ? pilotCopy(language).home.stoppedNotice
+                                : (language === 'vi'
+                                    ? 'Đã dừng trên thiết bị này. Nội dung bạn nhập được giữ lại; nhà cung cấp AI có thể chưa dừng yêu cầu này. Chỉnh sửa rồi gửi lại khi sẵn sàng.'
+                                    : 'Stopped on this device. Your inputs are kept; the AI provider may not have stopped this request. Edit and resubmit when ready.')}
                         </div>
                     )}
-                    <DynamicForm
+                    {selectedTemplate.id === 'web_build_handoff' && searchParams.get('htmlPilot') === '1'
+                      ? <form data-testid="html-pilot-goal-form" aria-labelledby="html-pilot-goal-heading" className="mx-auto max-w-2xl space-y-4 rounded-lg border p-5" onSubmit={event => {
+                          event.preventDefault(); if (!stopNotice && pilotGoal.trim()) handleFormSubmit({ websiteGoal: pilotGoal.trim() }, pilotGoal.trim());
+                        }}>
+                          <h2 id="html-pilot-goal-heading" className="text-xl font-semibold">{pilotCopy(language).home.heading}</h2>
+                          <p id="html-pilot-goal-intro">{pilotCopy(language).home.intro}</p>
+                          <label className="block">{pilotCopy(language).home.goalLabel}<input name="websiteGoal" value={pilotGoal} onChange={event => setPilotGoal(event.target.value)}
+                            required maxLength={2000} aria-describedby="html-pilot-goal-intro" className="mt-2 block min-h-11 w-full rounded border p-3 focus-visible:outline-2 focus-visible:outline-offset-2" /></label>
+                          <button type="submit" disabled={stopNotice} aria-describedby={stopNotice ? 'html-pilot-goal-blocked' : undefined}
+                            className="min-h-11 rounded bg-blue-700 px-5 py-3 text-white focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50">{pilotCopy(language).home.continueLabel}</button>
+                          {stopNotice && <p id="html-pilot-goal-blocked" data-testid="html-pilot-goal-blocked">{pilotCopy(language).home.blockedHint}</p>}
+                        </form>
+                      : <DynamicForm
                         key={`${selectedTemplate.id}:${formRevision}`}
                         template={selectedTemplate}
                         initialValues={draftInput ?? undefined}
                         onSubmit={handleFormSubmit}
                         onBack={handleBack}
                         onSendToAgent={handleSendToAgent}
-                    />
+                    />}
                 </>
             )}
 
@@ -739,6 +769,16 @@ export default function HomePage() {
                         ? { ...currentInput, _previousOutput: iterationContext }
                         : currentInput}
                     intent={currentIntent}
+                    htmlPilotIntent={activeExecution?.htmlPilot ? {
+                        operationKey: activeExecution.htmlPilot.operationKey,
+                        ...(activeExecution.htmlPilot.parentRunId ? {
+                            parentRunId: activeExecution.htmlPilot.parentRunId,
+                            rootRunId: activeExecution.htmlPilot.rootRunId!,
+                            parentOutputSha256: activeExecution.htmlPilot.outputSha256!,
+                            htmlJobId: activeExecution.htmlPilot.jobId!,
+                            ...(currentEvidenceReceipt ? { parentReceipt: currentEvidenceReceipt, parentOutput: currentOutput } : {}),
+                        } : {}),
+                    } : undefined}
                     onComplete={handleProcessingComplete}
                     onCancel={handleStopProcessing}
                 />

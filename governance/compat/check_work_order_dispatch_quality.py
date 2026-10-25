@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 """
-CVF Work Order Dispatch Quality Gate
-
-Hard-fails new or amended governed dispatch packets that try to move from
-planning into execution before the required source, roadmap, prerequisite, and
-GC-018 evidence exists.
+Dispatch quality: require source, roadmap, prerequisite and GC-018 evidence.
 """
 
 from __future__ import annotations
@@ -21,6 +17,7 @@ from pathlib import Path
 from typing import Any
 
 import check_work_order_dispatch_quality_source as source_validation
+from milestone_coverage_admission import collect_coverage_violations, validate_milestone_coverage
 from check_work_order_dispatch_quality_tables import (
     _clean_manifest_path,
     _extract_section,
@@ -269,6 +266,7 @@ def _run_check(base: str | None, head: str | None) -> tuple[dict[str, Any], str,
     resolved_base, resolved_head, base_source = _resolve_range(base, head)
     changed = _get_changed(resolved_base, resolved_head)
     report = _classify(sorted(changed), base_ref=resolved_base)
+    report["violations"].extend(collect_coverage_violations(REPO_ROOT, changed))
     for path in report["checkedFiles"]:
         if not path.startswith("docs/work_orders/"):
             continue
@@ -279,6 +277,8 @@ def _run_check(base: str | None, head: str | None) -> tuple[dict[str, Any], str,
     report["violationCount"] = len(report["violations"])
     report["compliant"] = report["violationCount"] == 0 and report["markerViolationCount"] == 0
     return report, resolved_base, resolved_head, base_source
+
+
 def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(errors="replace")

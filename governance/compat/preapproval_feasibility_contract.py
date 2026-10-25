@@ -235,7 +235,7 @@ def _check_bindings(comp: dict, proposal_path: str, proposal_sha: str, receipt: 
             diags.append(diag("OUTCOME_DIGEST_DRIFT", "approvalTarget.prospectiveOutcomeSha256 does not match prospectiveOutcome"))
 
 
-def _check_outcome(outcome: Any, snap: Snapshot, receipt: dict, diags: list) -> str | None:
+def _check_outcome(outcome: Any, proposal_path: str, snap: Snapshot, receipt: dict, diags: list) -> str | None:
     if not scec.is_active_block(outcome):
         diags.append(diag("OUTCOME_NOT_ACTIVE_SCEC", f"prospectiveOutcome must be one active {scec.SCEC_SCHEMA_VERSION} object"))
         return None
@@ -245,6 +245,7 @@ def _check_outcome(outcome: Any, snap: Snapshot, receipt: dict, diags: list) -> 
         predecessor_hash_resolver=snap.sha256,
         predecessor_block_resolver=snap.blocks,
         evidence_bytes_resolver=snap.read,
+        artifact_path=proposal_path,
     )
     receipt["canonicalViolations"] = [diag(v.code, v.message) for v in result.violations]
     disposition = outcome.get("requiredDisposition")
@@ -503,7 +504,7 @@ def evaluate(root: Path | str, proposal_path: Any, approval_target: Any = None, 
     if comp["schemaVersion"] != COMPANION_SCHEMA:
         diags.append(diag("COMPANION_SCHEMA_INVALID", f"schemaVersion must be {COMPANION_SCHEMA}"))
     _check_bindings(comp, proposal_path, receipt["proposal"]["sha256"], receipt, diags)
-    disposition = _check_outcome(comp["prospectiveOutcome"], snap, receipt, diags)
+    disposition = _check_outcome(comp["prospectiveOutcome"], proposal_path, snap, receipt, diags)
     receipt["prerequisites"]["examined"], receipt["prerequisites"]["deferred"] = check_prerequisites(comp["phasePrerequisites"], snap, diags)
     if comp["requestQueue"] is not None:
         receipt["queue"], receipt["coverageDisposition"] = check_queue(comp["requestQueue"], diags)

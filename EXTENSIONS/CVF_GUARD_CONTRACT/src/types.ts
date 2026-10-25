@@ -104,11 +104,30 @@ export interface GuardRequestContext {
   mutationBudget?: number;
   scope?: string;
   traceHash?: string;
+  /** Stable server-verified grant binding; never a client selector. */
+  approvalBinding?: string;
   /** Channel from which this request originated */
   channel?: 'web' | 'ide' | 'cli' | 'mcp' | 'api';
   /** Typed BUILD-phase mutation prerequisite evidence (RFR-R1). */
   buildAuthority?: BuildAuthorityEvidence;
+  /** R2 evidence verified by the calling adapter before guard evaluation. */
+  riskApproval?: RiskApprovalEvidence;
   metadata?: Record<string, unknown>;
+}
+
+/** Evidence only: issuer authenticity and document integrity belong to the adapter. */
+export interface RiskApprovalEvidence {
+  status: 'APPROVED';
+  approvalRef: string;
+  approvedByRole: 'OPERATOR' | 'HUMAN' | 'GOVERNOR';
+  subjectRole: CVFRole;
+  subjectPhase: CVFPhase;
+  action: string;
+  actorId: string;
+  binding: string;
+  traceHash: string;
+  expiresAt: string;
+  revoked: false;
 }
 
 export type BuildAuthoritySpecStatus = 'ACCEPTED' | 'REJECTED' | 'PENDING';

@@ -7,7 +7,7 @@ import { decideReceiptOperationRoute, resolveReceiptOperation, type ReceiptOpera
 import type { WireSend } from './bound-receipt-transport';
 
 const sha = (text: string) => createHash('sha256').update(text).digest('hex');
-const ROOT = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-source-20261019', 'worker', 'roots', 'profile-unit');
+const ROOT = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-authority-repair-20261020', 'worker', 'roots', 'profile-unit');
 const CONFIG: BoundConfigInput = { policyRevision: 'fixture-policy-r1', transformRevision: 'fixture-transform-1', endpointId: 'fixture-endpoint', storeId: 'fixture-store',
   authReference: 'fixture-bundle-1', authScope: 'two-hop-fixture', webOrigin: 'http://web.invalid:3000', engineOrigin: 'http://engine.invalid:8100',
   instanceId: '123e4567-e89b-42d3-a456-426614174000', storeBindingId: 'ab'.repeat(32), timeoutMs: 4000 };
@@ -28,6 +28,8 @@ describe('typed fixture profile factory', () => {
     expect(profile.config.instanceId).toBe(CONFIG.instanceId);
     expect(profile.timeoutMs).toBe(4000);
     expect(Object.isFrozen(profile)).toBe(true);
+    expect(Object.isFrozen(profile.config)).toBe(true);
+    expect(Object.isFrozen(profile.store)).toBe(true);
     expect(Object.isFrozen(profile.webContext)).toBe(true);
     expect(profile.disclosure()).toEqual(boundDisclosureOf(profile.config));
   });
@@ -77,6 +79,8 @@ describe('typed fixture profile factory', () => {
     expect(typeof first).toBe('function');
     expect(profile.createInvoker(envelope)).not.toBe(first);
     expect(profile.counters).toEqual({ invokerCalls: 0, challengeSent: 0, evaluateSent: 0, proxyRequests: 0, engineChallengeSends: 0, engineEvaluateSends: 0 });
+    const mismatched = { ...envelope, config: { ...envelope.config, storeBindingId: 'cd'.repeat(32) } };
+    expect(() => profile.createInvoker(mismatched)).toThrow('BOUND_ENVELOPE_AUTHORITY_MISMATCH');
   });
 });
 
@@ -96,6 +100,9 @@ describe('held activation and default denial (BC09)', () => {
     const posture: ReceiptOperationPosture = { posture: 'BOUND_CONTROLLED', profile };
     expect(decideReceiptOperationRoute({ posture, selectors: 'VALID', localProfilePresent: false })).toEqual({ route: 'BOUND', profile });
     expect(decideReceiptOperationRoute({ posture, selectors: 'VALID', localProfilePresent: true })).toEqual({ route: 'BOUND', profile });
+    const copy = { ...profile };
+    expect(decideReceiptOperationRoute({ posture: { posture: 'BOUND_CONTROLLED', profile: copy }, selectors: 'VALID', localProfilePresent: false }))
+      .toEqual({ route: 'DENY', reason: 'BOUND_PROFILE_UNISSUED', status: 403 });
     expect(decideReceiptOperationRoute({ posture, selectors: 'NONE', localProfilePresent: false })).toEqual({ route: 'DENY', reason: 'SELECTOR_REQUIRED', status: 400 });
     expect(decideReceiptOperationRoute({ posture, selectors: 'INVALID', localProfilePresent: false })).toEqual({ route: 'DENY', reason: 'SELECTOR_INVALID', status: 400 });
     expect(decideReceiptOperationRoute({ posture: { posture: 'DENY', reason: 'DISABLED' }, selectors: 'VALID', localProfilePresent: false }).route).toBe('DENY');

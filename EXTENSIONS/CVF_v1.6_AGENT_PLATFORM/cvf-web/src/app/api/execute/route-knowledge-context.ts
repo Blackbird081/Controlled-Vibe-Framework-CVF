@@ -70,6 +70,28 @@ export interface KnowledgeContextResult {
     sot3: Sot3KnowledgeActivationResult | null;
 }
 
+const emptyRetrievalResult = (): KnowledgeQueryResult => ({
+    chunks: [], matchedChunkCount: 0, allowedChunkCount: 0, droppedChunkCount: 0,
+    allowedCollectionIds: [], droppedCollectionIds: [],
+});
+
+/**
+ * Result for a server-selected, prepared HTML pilot. Nothing is queried, audited or activated for it, so no
+ * ambient chunk can reach the prompt, and the system prompt stays the static CVF instructions. Callers must pass
+ * this only for a verified server-side pilot binding, never for a request flag.
+ */
+export function isolatedPilotKnowledgeContext(): KnowledgeContextResult {
+    return {
+        retrievalResult: emptyRetrievalResult(),
+        finalKnowledgeContext: undefined,
+        knowledgeInjected: false,
+        knowledgeSource: 'none',
+        knowledgeSystemPrompt: CVF_SYSTEM_PROMPT,
+        requestedKnowledgeCollectionId: null,
+        sot3: null,
+    };
+}
+
 function resolveChunkSot3Source(chunk: { id: string; collectionId: string }) {
     const collection = knowledgeStore.getCollection(chunk.collectionId);
     return collection?.chunks.find((stored) => stored.id === chunk.id)?.sot3Source;

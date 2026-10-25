@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 
 export const DRAFT_SCHEMA = 'cvf.htmlDraftSnapshot.v1' as const;
 export const DRAFT_TTL_MS = 24 * 60 * 60 * 1000;
@@ -28,6 +29,8 @@ export interface DraftInput {
   filename: string;
   generatedAt: string;
   buildNumber: number;
+  /** Pilot-only signed source. API verifies it against the current owner and exact sourceContent. */
+  pilotSource?: { receipt: GovernanceEvidenceReceipt };
 }
 export interface DraftPrincipal { userId: string; orgId: string; teamId: string }
 export interface DraftSnapshot extends DraftInput {
@@ -49,7 +52,8 @@ export function safeText(value: unknown, max: number, allowEmpty = false): value
     && !SECRET_PATTERNS.some(pattern => pattern.test(value));
 }
 export function parseDraftInput(value: unknown): DraftInput | null {
-  if (!object(value) || !exact(value, SAVE_KEYS) || !object(value.request) || !exact(value.request, REQUEST_KEYS)) return null;
+  if (!object(value) || !(exact(value, SAVE_KEYS) || exact(value, [...SAVE_KEYS, 'pilotSource']))
+    || !object(value.request) || !exact(value.request, REQUEST_KEYS)) return null;
   const request = value.request;
   if (!REQUEST_KEYS.every(key => safeText(request[key], LIMITS[key]))
     || !['FULL_RECORD', 'POINTER_RECORD'].includes(request.memoryClass as string)
@@ -58,7 +62,9 @@ export function parseDraftInput(value: unknown): DraftInput | null {
     || !safeText(value.html, 250_000) || !safeText(value.filename, 200)
     || !safeText(value.generatedAt, 40) || !Number.isFinite(Date.parse(value.generatedAt))
     || new Date(value.generatedAt).toISOString() !== value.generatedAt
-    || !Number.isSafeInteger(value.buildNumber) || (value.buildNumber as number) < 1 || (value.buildNumber as number) > 1_000_000) return null;
+    || !Number.isSafeInteger(value.buildNumber) || (value.buildNumber as number) < 1 || (value.buildNumber as number) > 1_000_000
+    || (Object.hasOwn(value, 'pilotSource') && (!object(value.pilotSource) || !exact(value.pilotSource, ['receipt'])
+      || !object(value.pilotSource.receipt) || !object(value.pilotSource.receipt.htmlPilotEvidence)))) return null;
   return value as unknown as DraftInput;
 }
 export function requestIdentity(request: DraftRequest): string {
@@ -75,8 +81,9 @@ export function makeSnapshot(input: DraftInput, owner: DraftPrincipal, now: numb
   return snapshot;
 }
 export function validateSnapshot(value: unknown, owner: DraftPrincipal, now: number): DraftSnapshot | null {
-  if (!object(value) || !exact(value, ['versionId', 'sourceRecordId', 'request', 'html', 'filename', 'generatedAt', 'buildNumber', 'schema', 'state', 'acceptance', 'owner', 'createdAt', 'expiresAt', 'htmlSha256', 'requestSha256'])) return null;
-  const input = parseDraftInput(Object.fromEntries(SAVE_KEYS.map(key => [key, value[key]])));
+  const snapshotKeys = ['versionId', 'sourceRecordId', 'request', 'html', 'filename', 'generatedAt', 'buildNumber', 'schema', 'state', 'acceptance', 'owner', 'createdAt', 'expiresAt', 'htmlSha256', 'requestSha256'];
+  if (!object(value) || !(exact(value, snapshotKeys) || exact(value, [...snapshotKeys, 'pilotSource']))) return null;
+  const input = parseDraftInput(Object.fromEntries([...SAVE_KEYS, ...(Object.hasOwn(value, 'pilotSource') ? ['pilotSource'] : [])].map(key => [key, value[key]])));
   const actualOwner = value.owner;
   if (!input || value.schema !== DRAFT_SCHEMA || value.state !== 'CLIENT_SUBMITTED_UNVERIFIED' || value.acceptance !== 'DRAFT_UNACCEPTED'
     || !object(actualOwner) || !exact(actualOwner, ['userId', 'orgId', 'teamId'])

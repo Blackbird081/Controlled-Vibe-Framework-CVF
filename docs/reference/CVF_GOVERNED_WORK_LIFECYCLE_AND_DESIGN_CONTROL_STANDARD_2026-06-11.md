@@ -370,6 +370,18 @@ instructions and structural checks are not proof of agent behavior or enforcemen
 
 ## Design Control Gate
 
+### Product Milestone Coverage From Roadmap Creation
+
+Mandatory owner extension:
+`docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`.
+Apply at roadmap creation, checkpoint design, milestone admission, dispatch and
+terminal review, including direct Local work. Bind the user outcome, complete
+selected-milestone criterion reconciliation, owned remainder, supporting-work
+stop/return path and separate tranche/milestone conclusions. Missing reconciliation
+holds implementation dispatch; uncertain coverage allows finite verification only,
+subject to the contract's explicit independence decision. Written adoption does
+not imply automatic machine coverage or downstream installation.
+
 Before a roadmap can authorize a work order, it must include a design-control
 block or equivalent sections that answer:
 

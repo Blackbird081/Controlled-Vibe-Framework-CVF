@@ -39,6 +39,12 @@ export function buildContinuationExecution(opts: ContinuationInput): Execution {
         projectLabel: opts.projectLabel ?? parent.projectLabel,
         knowledgeCollectionId: parent.knowledgeCollectionId,
         starterSource: 'history-followup',
+        ...(parent.htmlPilot?.runId && parent.htmlPilot.jobId ? { htmlPilot: {
+            operationKey: `pilot_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+            parentRunId: parent.htmlPilot.runId, rootRunId: parent.htmlPilot.rootRunId,
+            outputSha256: parent.htmlPilot.outputSha256, jobId: parent.htmlPilot.jobId,
+            profileDigest: parent.htmlPilot.profileDigest,
+        } } : {}),
     };
 }
 

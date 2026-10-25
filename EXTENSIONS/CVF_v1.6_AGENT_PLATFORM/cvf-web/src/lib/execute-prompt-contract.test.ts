@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese fictional-content labels and existing localized text use UTF-8.
 import { describe, expect, it } from 'vitest';
 import { buildExecutionPrompt } from './execute-prompt-contract';
 import type { ExecutionRequest } from '@/lib/ai';
@@ -13,6 +14,16 @@ const baseRequest: ExecutionRequest = {
 };
 
 describe('buildExecutionPrompt', () => {
+  it('selects the bounded Vietnamese landing-copy grammar only with a server-trusted pilot branch', () => {
+    const normal = buildExecutionPrompt(baseRequest);
+    const pilot = buildExecutionPrompt(baseRequest, { htmlPilot: 'CREATE' });
+    const revision = buildExecutionPrompt(baseRequest, { htmlPilot: 'REVISION' });
+    expect(normal).toContain('Template Output Contract');
+    expect(normal).not.toContain('CTA: Đăng ký tham gia -> Liên hệ');
+    expect(pilot).toContain('# Không gian đọc Ánh Sao');
+    expect(pilot).toContain('CTA: Đăng ký tham gia -> Liên hệ');
+    expect(revision).toContain('# Ngày hội đọc Ánh Sao');
+  });
   it('attaches CVF Web Redesign DNA for non-coder web handoff requests', () => {
     const prompt = buildExecutionPrompt(baseRequest);
 

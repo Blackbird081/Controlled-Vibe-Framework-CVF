@@ -10,12 +10,14 @@ import type { BoundIntent, BoundOutcome, BoundOutcomeInput, BoundStart } from '.
 import type { BaseEnvelope, BaseIntent, BaseOutcome, BaseReceiptInput, BaseStart, OperationCodec, OperationSchemaKind } from '../receipt-operation-schema';
 import { DRAFT_TTL_MS, MAX_SNAPSHOT_BYTES, SOURCE_ID, VERSION_ID, makeSnapshot, sha256, validateSnapshot,
   type DraftInput, type DraftPrincipal, type DraftSnapshot } from '../html-draft-recovery-contract';
-import { MAX_JOB_METADATA_BYTES, makeDecision, makeJob, makeVersion, parseAcceptVersion, parseCreateJob, parseLinkVersion,
-  reviewMatches, validateDecision, validateJob, validateVersion,
-  type AcceptVersionInput, type CreateJobInput, type HtmlJob, type HtmlJobDecision, type HtmlJobVersion, type LinkVersionInput } from '../html-job-contract';
+import { htmlPilotFilename, renderLockedHtmlPilotSource } from '../html-cta-rendering';
+import { MAX_JOB_METADATA_BYTES, PRODUCT_DECISION_SCHEMA, makeDecision, makeJob, makeVersion, parseAcceptVersion, parseCreateJob, parseLinkVersion,
+  parseProductDecision, reviewMatches, validateDecision, validateJob, validateVersion, validateProductDecision,
+  type AcceptVersionInput, type CreateJobInput, type HtmlJob, type HtmlJobDecision, type HtmlJobVersion, type LinkVersionInput,
+  type ProductDecisionInput, type HtmlPilotProductDecision } from '../html-job-contract';
 
 export interface SyntheticDraftProfile {
-  kind: 'local-synthetic';
+  kind: 'local-synthetic' | 'real-provider-fictional-content';
   root: string;
   production: false;
   jobDecisions?: true;
@@ -27,6 +29,19 @@ export interface SyntheticDraftProfile {
 export type SaveOutcome = 'SAVED' | 'COLLISION' | 'UNCONFIRMED' | 'UNAVAILABLE';
 const safePrincipal = (p: DraftPrincipal) => [p.userId, p.orgId, p.teamId].every(v => typeof v === 'string' && v.length > 0 && v.length <= 150 && /^[A-Za-z0-9_-]+$/.test(v));
 const sameOwner = (a: DraftPrincipal, b: DraftPrincipal) => a.userId === b.userId && a.orgId === b.orgId && a.teamId === b.teamId;
+const PILOT_CLAIM = 'Signed fictional-content pilot draft. Exact version awaits operator acceptance.';
+function canonicalPilotRequest(value: Pick<DraftInput, 'sourceRecordId' | 'request' | 'pilotSource'>) {
+  const evidence = value.pilotSource?.receipt.htmlPilotEvidence;
+  if (!evidence || value.sourceRecordId !== evidence.rootRunId) return null;
+  const rendered = renderLockedHtmlPilotSource(value.request.sourceContent, evidence.parentRunId);
+  return rendered && value.request.title === rendered.title && value.request.sourcePath === `pilot:${evidence.runId}`
+    && value.request.receiptAnchor === evidence.receiptId && value.request.memoryClass === 'FULL_RECORD'
+    && value.request.status === 'DRAFT_UNACCEPTED' && value.request.claimBoundary === PILOT_CLAIM ? rendered : null;
+}
+function canonicalPilotDraft(value: DraftInput | DraftSnapshot): boolean {
+  const rendered = canonicalPilotRequest(value);
+  return !!rendered && value.html === rendered.html && value.filename === htmlPilotFilename(rendered.title);
+}
 
 export type OperationState =
   | { state: 'ABSENT' }
@@ -106,15 +121,19 @@ type RawWrite = { kind: 'SAVED'; outcome: BaseOutcome } | { kind: 'COLLISION' | 
 
 export class HtmlDraftSnapshotStore {
   private readonly root: string;
+  private readonly realPilot: boolean;
   private readonly jobDecisions: boolean;
   private readonly receiptOperations: boolean;
   private readonly boundOperations: boolean;
   constructor(profile: SyntheticDraftProfile, private readonly clock: () => number = Date.now) {
-    if (profile.kind !== 'local-synthetic' || profile.production !== false || !path.isAbsolute(profile.root)
+    if (!['local-synthetic', 'real-provider-fictional-content'].includes(profile.kind)
+      || (profile.kind === 'real-provider-fictional-content' && (profile.receiptOperations || profile.boundReceiptOperations))
+      || profile.production !== false || !path.isAbsolute(profile.root)
       || path.resolve(profile.root) === path.parse(profile.root).root || profile.root.startsWith('\\\\')) {
       throw new Error('SYNTHETIC_PROFILE_REQUIRED');
     }
     this.root = path.resolve(profile.root);
+    this.realPilot = profile.kind === 'real-provider-fictional-content';
     this.jobDecisions = profile.jobDecisions === true;
     this.receiptOperations = profile.receiptOperations === true;
     this.boundOperations = profile.boundReceiptOperations === true;
@@ -137,6 +156,7 @@ export class HtmlDraftSnapshotStore {
   }
   async save(input: DraftInput, owner: DraftPrincipal): Promise<SaveOutcome> {
     if (!safePrincipal(owner) || !VERSION_ID.test(input.versionId) || !SOURCE_ID.test(input.sourceRecordId)) return 'UNAVAILABLE';
+    if (this.realPilot && !canonicalPilotDraft(input)) return 'UNAVAILABLE';
     let snapshot: DraftSnapshot;
     try { snapshot = makeSnapshot(input, owner, this.clock()); }
     catch { return 'UNAVAILABLE'; }
@@ -166,7 +186,8 @@ export class HtmlDraftSnapshotStore {
       if (bytes.byteLength !== stat.size || bytes.byteLength > MAX_SNAPSHOT_BYTES) return null;
       const value = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
       const snapshot = validateSnapshot(value, owner, this.clock());
-      return snapshot?.versionId === versionId && snapshot.sourceRecordId === sourceRecordId ? snapshot : null;
+      return snapshot?.versionId === versionId && snapshot.sourceRecordId === sourceRecordId
+        && (!this.realPilot || canonicalPilotDraft(snapshot)) ? snapshot : null;
     } catch { return null; }
   }
   async list(sourceRecordId: string, owner: DraftPrincipal): Promise<Array<Pick<DraftSnapshot, 'versionId' | 'sourceRecordId' | 'filename' | 'generatedAt' | 'createdAt' | 'expiresAt' | 'state' | 'acceptance'>>> {
@@ -219,7 +240,8 @@ export class HtmlDraftSnapshotStore {
 
   async createJob(input: CreateJobInput, owner: DraftPrincipal): Promise<SaveOutcome> {
     if (!this.jobDecisions || !parseCreateJob(input) || !safePrincipal(owner)
-      || !input.sourceRecordId.startsWith('ncr-synthetic-')) return 'UNAVAILABLE';
+      || !(input.sourceRecordId.startsWith('ncr-synthetic-') && !input.pilotSource
+        || this.realPilot && canonicalPilotRequest(input))) return 'UNAVAILABLE';
     return this.writeSidecar(`job-${input.jobId}.json`, makeJob(input, owner, this.clock()), owner);
   }
   async getJob(jobId: string, sourceRecordId: string, owner: DraftPrincipal): Promise<HtmlJob | null> {
@@ -232,7 +254,10 @@ export class HtmlDraftSnapshotStore {
     if (!this.jobDecisions || !parseLinkVersion(input) || !safePrincipal(owner)) return 'UNAVAILABLE';
     const job = await this.getJob(input.jobId, input.sourceRecordId, owner);
     const snapshot = await this.get(input.versionId, input.sourceRecordId, owner);
-    if (!job || !snapshot || snapshot.requestSha256 !== job.requestSha256) return 'UNAVAILABLE';
+    if (!job || !snapshot || !(job.pilotRootRunId
+      ? snapshot.pilotSource?.receipt.htmlPilotEvidence?.rootRunId === job.pilotRootRunId
+        && snapshot.pilotSource.receipt.htmlPilotEvidence.profileDigest === job.pilotProfileDigest
+      : snapshot.requestSha256 === job.requestSha256 && !snapshot.pilotSource)) return 'UNAVAILABLE';
     const link = makeVersion(job, snapshot, this.clock());
     return this.writeSidecar(`version-${input.versionId}-job.json`, link, owner);
   }
@@ -242,7 +267,13 @@ export class HtmlDraftSnapshotStore {
     if (!link || link.jobId !== jobId || link.sourceRecordId !== sourceRecordId || link.versionId !== versionId) return null;
     const job = await this.getJob(jobId, sourceRecordId, owner);
     const snapshot = await this.get(versionId, sourceRecordId, owner);
-    if (!job || !snapshot || link.requestSha256 !== job.requestSha256 || link.requestSha256 !== snapshot.requestSha256
+    if (!job || !snapshot || !(job.pilotRootRunId
+      ? snapshot.pilotSource?.receipt.htmlPilotEvidence?.rootRunId === job.pilotRootRunId
+        && snapshot.pilotSource.receipt.htmlPilotEvidence.profileDigest === job.pilotProfileDigest
+        && link.pilotSourceRunId === snapshot.pilotSource.receipt.htmlPilotEvidence.runId
+        && link.pilotOutputSha256 === snapshot.pilotSource.receipt.htmlPilotEvidence.outputSha256
+      : link.requestSha256 === job.requestSha256 && !snapshot.pilotSource)
+      || link.requestSha256 !== snapshot.requestSha256
       || link.htmlSha256 !== snapshot.htmlSha256 || link.expiresAt !== new Date(Math.min(Date.parse(job.expiresAt), Date.parse(snapshot.expiresAt))).toISOString()) return null;
     return link;
   }
@@ -252,7 +283,7 @@ export class HtmlDraftSnapshotStore {
     const job = await this.getJob(input.jobId, input.sourceRecordId, owner);
     const link = await this.getVersion(input.jobId, input.sourceRecordId, input.versionId, owner);
     const snapshot = await this.get(input.versionId, input.sourceRecordId, owner);
-    if (!job || !link || !snapshot || !reviewMatches(job.criteria, input.criteriaReview)
+    if (!job || job.pilotRootRunId || !link || !snapshot || !reviewMatches(job.criteria, input.criteriaReview)
       || input.requestSha256 !== link.requestSha256 || input.htmlSha256 !== link.htmlSha256) return 'UNAVAILABLE';
     const expiry = new Date(Math.min(Date.parse(job.expiresAt), Date.parse(link.expiresAt), Date.parse(snapshot.expiresAt))).toISOString();
     const decision = makeDecision(input, owner, expiry, this.clock());
@@ -270,6 +301,26 @@ export class HtmlDraftSnapshotStore {
       || decision.expiresAt !== new Date(Math.min(Date.parse(job.expiresAt), Date.parse(link.expiresAt), Date.parse(snapshot.expiresAt))).toISOString()
       || decision.requestSha256 !== link.requestSha256 || decision.htmlSha256 !== link.htmlSha256) return null;
     return decision;
+  }
+
+  async decideProductVersion(input: ProductDecisionInput, owner: DraftPrincipal): Promise<SaveOutcome> {
+    if (!this.realPilot || !parseProductDecision(input) || !safePrincipal(owner)) return 'UNAVAILABLE';
+    const version = await this.getVersion(input.jobId, input.sourceRecordId, input.versionId, owner);
+    const snapshot = await this.get(input.versionId, input.sourceRecordId, owner);
+    if (!version?.pilotEvidenceSha256 || !snapshot?.pilotSource
+      || version.htmlSha256 !== input.htmlSha256 || version.pilotEvidenceSha256 !== input.sourceEvidenceSha256) return 'UNAVAILABLE';
+    const expiresAt = new Date(Math.min(Date.parse(version.expiresAt), Date.parse(snapshot.expiresAt))).toISOString();
+    const decision: HtmlPilotProductDecision = { ...input, schema: PRODUCT_DECISION_SCHEMA,
+      owner: { ...owner }, actor: { ...owner }, decidedAt: new Date(this.clock()).toISOString(), expiresAt };
+    return this.writeSidecar(`product-${input.jobId}-${input.versionId}.json`, decision, owner);
+  }
+
+  async getProductDecision(jobId: string, sourceRecordId: string, versionId: string, owner: DraftPrincipal): Promise<HtmlPilotProductDecision | null> {
+    if (!this.realPilot || ![jobId, versionId].every(x => VERSION_ID.test(x)) || !SOURCE_ID.test(sourceRecordId)) return null;
+    const value = validateProductDecision(await this.readSidecar(`product-${jobId}-${versionId}.json`, owner), owner, this.clock());
+    const version = await this.getVersion(jobId, sourceRecordId, versionId, owner);
+    return value && version && value.jobId === jobId && value.versionId === versionId && value.sourceRecordId === sourceRecordId
+      && value.htmlSha256 === version.htmlSha256 && value.sourceEvidenceSha256 === version.pilotEvidenceSha256 ? value : null;
   }
 
   // ---- Receipt operations: one-shot, monotonic exclusive-create records in a schema-specific operations child directory. ----

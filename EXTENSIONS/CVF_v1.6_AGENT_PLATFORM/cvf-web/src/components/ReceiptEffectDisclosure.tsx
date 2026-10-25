@@ -1,5 +1,41 @@
 'use client';
+import { useEffect, useState } from 'react';
+import type { ExecutionRequest, GovernanceEvidenceReceipt } from '@/lib/ai';
 import type { BoundDisclosure } from '@/lib/artifacts-bound-receipt-contract';
+import type { HtmlPilotPublicDisclosure } from '@/lib/server/ncr-html-pilot-runtime-profile';
+import { pilotCopy, type PilotLanguage } from './html-pilot-copy';
+
+/** Shared labels and signed-source context for the artifact effect disclosure. */
+export const ARTIFACT_DISCLOSURE_GROUPS = ['output', 'destination', 'cost', 'save', 'decline'] as const;
+
+/** Exact browser-carried source summary; server verification remains mandatory before rendering or saving. */
+export function PilotArtifactSourceSummary({ receipt, language = 'en' }: { receipt: GovernanceEvidenceReceipt; language?: PilotLanguage }) {
+  const source = receipt.htmlPilotEvidence;
+  const copy = pilotCopy(language).summary;
+  return <aside data-testid="html-pilot-source-summary" aria-label={copy.candidate(source?.runId ?? copy.unavailable, receipt.receiptId)}
+    className="rounded-lg border border-indigo-300 p-3 text-xs">
+    <p>{copy.candidate(source?.runId ?? copy.unavailable, receipt.receiptId)}</p>
+    <p>{copy.localRender}</p>
+  </aside>;
+}
+
+/** Fetches the current pilot effect disclosure before any paid attempt can be confirmed. */
+export function useHtmlPilotPublicDisclosure(htmlPilotIntent: ExecutionRequest['htmlPilotIntent']) {
+  const [pilotDisclosure, setPilotDisclosure] = useState<HtmlPilotPublicDisclosure | null>(null);
+  const [pilotDisclosureError, setPilotDisclosureError] = useState(false);
+  useEffect(() => {
+    if (!htmlPilotIntent) return;
+    let active = true;
+    void fetch('/api/execute', { cache: 'no-store' }).then(async response => {
+      const value = await response.json() as { success?: boolean; disclosure?: HtmlPilotPublicDisclosure };
+      if (active && response.ok && value.success && value.disclosure) setPilotDisclosure(value.disclosure);
+      else if (active) setPilotDisclosureError(true);
+    }).catch(() => { if (active) setPilotDisclosureError(true); });
+    return () => { active = false; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- one disclosure read per pilot operation key; the intent object identity changes on every render
+  }, [htmlPilotIntent?.operationKey]);
+  return { pilotDisclosure, pilotDisclosureError };
+}
 
 /** Capability boundary the job controls consume. Only an exactly validated disclosure can ever select the bound case. */
 export type EffectBoundary = { kind: 'LOCAL_SYNTHETIC' } | { kind: 'BOUND_ENGINE_RECEIPT'; disclosure: BoundDisclosure };
@@ -88,5 +124,21 @@ export function ReceiptEffectDisclosure({ disclosure, language }: { disclosure: 
       {rows.map(([id, label, value]) => <div key={id} data-testid={`bound-disclosure-${id}`}>
         <dt className="inline font-semibold">{label}: </dt><dd className="inline">{value}</dd></div>)}
     </dl>
+  </section>;
+}
+
+/** The live pilot disclosure is supplied by an authenticated GET and grants no effect by itself. */
+export function HtmlPilotEffectDisclosure({ disclosure, language }: { disclosure: HtmlPilotPublicDisclosure; language: 'en' | 'vi' }) {
+  const vi = language === 'vi';
+  return <section data-testid="html-pilot-effect-disclosure" aria-label={vi ? 'Tác động thật của thử nghiệm HTML' : 'Real HTML pilot effect'}
+    className="rounded-lg border border-amber-400 bg-amber-50 p-4 text-sm text-gray-900">
+    <h3 className="font-semibold">{vi ? 'Một lượt AI thật có phí' : 'One real paid AI attempt'}</h3>
+    <p>{vi ? 'Nội dung hư cấu và chỉ dẫn tĩnh CVF được gửi tới' : 'Fictional content and static CVF instructions go to'} {disclosure.provider} / {disclosure.model} ({disclosure.endpoint}).</p>
+    <p>{vi ? 'Lưu giữ: tối đa 30 ngày, có ngoại lệ pháp lý và an ninh. Quyền truy cập theo nhà cung cấp và cấu hình hiện hành.'
+      : 'Retention: up to 30 days, with legal and security exceptions. Access follows the provider and current configuration.'}</p>
+    <p>{vi ? 'Giới hạn' : 'Caps'}: {disclosure.maxPaidStarts} {vi ? 'lượt' : 'starts'}, {disclosure.maxTokens} tokens, USD {disclosure.maxUsd}, {disclosure.maxSeconds}s.</p>
+    <p>{vi ? 'Dừng chỉ dừng chờ tại đây; kết quả từ xa và chi phí có thể chưa rõ. Trạng thái chưa rõ không tự gửi lại.'
+      : 'Stop ends local waiting only; remote outcome and cost may remain unknown. An unknown attempt is never resent automatically.'}</p>
+    <p>{vi ? 'Bản HTML lưu vẫn chờ người vận hành nghiệm thu đúng phiên bản.' : 'Saved HTML still awaits operator acceptance of the exact version.'}</p>
   </section>;
 }

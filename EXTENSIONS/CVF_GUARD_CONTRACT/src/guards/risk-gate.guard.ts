@@ -15,6 +15,26 @@ export const RISK_DESCRIPTIONS: Record<CVFRiskLevel, string> = {
 
 export const GUARD_CONTRACT_RISK_GATE_ADAPTER_VERSION = 'phase2b-guard-contract-risk-gate-adapter-1';
 
+function hasMatchingR2Approval(context: GuardRequestContext, now: number): boolean {
+  const evidence = context.riskApproval;
+  if (!evidence || typeof evidence !== 'object' || Array.isArray(evidence)) return false;
+  const actorId = context.metadata?.actorId;
+  return evidence.status === 'APPROVED'
+    && ['OPERATOR', 'HUMAN', 'GOVERNOR'].includes(evidence.approvedByRole)
+    && typeof evidence.approvalRef === 'string' && evidence.approvalRef.trim().length > 0
+    && evidence.revoked === false
+    && evidence.subjectRole === context.role && evidence.subjectPhase === context.phase
+    && evidence.action === context.action
+    && typeof actorId === 'string' && actorId.length > 0 && evidence.actorId === actorId
+    && typeof context.approvalBinding === 'string' && context.approvalBinding.length > 0
+    && evidence.binding === context.approvalBinding
+    && typeof context.traceHash === 'string' && /^[a-f0-9]{64}$/.test(context.traceHash)
+    && evidence.traceHash === context.traceHash
+    && typeof evidence.expiresAt === 'string'
+    && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/.test(evidence.expiresAt)
+    && Number.isFinite(Date.parse(evidence.expiresAt)) && Date.parse(evidence.expiresAt) > now;
+}
+
 export interface GuardContractRiskGateAdapterSnapshot {
   version: typeof GUARD_CONTRACT_RISK_GATE_ADAPTER_VERSION;
   source: 'guard-contract:risk-gate';
@@ -113,6 +133,16 @@ export class RiskGateGuard implements Guard {
       }
 
       if (context.role === 'BUILDER' || context.role === 'ANALYST' || context.role === 'AI_AGENT') {
+        if (hasMatchingR2Approval(context, Date.now())) {
+          return {
+            guardId: this.id,
+            decision: 'ALLOW',
+            severity: 'WARN',
+            reason: `R2 approval evidence verified for role "${context.role}" and this exact action.`,
+            timestamp,
+            metadata: { approvalRef: context.riskApproval!.approvalRef, role: context.role },
+          };
+        }
         return {
           guardId: this.id,
           decision: 'ESCALATE',

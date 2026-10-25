@@ -23,7 +23,7 @@ from api.artifact_receipt_contract import (  # noqa: E402
     BOUND_PROXY_PATH, BOUND_SCHEMA, ENGINE_CHALLENGE_PATH, ENGINE_EVALUATE_PATH, WIRE_SCHEMA, bound_sha256, canonical_ascii, canonical_bytes, config_digest_of,
     sha256_hex, sign_message,
 )
-from api.artifact_receipts import BoundReceiptContext, create_fixture_orchestrator, create_router, handle_bound_request  # noqa: E402
+from api.artifact_receipts import create_bound_receipt_context, create_fixture_orchestrator, create_router, handle_bound_request  # noqa: E402
 from ledger_layer.artifact_receipt_binding import open_bound_ledger  # noqa: E402
 
 PEER_OWNER = {"userId": "peer-user", "orgId": "peer-org", "teamId": "peer-team"}
@@ -48,8 +48,8 @@ def make_config(ledger, timeout_ms=4000):
 
 
 def make_context(ledger, config=None, key=ENGINE_KEY, key_reference=KEY_REFERENCE):
-    return BoundReceiptContext(config=config or make_config(ledger), key_reference=key_reference, key=key, ledger=ledger,
-                               orchestrator=create_fixture_orchestrator(ledger))
+    return create_bound_receipt_context(config=config or make_config(ledger), key_reference=key_reference, key=key, ledger=ledger,
+                                        orchestrator=create_fixture_orchestrator(ledger))
 
 
 def signed_request(config, wire, key=ENGINE_KEY):
@@ -67,14 +67,16 @@ async def drive(context, request_id):
     base = {"schema": WIRE_SCHEMA, "owner": PEER_OWNER, "operationKey": sha256_hex(request_id), "attemptId": request_id, "configDigest": config["configDigest"],
             "challengeNonce": nonce}
     path, headers, body = signed_request(config, dict(base, kind="CHALLENGE"))
-    first = await handle_bound_request(context, path, Headers(headers=headers), body)
+    first = await handle_bound_request(context, path, Headers(headers=headers), body, origin=config["engineOrigin"], method="POST",
+                                       deadline_remaining_ms=config["timeoutMs"])
     if first.status != 200:
         raise RuntimeError(f"challenge refused: {first.status} {first.body!r}")
     wire = dict(base, kind="EVALUATE", requestSha256=sha256_hex("peer-request"), artifactId="peer-artifact", payloadSha256=bound_sha256(evaluate),
                 envelopeSha256=sha256_hex("peer-envelope"), phase="REVIEW", riskLevel="R1", instanceId=config["instanceId"], storeBindingId=config["storeBindingId"],
                 evaluate=evaluate)
     path, headers, body = signed_request(config, wire)
-    second = await handle_bound_request(context, path, Headers(headers=headers), body)
+    second = await handle_bound_request(context, path, Headers(headers=headers), body, origin=config["engineOrigin"], method="POST",
+                                        deadline_remaining_ms=config["timeoutMs"])
     if second.status != 200:
         raise RuntimeError(f"evaluate refused: {second.status} {second.body!r}")
 
@@ -117,19 +119,34 @@ def run_bridge(root):
             message = json.loads(line)
             kind = message["kind"]
             if kind == "CONFIGURE":
-                context = BoundReceiptContext(config=message["config"], key_reference=message["keyReference"], key=bytes.fromhex(message["keyHex"]), ledger=ledger,
-                                              orchestrator=create_fixture_orchestrator(ledger), challenge_capacity=message.get("challengeCapacity", 64))
+                context = create_bound_receipt_context(config=message["config"], key_reference=message["keyReference"], key=bytes.fromhex(message["keyHex"]), ledger=ledger,
+                                                       orchestrator=create_fixture_orchestrator(ledger), challenge_capacity=message.get("challengeCapacity", 64))
                 app = FastAPI()
                 app.include_router(create_router(lambda: context))
                 frame({"kind": "READY"})
             elif kind == "REQUEST":
+                config = context.config
+                from urllib.parse import urlsplit
+                destination = urlsplit(message["origin"] + message["path"])
+                if (message["origin"] != config["engineOrigin"] or message.get("method", "POST") != "POST"
+                        or message["path"] not in (config["engineChallengePath"], config["engineEvaluatePath"])
+                        or destination.query or destination.fragment):
+                    from api.artifact_receipts import _error
+                    denied = _error(422, "DESTINATION")
+                    frame({"kind": "RESPONSE", "id": message["id"], "status": denied.status, "headers": denied.headers,
+                           "bodyHex": denied.body.hex(), "asgiEntries": 0})
+                    continue
                 async def call(msg=message):
-                    transport = httpx.ASGITransport(app=app)
-                    async with httpx.AsyncClient(transport=transport, base_url="http://engine.invalid") as client:
-                        return await client.post(msg["path"], headers=msg["headers"], content=bytes.fromhex(msg["bodyHex"]))
+                    async def admitted(scope, receive, send):
+                        scope["state"] = {"bound_deadline_remaining_ms": msg.get("remainingMs")}
+                        await app(scope, receive, send)
+                    transport = httpx.ASGITransport(app=admitted)
+                    async with httpx.AsyncClient(transport=transport, base_url="http://engine.invalid:8100") as client:
+                        return await client.request(msg.get("method", "POST"), msg["origin"] + msg["path"], headers=msg["headers"],
+                                                    content=bytes.fromhex(msg["bodyHex"]))
                 response = loop.run_until_complete(call())
                 frame({"kind": "RESPONSE", "id": message["id"], "status": response.status_code, "headers": {k: v for k, v in response.headers.items()},
-                       "bodyHex": response.content.hex()})
+                       "bodyHex": response.content.hex(), "asgiEntries": 1})
             elif kind == "LEDGER":
                 chain = ledger.read_chain()
                 frame({"kind": "LEDGER", "requestIds": [block["event"]["request_id"] for block in chain], "appended": ledger.appended})

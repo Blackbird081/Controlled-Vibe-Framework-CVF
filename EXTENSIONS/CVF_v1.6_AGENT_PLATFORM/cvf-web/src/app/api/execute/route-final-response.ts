@@ -1,3 +1,4 @@
+import { InvalidRequestBodyEncodingError } from '@/lib/bounded-request-body';
 import { NextResponse } from 'next/server';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { evaluateDurableMemoryWrite, resolveDurableMemoryActorRole } from '@/lib/durable-memory-route';
@@ -20,7 +21,7 @@ import { buildWorkflowExecutionProjection } from '@/lib/workflows/workflow-resol
 import { withSessionAuditPayload } from '@/lib/middleware-auth';
 import { calculateTokenCost } from '@/lib/model-pricing';
 import { buildExecuteResponseReadouts } from './route-response-readouts';
-import { buildProviderAttemptReconciliation } from '@/lib/provider-attempt-admission';
+import { buildProviderAttemptReconciliation, createProviderAttemptLedger, buildProviderRequestCancelledResponse } from '@/lib/provider-attempt-admission';
 import type { ProviderAttemptLedger } from '@/lib/provider-attempt-admission';
 import type { AIProvider, ExecutionRequest, ExecutionResponse } from '@/lib/ai';
 import type { GuardPipelineResult } from '@/lib/guard-runtime-adapter';
@@ -39,6 +40,11 @@ import type { ExecutionIdentityDecision } from '@/lib/execution-identity';
 import type { AifMemoryReinjectionDecision } from '@/lib/aif-memory-reinjection';
 import type { DurableMemoryRouteResult } from '@/lib/durable-memory-route';
 import type { ProviderAttemptReconciliationReceipt } from '@/lib/ai';
+import { issueHtmlExecutionEvidence, htmlPilotRequestSha256 } from '@/lib/server/html-execution-evidence';
+import { renderLockedHtmlPilotSource } from '@/lib/html-cta-rendering';
+import { buildReceiptIntegrityAnchor } from '@/lib/receipt-integrity-anchor';
+import type { HtmlPilotPrepared } from './route-html-pilot';
+import type { HtmlPilotClaim } from '@/lib/server/ncr-html-pilot-operation-ledger';
 
 interface BuildOutputValidationExhaustedResponseParams {
     session: SessionCookie | null;
@@ -131,12 +137,15 @@ export async function buildOutputValidationExhaustedResponse(params: BuildOutput
 }
 
 interface BuildExecuteFinalResponseParams {
+    htmlPilotClaim?: { prepared: HtmlPilotPrepared; claim: HtmlPilotClaim };
     aiResult: ExecutionResponse;
     outputValidation?: ValidationResult;
     retryState: RetryState;
     request: ExecutionRequest;
     template?: Template;
     routeStartedAtMs: number;
+    routeStartedMonotonicMs: number;
+    pilotProviderElapsedMs: number;
     session: SessionCookie | null;
     serviceIdentity: string | null;
     isServiceAllowed: boolean;
@@ -173,6 +182,8 @@ export async function buildExecuteFinalResponse(params: BuildExecuteFinalRespons
         request,
         template,
         routeStartedAtMs,
+        routeStartedMonotonicMs,
+        pilotProviderElapsedMs,
         session,
         serviceIdentity,
         isServiceAllowed,
@@ -199,6 +210,7 @@ export async function buildExecuteFinalResponse(params: BuildExecuteFinalRespons
         filteredPrompt,
         actorRoleGate,
         providerAttemptReconciliation,
+        htmlPilotClaim,
     } = params;
 
     // A failed or empty response cannot become a completed artifact downstream.
@@ -480,6 +492,34 @@ export async function buildExecuteFinalResponse(params: BuildExecuteFinalRespons
         auditFeedbackValidationReadout,
     });
 
+    if (htmlPilotClaim && aiResult.success && aiResult.output) {
+        const { prepared, claim } = htmlPilotClaim;
+        // A source that the exact job verifier cannot render must not receive a signed pilot outcome.
+        if (!renderLockedHtmlPilotSource(aiResult.output, prepared.parentRunId)) {
+            return NextResponse.json({ success: false, error: 'PILOT_OUTPUT_FORMAT_REFUSED_NO_RESEND' }, { status: 422 });
+        }
+        const secret = process.env.CVF_RECEIPT_HMAC_SECRET ?? process.env.CVF_AUDIT_SIGNING_KEY ?? '';
+        if (aiResult.model !== prepared.profile.model) {
+            return NextResponse.json({ success: false, error: 'PILOT_ACTUAL_MODEL_MISMATCH' }, { status: 503 });
+        }
+        const routeElapsedMs = Math.max(0, performance.now() - routeStartedMonotonicMs);
+        governanceEvidenceReceipt.htmlPilotTiming = { schema: 'cvf.htmlPilotTiming.v1', providerAwaitMs: pilotProviderElapsedMs,
+            localGovernanceMs: Math.max(0, routeElapsedMs - pilotProviderElapsedMs), routeElapsedMs };
+        const { receiptIntegrity: _oldIntegrity, htmlPilotEvidence: _oldPilot, ...unsigned } = governanceEvidenceReceipt;
+        governanceEvidenceReceipt.receiptIntegrity = buildReceiptIntegrityAnchor({ receipt: unsigned,
+            signingSecret: secret, externalAnchorId: process.env.CVF_RECEIPT_EXTERNAL_ANCHOR_ID,
+            externalAnchorUrl: process.env.CVF_RECEIPT_EXTERNAL_ANCHOR_URL });
+        const evidence = issueHtmlExecutionEvidence({ owner: prepared.owner, operationKey: prepared.operationKey,
+            requestSha256: prepared.requestSha256, runId: claim.runId, rootRunId: prepared.rootRunId ?? claim.runId,
+            parentRunId: prepared.parentRunId, parentOutputSha256: prepared.parentOutputSha256,
+            htmlJobId: prepared.htmlJobId, receipt: governanceEvidenceReceipt, output: aiResult.output,
+            provider: routedProvider, model: aiResult.model, profileDigest: prepared.profile.manifestSha256, secret });
+        if (!evidence || !(await prepared.ledger.saveOutcome(claim, evidence.outputSha256, htmlPilotRequestSha256(evidence)))) {
+            return NextResponse.json({ success: false, error: 'PILOT_SIGNED_OUTCOME_UNAVAILABLE_NO_RESEND' }, { status: 503 });
+        }
+        governanceEvidenceReceipt.htmlPilotEvidence = evidence;
+    }
+
     return NextResponse.json({
         ...aiResult,
         usage,
@@ -538,4 +578,33 @@ export async function buildExecuteFinalResponse(params: BuildExecuteFinalRespons
         ...(phase2cProductBrief ? { phase2cProductBrief } : {}),
         ...(phase3eOperationalMetrics ? { phase3eOperationalMetrics } : {}),
     });
+}
+
+/** Common error response owner; cancellation keeps the exact admitted ledger. */
+export function buildExecuteRouteFailure(error: unknown, ledgerForCatch: ProviderAttemptLedger | undefined,
+    signal: AbortSignal | undefined, provider: string, model: string | undefined) {
+        if (signal?.aborted) {
+            const ledger = ledgerForCatch ?? createProviderAttemptLedger({ identityKind: 'service', identityHash: 'pre-admission-cancelled', providerModel: `alibaba:${model ?? 'default'}` });
+            return buildProviderRequestCancelledResponse({ ledger,
+                routedProvider: provider, requestedModel: model });
+        }
+        if (error instanceof InvalidRequestBodyEncodingError) {
+            return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+        }
+        console.error('Execute API error:', error);
+        // F01: carry reconciliation evidence here too when admission had
+        // already started; omit it when the error predates admission.
+        const catchReconciliation = ledgerForCatch
+            ? buildProviderAttemptReconciliation(ledgerForCatch, 'unknown', 'unknown')
+            : undefined;
+        return NextResponse.json(
+            {
+                success: false,
+                error: error instanceof Error ? error.message : 'Internal server error',
+                provider: 'unknown',
+                model: 'unknown',
+                ...(catchReconciliation ? { providerAttemptReconciliation: catchReconciliation } : {}),
+            },
+            { status: 500 },
+        );
 }

@@ -80,6 +80,9 @@ REQUIRED_AGENTS_HEADINGS: tuple[str, ...] = (
 )
 
 AGENTS_DIRECT_LITERALS: tuple[str, ...] = (
+    "docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md",
+    "Verification questions do not change approved direction",
+    "Preserve native capability reuse",
     "CVF_SESSION_MEMORY.md", "CVF_SESSION/ACTIVE_SESSION_STATE.json",
     "Mandatory Agent Workspace State Generated Aggregate Guard",
     "CVF_SESSION/agent_workspace/ACTIVE_AGENT_WORKSPACE_STATE.json",
@@ -119,6 +122,8 @@ TEMPLATE_ROLE_TOKENS: tuple[str, ...] = (
     "REVIEWER", "CLOSER", "SESSION_SYNC_STEWARD",
 )
 TEMPLATE_REHYDRATION_TOKENS: tuple[str, ...] = (
+    "Verification questions do not change approved direction",
+    "Preserve native capability reuse",
     "Mandatory Continuity Rehydration", "new or resumed chat/session",
     "new tranche or work order", "Do not rely on chat history",
     "BLOCKED_CONTINUITY_DRIFT",

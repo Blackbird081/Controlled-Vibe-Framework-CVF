@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "cvf.preapprovalFeasibility.v1",
+  "proposal": {
+    "path": "docs/reference/CVF_NCR_C1_S1_REASSESSED_ADMISSION_PROPOSAL_2026-10-08.md",
+    "sha256": "cb32c740c0fd1d6403036fa223476a4c93dcf7a6bdb603e61f59034c06696db5"
+  },
+  "approvalTarget": {
+    "path": "docs/reference/CVF_NCR_C1_S1_REASSESSED_ADMISSION_PROPOSAL_2026-10-08.md",
+    "sha256": "cb32c740c0fd1d6403036fa223476a4c93dcf7a6bdb603e61f59034c06696db5",
+    "prospectiveOutcomeSha256": "4270347829507cc1be5a32cb979c4820b9128095ffefbe954a12362bd472f7fd"
+  },
+  "prospectiveOutcome": {
+    "schemaVersion": "cvf.semanticConvergenceControl.v1",
+    "problemKey": "local-supervisor-source-contract",
+    "chainMode": "SUCCESSOR",
+    "chainOrdinal": 2,
+    "predecessor": {
+      "path": "docs/reviews/CVF_CVF_NCR_S05_S1_SUPERVISOR_SOURCE_R1_WORKER_RETURN_2026-10-03.md",
+      "sha256": "12116c9c696752b487b74de9d6ec75bd3e53e90efad92b8f6a6f7f72512bd6ce"
+    },
+    "blockerDelta": {
+      "prior": [
+        "SOURCE_CONTRACT_NOT_IMPLEMENTED",
+        "SOURCE_STATIC_REVIEW_PENDING",
+        "SOURCE_CONTRACT_STATIC_DEFECTS",
+        "SOURCE_CREATION_EVIDENCE_DEVIATIONS"
+      ],
+      "resolved": [
+        "SOURCE_STATIC_REVIEW_PENDING"
+      ],
+      "retained": [
+        "SOURCE_CONTRACT_NOT_IMPLEMENTED",
+        "SOURCE_CONTRACT_STATIC_DEFECTS",
+        "SOURCE_CREATION_EVIDENCE_DEVIATIONS"
+      ],
+      "new": [],
+      "reopened": [],
+      "current": [
+        "SOURCE_CONTRACT_NOT_IMPLEMENTED",
+        "SOURCE_CONTRACT_STATIC_DEFECTS",
+        "SOURCE_CREATION_EVIDENCE_DEVIATIONS"
+      ]
+    },
+    "resolutionEvidence": {
+      "SOURCE_STATIC_REVIEW_PENDING": {
+        "evidenceClass": "ACCEPTED_REVIEW",
+        "evidencePath": "docs/reference/CVF_NCR_C1_S1_ARCHITECTURAL_REASSESSMENT_2026-10-08.md",
+        "sha256": "e9ff0616c1c4a2e0ba65157c444589661c07787cbb2de15a4fa57159b30da335",
+        "locator": "S1-R1-STATIC-REVIEW-COMPLETION-ACCEPTED-20261008"
+      }
+    },
+    "counters": {
+      "partialReadyClosures": 0,
+      "reviewerScopeExpansions": 0,
+      "sameClaimCorrections": 1,
+      "nonDecreasingBlockerTransitions": 0
+    },
+    "claims": [
+      {
+        "claimId": "S1_REASSESSED_SOURCE_PLAN_ONLY",
+        "claimClass": "DOCUMENTATION_ONLY",
+        "proofClass": "PROPOSAL_ONLY_NO_RUNTIME_READINESS",
+        "evidenceRef": "docs/reference/CVF_NCR_C1_S1_ARCHITECTURAL_REASSESSMENT_2026-10-08.md"
+      }
+    ],
+    "requiredDisposition": "CONTINUE_BOUNDED",
+    "successorScope": "INTEGRATED_ROOT_CONTRACT"
+  },
+  "phasePrerequisites": {
+    "phase": "S1_ARCHITECTURAL_ADMISSION_PLANNING",
+    "rows": [
+      {
+        "requirementId": "LOCAL_REVIEW_COMPLETION",
+        "requiredForPhase": true,
+        "evidence": {
+          "path": "docs/reference/CVF_NCR_C1_S1_ARCHITECTURAL_REASSESSMENT_2026-10-08.md",
+          "sha256": "e9ff0616c1c4a2e0ba65157c444589661c07787cbb2de15a4fa57159b30da335",
+          "locator": "S1-R1-STATIC-REVIEW-COMPLETION-ACCEPTED-20261008"
+        },
+        "deferredToPhase": null
+      },
+      {
+        "requirementId": "RETAINED_SOURCE_DOCS_APPROVAL",
+        "requiredForPhase": true,
+        "evidence": {
+          "path": "docs/reference/CVF_NCR_C1_S1_APPROVAL_DISPATCH_DISPOSITION_2026-10-08.md",
+          "sha256": "d998ca001303859f1e694c23451b7fa473b145e198e7bba045fac593288e3f01",
+          "locator": "## Approval Record"
+        },
+        "deferredToPhase": null
+      },
+      {
+        "requirementId": "EXACT_SOURCE_SCOPE",
+        "requiredForPhase": true,
+        "evidence": {
+          "path": "docs/reference/CVF_NCR_C1_MANIFEST_CONTROL_SOURCE_PROPOSAL_2026-10-08.md",
+          "sha256": "c9b561f3b6053ba0518d460e908a0640183381a9e64d1f25237a33a1547af8e1",
+          "locator": "## Purpose"
+        },
+        "deferredToPhase": null
+      },
+      {
+        "requirementId": "NATIVE_ABI_SOURCE_CONTRACT",
+        "requiredForPhase": false,
+        "evidence": null,
+        "deferredToPhase": "S1_SOURCE_SPECIFICATION"
+      },
+      {
+        "requirementId": "NEW_SOURCE_STATIC_REVIEW",
+        "requiredForPhase": false,
+        "evidence": null,
+        "deferredToPhase": "S1_RETURN_REVIEW"
+      },
+      {
+        "requirementId": "HOST_DOCKER_OBSERVATIONS",
+        "requiredForPhase": false,
+        "evidence": null,
+        "deferredToPhase": "S2_HOST_READINESS"
+      }
+    ]
+  },
+  "requestQueue": null
+}

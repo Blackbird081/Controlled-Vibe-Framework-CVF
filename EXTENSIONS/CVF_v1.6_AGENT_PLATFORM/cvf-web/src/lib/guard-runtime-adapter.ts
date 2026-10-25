@@ -25,6 +25,8 @@ export {
   type GuardSeverity,
   type GuardResult,
   type GuardRequestContext,
+  type BuildAuthorityEvidence,
+  type RiskApprovalEvidence,
   type Guard,
   type GuardPipelineResult,
   type GuardAuditEntry,
@@ -61,7 +63,7 @@ export {
 } from 'cvf-guard-contract';
 
 import { GuardRuntimeEngine, createGuardEngine } from 'cvf-guard-contract';
-import type { GuardRuntimeConfig, GuardRequestContext, CVFPhase, CVFRiskLevel, CVFRole } from 'cvf-guard-contract';
+import type { GuardRuntimeConfig, GuardRequestContext, CVFPhase, CVFRiskLevel, CVFRole, BuildAuthorityEvidence, RiskApprovalEvidence } from 'cvf-guard-contract';
 
 // ─── Backward-compatible aliases ─────────────────────────────────────
 
@@ -90,11 +92,17 @@ export interface WebGuardInput {
   role?: string;
   userRole?: string; // Enterprise RBAC role
   agentId?: string;
+  actorId?: string;
   action?: string;
   templateCategory?: string;
   intent?: string;
   mutationCount?: number;
   fileScope?: string[];
+  targetFiles?: string[];
+  traceHash?: string;
+  approvalBinding?: string;
+  riskApproval?: RiskApprovalEvidence;
+  buildAuthority?: BuildAuthorityEvidence;
   aiCommit?: {
     commitId: string;
     agentId: string;
@@ -121,9 +129,15 @@ export function buildWebGuardContext(input: WebGuardInput): GuardRequestContext 
     action: input.action || input.intent || 'execute_template',
     mutationCount: input.mutationCount,
     fileScope: input.fileScope,
+    targetFiles: input.targetFiles,
+    traceHash: input.traceHash,
+    approvalBinding: input.approvalBinding,
+    riskApproval: input.riskApproval,
+    buildAuthority: input.buildAuthority,
     channel: 'web',
     metadata: {
       userRole: input.userRole,
+      actorId: input.actorId,
       ...(input.aiCommit ? { ai_commit: input.aiCommit } : {}),
     },
   };

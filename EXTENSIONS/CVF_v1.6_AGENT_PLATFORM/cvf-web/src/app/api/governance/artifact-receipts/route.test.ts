@@ -6,12 +6,12 @@ import { WIRE_SCHEMA, boundRequestSha256, canonicalBytes, parseCanonicalJson, pa
 import type { ControlledEvaluateRequest } from '@/lib/artifacts-receipt-operation-contract';
 import { createBoundReceiptHandlers } from '@/lib/server/bound-receipt-api';
 import { createBoundReceiptFixtureProfile } from '@/lib/server/bound-receipt-profile';
-import { EXPECTED_ACTION, type WireRequest, type WireResponse, type WireSend } from '@/lib/server/bound-receipt-transport';
+import { EXPECTED_ACTION, createDeadline, type Deadline, type WireRequest, type WireResponse, type WireSend } from '@/lib/server/bound-receipt-transport';
 import * as routeModule from './route';
 
 const sha = (text: string) => createHash('sha256').update(text).digest('hex');
 const NOW = 1_760_000_000_000;
-const ROOT = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-source-20261019', 'worker', 'roots', 'route-unit');
+const ROOT = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-authority-repair-20261020', 'worker', 'roots', 'route-unit');
 const owner = { userId: 'u1', orgId: 'o1', teamId: 't1' };
 const CONFIG_INPUT: BoundConfigInput = { policyRevision: 'fixture-policy-r1', transformRevision: 'fixture-transform-1', endpointId: 'fixture-endpoint', storeId: 'fixture-store',
   authReference: 'fixture-bundle-1', authScope: 'two-hop-fixture', webOrigin: 'http://web.invalid:3000', engineOrigin: 'http://engine.invalid:8100',
@@ -62,9 +62,13 @@ function signed(k: Kit, wire: unknown, over: { hop?: 'EXPORT_PROXY' | 'PROXY_ENG
   const message = k.keyring.sign(over.hop ?? 'EXPORT_PROXY', over.kind ?? 'REQUEST', over.path ?? k.config.proxyPath, body, over.at ?? NOW, over.nonce);
   return { body, nonce: message.nonce, headers: message.headers };
 }
+const admittedPost = (k: Kit, request: Request, timeoutMs = 1000) => {
+  const owner = createDeadline(timeoutMs, request.signal);
+  return k.handlers.POST(request, owner.view).finally(() => owner.dispose());
+};
 const post = (k: Kit, sent: Sent, url = `${CONFIG_INPUT.webOrigin}${k.config.proxyPath}`, drop: string[] = []) => {
   const headers = { ...sent.headers }; for (const name of drop) delete headers[name];
-  return k.handlers.POST(new Request(url, { method: 'POST', headers, body: sent.body as unknown as BodyInit }));
+  return admittedPost(k, new Request(url, { method: 'POST', headers, body: sent.body as unknown as BodyInit }));
 };
 const errorOf = async (response: Response) => (JSON.parse(await response.text()) as { error?: string }).error;
 
@@ -142,8 +146,9 @@ describe('signed export hop in, signed engine hop out', () => {
       return post(k, signed(k, evaluateWire(k, { evaluate: long, payloadSha256: boundRequestSha256(long) }))); }, 422, 'WIRE_INVALID'],
     ['evaluate actor override', k => { const bad = { ...evaluateRequest, payload: { content: 'c', actor_id: 'root' } };
       return post(k, signed(k, evaluateWire(k, { evaluate: bad, payloadSha256: sha('x') }))); }, 422, 'WIRE_INVALID'],
-    ['wrong path', k => post(k, signed(k, challengeWire(k)), `${CONFIG_INPUT.webOrigin}/api/governance/evaluate`), 404, 'PATH'],
-    ['declared oversize', k => k.handlers.POST({ url: `${CONFIG_INPUT.webOrigin}${k.config.proxyPath}`, headers: new Headers({ 'content-length': '20000' }), body: null,
+    ['wrong path', k => post(k, signed(k, challengeWire(k)), `${CONFIG_INPUT.webOrigin}/api/governance/evaluate`), 404, 'DESTINATION'],
+    ['foreign origin', k => post(k, signed(k, challengeWire(k)), `http://foreign.invalid:3000${k.config.proxyPath}`), 404, 'DESTINATION'],
+    ['declared oversize', k => admittedPost(k, { url: `${CONFIG_INPUT.webOrigin}${k.config.proxyPath}`, method: 'POST', headers: new Headers({ 'content-length': '20000' }), body: null,
       signal: new AbortController().signal } as unknown as Request), 413, 'OVERSIZE_BODY'],
     ['oversize stream', k => post(k, signed(k, null, { raw: Buffer.alloc(16_385, 0x20) })), 413, 'OVERSIZE_BODY'],
   ];
@@ -157,7 +162,7 @@ describe('signed export hop in, signed engine hop out', () => {
   });
   it('refuses a body-less request without a send and refuses a replayed signed request', async () => {
     const k = kit();
-    const none = await k.handlers.POST(new Request(`${CONFIG_INPUT.webOrigin}${k.config.proxyPath}`, { method: 'POST' }));
+    const none = await admittedPost(k, new Request(`${CONFIG_INPUT.webOrigin}${k.config.proxyPath}`, { method: 'POST' }));
     expect([400, 413]).toContain(none.status);
     const sent = signed(k, challengeWire(k));
     expect((await post(k, sent)).status).toBe(200);
@@ -191,5 +196,51 @@ describe('engine hop failures end in a bad gateway and never a second send', () 
     const second = await post(k, signed(k, challengeWire(k, { challengeNonce: 'cd'.repeat(32) })));
     expect(second.status).toBe(502);
     expect(await errorOf(second)).toBe('ENGINE_REPLAY');
+  });
+});
+
+
+describe('issued ingress budget before receive/auth/forward', () => {
+  it('rejects absent, structural, copied and spent deadlines before touching the body', async () => {
+    const k = kit();
+    let reads = 0;
+    const request = { url: `${CONFIG_INPUT.webOrigin}${k.config.proxyPath}`, method: 'POST', headers: new Headers(),
+      get body() { reads += 1; throw new Error('BODY_MUST_NOT_BE_READ'); } } as unknown as Request;
+    const owner = createDeadline(1000);
+    const spent = createDeadline(1000); spent.dispose();
+    try {
+      for (const value of [undefined, { expired: () => false, remainingMs: () => 1000, signal: new AbortController().signal },
+        { ...owner.view }, spent.view]) {
+        const reply = await k.handlers.POST(request, value as Deadline);
+        expect(reply.status).toBeGreaterThanOrEqual(400);
+      }
+      expect(reads).toBe(0); expect(k.seen).toEqual([]);
+    } finally { owner.dispose(); }
+  });
+  it('bounds a stalled body by the issued time budget without forwarding', async () => {
+    const k = kit();
+    const stream = new ReadableStream<Uint8Array>({ pull: () => new Promise<void>(() => undefined) });
+    const request = new Request(`${CONFIG_INPUT.webOrigin}${k.config.proxyPath}`, { method: 'POST', body: stream, duplex: 'half' } as RequestInit);
+    const started = performance.now();
+    const reply = await admittedPost(k, request, 40);
+    expect(reply.status).toBe(408);
+    expect(performance.now() - started).toBeLessThan(1000);
+    expect(k.seen).toEqual([]);
+  });
+  it('spends body ingress time from the same deadline before the engine hop', async () => {
+    const samples: number[] = [];
+    const k = kit(async (request, real) => {
+      samples.push(request.deadline.remainingMs());
+      await new Promise(resolve => setTimeout(resolve, 70));
+      return real(request);
+    });
+    const sent = signed(k, challengeWire(k));
+    const stream = new ReadableStream<Uint8Array>({ start(controller) {
+      setTimeout(() => { controller.enqueue(sent.body); controller.close(); }, 70);
+    } });
+    const request = new Request(`${CONFIG_INPUT.webOrigin}${k.config.proxyPath}`, { method: 'POST', headers: sent.headers, body: stream, duplex: 'half' } as RequestInit);
+    const reply = await admittedPost(k, request, 110);
+    expect(reply.status).toBe(502); expect(samples).toHaveLength(1);
+    expect(samples[0]).toBeLessThan(80);
   });
 });

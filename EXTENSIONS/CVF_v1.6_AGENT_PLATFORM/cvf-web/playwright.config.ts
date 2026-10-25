@@ -9,6 +9,9 @@ loadEnvConfig(__dirname, true, { info: () => {}, error: () => {
   throw new Error('CVF_PLAYWRIGHT_ENV_LOAD_FAILED: inspect local env syntax without printing secrets');
 } });
 
+// Live failure artifacts must not copy page content into an error snapshot.
+process.env.PLAYWRIGHT_NO_COPY_PROMPT = '1';
+
 const PLAYWRIGHT_PORT = Number(process.env.CVF_PLAYWRIGHT_PORT ?? 3001);
 
 // Live config — real provider calls, governance pipeline active.
@@ -29,9 +32,9 @@ export default defineConfig({
         // and 127.0.0.1 splits cookies/origins and can strand useSession() in
         // its client bootstrap path under the live release suite.
         baseURL: process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${PLAYWRIGHT_PORT}`,
-        trace: 'retain-on-failure',
-        screenshot: 'only-on-failure',
-        video: 'retain-on-failure',
+        trace: 'off',
+        screenshot: 'off',
+        video: 'off',
     },
     webServer: {
         command: `npm run dev -- --port ${PLAYWRIGHT_PORT}`,

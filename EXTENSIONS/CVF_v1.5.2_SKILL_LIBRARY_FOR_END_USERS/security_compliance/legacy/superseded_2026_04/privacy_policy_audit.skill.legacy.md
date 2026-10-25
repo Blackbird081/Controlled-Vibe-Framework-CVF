@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá và cải thiện Privacy Policy. Đảm bảo policy compliant với regulations và understandable cho users.
 
 **Khi nào nên dùng:**
+
 - Tạo privacy policy mới
 - Annual review
 - Sau khi add features mới
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,38 +80,45 @@ Không yêu cầu.
 ## ✅ Checklist - Required Elements
 
 ### Identity & Contact
+
 - [ ] Company name và legal entity?
 - [ ] Contact information (email, address)?
 - [ ] DPO contact (if applicable)?
 
 ### Data Collection
+
 - [ ] What data is collected?
 - [ ] How is data collected?
 - [ ] Is collection automatic or user-provided?
 - [ ] Categories clear (personal, usage, device)?
 
 ### Purpose & Use
+
 - [ ] Why data is collected?
 - [ ] How data is used?
 - [ ] Secondary uses disclosed?
 
 ### Legal Basis (GDPR)
+
 - [ ] Legal basis for each processing?
 - [ ] Consent mechanism explained?
 - [ ] Legitimate interest explained?
 
 ### Data Sharing
+
 - [ ] Who data is shared with?
 - [ ] Third party categories named?
 - [ ] Cross-border transfers disclosed?
 - [ ] Data processors listed?
 
 ### Retention
+
 - [ ] How long data is kept?
 - [ ] Retention criteria explained?
 - [ ] Deletion process?
 
 ### User Rights
+
 - [ ] Access rights explained?
 - [ ] Correction rights?
 - [ ] Deletion rights?
@@ -117,10 +126,12 @@ Không yêu cầu.
 - [ ] How to exercise rights?
 
 ### Security
+
 - [ ] Security measures described?
 - [ ] Breach notification process?
 
 ### Updates
+
 - [ ] Last updated date?
 - [ ] How changes are communicated?
 - [ ] Version history?
@@ -130,22 +141,26 @@ Không yêu cầu.
 ## ✅ Checklist - Regional Requirements
 
 ### GDPR (EU)
+
 - [ ] All Article 13/14 information?
 - [ ] DPO contact if required?
 - [ ] Supervisory authority info?
 
 ### CCPA (California)
+
 - [ ] "Do Not Sell My Info" link?
 - [ ] Categories of data collected/sold?
 - [ ] Consumer rights listed?
 - [ ] Toll-free number?
 
 ### LGPD (Brazil)
+
 - [ ] Legal basis for processing?
 - [ ] Data subject rights?
 - [ ] DPO (Encarregado) info?
 
 ### PDPA (Vietnam/Singapore)
+
 - [ ] Consent requirements?
 - [ ] Access and correction rights?
 - [ ] Withdrawal of consent?
@@ -167,7 +182,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Privacy Policy Structure:
+### Privacy Policy Structure
+
 ```markdown
 1. Introduction
    - Who we are
@@ -203,7 +219,8 @@ Không yêu cầu.
 10. Contact Us
 ```
 
-### Readability Tips:
+### Readability Tips
+
 ```
 ✅ Short paragraphs (3-4 sentences)
 ✅ Bullet points for lists
@@ -213,7 +230,8 @@ Không yêu cầu.
 ✅ Table of contents for long policies
 ```
 
-### Third-Party Service Template:
+### Third-Party Service Template
+
 ```markdown
 ## Third-Party Services
 
@@ -225,7 +243,8 @@ Không yêu cầu.
 | Facebook Pixel | Advertising | Behavior, device |
 ```
 
-### Contact Section Example:
+### Contact Section Example
+
 ```markdown
 ## Contact Us
 
@@ -270,7 +289,8 @@ Sau khi hoàn thành **Privacy Policy Audit**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Site: stockflow.vn
 Policy version: 2023-01
@@ -278,7 +298,8 @@ Data collected: email, phone, device ID, usage logs
 Vendors: GA, SendGrid, Stripe
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Privacy Policy Findings
 
@@ -297,13 +318,15 @@ P0: Legal basis + cookie disclosure
 P1: Retention & deletion timeline
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Chỉ ra thiếu sót cụ thể
 - ✅ Có ưu tiên rõ ràng
 - ✅ Phù hợp dữ liệu thực tế
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Data Handling Review](./data_handling_review.skill.md)
 - [GDPR Compliance Review](./gdpr_compliance_review.skill.md)
 
@@ -313,11 +336,6 @@ P1: Retention & deletion timeline
 |---|---|---|
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
-
-## 🔗 Next Step
-
-Sau khi hoàn thành **Privacy Policy Audit**, tiếp tục với:
-→ [GDPR Compliance Review](./gdpr_compliance_review.skill.md)
 
 ---
 

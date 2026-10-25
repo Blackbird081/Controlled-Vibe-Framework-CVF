@@ -1,6 +1,7 @@
 # Event Types
 
 Reference event categories used in governance hooks:
+
 - `execution.started`
 - `execution.completed`
 - `execution.failed`

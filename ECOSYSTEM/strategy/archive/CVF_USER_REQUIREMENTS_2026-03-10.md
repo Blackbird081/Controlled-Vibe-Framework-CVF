@@ -17,7 +17,7 @@
 
 ### User Actions Required
 
-- [ ] Create PR on GitHub: `cvf-next` → `main` (link: https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/compare/main...cvf-next)
+- [ ] Create PR on GitHub: `cvf-next` → `main` (link: <https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/compare/main...cvf-next>)
 - [ ] Approve and merge the PR
 - [ ] Verify Netlify deployment after merge
 
@@ -149,10 +149,10 @@
 
 ## Immediate Next Steps
 
-### To Start Sprint 0 RIGHT NOW:
+### To Start Sprint 0 RIGHT NOW
 
 1. **User decides:** What should `vibcode.netlify.app` display?
-2. **User creates PR:** https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/compare/main...cvf-next
+2. **User creates PR:** <https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/compare/main...cvf-next>
 3. **Cascade fixes:** `netlify.toml` → correct build path
 4. **Cascade sets up:** `.env.local` with Gemini API key
 5. **Cascade verifies:** Web UI runs locally with real AI

@@ -75,6 +75,7 @@ If any rule is ambiguous, STOP and ask for clarification.
 ## Nguồn gốc
 
 Toolkit này được tổng hợp và tối ưu hóa từ:
+
 - `CVF_INTERNAL_LITE/` — Bản governance nhẹ cho SME (15 files)
 - `HOW TO USE CVF FOR/` — Reference library đầy đủ (25 files)
 

@@ -143,6 +143,7 @@ handoff governance.
 ## Claim Boundary
 
 This spec is documentation-only. It does not claim:
+
 - Automated context trimming or augmentation execution
 - Live provider call for context repackaging
 - Durable memory storage for context profiles

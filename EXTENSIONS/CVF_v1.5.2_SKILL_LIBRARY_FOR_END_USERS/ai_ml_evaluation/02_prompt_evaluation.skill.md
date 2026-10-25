@@ -17,11 +17,13 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng:**
+
 - Review prompt trước khi deploy
 - Debug prompt kém hiệu quả
 - Optimize prompt quality
 
 **Không phù hợp khi:**
+
 - Need to create new prompt → Use prompt templates
 - Complex prompt engineering → Need specialist
 
@@ -64,6 +66,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -87,12 +90,14 @@ Không yêu cầu.
 ## 🔍 Cách đánh giá
 
 **Checklist:**
+
 - [ ] Identify real issues
 - [ ] Suggestions actionable
 - [ ] Revised prompt better
 - [ ] Explains why changes help
 
 **Red flags:**
+
 - ⚠️ Generic suggestions
 - ⚠️ Revised worse than original
 
@@ -129,13 +134,15 @@ Sau khi hoàn thành **Prompt Evaluation**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Prompt: "Tóm tắt ticket và đề xuất hướng xử lý"
 Context: ticket lỗi đồng bộ tồn kho
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Prompt Review
 
@@ -151,13 +158,15 @@ Improved Prompt
 Không đưa ra giá/khuyến mãi."
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Nêu rõ lỗ hổng prompt
 - ✅ Prompt mới có format + guardrails
 - ✅ Phù hợp use case CS
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Model Selection](./01_model_selection.skill.md)
 - [Output Quality Check](./03_output_quality_check.skill.md)
 
@@ -168,7 +177,7 @@ Không đưa ra giá/khuyến mãi."
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Output Quality Check
 
 Sau khi hoàn thành **Prompt Evaluation**, tiếp tục với:
 → [Output Quality Check](./03_output_quality_check.skill.md)
@@ -176,3 +185,5 @@ Sau khi hoàn thành **Prompt Evaluation**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | AI/ML Evaluation Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

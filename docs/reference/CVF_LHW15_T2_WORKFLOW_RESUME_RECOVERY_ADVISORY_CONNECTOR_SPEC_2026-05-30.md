@@ -130,6 +130,7 @@ handoff continuity.
 ## Claim Boundary
 
 This spec is documentation-only. It does not claim:
+
 - Automated workflow resumption execution
 - Live provider call during recovery
 - Hosted readiness or production readiness

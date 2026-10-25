@@ -137,26 +137,21 @@ export default function RuntimeMonitorPage() {
     const [loading, setLoading] = useState(true);
     const { headers: runtimeHeaders } = useRuntimeStore();
 
-    const load = useCallback(async () => {
-        setLoading(true);
-        setError(false);
-        try {
-            const response = await fetch('/api/runtime/observability', {
-                cache: 'no-store',
-                headers: runtimeHeaders,
-            });
-            if (!response.ok) throw new Error('runtime-observability-load-failed');
-            setSnapshot(await response.json() as RuntimeSnapshot);
-        } catch {
-            setError(true);
-        } finally {
-            setLoading(false);
-        }
-    }, [runtimeHeaders]);
+    const [previousHeaders, setPreviousHeaders] = useState(runtimeHeaders);
+    if (previousHeaders !== runtimeHeaders) {
+        setPreviousHeaders(runtimeHeaders); setLoading(true); setError(false);
+    }
+    const load = useCallback(() => fetch('/api/runtime/observability', {
+        cache: 'no-store', headers: runtimeHeaders,
+    }).then(async response => {
+        if (!response.ok) throw new Error('runtime-observability-load-failed');
+        const next = await response.json() as RuntimeSnapshot;
+        setSnapshot(next); setError(false);
+    }).catch(() => setError(true)).finally(() => setLoading(false)), [runtimeHeaders]);
 
     useEffect(() => {
         void load();
-        const timer = window.setInterval(() => void load(), 30000);
+        const timer = window.setInterval(() => { setLoading(true); setError(false); void load(); }, 30000);
         return () => window.clearInterval(timer);
     }, [load]);
 
@@ -191,7 +186,7 @@ export default function RuntimeMonitorPage() {
                     </div>
                     <button
                         type="button"
-                        onClick={() => void load()}
+                        onClick={() => { setLoading(true); setError(false); void load(); }}
                         className="inline-flex items-center justify-center gap-2 rounded-lg bg-gray-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
                     >
                         <RefreshCw className="h-4 w-4" />

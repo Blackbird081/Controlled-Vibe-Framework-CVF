@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành các skills sau trước khi dùng skill này:
+>
 > - [Budget Analysis](./01_budget_analysis.skill.md) — Hiểu cơ bản về metrics tài chính
 > - [ROI Calculator Review](./03_roi_calculator_review.skill.md) — Hiểu cách đo lường hiệu quả
 
@@ -19,11 +20,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Review và cải thiện KPI dashboards
 - Đánh giá việc chọn metrics
 - Kiểm tra data visualization best practices
 
 **Không phù hợp khi:**
+
 - Cần phân tích dữ liệu sâu (dùng data analysis tools)
 - Xây dựng dashboard từ đầu (đây là audit, không phải thiết kế)
 
@@ -66,9 +69,11 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 ### 1. Dashboard Purpose
+
 ```
 Mục đích của dashboard:
 [ ] Executive Overview
@@ -81,6 +86,7 @@ Mục đích của dashboard:
 ```
 
 ### 2. Current KPIs
+
 ```
 List các KPIs hiện có trên dashboard:
 VD:
@@ -92,6 +98,7 @@ VD:
 ```
 
 ### 3. Dashboard Screenshot/Description
+
 ```
 Mô tả layout và visualization types:
 VD:
@@ -102,12 +109,14 @@ VD:
 ```
 
 ### 4. Target Audience
+
 ```
 Ai sử dụng dashboard này?
 VD: C-suite, Sales team, Marketing team
 ```
 
 ### 5. Known Issues (Optional)
+
 ```
 Vấn đề đã biết:
 VD: "Churn rate calculation unclear", "Too many metrics"
@@ -120,26 +129,31 @@ VD: "Churn rate calculation unclear", "Too many metrics"
 AI sẽ trả về:
 
 ### 1. KPI Selection Audit
+
 | KPI | Relevance | Actionability | Data Quality | Score |
 |-----|-----------|---------------|--------------|-------|
 | Revenue | ✅ High | ✅ High | ✅ Good | 9/10 |
 | Page Views | ⚠️ Low | ❌ Low | ✅ Good | 4/10 |
 
 ### 2. Missing KPIs
+
 - Recommended metrics not included
 - Industry-standard KPIs missing
 
 ### 3. Visualization Review
+
 - Chart type appropriateness
 - Color coding effectiveness
 - Information hierarchy
 
 ### 4. Usability Assessment
+
 - At-a-glance comprehension
 - Drill-down capability
 - Mobile responsiveness
 
 ### 5. Recommendations
+
 - Specific improvements
 - Priority order
 
@@ -180,6 +194,7 @@ AI sẽ trả về:
 ## 📊 Ví dụ thực tế
 
 **Input:**
+
 ```
 Dashboard: Sales Performance Dashboard
 Audience: Sales VP, Regional Managers
@@ -198,18 +213,23 @@ Visualization: 8 KPI cards + 4 charts
 ```
 
 **Expected Audit:**
+
 ```markdown
 
 ### Input mẫu:
 ```
+
 Mục tiêu: Hoàn thành KPI Dashboard Audit
 Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
 Ràng buộc: Deadline 2 tuần
+
 ```
 
 ### Output mẫu:
 ```
+
 Tóm tắt kết quả: KPI Dashboard Audit với khuyến nghị/ưu tiên rõ ràng.
+
 ```
 ## Dashboard Audit: Sales Performance
 
@@ -248,6 +268,7 @@ Tóm tắt kết quả: KPI Dashboard Audit với khuyến nghị/ưu tiên rõ 
 ---
 
 ## 🔗 Related Skills
+
 - [ROI Calculator Review](./03_roi_calculator_review.skill.md)
 - [Cash Flow Analysis](./05_cash_flow_analysis.skill.md)
 

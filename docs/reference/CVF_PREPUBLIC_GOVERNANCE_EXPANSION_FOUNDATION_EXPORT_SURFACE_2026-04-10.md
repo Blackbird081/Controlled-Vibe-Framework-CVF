@@ -22,12 +22,15 @@ Single default export — all contracts accessible via `import { ... } from 'cvf
 ## Public Contract Families (via `src/index.ts`)
 
 **Watchdog Pulse family:**
+
 - `WatchdogPulseConsumerPipelineContract`, `WatchdogPulseConsumerPipelineBatchContract` + factory functions + types
 
 **Watchdog Escalation family:**
+
 - `WatchdogEscalationConsumerPipelineContract`, `WatchdogEscalationConsumerPipelineBatchContract` + factory functions + types
 
 **Governance Audit Signal family:**
+
 - `GovernanceAuditSignalConsumerPipelineBatchContract` + factory function + types
 
 All governance expansion contracts exported from `src/` barrel. No internal cross-package imports.
@@ -37,6 +40,7 @@ All governance expansion contracts exported from `src/` barrel. No internal cros
 ## Publication Boundary
 
 **Included in `npm pack`** (via `files` field):
+
 - `README.md`, `src/`
 
 **`npm pack --dry-run`**: PASS (verified 2026-04-10)

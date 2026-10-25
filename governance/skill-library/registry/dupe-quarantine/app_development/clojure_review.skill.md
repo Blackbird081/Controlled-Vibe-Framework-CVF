@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Review Clojure and ClojureScript code changes for compliance with Metabase coding standards, style violations, and code quality issues. Use when reviewing pull requests or diffs containing Clojure/ClojureScript code.
 
 **Khi nào dùng skill này:**
+
 - Cần Clojure Review với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -117,6 +119,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -138,13 +141,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Ưu tiên bối cảnh ngắn, rõ, có ràng buộc
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
-- Nguồn tham khảo: https://github.com/metabase/metabase/tree/master/.claude/skills/clojure-review
+- Nguồn tham khảo: <https://github.com/metabase/metabase/tree/master/.claude/skills/clojure-review>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Clojure Review cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
@@ -153,6 +157,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Clojure Review Output
 

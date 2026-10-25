@@ -3,6 +3,7 @@ You are reviewing a large monorepo called Controlled Vibe Framework (CVF).
 CVF is a governance-first control plane for AI-assisted software development. It is not a normal app-only repo. The key concern is whether governance claims are actually enforced in executable code.
 
 Important project constraints:
+
 - Any claim about governance behavior must be backed by real provider-backed behavior, not mock-only UI.
 - Mock mode is allowed only for pure UI structure checks and must not be treated as proof of governance.
 - The main risk categories in this repo are:
@@ -15,6 +16,7 @@ Important project constraints:
   - non-coder flows that look governed but are only cosmetic
 
 Recent remediations to verify rather than trust:
+
 - approval store persistence and request-hash binding in approvals/execute
 - CI governance hook invocation in .github/workflows
 - service-token request signing and per-token rate-limit isolation on /api/execute
@@ -27,10 +29,12 @@ Treat the remediations above as recently changed code: look for incomplete adopt
 This repository is very large and contains many markdown files. Do NOT spend meaningful review budget on markdown or documentation.
 
 Read these two files first for repository rules and context:
+
 - ./AGENTS.md
 - ./CLAUDE.md
 
 Then focus on these directories, in this priority order:
+
 1. ./EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib
 2. ./EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api
 3. ./EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)
@@ -40,6 +44,7 @@ Then focus on these directories, in this priority order:
 7. ./.githooks
 
 Also inspect these root-level release/build/config files if present:
+
 - ./package.json
 - ./netlify.toml
 - ./.gitignore
@@ -47,6 +52,7 @@ Also inspect these root-level release/build/config files if present:
 - ./.githooks/**
 
 Ignore these paths unless needed for direct code tracing:
+
 - ./docs/**
 - ./REVIEW/**
 - ./ECOSYSTEM/**
@@ -63,6 +69,7 @@ Primary review goal:
 Find real bugs, security issues, governance enforcement gaps, behavioral regressions, and mismatches between product claims and actual executable behavior.
 
 Prioritize findings in this order:
+
 1. Governance enforcement gaps
    - request paths that bypass policy/risk/approval checks
    - code paths where CVF appears to govern but does not actually enforce
@@ -93,6 +100,7 @@ Prioritize findings in this order:
    - mismatches between package scripts, workflow jobs, Netlify/build config, and claimed release gates
 
 Review rules:
+
 - Trust executable code and tests more than documentation.
 - Treat docs, roadmap language, help text, and marketing copy as non-authoritative unless code proves the behavior.
 - Focus on high-signal issues, not style.
@@ -101,6 +109,7 @@ Review rules:
 - Prefer fewer, stronger findings over many weak ones.
 
 Output format:
+
 1. Findings first, ordered by severity.
 2. For each finding include:
    - severity: critical / high / medium

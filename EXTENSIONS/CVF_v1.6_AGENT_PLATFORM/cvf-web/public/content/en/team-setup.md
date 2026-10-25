@@ -289,6 +289,7 @@ fi
 ### "Too much overhead"
 
 **Solution:** Start with Simple governance mode. Only 2 requirements:
+
 1. Write an INPUT_SPEC before asking AI
 2. Complete Phase D checklist in PR
 
@@ -297,6 +298,7 @@ Everything else is optional. Add more structure only when you feel the need.
 ### "Team members aren't adopting CVF"
 
 **Solution:** Make the CVF path easier than the non-CVF path:
+
 - PR template pre-fills checklist → less work than writing from scratch
 - Skill library provides starting points → faster than blank prompts
 - Templates mean less thinking → just fill the form
@@ -304,6 +306,7 @@ Everything else is optional. Add more structure only when you feel the need.
 ### "Skill library gets stale"
 
 **Solution:**
+
 - Assign owners (see table above)
 - Review quarterly: deprecate unused, merge duplicates
 - Version skills: changes require PR with diff

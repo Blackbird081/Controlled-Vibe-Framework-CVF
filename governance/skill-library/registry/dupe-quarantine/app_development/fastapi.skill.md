@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Build Python APIs with FastAPI, Pydantic v2, and SQLAlchemy 2.0 async. Covers project structure, JWT auth, validation, and database integration with uv package manager. Prevents 7 documented errors.  Use when: creating Python APIs, implementing JWT auth, or troubleshooting 422 validation, CORS, async blocking, form data, background tasks, or OpenAPI schema errors.
 
 **Khi nào dùng skill này:**
+
 - Cần Fa Tapi với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -117,6 +119,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -138,13 +141,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Ưu tiên bối cảnh ngắn, rõ, có ràng buộc
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
-- Nguồn tham khảo: https://github.com/srbhr/Resume-Matcher/tree/main/.agent/skills/fastapi
+- Nguồn tham khảo: <https://github.com/srbhr/Resume-Matcher/tree/main/.agent/skills/fastapi>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Fa Tapi cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
@@ -153,6 +157,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Fa Tapi Output
 

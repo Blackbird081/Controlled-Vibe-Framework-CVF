@@ -14,6 +14,7 @@ có loại
 có hậu quả rõ ràng
 
 Các Failure Mode chuẩn
+
 1. Input Failure
 
 Input thiếu khối
@@ -21,21 +22,21 @@ Input thiếu khối
 Input mơ hồ
 → Không được execution
 
-2. Execution Failure
+1. Execution Failure
 
 Output sai format
 
 Output thiếu trường
 → Fail ngay
 
-3. Boundary Violation
+1. Boundary Violation
 
 AI vượt quyền
 
 Operator can thiệp
 → Execution vô hiệu
 
-4. Trace Failure
+1. Trace Failure
 
 Không có trace
 

@@ -268,8 +268,29 @@ def _check_self_binding(violations: list[Violation]) -> None:
         if THIS_SCRIPT_PATH not in text:
             _add(violations, catalog_path, "self_binding_missing", f"`{catalog_path}` does not bind `{THIS_SCRIPT_PATH}`")
 
-def run() -> list[Violation]:
+def run(profile: str = "private") -> list[Violation]:
     violations: list[Violation] = []
+    if profile == "public":
+        from guard_binding_catalog import require_public_projection
+        try:
+            require_public_projection(REPO_ROOT)
+        except ValueError as exc:
+            _add(violations, AGENTS_PATH, "public_carrier_mismatch", str(exc))
+        for path, max_lines, max_bytes in BUDGETS:
+            if path not in (AGENTS_PATH, DOWNSTREAM_TEMPLATE_PATH):
+                continue
+            text = _read_text(path)
+            if not text:
+                _add(violations, path, "carrier_missing", "Public carrier is required")
+            elif len(text.splitlines()) > max_lines or len(text.encode("utf-8")) > max_bytes:
+                _add(violations, path, "carrier_over_budget", "Public carrier exceeds its existing budget")
+        _check_downstream_template(violations)
+        for path in (AGENTS_PATH, DOWNSTREAM_TEMPLATE_PATH):
+            for message in check_unconditional_full_read_wording(path, _read_text(path)):
+                _add(violations, path, "unconditional_full_read_wording", message)
+        if THIS_SCRIPT_PATH not in _read_text(DOCUMENTATION_CI_PATH):
+            _add(violations, DOCUMENTATION_CI_PATH, "self_binding_missing", THIS_SCRIPT_PATH)
+        return violations
     _check_budgets(violations)
     _check_archives(violations)
     _check_routing_index(violations)
@@ -291,11 +312,12 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="CVF agent instruction carrier compaction gate.")
     parser.add_argument("--enforce", action="store_true")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     parser.add_argument("--base", default=None, help="accepted for gate-chain uniformity; unused")
     parser.add_argument("--head", default=None, help="accepted for gate-chain uniformity; unused")
     args = parser.parse_args(argv)
 
-    violations = run()
+    violations = run(args.profile)
 
     if args.json:
         print(json.dumps(_report_json(violations), indent=2))

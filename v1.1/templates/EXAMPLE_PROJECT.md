@@ -1,7 +1,9 @@
 # EXAMPLE PROJECT — Mini Landing Page QA
+
 Version: 1.1 | Type: Example | Status: Complete
 
 ## Mô tả project
+
 Tạo checklist QA nội dung cho landing page chiến dịch Q1.
 
 ---
@@ -172,6 +174,7 @@ Status: Closed
 ## 7. Kết luận
 
 Project mẫu này minh họa:
+
 - Luồng INPUT_SPEC → OUTPUT_SPEC → Decision → AU → Trace → Output
 - Binding: CVF:EXECUTE → Execution Agent → Execution Policy
 - Trace đầy đủ từ start đến close

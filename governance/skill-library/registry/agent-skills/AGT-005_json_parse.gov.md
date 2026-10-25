@@ -17,6 +17,7 @@ Implementation in v1.6 AGENT_PLATFORM
 Parse and validate JSON data structures.
 
 **Actions:**
+
 - Parse JSON strings
 - Validate JSON syntax
 - Extract nested values
@@ -58,10 +59,12 @@ Parse and validate JSON data structures.
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Valid JSON parsed correctly
 - [ ] Invalid JSON returns error
 - [ ] No side effects
 
 **FAIL criteria:**
+
 - [ ] Parse errors on valid JSON
 - [ ] Silent failure on invalid JSON

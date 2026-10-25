@@ -301,12 +301,14 @@ SLOW QUERY DETECTED?
 **UAT Link:** `governance/skill-library/uat/results/UAT-AGT-028.md`
 
 **PASS criteria:**
+
 - [ ] Schema normalized to 3NF baseline
 - [ ] 100% of migrations have a DOWN/rollback
 - [ ] All foreign keys and common query fields indexed
 - [ ] 100% of migrations tested on staging before production
 
 **FAIL criteria:**
+
 - [ ] Migration deployed without a rollback path
 - [ ] Migration applied to production without staging test
 - [ ] Data mutation bundled into a schema migration

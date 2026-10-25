@@ -21,13 +21,13 @@ A. Readiness Checklist (Trước khi dùng)
 
 ☐ Mục tiêu không thay đổi liên tục trong quá trình làm
 
-2. Về ràng buộc
+1. Về ràng buộc
 
 ☐ Tôi biết các ràng buộc bắt buộc (pháp lý, chi phí, phạm vi)
 
 ☐ Tôi không yêu cầu AI vi phạm các ràng buộc này
 
-3. Về vai trò
+1. Về vai trò
 
 ☐ Tôi hiểu tôi không điều khiển cách AI làm việc
 
@@ -38,19 +38,20 @@ A. Readiness Checklist (Trước khi dùng)
 👉 Nếu có bất kỳ ô nào chưa đánh dấu → chưa nên dùng CVF.
 
 B. Adoption Checklist (Sau 1–2 vòng sử dụng)
+
 1. Về kết quả
 
 ☐ Output dùng được trong thực tế
 
 ☐ Không cần chỉnh sửa thủ công nhiều
 
-2. Về quy trình
+1. Về quy trình
 
 ☐ Dễ lặp lại với người khác
 
 ☐ Không phụ thuộc cá nhân giỏi prompt
 
-3. Về niềm tin
+1. Về niềm tin
 
 ☐ Người dùng hiểu CVF làm gì / không làm gì
 

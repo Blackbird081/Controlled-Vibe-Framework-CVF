@@ -1,6 +1,9 @@
 # SKILL REGISTRY SPEC
+
 # CVF-Toolkit Core Module
+
 # Status: Authoritative Specification
+
 # Toolkit Version: 1.0.0
 
 ## 1. PURPOSE
@@ -32,28 +35,35 @@ export interface SkillDefinition {
 ## 3. REGISTRY OPERATIONS
 
 ### 3.1 Register Skill
+
 ```ts
 register(skill: SkillDefinition): void
 ```
+
 - Validates required fields
 - Rejects duplicate id
 - Stores skill in registry
 
 ### 3.2 Retrieve Skill
+
 ```ts
 get(skillId: string): SkillDefinition
 ```
+
 - Returns skill or throws SkillViolationError
 
 ### 3.3 List Skills
+
 ```ts
 list(): SkillDefinition[]
 ```
+
 - Returns all registered skills
 
 ## 4. VALIDATION RULES
 
 On registration:
+
 - `id` must be non-empty, lowercase, kebab-case
 - `version` must follow SemVer format
 - `riskLevel` must be valid R1–R4

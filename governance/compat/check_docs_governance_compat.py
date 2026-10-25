@@ -66,6 +66,7 @@ APPROVED_ROOT_FILES = {
     "CHEAT_SHEET.md",
     "CVF_ARCHITECTURE_DECISIONS.md",
     "CVF_ARCHITECTURE_DECISIONS_ARCHIVE_ADR001-010.md",
+    "CVF_ARCHITECTURE_DECISIONS_ARCHIVE_ADR011-015.md",
     "CVF_CORE_KNOWLEDGE_BASE.md",
     "CVF_INCREMENTAL_TEST_LOG.md",
     "GET_STARTED.md",
@@ -75,6 +76,11 @@ APPROVED_ROOT_FILES = {
     "VERSION_COMPARISON.md",
 }
 APPROVED_GENERIC_FILENAMES = {"README.md", "INDEX.md", "SKILL.md"}
+PUBLIC_COMPATIBILITY_PATHS = frozenset({
+    "docs/EXPORT_MANIFEST.md",
+    "docs/benchmark/qbs-1/README.md",
+    "docs/evidence/archive/EXPORT_MANIFEST_2026-05-09.md",
+})
 APPROVED_GOVERNANCE_PATH_EXCEPTIONS = {
     # ACRC-T2B filenames are part of the exact archive preservation contract.
     "docs/reference/archive/AGENTS_FULL_PRE_T2B_2026-08-11.md",
@@ -88,9 +94,11 @@ SYMBOLIC_VALUE_RE = re.compile(r"\|\s*[<>]\s*\d")
 
 def _run_git(args: list[str]) -> tuple[int, str, str]:
     proc = subprocess.run(
-        ["git", *args],
+        ["git", "-c", "core.quotepath=false", *args],
         cwd=REPO_ROOT,
         text=True,
+        encoding="utf-8",
+        errors="strict",
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
@@ -199,6 +207,9 @@ def _validate_docs_path(path: str) -> list[dict[str, str]]:
     violations: list[dict[str, str]] = []
     normalized = path.replace("\\", "/")
 
+    if normalized in PUBLIC_COMPATIBILITY_PATHS:
+        return violations
+
     if not normalized.startswith("docs/") or not normalized.endswith(".md"):
         return violations
 
@@ -301,6 +312,7 @@ def _validate_docs_content(path: str) -> list[dict[str, str]]:
 def _classify(
     commits: list[dict[str, str]],
     changed_paths: dict[str, list[str]],
+    existing_public_paths: set[str] | None = None,
 ) -> dict[str, Any]:
     docs_files = {
         path: statuses
@@ -313,7 +325,10 @@ def _classify(
 
     violations: list[dict[str, str]] = []
     for path in docs_files:
-        violations.extend(_validate_docs_path(path))
+        # The public base already owns a canonical published path. Editing its
+        # content does not create a new storage placement. New paths stay strict.
+        if existing_public_paths is None or path not in existing_public_paths:
+            violations.extend(_validate_docs_path(path))
         violations.extend(_validate_docs_content(path))
 
     return {
@@ -327,6 +342,7 @@ def _classify(
         "hasDocsActivity": len(docs_files) > 0,
         "compliant": len(violations) == 0,
         "changedFiles": list(changed_paths.keys()),
+        "existingPublicCanonicalPaths": sorted(set(docs_files) & (existing_public_paths or set())),
     }
 
 
@@ -396,7 +412,11 @@ def main() -> int:
         default=None,
         help="Optional output path for JSON report file",
     )
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
+    if args.profile == "public":
+        from guard_binding_catalog import require_public_projection
+        require_public_projection(REPO_ROOT)
 
     base, head, base_source = _resolve_range(args.base, args.head)
 
@@ -404,6 +424,9 @@ def main() -> int:
         commits = _get_commits_in_range(base, head)
         range_changes = _get_changed_name_status(base, head)
     except RuntimeError as exc:
+        if args.profile == "public":
+            print(str(exc), file=sys.stderr)
+            return 1
         if args.base:
             fallback_base = "HEAD~1"
             try:
@@ -425,7 +448,14 @@ def main() -> int:
     worktree_changes = _get_worktree_name_status()
     changed_paths = _merge_changed_maps(range_changes, worktree_changes)
 
-    classified = _classify(commits, changed_paths)
+    existing_public_paths = None
+    if args.profile == "public":
+        code, out, err = _run_git(["ls-tree", "-r", "--name-only", "-z", base, "--", "docs"])
+        if code:
+            print(err or "Cannot verify the canonical public base paths", file=sys.stderr)
+            return 1
+        existing_public_paths = {path for path in out.split("\0") if path}
+    classified = _classify(commits, changed_paths, existing_public_paths)
     report = {
         "timestamp": dt.datetime.now(dt.timezone.utc)
         .replace(microsecond=0)

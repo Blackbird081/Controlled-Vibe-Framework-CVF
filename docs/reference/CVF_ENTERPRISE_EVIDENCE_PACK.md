@@ -156,100 +156,193 @@ All packet types above must also state explicit approval-artifact external revoc
 9. Validate that the packet itself reflects the linked multi-runtime evidence manifest:
    - `python governance/compat/check_cross_family_packet_coverage.py --packet <packet-path> --enforce`
 10. Validate deferred-family stratification and mixed-maturity posture:
-   - `python governance/compat/check_cross_family_deferred_policy.py --packet <packet-path> --enforce`
-11. Validate promotion-readiness posture:
-   - `python governance/compat/check_cross_family_promotion_readiness.py --packet <packet-path> --enforce`
-12. Validate promotion / exception policy:
-   - `python governance/compat/check_cross_family_promotion_policy.py --packet <packet-path> --enforce`
-13. Validate approval decision policy:
-   - `python governance/compat/check_cross_family_approval_decision_policy.py --packet <packet-path> --enforce`
-14. Validate transition policy:
-   - `python governance/compat/check_cross_family_transition_policy.py --packet <packet-path> --enforce`
-15. Validate transition prerequisites:
-   - `python governance/compat/check_cross_family_transition_prerequisites.py --packet <packet-path> --enforce`
-16. Validate transition threshold satisfaction:
-   - `python governance/compat/check_cross_family_transition_threshold_satisfaction.py --packet <packet-path> --enforce`
-17. Validate transition fulfillment evidence:
-   - `python governance/compat/check_cross_family_transition_fulfillment.py --packet <packet-path> --enforce`
-18. Validate approval artifact binding:
-   - `python governance/compat/check_cross_family_approval_artifact_binding.py --packet <packet-path> --enforce`
-19. Validate approval artifact fulfillment state:
-   - `python governance/compat/check_cross_family_approval_artifact_fulfillment.py --packet <packet-path> --enforce`
-20. Validate approval artifact strength state:
-   - `python governance/compat/check_cross_family_approval_artifact_strength.py --packet <packet-path> --enforce`
-21. Validate approval artifact authority state:
-   - `python governance/compat/check_cross_family_approval_artifact_authority.py --packet <packet-path> --enforce`
-22. Validate approval artifact validity lifecycle:
-   - `python governance/compat/check_cross_family_approval_artifact_validity.py --packet <packet-path> --enforce`
-23. Validate approval artifact revocation / expiry / invalidation-source evidence:
-   - `python governance/compat/check_cross_family_approval_artifact_invalidation_evidence.py --packet <packet-path> --enforce`
-24. Validate approval artifact external validity:
-   - `python governance/compat/check_cross_family_approval_artifact_external_validity.py --packet <packet-path> --enforce`
-25. Validate approval artifact external authority trust:
-   - `python governance/compat/check_cross_family_approval_artifact_external_authority_trust.py --packet <packet-path> --enforce`
-26. Validate approval artifact external issuer policy:
-   - `python governance/compat/check_cross_family_approval_artifact_external_issuer_policy.py --packet <packet-path> --enforce`
-27. Validate approval artifact external issuer verification:
-   - `python governance/compat/check_cross_family_approval_artifact_external_issuer_verification.py --packet <packet-path> --enforce`
-28. Validate approval artifact external proof binding:
-   - `python governance/compat/check_cross_family_approval_artifact_external_proof_binding.py --packet <packet-path> --enforce`
-29. Validate approval artifact external proof verification:
-   - `python governance/compat/check_cross_family_approval_artifact_external_proof_verification.py --packet <packet-path> --enforce`
-30. Validate approval artifact external proof attestation:
-   - `python governance/compat/check_cross_family_approval_artifact_external_proof_attestation.py --packet <packet-path> --enforce`
-31. Validate approval artifact external revocation validation:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_validation.py --packet <packet-path> --enforce`
-32. Validate approval artifact external revocation attestation:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_attestation.py --packet <packet-path> --enforce`
-33. Validate approval artifact external revocation issuer authority:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_authority.py --packet <packet-path> --enforce`
-34. Validate approval artifact external revocation issuer attestation:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_attestation.py --packet <packet-path> --enforce`
-35. Validate approval artifact external revocation issuer verification:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_verification.py --packet <packet-path> --enforce`
-36. Validate approval artifact external revocation issuer proof attestation:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_attestation.py --packet <packet-path> --enforce`
-37. Validate approval artifact external revocation issuer proof validity:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_validity.py --packet <packet-path> --enforce`
-38. Validate approval artifact external revocation issuer proof external validity:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_external_validity.py --packet <packet-path> --enforce`
-39. Validate approval artifact external revocation issuer proof authority validation:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_validation.py --packet <packet-path> --enforce`
-40. Validate approval artifact external revocation issuer proof authority provenance:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance.py --packet <packet-path> --enforce`
-41. Validate approval artifact external revocation issuer proof authority attestation:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_attestation.py --packet <packet-path> --enforce`
-42. Validate approval artifact external revocation issuer proof authority attestation verification:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_attestation_verification.py --packet <packet-path> --enforce`
-43. Validate approval artifact external revocation issuer proof authority provenance verification:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_verification.py --packet <packet-path> --enforce`
-44. Validate approval artifact external revocation issuer proof authority provenance attestation verification:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_verification.py --packet <packet-path> --enforce`
-45. Validate approval artifact external revocation issuer proof authority provenance attestation freshness:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_freshness.py --packet <packet-path> --enforce`
-46. Validate approval artifact external revocation issuer proof authority provenance attestation provenance:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance.py --packet <packet-path> --enforce`
-47. Validate approval artifact external revocation issuer proof authority provenance attestation provenance verification:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_verification.py --packet <packet-path> --enforce`
-48. Validate approval artifact external revocation issuer proof authority provenance attestation provenance freshness:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_freshness.py --packet <packet-path> --enforce`
-49. Validate approval artifact external revocation issuer proof authority provenance attestation provenance freshness proof:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_freshness_proof.py --packet <packet-path> --enforce`
-50. Validate approval artifact external revocation issuer proof authority provenance attestation provenance freshness proof verification:
-   - `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_freshness_proof_verification.py --packet <packet-path> --enforce`
-51. Validate approval artifact expiry timestamp / freshness / external invalidation authority:
-   - `python governance/compat/check_cross_family_approval_artifact_external_validity.py --packet <packet-path> --enforce`
-52. Validate the generated packet:
-   - `python governance/compat/check_enterprise_evidence_pack.py --packet <packet-path> --enforce`
-53. Use `CVF_RELEASE_APPROVAL_PACKET_TEMPLATE.md` only when a manual packet is still required.
-54. For authoritative Wave 1 verification, prefer the sequential wrapper:
-   - `python scripts/run_cvf_wave1_authoritative_sequence.py`
-55. For the canonical production-candidate review posture, prefer:
-   - `python scripts/run_cvf_production_candidate_packet_conformance.py`
-56. For the canonical internal-audit posture, prefer:
-   - `python scripts/run_cvf_internal_audit_packet_conformance.py`
-57. For the canonical enterprise-onboarding posture, prefer:
-   - `python scripts/run_cvf_enterprise_onboarding_packet_conformance.py`
+
+- `python governance/compat/check_cross_family_deferred_policy.py --packet <packet-path> --enforce`
+
+1. Validate promotion-readiness posture:
+
+- `python governance/compat/check_cross_family_promotion_readiness.py --packet <packet-path> --enforce`
+
+1. Validate promotion / exception policy:
+
+- `python governance/compat/check_cross_family_promotion_policy.py --packet <packet-path> --enforce`
+
+1. Validate approval decision policy:
+
+- `python governance/compat/check_cross_family_approval_decision_policy.py --packet <packet-path> --enforce`
+
+1. Validate transition policy:
+
+- `python governance/compat/check_cross_family_transition_policy.py --packet <packet-path> --enforce`
+
+1. Validate transition prerequisites:
+
+- `python governance/compat/check_cross_family_transition_prerequisites.py --packet <packet-path> --enforce`
+
+1. Validate transition threshold satisfaction:
+
+- `python governance/compat/check_cross_family_transition_threshold_satisfaction.py --packet <packet-path> --enforce`
+
+1. Validate transition fulfillment evidence:
+
+- `python governance/compat/check_cross_family_transition_fulfillment.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact binding:
+
+- `python governance/compat/check_cross_family_approval_artifact_binding.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact fulfillment state:
+
+- `python governance/compat/check_cross_family_approval_artifact_fulfillment.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact strength state:
+
+- `python governance/compat/check_cross_family_approval_artifact_strength.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact authority state:
+
+- `python governance/compat/check_cross_family_approval_artifact_authority.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact validity lifecycle:
+
+- `python governance/compat/check_cross_family_approval_artifact_validity.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact revocation / expiry / invalidation-source evidence:
+
+- `python governance/compat/check_cross_family_approval_artifact_invalidation_evidence.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external validity:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_validity.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external authority trust:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_authority_trust.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external issuer policy:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_issuer_policy.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external issuer verification:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_issuer_verification.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external proof binding:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_proof_binding.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external proof verification:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_proof_verification.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external proof attestation:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_proof_attestation.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation validation:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_validation.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation attestation:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_attestation.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer authority:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_authority.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer attestation:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_attestation.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer verification:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_verification.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof attestation:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_attestation.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof validity:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_validity.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof external validity:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_external_validity.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority validation:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_validation.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority provenance:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority attestation:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_attestation.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority attestation verification:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_attestation_verification.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority provenance verification:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_verification.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority provenance attestation verification:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_verification.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority provenance attestation freshness:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_freshness.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority provenance attestation provenance:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority provenance attestation provenance verification:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_verification.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority provenance attestation provenance freshness:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_freshness.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority provenance attestation provenance freshness proof:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_freshness_proof.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact external revocation issuer proof authority provenance attestation provenance freshness proof verification:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_revocation_issuer_proof_authority_provenance_attestation_provenance_freshness_proof_verification.py --packet <packet-path> --enforce`
+
+1. Validate approval artifact expiry timestamp / freshness / external invalidation authority:
+
+- `python governance/compat/check_cross_family_approval_artifact_external_validity.py --packet <packet-path> --enforce`
+
+1. Validate the generated packet:
+
+- `python governance/compat/check_enterprise_evidence_pack.py --packet <packet-path> --enforce`
+
+1. Use `CVF_RELEASE_APPROVAL_PACKET_TEMPLATE.md` only when a manual packet is still required.
+2. For authoritative Wave 1 verification, prefer the sequential wrapper:
+
+- `python scripts/run_cvf_wave1_authoritative_sequence.py`
+
+1. For the canonical production-candidate review posture, prefer:
+
+- `python scripts/run_cvf_production_candidate_packet_conformance.py`
+
+1. For the canonical internal-audit posture, prefer:
+
+- `python scripts/run_cvf_internal_audit_packet_conformance.py`
+
+1. For the canonical enterprise-onboarding posture, prefer:
+
+- `python scripts/run_cvf_enterprise_onboarding_packet_conformance.py`
 
 ## Canonical References
 

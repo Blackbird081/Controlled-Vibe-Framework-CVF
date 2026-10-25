@@ -45,9 +45,11 @@ Tự     Tự     Giám   Thủ    ──X──
 ## Kỹ năng 1: Truy xuất Tri thức RAG (AGT-009)
 
 ### Chức năng
+
 Tìm kiếm tài liệu liên quan từ kho tri thức bằng vector search, sau đó đưa vào làm ngữ cảnh cho câu trả lời AI.
 
 ### Khi nào sử dụng
+
 - Trả lời câu hỏi dựa trên tài liệu dự án
 - Tìm kiếm trong wiki nội bộ, đặc tả, tài liệu tuân thủ
 - Tránh AI bịa đặt bằng cách cung cấp tài liệu nguồn thực
@@ -55,6 +57,7 @@ Tìm kiếm tài liệu liên quan từ kho tri thức bằng vector search, sau
 ### Cách gọi
 
 **Trong Agent Chat:**
+
 ```
 Bạn: Tìm kiếm trong kho tri thức về best practice xác thực
 
@@ -70,6 +73,7 @@ Kết quả:
 ```
 
 **Trong Code (TypeScript):**
+
 ```typescript
 const result = await agentTools.execute('rag_retrieval', {
   query: 'best practice xác thực',
@@ -89,6 +93,7 @@ const result = await agentTools.execute('rag_retrieval', {
 ```
 
 ### Kiểm soát Quản trị
+
 - ✅ Tất cả tài liệu truy xuất được log với ID và điểm liên quan
 - ✅ Bắt buộc trích dẫn nguồn trong output AI
 - ✅ Lọc PII trên nội dung trước khi đưa vào
@@ -96,6 +101,7 @@ const result = await agentTools.execute('rag_retrieval', {
 - ❌ Không thể bịa đặt nguồn không có trong kho tri thức
 
 ### Lỗi thường gặp
+
 | Lỗi | Cách sửa |
 |-----|---------|
 | Truy vấn quá mơ hồ ("kể về dự án") | Dùng từ cụ thể: "luồng refresh JWT token trong module xác thực" |
@@ -107,9 +113,11 @@ const result = await agentTools.execute('rag_retrieval', {
 ## Kỹ năng 2: Tạo Trực quan hóa Dữ liệu (AGT-010)
 
 ### Chức năng
+
 Tạo JSON cấu hình biểu đồ từ dữ liệu có cấu trúc, hỗ trợ biểu đồ đường, cột, tròn, vùng, và xếp chồng.
 
 ### Khi nào sử dụng
+
 - Trực quan hóa dữ liệu tài chính, dashboard metrics
 - Tạo biểu đồ so sánh từ dữ liệu CSV
 - Tạo biểu đồ theo dõi tiến độ
@@ -117,6 +125,7 @@ Tạo JSON cấu hình biểu đồ từ dữ liệu có cấu trúc, hỗ trợ
 ### Cách gọi
 
 **Trong Agent Chat:**
+
 ```
 Bạn: Tạo biểu đồ cột so sánh doanh thu Q1 và Q2 theo khu vực
 
@@ -131,6 +140,7 @@ Kết quả:
 ```
 
 **Trong Code (TypeScript):**
+
 ```typescript
 const chart = await agentTools.execute('data_viz', {
   data: [
@@ -147,6 +157,7 @@ const chart = await agentTools.execute('data_viz', {
 ```
 
 ### Kiểm soát Quản trị
+
 - ✅ Chỉ đọc — dữ liệu không bao giờ bị sửa đổi
 - ✅ Cấu hình biểu đồ được validate theo schema
 - ✅ Không có mã thực thi trong output
@@ -158,9 +169,11 @@ const chart = await agentTools.execute('data_viz', {
 ## Kỹ năng 3: Phân tích Tài liệu (AGT-011)
 
 ### Chức năng
+
 Phân tích tài liệu (PDF, CSV, TXT, ảnh) và trích xuất dữ liệu có cấu trúc theo schema.
 
 ### Khi nào sử dụng
+
 - Trích xuất dữ liệu tài chính từ báo cáo PDF
 - Phân tích file CSV
 - Trích xuất văn bản từ ảnh (OCR)
@@ -169,6 +182,7 @@ Phân tích tài liệu (PDF, CSV, TXT, ảnh) và trích xuất dữ liệu có
 ### Cách gọi
 
 **Trong Agent Chat:**
+
 ```
 Bạn: [Tải lên bao_cao_quy.pdf] Trích xuất bảng doanh thu từ báo cáo này
 
@@ -183,6 +197,7 @@ Kết quả:
 ```
 
 ### Kiểm soát Quản trị
+
 - ✅ Phát hiện PII chạy trên tất cả văn bản trích xuất
 - ✅ Giới hạn kích thước file (tối đa 10 MB)
 - ✅ Validate định dạng hỗ trợ (từ chối file thực thi)
@@ -194,9 +209,11 @@ Kết quả:
 ## Kỹ năng 4: Bộ điều khiển Vòng lặp Agentic (AGT-012) ⚠️ R3
 
 ### Chức năng
+
 Quản lý thực thi tác vụ tự động nhiều bước. Giống như "cruise control" để xây dựng tính năng — agent làm việc qua danh sách task, commit tiến độ qua git, và có thể tiếp tục giữa các phiên.
 
 ### Khi nào sử dụng
+
 - Xây dựng tính năng lớn với hơn 10 subtask
 - Tái cấu trúc tự động trên nhiều file
 - Tạo test cho toàn bộ module
@@ -209,6 +226,7 @@ Kỹ năng này hoạt động tự động và sửa file. **Bạn phải phê 
 ### Cách gọi
 
 **Trong Agent Chat:**
+
 ```
 Bạn: Xây dựng module xác thực người dùng. Đây là spec: [tải lên auth_spec.md]
 
@@ -238,6 +256,7 @@ Agent: [Bắt đầu vòng lặp agentic...]
 ```
 
 ### Mô hình An ninh
+
 ```
 ┌─────────────────────────────────────┐
 │  Sandbox cấp OS                     │
@@ -260,6 +279,7 @@ Agent: [Bắt đầu vòng lặp agentic...]
 ```
 
 ### Kiểm soát Quản trị
+
 - ✅ Bắt buộc giới hạn số lần lặp (không vòng lặp vô hạn)
 - ✅ Danh sách lệnh Bash được phép applied
 - ✅ Thao tác file bị giới hạn trong thư mục dự án
@@ -274,9 +294,11 @@ Agent: [Bắt đầu vòng lặp agentic...]
 ## Kỹ năng 5: Tự động Trình duyệt (AGT-013) ⚠️ R3
 
 ### Chức năng
+
 Điều khiển trình duyệt web thông qua Playwright. Có thể điều hướng trang, đọc DOM, điền form, nhấn nút, cuộn trang, tìm văn bản, và chụp ảnh màn hình.
 
 ### Khi nào sử dụng
+
 - Test end-to-end cho ứng dụng web
 - Thu thập dữ liệu công khai từ website
 - Xác minh kết quả deploy
@@ -289,6 +311,7 @@ Tự động trình duyệt BẮT BUỘC chạy trong Docker container. Không b
 ### Cách gọi
 
 **Trong Agent Chat:**
+
 ```
 Bạn: Test trang đăng nhập tại http://localhost:3000/login
 
@@ -306,6 +329,7 @@ Agent (Builder): [Gọi AGT-013 trong container]
 ```
 
 ### Quy tắc An toàn
+
 | Quy tắc | Thực thi |
 |---------|---------|
 | Cô lập container | Docker với XVFB virtual display |
@@ -320,9 +344,11 @@ Agent (Builder): [Gọi AGT-013 trong container]
 ## Kỹ năng 6: Kết nối MCP Server (AGT-014)
 
 ### Chức năng
+
 Kết nối với server [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) bên ngoài để khám phá và gọi công cụ bên thứ ba một cách linh hoạt.
 
 ### Khi nào sử dụng
+
 - Tích hợp cơ sở dữ liệu, API, hoặc dịch vụ bên ngoài
 - Kết nối với công cụ AI chuyên biệt (phân tích code, search engine)
 - Khám phá công cụ động mà không cần hardcode
@@ -330,6 +356,7 @@ Kết nối với server [Model Context Protocol (MCP)](https://modelcontextprot
 ### Cách gọi
 
 **Trong Agent Chat:**
+
 ```
 Bạn: Kết nối với GitHub MCP server và liệt kê các issue đang mở
 
@@ -347,6 +374,7 @@ Kết quả:
 ```
 
 ### Kiểm soát Quản trị
+
 - ✅ Server phải nằm trong danh sách server đã phê duyệt
 - ✅ Giới hạn timeout kết nối (mặc định 15s)
 - ✅ Schema công cụ được validate trước khi gọi
@@ -390,21 +418,27 @@ Bạn cần gì?
 Các kỹ năng hoạt động tốt nhất khi kết hợp. Các tổ hợp phổ biến:
 
 ### Pipeline Phân tích Tài liệu
+
 ```
 AGT-011 (Parse PDF) → AGT-010 (Trực quan hóa) → AGT-009 (Tìm ngữ cảnh)
 ```
+
 Tải báo cáo tài chính → Trích xuất bảng → Tạo biểu đồ → Tìm so sánh trong kho tri thức.
 
 ### Workflow Xây dựng Tự động
+
 ```
 AGT-009 (Tìm specs) → AGT-012 (Vòng lặp agentic) → AGT-013 (Test trình duyệt)
 ```
+
 Truy xuất yêu cầu → Xây dựng tính năng từng bước → Xác minh trên trình duyệt.
 
 ### Pipeline Tích hợp Công cụ
+
 ```
 AGT-014 (Kết nối MCP) → AGT-011 (Parse kết quả) → AGT-010 (Trực quan hóa)
 ```
+
 Kết nối với API bên ngoài → Phân tích dữ liệu phản hồi → Tạo biểu đồ dashboard.
 
 ---

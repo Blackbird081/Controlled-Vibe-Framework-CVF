@@ -20,12 +20,14 @@ Không yêu cầu.
 Đánh giá các tương tác UI/UX: touch targets, cursor states, hover feedback, loading states, focus rings, transition timing. Đảm bảo mọi interaction đạt chuẩn chuyên nghiệp.
 
 **Khi nào nên dùng:**
+
 - Review UI trước khi launch
 - Kiểm tra mobile touch experience
 - Audit interaction patterns sau redesign
 - Nhận feedback "UI không responsive/mượt"
 
 **Không phù hợp khi:**
+
 - Chỉ cần review content/copy
 - Backend-only review
 
@@ -73,7 +75,7 @@ Không yêu cầu.
 
 | Field | Bắt buộc | Mô tả | Ví dụ |
 |-------|----------|-------|-------|
-| **URL/Code** | ✅ | Link hoặc code cần review | "https://myapp.com" |
+| **URL/Code** | ✅ | Link hoặc code cần review | "<https://myapp.com>" |
 | **Platform** | ✅ | Web, iOS, Android | "Web responsive" |
 | **Key flows** | ✅ | Flows quan trọng cần check | "Login, Checkout, Search" |
 | **Known issues** | ❌ | Vấn đề đã biết | "Buttons khó nhấn trên mobile" |
@@ -132,6 +134,7 @@ INTERACTION AUDIT: [Project Name]
 - [ ] `prefers-reduced-motion` respected
 
 **Red flags (cần Reject):**
+
 - ⚠️ Touch targets < 30px (unusable)
 - ⚠️ Không có focus indicators
 - ⚠️ Animation > 500ms (sluggish feel)
@@ -163,7 +166,8 @@ INTERACTION AUDIT: [Project Name]
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 URL: https://myshop.com
 Platform: Web responsive (mobile-first)
@@ -171,7 +175,8 @@ Key flows: Product search, Add to cart, Checkout
 Known issues: Customers complain about checkout on phone
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 🔴 CRITICAL: Checkout button 32x32px → cần 44x44px
 🟡 HIGH: 12 elements thiếu cursor-pointer

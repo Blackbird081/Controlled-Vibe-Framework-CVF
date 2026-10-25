@@ -12,6 +12,8 @@ Test coverage:
 import pytest
 from typing import Dict, Any
 
+from sdk.models.skill_contract import SkillContract
+
 
 class TestSkillContractCreation:
     """Test creating and loading Skill Contracts."""
@@ -43,40 +45,43 @@ class TestSkillContractCreation:
         assert contract["RISK_LEVEL"] == "High"
         assert contract["HUMAN_INTERVENTION_REQUIRED"] == True
 
+    def test_from_dict_accepts_native_lowercase_contract(self, valid_native_skill_contract_data):
+        """The native model accepts its documented lower-case contract shape."""
+        contract = SkillContract.from_dict(valid_native_skill_contract_data)
+
+        assert contract.capability_id == "native.comment.create"
+        assert contract.risk_level.value == "R1"
+        assert contract.execution.side_effects is True
+        assert contract.execution.rollback_possible is True
+        assert contract.execution.idempotent is False
+
 
 class TestSkillContractValidation:
     """Test Skill Contract validation and constraints."""
 
-    def test_deny_first_policy_missing_domain(self):
-        """Should deny contract missing DOMAIN (deny-first policy)."""
-        incomplete_contract = {
-            "CAPABILITY_ID": "test-skill",
-            # Missing DOMAIN
-            "DESCRIPTION": "Test"
-        }
+    def test_deny_first_policy_missing_domain(self, valid_native_skill_contract_data):
+        """The native parser refuses a contract without its required domain."""
+        incomplete_contract = valid_native_skill_contract_data.copy()
+        del incomplete_contract["domain"]
 
-        # This test assumes SkillContract validator exists
-        # Expected: validation fails with MissingFieldError
-        with pytest.raises(Exception):  # Replace with actual validator
-            # Pseudo-code: SkillContract.validate(incomplete_contract)
-            pass
+        with pytest.raises(KeyError, match="domain"):
+            SkillContract.from_dict(incomplete_contract)
 
-    def test_deny_first_policy_missing_input_spec(self, valid_skill_contract_r0):
-        """Should deny contract if INPUT_FIELDS missing."""
-        contract = valid_skill_contract_r0.copy()
-        del contract["INPUT_FIELDS"]  # Remove required field
+    def test_deny_first_policy_missing_input_spec(self, valid_native_skill_contract_data):
+        """The native model refuses a contract with no input specification."""
+        contract = valid_native_skill_contract_data.copy()
+        del contract["input_spec"]
 
-        # Expected: validation fails
-        with pytest.raises(Exception):  # Replace with actual validator
-            pass
+        with pytest.raises(ValueError, match="At least one input field is required"):
+            SkillContract.from_dict(contract)
 
-    def test_invalid_risk_level(self, invalid_skill_contract_bad_risk):
-        """Should reject invalid RISK_LEVEL."""
-        contract = invalid_skill_contract_bad_risk
+    def test_invalid_risk_level(self, valid_native_skill_contract_data):
+        """The native RiskLevel enum rejects unsupported risk values."""
+        contract = valid_native_skill_contract_data.copy()
+        contract["risk_level"] = "Unknown"
 
-        # Expected: validation fails with InvalidRiskLevelError
-        with pytest.raises(Exception):
-            pass
+        with pytest.raises(ValueError, match="Unknown"):
+            SkillContract.from_dict(contract)
 
     @pytest.mark.parametrize("invalid_risk", [
         "Unknown",
@@ -218,11 +223,12 @@ class TestRollbackPossibility:
 
         assert contract["ROLLBACK_POSSIBILITY"] == "N/A"
 
-    def test_r1_has_rollback_plan(self, valid_skill_contract_r1):
+    def test_r1_has_rollback_plan(self, valid_native_skill_contract_data):
         """R1 write operations should have rollback capability."""
-        contract = valid_skill_contract_r1
+        contract = SkillContract.from_dict(valid_native_skill_contract_data)
 
-        assert "rollback" in contract["ROLLBACK_POSSIBILITY"].lower()
+        assert contract.execution.side_effects is True
+        assert contract.execution.rollback_possible is True
 
     def test_r2_has_detailed_rollback(self, valid_skill_contract_r2):
         """R2 critical operations must have explicit rollback."""

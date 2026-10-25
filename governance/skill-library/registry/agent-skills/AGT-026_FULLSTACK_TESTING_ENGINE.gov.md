@@ -246,12 +246,14 @@ export const options = {
 **UAT Link:** `governance/skill-library/uat/results/UAT-AGT-026.md`
 
 **PASS criteria:**
+
 - [ ] Test pyramid adherence within 70±10% unit, 20±10% integration, 10±5% E2E
 - [ ] Flaky test rate <2% of total tests
 - [ ] CI gate pass rate ≥95% of builds
 - [ ] 100% of critical E2E paths tested
 
 **FAIL criteria:**
+
 - [ ] Gate 1 (unit) skipped to run Gate 3 (E2E)
 - [ ] Flaky test quarantined instead of fixed
 - [ ] Merge allowed below 60% unit coverage

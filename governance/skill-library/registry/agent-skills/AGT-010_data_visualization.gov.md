@@ -19,6 +19,7 @@ Skill mapping: `governance/skill-library/examples/AGT-010_DATA_VISUALIZATION_GEN
 Generates chart configuration JSON from structured data, supporting multiple chart types for interactive data visualization.
 
 **Actions:**
+
 - Accept structured data arrays and generate chart configs
 - Support line, bar, pie, area, and stacked area chart types
 - Configure axes, series, labels, and titles
@@ -64,6 +65,7 @@ Generates chart configuration JSON from structured data, supporting multiple cha
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Generated config is valid Recharts JSON
 - [ ] Chart accurately represents input data
 - [ ] No executable code in output
@@ -71,6 +73,7 @@ Generates chart configuration JSON from structured data, supporting multiple cha
 - [ ] Source data unmodified after operation
 
 **FAIL criteria:**
+
 - [ ] Invalid or malformed chart configuration
 - [ ] Data misrepresentation (wrong axis mapping, missing series)
 - [ ] Executable code injected into config

@@ -131,4 +131,3 @@ those assets without confusing derived views with authority.
 This standard creates a traceable reconciliation layer. It does not ingest a
 corpus, prove semantic correctness, authorize runtime changes, or permit
 autonomous mutation.
-

@@ -14,7 +14,7 @@ Nhưng thiếu, lệch hoặc yếu ở một số section
 
 Đây là trạng thái phổ biến nhất trong vận hành thực tế.
 
-2. Dấu hiệu nhận biết
+1. Dấu hiệu nhận biết
 
 Bạn đang gặp Partial Failure khi:
 
@@ -26,12 +26,12 @@ Có câu trả lời, nhưng thiếu căn cứ hoặc hành động rõ
 
 ⛔ Đây không phải là Happy Path.
 
-3. Phản xạ SAI cần tránh
-Phản xạ	Vì sao sai
-Sửa tay phần thiếu	Phá audit
-Prompt nối tiếp	Mất trace
-Chấp nhận tạm	Tích lũy lỗi
-4. Cách xử lý ĐÚNG
+1. Phản xạ SAI cần tránh
+Phản xạ Vì sao sai
+Sửa tay phần thiếu Phá audit
+Prompt nối tiếp Mất trace
+Chấp nhận tạm Tích lũy lỗi
+2. Cách xử lý ĐÚNG
 Bước 1: Reject có điều kiện
 
 Reject output
@@ -56,7 +56,7 @@ Chạy execution mới, độc lập
 
 ⛔ Không reuse output cũ.
 
-5. Khi nào được Retry ngay?
+1. Khi nào được Retry ngay?
 
 Retry chỉ được phép khi:
 
@@ -66,7 +66,7 @@ Thiếu format rõ ràng
 
 Tham chiếu: 13_FAILURE_UX/retry_vs_reject_policy.md
 
-6. Partial Failure ≠ Lỗi AI
+1. Partial Failure ≠ Lỗi AI
 
 Partial Failure thường cho thấy:
 

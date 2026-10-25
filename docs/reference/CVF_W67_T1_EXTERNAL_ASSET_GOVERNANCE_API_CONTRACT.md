@@ -26,6 +26,7 @@ Both routes are isolated from `/api/execute`, provider adapters, and PVV evidenc
 ## Authentication
 
 Both routes accept either:
+
 - **Session cookie** — set by NextAuth.js login (`verifySessionCookie`)
 - **Service token** — `x-cvf-service-token: <CVF_SERVICE_TOKEN env>` header
 
@@ -373,6 +374,7 @@ after retirement.
 The operator-facing page is available at `/governance/external-assets` in the cvf-web dashboard.
 
 Tabs:
+
 - **Prepare Asset** — submit a profile, view `workflowStatus` badge + closure guidance, register if ready
 - **Registry** — list all registered governed assets with audit metadata and CVF ADD runtime readout
 

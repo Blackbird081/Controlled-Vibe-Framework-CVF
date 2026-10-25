@@ -9,6 +9,7 @@
 Tài liệu này định nghĩa vòng đời chính thức của một **Capability** trong CVF v1.2, từ lúc đề xuất → sử dụng → nâng cấp → ngừng hoạt động.
 
 **Mục tiêu:**
+
 - Chặn skill drift
 - Tránh "AI biết làm nhưng không ai chịu trách nhiệm"
 - Cho phép tiến hóa mà không phá governance
@@ -49,6 +50,7 @@ stateDiagram-v2
 Capability mới được đề xuất, chưa được resolve.
 
 **BẮT BUỘC có:**
+
 - Draft Skill Contract
 - Risk assessment sơ bộ
 
@@ -64,6 +66,7 @@ Capability mới được đề xuất, chưa được resolve.
 Skill Contract đã được audit và phê duyệt.
 
 **Yêu cầu:**
+
 - Governance constraints hợp lệ
 - Có người chịu trách nhiệm phê duyệt
 
@@ -93,6 +96,7 @@ Capability hợp lệ để resolve và execution.
 Capability vẫn tồn tại nhưng **KHÔNG khuyến khích** sử dụng.
 
 **Lý do deprecated:**
+
 - Rủi ro đã xác định
 - Có capability thay thế
 - Governance mismatch
@@ -141,6 +145,7 @@ Skill Contract có version riêng với format: `MAJOR.MINOR`
 ### 4.3 Breaking Changes
 
 Breaking change → capability phải:
+
 1. Bị **DEPRECATED**
 2. Capability mới được tạo riêng với ID mới
 
@@ -193,6 +198,7 @@ if capability.state == LifecycleState.DEPRECATED:
 ## 7. Skill Drift Prevention Rules
 
 Một Capability bị coi là **DRIFTING** nếu:
+
 - Execution behavior khác contract
 - Input/output vượt spec
 - Governance bị bypass

@@ -33,17 +33,21 @@ All errors extend `BaseGovernanceError`:
 ## Common Scenarios
 
 ### "GovernanceViolationError: Governance violation: Operator not authorized; Risk exceeds environment cap"
+
 - **Cause**: Multiple governance checks failed
 - **Fix**: Ensure operator has required role AND operation risk fits environment
 
 ### "PhaseViolationError: Cannot transition from P1_BUILD to P3_UAT"
+
 - **Cause**: Phase skip attempted
 - **Fix**: Progress through P2_INTERNAL_VALIDATION first
 
 ### "FreezeViolationError: Skill finance-portfolio@1.0.0 is already frozen"
+
 - **Cause**: Trying to freeze an already-frozen skill
 - **Fix**: No action needed, or breakFreeze() then re-freeze
 
 ### "ProviderError: Model 'gpt-5' is not approved for provider 'openai'"
+
 - **Cause**: Using a model not in model.approval.list.md
 - **Fix**: Use an approved model or update the approval list

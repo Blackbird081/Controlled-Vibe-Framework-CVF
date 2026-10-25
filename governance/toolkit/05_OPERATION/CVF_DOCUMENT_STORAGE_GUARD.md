@@ -116,3 +116,17 @@ Violations include:
 ## Final Clause
 
 Correct naming identifies the document. Correct placement identifies its role in the system. CVF requires both.
+
+## Exact Public Compatibility Paths - 2026-10-26
+
+These existing public artifact paths retain their public compatibility identity
+when their source is reconciled into provenance:
+
+- `docs/EXPORT_MANIFEST.md`: compact current export/change-evidence front door.
+- `docs/benchmark/qbs-1/README.md`: current QBS package navigation and claim status.
+- `docs/evidence/archive/EXPORT_MANIFEST_2026-05-09.md`: immutable May 9 public inventory preimage.
+
+These are exact file exceptions, not approval for new docs root files or broad
+benchmark/evidence folders. The private docs index remains the taxonomy owner.
+The archive keeps its pinned bytes under the encoding standard; active summaries
+retain current authoring and evidence requirements.

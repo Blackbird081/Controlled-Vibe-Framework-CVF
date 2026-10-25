@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Write, structure, and update a business plan for a solopreneur. Use when creating a plan from scratch, updating an existing plan after a pivot or new phase, or preparing a plan to share with investors, partners, or even just to clarify your own strategy. Covers executive summary, market analysis, competitive positioning, revenue model, operations plan, financial projections, and risk assessment — all adapted for a one-person business. Trigger on "write a business plan", "business plan", "create my plan", "business plan template", "update my business plan", "plan for my business", "investor pitch plan".
 
 **Khi nào dùng skill này:**
+
 - Cần Business Plan với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: business analysis
-- Nguồn tham khảo: https://github.com/openclaw/skills/tree/main/skills/jk-0001/business-plan
+- Nguồn tham khảo: <https://github.com/openclaw/skills/tree/main/skills/jk-0001/business-plan>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Phân tích chiến lược mở rộng thị trường
 Context: SME Việt, ngân sách 50k USD
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Business Plan Output
 

@@ -59,4 +59,3 @@ drift check = PASS
 
 A knowledge map may be partial and still useful. It may not hide the partial
 state or present a derived view as source authority.
-

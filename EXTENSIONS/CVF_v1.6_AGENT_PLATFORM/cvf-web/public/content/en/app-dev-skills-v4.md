@@ -38,15 +38,18 @@ Safe/Auto         Low/Auto           Medium/Supervised    High/Manual
 ## Skill 1: API Architecture Designer (AGT-025)
 
 ### What It Does
+
 Comprehensive methodology for designing APIs with a **decision tree** that routes to the right architecture pattern (REST, GraphQL, or gRPC) based on project constraints.
 
 ### When to Use
+
 - Starting a new backend service or microservice
 - Migrating from monolith to microservices
 - Choosing between REST, GraphQL, and gRPC
 - Designing error handling contracts and versioning strategy
 
 ### Key Concept: API Style Decision Tree
+
 ```
 Need real-time streaming? ──Yes──→ gRPC (Protocol Buffers)
          │No
@@ -56,6 +59,7 @@ Standard CRUD with caching? ──Yes──→ REST (OpenAPI 3.1)
 ```
 
 ### Microservices Patterns Available
+
 | Pattern | When | Example |
 |---------|------|---------|
 | API Gateway | Multiple clients, rate limiting | Kong, AWS API Gateway |
@@ -66,6 +70,7 @@ Standard CRUD with caching? ──Yes──→ REST (OpenAPI 3.1)
 | Circuit Breaker | Cascading failure prevention | Resilience4j, Polly |
 
 ### Chat Prompt Examples
+
 ```
 "Design a REST API for a multi-tenant SaaS product catalog"
 "Should I use GraphQL or REST for this mobile app with complex nested data?"
@@ -78,15 +83,18 @@ Standard CRUD with caching? ──Yes──→ REST (OpenAPI 3.1)
 ## Skill 2: Full-Stack Testing Engine (AGT-026)
 
 ### What It Does
+
 Enforces the **70-20-10 testing pyramid** with a 4-gate CI system that progressively validates code quality from unit tests through to production readiness.
 
 ### When to Use
+
 - Setting up test infrastructure for a new project
 - Improving test coverage and reducing flaky tests
 - Building CI/CD quality gates
 - Performance testing with load simulation
 
 ### Key Concept: Testing Pyramid 70-20-10
+
 ```
            ╱╲          E2E (10%)
           ╱  ╲         Playwright, critical paths only
@@ -99,6 +107,7 @@ Enforces the **70-20-10 testing pyramid** with a 4-gate CI system that progressi
 ```
 
 ### 4-Gate CI System
+
 | Gate | Tests | Threshold | Blocks |
 |------|-------|-----------|--------|
 | **Gate 1** | Unit tests | 80% coverage | Merge to dev |
@@ -107,6 +116,7 @@ Enforces the **70-20-10 testing pyramid** with a 4-gate CI system that progressi
 | **Gate 4** | Load + security + a11y | p95 < 200ms, 0 critical | Deploy to prod |
 
 ### Flakiness Mitigation Protocol
+
 ```
 1. Quarantine flaky test immediately (move to .flaky.test.ts)
 2. Add retry(3) annotation with exponential backoff
@@ -115,6 +125,7 @@ Enforces the **70-20-10 testing pyramid** with a 4-gate CI system that progressi
 ```
 
 ### Chat Prompt Examples
+
 ```
 "Set up a Vitest + Playwright testing pyramid for my Next.js app"
 "My CI has 12% flaky tests — help me apply the flakiness mitigation protocol"
@@ -127,15 +138,18 @@ Enforces the **70-20-10 testing pyramid** with a 4-gate CI system that progressi
 ## Skill 3: Security & Auth Guard (AGT-027)
 
 ### What It Does
+
 Provides an **auth method selection decision tree** and **OWASP Top 10 defense matrix** for implementing production-grade authentication and security hardening.
 
 ### When to Use
+
 - Implementing user authentication from scratch
 - Adding OAuth, SSO, or multi-factor authentication
 - Security auditing an existing application
 - Hardening API endpoints and headers
 
 ### Key Concept: Auth Method Selection Tree
+
 ```
 Internal users only? ──Yes──→ SSO / SAML
          │No
@@ -151,6 +165,7 @@ Standard web app ──→ OAuth 2.1 + JWT (15m access / 7d refresh)
 ```
 
 ### OWASP Top 10 (2025) Defense Matrix
+
 | # | Threat | Defense |
 |---|--------|---------|
 | A01 | Broken Access Control | RBAC enforcement, principle of least privilege |
@@ -159,6 +174,7 @@ Standard web app ──→ OAuth 2.1 + JWT (15m access / 7d refresh)
 | A07 | Auth Failures | Account lockout (5 attempts/15min), 2FA enforcement |
 
 ### Security Headers Checklist
+
 ```
 Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 Content-Security-Policy: default-src 'self'; script-src 'self'
@@ -171,6 +187,7 @@ Cross-Origin-Opener-Policy: same-origin
 ```
 
 ### Chat Prompt Examples
+
 ```
 "Set up OAuth 2.1 with JWT for my Next.js app — 15-minute access tokens"
 "Run a security audit against OWASP Top 10 for my Express.js API"
@@ -183,15 +200,18 @@ Cross-Origin-Opener-Policy: same-origin
 ## Skill 4: Database Schema Architect (AGT-028)
 
 ### What It Does
+
 Database selection decision tree and schema design methodology covering **relational (PostgreSQL)** and **document (MongoDB)** patterns, with indexing, migration, and optimization strategies.
 
 ### When to Use
+
 - Choosing between PostgreSQL, MongoDB, Redis, or other databases
 - Designing schemas for a new application
 - Optimizing slow queries or adding indexes
 - Planning database migrations safely
 
 ### Key Concept: Database Selection Tree
+
 ```
 Need ACID transactions? ──Yes──→ PostgreSQL
          │No
@@ -205,6 +225,7 @@ Time-series data? ──Yes──→ TimescaleDB
 ```
 
 ### Schema Design Patterns
+
 | Type | Pattern | Example |
 |------|---------|---------|
 | **Relational** | 3NF normalization | Users → Orders → Items (FK relationships) |
@@ -213,6 +234,7 @@ Time-series data? ──Yes──→ TimescaleDB
 | **Hybrid** | Denormalize for performance | Cache computed fields, invalidate on write |
 
 ### Index Strategy Quick Reference
+
 | Query Pattern | PostgreSQL | MongoDB |
 |--------------|-----------|---------|
 | Exact match (=) | B-tree (default) | Single field |
@@ -223,6 +245,7 @@ Time-series data? ──Yes──→ TimescaleDB
 | Composite queries | Multi-column B-tree | Compound index |
 
 ### Migration Workflow (5 Steps)
+
 ```
 1. Schema version file → migrations/YYYYMMDD_description.sql
 2. Review: check backward compatibility
@@ -232,6 +255,7 @@ Time-series data? ──Yes──→ TimescaleDB
 ```
 
 ### Chat Prompt Examples
+
 ```
 "Design a PostgreSQL schema for a multi-tenant SaaS — users, teams, billing"
 "Should I embed orders inside user documents or reference them separately?"
@@ -244,15 +268,18 @@ Time-series data? ──Yes──→ TimescaleDB
 ## Skill 5: Frontend Component Forge (AGT-029)
 
 ### What It Does
+
 Component architecture decision system for **React/Next.js** applications — covering feature organization, Suspense patterns, lazy loading, and design system integration.
 
 ### When to Use
+
 - Setting up component architecture for a new React project
 - Refactoring a component hierarchy that's grown unwieldy
 - Adding code splitting and lazy loading
 - Integrating a design system (MUI, Tailwind, Shadcn)
 
 ### Key Concept: Component Architecture Tree
+
 ```
 Is it a page/route? ──────────────→ Route Component (app/page.tsx)
 Is it a data container? ──────────→ Smart Component (use hooks, Suspense)
@@ -262,6 +289,7 @@ Is it shared across features? ────→ Common Component (src/components/)
 ```
 
 ### Feature Directory Pattern
+
 ```
 src/features/checkout/
 ├── components/        # Feature-specific UI
@@ -283,6 +311,7 @@ src/features/checkout/
 ### Three Component Patterns (TypeScript)
 
 **1. Standard Presentational Component**
+
 ```typescript
 interface ProductCardProps {
   title: string;
@@ -304,6 +333,7 @@ export function ProductCard({ title, price, imageUrl, onAddToCart }: ProductCard
 ```
 
 **2. Suspense Data Component**
+
 ```typescript
 import { Suspense } from 'react';
 
@@ -322,6 +352,7 @@ async function ProductListContent() {
 ```
 
 **3. Lazy Route Component**
+
 ```typescript
 import { lazy, Suspense } from 'react';
 
@@ -336,6 +367,7 @@ const CheckoutPage = lazy(() => import('./features/checkout/CheckoutPage'));
 ```
 
 ### Anti-Patterns (NEVER Do These)
+
 | ❌ Don't | ✅ Do Instead |
 |----------|--------------|
 | Props drilling > 3 levels | Use Context or state management |
@@ -346,6 +378,7 @@ const CheckoutPage = lazy(() => import('./features/checkout/CheckoutPage'));
 | useEffect for data fetching | Use React Query / SWR / Server Components |
 
 ### Chat Prompt Examples
+
 ```
 "Set up a feature directory structure for an e-commerce checkout flow"
 "Refactor this 400-line component into smaller pieces with proper separation"
@@ -372,6 +405,7 @@ These 5 skills work together in the app development lifecycle:
 ```
 
 ### Typical Workflow Example
+
 ```
 1. AGT-025: Design REST API for user management
 2. AGT-028: Create PostgreSQL schema (users, sessions, roles)
@@ -395,6 +429,7 @@ All 5 skills are governed under CVF's standard risk/authority model:
 | AGT-029 | R1 (Auto) | Component architecture guidance, file generation |
 
 ### Escalation Rule
+
 If AGT-025 recommends microservices + AGT-028 requires multi-database setup → **escalate to R3** (requires Orchestrator approval for cross-service deployment).
 
 ---

@@ -28,6 +28,7 @@ Memory class: POINTER_RECORD
 ## Primary Public Contracts
 
 **`./contracts`** (`contracts/index.ts`) exports:
+
 - `LLMAdapterInterface` — LLM model adapter contract
 - `MemoryAdapterInterface` — Memory/persistence adapter contract
 - `RuntimeAdapterInterface` — Generic runtime adapter contract
@@ -35,6 +36,7 @@ Memory class: POINTER_RECORD
 - `PolicyContract` — Policy evaluation contract
 
 **`./adapters`** (`adapters/index.ts`) exports:
+
 - `OpenClawAdapter` — OpenClaw LLM adapter
 - `PicoClawAdapter` — PicoClaw LLM adapter
 - `ZeroClawAdapter` — ZeroClaw LLM adapter
@@ -48,6 +50,7 @@ Memory class: POINTER_RECORD
 ## Publication Boundary
 
 **Included in `npm pack`** (via `files` field):
+
 - `README.md`
 - `index.ts`
 - `contracts/`
@@ -57,6 +60,7 @@ Memory class: POINTER_RECORD
 - `risk_models/*.json` (4 risk model files)
 
 **Not included** (excluded from pack):
+
 - `tests/`
 - `node_modules/`
 - `dist/`

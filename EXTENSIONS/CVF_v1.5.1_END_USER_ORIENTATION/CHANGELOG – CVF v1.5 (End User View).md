@@ -32,4 +32,3 @@
 v1.5 exists to **reduce misuse, confusion, and over-expectation** from end users, which were identified as the primary failure causes in earlier versions.
 
 ---
-

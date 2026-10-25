@@ -55,12 +55,14 @@ Kết quả:
 🟡 STEP 2 – RISK CLASSIFICATION
 
 Dựa vào Risk Matrix:
+
 | Câu hỏi               | Nếu YES  |
 | --------------------- | -------- |
 | Ảnh hưởng chi phí?    | ≥ HIGH   |
 | Ảnh hưởng khách hàng? | ≥ HIGH   |
 | Có yếu tố pháp lý?    | CRITICAL |
 | Chỉ phân tích nội bộ? | LOW      |
+
 🟠 STEP 3 – APPROVAL
 
 Theo risk level:

@@ -109,6 +109,19 @@ def test_partial_verdict_allows_visible_unmapped_assets() -> None:
     assert MODULE._validate_output("docs/audits/CVF_TEST.md", partial) == []
 
 
-def test_binding_requires_checker_reference() -> None:
+def test_binding_requires_checker_reference(monkeypatch) -> None:
+    # Isolate the supplied runner text from real repository command catalogs.
+    monkeypatch.setitem(MODULE.has_binding_marker.__globals__["CATALOG_PATHS_BY_RUNNER"], MODULE.AUTORUN_PATH, ())
     issues = MODULE._validate_binding(MODULE.AUTORUN_PATH, "no checker binding")
     assert any(MODULE.THIS_SCRIPT_PATH in message for message in _messages(issues))
+
+
+def test_public_profile_keeps_public_binding_failure(monkeypatch):
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", True)
+    assert MODULE._validate_binding(MODULE.AGENTS_PATH, "no checker binding")
+    assert MODULE._validate_binding(MODULE.CLAUDE_PATH, "private carrier not exported") == []
+
+
+def test_private_default_keeps_private_carrier_failure(monkeypatch):
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", False)
+    assert MODULE._validate_binding(MODULE.CLAUDE_PATH, "private carrier missing binding")

@@ -1,15 +1,18 @@
 # CVF_COMMANDS — v1.1
+
 Version: 1.1 | Status: STABLE | Layer: Interface | Compatible: v1.0 baseline (additive)
 
 Purpose: Intent chuẩn hóa cho hành động; mỗi command yêu cầu artifact bắt buộc và binding tới Archetype/Preset/AU.
 
 ## Taxonomy
+
 - Governance: CVF:PROPOSE, CVF:DECIDE, CVF:FREEZE
 - Design: CVF:DESIGN, CVF:REFINE
 - Execution: CVF:EXECUTE
 - Audit: CVF:REVIEW, CVF:AUDIT
 
 ## Artifact bắt buộc (tóm tắt)
+
 - PROPOSE: proposal, scope boundary, assumptions
 - DECIDE: decision statement, rationale, impact scope
 - FREEZE: freeze declaration, frozen scope
@@ -20,6 +23,7 @@ Purpose: Intent chuẩn hóa cho hành động; mỗi command yêu cầu artifac
 - AUDIT: audit report, violation list
 
 ## Binding chuẩn (v1.1)
+
 - CVF:PROPOSE → Archetype: Exploration/Analysis → Preset: Exploration/Analysis → AU type: Proposal
 - CVF:DECIDE → Archetype: Decision → Preset: Decision Policy → AU type: Decision Record
 - CVF:DESIGN → Archetype: Planning/Analysis → Preset: Planning/Analysis → AU type: Design Note
@@ -39,4 +43,5 @@ Purpose: Intent chuẩn hóa cho hành động; mỗi command yêu cầu artifac
 | CVF:AUDIT | Supervisor | Supervisor Policy | Audit Record | Audit report, violation list, follow-up actions |
 
 ## Enforcement
+
 Mọi action phải chỉ ra 1 command + 1 archetype + 1 preset + 1 AU, và phải link INPUT/OUTPUT spec khi applicable. Hành động thiếu liên kết được coi là out-of-framework.

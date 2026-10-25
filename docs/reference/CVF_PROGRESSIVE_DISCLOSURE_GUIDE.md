@@ -198,6 +198,7 @@ references:
 ```
 
 **Dependency types:**
+
 - `dependencies` – Required skills that must be available
 - `references` – Optional skills that enhance functionality
 
@@ -230,11 +231,13 @@ references:
 ### Example: Converting USR-045 Code Review
 
 **Before (single file, ~2000 tokens always loaded):**
+
 ```
 USR-045_code_review.skill.md
 ```
 
 **After (progressive, ~50 tokens always loaded):**
+
 ```
 USR-045_code_review/
 ├── metadata.yaml          ← 50 tokens (always)
@@ -249,7 +252,7 @@ USR-045_code_review/
 
 ## 6. References
 
-- Anthropic Skills Architecture: https://github.com/anthropics/skills
-- claude-code-templates Skills Pattern: https://github.com/davila7/claude-code-templates
+- Anthropic Skills Architecture: <https://github.com/anthropics/skills>
+- claude-code-templates Skills Pattern: <https://github.com/davila7/claude-code-templates>
 - CVF Skill Spec: `governance/skill-library/specs/CVF_SKILL_SPEC.md`
 - AGT-019 (Skill Progressive Loader): Manages this pattern at runtime

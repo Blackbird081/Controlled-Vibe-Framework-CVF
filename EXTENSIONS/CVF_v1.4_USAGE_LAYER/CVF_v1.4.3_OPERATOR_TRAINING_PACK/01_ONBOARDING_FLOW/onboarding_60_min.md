@@ -82,4 +82,3 @@ Với điều kiện:
 
 * Pass readiness check
 * Chấp nhận audit
-

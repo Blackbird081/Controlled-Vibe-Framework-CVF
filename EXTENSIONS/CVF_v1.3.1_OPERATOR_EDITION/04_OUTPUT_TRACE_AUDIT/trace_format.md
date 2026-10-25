@@ -15,6 +15,7 @@
 ### 1. Decision Summary
 
 AI xác nhận:
+
 - Input đã được hiểu theo đúng contract
 - Không cần thêm thông tin
 
@@ -26,6 +27,7 @@ AI xác nhận:
 ### 2. Execution Confirmation
 
 AI xác nhận:
+
 - Execution đã hoàn tất
 - Output được sinh ra chỉ dựa trên input
 - Không có can thiệp từ Operator
@@ -38,6 +40,7 @@ AI xác nhận:
 ### 3. Boundary Declaration
 
 AI tuyên bố:
+
 - Không mở rộng scope
 - Không thêm giả định (hoặc liệt kê nếu có)
 - Không vượt quyền

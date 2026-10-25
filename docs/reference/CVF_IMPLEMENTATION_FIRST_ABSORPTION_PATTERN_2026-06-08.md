@@ -134,6 +134,7 @@ Operator confirmation (2026-06-08):
 > "Chung ta se tien hanh Huong A: Policy_Local truoc → absorb len CVF sau"
 
 **Absorption path (future):**
+
 ```
 Policy_Local Gap 4 T1–T3 (proven, shipped)
     │

@@ -5,6 +5,7 @@ Status: AUTHORIZED - CALIBRATION PILOT COMPLETE / SCORED RUN BLOCKED
 Date: 2026-05-09
 Track: QBS-2 Calibration Pilot
 Parent track:
+
 - `docs/reference/CVF_GC018_QBS1_RUNNER_CORPUS_CANDIDATE_2026-05-09.md`
 - `docs/roadmaps/CVF_QBS1_RUNNER_CORPUS_PLANNING_ROADMAP_2026-05-09.md`
 
@@ -102,4 +103,3 @@ Parent track:
   `docs/benchmark/runs/qbs1-calibration-20260509-three-provider/`
 - Public artifact commit:
   `4a405cf Publish QBS-1 calibration pilot results`
-

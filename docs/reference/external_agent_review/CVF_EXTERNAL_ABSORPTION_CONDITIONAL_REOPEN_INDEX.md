@@ -61,7 +61,7 @@ owned CVF surface, or when the only reopen condition is vague operator interest.
 |---|---|
 | Standard | `docs/reference/external_agent_review/CVF_EXTERNAL_ABSORPTION_CORE_STANDARD.md` |
 | Input root or repository | Seeded from governed CVF review and roadmap artifacts listed in the inline manifest below |
-| Enumeration command | `rg -n "PACKAGE_CANDIDATE|RUNTIME_CANDIDATE|CHECKER_CANDIDATE|DEFER_WITH_REOPEN_CONDITION|DEFERRED_WITH_REOPEN_CONDITION|VALUE_PARKED" docs/reviews docs/roadmaps docs/reference` |
+| Enumeration command | `rg -n "PACKAGE_CANDIDATE\|RUNTIME_CANDIDATE\|CHECKER_CANDIDATE\|DEFER_WITH_REOPEN_CONDITION\|DEFERRED_WITH_REOPEN_CONDITION\|VALUE_PARKED" docs/reviews docs/roadmaps docs/reference` |
 | Manifest artifact or inline manifest | inline seed-source manifest table in this file |
 | Processing ledger artifact or inline ledger | inline candidate index table in this file |
 | Ledger terminal statuses | READ, ADAPTED, DEFERRED, REJECTED, NO_NEW_VALUE, BLOCKED_UNREADABLE |

@@ -1,3 +1,7 @@
+# CVF_DOCS_PRIVATE_ONLY conformance-golden-diff: private conformance golden baseline and diff report
+# CVF_DOCS_PRIVATE_ONLY conformance-release-grade: private conformance release evidence, not a public release claim
+# CVF_DOCS_PRIVATE_ONLY conformance-trace-rotation: private conformance evidence trace window
+# CVF_DOCS_PRIVATE_ONLY depth-audit-continuation-compat: private depth-audit continuation evidence
 name: Documentation & Testing
 
 on:
@@ -13,6 +17,7 @@ on:
       - 'EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/guards/**'
       - 'EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/guard-runtime-adapter.ts'
       - 'sdk/**'
+      - 'EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk/**'
       - '.github/workflows/**'
   pull_request:
     branches: [ main, develop ]
@@ -36,7 +41,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_docs_governance_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_docs_governance_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   governed-artifact-authoring:
     name: Governed Artifact Authoring
@@ -184,27 +189,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_baseline_update_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
-
-  depth-audit-continuation-compat:
-    name: Depth Audit Continuation Compat
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Enforce depth-audit continuation guard
-        env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
-          HEAD_SHA: ${{ github.sha }}
-        run: |
-          python governance/compat/check_depth_audit_continuation_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_baseline_update_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   gc018-stop-boundary-semantics:
     name: GC-018 Stop-Boundary Semantics
@@ -224,7 +209,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_gc018_stop_boundary_semantics.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_gc018_stop_boundary_semantics.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   session-governance-bootstrap:
     name: Session Governance Bootstrap
@@ -244,7 +229,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_session_governance_bootstrap.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_session_governance_bootstrap.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   progress-tracker-sync:
     name: Progress Tracker Sync
@@ -264,7 +249,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_progress_tracker_sync.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_progress_tracker_sync.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   surface-scan-continuity:
     name: Surface Scan Continuity
@@ -281,7 +266,7 @@ jobs:
 
       - name: Enforce GC-041 surface scan continuity
         run: |
-          python governance/compat/check_surface_scan_registry.py --enforce
+          python governance/compat/check_surface_scan_registry.py --profile public --enforce
 
   product-value-validation-guard:
     name: Product Value Validation Guard
@@ -301,7 +286,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_product_value_validation_guard_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_product_value_validation_guard_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   template-skill-standard-guard:
     name: Template Skill Standard Guard
@@ -321,7 +306,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_template_skill_standard_guard_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_template_skill_standard_guard_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   knowledge-absorption-priority-guard:
     name: Knowledge Absorption Priority Guard
@@ -341,7 +326,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_knowledge_absorption_priority_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_knowledge_absorption_priority_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   corpus-completeness-report-integrity:
     name: Corpus Completeness And Report Integrity
@@ -361,7 +346,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_corpus_completeness_report_integrity.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_corpus_completeness_report_integrity.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   corpus-to-knowledge-map-reconciliation:
     name: Corpus-To-Knowledge-Map Reconciliation
@@ -381,7 +366,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_corpus_to_knowledge_map_reconciliation.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_corpus_to_knowledge_map_reconciliation.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   agent-instruction-carrier-compaction:
     name: Agent Instruction Carrier Compaction
@@ -398,7 +383,7 @@ jobs:
 
       - name: Enforce ACRC-T2B instruction carrier compaction contract
         run: |
-          python governance/compat/check_agent_instruction_carriers.py --enforce
+          python governance/compat/check_agent_instruction_carriers.py --profile public --enforce
 
   multi-agent-review-governance:
     name: Multi-Agent Review Governance
@@ -418,7 +403,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_multi_agent_review_governance_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_multi_agent_review_governance_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   boardroom-runtime-governance:
     name: Boardroom Runtime Governance
@@ -438,7 +423,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_boardroom_runtime_governance_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_boardroom_runtime_governance_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   extension-package-check:
     name: Extension Package Check
@@ -478,22 +463,7 @@ jobs:
 
       - name: Enforce incremental test log rotation guard
         run: |
-          python governance/compat/check_incremental_test_log_rotation.py --enforce
-
-  conformance-trace-rotation:
-    name: Conformance Trace Rotation
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Enforce conformance trace rotation guard
-        run: |
-          python governance/compat/check_conformance_trace_rotation.py --enforce
+          python governance/compat/check_incremental_test_log_rotation.py --profile public --enforce
 
   python-automation-size:
     name: Python Automation Size
@@ -538,7 +508,7 @@ jobs:
 
       - name: Enforce system chain map freshness guard
         run: |
-          python governance/compat/check_system_chain_map_freshness.py --enforce
+          python governance/compat/check_system_chain_map_freshness.py --profile public --enforce
 
   test-partition-ownership:
     name: Test Partition Ownership
@@ -568,7 +538,7 @@ jobs:
 
       - name: Enforce release manifest consistency
         run: |
-          python governance/compat/check_release_manifest_consistency.py --enforce
+          python governance/compat/check_release_manifest_consistency.py --profile public --enforce
 
   cross-channel-guard-compat:
     name: Cross-Channel Guard Compat
@@ -618,7 +588,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_guard_authoring_standard.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_guard_authoring_standard.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   active-window-registry:
     name: Active Window Registry
@@ -635,7 +605,7 @@ jobs:
 
       - name: Enforce active window registry compatibility
         run: |
-          python governance/compat/check_active_window_registry.py --enforce
+          python governance/compat/check_active_window_registry.py --profile public --enforce
 
   repository-lifecycle-classification:
     name: Repository Lifecycle Classification
@@ -706,7 +676,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_audit_retention_registry.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_audit_retention_registry.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   review-retention-registry:
     name: Review Retention Registry
@@ -726,7 +696,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_review_retention_registry.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_review_retention_registry.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   foundational-guard-surfaces:
     name: Foundational Guard Surfaces
@@ -746,7 +716,7 @@ jobs:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          python governance/compat/check_foundational_guard_surfaces.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
+          python governance/compat/check_foundational_guard_surfaces.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
 
   enterprise-evidence-pack:
     name: Enterprise Evidence Pack
@@ -761,7 +731,7 @@ jobs:
 
       - name: Enforce enterprise evidence pack consistency
         run: |
-          python governance/compat/check_enterprise_evidence_pack.py --packet docs/reviews/cvf_phase_governance/CVF_RELEASE_APPROVAL_PACKET_LOCAL_BASELINE_2026-03-07.md --enforce
+          python governance/compat/check_enterprise_evidence_pack.py --profile public --enforce
 
   conformance-artifact-consistency:
     name: Conformance Artifact Consistency
@@ -774,51 +744,9 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Rebuild conformance artifacts
-        run: |
-          python scripts/run_cvf_cross_extension_conformance.py
-
       - name: Enforce conformance artifact consistency
         run: |
-          python governance/compat/check_conformance_artifact_consistency.py --enforce
-
-  conformance-golden-diff:
-    name: Conformance Golden Diff
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Rebuild canonical conformance artifacts
-        run: |
-          python scripts/run_cvf_cross_extension_conformance.py
-
-      - name: Enforce conformance golden diff
-        run: |
-          python governance/compat/check_conformance_golden_diff.py --enforce
-
-  conformance-release-grade:
-    name: Conformance Release Grade
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Rebuild canonical conformance artifacts
-        run: |
-          python scripts/run_cvf_cross_extension_conformance.py
-
-      - name: Enforce conformance release-grade gate
-        run: |
-          python scripts/run_cvf_conformance_release_gate.py
+          python governance/compat/check_conformance_artifact_consistency.py --profile public --enforce
 
   markdown-lint:
     name: Markdown Linting
@@ -827,19 +755,21 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install markdownlint
-        run: npm install -g markdownlint-cli
+        run: npm install -g markdownlint-cli@0.47.0
 
       - name: Lint all markdown files
         run: |
-          markdownlint --config .markdownlintrc '**/*.md' \
-            --ignore node_modules \
-            --ignore .git
+          python scripts/check_cvf_public_sync_candidate.py --lint-public-markdown --public-root .
         continue-on-error: false
 
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}/EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT
+      PYTHONDONTWRITEBYTECODE: '1'
     strategy:
+      fail-fast: false
       matrix:
         python-version: ['3.9', '3.10', '3.11']
 
@@ -854,8 +784,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-cov
-          pip install -e ./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk
+          pip install pytest pytest-cov PyYAML
 
       - name: Run unit tests
         run: |
@@ -875,6 +804,9 @@ jobs:
   integration-test:
     name: Integration Tests
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}/EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT
+      PYTHONDONTWRITEBYTECODE: '1'
     needs: test
 
     steps:
@@ -888,8 +820,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest
-          pip install -e ./EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk
+          pip install pytest PyYAML
 
       - name: Run integration tests
         run: |
@@ -907,10 +838,11 @@ jobs:
       - name: Validate documentation structure
         run: |
           echo "Checking for required documentation files..."
-          test -f docs/DOCUMENTATION_STYLE_GUIDE.md || exit 1
-          test -f docs/EXPERT_ASSESSMENT_ROADMAP_29012026.md || exit 1
+          test -f README.md || exit 1
+          test -f docs/INDEX.md || exit 1
+          test -f docs/reference/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_STANDARD.md || exit 1
           test -f .markdownlintrc || exit 1
-          echo "✓ All required documentation files present"
+          echo "All required documentation files present"
 
   registry-validate:
     name: Governance Registry Validation
@@ -931,44 +863,17 @@ jobs:
   status-check:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [docs-governance-compat, governed-artifact-authoring, markdown-structural-completeness, baseline-update-compat, depth-audit-continuation-compat, gc018-stop-boundary-semantics, session-governance-bootstrap, progress-tracker-sync, multi-agent-review-governance, boardroom-runtime-governance, extension-package-check, incremental-test-log-rotation, conformance-trace-rotation, python-automation-size, governed-file-size, test-partition-ownership, release-manifest-consistency, cross-channel-guard-compat, guard-registry-compat, guard-authoring-standard, active-window-registry, repository-lifecycle-classification, repository-exposure-classification, prepublic-p3-readiness, foundational-guard-surfaces, enterprise-evidence-pack, conformance-artifact-consistency, conformance-golden-diff, conformance-release-grade, markdown-lint, test, integration-test, documentation-build, registry-validate]
+    needs: [active-window-registry, agent-instruction-carrier-compaction, audit-retention-registry, baseline-update-compat, batch-contract-determinism, boardroom-runtime-governance, canon-summary-evidence-separation, conformance-artifact-consistency, corpus-completeness-report-integrity, corpus-to-knowledge-map-reconciliation, cpf-public-surface-maintainability, cpf-shared-batch-helper-adoption, cross-channel-guard-compat, docs-governance-compat, documentation-build, enterprise-evidence-pack, extension-package-check, foundational-guard-surfaces, gc018-stop-boundary-semantics, governed-artifact-authoring, governed-file-size, guard-authoring-standard, guard-registry-compat, incremental-test-log-rotation, integration-test, knowledge-absorption-priority-guard, markdown-lint, markdown-structural-completeness, multi-agent-review-governance, prepublic-p3-readiness, product-value-validation-guard, progress-tracker-sync, python-automation-size, registry-validate, release-manifest-consistency, repository-exposure-classification, repository-lifecycle-classification, review-retention-registry, session-governance-bootstrap, surface-scan-continuity, system-chain-map-freshness, template-skill-standard-guard, test, test-partition-ownership, work-order-dispatch-quality]
     if: always()
-
     steps:
-      - name: Check status
+      - name: Enforce all applicable results
+        env:
+          JOB_RESULTS: ${{ toJSON(needs) }}
         run: |
-          echo "All checks completed"
-          echo "Docs governance compat: ${{ needs.docs-governance-compat.result }}"
-          echo "Governed artifact authoring: ${{ needs.governed-artifact-authoring.result }}"
-          echo "Markdown structural completeness: ${{ needs.markdown-structural-completeness.result }}"
-          echo "Baseline update compat: ${{ needs.baseline-update-compat.result }}"
-          echo "Depth-audit continuation compat: ${{ needs.depth-audit-continuation-compat.result }}"
-          echo "GC-018 stop-boundary semantics: ${{ needs.gc018-stop-boundary-semantics.result }}"
-          echo "Session governance bootstrap: ${{ needs.session-governance-bootstrap.result }}"
-          echo "Progress tracker sync: ${{ needs.progress-tracker-sync.result }}"
-          echo "Multi-agent review governance: ${{ needs.multi-agent-review-governance.result }}"
-          echo "Boardroom runtime governance: ${{ needs.boardroom-runtime-governance.result }}"
-          echo "Extension package check: ${{ needs.extension-package-check.result }}"
-          echo "Incremental test log rotation: ${{ needs.incremental-test-log-rotation.result }}"
-          echo "Conformance trace rotation: ${{ needs.conformance-trace-rotation.result }}"
-          echo "Python automation size: ${{ needs.python-automation-size.result }}"
-          echo "Governed file size: ${{ needs.governed-file-size.result }}"
-          echo "Test partition ownership: ${{ needs.test-partition-ownership.result }}"
-          echo "Release manifest consistency: ${{ needs.release-manifest-consistency.result }}"
-          echo "Cross-channel guard compat: ${{ needs.cross-channel-guard-compat.result }}"
-          echo "Guard registry compat: ${{ needs.guard-registry-compat.result }}"
-          echo "Guard authoring standard: ${{ needs.guard-authoring-standard.result }}"
-          echo "Active window registry: ${{ needs.active-window-registry.result }}"
-          echo "Repository lifecycle classification: ${{ needs.repository-lifecycle-classification.result }}"
-          echo "Repository exposure classification: ${{ needs.repository-exposure-classification.result }}"
-          echo "Pre-public P3 readiness: ${{ needs.prepublic-p3-readiness.result }}"
-          echo "Foundational guard surfaces: ${{ needs.foundational-guard-surfaces.result }}"
-          echo "Enterprise evidence pack: ${{ needs.enterprise-evidence-pack.result }}"
-          echo "Conformance artifact consistency: ${{ needs.conformance-artifact-consistency.result }}"
-          echo "Conformance golden diff: ${{ needs.conformance-golden-diff.result }}"
-          echo "Conformance release grade: ${{ needs.conformance-release-grade.result }}"
-          echo "Markdown lint: ${{ needs.markdown-lint.result }}"
-          echo "Unit tests: ${{ needs.test.result }}"
-          echo "Integration tests: ${{ needs.integration-test.result }}"
-          echo "Documentation: ${{ needs.documentation-build.result }}"
-          echo "Registry validation: ${{ needs.registry-validate.result }}"
+          python - <<'PY'
+          import json, os, sys
+          results = json.loads(os.environ["JOB_RESULTS"])
+          rejected = {job: value.get("result") for job, value in results.items() if value.get("result") != "success"}
+          print(json.dumps({"checked": len(results), "rejected": rejected}, sort_keys=True))
+          sys.exit(1 if rejected or not results else 0)
+          PY

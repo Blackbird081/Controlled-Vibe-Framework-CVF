@@ -9,7 +9,7 @@
 ## Source
 
 Inspired by claude-code-templates analytics dashboard (real-time session monitoring, live state detection, usage statistics, conversation monitoring, health checks) and Sentry engineering skills.  
-Reference: https://github.com/davila7/claude-code-templates (Analytics Dashboard, Conversation Monitor)  
+Reference: <https://github.com/davila7/claude-code-templates> (Analytics Dashboard, Conversation Monitor)  
 Implementation in v1.6 AGENT_PLATFORM.  
 Skill mapping: `governance/skill-library/examples/AGT-020_ANALYTICS_DASHBOARD_GENERATOR.md`
 
@@ -20,6 +20,7 @@ Skill mapping: `governance/skill-library/examples/AGT-020_ANALYTICS_DASHBOARD_GE
 Generates real-time analytics dashboards for monitoring AI agent sessions, skill usage, performance metrics, governance compliance, and system health. Provides actionable insights and trend visualization.
 
 **Actions:**
+
 - Generate real-time session monitoring dashboards
 - Track skill usage frequency and performance metrics
 - Monitor governance compliance rates across agent interactions
@@ -73,6 +74,7 @@ Generates real-time analytics dashboards for monitoring AI agent sessions, skill
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Analytics generated from read-only data access
 - [ ] User prompts redacted in dashboard views
 - [ ] Data retention policy enforced
@@ -80,6 +82,7 @@ Generates real-time analytics dashboards for monitoring AI agent sessions, skill
 - [ ] Dashboard reflects real-time session state
 
 **FAIL criteria:**
+
 - [ ] Source data modified by analytics generation
 - [ ] User prompt content exposed in analytics
 - [ ] Data retention exceeded without cleanup

@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > React Native and Expo best practices for building performant mobile apps. Use when building React Native components, optimizing list performance, implementing animations, or working with native modules. Triggers on tasks involving React Native, Expo, mobile performance, or native platform APIs.
 
 **Khi nào dùng skill này:**
+
 - Cần Vercel React Native Kill với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: mobile app
-- Nguồn tham khảo: https://github.com/databuddy-analytics/Databuddy/tree/main/.agents/skills/vercel-react-native-skills
+- Nguồn tham khảo: <https://github.com/databuddy-analytics/Databuddy/tree/main/.agents/skills/vercel-react-native-skills>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Thiết kế API cho ứng dụng quản lý dự án
 Context: Team 4 dev, cần MVP trong 6 tuần
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Vercel React Native Kill Output
 

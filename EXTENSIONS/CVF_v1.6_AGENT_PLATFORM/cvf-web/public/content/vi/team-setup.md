@@ -289,6 +289,7 @@ fi
 ### "Quá nhiều chi phí quản lý"
 
 **Giải pháp:** Bắt đầu với chế độ governance Simple. Chỉ có 2 yêu cầu:
+
 1. Viết INPUT_SPEC trước khi yêu cầu AI
 2. Hoàn thành danh sách kiểm tra Phase D trong PR
 
@@ -297,6 +298,7 @@ Mọi thứ khác là tùy chọn. Thêm cấu trúc khi bạn cảm thấy cầ
 ### "Thành viên nhóm không áp dụng CVF"
 
 **Giải pháp:** Làm cho con đường CVF dễ hơn con đường không CVF:
+
 - PR template điền sẵn danh sách kiểm tra → ít việc hơn viết từ đầu
 - Skill library cung cấp điểm khởi đầu → nhanh hơn prompt trống
 - Template giúp giảm suy nghĩ → chỉ cần điền form
@@ -304,6 +306,7 @@ Mọi thứ khác là tùy chọn. Thêm cấu trúc khi bạn cảm thấy cầ
 ### "Skill library trở nên lỗi thời"
 
 **Giải pháp:**
+
 - Phân công người sở hữu (xem bảng ở trên)
 - Review hàng quý: loại bỏ skill không dùng, gộp trùng lặp
 - Đánh phiên bản skill: thay đổi cần PR có diff

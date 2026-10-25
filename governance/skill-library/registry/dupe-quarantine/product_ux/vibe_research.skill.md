@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Deep research and market validation for app ideas. Use when starting a new project, validating an idea, or when the user says "research my idea", "validate my app", or "help me start a new project".
 
 **Khi nào dùng skill này:**
+
 - Cần Vibe Re Earch với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -139,13 +142,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Ưu tiên bối cảnh ngắn, rõ, có ràng buộc
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
-- Nguồn tham khảo: https://github.com/KhazP/vibe-coding-prompt-template/tree/main/.claude/skills/vibe-research
+- Nguồn tham khảo: <https://github.com/KhazP/vibe-coding-prompt-template/tree/main/.claude/skills/vibe-research>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Vibe Re Earch cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
@@ -154,6 +158,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Vibe Re Earch Output
 

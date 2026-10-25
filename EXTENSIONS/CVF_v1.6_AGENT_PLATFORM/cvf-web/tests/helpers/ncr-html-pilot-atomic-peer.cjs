@@ -1,5 +1,4 @@
 /* Root/worker owned offline peer: compiles and calls the production ledger, never a test double. */
-/* eslint-disable @typescript-eslint/no-require-imports */
 'use strict';
 const fs = require('node:fs');
 const path = require('node:path');

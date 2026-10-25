@@ -9,6 +9,7 @@ Quy trình audit chuẩn — hoàn thành trong ≤5 phút.
 ## Nguyên tắc Audit
 
 Audit phải:
+
 - ⚡ **Nhanh** — không quá 5 phút
 - 🧊 **Lạnh** — không cảm tính
 - 🚫 **Không tranh luận** — không hỏi lại AI
@@ -81,6 +82,7 @@ failure_type: F1 | F2 | F3 | F4 (nếu FAIL)
 ```
 
 Không ghi nhận:
+
 - Cảm xúc
 - Nhận xét cá nhân
 - "Có thể tốt hơn nếu..."

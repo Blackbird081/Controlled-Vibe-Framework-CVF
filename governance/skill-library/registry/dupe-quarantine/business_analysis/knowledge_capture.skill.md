@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Document business rules, technical patterns, and service interfaces discovered during analysis or implementation. Use when you find reusable patterns, external integrations, domain-specific rules, or API contracts. Always check existing documentation before creating new files. Handles deduplication and proper categorization.
 
 **Khi nào dùng skill này:**
+
 - Cần Knowledge Capture với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: business analysis
-- Nguồn tham khảo: https://github.com/rsmdt/the-startup/tree/main/plugins/start/skills/knowledge-capture
+- Nguồn tham khảo: <https://github.com/rsmdt/the-startup/tree/main/plugins/start/skills/knowledge-capture>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Phân tích chiến lược mở rộng thị trường
 Context: SME Việt, ngân sách 50k USD
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Knowledge Capture Output
 

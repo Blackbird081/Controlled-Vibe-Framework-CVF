@@ -1,7 +1,7 @@
 'use client';
 // Text Encoding Exception: localized Vietnamese recovery copy follows the existing bilingual UI convention.
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useLanguage } from '@/lib/i18n';
 import { buildPreviewDocument, containPreviewNavigation, type DisplayedResult } from './ArtifactExportPanel';
@@ -35,48 +35,48 @@ const COPY = {
     unknown: 'Chỉ lưu được kết quả đã tạo trong phiên biểu mẫu này.', loadError: 'Không xem được các bản đã lưu. Không tạo HTML mới.' },
 };
 
-export function HtmlDraftRecovery({ sourceRecordId, displayed, versionState, endpoint = '/api/artifacts/drafts', jobMode = false, onConfirmedSnapshot }: Props) {
-  const { language } = useLanguage();
-  const copy = COPY[language === 'vi' ? 'vi' : 'en'];
-  const [versions, setVersions] = useState<Metadata[]>([]);
-  const [restored, setRestored] = useState<DraftSnapshot | null>(null);
-  const [pendingId, setPendingId] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
-  const [notice, setNotice] = useState('');
-  const [uncertain, setUncertain] = useState(false);
+export function HtmlDraftRecovery(props: Props) {
+  const { sourceRecordId, jobMode = false } = props;
   const [clock, setClock] = useState(() => Date.now());
   const { data: session, status } = useSession();
   const user = session?.user as { userId?: string; orgId?: string; teamId?: string; realUserId?: string; realRole?: string; impersonation?: unknown } | undefined;
   const expires = session?.expires ? Date.parse(session.expires) : NaN;
   const active = status === 'authenticated' && [user?.userId, user?.orgId, user?.teamId].every(value => typeof value === 'string' && /^[A-Za-z0-9_-]{1,150}$/.test(value))
-    && !user?.realUserId && !user?.realRole && !user?.impersonation && Number.isFinite(expires) && expires > Date.now();
-  const scope = JSON.stringify([sourceRecordId, status, user?.userId, user?.orgId, user?.teamId, session?.expires, active]);
-  const [stateScope, setStateScope] = useState(scope);
+    && !user?.realUserId && !user?.realRole && !user?.impersonation && Number.isFinite(expires) && expires > clock;
+  const scope = JSON.stringify([sourceRecordId, status, user?.userId, user?.orgId, user?.teamId, session?.expires, active, jobMode]);
+  const owner = { userId: user?.userId ?? '', orgId: user?.orgId ?? '', teamId: user?.teamId ?? '' };
+  useEffect(() => {
+    if (!Number.isFinite(expires) || expires <= clock) return;
+    const timer = setTimeout(() => setClock(Date.now()), Math.max(0, Math.min(expires - Date.now(), 2 ** 31 - 1)));
+    return () => clearTimeout(timer);
+  }, [expires, clock]);
+  return <HtmlDraftRecoveryScope key={scope} {...props} owner={owner} active={active} expires={expires} />;
+}
+
+function HtmlDraftRecoveryScope({ sourceRecordId, displayed, versionState, endpoint = '/api/artifacts/drafts', jobMode = false,
+  onConfirmedSnapshot, owner, active, expires }: Props & {
+    owner: { userId: string; orgId: string; teamId: string }; active: boolean; expires: number;
+}) {
+  const { language } = useLanguage();
+  const copy = COPY[language === 'vi' ? 'vi' : 'en'];
+  const [initialPending] = useState(() => {
+    const pending = jobMode && active ? readPendingJobJournal({ owner, sourceRecordId }) : null;
+    return pending?.operation === 'SAVE_DRAFT' && pending.versionId ? pending.versionId : null;
+  });
+  const [versions, setVersions] = useState<Metadata[]>([]);
+  const [restored, setRestored] = useState<DraftSnapshot | null>(null);
+  const [pendingId, setPendingId] = useState<string | null>(initialPending);
+  const [saving, setSaving] = useState(false);
+  const [notice, setNotice] = useState('');
+  const [uncertain, setUncertain] = useState(Boolean(initialPending));
   const epoch = useRef(0);
   const sequence = useRef(0);
   const busy = useRef(false);
   const knownSave = useRef<{ id: string; record: string } | null>(null);
-  const owner = { userId: user?.userId ?? '', orgId: user?.orgId ?? '', teamId: user?.teamId ?? '' };
-
-  useEffect(() => {
-    epoch.current += 1;
-    sequence.current += 1;
-    setRestored(null); setVersions([]); setNotice(''); setPendingId(null);
-    setUncertain(false); setSaving(false); setStateScope(scope);
-    busy.current = false; knownSave.current = null;
-    if (jobMode && active) { const pending = readPendingJobJournal({ owner, sourceRecordId });
-      if (pending?.operation === 'SAVE_DRAFT' && pending.versionId) { setPendingId(pending.versionId); setUncertain(true); } }
-    return () => { epoch.current += 1; sequence.current += 1; };
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- state resets only when the owner/record scope key changes; owner/active/jobMode are inputs of that key
-  }, [scope]);
-  useEffect(() => {
-    if (!Number.isFinite(expires) || expires <= Date.now()) return;
-    const timer = setTimeout(() => setClock(Date.now()), Math.min(expires - Date.now(), 2 ** 31 - 1));
-    return () => clearTimeout(timer);
-  }, [expires, clock]);
+  useLayoutEffect(() => () => { epoch.current += 1; sequence.current += 1; }, []);
 
   const list = async () => {
-    if (!active) return;
+    if (!active || Date.now() >= expires) return;
     const scopeEpoch = epoch.current;
     const serial = ++sequence.current;
     try {
@@ -88,7 +88,7 @@ export function HtmlDraftRecovery({ sourceRecordId, displayed, versionState, end
     } catch { if (scopeEpoch === epoch.current && serial === sequence.current) setNotice(copy.loadError); }
   };
   const restore = async (versionId: string) => {
-    if (!active) return;
+    if (!active || Date.now() >= expires) return;
     const scopeEpoch = epoch.current;
     const serial = ++sequence.current;
     setRestored(null);
@@ -144,13 +144,13 @@ export function HtmlDraftRecovery({ sourceRecordId, displayed, versionState, end
       if (pending?.operation === 'SAVE_DRAFT' && pending.versionId) void restore(pending.versionId); }
   };
   const download = () => {
-    if (!active || stateScope !== scope || !restored) return;
+    if (!active || Date.now() >= expires || !restored) return;
     const url = URL.createObjectURL(new Blob([restored.html], { type: 'text/html;charset=utf-8' }));
     const anchor = document.createElement('a'); anchor.href = url;
     anchor.download = restored.filename.endsWith('.html') ? restored.filename : `${restored.filename}.html`;
     document.body.appendChild(anchor); anchor.click(); anchor.remove(); URL.revokeObjectURL(url);
   };
-  const visible = active && stateScope === scope;
+  const visible = active;
   const preview = visible && restored ? containPreviewNavigation(restored.html) : null;
   const hasDraft = !!restored || versions.length > 0 || !!pendingId;
   return <section className="mt-4 rounded-xl border border-gray-200 bg-gray-50 p-4 text-xs dark:border-gray-700 dark:bg-gray-950" data-testid="html-draft-recovery">

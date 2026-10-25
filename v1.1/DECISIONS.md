@@ -8,6 +8,7 @@
 ## Decision Log
 
 ### DC-001: Giữ v1.0 làm Baseline bất biến
+
 | Field | Value |
 |-------|-------|
 | **ID** | DC-001 |
@@ -20,6 +21,7 @@
 ---
 
 ### DC-002: Module v1.1 là Opt-in
+
 | Field | Value |
 |-------|-------|
 | **ID** | DC-002 |
@@ -32,6 +34,7 @@
 ---
 
 ### DC-003: Consolidate các biến thể v1.1 thành bản chính thức
+
 | Field | Value |
 |-------|-------|
 | **ID** | DC-003 |
@@ -45,6 +48,7 @@
 ---
 
 ### DC-004: 6 Agent Archetypes là đủ
+
 | Field | Value |
 |-------|-------|
 | **ID** | DC-004 |
@@ -57,6 +61,7 @@
 ---
 
 ### DC-005: Fast Track cho task nhỏ
+
 | Field | Value |
 |-------|-------|
 | **ID** | DC-005 |
@@ -70,6 +75,7 @@
 ---
 
 ### DC-006: Trace là bắt buộc, không ngoại lệ
+
 | Field | Value |
 |-------|-------|
 | **ID** | DC-006 |
@@ -82,6 +88,7 @@
 ---
 
 ### DC-007: MIT License
+
 | Field | Value |
 |-------|-------|
 | **ID** | DC-007 |
@@ -110,6 +117,7 @@
 ---
 
 ## Xem thêm
+
 - [CHANGELOG.md](CHANGELOG.md) — Lịch sử thay đổi
 - [FRAMEWORK_FREEZE.md](FRAMEWORK_FREEZE.md) — Điều kiện freeze
 - [governance/EXTENSION_REGISTER.md](governance/EXTENSION_REGISTER.md) — Đăng ký mở rộng

@@ -60,6 +60,7 @@ interface SkillRecord {
 ### 1. Skill verification gate
 
 A skill may not be promoted to `ACTIVE` until:
+
 - Test coverage ≥ 80%
 - At least 1 VERIFIED commit produced with this skill
 - CVF Governor approves
@@ -67,12 +68,14 @@ A skill may not be promoted to `ACTIVE` until:
 ### 2. Commit-skill linkage
 
 Every `AICommit` references the `skill` field. The governance executor:
+
 - Checks if the skill is `ACTIVE` or `VERIFIED`
 - Rejects commits from `DEPRECATED` skills (warning mode) or `REVOKED` skills (error)
 
 ### 3. Deprecation notice
 
 When a skill enters `DEPRECATED`:
+
 - All existing commits using this skill remain valid
 - New commits using this skill get flagged with `DEPRECATED_SKILL` warning
 - Grace period: 1 MINOR version cycle before `REVOKED`
@@ -80,6 +83,7 @@ When a skill enters `DEPRECATED`:
 ### 4. Revocation
 
 When a skill is `REVOKED`:
+
 - No new commits with this skill are accepted
 - Existing commits with this skill are flagged in audit
 - `REVOKED` is permanent — a successor skill must be created

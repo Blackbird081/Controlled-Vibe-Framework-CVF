@@ -100,7 +100,7 @@
       "exposureClass": "INTERNAL_ONLY"
     },
     {
-        "path": "AGENT_HANDOFF_V41_2026-07-11.md",
+      "path": "AGENT_HANDOFF_V41_2026-07-11.md",
       "exposureClass": "INTERNAL_ONLY"
     },
     {
@@ -262,6 +262,38 @@
     {
       "path": "AGENT_HANDOFF_V12_2026-05-23.md",
       "exposureClass": "INTERNAL_ONLY"
+    },
+    {
+      "path": ".mailmap",
+      "exposureClass": "PUBLIC_DOCS_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF.md",
+      "exposureClass": "PUBLIC_DOCS_ONLY"
+    },
+    {
+      "path": "CODEOWNERS",
+      "exposureClass": "PUBLIC_DOCS_ONLY"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "exposureClass": "PUBLIC_DOCS_ONLY"
+    },
+    {
+      "path": "COST_AND_QUOTA.md",
+      "exposureClass": "PUBLIC_DOCS_ONLY"
+    },
+    {
+      "path": "GOVERNANCE.md",
+      "exposureClass": "PUBLIC_DOCS_ONLY"
+    },
+    {
+      "path": "PROVENANCE.md",
+      "exposureClass": "PUBLIC_DOCS_ONLY"
+    },
+    {
+      "path": "PROVIDERS.md",
+      "exposureClass": "PUBLIC_DOCS_ONLY"
     }
   ]
 }

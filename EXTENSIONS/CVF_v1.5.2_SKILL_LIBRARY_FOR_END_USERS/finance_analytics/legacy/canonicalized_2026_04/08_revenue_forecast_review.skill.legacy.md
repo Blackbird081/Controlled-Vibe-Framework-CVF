@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành các skills sau trước khi dùng skill này:
+>
 > - [Financial Statement Review](./02_financial_statement_review.skill.md) — Hiểu về báo cáo tài chính
 > - [Financial Risk Assessment](./07_financial_risk_assessment.skill.md) — Đánh giá rủi ro
 
@@ -19,11 +20,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Review dự báo doanh thu hàng quý/năm
 - Đánh giá assumptions và methodology
 - Chuẩn bị cho budgeting và planning
 
 **Không phù hợp khi:**
+
 - Cần tạo forecast từ đầu (đây là review skill)
 - Đánh giá đầu tư (dùng Investment Due Diligence)
 
@@ -66,15 +69,18 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 ### 1. Forecast Period
+
 ```
 Kỳ dự báo:
 VD: FY2026, Q1-Q4 2026, 3-Year Plan
 ```
 
 ### 2. Historical Revenue
+
 ```
 Doanh thu thực tế:
 - FY2024: $___
@@ -83,6 +89,7 @@ Doanh thu thực tế:
 ```
 
 ### 3. Forecast Figures
+
 ```
 Dự báo doanh thu:
 By Quarter (if available):
@@ -99,6 +106,7 @@ Or by Category:
 ```
 
 ### 4. Key Assumptions
+
 ```
 Các giả định chính:
 VD:
@@ -109,6 +117,7 @@ VD:
 ```
 
 ### 5. Methodology
+
 ```
 Phương pháp dự báo:
 [ ] Top-down (market size → share)
@@ -125,27 +134,32 @@ Phương pháp dự báo:
 AI sẽ trả về:
 
 ### 1. Forecast Summary
+
 | Period | Forecast | Growth | Reasonableness |
 |--------|----------|--------|----------------|
 | FY2026 | $18M | +20% | ⚠️ Aggressive |
 
 ### 2. Assumption Validation
+
 | Assumption | Realistic? | Evidence | Risk |
 |------------|------------|----------|------|
 | 15% growth | ⚠️ High | Historical: 10% | Medium |
 | No churn | ❌ Unrealistic | Industry: 5% | High |
 
 ### 3. Sensitivity Analysis
+
 - Bull case: +25% → $19M
 - Base case: +15% → $17M
 - Bear case: +5% → $16M
 
 ### 4. Gap Analysis
+
 - Forecast vs historical trend
 - Forecast vs industry benchmarks
 - Forecast vs capacity constraints
 
 ### 5. Recommendations
+
 - Assumption adjustments
 - Risk mitigation
 - Upside opportunities
@@ -187,6 +201,7 @@ AI sẽ trả về:
 ## 📊 Ví dụ thực tế
 
 **Input:**
+
 ```
 Forecast Period: FY2026
 Historical:
@@ -209,18 +224,23 @@ Methodology: Bottom-up (pipeline + new products)
 ```
 
 **Expected Analysis:**
+
 ```markdown
 
 ### Input mẫu:
 ```
+
 Mục tiêu: Hoàn thành Revenue Forecast Review
 Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
 Ràng buộc: Deadline 2 tuần
+
 ```
 
 ### Output mẫu:
 ```
+
 Tóm tắt kết quả: Revenue Forecast Review với khuyến nghị/ưu tiên rõ ràng.
+
 ```
 ## Revenue Forecast Review: FY2026
 
@@ -277,6 +297,7 @@ Forecast of $16M (+33%) is **aggressive** compared to historical growth
 ---
 
 ## 🔗 Related Skills
+
 - [Financial Risk Assessment](./07_financial_risk_assessment.skill.md)
 - [Budget Analysis](./01_budget_analysis.skill.md)
 

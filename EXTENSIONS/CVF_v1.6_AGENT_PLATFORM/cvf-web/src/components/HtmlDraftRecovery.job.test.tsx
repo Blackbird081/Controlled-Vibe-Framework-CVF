@@ -15,11 +15,11 @@ describe('job draft recovery', () => {
   afterEach(() => { cleanup(); vi.unstubAllGlobals(); sessionStorage.clear(); });
   it('refuses a foreign pilot root on read-only restore without another write', async () => {
     sessionStorage.clear();
-    const fetchMock = vi.fn(async (url: string, _init?: RequestInit) => url.includes('list=1')
+    const fetchMock = vi.fn(async (url: string, init?: RequestInit) => { void init; return url.includes('list=1')
       ? { ok: true, json: async () => ({ success: true, data: [{ versionId, filename: 'pilot.html' }] }) }
       : { ok: true, json: async () => ({ success: true, data: { versionId, sourceRecordId,
         state: 'CLIENT_SUBMITTED_UNVERIFIED', acceptance: 'DRAFT_UNACCEPTED', html: '<p>foreign</p>',
-        filename: 'pilot.html', pilotSource: { receipt: { htmlPilotEvidence: { rootRunId: 'other-root' } } } } }) });
+        filename: 'pilot.html', pilotSource: { receipt: { htmlPilotEvidence: { rootRunId: 'other-root' } } } } }) }; });
     vi.stubGlobal('fetch', fetchMock);
     const onConfirmedSnapshot = vi.fn();
     render(<HtmlDraftRecovery sourceRecordId={sourceRecordId} displayed={displayed} versionState="current"

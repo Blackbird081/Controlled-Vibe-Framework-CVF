@@ -83,10 +83,10 @@ AI xin xác nhận thêm ngoài Input Contract
 📌 Nếu AI hỏi thêm → Execution invalid, không tiếp tục.
 
 Trách nhiệm trong Execution
-Thành phần	Trách nhiệm
-Operator	Input đúng & Audit
-AI	Execution & Output
-CVF	Enforcement
+Thành phần Trách nhiệm
+Operator Input đúng & Audit
+AI Execution & Output
+CVF Enforcement
 
 Không có “chia sẻ trách nhiệm”.
 

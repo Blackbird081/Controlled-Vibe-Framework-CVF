@@ -42,6 +42,7 @@ These files are safe for immediate public exposure without modification. Total: 
 ### Learning And Orientation Zones (29 files)
 
 **docs/guides/** (7 files):
+
 - `docs/guides/CVF_QUICK_ORIENTATION.md`
 - `docs/guides/solo-developer.md`
 - `docs/guides/enterprise.md`
@@ -51,6 +52,7 @@ These files are safe for immediate public exposure without modification. Total: 
 - `docs/guides/POST_MC5_ORIENTATION.md`
 
 **docs/concepts/** (8 files):
+
 - `docs/concepts/4-phase-process.md`
 - `docs/concepts/controlled-execution-loop.md`
 - `docs/concepts/core-philosophy.md`
@@ -61,6 +63,7 @@ These files are safe for immediate public exposure without modification. Total: 
 - `docs/concepts/README.md`
 
 **docs/tutorials/** (5 files):
+
 - `docs/tutorials/first-project.md`
 - `docs/tutorials/custom-skills.md`
 - `docs/tutorials/agent-platform.md`
@@ -68,6 +71,7 @@ These files are safe for immediate public exposure without modification. Total: 
 - `docs/tutorials/README.md`
 
 **docs/case-studies/** (5 files):
+
 - `docs/case-studies/01_fintech_credit_approval.md`
 - `docs/case-studies/02_healthcare_diagnostics.md`
 - `docs/case-studies/03_ecommerce_moderation.md`
@@ -75,6 +79,7 @@ These files are safe for immediate public exposure without modification. Total: 
 - `docs/case-studies/05_saas_customer_success.md`
 
 **docs/cheatsheets/** (4 files):
+
 - `docs/cheatsheets/faq.md`
 - `docs/cheatsheets/quick-reference.md`
 - `docs/cheatsheets/troubleshooting.md`
@@ -153,6 +158,7 @@ These files must remain in the private core and must never be publicly exposed. 
 ### Governance Artifacts (~1800 files)
 
 **Evidence and Decision Records**:
+
 - `docs/audits/` - All 171+ audit documents (W1-W61, P3-P4)
 - `docs/reviews/` - All 500+ review documents (GC-018, GC-019, GC-021, tranche closures)
 - `docs/baselines/` - All 200+ baseline/delta documents (GC-026 tracker sync)
@@ -172,6 +178,7 @@ These files must remain in the private core and must never be publicly exposed. 
 ### Internal Standards and Controls (~50 files)
 
 **Governance Standards**:
+
 - `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`
 - `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`
 - `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`
@@ -183,6 +190,7 @@ These files must remain in the private core and must never be publicly exposed. 
 - `docs/reference/CVF_QUALITY_ASSESSMENT_STANDARD.md`
 
 **Internal Templates**:
+
 - `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`
 - `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`
 - `docs/reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md`
@@ -204,6 +212,7 @@ These files must remain in the private core and must never be publicly exposed. 
 - `docs/reference/CVF_POST_W7_GC018_DRAFTING_CHECKLIST.md`
 
 **Internal Classifications**:
+
 - `docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md`
 - `docs/reference/CVF_AUDIT_RETENTION_CLASSIFICATION.md`
 - `docs/reference/CVF_REVIEW_RETENTION_CLASSIFICATION.md`
@@ -214,11 +223,13 @@ These files must remain in the private core and must never be publicly exposed. 
 ### Internal Planning and Baselines (~75 files)
 
 **Architecture Baselines**:
+
 - `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md` - Internal architecture baseline
 - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` - Internal progress tracking
 - `docs/reference/CVF_WHITEPAPER_GIT_FOR_AI.md` - Internal whitepaper
 
 **Pre-Public Planning** (All CVF_PREPUBLIC_* files):
+
 - `docs/reference/CVF_PREPUBLIC_CORE_GIT_EXPORT_SURFACE_2026-04-03.md`
 - `docs/reference/CVF_PREPUBLIC_CURATED_FRONT_DOOR_NAVIGATION_2026-04-02.md`
 - `docs/reference/CVF_PREPUBLIC_DOCS_MIRROR_BOUNDARY_2026-04-02.md`
@@ -232,6 +243,7 @@ These files must remain in the private core and must never be publicly exposed. 
 - `docs/reference/CVF_PREPUBLIC_SHORTLIST_WAVE_STATUS_2026-04-03.md`
 
 **Internal Workflow**:
+
 - `docs/reference/CVF_CANONICAL_PATH_MAP_2026-03-06.md`
 - `docs/reference/CVF_RESTRUCTURE_ARCHIVE_MANIFEST.md`
 - `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`

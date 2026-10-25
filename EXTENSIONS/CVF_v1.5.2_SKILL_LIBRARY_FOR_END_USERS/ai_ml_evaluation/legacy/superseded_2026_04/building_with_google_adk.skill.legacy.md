@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Use when building AI agents with Google's Agent Development Kit (ADK). Triggers include creating ADK agents, Gemini-powered agents, multi-agent workflows, MCP integration with ADK, agent evaluation, workflow agents (Sequential/Parallel/Loop), Vertex AI deployment, or comparing OpenAI SDK with ADK. NOT when using other frameworks (OpenAI SDK, LangChain, CrewAI) or general LLM API calls.
 
 **Khi nào dùng skill này:**
+
 - Cần Building With Google Adk với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: ai evaluation
-- Nguồn tham khảo: https://github.com/panaversity/agentfactory/tree/main/docs/_skills_archive/rare/building-with-google-adk
+- Nguồn tham khảo: <https://github.com/panaversity/agentfactory/tree/main/docs/_skills_archive/rare/building-with-google-adk>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Đánh giá prompt cho chatbot CSKH
 Context: Dữ liệu hội thoại đa ngành, cần đo độ chính xác
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Building With Google Adk Output
 

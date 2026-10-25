@@ -21,6 +21,7 @@ No team or organization should need to restructure their entire workflow to star
 **Goal:** Understand how AI agents develop without changing their behavior.
 
 **Actions:**
+
 - Install CVF Core (no enforcement)
 - Wrap AI agent outputs with `createCommit()` — read-only observation
 - Log `ArtifactStagingArea` entries without gating
@@ -37,6 +38,7 @@ No team or organization should need to restructure their entire workflow to star
 **Goal:** Identify governance risks without blocking development.
 
 **Actions:**
+
 - Run `GovernanceExecutor.run()` in dry-run mode
 - Report R0–R3 risk levels without enforcing gate
 - Surface `detectAnomalies()` and `checkInvariants()` findings as warnings
@@ -53,6 +55,7 @@ No team or organization should need to restructure their entire workflow to star
 **Goal:** Prevent critical governance failures from reaching production.
 
 **Actions:**
+
 - Enable `PhaseGate.enforce()` for `critical: true` checks only
 - `artifact_hashes_verified` required (Trust Boundary enforcement)
 - Capability Isolation (`CapabilityViolationError`) activated
@@ -69,6 +72,7 @@ No team or organization should need to restructure their entire workflow to star
 **Goal:** All AI commits pass full GOVERNANCE_PIPELINE before merge.
 
 **Actions:**
+
 - `GovernanceExecutor.run()` required before any `git merge`
 - All 6 modules in GOVERNANCE_PIPELINE must pass
 - `ArtifactLedger.commit()` called for all ACCEPTED artifacts
@@ -85,6 +89,7 @@ No team or organization should need to restructure their entire workflow to star
 **Goal:** AI agents self-validate before producing commits.
 
 **Actions:**
+
 - AI agents call `validateCommit()` before submitting commit
 - `ArtifactStagingArea` used natively in agent workflow
 - `ProcessModel` drives agent phase transitions (agent asks for `advanceStage` approval)
@@ -120,11 +125,13 @@ No team or organization should need to restructure their entire workflow to star
 ## Breaking Change Policy
 
 CVF Core follows strict backward compatibility:
+
 - `createCommit()` inputs are additive-only (new fields are optional)
 - `ArtifactLedger` entries are immutable — no migrations
 - `GOVERNANCE_PIPELINE` order is FROZEN per minor version
 
 Changes requiring MAJOR version bump:
+
 - Adding new _required_ fields to `AICommit`
 - Changing `commit_id` hash algorithm
 - Altering `GOVERNANCE_PIPELINE` module list or order

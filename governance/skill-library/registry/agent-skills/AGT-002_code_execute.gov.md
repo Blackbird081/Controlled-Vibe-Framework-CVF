@@ -17,6 +17,7 @@ Implementation in v1.6 AGENT_PLATFORM
 Executes code snippets in a sandboxed environment.
 
 **Actions:**
+
 - Execute JavaScript/Python code
 - Return execution results
 - Capture stdout/stderr
@@ -59,12 +60,14 @@ Executes code snippets in a sandboxed environment.
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Executes in sandbox only
 - [ ] Respects timeout limits
 - [ ] Logs all executions
 - [ ] No side effects outside sandbox
 
 **FAIL criteria:**
+
 - [ ] Sandbox escape attempted
 - [ ] Timeout exceeded
 - [ ] Unlogged execution

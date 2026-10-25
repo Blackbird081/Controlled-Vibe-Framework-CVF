@@ -1,5 +1,6 @@
 
 Adaptive Governance Layer
+
 1. Mục tiêu
 
 Adaptive Governance Layer bổ sung khả năng runtime enforcement động cho CVF.
@@ -20,7 +21,7 @@ Layer này cho phép:
 
 Hệ thống tự điều chỉnh mức kiểm soát dựa trên trạng thái vận hành thực tế.
 
-2. Triết lý thiết kế
+1. Triết lý thiết kế
 
 Adaptive Layer tuân thủ hoàn toàn triết lý CVF:
 
@@ -38,7 +39,7 @@ Nó chỉ:
 
 Human vẫn là người quyết định thay đổi hệ thống.
 
-3. Kiến trúc
+1. Kiến trúc
 Caller
   ↓
 Runtime Guard
@@ -58,7 +59,7 @@ Thành phần chính
     policy.deriver.ts
     runtime.guard.ts
     config.schema.ts
-4. Risk Engine
+2. Risk Engine
 Vai trò
 
 Tính toán composite risk score dựa trên:
@@ -82,19 +83,19 @@ Output
 Risk score không trực tiếp block hệ thống.
 Nó chỉ cung cấp input cho policy derivation.
 
-5. Policy Deriver
+1. Policy Deriver
 
 Chuyển risk score thành enforcement action:
 
-Risk Score	Action
-< 40	normal
-40–59	strict_mode
-60–79	throttle
-≥ 80	block
+Risk Score Action
+< 40 normal
+40–59 strict_mode
+60–79 throttle
+≥ 80 block
 
 Policy Deriver không thay đổi policy gốc, chỉ điều chỉnh execution context.
 
-6. Runtime Guard
+1. Runtime Guard
 
 Là entry point của adaptive layer.
 
@@ -112,7 +113,7 @@ Thêm security constraint
 
 Runtime Guard không ghi đè core runtime.
 
-7. Configuration
+1. Configuration
 export interface AdaptiveConfig {
   enabled: boolean
   thresholds: {
@@ -124,7 +125,7 @@ export interface AdaptiveConfig {
 
 Nếu enabled = false, toàn bộ layer sẽ bypass.
 
-8. Tính tương thích
+1. Tính tương thích
 
 Adaptive Layer:
 
@@ -138,7 +139,7 @@ Không phá backward compatibility
 
 Có thể bật/tắt độc lập.
 
-9. Khi nào nên sử dụng
+1. Khi nào nên sử dụng
 
 Phù hợp khi:
 
@@ -152,7 +153,7 @@ Có dấu hiệu security regression
 
 Không bắt buộc cho môi trường dev nhỏ.
 
-10. Không phải là gì
+1. Không phải là gì
 
 Adaptive Layer không phải:
 
@@ -166,7 +167,7 @@ Autonomic system
 
 Nó là governance enhancer, không phải intelligence layer.
 
-11. Roadmap tương lai
+1. Roadmap tương lai
 
 Có thể mở rộng:
 

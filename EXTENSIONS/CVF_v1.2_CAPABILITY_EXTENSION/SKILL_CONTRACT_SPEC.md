@@ -114,10 +114,13 @@ Mọi Skill Contract **PHẢI** có đầy đủ các mục sau, theo đúng th�
 * `TRACE_LEVEL` (Basic | Full)
 
 ---
+
 ### 3.8 Execution Type
+
 EXECUTION_TYPE:
-- EXECUTABLE
-- NON_EXECUTABLE
+
+* EXECUTABLE
+* NON_EXECUTABLE
 
 Rules
 
@@ -150,7 +153,8 @@ Có Audit
 ### 3.9 Dependencies
 
 DEPENDENCIES:
-- CAPABILITY_ID
+
+* CAPABILITY_ID
 Rules
 
 Dependency là logic dependency, không execution
@@ -168,7 +172,6 @@ Flow reasoning
 Design clarity
 
 📌 Dependency không được override governance
-
 
 ## 4. Hard Prohibitions (KHÔNG ĐƯỢC PHÉP)
 
@@ -215,4 +218,3 @@ Một Skill Contract chỉ được coi là **VALID** khi:
 
 > Skill Contract không giúp AI “làm được nhiều hơn”
 > mà giúp **con người kiểm soát được điều AI đang làm**
-

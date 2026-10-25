@@ -9,7 +9,7 @@ Ghi nội dung vào file trong phạm vi đã được phê duyệt.
 
 RISK_LEVEL: Medium
 
-2. Governance Constraints
+1. Governance Constraints
 
 ALLOWED_ARCHETYPES: Executor
 
@@ -23,7 +23,7 @@ REQUIRED_STATUS:
 
 PATH_VALIDATED
 
-3. Input Specification
+1. Input Specification
 
 INPUT_FIELDS:
 
@@ -43,7 +43,7 @@ validation: non-empty
 
 required
 
-4. Output Specification
+1. Output Specification
 
 OUTPUT_FIELDS:
 
@@ -55,7 +55,7 @@ success: content persisted
 
 failure: any error state
 
-5. Execution Properties
+1. Execution Properties
 
 SIDE_EFFECTS: File system mutation
 
@@ -65,7 +65,7 @@ IDEMPOTENCY: Conditional
 
 EXPECTED_DURATION: Short
 
-6. Failure & Risk Notes
+1. Failure & Risk Notes
 
 KNOWN_FAILURE_MODES:
 
@@ -81,7 +81,7 @@ Configuration corruption
 
 HUMAN_INTERVENTION_REQUIRED: Conditional
 
-7. Audit & Trace Requirements
+1. Audit & Trace Requirements
 
 AUDIT_FIELDS:
 

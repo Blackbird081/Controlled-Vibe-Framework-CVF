@@ -98,6 +98,7 @@ Cost tier and capability order are defined in `provider-policy-engine.ts`:
 Failover is active **only** when `riskTierOverride === false` (R0/R1 requests).
 
 If the primary provider call fails (network or API error):
+
 1. If `riskTierOverride === true` (R2/R3): throw immediately — no failover.
 2. If `fallbackChain` is empty: throw immediately.
 3. Otherwise: retry once with `fallbackChain[0]`.

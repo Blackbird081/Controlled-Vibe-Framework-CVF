@@ -6,18 +6,21 @@ at different risk levels.
 ## Contracts
 
 ### R1 - Code Review (`code_review.contract.yaml`)
+
 - **Domain**: development
 - **Risk**: R1 (Controlled)
 - **Description**: Reviews code without modifying it
 - **Key Properties**: No side effects, idempotent
 
 ### R2 - Database Query (`database_query.contract.yaml`)  
+
 - **Domain**: data
 - **Risk**: R2 (Elevated)
 - **Description**: Read-only database queries
 - **Key Properties**: Requires DATA_ACCESS_APPROVED decision
 
 ### R3 - File Operations (`file_operations.contract.yaml`)
+
 - **Domain**: devops
 - **Risk**: R3 (Critical)
 - **Description**: Write files to filesystem

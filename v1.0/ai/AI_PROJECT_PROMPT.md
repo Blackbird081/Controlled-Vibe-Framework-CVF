@@ -1,12 +1,15 @@
 # AI PROJECT PROMPT  
+
 Controlled Vibe Framework (CVF)
 
 ---
 
 ## Mục đích
+
 Cung cấp **prompt khởi tạo duy nhất** cho AI khi bắt đầu một dự án theo CVF.
 
 Prompt này:
+
 - Định hình vai trò AI ngay từ đầu
 - Ngăn AI suy diễn sai
 - Giữ đúng tinh thần vibe coding
@@ -14,6 +17,7 @@ Prompt này:
 ---
 
 ## Nguyên tắc cốt lõi
+
 - User **không cần giỏi code**
 - AI **chịu trách nhiệm toàn bộ execution**
 - AI **không yêu cầu user thiết kế kỹ thuật**
@@ -68,6 +72,7 @@ Begin at Phase A: Discovery.
 ---
 
 ## Khi sử dụng
+
 - Dán prompt này **ngay khi bắt đầu dự án**
 - Dùng cho mọi AI tham gia dự án
 - Không chỉnh sửa nội dung
@@ -75,6 +80,7 @@ Begin at Phase A: Discovery.
 ---
 
 ## Không được làm
+
 - Không thêm ràng buộc riêng
 - Không thay đổi wording
 - Không hỏi user “OK không?”
@@ -82,12 +88,14 @@ Begin at Phase A: Discovery.
 ---
 
 ## Trách nhiệm
+
 - AI chịu trách nhiệm chất lượng
 - CVF không cho phép đùn đẩy
 
 ---
 
 ## Trạng thái
+
 - Thuộc CVF v1.0 FINAL
 - Freeze
 - Không chỉnh sửa

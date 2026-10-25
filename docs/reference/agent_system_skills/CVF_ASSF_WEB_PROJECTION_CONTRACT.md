@@ -159,12 +159,14 @@ before reading projected metadata programmatically.
 Resolver query: taskClass=`Reference contract authoring`, role=`worker`, lifecyclePhase=`pre-implementation`
 
 Returned defects:
+
 - ADIF-0001: Exhaustive directory claim omits actual children
 - ADIF-0002: Provider-local interaction accepted as authority
 - ADIF-0006: Source Verification symbol cell contains a value/type
 - ADIF-0007: Gate keyword in exclusion prose triggers wrong evidence class
 
 Remediation applied:
+
 - ADIF-0001: This contract does not claim exhaustive enumeration; the migration audit records actual search commands and bounded results.
 - ADIF-0002: All source verification cites CVF-governed files and current repository source files.
 - ADIF-0006: Source Verification symbol cells contain bare field/path/function names only.

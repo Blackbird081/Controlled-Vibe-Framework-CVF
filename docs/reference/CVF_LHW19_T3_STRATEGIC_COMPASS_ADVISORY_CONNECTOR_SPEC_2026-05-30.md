@@ -102,6 +102,7 @@ Full Agent Economy is out of current scope.
 ## Strategic Anti-Focus (Hard Boundaries)
 
 CVF must NOT build:
+
 - AI models (not competing with OpenAI, Anthropic, Google)
 - LLM frameworks (not competing with LangChain, LlamaIndex)
 - AI applications (not competing with AI SaaS tools)
@@ -109,6 +110,7 @@ CVF must NOT build:
 CVF is **infrastructure only** — not a product, not a platform, not an app.
 
 These boundaries are consistent with:
+
 - LHW18 T2 "CVF = Governance Layer, not Agent OS"
 - `CVF_BOUNDARY_FIRST_GOVERNANCE_DOCTRINE_2026-05-07.md`
 - `docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md` public positioning

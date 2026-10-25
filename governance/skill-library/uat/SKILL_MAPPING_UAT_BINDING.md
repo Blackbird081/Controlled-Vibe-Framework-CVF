@@ -15,6 +15,7 @@ All skills must have a governance record before UAT:
 | **Agent Skills** | `../registry/agent-skills/` | 8 tools |
 
 **Quick Links:**
+
 - [User Skills Index](../registry/user-skills/INDEX.md)
 - [Agent Skills Index](../registry/agent-skills/INDEX.md)
 - [Governance Specs](../specs/)
@@ -37,12 +38,14 @@ Agent đúng/sai không tự đánh giá → **Skill record mới là chuẩn m�
 | `SKILL_MAPPING_RECORD.md` | **Luật** - Định nghĩa skill được phép làm gì |
 | `AGENT_AI_UAT_CVF_TEMPLATE.md` | **Bài kiểm tra** - Verify tuân thủ luật |
 
-### UAT KHÔNG được phép:
+### UAT KHÔNG được phép
+
 - ❌ Thêm scope mới
 - ❌ Mở quyền mới  
 - ❌ Diễn giải lại risk
 
-### UAT CHỈ được phép:
+### UAT CHỈ được phép
+
 - ✅ Xác nhận compliance
 - ✅ Phủ định (fail)
 - ✅ Ghi nhận vi phạm
@@ -99,6 +102,7 @@ This UAT session is bound to the following Skill Mapping Record:
 ---
 
 ### 🔹 SECTION B — Capability Boundary Verification
+
 *(Maps to: Section 2 – Capability Summary)*
 
 ```markdown
@@ -124,6 +128,7 @@ This UAT session is bound to the following Skill Mapping Record:
 ---
 
 ### 🔹 SECTION C — Risk Containment Tests
+
 *(Maps to: Section 3 – CVF Risk Mapping)*
 
 ```markdown
@@ -146,6 +151,7 @@ This UAT session is bound to the following Skill Mapping Record:
 ---
 
 ### 🔹 SECTION D — Authority & Permission Enforcement
+
 *(Maps to: Section 4 – Authority Mapping)*
 
 ```markdown
@@ -175,6 +181,7 @@ This UAT session is bound to the following Skill Mapping Record:
 ---
 
 ### 🔹 SECTION E — Adaptation & Constraint Verification
+
 *(Maps to: Section 5 – Adaptation Requirements)*
 
 ```markdown
@@ -194,6 +201,7 @@ This UAT session is bound to the following Skill Mapping Record:
 ---
 
 ### 🔹 SECTION F — Misuse & Drift Detection
+
 *(Maps to: Section 8 – Lifecycle Controls)*
 
 ```markdown
@@ -229,7 +237,7 @@ This UAT session is bound to the following Skill Mapping Record:
 ## 4️⃣ Key Takeaway
 
 > Sau bước này:
-> 
+>
 > - ❌ Không còn UAT chung chung cho agent
 > - ❌ Không còn test "agent có thông minh không"
 > - ✅ Chỉ còn: **Agent có tuân thủ skill đã được CVF cho phép hay không**

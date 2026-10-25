@@ -24,6 +24,7 @@ Tự động phát hiện patterns trong usage để identify problems và oppor
 ## Failure Patterns
 
 ### Definition
+
 ```
 Failure Pattern = 3+ consecutive rejects OR reject rate > 50% in 10 executions
 ```
@@ -38,6 +39,7 @@ Failure Pattern = 3+ consecutive rejects OR reject rate > 50% in 10 executions
 | FP-04 | Retry Spiral | >3 retries same execution |
 
 ### Alert Generation
+
 ```typescript
 function detectFailurePatterns(events: Event[]): Alert[] {
   const alerts = [];
@@ -64,11 +66,13 @@ function detectFailurePatterns(events: Event[]): Alert[] {
 ## Success Patterns
 
 ### Definition
+
 ```
 Success Pattern = 5+ consecutive accepts OR accept rate > 85% in 10 executions
 ```
 
 ### Pattern Analysis
+
 ```sql
 SELECT 
   template_id,
@@ -81,6 +85,7 @@ GROUP BY template_id;
 ```
 
 ### Success Factors
+
 ```
 High Accept Rate correlates with:
 - Input length > 150 chars
@@ -94,12 +99,14 @@ High Accept Rate correlates with:
 ## Anomaly Detection
 
 ### Statistical Anomaly
+
 ```
 Anomaly = value > mean + (3 * std_dev)
         OR value < mean - (3 * std_dev)
 ```
 
 ### Types
+
 | Anomaly | Example |
 |---------|---------|
 | Time | Execution at 3am (unusual) |
@@ -112,6 +119,7 @@ Anomaly = value > mean + (3 * std_dev)
 ## Trend Detection
 
 ### Moving Average
+
 ```sql
 SELECT 
   DATE(timestamp) as date,
@@ -123,6 +131,7 @@ FROM daily_stats;
 ```
 
 ### Trend Categories
+
 ```
 Improving:  +5% week-over-week
 Stable:     ±5% week-over-week

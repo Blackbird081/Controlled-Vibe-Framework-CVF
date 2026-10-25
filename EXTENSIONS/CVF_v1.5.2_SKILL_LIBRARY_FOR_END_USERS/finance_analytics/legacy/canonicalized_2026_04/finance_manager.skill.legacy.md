@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Comprehensive personal finance management system for analyzing transaction data, generating insights, creating visualizations, and providing actionable financial recommendations. Use when users need to analyze spending patterns, track budgets, visualize financial data, extract transactions from PDFs, calculate savings rates, identify spending trends, generate financial reports, or receive personalized budget recommendations. Triggers include requests like "analyze my finances", "track my spending", "create a financial report", "extract transactions from PDF", "visualize my budget", "where is my money going", "financial insights", "spending breakdown", or any finance-related analysis tasks.
 
 **Khi nào dùng skill này:**
+
 - Cần Finance Manager với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: finance analysis
-- Nguồn tham khảo: https://github.com/ailabs-393/ai-labs-claude-skills/tree/main/dist/skills/finance-manager
+- Nguồn tham khảo: <https://github.com/ailabs-393/ai-labs-claude-skills/tree/main/dist/skills/finance-manager>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Phân tích cash flow 6 tháng
 Context: Startup SaaS đang đốt tiền cao
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Finance Manager Output
 

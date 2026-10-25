@@ -1,10 +1,13 @@
 # INPUT_SPEC — CVF v1.1
+
 Version: 1.1 | Status: STABLE | Layer: Governance | Compatible: v1.0 baseline (additive)
 
 ## Mục đích
+
 Chuẩn hóa đầu vào cho mọi Action Unit/agent: rõ intent, scope, constraint, format. Không có INPUT_SPEC hợp lệ thì không khởi tạo AU.
 
 ## Trường bắt buộc
+
 - Title / Objective: mục tiêu ngắn gọn, đo được.
 - Problem Statement / Context: bối cảnh, người dùng, pain point.
 - In/Out of Scope: liệt kê rõ, tránh suy diễn.
@@ -16,6 +19,7 @@ Chuẩn hóa đầu vào cho mọi Action Unit/agent: rõ intent, scope, constra
 - Version / Date.
 
 ## Validation Checklist
+
 - [ ] Scope rõ, không mơ hồ
 - [ ] Không xung đột Decisions/Freeze
 - [ ] Constraint cụ thể, đo được
@@ -23,6 +27,7 @@ Chuẩn hóa đầu vào cho mọi Action Unit/agent: rõ intent, scope, constra
 - [ ] Dependencies/assumptions đã ghi nhận
 
 ## Ví dụ ngắn (AU: viết checklist review)
+
 - Title: Checklist review trang đích
 - Context: Trang đích chiến dịch Q1, cần checklist QA nội dung
 - In/Out: In phạm vi copy + CTA; Out: triển khai code
@@ -32,4 +37,5 @@ Chuẩn hóa đầu vào cho mọi Action Unit/agent: rõ intent, scope, constra
 - Owner: PM Growth
 
 ## Notes
+
 - Thay đổi INPUT_SPEC => log lý do, cập nhật version, re-freeze scope nếu đã freeze.

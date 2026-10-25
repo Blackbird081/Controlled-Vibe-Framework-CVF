@@ -14,6 +14,7 @@ Blocks recurring no-commit worker packet defects early:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -53,6 +54,10 @@ RAW_PREIMAGE_ARCHIVE_ENCODING_EXCEPTIONS = {
     "docs/reference/archive/AGENTS_FULL_PRE_T2B_2026-08-11.md",
     "docs/reference/archive/CLAUDE_FULL_PRE_T2B_2026-08-11.md",
     "docs/reference/archive/CVF_DOWNSTREAM_AGENTS_TEMPLATE_FULL_PRE_T2B_2026-08-11.md",
+    "docs/evidence/archive/EXPORT_MANIFEST_2026-05-09.md",
+}
+RAW_PREIMAGE_ARCHIVE_ENCODING_SHA256 = {
+    "docs/evidence/archive/EXPORT_MANIFEST_2026-05-09.md": "2ed5727817e3c0bbfbde0f906437f04e06922359967ca0f3ed121a5e7b4e6d0a",
 }
 EXCEPTION_MARKERS = (
     "Text Encoding Exception",
@@ -536,6 +541,12 @@ def find_non_ascii_line_violations(
     *,
     has_exception: bool,
 ) -> list[str]:
+    normalized = path.replace("\\", "/")
+    if normalized in RAW_PREIMAGE_ARCHIVE_ENCODING_SHA256:
+        archive = REPO_ROOT / normalized
+        expected = RAW_PREIMAGE_ARCHIVE_ENCODING_SHA256[normalized]
+        if not archive.is_file() or hashlib.sha256(archive.read_bytes()).hexdigest() != expected:
+            return ["raw preimage archive SHA256 mismatch; preserve the approved historical bytes"]
     if not _is_encoding_scoped(path) or has_exception:
         return []
     issues: list[str] = []

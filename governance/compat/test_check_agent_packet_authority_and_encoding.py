@@ -655,3 +655,22 @@ def test_deleted_tracked_path_recreated_untracked_is_not_hidden_by_delete() -> N
         _write(repo, "docs/recreated.md", "replacement \u00e9\n".encode("utf-8"))
         report = _run_check_in_repo(repo, head, head)
     assert "docs/recreated.md" in _violation_paths(report)
+
+
+def test_exact_raw_inventory_encoding_exception_requires_original_bytes(tmp_path, monkeypatch):
+    import hashlib
+    path = "docs/evidence/archive/EXPORT_MANIFEST_2026-05-09.md"
+    target = tmp_path / path
+    target.parent.mkdir(parents=True)
+    raw = "Historical inventory \u2014 preserved\n".encode("utf-8")
+    target.write_bytes(raw)
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    monkeypatch.setitem(MODULE.RAW_PREIMAGE_ARCHIVE_ENCODING_SHA256, path, hashlib.sha256(raw).hexdigest())
+    assert MODULE.find_non_ascii_line_violations(path, [], has_exception=False) == []
+    target.write_bytes(raw + b"ASCII alteration\n")
+    assert MODULE.find_non_ascii_line_violations(path, [], has_exception=True)
+
+
+def test_similar_raw_inventory_path_keeps_encoding_checks():
+    issues = MODULE.find_non_ascii_line_violations("docs/evidence/archive/EXPORT_MANIFEST_OTHER.md", [MODULE.AddedLine(1, "new \u2014 text")], has_exception=False)
+    assert issues

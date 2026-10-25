@@ -17,12 +17,14 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Tạo JD cho vị trí mới
 - Cập nhật JD hiện có cho phù hợp thị trường
 - Chuẩn hóa format JD toàn công ty
 - Đăng tuyển trên các platform
 
 **Không phù hợp khi:**
+
 - Cần đánh giá ứng viên → Dùng Interview Evaluation
 - Cần lên kế hoạch headcount → Cần workforce planning
 
@@ -65,6 +67,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -82,11 +85,13 @@
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - JD hoàn chỉnh, professional
 - Cấu trúc rõ ràng, dễ đọc
 - Phù hợp để đăng tuyển
 
 **Cấu trúc output:**
+
 ```
 1. Company Overview (ngắn gọn)
 2. Role Summary
@@ -112,6 +117,7 @@
 - [ ] Không quá dài (max 1 trang A4)
 
 **Red flags (cần Reject):**
+
 - ⚠️ Requirements quá generic hoặc quá nhiều
 - ⚠️ Responsibilities không clear
 - ⚠️ Có bias language ("dynamic young team")
@@ -142,7 +148,8 @@
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Vị trí: Senior Frontend Developer
 Level: Senior, 4+ năm kinh nghiệm
@@ -152,7 +159,8 @@ Requirements: React, TypeScript, testing
 Benefits: Remote, 13th salary, learning budget
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 SENIOR FRONTEND DEVELOPER
 Engineering Team | Remote-first
@@ -191,7 +199,8 @@ How to Apply:
 Send your CV to careers@company.com
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Clear responsibilities
 - ✅ Realistic requirements
 - ✅ No bias language
@@ -203,6 +212,7 @@ Send your CV to careers@company.com
 ---
 
 ## 🔗 Related Skills
+
 - [Policy Documentation](./05_policy_documentation.skill.md)
 - [Interview Evaluation](./02_interview_evaluation.skill.md)
 

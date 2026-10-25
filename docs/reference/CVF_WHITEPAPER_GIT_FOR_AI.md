@@ -15,6 +15,7 @@ AI systems generate code, architecture, and decisions without a structured devel
 **Controlled Vibe Framework (CVF)** introduces a Git-inspired development paradigm for AI systems — transforming AI generation into a deterministic, traceable, and governed process.
 
 CVF defines:
+
 - **AI Commits** — atomic, auditable units of AI work
 - **Artifact Lineage** — content-addressed, version-tracked artifacts
 - **Skill Lifecycle** — controlled evolution of AI capabilities
@@ -83,6 +84,7 @@ AICommit {
 ```
 
 **Properties:**
+
 - **Deterministic ID** — same inputs → same commit_id → reproducible
 - **Immutable** — commits are never modified, only superseded
 - **Tamper-evident** — `verifyCommitIntegrity()` re-derives and compares commit_id
@@ -109,6 +111,7 @@ Equivalent to `git add` (stage) → governance (review) → `git commit` (ledger
 ### 3.4 Artifact Ledger (≈ Git object store)
 
 Append-only, content-addressed store of ACCEPTED artifacts:
+
 - **Immutable entries** — no writes after commit
 - **Full lineage** — `getHistory(artifact_id)` returns all versions
 - **Rollback-ready** — `previous_hash` chain enables safe revert
@@ -116,6 +119,7 @@ Append-only, content-addressed store of ACCEPTED artifacts:
 ### 3.5 Process Model (≈ Git branch)
 
 A `CVFProcess` is a named, phase-driven development line:
+
 - Independent of other processes (multi-agent parallel development)
 - Deterministic advancement: `advanceStage()` requires governance gate to pass
 - Full transition history: every stage change is recorded with triggering commit

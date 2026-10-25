@@ -510,7 +510,7 @@ judgment.
 ### Status Authority And Field Grammar
 
 Only the metadata preamble -- the document text before its first level-two
-(`## `) section heading -- is ever read for the authoritative `Status:`
+(`##`) section heading -- is ever read for the authoritative `Status:`
 declaration. Exactly one preamble `Status:` occurrence is required; zero or
 more than one, even when every occurrence carries the identical value, is
 treated as missing/ambiguous and rejects an applicable closure evaluation.

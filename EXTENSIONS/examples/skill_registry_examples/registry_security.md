@@ -1,10 +1,12 @@
 # Skill Registry Security Model — Example
 
 ## Purpose
+
 Tài liệu này mô tả **các nguyên tắc và cơ chế bảo mật**
 áp dụng cho Skill Registry trong Controlled Vibe Framework (CVF).
 
 Mục tiêu:
+
 - Ngăn registry bị lạm dụng như điểm leo thang quyền lực
 - Bảo vệ registry khỏi injection, spoofing và silent override
 - Đảm bảo mọi quyết định đều traceable và audit được
@@ -117,6 +119,7 @@ Registry phải chống:
 - Time-of-check / time-of-use attacks
 
 Mọi thay đổi registry:
+
 - Immutable log
 - Signed
 - Reviewable
@@ -138,6 +141,7 @@ Registry chỉ xử lý metadata có schema cứng.
 ## Failure Behavior
 
 Khi có lỗi:
+
 - Fail closed
 - Không fallback
 - Không silent retry
@@ -156,6 +160,7 @@ Registry phải log:
 - Denial reason (nếu có)
 
 Log phải:
+
 - Append-only
 - Immutable
 - Tamper-evident
@@ -176,12 +181,15 @@ BỊ CẤM:
 ## Example Attack Scenarios
 
 ### Attack: Agent attempts to resolve deprecated capability
+
 → Registry returns warning + logs attempt
 
 ### Attack: Agent attempts to resolve retired capability
+
 → Registry denies + escalates audit
 
 ### Attack: Adapter swapped at runtime
+
 → Registry detects mismatch → deny
 
 ---
@@ -192,5 +200,6 @@ Tài liệu này là **ví dụ chuẩn** cho lớp bảo mật registry trong C
 
 Mọi triển khai registry không tuân theo
 → **không an toàn**.
+
 ```
 

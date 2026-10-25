@@ -1,4 +1,5 @@
 # Action Unit Trace — AU-001
+
 - Command: CVF:EXECUTE
 - Objective: Viết checklist QA nội dung trang đích Q1
 - Archetype / Preset: Execution / Execution Policy
@@ -6,7 +7,7 @@
 - Outputs: templates/OUTPUT_SPEC.sample.md (expected)
 - Constraints: 1 ngày, không sửa design
 - Stop Conditions: thiếu reviewer; phát hiện scope đổi; input không đủ
-- Execution Notes: 
+- Execution Notes:
   - Thu thập yêu cầu từ DC-01, INPUT_SPEC.sample
   - Soạn checklist 12 mục
 - Issues/Risks: chưa có asset cuối? (N/A)

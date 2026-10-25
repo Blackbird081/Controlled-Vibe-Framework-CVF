@@ -11,6 +11,7 @@
 
 **Tình huống:**  
 CreditFlow, một startup fintech cung cấp quyết định tín dụng tức thì, đang gặp phải:
+
 - **Quyết định AI không nhất quán**: Chuyên viên phân tích tín dụng không thể hiểu tại sao AI phê duyệt/từ chối hồ sơ
 - **Rủi ro pháp lý**: Không có nhật ký kiểm toán để tuân thủ (Đạo luật Cho vay Công bằng, FCRA)
 - **Đánh đổi giữa tốc độ và kiểm soát**: Đánh giá thủ công kỹ lưỡng nhưng chậm (3-5 ngày/hồ sơ)
@@ -24,11 +25,13 @@ CreditFlow, một startup fintech cung cấp quyết định tín dụng tức t
 ### Kiến trúc
 
 **Trước CVF:**
+
 ```
 User Request → AI Analyst (Claude) → Approve/Reject → No Trace
 ```
 
 **Sau CVF:**
+
 ```
 User Request
     ↓
@@ -54,11 +57,13 @@ Approve/Reject + Audit Log
 ### Triển khai (Tuần 1-3)
 
 **Tuần 1: Nền tảng Spec**
+
 - Viết INPUT_SPEC.md: Các trường hồ sơ, thu nhập, lịch sử tín dụng, ràng buộc
 - Viết OUTPUT_SPEC.md: Loại quyết định (phê duyệt/từ chối/cần xem xét), điểm rủi ro, bậc lãi suất, giải thích
 - Thiết lập quy tắc governance: R2 yêu cầu con người cho khoản >$10k, điều chỉnh lãi suất
 
 **Tuần 2: AI Governance**
+
 - Tạo Archetype: Credit Analysis Agent
   - Vai trò: Đánh giá rủi ro tín dụng, đề xuất bậc
   - KHÔNG được phép: Ghi đè phê duyệt cuối cùng, thay đổi lãi suất
@@ -69,6 +74,7 @@ Approve/Reject + Audit Log
   - Truy vết: Mọi yếu tố phải được ghi lại
 
 **Tuần 3: Thực thi + Kiểm toán**
+
 - Tạo Skill Contract: evaluate_credit_risk (R2)
   - Đầu vào: Dữ liệu hồ sơ, điểm tín dụng, xác minh thu nhập
   - Đầu ra: Điểm rủi ro, khuyến nghị bậc, mức độ tin cậy
@@ -99,15 +105,18 @@ Approve/Reject + Audit Log
 ### Tác động vận hành
 
 **Năng suất chuyên viên phân tích:**
+
 - Trước: Đánh giá thủ công mỗi hồ sơ, viết thư quyết định, theo dõi lý do
 - Sau: Chỉ đánh giá các quyết định ngoại lệ (trường hợp R2), dành thời gian cải thiện chính sách
 
 **Giảm rủi ro:**
+
 - Kiểm toán pháp lý: Chứng minh truy vết quyết định → Không có phát hiện vi phạm
 - Khiếu nại khách hàng: Giải thích rõ ràng được cung cấp với mỗi lần từ chối
 - Cho vay công bằng: Lý luận AI + phê duyệt chuyên viên = quyết định có thể bảo vệ
 
 **Tác động doanh thu:**
+
 - Xử lý hồ sơ nhiều gấp 3 lần mỗi ngày
 - Quyết định tín dụng nhanh hơn = cấp khoản vay nhanh hơn = cải thiện dòng tiền
 - Giảm chi phí thủ công = cải thiện biên lợi nhuận
@@ -149,6 +158,7 @@ Thách thức lớn nhất là sự chấp nhận của chuyên viên phân tíc
 ## Khuyến nghị
 
 **Cho các tình huống FinTech tương tự:**
+
 - Sử dụng CVF v1.1 full stack (INPUT/OUTPUT + Archetype + AU + Trace)
 - R2 là điểm cân bằng lý tưởng cho human-in-the-loop với tốc độ
 - Đầu tư vào OUTPUT_SPEC rõ ràng — đây là thứ cơ quan quản lý sẽ xem xét

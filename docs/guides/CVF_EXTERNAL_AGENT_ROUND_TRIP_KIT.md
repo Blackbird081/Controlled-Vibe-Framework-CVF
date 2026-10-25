@@ -8,7 +8,7 @@ Status: CURRENT PUBLIC GUIDE
 
 protocolVersion: 1.3.0
 projectionOf: cvf.external-agent-round-trip
-compatibleWith: cvf.external-agent-portable-packet@1.x
+compatibleWith: <cvf.external-agent-portable-packet@1.x>
 updatedAt: 2026-10-09
 representation: PUBLIC_COMPACT_PROJECTION
 

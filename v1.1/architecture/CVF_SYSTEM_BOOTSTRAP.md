@@ -1,7 +1,9 @@
 # CVF_SYSTEM_BOOTSTRAP — v1.1
+
 Version: 1.1 | Status: STABLE | Layer: Architecture | Compatible: v1.0 baseline (additive)
 
 Thứ tự bắt buộc khi khởi động hệ thống AI dùng CVF:
+
 1) Load CVF Core (Manifesto, Layering, Freeze)
 2) Init Governance
 3) Register Agent Archetypes

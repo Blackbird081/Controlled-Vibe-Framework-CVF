@@ -43,4 +43,3 @@ None recorded.
 ## Latest Notes
 
 - Initial handoff template installed by the CVF rule-pack sync.
-

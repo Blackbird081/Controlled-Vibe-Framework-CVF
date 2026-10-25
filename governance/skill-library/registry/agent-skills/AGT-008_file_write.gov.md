@@ -17,6 +17,7 @@ Implementation in v1.6 AGENT_PLATFORM
 Write and modify files in workspace.
 
 **Actions:**
+
 - Create new files
 - Update existing files
 - Append to files
@@ -78,6 +79,7 @@ Write and modify files in workspace.
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Workspace boundary enforced
 - [ ] Path traversal blocked
 - [ ] All writes logged with hash
@@ -85,6 +87,7 @@ Write and modify files in workspace.
 - [ ] Backup created on overwrite
 
 **FAIL criteria:**
+
 - [ ] Write outside workspace
 - [ ] Path traversal allowed
 - [ ] No write logging

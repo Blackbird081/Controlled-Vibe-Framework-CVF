@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành skill sau trước khi dùng skill này:
+>
 > - [Cash Flow Analysis](./05_cash_flow_analysis.skill.md) — Hiểu tình hình dòng tiền
 
 ---
@@ -18,11 +19,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Đánh giá rủi ro tài chính tổng thể của doanh nghiệp
 - Chuẩn bị risk mitigation strategies
 - Review trước khi ra quyết định tài chính quan trọng
 
 **Không phù hợp khi:**
+
 - Đánh giá rủi ro phi tài chính (operational, legal)
 - Cần due diligence đầu tư đầy đủ (dùng Investment Due Diligence)
 
@@ -65,9 +68,11 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 ### 1. Company/Project Overview
+
 ```
 Thông tin tổng quan:
 - Company Name: ___
@@ -77,6 +82,7 @@ Thông tin tổng quan:
 ```
 
 ### 2. Financial Position
+
 ```
 Vị thế tài chính:
 - Total Assets: $___
@@ -87,6 +93,7 @@ Vị thế tài chính:
 ```
 
 ### 3. Revenue Concentration
+
 ```
 Tập trung doanh thu:
 - Top Customer %: ___%
@@ -96,6 +103,7 @@ Tập trung doanh thu:
 ```
 
 ### 4. Cash & Liquidity
+
 ```
 Thanh khoản:
 - Cash on Hand: $___
@@ -105,6 +113,7 @@ Thanh khoản:
 ```
 
 ### 5. Known Risks
+
 ```
 Rủi ro đã biết:
 VD:
@@ -121,6 +130,7 @@ VD:
 AI sẽ trả về:
 
 ### 1. Risk Heat Map
+
 | Risk Category | Likelihood | Impact | Priority |
 |---------------|------------|--------|----------|
 | Liquidity Risk | Medium | High | 🔴 Critical |
@@ -128,23 +138,28 @@ AI sẽ trả về:
 | Market Risk | High | Medium | 🟠 High |
 
 ### 2. Risk Scoring
+
 - Overall Risk Score: X/100
 - Category breakdown
 - Trend vs previous period
 
 ### 3. Detailed Risk Analysis
+
 For each major risk:
+
 - Description
 - Quantified impact
 - Likelihood assessment
 - Current controls
 
 ### 4. Mitigation Strategies
+
 | Risk | Strategy | Cost | Timeline |
 |------|----------|------|----------|
 | Liquidity | Credit line | $50K/yr | Q1 |
 
 ### 5. Early Warning Indicators
+
 - Key metrics to monitor
 - Threshold levels
 - Escalation process
@@ -186,6 +201,7 @@ For each major risk:
 ## 📊 Ví dụ thực tế
 
 **Input:**
+
 ```
 Company: E-commerce Platform
 Industry: Retail
@@ -214,18 +230,23 @@ Known Risks:
 ```
 
 **Expected Analysis:**
+
 ```markdown
 
 ### Input mẫu:
 ```
+
 Mục tiêu: Hoàn thành Financial Risk Assessment
 Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
 Ràng buộc: Deadline 2 tuần
+
 ```
 
 ### Output mẫu:
 ```
+
 Tóm tắt kết quả: Financial Risk Assessment với khuyến nghị/ưu tiên rõ ràng.
+
 ```
 ## Financial Risk Assessment: E-commerce Platform
 
@@ -284,6 +305,7 @@ Tóm tắt kết quả: Financial Risk Assessment với khuyến nghị/ưu tiê
 ---
 
 ## 🔗 Related Skills
+
 - [Investment Due Diligence](./06_investment_due_diligence.skill.md)
 - [Revenue Forecast Review](./08_revenue_forecast_review.skill.md)
 

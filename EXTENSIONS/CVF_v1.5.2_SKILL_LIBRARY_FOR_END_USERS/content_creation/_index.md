@@ -9,6 +9,7 @@
 ## 🎯 Domain Overview
 
 Domain này giúp End User làm việc với AI để tạo nội dung chất lượng. Mỗi skill cung cấp:
+
 - Framework cho từng loại content
 - Tiêu chí đánh giá quality
 - Common mistakes cần tránh

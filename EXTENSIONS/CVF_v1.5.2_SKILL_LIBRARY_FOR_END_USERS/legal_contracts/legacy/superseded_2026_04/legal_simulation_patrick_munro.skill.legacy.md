@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Framework for demonstrating AI capabilities in legal contexts. Provides detailed personas across tenant law, business contracts, startup disputes, employment claims, and consumer protection with progressive complexity scenarios. Use when: (1) Demonstrating AI-powered legal triage or intake systems, (2) Showcasing responsible AI-assisted client interactions, (3) Training staff on appropriate AI use in legal contexts, (4) Creating realistic scenarios for legal tech presentations, (5) Developing educational materials about AI in legal services, or (6) Testing AI-powered legal information systems in controlled environments.
 
 **Khi nào dùng skill này:**
+
 - Cần Legal Imulation Patrick Munro với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: legal contract
-- Nguồn tham khảo: https://github.com/lawvable/awesome-legal-skills/tree/main/🌐/legal-simulation-patrick-munro
+- Nguồn tham khảo: <https://github.com/lawvable/awesome-legal-skills/tree/main/🌐/legal-simulation-patrick-munro>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Review NDA cho hợp tác đối tác
 Context: Đối tác quốc tế, thời hạn 12 tháng
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Legal Imulation Patrick Munro Output
 

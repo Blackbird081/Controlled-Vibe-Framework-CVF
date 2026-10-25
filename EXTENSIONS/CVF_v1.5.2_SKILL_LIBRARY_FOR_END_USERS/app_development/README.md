@@ -12,6 +12,7 @@
 Domain này cung cấp các skills để tạo **spec chất lượng cao** cho AI Agents (Claude, Cursor, Copilot...) để build local apps.
 
 **Use cases:**
+
 - Desktop apps (Electron, Tauri)
 - CLI tools (Python, Node.js)
 - Mobile apps (React Native, Flutter)
@@ -80,6 +81,7 @@ Khi export spec từ các skills này, **recommend sử dụng CVF Full Mode**:
 | **CVF Full Mode** ⭐ | Production apps, complex systems |
 
 **CVF Full Mode đảm bảo AI Agent:**
+
 - Follow 4-phase process (Discovery → Design → Build → Review)
 - Không skip requirements
 - Xác nhận trước khi thực thi
@@ -92,6 +94,7 @@ Khi export spec từ các skills này, **recommend sử dụng CVF Full Mode**:
 ### Scenario: Xây dựng Task Manager Desktop App
 
 **Step 1:** App Requirements Spec
+
 ```
 App name: TaskFlow Desktop
 Type: Desktop (cross-platform)
@@ -100,6 +103,7 @@ Target users: Individual productivity
 ```
 
 **Step 2:** Tech Stack Selection
+
 ```
 Framework: Tauri (Rust + Vue 3)
 Database: SQLite (embedded)
@@ -107,6 +111,7 @@ UI: Vue 3 + Tailwind CSS
 ```
 
 **Step 3:** Architecture Design
+
 ```
 ┌─────────────┐     ┌─────────────┐
 │   Frontend  │ ──▶ │   Tauri     │
@@ -120,6 +125,7 @@ UI: Vue 3 + Tailwind CSS
 ```
 
 **Step 4:** Database Schema
+
 ```sql
 CREATE TABLE tasks (
     id INTEGER PRIMARY KEY,
@@ -131,6 +137,7 @@ CREATE TABLE tasks (
 ```
 
 **Step 5:** Desktop App Spec
+
 ```
 Window: 800x600, resizable
 Menu: File, Edit, View, Help

@@ -1,5 +1,6 @@
 /** @vitest-environment jsdom */
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { execFile } from 'node:child_process';
 import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -28,6 +29,29 @@ describe.runIf(process.platform === 'win32')('WINDOWS_SINGLE_HOST_PRIVATE_V1 adm
         expect(await code(admitPrivateStoreProfile(env(undefined)))).toBe('PROFILE_DISABLED');
         expect(await code(admitPrivateStoreProfile(env(root, 'OTHER')))).toBe('PROFILE_DISABLED');
     });
+    it('isolates Windows PowerShell from an inherited incompatible Core module path', async () => {
+        const inherited = await plain();
+        const moduleRoot = path.join(inherited, 'PowerShell', '7', 'Modules');
+        const securityModule = path.join(moduleRoot, 'Microsoft.PowerShell.Security');
+        await fs.mkdir(securityModule, { recursive: true });
+        // A discoverable incompatible module reproduces the inherited Core-path failure without requiring Core installation.
+        await fs.writeFile(path.join(securityModule, 'Microsoft.PowerShell.Security.psd1'),
+            "@{ ModuleVersion='99.0'; PowerShellVersion='3.0'; CompatiblePSEditions=@('Core'); CmdletsToExport=@('Get-Acl'); RequiredAssemblies=@('CVF_SYNTHETIC_MISSING_ASSEMBLY.dll'); GUID='a94c8c7e-9810-47c0-b8af-65089c13a35a' }");
+        vi.stubEnv('PSModulePath', moduleRoot);
+        const inheritedFailure = await new Promise<string>((resolve, reject) => {
+            const executable = path.join(process.env.SystemRoot ?? 'C:\\Windows', 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe');
+            execFile(executable, ['-NoProfile', '-NonInteractive', '-Command',
+                '$ErrorActionPreference="Stop"; Get-Acl -LiteralPath $env:CVF_NIS_TARGET | Out-Null'], {
+                env: { ...process.env, CVF_NIS_TARGET: inherited }, windowsHide: true, timeout: 20000, shell: false,
+            }, (error, _stdout, stderr) => error ? resolve(String(stderr)) : reject(new Error('INCOMPATIBLE_MODULE_WAS_NOT_EXERCISED')));
+        });
+        expect(inheritedFailure).toContain('CouldNotAutoloadMatchingModule');
+        const root = await track('inherited-core-path');
+        expect(isPrivateSecurity(await measureSecurity(root))).toBe(true);
+        expect((await admitPrivateStoreProfile(env(root))).root).toBe(path.resolve(root));
+        // The parent environment is left intact; only the child module search path is isolated.
+        expect(process.env.PSModulePath).toBe(moduleRoot);
+    });
     it('admits only an existing absolute private root measured from real NTFS state', async () => {
         const root = await track('admit');
         const admitted = await admitPrivateStoreProfile(env(root));
@@ -46,17 +70,20 @@ describe.runIf(process.platform === 'win32')('WINDOWS_SINGLE_HOST_PRIVATE_V1 adm
         'refuses an invalid root: %s', async value => {
             expect(await code(admitPrivateStoreProfile(env(value)))).toBe('PROFILE_ROOT_INVALID');
         });
-    it('refuses an ordinary inheriting root and every non-private mutation without changing it', async () => {
+    it('refuses an ordinary inheriting root without changing it', async () => {
         const inheriting = await plain();
+        const before = await measureSecurity(inheriting);
         expect(await code(admitPrivateStoreProfile(env(inheriting)))).toBe('PROFILE_ROOT_INSECURE');
-        for (const kind of ['EXTRA_ALLOW', 'DENY', 'INHERITED'] as const) {
-            const root = await track(kind.toLowerCase());
-            await applyAdversary(root, kind);
-            const before = await measureSecurity(root);
-            expect(isPrivateSecurity(before)).toBe(false);
-            expect(await code(admitPrivateStoreProfile(env(root)))).toBe('PROFILE_ROOT_INSECURE');
-            expect((await measureSecurity(root)).tuple).toEqual(before.tuple);
-        }
+        expect((await measureSecurity(inheriting)).tuple).toEqual(before.tuple);
+    });
+    // Each real ACL case has the unchanged per-test deadline instead of sharing it across many shell launches.
+    it.each(['EXTRA_ALLOW', 'DENY', 'INHERITED'] as const)('refuses a %s root without changing it', async kind => {
+        const root = await track(kind.toLowerCase());
+        await applyAdversary(root, kind);
+        const before = await measureSecurity(root);
+        expect(isPrivateSecurity(before)).toBe(false);
+        expect(await code(admitPrivateStoreProfile(env(root)))).toBe('PROFILE_ROOT_INSECURE');
+        expect((await measureSecurity(root)).tuple).toEqual(before.tuple);
     });
     it('refuses a file or a link root', async () => {
         const root = await track('link');

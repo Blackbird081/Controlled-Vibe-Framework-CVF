@@ -66,6 +66,7 @@ H3 Capability Request Governance (no auto-grant, audit log, rate limit) — `CVF
 **Source:** `CVF_TRUST_AND_ISOLATION_LAYER.md` §5, `CVF_AGENT_RUNTIME_PROTOCOL.md` §9
 
 **Advisory:** Secrets must be:
+
 1. Bound to `execution_id` (not agent_id)
 2. Decrypted just-in-time at Execution Proxy
 3. Destroyed after execution ends
@@ -82,6 +83,7 @@ H3 Capability Request Governance (no auto-grant, audit log, rate limit) — `CVF
 **Source:** `CVF_TRUST_AND_ISOLATION_LAYER.md` §4, `CVF_CAPABILITY_INTEGRATION_SPEC.md` §2
 
 **Advisory:** Each execution must have:
+
 - Its own context (no reuse from other executions)
 - Its own credential scope
 - Context marked with `context_id`, `owner: execution_id`, `scope: private|shared`
@@ -98,6 +100,7 @@ H3 Capability Request Governance (no auto-grant, audit log, rate limit) — `CVF
 **Source:** `CVF_TRUST_AND_ISOLATION_LAYER.md` §6
 
 **Advisory:** Agent-to-agent communication must default to DENY. Communication only allowed when:
+
 - Explicitly defined in policy: `{ from, to, allowed: true, scope: limited_context }`
 - Only filtered/structured data shared — no raw context, no full memory
 
@@ -112,6 +115,7 @@ H3 Capability Request Governance (no auto-grant, audit log, rate limit) — `CVF
 **Source:** `CVF_FAILURE_AND_SAFETY_LAYER.md` §9
 
 **Advisory:** Failures must be classified by severity before containment action:
+
 - **Low:** retryable error → retry with same agent
 - **Medium:** repeated failure → increase supervision, log pattern
 - **High:** security violation, data leak risk → terminate execution, isolate context
@@ -128,6 +132,7 @@ H3 Capability Request Governance (no auto-grant, audit log, rate limit) — `CVF
 **Source:** `CVF_FAILURE_AND_SAFETY_LAYER.md` §4.2 (Cross-check CRITICAL)
 
 **Advisory:** Failure detection must NOT rely solely on agent self-report. The system must cross-check:
+
 - Expected outcome (from Control/Task definition)
 - Actual state (from environment/tool output)
 

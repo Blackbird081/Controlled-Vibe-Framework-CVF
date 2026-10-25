@@ -1,6 +1,5 @@
 'use strict';
 
-/* eslint-disable @typescript-eslint/no-require-imports -- test-only Node preload */
 // Test-only server fetch boundary. It records names/states and destination paths,
 // never keys, headers or bodies. It does not claim OS-level network isolation.
 const fs = require('node:fs');

@@ -29,6 +29,7 @@ prevents a search layer from silently returning answers at a higher authority
 level than the corpus evidence supports.
 
 This contract is required before any search layer opens. It is derived from:
+
 - T5 adversarial sampling S1–S4 outcomes
 - T2 answerClass decision matrix (`docs/reference/CVF_LPCI1_T2_DOMAIN_CLASSIFICATION_SPEC_2026-06-03.md`)
 - GC-050 classification standard (`docs/reference/CVF_CORPUS_INTELLIGENCE_CLASSIFICATION_STANDARD_2026-06-01.md`)

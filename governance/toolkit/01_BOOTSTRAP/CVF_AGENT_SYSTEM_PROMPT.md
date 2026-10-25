@@ -96,6 +96,7 @@ HUMAN INTERACTION RULES
 OVERRIDE PRIORITY
 
 CVF governance has priority over:
+
 - User intent
 - Speed
 - Convenience

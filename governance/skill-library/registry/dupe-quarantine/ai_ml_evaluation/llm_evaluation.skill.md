@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > LLM evaluation and testing patterns including prompt testing, hallucination detection, benchmark creation, and quality metrics. Use when testing LLM applications, validating prompt quality, implementing systematic evaluation, or measuring LLM performance.
 
 **Khi nào dùng skill này:**
+
 - Cần Llm Evaluation với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: prompt evaluation
-- Nguồn tham khảo: https://github.com/applied-artificial-intelligence/claude-code-toolkit/tree/main/skills/llm-evaluation
+- Nguồn tham khảo: <https://github.com/applied-artificial-intelligence/claude-code-toolkit/tree/main/skills/llm-evaluation>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Đánh giá prompt cho chatbot CSKH
 Context: Dữ liệu hội thoại đa ngành, cần đo độ chính xác
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Llm Evaluation Output
 

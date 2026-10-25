@@ -218,7 +218,7 @@ Policy_Local source, or uncited inference is used as source authority.
 - Design questions answered by this candidate (per work order boundary):
   1. **Repo-local detection signals:** `git status --short` before work
      (pre-flight) + `Test-Path docs/roadmaps` (protected directory existence)
-     + `check_forbidden_filesystem_state.py` (forbidden paths on disk before
+     - `check_forbidden_filesystem_state.py` (forbidden paths on disk before
      implementation) + `git diff --name-status` scope guard (diff must stay
      inside allowed artifact set). As of 2026-06-13 these are all in use and already wired into
      the pre-flight protocol. A future `check_workspace_integrity.py` could
@@ -356,7 +356,7 @@ Rationale:
 The design for FPC-T3-C07 is complete as a planning artifact. The following
 boundaries apply to any future implementation work:
 
-### What this plan authorizes (design-only):
+### What this plan authorizes (design-only)
 
 - documentation of repo-local detection signals (git status, Test-Path, diff
   scope guard, forbidden-filesystem-state checker);
@@ -367,7 +367,7 @@ boundaries apply to any future implementation work:
 - documentation of the rollback evidence model (git snapshot + allowed artifact
   list + SHA-256 digest of key governed files before work).
 
-### What requires a separate Codex-authorized work order:
+### What requires a separate Codex-authorized work order
 
 - implementation of `check_workspace_integrity.py` (repo-local deletion
   detection checker);
@@ -375,7 +375,7 @@ boundaries apply to any future implementation work:
 - authoring of a "protected-path expected-manifest" that the checker validates
   against.
 
-### What requires a separate OPERATOR DECISION (out of FPC scope entirely):
+### What requires a separate OPERATOR DECISION (out of FPC scope entirely)
 
 - Windows Security Audit policy configuration;
 - Sysmon or equivalent EDR installation;
@@ -384,7 +384,7 @@ boundaries apply to any future implementation work:
 - agent computer-control permission changes;
 - any OS-level or endpoint-level attribution mechanism.
 
-### Claim boundary for C07 repo-local detection:
+### Claim boundary for C07 repo-local detection
 
 A `check_workspace_integrity.py` checker proves that governed tracked paths
 were not unexpectedly deleted or modified outside the allowed artifact set

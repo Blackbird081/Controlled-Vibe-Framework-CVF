@@ -67,7 +67,7 @@ function ApprovalInboxContent({ homePath = '/home' }: ApprovalInboxContentProps)
   const { language } = useLanguage();
   const [requests, setRequests] = useState<ApprovalRequestRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
   const [reasons, setReasons] = useState<Record<string, string>>({});
   const [acting, setActing] = useState<Record<string, boolean>>({});
 

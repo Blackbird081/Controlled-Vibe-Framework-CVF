@@ -54,6 +54,7 @@ code-intelligence is an optional enhancement; it does not replace CVF governed
 evidence or override CVF approval flow.
 
 **Allowed query operations:**
+
 - symbol_lookup: locate a named symbol in the codebase
 - route_lookup: find the handler for an API route
 - callers: find callers of a symbol
@@ -66,6 +67,7 @@ evidence or override CVF approval flow.
 - graph_receipt_create: produce a timestamped graph context receipt
 
 **Forbidden operations:**
+
 - direct_file_mutation: code intelligence is read-only
 - auto_commit: graph results must not drive automated commits
 - auto_merge: graph results must not drive automated merges
@@ -78,6 +80,7 @@ evidence or override CVF approval flow.
 Absorbed from `docs/reference/CVF_CODE_INTELLIGENCE_CLAIM_BOUNDARY_2026-06-19.md`.
 
 A CVF-governed code-intelligence claim is only valid when:
+
 1. A live graph index is available (indexStatus = fresh or stale-with-fallback).
 2. A graph context receipt has been produced and attached to the work order.
 3. The query scope is bounded by the active work order.
@@ -107,6 +110,7 @@ Absorbed from `docs/reference/CVF_GRAPH_STALENESS_AND_SYNC_POLICY_2026-06-19.md`
 ### Block Conditions
 
 Graph-assisted freeze is BLOCKED when:
+
 - indexStatus = absent
 - indexStatus = stale AND fallbackEvidenceExists = false
 - Requested phase = FREEZE AND indexStatus != fresh
@@ -114,6 +118,7 @@ Graph-assisted freeze is BLOCKED when:
 ### Fallback Discipline
 
 When graph index is absent or stale without fallback, the worker must:
+
 1. State `FALLBACK_STATIC_EVIDENCE` in the work order packet.
 2. List the static files inspected as the basis for impact claim.
 3. Not claim graph-backed confidence.
@@ -154,6 +159,7 @@ receipt.
 Absorbed from `docs/protocols/CVF_CODE_INTELLIGENCE_FREEZE_PROTOCOL.md`.
 
 A graph-assisted task must NOT proceed to the freeze phase unless:
+
 1. indexStatus = fresh (or stale with accepted fallback evidence).
 2. A graph context receipt is attached to the work order.
 3. The reviewer verifies direct-read fallback, scope, affected files, and test
@@ -183,6 +189,7 @@ receipt_attachment_required: true
 ```
 
 Workers executing graph-assisted work orders must:
+
 1. Check index status before beginning query planning.
 2. Produce a graph query plan with query type, input, scope, and fallback.
 3. Execute queries within the bounded scope only.
@@ -194,6 +201,7 @@ Absorbed from `docs/protocols/CVF_GRAPH_BACKED_REVIEW_PROTOCOL.md`.
 
 Graph-backed reviews must include an impact-radius check before sign-off.
 The reviewer must verify:
+
 1. Receipt is present and indexStatus is acceptable for the phase.
 2. Impact-radius result does not include files outside the declared work order scope.
 3. If impact radius is wider than expected, the reviewer must request a scope expansion

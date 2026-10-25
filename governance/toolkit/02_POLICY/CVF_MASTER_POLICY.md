@@ -12,6 +12,7 @@ This policy governs the use of AI agents
 within the organization under Controlled Vibe Framework (CVF).
 
 The objective is to:
+
 - Reduce operational risk
 - Prevent uncontrolled AI usage
 - Ensure traceability
@@ -63,90 +64,114 @@ Personal AI usage unrelated to company work is excluded.
    - This rule applies equally to humans and AI agents.
    - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_DOCUMENT_NAMING_GUARD.md`.
 10. Document storage classification under CVF governance is mandatory:
-   - New long-term documents created in `docs/` must be placed in the correct taxonomy folder.
-   - `docs/INDEX.md` is the canonical storage map.
-   - This rule applies equally to humans and AI agents.
-   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md`.
-   - Automated docs gate reference: `governance/compat/check_docs_governance_compat.py`.
-11. Depth audit is mandatory before deepening any roadmap phase:
-   - This rule applies to all phases, not only deep policy branches.
-   - Any new semantic layer, `CF-*` expansion, or comparable roadmap deepening must be justified by explicit depth-audit scoring.
-   - The default should be `defer` unless the proposal demonstrates real risk reduction, decision value, and machine-enforceable closure.
-   - Low-yield continuation classes such as validation/test-only breadth, packaging-only continuation, and truth/claim-expansion continuation must also record why a lateral shift is not better and what real decision boundary still improves.
-   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`.
-   - Automated continuation gate reference: `governance/compat/check_depth_audit_continuation_compat.py`.
-   - Automated stop-boundary semantics reference: `governance/compat/check_gc018_stop_boundary_semantics.py`.
-12. `GC-015` Baseline update is mandatory after every accepted fix/update:
-   - Every real fix/update must produce a baseline update artifact, not only a normal log entry.
-   - Acceptable forms: new baseline snapshot, baseline delta/addendum, or post-fix assessment linked to the prior baseline.
-   - `docs/CVF_INCREMENTAL_TEST_LOG.md` does not replace this requirement.
-   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md`.
-13. Structural change audit is mandatory before any major restructuring execution:
-   - This rule applies to major module merges, physical moves, ownership-plane transfers, package unification, or boundary-changing consolidation work.
-   - Execution must follow the mandatory sequence:
+
+- New long-term documents created in `docs/` must be placed in the correct taxonomy folder.
+- `docs/INDEX.md` is the canonical storage map.
+- This rule applies equally to humans and AI agents.
+- Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_DOCUMENT_STORAGE_GUARD.md`.
+- Automated docs gate reference: `governance/compat/check_docs_governance_compat.py`.
+
+1. Depth audit is mandatory before deepening any roadmap phase:
+
+- This rule applies to all phases, not only deep policy branches.
+- Any new semantic layer, `CF-*` expansion, or comparable roadmap deepening must be justified by explicit depth-audit scoring.
+- The default should be `defer` unless the proposal demonstrates real risk reduction, decision value, and machine-enforceable closure.
+- Low-yield continuation classes such as validation/test-only breadth, packaging-only continuation, and truth/claim-expansion continuation must also record why a lateral shift is not better and what real decision boundary still improves.
+- Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_DEPTH_AUDIT_GUARD.md`.
+- Automated continuation gate reference: `governance/compat/check_depth_audit_continuation_compat.py`.
+- Automated stop-boundary semantics reference: `governance/compat/check_gc018_stop_boundary_semantics.py`.
+
+1. `GC-015` Baseline update is mandatory after every accepted fix/update:
+
+- Every real fix/update must produce a baseline update artifact, not only a normal log entry.
+- Acceptable forms: new baseline snapshot, baseline delta/addendum, or post-fix assessment linked to the prior baseline.
+- `docs/CVF_INCREMENTAL_TEST_LOG.md` does not replace this requirement.
+- Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_BASELINE_UPDATE_GUARD.md`.
+
+1. Structural change audit is mandatory before any major restructuring execution:
+
+- This rule applies to major module merges, physical moves, ownership-plane transfers, package unification, or boundary-changing consolidation work.
+- Execution must follow the mandatory sequence:
      1. create a structural audit packet,
      2. create an independent review of that audit,
      3. obtain explicit user or authority decision,
      4. only then execute the structural change.
-   - Each audit must classify the proposed change as `coordination package`, `wrapper/re-export merge`, or `physical merge`.
-   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`.
-14. `GC-020` Agent handoff is mandatory whenever governed work pauses or transfers before closure:
-   - This rule applies to pause/resume, agent-to-agent transfer, and mid-tranche stop states.
-   - Transition classification must be determined first using `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`.
-   - The governing context-continuity model is `memory = repository of facts, history, and durable evidence`, `handoff = governance-filtered summary and transfer checkpoint`, and `context loading = phase-bounded loading of only what the current step needs`.
-   - In CVF, handoff is context quality control by phase for multi-agent continuation, not only work transfer.
-   - The handoff must truthfully state repo truth, tranche truth, latest completed commit, next governed move, and explicit scope limits.
-   - The canonical handoff template is `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`.
-   - The canonical context-continuity reference is `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`.
-   - Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`.
-15. `GC-021` Fast-lane governance is allowed only for low-risk additive work inside an already-authorized tranche:
-   - `GC-018` still opens the wave or tranche.
-   - `GC-019` full-lane handling remains mandatory for physical merges, ownership transfer, target-state claim expansion, runtime-authority changes, or concept-to-module work.
-   - Fast lane is allowed only when the change stays additive, remains inside the approved tranche scope, and keeps rollback bounded.
-   - Fast-lane selection controls evidence burden only; durable memory class is still governed separately by `GC-022`.
-   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`.
-   - Canonical templates: `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md` and `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`.
-16. Memory governance is mandatory for evidence-bearing records intended to support later CVF memory:
-   - Every memory-bearing record must classify itself as `FULL_RECORD`, `SUMMARY_RECORD`, or `POINTER_RECORD`.
-   - The chosen class must match the document's storage role and the canonical `docs/` taxonomy.
-   - Do not preserve full-detail durable history when a truthful summary or pointer-only record is sufficient.
-   - Memory class follows artifact role, not whether the change used `Fast Lane` or `Full Lane`.
-   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`.
-   - Canonical classification reference: `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`.
-17. `GC-023` governed file size discipline is mandatory for maintainability across CVF:
-   - Governed source, test, frontend, and active markdown files must stay within the active class-specific size thresholds unless an approved exception exists.
-   - Oversized files must be split by responsibility or tranche unless they are explicitly registered as legacy debt with rationale and follow-up.
-   - Dedicated rotation guards remain authoritative for long-lived logs and traces.
-   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_GOVERNED_FILE_SIZE_GUARD.md`.
-   - Automated enforcement reference: `governance/compat/check_governed_file_size.py`.
-18. `GC-024` canonical test partition ownership is mandatory once a large governed test surface has been split:
-   - After tranche-local or subsystem-local tests are extracted into a canonical file, the old monolithic file must not re-absorb that surface.
-   - Canonical ownership and forbidden legacy files must be recorded in a machine-readable registry.
-   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_TEST_PARTITION_OWNERSHIP_GUARD.md`.
-   - Automated enforcement reference: `governance/compat/check_test_partition_ownership.py`.
-19. `GC-025` Session governance bootstrap is mandatory before governed work starts or resumes in a fresh session:
-   - Workers must first load the canonical bootstrap reference instead of rereading every governance guard by default.
-   - The bootstrap must route workers to the relevant controls based on task class and transition state.
-   - In CVF, `memory` preserves durable truth, `handoff` preserves transition truth, and `bootstrap` preserves minimal governance routing truth.
-   - The canonical bootstrap reference is `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`.
-   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md`.
-   - Automated enforcement reference: `governance/compat/check_session_governance_bootstrap.py`.
-20. `GC-026` Progress tracker sync is mandatory after any governed tranche or authorization state change that alters canonical progress posture:
-   - Workers must update the canonical tracker for the affected workline so session bootstrap does not read stale progress truth.
-   - Workers must also leave one short standardized sync note instead of relying on tracker edits alone.
-   - This rule is intentionally lighter than a full status-review rewrite, but stronger than an optional tracker refresh.
-   - Canonical template: `docs/reference/CVF_GC026_PROGRESS_TRACKER_SYNC_TEMPLATE.md`.
-   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_PROGRESS_TRACKER_SYNC_GUARD.md`.
-   - Automated enforcement reference: `governance/compat/check_progress_tracker_sync.py`.
-21. `GC-027` Canonical multi-agent intake/rebuttal/decision documentation is mandatory before roadmap intake or implementation selection when multiple agents evaluate the same proposal set:
+- Each audit must classify the proposed change as `coordination package`, `wrapper/re-export merge`, or `physical merge`.
+- Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`.
+
+1. `GC-020` Agent handoff is mandatory whenever governed work pauses or transfers before closure:
+
+- This rule applies to pause/resume, agent-to-agent transfer, and mid-tranche stop states.
+- Transition classification must be determined first using `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`.
+- The governing context-continuity model is `memory = repository of facts, history, and durable evidence`, `handoff = governance-filtered summary and transfer checkpoint`, and `context loading = phase-bounded loading of only what the current step needs`.
+- In CVF, handoff is context quality control by phase for multi-agent continuation, not only work transfer.
+- The handoff must truthfully state repo truth, tranche truth, latest completed commit, next governed move, and explicit scope limits.
+- The canonical handoff template is `docs/reference/CVF_AGENT_HANDOFF_TEMPLATE.md`.
+- The canonical context-continuity reference is `docs/reference/CVF_CONTEXT_CONTINUITY_MODEL.md`.
+- Operational enforcement reference: `governance/toolkit/05_OPERATION/CVF_AGENT_HANDOFF_GUARD.md`.
+
+1. `GC-021` Fast-lane governance is allowed only for low-risk additive work inside an already-authorized tranche:
+
+- `GC-018` still opens the wave or tranche.
+- `GC-019` full-lane handling remains mandatory for physical merges, ownership transfer, target-state claim expansion, runtime-authority changes, or concept-to-module work.
+- Fast lane is allowed only when the change stays additive, remains inside the approved tranche scope, and keeps rollback bounded.
+- Fast-lane selection controls evidence burden only; durable memory class is still governed separately by `GC-022`.
+- Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_FAST_LANE_GOVERNANCE_GUARD.md`.
+- Canonical templates: `docs/reference/CVF_FAST_LANE_AUDIT_TEMPLATE.md` and `docs/reference/CVF_FAST_LANE_REVIEW_TEMPLATE.md`.
+
+1. Memory governance is mandatory for evidence-bearing records intended to support later CVF memory:
+
+- Every memory-bearing record must classify itself as `FULL_RECORD`, `SUMMARY_RECORD`, or `POINTER_RECORD`.
+- The chosen class must match the document's storage role and the canonical `docs/` taxonomy.
+- Do not preserve full-detail durable history when a truthful summary or pointer-only record is sufficient.
+- Memory class follows artifact role, not whether the change used `Fast Lane` or `Full Lane`.
+- Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MEMORY_GOVERNANCE_GUARD.md`.
+- Canonical classification reference: `docs/reference/CVF_MEMORY_RECORD_CLASSIFICATION.md`.
+
+1. `GC-023` governed file size discipline is mandatory for maintainability across CVF:
+
+- Governed source, test, frontend, and active markdown files must stay within the active class-specific size thresholds unless an approved exception exists.
+- Oversized files must be split by responsibility or tranche unless they are explicitly registered as legacy debt with rationale and follow-up.
+- Dedicated rotation guards remain authoritative for long-lived logs and traces.
+- Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_GOVERNED_FILE_SIZE_GUARD.md`.
+- Automated enforcement reference: `governance/compat/check_governed_file_size.py`.
+
+1. `GC-024` canonical test partition ownership is mandatory once a large governed test surface has been split:
+
+- After tranche-local or subsystem-local tests are extracted into a canonical file, the old monolithic file must not re-absorb that surface.
+- Canonical ownership and forbidden legacy files must be recorded in a machine-readable registry.
+- Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_TEST_PARTITION_OWNERSHIP_GUARD.md`.
+- Automated enforcement reference: `governance/compat/check_test_partition_ownership.py`.
+
+1. `GC-025` Session governance bootstrap is mandatory before governed work starts or resumes in a fresh session:
+
+- Workers must first load the canonical bootstrap reference instead of rereading every governance guard by default.
+- The bootstrap must route workers to the relevant controls based on task class and transition state.
+- In CVF, `memory` preserves durable truth, `handoff` preserves transition truth, and `bootstrap` preserves minimal governance routing truth.
+- The canonical bootstrap reference is `docs/reference/CVF_SESSION_GOVERNANCE_BOOTSTRAP.md`.
+- Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md`.
+- Automated enforcement reference: `governance/compat/check_session_governance_bootstrap.py`.
+
+1. `GC-026` Progress tracker sync is mandatory after any governed tranche or authorization state change that alters canonical progress posture:
+
+- Workers must update the canonical tracker for the affected workline so session bootstrap does not read stale progress truth.
+- Workers must also leave one short standardized sync note instead of relying on tracker edits alone.
+- This rule is intentionally lighter than a full status-review rewrite, but stronger than an optional tracker refresh.
+- Canonical template: `docs/reference/CVF_GC026_PROGRESS_TRACKER_SYNC_TEMPLATE.md`.
+- Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_PROGRESS_TRACKER_SYNC_GUARD.md`.
+- Automated enforcement reference: `governance/compat/check_progress_tracker_sync.py`.
+
+1. `GC-027` Canonical multi-agent intake/rebuttal/decision documentation is mandatory before roadmap intake or implementation selection when multiple agents evaluate the same proposal set:
     - This rule applies when CVF uses separate agents or review passes to evaluate, rebut, and reconcile the same new module, layer, architecture addition, or roadmap candidate.
     - The canonical sequence is: intake review -> cross-agent rebuttal -> pre-integration decision pack -> only then roadmap intake or implementation authorization.
-   - Canonical templates: `docs/reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`, `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`, and `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`.
-   - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`.
-    - Automated enforcement reference: `governance/compat/check_multi_agent_review_governance_compat.py`.
-    - This rule governs canonical documentation only; it does not replace live `AI Boardroom` deliberation inside the Control Plane.
-    - The separate canonical runtime/reference boundary for boardroom deliberation is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
- 22. `GC-028` Live `AI Boardroom` deliberation is a separate high-criticality control and must truthfully gate downstream work:
+
+- Canonical templates: `docs/reference/CVF_MULTI_AGENT_INTAKE_REVIEW_TEMPLATE.md`, `docs/reference/CVF_MULTI_AGENT_REBUTTAL_TEMPLATE.md`, and `docs/reference/CVF_MULTI_AGENT_DECISION_PACK_TEMPLATE.md`.
+- Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`.
+  - Automated enforcement reference: `governance/compat/check_multi_agent_review_governance_compat.py`.
+  - This rule governs canonical documentation only; it does not replace live `AI Boardroom` deliberation inside the Control Plane.
+  - The separate canonical runtime/reference boundary for boardroom deliberation is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
+
+ 1. `GC-028` Live `AI Boardroom` deliberation is a separate high-criticality control and must truthfully gate downstream work:
      - This rule applies when multiple agents or perspectives deliberate inside the live Control Plane before downstream design or orchestration continues.
      - The canonical sequence is: boardroom session packet -> dissent log when needed -> transition decision -> only then the next allowed runtime stage.
      - Canonical templates: `docs/reference/CVF_BOARDROOM_SESSION_PACKET_TEMPLATE.md`, `docs/reference/CVF_BOARDROOM_DISSENT_LOG_TEMPLATE.md`, and `docs/reference/CVF_BOARDROOM_TRANSITION_DECISION_TEMPLATE.md`.
@@ -154,101 +179,101 @@ Personal AI usage unrelated to company work is excluded.
      - Automated enforcement reference: `governance/compat/check_boardroom_runtime_governance_compat.py`.
      - The canonical runtime/reference protocol is `docs/reference/CVF_BOARDROOM_DELIBERATION_PROTOCOL.md`.
      - Downstream orchestration must remain blocked unless the boardroom transition gate returns `PROCEED_TO_ORCHESTRATION`.
- 23. `GC-029` Touched extension packages under `EXTENSIONS/` must pass their own package-level `check` script before push when governed changes affect source, test, or package config files:
+ 2. `GC-029` Touched extension packages under `EXTENSIONS/` must pass their own package-level `check` script before push when governed changes affect source, test, or package config files:
      - This rule applies to extension packages with `package.json` and `scripts.check`.
      - The package-level `check` script is mandatory even when focused tests or repo-level governance checks already pass.
      - Touched packages must not rely on “green local test files” as a substitute for package-level verification.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_EXTENSION_PACKAGE_CHECK_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_extension_package_check.py`.
- 24. `GC-030` new or materially revised governance guards must satisfy the canonical authoring standard before commit:
+ 3. `GC-030` new or materially revised governance guards must satisfy the canonical authoring standard before commit:
      - This rule applies to any new guard and any existing guard whose rule or enforcement surface is materially revised.
      - Required metadata: `Guard Class`, `Status`, `Applies to`, and `Enforced by`.
      - Required sections: `Purpose`, `Rule`, `Enforcement Surface`, `Related Artifacts`, and `Final Clause`.
      - If a guard claims a `GC-*` control ID, that ID must be synchronized with the control matrix and master policy in the same change batch.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_GUARD_AUTHORING_STANDARD_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_guard_authoring_standard.py`.
- 25. `GC-031` canonical active trace/log windows owned by dedicated rotation guards must be registered by class before archive tooling may rely on them:
+ 4. `GC-031` canonical active trace/log windows owned by dedicated rotation guards must be registered by class before archive tooling may rely on them:
      - Every dedicated rotation guard that defines a canonical active window must register that window in `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`.
      - The registry is the source of truth for grouped active-window classification and generic archive protection.
      - Existing protected active-window entries are governed state and must not be silently mutated or removed in the normal commit path.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_active_window_registry.py`.
- 26. `GC-032` governed artifact authoring is mandatory whenever humans or AI agents write governed packets, evidence docs, or canonical continuity records:
+ 5. `GC-032` governed artifact authoring is mandatory whenever humans or AI agents write governed packets, evidence docs, or canonical continuity records:
      - Authors must read source truth first and may not replace typed evidence with narrative shorthand when upstream contracts define explicit fields.
      - Planning, execution, evidence, and continuity artifacts must remain role-separated; one artifact class may not silently stand in for another.
      - Tranche posture changes must move the relevant continuity surfaces together instead of leaving tracker, handoff, and closure truth out of sync.
      - Canonical authoring standard: `docs/reference/CVF_GOVERNED_ARTIFACT_AUTHORING_STANDARD.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_governed_artifact_authoring.py`.
- 27. `GC-033` governed package public barrels must remain thin routing surfaces once an intentional split has been made:
+ 6. `GC-033` governed package public barrels must remain thin routing surfaces once an intentional split has been made:
      - Public barrels such as `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/src/index.ts` must stay re-export-oriented and must not grow back into implementation hotspots.
      - Canonical maintainability authority: `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_PUBLIC_SURFACE_MAINTAINABILITY_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_cpf_public_surface_maintainability.py`.
- 28. `GC-034` governed barrel smoke tests must remain ownership-clean after canonical test surfaces are split:
+ 7. `GC-034` governed barrel smoke tests must remain ownership-clean after canonical test surfaces are split:
      - `tests/index.test.ts` style barrel smoke files may cover public-surface reachability, but they must not re-own tranche-local behavior already assigned to dedicated files.
      - Imports must route through the public barrel and approved helpers instead of local tranche contracts.
      - Canonical maintainability authority: `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_BARREL_SMOKE_OWNERSHIP_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_cpf_public_surface_maintainability.py`.
- 29. `GC-035` governed CPF batch families must adopt shared batch helpers and shared fixture builders once those helpers exist:
+ 8. `GC-035` governed CPF batch families must adopt shared batch helpers and shared fixture builders once those helpers exist:
      - Stable repeated batch logic such as deterministic batch identity and dominant-resolution patterns must route through the shared helper instead of being copied into new tranche files.
      - Stable repeated batch-test fixtures must route through shared builders under `tests/helpers/` instead of being redefined in every file.
      - Canonical maintainability authority: `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_SHARED_BATCH_HELPER_ADOPTION_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_cpf_batch_helper_adoption.py`.
- 30. `GC-036` canonical summary docs must stay separate from typed evidence payloads:
+ 9. `GC-036` canonical summary docs must stay separate from typed evidence payloads:
      - Whitepaper, tracker, handoff, index, and active roadmap summary surfaces may cite evidence but must not inline evidence-owned typed fields such as trace/report IDs and hashes.
      - Summary canon should point to baselines, reviews, audits, and assessments rather than duplicating them.
      - Canonical maintainability authority: `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_canon_summary_evidence_separation.py`.
- 31. `GC-037` visible repository roots and extension roots must be lifecycle-classified before any pre-public relocation or retirement wave begins:
+ 10. `GC-037` visible repository roots and extension roots must be lifecycle-classified before any pre-public relocation or retirement wave begins:
      - This rule applies to repository cleanup work meant to improve public architectural clarity before packaging or external rollout.
      - Lifecycle classification must precede structural movement; do not infer deletion or retirement from legacy-looking names alone.
      - Canonical lifecycle classes are `ACTIVE_CANONICAL`, `MERGED_RETAINED`, `FROZEN_REFERENCE`, and `RETIRE_CANDIDATE`.
      - Canonical reference: `docs/reference/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_repository_lifecycle_classification.py`.
-32. `GC-038` visible repository roots and extension roots must be exposure-classified before any public, mirror, package-export, or selective-distribution decision proceeds:
+11. `GC-038` visible repository roots and extension roots must be exposure-classified before any public, mirror, package-export, or selective-distribution decision proceeds:
        - This rule applies to pre-public planning, selective module export planning, and any attempt to decide what CVF should expose externally.
        - Public-by-accident is forbidden; the default model is `private-by-default, selective-publication-only`.
        - Canonical exposure classes are `PUBLIC_DOCS_ONLY`, `PUBLIC_EXPORT_CANDIDATE`, `INTERNAL_ONLY`, and `PRIVATE_ENTERPRISE_ONLY`.
-33. `GC-039` no `P3` structural relocation authorization may proceed until pre-public readiness truth is explicit:
+12. `GC-039` no `P3` structural relocation authorization may proceed until pre-public readiness truth is explicit:
        - `P0`, `P1`, and `P2` must be formally closed in a phase-gate registry.
        - Visible root files must be exposure-classified; directory tags alone are insufficient.
        - `PUBLIC_DOCS_ONLY` roots must declare public-content audit status, and `PUBLIC_EXPORT_CANDIDATE` extensions must declare export-readiness status.
        - The publication decision memo must carry a live re-assessment boundary before `P3` may be considered.
-     - Canonical reference: `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`.
-     - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`.
-     - Automated enforcement reference: `governance/compat/check_repository_exposure_classification.py`.
-34. `GC-040` governed CPF and EPF batch contracts must preserve deterministic identity and nested clock propagation:
+       - Canonical reference: `docs/reference/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION.md`.
+       - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`.
+       - Automated enforcement reference: `governance/compat/check_repository_exposure_classification.py`.
+13. `GC-040` governed CPF and EPF batch contracts must preserve deterministic identity and nested clock propagation:
      - `batchId` must be derived from `batchHash` only; volatile post-`batchHash` suffixes are forbidden in governed batch identity.
      - batch wrappers that own `now` and instantiate nested non-batch contracts internally must thread `now: this.now` into those nested dependencies.
      - Canonical maintainability authority: `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`.
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_BATCH_CONTRACT_DETERMINISM_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_batch_contract_determinism.py`.
-35. `GC-041` tranche-opening scan inheritance is mandatory before a fresh quality assessment or next-surface selection proceeds:
+14. `GC-041` tranche-opening scan inheritance is mandatory before a fresh quality assessment or next-surface selection proceeds:
      - workers must consult `governance/compat/CVF_SURFACE_SCAN_REGISTRY.json` before re-scanning by default
      - the same registry must be updated when scan posture materially changes so later agents inherit current surface-state truth
      - `AGENT_HANDOFF.md` and `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` must keep pointing to the canonical scan continuity registry
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_SURFACE_SCAN_CONTINUITY_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_surface_scan_registry.py`.
-36. `GC-042` product-value claims and Docker-sandbox justification must use one frozen comparative evidence chain:
+15. `GC-042` product-value claims and Docker-sandbox justification must use one frozen comparative evidence chain:
      - product value may not be claimed from code volume, benchmark-harness existence, self-scoring, or cherry-picked demos alone
      - comparative validation must freeze corpus, rubric, configuration set, and hard gates before scored runs begin
      - the canonical evidence chain is `corpus -> rubric -> run manifest -> final assessment`
      - Docker sandbox remains deferred-by-default unless this evidence chain or an explicit external requirement produces a real trigger
      - Canonical operational rule: `governance/toolkit/05_OPERATION/CVF_PRODUCT_VALUE_VALIDATION_GUARD.md`.
      - Automated enforcement reference: `governance/compat/check_product_value_validation_guard_compat.py`.
-37. `GC-043` future knowledge absorption and repo-derived extension planning must default to doctrine-first / governance-first absorption before implementation-first expansion:
+16. `GC-043` future knowledge absorption and repo-derived extension planning must default to doctrine-first / governance-first absorption before implementation-first expansion:
      - this rule applies to external knowledge intake, repo-derived skill or doctrine uplift, post-closure synthesis waves, and similar packets that try to improve CVF by importing outside patterns
      - the canonical default is `doctrine-first / governance-first absorption` followed by owner-surface mapping into existing CVF canon and existing CVF owner surfaces
      - `implementation-first expansion` is forbidden by default and may open only after a fresh operator decision and explicit fresh `GC-018` state
      - canonical priority authority: `docs/reference/CVF_KNOWLEDGE_ABSORPTION_AND_EXTENSION_PRIORITY_STANDARD_2026-04-13.md`
      - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md`
      - automated enforcement reference: `governance/compat/check_knowledge_absorption_priority_compat.py`
-38. `GC-044` future template/skill intake, corpus rescreen, and trusted-subset admission must use one deterministic CVF-standard quality rule before public non-coder use or value-proof:
+17. `GC-044` future template/skill intake, corpus rescreen, and trusted-subset admission must use one deterministic CVF-standard quality rule before public non-coder use or value-proof:
      - this rule applies to repo-derived skill intake, front-door template additions, legacy corpus rescreen, and selection of templates/skills used to justify public non-coder value claims
      - the canonical quality authority is `docs/reference/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_STANDARD_2026-04-14.md`
      - only items classified `TRUSTED_FOR_VALUE_PROOF` may be used in benchmark/value-proof tranches
@@ -256,7 +281,7 @@ Personal AI usage unrelated to company work is excluded.
      - provider freeze for the current lane remains roadmap/execution policy, not a permanent guard invariant
      - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md`
      - automated enforcement reference: `governance/compat/check_template_skill_standard_guard_compat.py`
-39. `GC-045` new governed Markdown files must satisfy structural completeness by artifact type before entering CVF canon:
+18. `GC-045` new governed Markdown files must satisfy structural completeness by artifact type before entering CVF canon:
      - this rule applies to new governed Markdown under `docs/`, `governance/toolkit/`, `AGENT_HANDOFF*.md`, and repository-root `CVF_*.md`
      - every new governed Markdown file must expose title, memory class, status, purpose, scope or owner boundary, and final/claim/verification boundary
      - contracts, specs, policies, roadmaps, reviews, baselines, ADRs, and handoffs must follow their respective required section sets
@@ -264,7 +289,7 @@ Personal AI usage unrelated to company work is excluded.
      - canonical structural standard: `docs/reference/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_STANDARD.md`
      - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_GUARD.md`
      - automated enforcement reference: `governance/compat/check_markdown_structural_completeness.py`
-40. `GC-046` multi-agent absorption reviews must use Evidence Trace Blocks per claim, Adversarial Role Assignment, and a deterministic Convergence Algorithm before any convergence verdict is treated as implementation authorization:
+19. `GC-046` multi-agent absorption reviews must use Evidence Trace Blocks per claim, Adversarial Role Assignment, and a deterministic Convergence Algorithm before any convergence verdict is treated as implementation authorization:
      - this rule applies to all AI agents participating in CVF knowledge absorption reviews, rebuttal cycles, or multi-agent audit chains
      - PROPOSER argues for source value; REVIEWER argues for risk — roles are structurally assigned and reversed across review numbers
      - every significant claim must include an Evidence Trace Block with exact command, result, key file path, and verdict
@@ -273,7 +298,7 @@ Personal AI usage unrelated to company work is excluded.
      - Phase 0.A (doctrine + template): authorized. Phase 0.B (manual checker + CI advisory): pending GC-018. Phase 0.C (hard enforcement): deferred.
      - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_AGENT_REVIEW_ANTI_COLLUSION_GUARD.md`
      - GC-018 template update: `docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md`
-41. `GC-047` bounded-corpus reports, comparisons, audits, extractions, migrations, inventories, and knowledge-absorption decisions must prove corpus completeness before claiming a complete result:
+20. `GC-047` bounded-corpus reports, comparisons, audits, extractions, migrations, inventories, and knowledge-absorption decisions must prove corpus completeness before claiming a complete result:
      - enumerate the actual source corpus from filesystem or structured source truth
      - record a file-level processing ledger with visible exclusions and unreadable or unsupported formats
      - reconcile manifest items against terminal ledger statuses before using `COMPLETE_VERIFIED`
@@ -281,7 +306,7 @@ Personal AI usage unrelated to company work is excluded.
      - canonical standard: `docs/reference/CVF_CORPUS_COMPLETENESS_AND_REPORT_INTEGRITY_STANDARD_2026-06-01.md`
      - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_CORPUS_COMPLETENESS_AND_REPORT_INTEGRITY_GUARD.md`
      - automated enforcement reference: `governance/compat/check_corpus_completeness_report_integrity.py`
-42. `GC-048` corpus-derived knowledge maps, semantic-region ledgers, architecture reconciliations, Memory syntheses, graphification plans, and retrieval-readiness claims must preserve source authority and prove map reconciliation:
+21. `GC-048` corpus-derived knowledge maps, semantic-region ledgers, architecture reconciliations, Memory syntheses, graphification plans, and retrieval-readiness claims must preserve source authority and prove map reconciliation:
      - distinguish authority assets from rebuildable graph, region, Palace, summary, cache, snapshot, and retrieval views
      - reconcile `assets = mapped + deferred + unmapped`
      - reject bare ignore-sensitive `rg --files` evidence, orphan-hidden maps, and reconciled claims with stale drift state
@@ -290,13 +315,13 @@ Personal AI usage unrelated to company work is excluded.
      - canonical standard: `docs/reference/CVF_CORPUS_TO_KNOWLEDGE_MAP_RECONCILIATION_STANDARD_2026-06-01.md`
      - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_CORPUS_TO_KNOWLEDGE_MAP_RECONCILIATION_GUARD.md`
      - automated enforcement reference: `governance/compat/check_corpus_to_knowledge_map_reconciliation.py`
-43. `GC-049` core guard/control files are frozen by default and large agent change sets must be explicitly authorized:
+22. `GC-049` core guard/control files are frozen by default and large agent change sets must be explicitly authorized:
      - protected guard scripts, hook chains, guard docs, master policy, control matrix, and session startup files require a same-batch `Core Guard Self-Protection Authorization` block
      - agents may not delete or rename protected guard/control files
      - large change sets require a `Large-Scope Change Authorization` block before commit or closure
      - canonical operational rule: `governance/toolkit/05_OPERATION/CVF_CORE_GUARD_SELF_PROTECTION_GUARD.md`
      - automated enforcement reference: `governance/compat/check_core_guard_self_protection.py`
-44. `GC-050` corpus-derived intelligence classification must use structural ledger discipline before chatbot, retrieval, legal/policy, internal-decision, or answer-surface claims:
+23. `GC-050` corpus-derived intelligence classification must use structural ledger discipline before chatbot, retrieval, legal/policy, internal-decision, or answer-surface claims:
      - include a `Corpus Intelligence Classification` block and a `Corpus Intelligence Classification Ledger`
      - each ledger row must carry source path, processing status, knowledge region, owner surface, disposition, and evidence pointer
      - accepted dispositions require evidence pointers

@@ -1,4 +1,5 @@
 # SKILL ADAPTATION GUIDE
+
 From External Capability to CVF-Compliant Skill
 
 > **Version:** 1.0.0  
@@ -18,11 +19,13 @@ into a CVF-compliant internal skill.
 ## 2. Why Adaptation Exists
 
 External skills are built for:
+
 - Speed
 - Convenience
 - Maximum autonomy
 
 CVF requires:
+
 - Control
 - Accountability
 - Explicit authority boundaries
@@ -68,6 +71,7 @@ Every adapted skill MUST be redefined across five dimensions:
 
 An adapted skill is no longer considered an "external skill".
 It becomes a **CVF Skill Instance** with:
+
 - Explicit boundaries
 - Known risks
 - Assigned responsibility
@@ -77,5 +81,6 @@ It becomes a **CVF Skill Instance** with:
 ## 6. Ownership Rule
 
 Every adapted skill MUST have:
+
 - A human owner
 - A defined deprecation review cycle

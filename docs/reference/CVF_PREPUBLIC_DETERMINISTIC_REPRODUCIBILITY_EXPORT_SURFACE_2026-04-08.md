@@ -27,12 +27,14 @@ Preferred entry:
 ### Types Module (`types/index.ts`)
 
 **Core Types**:
+
 - `ExecutionRecord` — 9 immutable fields for forensic audit
 - `ContextSnapshot` — Frozen context at ANALYSIS phase
 - `ReplayStatus` — 'EXACT' | 'DRIFT' | 'FAILED'
 - `ReplayResult` — Replay validation result
 
 **Cross-Extension Types**:
+
 - `LegacyResumeAuditContext` — Resume context from v1.8
 - `LegacyExecutionAuditRecord` — Audit record from v1.8
 - `CrossExtensionReplaySeed` — Replay seed for cross-extension replay
@@ -54,26 +56,31 @@ Preferred entry:
 ### Core Modules
 
 **Deterministic Hash** (`core/deterministic.hash.ts`):
+
 - `computeDeterministicHash(...parts: string[]): string` — Compute SHA-256 hash from parts
 - `verifyHash(recordedHash, executionId, riskHash, mutationFingerprint, snapshotId): boolean` — Verify hash matches
 
 **Execution Replay** (`core/execution.replay.ts`):
+
 - `ReplayEngine` class — Replay engine for forensic audit
   - `replay(executionId: string, input: ReplayInput): ReplayResult` — Replay execution
 - `ReplayInput` interface — Input for replay
 
 **Context Freezer** (`core/context.freezer.ts`):
+
 - `ContextFreezer` class — Context snapshot and freeze
   - `freeze(executionId: string, fileHashes: Record<string, string>, policyVersion: string, envMeta?: Record<string, string>): string` — Freeze context
   - `detectDrift(executionId: string, currentFileHashes: Record<string, string>): string[]` — Detect context drift
 
 **Execution Snapshot** (`core/execution.snapshot.ts`):
+
 - `ExecutionSnapshot` class — Execution record storage
   - `save(record: ExecutionRecord): void` — Save execution record
   - `get(executionId: string): ExecutionRecord` — Retrieve execution record
   - `list(): ExecutionRecord[]` — List all execution records
 
 **Replay Validator** (`core/replay.validator.ts`):
+
 - `ReplayValidator` class — Replay validation
   - `validate(replayResult: ReplayResult): boolean` — Validate replay result
   - `validateWithThreshold(replayResult: ReplayResult, maxDriftFiles: number, maxRiskDrift: number): boolean` — Validate with thresholds
@@ -110,4 +117,3 @@ Preferred entry:
 - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/package.json`
 - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/README.md`
 - `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/SPEC.md`
-

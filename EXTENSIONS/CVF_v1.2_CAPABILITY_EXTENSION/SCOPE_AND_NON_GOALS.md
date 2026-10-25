@@ -1,9 +1,11 @@
 # Scope and Non-Goals
 
 ## Purpose
+
 Tài liệu này định nghĩa **phạm vi chính thức (Scope)** và **những điều CVF cố tình KHÔNG làm (Non-Goals)**.
 
 Mục tiêu:
+
 - Ngăn mở rộng scope không kiểm soát
 - Tránh hiểu nhầm CVF là agent framework, toolchain, hoặc AI platform
 - Bảo vệ tính ổn định lâu dài của CVF
@@ -35,6 +37,7 @@ CVF trả lời câu hỏi:
 CVF **KHÔNG** nhằm mục đích:
 
 ### 1. Agent Framework
+
 - Không định nghĩa agent loop
 - Không quản lý memory, planning, reflection
 - Không cung cấp reasoning strategy
@@ -42,6 +45,7 @@ CVF **KHÔNG** nhằm mục đích:
 ---
 
 ### 2. Tooling Platform
+
 - Không cung cấp tool adapter
 - Không quản lý API keys
 - Không cung cấp SDK cho tool execution
@@ -49,6 +53,7 @@ CVF **KHÔNG** nhằm mục đích:
 ---
 
 ### 3. Prompt Engineering System
+
 - Không chứa prompt library
 - Không tối ưu prompt
 - Không chuẩn hóa prompt format
@@ -56,6 +61,7 @@ CVF **KHÔNG** nhằm mục đích:
 ---
 
 ### 4. Model Management
+
 - Không chọn model
 - Không benchmark model
 - Không tối ưu inference
@@ -63,6 +69,7 @@ CVF **KHÔNG** nhằm mục đích:
 ---
 
 ### 5. Automation Engine
+
 - Không scheduler
 - Không workflow engine
 - Không auto-chaining
@@ -70,6 +77,7 @@ CVF **KHÔNG** nhằm mục đích:
 ---
 
 ### 6. Skill Marketplace
+
 - Không catalog marketplace
 - Không rating / discovery engine
 - Không dynamic skill loading
@@ -107,6 +115,7 @@ CVF **không trực tiếp làm**, nhưng **cho phép xây dựng**:
 CVF chỉ hoạt động ở **governance layer**.
 
 Nếu một quyết định liên quan đến:
+
 - “Làm thế nào” → agent / tool
 - “Dùng model gì” → platform
 - “Tối ưu ra sao” → infrastructure
@@ -118,6 +127,7 @@ Nếu một quyết định liên quan đến:
 ## Evolution Constraints
 
 Bất kỳ đề xuất nào:
+
 - Làm CVF phụ thuộc agent
 - Làm CVF phụ thuộc tool
 - Mở auto-execution
@@ -133,5 +143,6 @@ Tài liệu này là **nguồn chân lý** cho phạm vi của CVF.
 
 Mọi tính năng, extension, hoặc proposal
 phải được đối chiếu với file này trước khi được chấp nhận.
+
 ```
 

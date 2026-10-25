@@ -98,6 +98,7 @@ Template này chứa **~49% file chỉ tham khảo** minh họa các mẫu nhưn
 ### Không Tích Hợp CVF Runtime
 
 Template này **không** bao gồm CVF governance enforcement. Nó minh họa:
+
 - ✅ Cách cấu trúc ứng dụng server AI
 - ✅ Mẫu chat AI đa nhà cung cấp
 - ✅ Mẫu streaming response

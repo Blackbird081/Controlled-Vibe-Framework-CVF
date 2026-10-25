@@ -17,12 +17,14 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Có nhân viên mới join
 - Chuẩn hóa onboarding process
 - Đảm bảo không miss steps quan trọng
 - Tạo experience tốt cho new hire
 
 **Không phù hợp khi:**
+
 - Onboarding contractors ngắn hạn — Cần version simple hơn
 - Offboarding — Cần checklist riêng
 
@@ -65,6 +67,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -82,12 +85,14 @@
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Checklist đầy đủ theo timeline
 - Tasks cho HR, IT, Manager, Buddy
 - Day-by-day plan cho tuần đầu
 - 30-60-90 day expectations
 
 **Cấu trúc output:**
+
 ```
 ONBOARDING CHECKLIST
 
@@ -113,6 +118,7 @@ ONBOARDING CHECKLIST
 - [ ] Include feedback checkpoints
 
 **Red flags (cần Reject):**
+
 - ⚠️ Chỉ focus logistics, thiếu cultural integration
 - ⚠️ No clear owners cho tasks
 - ⚠️ Too generic, không fit role
@@ -143,7 +149,8 @@ ONBOARDING CHECKLIST
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Tên nhân viên: Hoàng Văn G
 Vị trí: Senior Backend Developer
@@ -154,7 +161,8 @@ Work mode: Hybrid (3 days office)
 Special needs: Linux laptop preferred
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 ONBOARDING CHECKLIST: HOÀNG VĂN G
 Position: Senior Backend Developer
@@ -230,7 +238,8 @@ KEY CONTACTS
 • IT Support: it@company.com
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Full timeline pre-day to 90 days
 - ✅ Clear owners [HR], [IT], [Manager]
 - ✅ Role-specific (dev environment, repos)
@@ -242,6 +251,7 @@ KEY CONTACTS
 ---
 
 ## 🔗 Related Skills
+
 - [Interview Evaluation](./02_interview_evaluation.skill.md)
 - [Performance Review](./03_performance_review.skill.md)
 

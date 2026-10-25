@@ -56,15 +56,13 @@ function getBarColor(value: number): string {
 export function GovernanceMetrics({ data: propData }: GovernanceMetricsProps) {
     const { language } = useLanguage();
     const l = LABELS[language];
-    const [data, setData] = useState<GovernanceMetricsData | null>(propData || null);
+    const [fetchedData, setData] = useState<GovernanceMetricsData | null>(null);
+    const data = propData ?? fetchedData;
     const [loading, setLoading] = useState(!propData);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (propData) {
-            setData(propData);
-            return;
-        }
+        if (propData) return;
         let cancelled = false;
         async function fetchMetrics() {
             try {
@@ -89,8 +87,8 @@ export function GovernanceMetrics({ data: propData }: GovernanceMetricsProps) {
         return () => { cancelled = true; };
     }, [propData, l.error]);
 
-    if (loading) return <p className="text-sm text-gray-400">{l.loading}</p>;
-    if (error) return <p className="text-sm text-red-500">{error}</p>;
+    if (!propData && loading) return <p className="text-sm text-gray-400">{l.loading}</p>;
+    if (!propData && error) return <p className="text-sm text-red-500">{error}</p>;
     if (!data) return null;
 
     const cards = [

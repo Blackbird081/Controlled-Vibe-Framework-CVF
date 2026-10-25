@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá thiết kế và kết quả của A/B test. Đảm bảo test được setup đúng cách và kết quả có statistical significance.
 
 **Khi nào nên dùng:**
+
 - Trước khi launch A/B test mới
 - Phân tích kết quả sau khi test xong
 - Review test design từ team
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -79,24 +81,28 @@ Không yêu cầu.
 ## ✅ Checklist Trước khi Test
 
 ### Hypothesis Quality
+
 - [ ] Hypothesis có clear và testable?
 - [ ] Có "Why" - lý do expect change?
 - [ ] Có measurable outcome?
 - [ ] Có reasonable timeframe?
 
 ### Test Design
+
 - [ ] Chỉ test 1 biến duy nhất (isolated)?
 - [ ] Sample size đủ lớn cho statistical power?
 - [ ] User assignment random và fair?
 - [ ] No selection bias trong audience?
 
 ### Metrics
+
 - [ ] Primary metric có được define rõ?
 - [ ] Có secondary/guardrail metrics?
 - [ ] Tracking đã implement và test?
 - [ ] Baseline data có sẵn?
 
 ### Technical Setup
+
 - [ ] No bugs/errors trong variant?
 - [ ] Đã QA test cả control và variant?
 - [ ] Tracking events fire đúng?
@@ -107,17 +113,18 @@ Không yêu cầu.
 ## ✅ Checklist Review Results
 
 ### Statistical Validity
+
 - [ ] Sample size đủ (power ≥80%)?
 - [ ] Statistical significance (p < 0.05)?
 - [ ] Confidence interval có narrow?
 - [ ] Đã chạy đủ lâu (≥ 1-2 business cycles)?
 
 ### Result Interpretation
+
 - [ ] Effect size có meaningful (>5%)?
 - [ ] Results consistent across segments?
 - [ ] No novelty effect (stable over time)?
 - [ ] Guardrail metrics không bị ảnh hưởng xấu?
-
 
 ---
 
@@ -137,7 +144,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Hypothesis Template:
+### Hypothesis Template
+
 ```
 If we [CHANGE],
 then [METRIC] will [INCREASE/DECREASE] by [X%],
@@ -149,7 +157,8 @@ then conversion rate will increase by 5%,
 because users feel more secure about payment."
 ```
 
-### Sample Size Calculator:
+### Sample Size Calculator
+
 ```
 Minimum sample per variant:
 - Small effect (5%): ~3,000 users
@@ -159,14 +168,16 @@ Minimum sample per variant:
 (Assuming baseline 5% conversion, 80% power, 95% confidence)
 ```
 
-### Duration Guidelines:
+### Duration Guidelines
+
 | Traffic | Minimum Duration |
 |---------|-----------------|
 | High (10k+/day) | 1-2 weeks |
 | Medium (1k/day) | 2-4 weeks |
 | Low (<1k/day) | 4+ weeks |
 
-### Reading Results:
+### Reading Results
+
 ```
 ✅ WINNER if:
 - p-value < 0.05 (95% confidence)
@@ -203,7 +214,8 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Test: CTA "Dùng thử 14 ngày" vs "Book demo"
 Baseline conversion: 3.2%
@@ -213,7 +225,8 @@ Result: Variant 3.8% (+18.7%), p=0.03
 Guardrail: Bounce +1% (ns)
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # A/B Test Review
 
@@ -229,13 +242,15 @@ Winner: Variant (CTA "Dùng thử 14 ngày")
 Ship 100% và test lại headline trong 2 tuần.
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Có đủ sample và p-value
 - ✅ Guardrail không bị ảnh hưởng
 - ✅ Recommendation rõ ràng
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Feature Prioritization (RICE/ICE)](./feature_prioritization.skill.md)
 - [User Persona Development](./user_persona_development.skill.md)
 

@@ -32,7 +32,8 @@ before importing external skill packs or adding overlapping micro-skills.
 
 ## 🗂️ Domains
 
-### 👔 [HR & Operations](hr_operations/) (Phase 5) ⭐ NEW!
+### 👔 [HR & Operations](hr_operations/) (Phase 5) ⭐ NEW
+
 5 skills cho quản lý nhân sự và vận hành
 
 | Skill | Mục đích | Difficulty |
@@ -45,7 +46,8 @@ before importing external skill packs or adding overlapping micro-skills.
 
 ---
 
-### ⚖️ [Legal & Contracts](legal_contracts/) (Phase 5) ⭐ NEW!
+### ⚖️ [Legal & Contracts](legal_contracts/) (Phase 5) ⭐ NEW
+
 5 skills cho hợp đồng và pháp lý
 
 | Skill | Mục đích | Difficulty |
@@ -58,7 +60,8 @@ before importing external skill packs or adding overlapping micro-skills.
 
 ---
 
-### 🤖 [AI/ML Evaluation](ai_ml_evaluation/) (Phase 5) ⭐ NEW!
+### 🤖 [AI/ML Evaluation](ai_ml_evaluation/) (Phase 5) ⭐ NEW
+
 6 skills cho đánh giá và tối ưu AI
 
 | Skill | Mục đích | Difficulty |
@@ -73,18 +76,19 @@ before importing external skill packs or adding overlapping micro-skills.
 ---
 
 ### 🚀 [App Development](app_development/) (Phase 4)
+
 8 skills cho việc tạo spec để AI Agent build local apps
 
-| Skill | Mục đích | Difficulty |
-|-------|----------|------------|
-| App Requirements Spec | Thu thập requirements | Easy |
-| Tech Stack Selection | Chọn công nghệ | Medium |
-| Architecture Design | Thiết kế hệ thống | Hard |
-| Database Schema Design | Data modeling | Medium |
-| API Design Spec | Thiết kế API | Medium |
-| Desktop App Spec | Windows, menus, shortcuts | Medium |
-| CLI Tool Spec | Commands, arguments | Medium |
-| Local Deployment | Packaging, distribution | Medium |
+| Skill | Mục đích | Difficulty | Status |
+|-------|----------|------------|---|
+| App Requirements Spec | Thu thập requirements | Easy | |
+| Tech Stack Selection | Chọn công nghệ | Medium | |
+| Architecture Design | Thiết kế hệ thống | Hard | |
+| Database Schema Design | Data modeling | Medium | |
+| API Design Spec | Thiết kế API | Medium | |
+| Desktop App Spec | Windows, menus, shortcuts | Medium | |
+| CLI Tool Spec | Commands, arguments | Medium | |
+| Local Deployment | Packaging, distribution | Medium | |
 | UI Pre-Delivery Checklist | Checklist cuối trước khi ship UI | Easy | ⭐ NEW |
 
 ---
@@ -104,13 +108,14 @@ before importing external skill packs or adding overlapping micro-skills.
 ---
 
 ### 🎨 [Product & UX](product_ux/) (Phase 2)
+
 Canonical UI/UX web guidance now lives in root `DESIGN.md`,
 `product_ux/cvf_web_ux_redesign_system.skill.md`, and
 `product_ux/claude_design_handoff.skill.md`. Legacy visual micro-skills are
 kept under `legacy/` for audit/reference only.
 
-| Skill (NEW) | Mục đích | Difficulty |
-|-------------|----------|------------|
+| Skill (NEW) | Mục đích | Difficulty | Status |
+|-------------|----------|------------|---|
 | CVF Web UX Redesign System | Chuẩn hóa design DNA, layout, component rules, và handoff cho web build/redesign | Advanced | ⭐ NEW |
 | Claude Design Handoff | Hấp thụ prototype Claude Design/HTML thành spec sạch cho agent build | Advanced | ⭐ NEW |
 | Accessibility Audit | Kiểm tra WCAG compliance khi cần QA chuyên sâu | Medium | |
@@ -119,11 +124,13 @@ kept under `legacy/` for audit/reference only.
 ---
 
 ### 🔐 [Security & Compliance](security_compliance/) (Phase 3)
+
 6 skills cho API security, GDPR, privacy, và incidents
 
 ---
 
 ### 💰 [Finance & Analytics](finance_analytics/) (Phase 4)
+
 Canonical finance guidance now uses 4 active, non-coder friendly skills. Older
 finance micro-skills are retained under `finance_analytics/legacy/` for
 audit/reference only.
@@ -209,3 +216,5 @@ python scripts/validate_skills.py --json reports/skill_validation.json
 ---
 
 *CVF Skill Library v1.5.2 | Last Updated: 2026-02-22*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

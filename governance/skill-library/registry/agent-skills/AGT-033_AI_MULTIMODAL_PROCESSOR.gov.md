@@ -108,6 +108,7 @@ Standard multimodal task ──→ gemini-2.5-flash (best balance)
 ### Implementation Patterns
 
 Pattern 1 — Audio Transcription:
+
 ```python
 import google.genai as genai
 
@@ -127,6 +128,7 @@ print(response.text)
 ```
 
 Pattern 2 — Document Table Extraction:
+
 ```python
 # Extract structured data from PDF
 pdf_file = client.files.upload(file="invoice.pdf")
@@ -142,6 +144,7 @@ response = client.models.generate_content(
 ```
 
 Pattern 3 — Video Scene Analysis:
+
 ```python
 video_file = client.files.upload(file="product_demo.mp4")
 
@@ -161,6 +164,7 @@ response = client.models.generate_content(
 ```
 
 Pattern 4 — Image Generation:
+
 ```python
 response = client.models.generate_content(
     model="gemini-2.5-flash-image",
@@ -190,6 +194,7 @@ for part in response.candidates[0].content.parts:
 | **High** | >$100/mo | Pro for quality, caching layer, preprocess media |
 
 **Optimization Checklist**
+
 - [ ] Use `gemini-2.5-flash` as default (best price/performance)
 - [ ] Use File API for files >20MB (avoids repeated upload)
 - [ ] Compress media before upload (target reasonable quality)
@@ -229,6 +234,7 @@ for part in response.candidates[0].content.parts:
 | 500 | Server error | Retry with backoff, max 3 attempts |
 
 Retry Pattern:
+
 ```python
 import time
 
@@ -302,6 +308,7 @@ async def api_call_with_retry(func, *args, max_retries=3):
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] API keys sourced from environment variable chain, never hardcoded
 - [ ] Cost estimated before any batch processing of large media sets
 - [ ] File API used for files >20MB
@@ -309,6 +316,7 @@ async def api_call_with_retry(func, *args, max_retries=3):
 - [ ] Generated content passes safety filters before use
 
 **FAIL criteria:**
+
 - [ ] Hardcoded API key found in code
 - [ ] Large media batch processed without cost estimate
 - [ ] 429 rate-limit error not retried with backoff

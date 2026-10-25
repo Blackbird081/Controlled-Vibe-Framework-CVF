@@ -18,6 +18,11 @@ from pathlib import Path
 from typing import Any
 
 
+try:
+    from guard_binding_catalog import private_binding, public_required_paths, public_required_markers, require_public_projection
+except ModuleNotFoundError:
+    from governance.compat.guard_binding_catalog import private_binding, public_required_paths, public_required_markers, require_public_projection
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 COMPAT_DIR = Path(__file__).resolve().parent
 if str(COMPAT_DIR) not in sys.path:
@@ -95,7 +100,9 @@ def _discover_rotation_guard_windows() -> list[dict[str, str]]:
     return discovered
 
 
-def build_report() -> dict[str, Any]:
+def build_report(profile: str = "private") -> dict[str, Any]:
+    if profile == "public":
+        require_public_projection(REPO_ROOT)
     violations: list[dict[str, str]] = []
     discovered_windows = _discover_rotation_guard_windows()
 
@@ -277,7 +284,10 @@ def build_report() -> dict[str, Any]:
                 }
             )
 
-        for ref in (entry["activePath"], entry["archiveDir"], entry["rotationGuard"], entry["rotationCheck"], entry["rotationScript"]):
+        references = (entry["activePath"], entry["archiveDir"], entry["rotationGuard"], entry["rotationCheck"], entry["rotationScript"])
+        if profile == "public":
+            references = public_required_paths((entry["rotationGuard"], entry["rotationCheck"], entry["rotationScript"]))
+        for ref in references:
             if not (REPO_ROOT / ref).exists():
                 violations.append(
                     {
@@ -366,13 +376,8 @@ def build_report() -> dict[str, Any]:
                     }
                 )
 
-    helper_texts = {
-        _rel(GUARD_DOC_PATH): _read(GUARD_DOC_PATH),
-        _rel(ACTIVE_ARCHIVE_GUARD_PATH): _read(ACTIVE_ARCHIVE_GUARD_PATH),
-        _rel(HOOK_CHAIN_PATH): _read(HOOK_CHAIN_PATH),
-        _rel(WORKFLOW_PATH): _read(WORKFLOW_PATH),
-        _rel(WINDOW_CLASSIFICATION_PATH): _read(WINDOW_CLASSIFICATION_PATH),
-    }
+    helper_paths = (GUARD_DOC_PATH, ACTIVE_ARCHIVE_GUARD_PATH, HOOK_CHAIN_PATH, WORKFLOW_PATH, WINDOW_CLASSIFICATION_PATH)
+    helper_texts = {_rel(path): _read(path) for path in helper_paths if profile != "public" or not private_binding(_rel(path))}
 
     for helper_path, marker in (
         (_rel(GUARD_DOC_PATH), _rel(REGISTRY_PATH)),
@@ -381,6 +386,8 @@ def build_report() -> dict[str, Any]:
         (_rel(WORKFLOW_PATH), "check_active_window_registry.py"),
         (_rel(WINDOW_CLASSIFICATION_PATH), _rel(REGISTRY_PATH)),
     ):
+        if profile == "public" and private_binding(helper_path):
+            continue
         if marker not in helper_texts.get(helper_path, ""):
             violations.append(
                 {
@@ -394,6 +401,7 @@ def build_report() -> dict[str, Any]:
         "timestamp": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "registryPath": _rel(REGISTRY_PATH),
         "baselineSource": baseline_source,
+        **({"profile": "public", "privateEvidenceNotApplicable": "Active payload/archive custody and declared private rotation effects are not assessed; compact public log checks are delegated to incremental-test-log-rotation; schema, normative guard/checker bindings and policy baseline remain enforced.", "claimBoundary": "PUBLIC_SCHEMA_AND_BINDINGS_ONLY_NOT_PRIVATE_WINDOW_OR_CLEANUP_PROOF"} if profile == "public" else {}),
         "classCount": len(classes),
         "windowCount": len(windows),
         "discoveredRotationWindows": discovered_windows,
@@ -436,10 +444,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="CVF active window registry compatibility gate")
     parser.add_argument("--enforce", action="store_true")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
 
-    report = build_report()
-    if args.json:
+    report = build_report(args.profile)
+    if args.json or args.profile == "public":
         print(json.dumps(report, indent=2, ensure_ascii=False))
     else:
         _print_report(report)

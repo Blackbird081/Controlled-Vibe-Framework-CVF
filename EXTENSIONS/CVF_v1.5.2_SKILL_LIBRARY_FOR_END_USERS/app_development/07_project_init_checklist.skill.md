@@ -18,11 +18,13 @@
 ## 🎯 Mục đích
 
 **When to use this skill:**
+
 - Starting any new project with AI
 - Want to ensure everything is ready before AI begins working
 - Use as a "health check" before launching a CVF project
 
 **Not suitable when:**
+
 - Project is already mid-way through (skip and use the appropriate Skill for the current phase)
 
 ---
@@ -102,6 +104,7 @@ Type **"Checklist Pass"** to begin, or let me know which item is not ready.
 ```
 
 **After User confirms — create tracking file:**
+
 ```markdown
 # PROJECT PROGRESS — FinanceTracker
 Start date: 2026-02-27
@@ -114,12 +117,14 @@ Status: 🟢 In Progress
 ## 🔍 Cách đánh giá
 
 **Accept Checklist:**
+
 - [ ] All 8 checklist items present and clear
 - [ ] Current tally shown: "[X]/8 items"
 - [ ] Clear confirmation instruction ("Type Checklist Pass")
 - [ ] `PROJECT_PROGRESS.md` created after confirmation
 
 **Red Flags (Reject):**
+
 - ⚠️ AI starts asking about spec while checklist has not passed
 - ⚠️ AI ticks boxes on behalf of the User
 - ⚠️ Tracking file not created after confirmation

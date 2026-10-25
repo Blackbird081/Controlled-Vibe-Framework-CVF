@@ -172,5 +172,3 @@ commit and that the bounded source set was reviewed. It does not prove full
 repository understanding, runtime correctness, dependency suitability,
 provider behavior, extraction accuracy, Policy_Local readiness, or production
 readiness.
-
-

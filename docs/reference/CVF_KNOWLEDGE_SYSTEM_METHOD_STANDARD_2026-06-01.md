@@ -128,4 +128,3 @@ and implementation work against source truth.
 This method establishes evidence discipline and a system architecture for
 knowledge work. It does not prove semantic correctness, complete Legacy
 absorption, runtime integration, production readiness, or autonomous learning.
-

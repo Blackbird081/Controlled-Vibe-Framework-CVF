@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành skill sau trước khi dùng skill này:
+>
 > - [App Requirements Spec](./01_app_requirements_spec.skill.md) — Cần có requirements rõ ràng
 
 ---
@@ -18,11 +19,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Đã có requirements, cần chọn công nghệ
 - Muốn AI Agent suggest stack phù hợp
 - Cần so sánh các options
 
 **Không phù hợp khi:**
+
 - Chưa có requirements rõ ràng
 - Stack đã được quy định sẵn
 
@@ -65,6 +68,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -152,6 +156,7 @@
 - [ ] Có install commands
 
 **Red flags (cần Reject):**
+
 - ⚠️ Chọn tech chỉ vì "popular"
 - ⚠️ Không có alternatives comparison
 - ⚠️ Ignore constraints (như offline requirement)
@@ -223,7 +228,8 @@
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 App Name: StockFlow
 App Type: Web + Desktop (kho)
@@ -236,7 +242,8 @@ Offline Required: Yes
 Budget: Moderate
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Tech Stack Recommendation
 
@@ -257,13 +264,15 @@ Budget: Moderate
 - Django: team không quen Python
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Cân bằng performance và tốc độ dev
 - ✅ Có lý do chọn/loại
 - ✅ Phù hợp offline + cross-platform
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [App Requirements Spec](./01_app_requirements_spec.skill.md)
 - [Architecture Design](./03_architecture_design.skill.md)
 
@@ -277,7 +286,6 @@ Budget: Moderate
 ## 🔗 Next Step
 
 Sau khi có Tech Stack → [Architecture Design](./03_architecture_design.skill.md)
-
 
 ---
 

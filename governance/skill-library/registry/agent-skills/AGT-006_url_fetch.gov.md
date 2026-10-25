@@ -17,6 +17,7 @@ Implementation in v1.6 AGENT_PLATFORM
 Fetch data from external URLs.
 
 **Actions:**
+
 - HTTP GET requests
 - API data retrieval
 - Webpage content fetch
@@ -69,12 +70,14 @@ Fetch data from external URLs.
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Domain validation active
 - [ ] Timeouts enforced
 - [ ] Request logged with URL
 - [ ] Response sanitized
 
 **FAIL criteria:**
+
 - [ ] Unvalidated URL access
 - [ ] No access logging
 - [ ] Internal network reached

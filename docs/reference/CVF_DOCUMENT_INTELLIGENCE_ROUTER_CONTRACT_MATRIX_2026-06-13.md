@@ -36,6 +36,7 @@ a runtime symbol until DIR-T1 source work is separately authorized.
 ## Scope
 
 In scope:
+
 - owner reconciliation of current EXA-T2 and EX-T9 surfaces;
 - three doc-only contract tables for `DocumentProfile`,
   `DocumentStructureSignals`, and `DocumentIntelligenceRouteDecision`;
@@ -45,6 +46,7 @@ In scope:
 - claim boundary and public export disposition.
 
 Out of scope:
+
 - runtime source code, test files, or EXTENSIONS tree changes;
 - reading, listing, hashing, or modifying the external Document Translator or
   Policy_Local source trees;
@@ -139,6 +141,7 @@ relationship explicit without duplicating quality logic.
 | `missing_page_flag` | PROPOSED_DOC_ONLY | bool | true if extraction quality reported partial coverage; derived from `ExtractionQualityReport.quality_flags`, not independently computed |
 
 Rejected fields:
+
 - `page_coverage_ratio` -- REJECTED; owned by `ExtractionQualityReport:108`
 - `mean_ocr_confidence` -- REJECTED; owned by `ExtractionQualityReport:111`
 - any raw extracted text field -- REJECTED
@@ -212,6 +215,7 @@ name. Use-case to capability mapping lives in the Adapter Eligibility Matrix
 | `ABSTAIN_OR_BLOCK` | PROPOSED_DOC_ONLY | router cannot route this document; surface to operator |
 
 Rejected values:
+
 - `TRANSLATION_PREP` -- REJECTED; use-case name, not capability shape
 - `POLICY_EVIDENCE_REVIEW` -- REJECTED; use-case name, not capability shape
 - any value that names a specific application, workspace, or external repo --

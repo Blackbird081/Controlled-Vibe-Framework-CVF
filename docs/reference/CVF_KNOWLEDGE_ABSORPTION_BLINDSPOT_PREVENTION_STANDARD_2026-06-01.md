@@ -112,6 +112,7 @@ find "<root_path>" -type f | wc -l
 ```
 
 The Gate 1 evidence block must contain:
+
 - the actual shell command run;
 - the raw output (subfolder names listed, not paraphrased);
 - the actual total file count from the command output.

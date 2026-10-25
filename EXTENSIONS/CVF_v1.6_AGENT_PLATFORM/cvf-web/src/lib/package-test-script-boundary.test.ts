@@ -16,8 +16,6 @@ const CVF_WEB_ROOT = path.resolve(__dirname, "..", "..");
 const SRC_ROOT = path.resolve(CVF_WEB_ROOT, "src");
 const PACKAGE_JSON_PATH = path.resolve(CVF_WEB_ROOT, "package.json");
 
-const LIVE_TEST_SUFFIX_TS = ".live.test.ts";
-const LIVE_TEST_SUFFIX_TSX = ".live.test.tsx";
 const LIVE_TEST_MARKER = ".live.test.";
 
 interface PackageScripts {

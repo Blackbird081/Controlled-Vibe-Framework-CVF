@@ -16,6 +16,7 @@ Mental Model đúng
 | Output         | Sản phẩm bàn giao   |
 | Trace          | Cam kết tuân thủ    |
 | Audit          | Nghiệm thu          |
+
 Operator là ai?
 
 Operator không phải:

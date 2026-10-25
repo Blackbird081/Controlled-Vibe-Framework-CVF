@@ -199,6 +199,7 @@ current changed-file text in memory.
 
 Signals with `latencyGuardDisposition=FAST_PATH` (`READOUT_ONLY`,
 `WATCH_FOR_REPEAT`) are advisory only. They must not:
+
 - extend the reviewer-fast gate chain;
 - add a new check that runs on every commit;
 - inflate the `run_worker_return_fast_gate.py` gate cost;

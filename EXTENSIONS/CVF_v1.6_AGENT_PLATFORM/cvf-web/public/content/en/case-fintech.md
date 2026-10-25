@@ -11,6 +11,7 @@
 
 **Situation:**  
 CreditFlow, a fintech startup offering instant credit decisions, was experiencing:
+
 - **Inconsistent AI decisions**: Credit analysts couldn't understand why AI approved/rejected applications
 - **Regulatory risk**: No audit trail for compliance (Fair Lending Act, FCRA)
 - **Speed vs. control trade-off**: Manual review was thorough but slow (3-5 days per application)
@@ -24,11 +25,13 @@ CreditFlow, a fintech startup offering instant credit decisions, was experiencin
 ### Architecture
 
 **Before CVF:**
+
 ```
 User Request → AI Analyst (Claude) → Approve/Reject → No Trace
 ```
 
 **After CVF:**
+
 ```
 User Request
     ↓
@@ -54,11 +57,13 @@ Approve/Reject + Audit Log
 ### Implementation (Week 1-3)
 
 **Week 1: Spec Foundation**
+
 - Wrote INPUT_SPEC.md: Application fields, income, credit history, constraints
 - Wrote OUTPUT_SPEC.md: Decision type (approve/reject/needs_review), risk score, interest rate tier, explanation
 - Established governance rules: R2 human required for >$10k, interest rate adjustments
 
 **Week 2: AI Governance**
+
 - Created Archetype: Credit Analysis Agent
   - Role: Evaluate credit risk, suggest tier
   - NOT allowed: Override final approval, modify interest rates
@@ -69,6 +74,7 @@ Approve/Reject + Audit Log
   - Traceability: Every factor must be logged
 
 **Week 3: Execution + Audit**
+
 - Created Skill Contract: evaluate_credit_risk (R2)
   - Input: Application data, credit score, income verification
   - Output: Risk score, tier recommendation, confidence level
@@ -99,15 +105,18 @@ Approve/Reject + Audit Log
 ### Operational Impact
 
 **Analyst Productivity:**
+
 - Before: Manually review every application, write decision letter, track reasons
 - After: Review only outlier decisions (R2 cases), spend time on policy improvements
 
 **Risk Reduction:**
+
 - Regulatory audit: Demonstrated decision traceability → Zero findings
 - Consumer complaints: Clear explanation provided with every rejection
 - Fair lending: AI reasoning + analyst approval = defensible decisions
 
 **Revenue Impact:**
+
 - 3x more applications processed daily
 - Faster credit decision = faster loan origination = cash flow improvement
 - Reduced manual overhead = margin improvement
@@ -149,6 +158,7 @@ Biggest challenge was analyst adoption — solved by showing time savings, not j
 ## Recommendation
 
 **For similar FinTech scenarios:**
+
 - Use CVF v1.1 full stack (INPUT/OUTPUT + Archetype + AU + Trace)
 - R2 is the sweet spot for human-in-the-loop with speed
 - Invest in clear OUTPUT_SPEC — this is what regulators will review

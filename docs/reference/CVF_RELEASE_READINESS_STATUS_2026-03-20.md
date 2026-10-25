@@ -1,7 +1,6 @@
 
 Memory class: POINTER_RECORD
 
-
 Status: release-readiness checkpoint for the current local remediation baseline.
 
 ## Purpose

@@ -1,4 +1,5 @@
 # CHANGELOG  
+
 Controlled Vibe Framework (CVF)
 
 ---
@@ -6,6 +7,7 @@ Controlled Vibe Framework (CVF)
 ## [v1.0 FINAL] — FREEZE
 
 ### Added
+
 - Cấu trúc framework hoàn chỉnh cho Controlled Vibe Coding
 - Bộ core files định nghĩa:
   - Manifesto
@@ -25,6 +27,7 @@ Controlled Vibe Framework (CVF)
 ---
 
 ### Changed
+
 - Chuẩn hoá cách tổ chức file & folder theo framework-level
 - Tách bạch:
   - Intent vs Execution
@@ -35,6 +38,7 @@ Controlled Vibe Framework (CVF)
 ---
 
 ### Fixed
+
 - Loại bỏ sự nhập nhằng giữa:
   - Phase A Discovery và Project Init Checklist
   - Phase Status (định nghĩa) và Phase Status (theo dõi)
@@ -44,6 +48,7 @@ Controlled Vibe Framework (CVF)
 ---
 
 ### Deprecated
+
 - Không áp dụng:
   - Vibe coding tuỳ hứng
   - AI-driven decision making
@@ -56,12 +61,14 @@ Controlled Vibe Framework (CVF)
 ---
 
 ### Removed
+
 - Mọi nội dung thử nghiệm, bản nháp, hoặc cấu trúc chưa ổn định
 - Các version CVF v1.0 trước đó (alpha / draft)
 
 ---
 
 ### Notes
+
 - Đây là phiên bản **đóng băng**
 - Mọi thay đổi mới sẽ được ghi nhận từ v1.1 trở đi
 - Không backport thay đổi vào v1.0

@@ -1,4 +1,5 @@
 # CVF AUTONOMOUS EXTENSION
+
 Standard Governance Block for Autonomous Skills
 
 > **Version:** 1.0.0  
@@ -11,6 +12,7 @@ Standard Governance Block for Autonomous Skills
 
 CVF assumes end users do **not** read code.
 Therefore the skill itself must carry:
+
 - Risk boundaries
 - Authority constraints
 - Execution stop conditions

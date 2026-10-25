@@ -19,6 +19,7 @@ Level 3 → R3 (High Risk)
 Level 4 → R4 (Critical Risk)
 
 Certification expires if:
+
 - Skill logic changes
 - Risk profile changes
 - Model provider changes

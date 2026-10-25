@@ -17,11 +17,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Bắt đầu một dự án app mới
 - Cần định nghĩa rõ ràng app sẽ làm gì
 - Muốn AI Agent hiểu đúng requirements trước khi code
 
 **Không phù hợp khi:**
+
 - Đã có spec chi tiết rồi
 - Chỉ cần fix bug/refactor code có sẵn
 
@@ -64,6 +66,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -141,6 +144,7 @@
 - [ ] Target users cụ thể (không phải "everyone")
 
 **Red flags (cần Reject):**
+
 - ⚠️ "Làm hết mọi thứ" (scope quá rộng)
 - ⚠️ Không biết ai sẽ dùng
 - ⚠️ Success criteria mơ hồ ("app tốt")
@@ -172,7 +176,8 @@
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 App Name: StockFlow
 App Type: Web app + Desktop app cho kho
@@ -190,7 +195,8 @@ Platform: Web (manager), Desktop (warehouse)
 Data Storage: PostgreSQL + local SQLite sync
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # StockFlow - Requirements Spec
 
@@ -215,13 +221,15 @@ Data Storage: PostgreSQL + local SQLite sync
 - Báo cáo tồn kho tải < 10s
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Mục tiêu rõ, có đo lường
 - ✅ Tách user role và phạm vi
 - ✅ Nêu rõ offline + sync
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Tech Stack Selection](./02_tech_stack_selection.skill.md)
 
 ## 📜 Version History
@@ -234,7 +242,6 @@ Data Storage: PostgreSQL + local SQLite sync
 ## 🔗 Next Step
 
 Sau khi có Requirements Spec → [Tech Stack Selection](./02_tech_stack_selection.skill.md)
-
 
 ---
 

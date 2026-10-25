@@ -304,27 +304,28 @@ export default function ExternalAssetsPage() {
     const [retireLoadingId, setRetireLoadingId] = useState<string | null>(null);
     const [retireError, setRetireError] = useState<string | null>(null);
 
-    const loadRegistry = useCallback(async (
+    const registryQuery = JSON.stringify([activeTab, statusFilter, sourceRefFilter, assetTypeFilter]);
+    const [previousRegistryQuery, setPreviousRegistryQuery] = useState(registryQuery);
+    if (previousRegistryQuery !== registryQuery) {
+        setPreviousRegistryQuery(registryQuery);
+        if (activeTab === 'registry') { setRegistryLoading(true); setRetireError(null); }
+    }
+
+    const loadRegistry = useCallback((
         status: StatusFilter = 'all',
         sourceRef: string = '',
         assetType: string = '',
     ) => {
-        setRegistryLoading(true);
-        setRetireError(null);
-        try {
-            const q = new URLSearchParams();
-            if (status !== 'all') q.set('status', status);
-            if (sourceRef.trim()) q.set('source_ref', sourceRef.trim());
-            if (assetType.trim()) q.set('candidate_asset_type', assetType.trim());
-            const params = q.toString() ? `?${q.toString()}` : '';
-            const res = await fetch(`/api/governance/external-assets/register${params}`);
-            const json = await res.json();
-            if (json.success) setRegistryEntries(json.entries as RegistryEntry[]);
-        } catch {
-            // registry empty or unavailable — not fatal
-        } finally {
-            setRegistryLoading(false);
-        }
+        const q = new URLSearchParams();
+        if (status !== 'all') q.set('status', status);
+        if (sourceRef.trim()) q.set('source_ref', sourceRef.trim());
+        if (assetType.trim()) q.set('candidate_asset_type', assetType.trim());
+        const params = q.toString() ? `?${q.toString()}` : '';
+        return fetch(`/api/governance/external-assets/register${params}`)
+            .then(res => res.json())
+            .then(json => { if (json.success) setRegistryEntries(json.entries as RegistryEntry[]); })
+            .catch(() => { /* Registry empty or unavailable is not fatal. */ })
+            .finally(() => setRegistryLoading(false));
     }, []);
 
     useEffect(() => {
@@ -400,6 +401,7 @@ export default function ExternalAssetsPage() {
             const json = await res.json();
             if (!json.success) throw new Error(json.error ?? 'Retirement failed');
             // Read-after-write: refresh the list with the current filters
+            setRegistryLoading(true); setRetireError(null);
             await loadRegistry(statusFilter, sourceRefFilter, assetTypeFilter);
         } catch (err) {
             setRetireError(err instanceof Error ? err.message : 'Retirement failed');
@@ -740,7 +742,7 @@ export default function ExternalAssetsPage() {
                             />
                             <button
                                 type="button"
-                                onClick={() => loadRegistry(statusFilter, sourceRefFilter, assetTypeFilter)}
+                                onClick={() => { setRegistryLoading(true); setRetireError(null); void loadRegistry(statusFilter, sourceRefFilter, assetTypeFilter); }}
                                 disabled={registryLoading}
                                 className="text-xs px-3 py-1.5 rounded border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
                             >

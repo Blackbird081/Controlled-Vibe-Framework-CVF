@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá email marketing campaign về mặt deliverability, engagement, và conversion. Tối ưu để cải thiện open rate và click-through rate.
 
 **Khi nào nên dùng:**
+
 - Review email trước khi send
 - Open rate hoặc CTR thấp
 - Audit email sequence/flow
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,6 +80,7 @@ Không yêu cầu.
 ## ✅ Checklist Đánh giá
 
 ### Subject Line
+
 - [ ] Dưới 50 ký tự (hiển thị đầy đủ mobile)?
 - [ ] Có tạo curiosity/urgency?
 - [ ] Không có spam trigger words?
@@ -85,6 +88,7 @@ Không yêu cầu.
 - [ ] Personalization nếu có data?
 
 ### Email Body - Content
+
 - [ ] Above the fold có compelling?
 - [ ] Single focus/goal?
 - [ ] Easy to scan (headers, bullets)?
@@ -92,6 +96,7 @@ Không yêu cầu.
 - [ ] Personalization elements?
 
 ### Design & Layout
+
 - [ ] Mobile-responsive?
 - [ ] Text-to-image ratio balanced (60:40)?
 - [ ] Images có alt text?
@@ -99,6 +104,7 @@ Không yêu cầu.
 - [ ] Font size readable (min 14px mobile)?
 
 ### Call to Action
+
 - [ ] CTA rõ ràng và nổi bật?
 - [ ] Button thay vì text link?
 - [ ] Action-oriented text?
@@ -106,6 +112,7 @@ Không yêu cầu.
 - [ ] Above the fold hoặc easily visible?
 
 ### Deliverability
+
 - [ ] Không có broken links?
 - [ ] From name recognizable?
 - [ ] Reply-to address valid?
@@ -113,6 +120,7 @@ Không yêu cầu.
 - [ ] Physical address (nếu required)?
 
 ### Technical
+
 - [ ] Tested across email clients (Gmail, Outlook, Apple)?
 - [ ] Dark mode compatible?
 - [ ] No broken images?
@@ -136,7 +144,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Subject Line Formulas:
+### Subject Line Formulas
+
 ```
 ❌ "Newsletter #45 - February Update"
 ✅ "Your special 24-hour access is waiting ⏰"
@@ -148,7 +157,8 @@ Không yêu cầu.
 ✅ "Members-only: 30% off ends tonight"
 ```
 
-### Email Benchmarks by Industry:
+### Email Benchmarks by Industry
+
 | Industry | Avg Open Rate | Avg CTR |
 |----------|--------------|---------|
 | E-commerce | 15-20% | 2-3% |
@@ -156,12 +166,14 @@ Không yêu cầu.
 | Media | 20-22% | 4-5% |
 | Non-profit | 25-30% | 3-4% |
 
-### Best Send Times:
+### Best Send Times
+
 - **B2B:** Tuesday-Thursday, 10AM-2PM
 - **B2C:** Weekend, 8AM or 8PM
 - **E-commerce:** Thursday-Friday for weekend sales
 
-### Email Length Guidelines:
+### Email Length Guidelines
+
 | Type | Ideal Length |
 |------|-------------|
 | Promotional | 50-125 words |
@@ -187,14 +199,16 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Sequence: 3 email onboarding (Day 0/2/5)
 Open rate 22%, Click 1.8%
 Goal: kích hoạt trial trong 7 ngày
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Email Review
 
@@ -211,13 +225,15 @@ Day 5: "Case study giảm sai số xuống 2%"
 Open > 30%, Click > 4%, Activation > 15%
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Insight rõ về funnel
 - ✅ Sequence thực tế, dễ triển khai
 - ✅ Target đo được
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Social Media Ad Review](./social_media_ad_review.skill.md)
 - [Competitor Analysis](./competitor_analysis.skill.md)
 

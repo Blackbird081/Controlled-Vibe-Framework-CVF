@@ -104,5 +104,3 @@ Không phù hợp cho:
 * Phân loại: Operator Training Pack
 * Phụ thuộc: CVF core v1.3+ ; Operator Pack v1.4.x
 * Trạng thái: DRAFT → sẽ freeze sau audit
-
-

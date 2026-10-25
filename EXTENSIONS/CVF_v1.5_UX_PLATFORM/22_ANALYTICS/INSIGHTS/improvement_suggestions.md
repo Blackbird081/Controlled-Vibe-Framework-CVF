@@ -24,6 +24,7 @@ Tự động generate suggestions để improve input và outcomes.
 ## Input Suggestions
 
 ### Before Submit
+
 ```
 ┌─────────────────────────────────────────┐
 │ 💡 Suggestions to improve results:      │
@@ -35,6 +36,7 @@ Tự động generate suggestions để improve input và outcomes.
 ```
 
 ### Trigger Rules
+
 ```typescript
 const inputSuggestions = [
   {
@@ -60,6 +62,7 @@ const inputSuggestions = [
 ## Template Suggestions
 
 ### Based on Input Analysis
+
 ```typescript
 function suggestTemplate(input: string): TemplateSuggestion[] {
   const keywords = extractKeywords(input);
@@ -78,6 +81,7 @@ function suggestTemplate(input: string): TemplateSuggestion[] {
 ```
 
 ### Display
+
 ```
 ┌─────────────────────────────────────────┐
 │ 🎯 Recommended Templates                │
@@ -93,6 +97,7 @@ function suggestTemplate(input: string): TemplateSuggestion[] {
 ## Retry Suggestions
 
 ### After Reject
+
 ```
 ┌─────────────────────────────────────────┐
 │ 💡 To improve results, try:             │
@@ -114,6 +119,7 @@ function suggestTemplate(input: string): TemplateSuggestion[] {
 ## Learning Suggestions
 
 ### Based on History
+
 ```typescript
 function generateLearningSuggestions(userId: string): Suggestion[] {
   const history = getUserHistory(userId);

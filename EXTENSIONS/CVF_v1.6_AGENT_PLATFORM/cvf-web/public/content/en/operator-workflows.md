@@ -43,9 +43,11 @@ This tutorial gives you **10 ready-to-use prompt templates** for Sales, Marketin
 ## Revenue Operations
 
 ### Workflow 1: Pipeline Risk Manager {#workflow-1}
+
 **Risk:** R2 | **Connector:** CRM (HubSpot/Salesforce)
 
 **Copy this prompt:**
+
 ```
 Access [CRM]. Retrieve all active deals assigned to me
 with close date in current quarter.
@@ -65,9 +67,11 @@ VERIFICATION (required):
 ---
 
 ### Workflow 2: Signal-Based Prospecting {#workflow-2}
+
 **Risk:** R2 | **Connector:** Web Search
 
 **Copy this prompt:**
+
 ```
 Run signal-based prospecting campaign:
 
@@ -88,9 +92,11 @@ GOVERNANCE:
 ---
 
 ### Workflow 3: Ad Spend Watchdog {#workflow-3}
+
 **Risk:** R2 | **Connector:** CSV Upload
 
 **Copy this prompt:**
+
 ```
 Analyze uploaded Ad Spend reports (Google Ads + Meta):
 
@@ -108,9 +114,11 @@ DATA INTEGRITY CHECK:
 ---
 
 ### Workflow 4: Content Distribution Engine {#workflow-4}
+
 **Risk:** R1 (read + transform only — no external actions)
 
 **Copy this prompt:**
+
 ```
 Read this content: [paste blog post or URL]
 
@@ -131,9 +139,11 @@ QUALITY CHECK:
 ## Product & Operations
 
 ### Workflow 5: Voice of Customer Engine {#workflow-5}
+
 **Risk:** R2 | **Connector:** Intercom/Zendesk
 
 **Copy this prompt:**
+
 ```
 Access [Ticketing System]. Pull last 50 unassigned tickets.
 
@@ -155,9 +165,11 @@ GOVERNANCE:
 ---
 
 ### Workflow 6: Product Manager's Weekly {#workflow-6}
+
 **Risk:** R2 | **Connector:** Jira + Notion
 
 **Copy this prompt:**
+
 ```
 Write Weekly Product Update:
 
@@ -177,9 +189,11 @@ VERIFICATION:
 ---
 
 ### Workflow 7: Process Surgeon {#workflow-7}
+
 **Risk:** R2 | **Connector:** File Upload (large context)
 
 **Copy this prompt:**
+
 ```
 Uploading: [N] SOP PDFs + [M] months of Incident Reports
 
@@ -203,9 +217,11 @@ OUTPUT:
 ---
 
 ### Workflow 8: Meeting Optimizer {#workflow-8}
+
 **Risk:** R2 | **Connector:** Google Calendar
 
 **Copy this prompt:**
+
 ```
 Schedule [duration] meeting: [Title]
 Participants: [Name (timezone)] × N
@@ -224,9 +240,11 @@ Include suggested agenda: [your agenda here]
 ## Finance & Strategy
 
 ### Workflow 9: Financial Analysis Protocol {#workflow-9}
+
 **Risk:** R2 | **Connector:** Financial Data / File Upload
 
 **Copy this prompt:**
+
 ```
 PHASE 1 — RETRIEVE:
 Access last [N] quarters of filings for [Company/Ticker]
@@ -249,9 +267,11 @@ MANDATORY GOVERNANCE:
 ---
 
 ### Workflow 10: Competitive Intelligence Swarm {#workflow-10}
+
 **Risk:** R3 (multi-agent — requires manual review)
 
 **Copy this prompt:**
+
 ```
 Competitive landscape analysis: [Market/Industry]
 

@@ -20,12 +20,14 @@ Không yêu cầu.
 Cho một sản phẩm/dịch vụ cụ thể, tự động match UI style, landing page structure, và color palette phù hợp nhất. Dựa trên 96 product types đã được map sẵn.
 
 **Khi nào nên dùng:**
+
 - Client cung cấp brief sản phẩm, cần nhanh chóng đề xuất style
 - Pitch cho client mới — cần visual direction nhanh
 - So sánh style phù hợp giữa nhiều options
 - Tạo mood board nhanh
 
 **Không phù hợp khi:**
+
 - Client đã có brand guide hoàn chỉnh
 - Thiết kế art/creative không theo business rules
 
@@ -131,6 +133,7 @@ SIMILAR PRODUCTS USING THIS STYLE:
 - [ ] Confidence score provided
 
 **Red flags (cần Reject):**
+
 - ⚠️ Tech/SaaS style cho wellness product
 - ⚠️ Dark mode default cho health/wellness
 - ⚠️ Mismatch giữa style và target audience
@@ -158,7 +161,8 @@ SIMILAR PRODUCTS USING THIS STYLE:
 4. **Budget signals** — Gold accent = premium, Bright CTA = value/deal
 5. **Quick pitch** — Use output directly in client presentations
 
-### Product Category Quick Map:
+### Product Category Quick Map
+
 ```
 SaaS B2B:       Clean Minimal + Blue       (Trust)
 E-commerce:     White Clean + Orange CTA    (Action)
@@ -175,7 +179,8 @@ Luxury:         Black + Gold + Serif        (Exclusivity)
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 Sản phẩm: Artisan coffee subscription box
 Ngành: Food & Beverage / E-commerce
@@ -183,7 +188,8 @@ Ngành: Food & Beverage / E-commerce
 Budget feel: Premium craft
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 Style: Artisan Warm — Photography-heavy, craft textures
 Colors: Deep Coffee #3E2723 + Cream #FFF8E1 + Gold #D4A574

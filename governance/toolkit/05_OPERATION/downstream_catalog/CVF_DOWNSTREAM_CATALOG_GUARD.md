@@ -15,6 +15,7 @@ with the governed downstream catalog kit (tranche `CVF-BSL-T1`, repair round
 following independent review findings BSL-R1 through BSL-R7).
 
 **Enforced by:**
+
 - the generated project's own `scripts/manage_cvf_downstream_catalog.ps1 -Check`
 - `scripts/check_cvf_workspace_agent_enforcement.ps1` (fails closed when any
   governed-catalog marker or surface is present but incomplete; bounded

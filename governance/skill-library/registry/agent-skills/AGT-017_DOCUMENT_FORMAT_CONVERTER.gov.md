@@ -9,7 +9,7 @@
 ## Source
 
 Inspired by claude-code-templates document-processing skills (pdf-processing-pro, pdf-anthropic, docx, xlsx, pptx) and Anthropic's official document manipulation toolkit.  
-Reference: https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/skills/document-processing  
+Reference: <https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/skills/document-processing>  
 Implementation in v1.6 AGENT_PLATFORM.  
 Skill mapping: `governance/skill-library/examples/AGT-017_DOCUMENT_FORMAT_CONVERTER.md`
 
@@ -20,6 +20,7 @@ Skill mapping: `governance/skill-library/examples/AGT-017_DOCUMENT_FORMAT_CONVER
 Converts, creates, and analyzes documents across multiple formats. Supports PDF (forms, tables, OCR), Word (DOCX), Excel (XLSX), PowerPoint (PPTX), and Markdown interchange.
 
 **Actions:**
+
 - Extract text, tables, and metadata from PDF documents
 - Generate PDF documents with forms, headers, and structured layouts
 - Create and edit Word documents with formatting and styles
@@ -73,6 +74,7 @@ Converts, creates, and analyzes documents across multiple formats. Supports PDF 
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Original documents remain unmodified
 - [ ] OCR results include confidence scores for extracted text
 - [ ] Format conversion lists any lost formatting elements
@@ -80,6 +82,7 @@ Converts, creates, and analyzes documents across multiple formats. Supports PDF 
 - [ ] File size limits enforced
 
 **FAIL criteria:**
+
 - [ ] Original document is modified or corrupted
 - [ ] OCR output presented without confidence information
 - [ ] Conversion silently drops significant content

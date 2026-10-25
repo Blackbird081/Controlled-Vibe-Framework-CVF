@@ -17,11 +17,13 @@
 ## 🎯 Purpose
 
 **When to use this skill:**
+
 - Phase B (Design) — evaluate design friendliness before building
 - Phase D (Review) — final UX check before shipping
 - Ensuring the app is usable by someone unfamiliar with technology
 
 **Not suitable when:**
+
 - App is exclusively for developers or technical experts
 - Only code logic needs review, not UX
 
@@ -108,12 +110,14 @@
 ## 🔍 Evaluation Criteria
 
 **Accept Checklist:**
+
 - [ ] Exactly 3 Quick Start steps, each ≤ 2 sentences
 - [ ] Issues classified clearly: Must Fix / Should Fix / Optional
 - [ ] No technical jargon in report
 - [ ] Overall UX score provided
 
 **Red Flags (Reject):**
+
 - ⚠️ Quick Start has more than 5 steps
 - ⚠️ Report uses "component", "state", "render"
 - ⚠️ Issue severity not differentiated
@@ -141,13 +145,15 @@
 
 ## 📊 Example
 
-### Sample Input:
+### Sample Input
+
 ```
 App Description: "Medication reminder app for the elderly"
 Core Features: "Set reminders, mark as taken, view history"
 ```
 
-### Sample Output:
+### Sample Output
+
 ```markdown
 # Grandma UX Test — Medication Reminder App
 
@@ -168,7 +174,8 @@ Core Features: "Set reminders, mark as taken, view history"
 ## Score: 🟡 6/10 — Fix font before shipping
 ```
 
-### Evaluation:
+### Evaluation
+
 - ✅ 3-step Quick Start is clear
 - ✅ Issues have priority levels
 - ✅ Specific UX score

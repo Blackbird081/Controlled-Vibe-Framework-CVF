@@ -19,8 +19,8 @@ This artifact applies only to R72G/R72H documentation evidence in the private pr
 | --- | --- | --- | --- | --- | --- | --- |
 | R72G owns the human/operator onboarding and bus-factor risk | EXISTS | docs/roadmaps/CVF_MSEA_R72_EA_ASSESSMENT_INTAKE_AND_GOVERNANCE_LOAD_REBALANCING_ROADMAP_2026-07-07.md | line 244 | `R72G` | R72 roadmap Work Plan | ACCEPT |
 | R72H owns the product/governance separability assessment | EXISTS | docs/roadmaps/CVF_MSEA_R72_EA_ASSESSMENT_INTAKE_AND_GOVERNANCE_LOAD_REBALANCING_ROADMAP_2026-07-07.md | line 245 | `R72H` | R72 roadmap Work Plan | ACCEPT |
-| Product candidate `cvf-web` has measurable local file surface | COMMAND_EVIDENCE | PowerShell command output | `(rg --files EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web | Measure-Object).Count` returned 835 | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web` | repository file tree | ACCEPT |
-| Direct checker script count has measurable governance surface | COMMAND_EVIDENCE | PowerShell command output | `(rg --files governance/compat -g "check_*.py" | Measure-Object).Count` returned 186 | `governance/compat/check_*.py` | repository file tree | ACCEPT |
+| Product candidate `cvf-web` has measurable local file surface | COMMAND_EVIDENCE | PowerShell command output | `(rg --files EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web \| Measure-Object).Count` returned 835 | `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web` | repository file tree | ACCEPT |
+| Direct checker script count has measurable governance surface | COMMAND_EVIDENCE | PowerShell command output | `(rg --files governance/compat -g "check_*.py" \| Measure-Object).Count` returned 186 | `governance/compat/check_*.py` | repository file tree | ACCEPT |
 | EXTENSIONS contains distinct product and ecosystem candidate surfaces | COMMAND_EVIDENCE | PowerShell command output | `Get-ChildItem EXTENSIONS -Directory` returned named CVF product/ecosystem directories | `EXTENSIONS` | repository file tree | ACCEPT |
 
 ## R72G Read-Chain Burden Table
@@ -76,10 +76,10 @@ Product assets are separable enough to evaluate in future product tranches, but 
 | Command | Result |
 | --- | --- |
 | `git rev-parse --short HEAD` | b896cc759 |
-| `(rg --files EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web | Measure-Object).Count` | 835 |
-| `(rg --files governance/compat -g "check_*.py" | Measure-Object).Count` | 186 |
+| `(rg --files EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web \| Measure-Object).Count` | 835 |
+| `(rg --files governance/compat -g "check_*.py" \| Measure-Object).Count` | 186 |
 | `Get-ChildItem EXTENSIONS -Directory` | returned CVF product/ecosystem/foundation candidate directories |
-| `rg -n "R72G|R72H|Own human|Own product" docs/roadmaps/CVF_MSEA_R72_EA_ASSESSMENT_INTAKE_AND_GOVERNANCE_LOAD_REBALANCING_ROADMAP_2026-07-07.md` | returned roadmap authority lines |
+| `rg -n "R72G\|R72H\|Own human\|Own product" docs/roadmaps/CVF_MSEA_R72_EA_ASSESSMENT_INTAKE_AND_GOVERNANCE_LOAD_REBALANCING_ROADMAP_2026-07-07.md` | returned roadmap authority lines |
 
 ## Epistemic Process Block
 

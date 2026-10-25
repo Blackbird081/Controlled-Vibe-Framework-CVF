@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Data analysis and statistical computation. Use when user needs "数据分析/统计/计算指标/数据洞察". Supports general analysis, financial data (stocks, returns), business data (sales, users), and scientific research. Uses pandas/numpy/scikit-learn for processing. Automatically activates data-base for data acquisition.
 
 **Khi nào dùng skill này:**
+
 - Cần Data Analy I với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: business analysis
-- Nguồn tham khảo: https://github.com/JinFanZheng/kode-sdk-csharp/tree/main/examples/Kode.Agent.WebApiAssistant/skills/data-analysis
+- Nguồn tham khảo: <https://github.com/JinFanZheng/kode-sdk-csharp/tree/main/examples/Kode.Agent.WebApiAssistant/skills/data-analysis>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Phân tích chiến lược mở rộng thị trường
 Context: SME Việt, ngân sách 50k USD
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Data Analy I Output
 

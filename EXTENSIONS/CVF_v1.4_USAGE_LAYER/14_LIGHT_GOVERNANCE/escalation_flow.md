@@ -23,4 +23,3 @@ Maintainer điều chỉnh Usage Layer (nếu cần)
 Không tranh luận với AI
 
 Không mở trace cho user
-

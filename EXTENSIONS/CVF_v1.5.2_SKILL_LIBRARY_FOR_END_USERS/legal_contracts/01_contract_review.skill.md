@@ -17,12 +17,14 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Review hợp đồng từ đối tác/vendor
 - Identify key terms và risks
 - Chuẩn bị negotiation points
 - So sánh với standard terms
 
 **Không phù hợp khi:**
+
 - Cần legal advice chính thức → Hỏi luật sư
 - Draft hợp đồng mới → Dùng templates khác
 - Disputes/litigation → Cần legal team
@@ -66,6 +68,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -81,12 +84,14 @@
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Summary of key terms
 - Risk analysis
 - Negotiation points
 - Recommended modifications
 
 **Cấu trúc output:**
+
 ```
 CONTRACT REVIEW
 
@@ -115,6 +120,7 @@ CONTRACT REVIEW
 - [ ] Language dễ hiểu (không quá legal jargon)
 
 **Red flags (cần Reject):**
+
 - ⚠️ Miss major risk clauses
 - ⚠️ Provide legal advice definitively
 - ⚠️ Không xét đến vai trò của bạn
@@ -145,7 +151,8 @@ CONTRACT REVIEW
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Loại hợp đồng: SaaS B2B
 Term: 12 tháng, auto-renew
@@ -154,7 +161,8 @@ Liability cap: không nêu
 Governing law: Singapore
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Contract Review Summary
 
@@ -173,13 +181,15 @@ Governing law: Singapore
 - Có quyền audit bảo mật không?
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Nhận diện điều khoản rủi ro
 - ✅ Khuyến nghị cụ thể để đàm phán
 - ✅ Có câu hỏi làm rõ
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [NDA Template](./02_nda_template.skill.md)
 - [Terms of Service](./03_terms_of_service.skill.md)
 

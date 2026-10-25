@@ -1,4 +1,5 @@
 # SKILL MAPPING RECORD
+
 ## AGT-009: RAG Knowledge Retrieval
 
 > **Status:** ✅ Active  
@@ -14,7 +15,7 @@
 | Skill ID | AGT-009 |
 | Skill Name | RAG Knowledge Retrieval |
 | Version | 1.0.0 |
-| Source URL | https://github.com/anthropics/anthropic-quickstarts/tree/main/customer-support-agent |
+| Source URL | <https://github.com/anthropics/anthropic-quickstarts/tree/main/customer-support-agent> |
 | Original Author | Anthropic (customer-support-agent) |
 | Intake Date | 2026-02-17 |
 | Intake Owner | CVF Governance Team |
@@ -24,13 +25,16 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
+
 Retrieves contextual information from a vector-indexed knowledge base using embedding-based semantic search. Inspired by the customer-support-agent quickstart's Amazon Bedrock Knowledge Base integration, which performs Retrieval-Augmented Generation (RAG) to ground agent responses in authoritative source documents. The skill:
+
 - Converts a natural-language query into an embedding vector
 - Performs approximate nearest-neighbor search against a configured knowledge base
 - Returns ranked document chunks with source attribution and relevance scores
 - Enforces citation requirements so that downstream agents never hallucinate references
 
 ### 2.2 Inputs
+
 | Input | Type | Sensitivity | Required |
 |-------|------|-------------|----------|
 | Query text | String | Internal | Yes |
@@ -40,6 +44,7 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 | Metadata filter | JSON object | Internal | No |
 
 ### 2.3 Outputs
+
 | Output | Type | Persistence |
 |--------|------|-------------|
 | Retrieved document chunks | JSON array | Logged |
@@ -49,6 +54,7 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 | Retrieval latency (ms) | Integer | Ephemeral |
 
 ### 2.4 Execution Model
+
 | Property | Value |
 |----------|-------|
 | Invocation | Agent-invoked |
@@ -61,6 +67,7 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 ## 3. CVF Risk Mapping
 
 ### 3.1 Assigned Risk Level
+
 - ☐ R0 – Informational (Read-only, no side effects)
 - ☐ R1 – Advisory (Suggestions only, human confirmation required)
 - ☑ **R2 – Assisted Execution** (Bounded actions, explicit invocation)
@@ -68,6 +75,7 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 - ☐ R4 – Critical / Blocked (Severe damage potential, execution blocked)
 
 ### 3.2 Risk Justification
+
 - Connects to an external vector database / knowledge base service (network call)
 - Query content may contain sensitive business context
 - Incorrect retrieval could propagate misinformation downstream
@@ -75,6 +83,7 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 - Source citations are enforced, limiting hallucination risk
 
 ### 3.3 Failure Scenarios
+
 | Mode | Description | Impact |
 |------|-------------|--------|
 | Primary | Knowledge base unavailable / timeout | Medium — Agent falls back to parametric knowledge with explicit disclaimer |
@@ -83,6 +92,7 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 | Quaternary | Embedding model mismatch (wrong dimensionality) | High — No results; fail-fast with descriptive error |
 
 ### 3.4 Blast Radius Assessment
+
 | Dimension | Assessment |
 |-----------|------------|
 | Scope of impact | Single agent session / single query |
@@ -94,23 +104,27 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 ## 4. Authority Mapping
 
 ### 4.1 Allowed Agent Roles
+
 - ☑ **Orchestrator**
 - ☑ **Architect**
 - ☑ **Builder**
 - ☑ **Reviewer**
 
 ### 4.2 Allowed CVF Phases
+
 - ☑ **Discovery**
 - ☑ **Design**
 - ☑ **Build**
 - ☑ **Review**
 
 ### 4.3 Decision Scope Influence
+
 - ☐ Informational
 - ☑ **Tactical** (influences immediate task decisions)
 - ☐ Strategic (requires human oversight)
 
 ### 4.4 Autonomy Constraints
+
 | Constraint | Value |
 |------------|-------|
 | Invocation conditions | Explicit agent request; rate-limited to 30 req/min |
@@ -128,6 +142,7 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 - ☑ **Additional audit hooks required** (Log every query and retrieval for traceability)
 
 ### Adaptation Details
+
 1. **Removed:** Write/indexing capabilities present in the original Bedrock KB SDK calls
 2. **Added:** Mandatory source citation enforcement — every retrieved chunk must include `sourceURI`, `title`, and `pageNumber` fields
 3. **Added:** Score threshold gate — chunks below the configured threshold are silently dropped
@@ -139,6 +154,7 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 ## 6. UAT & Validation Hooks
 
 ### 6.1 Required UAT Scenarios
+
 | Scenario | Description |
 |----------|-------------|
 | Normal operation | Query returns 3–5 relevant chunks with scores ≥ 0.7 |
@@ -149,6 +165,7 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 | PII sanitization | Query containing email/phone is sanitized before embedding |
 
 ### 6.2 Output Validation
+
 | Criteria | Check |
 |----------|-------|
 | Acceptance | All chunks include `sourceURI`, `title`, `relevanceScore` |
@@ -161,14 +178,17 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 ## 7. Decision Record
 
 ### 7.1 Intake Outcome
+
 - ☐ Reject
 - ☑ **Accept with Restrictions**
 - ☐ Accept after Adaptation
 
 ### 7.2 Decision Rationale
+
 The RAG retrieval pattern from Anthropic's customer-support-agent quickstart provides high-value grounding for agent responses. Accepted at R2 because the skill performs external network calls to a knowledge base service and retrieved content influences agent decisions. Restrictions enforce read-only access, mandatory citations, and query sanitization to align with CVF governance principles.
 
 ### 7.3 Decision Authority
+
 | Field | Value |
 |-------|-------|
 | Name / Role | CVF Governance Team / Skill Intake Owner |
@@ -180,12 +200,14 @@ The RAG retrieval pattern from Anthropic's customer-support-agent quickstart pro
 ## 8. Lifecycle Controls
 
 ### 8.1 Review Cycle
+
 | Field | Value |
 |-------|-------|
 | Review interval | 90 days |
 | Next review date | 2026-05-17 |
 
 ### 8.2 Deprecation Conditions
+
 - Knowledge base service deprecated or replaced
 - Embedding model changed without revalidation
 - >3 UAT failures in a review cycle

@@ -43,4 +43,3 @@ the target project folder.
 
 - Initial workspace memory template installed by the CVF rule-pack sync.
 - Add only short, current-state notes here.
-

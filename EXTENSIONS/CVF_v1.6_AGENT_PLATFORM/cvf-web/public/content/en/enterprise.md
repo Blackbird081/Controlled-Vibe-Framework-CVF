@@ -62,7 +62,7 @@ AI is already in your organization. Developers are using ChatGPT, Copilot, and C
 | D → Production | Final review | GOVERNOR (for R2+) |
 ```
 
-3. **Select pilot team** (5–7 devs, 1 project, 4 weeks)
+1. **Select pilot team** (5–7 devs, 1 project, 4 weeks)
 
 **Deliverables:** Governance policy, risk matrix, pilot team selected.
 
@@ -95,7 +95,7 @@ governance/toolkit/
 └── 07_QUICKSTART/       # Quick start for SME
 ```
 
-2. **Set Up Web UI (v1.6)**
+1. **Set Up Web UI (v1.6)**
 
 ```bash
 cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
@@ -112,7 +112,7 @@ npm start
 
 Deploy to internal infrastructure (see [Deployment Guide](../CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) for Vercel/Netlify/Docker options).
 
-3. **Customize Authority Matrix**
+1. **Customize Authority Matrix**
 
 Edit `governance/toolkit/03_CONTROL/CVF_PHASE_AUTHORITY_MATRIX.md`:
 
@@ -123,9 +123,10 @@ Edit `governance/toolkit/03_CONTROL/CVF_PHASE_AUTHORITY_MATRIX.md`:
 | Build | Read | Execute (R0-R1) | Execute (R0-R2), Approve R2 | All access |
 | Review | Read | Self-review | Review others, Approve | Final approval |
 
-4. **Train pilot team** (4-hour workshop)
+1. **Train pilot team** (4-hour workshop)
 
 **Workshop agenda:**
+
 - Hour 1: CVF philosophy ("Outcome > Code", 4 phases)
 - Hour 2: Hands-on: Write first INPUT_SPEC + use Phase D checklist
 - Hour 3: Risk levels, governance, roles
@@ -136,6 +137,7 @@ Edit `governance/toolkit/03_CONTROL/CVF_PHASE_AUTHORITY_MATRIX.md`:
 ### Week 3–4: Pilot Execution
 
 **Pilot project requirements:**
+
 - Real project (not a toy)
 - 4-week timeline
 - Clear deliverables
@@ -152,12 +154,14 @@ Edit `governance/toolkit/03_CONTROL/CVF_PHASE_AUTHORITY_MATRIX.md`:
 | Developer satisfaction | Survey | ≥4/5 |
 
 **Weekly check-ins:**
+
 - Is governance adding value or just friction?
 - Are phase gates too heavy or too light?
 - Which skills are being used? Which are missing?
 - Any governance workarounds? (= policy needs adjusting)
 
 **Pilot success criteria:**
+
 - ✅ 90%+ phase gate compliance
 - ✅ Zero R3 security incidents
 - ✅ Team satisfaction ≥ 4/5
@@ -322,6 +326,7 @@ VP Engineering (GOVERNOR)
 | **Team** | Individual Teams | Team-specific patterns | As needed |
 
 **Lifecycle:**
+
 ```
 PROPOSED → APPROVED → ACTIVE → DEPRECATED → RETIRED
 ```
@@ -349,18 +354,21 @@ Governance bypass attempts:    2   (auto-detected by CI)
 ## Case Study: Fintech Company (120 Devs)
 
 ### Before CVF
+
 - Inconsistent AI usage (some teams ban it, others use freely)
 - Security incidents: 3 per quarter
 - Code review bottleneck: 2–3 days average
 - Knowledge silos (can't reuse across teams)
 
 ### After CVF (6 Months)
+
 - Standardized: all teams use CVF v1.1 + Governance Toolkit
 - Security incidents: **0** (R3 gate prevented issues)
 - Code review: **<1 day** (Phase D checklist pre-validates)
 - Skill reuse: **62%** of new features use existing skills
 
 ### ROI
+
 | Metric | Before | After | Improvement |
 |--------|--------|-------|:-----------:|
 | Time per feature | 6.1 days | 4.2 days | **-31%** |
@@ -374,6 +382,7 @@ Governance bypass attempts:    2   (auto-detected by CI)
 
 **Q: How do we enforce CVF compliance?**  
 A: Three layers:
+
 1. **Technical:** CI/CD gates block PRs without Phase D checklist
 2. **Social:** PR templates make CVF easier than not using it
 3. **Audit:** Quarterly governance review (see `05_OPERATION/CVF_AUDIT_PROTOCOL.md`)
@@ -398,11 +407,13 @@ A: CVF v1.6 supports English and Vietnamese. Core specs (INPUT_SPEC, OUTPUT_SPEC
 ## Enterprise Support
 
 **Open Source (Free):**
+
 - CVF is CC BY-NC-ND 4.0 licensed (non-commercial)
 - Community support via GitHub Issues
 - Full documentation in this repo
 
 **Getting Started:**
+
 1. Clone this repo
 2. Read the [Governance Toolkit](../../governance/)
 3. Follow this guide to run a pilot

@@ -8,6 +8,7 @@
 ## 📋 Pre-flight Checklist
 
 ### 1. Xác định Scope & Version
+
 - [ ] Project scope và mục tiêu được document
 - [ ] Quyết định dùng v1.0 only hay v1.0 + v1.1 modules
 - [ ] List modules v1.1 sẽ bật:
@@ -19,27 +20,32 @@
   - [ ] Fast Track
 
 ### 2. Team & Roles
+
 - [ ] **Project Owner** được gán: `________________`
 - [ ] **Spec Owner(s)** được gán: `________________`
 - [ ] **Reviewer(s)** được gán: `________________`
 - [ ] **AI Agent roles** được map:
+
   | Agent | Archetype | Preset |
   |-------|-----------|--------|
   | | | |
 
 ### 3. Governance Setup
+
 - [ ] INPUT_SPEC template được copy từ `templates/INPUT_SPEC.sample.md`
 - [ ] OUTPUT_SPEC template được copy từ `templates/OUTPUT_SPEC.sample.md`
 - [ ] Preset policy được chọn (Minimal / Balanced / Strict)
 - [ ] Stop conditions được define
 
 ### 4. Infrastructure
+
 - [ ] Trace location được chọn: `________________`
 - [ ] Version control setup (git branch strategy)
 - [ ] Backup/rollback plan documented
 - [ ] Communication channel cho team
 
 ### 5. Documentation
+
 - [ ] Project README.md created
 - [ ] DECISIONS.md initialized
 - [ ] CHANGELOG.md initialized
@@ -91,6 +97,7 @@ touch project/CHANGELOG.md
 ---
 
 ## Xem thêm
+
 - [QUICK_START.md](QUICK_START.md) — Hướng dẫn nhanh 5 phút
 - [USAGE.md](USAGE.md) — Workflow chi tiết
 - [governance/EGL_PRESET_LIBRARY.md](governance/EGL_PRESET_LIBRARY.md) — Chọn preset phù hợp

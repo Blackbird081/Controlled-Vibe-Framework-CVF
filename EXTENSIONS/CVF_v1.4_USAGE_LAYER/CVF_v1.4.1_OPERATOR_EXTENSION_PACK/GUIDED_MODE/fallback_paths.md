@@ -16,7 +16,7 @@ Khởi động execution mới có kiểm soát
 
 Không có fallback nào cho phép can thiệp vào execution đang chạy.
 
-2. Phân loại tình huống cần Fallback
+1. Phân loại tình huống cần Fallback
 Case A – Output sai format
 
 Dấu hiệu:
@@ -89,12 +89,12 @@ Không lưu kết quả
 
 Quay lại 00_SCOPE_AND_BOUNDARY.md
 
-3. Những fallback KHÔNG ĐƯỢC PHÉP
-Hành động	Lý do
-Sửa output rồi dùng	Phá audit
-Prompt tiếp nối	Mất trace
-Hợp thức hóa sai	Drift hệ thống
-4. Fallback không phải thất bại
+1. Những fallback KHÔNG ĐƯỢC PHÉP
+Hành động Lý do
+Sửa output rồi dùng Phá audit
+Prompt tiếp nối Mất trace
+Hợp thức hóa sai Drift hệ thống
+2. Fallback không phải thất bại
 
 Fallback là cơ chế an toàn của CVF.
 

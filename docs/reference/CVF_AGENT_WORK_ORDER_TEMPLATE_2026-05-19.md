@@ -1092,6 +1092,7 @@ Return to orchestrator without continuing if:
 - implementation would exceed risk ceiling;
 - reviewer raises a structural blocking objection;
 - public/provenance boundary is unclear.
+
 ```
 
 ## Authoring Rules

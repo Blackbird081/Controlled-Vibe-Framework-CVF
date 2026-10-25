@@ -106,6 +106,7 @@ Export (optional)
 ## Non-Features
 
 Web Interface **KHÔNG** có:
+
 - ❌ Trace/audit view (Operator only)
 - ❌ Custom execution rules
 - ❌ Direct prompt input

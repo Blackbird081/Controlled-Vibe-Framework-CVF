@@ -60,4 +60,3 @@ Results:
 - Self-test: PASS; resolved the provenance package-local env file
 - Negative public-sync env-file test: PASS by failing closed
 - CLI help checks: PASS
-

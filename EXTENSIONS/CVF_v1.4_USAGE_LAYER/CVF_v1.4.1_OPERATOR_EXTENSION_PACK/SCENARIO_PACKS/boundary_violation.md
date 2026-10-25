@@ -14,7 +14,7 @@ Thực hiện suy đoán/giả định không được cấp phép
 
 Boundary Violation không phụ thuộc output có “hay” hay không.
 
-2. Dấu hiệu nhận biết
+1. Dấu hiệu nhận biết
 
 Bạn đang gặp Boundary Violation nếu output:
 
@@ -26,12 +26,12 @@ Trả lời các câu hỏi bạn chưa hỏi
 
 ⚠️ Cảm giác “AI làm quá tốt” đôi khi chính là dấu hiệu nguy hiểm.
 
-3. Phản xạ SAI cần tránh
-Phản xạ	Vì sao nguy hiểm
-Giữ lại phần "hay"	Hợp thức hóa sai
-Sửa output để dùng	Phá audit
-Prompt lại để thu hẹp	Che lỗi gốc
-4. Cách xử lý BẮT BUỘC
+1. Phản xạ SAI cần tránh
+Phản xạ Vì sao nguy hiểm
+Giữ lại phần "hay" Hợp thức hóa sai
+Sửa output để dùng Phá audit
+Prompt lại để thu hẹp Che lỗi gốc
+2. Cách xử lý BẮT BUỘC
 
 Reject ngay lập tức
 
@@ -43,7 +43,7 @@ Review lại scope & boundary
 
 ⛔ Không có ngoại lệ.
 
-5. Sau Boundary Violation cần làm gì?
+1. Sau Boundary Violation cần làm gì?
 
 Rà soát lại 00_SCOPE_AND_BOUNDARY.md
 
@@ -53,7 +53,7 @@ Thu hẹp nhiệm vụ cho execution mới
 
 Boundary Violation thường là tín hiệu thiết kế sai, không phải lỗi ngẫu nhiên.
 
-6. Boundary Violation ≠ Lỗi AI
+1. Boundary Violation ≠ Lỗi AI
 
 Trong CVF:
 

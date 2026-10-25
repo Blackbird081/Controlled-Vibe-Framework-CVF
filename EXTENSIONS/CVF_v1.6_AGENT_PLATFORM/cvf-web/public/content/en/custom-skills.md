@@ -10,6 +10,7 @@
 ## What is a Skill?
 
 A **skill** in CVF is a pre-structured, form-based template that:
+
 - Guides users in providing the right inputs to AI
 - Defines expected outputs and quality criteria
 - Includes acceptance checklists and common failure patterns
@@ -208,6 +209,7 @@ AI should produce:
 ### Example Input (filled form)
 
 ```
+
 Resource: User
 Method: POST
 Path: /api/v1/users
@@ -218,6 +220,7 @@ Validation: name required 2-100 chars, email required valid format, role require
 Errors: 400 (validation), 401 (not auth), 403 (not admin), 409 (email exists)
 Framework: Express + TypeScript
 Database: PostgreSQL + Prisma
+
 ```
 
 ### Example Output (what AI should produce)
@@ -229,7 +232,9 @@ Database: PostgreSQL + Prisma
 ### Example Evaluation
 
 ```
+
 Checklist:
+
 - [x] POST /api/v1/users ✅
 - [x] Zod validation for name, email, role ✅
 - [x] 400 for validation errors ✅
@@ -240,6 +245,7 @@ Checklist:
 - [x] No hardcoded values ✅
 
 Verdict: ✅ ACCEPT
+
 ```
 
 ---

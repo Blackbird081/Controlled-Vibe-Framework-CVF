@@ -62,6 +62,7 @@ Before any package is published:
 ## Next Step
 
 Publication implementation packet (`P4/CP15`):
+
 - run the pre-publish verification checklist
 - define concrete publishing steps per package
 - produce governance artifacts for the actual publish event

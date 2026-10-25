@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá và tối ưu landing page để tăng Conversion Rate (CRO). Phát hiện friction points và đề xuất improvements.
 
 **Khi nào nên dùng:**
+
 - Landing page có traffic nhưng ít conversions
 - Trước khi launch campaign mới
 - A/B testing planning
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,6 +80,7 @@ Không yêu cầu.
 ## ✅ Checklist Đánh giá
 
 ### Above the Fold (Vùng đầu tiên)
+
 - [ ] Headline có compelling và clear value proposition?
 - [ ] Subheadline có giải thích rõ hơn?
 - [ ] Hero image/video có relevant?
@@ -85,18 +88,21 @@ Không yêu cầu.
 - [ ] Trust badges/logos có hiển thị?
 
 ### Value Proposition
+
 - [ ] Có trả lời "Why should I care?" trong 5 giây?
 - [ ] Benefits > Features?
 - [ ] Unique Selling Point có rõ ràng?
 - [ ] Có differentiation so với competitors?
 
 ### Social Proof
+
 - [ ] Có testimonials/reviews?
 - [ ] Có customer logos/numbers?
 - [ ] Có case studies/results?
 - [ ] Có media mentions/awards?
 
 ### Form/CTA Optimization
+
 - [ ] Form có ít fields nhất có thể?
 - [ ] CTA button có nổi bật (size, color, contrast)?
 - [ ] CTA text có action-oriented?
@@ -104,18 +110,21 @@ Không yêu cầu.
 - [ ] Không có competing CTAs?
 
 ### Trust & Credibility
+
 - [ ] Có guarantee/refund policy?
 - [ ] Có security badges (nếu payment)?
 - [ ] Có contact information visible?
 - [ ] Có privacy policy link?
 
 ### Mobile Experience
+
 - [ ] Responsive design?
 - [ ] Tap targets đủ lớn (44x44px)?
 - [ ] Form easy to fill trên mobile?
 - [ ] Page speed < 3s on mobile?
 
 ### Friction Reduction
+
 - [ ] Không có distracting navigation?
 - [ ] Không có pop-ups gây phiền?
 - [ ] Không có unnecessary steps?
@@ -140,7 +149,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Conversion Rate Benchmarks by Industry:
+### Conversion Rate Benchmarks by Industry
+
 | Industry | Average CR | Good CR |
 |----------|-----------|---------|
 | E-commerce | 2-3% | 5%+ |
@@ -148,7 +158,8 @@ Không yêu cầu.
 | Lead Gen | 5-10% | 15%+ |
 | Finance | 2-5% | 8%+ |
 
-### CTA Button Best Practices:
+### CTA Button Best Practices
+
 ```
 ❌ "Submit" (quá generic)
 ❌ "Click Here" (không có value)
@@ -157,7 +168,8 @@ Không yêu cầu.
 ✅ "Join 10,000+ Members" (social proof + action)
 ```
 
-### Headline Formula cho Landing Page:
+### Headline Formula cho Landing Page
+
 ```
 [Outcome] + [Timeframe] + [Risk Reducer]
 
@@ -166,7 +178,8 @@ Không yêu cầu.
 "Save $500/month — No Credit Card Required"
 ```
 
-### High-Converting Page Structure:
+### High-Converting Page Structure
+
 1. **Hero**: Compelling headline + CTA
 2. **Problem**: Agitate the pain
 3. **Solution**: Your offering
@@ -193,7 +206,8 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Traffic: 20k visits/mo
 Conversion: 1.1% → trial
@@ -202,7 +216,8 @@ Form: 9 fields
 Heatmap: 65% drop ở pricing section
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # CRO Plan
 
@@ -220,13 +235,15 @@ Primary: Trial conversion
 Secondary: CTA CTR, form completion
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Có giả thuyết đo được
 - ✅ Test plan rõ ràng
 - ✅ KPI phù hợp
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Copywriting Evaluation](./copywriting_evaluation.skill.md)
 - [Pricing Strategy Review](./pricing_strategy_review.skill.md)
 

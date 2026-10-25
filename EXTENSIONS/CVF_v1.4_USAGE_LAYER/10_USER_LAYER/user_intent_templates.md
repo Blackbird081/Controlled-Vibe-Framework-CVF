@@ -26,10 +26,8 @@ Cấu trúc intent chuẩn (User-facing)
 INTENT:
 [Tôi muốn đạt được điều gì?]
 
-
 CONTEXT (nếu có):
 [Bối cảnh ngắn gọn, dữ kiện chính]
-
 
 SUCCESS CRITERIA:
 [Làm sao biết kết quả là đạt yêu cầu?]
@@ -41,10 +39,8 @@ Ví dụ 1 – Phân tích
 INTENT:
 Tôi muốn hiểu rủi ro chính của phương án A so với phương án B.
 
-
 CONTEXT:
 Đây là quyết định đầu tư ngắn hạn, dữ liệu có thể chưa đầy đủ.
-
 
 SUCCESS CRITERIA:
 Xác định rõ 3–5 rủi ro quan trọng nhất và mức độ ảnh hưởng của chúng.
@@ -52,10 +48,8 @@ Ví dụ 2 – Hỗ trợ quyết định
 INTENT:
 Tôi cần một khuyến nghị để chọn phương án phù hợp nhất.
 
-
 CONTEXT:
 Quyết định ảnh hưởng đến team 10 người, ưu tiên ổn định hơn tốc độ.
-
 
 SUCCESS CRITERIA:
 Có kết luận rõ ràng và nêu được lý do chính.

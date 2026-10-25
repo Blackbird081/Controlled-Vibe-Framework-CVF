@@ -1,4 +1,5 @@
 # Templates — CVF v1.1
+
 Version: 1.1 | Status: STABLE
 
 ## Mẫu có sẵn
@@ -11,10 +12,12 @@ Version: 1.1 | Status: STABLE
 | EXAMPLE_PROJECT.md | Ví dụ project hoàn chỉnh |
 
 ## Cách sử dụng
+
 1. Copy file .sample.md cần dùng
 2. Đổi tên theo project/AU của bạn
 3. Điền thông tin theo template
 4. Lưu vào thư mục project
 
 ## Xem ví dụ thực tế
+
 Đọc EXAMPLE_PROJECT.md để thấy luồng INPUT → OUTPUT → AU → Trace → Review hoàn chỉnh.

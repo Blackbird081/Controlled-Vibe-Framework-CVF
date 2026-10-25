@@ -1,7 +1,9 @@
 # CVF_AGENT_ARCHETYPE — v1.1
+
 Version: 1.1 | Status: STABLE | Layer: Agents | Compatible: v1.0 baseline (additive)
 
 Archetype nêu nhiệm vụ, cấm đoán, preset mặc định.
+
 - Analysis: findings/gaps; cấm quyết định; Preset: Analysis Policy
 - Decision: ra quyết định; cấm brainstorm; Preset: Decision Policy
 - Planning: lập kế hoạch; cấm thực thi; Preset: Planning Policy

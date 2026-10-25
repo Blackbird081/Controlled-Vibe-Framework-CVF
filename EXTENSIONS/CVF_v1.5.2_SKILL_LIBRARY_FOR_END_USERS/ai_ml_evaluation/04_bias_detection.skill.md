@@ -17,11 +17,13 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng:**
+
 - Audit AI system cho bias
 - Review AI output patterns
 - Compliance với fairness requirements
 
 **Không phù hợp khi:**
+
 - Need statistical analysis → Data scientist
 - Legal compliance → Legal team
 
@@ -64,6 +66,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -87,12 +90,14 @@ Không yêu cầu.
 ## 🔍 Cách đánh giá
 
 **Checklist:**
+
 - [ ] Check all protected classes
 - [ ] Evidence-based findings
 - [ ] Severity realistic
 - [ ] Mitigations actionable
 
 **Red flags:**
+
 - ⚠️ Miss obvious biases
 - ⚠️ Overstate without evidence
 
@@ -129,7 +134,8 @@ Sau khi hoàn thành **Bias Detection**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Use case: AI đề xuất mức chiết khấu cho đại lý
 Sample outputs:
@@ -139,7 +145,8 @@ Protected class: quy mô kinh doanh
 Decision impact: chiết khấu ảnh hưởng lợi nhuận
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 Potential bias: ưu tiên chiết khấu cho đại lý lớn, thiếu tiêu chí minh bạch.
 Evidence: cùng tỷ lệ tăng trưởng nhưng đề xuất khác biệt lớn.
@@ -149,13 +156,15 @@ Mitigations:
 - Review ngẫu nhiên 10% quyết định mỗi tháng.
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Có evidence rõ
 - ✅ Severity hợp lý
 - ✅ Mitigation khả thi
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Output Quality Check](./03_output_quality_check.skill.md)
 - [Cost Optimization](./05_cost_optimization.skill.md)
 
@@ -166,7 +175,7 @@ Mitigations:
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Cost Optimization
 
 Sau khi hoàn thành **Bias Detection**, tiếp tục với:
 → [Cost Optimization](./05_cost_optimization.skill.md)
@@ -174,3 +183,5 @@ Sau khi hoàn thành **Bias Detection**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | AI/ML Evaluation Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

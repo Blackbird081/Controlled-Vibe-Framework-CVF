@@ -11,7 +11,7 @@ và tìm kiếm text. Dùng cho E2E testing và web scraping có quản trị.
 
 RISK_LEVEL: High (R3)
 
-2. Governance Constraints
+1. Governance Constraints
 
 ALLOWED_ARCHETYPES: Builder
 
@@ -29,7 +29,7 @@ DOCKER_CONTAINER_ACTIVE
 XVFB_DISPLAY_READY
 DOMAIN_ALLOWLIST_LOADED
 
-3. Input Specification
+1. Input Specification
 
 INPUT_FIELDS:
 
@@ -59,7 +59,7 @@ screenshot_dir
   validation: writable directory path
   default: ./test-results/screenshots/
 
-4. Output Specification
+1. Output Specification
 
 OUTPUT_FIELDS:
 
@@ -76,13 +76,14 @@ page_content
 final_status
   type: enum(completed, timeout, error, blocked_domain)
 
-5. Execution Properties
+1. Execution Properties
 
 SIDE_EFFECTS:
-  - Network requests to allowed domains
-  - Form submissions may trigger server-side actions
-  - Screenshot files written to disk
-  - Browser process spawned in container
+
+- Network requests to allowed domains
+- Form submissions may trigger server-side actions
+- Screenshot files written to disk
+- Browser process spawned in container
 
 ROLLBACK_POSSIBILITY: Partial (cannot undo form submissions)
 
@@ -92,7 +93,7 @@ EXPECTED_DURATION: Medium (seconds to minutes)
 
 CONCURRENCY: Single browser session per container
 
-6. Failure & Risk Notes
+1. Failure & Risk Notes
 
 KNOWN_FAILURE_MODES:
 
@@ -111,12 +112,13 @@ WORST_CASE_IMPACT:
 HUMAN_INTERVENTION_REQUIRED: Yes (approve domain allowlist + any new domains)
 
 ESCALATION_RULES:
-  - Navigation to domain not in allowlist → immediate block + request approval
-  - Real credentials detected in form input → immediate halt + alert
-  - 3 consecutive action failures → pause + request human guidance
-  - Container health check failure → terminate session
 
-7. Audit & Trace Requirements
+- Navigation to domain not in allowlist → immediate block + request approval
+- Real credentials detected in form input → immediate halt + alert
+- 3 consecutive action failures → pause + request human guidance
+- Container health check failure → terminate session
+
+1. Audit & Trace Requirements
 
 AUDIT_FIELDS:
 
@@ -133,7 +135,7 @@ AUDIT_FIELDS:
 
 TRACE_LEVEL: Full (every action, every navigation, every screenshot)
 
-8. Security Model
+1. Security Model
 
 SANDBOX_TYPE: Docker container with XVFB virtual display
 
@@ -142,8 +144,9 @@ CONTAINER_REQUIRED: Mandatory (cannot run on bare metal)
 NETWORK_ACCESS: Restricted to domain allowlist only
 
 CREDENTIAL_HANDLING:
-  - No real passwords, tokens, or API keys
-  - Test data only
-  - Input values scanned for credential patterns before submission
+
+- No real passwords, tokens, or API keys
+- Test data only
+- Input values scanned for credential patterns before submission
 
 PROCESS_ISOLATION: Full container isolation, no host filesystem access

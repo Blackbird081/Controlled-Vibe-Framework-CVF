@@ -69,15 +69,18 @@ for gov_file in registry:
 ## 5. Quy Trình
 
 ### 5.1 Khi tạo `.gov.md` mới
+
 1. Script `generate_user_skills.py` tự động inject `## Version Lock` block
 2. Hash và version lấy từ `.skill.md` tại thời điểm generate
 
 ### 5.2 Khi cập nhật `.skill.md`
+
 1. Chạy `check_version_sync.py` → phát hiện DRIFT
 2. Developer review changes
 3. Chạy `check_version_sync.py --fix` → cập nhật hash + version + date
 
 ### 5.3 CI/CD Integration
+
 - `validate_registry.py` gọi version lock check
 - DRIFT → warning (không fail build)
 - BROKEN → error (fail build)

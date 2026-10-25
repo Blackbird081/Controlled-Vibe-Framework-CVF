@@ -98,24 +98,28 @@ CVF_v1.3_IMPLEMENTATION_TOOLKIT/
 ## 🎓 Learning Path
 
 ### Week 1: Get Started
+
 - [ ] Read INTERNAL_USER_GUIDE.md
 - [ ] Create your first skill (15 min)
 - [ ] Run it locally
 - [ ] Check the output
 
 ### Week 2: Use It Daily
+
 - [ ] Create 2-3 skills for real projects
 - [ ] Share with team
 - [ ] Check metrics weekly
 - [ ] Ask questions in Slack
 
 ### Week 3: Go Deeper
+
 - [ ] Read QUICK_START_INTERNAL.md
 - [ ] Understand all risk levels
 - [ ] Review other team's skills
 - [ ] Suggest improvements
 
 ### Month 2+: Master It
+
 - [ ] Help others create skills
 - [ ] Review team's audit logs
 - [ ] Optimize underperforming skills
@@ -128,6 +132,7 @@ CVF_v1.3_IMPLEMENTATION_TOOLKIT/
 **Framework Assessment:** 9.40/10 ✅
 
 **What's Implemented:**
+
 - ✅ Core skill framework (R0-R3 risk levels)
 - ✅ Input/output validation
 - ✅ Audit trail (who did what when)
@@ -138,6 +143,7 @@ CVF_v1.3_IMPLEMENTATION_TOOLKIT/
 - ✅ Comprehensive documentation
 
 **What's Not Included:**
+
 - ❌ Community/open-source features
 - ❌ Advanced marketplace
 - ❌ Multi-region deployment
@@ -230,7 +236,7 @@ git commit -m "Update validation rules"
 
 1. **Check docs first:** [INTERNAL_USER_GUIDE.md](../docs/INTERNAL_USER_GUIDE.md)
 2. **Ask in Slack:** #cvf-team
-3. **Email:** cvf-team@company.com
+3. **Email:** <cvf-team@company.com>
 4. **See FAQ:** [QUICK_START_INTERNAL.md](../docs/QUICK_START_INTERNAL.md#-faq---thường-gặp)
 
 ### For Bugs
@@ -242,7 +248,7 @@ git commit -m "Update validation rules"
 ### For Ideas
 
 1. Post in Slack #cvf-team
-2. Or email: cvf-team@company.com
+2. Or email: <cvf-team@company.com>
 3. We review ideas together
 
 ---
@@ -252,6 +258,7 @@ git commit -m "Update validation rules"
 ### What CVF Is
 
 ✅ **A tool to:**
+
 - Control AI output quality
 - Track what happened (audit trail)
 - Make sure input/output are correct
@@ -261,6 +268,7 @@ git commit -m "Update validation rules"
 ### What CVF Is NOT
 
 ❌ **NOT a tool for:**
+
 - Machine learning model training
 - Web framework
 - Database system
@@ -274,12 +282,14 @@ CVF complements what you already have.
 ## 📈 Roadmap (Internal Only)
 
 **Next 3 months:**
+
 - Week 1-2: Team gets comfortable using it
 - Week 3-4: Create 10+ internal skills
 - Month 2: Optimize based on learnings
 - Month 3: Decide if worth publishing publicly
 
 **Not planned (unless public):**
+
 - Community platform
 - Partner marketplace
 - Advanced analytics

@@ -58,6 +58,7 @@ Tổng 240 s; các đoạn liền kề từ 0 đến 240. Mốc là ước tính
 Mỗi cảnh có: lời dẫn, chữ trên màn hình, ý đồ hình ảnh (đề xuất slide/sơ đồ khái niệm), nhu cầu tài nguyên (chưa tạo) và mã claim. Từ S05 đến S08 thẻ "VÍ DỤ MINH HỌA - CHƯA CHẠY THẬT - DỮ LIỆU GIẢ" luôn hiện để cảnh dùng lại riêng lẻ vẫn rõ trạng thái.
 
 ### S01 | 0-15 | 15 s
+
 - Narration: Khi bạn giao cho AI một việc viết code, ai đặt ranh giới, ai làm việc, và bằng chứng nằm ở đâu? Trong khoảng bốn phút, ta xem CVF trả lời thế nào qua một ví dụ nhỏ.
 - On-screen: Giao AI việc code: ai làm gì?
 - Visual intent: Thẻ tiêu đề chữ trên nền đơn sắc, ba dấu hỏi nhỏ: ranh giới, người làm, bằng chứng.
@@ -65,6 +66,7 @@ Mỗi cảnh có: lời dẫn, chữ trên màn hình, ý đồ hình ảnh (đ�
 - Claims: C01
 
 ### S02 | 15-40 | 25 s
+
 - Narration: CVF là hạ tầng quản trị cho AI agent: một lớp luật và bằng chứng nằm giữa người giao việc, AI agent và nơi agent thực thi. CVF không viết code thay bạn. Nó không phải IDE, không phải công cụ tự viết code, cũng không phải công cụ tạo agent.
 - On-screen: CVF là: luật + bằng chứng. CVF không phải: IDE, công cụ tự viết code, công cụ tạo agent.
 - Visual intent: Bảng hai cột "là" và "không phải"; cột phải làm mờ nhẹ.
@@ -72,6 +74,7 @@ Mỗi cảnh có: lời dẫn, chữ trên màn hình, ý đồ hình ảnh (đ�
 - Claims: C02, C03
 
 ### S03 | 40-65 | 25 s
+
 - Narration: Có ba vai trò. Bạn, con người, nêu mục tiêu và ranh giới, rồi xem kết quả. AI agent làm đúng phần việc được giao, trong phạm vi đã nêu, và trả bằng chứng. CVF đặt luật, danh tính, quyền và bằng chứng, nhưng chỉ tại những điểm đã được tích hợp, hoặc theo quy trình bạn yêu cầu agent tuân theo.
 - On-screen: Bạn: mục tiêu và ranh giới. AI agent: làm việc được giao, trả bằng chứng. CVF: luật và bằng chứng tại điểm đã tích hợp.
 - Visual intent: Ba khối ngang nối bằng mũi tên; khối CVF có chú thích "chỉ tại điểm đã tích hợp".
@@ -79,6 +82,7 @@ Mỗi cảnh có: lời dẫn, chữ trên màn hình, ý đồ hình ảnh (đ�
 - Claims: C04, C05
 
 ### S04 | 65-95 | 30 s
+
 - Narration: Công việc có quản trị đi qua bảy quyết định: intake, design, spec, work order, build, review và freeze. Đây là bảy quyết định, không phải bảy tài liệu hay bảy lần xin phép. Việc nhỏ có thể gộp lại trong một yêu cầu rõ ràng, và bằng chứng đã được chấp nhận thì dùng lại, không chạy lại từ đầu.
 - On-screen: INTAKE - DESIGN - SPEC - WORK ORDER - BUILD - REVIEW - FREEZE. Bảy quyết định, không phải bảy tài liệu.
 - Visual intent: Dải bảy chặng sáng lần lượt theo lời dẫn; dòng chú thích "gộp được, dùng lại bằng chứng".
@@ -86,6 +90,7 @@ Mỗi cảnh có: lời dẫn, chữ trên màn hình, ý đồ hình ảnh (đ�
 - Claims: C06, C07
 
 ### S05 | 95-115 | 20 s
+
 - Narration: Ví dụ minh họa, chưa chạy thật, dữ liệu giả. Bạn có một ứng dụng liệt kê chi tiêu và muốn thêm bộ lọc theo tháng. Bạn giao việc có ranh giới: mục tiêu, hai file được sửa, những điều không được làm, và khi nào agent phải dừng lại để hỏi.
 - On-screen: VÍ DỤ MINH HỌA - CHƯA CHẠY THẬT - DỮ LIỆU GIẢ. Mục tiêu: lọc chi tiêu theo tháng. Được sửa: src/expenses/ExpenseList.tsx và src/expenses/ExpenseList.test.tsx. Dữ liệu thử: 5 khoản chi giả tự nhập trong test. Không được: sửa file khác, thêm thư viện, gọi mạng, dùng dữ liệu thật.
 - Visual intent: Thẻ trạng thái cố định phía trên; bên dưới là khung yêu cầu giao việc dạng chữ, không phải ảnh chụp giao diện thật.
@@ -93,6 +98,7 @@ Mỗi cảnh có: lời dẫn, chữ trên màn hình, ý đồ hình ảnh (đ�
 - Claims: C09, C10
 
 ### S06 | 115-135 | 20 s
+
 - Narration: Bạn mô tả kết quả đúng. Chọn tháng ba năm 2026 thì chỉ hiện khoản chi tháng ba. Tháng không có khoản nào thì hiện dòng thông báo không có khoản chi. Để trống bộ lọc thì hiện tất cả. Ngày sai định dạng thì bị bỏ qua và không làm ứng dụng lỗi.
 - On-screen: VÍ DỤ MINH HỌA. Bốn trường hợp: có tháng, tháng trống, bỏ lọc, ngày sai định dạng.
 - Visual intent: Bốn ô nhỏ, mỗi ô một trường hợp với dữ liệu giả vẽ tay dạng bảng chữ; không hiển thị kết quả chạy.
@@ -100,6 +106,7 @@ Mỗi cảnh có: lời dẫn, chữ trên màn hình, ý đồ hình ảnh (đ�
 - Claims: C09, C11
 
 ### S07 | 135-160 | 25 s
+
 - Narration: Theo cách làm được mô tả, agent chỉ sửa hai file đã nêu, thêm vài test cho bốn trường hợp trên và chạy test của hai file đó. Khi xong, agent trả danh sách file đã đổi, kết quả test, và những gì nó chưa kiểm tra. Đây là thực hành mong đợi, không phải kết quả đã chạy.
 - On-screen: VÍ DỤ MINH HỌA. Mong đợi: hai file, test cho bốn trường hợp, báo cáo gồm phần chưa kiểm tra. Chưa chạy thật.
 - Visual intent: Sơ đồ khái niệm một agent với hai file; mẫu báo cáo ba dòng để trống, không có số liệu hay dấu "đạt".
@@ -107,6 +114,7 @@ Mỗi cảnh có: lời dẫn, chữ trên màn hình, ý đồ hình ảnh (đ�
 - Claims: C09, C12, C13
 
 ### S08 | 160-190 | 30 s
+
 - Narration: Bạn, hay người review, quyết định từ bằng chứng. Danh sách file có đúng hai file không? Báo cáo có ca tháng trống và ca ngày sai định dạng không? Agent nói gì là chưa kiểm tra? Rồi chấp nhận, yêu cầu sửa, hoặc dừng. Nếu agent muốn sửa file ngoài danh sách, đó là đổi ranh giới: phải quyết định lại, agent không tự làm.
 - On-screen: VÍ DỤ MINH HỌA. Xem: danh sách file, các ca kiểm thử, phần chưa kiểm tra. Quyết định: chấp nhận / sửa / dừng. Sửa file ngoài danh sách = đổi ranh giới.
 - Visual intent: Danh sách ba câu hỏi review, rẽ ba nhánh quyết định; một nhánh phụ "đổi ranh giới" quay lại bước giao việc.
@@ -114,6 +122,7 @@ Mỗi cảnh có: lời dẫn, chữ trên màn hình, ý đồ hình ảnh (đ�
 - Claims: C09, C13, C14, C08
 
 ### S09 | 190-215 | 25 s
+
 - Narration: Sau khi chấp nhận, chỉ làm bước đã được giao đúng thẩm quyền. Đưa lên môi trường thật, gửi dữ liệu ra ngoài hay dùng dữ liệu thật là tác động mới, cần phê duyệt riêng. Mức rủi ro phụ thuộc hành động và môi trường, không chỉ số file được sửa.
 - On-screen: Tác động mới cần phê duyệt riêng: môi trường thật, gửi dữ liệu ra ngoài, dữ liệu thật. Rủi ro theo hành động và môi trường.
 - Visual intent: Một đường ranh giới kẻ ngang; phía trên "trong phạm vi đã giao", phía dưới ba tác động mới. Không gán mức R0-R3 cho việc thật.
@@ -121,6 +130,7 @@ Mỗi cảnh có: lời dẫn, chữ trên màn hình, ý đồ hình ảnh (đ�
 - Claims: C15, C16, C08
 
 ### S10 | 215-240 | 25 s
+
 - Narration: Nội dung này dựa trên tài liệu hướng dẫn. Nó chưa chứng minh CVF kiểm soát mọi agent hay mọi phiên làm việc, chưa chứng minh nhà cung cấp AI cụ thể đã sẵn sàng, và chưa chứng minh sẵn sàng cho môi trường thật. Để đi tiếp, hãy đọc hướng dẫn bắt đầu và hướng dẫn cho người không viết code trong repository.
 - On-screen: Chưa chứng minh: kiểm soát mọi agent, nhà cung cấp cụ thể, sẵn sàng môi trường thật. Đọc tiếp: GET_STARTED, VOM Quick Start (tài liệu nội bộ).
 - Visual intent: Hai cột "Đã có trong tài liệu" và "Chưa chứng minh"; dòng cuối liệt kê tên hai tài liệu nội bộ, không có địa chỉ công khai hay lời kêu gọi đăng ký.

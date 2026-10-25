@@ -7,6 +7,7 @@
 ## Tại sao v1.1?
 
 v1.1 mở rộng từ v1.0 với các ràng buộc kiểm soát chi tiết hơn:
+
 - **INPUT/OUTPUT spec**: hợp đồng vào/ra rõ ràng
 - **Agent Archetype + Lifecycle**: phân vai AI, ngăn vượt quyền
 - **Command taxonomy**: chuẩn hóa intent → action
@@ -14,6 +15,7 @@ v1.1 mở rộng từ v1.0 với các ràng buộc kiểm soát chi tiết hơn:
 - **Preset Library**: chính sách hành vi per archetype
 
 **Compatibility note:**
+
 - v1.0 là core baseline đã freeze; không chỉnh sửa.
 - v1.1 chỉ *bổ sung* module điều khiển, không đổi cấu trúc/triết lý gốc.
 - Bất kỳ project tối giản có thể chạy trên v1.0; bật module v1.1 theo nhu cầu.

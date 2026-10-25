@@ -9,6 +9,7 @@
 Template Library cung cấp **intent patterns sẵn sàng sử dụng** cho các use cases phổ biến.
 
 User chỉ cần:
+
 1. Chọn template phù hợp
 2. Điền thông tin vào placeholders
 3. Submit
@@ -29,6 +30,7 @@ User chỉ cần:
 ## Cách sử dụng
 
 ### Bước 1: Chọn Domain
+
 ```
 BUSINESS/    → Phân tích kinh doanh
 TECHNICAL/   → Review kỹ thuật
@@ -37,16 +39,20 @@ RESEARCH/    → Nghiên cứu
 ```
 
 ### Bước 2: Chọn Template
+
 Mỗi template có:
+
 - **Mô tả** — Khi nào dùng
 - **Form Fields** — Cần điền gì
 - **Intent Pattern** — Copy & paste
 - **Output Expected** — Kết quả mong đợi
 
 ### Bước 3: Điền Form
+
 Thay thế `[placeholder]` bằng thông tin thực tế.
 
 ### Bước 4: Submit
+
 - Via CLI: `cvf user submit --preset [template]`
 - Via Web: Chọn template → Điền form → Submit
 
@@ -72,6 +78,7 @@ Mỗi template tuân theo format chuẩn:
 ## Quick Access
 
 ### 📈 Business Templates
+
 | Template | File |
 |----------|------|
 | Strategy Analysis | [strategy_analysis.md](BUSINESS/strategy_analysis.md) |
@@ -81,6 +88,7 @@ Mỗi template tuân theo format chuẩn:
 | Business Proposal | [business_proposal.md](BUSINESS/business_proposal.md) |
 
 ### 🔧 Technical Templates
+
 | Template | File |
 |----------|------|
 | Code Review | [code_review.md](TECHNICAL/code_review.md) |
@@ -90,6 +98,7 @@ Mỗi template tuân theo format chuẩn:
 | API Design Review | [api_design_review.md](TECHNICAL/api_design_review.md) |
 
 ### ✍️ Content Templates
+
 | Template | File |
 |----------|------|
 | Documentation | [documentation.md](CONTENT/documentation.md) |
@@ -99,6 +108,7 @@ Mỗi template tuân theo format chuẩn:
 | Presentation | [presentation.md](CONTENT/presentation.md) |
 
 ### 🔬 Research Templates
+
 | Template | File |
 |----------|------|
 | Literature Review | [literature_review.md](RESEARCH/literature_review.md) |

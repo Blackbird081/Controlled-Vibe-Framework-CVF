@@ -101,18 +101,18 @@ QBS uses these as external anchors:
 
 Reference URLs:
 
-- https://arxiv.org/abs/1804.07461
-- https://arxiv.org/abs/1905.00537
-- https://arxiv.org/abs/2211.09110
-- https://crfm.stanford.edu/2022/11/17/helm.html
-- https://arxiv.org/abs/2306.05685
-- https://arxiv.org/abs/2308.03688
-- https://owasp.org/www-project-top-10-for-large-language-model-applications
-- https://atlas.mitre.org/
-- https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10
-- https://www.iso.org/standard/42001
-- https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689
-- https://mlcommons.org/ailuminate/
+- <https://arxiv.org/abs/1804.07461>
+- <https://arxiv.org/abs/1905.00537>
+- <https://arxiv.org/abs/2211.09110>
+- <https://crfm.stanford.edu/2022/11/17/helm.html>
+- <https://arxiv.org/abs/2306.05685>
+- <https://arxiv.org/abs/2308.03688>
+- <https://owasp.org/www-project-top-10-for-large-language-model-applications>
+- <https://atlas.mitre.org/>
+- <https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10>
+- <https://www.iso.org/standard/42001>
+- <https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689>
+- <https://mlcommons.org/ailuminate/>
 
 ## 4. Risk Mapping
 

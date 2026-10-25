@@ -111,3 +111,31 @@ class CheckFoundationalGuardSurfacesTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_public_structure_review_is_same_delta_and_does_not_replace_private_review(tmp_path, monkeypatch):
+    import json
+    base = "a" * 40
+    path = "EXTENSIONS/existing/tests/integration.py"
+    manifest = "docs/EXPORT_MANIFEST.md"
+    changed = {path: ["A"], manifest: ["M"]}
+    record = {"schemaVersion": "cvf.publicChangeEvidence.v1", "publicBase": base,
+              "sourceCommit": "b" * 40, "changedPaths": [path],
+              "claimBoundary": "PUBLIC_CHANGE_TRACEABILITY_NOT_PRIVATE_CLOSURE"}
+    text = ("# Export\n\n## Public Change Evidence\n\nChange summary: Add existing SDK integration evidence.\n"
+            "Changed owners: `EXTENSIONS/existing/tests/integration.py`\nValidation: Offline contract proof.\n"
+            "Structural review: PUBLIC_PROJECTION_STRUCTURE_REVIEWED; existing SDK test ownership only.\n\n"
+            "```public-change-evidence-json\n" + json.dumps(record) + "\n```\n")
+    target = tmp_path / manifest
+    target.parent.mkdir(parents=True)
+    target.write_text(text)
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", True)
+    monkeypatch.setattr(MODULE, "PUBLIC_EVIDENCE_BASE", base)
+    monkeypatch.setattr(MODULE, "_run_git", lambda args: (1, "", "no previous manifest"))
+    assert MODULE._check_structural_change_audit_guard([], changed)["issues"] == []
+    target.write_text(text.replace("Structural review:", "Missing review:"))
+    assert MODULE._check_structural_change_audit_guard([], changed)["issues"]
+    target.write_text(text)
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", False)
+    assert MODULE._check_structural_change_audit_guard([], changed)["issues"]

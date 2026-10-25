@@ -73,6 +73,7 @@ Response to User
 | A.1.10 | Export from index.ts + barrel test | `index.ts` | 3+ | P2 |
 
 **Success Criteria:**
+
 - [ ] 100% guards có runtime implementation (không chỉ document)
 - [ ] GuardRuntimeEngine xử lý request → ALLOW/BLOCK/ESCALATE trong <50ms
 - [ ] Integration test cover full pipeline: request → guard chain → decision
@@ -94,6 +95,7 @@ Response to User
 | `CVF_GUARD_REGISTRY_GUARD.md` | `guard.registry.guard.ts` — validate guard registered in KB + README | 5+ |
 
 **Success Criteria:**
+
 - [ ] 8/8 document guards converted to runtime code
 - [ ] Each guard: document (human-readable) + code (machine-enforceable)
 - [ ] 48+ new tests PASS
@@ -112,6 +114,7 @@ Response to User
 | A.3.5 | E2E integration test | Full pipeline run: intent → build → review → complete | 10+ |
 
 **Success Criteria:**
+
 - [ ] Pipeline chạy được end-to-end từ code
 - [ ] Phase transitions có gate enforcement
 - [ ] Rollback hoạt động ở bất kỳ phase nào
@@ -153,6 +156,7 @@ Response to User
 | B.1.9 | Golden baseline cho agent conformance | Expected behavior baseline | — |
 
 **Success Criteria:**
+
 - [ ] 45+ agent conformance scenarios defined
 - [ ] Runner chạy được với mock agent
 - [ ] Report format: "Agent X đạt Y% CVF conformance"
@@ -171,6 +175,7 @@ Response to User
 | B.2.5 | Integration tests cross-entry | Same guard, different entry → same result | 10+ |
 
 **Success Criteria:**
+
 - [ ] Guards enforce ở 4 entry points: Web, CLI, MCP, API
 - [ ] Unified config: thay đổi 1 nơi, áp dụng mọi nơi
 - [ ] 43+ tests PASS
@@ -187,6 +192,7 @@ Response to User
 | B.3.4 | E2E cross-extension test | 3+ extensions chạy trong 1 workflow | 10+ |
 
 **Success Criteria:**
+
 - [ ] WorkflowCoordinator chạy thật với 3+ extensions
 - [ ] State sharing giữa extensions hoạt động
 - [ ] 32+ tests PASS
@@ -224,6 +230,7 @@ Response to User
 | C.1.7 | Publish preparation (npm pack dry run) | Ensure publishable | 3+ |
 
 **Success Criteria:**
+
 - [ ] `npm install cvf-governance` → working governance trong 5 phút
 - [ ] 3 core modules: PhaseGate, RiskCheck, AuditLog
 - [ ] Framework adapters: Express, Next.js, Fastify
@@ -242,6 +249,7 @@ Response to User
 | C.2.5 | Post-scaffold validation | Verify generated project passes CVF compat | 6+ |
 
 **Success Criteria:**
+
 - [ ] `npx create-cvf-project` → working project trong 2 phút
 - [ ] 3 templates: Backend, Fullstack, Agent
 - [ ] Generated project passes CVF governance checks out-of-box
@@ -260,6 +268,7 @@ Response to User
 | C.3.5 | Badge generation | Auto-update conformance + test badges |
 
 **Success Criteria:**
+
 - [ ] 3 GitHub Actions workflows chạy trên push/PR
 - [ ] Pre-commit hooks enforce guards locally
 - [ ] Badges auto-updated từ CI results

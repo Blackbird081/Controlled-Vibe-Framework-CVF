@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành skill sau trước khi dùng skill này:
+>
 > - [Financial Statement Review](./02_financial_statement_review.skill.md) — Hiểu cơ bản về báo cáo tài chính
 
 ---
@@ -18,11 +19,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Đánh giá tình hình dòng tiền doanh nghiệp
 - Dự báo runway và khả năng chi trả
 - Phân tích working capital
 
 **Không phù hợp khi:**
+
 - Chỉ cần xem báo cáo tài chính tổng quan (dùng Financial Statement Review)
 - Đánh giá budget đơn giản (dùng Budget Analysis)
 
@@ -65,15 +68,18 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 ### 1. Analysis Period
+
 ```
 Kỳ phân tích:
 VD: Q4 2025, Last 12 months, YTD 2026
 ```
 
 ### 2. Cash Flow from Operations
+
 ```
 Operating Cash Flow:
 - Net Income: $___
@@ -84,6 +90,7 @@ Operating Cash Flow:
 ```
 
 ### 3. Cash Flow from Investing
+
 ```
 Investing Cash Flow:
 - Capital Expenditures: -$___
@@ -93,6 +100,7 @@ Investing Cash Flow:
 ```
 
 ### 4. Cash Flow from Financing
+
 ```
 Financing Cash Flow:
 - Debt Issued/Repaid: +/-$___
@@ -102,6 +110,7 @@ Financing Cash Flow:
 ```
 
 ### 5. Current Cash Position
+
 ```
 Số dư tiền:
 - Beginning Cash: $___
@@ -116,6 +125,7 @@ Số dư tiền:
 AI sẽ trả về:
 
 ### 1. Cash Flow Summary
+
 | Category | Amount | % of Total |
 |----------|--------|------------|
 | Operating | $500K | 70% |
@@ -124,22 +134,26 @@ AI sẽ trả về:
 | **Net Change** | **$350K** | |
 
 ### 2. Key Ratios
+
 - Operating Cash Flow Ratio
 - Free Cash Flow
 - Cash Conversion Cycle
 - Days Sales Outstanding (DSO)
 
 ### 3. Runway Analysis
+
 - Current runway (months)
 - Burn rate trend
 - Break-even projection
 
 ### 4. Working Capital Analysis
+
 - AR/AP aging
 - Inventory turnover
 - Cash conversion efficiency
 
 ### 5. Recommendations
+
 - Cash optimization opportunities
 - Risk mitigation strategies
 
@@ -180,6 +194,7 @@ AI sẽ trả về:
 ## 📊 Ví dụ thực tế
 
 **Input:**
+
 ```
 Period: Q4 2025
 Operating CF: $450,000
@@ -202,18 +217,23 @@ Ending Cash: $1,050,000
 ```
 
 **Expected Analysis:**
+
 ```markdown
 
 ### Input mẫu:
 ```
+
 Mục tiêu: Hoàn thành Cash Flow Analysis
 Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
 Ràng buộc: Deadline 2 tuần
+
 ```
 
 ### Output mẫu:
 ```
+
 Tóm tắt kết quả: Cash Flow Analysis với khuyến nghị/ưu tiên rõ ràng.
+
 ```
 ## Cash Flow Analysis: Q4 2025
 
@@ -254,6 +274,7 @@ Tóm tắt kết quả: Cash Flow Analysis với khuyến nghị/ưu tiên rõ r
 ---
 
 ## 🔗 Related Skills
+
 - [KPI Dashboard Audit](./04_kpi_dashboard_audit.skill.md)
 - [Investment Due Diligence](./06_investment_due_diligence.skill.md)
 

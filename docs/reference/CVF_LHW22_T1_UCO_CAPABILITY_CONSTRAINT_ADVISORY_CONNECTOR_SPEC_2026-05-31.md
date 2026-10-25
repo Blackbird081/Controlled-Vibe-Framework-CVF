@@ -20,7 +20,7 @@ GC-018: `docs/baselines/CVF_GC018_LHW22_AGENT_INTELLIGENCE_FOUNDATIONS_2026-05-3
 
 Section: S1
 
-Publish a documentation-only connection-point schema for execution-scoped Unified Constraint Objects (UCO). 
+Publish a documentation-only connection-point schema for execution-scoped Unified Constraint Objects (UCO).
 This tranche establishes an advisory mapping to connect the legacy trust/isolation UCO concepts with the active `EXTENSIONS/CVF_GUARD_CONTRACT/` surfaces.
 
 No runtime contract mutation, route change, or provider behavior change is authorized.

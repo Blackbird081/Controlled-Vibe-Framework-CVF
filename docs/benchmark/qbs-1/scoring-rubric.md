@@ -151,7 +151,6 @@ The public aggregate uses the methodology weights:
 
 Hard gates override the aggregate.
 
-
 ## Claim Boundary
 
 This rubric claims only the candidate scoring scale and reviewer-agreement

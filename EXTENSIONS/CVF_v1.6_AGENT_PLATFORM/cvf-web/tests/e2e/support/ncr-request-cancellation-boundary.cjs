@@ -1,5 +1,4 @@
 'use strict';
-/* eslint-disable @typescript-eslint/no-require-imports */
 
 // This owned file is the Playwright config and, only in the spawned Next server,
 // a test-only fetch observer. It never records keys, headers or request bodies.

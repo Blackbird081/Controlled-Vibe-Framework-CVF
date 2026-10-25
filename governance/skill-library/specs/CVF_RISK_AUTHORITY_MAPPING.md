@@ -68,7 +68,6 @@ CVF (Capability – Validation – Failure) is the control backbone.
 
 ## 4. Risk Aggregation Rule
 
-
 If **any dimension reaches R3**, the Agent is considered **High Risk**.
 
 ---
@@ -103,11 +102,13 @@ Spec Gate là lớp **đánh giá đầu vào** trước khi Agent thực thi.
 UAT là lớp **đánh giá đầu ra** sau khi Agent thực thi.
 
 **Rule bắt buộc:**
+
 - **Spec PASS** → mới được chạy Agent.
 - **Spec CLARIFY** → dừng execution, hỏi lại người dùng để bổ sung.
 - **Spec FAIL** → chặn execution, yêu cầu sửa spec/template/skill.
 
 **Pre-UAT (Agent self-check):**
+
 - R0–R1: khuyến nghị chạy Pre-UAT để tự kiểm tra trước khi trả kết quả.
 - R2+: bắt buộc Pre-UAT + evidence snapshot trước khi hiển thị cho người dùng.
 - R3: Pre-UAT bắt buộc + human approval.
@@ -146,6 +147,7 @@ This mapping defines the **maximum authority** an AI Agent may receive
 after successful UAT and CVF validation.
 
 Any change to risk level or authority requires:
+
 - Re-UAT execution
 - Re-signoff from governance owner
 
@@ -154,6 +156,7 @@ Any change to risk level or authority requires:
 ## 10. Relationship to CVF
 
 This document is the **canonical risk-authority reference** for:
+
 - `CVF_SKILL_RISK_AUTHORITY_LINK.md` - Skill binding
 - `SKILL_MAPPING_RECORD.md` - Per-skill documentation
 - `AGENT_AI_UAT_CVF_TEMPLATE.md` - Testing framework

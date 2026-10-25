@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Builds AI-native products using OpenAI's development philosophy and modern AI UX patterns. Use when integrating AI features, designing for model improvements, implementing evals as product specs, or creating AI-first experiences. Based on Kevin Weil (OpenAI CPO) on building for future models, hybrid approaches, and cost optimization.
 
 **Khi nào dùng skill này:**
+
 - Cần Ai Product Pattern với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: product ux
-- Nguồn tham khảo: https://github.com/menkesu/awesome-pm-skills/tree/main/ai-product-patterns
+- Nguồn tham khảo: <https://github.com/menkesu/awesome-pm-skills/tree/main/ai-product-patterns>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Thiết kế flow onboarding cho mobile app
 Context: Người dùng mới rơi nhiều ở bước 2
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Ai Product Pattern Output
 

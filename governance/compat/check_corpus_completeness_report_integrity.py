@@ -26,6 +26,7 @@ except ModuleNotFoundError:
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+PUBLIC_PROFILE = False
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 STANDARD_PATH = "docs/reference/CVF_CORPUS_COMPLETENESS_AND_REPORT_INTEGRITY_STANDARD_2026-06-01.md"
@@ -279,6 +280,10 @@ def _validate_standard(path: str, text: str) -> list[dict[str, str]]:
 
 
 def _validate_binding(path: str, text: str) -> list[dict[str, str]]:
+    if PUBLIC_PROFILE:
+        from guard_binding_catalog import private_binding
+        if private_binding(path):
+            return []
     violations: list[dict[str, str]] = []
     if not has_binding_marker(path, THIS_SCRIPT_PATH, text):
         _add(violations, path, "binding_missing", f"must cite `{THIS_SCRIPT_PATH}`")
@@ -392,6 +397,9 @@ def _classify(changed_paths: dict[str, list[str]]) -> dict[str, Any]:
         CLAUDE_PATH,
         GC018_TEMPLATE_PATH,
     )
+    if PUBLIC_PROFILE:
+        from guard_binding_catalog import public_required_paths
+        required_paths = public_required_paths(required_paths)
     missing_files = [path for path in required_paths if not (REPO_ROOT / path).exists()]
     scoped_paths = set(changed_paths)
     scoped_paths.update(path for path in required_paths if (REPO_ROOT / path).exists())
@@ -441,7 +449,13 @@ def main() -> int:
     parser.add_argument("--head", default=None, help="Optional git head ref")
     parser.add_argument("--enforce", action="store_true", help="Return non-zero when violations exist")
     parser.add_argument("--json", action="store_true", help="Print JSON report")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
+    global PUBLIC_PROFILE
+    PUBLIC_PROFILE = args.profile == "public"
+    if PUBLIC_PROFILE:
+        from guard_binding_catalog import require_public_projection
+        require_public_projection(REPO_ROOT)
 
     try:
         base, head, range_source = _resolve_range(args.base, args.head)

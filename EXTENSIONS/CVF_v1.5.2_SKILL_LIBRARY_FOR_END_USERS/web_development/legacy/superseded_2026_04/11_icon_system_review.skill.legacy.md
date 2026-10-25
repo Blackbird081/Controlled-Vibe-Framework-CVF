@@ -20,12 +20,14 @@ Không yêu cầu.
 Đánh giá hệ thống icon: không dùng emoji làm UI icons, consistent icon set, brand logos chính xác, SVG viewBox sizing, hover states, và accessibility.
 
 **Khi nào nên dùng:**
+
 - Review UI trước launch
 - Icon inconsistency across pages
 - Mix of emoji + SVG + font icons
 - Brand logo verification
 
 **Không phù hợp khi:**
+
 - Marketing content (emoji OK trong content)
 - Print/offline design
 
@@ -73,7 +75,7 @@ Không yêu cầu.
 
 | Field | Bắt buộc | Mô tả | Ví dụ |
 |-------|----------|-------|-------|
-| **URL/Code** | ✅ | Link hoặc code cần review | "https://myapp.com" |
+| **URL/Code** | ✅ | Link hoặc code cần review | "<https://myapp.com>" |
 | **Current icon source** | ✅ | Icon library đang dùng | "Mix: Heroicons + emoji + custom SVG" |
 | **Brand logos** | ❌ | Logos cần verify | "Google, Apple, GitHub logos" |
 | **Framework** | ❌ | React, Vue... | "React + Tailwind" |
@@ -133,6 +135,7 @@ SCORE: 5/10 → Target: 9/10
 - [ ] `currentColor` cho theme compatibility
 
 **Red flags (cần Reject):**
+
 - ⚠️ Emoji dùng trong navigation/buttons
 - ⚠️ > 2 icon libraries mixed
 - ⚠️ Raster images (PNG/JPG) thay vì SVG
@@ -160,7 +163,8 @@ SCORE: 5/10 → Target: 9/10
 4. **`currentColor`** — Icon inherits text color = auto dark mode
 5. **Sprite sheet** — For 50+ icons, SVG sprite reduces HTTP requests
 
-### Recommended Icon Sets:
+### Recommended Icon Sets
+
 ```
 UI Icons:    Heroicons (Tailwind) or Lucide (versatile)
 Brand Logos: Simple Icons (simpleicons.org)
@@ -172,14 +176,16 @@ Illustrations: unDraw, Humaaans (free)
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 URL: React SaaS dashboard
 Current icons: Mix of emoji (sidebar) + Heroicons (content) + FontAwesome (footer)
 Brand logos: Stripe, GitHub, Google in footer
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 🔴 7 emoji icons in sidebar → Replace with Heroicons
 🟡 FontAwesome in footer → Switch to Heroicons (consistency)

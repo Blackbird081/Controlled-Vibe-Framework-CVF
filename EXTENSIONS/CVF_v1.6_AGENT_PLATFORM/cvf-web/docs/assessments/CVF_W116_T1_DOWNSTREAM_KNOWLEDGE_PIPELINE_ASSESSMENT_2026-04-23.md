@@ -96,12 +96,14 @@ mismatch, not caused by W116-T1 changes.
 ## Files Changed
 
 ### New files
+
 - `scripts/ingest_cvf_downstream_knowledge.ps1` — CP2 ingestion script
 - `src/app/api/knowledge/ingest/route.ts` — CP3 ingest endpoint
 - `src/app/api/knowledge/ingest/route.test.ts` — CP3 unit tests (9 tests)
 - `src/app/api/knowledge/ingest/w116-cp5-delta.test.ts` — CP5 delta evidence (7 tests)
 
 ### Modified files
+
 - `scripts/new-cvf-workspace.ps1` — CP1: `knowledgePath` manifest field + folder creation
 - `scripts/check_cvf_workspace_agent_enforcement.ps1` — CP1: check-12 warn-only + colour fix
 - `governance/toolkit/05_OPERATION/CVF_DOWNSTREAM_AGENTS_TEMPLATE.md` — CP1: knowledge folder in first-read list

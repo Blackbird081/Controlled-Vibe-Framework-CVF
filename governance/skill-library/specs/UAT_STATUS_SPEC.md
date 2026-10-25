@@ -10,6 +10,7 @@
 ## 1. Purpose
 
 Define explicit UAT status badges to differentiate between:
+
 - UAT that has **not been executed** (neutral)
 - UAT that is **stale** (needs re-run)
 - UAT that has been **validated** (passed)
@@ -54,6 +55,7 @@ ELSE:
 ## 4. Integration Points
 
 ### 4.1 In `.gov.md` Files
+
 ```markdown
 ## UAT Status
 
@@ -67,6 +69,7 @@ ELSE:
 ```
 
 ### 4.2 In Domain Reports
+
 ```markdown
 | Domain | Skills | UAT Validated | UAT Not Run | UAT Stale |
 |--------|:------:|:-------------:|:-----------:|:---------:|
@@ -74,7 +77,9 @@ ELSE:
 ```
 
 ### 4.3 In `score_uat.py` Output
+
 Each UAT result record must include:
+
 - `badge`: one of `NOT_RUN`, `NEEDS_UAT`, `VALIDATED`, `FAILED`
 - `uat_skill_version`: skill version when UAT was run
 - `uat_date`: date of UAT execution
@@ -84,6 +89,7 @@ Each UAT result record must include:
 ## 5. Stale Detection
 
 A UAT result becomes **stale** when:
+
 1. The source `.skill.md` file's `Skill Version` metadata changes
 2. The governance `.gov.md` risk level or authority mapping changes
 3. The UAT template itself is updated

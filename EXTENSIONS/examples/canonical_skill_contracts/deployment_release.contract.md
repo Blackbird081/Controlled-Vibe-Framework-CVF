@@ -9,7 +9,7 @@ Triển khai phiên bản đã được phê duyệt lên môi trường mục t
 
 RISK_LEVEL: Critical
 
-2. Governance Constraints
+1. Governance Constraints
 
 ALLOWED_ARCHETYPES: Executor
 
@@ -27,7 +27,7 @@ BUILD_VERIFIED
 
 ROLLBACK_PLAN_READY
 
-3. Input Specification
+1. Input Specification
 
 INPUT_FIELDS:
 
@@ -47,7 +47,7 @@ validation: matches approved environment
 
 required
 
-4. Output Specification
+1. Output Specification
 
 OUTPUT_FIELDS:
 
@@ -67,7 +67,7 @@ success: version registered
 
 failure: empty
 
-5. Execution Properties
+1. Execution Properties
 
 SIDE_EFFECTS:
 
@@ -81,7 +81,7 @@ IDEMPOTENCY: No
 
 EXPECTED_DURATION: Medium
 
-6. Failure & Risk Notes
+1. Failure & Risk Notes
 
 KNOWN_FAILURE_MODES:
 
@@ -97,7 +97,7 @@ Data inconsistency
 
 HUMAN_INTERVENTION_REQUIRED: Yes
 
-7. Audit & Trace Requirements
+1. Audit & Trace Requirements
 
 AUDIT_FIELDS:
 

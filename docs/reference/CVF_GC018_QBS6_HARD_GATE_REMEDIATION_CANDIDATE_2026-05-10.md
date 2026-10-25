@@ -5,6 +5,7 @@ Status: CLOSED - REMEDIATION COMPLETE / RERUN BLOCKED
 Date: 2026-05-10
 Track: QBS-6 Hard-Gate Remediation And Rerun Planning
 Parent track:
+
 - `docs/reference/CVF_GC018_QBS5_SCORED_RUN_EXECUTION_CANDIDATE_2026-05-10.md`
 - `docs/roadmaps/CVF_QBS5_SCORED_RUN_EXECUTION_ROADMAP_2026-05-10.md`
 

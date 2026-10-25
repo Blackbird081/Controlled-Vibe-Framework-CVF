@@ -108,12 +108,12 @@ The audit record is still written for rejected calls.
 
 ## 5. Side-Effect Boundary
 
-### `cvf_submit_review_receipt` writes:
+### `cvf_submit_review_receipt` writes
 
 - One audit record to MCP in-memory audit store
 - Returns structured `SubmitReviewReceiptOutput` to caller
 
-### `cvf_submit_review_receipt` never writes:
+### `cvf_submit_review_receipt` never writes
 
 - Raw API keys or bearer tokens
 - Files to disk
@@ -121,12 +121,12 @@ The audit record is still written for rejected calls.
 - CVF governance envelope or Evidence Receipt (that is `/api/execute` scope)
 - Memory reinjection or session state mutation
 
-### `cvf_advance_pipeline_stage` writes:
+### `cvf_advance_pipeline_stage` writes
 
 - One audit record to MCP in-memory audit store
 - Returns updated `AdvancePipelineStageOutput` to caller (computed state, not persisted)
 
-### `cvf_advance_pipeline_stage` never writes:
+### `cvf_advance_pipeline_stage` never writes
 
 - Persistent pipeline state to disk or database
 - Cross-session state (in-memory only, scoped to MCP server lifetime)

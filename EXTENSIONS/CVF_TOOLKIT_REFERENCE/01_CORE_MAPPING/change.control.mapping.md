@@ -1,8 +1,13 @@
 # CHANGE CONTROL MAPPING SPEC
+
 # CVF → CVF-Toolkit Integration
+
 # Status: Authoritative Mapping
+
 # Toolkit Version: 1.0.0
+
 # CVF Lock: See 00_CANONICAL_REFERENCE/cvf_version.lock
+
 1. PURPOSE
 
 This document defines:
@@ -17,7 +22,7 @@ How high-risk modifications are blocked without authorization
 
 This file is binding and non-bypassable.
 
-2. CVF CHANGE PRINCIPLE (CANONICAL INTERPRETATION)
+1. CVF CHANGE PRINCIPLE (CANONICAL INTERPRETATION)
 
 From CVF:
 
@@ -47,7 +52,7 @@ Financial logic changes
 
 AI provider configuration changes
 
-3. WHAT CONSTITUTES A "CHANGE"
+1. WHAT CONSTITUTES A "CHANGE"
 
 Toolkit defines change as any modification to:
 
@@ -64,7 +69,7 @@ Toolkit defines change as any modification to:
 
 Any of the above requires change control.
 
-4. CHANGE REQUEST CONTRACT
+1. CHANGE REQUEST CONTRACT
 
 Every change must follow this schema:
 
@@ -85,7 +90,7 @@ Every change must follow this schema:
 
 No change may bypass this structure.
 
-5. CHANGE CONTROLLER COMPONENT
+1. CHANGE CONTROLLER COMPONENT
 
 Implemented in:
 change.controller.ts
@@ -105,7 +110,7 @@ Enforce freeze
 
 Log audit trail
 
-6. CHANGE RISK MATRIX
+1. CHANGE RISK MATRIX
 
 | Risk | Approval Required | UAT Required | Freeze Required |
 | ---- | ----------------- | ------------ | --------------- |
@@ -116,7 +121,7 @@ Log audit trail
 
 Multi-approval minimum: 2 independent roles.
 
-7. CHANGE LIFECYCLE
+1. CHANGE LIFECYCLE
 
 State transitions:
 draft → submitted → approved → implemented → frozen
@@ -129,7 +134,7 @@ Illegal transitions prohibited.
 
 Once frozen → cannot revert without new change request.
 
-8. FREEZE INTEGRATION RULE
+1. FREEZE INTEGRATION RULE
 
 Freeze protocol activates when:
 
@@ -155,7 +160,7 @@ Freeze status must be recorded in:
 
 freeze.protocol.md
 
-9. PROHIBITED ACTIONS
+1. PROHIBITED ACTIONS
 
 Direct modification of released skill without change request.
 
@@ -169,7 +174,7 @@ Bypassing freeze enforcement.
 
 Manual database modification to avoid change record.
 
-10. AI PROVIDER CHANGE RULE
+1. AI PROVIDER CHANGE RULE
 
 Switching model version (e.g., GPT-5 → GPT-5.1):
 
@@ -185,7 +190,7 @@ UAT
 
 Freeze before prod
 
-11. FINANCIAL CHANGE OVERRIDE
+1. FINANCIAL CHANGE OVERRIDE
 
 If changeType == "financial":
 
@@ -205,7 +210,7 @@ Then:
 
 Risk = R4 automatically.
 
-12. AUDIT REQUIREMENTS
+1. AUDIT REQUIREMENTS
 
 For each change:
 
@@ -223,7 +228,7 @@ Log:
 
 Audit logs must be immutable.
 
-13. CHANGE BLOCK CONDITIONS
+1. CHANGE BLOCK CONDITIONS
 
 Implementation blocked if:
 
@@ -241,7 +246,7 @@ System must throw:
 
 ChangeViolationError
 
-14. EXTENSION RULE
+1. EXTENSION RULE
 
 Extensions may:
 
@@ -257,7 +262,7 @@ Modify core governance logic
 
 Override freeze protocol
 
-15. VERSION INCREMENT RULE
+1. VERSION INCREMENT RULE
 
 If changeType == "skill":
 
@@ -271,7 +276,7 @@ If changeType == "risk":
 
 MINOR increment required.
 
-16. COMPLIANCE CHECKLIST
+1. COMPLIANCE CHECKLIST
 
 Toolkit compliant if:
 
@@ -282,4 +287,3 @@ Toolkit compliant if:
 ✔ Audit logging active
 ✔ Version increment rule applied
 ✔ No direct mutation allowed
-

@@ -20,12 +20,14 @@ Không yêu cầu.
 Cho một ngành cụ thể, output design system recommendations: recommended pattern, style, color mood, typography, effects, và anti-patterns cần tránh. Dựa trên 100 industry-specific reasoning rules.
 
 **Khi nào nên dùng:**
+
 - Bắt đầu dự án cho ngành mới (chưa quen)
 - Cần justify design decisions cho client
 - Muốn industry-standard UI cho sản phẩm
 - Research best practices cho vertical market
 
 **Không phù hợp khi:**
+
 - Sản phẩm internal (không cần industry alignment)
 - Art/creative project không cần business reasoning
 
@@ -146,6 +148,7 @@ INDUSTRY BENCHMARKS:
 - [ ] Actionable — team có thể implement ngay
 
 **Red flags (cần Reject):**
+
 - ⚠️ Generic "use clean design" không specific ngành
 - ⚠️ Anti-patterns quá ít hoặc quá generic
 - ⚠️ Không mention trust/credibility cho finance
@@ -173,7 +176,8 @@ INDUSTRY BENCHMARKS:
 4. **Anti-patterns save time** — Knowing what NOT to do prevents rework
 5. **Document reasoning** — "We chose navy because..." for stakeholder buy-in
 
-### Industry Quick Reference:
+### Industry Quick Reference
+
 ```
 Healthcare:  Blue/green, clean, HIPAA-friendly
 Fintech:     Navy/dark, trust-focused, data-dense
@@ -188,7 +192,8 @@ E-commerce:  White/clean, product-focused, CTA-driven
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 Ngành: Healthcare — Telemedicine
 Loại: Patient-facing web app
@@ -196,7 +201,8 @@ Loại: Patient-facing web app
 Region: Vietnam
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 Pattern: Appointment-First Dashboard
 Style: Clean Minimal — Trust, simplicity, readability

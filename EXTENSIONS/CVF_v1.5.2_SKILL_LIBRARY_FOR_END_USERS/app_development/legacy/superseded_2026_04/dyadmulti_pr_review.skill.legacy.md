@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Multi-agent code review system that spawns three independent Claude sub-agents to review PR diffs. Each agent receives files in different randomized order to reduce ordering bias. One agent focuses specifically on code health and maintainability. Issues are classified as high/medium/low severity (sloppy code that hurts maintainability is MEDIUM). Results are aggregated using consensus voting - only issues identified by 2+ agents where at least one rated it medium or higher severity are reported. Automatically deduplicates against existing PR comments. Always posts a summary (even if no new issues), with low priority issues mentioned in a collapsible section.
 
 **Khi nào dùng skill này:**
+
 - Cần Dyadmulti Pr Review với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -139,13 +142,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Ưu tiên bối cảnh ngắn, rõ, có ràng buộc
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
-- Nguồn tham khảo: https://github.com/dyad-sh/dyad/tree/main/.claude/skills/multi-pr-review
+- Nguồn tham khảo: <https://github.com/dyad-sh/dyad/tree/main/.claude/skills/multi-pr-review>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Dyadmulti Pr Review cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
@@ -154,6 +158,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Dyadmulti Pr Review Output
 

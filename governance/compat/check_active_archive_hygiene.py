@@ -41,6 +41,9 @@ PERMANENT_FILES = {
     "CVF_SYSTEM_UNIFICATION_REMEDIATION_ROADMAP_2026-03-19.md",
 }
 PERMANENT_PATHS = {
+    # Creation dates do not expire these current canonical public-sync standards.
+    "docs/reference/CVF_PUBLIC_PROJECTION_PRE_PUSH_PROFILE_STANDARD_2026-08-11.md",
+    "docs/reference/CVF_PUBLIC_SYNC_ONE_SHOT_PREFLIGHT_STANDARD_2026-08-24.md",
     "docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md",
     "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
     "docs/baselines/CVF_CORE_COMPAT_BASELINE.md",

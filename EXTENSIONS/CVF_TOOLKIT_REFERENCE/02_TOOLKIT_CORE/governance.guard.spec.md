@@ -1,6 +1,9 @@
 # GOVERNANCE GUARD SPEC
+
 # CVF-Toolkit Core Module
+
 # Status: Authoritative Specification
+
 # Toolkit Version: 1.0.0
 
 ## 1. PURPOSE
@@ -88,6 +91,7 @@ This function must:
 `skill.registry.get(skillId)`
 
 Reject if:
+
 - Not found
 - Version mismatch
 - Status != released
@@ -105,6 +109,7 @@ Reject if insufficient privilege.
 Output riskLevel.
 
 Reject if:
+
 - Agent capability < skill capability
 - Risk > agent maxRiskAllowed
 
@@ -121,6 +126,7 @@ If skill.version modified OR provider changed:
 `change.controller.validate(changeId)`
 
 Reject if:
+
 - No approved change
 - Approval incomplete
 - UAT incomplete
@@ -166,6 +172,7 @@ Audit must execute even if rejected.
 ## 6. RETURN STRUCTURE
 
 If allowed:
+
 ```json
 {
   "allowed": true,

@@ -44,9 +44,11 @@ Auto   Auto   Super-  Manual  ──X──
 ## Skill 1: RAG Knowledge Retrieval (AGT-009)
 
 ### What It Does
+
 Retrieves relevant documents from a knowledge base using vector search, then injects them as context for AI responses.
 
 ### When to Use
+
 - Answer questions grounded in your project documentation
 - Search internal wikis, specs, or compliance documents
 - Avoid AI hallucination by providing real source material
@@ -54,6 +56,7 @@ Retrieves relevant documents from a knowledge base using vector search, then inj
 ### How to Invoke
 
 **In Agent Chat:**
+
 ```
 You: Search our knowledge base for authentication best practices
 
@@ -69,6 +72,7 @@ Result:
 ```
 
 **In Code (TypeScript):**
+
 ```typescript
 const result = await agentTools.execute('rag_retrieval', {
   query: 'authentication best practices',
@@ -88,6 +92,7 @@ const result = await agentTools.execute('rag_retrieval', {
 ```
 
 ### Governance Controls
+
 - ✅ All retrieved documents logged with IDs and relevance scores
 - ✅ Source citations required in AI output
 - ✅ PII filtering on retrieved content before injection
@@ -95,6 +100,7 @@ const result = await agentTools.execute('rag_retrieval', {
 - ❌ Cannot fabricate sources not in the knowledge base
 
 ### Common Mistakes
+
 | Mistake | Fix |
 |---------|-----|
 | Query too vague ("tell me about the project") | Use specific terms: "JWT token refresh flow in auth module" |
@@ -106,9 +112,11 @@ const result = await agentTools.execute('rag_retrieval', {
 ## Skill 2: Data Visualization Generator (AGT-010)
 
 ### What It Does
+
 Generates chart configuration JSON from structured data, supporting line, bar, pie, area, and stacked charts.
 
 ### When to Use
+
 - Visualize financial data, metrics dashboards
 - Create comparison charts from CSV data
 - Generate progress tracking visualizations
@@ -116,6 +124,7 @@ Generates chart configuration JSON from structured data, supporting line, bar, p
 ### How to Invoke
 
 **In Agent Chat:**
+
 ```
 You: Create a bar chart comparing Q1 vs Q2 revenue by region
 
@@ -130,6 +139,7 @@ Result:
 ```
 
 **In Code (TypeScript):**
+
 ```typescript
 const chart = await agentTools.execute('data_viz', {
   data: [
@@ -153,6 +163,7 @@ const chart = await agentTools.execute('data_viz', {
 ```
 
 ### Governance Controls
+
 - ✅ Read-only — data is never modified
 - ✅ Chart configs validated against schema
 - ✅ No executable code in output
@@ -164,9 +175,11 @@ const chart = await agentTools.execute('data_viz', {
 ## Skill 3: Document Parser (AGT-011)
 
 ### What It Does
+
 Parses documents (PDF, CSV, TXT, images) and extracts structured data based on a schema.
 
 ### When to Use
+
 - Extract financial data from uploaded PDF reports
 - Parse CSV files for analysis
 - Extract text from images (OCR)
@@ -175,6 +188,7 @@ Parses documents (PDF, CSV, TXT, images) and extracts structured data based on a
 ### How to Invoke
 
 **In Agent Chat:**
+
 ```
 You: [Uploads quarterly_report.pdf] Extract the revenue table from this report
 
@@ -189,6 +203,7 @@ Result:
 ```
 
 **In Code (TypeScript):**
+
 ```typescript
 const parsed = await agentTools.execute('doc_parse', {
   content: fileBuffer,  // ArrayBuffer or base64
@@ -205,6 +220,7 @@ const parsed = await agentTools.execute('doc_parse', {
 ```
 
 ### Governance Controls
+
 - ✅ PII detection runs on all extracted text
 - ✅ File size limits enforced (max 10 MB)
 - ✅ Supported formats validated (rejects executables)
@@ -216,9 +232,11 @@ const parsed = await agentTools.execute('doc_parse', {
 ## Skill 4: Agentic Loop Controller (AGT-012) ⚠️ R3
 
 ### What It Does
+
 Manages multi-step autonomous task execution. Think of it as a "cruise control" for building features — the agent works through a list of tasks, commits progress via git, and can resume across sessions.
 
 ### When to Use
+
 - Building a large feature with 10+ subtasks
 - Automated refactoring across many files
 - Test generation for an entire module
@@ -231,6 +249,7 @@ This skill operates autonomously and modifies files. **You must explicitly appro
 ### How to Invoke
 
 **In Agent Chat:**
+
 ```
 You: Build the user authentication module. Here's the spec: [uploads auth_spec.md]
 
@@ -260,6 +279,7 @@ Agent: [Begins agentic loop...]
 ```
 
 **In Code (TypeScript):**
+
 ```typescript
 const loop = await agentTools.execute('agentic_loop', {
   taskSpec: authSpecContent,
@@ -277,6 +297,7 @@ const loop = await agentTools.execute('agentic_loop', {
 ```
 
 ### Security Model
+
 ```
 ┌─────────────────────────────────────┐
 │  OS-Level Sandbox                   │
@@ -299,6 +320,7 @@ const loop = await agentTools.execute('agentic_loop', {
 ```
 
 ### Governance Controls
+
 - ✅ Iteration limit mandatory (no infinite loops)
 - ✅ Bash command allowlist enforced
 - ✅ File operations restricted to project directory
@@ -313,9 +335,11 @@ const loop = await agentTools.execute('agentic_loop', {
 ## Skill 5: Browser Automation (AGT-013) ⚠️ R3
 
 ### What It Does
+
 Controls a web browser through Playwright. Can navigate pages, read DOM elements, fill forms, click buttons, scroll, search text, and take screenshots.
 
 ### When to Use
+
 - End-to-end testing of web applications
 - Scraping public data from websites
 - Verifying deployment results
@@ -328,6 +352,7 @@ Browser automation MUST run in a Docker container. Never on your bare machine.
 ### How to Invoke
 
 **In Agent Chat:**
+
 ```
 You: Test the login page at http://localhost:3000/login
 
@@ -345,6 +370,7 @@ Agent (Builder): [Invokes AGT-013 in container]
 ```
 
 **In Code (TypeScript):**
+
 ```typescript
 const result = await agentTools.execute('browser_auto', {
   url: 'http://localhost:3000/login',
@@ -363,6 +389,7 @@ const result = await agentTools.execute('browser_auto', {
 ```
 
 ### Safety Rules
+
 | Rule | Enforcement |
 |------|------------|
 | Container isolation | Docker with XVFB virtual display |
@@ -377,9 +404,11 @@ const result = await agentTools.execute('browser_auto', {
 ## Skill 6: MCP Server Connector (AGT-014)
 
 ### What It Does
+
 Connects to external [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) servers to discover and invoke third-party tools dynamically.
 
 ### When to Use
+
 - Integrating external databases, APIs, or services
 - Connecting to specialized AI tools (code analysis, search engines)
 - Dynamic tool discovery without hardcoding integrations
@@ -387,6 +416,7 @@ Connects to external [Model Context Protocol (MCP)](https://modelcontextprotocol
 ### How to Invoke
 
 **In Agent Chat:**
+
 ```
 You: Connect to the GitHub MCP server and list my open issues
 
@@ -404,6 +434,7 @@ Result:
 ```
 
 **In Code (TypeScript):**
+
 ```typescript
 const result = await agentTools.execute('mcp_connect', {
   server: {
@@ -419,6 +450,7 @@ const result = await agentTools.execute('mcp_connect', {
 ```
 
 ### Governance Controls
+
 - ✅ Server must be in the approved server list
 - ✅ Connection timeout enforced (default 15s)
 - ✅ Tool schema validated before invocation
@@ -462,21 +494,27 @@ What do you need?
 These skills work best together. Common combinations:
 
 ### Document Analysis Pipeline
+
 ```
 AGT-011 (Parse PDF) → AGT-010 (Visualize data) → AGT-009 (Search for context)
 ```
+
 Upload a financial report → Extract tables → Create charts → Search knowledge base for comparisons.
 
 ### Automated Build Workflow
+
 ```
 AGT-009 (Search specs) → AGT-012 (Agentic loop) → AGT-013 (Browser test)
 ```
+
 Retrieve requirements → Build feature step-by-step → Verify in browser.
 
 ### Tool Integration Pipeline
+
 ```
 AGT-014 (MCP connect) → AGT-011 (Parse results) → AGT-010 (Visualize)
 ```
+
 Connect to external API → Parse response data → Create dashboard chart.
 
 ---

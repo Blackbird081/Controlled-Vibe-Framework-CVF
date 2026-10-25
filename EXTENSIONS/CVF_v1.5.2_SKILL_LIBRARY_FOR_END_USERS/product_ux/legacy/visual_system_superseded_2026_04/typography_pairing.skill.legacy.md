@@ -20,12 +20,14 @@ Không yêu cầu.
 Chọn cặp font (heading + body) phù hợp cho sản phẩm, kèm Google Fonts URL, CSS import, và Tailwind config. Dựa trên 57+ font pairings đã được curate.
 
 **Khi nào nên dùng:**
+
 - Bắt đầu dự án mới, chưa chọn font
 - Redesign typography hiện tại
 - Cần font pairing phù hợp ngành/mood cụ thể
 - Optimize readability cho content-heavy sites
 
 **Không phù hợp khi:**
+
 - Đã có brand guidelines với font cố định
 - Dùng custom/proprietary fonts
 
@@ -135,6 +137,7 @@ ALTERNATIVES:
 - [ ] Phù hợp ngành/mood
 
 **Red flags (cần Reject):**
+
 - ⚠️ Dùng > 3 fonts (performance)
 - ⚠️ Heading + body quá giống → thiếu hierarchy
 - ⚠️ Font không support Vietnamese characters
@@ -166,7 +169,8 @@ ALTERNATIVES:
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 Mood: Playful, friendly, startup
 Ngành: EdTech SaaS
@@ -174,7 +178,8 @@ Content: Landing page + dashboard
 Language: Vietnamese + English
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 Heading: Space Grotesk (Sans) — Geometric, techy, playful
 Body: Inter (Sans) — Ultra-readable, variable weight

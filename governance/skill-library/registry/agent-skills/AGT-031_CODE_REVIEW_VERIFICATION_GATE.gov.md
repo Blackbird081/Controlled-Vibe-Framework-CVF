@@ -42,6 +42,7 @@ Systematic code review methodology enforcing **technical rigor over social perfo
 | "I completely agree" | "After reviewing: [technical assessment]" |
 
 **Feedback Source Handling**
+
 ```
 Who gave feedback?
 │
@@ -62,6 +63,7 @@ Who gave feedback?
 ```
 
 **YAGNI Check Protocol** — before implementing any "suggested improvement":
+
 1. Grep for actual usage of the suggested pattern
 2. Verify the problem actually exists (not theoretical)
 3. If no evidence of problem → don't implement
@@ -70,6 +72,7 @@ Who gave feedback?
 ### Practice 2: Requesting Review
 
 **When to Request**
+
 - After completing each task in multi-step development
 - After major feature or refactor completion
 - Before merge to main branch
@@ -77,6 +80,7 @@ Who gave feedback?
 - When stuck and need fresh perspective
 
 **Review Request Template**
+
 ```
 REVIEW REQUEST:
 ─────────────────────────
@@ -104,6 +108,7 @@ Test coverage: [what's tested, what's not]
 **The Iron Law:** NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 
 **Verification Gate Protocol**
+
 ```
 IDENTIFY the verification command needed
        │
@@ -132,6 +137,7 @@ THEN (and only then) state the claim WITH evidence
 | "Ready to deploy" | All above + security scan | Full CI pipeline pass |
 
 **Red Flags — STOP Immediately**
+
 - Using "should"/"probably"/"seems to" → STOP, run verification
 - Expressing satisfaction before running tests → STOP, run tests first
 - About to commit without verification → STOP, verify everything
@@ -218,12 +224,14 @@ SITUATION?
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] No completion claim made without fresh verification evidence (<5 min old)
 - [ ] Review requests include Base SHA and Head SHA context
 - [ ] Feedback responses contain no forbidden performative-agreement phrasing
 - [ ] Critical review findings fixed before merge
 
 **FAIL criteria:**
+
 - [ ] "Tests pass" / "Build succeeds" / "Feature complete" claimed without command output evidence
 - [ ] Performative agreement phrase ("You're absolutely right!", "Great point!") used in a feedback response
 - [ ] Cached/stale (>5 min) test result relied upon for a completion claim

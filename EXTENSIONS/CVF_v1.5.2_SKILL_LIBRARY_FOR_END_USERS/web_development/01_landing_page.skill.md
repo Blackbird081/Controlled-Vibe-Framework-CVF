@@ -18,12 +18,14 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Giới thiệu sản phẩm/dịch vụ
 - Thu leads (email, số điện thoại)
 - Bán hàng online (khóa học, ebook, SaaS...)
 - Ra mắt sản phẩm mới
 
 **Không phù hợp khi:**
+
 - Cần nhiều trang phức tạp → Dùng SaaS App
 - Cần admin panel → Dùng Dashboard
 - Chỉ cần blog → Dùng Blog/Docs
@@ -67,6 +69,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -75,7 +78,7 @@ Không yêu cầu.
 | **Mục tiêu** | Visitor làm gì sau khi xem? | ✅ | "Đăng ký học thử miễn phí" |
 | **Đối tượng** | Ai là khách hàng? | ✅ | "Nhân viên văn phòng 25-35 tuổi, muốn tăng lương" |
 | **Brand** | Đã có màu/logo chưa? | ❌ | "Chưa có, nhờ đề xuất. Tone: friendly" |
-| **Tham khảo** | Website mẫu yêu thích? | ❌ | "https://example.com - thích style này" |
+| **Tham khảo** | Website mẫu yêu thích? | ❌ | "<https://example.com> - thích style này" |
 | **Đặc biệt** | Có gì khác biệt? | ❌ | "Thêm section Before/After học viên" |
 
 ---
@@ -83,12 +86,14 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Landing page hoàn chỉnh, responsive
 - Copy/content phù hợp đối tượng
 - CTA rõ ràng, hướng tới mục tiêu
 - Style phù hợp brand (hoặc đề xuất mới)
 
 **Cấu trúc tiêu chuẩn:**
+
 ```
 ┌─────────────────────────────────────┐
 │ 1. Hero (Headline + CTA)           │
@@ -125,6 +130,7 @@ Không yêu cầu.
 - [ ] FAQ giải đáp được thắc mắc chính
 
 **Red flags (cần Reject):**
+
 - ⚠️ CTA không rõ ràng hoặc không có
 - ⚠️ Quá nhiều text, không có visual
 - ⚠️ Không responsive
@@ -156,7 +162,8 @@ Không yêu cầu.
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Sản phẩm: Khóa học Excel Mastery - từ zero đến hero trong 30 ngày
 Mục tiêu: Đăng ký học thử miễn phí (3 bài đầu)
@@ -165,7 +172,8 @@ Brand: Chưa có. Tone friendly, không quá formal
 Đặc biệt: Thêm section "Before/After" - kết quả học viên thực tế
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 Landing page với:
 - Hero: "Thành thạo Excel trong 30 ngày — Tự tin xử lý mọi báo cáo"
@@ -176,7 +184,8 @@ Landing page với:
 - FAQ: 7 câu hỏi về khóa học
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Headline: 9 từ, rõ benefit
 - ✅ CTA: xuất hiện 3 lần
 - ✅ Có Before/After section
@@ -195,6 +204,7 @@ Landing page với:
 ---
 
 ## 🔗 Related Skills
+
 - [SaaS App](./02_saas_app.skill.md)
 - [Portfolio](./05_portfolio.skill.md)
 

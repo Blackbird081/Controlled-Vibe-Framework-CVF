@@ -123,6 +123,7 @@ coverage index.
 | `ADDING_MODEL_ROUTER/CVF_MODEL_ROUTER_SPEC.md` | CONFIRMED at path | PARTIALLY_ABSORBED_NEW_VALUE: LHW17 T2 absorbed per-role routing concept; full RoutingContext/RoutingDecision interface and full decision pipeline not carried into current owner surfaces |
 
 LHW17 T2 explicit deferrals confirmed still active:
+
 - `ADDING_AI GATEWAY` family: DEFERRED_PENDING_PRIVACY_OPERATOR_AUTHORIZATION (from LHW17 GC-018 line 76)
 - `ADDING_AUDIT AGENT LAYER`: not in gateway scope; remain deferred (different family)
 
@@ -211,6 +212,7 @@ must not scope environment signal capture without a separate operator
 authorization.
 
 What C-02 rewrite must include:
+
 - Architecture boundary section referencing the 3-layer model (CVF_ARCHITECTURE.md)
   and 5-component layer model (MODEL_GATEWAY_ARCHITECTURE.md).
 - Scope decision on Execution Planner: include in boundary planning or defer
@@ -224,6 +226,7 @@ What C-02 rewrite must include:
 - Explicit re-state of AI Gateway deferral with LHW17 T2 citation.
 
 What C-02 must NOT include:
+
 - Runtime/source implementation of any strategy or registry component.
 - Provider/API calls or live proof.
 - Cost/quality claims.
@@ -234,6 +237,7 @@ What C-02 must NOT include:
 Standard: `docs/reference/CVF_KNOWLEDGE_ABSORPTION_BLINDSPOT_PREVENTION_STANDARD_2026-06-01.md`
 
 Gate 1 -- Source inventory:
+
 - `ADDING_MODEL GATEWAY/`: 12 files inventoried; all read or path-checked.
 - `ADDING_MODEL_ROUTER/`: 6 files inventoried; all read.
 - `ADDING_MINI_MODEL GATEWAY/`: 7 files inventoried; all read.
@@ -241,11 +245,13 @@ Gate 1 -- Source inventory:
   remaining 11 deferred per LHW17 T2 explicit deferral without reading content.
 
 Gate 2 -- Prior absorption evidence:
+
 - LHW17 T2 advisory and GC-018 read; 4 source files confirmed absorbed.
 - C-02 correction review read; active hold confirmed.
 - `CVF_GC018_MODEL_GATEWAY_LEGACY_ABSORPTION_COVERAGE_INDEX_2026-06-13.md` read.
 
 Gate 3 -- Detailed source files used:
+
 - Worker read 18 gateway-family files for accepted, deferred, rejected, or
   already-absorbed value. Codex reviewer remediation additionally checked
   `MODEL_GATEWAY_INTERFACE.md`, which was present in the inventory but
@@ -255,6 +261,7 @@ Gate 3 -- Detailed source files used:
   retained under the AI Gateway privacy/GDPR deferral boundary.
 
 Gate 4 -- Source families skipped:
+
 - `ADDING_AI GATEWAY/` content (11 of 12 files): deferred per LHW17 T2 explicit
   deferral; AI_GATEWAY_MINIMAL_SPEC.md read to confirm scope; privacy/GDPR risk
   maintained.
@@ -262,13 +269,16 @@ Gate 4 -- Source families skipped:
 - Broad memory/scan legacy families: not read; out of scope per GC-018.
 
 Gate 5 -- File-level accepted value:
+
 - See Accept/Defer/Reject Matrix above; 12 accepted value keys with owner-surface map.
 
 Gate 6 -- Owner-surface normalization:
+
 - All accepted values mapped to current owner surfaces in Section 5 (Current Owner
   Surface Map); gaps explicitly noted for C-02 scope decision.
 
 Gate 7 -- Cross-check:
+
 - AI Gateway family 12 files: all deferred with explicit LHW17 T2 citation. No
   content from this family was absorbed without operator authorization.
 - No accepted value overrides a current owner surface without noting the delta.
@@ -277,6 +287,7 @@ Gate 7 -- Cross-check:
 Blind-spot verdict: CLEAR
 
 Adversarial roles:
+
 - Implementer: 3 gap categories identified for C-02 rewrite scope; no implementation authorized.
 - Skeptic/Auditor: LHW17 T2 prior absorption verified; no duplication; new value is genuinely delta beyond prior advisory.
 - Product/Operator Advocate: AI Gateway deferral maintained; privacy risk preserved; no broad slow gates opened.

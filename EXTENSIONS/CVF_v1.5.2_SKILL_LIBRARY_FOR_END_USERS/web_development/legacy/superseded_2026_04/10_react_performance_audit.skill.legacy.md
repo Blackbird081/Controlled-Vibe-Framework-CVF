@@ -20,12 +20,14 @@ Không yêu cầu. Hữu ích nếu đã biết React basics.
 Audit React/Next.js apps cho render waterfalls, bundle size, Suspense boundaries, memo usage, re-render prevention, và caching strategies.
 
 **Khi nào nên dùng:**
+
 - App React/Next.js chậm, cần tìm bottleneck
 - Bundle size quá lớn
 - Components re-render không cần thiết
 - Lighthouse performance score thấp
 
 **Không phù hợp khi:**
+
 - App không dùng React/Next.js
 - Backend/API performance issues (khác skill)
 - CSS-only performance issues (dùng CSS Animation & Performance)
@@ -141,6 +143,7 @@ PRIORITY ORDER:
 - [ ] Framework-specific optimizations (Next.js: ISR, Streaming...)
 
 **Red flags (cần Reject):**
+
 - ⚠️ Generic advice ("use memo") without specific component
 - ⚠️ Không có impact estimates
 - ⚠️ Thiếu bundle analysis
@@ -168,7 +171,8 @@ PRIORITY ORDER:
 4. **Dynamic imports** — `React.lazy()` cho heavy components
 5. **Bundle analyzer** — `@next/bundle-analyzer` để visualize
 
-### Quick Wins Cheat Sheet:
+### Quick Wins Cheat Sheet
+
 ```
 1. moment → dayjs/date-fns         → -300KB
 2. lodash → lodash-es (tree-shake) → -70KB
@@ -181,7 +185,8 @@ PRIORITY ORDER:
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 Framework: Next.js 15 App Router
 Symptoms: Dashboard takes 5s to load, UI freezes on filter changes
@@ -190,7 +195,8 @@ Lighthouse Performance: 38
 Key pages: /dashboard, /products
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 Root cause: 4 sequential API calls + moment.js + no memo
 Fix 1: Parallel fetch with Suspense → LCP -2s

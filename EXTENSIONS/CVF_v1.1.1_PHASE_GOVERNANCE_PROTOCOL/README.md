@@ -19,6 +19,7 @@ CVF After v1.1.1: idea → SPEC → STATE_MACHINE → CODE → VALIDATE → GATE
 This is a **pre-runtime verification system** that validates architectural integrity before code enters the runtime environment.
 
 Current hardening status (2026-03-07):
+
 - `GovernanceExecutor` supports pluggable verification modules while preserving canonical pipeline order.
 - Executor can persist phase report + hash ledger into `GovernanceAuditLog` when audit logging is provided.
 - `artifact_integrity` now runs first in `GOVERNANCE_PIPELINE` so untrusted artifacts fail before deeper verification work starts.

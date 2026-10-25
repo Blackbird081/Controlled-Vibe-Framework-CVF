@@ -9,6 +9,7 @@ docType: reference
 Date: 2026-06-21
 
 Authority:
+
 - Work order: `docs/work_orders/CVF_WO_MPI_T1_MEMORY_PLANE_FRONT_DOOR_MAP_2026-06-21.md`
 - GC-018 baseline: `docs/baselines/CVF_GC018_MPI_T1_MEMORY_PLANE_FRONT_DOOR_MAP_2026-06-21.md`
 - Dependency release: `docs/reviews/CVF_MPI_T0_INDEX_LEGACY_MEMORY_GRAPH_RECHECK_COMPLETION_2026-06-21.md` (CLOSED_PASS_BOUNDED)

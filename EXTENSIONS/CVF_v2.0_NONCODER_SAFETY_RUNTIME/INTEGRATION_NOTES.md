@@ -12,6 +12,7 @@
 ## 2. Does NOT Bypass the Kernel
 
 The central design principle:
+
 ```
 v2.0 is an interface. Not a shortcut.
 All executions still go through the full v1.8+v1.9 kernel pipeline.

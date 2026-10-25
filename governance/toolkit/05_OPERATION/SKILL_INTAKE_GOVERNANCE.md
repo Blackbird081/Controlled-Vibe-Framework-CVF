@@ -74,7 +74,8 @@ Use this priority order to assign the correct domain:
 3. **Cross-domain** — if the skill serves 2+ domains equally, assign to the one where it provides the *most unique value*.
 4. **New domain only if** — the skill represents a genuinely new functional area with at least **5+ skills** to justify a new domain folder.
 
-### Existing domains (as of v1.5.2):
+### Existing domains (as of v1.5.2)
+
 `ai_ml_evaluation` | `app_development` | `business_analysis` | `content_creation` | `finance_analytics` | `hr_operations` | `legal_contracts` | `marketing_seo` | `product_ux` | `security_compliance` | `technical_review` | `web_development`
 
 ---
@@ -133,7 +134,8 @@ All skills must include these 15 sections validated by `validate_skills.py`:
 
 Every skill integrated into the library **MUST** have a corresponding Template entry for full bidirectional navigation.
 
-### Steps:
+### Steps
+
 1. Create the Template in the appropriate `src/lib/templates/*.ts` file
 2. Add the Template↔Skill mapping to `src/lib/skill-template-map.ts`
 3. Verify the "📚 View related Skill" and "📝 Use Template" links work in the Web UI
@@ -174,6 +176,7 @@ governance/skill-library/uat/results/UAT-{domain}-{skill_filename_without_extens
 ```
 
 Examples:
+
 - `UAT-app_development-01_vibe_to_spec.md`
 - `UAT-product_ux-04_grandma_ux_test.md`
 - `UAT-finance_analytics-09_financial_trend_predictor.md`
@@ -219,6 +222,7 @@ git push origin main
 ```
 
 Where:
+
 - `nn` = zero-padded 2-digit sequence number within the domain (01, 02...)
 - `skill_identifier` = snake_case, descriptive, max 4 words
 

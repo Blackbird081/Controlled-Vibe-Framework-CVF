@@ -1,4 +1,5 @@
 # CVF_ARCHITECTURE_OVERVIEW — v1.1
+
 Version: 1.1 | Status: STABLE | Layer: Architecture | Compatible: v1.0 baseline (additive)
 
 - CVF là kiến trúc kiểm soát hành vi AI (control-first), không phải prompt pack.

@@ -1,4 +1,5 @@
 # CVF Non-Coder Value Measurement Standard
+
 Memory class: POINTER_RECORD
 
 > Date: 2026-04-14

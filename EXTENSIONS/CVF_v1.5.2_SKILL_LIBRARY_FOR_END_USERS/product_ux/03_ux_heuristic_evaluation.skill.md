@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá UI/UX dựa trên Nielsen's 10 Usability Heuristics và các principles khác. Nhanh chóng identify usability issues mà không cần user testing.
 
 **Khi nào nên dùng:**
+
 - Review UI design trước development
 - Audit sản phẩm hiện có
 - Trước user testing (đã fix obvious issues)
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,60 +80,70 @@ Không yêu cầu.
 ## ✅ Checklist - Nielsen's 10 Heuristics
 
 ### 1. Visibility of System Status
+
 - [ ] System có show current state?
 - [ ] Loading indicators có visible?
 - [ ] Progress feedback cho long operations?
 - [ ] Success/error messages có clear?
 
 ### 2. Match Between System and Real World
+
 - [ ] Language có familiar với users?
 - [ ] Icons có intuitive?
 - [ ] Metaphors có phù hợp?
 - [ ] Information order có logical (real-world)?
 
 ### 3. User Control and Freedom
+
 - [ ] Có Undo/Redo?
 - [ ] Có Cancel options?
 - [ ] Easy to exit unwanted states?
 - [ ] No dead ends?
 
 ### 4. Consistency and Standards
+
 - [ ] UI patterns nhất quán?
 - [ ] Terminology nhất quán?
 - [ ] Follow platform conventions?
 - [ ] Same actions, same locations?
 
 ### 5. Error Prevention
+
 - [ ] Confirmation cho destructive actions?
 - [ ] Input validation có helpful?
 - [ ] Constraints prevent errors?
 - [ ] Defaults có safe?
 
 ### 6. Recognition Rather Than Recall
+
 - [ ] Options visible (not hidden)?
 - [ ] Instructions visible when needed?
 - [ ] Context help available?
 - [ ] Recent/suggested items shown?
 
 ### 7. Flexibility and Efficiency
+
 - [ ] Có shortcuts cho experts?
 - [ ] Có personalization/customization?
 - [ ] Frequent actions có easy access?
 - [ ] Có accelerators?
 
 ### 8. Aesthetic and Minimalist Design
+
 - [ ] No irrelevant information?
 - [ ] Visual hierarchy clear?
 - [ ] Whitespace used well?
 - [ ] Every element serves purpose?
 
 ### 9. Help Users Recognize and Recover
+
 - [ ] Error messages có clear?
 - [ ] Có suggest solution?
 - [ ] Non-technical language?
 - [ ] Có recovery path?
 
 ### 10. Help and Documentation
+
 - [ ] Help có available?
 - [ ] Easy to search?
 - [ ] Task-focused?
@@ -158,7 +170,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Severity Rating Scale:
+### Severity Rating Scale
+
 | Rating | Description | Action |
 |--------|-------------|--------|
 | 0 | Not a problem | N/A |
@@ -167,7 +180,8 @@ Không yêu cầu.
 | 3 | Major problem | High priority |
 | 4 | Catastrophe | Must fix before launch |
 
-### Evaluation Template:
+### Evaluation Template
+
 ```markdown
 ## Issue #[N]
 
@@ -185,7 +199,8 @@ Không yêu cầu.
 [Attach if possible]
 ```
 
-### Quick Checklist for Each Screen:
+### Quick Checklist for Each Screen
+
 ```
 □ Can user tell where they are?
 □ Can user tell what to do?
@@ -194,7 +209,8 @@ Không yêu cầu.
 □ Is it clear what's clickable?
 ```
 
-### Heuristic Evaluation Process:
+### Heuristic Evaluation Process
+
 1. **Define scope:** Which screens to evaluate
 2. **First pass:** Go through each heuristic
 3. **Task flow:** Complete key user tasks
@@ -231,13 +247,15 @@ Sau khi hoàn thành **UX Heuristic Evaluation**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Màn hình: Inventory List (web)
 Nhiệm vụ chính: tìm SKU + lọc theo kho
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Heuristic Review
 
@@ -253,13 +271,15 @@ Nhiệm vụ chính: tìm SKU + lọc theo kho
 - Confirm modal + undo 5s
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Phân loại severity rõ ràng
 - ✅ Có action nhanh để fix
 - ✅ Mapping đúng heuristic
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [User Flow Analysis](./user_flow_analysis.skill.md)
 - [Accessibility Audit (WCAG)](./accessibility_audit.skill.md)
 
@@ -270,7 +290,7 @@ Nhiệm vụ chính: tìm SKU + lọc theo kho
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Accessibility Audit (WCAG)
 
 Sau khi hoàn thành **UX Heuristic Evaluation**, tiếp tục với:
 → [Accessibility Audit (WCAG)](./accessibility_audit.skill.md)
@@ -278,3 +298,5 @@ Sau khi hoàn thành **UX Heuristic Evaluation**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Product & UX Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

@@ -27,6 +27,11 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+try:
+    from guard_binding_catalog import private_binding, public_required_paths, public_required_markers, require_public_projection
+except ModuleNotFoundError:
+    from governance.compat.guard_binding_catalog import private_binding, public_required_paths, public_required_markers, require_public_projection
+
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 GUARD_PATH = "governance/toolkit/05_OPERATION/CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md"
@@ -303,11 +308,15 @@ def _validate_canonical_doc(path: str, doc_type: str) -> list[dict[str, str]]:
     return violations
 
 
-def _classify(changed_paths: dict[str, list[str]]) -> dict[str, Any]:
-    missing_files = [path for path in REQUIRED_FILES if not (REPO_ROOT / path).exists()]
+def _classify(changed_paths: dict[str, list[str]], profile: str = "private") -> dict[str, Any]:
+    if profile == "public":
+        require_public_projection(REPO_ROOT)
+    required_files = public_required_paths(REQUIRED_FILES) if profile == "public" else REQUIRED_FILES
+    required_markers = public_required_markers(REQUIRED_MARKERS) if profile == "public" else REQUIRED_MARKERS
+    missing_files = [path for path in required_files if not (REPO_ROOT / path).exists()]
 
     marker_violations: dict[str, list[str]] = {}
-    for path, markers in REQUIRED_MARKERS.items():
+    for path, markers in required_markers.items():
         text = _read_text(path)
         missing_markers = [marker for marker in markers if marker not in text]
         if missing_markers:
@@ -315,12 +324,14 @@ def _classify(changed_paths: dict[str, list[str]]) -> dict[str, Any]:
 
     relevant_changed_files = [
         path for path in changed_paths
-        if path in REQUIRED_FILES or path == THIS_SCRIPT_PATH
+        if path in required_files or path == THIS_SCRIPT_PATH
     ]
 
     canonical_doc_reports: list[dict[str, Any]] = []
     canonical_doc_violations: list[dict[str, str]] = []
     for path, statuses in changed_paths.items():
+        if profile == "public" and private_binding(path):
+            continue  # Private review/runtime packets are not public normative proof.
         doc_type = _classify_doc_type(path, statuses)
         if doc_type is None:
             continue
@@ -335,7 +346,7 @@ def _classify(changed_paths: dict[str, list[str]]) -> dict[str, Any]:
     compliant = not missing_files and not marker_violations and not canonical_doc_violations
 
     return {
-        "requiredFileCount": len(REQUIRED_FILES),
+        "requiredFileCount": len(required_files),
         "missingFiles": missing_files,
         "missingFileCount": len(missing_files),
         "markerViolations": marker_violations,
@@ -345,6 +356,7 @@ def _classify(changed_paths: dict[str, list[str]]) -> dict[str, Any]:
         "canonicalDocReports": canonical_doc_reports,
         "canonicalDocViolations": canonical_doc_violations,
         "canonicalDocViolationCount": len(canonical_doc_violations),
+        **({"profile": "public", "privateEvidenceNotApplicable": "Private session/review/workline payload validation is not assessed; normative files, markers and registry contracts remain enforced.", "claimBoundary": "PUBLIC_NORMATIVE_CONTRACT_ONLY_NOT_PRIVATE_EVIDENCE_OR_RUNTIME_PROOF"} if profile == "public" else {}),
         "compliant": compliant,
         "changedFiles": list(changed_paths.keys()),
     }
@@ -411,6 +423,7 @@ def main() -> int:
     parser.add_argument("--enforce", action="store_true", help="Return non-zero (exit 2) when the GC-027 chain is incomplete or misaligned")
     parser.add_argument("--json", action="store_true", help="Print JSON report to stdout instead of text")
     parser.add_argument("--write-report", default=None, help="Optional output path for JSON report file")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
 
     base, head, base_source = _resolve_range(args.base, args.head)
@@ -438,7 +451,7 @@ def main() -> int:
     worktree_map = _get_worktree_name_status()
     merged = _merge_changed_maps(changed_map, worktree_map)
 
-    classified = _classify(merged)
+    classified = _classify(merged, args.profile)
     report = {
         "timestamp": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "range": {"base": base, "head": head, "baseSource": base_source},
@@ -453,7 +466,7 @@ def main() -> int:
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    if args.json:
+    if args.json or args.profile == "public":
         print(json.dumps(report, indent=2, ensure_ascii=False))
     else:
         _print_report(report, base, head, base_source)

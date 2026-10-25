@@ -19,20 +19,25 @@ CVF 1.8 role:   Builds the Control Kernel that v1.9 and v2.0 will depend on.
 ## Control Kernel Components (v1.8)
 
 ### 1. Execution Lifecycle Controller
+
 Every action passes through:
+
 ```
 INTENT → ROLE_VALIDATION → RISK_SCORING → SCOPE_CHECK
 → REASONING_GATE → MUTATION_SANDBOX → VERIFICATION → COMMIT/ROLLBACK
 ```
 
 ### 2. Phase Isolation Engine
+
 - Analysis phase and Mutation phase are completely separated
 - Cannot reason during mutation
 - Cannot mutate during reasoning
 - Contract per phase (input/output spec enforced)
 
 ### 3. Deterministic Mutation Sandbox
+
 Every change has:
+
 - Pre-mutation snapshot
 - Impact calculation
 - Mutation budget limit
@@ -41,13 +46,16 @@ Every change has:
 AI proposes → Kernel applies. AI never directly modifies.
 
 ### 4. Governance Brain
+
 Manages:
+
 - Risk scorer (formula-based, not heuristic)
 - Severity matrix
 - Escalation logic (L0–L3 tiers)
 - Autonomy matrix (per mode × per role)
 
 ### 5. Stability & Elegance Monitor
+
 - Drift Monitor: cross-execution trend analysis
 - Stability Index: auto-regulates autonomy level
 - Elegance Guard: structural quality check at VERIFICATION

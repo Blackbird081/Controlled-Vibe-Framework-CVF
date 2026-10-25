@@ -1,7 +1,7 @@
 # 🗺️ CVF CORE KNOWLEDGE BASE — Architectural Map
 
 > **Developed by Tien - Tan Thuan Port@2026**
-
+>
 > **Loại tài liệu:** Governance Reference (Permanent)
 > **Mục đích:** Bản đồ kiến trúc toàn diện của CVF gốc.
 > Dùng để **định vị nhanh** bất kỳ extension/version/layer mới vào đúng chỗ trong cấu trúc,
@@ -9,7 +9,7 @@
 >
 > **Phiên bản hiện tại:** v4.0.0 Runtime | **Cập nhật:** 2026-04-21
 > **Nguồn xác minh:** GitHub repo + README.md + ARCHITECTURE.md + live evidence packet + provider lane receipts
-
+>
 > **Current evidence posture:** CVF retains historical Alibaba provider-lane proof, but the current `qwen-flash` target awaits fresh live compatibility proof; DeepSeek `deepseek-chat` remains certified. Release-quality governance claims require `python scripts/run_cvf_release_gate_bundle.py --json`; mock mode is UI-only.
 
 ---
@@ -32,6 +32,7 @@ CVF = Governance Framework (Rules + Process + Tools)
 | **License** | CC BY-NC-ND 4.0 |
 
 ### CVF IS / IS NOT
+
 | CVF IS | CVF IS NOT |
 |--------|-----------|
 | Governance framework | AI model / AI tool |
@@ -357,6 +358,7 @@ or IDE integration claims.
 | [`EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/README.md`](../EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/README.md) | MCP Server usage guide |
 | [`governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md`](../governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md) | Doctrine-first / governance-first absorption |
 | [`governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md`](../governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md) | `TRUSTED_FOR_VALUE_PROOF` admission boundary |
+
 Guard registry marker set: `CVF_ACTIVE_ARCHIVE_GUARD.md`, `CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md`, `CVF_ADR_GUARD.md`, `CVF_AGENT_HANDOFF_GUARD.md`, `CVF_AGENT_HANDOFF_TRANSITION_GUARD.md`, `CVF_AGENT_REVIEW_ANTI_COLLUSION_GUARD.md`, `CVF_ARCHITECTURE_CHECK_GUARD.md`, `CVF_BARREL_SMOKE_OWNERSHIP_GUARD.md`, `CVF_BASELINE_UPDATE_GUARD.md`, `CVF_BATCH_CONTRACT_DETERMINISM_GUARD.md`, `CVF_BOARDROOM_RUNTIME_GUARD.md`, `CVF_BUG_DOCUMENTATION_GUARD.md`, `CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md`, `CVF_CAPABILITY_INTAKE_PIPELINE_GUARD.md`, `CVF_CONFORMANCE_EXECUTION_PERFORMANCE_GUARD.md`, `CVF_CONFORMANCE_TRACE_ROTATION_GUARD.md`, `CVF_CONTINUATION_CHAIN_GUARD.md`, `CVF_CORE_GUARD_SELF_PROTECTION_GUARD.md`, `CVF_CORPUS_COMPLETENESS_AND_REPORT_INTEGRITY_GUARD.md`, `CVF_CORPUS_INTELLIGENCE_CLASSIFICATION_GUARD.md`, `CVF_CORPUS_TO_KNOWLEDGE_MAP_RECONCILIATION_GUARD.md`, `CVF_DEPTH_AUDIT_GUARD.md`, `CVF_DIAGRAM_VALIDATION_GUARD.md`, `CVF_DOCUMENT_NAMING_GUARD.md`, `CVF_DOCUMENT_STORAGE_GUARD.md`, `CVF_EXECUTE_ROUTE_STEP_SEQUENCE_GUARD.md`, `CVF_EXTENSION_PACKAGE_CHECK_GUARD.md`, `CVF_EXTENSION_VERSIONING_GUARD.md`, `CVF_FAST_LANE_GOVERNANCE_GUARD.md`, `CVF_GC051_CORPUS_SCAN_REGISTRY_GUARD.md`, `CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md`, `CVF_GOVERNED_FILE_SIZE_GUARD.md`, `CVF_GOVERNED_PACK_CONTRACT_GUARD.md`, `CVF_GUARD_AUTHORING_STANDARD_GUARD.md`, `CVF_GUARD_REGISTRY_GUARD.md`, `CVF_INCREMENTAL_TEST_LOG_ROTATION_GUARD.md`, `CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md`, `CVF_MARKDOWN_STRUCTURAL_COMPLETENESS_GUARD.md`, `CVF_MEMORY_GOVERNANCE_GUARD.md`, `CVF_MULTI_AGENT_REVIEW_DOC_GUARD.md`, `CVF_PREPUBLIC_P3_READINESS_GUARD.md`, `CVF_PRODUCT_VALUE_VALIDATION_GUARD.md`, `CVF_PROGRESS_TRACKER_SYNC_GUARD.md`, `CVF_PUBLIC_SURFACE_MAINTAINABILITY_GUARD.md`, `CVF_PYTHON_AUTOMATION_SIZE_GUARD.md`, `CVF_REPOSITORY_EXPOSURE_CLASSIFICATION_GUARD.md`, `CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION_GUARD.md`, `CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md`, `CVF_SHARED_BATCH_HELPER_ADOPTION_GUARD.md`, `CVF_STRUCTURAL_CHANGE_AUDIT_GUARD.md`, `CVF_SURFACE_SCAN_CONTINUITY_GUARD.md`, `CVF_TEMPLATE_SKILL_STANDARD_GUARD.md`, `CVF_TEST_DEPTH_CLASSIFICATION_GUARD.md`, `CVF_TEST_DOCUMENTATION_GUARD.md`, `CVF_TEST_PARTITION_OWNERSHIP_GUARD.md`, `CVF_WORKSPACE_ISOLATION_GUARD.md`
 
 ---
@@ -401,6 +403,7 @@ Guard registry marker set: `CVF_ACTIVE_ARCHIVE_GUARD.md`, `CVF_ACTIVE_WINDOW_REG
 > **Không tư ý đặt tên version, layer, hay guard mới.**
 
 **Version naming:**
+
 ```
 Đúng:  CVF_v[MAJOR].[MINOR]_[TEN_VIET_HOA]
          ví dụ: CVF_v1.8_SAFETY_HARDENING
@@ -408,6 +411,7 @@ Guard registry marker set: `CVF_ACTIVE_ARCHIVE_GUARD.md`, `CVF_ACTIVE_WINDOW_REG
 ```
 
 **Layer naming:**
+
 ```
 Đúng:  LAYER [N] — [MÔ TẢ CHỤC NĂNG]
          ví dụ: LAYER 5 — ADAPTER HUB
@@ -415,6 +419,7 @@ Guard registry marker set: `CVF_ACTIVE_ARCHIVE_GUARD.md`, `CVF_ACTIVE_WINDOW_REG
 ```
 
 **Guard naming:**
+
 ```
 ĐúNG: CVF_[MỤC_ĐÍCH]_GUARD.md
         ví dụ: CVF_ARCHITECTURE_CHECK_GUARD.md
@@ -422,6 +427,7 @@ Guard registry marker set: `CVF_ACTIVE_ARCHIVE_GUARD.md`, `CVF_ACTIVE_WINDOW_REG
 ```
 
 **Document naming (long-term records in `docs/` / `governance/`):**
+
 ```
 ĐúNG: CVF_[MỤC_ĐÍCH]_[PHẠM_VI]_[YYYY-MM-DD].md
         ví dụ: CVF_EXECUTIVE_REVIEW_BASELINE_2026-03-06.md
@@ -434,6 +440,7 @@ SAI:   roadmap_latest.md / final_review.md / danh_gia_moi.md
 `GET_STARTED.md`, `VERSIONING.md`, `VERSION_COMPARISON.md`
 
 **Document storage placement (new long-term docs):**
+
 ```
 reference/    = authoritative long-lived reference docs
 assessments/  = assessments, audits, reassessments
@@ -445,6 +452,7 @@ reviews/      = review archives by module or scope
 **Quy tắc cứng:** Không tạo hồ sơ dài hạn mới trực tiếp ở `docs/` root nếu không có phê duyệt rõ ràng.
 
 **Governance additions:** Phải với:
+
 - Scope rõ ràng (trigger condition, what it covers)
 - Không duplicate guard đã tồn tại
 - ADR entry vì mang ý nghĩa architectural decision
@@ -456,12 +464,14 @@ reviews/      = review archives by module or scope
 > **Quy tắc:** Mỗi khi version/layer mới được implement hoặc nâng cấp, **phải cập nhật** Section II của `CVF_CORE_KNOWLEDGE_BASE.md` và `docs/reference/CVF_MODULE_INVENTORY.md` ngay lập tức.
 
 **Cụ thể phải update:**
+
 - **Section II** (Layer Diagram): thêm version mới vào đúng layer, ghi trạng thái (Spec/Implemented)
 - **`docs/reference/CVF_MODULE_INVENTORY.md`**: cập nhật trạng thái, folder, owner
 - **Owner quality/release docs**: thêm test-count hoặc release evidence mới khi có
 - **Header**: cập nhật version hiện tại
 
 **Tại sao bắt buộc:**
+
 - File này là **base cho tất cả lần bổ sung sau** — nếu không update, contributor sau sẽ đề xuất dựa trên thông tin cũ
 - Governance check sẽ dẫn vào file này — nếu file lỗi thời thì governance cũng sai theo
 - Giữ tính **liên tục** và **tự cập nhật** — không cần nhớ, chỉ cần follow rule
@@ -542,3 +552,5 @@ Touched governed files near threshold must be split, rotated, archived, or
 materially reduced in the same batch before closure.
 
 Text Encoding Exception: pre-existing non-ASCII text preserved unchanged; the QTDM-01 migration edited only the ASCII deprecated model identifier.
+
+- [CVF_WORKFLOW_ORCHESTRATION_GUARD.md](../governance/toolkit/05_OPERATION/CVF_WORKFLOW_ORCHESTRATION_GUARD.md)

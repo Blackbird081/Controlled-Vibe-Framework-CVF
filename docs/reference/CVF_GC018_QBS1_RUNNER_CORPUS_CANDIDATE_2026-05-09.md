@@ -5,6 +5,7 @@ Status: AUTHORIZED - PLANNING PACKET COMPLETE / SCORED RUN BLOCKED
 Date: 2026-05-09
 Track: QBS-1 Runner And Corpus Planning
 Parent methodology:
+
 - `docs/reference/CVF_QUALITY_BENCHMARK_SUITE_CRITERIA_V2_FINAL_2026-05-09.md`
 - public methodology commit `7a05cbd Tighten QBS public benchmark methodology`
 Review:
@@ -79,4 +80,3 @@ Review:
   - provider-cost benchmark execution;
   - family-level public quality claims;
   - public QBS score claim.
-

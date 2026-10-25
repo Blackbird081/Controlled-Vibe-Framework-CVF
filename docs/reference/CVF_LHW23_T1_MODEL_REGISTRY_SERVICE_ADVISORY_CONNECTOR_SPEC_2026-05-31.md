@@ -40,6 +40,7 @@ Source: `.private_reference/legacy/CVF_Important/ADDING_MODEL_ROUTER/CVF_MODEL_R
    ```text
    Task → Required Capability → Query Model Registry → Selected Model
    ```
+
 2. **Metadata & Capabilities Indexing**: Models declare their supported capabilities (such as code, reasoning, vision, embedding, stream) so the router can resolve compatible candidates dynamically.
 3. **Dynamic Availability**: Tracks whether a model is up or down, real-time latency, and real-time cost changes.
 4. **Versioning & Rollback**: Enables tracking model versions and rolling back automatically to fallback models upon failure.

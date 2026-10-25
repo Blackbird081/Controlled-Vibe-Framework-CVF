@@ -81,8 +81,9 @@ export function useHtmlBuildAttempts({ initialResult, exportEndpoint, prepareJob
   const disposed = useRef(false);
   useEffect(() => {
     disposed.current = false;
+    const ownedControllers = controllers.current;
     return () => { disposed.current = true; latestAttempt.current += 1;
-      for (const controller of controllers.current.values()) controller.abort(); };
+      for (const controller of ownedControllers.values()) controller.abort(); };
   }, []);
   const stop = useCallback(() => {
     const pending = pendingRequest.current;

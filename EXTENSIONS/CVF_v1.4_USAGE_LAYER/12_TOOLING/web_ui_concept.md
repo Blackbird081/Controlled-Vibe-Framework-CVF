@@ -180,6 +180,7 @@ const result = await fetch(`/api/v1/result/${response.taskId}`);
 ## Không bao gồm
 
 Web UI **không** hiển thị:
+
 - Trace / reasoning nội bộ
 - Execution details
 - Audit log

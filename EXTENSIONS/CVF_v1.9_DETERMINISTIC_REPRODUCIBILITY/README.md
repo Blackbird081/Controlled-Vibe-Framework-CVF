@@ -54,6 +54,7 @@ console.log(result.status); // 'EXACT' | 'DRIFT' | 'FAILED'
 CVF v1.9 makes every AI execution **replayable, auditable, and reproducible**.
 
 **Core principle:**
+
 ```
 AI is probabilistic. Kernel must be deterministic.
 

@@ -36,6 +36,7 @@ public release readiness.
 
 This connector is a normative documentation standard mapping W4
 `OperationalBenchmarkMetrics` failure signals + V3 `ExecutionDiagnosticClass`
+
 + WR1 `WorkflowRecoveryAction` + LHW3-T1 trend labels into reproducible
 simulation scenario packets for Orchestrator pre-run validation planning.
 
@@ -66,9 +67,9 @@ thresholds. A future simulation harness must bind them to explicit numeric
 criteria before execution. For this doc-only connector, the reproducible
 threshold criterion is:
 
-- `high`: metric rate or count is above the harness-defined failure threshold
-- `low`: metric rate is below the harness-defined success threshold
-- `none`: no metric threshold is required; the V3 class alone selects the scenario
++ `high`: metric rate or count is above the harness-defined failure threshold
++ `low`: metric rate is below the harness-defined success threshold
++ `none`: no metric threshold is required; the V3 class alone selects the scenario
 
 ---
 
@@ -80,18 +81,18 @@ invariant. Scenario packets do not extend `GovernanceEvidenceReceipt` or any
 existing receipt envelope. They do not trigger provider calls or workflow state
 changes.
 
-- `scenarioId`: unique token for this packet (doc-only)
-- `scenarioType`: one of `policy_block` | `provider_failure` | `output_drift` | `human_review` | `routing_block` | `model_failure` (doc-only)
-- `triggerMetric`: from W4 `OperationalBenchmarkMetrics` — `taskCompletionRate`, `policyViolationRate`, `retryCount`, `humanCorrectionCount`, or `none`
-- `thresholdDirection`: `high` | `low` | `none` (doc-only)
-- `thresholdCriterion`: `above harness-defined failure threshold` | `below harness-defined success threshold` | `not_applicable` (doc-only)
-- `v3DiagnosticClass`: from V3 `ExecutionDiagnosticClass`
-- `wr1RecoveryAction`: from WR1 `WorkflowRecoveryAction`
-- `lhw3TrendSignal`: from LHW3-T1 trend signal labels when applicable (doc-only)
-- `simulationSteps`: ordered planning steps for a future simulation harness (doc-only)
-- `expectedOutcome`: one-sentence expected result for Orchestrator planning (doc-only)
-- `boundaryStatement`: must state that the packet is planning-only and cannot execute simulations, trigger provider calls, change workflow state, or modify runtime behavior (doc-only)
-- `scenarioPlanningOnly`: always `true` (doc-only)
++ `scenarioId`: unique token for this packet (doc-only)
++ `scenarioType`: one of `policy_block` | `provider_failure` | `output_drift` | `human_review` | `routing_block` | `model_failure` (doc-only)
++ `triggerMetric`: from W4 `OperationalBenchmarkMetrics` — `taskCompletionRate`, `policyViolationRate`, `retryCount`, `humanCorrectionCount`, or `none`
++ `thresholdDirection`: `high` | `low` | `none` (doc-only)
++ `thresholdCriterion`: `above harness-defined failure threshold` | `below harness-defined success threshold` | `not_applicable` (doc-only)
++ `v3DiagnosticClass`: from V3 `ExecutionDiagnosticClass`
++ `wr1RecoveryAction`: from WR1 `WorkflowRecoveryAction`
++ `lhw3TrendSignal`: from LHW3-T1 trend signal labels when applicable (doc-only)
++ `simulationSteps`: ordered planning steps for a future simulation harness (doc-only)
++ `expectedOutcome`: one-sentence expected result for Orchestrator planning (doc-only)
++ `boundaryStatement`: must state that the packet is planning-only and cannot execute simulations, trigger provider calls, change workflow state, or modify runtime behavior (doc-only)
++ `scenarioPlanningOnly`: always `true` (doc-only)
 
 Minimum `simulationSteps`:
 

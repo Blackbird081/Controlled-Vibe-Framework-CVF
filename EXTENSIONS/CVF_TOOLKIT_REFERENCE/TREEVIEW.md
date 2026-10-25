@@ -1,7 +1,7 @@
 CVF TOOLKIT (Canonical Edition)
 Một framework độc lập, lâu dài, AI-agnostic, Agent-agnostic
 Dexter + Financial AI chỉ là 1 implementation.
-https://github.com/virattt/dexter
+<https://github.com/virattt/dexter>
 
 CVF làm Core Constitution
 

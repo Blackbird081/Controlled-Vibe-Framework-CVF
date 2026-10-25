@@ -59,6 +59,7 @@ wiring requires a separate GC-018.
 **What:** Per-provider status indicators with active/healthy/degraded/down states.
 
 **Source:** LHW10-T3 `providerHealthAdvisoryType`
+
 - Source path: `docs/reference/CVF_LHW10_T3_PROVIDER_HEALTH_DEGRADATION_ADVISORY_CONNECTOR_SPEC_2026-05-28.md` — S2 advisory types
 
 **Refresh cadence:** Per-call (each `/api/execute` receipt updates lane state)
@@ -74,6 +75,7 @@ indicator
 **What:** Current release gate bundle pass/fail status with last run timestamp.
 
 **Source:** W4 `OperationalBenchmarkScorecard` → `clarityStatus`
+
 - Source path: `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/operational-benchmark-suite.ts` line 75
 - Values: `clean`, `marginal`, `degraded`, `failing`, `no_data`
 
@@ -88,6 +90,7 @@ indicator
 **What:** Most recent governance evidence receipt ID, decision, and timestamp.
 
 **Source:** V3 `ExecutionDiagnostic` contract
+
 - Source path: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/execution-diagnostics.ts` lines 16–38
 - Fields: `receiptId`, `stage`, `class`, `safeMessage`
 
@@ -102,6 +105,7 @@ indicator
 **What:** Ratio of policy-blocked vs. allowed executions over the current session.
 
 **Source:** V3 `ExecutionDiagnosticClass` aggregation
+
 - Source path: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/execution-diagnostics.ts` lines 16–38
 - Classes: `policy_blocked`, `approval_required`, `routing_denied` (blocked);
   all other `live`-mode receipts (allowed)
@@ -117,6 +121,7 @@ indicator
 **What:** Estimated token consumption and cost for current session.
 
 **Source:** CB1 `budgetTier` + provider cost tier
+
 - Source path: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/budget.ts`
 - Fields: `budgetTier` (`minimal`, `standard`, `expanded`)
 
@@ -132,6 +137,7 @@ indicator
 intervention.
 
 **Source:** MA1 transfer packet `## 7. Dissent And Review Ledger` + V3 diagnostic
+
 - Source path: `docs/reference/archive/CVF_INTERNAL_MULTI_AGENT_WORK_TRANSFER_PACKET_STANDARD_2026-05-26.md` — Section 7
 
 **Refresh cadence:** Per failure event
@@ -145,6 +151,7 @@ intervention.
 **What:** Count and list of executions where G1 identity gate denied a role.
 
 **Source:** G1 identity gate — `role_resolution_denied` decision
+
 - Source path: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/execution-identity.ts`
 - LHW11-T1 `sessionGovernancePostureType` at `posture_blocked`
 
@@ -159,6 +166,7 @@ intervention.
 **What:** Count of evidence receipts awaiting export or with pending audit.
 
 **Source:** Receipt store + LHW5-T2 `artifactExportBoundaryAdvisory`
+
 - Source path: `docs/reference/archive/CVF_LHW5_ARTIFACT_EXPORT_BOUNDARY_ADVISORY_CONNECTOR_SPEC_2026-05-27.md` — S2 advisory types
 
 **Refresh cadence:** Per export event
@@ -172,6 +180,7 @@ intervention.
 **What:** Current session posture with risk level and active advisories.
 
 **Source:** LHW11-T1 `sessionGovernancePostureType` + `highestRiskAdvisory`
+
 - Source path: `docs/reference/CVF_LHW11_T1_SESSION_GOVERNANCE_POSTURE_AGGREGATOR_CONNECTOR_SPEC_2026-05-28.md` — S3 field list
 - Values: `posture_clear`, `posture_hold`, `posture_blocked`
 
@@ -187,6 +196,7 @@ LHW9-T1, LHW8-T2 advisory inputs
 **What:** Current memory continuity level advisory (L0–L3).
 
 **Source:** LHW13-T2 `memoryContinuityLevelAdvisoryType`
+
 - Source path: `docs/reference/archive/CVF_LHW13_T2_MEMORY_CONTINUITY_LEVEL_ADVISORY_CONNECTOR_SPEC_2026-05-29.md` — S3 field list
 
 **Refresh cadence:** Per memory snapshot or context change event
@@ -200,6 +210,7 @@ LHW9-T1, LHW8-T2 advisory inputs
 **What:** Current MCP tool approval posture from the admission gateway.
 
 **Source:** LHW9-T1 `mcpApprovalAdvisoryType`
+
 - Source path: `docs/reference/CVF_LHW9_T1_MCP_TOOL_APPROVAL_ADVISORY_CONNECTOR_SPEC_2026-05-28.md` — S3 field list
 
 **Refresh cadence:** Per MCP tool approval request
@@ -263,6 +274,7 @@ LHW9-T1, LHW8-T2 advisory inputs
 ## S5 — Deferred Elements (Phase B)
 
 Phase B wiring requires:
+
 - `cvf-web` governance dashboard route under `/dashboard/governance`
 - Live data aggregation from existing receipt store
 - WebSocket or polling for per-call refresh

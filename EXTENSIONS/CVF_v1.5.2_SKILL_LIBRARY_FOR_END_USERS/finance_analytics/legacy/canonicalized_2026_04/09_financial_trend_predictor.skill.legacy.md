@@ -19,11 +19,13 @@
 ## 🎯 Purpose
 
 **When to use this skill:**
+
 - Phase B (Design) — upgrading a dashboard from "static reports" to "intelligent forecasting"
 - Have ≥ 3 months of historical data and want to see future trends
 - Want to add alerts when spending or revenue approaches a danger threshold
 
 **Not suitable when:**
+
 - Fewer than 3 months of data available (results would be unreliable)
 - Complex forecasting is needed (ML models, advanced time-series) — use AGT-016
 
@@ -109,6 +111,7 @@ fig.add_trace(go.Scatter(
 ```
 
 **Auto-generated explanation:**
+
 ```
 📊 Spending Trend Forecast
 
@@ -127,6 +130,7 @@ not a guaranteed prediction. Many factors can change.
 ## 🔍 Evaluation Criteria
 
 **Accept Checklist:**
+
 - [ ] Chart has 2 distinct parts: solid line (historical) + dashed (forecast)
 - [ ] Red Zone appears when forecast ≤ 0 or exceeds threshold
 - [ ] Plain-language explanation with specific numbers
@@ -134,6 +138,7 @@ not a guaranteed prediction. Many factors can change.
 - [ ] Algorithm used is Linear Regression or Moving Average
 
 **Red Flags (Reject):**
+
 - ⚠️ Complex ML model used without explanation
 - ⚠️ No disclaimer included
 - ⚠️ Chart does not distinguish historical from forecast
@@ -161,7 +166,8 @@ not a guaranteed prediction. Many factors can change.
 
 ## 📊 Example
 
-### Sample Input:
+### Sample Input
+
 ```
 Data Type: Monthly expenses
 Historical Months: 6 months (Jan–Jun 2026)
@@ -170,13 +176,15 @@ Alert Threshold: 20,000,000 / month
 Data Source: SQLite — monthly_expenses table
 ```
 
-### Sample Output:
+### Sample Output
+
 - Plotly chart with solid line (Jan–Jun) + dashed (Jul–Sep)
 - Forecast Jul: 17.2M, Aug: 18.9M, Sep: 20.7M ⚠️ (exceeds threshold)
 - Plain-language explanation: "September 2026 is projected to exceed the threshold..."
 - Full disclaimer included
 
-### Evaluation:
+### Evaluation
+
 - ✅ Chart clearly has 2 distinct parts
 - ✅ Red Zone in September
 - ✅ Plain-language explanation with specific numbers

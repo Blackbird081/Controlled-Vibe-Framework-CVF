@@ -2,7 +2,10 @@
 
 Memory class: POLICY_RECORD
 
-Status: ACTIVE
+**Guard Class:** STATIC_SOURCE_ORDER
+**Status:** ACTIVE
+**Applies to:** selected call-site order in the existing Web execute route
+**Enforced by:** `governance/compat/check_execute_route_step_sequence.py`
 
 ## Purpose
 
@@ -31,7 +34,7 @@ strictly increasing line number in this order:
 7. `buildRouteAuditMemoryCapture(`
 8. `appendAuditEvent(` using selector `last`
 
-Detection ignores lines whose stripped content starts with `import ` or `//`.
+Detection ignores lines whose stripped content starts with `import` followed by one space, or with `//`.
 Selectors must be either `first` or `last`.
 
 ## Enforcement Surface

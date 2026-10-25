@@ -17,6 +17,7 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Review system design documents
 - Evaluate architecture decisions
 - Identify scalability concerns
@@ -24,6 +25,7 @@ Không yêu cầu.
 - Compare architecture options
 
 **Không phù hợp khi:**
+
 - Code-level review → Code Review
 - Security-specific → Security Audit
 - Performance benchmarking → Cần load testing
@@ -67,6 +69,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -82,6 +85,7 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả:**
+
 - Architecture assessment
 - Strengths và weaknesses
 - Scalability analysis
@@ -89,6 +93,7 @@ Không yêu cầu.
 - Alternative options
 
 **Cấu trúc output:**
+
 ```
 ARCHITECTURE REVIEW
 
@@ -145,6 +150,7 @@ ARCHITECTURE REVIEW
 - [ ] Scalability assessed
 
 **Red flags (cần Reject):**
+
 - ⚠️ Missing scalability analysis
 - ⚠️ Ignores stated constraints
 - ⚠️ No concrete recommendations
@@ -175,7 +181,8 @@ ARCHITECTURE REVIEW
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Architecture: E-commerce platform
 - React frontend → API Gateway → Microservices → PostgreSQL
@@ -190,7 +197,8 @@ Scale: Normal 10K, peak 100K concurrent
 Concerns: Database bottleneck during flash sales
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 ARCHITECTURE REVIEW: E-Commerce Platform
 
@@ -276,7 +284,8 @@ ARCHITECTURE REVIEW: E-Commerce Platform
    Recommendation: Start with A, plan for B
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Addresses all areas (scale, reliability, cost)
 - ✅ Specific bottlenecks identified
 - ✅ Actionable recommendations with priority
@@ -289,6 +298,7 @@ ARCHITECTURE REVIEW: E-Commerce Platform
 ---
 
 ## 🔗 Related Skills
+
 - [Code Review](./01_code_review.skill.md)
 - [Security Audit](./03_security_audit.skill.md)
 

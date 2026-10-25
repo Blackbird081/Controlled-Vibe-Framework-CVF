@@ -21,7 +21,6 @@ Adaptive Governance (policy + risk)
 ↑
 Phase Governance (development control)
 
-
 The governance layer operates **above the runtime** and enforces rules during the **system construction phase**.
 
 ---
@@ -73,7 +72,6 @@ PHASE GATE VALIDATION
 ↓
 MERGE INTO SYSTEM
 
-
 ---
 
 # Required Phase Artifacts
@@ -103,7 +101,6 @@ scenario_simulator
 phase_gate
 reports
 
-
 Each module focuses on a specific validation responsibility.
 
 ---
@@ -126,7 +123,6 @@ If any validation fails:
 
 PHASE STATUS = REJECTED
 
-
 ---
 
 # Deterministic System Construction
@@ -138,7 +134,6 @@ transitions
 guards
 terminal states
 failure paths
-
 
 This prevents hidden logic and incomplete execution flows.
 
@@ -164,7 +159,6 @@ structural_diff
 scenario_simulator
 reports
 
-
 Each module performs a specific validation responsibility.
 
 ---
@@ -179,20 +173,15 @@ It transforms AI-assisted development from:
 
 code generation
 
-
 into:
 
-
 verified system construction
-
 
 ---
 
 # Version
 
-
 CVF Phase Governance Protocol v1.0
-
 
 ---
 

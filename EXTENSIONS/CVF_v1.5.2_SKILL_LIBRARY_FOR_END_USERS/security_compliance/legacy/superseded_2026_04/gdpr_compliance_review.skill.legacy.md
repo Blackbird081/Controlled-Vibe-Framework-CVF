@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá website/app về GDPR compliance. Đảm bảo xử lý personal data đúng quy định của European Union.
 
 **Khi nào nên dùng:**
+
 - Launch sản phẩm có EU users
 - Annual compliance audit
 - Sau data breach
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,32 +80,38 @@ Không yêu cầu.
 ## ✅ Checklist - GDPR Principles
 
 ### Lawfulness, Fairness, Transparency (Art. 5)
+
 - [ ] Có legal basis cho mỗi processing activity?
 - [ ] Privacy policy có clear và accessible?
 - [ ] Users được inform về data processing?
 - [ ] Language có understandable (không legal jargon)?
 
 ### Purpose Limitation (Art. 5)
+
 - [ ] Data chỉ dùng cho stated purposes?
 - [ ] Có inform nếu purpose changes?
 - [ ] No secondary use without consent?
 
 ### Data Minimization (Art. 5)
+
 - [ ] Chỉ collect data cần thiết?
 - [ ] Không collect "just in case"?
 - [ ] Form fields có minimal?
 
 ### Accuracy (Art. 5)
+
 - [ ] Users có thể update their data?
 - [ ] Có process để keep data accurate?
 - [ ] Incorrect data được rectify/delete?
 
 ### Storage Limitation (Art. 5)
+
 - [ ] Retention periods defined?
 - [ ] Data deleted when no longer needed?
 - [ ] Có data deletion procedures?
 
 ### Integrity & Confidentiality (Art. 5)
+
 - [ ] Appropriate security measures?
 - [ ] Encryption for sensitive data?
 - [ ] Access controls implemented?
@@ -114,24 +122,29 @@ Không yêu cầu.
 ## ✅ Checklist - User Rights
 
 ### Right to Access (Art. 15)
+
 - [ ] Users có thể request their data?
 - [ ] Process to fulfill requests trong 30 days?
 - [ ] Data provided in readable format?
 
 ### Right to Rectification (Art. 16)
+
 - [ ] Users có thể correct their data?
 - [ ] Easy process to update info?
 
 ### Right to Erasure (Art. 17)
+
 - [ ] Users có thể delete their data?
 - [ ] "Delete account" option available?
 - [ ] Data deleted from backups too?
 
 ### Right to Data Portability (Art. 20)
+
 - [ ] Users có thể export their data?
 - [ ] Export trong machine-readable format (JSON/CSV)?
 
 ### Right to Object (Art. 21)
+
 - [ ] Users có thể opt-out of marketing?
 - [ ] Easy unsubscribe process?
 
@@ -140,6 +153,7 @@ Không yêu cầu.
 ## ✅ Checklist - Consent
 
 ### Valid Consent (Art. 7)
+
 - [ ] Consent là freely given?
 - [ ] Consent là specific và informed?
 - [ ] Clear affirmative action (no pre-ticked)?
@@ -147,6 +161,7 @@ Không yêu cầu.
 - [ ] Consent recorded và auditable?
 
 ### Cookie Consent
+
 - [ ] Cookie banner trước khi set cookies?
 - [ ] Option to accept/reject?
 - [ ] Granular choices (essential/analytics/marketing)?
@@ -171,7 +186,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Legal Bases for Processing:
+### Legal Bases for Processing
+
 | Basis | Example |
 |-------|---------|
 | **Consent** | Marketing emails |
@@ -181,7 +197,8 @@ Không yêu cầu.
 | **Public Task** | Government services |
 | **Legitimate Interest** | Fraud prevention |
 
-### Privacy Policy Must-Haves:
+### Privacy Policy Must-Haves
+
 ```markdown
 1. Identity of data controller
 2. Contact details (DPO if applicable)
@@ -195,7 +212,8 @@ Không yêu cầu.
 10. Right to lodge complaint with supervisory authority
 ```
 
-### Cookie Categories:
+### Cookie Categories
+
 | Category | Consent Required | Example |
 |----------|-----------------|---------|
 | Essential | No | Session, security |
@@ -203,7 +221,8 @@ Không yêu cầu.
 | Analytics | Yes | Google Analytics |
 | Marketing | Yes | Facebook Pixel, ads |
 
-### Data Subject Request Response:
+### Data Subject Request Response
+
 ```markdown
 ## DSR Response Template
 
@@ -254,7 +273,8 @@ Sau khi hoàn thành **GDPR Compliance Review**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 EU users: ~12%
 Legal basis: contract + consent
@@ -262,7 +282,8 @@ Vendors: AWS (EU), Stripe (US)
 DSAR process: chưa có
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # GDPR Review
 
@@ -277,13 +298,15 @@ DSAR process: chưa có
 - Maintain processing register (data type, purpose, retention)
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Xác định gaps cốt lõi
 - ✅ Có biện pháp phù hợp GDPR
 - ✅ Ưu tiên theo rủi ro
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Privacy Policy Audit](./privacy_policy_audit.skill.md)
 - [Terms of Service Review](./terms_of_service_review.skill.md)
 
@@ -294,7 +317,7 @@ DSAR process: chưa có
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Terms of Service Review
 
 Sau khi hoàn thành **GDPR Compliance Review**, tiếp tục với:
 → [Terms of Service Review](./terms_of_service_review.skill.md)
@@ -302,3 +325,5 @@ Sau khi hoàn thành **GDPR Compliance Review**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Security & Compliance Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

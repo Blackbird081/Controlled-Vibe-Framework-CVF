@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá chất lượng copy marketing (headlines, ads, landing pages, emails) và đề xuất cải thiện để tăng conversion rate.
 
 **Khi nào nên dùng:**
+
 - Review copy trước khi launch campaign
 - A/B test cần ý tưởng mới
 - Copy hiện tại không convert
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,30 +80,35 @@ Không yêu cầu.
 ## ✅ Checklist Đánh giá
 
 ### Clarity (Rõ ràng)
+
 - [ ] Có thể hiểu trong 3 giây đầu tiên?
 - [ ] Không có jargon phức tạp?
 - [ ] Message chính có rõ ràng?
 - [ ] Không có câu dài > 20 từ?
 
 ### Benefit-Focused (Lợi ích)
+
 - [ ] Nói về LỢI ÍCH không chỉ tính năng?
 - [ ] Giải quyết PAIN POINT của customer?
 - [ ] Có "What's in it for me?" rõ ràng?
 - [ ] Có proof/evidence hỗ trợ?
 
 ### Emotional Trigger (Cảm xúc)
+
 - [ ] Có tạo cảm xúc (urgency, curiosity, fear, desire)?
 - [ ] Power words được sử dụng?
 - [ ] Có storytelling element?
 - [ ] Có kết nối personal?
 
 ### Call to Action (CTA)
+
 - [ ] CTA có rõ ràng và nổi bật?
 - [ ] CTA có action-oriented verb?
 - [ ] Chỉ có 1 CTA chính?
 - [ ] Có urgency/scarcity nếu cần?
 
 ### Formatting (Trình bày)
+
 - [ ] Dễ scan (bullets, short paragraphs)?
 - [ ] Headlines có compelling?
 - [ ] Whitespace phù hợp?
@@ -125,7 +132,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### AIDA Formula:
+### AIDA Formula
+
 ```
 A - Attention: Hook that grabs attention
 I - Interest: Make them curious  
@@ -133,9 +141,10 @@ D - Desire: Show benefits, create want
 A - Action: Clear CTA
 ```
 
-### Headline Formulas:
+### Headline Formulas
 
 **Problem-Agitate-Solution:**
+
 ```
 Tired of [problem]? [Agitate pain]. [Solution].
 "Tired of long meetings? 5-hour meetings kill productivity. 
@@ -143,18 +152,21 @@ Try async video updates."
 ```
 
 **How To:**
+
 ```
 How to [benefit] without [pain point]
 "How to grow Instagram to 10K without posting daily"
 ```
 
 **Number + Benefit:**
+
 ```
 [Number] [Timeframe] to [Benefit]
 "7 Days to Double Your Email Open Rates"
 ```
 
-### Power Words:
+### Power Words
+
 - **Urgency:** Now, Today, Limited, Last chance
 - **Exclusivity:** Secret, Insider, VIP, Members-only
 - **Value:** Free, Save, Bonus, Guaranteed
@@ -176,7 +188,8 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Trang: Landing "StockFlow"
 Hero: "Quản lý kho dễ dàng cho mọi doanh nghiệp"
@@ -185,7 +198,8 @@ CTA: "Book demo"
 Metrics: Bounce 68%, CTR CTA 1.4%
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Copy Review
 
@@ -205,13 +219,15 @@ Clarity 6/10 → 8/10
 Proof 3/10 → 7/10
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Nêu rõ pain + proof
 - ✅ Có phương án CTA thay thế
 - ✅ Dễ test A/B
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Brand Voice Consistency](./brand_voice_consistency.skill.md)
 - [Landing Page CRO](./landing_page_cro.skill.md)
 

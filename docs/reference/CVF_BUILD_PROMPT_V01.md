@@ -71,9 +71,9 @@ Before writing any code:
 CVF_REPO_TREE_FINAL.md
 ```
 
-2. Verify the repository structure.
+1. Verify the repository structure.
 
-3. Ensure the folder structure **matches exactly**.
+2. Ensure the folder structure **matches exactly**.
 
 If any mismatch exists:
 
@@ -120,7 +120,7 @@ Each phase must complete before moving to the next.
 
 Implementation must follow these principles:
 
-### Deterministic Behavior
+## Deterministic Behavior
 
 Code should behave predictably.
 
@@ -128,7 +128,7 @@ Avoid hidden side effects.
 
 ---
 
-### Modular Design
+## Modular Design
 
 Each file should represent a clear module.
 
@@ -136,7 +136,7 @@ Avoid cross-module coupling.
 
 ---
 
-### Clear Interfaces
+## Clear Interfaces
 
 Each engine must expose clear methods.
 
@@ -151,7 +151,7 @@ evaluate()
 
 ---
 
-### Explicit Logging
+## Explicit Logging
 
 All major operations should log activity to:
 

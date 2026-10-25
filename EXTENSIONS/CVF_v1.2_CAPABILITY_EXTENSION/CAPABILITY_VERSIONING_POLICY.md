@@ -2,7 +2,7 @@
 
 Chuẩn hóa cách nâng cấp capability không phá hệ thống.
 
-2. Golden Rules
+1. Golden Rules
 
 Không silent upgrade
 
@@ -10,7 +10,7 @@ Không auto-migrate
 
 Không backward ambiguity
 
-3. Upgrade Paths
+1. Upgrade Paths
 3.1 Minor Upgrade
 
 Không đổi governance
@@ -27,7 +27,7 @@ Registry update bắt buộc
 
 Có migration note
 
-4. Forbidden Practices
+1. Forbidden Practices
 
 Overwrite contract cũ
 
@@ -35,7 +35,7 @@ Dùng cùng capability cho 2 hành vi khác nhau
 
 Cho agent tự chọn version
 
-5. Final Authority
+1. Final Authority
 
 CVF Core quyết định version hợp lệ cuối cùng.
 

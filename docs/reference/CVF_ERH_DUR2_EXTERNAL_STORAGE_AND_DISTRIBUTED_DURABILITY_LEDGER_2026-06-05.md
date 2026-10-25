@@ -88,6 +88,7 @@ readiness.
 ## Allowed-Scope Verification
 
 Allowed paths per work order:
+
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/storage-adapter.ts` ✓
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/control-plane-events.ts` ✓
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/policy-snapshot-registry.ts` ✓

@@ -43,7 +43,7 @@ Production deployment<br>với governance đầy đủ
 
 Muốn contribute<br>vào CVF
 
-**[→ Dev Guide](#-contributors)**
+**[→ Dev Guide](#%EF%B8%8F-contributors)**
 
 </td>
 </tr>
@@ -96,6 +96,7 @@ npm run dev
 ```
 
 **What to try:**
+
 1. Click "Templates" → Chọn "Simple Todo App"
 2. Fill form → Click "Generate"
 3. See 4-phase breakdown
@@ -104,6 +105,7 @@ npm run dev
 #### Option B: Manual (Core CVF)
 
 Đọc file này và làm theo:
+
 - v1.0/USAGE.md - Cách dùng CVF core
 - v1.0/phases/ - Chi tiết từng phase
 
@@ -156,6 +158,7 @@ npm run dev
    - ✅ **Reviewer:** Validate quality (Phase D)
 
 2. **Workflow:**
+
    ```
    Owner defines → Architect designs → AI builds → Reviewer validates
    ```
@@ -192,12 +195,14 @@ npm run dev
 **Evaluate if CVF fits your needs:**
 
 ✅ **Good Fit:**
+
 - Using AI for development already
 - Need governance & control
 - Want reusable skill library
 - Need audit trails
 
 ❌ **Not Yet:**
+
 - Don't use AI coding
 - Pure waterfall process
 - No bandwidth for new tools
@@ -237,6 +242,7 @@ npm run dev
 | AI Code Reuse | 40%+ | Skill usage analytics |
 
 **Scaling:**
+
 1. Pilot success → Expand to 3 teams
 2. 3 teams success → Company-wide rollout
 3. Continuous improvement based on metrics
@@ -255,6 +261,7 @@ npm run dev
 ### Want to Contribute?
 
 **We welcome:**
+
 - 📖 Documentation improvements
 - 🐛 Bug fixes
 - ✨ New features
@@ -291,7 +298,7 @@ git push origin feature/your-feature-name
 
 - 💬 [Discord](https://discord.gg/cvf) - Real-time chat
 - 🐛 [GitHub Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
-- 📧 Email: contribute@cvf.io
+- 📧 Email: <contribute@cvf.io>
 
 ---
 
@@ -345,6 +352,7 @@ git push origin feature/your-feature-name
 5. ✉️ [Email Support](mailto:support@cvf.io)
 
 **Response Times:**
+
 - Discord: Usually <2 hours
 - GitHub: Usually <24 hours
 - Email: Usually <48 hours
@@ -388,3 +396,5 @@ After getting started, here are recommended next steps:
 ---
 
 *Last updated: February 2026 · Version: 1.6.0*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

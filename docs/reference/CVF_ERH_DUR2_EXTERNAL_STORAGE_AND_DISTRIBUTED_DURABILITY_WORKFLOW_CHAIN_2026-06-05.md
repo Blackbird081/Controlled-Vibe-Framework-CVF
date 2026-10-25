@@ -94,6 +94,7 @@ Registry: `docs/reference/CVF_SYSTEM_LOOP_INTERLOCK_REGISTRY_2026-06-02.json`
 ## Claim Boundary
 
 This workflow chain proves:
+
 - Pluggable storage adapter interface is defined and wired into `control-plane-events.ts` and `policy-snapshot-registry.ts`.
 - `FileEventListAdapter` and `FileKeyValueAdapter` preserve DUR1 file-backed behavior with zero behavioral change.
 - `SQLiteEventListAdapter` and `SQLiteKeyValueAdapter` provide a local durable
@@ -103,6 +104,7 @@ This workflow chain proves:
 - Machine checker (`check_erh_external_storage_adapter.py`) enforces 18 structural checks.
 
 This workflow chain does **not** prove:
+
 - Live Redis connectivity or connection pooling.
 - Production database, distributed durability, or external storage service.
 - Multi-instance consensus (DUR3).

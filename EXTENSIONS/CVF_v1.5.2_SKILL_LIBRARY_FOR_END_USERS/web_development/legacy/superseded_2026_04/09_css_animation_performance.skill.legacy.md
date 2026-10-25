@@ -20,12 +20,14 @@ Không yêu cầu.
 Review CSS animations, transitions, và performance: GPU-accelerated properties, `prefers-reduced-motion`, duration ranges, skeleton loading, và jank prevention.
 
 **Khi nào nên dùng:**
+
 - UI có nhiều animations cần optimize
 - Performance audit (FPS drops, jank)
 - Accessibility check cho motion sensitivity
 - Review animation library usage
 
 **Không phù hợp khi:**
+
 - App không có animations
 - Backend performance issues
 
@@ -135,6 +137,7 @@ SCORE: 5/10 → Target: 8/10
 - [ ] Score + prioritized fixes
 
 **Red flags (cần Reject):**
+
 - ⚠️ Animate width/height gây reflow
 - ⚠️ Không có `prefers-reduced-motion`
 - ⚠️ Duration > 500ms cho interaction animations
@@ -162,7 +165,8 @@ SCORE: 5/10 → Target: 8/10
 4. **`animation-fill-mode: both`** — Prevent flash back
 5. **Measure first** — Chrome DevTools Performance tab trước optimize
 
-### Performance Property Cheat Sheet:
+### Performance Property Cheat Sheet
+
 ```
 ✅ FAST (GPU-accelerated):
   transform, opacity, filter, clip-path
@@ -177,14 +181,16 @@ SCORE: 5/10 → Target: 8/10
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 Code: React component with sidebar toggle + page transitions
 Framework: Framer Motion + Tailwind
 Performance: Users report lag on mobile
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 🔴 sidebar: animate width → use translateX
 🔴 no prefers-reduced-motion

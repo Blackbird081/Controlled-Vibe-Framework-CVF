@@ -10,6 +10,7 @@
 ## Before You Start
 
 You need:
+
 - A text editor (VS Code, any other)
 - An AI assistant (ChatGPT, Claude, Copilot, or the [CVF Web UI](web-ui-setup.md))
 - Python 3.10+ installed (for this tutorial's example)
@@ -176,7 +177,9 @@ Create `specs/DESIGN.md`:
 
 ## Flow
 ```
+
 CLI input → argparse → validate → db operation → format output → print
+
 ```
 
 ## How to Verify (Without Reading Code)
@@ -328,6 +331,7 @@ Congratulations! You've completed a full CVF cycle:
 | **Total** | | **~25 min** |
 
 **Without CVF**, you might have asked AI: *"Build me a bookmark manager in Python"* and spent 45 minutes going back and forth:
+
 - "No, I wanted CLI, not web"
 - "Don't use external libraries"
 - "Where does it save data?"

@@ -86,8 +86,8 @@ Single unified library with prebuilt Rust-core binary wheels:
 | Latest version | 0.11.9 |
 | Installed on this machine | 0.11.7 |
 | License | MIT (per PyPI metadata) |
-| primarySourceUrl | https://github.com/jsvine/pdfplumber |
-| PyPI page | https://pypi.org/project/pdfplumber/ |
+| primarySourceUrl | <https://github.com/jsvine/pdfplumber> |
+| PyPI page | <https://pypi.org/project/pdfplumber/> |
 | Python requirement | Python 3.8+ |
 | Runtime dependencies | pdfminer.six, Pillow, pypdfium2 |
 | System dependencies | None (pypdfium2 bundles PDFium) |
@@ -107,8 +107,8 @@ Single unified library with prebuilt Rust-core binary wheels:
 | Latest version | 1.2.0 |
 | Installed on this machine | 1.2.0 |
 | License | MIT |
-| primarySourceUrl | https://github.com/python-openxml/python-docx |
-| PyPI page | https://pypi.org/project/python-docx/ |
+| primarySourceUrl | <https://github.com/python-openxml/python-docx> |
+| PyPI page | <https://pypi.org/project/python-docx/> |
 | Python requirement | Python 3.8+ |
 | Runtime dependencies | lxml, typing_extensions |
 | System dependencies | None |
@@ -128,8 +128,8 @@ Single unified library with prebuilt Rust-core binary wheels:
 | Latest version | 1.17.0 |
 | Installed on this machine | Not installed |
 | License | MIT |
-| primarySourceUrl | https://github.com/Belval/pdf2image |
-| PyPI page | https://pypi.org/project/pdf2image/ |
+| primarySourceUrl | <https://github.com/Belval/pdf2image> |
+| PyPI page | <https://pypi.org/project/pdf2image/> |
 | Python requirement | Python 3.6+ |
 | Runtime dependencies | Pillow (Python dep only) |
 | System dependencies | **poppler** (pdftoppm, pdfinfo binaries)  --  REQUIRED at runtime |
@@ -137,7 +137,7 @@ Single unified library with prebuilt Rust-core binary wheels:
 | importProbeResult | Not installed; import would fail without install |
 | inputFormatFinding | Converts `.pdf` pages to PIL images; no direct text extraction; feeds into EasyOCR |
 | ocrLanguageMappingFinding | pdf2image has no OCR; provides images to OCR engine; N/A for language mapping |
-| Windows feasibility | CONDITIONAL  --  pdf2image Python install is clean, BUT poppler is NOT in PATH on this machine. Poppler must be installed separately and added to PATH. On Windows, poppler is typically distributed as a third-party binary (https://github.com/oschwartz10612/poppler-windows/releases). |
+| Windows feasibility | CONDITIONAL  --  pdf2image Python install is clean, BUT poppler is NOT in PATH on this machine. Poppler must be installed separately and added to PATH. On Windows, poppler is typically distributed as a third-party binary (<https://github.com/oschwartz10612/poppler-windows/releases>). |
 | ciFeasibilityVerdict | CONDITIONAL  --  poppler must be pre-installed in CI image or added as a step. Standard GitHub Actions runners do not include poppler by default on Windows; Linux runners: `apt-get install poppler-utils`. |
 
 **Windows probe result for poppler:**
@@ -153,8 +153,8 @@ Result: `INFO: Could not find files for the given pattern(s).`  --  poppler NOT 
 | Latest version | 1.7.2 |
 | Installed on this machine | Not installed |
 | License | Apache 2.0 |
-| primarySourceUrl | https://github.com/JaidedAI/EasyOCR |
-| PyPI page | https://pypi.org/project/easyocr/ |
+| primarySourceUrl | <https://github.com/JaidedAI/EasyOCR> |
+| PyPI page | <https://pypi.org/project/easyocr/> |
 | Python requirement | Python 3.6+ |
 | Runtime dependencies | torch, torchvision, opencv-python-headless, scikit-image, scipy, Pillow, numpy, and others |
 | System dependencies | None required beyond Python (PyTorch GPU optional) |
@@ -167,6 +167,7 @@ Result: `INFO: Could not find files for the given pattern(s).`  --  poppler NOT 
 | ciFeasibilityVerdict | CONDITIONAL  --  large download (PyTorch ~800MB + model weights per language). CI environment must have internet access for first model download OR models must be pre-cached in CI image. Significant impact on CI cold-start time. |
 
 **EasyOCR install size estimate:**
+
 - torch-2.12.0: ~800MB (CPU-only wheel, Windows)
 - torchvision-0.27.0: ~20MB
 - easyocr-1.7.2: ~1MB (model weights downloaded separately at runtime)
@@ -182,7 +183,7 @@ Result: `INFO: Could not find files for the given pattern(s).`  --  poppler NOT 
 | Version | N/A  --  varies by OS package manager |
 | Installed on this machine | NOT FOUND (not in PATH) |
 | License | GPL v2 |
-| primarySourceUrl | https://poppler.freedesktop.org/ ; Windows port: https://github.com/oschwartz10612/poppler-windows |
+| primarySourceUrl | <https://poppler.freedesktop.org/> ; Windows port: <https://github.com/oschwartz10612/poppler-windows> |
 | System dependencies | libpoppler (C++ library); bundled with pdftoppm, pdfinfo, pdftotext binaries |
 | installProbeResult | `where.exe pdftoppm`, `where.exe pdfinfo` -> both NOT FOUND on this machine |
 | importProbeResult | N/A  --  system binary, not Python package |
@@ -199,8 +200,8 @@ Result: `INFO: Could not find files for the given pattern(s).`  --  poppler NOT 
 | Latest version | 2.0.7 |
 | Installed on this machine | Not installed (pip install would succeed immediately) |
 | License | Python wrapper: MIT (per PyPI classifier); Rust core and SBOM: Apache-2.0. Bundled PDFium: BSD-style (PDFium license) |
-| primarySourceUrl | https://github.com/run-llama/liteparse |
-| PyPI page | https://pypi.org/project/liteparse/ |
+| primarySourceUrl | <https://github.com/run-llama/liteparse> |
+| PyPI page | <https://pypi.org/project/liteparse/> |
 | Python requirement | Python 3.10+ (classifiers confirm 3.10, 3.11, 3.12, 3.13, 3.14) |
 | Runtime dependencies | None (confirmed by dry-run: `Would install liteparse-2.0.7` only) |
 | System dependencies | Tesseract (external) for OCR; LibreOffice (optional, ~300MB) for .docx/.xlsx conversion; ImageMagick (optional) for image formats |
@@ -296,6 +297,7 @@ Based on the collected evidence:
 for Phase EX-T2 (Tier 1 digital-native extraction only).
 
 **Rationale:**
+
 1. pdfplumber and python-docx are already installed on this machine. Both pass import probes. Pure Python, no system deps, clean CI across all platforms.
 2. pdf2image Python package is clean pip install. The poppler system dependency is a one-time setup step  --  well-documented for both Ubuntu CI and Windows local.
 3. EasyOCR model download size is the largest risk. However, this only applies to Tier 2 (OCR fallback). EX-T2 scopes only Tier 1 (digital-native). EasyOCR installation and model probing belongs to EX-T3 scope.
@@ -332,7 +334,7 @@ This recommendation is bounded to EX-T2 planning. It does not claim extraction r
 | liteparse PDFium bundled | wheel contents | `liteparse/pdfium.dll` in wheel zip | wheel contents | EXISTS |
 | liteparse .docx needs LibreOffice | wheel METADATA README | "Microsoft Office (.docx, .xlsx, .pptx, etc.) - requires LibreOffice" | wheel METADATA | EXISTS |
 | liteparse Tesseract `ocr_language` | wheel METADATA README | `ocr_language="eng"`  --  Tesseract format (3-letter ISO) | wheel METADATA | EXISTS |
-| EasyOCR `vi` code | EasyOCR README language list | `vi` for Vietnamese (ISO 639-1); `en` for English | https://github.com/JaidedAI/EasyOCR (language list) | EXISTS |
+| EasyOCR `vi` code | EasyOCR README language list | `vi` for Vietnamese (ISO 639-1); `en` for English | <https://github.com/JaidedAI/EasyOCR> (language list) | EXISTS |
 | Tesseract `vie` code | Tesseract tessdata convention | `vie.traineddata` for Vietnamese; `eng.traineddata` for English | Tesseract tessdata repository convention | EXISTS |
 | pre-implementation gate | `python governance/compat/run_agent_autorun_workflow_gate.py --phase pre-implementation --base 8b6bd04d --head HEAD` | COMPLIANT: pre-implementation autorun gate passed | local | EXISTS |
 

@@ -17,11 +17,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Review ngân sách dự án hoặc phòng ban
 - Phân tích variance giữa kế hoạch và thực tế
 - Đánh giá phân bổ nguồn lực
 
 **Không phù hợp khi:**
+
 - Cần phân tích tài chính phức tạp (dùng Financial Statement Review)
 - Đánh giá đầu tư dài hạn (dùng Investment Due Diligence)
 
@@ -64,15 +66,18 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 ### 1. Budget Period
+
 ```
 Kỳ ngân sách cần review:
 VD: Q1 2026, FY2025, Jan-Mar 2026
 ```
 
 ### 2. Budget Categories
+
 ```
 Các hạng mục chi phí chính:
 VD:
@@ -83,6 +88,7 @@ VD:
 ```
 
 ### 3. Actual Spending
+
 ```
 Chi tiêu thực tế theo hạng mục:
 VD:
@@ -93,6 +99,7 @@ VD:
 ```
 
 ### 4. Business Context (Optional)
+
 ```
 Bối cảnh kinh doanh ảnh hưởng đến ngân sách:
 VD: Unexpected marketing campaign, new hire delayed
@@ -105,21 +112,25 @@ VD: Unexpected marketing campaign, new hire delayed
 AI sẽ trả về:
 
 ### 1. Variance Analysis Table
+
 | Category | Budget | Actual | Variance | % |
 |----------|--------|--------|----------|---|
 | Personnel | $120K | $115K | -$5K | -4% |
 
 ### 2. Red Flag Identification
+
 - Categories exceeding budget by >10%
 - Unusual spending patterns
 - Potential overspend risks
 
 ### 3. Reallocation Recommendations
+
 - Suggested budget adjustments
 - Carry-forward amounts
 - Next period recommendations
 
 ### 4. Executive Summary
+
 - Overall budget health score
 - Key findings (bullet points)
 - Action items
@@ -161,6 +172,7 @@ AI sẽ trả về:
 ## 📊 Ví dụ thực tế
 
 **Input:**
+
 ```
 Budget Period: Q4 2025
 Categories:
@@ -172,18 +184,23 @@ Context: Launched unexpected Black Friday campaign
 ```
 
 **Expected Analysis:**
+
 ```markdown
 
 ### Input mẫu:
 ```
+
 Mục tiêu: Hoàn thành Budget Analysis
 Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
 Ràng buộc: Deadline 2 tuần
+
 ```
 
 ### Output mẫu:
 ```
+
 Tóm tắt kết quả: Budget Analysis với khuyến nghị/ưu tiên rõ ràng.
+
 ```
 ## Variance Summary
 - Total Budget: $240K
@@ -212,6 +229,7 @@ Tóm tắt kết quả: Budget Analysis với khuyến nghị/ưu tiên rõ ràn
 ---
 
 ## 🔗 Related Skills
+
 - [Financial Statement Review](./02_financial_statement_review.skill.md)
 - [Revenue Forecast Review](./08_revenue_forecast_review.skill.md)
 

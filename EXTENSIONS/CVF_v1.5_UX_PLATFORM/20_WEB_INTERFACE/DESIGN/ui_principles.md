@@ -7,33 +7,41 @@
 ## Core Principles
 
 ### 1. Zero Friction
+
 ```
 "Từ mở app đến submit < 2 phút"
 ```
+
 - Không registration barrier
 - Không tutorial bắt buộc
 - Defaults hợp lý
 
 ### 2. Progressive Disclosure
+
 ```
 "Hiện đúng thứ cần hiện, đúng lúc cần hiện"
 ```
+
 - Basic fields hiện trước
 - Advanced options ẩn trong "More"
 - Help text on-demand
 
 ### 3. Forgiving Design
+
 ```
 "User không sợ làm sai"
 ```
+
 - Undo mọi action
 - Clear error messages
 - Auto-save drafts
 
 ### 4. Consistent Patterns
+
 ```
 "Học 1 lần, dùng mọi nơi"
 ```
+
 - Same form layout everywhere
 - Same button positions
 - Same color meanings
@@ -79,18 +87,21 @@
 ## Component States
 
 ### Buttons
+
 ```
 Default  → Hover → Active → Disabled
 [Blue]   → [Dark] → [Darker] → [Gray]
 ```
 
 ### Form Fields
+
 ```
 Empty → Focus → Filled → Error → Success
 [Gray] → [Blue border] → [Green check] → [Red border]
 ```
 
 ### Cards
+
 ```
 Default → Hover → Selected
 [White] → [Shadow] → [Blue border]

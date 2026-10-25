@@ -3,6 +3,7 @@
 **Controlled Vibe Framework (CVF)** là một framework quản lý dự án theo tinh thần *vibe coding có kiểm soát* — được thiết kế cho những người **không cần giỏi code**, nhưng **chịu trách nhiệm về chất lượng sản phẩm cuối cùng**.
 
 CVF giúp bạn:
+
 - Làm việc với AI một cách có cấu trúc
 - Kiểm soát tiến trình và quyết định
 - Tránh “vibe quá đà” dẫn đến sai hướng hoặc sản phẩm không dùng được
@@ -12,6 +13,7 @@ CVF giúp bạn:
 ## 🎯 CVF DÙNG KHI NÀO?
 
 Sử dụng CVF khi bạn:
+
 - Có **ý tưởng hoặc bài toán**, nhưng không muốn (hoặc không cần) tự viết code
 - Là **product owner, quản lý, chuyên gia nghiệp vụ**, hoặc người kiểm tra chất lượng
 - Làm việc với **AI / developer / team nhỏ**
@@ -69,7 +71,8 @@ Không có file nào “để cho đẹp”.
 
 **Không chỉnh sửa framework. Không copy rời rạc.**
 
-### Cách dùng chuẩn:
+### Cách dùng chuẩn
+
 1. Tạo một repository mới cho project của bạn
 2. Copy toàn bộ thư mục **CVF v1.0 FINAL** vào project
 3. Thực hiện theo:  

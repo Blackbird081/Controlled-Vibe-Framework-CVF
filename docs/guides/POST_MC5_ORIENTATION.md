@@ -27,12 +27,14 @@ MC5 (Master Closure 5) is the final milestone in CVF's architecture baseline com
 **Document Type**: `CLOSURE-ASSESSED`
 
 **Posture**:
+
 - CPF: **DONE-ready** (2929 tests, 0 failures)
 - GEF: **DONE (6/6)** (625 tests, 0 failures)
 - LPF: **DONE-ready (7/7)** (1465 tests, 0 failures)
 - EPF: **DONE-ready** (1301 tests, 0 failures)
 
 **Deferred Items** (intentionally future-facing, not closure gaps):
+
 - Model Gateway (provider routing) - boundary governance in CPF W8-T1 + W39-T1
 - Sandbox Runtime (physical isolation) - worker agents governed via Dispatch/PolicyGate/CommandRuntime
 
@@ -47,6 +49,7 @@ MC5 (Master Closure 5) is the final milestone in CVF's architecture baseline com
 **After W61-T1**: 100% coverage (8294 tests)
 
 **New CI Jobs** (W61-T1):
+
 - `test-cpf` (2929 tests)
 - `test-epf` (1301 tests)
 - `test-gef` (625 tests)
@@ -94,6 +97,7 @@ With MC1-MC5 complete, CVF follows a structured continuation path defined in the
 ### Immediate (W62-T1)
 
 **Track 4: Documentation Curation** (DOCUMENTATION class, no GC-018 required)
+
 - Audit sensitive content in `docs/`
 - Define `PUBLIC_DOCS_MIRROR` boundary
 - Refresh root docs to reflect CLOSURE-ASSESSED status
@@ -101,6 +105,7 @@ With MC1-MC5 complete, CVF follows a structured continuation path defined in the
 ### Short-Term
 
 **Track 3: Pre-Public Packaging** (requires GC-018 authorization)
+
 - Phase A Targets: Guard Contract, MCP Server, Deterministic Reproducibility
 - Add `exportReadiness` status and documentation
 - Define packaging boundaries
@@ -108,6 +113,7 @@ With MC1-MC5 complete, CVF follows a structured continuation path defined in the
 ### Future (post May 2026)
 
 **Track 5: Deferred Architecture** (only if required)
+
 - Model Gateway (provider routing)
 - Sandbox Runtime (physical isolation)
 - Agent Definition Registry L0-L4 consolidation
@@ -195,6 +201,7 @@ If you're joining CVF post-MC5:
 If you worked on CVF pre-MC5:
 
 **What Changed**:
+
 - ✅ MC1-MC5 architecture baseline is complete and CLOSURE-ASSESSED
 - ✅ CI coverage expanded from 1.5% to 100% (8294 tests)
 - ✅ All 4 foundation planes assessed and closed
@@ -203,6 +210,7 @@ If you worked on CVF pre-MC5:
 - ✅ New work requires GC-018 authorization (except DOCUMENTATION class)
 
 **What Stayed the Same**:
+
 - Core governance protocols (GC-018, GC-019, GC-021, GC-026)
 - 5-phase controlled execution loop (INTAKE → DESIGN → BUILD → REVIEW → FREEZE)
 - Guard contract and governance enforcement

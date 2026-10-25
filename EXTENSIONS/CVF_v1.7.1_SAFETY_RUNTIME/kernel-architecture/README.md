@@ -4,12 +4,14 @@ AI Safety Runtime Kernel for Non-Coders
 Safety Absolute by Default — Creative by Permission
 
 Official Mapping Note (CVF Canonical):
+
 - Canonical module ID: `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture`
 - Version binding: CVF `v1.7.1` Safety Runtime submodule (no independent version outside CVF policy)
 - Layer mapping: Safety Runtime (`Layer 2.5` in root README stack, equivalent `Layer 3` in positioning stack)
 - Core compatibility rule: additive hardening only; must not mutate `v1.0/v1.1/v1.2` behavior
 
 Status (2026-02-26):
+
 - Stabilized local module baseline (no GitHub publish yet by owner rule).
 - Pre-fix baseline: `docs/assessments/CVF_KERNEL_ARCHITECTURE_PRE_FIX_ASSESSMENT_2026-02-25.md`.
 - Fix roadmap: `docs/roadmaps/CVF_KERNEL_ARCHITECTURE_FIX_ROADMAP_2026-02-25.md`.
@@ -24,6 +26,7 @@ Status (2026-02-26):
 - Module CI gate (current): `npm run ci:gate` from this folder.
 
 Coverage Policy (team standard):
+
 - Global minimum: `>= 80%` for statements, branches, functions, lines.
 - Core branch minimum: `>= 90%` for statements, branches, functions, lines.
 - Coverage scope: `kernel/**/*.ts`, `runtime/**/*.ts`, `internal_ledger/**/*.ts`.
@@ -38,12 +41,14 @@ Coverage Policy (team standard):
   - `kernel/04_refusal_router/refusal.router.ts`
 
 Latest validated snapshot (2026-02-26):
+
 - `Tests`: 51/51 passed (13 files)
 - `Coverage`: Statements 96.45%, Branches 91.41%, Functions 99.09%, Lines 97.01%
 - `Integration`: 5/5 passed (`kernel` <-> `cvf-web` parity + E2E runtime path)
 - `Benchmark`: avg 0.15-0.28 ms, p95 1.00 ms (40 runs, local)
 
 Operational Notes (current implementation):
+
 - Runtime invariants:
   - Mandatory runtime gateway: `KernelRuntimeEntrypoint` is the intended execution path.
   - Direct orchestrator construction is blocked.

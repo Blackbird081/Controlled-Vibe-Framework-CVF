@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá và cải thiện cách sản phẩm handle errors, exceptions, và edge cases. Good error UX giúp users recover và maintain trust.
 
 **Khi nào nên dùng:**
+
 - High error rates trong analytics
 - Negative feedback về confusing errors
 - Before launch quality check
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -77,6 +79,7 @@ Không yêu cầu.
 ## ✅ Checklist Đánh giá
 
 ### Message Quality
+
 - [ ] Có nói LÝ DO lỗi xảy ra?
 - [ ] Dùng ngôn ngữ human-friendly (không technical)?
 - [ ] Có cung cấp GIẢI PHÁP?
@@ -84,6 +87,7 @@ Không yêu cầu.
 - [ ] Tone có phù hợp (không blame user)?
 
 ### Visual Design
+
 - [ ] Error có visible và noticeable?
 - [ ] Có sử dụng color coding (red for errors)?
 - [ ] Có icon hỗ trợ nhận diện?
@@ -91,6 +95,7 @@ Không yêu cầu.
 - [ ] Positioned gần related element?
 
 ### Recovery Path
+
 - [ ] User có clear next action?
 - [ ] Có "Try again" option?
 - [ ] Data đã nhập có được preserve?
@@ -98,12 +103,14 @@ Không yêu cầu.
 - [ ] Có skip/bypass option nếu non-critical?
 
 ### Prevention
+
 - [ ] Có inline validation (real-time)?
 - [ ] Có input hints/examples?
 - [ ] Constraints prevent invalid input?
 - [ ] Confirmation cho destructive actions?
 
 ### Empty States
+
 - [ ] Empty state có friendly message?
 - [ ] Có guide user what to do?
 - [ ] Có illustration/visual?
@@ -127,7 +134,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Error Message Formula:
+### Error Message Formula
+
 ```
 What happened + Why it happened + How to fix it
 
@@ -143,7 +151,8 @@ What happened + Why it happened + How to fix it
    connection and try again."
 ```
 
-### Tone Guidelines:
+### Tone Guidelines
+
 ```
 ❌ "You entered an invalid password"
 ✅ "That password doesn't match our records"
@@ -155,7 +164,7 @@ What happened + Why it happened + How to fix it
 ✅ "Taking longer than expected... Retrying"
 ```
 
-### Error Types & Handling:
+### Error Types & Handling
 
 | Type | Example | Best Practice |
 |------|---------|---------------|
@@ -166,7 +175,8 @@ What happened + Why it happened + How to fix it
 | **System** | Server error | Apologize, auto-retry |
 | **Not Found** | 404 | Helpful navigation options |
 
-### Empty State Best Practices:
+### Empty State Best Practices
+
 ```markdown
 ## Elements of a Good Empty State:
 1. 🖼️ Illustration (friendly, relevant)
@@ -181,7 +191,8 @@ Example (Empty inbox):
 [Send a message] button
 ```
 
-### Error Prevention:
+### Error Prevention
+
 ```
 Input Masks: Phone number (xxx) xxx-xxxx
 Character counters: 45/280 characters
@@ -219,13 +230,15 @@ Sau khi hoàn thành **Error Handling UX**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Error cases: duplicate SKU, sync conflict (offline), upload timeout
 User type: Warehouse staff
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Error UX Spec
 
@@ -242,13 +255,15 @@ Message: "Kết nối yếu. Thử lại trong 30s?"
 Actions: [Retry] [Save draft]
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Rõ nguyên nhân + hướng xử lý
 - ✅ Có hành động phục hồi
 - ✅ Ngôn ngữ thân thiện
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Accessibility Audit (WCAG)](./accessibility_audit.skill.md)
 - [Onboarding Experience Review](./onboarding_experience_review.skill.md)
 
@@ -259,7 +274,7 @@ Actions: [Retry] [Save draft]
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Onboarding Experience Review
 
 Sau khi hoàn thành **Error Handling UX**, tiếp tục với:
 → [Onboarding Experience Review](./onboarding_experience_review.skill.md)
@@ -267,3 +282,5 @@ Sau khi hoàn thành **Error Handling UX**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Product & UX Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

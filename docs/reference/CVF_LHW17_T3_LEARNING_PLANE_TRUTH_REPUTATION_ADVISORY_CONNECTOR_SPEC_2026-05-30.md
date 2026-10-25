@@ -43,7 +43,7 @@ Truth Model and Reputation scoring are NOT yet wired into runtime.
 
 ---
 
-## Purpose
+## Activation Boundary
 
 Documents the advisory boundary for Truth Model + Reputation Model activation against the
 existing `CVF_LEARNING_PLANE_FOUNDATION` owner surface. This spec establishes the activation
@@ -81,6 +81,7 @@ through `CVF_BOUNDARY_FIRST_GOVERNANCE_DOCTRINE_2026-05-07.md` (boundary-first, 
 be bounded).
 
 **Advisory:** Before a Truth Model can be activated in CVF runtime:
+
 1. All existing CVF claim-boundary language must be reconciled against the Truth Model schema
 2. Truth Model records must be stored in the existing `CVF_LEARNING_PLANE_FOUNDATION` memory
    tier — not a new persistence layer
@@ -102,6 +103,7 @@ task completion, review pass rate, and governance compliance history.
 Reputation scoring is not wired into provider routing or task assignment.
 
 **Advisory:** Reputation Model activation requires:
+
 1. At least 3 distinct agent sessions with governance evidence receipts as calibration data
 2. Reputation score must feed into `resolveProviderForRole()` (WCE W3) as an advisory
    signal — not a hard gate — until calibration is proven stable
@@ -184,3 +186,7 @@ requires a separate governed tranche after prerequisite steps 1-5 are frozen.
 - No new persistence layer (Truth/Reputation records must use existing LPF memory tier)
 - No fixed TruthScore weighting doctrine (provisional only, per 2026-04-12 decision)
 - No public release readiness claim
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->
+
+<!-- Authority boundary: historical CLOSED_PASS_BOUNDED public compatibility copy; no new private execution authority. runtimeExecutionAuthorized remains false. -->

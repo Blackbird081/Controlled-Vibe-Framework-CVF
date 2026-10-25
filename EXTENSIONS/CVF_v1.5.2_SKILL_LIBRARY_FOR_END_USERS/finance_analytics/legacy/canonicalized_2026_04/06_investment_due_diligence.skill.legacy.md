@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành các skills sau trước khi dùng skill này:
+>
 > - [Financial Statement Review](./02_financial_statement_review.skill.md) — Hiểu báo cáo tài chính
 > - [Cash Flow Analysis](./05_cash_flow_analysis.skill.md) — Phân tích dòng tiền
 > - [Financial Risk Assessment](./07_financial_risk_assessment.skill.md) — Đánh giá rủi ro
@@ -20,11 +21,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Đánh giá cơ hội đầu tư (M&A, venture, real estate)
 - Chuẩn bị investment memo
 - Due diligence trước khi commit vốn
 
 **Không phù hợp khi:**
+
 - Đánh giá ROI đơn giản (dùng ROI Calculator Review)
 - Chỉ cần phân tích tài chính cơ bản (dùng Financial Statement Review)
 
@@ -67,9 +70,11 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 ### 1. Investment Overview
+
 ```
 Thông tin đầu tư:
 - Target Company/Asset: ___
@@ -79,6 +84,7 @@ Thông tin đầu tư:
 ```
 
 ### 2. Financial Summary
+
 ```
 Số liệu tài chính chính:
 - Revenue (LTM): $___
@@ -90,6 +96,7 @@ Số liệu tài chính chính:
 ```
 
 ### 3. Business Model
+
 ```
 Mô tả business model:
 - Revenue streams: ___
@@ -99,6 +106,7 @@ Mô tả business model:
 ```
 
 ### 4. Deal Structure
+
 ```
 Cấu trúc deal:
 - Valuation multiple: ___x EBITDA
@@ -108,6 +116,7 @@ Cấu trúc deal:
 ```
 
 ### 5. Known Risks
+
 ```
 Rủi ro đã biết:
 VD:
@@ -123,11 +132,13 @@ VD:
 AI sẽ trả về:
 
 ### 1. Executive Summary
+
 - Investment thesis (2-3 sentences)
 - Key highlights
 - Deal terms summary
 
 ### 2. Financial Analysis
+
 | Metric | Value | Industry Avg | Assessment |
 |--------|-------|--------------|------------|
 | Revenue Growth | 25% | 15% | ✅ Above |
@@ -135,16 +146,19 @@ AI sẽ trả về:
 | Debt/EBITDA | 2.5x | 3.0x | ✅ Healthy |
 
 ### 3. Valuation Assessment
+
 - Multiple comparison
 - DCF analysis summary
 - Implied returns
 
 ### 4. Risk Matrix
+
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
 | Customer concentration | High | High | Diversify in Y2 |
 
 ### 5. Due Diligence Checklist
+
 - [ ] Financial audit
 - [ ] Legal review
 - [ ] Tax analysis
@@ -152,6 +166,7 @@ AI sẽ trả về:
 - [ ] Management interviews
 
 ### 6. Investment Recommendation
+
 - Go/No-Go decision
 - Conditions precedent
 - Key negotiation points
@@ -194,6 +209,7 @@ AI sẽ trả về:
 ## 📊 Ví dụ thực tế
 
 **Input:**
+
 ```
 Target: TechCorp SaaS Platform
 Investment: $5M for 25% equity
@@ -214,18 +230,23 @@ Risks:
 ```
 
 **Expected Analysis:**
+
 ```markdown
 
 ### Input mẫu:
 ```
+
 Mục tiêu: Hoàn thành Investment Due Diligence
 Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
 Ràng buộc: Deadline 2 tuần
+
 ```
 
 ### Output mẫu:
 ```
+
 Tóm tắt kết quả: Investment Due Diligence với khuyến nghị/ưu tiên rõ ràng.
+
 ```
 ## Investment Due Diligence: TechCorp
 
@@ -274,6 +295,7 @@ expansion in [sector]. Key risks: customer concentration and team stability.
 ---
 
 ## 🔗 Related Skills
+
 - [Cash Flow Analysis](./05_cash_flow_analysis.skill.md)
 - [Financial Risk Assessment](./07_financial_risk_assessment.skill.md)
 

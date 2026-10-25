@@ -40,6 +40,7 @@ contract: `docs/reference/CVF_EC02_GATE_SEMANTICS_2026-06-11.json`.
 
 EC-02: replaced flat date-block with `documentStatus` x `queryClass` matrix
 (5 rows); content queries on `PROMULGATED` now route to `SUMMARY_WITH_SOURCE`
+
 + disclosure. `notYetInForceDisclosure` upgraded to i18n template mechanism.
 `documentStatus` added to `citationMinimum.minimumFields`. Collision note
 added for `domainFacetFields.documentStatus`. `reviewRequired` extended.

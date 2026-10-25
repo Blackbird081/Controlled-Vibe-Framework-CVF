@@ -1,4 +1,5 @@
 # SKILL MAPPING RECORD
+
 ## AGT-011: Document Parser
 
 > **Status:** ✅ Active  
@@ -14,7 +15,7 @@
 | Skill ID | AGT-011 |
 | Skill Name | Document Parser |
 | Version | 1.0.0 |
-| Source URL | https://github.com/anthropics/anthropic-quickstarts/tree/main/financial-data-analyst |
+| Source URL | <https://github.com/anthropics/anthropic-quickstarts/tree/main/financial-data-analyst> |
 | Original Author | Anthropic (financial-data-analyst) |
 | Intake Date | 2026-02-17 |
 | Intake Owner | CVF Governance Team |
@@ -24,7 +25,9 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
+
 Parses multi-format documents and extracts structured data according to a caller-defined schema. Inspired by the financial-data-analyst quickstart's file upload and processing pipeline, which accepts PDF financial statements, CSV spreadsheets, and image-based documents (via OCR), then extracts tabular and textual data for downstream analysis. The skill:
+
 - Accepts raw file content with a declared MIME type
 - Routes to the appropriate parser (PDF text extraction, CSV parsing, image OCR)
 - Applies a caller-defined extraction schema to produce structured output
@@ -32,6 +35,7 @@ Parses multi-format documents and extracts structured data according to a caller
 - Returns document metadata (page count, word count, detected language, creation date)
 
 ### 2.2 Inputs
+
 | Input | Type | Sensitivity | Required |
 |-------|------|-------------|----------|
 | File content | Base64-encoded string | Confidential | Yes |
@@ -42,6 +46,7 @@ Parses multi-format documents and extracts structured data according to a caller
 | OCR language | String (ISO 639-1) | Public | No (default: `en`) |
 
 ### 2.3 Outputs
+
 | Output | Type | Persistence |
 |--------|------|-------------|
 | Structured extracted data | JSON (conforming to schema) | Logged |
@@ -51,6 +56,7 @@ Parses multi-format documents and extracts structured data according to a caller
 | Parsing warnings | String array | Logged |
 
 ### 2.4 Execution Model
+
 | Property | Value |
 |----------|-------|
 | Invocation | Agent-invoked |
@@ -63,6 +69,7 @@ Parses multi-format documents and extracts structured data according to a caller
 ## 3. CVF Risk Mapping
 
 ### 3.1 Assigned Risk Level
+
 - ☐ R0 – Informational (Read-only, no side effects)
 - ☑ **R1 – Advisory** (Suggestions only, human confirmation required)
 - ☐ R2 – Assisted Execution (Bounded actions, explicit invocation)
@@ -70,6 +77,7 @@ Parses multi-format documents and extracts structured data according to a caller
 - ☐ R4 – Critical / Blocked (Severe damage potential, execution blocked)
 
 ### 3.2 Risk Justification
+
 - Read-only transformation: document bytes → structured data (no side effects)
 - Documents may contain sensitive or confidential information
 - PII detection and sanitization hooks mitigate data exposure
@@ -78,6 +86,7 @@ Parses multi-format documents and extracts structured data according to a caller
 - Elevated above R0 because extracted data may contain PII and influences decisions
 
 ### 3.3 Failure Scenarios
+
 | Mode | Description | Impact |
 |------|-------------|--------|
 | Primary | Corrupted or password-protected PDF | Low — Parser returns error, no partial output |
@@ -87,6 +96,7 @@ Parses multi-format documents and extracts structured data according to a caller
 | Quinary | File exceeds max page limit | Low — Truncated with warning |
 
 ### 3.4 Blast Radius Assessment
+
 | Dimension | Assessment |
 |-----------|------------|
 | Scope of impact | Single document parse operation |
@@ -98,23 +108,27 @@ Parses multi-format documents and extracts structured data according to a caller
 ## 4. Authority Mapping
 
 ### 4.1 Allowed Agent Roles
+
 - ☑ **Orchestrator**
 - ☑ **Architect**
 - ☑ **Builder**
 - ☑ **Reviewer**
 
 ### 4.2 Allowed CVF Phases
+
 - ☑ **Discovery**
 - ☑ **Design**
 - ☑ **Build**
 - ☑ **Review**
 
 ### 4.3 Decision Scope Influence
+
 - ☑ **Informational**
 - ☐ Tactical (influences immediate task decisions)
 - ☐ Strategic (requires human oversight)
 
 ### 4.4 Autonomy Constraints
+
 | Constraint | Value |
 |------------|-------|
 | Invocation conditions | Explicit agent request with file content payload |
@@ -132,6 +146,7 @@ Parses multi-format documents and extracts structured data according to a caller
 - ☑ **Additional audit hooks required** (PII detection logging)
 
 ### Adaptation Details
+
 1. **Removed:** File upload endpoint — the original financial-data-analyst uses a Next.js API route to accept multipart uploads; this skill only accepts pre-loaded base64 content
 2. **Removed:** Direct Claude vision API calls for image analysis — OCR is handled locally
 3. **Added:** PII detection pipeline with three modes: `flag` (annotate findings), `redact` (replace with `[REDACTED]`), `off` (no detection)
@@ -144,6 +159,7 @@ Parses multi-format documents and extracts structured data according to a caller
 ## 6. UAT & Validation Hooks
 
 ### 6.1 Required UAT Scenarios
+
 | Scenario | Description |
 |----------|-------------|
 | PDF extraction | Parse a 10-page PDF and extract text matching the provided schema |
@@ -156,6 +172,7 @@ Parses multi-format documents and extracts structured data according to a caller
 | Page limit | Truncate and warn when document exceeds max pages |
 
 ### 6.2 Output Validation
+
 | Criteria | Check |
 |----------|-------|
 | Acceptance | Structured output validates against caller-provided JSON Schema |
@@ -169,14 +186,17 @@ Parses multi-format documents and extracts structured data according to a caller
 ## 7. Decision Record
 
 ### 7.1 Intake Outcome
+
 - ☐ Reject
 - ☑ **Accept with Restrictions**
 - ☐ Accept after Adaptation
 
 ### 7.2 Decision Rationale
+
 The document parsing pattern from Anthropic's financial-data-analyst quickstart is essential for workflows requiring structured data extraction from unstructured documents. Accepted at R1 because the skill is a read-only transformation with no external side effects. Restrictions enforce mandatory PII detection, local-only processing, and schema-validated output to prevent data leakage and ensure extraction quality.
 
 ### 7.3 Decision Authority
+
 | Field | Value |
 |-------|-------|
 | Name / Role | CVF Governance Team / Skill Intake Owner |
@@ -188,12 +208,14 @@ The document parsing pattern from Anthropic's financial-data-analyst quickstart 
 ## 8. Lifecycle Controls
 
 ### 8.1 Review Cycle
+
 | Field | Value |
 |-------|-------|
 | Review interval | 90 days |
 | Next review date | 2026-05-17 |
 
 ### 8.2 Deprecation Conditions
+
 - PII detection accuracy falls below 90% on standard test corpora
 - Supported file types no longer align with organizational needs
 - >3 UAT failures in a review cycle

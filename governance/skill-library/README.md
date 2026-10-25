@@ -126,11 +126,13 @@ External Skill
 ## 🔗 Relationship to CVF
 
 ### Dependencies
+
 - Extends: `v1.2 CAPABILITY_EXTENSION` (risk model foundation)
 - Complements: `v1.5.2 SKILL_LIBRARY_FOR_END_USERS` (user-facing skills)
 - Integrates with: `v1.6 AGENT_PLATFORM` (agent execution)
 
 ### Position in Stack
+
 ```
 CVF v1.6 Agent Platform
      ↑ executes
@@ -185,6 +187,7 @@ python registry/generate_user_skills.py
 ```
 
 Script tự động:
+
 - Scan v1.5.2 SKILL_LIBRARY (124 skills, 12 domains)
 - Generate `.gov.md` files với metadata chuẩn
 - Assign Risk Level mặc định theo domain
@@ -202,11 +205,13 @@ SKILLSMP_API_KEY="***" python registry/import_skillsmp.py --limit 50
 ```
 
 Script tự động:
+
 - Pull skills từ SkillsMP theo ưu tiên **App Development**
 - Lọc theo các domain đã có trong CVF
 - Chọn shortlist 50 skills và map về CVF domain
 
 **Output:**
+
 - `registry/external-sources/skillsmp/skillsmp_shortlist.json`
 - `registry/external-sources/skillsmp/skillsmp_shortlist.csv`
 - `registry/external-sources/skillsmp/skillsmp_shortlist.md`
@@ -221,6 +226,7 @@ SKILLSMP_API_KEY="***" python registry/run_external_intake.py --limit 50 --per-c
 ```
 
 Script tự động:
+
 - Import shortlist → Convert → Inject Autonomous
 - Generate mapping records + UAT records
 - Validate skills + regenerate governance registry
@@ -235,11 +241,13 @@ python registry/convert_shortlist_to_cvf.py --limit 50
 ```
 
 Script tự động:
+
 - Dedupe theo repo (ưu tiên mô tả tốt hơn)
 - Tạo `.skill.md` chuẩn CVF theo domain
 - Ghi mapping tại `skillsmp_to_cvf_map.md`
 
 **Output:**
+
 - `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/<domain>/*.skill.md`
 - `registry/external-sources/skillsmp/skillsmp_to_cvf_map.md`
 
@@ -253,6 +261,7 @@ python registry/inject_autonomous_extension.py
 ```
 
 Script tự động:
+
 - Thêm Governance Summary + Constraints + Validation + UAT Binding
 - Bảo đảm skill sẵn sàng cho autonomous execution
 
@@ -266,6 +275,7 @@ python registry/generate_mapping_records.py
 ```
 
 Script tự động:
+
 - Tạo mapping record cho từng skill
 - Đồng bộ risk/authority từ governance block
 
@@ -279,6 +289,7 @@ python uat/generate_uat_records.py
 ```
 
 Script tự động:
+
 - Tạo file UAT cho từng skill
 - Seed test case theo domain
 - Liên kết mapping record + risk level
@@ -293,6 +304,7 @@ python uat/score_uat.py
 ```
 
 Script tự động:
+
 - Tự chấm điểm UAT theo rule
 - Xuất report `.json/.csv/.md` để hiển thị trên UI
 
@@ -306,6 +318,7 @@ python registry/report_spec_metrics.py
 ```
 
 Script tự động:
+
 - Tính Spec Score/Quality cho toàn bộ `.skill.md`
 - Xuất report `.json/.csv/.md` để dùng cho Domain Report (Spec Avg)
 - Không chỉnh sửa nội dung skill gốc
@@ -320,6 +333,7 @@ python registry/validate_registry.py
 ```
 
 Script tự động:
+
 - Check registry structure và required sections
 - Verify source links tới `.skill.md`
 - Đối chiếu count registry vs source skill library
@@ -332,6 +346,7 @@ Script tự động:
 ### CI/CD Auto-Run
 
 Registry validation tự chạy trong CI khi có thay đổi:
+
 - `governance/skill-library/registry/**.py`
 - `governance/skill-library/registry/**.md`
 - `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/**.skill.md`
@@ -341,22 +356,26 @@ Registry validation tự chạy trong CI khi có thay đổi:
 ## 📚 Quick Links
 
 ### Registry Index
+
 | Registry | Count | Link |
 |----------|-------|------|
 | User Skills | 124 | [INDEX.md](./registry/user-skills/INDEX.md) |
 | Agent Skills | 24 | [INDEX.md](./registry/agent-skills/INDEX.md) |
 
 ### Mapping Records
+
 | Type | Link |
 |------|------|
 | Skill Mapping Records | [mapping-records](./registry/mapping-records/) |
 
 ### UAT Records
+
 | Type | Link |
 |------|------|
 | Per-skill UAT Results | [results](./uat/results/) |
 
 ### Specifications
+
 | Document | Purpose |
 |----------|---------|
 | [CVF_SKILL_SPEC](./specs/CVF_SKILL_SPEC.md) | Define a valid skill |
@@ -365,6 +384,7 @@ Registry validation tự chạy trong CI khi có thay đổi:
 | [CVF_RISK_AUTHORITY_MAPPING](./specs/CVF_RISK_AUTHORITY_MAPPING.md) | Understand risk → authority |
 
 ### UAT
+
 | Document | Purpose |
 |----------|---------|
 | [UAT Template](./uat/AGENT_AI_UAT_CVF_TEMPLATE.md) | Test agent compliance |

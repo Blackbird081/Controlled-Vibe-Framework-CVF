@@ -58,6 +58,7 @@
 ### Scenario 1: Solo Developer, First Time Learning
 
 **Your Profile:**
+
 - 👤 Working alone
 - 🆕 New to AI coding
 - 📚 Want to understand concepts first
@@ -65,12 +66,14 @@
 **Recommended:** **v1.0 (Core)**
 
 **Why:**
+
 - ✅ Simplest version
 - ✅ Focuses on principles
 - ✅ No setup needed
 - ✅ Just read docs + follow checklist
 
 **Get Started:**
+
 ```bash
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
 cd Controlled-Vibe-Framework-CVF/v1.0
@@ -78,6 +81,7 @@ cat CVF_MANIFESTO.md
 ```
 
 **Next Steps:**
+
 1. Read CVF_MANIFESTO.md
 2. Follow 4-Phase Process
 3. Use Checklists
@@ -89,6 +93,7 @@ cat CVF_MANIFESTO.md
 ### Scenario 2: Want to Build Now, With Web UI
 
 **Your Profile:**
+
 - 🚀 Want to build right away, less reading
 - 🖥️ Prefer UI over CLI
 - 🤖 Want to chat with AI within CVF
@@ -97,6 +102,7 @@ cat CVF_MANIFESTO.md
 **Recommended:** **v1.6 (Agent Platform)**
 
 **Why:**
+
 - ✅ Full-featured Web UI
 - ✅ 50 ready-made templates
 - ✅ Chat directly with AI
@@ -105,6 +111,7 @@ cat CVF_MANIFESTO.md
 - ✅ Governance toolkit
 
 **Get Started:**
+
 ```bash
 npx create-cvf-app my-project
 cd my-project
@@ -113,6 +120,7 @@ npm start
 ```
 
 **Ideal For:**
+
 - MVPs, prototypes
 - Learning by doing
 - Solo dev or small teams (2-3)
@@ -123,6 +131,7 @@ npm start
 ### Scenario 3: Small Team (2-5 people)
 
 **Your Profile:**
+
 - 👥 Team of 2-5 people
 - 🔄 Need collaboration
 - 📝 Need audit trails
@@ -131,12 +140,14 @@ npm start
 **Recommended:** **v1.1 + v1.6**
 
 **Why:**
+
 - ✅ v1.1: Input/output contracts for team
 - ✅ v1.1: Agent archetypes (roles)
 - ✅ v1.1: Execution spine (audit)
 - ✅ v1.6: Web UI for collaboration
 
 **Get Started:**
+
 ```bash
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
 cd Controlled-Vibe-Framework-CVF
@@ -151,6 +162,7 @@ cat QUICK_START.md
 ```
 
 **Team Roles:**
+
 - 🎯 Owner: Phase A (requirements)
 - 🎨 Architect: Phase B (design)
 - 🤖 AI/Developer: Phase C (build)
@@ -161,6 +173,7 @@ cat QUICK_START.md
 ### Scenario 4: Production/Enterprise
 
 **Your Profile:**
+
 - 🏢 Team >5 people or enterprise
 - 🔐 Need strict governance
 - 🔄 Need CI/CD integration
@@ -170,12 +183,14 @@ cat QUICK_START.md
 **Recommended:** **v1.1 + v1.2 + v1.3 + v1.6**
 
 **Why:**
+
 - ✅ v1.1: Contracts & execution spine
 - ✅ v1.2: Skill governance, risk model
 - ✅ v1.3: SDK, CLI, CI/CD templates
 - ✅ v1.6: UI + governance toolkit
 
 **Get Started:**
+
 ```bash
 # 1. Set up full stack
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
@@ -201,6 +216,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ```
 
 **Must-Have:**
+
 - [ ] Governance policies defined
 - [ ] Risk levels per phase
 - [ ] Approval workflows
@@ -212,6 +228,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### Scenario 5: Advanced — Customize/Contribute
 
 **Your Profile:**
+
 - 🛠️ Want to extend CVF
 - 🧩 Build custom skills
 - 🔌 Integrate with other tools
@@ -220,6 +237,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 **Recommended:** **Full Stack (all versions)**
 
 **Study Path:**
+
 1. **v1.0** - Understand core principles
 2. **v1.1** - Learn architecture
 3. **v1.2** - Skill system internals
@@ -227,6 +245,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 5. **v1.6** - Platform architecture
 
 **Resources:**
+
 - Developer Guide
 - Skill Spec
 - API Reference
@@ -239,11 +258,13 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### From v1.0 → v1.1
 
 **When to migrate:**
+
 - Team grows from 1 → 2+ people
 - Need input/output specs
 - Need audit trails
 
 **How:**
+
 1. Keep v1.0 process
 2. Add contracts
 3. Define agent archetypes
@@ -256,11 +277,13 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### From v1.1 → v1.6
 
 **When to migrate:**
+
 - Team comfortable with v1.1
 - Want Web UI
 - Want AI agent features
 
 **How:**
+
 1. Keep v1.1 architecture
 2. Add v1.6 Web UI
 3. Map your workflows to templates
@@ -273,11 +296,13 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### From Manual → Automated (v1.3)
 
 **When:**
+
 - Team >3 people
 - Doing repetitive tasks
 - Need CI/CD
 
 **How:**
+
 1. Install Python SDK
 2. Write automation scripts
 3. Add CI/CD templates
@@ -362,12 +387,14 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### v1.0 (Core)
 
 **Pros:**
+
 - ✅ Simple, easy to learn
 - ✅ No dependencies
 - ✅ Pure concepts
 - ✅ Great for learning
 
 **Cons:**
+
 - ❌ Manual everything
 - ❌ No tooling
 - ❌ Limited for teams
@@ -379,12 +406,14 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### v1.1 (Extended)
 
 **Pros:**
+
 - ✅ Team-ready
 - ✅ Contracts & specs
 - ✅ Audit trails
 - ✅ Agent archetypes
 
 **Cons:**
+
 - ❌ More complex
 - ❌ Still mostly manual
 - ❌ No UI
@@ -396,6 +425,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### v1.6 (Platform)
 
 **Pros:**
+
 - ✅ Web UI (easy)
 - ✅ AI chat built-in
 - ✅ Templates ready
@@ -403,6 +433,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 - ✅ Governance toolkit
 
 **Cons:**
+
 - ❌ Requires setup
 - ❌ Node.js needed
 - ❌ Heavier than core
@@ -445,6 +476,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
    - No → v1.6
 
 **Still not sure?**
+
 - 💬 Ask on Discord
 - 📧 Email us
 - 🐛 Open an issue on GitHub

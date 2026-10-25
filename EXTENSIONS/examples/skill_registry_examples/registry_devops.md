@@ -6,7 +6,7 @@ Registry KHÔNG thực thi
 Registry KHÔNG mô tả tool
 Registry chỉ ánh xạ capability ↔ contract ↔ governance
 
-2. Registry Scope
+1. Registry Scope
 
 DOMAIN: devops
 
@@ -14,7 +14,7 @@ CVF_VERSION: 1.2
 
 GOVERNANCE_LEVEL: Strict
 
-3. Registered Capabilities
+1. Registered Capabilities
 3.1 DEVOPS_GIT_PUSH
 
 CAPABILITY_ID: DEVOPS_GIT_PUSH
@@ -69,7 +69,7 @@ Không được dùng để ghi file ngoài scope đã approve
 
 Không chaining với deployment capability
 
-4. Resolution Rules (CRITICAL)
+1. Resolution Rules (CRITICAL)
 
 Registry KHÔNG chọn agent
 Registry KHÔNG trigger execution
@@ -96,7 +96,7 @@ Governance constraints
 
 Nếu fail → DENY
 
-5. Explicit Prohibitions
+1. Explicit Prohibitions
 
 Registry KHÔNG ĐƯỢC:
 
@@ -108,7 +108,7 @@ Chứa execution logic
 
 Thay đổi Skill Contract
 
-6. Audit Implications
+1. Audit Implications
 
 Mọi lần resolve capability phải log:
 
@@ -122,7 +122,7 @@ decision snapshot
 
 registry_decision (ALLOW / DENY)
 
-7. Canonical Status
+1. Canonical Status
 
 Registry này là ví dụ chuẩn cho domain DevOps trong CVF v1.2
 Có thể copy cho domain khác mà không cần sửa core

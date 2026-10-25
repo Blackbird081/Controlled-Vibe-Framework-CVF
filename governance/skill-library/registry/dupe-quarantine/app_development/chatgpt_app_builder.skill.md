@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Build ChatGPT apps with interactive widgets using mcp-use and OpenAI Apps SDK. Use when creating ChatGPT apps, building MCP servers with widgets, defining React widgets, working with Apps SDK, or when user mentions ChatGPT widgets, mcp-use widgets, or Apps SDK development.
 
 **Khi nào dùng skill này:**
+
 - Cần Chatgpt App Builder với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -139,13 +142,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Ưu tiên bối cảnh ngắn, rõ, có ràng buộc
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
-- Nguồn tham khảo: https://github.com/mcp-use/mcp-use/tree/main/skills/chatgpt-app-builder
+- Nguồn tham khảo: <https://github.com/mcp-use/mcp-use/tree/main/skills/chatgpt-app-builder>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Chatgpt App Builder cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
@@ -154,6 +158,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Chatgpt App Builder Output
 

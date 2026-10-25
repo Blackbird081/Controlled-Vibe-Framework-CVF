@@ -23,6 +23,7 @@ Metrics automation, scheduled execution, or new checker/script implementation re
 ## Governance Cost Metrics
 
 ### Metric: product-source touches
+
 * **metricDefinition**: The number of unique file path edits in the last 30 days within product paths (`EXTENSIONS/`, `scripts/`, `src/`).
 * **computationCommand**: `git log --since="30 days ago" --name-only --format="" | Where-Object { $_ -match '^(EXTENSIONS/|scripts/|src/)' } | Sort-Object -Unique | Measure-Object | Select-Object -ExpandProperty Count`
 * **reproducibilityEvidence**: `134`
@@ -31,6 +32,7 @@ Metrics automation, scheduled execution, or new checker/script implementation re
 * **candidateImplementation**: `governance/compat/check_product_source_metric.py`
 
 ### Metric: governance-artifact touches
+
 * **metricDefinition**: The number of unique file path edits in the last 30 days within governance paths (`docs/`, `governance/`, `CVF_SESSION/`, `*.md`).
 * **computationCommand**: `git log --since="30 days ago" --name-only --format="" | Where-Object { $_ -match '^(docs/|governance/|CVF_SESSION/|[^/]+\.md$)' } | Sort-Object -Unique | Measure-Object | Select-Object -ExpandProperty Count`
 * **reproducibilityEvidence**: `3541`
@@ -39,6 +41,7 @@ Metrics automation, scheduled execution, or new checker/script implementation re
 * **candidateImplementation**: `governance/compat/check_governance_artifact_metric.py`
 
 ### Metric: checker additions
+
 * **metricDefinition**: The number of direct checker scripts added in the last 30 days.
 * **computationCommand**: `git log --diff-filter=A --since="30 days ago" --name-only --format="" | Where-Object { $_ -match '^governance/compat/check_.*\.py$' } | Sort-Object -Unique | Measure-Object | Select-Object -ExpandProperty Count`
 * **reproducibilityEvidence**: `62`
@@ -47,6 +50,7 @@ Metrics automation, scheduled execution, or new checker/script implementation re
 * **candidateImplementation**: `governance/compat/check_checker_lifecycle_metric.py`
 
 ### Metric: checker deletions
+
 * **metricDefinition**: The number of direct checker scripts deleted in the last 30 days.
 * **computationCommand**: `git log --diff-filter=D --since="30 days ago" --name-only --format="" | Where-Object { $_ -match '^governance/compat/check_.*\.py$' } | Sort-Object -Unique | Measure-Object | Select-Object -ExpandProperty Count`
 * **reproducibilityEvidence**: `0`
@@ -55,6 +59,7 @@ Metrics automation, scheduled execution, or new checker/script implementation re
 * **candidateImplementation**: `governance/compat/check_checker_lifecycle_metric.py`
 
 ### Metric: public CI status
+
 * **metricDefinition**: The latest visible GitHub Actions run set on the public repository `main` branch, summarized by workflow result.
 * **computationCommand**: `gh run list --repo Blackbird081/Controlled-Vibe-Framework-CVF --branch main --limit 5`
 * **reproducibilityEvidence**: `CVF Public Surface=success; CVF Static CI Gate=success; CVF CI Pipeline=failure; Documentation & Testing=failure; CVF CI=failure; observed at public-main run timestamp 2026-07-07T14:19:20Z`
@@ -63,6 +68,7 @@ Metrics automation, scheduled execution, or new checker/script implementation re
 * **candidateImplementation**: `governance/compat/check_public_ci_status_metric.py`
 
 ### Metric: ceremony ratio
+
 * **metricDefinition**: The ratio of overhead (ceremony) to output, proxied by the total line count of worker returns divided by the total line count of work orders.
 * **computationCommand**: `$wr=(Get-ChildItem docs/reviews -Filter '*WORKER_RETURN*.md' -File | Get-Content | Measure-Object -Line).Lines; $wo=(Get-ChildItem docs/work_orders -Filter '*WORK_ORDER*.md' -File | Get-Content | Measure-Object -Line).Lines; [math]::Round($wr/$wo,2)`
 * **reproducibilityEvidence**: `60613 worker-return lines / 144270 work-order lines = 0.42`
@@ -79,15 +85,19 @@ Metrics automation, scheduled execution, or new checker/script implementation re
 ## Epistemic Process Block
 
 ### Expected Result / Prediction
+
 The extraction of governance cost metrics from the repository using standard Git commands will produce reliable, reproducible proxy metrics.
 
 ### Evidence Comparison
+
 The metrics values were successfully derived from running the documented Git commands locally against the current repository state, confirming the expectation.
 
 ### Contradiction Or Gap Disposition
+
 No contradictions found; all metrics are reproducible.
 
 ### Claim Update
+
 The specification defines reproducible metrics without implementing automation.
 
 ## Claim Boundary

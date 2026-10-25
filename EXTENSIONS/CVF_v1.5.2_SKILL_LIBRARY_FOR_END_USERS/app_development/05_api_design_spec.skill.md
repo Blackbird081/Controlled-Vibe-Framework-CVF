@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành skill sau trước khi dùng skill này:
+>
 > - [Architecture Design](./03_architecture_design.skill.md) — Cần hiểu cấu trúc hệ thống
 
 ---
@@ -18,12 +19,14 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - App có backend API (REST/GraphQL)
 - Frontend-Backend separation
 - Desktop app with IPC commands
 - CLI tool with multiple commands
 
 **Không phù hợp khi:**
+
 - Single file scripts
 - No external interface
 
@@ -66,6 +69,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -174,6 +178,7 @@ Create a task
 - [ ] Pagination cho list endpoints
 
 **Red flags (cần Reject):**
+
 - ⚠️ Missing CRUD operations
 - ⚠️ No error handling spec
 - ⚠️ Inconsistent naming
@@ -218,7 +223,8 @@ Create a task
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Resources: products, warehouses, stock-movements, purchase-orders
 Operations: CRUD + low-stock report
@@ -226,7 +232,8 @@ Auth: JWT + role-based access
 Pagination: cursor-based
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # StockFlow API Spec
 
@@ -238,13 +245,15 @@ Response 201: {"id":"m_999","status":"recorded"}
 Response 200: [{"sku":"SKU-01","current":3,"min":10}]
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Endpoint rõ ràng, có ví dụ JSON
 - ✅ Có report chuyên dụng
 - ✅ Auth và pagination nêu rõ
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Database Schema Design](./04_database_schema_design.skill.md)
 - [Desktop App Spec](./06_desktop_app_spec.skill.md)
 - [CLI Tool Spec](./07_cli_tool_spec.skill.md)
@@ -259,7 +268,6 @@ Response 200: [{"sku":"SKU-01","current":3,"min":10}]
 ## 🔗 Next Step
 
 Sau khi có API Spec → [Desktop App Spec](./06_desktop_app_spec.skill.md) hoặc → [CLI Tool Spec](./07_cli_tool_spec.skill.md) hoặc → Build Phase
-
 
 ---
 

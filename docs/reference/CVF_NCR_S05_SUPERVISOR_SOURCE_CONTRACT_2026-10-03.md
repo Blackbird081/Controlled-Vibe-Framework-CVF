@@ -33,7 +33,6 @@ Old problem `cvf-ncr-c1-metadata-footprint` remains STOP at ordinal2 with its or
 
 Independence test: removing all VieNeu/HyperFrames/dependency metadata leaves every source acceptance criterion meaningful. Implementing this source contract does not change C1 admission. The old stopped key/counters are preserved as historical constraints, not reset into this source lifecycle. New initial identity `local-supervisor-source-contract` denotes this concrete independent contract only; no C1 successor is released. If implementation introduces C1-specific behavior or claims to reduce its blocker, reject as scope/identity violation rather than silently reroute.
 
-
 ## Protocol / Contract / Requirements
 
 1. `validate_envelope(data)` validates a versioned pure-data envelope: exact absolute owned root, allowlisted relative outputs, artifact hashes, positive finite caller limits, integer attempt cap, explicit stage/effect identifiers and custody owner. Reject missing, UNKNOWN, traversal, duplicate/case-colliding outputs, malformed hash, unsupported version and non-finite limits. No default values from C1/P1 or presets.

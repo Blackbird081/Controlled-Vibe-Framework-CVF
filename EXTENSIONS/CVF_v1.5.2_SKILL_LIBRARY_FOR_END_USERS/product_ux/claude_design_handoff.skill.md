@@ -21,16 +21,19 @@
 Khai thác **Claude Design** (`claude.ai/design`) để thiết kế UI visual đẹp, sau đó chuyển prototype/handoff sang code thật — không mất đi logic, không phá design system.
 
 Claude Design có thể trả về **prototype code trực tiếp** (`.html`, `.jsx`, inline CSS) thay vì spec. Skill này hỗ trợ cả hai dạng:
+
 - Handoff/spec text từ Claude Design
 - Prototype HTML/JSX/CSS được Claude Design tạo trên canvas
 
 **Khi nào dùng:**
+
 - Muốn thiết kế lại giao diện đẹp hơn mà không code tay từ đầu
 - Cần prototype nhanh rồi chuyển thành React/Next.js production UI
 - Muốn tạo pitch deck / slide / one-pager rồi export
 - Muốn rút design DNA từ prototype Claude Design thành skill/spec tái sử dụng
 
 **Không phù hợp khi:**
+
 - Chỉ sửa 1 class CSS nhỏ — dùng trực tiếp Edit tool
 - App chưa có design system rõ ràng — dùng `design_system_generator.skill.md` trước
 
@@ -84,10 +87,12 @@ Nếu Claude Design không có nút handoff/spec, dùng prototype code làm sour
 ## ✅ Expected Output
 
 **Từ Claude Design:**
+
 - Visual prototype tương tác đẹp
 - Có thể export/copy: HTML · JSX · ZIP · PDF · PPTX · Canva, tùy tính năng hiện có
 
 **Sau khi đưa về codebase:**
+
 - Nếu artifact là handoff text: map trực tiếp sang code thật
 - Nếu artifact là prototype code: trích xuất design DNA trước, sau đó implement
 - Code thật giữ nguyên logic, hooks, route, auth, data flow, API/Dexie/parser
@@ -245,6 +250,7 @@ Khi Claude Design output dùng màu generic → map sang CSS variables của pro
 - [ ] Lucide icons dùng xuyên suốt, không mix icon library khác
 
 **Red flags (cần Reject):**
+
 - ⚠️ Claude Design dùng màu hardcode hex thay vì map sang variables
 - ⚠️ Import thêm `framer-motion`, `@radix-ui`, hoặc bất kỳ UI lib nào không có trong dự án
 - ⚠️ Xóa hoặc thay đổi tên props, hooks, hoặc data structures
@@ -277,7 +283,8 @@ Khi Claude Design output dùng màu generic → map sang CSS variables của pro
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu (Template B — Tan Thuan Port):
+### Input mẫu (Template B — Tan Thuan Port)
+
 ```
 Page: Dashboard
 Design system: bg #0b1d35, accent #0ea5e9
@@ -288,7 +295,8 @@ Keep: Vietnamese labels, recharts data, session-based auth display
 Tech target: Next.js 16 + Tailwind v4 → coded prototype or handoff text
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 Claude Design tạo ra prototype dashboard với:
 - KPI cards có glassmorphism border + blue glow
@@ -297,7 +305,8 @@ Claude Design tạo ra prototype dashboard với:
 → Copy/export prototype HTML/JSX hoặc handoff text → Claude Code extract DNA → implement
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Design đẹp hơn rõ ràng
 - ✅ Màu đã map sang CSS variables
 - ✅ Logic giữ nguyên

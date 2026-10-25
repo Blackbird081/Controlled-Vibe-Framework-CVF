@@ -1,7 +1,7 @@
 // Text Encoding Exception: Vietnamese user-facing copy and matching localization fixtures.
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import {
     createSpecConfirmationCandidate, MAX_CONFIRMATION_BYTES, renderDocumentaryWorksheet, reviewBindingKey, reviewFileName,
@@ -28,15 +28,15 @@ export function IntentSpecConfirmation({ review, language }: { review: IntentSpe
     const { data: session, status } = useSession();
     const sessionUser = session?.user as { userId?: string; orgId?: string; teamId?: string } | undefined;
     const expiresAt = session?.expires ? Date.parse(session.expires) : NaN;
-    const [expiredAt, setExpiredAt] = useState<number | null>(null);
+    const [clock, setClock] = useState(() => Date.now());
     useEffect(() => {
         if (!Number.isFinite(expiresAt)) return;
+        if (expiresAt <= clock) return;
         const wait = expiresAt - Date.now();
-        if (wait <= 0) { setExpiredAt(expiresAt); return; }
-        const timer = setTimeout(() => setExpiredAt(expiresAt), Math.min(wait, 2 ** 31 - 1));
+        const timer = setTimeout(() => setClock(Date.now()), Math.max(0, Math.min(wait, 2 ** 31 - 1)));
         return () => clearTimeout(timer);
-    }, [expiresAt]);
-    const expired = expiredAt !== null && expiredAt === expiresAt;
+    }, [expiresAt, clock]);
+    const expired = Number.isFinite(expiresAt) && expiresAt <= clock;
     const sessionActive = status === 'authenticated' && !!sessionUser?.userId && !expired;
     const sessionKey = sessionActive
         ? `ACTIVE:${sessionUser!.userId}|${sessionUser!.orgId ?? ''}|${sessionUser!.teamId ?? ''}`
@@ -45,11 +45,15 @@ export function IntentSpecConfirmation({ review, language }: { review: IntentSpe
     const [previousKey, setPreviousKey] = useState(stateKey);
     const [previousSession, setPreviousSession] = useState(sessionKey);
     const liveKey = useRef(stateKey);
-    liveKey.current = stateKey;
-    const generation = useRef(0);
+    const generation = useRef({ value: 0 });
+    useLayoutEffect(() => {
+        liveKey.current = stateKey;
+        const ownedGeneration = generation.current;
+        ownedGeneration.value++;
+        return () => { ownedGeneration.value++; };
+    }, [stateKey]);
     if (previousSession !== sessionKey) { setPreviousSession(sessionKey); setSavedId(''); }
     if (previousKey !== stateKey) {
-        generation.current++;
         setPreviousKey(stateKey); setCandidate(null); setResult(null); setBusy(false); setSaved(null); setReopened(null);
     }
     const active = candidate?.bindingKey === bindingKey ? candidate : null;
@@ -59,40 +63,40 @@ export function IntentSpecConfirmation({ review, language }: { review: IntentSpe
 
     const create = async () => {
         const key = stateKey;
-        const operation = ++generation.current;
+        const operation = ++generation.current.value;
         setCandidate(null); setResult(null); setBusy(true);
         try {
             const next = await createSpecConfirmationCandidate(review, language, reviewer);
-            if (liveKey.current === key && generation.current === operation) setCandidate(next);
+            if (liveKey.current === key && generation.current.value === operation) setCandidate(next);
         } catch {
-            if (liveKey.current === key && generation.current === operation) {
+            if (liveKey.current === key && generation.current.value === operation) {
                 setResult({ key, text: vi ? 'Chưa tạo được gói. Hãy kiểm lại bản review và thử lại.' : 'Could not create the file. Check the review and try again.' });
             }
-        } finally { if (generation.current === operation) setBusy(false); }
+        } finally { if (generation.current.value === operation) setBusy(false); }
     };
 
     // Saving is acknowledged only from the server's exact-readback receipt for this still-current candidate.
     const save = async () => {
         if (!active || !sessionActive) return;
         const key = stateKey;
-        const operation = ++generation.current;
+        const operation = ++generation.current.value;
         setSaved({ key, outcome: 'saving' }); setBusy(true);
         const outcome = await saveReviewCandidate(active);
-        if (liveKey.current === key && generation.current === operation) {
+        if (liveKey.current === key && generation.current.value === operation) {
             setSaved({ key, outcome });
             if (outcome.kind === 'saved') setSavedId(outcome.id);
         }
-        if (generation.current === operation) setBusy(false);
+        if (generation.current.value === operation) setBusy(false);
     };
 
     const reopen = async () => {
         if (!sessionActive) return;
         const key = stateKey;
-        const operation = ++generation.current;
+        const operation = ++generation.current.value;
         setReopened({ key, outcome: 'opening' }); setBusy(true);
         const outcome = await readSavedReview(savedId.trim());
-        if (liveKey.current === key && generation.current === operation) setReopened({ key, outcome });
-        if (generation.current === operation) setBusy(false);
+        if (liveKey.current === key && generation.current.value === operation) setReopened({ key, outcome });
+        if (generation.current.value === operation) setBusy(false);
     };
 
     const download = () => {
@@ -128,21 +132,21 @@ export function IntentSpecConfirmation({ review, language }: { review: IntentSpe
     const readback = async (file: File) => {
         if (!active) return;
         const key = stateKey;
-        const operation = ++generation.current;
+        const operation = ++generation.current.value;
         setResult(null); setBusy(true);
         try {
             if (file.size > MAX_CONFIRMATION_BYTES) throw new Error('FILE_TOO_LARGE');
             const ok = await verifySpecConfirmationReadback(active, new Uint8Array(await file.arrayBuffer()));
-            if (liveKey.current === key && generation.current === operation) {
+            if (liveKey.current === key && generation.current.value === operation) {
                 setResult({ key, text: ok
                     ? (vi ? 'File đã chọn khớp đúng gói của bản review này.' : 'Selected file matches this exact review candidate.')
                     : (vi ? 'File không khớp. Chưa xác nhận bản này.' : 'File does not match. This revision is unconfirmed.') });
             }
         } catch {
-            if (liveKey.current === key && generation.current === operation) {
+            if (liveKey.current === key && generation.current.value === operation) {
                 setResult({ key, text: vi ? 'Không kiểm tra được file. Chưa xác nhận bản này.' : 'Could not verify the file. This revision is unconfirmed.' });
             }
-        } finally { if (generation.current === operation) setBusy(false); }
+        } finally { if (generation.current.value === operation) setBusy(false); }
     };
 
     if (!opened) return <button type="button" className={`${control} mt-4`} onClick={() => setOpened(true)}>

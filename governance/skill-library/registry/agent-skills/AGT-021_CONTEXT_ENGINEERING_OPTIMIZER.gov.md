@@ -151,6 +151,7 @@ and `auto_audit`. The conservative canonical value `Auto + Audit` is retained.
 **UAT Link:** `governance/skill-library/uat/results/UAT-AGT-021.md`
 
 **PASS criteria:**
+
 - [ ] Token savings per session ≥30% reduction
 - [ ] Relevant information ratio ≥80%
 - [ ] Quality loss after compaction <5%
@@ -158,6 +159,7 @@ and `auto_audit`. The conservative canonical value `Auto + Audit` is retained.
 - [ ] All compaction decisions logged for audit trail
 
 **FAIL criteria:**
+
 - [ ] User-provided context deleted without HITL approval
 - [ ] No alert raised approaching 80% utilization threshold
 - [ ] Semantic fidelity after compression falls below 95%

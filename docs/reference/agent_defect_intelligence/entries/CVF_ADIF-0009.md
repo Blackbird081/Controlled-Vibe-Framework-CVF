@@ -50,6 +50,7 @@ backticks. Does not apply to runtime, provider, or public-sync behavior.
 
 > In a completion review's Findings table: `` `## Rescan Intelligence
 > Hardening` was missing the routing lanes and semantic-sampling table ``
+>
 > - this row appears earlier in the same document than the real
 > `## Rescan Intelligence Hardening` heading. `_extract_section`'s
 > `text.find(heading)` matches the backtick-quoted mention first, so the

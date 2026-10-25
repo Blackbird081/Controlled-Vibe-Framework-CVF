@@ -1,4 +1,5 @@
 # CVF v1.2.2 — Skill Governance Engine
+
 # Structure: All components are under /skill_system/ or dedicated top-level folders
 
 /cvf

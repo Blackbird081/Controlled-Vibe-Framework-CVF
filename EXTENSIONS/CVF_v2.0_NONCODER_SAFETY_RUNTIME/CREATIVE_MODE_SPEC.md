@@ -8,6 +8,7 @@
 ## Three Modes
 
 ### SAFE Mode
+
 - **Use when:** Non-coder wants maximum safety, no surprises
 - **Risk budget:** R0–R1 only (score 0–5)
 - **Mutation limits:** max 2 files, max 50 lines per execution
@@ -16,6 +17,7 @@
 - **Auto-rejected at:** Any action scoring R2+ or cross-domain
 
 ### BALANCED Mode (Default)
+
 - **Use when:** Normal development work
 - **Risk budget:** R0–R2 (score 0–10)
 - **Mutation limits:** max 5 files, max 150 lines per execution
@@ -24,6 +26,7 @@
 - **Auto-rejected at:** Any action scoring R3+
 
 ### CREATIVE Mode
+
 - **Use when:** Experimental work, prototyping, AI-driven exploration
 - **Risk budget:** R0–R3 (score 0–15)
 - **Mutation limits:** max 10 files, max 300 lines per execution
@@ -48,6 +51,7 @@ The kernel treats these as **hard limits**, not guidelines.
 ## Stability Index Override
 
 Regardless of mode selected, if:
+
 - `stabilityIndex < 70` → Force SAFE mode
 - `stabilityIndex < 50` → Disable CREATIVE mode entirely
 

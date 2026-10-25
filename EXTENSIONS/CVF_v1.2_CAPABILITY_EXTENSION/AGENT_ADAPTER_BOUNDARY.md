@@ -1,10 +1,12 @@
 # Agent Adapter Boundary
 
 ## Purpose
+
 Tài liệu này định nghĩa **ranh giới quyền lực và trách nhiệm** giữa
 **Controlled Vibe Framework (CVF)** và bất kỳ **Agent / Model / Runtime** nào.
 
 Mục tiêu:
+
 - Ngăn agent chiếm quyền quyết định
 - Tránh agent-specific coupling
 - Đảm bảo CVF luôn là authority tối cao
@@ -24,12 +26,14 @@ không phải để **tự suy diễn hoặc mở rộng quyền**.
 ## What Is an Agent Adapter
 
 Agent Adapter là:
+
 - Lớp trung gian giữa CVF và agent cụ thể
 - Chịu trách nhiệm mapping:
   - CVF intent → agent-compatible format
   - agent output → CVF-auditable output
 
 Agent Adapter **KHÔNG**:
+
 - Định nghĩa governance
 - Thay đổi Skill Contract
 - Quyết định lifecycle
@@ -83,10 +87,12 @@ Không inference thêm logic.
 ## Thought Process Isolation
 
 CVF **KHÔNG**:
+
 - Yêu cầu agent lộ chain-of-thought
 - Phụ thuộc vào reasoning nội bộ của agent
 
 Agent Adapter:
+
 - Chỉ xử lý **observable behavior**
 - Không dựa vào “ý định suy đoán”
 
@@ -95,6 +101,7 @@ Agent Adapter:
 ## Non-Executable Capabilities
 
 Với capability `NON_EXECUTABLE`:
+
 - Agent Adapter không gọi agent execution
 - Chỉ trả về:
   - Validation
@@ -118,6 +125,7 @@ Agent Adapter **không được che giấu lỗi**.
 ## Adapter Swappability
 
 Một Agent Adapter phải:
+
 - Có thể thay thế mà không sửa CVF core
 - Không mang logic business
 - Không giữ state dài hạn
@@ -129,6 +137,7 @@ CVF **không phụ thuộc** agent nào cụ thể.
 ## Security Considerations
 
 Agent Adapter:
+
 - Không giữ secret lâu dài
 - Không tự quản lý credential ngoài scope được cấp
 - Không gọi external tool ngoài contract
@@ -141,6 +150,7 @@ Tài liệu này là **chuẩn ranh giới duy nhất** giữa CVF và agent.
 
 Bất kỳ hệ thống nào cho agent vượt qua ranh giới này
 → **không còn là CVF**.
+
 ```
 
 

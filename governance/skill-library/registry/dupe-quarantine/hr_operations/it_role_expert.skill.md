@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Provides role-specific expertise for 26+ IT company positions. Use when responding from a specific role's perspective, providing role-based advice, or when specialized knowledge is needed for engineering, product, design, data, marketing, sales, operations, HR, legal, finance, leadership, or academic functions.
 
 **Khi nào dùng skill này:**
+
 - Cần It Role Expert với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: hr operations
-- Nguồn tham khảo: https://github.com/krafton-ai/KIRA/tree/main/.claude/skills/it-role-expert
+- Nguồn tham khảo: <https://github.com/krafton-ai/KIRA/tree/main/.claude/skills/it-role-expert>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Viết JD cho vị trí Product Manager
 Context: Công ty scale nhanh, team 10 người
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # It Role Expert Output
 

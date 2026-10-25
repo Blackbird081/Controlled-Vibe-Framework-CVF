@@ -161,6 +161,7 @@ pre-WOAS-R3 behavior. The WOAS-R2 source-intake golden fixture test
 continues to guard this stability.
 
 The skeleton generator is `build_worker_return_skeleton(args: ScaffoldArgs)`
+
 - a deterministic pure function that takes the same `ScaffoldArgs` used for
 baseline/work-order generation and returns the skeleton markdown string.
 

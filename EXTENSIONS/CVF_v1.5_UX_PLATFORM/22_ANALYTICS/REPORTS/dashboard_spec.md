@@ -64,17 +64,20 @@ Dashboard tổng quan cho analytics data.
 ## Charts
 
 ### Accept/Reject Trend
+
 - Type: Line chart
 - X-axis: Date (7/30/90 days)
 - Y-axis: Percentage
 - Lines: Accept %, Reject %
 
 ### Template Usage
+
 - Type: Horizontal bar chart
 - Bars: Template categories
 - Color: By accept rate
 
 ### Quality Distribution
+
 - Type: Histogram
 - Bins: 0-2, 3-4, 5-6, 7-8, 9-10
 - Color: Red → Yellow → Green

@@ -43,9 +43,11 @@ Tutorial này cung cấp **10 mẫu prompt sẵn dùng** cho Sales, Marketing, P
 ## Vận hành Doanh thu
 
 ### Workflow 1: Quản lý Pipeline {#workflow-1}
+
 **Rủi ro:** R2 | **Kết nối:** CRM (HubSpot/Salesforce)
 
 **Copy prompt này:**
+
 ```
 Truy cập [CRM]. Lấy tất cả deals đang hoạt động gán cho tôi
 với ngày đóng trong quý hiện tại.
@@ -65,9 +67,11 @@ XÁC MINH (bắt buộc):
 ---
 
 ### Workflow 2: Tìm kiếm Prospect {#workflow-2}
+
 **Rủi ro:** R2 | **Kết nối:** Tìm kiếm Web
 
 **Copy prompt này:**
+
 ```
 Chạy chiến dịch tìm prospect theo tín hiệu:
 
@@ -88,9 +92,11 @@ GOVERNANCE:
 ---
 
 ### Workflow 3: Giám sát Chi phí QC {#workflow-3}
+
 **Rủi ro:** R2 | **Kết nối:** Upload CSV
 
 **Copy prompt này:**
+
 ```
 Phân tích báo cáo Chi phí QC (Google Ads + Meta):
 
@@ -108,9 +114,11 @@ KIỂM TRA DỮ LIỆU:
 ---
 
 ### Workflow 4: Phân phối Nội dung {#workflow-4}
+
 **Rủi ro:** R1 (chỉ đọc + chuyển đổi — không hành động bên ngoài)
 
 **Copy prompt này:**
+
 ```
 Đọc nội dung này: [dán bài viết hoặc URL]
 
@@ -131,9 +139,11 @@ KIỂM TRA CHẤT LƯỢNG:
 ## Sản phẩm & Vận hành
 
 ### Workflow 5: Tiếng nói Khách hàng {#workflow-5}
+
 **Rủi ro:** R2 | **Kết nối:** Intercom/Zendesk
 
 **Copy prompt này:**
+
 ```
 Truy cập [Hệ thống Ticket]. Lấy 50 ticket chưa gán gần nhất.
 
@@ -155,9 +165,11 @@ GOVERNANCE:
 ---
 
 ### Workflow 6: Báo cáo Sản phẩm Hàng tuần {#workflow-6}
+
 **Rủi ro:** R2 | **Kết nối:** Jira + Notion
 
 **Copy prompt này:**
+
 ```
 Viết Báo cáo Sản phẩm Hàng tuần:
 
@@ -177,9 +189,11 @@ XÁC MINH:
 ---
 
 ### Workflow 7: Phẫu thuật Quy trình {#workflow-7}
+
 **Rủi ro:** R2 | **Kết nối:** Upload File (ngữ cảnh lớn)
 
 **Copy prompt này:**
+
 ```
 Upload: [N] bản SOP PDF + [M] tháng Báo cáo Sự cố
 
@@ -203,9 +217,11 @@ OUTPUT:
 ---
 
 ### Workflow 8: Tối ưu Lịch họp {#workflow-8}
+
 **Rủi ro:** R2 | **Kết nối:** Google Calendar
 
 **Copy prompt này:**
+
 ```
 Lên lịch họp [thời lượng]: [Tiêu đề]
 Người tham gia: [Tên (múi giờ)] × N
@@ -224,9 +240,11 @@ Chương trình họp đề xuất: [chương trình của bạn]
 ## Tài chính & Chiến lược
 
 ### Workflow 9: Phân tích Tài chính {#workflow-9}
+
 **Rủi ro:** R2 | **Kết nối:** Dữ liệu Tài chính / Upload File
 
 **Copy prompt này:**
+
 ```
 GIAI ĐOẠN 1 — TRUY XUẤT:
 Lấy [N] quý gần nhất của báo cáo [Công ty/Mã chứng khoán]
@@ -249,9 +267,11 @@ GOVERNANCE BẮT BUỘC:
 ---
 
 ### Workflow 10: Tình báo Cạnh tranh {#workflow-10}
+
 **Rủi ro:** R3 (đa agent — bắt buộc review thủ công)
 
 **Copy prompt này:**
+
 ```
 Phân tích cạnh tranh: [Thị trường/Ngành]
 

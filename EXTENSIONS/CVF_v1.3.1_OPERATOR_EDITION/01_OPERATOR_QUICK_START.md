@@ -32,13 +32,13 @@ Không có bước 5.
 
 ## Bước 1 — Chuẩn bị Input
 
-### Operator phải đảm bảo:
+### Operator phải đảm bảo
 
 * Input **đầy đủ theo input contract**
 * Không chứa yêu cầu mơ hồ
 * Không chứa “gợi ý cách làm”
 
-### Operator **không được**:
+### Operator **không được**
 
 * mô tả logic thực hiện
 * đề xuất phương án
@@ -172,4 +172,3 @@ CVF yêu cầu Operator **kỷ luật hơn**.
 ---
 
 **Kết thúc Quick Start.**
-

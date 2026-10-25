@@ -19,6 +19,12 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 SCENARIO_REGISTRY_PATH = REPO_ROOT / "docs" / "reference" / "CVF_CONFORMANCE_SCENARIOS.json"
 REPORT_PATH = REPO_ROOT / "docs" / "reviews" / "cvf_phase_governance" / "CVF_CROSS_EXTENSION_CONFORMANCE_REPORT_2026-03-07.md"
 SUMMARY_PATH = REPO_ROOT / "docs" / "reviews" / "cvf_phase_governance" / "CVF_CROSS_EXTENSION_CONFORMANCE_SUMMARY_2026-03-07.json"
+SCENARIO_DOC_REL_PATH = "docs/reference/CVF_CONFORMANCE_SCENARIOS.md"
+SCENARIO_REGISTRY_REL_PATH = "docs/reference/CVF_CONFORMANCE_SCENARIOS.json"
+PUBLIC_SCENARIO_DOC_MARKERS = (
+    "give the conformance runner a stable scenario registry",
+    "machine-readable registry: `docs/reference/CVF_CONFORMANCE_SCENARIOS.json`",
+)
 
 
 def _read(path: Path) -> str:
@@ -42,7 +48,146 @@ def _extract_report_overall(report_text: str) -> str | None:
     return match.group(1) if match else None
 
 
-def _build_report() -> dict[str, Any]:
+def _public_projection_error() -> str | None:
+    try:
+        from guard_binding_catalog import require_public_projection
+    except ModuleNotFoundError:
+        from governance.compat.guard_binding_catalog import require_public_projection
+    try:
+        require_public_projection(REPO_ROOT)
+    except ValueError as exc:
+        return str(exc)
+    return None
+
+
+def _validate_public_registry(registry: Any, violations: list[dict[str, str]], path: str) -> int:
+    if not isinstance(registry, dict):
+        violations.append({
+            "type": "invalid_registry_shape",
+            "path": path,
+            "message": "Public conformance scenario registry must be an object.",
+        })
+        return 0
+
+    for field in ("schemaVersion", "wave", "requestId"):
+        if not isinstance(registry.get(field), str) or not registry[field].strip():
+            violations.append({
+                "type": "invalid_registry_field",
+                "path": path,
+                "message": f"Public conformance scenario registry field `{field}` must be non-empty text.",
+            })
+
+    scenarios = registry.get("scenarios")
+    if not isinstance(scenarios, list) or not scenarios:
+        violations.append({
+            "type": "invalid_scenarios_shape",
+            "path": path,
+            "message": "Public conformance scenario registry must declare a non-empty scenarios array.",
+        })
+        return 0
+
+    scenario_ids: list[str] = []
+    required_text_fields = ("scenarioId", "title", "objective", "workdir")
+    for index, scenario in enumerate(scenarios):
+        if not isinstance(scenario, dict):
+            violations.append({
+                "type": "invalid_scenario_entry",
+                "path": path,
+                "message": f"Scenario entry at index {index} must be an object.",
+            })
+            continue
+        for field in required_text_fields:
+            value = scenario.get(field)
+            if not isinstance(value, str) or not value.strip():
+                violations.append({
+                    "type": "invalid_scenario_field",
+                    "path": path,
+                    "message": f"Scenario entry at index {index} requires non-empty `{field}` text.",
+                })
+        scenario_id = scenario.get("scenarioId")
+        if isinstance(scenario_id, str) and scenario_id.strip():
+            scenario_ids.append(scenario_id)
+        command = scenario.get("command")
+        if not isinstance(command, list) or not command or any(
+            not isinstance(part, str) or not part.strip() for part in command
+        ):
+            violations.append({
+                "type": "invalid_scenario_command",
+                "path": path,
+                "message": f"Scenario entry at index {index} requires a non-empty string command array.",
+            })
+
+    if len(scenario_ids) != len(set(scenario_ids)):
+        violations.append({
+            "type": "duplicate_scenario_id",
+            "path": path,
+            "message": "Conformance scenario registry contains duplicate scenario IDs.",
+        })
+    return len(scenarios)
+
+
+def _build_public_report() -> dict[str, Any]:
+    violations: list[dict[str, str]] = []
+    mismatch = _public_projection_error()
+    if mismatch:
+        violations.append({
+            "type": "public_carrier_mismatch",
+            "path": "AGENTS.md",
+            "message": mismatch,
+        })
+
+    registry_path = REPO_ROOT / SCENARIO_REGISTRY_REL_PATH
+    scenario_doc_path = REPO_ROOT / SCENARIO_DOC_REL_PATH
+    for path in (registry_path, scenario_doc_path):
+        if not path.is_file():
+            violations.append({
+                "type": "required_public_file_missing",
+                "path": str(path.relative_to(REPO_ROOT)).replace("\\", "/"),
+                "message": "Required public conformance scenario owner is missing.",
+            })
+
+    if scenario_doc_path.is_file():
+        scenario_doc = scenario_doc_path.read_text(encoding="utf-8", errors="replace")
+        for marker in PUBLIC_SCENARIO_DOC_MARKERS:
+            if marker not in " ".join(scenario_doc.split()):
+                violations.append({
+                    "type": "missing_public_scenario_doc_marker",
+                    "path": SCENARIO_DOC_REL_PATH,
+                    "message": f"Public conformance scenario reference is missing marker `{marker}`.",
+                })
+
+    scenario_count = 0
+    if registry_path.is_file():
+        try:
+            registry = json.loads(registry_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            registry = None
+            violations.append({
+                "type": "invalid_registry_json",
+                "path": SCENARIO_REGISTRY_REL_PATH,
+                "message": f"Public conformance scenario registry is unreadable JSON: {exc}.",
+            })
+        scenario_count = _validate_public_registry(registry, violations, SCENARIO_REGISTRY_REL_PATH)
+
+    return {
+        "profile": "public",
+        "scenarioRegistryPath": SCENARIO_REGISTRY_REL_PATH,
+        "scenarioCount": scenario_count,
+        "registrySchemaStatus": "checked",
+        "privateReportSummaryComparison": "not_applicable_public_profile",
+        "privateCommandExecution": "not_run_public_profile",
+        "claimBoundary": "PUBLIC_SCENARIO_REGISTRY_SCHEMA_ONLY_NOT_PRIVATE_CONFORMANCE_RESULT",
+        "violationCount": len(violations),
+        "violations": violations,
+        "compliant": len(violations) == 0,
+    }
+
+
+def _build_report(profile: str = "private") -> dict[str, Any]:
+    if profile not in {"private", "public"}:
+        raise ValueError(f"Unsupported conformance artifact profile: {profile}")
+    if profile == "public":
+        return _build_public_report()
     violations: list[dict[str, str]] = []
 
     for required in [SCENARIO_REGISTRY_PATH, REPORT_PATH, SUMMARY_PATH]:
@@ -143,7 +288,10 @@ def _print_report(report: dict[str, Any]) -> None:
             print(f"  - {violation['path']} ({violation['type']}): {violation['message']}")
         print("\nFAIL — Conformance artifacts are not internally aligned.")
     else:
-        print("\nCOMPLIANT — Scenario registry, JSON summary, and markdown report are aligned.")
+        if report.get("profile") == "public":
+            print("\nCOMPLIANT — Public scenario registry schema and identity checks passed; private report/summary comparison was not assessed.")
+        else:
+            print("\nCOMPLIANT — Scenario registry, JSON summary, and markdown report are aligned.")
 
 
 def main() -> int:
@@ -155,9 +303,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="CVF conformance artifact consistency gate")
     parser.add_argument("--enforce", action="store_true", help="Return non-zero when violations exist")
     parser.add_argument("--json", action="store_true", help="Print JSON report")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
 
-    report = _build_report()
+    report = _build_report(profile=args.profile)
     if args.json:
         print(json.dumps(report, indent=2))
     else:
@@ -170,3 +319,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+# Text Encoding Exception: existing CLI report symbols are retained; profile controls use ASCII.

@@ -12,6 +12,7 @@
 ## 📌 Prerequisites
 
 Khuyến khích hoàn thành trước:
+
 - [Accessibility Audit](../product_ux/accessibility_audit.skill.md) — Hiểu WCAG cơ bản
 
 ---
@@ -21,12 +22,14 @@ Khuyến khích hoàn thành trước:
 Kiểm tra ARIA labels, keyboard navigation, semantic HTML, focus management, skip links, và screen reader compatibility. Chuyên sâu hơn Accessibility Audit — tập trung vào kỹ thuật implementation.
 
 **Khi nào nên dùng:**
+
 - Build custom components (dropdown, modal, tabs...)
 - Audit ARIA implementation hiện tại
 - Compliance requirement (ADA, Section 508)
 - Screen reader testing
 
 **Không phù hợp khi:**
+
 - Chỉ dùng native HTML elements (đã semantic sẵn)
 - Visual design audit (dùng Accessibility Audit)
 
@@ -74,7 +77,7 @@ Kiểm tra ARIA labels, keyboard navigation, semantic HTML, focus management, sk
 
 | Field | Bắt buộc | Mô tả | Ví dụ |
 |-------|----------|-------|-------|
-| **URL/Code** | ✅ | Link hoặc code cần audit | "https://myapp.com" |
+| **URL/Code** | ✅ | Link hoặc code cần audit | "<https://myapp.com>" |
 | **Components** | ✅ | Custom components cần check | "Modal, Dropdown, Tab panel, Toast" |
 | **Framework** | ❌ | React, Vue, vanilla... | "React + shadcn/ui" |
 | **Screen readers** | ❌ | Target screen readers | "NVDA, VoiceOver" |
@@ -138,6 +141,7 @@ SCORE: 4/10 → Target: 8/10
 - [ ] Score provided với fixes prioritized
 
 **Red flags (cần Reject):**
+
 - ⚠️ Không có focus trap trong modal
 - ⚠️ Không test với screen reader thực tế
 - ⚠️ Chỉ list issues mà không có fix instructions

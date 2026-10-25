@@ -1,7 +1,6 @@
 
 Memory class: POINTER_RECORD
 
-
 > Status: active classification reference for `docs/audits/`
 > Canonical registry: `governance/compat/CVF_AUDIT_RETENTION_REGISTRY.json`
 > Last reviewed: `2026-03-30`

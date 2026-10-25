@@ -1,4 +1,5 @@
 # SKILL MAPPING RECORD
+
 ## AGT-010: Data Visualization Generator
 
 > **Status:** ✅ Active  
@@ -14,7 +15,7 @@
 | Skill ID | AGT-010 |
 | Skill Name | Data Visualization Generator |
 | Version | 1.0.0 |
-| Source URL | https://github.com/anthropics/anthropic-quickstarts/tree/main/financial-data-analyst |
+| Source URL | <https://github.com/anthropics/anthropic-quickstarts/tree/main/financial-data-analyst> |
 | Original Author | Anthropic (financial-data-analyst) |
 | Intake Date | 2026-02-17 |
 | Intake Owner | CVF Governance Team |
@@ -24,7 +25,9 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
+
 Generates chart configurations and visual renderings from structured data. Inspired by the financial-data-analyst quickstart's Recharts-based visualization pipeline, which dynamically produces interactive charts (line, bar, pie, area, stacked bar, scatter) from tabular financial data. The skill:
+
 - Accepts a data array and chart specification
 - Validates data schema against the requested chart type
 - Produces a Recharts-compatible JSON configuration object
@@ -32,6 +35,7 @@ Generates chart configurations and visual renderings from structured data. Inspi
 - Supports axis labeling, color theming, legends, and tooltips
 
 ### 2.2 Inputs
+
 | Input | Type | Sensitivity | Required |
 |-------|------|-------------|----------|
 | Data array | JSON array of objects | Internal | Yes |
@@ -43,6 +47,7 @@ Generates chart configurations and visual renderings from structured data. Inspi
 | Width × Height | Integer pair (px) | Public | No (default: 800×500) |
 
 ### 2.3 Outputs
+
 | Output | Type | Persistence |
 |--------|------|-------------|
 | Chart config JSON (Recharts-compatible) | JSON object | Logged |
@@ -51,6 +56,7 @@ Generates chart configurations and visual renderings from structured data. Inspi
 | Validation warnings | String array | Logged |
 
 ### 2.4 Execution Model
+
 | Property | Value |
 |----------|-------|
 | Invocation | Agent-invoked |
@@ -63,6 +69,7 @@ Generates chart configurations and visual renderings from structured data. Inspi
 ## 3. CVF Risk Mapping
 
 ### 3.1 Assigned Risk Level
+
 - ☐ R0 – Informational (Read-only, no side effects)
 - ☑ **R1 – Advisory** (Suggestions only, human confirmation required)
 - ☐ R2 – Assisted Execution (Bounded actions, explicit invocation)
@@ -70,6 +77,7 @@ Generates chart configurations and visual renderings from structured data. Inspi
 - ☐ R4 – Critical / Blocked (Severe damage potential, execution blocked)
 
 ### 3.2 Risk Justification
+
 - Pure transformation: input data → chart configuration (no side effects)
 - Does not modify source data, databases, or external systems
 - Output is visual/advisory — human interprets the chart
@@ -77,6 +85,7 @@ Generates chart configurations and visual renderings from structured data. Inspi
 - Elevated above R0 because chart output may influence business decisions
 
 ### 3.3 Failure Scenarios
+
 | Mode | Description | Impact |
 |------|-------------|--------|
 | Primary | Data schema mismatch (missing fields) | Low — Validation error returned, no chart produced |
@@ -85,6 +94,7 @@ Generates chart configurations and visual renderings from structured data. Inspi
 | Quaternary | Invalid color palette | Low — Falls back to default palette |
 
 ### 3.4 Blast Radius Assessment
+
 | Dimension | Assessment |
 |-----------|------------|
 | Scope of impact | Single visualization output |
@@ -96,23 +106,27 @@ Generates chart configurations and visual renderings from structured data. Inspi
 ## 4. Authority Mapping
 
 ### 4.1 Allowed Agent Roles
+
 - ☐ Orchestrator
 - ☑ **Architect**
 - ☑ **Builder**
 - ☐ Reviewer
 
 ### 4.2 Allowed CVF Phases
+
 - ☐ Discovery
 - ☐ Design
 - ☑ **Build**
 - ☑ **Review**
 
 ### 4.3 Decision Scope Influence
+
 - ☑ **Informational**
 - ☐ Tactical (influences immediate task decisions)
 - ☐ Strategic (requires human oversight)
 
 ### 4.4 Autonomy Constraints
+
 | Constraint | Value |
 |------------|-------|
 | Invocation conditions | Explicit agent request with data payload |
@@ -130,6 +144,7 @@ Generates chart configurations and visual renderings from structured data. Inspi
 - ☐ Additional audit hooks required
 
 ### Adaptation Details
+
 1. **Removed:** Direct database query capability present in the original financial-data-analyst (data must be provided as input)
 2. **Removed:** File upload handling — the original quickstart accepts PDF, CSV, and image uploads; this skill only accepts pre-parsed JSON arrays
 3. **Added:** Chart type validation — blocks pie charts when category count > 10 to prevent unreadable output
@@ -141,6 +156,7 @@ Generates chart configurations and visual renderings from structured data. Inspi
 ## 6. UAT & Validation Hooks
 
 ### 6.1 Required UAT Scenarios
+
 | Scenario | Description |
 |----------|-------------|
 | Normal operation | Generate line chart from 100-row dataset with 2 Y-axis series |
@@ -151,6 +167,7 @@ Generates chart configurations and visual renderings from structured data. Inspi
 | SVG render | Generate valid base64-encoded SVG output |
 
 ### 6.2 Output Validation
+
 | Criteria | Check |
 |----------|-------|
 | Acceptance | Chart config JSON is valid Recharts specification |
@@ -164,14 +181,17 @@ Generates chart configurations and visual renderings from structured data. Inspi
 ## 7. Decision Record
 
 ### 7.1 Intake Outcome
+
 - ☐ Reject
 - ☑ **Accept with Restrictions**
 - ☐ Accept after Adaptation
 
 ### 7.2 Decision Rationale
+
 The chart generation pattern from Anthropic's financial-data-analyst quickstart is a valuable read-only visualization capability. Accepted at R1 because it produces advisory output (charts) that humans must interpret. Restrictions remove data querying and file upload capabilities, limiting the skill to pure data-to-chart transformation with safeguards against misleading visualizations.
 
 ### 7.3 Decision Authority
+
 | Field | Value |
 |-------|-------|
 | Name / Role | CVF Governance Team / Skill Intake Owner |
@@ -183,12 +203,14 @@ The chart generation pattern from Anthropic's financial-data-analyst quickstart 
 ## 8. Lifecycle Controls
 
 ### 8.1 Review Cycle
+
 | Field | Value |
 |-------|-------|
 | Review interval | 90 days |
 | Next review date | 2026-05-17 |
 
 ### 8.2 Deprecation Conditions
+
 - Recharts library deprecated or replaced by a successor
 - Visualization requirements exceed supported chart types
 - >3 UAT failures in a review cycle

@@ -33,6 +33,7 @@ python scripts/run_cvf_alibaba_live_canary.py --save-receipt
 ```
 
 Exit codes:
+
 - `0` — all 6 scenarios PASS
 - `1` — one or more scenarios FAIL
 - `2` — ALIBABA_API_KEY absent; all scenarios skipped
@@ -62,11 +63,13 @@ Anti-pattern check (all scenarios): output must **not** match `choose frameworks
 Each run with `--save-receipt` writes two files to `docs/audits/alibaba-canary/`:
 
 **`RECEIPT_<run-id>.json`** — machine-readable, contains:
+
 - `run_id`, `timestamp`, `provider`, `model`
 - per-scenario: `status`, `duration_ms`, `quality_signals`
 - `overall_status`, `pass_count`, `fail_count`, `skip_count`
 
 `quality_signals` are derived from the locked Vitest assertions. On PASS, they record:
+
 - `min_output_met: true`
 - `keyword_matches`: the scenario's locked quality anchors
 - `antipattern_clean: true`

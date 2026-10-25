@@ -25,6 +25,7 @@ except ModuleNotFoundError:
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+PUBLIC_PROFILE = False
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 METHOD_PATH = "docs/reference/CVF_KNOWLEDGE_SYSTEM_METHOD_STANDARD_2026-06-01.md"
@@ -252,6 +253,10 @@ def _validate_standard(path: str, text: str) -> list[dict[str, str]]:
 
 
 def _validate_binding(path: str, text: str) -> list[dict[str, str]]:
+    if PUBLIC_PROFILE:
+        from guard_binding_catalog import private_binding
+        if private_binding(path):
+            return []
     if has_binding_marker(path, THIS_SCRIPT_PATH, text):
         return []
     return [{"path": path, "type": "binding_missing", "message": f"must cite `{THIS_SCRIPT_PATH}`"}]
@@ -328,6 +333,9 @@ def _classify(changed_paths: dict[str, list[str]]) -> dict[str, Any]:
         METHOD_PATH, STANDARD_PATH, GUARD_PATH, AUTORUN_PATH, HOOK_CHAIN_PATH,
         WORKFLOW_PATH, AGENTS_PATH, CLAUDE_PATH, GC018_TEMPLATE_PATH, WORK_ORDER_TEMPLATE_PATH,
     )
+    if PUBLIC_PROFILE:
+        from guard_binding_catalog import public_required_paths
+        required_paths = public_required_paths(required_paths)
     missing_files = [path for path in required_paths if not (REPO_ROOT / path).exists()]
     scoped_paths = set(changed_paths)
     scoped_paths.update(path for path in required_paths if (REPO_ROOT / path).exists())
@@ -372,7 +380,13 @@ def main() -> int:
     parser.add_argument("--head", default=None, help="Optional git head ref")
     parser.add_argument("--enforce", action="store_true", help="Return non-zero when violations exist")
     parser.add_argument("--json", action="store_true", help="Print JSON report")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
+    global PUBLIC_PROFILE
+    PUBLIC_PROFILE = args.profile == "public"
+    if PUBLIC_PROFILE:
+        from guard_binding_catalog import require_public_projection
+        require_public_projection(REPO_ROOT)
     try:
         base, head, range_source = _resolve_range(args.base, args.head)
         report = _classify(_merge_changed_maps(_get_changed_name_status(base, head), _get_worktree_name_status()))

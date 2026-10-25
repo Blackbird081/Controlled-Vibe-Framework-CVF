@@ -5,7 +5,6 @@ Memory class: POINTER_RECORD
 Status: ACTIVE_INDEX
 EPISTEMIC_PROCESS_NA_WITH_REASON: pointer-record folder index; no evidence claims or source-backed assertions are made.
 
-
 docType: reference
 
 Text Encoding Exception: em dash and standard punctuation used in governance prose
@@ -55,6 +54,7 @@ Dates are appropriate for roadmaps, GC-018 packets, reviews, worker returns,
 and execution-only artifacts — not for reusable rule addenda.
 
 When an addendum is materially revised:
+
 - update it in place with a change note in the file header;
 - do not create a new dated copy alongside the existing file;
 - add an archive pointer here if the prior version must be preserved.
@@ -117,6 +117,7 @@ Then read addenda only when the work order type requires them:
 ## Archive Policy
 
 If an addendum in this folder is superseded by a newer version:
+
 - rename the old file to `archive/<filename>` within this folder;
 - update this README's addenda table to point to the new canonical file;
 - add an archive note at the top of the archived file.

@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Help users apply behavioral science to product design. Use when someone is designing for habit formation, reducing friction, applying psychology to UX, increasing retention through behavioral principles, or using nudges to influence user behavior.
 
 **Khi nào dùng skill này:**
+
 - Cần Behavioral Product De Ign với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: product ux
-- Nguồn tham khảo: https://github.com/RefoundAI/lenny-skills/tree/main/skills/behavioral-product-design
+- Nguồn tham khảo: <https://github.com/RefoundAI/lenny-skills/tree/main/skills/behavioral-product-design>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Thiết kế flow onboarding cho mobile app
 Context: Người dùng mới rơi nhiều ở bước 2
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Behavioral Product De Ign Output
 

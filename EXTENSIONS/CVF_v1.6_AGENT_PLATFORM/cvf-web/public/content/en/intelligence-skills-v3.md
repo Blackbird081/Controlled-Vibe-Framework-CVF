@@ -38,20 +38,24 @@ Safe/Auto         Low/Auto          Medium/Supervised   High/Manual
 ## Skill 1: Context Engineering Optimizer (AGT-021)
 
 ### What It Does
+
 Framework-level skill for **optimizing token context** in agent workflows. Monitors context health, detects degradation patterns, and triggers compaction when needed.
 
 ### When to Use
+
 - Context window approaching 70-80% utilization
 - Agent performance degrading over long sessions
 - Multi-agent workflows with high token costs
 - Need to optimize prompt structure for cache hit rates
 
 ### Key Concept: Four-Bucket Strategy
+
 ```
 Write (save external) → Select (pull relevant) → Compress (reduce tokens) → Isolate (split sub-agents)
 ```
 
 ### Chat Prompt Examples
+
 ```
 "Analyze my current context health — what's the token utilization?"
 "Optimize context: move critical information to beginning/end positions"
@@ -60,6 +64,7 @@ Write (save external) → Select (pull relevant) → Compress (reduce tokens) �
 ```
 
 ### TypeScript Integration
+
 ```typescript
 import { ContextEngineering } from '@cvf/agent-skills';
 
@@ -95,6 +100,7 @@ if (health.utilization > 0.7) {
 ```
 
 ### Anti-Patterns Detected
+
 | Anti-Pattern | Correction |
 |-------------|------------|
 | Exhaustive context loading | Curated high-signal tokens only |
@@ -107,9 +113,11 @@ if (health.utilization > 0.7) {
 ## Skill 2: Problem-Solving Framework Router (AGT-022)
 
 ### What It Does
+
 Meta-skill that **dispatches to the right problem-solving technique** based on how you're stuck. Doesn't solve problems directly — it identifies the optimal approach.
 
 ### When to Use
+
 - Architecture is getting too complex
 - Need a breakthrough idea
 - Seeing the same pattern across multiple places
@@ -117,6 +125,7 @@ Meta-skill that **dispatches to the right problem-solving technique** based on h
 - Unsure if a solution will scale
 
 ### Decision Tree
+
 ```
 STUCK?
 ├─ Technical bug?               → AGT-023 (Systematic Debugging)
@@ -129,6 +138,7 @@ STUCK?
 ```
 
 ### Chat Prompt Examples
+
 ```
 "I'm stuck — this architecture keeps growing more special cases. Help me simplify."
 "I need an innovative approach — conventional solutions aren't working."
@@ -140,36 +150,42 @@ STUCK?
 ### The 6 Techniques
 
 **1. Simplification Cascades** — When complexity spirals
+
 ```
 Find one insight that eliminates multiple components at once.
 Look for: same thing done 5+ ways, growing special cases.
 ```
 
 **2. Collision Zone Thinking** — When you need innovation
+
 ```
 Force unrelated concepts together to discover emergent properties.
 Example: "What if our auth system worked like a biological immune system?"
 ```
 
 **3. Meta-Pattern Recognition** — When recurring patterns appear
+
 ```
 Spot patterns appearing in 3+ domains.
 Action: Abstract the pattern, solve it once, apply everywhere.
 ```
 
 **4. Inversion Exercise** — When forced by assumptions
+
 ```
 Flip core assumptions to reveal hidden constraints.
 Ask: "What if we did the exact opposite?"
 ```
 
 **5. Scale Game** — When unsure about production
+
 ```
 Test at extremes: 1000x bigger AND 1000x smaller.
 Reveals: true bottlenecks, unnecessary complexity, scale invariants.
 ```
 
 **6. Combine Techniques**
+
 ```
 Simplification + Meta-pattern: Find pattern → simplify all instances
 Collision + Inversion:         Force metaphor → invert its assumptions
@@ -181,12 +197,15 @@ Scale + Simplification:        Extremes reveal what to eliminate
 ## Skill 3: Systematic Debugging Engine (AGT-023)
 
 ### What It Does
+
 4-phase debugging methodology that ensures **root cause investigation BEFORE any fix attempts**. Prevents the common AI anti-pattern of "guess-and-fix" cycles.
 
 ### The Iron Law
+>
 > **NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST.**
 
 ### When to Use
+
 - Code producing wrong behavior
 - Tests failing unexpectedly
 - System errors after changes
@@ -205,6 +224,7 @@ Phase 1: Root Cause     →  Phase 2: Pattern      →  Phase 3: Hypothesis   �
 ```
 
 ### Chat Prompt Examples
+
 ```
 "Debug this failing test — start with Phase 1 root cause investigation."
 "The API returns 500 after the last deploy. Trace the data flow."
@@ -213,6 +233,7 @@ Phase 1: Root Cause     →  Phase 2: Pattern      →  Phase 3: Hypothesis   �
 ```
 
 ### TypeScript Integration
+
 ```typescript
 import { SystematicDebugger } from '@cvf/agent-skills';
 
@@ -255,6 +276,7 @@ if (hypothesis.confirmed) {
 ```
 
 ### Red Flags — STOP and Return to Phase 1
+
 - ❌ "Just try changing X and see"
 - ❌ "Quick fix for now, investigate later"
 - ❌ "Add multiple changes, run tests"
@@ -263,6 +285,7 @@ if (hypothesis.confirmed) {
 - ❌ Proposing solutions before tracing data flow
 
 ### Escalation Rule
+>
 > **If 3+ fixes fail → STOP → Question architecture.** Escalate to Architect role.
 
 ---
@@ -270,18 +293,22 @@ if (hypothesis.confirmed) {
 ## Skill 4: MCP Context Isolation Manager (AGT-024)
 
 ### What It Does
+
 Architectural pattern for **delegating MCP tool calls to a dedicated subagent**, keeping the main agent's context clean. Solves the "context bloat" problem where loading multiple MCP servers pollutes the primary context window.
 
 ### Key Principle
+>
 > MCP tool discovery and execution happen in an isolated subagent context. The main agent only receives the result, not the 1000+ tool definitions.
 
 ### When to Use
+
 - Working with 3+ MCP servers simultaneously
 - Context window getting bloated by tool definitions
 - Need to preserve main context quality during MCP-heavy workflows
 - Managing 10-80+ MCP servers for enterprise setups
 
 ### Architecture
+
 ```
 ┌──────────────────────────┐
 │     Main Agent           │
@@ -311,6 +338,7 @@ Architectural pattern for **delegating MCP tool calls to a dedicated subagent**,
 ```
 
 ### Chat Prompt Examples
+
 ```
 "Use the GitHub MCP server to list my open PRs — isolate it from main context."
 "Set up context isolation for these 5 MCP servers."
@@ -319,6 +347,7 @@ Architectural pattern for **delegating MCP tool calls to a dedicated subagent**,
 ```
 
 ### Context Savings
+
 | Metric | Without Isolation | With Isolation |
 |--------|-------------------|----------------|
 | Context overhead per MCP server | ~500-2000 tokens | ~0 tokens (main) |
@@ -327,6 +356,7 @@ Architectural pattern for **delegating MCP tool calls to a dedicated subagent**,
 | Main context quality | Degraded | Preserved |
 
 ### TypeScript Integration
+
 ```typescript
 import { MCPIsolationManager } from '@cvf/agent-skills';
 
@@ -364,6 +394,7 @@ console.log(result);
 ```
 
 ### Security Model
+
 - MCP credentials managed via **environment variables** (never in context)
 - Subagent has **limited permissions**: execute MCP tools only
 - Results **filtered for sensitive data** before returning
@@ -393,6 +424,7 @@ Agent encounters problem
 ```
 
 ### Integration Map
+
 | Skill | Integrates With | How |
 |-------|----------------|-----|
 | AGT-021 | AGT-019 (Progressive Loader) | Runtime skill loading budget |

@@ -187,7 +187,8 @@ source-mirror scan, or rescan rule.
 | Field | Value |
 | --- | --- |
 | Epistemic Process Applicability | BOUNDED_GOVERNANCE_DECISION |
-| Expected Result / Prediction | T1/T2 source material should be complete enough to select READY_FOR_SEPARATE_PUBLIC_SYNC_PACKET, since R33 T5 already proved the export path works | Evidence Comparison | R33 T5's `7f6e548d3` export confirms clone accessibility; T1/T2 provide the staleness and claim-language evidence a future batch needs; the only gaps are operator section-selection and the actual execution step, both explicitly named as future prerequisites, not source gaps |
+| Expected Result / Prediction | T1/T2 source material should be complete enough to select READY_FOR_SEPARATE_PUBLIC_SYNC_PACKET, since R33 T5 already proved the export path works |
+| Evidence Comparison | R33 T5's `7f6e548d3` export confirms clone accessibility; T1/T2 provide the staleness and claim-language evidence a future batch needs; the only gaps are operator section-selection and the actual execution step, both explicitly named as future prerequisites, not source gaps |
 | Contradiction Or Gap Disposition | No contradiction found; the remaining gaps are process steps (operator decision, execution), not missing evidence |
 | Claim Update | R36-T3 selects readiness for a future packet without executing public-sync or claiming the catalog is already updated |
 

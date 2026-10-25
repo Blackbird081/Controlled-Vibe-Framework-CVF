@@ -1,7 +1,7 @@
 // Text Encoding Exception: Vietnamese user-facing copy and matching localization fixtures.
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Template } from '@/types';
 import { useUserContext } from './UserContext';
 import { WorkflowVisualizer } from './WorkflowVisualizer';
@@ -562,7 +562,7 @@ export function SpecExport({ template, values, onClose, onSendToAgent }: SpecExp
     const packet = confirmed && artifact?.revision === current.revision && artifact.mode === exportMode ? artifact.text : '';
     const liveKey = `${current.revision}:${exportMode}`;
     const live = useRef(liveKey);
-    live.current = liveKey;
+    useLayoutEffect(() => { live.current = liveKey; }, [liveKey]);
     const copyAttempt = useRef(0);
     // Pending adapter completions lose ownership when this panel unmounts.
     useEffect(() => () => { copyAttempt.current += 1; }, []);

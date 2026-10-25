@@ -47,6 +47,7 @@ TRACK IV: Runtime Evolution                ██████████ 100%  
 | **Phase 6** | ⏸ DEPTH-FROZEN | ⏸ **DEFERRED** | Depth Audit 3/10 = DEFER | ⚠️ INTENTIONALLY PAUSED |
 
 **Overall Assessment (2026-03-09 update):** Gaps addressed with runtime implementations:
+
 - Phase 1: `UnifiedStateResolver` — single-source governance state (23 tests)
 - Phase 2: Wave 2 conformance scenarios — 24 scenarios for CVF_ECO (JSON definition)
 - Phase 3: `SkillRolloutEngine` — 5-stage enterprise rollout (23 tests)
@@ -56,12 +57,14 @@ TRACK IV: Runtime Evolution                ██████████ 100%  
 ### 2.2 Detailed Fix Plan
 
 #### Phase 1 — Complete Control Plane Unification ✅ DONE
+
 **Target:** Single-source governance state for entire ecosystem
 **Implementation:** `UnifiedStateResolver` (23 tests)
 **Effort:** HIGH ~~(4-6 weeks)~~ → Completed in single session
 **Dependencies:** None
 
 **✅ Completed:**
+
 1. **Governance State Schema:** Designed unified schema with 5-level source hierarchy
 2. **Single Registry:** `UnifiedStateResolver` resolves governance state from canonical sources
 3. **State Validation:** Drift detection, pipeline order validation, trace field validation
@@ -70,12 +73,14 @@ TRACK IV: Runtime Evolution                ██████████ 100%  
 6. **Production Ready:** All phases now report "PRODUCTION READY"
 
 #### Phase 2 — Expand to Full Release-Candidate Gate ✅ DONE
+
 **Target:** Complete release-grade conformance for all future waves
 **Implementation:** `CVF_CONFORMANCE_SCENARIOS_WAVE2.json` (24 scenarios)
 **Effort:** MEDIUM ~~(3-4 weeks)~~ → Completed in single session
 **Dependencies:** Phase 1 completion ✅
 
 **✅ Completed:**
+
 1. **Wave 2 Scenarios:** 24 scenarios covering all 12 CVF_ECO extensions
 2. **Capability Families:** 6 families (Intelligence, Packaging, Network, Economy, Architecture, Hardening)
 3. **Critical Anchors:** 15 critical anchors defined for release-grade conformance
@@ -84,12 +89,14 @@ TRACK IV: Runtime Evolution                ██████████ 100%  
 6. **Documentation:** Complete JSON schema with working directories and expected test counts
 
 #### Phase 3 — Complete Skill Rollout Policy ✅ DONE
+
 **Target:** Enterprise-scale skill governance rollout
 **Implementation:** `SkillRolloutEngine` (23 tests)
 **Effort:** MEDIUM ~~(2-3 weeks)~~ → Completed in single session
 **Dependencies:** Phase 1 completion ✅
 
 **✅ Completed:**
+
 1. **5-Stage Rollout:** DRAFT_REVIEW → CANARY → GENERAL_AVAILABILITY → DEPRECATION → REVOCATION
 2. **Enterprise Framework:** Canary deployment with allowed agents/projects, anomaly detection
 3. **Rollout Orchestration:** `SkillRolloutEngine` manages stage transitions with gates
@@ -98,12 +105,14 @@ TRACK IV: Runtime Evolution                ██████████ 100%  
 6. **Testing:** 23 tests covering all rollout paths, edge cases, gate failures, successor validation
 
 #### Phase 4 — Expand Durable Execution Orchestration ✅ DONE
+
 **Target:** Production-grade long-running workflow orchestration
 **Implementation:** `WorkflowCoordinator` (30 tests)
 **Effort:** HIGH ~~(4-5 weeks)~~ → Completed in single session
 **Dependencies:** Phase 1-3 completion ✅
 
 **✅ Completed:**
+
 1. **Orchestration Framework:** `WorkflowCoordinator` manages multi-extension workflows
 2. **Complex Workflow Modeling:** Step definitions, dependencies, rollback capabilities
 3. **Resource Management:** Extension executors, rollback functions, checkpoint management
@@ -238,6 +247,7 @@ W2 đã đạt ở mức baseline. W1, W3, W4 cần close phần "MOSTLY DONE" �
 ### 6.2 Depth Audit vẫn áp dụng
 
 Mọi track, mọi phase muốn mở thêm layer → phải qua 5 câu hỏi Depth Audit:
+
 1. Risk reduction ≠ 0?
 2. Decision value ≠ 0?
 3. Machine enforcement ≠ 0?

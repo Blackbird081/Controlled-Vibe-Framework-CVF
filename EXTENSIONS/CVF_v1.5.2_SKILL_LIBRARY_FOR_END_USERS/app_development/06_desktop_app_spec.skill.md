@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành các skills sau trước khi dùng skill này:
+>
 > - [Tech Stack Selection](./02_tech_stack_selection.skill.md) — Cần biết framework sẽ dùng
 > - [Architecture Design](./03_architecture_design.skill.md) — Cần hiểu cấu trúc app
 
@@ -19,11 +20,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Xây dựng desktop application (Windows/macOS/Linux)
 - Dùng Electron, Tauri, hoặc native frameworks
 - Cần define windowing, menus, shortcuts
 
 **Không phù hợp khi:**
+
 - Web app only
 - CLI tool → Dùng [CLI Tool Spec](./07_cli_tool_spec.skill.md)
 - Mobile app
@@ -67,6 +70,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -186,6 +190,7 @@
 - [ ] Lifecycle behavior clear
 
 **Red flags (cần Reject):**
+
 - ⚠️ No menu structure
 - ⚠️ Missing shortcuts
 - ⚠️ Platform behavior ignored
@@ -217,7 +222,8 @@
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 App Name: StockFlow Warehouse
 Platforms: Windows 10+, macOS
@@ -226,7 +232,8 @@ Offline Required: Yes
 Devices: USB barcode scanner
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Desktop App Spec
 
@@ -246,13 +253,15 @@ Devices: USB barcode scanner
 - Hoạt động ổn định với 5.000 sản phẩm
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Flow rõ cho warehouse
 - ✅ Có offline + sync
 - ✅ Nêu performance mục tiêu
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [API Design Spec](./05_api_design_spec.skill.md)
 - [CLI Tool Spec](./07_cli_tool_spec.skill.md)
 - [Local Deployment Spec](./08_local_deployment.skill.md)
@@ -267,7 +276,6 @@ Devices: USB barcode scanner
 ## 🔗 Next Step
 
 Sau khi có Desktop Spec → [Local Deployment Spec](./08_local_deployment.skill.md) (nếu cần đóng gói) hoặc → Build Phase (Phase C)
-
 
 ---
 

@@ -17,6 +17,7 @@ into your CI/CD pipeline.
 ### Customization
 
 Edit the workflow to:
+
 - Change the path to your contracts directory
 - Add additional validation steps
 - Configure notifications
@@ -26,6 +27,7 @@ Edit the workflow to:
 ### Setup
 
 1. Install pre-commit:
+
    ```bash
    pip install pre-commit
    ```
@@ -33,6 +35,7 @@ Edit the workflow to:
 2. Copy `.pre-commit-config.yaml` to your repository root
 
 3. Install the hooks:
+
    ```bash
    pre-commit install
    ```

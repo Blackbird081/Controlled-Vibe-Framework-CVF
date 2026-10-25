@@ -43,6 +43,7 @@ A user with no coding background can create a governed application using CVF's f
 Navigate to `http://localhost:3000/landing`
 
 Point out:
+
 - bilingual support (toggle EN/VI)
 - "Start Building" CTA
 - the three value props: governed, multi-provider, non-coder accessible
@@ -52,6 +53,7 @@ Point out:
 Navigate to `http://localhost:3000` (home/dashboard)
 
 Point out:
+
 - curated template cards by use case
 - categories: app builder, content strategy, data analysis, research, etc.
 - each template has a governance tier displayed
@@ -65,6 +67,7 @@ Click "Use Template" or "Start".
 **Step 4 — Walk through the intake wizard**
 
 The wizard walks through:
+
 1. Project name and description
 2. Target users
 3. Primary goal
@@ -75,6 +78,7 @@ Fill in minimal values — purpose is to show the structured intake, not to prod
 **Step 5 — Show the governance output**
 
 After intake, CVF shows:
+
 - risk classification (R0 / R1 / R2 / R3)
 - suggested next steps per classification
 - approval gates if risk level is elevated
@@ -106,6 +110,7 @@ If using a template with a high-risk operation step, proceed to that step.
 **Step 2 — Trigger a high-risk classification**
 
 Actions that typically classify as R2 or R3:
+
 - "delete all project data"
 - "publish to external API without review"
 - "execute SQL migration on production database"
@@ -115,6 +120,7 @@ Enter any such intent in the agent input or select a high-risk template action.
 **Step 3 — Show the High-Risk Guided Response panel**
 
 CVF intercepts the action and displays:
+
 - risk level badge (R2 or R3)
 - plain-language explanation of why the action is high-risk
 - required approval scope
@@ -123,6 +129,7 @@ CVF intercepts the action and displays:
 **Step 4 — Show the block behavior**
 
 Do not confirm. Show that:
+
 - the action does not proceed
 - CVF explains what approval is needed
 - the session audit trail records the attempted action and the block
@@ -130,6 +137,7 @@ Do not confirm. Show that:
 **Step 5 — Show the approval path (optional)**
 
 Confirm the action. Show that:
+
 - CVF records the approval with scope
 - the action proceeds within the approved scope
 - the audit trail shows the full decision chain
@@ -159,6 +167,7 @@ Navigate to `http://localhost:3000/settings` or open Settings from the sidebar.
 **Step 2 — Show the Provider section**
 
 Point out the provider cards:
+
 - Anthropic (default, always present)
 - Alibaba Cloud (qwen-flash)
 - DeepSeek (deepseek-chat)
@@ -166,11 +175,13 @@ Point out the provider cards:
 **Step 3 — Show lane status badges**
 
 For DeepSeek, the lane badge displays:
+
 - `Certified` (green badge)
 - `3/3 PASS` pass window
 - tooltip: "User-paid provider lane — Certification reflects CVF canary evidence, not universal provider parity"
 
 For Alibaba, the lane badge displays:
+
 - `Experimental` (badge)
 - `Fresh live proof pending` pass window
 - note: current target `qwen-flash`; historical Alibaba receipts do not transfer to this model
@@ -180,6 +191,7 @@ For an unconfigured provider (no key set), the badge shows `Unconfigured`.
 **Step 4 — Explain the evidence chain**
 
 Point to the operator documentation:
+
 - `docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md` — current status per provider
 - `docs/audits/alibaba-canary/INDEX.md` — Alibaba receipt index
 - `docs/audits/deepseek-canary/INDEX.md` — DeepSeek receipt index

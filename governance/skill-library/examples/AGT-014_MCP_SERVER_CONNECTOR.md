@@ -1,4 +1,5 @@
 # SKILL MAPPING RECORD
+
 ## AGT-014: MCP Server Connector
 
 > **Status:** ✅ Active  
@@ -14,7 +15,7 @@
 | Skill ID | AGT-014 |
 | Skill Name | MCP Server Connector |
 | Version | 1.0.0 |
-| Source URL | https://github.com/anthropics/anthropic-quickstarts/tree/main/agents |
+| Source URL | <https://github.com/anthropics/anthropic-quickstarts/tree/main/agents> |
 | Original Author | Anthropic (agents module) |
 | Intake Date | 2026-02-17 |
 | Intake Owner | CVF Governance Team |
@@ -24,7 +25,9 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
+
 Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, capability negotiation, and tool invocation. Inspired by the agents quickstart module's MCP server integration, which enables Claude-based agents to discover and use tools hosted on external MCP servers (both `stdio`-based local processes and `sse`-based remote servers). The skill:
+
 - Connects to a configured MCP server using the `stdio` or `sse` transport
 - Discovers available tools via the MCP `tools/list` protocol
 - Maps discovered tools to CVF-compatible skill definitions with risk metadata
@@ -33,6 +36,7 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 - Enforces a server allowlist and per-tool timeout limits
 
 ### 2.2 Inputs
+
 | Input | Type | Sensitivity | Required |
 |-------|------|-------------|----------|
 | Server config | JSON object (`type`: `stdio`\|`sse`, `command`, `args`, `url`) | Internal | Yes |
@@ -43,6 +47,7 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 | Max concurrent connections | Integer (1–5) | Public | No (default: 1) |
 
 ### 2.3 Outputs
+
 | Output | Type | Persistence |
 |--------|------|-------------|
 | Tool invocation result | JSON (content array with text/image blocks) | Logged |
@@ -53,6 +58,7 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 | Error details | JSON object | Logged |
 
 ### 2.4 Execution Model
+
 | Property | Value |
 |----------|-------|
 | Invocation | Agent-invoked |
@@ -65,6 +71,7 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 ## 3. CVF Risk Mapping
 
 ### 3.1 Assigned Risk Level
+
 - ☐ R0 – Informational (Read-only, no side effects)
 - ☐ R1 – Advisory (Suggestions only, human confirmation required)
 - ☑ **R2 – Assisted Execution** (Bounded actions, explicit invocation)
@@ -72,6 +79,7 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 - ☐ R4 – Critical / Blocked (Severe damage potential, execution blocked)
 
 ### 3.2 Risk Justification
+
 - Establishes connections to external processes or remote servers
 - Invoked tools execute code or perform actions outside the agent's sandbox
 - The MCP protocol enables dynamic tool discovery — tools are not statically known at intake time
@@ -80,6 +88,7 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 - Classified as R2 rather than R3 because invocations are single-step, explicit, and supervised — the skill does not autonomously chain multiple tool calls
 
 ### 3.3 Failure Scenarios
+
 | Mode | Description | Impact |
 |------|-------------|--------|
 | Primary | MCP server unavailable / connection refused | Low — Graceful error with retry guidance |
@@ -90,6 +99,7 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 | Senary | Server process crash (`stdio` transport) | Medium — Connection error detected; automatic cleanup of child process |
 
 ### 3.4 Blast Radius Assessment
+
 | Dimension | Assessment |
 |-----------|------------|
 | Scope of impact | Single tool invocation on a single MCP server |
@@ -101,23 +111,27 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 ## 4. Authority Mapping
 
 ### 4.1 Allowed Agent Roles
+
 - ☑ **Orchestrator**
 - ☐ Architect
 - ☑ **Builder**
 - ☐ Reviewer
 
 ### 4.2 Allowed CVF Phases
+
 - ☐ Discovery
 - ☐ Design
 - ☑ **Build**
 - ☑ **Review**
 
 ### 4.3 Decision Scope Influence
+
 - ☐ Informational
 - ☑ **Tactical** (influences immediate task decisions)
 - ☐ Strategic (requires human oversight)
 
 ### 4.4 Autonomy Constraints
+
 | Constraint | Value |
 |------------|-------|
 | Invocation conditions | Explicit agent request; server must be in allowlist; tool must be in discovered tools list |
@@ -135,6 +149,7 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 - ☑ **Additional audit hooks required** (Full invocation logging with parameters and results)
 
 ### Adaptation Details
+
 1. **Added:** Server allowlist — only pre-approved MCP servers can be connected; the original agents module allows arbitrary server configuration
 2. **Added:** Tool schema validation — discovered tools must have valid JSON Schema input definitions; tools with missing or malformed schemas are excluded
 3. **Added:** Parameter size limit — tool parameters are capped at 1 MB to prevent memory exhaustion
@@ -148,6 +163,7 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 ## 6. UAT & Validation Hooks
 
 ### 6.1 Required UAT Scenarios
+
 | Scenario | Description |
 |----------|-------------|
 | Stdio connection | Connect to a local MCP server via stdio transport, discover tools, invoke one |
@@ -162,6 +178,7 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 | Process cleanup | Disconnect from stdio server; verify child process is terminated |
 
 ### 6.2 Output Validation
+
 | Criteria | Check |
 |----------|-------|
 | Acceptance | Tool results conform to MCP content block format (text/image) |
@@ -176,14 +193,17 @@ Connects to Model Context Protocol (MCP) servers for dynamic tool discovery, cap
 ## 7. Decision Record
 
 ### 7.1 Intake Outcome
+
 - ☐ Reject
 - ☑ **Accept with Restrictions**
 - ☐ Accept after Adaptation
 
 ### 7.2 Decision Rationale
+
 The MCP server integration pattern from Anthropic's agents quickstart module addresses a critical need: dynamic tool extensibility. MCP enables agents to discover and use tools beyond the statically defined skill set. Accepted at R2 because each tool invocation is explicit and supervised (not autonomously chained). Restrictions enforce server allowlists, parameter validation, output sanitization, process-level sandboxing, and full invocation audit logging. The skill bridges the gap between CVF's governed skill model and the broader MCP ecosystem while maintaining governance control.
 
 ### 7.3 Decision Authority
+
 | Field | Value |
 |-------|-------|
 | Name / Role | CVF Governance Team / Skill Intake Owner |
@@ -195,12 +215,14 @@ The MCP server integration pattern from Anthropic's agents quickstart module add
 ## 8. Lifecycle Controls
 
 ### 8.1 Review Cycle
+
 | Field | Value |
 |-------|-------|
 | Review interval | 60 days (intermediate cycle due to external dependency) |
 | Next review date | 2026-04-18 |
 
 ### 8.2 Deprecation Conditions
+
 - MCP protocol specification changes incompatibly
 - Security vulnerability in MCP transport layer unpatched for > 14 days
 - Server allowlist management becomes operationally infeasible

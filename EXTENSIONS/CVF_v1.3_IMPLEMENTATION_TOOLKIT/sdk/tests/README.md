@@ -1,47 +1,36 @@
-# Testing Framework for CVF
+# SDK tests
 
-This directory contains the testing infrastructure for CVF v1.3+.
+The integration suite exercises the current Python SDK directly with synthetic
+contracts. It covers contract validation, registry lifecycle and audit freshness,
+context/control refusals, duplicate registration, persistence, and native routing
+assignment and approval metadata. It makes no provider, network or skill execution
+call and does not establish live governance, release or production readiness.
 
-## Structure
+## Current layout
 
-```
-tests/
-├── conftest.py                    # Pytest configuration & fixtures
-├── pytest_cvf_plugin/
-│   ├── __init__.py
-│   ├── validators.py              # Contract validation tests
-│   └── fixtures.py                # Reusable test fixtures
-├── unit/
-│   ├── test_skill_contract.py
-│   ├── test_registry.py
-│   ├── test_adapters.py
-│   └── test_validators.py
-├── integration/
-│   ├── test_full_lifecycle.py
-│   └── test_agent_adapters.py
-├── fixtures/
-│   ├── valid_contracts/           # Valid contract examples
-│   ├── invalid_contracts/         # Invalid contract examples
-│   └── sample_data.yaml           # Test data
-└── README.md
-```
+- `conftest.py`: shared fixtures used by the older unit examples.
+- `unit/`: historical fixture-based test scaffolding; passing it alone is not SDK integration proof.
+- `integration/test_registry_lifecycle.py`: executable tests against `SkillContract`, `SkillRegistry`, and `SkillRouter`.
+- `fixtures/`: sample valid and invalid YAML contracts.
+- `_archive/`: historical phase tests, excluded by the SDK CI selection.
 
-## Quick Start
+## Run native integration tests
+
+From `EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT`, expose this directory on
+`PYTHONPATH` so the native `sdk` package can be imported. Use the project's
+existing Python test dependencies (`pytest` and `PyYAML`).
 
 ```bash
-# Install test dependencies
-pip install pytest pytest-cov
-
-# Run all tests
-pytest
-
-# Run specific test file
-pytest tests/unit/test_skill_contract.py
-
-# With coverage report
-pytest --cov=sdk --cov-report=html
+PYTHONPATH=. python -m pytest sdk/tests/integration -q
 ```
 
-## Writing Tests
+PowerShell equivalent:
 
-See individual test files for patterns and best practices.
+```powershell
+$env:PYTHONPATH = (Get-Location).Path
+python -m pytest sdk/tests/integration -q
+```
+
+The selected SDK CI unit command is `python -m pytest sdk/tests/unit -q` with the
+same import path. The integration command is separate and must collect actual
+native SDK tests. No provider adapters are constructed by this integration suite.

@@ -18,12 +18,14 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Portfolio cá nhân (developer, designer, writer...)
 - Agency/Studio showcase
 - Freelancer website
 - Personal brand
 
 **Không phù hợp khi:**
+
 - Bán sản phẩm → Dùng Landing Page
 - Blog/viết bài → Dùng Blog/Docs
 - App phức tạp → Dùng SaaS App
@@ -67,6 +69,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -83,6 +86,7 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Portfolio website responsive
 - Hero với tagline ấn tượng
 - Projects showcase
@@ -93,6 +97,7 @@ Không yêu cầu.
 **Style Options:**
 
 ### Option A: MINIMAL (Developers, Writers)
+
 ```
 ┌────────────────────────────────────────┐
 │ Clean, whitespace-heavy                │
@@ -104,6 +109,7 @@ Không yêu cầu.
 ```
 
 ### Option B: BOLD (Designers, Creatives)
+
 ```
 ┌────────────────────────────────────────┐
 │ Strong visual impact                   │
@@ -115,6 +121,7 @@ Không yêu cầu.
 ```
 
 ### Option C: EDITORIAL (Agencies, Studios)
+
 ```
 ┌────────────────────────────────────────┐
 │ Magazine-style                         │
@@ -126,6 +133,7 @@ Không yêu cầu.
 ```
 
 **Sections tiêu chuẩn:**
+
 ```
 ┌─────────────────────────────────────┐
 │ 1. Hero (name + tagline + CTA)     │
@@ -156,6 +164,7 @@ Không yêu cầu.
 - [ ] Mobile responsive
 
 **Red flags (cần Reject):**
+
 - ⚠️ Hero không gây ấn tượng
 - ⚠️ Projects chỉ có hình, không có context
 - ⚠️ Style không match nghề
@@ -188,7 +197,8 @@ Không yêu cầu.
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Nghề nghiệp: UX Designer, 5 năm kinh nghiệm
 Style: Minimal - clean, professional
@@ -198,7 +208,8 @@ Contact: Form + email + LinkedIn
 Tham khảo: brittanychiang.com, leerob.io
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 Portfolio với:
 - Hero: "I design experiences that people love."
@@ -211,7 +222,8 @@ Portfolio với:
 - Dark mode toggle
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Hero: Strong tagline + professional
 - ✅ Case studies: Chi tiết, có process
 - ✅ Style: Minimal phù hợp designer
@@ -224,6 +236,7 @@ Portfolio với:
 ---
 
 ## 🔗 Related Skills
+
 - [Blog / Documentation](./04_blog_docs.skill.md)
 - [Landing Page](./01_landing_page.skill.md)
 

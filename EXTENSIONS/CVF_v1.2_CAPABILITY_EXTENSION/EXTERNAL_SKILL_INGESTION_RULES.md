@@ -1,10 +1,12 @@
 # External Skill Ingestion Rules
 
 ## Purpose
+
 Tài liệu này định nghĩa **quy tắc bắt buộc** khi đưa bất kỳ external skill nào
 vào Controlled Vibe Framework (CVF).
 
 Mục tiêu:
+
 - Ngăn skill không rõ nguồn gốc xâm nhập core
 - Tách biệt rõ capability và implementation
 - Đảm bảo governance, audit và kiểm soát rủi ro
@@ -22,6 +24,7 @@ Không có ngoại lệ.
 ## Definition
 
 **External Skill** là bất kỳ:
+
 - Prompt
 - Agent
 - Tool
@@ -52,11 +55,13 @@ Bỏ qua bất kỳ bước nào
 ## Phase 1 — Isolation
 
 External skill:
+
 - Không được chạy trực tiếp
 - Không được gọi core primitive
 - Không được truy cập registry
 
 Mục tiêu:
+
 - Quan sát
 - Phân tích
 - Không cho execution
@@ -73,6 +78,7 @@ Mục tiêu:
 - Mapping sang capability độc lập
 
 Không được:
+
 - Import logic nguyên khối
 - Copy prompt trực tiếp
 
@@ -94,10 +100,12 @@ Không có risk declaration
 ## Phase 4 — Contract Declaration
 
 External skill phải được mô tả bằng:
+
 - Capability Manifest
 - Skill Contract versioned
 
 Contract:
+
 - Độc lập implementation
 - Không chứa prompt gốc
 - Không hardcode agent behavior
@@ -151,6 +159,7 @@ BỊ CẤM tuyệt đối:
 ## Audit Requirements
 
 Mỗi ingestion phải lưu:
+
 - Source reference
 - Extraction notes
 - Risk decision
@@ -165,11 +174,13 @@ Thiếu log
 ## Failure Handling
 
 Nếu external skill:
+
 - Vi phạm contract
 - Vượt risk
 - Bypass control
 
 → Adapter phải:
+
 - Block execution
 - Log đầy đủ
 - Escalate theo policy
@@ -182,5 +193,6 @@ Tài liệu này là **chuẩn duy nhất** cho việc ingest external skill và
 
 Không shortcut.
 Không exception.
+
 ```
 

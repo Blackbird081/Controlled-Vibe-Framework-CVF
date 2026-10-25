@@ -122,6 +122,7 @@ Apply the ERH-DEP1 decision matrix.
 **Decision: `ACCEPT_WITH_CAVEAT`**
 
 Rationale:
+
 - No stable v5 exists to migrate to; downgrading to v4 would break the app.
 - Current scope is private/prototype, not hosted production or enterprise.
 - The beta dependency must be disclosed in public docs (ERH-T4 baseline and

@@ -19,6 +19,7 @@ Skill mapping: `governance/skill-library/examples/AGT-012_AGENTIC_LOOP_CONTROLLE
 Manages multi-step autonomous task execution with iteration limits, sandbox enforcement, progress persistence via git, and configurable human review checkpoints.
 
 **Actions:**
+
 - Accept feature specifications and decompose into subtasks
 - Execute subtasks sequentially with per-iteration governance checks
 - Persist progress via git commits after each subtask
@@ -72,6 +73,7 @@ Manages multi-step autonomous task execution with iteration limits, sandbox enfo
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Iteration limit respected (loop terminates)
 - [ ] All commands within allowlist
 - [ ] File operations within project directory only
@@ -82,6 +84,7 @@ Manages multi-step autonomous task execution with iteration limits, sandbox enfo
 - [ ] Explicit approval obtained before execution
 
 **FAIL criteria:**
+
 - [ ] Infinite loop or iteration limit bypass
 - [ ] Command executed outside allowlist
 - [ ] File access outside project directory

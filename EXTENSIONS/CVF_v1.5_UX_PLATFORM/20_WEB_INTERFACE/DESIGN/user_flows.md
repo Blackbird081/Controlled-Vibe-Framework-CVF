@@ -14,6 +14,7 @@
 ```
 
 **Steps:**
+
 1. User opens app
 2. Browses template categories
 3. Selects a template
@@ -40,6 +41,7 @@
 ```
 
 **Steps:**
+
 1. User receives result
 2. Result doesn't meet expectations
 3. Clicks Reject
@@ -85,16 +87,19 @@
 ## Error Flows
 
 ### Input Validation Error
+
 ```
 Fill Form → Submit → ❌ Validation Error → Fix Fields → Submit
 ```
 
 ### Processing Error
+
 ```
 Submit → Processing → ❌ Error → [Retry] or [Edit Input]
 ```
 
 ### Session Timeout
+
 ```
 Processing (too long) → ⚠️ Timeout → [Retry] or [Cancel]
 ```

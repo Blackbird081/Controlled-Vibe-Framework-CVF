@@ -17,12 +17,14 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Đánh giá rủi ro trước khi ra quyết định lớn
 - Xác định và ưu tiên các rủi ro dự án
 - Lập kế hoạch mitigation
 - Due diligence cho đầu tư/partnership
 
 **Không phù hợp khi:**
+
 - Cần so sánh chiến lược → Dùng Strategy Analysis
 - Chỉ cần hiểu thị trường → Dùng Market Research
 - Rủi ro pháp lý phức tạp → Cần legal expert
@@ -66,6 +68,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -82,6 +85,7 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Risk register với categorization
 - Impact/Probability matrix
 - Mitigation strategies
@@ -89,6 +93,7 @@ Không yêu cầu.
 - Risk monitoring recommendations
 
 **Cấu trúc output:**
+
 ```
 RISK ASSESSMENT REPORT
 
@@ -134,6 +139,7 @@ RISK ASSESSMENT REPORT
 - [ ] Không quá pessimistic hoặc optimistic
 
 **Red flags (cần Reject):**
+
 - ⚠️ Missing major risk categories
 - ⚠️ Mitigation quá generic
 - ⚠️ Không có contingency plans
@@ -164,7 +170,8 @@ RISK ASSESSMENT REPORT
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Quyết định: Launch AI chatbot cho customer support
 Stakeholders: CS team (10), customers (5000), engineering (3)
@@ -176,7 +183,8 @@ Known concerns:
 Risk tolerance: Low-Medium (enterprise customers)
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 RISK ASSESSMENT: AI CHATBOT LAUNCH
 
@@ -245,7 +253,8 @@ RISK ASSESSMENT: AI CHATBOT LAUNCH
    - Review: Bi-weekly risk review meetings
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Đủ categories (Technical, Operational, External)
 - ✅ Mitigation có owner và timeline
 - ✅ Contingency plans với triggers
@@ -257,6 +266,7 @@ RISK ASSESSMENT: AI CHATBOT LAUNCH
 ---
 
 ## 🔗 Related Skills
+
 - [Strategy Analysis](./01_strategy_analysis.skill.md)
 - [Market Research](./03_market_research.skill.md)
 

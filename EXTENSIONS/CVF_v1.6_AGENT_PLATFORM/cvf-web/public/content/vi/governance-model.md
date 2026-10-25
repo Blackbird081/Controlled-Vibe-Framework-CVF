@@ -51,6 +51,7 @@ Khi sử dụng AI agent, CVF gán 6 archetype:
 | **Exploration** | Ý tưởng, giả thuyết, hướng đi khả thi | Quyết định, cam kết |
 
 ### Quy Tắc
+
 - **1 agent = 1 archetype** tại một thời điểm
 - Chuyển đổi vai trò yêu cầu **kết thúc agent hiện tại + khởi tạo agent mới**
 - Mọi hành động của agent phải chỉ rõ: archetype + preset + command
@@ -75,6 +76,7 @@ Khởi tạo → Gắn kết → Kích hoạt → Thực thi → Chuyển tiếp
 | **Kết thúc (Termination)** | Agent kết thúc — ghi nhận đầu ra, giải phóng quyền hạn |
 
 ### Quy Tắc Quan Trọng
+
 - Không có agent vô hạn — mỗi agent có **điều kiện dừng**
 - Gắn kết yêu cầu: archetype + preset + governance
 - Chuyển tiếp = kết thúc agent cũ, khởi tạo agent mới (không biến đổi)
@@ -133,6 +135,7 @@ Từ cao nhất đến thấp nhất:
 Phase Gate là các điểm kiểm tra chất lượng giữa các phase:
 
 ### Gate: Phase A → Phase B
+
 ```
 - [ ] Ý định được ghi nhận rõ ràng
 - [ ] Phạm vi được xác định (bao gồm/loại trừ)
@@ -141,6 +144,7 @@ Phase Gate là các điểm kiểm tra chất lượng giữa các phase:
 ```
 
 ### Gate: Phase B → Phase C (PHASE_C_GATE)
+
 ```
 - [ ] Mục tiêu đã cố định (đã khóa)
 - [ ] Thiết kế đủ chi tiết để triển khai
@@ -150,6 +154,7 @@ Phase Gate là các điểm kiểm tra chất lượng giữa các phase:
 ```
 
 ### Gate: Phase C → Phase D
+
 ```
 - [ ] Tất cả sản phẩm đã được tạo
 - [ ] Đầu ra có thể đánh giá được
@@ -174,11 +179,13 @@ Giao diện web v1.6 cung cấp 3 cấp độ governance:
 ### Chấm Điểm Chất Lượng Hoạt Động Thế Nào (Chế Độ Rules)
 
 Mỗi phản hồi AI được đánh giá trên các khía cạnh:
+
 - Nó có tuân theo spec không?
 - Đầu ra có hoàn chỉnh không?
 - Có vi phạm phạm vi không?
 
 Điểm: **0–100**. Hành động:
+
 - ✅ **Chấp nhận** (điểm ≥ ngưỡng)
 - ❌ **Từ chối** (giải thích điều gì sai)
 - 🔄 **Thử lại** (yêu cầu AI thử lại)

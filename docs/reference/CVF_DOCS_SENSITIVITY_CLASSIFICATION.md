@@ -24,6 +24,7 @@ Classify all documentation files by exposure readiness to:
 Files that are safe for immediate public exposure without modification.
 
 **Criteria**:
+
 - No internal governance details
 - No sensitive workflow or handoff information
 - No PII or internal references
@@ -34,6 +35,7 @@ Files that are safe for immediate public exposure without modification.
 Files that may be suitable for public exposure after per-file review and redaction.
 
 **Criteria**:
+
 - Contains mix of public-facing and internal content
 - May reference internal governance but not core to the document
 - Requires link updates or content redaction before public exposure
@@ -43,6 +45,7 @@ Files that may be suitable for public exposure after per-file review and redacti
 Files that must remain in private core and never be publicly exposed.
 
 **Criteria**:
+
 - Governance artifacts (audits, reviews, baselines, roadmaps)
 - Internal workflow and handoff documents
 - Sensitive decision records or evidence trails
@@ -239,6 +242,7 @@ Files that must remain in private core and never be publicly exposed.
 ## Classification Summary
 
 **PUBLIC_READY**: ~61 files
+
 - Root front-door files (7)
 - docs/ root guides (5)
 - docs/guides/ (7)
@@ -249,9 +253,11 @@ Files that must remain in private core and never be publicly exposed.
 - docs/reference/ selected (20)
 
 **NEEDS_REVIEW**: ~15 files
+
 - Mixed content requiring redaction or link updates
 
 **PRIVATE_ONLY**: ~2325 files
+
 - Governance artifacts (~1800)
 - Internal templates and standards (~50)
 - Internal reference docs (~75)

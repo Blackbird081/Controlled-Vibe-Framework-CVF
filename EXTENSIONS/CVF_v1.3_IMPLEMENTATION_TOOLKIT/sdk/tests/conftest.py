@@ -186,6 +186,45 @@ def valid_skill_contract_r2() -> Dict[str, Any]:
 
 
 @pytest.fixture
+def valid_native_skill_contract_data() -> Dict[str, Any]:
+    """Valid lower-case data accepted by the native SkillContract.from_dict API."""
+    return {
+        "capability_id": "native.comment.create",
+        "domain": "product",
+        "description": "Create a comment with a reversible synthetic action.",
+        "risk_level": "R1",
+        "version": "1.0",
+        "governance": {
+            "allowed_archetypes": ["executor"],
+            "allowed_phases": ["BUILD"],
+            "required_decisions": ["DECISION_ALLOW_COMMENTS"],
+            "required_status": "ACTIVE",
+        },
+        "input_spec": [
+            {"name": "comment_text", "type": "string", "required": True},
+        ],
+        "output_spec": [
+            {"name": "comment_id", "type": "string", "success_criteria": "not empty"},
+        ],
+        "execution": {
+            "side_effects": True,
+            "rollback_possible": True,
+            "idempotent": False,
+            "expected_duration": "under 10 seconds",
+        },
+        "audit": {
+            "trace_level": "Full",
+            "required_fields": ["timestamp", "actor", "inputs", "outputs"],
+        },
+        "failure_info": {
+            "known_failure_modes": ["permission_denied"],
+            "worst_case_impact": "Creates one unwanted synthetic comment.",
+            "human_intervention_required": False,
+        },
+    }
+
+
+@pytest.fixture
 def invalid_skill_contract_missing_field() -> Dict[str, Any]:
     """Invalid contract - missing required field."""
     return {

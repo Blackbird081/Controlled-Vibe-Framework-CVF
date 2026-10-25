@@ -1,5 +1,6 @@
 File này không phải UI mockup
 mà là contract cho bất kỳ dashboard nào sau này
+
 # CVF AGENT UAT DASHBOARD SPEC
 
 This document defines the logical structure
@@ -13,11 +14,13 @@ not agent capability.
 ## 1. DASHBOARD PURPOSE
 
 The UAT Dashboard exists to:
+
 - Visualize agent compliance with CVF
 - Provide go / no-go decisions
 - Support audit and review
 
 The dashboard does NOT:
+
 - Optimize productivity
 - Rank agent intelligence
 - Replace governance decisions
@@ -27,6 +30,7 @@ The dashboard does NOT:
 ## 2. DASHBOARD ENTITIES
 
 Each dashboard instance is bound to:
+
 - One Repository
 - One CVF Version
 - One Agent Configuration
@@ -37,6 +41,7 @@ Each dashboard instance is bound to:
 ## 3. STATUS MODEL
 
 Each test node has exactly one status:
+
 - PASS
 - FAIL
 - NOT TESTED
@@ -89,12 +94,14 @@ Final UAT Result is determined as follows:
 ## 7. OPERATIONAL OUTPUT
 
 A PASS result MUST explicitly declare:
+
 - Allowed CVF Phases
 - Allowed Agent Roles
 - Maximum Allowed Risk Level
 - Approved Skills
 
 A FAIL result MUST explicitly declare:
+
 - Blocking reason
 - Required remediation
 - Re-UAT conditions
@@ -104,6 +111,7 @@ A FAIL result MUST explicitly declare:
 ## 8. AUDIT REQUIREMENT
 
 The dashboard MUST support:
+
 - Timestamping
 - Decision ownership
 - Historical retention

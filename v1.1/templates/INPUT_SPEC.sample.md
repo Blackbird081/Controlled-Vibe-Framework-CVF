@@ -1,4 +1,5 @@
 # INPUT_SPEC Sample — AU-001
+
 - Title / Objective: Checklist QA nội dung trang đích Q1
 - Problem Statement / Context: Trang đích chiến dịch Q1 cần checklist QA nội dung trước khi lên lịch.
 - In/Out of Scope: In: copy, CTA, liên kết, brand voice; Out: code, thiết kế.

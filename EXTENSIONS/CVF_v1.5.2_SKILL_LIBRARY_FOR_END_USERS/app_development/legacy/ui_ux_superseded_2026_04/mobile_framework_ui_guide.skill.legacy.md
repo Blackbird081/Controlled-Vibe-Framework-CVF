@@ -20,12 +20,14 @@ Không yêu cầu.
 Cung cấp hướng dẫn UI best practices theo framework cụ thể: SwiftUI, React Native, Flutter, hoặc Jetpack Compose. Bao gồm components, state management, navigation patterns, và theming.
 
 **Khi nào nên dùng:**
+
 - Bắt đầu dự án mobile mới
 - Chuyển từ web sang mobile development
 - Cần best practices cho framework cụ thể
 - Review UI patterns hiện tại
 
 **Không phù hợp khi:**
+
 - Web-only project
 - Backend/API development
 - Đã có extensive mobile experience
@@ -133,6 +135,7 @@ MOBILE UI GUIDE: [Framework]
 - [ ] Code snippets sẵn dùng
 
 **Red flags (cần Reject):**
+
 - ⚠️ Web patterns forced vào mobile (horizontal scroll tabs trên phone)
 - ⚠️ Generic advice không specific framework
 - ⚠️ Bỏ qua platform conventions
@@ -164,7 +167,8 @@ MOBILE UI GUIDE: [Framework]
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 Framework: React Native
 App type: Social media with stories, feed, messaging
@@ -172,7 +176,8 @@ Key screens: Feed, Stories, Chat, Profile, Settings
 Experience: Team biết React web, first mobile project
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 Navigation: Bottom Tabs (Feed, Search, Create, Chat, Profile)
 Feed: FlatList with estimated item size

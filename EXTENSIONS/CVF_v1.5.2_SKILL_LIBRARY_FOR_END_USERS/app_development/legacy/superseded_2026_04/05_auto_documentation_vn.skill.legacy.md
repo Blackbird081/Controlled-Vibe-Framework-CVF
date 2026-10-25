@@ -18,11 +18,13 @@
 ## 🎯 Purpose
 
 **When to use this skill:**
+
 - End of Phase D (Review), before handing the app to users
 - Need to create a `USER_GUIDE.md` file in plain, readable language
 - Want a ready-made list of common errors and quick fixes
 
 **Not suitable when:**
+
 - App is intended for developers (use a technical README.md instead)
 - App is too complex and requires in-depth documentation (use AGT-016)
 
@@ -127,12 +129,14 @@ If you encounter an issue not on this list, take a screenshot and contact: [cont
 ## 🔍 Evaluation Criteria
 
 **Accept Checklist:**
+
 - [ ] Quick Start has ≤ 5 steps sufficient to launch the app
 - [ ] At least 3 common errors with resolution steps
 - [ ] No unexplained technical jargon
 - [ ] `USER_GUIDE.md` file is actually created (not just described)
 
 **Red Flags (Reject):**
+
 - ⚠️ Quick Start requires conda/virtualenv/Docker installation
 - ⚠️ Uses "terminal", "command line", "pip install" without explanation
 - ⚠️ No error-handling guidance included
@@ -160,7 +164,8 @@ If you encounter an issue not on this list, take a screenshot and contact: [cont
 
 ## 📊 Example
 
-### Sample Input:
+### Sample Input
+
 ```
 App Name: "StockCheck — Supermarket Inventory"
 How to Launch: "Double-click START.bat"
@@ -169,7 +174,9 @@ Operating System: Windows 10
 ```
 
 ### Sample Output: Created `USER_GUIDE.md` with all 4 required sections
-### Evaluation:
+
+### Evaluation
+
 - ✅ Quick Start 3 steps, no terminal required
 - ✅ 3 common errors documented
 - ✅ File actually created

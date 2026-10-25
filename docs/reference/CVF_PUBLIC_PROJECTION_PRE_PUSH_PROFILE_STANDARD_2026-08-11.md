@@ -305,3 +305,21 @@ silently omitting, weakening, or deferring that category. This is not a
 failure state for the profile's implementation; it is the correct, honest
 outcome when the read-only-public-root requirement and a command's
 mandatory behavior are irreconcilable even inside a sandbox.
+
+## Current Candidate And Resolved Size Debt - 2026-10-26
+
+Current public main candidates use the existing one-shot exporter/preflight in
+`docs/reference/CVF_PUBLIC_SYNC_ONE_SHOT_PREFLIGHT_STANDARD_2026-08-24.md`.
+The staging branch/base/head above remain historical and must not be invoked
+against a different candidate. Their ownership taxonomy remains useful; their
+range pins do not authorize a current candidate or grandfather current defects.
+
+The May 9 inventory is preserved byte-for-byte under
+`docs/evidence/archive/EXPORT_MANIFEST_2026-05-09.md`; the active export manifest
+is a compact current change-evidence front door. The QBS reviewer CLI retains
+its interface while cohesive scoring helpers live in a companion module.
+The two size-family policy entries now pin values below the hard thresholds
+and use GATE. Historical oversized counts remain documentary fields only;
+restoring either oversized owner fails instead of receiving report-only debt.
+Source/negative proof is recorded in the existing remaining-Docs evidence.
+Public candidate CI and Root closure still determine final acceptance.

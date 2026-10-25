@@ -38,4 +38,3 @@ Cả hai lộ trình đều kết thúc bằng **readiness check**.
 
 Nếu operator không chấp nhận các nguyên tắc trên:
 → Dừng onboarding.
-

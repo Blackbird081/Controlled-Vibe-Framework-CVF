@@ -17,6 +17,7 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Pitch deck cho investors
 - Internal business presentations
 - Conference talks
@@ -24,6 +25,7 @@ Không yêu cầu.
 - Sales presentations
 
 **Không phù hợp khi:**
+
 - Written reports → Report Writing
 - Detailed docs → Documentation
 - Website content → Web Development skills
@@ -67,6 +69,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -83,12 +86,14 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả:**
+
 - Slide outline với content suggestions
 - Key points per slide
 - Speaker notes
 - Visual suggestions
 
 **Cấu trúc output (Pitch Deck example):**
+
 ```
 PITCH DECK OUTLINE | [Company Name]
 
@@ -156,6 +161,7 @@ SLIDE 10: CLOSING
 - [ ] Visual suggestions included
 
 **Red flags (cần Reject):**
+
 - ⚠️ Too many words per slide
 - ⚠️ No logical flow
 - ⚠️ Missing key sections
@@ -186,7 +192,8 @@ SLIDE 10: CLOSING
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Presentation type: Investor pitch deck
 Audience: VCs (early stage)
@@ -197,7 +204,8 @@ Main points: Problem (AI unpredictable), Solution (CVF framework),
              Traction (1000 users), Ask ($1M for 18 months runway)
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 CVF PITCH DECK | 10 Slides for 10 Minutes
 
@@ -282,7 +290,8 @@ SLIDE 10: CLOSING
 Thank you!
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ 10 slides = 10 minutes
 - ✅ Clear flow: Problem → Solution → Traction → Ask
 - ✅ Minimal text per slide
@@ -295,6 +304,7 @@ Thank you!
 ---
 
 ## 🔗 Related Skills
+
 - [Report Writing](./02_report_writing.skill.md)
 - [Documentation](./01_documentation.skill.md)
 

@@ -20,12 +20,14 @@ Không yêu cầu.
 Kiểm tra việc triển khai dark mode và light mode: text contrast, glass card opacity, border visibility, muted text readability, và OLED optimization.
 
 **Khi nào nên dùng:**
+
 - Vừa implement dark mode, cần verify
 - Users complaint "khó đọc" ở 1 mode
 - Audit trước khi launch theme switching
 - Review glassmorphism/transparent elements cross-mode
 
 **Không phù hợp khi:**
+
 - App chỉ có single theme (không toggle)
 - Backend-only project
 
@@ -73,7 +75,7 @@ Kiểm tra việc triển khai dark mode và light mode: text contrast, glass ca
 
 | Field | Bắt buộc | Mô tả | Ví dụ |
 |-------|----------|-------|-------|
-| **URL/Code** | ✅ | Link hoặc code cần audit | "https://myapp.com" |
+| **URL/Code** | ✅ | Link hoặc code cần audit | "<https://myapp.com>" |
 | **Current modes** | ✅ | Modes đang support | "Dark + Light, auto-detect" |
 | **Framework** | ❌ | CSS approach | "Tailwind dark: prefix" |
 | **Key pages** | ❌ | Trang quan trọng | "Dashboard, Settings, Profile" |
@@ -130,6 +132,7 @@ FIXES NEEDED:
 - [ ] `prefers-color-scheme` respected
 
 **Red flags (cần Reject):**
+
 - ⚠️ Contrast < 3:1 ở bất kỳ text nào
 - ⚠️ Elements invisible ở 1 mode
 - ⚠️ Flash of wrong theme on load
@@ -161,7 +164,8 @@ FIXES NEEDED:
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 URL: https://mydashboard.app
 Current modes: Dark + Light with toggle
@@ -169,7 +173,8 @@ Framework: Next.js + Tailwind dark: prefix
 Known issues: Cards disappear in light mode
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 Light mode: 3 issues (glass cards, muted text, icon contrast)
 Dark mode: 2 issues (borders, image brightness)

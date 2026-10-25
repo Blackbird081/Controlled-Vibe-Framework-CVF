@@ -25,14 +25,14 @@ Nếu bỏ toàn bộ Extension Pack → **CVF v1.4 vẫn hoạt động hoàn c
 
 ## 2. Ai NÊN / KHÔNG NÊN dùng Extension Pack?
 
-### ✅ NÊN dùng nếu bạn:
+### ✅ NÊN dùng nếu bạn
 
 * Mới tiếp cận CVF
 * Chưa quen với tư duy “AI tự chịu trách nhiệm trong boundary”
 * Hay mắc lỗi ở bước input, expectation, hoặc review output
 * Cần tốc độ, ít suy nghĩ lại mỗi lần dùng
 
-### ❌ KHÔNG cần dùng nếu bạn:
+### ❌ KHÔNG cần dùng nếu bạn
 
 * Đã vận hành CVF ổn định
 * Hiểu rõ scope / boundary / audit
@@ -87,7 +87,7 @@ CVF_v1.4.1_OPERATOR_EXTENSION_PACK/
 
 ## 5. Cách sử dụng khuyến nghị
 
-### Lộ trình tối giản cho người mới:
+### Lộ trình tối giản cho người mới
 
 1. Đọc `guided_entry.md`
 2. Tham khảo `decision_flow.md`

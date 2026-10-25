@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá chất lượng content (blog, article, webpage) về mặt SEO, engagement, và value để user. Đảm bảo content worthy of ranking và sharing.
 
 **Khi nào nên dùng:**
+
 - Trước khi publish content mới
 - Audit content cũ để improve
 - Content không rank hoặc traffic thấp
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,12 +80,14 @@ Không yêu cầu.
 ## ✅ Checklist Đánh giá
 
 ### Headline & Opening
+
 - [ ] Headline có compelling và chứa keyword?
 - [ ] Subheadline/Meta có hook được reader?
 - [ ] Opening paragraph có engage ngay?
 - [ ] Có promise value ngay từ đầu?
 
 ### Content Structure
+
 - [ ] Có clear outline (H2, H3 headers)?
 - [ ] Sử dụng bullets/numbered lists?
 - [ ] Paragraphs ngắn (max 3-4 câu)?
@@ -91,6 +95,7 @@ Không yêu cầu.
 - [ ] Có visual breaks (images, quotes)?
 
 ### Content Quality
+
 - [ ] Comprehensive - cover topic đầy đủ?
 - [ ] Unique insight hoặc data?
 - [ ] Up-to-date information?
@@ -98,12 +103,14 @@ Không yêu cầu.
 - [ ] No fluff/filler content?
 
 ### E-E-A-T Signals
+
 - [ ] **Experience:** Personal experience / case studies?
 - [ ] **Expertise:** Author credentials visible?
 - [ ] **Authority:** Citations, data, expert quotes?
 - [ ] **Trust:** Accurate, transparent, updated?
 
 ### SEO Optimization
+
 - [ ] Primary keyword trong H1, intro, conclusion?
 - [ ] Related keywords (LSI) có coverage?
 - [ ] Internal links đến related content?
@@ -112,12 +119,14 @@ Không yêu cầu.
 - [ ] Meta title và description optimized?
 
 ### Engagement Elements
+
 - [ ] Có visual content (images, charts, videos)?
 - [ ] Có CTAs appropriate cho content stage?
 - [ ] Có share buttons?
 - [ ] Có comment section hoặc engagement prompt?
 
 ### Readability
+
 - [ ] Reading level phù hợp audience?
 - [ ] Không có jargon phức tạp?
 - [ ] Active voice predominant?
@@ -141,7 +150,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Content Length Guidelines:
+### Content Length Guidelines
+
 | Content Type | Recommended Length |
 |--------------|-------------------|
 | Blog post | 1,500 - 2,500 words |
@@ -150,7 +160,8 @@ Không yêu cầu.
 | Landing page | 500 - 2,000 words |
 | How-to article | 1,000 - 2,000 words |
 
-### Content Structure Template:
+### Content Structure Template
+
 ```markdown
 # Compelling H1 with Keyword
 
@@ -169,12 +180,14 @@ Không yêu cầu.
 [Summary + CTA]
 ```
 
-### Quick Readability Check:
+### Quick Readability Check
+
 - **Hemingway App**: Check grade level
 - **Grammarly**: Grammar + clarity
 - **Yoast SEO**: SEO checklist (WordPress)
 
-### Content Freshness Rules:
+### Content Freshness Rules
+
 - Update stats/data yearly
 - Add new sections as industry evolves
 - Update screenshots if UI changed
@@ -197,7 +210,8 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Bài: "Cách quản lý tồn kho cho cửa hàng tạp hóa"
 Word count: 900
@@ -205,7 +219,8 @@ Nguồn dữ liệu: chưa có
 Tác giả: không có bio
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Content Quality Review
 
@@ -221,13 +236,15 @@ Tác giả: không có bio
 Result: Revise before publish
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Chỉ ra điểm yếu E-E-A-T
 - ✅ Có hành động cải thiện cụ thể
 - ✅ Quyết định rõ (revise)
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [SEO Audit](./seo_audit.skill.md)
 - [Social Media Ad Review](./social_media_ad_review.skill.md)
 

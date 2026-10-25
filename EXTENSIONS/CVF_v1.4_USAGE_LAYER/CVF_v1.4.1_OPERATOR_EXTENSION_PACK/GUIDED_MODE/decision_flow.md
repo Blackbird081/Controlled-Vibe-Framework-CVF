@@ -41,6 +41,7 @@ Mọi quyết định ngoài các điểm dưới đây đều bị xem là **ca
 ```
 
 Operator chỉ được quyết định tại **2 điểm**:
+
 1. **Trước khi Execute** — Khóa input
 2. **Sau khi Review Output** — Accept hoặc Reject
 
@@ -51,6 +52,7 @@ Operator chỉ được quyết định tại **2 điểm**:
 ### 🛑 Stop Point A – Input không chắc chắn
 
 Nếu trong lúc viết input, bạn:
+
 - Phải suy nghĩ lại quá nhiều lần
 - Không chắc AI có được phép tự quyết hay không
 
@@ -61,6 +63,7 @@ Nếu trong lúc viết input, bạn:
 ### 🛑 Stop Point B – Muốn can thiệp giữa chừng
 
 Nếu trong lúc AI đang xử lý, bạn muốn:
+
 - Thêm điều kiện
 - Sửa yêu cầu
 - "Giải thích thêm cho AI"
@@ -72,6 +75,7 @@ Nếu trong lúc AI đang xử lý, bạn muốn:
 ### 🛑 Stop Point C – Output gây khó chịu nhưng đúng contract
 
 Nếu output:
+
 - ✅ Đúng format
 - ✅ Đúng boundary
 - ❌ Nhưng không giống mong muốn cá nhân
@@ -99,6 +103,7 @@ Tham chiếu: `13_FAILURE_UX/retry_vs_reject_policy.md`
 ## 5. Khi nào BẮT BUỘC Reject?
 
 Reject khi:
+
 - ❌ Boundary bị vi phạm
 - ❌ AI suy đoán ngoài scope
 - ❌ Output thiếu phần bắt buộc

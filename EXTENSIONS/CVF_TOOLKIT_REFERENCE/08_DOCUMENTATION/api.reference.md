@@ -7,6 +7,7 @@
 Main entry point. Validates skill, operator, risk, phase, and change control.
 
 **Parameters:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | operatorId | string | ✅ | Operator performing the action |
@@ -19,6 +20,7 @@ Main entry point. Validates skill, operator, risk, phase, and change control.
 | agentId | string | ❌ | Multi-agent context |
 
 **Returns:** `GovernanceDecision`
+
 | Field | Type | Description |
 |-------|------|-------------|
 | allowed | boolean | Whether the operation is permitted |
@@ -40,6 +42,7 @@ Main entry point. Validates skill, operator, risk, phase, and change control.
 Computes effective risk level applying capability mismatch, domain overrides, and environment caps.
 
 **Parameters:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | skillId | string | ✅ | Skill ID |
@@ -71,12 +74,15 @@ Rolls back to P0_DESIGN (ADMIN only).
 ## Module: skill.registry
 
 ### `register(skill: SkillDefinition): void`
+
 Registers a new skill. Rejects duplicates.
 
 ### `get(skillId: string): SkillDefinition`
+
 Returns skill definition or throws `SkillViolationError`.
 
 ### `list(): SkillDefinition[]`
+
 Returns all registered skills.
 
 ---
@@ -84,18 +90,23 @@ Returns all registered skills.
 ## Module: change.controller
 
 ### `register(request: ChangeRequest): void`
+
 Registers a new change request.
 
 ### `submit(changeId: string): void`
+
 Moves change from draft → submitted.
 
 ### `approve(changeId: string, approverId: string): void`
+
 Approves a change. R4 requires multi-approval (2+).
 
 ### `reject(changeId: string, rejectedBy: string, reason: string): void`
+
 Rejects a change request.
 
 ### `validate(changeId: string): boolean`
+
 Returns whether change is approved.
 
 ---
@@ -103,9 +114,11 @@ Returns whether change is approved.
 ## Module: audit.logger
 
 ### `log(record: AuditRecord): void`
+
 Logs an audit event with auto-populated timestamp.
 
 ### `getAll(): AuditRecord[]`
+
 Returns all audit records.
 
 ---
@@ -113,12 +126,15 @@ Returns all audit records.
 ## Module: freeze.protocol (06_VERSIONING_AND_FREEZE)
 
 ### `activate(skillId, version, riskLevel, frozenBy, reason): FreezeState`
+
 Activates freeze on a skill version.
 
 ### `isActive(skillId, version): boolean`
+
 Checks if a freeze is active.
 
 ### `breakFreeze(request: FreezeBreakRequest, adminRole: string): void`
+
 Admin-only freeze break with justification.
 
 ---
@@ -126,15 +142,19 @@ Admin-only freeze break with justification.
 ## Module: provider.registry (07_AI_PROVIDER_ABSTRACTION)
 
 ### `register(provider: AIProvider): void`
+
 Registers an AI provider.
 
 ### `invoke(providerName, request: AIRequest): Promise<AIResponse>`
+
 Invokes provider with model approval validation.
 
 ### `invokeWithFallback(primary, fallback, request): Promise<AIResponse>`
+
 Tries primary provider, falls back on failure.
 
 ### `healthCheck(providerName): Promise<boolean>`
+
 Checks provider health.
 
 ---

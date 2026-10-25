@@ -57,6 +57,7 @@ new runtime failure handlers — existing EL-2/EL-3 handlers are the current bou
 **Source finding:** Dev Agent bypasses Service Layer, calls Database directly → architecture drift.
 
 **CVF coverage:** STRONG
+
 - Architecture spec enforcement via Phase Lock (phase C cannot modify phase B artifacts)
 - Review Agent checks: does implementation match architecture?
 - `cvf_advance_pipeline_stage` enforces stage transition order
@@ -74,6 +75,7 @@ This is documented as intentional: CVF contains damage, does not auto-fix design
 business-logic errors if the human approved the wrong spec.
 
 **CVF coverage:** LIMITED
+
 - `CVF_ECO_v1.0_INTENT_VALIDATION` catches structural/format errors
 - Human approval checkpoint is the primary gate
 - If human approves a logically wrong spec, downstream AI implements it correctly but uselessly
@@ -92,6 +94,7 @@ validation is out of scope for governance framework.
 **Source finding:** Agent imports non-existent library or calls wrong API endpoint.
 
 **CVF coverage:** STRONG
+
 - Task scope isolation: each agent handles 1 task → hallucination blast radius is small
 - Review Agent checks: invalid imports, missing functions, logic mismatch
 - Validation phase: test agent catches runtime errors
@@ -109,6 +112,7 @@ but root-cause correction requires Review Agent feedback loop.
 **Source finding:** Two agents create `getUser()` and `fetchUser()` with duplicate functionality.
 
 **CVF coverage:** PARTIAL
+
 - Task Graph dependency rules reduce parallel conflicts
 - Review Agent detects duplicate functionality
 - No automated conflict resolution — human must merge or deprecate
@@ -126,6 +130,7 @@ requires separate tranche. Eligible for separate runtime roadmap post-LHW.
 **Source finding:** 150 modules, 500 tasks → LLM context overflow, global architecture forgotten.
 
 **CVF coverage:** MODERATE
+
 - Task scope minimization: agent receives only task-relevant context
 - `memory-context-packager.ts` (AIF-C) packages context per task
 - LHW17 T3 advisory establishes context budget boundary

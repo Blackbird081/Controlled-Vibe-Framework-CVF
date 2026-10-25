@@ -17,6 +17,7 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Security review for applications
 - Identify vulnerabilities
 - Check compliance requirements
@@ -24,6 +25,7 @@ Không yêu cầu.
 - Third-party integration security
 
 **Không phù hợp khi:**
+
 - Penetration testing → Cần security tools
 - Compliance certification → Cần auditors
 - Incident response → Need real-time analysis
@@ -67,6 +69,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -83,6 +86,7 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả:**
+
 - Security assessment by area
 - Vulnerabilities found (OWASP categorized)
 - Risk ratings
@@ -90,6 +94,7 @@ Không yêu cầu.
 - Compliance gaps
 
 **Cấu trúc output:**
+
 ```
 SECURITY AUDIT REPORT
 
@@ -146,6 +151,7 @@ SECURITY AUDIT REPORT
 - [ ] No false sense of security
 
 **Red flags (cần Reject):**
+
 - ⚠️ Missing critical areas
 - ⚠️ Vague remediations
 - ⚠️ Underestimated risks
@@ -176,7 +182,8 @@ SECURITY AUDIT REPORT
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 System: Healthcare appointment booking app
 Tech stack: React, Node.js Express, MongoDB, AWS
@@ -186,7 +193,8 @@ Compliance: HIPAA required
 Threat model: Concerned about data breaches, unauthorized access
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 SECURITY AUDIT: Healthcare Booking App
 
@@ -291,7 +299,8 @@ Top Risks:
    • Penetration testing
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Covers authentication, data, logging, API
 - ✅ HIPAA gaps clearly mapped
 - ✅ Risk levels appropriate
@@ -304,6 +313,7 @@ Top Risks:
 ---
 
 ## 🔗 Related Skills
+
 - [Architecture Review](./02_architecture_review.skill.md)
 - [Code Review](./01_code_review.skill.md)
 

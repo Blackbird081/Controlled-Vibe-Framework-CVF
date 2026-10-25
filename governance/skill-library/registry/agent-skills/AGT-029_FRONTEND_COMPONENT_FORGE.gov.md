@@ -348,6 +348,7 @@ Accessibility:
 **UAT Link:** `governance/skill-library/uat/results/UAT-AGT-029.md`
 
 **PASS criteria:**
+
 - [ ] 100% domain code organized under features/
 - [ ] 100% data-fetching uses Suspense (no early-return spinners)
 - [ ] 100% routes lazy loaded
@@ -355,6 +356,7 @@ Accessibility:
 - [ ] WCAG AA compliance verified
 
 **FAIL criteria:**
+
 - [ ] useEffect used for data fetching
 - [ ] Component exceeds 300 lines
 - [ ] Route not lazy loaded

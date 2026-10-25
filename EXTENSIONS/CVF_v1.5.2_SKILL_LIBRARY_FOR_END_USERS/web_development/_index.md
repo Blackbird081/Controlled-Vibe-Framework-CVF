@@ -9,6 +9,7 @@
 ## 🎯 Domain Overview
 
 Domain này giúp End User làm việc với AI để tạo các sản phẩm web mà **không cần biết code**. Mỗi skill cung cấp:
+
 - Form input chuẩn
 - Tiêu chí đánh giá kết quả
 - Những lỗi thường gặp cần tránh

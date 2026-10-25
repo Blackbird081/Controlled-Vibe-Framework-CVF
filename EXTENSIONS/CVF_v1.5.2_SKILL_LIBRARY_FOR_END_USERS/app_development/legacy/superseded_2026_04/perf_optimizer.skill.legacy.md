@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Systematic performance optimization and regression debugging for OneKey mobile app (iOS). Use when: (1) Fixing performance regressions - when metrics like tokensStartMs, tokensSpanMs, or functionCallCount have regressed and need to be brought back to normal levels, (2) Improving baseline performance - when there's a need to optimize cold start time or reduce function call overhead, (3) User requests performance optimization/improvement/debugging for the app's startup or home screen refresh flow.
 
 **Khi nào dùng skill này:**
+
 - Cần Perf Optimizer với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: mobile app
-- Nguồn tham khảo: https://github.com/OneKeyHQ/app-monorepo/tree/x/.claude/skills/perf-optimizer
+- Nguồn tham khảo: <https://github.com/OneKeyHQ/app-monorepo/tree/x/.claude/skills/perf-optimizer>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Thiết kế API cho ứng dụng quản lý dự án
 Context: Team 4 dev, cần MVP trong 6 tuần
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Perf Optimizer Output
 

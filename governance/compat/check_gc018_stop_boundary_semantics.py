@@ -26,6 +26,11 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+try:
+    from guard_binding_catalog import private_binding, public_required_paths, public_required_markers, require_public_projection
+except ModuleNotFoundError:
+    from governance.compat.guard_binding_catalog import private_binding, public_required_paths, public_required_markers, require_public_projection
+
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 TEMPLATE_PATH = "docs/reference/CVF_GC018_CONTINUATION_CANDIDATE_TEMPLATE.md"
@@ -412,17 +417,22 @@ def _validate_packet(path: str) -> list[dict[str, str]]:
     return violations
 
 
-def _classify(changed_paths: dict[str, list[str]]) -> dict[str, Any]:
+def _classify(changed_paths: dict[str, list[str]], profile: str = "private") -> dict[str, Any]:
+    if profile == "public":
+        require_public_projection(REPO_ROOT)
     candidate_packets = [
         path for path, statuses in changed_paths.items()
-        if _is_candidate_packet(path, statuses)
+        if profile != "public" and _is_candidate_packet(path, statuses)
     ]
 
     violations = _validate_template()
+    if profile == "public" and not (REPO_ROOT / POLICY_PATH).is_file():
+        violations.append({"path": POLICY_PATH, "type": "missing_policy", "message": "Exported GC-018 policy is required."})
     for path in candidate_packets:
         violations.extend(_validate_packet(path))
 
     return {
+        **({"profile": "public", "privateEvidenceNotApplicable": "Private GC-018 continuation packets are not assessed; exported template and policy remain enforced.", "claimBoundary": "PUBLIC_TEMPLATE_CONTRACT_ONLY_NOT_PRIVATE_PACKET_APPROVAL"} if profile == "public" else {}),
         "candidatePacketCount": len(candidate_packets),
         "candidatePackets": candidate_packets,
         "violations": violations,
@@ -466,6 +476,7 @@ def main() -> int:
     parser.add_argument("--head", default=None, help="Git head ref")
     parser.add_argument("--enforce", action="store_true", help="Exit 2 on violation")
     parser.add_argument("--json", action="store_true", help="Print JSON report")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
 
     base, head, base_source = _resolve_range(args.base, args.head)
@@ -487,7 +498,7 @@ def main() -> int:
     worktree_changed = _get_worktree_name_status()
     merged = _merge_changed_maps(changed, worktree_changed)
 
-    classified = _classify(merged)
+    classified = _classify(merged, args.profile)
     report = {
         "timestamp": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "range": {"base": base, "head": head, "baseSource": base_source},
@@ -496,7 +507,7 @@ def main() -> int:
         **classified,
     }
 
-    if args.json:
+    if args.json or args.profile == "public":
         print(json.dumps(report, indent=2))
     else:
         _print_report(report, base, head, base_source)

@@ -52,6 +52,7 @@ Key-value/cache? ──Yes──→ Cloudflare KV / Redis
 ### Containerization Strategy
 
 #### Dockerfile Decision Tree
+
 ```
 Is it a Node.js/Python app?
 ├─ Yes → Multi-stage build (builder + runtime)
@@ -66,6 +67,7 @@ Need system deps?
 ```
 
 #### Multi-Stage Build Pattern (Node.js)
+
 ```dockerfile
 # Stage 1: Build
 FROM node:20-alpine AS builder
@@ -90,6 +92,7 @@ CMD ["node", "dist/index.js"]
 ```
 
 #### Docker Security Checklist
+
 - [ ] Non-root user in final stage
 - [ ] No secrets in image layers (use runtime env vars)
 - [ ] Pin base image versions (e.g., `node:20.11-alpine`)
@@ -100,6 +103,7 @@ CMD ["node", "dist/index.js"]
 ### Kubernetes Deployment Patterns
 
 #### Deployment Strategy Selection
+
 | Strategy | When | Risk | Rollback |
 |----------|------|------|----------|
 | **Rolling Update** | Default, most apps | Low | Automatic |
@@ -108,6 +112,7 @@ CMD ["node", "dist/index.js"]
 | **Recreate** | Non-critical, accepts downtime | High | Manual redeploy |
 
 #### Essential K8s Resources
+
 ```yaml
 # deployment.yaml
 apiVersion: apps/v1
@@ -151,6 +156,7 @@ spec:
 ### GitOps Workflow
 
 #### GitOps Decision Tree
+
 ```
 Team size > 5 developers? ──Yes──→ ArgoCD (UI, RBAC, multi-cluster)
          │No
@@ -160,6 +166,7 @@ Need approval gates? ──Yes──→ ArgoCD with sync policies
 ```
 
 #### GitOps Repository Structure
+
 ```
 infra/
 ├── base/                    # Base manifests
@@ -185,6 +192,7 @@ infra/
 ### CI/CD Pipeline Integration
 
 #### Pipeline Stages
+
 ```
 Code Push → Lint → Test → Build Image → Scan → Push Registry → Update Manifest → Deploy
            Gate 1   Gate 2   Gate 3      Gate 4                  Gate 5           Gate 6
@@ -202,6 +210,7 @@ Code Push → Lint → Test → Build Image → Scan → Push Registry → Updat
 ### Edge Deployment (Cloudflare Workers)
 
 #### Worker Pattern
+
 ```typescript
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -292,6 +301,7 @@ export default {
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Platform selected via decision tree, not ad hoc preference
 - [ ] Dockerfile follows multi-stage + non-root security checklist
 - [ ] Production deployment passes all 6 CI/CD pipeline gates
@@ -299,6 +309,7 @@ export default {
 - [ ] Rollback procedure documented before deploy
 
 **FAIL criteria:**
+
 - [ ] Secret committed to Git or baked into an image layer
 - [ ] Production deployment bypasses a CI gate
 - [ ] `latest` tag used in production

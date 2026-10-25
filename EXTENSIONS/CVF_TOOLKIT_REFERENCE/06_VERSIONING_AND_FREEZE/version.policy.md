@@ -22,6 +22,7 @@ Increase MAJOR when:
 - Certification model changes
 
 MAJOR upgrade requires:
+
 - Full regression UAT
 - Executive approval (for HIGH/CRITICAL domains)
 - Migration guide publication
@@ -38,6 +39,7 @@ Increase MINOR when:
 - Backward-compatible feature enhancement
 
 Requires:
+
 - Targeted UAT
 - Risk re-evaluation if domain-sensitive
 
@@ -61,6 +63,7 @@ No certification reset required unless affecting HIGH/CRITICAL skills.
 Each skill maintains its own version.
 
 If skill logic changes:
+
 - Skill version must increment
 - UAT must re-run
 - Certification may be invalidated

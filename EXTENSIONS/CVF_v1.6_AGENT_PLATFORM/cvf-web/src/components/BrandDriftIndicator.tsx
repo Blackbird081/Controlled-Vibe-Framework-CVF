@@ -57,14 +57,12 @@ function getStatusBadge(status: string, l: typeof LABELS.en) {
 export function BrandDriftIndicator({ data: propData, compact = false }: BrandDriftIndicatorProps) {
     const { language } = useLanguage();
     const l = LABELS[language];
-    const [data, setData] = useState<BrandDriftData | null>(propData || null);
+    const [fetchedData, setData] = useState<BrandDriftData | null>(null);
+    const data = propData ?? fetchedData;
     const [loading, setLoading] = useState(!propData);
 
     useEffect(() => {
-        if (propData) {
-            setData(propData);
-            return;
-        }
+        if (propData) return;
         let cancelled = false;
         async function fetchDrift() {
             try {
@@ -91,7 +89,7 @@ export function BrandDriftIndicator({ data: propData, compact = false }: BrandDr
         return () => { cancelled = true; };
     }, [propData]);
 
-    if (loading) return <p className="text-xs text-gray-400">{l.loading}</p>;
+    if (!propData && loading) return <p className="text-xs text-gray-400">{l.loading}</p>;
     if (!data) return null;
 
     const badge = getStatusBadge(data.status, l);

@@ -25,11 +25,13 @@ The extension does **NOT** replace CVF. It automates enforcement within CVF phas
 CVF is a governance-first intelligence architecture.
 
 It is NOT:
+
 - A multi-agent mesh
 - A self-modifying autonomous system
 - A stochastic experimentation engine
 
 It IS:
+
 - A Single-Agent Multi-Role system
 - Deterministic-first
 - Governance-enforced
@@ -41,22 +43,28 @@ It IS:
 ## Core Principles
 
 ### 1. Governance Above Intelligence
+
 No reasoning step can override governance rules. R3 → hard BLOCK, always.
 
 ### 2. Single Agent – Multi Role
+
 CVF prefers internal role transition over multiple agents with divergent logic.
 Roles map to CVF phases: Phase A→RESEARCH, B→DESIGN, C→BUILD, D→REVIEW.
 
 ### 3. Determinism Over Randomness
+
 Temperature is controlled. Entropy is self-calculated when possible.
 Snapshots include prompt hash for true reproducibility.
 
 ### 4. Learning Without Mutation
+
 Lessons are versioned, conflict-checked (keyword similarity), persisted to disk.
 Injected, not auto-applied.
 
 ### 5. Measured Intelligence
+
 CVF tracks (all persisted to `.jsonl`):
+
 - Mistake rate (time-windowed)
 - Elegance score (weighted + trended)
 - Verification score (time-tracked)

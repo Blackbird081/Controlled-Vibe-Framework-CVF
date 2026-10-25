@@ -5,11 +5,13 @@
 This module integrates OpenClaw as an interaction layer while keeping CVF as the deterministic core.
 
 OpenClaw is responsible for:
+
 - Conversational interface
 - Intent extraction
 - Tool invocation routing
 
 CVF remains responsible for:
+
 - Validation
 - Policy enforcement
 - Execution
@@ -30,6 +32,7 @@ User → OpenClaw → Intent → Proposal → CVF → Decision → Response → 
 This layer can be enabled or disabled via config.
 
 When disabled:
+
 - Requests bypass OpenClaw
 - CVF works in structured mode only
 

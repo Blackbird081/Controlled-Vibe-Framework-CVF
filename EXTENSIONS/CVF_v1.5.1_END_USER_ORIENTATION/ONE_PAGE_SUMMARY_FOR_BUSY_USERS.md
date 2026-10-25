@@ -31,12 +31,15 @@ Không phải công cụ AI. Không phải phần mềm. Là **cơ chế bảo v
 ## 3 nguyên tắc khi làm việc với CVF
 
 ### 1. Nói rõ mục tiêu
+>
 > "Tôi muốn X" — không phải "làm gì cũng được"
 
 ### 2. Chấp nhận bị hỏi lại
+>
 > CVF hỏi để làm rõ, không phải làm khó
 
 ### 3. Không ép kết quả
+>
 > Nếu CVF từ chối, xem lại yêu cầu thay vì ép tiếp
 
 ---

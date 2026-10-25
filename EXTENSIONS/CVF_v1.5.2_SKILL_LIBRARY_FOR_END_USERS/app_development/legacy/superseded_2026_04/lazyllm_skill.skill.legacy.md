@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > LazyLLM framework for building multi-agent AI applications. Use when task mentioned LazyLLM or AI program for: (1) Flow orchestration - linear, branching, parallel, loop workflows for complex data pipelines, (2) Model fine-tuning and acceleration - finetuning LLMs with LLaMA-Factory/Alpaca-LoRA/Collie and acceleration with vLLM/LMDeploy/LightLLM. Includes comprehensive code examples for all components, (3) RAG systems - knowledge-based QA with document retrieval, vectorization, and generation, (4) Agent development - single/multi-agent systems with tools, memory, planning, and web interfaces.
 
 **Khi nào dùng skill này:**
+
 - Cần Lazyllm Skill với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: web app
-- Nguồn tham khảo: https://github.com/LazyAGI/LazyLLM/tree/main/docs/lazyllm-skill
+- Nguồn tham khảo: <https://github.com/LazyAGI/LazyLLM/tree/main/docs/lazyllm-skill>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Thiết kế API cho ứng dụng quản lý dự án
 Context: Team 4 dev, cần MVP trong 6 tuần
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Lazyllm Skill Output
 

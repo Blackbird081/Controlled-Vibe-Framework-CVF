@@ -46,6 +46,7 @@ R4 means: **do not execute under any circumstances**.
 Every capability or task is assessed across 5 dimensions:
 
 ### 1. Authority Risk
+>
 > Can it override decisions, act autonomously, modify governance?
 
 | Level | Description |
@@ -56,6 +57,7 @@ Every capability or task is assessed across 5 dimensions:
 | R3 | Can override governance, modify system behavior |
 
 ### 2. Scope Expansion Risk
+>
 > Can it expand its own scope, run outside original context, chain uncontrolled?
 
 | Level | Description |
@@ -66,6 +68,7 @@ Every capability or task is assessed across 5 dimensions:
 | R3 | Can self-expand scope, create new tasks |
 
 ### 3. Irreversibility Risk
+>
 > Can actions be undone? Is there permanent impact?
 
 | Level | Description |
@@ -76,6 +79,7 @@ Every capability or task is assessed across 5 dimensions:
 | R3 | Irreversible (data deletion, external notifications) |
 
 ### 4. Interpretability Risk
+>
 > Is it hard to explain, trace logic, audit cause?
 
 | Level | Description |
@@ -86,6 +90,7 @@ Every capability or task is assessed across 5 dimensions:
 | R3 | Opaque (black-box decision, no clear trace) |
 
 ### 5. External Impact Risk
+>
 > Does it affect systems outside CVF, call external APIs, impact real world?
 
 | Level | Description |
@@ -204,6 +209,7 @@ For UAT (User Acceptance Testing), risk is evaluated via 3 dimensions:
 | **Failure Handling (F)** | Does the agent refuse / hedge / hallucinate when uncertain? |
 
 A well-governed agent:
+
 - Stays within capability boundaries (C)
 - Provides traceable outputs (V)
 - Fails gracefully when uncertain (F)
@@ -219,6 +225,7 @@ Every skill has a risk level in its metadata:
 ```
 
 This tells users:
+
 - R0 skills: Use freely, no governance needed
 - R1 skills: Peer review recommended
 - R2 skills: ARCHITECT approval before using output

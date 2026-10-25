@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Interview the user to turn a proposed product/engineering change into a structured design document. Use when the user asks to be interviewed, wants help clarifying a design, or wants a design doc produced from Q&A. Emphasize numbered questions (few at a time), capture requirements/constraints/UX/data/logic/testing, and output a clean design doc.
 
 **Khi nào dùng skill này:**
+
 - Cần De Ign Doc Interviewer với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: product ux
-- Nguồn tham khảo: https://github.com/liveloveapp/hashbrown/tree/main/.codex/skills/design-doc-interviewer
+- Nguồn tham khảo: <https://github.com/liveloveapp/hashbrown/tree/main/.codex/skills/design-doc-interviewer>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Thiết kế flow onboarding cho mobile app
 Context: Người dùng mới rơi nhiều ở bước 2
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # De Ign Doc Interviewer Output
 

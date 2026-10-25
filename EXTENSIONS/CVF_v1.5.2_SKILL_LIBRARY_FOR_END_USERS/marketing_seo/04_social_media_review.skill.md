@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá và tối ưu social media ads (Facebook, Instagram, TikTok, LinkedIn) để improve CTR, decrease CPC, và increase ROAS.
 
 **Khi nào nên dùng:**
+
 - Trước khi launch ad campaign
 - Ads có ROAS thấp
 - CTR dưới benchmark
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -79,6 +81,7 @@ Không yêu cầu.
 ## ✅ Checklist Đánh giá
 
 ### Creative/Visual
+
 - [ ] Thumb-stopping visual (scroll stop)?
 - [ ] Faces hoặc people in image?
 - [ ] Contrast và colors nổi bật?
@@ -88,6 +91,7 @@ Không yêu cầu.
 - [ ] Text overlay < 20% image?
 
 ### Ad Copy - Primary Text
+
 - [ ] Hook ngay câu đầu tiên?
 - [ ] Benefits > Features?
 - [ ] Social proof hoặc numbers?
@@ -95,23 +99,27 @@ Không yêu cầu.
 - [ ] Không quá dài (3-5 lines visible)?
 
 ### Headline
+
 - [ ] Clear value proposition?
 - [ ] Action-oriented?
 - [ ] Under 40 characters (no truncation)?
 - [ ] Matches ad creative?
 
 ### Call to Action
+
 - [ ] CTA button phù hợp (Learn More, Shop Now, Sign Up)?
 - [ ] CTA matches campaign objective?
 - [ ] Creates clear expectation?
 
 ### Landing Page Alignment
+
 - [ ] Ad promise = Landing page reality?
 - [ ] Visual consistency?
 - [ ] Same offer/CTA?
 - [ ] Fast load time?
 
 ### Platform-Specific
+
 - [ ] **Facebook/IG:** Carousel if multiple products?
 - [ ] **TikTok:** Native/authentic style?
 - [ ] **LinkedIn:** Professional tone?
@@ -136,7 +144,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Ad Benchmarks by Platform:
+### Ad Benchmarks by Platform
+
 | Platform | Avg CTR | Avg CPC |
 |----------|---------|---------|
 | Facebook | 0.9-1.5% | $0.50-2.00 |
@@ -144,7 +153,8 @@ Không yêu cầu.
 | LinkedIn | 0.4-0.6% | $2.00-7.00 |
 | TikTok | 1.0-3.0% | $0.20-1.00 |
 
-### High-Converting Ad Formula:
+### High-Converting Ad Formula
+
 ```
 [HOOK] → [PROBLEM] → [SOLUTION] → [PROOF] → [CTA]
 
@@ -154,7 +164,8 @@ With [Product], we helped 500+ brands cut CPC by 40%.
 Start your free trial today 👇"
 ```
 
-### Creative Best Practices:
+### Creative Best Practices
+
 ```
 ✅ User-generated content (UGC) outperforms polished ads
 ✅ Video ads: 15-30 seconds optimal
@@ -163,7 +174,8 @@ Start your free trial today 👇"
 ✅ Before/after comparisons work well
 ```
 
-### Facebook Ad Copy Template:
+### Facebook Ad Copy Template
+
 ```
 📌 HEADLINE: [Benefit in 5 words]
 
@@ -177,7 +189,8 @@ PRIMARY TEXT:
 💡 DESCRIPTION: [Short benefit + urgency]
 ```
 
-### TikTok-Style Ads:
+### TikTok-Style Ads
+
 - Look native, not like ads
 - Vertical 9:16 only
 - Hook in first 1-2 seconds
@@ -203,7 +216,8 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Platform: Facebook
 3 creatives, CTR 0.6%, CPC $1.2, CPA $28
@@ -211,7 +225,8 @@ Audience: chủ shop bán lẻ, 25-45
 Offer: "Dùng thử miễn phí"
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Ad Review
 
@@ -229,13 +244,15 @@ Offer: "Dùng thử miễn phí"
 - Caption nhấn offline + đồng bộ
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Chỉ ra vấn đề cụ thể
 - ✅ Có hook mới để test
 - ✅ Brief rõ ràng cho designer
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Content Quality Checklist](./content_quality_checklist.skill.md)
 - [Email Campaign Review](./email_campaign_review.skill.md)
 

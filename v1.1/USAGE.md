@@ -56,6 +56,7 @@
 ```
 
 ### Bước 5: Review & Merge
+
 ```
 □ Human review output của AI
 □ Chạy validation theo OUTPUT_SPEC
@@ -81,6 +82,7 @@
 ## 4. Do's and Don'ts
 
 ### ✅ DO
+
 - Viết spec trước khi yêu cầu AI code
 - Chia task lớn thành nhiều Action Units
 - Review mọi output của AI trước khi merge
@@ -88,6 +90,7 @@
 - Dùng Preset phù hợp với risk level
 
 ### ❌ DON'T
+
 - Để AI tự quyết định scope
 - Skip trace vì "task nhỏ"
 - Merge output mà không review
@@ -99,13 +102,17 @@
 ## 5. Tips & Tricks
 
 ### 💡 Tip 1: Template-first
+
 Dùng templates có sẵn trong `templates/` folder thay vì viết từ đầu.
 
 ### 💡 Tip 2: Preset chaining
+
 Có thể dùng Balanced Preset cho phần lớn task, chỉ switch sang Strict khi cần.
 
 ### 💡 Tip 3: Trace location
+
 Đặt trace cùng folder với output để dễ review:
+
 ```
 /feature-x/
   ├── code.py
@@ -113,13 +120,16 @@ Có thể dùng Balanced Preset cho phần lớn task, chỉ switch sang Strict 
 ```
 
 ### 💡 Tip 4: Fast Track criteria
+
 Nếu task thỏa ALL điều kiện sau → dùng Fast Track:
+
 - Duration < 2h
 - Scope isolated (không ảnh hưởng files khác)
 - Risk thấp
 - Không cần approval chain
 
 ### 💡 Tip 5: Rollback plan
+
 Luôn có backup trước khi AI thực thi task lớn. Git branch hoặc copy folder.
 
 ---
@@ -143,6 +153,7 @@ Luôn có backup trước khi AI thực thi task lớn. Git branch hoặc copy f
 ---
 
 ## Xem thêm
+
 - [QUICK_START.md](QUICK_START.md) — Bắt đầu trong 5 phút
 - [governance/INPUT_SPEC.md](governance/INPUT_SPEC.md) — Chi tiết spec đầu vào
 - [governance/FAST_TRACK.md](governance/FAST_TRACK.md) — Khi nào được rút gọn

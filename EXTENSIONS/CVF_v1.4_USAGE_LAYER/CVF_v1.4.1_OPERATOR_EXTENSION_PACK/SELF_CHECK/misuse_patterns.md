@@ -14,7 +14,7 @@ Dễ drift boundary
 
 Misuse Pattern không phải lỗi kỹ thuật.
 
-2. Các Misuse Pattern phổ biến
+1. Các Misuse Pattern phổ biến
 MP-01: Chat hóa CVF
 
 Dùng CVF như hội thoại
@@ -55,7 +55,7 @@ Thất vọng dù output đúng contract
 
 Hậu quả: Prompt vòng lặp vô hạn
 
-3. Cách tự kiểm tra nhanh
+1. Cách tự kiểm tra nhanh
 
 Trước khi blame AI, hỏi 3 câu:
 
@@ -67,7 +67,7 @@ Tôi có đổi kỳ vọng sau khi chạy không?
 
 Nếu có ≥ 1 câu trả lời là CÓ → khả năng cao là Misuse.
 
-4. Cách xử lý khi phát hiện Misuse
+1. Cách xử lý khi phát hiện Misuse
 
 Dừng execution hiện tại
 

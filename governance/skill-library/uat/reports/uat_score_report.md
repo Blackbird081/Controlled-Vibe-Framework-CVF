@@ -13,6 +13,7 @@
 | 🔘 NOT_RUN | 149 | UAT not yet executed |
 
 ## Domain Coverage
+
 | Domain | Skills |
 |---|---|
 | AI/ML Evaluation | 6 |
@@ -36,6 +37,7 @@
 | Web Development | 11 |
 
 ## Skill Scores
+
 | Skill ID | Domain | Status | Badge | Score | Quality |
 |---|---|---|---|---|---|
 | 01_app_requirements_spec | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |

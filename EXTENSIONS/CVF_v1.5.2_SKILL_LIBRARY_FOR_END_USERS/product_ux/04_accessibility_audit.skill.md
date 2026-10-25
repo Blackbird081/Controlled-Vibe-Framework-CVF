@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá website/app về accessibility theo WCAG guidelines. Đảm bảo sản phẩm có thể sử dụng được bởi mọi người, kể cả người có disabilities.
 
 **Khi nào nên dùng:**
+
 - Launch sản phẩm mới
 - Audit compliance trước deadline
 - Redesign UI components
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,6 +80,7 @@ Không yêu cầu.
 ## ✅ Checklist Đánh giá
 
 ### Perceivable (Có thể cảm nhận)
+
 - [ ] **Text alternatives:** Images có alt text?
 - [ ] **Captions:** Videos có subtitles/captions?
 - [ ] **Color contrast:** Minimum 4.5:1 cho text?
@@ -86,6 +89,7 @@ Không yêu cầu.
 - [ ] **Don't use color alone:** Info không chỉ rely on color?
 
 ### Operable (Có thể vận hành)
+
 - [ ] **Keyboard:** Tất cả functions dùng được bằng keyboard?
 - [ ] **Focus visible:** Focus indicator có visible?
 - [ ] **Focus order:** Tab order có logical?
@@ -95,12 +99,14 @@ Không yêu cầu.
 - [ ] **Multiple ways:** Có nhiều cách navigate (search, menu, sitemap)?
 
 ### Understandable (Có thể hiểu)
+
 - [ ] **Language:** Page language có declared?
 - [ ] **Predictable:** Navigation nhất quán across pages?
 - [ ] **Input assistance:** Form errors có clear và helpful?
 - [ ] **Error prevention:** Có confirmation cho actions quan trọng?
 
 ### Robust (Vững chắc)
+
 - [ ] **Valid HTML:** Markup có valid?
 - [ ] **ARIA:** Proper use của ARIA attributes?
 - [ ] **Name, Role, Value:** All UI components có accessible name?
@@ -123,14 +129,16 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### WCAG Levels:
+### WCAG Levels
+
 | Level | Description | Required For |
 |-------|-------------|--------------|
 | **A** | Basic minimum | All websites |
 | **AA** | Standard (recommended) | Government, Enterprise |
 | **AAA** | Excellent | Specialized audiences |
 
-### Color Contrast Check:
+### Color Contrast Check
+
 ```
 Text size < 18px (or 14px bold):
   ✅ Normal: 4.5:1 minimum
@@ -141,7 +149,8 @@ Large text ≥ 18px (or 14px bold):
   ✅ Enhanced: 4.5:1 for AAA
 ```
 
-### Free Testing Tools:
+### Free Testing Tools
+
 | Tool | Purpose |
 |------|---------|
 | **WAVE** | Browser extension for quick checks |
@@ -150,7 +159,8 @@ Large text ≥ 18px (or 14px bold):
 | **NVDA/VoiceOver** | Actual screen reader testing |
 | **Color Contrast Checker** | WebAIM's color tool |
 
-### ARIA Best Practices:
+### ARIA Best Practices
+
 ```html
 <!-- Good: Native HTML first -->
 <button>Click me</button>
@@ -166,7 +176,8 @@ aria-hidden="true" (decorative only)
 aria-live="polite" (dynamic content)
 ```
 
-### Quick Keyboard Test:
+### Quick Keyboard Test
+
 1. Press **Tab** - Can you reach all interactive elements?
 2. Press **Enter/Space** - Can you activate buttons/links?
 3. Press **Escape** - Can you close modals/popups?
@@ -202,14 +213,16 @@ Sau khi hoàn thành **Accessibility Audit (WCAG)**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Trang: Dashboard StockFlow
 Scope: Sidebar + table + filter modal
 Tools: Lighthouse + axe
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Accessibility Findings
 
@@ -224,13 +237,15 @@ Tools: Lighthouse + axe
 - Bổ sung aria-label="Search SKU"
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Map đúng WCAG
 - ✅ Fix cụ thể, khả thi
 - ✅ Có tool kiểm chứng
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [UX Heuristic Evaluation](./ux_heuristic_evaluation.skill.md)
 - [Error Handling UX](./error_handling_ux.skill.md)
 
@@ -241,7 +256,7 @@ Tools: Lighthouse + axe
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Error Handling UX
 
 Sau khi hoàn thành **Accessibility Audit (WCAG)**, tiếp tục với:
 → [Error Handling UX](./error_handling_ux.skill.md)
@@ -249,3 +264,5 @@ Sau khi hoàn thành **Accessibility Audit (WCAG)**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Product & UX Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

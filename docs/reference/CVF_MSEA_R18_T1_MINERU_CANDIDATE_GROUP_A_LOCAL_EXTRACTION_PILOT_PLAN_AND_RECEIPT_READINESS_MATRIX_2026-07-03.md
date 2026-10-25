@@ -19,6 +19,7 @@ Record a private pilot planning matrix and route-selection decision for a future
 Target: create a CVF-owned private pilot planning matrix that maps Candidate Group A files to a future command envelope, private output quarantine, and receipt fields.
 
 Source basis:
+
 - `docs/baselines/CVF_GC018_MSEA_R18_T1_MINERU_CANDIDATE_GROUP_A_LOCAL_EXTRACTION_PILOT_PLAN_AND_RECEIPT_READINESS_SELECTION_2026-07-03.md`
 - `docs/work_orders/CVF_AGENT_WORK_ORDER_MSEA_R18_T1_MINERU_CANDIDATE_GROUP_A_LOCAL_EXTRACTION_PILOT_PLAN_AND_RECEIPT_READINESS_SELECTION_2026-07-03.md`
 - `docs/reference/CVF_MSEA_R17_T1_MINERU_CANDIDATE_GROUP_A_PRIVATE_TEST_CORPUS_INTAKE_LEDGER_2026-07-03.md`

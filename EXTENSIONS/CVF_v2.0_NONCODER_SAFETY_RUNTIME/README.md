@@ -13,6 +13,7 @@
 v2.0 does one thing: **makes the v1.8+v1.9 kernel accessible to non-coders, safely.**
 
 v2.0 is NOT adding intelligence. It is an **abstraction layer** that:
+
 - Maps human language ("Is this safe?") to kernel policy
 - Hides risk scores, mutation budgets, phase states from non-technical users
 - Exposes 3 simple modes: SAFE / BALANCED / CREATIVE

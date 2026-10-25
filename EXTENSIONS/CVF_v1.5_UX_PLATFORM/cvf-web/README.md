@@ -16,7 +16,9 @@ Open [http://localhost:3000](http://localhost:3000)
 ## ✨ Features
 
 ### 📋 40+ Prompt Templates
+
 Categorized templates for various use cases:
+
 - Business, Marketing, Product, Technical
 - Research, Content, Security, DevOps
 
@@ -37,6 +39,7 @@ Interactive wizards that guide you through complex tasks:
 | 📊 **Data Analysis** | Research | 5 | Data analysis plan |
 
 **Wizard Features:**
+
 - ✅ Click-to-jump step navigation
 - ✅ Auto-save drafts (localStorage)
 - ✅ Field tips and guidance
@@ -75,12 +78,14 @@ src/
 ## 🎯 How to Use
 
 ### Templates
+
 1. Browse categories (Business, Technical, etc.)
 2. Select a template
 3. Fill in the fields
 4. Generate your prompt
 
 ### Wizards
+
 1. Navigate to category
 2. Click the wizard (marked with icon like 🛠️ 🎨 📣)
 3. Complete steps sequentially

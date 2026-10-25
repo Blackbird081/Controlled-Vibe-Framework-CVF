@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành các skills sau trước khi dùng skill này:
+>
 > - [App Requirements Spec](./01_app_requirements_spec.skill.md) — Cần requirements rõ ràng
 > - [Tech Stack Selection](./02_tech_stack_selection.skill.md) — Cần biết tech stack sẽ dùng
 
@@ -19,11 +20,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Đã có requirements và tech stack
 - Cần thiết kế cấu trúc hệ thống
 - App có > 3 components cần coordinate
 
 **Không phù hợp khi:**
+
 - App đơn giản (1-2 files)
 - Script ngắn, one-off task
 
@@ -66,6 +69,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -168,6 +172,7 @@ project/
 - [ ] Key decisions explained
 
 **Red flags (cần Reject):**
+
 - ⚠️ Components không có clear boundaries
 - ⚠️ Circular dependencies
 - ⚠️ God component (làm mọi thứ)
@@ -275,7 +280,8 @@ project/
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 System: StockFlow
 Modules: Auth, Inventory, Purchase Orders, Reporting, Sync
@@ -284,7 +290,8 @@ Constraint: Kho cần offline, sync khi có mạng
 Users: 50-80 concurrent
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Architecture Overview
 
@@ -307,13 +314,15 @@ Users: 50-80 concurrent
 - Idempotent sync để tránh double count
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Tách component rõ ràng
 - ✅ Có chiến lược offline/sync
 - ✅ Có xử lý reporting
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Tech Stack Selection](./02_tech_stack_selection.skill.md)
 - [Database Schema Design](./04_database_schema_design.skill.md)
 - [API Design Spec](./05_api_design_spec.skill.md)
@@ -328,7 +337,6 @@ Users: 50-80 concurrent
 ## 🔗 Next Step
 
 Sau khi có Architecture → [Database Schema Design](./04_database_schema_design.skill.md) (nếu cần DB) hoặc → [API Design Spec](./05_api_design_spec.skill.md)
-
 
 ---
 

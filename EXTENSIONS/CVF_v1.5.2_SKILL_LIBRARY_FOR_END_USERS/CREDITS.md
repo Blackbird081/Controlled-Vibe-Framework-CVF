@@ -1,8 +1,8 @@
 # Credits & Sources
 
 > CVF Skill Library mở rộng dựa trên việc học hỏi từ các nguồn tham khảo chất lượng cao.
-> 
-> **QUAN TRỌNG:** CVF là GỐC — các skills được CHUYỂN ĐỔI sang CVF format cho End Users, 
+>
+> **QUAN TRỌNG:** CVF là GỐC — các skills được CHUYỂN ĐỔI sang CVF format cho End Users,
 > KHÔNG phải copy nguyên bản.
 
 ---
@@ -10,7 +10,8 @@
 ## 🌟 Nguồn tham khảo chính
 
 ### antigravity-awesome-skills
-- **Repository:** https://github.com/sickn33/antigravity-awesome-skills
+
+- **Repository:** <https://github.com/sickn33/antigravity-awesome-skills>
 - **Loại:** Collection of 626+ Agentic Skills for AI Agents
 - **License:** MIT
 - **Sử dụng:** Học hỏi criteria và best practices, chuyển đổi sang CVF End User format
@@ -19,7 +20,7 @@
 
 ## 📋 Danh sách Skills đã học hỏi
 
-### Từ antigravity-awesome-skills:
+### Từ antigravity-awesome-skills
 
 | CVF Skill | Nguồn gốc | Transformation |
 |-----------|-----------|----------------|

@@ -20,6 +20,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -63,9 +64,11 @@ BASELINE_ARTIFACT_EXACT = {
 
 def _run_git(args: list[str]) -> tuple[int, str, str]:
     proc = subprocess.run(
-        ["git", *args],
+        ["git", "-c", "core.quotepath=false", *args],
         cwd=REPO_ROOT,
         text=True,
+        encoding="utf-8",
+        errors="strict",
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
@@ -219,6 +222,87 @@ def _classify(commits: list[dict[str, str]], changed_paths: dict[str, list[str]]
     }
 
 
+PUBLIC_CHANGE_EVIDENCE_PATH = "docs/EXPORT_MANIFEST.md"
+PUBLIC_CHANGE_EVIDENCE_SCHEMA = "cvf.publicChangeEvidence.v1"
+PUBLIC_CHANGE_CLAIM_BOUNDARY = "PUBLIC_CHANGE_TRACEABILITY_NOT_PRIVATE_CLOSURE"
+
+
+def _public_evidence_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON key")
+        result[key] = value
+    return result
+
+
+def _safe_public_path(value: Any) -> bool:
+    return (
+        isinstance(value, str) and bool(value)
+        and not any(character in value for character in "\\\0\r\n:")
+        and all(part not in ("", ".", "..") for part in value.split("/"))
+    )
+
+
+def classify_public_change_evidence(
+    commits, changed_paths, evidence_text: str, previous_text: str, expected_public_base: str,
+) -> dict[str, Any]:
+    """Bind public traceability to the exact current delta, never private closure."""
+    report = _classify(commits, changed_paths)
+    # Deletions also alter the public distribution; the evidence file cannot cover itself.
+    substantive = [path for path in changed_paths if path != PUBLIC_CHANGE_EVIDENCE_PATH and not _is_non_substantive(path)]
+    report.update(substantiveFiles=substantive, substantiveFileCount=len(substantive), hasSubstantiveUpdate=bool(substantive))
+    errors = []
+    sections = re.findall(r"(?m)^## Public Change Evidence[ \t]*$", evidence_text)
+    section = evidence_text.partition("## Public Change Evidence\n")[2].split("\n## ", 1)[0]
+    fields = {}
+    for label in ("Change summary", "Changed owners", "Validation"):
+        match = re.search(r"(?m)^" + re.escape(label) + r":[ \t]*(\S[^\n]*)$", section)
+        fields[label] = match.group(1).strip() if match else ""
+    if len(sections) != 1 or not all(fields.values()) or any(
+        re.search(r"\b(?:TODO|TBD|placeholder)\b", value, re.I) for value in fields.values()
+    ):
+        errors.append("missing_or_incomplete_public_summary")
+    evidence_status = changed_paths.get(PUBLIC_CHANGE_EVIDENCE_PATH, [])
+    if not evidence_status or _is_deleted_only(evidence_status) or evidence_text == previous_text:
+        errors.append("public_evidence_not_changed")
+    fences = re.findall(r"(?ms)^```public-change-evidence-json[ \t]*\n(.*?)^```[ \t]*$", section)
+    evidence = None
+    if len(fences) == 1:
+        try:
+            evidence = json.loads(fences[0], object_pairs_hook=_public_evidence_object)
+        except (ValueError, TypeError):
+            pass
+    if not isinstance(evidence, dict):
+        errors.append("missing_or_invalid_public_evidence_json")
+    else:
+        required = {"schemaVersion", "publicBase", "sourceCommit", "changedPaths", "claimBoundary"}
+        if set(evidence) != required or evidence.get("schemaVersion") != PUBLIC_CHANGE_EVIDENCE_SCHEMA:
+            errors.append("invalid_public_evidence_schema")
+        if evidence.get("claimBoundary") != PUBLIC_CHANGE_CLAIM_BOUNDARY:
+            errors.append("invalid_public_claim_boundary")
+        for key in ("publicBase", "sourceCommit"):
+            if not isinstance(evidence.get(key), str) or not re.fullmatch(r"[0-9a-f]{40}", evidence[key]):
+                errors.append(f"invalid_{key}")
+        if evidence.get("publicBase") != expected_public_base:
+            errors.append("public_base_mismatch")
+        paths = evidence.get("changedPaths")
+        expected_paths = sorted(path for path in changed_paths if path != PUBLIC_CHANGE_EVIDENCE_PATH)
+        if not isinstance(paths, list) or not all(_safe_public_path(value) for value in paths):
+            errors.append("invalid_public_changed_paths")
+        elif paths != expected_paths:
+            errors.append("public_changed_paths_mismatch")
+    valid = not errors
+    report.update({
+        "profile": "public", "publicChangeEvidencePath": PUBLIC_CHANGE_EVIDENCE_PATH,
+        "publicChangeEvidenceValid": valid, "publicChangeEvidenceErrors": errors,
+        "baselineArtifactsUpdated": [PUBLIC_CHANGE_EVIDENCE_PATH] if valid else [],
+        "baselineArtifactCount": int(valid),
+        "compliant": not report["hasSubstantiveUpdate"] or valid,
+    })
+    return report
+
+
 def _print_report(report: dict[str, Any], base: str, head: str, base_source: str) -> None:
     print("=== CVF Baseline Update Gate ===")
     print(f"Range: {base}..{head}")
@@ -277,6 +361,7 @@ def main() -> int:
         "--write-report", default=None,
         help="Optional output path for JSON report file"
     )
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
 
     base, head, base_source = _resolve_range(args.base, args.head)
@@ -285,7 +370,7 @@ def main() -> int:
         commits = _get_commits_in_range(base, head)
         changed = _get_changed_name_status(base, head)
     except RuntimeError as exc:
-        if args.base:
+        if args.base and args.profile == "private":
             fallback_base = "HEAD~1"
             try:
                 commits = _get_commits_in_range(fallback_base, head)
@@ -307,6 +392,23 @@ def main() -> int:
     merged = _merge_changed_maps(changed, worktree_changed)
 
     classified = _classify(commits, merged)
+    if args.profile == "public":
+        from guard_binding_catalog import require_public_projection
+        try:
+            require_public_projection(REPO_ROOT)
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
+            return 1
+        code, public_base, _ = _run_git(["rev-parse", "--verify", f"{base}^{{commit}}"])
+        if code != 0:
+            print("Unable to resolve the public evidence base commit", file=sys.stderr)
+            return 1
+        evidence_path = REPO_ROOT / PUBLIC_CHANGE_EVIDENCE_PATH
+        evidence_text = evidence_path.read_text(encoding="utf-8") if evidence_path.is_file() else ""
+        code, previous_text, _ = _run_git(["show", f"{base}:{PUBLIC_CHANGE_EVIDENCE_PATH}"])
+        classified = classify_public_change_evidence(
+            commits, merged, evidence_text.strip(), previous_text if code == 0 else "", public_base,
+        )
     report = {
         "timestamp": dt.datetime.now(dt.timezone.utc)
             .replace(microsecond=0).isoformat().replace("+00:00", "Z"),

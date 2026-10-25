@@ -208,6 +208,7 @@ value keys remain as planning inputs to this C-02 rewrite plan.
 Decision: **DEFER_WITH_REASON** for all strategy-layer depth components.
 
 Affected accepted value keys:
+
 - `executionStrategyTaxonomy` (SINGLE_SHOT/ITERATIVE/MULTI_STEP/PARALLEL/TREE)
 - `executionPlannerStepLifecycle` (strategy-to-plan DAG, dependency graph, constraint-aware expansion)
 - `executionEngineStepLifecycleModel` (PENDING/READY/RUNNING/SUCCESS/FAILURE lifecycle)
@@ -250,6 +251,7 @@ the coverage index before opening a new strategy-plane implementation GC-018.
 Decision: **INCLUDE_IN_BOUNDARY** (advisory/planning only; no implementation authorized).
 
 Affected accepted value keys:
+
 - `routingPolicyEnginePluggablePipeline`
 - `routingContextFullInterface`
 
@@ -295,6 +297,7 @@ GC-018 with source verification of every named field and interface.
 Decision: **INCLUDE_IN_BOUNDARY** (advisory/planning only; no implementation authorized).
 
 Affected accepted value key:
+
 - `dynamicModelRegistryWithHealthMonitoring`
 
 Current source state:
@@ -346,12 +349,14 @@ key `dynamicModelRegistryWithHealthMonitoring`.
 Decision: **INCLUDE_IN_BOUNDARY** (advisory/planning only; no implementation authorized).
 
 Affected accepted value keys:
+
 - `integrationFlowResponsibilityBoundary`
 - `gatewayUnifiedInterfaceBoundary`
 
 Current source state:
 
 The `EXTENSIONS/CVF_MODEL_GATEWAY/src/index.ts` barrel exports:
+
 - `GatewayPolicyContext`, `GatewayPolicyResult`, `isPolicyAllowed` (gateway policy)
 - `RoutingRequest`, `RoutingDecision`, `RoutingPolicyEngine`, `buildRoutingPolicyContractSnapshot` (routing)
 - `ProviderRegistry`, `ProviderRecord`, `ProviderModel` (provider registry)
@@ -421,6 +426,7 @@ authorized without separate operator privacy/GDPR authorization.
 
 Restate condition: a future operator-authorized absorption wave for the AI Gateway
 family requires:
+
 1. Explicit operator instruction citing the LHW17 T2 deferral and acknowledging
    the privacy/GDPR risk.
 2. A new GC-018 or equivalent governed work order.
@@ -463,6 +469,7 @@ accepting this plan):
 C-02 Implementation Tranche -- Provider Routing Boundary Implementation
 
 Priority 1 (core routing boundary):
+
 - Extend `RoutingRequest` and `RoutingDecision` to include execution-stage,
   complexity-score, risk-score, required-capabilities, cost-budget,
   latency-budget-ms, and fallback-chain (or a `RoutingContext` wrapper).
@@ -470,21 +477,25 @@ Priority 1 (core routing boundary):
   stage-based and cost-based policies, a merge engine, and an escalation policy.
 
 Priority 2 (registry boundary):
+
 - Define a `DynamicModelRegistry` extension on top of the current
   `provider-capability-registry.ts` and `provider-registry.ts` to support
   tier-based model selection, `findOptimal` query, and static+runtime merge.
 
 Priority 3 (gateway interface boundary):
+
 - Define a unified gateway interface layer combining `execute_model`,
   `execute_model_stream`, `generate_embedding`, `gateway_health` with
   credential shielding and standard error format.
 - Define a responsibility-chain boundary document.
 
 Deferred to a separate strategy-plane tranche:
+
 - Execution Planner, Strategy Taxonomy, Feedback Loop, Strategy Registry, and
   Execution Engine step lifecycle.
 
 Deferred pending operator authorization:
+
 - AI Gateway family (environment signal capture).
 
 ---
@@ -554,6 +565,7 @@ also held that no current source surface would fully own a required legacy value
 meaning no narrowing of the next tranche recommendation would be needed.
 
 Evidence Comparison: Prediction confirmed. Source inspection verified:
+
 - `RoutingPolicyEngine` (`routing-policy.ts:60`) exists but has no pluggable
   policy pipeline, no `PolicyDecision` interface, no merge engine, no escalation
   policy, and no stage-based or complexity-score routing.

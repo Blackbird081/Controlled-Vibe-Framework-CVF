@@ -5,7 +5,7 @@
   "sourceAuditEvidence": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_EVIDENCE_2026-07-10.json",
   "reviewerCompletion": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md",
   "reviewerCompletionMaterialCommit": "645df8b83",
-  "lastVerifiedDate": "2026-09-27",
+  "lastVerifiedDate": "2026-10-26",
   "maxAgeDays": 30,
   "reminderPolicy": "This machine map and its human companion record reviewer-accepted MSEA-R90 Audit A findings. Source-file drift and review age are detected automatically by governance/compat/check_system_chain_map_freshness.py. Detecting drift or age expiry never rewrites a lane's currentPosture or verdict automatically; only a fresh governed review may change those fields.",
   "lanes": [
@@ -25,35 +25,48 @@
       "sourceFingerprints": [
         {
           "path": "ECOSYSTEM/doctrine/CVF_LAYER_MODEL.md",
-          "sha256": "b3529fdd4d71bb69be3558230267042549d482aeb4732c3015048b86733156a0",
-          "evidenceRole": "frozen doctrine authority for L0-L6 layer naming"
+          "sha256": "ccbed174e65f2f6b4ee95608633954e779dedced585ddce3f2e7029601aa6373",
+          "evidenceRole": "frozen doctrine authority for L0-L6 layer naming",
+          "provenanceSha256": "b3529fdd4d71bb69be3558230267042549d482aeb4732c3015048b86733156a0",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "ARCHITECTURE.md",
           "sha256": "fcbc2fdb1d678dc1f92d5f32744c6a8a97fa159fdf47e183cee41994916f6cb2",
-          "evidenceRole": "non-doctrine master-architecture narration, including the bounded SOT3 knowledge-authority path"
+          "evidenceRole": "non-doctrine master-architecture narration, including the bounded SOT3 knowledge-authority path",
+          "provenanceSha256": "fcbc2fdb1d678dc1f92d5f32744c6a8a97fa159fdf47e183cee41994916f6cb2",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "docs/reference/CVF_ARCHITECTURE_DIAGRAMS.md",
-          "sha256": "84f06ebad0892a5b641c7dfeac4c3110db1a6bf304dc6f20500398cb1758a599",
-          "evidenceRole": "non-doctrine module-map narration (5 Layers mermaid stack)"
+          "sha256": "e23cf4aa592ec005cc3c13cff9e95e0e8cb96d81dee3c7daa8bc60b8838833a7",
+          "evidenceRole": "non-doctrine module-map narration (5 Layers mermaid stack)",
+          "provenanceSha256": "84f06ebad0892a5b641c7dfeac4c3110db1a6bf304dc6f20500398cb1758a599",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "docs/CVF_CORE_KNOWLEDGE_BASE.md",
-          "sha256": "1390aa75fc9cf882691c07e2a7ceac6edd62c0c0593609981d6a24e3201bf1d6",
-          "evidenceRole": "non-doctrine module-map narration (5 Layers version stack)"
+          "sha256": "a39a5b98be025debff3b2300e3a5ad570aa50791ade5f84df502af347dd1fa3f",
+          "evidenceRole": "non-doctrine module-map narration (5 Layers version stack)",
+          "provenanceSha256": "7ff7c3ab9b6fb05cbad05e23ea44e7df6329025f555ba0e26ff93a34351557fe",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "docs/reference/system_chain/CVF_DOCTRINE_TO_CONTRACT_ROUTE_MAP.md",
           "sha256": "ba6122efe310706d97c2c0929796ade301d33bb0e70fd6d2361e9d5ef42d987b",
-          "evidenceRole": "R94-T2 active doctrine route and intentional-separation record"
+          "evidenceRole": "R94-T2 active doctrine route and intentional-separation record",
+          "provenanceSha256": "ba6122efe310706d97c2c0929796ade301d33bb0e70fd6d2361e9d5ef42d987b",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "docs/reference/system_chain/CVF_SYSTEM_DEFINITION.md",
           "sha256": "5f1d43483537f09f294c4b072a152dae3dd0ffa4f1f5d7c31ad206397c83fc57",
-          "evidenceRole": "R99 active L1 identity, component, and navigation pointer owner"
+          "evidenceRole": "R99 active L1 identity, component, and navigation pointer owner",
+          "provenanceSha256": "5f1d43483537f09f294c4b072a152dae3dd0ffa4f1f5d7c31ad206397c83fc57",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         }
-      ]
+      ],
+      "publicProofDisposition": "STATIC_SOURCE_REVIEW_NOT_RUNTIME_PROOF"
     },
     {
       "laneId": "CONTRACT_TO_RUNTIME",
@@ -71,50 +84,69 @@
       "sourceFingerprints": [
         {
           "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
-          "sha256": "f0ad0b5899bb5f39c09bc189d87cf129e50a1b6bd4969a7ec1ce30dafed6b612",
-          "evidenceRole": "control matrix rows GC-001, GC-009, GC-011, GC-019"
+          "sha256": "fa68156e3584bd661de805bdedd92a2c9b03160b17a2b2f65c4c4041bac981a3",
+          "evidenceRole": "control matrix rows GC-001, GC-009, GC-011, GC-019",
+          "provenanceSha256": "f0ad0b5899bb5f39c09bc189d87cf129e50a1b6bd4969a7ec1ce30dafed6b612",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/guards/phase-gate.guard.ts",
-          "sha256": "fc5c509f0273155f946018484683906efd2e6a2513023acd78119055a39257f6",
-          "evidenceRole": "GC-001 cited implementation"
+          "sha256": "034b1e82b8d9be538ba2ec0160c41b58168d2bd9ae51a72dc90ba3953a38da1f",
+          "evidenceRole": "GC-001 cited implementation",
+          "provenanceSha256": "fc5c509f0273155f946018484683906efd2e6a2513023acd78119055a39257f6",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts",
-          "sha256": "deae7e264f0a51446ac44110389bf65f6d3fa7f76863efe04178b435997b1cd2",
-          "evidenceRole": "GC-001 real production caller (registerGuard) and GC-009 package barrel export"
+          "sha256": "2fc4f5ce93d775ba517fa4326432425d1631e4afa1b15154f876ea0c9d279987",
+          "evidenceRole": "GC-001 real production caller (registerGuard) and GC-009 package barrel export",
+          "provenanceSha256": "deae7e264f0a51446ac44110389bf65f6d3fa7f76863efe04178b435997b1cd2",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts",
           "sha256": "b024986015de1e7645ca478c8d1d29d994150de26ec7cc9917960d632c174997",
-          "evidenceRole": "GC-009 cited implementation with context-preserving checkContext, RFR-R2 frozen bootstrap configuration, exact canonical bypass matching, and malformed-action fail-closed admission"
+          "evidenceRole": "GC-009 cited implementation with context-preserving checkContext, RFR-R2 frozen bootstrap configuration, exact canonical bypass matching, and malformed-action fail-closed admission",
+          "provenanceSha256": "b024986015de1e7645ca478c8d1d29d994150de26ec7cc9917960d632c174997",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts",
           "sha256": "05d97f3b6057740d73730d3ad0b8c4230ea4ff2953c43f376f0dd0cd428a859e",
-          "evidenceRole": "GC-009 cited test with checkContext coverage, valid source pairing, and RFR-R2 F3-F4 adversarial matrix including zero-engine malformed-action rejection"
+          "evidenceRole": "GC-009 cited test with checkContext coverage, valid source pairing, and RFR-R2 F3-F4 adversarial matrix including zero-engine malformed-action rejection",
+          "provenanceSha256": "05d97f3b6057740d73730d3ad0b8c4230ea4ff2953c43f376f0dd0cd428a859e",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/pipeline.orchestrator.ts",
-          "sha256": "5a6c6c6dded1010357f20e30543697d7222e2bf148f5b7d138f2ae63109dad02",
-          "evidenceRole": "GC-011 cited implementation"
+          "sha256": "43c4ebb87f3f881ed96ac52fbd9f565c8448ab657dee5157f3721e7abae0e62a",
+          "evidenceRole": "GC-011 cited implementation",
+          "provenanceSha256": "5a6c6c6dded1010357f20e30543697d7222e2bf148f5b7d138f2ae63109dad02",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts",
-          "sha256": "17e220c23f580ed38752d0d3806493204e03119cb38b2a057939c0abe22e00ca",
-          "evidenceRole": "GC-011 real production caller and GC-001 alternate-class registration site"
+          "sha256": "db4f9519a14d54b069bcdeab0272c94e8c8d4bee97674d49fed802b652d528e1",
+          "evidenceRole": "GC-011 real production caller and GC-001 alternate-class registration site",
+          "provenanceSha256": "17e220c23f580ed38752d0d3806493204e03119cb38b2a057939c0abe22e00ca",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/index.test.ts",
-          "sha256": "5a9fc09fe3653b419a29ecf785c2d4b87641da2652eb904164dae9614b11cbb8",
-          "evidenceRole": "direct contract tests for canonical shared guard composition, including build_authority and RFR-R2 F2 registered-guard immutability"
+          "sha256": "b9a56817531ffe0d9b715b8886d36ed331b45d8811d4b31b3f95ea7933ee0f1d",
+          "evidenceRole": "direct contract tests for canonical shared guard composition, including build_authority and RFR-R2 F2 registered-guard immutability",
+          "provenanceSha256": "5a9fc09fe3653b419a29ecf785c2d4b87641da2652eb904164dae9614b11cbb8",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/tests/pipeline.orchestrator.test.ts",
-          "sha256": "5b2218e54e28108d6592a8b494abb7ee2ec1b9c35fe364ee3fae03f97f4a2b8b",
-          "evidenceRole": "GC-011 cited test, valid pairing"
+          "sha256": "fdff666e763a27085dcf4270486a213b684f66b68c02fd8b4d2eb8091e5d1733",
+          "evidenceRole": "GC-011 cited test, valid pairing",
+          "provenanceSha256": "5b2218e54e28108d6592a8b494abb7ee2ec1b9c35fe364ee3fae03f97f4a2b8b",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         }
-      ]
+      ],
+      "publicProofDisposition": "STATIC_SOURCE_REVIEW_NOT_RUNTIME_PROOF"
     },
     {
       "laneId": "RUNTIME_TO_ENFORCEMENT",
@@ -132,35 +164,49 @@
       "sourceFingerprints": [
         {
           "path": ".github/workflows/documentation-testing.yml",
-          "sha256": "26d0ab30e1b7a31c41ec57734a0dde2944d25ede62e2c867d6e66e033025efe7",
-          "evidenceRole": "CI job invoking the conformance runner"
+          "sha256": "3bcf0fae0fa61e45715709b29dd61923f0473657d45c8d956f7806dc13614aad",
+          "evidenceRole": "CI job invoking the conformance runner",
+          "provenanceSha256": "e339c91bc69bfd0596b717b81e55379f71fd1bb764f9bd475e78ebaa86c75605",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "scripts/run_cvf_cross_extension_conformance.py",
           "sha256": "5dffce139e1699bc43f26dc4eb250ea4543d84878967569b6886d357c274c7a1",
-          "evidenceRole": "reads scenario registry and subprocess-executes each command"
+          "evidenceRole": "reads scenario registry and subprocess-executes each command",
+          "provenanceSha256": "5dffce139e1699bc43f26dc4eb250ea4543d84878967569b6886d357c274c7a1",
+          "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
         },
         {
           "path": "scripts/run_cvf_packet_posture_gate_conformance.py",
           "sha256": "afc6fb63d04bab644d0580d0d448d88a4931f523ef315e78e286b6ba543c49a7",
-          "evidenceRole": "generic --gate runner against 4 canonical packet postures"
+          "evidenceRole": "generic --gate runner against 4 canonical packet postures",
+          "provenanceSha256": "afc6fb63d04bab644d0580d0d448d88a4931f523ef315e78e286b6ba543c49a7",
+          "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
         },
         {
           "path": "docs/reference/CVF_CONFORMANCE_SCENARIOS.json",
-          "sha256": "aaf625239e390fd97dbffad75a3bda687fd2ac40ca8cd9732b9c386a114beabb",
-          "evidenceRole": "scenario registry with CF-076..CF-084 command arrays"
+          "sha256": "e9366f0eed50d5e489e698abb1ba5c0f7d90f7b5e7c3a40280f791611bd13260",
+          "evidenceRole": "scenario registry with CF-076..CF-084 command arrays",
+          "provenanceSha256": "aaf625239e390fd97dbffad75a3bda687fd2ac40ca8cd9732b9c386a114beabb",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "governance/compat/check_conformance_artifact_consistency.py",
-          "sha256": "7d6dc567eef11b1134ed3686cd1b2b283b877b2d5bd92e198892a533336a5585",
-          "evidenceRole": "registry/report/summary mutual-consistency enforcement"
+          "sha256": "fd913e1556d44a39a9ab68b36b4669c67f3b20d70e5af012ab1969b0bb8b93ab",
+          "evidenceRole": "default-private registry/report/summary mutual-consistency enforcement; explicit public profile validates registry schema only and does not run the private chain",
+          "provenanceSha256": "f19c4f34022701e046234b827688bf353a0d14f20e6871cc1635939b07a5f4d0",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "docs/reference/CVF_MSEA_R72F_FIRST_RETIREMENT_OR_CONSOLIDATION_PILOT_DECISION_MATRIX_2026-07-08.md",
-          "sha256": "7f81f8c864e0d1ad8eebaa0f0fce49087d726739216d67ce85b5fcc6f67f07e4",
-          "evidenceRole": "unchanged R72F lifecycle disposition authority"
+          "sha256": "a7b2c069b85a6ff9546afda043d8c1cffe48b5490b9683eacb0dbeccfff09d5b",
+          "evidenceRole": "unchanged R72F lifecycle disposition authority",
+          "provenanceSha256": "7f81f8c864e0d1ad8eebaa0f0fce49087d726739216d67ce85b5fcc6f67f07e4",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         }
-      ]
+      ],
+      "publicProofDisposition": "STATIC_SOURCE_REVIEW_NOT_RUNTIME_PROOF",
+      "publicInvocationDisposition": "PRIVATE_INVOCATION_NOT_PUBLIC_PROOF"
     },
     {
       "laneId": "ENFORCEMENT_TO_EVIDENCE",
@@ -178,15 +224,20 @@
       "sourceFingerprints": [
         {
           "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
-          "sha256": "f0ad0b5899bb5f39c09bc189d87cf129e50a1b6bd4969a7ec1ce30dafed6b612",
-          "evidenceRole": "GC-019 corrected archive-qualified citation"
+          "sha256": "fa68156e3584bd661de805bdedd92a2c9b03160b17a2b2f65c4c4041bac981a3",
+          "evidenceRole": "GC-019 corrected archive-qualified citation",
+          "provenanceSha256": "f0ad0b5899bb5f39c09bc189d87cf129e50a1b6bd4969a7ec1ce30dafed6b612",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "docs/reference/CVF_OPERATIONAL_REFERENCE_INDEX_2026-05-23.md",
           "sha256": "a8dac5c8538b3c19e5d6e6442f338420ba55a6babc578165299cd28f9e7474c4",
-          "evidenceRole": "corrected archive-qualified citations, honest H2-missing wording, and bounded SOT3 operational routing"
+          "evidenceRole": "corrected archive-qualified citations, honest H2-missing wording, and bounded SOT3 operational routing",
+          "provenanceSha256": "a8dac5c8538b3c19e5d6e6442f338420ba55a6babc578165299cd28f9e7474c4",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         }
-      ]
+      ],
+      "publicProofDisposition": "STATIC_SOURCE_REVIEW_NOT_RUNTIME_PROOF"
     },
     {
       "laneId": "EVIDENCE_TO_OPERATOR_SURFACE",
@@ -205,55 +256,77 @@
         {
           "path": "scripts/cvf_doctor.py",
           "sha256": "ca63a09f1f68ad9245fd8aaa108440709f83f54c946c7c414efc65725aabe33e",
-          "evidenceRole": "CLI human-readable operator readout plus secret-safe capability environment snapshot"
+          "evidenceRole": "CLI human-readable operator readout plus secret-safe capability environment snapshot",
+          "provenanceSha256": "ca63a09f1f68ad9245fd8aaa108440709f83f54c946c7c414efc65725aabe33e",
+          "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
         },
         {
           "path": "governance/compat/run_agent_autorun_workflow_gate.py",
           "sha256": "8d28ac306eb2d7569571b53a833478b59708e89860ef11ff06115ba8a8ea6a1e",
-          "evidenceRole": "per-checker PASS/FAIL CLI print, bound dispatch-release and package target-state feasibility admission, plus v3 JSON receipt owner"
+          "evidenceRole": "per-checker PASS/FAIL CLI print, bound dispatch-release and package target-state feasibility admission, plus v3 JSON receipt owner",
+          "provenanceSha256": "8d28ac306eb2d7569571b53a833478b59708e89860ef11ff06115ba8a8ea6a1e",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "governance/compat/agent_autorun_machine_verification.py",
           "sha256": "e3686ee11d7d52e644a7d68eea47dd744ec3a6e9970d503aed704f4e9c3cc9d5",
-          "evidenceRole": "canonical v3 machine-verification receipt composition, digest, and integrity validation"
+          "evidenceRole": "canonical v3 machine-verification receipt composition, digest, and integrity validation",
+          "provenanceSha256": "e3686ee11d7d52e644a7d68eea47dd744ec3a6e9970d503aed704f4e9c3cc9d5",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "governance/compat/run_agent_automation_assist.py",
           "sha256": "c58c424a2754d5183db05ae2489d59d8a6c59351c04c3813d7cee74cbbd1ad30",
-          "evidenceRole": "optional repository-bounded receipt consumption integration"
+          "evidenceRole": "optional repository-bounded receipt consumption integration",
+          "provenanceSha256": "c58c424a2754d5183db05ae2489d59d8a6c59351c04c3813d7cee74cbbd1ad30",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "governance/compat/agent_automation_machine_verification_readout.py",
           "sha256": "ff6088bf8144deec4582ce9faf62384b314346c9cbbb87f6b3349a2d23f7e7c3",
-          "evidenceRole": "exception-first mechanical reviewer readout composition without semantic authorization"
+          "evidenceRole": "exception-first mechanical reviewer readout composition without semantic authorization",
+          "provenanceSha256": "ff6088bf8144deec4582ce9faf62384b314346c9cbbb87f6b3349a2d23f7e7c3",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "governance/compat/run_local_governance_hook_chain.py",
-          "sha256": "ee89ca632dc594ece4519e1309936c5f3c4c23ce4ca850670f18e1ca820f0252",
-          "evidenceRole": "per-hook-step PASS/FAIL CLI print"
+          "sha256": "ef976fc122c0d8c068ad34dbe50c975c28a249c8fc64848e56678b7d9773de96",
+          "evidenceRole": "per-hook-step PASS/FAIL CLI print",
+          "provenanceSha256": "ee89ca632dc594ece4519e1309936c5f3c4c23ce4ca850670f18e1ca820f0252",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/web-governance-jobs.ts",
           "sha256": "ac0dae3f9afac15f021ba964499f23659482f9bf477a9e3ccb55d3e546d2a585",
-          "evidenceRole": "Web job registry, 5 job types, 1 directly wired checker"
+          "evidenceRole": "Web job registry, 5 job types, 1 directly wired checker",
+          "provenanceSha256": "ac0dae3f9afac15f021ba964499f23659482f9bf477a9e3ccb55d3e546d2a585",
+          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         }
-      ]
+      ],
+      "publicProofDisposition": "STATIC_SOURCE_REVIEW_NOT_RUNTIME_PROOF"
     }
   ],
   "auditManifestFingerprint": {
     "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_2026-07-10.md",
     "sha256": "e280b23392b76d9da73a90a9a0e6884e9706a056565e5e3748566044070a00b6",
-    "evidenceRole": "canonical source audit Markdown"
+    "evidenceRole": "canonical source audit Markdown",
+    "provenanceSha256": "e280b23392b76d9da73a90a9a0e6884e9706a056565e5e3748566044070a00b6",
+    "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
   },
   "auditEvidenceFingerprint": {
     "path": "docs/audits/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_EVIDENCE_2026-07-10.json",
     "sha256": "341c7622f9298efde2407405e23da80ba943b6e3e067ce25ae7607dce4cbe465",
-    "evidenceRole": "canonical source JSON evidence companion"
+    "evidenceRole": "canonical source JSON evidence companion",
+    "provenanceSha256": "341c7622f9298efde2407405e23da80ba943b6e3e067ce25ae7607dce4cbe465",
+    "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
   },
   "reviewerCompletionFingerprint": {
     "path": "docs/reviews/CVF_MSEA_R90_SYSTEM_CHAIN_AUDIT_A_COMPLETION_2026-07-10.md",
     "sha256": "773a668127a163801d113cb3b7dd8f5697b1ce2b32a62c66e3b2bfb739533fc8",
-    "evidenceRole": "reviewer acceptance record, REVIEWER_ACCEPTED_BOUNDED"
+    "evidenceRole": "reviewer acceptance record, REVIEWER_ACCEPTED_BOUNDED",
+    "provenanceSha256": "773a668127a163801d113cb3b7dd8f5697b1ce2b32a62c66e3b2bfb739533fc8",
+    "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
   },
-  "claimBoundary": "This machine map records five lane verdicts accepted by MSEA-R90 Audit A reviewer closure at material commit 645df8b83. It does not certify semantic correctness beyond that acceptance, does not authorize a Web dashboard, runtime/provider/live behavior, public export, R72F lifecycle change, or session mutation, and does not authorize automatic rewriting of any lane's currentPosture or verdict from hash or age signals alone."
+  "claimBoundary": "This machine map records five lane verdicts accepted by MSEA-R90 Audit A reviewer closure at material commit 645df8b83. It does not certify semantic correctness beyond that acceptance, does not authorize a Web dashboard, runtime/provider/live behavior, public export, R72F lifecycle change, or session mutation, and does not authorize automatic rewriting of any lane's currentPosture or verdict from hash or age signals alone.",
+  "publicProofBoundary": "PRIVATE_INVOCATION_NOT_PUBLIC_PROOF"
 }

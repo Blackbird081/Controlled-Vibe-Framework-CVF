@@ -57,6 +57,7 @@ Hỗ trợ render:
 ## Table Enhancement
 
 Tables được render với:
+
 - Sortable columns
 - Alternating row colors
 - Responsive scrolling
@@ -75,6 +76,7 @@ Tables được render với:
 ## Actions
 
 ### Accept
+
 ```javascript
 async function acceptResult(executionId) {
   await api.updateStatus(executionId, 'accepted');
@@ -84,6 +86,7 @@ async function acceptResult(executionId) {
 ```
 
 ### Reject
+
 ```javascript
 async function rejectResult(executionId) {
   const reason = await showRejectDialog();
@@ -93,6 +96,7 @@ async function rejectResult(executionId) {
 ```
 
 ### Retry
+
 ```javascript
 async function retryExecution(input) {
   navigate('/form', { prefill: input, autoSubmit: true });

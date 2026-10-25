@@ -11,7 +11,7 @@ sandbox enforcement, và human review checkpoints. Quản lý toàn bộ vòng
 
 RISK_LEVEL: High (R3)
 
-2. Governance Constraints
+1. Governance Constraints
 
 ALLOWED_ARCHETYPES: Orchestrator (primary), Builder (with approval)
 
@@ -29,7 +29,7 @@ PROJECT_DIRECTORY_IDENTIFIED
 GIT_REPO_INITIALIZED
 SANDBOX_ACTIVE
 
-3. Input Specification
+1. Input Specification
 
 INPUT_FIELDS:
 
@@ -67,7 +67,7 @@ auto_commit
   type: boolean
   default: true
 
-4. Output Specification
+1. Output Specification
 
 OUTPUT_FIELDS:
 
@@ -81,13 +81,14 @@ per_task_result
 audit_trail
   type: array[{iteration: int, command: string, output_summary: string, files_changed: array[string], timestamp: string}]
 
-5. Execution Properties
+1. Execution Properties
 
 SIDE_EFFECTS:
-  - File system mutation (create, edit, delete files)
-  - Git commits to repository
-  - npm/node process execution
-  - Terminal command execution
+
+- File system mutation (create, edit, delete files)
+- Git commits to repository
+- npm/node process execution
+- Terminal command execution
 
 ROLLBACK_POSSIBILITY: Yes (git revert to pre-loop commit)
 
@@ -97,7 +98,7 @@ EXPECTED_DURATION: Long (minutes to hours)
 
 CONCURRENCY: Single instance only (no parallel loops)
 
-6. Failure & Risk Notes
+1. Failure & Risk Notes
 
 KNOWN_FAILURE_MODES:
 
@@ -116,11 +117,12 @@ WORST_CASE_IMPACT:
 HUMAN_INTERVENTION_REQUIRED: Yes (initial approval + periodic review)
 
 ESCALATION_RULES:
-  - 3 consecutive task failures → auto-pause + request human review
-  - Any command not in allowlist → immediate halt
-  - Any file access outside project directory → immediate halt + alert
 
-7. Audit & Trace Requirements
+- 3 consecutive task failures → auto-pause + request human review
+- Any command not in allowlist → immediate halt
+- Any file access outside project directory → immediate halt + alert
+
+1. Audit & Trace Requirements
 
 AUDIT_FIELDS:
 
@@ -137,7 +139,7 @@ AUDIT_FIELDS:
 
 TRACE_LEVEL: Full (every command, every file change, every decision)
 
-8. Security Model
+1. Security Model
 
 SANDBOX_TYPE: Filesystem restriction + bash allowlist
 

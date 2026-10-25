@@ -84,4 +84,3 @@ every context-selection tradeoff.
 
 Runtime use requires a future roadmap that chooses concrete owner surfaces and
 testable fields. Until then, this doctrine is canonical guidance only.
-

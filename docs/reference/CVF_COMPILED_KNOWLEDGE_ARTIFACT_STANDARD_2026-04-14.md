@@ -79,12 +79,14 @@ An artifact without `governedAt` is in `pending` state and must not enter `Query
 ## 5. What Makes an Artifact "Compiled" vs Raw
 
 **Compiled means:**
+
 - The artifact was produced inside CVF by a governed transformation
 - It carries an explicit citation trail to its raw source(s)
 - It has been (or is pending) governance validation
 - Its content hash is deterministic and verifiable
 
 **Raw means:**
+
 - The source was ingested from an external origin as-is
 - It has provenance (`sourceId`, `ingestedAt`, `citationRef`) but has not been transformed
 - It cannot enter the `Query` step directly — it must first be compiled

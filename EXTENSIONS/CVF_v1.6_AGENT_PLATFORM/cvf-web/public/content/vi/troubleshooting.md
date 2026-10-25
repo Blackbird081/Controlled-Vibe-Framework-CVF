@@ -21,6 +21,7 @@
 ### Vấn đề: `npm install` thất bại
 
 **Triệu chứng:**
+
 ```
 npm ERR! code ERESOLVE
 npm ERR! ERESOLVE could not resolve
@@ -29,14 +30,16 @@ npm ERR! ERESOLVE could not resolve
 **Giải pháp:**
 
 1. **Kiểm tra phiên bản Node.js:**
+
    ```bash
    node -v
    # Should be 18.0.0 or higher
    ```
-   
-   Nếu không đúng, cài đặt Node 18+: https://nodejs.org/
+
+   Nếu không đúng, cài đặt Node 18+: <https://nodejs.org/>
 
 2. **Xóa cache npm:**
+
    ```bash
    npm cache clean --force
    rm -rf node_modules package-lock.json
@@ -44,6 +47,7 @@ npm ERR! ERESOLVE could not resolve
    ```
 
 3. **Sử dụng legacy peer deps (nếu vẫn lỗi):**
+
    ```bash
    npm install --legacy-peer-deps
    ```
@@ -53,6 +57,7 @@ npm ERR! ERESOLVE could not resolve
 ### Vấn đề: Lỗi từ chối quyền truy cập
 
 **Triệu chứng:**
+
 ```
 EACCES: permission denied
 ```
@@ -62,6 +67,7 @@ EACCES: permission denied
 1. **Không sử dụng sudo với npm** (nguy hiểm)
 
 2. **Sửa quyền npm:**
+
    ```bash
    # Option A: Use nvm (recommended)
    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
@@ -79,6 +85,7 @@ EACCES: permission denied
 ### Vấn đề: Cổng 3000 đã được sử dụng
 
 **Triệu chứng:**
+
 ```
 Error: listen EADDRINUSE: address already in use :::3000
 ```
@@ -86,6 +93,7 @@ Error: listen EADDRINUSE: address already in use :::3000
 **Giải pháp:**
 
 1. **Tìm và tắt tiến trình trên cổng 3000:**
+
    ```bash
    # On Mac/Linux
    lsof -ti:3000 | xargs kill -9
@@ -96,6 +104,7 @@ Error: listen EADDRINUSE: address already in use :::3000
    ```
 
 2. **Hoặc sử dụng cổng khác:**
+
    ```bash
    # Edit .env file
    PORT=3001
@@ -109,6 +118,7 @@ Error: listen EADDRINUSE: address already in use :::3000
 ### Vấn đề: Git clone thất bại
 
 **Triệu chứng:**
+
 ```
 fatal: repository not found
 fatal: could not read Username
@@ -117,6 +127,7 @@ fatal: could not read Username
 **Giải pháp:**
 
 1. **Kiểm tra URL:**
+
    ```bash
    # Correct URL
    git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
@@ -128,6 +139,7 @@ fatal: could not read Username
    - Sử dụng VPN nếu cần
 
 3. **Sử dụng SSH thay thế:**
+
    ```bash
    git clone git@github.com:Blackbird081/Controlled-Vibe-Framework-CVF.git
    ```
@@ -139,12 +151,14 @@ fatal: could not read Username
 ### Vấn đề: Web UI hiển thị trang trắng
 
 **Triệu chứng:**
+
 - Trình duyệt hiển thị màn hình trắng
 - Console hiển thị lỗi React
 
 **Giải pháp:**
 
 1. **Kiểm tra quá trình build:**
+
    ```bash
    npm run build
    # Check for errors
@@ -160,6 +174,7 @@ fatal: could not read Username
    - Chụp màn hình và báo cáo vấn đề
 
 4. **Xác minh file .env:**
+
    ```bash
    # .env should have:
    NODE_ENV=development
@@ -171,12 +186,14 @@ fatal: could not read Username
 ### Vấn đề: Template không tải được
 
 **Triệu chứng:**
+
 - Danh sách template trống
 - Lỗi "Failed to load templates"
 
 **Giải pháp:**
 
 1. **Kiểm tra đường dẫn file:**
+
    ```bash
    # Templates should be in:
    EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/
@@ -188,6 +205,7 @@ fatal: could not read Username
    - Escape đúng cách
 
 3. **Kiểm tra quyền truy cập:**
+
    ```bash
    # Make sure files are readable
    chmod -R 755 EXTENSIONS/
@@ -198,12 +216,14 @@ fatal: could not read Username
 ### Vấn đề: Nhà cung cấp AI không hoạt động
 
 **Triệu chứng:**
+
 - Lỗi "API key invalid"
 - Phản hồi không trả về
 
 **Giải pháp:**
 
 1. **Thêm API key vào .env:**
+
    ```bash
    # .env file
    OPENAI_API_KEY=sk-...
@@ -222,6 +242,7 @@ fatal: could not read Username
    - Thêm thanh toán nếu cần
 
 4. **Kiểm tra API key riêng biệt:**
+
    ```bash
    curl https://api.openai.com/v1/models \
      -H "Authorization: Bearer $OPENAI_API_KEY"
@@ -232,12 +253,14 @@ fatal: could not read Username
 ### Vấn đề: Chế độ tối không hoạt động
 
 **Triệu chứng:**
+
 - Nút chuyển đổi giao diện không chuyển
 - Bị kẹt ở chế độ sáng/tối
 
 **Giải pháp:**
 
 1. **Xóa localStorage:**
+
    ```javascript
    // In browser console
    localStorage.clear()
@@ -274,11 +297,13 @@ fatal: could not read Username
 **Giải pháp:**
 
 1. **Kiểm tra phiên bản hiện tại:**
+
    ```bash
    cat package.json | grep version
    ```
 
 2. **Nâng cấp lên phiên bản cần thiết:**
+
    ```bash
    git pull origin main
    cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
@@ -295,6 +320,7 @@ fatal: could not read Username
 ### Vấn đề: Xác thực skill thất bại
 
 **Triệu chứng:**
+
 ```
 ❌ Skill validation failed
 Missing required field: risk_level
@@ -303,6 +329,7 @@ Missing required field: risk_level
 **Giải pháp:**
 
 1. **Kiểm tra định dạng skill:**
+
    ```yaml
    # Required fields
    id: my-skill-v1
@@ -313,6 +340,7 @@ Missing required field: risk_level
    ```
 
 2. **Sử dụng công cụ xác thực:**
+
    ```bash
    cd tools/skill-validation
    python3 validate_skills.py path/to/skill.md
@@ -329,6 +357,7 @@ Missing required field: risk_level
 **Giải pháp:**
 
 1. **Kiểm tra vị trí file:**
+
    ```bash
    # Skills should be in:
    EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/[category]/
@@ -347,6 +376,7 @@ Missing required field: risk_level
 ### Vấn đề: "Mức rủi ro vượt giới hạn phase"
 
 **Triệu chứng:**
+
 ```
 ⚠️ Warning: Risk level R3 not allowed in Phase A
 ```
@@ -360,6 +390,7 @@ Missing required field: risk_level
    - Phase D (Đánh giá): R0-R1
 
 2. **Giảm mức rủi ro hoặc đổi phase:**
+
    ```yaml
    # Either:
    risk_level: R1  # Lower risk
@@ -378,12 +409,14 @@ Missing required field: risk_level
 ### Vấn đề: Phase gate chặn tiến trình
 
 **Triệu chứng:**
+
 - Không thể tiến sang phase tiếp theo
 - Checklist chưa hoàn thành
 
 **Giải pháp:**
 
 1. **Xem lại các mục checklist:**
+
    ```bash
    # Check phase gate requirements
    governance/toolkit/01_BOOTSTRAP/phase-gates.md
@@ -394,6 +427,7 @@ Missing required field: risk_level
    - Phải đánh dấu hoàn thành trước khi tiếp tục
 
 3. **Ghi đè (nếu được phân quyền):**
+
    ```yaml
    # In governance config
    allow_phase_skip: true  # Use with caution!
@@ -404,12 +438,14 @@ Missing required field: risk_level
 ### Vấn đề: Xung đột ma trận quyền hạn
 
 **Triệu chứng:**
+
 - "User not authorized for this role"
 - Lỗi từ chối quyền truy cập
 
 **Giải pháp:**
 
 1. **Kiểm tra phân quyền vai trò:**
+
    ```yaml
    # governance/toolkit/03_CONTROL/authority-matrix.yaml
    roles:
@@ -437,6 +473,7 @@ Missing required field: risk_level
 **Giải pháp:**
 
 1. **Kiểm tra tài nguyên hệ thống:**
+
    ```bash
    # Make sure you have enough RAM/CPU
    top  # or Activity Monitor on Mac
@@ -445,6 +482,7 @@ Missing required field: risk_level
 2. **Đóng các tab/ứng dụng không cần thiết**
 
 3. **Sử dụng bản build production:**
+
    ```bash
    npm run build
    npm run start  # Instead of dev
@@ -462,16 +500,19 @@ Missing required field: risk_level
 **Giải pháp:**
 
 1. **Sử dụng npm install nhanh hơn:**
+
    ```bash
    npm ci  # Instead of npm install
    ```
 
 2. **Bật caching:**
+
    ```bash
    npm config set cache ~/.npm-cache
    ```
 
 3. **Sử dụng yarn thay thế:**
+
    ```bash
    npm install -g yarn
    yarn install  # Faster than npm
@@ -484,11 +525,13 @@ Missing required field: risk_level
 ### Lỗi: "Module not found"
 
 **Lỗi đầy đủ:**
+
 ```
 Error: Cannot find module 'react'
 ```
 
 **Giải pháp:**
+
 ```bash
 npm install
 # or
@@ -500,15 +543,18 @@ npm install react react-dom
 ### Lỗi: "Unexpected token <"
 
 **Lỗi đầy đủ:**
+
 ```
 SyntaxError: Unexpected token '<'
 ```
 
 **Nguyên nhân:**
+
 - Build thất bại
 - Sai loại file
 
 **Giải pháp:**
+
 ```bash
 # Clear build
 rm -rf .next  # or build/
@@ -520,11 +566,13 @@ npm run build
 ### Lỗi: "fetch is not defined"
 
 **Lỗi đầy đủ:**
+
 ```
 ReferenceError: fetch is not defined
 ```
 
 **Giải pháp:**
+
 ```bash
 # Node <18, install polyfill
 npm install node-fetch
@@ -538,6 +586,7 @@ nvm install 18
 ### Lỗi: "CORS policy blocked"
 
 **Lỗi đầy đủ:**
+
 ```
 Access to fetch at '...' has been blocked by CORS policy
 ```
@@ -547,12 +596,14 @@ Access to fetch at '...' has been blocked by CORS policy
 1. **Kiểm tra URL của API endpoint**
 
 2. **Thêm CORS headers (nếu là API server):**
+
    ```javascript
    // In API server
    res.setHeader('Access-Control-Allow-Origin', '*')
    ```
 
 3. **Sử dụng proxy:**
+
    ```javascript
    // In package.json
    "proxy": "http://localhost:5000"
@@ -563,20 +614,24 @@ Access to fetch at '...' has been blocked by CORS policy
 ## 🆘 Vẫn cần trợ giúp?
 
 ### Bước 1: Tìm kiếm trong tài liệu
+
 - 🔍 Tài liệu đầy đủ
 - ❓ Câu hỏi thường gặp (FAQ)
 
 ### Bước 2: Kiểm tra các vấn đề hiện có
+
 - 🐛 [GitHub Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
 - Tìm kiếm thông báo lỗi của bạn
 
 ### Bước 3: Hỏi cộng đồng
+
 - 💬 [Discord](https://discord.gg/cvf)
 - Thường được phản hồi nhanh nhất
 
 ### Bước 4: Gửi báo cáo lỗi
 
 **Bao gồm:**
+
 - Phiên bản CVF
 - Phiên bản Node.js
 - Hệ điều hành (Windows/Mac/Linux)
@@ -584,6 +639,7 @@ Access to fetch at '...' has been blocked by CORS policy
 - Các bước tái tạo lỗi
 
 **Template:**
+
 ```markdown
 **CVF Version:** 1.6.0
 **Node Version:** 18.12.0
@@ -599,7 +655,9 @@ Access to fetch at '...' has been blocked by CORS policy
 
 **Error Message:**
 ```
+
 [Paste full error]
+
 ```
 
 **Screenshots:**

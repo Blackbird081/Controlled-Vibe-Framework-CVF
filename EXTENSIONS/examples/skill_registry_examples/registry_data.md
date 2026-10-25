@@ -1,10 +1,12 @@
 # Skill Registry Data — Example
 
 ## Purpose
+
 Tài liệu này cung cấp **ví dụ dữ liệu registry**
 phù hợp với mô hình định nghĩa trong `SKILL_REGISTRY_MODEL.md`.
 
 File này **không phải code chạy**, mà là:
+
 - dữ liệu mô tả
 - có thể map sang JSON / YAML / DB schema
 
@@ -98,10 +100,12 @@ File này **không phải code chạy**, mà là:
 ### Example 1 — Valid Resolution
 
 Request:
+
 - Capability: `DATA_VISUALIZATION_D3`
 - Version: `1.0`
 
 Result:
+
 - Resolution: SUCCESS
 - Adapter: `d3_viz_adapter@1.0`
 
@@ -110,10 +114,12 @@ Result:
 ### Example 2 — Deprecated Capability
 
 Request:
+
 - Capability: `LEGACY_D3_RENDER`
 - Version: `0.9`
 
 Result:
+
 - Resolution: SUCCESS
 - Warning: Capability is deprecated
 
@@ -122,10 +128,12 @@ Result:
 ### Example 3 — Invalid Resolution
 
 Request:
+
 - Capability: `AUTO_GIT_PUSH`
 - Version: `0.1`
 
 Result:
+
 - Resolution: FAILED
 - Reason: Capability is retired
 
@@ -137,6 +145,7 @@ Tài liệu này là **ví dụ chuẩn** cho dữ liệu registry CVF v1.2.
 
 Không dùng làm policy.
 Chỉ dùng làm reference và test.
+
 ```
 
 

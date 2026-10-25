@@ -175,7 +175,7 @@ Voice and likeness: only one fixed preset with matching consent evidence; clonin
 
 ## S05 Binding
 
-Source: the accepted storyboard, scene S05 (Outline 95-115 seconds). Extraction recipe (recorded identically in `s05Extraction` of the evidence): design bytes decoded as UTF-8, CRLF normalized to LF, S05 heading section, value after `- <Label>: ` to end of line, re-encoded as UTF-8, no newline; status card = On-screen value up to the first `. ` separator. The design raw SHA256 is `3ce5e2363c3e29997fcbf42cb4cec59af7447cca38409d4d970e8aa71e5777e0`. The preflight fails closed with S05_SOURCE_DRIFT if any byte of the accepted source changes, and with S05_MANIFEST_DRIFT if a manifest binding differs.
+Source: the accepted storyboard, scene S05 (Outline 95-115 seconds). Extraction recipe (recorded identically in `s05Extraction` of the evidence): design bytes decoded as UTF-8, CRLF normalized to LF, S05 heading section, value after `- <Label>:` to end of line, re-encoded as UTF-8, no newline; status card = On-screen value up to the first `.` separator. The design raw SHA256 is `3ce5e2363c3e29997fcbf42cb4cec59af7447cca38409d4d970e8aa71e5777e0`. The preflight fails closed with S05_SOURCE_DRIFT if any byte of the accepted source changes, and with S05_MANIFEST_DRIFT if a manifest binding differs.
 
 Narration (SHA256 `f6c1cd46a00b535e07dc634bcb53d75dc80ed521a58432de8c5b449cf4017fb8`, 314 UTF-8 bytes, 236 code points, NFC):
 

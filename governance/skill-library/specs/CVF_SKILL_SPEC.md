@@ -1,4 +1,5 @@
 # CVF SKILL SPECIFICATION
+
 Canonical Definition of a CVF Skill
 
 > **Version:** 1.1.0  
@@ -20,39 +21,46 @@ it cannot exist as a CVF skill.
 ## 2. Required Sections
 
 ### 2.1 Skill Identity
+
 - Skill ID
 - Skill Name
 - Version
 - Owner
 
 ### 2.2 Intent Layer
+
 - Problem this skill addresses
 - Decisions it supports (not replaces)
 
 ### 2.3 Capability Layer
+
 - Explicit actions performed
 - Inputs
 - Outputs
 - Execution constraints
 
 ### 2.4 Risk Profile
+
 - Primary risks
 - Secondary risks
 - Failure handling
 - Safe-stop behavior
 
 ### 2.5 Authority Mapping
+
 - Allowed agent roles
 - Allowed CVF phases
 - Required preconditions
 - Forbidden contexts
 
 ### 2.6 Audit & Traceability
+
 - Required logs
 - Decision references
 - Output validation hooks
 
 ### 2.7 Autonomous Extension (Required for Autonomous Skills)
+
 - Governance Summary block
 - Execution Constraints
 - Validation Hooks

@@ -1,4 +1,5 @@
 # CONTRIBUTING  
+
 ## Controlled Vibe Framework (CVF)
 
 ---
@@ -31,11 +32,13 @@ Nếu bạn muốn đề xuất tính năng mới hoặc thay đổi logic:
 ## Quy trình đóng góp
 
 ### 1. Fork repository
+
 ```bash
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
 ```
 
 ### 2. Tạo branch mới
+
 ```bash
 git checkout -b fix/typo-readme
 # hoặc
@@ -43,6 +46,7 @@ git checkout -b feature/v1.1-input-output-spec
 ```
 
 ### 3. Commit theo convention
+
 ```bash
 git commit -m "fix: sửa typo trong README.md"
 # hoặc
@@ -50,6 +54,7 @@ git commit -m "feat(v1.1): thêm INPUT_OUTPUT_SPEC.md"
 ```
 
 ### 4. Push và tạo Pull Request
+
 ```bash
 git push origin fix/typo-readme
 ```

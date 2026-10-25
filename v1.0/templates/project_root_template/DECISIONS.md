@@ -1,12 +1,15 @@
 # PROJECT DECISIONS  
+
 Controlled Vibe Framework (CVF)
 
 ---
 
 ## Mục đích
+
 Lưu lại **toàn bộ quyết định quan trọng** trong dự án.
 
 File này:
+
 - Là nguồn sự thật duy nhất cho quyết định
 - Ngăn việc tranh luận lại trong tương lai
 - Không dùng để ghi thảo luận
@@ -14,6 +17,7 @@ File này:
 ---
 
 ## Nguyên tắc
+
 - Ghi khi quyết định đã được đưa ra
 - Không ghi phương án bị loại
 - Không ghi quá trình suy nghĩ
@@ -21,12 +25,14 @@ File này:
 ---
 
 ## Ai ghi
+
 - AI chịu trách nhiệm ghi
 - User không phải cập nhật
 
 ---
 
 ## Khi nào ghi
+
 - Sau Phase A: Discovery
 - Khi có thay đổi phạm vi
 - Khi có thay đổi hướng triển khai
@@ -57,6 +63,7 @@ Impact: Simpler navigation, faster onboarding
 ---
 
 ## Những gì KHÔNG được ghi
+
 - Không ghi giả định
 - Không ghi tranh luận
 - Không ghi việc nhỏ, không ảnh hưởng hướng dự án
@@ -64,12 +71,14 @@ Impact: Simpler navigation, faster onboarding
 ---
 
 ## Quan hệ với các file khác
+
 - Không trùng với `CHANGELOG.md`
 - Không thay thế `PHASE_STATUS.md`
 
 ---
 
 ## Trạng thái
+
 - Thuộc CVF v1.0 FINAL
 - Freeze
 - Không chỉnh sửa

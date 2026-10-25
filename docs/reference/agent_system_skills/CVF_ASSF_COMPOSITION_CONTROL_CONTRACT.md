@@ -266,7 +266,7 @@ past `PROPOSED`:
 |---|---|
 | Executable composition engine or loader | route to a separately authorized tranche; requires GC-018 baseline and source-verified work order citing this contract as required read |
 | Conflict-detection checker | route to ASSF-T7 or a checker tranche; this contract should be cited as required read |
-| Schema extension implementation (`extends`, `replaces`, `capabilityClaims`, `compositionFailureDisposition`) | route to an ASSF-T1 schema extension work order; requires source-verified evidence that T1 does not already carry these fields (NEW_FIELD_INTRODUCED evidence command: `rg -n "extends|replaces|capabilityClaims|compositionFailureDisposition" docs/reference/agent_system_skills/CVF_ASSF_PACKAGE_CONTRACT.md`) |
+| Schema extension implementation (`extends`, `replaces`, `capabilityClaims`, `compositionFailureDisposition`) | route to an ASSF-T1 schema extension work order; requires source-verified evidence that T1 does not already carry these fields (NEW_FIELD_INTRODUCED evidence command: `rg -n "extends\|replaces\|capabilityClaims\|compositionFailureDisposition" docs/reference/agent_system_skills/CVF_ASSF_PACKAGE_CONTRACT.md`) |
 | Composition-conformance machine check | route to ASSF-T7 or a checker tranche; checker should verify that package entries carry valid composition evidence citations |
 | ASSF-T6 CVF Web Projection | next in roadmap after T5 closes; must not begin until T5 is closed |
 

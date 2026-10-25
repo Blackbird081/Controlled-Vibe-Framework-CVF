@@ -21,11 +21,13 @@
 **Chức năng:** Customer-support-agent truy xuất tài liệu liên quan từ Amazon Bedrock Knowledge Bases trước khi trả lời, neo câu trả lời vào dữ liệu thực.
 
 **Mẫu:**
+
 ```
 Truy vấn → Embedding → Tìm kiếm vector → Top-K Tài liệu → Chèn ngữ cảnh → Phản hồi Claude
 ```
 
 **Ánh xạ CVF:**
+
 - **Skill mới:** AGT-009 RAG Knowledge Retrieval (R2, Có giám sát)
 - **Rủi ro:** R2 vì ngữ cảnh truy xuất ảnh hưởng chất lượng đầu ra AI
 - **Governance:** Phải trích nguồn, ghi log ID tài liệu, từ chối tham chiếu bịa đặt
@@ -40,11 +42,13 @@ Truy vấn → Embedding → Tìm kiếm vector → Top-K Tài liệu → Chèn 
 **Chức năng:** Financial-data-analyst tạo cấu hình biểu đồ (line, bar, pie, area, stacked area) từ dữ liệu tài chính, render bằng Recharts.
 
 **Mẫu:**
+
 ```
 Upload dữ liệu → Phân tích Claude → JSON cấu hình biểu đồ → Render Recharts → Dashboard tương tác
 ```
 
 **Ánh xạ CVF:**
+
 - **Skill mới:** AGT-010 Data Visualization Generator (R1, Tự động)
 - **Rủi ro:** R1 vì đầu ra là trực quan hóa chỉ-đọc, không sửa đổi dữ liệu
 - **Governance:** Cấu hình biểu đồ xác thực theo schema, không có mã thực thi trong đầu ra
@@ -59,11 +63,13 @@ Upload dữ liệu → Phân tích Claude → JSON cấu hình biểu đồ → 
 **Chức năng:** Financial-data-analyst xử lý upload text, PDF, CSV, và hình ảnh, trích xuất dữ liệu có cấu trúc.
 
 **Mẫu:**
+
 ```
 Upload file → Phát hiện loại → Parser (PDF.js / CSV / Vision) → Dữ liệu có cấu trúc → Sẵn sàng phân tích
 ```
 
 **Ánh xạ CVF:**
+
 - **Skill mới:** AGT-011 Document Parser (R1, Tự động)
 - **Rủi ro:** R1 vì phân tích chỉ-đọc với đầu ra có cấu trúc
 - **Governance:** Hook phát hiện PII, giới hạn kích thước file, danh sách định dạng cho phép
@@ -78,6 +84,7 @@ Upload file → Phát hiện loại → Parser (PDF.js / CSV / Vision) → Dữ 
 **Chức năng:** Autonomous-coding agent dùng **mẫu hai-agent**: Agent Khởi tạo tạo danh sách tính năng (200 test case), sau đó Agent Lập trình triển khai từng tính năng qua nhiều phiên, lưu tiến độ qua `feature_list.json` và git.
 
 **Mẫu:**
+
 ```
 App Spec → Agent Khởi tạo → feature_list.json (200 mục)
                                         ↓
@@ -91,12 +98,14 @@ App Spec → Agent Khởi tạo → feature_list.json (200 mục)
 **Đổi mới chính:** Tiến độ tồn tại qua các cửa sổ ngữ cảnh mới nhờ git + danh sách tính năng.
 
 **Ánh xạ CVF:**
+
 - **Skill mới:** AGT-012 Agentic Loop Controller (R3, Thủ công)
 - **Rủi ro:** R3 vì thực thi tự chủ nhiều bước với truy cập hệ thống file
 - **Governance:** Giới hạn lặp, danh sách lệnh bash cho phép, sandbox hệ thống file, bắt buộc review
 - **Cổng phase:** Chỉ Build + Review — thực thi tự chủ quá rủi ro cho Discovery/Design
 
 **Mô hình bảo mật (từ claude-quickstarts):**
+
 1. Sandbox cấp OS
 2. Hệ thống file giới hạn trong thư mục dự án
 3. Danh sách bash cho phép: `ls`, `cat`, `head`, `tail`, `wc`, `grep`, `npm`, `node`, `git`, `ps`, `lsof`, `sleep`, `pkill`
@@ -110,6 +119,7 @@ App Spec → Agent Khởi tạo → feature_list.json (200 mục)
 **Chức năng:** Browser-use-demo cho Claude điều khiển trình duyệt qua Playwright với các hành động nhận biết DOM: navigate, click, type, scroll, đọc trang, điền form, chụp màn hình.
 
 **Mẫu:**
+
 ```
 Hướng dẫn → Claude → Gọi Tool Trình duyệt → Hành động Playwright → Screenshot → Phân tích Claude → Hành động tiếp
 ```
@@ -117,6 +127,7 @@ Hướng dẫn → Claude → Gọi Tool Trình duyệt → Hành động Playwr
 **Đổi mới chính:** Nhắm mục tiêu phần tử qua tham số `ref` (tham chiếu DOM) thay vì tọa độ pixel dễ vỡ.
 
 **Ánh xạ CVF:**
+
 - **Skill mới:** AGT-013 Browser Automation (R3, Thủ công)
 - **Rủi ro:** R3 vì trình duyệt có thể truy cập hệ thống bên ngoài, gửi form, điều hướng trang tùy ý
 - **Governance:** Thực thi container hóa (Docker), danh sách domain cho phép, không nhập thông tin đăng nhập
@@ -131,6 +142,7 @@ Hướng dẫn → Claude → Gọi Tool Trình duyệt → Hành động Playwr
 **Chức năng:** Module agents kết nối đến MCP (Model Context Protocol) servers để khám phá và gọi công cụ động, hỗ trợ cả stdio và HTTP.
 
 **Mẫu:**
+
 ```python
 agent = Agent(
     tools=[ThinkTool()],      # Công cụ cục bộ
@@ -143,6 +155,7 @@ agent = Agent(
 ```
 
 **Ánh xạ CVF:**
+
 - **Skill mới:** AGT-014 MCP Server Connector (R2, Có giám sát)
 - **Rủi ro:** R2 vì truy cập server bên ngoài với khám phá công cụ động
 - **Governance:** Danh sách server cho phép, giới hạn timeout kết nối, xác thực kết quả công cụ

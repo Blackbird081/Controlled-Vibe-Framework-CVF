@@ -57,9 +57,9 @@ Use this path only after a separate provider-lane tranche is authorized.
 python scripts/run_cvf_provider_live_canary.py --provider <name> --save-receipt
 ```
 
-4. Update `docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md` only after
+1. Update `docs/reference/CVF_PROVIDER_LANE_READINESS_MATRIX.md` only after
    receipt evidence exists.
-5. Never commit raw keys. Use operator-supplied environment variables.
+2. Never commit raw keys. Use operator-supplied environment variables.
 
 Provider certification requires evidence. Integration alone is not a certified
 lane.

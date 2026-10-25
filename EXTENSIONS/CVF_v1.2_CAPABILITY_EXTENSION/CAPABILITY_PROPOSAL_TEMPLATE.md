@@ -5,6 +5,7 @@ Chuẩn hóa cách đề xuất capability mới trước khi bước vào lifec
 Template này không thay thế Skill Contract, mà là tiền đề governance.
 
 Proposal Sections (BẮT BUỘC)
+
 1. Capability Overview
 
 Proposed Capability Name
@@ -13,7 +14,7 @@ Intended DOMAIN
 
 High-level Description
 
-2. Motivation
+1. Motivation
 
 Vấn đề cần giải quyết
 
@@ -21,7 +22,7 @@ Tại sao capability hiện tại không đủ
 
 Nếu không có capability này thì hậu quả gì?
 
-3. Risk Justification
+1. Risk Justification
 
 Expected Risk Level (Low → Critical)
 
@@ -29,13 +30,13 @@ Tác động nếu misuse
 
 Có cần human approval không?
 
-4. Side Effects
+1. Side Effects
 
 Hệ thống nào bị ảnh hưởng
 
 Có mutation / irreversible action không?
 
-5. Governance Expectations
+1. Governance Expectations
 
 Intended phases
 
@@ -43,7 +44,7 @@ Intended archetypes
 
 Có cần registry riêng không?
 
-6. Exit Criteria
+1. Exit Criteria
 
 Khi nào capability nên bị deprecated?
 

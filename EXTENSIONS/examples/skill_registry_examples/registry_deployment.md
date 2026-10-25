@@ -2,7 +2,7 @@
 
 Registry quản lý capability có tác động hệ thống cao, yêu cầu governance chặt.
 
-2. Registry Scope
+1. Registry Scope
 
 DOMAIN: deployment
 
@@ -10,7 +10,7 @@ CVF_VERSION: 1.2
 
 GOVERNANCE_LEVEL: Maximum
 
-3. Registered Capabilities
+1. Registered Capabilities
 3.1 DEPLOYMENT_RELEASE
 
 CAPABILITY_ID: DEPLOYMENT_RELEASE
@@ -36,7 +36,7 @@ Không resolve nếu target_environment = production mà thiếu APPROVED_RELEAS
 
 Execution phải Full Trace
 
-4. Resolution Rules
+1. Resolution Rules
 
 Deployment capability không được chain
 
@@ -44,6 +44,6 @@ Mỗi execution = 1 registry resolution
 
 Rollback capability phải được resolve riêng
 
-5. Canonical Status
+1. Canonical Status
 
 Registry này đại diện cho highest-risk pattern trong CVF v1.2

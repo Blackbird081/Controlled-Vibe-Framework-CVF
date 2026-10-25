@@ -264,12 +264,14 @@ Infrastructure:
 **UAT Link:** `governance/skill-library/uat/results/UAT-AGT-027.md`
 
 **PASS criteria:**
+
 - [ ] 100% OWASP Top 10 vulnerabilities addressed
 - [ ] All auth endpoints protected by rate limiting
 - [ ] Passwords stored via Argon2id or bcrypt (≥12 rounds)
 - [ ] JWT configured RS256, ≤15 min expiry, with refresh rotation
 
 **FAIL criteria:**
+
 - [ ] Plaintext password or secret found in code
 - [ ] Custom/home-rolled cryptography used
 - [ ] Auth endpoint missing rate limiting

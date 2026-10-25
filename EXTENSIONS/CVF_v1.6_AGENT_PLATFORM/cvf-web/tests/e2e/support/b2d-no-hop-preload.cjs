@@ -1,6 +1,5 @@
 'use strict';
 
-/* eslint-disable @typescript-eslint/no-require-imports -- CommonJS preload loaded through NODE_OPTIONS --require */
 
 // NCR HTML B2d test-only no-hop preload. Install with NODE_OPTIONS=--require <this file> before the
 // fresh Next test server starts. It wraps global fetch, synchronously records and throws on any

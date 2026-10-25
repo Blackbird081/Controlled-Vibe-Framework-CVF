@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useEffectEvent } from 'react';
 import {
   planTask,
   loadReasoning,
@@ -46,6 +46,15 @@ const RISK_BADGE: Record<string, string> = {
   R3: 'bg-red-200 text-red-800 dark:bg-red-900/40 dark:text-red-300',
 };
 
+function automaticPlan(task: string): { plan: SkillPlan | null; error: string } {
+  try {
+    const plan = task.trim() ? planTask(task.trim()) : null;
+    return { plan, error: plan ? '' : 'Could not match industry. Try including keywords like "fintech", "ecommerce", "healthcare".' };
+  } catch {
+    return { plan: null, error: 'Plan generation failed' };
+  }
+}
+
 // ─── Component ───────────────────────────────────────────────────────
 
 export function SkillPlanner({
@@ -54,17 +63,26 @@ export function SkillPlanner({
   onSkillClick,
 }: SkillPlannerProps) {
   const [task, setTask] = useState(initialTask);
-  const [plan, setPlan] = useState<SkillPlan | null>(null);
+  const [manualPlan, setPlan] = useState<SkillPlan | null | undefined>(undefined);
   const [loading, setLoading] = useState(false);
-  const [dataReady, setDataReady] = useState(isReasoningLoaded());
-  const [error, setError] = useState('');
+  const [dataReady, setDataReady] = useState(() => isReasoningLoaded());
+  const [storedError, setError] = useState('');
+  const [automatic, setAutomatic] = useState(() => initialTask && dataReady ? automaticPlan(task) : null);
+  const plan = manualPlan === undefined ? automatic?.plan ?? null : manualPlan;
+  const [automaticInputs, setAutomaticInputs] = useState({ initialTask, dataReady });
+  if (automaticInputs.initialTask !== initialTask || automaticInputs.dataReady !== dataReady) {
+    setAutomaticInputs({ initialTask, dataReady });
+    if (initialTask && dataReady && !plan) { setAutomatic(automaticPlan(task)); setPlan(undefined); }
+  }
+  const error = storedError || automatic?.error || '';
+  const notifyAutomaticPlan = useEffectEvent((next: SkillPlan) => onPlanGenerated?.(next));
+  useEffect(() => {
+    if (automatic?.plan) notifyAutomaticPlan(automatic.plan);
+  }, [automatic]);
 
   // Load reasoning + front-door trusted subset data
   useEffect(() => {
-    if (isReasoningLoaded()) {
-      setDataReady(true);
-      return;
-    }
+    if (isReasoningLoaded()) return;
 
     async function load() {
       try {
@@ -117,14 +135,6 @@ export function SkillPlanner({
       setLoading(false);
     }
   }, [task, dataReady, onPlanGenerated]);
-
-  // Auto-generate when initialTask is provided
-  useEffect(() => {
-    if (initialTask && dataReady && !plan) {
-      generate();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataReady, initialTask]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {

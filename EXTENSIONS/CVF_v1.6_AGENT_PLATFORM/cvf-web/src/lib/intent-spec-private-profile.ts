@@ -62,8 +62,14 @@ $item.SetAccessControl($acl)`;
 
 function powershell(script: string, env: Record<string, string>): Promise<string> {
     return new Promise((resolve, reject) => {
+        // Drop every case variant: Windows/Vitest may expose PSMODULEPATH while a parent uses PSModulePath.
+        // Only the child uses the selected Windows PowerShell executable's bundled Desktop modules.
+        const inheritedEnv: NodeJS.ProcessEnv = { ...process.env };
+        for (const key of Object.keys(inheritedEnv)) {
+            if (key.toUpperCase() === 'PSMODULEPATH') delete inheritedEnv[key];
+        }
         execFile(POWERSHELL(), ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command', script], {
-            env: { ...process.env, ...env }, windowsHide: true, timeout: 20000, maxBuffer: 1024 * 1024, shell: false,
+            env: { ...inheritedEnv, ...env, PSModulePath: path.join(path.dirname(POWERSHELL()), 'Modules') }, windowsHide: true, timeout: 20000, maxBuffer: 1024 * 1024, shell: false,
         }, (error, stdout) => error ? reject(new Error('SECURITY_OPERATION_FAILED')) : resolve(stdout));
     });
 }

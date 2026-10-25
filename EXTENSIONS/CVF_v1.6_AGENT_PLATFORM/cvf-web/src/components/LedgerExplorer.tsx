@@ -92,33 +92,25 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
     // Pagination
     const [page, setPage] = useState(1);
 
-    const fetchLedger = useCallback(async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const res = await fetch('/api/governance/ledger?limit=500');
-            const json = await res.json();
-
+    const loadLabel = `${l.disconnected}:${l.error}`;
+    const [previousLoadLabel, setPreviousLoadLabel] = useState(loadLabel);
+    if (previousLoadLabel !== loadLabel) {
+        setPreviousLoadLabel(loadLabel); setLoading(true); setError(null);
+    }
+    const fetchLedger = useCallback(() => fetch('/api/governance/ledger?limit=500')
+        .then(res => res.json())
+        .then(async json => {
+            setError(null);
             if (!json.success) {
-                setError(json.error || l.disconnected);
-                setEntries([]);
+                setError(json.error || l.disconnected); setEntries([]);
                 return;
             }
-
             const data = json.data;
-            setTotalBlocks(data.total_blocks);
-            setEntries(data.entries || []);
-
-            // Validate chain integrity
+            setTotalBlocks(data.total_blocks); setEntries(data.entries || []);
             const result = await validateChain(data.entries || []);
             setValidation(result);
-        } catch {
-            setError(l.error);
-            setEntries([]);
-        } finally {
-            setLoading(false);
-        }
-    }, [l.disconnected, l.error]);
+        }).catch(() => { setError(l.error); setEntries([]); })
+        .finally(() => setLoading(false)), [l.disconnected, l.error]);
 
     useEffect(() => {
         fetchLedger();
@@ -212,7 +204,7 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
                 </div>
                 <div className="flex gap-2">
                     <button
-                        onClick={fetchLedger}
+                        onClick={() => { setLoading(true); setError(null); void fetchLedger(); }}
                         className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                     >
                         🔄 {l.refresh}

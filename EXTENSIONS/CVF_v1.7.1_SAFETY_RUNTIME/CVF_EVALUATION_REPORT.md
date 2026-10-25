@@ -57,6 +57,7 @@ vitest run    → 12 suites, 97 tests, 0 failures
 | **Total** | **97** | |
 
 ### Remaining Gaps
+
 - API route tests (Next.js) — middleware tested, routes not
 - `simulation.engine.ts` — replay scenarios untested
 
@@ -76,6 +77,7 @@ vitest run    → 12 suites, 97 tests, 0 failures
 | Content policy | Keyword blocking in AI pipeline |
 
 ### Remaining Concerns
+
 - Rate limiter in-memory only (use Redis for production)
 - User store in-memory (`auth.ts` → `users` Map)
 
@@ -84,6 +86,7 @@ vitest run    → 12 suites, 97 tests, 0 failures
 ## 5. Architecture — 9/10 ✅ (was 7/10)
 
 ### Fixed ✅
+
 - **DI Container wired** — `LifecycleEngine` accepts `EventBus` via constructor injection
 - **Event Bus wired** — 3 events emitted during lifecycle (`submitted`, `decided`, `executed`)
 - **Execution boundary upgraded** — Error events, operation timing, structured logging
@@ -91,6 +94,7 @@ vitest run    → 12 suites, 97 tests, 0 failures
 - **Dead code removed** — `ai/ai.registry.ts`, `ai/ai.interface.ts`, `cvf-ui/server.ts` deleted
 
 ### Remaining
+
 - `adapters/openclaw/` has duplicate `openclaw.adapter.ts` (separate from `ai/openclaw.adapter.ts`)
 
 ---
@@ -111,6 +115,7 @@ vitest run    → 12 suites, 97 tests, 0 failures
 ## 7. UI/UX — 8/10 ✅ (was 6/10)
 
 ### Implemented ✅
+
 - Design system CSS (dark theme, custom properties)
 - Dashboard with stat cards, proposals table, activity feed
 - **Audit Log** — Filterable table with color-coded action levels
@@ -120,6 +125,7 @@ vitest run    → 12 suites, 97 tests, 0 failures
 - 3 reusable components: `Sidebar`, `StatCard`, `StatusBadge`
 
 ### Remaining
+
 - Pages use sample data (not real API fetch)
 - No loading states or error boundaries
 - No responsive mobile layout

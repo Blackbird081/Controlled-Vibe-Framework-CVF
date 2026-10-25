@@ -1,8 +1,13 @@
 # SKILL SCHEMA MAPPING SPEC
+
 # CVF → CVF-Toolkit Integration
+
 # Status: Authoritative Mapping
+
 # Toolkit Version: 1.0.0
+
 # CVF Lock: See 00_CANONICAL_REFERENCE/cvf_version.lock
+
 1. PURPOSE
 
 This document defines:
@@ -17,7 +22,7 @@ How skills interact with risk, governance, and phases
 
 This file is normative and binding.
 
-2. CVF SKILL CONCEPT (CANONICAL INTERPRETATION)
+1. CVF SKILL CONCEPT (CANONICAL INTERPRETATION)
 
 From CVF:
 
@@ -37,7 +42,7 @@ Toolkit MUST treat Skill as the atomic execution unit.
 
 No AI call may occur outside a registered Skill.
 
-3. TOOLKIT CANONICAL SKILL CONTRACT
+1. TOOLKIT CANONICAL SKILL CONTRACT
 
 Every skill MUST conform to this schema:
 
@@ -67,7 +72,7 @@ Every skill MUST conform to this schema:
 
 No field may be omitted.
 
-4. CVF SKILL → TOOLKIT FIELD MAPPING
+1. CVF SKILL → TOOLKIT FIELD MAPPING
 
 | CVF Concept          | Toolkit Field        |
 | -------------------- | -------------------- |
@@ -81,7 +86,7 @@ No field may be omitted.
 | Freeze enforcement   | freezeOnRelease      |
 | Skill lifecycle      | status               |
 
-5. SKILL REGISTRY REQUIREMENTS
+1. SKILL REGISTRY REQUIREMENTS
 
 Implemented in:
 skill.registry.ts
@@ -102,7 +107,7 @@ Track skill ownership
 
 Log registration event
 
-6. SKILL VERSIONING RULE
+1. SKILL VERSIONING RULE
 
 Skill version MUST follow:
 
@@ -126,9 +131,10 @@ Approval mandatory
 
 Freeze required before release
 
-7. SKILL LIFECYCLE
+1. SKILL LIFECYCLE
 
 States:
+
 | Status     | Description                |
 | ---------- | -------------------------- |
 | draft      | Not executable             |
@@ -144,7 +150,7 @@ released → deprecated
 
 No reverse transition allowed.
 
-8. SKILL EXECUTION GATE
+1. SKILL EXECUTION GATE
 
 Before execution:
 
@@ -168,7 +174,7 @@ Freeze applied if required
 
 Failure of any condition → reject execution.
 
-9. SKILL CAPABILITY LEVELS
+1. SKILL CAPABILITY LEVELS
 
 CapabilityLevel MUST align with CVF capability extension.
 
@@ -190,7 +196,7 @@ C4 → max risk R4
 
 Skill cannot declare capability lower than baseRisk implies.
 
-10. INPUT / OUTPUT SCHEMA RULE
+1. INPUT / OUTPUT SCHEMA RULE
 
 Each skill must define:
 
@@ -209,7 +215,7 @@ Log validation errors
 
 This ensures AI deterministic behavior control.
 
-11. AI PROVIDER ABSTRACTION RULE
+1. AI PROVIDER ABSTRACTION RULE
 
 Skill cannot directly bind to a specific AI provider.
 
@@ -223,7 +229,7 @@ Provider chosen at runtime via configuration.
 
 Skill remains provider-agnostic.
 
-12. EXTENSION RULE
+1. EXTENSION RULE
 
 Extensions (Financial, Dexter) must:
 
@@ -243,7 +249,7 @@ Alter core schema
 
 Downgrade risk profile
 
-13. FINANCIAL SKILL OVERRIDE RULE
+1. FINANCIAL SKILL OVERRIDE RULE
 
 Financial skills automatically enforce:
 
@@ -261,7 +267,7 @@ Extended audit if risk >= R3
 
 Freeze mandatory if risk >= R3
 
-14. AUDIT REQUIREMENTS
+1. AUDIT REQUIREMENTS
 
 For each skill execution log:
 
@@ -288,7 +294,7 @@ cost estimate
 
 approval chain
 
-15. NON-NEGOTIABLE RULES
+1. NON-NEGOTIABLE RULES
 
 No AI call outside skill.
 
@@ -300,7 +306,7 @@ Risk cannot be reduced in minor update.
 
 Deprecated skill cannot be executed.
 
-16. COMPLIANCE CHECKLIST
+1. COMPLIANCE CHECKLIST
 
 Toolkit compliant if:
 
@@ -311,4 +317,3 @@ Toolkit compliant if:
 ✔ Risk-capability alignment active
 ✔ Financial override active
 ✔ Provider abstraction enforced
-

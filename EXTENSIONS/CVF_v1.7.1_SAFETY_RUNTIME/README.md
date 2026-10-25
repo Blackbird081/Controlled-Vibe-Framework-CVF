@@ -3,7 +3,7 @@
 > This source module now participates in the approved `B* Merge 4` trust umbrella:
 > canonical coordination package: `EXTENSIONS/CVF_TRUST_SANDBOX/`
 > execution class: `coordination package`
-
+>
 > **AI Governance Framework** — Policy-driven controls for AI-generated proposals with full audit trail, risk management, and simulation capabilities.
 
 ## Quick Start
@@ -44,6 +44,7 @@ Client → [Zod Validation] → [JWT Auth + RBAC] → [Rate Limiter]
 ## Features
 
 ### Core Engine
+
 - **5-step lifecycle**: validate → policy → approve → execute → journal
 - **Immutable policy registry** with SHA-256 hash verification
 - **Safe default**: proposals with no matching rule → `pending` (not auto-approved)
@@ -51,6 +52,7 @@ Client → [Zod Validation] → [JWT Auth + RBAC] → [Rate Limiter]
 - **Typed Event Bus** with 6 event types for observability
 
 ### Security
+
 - **Input Validation**: 14 Zod v4 schemas at every boundary
 - **Authentication**: HMAC-SHA256 JWT + PBKDF2 password hashing (100K iterations)
 - **Authorization**: RBAC with 3 roles (admin, operator, viewer) and 11 permissions
@@ -58,16 +60,19 @@ Client → [Zod Validation] → [JWT Auth + RBAC] → [Rate Limiter]
 - **Secure Cookies**: `httpOnly`, `secure`, `sameSite: strict`
 
 ### AI Governance
+
 - **Pipeline**: policy check → generate → track usage → audit log
 - **Multi-provider**: OpenClaw, Direct LLM, Local providers
 - **Token budgets**: per-provider spending limits
 
 ### Data Layer
+
 - **Prisma v7** with SQLite (6 models)
 - **Repository Pattern**: interfaces → Prisma implementations
 - **Migration-ready**: Easily swap database via `prisma.config.ts`
 
 ### Testing
+
 - **71 tests** across 9 suites covering:
   - State machine, policy executor, policy hash
   - Safety guard, input validation (Zod)

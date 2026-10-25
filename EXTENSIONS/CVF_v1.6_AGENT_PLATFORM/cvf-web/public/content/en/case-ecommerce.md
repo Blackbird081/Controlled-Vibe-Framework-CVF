@@ -11,6 +11,7 @@
 
 **Situation:**  
 ShopHub, a marketplace with 500K sellers and 50M SKUs, struggled with:
+
 - **Scale problem**: 10K+ listings/day, impossible to manually review all
 - **False positives**: AI flagged legitimate products as policy violations
 - **Appeal process broken**: Sellers had no recourse when AI made mistakes
@@ -45,16 +46,19 @@ Seller notification + appeal option for rejected listings
 ### Implementation (Week 1-3)
 
 **Week 1: Define Policy Spec**
+
 - INPUT_SPEC: Listing title, description, images, category, seller history
 - OUTPUT_SPEC: Approved / Needs Review / Rejected, plus explanation
 - Policy rules: Prohibited items (weapons, fake products), misleading claims, quality standards
 
 **Week 2: Skill Contracts + Tiers**
+
 - R0 (Auto-approve): Confidence >95%, known seller, clear policy compliance
 - R1 (Auto-reject with appeal): Confidence <50% on violations, clear policy breach
 - R2 (Human review): Confidence 50-95%, borderline cases, new seller, policy edge case
 
 **Week 3: Human Review Workflow**
+
 - Reviewer can: Approve, Reject, Request Seller Info
 - Trace: Every decision logged with reviewer ID, time, reasoning
 - Appeal: Rejected listings go to appeal queue (secondary human reviewer)
@@ -78,6 +82,7 @@ Seller notification + appeal option for rejected listings
 ### Business Impact
 
 **Content Team Efficiency:**
+
 - Reduced review team from 12 to 3 (redirected 9 people to policy/appeals)
 - Can now focus on:
   - Policy edge cases (not volume screening)
@@ -85,6 +90,7 @@ Seller notification + appeal option for rejected listings
   - Fraud pattern detection (proactive, not reactive)
 
 **Seller Trust:**
+
 - Clear explanation with every rejection improves acceptance
 - Appeal process (human review) = sellers feel heard
 - Transparency: "AI flagged, human verified" builds confidence
@@ -135,6 +141,7 @@ Manual only = bottleneck; AI only = unfair; hybrid = working solution
 ## Recommendation
 
 **For e-commerce/content moderation:**
+
 - Use **confidence-based tiering** (R0 high-confidence auto, R2 borderline human, R1 low-confidence auto-reject)
 - **Always have appeals** — even if approval rate low, process validates system
 - **Clear explanations** reduce disputes by 80%

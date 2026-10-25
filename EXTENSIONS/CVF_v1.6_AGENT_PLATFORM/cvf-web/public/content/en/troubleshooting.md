@@ -7,12 +7,12 @@
 ## 📋 Table of Contents
 
 - [Setup Issues](#-setup-issues)
-- [Web UI Problems](#-web-ui-problems)
+- [Web UI Problems](#%EF%B8%8F-web-ui-problems)
 - [Version Confusion](#-version-confusion)
 - [Skill Errors](#-skill-errors)
 - [Governance Issues](#-governance-issues)
 - [Performance Problems](#-performance-problems)
-- [Common Error Messages](#-common-error-messages)
+- [Common Error Messages](#%EF%B8%8F-common-error-messages)
 
 ---
 
@@ -21,6 +21,7 @@
 ### Issue: `npm install` fails
 
 **Symptoms:**
+
 ```
 npm ERR! code ERESOLVE
 npm ERR! ERESOLVE could not resolve
@@ -29,14 +30,16 @@ npm ERR! ERESOLVE could not resolve
 **Solutions:**
 
 1. **Check Node.js version:**
+
    ```bash
    node -v
    # Should be 18.0.0 or higher
    ```
-   
-   If not, install Node 18+: https://nodejs.org/
+
+   If not, install Node 18+: <https://nodejs.org/>
 
 2. **Clear npm cache:**
+
    ```bash
    npm cache clean --force
    rm -rf node_modules package-lock.json
@@ -44,6 +47,7 @@ npm ERR! ERESOLVE could not resolve
    ```
 
 3. **Use legacy peer deps (if still failing):**
+
    ```bash
    npm install --legacy-peer-deps
    ```
@@ -53,6 +57,7 @@ npm ERR! ERESOLVE could not resolve
 ### Issue: Permission denied errors
 
 **Symptoms:**
+
 ```
 EACCES: permission denied
 ```
@@ -62,6 +67,7 @@ EACCES: permission denied
 1. **Don't use sudo with npm** (dangerous)
 
 2. **Fix npm permissions:**
+
    ```bash
    # Option A: Use nvm (recommended)
    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
@@ -79,6 +85,7 @@ EACCES: permission denied
 ### Issue: Port 3000 already in use
 
 **Symptoms:**
+
 ```
 Error: listen EADDRINUSE: address already in use :::3000
 ```
@@ -86,6 +93,7 @@ Error: listen EADDRINUSE: address already in use :::3000
 **Solutions:**
 
 1. **Find and kill process on port 3000:**
+
    ```bash
    # On Mac/Linux
    lsof -ti:3000 | xargs kill -9
@@ -96,6 +104,7 @@ Error: listen EADDRINUSE: address already in use :::3000
    ```
 
 2. **Or use different port:**
+
    ```bash
    # Edit .env file
    PORT=3001
@@ -109,6 +118,7 @@ Error: listen EADDRINUSE: address already in use :::3000
 ### Issue: Git clone fails
 
 **Symptoms:**
+
 ```
 fatal: repository not found
 fatal: could not read Username
@@ -117,6 +127,7 @@ fatal: could not read Username
 **Solutions:**
 
 1. **Check URL:**
+
    ```bash
    # Correct URL
    git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
@@ -128,6 +139,7 @@ fatal: could not read Username
    - Use VPN if needed
 
 3. **Use SSH instead:**
+
    ```bash
    git clone git@github.com:Blackbird081/Controlled-Vibe-Framework-CVF.git
    ```
@@ -139,12 +151,14 @@ fatal: could not read Username
 ### Issue: Web UI shows blank page
 
 **Symptoms:**
+
 - Browser shows white screen
 - Console shows React errors
 
 **Solutions:**
 
 1. **Check build process:**
+
    ```bash
    npm run build
    # Check for errors
@@ -160,6 +174,7 @@ fatal: could not read Username
    - Screenshot and report issues
 
 4. **Verify .env file:**
+
    ```bash
    # .env should have:
    NODE_ENV=development
@@ -171,12 +186,14 @@ fatal: could not read Username
 ### Issue: Templates not loading
 
 **Symptoms:**
+
 - Template list empty
 - "Failed to load templates" error
 
 **Solutions:**
 
 1. **Check file paths:**
+
    ```bash
    # Templates should be in:
    EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/
@@ -188,6 +205,7 @@ fatal: could not read Username
    - Proper escaping
 
 3. **Check permissions:**
+
    ```bash
    # Make sure files are readable
    chmod -R 755 EXTENSIONS/
@@ -198,12 +216,14 @@ fatal: could not read Username
 ### Issue: AI providers not working
 
 **Symptoms:**
+
 - "API key invalid" errors
 - Responses not coming back
 
 **Solutions:**
 
 1. **Add API keys to .env:**
+
    ```bash
    # .env file
    OPENAI_API_KEY=sk-...
@@ -222,6 +242,7 @@ fatal: could not read Username
    - Add billing if needed
 
 4. **Test API key separately:**
+
    ```bash
    curl https://api.openai.com/v1/models \
      -H "Authorization: Bearer $OPENAI_API_KEY"
@@ -232,12 +253,14 @@ fatal: could not read Username
 ### Issue: Dark mode not working
 
 **Symptoms:**
+
 - Theme toggle doesn't switch
 - Stuck in light/dark mode
 
 **Solutions:**
 
 1. **Clear localStorage:**
+
    ```javascript
    // In browser console
    localStorage.clear()
@@ -274,11 +297,13 @@ fatal: could not read Username
 **Solutions:**
 
 1. **Check current version:**
+
    ```bash
    cat package.json | grep version
    ```
 
 2. **Upgrade to needed version:**
+
    ```bash
    git pull origin main
    cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
@@ -295,6 +320,7 @@ fatal: could not read Username
 ### Issue: Skill validation fails
 
 **Symptoms:**
+
 ```
 ❌ Skill validation failed
 Missing required field: risk_level
@@ -303,6 +329,7 @@ Missing required field: risk_level
 **Solutions:**
 
 1. **Check skill format:**
+
    ```yaml
    # Required fields
    id: my-skill-v1
@@ -313,6 +340,7 @@ Missing required field: risk_level
    ```
 
 2. **Use validation tool:**
+
    ```bash
    cd tools/skill-validation
    python3 validate_skills.py path/to/skill.md
@@ -329,6 +357,7 @@ Missing required field: risk_level
 **Solutions:**
 
 1. **Check file location:**
+
    ```bash
    # Skills should be in:
    EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/[category]/
@@ -347,6 +376,7 @@ Missing required field: risk_level
 ### Issue: "Risk level exceeds phase limit"
 
 **Symptoms:**
+
 ```
 ⚠️ Warning: Risk level R3 not allowed in Phase A
 ```
@@ -360,6 +390,7 @@ Missing required field: risk_level
    - Phase D (Review): R0-R1
 
 2. **Lower risk level or change phase:**
+
    ```yaml
    # Either:
    risk_level: R1  # Lower risk
@@ -378,12 +409,14 @@ Missing required field: risk_level
 ### Issue: Phase gates blocking progress
 
 **Symptoms:**
+
 - Can't proceed to next phase
 - Checklist not complete
 
 **Solutions:**
 
 1. **Review checklist items:**
+
    ```bash
    # Check phase gate requirements
    governance/toolkit/01_BOOTSTRAP/phase-gates.md
@@ -394,6 +427,7 @@ Missing required field: risk_level
    - Must be checked off before proceeding
 
 3. **Override (if authorized):**
+
    ```yaml
    # In governance config
    allow_phase_skip: true  # Use with caution!
@@ -404,12 +438,14 @@ Missing required field: risk_level
 ### Issue: Authority matrix conflicts
 
 **Symptoms:**
+
 - "User not authorized for this role"
 - Permission denied errors
 
 **Solutions:**
 
 1. **Check role assignment:**
+
    ```yaml
    # governance/toolkit/03_CONTROL/authority-matrix.yaml
    roles:
@@ -437,6 +473,7 @@ Missing required field: risk_level
 **Solutions:**
 
 1. **Check system resources:**
+
    ```bash
    # Make sure you have enough RAM/CPU
    top  # or Activity Monitor on Mac
@@ -445,6 +482,7 @@ Missing required field: risk_level
 2. **Close unnecessary tabs/apps**
 
 3. **Use production build:**
+
    ```bash
    npm run build
    npm run start  # Instead of dev
@@ -462,16 +500,19 @@ Missing required field: risk_level
 **Solutions:**
 
 1. **Use faster npm install:**
+
    ```bash
    npm ci  # Instead of npm install
    ```
 
 2. **Enable caching:**
+
    ```bash
    npm config set cache ~/.npm-cache
    ```
 
 3. **Use yarn instead:**
+
    ```bash
    npm install -g yarn
    yarn install  # Faster than npm
@@ -484,11 +525,13 @@ Missing required field: risk_level
 ### Error: "Module not found"
 
 **Full error:**
+
 ```
 Error: Cannot find module 'react'
 ```
 
 **Solution:**
+
 ```bash
 npm install
 # or
@@ -500,15 +543,18 @@ npm install react react-dom
 ### Error: "Unexpected token <"
 
 **Full error:**
+
 ```
 SyntaxError: Unexpected token '<'
 ```
 
 **Causes:**
+
 - Build failed
 - Wrong file type
 
 **Solution:**
+
 ```bash
 # Clear build
 rm -rf .next  # or build/
@@ -520,11 +566,13 @@ npm run build
 ### Error: "fetch is not defined"
 
 **Full error:**
+
 ```
 ReferenceError: fetch is not defined
 ```
 
 **Solution:**
+
 ```bash
 # Node <18, install polyfill
 npm install node-fetch
@@ -538,6 +586,7 @@ nvm install 18
 ### Error: "CORS policy blocked"
 
 **Full error:**
+
 ```
 Access to fetch at '...' has been blocked by CORS policy
 ```
@@ -547,12 +596,14 @@ Access to fetch at '...' has been blocked by CORS policy
 1. **Check API endpoint URL**
 
 2. **Add CORS headers (if API server):**
+
    ```javascript
    // In API server
    res.setHeader('Access-Control-Allow-Origin', '*')
    ```
 
 3. **Use proxy:**
+
    ```javascript
    // In package.json
    "proxy": "http://localhost:5000"
@@ -563,20 +614,24 @@ Access to fetch at '...' has been blocked by CORS policy
 ## 🆘 Still Need Help?
 
 ### Step 1: Search Documentation
+
 - 🔍 [Full docs](../docs/GET_STARTED.md)
 - ❓ [FAQ](faq.md)
 
 ### Step 2: Check Existing Issues
+
 - 🐛 [GitHub Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
 - Search for your error message
 
 ### Step 3: Ask Community
+
 - 💬 [Discord](https://discord.gg/cvf)
 - Usually fastest response
 
 ### Step 4: File a Bug Report
 
 **Include:**
+
 - CVF version
 - Node.js version
 - OS (Windows/Mac/Linux)
@@ -584,6 +639,7 @@ Access to fetch at '...' has been blocked by CORS policy
 - Steps to reproduce
 
 **Template:**
+
 ```markdown
 **CVF Version:** 1.6.0
 **Node Version:** 18.12.0
@@ -599,7 +655,9 @@ Access to fetch at '...' has been blocked by CORS policy
 
 **Error Message:**
 ```
+
 [Paste full error]
+
 ```
 
 **Screenshots:**

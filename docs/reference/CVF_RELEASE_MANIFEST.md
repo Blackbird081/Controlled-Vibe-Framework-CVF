@@ -1,7 +1,6 @@
 
 Memory class: POINTER_RECORD
 
-
 Status: authoritative operational release manifest for the current local baseline.
 
 ## Purpose

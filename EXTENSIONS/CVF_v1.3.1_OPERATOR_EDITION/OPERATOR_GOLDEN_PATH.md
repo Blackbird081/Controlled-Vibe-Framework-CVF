@@ -19,6 +19,7 @@ Không tối ưu.
 Không làm thêm.
 
 Operator được phép làm gì ở mỗi bước?
+
 | Step | Operator Action          |
 | ---- | ------------------------ |
 | 1    | Viết input theo contract |
@@ -28,7 +29,6 @@ Operator được phép làm gì ở mỗi bước?
 | 5    | Audit lạnh               |
 | 6    | Ghi log                  |
 | 7    | Kết thúc                 |
-
 
 Nếu bạn phải nghĩ thêm bước 8 → bạn đang dùng sai CVF.
 

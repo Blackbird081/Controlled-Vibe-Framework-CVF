@@ -106,6 +106,7 @@ them.
 | `maxCandidateCount` | number | DOC_ONLY_NEW | maximum number of summary candidates to return; advisory only; implementation may apply lower bounds |
 
 **Mandatory constraints on the request:**
+
 - `taskContext` and `queryTopic` must not contain raw chat context, provider
   session content, or secret-like values.
 - `roleIdentity` records the requestor role for audit; it does not grant access
@@ -131,6 +132,7 @@ implements them.
 | `forbiddenFieldFlags` | object | DOC_ONLY_NEW | records the blocked invariants: `rawMemoryReleased: false`, `canReinject: false`, `rawContentPresent: false` |
 
 **Mandatory constraints on the response:**
+
 - `summaries[].summary` must be bounded (maximum 280 characters per summary
   record, consistent with the MPI-T2 projection output contract).
 - `summaries` must not include a `content` field on any record.

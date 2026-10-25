@@ -9,6 +9,7 @@
 ## 🎯 Domain Overview
 
 Domain này giúp End User làm việc với AI để phân tích và ra quyết định kinh doanh. Mỗi skill cung cấp:
+
 - Framework tư duy có cấu trúc
 - Tiêu chí đánh giá output
 - Red flags cần tránh

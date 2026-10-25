@@ -30,12 +30,15 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 ## 2. Đánh Giá Từng Module
 
 ### 00_CANONICAL_REFERENCE — ⭐⭐⭐⭐⭐ (5/5) ↑ từ 4/5
+
 - `cvf_version.lock.md`: YAML rõ ràng, lock CVF v1.0–v1.6
 - ✅ `cvf.version.validator.ts` — runtime version check — **ĐÃ THÊM**
 - Lock policy + governance alignment đầy đủ
 
 ### 01_CORE_MAPPING — ⭐⭐⭐⭐⭐ (5/5) — Module tốt nhất
+
 5 mapping specs nhất quán, coverage toàn diện:
+
 - `governance.mapping.md` — 7 pillars, execution flow P0–P6
 - `risk.phase.mapping.md` — 7-phase model, risk-phase matrix
 - `skill.schema.mapping.md` — Canonical skill contract
@@ -45,6 +48,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 - ✅ `glossary.md` — 23 terms defined — **ĐÃ THÊM**
 
 ### 02_TOOLKIT_CORE — ⭐⭐⭐⭐⭐ (5/5) ↑ từ 4/5
+
 - 6 file spec.md (all core modules covered)
 - 10 file TypeScript compilable
 - ✅ `errors.ts` — 12 error classes CVF_ERR_001–012 — **ĐÃ THÊM**
@@ -58,27 +62,32 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 - ✅ Unit tests: risk.classifier, phase.controller, change.controller, governance.guard — **ĐÃ THÊM**
 
 ### 03_ADAPTER_LAYER — ⭐⭐⭐⭐⭐ (5/5) ↑ từ 4/5
+
 - 5 thin adapters + 1 factory
 - ✅ `cvf.change.adapter.ts` — gọi `changeController` thực tế — **ĐÃ FIX**
 - ✅ `adapter.factory.ts` — central adapter registration — **ĐÃ THÊM**
 
 ### 04_EXTENSION_LAYER — ⭐⭐⭐⭐⭐ (5/5) ↑ từ 4/5
+
 - Financial: risk profile, skill pack (4 skills), validation rules
 - Dexter: workflow adapter + agent bridge
 - ✅ `dexter.agent.bridge.ts` — dùng `skill.domain` thay `skillId.includes()` — **ĐÃ FIX**
 - ✅ `_extension.template/` — 4-file scaffolding (README, risk, skills, validation) — **ĐÃ THÊM**
 
 ### 05_UAT_AND_CERTIFICATION — ⭐⭐⭐⭐ (4/5)
+
 - UAT runner hoạt động, rubric theo R1–R4
 - Certification schema + compliance report generator
 - ⬜ Còn thiếu: concrete test cases, certification storage, expiry mechanism
 
 ### 06_VERSIONING_AND_FREEZE — ⭐⭐⭐⭐⭐ (5/5) ↑ từ 4/5
+
 - SemVer policy, freeze protocol spec, migration template
 - ✅ `CHANGELOG.md` — version history — **ĐÃ THÊM**
 - ✅ `freeze.protocol.ts` — runtime activate/break/isActive — **ĐÃ THÊM**
 
 ### 07_AI_PROVIDER_ABSTRACTION — ⭐⭐⭐⭐⭐ (5/5)
+
 - `provider.interface.ts` — Clean `AIProvider` interface
 - 3 provider implementations — production-ready
 - ✅ `claude.provider.ts` — usage tracking + healthCheck — **ĐÃ FIX**
@@ -86,6 +95,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 - ✅ `provider.security.spec.md` — API key policy, rotation — **ĐÃ THÊM**
 
 ### 08_DOCUMENTATION — ⭐⭐⭐⭐⭐ (5/5) ↑ từ 3/5
+
 - ✅ `architecture.overview.md` — 4 Mermaid diagrams — **ĐÃ THÊM**
 - ✅ `api.reference.md` — all function signatures + error codes — **ĐÃ THÊM**
 - ✅ `onboarding.guide.md` — developer setup & first tasks — **ĐÃ THÊM**
@@ -125,20 +135,25 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 ## 5. Khuyến Nghị Kiến Trúc — **TRẠNG THÁI**
 
 ### 5.1 Tách biệt Spec vs Implementation — ✅ DONE
+
 - ✅ Tạo `skill.registry.spec.md`, `operator.policy.spec.md`, `audit.logger.spec.md`
 - Tất cả core modules giờ có pattern: `module.spec.md` + `module.ts`
 
 ### 5.2 Dependency Graph formal hóa — ✅ DONE
+
 - ✅ `dependency.map.md` với Mermaid diagram + 5-layer hierarchy + import rules
 
 ### 5.3 Error Handling Strategy — ✅ DONE
+
 - ✅ `errors.ts` — 12 error classes với `code` field (CVF_ERR_001–012)
 - ✅ `error.reference.md` — troubleshooting guide
 
 ### 5.4 Configuration Layer — ✅ DONE
+
 - ✅ `cvf.config.ts` — environment caps, phase gates, financial thresholds, audit policy, SLA, rate limits
 
 ### 5.5 Event System — ⬜ PLANNED (Sprint 5 Advanced)
+
 - Audit logger vẫn write-only
 - Event emitter + webhook integration chưa implement
 - **Đề xuất**: Implement trong Sprint 5 Advanced
@@ -148,21 +163,26 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 ## 6. Khuyến Nghị Bảo Mật — **TRẠNG THÁI**
 
 ### 6.1 Input Validation — ✅ PARTIAL
+
 - ✅ `cvf.config.ts` chứa validation rules
 - ⬜ Runtime validation cho skillId/operatorId format chưa enforce trong mỗi function
 
 ### 6.2 Immutability Enforcement — ✅ PARTIAL
+
 - ✅ `freeze.protocol.ts` dùng `Object.freeze()` cho returned state
 - ⬜ `Readonly<T>` chưa áp dụng toàn bộ
 
 ### 6.3 Rate Limiting & Abuse Prevention — ✅ CONFIGURED
+
 - ✅ `cvf.config.ts` định nghĩa rate limit values
 - ⬜ Runtime enforcement chưa implement
 
 ### 6.4 Sensitive Data trong Audit — ✅ DONE
+
 - ✅ `audit.sanitizer.ts` — deep-redact PII, API keys, passwords, tokens
 
 ### 6.5 Provider Security — ✅ DONE
+
 - ✅ `provider.security.spec.md` — full policy documented
 - ✅ `provider.registry.ts` — model approval validation, health checks
 
@@ -171,18 +191,22 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 ## 7. Khuyến Nghị Vận Hành — **TRẠNG THÁI**
 
 ### 7.1 Observability — ✅ PARTIAL
+
 - ✅ `correlationId` added to `AuditRecord` — tracing foundation
 - ✅ `cvf.config.ts` defines SLA targets
 - ⬜ Metrics dashboard, tracing pipeline chưa implement
 
 ### 7.2 Disaster Recovery — ⬜ PLANNED
+
 - Rollback procedure documented nhưng chưa có incident response playbook
 
 ### 7.3 Performance — ✅ CONFIGURED  
+
 - ✅ SLA target defined (< 50ms per decision)
 - ⬜ Cache, parallel execution chưa implement
 
 ### 7.4 Scalability — ⬜ PLANNED
+
 - State persistence, distributed lock chưa implement
 
 ---
@@ -190,6 +214,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 ## 8. Khuyến Nghị Từng Module — **TRẠNG THÁI**
 
 ### 8.1 — 00_CANONICAL_REFERENCE
+
 | Item | Priority | Trạng thái |
 |------|----------|------------|
 | Machine-readable lock | 🟡 Medium | ⬜ Vẫn dùng `.md` |
@@ -197,6 +222,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 | Auto-update check | 🟢 Low | ⬜ Planned |
 
 ### 8.2 — 01_CORE_MAPPING
+
 | Item | Priority | Trạng thái |
 |------|----------|------------|
 | Cross-reference index | 🟡 Medium | ✅ `mapping.index.md` — DONE |
@@ -204,6 +230,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 | Glossary | 🟢 Low | ✅ `glossary.md` — DONE |
 
 ### 8.3 — 02_TOOLKIT_CORE
+
 | Item | Priority | Trạng thái |
 |------|----------|------------|
 | Centralized error file | 🔴 High | ✅ `errors.ts` — DONE |
@@ -213,6 +240,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 | Interface-first | 🟢 Low | ✅ `interfaces.ts` — DONE |
 
 ### 8.4 — 03_ADAPTER_LAYER
+
 | Item | Priority | Trạng thái |
 |------|----------|------------|
 | Change adapter enrichment | 🟡 Medium | ✅ Calls changeController — DONE |
@@ -220,6 +248,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 | Error propagation | 🟢 Low | ⬜ Planned |
 
 ### 8.5 — 04_EXTENSION_LAYER
+
 | Item | Priority | Trạng thái |
 |------|----------|------------|
 | Domain field usage | 🔴 High | ✅ Dexter bridge uses `skill.domain` — DONE |
@@ -228,6 +257,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 | Validation rule interface | 🟢 Low | ✅ `IValidationRule` in `interfaces.ts` — DONE |
 
 ### 8.6 — 05_UAT_AND_CERTIFICATION
+
 | Item | Priority | Trạng thái |
 |------|----------|------------|
 | Concrete test cases | 🔴 High | ⬜ Planned |
@@ -236,6 +266,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 | Re-certification flow | 🟢 Low | ⬜ Planned |
 
 ### 8.7 — 06_VERSIONING_AND_FREEZE
+
 | Item | Priority | Trạng thái |
 |------|----------|------------|
 | CHANGELOG.md | 🔴 High | ✅ Created & maintained — DONE |
@@ -244,6 +275,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 | Auto-freeze trigger | 🟢 Low | ⬜ Planned |
 
 ### 8.8 — 07_AI_PROVIDER_ABSTRACTION
+
 | Item | Priority | Trạng thái |
 |------|----------|------------|
 | Claude usage tracking | 🟡 Medium | ✅ Token counts in response — DONE |
@@ -253,6 +285,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 | Cost tracking | 🟢 Low | ⬜ Planned |
 
 ### 8.9 — 08_DOCUMENTATION
+
 | Item | Priority | Trạng thái |
 |------|----------|------------|
 | Architecture diagrams | 🔴 High | ✅ 4 Mermaid diagrams — DONE |
@@ -268,6 +301,7 @@ CVF Toolkit là **integration blueprint + enforcement engine** cho governance AI
 Khi phát triển extension mới (ngoài Financial/Dexter), tuân thủ:
 
 ### 9.1 Cấu trúc bắt buộc mỗi Extension
+
 ```
 04_EXTENSION_LAYER/
 └── {domain}.extension/
@@ -280,6 +314,7 @@ Khi phát triển extension mới (ngoài Financial/Dexter), tuân thủ:
 ✅ **Template sẵn có**: Copy `_extension.template/` để bắt đầu
 
 ### 9.2 Checklist tạo Extension mới
+
 - [x] Define domain-specific risk factors → map sang R1–R4 — ✅ Template có sẵn
 - [x] Register skills (mỗi skill có `domain` field rõ ràng) — ✅ Template có sẵn
 - [x] Implement validation rules (output quality checks) — ✅ Template có sẵn
@@ -290,6 +325,7 @@ Khi phát triển extension mới (ngoài Financial/Dexter), tuân thủ:
 - [ ] Register trong adapter layer (nếu cần external bridge)
 
 ### 9.3 Ví dụ domain tiềm năng
+
 | Domain | Mô tả | Estimated Risk Range |
 |--------|--------|---------------------|
 | Logistics | Container tracking, ETA prediction | R1–R2 |
@@ -303,6 +339,7 @@ Khi phát triển extension mới (ngoài Financial/Dexter), tuân thủ:
 ## 10. Khuyến Nghị Testing & QA — **TRẠNG THÁI**
 
 ### 10.1 Unit Tests — ✅ DONE
+
 | Module | Test cases | Trạng thái |
 |--------|-----------|------------|
 | `risk.classifier.ts` | R1→R4, financial override, capability mismatch, environment cap | ✅ |
@@ -311,6 +348,7 @@ Khi phát triển extension mới (ngoài Financial/Dexter), tuân thủ:
 | `governance.guard.ts` | full flow pass, operator reject, R3 approval | ✅ |
 
 ### 10.2 Integration Tests — ✅ PARTIAL
+
 | Scenario | Trạng thái |
 |----------|------------|
 | Skill → governance → audit flow | ✅ `governance.flow.test.ts` |
@@ -319,8 +357,11 @@ Khi phát triển extension mới (ngoài Financial/Dexter), tuân thủ:
 | Multi-agent risk dominance | ⬜ Planned |
 
 ### 10.3 Contract Tests — ⬜ PLANNED
+
 ### 10.4 Compliance Tests — ⬜ PLANNED
+
 ### 10.5 Test Infrastructure — ✅ DONE
+
 - [x] `jest.config.js` — ✅ ts-jest, path aliases, coverage
 - [x] `__tests__/` — ✅ 4 unit test files
 - [x] `__tests__/integration/` — ✅ 1 integration test
@@ -332,12 +373,14 @@ Khi phát triển extension mới (ngoài Financial/Dexter), tuân thủ:
 ## 11. Roadmap Phát Triển — **TRẠNG THÁI**
 
 ### Sprint 1 — Foundation — ✅ COMPLETE
+
 - [x] Thêm `tsconfig.json` + `package.json`
 - [x] Setup build pipeline (tsc compile check)
 - [x] Tạo `errors.ts` + `cvf.config.ts` + `interfaces.ts`
 - [x] Tạo `CHANGELOG.md`
 
 ### Sprint 2 — Core Completion — ✅ COMPLETE
+
 - [x] Spec.md cho 3 module còn thiếu
 - [x] `dependency.map.md`
 - [x] `freeze.protocol.ts` implementation
@@ -347,6 +390,7 @@ Khi phát triển extension mới (ngoài Financial/Dexter), tuân thủ:
 - [x] Fix `audit.logger.ts` (add missing event types)
 
 ### Sprint 3 — Provider & Extension — ✅ COMPLETE
+
 - [x] Claude provider usage tracking + healthCheck
 - [x] `provider.registry.ts` + model approval runtime validation
 - [x] `provider.security.spec.md`
@@ -356,6 +400,7 @@ Khi phát triển extension mới (ngoài Financial/Dexter), tuân thủ:
 - [x] `cvf.version.validator.ts`
 
 ### Sprint 4 — Documentation — ✅ COMPLETE
+
 - [x] Architecture diagrams (4 Mermaid)
 - [x] API reference doc
 - [x] Sequence diagrams (5 flows)
@@ -365,11 +410,13 @@ Khi phát triển extension mới (ngoài Financial/Dexter), tuân thủ:
 - [x] ADR decisions (9 records)
 
 ### Sprint 5 — Testing — ✅ COMPLETE (Core)
+
 - [x] `jest.config.js`
 - [x] Unit tests: risk.classifier, phase.controller, change.controller, governance.guard
 - [x] Integration test: governance.flow
 
 ### Sprint 6 — Advanced (NEXT)
+
 - [ ] Multi-agent orchestrator implementation
 - [ ] Event system + webhook integration
 - [ ] Real-time audit dashboard spec

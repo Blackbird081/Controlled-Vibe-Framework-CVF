@@ -79,6 +79,7 @@ from T1 intake record schema and T2 classification scheme:
 | `contentSnippet` | string | intake | yes (fulltext) | no | no |
 
 **Notes:**
+
 - `titleSnippet` and `contentSnippet` are short text extracts for fulltext
   search; exact extraction method is T5 implementation scope.
 - `contentSnippet` must not exceed 512 characters per record; it is a display

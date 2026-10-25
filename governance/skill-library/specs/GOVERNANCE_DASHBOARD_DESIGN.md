@@ -8,12 +8,14 @@
 
 ## 1️⃣ Design Principles
 
-### Dashboard này KHÔNG PHẢI:
+### Dashboard này KHÔNG PHẢI
+
 - ❌ Agent playground
 - ❌ Skill marketplace
 - ❌ Nơi "enable / disable cho tiện"
 
-### Dashboard này LÀ:
+### Dashboard này LÀ
+
 - ✅ Bảng điều khiển governance
 - ✅ Nơi nhìn thấy **quyền – rủi ro – trạng thái tuân thủ**
 
@@ -211,6 +213,7 @@ UAT là **đánh giá đầu ra** (Output). Hai khái niệm tách biệt.
 ## 5️⃣ Dashboard Restrictions
 
 Dashboard KHÔNG được phép:
+
 - ❌ Edit Risk Level trực tiếp
 - ❌ Mở quyền trực tiếp
 - ❌ Bypass UAT

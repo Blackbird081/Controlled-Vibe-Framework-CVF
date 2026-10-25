@@ -24,13 +24,13 @@ If escalation is used to:
 
 ## 2. What Escalation Is / Is Not
 
-### Escalation IS:
+### Escalation IS
 
 * A governance signal
 * A boundary integrity mechanism
 * A response to *patterned failure*
 
-### Escalation IS NOT:
+### Escalation IS NOT
 
 * Debugging
 * Prompt optimization

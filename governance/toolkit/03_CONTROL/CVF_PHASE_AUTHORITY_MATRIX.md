@@ -1,5 +1,6 @@
 File này là bảng luật tối cao cho hành vi agent theo phase
 Skill, prompt, hay con người đều không được vượt matrix này
+
 # CVF PHASE – AUTHORITY MATRIX
 
 This document defines the authoritative mapping between:
@@ -129,6 +130,7 @@ Authority exists ONLY at the intersection of all three.
 ## 7. ENFORCEMENT REQUIREMENT
 
 Agents MUST:
+
 - Check this matrix before acting
 - Refuse actions not permitted here
 - Cite this file when refusing
@@ -141,6 +143,7 @@ Example refusal:
 ## 8. FINAL CLAUSE
 
 This matrix overrides:
+
 - Skill documentation
 - Agent prompts
 - Human informal requests

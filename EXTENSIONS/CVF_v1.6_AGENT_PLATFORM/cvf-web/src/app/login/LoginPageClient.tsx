@@ -2,7 +2,7 @@
 
 // Text Encoding Exception: source-faithful Vietnamese login copy is required for the existing UI.
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState, useSyncExternalStore } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLanguage, LanguageToggle } from '@/lib/i18n';
 import { signIn, useSession } from 'next-auth/react';
@@ -13,6 +13,10 @@ interface LoginPageProps {
     selectedOAuthProvider: OAuthProviderId | null;
 }
 
+const subscribeToHydration = () => () => {};
+const clientReady = () => true;
+const serverReady = () => false;
+
 function LoginPageContent({ localMockAllowed, selectedOAuthProvider }: LoginPageProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -22,9 +26,14 @@ function LoginPageContent({ localMockAllowed, selectedOAuthProvider }: LoginPage
     const isVi = language === 'vi';
     const isLocalMockLogin = localMockAllowed;
 
-    const [username, setUsername] = useState('');
+    const hydrated = useSyncExternalStore(subscribeToHydration, clientReady, serverReady);
+    const [savedUsername] = useState(() => {
+        try { return typeof window === 'undefined' ? '' : localStorage.getItem('cvf_login_username') ?? ''; }
+        catch { return ''; }
+    });
+    const [username, setUsername] = useState(savedUsername);
     const [password, setPassword] = useState('');
-    const [rememberUsername, setRememberUsername] = useState(false);
+    const [rememberUsername, setRememberUsername] = useState(Boolean(savedUsername));
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,17 +44,7 @@ function LoginPageContent({ localMockAllowed, selectedOAuthProvider }: LoginPage
         }
     }, [from, router, status]);
 
-    useEffect(() => {
-        try {
-            const saved = localStorage.getItem('cvf_login_username');
-            if (saved) {
-                setUsername(saved);
-                setRememberUsername(true);
-            }
-        } catch {
-            // ignore invalid storage
-        }
-    }, []);
+
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -101,7 +100,7 @@ function LoginPageContent({ localMockAllowed, selectedOAuthProvider }: LoginPage
                             {isVi ? 'Tên đăng nhập' : 'Username'}
                         </label>
                         <input
-                            value={username}
+                            value={hydrated ? username : ''}
                             onChange={(e) => setUsername(e.target.value)}
                             type="text"
                             className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -124,7 +123,7 @@ function LoginPageContent({ localMockAllowed, selectedOAuthProvider }: LoginPage
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input
                                 type="checkbox"
-                                checked={rememberUsername}
+                                checked={hydrated && rememberUsername}
                                 onChange={(e) => setRememberUsername(e.target.checked)}
                                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />

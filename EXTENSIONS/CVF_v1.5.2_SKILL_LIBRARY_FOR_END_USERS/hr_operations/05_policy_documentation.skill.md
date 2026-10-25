@@ -17,12 +17,14 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Viết chính sách mới cho công ty
 - Cập nhật policy hiện có
 - Chuẩn hóa format tài liệu nội bộ
 - Communicate changes cho employees
 
 **Không phù hợp khi:**
+
 - Cần legal contracts — Cần luật sư review
 - Compliance documentation — Cần compliance officer
 - Technical guidelines — Dùng technical docs skills
@@ -66,6 +68,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -82,11 +85,13 @@
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Policy document hoàn chỉnh
 - Ngôn ngữ clear, professional
 - Format chuẩn, dễ reference
 
 **Cấu trúc output:**
+
 ```
 [COMPANY] POLICY: [TOPIC]
 
@@ -115,6 +120,7 @@
 - [ ] Format consistent, scannable
 
 **Red flags (cần Reject):**
+
 - ⚠️ Quá vague, room for interpretation
 - ⚠️ Too harsh/too lenient tone
 - ⚠️ Missing key scenarios
@@ -145,7 +151,8 @@
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Policy topic: Work From Home Policy
 Purpose: Enable flexible working while maintaining productivity
@@ -159,7 +166,8 @@ Exceptions: Special circumstances với HR approval
 Effective date: 2026-03-01
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [COMPANY NAME] POLICY
@@ -278,7 +286,8 @@ Approved by: [HR Director Name]
 Date: [Date]
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Clear purpose và scope
 - ✅ Specific rules với numbers
 - ✅ Professional language
@@ -290,6 +299,7 @@ Date: [Date]
 ---
 
 ## 🔗 Related Skills
+
 - [Job Description](./01_job_description.skill.md)
 - [Onboarding Checklist](./04_onboarding_checklist.skill.md)
 

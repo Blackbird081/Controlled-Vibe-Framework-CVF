@@ -19,6 +19,7 @@ Skill mapping: `governance/skill-library/examples/AGT-014_MCP_SERVER_CONNECTOR.m
 Connects to external Model Context Protocol (MCP) servers, discovers available tools, validates schemas, and invokes tools with full audit logging.
 
 **Actions:**
+
 - Connect to MCP servers via stdio or HTTP transport
 - Discover available tools and their schemas dynamically
 - Validate tool input/output schemas before invocation
@@ -70,6 +71,7 @@ Connects to external Model Context Protocol (MCP) servers, discovers available t
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Only connects to approved MCP servers
 - [ ] Schema validation performed before tool invocation
 - [ ] Connection timeout enforced (≤15s default)
@@ -78,6 +80,7 @@ Connects to external Model Context Protocol (MCP) servers, discovers available t
 - [ ] Human confirmation for new server connections
 
 **FAIL criteria:**
+
 - [ ] Connection to unapproved server
 - [ ] Tool invoked without schema validation
 - [ ] Connection timeout bypassed

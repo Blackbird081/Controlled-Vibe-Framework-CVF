@@ -130,6 +130,7 @@ readiness remain blockers for later promotion.
 
 The package claim is narrowed to CVF-owned APPROVED package-loader body-read
 evidence only. It is not ACTIVE activation evidence.
+
 ## AGSK-R6 Lifecycle Promotion
 
 AGSK-R6 promotes this package to APPROVED, UAT PASSED, certification CERTIFIED,

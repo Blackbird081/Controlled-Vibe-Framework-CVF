@@ -26,6 +26,12 @@ from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+PUBLIC_PROFILE = False
+PRIVATE_INVOCATION_PATHS = frozenset({
+    "scripts/run_cvf_cross_extension_conformance.py",
+    "scripts/run_cvf_packet_posture_gate_conformance.py",
+    "scripts/cvf_doctor.py",
+})
 
 MAP_PATH = "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json"
 README_PATH = "docs/reference/system_chain/README.md"
@@ -161,7 +167,10 @@ def _read_text(path: Path) -> tuple[str | None, str | None]:
 def _sha256_of(path: Path) -> str | None:
     if not path.exists() or path.is_dir():
         return None
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    raw = path.read_bytes()
+    # Public Git text identity must survive LF/CRLF checkout; private evidence
+    # keeps its reviewed host-raw identity and receives no normalization.
+    return hashlib.sha256(raw.replace(b"\r\n", b"\n") if PUBLIC_PROFILE else raw).hexdigest()
 
 
 def _validate_fingerprint_entry(label: str, fp: Any, issues: list[str]) -> None:
@@ -267,6 +276,13 @@ def _check_fingerprint_drift(label: str, fp: Any, issues: list[str]) -> None:
     if not rel_path or not expected:
         return
     full = REPO_ROOT / rel_path
+    if PUBLIC_PROFILE and fp.get("publicDisposition") == "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF":
+        from guard_binding_catalog import private_binding
+        if not private_binding(rel_path) and rel_path not in PRIVATE_INVOCATION_PATHS:
+            issues.append(f"schema: public source `{rel_path}` cannot be exempted as private proof")
+        elif full.exists():
+            issues.append(f"PATH_MISSING: private proof `{rel_path}` was unexpectedly exported")
+        return
     actual = _sha256_of(full)
     if actual is None:
         issues.append(
@@ -423,6 +439,9 @@ def validate_wiring() -> list[str]:
     """Confirm this checker's own command appears exactly once in every required catalog/workflow."""
     issues: list[str] = []
     for rel_path, label in WIRING_TARGETS:
+        if PUBLIC_PROFILE and rel_path.startswith("governance/compat/"):
+            # These are private autorun/hook catalogs, explicitly unexported.
+            continue
         full = REPO_ROOT / rel_path
         text, err = _read_text(full)
         if err:
@@ -484,7 +503,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--as-of-date", help="ISO date (YYYY-MM-DD) to evaluate age against; default is today")
     parser.add_argument("--json", action="store_true", help="Print JSON report")
     parser.add_argument("--enforce", action="store_true", help="Exit non-zero on violations")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args(argv)
+    global PUBLIC_PROFILE
+    PUBLIC_PROFILE = args.profile == "public"
+    if PUBLIC_PROFILE:
+        from guard_binding_catalog import require_public_projection
+        require_public_projection(REPO_ROOT)
 
     if args.as_of_date:
         try:
@@ -496,6 +521,12 @@ def main(argv: list[str] | None = None) -> int:
         as_of_date = dt.date.today()
 
     issues, _doc = run_all_validations(as_of_date)
+    if PUBLIC_PROFILE and _doc:
+        if _doc.get("publicProofBoundary") != "PRIVATE_INVOCATION_NOT_PUBLIC_PROOF":
+            issues.append("schema: public map must declare the private invocation proof boundary")
+        lane = next((item for item in _doc.get("lanes", []) if item.get("laneId") == "RUNTIME_TO_ENFORCEMENT"), {})
+        if lane.get("publicInvocationDisposition") != "PRIVATE_INVOCATION_NOT_PUBLIC_PROOF":
+            issues.append("schema: lane 3 must retain its private invocation disposition")
     counts = _classify(issues)
     freshness_state = "CURRENT" if not issues else next(
         (k for k in ("PATH_MISSING", "SOURCE_DRIFT", "MAP_DRIFT", "COVERAGE_DRIFT", "AGE_EXPIRED", "schema", "wiring") if counts[k]),

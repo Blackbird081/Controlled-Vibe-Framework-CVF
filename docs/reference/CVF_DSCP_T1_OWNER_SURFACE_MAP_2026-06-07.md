@@ -25,6 +25,7 @@ or any runtime/external source outside the CVF provenance repository.
 
 Source-verified map of all existing scan, classification, context-pack, and
 retrieval receipt surfaces in CVF. For each surface, records:
+
 - owning file and line range
 - key interfaces/types
 - which fields are domain-specific (LPCI/legal) vs domain-agnostic (reusable)
@@ -270,6 +271,7 @@ primary reference for the proposed `GovernedContextPackage` evidence block.
 **Owner:** CVF_CONTROL_PLANE_FOUNDATION (W77-T1 declaration)
 
 Canonical retrieval path (domain-agnostic):
+
 1. `KnowledgeQueryContract.query()` + `StructuralIndexContract.build()`
 2. `KnowledgeRankingContract.rank()`
 3. `KnowledgeContextAssemblyContract.assemble()`

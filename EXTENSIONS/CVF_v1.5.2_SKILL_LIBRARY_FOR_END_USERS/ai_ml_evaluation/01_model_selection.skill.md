@@ -17,11 +17,13 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng:**
+
 - Chọn LLM cho dự án mới
 - So sánh các options (GPT vs Claude vs Gemini)
 - Cân nhắc cost vs performance
 
 **Không phù hợp khi:**
+
 - Highly specialized ML models → Cần ML engineer
 - Real-time inference critical → Cần benchmark riêng
 
@@ -64,6 +66,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -88,12 +91,14 @@ Không yêu cầu.
 ## 🔍 Cách đánh giá
 
 **Checklist:**
+
 - [ ] Cover major options
 - [ ] Cost calculation realistic
 - [ ] Trade-offs explained
 - [ ] Recommendation fits use case
 
 **Red flags:**
+
 - ⚠️ Miss major model options
 - ⚠️ Cost calculation wrong
 
@@ -130,7 +135,8 @@ Sau khi hoàn thành **Model Selection**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Task: Viết draft trả lời ticket hỗ trợ bằng tiếng Việt
 Constraints: latency < 2s, cost < $300/tháng
@@ -138,7 +144,8 @@ Volume: 50k requests/tháng
 Quality: không được hallucinate giá/khuyến mãi
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Model Selection
 
@@ -156,13 +163,15 @@ Estimated Cost
 Total: ~$240/mo
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Đáp ứng latency + cost
 - ✅ Quality control bằng hybrid
 - ✅ Tính toán chi phí rõ
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [AI Use Case Fit](./06_ai_use_case_fit.skill.md)
 - [Prompt Evaluation](./02_prompt_evaluation.skill.md)
 
@@ -172,11 +181,6 @@ Total: ~$240/mo
 |---|---|---|
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
-
-## 🔗 Next Step
-
-Sau khi hoàn thành **Model Selection**, tiếp tục với:
-→ [Prompt Evaluation](./02_prompt_evaluation.skill.md)
 
 ---
 

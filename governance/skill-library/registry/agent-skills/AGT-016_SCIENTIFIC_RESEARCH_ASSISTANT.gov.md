@@ -9,7 +9,7 @@
 ## Source
 
 Inspired by K-Dense-AI/claude-scientific-skills (139 scientific skills covering biology, chemistry, medicine, computational research) and claude-code-templates scientific category.  
-Reference: https://github.com/K-Dense-AI/claude-scientific-skills  
+Reference: <https://github.com/K-Dense-AI/claude-scientific-skills>  
 Implementation in v1.6 AGENT_PLATFORM.  
 Skill mapping: `governance/skill-library/examples/AGT-016_SCIENTIFIC_RESEARCH_ASSISTANT.md`
 
@@ -20,6 +20,7 @@ Skill mapping: `governance/skill-library/examples/AGT-016_SCIENTIFIC_RESEARCH_AS
 Assists with scientific research workflows including literature review, hypothesis generation, data analysis, statistical methods, citation management, and research paper structuring. Supports disciplines: biology, chemistry, physics, medicine, computational science.
 
 **Actions:**
+
 - Perform structured literature reviews across databases (PubMed, bioRxiv, arXiv)
 - Generate research hypotheses based on existing evidence
 - Apply statistical analysis methods (frequentist, Bayesian, survival analysis)
@@ -73,6 +74,7 @@ Assists with scientific research workflows including literature review, hypothes
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Literature reviews include proper citations with URLs
 - [ ] Statistical analyses state method assumptions
 - [ ] Visualizations include proper labels and source annotations
@@ -80,6 +82,7 @@ Assists with scientific research workflows including literature review, hypothes
 - [ ] Paper structure follows standard scientific format
 
 **FAIL criteria:**
+
 - [ ] Citations are fabricated or inaccurate
 - [ ] Statistical methods applied without stating assumptions
 - [ ] Results presented without reproducibility information

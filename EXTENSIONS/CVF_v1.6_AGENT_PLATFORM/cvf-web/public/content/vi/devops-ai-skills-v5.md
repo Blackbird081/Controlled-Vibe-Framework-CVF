@@ -32,9 +32,11 @@ An toàn/Tự động   Thấp/Tự động       Trung bình/Giám sát  Cao/Th
 ## Kỹ năng 1: Cloud Deployment Strategist (AGT-030)
 
 ### Chức năng
+
 Hoàn thiện vòng đời phát triển bằng cách bao phủ **triển khai và hạ tầng** — từ chọn nền tảng phù hợp đến quy trình GitOps và tích hợp CI/CD pipeline.
 
 ### Cây Quyết Định Chọn Nền Tảng
+
 ```
 Cần độ trễ <50ms toàn cầu? ──Có──→ Cloudflare Workers (Edge)
          │Không
@@ -48,12 +50,14 @@ Site tĩnh + API? ──Có──→ Cloudflare Pages + Workers
 ```
 
 ### Các Pattern Chính
+
 - **Dockerfile nhiều giai đoạn**: Giai đoạn builder (dependencies + build) → Giai đoạn runtime (image gọn, user không phải root)
 - **Chiến lược triển khai K8s**: Rolling Update (mặc định), Blue-Green (không downtime), Canary (xác thực dần dần)
 - **GitOps**: ArgoCD cho team lớn, Flux cho single-cluster đơn giản
 - **CI/CD Pipeline**: 6 cổng từ lint → test → build → scan → push → deploy
 
 ### Ví dụ Prompt Chat
+
 ```
 "Chọn nền tảng triển khai tốt nhất cho ứng dụng Next.js SaaS với 10K users"
 "Tạo Dockerfile nhiều giai đoạn cho API Node.js với bảo mật tốt nhất"
@@ -66,12 +70,15 @@ Site tĩnh + API? ──Có──→ Cloudflare Pages + Workers
 ## Kỹ năng 2: Code Review & Verification Gate (AGT-031)
 
 ### Chức năng
+
 Thực thi **sự nghiêm ngặt kỹ thuật thay vì biểu diễn xã hội** trong code review. Ba thực hành: nhận phản hồi đúng cách, yêu cầu review có cấu trúc, và verification gates yêu cầu bằng chứng trước mọi tuyên bố hoàn thành.
 
 ### Luật Sắt
+>
 > **KHÔNG TUYÊN BỐ HOÀN THÀNH MÀ THIẾU BẰNG CHỨNG XÁC MINH MỚI**
 
 ### Ba Thực Hành
+
 | Thực hành | Giao thức | Quy tắc chính |
 |-----------|----------|---------------|
 | **Nhận Phản hồi** | ĐỌC → HIỂU → XÁC MINH → ĐÁNH GIÁ → PHẢN HỒI → TRIỂN KHAI | Không đồng ý biểu diễn ("Tuyệt vời!") |
@@ -79,6 +86,7 @@ Thực thi **sự nghiêm ngặt kỹ thuật thay vì biểu diễn xã hội**
 | **Verification Gate** | NHẬN DIỆN → CHẠY → ĐỌC → XÁC MINH → TUYÊN BỐ | Chỉ bằng chứng mới (<5 phút) |
 
 ### Pattern Cấm vs Đúng
+
 | ❌ Không bao giờ nói | ✅ Nói thay bằng |
 |---------------------|-----------------|
 | "Bạn hoàn toàn đúng!" | "Tôi hiểu mối lo. Để tôi xác minh..." |
@@ -86,6 +94,7 @@ Thực thi **sự nghiêm ngặt kỹ thuật thay vì biểu diễn xã hội**
 | "Có lẽ xong rồi" | [chạy build + tests] "Build thành công, tất cả tests pass. Bằng chứng: ..." |
 
 ### Ví dụ Prompt Chat
+
 ```
 "Review các thay đổi mới nhất — đây là diff từ commit abc123"
 "Áp dụng verification gates trước khi tuyên bố feature hoàn thành"
@@ -98,9 +107,11 @@ Thực thi **sự nghiêm ngặt kỹ thuật thay vì biểu diễn xã hội**
 ## Kỹ năng 3: MCP Server Builder (AGT-032)
 
 ### Chức năng
+
 Phương pháp 4 giai đoạn có cấu trúc để xây dựng **MCP servers chất lượng production**. Tập trung vào thiết kế lấy agent làm trung tâm — tools phục vụ quy trình, không phải bọc API.
 
 ### Nguyên tắc Thiết kế Agent-Centric
+
 | ❌ API-Centric | ✅ Agent-Centric |
 |---------------|-----------------|
 | Bọc mọi endpoint thành tool | Thiết kế tools hướng workflow |
@@ -109,6 +120,7 @@ Phương pháp 4 giai đoạn có cấu trúc để xây dựng **MCP servers ch
 | "Lỗi xảy ra" | "Rate limited — thử lại sau 30s" |
 
 ### Quy trình 4 Giai Đoạn
+
 ```
 Giai đoạn 1: Nghiên cứu → Giai đoạn 2: Triển khai → Giai đoạn 3: Review → Giai đoạn 4: Đánh giá
 Docs giao thức, API         Python/TypeScript       Checklist chất lượng   10 câu hỏi đánh giá
@@ -117,6 +129,7 @@ Lập kế hoạch schema I/O     Tool annotations        Audit type safety     
 ```
 
 ### Ví dụ Prompt Chat
+
 ```
 "Xây dựng MCP server bằng Python (FastMCP) cho GitHub API"
 "Thiết kế agent-centric tools cho dịch vụ quản lý dự án"
@@ -129,9 +142,11 @@ Lập kế hoạch schema I/O     Tool annotations        Audit type safety     
 ## Kỹ năng 4: AI Multimodal Processor (AGT-033)
 
 ### Chức năng
+
 Xử lý **âm thanh, hình ảnh, video, và tài liệu** thông qua API AI đa phương tiện. Cung cấp lựa chọn model, tối ưu chi phí, và pattern triển khai cho từng loại phương tiện.
 
 ### Ma trận Khả năng
+
 | Tác vụ | Âm thanh | Hình ảnh | Video | Tài liệu |
 |--------|:--------:|:--------:|:-----:|:---------:|
 | Chuyển văn bản | ✅ | — | ✅ | — |
@@ -142,6 +157,7 @@ Xử lý **âm thanh, hình ảnh, video, và tài liệu** thông qua API AI đ
 | Tạo nội dung | TTS | — | — | ✅ |
 
 ### Chọn Model
+
 ```
 Cần độ chính xác cao nhất? ──→ gemini-2.5-pro ($3/1M tokens)
 Nhạy cảm chi phí? ──→ gemini-2.5-flash-lite ($0.50/1M tokens)
@@ -150,6 +166,7 @@ Tác vụ tiêu chuẩn ──→ gemini-2.5-flash ($1/1M tokens, cân bằng t�
 ```
 
 ### Mẹo Tối Ưu Chi Phí
+
 - Dùng File API cho file >20MB (tránh upload lặp lại)
 - Nén media trước khi upload
 - Xử lý phân đoạn cụ thể, không phải toàn bộ video dài
@@ -157,6 +174,7 @@ Tác vụ tiêu chuẩn ──→ gemini-2.5-flash ($1/1M tokens, cân bằng t�
 - Cache phản hồi cho truy vấn lặp lại
 
 ### Ví dụ Prompt Chat
+
 ```
 "Chuyển văn bản podcast 2 giờ với timestamps và ID người nói"
 "Trích xuất tất cả bảng từ PDF 50 trang thành JSON có cấu trúc"

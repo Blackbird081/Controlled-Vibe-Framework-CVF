@@ -38,6 +38,7 @@ Do not perform any other task.
 Khi vào Self-UAT Mode, agent phải:
 
 Step 1 — Declare Context
+
 - CVF version
 - Current Phase
 - Current Role

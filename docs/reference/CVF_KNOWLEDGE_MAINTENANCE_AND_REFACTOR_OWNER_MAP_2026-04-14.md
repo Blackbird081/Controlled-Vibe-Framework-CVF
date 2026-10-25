@@ -111,6 +111,7 @@ in the Learning Plane (or CPF Knowledge Layer) requires a fresh GC-018 authoriza
 specific surfaces.
 
 Future implementation candidates (in dependency order):
+
 1. `KnowledgeLintContract` — schema compliance + citation check (Learning Plane)
 2. `KnowledgeContradictionContract` — cross-artifact conflict detection (Learning Plane `TruthModel`)
 3. `KnowledgeDriftContract` — source divergence detection (Learning Plane `PatternInsight`)

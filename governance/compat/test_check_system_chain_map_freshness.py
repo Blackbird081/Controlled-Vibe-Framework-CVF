@@ -332,3 +332,58 @@ def test_json_output_is_valid_and_secret_free(monkeypatch, tmp_path, capsys) -> 
 def test_checker_run_in_real_repo_after_all_edits_passes() -> None:
     exit_code = MODULE.main(["--as-of-date", "2026-07-10", "--enforce"])
     assert exit_code == 0
+
+
+def test_public_profile_rejects_public_source_disguised_as_private(tmp_path, monkeypatch):
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", True)
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    issues = []
+    MODULE._check_fingerprint_drift("test", {"path": "docs/reference/current.md", "sha256": "a" * 64, "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"}, issues)
+    assert any("cannot be exempted" in issue for issue in issues)
+
+
+def test_public_profile_keeps_missing_public_source_failure(tmp_path, monkeypatch):
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", True)
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    issues = []
+    MODULE._check_fingerprint_drift("test", {"path": "docs/reference/current.md", "sha256": "a" * 64}, issues)
+    assert any("PATH_MISSING" in issue for issue in issues)
+
+
+def test_public_profile_keeps_private_proof_unexported(tmp_path, monkeypatch):
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", True)
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    fp = {"path": "docs/reviews/private-proof.md", "sha256": "a" * 64, "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"}
+    issues = []
+    MODULE._check_fingerprint_drift("test", fp, issues)
+    assert issues == []
+    target = tmp_path / fp["path"]
+    target.parent.mkdir(parents=True)
+    target.write_text("accidental private export")
+    MODULE._check_fingerprint_drift("test", fp, issues)
+    assert any("unexpectedly exported" in issue for issue in issues)
+
+
+def test_private_profile_still_requires_private_proof(tmp_path, monkeypatch):
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", False)
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    issues = []
+    MODULE._check_fingerprint_drift("test", {"path": "docs/reviews/private-proof.md", "sha256": "a" * 64, "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"}, issues)
+    assert any("PATH_MISSING" in issue for issue in issues)
+
+
+def test_public_git_text_hash_checkout_equivalence_and_content_drift(tmp_path, monkeypatch):
+    source = tmp_path / "source.md"
+    canonical = b"First line\nSecond line\n"
+    expected = hashlib.sha256(canonical).hexdigest()
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", True)
+    source.write_bytes(canonical)
+    assert MODULE._sha256_of(source) == expected
+    source.write_bytes(canonical.replace(b"\n", b"\r\n"))
+    assert MODULE._sha256_of(source) == expected
+    source.write_bytes(b"Changed\r\nSecond line\r\n")
+    assert MODULE._sha256_of(source) != expected
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", False)
+    source.write_bytes(canonical.replace(b"\n", b"\r\n"))
+    assert MODULE._sha256_of(source) == hashlib.sha256(source.read_bytes()).hexdigest()
+    assert MODULE._sha256_of(source) != expected

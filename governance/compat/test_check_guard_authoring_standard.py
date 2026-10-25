@@ -111,3 +111,16 @@ class CheckGuardAuthoringStandardTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_public_blank_lines_do_not_create_material_guard_revision():
+    before = "# Guard\n\n## Rule\n\nKeep the existing rule.\n"
+    after = "# Guard\n\n\n## Rule\n\nKeep the existing rule.\n"
+    assert MODULE.blank_line_only_layout_change(before, after)
+    assert not MODULE.blank_line_only_layout_change(before, after.replace("existing rule", "different rule"))
+
+
+def test_public_fenced_code_bytes_remain_material():
+    before = "# Guard\n\n```python\nvalue = 'fixed'\n\nprint(value)\n```\n"
+    after = before.replace("\n\nprint", "\nprint")
+    assert not MODULE.blank_line_only_layout_change(before, after)

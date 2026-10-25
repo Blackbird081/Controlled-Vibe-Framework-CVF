@@ -36,6 +36,7 @@ production readiness, or public release readiness.
 ## S1 — Purpose and Claim Boundary
 
 This connector is a normative documentation standard binding W3 `surface=database`
+
 + `sideEffect` + `databaseFamily` → TA1 `approvalState` → LHW4-T2
 `dispatchDecision` into a single database-action boundary packet readable by
 Orchestrator before any database-facing operation.
@@ -75,15 +76,15 @@ are documentation-only minimum requirements. `databaseMutationAuthorized=false`
 is invariant. The boundary packet does not extend `GovernanceEvidenceReceipt`
 or any existing receipt envelope type.
 
-- `dbBoundaryId`: unique token for this readout (doc-only)
-- `surface`: from W3 (always `database` for this connector)
-- `sideEffect`: from W3 `ToolActionSideEffect`
-- `databaseFamily`: from W3 `DatabaseActionFamily` when present
-- `approvalState`: from TA1 `ToolActionApprovalReadout.approvalState`
-- `runtimeExecutionAuthorized`: always `false` from W3/TA1 boundary
-- `dbBoundaryDecision`: one of `allowed` | `hold_for_approval` | `blocked` (doc-only)
-- `mutationGuard`: always `false` for any mutation sideEffect (doc-only)
-- `databaseBoundarySignal`: plain-language summary of the boundary decision (doc-only)
++ `dbBoundaryId`: unique token for this readout (doc-only)
++ `surface`: from W3 (always `database` for this connector)
++ `sideEffect`: from W3 `ToolActionSideEffect`
++ `databaseFamily`: from W3 `DatabaseActionFamily` when present
++ `approvalState`: from TA1 `ToolActionApprovalReadout.approvalState`
++ `runtimeExecutionAuthorized`: always `false` from W3/TA1 boundary
++ `dbBoundaryDecision`: one of `allowed` | `hold_for_approval` | `blocked` (doc-only)
++ `mutationGuard`: always `false` for any mutation sideEffect (doc-only)
++ `databaseBoundarySignal`: plain-language summary of the boundary decision (doc-only)
 
 ---
 

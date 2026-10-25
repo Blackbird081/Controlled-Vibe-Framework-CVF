@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 Nên chuẩn bị trước:
+
 - Danh sách pages / modals / flows cần build hoặc redesign
 - Những logic phải giữ nguyên: route, auth, API, state, data contracts
 - 1-3 references thể hiện đúng gu giao diện mong muốn
@@ -28,6 +29,7 @@ Skill này **không phụ thuộc Claude Design ở runtime**. Claude Design ch�
 `DESIGN.md` ở root CVF là **canonical visual contract**. Skill này triển khai và diễn giải contract đó cho web build handoff. Nếu có xung đột giữa prototype, repo tham khảo, hoặc gu brand bên ngoài với `DESIGN.md`, ưu tiên `DESIGN.md`.
 
 **Khi nào nên dùng:**
+
 - Muốn áp dụng lại tinh thần giao diện của CVF web redesign cho dự án khác
 - Cần chuyển từ "mood đẹp" sang spec UX/UI có thể implement
 - Cần giữ logic cũ nhưng thay toàn bộ presentation layer
@@ -36,6 +38,7 @@ Skill này **không phụ thuộc Claude Design ở runtime**. Claude Design ch�
 - Agent cần dựng UI cùng phong cách CVF redesign mà không có prototype Claude Design đi kèm
 
 **Không phù hợp khi:**
+
 - Chỉ sửa 1 component nhỏ hoặc fix spacing đơn lẻ
 - Đã có design system production hoàn chỉnh và chỉ cần follow system đó
 - Cần invention hoàn toàn mới, không muốn reuse ngôn ngữ giao diện từ CVF
@@ -99,22 +102,26 @@ Không copy nguyên prototype vào sản phẩm. Dùng các rule dưới đây �
 ### Component Recipes
 
 **Card**
+
 - Background surface, 1px border, radius 12-14px, padding 16-20px.
 - Hover: border chuyển sang accent alpha, translateY(-2px), shadow `0 8px 28px accentAlpha + 0 2px 8px rgba(0,0,0,0.07)`.
 - Không dùng card lồng card trừ khi item lặp nằm trong panel nghiệp vụ rõ ràng.
 
 **Stat/KPI Card**
+
 - Label uppercase 11px muted, icon pill 28px, value 26px bold, optional subtext 11px.
 - Icon bg dùng semantic/accent alpha 18%.
 - KPI quan trọng nhất đặt trước, không để chart cạnh tranh với số chính.
 
 **Filter Bar**
+
 - Surface riêng với border, radius 14px, padding 13-16px.
 - Input search cao 36px, radius 9px, icon left 13px.
 - Category pills radius 20px, padding 6px 13px, active bg accent, inactive bg tab alpha.
 - Count chip bên trong pill: 9px, bold, alpha bg.
 
 **Button**
+
 - Radius 7-8px, font 11-12px, medium weight.
 - Primary: solid accent + white.
 - Soft: accent alpha bg + accent text.
@@ -123,14 +130,17 @@ Không copy nguyên prototype vào sản phẩm. Dùng các rule dưới đây �
 - Icon size 11-13px; không dùng text-only khi icon rõ nghĩa.
 
 **Badge**
+
 - Uppercase 9px, 700, letter spacing `0.04em`, padding 2px 7px, radius 4px.
 - Dark mode dùng text color làm bg alpha và light bg color làm text.
 
 **Input**
+
 - Height 36px, radius 9px, bg input surface, border alpha.
 - Focus border đổi sang accent, không thêm glow lớn.
 
 **Empty / Loading / Error**
+
 - Empty state nằm đúng grid/table area, text muted, padding 48-52px.
 - Loading dùng skeleton/pulse nhẹ hoặc muted text; không dùng spinner to quá.
 - Error dùng danger semantic + action khôi phục.
@@ -311,6 +321,7 @@ Nếu input là prototype Claude Design/HTML/JSX, không đưa toàn bộ protot
 - [ ] Có anti-patterns để tránh drift khỏi style gốc
 
 **Red flags (cần Reject):**
+
 - ⚠️ Chỉ nói "làm đẹp hơn / hiện đại hơn"
 - ⚠️ Không ghi rõ phần nào bắt buộc giữ nguyên
 - ⚠️ Design system quá generic, app nào cũng giống nhau
@@ -379,7 +390,8 @@ Theme Strategy: dark-primary, light-supporting
 - Validate 375px, keyboard focus, empty/loading/error states before ship
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Có style DNA cụ thể
 - ✅ Có preservation guard
 - ✅ Có page + component rules

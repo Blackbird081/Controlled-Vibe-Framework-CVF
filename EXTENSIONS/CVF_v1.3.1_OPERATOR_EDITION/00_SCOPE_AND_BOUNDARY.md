@@ -63,13 +63,13 @@ Operator **không được**:
 
 ## 4. Ranh giới trách nhiệm (Responsibility Boundary)
 
-### AI chịu trách nhiệm khi:
+### AI chịu trách nhiệm khi
 
 * Input hợp lệ
 * CVF rules được tuân thủ
 * Execution hoàn tất
 
-### Operator chịu trách nhiệm khi:
+### Operator chịu trách nhiệm khi
 
 * Input mơ hồ
 * Input sai contract
@@ -92,10 +92,10 @@ Chỉ có:
 
 **Lưu ý quan trọng (reconcile với interactive chat):**
 
-- Quy tắc này **chỉ áp dụng trong “execution window”** (khi AI đã bắt đầu chạy và đang tạo output).  
-- **Trước khi execute**, Operator **được phép** trả lời câu hỏi làm rõ (clarifying questions) để hoàn thiện input/spec.  
-- Với **interactive chat (v1.6)**, việc hỏi–đáp để làm rõ **được chấp nhận** ở Phase A/B.  
-- Khi đã chuyển sang Phase C/D (execution), Operator **không được can thiệp** vào logic thực thi.
+* Quy tắc này **chỉ áp dụng trong “execution window”** (khi AI đã bắt đầu chạy và đang tạo output).  
+* **Trước khi execute**, Operator **được phép** trả lời câu hỏi làm rõ (clarifying questions) để hoàn thiện input/spec.  
+* Với **interactive chat (v1.6)**, việc hỏi–đáp để làm rõ **được chấp nhận** ở Phase A/B.  
+* Khi đã chuyển sang Phase C/D (execution), Operator **không được can thiệp** vào logic thực thi.
 
 ---
 
@@ -137,4 +137,3 @@ Mọi nội dung ở đây **chỉ áp dụng cho Operator**.
 ---
 
 **Kết thúc phạm vi.**
-

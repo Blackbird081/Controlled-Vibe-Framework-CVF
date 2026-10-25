@@ -62,7 +62,7 @@ AI đã có mặt trong tổ chức của bạn. Lập trình viên đang sử d
 | D → Production | Final review | GOVERNOR (for R2+) |
 ```
 
-3. **Chọn nhóm thí điểm** (5–7 dev, 1 dự án, 4 tuần)
+1. **Chọn nhóm thí điểm** (5–7 dev, 1 dự án, 4 tuần)
 
 **Sản phẩm bàn giao:** Chính sách governance, ma trận rủi ro, nhóm thí điểm đã chọn.
 
@@ -95,7 +95,7 @@ governance/toolkit/
 └── 07_QUICKSTART/       # Bắt đầu nhanh cho SME
 ```
 
-2. **Cài đặt Giao diện Web (v1.6)**
+1. **Cài đặt Giao diện Web (v1.6)**
 
 ```bash
 cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
@@ -112,7 +112,7 @@ npm start
 
 Triển khai lên hạ tầng nội bộ (xem Hướng dẫn Triển khai để biết các tùy chọn Vercel/Netlify/Docker).
 
-3. **Tùy chỉnh Ma trận Quyền hạn**
+1. **Tùy chỉnh Ma trận Quyền hạn**
 
 Chỉnh sửa `governance/toolkit/03_CONTROL/CVF_PHASE_AUTHORITY_MATRIX.md`:
 
@@ -123,9 +123,10 @@ Chỉnh sửa `governance/toolkit/03_CONTROL/CVF_PHASE_AUTHORITY_MATRIX.md`:
 | Build | Đọc | Thực thi (R0-R1) | Thực thi (R0-R2), Phê duyệt R2 | Toàn quyền |
 | Review | Đọc | Tự review | Review người khác, Phê duyệt | Phê duyệt cuối |
 
-4. **Đào tạo nhóm thí điểm** (workshop 4 giờ)
+1. **Đào tạo nhóm thí điểm** (workshop 4 giờ)
 
 **Chương trình workshop:**
+
 - Giờ 1: Triết lý CVF ("Kết quả > Code", 4 phase)
 - Giờ 2: Thực hành: Viết INPUT_SPEC đầu tiên + sử dụng danh sách kiểm tra Phase D
 - Giờ 3: Mức rủi ro, governance, vai trò
@@ -136,6 +137,7 @@ Chỉnh sửa `governance/toolkit/03_CONTROL/CVF_PHASE_AUTHORITY_MATRIX.md`:
 ### Tuần 3–4: Thực thi Thí điểm
 
 **Yêu cầu dự án thí điểm:**
+
 - Dự án thực (không phải dự án mẫu)
 - Thời hạn 4 tuần
 - Sản phẩm bàn giao rõ ràng
@@ -152,12 +154,14 @@ Chỉnh sửa `governance/toolkit/03_CONTROL/CVF_PHASE_AUTHORITY_MATRIX.md`:
 | Mức hài lòng developer | Khảo sát | ≥4/5 |
 
 **Đánh giá hàng tuần:**
+
 - Governance đang thêm giá trị hay chỉ tạo ma sát?
 - Phase gate quá nặng hay quá nhẹ?
 - Những skill nào đang được dùng? Thiếu những cái nào?
 - Có ai lách governance không? (= chính sách cần điều chỉnh)
 
 **Tiêu chí thành công thí điểm:**
+
 - ✅ 90%+ tuân thủ phase gate
 - ✅ Không có sự cố bảo mật R3
 - ✅ Mức hài lòng nhóm ≥ 4/5
@@ -324,6 +328,7 @@ VP Engineering (GOVERNOR)
 | **Nhóm** | Nhóm riêng lẻ | Mẫu riêng của nhóm | Khi cần |
 
 **Vòng đời:**
+
 ```
 PROPOSED → APPROVED → ACTIVE → DEPRECATED → RETIRED
 ```
@@ -351,12 +356,14 @@ Governance bypass attempts:    2   (auto-detected by CI)
 ## Nghiên cứu Tình huống: Công ty Fintech (120 Dev)
 
 ### Trước CVF
+
 - Sử dụng AI không nhất quán (một số nhóm cấm, số khác dùng tự do)
 - Sự cố bảo mật: 3 mỗi quý
 - Nghẽn cổ chai review code: trung bình 2–3 ngày
 - Silo kiến thức (không tái sử dụng được giữa các nhóm)
 
 ### Sau CVF (6 tháng)
+
 - Chuẩn hóa: tất cả nhóm sử dụng CVF v1.1 + Governance Toolkit
 - Sự cố bảo mật: **0** (phase gate R3 ngăn chặn vấn đề)
 - Review code: **<1 ngày** (danh sách kiểm tra Phase D pre-validate)
@@ -377,6 +384,7 @@ Governance bypass attempts:    2   (auto-detected by CI)
 
 **H: Làm thế nào để bắt buộc tuân thủ CVF?**  
 Đ: Ba lớp:
+
 1. **Kỹ thuật:** CI/CD gate chặn PR không có danh sách kiểm tra Phase D
 2. **Xã hội:** PR template làm CVF dễ hơn việc không dùng
 3. **Kiểm toán:** Review governance hàng quý (xem `05_OPERATION/CVF_AUDIT_PROTOCOL.md`)
@@ -401,11 +409,13 @@ Governance bypass attempts:    2   (auto-detected by CI)
 ## Hỗ trợ Doanh nghiệp
 
 **Mã nguồn mở (Miễn phí):**
+
 - CVF được cấp phép CC BY-NC-ND 4.0 (phi thương mại)
 - Hỗ trợ cộng đồng qua GitHub Issues
 - Tài liệu đầy đủ trong repo này
 
 **Bắt đầu:**
+
 1. Clone repo này
 2. Đọc Governance Toolkit
 3. Làm theo hướng dẫn này để chạy thí điểm

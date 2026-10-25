@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành các skills sau trước khi dùng skill này:
+>
 > - [Tech Stack Selection](./02_tech_stack_selection.skill.md) — Cần biết language/framework sẽ dùng
 > - [Architecture Design](./03_architecture_design.skill.md) — Cần hiểu cấu trúc CLI
 
@@ -19,11 +20,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Building command-line tools
 - Script automation với multiple commands
 - Developer utilities
 
 **Không phù hợp khi:**
+
 - GUI application → Dùng [Desktop App Spec](./06_desktop_app_spec.skill.md)
 - Single-file simple script
 - Web service
@@ -67,6 +70,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -163,6 +167,7 @@ setting2: value
 - [ ] Examples cho mỗi command
 
 **Red flags (cần Reject):**
+
 - ⚠️ Missing examples
 - ⚠️ Unclear arguments
 - ⚠️ No exit codes
@@ -195,6 +200,7 @@ setting2: value
 ## 📊 Common Patterns
 
 ### CRUD Pattern
+
 ```bash
 tool add <item>
 tool list [--filter]
@@ -204,6 +210,7 @@ tool delete <id>
 ```
 
 ### Config Pattern
+
 ```bash
 tool config get <key>
 tool config set <key> <value>
@@ -211,6 +218,7 @@ tool config list
 ```
 
 ### Interactive Pattern
+
 ```bash
 tool init          # Interactive setup
 tool wizard        # Guided flow
@@ -221,7 +229,8 @@ tool --interactive # Force prompts
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Tool Name: stockflow-cli
 Use Cases: bulk import products, export low-stock report
@@ -229,7 +238,8 @@ Environments: Admin laptop, CI jobs
 Auth: API token
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # stockflow-cli Spec
 
@@ -242,13 +252,15 @@ Auth: API token
 stockflow import products --file products.csv --dry-run
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Command rõ và có flags
 - ✅ Hỗ trợ dry-run
 - ✅ Phù hợp automation
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Desktop App Spec](./06_desktop_app_spec.skill.md)
 - [Local Deployment Spec](./08_local_deployment.skill.md)
 
@@ -262,7 +274,6 @@ stockflow import products --file products.csv --dry-run
 ## 🔗 Next Step
 
 Sau khi có CLI Spec → [Local Deployment Spec](./08_local_deployment.skill.md) (nếu cần đóng gói) hoặc → Build Phase (Phase C)
-
 
 ---
 

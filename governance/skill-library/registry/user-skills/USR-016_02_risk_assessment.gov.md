@@ -1,4 +1,5 @@
 # USR-016: Risk Assessment
+
 Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Type:** User Skill
@@ -29,11 +30,13 @@ Text Encoding Exception: preserves source-faithful Unicode from accepted skill m
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Output follows skill expected format
 - [ ] Stays within declared scope
 - [ ] References provided where applicable
 
 **FAIL criteria:**
+
 - [ ] Actions outside authority
 - [ ] Missing required validation
 - [ ] Hallucinated information

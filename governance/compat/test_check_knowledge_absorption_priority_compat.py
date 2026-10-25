@@ -116,14 +116,8 @@ class KnowledgeAbsorptionPriorityCompatTests(unittest.TestCase):
             ),
         )
         self._write(
-            MODULE.HANDOFF_PATH,
-            "\n".join(
-                [
-                    MODULE.STANDARD_PATH,
-                    Path(MODULE.GUARD_PATH).name,
-                    MODULE.THIS_SCRIPT_PATH,
-                ]
-            ),
+            MODULE.SESSION_MEMORY_PATH,
+            "\n".join(MODULE.REQUIRED_MARKERS[MODULE.SESSION_MEMORY_PATH]),
         )
         self._write(MODULE.HOOK_CHAIN_PATH, MODULE.THIS_SCRIPT_PATH)
         self._write(
@@ -178,11 +172,11 @@ class KnowledgeAbsorptionPriorityCompatTests(unittest.TestCase):
 
     def test_classify_fails_when_guard_chain_is_missing_required_marker(self) -> None:
         self._seed_compliant_repo()
-        self._write(MODULE.HANDOFF_PATH, MODULE.STANDARD_PATH)
+        self._write(MODULE.SESSION_MEMORY_PATH, MODULE.STANDARD_PATH)
         with patch.object(MODULE, "REPO_ROOT", self.repo_root):
             report = MODULE._classify([])
         self.assertFalse(report["compliant"])
-        self.assertIn(MODULE.HANDOFF_PATH, report["markerViolations"])
+        self.assertIn(MODULE.SESSION_MEMORY_PATH, report["markerViolations"])
 
 
 if __name__ == "__main__":

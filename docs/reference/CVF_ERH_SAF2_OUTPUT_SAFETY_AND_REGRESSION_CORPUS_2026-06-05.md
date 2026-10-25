@@ -86,6 +86,7 @@ independently of retry outcome.
 ## Claim Boundary
 
 SAF2 claims only:
+
 - bounded regex-only governance output pattern detection;
 - `OUTPUT_SAFETY_TRIGGERED` audit event wired before retry exhaustion;
 - adversarial regression corpus with local test evidence.
@@ -99,6 +100,7 @@ external-review remediation.
 `governance/compat/check_erh_output_safety_workflow_chain.py --enforce`
 
 Checks verified:
+
 1. `ERH_SAF2_MARKER` present in `output-validator.ts`
 2. `GOVERNANCE_OUTPUT_PATTERNS` exported
 3. `isGovernanceOutputUnsafe` exported

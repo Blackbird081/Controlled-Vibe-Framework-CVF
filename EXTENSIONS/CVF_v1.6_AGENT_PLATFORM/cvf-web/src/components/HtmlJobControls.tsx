@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useLanguage } from '@/lib/i18n';
 import type { DraftSnapshot } from '@/lib/html-draft-recovery-contract';
@@ -80,9 +80,6 @@ const joined = (job: HtmlJob, saved: DraftSnapshot, link: HtmlJobVersion) =>
 
 export function HtmlJobControls({ sourceRecordId, initialRequest }: Props) {
   const { data: session, status } = useSession();
-  const { language } = useLanguage();
-  const copy = COPY[language === 'vi' ? 'vi' : 'en'];
-  const helpId = useId();
   const user = session?.user as { userId?: string; orgId?: string; teamId?: string; realUserId?: string; realRole?: string; impersonation?: unknown } | undefined;
   const owner = { userId: user?.userId ?? '', orgId: user?.orgId ?? '', teamId: user?.teamId ?? '' };
   const expires = session?.expires ? Date.parse(session.expires) : NaN;
@@ -90,11 +87,24 @@ export function HtmlJobControls({ sourceRecordId, initialRequest }: Props) {
   const active = status === 'authenticated' && [owner.userId, owner.orgId, owner.teamId].every(x => /^[A-Za-z0-9_-]{1,150}$/.test(x))
     && !user?.realUserId && !user?.realRole && !user?.impersonation && Number.isFinite(expires) && expires > now;
   const scope = JSON.stringify([sourceRecordId, owner, session?.expires, active]);
-  const scopeRef = useRef(scope); scopeRef.current = scope;
-  const [stateScope, setStateScope] = useState(scope);
+  useEffect(() => {
+    if (!Number.isFinite(expires) || expires <= now) return;
+    const timer = window.setTimeout(() => setNow(Date.now()), Math.max(0, Math.min(expires - Date.now(), 2 ** 31 - 1)));
+    return () => window.clearTimeout(timer);
+  }, [expires, now]);
+  return <HtmlJobControlsScope key={scope} sourceRecordId={sourceRecordId} initialRequest={initialRequest}
+    scope={scope} owner={owner} active={active} expires={expires} />;
+}
+
+function HtmlJobControlsScope({ sourceRecordId, initialRequest, scope, owner, active, expires }: Props & {
+  scope: string; owner: { userId: string; orgId: string; teamId: string }; active: boolean; expires: number;
+}) {
+  const { language } = useLanguage();
+  const copy = COPY[language === 'vi' ? 'vi' : 'en'];
+  const helpId = useId();
   const epoch = useRef(0);
   const busy = useRef(false);
-  const [capability, setCapability] = useState<'loading' | 'enabled' | 'disabled'>('loading');
+  const [capability, setCapability] = useState<'loading' | 'enabled' | 'disabled'>(active && sourceRecordId.startsWith('ncr-synthetic-') ? 'loading' : 'disabled');
   const [effectBoundary, setEffectBoundary] = useState<EffectBoundary | null>(null);
   const enabled = capability === 'enabled';
   const [goal, setGoal] = useState('');
@@ -109,20 +119,16 @@ export function HtmlJobControls({ sourceRecordId, initialRequest }: Props) {
   const [versionState, setVersionState] = useState<VersionState>(null);
   const [reopened, setReopened] = useState(false);
   const [linkAbsent, setLinkAbsent] = useState(false);
-  const [pending, setPending] = useState<PendingJobJournal | null>(null);
+  const [pending, setPending] = useState<PendingJobJournal | null>(() => active && sourceRecordId.startsWith('ncr-synthetic-') ? readPendingJobJournal({ owner, sourceRecordId }) : null);
   const [notice, setNotice] = useState<NoticeKey | null>(null);
   const signature = JSON.stringify([goal, criteria]);
-  const still = (token: number, key: string) => epoch.current === token && scopeRef.current === key && active && Date.now() < expires;
+  const still = (token: number, key: string) => epoch.current === token && scope === key && active && Date.now() < expires;
 
+  useLayoutEffect(() => () => { epoch.current += 1; }, []);
   useEffect(() => {
-    epoch.current += 1; busy.current = false;
-    setStateScope(scope); setGoal(''); setCriteria([{ criterionId: 'c1', text: '' }]);
-    setNotes({}); setConfirmed(false); setJobSignature('');
-    setCapability('loading'); setEffectBoundary(null); setJob(null); setSnapshot(null); setLink(null); setDecision(null);
-    setPending(null); setNotice(null); setVersionState(null); setReopened(false); setLinkAbsent(false);
+    epoch.current += 1;
     const token = epoch.current; const key = scope;
-    if (!active || !sourceRecordId.startsWith('ncr-synthetic-')) { setCapability('disabled'); return; }
-    setPending(readPendingJobJournal({ owner, sourceRecordId }));
+    if (!active || !sourceRecordId.startsWith('ncr-synthetic-')) return;
     void fetch(url({ kind: 'capabilities' }), { cache: 'no-store' }).then(data<{ jobDecisions?: unknown; effectBoundary?: unknown }>)
       .then(value => { if (still(token, key)) {
         const next = jobCapabilityOf(value);
@@ -133,12 +139,6 @@ export function HtmlJobControls({ sourceRecordId, initialRequest }: Props) {
     return () => { epoch.current += 1; };
   // eslint-disable-next-line react-hooks/exhaustive-deps -- capability fetch is keyed by the scope key; owner/active/sourceRecordId are inputs of that key
   }, [scope]);
-  useEffect(() => {
-    if (!Number.isFinite(expires) || expires <= Date.now()) return;
-    const timer = window.setTimeout(() => setNow(Date.now()), Math.min(expires - Date.now(), 2 ** 31 - 1));
-    return () => window.clearTimeout(timer);
-  }, [expires, now]);
-
   const prepareJob = useCallback(async (request: ArtifactExportRequest) => {
     if (!active || Date.now() >= expires || busy.current || !enabled || goal.length < 1 || goal.length > 2000
       || criteria.some(c => !c.text.trim())) throw new Error('Complete the goal and criteria first.');
@@ -252,7 +252,6 @@ export function HtmlJobControls({ sourceRecordId, initialRequest }: Props) {
     <HtmlDraftRecovery key={scope} sourceRecordId={sourceRecordId} displayed={displayed} versionState={current}
       jobMode={enabled} onConfirmedSnapshot={(saved, targetJobId) => { void linkSnapshot(saved, targetJobId); }} />
   </>;
-  if (stateScope !== scope) return <p role="status">{copy.scopeChecking}</p>;
   if (!active) return <p role="status">{copy.sessionRequired}</p>;
   if (capability === 'loading') return <p role="status">{copy.capabilityChecking}</p>;
   if (!enabled) return <ArtifactExportPanel key={scope} initialRequest={initialRequest} renderRecovery={recovery} />;

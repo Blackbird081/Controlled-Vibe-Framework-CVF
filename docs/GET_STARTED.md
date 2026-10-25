@@ -6,7 +6,7 @@ Vietnamese text.
 [🇬🇧 English guides](guides/) | 🇻🇳 Tiếng Việt
 
 > **🎯 Mục tiêu:** Giúp bạn hiểu và chạy được CVF project đầu tiên trong 5 phút
-
+>
 > **Mới với CVF?** Đọc [Quick Orientation](guides/CVF_QUICK_ORIENTATION.md) trước (tổng quan và ví dụ giao AI việc code). Lối vào cũ: [CVF_INTERNAL_USER_GUIDE](reference/CVF_INTERNAL_USER_GUIDE.md).
 
 ---
@@ -41,6 +41,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\new-cvf-workspace.ps1 `
 ```
 
 Kết quả:
+
 - `D:\CVF-Workspace\.Controlled-Vibe-Framework-CVF`
 - `D:\CVF-Workspace\Trading-Tools`
 - `D:\CVF-Workspace\Trading-Tools.code-workspace` (terminal mặc định vào project)
@@ -169,7 +170,7 @@ Production deployment<br>với governance đầy đủ
 
 Muốn contribute<br>vào CVF
 
-**[→ Dev Guide](#-contributors)**
+**[→ Dev Guide](#%EF%B8%8F-contributors)**
 
 </td>
 </tr>
@@ -235,6 +236,7 @@ Console vận hành governance: mở `http://localhost:3000/governance/operation
 Console này chỉ chạy các job governance được allowlist, hiển thị receipt đã redaction, và dùng cost/quota preflight cục bộ trước các live provider call. Policy nằm tại `.cvf/config/cost-quota-policy.json`; audit cục bộ nằm dưới `.cvf/runtime/`. Đây là cơ chế local-first để operator kiểm soát CVF, không phải yêu cầu đưa dữ liệu lên cloud.
 
 **What to try:**
+
 1. Click "Templates" → Chọn "Simple Todo App"
 2. Fill form → Click "Generate"
 3. See the canonical seven-stage breakdown
@@ -243,6 +245,7 @@ Console này chỉ chạy các job governance được allowlist, hiển thị r
 #### Option B: Manual (Core CVF)
 
 Đọc file này và làm theo:
+
 - [v1.0/USAGE.md](../v1.0/USAGE.md) - Cách dùng CVF core
 - [v1.0/phases/](../v1.0/phases/) - Chi tiết từng phase
 
@@ -295,6 +298,7 @@ npm run dev
    - ✅ **Reviewer / Governor:** Validate rồi đóng lại (`REVIEW` → `FREEZE`)
 
 2. **Workflow:**
+
    ```
    Owner scopes → Architect designs → AI builds → Reviewer validates → Governor closes
    ```
@@ -331,12 +335,14 @@ npm run dev
 **Evaluate if CVF fits your needs:**
 
 ✅ **Good Fit:**
+
 - Using AI for development already
 - Need governance & control
 - Want reusable skill library
 - Need audit trails
 
 ❌ **Not Yet:**
+
 - Don't use AI coding
 - Pure waterfall process
 - No bandwidth for new tools
@@ -376,6 +382,7 @@ npm run dev
 | AI Code Reuse | 40%+ | Skill usage analytics |
 
 **Scaling:**
+
 1. Pilot success → Expand to 3 teams
 2. 3 teams success → Company-wide rollout
 3. Continuous improvement based on metrics
@@ -394,6 +401,7 @@ npm run dev
 ### Want to Contribute?
 
 **We welcome:**
+
 - 📖 Documentation improvements
 - 🐛 Bug fixes
 - ✨ New features
@@ -430,7 +438,7 @@ git push origin feature/your-feature-name
 
 - 💬 [Discord](https://discord.gg/cvf) - Real-time chat
 - 🐛 [GitHub Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
-- 📧 Email: contribute@cvf.io
+- 📧 Email: <contribute@cvf.io>
 
 ---
 
@@ -484,6 +492,7 @@ git push origin feature/your-feature-name
 5. ✉️ [Email Support](mailto:support@cvf.io)
 
 **Response Times:**
+
 - Discord: Usually <2 hours
 - GitHub: Usually <24 hours
 - Email: Usually <48 hours

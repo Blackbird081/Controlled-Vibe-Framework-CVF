@@ -400,7 +400,7 @@ This standard does not:
 | Empty closure range | Re-run with the captured base HEAD and do not claim closure from `HEAD..HEAD`. |
 | Source invariant claim exceeds source proof | Downgrade the claim to doc-only normalization or cite a literal source invariant. |
 | Latest LHW closure is missing from front door, `nextAllowedMove`, or active handoff | Sync continuity surfaces before claiming or accepting closure. |
-| Closed artifact contains `| OPEN |` or unchecked `- [ ]` residue | Finalize the work-order/roadmap/review checklist or downgrade status to `HOLD_*`/`BLOCKED`. |
+| Closed artifact contains `\| OPEN \|` or unchecked `- [ ]` residue | Finalize the work-order/roadmap/review checklist or downgrade status to `HOLD_*`/`BLOCKED`. |
 | Closed work order contains `HOLD`, `PENDING`, or dispatch-blocking prose | Convert the item to `PASS`, `N/A with reason`, or downgrade the work order out of closed status. |
 | Runtime/source files changed while cited work order is still `HOLD_*` | Release/update the work order through the required authority chain before implementation, or revert/split the runtime change. |
 | Closed roadmap still says `WORK_ORDER_READY` or `HOLD until` | Replace dispatch planning text with final per-tranche closure status. |

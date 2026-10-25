@@ -18,6 +18,7 @@
 ## 3. Key Usage Tracking
 
 Each provider call must log:
+
 - Provider name
 - Model used
 - Token consumption (prompt + completion)
@@ -45,6 +46,7 @@ Each provider call must log:
 ## 7. Audit Requirements
 
 Every provider call must generate audit record:
+
 ```json
 {
   "eventType": "PROVIDER_CALL",

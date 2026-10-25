@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Use when working with AWS Strands Agents SDK or Amazon Bedrock AgentCore platform for building AI agents. Provides architecture guidance, implementation patterns, deployment strategies, observability, quality evaluations, multi-agent orchestration, and MCP server integration.
 
 **Khi nào dùng skill này:**
+
 - Cần Aw Trand Agent Agentcore với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: ai evaluation
-- Nguồn tham khảo: https://github.com/sammcj/agentic-coding/tree/main/Skills/aws-strands-agents-agentcore
+- Nguồn tham khảo: <https://github.com/sammcj/agentic-coding/tree/main/Skills/aws-strands-agents-agentcore>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Đánh giá prompt cho chatbot CSKH
 Context: Dữ liệu hội thoại đa ngành, cần đo độ chính xác
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Aw Trand Agent Agentcore Output
 

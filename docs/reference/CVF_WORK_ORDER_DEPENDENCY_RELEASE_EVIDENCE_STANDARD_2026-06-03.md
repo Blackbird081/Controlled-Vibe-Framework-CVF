@@ -110,7 +110,7 @@ python governance/compat/check_work_order_dispatch_quality.py --base <releaseBas
 python governance/compat/run_agent_autorun_workflow_gate.py --phase pre-dispatch --base <releaseBaseHead> --head HEAD
 ```
 
-6. If either gate fails inside the allowed scope, repair and rerun. If repair
+1. If either gate fails inside the allowed scope, repair and rerun. If repair
    exceeds scope, return the packet to orchestrator.
 
 ---

@@ -1,4 +1,5 @@
 # HƯỚNG DẪN SỬ DỤNG CVF  
+
 ## Controlled Vibe Framework — v1.0 FINAL
 
 ---
@@ -82,12 +83,15 @@ git commit -m "chore: update CVF to latest version"
 ## ❓ FAQ
 
 ### Q: Tôi có thể thêm file mới vào framework không?
+
 **A:** Có thể thêm vào `project/` hoặc `docs/`, nhưng không được thêm vào `governance/`, `phases/`, `ai/`.
 
 ### Q: Nếu phát hiện lỗi trong framework thì sao?
+
 **A:** Mở Issue trên GitHub repo chính. Không tự sửa.
 
 ### Q: Khi nào cần upgrade lên v1.1?
+
 **A:** Khi v1.1 được release và bạn cần các tính năng mới (ví dụ: INPUT/OUTPUT spec).
 
 ---

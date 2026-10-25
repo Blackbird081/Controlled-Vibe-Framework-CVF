@@ -16,14 +16,14 @@ Mọi sửa sai phải dẫn tới execution mới
 
 Nếu một hành động vi phạm ≥ 1 nguyên tắc trên → KHÔNG hợp lệ.
 
-2. Bảng ánh xạ: Tín hiệu → Hành động
-Tình huống	Hành động đúng	File tham chiếu
-Misuse Pattern	Dừng + viết lại input	misuse_patterns.md
-Early Warning Signal	Dừng + rà scope/input	early_warning_signals.md
-Partial Failure	Reject + execution mới	SCENARIO_PACKS/partial_failure.md
-Operator Error	Reset input	SCENARIO_PACKS/operator_error.md
-Boundary Violation	Reject + log	SCENARIO_PACKS/boundary_violation.md
-3. Các Corrective Action hợp lệ
+1. Bảng ánh xạ: Tín hiệu → Hành động
+Tình huống Hành động đúng File tham chiếu
+Misuse Pattern Dừng + viết lại input misuse_patterns.md
+Early Warning Signal Dừng + rà scope/input early_warning_signals.md
+Partial Failure Reject + execution mới SCENARIO_PACKS/partial_failure.md
+Operator Error Reset input SCENARIO_PACKS/operator_error.md
+Boundary Violation Reject + log SCENARIO_PACKS/boundary_violation.md
+2. Các Corrective Action hợp lệ
 CA-01: Input Reset
 
 Viết lại input ngắn hơn
@@ -58,13 +58,13 @@ Giữ nguyên input
 
 Chỉ dùng cho lỗi trình bày/format
 
-4. Những hành động KHÔNG được xem là Corrective
-Hành động	Vì sao bị cấm
-Sửa output	Phá audit
-Prompt nối	Mất trace
-Thêm ràng buộc giữa chừng	Drift execution
-Giữ lại phần "hay"	Hợp thức hóa sai
-5. Khi nào cần escalation?
+1. Những hành động KHÔNG được xem là Corrective
+Hành động Vì sao bị cấm
+Sửa output Phá audit
+Prompt nối Mất trace
+Thêm ràng buộc giữa chừng Drift execution
+Giữ lại phần "hay" Hợp thức hóa sai
+2. Khi nào cần escalation?
 
 Escalate khi:
 

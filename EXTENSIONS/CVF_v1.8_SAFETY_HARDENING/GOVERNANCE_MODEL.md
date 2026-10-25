@@ -42,6 +42,7 @@ Each execution has a fixed budget. AI cannot exceed it.
 | CREATIVE | max 10 files | max 300 lines | Broad scope |
 
 **Budget enforcement:**
+
 - Budget set at INTENT phase, immutable thereafter
 - PLANNING phase validates proposed plan against budget
 - MUTATION_SANDBOX rejects any action exceeding budget
@@ -62,6 +63,7 @@ Each execution has a fixed budget. AI cannot exceed it.
 ## IV. Behavior Drift Monitor
 
 Tracks across N executions:
+
 - Average risk trend
 - Mutation size growth
 - Escalation frequency
@@ -69,6 +71,7 @@ Tracks across N executions:
 - Role boundary violations
 
 **DriftScore** = weighted composite. If DriftScore > threshold:
+
 - Force SAFE mode
 - Reduce mutation budget
 - Increase confirmation requirements

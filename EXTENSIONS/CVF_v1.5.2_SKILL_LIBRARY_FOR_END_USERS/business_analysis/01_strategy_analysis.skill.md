@@ -17,12 +17,14 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - So sánh các phương án kinh doanh
 - Đánh giá chiến lược mới
 - Phân tích SWOT, Porter's 5 Forces
 - Lập kế hoạch chiến lược
 
 **Không phù hợp khi:**
+
 - Cần nghiên cứu thị trường chi tiết → Dùng Market Research
 - Chỉ đánh giá rủi ro → Dùng Risk Assessment
 - Cần số liệu tài chính cụ thể → Cần financial analyst
@@ -66,6 +68,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -81,12 +84,14 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - So sánh các phương án theo nhiều tiêu chí
 - SWOT analysis cho mỗi option (nếu cần)
 - Recommendation với lý do
 - Implementation roadmap sơ bộ
 
 **Cấu trúc output:**
+
 ```
 1. Tóm tắt tình huống
 2. Framework phân tích (SWOT/Porter/BCG...)
@@ -112,6 +117,7 @@ Không yêu cầu.
 - [ ] Không bias sang 1 option từ đầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Recommendation không có justification
 - ⚠️ Bỏ qua ràng buộc đã nêu
 - ⚠️ Phân tích quá generic, không specific
@@ -142,7 +148,8 @@ Không yêu cầu.
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Tình huống: Công ty SaaS đang cân nhắc mở rộng sang SEA
 Các phương án:
@@ -154,7 +161,8 @@ Ràng buộc: Budget $300K/năm, core team ở VN
 Context: B2B SaaS, HR Tech, 100 customers ở VN
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 STRATEGY ANALYSIS: SEA EXPANSION
 
@@ -194,7 +202,8 @@ STRATEGY ANALYSIS: SEA EXPANSION
    - Month 18: Evaluate office decision
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Hiểu context (B2B SaaS, HR Tech)
 - ✅ Phân tích 3 options balanced
 - ✅ Recommendation có justification
@@ -207,6 +216,7 @@ STRATEGY ANALYSIS: SEA EXPANSION
 ---
 
 ## 🔗 Related Skills
+
 - [Market Research](./03_market_research.skill.md)
 - [Risk Assessment](./02_risk_assessment.skill.md)
 

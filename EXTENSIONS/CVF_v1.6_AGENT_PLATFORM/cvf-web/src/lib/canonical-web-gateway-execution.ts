@@ -95,7 +95,7 @@ export function buildCanonicalWebAttemptBoundary(
     ledger: ProviderAttemptLedger,
     purpose: ProviderAttemptPurpose,
 ): (input: CanonicalExecutionAttemptBoundaryInput) => Promise<CanonicalExecutionAttemptBoundaryOutcome> {
-    return async (_input: CanonicalExecutionAttemptBoundaryInput): Promise<CanonicalExecutionAttemptBoundaryOutcome> => {
+    return async (): Promise<CanonicalExecutionAttemptBoundaryOutcome> => {
         const admission = await admitProviderAttempt(ledger, purpose);
         if (!admission.admitted) {
             return {

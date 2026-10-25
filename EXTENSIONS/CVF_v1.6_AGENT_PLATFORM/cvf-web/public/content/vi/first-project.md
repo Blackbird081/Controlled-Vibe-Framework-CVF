@@ -10,6 +10,7 @@
 ## Trước khi Bắt đầu
 
 Bạn cần:
+
 - Trình soạn thảo (VS Code, hoặc bất kỳ trình nào khác)
 - Trợ lý AI (ChatGPT, Claude, Copilot, hoặc Giao diện Web CVF)
 - Python 3.10+ đã cài đặt (cho ví dụ trong hướng dẫn này)
@@ -176,7 +177,9 @@ Tạo `specs/DESIGN.md`:
 
 ## Flow
 ```
+
 CLI input → argparse → validate → db operation → format output → print
+
 ```
 
 ## How to Verify (Without Reading Code)
@@ -328,6 +331,7 @@ Chúc mừng! Bạn đã hoàn thành một chu kỳ CVF đầy đủ:
 | **Tổng cộng** | | **~25 phút** |
 
 **Không có CVF**, bạn có thể đã hỏi AI: *"Xây cho tôi một bookmark manager bằng Python"* và mất 45 phút đi qua đi lại:
+
 - "Không, tôi muốn CLI, không phải web"
 - "Đừng dùng thư viện ngoài"
 - "Nó lưu dữ liệu ở đâu?"

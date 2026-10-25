@@ -18,6 +18,7 @@ Không yêu cầu.
 Tạo hoặc review user personas dựa trên data và research. Personas giúp team align về target users và make better product decisions.
 
 **Khi nào nên dùng:**
+
 - Launch sản phẩm mới
 - Không có personas hoặc personas cũ
 - Team không align về target users
@@ -62,6 +63,7 @@ Tạo hoặc review user personas dựa trên data và research. Personas giúp 
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,6 +80,7 @@ Tạo hoặc review user personas dựa trên data và research. Personas giúp 
 ## ✅ Checklist Xây dựng Persona
 
 ### Demographics
+
 - [ ] Name và photo (realistic)?
 - [ ] Age range?
 - [ ] Location/Region?
@@ -87,6 +90,7 @@ Tạo hoặc review user personas dựa trên data và research. Personas giúp 
 - [ ] Family status?
 
 ### Psychographics
+
 - [ ] Goals và motivations?
 - [ ] Pain points và frustrations?
 - [ ] Values và beliefs?
@@ -94,6 +98,7 @@ Tạo hoặc review user personas dựa trên data và research. Personas giúp 
 - [ ] Personality traits?
 
 ### Behaviors
+
 - [ ] Technology usage?
 - [ ] Preferred channels (mobile/desktop)?
 - [ ] Information sources?
@@ -101,6 +106,7 @@ Tạo hoặc review user personas dựa trên data và research. Personas giúp 
 - [ ] Brand preferences?
 
 ### Context
+
 - [ ] Day in the life?
 - [ ] How they'd use your product?
 - [ ] Current solutions/alternatives?
@@ -108,6 +114,7 @@ Tạo hoặc review user personas dựa trên data và research. Personas giúp 
 - [ ] Objections/concerns?
 
 ### Data Validation
+
 - [ ] Based on real data (not assumptions)?
 - [ ] Validated through research?
 - [ ] Representative of significant segment?
@@ -131,7 +138,8 @@ Tạo hoặc review user personas dựa trên data và research. Personas giúp 
 
 ## 💡 Tips & Examples
 
-### Persona Template:
+### Persona Template
+
 ```markdown
 # [Persona Name]
 ![Photo](placeholder.jpg)
@@ -168,7 +176,8 @@ Tạo hoặc review user personas dựa trên data và research. Personas giúp 
 "What they'd say about our product/problem"
 ```
 
-### Persona Types:
+### Persona Types
+
 | Type | Description |
 |------|-------------|
 | **Primary** | Main target, drive most decisions |
@@ -177,7 +186,8 @@ Tạo hoặc review user personas dựa trên data và research. Personas giúp 
 | **Served** | Who uses but doesn't buy |
 | **Customer** | Who buys but doesn't use |
 
-### Data Sources for Personas:
+### Data Sources for Personas
+
 ```
 Quantitative:
 ✅ Analytics (demographics, behavior)
@@ -192,7 +202,8 @@ Qualitative:
 ✅ Social media listening
 ```
 
-### Red Flags - Bad Personas:
+### Red Flags - Bad Personas
+
 ```
 ❌ "Mary is a 28-year-old who likes yoga and coffee"
    (Too generic, not actionable)
@@ -232,7 +243,8 @@ Sau khi hoàn thành **User Persona Development**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Sản phẩm: StockFlow (SaaS quản lý kho)
 Thị trường: SMB retail
@@ -240,7 +252,8 @@ Nguồn dữ liệu: 6 phỏng vấn + 120 survey + log 30 ngày
 Mục tiêu: tăng activation tuần 1 từ 32% lên 45%
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Persona 1: Mai — Store Manager
 Goals: giảm thất thoát, báo cáo nhanh
@@ -253,13 +266,15 @@ Pains: mạng yếu, barcode chậm
 JTBD: "Khi nhận hàng, tôi cần nhập trong 30s để không trễ giao ca."
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Persona dựa trên dữ liệu thật
 - ✅ Goals/Pains rõ ràng, đo được
 - ✅ Có JTBD áp dụng cho thiết kế
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [User Flow Analysis](./user_flow_analysis.skill.md)
 - [Feature Prioritization (RICE/ICE)](./feature_prioritization.skill.md)
 
@@ -270,7 +285,7 @@ JTBD: "Khi nhận hàng, tôi cần nhập trong 30s để không trễ giao ca.
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: User Flow Analysis
 
 Sau khi hoàn thành **User Persona Development**, tiếp tục với:
 → [User Flow Analysis](./user_flow_analysis.skill.md)
@@ -278,3 +293,5 @@ Sau khi hoàn thành **User Persona Development**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Product & UX Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

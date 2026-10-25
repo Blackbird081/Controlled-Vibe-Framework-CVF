@@ -107,6 +107,7 @@ before structured signal intake.
 ### Prohibited External Fields
 
 The external event must not include:
+
 - `sourceId` or `recordId` (synthesized by helper/ledger per section Normalization Defaults)
 - `repeatRisk` (defaulted by helper; may only be `OBSERVED_REPEATED` after
   ledger de-dup confirmation per LSC-T4)
@@ -211,6 +212,7 @@ is a helper-local advisory output. Each `SignalReadoutItem` carries:
 `nextSuggestedAction`, `blocking`, and `reason`.
 
 This output is currently emitted as:
+
 - JSON under the `--json` flag (`"signalReadout": [...]` in `AssistReport.to_dict`).
 - Human text in the `Learning Signal Readout (LSC-T3)` section of `_print_human`.
 
@@ -301,6 +303,7 @@ CVF signal by direct quotation, chat-paste, or raw file injection.
 
 Completing the absorption chain classifies the external output for signal
 mapping. It does not:
+
 - grant the external agent autonomous mutation authority;
 - create a governed work order;
 - update session or handoff surfaces;

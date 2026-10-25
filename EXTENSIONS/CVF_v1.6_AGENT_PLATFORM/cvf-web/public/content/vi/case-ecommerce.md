@@ -11,6 +11,7 @@
 
 **Tình huống:**  
 ShopHub, một sàn thương mại với 500K người bán và 50 triệu SKU, gặp khó khăn với:
+
 - **Vấn đề quy mô**: 10K+ sản phẩm mới/ngày, không thể kiểm duyệt thủ công toàn bộ
 - **Dương tính giả**: AI đánh dấu nhầm sản phẩm hợp lệ là vi phạm chính sách
 - **Quy trình khiếu nại hỏng**: Người bán không có cách phản hồi khi AI mắc lỗi
@@ -45,16 +46,19 @@ Thông báo người bán + tùy chọn khiếu nại cho sản phẩm bị từ
 ### Triển Khai (Tuần 1-3)
 
 **Tuần 1: Xác Định Policy Spec**
+
 - INPUT_SPEC: Tiêu đề sản phẩm, mô tả, hình ảnh, danh mục, lịch sử người bán
 - OUTPUT_SPEC: Được duyệt / Cần kiểm duyệt / Từ chối, kèm giải thích
 - Quy tắc chính sách: Hàng cấm (vũ khí, hàng giả), quảng cáo sai sự thật, tiêu chuẩn chất lượng
 
 **Tuần 2: Skill Contracts + Phân Tầng**
+
 - R0 (Tự động duyệt): Confidence >95%, người bán đã xác minh, tuân thủ chính sách rõ ràng
 - R1 (Tự động từ chối kèm khiếu nại): Confidence <50% về vi phạm, vi phạm chính sách rõ ràng
 - R2 (Kiểm duyệt thủ công): Confidence 50-95%, trường hợp biên, người bán mới, trường hợp chính sách mới
 
 **Tuần 3: Quy Trình Kiểm Duyệt Thủ Công**
+
 - Kiểm duyệt viên có thể: Duyệt, Từ chối, Yêu cầu thêm thông tin
 - Trace: Mọi quyết định được ghi lại với ID kiểm duyệt viên, thời gian, lý do
 - Khiếu nại: Sản phẩm bị từ chối vào hàng đợi khiếu nại (kiểm duyệt viên thứ hai)
@@ -78,6 +82,7 @@ Thông báo người bán + tùy chọn khiếu nại cho sản phẩm bị từ
 ### Tác Động Kinh Doanh
 
 **Hiệu Quả Đội Kiểm Duyệt:**
+
 - Giảm đội kiểm duyệt từ 12 xuống 3 người (chuyển 9 người sang chính sách/khiếu nại)
 - Giờ có thể tập trung vào:
   - Các trường hợp chính sách biên (không phải sàng lọc số lượng)
@@ -85,6 +90,7 @@ Thông báo người bán + tùy chọn khiếu nại cho sản phẩm bị từ
   - Phát hiện mẫu gian lận (chủ động, không phản ứng)
 
 **Niềm Tin Người Bán:**
+
 - Giải thích rõ ràng cho mỗi lần từ chối giúp cải thiện sự chấp nhận
 - Quy trình khiếu nại (kiểm duyệt thủ công) = người bán cảm thấy được lắng nghe
 - Minh bạch: "AI đánh dấu, con người xác minh" xây dựng niềm tin
@@ -135,6 +141,7 @@ Chỉ thủ công = tắc nghẽn; chỉ AI = không công bằng; kết hợp =
 ## Khuyến Nghị
 
 **Cho thương mại điện tử/kiểm duyệt nội dung:**
+
 - Sử dụng **phân tầng dựa trên confidence** (R0 tự động confidence cao, R2 trường hợp biên kiểm duyệt thủ công, R1 tự động từ chối confidence thấp)
 - **Luôn có khiếu nại** — dù tỷ lệ duyệt thấp, quy trình xác nhận hệ thống hoạt động
 - **Giải thích rõ ràng** giảm tranh chấp 80%

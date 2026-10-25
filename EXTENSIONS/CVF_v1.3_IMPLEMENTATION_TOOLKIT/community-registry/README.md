@@ -7,6 +7,7 @@ Central repository for sharing and discovering CVF Skill Contracts across teams 
 ## 🎯 Purpose
 
 The Community Registry provides:
+
 - **Discoverability** — Find contracts for common tasks
 - **Reusability** — Don't reinvent the wheel
 - **Quality** — Peer-reviewed, validated contracts

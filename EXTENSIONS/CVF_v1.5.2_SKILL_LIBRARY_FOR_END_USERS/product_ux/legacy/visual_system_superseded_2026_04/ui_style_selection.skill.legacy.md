@@ -20,12 +20,14 @@ Không yêu cầu.
 Chọn UI style phù hợp nhất cho sản phẩm dựa trên ngành, đối tượng mục tiêu, và mục đích kinh doanh. Phân tích từ 67+ styles hiện đại (Glassmorphism, Neumorphism, Brutalism, Bento Grid, v.v.) để tìm style tối ưu.
 
 **Khi nào nên dùng:**
+
 - Bắt đầu dự án mới, chưa biết chọn style nào
 - Redesign sản phẩm hiện tại
 - Cần justify quyết định design với stakeholders
 - Muốn theo trend nhưng phù hợp ngành
 
 **Không phù hợp khi:**
+
 - Đã có brand guidelines cố định với style cụ thể
 - Chỉ cần fix nhỏ UI hiện tại
 
@@ -96,7 +98,7 @@ Chọn UI style phù hợp nhất cho sản phẩm dựa trên ngành, đối t�
 4. **Implementation Notes** — Framework-specific tips
 5. **Accessibility Score** — WCAG compatibility của style
 
-### Ví dụ Output Format:
+### Ví dụ Output Format
 
 ```
 RECOMMENDED STYLE: Soft UI Evolution
@@ -130,6 +132,7 @@ RECOMMENDED STYLE: Soft UI Evolution
 - [ ] Không recommend style "trendy" mà không phù hợp ngành
 
 **Red flags (cần Reject):**
+
 - ⚠️ Recommend Glassmorphism cho banking app (trust issue)
 - ⚠️ Recommend Dark mode cho healthcare (readability)
 - ⚠️ Không có anti-patterns — thiếu critical thinking
@@ -161,7 +164,8 @@ RECOMMENDED STYLE: Soft UI Evolution
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 Loại sản phẩm: Trading dashboard
 Ngành: Fintech/Crypto
@@ -171,7 +175,8 @@ Platform: Web desktop-first
 Dark mode: Yes
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 1st: Data-Dense Dark UI — Clean typography, high-contrast data tables
 2nd: Trading Terminal Style — Bloomberg-inspired, dense but readable

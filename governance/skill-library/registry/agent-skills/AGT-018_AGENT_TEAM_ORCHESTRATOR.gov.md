@@ -9,7 +9,7 @@
 ## Source
 
 Inspired by claude-code-templates multi-agent team patterns (deep-research-team, development-team, mcp-dev-team, podcast-creator-team) and VoltAgent/awesome-claude-code-subagents (119 agents).  
-Reference: https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/agents  
+Reference: <https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/agents>  
 Implementation in v1.6 AGENT_PLATFORM.  
 Skill mapping: `governance/skill-library/examples/AGT-018_AGENT_TEAM_ORCHESTRATOR.md`
 
@@ -20,6 +20,7 @@ Skill mapping: `governance/skill-library/examples/AGT-018_AGENT_TEAM_ORCHESTRATO
 Coordinates multiple specialized sub-agents working together as a team to complete complex multi-step tasks. Manages agent roles, task distribution, result aggregation, and conflict resolution across team members.
 
 **Actions:**
+
 - Define agent teams with roles (Planner, Executor, Reviewer, Synthesizer)
 - Distribute tasks to specialized sub-agents based on expertise
 - Coordinate parallel and sequential agent execution pipelines
@@ -76,6 +77,7 @@ Coordinates multiple specialized sub-agents working together as a team to comple
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Team composition approved by human before execution
 - [ ] Task plan reviewed before agent distribution
 - [ ] Each sub-agent respects its individual governance constraints
@@ -85,6 +87,7 @@ Coordinates multiple specialized sub-agents working together as a team to comple
 - [ ] Full execution trace available for audit
 
 **FAIL criteria:**
+
 - [ ] Teams created without human approval
 - [ ] Sub-agents violate their individual governance rules
 - [ ] Conflicts auto-resolved without human input on critical matters

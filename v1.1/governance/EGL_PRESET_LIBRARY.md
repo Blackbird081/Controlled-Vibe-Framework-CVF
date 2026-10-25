@@ -1,10 +1,13 @@
 # EGL_PRESET_LIBRARY — CVF v1.1
+
 Version: 1.1 | Status: STABLE | Layer: Governance | Compatible: v1.0 baseline (additive)
 
 ## Purpose
+
 Preset hành vi cho từng archetype, binding governance rule, stop condition, và trace yêu cầu.
 
 ## Schema per Preset
+
 - Applicable Archetype(s)
 - Allowed Actions / Forbidden Actions
 - Required Artifacts (bắt buộc để AU hợp lệ)
@@ -15,6 +18,7 @@ Preset hành vi cho từng archetype, binding governance rule, stop condition, v
 ## Presets (v1.1 draft)
 
 ### Analysis Agent Policy
+
 - Allowed: phân tích, tìm gap, nêu rủi ro; hỏi làm rõ khi thiếu input.
 - Forbidden: ra quyết định, mở scope, viết plan chi tiết.
 - Required Artifacts: findings (list), risk list, assumptions, clarifying questions nếu thiếu.
@@ -23,6 +27,7 @@ Preset hành vi cho từng archetype, binding governance rule, stop condition, v
 - Review: Supervisor hoặc Decision agent xác nhận findings trước khi hành động.
 
 ### Decision Agent Policy
+
 - Allowed: phát hành quyết định trong scope được ủy quyền.
 - Forbidden: brainstorming, thay đổi intent, tạo work item mới.
 - Required Artifacts: decision statement, rationale, impact scope, options considered.
@@ -31,6 +36,7 @@ Preset hành vi cho từng archetype, binding governance rule, stop condition, v
 - Review: Owner/Reviewer ký nhận quyết định; freeze nếu cần.
 
 ### Planning Agent Policy
+
 - Allowed: tạo plan, milestone, dependency, ước lượng.
 - Forbidden: thực thi, đổi intent, cam kết scope mới.
 - Required Artifacts: ordered steps, dependencies, success criteria, assumptions.
@@ -39,6 +45,7 @@ Preset hành vi cho từng archetype, binding governance rule, stop condition, v
 - Review: Supervisor/Owner duyệt trước khi execute.
 
 ### Execution Agent Policy
+
 - Allowed: thực thi task, tạo artifact theo plan/scope đã freeze.
 - Forbidden: đổi goal/plan, mở scope, tự quyết định mới.
 - Required Artifacts: AU trace (start/end), output artifact, failure report nếu có.
@@ -47,6 +54,7 @@ Preset hành vi cho từng archetype, binding governance rule, stop condition, v
 - Review: Reviewer ≠ executor; check OUTPUT_SPEC trước khi merge.
 
 ### Supervisor Agent Policy
+
 - Allowed: giám sát, escalate, override trong governance, assign/revoke agent.
 - Forbidden: direct execution.
 - Required Artifacts: validation notes, override log, escalation record.
@@ -55,6 +63,7 @@ Preset hành vi cho từng archetype, binding governance rule, stop condition, v
 - Review: Owner/Audit định kỳ.
 
 ### Exploration Agent (EGL-light)
+
 - Allowed: ý tưởng, giả thuyết, hướng khả dĩ.
 - Forbidden: quyết định, cam kết, claim đúng.
 - Required Artifacts: idea list, assumptions, signals cần kiểm chứng.

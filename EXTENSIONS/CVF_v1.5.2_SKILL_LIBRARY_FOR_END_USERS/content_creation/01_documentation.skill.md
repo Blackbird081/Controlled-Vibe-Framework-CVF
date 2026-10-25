@@ -17,6 +17,7 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Viết technical documentation
 - Tạo user guides/manuals
 - API documentation
@@ -24,6 +25,7 @@ Không yêu cầu.
 - Process documentation
 
 **Không phù hợp khi:**
+
 - Báo cáo với phân tích → Report Writing
 - Slides/presentations → Presentation
 - Marketing content → Landing Page skill
@@ -67,6 +69,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -82,6 +85,7 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Structured documentation
 - Clear sections với headings
 - Step-by-step instructions
@@ -89,6 +93,7 @@ Không yêu cầu.
 - FAQs section
 
 **Cấu trúc output:**
+
 ```
 1. Overview
    - Purpose
@@ -128,6 +133,7 @@ Không yêu cầu.
 - [ ] Includes troubleshooting
 
 **Red flags (cần Reject):**
+
 - ⚠️ Missing prerequisites
 - ⚠️ Steps không logical order
 - ⚠️ Jargon không explained
@@ -158,7 +164,8 @@ Không yêu cầu.
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Loại docs: User guide cho CVF template system
 Đối tượng: End users, có hiểu biết cơ bản về AI
@@ -166,7 +173,8 @@ Phạm vi: Chọn template → Điền form → Đánh giá output
 Tone: Friendly, practical
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 # CVF Template User Guide
 
@@ -218,7 +226,8 @@ A: Add more context in form fields.
 A: Specify format explicitly in input.
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Clear structure
 - ✅ Prerequisites stated
 - ✅ Steps numbered
@@ -230,6 +239,7 @@ A: Specify format explicitly in input.
 ---
 
 ## 🔗 Related Skills
+
 - [Report Writing](./02_report_writing.skill.md)
 - [Presentation](./03_presentation.skill.md)
 

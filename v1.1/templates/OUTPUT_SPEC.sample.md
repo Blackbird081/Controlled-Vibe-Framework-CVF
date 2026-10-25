@@ -1,4 +1,5 @@
 # OUTPUT_SPEC Sample — AU-001
+
 - Output Description: Checklist QA nội dung trang đích Q1
 - Format / Deliverable type: Markdown checklist, 12 mục
 - Acceptance Criteria: có mục CTA, liên kết, chính tả, brand voice, ngày phát hành; không lỗi chính tả; bullet rõ

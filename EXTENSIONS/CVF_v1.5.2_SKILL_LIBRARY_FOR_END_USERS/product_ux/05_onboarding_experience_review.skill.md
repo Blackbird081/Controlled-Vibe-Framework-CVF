@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá và tối ưu first-time user experience (onboarding). Good onboarding drives activation và reduces churn in early days.
 
 **Khi nào nên dùng:**
+
 - High signup-to-active drop-off
 - Users không reach "Aha moment"
 - Redesign onboarding flow
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,6 +80,7 @@ Không yêu cầu.
 ## ✅ Checklist Đánh giá
 
 ### First Impression (0-30 seconds)
+
 - [ ] Welcome có warm và clear?
 - [ ] Value proposition visible ngay?
 - [ ] Có set expectations (what's next)?
@@ -85,6 +88,7 @@ Không yêu cầu.
 - [ ] Not overwhelming với information?
 
 ### Registration
+
 - [ ] Minimal fields required (email only lý tưởng)?
 - [ ] Social login options?
 - [ ] Progress indicator nếu multi-step?
@@ -92,6 +96,7 @@ Không yêu cầu.
 - [ ] Email verification không block?
 
 ### First Experience
+
 - [ ] Có quick win trong first session?
 - [ ] Core value visible sớm?
 - [ ] Có guided tour/tooltips (optional)?
@@ -99,6 +104,7 @@ Không yêu cầu.
 - [ ] Not forcing users to explore everything?
 
 ### Guidance
+
 - [ ] Có checklist/progress (what's done/todo)?
 - [ ] Có contextual help?
 - [ ] Có empty states với CTAs?
@@ -106,6 +112,7 @@ Không yêu cầu.
 - [ ] Có skip options cho power users?
 
 ### Activation
+
 - [ ] Có clear definition của "success"?
 - [ ] Path to first value < 5 minutes?
 - [ ] Có celebrate milestones?
@@ -130,7 +137,7 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Onboarding Patterns:
+### Onboarding Patterns
 
 | Pattern | Best For | Example |
 |---------|----------|---------|
@@ -140,7 +147,8 @@ Không yêu cầu.
 | **Templates** | Creative tools | Canva |
 | **Checklist** | Multi-step value | Notion |
 
-### Time-to-Value Benchmarks:
+### Time-to-Value Benchmarks
+
 ```
 Great:    < 2 minutes
 Good:     2-5 minutes
@@ -148,7 +156,8 @@ Okay:     5-15 minutes
 Poor:     > 15 minutes
 ```
 
-### Onboarding Email Sequence:
+### Onboarding Email Sequence
+
 ```
 Day 0: Welcome + quick start guide
 Day 1: Feature highlight #1
@@ -158,7 +167,8 @@ Day 7: Check-in + offer help
 Day 14: Last chance engagement
 ```
 
-### Onboarding Metrics:
+### Onboarding Metrics
+
 | Metric | Description |
 |--------|-------------|
 | **Signup-to-activation** | % complete setup |
@@ -167,7 +177,8 @@ Day 14: Last chance engagement
 | **D1/D7/D30 retention** | Return rate |
 | **Onboarding completion** | % finish onboarding |
 
-### Progressive Onboarding Example:
+### Progressive Onboarding Example
+
 ```
 Level 1: Immediate (first session)
 ├── Create account
@@ -185,7 +196,8 @@ Level 3: First month
 └── Power user tips
 ```
 
-### Aha Moment Examples:
+### Aha Moment Examples
+
 | Product | Aha Moment | Time |
 |---------|------------|------|
 | Slack | First team message | 10 min |
@@ -223,14 +235,16 @@ Sau khi hoàn thành **Onboarding Experience Review**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Onboarding: 5 bước, yêu cầu import CSV
 Drop-off: 48% tại bước 3 (import)
 Time-to-Value: 18 phút
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Onboarding Improvements
 
@@ -248,13 +262,15 @@ Time-to-Value < 8 phút
 Drop-off step 3 < 20%
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Dựa trên số liệu drop-off
 - ✅ Thay đổi cụ thể, có mục tiêu
 - ✅ Dễ A/B test
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Error Handling UX](./error_handling_ux.skill.md)
 - [Feature Prioritization (RICE/ICE)](./feature_prioritization.skill.md)
 
@@ -265,7 +281,7 @@ Drop-off step 3 < 20%
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Feature Prioritization (RICE/ICE)
 
 Sau khi hoàn thành **Onboarding Experience Review**, tiếp tục với:
 → [Feature Prioritization (RICE/ICE)](./feature_prioritization.skill.md)
@@ -273,3 +289,5 @@ Sau khi hoàn thành **Onboarding Experience Review**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Product & UX Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

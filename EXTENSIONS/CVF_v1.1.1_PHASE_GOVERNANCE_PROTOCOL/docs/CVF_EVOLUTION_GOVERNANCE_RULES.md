@@ -24,25 +24,32 @@ CVF modules phải được phân loại trong **3 layers** trước khi thêm v
 ## II. 5 DESIGN INVARIANTS (Bất Biến)
 
 ### INV-A — AI must produce commits
+>
 > AI không được thay đổi repo trực tiếp. Mọi thay đổi phải thông qua AI Commit (phase-tracked, governance-validated).
 
 ### INV-B — Artifact identity must be stable  
+>
 > Artifact không được định danh bằng path. Path có thể rename/move. Artifact phải có `artifact_id` path-independent.
 
 ### INV-C — Process transitions must be deterministic
+>
 > AI không được nhảy phase tùy ý. Transitions phải đi đúng thứ tự: `SPEC → STATE_MACHINE → ... → COMPLETE`. Phase gate phải chặn nếu vi phạm.
 
 ### INV-D — Governance must be deterministic
+>
 > Pipeline governance phải chạy theo `GOVERNANCE_PIPELINE` cố định. Thứ tự khác nhau → kết quả validation không nhất quán → không cho phép.
 
 Operational refinement (2026-03-07):
+
 - `artifact_integrity` phải chạy trước các verification module còn lại để thiết lập trust boundary fail-fast.
 - Deterministic không chỉ là "fixed order", mà còn là "fixed order with trusted inputs first".
 
 ### INV-E — Verification must be pluggable
+>
 > Verification modules (`state_enforcement`, `diagram_validation`, `structural_diff`, `scenario_simulator`) KHÔNG được hardcode trong core. Core chỉ load và gọi plugins.
 
 Implementation note (2026-03-07):
+
 - `runtime/governance.executor.ts` phải resolve module theo plugin registry, rồi iterate bằng `GOVERNANCE_PIPELINE`.
 - Override module được phép ở executor boundary, nhưng không được phép đổi thứ tự pipeline canon.
 - Nếu executor được truyền `GovernanceAuditLog`, phase report và hash ledger phải được persist tự động sau `reports`.

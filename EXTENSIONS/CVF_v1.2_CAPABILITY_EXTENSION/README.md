@@ -16,17 +16,17 @@ Related source:
 
 ## Mục tiêu (Scope – đã khóa)
 
-* Bổ sung **Capability / Skill Abstraction Layer** cho CVF.
-* **Không phụ thuộc** agent, IDE, hay runtime cụ thể.
-* **Không thay đổi** Decision model, Execution Spine, Governance rules của v1.1.
-* Cho phép **wrap skills bên ngoài** (ví dụ antigravity-awesome-skills) mà **không phá kiểm soát**.
+- Bổ sung **Capability / Skill Abstraction Layer** cho CVF.
+- **Không phụ thuộc** agent, IDE, hay runtime cụ thể.
+- **Không thay đổi** Decision model, Execution Spine, Governance rules của v1.1.
+- Cho phép **wrap skills bên ngoài** (ví dụ antigravity-awesome-skills) mà **không phá kiểm soát**.
 
 ## Phi mục tiêu (Non-Goals – đã khóa)
 
-* Không đưa prompt/tool-specific vào core.
-* Không cho AI tự chọn skill.
-* Không auto-trigger skill.
-* Không mở rộng authority của agent.
+- Không đưa prompt/tool-specific vào core.
+- Không cho AI tự chọn skill.
+- Không auto-trigger skill.
+- Không mở rộng authority của agent.
 
 ---
 
@@ -38,15 +38,15 @@ Related source:
 
 **CAL chịu trách nhiệm:**
 
-* Chuẩn hóa *Capability Contract* (không phải code).
-* Ràng buộc *who / when / why* trước *how*.
-* Đảm bảo mọi capability đi qua **Execution Spine**.
+- Chuẩn hóa *Capability Contract* (không phải code).
+- Ràng buộc *who / when / why* trước *how*.
+- Đảm bảo mọi capability đi qua **Execution Spine**.
 
 **Audit Check:**
 
-* ❌ CAL không có quyền quyết định.
-* ❌ CAL không biết runtime là gì.
-* ✅ CAL chỉ mô tả contract & constraints.
+- ❌ CAL không có quyền quyết định.
+- ❌ CAL không biết runtime là gì.
+- ✅ CAL chỉ mô tả contract & constraints.
 
 ---
 
@@ -58,39 +58,39 @@ Mỗi capability **phải** được định nghĩa bằng contract này:
 
 **Metadata**
 
-* `Capability_ID`
-* `Domain`
-* `Risk_Level` (Low / Medium / High / Critical)
-* `Description`
+- `Capability_ID`
+- `Domain`
+- `Risk_Level` (Low / Medium / High / Critical)
+- `Description`
 
 **Governance Constraints**
 
-* `Allowed_Archetypes`
-* `Allowed_Phases`
-* `Required_Decisions`
-* `Required_Status`
+- `Allowed_Archetypes`
+- `Allowed_Phases`
+- `Required_Decisions`
+- `Required_Status`
 
 **Interface Spec**
 
-* `Input_Spec` (typed, validated)
-* `Output_Spec` (verifiable)
+- `Input_Spec` (typed, validated)
+- `Output_Spec` (verifiable)
 
 **Execution Rules**
 
-* `Side_Effects`
-* `Rollback_Possibility`
-* `Idempotency`
+- `Side_Effects`
+- `Rollback_Possibility`
+- `Idempotency`
 
 **Audit & Trace**
 
-* `Audit_Fields`
-* `Failure_Modes`
+- `Audit_Fields`
+- `Failure_Modes`
 
 **Audit Check:**
 
-* ❌ Không có contract → không được gọi.
-* ❌ Output không match spec → execution fail.
-* ✅ Mọi skill đều trace được.
+- ❌ Không có contract → không được gọi.
+- ❌ Output không match spec → execution fail.
+- ✅ Mọi skill đều trace được.
 
 ---
 
@@ -112,15 +112,15 @@ capabilities/
 
 **Mỗi entry:**
 
-* Tham chiếu Skill Contract
-* Đánh dấu Risk & Permission
-* Mapping domain (không mapping tool)
+- Tham chiếu Skill Contract
+- Đánh dấu Risk & Permission
+- Mapping domain (không mapping tool)
 
 **Audit Check:**
 
-* ❌ Registry không gọi runtime.
-* ❌ Registry không chứa prompt.
-* ✅ Registry chỉ là “danh sách cho phép”.
+- ❌ Registry không gọi runtime.
+- ❌ Registry không chứa prompt.
+- ✅ Registry chỉ là “danh sách cho phép”.
 
 ---
 
@@ -139,9 +139,9 @@ Adapter là **biên giới**, không phải thành phần core.
 
 **Audit Check:**
 
-* ❌ Adapter không được bypass CVF.
-* ❌ Adapter không được cache authority.
-* ✅ Có thể thay adapter mà không đổi CVF.
+- ❌ Adapter không được bypass CVF.
+- ❌ Adapter không được cache authority.
+- ✅ Có thể thay adapter mà không đổi CVF.
 
 ---
 
@@ -151,20 +151,20 @@ Adapter là **biên giới**, không phải thành phần core.
 
 Risk level ảnh hưởng trực tiếp đến:
 
-* Required Decision count
-* Allowed archetype
-* Manual / Auto execution
+- Required Decision count
+- Allowed archetype
+- Manual / Auto execution
 
 **Ví dụ nguyên tắc:**
 
-* `High / Critical` → luôn cần human decision artifact.
-* `Medium` → cần status gate.
-* `Low` → có thể fast-track (nhưng vẫn trace).
+- `High / Critical` → luôn cần human decision artifact.
+- `Medium` → cần status gate.
+- `Low` → có thể fast-track (nhưng vẫn trace).
 
 **Audit Check:**
 
-* ❌ Không có risk → mặc định High.
-* ✅ Risk không thể override bởi agent.
+- ❌ Không có risk → mặc định High.
+- ✅ Risk không thể override bởi agent.
 
 ---
 
@@ -172,8 +172,8 @@ Risk level ảnh hưởng trực tiếp đến:
 
 ### F1. Rule học từ antigravity-awesome-skills
 
-* Skills bên ngoài **chỉ được xem là raw capability ideas**.
-* Phải trải qua:
+- Skills bên ngoài **chỉ được xem là raw capability ideas**.
+- Phải trải qua:
 
   1. Contract rewrite
   2. Governance mapping
@@ -182,30 +182,30 @@ Risk level ảnh hưởng trực tiếp đến:
 
 **Audit Check:**
 
-* ❌ Không import trực tiếp.
-* ❌ Không trust behavior từ repo ngoài.
-* ✅ CVF luôn là authority cuối.
+- ❌ Không import trực tiếp.
+- ❌ Không trust behavior từ repo ngoài.
+- ✅ CVF luôn là authority cuối.
 
 ---
 
 ## PHASE G — Backward Compatibility (AUDITED)
 
-* CVF v1.1 projects **không bắt buộc** dùng v1.2.
-* v1.2 là **opt-in extension**.
-* Không skill nào ảnh hưởng spine cũ.
+- CVF v1.1 projects **không bắt buộc** dùng v1.2.
+- v1.2 là **opt-in extension**.
+- Không skill nào ảnh hưởng spine cũ.
 
 **Audit Check:**
 
-* ❌ Không breaking change.
-* ✅ CVF core vẫn standalone.
+- ❌ Không breaking change.
+- ✅ CVF core vẫn standalone.
 
 ---
 
-## KẾT LUẬN 
+## KẾT LUẬN
 
-* **CVF v1.2 không làm CVF “mạnh hơn theo kiểu nguy hiểm”**
-* Nó làm CVF **mở rộng nhưng an toàn**
-* Skills được *thuần hóa*, không được *tự do*
+- **CVF v1.2 không làm CVF “mạnh hơn theo kiểu nguy hiểm”**
+- Nó làm CVF **mở rộng nhưng an toàn**
+- Skills được *thuần hóa*, không được *tự do*
 
 > CVF vẫn là **governance-first framework**,
 > capability chỉ là **tay chân**, không bao giờ là **bộ não**.

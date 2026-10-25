@@ -61,4 +61,3 @@ Operator:
 * Không xử lý case rủi ro
 
 Nếu vi phạm → tạm dừng quyền vận hành.
-

@@ -34,11 +34,13 @@ This connector maps each of the 13 MA1 required sections →
 `Ma1CliPacket` JSON field name + type for the CLI runtime.
 
 Key invariants:
+
 - `runtimeExecutionAuthorized=false` for this Phase A spec.
 - Phase B runtime wiring is DEMAND_GATED pending W1+W3 CLOSED_PASS.
 - This connector does not modify any source file.
 
 Authority chain:
+
 - WCE roadmap: `docs/roadmaps/CVF_WCE_WORKFLOW_CHAIN_EXECUTION_ROADMAP_2026-05-29.md`
 - WCE GC-018: `docs/baselines/CVF_GC018_WCE_WORKFLOW_CHAIN_EXECUTION_2026-05-29.md`
 - MA1 standard: `docs/reference/CVF_INTERNAL_MULTI_AGENT_WORK_TRANSFER_PACKET_STANDARD_2026-05-26.md`

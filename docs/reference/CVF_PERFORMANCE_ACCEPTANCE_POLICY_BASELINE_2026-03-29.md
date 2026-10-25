@@ -82,6 +82,7 @@ No threshold in this document may be cited as a current performance guarantee.
 ## Promotion Path
 
 Promotion of any threshold from `PROPOSAL ONLY` to `BASELINE TRUTH` requires:
+
 1. A completed benchmark run with measurements committed to `docs/baselines/` with `evidenceClass: "PROPOSAL_ONLY"` upgraded to trace-backed evidence
 2. Evidence batch reviewed and accepted by the governance chain
 3. GC-026 tracker sync explicitly noting the promotion

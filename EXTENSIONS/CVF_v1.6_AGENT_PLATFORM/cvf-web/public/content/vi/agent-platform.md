@@ -34,7 +34,7 @@ Chế độ multi-agent cho phép bạn dùng đúng mô hình cho đúng công 
 
 ## Bước 1: Mở chế độ Multi-Agent
 
-1. Mở CVF Web UI (http://localhost:3000)
+1. Mở CVF Web UI (<http://localhost:3000>)
 2. Điều hướng đến **Agent Chat**
 3. Nhấn vào nút **Multi-Agent** (thường nằm trong phần cài đặt chat)
 4. Bạn sẽ thấy 4 vai trò agent xuất hiện
@@ -44,13 +44,16 @@ Chế độ multi-agent cho phép bạn dùng đúng mô hình cho đúng công 
 ## Bước 2: Cấu hình Agent
 
 ### Chế độ một AI (Đơn giản)
+
 Tất cả 4 agent sử dụng cùng một nhà cung cấp AI. Phù hợp cho người mới bắt đầu.
 
 **Cài đặt:**
+
 - Nhà cung cấp: Chọn một (Gemini/OpenAI/Anthropic)
 - Tất cả agent kế thừa cùng nhà cung cấp
 
 ### Chế độ nhiều AI (Nâng cao)
+
 Mỗi agent sử dụng một nhà cung cấp AI khác nhau.
 
 **Cấu hình khuyến nghị:**
@@ -73,6 +76,7 @@ Mỗi agent sử dụng một nhà cung cấp AI khác nhau.
 **1. Bắt đầu với Orchestrator (Phase A)**
 
 Nhập ý định của bạn:
+
 ```
 I want to build a weather dashboard web app. 
 It should show current weather for a city and a 5-day forecast.
@@ -80,6 +84,7 @@ Use a free weather API. Keep it simple — just HTML/CSS/JS, no frameworks.
 ```
 
 **Orchestrator** sẽ:
+
 - Làm rõ ý định của bạn
 - Xác định phạm vi (trong/ngoài)
 - Phân chia dự án thành các nhiệm vụ
@@ -87,6 +92,7 @@ Use a free weather API. Keep it simple — just HTML/CSS/JS, no frameworks.
 - Tạo bản tóm tắt có cấu trúc cho Architect
 
 **Ví dụ kết quả từ Orchestrator:**
+
 ```
 ## Discovery Summary
 
@@ -152,6 +158,7 @@ User types city → app.js calls API → parse JSON → update DOM
 **3. Builder thực thi (Phase C)**
 
 Builder nhận bản thiết kế và viết code:
+
 - Tạo `index.html` với cấu trúc ngữ nghĩa
 - Tạo `style.css` với grid responsive
 - Tạo `app.js` với các lệnh gọi API và xử lý lỗi
@@ -188,7 +195,9 @@ Reviewer đánh giá code của Builder so với ý định ban đầu:
 ## Bước 4: Hiểu về chuyển giao giữa các Agent
 
 ### Chuyển giao tự động
+
 Trong chế độ governance CVF đầy đủ, các agent tự động chuyển giao:
+
 ```
 Orchestrator → (Phase A hoàn thành?) → Architect → (Phase B hoàn thành?) → Builder → (Phase C hoàn thành?) → Reviewer
 ```
@@ -196,10 +205,13 @@ Orchestrator → (Phase A hoàn thành?) → Architect → (Phase B hoàn thành
 Mỗi lần chuyển giao yêu cầu checklist của phase trước phải được hoàn thành.
 
 ### Chuyển giao thủ công
+
 Trong chế độ Simple hoặc Rules, bạn kiểm soát thời điểm chuyển agent. Nhấn vào agent bạn muốn kích hoạt.
 
 ### Quay lại
+
 Nếu Reviewer phát hiện vấn đề, quy trình có thể quay lại:
+
 - Vấn đề nhỏ → Quay về **Builder** (thực thi lại)
 - Vấn đề thiết kế → Quay về **Architect** (thiết kế lại)
 - Vấn đề ý định → Quay về **Orchestrator** (làm rõ lại)
@@ -211,6 +223,7 @@ Nếu Reviewer phát hiện vấn đề, quy trình có thể quay lại:
 Khi sử dụng **chế độ governance CVF đầy đủ**, phase gate đảm bảo chất lượng:
 
 ### Cổng Phase A → B (Orchestrator → Architect)
+
 ```
 Checklist:
 - [ ] Intent clearly stated
@@ -218,9 +231,11 @@ Checklist:
 - [ ] Constraints identified
 - [ ] Success criteria defined
 ```
+
 Tất cả các mục phải được đánh dấu trước khi Architect bắt đầu.
 
 ### Cổng Phase B → C (Architect → Builder)
+
 ```
 Checklist:
 - [ ] Architecture components defined
@@ -231,6 +246,7 @@ Checklist:
 ```
 
 ### Cổng Phase C → D (Builder → Reviewer)
+
 ```
 Checklist:
 - [ ] All components implemented
@@ -252,6 +268,7 @@ Mỗi chế độ agent có mức rủi ro vốn có:
 | Quy trình multi-agent | **R2** | Có thể chuỗi hành động, cần phê duyệt |
 
 Trong thực tế:
+
 - **R0-R1:** Agent có thể tự động tiến hành
 - **R2:** Bạn sẽ thấy yêu cầu phê duyệt trước mỗi lần chuyển phase
 - **R3:** Yêu cầu con người tham gia mọi hành động (không phổ biến với web UI)
@@ -261,21 +278,27 @@ Trong thực tế:
 ## Mẹo sử dụng quy trình Multi-Agent hiệu quả
 
 ### 1. Cụ thể với Orchestrator
+
 Chất lượng toàn bộ quy trình phụ thuộc vào Phase A. Cung cấp cho Orchestrator:
+
 - Ý định rõ ràng (cái gì, không phải cách nào)
 - Ràng buộc cụ thể
 - Tiêu chí thành công/thất bại
 
 ### 2. Xem lại thiết kế của Architect trước khi xây dựng
+
 Đừng vội vàng chuyển sang Phase C. Thiết kế tệ = code tệ. Dành 2 phút xem lại kết quả của Architect.
 
 ### 3. Để Builder tuân theo Spec
+
 Đừng can thiệp trong Phase C trừ khi có lỗi rõ ràng. Builder nên làm theo thiết kế của Architect, không tự ý sáng tạo.
 
 ### 4. Sử dụng phản hồi của Reviewer
+
 Reviewer không chỉ đánh dấu ô — nó tìm các trường hợp biên. Chú ý đến cảnh báo, không chỉ đạt/không đạt.
 
 ### 5. Theo dõi Token sử dụng
+
 Multi-agent sử dụng token nhiều gấp 3–4 lần so với single-agent. Theo dõi bộ đếm sử dụng trong UI.
 
 ---

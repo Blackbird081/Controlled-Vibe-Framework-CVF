@@ -9,7 +9,7 @@
 ## Source
 
 Inspired by claude-code-templates progressive disclosure pattern (Anthropic's skill architecture: metadata → instructions → resources → scripts) and skill composability patterns.  
-Reference: https://github.com/anthropics/skills  
+Reference: <https://github.com/anthropics/skills>  
 Implementation in v1.6 AGENT_PLATFORM.  
 Skill mapping: `governance/skill-library/examples/AGT-019_SKILL_PROGRESSIVE_LOADER.md`
 
@@ -20,6 +20,7 @@ Skill mapping: `governance/skill-library/examples/AGT-019_SKILL_PROGRESSIVE_LOAD
 Manages dynamic loading of skill definitions using progressive disclosure — loading only the necessary layers (metadata, instructions, resources, scripts) based on context needs. Minimizes context window usage while maximizing skill availability.
 
 **Actions:**
+
 - Maintain skill catalog with metadata always available (name, description, risk level)
 - Load skill instructions on-demand when skill is triggered
 - Attach skill resources (reference files, examples) only when explicitly needed
@@ -71,6 +72,7 @@ Manages dynamic loading of skill definitions using progressive disclosure — lo
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Metadata available without explicit skill loading
 - [ ] Instructions loaded only on skill activation
 - [ ] Resources loaded only on explicit request
@@ -78,6 +80,7 @@ Manages dynamic loading of skill definitions using progressive disclosure — lo
 - [ ] Skill dependencies resolved correctly
 
 **FAIL criteria:**
+
 - [ ] All skill layers loaded eagerly (wasting context)
 - [ ] Skill definitions modified by loader
 - [ ] Scripts executed without proper governance check

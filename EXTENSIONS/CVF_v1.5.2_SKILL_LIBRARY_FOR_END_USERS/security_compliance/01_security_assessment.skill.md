@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá security của API endpoints. Đảm bảo APIs protected against common vulnerabilities và follow best practices.
 
 **Khi nào nên dùng:**
+
 - Trước khi launch APIs mới
 - Security audit định kỳ
 - Sau khi phát hiện vulnerabilities
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,6 +80,7 @@ Không yêu cầu.
 ## ✅ Checklist Đánh giá
 
 ### Authentication & Authorization
+
 - [ ] Có authentication cho tất cả sensitive endpoints?
 - [ ] Strong password/token policies?
 - [ ] OAuth/JWT implemented correctly?
@@ -87,6 +90,7 @@ Không yêu cầu.
 - [ ] No privilege escalation?
 
 ### Input Validation
+
 - [ ] All input validated (whitelist approach)?
 - [ ] SQL injection protected (parameterized queries)?
 - [ ] XSS protected (output encoding)?
@@ -95,12 +99,14 @@ Không yêu cầu.
 - [ ] Path traversal protected?
 
 ### Rate Limiting & Throttling
+
 - [ ] Rate limiting per user/IP?
 - [ ] Brute force protection (login attempts)?
 - [ ] DDoS protection?
 - [ ] Exponential backoff responses?
 
 ### Data Protection
+
 - [ ] HTTPS only (TLS 1.2+)?
 - [ ] Sensitive data encrypted at rest?
 - [ ] No sensitive data in URLs/logs?
@@ -108,12 +114,14 @@ Không yêu cầu.
 - [ ] Response không leak internal info?
 
 ### Headers & CORS
+
 - [ ] Proper CORS configuration?
 - [ ] Security headers (X-Content-Type-Options, etc.)?
 - [ ] No CORS wildcard (*) for sensitive APIs?
 - [ ] Cache-Control cho sensitive responses?
 
 ### Logging & Monitoring
+
 - [ ] Authentication events logged?
 - [ ] Failed requests logged?
 - [ ] No sensitive data in logs?
@@ -140,7 +148,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### JWT Best Practices:
+### JWT Best Practices
+
 ```
 ✅ Use RS256 (asymmetric) over HS256
 ✅ Short-lived access tokens (15min - 1hr)
@@ -154,7 +163,8 @@ Không yêu cầu.
 ❌ Don't trust algorithm from header
 ```
 
-### Rate Limiting Guidelines:
+### Rate Limiting Guidelines
+
 ```
 Anonymous:     60 requests/minute
 Authenticated: 600 requests/minute
@@ -162,7 +172,8 @@ Login:         5 attempts/15 minutes
 Password Reset: 3 requests/hour
 ```
 
-### Security Headers:
+### Security Headers
+
 ```http
 Strict-Transport-Security: max-age=31536000; includeSubDomains
 X-Content-Type-Options: nosniff
@@ -172,7 +183,8 @@ X-XSS-Protection: 1; mode=block
 Cache-Control: no-store (for sensitive responses)
 ```
 
-### CORS Configuration:
+### CORS Configuration
+
 ```javascript
 // ❌ Bad - allows any origin
 Access-Control-Allow-Origin: *
@@ -183,7 +195,8 @@ Access-Control-Allow-Methods: GET, POST
 Access-Control-Allow-Headers: Content-Type, Authorization
 ```
 
-### Error Response Best Practices:
+### Error Response Best Practices
+
 ```json
 // ❌ Bad - leaks info
 {
@@ -226,7 +239,8 @@ Sau khi hoàn thành **API Security Checklist**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 API: StockFlow v1
 Auth: JWT + refresh token
@@ -236,7 +250,8 @@ Current controls: HTTPS only, rate limit 60 rpm
 Known issues: 429 spikes khi import hàng loạt
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # API Security Findings
 
@@ -255,13 +270,15 @@ Known issues: 429 spikes khi import hàng loạt
 - Log admin actions to audit table
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Chỉ ra lỗ hổng rõ ràng, có mức độ ưu tiên
 - ✅ Đề xuất fix cụ thể, khả thi
 - ✅ Có focus vào auth và RBAC
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Data Handling Review](./data_handling_review.skill.md)
 - [Incident Response Plan](./incident_response_plan.skill.md)
 
@@ -272,7 +289,7 @@ Known issues: 429 spikes khi import hàng loạt
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Data Handling Review
 
 Sau khi hoàn thành **API Security Checklist**, tiếp tục với:
 → [Data Handling Review](./data_handling_review.skill.md)
@@ -280,3 +297,5 @@ Sau khi hoàn thành **API Security Checklist**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Security & Compliance Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

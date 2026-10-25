@@ -71,15 +71,18 @@ Captured: 2026-06-04
 | total | 14 | 0 |
 
 Critical packages (all dev/test toolchain):
+
 - `@vitest/coverage-v8` — test coverage reporter
 - `jspdf` — PDF export (dev usage)
 - `vitest` — test runner
 
 High packages:
+
 - `flatted`, `minimatch`, `picomatch`, `rollup`, `undici`, `vite` — build/test toolchain
 - `next` — framework, fix gated on semver-major upgrade
 
 Moderate packages:
+
 - `ajv`, `brace-expansion` — build toolchain
 - `dompurify` — sanitization utility
 - `postcss` — CSS processing, fix gated on `next` semver-major

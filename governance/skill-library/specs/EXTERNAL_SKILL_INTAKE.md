@@ -1,4 +1,5 @@
 # EXTERNAL SKILL INTAKE
+
 CVF Skill Intake as Risk & Authority Mapping
 
 > **Version:** 1.1.0  
@@ -18,6 +19,7 @@ It is a governance alignment exercise.
 ## 2. Intake Prerequisite
 
 An external skill may only enter intake AFTER:
+
 - CVF Risk Levels are defined
 - CVF Authority Model exists
 - CVF Skill ↔ Risk ↔ Authority Linkage is established
@@ -45,18 +47,21 @@ If any answer is “unknown” → intake fails.
 Each external skill intake MUST produce the following mapping:
 
 ### 4.1 Capability Extraction
+
 - Core function (one sentence)
 - Required inputs
 - Produced outputs
 - Execution model (sync / async / autonomous)
 
 ### 4.2 Risk Mapping
+
 - Assigned CVF Risk Level (R0–R3)
 - Justification
 - Worst-case failure scenario
 - Blast radius estimate
 
 ### 4.3 Authority Mapping
+
 - Allowed agent roles
 - Allowed CVF phases
 - Decision scope influence
@@ -87,12 +92,14 @@ No other outcomes are allowed.
 ## 6. Documentation Artifact
 
 Each intake MUST generate:
+
 - Skill Mapping Record
 - Explicit CVF linkage references
 - Decision owner
 - Timestamp
 
 This artifact is required for:
+
 - Audit
 - UAT
 - Future deprecation
@@ -132,11 +139,13 @@ SKILLSMP_API_KEY="***" python registry/import_skillsmp.py --limit 50 --per-categ
 ```
 
 **Outputs:**
+
 - `registry/external-sources/skillsmp/skillsmp_shortlist.json`
 - `registry/external-sources/skillsmp/skillsmp_shortlist.csv`
 - `registry/external-sources/skillsmp/skillsmp_shortlist.md`
 
 **Rules:**
+
 - Use **env vars only** for API keys (no secrets in repo)
 - Do not import raw skills directly into CVF library
 
@@ -161,11 +170,13 @@ python registry/convert_shortlist_to_cvf.py --limit 50
 ```
 
 **Standard filters:**
+
 - **Dedupe by repo**
 - If near-duplicate, prefer **better descriptions**
 - Map to CVF domain (App Development first, then existing domains)
 
 **Outputs:**
+
 - CVF skills generated in:
   - `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/<domain>/*.skill.md`
 - Import map:

@@ -9,6 +9,7 @@
 ## 🎯 Objective
 
 Tích hợp `CVF_SKILL_LIBRARY` như **Governance Layer** để kiểm soát:
+
 1. **User Skills** (v1.5.2 SKILL_LIBRARY_FOR_END_USERS - 131 skills)
 2. **Agent Skills** (v1.6 AGENT_PLATFORM - 8 tools)
 3. **Agent Output Quality** (UAT framework)
@@ -88,6 +89,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 ## 📋 Tasks
 
 ### Phase 1: Structure Setup
+
 | # | Task | Est. | Status |
 |---|------|------|--------|
 | 1.1 | Create `governance/skill-library/` folder | 5 min | ⬜ |
@@ -98,6 +100,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 | 1.6 | Update README.md with new structure | 15 min | ⬜ |
 
 ### Phase 2: User Skills Registry (131 skills)
+
 | # | Task | Est. | Status |
 |---|------|------|--------|
 | 2.1 | Create `.gov.md` template | 10 min | ⬜ |
@@ -107,6 +110,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 | 2.5 | Validate all registry files | 15 min | ⬜ |
 
 ### Phase 3: Agent Skills Registry (8 tools)
+
 | # | Task | Est. | Status |
 |---|------|------|--------|
 | 3.1 | Document 8 agent tools from v1.6 | 30 min | ⬜ |
@@ -115,6 +119,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 | 3.4 | Link to v1.6 implementation | 15 min | ⬜ |
 
 ### Phase 4: UAT Integration
+
 | # | Task | Est. | Status |
 |---|------|------|--------|
 | 4.1 | Move UAT templates to `uat/` | 10 min | ⬜ |
@@ -125,6 +130,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 | 4.6 | Auto-score UAT + export report | 20 min | ⬜ |
 
 ### Phase 5: Documentation & Links
+
 | # | Task | Est. | Status |
 |---|------|------|--------|
 | 5.1 | Update main README.md (root) | 15 min | ⬜ |
@@ -134,6 +140,7 @@ governance/skill-library/          ← CVF_SKILL_LIBRARY relocated
 | 5.5 | Create governance/README.md | 20 min | ⬜ |
 
 ### Phase 6: Validation & Commit
+
 | # | Task | Est. | Status |
 |---|------|------|--------|
 | 6.1 | Validate all links work | 15 min | ⬜ |

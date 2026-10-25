@@ -109,4 +109,3 @@ operator sẽ:
 * Ít sai hơn
 * Ít tranh cãi hơn
 * Dễ audit hơn
-

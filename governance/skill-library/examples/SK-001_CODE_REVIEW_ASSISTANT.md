@@ -1,4 +1,5 @@
 # SKILL MAPPING RECORD — EXAMPLE
+
 ## SK-001: Code Review Assistant
 
 > **Status:** ✅ Active  
@@ -24,13 +25,16 @@
 ## 2. Capability Summary
 
 ### 2.1 Core Capability
+
 Analyzes code changes and provides structured review feedback including:
+
 - Security vulnerabilities
 - Performance concerns
 - Code style violations
 - Best practice suggestions
 
 ### 2.2 Inputs
+
 | Input | Type | Sensitivity | Required |
 |-------|------|-------------|----------|
 | Code diff | Text | Internal | Yes |
@@ -38,6 +42,7 @@ Analyzes code changes and provides structured review feedback including:
 | Review criteria | Config | Public | No |
 
 ### 2.3 Outputs
+
 | Output | Type | Persistence |
 |--------|------|-------------|
 | Review comments | JSON | Logged |
@@ -45,6 +50,7 @@ Analyzes code changes and provides structured review feedback including:
 | Suggestions | Text | Ephemeral |
 
 ### 2.4 Execution Model
+
 | Property | Value |
 |----------|-------|
 | Invocation | Agent-invoked |
@@ -56,6 +62,7 @@ Analyzes code changes and provides structured review feedback including:
 ## 3. CVF Risk Mapping
 
 ### 3.1 Assigned Risk Level
+
 - ☐ R0 – Informational (Read-only, no side effects)
 - ☐ R1 – Advisory (Suggestions only, human confirmation required)
 - ☑ **R2 – Assisted Execution** (Bounded actions, explicit invocation)
@@ -63,12 +70,14 @@ Analyzes code changes and provides structured review feedback including:
 - ☐ R4 – Critical / Blocked (Severe damage potential, execution blocked)
 
 ### 3.2 Risk Justification
+
 - Produces actionable feedback that may influence code approval
 - Does not directly modify code
 - Requires human review before merge decision
 - Bounded to single PR/commit scope
 
 ### 3.3 Failure Scenarios
+
 | Mode | Description | Impact |
 |------|-------------|--------|
 | Primary | Misses security vulnerability | Medium - Human reviewer backup |
@@ -76,6 +85,7 @@ Analyzes code changes and provides structured review feedback including:
 | Tertiary | Timeout on large codebase | Low - Graceful degradation |
 
 ### 3.4 Blast Radius Assessment
+
 | Dimension | Assessment |
 |-----------|------------|
 | Scope of impact | Single code review session |
@@ -87,23 +97,27 @@ Analyzes code changes and provides structured review feedback including:
 ## 4. Authority Mapping
 
 ### 4.1 Allowed Agent Roles
+
 - ☐ Orchestrator
 - ☐ Architect
 - ☑ **Builder**
 - ☑ **Reviewer**
 
 ### 4.2 Allowed CVF Phases
+
 - ☐ Discovery
 - ☐ Design
 - ☑ **Build**
 - ☑ **Review**
 
 ### 4.3 Decision Scope Influence
+
 - ☐ Informational
 - ☑ **Tactical** (influences immediate task decisions)
 - ☐ Strategic (requires human oversight)
 
 ### 4.4 Autonomy Constraints
+
 | Constraint | Value |
 |------------|-------|
 | Invocation conditions | Explicit request or CI trigger |
@@ -121,6 +135,7 @@ Analyzes code changes and provides structured review feedback including:
 - ☑ **Additional audit hooks required** (Log all review decisions)
 
 ### Adaptation Details
+
 1. **Removed:** Auto-fix capability from original tool
 2. **Added:** Structured output format for audit
 3. **Constrained:** Max file size to 10,000 lines
@@ -130,6 +145,7 @@ Analyzes code changes and provides structured review feedback including:
 ## 6. UAT & Validation Hooks
 
 ### 6.1 Required UAT Scenarios
+
 | Scenario | Description |
 |----------|-------------|
 | Normal operation | Review clean code with minor issues |
@@ -137,6 +153,7 @@ Analyzes code changes and provides structured review feedback including:
 | Failure handling | Review malformed/binary files |
 
 ### 6.2 Output Validation
+
 | Criteria | Check |
 |----------|-------|
 | Acceptance | All issues have severity + description |
@@ -147,14 +164,17 @@ Analyzes code changes and provides structured review feedback including:
 ## 7. Decision Record
 
 ### 7.1 Intake Outcome
+
 - ☐ Reject
 - ☑ **Accept with Restrictions**
 - ☐ Accept after Adaptation
 
 ### 7.2 Decision Rationale
+
 Original tool had auto-fix capability which violates CVF principle of human-in-the-loop for code modifications. Restricted version provides value while maintaining governance.
 
 ### 7.3 Decision Authority
+
 | Field | Value |
 |-------|-------|
 | Name / Role | Tech Lead / Governance Owner |
@@ -166,12 +186,14 @@ Original tool had auto-fix capability which violates CVF principle of human-in-t
 ## 8. Lifecycle Controls
 
 ### 8.1 Review Cycle
+
 | Field | Value |
 |-------|-------|
 | Review interval | 90 days |
 | Next review date | 2026-05-07 |
 
 ### 8.2 Deprecation Conditions
+
 - New review tool with better security coverage
 - CVF authority model changes
 - >3 UAT failures in review cycle

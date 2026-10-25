@@ -49,11 +49,11 @@ thêm giả định
 né trace
 
 Boundary Violation Types
-Loại	Mô tả
-Operator Intrusion	Operator can thiệp execution
-AI Overreach	AI vượt scope
-Silent Assumption	AI tự thêm giả định
-Trace Evasion	AI không trace rõ
+Loại Mô tả
+Operator Intrusion Operator can thiệp execution
+AI Overreach AI vượt scope
+Silent Assumption AI tự thêm giả định
+Trace Evasion AI không trace rõ
 
 Chỉ cần 1 violation → execution FAIL.
 

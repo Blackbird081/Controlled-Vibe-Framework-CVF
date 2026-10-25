@@ -95,6 +95,7 @@ hosted-readiness, production-readiness, or production-grade durability claims.
 Machine checker: `governance/compat/check_erh_durable_evidence_policy_snapshot.py`
 
 Verifies:
+
 - `ERH_DUR1_MARKER` present in `control-plane-events.ts`
 - `CVF_DURABLE_EVIDENCE_VERSION` present in `control-plane-events.ts`
 - `os.tmpdir()` NOT present as default in `control-plane-events.ts`

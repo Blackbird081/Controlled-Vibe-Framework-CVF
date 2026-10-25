@@ -17,12 +17,14 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng:**
+
 - Đánh giá IP assets của công ty
 - Lập strategy bảo vệ IP
 - Chuẩn bị cho M&A/investment
 - Review IP risks
 
 **Không phù hợp khi:**
+
 - Filing patents → Cần IP attorney
 - IP litigation → Cần legal team
 
@@ -65,6 +67,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -88,12 +91,14 @@ Không yêu cầu.
 ## 🔍 Cách đánh giá
 
 **Checklist:**
+
 - [ ] Identify tất cả IP types
 - [ ] Protection methods phù hợp
 - [ ] Risks được highlight
 - [ ] Action items practical
 
 **Red flags:**
+
 - ⚠️ Miss key IP types
 - ⚠️ Wrong protection method
 
@@ -130,14 +135,16 @@ Sau khi hoàn thành **IP Protection**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 IP Assets: source code, logo, brand name "StockFlow", domain stockflow.vn
 Team: 6 employees + 2 contractors
 Open-source: dùng 12 libs (MIT/Apache)
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # IP Protection Plan
 
@@ -147,13 +154,15 @@ Open-source: dùng 12 libs (MIT/Apache)
 - Brand: đăng ký domain .com/.vn
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Bao phủ trademark + code ownership
 - ✅ Kiểm soát OSS license
 - ✅ Hành động ưu tiên rõ
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Compliance Checklist](./04_compliance_checklist.skill.md)
 - [Contract Review](./01_contract_review.skill.md)
 
@@ -164,7 +173,7 @@ Open-source: dùng 12 libs (MIT/Apache)
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Contract Review
 
 Sau khi hoàn thành **IP Protection**, quay lại rà soát hợp đồng:
 → [Contract Review](./01_contract_review.skill.md)
@@ -172,3 +181,5 @@ Sau khi hoàn thành **IP Protection**, quay lại rà soát hợp đồng:
 ---
 
 *CVF Skill Library v1.5.2 | Legal & Contracts Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

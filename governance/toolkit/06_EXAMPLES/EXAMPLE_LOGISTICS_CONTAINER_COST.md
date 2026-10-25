@@ -79,6 +79,7 @@ Department: Sales
 Risk Level: HIGH
 Approved Phases: DESIGN, BUILD, REVIEW
 Approved Skills:
+
 - historical_cost_analysis
 - margin_simulation
 Certification Status: DRAFT

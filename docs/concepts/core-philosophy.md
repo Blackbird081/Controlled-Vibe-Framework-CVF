@@ -11,6 +11,7 @@
 AI can write code. But who decides **what** to build, **how** to build it, and **when** it's done?
 
 Without structure:
+
 - AI invents features you didn't ask for
 - Scope expands silently
 - "It works" replaces "it's correct"
@@ -38,6 +39,7 @@ A 50-line script that solves the problem is better than a 500-line "enterprise-g
 ### 3. "Decisions are first-class citizens"
 
 Every important decision must be **recorded**. Not in Slack. Not in someone's head. In a Decision Log with:
+
 - What was decided
 - Why (rationale)
 - What alternatives were considered
@@ -48,6 +50,7 @@ This prevents "why did we build it this way?" conversations 3 months later.
 ### 4. "Control through structure, not micromanagement"
 
 CVF is NOT about reviewing every line of AI code. It's about:
+
 - Clear phases with defined entry/exit criteria
 - Phase gates that catch problems early
 - Checklists that make quality checkable
@@ -57,6 +60,7 @@ The analogy: a bridge has guardrails. You can drive freely within the lanes. Wit
 ### 5. "AI is an executor, not a decision-maker"
 
 AI executes within the context you provide. AI doesn't:
+
 - Set project goals
 - Define what "done" means
 - Choose architecture without direction
@@ -67,10 +71,12 @@ All decisions come from humans. AI implements those decisions.
 ### 6. "Users don't need to be good at coding"
 
 CVF is designed for **anyone who takes responsibility for the product**: product owners, managers, domain experts, QA testers, founders. You need to:
+
 - Know what you want (intent)
 - Recognize when output is wrong (review)
 
 You don't need to:
+
 - Write code
 - Understand algorithms
 - Debug stack traces

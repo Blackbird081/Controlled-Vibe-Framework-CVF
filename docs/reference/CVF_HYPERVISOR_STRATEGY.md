@@ -1,4 +1,5 @@
 I. Bức tranh kiến trúc các Claw (ở tầng runtime)
+
 | Tool     | Lõi giá trị thật sự             | Thứ CVF có thể học         |
 | -------- | ------------------------------- | -------------------------- |
 | OpenClaw | Tool execution rộng             | Tool abstraction layer     |

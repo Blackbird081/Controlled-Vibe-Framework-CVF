@@ -1,7 +1,11 @@
 # AGENT LIFECYCLE MAPPING SPEC
+
 # CVF → CVF-Toolkit Integration
+
 # Status: Authoritative Mapping
+
 # Toolkit Version: 1.0.0
+
 # CVF Lock: See 00_CANONICAL_REFERENCE/cvf_version.lock
 
 1. PURPOSE
@@ -20,7 +24,7 @@ How isolation boundaries prevent governance bypass
 
 This file is binding and architecture-critical.
 
-2. CANONICAL AGENT DEFINITION
+1. CANONICAL AGENT DEFINITION
 
 In Toolkit:
 
@@ -42,7 +46,7 @@ Agents are NOT free-form LLM sessions.
 
 Agents cannot exist outside governance.
 
-3. AGENT TYPES SUPPORTED
+1. AGENT TYPES SUPPORTED
 
 Toolkit supports two modes:
 
@@ -86,7 +90,7 @@ Unique provider binding (optional)
 
 Governance must evaluate all agents.
 
-4. AGENT CONTRACT SCHEMA
+1. AGENT CONTRACT SCHEMA
 
 Every agent must register with:
 
@@ -103,7 +107,7 @@ Every agent must register with:
 
 Agents cannot execute unregistered skills.
 
-5. AGENT LIFECYCLE STATES
+1. AGENT LIFECYCLE STATES
 
 States:
 
@@ -122,7 +126,7 @@ active → terminated
 
 Illegal transitions blocked.
 
-6. AGENT EXECUTION FLOW
+1. AGENT EXECUTION FLOW
 
 For each execution:
 Agent Request
@@ -143,7 +147,7 @@ Audit Log
 
 No step may be skipped.
 
-7. ROLE BINDING RULE
+1. ROLE BINDING RULE
 
 Each agent role must map to:
 
@@ -156,7 +160,7 @@ Each agent role must map to:
 
 Agent capability must be >= skill capability.
 
-8. RISK DOMINANCE RULE (MULTI-AGENT)
+1. RISK DOMINANCE RULE (MULTI-AGENT)
 
 If multiple agents participate:
 
@@ -172,7 +176,7 @@ Final risk = R3.
 
 Phase enforcement must follow R3.
 
-9. AGENT ISOLATION RULE
+1. AGENT ISOLATION RULE
 
 Agents:
 
@@ -191,7 +195,7 @@ Isolation enforced in:
 cvf.agent.adapter.ts
 governance.guard.ts
 
-10. PROVIDER BINDING RULE
+1. PROVIDER BINDING RULE
 
 Agent must use:
 
@@ -209,7 +213,7 @@ Provider must be declared at registration.
 
 Switching provider = Change Request required.
 
-11. AGENT MEMORY RULE
+1. AGENT MEMORY RULE
 
 Toolkit supports:
 
@@ -225,7 +229,7 @@ Must not persist across freeze unless approved
 
 Must be audited if risk >= R3
 
-12. FINANCIAL AGENT RULE
+1. FINANCIAL AGENT RULE
 
 For financial domain:
 
@@ -243,7 +247,7 @@ Execution Agent (C4 required)
 
 Risk auto-set to R4
 
-13. AGENT TERMINATION RULE
+1. AGENT TERMINATION RULE
 
 Agent must be terminated if:
 
@@ -259,7 +263,7 @@ Termination must log:
 
 AgentTerminationEvent
 
-14. EXTENSION AGENT RULE
+1. EXTENSION AGENT RULE
 
 Extensions (e.g., Financial, Dexter) may:
 
@@ -277,7 +281,7 @@ Remove risk dominance rule
 
 Remove isolation rule
 
-15. NON-NEGOTIABLE RULES
+1. NON-NEGOTIABLE RULES
 
 No agent outside registry.
 
@@ -293,7 +297,7 @@ Agent cannot auto-release to prod.
 
 Agent cannot approve own change.
 
-16. COMPLIANCE CHECKLIST
+1. COMPLIANCE CHECKLIST
 
 Toolkit compliant if:
 

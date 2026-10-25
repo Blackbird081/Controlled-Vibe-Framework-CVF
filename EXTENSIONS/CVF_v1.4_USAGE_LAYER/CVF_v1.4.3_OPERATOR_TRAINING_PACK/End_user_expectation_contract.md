@@ -40,7 +40,7 @@ Chịu trách nhiệm pháp lý / tài chính
 
 👉 Nếu user tìm “công cụ đảm bảo thắng” → CVF không phù hợp
 
-2. Nguyên tắc kỳ vọng cốt lõi
+1. Nguyên tắc kỳ vọng cốt lõi
 2.1. Correctness > Speed
 
 CVF không chạy đua deadline
@@ -69,7 +69,7 @@ CVF + Operator chỉ hỗ trợ
 
 Không có khái niệm “AI bảo làm”
 
-3. Những yêu cầu CVF sẽ từ chối
+1. Những yêu cầu CVF sẽ từ chối
 
 CVF bắt buộc từ chối khi user:
 
@@ -93,7 +93,7 @@ Dùng CVF để hợp thức hóa quyết định đã có
 
 👉 Đây là hard boundary, không thương lượng.
 
-4. Cách làm việc hiệu quả với CVF
+1. Cách làm việc hiệu quả với CVF
 
 Để đạt kết quả tốt nhất, user nên:
 
@@ -113,7 +113,7 @@ CVF phản biện
 
 CVF đề xuất dừng hoặc chia nhỏ
 
-5. Escalation từ góc nhìn user
+1. Escalation từ góc nhìn user
 
 User nên chủ động escalate khi:
 
@@ -133,7 +133,7 @@ Rủi ro tăng đột ngột
 
 Escalation không phải thất bại, mà là hành vi trưởng thành.
 
-6. Tuyên bố rõ ràng (user acknowledgement)
+1. Tuyên bố rõ ràng (user acknowledgement)
 
 Khi sử dụng CVF, tôi hiểu rằng:
 
@@ -145,7 +145,7 @@ CVF có quyền từ chối yêu cầu không phù hợp
 
 Không đồng ý → không nên sử dụng CVF
 
-7. Một câu chốt cho end user
+1. Một câu chốt cho end user
 
 CVF tồn tại để giúp bạn tránh quyết định tệ,
 không phải để hợp thức hóa quyết định sai.

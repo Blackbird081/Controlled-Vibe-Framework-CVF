@@ -12,6 +12,7 @@
 ## 📌 Prerequisites
 
 Khuyến khích hoàn thành trước:
+
 - [UI Style Selection](./ui_style_selection.skill.md) — Hiểu styles
 - [Color Palette Generator](./color_palette_generator.skill.md) — Hiểu color theory
 - [Typography Pairing](./typography_pairing.skill.md) — Hiểu typography
@@ -23,12 +24,14 @@ Khuyến khích hoàn thành trước:
 Sinh ra **design system hoàn chỉnh** từ mô tả sản phẩm: bao gồm UI pattern, style, bảng màu, typography, effects, và anti-patterns. Đây là skill tổng hợp kết hợp 5 domain (product, style, color, landing, typography).
 
 **Khi nào nên dùng:**
+
 - Khởi đầu dự án hoàn toàn mới
 - Cần design system nhất quán cho team
 - Muốn document design decisions cho stakeholders
 - Chuyển từ prototype → production
 
 **Không phù hợp khi:**
+
 - Đã có design system hoàn chỉnh (Figma/Storybook)
 - Chỉ cần adjust component nhỏ
 
@@ -85,7 +88,7 @@ Sinh ra **design system hoàn chỉnh** từ mô tả sản phẩm: bao gồm UI
 | **Tech stack** | ❌ | React, Next.js, Vue... | "Next.js + Tailwind" |
 | **Pages chính** | ❌ | Các trang cần build | "Home, Services, Booking, Contact" |
 | **Brand assets** | ❌ | Logo, colors đã có | "Logo có, chưa có color guide" |
-| **References** | ❌ | Websites tham khảo | "https://example.com — thích style này" |
+| **References** | ❌ | Websites tham khảo | "<https://example.com> — thích style này" |
 
 ---
 
@@ -153,6 +156,7 @@ Sinh ra **design system hoàn chỉnh** từ mô tả sản phẩm: bao gồm UI
 - [ ] Actionable — team có thể implement ngay
 
 **Red flags (cần Reject):**
+
 - ⚠️ Thiếu bất kỳ section nào trong 6 sections
 - ⚠️ Anti-patterns quá generic ("avoid bad design")
 - ⚠️ Colors không có hex codes
@@ -184,7 +188,8 @@ Sinh ra **design system hoàn chỉnh** từ mô tả sản phẩm: bao gồm UI
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 Tên: FinTrack
 Loại: Personal finance dashboard
@@ -194,7 +199,8 @@ Stack: React + Tailwind + shadcn/ui
 Pages: Dashboard, Transactions, Goals, Settings
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 Pattern: Dashboard-First + Onboarding Flow
 Style: Clean Data UI (high contrast, dense but readable)

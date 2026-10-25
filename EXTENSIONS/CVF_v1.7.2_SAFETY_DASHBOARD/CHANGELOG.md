@@ -5,6 +5,7 @@ All notable changes to /**CVF – Controlled Vibe Framework**/ will be documente
 ## [2.1.0] - 2026-02-23
 
 ### Added
+
 - **Toast Notifications** — react-hot-toast cho hardStop, escalation, autonomy, phase, freeze
 - **PDF Export** — jsPDF + autoTable report (Session Info, Final State, Timeline) với page numbers
 - **Session Comparison** — So sánh 2 sessions side-by-side trong `/history`
@@ -14,6 +15,7 @@ All notable changes to /**CVF – Controlled Vibe Framework**/ will be documente
 - **Accessibility** — ARIA labels, `role`, `aria-label`, keyboard navigation, semantic `<nav>`
 
 ### Changed
+
 - `page.tsx`: thêm navigation bar (Analytics + History + Dark Mode), PDF export, shortcuts reference
 - `history/page.tsx`: rewrite hoàn toàn — thêm compare mode, PDF export, analytics link
 - `ClientProviders.tsx`: thêm `<Toaster>` provider
@@ -22,6 +24,7 @@ All notable changes to /**CVF – Controlled Vibe Framework**/ will be documente
 ## [2.0.0] - 2026-02-23
 
 ### Added
+
 - **Unit Test Suite** — 49 tests (20 engine + 29 session manager) using Vitest
 - **Error Boundary** — React ErrorBoundary prevents white screen on runtime errors
 - **Input Validation** — Constructor validates `initialAutonomy` range (0–100)
@@ -37,11 +40,13 @@ All notable changes to /**CVF – Controlled Vibe Framework**/ will be documente
 - **Micro-animations** — Phase pulse, risk pulse, slide-in, count-pop, glow effects
 
 ### Changed
+
 - `page.tsx` refactored: logic moved to custom hook
 - `SessionManager` upgraded to V2.0 with observer pattern
 - Tailwind config: added `darkMode: "class"` strategy
 
 ### Fixed
+
 - **15 bugs total** (8 original + 7 discovered during testing)
 - Duplicate event logging across all mutation methods
 - Profile selector UI desync after new session
@@ -50,6 +55,7 @@ All notable changes to /**CVF – Controlled Vibe Framework**/ will be documente
 ## [1.7.0] - 2026-02-22
 
 ### Added
+
 - Governance Strategy Engine (3 profiles: Conservative, Balanced, Exploratory)
 - Strategy Adapter pattern for dynamic profile switching
 - Session lifecycle management (ACTIVE → FROZEN)

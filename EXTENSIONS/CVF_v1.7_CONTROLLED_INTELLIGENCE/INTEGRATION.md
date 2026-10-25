@@ -1,4 +1,5 @@
 # CVF – Controlled Intelligence Extension
+
 ## Integration Guide: How Extension Fits Into Base CVF
 
 > **Nguyên tắc:** CVF gốc (v1.0–v1.6) là chuẩn tuyệt đối.  

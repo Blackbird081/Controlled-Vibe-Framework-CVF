@@ -19,6 +19,7 @@ Skill mapping: `governance/skill-library/examples/AGT-011_DOCUMENT_PARSER.md`
 Parses documents (PDF, CSV, TXT, images) and extracts structured data based on user-defined schemas, with built-in PII detection.
 
 **Actions:**
+
 - Parse PDF, CSV, TXT, and image files
 - Extract structured data using schema definitions
 - Perform OCR on image-based documents
@@ -66,6 +67,7 @@ Parses documents (PDF, CSV, TXT, images) and extracts structured data based on u
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Correctly extracts data matching the provided schema
 - [ ] PII detection identifies and redacts sensitive content
 - [ ] Rejects unsupported and executable file types
@@ -73,6 +75,7 @@ Parses documents (PDF, CSV, TXT, images) and extracts structured data based on u
 - [ ] Extraction results logged with PII redaction
 
 **FAIL criteria:**
+
 - [ ] PII content passed through unredacted
 - [ ] Executable file accepted for processing
 - [ ] File size limit bypassed

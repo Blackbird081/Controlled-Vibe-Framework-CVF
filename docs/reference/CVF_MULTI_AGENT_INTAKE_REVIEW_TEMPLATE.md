@@ -63,4 +63,3 @@ Memory class: POINTER_RECORD
 
 - evidence 1: `path/to/file.md:line`
 - evidence 2: `path/to/file.md:line`
-

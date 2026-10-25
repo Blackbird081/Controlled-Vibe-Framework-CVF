@@ -60,14 +60,12 @@ export function RiskTrendChart({ data: propData }: RiskTrendChartProps) {
     const { language } = useLanguage();
     const l = LABELS[language];
     const [range, setRange] = useState<TimeRange>('30');
-    const [data, setData] = useState<RiskTrendPoint[]>(propData || []);
+    const [fetchedData, setData] = useState<RiskTrendPoint[]>([]);
+    const data = propData ?? fetchedData;
     const [loading, setLoading] = useState(!propData);
 
     useEffect(() => {
-        if (propData) {
-            setData(propData);
-            return;
-        }
+        if (propData) return;
         let cancelled = false;
         async function fetchTrends() {
             try {
@@ -124,7 +122,7 @@ export function RiskTrendChart({ data: propData }: RiskTrendChartProps) {
             .filter(Boolean) as { x: number; y: number; color: string; event: string; key: number }[];
     }, [data]);
 
-    if (loading) return <p className="text-sm text-gray-400">{l.loading}</p>;
+    if (!propData && loading) return <p className="text-sm text-gray-400">{l.loading}</p>;
 
     return (
         <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">

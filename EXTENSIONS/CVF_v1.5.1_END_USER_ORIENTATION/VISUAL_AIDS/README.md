@@ -17,16 +17,19 @@
 ## 🚀 Hướng dẫn sử dụng
 
 ### 1. Process Flowchart
+
 - **Mục đích:** Hiểu quy trình CVF 5 bước
 - **Cách dùng:** Double-click file → mở trong Chrome/Edge → click từng bước để xem chi tiết
 - **Tính năng:** Interactive, dark theme, animation
 
 ### 2. Quick Reference Card
+
 - **Mục đích:** Cheat sheet 1 trang để dán lên bàn làm việc
 - **Cách dùng:** Mở file → Ctrl+P → In ra giấy A4
 - **Tính năng:** Printable, đầy đủ info cần thiết
 
 ### 3. Template Gallery
+
 - **Mục đích:** Xem trước tất cả templates có sẵn
 - **Cách dùng:** Mở file → Lọc theo category → Click template để xem chi tiết
 - **Tính năng:** Filter, modal detail, responsive

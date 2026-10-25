@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Analyzes code based on John Ousterhout's "A Philosophy of Software Design". Identifies unnecessary complexity, shallow modules, information leaks, and design problems. Use when reviewing architecture, PRs, refactoring, or asking about code quality.
 
 **Khi nào dùng skill này:**
+
 - Cần Oftware De Ign Review với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: software architecture
-- Nguồn tham khảo: https://github.com/atilladeniz/Kubeli/tree/main/.claude/skills/software-design-review
+- Nguồn tham khảo: <https://github.com/atilladeniz/Kubeli/tree/main/.claude/skills/software-design-review>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Thiết kế API cho ứng dụng quản lý dự án
 Context: Team 4 dev, cần MVP trong 6 tuần
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Oftware De Ign Review Output
 

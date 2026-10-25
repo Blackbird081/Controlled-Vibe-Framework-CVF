@@ -113,6 +113,7 @@ Evidence: `docs/benchmark/README.md`
 Date: 2026-05-08
 
 ### Added
+
 - Public RC tag binding for `v4.0.0-rc.1`.
 - Release notes draft: `docs/reference/CVF_RELEASE_NOTES_V4_0_0_RC_1_2026-05-08.md`.
 - WPR-1 contributor boundary: `docs/reference/CVF_EXTENSION_AUTHOR_BOUNDARY.md`.
@@ -120,11 +121,13 @@ Date: 2026-05-08
 - WPR-3 exposure audit: `docs/reviews/CVF_PUBLIC_EXPOSURE_AUDIT_2026-05-08.md`.
 
 ### Verified
+
 - Release gate PASS 7/7: Web build, TypeScript guard contract, provider readiness, secrets scan, docs governance, UI mock Playwright, and live governance Playwright.
 - W149 trusted-form corpus evidence remains the live value baseline: Alibaba direct API 40/40, Alibaba browser UI 40/40, DeepSeek confirmatory 12/12.
 - RC truth remains bounded by `docs/reference/CVF_RELEASE_CANDIDATE_TRUTH_PACKET_2026-04-21.md` and `docs/reference/CVF_KNOWN_LIMITATIONS_REGISTER_2026-04-21.md`.
 
 ### Boundary
+
 - This is a release candidate, not GA.
 - No runtime behavior, provider behavior, deploy config, governance policy, or trusted-form corpus changed in WPR-4.
 - GitHub Release publication remains operator/CLI-token dependent; the in-repo release notes are the canonical draft.
@@ -134,6 +137,7 @@ Date: 2026-05-08
 ## [2026-03-21] — Federated Plane Convergence: Phase 0-2 Complete
 
 ### Added
+
 - **CVF_PLANE_FACADES** — New extension package (`EXTENSIONS/CVF_PLANE_FACADES/`)
   - `GovernanceFacade` — Guard evaluation, phase validation, assertAllowed, audit
   - `ExecutionFacade` — Governance-checked execution, risk-based model routing (R0→CHEAP, R3→REASONING)
@@ -152,6 +156,7 @@ Date: 2026-05-08
 - **Phase 2 deliverable** — `docs/roadmaps/CVF_PHASE_2_FEDERATED_PLANE_FACADES.md`
 
 ### Changed
+
 - **Whitepaper Section 7** — Replaced mixed "Architecture Invariants" with EA-approved 3-tier structure:
   - 7.1 Current Frozen Invariants (4 items — already true in code)
   - 7.2 Migration Guardrails (6 items — transition rules)
@@ -159,14 +164,17 @@ Date: 2026-05-08
 - **Federated Convergence Roadmap REV2** — Added baseline re-verify gate (Phase 0) and independent subsystem rollback highlight (Phase 3)
 
 ### Deprecated
+
 - `CVF_V2_RESTRUCTURING_ROADMAP.md` — big-bang approach replaced by Federated Convergence
 - `CVF_FEDERATED_PLANE_CONVERGENCE_ROADMAP_PROPOSAL_2026-03-21.md` — REV1 replaced by REV2
 
 ### Fixed
+
 - `knowledge.facade.ts` — `readonly Array<T>` → `ReadonlyArray<T>` (TypeScript syntax)
 - `tsconfig.json` — Removed `rootDir`/`outDir`, added `noEmit: true` (path mapping conflict)
 
 ### Baseline Verified
+
 - Risk Model: **R0-R3** (types.ts:31) ✅
 - Guard Shared Default: **8** (index.ts:47-59) ✅
 - Guard Full Runtime: **15** (cvf.sdk.ts:819-839) ✅
@@ -177,6 +185,7 @@ Date: 2026-05-08
 ## [2026-03-19] — CVF Edit Integration: Phase 1-6 Verified Complete (Level 4.0)
 
 ### Verified
+
 - **Phase 1 — Governance Runtime Hardening** — 15 guards, `MANDATORY_GUARD_IDS` (`authority_gate`, `phase_gate`, `ai_commit`), pipeline orchestrator with rollback/fail/pause
 - **Phase 2 — Verification & Review Hardening** — Conformance runner (22 scenarios, 14 categories), `cvf-checklists.ts`, anomaly detection (DEAD_PATH, UNREACHABLE_STATE, LOOP_TRAP)
 - **Phase 3 — Failure Handling & Traceability** — `governance.audit.log.ts` with hash ledger snapshots, artifact integrity verification
@@ -185,12 +194,14 @@ Date: 2026-05-08
 - **Phase 6 — Validation & Benchmarking** — 602 tests ALL PASS (504 governance + 98 guard contracts)
 
 ### Changed
+
 - `CVF_GOVERNANCE_AUDIT_LOG_2026-03-19.md` — Updated enforcement table, conclusion from Level 2.5→4.0, all 4 audit deliverables checked
 - `CVF_ARCHITECTURE_REVIEW_CONSOLIDATED_2026-03-19.md` — Updated gap map (3/5 resolved, 2/5 partial), maturity scores, governance Level 2.5→4.0
 - `CVF_IMPROVEMENT_PROPOSALS_2026-03-19.md` — Status from "Proposed" to "✅ Implemented", all 6 groups Done
 - `CVF_EDIT_INTEGRATION_ROADMAP_2026-03-19.md` — Added Phase 1-6 verification results table
 
 ### Governance Level
+
 - **Previous:** Level 2.5 (Framework + Partial Runtime Governance)
 - **Current:** **Level 4.0** (Ecosystem Standard — Enforceable Governance with SDK integration)
 
@@ -199,6 +210,7 @@ Date: 2026-05-08
 ## [2026-03-13] — CVF Enterprise Features (Task 8.6)
 
 ### Added
+
 - **NextAuth.js Integration** — Added `src/auth.ts` with Mock Credentials, GitHub, and Google SSO providers.
 - **Enterprise RBAC** — Implemented 5 enterprise roles: Owner, Admin, Developer, Reviewer, Viewer.
 - **Enterprise Guard Context** — Wired WebUI `session.role` securely into `GuardRequestContext.metadata.userRole`.
@@ -209,6 +221,7 @@ Date: 2026-05-08
 - **Compliance Reports** — `/reports/compliance` analytics dashboard auto-generating governance metrics UI.
 
 ### Changed
+
 - `middleware.ts` upgraded to utilize NextAuth edge compatibility without breaking legacy fallback `verifySessionCookie`.
 - Upgraded `playwright.config.ts` to cleanly invoke `npm run dev` with Next.js specific server ports.
 - CVF Roadmap and task history updated to fully clear out deferred tasks from Sprint 8.
@@ -218,6 +231,7 @@ Date: 2026-05-08
 ## [2026-03-06] — CVF v3.0 Core Foundation Primitives (branch cvf-next)
 
 ### Added
+
 - **CVF v3.0 Core — "Git for AI Development"** — `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/`
   - **Layer 0 (Foundation Primitives)** — NEW layer below all existing layers
   - **AI Commit Model**: schema (9 CommitTypes), parser (deterministic SHA-256 commit_id), validator (8 RULE checks)
@@ -236,6 +250,7 @@ Date: 2026-05-08
 ## [2026-03-06] — CVF v1.1.2 Phase Governance Hardening
 
 ### Added
+
 - **GOVERNANCE_PIPELINE** — deterministic fixed 6-module execution order (De_xuat_02)
 - **Trust Boundary** — SHA-256 contentHash per artifact, `verifyAllHashes()` (De_xuat_06)
 - **Hash Ledger** — `getHashLedger()`, `detectTampering()`, Hash Ledger audit snapshots (De_xuat_06)
@@ -252,6 +267,7 @@ Date: 2026-05-08
 ## [2026-03-06] — CVF v1.1.1 Phase Governance Protocol Integrated
 
 ### Added
+
 - **CVF v1.1.1 Phase Governance Protocol** — `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/`
   - **Layer 1.5 (Development Governance)** — NEW layer between Core and Tools
   - 9-stage deterministic pipeline: SPEC→STATE_MACHINE→STATE_DIAGRAM→IMPLEMENTATION→STATE_VALIDATION→UNIT_TESTING→SCENARIO_SIMULATION→PHASE_GATE→COMPLETE
@@ -260,6 +276,7 @@ Date: 2026-05-08
 - **ADR-014** — Phase Governance Protocol integration decision
 
 ### Fixed (during integration)
+
 - `scenario.generator.ts` — added MAX_SCENARIOS=100, MAX_DEPTH=50, cycle-safe DFS
 - `mermaid.parser.ts` — added `toStateMachine()` converter for data structure compatibility
 - `gate.result.ts` — added R0–R3 canonical risk level mapping
@@ -269,6 +286,7 @@ Date: 2026-05-08
 ## [2026-03-05] — CVF_Layer AI Stack Integrated (v1.8.1 + v1.7.3 update + tools/)
 
 ### Added
+
 - **CVF v1.8.1 Adaptive Observability Runtime** — `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/`
   - **Adaptive Governance**: Risk-based enforcement feedback loop (normal/moderate/strict/block)
   - **Observability**: 10 modules — telemetry, satisfaction, cost, regression, health, A/B testing
@@ -280,6 +298,7 @@ Date: 2026-05-08
 - **ADR-013** — CVF_Layer AI Stack refactoring decision: tách compound system thành 3 đích đến
 
 ### Architecture decisions
+
 - CVF_Layer AI Stack = compound system (3 repos + 1 layer) → refactored into 3 đích đến:
   - Adaptive + Observability (tight coupling) → v1.8.1 (sub-extension of v1.8, Layer 2.5+3)
   - Edge Security → merge vào v1.7.3 (natural extension, Layer 5)
@@ -292,6 +311,7 @@ Date: 2026-05-08
 ## [2026-03-05] — v1.2.2 Skill Governance Engine Integrated
 
 ### Added
+
 - **CVF v1.2.2 Skill Governance Engine** — `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/`
   - **Skill Spec Schema (CSS-1.0)**: Chuẩn hóa toàn bộ skills với R0–R3 canonical mapping, evaluation block bắt buộc, maturity lifecycle
   - **Constitution Layer**: 5 CVF Rules STRICT, `constitution.ts` — không component nào được bypass
@@ -306,6 +326,7 @@ Date: 2026-05-08
 - **Decision Framework**: Permanent rule: "MỞ VERSION MỚI khi scope hoàn toàn mới. MỞ RỘNG LAYER CŨ khi là natural extension." Prevents version sprawl.
 
 ### Fixed (During Integration)
+
 - Risk threshold conflict: `global.policy.yaml` aligned to 70 (matches `governance.kernel.ts`)
 - Phase Manager: Added `GovernanceKernel.evaluate()` gate for GOVERNANCE_DECISION / EXECUTION / LEDGER_RECORD phases
 - `skill.schema.yaml`: Added mandatory `evaluation` block (success_metrics, failure_conditions, rollback_strategy)
@@ -313,6 +334,7 @@ Date: 2026-05-08
 - `TREEVIEW.md`: Removed duplicate `/fusion` reference — now only exists under `/skill_system/fusion/`
 
 ### Architecture decisions
+
 - v1.2.2 is sub-extension of v1.2 (Skill Governance) — same domain, NOT a new MAJOR/MINOR version
 - Layer 2 (Tools) — technical governance tooling, not UI/UX layer
 - `CVF_Skill Specification/` folder at root replaced by `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/`
@@ -323,6 +345,7 @@ Date: 2026-05-08
 ## [2026-03-05] — v1.8/v1.9/v2.0 Governance Specs Integrated + Extension Rules
 
 ### Added
+
 - **CVF v1.8 Safety Hardening** spec — `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/`
   - 7-phase execution state machine (INTENT→COMMIT), strictly enforced
   - Deterministic Mutation Sandbox + Mandatory Rollback Manager
@@ -348,11 +371,13 @@ Date: 2026-05-08
 - **CVF_CORE_KNOWLEDGE_BASE.md** — Permanent governance reference at `docs/`
 
 ### Changed
+
 - `docs/CVF_CORE_KNOWLEDGE_BASE.md` — Added v1.8/v1.9/v2.0 to Section II (Layer 2.5) and Section III (version table). Added Section XIV (CVF Extension Rules).
 - `README.md` — Added Architecture Check Rule + CVF Extension Rules in governance section
 - `docs/CVF_ARCHITECTURE_DECISIONS.md` — Added ADR-010
 
 ### Architecture decisions
+
 - v1.8 is a refinement of v1.7.1 (not replacement) — same Layer 2.5, starts from v1.7.1 codebase
 - v1.9 is purely additive on top of v1.8 (no v1.8 components changed)
 - v2.0 extends v1.7.2 + v1.7.3 at Layer 4/5 (does not bypass kernel)
@@ -363,6 +388,7 @@ Date: 2026-05-08
 ## [2026-02-28] — v1.7.3 Runtime Adapter Hub + Web UI Integration
 
 ### Added
+
 - **CVF v1.7.3 Runtime Adapter Hub** — Extracted from CVF_Hypervisor Mode into `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/`
   - 5 contract interfaces (LLM, Runtime, Tool, Memory, Policy)
   - 4 runtime adapters (OpenClaw, PicoClaw, ZeroClaw, Nano)
@@ -381,6 +407,7 @@ Date: 2026-05-08
 - **BUG-010 → BUG-014** — 5 new entries in `BUG_HISTORY.md`
 
 ### Fixed
+
 - **BUG-010** — Safety page test regression: ambiguous `/send/i` selector (added `aria-label="Submit OpenClaw"`)
 - **BUG-011** — CI workflow missing v1.7.3 path filter
 - **BUG-012** — v1.7.3 typecheck failure (added `@types/node` + DOM lib)
@@ -389,11 +416,13 @@ Date: 2026-05-08
 - **BUG-015** — 24 lint errors and build typecheck crashes across Web UI (resolved `no-explicit-any`, `set-state-in-effect`, introduced `OpenClawResultData`)
 
 ### Changed
+
 - `README.md` — Updated version to 1.7.3, quality snapshot, architecture diagram
 - `VERSIONING.md` — Added v1.7.3 to version table
 - `VERSION_COMPARISON.md` — Added v1.7.3 comparison
 
 ### Removed
+
 - `CVF_Hypervisor Mode/` folder — Deleted after extracting unique value (added to `.gitignore`)
 
 ---
@@ -401,6 +430,7 @@ Date: 2026-05-08
 ## [2026-02-17] — Reference Implementation Restructuring
 
 ### Changed
+
 - **CVF Toolkit** → moved to `EXTENSIONS/CVF_TOOLKIT_REFERENCE/` as controlled extension
 - **cvf-starter-template** → moved to `EXTENSIONS/CVF_STARTER_TEMPLATE_REFERENCE/` as controlled extension
 - **Architecture Separation Diagram** → moved to `EXTENSIONS/ARCHITECTURE_SEPARATION_DIAGRAM.md`, fully rewritten to reflect actual system structure
@@ -408,6 +438,7 @@ Date: 2026-05-08
 - Root README updated — architecture section now mentions reference implementations
 
 ### Fixed (CVF Toolkit Reference)
+
 - **Type deduplication** — All modules now import from `interfaces.ts` instead of re-declaring types locally (~30 duplicate type definitions removed)
 - **RiskLevel** — Added `R0` to align with CVF v1.2 spec (R0–R4)
 - **OperatorRole** — Added `VIEWER` role
@@ -420,6 +451,7 @@ Date: 2026-05-08
 - **cvf.config.ts** — Added R0 entries to all risk mappings
 
 ### Fixed (CVF Starter Template Reference)
+
 - **26 dead code files annotated** — `@reference-only` marker added to unused modules
 - **Phase type mismatch** — Mapping comment added between ExecutionState and ExecutionPhase
 - **Provider cost tracking** — TODO comments for hardcoded `costUSD: 0`
@@ -431,12 +463,14 @@ Date: 2026-05-08
 ## [2026-02-16] — Independent Assessment Fixes & Coverage Push
 
 ### Added
+
 - **Security headers** in `next.config.ts` — 7 headers (HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, X-XSS-Protection, X-DNS-Prefetch-Control)
 - **CVF_SKILL_LIBRARY/README.md** — Redirect to canonical skill library location
 - **44 new tests** across 7 test files (i18n, Settings, ResultViewer, SkillLibrary, useAgentChat, AgentChatHeader, AgentChatMessageBubble, AnalyticsDashboard, auth/login)
 - **Independent Assessment Report** (`docs/CVF_INDEPENDENT_ASSESSMENT_2026-02-16.md`)
 
 ### Changed
+
 - **Test coverage** — 1068 tests passing (71 files), up from 1024 tests (70 files)
 - **Coverage metrics** — 95.57% Stmts | 79.40% Branch | 94.52% Funcs | 96.17% Lines
 - **Skill count** — Corrected from 114 → 131 across 15 documentation files
@@ -445,6 +479,7 @@ Date: 2026-05-08
 - **useAgentChat.test.ts** — Refactored checkBudget mock (replaced dynamic imports with static mock pattern)
 
 ### Fixed
+
 - Broken Discord URL → placeholder "Coming soon"
 - Broken support email → placeholder "Coming soon"
 - Incorrect skill count (114 → 131) in 15 files
@@ -454,6 +489,7 @@ Date: 2026-05-08
 ## [2026-02-08] — Quality Calibration & Governance Overhaul
 
 ### Added
+
 - **Independent Expert Review** (`docs/CVF_INDEPENDENT_EXPERT_REVIEW_2026-02-08.md`) — 8.5/10 calibrated score
 - **Combined Assessment Roadmap** (`docs/CVF_COMBINED_ASSESSMENT_ROADMAP_2026-02-08.md`) — 15 findings, 4 sprints
 - **Scoring Methodology** (`docs/CVF_SCORING_METHODOLOGY.md`) — Self vs Independent rating process
@@ -469,6 +505,7 @@ Date: 2026-05-08
 - `inject_lineage.py` — Data lineage tag injector for `.gov.md` files
 
 ### Changed
+
 - **`report_spec_metrics.py`** — Complete rewrite with calibrated v2 scoring (content depth, concrete examples, input constraints, output schema, placeholder penalty). Scores dropped from 92-100 → 84-94 range.
 - **`score_uat.py`** — Added badge field to `ScoreResult`, badge summary in reports
 - **README.md** — Assessment updated to 8.5/10 (calibrated), added 3-tier architecture diagram, skill count corrected to 124
@@ -477,6 +514,7 @@ Date: 2026-05-08
 - **124 `.gov.md` files** — Injected Origin/Origin Source lineage tags in Governance table
 
 ### Status
+
 - Sprint 1 (Trust Calibration): ✅ COMPLETED
 - Sprint 2 (Data Integrity): ✅ COMPLETED
 - Sprint 3 (Validation + Adoption): 🟡 Partially complete (CVF Lite, Positioning, Version Consolidation done; Pilot remains)
@@ -487,6 +525,7 @@ Date: 2026-05-08
 ## [2026-02-07] — Quality Pass 2 + Platform Updates
 
 ### Added
+
 - Domain Refinement (Quality Pass 2) completed for CVF v1.5.2 Skill Library (12 domains, 131 skills)
 - Real-world examples across Security/Compliance, AI/ML, Legal, Product & UX, Marketing, and other domains
 - Shared skill validation tools under `tools/skill-validation`
@@ -496,6 +535,7 @@ Date: 2026-05-08
 - Mobile web audit + spec docs for v1.6 (`docs/mobile/*`)
 
 ### Changed
+
 - Skill metadata and Version History normalized across v1.5.2 library
 - Related Skills and Next Step flows aligned per domain
 - Roadmaps updated to reflect domain refinement completion
@@ -507,6 +547,7 @@ Date: 2026-05-08
 - v1.6 test suite expanded to 176 tests (23 files) with 85%+ branch coverage
 
 ### Fixed
+
 - Placeholder examples replaced with concrete scenarios
 - Inconsistent domain counts in README
 - Validation warnings eliminated (131 skills pass `validate_skills.py`)

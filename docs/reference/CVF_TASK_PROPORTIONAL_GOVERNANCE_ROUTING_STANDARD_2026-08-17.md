@@ -99,11 +99,13 @@ that commit the checker validates its registry and remains compatible with the
 legacy range. In every later range, a changed work order whose status is
 `DISPATCH_READY`, `READY`, `ACTIVE`, or `APPROVED_FOR_EXECUTION` must include:
 
-    ## Task Governance Routing Manifest
+````markdown
+## Task Governance Routing Manifest
 
-    ```json
-    { ... cvf.taskGovernanceManifest.v1 ... }
-    ```
+```json
+{ ... cvf.taskGovernanceManifest.v1 ... }
+```
+````
 
 The JSON must route to `ROUTED_SHADOW`. Missing or rejected manifests block
 dispatch. Closed historical work orders are not retroactively rewritten.

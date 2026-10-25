@@ -1,5 +1,6 @@
 The CVF Strategic Compass
 The Strategic Direction of the Civilization Framework
+
 1. The Core Mission of CVF
 
 CVF tồn tại để giải quyết một vấn đề duy nhất:
@@ -45,7 +46,7 @@ Giống như:
 | Blockchain     | trust infrastructure             |
 | **CVF**        | **AI governance infrastructure** |
 
-3. The Core Problem CVF Solves
+1. The Core Problem CVF Solves
 
 Thế giới đang có:
 
@@ -91,7 +92,7 @@ Ai sẽ điều phối?
 
 CVF giải quyết 3 vấn đề này.
 
-4. The Strategic Position of CVF
+1. The Strategic Position of CVF
 
 CVF không phải AI framework.
 
@@ -114,7 +115,7 @@ CVF ngồi dưới các Agent Framework.
 
 Điều này cực kỳ quan trọng.
 
-5. The Strategic Focus (3 Things Only)
+1. The Strategic Focus (3 Things Only)
 
 CVF chỉ nên tập trung vào 3 thứ duy nhất.
 
@@ -198,7 +199,7 @@ CVF chỉ là:
 
 Infrastructure
 
-7. The CVF Strategic Triangle
+1. The CVF Strategic Triangle
 
 CVF đứng trên 3 trụ:
 
@@ -308,7 +309,7 @@ The Rules of Civilization
 
 Agent sẽ tự vận hành trong đó.
 
-12. The Ultimate Vision
+1. The Ultimate Vision
 
 Nếu CVF thành công:
 

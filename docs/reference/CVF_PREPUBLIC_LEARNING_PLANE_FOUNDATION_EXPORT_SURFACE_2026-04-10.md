@@ -22,12 +22,15 @@ Single default export — all contracts accessible via `import { ... } from 'cvf
 ## Public Contract Families (via `src/index.ts`)
 
 **Evaluation Engine family:**
+
 - `EvaluationEngineConsumerPipelineContract`, `EvaluationEngineConsumerPipelineBatchContract` + factory functions + types
 
 **TruthScore family:**
+
 - `TruthScoreConsumerPipelineContract`, `TruthScoreConsumerPipelineBatchContract` + factory functions + types
 
 **PatternDetection family:**
+
 - `PatternDetectionConsumerPipelineContract`, `PatternDetectionConsumerPipelineBatchContract` + factory functions + types
 
 **Additional learning plane contracts** (full barrel — all contracts in `src/index.ts`): Storage, Observability, GovernanceSignal, and remaining consumer pipeline families.
@@ -39,6 +42,7 @@ No internal cross-package imports. No private implementation details leak throug
 ## Publication Boundary
 
 **Included in `npm pack`** (via `files` field):
+
 - `README.md`, `src/`
 
 **`npm pack --dry-run`**: PASS (verified 2026-04-10)

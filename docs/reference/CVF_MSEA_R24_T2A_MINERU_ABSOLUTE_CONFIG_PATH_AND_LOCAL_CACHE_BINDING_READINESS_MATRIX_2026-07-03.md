@@ -81,7 +81,7 @@ ledger_terminal=CONFIG_CACHE_RECEIPT_READY
 |---|---|
 | Standard | `docs/reference/external_agent_review/CVF_EXTERNAL_ABSORPTION_CORE_STANDARD.md` |
 | Input root or repository | `.private_reference/source_mirrors/opendatalab__MinerU/` plus ignored local T2A receipt evidence |
-| Enumeration command | `rg --files --hidden --no-ignore .cvf/runtime | rg "msea-r24-t2a"`; safe JSON metadata read; log tail read |
+| Enumeration command | `rg --files --hidden --no-ignore .cvf/runtime \| rg "msea-r24-t2a"`; safe JSON metadata read; log tail read |
 | Manifest artifact or inline manifest | inline table: Source / Receipt Summary |
 | Processing ledger artifact or inline ledger | inline table: Route Decision Matrix |
 | Ledger terminal statuses | READ; ADAPTED; DEFERRED; REJECTED; NO_NEW_VALUE; BLOCKED_UNREADABLE |
@@ -185,9 +185,9 @@ for reviewer consideration.
 | Claim boundary | local config/cache readiness classification only |
 | Agent type | worker |
 | Invocation ID | `msea-r24-t2a-readiness-matrix-2026-07-03` |
-| Expected manifest | worker return and this matrix |
-| Actual changed set | worker return and this matrix |
-| Manifest delta | MATCH |
+| Expected manifest | N/A with reason: historical readiness review; current edit is Markdown table escaping only |
+| Actual changed set | N/A with reason: no current worker execution or manifest reopening |
+| Manifest delta | N/A with reason: original historical value MATCH retained below |
 | Deletion or rename disposition | N/A with reason: no deletion or rename in worker execution |
 
 ## Delta Execution Claim Boundary Control Block
@@ -215,3 +215,5 @@ This matrix classifies only local config/cache receipt readiness after T2A. It
 does not claim runtime smoke, parser execution, extraction quality, legal advice
 quality, current-law correctness, public readiness, workflow-chain completion,
 or production readiness.
+
+Historical trace preservation: the original Expected manifest and Actual changed set both read "worker return and this matrix", and Manifest delta read MATCH. The present correction makes the current non-execution applicability explicit; it does not reassess that historical worker run.

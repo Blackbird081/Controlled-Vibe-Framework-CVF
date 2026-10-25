@@ -1,6 +1,7 @@
 # CVF Incremental Test Log
 
 Memory class: SUMMARY_RECORD
+docType: reference
 
 Status: CURRENT
 
@@ -58,12 +59,11 @@ the matching public evidence packet.
 
 ## Enforcement / Verification
 
-This log is enforced by `governance/compat/check_test_documentation.py` and the
-local pre-push hook chain.
+Current public compact-log structure and size are checked by `governance/compat/check_incremental_test_log_rotation.py --profile public`. Exact public change traceability is checked through the export manifest and current-candidate preflight. Historical commands below retain their original scope.
 
 ## Claim Boundary
 
-This log records command execution for the public-sync worktree. It does not
+This log records public-sync verification, including explicitly identified Local source/TEMP checks and public commit CI. It does not
 claim production readiness, hosted readiness, provider parity, or new live
 governance proof.
 
@@ -77,3 +77,16 @@ by the local test documentation guard for source/test-bearing public batches.
 - `docs/evidence/cvf-31-05-public-runtime-source-sync-2026-05-31.md`
 - `docs/assessments/CVF_PUBLIC_RUNTIME_SOURCE_SYNC_ASSESSMENT_2026-05-31.md`
 - `governance/compat/run_local_governance_hook_chain.py`
+
+## Batch: Remaining Foundation Source Repair - 2026-10-26
+
+Scope: the selected public software/doc profile repair. The following evidence came from Local source or disposable TEMP verification, not execution in the real public-sync worktree.
+
+- Strict source ESLint:0errors/0warnings across1084candidates; TypeScript PASS.
+- Affected Web behavior:565distinct targeted tests across38suites passed; SQLite native binding was rebuilt before its40-test verification.
+- Windows private-profile/file-store/API:53synthetic NTFS tests in3suites passed without ACL-policy relaxation. This is host-bounded software proof.
+- Native SDK integration: `PYTHONPATH=EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT python -m pytest EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk/tests/integration -q` passed8cases.
+- Existing checker public/private profiles: core45, retention/log/conformance37 and Enterprise8focused tests passed. Private defaults and missing-public-normative failure cases were retained.
+- QBS CLI/helper/preflight: offline compilation, six existing completeness tests, helper parity and CLI help parity passed. Historical R10 remains reviewer-agreement failure with no public QBS claim; no new provider score was run.
+
+Current source/change ownership is recorded in `docs/EXPORT_MANIFEST.md`. The exact public commit's GitHub checks carry final CI results. This entry does not anticipate their result, assert live AI governance, or declare a new GA or NCR product acceptance.

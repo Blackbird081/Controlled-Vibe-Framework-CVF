@@ -46,6 +46,7 @@ R4 có nghĩa là: **không thực thi trong bất kỳ trường hợp nào**.
 Mỗi khả năng hoặc tác vụ được đánh giá trên 5 khía cạnh:
 
 ### 1. Rủi Ro Quyền Hạn
+>
 > Nó có thể ghi đè quyết định, hành động tự trị, sửa đổi governance không?
 
 | Mức | Mô Tả |
@@ -56,6 +57,7 @@ Mỗi khả năng hoặc tác vụ được đánh giá trên 5 khía cạnh:
 | R3 | Có thể ghi đè governance, thay đổi hành vi hệ thống |
 
 ### 2. Rủi Ro Mở Rộng Phạm Vi
+>
 > Nó có thể mở rộng phạm vi của chính nó, chạy ngoài ngữ cảnh ban đầu, chuỗi không kiểm soát?
 
 | Mức | Mô Tả |
@@ -66,6 +68,7 @@ Mỗi khả năng hoặc tác vụ được đánh giá trên 5 khía cạnh:
 | R3 | Có thể tự mở rộng phạm vi, tạo tác vụ mới |
 
 ### 3. Rủi Ro Không Thể Đảo Ngược
+>
 > Hành động có thể hoàn tác không? Có tác động vĩnh viễn không?
 
 | Mức | Mô Tả |
@@ -76,6 +79,7 @@ Mỗi khả năng hoặc tác vụ được đánh giá trên 5 khía cạnh:
 | R3 | Không thể đảo ngược (xóa dữ liệu, thông báo bên ngoài) |
 
 ### 4. Rủi Ro Khả Năng Diễn Giải
+>
 > Có khó giải thích, truy vết logic, audit nguyên nhân không?
 
 | Mức | Mô Tả |
@@ -86,6 +90,7 @@ Mỗi khả năng hoặc tác vụ được đánh giá trên 5 khía cạnh:
 | R3 | Không rõ ràng (quyết định hộp đen, không có truy vết rõ) |
 
 ### 5. Rủi Ro Tác Động Bên Ngoài
+>
 > Nó có ảnh hưởng đến các hệ thống bên ngoài CVF, gọi API bên ngoài, tác động đến thế giới thực không?
 
 | Mức | Mô Tả |
@@ -204,6 +209,7 @@ Nếu Phase C liên quan đến hành động R3 (ví dụ: triển khai lên pr
 | **Failure Handling (F)** | Agent có từ chối / lưỡng lự / bịa đặt khi không chắc chắn không? |
 
 Một agent được quản lý tốt:
+
 - Giữ trong ranh giới khả năng (C)
 - Cung cấp đầu ra có thể truy vết (V)
 - Xử lý lỗi một cách trang nhã khi không chắc chắn (F)
@@ -219,6 +225,7 @@ Mỗi skill có mức rủi ro trong metadata:
 ```
 
 Điều này cho người dùng biết:
+
 - Skill R0: Tự do sử dụng, không cần governance
 - Skill R1: Khuyến nghị đánh giá ngang hàng
 - Skill R2: Cần phê duyệt ARCHITECT trước khi dùng đầu ra

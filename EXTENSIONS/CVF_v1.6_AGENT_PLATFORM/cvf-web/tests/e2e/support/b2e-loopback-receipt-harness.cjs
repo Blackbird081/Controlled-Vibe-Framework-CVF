@@ -1,6 +1,5 @@
 'use strict';
 
-/* eslint-disable @typescript-eslint/no-require-imports -- CommonJS harness; also loaded through NODE_OPTIONS --require */
 
 // NCR HTML B2e test-only inert loopback receipt harness (two modes in one file).
 //

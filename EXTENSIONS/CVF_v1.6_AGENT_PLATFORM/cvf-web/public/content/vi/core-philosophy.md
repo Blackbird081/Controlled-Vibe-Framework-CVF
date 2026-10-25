@@ -9,6 +9,7 @@
 AI có thể viết code. Nhưng ai quyết định **xây cái gì**, **xây như thế nào**, và **khi nào thì hoàn thành**?
 
 Nếu không có cấu trúc:
+
 - AI tự phát minh ra tính năng bạn không yêu cầu
 - Phạm vi dự án âm thầm mở rộng
 - "Nó chạy được" thay thế cho "nó đúng"
@@ -36,6 +37,7 @@ Một script 50 dòng giải quyết được vấn đề tốt hơn một giả
 ### 3. "Quyết định là công dân hạng nhất"
 
 Mọi quyết định quan trọng phải được **ghi lại**. Không phải trên Slack. Không phải trong đầu ai đó. Trong Nhật ký Quyết định (Decision Log) với:
+
 - Quyết định gì
 - Tại sao (lý do)
 - Các phương án thay thế đã xem xét
@@ -46,6 +48,7 @@ Mọi quyết định quan trọng phải được **ghi lại**. Không phải 
 ### 4. "Kiểm soát bằng cấu trúc, không phải quản lý vi mô"
 
 CVF KHÔNG phải là về việc review từng dòng code AI. Mà là về:
+
 - Các phase rõ ràng với tiêu chí đầu vào/đầu ra xác định
 - Các cổng phase bắt lỗi sớm
 - Danh sách kiểm tra (checklist) giúp chất lượng có thể đánh giá được
@@ -55,6 +58,7 @@ Ví von: một cây cầu có lan can. Bạn có thể lái tự do trong làn �
 ### 5. "AI là người thực thi, không phải người ra quyết định"
 
 AI thực thi trong ngữ cảnh bạn cung cấp. AI không:
+
 - Đặt mục tiêu dự án
 - Định nghĩa "hoàn thành" nghĩa là gì
 - Chọn kiến trúc mà không có định hướng
@@ -65,10 +69,12 @@ Mọi quyết định đến từ con người. AI triển khai các quyết đ�
 ### 6. "Người dùng không cần giỏi coding"
 
 CVF được thiết kế cho **bất kỳ ai chịu trách nhiệm về sản phẩm**: product owner, quản lý, chuyên gia lĩnh vực, QA tester, founder. Bạn cần:
+
 - Biết bạn muốn gì (ý định)
 - Nhận ra khi đầu ra sai (review)
 
 Bạn không cần:
+
 - Viết code
 - Hiểu thuật toán
 - Debug stack trace

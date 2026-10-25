@@ -37,6 +37,7 @@ Structured methodology for building **production-quality MCP (Model Context Prot
 | Generic error messages | Actionable error with next-step suggestion |
 
 **Design Principles Checklist**
+
 - [ ] **Workflow-oriented**: Tools enable complete tasks, not just API calls
 - [ ] **Context-efficient**: Every token counts — concise default, detailed on request
 - [ ] **Actionable errors**: "Try using filter='active_only' to reduce results"
@@ -57,6 +58,7 @@ Design I/O schemas          Add annotations       Build & syntax check        Ag
 #### Phase 1: Research & Planning
 
 MCP Server Architecture:
+
 ```
 ┌─────────────┐    stdio/SSE    ┌─────────────┐
 │  LLM Client │ ◄────────────► │  MCP Server  │
@@ -70,6 +72,7 @@ MCP Server Architecture:
 ```
 
 Tool Design Template — for each tool, define:
+
 ```
 Tool Name: [verb_noun format, e.g., search_issues]
 Description: [One-line: what it does]
@@ -85,6 +88,7 @@ Annotations:
 ```
 
 Implementation Plan Checklist:
+
 - [ ] List all tools to implement (prioritized by use case frequency)
 - [ ] Identify shared utilities (auth, pagination, formatting, error handling)
 - [ ] Define input validation models (Pydantic v2 / Zod strict)
@@ -95,6 +99,7 @@ Implementation Plan Checklist:
 #### Phase 2: Implementation
 
 Python (FastMCP) pattern:
+
 ```python
 from mcp.server.fastmcp import FastMCP
 from pydantic import BaseModel, Field
@@ -135,6 +140,7 @@ async def search_items(params: SearchParams) -> str:
 ```
 
 TypeScript (MCP SDK) pattern:
+
 ```typescript
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
@@ -177,6 +183,7 @@ Quality Checklist:
 | **Async** | All I/O operations use async/await | Yes |
 
 Build Verification:
+
 ```bash
 # Python
 python -m py_compile your_server.py    # Syntax check
@@ -192,6 +199,7 @@ npx tsc --noEmit                       # Type check only
 #### Phase 4: Evaluation
 
 Create 10 evaluation questions. Each question MUST be:
+
 - **Independent**: No dependency on other questions
 - **Read-only**: Only non-destructive tools required
 - **Complex**: Requires multiple tool calls
@@ -200,6 +208,7 @@ Create 10 evaluation questions. Each question MUST be:
 - **Stable**: Answer won't change over time
 
 Evaluation File Format:
+
 ```xml
 <evaluation>
   <qa_pair>
@@ -276,12 +285,14 @@ Evaluation File Format:
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] All tools have readOnlyHint/destructiveHint/idempotentHint annotations set
 - [ ] API keys sourced from environment variables, never hardcoded
 - [ ] 10-question evaluation file created and passing before production use
 - [ ] All external calls wrapped with error handling and rate-limit backoff
 
 **FAIL criteria:**
+
 - [ ] Hardcoded API key or secret found in server code
 - [ ] Tool missing required annotations
 - [ ] Server deployed to production without a passing evaluation

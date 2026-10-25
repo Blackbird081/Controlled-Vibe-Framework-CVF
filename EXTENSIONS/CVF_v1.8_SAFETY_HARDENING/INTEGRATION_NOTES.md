@@ -46,6 +46,7 @@ Implementation must expose both: numeric score AND R-level label.
 ## 4. Governance Guards Triggered by v1.8
 
 When implementing v1.8 code:
+
 - ✅ ADR Guard: ADR-010 already created
 - ✅ Architecture Check Guard: COMPAT assessment completed (46/54, 85%)
 - → Will need: Test Documentation Guard (when kernel tests are written)
@@ -56,6 +57,7 @@ When implementing v1.8 code:
 ## 5. Compat Gate
 
 Before merging any v1.8 code:
+
 ```bash
 python governance/compat/check_core_compat.py --base HEAD~1 --head HEAD
 ```

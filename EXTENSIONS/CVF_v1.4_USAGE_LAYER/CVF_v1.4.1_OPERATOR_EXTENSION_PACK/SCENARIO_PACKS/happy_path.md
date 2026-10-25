@@ -18,7 +18,7 @@ Execution không bị can thiệp
 
 Output đúng contract và không vi phạm boundary
 
-2. Dấu hiệu nhận biết Happy Path
+1. Dấu hiệu nhận biết Happy Path
 
 Bạn đang ở Happy Path khi:
 
@@ -32,7 +32,7 @@ Review output diễn ra nhanh, rõ
 
 Nếu bạn cảm thấy "muốn chỉnh chút nữa cho đẹp" → đó không phải lỗi.
 
-3. Hành vi đúng của operator
+1. Hành vi đúng của operator
 
 Khi ở Happy Path, operator chỉ nên làm 3 việc:
 
@@ -44,12 +44,12 @@ Ghi nhận lesson (nếu có)
 
 ⛔ Không tối ưu thêm. ⛔ Không ép AI làm tốt hơn.
 
-4. Những cám dỗ thường gặp (và cần tránh)
-Cám dỗ	Vì sao cần tránh
-Prompt lại để "tốt hơn"	Làm lệch baseline
-Thêm yêu cầu nhỏ	Phá so sánh
-Can thiệp formatting	Mất trace
-5. Khi nào Happy Path kết thúc?
+1. Những cám dỗ thường gặp (và cần tránh)
+Cám dỗ Vì sao cần tránh
+Prompt lại để "tốt hơn" Làm lệch baseline
+Thêm yêu cầu nhỏ Phá so sánh
+Can thiệp formatting Mất trace
+2. Khi nào Happy Path kết thúc?
 
 Happy Path kết thúc khi:
 

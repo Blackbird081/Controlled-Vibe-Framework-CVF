@@ -11,6 +11,7 @@
 
 **Situation:**  
 MediScan, a healthcare SaaS providing AI-assisted radiology screening, faced:
+
 - **Liability exposure**: Hospitals worried about AI recommendations influencing physician decisions
 - **Validation chaos**: No standardized way to validate AI outputs before clinical use
 - **Integration friction**: Different hospital systems had different governance requirements
@@ -48,6 +49,7 @@ Patient Report + Liability acknowledgment
 
 **Week 1-2: Skill Contract Design**  
 Created `diagnose_radiology` contract:
+
 - Input: DICOM image, patient demographics, prior scans, clinical history
 - Output: Top 3 diagnoses, confidence per diagnosis, anatomical findings, recommendation (approve AI / request second opinion / reject)
 - Risk level: **R3** — system-wide impact on patient care
@@ -57,12 +59,14 @@ Created `diagnose_radiology` contract:
 
 **Week 3: Validation Framework**  
 Established OUTPUT_SPEC with validation:
+
 - Radiologist must confirm/modify each AI finding
 - Confidence score must meet threshold (>85%) OR require manual review
 - Prior scan comparison (AI flagged change but physician might disagree)
 - Final report must include: "Reviewed with AI assistance" statement
 
 **Week 4: Integration + Compliance**  
+
 - Connected to hospital EHR systems (FHIR compliance)
 - Set up audit logging to hospital compliance system
 - Created liability documentation proving physician oversight
@@ -86,11 +90,13 @@ Established OUTPUT_SPEC with validation:
 ### Business Impact
 
 **Hospital Adoption:**
+
 - 4 hospitals expanded to 12 hospitals in 6 months
 - Average case volume: +15% (radiologists can handle more cases)
 - Throughput not just speed — also reduced errors (liability reduction)
 
 **Regulatory Wins:**
+
 - FDA pre-submission meeting: Approved architecture (human-in-loop + R3 contract)
 - State medical boards: No concerns (clear audit trail)
 - Hospital legal teams: Comfortable with liability structure
@@ -130,11 +136,13 @@ Radiologists initially skeptical; showed them: "AI catches things you miss, you 
 ## Technical Debt & Future
 
 **Current Challenges:**
+
 - Different hospitals want different OUTPUT_SPEC (some want ML confidence scores, others don't)
 - Integrating with 20+ EMR systems = significant engineering effort
 - Regulatory compliance varies by jurisdiction (FDA vs state boards)
 
 **Next Phase (Year 2):**
+
 - Capability registry for versioned skills (different diagnoses by organ system)
 - External skill ingestion (hospital can plug in custom training data)
 - Monitoring dashboard for radiologist feedback loop
@@ -144,6 +152,7 @@ Radiologists initially skeptical; showed them: "AI catches things you miss, you 
 ## Recommendation
 
 **For healthcare AI:**
+
 - **Always use R3 contracts** for clinical decision support
 - **Mandatory human approval** is not optional — it's liability insurance
 - **Clear OUTPUT_SPEC** saves months of regulatory back-and-forth

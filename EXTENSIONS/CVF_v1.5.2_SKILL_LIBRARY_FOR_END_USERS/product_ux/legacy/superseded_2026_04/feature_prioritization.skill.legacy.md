@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá và prioritize features/initiatives dựa trên frameworks như RICE, ICE, hoặc Value vs Effort. Giúp product team focus vào high-impact work.
 
 **Khi nào nên dùng:**
+
 - Quarterly/Sprint planning
 - Backlog grooming
 - Roadmap prioritization
@@ -63,6 +64,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -79,24 +81,28 @@ Không yêu cầu.
 ## ✅ RICE Framework Checklist
 
 ### Reach (R)
+
 - [ ] Bao nhiêu users/customers sẽ affected?
 - [ ] Per week? Per month? Per quarter?
 - [ ] Data-backed hoặc estimated?
 - [ ] Có consider all segments?
 
 ### Impact (I)
+
 - [ ] Impact level defined (0.25 = low, 3 = massive)?
 - [ ] Aligned với company goals?
 - [ ] Có quantifiable outcome?
 - [ ] Conservative estimate?
 
 ### Confidence (C)
+
 - [ ] Có user research backing?
 - [ ] Có data supporting?
 - [ ] Team agreement on estimates?
 - [ ] % confidence realistic?
 
 ### Effort (E)
+
 - [ ] Estimated in person-months?
 - [ ] All disciplines included (dev, design, QA)?
 - [ ] Có buffer cho unknowns?
@@ -107,16 +113,19 @@ Không yêu cầu.
 ## ✅ ICE Framework Checklist
 
 ### Impact (I)
+
 - [ ] Score 1-10 cho potential impact?
 - [ ] Có align với metrics/goals?
 - [ ] Realistic expectations?
 
 ### Confidence (C)
+
 - [ ] Score 1-10 cho certainty?
 - [ ] Có evidence backing?
 - [ ] Team consensus?
 
 ### Ease (E)
+
 - [ ] Score 1-10 cho implementation ease?
 - [ ] Có consider all work involved?
 - [ ] Có include testing, rollout?
@@ -138,7 +147,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### RICE Score Calculation:
+### RICE Score Calculation
+
 ```
 RICE Score = (Reach × Impact × Confidence) / Effort
 
@@ -151,7 +161,8 @@ Example:
 Score = (5000 × 2 × 0.8) / 3 = 2,667
 ```
 
-### Impact Scale (RICE):
+### Impact Scale (RICE)
+
 | Score | Description | Example |
 |-------|-------------|---------|
 | 3 | Massive | Complete game-changer |
@@ -160,14 +171,16 @@ Score = (5000 × 2 × 0.8) / 3 = 2,667
 | 0.5 | Low | Small improvement |
 | 0.25 | Minimal | Slight improvement |
 
-### Confidence Scale (RICE):
+### Confidence Scale (RICE)
+
 | % | Description | Evidence |
 |---|-------------|----------|
 | 100% | High | Data from A/B tests |
 | 80% | Medium | User research |
 | 50% | Low | Intuition, anecdotes |
 
-### ICE Quick Scoring:
+### ICE Quick Scoring
+
 ```
 Feature A: Impact=8, Confidence=9, Ease=7 → Score = 8×9×7 = 504
 Feature B: Impact=6, Confidence=7, Ease=9 → Score = 6×7×9 = 378
@@ -176,7 +189,8 @@ Feature C: Impact=9, Confidence=5, Ease=4 → Score = 9×5×4 = 180
 Priority: A > B > C
 ```
 
-### Prioritization Matrix:
+### Prioritization Matrix
+
 ```
            High Value
                ↑
@@ -190,7 +204,8 @@ Effort         │          Effort
            Low Value
 ```
 
-### MoSCoW Alternative:
+### MoSCoW Alternative
+
 - **Must have:** Critical, non-negotiable
 - **Should have:** Important, not vital
 - **Could have:** Nice to have
@@ -225,7 +240,8 @@ Sau khi hoàn thành **Feature Prioritization (RICE/ICE)**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Features: offline sync, barcode batch import, low-stock alert, role permissions
 Reach (Q): 1200 / 600 / 900 / 400
@@ -234,7 +250,8 @@ Confidence: 0.7 / 0.6 / 0.8 / 0.5
 Effort (person-weeks): 6 / 3 / 2 / 4
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # RICE Scoring
 
@@ -248,13 +265,15 @@ Effort (person-weeks): 6 / 3 / 2 / 4
 Top 2: Low-stock alert, Offline sync
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Score minh bạch, dễ audit
 - ✅ Ưu tiên dựa trên data
 - ✅ Dễ chuyển roadmap
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Onboarding Experience Review](./onboarding_experience_review.skill.md)
 - [A/B Test Review](./ab_test_review.skill.md)
 
@@ -265,7 +284,7 @@ Top 2: Low-stock alert, Offline sync
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: A/B Test Review
 
 Sau khi hoàn thành **Feature Prioritization (RICE/ICE)**, tiếp tục với:
 → [A/B Test Review](./ab_test_review.skill.md)
@@ -273,3 +292,5 @@ Sau khi hoàn thành **Feature Prioritization (RICE/ICE)**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Product & UX Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

@@ -18,6 +18,7 @@ Không yêu cầu.
 Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared để handle security incidents và breaches effectively.
 
 **Khi nào nên dùng:**
+
 - Chưa có incident response plan
 - Annual plan review
 - Sau khi có incident xảy ra
@@ -62,6 +63,7 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,6 +80,7 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 ## ✅ Checklist - Preparation Phase
 
 ### Team & Roles
+
 - [ ] Incident Response Team identified?
 - [ ] Roles và responsibilities clear?
 - [ ] Contact info updated (24/7)?
@@ -85,6 +88,7 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 - [ ] Escalation paths defined?
 
 ### Tools & Resources
+
 - [ ] Có incident management tool?
 - [ ] Communication channels (Slack, phone)?
 - [ ] Access to logs và forensics tools?
@@ -92,6 +96,7 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 - [ ] War room location (virtual/physical)?
 
 ### Documentation
+
 - [ ] Runbooks for common incidents?
 - [ ] System architecture diagrams?
 - [ ] Data flow documentation?
@@ -99,6 +104,7 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 - [ ] Legal/PR contacts?
 
 ### Training
+
 - [ ] Team trained on procedures?
 - [ ] Tabletop exercises conducted?
 - [ ] New team members onboarded?
@@ -109,12 +115,14 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 ## ✅ Checklist - Detection & Analysis
 
 ### Detection
+
 - [ ] Monitoring systems in place?
 - [ ] Alert thresholds defined?
 - [ ] On-call rotation?
 - [ ] Incident classification criteria?
 
 ### Initial Analysis
+
 - [ ] Scope assessment process?
 - [ ] Impact evaluation criteria?
 - [ ] Severity levels defined?
@@ -125,17 +133,20 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 ## ✅ Checklist - Containment & Eradication
 
 ### Short-term Containment
+
 - [ ] Isolation procedures?
 - [ ] Network segmentation ready?
 - [ ] Account suspension process?
 - [ ] Service shutdown procedures?
 
 ### Long-term Containment
+
 - [ ] Root cause analysis process?
 - [ ] Evidence preservation?
 - [ ] Forensic imaging capability?
 
 ### Eradication
+
 - [ ] Malware removal procedures?
 - [ ] System rebuild/restore?
 - [ ] Credential rotation?
@@ -146,12 +157,14 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 ## ✅ Checklist - Recovery & Post-Incident
 
 ### Recovery
+
 - [ ] Service restoration priority?
 - [ ] Validation testing?
 - [ ] Monitoring enhancement?
 - [ ] User communication?
 
 ### Post-Incident
+
 - [ ] Incident report template?
 - [ ] Lessons learned process?
 - [ ] Plan update procedure?
@@ -174,7 +187,8 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 
 ## 💡 Tips & Examples
 
-### Incident Severity Levels:
+### Incident Severity Levels
+
 | Level | Description | Response Time | Example |
 |-------|-------------|---------------|---------|
 | **SEV1** | Critical - Business down | 15 min | Data breach, ransom |
@@ -182,7 +196,8 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 | **SEV3** | Medium - Limited impact | 4 hours | Minor security issue |
 | **SEV4** | Low - Minimal impact | 24 hours | Policy violation |
 
-### CSIRT Team Roles:
+### CSIRT Team Roles
+
 ```markdown
 ## Core Team
 - **Incident Commander:** Overall coordination
@@ -199,7 +214,8 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 - Customer Support
 ```
 
-### Incident Response Playbook Template:
+### Incident Response Playbook Template
+
 ```markdown
 # [Incident Type] Playbook
 
@@ -232,7 +248,8 @@ Xây dựng hoặc review Incident Response Plan. Đảm bảo team prepared đ�
 - Regulatory: [checklist]
 ```
 
-### Communication Templates:
+### Communication Templates
+
 ```markdown
 ## Internal (Slack/Email)
 🚨 [SEV X] Incident: [Brief description]
@@ -277,14 +294,16 @@ Sau khi hoàn thành **Incident Response Plan**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Team: 8 người
 Tools: Sentry, Cloudflare, AWS, Slack
 Rủi ro chính: lộ token API, rò rỉ dữ liệu PII
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Incident Response Plan (v1)
 
@@ -305,13 +324,15 @@ Detect → Triage (15m) → Contain (1h) → Eradicate → Recover → Postmorte
 "We detected an incident at [time]. Impact: [scope]. Next update in 60 minutes."
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Có mức độ sự cố rõ ràng
 - ✅ Flow và role cụ thể
 - ✅ Có mẫu thông báo
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [API Security Checklist](./api_security_checklist.skill.md)
 - [Data Handling Review](./data_handling_review.skill.md)
 
@@ -322,7 +343,7 @@ Detect → Triage (15m) → Contain (1h) → Eradicate → Recover → Postmorte
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: API Security Checklist
 
 Sau khi hoàn thành **Incident Response Plan**, định kỳ diễn tập và rà soát lại:
 → [API Security Checklist](./api_security_checklist.skill.md)
@@ -330,3 +351,5 @@ Sau khi hoàn thành **Incident Response Plan**, định kỳ diễn tập và r
 ---
 
 *CVF Skill Library v1.5.2 | Security & Compliance Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

@@ -58,6 +58,7 @@ Không có partial pass.
 ## Enforcement tools
 
 Tham khảo:
+
 - `CVF_v1.3_IMPLEMENTATION_TOOLKIT/cli/` — CLI validation
 - `CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci_cd/` — CI/CD templates
 

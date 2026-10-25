@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Handle Word document (.docx) creation, editing, and analysis with high-fidelity visual review. Use for professional reports, legal documents, and tracked changes. Use proactively when quality and precise formatting are critical.  Examples: - user: "Create a professional report in Word" -> use python-docx with render loops - user: "Draft a legal contract with redlines" -> use ooxml redlining workflow - user: "Extract text from this DOCX while preserving structure" -> use pandoc markdown conversion
 
 **Khi nào dùng skill này:**
+
 - Cần Word với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: legal contract
-- Nguồn tham khảo: https://github.com/IgorWarzocha/Opencode-Workflows/tree/master/cowork/.opencode/skill/word
+- Nguồn tham khảo: <https://github.com/IgorWarzocha/Opencode-Workflows/tree/master/cowork/.opencode/skill/word>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Review NDA cho hợp tác đối tác
 Context: Đối tác quốc tế, thời hạn 12 tháng
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Word Output
 

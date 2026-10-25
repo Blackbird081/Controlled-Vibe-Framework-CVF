@@ -43,6 +43,12 @@ REQUIRED_CANONICAL = [
     RUNTIME_LOG_PATH,
 ]
 
+# These four artifacts are private provenance evidence, not public pack owners.
+# Applicability is explicit and never inferred from filesystem absence.
+PRIVATE_EVIDENCE_CANONICAL = frozenset({
+    TRACE_PATH, TEST_LOG_PATH, RUNTIME_MANIFEST_PATH, RUNTIME_LOG_PATH,
+})
+
 REQUIRED_TEMPLATE_MARKERS = [
     "## Packet Header",
     "## 1. Release Scope",
@@ -78,9 +84,9 @@ def _normalize(path: Path) -> str:
     return str(path.relative_to(REPO_ROOT)).replace("\\", "/")
 
 
-def _check_required_files() -> list[dict[str, str]]:
+def _check_required_files(required_paths: list[Path] | None = None) -> list[dict[str, str]]:
     violations: list[dict[str, str]] = []
-    for path in REQUIRED_CANONICAL:
+    for path in REQUIRED_CANONICAL if required_paths is None else required_paths:
         if not path.exists():
             violations.append(
                 {
@@ -134,23 +140,52 @@ def _check_packet(packet_path: Path) -> list[dict[str, str]]:
     return violations
 
 
-def build_report(packet: str | None) -> dict[str, Any]:
-    violations = _check_required_files()
+def build_report(packet: str | None, profile: str = "private") -> dict[str, Any]:
+    if profile not in ("private", "public"):
+        raise ValueError("Unsupported enterprise evidence profile")
+    # Select a fresh list per invocation; a public call cannot narrow a later private call.
+    required_paths = [
+        path for path in REQUIRED_CANONICAL
+        if profile == "private" or path not in PRIVATE_EVIDENCE_CANONICAL
+    ]
+    violations: list[dict[str, str]] = []
+    if profile == "public":
+        try:
+            from guard_binding_catalog import require_public_projection
+        except ModuleNotFoundError:
+            from governance.compat.guard_binding_catalog import require_public_projection
+        try:
+            require_public_projection(REPO_ROOT)
+        except ValueError as exc:
+            violations.append({"type": "public_profile_mismatch", "path": "AGENTS.md", "message": str(exc)})
+        if packet is not None:
+            violations.append({
+                "type": "public_packet_unsupported", "path": "--packet",
+                "message": "Public profile checks normative pack artifacts only; private approval packets are unsupported.",
+            })
+    violations.extend(_check_required_files(required_paths))
     violations.extend(_check_template())
 
     packet_rel = None
-    if packet:
+    if packet and profile == "private":
         packet_path = (REPO_ROOT / packet).resolve() if not Path(packet).is_absolute() else Path(packet)
         packet_rel = _normalize(packet_path) if packet_path.exists() and packet_path.is_relative_to(REPO_ROOT) else str(packet_path)
         violations.extend(_check_packet(packet_path))
 
-    return {
-        "canonicalFilesChecked": [_normalize(path) for path in REQUIRED_CANONICAL],
+    report = {
+        "canonicalFilesChecked": [_normalize(path) for path in required_paths],
         "packetChecked": packet_rel,
         "violationCount": len(violations),
         "violations": violations,
         "compliant": len(violations) == 0,
     }
+    if profile == "public":
+        report.update({
+            "profile": "public",
+            "privateEvidencePresenceNotApplicable": sorted(_normalize(path) for path in PRIVATE_EVIDENCE_CANONICAL),
+            "claimBoundary": "PUBLIC_NORMATIVE_PACK_CONSISTENCY_ONLY_NOT_PACKET_OR_RELEASE_READINESS",
+        })
+    return report
 
 
 def _print_report(report: dict[str, Any]) -> None:
@@ -165,7 +200,10 @@ def _print_report(report: dict[str, Any]) -> None:
             print(f"  - {violation['path']} ({violation['type']}): {violation['message']}")
         print("\n❌ VIOLATION — Enterprise evidence pack is incomplete or inconsistent.")
     else:
-        print("\n✅ COMPLIANT — Enterprise evidence pack artifacts are present and aligned.")
+        if report.get("profile") == "public":
+            print("\nCOMPLIANT - Public normative pack checks passed; private packet/release readiness is not assessed.")
+        else:
+            print("\n✅ COMPLIANT — Enterprise evidence pack artifacts are present and aligned.")
 
 
 def main() -> int:
@@ -175,17 +213,23 @@ def main() -> int:
         sys.stderr.reconfigure(errors="replace")
 
     parser = argparse.ArgumentParser(description="CVF enterprise evidence pack consistency gate")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     parser.add_argument("--packet", default=None, help="Optional packet file to validate against the template")
     parser.add_argument("--enforce", action="store_true", help="Return non-zero when violations exist")
     parser.add_argument("--json", action="store_true", help="Print JSON report")
     args = parser.parse_args()
 
-    report = build_report(args.packet)
+    report = build_report(args.packet, args.profile)
     if args.json:
         print(json.dumps(report, indent=2))
     else:
         _print_report(report)
 
+    if args.profile == "public" and any(
+        violation["type"] in ("public_profile_mismatch", "public_packet_unsupported")
+        for violation in report["violations"]
+    ):
+        return 2
     if args.enforce and not report["compliant"]:
         return 2
     return 0
@@ -193,3 +237,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+# Text Encoding Exception: existing CLI report symbols are retained; profile controls use ASCII.

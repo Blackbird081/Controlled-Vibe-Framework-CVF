@@ -33,6 +33,7 @@ Toàn bộ kỹ năng agent được tổ chức thành **7 lĩnh vực** theo c
 | AGT-008 | **File Write** | R2 | Ghi/sửa file trong dự án |
 
 **Quan hệ:**
+
 - AGT-007 + AGT-008 được hầu hết kỹ năng khác sử dụng (I/O file)
 - AGT-001 + AGT-006 cung cấp dữ liệu cho AGT-009 (RAG), AGT-016 (Nghiên cứu)
 - AGT-002 là engine thực thi cho AGT-012 (Agentic Loop), AGT-026 (Testing)
@@ -53,6 +54,7 @@ Toàn bộ kỹ năng agent được tổ chức thành **7 lĩnh vực** theo c
 | AGT-014 | **MCP Server Connector** | R2 | Kết nối đến MCP tool servers bên ngoài |
 
 **Quan hệ:**
+
 - AGT-009 (RAG) ← dùng AGT-001 (Search) + AGT-006 (Fetch) để lấy dữ liệu
 - AGT-012 (Loop) ← dùng AGT-002 (Execute) cho các bước code
 - AGT-013 (Browser) ← thường được AGT-012 (Loop) điều phối
@@ -76,6 +78,7 @@ Toàn bộ kỹ năng agent được tổ chức thành **7 lĩnh vực** theo c
 | AGT-020 | **Analytics Dashboard Generator** | R1 | Dashboard giám sát phiên thời gian thực |
 
 **Quan hệ:**
+
 - AGT-018 (Teams) ← phối hợp các phiên bản AGT-012 (Loop) làm sub-agent
 - AGT-019 (Loader) → quản lý tải TẤT CẢ kỹ năng khác một cách động
 - AGT-020 (Analytics) ← dùng AGT-010 (Visualization) để render biểu đồ
@@ -98,6 +101,7 @@ Toàn bộ kỹ năng agent được tổ chức thành **7 lĩnh vực** theo c
 | AGT-024 | **MCP Context Isolation Manager** | R2 | Sandbox MCP tools qua subagent riêng |
 
 **Quan hệ:**
+
 - AGT-022 (Router) → chuyển đến AGT-023 (Debug) khi stuck-type = "bug"
 - AGT-023 (Debug) ← dùng AGT-002 (Execute) để xác minh bản sửa
 - AGT-024 (Isolation) ← bọc AGT-014 (MCP Connector) trong sandbox
@@ -121,6 +125,7 @@ Toàn bộ kỹ năng agent được tổ chức thành **7 lĩnh vực** theo c
 | AGT-029 | **Frontend Component Forge** | R1 | Kiến trúc component, Suspense patterns |
 
 **Quan hệ:**
+
 - **Bộ ba thiết kế:** AGT-025 (API) → AGT-028 (Database) → AGT-029 (Frontend) — thiết kế từ trên xuống
 - AGT-026 (Testing) ← xác thực TẤT CẢ kỹ năng khác trong lĩnh vực
 - AGT-027 (Security) ← bảo vệ AGT-025 (API) và AGT-028 (Database)
@@ -143,6 +148,7 @@ Toàn bộ kỹ năng agent được tổ chức thành **7 lĩnh vực** theo c
 | AGT-033 | **AI Multimodal Processor** | R2 | Xử lý âm thanh/hình ảnh/video/tài liệu bằng AI |
 
 **Quan hệ:**
+
 - AGT-030 (Deploy) ← nhận output từ AGT-025→029 (lĩnh vực Development)
 - AGT-031 (Review) ← xác thực tuyên bố của AGT-023 (Debug) và AGT-026 (Testing)
 - AGT-032 (MCP Builder) ← mở rộng AGT-014 (Connector) và AGT-024 (Isolation)
@@ -176,6 +182,7 @@ Toàn bộ kỹ năng agent được tổ chức thành **7 lĩnh vực** theo c
 | 10 | Tình báo Cạnh tranh | Chiến lược | Agentic Search (swarm) | R3 |
 
 **CVF Governance cho mọi workflow:**
+
 - Verification gates (kiểm chéo output AI với hệ thống nguồn)
 - Chấm điểm độ tin cậy (Xác minh / Suy luận / Suy đoán)
 - Con người trong vòng lặp cho mọi hành động ghi (không tự gửi email, không tự đặt lịch)
@@ -183,6 +190,7 @@ Toàn bộ kỹ năng agent được tổ chức thành **7 lĩnh vực** theo c
 - Nhật ký kiểm toán cho tuân thủ
 
 **Quan hệ:**
+
 - AGT-034 ← dùng AGT-018 (Agent Teams) cho swarm workflows (#10)
 - AGT-034 ← dùng AGT-021 (Context Engineering) cho phân tích tài liệu lớn (#7)
 - AGT-034 ← dùng phương pháp verification của AGT-031 (Code Review) cho mọi output
@@ -240,13 +248,17 @@ Toàn bộ kỹ năng agent được tổ chức thành **7 lĩnh vực** theo c
 ## Theo Mức Rủi ro
 
 ### R0 — Tự động (5 kỹ năng)
+
 Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Router
 
 ### R1 — Tự động (11 kỹ năng)
+
 File Read, Data Viz, Doc Parser, Scientific Research, Doc Converter, Analytics Dashboard, Context Optimizer, API Architecture, Database Schema, Frontend Forge, Code Review Gate
 
 ### R2 — Giám sát (14 kỹ năng)
+
 Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debug, MCP Isolation, Full-Stack Testing, Security Guard, Cloud Deploy, MCP Builder, AI Multimodal, Operator Workflow
 
 ### R3 — Thủ công (4 kỹ năng)
+
 Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator

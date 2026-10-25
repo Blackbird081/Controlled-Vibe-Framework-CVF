@@ -43,6 +43,7 @@ Expected pattern:
 - [ ] Team members informed: do not run project build/test/patch in CVF root
 
 Evidence:
+
 - `git -C "<project>" rev-parse --show-toplevel`
 - `git -C "<cvf-core>" rev-parse --show-toplevel`
 - `.vscode/settings.json` snapshot

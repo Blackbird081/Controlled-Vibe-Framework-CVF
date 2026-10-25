@@ -24,6 +24,7 @@ Demo theo kiểu chatbot
 → Những thứ này không giải quyết nỗi lo của management.
 
 Cách NÊN trình bày (Executive Framing)
+
 1. CVF giải quyết vấn đề gì?
 
 AI khó kiểm soát
@@ -34,7 +35,7 @@ Kết quả không audit được
 
 👉 CVF biến AI thành quy trình có kiểm soát, giống hệ thống nội bộ.
 
-2. CVF mang lại lợi ích gì cho tổ chức?
+1. CVF mang lại lợi ích gì cho tổ chức?
 
 Giảm rủi ro: hạn chế can thiệp cảm tính
 
@@ -44,7 +45,7 @@ Dễ audit: có trace, có tiêu chí đánh giá
 
 Dễ scale: không phụ thuộc cá nhân giỏi prompt
 
-3. CVF không hứa hẹn điều gì?
+1. CVF không hứa hẹn điều gì?
 
 Không hứa AI luôn đúng
 

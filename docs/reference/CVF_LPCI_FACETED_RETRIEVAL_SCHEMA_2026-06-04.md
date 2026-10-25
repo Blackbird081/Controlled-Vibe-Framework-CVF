@@ -29,6 +29,7 @@ retrieval operations against the LPCI corpus. It is required before any search
 layer opens per the Corpus Search And Filter Readiness Standard.
 
 This schema covers:
+
 1. Common CVF facet fields (from `CVF_CORPUS_SEARCH_FILTER_READINESS_STANDARD`)
 2. PolicyLocal legal/policy domain extension fields
 3. Freshness state machine (all 7 states + transition rules)
@@ -185,6 +186,7 @@ The controlled vocabulary for this family is derived from document content
 Schema version identifier: `policylocal.facetSchema.t7.v1`
 
 This schema applies to:
+
 - `policylocal-corpus-records.json` schemaVersion `policylocal.corpusRecords.t7.v1`
 - Any future LPCI corpus imports using the PolicyLocal pipeline
 

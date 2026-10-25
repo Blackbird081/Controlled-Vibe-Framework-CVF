@@ -33,6 +33,7 @@ Project Description:
 > Describe the purpose of this repository in one paragraph.
 
 Project Domain:
+
 - [ ] Software
 - [ ] Data / Analytics
 - [ ] AI / Agent System
@@ -40,6 +41,7 @@ Project Domain:
 - [ ] Other: ____________
 
 Criticality Level:
+
 - Low   → experimentation allowed
 - Medium → review required
 - High  → strict governance, no autonomy
@@ -53,6 +55,7 @@ Selected Level: ________________________
 Unless explicitly overridden by a human decision record:
 
 Default CVF Phase:
+
 - [ ] Intake
 - [ ] Design
 - [ ] Build
@@ -60,6 +63,7 @@ Default CVF Phase:
 - [ ] Freeze
 
 Default Agent Role:
+
 - [ ] Observer
 - [ ] Analyst
 - [ ] Builder
@@ -67,12 +71,14 @@ Default Agent Role:
 - [ ] Governor
 
 Maximum Allowed Risk Level:
+
 - R0 – No risk / informational only
 - R1 – Low risk / reversible
 - R2 – Medium risk / review required
 - R3 – High risk / forbidden without approval
 
 Selected Defaults:
+
 - Phase: ______________________
 - Role: _______________________
 - Max Risk: ___________________
@@ -85,15 +91,18 @@ Skills and templates are EXTENSIONS of CVF,
 never replacements.
 
 Allowed Skill IDs:
+
 - CVF_CORE_*
-- ____________________________
+- `____________________________`
 
 Forbidden Skill IDs:
+
 - Any skill bypassing CVF phases
 - Any skill modifying authority or risk without record
-- ____________________________
+- `____________________________`
 
 Skill Usage Rules:
+
 - Skills must be declared before use
 - Skills must map to the current CVF phase
 - Before any Build action that modifies artifacts, Skill Preflight is mandatory:
@@ -155,6 +164,7 @@ All approvals should be documented
 Phase transitions are NOT automatic.
 
 A phase change requires:
+
 - Clear justification
 - Human acknowledgment (unless explicitly delegated)
 - Updated declaration by the agent
@@ -180,6 +190,7 @@ If ambiguity exists:
 ## 9. FINAL CLAUSE
 
 CVF governance has priority over:
+
 - Speed
 - Convenience
 - Creativity

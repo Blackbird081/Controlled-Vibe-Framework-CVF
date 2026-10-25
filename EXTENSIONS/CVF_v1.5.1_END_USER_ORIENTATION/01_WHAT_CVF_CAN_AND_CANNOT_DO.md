@@ -35,7 +35,7 @@ So sánh được điểm mạnh – điểm yếu – trade-off
 
 CVF không nhằm thay đổi lựa chọn của bạn, mà giúp bạn hiểu rõ lựa chọn đó.
 
-2. CVF KHÔNG làm gì (phần quan trọng nhất)
+1. CVF KHÔNG làm gì (phần quan trọng nhất)
 
 CVF không:
 
@@ -53,7 +53,7 @@ Nếu bạn đang tìm:
 
 → CVF không phù hợp với mục đích đó.
 
-3. Những kỳ vọng dễ gây hiểu nhầm
+1. Những kỳ vọng dễ gây hiểu nhầm
 
 3.1. “AI đã phân tích rồi thì chắc ổn”
 
@@ -95,7 +95,7 @@ Trong trường hợp đó:
 
 CVF không tạo rào cản – CVF làm lộ rào cản đã tồn tại.
 
-4. Một nguyên tắc để ghi nhớ
+1. Một nguyên tắc để ghi nhớ
 
 CVF không tồn tại để nói bạn nên làm gì.
 CVF tồn tại để đảm bảo khi bạn quyết định,

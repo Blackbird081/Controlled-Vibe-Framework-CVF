@@ -44,9 +44,11 @@ npm test
 ## Key Concepts
 
 ### 1. Governance-First
+
 Every AI operation must pass through `governance.guard.ts` before execution. No bypass is allowed.
 
 ### 2. Risk Levels (R1–R4)
+
 | Level | Description | Example | Requires |
 |-------|-------------|---------|----------|
 | R1 | Low risk | Data retrieval | Nothing extra |
@@ -55,9 +57,11 @@ Every AI operation must pass through `governance.guard.ts` before execution. No 
 | R4 | Critical risk | Automated trading | UAT + Multi-Approval + Freeze |
 
 ### 3. Phases (P0–P6)
+
 Skills progress through 7 sequential phases: Design → Build → Validation → UAT → Approved → Production → Frozen.
 
 ### 4. Operators
+
 Roles: ANALYST < REVIEWER < APPROVER < ADMIN. Higher risk requires higher role.
 
 ## Your First Task

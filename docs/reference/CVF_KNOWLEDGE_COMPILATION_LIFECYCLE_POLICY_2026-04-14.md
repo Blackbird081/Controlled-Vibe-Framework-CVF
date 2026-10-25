@@ -120,6 +120,7 @@ All four guards are already implemented in CVF. The `Govern` step is documentati
 ## 5. Relationship to StructuralIndexContract (W72-T1)
 
 `StructuralIndexContract` (landed W72-T1) adds structural navigation to the `Query` step:
+
 - It operates on governed artifacts in the artifact pool
 - It traverses declared structural relationships (depends_on, related_to, extends, supersedes)
 - It returns structural neighbors with deterministic hash bound to actual graph content

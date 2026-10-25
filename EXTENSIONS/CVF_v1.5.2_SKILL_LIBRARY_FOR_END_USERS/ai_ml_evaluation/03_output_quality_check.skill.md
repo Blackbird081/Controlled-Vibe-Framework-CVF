@@ -17,11 +17,13 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng:**
+
 - Review AI output trước khi dùng
 - Check cho errors và hallucinations
 - Validate against requirements
 
 **Không phù hợp khi:**
+
 - Need domain expert validation → Hỏi expert
 - Critical decisions → Human review required
 
@@ -64,6 +66,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -87,12 +90,14 @@ Không yêu cầu.
 ## 🔍 Cách đánh giá
 
 **Checklist:**
+
 - [ ] Accuracy checked
 - [ ] Completeness verified
 - [ ] Hallucinations flagged
 - [ ] Recommendation clear
 
 **Red flags:**
+
 - ⚠️ Miss obvious errors
 - ⚠️ Over-trust AI output
 
@@ -129,14 +134,16 @@ Sau khi hoàn thành **Output Quality Check**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Task: AI tạo báo cáo "low-stock" hàng ngày
 Sample outputs: 10 báo cáo gần nhất
 Ground truth: dữ liệu tồn kho từ DB
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Output Quality Summary
 
@@ -153,13 +160,15 @@ Actions
 - Thêm validation với DB trước khi gửi
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Có tiêu chí rõ (accuracy/hallucination)
 - ✅ Nêu lỗi cụ thể
 - ✅ Có hành động khắc phục
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Prompt Evaluation](./02_prompt_evaluation.skill.md)
 - [Bias Detection](./04_bias_detection.skill.md)
 
@@ -170,7 +179,7 @@ Actions
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Bias Detection
 
 Sau khi hoàn thành **Output Quality Check**, tiếp tục với:
 → [Bias Detection](./04_bias_detection.skill.md)
@@ -178,3 +187,5 @@ Sau khi hoàn thành **Output Quality Check**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | AI/ML Evaluation Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

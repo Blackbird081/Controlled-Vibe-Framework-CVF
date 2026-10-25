@@ -17,12 +17,14 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Nghiên cứu thị trường mới
 - Phân tích đối thủ cạnh tranh
 - Hiểu customer segments
 - Validate product idea
 
 **Không phù hợp khi:**
+
 - Cần primary research (surveys, interviews) → Tự thực hiện
 - Số liệu tài chính precise → Cần market data providers
 - Comparison strategies → Dùng Strategy Analysis
@@ -66,6 +68,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -82,6 +85,7 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Market overview và sizing
 - Key players analysis
 - Customer segments
@@ -89,6 +93,7 @@ Không yêu cầu.
 - Entry barriers và challenges
 
 **Cấu trúc output:**
+
 ```
 MARKET RESEARCH REPORT
 
@@ -139,6 +144,7 @@ MARKET RESEARCH REPORT
 - [ ] Sources được cite (nếu có)
 
 **Red flags (cần Reject):**
+
 - ⚠️ Sizing không có basis
 - ⚠️ Missing key competitors
 - ⚠️ Outdated information
@@ -169,7 +175,8 @@ MARKET RESEARCH REPORT
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Market focus: EdTech Online courses tại Vietnam
 Research goal: Market size, trends, competitive landscape
@@ -178,7 +185,8 @@ Products: Online courses, learning platforms
 Known players: Kyna, Unica, Edumall, Coursera Vietnam
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 MARKET RESEARCH: EDTECH VIETNAM
 
@@ -236,7 +244,8 @@ MARKET RESEARCH: EDTECH VIETNAM
    - Go-to-market: Enterprise → B2C
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Market clearly defined
 - ✅ Sizing có TAM/SAM/SOM
 - ✅ Competitive balanced (có cả weaknesses)
@@ -249,6 +258,7 @@ MARKET RESEARCH: EDTECH VIETNAM
 ---
 
 ## 🔗 Related Skills
+
 - [Strategy Analysis](./01_strategy_analysis.skill.md)
 - [Risk Assessment](./02_risk_assessment.skill.md)
 

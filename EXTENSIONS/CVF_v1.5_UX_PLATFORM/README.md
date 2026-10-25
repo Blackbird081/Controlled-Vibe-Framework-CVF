@@ -30,6 +30,7 @@ CVF v1.5 là **lớp trải nghiệm người dùng (UX Platform)** đặt trên
 ```
 
 **Bạn KHÔNG cần:**
+
 - ❌ Học CVF
 - ❌ Viết prompt
 - ❌ Dùng CLI

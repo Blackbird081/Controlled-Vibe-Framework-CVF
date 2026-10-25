@@ -107,6 +107,109 @@ class ReviewRetentionRegistryTests(unittest.TestCase):
             encoding="utf-8",
         )
 
+    def _seed_public_sources(self) -> None:
+        public_carrier = "# Public CVF carrier\n"
+        (self.repo_root / "AGENTS.md").write_text(public_carrier, encoding="utf-8")
+        public_source = self.repo_root / "governance" / "toolkit" / "05_OPERATION" / "CVF_PUBLIC_CORE_AGENTS.md"
+        public_source.parent.mkdir(parents=True, exist_ok=True)
+        public_source.write_text(public_carrier, encoding="utf-8")
+        for rel_path in MODULE.PUBLIC_REQUIRED_FILES:
+            path = self.repo_root / rel_path
+            if path.exists():
+                continue
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("\n".join(MODULE.PUBLIC_REQUIRED_MARKERS.get(rel_path, ())), encoding="utf-8")
+        for rel_path, markers in MODULE.PUBLIC_REQUIRED_MARKERS.items():
+            path = self.repo_root / rel_path
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("\n".join(markers), encoding="utf-8")
+
+    def test_public_profile_validates_registry_without_private_file_scan(self) -> None:
+        missing_private_path = "docs/reviews/CVF_MISSING_PRIVATE_REVIEW_2026-03-21.md"
+        self._write_registry([missing_private_path])
+        self._seed_public_sources()
+
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root), patch.object(MODULE, "ARCHIVE_MODULE", None), patch.object(
+            MODULE,
+            "_archive_module",
+            side_effect=AssertionError("public profile must not access private archive executor"),
+        ):
+            report = MODULE.build_report(profile="public", changed_paths={missing_private_path: ["M"]})
+
+        self.assertTrue(report["compliant"])
+        self.assertEqual(report["profile"], "public")
+        self.assertEqual(report["dynamicScanMode"], "not_applicable_public_profile")
+        self.assertEqual(report["privateEvidenceScan"], "not_applicable_public_profile")
+        self.assertEqual(report["publicArchiveExecutor"], "not_applicable_private_effect_executor")
+        self.assertEqual(report["registeredRetainEvidenceCount"], 1)
+
+    def test_public_profile_fails_when_public_contract_owner_is_missing(self) -> None:
+        self._write_registry([])
+        self._seed_public_sources()
+        missing_owner = self.repo_root / "docs" / "reference" / "CVF_REVIEW_RETENTION_CLASSIFICATION.md"
+        missing_owner.unlink()
+
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root):
+            report = MODULE.build_report(profile="public")
+
+        self.assertFalse(report["compliant"])
+        self.assertIn(
+            "missing_public_required_file",
+            {entry["type"] for entry in report["violations"]},
+        )
+
+    def test_public_profile_fails_when_public_registry_is_missing(self) -> None:
+        self._write_registry([])
+        self._seed_public_sources()
+        (self.repo_root / "governance" / "compat" / "CVF_REVIEW_RETENTION_REGISTRY.json").unlink()
+
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root):
+            report = MODULE.build_report(profile="public")
+
+        self.assertFalse(report["compliant"])
+        self.assertIn("missing_public_required_file", {entry["type"] for entry in report["violations"]})
+
+    def test_public_profile_fails_on_registry_summary_mismatch(self) -> None:
+        self._write_registry([self.retain_path])
+        self._seed_public_sources()
+        registry_path = self.repo_root / "governance" / "compat" / "CVF_REVIEW_RETENTION_REGISTRY.json"
+        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+        registry["summary"]["retainEvidenceCount"] = 0
+        registry_path.write_text(json.dumps(registry), encoding="utf-8")
+
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root):
+            report = MODULE.build_report(profile="public")
+
+        self.assertFalse(report["compliant"])
+        self.assertIn("retain_evidence_count_mismatch", {entry["type"] for entry in report["violations"]})
+
+    def test_public_profile_rejects_invalid_registry_path_shape(self) -> None:
+        self._write_registry(["docs/reviews/../audits/CVF_OUTSIDE_REVIEW_2026-03-21.md"])
+        self._seed_public_sources()
+
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root):
+            report = MODULE.build_report(profile="public")
+
+        self.assertFalse(report["compliant"])
+        self.assertIn("invalid_retain_evidence_scope", {entry["type"] for entry in report["violations"]})
+
+    def test_public_then_private_profile_keeps_private_dynamic_scan(self) -> None:
+        self._write_registry([self.retain_path])
+        self._seed_public_sources()
+
+        with patch.object(MODULE, "REPO_ROOT", self.repo_root):
+            public_report = MODULE.build_report(profile="public")
+            with patch.object(MODULE, "_compute_dynamic_blocked_reviews", return_value=(set(), {
+                "activeRecentCount": 1,
+                "retainEvidenceCandidateCount": 0,
+                "safeToArchiveCount": 0,
+            })):
+                private_report = MODULE.build_report(profile="private", changed_paths={self.retain_path: ["M"]})
+
+        self.assertEqual(public_report["dynamicScanMode"], "not_applicable_public_profile")
+        self.assertEqual(private_report["dynamicScanMode"], "full")
+        self.assertEqual(private_report["profile"], "private")
+
     def test_build_report_passes_when_dynamic_blocked_review_is_registered(self) -> None:
         self._write_registry([self.retain_path])
 

@@ -25,7 +25,7 @@ Minimum registration checklist:
 3. the filename appears in `docs/CVF_CORE_KNOWLEDGE_BASE.md`
 4. `README.md` links to the guard registry and operation toolkit instead of
    duplicating the full guard filename table
-4. registration changes ship in the same commit batch as the guard change
+5. registration changes ship in the same commit batch as the guard change
 
 This registry rule governs discoverability only. It complements, but does not replace, the stronger guard authoring contract in `GC-030`.
 

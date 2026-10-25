@@ -1,8 +1,13 @@
 # GOVERNANCE MAPPING SPEC
+
 # CVF → CVF-Toolkit Core Integration
+
 # Status: Authoritative Mapping
+
 # Toolkit Version: 1.0.0
+
 # CVF Lock: See 00_CANONICAL_REFERENCE/cvf_version.lock
+
 1. PURPOSE
 
 This document defines how CVF governance principles, structures, and enforcement rules are mapped into the CVF-Toolkit execution engine.
@@ -22,7 +27,7 @@ Developer-enforceable
 No part of CVF governance logic is redefined here.
 This file only maps enforcement into Toolkit components.
 
-2. GOVERNANCE PHILOSOPHY (From CVF Core)
+1. GOVERNANCE PHILOSOPHY (From CVF Core)
 
 CVF Governance is built on:
 
@@ -42,7 +47,7 @@ Freeze Before Production
 
 Toolkit MUST enforce all 7 pillars.
 
-3. GOVERNANCE ENFORCEMENT LAYERS
+1. GOVERNANCE ENFORCEMENT LAYERS
 
 Governance in Toolkit is enforced at 4 levels:
 
@@ -53,7 +58,7 @@ Governance in Toolkit is enforced at 4 levels:
 | L3    | Skill Registry   | Validate capability & scope        |
 | L4    | Audit & Logging  | Record immutable execution trace   |
 
-4. CVF GOVERNANCE → TOOLKIT COMPONENT MAPPING
+1. CVF GOVERNANCE → TOOLKIT COMPONENT MAPPING
 4.1 Phase-Based Control
 CVF Concept:
 
@@ -246,7 +251,7 @@ Lock extension mapping
 
 Release cannot occur if freeze not applied.
 
-5. GOVERNANCE EXECUTION FLOW
+1. GOVERNANCE EXECUTION FLOW
 
 User Request
    ↓
@@ -276,7 +281,7 @@ Any failure at any stage:
 → Log reason
 → Return structured rejection
 
-6. NON-NEGOTIABLE RULES
+1. NON-NEGOTIABLE RULES
 
 Governance MUST execute before AI call.
 
@@ -292,7 +297,7 @@ No debug mode can skip governance.
 
 Adapter layer cannot override governance decisions.
 
-7. EXTENSION GOVERNANCE RULE
+1. EXTENSION GOVERNANCE RULE
 
 Extensions (e.g., Financial, Dexter) must:
 
@@ -314,7 +319,7 @@ Modify core risk thresholds
 
 Modify phase rules
 
-8. COMPLIANCE REQUIREMENT
+1. COMPLIANCE REQUIREMENT
 
 Toolkit is compliant with CVF governance if:
 
@@ -328,7 +333,7 @@ Toolkit is compliant with CVF governance if:
 
 Failure of any of the above → Non-compliant.
 
-9. NEXT IMPLEMENTATION FILES
+1. NEXT IMPLEMENTATION FILES
 
 Based on this mapping, next files to define:
 

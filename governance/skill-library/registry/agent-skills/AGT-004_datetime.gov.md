@@ -17,6 +17,7 @@ Implementation in v1.6 AGENT_PLATFORM
 Get current date/time and perform date calculations.
 
 **Actions:**
+
 - Get current datetime
 - Format dates
 - Calculate time differences
@@ -57,10 +58,12 @@ Get current date/time and perform date calculations.
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Correct datetime returned
 - [ ] Proper formatting
 - [ ] Timezone handling correct
 
 **FAIL criteria:**
+
 - [ ] Incorrect time values
 - [ ] Invalid formatting

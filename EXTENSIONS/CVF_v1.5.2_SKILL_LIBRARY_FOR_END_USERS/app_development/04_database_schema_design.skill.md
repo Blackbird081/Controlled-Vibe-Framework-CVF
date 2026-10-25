@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành skill sau trước khi dùng skill này:
+>
 > - [Architecture Design](./03_architecture_design.skill.md) — Cần hiểu cấu trúc hệ thống
 
 ---
@@ -18,11 +19,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - App cần lưu trữ structured data
 - Cần database (SQLite, PostgreSQL, etc.)
 - Data có relationships (1-N, N-N)
 
 **Không phù hợp khi:**
+
 - Chỉ cần lưu config (dùng JSON/YAML)
 - Data đơn giản (key-value)
 - No persistence needed
@@ -66,6 +69,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -170,6 +174,7 @@ SELECT * FROM tasks WHERE title LIKE '%keyword%';
 - [ ] Có sample queries
 
 **Red flags (cần Reject):**
+
 - ⚠️ Thiếu foreign keys
 - ⚠️ Không có primary key
 - ⚠️ Wrong data types
@@ -201,14 +206,16 @@ SELECT * FROM tasks WHERE title LIKE '%keyword%';
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Entities: Product, Warehouse, StockMovement, Supplier, PurchaseOrder, User, Role
 Access Patterns: tra cứu tồn theo SKU, báo cáo tồn theo ngày
 Constraints: movement phải có user_id + timestamp
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Database Schema (PostgreSQL)
 
@@ -228,13 +235,15 @@ Constraints: movement phải có user_id + timestamp
 - purchase_orders(status)
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Quan hệ và index phù hợp query
 - ✅ Có bảng movement cho audit
 - ✅ Rõ ràng trạng thái PO
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Architecture Design](./03_architecture_design.skill.md)
 - [API Design Spec](./05_api_design_spec.skill.md)
 
@@ -248,7 +257,6 @@ Constraints: movement phải có user_id + timestamp
 ## 🔗 Next Step
 
 Sau khi có Schema → [API Design Spec](./05_api_design_spec.skill.md) hoặc → Build Phase
-
 
 ---
 

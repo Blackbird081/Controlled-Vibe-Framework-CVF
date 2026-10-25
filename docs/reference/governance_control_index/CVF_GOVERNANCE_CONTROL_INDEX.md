@@ -64,7 +64,7 @@ Does not apply to:
 | Claimed item | Source or command | Verified section or command result | Disposition |
 |---|---|---|---|
 | R72 identifies governance-load imbalance and routes correction through R72A-R72F | `docs/roadmaps/CVF_MSEA_R72_EA_ASSESSMENT_INTAKE_AND_GOVERNANCE_LOAD_REBALANCING_ROADMAP_2026-07-07.md` | `## Work Plan`; `## Design Principle`; `## Problem Statement` | ACCEPT |
-| Existing control ownership matrix maps 50 GC rows but lacks lifecycle/cost/retirement fields | `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`; command `Select-String -Pattern '^\\| `GC-'` | `gcRows=50`; matrix columns are ownership/enforcement/evidence, not lifecycle/cost/retirement | ACCEPT |
+| Existing control ownership matrix maps 50 GC rows but lacks lifecycle/cost/retirement fields | `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md`; command ``Select-String -Pattern '^\\\| `GC-'`` | `gcRows=50`; matrix columns are ownership/enforcement/evidence, not lifecycle/cost/retirement | ACCEPT |
 | Existing task guard front door routes agents to guard surfaces but is not a lifecycle/cost index | `docs/reference/guard_orientation/README.md` | `## Purpose`; `## Task Class Guard Map`; `## Claim Boundary` | ACCEPT |
 | Current direct checker-script baseline is 186 `check_*.py` files with zero direct checker deletion in git history | command `rg --files governance/compat` filtered for `check_*.py`; `git log --all --diff-filter=A/D --name-only -- governance/compat/*.py` | `checkerCount=186`; `added=186`; `deleted=0` for direct checker-script scope at `778adb4c3` | ACCEPT |
 | INDEX artifact metadata requirements apply to this file | `docs/reference/CVF_INDEX_CLASSIFICATION_STANDARD_2026-06-21.md` | `## Required Metadata Per INDEX Artifact`; `IDX-3` | ACCEPT |
@@ -153,7 +153,7 @@ include at least:
 
 | Metric | Scope | Value | Evidence |
 |---|---|---|---|
-| control matrix rows | rows beginning with `GC-` in `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md` | 50 | `Select-String -Pattern '^\\| `GC-'` |
+| control matrix rows | rows beginning with `GC-` in `docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md` | 50 | ``Select-String -Pattern '^\\\| `GC-'`` |
 | direct checker scripts | current `governance/compat/check_*.py` files at `778adb4c3` | 186 | `rg --files governance/compat` filtered for direct checker scripts |
 | direct checker deletions | git history for `governance/compat/check_*.py` direct checker scripts | 0 | `git log --all --diff-filter=D --name-only -- governance/compat/*.py` |
 | R72 broader governance-load signal | roadmap recomputation before this index | high-confidence imbalance | R72 roadmap Source Verification Block |

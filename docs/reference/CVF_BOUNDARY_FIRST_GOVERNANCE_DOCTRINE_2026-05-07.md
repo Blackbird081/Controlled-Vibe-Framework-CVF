@@ -89,4 +89,3 @@ Together they form the Phase A CVF ADD absorption core:
 - capability power is not trusted by default;
 - agent autonomy is exercised inside explicit boundaries;
 - operator review happens at final result and true authorization gates.
-

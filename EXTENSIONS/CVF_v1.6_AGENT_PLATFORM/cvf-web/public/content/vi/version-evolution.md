@@ -24,6 +24,7 @@ v1.6  Nền Tảng Agent        ████████████████
 **Trạng thái:** ĐÓNG BĂNG
 
 **Những gì được giới thiệu:**
+
 - Quy trình 4 phase: Khám Phá → Thiết Kế → Xây Dựng → Đánh Giá
 - Phase Gate (phải vượt qua để tiếp tục)
 - Ghi nhận quyết định cơ bản (Decision Log)
@@ -32,6 +33,7 @@ v1.6  Nền Tảng Agent        ████████████████
 - Khung tuân thủ sơ bộ
 
 **File quan trọng:**
+
 - `v1.0/CVF_MANIFESTO.md` — Manifesto gốc
 - `v1.0/phases/` — Định nghĩa phase
 - `v1.0/governance/` — Quy tắc governance cơ bản
@@ -48,6 +50,7 @@ v1.6  Nền Tảng Agent        ████████████████
 **Trạng thái:** ĐÓNG BĂNG
 
 **Những gì được thêm:**
+
 - 4 vai trò con người: OBSERVER, BUILDER, ARCHITECT, GOVERNOR
 - Ma trận quyền hạn theo phase (ai phê duyệt gì trong phase nào)
 - 6 agent archetype: Analysis, Decision, Planning, Execution, Supervisor, Exploration
@@ -57,6 +60,7 @@ v1.6  Nền Tảng Agent        ████████████████
 - Hướng dẫn di cư từ v1.0
 
 **File quan trọng:**
+
 - `v1.1/governance/` — Mô hình governance đầy đủ
 - `v1.1/agents/` — Định nghĩa agent archetype
 - `v1.1/architecture/` — Kiến trúc hệ thống
@@ -73,6 +77,7 @@ v1.6  Nền Tảng Agent        ████████████████
 **Trạng thái:** ĐÓNG BĂNG
 
 **Những gì được thêm:**
+
 - Skill contract: định nghĩa chính thức về khả năng AI
 - Quản lý vòng đời khả năng
 - Mô hình rủi ro với 5 khía cạnh:
@@ -86,6 +91,7 @@ v1.6  Nền Tảng Agent        ████████████████
 - Framework xác thực khả năng
 
 **File quan trọng:**
+
 - `EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/` — Toàn bộ phần mở rộng
 
 **Phù hợp cho:** Tổ chức cần quản lý rủi ro chính thức cho khả năng AI.
@@ -99,6 +105,7 @@ v1.6  Nền Tảng Agent        ████████████████
 **Trạng thái:** ĐÓNG BĂNG
 
 **Những gì được thêm:**
+
 - Python SDK cho các thao tác CVF
 - Công cụ CLI để khởi tạo và quản lý dự án
 - Tích hợp CI/CD (GitHub Actions workflow)
@@ -106,6 +113,7 @@ v1.6  Nền Tảng Agent        ████████████████
 - Phiên bản Operator (v1.3.1): đơn giản hóa cho người vận hành thực tế
 
 **File quan trọng:**
+
 - `EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/` — SDK và công cụ
 - `EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/` — Tinh gọn cho người vận hành
 
@@ -120,11 +128,13 @@ v1.6  Nền Tảng Agent        ████████████████
 **Trạng thái:** ĐÓNG BĂNG
 
 **Những gì được thêm:**
+
 - Mẫu sử dụng cho các loại dự án khác nhau
 - Hướng dẫn áp dụng theo ngữ cảnh cụ thể
 - Mẫu quy trình làm việc
 
 **File quan trọng:**
+
 - `EXTENSIONS/CVF_v1.4_USAGE_LAYER/` — Mẫu sử dụng
 
 ---
@@ -136,11 +146,13 @@ v1.6  Nền Tảng Agent        ████████████████
 **Trạng thái:** ĐÓNG BĂNG
 
 **Những gì được thêm:**
+
 - Định hướng người dùng cuối (v1.5.1): hướng dẫn cho người không phải lập trình viên
 - Thư viện Skill cho người dùng cuối (v1.5.2): 114 skill trên 12 lĩnh vực
 - Tài liệu và hướng dẫn hướng đến người dùng
 
 **File quan trọng:**
+
 - `EXTENSIONS/CVF_v1.5_UX_PLATFORM/` — Spec nền tảng
 - `EXTENSIONS/CVF_v1.5.1_END_USER_ORIENTATION/` — Hướng dẫn người dùng cuối
 - `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` — Thư viện skill đầy đủ
@@ -156,6 +168,7 @@ v1.6  Nền Tảng Agent        ████████████████
 **Trạng thái:** HOẠT ĐỘNG (phiên bản hiện tại)
 
 **Những gì được thêm:**
+
 - Ứng dụng web đầy đủ (Next.js 16 + React 19 + TypeScript 5)
 - Mẫu tương tác cho tất cả 4 phase
 - Giao diện chat đa agent
@@ -168,6 +181,7 @@ v1.6  Nền Tảng Agent        ████████████████
 - Framework kiểm thử Vitest
 
 **Stack công nghệ:**
+
 | Công Nghệ | Phiên Bản |
 |-----------|-----------|
 | Next.js | 16 |
@@ -178,6 +192,7 @@ v1.6  Nền Tảng Agent        ████████████████
 | Vitest | 4 |
 
 **File quan trọng:**
+
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/` — Spec nền tảng
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/` — Mã nguồn ứng dụng web
 

@@ -16,7 +16,7 @@ Hãy coi CVF như một hệ thống sản xuất tri thức có kiểm soát.
 
 Bạn đặt yêu cầu, CVF chịu trách nhiệm xử lý, bạn đánh giá kết quả.
 
-2. Chỉ tập trung vào 3 việc duy nhất
+1. Chỉ tập trung vào 3 việc duy nhất
 
 End user chỉ cần làm đúng 3 việc:
 

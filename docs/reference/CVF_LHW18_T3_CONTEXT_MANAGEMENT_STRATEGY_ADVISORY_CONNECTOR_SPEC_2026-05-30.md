@@ -50,6 +50,7 @@ in this wave.
 ## Core Strategy (from De_xuat.md + Review CVF_5.md)
 
 **Problem:** When project scales to 150+ modules, LLM context overflow causes:
+
 - agent loses understanding of global architecture
 - code drifts from spec
 - hallucinations increase
@@ -85,6 +86,7 @@ Context delivery must respect the LLM's effective context window for the assigne
 No explicit token budget enforcement exists yet.
 
 **Advisory:** A future Context Budget Guard should enforce:
+
 - `maxContextTokens` per task class (e.g., review task vs. implementation task)
 - reject context packages that exceed budget
 - escalate to human if task cannot be completed within budget
@@ -100,7 +102,8 @@ the context profile packaging boundary. AIF-B Graph Knowledge enables targeted s
 retrieval rather than full codebase injection.
 
 **Advisory:** Progressive disclosure = the already-established behavior of context packager
-+ graph knowledge retrieval. This is NOT a new doctrine — it is the confirmed name for
+
+- graph knowledge retrieval. This is NOT a new doctrine — it is the confirmed name for
 existing behavior, per `CVF_ADDING_NEW_FINAL_INTEGRATION_DECISION_2026-04-12.md` section 3.5.
 
 ---
@@ -114,6 +117,7 @@ The T1 advisory rates project scale stability as `MODERATE`. The root cause is t
 for large projects.
 
 **Advisory path forward:**
+
 1. Context Budget Guard (P2 above) — prevents overflow, forces explicit scope
 2. Graph Knowledge Service (AIF-B) — enables targeted cross-module retrieval
 3. Context Profile Packaging (LHW15 T3) — provides structured profile per task

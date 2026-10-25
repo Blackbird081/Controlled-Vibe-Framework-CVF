@@ -30,16 +30,19 @@ graph TD
 ```
 
 #### 1. Templates Layer (Intent-Driven)
+
 - Cấu trúc hóa user intent thành task rõ ràng
 - Map với CVF Phases (A→D)
 - Enforce governance từ đầu
 
 #### 2. Agent Layer (Controlled Execution)
+
 - **Agent Chat**: 1-on-1 với AI
 - **Multi-Agent**: Multiple AI roles collaborate
 - Built-in checkpoints và human review
 
 #### 3. Provider Layer (AI-Agnostic)
+
 - Gemini 2.5 Flash
 - GPT-5.2 Mini
 - Claude Sonnet 4.5
@@ -54,6 +57,7 @@ graph TD
 Pre-structured workflows embodying CVF phases
 
 **Example:**
+
 ```
 Template: "Build & Review"
 ├── Phase A (Discovery): User defines requirements
@@ -63,6 +67,7 @@ Template: "Build & Review"
 ```
 
 **Available Templates:**
+
 | Template | CVF Phases | Use Case |
 |----------|------------|----------|
 | Quick Draft | A→C | Fast prototyping |
@@ -75,17 +80,20 @@ Template: "Build & Review"
 **NOT** raw ChatGPT! **IS** CVF-governed conversation:
 
 ✅ **Has:**
+
 - System prompt with CVF guidelines
 - User context injection
 - Conversation history
 - File upload support
 
 ❌ **Doesn't have (yet):**
+
 - Access to project files
 - Code execution
 - RAG/vector search
 
 **CVF Controls:**
+
 - Intent recognition
 - Output formatting
 - Stop conditions
@@ -105,11 +113,13 @@ Template: "Build & Review"
 **Two Modes:**
 
 **Single AI Mode** (Default)
+
 ```
 All agents use same AI (simple, one API key)
 ```
 
 **Multi AI Mode** (Advanced)
+
 ```
 Each agent has specialized AI
 - Orchestrator: Gemini (best reasoning)
@@ -121,12 +131,14 @@ Each agent has specialized AI
 ### 4. Quality Assurance = Built-in CVF Phase D
 
 **Every output gets:**
+
 - ✅ Quality Score (0-100)
 - ✅ Accept/Reject actions
 - ✅ Retry with feedback
 - ✅ Send to Agent for refinement
 
 **CVF Risk Levels in v1.6:**
+
 - Templates are **R0** (passive, no execution)
 - Agent Chat is **R1** (controlled, logged)
 - Multi-Agent is **R2** (explicit approval needed)
@@ -136,6 +148,7 @@ Each agent has specialized AI
 ## 🎨 How CVF Principles Apply
 
 ### Principle 1: Intent-Driven
+
 ```
 User thinks: "I want a login form"
 ↓
@@ -147,11 +160,13 @@ Agent understands intent, not exact words
 ### Principle 2: Phase-Based Workflow
 
 **CVF Classic (v1.0-v1.3):**
+
 ```
 A: Discovery → B: Blueprint → C: Construct → D: Deliver
 ```
 
 **CVF v1.6 Web:**
+
 ```
 Template Selection → Agent Execution → Quality Check → User Approval
 ```
@@ -161,12 +176,14 @@ Same phases, better UX!
 ### Principle 3: Governance without Micromanagement
 
 **Control Points:**
+
 1. Template enforces structure
 2. System prompt guides AI
 3. Quality score validates output
 4. User reviews before accepting
 
 **Freedom:**
+
 - AI chooses implementation details
 - User iterates with natural language
 - No need to write prompts manually
@@ -174,6 +191,7 @@ Same phases, better UX!
 ### Principle 4: Traceability
 
 **Everything logged:**
+
 - Template used
 - Inputs provided
 - AI provider & model
@@ -184,12 +202,14 @@ Same phases, better UX!
 ### Principle 5: AI is Executor, Not Decision-Maker
 
 **User decides:**
+
 - Which template to use
 - Which inputs to provide
 - Accept or reject output
 - When to send to agent for refinement
 
 **AI executes:**
+
 - Following template structure
 - Within governance constraints
 - With built-in quality checks
@@ -269,6 +289,7 @@ PWA: Installable, offline-capable
 ## 📊 Current Capabilities
 
 ### ✅ Implemented
+
 - [x] Template system (6 templates)
 - [x] Agent Chat with streaming
 - [x] Multi-Agent workflows
@@ -283,6 +304,7 @@ PWA: Installable, offline-capable
 - [x] Export functionality
 
 ### 🔜 Roadmap
+
 - [ ] RAG/Vector search
 - [ ] Project file access
 - [ ] Code execution sandbox
@@ -295,18 +317,21 @@ PWA: Installable, offline-capable
 ## 🎓 Learning Path
 
 ### For CVF Newcomers
+
 1. Read: CVF v1.0 [Manifesto](../../v1.0/CVF_MANIFESTO.md) (10 min)
 2. Understand: 4 Phases (A→D)
 3. Try: CVF v1.6 web app
 4. See: How templates enforce governance
 
 ### For CVF v1.3 SDK Users
+
 1. Recognize: Same philosophy, different interface
 2. Map: Skill Contracts → Templates
 3. Map: Risk Levels → Quality Checks
 4. Use: v1.6 for rapid prototyping, v1.3 for production systems
 
 ### For Developers
+
 1. Explore: `cvf-web/src/` codebase
 2. Study: `lib/ai/` provider abstraction
 3. Understand: Template → Agent → Provider flow
@@ -347,9 +372,11 @@ A: ✅ Yes for individual use. Team features coming soon.
 > **CVF v1.6 makes AI governance accessible to everyone, not just developers.**
 
 **Before v1.6:**
+
 - CVF = contracts, SDK, CLI → technical barrier
 
 **With v1.6:**
+
 - CVF = templates, chat, workflows → anyone can use
 
 **Bottom line:**

@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Hook Model framework for building habit-forming products based on Nir Eyal's "Hooked". Use when you need to: (1) increase user engagement and retention, (2) design habit loops in your product, (3) audit why users aren't returning, (4) create effective triggers and notifications, (5) design variable reward systems, (6) increase investment and switching costs, (7) evaluate the ethics of your engagement tactics, (8) optimize onboarding for habit formation.
 
 **Khi nào dùng skill này:**
+
 - Cần Hooked Ux với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: product ux
-- Nguồn tham khảo: https://github.com/wondelai/skills/tree/main/hooked-ux
+- Nguồn tham khảo: <https://github.com/wondelai/skills/tree/main/hooked-ux>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Thiết kế flow onboarding cho mobile app
 Context: Người dùng mới rơi nhiều ở bước 2
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Hooked Ux Output
 

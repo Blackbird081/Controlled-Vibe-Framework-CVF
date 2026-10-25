@@ -20,12 +20,14 @@ Không yêu cầu.
 Chọn pattern/structure tối ưu cho landing page dựa trên mục đích kinh doanh. Dựa trên 30+ patterns đã được validate (Hero-Centric, Funnel, Comparison Table, Waitlist, Bento Grid, v.v.).
 
 **Khi nào nên dùng:**
+
 - Build landing page mới, chưa biết structure
 - Redesign landing page hiện tại (conversion thấp)
 - Cần justify layout decisions
 - Compare patterns cho A/B test
 
 **Không phù hợp khi:**
+
 - Build full web app (nhiều trang)
 - Landing page đã convert tốt rồi
 
@@ -137,6 +139,7 @@ ALTERNATIVES:
 - [ ] Mobile-specific notes included
 
 **Red flags (cần Reject):**
+
 - ⚠️ CTA chỉ xuất hiện 1 lần
 - ⚠️ Pricing trước Social Proof (chưa build trust)
 - ⚠️ Quá nhiều sections (>10 = overwhelming)
@@ -168,7 +171,8 @@ ALTERNATIVES:
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 Mục đích: Thu email early access cho AI writing tool
 Sản phẩm: AI copywriting assistant
@@ -177,7 +181,8 @@ CTA: "Join Waitlist"
 Đã có: 500 beta users, 3 testimonials
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 Pattern: Waitlist + Social Proof
 Sections: Hero → "500+ đã join" → Demo video → Features → Testimonials → Waitlist form → FAQ

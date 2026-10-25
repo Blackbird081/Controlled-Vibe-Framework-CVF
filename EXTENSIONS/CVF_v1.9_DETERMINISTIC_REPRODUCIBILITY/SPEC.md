@@ -32,12 +32,14 @@ All fields immutable after COMMIT. Any replay must produce the same `commitHash`
 **Problem:** LLM reasoning depends on context. Context changes → different result → not reproducible.
 
 **Solution:** Before ANALYSIS phase begins, freeze:
+
 - File list + file hashes
 - Environment state
 - Policy version
 - Active skill bindings
 
 This produces `frozenContextHash`. If context changes between original and replay:
+
 - Replay validator reports drift
 - Record is flagged as non-deterministic
 
@@ -73,6 +75,7 @@ core/
 ```
 
 Treeview for v2.0 (runtime layer):
+
 ```
 runtime/
 └── mode/ + intent/  ← see CVF_v2.0_NONCODER_SAFETY_RUNTIME/

@@ -100,14 +100,18 @@ Ví dụ: `01_app_requirements_spec.skill.md`
 
 ### Input mẫu:
 ```
+
 Mục tiêu: [...]
 Đối tượng: [...]
 Ràng buộc: [...]
+
 ```
 
 ### Output mẫu:
 ```
+
 [Tóm tắt output]
+
 ```
 
 ### Đánh giá:
@@ -145,16 +149,19 @@ Ràng buộc: [...]
 ## ✅ Checklist khi tạo skill mới
 
 ### Metadata
+
 - [ ] Tên skill rõ ràng, dễ hiểu
 - [ ] Difficulty phù hợp (xem [DIFFICULTY_GUIDE.md](./DIFFICULTY_GUIDE.md))
 - [ ] Skill Version bắt đầu từ 1.0.0
 - [ ] Last Updated là ngày tạo/cập nhật
 
 ### Prerequisites
+
 - [ ] Liệt kê skills cần hoàn thành trước (nếu có)
 - [ ] Link đúng path đến skill đó
 
 ### Content
+
 - [ ] Mục đích cụ thể (khi nào dùng / không dùng)
 - [ ] Form input đầy đủ với ví dụ
 - [ ] Tiêu chí đánh giá rõ ràng
@@ -162,11 +169,13 @@ Ràng buộc: [...]
 - [ ] Có ví dụ thực tế (input + output + evaluation)
 
 ### Language
+
 - [ ] Ngôn ngữ: **Tiếng Việt** là chính
 - [ ] Technical terms: English trong `backticks`
 - [ ] Code examples: English
 
 ### Navigation
+
 - [ ] Có Next Step link (nếu là part of workflow)
 - [ ] File name có số thứ tự đúng
 - [ ] Có Related Skills section (nếu liên quan)

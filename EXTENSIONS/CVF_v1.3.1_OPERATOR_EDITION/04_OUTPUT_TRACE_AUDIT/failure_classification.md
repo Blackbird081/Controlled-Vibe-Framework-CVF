@@ -20,6 +20,7 @@
 ### F1 — Input Error
 
 **Nguyên nhân:** Operator
+
 - Input không theo input_spec_minimal
 - Thiếu objective rõ ràng
 - Chứa yêu cầu mâu thuẫn
@@ -31,6 +32,7 @@
 ### F2 — Execution Drift
 
 **Nguyên nhân:** AI
+
 - Tự thêm giả định không khai báo
 - Mở rộng scope
 - Đề xuất alternatives không được yêu cầu
@@ -42,6 +44,7 @@
 ### F3 — Output Contract Violation
 
 **Nguyên nhân:** AI
+
 - Thiếu Final Result
 - Thiếu Assumption Summary
 - Thiếu Constraint Compliance
@@ -54,6 +57,7 @@
 ### F4 — Expectation Mismatch
 
 **Nguyên nhân:** Operator
+
 - Kỳ vọng AI "hiểu ngầm"
 - Muốn AI làm nhiều hơn contract
 - Đánh giá bằng cảm tính

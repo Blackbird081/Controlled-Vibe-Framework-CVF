@@ -17,6 +17,7 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Review pull requests
 - Đánh giá code changes
 - Tìm bugs và issues
@@ -24,6 +25,7 @@ Không yêu cầu.
 - Check coding standards
 
 **Không phù hợp khi:**
+
 - Review kiến trúc hệ thống → Architecture Review
 - Security-focused review → Security Audit
 - Performance tuning → Cần profiling tools
@@ -67,6 +69,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -82,12 +85,14 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả:**
+
 - Summary of changes
 - Issues found (categorized)
 - Suggestions for improvement
 - Overall assessment
 
 **Cấu trúc output:**
+
 ```
 CODE REVIEW REPORT
 
@@ -130,6 +135,7 @@ CODE REVIEW REPORT
 - [ ] Clear verdict
 
 **Red flags (cần Reject):**
+
 - ⚠️ Missing obvious bugs
 - ⚠️ Too vague suggestions
 - ⚠️ Ignores context
@@ -160,7 +166,8 @@ CODE REVIEW REPORT
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Code:
 ```typescript
@@ -176,10 +183,12 @@ async function login(email: string, password: string) {
 Context: User login endpoint
 Language: TypeScript
 Focus areas: Security, error handling
+
 ```
 
 ### Output mẫu:
 ```
+
 CODE REVIEW: Login Function
 
 1. SUMMARY
@@ -187,12 +196,12 @@ CODE REVIEW: Login Function
    Overall: Has significant security issues.
 
 2. CRITICAL ISSUES
-   
+
    🔴 Plain text password comparison
       Line 3: `user.password === password`
       Risk: Passwords stored/compared in plain text
       Fix: Use bcrypt.compare() with hashed passwords
-      
+
    🔴 Timing attack vulnerability
       Risk: Password comparison time reveals info
       Fix: Use constant-time comparison
@@ -203,17 +212,17 @@ CODE REVIEW: Login Function
       Fix: Add null check before accessing user.password
 
 3. MAJOR ISSUES
-   
+
    🟠 Generic error message not logged
       Risk: Can't debug failed logins
       Fix: Log attempt (without password) for monitoring
 
 4. MINOR SUGGESTIONS
-   
+
    🟡 Return consistent error structure
       Current: `{ error: 'Invalid' }`
       Suggest: Typed error with code
-      
+
    🟡 Add rate limiting (outside this function)
       Prevent brute force attacks
 
@@ -223,11 +232,12 @@ CODE REVIEW: Login Function
 
 6. VERDICT
    ❌ Needs major revision
-   
+
    Priority fixes:
    1. Hash passwords with bcrypt
    2. Add null check for user
    3. Use constant-time comparison
+
 ```
 
 ### Đánh giá:

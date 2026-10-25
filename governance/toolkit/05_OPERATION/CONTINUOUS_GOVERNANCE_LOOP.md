@@ -129,11 +129,13 @@ For architectural or strategic decisions specifically:
 ## 8. ARCHITECTURAL PHILOSOPHY
 
 CVF does not trust:
+
 - Memory
 - Previous success
 - Assumed stability
 
 CVF only trusts:
+
 - Current validated state
 
 ---

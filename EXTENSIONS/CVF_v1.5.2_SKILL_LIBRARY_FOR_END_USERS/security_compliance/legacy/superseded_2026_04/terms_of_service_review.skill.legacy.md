@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá và cải thiện Terms of Service (ToS). Đảm bảo ToS protect business while remaining fair và understandable cho users.
 
 **Khi nào nên dùng:**
+
 - Tạo ToS cho product mới
 - Annual review
 - Feature/policy changes
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,18 +80,21 @@ Không yêu cầu.
 ## ✅ Checklist - Essential Sections
 
 ### Service Description
+
 - [ ] What service is provided?
 - [ ] Service limitations stated?
 - [ ] Availability expectations?
 - [ ] Service modifications reserved?
 
 ### User Responsibilities
+
 - [ ] Account requirements?
 - [ ] Acceptable use defined?
 - [ ] Prohibited activities listed?
 - [ ] Content guidelines?
 
 ### Payment Terms (if applicable)
+
 - [ ] Pricing clearly stated?
 - [ ] Billing cycle explained?
 - [ ] Refund policy?
@@ -97,30 +102,35 @@ Không yêu cầu.
 - [ ] Cancellation process?
 
 ### Intellectual Property
+
 - [ ] Service IP ownership?
 - [ ] User content rights?
 - [ ] License grants clear?
 - [ ] Trademark usage?
 
 ### Liability & Disclaimers
+
 - [ ] Warranty disclaimers?
 - [ ] Limitation of liability?
 - [ ] Indemnification clauses?
 - [ ] Force majeure?
 
 ### Termination
+
 - [ ] Termination rights (both sides)?
 - [ ] Effect of termination?
 - [ ] Data after termination?
 - [ ] Surviving provisions?
 
 ### Dispute Resolution
+
 - [ ] Governing law?
 - [ ] Jurisdiction?
 - [ ] Arbitration clause (if used)?
 - [ ] Class action waiver (if applicable)?
 
 ### General
+
 - [ ] Effective date?
 - [ ] Modification process?
 - [ ] Entire agreement clause?
@@ -132,18 +142,21 @@ Không yêu cầu.
 ## ✅ Checklist - User-Friendliness
 
 ### Readability
+
 - [ ] Plain language used?
 - [ ] Short paragraphs?
 - [ ] Sectioned with headers?
 - [ ] No unnecessary legal jargon?
 
 ### Accessibility
+
 - [ ] Easy to find on website?
 - [ ] Table of contents?
 - [ ] Searchable (not image/PDF)?
 - [ ] Mobile-friendly format?
 
 ### Fairness
+
 - [ ] Balanced rights (not one-sided)?
 - [ ] No surprise clauses?
 - [ ] Reasonable limitations?
@@ -167,7 +180,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### ToS Structure:
+### ToS Structure
+
 ```markdown
 1. Acceptance of Terms
 2. Service Description
@@ -185,9 +199,10 @@ Không yêu cầu.
 14. Contact Information
 ```
 
-### Key Clause Examples:
+### Key Clause Examples
 
 **Limitation of Liability:**
+
 ```
 TO THE MAXIMUM EXTENT PERMITTED BY LAW, OUR TOTAL 
 LIABILITY TO YOU FOR ALL CLAIMS ARISING FROM OR 
@@ -197,6 +212,7 @@ THE CLAIM.
 ```
 
 **Modification Clause:**
+
 ```
 We may modify these Terms at any time. We will notify 
 you of material changes by email or in-service notice 
@@ -206,6 +222,7 @@ acceptance of the modified Terms.
 ```
 
 **Termination:**
+
 ```
 Either party may terminate this agreement at any time 
 for any reason by providing 30 days written notice. 
@@ -214,7 +231,8 @@ Upon termination, your right to use the service ends,
 but sections [X, Y, Z] survive termination.
 ```
 
-### User-Friendly Approaches:
+### User-Friendly Approaches
+
 ```
 ✅ TL;DR summaries at section start
 ✅ Icons for different section types
@@ -223,7 +241,8 @@ but sections [X, Y, Z] survive termination.
 ✅ Version history accessible
 ```
 
-### Regional Considerations:
+### Regional Considerations
+
 | Region | Requirement |
 |--------|-------------|
 | **EU** | Clear, understandable language; fair terms |
@@ -260,7 +279,8 @@ Sau khi hoàn thành **Terms of Service Review**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Product: StockFlow (B2B SaaS)
 Plans: monthly/annual
@@ -268,7 +288,8 @@ SLA: 99.5%
 Billing: auto-renew
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # ToS Review
 
@@ -283,13 +304,15 @@ Billing: auto-renew
 - Add AUP section: no scraping, no abuse
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Bám đúng rủi ro pháp lý
 - ✅ Khuyến nghị cụ thể
 - ✅ Dễ cập nhật vào ToS
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [GDPR Compliance Review](./gdpr_compliance_review.skill.md)
 - [Incident Response Plan](./incident_response_plan.skill.md)
 
@@ -300,7 +323,7 @@ Billing: auto-renew
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Incident Response Plan
 
 Sau khi hoàn thành **Terms of Service Review**, tiếp tục với:
 → [Incident Response Plan](./incident_response_plan.skill.md)
@@ -308,3 +331,5 @@ Sau khi hoàn thành **Terms of Service Review**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Security & Compliance Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

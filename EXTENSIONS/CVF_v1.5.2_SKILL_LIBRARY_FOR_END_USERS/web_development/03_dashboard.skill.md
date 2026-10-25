@@ -18,12 +18,14 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Bảng điều khiển quản lý dữ liệu
 - Admin panel cho hệ thống
 - Analytics/reporting dashboard
 - Data visualization
 
 **Không phù hợp khi:**
+
 - Cần public-facing website → Dùng Landing Page
 - App có nhiều features → Dùng SaaS App
 - Chỉ cần CRUD đơn giản → Dùng simple admin template
@@ -67,6 +69,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -83,6 +86,7 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Dashboard layout hoàn chỉnh
 - KPI cards với số liệu chính
 - Charts phù hợp với loại data
@@ -90,6 +94,7 @@ Không yêu cầu.
 - Responsive design
 
 **Cấu trúc tiêu chuẩn:**
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  ┌──────────┐ ┌────────────────────────────────────────┐   │
@@ -127,6 +132,7 @@ Không yêu cầu.
 - [ ] Loading states có
 
 **Red flags (cần Reject):**
+
 - ⚠️ Data quá nhiều, không focus
 - ⚠️ Charts sai loại (pie cho trend data)
 - ⚠️ Không có loading states
@@ -158,7 +164,8 @@ Không yêu cầu.
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Mục đích: Sales dashboard cho e-commerce
 Data chính: Orders, revenue, products, customers
@@ -173,7 +180,8 @@ Actions: Filter by date, Export to Excel
 Dark mode: Có
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 Dashboard với:
 - 4 KPI cards (Revenue, Orders, AOV, Conversion)
@@ -185,7 +193,8 @@ Dashboard với:
 - Dark mode toggle
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ 4 KPIs rõ ràng
 - ✅ Charts phù hợp (line cho trend, bar cho compare)
 - ✅ Table có filter/sort
@@ -198,6 +207,7 @@ Dashboard với:
 ---
 
 ## 🔗 Related Skills
+
 - [SaaS App](./02_saas_app.skill.md)
 - [Blog / Documentation](./04_blog_docs.skill.md)
 

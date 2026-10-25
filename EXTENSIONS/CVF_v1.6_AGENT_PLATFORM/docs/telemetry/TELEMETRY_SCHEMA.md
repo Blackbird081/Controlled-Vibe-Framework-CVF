@@ -1,6 +1,7 @@
 # Telemetry Schema (Local Events)
 
 ## Event Envelope
+
 ```json
 {
   "id": "evt_...",
@@ -11,6 +12,7 @@
 ```
 
 ## Event Types
+
 - `execution_created`
 - `execution_completed`
 - `execution_accepted`
@@ -26,19 +28,23 @@
 - `tools_opened`
 
 ## Common Fields (by type)
+
 ### Template/Execution Events
+
 - `templateId`
 - `templateName`
 - `category`
 - `qualityScore` (execution_completed only)
 
 ### Skill Events
+
 - `skillId`
 - `skillTitle`
 - `domain`
 - `difficulty` (skill_viewed)
 
 ## Metrics Derived (Aggregation)
+
 - Top skills by views
 - Domain usage counts
 - Accept/reject ratio

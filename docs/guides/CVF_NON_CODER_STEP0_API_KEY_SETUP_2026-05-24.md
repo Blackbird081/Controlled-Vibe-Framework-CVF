@@ -43,12 +43,12 @@ compatibility.
 EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
 ```
 
-3. Create or open `.env.local`.
-4. Add one environment variable line using your real key value.
-5. Do not commit `.env.local`.
-6. Restart the dev server or proof process after changing the file.
-7. Run a boolean readiness check without printing the key value.
-8. Continue to the first-receipt guide.
+1. Create or open `.env.local`.
+2. Add one environment variable line using your real key value.
+3. Do not commit `.env.local`.
+4. Restart the dev server or proof process after changing the file.
+5. Run a boolean readiness check without printing the key value.
+6. Continue to the first-receipt guide.
 
 PowerShell readiness check:
 
@@ -92,4 +92,3 @@ printing the secret.
 It does not claim automated provider signup, universal provider availability,
 hosted secret management, enterprise onboarding, broad provider stability, or
 full production readiness.
-

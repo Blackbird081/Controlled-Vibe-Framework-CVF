@@ -12,6 +12,7 @@
 ## 📌 Prerequisites
 
 Khuyến khích:
+
 - [Landing Page](../web_development/01_landing_page.skill.md) — Hiểu landing page basics
 
 ---
@@ -21,12 +22,14 @@ Khuyến khích:
 Tối ưu landing page cho conversion rate: CTA placement, urgency elements, social proof positioning, form field optimization, và A/B test readiness.
 
 **Khi nào nên dùng:**
+
 - Landing page có traffic nhưng conversion thấp
 - Redesign landing page cho campaign mới
 - A/B test optimization
 - Muốn data-driven CRO recommendations
 
 **Không phù hợp khi:**
+
 - Landing page chưa có traffic (optimize sau khi có data)
 - Blog/content pages (khác mục đích)
 
@@ -74,7 +77,7 @@ Tối ưu landing page cho conversion rate: CTA placement, urgency elements, soc
 
 | Field | Bắt buộc | Mô tả | Ví dụ |
 |-------|----------|-------|-------|
-| **URL** | ✅ | Landing page URL | "https://myproduct.com/pricing" |
+| **URL** | ✅ | Landing page URL | "<https://myproduct.com/pricing>" |
 | **Conversion goal** | ✅ | CTA mong muốn | "Sign up for free trial" |
 | **Current metrics** | ✅ | Bounce rate, conversion rate | "Bounce: 65%, Conv: 1.2%" |
 | **Traffic source** | ❌ | Organic, paid, social | "Google Ads + organic" |
@@ -148,6 +151,7 @@ PROJECTED: 1.2% → 2.5-3.2% conversion
 - [ ] Page speed considered
 
 **Red flags (cần Reject):**
+
 - ⚠️ Generic "improve CTA" without specifics
 - ⚠️ No impact estimates
 - ⚠️ Recommend fake urgency/countdown
@@ -179,7 +183,8 @@ PROJECTED: 1.2% → 2.5-3.2% conversion
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 URL: https://mycrm.com/trial
 Goal: Start free trial
@@ -188,7 +193,8 @@ Traffic: 60% Google Ads, 40% organic
 Audience: Sales managers at SMBs
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 Fix 1: Hero CTA "Start 14-day Free Trial — No credit card" (+0.6%)
 Fix 2: Form 5 fields → 2 (email, company) (+0.4%)

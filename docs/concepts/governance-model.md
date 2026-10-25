@@ -59,6 +59,7 @@ When AI agents are used, CVF assigns 6 archetypes:
 | **Exploration** | Ideas, hypotheses, possible directions | Decisions, commitments |
 
 ### Rules
+
 - **1 agent = 1 archetype** at a time
 - Role switch requires **terminate current + spawn new**
 - Every agent action must specify: archetype + preset + command
@@ -83,6 +84,7 @@ Invocation → Binding → Activation → Execution → Transition → Terminati
 | **Termination** | Agent ends — logs output, releases authority |
 
 ### Key Rules
+
 - No infinite agents — every agent has a **stop condition**
 - Binding requires: archetype + preset + governance
 - Transition = terminate old agent, spawn new one (no morphing)
@@ -142,6 +144,7 @@ From highest to lowest authority:
 Phase gates are quality checkpoints between phases:
 
 ### Gate: Phase A → Phase B
+
 ```
 - [ ] Intent recorded clearly
 - [ ] Scope defined (in/out)
@@ -150,6 +153,7 @@ Phase gates are quality checkpoints between phases:
 ```
 
 ### Gate: Phase B → Phase C (PHASE_C_GATE)
+
 ```
 - [ ] Goals fixed (frozen)
 - [ ] Design detailed enough to implement
@@ -160,6 +164,7 @@ Phase gates are quality checkpoints between phases:
 ```
 
 ### Gate: Phase C → Phase D
+
 ```
 - [ ] All artifacts created
 - [ ] Output is evaluable
@@ -184,11 +189,13 @@ The v1.6 web UI offers 3 governance levels:
 ### How Quality Scoring Works (Rules Mode)
 
 Each AI response is evaluated across dimensions:
+
 - Did it follow the spec?
 - Is the output complete?
 - Are there scope violations?
 
 Score: **0–100**. Actions:
+
 - ✅ **Accept** (score ≥ threshold)
 - ❌ **Reject** (explain what's wrong)
 - 🔄 **Retry** (ask AI to try again)

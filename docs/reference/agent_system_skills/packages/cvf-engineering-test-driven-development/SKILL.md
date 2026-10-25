@@ -129,6 +129,7 @@ readiness remain blockers for later promotion.
 
 The package claim is narrowed to CVF-owned APPROVED package-loader body-read
 evidence only. It is not ACTIVE activation evidence.
+
 ## Claim Boundary
 
 This package root is an APPROVED CVF adaptation sourced from the upstream `test-driven-development` skill at pinned commit `aba7c4e9695c363e65cb59effe926c7f1d1abe3d`. It may be opened by the AGSK-R4 runtime package loader after AGSK-R7 lifecycle gates pass. It does not run test suites automatically, wire CI integrations, implement a CLI/MCP adapter, or claim automatic invocation.

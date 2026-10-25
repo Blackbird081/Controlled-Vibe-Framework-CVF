@@ -1,5 +1,6 @@
 The CVF One-Page Master Blueprint
 Governance Infrastructure for AI Agents
+
 1. Core Mission
 
 CVF tồn tại để giải quyết một vấn đề duy nhất:
@@ -18,7 +19,7 @@ coordinate
 
 CVF chính là layer đó.
 
-2. Strategic Position
+1. Strategic Position
 
 CVF không phải AI framework.
 
@@ -39,7 +40,7 @@ Cloud / Compute / LLM
 
 CVF nằm giữa agents và execution.
 
-3. CVF Core System
+1. CVF Core System
 
 CVF v1 chỉ có 4 thành phần.
 
@@ -59,7 +60,7 @@ CVF v1 chỉ có 4 thành phần.
                        |
                    Audit Log
 
-4. Core Components
+1. Core Components
 CVF Guard
 
 SDK đặt trước agent runtime.

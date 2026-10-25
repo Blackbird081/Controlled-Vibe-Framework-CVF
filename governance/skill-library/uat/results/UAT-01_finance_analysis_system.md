@@ -24,14 +24,17 @@ This UAT session is bound to the canonical Finance Analytics portfolio.
 ## B. Capability Boundary Verification
 
 ### B.1 Allowed Capabilities
+
 - Analyze provided budget, P&L, balance sheet, cash flow, KPI, and ROI data.
 - Produce advisory finance packets with assumptions and human decision boundary.
 
 ### B.2 Forbidden Capabilities
+
 - No certified accounting, tax, legal, or investment advice.
 - No invented figures or autonomous financial action.
 
 ### B.3 Test Scenarios
+
 | Scenario | Input | Expected | Actual | Result |
 |----------|-------|----------|--------|--------|
 | Happy path | Budget variance and cash context | Structured packet with metrics, findings, and next actions | | |

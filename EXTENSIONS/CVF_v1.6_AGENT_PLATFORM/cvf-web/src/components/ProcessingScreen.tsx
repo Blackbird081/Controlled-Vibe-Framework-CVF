@@ -479,7 +479,7 @@ export function ProcessingScreen({
         } finally {
             if (attempt.active) setApprovalSubmitting(false);
         }
-    }, [templateId, templateName, inputs, intent, error, executionOverrides?.cvfPhase, executionOverrides?.cvfRiskLevel, executionProvider, selectedModel]);
+    }, [templateId, templateName, inputs, intent, error, executionOverrides, executionProvider, selectedModel]);
 
     const runMockExecution = useCallback((attempt: Attempt) => {
         const { isVi, request } = latest.current;
@@ -523,12 +523,14 @@ export function ProcessingScreen({
         return () => clearTimeout(timer);
     }, [completion]);
 
+    const hasHtmlPilotIntent = Boolean(htmlPilotIntent);
+
     // The attempt restarts only when the request content (taskKey) or settings readiness changes.
     useEffect(() => {
         if (!isLoaded) {
             return;
         }
-        if (htmlPilotIntent && (!pilotDisclosure || !pilotConfirmed)) return;
+        if (hasHtmlPilotIntent && (!pilotDisclosure || !pilotConfirmed)) return;
 
         const attempt = createAttempt();
         attemptRef.current = attempt;
@@ -561,7 +563,7 @@ export function ProcessingScreen({
             stopAttempt(attempt);
             if (attemptRef.current === attempt) attemptRef.current = null;
         };
-    }, [taskKey, isLoaded, executeReal, runMockExecution, pilotDisclosure, pilotConfirmed, htmlPilotIntent?.operationKey]);
+    }, [taskKey, isLoaded, executeReal, runMockExecution, pilotDisclosure, pilotConfirmed, hasHtmlPilotIntent, htmlPilotIntent?.operationKey]);
 
     // Cancel invalidates the attempt, then forwards onCancel once per attempt.
     const handleCancel = useCallback(() => {

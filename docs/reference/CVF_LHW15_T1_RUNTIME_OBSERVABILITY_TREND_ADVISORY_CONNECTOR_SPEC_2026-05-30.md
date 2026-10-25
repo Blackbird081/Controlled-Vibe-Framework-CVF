@@ -126,6 +126,7 @@ event-model denominator separation.
 ## Claim Boundary
 
 This spec is documentation-only. It does not claim:
+
 - Live dashboard query or execution
 - Automated trend enforcement or alerting
 - Provider behavior or hosted readiness

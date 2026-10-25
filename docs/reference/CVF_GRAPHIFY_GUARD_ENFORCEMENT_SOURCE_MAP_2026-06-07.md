@@ -54,6 +54,7 @@ CI1-T2 recorded: `rg "G-GM-0" --include="*.ts"` across `EXTENSIONS/` → 0 resul
 
 **Current source contradicts this.** The present drift-check at HEAD `74ba8033` finds
 `G-GM-01` through `G-GM-08` at:
+
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/knowledge-graph-store.ts` lines 75–83 (`KgrGuardPolicyId` type union)
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/knowledge-graph-store.ts` lines 191–244 (`KGR_GUARD_POLICIES` constant, all 8 entries)
 - `EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src/index.ts` lines 127, 134, 140–141 (public re-exports)
@@ -161,6 +162,7 @@ This source map does not address CLI implementation; it is out of scope.
 are accounted for above. No file listed in the work order is unresolved.
 
 **Exclusions:**
+
 - Runtime implementation files under `EXTENSIONS/` beyond the KGR/retrieval surfaces listed: out of scope per work order §4.
 - `governance/compat/` machine check files: forbidden per work order §4.
 - `CVF_GRAPH_MEMORY_GUARD_SPEC.md` (legacy private reference): the finding packet already summarizes its content; direct re-read would be redundant and the file is in `.private_reference/legacy/` (read-only, not for modification). Content is already captured in CI1-T2 audit and finding file.
@@ -208,6 +210,7 @@ This source map claims only:
 > enforcement evidence, and a later implementation disposition.
 
 This source map does **not** claim:
+
 - Named runtime Graphify guard enforcement is wired for any policy
 - `cvf graph` CLI is implemented or ready
 - Knowledge graph product readiness

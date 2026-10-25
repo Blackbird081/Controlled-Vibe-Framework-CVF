@@ -18,6 +18,7 @@ Không yêu cầu.
 Phân tích đối thủ cạnh tranh một cách toàn diện để tìm ra điểm mạnh, điểm yếu, và cơ hội differentiation.
 
 **Khi nào nên dùng:**
+
 - Lập chiến lược marketing mới
 - Launch sản phẩm mới vào thị trường
 - Mất market share cho đối thủ
@@ -62,6 +63,7 @@ Phân tích đối thủ cạnh tranh một cách toàn diện để tìm ra đi
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -77,6 +79,7 @@ Phân tích đối thủ cạnh tranh một cách toàn diện để tìm ra đi
 ## ✅ Checklist Đánh giá (cho mỗi đối thủ)
 
 ### Product/Service
+
 - [ ] Họ offer gì? Core features?
 - [ ] Pricing structure như thế nào?
 - [ ] Unique Selling Points là gì?
@@ -84,24 +87,28 @@ Phân tích đối thủ cạnh tranh một cách toàn diện để tìm ra đi
 - [ ] Có gì họ làm kém hơn bạn?
 
 ### Market Position
+
 - [ ] Họ target segment nào?
 - [ ] Positioning: Budget / Mid / Premium?
 - [ ] Estimated market share?
 - [ ] Brand perception như thế nào?
 
 ### Marketing Strategy
+
 - [ ] Channels họ sử dụng? (SEO, Ads, Social, etc.)
 - [ ] Content strategy? (Blog, Video, Podcast)
 - [ ] Messaging và tone of voice?
 - [ ] Estimated marketing budget?
 
 ### Digital Presence
+
 - [ ] Website traffic (SimilarWeb estimate)?
 - [ ] SEO rankings cho key terms?
 - [ ] Social media followers và engagement?
 - [ ] Review scores (G2, Capterra, Google)?
 
 ### Customer Experience
+
 - [ ] Onboarding process?
 - [ ] Customer support options?
 - [ ] User reviews nói gì?
@@ -124,7 +131,7 @@ Phân tích đối thủ cạnh tranh một cách toàn diện để tìm ra đi
 
 ## 💡 Tips & Examples
 
-### Competitive Analysis Framework:
+### Competitive Analysis Framework
 
 ```
 +------------------+--------+----------+----------+
@@ -138,7 +145,8 @@ Phân tích đối thủ cạnh tranh một cách toàn diện để tìm ra đi
 +------------------+--------+----------+----------+
 ```
 
-### Free Tools for Competitor Research:
+### Free Tools for Competitor Research
+
 | Tool | What it shows |
 |------|---------------|
 | **SimilarWeb** | Traffic estimates, sources |
@@ -148,7 +156,8 @@ Phân tích đối thủ cạnh tranh một cách toàn diện để tìm ra đi
 | **Wayback Machine** | Historical changes |
 | **G2/Capterra** | User reviews |
 
-### SWOT Template (per competitor):
+### SWOT Template (per competitor)
+
 ```
 STRENGTHS                    WEAKNESSES
 - Strong brand               - High prices
@@ -161,7 +170,8 @@ OPPORTUNITIES               THREATS
 - Bad reviews on Z          - Acquiring companies
 ```
 
-### Finding Your Blue Ocean:
+### Finding Your Blue Ocean
+
 1. List what competitors compete on
 2. Find what they ALL ignore
 3. That's your differentiation opportunity
@@ -184,7 +194,8 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Sản phẩm: StockFlow (SaaS quản lý tồn kho cho chuỗi cửa hàng)
 Thị trường: VN/SEA, SMB retail
@@ -193,7 +204,8 @@ Kênh tăng trưởng: SEO + Facebook Ads
 Mục tiêu: Xác định điểm khác biệt trong 90 ngày
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Competitor Snapshot
 
@@ -217,13 +229,15 @@ Mục tiêu: Xác định điểm khác biệt trong 90 ngày
 3. Viết bài SEO “phần mềm quản lý kho offline”
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ So sánh rõ ràng, có khoảng trống thị trường
 - ✅ Positioning có khác biệt
 - ✅ Hành động cụ thể theo thời gian
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Brand Voice Consistency](./brand_voice_consistency.skill.md)
 - [Pricing Strategy Review](./pricing_strategy_review.skill.md)
 

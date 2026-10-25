@@ -75,6 +75,7 @@ python cli/cvf_validate.py validate code_review.contract.yaml
 ```
 
 Expected output:
+
 ```
 ✅ code_review.contract.yaml: VALID
 ```

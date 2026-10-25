@@ -98,6 +98,7 @@ This template contains **~49% reference-only files** that demonstrate patterns b
 ### No CVF Runtime Integration
 
 This template does **not** include CVF governance enforcement. It demonstrates:
+
 - ✅ How to structure an AI server application
 - ✅ Multi-provider AI chat patterns
 - ✅ Streaming response patterns

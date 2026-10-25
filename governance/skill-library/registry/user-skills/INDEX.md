@@ -1,4 +1,5 @@
 # User Skills Registry Index
+
 Text Encoding Exception: preserves source-faithful Unicode from accepted skill metadata.
 
 > **Total Skills:** 62
@@ -8,7 +9,6 @@ Text Encoding Exception: preserves source-faithful Unicode from accepted skill m
 ---
 
 ## Skills by Domain
-
 
 ### Ai Ml Evaluation (6 skills)
 

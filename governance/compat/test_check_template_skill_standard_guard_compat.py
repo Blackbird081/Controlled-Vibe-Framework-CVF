@@ -117,17 +117,14 @@ class TestMarkerViolationDetection(_RepoMixin, unittest.TestCase):
             result["markerViolations"][MODULE.STANDARD_PATH],
         )
 
-    def test_handoff_loses_compat_script_marker(self) -> None:
-        """Remove compat-script reference from handoff → detected."""
+    def test_session_memory_loses_continuity_marker(self) -> None:
+        """The current session front door retains the private blocked-lane marker."""
         self._seed_compliant_repo()
-        handoff_text = _minimal_text_for(MODULE.HANDOFF_PATH)
-        self._write(
-            MODULE.HANDOFF_PATH,
-            handoff_text.replace(MODULE.THIS_SCRIPT_PATH, ""),
-        )
+        text = _minimal_text_for(MODULE.SESSION_MEMORY_PATH)
+        self._write(MODULE.SESSION_MEMORY_PATH, text.replace("blocked work classes", ""))
         with patch.object(MODULE, "REPO_ROOT", self.repo_root):
             result = MODULE._classify({})
-        self.assertIn(MODULE.HANDOFF_PATH, result["markerViolations"])
+        self.assertIn(MODULE.SESSION_MEMORY_PATH, result["markerViolations"])
 
     def test_master_policy_loses_guard_path_marker(self) -> None:
         """Remove guard path from master policy → detected."""

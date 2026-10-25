@@ -13,6 +13,7 @@ Reusable UI components cho CVF Web Interface.
 ## Form Components
 
 ### TextField
+
 ```jsx
 <TextField
   label="Chủ đề chiến lược"
@@ -23,6 +24,7 @@ Reusable UI components cho CVF Web Interface.
 ```
 
 ### TextArea
+
 ```jsx
 <TextArea
   label="Bối cảnh"
@@ -33,6 +35,7 @@ Reusable UI components cho CVF Web Interface.
 ```
 
 ### Select
+
 ```jsx
 <Select
   label="Ưu tiên"
@@ -42,6 +45,7 @@ Reusable UI components cho CVF Web Interface.
 ```
 
 ### MultiSelect
+
 ```jsx
 <MultiSelect
   label="Focus areas"
@@ -54,16 +58,19 @@ Reusable UI components cho CVF Web Interface.
 ## Button Components
 
 ### Primary Button
+
 ```jsx
 <Button variant="primary" icon="🚀">Submit</Button>
 ```
 
 ### Secondary Button
+
 ```jsx
 <Button variant="secondary">Cancel</Button>
 ```
 
 ### Action Buttons
+
 ```jsx
 <ButtonGroup>
   <Button variant="success" icon="✅">Accept</Button>
@@ -77,6 +84,7 @@ Reusable UI components cho CVF Web Interface.
 ## Card Components
 
 ### Template Card
+
 ```jsx
 <TemplateCard
   icon="📊"
@@ -87,6 +95,7 @@ Reusable UI components cho CVF Web Interface.
 ```
 
 ### History Card
+
 ```jsx
 <HistoryCard
   status="accepted" // or "rejected"
@@ -101,6 +110,7 @@ Reusable UI components cho CVF Web Interface.
 ## Feedback Components
 
 ### Loading
+
 ```jsx
 <Loading
   progress={60}
@@ -110,6 +120,7 @@ Reusable UI components cho CVF Web Interface.
 ```
 
 ### Error
+
 ```jsx
 <Error
   title="Unable to process"
@@ -119,6 +130,7 @@ Reusable UI components cho CVF Web Interface.
 ```
 
 ### Success
+
 ```jsx
 <Success
   title="Analysis Complete"
@@ -131,6 +143,7 @@ Reusable UI components cho CVF Web Interface.
 ## Layout Components
 
 ### Container
+
 ```jsx
 <Container maxWidth="lg" padding="xl">
   {children}
@@ -138,6 +151,7 @@ Reusable UI components cho CVF Web Interface.
 ```
 
 ### Grid
+
 ```jsx
 <Grid columns={4} gap="md">
   <TemplateCard />

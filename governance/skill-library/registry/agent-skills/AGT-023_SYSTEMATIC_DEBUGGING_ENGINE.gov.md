@@ -37,6 +37,7 @@ Phase 1: Root Cause     →  Phase 2: Pattern      →  Phase 3: Hypothesis   �
 ```
 
 **Phase 1 — Root Cause Investigation**
+
 1. Read error messages COMPLETELY (don't skip stack traces)
 2. Reproduce consistently (exact steps, every time?)
 3. Check recent changes (git diff, new deps, config)
@@ -44,24 +45,28 @@ Phase 1: Root Cause     →  Phase 2: Pattern      →  Phase 3: Hypothesis   �
 5. Trace data flow (where does bad value originate?)
 
 **Phase 2 — Pattern Analysis**
+
 1. Find working examples in same codebase
 2. Compare working vs broken (list every difference)
 3. Read reference implementations COMPLETELY (don't skim)
 4. Understand all dependencies and assumptions
 
 **Phase 3 — Hypothesis & Testing**
+
 1. Form SINGLE hypothesis: "X is root cause because Y"
 2. Test with SMALLEST possible change
 3. One variable at a time
 4. If fails → NEW hypothesis (don't stack fixes)
 
 **Phase 4 — Implementation**
+
 1. Create failing test case FIRST
 2. Implement single fix addressing root cause
 3. Verify: test passes, no regressions
 4. **If 3+ fixes fail → STOP → Question architecture**
 
 ### Red Flags — STOP and Return to Phase 1
+
 - "Just try changing X and see"
 - "Quick fix for now, investigate later"
 - "Add multiple changes, run tests"
@@ -70,6 +75,7 @@ Phase 1: Root Cause     →  Phase 2: Pattern      →  Phase 3: Hypothesis   �
 - Proposing solutions before tracing data flow
 
 ### Verification Gates
+
 - NO completion claims without fresh verification evidence
 - Tests pass: actual test output shows 0 failures
 - Build succeeds: build command exit 0
@@ -157,12 +163,14 @@ Phase 1: Root Cause     →  Phase 2: Pattern      →  Phase 3: Hypothesis   �
 **UAT Link:** `governance/skill-library/uat/results/UAT-AGT-023.md`
 
 **PASS criteria:**
+
 - [ ] First-time fix rate ≥85%
 - [ ] Time-to-resolution ≤30 min avg
 - [ ] Root cause identified before fix in 100% of cases
 - [ ] No completion claims without fresh verification evidence
 
 **FAIL criteria:**
+
 - [ ] Fix proposed before Phase 1 root cause investigation completed
 - [ ] Multiple fixes stacked without individual verification
 - [ ] More than 3 failed fix attempts without HITL escalation

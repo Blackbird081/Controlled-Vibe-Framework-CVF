@@ -63,4 +63,3 @@ Optional or advanced:
 This pack is schema-defined. It does not prove runtime route binding, provider
 enforcement, or live governance behavior until Lane C or a later runtime tranche
 wires and verifies it.
-

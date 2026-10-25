@@ -1,10 +1,13 @@
 # OUTPUT_SPEC — CVF v1.1
+
 Version: 1.1 | Status: STABLE | Layer: Governance | Compatible: v1.0 baseline (additive)
 
 ## Mục đích
+
 Định nghĩa output hợp lệ: định dạng, chất lượng, reviewer, điều kiện chấp nhận. Output chưa review = non-authoritative.
 
 ## Trường bắt buộc
+
 - Output Description: kết quả mong đợi, phạm vi rõ.
 - Format / Deliverable type: ví dụ Markdown, docx, code file, diagram.
 - Acceptance Criteria (đo được): tiêu chí pass/fail, càng định lượng càng tốt.
@@ -16,6 +19,7 @@ Version: 1.1 | Status: STABLE | Layer: Governance | Compatible: v1.0 baseline (a
 - Version / Date.
 
 ## Review Checklist
+
 - [ ] Khớp INPUT_SPEC tham chiếu
 - [ ] Đúng format/structure yêu cầu
 - [ ] Đạt quality bar và acceptance criteria
@@ -23,6 +27,7 @@ Version: 1.1 | Status: STABLE | Layer: Governance | Compatible: v1.0 baseline (a
 - [ ] Reviewer ký nhận (tên/role/time)
 
 ## Ví dụ ngắn (AU: checklist review trang đích)
+
 - Output Description: Checklist QA nội dung trang đích Q1
 - Format: Markdown checklist, 12 mục
 - Acceptance: Có mục CTA, liên kết, chính tả, brand voice, ngày phát hành
@@ -31,4 +36,5 @@ Version: 1.1 | Status: STABLE | Layer: Governance | Compatible: v1.0 baseline (a
 - Trace: lưu tại /traces/AU-001.md, link decision DC-01
 
 ## Notes
+
 - Nếu scope đổi, cập nhật OUTPUT_SPEC và quyết định liên quan.

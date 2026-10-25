@@ -56,21 +56,25 @@ interface ExecutionEvent {
 ## Metrics Derived
 
 ### Accept Rate
+
 ```
 accept_rate = accepted / (accepted + rejected) * 100
 ```
 
 ### First-time Accept Rate
+
 ```
 first_time_accept = accepted_without_retry / total * 100
 ```
 
 ### Average Review Time
+
 ```
 avg_review_time = sum(review_duration) / count
 ```
 
 ### Reject Reasons Distribution
+
 ```sql
 SELECT reject_reason, COUNT(*) as count
 FROM executions
@@ -139,6 +143,7 @@ CREATE INDEX idx_timestamp ON execution_events(timestamp);
 ## Example Queries
 
 ### Overall Accept Rate
+
 ```sql
 SELECT 
   COUNT(CASE WHEN status = 'accepted' THEN 1 END) * 100.0 / COUNT(*) as accept_rate
@@ -147,6 +152,7 @@ WHERE timestamp > NOW() - INTERVAL '7 days';
 ```
 
 ### Template Performance
+
 ```sql
 SELECT 
   template_id,

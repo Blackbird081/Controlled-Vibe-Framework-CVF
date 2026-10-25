@@ -18,12 +18,14 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Blog cá nhân hoặc công ty
 - Documentation cho sản phẩm
 - Knowledge base / Wiki
 - Tutorial / Guide website
 
 **Không phù hợp khi:**
+
 - Cần bán hàng → Dùng Landing Page
 - Cần app phức tạp → Dùng SaaS App
 - Portfolio showcase → Dùng Portfolio
@@ -67,6 +69,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -83,6 +86,7 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Blog/Docs website hoàn chỉnh
 - Homepage với featured + recent posts
 - Post page với TOC
@@ -92,7 +96,8 @@ Không yêu cầu.
 
 **Cấu trúc tiêu chuẩn:**
 
-### Blog Pattern:
+### Blog Pattern
+
 ```
 ┌─────────────────────────────────────────┐
 │ Homepage                                │
@@ -112,7 +117,8 @@ Không yêu cầu.
 └─────────────────────────────────────────┘
 ```
 
-### Docs Pattern:
+### Docs Pattern
+
 ```
 ┌───────────────────────────────────────────────────────────┐
 │  ┌────────────┐ ┌─────────────────────┐ ┌────────────┐   │
@@ -143,6 +149,7 @@ Không yêu cầu.
 - [ ] SEO meta tags đầy đủ
 
 **Red flags (cần Reject):**
+
 - ⚠️ Font quá nhỏ / line-height quá sát
 - ⚠️ Không có TOC cho bài dài
 - ⚠️ Search không hoạt động
@@ -174,7 +181,8 @@ Không yêu cầu.
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Loại: Blog về AI và Machine Learning
 Nội dung: Tutorials, news, case studies
@@ -184,7 +192,8 @@ Categories: Tutorials, News, Case Studies, Tools
 Tham khảo: blog.vercel.com, overreacted.io
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 Blog với:
 - Homepage: Featured + Recent grid
@@ -197,7 +206,8 @@ Blog với:
 - Dark mode
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Typography: 18px, 1.7 line-height
 - ✅ TOC sticky sidebar
 - ✅ Search working
@@ -210,6 +220,7 @@ Blog với:
 ---
 
 ## 🔗 Related Skills
+
 - [Dashboard](./03_dashboard.skill.md)
 - [Portfolio](./05_portfolio.skill.md)
 

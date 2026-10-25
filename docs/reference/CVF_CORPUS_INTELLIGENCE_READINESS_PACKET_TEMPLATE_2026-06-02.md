@@ -59,7 +59,6 @@ This template is corpus-type agnostic. It applies equally to CVF legacy
 absorption rescans, legal/policy document corpora, internal company document
 sets, source-code documentation, and any other bounded corpus.
 
-
 ## How To Use This Template
 
 1. Copy this file to a task-specific path under `docs/audits/` named for the

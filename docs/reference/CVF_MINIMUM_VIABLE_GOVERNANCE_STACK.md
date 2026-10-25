@@ -1,6 +1,7 @@
 User Intent
      │
      ▼
+
 1. Intent Validation
      │
      ▼
@@ -18,7 +19,7 @@ User Intent
      ▼
 Tools / APIs / Systems
 
-1. Intent Validation
+6. Intent Validation
 
 Mục tiêu: kiểm tra yêu cầu trước khi agent lập kế hoạch.
 
@@ -90,7 +91,8 @@ Threshold:
 > 0.8 → block
 0.5–0.8 → restricted execution
 < 0.5 → allow
-4. Execution Guard
+
+1. Execution Guard
 
 Mục tiêu: kiểm soát agent khi thực thi.
 
@@ -115,7 +117,7 @@ Tool / API
 
 Agent không được gọi tool trực tiếp — phải đi qua guard.
 
-5. Audit Ledger
+1. Audit Ledger
 
 Mục tiêu: ghi lại toàn bộ hành vi của agent.
 
@@ -188,7 +190,7 @@ custom agents
 
 Không làm chậm agent runtime.
 
-3. Mandatory gateway
+1. Mandatory gateway
 
 Mọi tool execution phải đi qua CVF.
 

@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá website về các yếu tố SEO cơ bản, phát hiện vấn đề và đề xuất cải thiện để tăng khả năng hiển thị trên search engines.
 
 **Khi nào nên dùng:**
+
 - Trước khi launch website mới
 - Website có traffic giảm đột ngột
 - Kiểm tra định kỳ hàng quý
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -77,6 +79,7 @@ Không yêu cầu.
 ## ✅ Checklist Đánh giá
 
 ### Technical SEO
+
 - [ ] Website có SSL certificate (HTTPS)?
 - [ ] Sitemap.xml có tồn tại và đúng format?
 - [ ] Robots.txt được cấu hình đúng?
@@ -86,6 +89,7 @@ Không yêu cầu.
 - [ ] URL structure có clean và descriptive?
 
 ### On-Page SEO
+
 - [ ] Mỗi page có unique title tag (50-60 ký tự)?
 - [ ] Meta description có compelling (150-160 ký tự)?
 - [ ] Chỉ có 1 H1 tag per page?
@@ -95,6 +99,7 @@ Không yêu cầu.
 - [ ] Content có keyword optimization phù hợp?
 
 ### Content Quality (E-E-A-T)
+
 - [ ] Content có thể hiện Experience (kinh nghiệm)?
 - [ ] Content có thể hiện Expertise (chuyên môn)?
 - [ ] Content có thể hiện Authoritativeness (uy tín)?
@@ -102,6 +107,7 @@ Không yêu cầu.
 - [ ] Có author bio và credentials?
 
 ### Off-Page SEO
+
 - [ ] Có backlinks từ sites uy tín?
 - [ ] Google Business Profile (nếu local business)?
 - [ ] Social signals có presence?
@@ -124,19 +130,22 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Công cụ miễn phí để kiểm tra:
+### Công cụ miễn phí để kiểm tra
+
 - **Google PageSpeed Insights**: Tốc độ và Core Web Vitals
 - **Google Search Console**: Lỗi indexing và keywords
 - **Screaming Frog (free)**: Crawl technical issues
 - **GTmetrix**: Performance analysis
 
-### Ví dụ Title Tag tốt:
+### Ví dụ Title Tag tốt
+
 ```
 ❌ "Trang chủ"
 ✅ "Mua Giày Thể Thao Nike Chính Hãng | Free Ship | ShopXYZ"
 ```
 
-### Ví dụ Meta Description tốt:
+### Ví dụ Meta Description tốt
+
 ```
 ❌ "Chúng tôi bán giày"
 ✅ "Khám phá 500+ mẫu giày Nike, Adidas chính hãng. Giá tốt nhất, 
@@ -159,7 +168,8 @@ Khi paste spec này vào AI (ChatGPT/Claude/Gemini), bạn sẽ nhận được:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 URL: https://stockflow.vn
 Target keywords: "phần mềm quản lý kho", "barcode inventory"
@@ -167,7 +177,8 @@ GSC CTR: 1.2%, Avg pos: 11
 CWV: LCP 4.2s, CLS 0.18
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # SEO Audit Summary
 
@@ -184,13 +195,15 @@ CWV: LCP 4.2s, CLS 0.18
 Expected impact: +20-30% CTR
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Ưu tiên rõ P0/P1
 - ✅ Hành động cụ thể, khả thi
 - ✅ Kỳ vọng impact hợp lý
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Landing Page CRO](./landing_page_cro.skill.md)
 - [Content Quality Checklist](./content_quality_checklist.skill.md)
 

@@ -523,6 +523,7 @@ its focused tests so future work-order authors get safer defaults for known
 literal-shape traps discovered during MSEA-R16-T1 dispatch authoring.
 
 Protected paths:
+
 - `governance/compat/build_dispatch_packet_scaffold.py`
 - `governance/compat/test_build_dispatch_packet_scaffold.py`
 

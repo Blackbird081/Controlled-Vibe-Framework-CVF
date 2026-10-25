@@ -32,9 +32,11 @@ Safe/Auto         Low/Auto           Medium/Supervised    High/Manual
 ## Skill 1: Cloud Deployment Strategist (AGT-030)
 
 ### What It Does
+
 Completes the development lifecycle by covering **deployment and infrastructure** — from choosing the right platform to GitOps workflows and CI/CD pipeline integration.
 
 ### Platform Selection Decision Tree
+
 ```
 Need sub-50ms global latency? ──Yes──→ Cloudflare Workers (Edge)
          │No
@@ -48,12 +50,14 @@ Simple containerized app? ──Yes──→ Docker Compose (VPS/VM)
 ```
 
 ### Key Patterns
+
 - **Multi-stage Dockerfile**: Builder stage (dependencies + build) → Runtime stage (slim image, non-root user)
 - **K8s Deployment Strategies**: Rolling Update (default), Blue-Green (zero downtime), Canary (gradual validation)
 - **GitOps**: ArgoCD for large teams, Flux for simple single-cluster setups
 - **CI/CD Pipeline**: 6 gates from lint → test → build → scan → push → deploy
 
 ### Chat Prompt Examples
+
 ```
 "Choose the best deployment platform for my Next.js SaaS app with 10K users"
 "Create a multi-stage Dockerfile for my Node.js API with security best practices"
@@ -66,12 +70,15 @@ Simple containerized app? ──Yes──→ Docker Compose (VPS/VM)
 ## Skill 2: Code Review & Verification Gate (AGT-031)
 
 ### What It Does
+
 Enforces **technical rigor over social performance** in code reviews. Three practices: receiving feedback correctly, requesting structured reviews, and verification gates requiring evidence before any completion claims.
 
 ### The Iron Law
+>
 > **NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE**
 
 ### Three Practices
+
 | Practice | Protocol | Key Rule |
 |----------|----------|----------|
 | **Receiving Feedback** | READ → UNDERSTAND → VERIFY → EVALUATE → RESPOND → IMPLEMENT | No performative agreement ("Great point!") |
@@ -79,6 +86,7 @@ Enforces **technical rigor over social performance** in code reviews. Three prac
 | **Verification Gate** | IDENTIFY → RUN → READ → VERIFY → CLAIM | Fresh evidence only (<5 min) |
 
 ### Forbidden vs Correct Patterns
+
 | ❌ Never Say | ✅ Say Instead |
 |-------------|---------------|
 | "You're absolutely right!" | "I understand the concern. Let me verify..." |
@@ -86,6 +94,7 @@ Enforces **technical rigor over social performance** in code reviews. Three prac
 | "I think it's done" | [run build + tests] "Build succeeds, all tests pass. Evidence: ..." |
 
 ### Chat Prompt Examples
+
 ```
 "Review my latest changes — here's the diff since commit abc123"
 "Apply verification gates before I claim this feature is complete"
@@ -98,9 +107,11 @@ Enforces **technical rigor over social performance** in code reviews. Three prac
 ## Skill 3: MCP Server Builder (AGT-032)
 
 ### What It Does
+
 Structured 4-phase methodology for building **production-quality MCP servers**. Focuses on agent-centric design — tools that enable workflows, not just API wrappers.
 
 ### Agent-Centric Design Principles
+
 | ❌ API-Centric | ✅ Agent-Centric |
 |---------------|-----------------|
 | Wrap every endpoint as a tool | Design workflow-oriented tools |
@@ -109,6 +120,7 @@ Structured 4-phase methodology for building **production-quality MCP servers**. 
 | "Error occurred" | "Rate limited — retry after 30s" |
 
 ### 4-Phase Workflow
+
 ```
 Phase 1: Research & Plan → Phase 2: Implement → Phase 3: Review → Phase 4: Evaluate
 Protocol docs, API study    Python/TypeScript     Quality checklist    10 eval questions
@@ -117,6 +129,7 @@ I/O schema planning         Tool annotations       Type safety audit    XML eval
 ```
 
 ### Chat Prompt Examples
+
 ```
 "Build an MCP server in Python (FastMCP) for the GitHub API"
 "Design agent-centric tools for a project management service"
@@ -129,9 +142,11 @@ I/O schema planning         Tool annotations       Type safety audit    XML eval
 ## Skill 4: AI Multimodal Processor (AGT-033)
 
 ### What It Does
+
 Process **audio, images, video, and documents** through multimodal AI APIs. Provides model selection, cost optimization, and implementation patterns for each modality.
 
 ### Capability Matrix
+
 | Task | Audio | Image | Video | Document |
 |------|:-----:|:-----:|:-----:|:--------:|
 | Transcription | ✅ | — | ✅ | — |
@@ -142,6 +157,7 @@ Process **audio, images, video, and documents** through multimodal AI APIs. Prov
 | Generation | TTS | — | — | ✅ |
 
 ### Model Selection
+
 ```
 Need highest accuracy? ──→ gemini-2.5-pro ($3/1M tokens)
 Budget-sensitive? ──→ gemini-2.5-flash-lite ($0.50/1M tokens)
@@ -150,6 +166,7 @@ Standard tasks ──→ gemini-2.5-flash ($1/1M tokens, best balance)
 ```
 
 ### Cost Optimization Tips
+
 - Use File API for files >20MB (avoids repeated upload)
 - Compress media before upload
 - Process specific segments, not entire long videos
@@ -157,6 +174,7 @@ Standard tasks ──→ gemini-2.5-flash ($1/1M tokens, best balance)
 - Cache responses for repeated queries
 
 ### Chat Prompt Examples
+
 ```
 "Transcribe this 2-hour podcast with timestamps and speaker IDs"
 "Extract all tables from this 50-page PDF as structured JSON"

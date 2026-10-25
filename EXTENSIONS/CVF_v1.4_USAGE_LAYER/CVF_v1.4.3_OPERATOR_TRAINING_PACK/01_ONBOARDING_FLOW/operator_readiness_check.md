@@ -11,7 +11,7 @@ CVF chỉ tin vào hành vi có thể quan sát
 Readiness ≠ kiến thức
 → Readiness = ra quyết định đúng trong bối cảnh mơ hồ
 
-2. Khi nào cần thực hiện readiness check
+1. Khi nào cần thực hiện readiness check
 
 Thực hiện bắt buộc khi:
 
@@ -23,7 +23,7 @@ Operator chuyển role (observer → executor)
 
 Operator từng gây incident mức ⚠️ trở lên
 
-3. Cấu trúc readiness check (15–20 phút)
+1. Cấu trúc readiness check (15–20 phút)
 3.1. Self-Assessment nhanh (5 phút)
 
 Operator tự trả lời, không tra tài liệu:
@@ -34,6 +34,7 @@ Operator tự trả lời, không tra tài liệu:
 | Khi nào **phải escalate**?                          | Nhận diện đúng boundary |
 | Thứ tự ưu tiên: Correctness – Speed – Completeness? | Trả lời đúng thứ tự     |
 | Một ví dụ task **nên từ chối xử lý**                | Có lý do hợp lệ         |
+
 👉 Nếu trả lời mang tính chung chung → fail ngay
 
 3.2. Scenario Check (10 phút – bắt buộc)
@@ -90,13 +91,13 @@ Bị audit log bất kỳ lúc nào
 
 👉 Không đồng ý = không onboard
 
-4. Kết quả readiness
+1. Kết quả readiness
 | Kết quả        | Ý nghĩa                           |
 | -------------- | --------------------------------- |
 | ✅ Pass         | Được cấp quyền xử lý task thật    |
 | ⚠️ Conditional | Chỉ xử lý task low-risk           |
 | ❌ Fail         | Quay lại onboarding / shadow mode |
-5. Các lỗi phổ biến khiến operator fail
+2. Các lỗi phổ biến khiến operator fail
 
 “AI nói vậy nên em làm theo”
 
@@ -108,7 +109,7 @@ Né escalation vì sợ chậm tiến độ
 
 👉 CVF coi đây là risk behavior, không phải lỗi cá nhân.
 
-6. Nguyên tắc quan trọng (in đậm cho operator)
+1. Nguyên tắc quan trọng (in đậm cho operator)
 
 CVF thà chậm còn hơn sai.
 CVF thà dừng sớm còn hơn sửa hậu quả.

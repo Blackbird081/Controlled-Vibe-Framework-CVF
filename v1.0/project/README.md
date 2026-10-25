@@ -13,6 +13,7 @@ between humans and AI agents.
 ## 1. Project Purpose
 
 Briefly describe:
+
 - What problem this project solves
 - Who it is for
 - What is explicitly OUT of scope
@@ -40,6 +41,7 @@ All contributors (human or AI) must comply.
 Refer to `PHASE_STATUS.md` for authoritative status.
 
 Summary (optional):
+
 - Active Phase: Phase A / B / C / D
 - Locked Phases: Listed in PHASE_STATUS.md
 
@@ -81,6 +83,7 @@ Non-compliant commits should not be merged.
 ## 7. AI Usage Policy
 
 AI agents:
+
 - Must follow CVF rules
 - Must not cross locked phases
 - Must not introduce decisions silently
@@ -93,6 +96,7 @@ until validated by project rules.
 ## 8. Notes
 
 This repository prioritizes:
+
 - Thinking over speed
 - Control over convenience
 - Explicit structure over intuition

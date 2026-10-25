@@ -17,11 +17,13 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng:**
+
 - Launch sản phẩm ở thị trường mới
 - Audit compliance định kỳ
 - Chuẩn bị cho external audit
 
 **Không phù hợp khi:**
+
 - Complex multi-jurisdiction → Cần specialist
 
 ---
@@ -63,6 +65,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -85,12 +88,14 @@ Không yêu cầu.
 ## 🔍 Cách đánh giá
 
 **Checklist:**
+
 - [ ] Cover đúng jurisdictions
 - [ ] Requirements actionable
 - [ ] Priority ranking hợp lý
 - [ ] Include documentation needs
 
 **Red flags:**
+
 - ⚠️ Missing major regulations
 - ⚠️ Outdated requirements
 
@@ -127,14 +132,16 @@ Sau khi hoàn thành **Compliance Checklist**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Market: VN + EU
 Data: PII + payment via Stripe
 Sản phẩm: StockFlow
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Compliance Checklist
 
@@ -145,13 +152,15 @@ Sản phẩm: StockFlow
 - Tax/Invoice: xuất hóa đơn VAT
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Checklist đúng thị trường
 - ✅ Bao phủ data + security + tax
 - ✅ Hành động cụ thể
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Terms of Service](./03_terms_of_service.skill.md)
 - [IP Protection](./05_ip_protection.skill.md)
 
@@ -162,7 +171,7 @@ Sản phẩm: StockFlow
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: IP Protection
 
 Sau khi hoàn thành **Compliance Checklist**, tiếp tục với:
 → [IP Protection](./05_ip_protection.skill.md)
@@ -170,3 +179,5 @@ Sau khi hoàn thành **Compliance Checklist**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Legal & Contracts Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

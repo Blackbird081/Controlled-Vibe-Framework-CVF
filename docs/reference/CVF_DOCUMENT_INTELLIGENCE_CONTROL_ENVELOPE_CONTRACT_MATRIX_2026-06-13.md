@@ -49,6 +49,7 @@ authorization, machine-check candidates, and claim boundary for the Document
 Intelligence Control Envelope foundation layer.
 
 In scope:
+
 - owner reconciliation of EXA-T2, DIR-T1, extraction pipeline, and EX-T9
   surfaces;
 - five doc-only DICE envelope labels (`DocumentIntelligenceControlEnvelope`,
@@ -61,6 +62,7 @@ In scope:
 - machine-check candidates for DICE-T1.
 
 Out of scope:
+
 - runtime source implementation;
 - external Document Translator or Policy_Local tree access;
 - OCR/provider/API execution or cost-bearing computation;

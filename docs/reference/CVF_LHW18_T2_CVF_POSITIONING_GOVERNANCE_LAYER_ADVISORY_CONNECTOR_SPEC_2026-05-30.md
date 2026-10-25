@@ -132,6 +132,7 @@ because the public catalog did not surface them. This was a **documentation fail
 capability gap** (per GC-024 rule already in place).
 
 Advisory: any future public-facing CVF document must:
+
 1. Lead with "CVF = Governance & Safety Layer" framing, not "Agent OS"
 2. Surface CLI (`CVF_ECO_v2.2_GOVERNANCE_CLI`), benchmark, and MCP capabilities explicitly
 3. Use the framework-comparison table above when explaining CVF's position

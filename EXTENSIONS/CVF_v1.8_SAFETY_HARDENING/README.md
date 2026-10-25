@@ -15,6 +15,7 @@ CVF v1.8 **hardens** the existing v1.7.1 Safety Kernel into a fully deterministi
 This is NOT a replacement of v1.7.1. It is the **specification for the next evolution** of the same kernel (see ADR-010).
 
 **Core philosophy:**
+
 ```
 "AI is an untrusted executor. Kernel is the trusted authority."
 ```
@@ -32,6 +33,7 @@ This is NOT a replacement of v1.7.1. It is the **specification for the next evol
 | Creative Control | Mutation Budget System — quantified limits per mode |
 
 **New in v1.8 (not in v1.7.1):**
+
 - Execution Lifecycle Controller (7-phase state machine: INTENT→COMMIT)
 - Deterministic Mutation Sandbox (AI proposes → Kernel applies)
 - Rollback Manager (every execution has a rollback key)

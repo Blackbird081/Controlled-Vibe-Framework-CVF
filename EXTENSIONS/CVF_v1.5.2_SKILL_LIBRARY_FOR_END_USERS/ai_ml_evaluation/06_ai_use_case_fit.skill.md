@@ -17,11 +17,13 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng:**
+
 - Đánh giá có nên dùng AI không
 - Compare AI vs traditional solutions
 - Estimate ROI of AI implementation
 
 **Không phù hợp khi:**
+
 - Already decided → Move to implementation
 - Need detailed ROI → Financial analyst
 
@@ -64,6 +66,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -88,12 +91,14 @@ Không yêu cầu.
 ## 🔍 Cách đánh giá
 
 **Checklist:**
+
 - [ ] Honest assessment
 - [ ] Consider alternatives
 - [ ] ROI realistic
 - [ ] Risks identified
 
 **Red flags:**
+
 - ⚠️ Always recommend AI
 - ⚠️ Ignore risks/limitations
 
@@ -130,7 +135,8 @@ Sau khi hoàn thành **AI Use Case Fit**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Use case: Tự động phân loại ticket hỗ trợ (Billing/Inventory/Tech)
 Volume: 800 tickets/tuần, SLA 4h
@@ -138,7 +144,8 @@ Data: 2 năm ticket + tag chuẩn
 Rủi ro: sai routing gây trễ xử lý
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # AI Use Case Fit Assessment
 
@@ -155,13 +162,15 @@ Success Metrics
 - SLA giảm từ 4h xuống 2h
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Use case phù hợp AI, rủi ro kiểm soát được
 - ✅ Có human-in-the-loop rõ ràng
 - ✅ Có metrics đo hiệu quả
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Model Selection](./01_model_selection.skill.md)
 - [Cost Optimization](./05_cost_optimization.skill.md)
 
@@ -172,7 +181,7 @@ Success Metrics
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Model Selection
 
 Sau khi hoàn thành **AI Use Case Fit**, tiếp tục với:
 → [Model Selection](./01_model_selection.skill.md)
@@ -180,3 +189,5 @@ Sau khi hoàn thành **AI Use Case Fit**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | AI/ML Evaluation Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

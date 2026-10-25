@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành app development workflow trước khi dùng skill này:
+>
 > - App đã build và test xong
 > - [Desktop App Spec](./06_desktop_app_spec.skill.md) hoặc [CLI Tool Spec](./07_cli_tool_spec.skill.md)
 
@@ -19,11 +20,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - App đã build xong, cần đóng gói để distribute
 - Cần tạo installer cho users
 - Cần packaging cho different platforms
 
 **Không phù hợp khi:**
+
 - Still in development phase
 - Cloud deployment (khác bài)
 - Internal tool không cần distribute
@@ -67,6 +70,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -169,6 +173,7 @@
 - [ ] Signing requirements noted
 
 **Red flags (cần Reject):**
+
 - ⚠️ Missing platform
 - ⚠️ No build commands
 - ⚠️ Unsigned for production
@@ -200,7 +205,8 @@
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 App Name: TaskFlow
 App Type: Desktop (Tauri)
@@ -211,7 +217,8 @@ Signing: Yes (Windows, macOS)
 Dependencies: None (single binary)
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # TaskFlow - Deployment Specification
 
@@ -485,15 +492,16 @@ sha256sum TaskFlow_* > SHA256SUMS.txt
 - [ ] Auto-update works
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ All platforms covered
 - ✅ Build commands documented
 - ✅ CI/CD included
 - ✅ Signing documented
 - **Kết quả: ACCEPT ✅**
 
-
 ## 🔗 Related Skills
+
 - [Desktop App Spec](./06_desktop_app_spec.skill.md)
 - [CLI Tool Spec](./07_cli_tool_spec.skill.md)
 
@@ -507,11 +515,11 @@ sha256sum TaskFlow_* > SHA256SUMS.txt
 ## 🔗 Next Step
 
 Sau khi hoàn thành **Local Deployment Spec**, chuyển sang Build & Release:
+
 - Test trên tất cả target platforms
 - Code signing configured
 - Auto-update working (nếu có)
 - Distribution channel ready
-
 
 ---
 

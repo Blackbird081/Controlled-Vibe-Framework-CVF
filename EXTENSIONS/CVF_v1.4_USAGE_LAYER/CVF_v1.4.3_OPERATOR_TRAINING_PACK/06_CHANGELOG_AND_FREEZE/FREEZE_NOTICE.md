@@ -7,6 +7,7 @@ Trạng thái: 🔒 FROZEN
 ## Ý nghĩa của FREEZE
 
 Kể từ thời điểm freeze:
+
 - Không chỉnh sửa nội dung
 - Không thêm file
 - Không mở rộng scope
@@ -19,11 +20,13 @@ Mọi thay đổi sau đó:
 ## Lý do freeze v1.4.3
 
 v1.4.3 đã:
+
 - Đủ nội dung đào tạo
 - Đủ tiêu chí đánh giá
 - Đủ playbook vận hành
 
 Tiếp tục thêm sẽ:
+
 - Làm loãng mục tiêu training
 - Gây chồng chéo với end-user materials
 
@@ -43,6 +46,7 @@ Tiếp tục thêm sẽ:
 ## Trách nhiệm sử dụng
 
 Người sử dụng v1.4.3:
+
 - Chịu trách nhiệm với cách áp dụng
 - Không viện lý do “CVF không nói rõ”
 

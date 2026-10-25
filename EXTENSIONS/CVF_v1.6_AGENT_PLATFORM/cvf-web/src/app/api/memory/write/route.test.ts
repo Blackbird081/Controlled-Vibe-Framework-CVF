@@ -172,7 +172,7 @@ describe('/api/memory/write', () => {
   });
 
   it('rejects omitted provenance score', async () => {
-    const { provenanceScore: _drop, ...rest } = baseBody;
+    const { provenanceScore: _drop, ...rest } = baseBody; void _drop;
     const res = await POST(makeReq(rest) as never);
     expect(res.status).toBe(400);
     await expectNoStoreMutation();
@@ -209,14 +209,14 @@ describe('/api/memory/write', () => {
   });
 
   it('rejects missing caller policy field', async () => {
-    const { policyDecision: _drop, ...rest } = baseBody;
+    const { policyDecision: _drop, ...rest } = baseBody; void _drop;
     const res = await POST(makeReq(rest) as never);
     expect(res.status).toBe(400);
     await expectNoStoreMutation();
   });
 
   it('rejects missing caller actor-authorization field', async () => {
-    const { actorAuthorized: _drop, ...rest } = baseBody;
+    const { actorAuthorized: _drop, ...rest } = baseBody; void _drop;
     const res = await POST(makeReq(rest) as never);
     expect(res.status).toBe(400);
     await expectNoStoreMutation();

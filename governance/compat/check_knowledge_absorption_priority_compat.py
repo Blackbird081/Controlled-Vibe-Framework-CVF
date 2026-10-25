@@ -167,6 +167,10 @@ ROADMAP_REQUIRED_ANY_BOUNDARY_MARKERS = (
 )
 
 
+_PRIVATE_REQUIRED_FILES = REQUIRED_FILES
+_PRIVATE_REQUIRED_MARKERS = REQUIRED_MARKERS
+
+
 def _run_git(args: list[str]) -> tuple[int, str, str]:
     proc = subprocess.run(
         ["git", *args],
@@ -327,7 +331,16 @@ def main() -> int:
     parser.add_argument("--base", help="Base git ref/sha for changed-file detection.")
     parser.add_argument("--head", help="Head git ref/sha for changed-file detection.")
     parser.add_argument("--enforce", action="store_true", help="Return non-zero on violations.")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
+    global REQUIRED_FILES, REQUIRED_MARKERS
+    REQUIRED_FILES = _PRIVATE_REQUIRED_FILES
+    REQUIRED_MARKERS = _PRIVATE_REQUIRED_MARKERS
+    if args.profile == "public":
+        from guard_binding_catalog import public_required_paths, public_required_markers, require_public_projection
+        require_public_projection(REPO_ROOT)
+        REQUIRED_FILES = public_required_paths(REQUIRED_FILES)
+        REQUIRED_MARKERS = public_required_markers(REQUIRED_MARKERS)
 
     resolved_base, resolved_head, base_source = _resolve_range(args.base, args.head)
     changed_files = sorted(set(_get_changed_files(resolved_base, resolved_head) + _get_worktree_changed_files()))

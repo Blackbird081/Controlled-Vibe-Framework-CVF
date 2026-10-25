@@ -59,15 +59,21 @@
       "subjectPath": "docs/EXPORT_MANIFEST.md",
       "checkClass": "active_markdown",
       "hardThresholdLines": 1200,
-      "pinnedLineCount": 1903,
-      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+      "pinnedLineCount": 55,
+      "disposition": "GATE",
+      "historicalPinnedLineCount": 1903,
+      "resolutionStatus": "RESOLVED_SOURCE_SIZE_DEBT",
+      "resolutionEvidence": "docs/reviews/evidence/cvf-remaining-docs-plan-20261026.json"
     },
     "governed_python_automation_size": {
       "subjectPath": "scripts/score_qbs_model_assisted_reviewers.py",
       "checkClass": "python_cli_orchestrator",
       "hardThresholdLines": 800,
-      "pinnedLineCount": 879,
-      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+      "pinnedLineCount": 530,
+      "disposition": "GATE",
+      "historicalPinnedLineCount": 879,
+      "resolutionStatus": "RESOLVED_SOURCE_SIZE_DEBT",
+      "resolutionEvidence": "docs/reviews/evidence/cvf-remaining-docs-plan-20261026.json"
     },
     "guard_registry_compatibility": {
       "subjectPaths": [
@@ -156,13 +162,13 @@
       "id": "governed_file_size",
       "ownerApplicability": "PUBLIC_OWNED",
       "family": "governed_file_size",
-      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+      "disposition": "GATE"
     },
     {
       "id": "governed_python_automation_size",
       "ownerApplicability": "PUBLIC_OWNED",
       "family": "governed_python_automation_size",
-      "disposition": "REPORT_IF_UNCHANGED_ELSE_GATE"
+      "disposition": "GATE"
     },
     {
       "id": "guard_registry_compatibility",
@@ -229,7 +235,9 @@
     "note": "Amendment 1 resolves the read-only-vs-build contradiction by relocating every mutating package command to a disposable sandbox (see the standard's Sandbox Execution Contract) instead of weakening or omitting any command category. Every command below is 'sandboxed': true and executes against a hash-verified git-archive extraction of authorizedCandidateHead, never against the real public root. Per AC-03, the real public root and Core are read-only copy sources only and are never live dependency-link targets: every third-party node_modules entry is first physically copied from the real public root's installed store into a dedicated dependency-store subtree of the disposable temporary support directory, then junctioned (directories) or hard-linked (files) from that support-owned copy into the sandbox - never linked directly from either real repository. `next` is a documented exception: it is physically copied straight into the sandbox's own node_modules with no junction step anywhere in its path, because webpack's resolve.symlinks realpaths through any junction (including one targeting a support-owned copy) during module resolution, and only a zero-junction path resolves entirely inside the sandbox.",
     "extractionMethod": "GIT_ARCHIVE",
     "dependencyIsolationMethod": "SUPPORT_DIRECTORY_COPY_THEN_LINK_FROM_LOCAL_STORE",
-    "fullCopyDependencyEntries": ["next"],
+    "fullCopyDependencyEntries": [
+      "next"
+    ],
     "siblingPackagesRequiringSandboxRedirect": [
       "cvf-control-plane-foundation",
       "cvf-execution-plane-foundation",
@@ -263,16 +271,29 @@
         "description": "CVF_MODEL_GATEWAY vitest unit/contract suite, sandboxed",
         "sandboxed": true,
         "workingDirectory": "EXTENSIONS/CVF_MODEL_GATEWAY",
-        "argv": ["node_modules/.bin/vitest.cmd", "run", "--config", "vitest.config.ts"],
+        "argv": [
+          "node_modules/.bin/vitest.cmd",
+          "run",
+          "--config",
+          "vitest.config.ts"
+        ],
         "timeoutSeconds": 180,
-        "expectedEvidence": {"files": 30, "tests": 231}
+        "expectedEvidence": {
+          "files": 30,
+          "tests": 231
+        }
       },
       {
         "id": "model_gateway_check",
         "description": "CVF_MODEL_GATEWAY TypeScript --noEmit type check, sandboxed",
         "sandboxed": true,
         "workingDirectory": "EXTENSIONS/CVF_MODEL_GATEWAY",
-        "argv": ["node_modules/.bin/tsc.cmd", "-p", "tsconfig.json", "--noEmit"],
+        "argv": [
+          "node_modules/.bin/tsc.cmd",
+          "-p",
+          "tsconfig.json",
+          "--noEmit"
+        ],
         "timeoutSeconds": 120
       },
       {
@@ -280,7 +301,12 @@
         "description": "cvf-web TypeScript --noEmit type check under the complete eight-package offline dependency topology, sandboxed",
         "sandboxed": true,
         "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
-        "argv": ["node_modules/.bin/tsc.cmd", "--noEmit", "-p", "tsconfig.json"],
+        "argv": [
+          "node_modules/.bin/tsc.cmd",
+          "--noEmit",
+          "-p",
+          "tsconfig.json"
+        ],
         "timeoutSeconds": 180
       },
       {
@@ -288,7 +314,10 @@
         "description": "cvf-web ESLint scoped to exactly the predecessor-accepted file, sandboxed. timeoutSeconds raised from 120 to 300 during Amendment 1 continuation: a disposable sandbox has zero warm ESLint/TypeScript-parser caches on every run (by design - the sandbox is torn down after every command set), so cold-start elapsed time (measured directly at ~117s for this exact scoped command) leaves too little margin at 120s to distinguish a real hang from ordinary cold-cache latency.",
         "sandboxed": true,
         "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
-        "argv": ["node_modules/.bin/eslint.cmd", "src/app/api/lpci/query/route.governance.test.ts"],
+        "argv": [
+          "node_modules/.bin/eslint.cmd",
+          "src/app/api/lpci/query/route.governance.test.ts"
+        ],
         "timeoutSeconds": 300
       },
       {
@@ -297,7 +326,8 @@
         "sandboxed": true,
         "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
         "argv": [
-          "node_modules/.bin/vitest.cmd", "run",
+          "node_modules/.bin/vitest.cmd",
+          "run",
           "src/app/(dashboard)/lpci/page.test.tsx",
           "src/app/api/lpci/query/route.governance.test.ts",
           "src/app/api/lpci/query/route.test.ts",
@@ -315,7 +345,10 @@
           "src/lib/storage-adapter.test.ts"
         ],
         "timeoutSeconds": 240,
-        "expectedEvidence": {"files": 15, "tests": 218}
+        "expectedEvidence": {
+          "files": 15,
+          "tests": 218
+        }
       },
       {
         "id": "cvf_web_build",
@@ -323,7 +356,10 @@
         "sandboxed": true,
         "resolveViaSystemPath": true,
         "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
-        "argv": ["node", "scripts/build-risk-models.js"],
+        "argv": [
+          "node",
+          "scripts/build-risk-models.js"
+        ],
         "timeoutSeconds": 60
       },
       {
@@ -332,7 +368,10 @@
         "sandboxed": true,
         "resolveViaSystemPath": true,
         "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
-        "argv": ["node", "scripts/build-skill-index.js"],
+        "argv": [
+          "node",
+          "scripts/build-skill-index.js"
+        ],
         "timeoutSeconds": 60
       },
       {
@@ -341,13 +380,21 @@
         "sandboxed": true,
         "resolveViaSystemPath": true,
         "workingDirectory": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web",
-        "argv": ["node", "node_modules/next/dist/bin/next", "build", "--webpack"],
+        "argv": [
+          "node",
+          "node_modules/next/dist/bin/next",
+          "build",
+          "--webpack"
+        ],
         "timeoutSeconds": 300,
-        "expectedEvidence": {"staticPages": 121}
+        "expectedEvidence": {
+          "staticPages": 121
+        }
       }
     ],
     "excludedCommands": []
   },
   "subprocessTimeoutSeconds": 60,
-  "claimBoundary": "This policy authorizes a local, provenance-run public-projection pre-push evaluation only. Git-level validation reads the real public root read-only. Every mutating package command executes only inside a disposable, hash-verified sandbox extracted from authorizedCandidateHead, never against the real public root. It does not authorize push, deploy, provider/store, secrets, network install, or any mutation of the real public clone."
+  "claimBoundary": "This policy authorizes a local, provenance-run public-projection pre-push evaluation only. Git-level validation reads the real public root read-only. Every mutating package command executes only inside a disposable, hash-verified sandbox extracted from authorizedCandidateHead, never against the real public root. It does not authorize push, deploy, provider/store, secrets, network install, or any mutation of the real public clone.",
+  "currentCandidateRoute": "scripts/check_cvf_public_sync_candidate.py; historical staging pins do not admit current main candidates"
 }

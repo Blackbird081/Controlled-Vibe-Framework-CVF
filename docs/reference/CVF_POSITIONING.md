@@ -56,6 +56,7 @@ CVF has 5 distinct layers (not a monolith):
 ```
 
 ### Layer 1: Core (Required)
+
 - **Principles:** Outcome > Code, Spec-first, Risk-aware
 - **Canonical loop:** INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE
 - **Current runtime projection:** some surfaces use INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE; SPEC and WORK ORDER remain governance boundaries unless an accepted adoption artifact makes them runtime states
@@ -63,6 +64,7 @@ CVF has 5 distinct layers (not a monolith):
 - **Skill Library:** 62 active skills across 12 domains
 
 ### Layer 2: Tools (Optional)
+
 - `report_spec_metrics.py` — Spec quality scoring
 - `score_uat.py` — UAT scoring
 - `check_version_sync.py` — Version drift checking
@@ -70,17 +72,20 @@ CVF has 5 distinct layers (not a monolith):
 - `validate_registry.py` — CI/CD validation
 
 ### Layer 3: Safety Runtime (Optional)
+
 - **v1.7 Intelligence** — Reasoning gate, entropy guard, prompt sanitizer
 - **v1.7.1 Runtime** — Policy lifecycle engine, auth, DI container, audit trail
 - Anomaly detection, system prompt hardening
 
 ### Layer 4: Platform (Reference Implementation)
+
 - Web app (Next.js) — governed UI and non-coder control surface
 - AI Agent Chat — Gemini, OpenAI, Anthropic
 - 34 Agent Tools — multi-agent workflows
 - Template Marketplace — community templates
 
 ### Layer 5: Safety Dashboard (Non-Coder)
+
 - **v1.7.2** — Real-time risk visualization
 - Risk levels: 🟢Safe 🟡Attention 🟠Review 🔴Dangerous
 - Read-only interface for managers and stakeholders
@@ -91,6 +96,7 @@ CVF has 5 distinct layers (not a monolith):
 ## 3. Suitable Use Cases
 
 ### ✅ Suitable
+
 | Scenario | How to use CVF |
 |----------|----------------|
 | Solo dev using AI daily | Layer 1: Skills + Risk awareness |
@@ -102,6 +108,7 @@ CVF has 5 distinct layers (not a monolith):
 | Enterprise AI governance | Layer 1 + 3 + 4: Full stack governance |
 
 ### ❌ Not Suitable
+
 | Scenario | Reason |
 |----------|--------|
 | Replacing AI models | CVF is not AI, only manages the process |

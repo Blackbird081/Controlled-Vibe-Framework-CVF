@@ -14,6 +14,7 @@ A skill is a **form-based template** (`.skill.md` file) that:
 4. **Documents failures** — Lists common mistakes and how to avoid them
 
 ### Skills Are NOT
+
 - ❌ Code libraries
 - ❌ Prompt templates (though they inform prompts)
 - ❌ AI configurations
@@ -97,21 +98,27 @@ CVF includes **114 pre-built skills** across 12 domains:
 ## How to Use a Skill
 
 ### Step 1: Find a skill
+
 Browse by domain or search the skill library.
 
 ### Step 2: Check prerequisites
+
 Read the Prerequisites section. Make sure you have everything needed.
 
 ### Step 3: Fill the form
+
 Copy the Form Input table and fill in your values.
 
 ### Step 4: Give to AI
+
 Paste the filled form into your AI tool (ChatGPT, Claude, Copilot, etc.), along with the Expected Output section.
 
 ### Step 5: Evaluate
+
 Use the Acceptance Checklist to verify the AI's output. Check for Red Flags.
 
 ### Step 6: Accept or retry
+
 - ✅ All boxes checked → Accept
 - ❌ Failed items → Fix form input or ask AI to retry
 
@@ -167,6 +174,7 @@ PROPOSED → APPROVED → ACTIVE → DEPRECATED → RETIRED
 | **RETIRED** | No longer available |
 
 ### Lifecycle Rules
+
 - PROPOSED → APPROVED: Requires reviewer sign-off
 - ACTIVE → DEPRECATED: Must specify replacement skill
 - DEPRECATED → RETIRED: 30-day notice period
@@ -205,6 +213,7 @@ For teams and enterprise, each skill gets a **governance record** (`.gov.md`):
 ### Governance Numbers
 
 The CVF governance tracks:
+
 - **114 user skills** with governance records (`USR-*.gov.md`)
 - **8 agent skills** with governance records (`AGT-*.gov.md`)
 - Automated validation via `validate_registry.py`
@@ -214,9 +223,11 @@ The CVF governance tracks:
 ## Types of Skills
 
 ### User Skills (USR-*)
+
 Form-based templates for humans using AI. No code needed. Fill form → give to AI → evaluate output.
 
 ### Agent Skills (AGT-*)
+
 Configuration templates for AI agents in multi-agent workflows. Define what the agent can do, what it can't, and how it reports.
 
 ---
@@ -268,6 +279,7 @@ See the [Custom Skills Tutorial](../tutorials/custom-skills.md) for a step-by-st
 ## Skill Library in Web UI (v1.6)
 
 The v1.6 web app integrates skills as templates:
+
 - Skills appear in the template picker
 - Form Input fields become interactive form elements
 - Acceptance Checklist becomes part of the review UI

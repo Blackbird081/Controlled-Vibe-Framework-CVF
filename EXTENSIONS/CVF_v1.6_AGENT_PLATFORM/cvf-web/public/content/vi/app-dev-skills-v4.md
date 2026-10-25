@@ -38,15 +38,18 @@ An toàn/Tự động   Thấp/Tự động      Trung bình/Giám sát  Cao/Th�
 ## Kỹ năng 1: API Architecture Designer (AGT-025)
 
 ### Chức năng
+
 Phương pháp luận toàn diện thiết kế API với **cây quyết định** chọn đúng mẫu kiến trúc (REST, GraphQL, hoặc gRPC) dựa trên ràng buộc dự án.
 
 ### Khi nào dùng
+
 - Bắt đầu dịch vụ backend hoặc microservice mới
 - Di chuyển từ monolith sang microservices
 - Chọn giữa REST, GraphQL, và gRPC
 - Thiết kế hợp đồng lỗi và chiến lược versioning
 
 ### Khái niệm chính: Cây quyết định API
+
 ```
 Cần streaming real-time? ──Có──→ gRPC (Protocol Buffers)
          │Không
@@ -56,6 +59,7 @@ CRUD chuẩn với caching? ──Có──→ REST (OpenAPI 3.1)
 ```
 
 ### Các mẫu Microservices có sẵn
+
 | Mẫu | Khi nào | Ví dụ |
 |------|---------|-------|
 | API Gateway | Nhiều client, rate limiting | Kong, AWS API Gateway |
@@ -66,6 +70,7 @@ CRUD chuẩn với caching? ──Có──→ REST (OpenAPI 3.1)
 | Circuit Breaker | Ngăn lỗi lan truyền | Resilience4j, Polly |
 
 ### Ví dụ Prompt
+
 ```
 "Thiết kế REST API cho catalog sản phẩm SaaS đa thuê bao"
 "Nên dùng GraphQL hay REST cho app mobile này với nested data phức tạp?"
@@ -78,15 +83,18 @@ CRUD chuẩn với caching? ──Có──→ REST (OpenAPI 3.1)
 ## Kỹ năng 2: Full-Stack Testing Engine (AGT-026)
 
 ### Chức năng
+
 Thực thi **kim tự tháp kiểm thử 70-20-10** với hệ thống 4 cổng CI xác thực chất lượng code từ unit test đến sẵn sàng production.
 
 ### Khi nào dùng
+
 - Thiết lập hạ tầng kiểm thử cho dự án mới
 - Cải thiện test coverage và giảm flaky tests
 - Xây dựng quality gates cho CI/CD
 - Kiểm thử hiệu năng với mô phỏng tải
 
 ### Khái niệm chính: Kim tự tháp 70-20-10
+
 ```
            ╱╲          E2E (10%)
           ╱  ╲         Playwright, chỉ critical paths
@@ -99,6 +107,7 @@ Thực thi **kim tự tháp kiểm thử 70-20-10** với hệ thống 4 cổng 
 ```
 
 ### Hệ thống 4 Cổng CI
+
 | Cổng | Tests | Ngưỡng | Chặn |
 |------|-------|--------|------|
 | **Cổng 1** | Unit tests | 80% coverage | Merge vào dev |
@@ -107,6 +116,7 @@ Thực thi **kim tự tháp kiểm thử 70-20-10** với hệ thống 4 cổng 
 | **Cổng 4** | Load + security + a11y | p95 < 200ms, 0 critical | Deploy lên prod |
 
 ### Quy trình xử lý Flaky Test
+
 ```
 1. Cách ly test flaky ngay (chuyển sang .flaky.test.ts)
 2. Thêm retry(3) với exponential backoff
@@ -115,6 +125,7 @@ Thực thi **kim tự tháp kiểm thử 70-20-10** với hệ thống 4 cổng 
 ```
 
 ### Ví dụ Prompt
+
 ```
 "Thiết lập kim tự tháp kiểm thử Vitest + Playwright cho app Next.js"
 "CI có 12% flaky tests — giúp tôi áp dụng quy trình xử lý flaky"
@@ -127,15 +138,18 @@ Thực thi **kim tự tháp kiểm thử 70-20-10** với hệ thống 4 cổng 
 ## Kỹ năng 3: Security & Auth Guard (AGT-027)
 
 ### Chức năng
+
 Cung cấp **cây quyết định chọn phương thức auth** và **ma trận phòng thủ OWASP Top 10** để triển khai xác thực và bảo mật production-grade.
 
 ### Khi nào dùng
+
 - Triển khai xác thực người dùng từ đầu
 - Thêm OAuth, SSO, hoặc xác thực đa yếu tố
 - Kiểm tra bảo mật ứng dụng hiện tại
 - Tăng cường bảo mật API endpoints và headers
 
 ### Khái niệm chính: Cây chọn phương thức Auth
+
 ```
 Chỉ user nội bộ? ──Có──→ SSO / SAML
          │Không
@@ -151,6 +165,7 @@ Web app tiêu chuẩn ──→ OAuth 2.1 + JWT (15p access / 7 ngày refresh)
 ```
 
 ### Ma trận phòng thủ OWASP Top 10 (2025)
+
 | # | Mối đe dọa | Phòng thủ |
 |---|-----------|---------|
 | A01 | Broken Access Control | RBAC, nguyên tắc quyền tối thiểu |
@@ -159,6 +174,7 @@ Web app tiêu chuẩn ──→ OAuth 2.1 + JWT (15p access / 7 ngày refresh)
 | A07 | Lỗi xác thực | Khóa tài khoản (5 lần/15 phút), bắt buộc 2FA |
 
 ### Danh sách Security Headers
+
 ```
 Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 Content-Security-Policy: default-src 'self'; script-src 'self'
@@ -171,6 +187,7 @@ Cross-Origin-Opener-Policy: same-origin
 ```
 
 ### Ví dụ Prompt
+
 ```
 "Thiết lập OAuth 2.1 với JWT cho app Next.js — token truy cập 15 phút"
 "Chạy kiểm tra bảo mật OWASP Top 10 cho Express.js API"
@@ -183,15 +200,18 @@ Cross-Origin-Opener-Policy: same-origin
 ## Kỹ năng 4: Database Schema Architect (AGT-028)
 
 ### Chức năng
+
 Cây quyết định chọn database và phương pháp thiết kế schema cho **relational (PostgreSQL)** và **document (MongoDB)**, với chiến lược indexing, migration, và tối ưu hóa.
 
 ### Khi nào dùng
+
 - Chọn giữa PostgreSQL, MongoDB, Redis, hoặc database khác
 - Thiết kế schema cho ứng dụng mới
 - Tối ưu hóa truy vấn chậm hoặc thêm index
 - Lập kế hoạch database migration an toàn
 
 ### Khái niệm chính: Cây chọn Database
+
 ```
 Cần giao dịch ACID? ──Có──→ PostgreSQL
          │Không
@@ -205,6 +225,7 @@ Dữ liệu time-series? ──Có──→ TimescaleDB
 ```
 
 ### Mẫu thiết kế Schema
+
 | Loại | Mẫu | Ví dụ |
 |------|------|-------|
 | **Relational** | Chuẩn hóa 3NF | Users → Orders → Items (FK) |
@@ -213,6 +234,7 @@ Dữ liệu time-series? ──Có──→ TimescaleDB
 | **Hybrid** | Phi chuẩn hóa cho hiệu năng | Cache computed fields, invalidate khi ghi |
 
 ### Tham khảo nhanh chiến lược Index
+
 | Mẫu truy vấn | PostgreSQL | MongoDB |
 |--------------|-----------|---------|
 | Exact match (=) | B-tree (mặc định) | Single field |
@@ -223,6 +245,7 @@ Dữ liệu time-series? ──Có──→ TimescaleDB
 | Truy vấn tổng hợp | Multi-column B-tree | Compound index |
 
 ### Quy trình Migration (5 bước)
+
 ```
 1. File phiên bản schema → migrations/YYYYMMDD_description.sql
 2. Review: kiểm tra tương thích ngược
@@ -232,6 +255,7 @@ Dữ liệu time-series? ──Có──→ TimescaleDB
 ```
 
 ### Ví dụ Prompt
+
 ```
 "Thiết kế PostgreSQL schema cho SaaS đa thuê bao — users, teams, billing"
 "Nên nhúng đơn hàng vào document user hay tham chiếu riêng?"
@@ -244,15 +268,18 @@ Dữ liệu time-series? ──Có──→ TimescaleDB
 ## Kỹ năng 5: Frontend Component Forge (AGT-029)
 
 ### Chức năng
+
 Hệ thống quyết định kiến trúc component cho ứng dụng **React/Next.js** — bao gồm tổ chức feature, mẫu Suspense, lazy loading, và tích hợp design system.
 
 ### Khi nào dùng
+
 - Thiết lập kiến trúc component cho dự án React mới
 - Tái cấu trúc hệ thống component đã phình to
 - Thêm code splitting và lazy loading
 - Tích hợp design system (MUI, Tailwind, Shadcn)
 
 ### Khái niệm chính: Cây kiến trúc Component
+
 ```
 Là page/route? ──────────────→ Route Component (app/page.tsx)
 Là container dữ liệu? ──────→ Smart Component (dùng hooks, Suspense)
@@ -262,6 +289,7 @@ Dùng chung nhiều feature? ───→ Common Component (src/components/)
 ```
 
 ### Mẫu thư mục Feature
+
 ```
 src/features/checkout/
 ├── components/        # UI riêng feature
@@ -281,6 +309,7 @@ src/features/checkout/
 ```
 
 ### Anti-Patterns (KHÔNG BAO GIỜ làm những điều này)
+
 | ❌ Đừng | ✅ Thay vào đó |
 |---------|--------------|
 | Props drilling > 3 tầng | Dùng Context hoặc state management |
@@ -291,6 +320,7 @@ src/features/checkout/
 | useEffect cho data fetching | Dùng React Query / SWR / Server Components |
 
 ### Ví dụ Prompt
+
 ```
 "Thiết lập cấu trúc thư mục feature cho luồng checkout thương mại điện tử"
 "Tái cấu trúc component 400 dòng thành các mảnh nhỏ hơn với phân tách đúng"
@@ -317,6 +347,7 @@ src/features/checkout/
 ```
 
 ### Ví dụ quy trình làm việc điển hình
+
 ```
 1. AGT-025: Thiết kế REST API quản lý người dùng
 2. AGT-028: Tạo PostgreSQL schema (users, sessions, roles)
@@ -340,6 +371,7 @@ Tất cả 5 kỹ năng đều được quản trị theo mô hình risk/authori
 | AGT-029 | R1 (Tự động) | Hướng dẫn kiến trúc component, tạo file |
 
 ### Quy tắc leo thang
+
 Nếu AGT-025 khuyến nghị microservices + AGT-028 yêu cầu multi-database → **leo thang lên R3** (cần Orchestrator phê duyệt cho triển khai đa dịch vụ).
 
 ---

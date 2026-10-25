@@ -1,6 +1,5 @@
 Memory class: POINTER_RECORD
 
-
 > Status: active classification reference for `docs/reviews/`
 > Canonical registry: `governance/compat/CVF_REVIEW_RETENTION_REGISTRY.json`
 > Last reviewed: `2026-03-30`

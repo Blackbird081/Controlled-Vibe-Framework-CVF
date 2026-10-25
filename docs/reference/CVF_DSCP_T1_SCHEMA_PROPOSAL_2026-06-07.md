@@ -126,6 +126,7 @@ interface GovernedArtifactDescriptor {
 ```
 
 **Replaces (per surface map Layer 1 and Layer 2):**
+
 - `ManifestEntry` domain-specific fields (`jurisdiction`, `authorityLevel`,
   `issuingBody`, `effectiveDate`, `status`) - move to `metadata`.
 - `LpciIndexRecord` domain-specific fields - move to `metadata` + `customGates`.
@@ -277,6 +278,7 @@ interface GovernedRetrievalReceipt {
 ```
 
 **Replaces (per surface map Layer 4):**
+
 - `AuditReceipt.applied_filters` (LPCI `FilterParams` with `jurisdiction`) -
   replaced by `governanceGateResults` open map.
 - `AuditReceipt.answer_class` (`AnswerClass` LPCI union) - replaced by

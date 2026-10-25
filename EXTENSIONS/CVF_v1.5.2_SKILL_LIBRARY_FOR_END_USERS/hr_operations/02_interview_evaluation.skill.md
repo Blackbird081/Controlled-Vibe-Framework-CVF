@@ -17,12 +17,14 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Sau khi phỏng vấn ứng viên, cần đánh giá tổng hợp
 - So sánh nhiều ứng viên cho cùng vị trí
 - Tạo scorecard chuẩn cho team tuyển dụng
 - Cần documentation cho hiring decision
 
 **Không phù hợp khi:**
+
 - Chưa có interview notes — Cần ghi chép trước
 - Cần reference check — Đó là bước riêng
 - Đánh giá technical skills chi tiết — Cần technical interviewer
@@ -66,6 +68,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -82,12 +85,14 @@
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Scorecard đánh giá theo criteria
 - Summary strengths/weaknesses
 - Recommendation: Hire / Reject / Next round
 - Notes cho hiring manager
 
 **Cấu trúc output:**
+
 ```
 CANDIDATE EVALUATION
 
@@ -116,6 +121,7 @@ CANDIDATE EVALUATION
 - [ ] Language professional
 
 **Red flags (cần Reject):**
+
 - ⚠️ Đánh giá quá subjective ("cảm thấy", "có vẻ")
 - ⚠️ Thiếu evidence cho scores
 - ⚠️ Bias language
@@ -146,7 +152,8 @@ CANDIDATE EVALUATION
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Tên ứng viên: Trần Văn B
 Vị trí: Senior Product Manager
@@ -160,7 +167,8 @@ Criteria: Product sense, Communication, Technical, Leadership
 Red flags: Salary gap, nhảy 3 công ty trong 4 năm
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 CANDIDATE EVALUATION: TRẦN VĂN B
 Position: Senior Product Manager
@@ -202,7 +210,8 @@ NEXT STEPS:
 3. Reference check (2 previous managers)
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Objective với evidence
 - ✅ Cover all criteria
 - ✅ Address red flags
@@ -214,6 +223,7 @@ NEXT STEPS:
 ---
 
 ## 🔗 Related Skills
+
 - [Job Description](./01_job_description.skill.md)
 - [Onboarding Checklist](./04_onboarding_checklist.skill.md)
 

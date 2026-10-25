@@ -65,6 +65,7 @@ my-project/
 ```
 
 **Sau đó đưa spec cho AI:**
+
 ```
 Read the attached INPUT_SPEC.md. Follow the requirements exactly.
 Do not add features not listed. Do not change the tech stack.
@@ -84,7 +85,7 @@ npm install
 npm run dev
 ```
 
-Mở http://localhost:3000 → Chọn template → Điền form → Xuất → Đưa cho AI.
+Mở <http://localhost:3000> → Chọn template → Điền form → Xuất → Đưa cho AI.
 
 Giao diện web sẽ hướng dẫn bạn qua 4 phase một cách tự động.
 
@@ -205,12 +206,15 @@ Create: src/csv_to_json.py
 ## Mẹo để Thành công khi Làm việc Một mình
 
 ### 1. Bắt đầu Đơn giản
+
 Đừng dùng tất cả tính năng CVF cùng lúc. Bắt đầu chỉ với `INPUT_SPEC.md` và danh sách kiểm tra Phase D. Thêm cấu trúc khi bạn cần.
 
 ### 2. Sử dụng Quy tắc 2 Giờ
+
 Nếu một tác vụ mất hơn 2 giờ, chia nhỏ thành các tác vụ nhỏ hơn. Mỗi tác vụ có spec và trace riêng.
 
 ### 3. Ghi lại Decision Log
+
 Khi bạn chọn React thay vì Vue, hay Python thay vì Node — ghi lại. Bạn trong tương lai sẽ hỏi "tại sao mình chọn cái này?"
 
 ```markdown
@@ -224,6 +228,7 @@ Khi bạn chọn React thay vì Vue, hay Python thay vì Node — ghi lại. B�
 ```
 
 ### 4. Theo dõi những gì AI đã làm
+
 Sau mỗi phiên AI, lưu một bản trace nhanh:
 
 ```markdown
@@ -238,6 +243,7 @@ Sau mỗi phiên AI, lưu một bản trace nhanh:
 ```
 
 ### 5. Đừng để AI quyết định Phạm vi
+
 AI luôn gợi ý "cải tiến". Câu trả lời của bạn:
 
 > "Điều đó thú vị nhưng ngoài phạm vi. Hãy tuân theo spec."

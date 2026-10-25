@@ -2,7 +2,7 @@
 
 Định nghĩa van an toàn cho các tình huống khẩn cấp, không biến thành backdoor.
 
-2. What Is Emergency Override
+1. What Is Emergency Override
 
 Emergency Override cho phép:
 
@@ -10,13 +10,13 @@ Chuyển trạng thái capability ngoài flow chuẩn
 
 Bypass một số constraint trong thời gian ngắn
 
-3. Who Can Trigger
+1. Who Can Trigger
 
 Chỉ CVF Authority hoặc người được ủy quyền
 
 Agent KHÔNG BAO GIỜ được trigger
 
-4. What Can Be Overridden
+1. What Can Be Overridden
 
 ✔ Allowed:
 
@@ -32,7 +32,7 @@ Bypass human accountability
 
 Modify Skill Contract
 
-5. Mandatory Audit
+1. Mandatory Audit
 
 Mỗi Emergency Override BẮT BUỘC log:
 
@@ -48,7 +48,7 @@ duration
 
 postmortem_required (Yes)
 
-6. Time Bound
+1. Time Bound
 
 Override luôn có expiration
 

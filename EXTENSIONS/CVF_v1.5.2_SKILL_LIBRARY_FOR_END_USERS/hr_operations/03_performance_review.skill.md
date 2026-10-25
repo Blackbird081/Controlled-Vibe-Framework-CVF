@@ -17,12 +17,14 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Đánh giá hiệu suất định kỳ (quarterly/annually)
 - Chuẩn bị cho salary review/promotion
 - Document performance cho HR records
 - Feedback 360 cho nhân viên
 
 **Không phù hợp khi:**
+
 - Feedback nhanh daily/weekly — Dùng 1-on-1 notes
 - Đánh giá trong probation — Cần format riêng
 - PIP (Performance Improvement Plan) — Cần legal review
@@ -66,6 +68,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -83,12 +86,14 @@
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - Performance review hoàn chỉnh
 - Rating theo các dimensions
 - Development recommendations
 - Goals cho next period
 
 **Cấu trúc output:**
+
 ```
 PERFORMANCE REVIEW
 
@@ -118,6 +123,7 @@ PERFORMANCE REVIEW
 - [ ] Goals cho next period SMART
 
 **Red flags (cần Reject):**
+
 - ⚠️ Chỉ có negatives hoặc chỉ positives
 - ⚠️ Generic phrases không có examples
 - ⚠️ Rating không match với content
@@ -148,7 +154,8 @@ PERFORMANCE REVIEW
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Tên nhân viên: Lê Văn D
 Vị trí: Product Designer
@@ -168,7 +175,8 @@ Peer feedback:
   - "Great creativity, sometimes communication unclear"
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 PERFORMANCE REVIEW: LÊ VĂN D
 Position: Product Designer | Period: H1 2026
@@ -212,7 +220,8 @@ GOALS FOR H2 2026:
 3. Present at 1 team knowledge sharing session
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Balanced strengths + improvements
 - ✅ Specific examples với numbers
 - ✅ Rating matches evidence
@@ -224,6 +233,7 @@ GOALS FOR H2 2026:
 ---
 
 ## 🔗 Related Skills
+
 - [Onboarding Checklist](./04_onboarding_checklist.skill.md)
 - [Policy Documentation](./05_policy_documentation.skill.md)
 

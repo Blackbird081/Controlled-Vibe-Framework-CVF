@@ -103,3 +103,7 @@ for release-quality live governance proof.
 Do not claim hosted readiness, production readiness, universal provider parity,
 or private-provenance completeness from this public checkout alone. Use only
 public artifacts, current git state, and explicit live receipts as evidence.
+
+## Public Artifact Evidence Checks
+
+Exported corpus outputs must satisfy `governance/compat/check_corpus_completeness_report_integrity.py`; exported knowledge maps must satisfy `governance/compat/check_corpus_to_knowledge_map_reconciliation.py`. Public profiles retain artifact checks and exclude private session, dispatch and review evidence. The public repository carries no private release approval.

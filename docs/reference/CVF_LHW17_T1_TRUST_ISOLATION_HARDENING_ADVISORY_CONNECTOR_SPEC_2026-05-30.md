@@ -36,7 +36,7 @@ pending 3 hardening items. Outstanding since 2026-03-21.
 
 ---
 
-## Purpose
+## Closure Scope
 
 Closes the EA CONDITIONAL finding on Trust & Isolation (Review 12) by documenting the 3 mandatory
 hardening items as advisory connector specs against existing CVF owner surfaces. This is
@@ -90,6 +90,7 @@ through proxy." If any raw shell escape hatch exists, the guarantee breaks.
 
 **Advisory:** CVF must maintain the invariant that agents have no direct execution path outside
 the governed capability gate. Specifically:
+
 - no `spawn` / `exec` / raw shell call reachable from agent context
 - all CLI execution routes through `cvf_invoke_cli_stage` whitelist (Delta D3)
 - the whitelist (`evaluate`, `status`, `help`) is the only authorized direct-execution surface
@@ -109,6 +110,7 @@ change in this wave.
 system denies auto-grant and maintains a mandatory audit log.
 
 **Advisory:** Any runtime surface that processes agent capability requests MUST:
+
 1. Never auto-grant beyond the pre-authorized capability set for the session
 2. Record every capability request (granted and denied) in the governance audit trail
 3. Escalate requests for capabilities above `R1` to require operator authorization
@@ -167,3 +169,20 @@ is eligible for a separate governed tranche under `CVF_v1.7.1_SAFETY_RUNTIME`.
 - No receipt-envelope extension
 - No database/persistence change
 - No public release readiness claim
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->
+
+<!-- Authority boundary: historical CLOSED_PASS_BOUNDED public compatibility copy; no new private execution authority. runtimeExecutionAuthorized remains false. -->
+
+## Delta Execution Claim Boundary Control Block
+
+| Field | Value |
+|---|---|
+| claimScope | Documentation-only LHW17 T1 advisory connector compatibility copy. |
+| claimDisposition | N/A with reason: this copy makes no execution-control or runtime-enforcement claim. |
+| receiptEvidence | N/A with reason: no runtime or action receipt is asserted. |
+| actionEvidence | N/A with reason: this copy does not authorize or perform execution. |
+| invocationBoundary | `runtimeExecutionAuthorized=false`; no route, runner, or provider invocation is granted. |
+| interceptionBoundary | No runtime interception or enforcement is claimed. |
+| claimLanguage | Advisory trust-isolation material only; historical CLOSED_PASS_BOUNDED status is retained as evidence. |
+| forbiddenExpansion | No runtime, provider, route, receipt, deployment, production, or execution authority. |

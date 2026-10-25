@@ -17,11 +17,13 @@
 ## 🎯 Purpose
 
 **When to use this skill:**
+
 - Phase B (Design) — after the Vibe Mapping has been approved
 - Need to convert confirmed "vibes" into concrete technical parameters (font, color, layout) for AI to use during build
 - Ensures UI/UX consistency throughout the entire app
 
 **Not suitable when:**
+
 - No User-confirmed Vibe Mapping exists yet
 - App has no UI (pure CLI, API backend)
 
@@ -113,12 +115,14 @@
 ## 🔍 Evaluation Criteria
 
 **Accept Checklist:**
+
 - [ ] Each vibe has at least 4 technical parameters
 - [ ] Parameters are specific enough to implement immediately (no vagueness)
 - [ ] AI clearly states rationale: "Because you wanted [X], I chose [Y]"
 - [ ] No contradictions between different vibes
 
 **Red Flags (Reject):**
+
 - ⚠️ Parameters too vague: "nice color", "readable font"
 - ⚠️ Different vibes produce identical parameters
 - ⚠️ No rationale provided for each choice
@@ -146,14 +150,16 @@
 
 ## 📊 Example
 
-### Sample Input:
+### Sample Input
+
 ```
 Approved Vibe: "Professional + Minimal"
 Tech Stack: Streamlit (Python)
 App Type: Expense management dashboard
 ```
 
-### Sample Output:
+### Sample Output
+
 ```markdown
 # Vibe Technical Spec — "Professional + Minimal"
 
@@ -167,7 +173,8 @@ App Type: Expense management dashboard
 | Effects | st.spinner only on load | "Minimal" — no unnecessary animations |
 ```
 
-### Evaluation:
+### Evaluation
+
 - ✅ Every parameter has clear rationale
 - ✅ Specific enough to implement immediately
 - ✅ No contradiction between vibes

@@ -42,6 +42,7 @@ MCP SDK's `runCli()` function:
 | `help` | Get help text |
 
 **Rejected commands** — any other string → reject with `command_not_whitelisted`:
+
 - `rm`, `del`, `rmdir` — filesystem destruction
 - `curl`, `wget`, `fetch` — network egress
 - `git push`, `git commit` — VCS mutation
@@ -66,6 +67,7 @@ from `pipeline-chain-orchestrator.ts`. The MCP tool:
 process or change working directory. It runs the CVF CLI logic in-process.
 
 Therefore:
+
 - No working directory restriction is needed (no shell, no filesystem access beyond what `runCli()` itself uses)
 - No `..` path escape is possible via `runCli()`
 
@@ -137,6 +139,7 @@ D3 code may proceed per Execution Plan in work order
 
 This boundary covers only `cvf_invoke_cli_stage` with the specific `runCli()`
 from `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/cli/cli.ts`. It does not cover:
+
 - Arbitrary shell execution or process spawning
 - Network egress from any tool
 - Multi-user or remote MCP transport

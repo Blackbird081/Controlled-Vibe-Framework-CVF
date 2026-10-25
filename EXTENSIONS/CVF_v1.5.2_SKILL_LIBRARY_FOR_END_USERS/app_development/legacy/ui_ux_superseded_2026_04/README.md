@@ -6,4 +6,3 @@ now governed by the root `DESIGN.md`, `product_ux/cvf_web_ux_redesign_system`,
 
 Do not route normal CVF web builds through these legacy skills. Promote only
 new, non-overlapping capability back into the active library.
-

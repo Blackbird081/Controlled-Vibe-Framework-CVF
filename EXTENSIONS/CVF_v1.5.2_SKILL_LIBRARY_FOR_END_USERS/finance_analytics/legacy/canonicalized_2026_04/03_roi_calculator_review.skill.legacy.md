@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành skill sau trước khi dùng skill này:
+>
 > - [Budget Analysis](./01_budget_analysis.skill.md) — Hiểu cơ bản về chi phí và ngân sách
 
 ---
@@ -18,11 +19,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Đánh giá ROI của một dự án hoặc đầu tư
 - So sánh hiệu quả giữa các phương án
 - Chuẩn bị business case cho stakeholders
 
 **Không phù hợp khi:**
+
 - Đánh giá đầu tư phức tạp, dài hạn (dùng Investment Due Diligence)
 - Phân tích rủi ro tài chính (dùng Financial Risk Assessment)
 
@@ -65,15 +68,18 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 ### 1. Investment/Project Name
+
 ```
 Tên dự án hoặc khoản đầu tư:
 VD: Marketing Automation Platform, New Hire Program
 ```
 
 ### 2. Total Investment Cost
+
 ```
 Tổng chi phí đầu tư:
 - Initial Cost: $___
@@ -83,6 +89,7 @@ Tổng chi phí đầu tư:
 ```
 
 ### 3. Expected Benefits
+
 ```
 Lợi ích kỳ vọng:
 - Revenue Increase: $___/year
@@ -92,12 +99,14 @@ Lợi ích kỳ vọng:
 ```
 
 ### 4. Time Horizon
+
 ```
 Thời gian đánh giá:
 VD: 1 year, 3 years, 5 years
 ```
 
 ### 5. Assumptions (Optional)
+
 ```
 Các giả định quan trọng:
 VD: 10% customer growth, no inflation adjustment
@@ -110,6 +119,7 @@ VD: 10% customer growth, no inflation adjustment
 AI sẽ trả về:
 
 ### 1. ROI Calculation
+
 | Metric | Value |
 |--------|-------|
 | Total Investment | $100,000 |
@@ -119,19 +129,23 @@ AI sẽ trả về:
 | **Payback Period** | **14 months** |
 
 ### 2. Sensitivity Analysis
+
 - Best case scenario
 - Base case scenario  
 - Worst case scenario
 
 ### 3. Assumption Validation
+
 - Reality check trên các assumptions
 - Risk factors
 
 ### 4. Comparison (if applicable)
+
 - So sánh với alternative investments
 - Opportunity cost analysis
 
 ### 5. Recommendation
+
 - Go/No-Go decision
 - Conditions for success
 
@@ -172,6 +186,7 @@ AI sẽ trả về:
 ## 📊 Ví dụ thực tế
 
 **Input:**
+
 ```
 Project: CRM Implementation
 Investment: $50,000 (software + implementation)
@@ -183,18 +198,23 @@ Time Horizon: 3 years
 ```
 
 **Expected Analysis:**
+
 ```markdown
 
 ### Input mẫu:
 ```
+
 Mục tiêu: Hoàn thành ROI Calculator Review
 Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
 Ràng buộc: Deadline 2 tuần
+
 ```
 
 ### Output mẫu:
 ```
+
 Tóm tắt kết quả: ROI Calculator Review với khuyến nghị/ưu tiên rõ ràng.
+
 ```
 ## ROI Analysis: CRM Implementation
 
@@ -229,6 +249,7 @@ Tóm tắt kết quả: ROI Calculator Review với khuyến nghị/ưu tiên r�
 ---
 
 ## 🔗 Related Skills
+
 - [Financial Statement Review](./02_financial_statement_review.skill.md)
 - [KPI Dashboard Audit](./04_kpi_dashboard_audit.skill.md)
 

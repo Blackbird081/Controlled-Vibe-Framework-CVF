@@ -17,12 +17,14 @@
 ## 🎯 Purpose
 
 **When to use this skill:**
+
 - App crashes, fails to open, or displays a blank white screen
 - Calculation or display results are incorrect
 - User sees an error message but does not understand what it means
 - Phase C (Build) or Phase D (Review) — when an error occurs
 
 **Not suitable when:**
+
 - Debugging complex performance issues (use AGT-023 Systematic Debugging Engine)
 - Error relates to infrastructure or server
 
@@ -105,12 +107,14 @@ show a message "Please enter a number greater than 0" instead of going blank.
 ## 🔍 Evaluation Criteria
 
 **Accept Checklist:**
+
 - [ ] Symptom description matches what the User reported
 - [ ] Root cause explained without code or jargon
 - [ ] Test run results included (at least 3 cases)
 - [ ] Error does not reappear after the fix
 
 **Red Flags (Reject):**
+
 - ⚠️ Explanation contains "TypeError", "NullPointerException", "500 error"
 - ⚠️ No test step after fixing
 - ⚠️ Blame attributed to "low RAM" without checking code first
@@ -138,13 +142,15 @@ show a message "Please enter a number greater than 0" instead of going blank.
 
 ## 📊 Example
 
-### Sample Input:
+### Sample Input
+
 ```
 Error Symptom: "App shows strange number like 1e+06 instead of 1,000,000"
 Steps to Reproduce: "Enter an amount larger than 1 million then click Calculate"
 ```
 
-### Sample Output:
+### Sample Output
+
 ```markdown
 ## Symptom
 When you enter an amount larger than 1 million, the app shows "1e+06" instead of "1,000,000".
@@ -162,7 +168,8 @@ I added automatic number formatting to the display results.
 ✅ 0 → shows "0"
 ```
 
-### Evaluation:
+### Evaluation
+
 - ✅ No technical jargon used
 - ✅ Plain-language analogy
 - ✅ 3 test cases sufficient

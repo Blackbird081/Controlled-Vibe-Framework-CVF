@@ -57,6 +57,7 @@
 ### Kịch bản 1: Developer cá nhân, Học Lần Đầu
 
 **Hồ sơ của bạn:**
+
 - 👤 Làm việc 1 mình
 - 🆕 Mới dùng AI coding
 - 📚 Muốn hiểu khái niệm trước
@@ -64,12 +65,14 @@
 **Khuyến nghị:** **v1.0 (Core)**
 
 **Tại sao:**
+
 - ✅ Đơn giản nhất
 - ✅ Tập trung vào nguyên tắc
 - ✅ Không cần setup gì
 - ✅ Đọc docs + follow checklist là được
 
 **Bắt đầu:**
+
 ```bash
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
 cd Controlled-Vibe-Framework-CVF/v1.0
@@ -77,6 +80,7 @@ cat CVF_MANIFESTO.md
 ```
 
 **Bước tiếp theo:**
+
 1. Đọc CVF_MANIFESTO.md
 2. Theo dõi Quy trình 4 Phase
 3. Sử dụng Checklists
@@ -88,6 +92,7 @@ cat CVF_MANIFESTO.md
 ### Kịch bản 2: Muốn Xây Dựng Ngay, Có Web UI
 
 **Hồ sơ của bạn:**
+
 - 🚀 Muốn xây dựng ngay, ít đọc docs
 - 🖥️ Thích UI hơn CLI
 - 🤖 Muốn chat với AI trong CVF
@@ -96,6 +101,7 @@ cat CVF_MANIFESTO.md
 **Khuyến nghị:** **v1.6 (Agent Platform)**
 
 **Tại sao:**
+
 - ✅ Web UI đầy đủ tính năng
 - ✅ 50 templates có sẵn
 - ✅ Chat trực tiếp với AI
@@ -104,6 +110,7 @@ cat CVF_MANIFESTO.md
 - ✅ Governance toolkit
 
 **Bắt đầu:**
+
 ```bash
 npx create-cvf-app my-project
 cd my-project
@@ -112,6 +119,7 @@ npm start
 ```
 
 **Phù hợp cho:**
+
 - MVP, prototype
 - Học qua thực hành
 - Developer cá nhân hoặc team nhỏ (2-3 người)
@@ -122,6 +130,7 @@ npm start
 ### Kịch bản 3: Team nhỏ (2-5 người)
 
 **Hồ sơ của bạn:**
+
 - 👥 Team 2-5 người
 - 🔄 Cần collaboration
 - 📝 Cần audit trails
@@ -130,12 +139,14 @@ npm start
 **Khuyến nghị:** **v1.1 + v1.6**
 
 **Tại sao:**
+
 - ✅ v1.1: Input/output contracts cho team
 - ✅ v1.1: Agent archetypes (vai trò)
 - ✅ v1.1: Execution spine (kiểm toán)
 - ✅ v1.6: Web UI cho collaboration
 
 **Bắt đầu:**
+
 ```bash
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
 cd Controlled-Vibe-Framework-CVF
@@ -150,6 +161,7 @@ cat QUICK_START.md
 ```
 
 **Vai trò trong team:**
+
 - 🎯 Owner: Phase A (yêu cầu)
 - 🎨 Architect: Phase B (thiết kế)
 - 🤖 AI/Developer: Phase C (xây dựng)
@@ -160,6 +172,7 @@ cat QUICK_START.md
 ### Kịch bản 4: Production/Doanh nghiệp
 
 **Hồ sơ của bạn:**
+
 - 🏢 Team >5 người hoặc doanh nghiệp
 - 🔐 Cần governance nghiêm ngặt
 - 🔄 Cần tích hợp CI/CD
@@ -169,12 +182,14 @@ cat QUICK_START.md
 **Khuyến nghị:** **v1.1 + v1.2 + v1.3 + v1.6**
 
 **Tại sao:**
+
 - ✅ v1.1: Contracts & execution spine
 - ✅ v1.2: Skill governance, risk model
 - ✅ v1.3: SDK, CLI, CI/CD templates
 - ✅ v1.6: UI + governance toolkit
 
 **Bắt đầu:**
+
 ```bash
 # 1. Cài đặt full stack
 git clone https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git
@@ -200,6 +215,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ```
 
 **Bắt buộc có:**
+
 - [ ] Đã định nghĩa governance policies
 - [ ] Risk levels cho từng phase
 - [ ] Approval workflows
@@ -211,6 +227,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### Kịch bản 5: Nâng cao — Tùy chỉnh/Đóng góp
 
 **Hồ sơ của bạn:**
+
 - 🛠️ Muốn mở rộng CVF
 - 🧩 Xây dựng custom skills
 - 🔌 Tích hợp với công cụ khác
@@ -219,6 +236,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 **Khuyến nghị:** **Full Stack (tất cả phiên bản)**
 
 **Lộ trình học:**
+
 1. **v1.0** - Hiểu nguyên tắc cốt lõi
 2. **v1.1** - Học kiến trúc
 3. **v1.2** - Hệ thống Skill bên trong
@@ -226,6 +244,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 5. **v1.6** - Kiến trúc nền tảng
 
 **Tài nguyên:**
+
 - Hướng dẫn Developer
 - Skill Spec
 - API Reference
@@ -238,11 +257,13 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### Từ v1.0 → v1.1
 
 **Khi nào nâng cấp:**
+
 - Team tăng từ 1 → 2+ người
 - Cần input/output specs
 - Cần audit trails
 
 **Cách thực hiện:**
+
 1. Giữ quy trình v1.0
 2. Thêm contracts
 3. Định nghĩa agent archetypes
@@ -255,11 +276,13 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### Từ v1.1 → v1.6
 
 **Khi nào nâng cấp:**
+
 - Team đã quen với v1.1
 - Muốn có Web UI
 - Muốn tính năng AI agent
 
 **Cách thực hiện:**
+
 1. Giữ kiến trúc v1.1
 2. Thêm v1.6 Web UI
 3. Ánh xạ workflows vào templates
@@ -272,11 +295,13 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### Từ Thủ công → Tự động (v1.3)
 
 **Khi nào:**
+
 - Team >3 người
 - Các tác vụ lặp đi lặp lại
 - Cần CI/CD
 
 **Cách thực hiện:**
+
 1. Cài đặt Python SDK
 2. Viết script tự động hóa
 3. Thêm CI/CD templates
@@ -361,12 +386,14 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### v1.0 (Core)
 
 **Ưu điểm:**
+
 - ✅ Đơn giản, dễ học
 - ✅ Không phụ thuộc
 - ✅ Khái niệm thuần túy
 - ✅ Tuyệt vời để học
 
 **Nhược điểm:**
+
 - ❌ Mọi thứ đều thủ công
 - ❌ Không có công cụ
 - ❌ Hạn chế cho team
@@ -378,12 +405,14 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### v1.1 (Mở rộng)
 
 **Ưu điểm:**
+
 - ✅ Sẵn sàng cho team
 - ✅ Contracts & specs
 - ✅ Audit trails
 - ✅ Agent archetypes
 
 **Nhược điểm:**
+
 - ❌ Phức tạp hơn
 - ❌ Vẫn chủ yếu thủ công
 - ❌ Không có UI
@@ -395,6 +424,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### v1.6 (Nền tảng)
 
 **Ưu điểm:**
+
 - ✅ Web UI (dễ dùng)
 - ✅ AI chat tích hợp
 - ✅ Templates có sẵn
@@ -402,6 +432,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 - ✅ Governance toolkit
 
 **Nhược điểm:**
+
 - ❌ Cần cài đặt
 - ❌ Cần Node.js
 - ❌ Nặng hơn core
@@ -444,6 +475,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
    - Không → v1.6
 
 **Vẫn chưa chắc?**
+
 - 💬 Hỏi trên Discord
 - 📧 Gửi email cho chúng tôi
 - 🐛 Mở issue trên GitHub

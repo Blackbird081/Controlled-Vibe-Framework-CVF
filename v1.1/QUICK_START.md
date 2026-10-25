@@ -1,4 +1,5 @@
 # QUICK START — CVF v1.1
+
 Version: 1.1 | Status: STABLE
 
 ## 5 phút bắt đầu với CVF v1.1
@@ -6,6 +7,7 @@ Version: 1.1 | Status: STABLE
 ---
 
 ### Bước 1: Hiểu triết lý (30 giây)
+
 - **Outcome > Code**: quan trọng là sản phẩm làm được gì
 - **AI là executor, không phải decision maker**
 - **Mọi action phải truy vết được**: Command → Archetype → Preset → AU → Trace
@@ -48,28 +50,33 @@ Version: 1.1 | Status: STABLE
 **Task:** Viết checklist QA cho landing page
 
 **INPUT_SPEC (rút gọn):**
+
 - Objective: Checklist QA nội dung landing page
 - Scope: copy, CTA, link, brand voice
 - Constraint: 1 ngày
 - Output form: Markdown checklist 10-15 mục
 
 **Command + Binding:**
+
 - Command: CVF:EXECUTE
 - Archetype: Execution Agent
 - Preset: Execution Policy
 
 **AU:**
+
 - AU-001: Viết checklist
 - Input: INPUT_SPEC trên
 - Output: checklist.md
 - Trace: /traces/AU-001/
 
 **Thực thi:**
+
 - AI viết checklist theo scope
 - Ghi trace: start, assumptions, issues
 - Hoàn thành → ghi end
 
 **Review:**
+
 - Reviewer check OUTPUT_SPEC
 - Pass → merge
 - Fail → feedback → sửa → review lại
@@ -103,6 +110,7 @@ Version: 1.1 | Status: STABLE
 ---
 
 ### Mẹo nhanh
+
 - Bắt đầu với Fast Track nếu task nhỏ (< 2h)
 - Luôn lập INPUT_SPEC trước khi làm bất cứ gì
 - 1 agent = 1 archetype; không kiêm nhiệm

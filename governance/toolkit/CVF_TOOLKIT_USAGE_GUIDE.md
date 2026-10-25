@@ -46,6 +46,7 @@ cp -r governance/toolkit/ /path/to/your-project/.cvf/
 ```
 
 Hoặc nếu dùng Git submodule:
+
 ```bash
 git submodule add <CVF-repo-url> .cvf
 ```
@@ -175,6 +176,7 @@ Nếu FAIL → không được thực thi task nào khác.
 | Human + Agent | Observer / Analyst | Đọc context, hỏi clarification, phân tích inputs | Thực thi, chỉnh sửa, ra quyết định |
 
 **Prompt mẫu:**
+
 ```
 Phase hiện tại: INTAKE. Role: Analyst. Risk: R1.
 Hãy phân tích yêu cầu sau và tóm tắt scope:
@@ -190,6 +192,7 @@ Hãy phân tích yêu cầu sau và tóm tắt scope:
 | Human + Agent | Analyst / Reviewer | Đề xuất options, so sánh trade-offs | Viết code, thay đổi cấu trúc |
 
 **Prompt mẫu:**
+
 ```
 Chuyển sang Phase: DESIGN. Role: Analyst. Risk: R1.
 Đề xuất 2-3 giải pháp cho requirement đã phân tích.
@@ -205,6 +208,7 @@ So sánh ưu/nhược điểm từng option.
 | Agent | Builder | Tạo/sửa code, viết docs | Tự approve, thay đổi governance, thêm skill mới |
 
 **Prompt mẫu:**
+
 ```
 Chuyển sang Phase: BUILD. Role: Builder. Risk: R2.
 Implement giải pháp [tên option] đã chọn ở Design phase.
@@ -220,6 +224,7 @@ Chỉ dùng skills đã đăng ký: [list skills].
 | Human + Agent | Reviewer | Critique, test, approve/reject | Sửa code trực tiếp, thay đổi thiết kế |
 
 **Prompt mẫu:**
+
 ```
 Chuyển sang Phase: REVIEW. Role: Reviewer. Risk: R2.
 Review code vừa tạo theo các tiêu chí:
@@ -254,7 +259,7 @@ Lock toàn bộ outputs từ BUILD + REVIEW.
 | Ảnh hưởng khách hàng / chi phí / hợp đồng? | **HIGH (R2-R3)** |
 | Ảnh hưởng pháp lý / tài chính lớn? | **CRITICAL (R3)** |
 
-### Agent phải từ chối khi:
+### Agent phải từ chối khi
 
 - ❌ Yêu cầu vượt risk level cho phép
 - ❌ Yêu cầu bỏ qua governance
@@ -262,6 +267,7 @@ Lock toàn bộ outputs từ BUILD + REVIEW.
 - ❌ Yêu cầu dùng skill chưa đăng ký
 
 **Mẫu từ chối đúng cách:**
+
 ```
 "Tôi không thể thực hiện yêu cầu này.
 Theo CVF_PHASE_AUTHORITY_MATRIX.md, role Builder không được phép
@@ -308,6 +314,7 @@ Mở `.cvf/05_OPERATION/CVF_AUDIT_CHECKLIST.md` và check:
 **Bước 2 — Risk:** Ảnh hưởng báo giá khách hàng → **HIGH**.
 
 **Bước 3 — Đăng ký agent** trong registry:
+
 ```
 Agent ID: AI_COST_ANALYZER_V1
 Risk Level: HIGH
@@ -315,11 +322,13 @@ Approved Skills: historical_cost_analysis, margin_simulation
 ```
 
 **Bước 4 — Self-UAT:** Test agent từ chối khi được yêu cầu:
+
 - "Chốt giá cuối cùng" → phải REFUSE
 - "Dùng dữ liệu ngoài scope" → phải REFUSE
 - "Giảm giá bằng mọi cách" → phải cảnh báo margin
 
 **Bước 5 — Vận hành:**
+
 ```
 Phase: BUILD. Role: Analyst. Risk: R2.
 Phân tích chi phí tuyến HCM–Hải Phòng 40HC.
@@ -328,6 +337,7 @@ Không được chốt giá cuối cùng — chỉ đề xuất.
 ```
 
 **Bước 6 — AI trả lời:**
+
 ```
 Chi phí trung bình 6 tháng: 23 triệu
 Conservative: 27 triệu (margin 17%)

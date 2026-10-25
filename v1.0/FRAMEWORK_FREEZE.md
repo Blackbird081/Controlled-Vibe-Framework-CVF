@@ -1,4 +1,5 @@
 # FRAMEWORK FREEZE  
+
 ## Controlled Vibe Framework — v1.0 FINAL
 
 Tài liệu này xác nhận trạng thái **FREEZE** của Controlled Vibe Framework (CVF) phiên bản **v1.0 FINAL**.
@@ -43,12 +44,14 @@ Mọi hành vi trên đều được xem là **vi phạm framework**.
 FREEZE không cấm sử dụng hay mở rộng ở cấp dự án.
 
 Được phép:
+
 - Áp dụng CVF v1.0 cho nhiều project khác nhau
 - Sao chép templates để khởi tạo project
 - Ghi quyết định mới ở cấp project
 - Ghi log sử dụng AI ở cấp project
 
 Miễn là:
+
 - Không sửa nội dung gốc của CVF
 - Không phá vỡ cấu trúc framework
 
@@ -63,6 +66,7 @@ Mọi thay đổi đối với CVF **bắt buộc** phải tuân theo:
 - Có quyết định đi kèm trong `DECISIONS.md`
 
 Không có khái niệm:
+
 - “Sửa nhỏ cho tiện”
 - “Tinh chỉnh nhẹ”
 - “Tạm thời thay đổi”
@@ -72,11 +76,13 @@ Không có khái niệm:
 ## 5. ĐIỀU KIỆN UNFREEZE
 
 CVF v1.0 chỉ được unfreeze khi:
+
 - Có dữ liệu sử dụng thực tế từ nhiều project
 - Có bằng chứng rõ ràng về hạn chế của v1.0
 - Có mục tiêu cụ thể cho phiên bản tiếp theo
 
 Việc unfreeze:
+
 - Không hồi tố
 - Không làm mất hiệu lực của v1.0
 - Chỉ áp dụng cho phiên bản mới

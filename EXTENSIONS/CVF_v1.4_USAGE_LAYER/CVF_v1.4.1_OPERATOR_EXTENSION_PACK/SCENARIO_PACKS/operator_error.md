@@ -14,7 +14,7 @@ Hành vi sử dụng lệch vai trò (can thiệp execution, sửa output)
 
 Đây là lỗi hệ thống con người, không phải lỗi mô hình.
 
-2. Dấu hiệu nhận biết nhanh
+1. Dấu hiệu nhận biết nhanh
 
 Bạn có khả năng đang mắc Operator Error nếu:
 
@@ -24,7 +24,7 @@ Cảm thấy "AI không hiểu ý mình" nhiều lần
 
 Muốn chỉnh output cho khớp mong muốn
 
-3. Các dạng Operator Error phổ biến
+1. Các dạng Operator Error phổ biến
 A. Scope Creep
 
 Input mở rộng ngoài phạm vi ban đầu
@@ -49,7 +49,7 @@ Prompt nối tiếp
 
 Hậu quả: Mất trace, không audit được
 
-4. Cách xử lý ĐÚNG
+1. Cách xử lý ĐÚNG
 
 Dừng execution hiện tại
 
@@ -61,7 +61,7 @@ Viết lại input ngắn hơn, rõ hơn
 
 ⛔ Không sửa output để "chữa cháy".
 
-5. Phòng ngừa Operator Error
+1. Phòng ngừa Operator Error
 
 Dùng 02_INPUT_CONTRACT/input_checklist.md
 

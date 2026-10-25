@@ -33,6 +33,7 @@ Preferred entry:
 ### SDK Exports (via `src/sdk.ts`)
 
 **Guards Module**:
+
 - `GuardRuntimeEngine` — Main guard evaluation engine
 - `createGuardEngine` — Factory function
 - 6 guard classes: `PhaseGateGuard`, `RiskGateGuard`, `AuthorityGateGuard`, `MutationBudgetGuard`, `ScopeGuard`, `AuditTrailGuard`
@@ -40,24 +41,29 @@ Preferred entry:
 - Types: `Guard`, `GuardResult`, `GuardRequestContext`, `GuardPipelineResult`, `GuardAuditEntry`, `GuardRuntimeConfig`, `GuardDecision`, `GuardSeverity`, `CVFPhase`, `CVFRiskLevel`, `CVFRole`
 
 **Persistence Module**:
+
 - `JsonFileAdapter` — JSON file storage adapter
 - Types: `PersistenceAdapter`, `SessionState`, `JsonFileAdapterOptions`
 
 **System Prompt Module**:
+
 - `generateSystemPrompt` — Context-aware prompt generator
 - `MCP_TOOL_DESCRIPTIONS` — Tool descriptions for prompts
 - Types: `PromptContext`, `GeneratedPrompt`
 
 **CLI Module**:
+
 - `runCli`, `parseArgs`, `executeCommand`, `formatOutput` — CLI wrapper functions
 - Type: `CliResult`
 
 **Registry Module**:
+
 - `UnifiedGuardRegistry`, `createUnifiedRegistry` — Guard registry
 - `SkillGuardWire`, `createDefaultSkillGuardWire` — Skill-to-guard mapping
 - Types: `GuardMetadata`, `GuardCategory`, `RegisteredGuard`, `RegistryStats`, `SkillGuardMapping`, `SkillGuardCheckResult`
 
 **Vibe Translator Module**:
+
 - `parseVibe` — Natural language intent parser (EN/VI)
 - `generateClarifications` — Slot filling + active clarification
 - `generateConfirmationCard`, `formatCardAsText` — Structured confirmation cards
@@ -65,14 +71,17 @@ Preferred entry:
 - Types: `ParsedVibe`, `VibeActionType`, `VibeEntity`, `VibeConstraint`, `ClarificationQuestion`, `ClarificationResult`, `ConfirmationCard`, `ConfirmationStep`
 
 **Session Memory Module**:
+
 - `SessionMemory` — Cross-request state persistence
 - Types: `MemoryEntry`, `SessionMemoryConfig`, `SessionSnapshot`
 
 **Non-coder Module** (5 Golden Screens):
+
 - `generateVibeBoxScreen`, `generateIntentionMapScreen`, `generateLiveDashboardScreen`, `generateHITLScreen`, `generateAuditLedgerScreen` — Screen generators
 - Types: `VibeBoxScreen`, `IntentionMapScreen`, `IntentionMapNode`, `LiveDashboardScreen`, `HITLScreen`, `HITLNotification`, `AuditLedgerScreen`, `AuditLedgerEntry`
 
 **Non-coder Module** (Smart Onboarding):
+
 - `getPersonaQuestions`, `buildPersonaProfile`, `getMaxRiskForAutonomy`, `getDefaultRedLines`, `mergeRedLines`, `checkRedLine`, `PersonalDictionary`, `completeOnboarding` — Onboarding functions
 - Types: `AutonomyLevel`, `PersonaProfile`, `PersonaQuestion`, `RedLineConfig`, `DictionaryEntry`, `OnboardingResult`
 
@@ -106,4 +115,3 @@ Preferred entry:
 - `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/package.json`
 - `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/README.md`
 - `EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/src/sdk.ts`
-

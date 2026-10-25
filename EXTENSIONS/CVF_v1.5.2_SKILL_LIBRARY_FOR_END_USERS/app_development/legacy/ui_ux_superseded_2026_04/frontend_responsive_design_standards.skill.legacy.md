@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Build responsive, mobile-first layouts using fluid containers, flexible units, media queries, and touch-friendly design that works across all screen sizes. Use this skill when creating or modifying UI layouts, responsive grids, breakpoint styles, mobile navigation, or any interface that needs to adapt to different screen sizes. Apply when working with responsive CSS, media queries, viewport settings, flexbox/grid layouts, mobile-first styling, breakpoint definitions (mobile, tablet, desktop), touch target sizing, relative units (rem, em, %), image optimization for different screens, or testing layouts across multiple devices. Use for any task involving multi-device support, responsive design patterns, or adaptive layouts.
 
 **Khi nào dùng skill này:**
+
 - Cần Frontend Responsive Design Standards với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: mobile app
-- Nguồn tham khảo: https://github.com/am-will/codex-skills/tree/main/skills/frontend-responsive-ui
+- Nguồn tham khảo: <https://github.com/am-will/codex-skills/tree/main/skills/frontend-responsive-ui>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Thiết kế API cho ứng dụng quản lý dự án
 Context: Team 4 dev, cần MVP trong 6 tuần
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Frontend Responsive Design Standards Output
 

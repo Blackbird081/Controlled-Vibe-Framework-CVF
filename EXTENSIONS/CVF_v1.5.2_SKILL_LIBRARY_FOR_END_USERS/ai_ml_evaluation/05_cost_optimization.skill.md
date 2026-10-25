@@ -17,11 +17,13 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng:**
+
 - AI costs đang cao
 - Scale up usage
 - Optimize existing implementation
 
 **Không phù hợp khi:**
+
 - Need infrastructure changes → DevOps
 - Complex ML pipelines → ML engineer
 
@@ -64,6 +66,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -87,12 +90,14 @@ Không yêu cầu.
 ## 🔍 Cách đánh giá
 
 **Checklist:**
+
 - [ ] Understand current usage
 - [ ] Savings realistic
 - [ ] Quality trade-offs explained
 - [ ] Implementation practical
 
 **Red flags:**
+
 - ⚠️ Unrealistic savings
 - ⚠️ Ignore quality impact
 
@@ -129,7 +134,8 @@ Sau khi hoàn thành **Cost Optimization**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Volume: 60k requests/tháng
 Avg tokens: 1,200
@@ -137,7 +143,8 @@ Model cost: $5 / 1M tokens
 Latency target: < 2s
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Cost Optimization Plan
 
@@ -152,13 +159,15 @@ Optimizations
 New Estimated Cost: ~$144/mo (60% reduction)
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Có baseline + savings rõ
 - ✅ Không ảnh hưởng SLA
 - ✅ Dễ triển khai theo bước
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Bias Detection](./04_bias_detection.skill.md)
 - [AI Use Case Fit](./06_ai_use_case_fit.skill.md)
 
@@ -169,7 +178,7 @@ New Estimated Cost: ~$144/mo (60% reduction)
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: AI Use Case Fit
 
 Sau khi hoàn thành **Cost Optimization**, quay lại đánh giá use case:
 → [AI Use Case Fit](./06_ai_use_case_fit.skill.md)
@@ -177,3 +186,5 @@ Sau khi hoàn thành **Cost Optimization**, quay lại đánh giá use case:
 ---
 
 *CVF Skill Library v1.5.2 | AI/ML Evaluation Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

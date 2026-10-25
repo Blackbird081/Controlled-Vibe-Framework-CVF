@@ -59,12 +59,14 @@ User picks Template → Fills form → Hits Submit → Waits → Gets result
 ```
 
 **The user NEVER sees:**
+
 - Guard names or guard decisions
 - Risk level codes (R0-R3)
 - Phase gates or compliance checks
 - Enforcement status (ALLOW/BLOCK/CLARIFY)
 
 **The user SEES:**
+
 - Green checkmark = "Your result is ready"
 - Yellow advisory = "I improved your request for better results"
 - Progress bar = "Working on it..."
@@ -102,6 +104,7 @@ Create a **self-contained adapter** inside `cvf-web/src/lib/` that ports guard l
 **File:** `cvf-web/src/lib/guard-runtime-adapter.ts`
 
 **Scope:**
+
 - Port `GuardRuntimeEngine` evaluation logic (pure functions, no Node dependencies)
 - Include guards relevant to non-coder context:
   - `PhaseGuard` — ensure request matches current workflow phase
@@ -119,6 +122,7 @@ Create a **self-contained adapter** inside `cvf-web/src/lib/` that ports guard l
 **File:** `cvf-web/src/lib/output-validator.ts`
 
 After AI generates a response, validate it before showing to user:
+
 - Does output match the template's expected structure?
 - Is output length reasonable for the request type?
 - Does output contain unsafe/inappropriate content? (extend `safety-status.ts`)
@@ -175,6 +179,7 @@ Current display → New display for non-coders:
 | "ALLOW" | *(show nothing — just proceed)* |
 
 Add a `nonCoderMode` toggle (default: ON for v1.6 users):
+
 - When ON: friendly language, minimal technical details
 - When OFF: full technical view (for developers debugging)
 
@@ -229,6 +234,7 @@ New for non-coders:
 **File:** `cvf-web/src/lib/template-recommender.ts` (new)
 
 When user starts typing in the main input:
+
 - "I want to build a website" → suggest `App Builder` template
 - "Write a marketing plan" → suggest `Marketing Campaign` wizard
 - "Analyze my sales data" → suggest `Data Analysis` wizard
@@ -243,6 +249,7 @@ Uses keyword matching from existing `skill-search.ts` patterns — no external A
 **File:** `cvf-web/src/lib/smart-defaults.ts` (new)
 
 If user has completed wizards before:
+
 - Pre-fill "Target Users", "Platform", "Tech Stack" from previous sessions
 - Show: "Based on your last project, I pre-filled some fields"
 - User can override any field
@@ -257,6 +264,7 @@ Uses existing `localStorage` patterns from `store.ts`.
 **Files:** Existing wizard components
 
 Enhance each wizard step with:
+
 - Progress indicator: "Step 3 of 8 — Architecture"
 - Context tips: "Most users pick 'Layered' for web apps"
 - Skip suggestions: "This step is optional for simple projects"
@@ -278,6 +286,7 @@ Enhance each wizard step with:
 **File:** `cvf-web/src/lib/multi-agent.tsx` (modify existing)
 
 When output passes from one agent to the next:
+
 - Validate output meets expected format for next agent
 - Check scope hasn't expanded beyond original request
 - Auto-adjust if agent output drifts
@@ -292,6 +301,7 @@ User sees: smooth progress bar, not individual agent handoffs.
 **File:** `cvf-web/src/components/MultiAgentPanel.tsx` (modify existing)
 
 For non-coders, show simplified view:
+
 - "Planning your project..." (Orchestrator working)
 - "Designing architecture..." (Architect working)
 - "Building solution..." (Builder working)
@@ -321,21 +331,25 @@ NOT: agent names, task IDs, or governance details.
 ### Suggested Schedule
 
 **Week 1-2: Track 1** (Background Guard Enforcement)
+
 - Day 1-4: Task 1.1 — Guard Runtime Adapter
 - Day 5-7: Task 1.2 — Post-Response Validation
 - Day 8-9: Task 1.3 — Execute Route Integration
 
 **Week 2-3: Track 2** (User-Friendly Language)
+
 - Day 10-12: Task 2.1 — GovernanceBar Simplification
 - Day 13-14: Task 2.2 — Error Humanization
 - Day 15: Task 2.3 — Quality Score Visualization
 
 **Week 3-4: Track 3** (Smart Templates)
+
 - Day 16-18: Task 3.1 — Intent-Based Suggestion
 - Day 19-20: Task 3.2 — Smart Defaults
 - Day 21-23: Task 3.3 — Context Tips
 
 **Week 4-5: Track 4** (Multi-Agent Governance)
+
 - Day 24-27: Task 4.1 — Agent Handoff Validation
 - Day 28-30: Task 4.2 — Workflow Monitoring
 

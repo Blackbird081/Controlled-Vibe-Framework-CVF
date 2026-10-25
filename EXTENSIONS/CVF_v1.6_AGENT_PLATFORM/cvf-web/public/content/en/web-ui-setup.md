@@ -78,9 +78,10 @@ npm install
 npm run dev
 ```
 
-Open **http://localhost:3000** in your browser.
+Open **<http://localhost:3000>** in your browser.
 
 You should see the CVF Agent Platform homepage with:
+
 - Template cards
 - Navigation sidebar
 - Language toggle (EN/VI)
@@ -138,21 +139,27 @@ You should see the CVF Agent Platform homepage with:
 ## Step 7: Explore Key Features
 
 ### Dark Mode
+
 Click the moon/sun icon in the header. Follows system preference by default.
 
 ### Language Toggle
+
 Switch between English (EN) and Vietnamese (VI) via the language selector.
 
 ### Usage Tracking
+
 The Agent Chat tracks:
+
 - Total tokens used
 - Cost per provider
 - Number of interactions
 
 ### File Upload
+
 In Agent Chat, you can upload files (specs, code, docs) as context for the AI.
 
 ### Spec Export
+
 After completing a template or chat session, click **Export** to download a Markdown file with your spec + governance rules.
 
 ---
@@ -170,6 +177,7 @@ npm install
 ### "API key not configured" error
 
 Check your `.env.local` file:
+
 - Make sure the key names match exactly (no typos)
 - No spaces around `=`
 - File is named `.env.local` (not `.env`)

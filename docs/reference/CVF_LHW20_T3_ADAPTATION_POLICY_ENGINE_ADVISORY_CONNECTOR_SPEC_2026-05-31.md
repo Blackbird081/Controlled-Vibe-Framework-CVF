@@ -57,6 +57,7 @@ This is the stabilizer that prevents the Learning Plane from becoming self-destr
 ### A1 — Risk Budget per Cycle
 
 **Advisory:** Per adaptation cycle, the system must limit:
+
 - Max 10% agent role changes
 - Max 5% new agent spawns
 - Max 5% agent retirements
@@ -70,6 +71,7 @@ This is the stabilizer that prevents the Learning Plane from becoming self-destr
 ### A2 — Confidence Gating (NO action without sufficient evidence)
 
 **Advisory:**
+
 - High score + low confidence → NO promotion
 - Low score + low confidence → NO demotion
 - Only high confidence signals (based on sufficient sample_size) trigger strong actions
@@ -83,6 +85,7 @@ This is the stabilizer that prevents the Learning Plane from becoming self-destr
 ### A3 — Multi-Signal Requirement (NO adaptation from single signal)
 
 **Advisory:** No adaptation decision may be based on:
+
 - A single evaluation metric
 - Self-reported agent data alone
 - One execution's outcome
@@ -96,6 +99,7 @@ Minimum: multiple consistent signals across ≥ N tasks.
 ### A4 — Cooldown Period (prevent oscillation)
 
 **Advisory:** After an adaptation action (promote/demote/spawn/retire), the affected agent enters a cooldown period. No further changes allowed until:
+
 - N executions complete in the new state
 - Stability confirmed (no immediate reversal trigger)
 
@@ -108,12 +112,14 @@ Minimum: multiple consistent signals across ≥ N tasks.
 ### A5 — Tiered Authority System (Tier 0-3)
 
 **Advisory:** Agents operate in authority tiers:
+
 - **Tier 0:** Experimental (low trust, low-risk tasks only)
 - **Tier 1:** Validated (standard tasks, monitored)
 - **Tier 2:** Trusted (complex tasks, less oversight)
 - **Tier 3:** Critical (cannot be demoted without strong evidence)
 
 Rules:
+
 - Tier 3 cannot be demoted without ≥ N confirmed failures across ≥ M time periods
 - Tier 0 cannot be promoted quickly (requires sustained evidence)
 
@@ -124,6 +130,7 @@ Rules:
 ### A6 — Rollback Mechanism
 
 **Advisory:** The system must support reverting adaptation changes when:
+
 - Performance degrades after adaptation
 - Unexpected failure spike detected (via OFB-1 `overallSignal: ESCALATE`)
 

@@ -5,4 +5,3 @@
 | Input    | 02_INPUT_CONTRACT     |
 | Execute  | 03_EXECUTION_RULES    |
 | Output   | 04_OUTPUT_AND_AUDIT   |
-

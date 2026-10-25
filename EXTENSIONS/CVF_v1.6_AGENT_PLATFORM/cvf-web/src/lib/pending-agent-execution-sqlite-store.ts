@@ -680,7 +680,6 @@ export class PendingAgentExecutionSqliteStore implements PendingAgentExecutionSt
                 return decision;
             }
 
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const nextRecord = decision.record!;
             const nextRow = encodeRecordToRow(nextRecord);
 

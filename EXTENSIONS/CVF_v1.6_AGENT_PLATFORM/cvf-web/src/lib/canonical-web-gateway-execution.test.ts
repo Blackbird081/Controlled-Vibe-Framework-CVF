@@ -5,7 +5,6 @@ import { join } from 'node:path';
 import {
     ProviderExecutionBridge,
     type ProviderExecutionAdapter,
-    type ProviderExecutionAdapterInput,
     type ProviderExecutionAdapterResult,
     type ProviderExecutionBridgeOptions,
     type CredentialReference,
@@ -64,7 +63,7 @@ function makeCredentialRef(): CredentialReference {
 
 function makeMockAdapter(): ProviderExecutionAdapter & { execute: ReturnType<typeof vi.fn> } {
     const executeFn = vi.fn(
-        async (_input: ProviderExecutionAdapterInput): Promise<ProviderExecutionAdapterResult> => ({
+        async (): Promise<ProviderExecutionAdapterResult> => ({
             text: 'Hello from test adapter',
             usage: { inputTokens: 10, outputTokens: 15 },
         }),

@@ -14,6 +14,7 @@ Một skill là một **mẫu dạng biểu mẫu** (file `.skill.md`) có khả
 4. **Ghi nhận lỗi thường gặp** — Liệt kê các sai lầm phổ biến và cách tránh chúng
 
 ### Skill KHÔNG PHẢI Là
+
 - ❌ Thư viện code
 - ❌ Mẫu prompt (mặc dù chúng hỗ trợ tạo prompt)
 - ❌ Cấu hình AI
@@ -97,21 +98,27 @@ CVF bao gồm **114 skill có sẵn** trên 12 lĩnh vực:
 ## Cách Sử Dụng Skill
 
 ### Bước 1: Tìm skill
+
 Duyệt theo lĩnh vực hoặc tìm kiếm trong thư viện skill.
 
 ### Bước 2: Kiểm tra điều kiện tiên quyết
+
 Đọc phần Điều kiện tiên quyết. Đảm bảo bạn đã có mọi thứ cần thiết.
 
 ### Bước 3: Điền biểu mẫu
+
 Sao chép bảng Biểu Mẫu Đầu Vào và điền giá trị của bạn.
 
 ### Bước 4: Gửi cho AI
+
 Dán biểu mẫu đã điền vào công cụ AI (ChatGPT, Claude, Copilot, v.v.), cùng với phần Đầu Ra Mong Đợi.
 
 ### Bước 5: Đánh giá
+
 Sử dụng Danh Sách Kiểm Tra Chấp Nhận để xác minh đầu ra của AI. Kiểm tra các Dấu Hiệu Cảnh Báo.
 
 ### Bước 6: Chấp nhận hoặc thử lại
+
 - ✅ Tất cả các mục đều đạt → Chấp nhận
 - ❌ Có mục thất bại → Sửa biểu mẫu đầu vào hoặc yêu cầu AI thử lại
 
@@ -167,6 +174,7 @@ Skill tuân theo vòng đời được định nghĩa:
 | **RETIRED** | Không còn sử dụng được |
 
 ### Quy Tắc Vòng Đời
+
 - PROPOSED → APPROVED: Yêu cầu người đánh giá ký duyệt
 - ACTIVE → DEPRECATED: Phải chỉ rõ skill thay thế
 - DEPRECATED → RETIRED: Thời gian thông báo 30 ngày
@@ -205,6 +213,7 @@ Skill tuân theo vòng đời được định nghĩa:
 ### Con Số Governance
 
 CVF governance theo dõi:
+
 - **114 skill người dùng** với bản ghi governance (`USR-*.gov.md`)
 - **8 agent skill** với bản ghi governance (`AGT-*.gov.md`)
 - Xác thực tự động qua `validate_registry.py`
@@ -214,9 +223,11 @@ CVF governance theo dõi:
 ## Các Loại Skill
 
 ### Skill Người Dùng (USR-*)
+
 Mẫu dạng biểu mẫu dành cho con người sử dụng AI. Không cần code. Điền biểu mẫu → gửi cho AI → đánh giá đầu ra.
 
 ### Agent Skill (AGT-*)
+
 Mẫu cấu hình cho AI agent trong luồng công việc đa agent. Định nghĩa agent có thể làm gì, không thể làm gì, và cách báo cáo.
 
 ---
@@ -268,6 +279,7 @@ Xem Hướng Dẫn Tạo Skill Tùy Chỉnh để có hướng dẫn từng bư�
 ## Thư Viện Skill Trong Giao Diện Web (v1.6)
 
 Ứng dụng web v1.6 tích hợp skill dưới dạng mẫu:
+
 - Skill hiển thị trong bộ chọn mẫu
 - Các trường Biểu Mẫu Đầu Vào trở thành phần tử tương tác
 - Danh Sách Kiểm Tra Chấp Nhận trở thành một phần của giao diện đánh giá

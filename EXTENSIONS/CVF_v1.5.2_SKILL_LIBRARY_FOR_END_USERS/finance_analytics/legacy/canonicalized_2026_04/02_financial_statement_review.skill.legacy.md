@@ -11,6 +11,7 @@
 ## 📌 Prerequisites
 
 > Hoàn thành skill sau trước khi dùng skill này:
+>
 > - [Budget Analysis](./01_budget_analysis.skill.md) — Hiểu cơ bản về phân tích ngân sách
 
 ---
@@ -18,11 +19,13 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Đánh giá sức khỏe tài chính công ty
 - Review báo cáo tài chính hàng quý/năm
 - Chuẩn bị cho investor meetings hoặc audits
 
 **Không phù hợp khi:**
+
 - Chỉ cần phân tích ngân sách đơn giản (dùng Budget Analysis)
 - Đánh giá dòng tiền chi tiết (dùng Cash Flow Analysis)
 
@@ -65,9 +68,11 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 ### 1. Statement Type
+
 ```
 Loại báo cáo cần review:
 [ ] Balance Sheet (Bảng cân đối kế toán)
@@ -77,12 +82,14 @@ Loại báo cáo cần review:
 ```
 
 ### 2. Reporting Period
+
 ```
 Kỳ báo cáo:
 VD: Q4 2025, FY2025, TTM (Trailing Twelve Months)
 ```
 
 ### 3. Key Figures — Balance Sheet
+
 ```
 Assets:
 - Current Assets: $___
@@ -98,6 +105,7 @@ Equity: $___
 ```
 
 ### 4. Key Figures — Income Statement
+
 ```
 Revenue: $___
 COGS: $___
@@ -108,6 +116,7 @@ Net Income: $___
 ```
 
 ### 5. Comparison Period (Optional)
+
 ```
 Số liệu kỳ trước để so sánh:
 VD: Q4 2024, FY2024
@@ -120,6 +129,7 @@ VD: Q4 2024, FY2024
 AI sẽ trả về:
 
 ### 1. Key Financial Ratios
+
 | Ratio | Value | Benchmark | Status |
 |-------|-------|-----------|--------|
 | Current Ratio | 2.1 | >1.5 | ✅ Healthy |
@@ -128,20 +138,24 @@ AI sẽ trả về:
 | Net Profit Margin | 12% | >10% | ✅ Good |
 
 ### 2. Trend Analysis
+
 - YoY revenue growth
 - Margin trends
 - Working capital changes
 
 ### 3. Red Flags & Concerns
+
 - Deteriorating ratios
 - Unusual items
 - Off-balance sheet items
 
 ### 4. Strengths & Opportunities
+
 - Strong metrics
 - Areas of improvement potential
 
 ### 5. Executive Summary
+
 - Financial health score (1-10)
 - Key takeaways
 - Recommended actions
@@ -183,6 +197,7 @@ AI sẽ trả về:
 ## 📊 Ví dụ thực tế
 
 **Input:**
+
 ```
 Statement: Income Statement
 Period: FY2025
@@ -196,18 +211,23 @@ Net Income: $520,000
 ```
 
 **Expected Analysis:**
+
 ```markdown
 
 ### Input mẫu:
 ```
+
 Mục tiêu: Hoàn thành Financial Statement Review
 Bối cảnh: Dữ liệu hiện có và giới hạn nguồn lực
 Ràng buộc: Deadline 2 tuần
+
 ```
 
 ### Output mẫu:
 ```
+
 Tóm tắt kết quả: Financial Statement Review với khuyến nghị/ưu tiên rõ ràng.
+
 ```
 ## Key Ratios
 | Metric | FY2025 | FY2024 | Change |
@@ -240,6 +260,7 @@ Tóm tắt kết quả: Financial Statement Review với khuyến nghị/ưu ti�
 ---
 
 ## 🔗 Related Skills
+
 - [Budget Analysis](./01_budget_analysis.skill.md)
 - [ROI Calculator Review](./03_roi_calculator_review.skill.md)
 

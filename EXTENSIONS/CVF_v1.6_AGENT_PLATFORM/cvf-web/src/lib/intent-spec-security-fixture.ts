@@ -12,8 +12,13 @@ export type Adversary = 'EXTRA_ALLOW' | 'DENY' | 'INHERITED' | 'WRONG_OWNER';
 const POWERSHELL = () => path.join(process.env.SystemRoot ?? 'C:\\Windows', 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe');
 
 function powershell(script: string, target: string): Promise<void> {
+    // Match production child isolation, including case-insensitive Windows environment keys.
+    const inheritedEnv: NodeJS.ProcessEnv = { ...process.env };
+    for (const key of Object.keys(inheritedEnv)) {
+        if (key.toUpperCase() === 'PSMODULEPATH') delete inheritedEnv[key];
+    }
     return new Promise((resolve, reject) => execFile(POWERSHELL(), ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command', script], {
-        env: { ...process.env, CVF_NIS_TARGET: target }, windowsHide: true, timeout: 20000, shell: false,
+        env: { ...inheritedEnv, CVF_NIS_TARGET: target, PSModulePath: path.join(path.dirname(POWERSHELL()), 'Modules') }, windowsHide: true, timeout: 20000, shell: false,
     }, (error, _stdout, stderr) => error ? reject(new Error(`FIXTURE_SECURITY_FAILED: ${String(stderr).trim().split(/\r?\n/)[0] ?? ''}`)) : resolve()));
 }
 

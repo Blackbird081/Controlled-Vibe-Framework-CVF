@@ -1,6 +1,9 @@
 # AUDIT LOGGER SPEC
+
 # CVF-Toolkit Core Module
+
 # Status: Authoritative Specification
+
 # Toolkit Version: 1.0.0
 
 ## 1. PURPOSE
@@ -40,14 +43,17 @@ export interface AuditRecord {
 ## 4. OPERATIONS
 
 ### 4.1 Log Event
+
 ```ts
 log(record: AuditRecord): void
 ```
+
 - Auto-assigns timestamp (ISO 8601)
 - Stores in internal log
 - Must never throw — logging failures are silent
 
 ### 4.2 Retrieve Logs
+
 ```ts
 getAll(): AuditRecord[]
 getByType(eventType: AuditEventType): AuditRecord[]
@@ -62,6 +68,7 @@ getByType(eventType: AuditEventType): AuditRecord[]
 ## 6. SANITIZATION RULES
 
 Before logging:
+
 - Redact fields matching: apiKey, password, token, secret, credential
 - Replace values with `[REDACTED]`
 - Log sanitization failures as separate events

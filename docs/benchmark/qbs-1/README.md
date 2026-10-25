@@ -177,22 +177,24 @@ python scripts/check_qbs_scored_run_readiness.py --json
 | QBS-38 governance-family mapper | `READY_NO_NEW_SCORE`; family metadata added without changing governance decisions |
 | QBS-39 family ALLOW output contract | `READY_NO_NEW_SCORE`; chronic-negative family contracts added for ALLOW path only |
 | QBS-40 R10 pre-registration | `PREREGISTERED_NO_SCORED_RUN` as `qbs/preregister/qbs1-powered-single-provider-20260512-alibaba-r10` |
+| QBS-41 R10 reviewer scoring | `QBS41_R10_REVIEWER_AGREEMENT_FAIL_NO_PUBLIC_QBS_CLAIM` |
 | QBS-1 scored claim | `NO_PUBLIC_QBS_CLAIM` |
 | Family-level claims under `POWERED_SINGLE_PROVIDER` | `BLOCKED` |
 | Public QBS score | `NOT_CLAIMED` |
 
 ## Next Authorized Work
 
-QBS-40 freezes the R10 checkpoint and pre-registration packet. The next
-authorized work is live R10 execution only if an operator explicitly runs the
-pre-registered command with `--confirm-live-cost`. Pre-registration alone does
-not authorize a score, L4/L5 claim, family-level claim, provider-parity claim,
-or human-gold claim.
+QBS-41 records completed reviewer scoring for the R10 run. Reviewer agreement
+failed, with median normalized quality delta CFG-B vs CFG-A1 of `-0.125`. The
+public QBS score and family-level claims remain unclaimed. These artifacts
+authorize no further live execution. Any later run requires a new explicit
+operator decision, a fresh pre-registration, and the existing live-cost
+controls.
 
 ## Claim Boundary
 
 This file claims only the QBS-1 planning packet, the documented remediation
-history, and the next authorized work. It does not claim a QBS score, does
-not claim provider or model parity, and does not authorize publishing a
-quality-level claim without a fully executed and pre-registered powered run
-under the public methodology.
+history, and the recorded R10 reviewer-agreement failure. It does not claim a
+QBS score, provider or model parity, or authorize subsequent live execution.
+A quality-level claim still requires a fully executed and pre-registered
+powered run under the public methodology and all applicable claim gates.

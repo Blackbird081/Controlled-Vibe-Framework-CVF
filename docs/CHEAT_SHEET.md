@@ -95,6 +95,7 @@ errors = skill.get_failed_executions()
    - NO → stay same
 
 **Example Decision:**
+
 ```
 Email classifier
 - Can AI decide alone? YES → R0/R1
@@ -189,6 +190,7 @@ result = my_skill.execute(data)
 ## 💡 Pro Tips
 
 ✅ **Do:**
+
 - Start simple (R0 or R1)
 - Set validation rules
 - Check metrics weekly
@@ -196,6 +198,7 @@ result = my_skill.execute(data)
 - Ask team for feedback
 
 ❌ **Don't:**
+
 - Skip input validation
 - Choose risk level too low
 - Ignore error messages

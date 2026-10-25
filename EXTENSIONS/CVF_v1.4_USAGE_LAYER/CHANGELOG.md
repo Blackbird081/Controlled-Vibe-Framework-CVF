@@ -15,6 +15,7 @@ CVF v1.4 là lớp Usage/UX đặt trên CVF v1.3.1 (CORE – Frozen). Phiên b�
 ### ✨ Thêm mới (Added)
 
 #### 10_USER_LAYER/
+
 | File | Mục đích |
 |------|----------|
 | `user_intent_templates.md` | Chuẩn hóa cách khai báo intent |
@@ -22,6 +23,7 @@ CVF v1.4 là lớp Usage/UX đặt trên CVF v1.3.1 (CORE – Frozen). Phiên b�
 | `expectation_management.md` | Quản lý kỳ vọng về AI |
 
 #### 11_PRESET_USE_CASES/
+
 | File | Mục đích |
 |------|----------|
 | `analysis_mode.md` | 📊 Preset phân tích với intent templates, output format, ví dụ |
@@ -30,6 +32,7 @@ CVF v1.4 là lớp Usage/UX đặt trên CVF v1.3.1 (CORE – Frozen). Phiên b�
 | `technical_review.md` | 🔍 Preset review kỹ thuật với severity levels |
 
 #### 12_TOOLING/
+
 | File | Mục đích |
 |------|----------|
 | `cvf_cli_user_mode.md` | CLI user mode với full commands và flow diagram |
@@ -37,6 +40,7 @@ CVF v1.4 là lớp Usage/UX đặt trên CVF v1.3.1 (CORE – Frozen). Phiên b�
 | `api_wrapper_contract.md` | REST API contract với SDK examples |
 
 #### 13_FAILURE_UX/
+
 | File | Mục đích |
 |------|----------|
 | `user_facing_error_messages.md` | Error messages thân thiện |
@@ -44,6 +48,7 @@ CVF v1.4 là lớp Usage/UX đặt trên CVF v1.3.1 (CORE – Frozen). Phiên b�
 | `explain_failure_without_trace.md` | Giải thích lỗi không lộ trace |
 
 #### 14_LIGHT_GOVERNANCE/
+
 | File | Mục đích |
 |------|----------|
 | `role_matrix.md` | Ma trận vai trò User/Operator/Maintainer |

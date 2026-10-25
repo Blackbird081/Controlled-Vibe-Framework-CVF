@@ -34,6 +34,7 @@ Key innovation: Apply CVF's "Controlled Autonomy" philosophy to business automat
 | CEO / Founder | Competitive landscape, strategy | Governed agent swarm research |
 
 **Operator vs Developer Workflow**
+
 ```
 Developer Path (existing CVF):
   Code → Test → Deploy → Monitor
@@ -57,6 +58,7 @@ Operator Path (AGT-034):
 | **Agent Swarms** | Parallel research, competitive analysis | R3 | Manual — review each agent output |
 
 **Connector Security Checklist**
+
 ```
 □ OAuth 2.0 authentication (never API keys in prompts)
 □ Permission scoping (read-only by default)
@@ -71,6 +73,7 @@ Operator Path (AGT-034):
 #### Category 1: Revenue Operations (Sales & Marketing)
 
 **Workflow 1: Pipeline Risk Manager** — Risk: R2 (CRM data read + analysis). Connector: CRM (HubSpot/Salesforce). Governance: Read-only access, no deal modifications.
+
 ```
 Prompt Template:
 ┌─────────────────────────────────────────────────────────┐
@@ -85,9 +88,11 @@ Prompt Template:
 │ dashboard total. Report any discrepancy.                │
 └─────────────────────────────────────────────────────────┘
 ```
+
 CVF Addition: Verification gate — always cross-reference AI output with source system totals.
 
 **Workflow 2: Signal-Based Prospecting** — Risk: R2 (web research + email drafting). Connector: Agentic Search. Governance: No sending — draft only, human reviews before send.
+
 ```
 Prompt Template:
 ┌─────────────────────────────────────────────────────────┐
@@ -105,9 +110,11 @@ Prompt Template:
 │ DO NOT auto-send. All emails require human approval.    │
 └─────────────────────────────────────────────────────────┘
 ```
+
 CVF Addition: Confidence scoring + mandatory human-in-the-loop before any outbound action.
 
 **Workflow 3: Ad Spend Watchdog** — Risk: R2 (financial data analysis). Connector: Google Ads/Meta CSV upload. Governance: Read-only analysis, no budget changes.
+
 ```
 Prompt Template:
 ┌─────────────────────────────────────────────────────────┐
@@ -124,9 +131,11 @@ Prompt Template:
 │ - Mark any data quality issues (missing campaigns, etc.)│
 └─────────────────────────────────────────────────────────┘
 ```
+
 CVF Addition: Data integrity verification — sum-check before reporting.
 
 **Workflow 4: Content Distribution Engine** — Risk: R1 (content transformation, no external actions). Connector: None (text input). Governance: Auto-approved (read + transform only).
+
 ```
 Prompt Template:
 ┌─────────────────────────────────────────────────────────┐
@@ -148,6 +157,7 @@ Prompt Template:
 #### Category 2: Product & Operations
 
 **Workflow 5: Voice of Customer Engine** — Risk: R2 (ticket system access + response drafting). Connector: Intercom/Zendesk. Governance: Draft responses only — human sends.
+
 ```
 Prompt Template:
 ┌─────────────────────────────────────────────────────────┐
@@ -165,9 +175,11 @@ Prompt Template:
 │   account manager immediately                           │
 └─────────────────────────────────────────────────────────┘
 ```
+
 CVF Addition: Escalation rules for sensitive tickets.
 
 **Workflow 6: Product Manager's Weekly** — Risk: R2 (cross-tool data synthesis). Connector: Jira + Notion. Governance: Verify ticket counts against Jira dashboard.
+
 ```
 Prompt Template:
 ┌─────────────────────────────────────────────────────────┐
@@ -187,6 +199,7 @@ Prompt Template:
 ```
 
 **Workflow 7: Process Surgeon (Large Context)** — Risk: R2 (massive document analysis). Connector: File upload (1M token context). Governance: Context quality verification before analysis.
+
 ```
 Prompt Template:
 ┌─────────────────────────────────────────────────────────┐
@@ -208,9 +221,11 @@ Prompt Template:
 │ recommendation.                                          │
 └─────────────────────────────────────────────────────────┘
 ```
+
 CVF Addition: Context verification step + evidence-based recommendations (aligns with AGT-031 Code Review principles).
 
 **Workflow 8: Meeting Optimizer** — Risk: R2 (calendar access + scheduling). Connector: Google Calendar. Governance: Propose only — human confirms invite.
+
 ```
 Prompt Template:
 ┌─────────────────────────────────────────────────────────┐
@@ -229,6 +244,7 @@ Prompt Template:
 #### Category 3: Finance & Strategy
 
 **Workflow 9: Financial Analysis Protocol** — Risk: R2 (financial data, audit-critical). Connector: Financial data source / File upload. Governance: Full audit trail, no investment recommendations without disclaimers.
+
 ```
 Prompt Template:
 ┌─────────────────────────────────────────────────────────┐
@@ -250,9 +266,11 @@ Prompt Template:
 │   investment advice. Verify all figures independently."   │
 └─────────────────────────────────────────────────────────┘
 ```
+
 CVF Addition: Mandatory source citation + estimation flagging + disclaimer.
 
 **Workflow 10: Competitive Intelligence Swarm** — Risk: R3 (multi-agent parallel research, high autonomy). Connector: Agentic Search (swarm mode). Governance: Review each agent output individually before synthesis.
+
 ```
 Prompt Template:
 ┌─────────────────────────────────────────────────────────┐
@@ -273,6 +291,7 @@ Prompt Template:
 │ 5. Mark confidence: Verified / Inferred / Speculative       │
 └─────────────────────────────────────────────────────────┘
 ```
+
 CVF Addition: Individual agent verification before synthesis + 3-tier confidence marking.
 
 ### CVF Governance Overlay
@@ -290,6 +309,7 @@ CVF Addition: Individual agent verification before synthesis + 3-tier confidence
 | **Confidence Scoring** | Outputs marked as Verified / Inferred / Speculative |
 
 **The Operator's Verification Checklist**
+
 ```
 Before acting on any AI-generated business output:
 
@@ -371,6 +391,7 @@ Individual workflows within this skill range from R1 (read-only content transfor
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Every workflow execution logged for compliance (audit trail present)
 - [ ] Write actions (send/schedule/modify) held for human approval before execution
 - [ ] R3 swarm workflows show individual agent reports before synthesis
@@ -378,6 +399,7 @@ Individual workflows within this skill range from R1 (read-only content transfor
 - [ ] Sensitive-content workflows (legal/financial/enterprise) escalate per rules
 
 **FAIL criteria:**
+
 - [ ] AI sends an email or executes a write action without human approval
 - [ ] Agent swarm synthesis produced without individual agent review
 - [ ] Financial analysis presented without disclaimer or source citation

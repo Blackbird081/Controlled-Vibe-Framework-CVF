@@ -1,5 +1,7 @@
 'use client';
 
+import { useStoredDraft } from '@/lib/hooks/useStoredDraft';
+
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { WIZARD_COMMON, t as wt, type Lang } from '@/lib/wizard-i18n';
@@ -320,22 +322,10 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
     const [showGovernedPacket, setShowGovernedPacket] = useState(false);
     const [showLiveRun, setShowLiveRun] = useState(false);
     const [liveRunOutput, setLiveRunOutput] = useState<string | null>(null);
-    const [hasDraft, setHasDraft] = useState(false);
+    const [hasDraft, setHasDraft] = useStoredDraft(DRAFT_STORAGE_KEY);
 
     // Load draft from localStorage on mount
-    useEffect(() => {
-        const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
-        if (savedDraft) {
-            try {
-                const parsed = JSON.parse(savedDraft);
-                if (parsed.data && Object.keys(parsed.data).length > 0) {
-                    setHasDraft(true);
-                }
-            } catch {
-                // Invalid draft, ignore
-            }
-        }
-    }, []);
+
 
     // Save draft to localStorage whenever data changes
     useEffect(() => {

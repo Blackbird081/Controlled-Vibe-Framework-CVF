@@ -3,7 +3,7 @@
   "ledgerId": "cvf-system-chain-live-proof-coverage-2026-07-14",
   "standard": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_LIVE_PROOF_AND_LEARNING_LOOP_STANDARD.md",
   "sourceMap": "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json",
-  "lastReviewedDate": "2026-08-16",
+  "lastReviewedDate": "2026-10-26",
   "claimBoundary": "This ledger classifies live-proof applicability and current evidence for five generic CVF system-chain lanes. It preserves each source map verdict and does not treat SOT3 UC-01 as proof of any other lane. SCLP-T5 (2026-07-15) reconciled all four use cases and five lanes, retained their bounded evidence states, and retired the stale UC-03 next-use-case pointer after UC-03 closure.",
   "useCases": [
     {
@@ -14,7 +14,8 @@
       "scope": "selected CVF Web knowledge-context path, controlled scenario, Alibaba provider lane, environment, and evidence window",
       "evidenceOwner": "docs/roadmaps/CVF_SOT3_ACTIVATION_AND_OPERATIONAL_PROOF_ROADMAP_2026-07-13.md",
       "retainedClaim": "LIVE_GOVERNANCE_PROVEN_BOUNDED",
-      "notProven": "other system chains, universal SOT3 activation, production, scale, public shipment, or real-user value"
+      "notProven": "other system chains, universal SOT3 activation, production, scale, public shipment, or real-user value",
+      "publicProofDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
     },
     {
       "useCaseId": "UC-02-RUNTIME-TO-ENFORCEMENT-CURRENT-RUN",
@@ -26,7 +27,8 @@
       "providerCallRequired": false,
       "latestEvidence": "docs/reviews/evidence/system-chain-uc02-current-rerun-2026-07-14.json",
       "latestResult": "PASS_BOOTSTRAP_9_OF_9",
-      "nextAction": "retain this bounded proof; repair downstream generated Markdown conformance separately without rerunning UC-02"
+      "nextAction": "retain this bounded proof; repair downstream generated Markdown conformance separately without rerunning UC-02",
+      "publicProofDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
     },
     {
       "useCaseId": "UC-03-CONTRACT-TO-RUNTIME-REPRESENTATIVE-PATH",
@@ -39,7 +41,8 @@
       "selectedControlId": "GC-011",
       "latestEvidence": "docs/reviews/evidence/system-chain-uc03-contract-runtime-proof-2026-07-14.json",
       "latestResult": "PASS_TWO_OF_TWO_WITH_RECEIPT_CASE_IDENTITY_LIMITATION",
-      "nextAction": "retain the bounded GC-011 result; do not promote GC-009 or GC-010; repair the harness only if a later proof must reuse per-case receipt identity"
+      "nextAction": "retain the bounded GC-011 result; do not promote GC-009 or GC-010; repair the harness only if a later proof must reuse per-case receipt identity",
+      "publicProofDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
     },
     {
       "useCaseId": "UC-04-EVIDENCE-TO-OPERATOR-SURFACE",
@@ -51,7 +54,8 @@
       "observedProofClass": "CURRENT_RUNTIME_INVOCATION",
       "latestEvidence": "docs/reviews/evidence/system-chain-uc04b-r3r3-reviewer-negative-proof-2026-07-15.json",
       "latestResult": "WEB_DEVELOPER_SUCCESS_AND_REVIEWER_DENIAL_PASS_BOUNDED",
-      "nextAction": "retain CLI plus the selected Web developer-success/reviewer-denial pair; do not expand into unified checker inventory without a separate value-assessed packet"
+      "nextAction": "retain CLI plus the selected Web developer-success/reviewer-denial pair; do not expand into unified checker inventory without a separate value-assessed packet",
+      "publicProofDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
     }
   ],
   "lanes": [
@@ -65,7 +69,8 @@
       "operationalProofStatus": "NOT_APPLICABLE_STATIC_WITH_REASON",
       "reason": "doctrine ownership and mapping are read-time governance properties, not runtime invocation claims",
       "nextUseCase": "NONE",
-      "nextAction": "refresh source mapping and gap dispositions during the next governed semantic review"
+      "nextAction": "refresh source mapping and gap dispositions during the next governed semantic review",
+      "publicProofDisposition": "STATIC_SOURCE_REVIEW_NOT_RUNTIME_PROOF"
     },
     {
       "laneId": "CONTRACT_TO_RUNTIME",
@@ -77,7 +82,8 @@
       "operationalProofStatus": "PROVEN",
       "reason": "the representative GC-011 path executed once through CvfSdk into PipelineOrchestrator with positive and fail-closed negative cases; this operational proof does not change the lane's PARTIAL semantic posture or promote invocation-unproven rows",
       "nextUseCase": "NONE",
-      "nextAction": "retain the bounded GC-011 receipt and explicit GC-009/GC-010 exclusion; reopen only for a materially different contract-to-runtime claim or proven active caller"
+      "nextAction": "retain the bounded GC-011 receipt and explicit GC-009/GC-010 exclusion; reopen only for a materially different contract-to-runtime claim or proven active caller",
+      "publicProofDisposition": "STATIC_SOURCE_REVIEW_NOT_RUNTIME_PROOF"
     },
     {
       "laneId": "RUNTIME_TO_ENFORCEMENT",
@@ -89,7 +95,8 @@
       "operationalProofStatus": "PROVEN",
       "reason": "the repaired shared bootstrap passed once and the retained registry-driven UC-02 runner recorded CF-076 through CF-084 as nine of nine PASS in one current invocation",
       "nextUseCase": "NONE",
-      "nextAction": "retain the bounded receipt; treat downstream generated-artifact conformance as a separate GAP and do not rerun UC-02 for that repair"
+      "nextAction": "retain the bounded receipt; treat downstream generated-artifact conformance as a separate GAP and do not rerun UC-02 for that repair",
+      "publicProofDisposition": "STATIC_SOURCE_REVIEW_NOT_RUNTIME_PROOF"
     },
     {
       "laneId": "ENFORCEMENT_TO_EVIDENCE",
@@ -101,7 +108,8 @@
       "operationalProofStatus": "NOT_APPLICABLE_STATIC_WITH_REASON",
       "reason": "citation/path integrity is a repository property and is proved by fresh deterministic recomputation, not a provider or runtime call",
       "nextUseCase": "NONE",
-      "nextAction": "recompute citation and path dispositions when either evidence-owner document changes"
+      "nextAction": "recompute citation and path dispositions when either evidence-owner document changes",
+      "publicProofDisposition": "STATIC_SOURCE_REVIEW_NOT_RUNTIME_PROOF"
     },
     {
       "laneId": "EVIDENCE_TO_OPERATOR_SURFACE",
@@ -113,7 +121,15 @@
       "operationalProofStatus": "PROVEN",
       "reason": "the CLI surface and selected Web pair are proven bounded: the developer path succeeds and the reviewer path is denied before runner/provider work with exact one-submission evidence. RSPB-AI-T2 adds a locally verified, secret-safe five-command capability snapshot and fail-closed release preflight, backed by 42/42 hermetic tests and 38/38 SOT3 integration regressions; this deterministic evidence does not add a provider/live claim. The lane remains semantically PARTIAL because no unified Web checker inventory is claimed",
       "nextUseCase": "NONE",
-      "nextAction": "retain bounded CLI, capability-snapshot preflight, and selected Web pair evidence; reopen only for a materially broader, value-assessed operator-surface claim"
+      "nextAction": "retain bounded CLI, capability-snapshot preflight, and selected Web pair evidence; reopen only for a materially broader, value-assessed operator-surface claim",
+      "publicProofDisposition": "STATIC_SOURCE_REVIEW_NOT_RUNTIME_PROOF"
     }
-  ]
+  ],
+  "staticReviewBoundary": {
+    "reviewDate": "2026-10-26",
+    "scope": "Source identity and two markup/workflow deltas only; retained original lane verdicts, gaps and bounded receipts.",
+    "liveProofReexecuted": false,
+    "runtimeOrProviderProofPromoted": false
+  },
+  "publicProofBoundary": "Retained private bounded proof descriptions are not public proof; this projection verifies source shape only."
 }

@@ -33,6 +33,7 @@ Before writing any GC-018 packet, confirm all of the following:
 Every GC-018 packet for a post-W7 wave MUST include all sections below. Missing any section fails the corresponding gate.
 
 ### Packet Header (always required)
+
 - [ ] Candidate ID — stable, unique (e.g., `W8-T1-CANDIDATE-A`)
 - [ ] Date: `YYYY-MM-DD`
 - [ ] Parent roadmap path
@@ -40,6 +41,7 @@ Every GC-018 packet for a post-W7 wave MUST include all sections below. Missing 
 - [ ] Continuation class: STRUCTURAL | VALIDATION_TEST | PACKAGING_ONLY | TRUTH_CLAIM | REALIZATION | MIXED | OTHER
 
 ### Justification Block (always required)
+
 - [ ] Active quality assessment path declared
 - [ ] Weighted total declared
 - [ ] Lowest dimension declared
@@ -56,6 +58,7 @@ Every GC-018 packet for a post-W7 wave MUST include all sections below. Missing 
 - [ ] Expected enforcement class
 
 ### Depth Audit (always required — gate G1)
+
 - [ ] Risk reduction: 0 | 1 | 2
 - [ ] Decision value: 0 | 1 | 2
 - [ ] Machine enforceability: 0 | 1 | 2
@@ -67,40 +70,48 @@ Every GC-018 packet for a post-W7 wave MUST include all sections below. Missing 
 - [ ] **Hard stop**: if Risk reduction = 0 OR Decision value = 0 OR Machine enforceability = 0 → Decision MUST be DEFER
 
 ### Ownership Map (always required — gate G2)
+
 - [ ] keep / retire / merge-into map for all affected artifacts and contracts
 - [ ] Explicit ownership transfer or retention statement per affected surface
 
 ### Exclusion Block (always required — gate G3)
+
 - [ ] All permanent post-W7 exclusions declared (use `CVF_POST_W7_EXCLUSION_TEMPLATE.md`)
 - [ ] Wave-specific additional exclusions declared
 - [ ] Reviewer confirmation line included
 
 ### Dependency Declaration (always required — gate G4)
+
 - [ ] Upstream dependencies listed with FIXED | IN_MOTION | UNKNOWN status
 - [ ] Downstream dependents listed with blocking condition
 - [ ] Use `CVF_POST_W7_DEPENDENCY_DECLARATION_PATTERN.md`
 
 ### W7 Chain Impact Assessment (required if touching Runtime/Artifact/Trace/Planner/Decision/Eval/Memory — gate G5)
+
 - [ ] Each of the 7 chain links assessed: Runtime / Artifact / Trace / Planner / Decision / Eval-Builder / Memory
 - [ ] Impact level per link: NONE | READ_ONLY | ADDITIVE | STRUCTURAL
 - [ ] Non-destabilization posture declared
 
 ### Gateway Contract Declaration (required for Candidate A and any gateway-touching family — gate G7)
+
 - [ ] AI Gateway contract surfaces that face the Knowledge Layer are explicitly stated
 - [ ] Each surface declared as FIXED INPUT or IN SCOPE
 - [ ] If in scope: justification for why that added scope is unavoidable
 
 ### Performance / Benchmark Constraint (required if touching performance numbers — gate G6)
+
 - [ ] No benchmark numbers promoted to baseline truth before measurement evidence exists
 - [ ] All performance numbers labeled PROPOSAL ONLY until Candidate C instrumentation evidence closes
 - [ ] Any evidence cited as measured evidence keeps typed evidence and typed provenance fields instead of symbolic shorthand
 
 ### Authorization Boundary (always required)
+
 - [ ] Authorized now: YES | NO
 - [ ] If YES: next batch name
 - [ ] If NO: reopen trigger condition
 
 ### Guard-Clean Blocks (required when applicable)
+
 - [ ] `Corpus Completeness And Report Integrity` block present for any bounded corpus/inventory/report/absorption decision, or explicitly N/A with reason
 - [ ] `Rescan Intelligence Hardening` block present for any external-review, legacy/intake, corpus-finding replay, or rescan-derived packet, or explicitly N/A with reason
 - [ ] `Knowledge System Reconciliation` block present for memory, graph, retrieval, semantic-region, or corpus-derived knowledge-map work, or explicitly N/A with reason

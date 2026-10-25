@@ -78,9 +78,10 @@ npm install
 npm run dev
 ```
 
-Mở **http://localhost:3000** trong trình duyệt.
+Mở **<http://localhost:3000>** trong trình duyệt.
 
 Bạn sẽ thấy trang chủ CVF Agent Platform với:
+
 - Các thẻ template
 - Thanh điều hướng bên
 - Nút chuyển ngôn ngữ (EN/VI)
@@ -138,21 +139,27 @@ Bạn sẽ thấy trang chủ CVF Agent Platform với:
 ## Bước 7: Khám phá Tính năng Chính
 
 ### Chế độ Tối
+
 Nhấp biểu tượng mặt trăng/mặt trời ở phần header. Mặc định theo cài đặt hệ thống.
 
 ### Chuyển đổi Ngôn ngữ
+
 Chuyển giữa tiếng Anh (EN) và tiếng Việt (VI) qua bộ chọn ngôn ngữ.
 
 ### Theo dõi Sử dụng
+
 Agent Chat theo dõi:
+
 - Tổng token đã dùng
 - Chi phí theo nhà cung cấp
 - Số lượng tương tác
 
 ### Tải File lên
+
 Trong Agent Chat, bạn có thể tải file (spec, code, tài liệu) làm ngữ cảnh cho AI.
 
 ### Xuất Spec
+
 Sau khi hoàn thành template hoặc phiên chat, nhấp **Xuất** để tải file Markdown với spec + quy tắc governance.
 
 ---
@@ -170,6 +177,7 @@ npm install
 ### Lỗi "API key not configured"
 
 Kiểm tra file `.env.local`:
+
 - Đảm bảo tên key khớp chính xác (không lỗi chính tả)
 - Không có khoảng trắng quanh `=`
 - File tên là `.env.local` (không phải `.env`)

@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Product discovery and requirements analysis specialist. Conducts stakeholder interviews, market research, problem discovery, and creates product briefs. Use for product brief, brainstorm, research, discovery, requirements gathering, problem analysis, user needs, competitive analysis, and setting foundation before product planning. Hands off to product manager when analysis complete.
 
 **Khi nào dùng skill này:**
+
 - Cần Bu Ine Analy T với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: business analysis
-- Nguồn tham khảo: https://github.com/aj-geddes/claude-code-bmad-skills/tree/main/bmad-skills/business-analyst
+- Nguồn tham khảo: <https://github.com/aj-geddes/claude-code-bmad-skills/tree/main/bmad-skills/business-analyst>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Phân tích chiến lược mở rộng thị trường
 Context: SME Việt, ngân sách 50k USD
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Bu Ine Analy T Output
 

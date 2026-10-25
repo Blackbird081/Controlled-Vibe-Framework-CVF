@@ -83,6 +83,7 @@ completion reviews; it still does not score semantic value.
 | Expected manifest | eight work-order paths |
 | Actual changed set | eight work-order paths |
 | Manifest delta | MATCH |
+
 This is a two-file reference family with no generated aggregate; the standard
 is the single source of truth and is updated directly.
 

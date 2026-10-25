@@ -23,6 +23,11 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+try:
+    from guard_binding_catalog import private_binding, public_required_paths, public_required_markers, require_public_projection
+except ModuleNotFoundError:
+    from governance.compat.guard_binding_catalog import private_binding, public_required_paths, public_required_markers, require_public_projection
+
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 BOOTSTRAP_GUARD_PATH = "governance/toolkit/05_OPERATION/CVF_SESSION_GOVERNANCE_BOOTSTRAP_GUARD.md"
@@ -172,11 +177,15 @@ def _read_text(path: str) -> str:
     return abs_path.read_text(encoding="utf-8")
 
 
-def _classify(changed_files: list[str]) -> dict[str, Any]:
-    missing_files = [path for path in REQUIRED_FILES if not (REPO_ROOT / path).exists()]
+def _classify(changed_files: list[str], profile: str = "private") -> dict[str, Any]:
+    if profile == "public":
+        require_public_projection(REPO_ROOT)
+    required_files = public_required_paths(REQUIRED_FILES) if profile == "public" else REQUIRED_FILES
+    required_markers = public_required_markers(REQUIRED_MARKERS) if profile == "public" else REQUIRED_MARKERS
+    missing_files = [path for path in required_files if not (REPO_ROOT / path).exists()]
 
     marker_violations: dict[str, list[str]] = {}
-    for path, markers in REQUIRED_MARKERS.items():
+    for path, markers in required_markers.items():
         text = _read_text(path)
         missing_markers = [marker for marker in markers if marker not in text]
         if missing_markers:
@@ -184,19 +193,20 @@ def _classify(changed_files: list[str]) -> dict[str, Any]:
 
     relevant_changed_files = [
         path for path in changed_files
-        if path in REQUIRED_FILES or path == THIS_SCRIPT_PATH
+        if path in required_files or path == THIS_SCRIPT_PATH
     ]
 
     compliant = not missing_files and not marker_violations
 
     return {
-        "requiredFileCount": len(REQUIRED_FILES),
+        "requiredFileCount": len(required_files),
         "missingFiles": missing_files,
         "missingFileCount": len(missing_files),
         "markerViolations": marker_violations,
         "markerViolationCount": len(marker_violations),
         "relevantChangedFiles": relevant_changed_files,
         "relevantChangedFileCount": len(relevant_changed_files),
+        **({"profile": "public", "privateEvidenceNotApplicable": "Private session/review/workline payload validation is not assessed; normative files, markers and registry contracts remain enforced.", "claimBoundary": "PUBLIC_NORMATIVE_CONTRACT_ONLY_NOT_PRIVATE_EVIDENCE_OR_RUNTIME_PROOF"} if profile == "public" else {}),
         "compliant": compliant,
         "changedFiles": changed_files,
     }
@@ -252,6 +262,7 @@ def main() -> int:
     parser.add_argument("--enforce", action="store_true", help="Return non-zero (exit 2) when the GC-025 chain is incomplete or misaligned")
     parser.add_argument("--json", action="store_true", help="Print JSON report to stdout instead of text")
     parser.add_argument("--write-report", default=None, help="Optional output path for JSON report file")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
 
     base, head, base_source = _resolve_range(args.base, args.head)
@@ -280,7 +291,7 @@ def main() -> int:
     if worktree_files:
         changed_files = sorted(set(changed_files) | set(worktree_files))
 
-    classified = _classify(changed_files)
+    classified = _classify(changed_files, args.profile)
     report = {
         "timestamp": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "range": {"base": base, "head": head, "baseSource": base_source},
@@ -295,7 +306,7 @@ def main() -> int:
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    if args.json:
+    if args.json or args.profile == "public":
         print(json.dumps(report, indent=2, ensure_ascii=False))
     else:
         _print_report(report, base, head, base_source)

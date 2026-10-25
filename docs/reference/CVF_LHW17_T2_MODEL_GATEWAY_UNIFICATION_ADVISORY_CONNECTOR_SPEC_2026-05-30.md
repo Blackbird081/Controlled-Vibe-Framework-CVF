@@ -20,6 +20,7 @@ runtimeExecutionAuthorized: false
 
 Resolve the EA duplicate-module finding for Reviews 7/8/9 by defining the unified Model
 Gateway architecture boundary as a single advisory connector spec. Establishes Routing Layer
+
 + Strategy Layer as the canonical two-layer structure against existing CVF owner surfaces.
 
 ## Scope / Applies To
@@ -29,10 +30,10 @@ execution strategy. Does NOT authorize runtime gateway unification implementatio
 
 ## Source
 
-- `.private_reference/legacy/CVF_Important/ADDING_MINI_MODEL GATEWAY/Thong_tin.md`
-- `.private_reference/legacy/CVF_Important/ADDING_MINI_MODEL GATEWAY/MODEL_ADAPTER_MODEL.md`
-- `.private_reference/legacy/CVF_Important/ADDING_MODEL GATEWAY/CVF_MODEL_GATEWAY_SPEC.md`
-- `.private_reference/legacy/CVF_Important/ADDING_MODEL_ROUTER/CVF_MODEL_ROUTER_SPEC.md`
++ `.private_reference/legacy/CVF_Important/ADDING_MINI_MODEL GATEWAY/Thong_tin.md`
++ `.private_reference/legacy/CVF_Important/ADDING_MINI_MODEL GATEWAY/MODEL_ADAPTER_MODEL.md`
++ `.private_reference/legacy/CVF_Important/ADDING_MODEL GATEWAY/CVF_MODEL_GATEWAY_SPEC.md`
++ `.private_reference/legacy/CVF_Important/ADDING_MODEL_ROUTER/CVF_MODEL_ROUTER_SPEC.md`
 
 EA finding: `EA_CROSS_CHECK_ASSESSMENT.md` — Review 7, 8, and 9 overlap heavily; must be
 unified into one `CVF_MODEL_GATEWAY` with 2 sub-layers. Router is sub-component of Gateway,
@@ -40,7 +41,7 @@ not top-level module. Outstanding since 2026-03-21.
 
 ---
 
-## Purpose
+## Resolution Summary
 
 Resolves the EA duplicate-module finding for Reviews 7/8/9 by defining the unified Model
 Gateway architecture boundary — Routing Layer + Strategy Layer — as a single advisory connector
@@ -93,9 +94,10 @@ Model Gateway API   ← single entry point
 EA decision: Router is sub-component inside Gateway, not top-level module.
 
 **Responsibilities:**
-- Model Adapter — normalize provider API differences (already in `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`)
-- Per-role routing — select provider based on CVFRole (already in WCE W3)
-- Fallback strategy — deferred; requires separate GC-018 for fallback policy engine
+
++ Model Adapter — normalize provider API differences (already in `CVF_v1.7.3_RUNTIME_ADAPTER_HUB`)
++ Per-role routing — select provider based on CVFRole (already in WCE W3)
++ Fallback strategy — deferred; requires separate GC-018 for fallback policy engine
 
 **Advisory boundary:** Routing Layer is substantially absorbed. Remaining gap is a formal
 Routing Policy Engine (priority, cost-based fallback) — deferred as a separate live-proof
@@ -107,9 +109,10 @@ roadmap post-LHW.
 EA decision: Strategy Layer is the other half of the unified gateway.
 
 **Responsibilities:**
-- Pipeline chain orchestration — partially absorbed (`pipeline-chain-orchestrator.ts`)
-- Execution strategy selection (cheap/strong/long-context) — advisory only; not implemented
-- Feedback loop (token usage, latency, cost tracking) — deferred; `CVF_v1.8.1` covers
+
++ Pipeline chain orchestration — partially absorbed (`pipeline-chain-orchestrator.ts`)
++ Execution strategy selection (cheap/strong/long-context) — advisory only; not implemented
++ Feedback loop (token usage, latency, cost tracking) — deferred; `CVF_v1.8.1` covers
   observability telemetry but feedback-to-routing loop is not wired
 
 **Advisory boundary:** Strategy Layer foundation exists. Full strategy planner and
@@ -146,11 +149,11 @@ gatewayAdvisory: {
 
 ## Related Artifacts
 
-- GC-018: `docs/baselines/CVF_GC018_LHW17_CVF_IMPORTANT_ABSORPTION_WAVE_2026-05-30.md`
-- Source: `.private_reference/legacy/CVF_Important/ADDING_MINI_MODEL GATEWAY/`
-- Source: `.private_reference/legacy/CVF_Important/ADDING_MODEL GATEWAY/`
-- EA finding: `.private_reference/legacy/CVF_Important/REVIEW FOLDER/EA_CROSS_CHECK_ASSESSMENT.md`
-- WCE W3: `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/execute.client.ts` (`resolveProviderForRole`)
++ GC-018: `docs/baselines/CVF_GC018_LHW17_CVF_IMPORTANT_ABSORPTION_WAVE_2026-05-30.md`
++ Source: `.private_reference/legacy/CVF_Important/ADDING_MINI_MODEL GATEWAY/`
++ Source: `.private_reference/legacy/CVF_Important/ADDING_MODEL GATEWAY/`
++ EA finding: `.private_reference/legacy/CVF_Important/REVIEW FOLDER/EA_CROSS_CHECK_ASSESSMENT.md`
++ WCE W3: `EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/src/execute.client.ts` (`resolveProviderForRole`)
 
 ## Claim Boundary
 
@@ -160,9 +163,13 @@ unification requires a separate governed tranche.
 
 ## Invariants
 
-- `runtimeExecutionAuthorized=false`
-- Risk model: R0-R3 (L0-L4 must NOT appear)
-- No route.ts change
-- No receipt-envelope extension
-- No database/persistence change
-- No public release readiness claim
++ `runtimeExecutionAuthorized=false`
++ Risk model: R0-R3 (L0-L4 must NOT appear)
++ No route.ts change
++ No receipt-envelope extension
++ No database/persistence change
++ No public release readiness claim
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->
+
+<!-- Authority boundary: historical CLOSED_PASS_BOUNDED public compatibility copy; no new private execution authority. runtimeExecutionAuthorized remains false. -->

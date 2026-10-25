@@ -19,6 +19,7 @@ Skill mapping: `governance/skill-library/examples/AGT-009_RAG_KNOWLEDGE_RETRIEVA
 Retrieves contextual information from a vector-indexed knowledge base using embedding-based semantic search, returning ranked document chunks with source attribution.
 
 **Actions:**
+
 - Convert natural-language queries into embedding vectors
 - Perform approximate nearest-neighbor search against knowledge base
 - Return ranked document chunks with relevance scores
@@ -66,6 +67,7 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Returns results above minimum relevance threshold
 - [ ] All results include source citations (URI, title)
 - [ ] PII-flagged content redacted before injection
@@ -73,6 +75,7 @@ Retrieves contextual information from a vector-indexed knowledge base using embe
 - [ ] Timeout enforced (≤10s)
 
 **FAIL criteria:**
+
 - [ ] Returns results below threshold without flagging
 - [ ] Missing source citations in output
 - [ ] PII content passed through unfiltered

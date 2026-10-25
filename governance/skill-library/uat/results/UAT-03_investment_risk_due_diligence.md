@@ -24,14 +24,17 @@ This UAT session is bound to the canonical Finance Analytics portfolio.
 ## B. Capability Boundary Verification
 
 ### B.1 Allowed Capabilities
+
 - Produce due diligence packets for investments, vendors, projects, and strategic finance decisions.
 - Identify risks, evidence gaps, conditions, and approval boundaries.
 
 ### B.2 Forbidden Capabilities
+
 - No autonomous investment, procurement, or capital allocation decision.
 - No guaranteed returns.
 
 ### B.3 Test Scenarios
+
 | Scenario | Input | Expected | Actual | Result |
 |----------|-------|----------|--------|--------|
 | Happy path | Vendor investment with evidence and risks | Conditional recommendation with risk register | | |

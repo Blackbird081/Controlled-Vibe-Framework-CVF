@@ -14,7 +14,7 @@ Operator sắp can thiệp sai vai trò
 
 Nhận diện sớm giúp không cần đến Reject nặng.
 
-2. Nhóm tín hiệu từ HÀNH VI operator
+1. Nhóm tín hiệu từ HÀNH VI operator
 EWS-01: Do dự kéo dài khi viết input
 
 Viết rồi xóa nhiều lần
@@ -39,7 +39,7 @@ Thất vọng dù output đúng contract
 
 → Dấu hiệu Expectation Drift.
 
-3. Nhóm tín hiệu từ KẾT QUẢ lặp lại
+1. Nhóm tín hiệu từ KẾT QUẢ lặp lại
 EWS-04: Partial Failure lặp lại
 
 Nhiều lần thiếu cùng một section
@@ -56,7 +56,7 @@ Mỗi lần chỉnh nhỏ
 
 → Dấu hiệu prompt overfitting.
 
-4. Cách phản ứng ĐÚNG khi thấy tín hiệu
+1. Cách phản ứng ĐÚNG khi thấy tín hiệu
 
 Dừng lại (không chạy thêm)
 
@@ -72,7 +72,7 @@ Expectation → GUIDED_MODE/
 
 ⛔ Không dùng retry để che tín hiệu.
 
-5. Khi nào cần escalation?
+1. Khi nào cần escalation?
 
 Escalate khi:
 

@@ -6,15 +6,15 @@ Common Governance Failures
 
 Bỏ audit → FAIL
 
-2. “AI này quen rồi”
+1. “AI này quen rồi”
 
 Tin AI → FAIL
 
-3. “Sửa tí cho dùng được”
+1. “Sửa tí cho dùng được”
 
 Chỉnh output → FAIL
 
-4. “Lần này ngoại lệ”
+1. “Lần này ngoại lệ”
 
 Ngoại lệ → FAIL
 

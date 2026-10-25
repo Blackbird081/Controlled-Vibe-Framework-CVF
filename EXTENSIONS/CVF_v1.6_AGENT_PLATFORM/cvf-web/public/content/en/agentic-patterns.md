@@ -21,11 +21,13 @@ Anthropic's [claude-quickstarts](https://github.com/anthropics/claude-quickstart
 **What it does:** The customer-support-agent retrieves relevant documents from Amazon Bedrock Knowledge Bases before answering, grounding responses in real data.
 
 **Pattern:**
+
 ```
 User Query → Embedding → Vector Search → Top-K Documents → Context Injection → Claude Response
 ```
 
 **CVF Mapping:**
+
 - **New Skill:** AGT-009 RAG Knowledge Retrieval (R2, Supervised)
 - **Risk:** R2 because retrieved context influences AI output quality
 - **Governance:** Must cite sources, log retrieved document IDs, reject hallucinated references
@@ -40,11 +42,13 @@ User Query → Embedding → Vector Search → Top-K Documents → Context Injec
 **What it does:** The financial-data-analyst generates chart configurations (line, bar, pie, area, stacked area) from uploaded financial data, rendered with Recharts.
 
 **Pattern:**
+
 ```
 Data Upload → Claude Analysis → Chart Config JSON → Recharts Render → Interactive Dashboard
 ```
 
 **CVF Mapping:**
+
 - **New Skill:** AGT-010 Data Visualization Generator (R1, Auto)
 - **Risk:** R1 because output is read-only visualization, no data modification
 - **Governance:** Chart configs validated against schema, no executable code in output
@@ -59,11 +63,13 @@ Data Upload → Claude Analysis → Chart Config JSON → Recharts Render → In
 **What it does:** The financial-data-analyst handles text, PDF, CSV, and image uploads, extracting structured data for analysis.
 
 **Pattern:**
+
 ```
 File Upload → Type Detection → Parser (PDF.js / CSV / Vision) → Structured Data → Analysis Ready
 ```
 
 **CVF Mapping:**
+
 - **New Skill:** AGT-011 Document Parser (R1, Auto)
 - **Risk:** R1 because parsing is read-only with structured output
 - **Governance:** PII detection hooks, file size limits, supported format allowlist
@@ -78,6 +84,7 @@ File Upload → Type Detection → Parser (PDF.js / CSV / Vision) → Structured
 **What it does:** The autonomous-coding agent uses a **two-agent pattern**: an Initializer agent creates a feature list (200 test cases), then a Coding agent implements features one by one across multiple sessions, persisting progress via `feature_list.json` and git.
 
 **Pattern:**
+
 ```
 App Spec → Initializer Agent → feature_list.json (200 items)
                                         ↓
@@ -91,12 +98,14 @@ App Spec → Initializer Agent → feature_list.json (200 items)
 **Key innovation:** Progress persists across fresh context windows via git + feature list.
 
 **CVF Mapping:**
+
 - **New Skill:** AGT-012 Agentic Loop Controller (R3, Manual)
 - **Risk:** R3 because autonomous multi-step execution with file system access
 - **Governance:** Iteration limits, bash command allowlist, filesystem sandboxing, mandatory human review
 - **Phase Gate:** Build + Review only — autonomous execution is too risky for Discovery/Design
 
 **Security model (from claude-quickstarts):**
+
 1. OS-level sandbox
 2. Filesystem restricted to project directory
 3. Bash allowlist: `ls`, `cat`, `head`, `tail`, `wc`, `grep`, `npm`, `node`, `git`, `ps`, `lsof`, `sleep`, `pkill`
@@ -110,6 +119,7 @@ App Spec → Initializer Agent → feature_list.json (200 items)
 **What it does:** The browser-use-demo gives Claude browser control via Playwright with DOM-aware actions: navigate, click, type, scroll, read page, fill forms, take screenshots.
 
 **Pattern:**
+
 ```
 User Instruction → Claude → Browser Tool Call → Playwright Action → Screenshot → Claude Analysis → Next Action
 ```
@@ -117,12 +127,14 @@ User Instruction → Claude → Browser Tool Call → Playwright Action → Scre
 **Key innovation:** Element targeting via `ref` parameter (DOM reference) instead of brittle pixel coordinates.
 
 **CVF Mapping:**
+
 - **New Skill:** AGT-013 Browser Automation (R3, Manual)
 - **Risk:** R3 because browser can access external systems, submit forms, navigate to arbitrary pages
 - **Governance:** Containerized execution (Docker), domain allowlist, no credential input, screenshot logging
 - **Phase Gate:** Build only — browser automation is execution-level activity
 
 **Safety measures (from claude-quickstarts):**
+
 1. Isolated Docker container with virtual display (XVFB)
 2. No personal credentials or sensitive information
 3. Domain allowlist recommended
@@ -137,6 +149,7 @@ User Instruction → Claude → Browser Tool Call → Playwright Action → Scre
 **What it does:** The agents module connects to Model Context Protocol (MCP) servers for dynamic tool discovery and invocation, supporting both stdio and HTTP transports.
 
 **Pattern:**
+
 ```python
 agent = Agent(
     tools=[ThinkTool()],      # Local tools
@@ -149,6 +162,7 @@ agent = Agent(
 ```
 
 **CVF Mapping:**
+
 - **New Skill:** AGT-014 MCP Server Connector (R2, Supervised)
 - **Risk:** R2 because external server access with dynamic tool discovery
 - **Governance:** Server allowlist, connection timeout limits, tool result validation

@@ -38,20 +38,24 @@ An toàn/Tự động   Thấp/Tự động      Trung bình/Giám sát   Cao/Th
 ## Kỹ năng 1: Context Engineering Optimizer (AGT-021)
 
 ### Chức năng
+
 Kỹ năng cấp framework cho việc **tối ưu hóa token context** trong workflow agent. Giám sát sức khỏe context, phát hiện mẫu suy giảm, và kích hoạt nén khi cần.
 
 ### Khi nào dùng
+
 - Context window tiến gần 70-80% dung lượng
 - Hiệu suất agent giảm trong phiên làm việc dài
 - Workflow đa agent với chi phí token cao
 - Cần tối ưu cấu trúc prompt cho cache hit rate
 
 ### Khái niệm chính: Chiến lược 4 Nhóm
+
 ```
 Write (lưu bên ngoài) → Select (lấy liên quan) → Compress (giảm token) → Isolate (tách sub-agent)
 ```
 
 ### Ví dụ Prompt Chat
+
 ```
 "Phân tích sức khỏe context hiện tại — token utilization bao nhiêu?"
 "Tối ưu context: di chuyển thông tin quan trọng về đầu/cuối"
@@ -60,6 +64,7 @@ Write (lưu bên ngoài) → Select (lấy liên quan) → Compress (giảm toke
 ```
 
 ### Tích hợp TypeScript
+
 ```typescript
 import { ContextEngineering } from '@cvf/agent-skills';
 
@@ -95,6 +100,7 @@ if (health.utilization > 0.7) {
 ```
 
 ### Các Anti-Pattern Được Phát hiện
+
 | Anti-Pattern | Cách Sửa |
 |-------------|----------|
 | Tải context đầy đủ | Chỉ chọn token có tín hiệu cao |
@@ -107,9 +113,11 @@ if (health.utilization > 0.7) {
 ## Kỹ năng 2: Problem-Solving Framework Router (AGT-022)
 
 ### Chức năng
+
 Meta-skill **định tuyến đến kỹ thuật giải quyết vấn đề phù hợp** dựa trên cách bạn bị kẹt. Không giải quyết trực tiếp — chỉ xác định phương pháp tối ưu.
 
 ### Khi nào dùng
+
 - Kiến trúc ngày càng phức tạp
 - Cần ý tưởng đột phá
 - Thấy cùng một mẫu ở nhiều nơi
@@ -117,6 +125,7 @@ Meta-skill **định tuyến đến kỹ thuật giải quyết vấn đề phù
 - Không chắc giải pháp có mở rộng được không
 
 ### Cây Quyết định
+
 ```
 BỊ KẸT?
 ├─ Lỗi kỹ thuật?                → AGT-023 (Systematic Debugging)
@@ -129,6 +138,7 @@ BỊ KẸT?
 ```
 
 ### Ví dụ Prompt Chat
+
 ```
 "Tôi bị kẹt — kiến trúc này cứ thêm trường hợp đặc biệt. Giúp tôi đơn giản hóa."
 "Tôi cần cách tiếp cận sáng tạo — giải pháp thông thường không hiệu quả."
@@ -140,36 +150,42 @@ BỊ KẸT?
 ### 6 Kỹ thuật
 
 **1. Simplification Cascades** — Khi phức tạp leo thang
+
 ```
 Tìm một insight loại bỏ nhiều thành phần cùng lúc.
 Dấu hiệu: cùng một thứ làm 5+ cách, trường hợp đặc biệt tăng dần.
 ```
 
 **2. Collision Zone Thinking** — Khi cần sáng tạo
+
 ```
 Ép buộc khái niệm không liên quan kết hợp để phát hiện tính chất mới.
 Ví dụ: "Nếu hệ thống auth hoạt động như hệ miễn dịch sinh học thì sao?"
 ```
 
 **3. Meta-Pattern Recognition** — Khi mẫu lặp lại xuất hiện
+
 ```
 Nhận diện mẫu xuất hiện ở 3+ lĩnh vực.
 Hành động: Trừu tượng hóa mẫu, giải quyết một lần, áp dụng mọi nơi.
 ```
 
 **4. Inversion Exercise** — Khi bị ràng buộc bởi giả định
+
 ```
 Đảo ngược giả định cốt lõi để lộ ra ràng buộc ẩn.
 Hỏi: "Nếu chúng ta làm ngược lại hoàn toàn thì sao?"
 ```
 
 **5. Scale Game** — Khi chưa chắc về production
+
 ```
 Thử nghiệm ở cực đoan: gấp 1000 lần VÀ nhỏ hơn 1000 lần.
 Tiết lộ: điểm nghẽn thực sự, phức tạp không cần thiết, bất biến quy mô.
 ```
 
 **6. Kết hợp Kỹ thuật**
+
 ```
 Simplification + Meta-pattern: Tìm mẫu → đơn giản hóa tất cả instances
 Collision + Inversion:         Ép metaphor → đảo ngược giả định
@@ -181,12 +197,15 @@ Scale + Simplification:        Cực đoan tiết lộ cái cần loại bỏ
 ## Kỹ năng 3: Systematic Debugging Engine (AGT-023)
 
 ### Chức năng
+
 Phương pháp debug 4 pha đảm bảo **tìm nguyên nhân gốc TRƯỚC KHI sửa**. Ngăn chặn anti-pattern phổ biến của AI là "đoán-và-sửa".
 
 ### Luật Sắt
+>
 > **KHÔNG SỬA MÀ CHƯA ĐIỀU TRA NGUYÊN NHÂN GỐC.**
 
 ### Khi nào dùng
+
 - Code cho kết quả sai
 - Test fail bất ngờ
 - Lỗi hệ thống sau thay đổi
@@ -205,6 +224,7 @@ Pha 1: Nguyên nhân    →  Pha 2: Phân tích     →  Pha 3: Giả thuyết  
 ```
 
 ### Ví dụ Prompt Chat
+
 ```
 "Debug test này — bắt đầu với Pha 1 điều tra nguyên nhân gốc."
 "API trả về 500 sau deploy cuối. Truy vết luồng dữ liệu."
@@ -213,6 +233,7 @@ Pha 1: Nguyên nhân    →  Pha 2: Phân tích     →  Pha 3: Giả thuyết  
 ```
 
 ### Tích hợp TypeScript
+
 ```typescript
 import { SystematicDebugger } from '@cvf/agent-skills';
 
@@ -255,6 +276,7 @@ if (hypothesis.confirmed) {
 ```
 
 ### Dấu hiệu Cảnh báo — DỪNG và Quay về Pha 1
+
 - ❌ "Thử đổi X xem sao"
 - ❌ "Sửa tạm, điều tra sau"
 - ❌ "Thêm nhiều thay đổi rồi chạy test"
@@ -263,6 +285,7 @@ if (hypothesis.confirmed) {
 - ❌ Đề xuất giải pháp trước khi truy vết luồng dữ liệu
 
 ### Quy tắc Leo thang
+>
 > **Nếu 3+ lần sửa thất bại → DỪNG → Đặt câu hỏi về kiến trúc.** Chuyển lên vai trò Architect.
 
 ---
@@ -270,18 +293,22 @@ if (hypothesis.confirmed) {
 ## Kỹ năng 4: MCP Context Isolation Manager (AGT-024)
 
 ### Chức năng
+
 Mẫu kiến trúc **ủy quyền gọi công cụ MCP cho subagent riêng biệt**, giữ context của agent chính sạch. Giải quyết vấn đề "phình context" khi tải nhiều MCP server.
 
 ### Nguyên tắc Chính
+>
 > Khám phá và thực thi công cụ MCP diễn ra trong context subagent cách ly. Agent chính chỉ nhận kết quả, không nhận 1000+ định nghĩa tool.
 
 ### Khi nào dùng
+
 - Làm việc với 3+ MCP server cùng lúc
 - Context window bị phình bởi định nghĩa tool
 - Cần bảo toàn chất lượng context chính trong workflow nặng MCP
 - Quản lý 10-80+ MCP server cho enterprise
 
 ### Kiến trúc
+
 ```
 ┌──────────────────────────┐
 │     Agent Chính          │
@@ -311,6 +338,7 @@ Mẫu kiến trúc **ủy quyền gọi công cụ MCP cho subagent riêng biệ
 ```
 
 ### Ví dụ Prompt Chat
+
 ```
 "Dùng GitHub MCP server để liệt kê PR mở — cách ly khỏi context chính."
 "Thiết lập context isolation cho 5 MCP server này."
@@ -319,6 +347,7 @@ Mẫu kiến trúc **ủy quyền gọi công cụ MCP cho subagent riêng biệ
 ```
 
 ### Tiết kiệm Context
+
 | Chỉ số | Không cách ly | Có cách ly |
 |--------|---------------|-----------|
 | Chi phí context mỗi MCP server | ~500-2000 tokens | ~0 tokens (chính) |
@@ -327,6 +356,7 @@ Mẫu kiến trúc **ủy quyền gọi công cụ MCP cho subagent riêng biệ
 | Chất lượng context chính | Suy giảm | Bảo toàn |
 
 ### Tích hợp TypeScript
+
 ```typescript
 import { MCPIsolationManager } from '@cvf/agent-skills';
 
@@ -364,6 +394,7 @@ console.log(result);
 ```
 
 ### Mô hình Bảo mật
+
 - Thông tin MCP quản lý qua **biến môi trường** (không bao giờ trong context)
 - Subagent có **quyền hạn giới hạn**: chỉ thực thi MCP tools
 - Kết quả được **lọc dữ liệu nhạy cảm** trước khi trả về
@@ -393,6 +424,7 @@ Agent gặp vấn đề
 ```
 
 ### Bản đồ Tích hợp
+
 | Kỹ năng | Tích hợp với | Cách thức |
 |---------|-------------|----------|
 | AGT-021 | AGT-019 (Progressive Loader) | Ngân sách tải skill runtime |

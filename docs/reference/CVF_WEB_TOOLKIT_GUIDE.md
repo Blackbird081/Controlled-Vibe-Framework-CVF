@@ -14,9 +14,9 @@
 3. [Xuất Spec (SpecExport)](#phần-3--xuất-spec-specexport)
 4. [Agent Chat có Governance](#phần-4--agent-chat-có-governance)
 5. [Governance Bar — Điều khiển Phase/Role/Risk](#phần-5--governance-bar)
-6. [Governance Panel — Self-UAT & Monitoring](#phần-6--governance-panel--self-uat)
+6. [Governance Panel — Self-UAT & Monitoring](#phần-6--governance-panel-self-uat)
 7. [Skills ↔ Templates — Liên kết hai chiều](#phần-7--skills--templates)
-8. [Workflow hoàn chỉnh (End-to-End)](#phần-8--workflow-hoàn-chỉnh)
+8. [Workflow hoàn chỉnh (End-to-End)](#phần-8--workflow-hoàn-chỉnh-end-to-end)
 
 ---
 
@@ -132,7 +132,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 npm run dev
 ```
 
-Mở trình duyệt: **http://localhost:3000**
+Mở trình duyệt: **<http://localhost:3000>**
 
 ### Bước 5: Build cho production (tuỳ chọn)
 
@@ -208,6 +208,7 @@ Khi chọn mode "With Rules" hoặc "CVF Full", hệ thống **tự động** in
 ### "Send to Agent" — Gửi trực tiếp vào Agent Chat
 
 Thay vì copy-paste, bạn có thể nhấn nút **"🤖 Send to Agent"** để tự động:
+
 - Mở Agent Chat
 - Đính kèm spec đã xuất làm prompt đầu tiên
 - Governance rules được inject vào system prompt
@@ -259,6 +260,7 @@ Chat trực tiếp với AI (Gemini/OpenAI/Anthropic) ngay trên web, với gove
 ### Multi-Agent Workflow
 
 Agent Chat hỗ trợ 4 agent roles:
+
 - 🧠 **Orchestrator** — Phân tích và phối hợp
 - 📐 **Architect** — Thiết kế giải pháp
 - 🔨 **Builder** — Thực thi code
@@ -290,6 +292,7 @@ Agent Chat hỗ trợ 4 agent roles:
 ### Manual Mode
 
 Nhấn nút toggle để chuyển sang Manual → 3 dropdown xuất hiện:
+
 - **Phase:** INTAKE / DESIGN / BUILD / REVIEW / FREEZE
 - **Role:** OBSERVER / ANALYST / BUILDER / REVIEWER / GOVERNOR
 - **Risk:** R0 / R1 / R2 / R3
@@ -319,7 +322,7 @@ Panel bên phải — hiển thị trạng thái governance hiện tại và cho
 | 5 | Skill Governance | AI từ chối skill chưa đăng ký? |
 | 6 | Refusal Quality | AI từ chối bình tĩnh, trích dẫn CVF? |
 
-4. Kết quả: **PASS** (✅ Production Ready) hoặc **FAIL** (❌ Blocked)
+1. Kết quả: **PASS** (✅ Production Ready) hoặc **FAIL** (❌ Blocked)
 
 ### Governance Status Indicators
 
@@ -360,11 +363,13 @@ Panel bên phải — hiển thị trạng thái governance hiện tại và cho
 ### Cách sử dụng
 
 **Từ Templates (khi điền form):**
+
 - Nhìn cạnh mô tả template → badge **📚 View Skill**
 - Click → mở trang Skills với skill tương ứng
 - Xem governance metadata, checklist, UAT status
 
 **Từ Skills Library (khi xem skill):**
+
 - Chọn 1 skill → nhìn phần header → badge **📝 Use Template**
 - Click → mở template form tương ứng
 - Nếu không có template trực tiếp → link **📝 Browse category templates**
@@ -382,11 +387,13 @@ Panel bên phải — hiển thị trạng thái governance hiện tại và cho
 ### Scenario: Xây dựng API authentication cho app mới
 
 **Bước 1 — Chọn template**
+
 ```
 Trang chủ → Category: Development → Template: "API Design Spec"
 ```
 
 **Bước 2 — Điền form**
+
 ```
 API Name: User Authentication API
 Endpoints: Login, Register, Logout, Refresh Token
@@ -395,15 +402,18 @@ Database: PostgreSQL
 ```
 
 **Bước 3 — Xuất spec (CVF Full Mode)**
+
 - Chọn mode: 🚦 **CVF Full Mode**
 - Chọn ngôn ngữ: English
 - Governance tự động inject: Phase=BUILD, Role=BUILDER, Risk=R2
 
 **Bước 4 — Gửi vào Agent Chat**
+
 - Nhấn **"🤖 Send to Agent"**
 - Agent Chat mở với spec đã xuất
 
 **Bước 5 — AI hoạt động theo CVF**
+
 ```
 📋 Phase: BUILD | 👤 Role: BUILDER | ⚠️ Risk: R2
 
@@ -416,11 +426,13 @@ I'll implement the JWT authentication API following the CVF 4-Phase protocol.
 ```
 
 **Bước 6 — Review kết quả**
+
 - Kiểm tra GovernanceBar → Phase/Role/Risk hiển thị đúng
 - Mở GovernancePanel → xem Authority Matrix
 - Chạy Self-UAT nếu cần verify governance compliance
 
 **Bước 7 (tuỳ chọn) — Xem Skill liên quan**
+
 - Nhìn template header → badge **📚 View Skill**
 - Click → mở `app_development/05_api_design_spec` skill
 - Xem checklist, common failures, UAT criteria
@@ -456,3 +468,5 @@ I'll implement the JWT authentication API following the CVF 4-Phase protocol.
 ---
 
 **CVF Web Toolkit = Governance on auto-pilot.** 🚀
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

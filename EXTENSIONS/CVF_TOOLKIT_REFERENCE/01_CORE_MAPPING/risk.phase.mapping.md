@@ -1,8 +1,13 @@
 # RISK & PHASE MAPPING SPEC
+
 # CVF → CVF-Toolkit Integration
+
 # Status: Authoritative Mapping
+
 # Toolkit Version: 1.0.0
+
 # CVF Lock: See 00_CANONICAL_REFERENCE/cvf_version.lock
+
 1. PURPOSE
 
 This document defines:
@@ -17,7 +22,7 @@ How both integrate into execution flow
 
 This file is binding and must be implemented exactly as defined.
 
-2. CVF RISK MODEL (CANONICAL INTERPRETATION)
+1. CVF RISK MODEL (CANONICAL INTERPRETATION)
 
 CVF defines risk as a function of:
 
@@ -33,7 +38,7 @@ System stability risk
 
 Toolkit MUST classify every request before execution.
 
-3. TOOLKIT RISK LEVELS
+1. TOOLKIT RISK LEVELS
 
 Toolkit defines 4 operational risk tiers:
 
@@ -44,7 +49,7 @@ Toolkit defines 4 operational risk tiers:
 | HIGH       | R3   | Structural logic impact            |
 | CRITICAL   | R4   | Production/system-wide consequence |
 
-4. RISK CLASSIFICATION ENGINE
+1. RISK CLASSIFICATION ENGINE
 Implemented in:
 risk.classifier.ts
 
@@ -70,7 +75,7 @@ Mandatory Output:
   requiresFreeze: boolean
 }
 
-5. PHASE MODEL (CVF → TOOLKIT)
+1. PHASE MODEL (CVF → TOOLKIT)
 
 Toolkit implements 7 phases:
 
@@ -83,9 +88,10 @@ Toolkit implements 7 phases:
 | APPROVED            | P4   | Formal approval granted        |
 | PRODUCTION          | P5   | Live production deployment     |
 | FROZEN              | P6   | Locked, no modification allowed|
+
 Phase enforcement is mandatory.
 
-6. PHASE TRANSITION RULES
+1. PHASE TRANSITION RULES
 
 Allowed transitions:
 
@@ -107,7 +113,7 @@ Any backward transition (except P6 → P0 rollback)
 
 Any illegal transition must throw governance exception.
 
-7. RISK → PHASE ENFORCEMENT MATRIX
+1. RISK → PHASE ENFORCEMENT MATRIX
 
 | Risk | Max Allowed Phase Without Approval | UAT Required       | Freeze Required      |
 | ---- | ---------------------------------- | ------------------ | -------------------- |
@@ -126,7 +132,7 @@ R3 cannot auto-release beyond P4 without approval.
 
 R4 cannot advance beyond P2 without formal multi-approval.
 
-8. RISK IMPACT ON EXECUTION FLOW
+1. RISK IMPACT ON EXECUTION FLOW
 Before Model Invocation:
 
 If:
@@ -151,7 +157,7 @@ Must enforce freeze
 
 Must log extended audit
 
-9. FINANCIAL DOMAIN RISK OVERRIDE
+1. FINANCIAL DOMAIN RISK OVERRIDE
 
 Financial calculations override baseline risk:
 
@@ -166,7 +172,7 @@ Financial calculations override baseline risk:
 This override is enforced in:
 financial.extension/financial.risk.profile.ts
 
-10. PHASE CONTROLLER CONTRACT
+1. PHASE CONTROLLER CONTRACT
 
 Implemented in:
 phase.controller.ts
@@ -183,7 +189,7 @@ Must throw:
 PhaseViolationError
 RiskPhaseMismatchError
 
-11. RELEASE BLOCK CONDITIONS
+1. RELEASE BLOCK CONDITIONS
 
 Production (P5) is blocked if:
 
@@ -203,7 +209,7 @@ Production (P5) not reached
 
 Release and freeze cannot be forced.
 
-12. MULTI-AGENT CONSIDERATION
+1. MULTI-AGENT CONSIDERATION
 
 If multiple agents:
 
@@ -213,7 +219,7 @@ Phase must align with highest-risk agent
 
 Audit logs must include agent ID
 
-13. ENVIRONMENT RULES
+1. ENVIRONMENT RULES
 
 | Environment | Max Risk Without Manual Approval |
 | ----------- | -------------------------------- |
@@ -223,7 +229,7 @@ Audit logs must include agent ID
 
 Prod environment has strictest enforcement.
 
-14. NON-NEGOTIABLE RULES
+1. NON-NEGOTIABLE RULES
 
 No execution without risk classification.
 
@@ -235,7 +241,7 @@ Risk cannot be downgraded manually.
 
 Extensions cannot redefine risk core logic.
 
-15. COMPLIANCE CHECKLIST
+1. COMPLIANCE CHECKLIST
 
 Toolkit compliant if:
 
@@ -245,7 +251,3 @@ Toolkit compliant if:
 ✔ Financial override active
 ✔ Release blocking active
 ✔ Environment restrictions active
-
-
-
-

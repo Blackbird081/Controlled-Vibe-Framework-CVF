@@ -38,6 +38,7 @@ Content-Type: application/json
 ```
 
 **Request:**
+
 ```json
 {
   "preset": "analysis",
@@ -52,6 +53,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "task_id": "task_abc123",
@@ -70,6 +72,7 @@ GET /result/{task_id}
 ```
 
 **Response (Processing):**
+
 ```json
 {
   "task_id": "task_abc123",
@@ -79,6 +82,7 @@ GET /result/{task_id}
 ```
 
 **Response (Complete):**
+
 ```json
 {
   "task_id": "task_abc123",
@@ -93,6 +97,7 @@ GET /result/{task_id}
 ```
 
 **Response (Failed):**
+
 ```json
 {
   "task_id": "task_abc123",
@@ -114,6 +119,7 @@ GET /presets
 ```
 
 **Response:**
+
 ```json
 {
   "presets": [
@@ -154,6 +160,7 @@ POST /validate
 ```
 
 **Request:**
+
 ```json
 {
   "preset": "analysis",
@@ -162,6 +169,7 @@ POST /validate
 ```
 
 **Response:**
+
 ```json
 {
   "valid": false,
@@ -253,6 +261,7 @@ POST /submit
 ```
 
 Callback payload:
+
 ```json
 {
   "task_id": "task_abc123",

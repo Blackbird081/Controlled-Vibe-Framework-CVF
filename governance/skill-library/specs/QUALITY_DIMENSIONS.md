@@ -33,12 +33,15 @@ CVF đo lường chất lượng qua **3 chiều độc lập** (không phải 1
 ## 2. Dimension 1: Spec Quality (Input Quality)
 
 ### Đo gì?
+
 Chất lượng của **file .skill.md** — spec có đầy đủ, cụ thể, actionable không?
 
 ### Công cụ
+
 `report_spec_metrics.py` (v2 calibrated)
 
 ### Thang điểm
+
 | Range | Quality | Gate |
 |-------|---------|------|
 | 85-100 | ✅ Excellent | PASS |
@@ -47,6 +50,7 @@ Chất lượng của **file .skill.md** — spec có đầy đủ, cụ thể, 
 | 0-49 | ❌ Not Ready | FAIL |
 
 ### Tiêu chí
+
 - Content depth (word count per section)
 - Concrete examples (quoted strings, numbers, code blocks)
 - Input constraints (format, type, validation)
@@ -54,6 +58,7 @@ Chất lượng của **file .skill.md** — spec có đầy đủ, cụ thể, 
 - Placeholder penalty (generic/TBD content)
 
 ### Hiển thị trong
+
 - `.gov.md` → `## Spec Score` block
 - Domain reports → `spec_metrics_report.md`
 - Dashboard → Spec Quality column
@@ -63,12 +68,15 @@ Chất lượng của **file .skill.md** — spec có đầy đủ, cụ thể, 
 ## 3. Dimension 2: UAT Score (Output Quality)
 
 ### Đo gì?
+
 Kết quả **User Acceptance Testing** thực tế — skill có hoạt động đúng không?
 
 ### Công cụ
+
 `score_uat.py` + badge system
 
 ### Thang điểm
+
 | Badge | Meaning |
 |-------|---------|
 | ✅ VALIDATED | UAT passed, skill đáng tin cậy |
@@ -77,6 +85,7 @@ Kết quả **User Acceptance Testing** thực tế — skill có hoạt động
 | 🔘 NOT_RUN | Chưa chạy UAT |
 
 ### UAT Criteria
+
 1. Output follows expected format
 2. Stays within declared scope
 3. Risk level appropriate
@@ -84,6 +93,7 @@ Kết quả **User Acceptance Testing** thực tế — skill có hoạt động
 5. Edge cases handled
 
 ### Hiển thị trong
+
 - `.gov.md` → `## UAT Binding` block + badge
 - UAT reports → `uat_score_report.md`
 - Dashboard → UAT Badge column
@@ -93,12 +103,15 @@ Kết quả **User Acceptance Testing** thực tế — skill có hoạt động
 ## 4. Dimension 3: User Satisfaction (Experience Quality)
 
 ### Đo gì?
+
 **Trải nghiệm thực tế** của người dùng khi sử dụng skill — dễ hiểu? hữu ích? muốn dùng lại?
 
 ### Công cụ
+
 Manual feedback (chưa auto)
 
 ### Thang điểm
+
 | Stars | Meaning |
 |-------|---------|
 | ⭐⭐⭐⭐⭐ | Exceptional — dùng hàng ngày |
@@ -108,6 +121,7 @@ Manual feedback (chưa auto)
 | ⭐ | Poor — không hữu ích |
 
 ### Feedback Fields
+
 ```yaml
 user_satisfaction:
   rating: 4          # 1-5 stars
@@ -118,6 +132,7 @@ user_satisfaction:
 ```
 
 ### Hiển thị trong
+
 - `.gov.md` → `## User Feedback` block (future)
 - Aggregate reports → satisfaction dashboard
 - Skill ranking → sort by satisfaction
@@ -141,6 +156,7 @@ Thay vào đó, hiển thị parallel:
 ```
 
 ### Lý do không cộng
+
 1. **Spec Quality cao + UAT fail** = spec viết đẹp nhưng không hoạt động → vẫn cần fix
 2. **Spec Quality thấp + UAT pass** = spec chưa tốt nhưng skill vẫn work → cần cải thiện spec
 3. **Cả hai tốt + User không hài lòng** = gap giữa technical quality và UX
@@ -163,12 +179,14 @@ Thay vào đó, hiển thị parallel:
 ## 7. Integration Points
 
 ### Hiện tại (đã implement)
+
 - [x] Spec Quality → `report_spec_metrics.py` (v2)
 - [x] UAT Score → `score_uat.py` + badges
 - [x] Spec Score in `.gov.md` → `inject_spec_scores.py`
 - [x] Version Lock → `check_version_sync.py`
 
 ### Roadmap (chưa implement)
+
 - [ ] User Satisfaction feedback form
 - [ ] Composite dashboard view
 - [ ] Automated stale detection (satisfaction > 30 days old)

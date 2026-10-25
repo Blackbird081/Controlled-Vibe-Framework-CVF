@@ -143,13 +143,13 @@ governance proof, or permission to use legacy field names in implementation.
 | Claim | Command | Result | Verdict |
 | --- | --- | --- | --- |
 | Learning intake exists | `rg -n "LearningSignalIntakeRecord" EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src docs/reference` | LPF bridge line 51 and standard lines 42/58 | ACCEPT |
-| Memory gateway exists under renamed current contract | `rg -n "ControlledMemoryGatewayContract|MemoryGatewayRequest|evaluateMemoryGatewayRequest" EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src` | gateway contract and runtime files found | ACCEPT_RENAMED |
-| Raw memory reinjection is blocked by current source | `rg -n "canReinject: false|memory_reinjection_not_authorized|no_memory_reinjection" EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib` | context packager, durable store, gateway, route readout, audit memory receipt | ACCEPT |
-| Context budget exists under renamed current policy/readout | `rg -n "ContextBudgetPolicy|ContextBudgetReadout|checkContextBudgetGuard" EXTENSIONS/` | LPF policy/guard and cvf-web readout files found | ACCEPT_RENAMED |
-| Exact W7 runtime record names are not source types | `rg -l "W7ArtifactRecord|W7TraceRecord|W7PlannerRecord|W7DecisionRecord|W7MemoryRecord" EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/memory` | no runtime source matches | BLOCKED_NO_RUNTIME_SOURCE |
-| Current execution continuity exists under renamed symbols | `rg -n "ContinuationInput|buildEvidenceSnapshot|ContinuityParityObject" EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/execution-continuity.ts` | source lines 7, 91, 111 | ACCEPT_RENAMED |
-| Current audit memory receipt exists | `rg -n "AgentMemoryCaptureRecord|AuditMemoryReceipt|buildRouteAuditMemoryCapture" EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/audit-memory-receipt.ts` | source lines 16, 89, 320 | ACCEPT_RENAMED |
-| Current handoff validation exists | `rg -n "HandoffContext|validateHandoff|validateWorkflowChain" EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/agent-handoff-validator.ts` | source lines 40, 209, 256 | ACCEPT_RENAMED |
+| Memory gateway exists under renamed current contract | `rg -n "ControlledMemoryGatewayContract\|MemoryGatewayRequest\|evaluateMemoryGatewayRequest" EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src` | gateway contract and runtime files found | ACCEPT_RENAMED |
+| Raw memory reinjection is blocked by current source | `rg -n "canReinject: false\|memory_reinjection_not_authorized\|no_memory_reinjection" EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib` | context packager, durable store, gateway, route readout, audit memory receipt | ACCEPT |
+| Context budget exists under renamed current policy/readout | `rg -n "ContextBudgetPolicy\|ContextBudgetReadout\|checkContextBudgetGuard" EXTENSIONS/` | LPF policy/guard and cvf-web readout files found | ACCEPT_RENAMED |
+| Exact W7 runtime record names are not source types | `rg -l "W7ArtifactRecord\|W7TraceRecord\|W7PlannerRecord\|W7DecisionRecord\|W7MemoryRecord" EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/src EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/memory` | no runtime source matches | BLOCKED_NO_RUNTIME_SOURCE |
+| Current execution continuity exists under renamed symbols | `rg -n "ContinuationInput\|buildEvidenceSnapshot\|ContinuityParityObject" EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/execution-continuity.ts` | source lines 7, 91, 111 | ACCEPT_RENAMED |
+| Current audit memory receipt exists | `rg -n "AgentMemoryCaptureRecord\|AuditMemoryReceipt\|buildRouteAuditMemoryCapture" EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/audit-memory-receipt.ts` | source lines 16, 89, 320 | ACCEPT_RENAMED |
+| Current handoff validation exists | `rg -n "HandoffContext\|validateHandoff\|validateWorkflowChain" EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/agent-handoff-validator.ts` | source lines 40, 209, 256 | ACCEPT_RENAMED |
 
 ## Tranche Dependency Update
 

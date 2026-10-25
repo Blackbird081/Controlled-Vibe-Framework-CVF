@@ -50,7 +50,6 @@ FILL_ME: state the mission prompt for this work order.
 | docOnlyNewFields | FILL_ME (list new doc-only field names introduced by this dispatch) |
 | claimBoundary | Dispatch authoring provenance only; no runtime/provider/live/public/Web/MCP/model-router behavior claim. |
 
-
 ## Worker Autonomy / No-Question Rule
 
 Worker must repair allowed-scope checker failures directly by reading the failing checker source and matching the literal required shape. Worker should return to orchestrator only for a source contradiction, forbidden-scope need, or missing authority that makes completion impossible.
@@ -116,7 +115,6 @@ Contract source archive-qualified exception: `docs/reference/CVF_AHB_T2_AGENT_HA
 | crossBatchIsolation | FILL_ME |
 | nextMoveSurfaces | FILL_ME |
 
-
 ## Reviewer Closure Conversion
 
 | Field | Value |
@@ -125,7 +123,6 @@ Contract source archive-qualified exception: `docs/reference/CVF_AHB_T2_AGENT_HA
 | reviewerOwnedClosurePaths | FILL_ME |
 | closureOwner | FILL_ME |
 | workerCommitPermission | FORBIDDEN |
-
 
 ## Worker Output Checker Read-Ahead Mandate
 
@@ -144,7 +141,6 @@ Literal-shape reminders: do not list required headings as backticked `## ...` st
 | --- | --- |
 | FILL_ME | FILL_ME |
 
-
 ## Worker Return Packet Shape Contract
 
 workerReturnPath: `docs/reviews/CVF_WOAS-R2-GOLDEN_WORKER_RETURN_2026-07-01.md`
@@ -154,7 +150,6 @@ individualCheckerSubstitution: FORBIDDEN
 workerReturnSkeleton: CHECKER_SAFE_SKELETON_REQUIRED
 
 Shape-list rule: when listing required worker-output sections, write section names without the `##` prefix. Reserve actual heading syntax for real sections so structural checkers do not treat this checklist as the artifact section body.
-
 
 ## Verification Commands
 
@@ -172,7 +167,6 @@ git status --short
 | Input type | FILL_ME (must be a canonical chain-map input type) |
 | Negative search performed | FILL_ME |
 | Disposition | FILL_ME (ABSORB/ADAPT/DEFER/REJECT/BLOCK/PACKAGE_CANDIDATE/RUNTIME_CANDIDATE/CHECKER_CANDIDATE/NO_PACKAGE_OR_RUNTIME_VALUE) |
-
 
 ## Agent Operation Trace Block
 
@@ -196,7 +190,6 @@ git status --short
 | Actual changed set | FILL_ME |
 | Manifest delta | FILL_ME |
 
-
 ## Delta Execution Claim Boundary Control Block
 
 | Field | Value |
@@ -209,7 +202,6 @@ git status --short
 | interceptionBoundary | No direct interception, wrapper/proxy enforcement, runtime gate, or agent coding control is authorized unless replaced with real evidence. |
 | claimLanguage | FILL_ME |
 | forbiddenExpansion | Do not expand into runtime/provider/live/public/package/Web/MCP/model-router behavior without a fresh source-verified authorization. |
-
 
 ## Claim Boundary
 

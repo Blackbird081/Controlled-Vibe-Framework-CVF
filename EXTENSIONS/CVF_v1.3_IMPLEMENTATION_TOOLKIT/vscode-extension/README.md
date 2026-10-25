@@ -19,6 +19,7 @@ Syntax highlighting, validation, and snippets for CVF Skill Contract files.
 ### ✅ Real-time Validation
 
 Validates contracts on save with checks for:
+
 - Required fields (capability_id, domain, risk_level, etc.)
 - Valid risk levels (R0-R3)
 - Valid archetypes (Analysis, Decision, Planning, Execution, Supervisor, Exploration)
@@ -44,6 +45,7 @@ Validates contracts on save with checks for:
 ### ✅ Hover Information
 
 Hover over keywords to see documentation:
+
 - Risk level descriptions
 - Archetype explanations
 - Field requirements
@@ -61,6 +63,7 @@ Hover over keywords to see documentation:
 ### From VSIX (Recommended)
 
 1. Build the extension:
+
    ```bash
    cd vscode-extension
    npm install

@@ -23,7 +23,6 @@
 | Technical Review | 3 | 0 | ✅ **CANONICALIZED** |
 | **TỔNG** | **62 active** | **80 archived** | **Full Canonicalization Complete** |
 
-
 ---
 
 ## ✅ Phase 1: Marketing & SEO — COMPLETE
@@ -106,12 +105,14 @@ with `.legacy.md` extensions so they are not indexed as active skills.
 **Trạng thái:** ✅ Completed (2026-02-07)
 
 **Definition of Done (per domain):**
+
 - Ví dụ thực tế rõ, có Input/Output mẫu thực tế (không placeholder)
 - Related Skills liên kết theo flow thực tế trong domain
 - Version History cập nhật đúng chuẩn
 - Ngôn ngữ và cấu trúc đồng nhất
 
 **Ưu tiên (batch theo domain):**
+
 1. App Development
 2. Marketing & SEO
 3. Product & UX
@@ -139,7 +140,6 @@ with `.legacy.md` extensions so they are not indexed as active skills.
 | Technical Review | 3 | ✅ Done |
 | HR & Operations | 5 | ✅ Done |
 | Legal & Contracts | 5 | ✅ Done |
-
 
 ---
 
@@ -180,7 +180,8 @@ with `.legacy.md` extensions so they are not indexed as active skills.
 | `plan_skills.py` | `tools/skill-search/` | Skill Execution Plan generator |
 | `skill_reasoning.csv` | `data/skill_reasoning.csv` | 50 industry → skill chain mappings |
 
-### Usage:
+### Usage
+
 ```bash
 # Search skills
 python tools/skill-search/search_skills.py "landing page conversion"
@@ -200,6 +201,7 @@ python tools/skill-search/plan_skills.py --task "e-commerce mobile app" --format
 **UUPM Import:** [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) (MIT License)
 
 **Transformation:** Skills được chuyển đổi sang CVF End User format với:
+
 - Form Input fields
 - Evaluation Checklists
 - Common Failures analysis

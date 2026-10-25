@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá chiến lược giá (pricing) của sản phẩm/dịch vụ và đề xuất tối ưu để tăng revenue và customer value.
 
 **Khi nào nên dùng:**
+
 - Launch sản phẩm mới, cần set price
 - Revenue không đạt target
 - Cạnh tranh về giá với đối thủ
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -79,30 +81,35 @@ Không yêu cầu.
 ## ✅ Checklist Đánh giá
 
 ### Value-Based Pricing
+
 - [ ] Giá phản ánh VALUE customer nhận được?
 - [ ] Có quantify được ROI cho customer?
 - [ ] Giá phù hợp với customer segment?
 - [ ] Có premium option cho high-value customers?
 
 ### Competitive Positioning
+
 - [ ] Biết rõ giá của top 3 đối thủ?
 - [ ] Có differentiation rõ ràng justify giá?
 - [ ] Positioned đúng (budget / mid-market / premium)?
 - [ ] Không bị "race to bottom"?
 
 ### Pricing Structure
+
 - [ ] Pricing tiers có logic và clear?
 - [ ] Feature differentiation giữa tiers có sense?
 - [ ] Có "decoy" tier để guide choice?
 - [ ] Billing frequency options phù hợp?
 
 ### Psychology & Presentation
+
 - [ ] Có sử dụng charm pricing ($99 vs $100)?
 - [ ] Có anchor pricing (show crossed price)?
 - [ ] Best value tier có được highlight?
 - [ ] Pricing page có clear và scannable?
 
 ### Monetization Optimization
+
 - [ ] Có upsell/cross-sell opportunities?
 - [ ] Có annual discount để improve cash flow?
 - [ ] Free trial/freemium có convert được?
@@ -126,7 +133,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Pricing Models:
+### Pricing Models
+
 | Model | Best For | Example |
 |-------|----------|---------|
 | **Flat-rate** | Simple products | Netflix $15.99/mo |
@@ -135,7 +143,8 @@ Không yêu cầu.
 | **Tiered** | Feature upsell | Starter/Pro/Enterprise |
 | **Freemium** | Volume + conversion | Spotify Free → Premium |
 
-### SaaS Pricing Page Best Practices:
+### SaaS Pricing Page Best Practices
+
 ```
 ✅ Show monthly price (easier to compare)
 ✅ Highlight "Most Popular" tier
@@ -145,13 +154,15 @@ Không yêu cầu.
 ✅ Money-back guarantee
 ```
 
-### Pricing Psychology:
+### Pricing Psychology
+
 - **Charm pricing:** $99 > $100 (Left digit effect)
 - **Anchoring:** Show premium first
 - **Decoy effect:** Add tier that makes target tier look better
 - **Price-quality:** Higher price = higher perceived quality
 
-### Quick Pricing Formula (SaaS):
+### Quick Pricing Formula (SaaS)
+
 ```
 Price = (Customer Value / 10) 
         OR 
@@ -175,7 +186,8 @@ Khi paste spec này vào AI, bạn sẽ nhận được:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Current plans:
 - Basic $29 (1 user, 1 kho)
@@ -185,7 +197,8 @@ ARPU $45, churn 6%/mo
 Competitors: KiotViet $25-80, Sapo $20-70
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Pricing Recommendation
 
@@ -204,13 +217,15 @@ Add-on: $8/kho thêm
 - Test trial 14 ngày vs 7 ngày
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Tiers logic theo quy mô
 - ✅ Có add-on linh hoạt
 - ✅ Có kế hoạch thử nghiệm
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Landing Page CRO](./landing_page_cro.skill.md)
 - [SEO Audit](./seo_audit.skill.md)
 

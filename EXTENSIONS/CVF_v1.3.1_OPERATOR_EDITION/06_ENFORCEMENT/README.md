@@ -20,6 +20,7 @@ Tài liệu tham khảo về enforcement và validation cho CVF operations.
 > Section này là **tham khảo**, không bắt buộc cho Operator thông thường.
 
 Chỉ cần đọc nếu:
+
 - Thiết lập CI/CD cho CVF
 - Triển khai automated validation
 - Audit quy trình ở cấp hệ thống

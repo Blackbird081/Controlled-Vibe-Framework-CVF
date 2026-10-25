@@ -78,7 +78,7 @@ interface BuildOutputValidationExhaustedResponseParams {
  */
 export async function buildOutputValidationExhaustedResponse(params: BuildOutputValidationExhaustedResponseParams) {
     const {
-        session, isServiceAllowed, serviceIdentity, body, outputValidation, retryState, routedProvider, aiResult,
+        session, body, outputValidation, retryState, routedProvider, aiResult,
         enforcement, guardResult, govEnvelope, routingResult, knowledgeSource, knowledgeInjected,
         requestedKnowledgeCollectionId, retrievalResult, approvedRequestRecord, aifMemoryReinjection,
         durableMemoryRoute, providerAttemptLedger,
@@ -506,6 +506,7 @@ export async function buildExecuteFinalResponse(params: BuildExecuteFinalRespons
         governanceEvidenceReceipt.htmlPilotTiming = { schema: 'cvf.htmlPilotTiming.v1', providerAwaitMs: pilotProviderElapsedMs,
             localGovernanceMs: Math.max(0, routeElapsedMs - pilotProviderElapsedMs), routeElapsedMs };
         const { receiptIntegrity: _oldIntegrity, htmlPilotEvidence: _oldPilot, ...unsigned } = governanceEvidenceReceipt;
+        void _oldIntegrity; void _oldPilot;
         governanceEvidenceReceipt.receiptIntegrity = buildReceiptIntegrityAnchor({ receipt: unsigned,
             signingSecret: secret, externalAnchorId: process.env.CVF_RECEIPT_EXTERNAL_ANCHOR_ID,
             externalAnchorUrl: process.env.CVF_RECEIPT_EXTERNAL_ANCHOR_URL });

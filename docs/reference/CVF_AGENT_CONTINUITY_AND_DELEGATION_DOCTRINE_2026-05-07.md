@@ -82,4 +82,3 @@ This keeps knowledge alive in CVF, not trapped in private scratch files.
 
 Runtime activation may later add structured delegation receipts or W7/W8
 signals. This doctrine does not implement them.
-

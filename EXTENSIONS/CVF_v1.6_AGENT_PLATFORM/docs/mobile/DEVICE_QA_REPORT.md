@@ -5,6 +5,7 @@
 **Status:** Emulation-ready; physical device verification pending
 
 ## ✅ Emulation Checklist (Desktop Responsive Review)
+
 - Layout stacks correctly on ≤640px
 - Modals open full-screen on mobile
 - Chat input sticks to bottom + safe-area padding
@@ -12,6 +13,7 @@
 - Decision Log sidebar overlays on mobile
 
 ## ⚠️ Physical Device QA (Pending)
+
 | Device | OS/Browser | Status | Notes |
 |--------|------------|:------:|------|
 | iPhone (small, notch) | iOS Safari | ⏳ Pending | Needs tap/keyboard/scroll check |
@@ -19,6 +21,7 @@
 | Large phone/phablet | Chrome/Samsung | ⏳ Pending | Validate modal sizing + touch targets |
 
 ## Known Risks to Verify
+
 - Keyboard overlap with long forms
 - Chat input + safe-area on iOS
 - Performance with long chat history

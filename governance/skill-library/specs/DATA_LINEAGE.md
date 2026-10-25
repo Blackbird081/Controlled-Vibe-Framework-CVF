@@ -8,6 +8,7 @@
 ## 1. Vấn Đề
 
 124 skills hiện tại không ghi rõ **nguồn gốc**:
+
 - Được import tự động từ external source?
 - Viết thủ công bởi team?
 - Đã qua UAT validation?
@@ -92,6 +93,7 @@ python inject_lineage.py --report
 ## 7. Current State Analysis
 
 Dựa trên `generate_user_skills.py` logs và content analysis:
+
 - **~30 skills**: Original CVF format → CURATED
 - **~80 skills**: Imported from awesome-cursorrules → IMPORTED
 - **~14 skills**: Adapted after import → ADAPTED

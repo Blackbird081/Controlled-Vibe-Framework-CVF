@@ -116,7 +116,6 @@ Every public run manifest must include:
 - `allowed_claim_level`
 - `verdict`
 
-
 ## Claim Boundary
 
 This layout claims only the public artifact structure and sanitization

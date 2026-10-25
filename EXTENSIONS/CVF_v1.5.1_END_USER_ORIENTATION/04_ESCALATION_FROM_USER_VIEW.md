@@ -5,6 +5,7 @@
 Escalation là khi CVF (hoặc Operator) **dừng lại và chuyển vấn đề lên cấp cao hơn**.
 
 Đây không phải:
+
 - Thất bại
 - Né trách nhiệm
 - Làm khó bạn
@@ -37,13 +38,16 @@ CVF sẽ escalate khi:
 
 ## Vì sao escalation bảo vệ bạn?
 
-### Góc nhìn sai:
+### Góc nhìn sai
+>
 > "CVF làm khó, không chịu giúp"
 
-### Góc nhìn đúng:
+### Góc nhìn đúng
+>
 > "CVF không muốn tôi ra quyết định dựa trên cơ sở yếu"
 
 Khi CVF escalate:
+
 - Bạn được **cảnh báo sớm** về rủi ro
 - Bạn có cơ hội **bổ sung thông tin**
 - Bạn không bị **đổ lỗi** nếu sai
@@ -52,12 +56,14 @@ Khi CVF escalate:
 
 ## Bạn nên làm gì khi gặp escalation?
 
-### ✅ Nên làm:
+### ✅ Nên làm
+
 - Đọc rõ lý do escalation
 - Cung cấp thông tin bổ sung nếu có
 - Chuyển cho người phù hợp nếu vượt quyền bạn
 
-### ❌ Không nên làm:
+### ❌ Không nên làm
+
 - Ép tiếp tục bằng mọi giá
 - Bỏ qua cảnh báo
 - Tự "đoán" để lấp chỗ trống

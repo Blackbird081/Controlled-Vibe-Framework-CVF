@@ -107,4 +107,3 @@ This doctrine does not:
 Docs absorption is complete with this file. Runtime activation is a separate
 step and must define concrete code surfaces, tests, and live proof boundaries
 before any behavior claim is made.
-

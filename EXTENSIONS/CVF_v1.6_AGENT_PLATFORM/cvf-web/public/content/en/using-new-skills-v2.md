@@ -41,9 +41,11 @@ Safe/Auto         Low/Auto          Medium/Supervised   High/Manual
 ## Skill 1: Workflow Automation Hook (AGT-015)
 
 ### What It Does
+
 Manages automation hooks that trigger before or after AI tool actions — similar to git hooks but for AI workflows. Inspired by claude-code-templates' 10-category hook system.
 
 ### When to Use
+
 - Secret scanning before code commits
 - Auto-running tests after code changes
 - Sending notifications (Slack, Telegram) on events
@@ -51,6 +53,7 @@ Manages automation hooks that trigger before or after AI tool actions — simila
 - Monitoring and logging pipelines
 
 ### Chat Prompt Examples
+
 ```
 "Set up a pre-commit hook that scans for secrets before allowing code commits"
 "Add a post-tool hook that runs tests whenever File Write completes"
@@ -58,6 +61,7 @@ Manages automation hooks that trigger before or after AI tool actions — simila
 ```
 
 ### TypeScript Integration
+
 ```typescript
 import { WorkflowHookManager } from '@cvf/agent-skills';
 
@@ -95,6 +99,7 @@ hookManager.register({
 ```
 
 ### Hook Event Types
+
 | Event | When | Use Case |
 |-------|------|----------|
 | `PreToolUse` | Before any tool executes | Validation, security scanning |
@@ -104,6 +109,7 @@ hookManager.register({
 | `OnError` | When tool encounters error | Error reporting, fallback logic |
 
 ### Governance Controls
+
 - **Approval:** Human must approve hook registration
 - **Timeout:** 10s max per hook (configurable down, not up)
 - **Blocking:** Pre-tool hooks can block execution (fail-open/fail-closed)
@@ -114,9 +120,11 @@ hookManager.register({
 ## Skill 2: Scientific Research Assistant (AGT-016)
 
 ### What It Does
+
 Assists with structured scientific research workflows. Inspired by K-Dense-AI's 139 scientific skills covering biology, chemistry, medicine, physics, and computational science.
 
 ### When to Use
+
 - Literature reviews with proper citations
 - Hypothesis generation from existing evidence
 - Statistical analysis methodology selection
@@ -124,6 +132,7 @@ Assists with structured scientific research workflows. Inspired by K-Dense-AI's 
 - Scientific visualization
 
 ### Chat Prompt Examples
+
 ```
 "Perform a literature review on CRISPR gene editing techniques published in 2025"
 "Help me design a statistical analysis plan for a clinical trial with 3 treatment arms"
@@ -132,6 +141,7 @@ Assists with structured scientific research workflows. Inspired by K-Dense-AI's 
 ```
 
 ### TypeScript Integration
+
 ```typescript
 import { ScientificResearchAssistant } from '@cvf/agent-skills';
 
@@ -166,6 +176,7 @@ const analysisPlan = await researcher.designAnalysis({
 ```
 
 ### Supported Disciplines
+
 | Discipline | Capabilities |
 |-----------|-------------|
 | Biology | Genomics, proteomics, phylogenetics, cell biology |
@@ -179,9 +190,11 @@ const analysisPlan = await researcher.designAnalysis({
 ## Skill 3: Document Format Converter (AGT-017)
 
 ### What It Does
+
 Creates, converts, and analyzes documents across PDF, Word, Excel, PowerPoint, and Markdown formats. Inspired by Anthropic's document processing toolkit.
 
 ### When to Use
+
 - Extract tables and text from PDF documents
 - Create professional Word documents or presentations
 - Convert between document formats
@@ -189,6 +202,7 @@ Creates, converts, and analyzes documents across PDF, Word, Excel, PowerPoint, a
 - Perform OCR on scanned documents
 
 ### Chat Prompt Examples
+
 ```
 "Extract all tables from this PDF and convert them to CSV"
 "Create a PowerPoint presentation from this Markdown outline"
@@ -197,6 +211,7 @@ Creates, converts, and analyzes documents across PDF, Word, Excel, PowerPoint, a
 ```
 
 ### TypeScript Integration
+
 ```typescript
 import { DocumentFormatConverter } from '@cvf/agent-skills';
 
@@ -233,15 +248,18 @@ const analysis = await converter.analyzeSpreadsheet({
 ## Skill 4: Agent Team Orchestrator (AGT-018)
 
 ### What It Does
+
 Coordinates multiple specialized sub-agents working together as a team. Inspired by claude-code-templates' agent team patterns (deep-research-team, development-team, mcp-dev-team).
 
 ### When to Use
+
 - Complex tasks requiring multiple expertise areas
 - Research projects needing plan → execute → review cycles
 - Development workflows with design → code → test → review
 - Content pipelines with write → edit → format → publish
 
 ### Chat Prompt Examples
+
 ```
 "Assemble a research team: one agent for literature review, one for data analysis, one for writing"
 "Create a development team to design, implement, test, and review a new API endpoint"
@@ -262,6 +280,7 @@ Coordinates multiple specialized sub-agents working together as a team. Inspired
 ```
 
 ### TypeScript Integration
+
 ```typescript
 import { AgentTeamOrchestrator } from '@cvf/agent-skills';
 
@@ -295,6 +314,7 @@ const results = await team.execute({
 ```
 
 ### Governance Controls
+
 - **Approval:** Team composition AND task plan require manual human approval
 - **Sub-agents:** Each sub-agent operates under its own governance rules
 - **Conflicts:** Escalated to human (never auto-resolved for critical matters)
@@ -306,6 +326,7 @@ const results = await team.execute({
 ## Skill 5: Skill Progressive Loader (AGT-019)
 
 ### What It Does
+
 Manages how skill definitions load into the AI's context window using progressive disclosure. Only loads what's needed, when it's needed — keeping the context lean. Inspired by Anthropic's skill architecture.
 
 ### How It Works (Automatic)
@@ -336,7 +357,9 @@ Manages how skill definitions load into the AI's context window using progressiv
 | **Savings** | **93.9%** |
 
 ### No Chat Prompts Needed
+
 AGT-019 operates automatically. When you invoke any skill, the Progressive Loader handles:
+
 1. Looking up the skill's metadata catalog
 2. Loading only the activated skill's instructions
 3. Fetching resources only if explicitly needed
@@ -347,9 +370,11 @@ AGT-019 operates automatically. When you invoke any skill, the Progressive Loade
 ## Skill 6: Analytics Dashboard Generator (AGT-020)
 
 ### What It Does
+
 Generates real-time analytics dashboards for monitoring AI agent sessions, tracking skill usage, governance compliance, and system health. Inspired by claude-code-templates' analytics dashboard and Sentry integration.
 
 ### When to Use
+
 - Monitor which skills are used most frequently
 - Track governance compliance across sessions
 - Visualize token usage and cost estimates
@@ -357,6 +382,7 @@ Generates real-time analytics dashboards for monitoring AI agent sessions, track
 - Generate health check reports
 
 ### Chat Prompt Examples
+
 ```
 "Generate a dashboard showing skill usage over the past 7 days"
 "Show me governance compliance metrics for this project"
@@ -365,6 +391,7 @@ Generates real-time analytics dashboards for monitoring AI agent sessions, track
 ```
 
 ### TypeScript Integration
+
 ```typescript
 import { AnalyticsDashboardGenerator } from '@cvf/agent-skills';
 
@@ -395,6 +422,7 @@ const trends = await analytics.usageTrends({
 ```
 
 ### Dashboard Metrics
+
 | Metric | Description |
 |--------|------------|
 | **Skill Usage** | Frequency and duration of each skill invocation |
@@ -409,6 +437,7 @@ const trends = await analytics.usageTrends({
 ## Skill Combination Pipelines
 
 ### Pipeline 1: Automated Research → Report
+
 ```
 AGT-016 (Scientific Research)
     → AGT-010 (Data Visualization)
@@ -417,6 +446,7 @@ AGT-016 (Scientific Research)
 ```
 
 ### Pipeline 2: CI/CD with Governance
+
 ```
 AGT-015 (Pre-commit Hook → security scan)
     → AGT-008 (File Write → save changes)
@@ -425,6 +455,7 @@ AGT-015 (Pre-commit Hook → security scan)
 ```
 
 ### Pipeline 3: Multi-Agent Development
+
 ```
 AGT-018 (Agent Team → plan + code + review)
     → AGT-012 (Agentic Loop → iterate)

@@ -26,6 +26,7 @@ Automated quality scoring cho mọi execution output.
 ## Scoring Criteria
 
 ### Structure (25%)
+
 ```
 10: All expected sections present, proper hierarchy
 8:  Most sections present, minor hierarchy issues
@@ -35,6 +36,7 @@ Automated quality scoring cho mọi execution output.
 ```
 
 ### Completeness (25%)
+
 ```
 10: All required elements + bonus insights
 8:  All required elements present
@@ -44,6 +46,7 @@ Automated quality scoring cho mọi execution output.
 ```
 
 ### Clarity (25%)
+
 ```
 10: Crystal clear, no ambiguity
 8:  Very clear, minor unclear points
@@ -53,6 +56,7 @@ Automated quality scoring cho mọi execution output.
 ```
 
 ### Actionability (25%)
+
 ```
 10: Clear next steps, specific recommendations
 8:  Good recommendations, mostly specific

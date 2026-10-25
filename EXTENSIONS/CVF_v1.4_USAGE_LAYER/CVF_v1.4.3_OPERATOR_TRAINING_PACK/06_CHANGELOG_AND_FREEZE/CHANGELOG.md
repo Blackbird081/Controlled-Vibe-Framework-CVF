@@ -17,10 +17,12 @@ Status: FINAL
 ## Nội dung được BỔ SUNG
 
 ### 01. Orientation & Mental Model
+
 - Định vị rõ vai trò operator
 - Cắt bỏ ảo tưởng sáng tạo / quyền quyết định
 
 ### 02. Core Drills
+
 - Input discipline
 - Scope boundary
 - Output review
@@ -31,6 +33,7 @@ Status: FINAL
 ---
 
 ### 03. Anti-Pattern Training
+
 - Tổng hợp hành vi sai phổ biến
 - Phân tích *vì sao sai theo CVF*
 - Cách phục hồi sau lỗi
@@ -40,6 +43,7 @@ Status: FINAL
 ---
 
 ### 04. Operator Evaluation
+
 - Evaluation criteria
 - Pass / Fail rubric
 - Certification statement
@@ -49,6 +53,7 @@ Status: FINAL
 ---
 
 ### 05. Training Playbook
+
 - Trainer guidelines
 - Solo training mode
 - Team training mode

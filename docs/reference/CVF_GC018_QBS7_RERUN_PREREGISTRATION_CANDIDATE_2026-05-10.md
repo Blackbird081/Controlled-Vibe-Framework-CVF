@@ -5,6 +5,7 @@ Status: CLOSED - RERUN PREREGISTERED / NO SCORED RUN
 Date: 2026-05-10
 Track: QBS-7 Rerun Pre-Registration
 Parent track:
+
 - `docs/reference/CVF_GC018_QBS6_HARD_GATE_REMEDIATION_CANDIDATE_2026-05-10.md`
 - `docs/roadmaps/CVF_QBS6_HARD_GATE_REMEDIATION_ROADMAP_2026-05-10.md`
 

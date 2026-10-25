@@ -20,12 +20,14 @@ Không yêu cầu.
 Sinh bảng màu hoàn chỉnh cho sản phẩm dựa trên loại sản phẩm và ngành. Bao gồm Primary, Secondary, CTA, Background, Text, Border — tất cả với hex codes và contrast ratios.
 
 **Khi nào nên dùng:**
+
 - Bắt đầu dự án mới, chưa có brand colors
 - Redesign brand identity
 - Cần bảng màu phù hợp ngành cụ thể
 - Kiểm tra contrast ratio hiện tại
 
 **Không phù hợp khi:**
+
 - Đã có brand guidelines hoàn chỉnh với color tokens
 - Chỉ cần adjust 1-2 màu nhỏ
 
@@ -125,6 +127,7 @@ NOTES:
 - [ ] Anti-patterns được liệt kê
 
 **Red flags (cần Reject):**
+
 - ⚠️ Primary color quá neon/sáng cho professional app
 - ⚠️ Contrast ratio dưới 4.5:1
 - ⚠️ Thiếu error/success states
@@ -156,7 +159,8 @@ NOTES:
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 Loại sản phẩm: Beauty Spa booking platform
 Ngành: Beauty/Wellness
@@ -164,7 +168,8 @@ Mood: Calming, premium, feminine
 Accessibility: WCAG AA
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 Primary:    #E8B4B8 (Soft Pink)      — Brand warmth
 Secondary:  #A8D5BA (Sage Green)     — Balance, nature

@@ -209,6 +209,7 @@ Chi tiết: xem `02_TOOLKIT_CORE/error.reference.md`
 Copy `04_EXTENSION_LAYER/_extension.template/` → `{domain}.extension/`
 
 Mỗi extension cần 3 files:
+
 - `{domain}.risk.profile.ts` — Map domain risk → R1–R4
 - `{domain}.skill.pack.ts` — Register skills
 - `{domain}.validation.rules.ts` — Output validation
@@ -222,6 +223,7 @@ Mỗi extension cần 3 files:
 3 providers tích hợp sẵn: **OpenAI**, **Claude**, **Gemini**
 
 Provider Registry (`provider.registry.ts`) cung cấp:
+
 - ✅ Model approval validation (chỉ cho phép models trong approved list)
 - ✅ Health check per provider
 - ✅ Fallback strategy (primary → secondary)
@@ -287,6 +289,7 @@ Provider Registry (`provider.registry.ts`) cung cấp:
 ### Lưu Ý Về Type System
 
 Toolkit reference sử dụng type system riêng (R1–R4, P0–P6) khác với:
+
 - CVF Core (Phases A–D, Risk R0–R3)
 - cvf-web (Phases INTAKE/DESIGN/BUILD/REVIEW/FREEZE, Risk R0–R4)
 - v1.3 SDK (snake_case, R0–R4)
@@ -298,6 +301,7 @@ Toolkit reference sử dụng type system riêng (R1–R4, P0–P6) khác với:
 ## 13. Long-Term Vision
 
 CVF Toolkit cho phép:
+
 - Một tổ chức xây dựng **nhiều AI system**
 - Dùng chung **governance language**
 - Giảm rủi ro **compliance drift**

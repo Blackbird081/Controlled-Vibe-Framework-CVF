@@ -60,6 +60,7 @@ Every commit is uniquely and deterministically tied to its full execution contex
 ## IV. Hard Safety Guarantees
 
 AI **cannot:**
+
 - Expand scope mid-run
 - Recalculate risk after RISK_ASSESSMENT phase
 - Add files beyond approved plan
@@ -68,6 +69,7 @@ AI **cannot:**
 - Retry mutation after failure
 
 Kernel **guarantees:**
+
 - Snapshot always exists before mutation
 - Rollback always available
 - Drift monitored across executions

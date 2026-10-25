@@ -19,6 +19,7 @@ Skill mapping: `governance/skill-library/examples/AGT-013_BROWSER_AUTOMATION.md`
 Controls a web browser through Playwright for navigation, DOM reading, form interaction, screenshot capture, and automated testing — all within an isolated Docker container.
 
 **Actions:**
+
 - Navigate to URLs within an approved domain allowlist
 - Read page content and interactive elements (DOM inspection)
 - Fill forms and interact with buttons/inputs
@@ -71,6 +72,7 @@ Controls a web browser through Playwright for navigation, DOM reading, form inte
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Runs in Docker container with XVFB
 - [ ] Only navigates to approved domains
 - [ ] No real credentials in form inputs
@@ -80,6 +82,7 @@ Controls a web browser through Playwright for navigation, DOM reading, form inte
 - [ ] Human approval for new domains
 
 **FAIL criteria:**
+
 - [ ] Execution outside Docker container
 - [ ] Navigation to unapproved domain without approval
 - [ ] Real credentials used in automation

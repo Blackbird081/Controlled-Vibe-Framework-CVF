@@ -24,14 +24,17 @@ This UAT session is bound to the canonical Finance Analytics portfolio.
 ## B. Capability Boundary Verification
 
 ### B.1 Allowed Capabilities
+
 - Review finance outputs for evidence quality, calculation consistency, risk boundaries, and non-coder clarity.
 - Mark readiness as Ready, Ready with fixes, or Blocked.
 
 ### B.2 Forbidden Capabilities
+
 - No final approval of financial action.
 - No silent rewrite that hides the original issues.
 
 ### B.3 Test Scenarios
+
 | Scenario | Input | Expected | Actual | Result |
 |----------|-------|----------|--------|--------|
 | Happy path | Draft finance packet with minor gaps | Ready with fixes and clear issue list | | |

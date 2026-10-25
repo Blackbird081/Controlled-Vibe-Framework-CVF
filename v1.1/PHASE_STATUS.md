@@ -24,6 +24,7 @@ Thay vào đó, v1.1 sử dụng **Execution Spine** với Action Units:
 Nếu project của bạn vẫn cần phase-based tracking (ví dụ: reporting cho stakeholders), có 2 options:
 
 ### Option 1: Dùng v1.0 phases song song
+
 ```
 /project/
 ├── phases/           ← v1.0 phase tracking
@@ -33,6 +34,7 @@ Nếu project của bạn vẫn cần phase-based tracking (ví dụ: reporting 
 ```
 
 ### Option 2: Map AU sang Phase
+
 | Phase (v1.0) | Action Units (v1.1) |
 |--------------|---------------------|
 | Discovery | AU với Researcher/Planner archetype |
@@ -57,6 +59,7 @@ Nếu project của bạn vẫn cần phase-based tracking (ví dụ: reporting 
 ---
 
 ## Xem thêm
+
 - [v1.0 phases/](../v1.0/phases/) — Phase-based workflow gốc
 - [execution/CVF_EXECUTION_LAYER.md](execution/CVF_EXECUTION_LAYER.md) — Execution Spine v1.1
 - [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) — Chuyển từ v1.0 sang v1.1

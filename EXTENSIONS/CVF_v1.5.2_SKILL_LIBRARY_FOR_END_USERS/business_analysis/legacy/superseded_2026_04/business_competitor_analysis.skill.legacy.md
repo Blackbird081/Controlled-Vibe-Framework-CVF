@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Perform comprehensive competitor analysis for any business. Produces an executive-summary markdown report with target customer profile, market positioning, pricing/business model, product features, funding/company size, SWOT analysis, and competitive matrix. All findings are data-grounded. Use when the user asks to analyze competitors, understand competitive landscape, compare a business to alternatives, or perform market research.
 
 **Khi nào dùng skill này:**
+
 - Cần Business Competitor Analysis với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: business analysis
-- Nguồn tham khảo: https://github.com/kenneth-liao/ai-launchpad-marketplace/tree/main/research/skills/business-competitor-analysis
+- Nguồn tham khảo: <https://github.com/kenneth-liao/ai-launchpad-marketplace/tree/main/research/skills/business-competitor-analysis>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Phân tích chiến lược mở rộng thị trường
 Context: SME Việt, ngân sách 50k USD
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Business Competitor Analysis Output
 

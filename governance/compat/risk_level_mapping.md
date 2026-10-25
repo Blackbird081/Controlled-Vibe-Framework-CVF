@@ -24,12 +24,14 @@
 1. **All CVF governance docs use R0–R3 notation** — this is the canonical label
 2. **Runtime implementations (v1.8+) use numeric score** — must always map to R-level
 3. **Safety Dashboard (v1.7.2) shows color indicators** — these map to R-level:
+
    ```
    🟢 Safe      = R0 (score 0–2)
    🟡 Attention = R1 (score 3–5)
    🟠 Review    = R2 (score 6–10)
    🔴 Dangerous = R3 (score 11+)
    ```
+
 4. **Any implementation exposing numeric score MUST also expose the R-level label**
 5. **When in doubt, round UP to the next R-level** (safety-first principle)
 

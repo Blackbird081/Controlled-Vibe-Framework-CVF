@@ -18,6 +18,7 @@ Không yêu cầu.
 Đánh giá cách organization xử lý, lưu trữ, và bảo vệ data. Đảm bảo data lifecycle management theo best practices và compliance.
 
 **Khi nào nên dùng:**
+
 - Setup data governance
 - Annual data audit
 - New data source/system
@@ -62,6 +63,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -78,18 +80,21 @@ Không yêu cầu.
 ## ✅ Checklist - Data Classification
 
 ### Data Inventory
+
 - [ ] All data sources identified?
 - [ ] Data types categorized?
 - [ ] Owners assigned cho mỗi dataset?
 - [ ] Data flow diagrams documented?
 
 ### Classification Levels
+
 - [ ] Classification scheme defined?
 - [ ] Labels applied to data?
 - [ ] Handling rules per level?
 - [ ] Regular reclassification?
 
 ### Sensitive Data
+
 - [ ] PII identified và mapped?
 - [ ] PCI data scope minimized?
 - [ ] PHI properly segregated?
@@ -100,16 +105,19 @@ Không yêu cầu.
 ## ✅ Checklist - Data Collection
 
 ### Minimization
+
 - [ ] Only necessary data collected?
 - [ ] Retention limits defined?
 - [ ] Collection methods documented?
 
 ### Consent
+
 - [ ] Proper consent obtained?
 - [ ] Purpose stated clearly?
 - [ ] Opt-out mechanism?
 
 ### Source Validation
+
 - [ ] Data quality checks?
 - [ ] Third-party source vetting?
 - [ ] Import validation rules?
@@ -119,18 +127,21 @@ Không yêu cầu.
 ## ✅ Checklist - Data Storage
 
 ### Security
+
 - [ ] Encryption at rest?
 - [ ] Access controls (RBAC)?
 - [ ] Audit logging enabled?
 - [ ] Regular access reviews?
 
 ### Availability
+
 - [ ] Backup procedures?
 - [ ] Disaster recovery plan?
 - [ ] Backup testing schedule?
 - [ ] Geographic redundancy?
 
 ### Retention
+
 - [ ] Retention periods defined?
 - [ ] Automated deletion?
 - [ ] Archive policies?
@@ -141,12 +152,14 @@ Không yêu cầu.
 ## ✅ Checklist - Data Processing
 
 ### Security During Processing
+
 - [ ] Encryption in transit?
 - [ ] Secure processing environments?
 - [ ] No data in temporary files/logs?
 - [ ] Memory protection?
 
 ### Third-Party Processing
+
 - [ ] Vendor agreements (DPA)?
 - [ ] Security assessments?
 - [ ] Subprocessor visibility?
@@ -157,12 +170,14 @@ Không yêu cầu.
 ## ✅ Checklist - Data Disposal
 
 ### Secure Deletion
+
 - [ ] Deletion procedures documented?
 - [ ] Cryptographic erasure for encrypted data?
 - [ ] Physical destruction for hardware?
 - [ ] Certificate of destruction?
 
 ### Verification
+
 - [ ] Deletion verification?
 - [ ] Audit trail of deletions?
 - [ ] Backup data included?
@@ -184,7 +199,8 @@ Không yêu cầu.
 
 ## 💡 Tips & Examples
 
-### Data Classification Levels:
+### Data Classification Levels
+
 | Level | Description | Examples | Controls |
 |-------|-------------|----------|----------|
 | **Public** | No harm if disclosed | Marketing, docs | None |
@@ -192,7 +208,8 @@ Không yêu cầu.
 | **Confidential** | Limited disclosure | Customer data, PII | Encryption, RBAC |
 | **Restricted** | Strict controls | PCI, PHI, secrets | Max security |
 
-### Data Lifecycle:
+### Data Lifecycle
+
 ```
 Collection → Processing → Storage → Usage → Archival → Disposal
      ↓           ↓           ↓         ↓         ↓          ↓
@@ -200,7 +217,8 @@ Collection → Processing → Storage → Usage → Archival → Disposal
              validation   control   audit     policy     deletion
 ```
 
-### Encryption Standards:
+### Encryption Standards
+
 | Use Case | Recommendation |
 |----------|---------------|
 | At rest | AES-256 |
@@ -209,7 +227,8 @@ Collection → Processing → Storage → Usage → Archival → Disposal
 | Backups | Same as production |
 | Key management | HSM or KMS |
 
-### Data Flow Documentation Template:
+### Data Flow Documentation Template
+
 ```markdown
 ## Data Flow: [Name]
 
@@ -225,7 +244,8 @@ Collection → Processing → Storage → Usage → Archival → Disposal
 - [ ] Logged for audit
 ```
 
-### Retention Schedule Example:
+### Retention Schedule Example
+
 | Data Type | Retention | Reason |
 |-----------|-----------|--------|
 | User accounts | Active + 1 year | Business need |
@@ -263,7 +283,8 @@ Sau khi hoàn thành **Data Handling Review**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Data types: user profile, inventory logs, audit logs, invoices
 Storage: Postgres (core), S3 (exports), Redis cache
@@ -271,7 +292,8 @@ Retention: chưa định nghĩa
 Third-party: SendGrid, Sentry, Google Analytics
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # Data Handling Summary
 
@@ -291,13 +313,15 @@ Third-party: SendGrid, Sentry, Google Analytics
 - Strip SKU khỏi URL tracking
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Có data map rõ ràng
 - ✅ Chỉ ra lỗ hổng compliance
 - ✅ Action cụ thể theo hệ thống
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [API Security Checklist](./api_security_checklist.skill.md)
 - [Privacy Policy Audit](./privacy_policy_audit.skill.md)
 
@@ -308,7 +332,7 @@ Third-party: SendGrid, Sentry, Google Analytics
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: Privacy Policy Audit
 
 Sau khi hoàn thành **Data Handling Review**, tiếp tục với:
 → [Privacy Policy Audit](./privacy_policy_audit.skill.md)
@@ -316,3 +340,5 @@ Sau khi hoàn thành **Data Handling Review**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Security & Compliance Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

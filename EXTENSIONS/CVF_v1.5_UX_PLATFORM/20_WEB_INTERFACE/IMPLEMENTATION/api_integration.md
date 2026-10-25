@@ -28,6 +28,7 @@ Web UI talks to CVF SDK via REST API.
 ### Execute Intent
 
 **Request:**
+
 ```json
 POST /api/execute
 {
@@ -42,6 +43,7 @@ POST /api/execute
 ```
 
 **Response:**
+
 ```json
 {
   "execution_id": "exec_abc123",
@@ -53,11 +55,13 @@ POST /api/execute
 ### Get Result
 
 **Request:**
+
 ```json
 GET /api/executions/exec_abc123
 ```
 
 **Response:**
+
 ```json
 {
   "execution_id": "exec_abc123",

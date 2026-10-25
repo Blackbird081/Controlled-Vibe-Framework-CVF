@@ -12,6 +12,7 @@
 **CVF (Controlled Vibe Framework)** là bộ quy tắc giúp bạn **kiểm soát AI** khi AI làm việc cho bạn.
 
 Hãy nghĩ CVF như **luật giao thông cho AI**:
+
 - Bạn quyết định **đi đâu** (mục tiêu)
 - CVF đặt luật và bằng chứng để AI **đi đúng đường** ở những điểm có kiểm soát (governance)
 - Ở những bề mặt đã tích hợp CVF, khả năng chặn hoặc ghi lại việc **rẽ ra ngoài** khuôn khổ phụ thuộc control đã có và phạm vi được kiểm chứng của từng bề mặt. Ngoài các điểm đó, luật chỉ là quy trình bằng văn bản
@@ -64,6 +65,7 @@ Discovery  →  Design  →  Build  →  Review
 ### Bước 4 — Bạn kiểm tra và phê duyệt
 
 Tại các ranh giới cần phê duyệt, bạn:
+
 - Xem AI đã làm gì
 - Chấp nhận hoặc yêu cầu sửa
 - AI chỉ tiếp tục khi có thẩm quyền phù hợp
@@ -95,11 +97,12 @@ cd Controlled-Vibe-Framework-CVF/EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
 npm install && npm run dev
 ```
 
-Mở http://localhost:3000 — giao diện trực quan, hỗ trợ tiếng Việt.
+Mở <http://localhost:3000> — giao diện trực quan, hỗ trợ tiếng Việt.
 
 ### Cách 2 — Dùng với AI IDE (Cursor, Windsurf, VS Code)
 
 1. Clone CVF vào workspace:
+
    ```
    D:\MyWorkspace\
    ├── .Controlled-Vibe-Framework-CVF\   ← CVF (governance)
@@ -113,6 +116,7 @@ Mở http://localhost:3000 — giao diện trực quan, hỗ trợ tiếng Việ
 ### Cách 3 — Chỉ đọc tài liệu (không cài gì)
 
 Đọc theo thứ tự:
+
 1. [Quick Orientation](../../docs/guides/CVF_QUICK_ORIENTATION.md) — Hiểu CVF trong 15 phút
 2. [Builder Model](CVF_BUILDER_MODEL.md) — Cách xây dựng hệ thống AI với CVF
 3. [Thư viện kỹ năng](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) — Thư viện kỹ năng sẵn có
@@ -126,6 +130,7 @@ Mở http://localhost:3000 — giao diện trực quan, hỗ trợ tiếng Việ
 ### Scenario: Bạn muốn AI tạo báo cáo tài chính
 
 **Không có kiểm soát:**
+
 ```
 Bạn: "Tạo báo cáo tài chính"
 AI: *tự ý truy cập dữ liệu, tự ý format, tự ý gửi email*
@@ -133,6 +138,7 @@ AI: *tự ý truy cập dữ liệu, tự ý format, tự ý gửi email*
 ```
 
 **Có quy trình CVF (minh họa):**
+
 ```
 Bạn: "Tạo báo cáo tài chính từ bảng dữ liệu giả này"
 
@@ -158,6 +164,7 @@ Audit      →  Ghi vết các hành động trong phạm vi control đã tích 
 ```
 
 Bạn không cần nhớ chi tiết các trụ cột. Khả năng thực thi và ghi vết phụ thuộc control đã tích hợp và bằng chứng của từng bề mặt; không suy ra mọi hành động đều được chặn hoặc ghi lại. Ở nơi khác, chúng chỉ là quy trình bằng văn bản. Bạn cần:
+
 - Thiết lập Policy (ranh giới)
 - Kiểm tra Audit (kết quả)
 

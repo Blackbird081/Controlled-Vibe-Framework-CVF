@@ -15,6 +15,7 @@ A skill without this record is FORBIDDEN.
 Skill ID:
 Skill Name:
 Skill Source:
+
 - [ ] Internal (CVF-owned)
 - [ ] External (third-party / community / vendor)
 
@@ -22,6 +23,7 @@ Source Reference:
 (link / repo / documentation)
 
 Record Status:
+
 - [ ] Draft
 - [ ] Active
 - [ ] Deprecated
@@ -45,6 +47,7 @@ Describe what the skill DOES.
 ### 2.2 Inputs
 
 List all required inputs:
+
 - Type
 - Sensitivity (low / medium / high)
 - Validation requirements
@@ -54,6 +57,7 @@ List all required inputs:
 ### 2.3 Outputs
 
 List all produced outputs:
+
 - Type
 - Persistence (temporary / stored / external)
 - Potential downstream impact
@@ -76,6 +80,7 @@ Execution Notes:
 ### 3.1 Assigned Risk Level
 
 Primary Risk Level:
+
 - [ ] R0
 - [ ] R1
 - [ ] R2
@@ -89,6 +94,7 @@ Justification:
 ### 3.2 Worst-Case Scenario
 
 Describe the worst realistic failure:
+
 - What breaks?
 - Who is affected?
 - Can it be reversed?
@@ -109,6 +115,7 @@ Describe the worst realistic failure:
 ### 4.1 Allowed Agent Roles
 
 This skill may ONLY be used by:
+
 - [ ] Observer
 - [ ] Analyst
 - [ ] Builder
@@ -120,6 +127,7 @@ This skill may ONLY be used by:
 ### 4.2 Allowed CVF Phases
 
 This skill may ONLY be used in:
+
 - [ ] Intake
 - [ ] Design
 - [ ] Build
@@ -131,6 +139,7 @@ This skill may ONLY be used in:
 ### 4.3 Decision Influence Scope
 
 Using this skill may:
+
 - [ ] Provide information only
 - [ ] Suggest actions
 - [ ] Modify artifacts
@@ -142,12 +151,15 @@ Using this skill may:
 ## 5. CONSTRAINTS & SAFEGUARDS
 
 Mandatory Constraints:
+
 - (e.g. read-only, no deletion, dry-run only)
 
 Forbidden Actions:
+
 - (explicitly disallowed behaviors)
 
 Human Approval Required:
+
 - [ ] Never
 - [ ] Sometimes (specify)
 - [ ] Always
@@ -157,6 +169,7 @@ Human Approval Required:
 ## 6. CVF FIT DECISION
 
 Final Decision:
+
 - ❌ Reject
 - ⚠️ Accept with Restrictions
 - ✅ Accept (CVF-Compliant)
@@ -169,6 +182,7 @@ Decision Rationale:
 ## 7. UAT & VALIDATION NOTES
 
 Has this skill passed UAT?
+
 - [ ] Yes
 - [ ] No
 - [ ] Not required

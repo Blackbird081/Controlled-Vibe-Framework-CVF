@@ -81,11 +81,11 @@ export function useAgentChat({
         governanceStateRef.current = governanceState;
     }, [governanceState]);
 
-    useEffect(() => {
-        if (externalGovernanceState) {
-            setGovernanceState(externalGovernanceState);
-        }
-    }, [externalGovernanceState]);
+    const [previousExternalGovernanceState, setPreviousExternalGovernanceState] = useState(externalGovernanceState);
+    if (previousExternalGovernanceState !== externalGovernanceState) {
+        setPreviousExternalGovernanceState(externalGovernanceState);
+        if (externalGovernanceState) setGovernanceState(externalGovernanceState);
+    }
     const { trackUsage, checkBudget } = useQuotaManager();
     const { detectPhase } = usePhaseDetection();
 

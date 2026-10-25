@@ -112,4 +112,3 @@ For `HIGH` or `CRITICAL` tasks:
 - rubric source 1:
 - rubric source 2:
 - reviewer calibration note:
-

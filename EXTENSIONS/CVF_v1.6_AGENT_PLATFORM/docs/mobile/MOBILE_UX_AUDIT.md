@@ -3,10 +3,12 @@
 **Goal:** Ensure core flows work on mobile browsers (iOS/Android) without a native app.
 
 ## ✅ Baseline
+
 - [x] Responsive layout tweaks for History/Result/Analytics (done)
 - [x] Navigation menu accessible on small screens
 
 ## 🔍 Flow Checks (Pending)
+
 - [ ] Home → Template list (scroll + tap targets)
 - [ ] Form input (keyboard overlap, focus/scroll)
 - [ ] Processing screen (progress visibility)
@@ -19,6 +21,7 @@
 - [ ] Tools page (cards + actions)
 
 ## UI/UX Details (Pending)
+
 - [x] Buttons ≥ 44px height
 - [x] Safe-area padding for notched devices
 - [x] Sticky input on chat
@@ -26,6 +29,7 @@
 - [ ] Dark mode contrast
 
 ## Device QA (Pending)
+
 - [ ] iPhone (small, notch)
 - [ ] Android (mid-range)
 - [ ] Large phone/phablet

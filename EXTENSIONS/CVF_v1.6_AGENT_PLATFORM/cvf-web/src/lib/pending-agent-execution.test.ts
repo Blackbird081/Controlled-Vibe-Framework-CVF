@@ -227,117 +227,6 @@ describe('1. canonical digest determinism and field sensitivity', () => {
 });
 
 // ---------------------------------------------------------------------------
-// 2. Rejection of unsupported JS values
-// ---------------------------------------------------------------------------
-
-describe('2. canonicalizer hard-rejects unsupported values', () => {
-    it('rejects undefined', () => {
-        expect(() => canonicalizeToJson(undefined)).toThrow(CanonicalizationError);
-    });
-
-    it('rejects undefined-valued object property', () => {
-        expect(() => canonicalizeToJson({ a: undefined })).toThrow(CanonicalizationError);
-    });
-
-    it('rejects sparse array holes', () => {
-        const sparse = [1, , 3]; // eslint-disable-line no-sparse-arrays
-        expect(() => canonicalizeToJson(sparse)).toThrow(CanonicalizationError);
-    });
-
-    it('rejects NaN', () => {
-        expect(() => canonicalizeToJson({ a: NaN })).toThrow(CanonicalizationError);
-    });
-
-    it('rejects Infinity and -Infinity', () => {
-        expect(() => canonicalizeToJson({ a: Infinity })).toThrow(CanonicalizationError);
-        expect(() => canonicalizeToJson({ a: -Infinity })).toThrow(CanonicalizationError);
-    });
-
-    it('rejects bigint', () => {
-        expect(() => canonicalizeToJson({ a: BigInt(1) })).toThrow(CanonicalizationError);
-    });
-
-    it('rejects symbol', () => {
-        expect(() => canonicalizeToJson({ a: Symbol('x') })).toThrow(CanonicalizationError);
-    });
-
-    it('rejects functions', () => {
-        expect(() => canonicalizeToJson({ a: () => 1 })).toThrow(CanonicalizationError);
-    });
-
-    it('rejects Date instances', () => {
-        expect(() => canonicalizeToJson({ a: new Date() })).toThrow(CanonicalizationError);
-    });
-
-    it('rejects class instances (non-plain prototype)', () => {
-        class Foo {
-            x = 1;
-        }
-        expect(() => canonicalizeToJson({ a: new Foo() })).toThrow(CanonicalizationError);
-    });
-
-    it('rejects cyclic references', () => {
-        const obj: Record<string, unknown> = { a: 1 };
-        obj.self = obj;
-        expect(() => canonicalizeToJson(obj)).toThrow(CanonicalizationError);
-    });
-
-    it('rejects lone surrogates, symbol keys, accessors, and non-enumerable fields', () => {
-        expect(() => canonicalizeToJson({ value: '\ud800' })).toThrow(CanonicalizationError);
-        const symbolKeyed = { value: 'ok', [Symbol('hidden')]: 'hidden' };
-        expect(() => canonicalizeToJson(symbolKeyed)).toThrow(CanonicalizationError);
-        const accessor: Record<string, unknown> = {};
-        Object.defineProperty(accessor, 'value', { enumerable: true, get: () => 'x' });
-        expect(() => canonicalizeToJson(accessor)).toThrow(CanonicalizationError);
-        const hidden = { value: 'ok' };
-        Object.defineProperty(hidden, 'secret', { enumerable: false, value: 'x' });
-        expect(() => canonicalizeToJson(hidden)).toThrow(CanonicalizationError);
-    });
-
-    it('rejects unknown environment identity keys', () => {
-        expect(() =>
-            validateEnvironmentIdentity({
-                nodeEnv: 'test',
-                runtimeName: 'vitest',
-                deploymentBoundary: 'single_process_non_production',
-                extraKey: 'x',
-            }),
-        ).toThrow(CanonicalizationError);
-    });
-
-    it('rejects secret-like environment key', () => {
-        expect(() =>
-            validateEnvironmentIdentity({
-                nodeEnv: 'test',
-                runtimeName: 'vitest',
-                deploymentBoundary: 'single_process_non_production',
-                apiKey: 'shhh',
-            } as unknown as Record<string, unknown>),
-        ).toThrow(CanonicalizationError);
-    });
-
-    it('rejects secret-like environment value', () => {
-        expect(() =>
-            validateEnvironmentIdentity({
-                nodeEnv: 'test-secret-token-value',
-                runtimeName: 'vitest',
-                deploymentBoundary: 'single_process_non_production',
-            }),
-        ).toThrow(CanonicalizationError);
-    });
-
-    it('rejects deploymentBoundary values other than the fixed literal', () => {
-        expect(() =>
-            validateEnvironmentIdentity({
-                nodeEnv: 'test',
-                runtimeName: 'vitest',
-                deploymentBoundary: 'production',
-            }),
-        ).toThrow(CanonicalizationError);
-    });
-});
-
-// ---------------------------------------------------------------------------
 // 3. Policy fingerprint stability and drift rejection
 // ---------------------------------------------------------------------------
 
@@ -479,7 +368,6 @@ describe('4. create read-back integrity and clone isolation', () => {
         const { store, record } = createStoreWithRecord();
         const fetched = store.get(record.pendingExecutionId);
         expect(fetched).not.toBeNull();
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         (fetched!.state as { status: string }).status = 'TAMPERED';
         const fetchedAgain = store.get(record.pendingExecutionId);
         expect(fetchedAgain?.state.status).toBe('CREATED');
@@ -783,7 +671,6 @@ describe('8. grant consumption precedes the executing CAS', () => {
         // Force the CAS to fail by first abandoning the record out from under
         // the grant (simulating an injected/racing CAS failure).
         const current = store.get(grant.pendingExecutionId);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         abandonBeforeStart(store, grant.pendingExecutionId, current!.state.recordVersion, grant.claimId, 'test-abandon', new Date().toISOString());
 
         expect(isAuthenticUnconsumedGrant(grant)).toBe(true); // still authentic before consumption attempt
@@ -824,9 +711,7 @@ describe('9. crash-boundary disposition', () => {
         const abandonResult = abandonBeforeStart(
             store,
             record.pendingExecutionId,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             stored!.state.recordVersion,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             stored!.state.claimId!,
             'process_exit_before_executing',
             new Date().toISOString(),
@@ -929,7 +814,6 @@ describe('10. terminal outcomes remain distinct with correlation data', () => {
             const stored = store.get(record.pendingExecutionId);
             const result = applyTerminalTransition(store, {
                 pendingExecutionId: record.pendingExecutionId,
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 expectedVersion: stored!.state.recordVersion,
                 claimId: grant.claimId,
                 attemptIndex: 3,
@@ -949,7 +833,6 @@ describe('10. terminal outcomes remain distinct with correlation data', () => {
         const stored = store.get(record.pendingExecutionId);
         const result = applyTerminalTransition(store, {
             pendingExecutionId: record.pendingExecutionId,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             expectedVersion: stored!.state.recordVersion,
             claimId: grant.claimId,
             attemptIndex: 3,
@@ -973,7 +856,6 @@ describe('10. terminal outcomes remain distinct with correlation data', () => {
         const stored = store.get(record.pendingExecutionId);
         const wrongClaim = applyTerminalTransition(store, {
             pendingExecutionId: record.pendingExecutionId,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             expectedVersion: stored!.state.recordVersion,
             claimId: 'wrong-claim-id',
             attemptIndex: 3,
@@ -986,7 +868,6 @@ describe('10. terminal outcomes remain distinct with correlation data', () => {
 
         const wrongAttempt = applyTerminalTransition(store, {
             pendingExecutionId: record.pendingExecutionId,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             expectedVersion: stored!.state.recordVersion,
             claimId: grant.claimId,
             attemptIndex: 99,
@@ -1005,8 +886,9 @@ describe('10. terminal outcomes remain distinct with correlation data', () => {
 
 describe('11. static proof of call-boundary isolation', () => {
     it('imports/calls no route, AER, provider, admission, audit-store, network, or credential surface', () => {
-        const sourcePath = join(__dirname, 'pending-agent-execution.ts');
-        const source = readFileSync(sourcePath, 'utf8');
+        const source = ['pending-agent-execution.ts', 'pending-agent-execution-canonicalization.ts']
+            .map((name) => readFileSync(join(__dirname, name), 'utf8'))
+            .join('\n');
 
         const forbiddenTokens = [
             'AgentExecutionRuntime',
@@ -1086,7 +968,6 @@ describe('12. shared pure transition helper parity with in-memory CAS', () => {
             kind: 'CLAIM', claimId: 'c1', claimedAt: now, claimedBy: ACTOR, requestId: 'r1',
         });
         expect(claimed.ok).toBe(true);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const claimedRecord = claimed.record!;
 
         const illegalTransition = applyPendingAgentExecutionTransition(
@@ -1112,7 +993,6 @@ describe('12. shared pure transition helper parity with in-memory CAS', () => {
             { kind: 'BEGIN_EXECUTING', claimId: 'c1', attemptIndex: 0 },
         );
         expect(beganExecuting.ok).toBe(true);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const executingRecord = beganExecuting.record!;
 
         const wrongAttempt = applyPendingAgentExecutionTransition(
@@ -1130,7 +1010,6 @@ describe('12. shared pure transition helper parity with in-memory CAS', () => {
             { kind: 'TERMINAL', claimId: 'c1', attemptIndex: 0, status: 'SUCCEEDED', reason: 'done', terminalAt: now },
         );
         expect(terminal.ok).toBe(true);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const terminalRecord = terminal.record!;
 
         const afterTerminal = applyPendingAgentExecutionTransition(

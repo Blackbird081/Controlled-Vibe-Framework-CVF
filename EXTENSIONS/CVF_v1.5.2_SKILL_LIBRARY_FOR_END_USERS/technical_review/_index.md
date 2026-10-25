@@ -8,6 +8,7 @@
 ## 🎯 Domain Overview
 
 Domain này giúp End User làm việc với AI để review và đánh giá các sản phẩm kỹ thuật. Mỗi skill cung cấp:
+
 - Checklist review có cấu trúc
 - Red flags cần chú ý
 - Tiêu chí chất lượng

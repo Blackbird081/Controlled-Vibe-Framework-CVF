@@ -32,6 +32,8 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+PUBLIC_PROFILE = False
+PUBLIC_EVIDENCE_BASE = "HEAD"
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 
 ADR_PATH = "docs/CVF_ARCHITECTURE_DECISIONS.md"
@@ -163,11 +165,11 @@ TEST_REPORT_FILE_PREFIXES = ("docs/baselines/", "docs/assessments/", "docs/revie
 
 def _run_git(args: list[str]) -> tuple[int, str, str]:
     proc = subprocess.run(
-        ["git", *args],
+        ["git", "-c", "core.quotepath=false", *args],
         cwd=REPO_ROOT,
         text=True,
         encoding="utf-8",
-        errors="replace",
+        errors="strict",
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
@@ -448,6 +450,20 @@ def _check_structural_change_audit_guard(
     triggered = bool(trigger_commits or rename_paths or structural_path_triggers)
     issues: list[str] = []
     if triggered:
+        if PUBLIC_PROFILE:
+            from check_baseline_update_compat import classify_public_change_evidence
+            manifest = "docs/EXPORT_MANIFEST.md"
+            text = _read_text(manifest)
+            code, previous, _ = _run_git(["show", f"{PUBLIC_EVIDENCE_BASE}:{manifest}"])
+            proof = classify_public_change_evidence(commits, changed_paths, text.strip(), previous if code == 0 else "", PUBLIC_EVIDENCE_BASE)
+            section = text.partition("## Public Change Evidence\n")[2].split("\n## ", 1)[0]
+            if not proof["compliant"]:
+                issues.append("public structural review requires valid exact same-delta public change evidence")
+            if not re.search(r"(?m)^Structural review: PUBLIC_PROJECTION_STRUCTURE_REVIEWED;\s+\S.+$", section):
+                issues.append("public structural change requires an explicit reviewed scope in Public Change Evidence")
+            return {"triggered": triggered, "triggerCommits": trigger_commits,
+                    "triggerPaths": sorted(set(rename_paths + structural_path_triggers)), "issues": issues,
+                    "claimBoundary": "PUBLIC_STRUCTURE_REVIEW_NOT_PRIVATE_GC019_OR_RUNTIME_READINESS"}
         supporting_docs = [
             path for path in changed_paths
             if re.search(r"^docs/(reviews|baselines|roadmaps)/.*(GC019|RESTRUCTURING).*\.md$", path, re.I)
@@ -626,14 +642,29 @@ def main() -> int:
     parser.add_argument("--head", default=None, help="Git head ref")
     parser.add_argument("--enforce", action="store_true", help="Return non-zero (exit 2) when violations are found")
     parser.add_argument("--json", action="store_true", help="Print JSON report to stdout instead of text")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
+    global PUBLIC_PROFILE, PUBLIC_EVIDENCE_BASE
+    PUBLIC_PROFILE = args.profile == "public"
+    if PUBLIC_PROFILE:
+        from guard_binding_catalog import require_public_projection
+        require_public_projection(REPO_ROOT)
 
     base, head, base_source = _resolve_range(args.base, args.head)
+    if PUBLIC_PROFILE:
+        code, resolved, err = _run_git(["rev-parse", "--verify", f"{base}^{{commit}}"])
+        if code:
+            print(err or "Invalid public structural review base", file=sys.stderr)
+            return 1
+        PUBLIC_EVIDENCE_BASE = resolved
 
     try:
         commits = _get_commits_in_range(base, head)
         changed_range = _get_changed_name_status(base, head)
     except RuntimeError as exc:
+        if PUBLIC_PROFILE:
+            print(str(exc), file=sys.stderr)
+            return 1
         if args.base:
             fallback_base = "HEAD~1"
             try:

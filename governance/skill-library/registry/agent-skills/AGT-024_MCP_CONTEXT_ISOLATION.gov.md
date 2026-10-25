@@ -57,6 +57,7 @@ Architectural pattern for delegating MCP (Model Context Protocol) tool calls to 
 ```
 
 ### Core Functions
+
 1. **Context Isolation** — MCP tool definitions never enter main context
 2. **Intelligent Tool Selection** — Subagent analyzes available tools and selects optimal match
 3. **Multi-Server Management** — Handle 10-80+ MCP servers without context cost
@@ -73,6 +74,7 @@ Architectural pattern for delegating MCP (Model Context Protocol) tool calls to 
 | Main context quality | Degraded | Preserved |
 
 ### Security Model
+
 - MCP credentials managed via environment variables, never in context
 - Subagent has limited permissions: execute MCP tools only
 - Results filtered for sensitive data before return
@@ -155,12 +157,14 @@ Architectural pattern for delegating MCP (Model Context Protocol) tool calls to 
 **UAT Link:** `governance/skill-library/uat/results/UAT-AGT-024.md`
 
 **PASS criteria:**
+
 - [ ] Main context token savings ≥95% reduction vs direct MCP loading
 - [ ] MCP tool call success rate ≥98%
 - [ ] Average subagent round-trip <5 seconds
 - [ ] MCP tool definitions never appear in main agent context
 
 **FAIL criteria:**
+
 - [ ] MCP tool definitions loaded directly into main context
 - [ ] MCP tool calls not logged for audit trail
 - [ ] MCP credentials found in context or code instead of environment variables

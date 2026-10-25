@@ -148,8 +148,8 @@ family.
 
 | Search query | Search roots | Result summary | Disposition |
 | --- | --- | --- | --- |
-| `rg --files docs/reference docs/baselines docs/work_orders docs/reviews docs/roadmaps \| rg "(FPC|AOT|MEMCON|MODEL_GATEWAY|LEGACY|ABSORPTION|SYSTEM_LOOP|WORKFLOW_CHAIN|FOUNDATION_PLANES)"` | governed docs | Existing packets found across FPC, AOT, MEMCON, Model Gateway, legacy, system-loop, and workflow-chain surfaces | COLLISION_RECORDED_AS_INDEX_SEED_INPUT |
-| `rg -n "CVF_Important|Model Gateway|memory|scan|legacy|priorAbsorption|LHW17|LHW20" docs/corpus-intelligence/registry/entries -g "*.json"` | corpus registry entries | Memory/learning and legacy registry entries found; Model Gateway-specific registry row not found in current active entries | GAP_RECORDED_FOR_WORKER_RECHECK |
+| `rg --files docs/reference docs/baselines docs/work_orders docs/reviews docs/roadmaps \| rg "(FPC\|AOT\|MEMCON\|MODEL_GATEWAY\|LEGACY\|ABSORPTION\|SYSTEM_LOOP\|WORKFLOW_CHAIN\|FOUNDATION_PLANES)"` | governed docs | Existing packets found across FPC, AOT, MEMCON, Model Gateway, legacy, system-loop, and workflow-chain surfaces | COLLISION_RECORDED_AS_INDEX_SEED_INPUT |
+| `rg -n "CVF_Important\|Model Gateway\|memory\|scan\|legacy\|priorAbsorption\|LHW17\|LHW20" docs/corpus-intelligence/registry/entries -g "*.json"` | corpus registry entries | Memory/learning and legacy registry entries found; Model Gateway-specific registry row not found in current active entries | GAP_RECORDED_FOR_WORKER_RECHECK |
 | `Get-ChildItem docs/reference -Filter "*LEGACY*INDEX*.md"` | `docs/reference` | No active legacy coverage index found before this artifact | NEW_INDEX_JUSTIFIED |
 
 ## Epistemic Process Block

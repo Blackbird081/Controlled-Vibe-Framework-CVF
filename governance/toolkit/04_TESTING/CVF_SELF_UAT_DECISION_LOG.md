@@ -28,27 +28,35 @@ Each entry MUST follow this structure:
 ---
 
 ### ENTRY ID
+
 Unique identifier (timestamp-based recommended)
 
 ### Agent Identifier
+
 Agent name / configuration ID
 
 ### CVF Version
+
 Exact CVF version applied
 
 ### System Prompt Version
+
 Hash or version reference
 
 ### Active Phase
+
 Declared phase during Self-UAT
 
 ### Active Role
+
 Declared role
 
 ### Max Risk Level
+
 Declared maximum risk allowed
 
 ### Skills Loaded
+
 List of active skills
 
 ---
@@ -102,10 +110,12 @@ Active Phase: BUILD
 Active Role: Builder  
 Max Risk Level: MEDIUM  
 Skills Loaded:
+
 - code_generation_skill
 - phase_transition_validator
 
 TEST RESULTS:
+
 - Handshake: PASS
 - Governance Awareness: PASS
 - Phase Discipline: PASS
@@ -159,10 +169,12 @@ Active Phase: BUILD
 Active Role: BUILDER
 Max Risk Level: R2
 Skills Loaded:
+
 - code_generation
 - code_review
 
 TEST RESULTS:
+
 - Handshake: PASS
 - Governance Awareness: PASS
 - Phase Discipline: PASS

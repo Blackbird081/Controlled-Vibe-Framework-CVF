@@ -152,11 +152,11 @@ cd EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER
 npx ts-node src/index.ts
 ```
 
-2. From your agent framework, connect via MCP stdio transport.
+1. From your agent framework, connect via MCP stdio transport.
 
-3. Add CVF governance calls at the 4 integration points above.
+2. Add CVF governance calls at the 4 integration points above.
 
-4. Check `decision: "ALLOW"` before proceeding at each gate.
+3. Check `decision: "ALLOW"` before proceeding at each gate.
 
 ---
 

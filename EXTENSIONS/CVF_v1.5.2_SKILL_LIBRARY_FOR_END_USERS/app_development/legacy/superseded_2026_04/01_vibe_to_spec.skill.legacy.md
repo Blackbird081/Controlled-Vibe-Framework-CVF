@@ -17,11 +17,13 @@
 ## 🎯 Purpose
 
 **When to use this skill:**
+
 - User describes the app using feelings or visual metaphors ("Make it look luxurious", "Clean interface like Apple", "Make it smooth")
 - Need to convert vague requirements into concrete technical specifications before Design
 - Phase A (Discovery) — when a "vibe" has not yet become a spec
 
 **Not suitable when:**
+
 - User already has a detailed technical spec
 - Requirements clearly specify colors, fonts, or exact layout values
 
@@ -97,12 +99,14 @@ Type "Approve Vibe" so I can begin designing.
 ## 🔍 Evaluation Criteria
 
 **Accept Checklist:**
+
 - [ ] Vibe Mapping Table has all 3 columns
 - [ ] No technical jargon (CSS, hex, padding) in the table
 - [ ] AI ends with a confirmation question
 - [ ] User has typed "Approve Vibe" before proceeding
 
 **Red Flags (Reject):**
+
 - ⚠️ AI chooses a specific color without asking the User
 - ⚠️ Mapping table uses technical terms like "#1A1A2E" or "border-radius"
 - ⚠️ AI starts coding or designing before confirmation
@@ -130,13 +134,15 @@ Type "Approve Vibe" so I can begin designing.
 
 ## 📊 Example
 
-### Sample Input:
+### Sample Input
+
 ```
 Vibe Description: "I want my expense tracker to look chill and minimal like Notion"
 App Type: Personal finance manager (Streamlit)
 ```
 
-### Sample Output:
+### Sample Output
+
 ```markdown
 # Vibe Mapping Table
 
@@ -149,7 +155,8 @@ App Type: Personal finance manager (Streamlit)
 Do you agree? Type "Approve Vibe" so I can begin designing.
 ```
 
-### Evaluation:
+### Evaluation
+
 - ✅ No technical jargon
 - ✅ Every vibe has a concrete action
 - ✅ Confirmation question present

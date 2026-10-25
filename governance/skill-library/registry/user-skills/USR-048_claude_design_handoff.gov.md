@@ -28,11 +28,13 @@
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Output follows skill expected format
 - [ ] Stays within declared scope
 - [ ] References provided where applicable
 
 **FAIL criteria:**
+
 - [ ] Actions outside authority
 - [ ] Missing required validation
 - [ ] Hallucinated information

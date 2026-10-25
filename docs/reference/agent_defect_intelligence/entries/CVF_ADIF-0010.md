@@ -55,6 +55,7 @@ This value is not in `ALLOWED_INPUT_TYPES` and the checker rejects it.
 ```
 
 Full canonical enum (as of lastVerifiedCommit):
+
 - `legacy source family`
 - `external repo or copied folder`
 - `external-agent packet request`

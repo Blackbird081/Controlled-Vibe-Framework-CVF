@@ -41,8 +41,8 @@ const LABELS = {
     },
 };
 
-function getTimeRemaining(expiresAt: string): { text: string; urgent: boolean; expired: boolean } {
-    const remaining = new Date(expiresAt).getTime() - Date.now();
+function getTimeRemaining(expiresAt: string, now: number): { text: string; urgent: boolean; expired: boolean } {
+    const remaining = new Date(expiresAt).getTime() - now;
     if (remaining <= 0) return { text: '0h', urgent: true, expired: true };
     const hours = Math.floor(remaining / (1000 * 60 * 60));
     const days = Math.floor(hours / 24);
@@ -53,14 +53,12 @@ function getTimeRemaining(expiresAt: string): { text: string; urgent: boolean; e
 export function ActiveOverrides({ overrides: propOverrides, compact = false }: ActiveOverridesProps) {
     const { language } = useLanguage();
     const l = LABELS[language];
-    const [overrides, setOverrides] = useState<ActiveOverride[]>(propOverrides || []);
+    const [fetchedOverrides, setOverrides] = useState<ActiveOverride[]>([]);
+    const overrides = propOverrides ?? fetchedOverrides;
     const [loading, setLoading] = useState(!propOverrides);
 
     useEffect(() => {
-        if (propOverrides) {
-            setOverrides(propOverrides);
-            return;
-        }
+        if (propOverrides) return;
         let cancelled = false;
         async function fetchOverrides() {
             try {
@@ -80,10 +78,16 @@ export function ActiveOverrides({ overrides: propOverrides, compact = false }: A
         return () => { cancelled = true; };
     }, [propOverrides]);
 
-    // Filter out expired overrides
-    const activeOverrides = overrides.filter(o => new Date(o.expiresAt).getTime() > Date.now());
+    const [now, setNow] = useState(() => Date.now());
+    useEffect(() => {
+        const timer = setInterval(() => setNow(Date.now()), 1000);
+        return () => clearInterval(timer);
+    }, []);
 
-    if (loading) return <p className="text-xs text-gray-400">{l.loading}</p>;
+    // Filter out expired overrides
+    const activeOverrides = overrides.filter(o => new Date(o.expiresAt).getTime() > now);
+
+    if (!propOverrides && loading) return <p className="text-xs text-gray-400">{l.loading}</p>;
 
     if (compact) {
         return (
@@ -104,7 +108,7 @@ export function ActiveOverrides({ overrides: propOverrides, compact = false }: A
             ) : (
                 <div className="space-y-2">
                     {activeOverrides.map(override => {
-                        const time = getTimeRemaining(override.expiresAt);
+                        const time = getTimeRemaining(override.expiresAt, now);
                         return (
                             <div
                                 key={override.id}

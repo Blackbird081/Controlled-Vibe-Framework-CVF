@@ -1,4 +1,5 @@
 # CVF SKILL ↔ RISK ↔ AUTHORITY LINKAGE
+
 Canonical Binding Between Skills and CVF Governance
 
 > **Version:** 1.0.0  
@@ -8,6 +9,7 @@ Canonical Binding Between Skills and CVF Governance
 ## 1. Purpose
 
 This document defines how every CVF Skill is bound to:
+
 - Risk Level
 - Authority Scope
 - Agent Role
@@ -16,6 +18,7 @@ This document defines how every CVF Skill is bound to:
 No skill may exist independently of this linkage.
 
 This linkage precedes:
+
 - Skill intake
 - Skill adaptation
 - Skill execution
@@ -25,6 +28,7 @@ This linkage precedes:
 ## 2. Core Principle
 
 In CVF:
+
 - Skills do NOT have inherent power
 - Skills BORROW authority from CVF context
 
@@ -39,27 +43,32 @@ and can always be revoked.
 Each skill MUST be assigned exactly one primary risk level.
 
 ### R0 – Informational
+
 - Read-only
 - No decision influence
 - No side effects
 
 ### R1 – Advisory
+
 - Produces suggestions
 - No autonomous execution
 - Human confirmation required
 
 ### R2 – Assisted Execution
+
 - Performs bounded actions
 - Explicit invocation only
 - Strong preconditions
 
 ### R3 – Autonomous Execution
+
 - Executes multi-step actions
 - High blast radius
 - Requires explicit authorization
 - Rare by design
 
 ### R4 – Critical / Blocked
+
 - Severe or irreversible damage potential
 - Cannot be safely constrained
 - Execution BLOCKED by default
@@ -73,14 +82,18 @@ Each skill MUST be assigned exactly one primary risk level.
 Skill authority is evaluated across four dimensions:
 
 ### 4.1 Agent Role
+
 Which agent may invoke the skill:
+
 - Orchestrator
 - Architect
 - Builder
 - Reviewer
 
 ### 4.2 CVF Phase
+
 In which phase the skill may operate:
+
 - Discovery
 - Design
 - Build
@@ -89,7 +102,9 @@ In which phase the skill may operate:
 Cross-phase execution is forbidden unless explicitly stated.
 
 ### 4.3 Decision Scope
+
 What kind of decision the skill may influence:
+
 - Informational
 - Tactical
 - Strategic
@@ -97,6 +112,7 @@ What kind of decision the skill may influence:
 Strategic influence requires human oversight.
 
 ### 4.4 Execution Autonomy
+
 - Never
 - Conditional
 - Always (discouraged)
@@ -121,6 +137,7 @@ Undefined = Forbidden by default.
 ## 6. Spec Gate + UAT Hooks (Mandatory)
 
 Every skill MUST declare:
+
 - **Spec Gate Requirements**
   - Required inputs (Form Input must define required fields)
   - Constraints + validation hooks
@@ -142,21 +159,25 @@ If Spec Gate fails, **execution is blocked** regardless of risk level.
 Risk level enforces hard limits:
 
 ### R0
+
 - Any role
 - Any phase
 - No execution authority
 
 ### R1
+
 - Limited roles
 - No Build phase execution
 - Advisory only
 
 ### R2
+
 - Builder / Orchestrator only
 - Build phase only
 - Mandatory audit hooks
 
 ### R3
+
 - Explicit human approval
 - Isolated environment
 - Continuous monitoring
@@ -167,6 +188,7 @@ Risk level enforces hard limits:
 ## 8. Enforcement Rule
 
 If a skill invocation violates this linkage:
+
 - The system MUST block execution
 - The violation is logged as a governance failure
 - The skill enters mandatory review
@@ -179,6 +201,7 @@ It is a framework breach.
 ## 9. Design Intent
 
 This linkage exists to ensure:
+
 - Skills never outgrow governance
 - Capabilities never outrun responsibility
 - CVF remains the single source of authority

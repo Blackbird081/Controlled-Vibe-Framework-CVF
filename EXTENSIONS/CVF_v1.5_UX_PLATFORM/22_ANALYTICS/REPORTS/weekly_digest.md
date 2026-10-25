@@ -49,6 +49,7 @@ Subject: Your CVF Weekly Digest - Feb 1-7, 2026
 ## Content Sections
 
 ### Summary Stats
+
 ```typescript
 interface WeeklySummary {
   period: { start: Date; end: Date };
@@ -62,6 +63,7 @@ interface WeeklySummary {
 ```
 
 ### Top Templates
+
 ```sql
 SELECT template_id, accept_rate
 FROM weekly_stats
@@ -71,6 +73,7 @@ LIMIT 5;
 ```
 
 ### Insights
+
 ```typescript
 function generateInsights(data: WeeklyData): Insight[] {
   const insights = [];

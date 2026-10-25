@@ -10,6 +10,11 @@ from pathlib import Path
 from typing import Any
 
 
+try:
+    from guard_binding_catalog import private_binding, public_required_paths, public_required_markers, require_public_projection
+except ModuleNotFoundError:
+    from governance.compat.guard_binding_catalog import private_binding, public_required_paths, public_required_markers, require_public_projection
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 REGISTRY_PATH = REPO_ROOT / "governance" / "compat" / "CVF_SURFACE_SCAN_REGISTRY.json"
 GUARD_PATH = REPO_ROOT / "governance" / "toolkit" / "05_OPERATION" / "CVF_SURFACE_SCAN_CONTINUITY_GUARD.md"
@@ -108,10 +113,15 @@ def _read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def build_report() -> dict[str, Any]:
+def build_report(profile: str = "private") -> dict[str, Any]:
+    if profile == "public":
+        require_public_projection(REPO_ROOT)
     violations: list[dict[str, str]] = []
     required_files = _required_files()
     required_markers = _required_markers()
+    if profile == "public":
+        required_files = tuple(REPO_ROOT / path for path in public_required_paths(tuple(_rel(path) for path in required_files)))
+        required_markers = {REPO_ROOT / path: markers for path, markers in public_required_markers({_rel(path): markers for path, markers in required_markers.items()}).items()}
 
     missing_files = [_rel(path) for path in required_files if not path.exists()]
     for missing in missing_files:
@@ -125,7 +135,7 @@ def build_report() -> dict[str, Any]:
 
     for path, markers in required_markers.items():
         text = _read(path)
-        if not text:
+        if not text and profile != "public":
             continue
         for marker in markers:
             if marker not in text:
@@ -239,7 +249,7 @@ def build_report() -> dict[str, Any]:
                     }
                 )
                 continue
-            for rel_path in values:
+            for rel_path in ([] if profile == "public" else values):
                 candidate = REPO_ROOT / rel_path
                 if not candidate.exists():
                     violations.append(
@@ -273,6 +283,7 @@ def build_report() -> dict[str, Any]:
     return {
         "timestamp": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "registryPath": _rel(REGISTRY_PATH),
+        **({"profile": "public", "privateEvidenceNotApplicable": "Historical scan scope/evidence filesystem custody is not assessed; registry schema and normative bindings remain enforced.", "claimBoundary": "PUBLIC_SCHEMA_AND_BINDINGS_ONLY_NOT_SCAN_COMPLETENESS"} if profile == "public" else {}),
         "surfaceCount": len(surfaces),
         "surfaceIds": sorted(seen_surface_ids),
         "violationCount": len(violations),
@@ -304,10 +315,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Check surface scan continuity registry")
     parser.add_argument("--enforce", action="store_true")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
 
-    report = build_report()
-    if args.json:
+    report = build_report(args.profile)
+    if args.json or args.profile == "public":
         print(json.dumps(report, indent=2))
     else:
         _print_report(report)

@@ -21,11 +21,13 @@ Use financial.risk.profile.ts or custom domain profile.
 ## Step 4: Configure AI Provider
 
 Select provider:
+
 - OpenAI
 - Claude
 - Gemini
 
 Initialize with:
+
 - API key
 - Approved model
 
@@ -34,10 +36,12 @@ Initialize with:
 ## Step 5: Connect Workflow
 
 If using Dexter:
+
 - Use dexter.workflow.adapter.ts
 - Use dexter.agent.bridge.ts
 
 If custom workflow:
+
 - Use cvf.skill.adapter.ts
 - Use cvf.governance.adapter.ts
 
@@ -46,6 +50,7 @@ If custom workflow:
 ## Step 6: Run UAT
 
 For MEDIUM+ skills:
+
 - Use uat.runner.ts
 - Follow uat.rubric.md
 

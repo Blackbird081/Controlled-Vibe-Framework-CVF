@@ -5,6 +5,7 @@
 Không phải mọi yêu cầu đều được xử lý.
 
 CVF từ chối không phải vì:
+
 - AI không đủ thông minh
 - Operator lười
 - Hệ thống bị lỗi
@@ -20,6 +21,7 @@ CVF từ chối vì **yêu cầu vi phạm nguyên tắc an toàn**.
 > "Chứng minh rằng phương án A là tốt nhất"
 
 CVF không làm vì:
+
 - Đây là hợp thức hóa, không phải phân tích
 - Kết quả bị bias từ đầu
 
@@ -30,6 +32,7 @@ CVF không làm vì:
 > "Cứ ước lượng, thiếu cũng được"
 
 CVF không làm vì:
+
 - Output sẽ không đáng tin
 - Không ai chịu trách nhiệm cho dữ liệu bịa
 
@@ -40,6 +43,7 @@ CVF không làm vì:
 > "Làm nhanh, sai tôi chịu"
 
 CVF không làm vì:
+
 - "Tôi chịu" không phải cơ chế kiểm soát
 - Hậu quả có thể vượt quá cá nhân
 
@@ -50,6 +54,7 @@ CVF không làm vì:
 > "Viết hợp đồng pháp lý"
 
 CVF không làm vì:
+
 - Không có thẩm quyền
 - Cần chuyên gia đúng lĩnh vực
 
@@ -58,10 +63,12 @@ CVF không làm vì:
 ## Khi CVF nói "không", bạn nên làm gì?
 
 ### Bước 1: Đọc lý do từ chối
+
 - CVF luôn giải thích vì sao
 - Không từ chối mà không có lý do
 
 ### Bước 2: Xem xét lại yêu cầu
+
 - Có thể điều chỉnh được không?
 - Có thể chia nhỏ không?
 - Có thể bổ sung thông tin không?

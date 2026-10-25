@@ -66,7 +66,9 @@ This registry contains governance metadata for all agent skills (tools) defined 
 ## By Category
 
 ### Safe Operations (R0)
+
 Auto-approved, all roles, all phases:
+
 - AGT-003: Calculator
 - AGT-004: DateTime
 - AGT-005: JSON Parse
@@ -74,7 +76,9 @@ Auto-approved, all roles, all phases:
 - AGT-022: Problem-Solving Framework Router
 
 ### Data Operations (R1)
+
 Auto-approved, read-only or output-only:
+
 - AGT-007: File Read
 - AGT-010: Data Visualization Generator
 - AGT-011: Document Parser
@@ -84,61 +88,87 @@ Auto-approved, read-only or output-only:
 - AGT-021: Context Engineering Optimizer
 
 ### Workspace Operations (R2)
+
 Requires supervision, restricted roles:
+
 - AGT-008: File Write
 
 ### External Operations (R2)
+
 Requires supervision, restricted roles:
+
 - AGT-001: Web Search
 - AGT-006: URL Fetch
 
 ### Knowledge & Integration Operations (R2)
+
 Requires supervision, data-aware:
+
 - AGT-009: RAG Knowledge Retrieval
 - AGT-014: MCP Server Connector
 
 ### Automation Operations (R2)
+
 Requires supervision, hook management:
+
 - AGT-015: Workflow Automation Hook
 
 ### Quality & Integration Operations (R2)
+
 Requires supervision, debugging & MCP isolation:
+
 - AGT-023: Systematic Debugging Engine
 - AGT-024: MCP Context Isolation Manager
 
 ### App Development Operations — Design & Architecture (R1)
+
 Auto-approved, methodology & architecture guidance:
+
 - AGT-025: API Architecture Designer
 - AGT-028: Database Schema Architect
 - AGT-029: Frontend Component Forge
 
 ### App Development Operations — Testing & Security (R2)
+
 Requires supervision, testing/security enforcement:
+
 - AGT-026: Full-Stack Testing Engine
 - AGT-027: Security & Auth Guard
 
 ### Infrastructure & Deployment (R2)
+
 Requires supervision, infrastructure changes:
+
 - AGT-030: Cloud Deployment Strategist
 
 ### Code Quality & Review (R1)
+
 Auto-approved, review methodology:
+
 - AGT-031: Code Review & Verification Gate
 
 ### MCP Tooling (R2)
+
 Requires supervision, server creation:
+
 - AGT-032: MCP Server Builder
 
 ### AI & Multimodal Processing (R2)
+
 Requires supervision, external API + cost implications:
+
 - AGT-033: AI Multimodal Processor
 
 ### Business Operations (R2)
+
 Requires supervision, business system connectors + data synthesis:
+
 - AGT-034: Operator Workflow Orchestrator (10 governed business workflows: Sales, Marketing, Product, Ops, Finance, Strategy)
 
 ### High-Risk Operations (R3)
+
 Requires explicit manual approval:
+
 - AGT-002: Code Execute (Builder only)
 - AGT-012: Agentic Loop Controller (Orchestrator only, multi-step autonomous)
 - AGT-013: Browser Automation (Builder only, Docker container required)
@@ -247,5 +277,6 @@ The following skill extends CVF beyond development into business operator workfl
 ## Governance Specs
 
 See parent directory for full governance specifications:
+
 - [CVF_SKILL_SPEC.md](../../specs/CVF_SKILL_SPEC.md)
 - [CVF_RISK_AUTHORITY_MAPPING.md](../../specs/CVF_RISK_AUTHORITY_MAPPING.md)

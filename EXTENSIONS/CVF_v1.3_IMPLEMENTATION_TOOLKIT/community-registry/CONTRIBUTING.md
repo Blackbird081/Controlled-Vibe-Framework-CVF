@@ -197,6 +197,7 @@ Add relevant tags to help discoverability:
 ```
 
 Common tags:
+
 - By action: `review`, `generate`, `analyze`, `transform`, `send`
 - By subject: `code`, `data`, `file`, `message`, `security`
 - By technology: `sql`, `json`, `python`, `docker`

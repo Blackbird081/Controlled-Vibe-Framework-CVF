@@ -503,7 +503,6 @@ Coverage is PARTIAL: named files and metadata at immutable commits and declared 
 
 Documentary metadata, lockfile and source-text analysis only, qualified PASS_STATIC_ONLY, labelled PARTIAL_SOURCE_REFRESH and never a mirror update. No install, download of a payload, import of a component, model load, inference, WAV, MP4, upstream execution, provider, paid, account, credential, upload, public or deploy effect occurred. Proposed envelopes and cases are proposals. Publisher declarations are recorded, not cleared. C1 is neither selected as runtime nor defaulted; Q001, Q004, P11, send and B2 boundaries are unchanged. DEFERRED_PRIVATE_ONLY.
 
-
 ## Local Review Qualification
 
 Local independent selector probe PASS_STATIC_ONLY, 20 targeted checks, strengthens the candidate metadata selection for this exact lock/target. No installed closure, resolver, package content, rights or runtime proof. npm graph remains PARTIAL and its byte sum covers the worker-selected approximation only. DV-01..09 remain disclosed; 133 requests are below the approved 160 cap, not the estimated plan count. Final helper hash and original expectation seal are verifiable; rev1 has only a reported hash, not retained bytes, so no independent rev1 reconstruction claim.

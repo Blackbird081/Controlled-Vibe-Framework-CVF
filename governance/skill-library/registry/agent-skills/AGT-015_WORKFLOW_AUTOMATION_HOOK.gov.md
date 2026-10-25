@@ -9,7 +9,7 @@
 ## Source
 
 Inspired by claude-code-templates hooks system (pre/post-tool automation, secret scanners, CI/CD triggers, monitoring hooks).  
-Reference: https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/hooks  
+Reference: <https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/hooks>  
 Implementation in v1.6 AGENT_PLATFORM.  
 Skill mapping: `governance/skill-library/examples/AGT-015_WORKFLOW_AUTOMATION_HOOK.md`
 
@@ -20,6 +20,7 @@ Skill mapping: `governance/skill-library/examples/AGT-015_WORKFLOW_AUTOMATION_HO
 Manages pre-tool and post-tool automation hooks that trigger before or after AI tool actions. Enables CI/CD integration, secret scanning, auto-testing, notification dispatching, and monitoring pipelines.
 
 **Actions:**
+
 - Register pre-tool hooks (security scanner, lint checker, input validator)
 - Register post-tool hooks (auto-test runner, notification sender, log aggregator)
 - Execute hook chains in priority order with timeout management
@@ -70,6 +71,7 @@ Manages pre-tool and post-tool automation hooks that trigger before or after AI 
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Hook registration requires human approval
 - [ ] Pre-tool hooks execute before tool invocation
 - [ ] Post-tool hooks execute after tool completion
@@ -78,6 +80,7 @@ Manages pre-tool and post-tool automation hooks that trigger before or after AI 
 - [ ] Hook chain respects priority ordering
 
 **FAIL criteria:**
+
 - [ ] Hooks execute without registration approval
 - [ ] Hook timeout exceeded without termination
 - [ ] Hook failures silently ignored

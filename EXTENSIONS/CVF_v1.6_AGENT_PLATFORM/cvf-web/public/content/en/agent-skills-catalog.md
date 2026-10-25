@@ -33,6 +33,7 @@ All agent skills organized into **7 domains** by function, with relationship map
 | AGT-008 | **File Write** | R2 | Write/modify project files |
 
 **Relationships:**
+
 - AGT-007 + AGT-008 are used by almost all other skills (file I/O)
 - AGT-001 + AGT-006 provide data for AGT-009 (RAG), AGT-016 (Research)
 - AGT-002 is the execution engine for AGT-012 (Agentic Loop), AGT-026 (Testing)
@@ -53,6 +54,7 @@ All agent skills organized into **7 domains** by function, with relationship map
 | AGT-014 | **MCP Server Connector** | R2 | Connect to external MCP tool servers |
 
 **Relationships:**
+
 - AGT-009 (RAG) ← uses AGT-001 (Search) + AGT-006 (Fetch) for data
 - AGT-012 (Loop) ← uses AGT-002 (Execute) for code steps
 - AGT-013 (Browser) ← often orchestrated by AGT-012 (Loop)
@@ -76,6 +78,7 @@ All agent skills organized into **7 domains** by function, with relationship map
 | AGT-020 | **Analytics Dashboard Generator** | R1 | Real-time session monitoring dashboards |
 
 **Relationships:**
+
 - AGT-018 (Teams) ← coordinates AGT-012 (Loop) instances as sub-agents
 - AGT-019 (Loader) → manages loading of ALL other skills dynamically
 - AGT-020 (Analytics) ← uses AGT-010 (Visualization) for chart rendering
@@ -98,6 +101,7 @@ All agent skills organized into **7 domains** by function, with relationship map
 | AGT-024 | **MCP Context Isolation Manager** | R2 | Sandbox MCP tools via dedicated subagent |
 
 **Relationships:**
+
 - AGT-022 (Router) → dispatches to AGT-023 (Debug) when stuck-type = "bug"
 - AGT-023 (Debug) ← uses AGT-002 (Execute) to verify fixes
 - AGT-024 (Isolation) ← wraps AGT-014 (MCP Connector) in sandbox
@@ -121,6 +125,7 @@ All agent skills organized into **7 domains** by function, with relationship map
 | AGT-029 | **Frontend Component Forge** | R1 | Component architecture, Suspense patterns |
 
 **Relationships:**
+
 - **Design trio:** AGT-025 (API) → AGT-028 (Database) → AGT-029 (Frontend) — design flows top-down
 - AGT-026 (Testing) ← validates ALL other skills in this domain
 - AGT-027 (Security) ← protects AGT-025 (API) and AGT-028 (Database)
@@ -143,6 +148,7 @@ All agent skills organized into **7 domains** by function, with relationship map
 | AGT-033 | **AI Multimodal Processor** | R2 | Audio/image/video/document AI processing |
 
 **Relationships:**
+
 - AGT-030 (Deploy) ← takes output from AGT-025→029 (Development domain)
 - AGT-031 (Review) ← validates AGT-023 (Debug) and AGT-026 (Testing) claims
 - AGT-032 (MCP Builder) ← extends AGT-014 (Connector) and AGT-024 (Isolation)
@@ -176,6 +182,7 @@ All agent skills organized into **7 domains** by function, with relationship map
 | 10 | Competitive Intelligence Swarm | Strategy | Agentic Search (swarm) | R3 |
 
 **CVF Governance overlay on every workflow:**
+
 - Verification gates (cross-check AI output with source systems)
 - Confidence scoring (Verified / Inferred / Speculative)
 - Human-in-the-loop for all write actions (no auto-send emails, no auto-schedule)
@@ -183,6 +190,7 @@ All agent skills organized into **7 domains** by function, with relationship map
 - Audit trail for compliance
 
 **Relationships:**
+
 - AGT-034 ← uses AGT-018 (Agent Teams) for swarm workflows (#10)
 - AGT-034 ← uses AGT-021 (Context Engineering) for large document analysis (#7)
 - AGT-034 ← uses AGT-031 (Code Review) verification methodology for all outputs
@@ -232,13 +240,17 @@ All agent skills organized into **7 domains** by function, with relationship map
 ## By Risk Level
 
 ### R0 — Auto (5 skills)
+
 Calculator, DateTime, JSON Parse, Skill Progressive Loader, Problem-Solving Router
 
 ### R1 — Auto (11 skills)
+
 File Read, Data Viz, Doc Parser, Scientific Research, Doc Converter, Analytics Dashboard, Context Optimizer, API Architecture, Database Schema, Frontend Forge, Code Review Gate
 
 ### R2 — Supervised (14 skills)
+
 Web Search, URL Fetch, File Write, RAG Retrieval, MCP Connector, Workflow Hook, Systematic Debug, MCP Isolation, Full-Stack Testing, Security Guard, Cloud Deploy, MCP Builder, AI Multimodal, Operator Workflow
 
 ### R3 — Manual (4 skills)
+
 Code Execute, Agentic Loop, Browser Automation, Agent Team Orchestrator

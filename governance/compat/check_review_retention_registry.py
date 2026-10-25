@@ -16,6 +16,7 @@ import datetime as dt
 import importlib.util
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -25,6 +26,7 @@ from unittest.mock import patch
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ARCHIVE_MODULE_PATH = REPO_ROOT / "scripts" / "cvf_active_archive.py"
+ARCHIVE_MODULE = None
 DEFAULT_BASE_CANDIDATES = ("origin/main", "origin/master", "main", "master")
 REQUIRED_CLASS_IDS = {
     "ACTIVE_DECISION_REVIEW",
@@ -53,6 +55,40 @@ RETENTION_REFERENCE_CANDIDATE_EXACT = {
     "docs/CVF_INCREMENTAL_TEST_LOG.md",
 }
 RETENTION_TARGET_MARKERS = ("docs/reviews/", "docs/reviews/archive/")
+RETENTION_DATE_PATTERNS = (
+    re.compile(r"(\d{4}-\d{2}-\d{2})"),
+    re.compile(r"(\d{4}_\d{2}_\d{2})"),
+)
+PUBLIC_REQUIRED_FILES = (
+    "governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json",
+    "governance/toolkit/05_OPERATION/CVF_ACTIVE_ARCHIVE_GUARD.md",
+    "governance/toolkit/05_OPERATION/CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md",
+    "docs/reference/CVF_REVIEW_RETENTION_CLASSIFICATION.md",
+    "docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md",
+)
+PUBLIC_REQUIRED_MARKERS = {
+    "governance/toolkit/05_OPERATION/CVF_ACTIVE_ARCHIVE_GUARD.md": (
+        "docs/reviews/",
+        "CVF_REVIEW_RETENTION_REGISTRY.json",
+    ),
+    "governance/toolkit/05_OPERATION/CVF_ACTIVE_WINDOW_REGISTRY_GUARD.md": (
+        "canonical active trace/log window",
+        "CVF_ACTIVE_WINDOW_REGISTRY.json",
+        "CVF_ACTIVE_WINDOW_CLASSIFICATION.md",
+    ),
+    "docs/reference/CVF_REVIEW_RETENTION_CLASSIFICATION.md": (
+        "CVF_REVIEW_RETENTION_REGISTRY.json",
+        "ACTIVE_DECISION_REVIEW",
+        "RETAIN_EVIDENCE_REVIEW",
+        "SAFE_TO_ARCHIVE_REVIEW",
+        "registry-pinned `retain-evidence` reviews are blocked even if they are old",
+    ),
+    "docs/reference/CVF_ACTIVE_WINDOW_CLASSIFICATION.md": (
+        "CVF_ACTIVE_WINDOW_REGISTRY.json",
+        "GLOBAL_APPEND_ONLY_LOG_WINDOW",
+        "Registration Rule",
+    ),
+}
 
 
 def _load_archive_module():
@@ -65,7 +101,66 @@ def _load_archive_module():
     return module
 
 
-ARCHIVE_MODULE = _load_archive_module()
+def _archive_module():
+    """Load the private archive executor only for the private evidence scan."""
+    global ARCHIVE_MODULE
+    if ARCHIVE_MODULE is None:
+        ARCHIVE_MODULE = _load_archive_module()
+    return ARCHIVE_MODULE
+
+
+def _require_public_projection() -> str | None:
+    try:
+        from guard_binding_catalog import require_public_projection
+    except ModuleNotFoundError:
+        from governance.compat.guard_binding_catalog import require_public_projection
+    try:
+        require_public_projection(REPO_ROOT)
+    except ValueError as exc:
+        return str(exc)
+    return None
+
+
+def _validate_public_sources() -> list[dict[str, str]]:
+    violations: list[dict[str, str]] = []
+    mismatch = _require_public_projection()
+    if mismatch:
+        violations.append({
+            "type": "public_carrier_mismatch",
+            "path": "AGENTS.md",
+            "message": mismatch,
+        })
+
+    for rel_path in PUBLIC_REQUIRED_FILES:
+        path = REPO_ROOT / rel_path
+        if not path.is_file():
+            violations.append({
+                "type": "missing_public_required_file",
+                "path": rel_path,
+                "message": f"Required public archive contract file is missing: `{rel_path}`.",
+            })
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        for marker in PUBLIC_REQUIRED_MARKERS.get(rel_path, ()):
+            if marker not in text:
+                violations.append({
+                    "type": "missing_public_contract_marker",
+                    "path": rel_path,
+                    "message": f"`{rel_path}` is missing required public marker `{marker}`.",
+                })
+    return violations
+
+
+def _registry_date_from_filename(filename: str) -> dt.datetime | None:
+    for pattern in RETENTION_DATE_PATTERNS:
+        match = pattern.search(filename)
+        if not match:
+            continue
+        try:
+            return dt.datetime.strptime(match.group(1).replace("_", "-"), "%Y-%m-%d")
+        except ValueError:
+            continue
+    return None
 
 
 def _rel(path: Path) -> str:
@@ -256,10 +351,16 @@ def _resolve_changed_paths(base: str | None, head: str | None) -> tuple[dict[str
     return _merge_changed_maps(range_changes, worktree_changes), resolved_base, resolved_head, base_source
 
 
-def _normalize_registry_paths(raw_paths: list[Any], violations: list[dict[str, str]]) -> list[str]:
+def _normalize_registry_paths(
+    raw_paths: list[Any],
+    violations: list[dict[str, str]],
+    *,
+    public_profile: bool = False,
+) -> list[str]:
     normalized: list[str] = []
     seen: set[str] = set()
-    cutoff = dt.datetime.now() - dt.timedelta(days=ARCHIVE_MODULE.AGE_THRESHOLD_DAYS)
+    archive_module = None if public_profile else _archive_module()
+    cutoff = None if public_profile else dt.datetime.now() - dt.timedelta(days=archive_module.AGE_THRESHOLD_DAYS)
 
     for entry in raw_paths:
         if not isinstance(entry, str) or not entry:
@@ -285,7 +386,10 @@ def _normalize_registry_paths(raw_paths: list[Any], violations: list[dict[str, s
         seen.add(candidate)
         normalized.append(candidate)
 
-        if not candidate.startswith("docs/reviews/"):
+        if (
+            not candidate.startswith("docs/reviews/")
+            or (public_profile and (candidate.startswith("/") or any(part in {"", ".", ".."} for part in candidate.split("/"))))
+        ):
             violations.append(
                 {
                     "type": "invalid_retain_evidence_scope",
@@ -296,7 +400,7 @@ def _normalize_registry_paths(raw_paths: list[Any], violations: list[dict[str, s
             continue
 
         candidate_path = REPO_ROOT / Path(candidate)
-        if not candidate_path.exists():
+        if not public_profile and not candidate_path.exists():
             violations.append(
                 {
                     "type": "missing_retain_evidence_file",
@@ -306,7 +410,11 @@ def _normalize_registry_paths(raw_paths: list[Any], violations: list[dict[str, s
             )
             continue
 
-        file_date = ARCHIVE_MODULE.extract_date_from_filename(candidate_path.name)
+        file_date = (
+            _registry_date_from_filename(candidate_path.name)
+            if public_profile
+            else archive_module.extract_date_from_filename(candidate_path.name)
+        )
         if file_date is None:
             violations.append(
                 {
@@ -317,7 +425,15 @@ def _normalize_registry_paths(raw_paths: list[Any], violations: list[dict[str, s
             )
             continue
 
-        if file_date > cutoff:
+        if public_profile and file_date.date() > dt.date.today():
+            violations.append(
+                {
+                    "type": "retain_evidence_future_date",
+                    "path": _rel(_registry_path()),
+                    "message": f"Retain-evidence path `{candidate}` has a future date token.",
+                }
+            )
+        elif cutoff is not None and file_date > cutoff:
             violations.append(
                 {
                     "type": "retain_evidence_not_historical",
@@ -330,17 +446,18 @@ def _normalize_registry_paths(raw_paths: list[Any], violations: list[dict[str, s
 
 
 def _compute_dynamic_blocked_reviews() -> tuple[set[str], dict[str, int]]:
-    cutoff = dt.datetime.now() - dt.timedelta(days=ARCHIVE_MODULE.AGE_THRESHOLD_DAYS)
-    with patch.object(ARCHIVE_MODULE, "PROJECT_ROOT", REPO_ROOT), patch.object(
-        ARCHIVE_MODULE, "ACTIVE_WINDOW_REGISTRY_PATH", _active_window_registry_path()
-    ), patch.object(ARCHIVE_MODULE, "REVIEW_RETENTION_REGISTRY_PATH", _registry_path()):
-        ARCHIVE_MODULE.load_active_window_paths.cache_clear()
-        ARCHIVE_MODULE.load_review_retain_evidence_paths.cache_clear()
-        scan = ARCHIVE_MODULE.scan_root(_reviews_root(), cutoff)
+    archive_module = _archive_module()
+    cutoff = dt.datetime.now() - dt.timedelta(days=archive_module.AGE_THRESHOLD_DAYS)
+    with patch.object(archive_module, "PROJECT_ROOT", REPO_ROOT), patch.object(
+        archive_module, "ACTIVE_WINDOW_REGISTRY_PATH", _active_window_registry_path()
+    ), patch.object(archive_module, "REVIEW_RETENTION_REGISTRY_PATH", _registry_path()):
+        archive_module.load_active_window_paths.cache_clear()
+        archive_module.load_review_retain_evidence_paths.cache_clear()
+        scan = archive_module.scan_root(_reviews_root(), cutoff)
         candidates = scan.archive_candidates
 
-        with patch.object(ARCHIVE_MODULE, "load_review_retain_evidence_paths", return_value=set()):
-            risks, _ = ARCHIVE_MODULE.build_full_plan(cutoff, {"docs/reviews": scan}, candidates)
+        with patch.object(archive_module, "load_review_retain_evidence_paths", return_value=set()):
+            risks, _ = archive_module.build_full_plan(cutoff, {"docs/reviews": scan}, candidates)
 
         blocked = {rel_path for rel_path, risk in risks.items() if risk.blocked}
         counts = {
@@ -349,8 +466,8 @@ def _compute_dynamic_blocked_reviews() -> tuple[set[str], dict[str, int]]:
             "safeToArchiveCount": sum(1 for rel_path in risks if rel_path not in blocked),
         }
 
-        ARCHIVE_MODULE.load_active_window_paths.cache_clear()
-        ARCHIVE_MODULE.load_review_retain_evidence_paths.cache_clear()
+        archive_module.load_active_window_paths.cache_clear()
+        archive_module.load_review_retain_evidence_paths.cache_clear()
         return blocked, counts
 
 
@@ -360,33 +477,94 @@ def build_report(
     head: str | None = None,
     changed_paths: dict[str, list[str]] | None = None,
     scan_mode: str = "auto",
+    profile: str = "private",
 ) -> dict[str, Any]:
+    if profile not in {"private", "public"}:
+        raise ValueError(f"Unsupported retention profile: {profile}")
+    if profile == "public" and scan_mode != "auto":
+        raise ValueError("Public retention profile does not accept a private evidence scan mode")
     timestamp = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     violations: list[dict[str, str]] = []
+    if profile == "public":
+        violations.extend(_validate_public_sources())
     registry_path = _registry_path()
     resolved_base = "N/A"
     resolved_head = "N/A"
     base_source = "not-requested"
 
-    if not registry_path.exists():
+    if not registry_path.is_file():
+        missing_type = "missing_public_required_file" if profile == "public" else "registry_missing"
+        violations.append({
+            "type": missing_type,
+            "path": _rel(registry_path),
+            "message": "Review retention registry is missing.",
+        })
         return {
             "timestamp": timestamp,
             "registryPath": _rel(registry_path),
-            "violationCount": 1,
-            "violations": [
-                {
-                    "type": "registry_missing",
-                    "path": _rel(registry_path),
-                    "message": "Review retention registry is missing.",
-                }
-            ],
+            "profile": profile,
+            "dynamicScanMode": "not_applicable_public_profile" if profile == "public" else "not-run",
+            "violationCount": len(violations),
+            "violations": violations,
             "compliant": False,
         }
 
-    if changed_paths is None:
+    if profile == "public":
+        changed_paths = {}
+        base_source = "not_applicable_public_profile"
+    elif changed_paths is None:
         changed_paths, resolved_base, resolved_head, base_source = _resolve_changed_paths(base, head)
 
-    registry = _read_json(registry_path)
+    try:
+        registry = _read_json(registry_path)
+    except (OSError, json.JSONDecodeError) as exc:
+        if profile == "private":
+            raise
+        violations.append({
+            "type": "invalid_registry_json",
+            "path": _rel(registry_path),
+            "message": f"Public review retention registry is unreadable JSON: {exc}.",
+        })
+        registry = {}
+    if profile == "public" and not isinstance(registry, dict):
+        violations.append({
+            "type": "invalid_registry_shape",
+            "path": _rel(registry_path),
+            "message": "Public review retention registry must be an object.",
+        })
+        registry = {}
+    if profile == "public" and (
+        not isinstance(registry.get("version"), int)
+        or isinstance(registry.get("version"), bool)
+        or registry.get("version") != 1
+    ):
+        violations.append({
+            "type": "invalid_registry_version",
+            "path": _rel(registry_path),
+            "message": "Public review retention registry must declare version 1.",
+        })
+    if profile == "public":
+        reviewed = registry.get("lastReviewed")
+        try:
+            reviewed_date = (
+                dt.date.fromisoformat(reviewed)
+                if isinstance(reviewed, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", reviewed)
+                else None
+            )
+        except ValueError:
+            reviewed_date = None
+        if reviewed_date is None:
+            violations.append({
+                "type": "invalid_last_reviewed_date",
+                "path": _rel(registry_path),
+                "message": "Public review retention registry must declare a valid ISO lastReviewed date.",
+            })
+        elif reviewed_date > dt.date.today():
+            violations.append({
+                "type": "future_last_reviewed_date",
+                "path": _rel(registry_path),
+                "message": "Public review retention registry lastReviewed date cannot be in the future.",
+            })
     classes = registry.get("classes", [])
     if not isinstance(classes, list):
         violations.append(
@@ -398,7 +576,30 @@ def build_report(
         )
         classes = []
 
-    class_ids = {entry.get("id") for entry in classes if isinstance(entry, dict) and entry.get("id")}
+    class_ids: set[str] = set()
+    for entry in classes:
+        if (
+            not isinstance(entry, dict)
+            or not isinstance(entry.get("id"), str)
+            or not entry.get("id")
+            or not isinstance(entry.get("description"), str)
+            or not entry.get("description")
+        ):
+            if profile == "public":
+                violations.append({
+                    "type": "invalid_class_entry",
+                    "path": _rel(registry_path),
+                    "message": "Each public retention class must declare a non-empty id and description.",
+                })
+            continue
+        class_id = entry["id"]
+        if class_id in class_ids and profile == "public":
+            violations.append({
+                "type": "duplicate_class_id",
+                "path": _rel(registry_path),
+                "message": f"Duplicate public retention class id `{class_id}`.",
+            })
+        class_ids.add(class_id)
     missing_class_ids = sorted(REQUIRED_CLASS_IDS - class_ids)
     for class_id in missing_class_ids:
         violations.append(
@@ -420,11 +621,54 @@ def build_report(
         )
         retain_paths = []
 
-    normalized_retain_paths = _normalize_registry_paths(retain_paths, violations)
+    normalized_retain_paths = _normalize_registry_paths(
+        retain_paths,
+        violations,
+        public_profile=profile == "public",
+    )
 
     summary = registry.get("summary", {})
     if isinstance(summary, dict):
         summary_count = summary.get("retainEvidenceCount")
+        if profile == "public":
+            for field in ("activeRecentCount", "retainEvidenceCount", "safeToArchiveCount", "archivedCount"):
+                value = summary.get(field)
+                if value is None:
+                    continue
+                if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+                    violations.append({
+                        "type": "invalid_summary_count",
+                        "path": _rel(registry_path),
+                        "message": f"Public registry summary `{field}` must be a non-negative integer.",
+                    })
+            derived_at = summary.get("derivedAt")
+            try:
+                derived_date = (
+                    dt.date.fromisoformat(derived_at)
+                    if isinstance(derived_at, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", derived_at)
+                    else None
+                )
+            except ValueError:
+                derived_date = None
+            if derived_at is not None and derived_date is None:
+                violations.append({
+                    "type": "invalid_summary_date",
+                    "path": _rel(registry_path),
+                    "message": "Public review registry summary derivedAt must be a valid ISO date when present.",
+                })
+            method = summary.get("derivationMethod")
+            if method is not None and (not isinstance(method, str) or not method.strip()):
+                violations.append({
+                    "type": "invalid_summary_method",
+                    "path": _rel(registry_path),
+                    "message": "Public review registry summary derivationMethod must be non-empty text when present.",
+                })
+            if summary_count is None:
+                violations.append({
+                    "type": "missing_retain_evidence_count",
+                    "path": _rel(registry_path),
+                    "message": "Public review registry summary must declare retainEvidenceCount.",
+                })
         if summary_count is not None and summary_count != len(normalized_retain_paths):
             violations.append(
                 {
@@ -436,27 +680,39 @@ def build_report(
                     ),
                 }
             )
+    elif profile == "public":
+        violations.append({
+            "type": "invalid_summary_shape",
+            "path": _rel(registry_path),
+            "message": "Public review retention registry summary must be an object.",
+        })
 
     if scan_mode not in {"auto", "fast", "full"}:
         raise ValueError(f"Unsupported scan_mode: {scan_mode}")
 
-    detected_retention_affecting = _retention_affecting_changes_present(
-        changed_paths,
-        resolved_base,
-        resolved_head,
-    )
-    retention_affecting = scan_mode == "full" or (
-        scan_mode == "auto" and detected_retention_affecting
-    )
-    if scan_mode == "fast":
-        dynamic_scan_mode = "skipped_fast_hook_mode"
-    elif retention_affecting:
-        dynamic_scan_mode = "full" if scan_mode == "auto" else "full_forced"
+    if profile == "public":
+        detected_retention_affecting = None
+        retention_affecting = None
+        dynamic_scan_mode = "not_applicable_public_profile"
+        dynamic_counts: dict[str, int] | dict[str, str] = {"status": "not_applicable_private_evidence"}
     else:
-        dynamic_scan_mode = "skipped_no_retention_affecting_changes"
-    dynamic_counts: dict[str, int] | dict[str, str]
+        detected_retention_affecting = _retention_affecting_changes_present(
+            changed_paths,
+            resolved_base,
+            resolved_head,
+        )
+        retention_affecting = scan_mode == "full" or (
+            scan_mode == "auto" and detected_retention_affecting
+        )
+        if scan_mode == "fast":
+            dynamic_scan_mode = "skipped_fast_hook_mode"
+        elif retention_affecting:
+            dynamic_scan_mode = "full" if scan_mode == "auto" else "full_forced"
+        else:
+            dynamic_scan_mode = "skipped_no_retention_affecting_changes"
+        dynamic_counts = {}
     missing_registry_paths: list[str] = []
-    if retention_affecting:
+    if profile == "private" and retention_affecting:
         dynamic_blocked, dynamic_counts = _compute_dynamic_blocked_reviews()
         missing_registry_paths = sorted(dynamic_blocked - set(normalized_retain_paths))
         for path in missing_registry_paths:
@@ -470,10 +726,10 @@ def build_report(
                     ),
                 }
             )
-    else:
+    elif profile == "private":
         dynamic_counts = {"status": "skipped"}
 
-    return {
+    report = {
         "timestamp": timestamp,
         "registryPath": _rel(registry_path),
         "range": f"{resolved_base}..{resolved_head}",
@@ -491,12 +747,21 @@ def build_report(
         "violations": violations,
         "compliant": not violations,
     }
+    report["profile"] = profile
+    if profile == "public":
+        report.update({
+            "publicArchiveExecutor": "not_applicable_private_effect_executor",
+            "privateEvidenceScan": "not_applicable_public_profile",
+            "claimBoundary": "PUBLIC_RETENTION_REGISTRY_CONTRACT_ONLY_NOT_PRIVATE_ARCHIVE_READINESS",
+        })
+    return report
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate the CVF review retention registry.")
     parser.add_argument("--base", default=None, help="Git base ref for change-scope detection.")
     parser.add_argument("--head", default=None, help="Git head ref for change-scope detection.")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     parser.add_argument(
         "--scan-mode",
         choices=("auto", "fast", "full"),
@@ -509,7 +774,7 @@ def main() -> int:
     parser.add_argument("--enforce", action="store_true", help="Return non-zero exit code on violations.")
     args = parser.parse_args()
 
-    report = build_report(base=args.base, head=args.head, scan_mode=args.scan_mode)
+    report = build_report(base=args.base, head=args.head, scan_mode=args.scan_mode, profile=args.profile)
     print(json.dumps(report, indent=2))
     if args.enforce and not report["compliant"]:
         return 1

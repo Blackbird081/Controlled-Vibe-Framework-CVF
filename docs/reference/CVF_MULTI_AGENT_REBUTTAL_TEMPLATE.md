@@ -43,4 +43,3 @@ Memory class: POINTER_RECORD
 - final recommendation:
 - remaining disagreement:
 - next governed move:
-

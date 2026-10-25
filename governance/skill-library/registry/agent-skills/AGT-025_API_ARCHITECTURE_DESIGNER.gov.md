@@ -212,12 +212,14 @@ Quality:
 **UAT Link:** `governance/skill-library/uat/results/UAT-AGT-025.md`
 
 **PASS criteria:**
+
 - [ ] API consistency score ≥90% adherence to chosen style guide
 - [ ] 100% endpoints have error contracts
 - [ ] 100% endpoints documented
 - [ ] Versioning strategy in place before breaking changes ship
 
 **FAIL criteria:**
+
 - [ ] API style chosen by preference instead of decision matrix
 - [ ] Public API shipped without rate limiting
 - [ ] Endpoints undocumented

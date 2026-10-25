@@ -26,12 +26,14 @@ KHÁM PHÁ    →    THIẾT KẾ    →    XÂY DỰNG    →    ĐÁNH GIÁ
 > **Mục tiêu:** Đảm bảo vấn đề được hiểu rõ trước khi bất kỳ ai viết code.
 
 ### Đây LÀ gì
+
 - Làm rõ **vấn đề cần giải quyết**
 - Xác định **kết quả mong muốn**
 - Nhận diện **các ràng buộc**
 - Định nghĩa **tiêu chí thành công và thất bại**
 
 ### Đây KHÔNG PHẢI là
+
 - ❌ Thu thập yêu cầu kỹ thuật
 - ❌ Viết spec chi tiết
 - ❌ Định nghĩa giải pháp
@@ -56,15 +58,18 @@ KHÁM PHÁ    →    THIẾT KẾ    →    XÂY DỰNG    →    ĐÁNH GIÁ
 | **AI** | Đặt câu hỏi làm rõ, chỉ ra sự mơ hồ, từ chối tiến hành nếu thiếu thông tin |
 
 ### Quy Tắc
+
 - AI KHÔNG ĐƯỢC đề xuất giải pháp trong Phase A
 - AI KHÔNG ĐƯỢC viết code trong Phase A
 - Nếu ý định không rõ ràng, AI phải HỎI, không đoán
 - Phase A CHƯA HOÀN THÀNH cho đến khi ý định được ghi nhận rõ ràng
 
 ### Gate: A → B
+
 Phase A chưa hoàn thành → **không thể chuyển sang Phase B**.
 
 Danh sách kiểm tra:
+
 - [ ] Ý định được ghi nhận rõ ràng
 - [ ] Phạm vi được xác định (bao gồm và loại trừ)
 - [ ] Các giả định được nêu rõ
@@ -78,12 +83,14 @@ Danh sách kiểm tra:
 > **Mục tiêu:** Chuyển đổi ý định thành phương pháp giải quyết trước khi viết bất kỳ dòng code nào.
 
 ### Đây LÀ gì
+
 - Thiết kế **cách tiếp cận** (hướng đi tổng thể)
 - Định nghĩa **cấu trúc giải pháp** (các thành phần, mối quan hệ)
 - Xác định **luồng logic** (trình tự xử lý, điểm quyết định)
 - Đặt **tiêu chí đánh giá** (cách người dùng kiểm tra mà không cần đọc code)
 
 ### Đây KHÔNG PHẢI là
+
 - ❌ Viết code
 - ❌ Tối ưu hóa kỹ thuật
 - ❌ Triển khai chi tiết
@@ -106,6 +113,7 @@ Danh sách kiểm tra:
 | **AI** | Đề xuất cách tiếp cận, giải thích logic rõ ràng, đảm bảo có thể xác minh được |
 
 ### Quy Tắc
+
 - AI KHÔNG ĐƯỢC viết code triển khai
 - AI KHÔNG ĐƯỢC mở rộng phạm vi ngoài Phase A
 - Thiết kế phải **có thể xác minh** bởi người không đọc được code
@@ -131,11 +139,13 @@ Tất cả các mục phải được đánh dấu. ĐẠT hoặc KHÔNG ĐẠT 
 > **Mục tiêu:** Thực thi thiết kế từ Phase B. Tạo sản phẩm cụ thể để đánh giá.
 
 ### Đây LÀ gì
+
 - Đây là **phase hành động** — trả lời "Thiết kế đã thống nhất được triển khai như thế nào?"
 - Triển khai chính xác những gì đã được thiết kế
 - Ghi nhận các sản phẩm (code, tài liệu, đầu ra)
 
 ### Đây KHÔNG PHẢI là
+
 - ❌ Nơi đưa ra quyết định sản phẩm
 - ❌ Nơi thay đổi thiết kế
 - ❌ Nơi mở rộng phạm vi
@@ -144,12 +154,14 @@ Tất cả các mục phải được đánh dấu. ĐẠT hoặc KHÔNG ĐẠT 
 ### Điều Kiện Tiên Quyết
 
 Phase C KHÔNG THỂ bắt đầu trừ khi:
+
 - [ ] Phase A hoàn thành (ý định rõ ràng)
 - [ ] Phase B hoàn thành (thiết kế được phê duyệt)
 - [ ] Không còn ý định mơ hồ
 - [ ] Không còn yếu tố thiết kế chưa rõ
 
 ### Quy Tắc
+
 - AI thực thi thiết kế **chính xác**
 - Không tối ưu hóa ngoài phạm vi
 - Không tự thay đổi cấu trúc (AI không thể thay đổi kế hoạch của chính nó)
@@ -169,6 +181,7 @@ Lựa chọn 3: Cần thay đổi phạm vi → DỪNG, quay lại Phase A
 AI KHÔNG BAO GIỜ âm thầm thay đổi thiết kế.
 
 ### Tiêu Chí Hoàn Thành
+
 - [ ] Tất cả sản phẩm đã được tạo (code, tài liệu, v.v.)
 - [ ] Đầu ra có thể đánh giá được bằng tiêu chí Phase B
 - [ ] Không còn hành động xây dựng đang chờ
@@ -181,12 +194,14 @@ AI KHÔNG BAO GIỜ âm thầm thay đổi thiết kế.
 > **Mục tiêu:** Kết quả này có khớp với những gì người dùng muốn không?
 
 ### Đây LÀ gì
+
 - Đánh giá đầu ra so với **ý định ban đầu** (Phase A)
 - Kiểm tra so với **tiêu chí thiết kế** (Phase B)
 - Xác định **các sai lệch**
 - Đưa ra **quyết định**: Chấp Nhận hoặc Điều Chỉnh
 
 ### Đây KHÔNG PHẢI là
+
 - ❌ Debug kỹ thuật
 - ❌ Tối ưu hóa hiệu suất
 - ❌ Thay đổi thiết kế
@@ -243,10 +258,13 @@ Mỗi phase có chính xác 4 trạng thái:
 ## Tại Sao 4 Phase?
 
 ### Tại Sao Không Phải 3? (Khám Phá → Xây Dựng → Đánh Giá)
+
 Nếu không có Thiết Kế (Phase B), AI sẽ đoán kiến trúc. Mỗi lần xây dựng trở thành một canh bạc. Bạn sẽ phải xây lại thay vì thiết kế lại.
 
 ### Tại Sao Không Phải 5+ Phase?
+
 Nhiều phase hơn = nhiều chi phí quản lý hơn mà không tạo thêm giá trị tương xứng. 4 phase tương ứng với tư duy tự nhiên:
+
 1. Tôi muốn gì? (suy nghĩ)
 2. Nó nên hoạt động thế nào? (lên kế hoạch)
 3. Xây dựng nó (thực hiện)

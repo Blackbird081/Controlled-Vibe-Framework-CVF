@@ -11,6 +11,7 @@
 
 **Tình huống:**  
 MediScan, một SaaS y tế cung cấp sàng lọc X-quang hỗ trợ bằng AI, đối mặt với:
+
 - **Rủi ro trách nhiệm pháp lý**: Bệnh viện lo ngại về khuyến nghị AI ảnh hưởng đến quyết định của bác sĩ
 - **Hỗn loạn xác thực**: Không có cách chuẩn hóa để xác thực đầu ra AI trước khi sử dụng lâm sàng
 - **Ma sát tích hợp**: Các hệ thống bệnh viện khác nhau có yêu cầu governance khác nhau
@@ -48,6 +49,7 @@ Patient Report + Liability acknowledgment
 
 **Tuần 1-2: Thiết kế Skill Contract**  
 Tạo contract `diagnose_radiology`:
+
 - Đầu vào: Hình ảnh DICOM, thông tin nhân khẩu bệnh nhân, phim chụp trước đó, lịch sử lâm sàng
 - Đầu ra: Top 3 chẩn đoán, độ tin cậy cho mỗi chẩn đoán, phát hiện giải phẫu, khuyến nghị (chấp nhận AI / yêu cầu ý kiến thứ hai / từ chối)
 - Mức rủi ro: **R3** — tác động ở cấp hệ thống đến chăm sóc bệnh nhân
@@ -57,12 +59,14 @@ Tạo contract `diagnose_radiology`:
 
 **Tuần 3: Framework xác thực**  
 Thiết lập OUTPUT_SPEC với xác thực:
+
 - Bác sĩ X-quang phải xác nhận/sửa đổi từng phát hiện AI
 - Điểm tin cậy phải đạt ngưỡng (>85%) HOẶC yêu cầu đánh giá thủ công
 - So sánh phim chụp trước (AI phát hiện thay đổi nhưng bác sĩ có thể không đồng ý)
 - Báo cáo cuối cùng phải bao gồm: tuyên bố "Đã đánh giá với sự hỗ trợ của AI"
 
 **Tuần 4: Tích hợp + Tuân thủ**
+
 - Kết nối với hệ thống EHR bệnh viện (tuân thủ FHIR)
 - Thiết lập ghi nhật ký kiểm toán vào hệ thống tuân thủ bệnh viện
 - Tạo tài liệu trách nhiệm chứng minh sự giám sát của bác sĩ
@@ -86,11 +90,13 @@ Thiết lập OUTPUT_SPEC với xác thực:
 ### Tác động kinh doanh
 
 **Sự chấp nhận của bệnh viện:**
+
 - 4 bệnh viện mở rộng thành 12 bệnh viện trong 6 tháng
 - Khối lượng trường hợp trung bình: +15% (bác sĩ X-quang có thể xử lý nhiều hơn)
 - Thông lượng không chỉ là tốc độ — còn giảm lỗi (giảm trách nhiệm pháp lý)
 
 **Thành công pháp lý:**
+
 - Cuộc họp tiền nộp hồ sơ FDA: Phê duyệt kiến trúc (human-in-loop + contract R3)
 - Hội đồng y tế tiểu bang: Không có lo ngại (nhật ký kiểm toán rõ ràng)
 - Đội pháp lý bệnh viện: Thoải mái với cấu trúc trách nhiệm
@@ -130,11 +136,13 @@ Bác sĩ X-quang ban đầu hoài nghi; cho họ thấy: "AI phát hiện nhữn
 ## Nợ kỹ thuật & Tương lai
 
 **Thách thức hiện tại:**
+
 - Các bệnh viện khác nhau muốn OUTPUT_SPEC khác nhau (một số muốn điểm tin cậy ML, số khác không)
 - Tích hợp với hơn 20 hệ thống EMR = nỗ lực kỹ thuật đáng kể
 - Tuân thủ pháp lý khác nhau theo khu vực pháp lý (FDA vs hội đồng tiểu bang)
 
 **Giai đoạn tiếp theo (Năm 2):**
+
 - Đăng ký khả năng cho skill có phiên bản (chẩn đoán khác nhau theo hệ cơ quan)
 - Nhập skill bên ngoài (bệnh viện có thể gắn dữ liệu đào tạo tùy chỉnh)
 - Dashboard giám sát cho vòng phản hồi của bác sĩ X-quang
@@ -144,6 +152,7 @@ Bác sĩ X-quang ban đầu hoài nghi; cho họ thấy: "AI phát hiện nhữn
 ## Khuyến nghị
 
 **Cho AI y tế:**
+
 - **Luôn sử dụng contract R3** cho hỗ trợ quyết định lâm sàng
 - **Phê duyệt con người bắt buộc** không phải tùy chọn — đó là bảo hiểm trách nhiệm
 - **OUTPUT_SPEC rõ ràng** tiết kiệm hàng tháng trao đổi qua lại với cơ quan quản lý

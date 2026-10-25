@@ -1,6 +1,9 @@
 # PHASE CONTROLLER SPEC
+
 # CVF-Toolkit Core Module
+
 # Status: Authoritative Specification
+
 # Toolkit Version: 1.0.0
 
 ## 1. PURPOSE
@@ -68,6 +71,7 @@ export function transitionPhase(
 ### RULE 1 — Freeze Lock
 
 If `state.freezeActive == true`:
+
 - Only allowed transition: `P6_FROZEN → P0_DESIGN` (formal rollback)
 - Otherwise throw: `PhaseTransitionError("System frozen")`
 
@@ -76,6 +80,7 @@ If `state.freezeActive == true`:
 No skipping allowed.
 
 Example:
+
 - P1 → P4 ❌
 - P2 → P5 ❌
 
@@ -99,6 +104,7 @@ If not satisfied → block transition.
 If `riskLevel == "R4"`:
 
 Must enforce:
+
 - Dual approval
 - Extended UAT
 - Explicit freeze plan documented
@@ -112,11 +118,13 @@ export function activateFreeze(state: PhaseState): PhaseState
 ```
 
 Freeze triggers if:
+
 - `risk >= R3`
 - OR manual governance trigger
 - OR production incident
 
 Set:
+
 - `freezeActive = true`
 - `currentPhase = "P6_FROZEN"`
 
@@ -125,6 +133,7 @@ Set:
 Rollback only allowed: `P6_FROZEN → P0_DESIGN`
 
 Must log:
+
 - Incident reference
 - Root cause summary
 - Risk reassessment
@@ -132,6 +141,7 @@ Must log:
 ## 9. ILLEGAL ACTIONS BLOCKED
 
 The controller must prevent:
+
 - Direct production deployment from build
 - Production deployment without UAT
 - Downgrading risk via phase jump
@@ -163,6 +173,7 @@ If multiple agents participate:
 Effective phase = lowest common allowed phase.
 
 Example:
+
 - Agent A at P5
 - Agent B at P3
 - System cannot claim P5.

@@ -17,12 +17,14 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Chia sẻ thông tin nhạy cảm với đối tác
 - Trước khi pitching cho investors
 - Thảo luận partnership hoặc M&A
 - Thuê contractors/freelancers
 
 **Không phù hợp khi:**
+
 - Cần NDA cực kỳ chặt chẽ → Luật sư draft
 - Nhiều bên (3+) → Cần format khác
 - Cross-border phức tạp → Cần specialist
@@ -66,6 +68,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -83,11 +86,13 @@
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - NDA draft hoàn chỉnh
 - Key clauses explained
 - Customized theo input
 
 **Cấu trúc output:**
+
 ```
 NDA DOCUMENT
 
@@ -116,6 +121,7 @@ NDA DOCUMENT
 - [ ] Remedies clause có
 
 **Red flags (cần Reject):**
+
 - ⚠️ Definition quá hẹp hoặc quá rộng
 - ⚠️ Thiếu exclusions quan trọng
 - ⚠️ Không có remedies clause
@@ -146,7 +152,8 @@ NDA DOCUMENT
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Type: Mutual NDA
 Scope: chia sẻ tài liệu kỹ thuật + pricing
@@ -154,7 +161,8 @@ Term: 2 năm
 Jurisdiction: Việt Nam
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # NDA Key Clauses
 
@@ -165,13 +173,15 @@ Jurisdiction: Việt Nam
 - Remedies: injunctive relief
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Đầy đủ điều khoản chuẩn
 - ✅ Phạm vi bảo mật rõ
 - ✅ Thời hạn hợp lý
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [Contract Review](./01_contract_review.skill.md)
 - [Terms of Service](./03_terms_of_service.skill.md)
 

@@ -255,18 +255,23 @@ The next step must **not** default to:
 Future agents must follow this priority order:
 
 1. **Doctrine fit**
+
 - determine what the new knowledge actually adds to CVF in conceptual terms
 
-2. **Governance fit**
+1. **Governance fit**
+
 - determine which accepted concepts can be governed safely inside existing CVF owner surfaces
 
-3. **Owner-surface mapping**
+1. **Owner-surface mapping**
+
 - map accepted value into existing CVF owners such as Knowledge Layer, Context Builder, Learning Plane, W7-aligned governance, or already delivered bounded `cvf-web` surfaces
 
-4. **Value concentration**
+1. **Value concentration**
+
 - choose the smallest uplift that increases reuse, clarity, or governed operability the most
 
-5. **Implementation only after proof of fit**
+1. **Implementation only after proof of fit**
+
 - implementation may open only after the doctrine/governance layer is clean and the boundary is explicit
 
 ## 5. No-New-Surface Default

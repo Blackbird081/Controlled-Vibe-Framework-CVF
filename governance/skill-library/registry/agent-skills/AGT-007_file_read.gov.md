@@ -17,6 +17,7 @@ Implementation in v1.6 AGENT_PLATFORM
 Read file contents from workspace.
 
 **Actions:**
+
 - Read text files
 - Read configuration files
 - Read data files
@@ -68,12 +69,14 @@ Read file contents from workspace.
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Workspace boundary respected
 - [ ] Path traversal blocked
 - [ ] Access logged
 - [ ] Sensitive files protected
 
 **FAIL criteria:**
+
 - [ ] Access outside workspace
 - [ ] Path traversal allowed
 - [ ] No access logging

@@ -5,29 +5,34 @@ Modern web dashboard for monitoring CVF capabilities, audit logs, and risk distr
 ## Features
 
 ### 📊 Overview
+
 - **Stats Cards** — Active, Proposed, Deprecated, Retired counts
 - **Risk Distribution** — Visual bar chart of R0/R1/R2/R3 capabilities
 - **Execution Stats** — Success rate, average duration, total executions
 - **Recent Activity** — Latest audit log entries
 
 ### 🎯 Capabilities Management
+
 - **Searchable Table** — Filter by name, domain, description
 - **State Filter** — ACTIVE, PROPOSED, APPROVED, DEPRECATED, RETIRED
 - **Risk Filter** — R0, R1, R2, R3
 - **Detail View** — Full capability info with lifecycle transitions
 
 ### 📋 Audit Logs
+
 - **Complete History** — All capability executions
 - **Filter by** — Capability, status (SUCCESS/FAILED), date range
 - **Detail View** — Full inputs, outputs, context, error messages
 - **Dashboard Access Audit** — Local access/actions shown in Audit tab (UI-only)
 
 ### ⚠️ Risk Analysis
+
 - **Risk Level Cards** — R0/R1/R2/R3 with descriptions
 - **Required Controls** — Per risk level
 - **Active Capabilities** — Grouped by risk level
 
 ### ⚙️ Settings
+
 - **Data Source** — Configure registry and audit log paths
 - **Display Options** — Auto-refresh, show retired capabilities
 - **Import/Export** — Backup and restore dashboard data
@@ -137,6 +142,7 @@ Edit CSS variables in `css/styles.css`:
 ### Add New Tabs
 
 1. Add nav item in HTML:
+
 ```html
 <a href="#" class="nav-item" data-tab="newtab">
     <span class="nav-icon">📌</span>
@@ -144,7 +150,8 @@ Edit CSS variables in `css/styles.css`:
 </a>
 ```
 
-2. Add content section:
+1. Add content section:
+
 ```html
 <section id="tab-newtab" class="tab-content">
     <!-- Your content -->
@@ -154,6 +161,7 @@ Edit CSS variables in `css/styles.css`:
 ## Screenshots
 
 ### Overview Tab
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │  Active: 4  │  Proposed: 1  │  Deprecated: 1  │  ...│
@@ -167,6 +175,7 @@ Edit CSS variables in `css/styles.css`:
 ```
 
 ### Capabilities Tab
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │ [Search...]  [All States ▼]  [All Risk Levels ▼]            │

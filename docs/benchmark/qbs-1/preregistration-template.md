@@ -117,7 +117,6 @@ git push origin qbs/preregister/<run-id>
 After the tag is pushed, any change to the frozen inputs creates a new run-set
 version and requires a new pre-registration tag.
 
-
 ## Claim Boundary
 
 This template claims only the pre-registration format and freeze rules. It

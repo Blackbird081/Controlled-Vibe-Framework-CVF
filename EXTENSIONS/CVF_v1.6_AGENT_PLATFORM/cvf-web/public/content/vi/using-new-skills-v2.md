@@ -34,15 +34,18 @@ An toàn/Tự động   Thấp/Tự động     Trung bình/Giám sát  Cao/Th�
 ## Kỹ năng 1: Workflow Automation Hook (AGT-015)
 
 ### Chức năng
+
 Quản lý các hook tự động hóa chạy trước hoặc sau hành động công cụ AI — tương tự git hooks nhưng cho quy trình AI. Lấy cảm hứng từ hệ thống 10 loại hook của claude-code-templates.
 
 ### Khi nào dùng
+
 - Quét bí mật (secrets) trước khi commit code
 - Tự động chạy test sau khi thay đổi code
 - Gửi thông báo (Slack, Telegram) khi có sự kiện
 - Kiểm tra lint/validation trước khi công cụ thực thi
 
 ### Ví dụ prompt
+
 ```
 "Thiết lập pre-commit hook quét bí mật trước khi cho phép commit"
 "Thêm post-tool hook chạy test mỗi khi File Write hoàn thành"
@@ -50,6 +53,7 @@ Quản lý các hook tự động hóa chạy trước hoặc sau hành động 
 ```
 
 ### Loại sự kiện Hook
+
 | Sự kiện | Khi nào | Dùng cho |
 |---------|---------|----------|
 | `PreToolUse` | Trước khi công cụ chạy | Xác thực, quét bảo mật |
@@ -63,15 +67,18 @@ Quản lý các hook tự động hóa chạy trước hoặc sau hành động 
 ## Kỹ năng 2: Trợ lý Nghiên cứu Khoa học (AGT-016)
 
 ### Chức năng
+
 Hỗ trợ quy trình nghiên cứu khoa học có cấu trúc. Lấy cảm hứng từ 139 kỹ năng khoa học của K-Dense-AI bao gồm sinh học, hóa học, y học, vật lý, và khoa học tính toán.
 
 ### Khi nào dùng
+
 - Tổng quan tài liệu với trích dẫn đúng chuẩn
 - Tạo giả thuyết từ bằng chứng hiện có
 - Chọn phương pháp phân tích thống kê
 - Cấu trúc bài báo nghiên cứu (IMRaD)
 
 ### Ví dụ prompt
+
 ```
 "Thực hiện tổng quan tài liệu về kỹ thuật CRISPR gene editing năm 2025"
 "Giúp tôi thiết kế kế hoạch phân tích thống kê cho thử nghiệm lâm sàng 3 nhóm điều trị"
@@ -83,15 +90,18 @@ Hỗ trợ quy trình nghiên cứu khoa học có cấu trúc. Lấy cảm hứ
 ## Kỹ năng 3: Chuyển đổi Định dạng Tài liệu (AGT-017)
 
 ### Chức năng
+
 Tạo, chuyển đổi và phân tích tài liệu đa định dạng. Lấy cảm hứng từ bộ công cụ xử lý tài liệu của Anthropic.
 
 ### Khi nào dùng
+
 - Trích xuất bảng và text từ PDF
 - Tạo tài liệu Word hoặc bài thuyết trình chuyên nghiệp
 - Chuyển đổi giữa các định dạng
 - Phân tích dữ liệu bảng tính
 
 ### Ví dụ prompt
+
 ```
 "Trích xuất tất cả bảng từ PDF này và chuyển sang CSV"
 "Tạo bài thuyết trình PowerPoint từ outline Markdown này"
@@ -103,14 +113,17 @@ Tạo, chuyển đổi và phân tích tài liệu đa định dạng. Lấy c�
 ## Kỹ năng 4: Điều phối Nhóm Agent (AGT-018)
 
 ### Chức năng
+
 Phối hợp nhiều sub-agent chuyên biệt làm việc cùng nhau. Lấy cảm hứng từ mẫu nhóm agent của claude-code-templates.
 
 ### Khi nào dùng
+
 - Nhiệm vụ phức tạp cần nhiều chuyên môn
 - Dự án nghiên cứu cần chu trình lập kế hoạch → thực hiện → đánh giá
 - Quy trình phát triển: thiết kế → code → test → review
 
 ### Mẫu nhóm
+
 ```
 ┌──────────────────────────────────────┐
 │     Điều phối Nhóm Agent             │
@@ -123,6 +136,7 @@ Phối hợp nhiều sub-agent chuyên biệt làm việc cùng nhau. Lấy cả
 ```
 
 ### Kiểm soát quản trị
+
 - **Phê duyệt:** Thành phần nhóm VÀ kế hoạch nhiệm vụ cần phê duyệt thủ công
 - **Sub-agents:** Mỗi sub-agent tuân theo quy tắc quản trị riêng
 - **Xung đột:** Chuyển cho người khi phát hiện (không tự giải quyết)
@@ -133,6 +147,7 @@ Phối hợp nhiều sub-agent chuyên biệt làm việc cùng nhau. Lấy cả
 ## Kỹ năng 5: Tải Kỹ năng Tiến triển (AGT-019)
 
 ### Chức năng
+
 Quản lý cách các định nghĩa kỹ năng tải vào cửa sổ context. Chỉ tải cần thiết khi cần — giữ context gọn nhẹ.
 
 ### Hoạt động tự động
@@ -154,6 +169,7 @@ Quản lý cách các định nghĩa kỹ năng tải vào cửa sổ context. C
 ```
 
 ### Tiết kiệm ngân sách Context
+
 | Chiến lược | Context sử dụng |
 |-----------|----------------|
 | Tải tất cả 20 kỹ năng | ~200,000 tokens |
@@ -165,15 +181,18 @@ Quản lý cách các định nghĩa kỹ năng tải vào cửa sổ context. C
 ## Kỹ năng 6: Tạo Bảng Phân tích (AGT-020)
 
 ### Chức năng
+
 Tạo bảng điều khiển phân tích thời gian thực để giám sát phiên AI, theo dõi sử dụng kỹ năng, tuân thủ quản trị và sức khỏe hệ thống.
 
 ### Khi nào dùng
+
 - Giám sát kỹ năng nào được sử dụng nhiều nhất
 - Theo dõi tỷ lệ tuân thủ quản trị
 - Phát hiện bất thường trong hành vi agent
 - Tạo báo cáo kiểm tra sức khỏe
 
 ### Ví dụ prompt
+
 ```
 "Tạo bảng điều khiển hiển thị sử dụng kỹ năng trong 7 ngày qua"
 "Hiển thị số liệu tuân thủ quản trị cho dự án này"
@@ -185,6 +204,7 @@ Tạo bảng điều khiển phân tích thời gian thực để giám sát phi
 ## Pipeline kết hợp kỹ năng
 
 ### Pipeline 1: Nghiên cứu → Báo cáo tự động
+
 ```
 AGT-016 (Nghiên cứu KH)
     → AGT-010 (Trực quan hóa dữ liệu)
@@ -193,6 +213,7 @@ AGT-016 (Nghiên cứu KH)
 ```
 
 ### Pipeline 2: CI/CD với Quản trị
+
 ```
 AGT-015 (Pre-commit Hook → quét bảo mật)
     → AGT-008 (File Write → lưu thay đổi)
@@ -201,6 +222,7 @@ AGT-015 (Pre-commit Hook → quét bảo mật)
 ```
 
 ### Pipeline 3: Phát triển đa Agent
+
 ```
 AGT-018 (Nhóm Agent → lập kế hoạch + code + review)
     → AGT-012 (Agentic Loop → lặp)

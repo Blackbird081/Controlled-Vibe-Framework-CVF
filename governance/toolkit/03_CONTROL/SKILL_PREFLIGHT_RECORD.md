@@ -22,6 +22,7 @@ Decision Owner:
 ## 2. EXECUTION CONTEXT
 
 Current Phase:
+
 - [ ] Intake
 - [ ] Design
 - [ ] Build
@@ -29,6 +30,7 @@ Current Phase:
 - [ ] Freeze
 
 Current Role:
+
 - [ ] Observer
 - [ ] Analyst
 - [ ] Builder
@@ -36,18 +38,21 @@ Current Role:
 - [ ] Governor
 
 Active Risk Level:
+
 - [ ] R0
 - [ ] R1
 - [ ] R2
 - [ ] R3
 
 Command:
+
 - [ ] CVF:EXECUTE
 - [ ] Other: ____________
 
 Action Summary (ONE sentence):
 
 Planned Artifact Changes:
+
 - Files/paths:
 - Change type: (create/update/delete)
 
@@ -63,6 +68,7 @@ List every skill intended for this action:
 | | | | [ ] Yes [ ] No | [ ] Yes [ ] No | [ ] PASS [ ] FAIL |
 
 Rules:
+
 - Every skill must have an existing mapping record.
 - Any "No" in phase/risk compatibility -> FAIL.
 - FAIL means do not start Build/Execute.
@@ -72,6 +78,7 @@ Rules:
 ## 4. NO-SKILL HANDLING (IF APPLICABLE)
 
 If no suitable skill exists:
+
 - [ ] Build/Execute STOPPED
 - [ ] Intake/Escalation record created
 
@@ -83,12 +90,14 @@ Reference:
 ## 5. PREFLIGHT DECISION
 
 Preflight Result:
+
 - [ ] PASS (execution allowed)
 - [ ] FAIL (execution blocked)
 
 Blocking Reason (required if FAIL):
 
 Required Follow-up:
+
 - [ ] Add/approve skill mapping
 - [ ] Adjust phase or risk
 - [ ] Escalate to Architect/Governor
@@ -114,6 +123,7 @@ Trace Path:
 (where execution log and resulting artifacts are recorded)
 
 Post-Execution Validation:
+
 - [ ] Output stayed within declared skills
 - [ ] No undeclared skill was used
 - [ ] Deviations logged

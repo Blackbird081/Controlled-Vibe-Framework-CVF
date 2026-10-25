@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Update native dependencies (libpng, libexpat, zlib, libwebp, harfbuzz, freetype, libjpeg-turbo, etc.) in SkiaSharp's Skia fork. Handles security CVE fixes, bug fixes, and version bumps. Use when user asks to: - Bump/update a native dependency (libpng, zlib, expat, webp, etc.) - Fix a CVE or security vulnerability in a native library - Update Skia's DEPS file - Check what version of a dependency is currently used - Analyze breaking changes between dependency versions Triggers: "bump libpng", "update zlib", "fix CVE in expat", "update native deps", "what version of libpng", "check for breaking changes". For security audits (finding CVEs, checking PR coverage), use the `security-audit` skill instead.
 
 **Khi nào dùng skill này:**
+
 - Cần Native Dependency Update với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -117,6 +119,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -138,13 +141,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Ưu tiên bối cảnh ngắn, rõ, có ràng buộc
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
-- Nguồn tham khảo: https://github.com/mono/SkiaSharp/tree/main/.github/skills/native-dependency-update
+- Nguồn tham khảo: <https://github.com/mono/SkiaSharp/tree/main/.github/skills/native-dependency-update>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Native Dependency Update cho ứng dụng quản lý công việc
 Context: Startup 5 người, cần go-live 3 tuần
@@ -153,6 +157,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Native Dependency Update Output
 

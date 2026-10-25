@@ -67,6 +67,7 @@ my-project/
 ```
 
 **Then give AI your spec:**
+
 ```
 Read the attached INPUT_SPEC.md. Follow the requirements exactly.
 Do not add features not listed. Do not change the tech stack.
@@ -86,7 +87,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000 → Pick a template → Fill the form → Review the plan → Export → Give to AI.
+Open <http://localhost:3000> → Pick a template → Fill the form → Review the plan → Export → Give to AI.
 
 The governed lifecycle is
 `INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE`.
@@ -228,12 +229,15 @@ When the result is acceptable, close it cleanly:
 ## Tips for Solo Success
 
 ### 1. Start Simple
+
 Don't use all CVF features at once. Start with just `INPUT_SPEC.md`, a simple DESIGN note, and a REVIEW checklist. Add more structure only when you need it.
 
 ### 2. Use the 2-Hour Rule
+
 If a task takes more than 2 hours, break it into smaller tasks. Each task gets its own spec and trace.
 
 ### 3. Keep a Decision Log
+
 When you choose React over Vue, or Python over Node — write it down. Future you will ask "why did I pick this?"
 
 ```markdown
@@ -247,6 +251,7 @@ When you choose React over Vue, or Python over Node — write it down. Future yo
 ```
 
 ### 4. Trace What AI Did
+
 After each AI session, save a quick trace:
 
 ```markdown
@@ -261,6 +266,7 @@ After each AI session, save a quick trace:
 ```
 
 ### 5. Don't Let AI Decide Scope
+
 AI will always suggest "improvements." Your response:
 
 > "That's interesting but out of scope. Stick to the spec."

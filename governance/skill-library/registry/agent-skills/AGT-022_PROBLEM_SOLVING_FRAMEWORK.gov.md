@@ -140,12 +140,14 @@ STUCK?
 **UAT Link:** `governance/skill-library/uat/results/UAT-AGT-022.md`
 
 **PASS criteria:**
+
 - [ ] Problem resolution rate ≥80% within 2 techniques
 - [ ] Technique match accuracy ≥90%
 - [ ] Time-to-resolution ≥40% faster than unstructured approach
 - [ ] Applied technique and outcome documented
 
 **FAIL criteria:**
+
 - [ ] Implementation attempted before analysis completed
 - [ ] More than 2 techniques tried without escalating to human
 - [ ] Technique/outcome not documented

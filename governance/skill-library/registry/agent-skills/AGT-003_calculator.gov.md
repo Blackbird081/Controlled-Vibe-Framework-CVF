@@ -17,6 +17,7 @@ Implementation in v1.6 AGENT_PLATFORM
 Performs mathematical calculations.
 
 **Actions:**
+
 - Arithmetic operations
 - Mathematical functions
 - Unit conversions
@@ -56,10 +57,12 @@ Performs mathematical calculations.
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Correct calculations
 - [ ] Results logged
 - [ ] No side effects
 
 **FAIL criteria:**
+
 - [ ] Incorrect calculations
 - [ ] Unlogged operations

@@ -1,12 +1,15 @@
 # DECISION TEMPLATE  
+
 Controlled Vibe Framework (CVF)
 
 ---
 
 ## Mục đích
+
 Cung cấp **mẫu chuẩn duy nhất** để ghi quyết định trong mọi dự án sử dụng CVF.
 
 Template này:
+
 - Áp dụng cho mọi dự án
 - Không tùy biến theo dự án
 - Đảm bảo tính nhất quán khi audit
@@ -14,6 +17,7 @@ Template này:
 ---
 
 ## Nguyên tắc sử dụng
+
 - Mỗi quyết định = 1 entry
 - Không gộp nhiều quyết định
 - Không chỉnh sửa format
@@ -43,6 +47,7 @@ Impact:
 ---
 
 ## Những điều KHÔNG được làm
+
 - Không thêm trường
 - Không đổi tên trường
 - Không ghi suy luận nội bộ
@@ -51,12 +56,14 @@ Impact:
 ---
 
 ## Quan hệ với file khác
+
 - Được sử dụng trong `DECISIONS.md`
 - Không thay thế `CHANGELOG.md`
 
 ---
 
 ## Trạng thái
+
 - Thuộc CVF v1.0 FINAL
 - Freeze
 - Không chỉnh sửa

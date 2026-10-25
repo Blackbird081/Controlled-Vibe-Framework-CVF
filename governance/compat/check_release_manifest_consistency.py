@@ -26,6 +26,7 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+PUBLIC_PROFILE = False
 MANIFEST_PATH = REPO_ROOT / "docs" / "reference" / "CVF_RELEASE_MANIFEST.md"
 INVENTORY_PATH = REPO_ROOT / "docs" / "reference" / "CVF_MODULE_INVENTORY.md"
 MATURITY_PATH = REPO_ROOT / "docs" / "reference" / "CVF_MATURITY_MATRIX.md"
@@ -165,6 +166,10 @@ def _validate_path_cells(rows: list[list[str]], source: Path, cell_indexes: list
             if index >= len(row):
                 continue
             for rel in _extract_backtick_paths(row[index]):
+                if PUBLIC_PROFILE and rel in {"docs/baselines/", "docs/roadmaps/"}:
+                    # The inventory records provenance ownership, not a public
+                    # shipment of these explicitly private evidence roots.
+                    continue
                 target = (REPO_ROOT / rel).resolve()
                 if not target.exists():
                     violations.append(
@@ -253,7 +258,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="CVF release manifest consistency gate")
     parser.add_argument("--enforce", action="store_true", help="Return non-zero when violations exist")
     parser.add_argument("--json", action="store_true", help="Print JSON report")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
+    global PUBLIC_PROFILE
+    PUBLIC_PROFILE = args.profile == "public"
+    if PUBLIC_PROFILE:
+        from guard_binding_catalog import require_public_projection
+        require_public_projection(REPO_ROOT)
 
     report = build_report()
 

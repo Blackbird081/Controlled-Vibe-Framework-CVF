@@ -20,6 +20,7 @@
 ## ✨ Features
 
 ### 🎯 Core
+
 | Feature | Description |
 |---------|-------------|
 | **Template Library** | Pre-built prompts for Product, Marketing, Business |
@@ -28,6 +29,7 @@
 | **Usage Tracking** | Token & cost monitoring per provider |
 
 ### 🚦 CVF Governance (NEW!)
+
 | Mode | Features |
 |------|----------|
 | **Đơn giản** | Basic phase indicator |
@@ -35,6 +37,7 @@
 | **CVF Full** | + Phase Gates + Checklists + Compliance |
 
 ### 🛡️ Governance Surfaces (read-only)
+
 | Surface | Route | Description |
 |---------|-------|-------------|
 | **Runtime Modules** | `/governance/runtime-modules` | Read-only registry of module Web-exposure state |
@@ -48,6 +51,7 @@ and deferred (`DEFER_WITH_REASON`, see `docs/reviews/CVF_WEB_INHERITANCE_T4_CONT
 in the governance repository) pending a concrete consumer route.
 
 ### 🛠️ Technical
+
 - 🌐 **i18n** - Vietnamese & English
 - 🌙 **Dark Mode** - System-aware themes
 - 📱 **Responsive** - Mobile-optimized
@@ -83,6 +87,7 @@ npm run test:run
 ```
 
 ### ⚙️ Configure API Keys
+
 Go to **Settings** (⚙️) and add your keys:
 
 | Provider | Format | Get Key |
@@ -92,6 +97,7 @@ Go to **Settings** (⚙️) and add your keys:
 | Anthropic | `sk-ant-...` | [Anthropic Console](https://console.anthropic.com) |
 
 ### 🧭 API Key Wizard (NEW)
+
 Nếu chưa có API key, vào Home sẽ thấy banner **“API key chưa được cấu hình”**.  
 Nhấn **API Key Wizard** để cấu hình nhanh.
 
@@ -109,6 +115,7 @@ Tài liệu deploy lên Vercel/Netlify:
 The platform implements **Controlled Vibe Framework** governance rules:
 
 ### 4-Phase Process
+
 ```
 ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
 │  🔍 Phase A │ → │  ✏️ Phase B │ → │  🔨 Phase C │ → │  ✅ Phase D │
@@ -117,6 +124,7 @@ The platform implements **Controlled Vibe Framework** governance rules:
 ```
 
 ### Governance Features
+
 - **Mode Detection** - Auto-detect from spec content
 - **Quality Scoring** - AI response rated 0-100
 - **Accept/Reject/Retry** - User controls AI output
@@ -166,6 +174,7 @@ src/
 ## 📝 Changelog
 
 ### v1.7.0 (2026-07-18)
+
 - ✅ **Governance Read-Only Surfaces** - `/governance/runtime-modules`,
   `/governance/sot3-evidence`, and `/governance/mao-runs`; all three are
   read-only status views with no mutation control
@@ -178,6 +187,7 @@ src/
 - ℹ️ This is a private version alignment, not a public release
 
 ### v1.6.0 (2026-02-07)
+
 - ✅ **CVF Governance Integration**
   - Phase 1: Mode Detection & Badge
   - Phase 2: Quality Scoring + Accept/Reject

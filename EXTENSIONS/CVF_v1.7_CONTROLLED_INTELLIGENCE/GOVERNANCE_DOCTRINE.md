@@ -3,6 +3,7 @@
 ## I. Supremacy Rule
 
 Governance overrides:
+
 - Role decisions
 - Reasoning output
 - Learning injection
@@ -16,6 +17,7 @@ No exception. R3 = hard BLOCK, always.
 ## II. Non-Autonomy Rule
 
 CVF shall not:
+
 - Self-modify rules automatically
 - Override policy based on performance
 - Introduce new roles without governance approval
@@ -38,6 +40,7 @@ Model version is tracked in every snapshot.
 ## IV. Learning Constraint Rule
 
 Lessons:
+
 - Must be versioned
 - Must pass conflict detection (keyword similarity ≥ 40%)
 - Must be signed (integrity hash)
@@ -61,6 +64,7 @@ Telemetry must be persisted with timestamps.
 All external input must pass through prompt sanitizer before reaching reasoning gate.
 
 Injection patterns are detected and neutralized:
+
 - CRITICAL → BLOCK (governance bypass, policy override, unrestricted mode)
 - HIGH → STRIP (role injection, system prompt injection)
 - MEDIUM → LOG (context wipe, persona injection)
@@ -72,6 +76,7 @@ Reasoning gate no longer receives raw input.
 ## VII. Recursion Limit Rule
 
 Role transitions are bounded:
+
 - Max transition depth per session (default 20)
 - Max same-role repetition (default 3)
 - Oscillation pattern detection (A→B→A→B)
@@ -97,6 +102,7 @@ Telemetry can only restrict, never grant more autonomy.
 CVF base framework (v1.0–v1.6) is the absolute standard.
 
 Extension adapts to base CVF — never the other way.
+
 - Risk model: R0–R3 from base, mapped to riskScore 0.0–1.0
 - Phase model: A/B/C/D from base, mapped to AgentRoles
 - Skills: 124 base skills, bridged via cvfPhase field
@@ -106,6 +112,7 @@ Extension adapts to base CVF — never the other way.
 ## X. Version Escalation Rule
 
 Major version (2.0) requires:
+
 - Core governance redesign
 - Architectural topology change
 

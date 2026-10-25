@@ -71,6 +71,7 @@ runtime provider routing, and does not claim autonomous pipeline execution.
 **MA1 role:** Orchestrator
 **Input:** `operatorPrompt: string` — raw operator request
 **Processing:**
+
 - Policy check: scan for prohibited content (security, DLP, risk)
 - Risk level assignment: `R0` / `R1` / `R2` / `R3`
 - Guard Contract scan: verify structural completeness
@@ -85,6 +86,7 @@ runtime provider routing, and does not claim autonomous pipeline execution.
 **MA1 role:** Orchestrator
 **Input:** `IntakeResult`
 **Processing:**
+
 - Decompose operator intent into one or more `WorkOrder` objects
 - Assign worker scope based on LHW12-T3 `workerLifecycleAdvisoryType` and
   `spawnAuthorizationAdvisory`
@@ -98,6 +100,7 @@ runtime provider routing, and does not claim autonomous pipeline execution.
 **MA1 role:** Implementer
 **Input:** `WorkOrder`
 **Processing:**
+
 - Sub-stage A: Draft — read codebase, generate draft output
 - Sub-stage B: Execute — run terminal commands, compile, test
 - Worker timeout detection: if execution exceeds configured timeout →
@@ -113,6 +116,7 @@ runtime provider routing, and does not claim autonomous pipeline execution.
 **MA1 role:** Reviewer
 **Input:** `WorkerExecutionResult` + `WorkerDraftResult`
 **Processing:**
+
 - Review output quality against acceptance criteria
 - Check for logic errors, structural issues, coverage gaps
 - Decision: `APPROVE` / `REJECT` / `HOLD`
@@ -127,6 +131,7 @@ runtime provider routing, and does not claim autonomous pipeline execution.
 **MA1 role:** Auditor
 **Input:** `ReviewerDecision` + all prior receipts
 **Processing:**
+
 - Aggregate all stage receipts into final evidence packet
 - Emit `GovernanceEvidenceReceipt` with chain trace
 - Freeze execution record
@@ -158,6 +163,7 @@ R = Required, O = Optional, N = Not applicable
 ### MA1 Section Mapping
 
 Each stage handoff must follow MA1 packet structure:
+
 - `## 0. Surface Fidelity Gate` — verify stage surface before handoff
 - `## 1. Authority Chain` — cite pipeline stage + receipt from prior stage
 - `## 4. Role Assignment` — assign role for next stage
@@ -170,12 +176,14 @@ Each stage handoff must follow MA1 packet structure:
 ### HumanInterventionRequired
 
 The pipeline emits `HumanInterventionRequired` when:
+
 1. Intake Gate blocks with `policy_blocked` diagnostic and risk level ≥ R2
 2. Worker timeout retry counter exhausts (2 max retries) → stop, do not re-dispatch
 3. Reviewer deadlock counter exceeds threshold (3 rejections) AND micro-task decomposition also fails
 4. Closure Gate detects incomplete receipt chain (missing stage receipt)
 
-### Escalation payload (MA1-compatible):
+### Escalation payload (MA1-compatible)
+
 ```text
 Stage: <current stage>
 Reason: <policy_blocked | worker_timeout_exhausted | reviewer_deadlock_unresolved | incomplete_receipt_chain>

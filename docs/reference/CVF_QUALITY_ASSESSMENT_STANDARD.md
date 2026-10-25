@@ -1,4 +1,5 @@
 # CVF Quality Assessment Standard
+
 Memory class: POINTER_RECORD
 
 > Status: canonical scoring standard for CVF tranche and architecture quality assessments

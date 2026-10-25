@@ -1,4 +1,5 @@
 # Approved AI Model List
+
 CVF Version: Locked by 00_CANONICAL_REFERENCE/cvf_version.lock
 
 ---
@@ -11,6 +12,7 @@ CVF Version: Locked by 00_CANONICAL_REFERENCE/cvf_version.lock
 - gpt-4o-mini
 
 Allowed Usage:
+
 - Financial reasoning
 - Policy drafting
 - Controlled automation
@@ -25,6 +27,7 @@ Allowed Usage:
 - claude-3-haiku
 
 Allowed Usage:
+
 - Long document analysis
 - Compliance review
 - Structured reasoning tasks
@@ -37,6 +40,7 @@ Allowed Usage:
 - gemini-1.5-flash
 
 Allowed Usage:
+
 - Large context reasoning
 - Multimodal tasks
 - Document ingestion

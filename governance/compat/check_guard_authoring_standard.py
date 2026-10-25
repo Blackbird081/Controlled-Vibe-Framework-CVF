@@ -24,6 +24,7 @@ import subprocess
 import sys
 from pathlib import Path
 import re
+import hashlib
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -178,12 +179,61 @@ def _validate_guard(
     return []
 
 
-def _run_check(base: str | None, head: str | None, check_all: bool) -> dict[str, object]:
+def _fenced_code(text: str) -> tuple[tuple[str, ...], ...]:
+    blocks, active = [], []
+    marker, width = "", 0
+    for line in text.replace("\r\n", "\n").splitlines():
+        match = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line)
+        if not marker and match:
+            marker, width = match.group(1)[0], len(match.group(1))
+            active = [line]
+        elif marker:
+            active.append(line)
+            if re.fullmatch(r" {0,3}" + re.escape(marker) + "{" + str(width) + r",}[ \t]*", line):
+                blocks.append(tuple(active))
+                active, marker = [], ""
+    if active:
+        blocks.append(tuple(active))
+    return tuple(blocks)
+
+
+def blank_line_only_layout_change(before: str, after: str) -> bool:
+    return (
+        [line for line in before.splitlines() if line.strip()] == [line for line in after.splitlines() if line.strip()]
+        and _fenced_code(before) == _fenced_code(after)
+    )
+
+
+def _public_blank_line_evidence(path: Path, base: str) -> dict | None:
+    rel = _normalize_rel(path)
+    proc = subprocess.run(["git", "show", f"{base}:{rel}"], cwd=REPO_ROOT, capture_output=True)
+    if proc.returncode:
+        return None
+    before = proc.stdout.decode("utf-8", errors="strict")
+    after = _read(path)
+    if not blank_line_only_layout_change(before, after):
+        return None
+    return {"path": rel, "baseSha256": hashlib.sha256(proc.stdout).hexdigest(),
+            "currentSha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "scope": "UNCHANGED_NONBLANK_LINES_AND_FENCED_CODE"}
+
+
+def _run_check(base: str | None, head: str | None, check_all: bool, profile: str = "private") -> dict[str, object]:
     all_guards = _discover_all_guards()
     changed_files = _get_changed_files(base, head)
     target_guards = all_guards if check_all else [
         path for path in all_guards if _normalize_rel(path) in changed_files
     ]
+    formatting = []
+    if profile == "public" and not check_all:
+        remaining = []
+        for path in target_guards:
+            proof = _public_blank_line_evidence(path, base or "HEAD")
+            if proof:
+                formatting.append(proof)
+            else:
+                remaining.append(path)
+        target_guards = remaining
 
     readme_text = _read(README_PATH)
     kb_text = _read(KB_PATH)
@@ -220,6 +270,7 @@ def _run_check(base: str | None, head: str | None, check_all: bool) -> dict[str,
         "violations": violations,
         "legacySkippedCount": max(len(all_guards) - len(target_guards), 0),
         "compliant": len(violations) == 0,
+        "publicBlankLineOnlyEvidence": formatting,
     }
 
 
@@ -273,10 +324,14 @@ def main() -> int:
     parser.add_argument("--all", action="store_true", help="Validate all guard files instead of only changed/new guards")
     parser.add_argument("--enforce", action="store_true", help="Return non-zero (exit 2) when violations are found")
     parser.add_argument("--json", action="store_true", help="Print JSON report to stdout instead of text")
+    parser.add_argument("--profile", choices=("private", "public"), default="private")
     args = parser.parse_args()
+    if args.profile == "public":
+        from guard_binding_catalog import require_public_projection
+        require_public_projection(REPO_ROOT)
 
     try:
-        report = _run_check(args.base, args.head, args.all)
+        report = _run_check(args.base, args.head, args.all, args.profile)
     except RuntimeError as exc:
         print(str(exc), file=sys.stderr)
         return 1

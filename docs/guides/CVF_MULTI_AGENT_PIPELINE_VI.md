@@ -172,6 +172,7 @@ Xử lý ngoại lệ: Nếu prompt vi phạm chính sách, hệ thống chặn 
 **Bước 2 — Phân rã chỉ thị (Orchestration Stage)**
 
 Orchestrator nhận payload sạch → biên dịch JSON/YAML để phân phối Work Orders:
+
 - 🟢 Option [E]: DeepSeek V4 Pro — tách lệnh JSON siêu rẻ, chấp nhận độ trễ ~15 giây
 - 🔵 Option [B]: Gemini 3.5 Flash (Medium/High Effort) — tốc độ sinh chuỗi 4x TPS, chi phí cực thấp
 - 🔴 Option [O]: GPT-5.5 — định tuyến ý định phức tạp, xử lý logic trạng thái tốt nhất ngành
@@ -179,6 +180,7 @@ Orchestrator nhận payload sạch → biên dịch JSON/YAML để phân phối
 **Bước 3 — Thực thi chuyên sâu (Execution Stage)**
 
 Workers kích hoạt phiên làm việc cô lập (Sandboxed Terminal):
+
 - Giai đoạn 1 (Làm thô): Gemini 3.5 Flash (Medium/High Effort) nuốt trọn codebase lớn 1–2M token, sinh code thô với tốc độ chóng mặt. DeepSeek V4 Pro xử lý batch qua đêm để ép chi phí tối thiểu.
 - Giai đoạn 2 (Thực thi & Sửa lỗi): Qwen 3.7 Max / GPT-5.5 gõ lệnh Terminal CLI, tự chạy vòng lặp sửa lỗi cục bộ (Self-debugging).
 
@@ -187,6 +189,7 @@ Xử lý ngoại lệ — Worker bị treo (>5 phút): `WorkerTimeoutException` 
 **Bước 4 — Thẩm định chất lượng (Review Stage)**
 
 Reviewer đối chiếu đầu ra với Work Orders gốc:
+
 - 🔵 Option [B]: Gemini 3.5 Pro hoặc Claude Sonnet 4.6 (Medium/High Effort) — đọc nhanh toàn bộ mã nguồn, xuất báo cáo thẩm định chi tiết
 - 🔴 Option [O]: Claude Opus 4.8 — đọc báo cáo từ lớp dưới, phán quyết phê duyệt/bác bỏ tối thượng, ngăn chặn 100% bug lọt lưới
 
@@ -227,6 +230,7 @@ MCP giữ "sách luật" và "con dấu duyệt bài". CLI cày cuốc trong san
 > **Phiên bản hợp đồng:** `cvf.multiAgentPipeline.visual.v1` (2026-05)
 >
 > Tài liệu này mô tả kiến trúc pipeline và logic định tuyến vai trò–model của CVF. CVF **không** tuyên bố:
+>
 > - Tương đương hoàn toàn giữa các model hoặc làn provider
 > - Lập lịch đa tác nhân tự động mà không cần giám sát của operator
 > - Tính ổn định production của bất kỳ model bên thứ ba nào (DeepSeek, Gemini, GPT, Qwen)

@@ -26,12 +26,14 @@ DISCOVERY   →    DESIGN      →    BUILD       →    REVIEW
 > **Goal:** Ensure the problem is understood before anyone writes code.
 
 ### What It IS
+
 - Clarifying the **problem to solve**
 - Identifying **desired outcomes**
 - Recognizing **constraints**
 - Defining **success and failure criteria**
 
 ### What It Is NOT
+
 - ❌ Gathering technical requirements
 - ❌ Writing detailed specifications
 - ❌ Defining solutions
@@ -56,15 +58,18 @@ DISCOVERY   →    DESIGN      →    BUILD       →    REVIEW
 | **AI** | Asks clarifying questions, flags ambiguity, refuses to proceed if info missing |
 
 ### Rules
+
 - AI may NOT propose solutions in Phase A
 - AI may NOT write code in Phase A
 - If intent is unclear, AI must ASK, not guess
 - Phase A is INCOMPLETE until intent is recorded clearly
 
 ### Gate: A → B
+
 Phase A incomplete → **cannot move to Phase B**.
 
 Checklist:
+
 - [ ] Intent recorded clearly
 - [ ] Scope defined (in and out)
 - [ ] Assumptions stated
@@ -78,12 +83,14 @@ Checklist:
 > **Goal:** Convert intent into a solution approach before any code is written.
 
 ### What It IS
+
 - Designing the **approach** (overall direction)
 - Defining the **solution structure** (components, relationships)
 - Specifying the **logic flow** (processing sequence, decision points)
 - Setting **evaluation criteria** (how user checks without reading code)
 
 ### What It Is NOT
+
 - ❌ Writing code
 - ❌ Technical optimization
 - ❌ Detailed implementation
@@ -106,6 +113,7 @@ Checklist:
 | **AI** | Proposes approach, explains logic clearly, ensures it's verifiable |
 
 ### Rules
+
 - AI may NOT write implementation code
 - AI may NOT expand scope beyond Phase A
 - Design must be **verifiable** by someone who can't read code
@@ -131,11 +139,13 @@ All boxes must be checked. PASS or FAIL — no partial.
 > **Goal:** Execute the design from Phase B. Create concrete output for evaluation.
 
 ### What It IS
+
 - The **action phase** — answering "How was the agreed design implemented?"
 - Implementing exactly what was designed
 - Recording artifacts (code, docs, outputs)
 
 ### What It Is NOT
+
 - ❌ A place for product decisions
 - ❌ A place for design changes
 - ❌ A place for scope expansion
@@ -144,12 +154,14 @@ All boxes must be checked. PASS or FAIL — no partial.
 ### Prerequisites
 
 Phase C CANNOT start unless:
+
 - [ ] Phase A complete (intent clear)
 - [ ] Phase B complete (design approved)
 - [ ] No ambiguous intent remaining
 - [ ] No unclear design elements
 
 ### Rules
+
 - AI executes design **precisely**
 - No optimization outside scope
 - No self-modifying structure (AI can't change its own plan)
@@ -169,6 +181,7 @@ Option 3: Scope change needed → STOP, return to Phase A
 AI NEVER silently changes the design.
 
 ### Completion Criteria
+
 - [ ] All artifacts created (code, docs, etc.)
 - [ ] Output is evaluable using Phase B criteria
 - [ ] No pending build actions
@@ -181,12 +194,14 @@ AI NEVER silently changes the design.
 > **Goal:** Does this result match what the user wanted?
 
 ### What It IS
+
 - Evaluating output against **original intent** (Phase A)
 - Checking against **design criteria** (Phase B)
 - Identifying **deviations**
 - Making a **decision**: Accept or Adjust
 
 ### What It Is NOT
+
 - ❌ Technical debugging
 - ❌ Performance optimization
 - ❌ Design changes
@@ -243,10 +258,13 @@ Each phase has exactly 4 states:
 ## Why 4 Phases?
 
 ### Why Not 3? (Discovery → Build → Review)
+
 Without Design (Phase B), AI guesses the architecture. Every build becomes a gamble. You end up re-building instead of re-designing.
 
 ### Why Not 5+ phases?
+
 More phases = more overhead without proportional value. The 4 phases match natural thinking:
+
 1. What do I want? (think)
 2. How should it work? (plan)
 3. Make it (do)

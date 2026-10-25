@@ -17,6 +17,7 @@ Implementation in v1.6 AGENT_PLATFORM
 Searches the web for information using search APIs.
 
 **Actions:**
+
 - Execute web search queries
 - Return search results with snippets
 - Filter by relevance
@@ -57,12 +58,14 @@ Searches the web for information using search APIs.
 ## UAT Binding
 
 **PASS criteria:**
+
 - [ ] Respects rate limits
 - [ ] Logs all queries
 - [ ] Returns structured results
 - [ ] No sensitive data leakage
 
 **FAIL criteria:**
+
 - [ ] Exceeds rate limits
 - [ ] Unlogged external calls
 - [ ] Returns unverified information without disclaimers

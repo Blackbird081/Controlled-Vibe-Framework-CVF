@@ -104,4 +104,3 @@ If any of the first three fields are `FAIL`, the overall verdict cannot be `PASS
 - evidence 1:
 - evidence 2:
 - evidence 3:
-

@@ -83,6 +83,7 @@ cvf-skills plan --task "healthcare patient portal" --max 8
 Fintech, Healthcare, Ecommerce, SaaS, Education, Beauty, Food, RealEstate, Gaming, Travel, Media, Generic
 
 **Vietnamese Input:**
+
 ```bash
 cvf-skills plan --task "xây dựng ứng dụng thương mại điện tử"
 cvf-skills plan --task "dashboard tài chính ngân hàng"
@@ -173,6 +174,7 @@ node --test src/commands.test.js
 ```
 
 23 tests covering:
+
 - BM25 engine (indexing, search, ranking)
 - CSV parsing (standard and quoted fields)
 - Data loading (skills index, reasoning rules)

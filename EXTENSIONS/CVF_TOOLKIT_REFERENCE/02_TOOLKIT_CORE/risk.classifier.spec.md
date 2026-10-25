@@ -1,6 +1,9 @@
 # RISK CLASSIFIER SPEC
+
 # CVF-Toolkit Core Module
+
 # Status: Authoritative Specification
+
 # Toolkit Version: 1.0.0
 
 ## 1. PURPOSE
@@ -57,6 +60,7 @@ export function classify(
 ## 5. RISK COMPUTATION LOGIC
 
 ### STEP 1 — Start with Skill Base Risk
+
 `risk = skillBaseRisk`
 
 ### STEP 2 — Capability Alignment
@@ -101,6 +105,7 @@ Add reason: "Financial override applied"
 | prod        | R1                                |
 
 If `risk > environmentMax`:
+
 - Set `environmentCapExceeded = true`
 - Set `requiresApproval = true`
 - Do NOT downgrade risk.
@@ -126,6 +131,7 @@ If `risk > environmentMax`:
 ### STEP 8 — Freeze Requirement
 
 Freeze required if:
+
 - `risk >= R3`
 - OR `environment == prod`
 - OR `affectsProduction == true`
@@ -161,6 +167,7 @@ Risk engine does not average. Highest always dominates.
 ## 9. ERROR CONDITIONS
 
 Throw `RiskViolationError` if:
+
 - Capability mismatch
 - Invalid risk input
 - Unsupported environment
@@ -185,6 +192,7 @@ Logging handled by governance.guard.
 ## 11. SECURITY RULE
 
 risk.classifier must:
+
 - Be pure function (no side effects)
 - Not access DB directly
 - Not depend on extension code

@@ -1,7 +1,136 @@
-* text=auto eol=lf
-*.png binary
-*.jpg binary
-*.jpeg binary
-*.gif binary
-*.ico binary
-*.pdf binary
+# Preserve exact review and design evidence bytes for SHA-256 reconciliation.
+# Product coverage learning/control raw pins must survive checkout.
+docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md text eol=lf
+docs/reviews/learnings/CVF_PRODUCT_MILESTONE_COVERAGE_LEARNING_2026-10-23.md text eol=lf
+docs/reviews/evidence/cvf-product-milestone-coverage-binding-20261023.json text eol=lf
+docs/guides/CVF_ORCHESTRATOR_MODEL_SELECTION_*_2026-10-10.md -text whitespace=cr-at-eol
+docs/reference/CVF_ORCHESTRATOR_MODEL_SELECTION_*_2026-10-10.md -text whitespace=cr-at-eol
+docs/roadmaps/CVF_ORCHESTRATOR_MODEL_SELECTION_SYSTEM_CHAIN_ROADMAP_2026-10-10.md -text whitespace=cr-at-eol
+docs/reviews/CVF_MODEL_SELECTION_DESIGN_RECONCILIATION_2026-10-10.md -text whitespace=cr-at-eol
+docs/reviews/evidence/model-selection-design-review-20261010/* -text whitespace=cr-at-eol
+# Keep this learning's typed raw-byte pins stable across Windows checkouts.
+docs/reviews/evidence/ccma-learning-*-20261012.* text eol=lf
+docs/reviews/learnings/CVF_CCMA_PROOF_PREPARATION_LEARNING_2026-10-12.md text eol=lf
+docs/reviews/evidence/ccma-seven-finding-learning-source-20261013.json text eol=lf
+docs/reviews/learnings/CVF_CCMA_SEVEN_FINDING_DELIVERY_LEARNING_2026-10-13.md text eol=lf
+docs/reviews/evidence/ccma-seven-finding-project-loopback-20261013.json text eol=lf
+docs/reviews/evidence/ccma-seven-finding-delivery-receipt-20261013.json text eol=lf
+docs/reviews/evidence/ccma-seven-finding-application-receipt-20261013.json text eol=lf
+docs/reference/downstream_gate_profile/CVF_PER_OUTPUT_DELIVERY_EVIDENCE_CHECKLIST.md text eol=lf
+docs/reference/downstream_gate_profile/CVF_BUILD_LEARNING_EVIDENCE_CHECKLIST.md text eol=lf
+# History recovery: preserve the immutable worker submission and Local raw pin.
+docs/reviews/CVF_NCR_HISTORY_RECOVERY_WORKER_RETURN_2026-10-12.md -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-history-recovery-worker-20261012.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-history-recovery-local-20261012.json text eol=lf
+
+# Draft recovery: immutable submitted worker evidence and stable Local proof.
+docs/reviews/CVF_NCR_DRAFT_RECOVERY_WORKER_RETURN_2026-10-12.md -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-draft-recovery-worker-20261012.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-draft-recovery-local-20261012.json text eol=lf
+
+# Draft export: immutable worker bytes and stable raw-hash closure pins.
+docs/reviews/CVF_NCR_DRAFT_EXPORT_WORKER_RETURN_2026-10-12.md -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-draft-export-worker-20261012.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-draft-export-local-20261012.json text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_DRAFT_EXPORT_2026-10-12.md text eol=lf
+docs/baselines/CVF_GC018_NCR_DRAFT_EXPORT_2026-10-12.md text eol=lf
+docs/reviews/evidence/cvf-worker-model-tranche-evaluation-2026-10-10.json text eol=lf
+docs/reviews/CVF_WORKER_MODEL_SELECTION_PRELIMINARY_REPORT_2026-10-10.md text eol=lf
+
+# Stable raw dispatch identity for incoming Agent Chat lifecycle.
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_AGENT_HANDOFF_2026-10-12.md text eol=lf
+docs/baselines/CVF_GC018_NCR_AGENT_HANDOFF_2026-10-12.md text eol=lf
+docs/reviews/evidence/ncr-agent-handoff-dispatch-20261012.json text eol=lf
+
+# NCR receiving lifecycle closure raw evidence
+"EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/layout.tsx" text eol=lf
+"EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/layout-agent-handoff.test.tsx" text eol=lf
+docs/reviews/evidence/ncr-agent-handoff-worker-20261012.json text eol=lf
+docs/reviews/CVF_NCR_AGENT_HANDOFF_WORKER_RETURN_2026-10-12.md text eol=lf
+docs/reviews/CVF_NCR_AGENT_HANDOFF_COMPLETION_2026-10-12.md text eol=lf
+docs/reviews/evidence/ncr-agent-handoff-local-20261012.json text eol=lf
+docs/reviews/evidence/cvf-worker-model-tranche-evaluation-2026-10-10.json text eol=lf
+docs/reviews/CVF_WORKER_MODEL_SELECTION_PRELIMINARY_REPORT_2026-10-10.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_AGENT_HANDOFF_2026-10-12.md text eol=lf
+docs/baselines/CVF_GC018_NCR_AGENT_HANDOFF_2026-10-12.md text eol=lf
+
+# Stable raw dispatch identity for chat history consistency.
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_CHAT_HISTORY_2026-10-12.md text eol=lf
+docs/baselines/CVF_GC018_NCR_CHAT_HISTORY_2026-10-12.md text eol=lf
+docs/reviews/evidence/ncr-chat-history-dispatch-20261012.json text eol=lf
+
+# NCR chat history closure raw evidence
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/AgentChatWithHistory.tsx text eol=lf
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/chat-history.tsx text eol=lf
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/AgentChatHistoryConsistency.test.tsx text eol=lf
+docs/reviews/evidence/ncr-chat-history-worker-20261012.json text eol=lf
+docs/reviews/CVF_NCR_CHAT_HISTORY_WORKER_RETURN_2026-10-12.md text eol=lf
+docs/reviews/CVF_NCR_CHAT_HISTORY_COMPLETION_2026-10-12.md text eol=lf
+docs/reviews/evidence/ncr-chat-history-local-20261012.json text eol=lf
+
+# NCR result isolation dispatch and raw future evidence
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_RESULT_ISOLATION_2026-10-12.md text eol=lf
+docs/baselines/CVF_GC018_NCR_RESULT_ISOLATION_2026-10-12.md text eol=lf
+docs/reviews/evidence/ncr-result-isolation-dispatch-20261012.json text eol=lf
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/ResultViewer.tsx text eol=lf
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/ResultViewer.isolation.test.tsx text eol=lf
+docs/reviews/evidence/ncr-result-isolation-worker-20261012.json text eol=lf
+docs/reviews/CVF_NCR_RESULT_ISOLATION_WORKER_RETURN_2026-10-12.md text eol=lf
+docs/reviews/CVF_NCR_RESULT_ISOLATION_COMPLETION_2026-10-12.md text eol=lf
+docs/reviews/evidence/ncr-result-isolation-local-20261012.json text eol=lf
+
+# NCR offline UI journey packet and future evidence raw identity
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_OFFLINE_JOURNEY_2026-10-13.md text eol=lf
+docs/baselines/CVF_GC018_NCR_OFFLINE_JOURNEY_2026-10-13.md text eol=lf
+docs/reviews/evidence/ncr-offline-journey-dispatch-20261013.json text eol=lf
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/home/page.journey.test.tsx text eol=lf
+docs/reviews/evidence/ncr-offline-journey-worker-20261013.json text eol=lf
+docs/reviews/CVF_NCR_OFFLINE_JOURNEY_WORKER_RETURN_2026-10-13.md text eol=lf
+docs/reviews/CVF_NCR_OFFLINE_JOURNEY_COMPLETION_2026-10-13.md text eol=lf
+docs/reviews/evidence/ncr-offline-journey-local-20261013.json text eol=lf
+
+# NCR offline UI journey packet and future evidence raw identity
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_OFFLINE_JOURNEY_2026-10-13.md text eol=lf
+docs/baselines/CVF_GC018_NCR_OFFLINE_JOURNEY_2026-10-13.md text eol=lf
+docs/reviews/evidence/ncr-offline-journey-dispatch-20261013.json text eol=lf
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/home/page.journey.test.tsx text eol=lf
+docs/reviews/evidence/ncr-offline-journey-worker-20261013.json text eol=lf
+docs/reviews/CVF_NCR_OFFLINE_JOURNEY_WORKER_RETURN_2026-10-13.md text eol=lf
+docs/reviews/CVF_NCR_OFFLINE_JOURNEY_COMPLETION_2026-10-13.md text eol=lf
+docs/reviews/evidence/ncr-offline-journey-local-20261013.json text eol=lf
+
+# NCR brief-panel packet and future evidence raw identity
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_BRIEF_REOPEN_2026-10-13.md text eol=lf
+docs/baselines/CVF_GC018_NCR_BRIEF_REOPEN_2026-10-13.md text eol=lf
+docs/reviews/evidence/ncr-brief-reopen-dispatch-20261013.json text eol=lf
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/DynamicForm.tsx text eol=lf
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/DynamicForm.brief-lifecycle.test.tsx text eol=lf
+docs/reviews/evidence/ncr-brief-reopen-worker-20261013.json text eol=lf
+docs/reviews/CVF_NCR_BRIEF_REOPEN_WORKER_RETURN_2026-10-13.md text eol=lf
+docs/reviews/CVF_NCR_BRIEF_REOPEN_COMPLETION_2026-10-13.md text eol=lf
+docs/reviews/evidence/ncr-brief-reopen-local-20261013.json text eol=lf
+
+docs/reviews/CVF_NCR_BRIEF_REOPEN_SOL_WORKER_RETURN_2026-10-13.md text eol=lf
+docs/reviews/evidence/ncr-brief-reopen-sol-worker-20261013.json text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_BRIEF_REOPEN_RETURN_REPAIR_2026-10-13.md text eol=lf
+docs/baselines/CVF_GC018_NCR_BRIEF_REOPEN_RETURN_REPAIR_2026-10-13.md text eol=lf
+docs/reviews/CVF_NCR_BRIEF_REOPEN_PRIMARY_QUALITY_2026-10-13.md text eol=lf
+docs/reviews/evidence/ncr-brief-reopen-quality-20261013.json text eol=lf
+docs/work_orders/archive/CVF_AGENT_WORK_ORDER_NCR_BRIEF_REOPEN_RETURN_REPAIR_DISPATCH_2026-10-13.md text eol=lf
+
+# Incident raw-pin recovery 2026-10-21: reviewed LF bytes survive Windows restore.
+governance/compat/run_agent_autorun_workflow_gate.py text eol=lf
+governance/compat/agent_autorun_machine_verification.py text eol=lf
+governance/compat/run_agent_automation_assist.py text eol=lf
+governance/compat/agent_automation_machine_verification_readout.py text eol=lf
+governance/compat/learning_application_binding.py text eol=lf
+governance/compat/check_dispatch_release_readiness.py text eol=lf
+EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.ts text eol=lf
+EXTENSIONS/CVF_GUARD_CONTRACT/src/runtime/mandatory-gateway.test.ts text eol=lf
+docs/reviews/CVF_MILESTONE_COVERAGE_MACHINE_LOCAL_REVIEW_2026-10-23.md text eol=lf
+docs/reviews/evidence/cvf-milestone-coverage-machine-20261023.json text eol=lf
+
+# Stable exact current-authority raw pins across Windows checkout.
+docs/baselines/CVF_GC018_JEV_CAPABILITY_SUGGESTION_ADAPTER_2026-10-25.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_JEV_SKILL_SUGGESTION_LOCAL_CONTINUATION_2026-10-25.md text eol=lf
+docs/CVF_ARCHITECTURE_DECISIONS_ARCHIVE_ADR011-015.md text eol=lf

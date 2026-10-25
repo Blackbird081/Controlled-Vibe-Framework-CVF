@@ -18,6 +18,7 @@ Không yêu cầu.
 Phân tích user journeys và flows trong sản phẩm. Tìm ra friction points, drop-offs, và opportunities để optimize conversion và retention.
 
 **Khi nào nên dùng:**
+
 - Funnel conversion rate thấp
 - High drop-off ở specific steps
 - Redesign user journey
@@ -62,6 +63,7 @@ Phân tích user journeys và flows trong sản phẩm. Tìm ra friction points,
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Bắt buộc | Mô tả |
@@ -79,6 +81,7 @@ Phân tích user journeys và flows trong sản phẩm. Tìm ra friction points,
 ## ✅ Checklist Đánh giá
 
 ### Flow Structure
+
 - [ ] Số bước có tối ưu (ít nhất có thể)?
 - [ ] Mỗi bước có clear purpose?
 - [ ] Progress indicator có visible?
@@ -86,12 +89,14 @@ Phân tích user journeys và flows trong sản phẩm. Tìm ra friction points,
 - [ ] Flow có logical sequence?
 
 ### Onboarding/First-Time Experience
+
 - [ ] First step có compelling?
 - [ ] Value có được show early?
 - [ ] Có quick win cho users mới?
 - [ ] Not asking too much upfront?
 
 ### Friction Points
+
 - [ ] Không có unnecessary steps?
 - [ ] Form fields có minimal?
 - [ ] No confusing UI elements?
@@ -99,12 +104,14 @@ Phân tích user journeys và flows trong sản phẩm. Tìm ra friction points,
 - [ ] Recovery path nếu fail?
 
 ### Mobile Experience
+
 - [ ] Flow có work well on mobile?
 - [ ] Input methods phù hợp mobile?
 - [ ] No horizontal scrolling?
 - [ ] Touch targets đủ lớn?
 
 ### Exit Points
+
 - [ ] Clear exit options (không trap users)?
 - [ ] Save progress cho long flows?
 - [ ] Exit surveys để capture feedback?
@@ -127,7 +134,8 @@ Phân tích user journeys và flows trong sản phẩm. Tìm ra friction points,
 
 ## 💡 Tips & Examples
 
-### Funnel Analysis Framework:
+### Funnel Analysis Framework
+
 ```
 Entry → Step 1 → Step 2 → Step 3 → Conversion
 100%    80%       60%       40%       20%
@@ -137,9 +145,10 @@ Drop rate: 20%    25%       33%       50%
        Investigate the biggest drops first
 ```
 
-### Common Flow Templates:
+### Common Flow Templates
 
 **E-commerce Checkout:**
+
 ```
 Cart → Shipping → Payment → Confirm → Success
   ↓        ↓          ↓         ↓
@@ -148,6 +157,7 @@ Cart → Shipping → Payment → Confirm → Success
 ```
 
 **SaaS Signup:**
+
 ```
 Landing → Email → Verify → Onboard → Aha Moment
     ↓        ↓        ↓         ↓
@@ -156,6 +166,7 @@ Landing → Email → Verify → Onboard → Aha Moment
 ```
 
 **Mobile App Onboarding:**
+
 ```
 Splash → Value Props → Permission → Login → Home
    ↓         ↓            ↓           ↓
@@ -163,7 +174,8 @@ Splash → Value Props → Permission → Login → Home
  max      max          why        login
 ```
 
-### Step Optimization Checklist:
+### Step Optimization Checklist
+
 ```
 For each step, ask:
 1. Is this step necessary?
@@ -173,7 +185,8 @@ For each step, ask:
 5. Can it be skipped for returning users?
 ```
 
-### Analytics to Track:
+### Analytics to Track
+
 | Metric | What it tells you |
 |--------|------------------|
 | **Step conversion rate** | Where users drop |
@@ -211,7 +224,8 @@ Sau khi hoàn thành **User Flow Analysis**, tiếp tục với:
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Flow: Tạo phiếu nhập hàng từ PO
 Steps: 7 bước
@@ -219,7 +233,8 @@ Drop-off: 35% tại bước chọn nhà cung cấp
 Time to complete: 4.5 phút
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # User Flow Findings
 
@@ -236,13 +251,15 @@ Home → PO List → PO Detail → "Receive" → Select Supplier → Scan Items 
 - Hiển thị progress (3/7)
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Chỉ ra điểm rơi rõ ràng
 - ✅ Có nguyên nhân + giải pháp
 - ✅ Dễ chuyển thành backlog UX
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [User Persona Development](./user_persona_development.skill.md)
 - [UX Heuristic Evaluation](./ux_heuristic_evaluation.skill.md)
 
@@ -253,7 +270,7 @@ Home → PO List → PO Detail → "Receive" → Select Supplier → Scan Items 
 | 1.0.1 | 2026-02-07 | Domain refinement: examples + flow alignment |
 | 1.0.0 | 2026-02-07 | Initial standardized metadata + example/related sections |
 
-## 🔗 Next Step
+## 🔗 Next Step: UX Heuristic Evaluation
 
 Sau khi hoàn thành **User Flow Analysis**, tiếp tục với:
 → [UX Heuristic Evaluation](./ux_heuristic_evaluation.skill.md)
@@ -261,3 +278,5 @@ Sau khi hoàn thành **User Flow Analysis**, tiếp tục với:
 ---
 
 *CVF Skill Library v1.5.2 | Product & UX Domain*
+
+<!-- Text Encoding Exception: pre-existing localized text and symbols are retained; this repair changes only navigation or Markdown structure. -->

@@ -1,4 +1,5 @@
 # ✅ AGENT AI – USER ACCEPTANCE TESTING (UAT)  
+
 ## with CVF Control (Capability – Validation – Failure)
 
 > **Version:** 1.0.1  
@@ -17,11 +18,13 @@ Before executing UAT, identify the governing skill record from:
 | **Agent Skills** | `../registry/agent-skills/` | 8 agent tools from v1.6 AGENT_PLATFORM |
 
 Each `.gov.md` file contains:
+
 - Risk Level (R0-R4)
 - Allowed Roles/Phases
 - UAT Binding criteria (PASS/FAIL)
 
 📋 **Index Files:**
+
 - [User Skills Index](../registry/user-skills/INDEX.md)
 - [Agent Skills Index](../registry/agent-skills/INDEX.md)
 
@@ -48,12 +51,14 @@ Each `.gov.md` file contains:
 > **Mandatory – must be completed before executing UAT**
 
 ### 1.1 Scope Definition
+
 - **Allowed Scope**
-  - 
+  - `____________________________`
 - **Forbidden Scope**
-  - 
+  - `____________________________`
 
 ### 1.2 Authority Level
+
 | Item | Value |
 |---|---|
 | Decision Authority | ☐ None ☐ Recommend ☐ Execute |
@@ -61,6 +66,7 @@ Each `.gov.md` file contains:
 | Human Override Required | ☐ Yes ☐ Optional ☐ No |
 
 ### 1.3 Risk Classification
+
 | Dimension | Level |
 |---|---|
 | Business Impact | ☐ Low ☐ Medium ☐ High |
@@ -72,18 +78,22 @@ Each `.gov.md` file contains:
 ## 2. CVF Control Definition (GLOBAL)
 
 ### 2.1 Capability Rules
+
 - Agent chỉ được trả lời trong phạm vi dữ liệu được cấp quyền
 - Không tự suy luận nghiệp vụ ngoài dữ liệu
 - Không giả định khi thiếu thông tin
 
 ### 2.2 Validation Rules
+
 Output **phải** đáp ứng:
+
 - ☐ Có reference (source / document / system)
 - ☐ Có mức độ chắc chắn (confidence qualifier)
 - ☐ Không dùng ngôn ngữ khẳng định tuyệt đối khi dữ liệu chưa đủ
 - ☐ Thể hiện rõ phạm vi trả lời
 
 ### 2.3 Failure Rules (Safe Failure)
+
 - Thiếu dữ liệu → từ chối trả lời & nêu lý do
 - Source conflict → yêu cầu xác nhận người dùng
 - Tool / RAG error → degrade sang safe mode
@@ -94,9 +104,11 @@ Output **phải** đáp ứng:
 ## 3. UAT Test Case Template (CVF-based)
 
 ### 🧪 UAT-ID
+
 `UAT-AI-<Module>.<Number>`
 
 ### 🧩 Category
+
 ☐ Happy Path  
 ☐ Boundary  
 ☐ Hallucination Control  
@@ -108,6 +120,7 @@ Output **phải** đáp ứng:
 ---
 
 ### 🔹 Preconditions
+
 - Agent status:
 - Data index status:
 - Tool availability:
@@ -117,7 +130,9 @@ Output **phải** đáp ứng:
 ---
 
 ### 🔹 Input (Exact User Prompt)
+
 [Paste exact user input here]
+
 ---
 
 ### 🔹 Expected Output (Criteria-based)
@@ -143,6 +158,7 @@ Output **phải** đáp ứng:
 ---
 
 ### 🔹 Acceptance Decision
+
 - ☐ PASS  
 - ☐ SOFT FAIL (Human review required)  
 - ☐ FAIL (Block usage / redesign required)
@@ -150,6 +166,7 @@ Output **phải** đáp ứng:
 ---
 
 ### 🔹 Evidence & Notes
+
 - Output snapshot:
 - Reference used:
 - Logs / Trace ID:

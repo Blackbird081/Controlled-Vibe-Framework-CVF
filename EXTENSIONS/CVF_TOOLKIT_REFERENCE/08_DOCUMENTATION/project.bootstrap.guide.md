@@ -13,6 +13,7 @@ Import CVF-TOOLKIT as core module.
 ## 2. Decide Domain Extension
 
 Options:
+
 - Financial
 - Logistics
 - Legal

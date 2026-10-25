@@ -17,12 +17,14 @@
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Launch sản phẩm/website mới
 - Cập nhật ToS hiện có
 - Mở rộng sang thị trường mới
 - Thêm tính năng mới cần legal coverage
 
 **Không phù hợp khi:**
+
 - Regulated industries (finance, healthcare) → Cần specialist
 - Multi-jurisdiction complex → Cần legal team
 - Already have legal disputes → Cần luật sư
@@ -66,6 +68,7 @@
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -83,11 +86,13 @@
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - ToS draft đầy đủ
 - Plain language explanations
 - Customized cho product type
 
 **Cấu trúc output:**
+
 ```
 TERMS OF SERVICE
 
@@ -119,6 +124,7 @@ TERMS OF SERVICE
 - [ ] Dispute resolution clear
 
 **Red flags (cần Reject):**
+
 - ⚠️ Copy-paste từ product khác không fit
 - ⚠️ Missing critical sections
 - ⚠️ Quá aggressive với users
@@ -149,7 +155,8 @@ TERMS OF SERVICE
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Product: StockFlow SaaS
 Pricing: monthly + annual
@@ -157,7 +164,8 @@ Trial: 14 ngày
 Data retention: 12 tháng sau hủy
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```markdown
 # ToS Highlights
 
@@ -168,13 +176,15 @@ Data retention: 12 tháng sau hủy
 - Acceptable use: no scraping, no abuse
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Điều khoản phù hợp SaaS
 - ✅ Retention rõ ràng
 - ✅ Liability hợp lý
 - **Kết quả: ACCEPT**
 
 ## 🔗 Related Skills
+
 - [NDA Template](./02_nda_template.skill.md)
 - [Compliance Checklist](./04_compliance_checklist.skill.md)
 

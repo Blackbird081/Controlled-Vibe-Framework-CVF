@@ -18,11 +18,13 @@
 ## 🎯 Purpose
 
 **When to use this skill:**
+
 - End of Phase D, preparing to hand the app off to other users
 - Want recipients to open the app with a single click, no setup required
 - Want to send the app as a ZIP file via email or messaging
 
 **Not suitable when:**
+
 - App is a public web service (use AGT-030 Cloud Deployment instead)
 - App requires cloud accounts or an external database server
 
@@ -107,6 +109,7 @@ pause
 ```
 
 **Delivery instructions for user:**
+
 ```
 1. Compress the "FinanceTracker_v1.0" folder into a ZIP file
 2. Send the ZIP file
@@ -118,6 +121,7 @@ pause
 ## 🔍 Evaluation Criteria
 
 **Accept Checklist:**
+
 - [ ] All files in a single folder
 - [ ] `START.bat` / `start.sh` exists and runs successfully
 - [ ] `requirements.txt` is correct and complete
@@ -125,6 +129,7 @@ pause
 - [ ] `USER_GUIDE.md` is included in the package
 
 **Red Flags (Reject):**
+
 - ⚠️ App uses absolute paths (`C:\Users\Username\...`) — will break on another machine
 - ⚠️ `requirements.txt` is missing libraries
 - ⚠️ Database contains developer's personal test data
@@ -152,7 +157,8 @@ pause
 
 ## 📊 Example
 
-### Sample Input:
+### Sample Input
+
 ```
 App Name: "SalesReport_v1.0"
 Tech Stack: Python 3.11 + Streamlit + pandas + plotly
@@ -160,12 +166,14 @@ Recipient OS: Windows 10/11
 Has Database: SQLite
 ```
 
-### Sample Output:
+### Sample Output
+
 - Folder `SalesReport_v1.0/` with standard structure
 - `START.bat` auto-installs `pip install -r requirements.txt` on first run
 - `data/sales.db` empty database with correct schema
 
-### Evaluation:
+### Evaluation
+
 - ✅ 1-click launch successful
 - ✅ No absolute paths
 - ✅ Empty database

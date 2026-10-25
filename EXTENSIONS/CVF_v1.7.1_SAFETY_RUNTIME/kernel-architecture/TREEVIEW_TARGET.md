@@ -1,6 +1,7 @@
 CVF v1.7.1 Kernel Architecture - TARGET (Design Intent)
 
 Principle:
+
 - CVF core is the base.
 - Kernel additions must extend CVF safety depth, not break existing CVF structure.
 - Runtime entrypoint must remain mandatory (`kernel_runtime_entrypoint.ts`) for all execution paths.
@@ -28,7 +29,7 @@ EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/
 |   |   |-- io_contract_registry.ts
 |   |   |-- consumer_authority_matrix.ts
 |   |   |-- transformation_guard.ts
-|   |   `-- contract_validator.ts
+|   |`-- contract_validator.ts
 |   |
 |   |-- 03_contamination_guard/
 |   |   |-- risk.types.ts
@@ -43,12 +44,12 @@ EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/
 |   |   |-- refusal_policy_registry.ts
 |   |   |-- safe_rewrite_engine.ts
 |   |   |-- clarification_generator.ts
-|   |   `-- alternative_route_engine.ts
+|   |`-- alternative_route_engine.ts
 |   |
 |   `-- 05_creative_control/
 |       |-- creative.controller.ts
 |       |-- creative_permission.policy.ts
-|       `-- creative_provenance.tagger.ts
+|`-- creative_provenance.tagger.ts
 |
 |-- runtime/
 |   |-- execution_orchestrator.ts

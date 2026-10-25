@@ -19,11 +19,13 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 > Fullstack development skill using bkend.ai BaaS platform. Covers authentication, data storage, API integration for dynamic web apps.  Project initialization with "init dynamic" or "dynamic init".  Use proactively when user needs login, database, or backend features without managing servers.  Triggers: fullstack, BaaS, bkend, authentication, login feature, signup, database, web app, SaaS, MVP, init dynamic, dynamic init, 풀스택, 인증, 로그인 기능, 회원가입, 데이터베이스, 웹앱, フルスタック, 認証, ログイン機能, データベース, 全栈, 身份验证, 登录功能, autenticación, inicio de sesión, registro, base de datos, fullstack, aplicación web, authentification, connexion, inscription, base de données, fullstack, application web, Authentifizierung, Anmeldung, Registrierung, Datenbank, Fullstack, Web-App, autenticazione, accesso, registrazione, database, fullstack, applicazione web  Do NOT use for: static websites, Enterprise-grade systems requiring custom infrastructure.
 
 **Khi nào dùng skill này:**
+
 - Cần Dynamic với tiêu chí rõ ràng
 - Muốn chuẩn hóa quy trình trước khi thực thi
 - Muốn đầu ra có cấu trúc, dễ review
 
 **Không phù hợp khi:**
+
 - Thiếu thông tin đầu vào tối thiểu
 - Mục tiêu đang mơ hồ, chưa thống nhất
 
@@ -118,6 +120,7 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - [ ] Không vượt quá phạm vi yêu cầu
 
 **Red flags (cần Reject):**
+
 - ⚠️ Output chung chung, không actionable
 - ⚠️ Bỏ qua constraints hoặc context
 - ⚠️ Tự ý mở rộng scope
@@ -140,13 +143,14 @@ Không yêu cầu bắt buộc. Nên chuẩn bị bối cảnh ngắn gọn về
 - Đưa ra 2-3 khuyến nghị khả thi nhất
 - Nếu thiếu dữ liệu, hỏi lại trước khi trả lời
 - Keyword focus: app development
-- Nguồn tham khảo: https://github.com/popup-studio-ai/bkit-claude-code/tree/main/skills/dynamic
+- Nguồn tham khảo: <https://github.com/popup-studio-ai/bkit-claude-code/tree/main/skills/dynamic>
 
 ---
 
 ## 📊 Ví dụ thực tế
 
 **Input mẫu:**
+
 ```text
 Objective: Thiết kế API cho ứng dụng quản lý dự án
 Context: Team 4 dev, cần MVP trong 6 tuần
@@ -155,6 +159,7 @@ Output Format: Checklist + đề xuất
 ```
 
 **Output mẫu:**
+
 ```markdown
 # Dynamic Output
 

@@ -1,10 +1,12 @@
 # Skill Registry Model
 
 ## Purpose
+
 Tài liệu này định nghĩa **mô hình registry chính thức** cho các skill và capability
 trong Controlled Vibe Framework (CVF).
 
 Registry là:
+
 - Điểm tra cứu
 - Điểm kiểm soát
 - Điểm quyết định cuối trước execution
@@ -82,11 +84,13 @@ Registry **KHÔNG** tự động chuyển trạng thái.
 ## Risk Enforcement
 
 Registry phải:
+
 - Check risk level
 - Verify control readiness
 - Reject nếu control thiếu
 
 Registry không được:
+
 - Hạ risk
 - Override assessment
 
@@ -133,6 +137,7 @@ Registry phải fail khi:
 - Risk control thiếu
 
 Fail phải:
+
 - Deterministic
 - Traceable
 
@@ -169,5 +174,6 @@ Tài liệu này là **nguồn chân lý duy nhất** cho mô hình registry tro
 
 Registry vi phạm tài liệu này
 → không phải CVF-compliant.
+
 ```
 

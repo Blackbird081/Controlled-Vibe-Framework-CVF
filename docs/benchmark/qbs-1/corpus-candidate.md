@@ -201,7 +201,6 @@ The candidate corpus becomes a scored-run corpus only when:
 - the corpus manifest hash is recorded;
 - a public `qbs/preregister/<run-id>` tag points to the frozen commit.
 
-
 ## Claim Boundary
 
 This file claims only the candidate corpus structure and family mix. It does

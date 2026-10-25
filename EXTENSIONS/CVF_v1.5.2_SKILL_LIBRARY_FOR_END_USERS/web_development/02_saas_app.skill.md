@@ -18,12 +18,14 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Ứng dụng web có đăng nhập/đăng ký
 - Có user accounts và quản lý profile
 - Có subscription/payment
 - Nhiều tính năng, nhiều trang
 
 **Không phù hợp khi:**
+
 - Chỉ cần 1 trang giới thiệu → Dùng Landing Page
 - Chỉ cần quản lý data → Dùng Dashboard
 - Website tĩnh/blog → Dùng Blog/Docs
@@ -67,6 +69,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -84,12 +87,14 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả bạn sẽ nhận được:**
+
 - App structure hoàn chỉnh
 - Public pages (landing, pricing, login)
 - Authenticated area với core features
 - Responsive design
 
 **Cấu trúc tiêu chuẩn:**
+
 ```
 ┌─────────────────────────────────────────┐
 │ PUBLIC PAGES                            │
@@ -126,6 +131,7 @@ Không yêu cầu.
 - [ ] Responsive trên mobile
 
 **Red flags (cần Reject):**
+
 - ⚠️ Auth flow không an toàn
 - ⚠️ Core features thiếu/không đúng
 - ⚠️ UX phức tạp, khó dùng
@@ -157,7 +163,8 @@ Không yêu cầu.
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Tên app: TaskFlow - quản lý công việc cho team nhỏ
 Core features: 
@@ -171,7 +178,8 @@ Payment: Free (3 users), Pro $10/user/month
 Tham khảo: Notion, Linear
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 SaaS App với:
 - Landing page giới thiệu TaskFlow
@@ -185,7 +193,8 @@ SaaS App với:
 - Admin: User management, analytics
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Auth: Email + Google OK
 - ✅ 3 core features đầy đủ
 - ✅ Pricing clear
@@ -197,6 +206,7 @@ SaaS App với:
 ---
 
 ## 🔗 Related Skills
+
 - [Landing Page](./01_landing_page.skill.md)
 - [Dashboard](./03_dashboard.skill.md)
 

@@ -1,6 +1,7 @@
 CVF v1.7.1 Kernel Architecture - IMPLEMENTED (Current Snapshot)
 Generated from current files in `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/`.
 Validation commands:
+
 - `npm run test:run`
 - `npm run test:coverage`
 
@@ -32,7 +33,7 @@ EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/
 |   |-- refusal_policy_golden.test.ts
 |   |-- golden/
 |   |   `-- refusal-policy.v1.json
-|   `-- risk_refusal.test.ts
+|`-- risk_refusal.test.ts
 |
 |-- kernel/
 |   |
@@ -55,7 +56,7 @@ EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/
 |   |   |-- contract_validator.ts
 |   |   |-- contract_runtime_engine.ts
 |   |   |-- io_contract_registry.ts
-|   |   `-- output_validator.ts
+|   |`-- output_validator.ts
 |   |
 |   |-- 03_contamination_guard/
 |   |   |-- assumption_tracker.ts
@@ -80,7 +81,7 @@ EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/
 |   |   |-- refusal_policy_registry.ts
 |   |   |-- refusal.risk.ts
 |   |   |-- refusal.router.ts
-|   |   `-- safe_rewrite_engine.ts
+|   |`-- safe_rewrite_engine.ts
 |   |
 |   `-- 05_creative_control/
 |       |-- audit.logger.ts
@@ -91,7 +92,7 @@ EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/kernel-architecture/
 |       |-- lineage.store.ts
 |       |-- lineage.types.ts
 |       |-- refusal.registry.ts
-|       `-- trace.reporter.ts
+|`-- trace.reporter.ts
 |
 |-- runtime/
 |   |-- execution_orchestrator.ts

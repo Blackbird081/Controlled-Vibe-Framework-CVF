@@ -32,6 +32,7 @@ v1.6  Agent Platform      ██████████████████
 **Status:** FROZEN
 
 **What it introduced:**
+
 - The original 4-phase process: Discovery → Design → Build → Review
 - Phase gates (must pass to continue)
 - Basic decision logging (`DECISIONS.md`)
@@ -40,6 +41,7 @@ v1.6  Agent Platform      ██████████████████
 - Compliance framework outline
 
 **Key files:**
+
 - `v1.0/CVF_MANIFESTO.md` — The original manifesto
 - `v1.0/phases/` — Phase definitions
 - `v1.0/governance/` — Basic governance rules
@@ -56,6 +58,7 @@ v1.6  Agent Platform      ██████████████████
 **Status:** FROZEN
 
 **What it added:**
+
 - 4 human roles: OBSERVER, BUILDER, ARCHITECT, GOVERNOR
 - Authority-by-phase matrix (who approves what in which phase)
 - 6 agent archetypes: Analysis, Decision, Planning, Execution, Supervisor, Exploration
@@ -65,6 +68,7 @@ v1.6  Agent Platform      ██████████████████
 - Migration guide from v1.0
 
 **Key files:**
+
 - `v1.1/governance/` — Full governance model
 - `v1.1/agents/` — Agent archetype definitions
 - `v1.1/architecture/` — System architecture
@@ -81,6 +85,7 @@ v1.6  Agent Platform      ██████████████████
 **Status:** FROZEN
 
 **What it added:**
+
 - Skill contracts: formal definition of AI capabilities
 - Capability lifecycle management
 - Risk model with 5 dimensions:
@@ -94,6 +99,7 @@ v1.6  Agent Platform      ██████████████████
 - Capability validation framework
 
 **Key files:**
+
 - `EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/` — Full extension
 
 **Ideal for:** Organizations needing formal risk management for AI capabilities.
@@ -107,6 +113,7 @@ v1.6  Agent Platform      ██████████████████
 **Status:** FROZEN
 
 **What it added:**
+
 - Python SDK for CVF operations
 - CLI tools for project initialization and management
 - CI/CD integration (GitHub Actions workflow)
@@ -114,6 +121,7 @@ v1.6  Agent Platform      ██████████████████
 - Operator Edition (v1.3.1): simplified for hands-on operators
 
 **Key files:**
+
 - `EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/` — SDK and tools
 - `EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/` — Streamlined for operators
 
@@ -128,11 +136,13 @@ v1.6  Agent Platform      ██████████████████
 **Status:** FROZEN
 
 **What it added:**
+
 - Usage patterns for different project types
 - Context-specific application guides
 - Workflow templates
 
 **Key files:**
+
 - `EXTENSIONS/CVF_v1.4_USAGE_LAYER/` — Usage patterns
 
 ---
@@ -144,11 +154,13 @@ v1.6  Agent Platform      ██████████████████
 **Status:** FROZEN
 
 **What it added:**
+
 - End-user orientation (v1.5.1): guides for non-developers
 - Skill Library for End Users (v1.5.2): 131 skills across 12 domains
 - User-facing documentation and tutorials
 
 **Key files:**
+
 - `EXTENSIONS/CVF_v1.5_UX_PLATFORM/` — Platform specs
 - `EXTENSIONS/CVF_v1.5.1_END_USER_ORIENTATION/` — End-user guides
 - `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` — Full skill library
@@ -164,6 +176,7 @@ v1.6  Agent Platform      ██████████████████
 **Status:** ACTIVE (current version)
 
 **What it added:**
+
 - Full web application (Next.js 16 + React 19 + TypeScript 5)
 - Interactive templates and governance flows that now align to the canonical controlled loop
 - Multi-agent chat interface
@@ -177,6 +190,7 @@ v1.6  Agent Platform      ██████████████████
 - Vitest testing framework
 
 **Tech stack:**
+
 | Technology | Version |
 |-----------|---------|
 | Next.js | 16 |
@@ -187,6 +201,7 @@ v1.6  Agent Platform      ██████████████████
 | Vitest | 4 |
 
 **Key files:**
+
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/` — Platform specs
 - `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/` — Web application source
 

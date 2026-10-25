@@ -24,12 +24,14 @@ palette, typography, interaction, and dark/light micro-skills are reference
 material only; do not ask agents to chain them for normal UI delivery.
 
 **Khi nào nên dùng:**
+
 - Trước khi merge PR có UI changes
 - Trước khi deploy lên production
 - Code review cho frontend
 - QA handoff
 
 **Không phù hợp khi:**
+
 - Backend-only changes
 - Documentation updates
 
@@ -77,7 +79,7 @@ material only; do not ask agents to chain them for normal UI delivery.
 
 | Field | Bắt buộc | Mô tả | Ví dụ |
 |-------|----------|-------|-------|
-| **URL/Code** | ✅ | Link hoặc code cần check | "https://staging.myapp.com" |
+| **URL/Code** | ✅ | Link hoặc code cần check | "<https://staging.myapp.com>" |
 | **Pages changed** | ✅ | Trang/components đã thay đổi | "Home page hero, nav dropdown" |
 | **Framework** | ❌ | React, Vue, HTML... | "Next.js + Tailwind" |
 | **Dark mode** | ❌ | Có support dark mode? | "Yes" |
@@ -165,12 +167,14 @@ VERDICT: ❌ FIX BLOCKERS → RECHECK → SHIP
 ## 🔍 Cách đánh giá
 
 **Scoring:**
+
 - 100% = Ship immediately
 - 80-99% = Fix blockers then ship
 - 60-79% = Significant work needed
 - < 60% = Not ready
 
 **Gate rules:**
+
 - Any CRITICAL (accessibility, broken on mobile) = BLOCK
 - All interaction basics (cursor, hover, focus) = REQUIRED
 - Dark mode issues = BLOCK if app supports dark mode
@@ -201,7 +205,8 @@ VERDICT: ❌ FIX BLOCKERS → RECHECK → SHIP
 
 ## 📊 Ví dụ thực tế
 
-### Input:
+### Input
+
 ```
 URL: https://staging.myshop.com
 Changed: Product listing page, cart sidebar
@@ -209,7 +214,8 @@ Framework: Next.js + Tailwind
 Dark mode: Yes
 ```
 
-### Output tóm tắt:
+### Output tóm tắt
+
 ```
 Visual: 6/6 ✅
 Interaction: 5/6 ❌ (cart sidebar no loading)

@@ -27,4 +27,4 @@ jobs:
 
       - name: Enforce system chain map freshness guard
         run: |
-          python governance/compat/check_system_chain_map_freshness.py --enforce
+          python governance/compat/check_system_chain_map_freshness.py --profile public --enforce

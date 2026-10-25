@@ -1,4 +1,5 @@
 # CVF Non-Coder Value Guard Proposal
+
 Memory class: POINTER_RECORD
 
 > Date: 2026-04-14

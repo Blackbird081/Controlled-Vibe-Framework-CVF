@@ -1,4 +1,5 @@
 ﻿# 🏛️ CVF Master Architecture Whitepaper
+
 Memory class: POINTER_RECORD
 
 > **Version:** 3.7-W46T1
@@ -6,22 +7,24 @@ Memory class: POINTER_RECORD
 > **Document Type:** CLOSURE-ASSESSED ARCHITECTURE WHITEPAPER — all four planes fully bridged and assessed; W7 Governance Integration Wave complete 2026-03-28; post-W7 continuation closures delivered through W54-T1 2026-04-05; all CPF barrel families FULLY CLOSED; EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED; canonical architecture snapshot remains `v3.7-W46T1`; operational readout refreshed through `2026-04-13` (MC5 Whitepaper Canon Promotion Pass complete; PVV one-provider / Alibaba / multi-role internal checkpoint confirmed then paused; W71-T1 Post-Closure Knowledge Native Adoption complete — promoted artifacts are now CVF-native: 6 canonical, 1 bounded-invariant, 5 deferred-by-design; external-asset governance surfaces are official CVF behavior)
 > **Authorization Status:** W5-T2 whitepaper update canonically closed 2026-03-28 (v3.0-W7T10). W11-T1 whitepaper update canonically closed 2026-03-29 (v3.1-W10T1). W12-T1 closure canonically closed 2026-03-29 and reflected in `v3.2-W12T1`. W13-T1 (`AgentDefinitionCapabilityBatchContract`) canonically closed 2026-03-30. W14-T1 (`AgentScopeResolutionBatchContract`) canonically closed 2026-03-30. W15-T1 (`AgentDefinitionAuditBatchContract`) canonically closed 2026-03-30 and reflected in `v3.3-W15T1`. W16-T1 whitepaper update canonically closed 2026-03-30 (v3.3-W15T1). W17-T1 (`AgentRegistrationBatchContract`) canonically closed 2026-03-30. W18-T1 whitepaper update canonically closed 2026-03-30 (`v3.4-W17T1`). W19-T1 through W30-T1 canonically closed 2026-03-30 to 2026-04-01 across trust isolation, gateway, orchestration, and boardroom batch surfaces. W31-T1 (`BoardroomRoundBatchContract`) and W32-T1 (`BoardroomMultiRoundBatchContract`) canonically closed 2026-04-01 and reflected in `v3.6-W32T1`. W33-T1 (`KnowledgeRankingBatchContract`) canonically closed 2026-04-01. W34-T1 (`ClarificationRefinementBatchContract`) canonically closed 2026-04-01. W35-T1 (`IntakeBatchContract`) canonically closed 2026-04-03. W36-T1 (`RetrievalBatchContract`) canonically closed 2026-04-03. W37-T1 (`ContextPackagerBatchContract`) canonically closed 2026-04-04. W38-T1 (`ContextEnrichmentBatchContract`) canonically closed 2026-04-04. W39-T1 (`ModelGatewayBoundaryBatchContract`) canonically closed 2026-04-05. W40-T1 (`PackagingBatchContract`) canonically closed 2026-04-05. W41-T1 (`GatewayAuthLogBatchContract`) canonically closed 2026-04-05. W42-T1 (`GatewayPIIDetectionLogBatchContract`) canonically closed 2026-04-05. W43-T1 (`RouteMatchLogBatchContract`) canonically closed 2026-04-05. W44-T1 (`ConsumerBatchContract`) canonically closed 2026-04-05; `control.plane.workflow.barrel.ts` FULLY CLOSED. W45-T1 (`GatewayConsumerBatchContract`) canonically closed 2026-04-05; `control.plane.gateway.barrel.ts` FULLY CLOSED. W46-T1 (`DesignConsumerBatchContract`) canonically closed 2026-04-05; `control.plane.design.boardroom.barrel.ts` FULLY CLOSED. W47-T1 whitepaper update canonically closed 2026-04-05 (`v3.7-W46T1`); all CPF barrel families FULLY CLOSED. W48-T1 (`ExecutionBridgeConsumerBatchContract`) through W54-T1 (`ExecutionReintakeBatchContract`) canonically closed 2026-04-05; EPF standalone batch wave W49-T1 through W54-T1 is now FULLY CLOSED. Post-baseline continuation is reconciled through `W1-T30 / W2-T38 / W3-T18 / W4-T25 / W6-T6 / W7-T10 / W8-T1 / W8-T2 / W9-T1 / W10-T1 / W12-T1 / W13-T1 / W14-T1 / W15-T1 / W16-T1 / W17-T1 / W18-T1 / W19-T1 / W20-T1 / W21-T1 / W22-T1 / W23-T1 / W24-T1 / W25-T1 / W26-T1 / W27-T1 / W28-T1 / W29-T1 / W30-T1 / W31-T1 / W32-T1 / W33-T1 / W34-T1 / W35-T1 / W36-T1 / W37-T1 / W38-T1 / W39-T1 / W40-T1 / W41-T1 / W42-T1 / W43-T1 / W44-T1 / W45-T1 / W46-T1 / W47-T1 / W48-T1 / W49-T1 / W50-T1 / W51-T1 / W52-T1 / W53-T1 / W54-T1`. Current active tranche is `NONE`; any further continuation requires a new `GC-018` wave decision.
 > **Clean Baseline References:**
+>
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/types.ts` (phases, risk model)
 > - `EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts` (shared default guard stack)
 > - `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/governance/guard_runtime/sdk/cvf.sdk.ts` (full runtime preset)
 > - `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md` (current quick status through `W59-T1`)
 > - `docs/roadmaps/CVF_WHITEPAPER_COMPLETION_ROADMAP_2026-03-21.md` (canonical delivered wave line and post-cycle continuation history)
 > - `docs/reviews/CVF_WHITEPAPER_COMPLETION_STATUS_2026-03-21.md` (historical reconciliation snapshot through `W5-T1`)
-
+>
 > **Status Note:** this document now contains a reconciled mix of:
+>
 > - delivered current truth already evidenced in code and tranche packets
 > - partially delivered target-state areas
 > - future-facing design principles that still require later governed waves
-
+>
 > **Baseline Tracking Note:** as of `2026-04-13`, this whitepaper keeps the canonical architecture snapshot at `v3.7-W46T1` and refreshes the operational readout through the post-closure integration wave and current PVV pause checkpoint — reflecting complete consumer pipeline bridge coverage across all four planes, the W7 Governance Integration Wave, all post-W7 continuation deliveries from `W8-T1` through `W54-T1`, all CPF barrel families FULLY CLOSED, the EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED, the MC1-MC5 closure sequence now fully complete, the PVV one-provider / Alibaba / multi-role internal checkpoint now confirmed then intentionally paused, and the latest verified local truth for the actively touched surfaces (`CPF 2999 / EPF 1301 / GEF 625 / LPF 1493 / cvf-web 1928 passed / 3 skipped`). W71-T1 Post-Closure Knowledge Native Adoption (delivered 2026-04-13): knowledge from `CVF ADDING NEW` and `Windows_Skill_Normalization` is now CVF-native — no longer described as a post-closure uplift. Final posture matrix: 6 canonical (`CVF_SEMANTIC_POLICY_INTENT_REGISTRY.md`, `CVF_W7_EXTERNAL_ASSET_INTAKE_PROFILE.md`, `CVF_W7_EXECUTION_ENVIRONMENT_NORMALIZATION_POLICY.md`, `CVF_W7_WINDOWS_COMPATIBILITY_EVALUATION_CHECKLIST.md`, `CVF_PLANNER_TRIGGER_HEURISTICS.md`, `CVF_W7_EXTERNAL_ASSET_COMPILER_GUIDE.md`); 1 bounded-invariant (`CVF_PROVISIONAL_EVALUATION_SIGNAL_CANDIDATES.md` — provisional by design, weights deferred); 5 deferred-by-design (W7/CLI family — no CLI runtime yet). The governed external-asset preparation lane (`POST /api/governance/external-assets/prepare` + registry + retire + operator page) is now an official CVF-native surface, not an experimental sidecar. This does not change the frozen architecture snapshot and must not be conflated with provider-lane execution or the paused PVV stream. Use this file for architectural shape, the progress tracker for quick current posture, the roadmap for tranche history, the quality assessment for post-closure posture, and the handoff for execution rules.
-
+>
 > **Core Principle:** *"Agents may execute tasks, but they cannot control the system that governs them."*
-
+>
 > **Cross-Plane Context Continuity Principle:** `memory = repository of facts, history, and durable evidence`; `handoff = governance-filtered summary and transfer checkpoint`; `context loading = phase-bounded loading of only what the current step needs`. In CVF, handoff is context quality control by phase for multi-agent continuation.
 
 ---
@@ -40,6 +43,7 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 ```
 
 > **Source of truth:** `CVF_GUARD_CONTRACT/src/types.ts:19-28`
+>
 > ```typescript
 > export type CanonicalCVFPhase =
 >   | 'INTAKE' | 'DESIGN' | 'BUILD' | 'REVIEW' | 'FREEZE';
@@ -59,7 +63,9 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 ## 2. Risk Model — CURRENT BASELINE vs PROPOSED
 
 ### Hiện trạng (Source of Truth)
+>
 > **Source:** `CVF_GUARD_CONTRACT/src/types.ts:31`
+>
 > ```typescript
 > export type CVFRiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
 > ```
@@ -72,6 +78,7 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 | **R3** | High Risk — deploy, xoá DB |
 
 ### Đề xuất từ Constitutional Layer (CHƯA ĐƯỢC PHÊ DUYỆT)
+>
 > ⚠️ Thang `L0-L4` chỉ tồn tại dưới dạng **design proposal** trong `ADDING_AI Constitutional Layer`. Codebase hiện tại **không hề có** `L0-L4`. Nếu muốn migrate, cần **GC-018 approval riêng** cho việc mở rộng Risk Model.
 
 | Level | Mô tả | Trạng thái |
@@ -83,6 +90,7 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 ## 3. Guard Baseline — CURRENT BASELINE (Đã xác minh bằng Code)
 
 ### Shared Hardened Default: 8 Guards
+>
 > **Source:** `CVF_GUARD_CONTRACT/src/index.ts:47-59`
 
 ```
@@ -97,8 +105,9 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 ```
 
 ### Full Runtime Preset: 15 Guards
+>
 > **Source:** `cvf.sdk.ts:819-839` (bổ sung 7 guards trên nền 8 guards mặc định)
-
+>
 > ⚠️ **Không bao giờ là "13 guards".** Mọi tài liệu trước đó ghi "13" đều sai so với source code.
 
 ---
@@ -303,7 +312,7 @@ INTAKE → DESIGN → BUILD → REVIEW → FREEZE
 | Canonical architecture snapshot | this document (`CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`, `v3.7-W46T1`; operational readout refreshed through `W59-T1`) |
 | Last canonical closure | `W109-T1 CLOSED DELIVERED — redesign wave W105-W109 is complete across sidebar, workspace pages, account modals, AI modals, and platform pages under the zero-logic-change contract; 2026-04-21 operational sync now also reflects strict front door all-trusted (42 front-door skills / 50 linked templates / 50 trusted / 0 review / 0 reject / 0 unscreened), Alibaba-first governed runtime validation on retrieval + web_build_handoff + app_builder_complete + api_design + web_ux_redesign_system, front-door product-proof expansion closing 6/6 priority templates, and productization hardening via dedicated front-door smoke CI. See docs/assessments/CVF_FRONT_DOOR_POST_W109_RUNTIME_VALIDATION_2026-04-21.md, docs/assessments/CVF_FRONT_DOOR_PRODUCT_PROOF_EXPANSION_ASSESSMENT_2026-04-21.md, docs/assessments/CVF_PRODUCTIZATION_LANE_ASSESSMENT_2026-04-21.md, and docs/roadmaps/CVF_FRONT_DOOR_PRODUCT_PROOF_AND_PRODUCTIZATION_ROADMAP_2026-04-21.md`; previous: `W104-T1 CLOSED DELIVERED — Skill Library Trusted Subset Sync; public /skills front door now governed by D2/D3 corpus authorities; front-door discovery limited to TRUSTED_FOR_VALUE_PROOF + REVIEW_REQUIRED, legacy/reject/unscreened surfaces quarantined; search and planner now consume the same governed subset; direct detail pages preserve archive continuity; spec export updated with non-coder success + governed response + knowledge context sections; targeted verification 118/118 vitest + tsc clean`; previous: `W102-T1 CLOSED DELIVERED — Knowledge-Native Benefit Revalidation; benefit PROVEN (injected 0.950 vs raw 0.175, +0.775 delta); 5 invented-domain scenarios; qwen-max; Gate 1+2 MET; W93-T1 MIXED resolved; knowledge injection pipeline PRODUCTION-READY`; previous: `W101-T1 CLOSED DELIVERED — Knowledge-Native Execute Path Integration; knowledge-context-injector.ts (buildKnowledgeSystemPrompt + hasKnowledgeContext); ExecutionRequest.knowledgeContext? type extension; executeAI systemPrompt? override; route.ts enriched prompt + knowledgeInjection metadata; +17 tests (2027/2027 pass, 0 regressions); W93-T1 architecture gap CLOSED` |
 | Current active tranche | `NONE — redesign wave W105-W109, front-door rewrite/runtime sync, product-proof expansion, and productization lane are all reflected; next bounded direction is multi-provider expansion or a new operator-driven feature, and each still requires a fresh GC-018 when reopened` |
-| Current posture | `CLOSURE-ASSESSED` — CPF **DONE-ready** (MC1); GEF **DONE (6/6)** (MC2); LPF **DONE-ready (7/7)** (MC3); EPF **DONE-ready** (MC4); MC5 whitepaper canon promotion **COMPLETE**; W7 Governance Integration `DONE`; post-W7 continuation `DONE`; all CPF barrel families FULLY CLOSED; EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED; PVV one-provider / Alibaba / multi-role checkpoint `CONFIRMED THEN PAUSED`; W71-T1 Post-Closure Knowledge Native Adoption `CLOSED DELIVERED 2026-04-13` — absorbed knowledge is now CVF-native; **W72-W76 Knowledge-Native CPF Wave `CLOSED DELIVERED 2026-04-14`** — StructuralIndexContract, CompiledKnowledgeArtifactContract, W7MemoryRecordContract, KnowledgeMaintenanceContract, KnowledgeRefactorContract, KnowledgeContextAssemblyContract, KnowledgeContextAssemblyConsumerPipelineContract + W7MemoryRecord palace vocabulary all landed; **N1 Canon Retrieval Authority (W77-T1) `CLOSED`** — rag.context.engine.convergence.contract.ts updated: 40 FIXED_INPUT / 3 IN_SCOPE / 43 grand total, knowledge-native retrieval authority declared; **N2 Benchmark Evidence (W78-T1) `CLOSED`** — decision HYBRID / NO SINGLE DEFAULT; compiled-preferred conditional (Rule 1) + raw-source fallback (Rule 2) unchanged; **N3 Canon Default Promotion (W79-T1) `CLOSED`** — decision promoted to whitepaper, tracker, and governance policy canon; **CVF-native core 100% gate: CLOSED**; **N4 Product/Operator Adoption (W80-T1) `CLOSED`** — 3 knowledge API routes in cvf-web; **Canon-Closure Corrections (W81-T1) `CLOSED`** — N1 dual authority resolved + N2/N3 evidence-gate resolved; 86/86 tests; **Knowledge-Native Value Realization (W82-T1) `CLOSED`** — operator surface + E2E tests (7/7) + operator guide + value evidence packet; completion matrix N1+N2+N3+N4 ALL CLOSED; **Post-Knowledge-Native Master Architecture Reassessment (W83-T1) `CLOSED`** — reassessment note + whitepaper refresh + tracker refresh + handoff + GC-026 sync; knowledge-native lane fully closure-clean; **Knowledge Live Benchmark Evidence Promotion (W84-T1) `CLOSED`** — 12 live API calls, qwen-max, evidence class LIVE_INFERENCE, all 8 gates MET; HYBRID / NO SINGLE DEFAULT CONFIRMED; Gates 1+2 promoted from PROPOSAL_ONLY to LIVE_INFERENCE; no policy change; **Post-W84 Canon Truth Sync (W85-T1) `CLOSED`** — whitepaper + tracker + handoff aligned to W84 truth; lane W71–W84 globally closure-clean; **PVV Lane Resume (W86-T1) `CLOSED`** — 40 live runs (20 CFG-A + 20 CFG-B); Gate D+E MET; NORMAL non-coder parity confirmed; HIGH_RISK guidance gap found (Gate A PARTIAL); **HIGH_RISK Guided Response Pattern (W87-T1) `CLOSED`** — guided.response.registry.ts (3 patterns: NC_003/NC_006/NC_007); 17/17 tests; Gate A FULL MET; governed path matches direct API for HIGH_RISK non-coder tasks; additive only, no policy change; **Guided Response UI Realization (W88-T1) `CLOSED`** — guidedResponse surfaced in ProcessingScreen.tsx; bilingual safe-next-step panel; 5/5 vitest tests; **Post-W88 Canon Truth Sync (W89-T1) `CLOSED`** — whitepaper + tracker + handoff aligned to W88 truth; lane W71–W88 globally closure-clean; **HIGH_RISK Pattern Expansion (W90-T1) `CLOSED`** — 8 patterns (3→8); **Template Output Quality Benchmark (W91-T1) `CLOSED`** — 9 trusted wizard templates; Gate 2 PASS 9/9; **NEEDS_APPROVAL Flow Completion (W92-T1) `CLOSED`** — approval APIs + review panel; Gate 3 PASS; **Knowledge-Native Non-Coder Benefit Validation (W93-T1) `CLOSED`** — Gate 4 MIXED / template-dependent; **Risk Visibility (W94-T1) `CLOSED`** + **W96-T1 persistence fix `CLOSED`** — all 5 non-coder value gates now fully MET on the one-provider governed lane; **W97-T1` through `W102-T1` CLOSED** — follow-up round, E2E benchmark, OFU fixes, knowledge injection integration, and benefit revalidation all landed; **W104-T1 `CLOSED`** — /skills front door aligned to governed corpus truth; **W105-W109 redesign wave `CLOSED DELIVERED 2026-04-19`** — public/default product surfaces visually synchronized without logic changes; **Front-door rewrite Wave 1/2 `DELIVERED 2026-04-21`** — strict front door is all-trusted under the current 42-skill / 50-template scope; **Alibaba-first front-door runtime validation `DELIVERED 2026-04-21`** — retrieval plus representative trusted/supporting rewrite surfaces pass on the governed live path; **front-door product-proof expansion `DELIVERED 2026-04-21`** — 6/6 priority templates now have governed live evidence; **front-door productization lane `DELIVERED 2026-04-21`** — front-door-smoke CI gate is wired into ci-passed. Product-proof claim remains bounded to the Alibaba-first lane; multi-provider parity is still not claimed.` |
+| Current posture | `CLOSURE-ASSESSED` — CPF **DONE-ready** (MC1); GEF **DONE (6/6)** (MC2); LPF **DONE-ready (7/7)** (MC3); EPF **DONE-ready** (MC4); MC5 whitepaper canon promotion **COMPLETE**; W7 Governance Integration `DONE`; post-W7 continuation `DONE`; all CPF barrel families FULLY CLOSED; EPF standalone batch wave W49-T1 through W54-T1 FULLY CLOSED; PVV one-provider / Alibaba / multi-role checkpoint `CONFIRMED THEN PAUSED`; W71-T1 Post-Closure Knowledge Native Adoption `CLOSED DELIVERED 2026-04-13` — absorbed knowledge is now CVF-native; **W72-W76 Knowledge-Native CPF Wave `CLOSED DELIVERED 2026-04-14`** — StructuralIndexContract, CompiledKnowledgeArtifactContract, W7MemoryRecordContract, KnowledgeMaintenanceContract, KnowledgeRefactorContract, KnowledgeContextAssemblyContract, KnowledgeContextAssemblyConsumerPipelineContract + W7MemoryRecord palace vocabulary all landed; **N1 Canon Retrieval Authority (W77-T1) `CLOSED`** — rag.context.engine.convergence.contract.ts updated: 40 FIXED_INPUT / 3 IN_SCOPE / 43 grand total, knowledge-native retrieval authority declared; **N2 Benchmark Evidence (W78-T1) `CLOSED`** — decision HYBRID / NO SINGLE DEFAULT; compiled-preferred conditional (Rule 1) + raw-source fallback (Rule 2) unchanged; **N3 Canon Default Promotion (W79-T1) `CLOSED`** — decision promoted to whitepaper, tracker, and governance policy canon; **CVF-native core 100% gate: CLOSED**; **N4 Product/Operator Adoption (W80-T1) `CLOSED`** — 3 knowledge API routes in cvf-web; **Canon-Closure Corrections (W81-T1) `CLOSED`** — N1 dual authority resolved + N2/N3 evidence-gate resolved; 86/86 tests; **Knowledge-Native Value Realization (W82-T1) `CLOSED`** — operator surface + E2E tests (7/7) + operator guide + value evidence packet; completion matrix N1+N2+N3+N4 ALL CLOSED; **Post-Knowledge-Native Master Architecture Reassessment (W83-T1) `CLOSED`** — reassessment note + whitepaper refresh + tracker refresh + handoff + GC-026 sync; knowledge-native lane fully closure-clean; **Knowledge Live Benchmark Evidence Promotion (W84-T1) `CLOSED`** — 12 live API calls, qwen-max, evidence class LIVE_INFERENCE, all 8 gates MET; HYBRID / NO SINGLE DEFAULT CONFIRMED; Gates 1+2 promoted from PROPOSAL_ONLY to LIVE_INFERENCE; no policy change; **Post-W84 Canon Truth Sync (W85-T1) `CLOSED`** — whitepaper + tracker + handoff aligned to W84 truth; lane W71–W84 globally closure-clean; **PVV Lane Resume (W86-T1) `CLOSED`** — 40 live runs (20 CFG-A + 20 CFG-B); Gate D+E MET; NORMAL non-coder parity confirmed; HIGH_RISK guidance gap found (Gate A PARTIAL); **HIGH_RISK Guided Response Pattern (W87-T1) `CLOSED`** — guided.response.registry.ts (3 patterns: NC_003/NC_006/NC_007); 17/17 tests; Gate A FULL MET; governed path matches direct API for HIGH_RISK non-coder tasks; additive only, no policy change; **Guided Response UI Realization (W88-T1) `CLOSED`** — guidedResponse surfaced in ProcessingScreen.tsx; bilingual safe-next-step panel; 5/5 vitest tests; **Post-W88 Canon Truth Sync (W89-T1) `CLOSED`** — whitepaper + tracker + handoff aligned to W88 truth; lane W71–W88 globally closure-clean; **HIGH_RISK Pattern Expansion (W90-T1) `CLOSED`** — 8 patterns (3→8); **Template Output Quality Benchmark (W91-T1) `CLOSED`** — 9 trusted wizard templates; Gate 2 PASS 9/9; **NEEDS_APPROVAL Flow Completion (W92-T1) `CLOSED`** — approval APIs + review panel; Gate 3 PASS; **Knowledge-Native Non-Coder Benefit Validation (W93-T1) `CLOSED`** — Gate 4 MIXED / template-dependent; **Risk Visibility (W94-T1) `CLOSED`** + **W96-T1 persistence fix `CLOSED`** — all 5 non-coder value gates now fully MET on the one-provider governed lane; **W97-T1` through `W102-T1` CLOSED** — follow-up round, E2E benchmark, OFU fixes, knowledge injection integration, and benefit revalidation all landed; **W104-T1 `CLOSED`** — /skills front door aligned to governed corpus truth; **W105-W109 redesign wave`CLOSED DELIVERED 2026-04-19`** — public/default product surfaces visually synchronized without logic changes; **Front-door rewrite Wave 1/2`DELIVERED 2026-04-21`** — strict front door is all-trusted under the current 42-skill / 50-template scope; **Alibaba-first front-door runtime validation`DELIVERED 2026-04-21`** — retrieval plus representative trusted/supporting rewrite surfaces pass on the governed live path; **front-door product-proof expansion`DELIVERED 2026-04-21`** — 6/6 priority templates now have governed live evidence; **front-door productization lane`DELIVERED 2026-04-21`** — front-door-smoke CI gate is wired into ci-passed. Product-proof claim remains bounded to the Alibaba-first lane; multi-provider parity is still not claimed.` |
 | Public-safe non-coder claim boundary | `ALLOWED` — CVF may now claim bounded non-coder value on one validated provider lane: normal-task usefulness preserved, governed safety/approval/follow-up path present, knowledge-native context improves live `/api/execute` outcomes, and the public Skill Library front door is governed by corpus rescreen classes. CVF must not yet claim universal multi-provider parity or treat all visible public skills as benchmark-trusted evidence surfaces. |
 | Required gate before any new implementation wave | fresh `GC-018` authorization for a new bounded tranche |
 | W71-T1 native adoption posture matrix | **Canonical (6):** `CVF_SEMANTIC_POLICY_INTENT_REGISTRY.md`, `CVF_W7_EXTERNAL_ASSET_INTAKE_PROFILE.md`, `CVF_W7_EXECUTION_ENVIRONMENT_NORMALIZATION_POLICY.md`, `CVF_W7_WINDOWS_COMPATIBILITY_EVALUATION_CHECKLIST.md`, `CVF_PLANNER_TRIGGER_HEURISTICS.md`, `CVF_W7_EXTERNAL_ASSET_COMPILER_GUIDE.md`; **Bounded invariant (1):** `CVF_PROVISIONAL_EVALUATION_SIGNAL_CANDIDATES.md` (provisional signals native, weights deferred); **Reference appendix (1):** `CVF_W7_WINDOWS_POWERSHELL_COMMAND_REFERENCE.md`; **Deferred by design (5):** W7/CLI family (`CVF_W7_CLI_SCHEMA_CONTRACTS.md`, `CVF_W7_CLI_GOVERNANCE_BINDINGS.md`, `CVF_W7_CLI_MVP_SCOPE.md`, `CVF_W7_CLI_WORKSPACE_AND_STATE.md`, `CVF_W7_CLI_COMMAND_SURFACE.md`) — no CLI runtime yet |
@@ -328,6 +337,7 @@ The external-asset governance lane (semantic policy intent, intake profile, plan
 ## 5. Bảng Hợp nhất Module (Merge Map — Target-State / Delivered Anchors)
 
 > ⚠️ Bảng này hiện chứa cả:
+>
 > - các anchor đã được delivered trong current-cycle và whitepaper-completion cycle
 > - các merge/upgrade target vẫn future-facing và chỉ được mở lại qua GC-018
 
@@ -364,6 +374,7 @@ The external-asset governance lane (semantic policy intent, intake profile, plan
 > Ba nhóm dưới đây **KHÔNG ĐƯỢC trộn lẫn**. Mỗi nhóm có bản chất khác nhau: sự thật hiện tại, kỷ luật chuyển đổi, và ý định thiết kế tương lai.
 
 ### 7.1 Current Frozen Invariants
+>
 > Những điều **đã đúng** trong codebase và governance hiện tại. Vi phạm = vi phạm kiến trúc hiện hành.
 
 1. **Canonical Runtime 5-Phase Projection**
@@ -391,6 +402,7 @@ The external-asset governance lane (semantic policy intent, intake profile, plan
 ---
 
 ### 7.2 Migration Guardrails
+>
 > Quy tắc cho **quá trình chuyển đổi an toàn**. Áp dụng khi có Restructuring Wave được phê duyệt.
 
 1. **Merge before create**
@@ -414,6 +426,7 @@ The external-asset governance lane (semantic policy intent, intake profile, plan
 ---
 
 ### 7.3 Target-State Design Principles
+>
 > Nguyên tắc thiết kế **dài hạn** cho nền tảng hội tụ. **Chưa phải sự thật runtime hiện tại.**
 
 1. **Control Plane does not execute**

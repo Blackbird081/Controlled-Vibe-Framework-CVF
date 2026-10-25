@@ -24,14 +24,17 @@ This UAT session is bound to the canonical Finance Analytics portfolio.
 ## B. Capability Boundary Verification
 
 ### B.1 Allowed Capabilities
+
 - Produce base, upside, and downside forecast scenarios.
 - Explain assumptions, thresholds, uncertainty, and response triggers.
 
 ### B.2 Forbidden Capabilities
+
 - No guaranteed predictions.
 - No forced code, ML, Plotly, or package dependency unless explicitly requested.
 
 ### B.3 Test Scenarios
+
 | Scenario | Input | Expected | Actual | Result |
 |----------|-------|----------|--------|--------|
 | Happy path | 6 months of revenue and threshold | Scenario packet with method and trigger actions | | |

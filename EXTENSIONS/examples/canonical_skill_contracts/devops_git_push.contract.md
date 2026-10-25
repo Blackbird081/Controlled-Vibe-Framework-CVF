@@ -9,7 +9,7 @@ Thực hiện commit và push các thay đổi đã được phê duyệt lên r
 
 RISK_LEVEL: High
 
-2. Governance Constraints
+1. Governance Constraints
 
 ALLOWED_ARCHETYPES: Executor
 
@@ -27,7 +27,7 @@ WORKTREE_CLEAN
 
 TESTS_PASSED
 
-3. Input Specification
+1. Input Specification
 
 INPUT_FIELDS:
 
@@ -55,7 +55,7 @@ validation: files must be tracked and within approved changeset
 
 required
 
-4. Output Specification
+1. Output Specification
 
 OUTPUT_FIELDS:
 
@@ -75,7 +75,7 @@ success: remote updated
 
 failure: any non-success state
 
-5. Execution Properties
+1. Execution Properties
 
 SIDE_EFFECTS:
 
@@ -89,7 +89,7 @@ IDEMPOTENCY: No
 
 EXPECTED_DURATION: Short
 
-6. Failure & Risk Notes
+1. Failure & Risk Notes
 
 KNOWN_FAILURE_MODES:
 
@@ -107,7 +107,7 @@ Deployment of unintended changes
 
 HUMAN_INTERVENTION_REQUIRED: Yes
 
-7. Audit & Trace Requirements
+1. Audit & Trace Requirements
 
 AUDIT_FIELDS:
 

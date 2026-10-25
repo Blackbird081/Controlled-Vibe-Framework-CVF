@@ -17,6 +17,7 @@ Không yêu cầu.
 ## 🎯 Mục đích
 
 **Khi nào dùng skill này:**
+
 - Báo cáo kinh doanh định kỳ
 - Analysis reports
 - Executive summaries
@@ -24,6 +25,7 @@ Không yêu cầu.
 - Project status reports
 
 **Không phù hợp khi:**
+
 - User guides → Documentation
 - Slides → Presentation
 - Deep data analysis → Cần analyst
@@ -67,6 +69,7 @@ Không yêu cầu.
 - UAT Objective: Skill phải đạt chuẩn output theo CVF + không vượt quyền
 
 ---
+
 ## 📋 Form Input
 
 | Field | Mô tả | Bắt buộc | Ví dụ |
@@ -83,6 +86,7 @@ Không yêu cầu.
 ## ✅ Expected Output
 
 **Kết quả:**
+
 - Structured report với clear sections
 - Executive summary upfront
 - Data-backed insights
@@ -90,6 +94,7 @@ Không yêu cầu.
 - Visual support (suggest charts)
 
 **Cấu trúc output:**
+
 ```
 REPORT TITLE | Date | Author
 
@@ -136,6 +141,7 @@ REPORT TITLE | Date | Author
 - [ ] Professional tone
 
 **Red flags (cần Reject):**
+
 - ⚠️ No executive summary
 - ⚠️ Opinions without data
 - ⚠️ Missing recommendations
@@ -166,7 +172,8 @@ REPORT TITLE | Date | Author
 
 ## 📊 Ví dụ thực tế
 
-### Input mẫu:
+### Input mẫu
+
 ```
 Report type: Monthly Marketing Performance
 Audience: Marketing Director
@@ -183,7 +190,8 @@ Key questions:
 Format: 1-page executive brief
 ```
 
-### Output mẫu:
+### Output mẫu
+
 ```
 MARKETING PERFORMANCE REPORT | January 2024
 
@@ -223,7 +231,8 @@ RECOMMENDED ACTIONS
 Next Review: Feb 5, 2024
 ```
 
-### Đánh giá:
+### Đánh giá
+
 - ✅ Executive summary clear
 - ✅ Data với comparisons
 - ✅ Answers key questions
@@ -236,6 +245,7 @@ Next Review: Feb 5, 2024
 ---
 
 ## 🔗 Related Skills
+
 - [Documentation](./01_documentation.skill.md)
 - [Presentation](./03_presentation.skill.md)
 

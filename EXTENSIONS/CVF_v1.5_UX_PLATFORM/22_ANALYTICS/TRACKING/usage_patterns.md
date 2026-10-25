@@ -24,6 +24,7 @@ Phân tích cách user sử dụng CVF để optimize UX.
 ## Template Usage Metrics
 
 ### Popularity
+
 ```sql
 SELECT 
   template_id,
@@ -35,6 +36,7 @@ ORDER BY usage_count DESC;
 ```
 
 ### Template Heatmap
+
 ```
 Business Templates:      ████████████ 45%
 Technical Templates:     ████████░░░░ 32%
@@ -47,6 +49,7 @@ Research Templates:      ██░░░░░░░░░░  5%
 ## Time Patterns
 
 ### By Hour
+
 ```
 00-06: ░░░░░░░░░░░░  5%  (Night)
 06-09: ████░░░░░░░░ 15%  (Morning)
@@ -57,6 +60,7 @@ Research Templates:      ██░░░░░░░░░░  5%
 ```
 
 ### By Day
+
 ```
 Mon: ████████░░ 18%
 Tue: ██████████ 22%
@@ -72,6 +76,7 @@ Sun: ██░░░░░░░░  2%
 ## Session Patterns
 
 ### Average Session
+
 ```
 Avg templates per session: 2.3
 Avg executions per session: 3.1
@@ -79,6 +84,7 @@ Avg session duration: 12 minutes
 ```
 
 ### Common Flows
+
 ```
 1. Home → Template → Form → Result → Accept (65%)
 2. Home → Template → Form → Result → Reject → Retry → Accept (20%)
@@ -91,6 +97,7 @@ Avg session duration: 12 minutes
 ## Input Patterns
 
 ### Field Completion
+
 ```
 Required fields: 100% (enforced)
 Optional fields: 43% (user choice)
@@ -98,6 +105,7 @@ Advanced options: 12% (power users)
 ```
 
 ### Input Length
+
 ```
 Short (<100 chars):  25%
 Medium (100-500):    55%

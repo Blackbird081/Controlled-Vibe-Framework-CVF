@@ -198,9 +198,11 @@ Grades: **A** (≥0.9) → **B** (≥0.8) → **C** (≥0.7) → **D** (≥0.6) 
 Base URL: `http://localhost:8000`
 
 ### `GET /health`
+
 Health check — returns `{"status": "ok", "timestamp": "..."}`
 
 ### `POST /evaluate`
+
 Evaluate AI output through governance pipeline.
 
 ```json
@@ -215,6 +217,7 @@ Evaluate AI output through governance pipeline.
 ```
 
 ### `POST /approve`
+
 Submit approval for a pending decision.
 
 ```json
@@ -226,9 +229,11 @@ Submit approval for a pending decision.
 ```
 
 ### `GET /ledger`
+
 Retrieve the full immutable audit ledger.
 
 ### `POST /risk-convert`
+
 Convert between CVF and internal risk levels.
 
 ```json
@@ -342,6 +347,7 @@ The included `ci/github_action.yml` runs on push/PR to `main` and `develop`:
 ### Pre-commit Hook
 
 `ci/pre_commit_hook.py` validates:
+
 - `governance_config.json` exists and is valid JSON
 - Freeze mode is not active
 - Ledger integrity is intact

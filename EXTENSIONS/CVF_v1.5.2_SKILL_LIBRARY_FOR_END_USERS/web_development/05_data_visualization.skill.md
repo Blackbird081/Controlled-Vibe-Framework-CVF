@@ -20,12 +20,14 @@ Không yêu cầu.
 Chọn loại biểu đồ phù hợp nhất cho dữ liệu, kèm theo color guidance, accessibility notes, library recommendation, và interactivity level. Dựa trên 25+ chart types.
 
 **Khi nào nên dùng:**
+
 - Build dashboard với nhiều loại data
 - Cần chọn chart type phù hợp cho từng metric
 - Compare charting libraries (Chart.js vs D3 vs Recharts)
 - Optimize chart accessibility & performance
 
 **Không phù hợp khi:**
+
 - Dữ liệu chỉ cần hiển thị bảng/text
 - Infographic design (khác data visualization)
 
@@ -134,6 +136,7 @@ PERFORMANCE:
 - [ ] Alternatives provided
 
 **Red flags (cần Reject):**
+
 - ⚠️ Pie chart cho > 5 categories (unreadable)
 - ⚠️ 3D charts (distorts perception)
 - ⚠️ Chỉ dùng color để phân biệt series (colorblind)

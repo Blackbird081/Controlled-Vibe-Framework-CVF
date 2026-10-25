@@ -81,6 +81,7 @@ export function buildReceiptIntegrityAnchor(
 export function verifySignedReceiptIntegrity(receipt: GovernanceEvidenceReceipt, signingSecret: string): boolean {
     if (!signingSecret?.trim() || receipt.receiptIntegrity?.signatureStatus !== 'SIGNED') return false;
     const { receiptIntegrity, htmlPilotEvidence: _pilot, ...unsigned } = receipt;
+    void _pilot;
     const canonical = canonicalizeReceiptForIntegrity(unsigned);
     const expectedHash = sha256Hex(canonical);
     const expectedHmac = hmacSha256Hex(signingSecret.trim(), canonical);

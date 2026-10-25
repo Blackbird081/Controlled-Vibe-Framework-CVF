@@ -23,7 +23,7 @@ kết quả cuối cùng cần đạt
 “Phân tích để hiểu rõ vấn đề.”
 “Đưa ra giải pháp tốt nhất.”
 
-2. Scope
+1. Scope
 
 Bắt buộc.
 
@@ -45,7 +45,7 @@ nguồn thông tin
 
 📌 Scope không phải checklist công việc.
 
-3. Output Contract
+1. Output Contract
 
 Bắt buộc.
 
@@ -67,7 +67,7 @@ thứ tự nếu cần
 
 📌 Nếu không định nghĩa output → không audit được.
 
-4. Constraints
+1. Constraints
 
 Bắt buộc.
 

@@ -47,7 +47,7 @@ Structural review: PUBLIC_PROJECTION_STRUCTURE_REVIEWED; QBS helper extraction, 
 Validation: Targeted public-profile rejection tests, offline SDK integration, strict Web lint/type/tests, Windows checks, QBS CLI parity and historical-byte checks have returned evidence. Final exact-candidate CI remains required before an all-gates claim. No provider call or live QBS scoring was run.
 
 ```public-change-evidence-json
-{"schemaVersion":"cvf.publicChangeEvidence.v1","publicBase":"6ee8e75ee734a478fd06e237ac17baee11cec547","sourceCommit":"673a779b4986a06f4b70e5467e8c88c9c047b768","changedPaths":[".gitattributes","EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk/models/skill_contract.py","EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/sdk/registry/validators.py","EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/tests/adapters.test.ts","governance/compat/CVF_ROOT_FILE_EXPOSURE_REGISTRY.json","scripts/check_public_surface.py","scripts/run_cvf_static_ci_gate.py","scripts/test_check_public_surface.py","scripts/test_run_cvf_static_ci_gate.py"],"claimBoundary":"PUBLIC_CHANGE_TRACEABILITY_NOT_PRIVATE_CLOSURE"}
+{"schemaVersion":"cvf.publicChangeEvidence.v1","publicBase":"150936e19bff3dec29febcf4121cd968036fd5fd","sourceCommit":"f60cf024bf1121d1a1769845f4451a7284605198","changedPaths":[".github/workflows/documentation-testing.yml","docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json"],"claimBoundary":"PUBLIC_CHANGE_TRACEABILITY_NOT_PRIVATE_CLOSURE"}
 ```
 
 ## Historical Export Binding

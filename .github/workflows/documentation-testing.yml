@@ -443,6 +443,12 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install and verify Runtime Adapter Hub check dependencies
+        working-directory: EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB
+        run: |
+          npm ci
+          npm run check
+
       - name: Enforce GC-029 extension package check
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}

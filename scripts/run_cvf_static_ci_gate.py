@@ -87,7 +87,7 @@ def check_docs_governance_compat() -> CheckResult:
     base = os.environ.get("BASE_SHA", "HEAD")
     head = os.environ.get("HEAD_SHA", "HEAD")
     code, stdout, stderr = run_cmd(
-        [sys.executable, str(script), "--base", base, "--head", head, "--enforce"],
+        [sys.executable, str(script), "--base", base, "--head", head, "--profile", "public", "--enforce"],
         cwd=REPO_ROOT,
         timeout=120,
     )

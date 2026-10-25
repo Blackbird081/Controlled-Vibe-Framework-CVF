@@ -6,7 +6,7 @@ Based on CVF v1.2 SKILL_CONTRACT_SPEC.md
 """
 
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
 from enum import Enum
 import yaml
 import json
@@ -194,7 +194,7 @@ class SkillContract:
         return self.governance.can_execute(archetype, phase)
     
     @classmethod
-    def from_yaml(cls, path: str | Path) -> "SkillContract":
+    def from_yaml(cls, path: Union[str, Path]) -> "SkillContract":
         """Load contract from YAML file"""
         path = Path(path)
         with open(path, 'r', encoding='utf-8') as f:
@@ -319,7 +319,7 @@ class SkillContract:
             "dependencies": self.dependencies,
         }
     
-    def to_yaml(self, path: str | Path) -> None:
+    def to_yaml(self, path: Union[str, Path]) -> None:
         """Save contract to YAML file"""
         path = Path(path)
         with open(path, 'w', encoding='utf-8') as f:

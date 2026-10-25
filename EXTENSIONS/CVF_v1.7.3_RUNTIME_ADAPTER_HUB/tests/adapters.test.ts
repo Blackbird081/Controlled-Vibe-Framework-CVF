@@ -556,7 +556,7 @@ describe('WorkerThreadSandboxAdapter', () => {
                 const isWindows = process.platform === 'win32'
                 const command: SandboxCommand = {
                     taskId: 'env-sentinel-test',
-                    command: isWindows ? 'cmd' : 'node',
+                    command: isWindows ? 'cmd' : process.execPath,
                     args: isWindows
                         ? ['/c', `if defined ${sentinelName} (echo LEAKED) else (echo CLEAN)`]
                         : ['-e', `process.stdout.write(process.env.${sentinelName} ? 'LEAKED' : 'CLEAN')`],
@@ -581,7 +581,7 @@ describe('WorkerThreadSandboxAdapter', () => {
             const isWindows = process.platform === 'win32'
             const command: SandboxCommand = {
                 taskId: 'env-explicit-test',
-                command: isWindows ? 'cmd' : 'node',
+                command: isWindows ? 'cmd' : process.execPath,
                 args: isWindows
                     ? ['/c', 'echo %CVF_EXPLICIT_VAR%']
                     : ['-e', 'process.stdout.write(process.env.CVF_EXPLICIT_VAR || "")'],

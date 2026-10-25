@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import fnmatch
+import hashlib
 import json
 import re
 import subprocess
@@ -49,6 +50,10 @@ SECRET_PATTERNS = [
 
 ALLOW_PLACEHOLDERS = ("<operator-supplied", "<your", "your-", "placeholder", "test-key", "fake", "dummy")
 SKIP_DIRS = {".git", "node_modules", ".next", "coverage", "test-results", "playwright-report", "__pycache__"}
+PINNED_REVIEWED_MARKDOWN_SHA256 = {
+    # Exact historical evidence payload retained byte-for-byte after archive rotation.
+    "docs/evidence/archive/EXPORT_MANIFEST_2026-05-09.md": "2ed5727817e3c0bbfbde0f906437f04e06922359967ca0f3ed121a5e7b4e6d0a",
+}
 
 
 def rel(path: Path) -> str:
@@ -108,6 +113,20 @@ def scan() -> list[str]:
 
     for path in git_surface_files():
         r = rel(path)
+        pinned_sha256 = PINNED_REVIEWED_MARKDOWN_SHA256.get(r)
+        pinned_payload_matches = False
+        if pinned_sha256 is not None:
+            try:
+                actual_sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
+            except OSError:
+                actual_sha256 = "UNREADABLE"
+            pinned_payload_matches = actual_sha256 == pinned_sha256
+            if not pinned_payload_matches:
+                violations.append(
+                    f"reviewed frozen markdown payload drift: {r} "
+                    f"(expected sha256 {pinned_sha256}; got {actual_sha256})"
+                )
+
         if path.name == ".env.example":
             pass
         else:
@@ -135,7 +154,7 @@ def scan() -> list[str]:
 
         if path.suffix.lower() == ".md":
             line_count = text.count("\n") + 1
-            if line_count > 1200 and r not in allowlist:
+            if line_count > 1200 and r not in allowlist and not pinned_payload_matches:
                 violations.append(f"large markdown file needs review: {r} ({line_count} lines)")
 
     return violations

@@ -6,7 +6,7 @@ Provides validation utilities for CVF contracts and registry entries.
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
 import yaml
 import json
 
@@ -67,7 +67,7 @@ class ContractValidator:
     
     VALID_TRACE_LEVELS = ["Basic", "Full"]
     
-    def validate(self, contract_path: Path | str) -> ValidationResult:
+    def validate(self, contract_path: Union[Path, str]) -> ValidationResult:
         """
         Validate a contract file
         

@@ -46,6 +46,18 @@ class PublicWorkflowOrchestrationTests(unittest.TestCase):
         self.assertEqual(result.status, "FAIL")
         self.assertTrue(any("missing public command fragment" in item for item in result.detail))
 
+    def test_docs_compatibility_forwards_public_profile(self) -> None:
+        with patch.dict(static_gate.os.environ, {"BASE_SHA": "base-sha", "HEAD_SHA": "head-sha"}):
+            with patch.object(static_gate, "run_cmd", return_value=(0, "", "")) as run:
+                result = static_gate.check_docs_governance_compat()
+
+        self.assertEqual(result.status, "PASS")
+        command = run.call_args.args[0]
+        self.assertIn("--profile", command)
+        self.assertEqual(command[command.index("--profile") + 1], "public")
+        self.assertEqual(command[command.index("--base") + 1], "base-sha")
+        self.assertEqual(command[command.index("--head") + 1], "head-sha")
+
 
 if __name__ == "__main__":
     unittest.main()

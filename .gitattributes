@@ -134,3 +134,6 @@ docs/reviews/evidence/cvf-milestone-coverage-machine-20261023.json text eol=lf
 docs/baselines/CVF_GC018_JEV_CAPABILITY_SUGGESTION_ADAPTER_2026-10-25.md text eol=lf
 docs/work_orders/CVF_AGENT_WORK_ORDER_JEV_SKILL_SUGGESTION_LOCAL_CONTINUATION_2026-10-25.md text eol=lf
 docs/CVF_ARCHITECTURE_DECISIONS_ARCHIVE_ADR011-015.md text eol=lf
+
+# Preserve the reviewed public May9 archive Git payload on Windows checkout.
+docs/evidence/archive/EXPORT_MANIFEST_2026-05-09.md text eol=lf

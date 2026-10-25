@@ -27,6 +27,25 @@ They must not:
 - inline typed evidence payloads or field-level trace/report metadata that belong in full evidence artifacts
 - silently replace baselines, reviews, audits, or measurement records
 
+## Repository Profiles
+
+The existing checker accepts an explicit `--profile private|public` selector.
+The default is `private`, which retains its five established summary surfaces.
+The `public` profile checks exactly these four surfaces:
+
+- `docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md`
+- `docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md`
+- `docs/INDEX.md`
+- `AGENT_HANDOFF.md`
+
+It does not require private session memory or roadmap files in the public
+repository.
+
+Both profiles apply the same missing-surface and typed-evidence checks. The
+invoking workflow selects the profile for its repository; the checker never
+infers a profile from missing files. Local pre-push and provenance checks keep
+the private default unless they explicitly select another profile.
+
 The canonical maintainability authority is:
 
 - `docs/reference/CVF_MAINTAINABILITY_STANDARD.md`

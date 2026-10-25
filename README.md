@@ -557,6 +557,7 @@ Mandatory guard registry:
 
 - [Core Knowledge Base](docs/CVF_CORE_KNOWLEDGE_BASE.md)
 - [Operation Guard Toolkit](governance/toolkit/05_OPERATION/)
+- [Canon Summary Evidence Separation Guard](governance/toolkit/05_OPERATION/CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md)
 - [Governed Artifact Authoring Guard](governance/toolkit/05_OPERATION/CVF_GOVERNED_ARTIFACT_AUTHORING_GUARD.md)
 - [Knowledge Absorption Priority Guard](governance/toolkit/05_OPERATION/CVF_KNOWLEDGE_ABSORPTION_PRIORITY_GUARD.md)
 - [Template Skill Standard Guard](governance/toolkit/05_OPERATION/CVF_TEMPLATE_SKILL_STANDARD_GUARD.md)

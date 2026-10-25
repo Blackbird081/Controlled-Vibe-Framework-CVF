@@ -63,6 +63,10 @@ jobs:
         working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
         run: npm ci
 
+      - name: Install MCP Server dependencies for imported SDK sources
+        working-directory: EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER
+        run: npm ci
+
       - name: Run static CI gate
         run: python scripts/run_cvf_static_ci_gate.py --json
         env:

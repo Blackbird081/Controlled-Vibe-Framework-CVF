@@ -37,7 +37,9 @@ describe('integrated job controls', () => {
     await waitFor(() => expect(screen.getByTestId('current-job-id').textContent).toContain(jobId));
     fireEvent.click(screen.getByText('Mock confirmed Save'));
     await waitFor(() => expect(screen.getByText(/Current displayed job and saved version/)).toBeTruthy());
-    fireEvent.click(screen.getByTestId('accept-synthetic-version'));
+    // Snapshot copy appears before the async LINK_VERSION readback enables review controls.
+    const acceptVersion = await screen.findByTestId('accept-synthetic-version');
+    fireEvent.click(acceptVersion);
     expect(calls).toEqual(['CREATE_JOB', 'LINK_VERSION']);
     fireEvent.change(screen.getByLabelText('Review note c1'), { target: { value: 'Observed exact heading' } });
     fireEvent.click(screen.getByLabelText(/I reviewed this exact saved version/));

@@ -11,13 +11,26 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 POLICY_PATH = "governance/toolkit/05_OPERATION/CVF_CANON_SUMMARY_EVIDENCE_SEPARATION_GUARD.md"
-SUMMARY_SURFACES = [
+PRIVATE_SUMMARY_SURFACES = [
     "docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md",
     "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
     "CVF_SESSION_MEMORY.md",
     "docs/INDEX.md",
     "docs/roadmaps/CVF_POST_W7_OPEN_TARGETS_UPGRADE_ROADMAP_2026-03-28.md",
 ]
+PUBLIC_SUMMARY_SURFACES = [
+    "docs/reference/CVF_MASTER_ARCHITECTURE_WHITEPAPER.md",
+    "docs/reference/CVF_WHITEPAPER_PROGRESS_TRACKER.md",
+    "docs/INDEX.md",
+    "AGENT_HANDOFF.md",
+]
+SUMMARY_SURFACE_PROFILES = {
+    "private": PRIVATE_SUMMARY_SURFACES,
+    "public": PUBLIC_SUMMARY_SURFACES,
+}
+DEFAULT_PROFILE = "private"
+# Keep the historical name as the private default surface for existing imports.
+SUMMARY_SURFACES = PRIVATE_SUMMARY_SURFACES
 FORBIDDEN_TOKENS = [
     "measurementId",
     "traceId",
@@ -40,14 +53,18 @@ def _read_text(rel_path: str) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
 
 
-def _classify() -> dict:
+def _classify(profile: str = DEFAULT_PROFILE) -> dict:
+    if profile not in SUMMARY_SURFACE_PROFILES:
+        raise ValueError(f"unknown summary surface profile: {profile}")
+
     violations: list[dict[str, str]] = []
     token_patterns = {
         token: re.compile(rf"\b{re.escape(token)}\b\s*[:=]")
         for token in FORBIDDEN_TOKENS
     }
 
-    for rel_path in SUMMARY_SURFACES:
+    surfaces = SUMMARY_SURFACE_PROFILES[profile]
+    for rel_path in surfaces:
         text = _read_text(rel_path)
         if not text:
             violations.append({
@@ -67,7 +84,8 @@ def _classify() -> dict:
     return {
         "timestamp": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "policy": POLICY_PATH,
-        "summarySurfaceCount": len(SUMMARY_SURFACES),
+        "profile": profile,
+        "summarySurfaceCount": len(surfaces),
         "violationCount": len(violations),
         "violations": violations,
         "compliant": not violations,
@@ -76,6 +94,7 @@ def _classify() -> dict:
 
 def _print_report(report: dict) -> None:
     print("=== CVF Canon Summary Evidence Separation Gate ===")
+    print(f"Profile: {report['profile']}")
     print(f"Summary surfaces checked: {report['summarySurfaceCount']}")
     print(f"Violations: {report['violationCount']}")
     if report["violations"]:
@@ -93,11 +112,17 @@ def main() -> int:
         sys.stderr.reconfigure(errors="replace")
 
     parser = argparse.ArgumentParser(description="Check canon summary vs evidence separation")
+    parser.add_argument(
+        "--profile",
+        choices=tuple(SUMMARY_SURFACE_PROFILES),
+        default=DEFAULT_PROFILE,
+        help="summary surface set to enforce (default: private)",
+    )
     parser.add_argument("--enforce", action="store_true")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 
-    report = _classify()
+    report = _classify(args.profile)
     if args.json:
         print(json.dumps(report, indent=2))
     else:

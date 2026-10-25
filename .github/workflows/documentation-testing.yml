@@ -164,7 +164,7 @@ jobs:
 
       - name: Enforce GC-036 summary/evidence separation
         run: |
-          python governance/compat/check_canon_summary_evidence_separation.py --enforce
+          python governance/compat/check_canon_summary_evidence_separation.py --profile public --enforce
 
   baseline-update-compat:
     name: Baseline Update Compat

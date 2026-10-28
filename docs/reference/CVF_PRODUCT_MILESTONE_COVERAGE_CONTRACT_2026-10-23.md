@@ -125,6 +125,127 @@ dependencies or evidence change, and at checkpoint/terminal review. Preserve val
 unaffected evidence. Record invalidated proof and the bounded verification needed;
 do not rerun unrelated suites or silently reset a spent budget.
 
+### Development-Owned Internal Readiness Before User Feedback
+
+The development team, including the orchestrator, workers and reviewers, owns
+turning the approved user outcome into an actionable roadmap, a usable product
+and internal acceptance evidence. This duty applies to CVF core, downstream
+products, packages, skills and templates. The non-coder supplies goals, business
+decisions, available business sources and later suitability feedback; they are
+not required to design technical tests, invent an oracle or expected output,
+debug the implementation, or perform technical QA before the team can proceed.
+Ask for genuinely missing business decisions with their consequences; the team
+resolves ordinary technical choices within existing authority.
+
+Before presenting a capability as internally ready for feedback, the team owns:
+
+- observable acceptance criteria and a bounded set of representative, boundary,
+  failure and recovery cases appropriate to the claimed use;
+- expected results supported by authoritative sources, reproducible calculations
+  or other justified evidence independent of the generated answer; do not invent
+  gold data or treat agreement among AI outputs as proof;
+- exact-version execution evidence, recorded failures and limitations, and the
+  independent review required by the existing risk and role rules; and
+- a real packaged consumer flow, including installation or opening, normal use,
+  useful output and applicable recovery, exercised in a permitted environment.
+  Component checks, document presence and a successful script alone do not prove
+  that the delivered product is usable.
+
+The team must organize qualified domain verification when the capability's
+correctness, safety or professional claim requires it. An AI cannot certify its
+own professional competence. Missing source, semantic or expert evidence blocks
+the affected capability or claim; the team owns the gap and its next condition.
+Independent capabilities may proceed only with an evidenced independence decision
+under this contract. An authorized experimental component may be delivered under an explicit
+experimental label, with its unmet criteria and use limits stated and without
+a ready-for-use claim. Its
+mandatory criteria remain unmet: do not relabel them optional, N/A or accepted
+merely to ship, or lower correctness/safety gates. Changing committed scope still
+requires its existing scope-owner authority.
+
+Keep three decisions explicit in the existing roadmap and terminal return:
+internal readiness (team evidence and required review), user feedback/business
+acceptance (fit to the user's needs), and permission to install, publish, deploy
+or otherwise act externally (the applicable authority). Internal readiness is a
+prerequisite for requesting product-use feedback, not a substitute for business
+acceptance or an external-action grant. Feedback may identify further work; its
+absence does not transfer unresolved internal testing or expertise to the user.
+
+#### Three Acceptance Layers And A Compact Evidence Record
+
+Make the order explicit: technical verification, then developer-owned product
+acceptance against defined content and workflow criteria, then a usable delivery
+for user suitability feedback/business acceptance. The orchestrator owns the
+integrated product outcome and all milestone gaps. Installation, activation,
+confirmation and publishing authority remain separate from these quality layers.
+Technical checks or a user enabling a package do not establish product quality.
+
+Use the existing acceptance/intake record for five questions, preserving every
+applicable project criterion rather than adding a parallel ledger:
+
+1. What job does the component perform, with which user-request triggers,
+   inputs, outputs, exclusions and reuse boundary?
+2. What output standard was defined before testing, including provenance,
+   usage terms, permissions, limitations and missing/invalid-input behaviour?
+3. Which revision-bound cases, justified expectations, actual outputs and
+   independent review demonstrate that standard, and what remains untested?
+4. What concrete value does it add over the existing approach, with evidence
+   for that claim and fair comparison where duplication requires it?
+5. Which exact delivered artifact, environment and consumer workflow were
+   exercised, including new-project and upgrade paths when claimed, preservation
+   of user files/choices/permissions and applicable recovery?
+
+Scale evidence to claim and risk: ordinary tasks need representative and
+missing-input cases with content review; numeric or format constraints add
+measurable checks and typical failures. High-consequence claims require source
+verification and appropriate domain assessment of the parts needing professional
+judgement. Mechanical checks need not all await a specialist. Developers prepare
+cases, sources, rubrics and questions for assessment. Where authority to recruit
+or pay is missing, ask the operator once in business language about the assessor
+and budget; reuse existing decisions, do not self-hire, contact or pay anyone
+without authorization. Keep dependent claims blocked until qualified evidence
+exists; continue independent checks rather than waiting for user-designed QA.
+Distinguish regressions used to tune behaviour from evidence for new-task claims.
+Do not use AI agreement as the sole oracle or demand a large benchmark for every
+skill. A concrete template-compliance or error-reduction claim can be tested as
+such without claiming universal superiority over native capability.
+
+For changeable sources, record the revision, check date, unresolved verification
+and risk-based recheck events/dates; a deadline triggers reassessment, not an
+assumption of continuing validity or an automatic status downgrade. If an overdue
+source has not been rechecked, state "not rechecked since <last check date>" in
+the output (unknown if unknown); do not present it as current authority for
+high-consequence claims. Record the
+actual OS/runtime/host/tool/format support matrix, marking unknown combinations
+NOT_TESTED. Test new and upgrade flows on the artifact being claimed, not just
+the development checkout. Reuse existing release gates; these questions do not
+add an approval gate, intake enum or universal project schema. Existing packages
+and skills need revision-bound evidence for readiness claims; legacy availability
+labels are not proof, and missing evidence does not authorize blanket status
+changes or silent removal of committed scope.
+
+#### Required Verification And Evidence Custody
+
+Before a ready-for-use claim, run the applicable required release/package suite
+on the exact candidate in the declared supported environment. Focused checks
+alone do not replace that suite when the changed delivered surface requires it.
+Reviewers consume valid producer evidence; repeat only required phase gates or
+bounded checks justified by a named gap/contradiction, expected information gain
+and cost reason under the existing review-cost rules. This is not a requirement
+to rerun unrelated suites for every documentation change.
+
+The existing test report lists each skipped test identifier, reason/environment,
+any equivalent platform coverage attempted, and its effect on the claim (or NONE
+when no cases were skipped). A skip is not PASS. Use a real supported equivalent
+where available; otherwise retain NOT_TESTED and the affected readiness limit.
+
+Before replacing an existing untracked/unversioned coordination document, retain
+its exact prior bytes in an appropriate archive and record the hash and replacement
+identity. Modify CVF rules at their canonical governance source, then use the
+existing public/workspace projection. An explicitly authorized temporary edit in
+a generated/downstream copy retains a hashed patch, the label NOT_UPSTREAMED and
+a source-owner destination until forward synchronization reconciles it.
+
 ### Two Terminal Conclusions
 
 Every terminal return/review states both:
@@ -158,8 +279,8 @@ Local-admitted milestone pointers, section identity, exact criterion sets, owned
 remainder and phase/conclusion joins are checked mechanically. File presence or a passing shape check never
 proves agent compliance, installed-project adoption or runtime AI enforcement.
 
-The 2026-10-25 intent-preservation and native-reuse clarification is a written
-semantic review obligation. Existing validators bind declared criteria and control
+The development-owned readiness rule and the 2026-10-25 intent-preservation
+and native-reuse clarification are written semantic review obligations. Existing validators bind declared criteria and control
 identity; they do not infer conversational intent or detect redundant native code.
 
 ## Related Artifacts

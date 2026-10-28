@@ -153,6 +153,14 @@ CVF-Workspace/
 - Run application work from the application project root.
 - Keep provider keys and secrets out of this file, `.cvf/`, generated `AGENTS.md`, and bootstrap logs.
 
+## Development Responsibility And Feedback
+
+Apply `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`,
+section "Development-Owned Internal Readiness Before User Feedback", in the CVF core.
+The development team proves usable product delivery before requesting feedback;
+noncoders supply business decisions, not technical QA. Follow its acceptance layers,
+five evidence questions and authority/claim limits in the existing project records.
+
 ## Reference
 
 Canonical source: `.Controlled-Vibe-Framework-CVF/docs/reference/CVF_WORKSPACE_RULES.md`

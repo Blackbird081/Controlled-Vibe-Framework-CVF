@@ -9,8 +9,7 @@
 Any test, roadmap closure, release gate, demo proof, or public claim asserting CVF governance behavior - risk
 classification, approval flow, phase gates, DLP filtering, bypass detection, output validation, provider routing,
 audit trail updates, or CVF controlling AI/agent behavior - **must use a real provider API call**. Mock mode is
-allowed **only** for pure UI structure checks (navigation, routing, static badges, layout, RBAC) that assert no AI
-governance behavior.
+allowed **only** for pure UI structure checks (navigation, routing, static badges, layout, RBAC) that assert no AI governance behavior.
 
 ## First-Request Protocol (MANDATORY)
 
@@ -21,23 +20,18 @@ Before performing ANY action on this project, you MUST:
 2. Resolve/verify the core path. On a fresh clone, run
    `powershell -ExecutionPolicy Bypass -File scripts/initialize_cvf_clone.ps1` to clone/pin the core and generate
    git-ignored local binding. Run the workspace doctor before material work; it must confirm the hidden core tracks
-   the public CVF remote, carries the public-safe workspace kit, and matches `origin/main`. On stale/unrelated
-   history, stop and reconcile with `scripts/update_cvf_workspace_public_core.ps1`.
+   the public CVF remote, carries the public-safe workspace kit, and matches `origin/main`. On stale/unrelated    history, stop and reconcile with `scripts/update_cvf_workspace_public_core.ps1`.
 3. Read `.cvf/policy.json`; `liveGovernanceEvidenceRequired` and `mockAllowedOnlyForUi` must both be `true`. Treat
    `requiredDocs` and state history as targeted authority inputs, not an unconditional full read.
 4. Resolve project continuity progressively. If `CVF_SESSION/ACTIVE_SESSION_BOOTSTRAP_READ_MODEL.json` exists, read it
-   first for compact current-mode/active-handoff/next-allowed-move facts; if not, extract `currentMode`,
-   `activeHandoff`, `nextAllowedMove`, `parkedCheckpoint`, and current-authority fields directly from
+   first for compact current-mode/active-handoff/next-allowed-move facts; if not, extract `currentMode`,    `activeHandoff`, `nextAllowedMove`, `parkedCheckpoint`, and current-authority fields directly from
    `CVF_SESSION/ACTIVE_SESSION_STATE.json` and record `BOOTSTRAP_MIGRATION_PENDING` as a non-blocking note - a missing
    bootstrap is not a reason to stop, nor license to read full history. Then read `CVF_SESSION_MEMORY.md`, the active
-   handoff, `IMPLEMENTATION_STATUS.json`, and `docs/INDEX.md`. Do a targeted full-state/historical-handoff lookup only
-   when a current fact is missing or contradictory.
+   handoff, `IMPLEMENTATION_STATUS.json`, and `docs/INDEX.md`. Do a targeted full-state/historical-handoff lookup only    when a current fact is missing or contradictory.
 5. Declare your operating context before your first substantive action, as a `CVF Agent Declaration` naming project,
-   CVF core path and commit, phase, risk ceiling, live evidence required (YES), active role, active handoff, next
-   allowed move, and parked checkpoint.
+   CVF core path and commit, phase, risk ceiling, live evidence required (YES), active role, active handoff, next    allowed move, and parked checkpoint.
 
-If you cannot complete steps 1-5 because a file is missing or unreadable: -> **STOP. Report which file is missing. Do
-not proceed.**
+If you cannot complete steps 1-5 because a file is missing or unreadable: -> **STOP. Report which file is missing. Do not proceed.**
 
 ## Mandatory Continuity Rehydration
 
@@ -64,6 +58,12 @@ A tranche may inherit accepted evidence and enter at its earliest open stage whe
 
 Before intake, planning, producing or receiving work, apply the pinned core's `docs/reference/CVF_GOVERNED_WORK_LIFECYCLE_AND_DESIGN_CONTROL_STANDARD_2026-06-11.md`, including its mandatory `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`: roadmap outcomes/checkpoints, complete milestone coverage, owned remainder, bounded supporting work and separate tranche/product conclusions. Apply `docs/reference/downstream_gate_profile/CVF_MILESTONE_COVERAGE_MACHINE_CONTRACT.md`: Local admits `docs/milestone-coverage-authority.json` before implementation; missing/unknown coverage permits finite verification only.
 Design outputs for quick agent and human continuation; accept incomplete inputs for permitted clarification, read sources before asking, resolve ordinary authorized details and pause only dependent actions. Apply these rules for every role and resumed agent without operator reminder. Verification questions do not change approved direction. Preserve native capability reuse; identify only missing CVF adapter work. Preserve governed SPEC/WORK_ORDER and locked design/authority; reuse existing artifact structure.
+
+Apply `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`,
+section "Development-Owned Internal Readiness Before User Feedback", in the CVF core.
+The development team proves usable product delivery before requesting feedback;
+noncoders supply business decisions, not technical QA. Follow its acceptance layers,
+five evidence questions and authority/claim limits in the existing project records.
 
 ## Provider-Neutral Role Contract
 

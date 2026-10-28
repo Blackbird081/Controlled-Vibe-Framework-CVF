@@ -95,6 +95,18 @@ an aggregate block is outside this control; if it declares the block at a termin
 status, it must distinguish its tranche position and unresolved product position.
 This does not replace the role/status owner or authorize worker product acceptance.
 
+### Development-Owned Acceptance Evidence Within Existing Fields
+
+Apply the product contract's "Development-Owned Internal Readiness Before User
+Feedback" section. The authority criterion descriptions identify technical,
+developer product and business acceptance obligations; rows[].evidence binds
+exact-version proof and unresolved rows retain gap/owner/destination. The existing
+conclusions.acceptance list carries the required acceptance evidence; a hash or
+technical PASS does not establish developer product or business acceptance.
+No acceptance-layer field or schema enum is added to this closed schema. Local
+reviews the five questions and evidence semantics; the existing validator checks
+criterion/evidence joins and terminal consistency, not usable-product quality.
+
 ## Phase And Integration Design
 
 Core: existing check_work_order_dispatch_quality.py calls the shared validator on

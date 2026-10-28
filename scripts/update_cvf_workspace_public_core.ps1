@@ -174,6 +174,14 @@ powershell -ExecutionPolicy Bypass -File ".Controlled-Vibe-Framework-CVF\scripts
 $projectList
 ~~~
 
+## Development Responsibility And Feedback
+
+Apply docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md,
+section "Development-Owned Internal Readiness Before User Feedback", in the CVF core.
+The development team proves usable product delivery before requesting feedback;
+noncoders supply business decisions, not technical QA. Follow its acceptance layers,
+five evidence questions and authority/claim limits in the existing project records.
+
 ## Boundary
 
 Workspace doctor PASS proves local enforcement artifacts and public-core

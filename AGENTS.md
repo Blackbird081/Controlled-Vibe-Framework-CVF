@@ -82,6 +82,12 @@ keys.
 
 Every role and resumed agent applies `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md` without operator reminder. Verification questions preserve approved direction. Bind work to user outcomes, complete milestone coverage, owned remainder, bounded supporting tasks and distinct tranche/product conclusions. Reuse native provider/repository capability and existing CVF owners; implement only demonstrated adapter gaps.
 
+Apply `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`,
+section "Development-Owned Internal Readiness Before User Feedback", in the CVF core.
+The development team proves usable product delivery before requesting feedback;
+noncoders supply business decisions, not technical QA. Follow its acceptance layers,
+five evidence questions and authority/claim limits in the existing project records.
+
 Agents must honor the startup order, workspace isolation rule, public claim
 boundary, and live-proof requirement above.
 

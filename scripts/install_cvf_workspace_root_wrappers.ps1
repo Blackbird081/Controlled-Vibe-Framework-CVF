@@ -628,6 +628,14 @@ CVF-Workspace/
 - Keep secrets out of workspace rules, generated project instructions, and logs.
 - Read `CVF_WORKSPACE_CLASSIFICATION_GUIDE.md` before selecting or changing a profile.
 
+## Development Responsibility And Feedback
+
+Apply `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`,
+section "Development-Owned Internal Readiness Before User Feedback", in the CVF core.
+The development team proves usable product delivery before requesting feedback;
+noncoders supply business decisions, not technical QA. Follow its acceptance layers,
+five evidence questions and authority/claim limits in the existing project records.
+
 ## Canonical Source
 
 `.Controlled-Vibe-Framework-CVF/docs/reference/CVF_WORKSPACE_RULES.md`

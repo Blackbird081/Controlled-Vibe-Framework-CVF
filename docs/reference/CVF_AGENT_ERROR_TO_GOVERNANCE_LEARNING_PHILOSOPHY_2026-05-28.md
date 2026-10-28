@@ -8,7 +8,7 @@ docType: reference
 
 Date: 2026-05-28
 
-EPISTEMIC_PROCESS_NA_WITH_REASON: binding governance philosophy reference restored from archive to its active path without semantic change; it defines a learning philosophy and makes no source-backed evidence comparison claim.
+EPISTEMIC_PROCESS_NA_WITH_REASON: normative learning philosophy including development-owned acceptance; incident evidence and adoption claims remain in governed learning records.
 
 ---
 
@@ -204,6 +204,14 @@ blocked, why the agents cannot resolve it inside current authority, the risk of
 continuing, and the next safe choice. A non-coder operator must not be asked to
 debug role choreography, path manifests, or checker ordering.
 
+## Learning From Acceptance Burden Transfer
+
+Treat technical QA shifted to a noncoder as an orchestrator/acceptance gap.
+Apply `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`,
+section "Development-Owned Internal Readiness Before User Feedback"; record the
+missing control and owned remedy in existing learning records. Implementation,
+source-project application and demonstrated effectiveness remain separate claims.
+
 ## Non-Coder Trust Boundary
 
 The operator should not need to inspect every diff, table, checklist, or source
@@ -222,6 +230,43 @@ The trusted object is the CVF control chain:
 If those controls are missing, a worker success claim is not enough.
 
 ## Closure Rule
+
+### Outcome-Level Learning And Operator Time
+
+Operator clarification, 2026-10-29: learning must improve the control chain
+while agents develop CVF, before a noncoder must discover its failures.
+Different error codes do not make repeated failure to reach the same user
+checkpoint independent first occurrences. At the second preparation failure,
+or when the operator first exposes a missed repeated pattern, the Local reviewer
+must assess the whole bounded outcome chain before another narrow repair.
+
+Record the common missing control, prior failures, remaining prerequisites,
+one consolidated corrective action, effort ceiling and stop decision. Keep
+technical error identity and outcome identity separate. A new tranche, worker,
+model, worktree or error label does not reset outcome history or spent budgets.
+Use existing SCEC for chain progression and F2G for learning disposition.
+
+Do not ask a noncoder to diagnose agent coordination or wait for an acceptance
+session while preparation is unresolved. Request availability or invite actual
+acceptance only after the admitted environment, launch route, user journey,
+remaining budget and exact candidate/version have current preparation evidence.
+Approval needed to obtain that evidence remains a separate question: never run
+a held effect to manufacture readiness before consent. An approval proposal is
+not an assertion that the UI is ready or a request to remain on standby.
+
+Learning has separate states: observed defect, accepted corrective control,
+implemented bounded control, and verified application/effectiveness. A written
+rule, added test or passing document gate alone cannot establish the final state.
+The positive/negative regression must target the originating failure mechanism;
+actual application requires the existing project-learning receipt. Parked source
+projects remain parked. Review explicitly records both foundation delivery and
+the unresolved product outcome, including responsibility for the next action.
+
+Machine boundary: the existing SCEC outcome-anchor extension enforces declared
+joins for enrolled milestones. It cannot interpret arbitrary chat, authenticate
+receipt truth, discover every semantic-equivalent outcome or control tools used
+outside the installed gates. Local review owns those limits; the operator does
+not become the technical fallback reviewer.
 
 A review finding should not close as "worker error" unless CVF also records why
 the governance layer did or did not catch it.

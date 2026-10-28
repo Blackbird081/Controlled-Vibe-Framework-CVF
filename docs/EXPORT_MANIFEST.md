@@ -47,7 +47,7 @@ Structural review: PUBLIC_PROJECTION_STRUCTURE_REVIEWED; QBS helper extraction, 
 Validation: Targeted public-profile rejection tests, offline SDK integration, strict Web lint/type/tests, Windows checks, QBS CLI parity and historical-byte checks have returned evidence. Final exact-candidate CI remains required before an all-gates claim. No provider call or live QBS scoring was run.
 
 ```public-change-evidence-json
-{"schemaVersion":"cvf.publicChangeEvidence.v1","publicBase":"b2d524bf3dff419b3e70f6e1e0468fd6748938c3","sourceCommit":"5ad56f136148591bc9e750af1b540705ebb9c0b3","changedPaths":["AGENTS.md","docs/reference/CVF_AGENT_ERROR_TO_GOVERNANCE_LEARNING_PHILOSOPHY_2026-05-28.md","docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md","docs/reference/CVF_WORKSPACE_RULES.md","docs/reference/downstream_gate_profile/CVF_MILESTONE_COVERAGE_MACHINE_CONTRACT.md","governance/toolkit/05_OPERATION/CVF_DOWNSTREAM_AGENTS_TEMPLATE.md","governance/toolkit/05_OPERATION/CVF_PUBLIC_CORE_AGENTS.md","scripts/install_cvf_workspace_root_wrappers.ps1","scripts/new-cvf-workspace.ps1","scripts/update_cvf_workspace_public_core.ps1"],"claimBoundary":"PUBLIC_CHANGE_TRACEABILITY_NOT_PRIVATE_CLOSURE"}
+{"schemaVersion":"cvf.publicChangeEvidence.v1","publicBase":"7bca1f0e763b1e04c65f7817f3a47331f4dd911b","sourceCommit":"7f6d5abe1709941c5721d3f690d20824d5db7fb9","changedPaths":["scripts/lib/downstream_governance/cvf_milestone_coverage.py","scripts/test_cvf_golden_downstream_bootstrap.ps1"],"claimBoundary":"PUBLIC_CHANGE_TRACEABILITY_NOT_PRIVATE_CLOSURE"}
 ```
 
 ## Historical Export Binding

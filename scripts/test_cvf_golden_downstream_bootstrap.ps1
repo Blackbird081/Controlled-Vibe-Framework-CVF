@@ -115,7 +115,7 @@ try {
     Add-Result "AC-03" "Catalog manager --check passes on pristine project" ($checkResult.ExitCode -eq 0) $checkResult.Output
     $artifactRegistry = Get-Content -LiteralPath (Join-Path $projectA "docs\catalog\ARTIFACT_REGISTRY.json") -Raw | ConvertFrom-Json
     $ids = @($artifactRegistry.artifacts | ForEach-Object { $_.id })
-    Add-Result "AC-03" "Artifact Registry has 17 unique mandatory entries" (($ids.Count -eq 17) -and (($ids | Select-Object -Unique).Count -eq 17)) "count=$($ids.Count)"
+    Add-Result "AC-03" "Artifact Registry has 18 unique mandatory entries including the shared learning home" (($ids.Count -eq 18) -and (($ids | Select-Object -Unique).Count -eq 18) -and ($ids -contains "family-learnings")) "count=$($ids.Count)"
     # AC-03 / BSL-R3: manifest carries the governed-catalog marker
     $manifestA = Get-Content -LiteralPath (Join-Path $projectA ".cvf\manifest.json") -Raw | ConvertFrom-Json
     Add-Result "BSL-R3" "Freshly bootstrapped manifest carries catalogKitVersion marker and expanded requiredDocs" `

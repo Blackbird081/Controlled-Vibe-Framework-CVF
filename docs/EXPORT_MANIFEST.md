@@ -47,7 +47,7 @@ Structural review: PUBLIC_PROJECTION_STRUCTURE_REVIEWED; QBS helper extraction, 
 Validation: Targeted public-profile rejection tests, offline SDK integration, strict Web lint/type/tests, Windows checks, QBS CLI parity and historical-byte checks have returned evidence. Final exact-candidate CI remains required before an all-gates claim. No provider call or live QBS scoring was run.
 
 ```public-change-evidence-json
-{"schemaVersion":"cvf.publicChangeEvidence.v1","publicBase":"7bca1f0e763b1e04c65f7817f3a47331f4dd911b","sourceCommit":"7f6d5abe1709941c5721d3f690d20824d5db7fb9","changedPaths":["scripts/lib/downstream_governance/cvf_milestone_coverage.py","scripts/test_cvf_golden_downstream_bootstrap.ps1"],"claimBoundary":"PUBLIC_CHANGE_TRACEABILITY_NOT_PRIVATE_CLOSURE"}
+{"schemaVersion":"cvf.publicChangeEvidence.v1","publicBase":"15e39450853184eb65dbde73398c69c3171a6241","sourceCommit":"1c7125286cf185f00c7b9248aed506889c448aa9","changedPaths":["docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md"],"claimBoundary":"PUBLIC_CHANGE_TRACEABILITY_NOT_PRIVATE_CLOSURE"}
 ```
 
 ## Historical Export Binding

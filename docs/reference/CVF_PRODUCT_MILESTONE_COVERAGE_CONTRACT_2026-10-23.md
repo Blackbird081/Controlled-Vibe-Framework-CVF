@@ -125,6 +125,55 @@ dependencies or evidence change, and at checkpoint/terminal review. Preserve val
 unaffected evidence. Record invalidated proof and the bounded verification needed;
 do not rerun unrelated suites or silently reset a spent budget.
 
+### Continuation Value And Cumulative Cost Decision
+
+Before self-assignment, dispatch, a successor or a paid/long-running verification,
+the orchestrator records the decision in the existing brief/coverage record:
+
+- which unmet product criterion this action will close or materially advance,
+  why it is the next useful action, and the observable result that reduces the
+  milestone remainder;
+- for supporting repair or investigation, the evidenced blocking dependency,
+  finite question, product action enabled by each result and a stop condition;
+- observed cumulative effort for the same outcome branch, including preparation,
+  execution, retries and review, plus the additional ceiling for this action;
+  retain UNKNOWN for unmeasured time, billing or usage, using available units
+  instead of inventing monetary costs; and
+- valid evidence reused and why this bounded action is preferable to a cheaper
+  sufficient alternative. A short reason is enough; no separate ROI ledger.
+
+A milestone label, complete gap table or per-command timeout alone is not a
+continuation decision. Orchestrators own useful selection; reviewers challenge
+its contribution and cumulative cost as well as scope, bytes and test results.
+Workers return a contradictory or inaccessible brief before dependent effects.
+Required revision/authority must be readable within the assigned scope; keep
+hidden evaluation material outside that brief. A later read cannot repair an
+already unauthorized or contradictory execution retrospectively.
+
+Keep clear minor repairs and their narrow checks in the current tranche. A
+reviewer repairs an understood local defect within existing authority instead
+of sending it through another worker/review loop. Material design, schema,
+permission, data or owner-boundary changes retain their existing review rules.
+
+Stop extending a branch when its promised product contribution is not delivered,
+preparation keeps creating further preparation, its ceiling is spent, or expected
+value no longer justifies cost. Preserve the failed/partial outcome, reconcile
+the milestone and report the undelivered contribution. Reopen only with named
+new evidence or a changed method addressing the stopping cause, and a recorded
+contribution and additional ceiling in the same brief. Renaming a tranche does
+not renew the parent budget. Continue an independent approved product criterion
+when available; hold only dependent work. Never drop acceptance or a required
+gate to create progress.
+
+Before an expensive run, establish that a failure/timeout can return useful,
+secret-safe evidence. At return, distinguish user capability/criteria actually
+closed from reduced technical uncertainty and retain every remaining gap.
+The goal is completion of the approved product roadmap, not a separate learning
+experiment. Assess this rule through ordinary delivery and existing evidence;
+do not add trials or benchmarks solely to make the learning look effective.
+These are semantic selection/review duties, not a new schema, approval layer or
+claim of automatic cost/value judgment or runtime interception.
+
 ### Development-Owned Internal Readiness Before User Feedback
 
 The development team, including the orchestrator, workers and reviewers, owns

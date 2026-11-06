@@ -89,6 +89,22 @@ The workspace root should stay clean:
 - It should not contain mixed application source files directly at root.
 - It should not be initialized as a git repository.
 
+## Project Development Application
+
+On first authorized work in a new project, the agent proactively applies
+`docs/reference/downstream_gate_profile/CVF_PROJECT_DEVELOPMENT_APPLICATION_STANDARD.md`.
+Connect the inherited common baseline, project-specific controls and task evidence
+in the existing design/roadmap before dependent BUILD. Read sources first; ask
+only for unresolved business choices. Refresh at material scope/risk changes.
+Resolve the standard through the active rule-pack artifact
+`project-development-application-standard`, or the project-pinned Core when present.
+Record supplemental pack source/version separately from the project Core pin.
+The workspace `AGENTS.md` template makes this discoverable at the parent entrypoint;
+existing custom instructions require deliberate merge, not overwrite. Neither
+folder presence nor copying instructions proves host loading or live compliance.
+
+Autonomous repair convergence: after one failed repair tranche, Local must initiate a bounded causal-chain audit before a dependent successor, without operator reminder. Preserve outcome history/cumulative cost; enroll the failure and reviewed audit under `docs/reference/downstream_gate_profile/CVF_MILESTONE_COVERAGE_MACHINE_CONTRACT.md` Repair Convergence Admission. Static fix is not full-flow acceptance; independent work needs evidence of independence.
+
 ## Development Responsibility And Feedback
 
 Apply `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`,

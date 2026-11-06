@@ -81,6 +81,7 @@ $requiredPublicCoreFiles = $requiredPublicCoreFiles + $Script:CvfGateProfileCore
 
 Write-Host ""
 Write-Host "CVF Workspace Agent Enforcement Doctor" -ForegroundColor Cyan
+Write-Host "Activation verifies project-authorized source and installed bundle. CORE_ONLY opens no pack; permitted supplemental mode verifies delivered bytes. Local reviews evidence semantics." -ForegroundColor Yellow
 Write-Host "=======================================" -ForegroundColor Cyan
 Write-Host "Project: $projectResolved"
 Write-Host ""
@@ -530,7 +531,13 @@ Write-Host "  $($gateDoctor.Summary)"
 $totalChecks = $results.Count
 $passCount = $totalChecks - $failCount - $warnCount
 
-if ($failCount -eq 0) {
+if ($gateDoctor.InitialAssessmentRequired -eq $true -and $failCount -eq 1) {
+    Write-Host "  RESULT: INSTALLED_ASSESSMENT_REQUIRED" -ForegroundColor Yellow
+    Write-Host "  Installation checks completed; ACT remains FAIL and dependent dispatch is blocked." -ForegroundColor Yellow
+    Write-Host "  Next: admit a bounded action, collect actual invocation evidence, obtain independent review and bind its activation receipt. No receipt or approval was generated." -ForegroundColor Yellow
+    exit 2
+}
+elseif ($failCount -eq 0) {
     if ($warnCount -eq 0) {
         Write-Host "  RESULT: PASS ($passCount/$totalChecks checks passed)" -ForegroundColor Green
         Write-Host "  Scope: the listed doctor checks only. Not a claim of hosted CI, real adoption or runtime AI enforcement." -ForegroundColor Green

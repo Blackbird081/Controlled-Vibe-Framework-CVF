@@ -121,6 +121,81 @@ if ($missingCoreFiles.Count -gt 0) {
     throw "CVF public core workspace kit is incomplete. Missing: $($missingCoreFiles -join ', '). Reconcile the hidden core with scripts/update_cvf_workspace_public_core.ps1 before bootstrapping a project."
 }
 
+# The caller supplies the functions above while the selected hidden Core supplies
+# the installed profile. Refuse mixed generations before writing project/wrappers.
+$callerRoot = Split-Path -Parent $PSScriptRoot
+$profileRelative = "scripts\lib\downstream_governance\cvf_downstream_gate_profile.json"
+$callerProfile = Get-Content -LiteralPath (Join-Path $callerRoot $profileRelative) -Raw -Encoding utf8 | ConvertFrom-Json
+$preflightFiles = @($Script:CvfGateProfileCoreFiles) + @(
+    "scripts\new-cvf-workspace.ps1",
+    "scripts\check_cvf_workspace_agent_enforcement.ps1",
+    "scripts\install_cvf_workspace_root_wrappers.ps1",
+    "scripts\lib\downstream_catalog\CvfDownstreamCatalogLib.ps1",
+    "scripts\lib\downstream_catalog\CvfDownstreamBootstrapContent.ps1",
+    "scripts\lib\downstream_catalog\CvfWorkspaceDoctorLiveReadiness.ps1",
+    "governance\toolkit\05_OPERATION\CVF_DOWNSTREAM_AGENTS_TEMPLATE.md"
+)
+foreach ($name in $callerProfile.installedFiles) {
+    $mapped = $callerProfile.coreSources.PSObject.Properties[$name]
+    if ($null -ne $mapped -and $mapped.Value) { $preflightFiles += [string]$mapped.Value }
+    else { $preflightFiles += "scripts\lib\downstream_governance\$name" }
+}
+$preflightFiles += "scripts\lib\downstream_governance\downstream_pr_gates.yml.template"
+function Get-CvfSourceSha256([string]$Path) {
+    $algorithm = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        $encoding = [System.Text.Encoding]::GetEncoding(28591)
+        $text = $encoding.GetString([System.IO.File]::ReadAllBytes($Path))
+        $bytes = $encoding.GetBytes($text.Replace("`r`n", "`n"))
+        return [BitConverter]::ToString($algorithm.ComputeHash($bytes))
+    }
+    finally { $algorithm.Dispose() }
+}
+foreach ($relative in ($preflightFiles | Select-Object -Unique)) {
+    $callerFile = Join-Path $callerRoot $relative
+    $selectedFile = Join-Path $cvfCorePath $relative
+    if (-not (Test-Path -LiteralPath $callerFile -PathType Leaf) -or
+        -not (Test-Path -LiteralPath $selectedFile -PathType Leaf) -or
+        (Get-CvfSourceSha256 $callerFile) -ne (Get-CvfSourceSha256 $selectedFile)) {
+        throw "BLOCKED_WORKSPACE_SOURCE_SKEW: caller and selected Core gate sources differ or are missing: $relative. Reconcile source versions before bootstrap; no project or workspace wrapper was written."
+    }
+}
+
+# Existing governance identity must remain valid before any refresh touches the project.
+$existingManifestPath = Join-Path $projectPath ".cvf\manifest.json"
+$existingPolicyPath = Join-Path $projectPath ".cvf\policy.json"
+$existingLockPath = Join-Path $projectPath ".cvf\gate-profile.lock.json"
+if ((Test-Path -LiteralPath $existingManifestPath) -or (Test-Path -LiteralPath $existingPolicyPath) -or (Test-Path -LiteralPath $existingLockPath)) {
+    try {
+        $manifest = Get-Content -LiteralPath $existingManifestPath -Raw -Encoding utf8 | ConvertFrom-Json -ErrorAction Stop
+        $policy = Get-Content -LiteralPath $existingPolicyPath -Raw -Encoding utf8 | ConvertFrom-Json -ErrorAction Stop
+        $selectedHead = (git -C $cvfCorePath rev-parse HEAD | Out-String).Trim()
+        if ($LASTEXITCODE -ne 0 -or $selectedHead -notmatch '^[a-f0-9]{40}$' -or
+            [string]$manifest.cvfCoreCommit -cne $selectedHead -or
+            [string]$manifest.cvfCoreRepository -cne 'https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git' -or
+            [string]$manifest.cvfCoreRelativePath -cne '../.Controlled-Vibe-Framework-CVF' -or
+            $policy.workspaceActivationSourcePolicy -notin @('CORE_ONLY', 'CORE_AND_SUPPLEMENTAL') -or
+            ($policy.workspaceActivationExecutableSource -and $policy.workspaceActivationExecutableSource -notin @('PINNED_CORE', 'OPERATOR_LOCAL_PACK'))) {
+            throw 'Existing manifest pin/path or activation policy does not match the selected Core.'
+        }
+        if (Test-Path -LiteralPath $existingLockPath) {
+            $lock = Get-Content -LiteralPath $existingLockPath -Raw -Encoding utf8 | ConvertFrom-Json -ErrorAction Stop
+            if ($lock.schemaVersion -cne 'cvf.downstreamGateLock@1.0.0' -or
+                $lock.profileId -cne $callerProfile.profileId -or $lock.coreCommit -cne $selectedHead -or
+                $lock.profileSha256 -cne (Get-CvfSourceSha256 (Join-Path $callerRoot $profileRelative)).Replace('-', '').ToLowerInvariant() -or
+                $lock.runnerSha256 -cne (Get-CvfSourceSha256 (Join-Path $callerRoot 'scripts\lib\downstream_governance\cvf_downstream_gate_runner.py')).Replace('-', '').ToLowerInvariant()) {
+                throw 'Existing gate lock differs from the selected Core profile.'
+            }
+            $python = Resolve-CvfPython
+            if (-not $python) { throw 'Python 3 is required for existing lock validation.' }
+            $verifyCode = 'import json,sys; from pathlib import Path; lib=Path(sys.argv[2]); sys.path.insert(0,str(lib)); from cvf_dg_install import verify_install; r=verify_install(Path(sys.argv[1]),lib,Path(sys.argv[3]),True); print(json.dumps(r.as_dict())); sys.exit(0 if r.ok else 1)'
+            $verifyResult = & $python -B -c $verifyCode $projectPath (Join-Path $cvfCorePath 'scripts\lib\downstream_governance') $cvfCorePath 2>&1 | Out-String
+            if ($LASTEXITCODE -ne 0) { throw "Existing profile verification failed: $verifyResult" }
+        }
+    }
+    catch { throw "BLOCKED_EXISTING_PROJECT_IDENTITY: $_ No project or workspace wrapper was written; retain the existing pin and use a reviewed migration." }
+}
+
 $workspaceWrapperInstallerPath = Join-Path $cvfCorePath "scripts\install_cvf_workspace_root_wrappers.ps1"
 & powershell -ExecutionPolicy Bypass -File $workspaceWrapperInstallerPath -WorkspaceRoot $workspaceRootResolved
 if ($LASTEXITCODE -ne 0) {
@@ -285,8 +360,7 @@ if ($gateProfileMode -ne "SKIP") {
     $manifestObj.downstreamGateProfile = $Script:CvfGateProfileId
 }
 $manifestJson = $manifestObj | ConvertTo-Json -Depth 5
-Set-Content -Path (Join-Path $cvfManifestDir "manifest.json") -Value $manifestJson -Encoding utf8
-Write-Ok "Created: $cvfManifestDir\manifest.json"
+Write-ProjectFileIfMissing -FilePath (Join-Path $cvfManifestDir "manifest.json") -Content $manifestJson
 Ensure-ProjectGitIgnoreLine -ProjectRoot $projectPath -Line ".cvf/local-binding.json"
 if ($gateProfileMode -ne "SKIP") { Ensure-ProjectGitIgnoreLine -ProjectRoot $projectPath -Line ".cvf/runtime/" }
 
@@ -309,10 +383,11 @@ $policyObj = [ordered]@{
         "Ignore CVF policy constraints"
     )
     cvfCoreRef                   = "../.Controlled-Vibe-Framework-CVF"
+    workspaceActivationSourcePolicy = "CORE_ONLY"
+    workspaceActivationExecutableSource = "PINNED_CORE"
 }
 $policyJson = $policyObj | ConvertTo-Json -Depth 5
-Set-Content -Path (Join-Path $cvfManifestDir "policy.json") -Value $policyJson -Encoding utf8
-Write-Ok "Created: $cvfManifestDir\policy.json"
+Write-ProjectFileIfMissing -FilePath (Join-Path $cvfManifestDir "policy.json") -Content $policyJson
 
 $projectScriptsDir = Join-Path $projectPath "scripts"
 Ensure-Directory $projectScriptsDir

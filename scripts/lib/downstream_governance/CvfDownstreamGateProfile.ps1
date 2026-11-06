@@ -2,9 +2,9 @@
 #
 # Core-side only; dot-sourced by new-cvf-workspace.ps1, the workspace doctor and the
 # web evidence bridge. The Python runner next to this file is the single
-# framework-owned control source (profile cvf.downstreamGateProfile@1.2.0).
+# framework-owned control source (profile cvf.downstreamGateProfile@1.4.0).
 
-$Script:CvfGateProfileId = "cvf.downstreamGateProfile@1.2.0"
+$Script:CvfGateProfileId = "cvf.downstreamGateProfile@1.4.0"
 $Script:CvfGateProfileCoreFiles = @(
     "governance\compat\check_gate_to_role_closeability.py",
     "scripts\lib\downstream_governance\CvfDownstreamGateProfile.ps1",
@@ -18,6 +18,7 @@ $Script:CvfGateProfileCoreFiles = @(
     "scripts\lib\downstream_governance\cvf_dg_review.py",
     "scripts\lib\downstream_governance\cvf_dg_intake.py",
     "scripts\lib\downstream_governance\cvf_dg_coverage.py",
+    "scripts\lib\downstream_governance\cvf_workspace_activation.py",
     "scripts\lib\downstream_governance\downstream_pr_gates.yml.template",
     "scripts\lib\downstream_governance\git-pre-commit.template",
     "scripts\lib\downstream_governance\project_learning_home.template.md",
@@ -100,6 +101,41 @@ function Install-CvfDownstreamGateProfile {
     return $status
 }
 
+function Test-CvfInitialAssessmentRequired {
+    # Reporting only: ACT remains failed. Compare through the canonical trusted CLI
+    # because check_activation reads a missing receipt before comparing source identity.
+    param([string]$ProjectPath, [string]$CorePath, $Run, $Parsed)
+    $receipt = Join-Path $ProjectPath ".cvf\workspace-activation.json"
+    if ((Test-Path -LiteralPath $receipt) -or (Get-Item -LiteralPath $receipt -Force -ErrorAction SilentlyContinue)) { return $false }
+    if ($Run.ExitCode -ne 2 -or $Parsed.exitCode -ne 2 -or $Parsed.phase -ne "bootstrap") { return $false }
+    try {
+        $profile = Get-Content -LiteralPath (Join-Path $CorePath "scripts\lib\downstream_governance\cvf_downstream_gate_profile.json") -Raw -Encoding utf8 | ConvertFrom-Json
+        $expected = @($profile.controls | Where-Object { $_.phases -contains "bootstrap" } | ForEach-Object { $_.id })
+        $actual = @($Parsed.results | ForEach-Object { $_.controlId })
+        if ($expected.Count -eq 0 -or ($actual -join "|") -cne ($expected -join "|")) { return $false }
+        $failed = @($Parsed.results | Where-Object { $_.ok -ne $true })
+        if ($failed.Count -ne 1 -or $failed[0].controlId -ne "CVF-DG-ACT-01" -or $failed[0].outcome -ne "FAIL") { return $false }
+        $findings = @($failed[0].findings)
+        if ($findings.Count -ne 1 -or $findings[0].code -ne "ACT_INVALID_INPUT" -or $findings[0].locator -ne ".cvf/workspace-activation.json") { return $false }
+        foreach ($control in @($Parsed.results | Where-Object { $_.controlId -ne "CVF-DG-ACT-01" })) {
+            if ($control.ok -ne $true -or $control.outcome -notin @("PASS", "NOT_APPLICABLE_WITH_REASON") -or @($control.findings).Count -ne 0) { return $false }
+        }
+        $python = Resolve-CvfPython
+        $helper = Join-Path $CorePath "scripts\lib\downstream_governance\cvf_workspace_activation.py"
+        if (-not $python -or -not (Test-Path -LiteralPath $helper -PathType Leaf)) { return $false }
+        $output = & $python -B $helper --project $ProjectPath 2>&1 | Out-String
+        $exitCode = $LASTEXITCODE
+        $compared = $output | ConvertFrom-Json -ErrorAction Stop
+        $comparisonFindings = @($compared.findings)
+        return ($exitCode -eq 2 -and $compared.status -eq "REVIEW_REQUIRED" -and
+            $null -ne $compared.identity -and $compared.identity.sourceRoute -eq "PINNED_CORE" -and
+            $comparisonFindings.Count -eq 1 -and $comparisonFindings[0].code -eq "ACT_INVALID_INPUT" -and
+            $comparisonFindings[0].locator -eq ".cvf/workspace-activation.json" -and
+            -not (Test-Path -LiteralPath $receipt))
+    }
+    catch { return $false }
+}
+
 function Get-CvfGateProfileDoctorChecks {
     # Returns doctor check descriptors; the doctor owns Add-Check/Add-Warn.
     param([Parameter(Mandatory = $true)][string]$ProjectPath, [Parameter(Mandatory = $true)][string]$CorePath, $ManifestObj)
@@ -141,5 +177,6 @@ function Get-CvfGateProfileDoctorChecks {
         }
         catch { }
     }
-    return [PSCustomObject]@{ Checks = $checks; Summary = $summary }
+    $assessmentRequired = Test-CvfInitialAssessmentRequired -ProjectPath $ProjectPath -CorePath $CorePath -Run $run -Parsed $parsed
+    return [PSCustomObject]@{ Checks = $checks; Summary = $summary; InitialAssessmentRequired = [bool]$assessmentRequired }
 }

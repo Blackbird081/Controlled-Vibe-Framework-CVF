@@ -40,6 +40,9 @@ reports any disagreement with a field-specific locator.
 3. Read the active handoff named by that state file.
 4. Read ``IMPLEMENTATION_STATUS.json`` and ``docs/INDEX.md``.
 5. Read matching records from ``docs/reviews/learnings/README.md`` before similar work; the home indexes shared findings and parent feedback.
+   Before dependent dispatch assess ``.cvf/workspace-activation.json`` against the
+   pinned profile and project policy; run the installed pre-dispatch gate with the
+   explicit action packet. Core-only policy does not inspect supplemental packs.
 6. State current mode, active handoff, next allowed move, parked checkpoint,
    and active role before material work.
 

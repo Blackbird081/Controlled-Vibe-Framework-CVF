@@ -51,8 +51,8 @@ def _stage0_bundle(directory: Path) -> tuple[str, dict[str, str]]:
 def _stage0(args: argparse.Namespace) -> list[str]:
     """Verify the CI pins against actual bytes BEFORE any sibling module is imported (project copy only)."""
     problems: list[str] = []
-    if args.phase == "pr-ci":
-        problems += [f"PIN_REQUIRED @ --{name.replace('_', '-')}: the pr-ci phase must be pinned" for name in CI_REQUIRED_PINS if not getattr(args, name)]
+    if args.phase in ("pr-ci", "pre-dispatch"):
+        problems += [f"PIN_REQUIRED @ --{name.replace('_', '-')}: this phase must be pinned" for name in CI_REQUIRED_PINS if not getattr(args, name)]
     bundle, files = _stage0_bundle(HERE)
     for label, expected, actual in (("PROFILE_PIN_MISMATCH", args.expect_profile_sha256, files.get(PROFILE_FILE)),
                                     ("RUNNER_PIN_MISMATCH", args.expect_runner_sha256, files.get(RUNNER_FILE)),
@@ -64,7 +64,7 @@ def _stage0(args: argparse.Namespace) -> list[str]:
 
 def _import_modules() -> dict:
     names = ("cvf_dg_applicability", "cvf_dg_common", "cvf_dg_continuity", "cvf_dg_coverage", "cvf_dg_install",
-             "cvf_dg_intake", "cvf_dg_review", "cvf_dg_routing", "cvf_milestone_coverage")
+             "cvf_dg_intake", "cvf_dg_review", "cvf_dg_routing", "cvf_milestone_coverage", "cvf_workspace_activation")
     return {name: importlib.import_module(name) for name in names}
 
 
@@ -83,13 +83,15 @@ def _range_result(M: dict, candidates, require: bool):
     return common.ControlResult("CVF-DG-RANGE-01", "PASS", [], notes=notes)
 
 
-def _milestone_result(M: dict, root: Path, packets: list[str], profile: dict):
+def _milestone_result(M: dict, root: Path, packets: list[str], profile: dict, base=None):
     common, coverage = M["cvf_dg_common"], M["cvf_milestone_coverage"]
     ControlResult, Finding = common.ControlResult, common.Finding
     CONTROL_ID = "CVF-DG-COV-01"
     candidates = set(packets)
     active = root / profile["continuityContract"]["implementationPath"]
     findings, checked = [], []
+    findings.extend(Finding(code, coverage.AUTHORITY_REGISTRY, "repair history transition refused")
+                    for code in coverage.validate_repair_transition(root, base))
     if active.is_file():
         try:
             state = common.load_json_strict(active)
@@ -198,7 +200,9 @@ def run_phase(args: argparse.Namespace) -> int:
         elif cid == "CVF-DG-APPL-01":
             results.append(M["cvf_dg_applicability"].check_applicability(root, packets(("docs/work_orders/",)), checker_dir))
         elif cid == "CVF-DG-COV-01":
-            results.append(_milestone_result(M, root, packets(("docs/roadmaps/", "docs/work_orders/", "docs/reviews/")), profile))
+            results.append(_milestone_result(M, root, packets(("docs/roadmaps/", "docs/work_orders/", "docs/reviews/")), profile, candidates.base))
+        elif cid == "CVF-DG-ACT-01":
+            results.append(M["cvf_workspace_activation"].check_activation(root, profile, args.packet or [], phase, core_root))
         elif cid == "CVF-DG-ROUTE-01":
             results.append(M["cvf_dg_routing"].check_routing(root, packets(("docs/work_orders/", "docs/reviews/")), profile))
         elif cid == "CVF-DG-ROLE-01":

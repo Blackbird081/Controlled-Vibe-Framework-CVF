@@ -33,6 +33,12 @@ Before performing ANY action on this project, you MUST:
 
 If you cannot complete steps 1-5 because a file is missing or unreadable: -> **STOP. Report which file is missing. Do not proceed.**
 
+On a fresh installation, doctor may return `INSTALLED_ASSESSMENT_REQUIRED` with exit code 2. This means the kit is
+installed and the first reviewed workspace assessment is still required; ACT remains failed and dependent BUILD
+remains blocked. Continue bounded intake, source inspection, assessment evidence, and independent review within
+the user's authorized request. Ask only for unresolved business decisions or action boundaries. Do not create an
+approval or activation receipt automatically, and do not treat this status as permission to dispatch implementation.
+
 ## Mandatory Continuity Rehydration
 
 The First-Request Protocol is not a one-time bootstrap step. Run it again before material work whenever a
@@ -47,9 +53,7 @@ the active handoff before BUILD begins. If summary, state, and handoff disagree,
 
 ## Phase Model
 
-```
-INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE
-```
+`INTAKE -> DESIGN -> SPEC -> WORK_ORDER -> BUILD -> REVIEW -> FREEZE`
 
 Required control: INTAKE bounds the request; DESIGN records decisions; SPEC separates intended behavior from implementation truth; WORK_ORDER grants bounded execution; BUILD preserves scope and produces evidence; REVIEW returns defects without silent self-approval; FREEZE closes only settled work.
 A tranche may inherit accepted evidence and enter at its earliest open stage when recorded. Gate applicable transitions without requiring a standalone review artifact after each stage. REVIEW evaluates results before FREEZE; lifecycle traceability is not universal machine enforcement.
@@ -57,13 +61,9 @@ A tranche may inherit accepted evidence and enter at its earliest open stage whe
 ## Agent Continuation And Action Readiness
 
 Before intake, planning, producing or receiving work, apply the pinned core's `docs/reference/CVF_GOVERNED_WORK_LIFECYCLE_AND_DESIGN_CONTROL_STANDARD_2026-06-11.md`, including its mandatory `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`: roadmap outcomes/checkpoints, complete milestone coverage, owned remainder, bounded supporting work and separate tranche/product conclusions. Apply `docs/reference/downstream_gate_profile/CVF_MILESTONE_COVERAGE_MACHINE_CONTRACT.md`: Local admits `docs/milestone-coverage-authority.json` before implementation; missing/unknown coverage permits finite verification only.
-Design outputs for quick agent and human continuation; accept incomplete inputs for permitted clarification, read sources before asking, resolve ordinary authorized details and pause only dependent actions. Apply these rules for every role and resumed agent without operator reminder. Verification questions do not change approved direction. Preserve native capability reuse; identify only missing CVF adapter work. Preserve governed SPEC/WORK_ORDER and locked design/authority; reuse existing artifact structure.
+Design outputs for quick agent and human continuation; accept incomplete inputs for permitted clarification, read sources before asking, resolve ordinary authorized details and pause only dependent actions. Apply these rules for every role and resumed agent without operator reminder. Verification questions do not change approved direction. Preserve native capability reuse; identify only missing CVF adapter work. Preserve governed SPEC/WORK_ORDER and locked design/authority; reuse existing artifact structure. Project Development Application: apply `docs/reference/downstream_gate_profile/CVF_PROJECT_DEVELOPMENT_APPLICATION_STANDARD.md` proactively at new-project intake and material scope changes; connect common baseline, project-specific controls and task evidence in existing project records before dependent BUILD. Resolve the active workspace pack artifact `project-development-application-standard` as supplemental guidance, or the pinned Core standard when available; record source/version separately.
 
-Apply `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`,
-section "Development-Owned Internal Readiness Before User Feedback", in the CVF core.
-The development team proves usable product delivery before requesting feedback;
-noncoders supply business decisions, not technical QA. Follow its acceptance layers,
-five evidence questions and authority/claim limits in the existing project records.
+Autonomous repair convergence: after one failed repair tranche, Local must initiate a bounded causal-chain audit before a dependent successor, without operator reminder. Preserve outcome history/cumulative cost; enroll the failure and reviewed audit under `docs/reference/downstream_gate_profile/CVF_MILESTONE_COVERAGE_MACHINE_CONTRACT.md` Repair Convergence Admission. Static fix is not full-flow acceptance; independent work needs evidence of independence. Apply `docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md`, section "Development-Owned Internal Readiness Before User Feedback", in the CVF core. The development team proves usable product delivery before requesting feedback; noncoders supply business decisions, not technical QA. Follow its acceptance layers, five evidence questions and authority/claim limits in the existing project records.
 
 ## Provider-Neutral Role Contract
 

@@ -124,10 +124,19 @@ if ($AllowOfflinePinnedCore) {
     $doctorArgs += "-AllowOfflinePinnedCore"
 }
 
-& powershell @doctorArgs
-if ($LASTEXITCODE -ne 0) {
-    exit $LASTEXITCODE
+$doctorOutput = @(& powershell @doctorArgs 2>&1)
+$doctorExit = $LASTEXITCODE
+$doctorOutput | ForEach-Object { Write-Host $_ }
+$doctorResults = @($doctorOutput | Where-Object { [string]$_ -match '^\s*RESULT:' })
+if ($doctorExit -eq 2 -and $doctorResults.Count -eq 1 -and [string]$doctorResults[0] -match '^\s*RESULT: INSTALLED_ASSESSMENT_REQUIRED\s*$') {
+    Write-Info "Project installed; first action assessment is required. ACT remains failed; dependent dispatch is blocked."
+    Write-Info "Admit a bounded action, collect actual invocation evidence, obtain independent review and bind its receipt. No automatic approval or workspace-wide gate success is claimed."
+    exit 2
 }
+if ($doctorExit -ne 0) {
+    exit $doctorExit
+}
+
 
 Write-Host ""
 Write-Info "Running workspace-wide new-project gate..."

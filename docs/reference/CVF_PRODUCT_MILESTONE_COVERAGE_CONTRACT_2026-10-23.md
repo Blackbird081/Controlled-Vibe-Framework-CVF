@@ -174,6 +174,60 @@ do not add trials or benchmarks solely to make the learning look effective.
 These are semantic selection/review duties, not a new schema, approval layer or
 claim of automatic cost/value judgment or runtime interception.
 
+### Autonomous Repair Convergence Before A Dependent Successor
+
+After the first completed repair tranche whose declared outcome remains unmet,
+Local must autonomously assess the bounded causal chain before another dependent
+repair. Do not wait for operator suspicion or reminders. This trigger is additional
+to the second preparation failure and operator-discovered recurrence triggers.
+An ordinary first implementation failure or planned partial delivery is not, by
+itself, a failed repair tranche. Review actual outcome/acceptance evidence.
+
+The orchestrator records, in the existing outcome record: acceptance criterion,
+prior attempts, exact failure boundary, observed environment facts, proven cause
+versus hypothesis, remaining causal steps, a finite discriminating check and its
+expected result, one integrated corrective action, accountable owner, cumulative
+cost (retain UNKNOWN), additional ceiling, and stop/reopen conditions. Reviewer
+checks the chain and counterevidence before admitting the successor. An audit may
+end in a bounded experiment or BLOCKED; it need not invent a proven root cause.
+
+Local proactively enrolls the failed repair in the existing milestone authority
+registry under the machine contract below before the dependent dispatch; no
+operator reminder is required. Reuse existing receipts and SCEC ancestry/cost
+where available. Different errors, APIs, workers, models, worktrees or tranche
+names do not reset the same outcome. Missing historical evidence stays UNKNOWN.
+No parallel counter ledger or approval for routine authorized diagnosis is added.
+
+Apply `docs/reference/downstream_gate_profile/CVF_MILESTONE_COVERAGE_MACHINE_CONTRACT.md`,
+Repair Convergence Admission. The installed gate checks declared history, audit
+and exact successor identity; it cannot discover an omitted first enrollment,
+judge causal truth, count tool executions or intercept arbitrary shell actions.
+A reviewer must challenge falsely independent work and an unreported recurrence.
+The first operator-discovered escape is a control defect, not a closed RULE_EXISTS
+finding. No prevention claim until real project application is independently proved.
+
+CVF Core development is itself a required consumer. At each repair return, the
+orchestrator classifies the trigger from the actual acceptance outcome and records
+it in the existing task/outcome evidence. A qualifying failure must be enrolled
+before a dependent successor. If it does not qualify, retain the reason; absence
+of an entry is not evidence of successful convergence. This is an executable work
+duty, not an optional operator action or an excuse based on machine limitations.
+
+Track natural application in the existing learning/task evidence: criterion and
+tranche, autonomous versus operator-prompted detection, audit-before-successor,
+repair attempts, recurrence, available cumulative cost and final acceptance.
+Unknown measurements stay UNKNOWN; no denominator or saving is invented. Reuse
+MFRP P4-C1 post-commit collection of eligible trusted review/receipt pairs and its
+checkpoint review; it does not infer these semantic outcomes or replace failure
+enrollment. Uncommitted or ineligible evidence stays explicitly outside the sample.
+The orchestrator owns recording and checkpoint follow-through without another
+operator reminder; do not add synthetic work merely to claim effectiveness.
+
+Continue independent admitted work only with evidence of independence. Preserve
+all effect permissions and holds. Static repair, full-flow verification and product
+acceptance remain separate. A successful audit or repeated PASS of the same packet
+does not authorize retries, reset runtime budgets, or resolve UNKNOWN cleanup.
+
 ### Development-Owned Internal Readiness Before User Feedback
 
 The development team, including the orchestrator, workers and reviewers, owns

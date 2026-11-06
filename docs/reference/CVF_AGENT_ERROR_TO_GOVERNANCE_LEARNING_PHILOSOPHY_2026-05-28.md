@@ -204,6 +204,11 @@ blocked, why the agents cannot resolve it inside current authority, the risk of
 continuing, and the next safe choice. A non-coder operator must not be asked to
 debug role choreography, path manifests, or checker ordering.
 
+Apply Autonomous Repair Convergence Before A Dependent Successor in
+`docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md` after the
+first failed repair tranche. Local initiates the causal-chain assessment without
+operator reminder; RULE_EXISTS alone cannot close a demonstrated application escape.
+
 ## Learning From Acceptance Burden Transfer
 
 Treat technical QA shifted to a noncoder as an orchestrator/acceptance gap.

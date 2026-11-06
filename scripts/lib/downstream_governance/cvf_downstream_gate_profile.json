@@ -1,6 +1,6 @@
 {
-  "profileId": "cvf.downstreamGateProfile@1.2.0",
-  "profileVersion": "1.2.0",
+  "profileId": "cvf.downstreamGateProfile@1.4.0",
+  "profileVersion": "1.4.0",
   "ownerResponsibility": "CVF parent Core owns this single control source; project copies are identity-pinned and never an independent definition.",
   "phases": [
     "bootstrap",
@@ -127,6 +127,16 @@
         "pre-commit",
         "pr-ci"
       ]
+    },
+    {
+      "id": "CVF-DG-ACT-01",
+      "title": "Project activation identity, expected control inventory and dependent action admission",
+      "mandatory": true,
+      "module": "cvf_workspace_activation",
+      "phases": [
+        "bootstrap",
+        "pre-dispatch"
+      ]
     }
   ],
   "installedFiles": [
@@ -144,7 +154,9 @@
     "git-pre-commit.template",
     "project_learning_home.template.md",
     "project_learning_record.template.md",
-    "cvf_milestone_coverage.py"
+    "cvf_milestone_coverage.py",
+    "cvf_repair_convergence.py",
+    "cvf_workspace_activation.py"
   ],
   "coreSources": {
     "check_gate_to_role_closeability.py": "governance/compat/check_gate_to_role_closeability.py"

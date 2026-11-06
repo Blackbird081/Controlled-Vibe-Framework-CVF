@@ -174,6 +174,27 @@ powershell -ExecutionPolicy Bypass -File ".Controlled-Vibe-Framework-CVF\scripts
 $projectList
 ~~~
 
+## Project Development Application
+
+Project activation: before dependent dispatch, compare the project-owned
+``.cvf/workspace-activation.json`` with its pinned Core/profile and project policy.
+For read-only comparison run ``python .Controlled-Vibe-Framework-CVF/scripts/lib/downstream_governance/cvf_workspace_activation.py --project <project> --core-only``.
+For admission run the trusted Core runner with ``run --trusted --phase pre-dispatch
+--project-root <project> --packet <work-order>``. Core-only policy never opens supplemental pack sources;
+separate held dependencies need an owner. Local reviews evidence meaning.
+
+On first authorized work in a new project, the agent proactively applies
+docs/reference/downstream_gate_profile/CVF_PROJECT_DEVELOPMENT_APPLICATION_STANDARD.md.
+Connect the inherited common baseline, project-specific controls and task evidence
+in the existing design/roadmap before dependent BUILD. Read sources first; ask
+only for unresolved business choices. Refresh at material scope/risk changes.
+Resolve the standard through the active rule-pack artifact
+project-development-application-standard, or the project-pinned Core when present.
+Record supplemental pack source/version separately from the project Core pin.
+The workspace AGENTS.md template makes this discoverable at the parent entrypoint;
+existing custom instructions require deliberate merge, not overwrite. Neither
+folder presence nor copying instructions proves host loading or live compliance.
+
 ## Development Responsibility And Feedback
 
 Apply docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md,

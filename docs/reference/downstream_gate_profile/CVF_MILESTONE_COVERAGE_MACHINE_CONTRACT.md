@@ -109,6 +109,81 @@ criterion/evidence joins and terminal consistency, not usable-product quality.
 
 ## Phase And Integration Design
 
+### Repair Convergence Admission
+
+Operator-authorized extension 2026-11-05: after the first failed repair tranche,
+Local autonomously enrolls the same outcome before a dependent successor. Existing
+coverage JSON stays `cvf.milestoneCoverage@1.0.0`. Historical registry
+`cvf.milestoneAuthority@1.0.0` remains readable and makes no repair-control claim.
+Registry `cvf.milestoneAuthority@1.1.0` has exactly schemaVersion, milestones,
+repairControls. Milestone authority rows retain exactly path/heading; repairControls
+maps existing milestone IDs to exactly history, affectedCriteria, audit. This is
+an extension of the existing registry, not a new learning or attempt-counter ledger.
+
+Each enrolled history is a nonempty list of at most32 pinned `{path, sha256}`
+references, with unique paths. A referenced `cvf.repairAttempt@1.0.0` JSON contains
+exactly schemaVersion, milestoneId, criterionIds, trancheId, activity, result,
+proofState, elapsedMinutes, evidence. Activity is IMPLEMENT or REPAIR; result is
+MET or UNMET; proofState is UNPROVED, STATIC_FIX_VERIFIED or FULL_FLOW_VERIFIED.
+MET requires FULL_FLOW_VERIFIED and nonempty pinned evidence. Minutes are a
+nonnegative integer or UNKNOWN. Preserve original receipts behind these bounded
+projections; wrapper declarations and hashes do not authenticate their meaning.
+At least one failed REPAIR is required for enrollment. A later full-flow MET
+record for the affected criteria may release their repair restriction; keep the
+history and enrollment, clear audit to null when all affected failures resolve.
+
+Before admission, compare enrolled identity and immutable history prefixes with
+both Git HEAD and the resolved ancestor/range base. Refuse erasure, authority
+replacement, criterion removal, history truncation/rewrites and unavailable base.
+This also runs for registry-only changes and deletion without a candidate packet.
+New enrollment in a repository with no commit requires a genuine baseline first.
+No synthetic predecessor or retroactive rewriting of old work orders is allowed.
+
+Audit is null while finite evidence gathering remains needed, otherwise a pinned
+`cvf.repairChainAssessment@1.0.0` JSON. Its exact fields are schemaVersion,
+milestoneId, history, affectedCriteria, failureBoundary, observedEvidence,
+causeStatus, causeOrHypothesis, remainingChain, discriminator, correctiveAction,
+owner, cumulativeMinutes, additionalCeilingMinutes, stopCondition, reopenCondition,
+disposition, admittedAction, review. History and criterion identity join the registry.
+CauseStatus is PROVEN, HYPOTHESIS or UNKNOWN. observedEvidence is nonempty pinned
+evidence; remainingChain is a nonempty list of at most32 concrete steps.
+CumulativeMinutes retains UNKNOWN if any history time is unknown; otherwise it
+cannot understate the summed observed minutes. Unknown does not mean zero.
+
+Disposition is REPAIR_ADMITTED, DIAGNOSTIC_ONLY or BLOCKED. BLOCKED uses zero
+additionalCeilingMinutes and null discriminator/admittedAction. Other dispositions
+require a positive finite ceiling and discriminator exactly `{question, expected,
+budgetMinutes}` within that ceiling. admittedAction is exactly `{kind, selected,
+owner, output, packet}`; packet pins the existing successor artifact's path/bytes.
+Kind is IMPLEMENT for REPAIR_ADMITTED or VERIFY for DIAGNOSTIC_ONLY. Review is
+exactly `{reviewer, decision, evidence}` with ACCEPTED and nonempty pinned review
+evidence. Local must assess causal relevance and reviewer independence; a string
+or valid pin is not a semantic approval oracle. Executable fixtures are in
+`governance/compat/test_repair_convergence.py`.
+
+Registry-owned enrollment determines applicability: deleting a packet binding is
+not an exemption. A dependent IMPLEMENT without assessment refuses. Accepted
+action owner/output/selected criteria and exact packet must match; budgets cannot
+exceed the assessment. Diagnostic VERIFY also matches its question and budget.
+Finite VERIFY with no audit may gather missing assessment evidence under the
+existing intake contract; it does not authorize a diagnostic external effect.
+BLOCKED refuses dependent IMPLEMENT/VERIFY until new evidence and assessment.
+Independent work needs the existing pinned independence declaration on affected
+rows. Unresolved repair history prohibits product COMPLETE even if static rows
+were relabeled VERIFIED. Tranche/source completion may remain separate.
+
+Profile1.3 installs the shared helper through CVF-DG-COV-01 in all existing phases.
+Explicit project install/upgrade updates the pinned bundle; it preserves project
+records and customized CI for explicit reconciliation. Workspace pack delivery
+alone does not upgrade a project. Local must enroll new failed repairs proactively;
+unenrolled outcomes, false semantic declarations and out-of-gate tools remain
+outside mechanical coverage. Revalidation of the same packet creates no new
+execution grant: SCEC/existing runtime owners retain attempt consumption, effect
+holds, spend and retry limits. This checker does not measure elapsed execution.
+Per repair-validation snapshot (one packet or registry transition), repair evidence is limited to128 distinct files/16MiB,1MiB per
+file; Git reads have finite timeouts. No source-project native recovery or
+prevention effectiveness follows from synthetic admission proof.
+
 Core: existing check_work_order_dispatch_quality.py calls the shared validator on
 changed roadmap/work-order artifacts and any changed declared coverage block;
 an enrolled currentAuthority work order is rechecked on invocation. The current

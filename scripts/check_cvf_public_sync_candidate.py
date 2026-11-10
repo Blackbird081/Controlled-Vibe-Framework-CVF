@@ -365,19 +365,39 @@ def project_root_classification(source_root: Path, public_root: Path) -> None:
     (public_root / rel).write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
 
-def write_public_change_evidence(public_root: Path, source_commit: str) -> None:
-    """Bind the complete projected pending delta before preflight/staging."""
+def public_candidate_delta(root: Path, public_base_ref: str) -> tuple[str, list[str]]:
+    """Bind the net final distribution to one published ancestor, not local HEAD."""
+    base = resolve_commit(root, public_base_ref, "published public base")
+    head = resolve_commit(root, "HEAD", "candidate HEAD")
+    ancestor = git(root, "merge-base", "--is-ancestor", base, head)
+    if ancestor.returncode != 0:
+        raise RuntimeError("Published public base is not an ancestor of candidate HEAD")
+    paths = set()
+    # Comparing the base directly to the final worktree includes staged and
+    # unstaged edits while excluding files reverted to the published bytes.
+    for command in (("diff", "--name-only", "-z", base, "--"),
+                    ("ls-files", "--others", "--exclude-standard", "-z")):
+        result = git(root, *command)
+        if result.returncode != 0:
+            raise RuntimeError(result.stderr.strip() or "Unable to enumerate public net delta")
+        paths.update(path for path in result.stdout.split("\0") if path)
+    return base, sorted(paths)
+
+
+def write_public_change_evidence(public_root: Path, source_commit: str, public_base_ref: str = "origin/main") -> None:
+    """Bind cumulative unpublished and pending changes to the published base."""
     if not re.fullmatch(r"[0-9a-f]{40}", source_commit):
         raise ValueError("sourceCommit must be a full source commit SHA")
     manifest = public_root / "docs/EXPORT_MANIFEST.md"
     text = manifest.read_text(encoding="utf-8")
     if "## Public Change Evidence\n" not in text:
         raise ValueError("The public change summary must be authored before projection")
+    public_base, delta = public_candidate_delta(public_root, public_base_ref)
     evidence = {
         "schemaVersion": "cvf.publicChangeEvidence.v1",
-        "publicBase": resolve_commit(public_root, "HEAD", "public base"),
+        "publicBase": public_base,
         "sourceCommit": source_commit,
-        "changedPaths": [path for path in pending_paths(public_root) if path != "docs/EXPORT_MANIFEST.md"],
+        "changedPaths": [path for path in delta if path != "docs/EXPORT_MANIFEST.md"],
         "claimBoundary": "PUBLIC_CHANGE_TRACEABILITY_NOT_PRIVATE_CLOSURE",
     }
     block = "```public-change-evidence-json\n" + json.dumps(evidence, separators=(",", ":")) + "\n```"
@@ -556,7 +576,7 @@ def check(args: argparse.Namespace) -> dict[str, object]:
         return {"status": "REJECT", "violations": violations, "pendingPaths": []}
 
     head_sha = resolve_commit(root, "HEAD", "HEAD")
-    baseline_sha = resolve_commit(root, args.baseline_ref, "baseline")
+    baseline_sha, public_delta = public_candidate_delta(root, args.baseline_ref)
 
     branch = git(root, "branch", "--show-current").stdout.strip()
     if args.expected_branch and branch != args.expected_branch:
@@ -590,11 +610,11 @@ def check(args: argparse.Namespace) -> dict[str, object]:
     change_evidence = None
     from check_baseline_update_compat import classify_public_change_evidence
     manifest_path = root / "docs/EXPORT_MANIFEST.md"
-    previous = git(root, "show", f"{head_sha}:docs/EXPORT_MANIFEST.md")
+    previous = git(root, "show", f"{baseline_sha}:docs/EXPORT_MANIFEST.md")
     change_evidence = classify_public_change_evidence(
-        [], {path: ["M" if (root / path).exists() else "D"] for path in pending},
+        [], {path: ["M" if (root / path).exists() else "D"] for path in public_delta},
         manifest_path.read_text(encoding="utf-8").strip() if manifest_path.is_file() else "",
-        previous.stdout.strip() if previous.returncode == 0 else "", head_sha,
+        previous.stdout.strip() if previous.returncode == 0 else "", baseline_sha,
     )
     if not change_evidence["compliant"]:
         violations.append({"code": "PUBLIC_CHANGE_EVIDENCE_INVALID", "detail": "Public same-delta evidence is missing, unchanged, incomplete, or does not cover the complete candidate"})
@@ -704,8 +724,9 @@ def main() -> int:
         evidence_parser.add_argument("--write-public-change-evidence", action="store_true")
         evidence_parser.add_argument("--public-root", required=True)
         evidence_parser.add_argument("--source-commit", required=True)
+        evidence_parser.add_argument("--public-base", default="origin/main")
         options = evidence_parser.parse_args()
-        write_public_change_evidence(Path(options.public_root), options.source_commit)
+        write_public_change_evidence(Path(options.public_root), options.source_commit, options.public_base)
         return 0
     if "--project-docs-workflow" in sys.argv:
         projection = argparse.ArgumentParser(description="Project the explicit Docs CI ownership profile")
@@ -724,7 +745,7 @@ def main() -> int:
     parser.add_argument("--authorized-paths-json")
     parser.add_argument("--expected-remote", required=True)
     parser.add_argument("--expected-branch")
-    parser.add_argument("--baseline-ref", default="HEAD")
+    parser.add_argument("--baseline-ref", default="origin/main")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     try:

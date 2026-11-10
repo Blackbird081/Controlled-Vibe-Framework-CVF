@@ -417,12 +417,31 @@ describe('LR1/REQ-AUTHORITY immutable invocation, no-bypass joins and no replay'
     const root = await newRoot('proof-late-write');
     const p = prepared(1);
     const { invoker, calls } = counting(request => engine(request));
-    const store = patched(root, real => { const write = real.writeOutcome.bind(real); return { writeOutcome: async (c, i) => { await sleep(500); return write(c, i); } }; });
-    expect(await run(store, p, invoker, { timeoutMs: 100 })).toMatchObject({ kind: 'EXECUTED', outcome: 'OUTCOME_UNKNOWN', receipt: null, persisted: false, reason: 'OUTCOME_WRITE_UNCONFIRMED', sends: 1 });
-    await sleep(900);
-    expect((await makeStore(root).readOperation(p.key, owner)).state).toBe('OUTCOME');
-    expect(await run(makeStore(root), p, invoker)).toMatchObject({ sends: 0 });
-    expect(calls).toHaveLength(1);
+    let markEntered!: () => void;
+    let releaseWrite!: () => void;
+    let markWritten!: () => void;
+    const entered = new Promise<void>(resolve => { markEntered = resolve; });
+    const release = new Promise<void>(resolve => { releaseWrite = resolve; });
+    const written = new Promise<void>(resolve => { markWritten = resolve; });
+    const store = patched(root, real => {
+      const write = real.writeOutcome.bind(real);
+      return { writeOutcome: async (c, i) => { markEntered(); await release; try { return await write(c, i); } finally { markWritten(); } } };
+    });
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    try {
+      const pending = run(store, p, invoker, { timeoutMs: 100 });
+      await entered;
+      await vi.advanceTimersByTimeAsync(100);
+      expect(await pending).toMatchObject({ kind: 'EXECUTED', outcome: 'OUTCOME_UNKNOWN', receipt: null, persisted: false, reason: 'OUTCOME_WRITE_UNCONFIRMED', sends: 1 });
+      releaseWrite();
+      await written;
+      expect((await makeStore(root).readOperation(p.key, owner)).state).toBe('OUTCOME');
+      expect(await run(makeStore(root), p, invoker)).toMatchObject({ sends: 0 });
+      expect(calls).toHaveLength(1);
+    } finally {
+      releaseWrite();
+      vi.useRealTimers();
+    }
   });
 });
 

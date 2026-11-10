@@ -101,31 +101,80 @@ function findTopLevelArrayEnd(raw: string): number | null {
   return null;
 }
 
+// All instances in this process must share the same per-file queue. A read can
+// repair corruption, so it must not race with an append or another repair.
+const fileEventOperations = new Map<string, Promise<void>>();
+
+function serializeFileEventOperation<T>(storeKey: string, operation: () => Promise<T>): Promise<T> {
+  const absolute = path.resolve(storeKey);
+  const key = process.platform === 'win32' ? absolute.toLowerCase() : absolute;
+  const previous = fileEventOperations.get(key) ?? Promise.resolve();
+  const result = previous.then(operation);
+  const tail = result.then(() => undefined, () => undefined);
+  fileEventOperations.set(key, tail);
+  void tail.then(() => {
+    if (fileEventOperations.get(key) === tail) fileEventOperations.delete(key);
+  });
+  return result;
+}
+
+export type EventListFileIO = {
+  mkdir: typeof mkdir;
+  readFile: (file: string, encoding: 'utf8') => Promise<string>;
+  writeFile: (file: string, content: string, encoding: 'utf8') => Promise<void>;
+};
+
 export class FileEventListAdapter<T = unknown> implements EventListAdapter<T> {
   readonly adapterType = 'file';
 
-  async init(storeKey: string): Promise<void> {
+  constructor(private readonly fs: EventListFileIO = { mkdir, readFile, writeFile }) {}
+
+  init(storeKey: string): Promise<void> {
+    return serializeFileEventOperation(storeKey, () => this.initUnlocked(storeKey));
+  }
+
+  readAll(storeKey: string): Promise<T[]> {
+    return serializeFileEventOperation(storeKey, () => this.readAllUnlocked(storeKey));
+  }
+
+  writeAll(storeKey: string, items: T[]): Promise<void> {
+    return serializeFileEventOperation(storeKey, () => this.writeAllUnlocked(storeKey, items));
+  }
+
+  append(storeKey: string, item: T): Promise<void> {
+    return serializeFileEventOperation(storeKey, async () => {
+      const items = await this.readAllUnlocked(storeKey);
+      items.push(item);
+      await this.writeAllUnlocked(storeKey, items);
+    });
+  }
+
+  writeRaw(storeKey: string, content: string): Promise<void> {
+    return serializeFileEventOperation(storeKey, () => this.writeRawUnlocked(storeKey, content));
+  }
+
+  private async initUnlocked(storeKey: string): Promise<void> {
     try {
-      await mkdir(path.dirname(storeKey), { recursive: true });
+      await this.fs.mkdir(path.dirname(storeKey), { recursive: true });
     } catch {
       // directory already exists or filesystem is read-only
     }
     try {
-      await readFile(storeKey, 'utf8');
+      await this.fs.readFile(storeKey, 'utf8');
     } catch {
       try {
-        await writeFile(storeKey, '[]', 'utf8');
+        await this.fs.writeFile(storeKey, '[]', 'utf8');
       } catch {
         // read-only filesystem — store operates in ephemeral mode
       }
     }
   }
 
-  async readAll(storeKey: string): Promise<T[]> {
-    await this.init(storeKey);
+  private async readAllUnlocked(storeKey: string): Promise<T[]> {
+    await this.initUnlocked(storeKey);
     let raw: string;
     try {
-      raw = await readFile(storeKey, 'utf8');
+      raw = await this.fs.readFile(storeKey, 'utf8');
     } catch {
       return [];
     }
@@ -136,24 +185,18 @@ export class FileEventListAdapter<T = unknown> implements EventListAdapter<T> {
     }
   }
 
-  async writeAll(storeKey: string, items: T[]): Promise<void> {
-    await this.init(storeKey);
-    await writeFile(storeKey, JSON.stringify(items, null, 2), 'utf8');
+  private async writeAllUnlocked(storeKey: string, items: T[]): Promise<void> {
+    await this.initUnlocked(storeKey);
+    await this.fs.writeFile(storeKey, JSON.stringify(items, null, 2), 'utf8');
   }
 
-  async append(storeKey: string, item: T): Promise<void> {
-    const items = await this.readAll(storeKey);
-    items.push(item);
-    await this.writeAll(storeKey, items);
-  }
-
-  async writeRaw(storeKey: string, content: string): Promise<void> {
+  private async writeRawUnlocked(storeKey: string, content: string): Promise<void> {
     try {
-      await mkdir(path.dirname(storeKey), { recursive: true });
+      await this.fs.mkdir(path.dirname(storeKey), { recursive: true });
     } catch {
       // directory exists or read-only
     }
-    await writeFile(storeKey, content, 'utf8');
+    await this.fs.writeFile(storeKey, content, 'utf8');
   }
 
   describeCapability(): EventListAdapterCapability {
@@ -172,18 +215,18 @@ export class FileEventListAdapter<T = unknown> implements EventListAdapter<T> {
   private async _repair(raw: string, storeKey: string): Promise<T[]> {
     const arrayEnd = findTopLevelArrayEnd(raw);
     if (arrayEnd === null) {
-      await this.writeRaw(storeKey, '[]');
+      await this.writeRawUnlocked(storeKey, '[]');
       return [];
     }
     const recoveredRaw = raw.slice(0, arrayEnd + 1);
     try {
       const recovered = JSON.parse(recoveredRaw) as T[];
       const backupPath = `${storeKey}.corrupt-${Date.now()}.json`;
-      await this.writeRaw(backupPath, raw);
-      await this.writeRaw(storeKey, JSON.stringify(recovered, null, 2));
+      await this.writeRawUnlocked(backupPath, raw);
+      await this.writeRawUnlocked(storeKey, JSON.stringify(recovered, null, 2));
       return recovered;
     } catch {
-      await this.writeRaw(storeKey, '[]');
+      await this.writeRawUnlocked(storeKey, '[]');
       return [];
     }
   }

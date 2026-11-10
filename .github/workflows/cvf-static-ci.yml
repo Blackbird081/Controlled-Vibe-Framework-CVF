@@ -2,7 +2,7 @@ name: CVF Static CI Gate
 
 on:
   push:
-    branches: [main, cvf-next]
+    branches: [main, develop, 'cvf-public-sync-candidate-*']
   pull_request:
     branches: [main]
 

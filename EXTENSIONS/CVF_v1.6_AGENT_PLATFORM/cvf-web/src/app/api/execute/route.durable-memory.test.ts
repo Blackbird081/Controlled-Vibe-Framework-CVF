@@ -34,6 +34,7 @@ vi.mock('@/lib/guard-engine-singleton', () => ({
 }));
 
 import { POST } from './route';
+import { resetRateLimitStoresForTest } from '@/lib/rate-limit';
 
 describe('/api/execute durable memory route wiring', () => {
   const originalEnv = { ...process.env };
@@ -43,9 +44,13 @@ describe('/api/execute durable memory route wiring', () => {
   let storePath = '';
 
   beforeEach(async () => {
+    resetRateLimitStoresForTest();
     tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-r2-durable-route-'));
     storePath = path.join(tempDir, 'durable-memory.json');
     process.env = { ...originalEnv };
+    process.env.CVF_RATE_LIMIT_STORE = 'memory';
+    process.env.CVF_RATE_LIMIT = '30';
+    process.env.CVF_PROVIDER_QUOTA_PER_MIN = '30';
     process.env.OPENAI_API_KEY = 'openai-test-key';
     process.env.CVF_DURABLE_MEMORY_STORE_PATH = storePath;
     delete process.env.ANTHROPIC_API_KEY;
@@ -87,6 +92,7 @@ describe('/api/execute durable memory route wiring', () => {
   });
 
   afterEach(async () => {
+    resetRateLimitStoresForTest();
     process.env = { ...originalEnv };
     if (tempDir) await rm(tempDir, { recursive: true, force: true });
   });
@@ -331,9 +337,10 @@ describe('/api/execute durable memory route wiring', () => {
       }),
     }) as never);
     const readData = await readRes.json();
+    expect(readRes.status).toBe(200);
+    expect(executeAIMock).toHaveBeenCalledTimes(2);
     const secondCallOptions = executeAIMock.mock.calls[1][3] as { systemPrompt?: string };
 
-    expect(readRes.status).toBe(200);
     expect(readData.durableMemoryRead).toMatchObject({
       operation: 'read',
       decision: 'allowed',

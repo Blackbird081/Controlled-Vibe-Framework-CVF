@@ -2,18 +2,7 @@ name: CVF v1.6 Web CI
 
 on:
   push:
-    paths:
-      - "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/**"
-      - "EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/**"
-      - "EXTENSIONS/CVF_GUARD_CONTRACT/**"
-      - "EXTENSIONS/CVF_MODEL_GATEWAY/**"
-      - "EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/**"
-      - "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/**"
-      - "EXTENSIONS/CVF_TRUTH_KERNEL/**"
-      - "EXTENSIONS/CVF_TRUTH_FLOW/**"
-      - "EXTENSIONS/CVF_REFINERY/**"
-      - "EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/**"
-      - ".github/workflows/cvf-web-ci.yml"
+    branches: [main, develop, 'cvf-public-sync-candidate-*']
   pull_request:
     paths:
       - "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/**"

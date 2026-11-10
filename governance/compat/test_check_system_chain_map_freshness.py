@@ -372,6 +372,57 @@ def test_private_profile_still_requires_private_proof(tmp_path, monkeypatch):
     assert any("PATH_MISSING" in issue for issue in issues)
 
 
+WITHDRAWN_MAP_INVOCATIONS = (
+    "governance/compat/run_agent_automation_assist.py",
+    "governance/compat/agent_automation_machine_verification_readout.py",
+)
+
+
+def test_withdrawn_public_invocations_accept_absence_only_with_private_disposition(tmp_path, monkeypatch):
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", True)
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    for path in WITHDRAWN_MAP_INVOCATIONS:
+        assert path in MODULE.PRIVATE_INVOCATION_PATHS
+        fp = {"path": path, "sha256": "a" * 64, "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"}
+        issues = []
+        MODULE._check_fingerprint_drift("test", fp, issues)
+        assert issues == []
+        del fp["publicDisposition"]
+        MODULE._check_fingerprint_drift("test", fp, issues)
+        assert any("PATH_MISSING" in issue for issue in issues)
+
+
+def test_withdrawn_public_invocations_reject_export_even_with_matching_hash(tmp_path, monkeypatch):
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", True)
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    (tmp_path / "governance/compat").mkdir(parents=True)
+    for path in WITHDRAWN_MAP_INVOCATIONS:
+        _, sha = _write_source(tmp_path, path, "# private invocation fixture\n")
+        fp = {"path": path, "sha256": sha, "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"}
+        issues = []
+        MODULE._check_fingerprint_drift("test", fp, issues)
+        assert any("unexpectedly exported" in issue for issue in issues)
+
+
+def test_withdrawn_invocations_private_profile_still_requires_source_and_hash(tmp_path, monkeypatch):
+    monkeypatch.setattr(MODULE, "PUBLIC_PROFILE", False)
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    (tmp_path / "governance/compat").mkdir(parents=True)
+    for path in WITHDRAWN_MAP_INVOCATIONS:
+        fp = {"path": path, "sha256": "a" * 64, "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"}
+        issues = []
+        MODULE._check_fingerprint_drift("test", fp, issues)
+        assert any("PATH_MISSING" in issue for issue in issues)
+        _, sha = _write_source(tmp_path, path, "# private invocation fixture\n")
+        fp["sha256"] = sha
+        issues = []
+        MODULE._check_fingerprint_drift("test", fp, issues)
+        assert issues == []
+        (tmp_path / path).write_text("# changed private invocation\n", encoding="utf-8")
+        MODULE._check_fingerprint_drift("test", fp, issues)
+        assert any("SOURCE_DRIFT" in issue for issue in issues)
+
+
 def test_public_git_text_hash_checkout_equivalence_and_content_drift(tmp_path, monkeypatch):
     source = tmp_path / "source.md"
     canonical = b"First line\nSecond line\n"

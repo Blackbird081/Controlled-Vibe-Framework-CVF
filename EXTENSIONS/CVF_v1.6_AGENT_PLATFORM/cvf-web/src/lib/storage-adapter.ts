@@ -21,7 +21,7 @@
  * forbidden from adapter records.
  */
 
-import { mkdirSync, lstatSync } from 'node:fs';
+import { mkdirSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Redis } from '@upstash/redis';

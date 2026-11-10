@@ -14,6 +14,7 @@ import shutil
 import tempfile
 from pathlib import Path
 from public_sync_workspace_contract import workspace_dependency_violations
+from public_autorun_contract import autorun_dependency_violations
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "governance/compat"))
 from guard_binding_catalog import DOCS_DECLARED_JOBS, DOCS_PRIVATE_JOBS, DOCS_PUBLIC_PROFILE_JOBS, private_binding, require_public_projection
@@ -620,11 +621,12 @@ def check(args: argparse.Namespace) -> dict[str, object]:
     tracked = git(root, "ls-files", "-z")
     if tracked.returncode != 0:
         raise RuntimeError(tracked.stderr.strip() or "git ls-files failed")
-    candidate_paths = {rel for rel in [*tracked.stdout.split("\0"), *pending] if rel}
+    candidate_paths = {rel for rel in [*tracked.stdout.split("\0"), *pending] if rel and (root / rel).is_file()}
     previous_tree = git(root, "ls-tree", "-r", "--name-only", "-z", baseline_sha)
     if previous_tree.returncode:
         raise RuntimeError("Cannot enumerate baseline byte-evidence paths")
     violations.extend(workspace_dependency_violations(root, candidate_paths, set(previous_tree.stdout.split("\0"))))
+    violations.extend(autorun_dependency_violations(root, candidate_paths, set(previous_tree.stdout.split("\0"))))
     violations.extend(frozen_markdown_violations(root, candidate_paths | set(previous_tree.stdout.split("\0"))))
     violations.extend(markdown_layout_compatibility_violations(root))
     source_paths = sorted(rel for rel in candidate_paths if Path(rel).suffix.lower() in SOURCE_EXTENSIONS)

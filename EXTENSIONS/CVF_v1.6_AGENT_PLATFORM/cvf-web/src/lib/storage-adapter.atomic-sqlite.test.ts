@@ -73,8 +73,8 @@ describe('Jev opted-in real SQLite production transactions',()=>{
       process.stdout.write('JEV_REAL_PEER '+JSON.stringify({production:entered.production,peerPid:entered.pid,barriers:['READY','START_ATTEMPT','ATTEMPTING','PARENT_RELEASE','ENTERED','COMPLETE'],postAcquireFailure:'SUBSEQUENT_PEER_ACQUIRES'})+'\n');
     }finally{holder?.process.kill();contender?.process.kill();rmSync(directory,{recursive:true,force:true});}
   },30000);
-  it('compares real complete Windows security before/after rollback and rejects every complete tuple adversary',()=>{
-    expect(process.platform).toBe('win32');const directory=root();try{
+  it.skipIf(process.platform !== 'win32')('compares real complete Windows security before/after rollback and rejects every complete tuple adversary',()=>{
+    const directory=root();try{
       const store=new SQLiteAtomicRecordAdapter(directory,'security');store.readAll();const before=security(store.databasePath);
       expect(()=>store.transaction(()=>({writes:[{id:'s',expectedRevision:null,value:1}],result:0}),{afterAcquire(){throw Error('FAIL');}})).toThrow(AtomicSQLiteError);
       const after=security(store.databasePath);expect(sqliteSecurityTuplesEqual(before,after)).toBe(true);expect(before.aces.length).toBeGreaterThan(0);

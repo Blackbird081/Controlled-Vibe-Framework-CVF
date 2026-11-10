@@ -56,7 +56,7 @@ function fixture(change?: (plan: ReadoutPlan) => void) {
         systemPrompt: system, userPrompt: input };
     const response = (output = initialOutput): ReadoutResponse => ({ provider: 'alibaba', model: plan.model,
         output, finishReason: 'stop', usage: { inputTokens: 2000, outputTokens: 100 } });
-    const transport = vi.fn(async (_request: ReadoutTransportRequest) => response());
+    const transport = vi.fn(async (_request: ReadoutTransportRequest) => { void _request; return response(); });
     pilot.initialize();
     return { plan, directory, store, pilot, request, response, transport };
 }

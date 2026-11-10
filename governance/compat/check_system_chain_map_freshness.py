@@ -31,6 +31,8 @@ PRIVATE_INVOCATION_PATHS = frozenset({
     "scripts/run_cvf_cross_extension_conformance.py",
     "scripts/run_cvf_packet_posture_gate_conformance.py",
     "scripts/cvf_doctor.py",
+    "governance/compat/run_agent_automation_assist.py",
+    "governance/compat/agent_automation_machine_verification_readout.py",
 })
 
 MAP_PATH = "docs/reference/system_chain/CVF_SYSTEM_CHAIN_MAP.json"

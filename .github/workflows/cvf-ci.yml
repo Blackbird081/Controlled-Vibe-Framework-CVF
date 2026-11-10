@@ -2,7 +2,7 @@ name: CVF CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, 'cvf-public-sync-candidate-*']
   pull_request:
     branches: [main]
 
@@ -423,6 +423,29 @@ jobs:
           CVF_OAUTH_PROVIDER: 'github'
           CVF_OAUTH_IDENTITY_BINDINGS_JSON: '[{"provider":"github","providerAccountId":"structural-build-subject","userId":"structural-build-user","role":"viewer","orgId":"structural-build-org","teamId":"structural-build-team"}]'
 
+  windows-sqlite-custody:
+    name: Windows SQLite custody proof
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install existing test dependency owners
+        shell: pwsh
+        run: |
+          $packages = @('CVF_CONTROL_PLANE_FOUNDATION', 'CVF_GUARD_CONTRACT', 'CVF_MODEL_GATEWAY', 'CVF_LEARNING_PLANE_FOUNDATION', 'CVF_EXECUTION_PLANE_FOUNDATION', 'CVF_TRUTH_KERNEL', 'CVF_TRUTH_FLOW', 'CVF_REFINERY', 'CVF_ECO_v2.5_MCP_SERVER', 'CVF_v1.6_AGENT_PLATFORM/cvf-web')
+          foreach ($package in $packages) {
+            npm ci --prefix "EXTENSIONS/$package"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - name: Verify foundation Windows ACL and rollback behavior
+        working-directory: EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION
+        run: npx vitest run tests/mao.atomic.sqlite.record.store.test.ts
+      - name: Verify Web Windows ACL and rollback behavior
+        working-directory: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web
+        run: npx vitest run src/lib/storage-adapter.atomic-sqlite.test.ts
+
   # ─── Summary gate ────────────────────────────────────────────────────
   ci-passed:
     name: CI Passed
@@ -435,7 +458,8 @@ jobs:
       test-gef,
       test-lpf,
       test-web-ui,
-      front-door-smoke
+      front-door-smoke,
+      windows-sqlite-custody
     ]
     runs-on: ubuntu-latest
     steps:

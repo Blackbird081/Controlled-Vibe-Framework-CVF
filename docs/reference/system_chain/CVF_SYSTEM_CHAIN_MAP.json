@@ -164,9 +164,9 @@
       "sourceFingerprints": [
         {
           "path": ".github/workflows/documentation-testing.yml",
-          "sha256": "b54653953d97e7d3bac1cc7695f99d6b24c1a69c120f5eae4ef1d090059e990c",
+          "sha256": "9ffc73cfc3b7b4338c0d512efa7346d24dea30e7e64f239392f3c928410b131c",
           "evidenceRole": "CI job invoking the conformance runner",
-          "provenanceSha256": "a4cdd2ce9cef9bd9436687dcbc6ace406015074f6d41f2db75dccca3ccae7899",
+          "provenanceSha256": "d3e851fb5dbdbb5f69041bb16cf4d31eba19c1220c1c4c432547b58e46024061",
           "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
@@ -262,7 +262,7 @@
         },
         {
           "path": "governance/compat/run_agent_autorun_workflow_gate.py",
-          "sha256": "8d28ac306eb2d7569571b53a833478b59708e89860ef11ff06115ba8a8ea6a1e",
+          "sha256": "fee326c44aad1a0c35169020d22684ec0ba85d531b856cab8e562cd3b303f760",
           "evidenceRole": "per-checker PASS/FAIL CLI print, bound dispatch-release and package target-state feasibility admission, plus v3 JSON receipt owner",
           "provenanceSha256": "8d28ac306eb2d7569571b53a833478b59708e89860ef11ff06115ba8a8ea6a1e",
           "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
@@ -279,14 +279,14 @@
           "sha256": "c58c424a2754d5183db05ae2489d59d8a6c59351c04c3813d7cee74cbbd1ad30",
           "evidenceRole": "optional repository-bounded receipt consumption integration",
           "provenanceSha256": "c58c424a2754d5183db05ae2489d59d8a6c59351c04c3813d7cee74cbbd1ad30",
-          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
+          "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
         },
         {
           "path": "governance/compat/agent_automation_machine_verification_readout.py",
           "sha256": "ff6088bf8144deec4582ce9faf62384b314346c9cbbb87f6b3349a2d23f7e7c3",
           "evidenceRole": "exception-first mechanical reviewer readout composition without semantic authorization",
           "provenanceSha256": "ff6088bf8144deec4582ce9faf62384b314346c9cbbb87f6b3349a2d23f7e7c3",
-          "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
+          "publicDisposition": "PRIVATE_PROVENANCE_NOT_PUBLIC_PROOF"
         },
         {
           "path": "governance/compat/run_local_governance_hook_chain.py",

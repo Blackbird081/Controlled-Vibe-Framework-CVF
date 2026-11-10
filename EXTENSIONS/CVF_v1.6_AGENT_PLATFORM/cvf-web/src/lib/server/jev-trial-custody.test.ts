@@ -17,6 +17,7 @@ function fixture(maxCases=2){
 function repinPricing(spec: JevTrialSpec, patch: Partial<JevTrialSpec['pricing']>): JevTrialSpec {
  const { digest: _oldPriceDigest, ...price } = { ...spec.pricing, ...patch };
  const { policyDigest: _oldPolicyDigest, ...policy } = { ...spec, pricing: { ...price, digest: jevDigest(canonical(price)) } };
+ void _oldPriceDigest; void _oldPolicyDigest;
  return { ...policy, policyDigest: jevDigest(canonical(policy)) };
 }
 

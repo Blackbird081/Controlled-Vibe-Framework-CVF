@@ -174,6 +174,15 @@ do not add trials or benchmarks solely to make the learning look effective.
 These are semantic selection/review duties, not a new schema, approval layer or
 claim of automatic cost/value judgment or runtime interception.
 
+At a meaningful authorized checkpoint or on request, an independent reviewer
+may give a readout of at most five lines in the existing record: outcome, effort
+and uncertainty, blockers, recommended continuation, and any operator decision.
+The reviewer is distinct from Root and the worker, reads the relevant evidence,
+and challenges continuation; a different provider is optional. Root decides
+technical disposition. Reuse existing file review and required independent
+probes; stop repeating a readout that cannot change the decision. No schedule,
+numerical trigger, new receipt or provider call follows from this practice.
+
 ### Autonomous Repair Convergence Before A Dependent Successor
 
 After the first completed repair tranche whose declared outcome remains unmet,

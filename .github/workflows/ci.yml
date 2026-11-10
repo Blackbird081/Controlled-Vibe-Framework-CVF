@@ -60,6 +60,9 @@ jobs:
       - name: Public candidate contract
         working-directory: ${{ github.workspace }}
         run: |
+          if [ "$(git rev-parse --is-shallow-repository)" = true ]; then
+            git fetch --unshallow origin
+          fi
           git fetch origin main:refs/remotes/origin/main --force
           python scripts/check_cvf_public_sync_candidate.py --public-root . --expected-remote https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF.git --baseline-ref origin/main --json
       - name: Install Control Plane Foundation dependencies

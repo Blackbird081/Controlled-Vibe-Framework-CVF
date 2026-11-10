@@ -10,6 +10,10 @@ Status: canonical grouped management map for all active trace/log windows protec
 - give archive tooling, rotation guards, and future contributors one shared source of truth
 - keep active-window protection scalable as CVF adds more evidence chains
 
+## Scope / Target / Owner Boundary
+
+Local governance owns active-window classification for exact canonical dependencies; protection preserves paths, not execution readiness.
+
 ## Canonical Registry
 
 Machine-readable source:
@@ -62,6 +66,14 @@ Registration is not optional because the registry drives:
 - retain the active path while it remains canonical and explicitly registered;
 - archive or supersede only through a reviewed authority-routing change.
 
+Current JEV-S1 binding reference: `docs/reference/CVF_CANONICAL_EXECUTION_PORT_INTERFACE_CONTRACT_2026-09-03.md` remains the exact active owner for the selected callback supplement; register it as BINDING_REFERENCE_ACTIVE_WINDOW while this authority binding remains current. Existing registry entries are preserved.
+
+Current dispatch binding reference: `docs/reference/CVF_DISPATCH_RELEASE_READINESS_MACHINE_STANDARD_2026-09-25.md` remains the exact `STANDARD_PATH` of the dispatch release checker. Register it as BINDING_REFERENCE_ACTIVE_WINDOW; see `docs/reviews/CVF_SYSTEM_CHAIN_CHECKPOINT_PRESERVATION_2026-11-09.md`. No archive or execution grant follows.
+
+Current system-chain dependency: `docs/roadmaps/CVF_CANONICAL_SYSTEM_CHAIN_COMPOSITION_ROADMAP_2026-09-02.md` remains the canonical T3/T4 owner under the operator-selected B design. Keep its exact path active while its obligations remain current; all STOP/HOLD states remain.
+
+Current B identity dependency: `docs/reference/CVF_CANONICAL_EXECUTION_IDENTITY_AND_RECEIPT_JOIN_CONTRACT_2026-09-03.md` remains paired with the canonical execution-port owner. Retain its exact path for source admission; supplemental design does not release runtime.
+
 ## Related Artifacts
 
 - `governance/compat/CVF_ACTIVE_WINDOW_REGISTRY.json`
@@ -73,3 +85,7 @@ Registration is not optional because the registry drives:
 ## Final Clause
 
 Active windows are not just big files. They are governed operational surfaces and must be grouped, registered, and protected as such.
+
+## Creation Proof Profile Owner Registration
+
+The existing high-risk transaction standard and work-order template are binding dated owners for the creation-proof correction; preserve their exact active paths under BINDING_REFERENCE_ACTIVE_WINDOW. Registry IDs: high_risk_local_transaction_proof_standard_active_reference and agent_work_order_template_active_reference. This registration grants no implementation or machine effects.

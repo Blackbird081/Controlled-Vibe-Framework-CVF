@@ -21,6 +21,15 @@
 | [CVF Web UX Redesign System](cvf_web_ux_redesign_system.skill.md) | Advanced | Biến yêu cầu redesign thành CVF-native design DNA |
 | [Claude Design Handoff](claude_design_handoff.skill.md) | Advanced | Hấp thụ prototype thành handoff sạch |
 
+## Source and readiness notes
+
+The handoff source and registry entry USR-048 exist. The source and registry
+role/phase declarations differ, and template binding, front-door visibility,
+and UAT evidence require reconciliation before invocation or promotion.
+The UX writing source and USR-047 exist and provide a general microcopy
+framework; their presence does not prove front-door or template readiness or
+completed UAT. Keep the existing visibility and permission boundaries.
+
 ## 🗂️ Legacy Skills
 
 9 skills được archive vào `legacy/superseded_2026_04/` — xem `legacy/superseded_2026_04/README.md` để biết lý do.

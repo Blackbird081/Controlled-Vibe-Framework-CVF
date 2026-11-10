@@ -1,5 +1,8 @@
 'use server';
 
+// Text Encoding Exception: Vietnamese purpose headings and labels are required native parser literals.
+import { summarizeSkillContent } from '@/lib/skill-summary';
+
 import fs from 'fs';
 import path from 'path';
 import { Skill, SkillCategory } from '../types/skill';
@@ -497,7 +500,7 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
                             title: finalTitle,
                             domain: domainValue,
                             difficulty: difficultyMatch ? difficultyMatch[1].trim() : 'Unknown',
-                            summary: '', // Could extract first paragraph
+                            summary: summarizeSkillContent(content),
                             path: path.relative(process.cwd(), filePath), // Store relative path for debugging or display
                             content: content,
                             riskLevel: riskMatch ? riskMatch[1].trim() : fallbackRisk,
@@ -591,7 +594,7 @@ export async function getSkillDetail(domain: string, skillId: string): Promise<S
             title: finalTitle,
             domain: domainValue,
             difficulty: difficultyMatch ? difficultyMatch[1].trim() : 'Unknown',
-            summary: '',
+            summary: summarizeSkillContent(content),
             path: path.relative(process.cwd(), filePath),
             content,
             riskLevel: riskMatch ? riskMatch[1].trim() : fallbackRisk,

@@ -52,6 +52,62 @@ Canonical sources:
 - `docs/reference/CVF_GOVERNED_WORK_LIFECYCLE_AND_DESIGN_CONTROL_STANDARD_2026-06-11.md` -
   expanded intake/design/spec/work-order/build/review/freeze control map.
 
+## Mandatory Docker And IDE Execution Priority
+
+Operator requirement,2026-11-08: all Local roles, resumed agents, dispatchers,
+workers and reviewers apply the following priority before selecting or reporting
+a build/test environment. Dispatchers carry this requirement into delegated
+task context; receivers verify actual tool access in their own environment.
+
+1. Prefer installed local Docker for isolated application build/test and
+   dependency-heavy preparation. Reuse an appropriate image and dependency
+   cache, keyed to the lockfile, runtime/platform and local-package inputs.
+   Do not make full host node_modules copies, fresh installs per test, new
+   sandboxes or equivalent repeated staging the default. Dependencies are
+   reproducible build inputs; protect source, data and credentials, and compare
+   reinstall/reuse cost before treating dependencies as irreplaceable state.
+2. Prefer existing repository Playwright with installed Chrome from the IDE for
+   browser checks, including a local container app exposed through loopback.
+   Codex desktop is fallback only after the required native capability has a
+   concrete diagnosed failure. Missing CUA or a broken auxiliary host alone
+   does not establish that Playwright/Chrome cannot work.
+3. Before saying a capability is absent or asking the operator to install or
+   switch tools, inspect available executables, Docker daemon/platform, relevant
+   local images, repository helpers and browser support. Record the scoped
+   check, observed result and exact missing requirement or incompatibility in
+   secret-safe task evidence. An existing image is not proof it contains this
+   app's runtime, and Docker access in one workspace is not universal access.
+4. Before choosing a more costly route, explain the concrete Docker/native
+   limitation, compare expected time, disk and quota costs with reuse, and name
+   the smallest sufficient fallback. Reviewers reject a missing comparison or
+   unsupported "no capability" report. Native direct commands remain suitable
+   when no isolated environment is needed and their lower cost is evidenced;
+   do not add container setup merely for an already sufficient small check.
+5. For Linux containers, install/cache compatible dependencies inside the image
+   or a task-owned reusable volume. Exclude host node_modules and credentials
+   from the build context; do not reuse Windows native binaries as Linux
+   packages. Keep generated config, build output and disposable writes in the
+   owned environment. Cache reuse does not waive source/version validation.
+6. Stop/remove task-owned containers and transient outputs after tests. Retain
+   only named reusable images/cache volumes with an owner and invalidation or
+   cleanup policy; do not accumulate anonymous volumes or dependency clones.
+   Remove only resources owned by the task, never broad machine-wide pruning.
+7. Consider Docker cloud when local capacity or compatibility is insufficient,
+   or its measured benefit justifies the route. Check current access, compute
+   credit, finite budget and expiry/stop behavior before use. Cloud transfer,
+   credential and provider-call boundaries remain separately scoped; available
+   compute credit is not evidence of paid model API authority.
+
+For UI01, this operator requirement supersedes the conditional Robocopy-first
+next-action recommendation in the earlier staging assessment. Preserve that
+historical evidence; prepare the Docker reuse design before any new runtime
+admission. The two spent VERIFY work orders remain non-executable.
+
+These are mandatory operating instructions and reviewer responsibilities.
+They do not prove automatic loading by every agent, intercept tools, create
+runtime authority, or prove the application works. Keep the existing source,
+effect, egress, owned lifecycle, finite-budget and acceptance requirements.
+
 ## Protocol / Contract / Requirements
 
 The mandatory operating chain is:

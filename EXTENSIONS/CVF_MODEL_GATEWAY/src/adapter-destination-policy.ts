@@ -1,6 +1,7 @@
 import {
   ALIBABA_DASHSCOPE_INTL_ENDPOINT,
   ALIBABA_DASHSCOPE_MAINLAND_ENDPOINT,
+  ALIBABA_WORKSPACE_DASHSCOPE_ENDPOINT,
 } from "./alibaba-free-quota-model-ledger";
 
 // EAFR-R10. This module is the single, gateway-owned source of destination
@@ -26,6 +27,7 @@ const LOOPBACK_HOSTNAMES = new Set([
 const GATEWAY_DERIVED_ENDPOINTS: ReadonlyArray<readonly [string, string]> = [
   [ALIBABA_DASHSCOPE_INTL_ENDPOINT, "alibaba"],
   [ALIBABA_DASHSCOPE_MAINLAND_ENDPOINT, "alibaba"],
+  [ALIBABA_WORKSPACE_DASHSCOPE_ENDPOINT, "alibaba"],
 ];
 
 /**

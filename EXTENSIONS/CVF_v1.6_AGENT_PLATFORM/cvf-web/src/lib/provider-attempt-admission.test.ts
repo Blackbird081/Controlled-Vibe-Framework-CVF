@@ -344,3 +344,11 @@ describe('provider-attempt-admission', () => {
         expect(gatedProviderCalls).toBeLessThan(unmeteredProviderCalls);
     });
 });
+
+
+it('counts a planned narrow continuation as zero retries while preserving exact reconciliation',()=>{
+    const ledger=createProviderAttemptLedger({identityKind:'session',identityHash:'jev-plan',providerModel:'typesafe/jev-latest'});
+    ledger.attempts=[{attemptIndex:0,purpose:'initial',admitted:true,callStarted:true},{attemptIndex:1,purpose:'continuation',admitted:true,callStarted:true}];
+    ledger.admittedCount=2;ledger.providerCallCount=2;ledger.hasAdmittedAttempt=true;
+    expect(buildProviderAttemptReconciliation(ledger,'typesafe','jev-latest')).toMatchObject({retryCount:0,providerCallCount:2,reconciles:true});
+});

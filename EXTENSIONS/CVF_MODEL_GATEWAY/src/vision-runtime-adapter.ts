@@ -1,3 +1,4 @@
+import { assertAlibabaFreeQuotaUse, resolveAlibabaDashScopeEndpoint } from "./alibaba-free-quota-model-ledger";
 import {
   isVisionContract,
   type VisionCapableProvider,
@@ -36,7 +37,6 @@ export const VISION_RUNTIME_CAPABLE_MODELS: Record<VisionRuntimeProvider, readon
   alibaba: ["qwen-vl-plus", "qwen-vl-max", "qwen-vl-max-latest"],
 };
 
-const DEFAULT_ALIBABA_COMPAT_ENDPOINT = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions";
 const RAW_FILE_PATH_PATTERN = /^(?:[A-Za-z]:[\\/]|\.{0,2}[\\/]|file:)/;
 
 export function isVisionRuntimeModel(provider: string, model: string): provider is VisionRuntimeProvider {
@@ -75,10 +75,11 @@ export function createAlibabaVisionRuntimeAdapter(
   const model = options.model ?? VISION_RUNTIME_DEFAULT_MODELS.alibaba;
   assertVisionProviderCapability("alibaba", model);
   const fetchFn = options.fetchFn ?? fetch;
-  const endpoint = options.endpoint ?? DEFAULT_ALIBABA_COMPAT_ENDPOINT;
+  const endpoint = options.endpoint ?? resolveAlibabaDashScopeEndpoint();
 
   return {
     async vision(request: VisionRequest): Promise<VisionContract> {
+      assertAlibabaFreeQuotaUse(model);
       const body = buildVisionRuntimeRequestBody(request, model);
       const response = await fetchFn(endpoint, {
         method: "POST",

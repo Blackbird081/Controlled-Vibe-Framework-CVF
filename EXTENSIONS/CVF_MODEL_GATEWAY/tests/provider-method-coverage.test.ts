@@ -6,6 +6,7 @@ import {
 } from "../src/provider-method-gate";
 import type { ProviderCapabilityFile } from "../src/provider-method-contract";
 import { createAlibabaQwenTurboStreamAdapter } from "../src/providers/alibaba/stream-adapter";
+import { ALIBABA_DASHSCOPE_INTL_ENDPOINT } from "../src/alibaba-free-quota-model-ledger";
 import { createDeepSeekChatJsonModeAdapter } from "../src/providers/deepseek/json-mode-adapter";
 
 const alibabaCapability: ProviderCapabilityFile = {
@@ -53,7 +54,8 @@ describe("provider method coverage", () => {
         "data: [DONE]\n\n",
       ]),
     });
-    const adapter = createAlibabaQwenTurboStreamAdapter({ apiKey: "redacted", fetchImpl });
+    const adapter = createAlibabaQwenTurboStreamAdapter({ apiKey: "redacted", fetchImpl,
+      endpoint: ALIBABA_DASHSCOPE_INTL_ENDPOINT, env: {} });
 
     const chunks = [];
     for await (const chunk of adapter.stream({ traceId: "trace-1", prompt: "Say hello" })) {

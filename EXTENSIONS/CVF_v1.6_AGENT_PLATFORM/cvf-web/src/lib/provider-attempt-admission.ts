@@ -50,7 +50,7 @@ import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation/web-run
  * @module lib/provider-attempt-admission
  */
 
-export type ProviderAttemptPurpose = 'initial' | 'retry';
+export type ProviderAttemptPurpose = 'initial' | 'retry' | 'continuation';
 
 export interface ProviderAttemptRecord {
     attemptIndex: number;
@@ -59,6 +59,7 @@ export interface ProviderAttemptRecord {
     retryAfterSeconds?: number;
     /** True once `recordProviderCallStart` has fired for this attempt. */
     callStarted?: boolean;
+    retainedReservation?: 'RESERVATION_RETAINED_NO_INVOCATION';
 }
 
 export interface ProviderAttemptLedger {
@@ -209,7 +210,9 @@ export function buildProviderAttemptReconciliation(
     provider: string,
     model: string,
 ): ProviderAttemptReconciliation {
-    const retryCount = ledger.providerCallCount > 0 ? ledger.providerCallCount - 1 : 0;
+    const retryCount = ledger.attempts.some(attempt => attempt.purpose === 'continuation')
+        ? ledger.attempts.filter(attempt => attempt.purpose === 'retry' && attempt.callStarted).length
+        : ledger.providerCallCount > 0 ? ledger.providerCallCount - 1 : 0;
     const reconciles =
         ledger.providerCallCount === ledger.admittedCount
         && ledger.admittedCount + ledger.deniedCount === ledger.attempts.length
@@ -406,4 +409,11 @@ export async function admitAndInvokeProvider<TResult>(params: {
             }),
         };
     }
+}
+
+
+/** Jev-only terminal reservation gap; it deliberately does not reconcile. */
+export function retainJevAttemptReservation(ledger: ProviderAttemptLedger, attemptIndex: number): void {
+    const attempt = ledger.attempts[attemptIndex];
+    if (attempt?.admitted && !attempt.callStarted) attempt.retainedReservation = 'RESERVATION_RETAINED_NO_INVOCATION';
 }

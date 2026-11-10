@@ -159,6 +159,21 @@ class CompliantFixtureTests(unittest.TestCase):
         kinds = {kind for _, kind, _ in violations}
         self.assertIn("direct_literal_missing", kinds)
 
+    def test_development_application_routes_cannot_be_dropped(self) -> None:
+        standard = "docs/reference/downstream_gate_profile/CVF_PROJECT_DEVELOPMENT_APPLICATION_STANDARD.md"
+        for path, factory, kind, tokens in (
+            (checker.AGENTS_PATH, _minimal_agents_text, "direct_literal_missing",
+             ("Project Development Application", standard)),
+            (checker.DOWNSTREAM_TEMPLATE_PATH, _minimal_template_text, "template_rehydration_token_missing",
+             ("Project Development Application", standard, "project-development-application-standard")),
+        ):
+            for token in tokens:
+                with self.subTest(path=path, removed=token):
+                    _write(self._root, path, factory().replace(token, ""))
+                    self.assertTrue(any(p == path and k == kind and token in msg
+                                        for p, k, msg in checker.run()))
+                    _write(self._root, path, factory())
+
     def test_coordination_startup_routes_cannot_be_dropped(self) -> None:
         # Exercise the production run entrypoint, retaining every unrelated rule.
         required = (

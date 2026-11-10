@@ -1,0 +1,1292 @@
+{
+  "schemaVersion": "cvf.uiuxCandidateIntake@1",
+  "recordedAt": "2026-11-08T06:16:05.603251+00:00",
+  "role": "INTERNAL_AGENT LOCAL",
+  "phase": "SOURCE_INTAKE_AND_TEST_CASE_PLANNING",
+  "decisionOwner": "LOCAL technical; project owner retains delivery authority",
+  "upstream": "https://github.com/evondev/evondevKit.git",
+  "observedDefaultBranch": "master",
+  "initialObservedHead": "9c03553222592e433f88429a19f831f0707dbf8f",
+  "analysisPin": "a3669b675f1810c2284001f1765501f3f3d16db1",
+  "lastObservedLiveHead": "a3669b675f1810c2284001f1765501f3f3d16db1",
+  "freshnessDelta": "Live HEAD changed during intake. Fetched exact new SHA, detached to it, fully reread new entry and locked-rules, read version/plugin metadata, and reused unchanged blobs or fully observed README one-line diff. Other changes remain DEFERRED. No ongoing latest claim.",
+  "freshnessChangedPaths": [
+    "M\t.claude-plugin/plugin.json",
+    "M\tDEVELOP.md",
+    "M\tNEXT.md",
+    "M\tREADME.md",
+    "M\tREADME.vi.md",
+    "M\tskills/ui-ux/SKILL.md",
+    "M\tskills/ui-ux/VERSION",
+    "M\tskills/ui-ux/references/brand-tokens.md",
+    "M\tskills/ui-ux/references/checklist.md",
+    "M\tskills/ui-ux/references/components/accordion.md",
+    "M\tskills/ui-ux/references/components/breadcrumb.md",
+    "M\tskills/ui-ux/references/components/charts.md",
+    "M\tskills/ui-ux/references/components/chat.md",
+    "M\tskills/ui-ux/references/components/choice-controls.md",
+    "M\tskills/ui-ux/references/components/description-list.md",
+    "M\tskills/ui-ux/references/components/file-upload.md",
+    "M\tskills/ui-ux/references/components/inline-edit.md",
+    "M\tskills/ui-ux/references/components/loading.md",
+    "M\tskills/ui-ux/references/components/logo.md",
+    "M\tskills/ui-ux/references/components/quantity-input.md",
+    "M\tskills/ui-ux/references/components/small-controls.md",
+    "M\tskills/ui-ux/references/components/sortable-header.md",
+    "M\tskills/ui-ux/references/components/tree.md",
+    "M\tskills/ui-ux/references/design-process.md",
+    "M\tskills/ui-ux/references/flows.md",
+    "M\tskills/ui-ux/references/layouts/app-kanban.html",
+    "M\tskills/ui-ux/references/layouts/app.md",
+    "A\tskills/ui-ux/references/layouts/app/activity.md",
+    "A\tskills/ui-ux/references/layouts/app/api-keys.md",
+    "A\tskills/ui-ux/references/layouts/app/billing.md",
+    "A\tskills/ui-ux/references/layouts/app/calendar.md",
+    "A\tskills/ui-ux/references/layouts/app/dashboard.md",
+    "A\tskills/ui-ux/references/layouts/app/data-table.md",
+    "A\tskills/ui-ux/references/layouts/app/entity-grid.md",
+    "A\tskills/ui-ux/references/layouts/app/error-pages.md",
+    "A\tskills/ui-ux/references/layouts/app/filtered-list.md",
+    "A\tskills/ui-ux/references/layouts/app/kanban.md",
+    "A\tskills/ui-ux/references/layouts/app/live-monitor.md",
+    "A\tskills/ui-ux/references/layouts/app/members.md",
+    "A\tskills/ui-ux/references/layouts/app/profile.md",
+    "A\tskills/ui-ux/references/layouts/app/record-detail.md",
+    "A\tskills/ui-ux/references/layouts/app/report.md",
+    "A\tskills/ui-ux/references/layouts/app/security.md",
+    "A\tskills/ui-ux/references/layouts/app/settings.md",
+    "A\tskills/ui-ux/references/layouts/app/shell-canvas.md",
+    "A\tskills/ui-ux/references/layouts/app/shell-floating.md",
+    "A\tskills/ui-ux/references/layouts/app/shell-full.md",
+    "A\tskills/ui-ux/references/layouts/app/shell-inset.md",
+    "A\tskills/ui-ux/references/layouts/app/shell-rail.md",
+    "A\tskills/ui-ux/references/layouts/app/shell-topnav.md",
+    "A\tskills/ui-ux/references/layouts/app/shell-unified.md",
+    "A\tskills/ui-ux/references/layouts/app/shell.md",
+    "A\tskills/ui-ux/references/layouts/app/two-panel.md",
+    "M\tskills/ui-ux/references/layouts/form.md",
+    "A\tskills/ui-ux/references/layouts/mobile-app.html",
+    "A\tskills/ui-ux/references/layouts/mobile-charts.html",
+    "A\tskills/ui-ux/references/layouts/mobile-immersive.html",
+    "A\tskills/ui-ux/references/layouts/mobile-order.html",
+    "A\tskills/ui-ux/references/layouts/mobile-photo.html",
+    "A\tskills/ui-ux/references/layouts/mobile-playful.html",
+    "A\tskills/ui-ux/references/layouts/mobile-showcase.html",
+    "A\tskills/ui-ux/references/layouts/mobile-tabbars.html",
+    "M\tskills/ui-ux/references/layouts/overlay.md",
+    "M\tskills/ui-ux/references/layouts/pricing.md",
+    "M\tskills/ui-ux/references/locked-rules.md",
+    "A\tskills/ui-ux/references/mobile.md",
+    "A\tskills/ui-ux/references/mobile/characters.md",
+    "A\tskills/ui-ux/references/mobile/charts.md",
+    "A\tskills/ui-ux/references/mobile/data-entry.md",
+    "A\tskills/ui-ux/references/mobile/faces.md",
+    "A\tskills/ui-ux/references/mobile/inputs.md",
+    "A\tskills/ui-ux/references/mobile/maps.md",
+    "A\tskills/ui-ux/references/mobile/motion.md",
+    "A\tskills/ui-ux/references/mobile/native-code.md",
+    "A\tskills/ui-ux/references/mobile/onboarding.md",
+    "A\tskills/ui-ux/references/mobile/ordering.md",
+    "A\tskills/ui-ux/references/mobile/showcase.md",
+    "A\tskills/ui-ux/references/mock-photos.md",
+    "M\tskills/ui-ux/references/principles.md",
+    "M\tskills/ui-ux/references/responsive.md",
+    "M\tskills/ui-ux/references/review.md",
+    "M\tskills/ui-ux/references/rules-color.md",
+    "M\tskills/ui-ux/references/rules-form.md",
+    "M\tskills/ui-ux/references/rules-state.md",
+    "M\tskills/ui-ux/references/rules-type.md",
+    "M\tskills/ui-ux/references/styles.md",
+    "M\tskills/ui-ux/references/system.md",
+    "A\tskills/ui-ux/references/wireframe.md",
+    "A\tskills/ui-ux/scripts/audit.sh",
+    "M\tskills/ui-ux/scripts/lint-skill.mjs",
+    "A\tskills/ui-ux/scripts/measure-skill.mjs",
+    "M\tskills/ui-ux/scripts/probe.mjs"
+  ],
+  "initialLeafCount": 77,
+  "manifestBasis": "filesystem-backed git ls-tree -rl HEAD; all127 leaf paths exist and bytes match pinned blobs; no Git metadata/untracked payload included",
+  "manifestSha256": "d8555f5baa66157f2dd8a658afb7a5ecce52b295fef0cec24145f8b7dd0fd041",
+  "counts": {
+    "manifest": 127,
+    "ledgerTerminal": 127,
+    "READ": 8,
+    "DEFERRED": 119,
+    "exclusions": 0,
+    "unresolved": 119
+  },
+  "unreadableSelectedFiles": [],
+  "corpusVerdict": "PARTIAL",
+  "absorptionStatus": "ABSORPTION_NOT_COMPLETE",
+  "candidateDisposition": "REFERENCE_CANDIDATE_NOT_INSTALLED_OR_EXECUTION_ADMITTED",
+  "entryBytes": 46364,
+  "pluginVersion": "0.9.0",
+  "skillVersion": "0.9.0",
+  "license": "Root MIT copyright2026 Tuan Tran; retain notices for copied substantial portions",
+  "selectedFindings": [
+    "Existing-component/DESIGN-first and plain HTML adaptation fit both proposed applications",
+    "UI-only scope leaves business handlers unwired: must preserve working behavior in any later redesign",
+    "Locked rule16/I14 suppresses default visible keyboard focus: reject in CVF and project pilot",
+    "Update checker can read public URL and write user cache; no script executed; automatic checker omitted from future reference subset",
+    "New0.9.0 moves layout/wireframe/audit details into smaller files; entry still46364bytes; measure selective-context cost before calling it lean",
+    "Publisher70-prompt success statement is not independent CVF proof; dark-mode limitations need project-specific evidence"
+  ],
+  "ledger": [
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "gitBlob": "486d5c8dcc28c347d488af14201f1bf8af716e21",
+      "sizeBytes": 445,
+      "sha256": "0ac77aa73a6b7646f1ace0cf8b03520e3e81d369b97bd1dce3fd19b83db73f8f",
+      "terminal": "READ",
+      "depth": "FULL",
+      "reason": "Entry/identity/license/safety-boundary inspection; unchanged blobs or fully observed README delta reuse prior complete reading"
+    },
+    {
+      "path": ".claude-plugin/plugin.json",
+      "gitBlob": "f1ac1368ed49693fcea6b19624d823c974e8b45c",
+      "sizeBytes": 384,
+      "sha256": "d25a7945677e7e97b665c34612fd6cfe9e2a54e7aaf0ebc2c9b4aa933c671bf8",
+      "terminal": "READ",
+      "depth": "FULL",
+      "reason": "Entry/identity/license/safety-boundary inspection; unchanged blobs or fully observed README delta reuse prior complete reading"
+    },
+    {
+      "path": ".gitignore",
+      "gitBlob": "4db4729136f7ee51ac4c095e6826ecad821374e9",
+      "sizeBytes": 46,
+      "sha256": "72751bfbb52463628ba56c96ddd9a95480a96bd0abc763cd04ad3825ad552c6b",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "BACKLOG.md",
+      "gitBlob": "31b9e6e3eedee50915e9ef2217d93d249ba5c6f1",
+      "sizeBytes": 26881,
+      "sha256": "04632e56450563eb23fc6bfac08601e86b9d0c62b77dea66b77d23adfa7e7789",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "DARKMODE.md",
+      "gitBlob": "a95a637f050ed17b4be835c1316fc48b500e3ea1",
+      "sizeBytes": 28204,
+      "sha256": "7c7511e233e7e8b40bf9dbc7c743033de03e49f07a864d3b7b335b046f2c7ec0",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "DEVELOP.md",
+      "gitBlob": "84086446762473acb5b607170566d812ff5779f6",
+      "sizeBytes": 10811,
+      "sha256": "2b72b1c2174d9ba91e1c74e691e8da71d497152a354d1a35619dac1497d71232",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "LICENSE",
+      "gitBlob": "67b54327835d636897e2c1d4ae15c9c2b269b6b7",
+      "sizeBytes": 1070,
+      "sha256": "11eb4e2dc344cdba59dc76ccc07f3db6864d96648d470af08407f048c4e4a560",
+      "terminal": "READ",
+      "depth": "FULL",
+      "reason": "Entry/identity/license/safety-boundary inspection; unchanged blobs or fully observed README delta reuse prior complete reading"
+    },
+    {
+      "path": "NEXT.md",
+      "gitBlob": "8e5635501869abd195f4631a3422c516c82757db",
+      "sizeBytes": 26630,
+      "sha256": "0f48db2500725e16a577a92034e4bd2cdc5965a400dc5340e413ced2a0007f6e",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "README.md",
+      "gitBlob": "308042c4dddbb5066068a8e77427ff4a38b58a08",
+      "sizeBytes": 9589,
+      "sha256": "fbb46425bbed40947ea32f5f2d11425c622393659be844e0893128f613f4ce9a",
+      "terminal": "READ",
+      "depth": "FULL",
+      "reason": "Entry/identity/license/safety-boundary inspection; unchanged blobs or fully observed README delta reuse prior complete reading"
+    },
+    {
+      "path": "README.vi.md",
+      "gitBlob": "19df033689ab67eebb19977210f17b789fd5ff64",
+      "sizeBytes": 10306,
+      "sha256": "3925849369ac3ad7d978fb7d653b2a4628114e9c1e9d2211316d55be370b1a00",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "REVIEW.md",
+      "gitBlob": "64e06bd0c0c9a09df7d0e59a53308d52e7615559",
+      "sizeBytes": 54823,
+      "sha256": "cc44a9c294cdbbadf7746ac7f505ff38e8724b95b7d3d96099db30017803bb30",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "TESTS.md",
+      "gitBlob": "4dc74ff6ac8dbc61474e230a146203da54749fa5",
+      "sizeBytes": 20764,
+      "sha256": "53d37a9cf27299559454820123a312e19acf6c74dfab7618516ef59bdfe6cfeb",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "archive/SKILL-cu.md",
+      "gitBlob": "d1f80bfe8ea51c4b2db8143985b7edfc00986003",
+      "sizeBytes": 19291,
+      "sha256": "4f8f72070bb5a459a855f5306ec7b91ede8b0e73014da02421ba44102189f4f4",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "archive/checklist.md",
+      "gitBlob": "cac20de5cf6bd5fb1ce9ce00ec6e8b57c73664b0",
+      "sizeBytes": 7618,
+      "sha256": "e458704c8ac8ed5e62dc005aeb6283e5854a840c34dd8ad470470436c62e2175",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "archive/page-layout.md",
+      "gitBlob": "98466d95e5f3997fa3896d2756bacd53ff24b85b",
+      "sizeBytes": 2187,
+      "sha256": "f5eb631bb3e5c0011e9deb208cdf89a2f44342e532ccb70aa6b9f2e02598af60",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "archive/rules.md",
+      "gitBlob": "a037b393fa3fc4aa3d90880f3f6c832a71736bc2",
+      "sizeBytes": 17202,
+      "sha256": "48dd64092f9636e077c8c22c0e0e7bed2a1dc8ae33ccdb136a6ef2f060df4da7",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "archive/sales-pricing-3-cot.html",
+      "gitBlob": "d3cb046ae3cae980e6b20146b3fa1d40f69796c3",
+      "sizeBytes": 20825,
+      "sha256": "5be474844231245ffa24030922105c20481a89b17bb63ee671edb31ec5a8ec36",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "archive/sales.md",
+      "gitBlob": "e086e50e7cffe850fa9a380b8957f8aaea34ceec",
+      "sizeBytes": 4727,
+      "sha256": "1aad2c48f36490a2aa7d35f5645cfe120aa5b6bbc5346819635d44aff8825f8d",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "images/evondevkit-ui-ux-en-v2.png",
+      "gitBlob": "62f4cd8c02671e67a9c60ee66ad3888c0d2e277e",
+      "sizeBytes": 1150959,
+      "sha256": "1196300aaba2807cc001c8573ea6f546ce4f1bb49a8acadc595a44cc92c7a7ab",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "images/evondevkit-ui-ux.png",
+      "gitBlob": "35a51fe81405ddcf8a5c1478f99c3d602bff9116",
+      "sizeBytes": 1140440,
+      "sha256": "ac85a4c13d2ad46f871f5a14c3c57a07609a588e3a212ceee837b8ad2d1160b3",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "images/logo-mark.png",
+      "gitBlob": "a0eac8b35d3d78ce19acf21a50ee26b8cd57ff81",
+      "sizeBytes": 94097,
+      "sha256": "17ceae92fd26fc5e8cae5440e033b8508add75456c55325aed5c5056ae6d9c52",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "images/momo.jpg",
+      "gitBlob": "63c6e009d60b3d8fc27c945af1cbfe32f6f870a5",
+      "sizeBytes": 77410,
+      "sha256": "546dc9e19a3604a4d9d140a040933a5ed2f59dcddde8a8c5e685692f1e8ed217",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/SKILL.md",
+      "gitBlob": "65056747cf9e9b9d30b01847ac57e69d3fd8b4f4",
+      "sizeBytes": 46364,
+      "sha256": "eb971215d5191214cbcbe1fa8fc528546f9957eb29ae06e21ce3b0462ff6b86e",
+      "terminal": "READ",
+      "depth": "FULL",
+      "reason": "Entry/identity/license/safety-boundary inspection; unchanged blobs or fully observed README delta reuse prior complete reading"
+    },
+    {
+      "path": "skills/ui-ux/VERSION",
+      "gitBlob": "ac39a106c48515b621e90c028ed94c6f71bc03fa",
+      "sizeBytes": 6,
+      "sha256": "9d8c94f1ad3ea96b1e2ac4914fda4cb93c76b4a3e0d8cc6dd8976d6c0b227d15",
+      "terminal": "READ",
+      "depth": "FULL",
+      "reason": "Entry/identity/license/safety-boundary inspection; unchanged blobs or fully observed README delta reuse prior complete reading"
+    },
+    {
+      "path": "skills/ui-ux/references/brand-tokens.md",
+      "gitBlob": "1591d607af825cb496f49cb22cbedf08b32fa5fa",
+      "sizeBytes": 12259,
+      "sha256": "49cccb9bef945f5620a064ff5018aaa2faa79d2eb08c7554d05b55bec29c5437",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/budgets.md",
+      "gitBlob": "7df481c9e52486321ea0f4d7c0ead9f6d2794236",
+      "sizeBytes": 6398,
+      "sha256": "a73cdfebd6a884e1240d36d39b0e3845ae86ae9a5b83bf1822191067536a0c8e",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/checklist.md",
+      "gitBlob": "19ec7d202e14efed73e15eb472606d900984c426",
+      "sizeBytes": 31799,
+      "sha256": "135e604978dd047628987f77711b1005b130933d7ca312c0f917f4e4c359910a",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/accordion.md",
+      "gitBlob": "59474b5cee9e425b5c34494e5e29be91f1a0250b",
+      "sizeBytes": 12875,
+      "sha256": "e6c3ef863f2ebf6fc80014abfa2f40656655b01d50f2d7470821fa0712dc84eb",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/avatar.md",
+      "gitBlob": "3e5c40de83544a4f0cec59f5859612bfeb1ab419",
+      "sizeBytes": 8107,
+      "sha256": "e9007f3af65ff08a86053d93ec2d29f41a43af795e05dc0c508698bc6cb80952",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/banner.md",
+      "gitBlob": "ab07c1f6e377d7754713fa573010baf0b4f69ab2",
+      "sizeBytes": 3628,
+      "sha256": "db1e7436642b98b3f30cda00bb950f58e91f11b81c9ed0226a21271e1e7a69ce",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/breadcrumb.md",
+      "gitBlob": "7c15b44993069d0209133c3b50ab7333f6d36a99",
+      "sizeBytes": 11459,
+      "sha256": "9d9471c4b7babc216472b69cd4d667ea44f0d4b68f1bb32c27152b8aadca785e",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/button.md",
+      "gitBlob": "3ba60432e4c6aa1efe22c2f5c8e5260842b4edb4",
+      "sizeBytes": 12855,
+      "sha256": "fb5027939e19bfea2be2081104b1484b6676445fa0be7946910b64e465e25b6d",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/card.md",
+      "gitBlob": "eb03f358afe2ff951da015c485701bf29cf839b6",
+      "sizeBytes": 6636,
+      "sha256": "42c211be831b47efbebf1449f45f2e5fbf3264c9f5762f593bf3ae47b7402123",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/charts.md",
+      "gitBlob": "c41cf5adcff81aa7180fdf8a6b8aed59641c0cf5",
+      "sizeBytes": 54534,
+      "sha256": "19f98cbd21e57a96fb5d517645877a69e57b510722dc38d5bb9de9c98f18fcec",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/chat.md",
+      "gitBlob": "4f7b49fd3e9c38cac9a32d9c07c985c65bd105d0",
+      "sizeBytes": 14768,
+      "sha256": "d860b234e6a813cef8476aa7b0c8bbdea1f8c41063adab3489650da3f553cf46",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/choice-controls.md",
+      "gitBlob": "5a8a482c571e0277a7ef8d3540f6369522ae8251",
+      "sizeBytes": 40944,
+      "sha256": "8f4aded746f1d076a2f12d3e0b26f734cfe4b5e89e35bee9ab957880b05022f2",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/comment-thread.md",
+      "gitBlob": "7eaa2b7af680ada7cfda0c5b103dea3801b52037",
+      "sizeBytes": 2708,
+      "sha256": "7b9a1daf89b6fe0d0563596f03fede91536fdda1e2a7fbc55d06b41bb3fd062b",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/description-list.md",
+      "gitBlob": "91852c83500f8d4efc8192387e3da61b051b0deb",
+      "sizeBytes": 10500,
+      "sha256": "4e910d86070ab0617e285a521105b0bc33fc3fc6ec26017768a54cbb49e5438d",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/empty-state.md",
+      "gitBlob": "7d32d84960313869ccab2fb9b3f0114c49e608b3",
+      "sizeBytes": 7212,
+      "sha256": "4325f5e00dff75636726ba913373aa20d08b5aacb8b0daaa7ba16e9f0559de11",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/file-upload.md",
+      "gitBlob": "9c635298610296609221c80698cf0250a12a1c25",
+      "sizeBytes": 15152,
+      "sha256": "bb758d19f14d0d2ce98cc3f336d1bfb15cbbd1fcf6f5e97bc4ecc74e53521391",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/inline-edit.md",
+      "gitBlob": "4081bd3f009c5686602a4484fed57bcd3cb9795b",
+      "sizeBytes": 7557,
+      "sha256": "77725c385db5eefe38c9bdc639db2d2e08da6c2ca174a414f356e053c79472cb",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/input.md",
+      "gitBlob": "1e33905473e6b00a4048f5347891dc5c77bc8257",
+      "sizeBytes": 9397,
+      "sha256": "a4bfcbac9c5710cf01950f3d12e6e45381e088045bcba063cfd2436b74701c77",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/list-row.md",
+      "gitBlob": "df04c66526ab9d661ce0dc81331daed2aa6a4c6e",
+      "sizeBytes": 6356,
+      "sha256": "b7a97b00618019c9065220d0a8781c24917fe0f262af79a82958b75555c2afe7",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/loading.md",
+      "gitBlob": "f93eff96ea85d6c89873e310178d6c8b3b9c4ad8",
+      "sizeBytes": 14671,
+      "sha256": "b943ec9109f975f31ac7aab5e0fd320c0e50e97d580f4bf960334145ef08de7a",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/logo.md",
+      "gitBlob": "ae9cd17387aef1fc39e5a1d9c6b7cbb5cf0508c3",
+      "sizeBytes": 9076,
+      "sha256": "1aaa92fcf7a1d63f31227ba50f36b03b9e4d6a733fde7309730dfe0e69b4af76",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/otp-input.md",
+      "gitBlob": "5d7139b1b1b53a271fbd9d79a5b1f5ba3fd08e93",
+      "sizeBytes": 6169,
+      "sha256": "8122d06a526fa36266938cdddaa73b2e98b05826691c5ab44a63ecfa4599026d",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/quantity-input.md",
+      "gitBlob": "8bb19a28c7407b278a74ae74ac6fb60f3ef6e6be",
+      "sizeBytes": 6369,
+      "sha256": "127d3c8ead23b5fcb63ce6600599f83134a145ec6f9ca3f96263633291955cae",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/range-slider.md",
+      "gitBlob": "e354340355d4fa679dc9c82c638055c1065e0ce3",
+      "sizeBytes": 2891,
+      "sha256": "4e0febcb5651873d40b76376566d4e28fa056c4ab7dedd62cbd86a217d1d1619",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/small-controls.md",
+      "gitBlob": "508ea4749a1974de4500ed214fdfe3a1b1fd88a5",
+      "sizeBytes": 29980,
+      "sha256": "ac2ff1ad932df477a5015f5c50556e0d2ffbd5c1fbbd30d6903ec70e1e5cace9",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/sortable-header.md",
+      "gitBlob": "e9512383c18b7d23433b5c9ea5432537b66f10f8",
+      "sizeBytes": 6078,
+      "sha256": "577e2993fa00d2cc1e6d24d28e0fea0bcfa3cc1abf3110dbe9648b9c34087f9e",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/tag-input.md",
+      "gitBlob": "4e415e1a10102fc869a940459665fbf704969118",
+      "sizeBytes": 2131,
+      "sha256": "38795de50b2fba74cd7c2a1c907ef784f25f899d88e421e9ffa1f7a65fb9142a",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/timeline.md",
+      "gitBlob": "0634accb0c3f2faf690f2ffe5554732115869ded",
+      "sizeBytes": 4510,
+      "sha256": "0c1781fdeca14a20e817da754e1ce1521bac0f609ce3b1e8ece851b2f3f9d6b4",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/components/tree.md",
+      "gitBlob": "2c29f20f431126a4218d174aba01435542d4ad06",
+      "sizeBytes": 4735,
+      "sha256": "5c06fb4946f43472f99e25d212d4942eea819a7022176851c686fa62e537b5c5",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/design-process.md",
+      "gitBlob": "5a099425740f795124da146d677e4bbb21e4bc53",
+      "sizeBytes": 23371,
+      "sha256": "f39fde260c2ae22fe03212655cb83e76020c6a2705f66fefd348022f25a272e2",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/flows.md",
+      "gitBlob": "83a3848916568234e1be0393e6718373b99bdc1f",
+      "sizeBytes": 19000,
+      "sha256": "0679cf595f7530718d0b76da04171f97008b5af36685740dbfe061d1380497cf",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/industry-patterns.md",
+      "gitBlob": "d6ce5ecc948507125ea75fd358f9544856826b14",
+      "sizeBytes": 17627,
+      "sha256": "e0c3f08f73555230ed62e48e29b709b6d2dc6c724e70e15baf74a3bcf8c0ff6e",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app-kanban.html",
+      "gitBlob": "82b8a5056bc4ba6d91b52d05a2ff8e18f968499d",
+      "sizeBytes": 16562,
+      "sha256": "f77c89347b35ba401d768c2ff61bc5bbfc0fcab805cd771be0e2e90321384d22",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app.md",
+      "gitBlob": "5099397c83728b54f4c141f6116193395acbe896",
+      "sizeBytes": 8203,
+      "sha256": "da52686f49adf22e7db94ba4aed0067d70e24ddc0033048fe459ae4f3459b18d",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/activity.md",
+      "gitBlob": "b1c93295cabc038e9e91b28fcfef748e274c2daa",
+      "sizeBytes": 1966,
+      "sha256": "72b4a787c4b8337371f61e1c6f2dacc28dbabde67d6e60332cdb2f7a906bf109",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/api-keys.md",
+      "gitBlob": "eb48febb6ce9e5361abd019027c9ddb4c61643e9",
+      "sizeBytes": 8748,
+      "sha256": "5b5d395772d04578fd73a8ba4d10d2c9de6e1d518432985d887c5610c61470bb",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/billing.md",
+      "gitBlob": "a63f7179d3b653f66d4a557c316be75c28e55ee3",
+      "sizeBytes": 12617,
+      "sha256": "c9d28f390f74fc27728449b37f5dff0bf2328aa4ff7a6798ace5cc565d17e228",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/calendar.md",
+      "gitBlob": "c2308fb2c15c096a72645b05977b982bcedc4c7e",
+      "sizeBytes": 10431,
+      "sha256": "61cce0997d43db0862aceeb57c944a30766bbd2cc8b400428ebd16b58cafadbc",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/dashboard.md",
+      "gitBlob": "4305c3e6f724e18cef928d3b1de16543ea0a858b",
+      "sizeBytes": 17010,
+      "sha256": "78700533ceb2e295224d7ee4e1c2d6d4758589051c322947ba9dfe6508390d0f",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/data-table.md",
+      "gitBlob": "c29861795f3b9fcb9fbfaa95da480477ca6902c8",
+      "sizeBytes": 21601,
+      "sha256": "7948a04398dcde9dd92986fb3c1781e7256a8cbd51a27df7f90c1506fa86113d",
+      "terminal": "DEFERRED",
+      "depth": "PARTIAL_NOT_FULL",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/entity-grid.md",
+      "gitBlob": "513d577732f7b0d622f775a5829031892102838f",
+      "sizeBytes": 5381,
+      "sha256": "0af8ef8c4cc4e904afbf34a0d3f9c9cfd8fae0efa5dfbf2eeed7dd85e61ec4b9",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/error-pages.md",
+      "gitBlob": "6debcd7701d91d6fe0dd41693029e8deb3ceb17c",
+      "sizeBytes": 7332,
+      "sha256": "cb1e47c02cf3208b8cf45b63363f0d91cd33f82396680884ae65edc4d429461a",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/filtered-list.md",
+      "gitBlob": "37068247639adb6c5cc76bb69eee15408ceaec4f",
+      "sizeBytes": 6434,
+      "sha256": "0cc971a0d21331653b3aee963bd8053c46cd81b97c0900f17de36501e8489366",
+      "terminal": "DEFERRED",
+      "depth": "PARTIAL_NOT_FULL",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/kanban.md",
+      "gitBlob": "4e59a750842101372def84170555e357157f4909",
+      "sizeBytes": 10488,
+      "sha256": "ba86618fb648b188cef14bba4dc623c33e2f9c837fc132b83eb16abc4b4172be",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/live-monitor.md",
+      "gitBlob": "01e8290a7c0408aee430e7b4dc1dd62cc7fa29c7",
+      "sizeBytes": 5472,
+      "sha256": "0d547f2ba4705a673a37a3f9b7e1ed350b0b9bcb2e3c05ce648b5b9b53ecbed4",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/members.md",
+      "gitBlob": "0c3b7246046b90220cde67777f3b7ff97b5b2887",
+      "sizeBytes": 8728,
+      "sha256": "54dcd50076780a56ee4927573440bf5f3d4caacd637be8834c3a00c9e29348fe",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/profile.md",
+      "gitBlob": "8bb062e87b82d7bad09e350afa1e0e60be9fb416",
+      "sizeBytes": 4610,
+      "sha256": "51081fdb1cc025382bf91eb4fd8f15d6e59c2313c465322b90adf951e20a0630",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/record-detail.md",
+      "gitBlob": "d7769c8935a8fcabfc8bf1f580ffa25a54cb6f89",
+      "sizeBytes": 9594,
+      "sha256": "8967b41bacbb1a8b312f86399e7f4d1cd9ba5baa22b8c75a0383083bc901d16d",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/report.md",
+      "gitBlob": "3f4b2beac46399539836d6abe04e4ea4234b60aa",
+      "sizeBytes": 7438,
+      "sha256": "f20e429bf728fc77bbf8535e724a59414bf84394fdf6d0763e56932d7e80fe3b",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/security.md",
+      "gitBlob": "d0f75f1179aa300cf52b2465115e8c21aefecf77",
+      "sizeBytes": 9226,
+      "sha256": "d08b58c83e9707f3110b10f98b52ea5b83e9ab7588aba8e43354cbb3584deb6f",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/settings.md",
+      "gitBlob": "a53ea197120b76e99b872a70d743ed95f080e41b",
+      "sizeBytes": 13037,
+      "sha256": "79422f1b5d506644766a9b87c1ad7cbffd22757703106ffb53ff900de0d39635",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/shell-canvas.md",
+      "gitBlob": "1f3f60a800e021ef0dfdc90e44c90019355719e1",
+      "sizeBytes": 1939,
+      "sha256": "040926c096c3232ce5e4903e3fa3b9b9cef4a6d457fcf61f6f3e4000bc096038",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/shell-floating.md",
+      "gitBlob": "444359f89bcdd95588d91d60f8c928b0b7458aba",
+      "sizeBytes": 2476,
+      "sha256": "f00479d03a57404b9855b58767b20046b0862bf10d94d2b7e85930098b81c708",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/shell-full.md",
+      "gitBlob": "286a5cf1e1593e98ad13b1f4bd7a2d5cbf9444a6",
+      "sizeBytes": 2767,
+      "sha256": "7462c3002048e2520ce485681874f76d26c54ac6be153f3a01275d06565d6e6b",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/shell-inset.md",
+      "gitBlob": "03b0a11f33dc40eb8862afedb7b5ff9cd426fd4f",
+      "sizeBytes": 5244,
+      "sha256": "471d176071df619f4d62eda7095cb24d7e8a62fff1384bd296bf0bef83c152f3",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/shell-rail.md",
+      "gitBlob": "861f9e04a1063afaf3e1c0a6578f09ff1ffe520f",
+      "sizeBytes": 4079,
+      "sha256": "1f50a395374a11291a77785c92347e202908e58bb6ecc2a9b4b80375d6736504",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/shell-topnav.md",
+      "gitBlob": "3a2d6ec3581fdfd635b6062997a55896617143f2",
+      "sizeBytes": 2675,
+      "sha256": "20dc3ec54918ba338474470bbc2004f2cfed35570e17d5641e6dd2fb1626c685",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/shell-unified.md",
+      "gitBlob": "dada0c82acf19a38c842f472d36c26888a1dd1bd",
+      "sizeBytes": 3828,
+      "sha256": "4143435b3eeeaa38f068bdbd001eed09cac404902de473cd93e8df3124a6be17",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/shell.md",
+      "gitBlob": "af8a667b085741b3f805b87e034698a5ccb7f740",
+      "sizeBytes": 46019,
+      "sha256": "2f80a29244dba5e3bb6a525bf0222e80279e50697ae1438335f3bda9684c7cff",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/app/two-panel.md",
+      "gitBlob": "3f056ccc8b54ed7e42d9ddca9e036874a7216e0b",
+      "sizeBytes": 3215,
+      "sha256": "e1d9b4794738e5868a8d1bc593eb3e3c4a3c9426fbaff600026b990d1d32496f",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/form.md",
+      "gitBlob": "9ebbab1e2f783bd478941acc0ae1c1aa7f831170",
+      "sizeBytes": 37540,
+      "sha256": "2f68a8ab0d83513d39506e0473962ae901127eeddb2bbb5c8574d5caa20c0dd5",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/mobile-app.html",
+      "gitBlob": "415c05cd35e3f717d495c3cc0293850d89dbdb2e",
+      "sizeBytes": 58868,
+      "sha256": "116351aaa72ae7427349c364d760214e7e969d81d88ae2619d6b9d5857fb68b7",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/mobile-charts.html",
+      "gitBlob": "52e7d0a12b44718f13a52e99462564d97e901a70",
+      "sizeBytes": 14093,
+      "sha256": "5e78b5e10fa1fa77c4bdec99be1c0702bed353a7c065d411f3d1dd69590865b1",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/mobile-immersive.html",
+      "gitBlob": "8a515abe9d76de471eed166a0d210238a960c637",
+      "sizeBytes": 131324,
+      "sha256": "8005552d0497f0a5a52711f7cc1f7e1552ecc2e8d9064c1b5de3448e1442374b",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/mobile-order.html",
+      "gitBlob": "dacc8d762d66b799498de384cce5af2255c4e0fc",
+      "sizeBytes": 83194,
+      "sha256": "176fa15fbddd13e6cb085f57649e930f580359709c5ee1a73eed426d077a9119",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/mobile-photo.html",
+      "gitBlob": "ab2c2cdc5baebf92b189ffe14dd514302538ba2e",
+      "sizeBytes": 123902,
+      "sha256": "6e598eb6ee1c14d8d06101f0d759944c731e48e8c427cb8e150f644a0813ca1a",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/mobile-playful.html",
+      "gitBlob": "3c5fdddf8d559bc99287defe6291eb311803fea9",
+      "sizeBytes": 76896,
+      "sha256": "4db1be77bface19cff26fb4d832bc627c18dbf5f83730a2d89c09391e387ad22",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/mobile-showcase.html",
+      "gitBlob": "c46d863246c5ba9936be5786903b7b996115f369",
+      "sizeBytes": 24990,
+      "sha256": "7e38cd534aef328a85636409cbefb9e2bbb860168153c8042fdf072ff1037252",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/mobile-tabbars.html",
+      "gitBlob": "e4706a3e6b24ecc9916ddc14e7a6c66b800ca9bd",
+      "sizeBytes": 19965,
+      "sha256": "f2e7a0f99e4ecaecfdb8b773a74a7057f8ee18c09860de62c5648b1f32324749",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/overlay.md",
+      "gitBlob": "070b25b1c4bbcf16f05521deb770eb1ae4eaa7d6",
+      "sizeBytes": 67945,
+      "sha256": "7456d98b05a2e6d9104587c752f15023d1416ed5ba60051c46475344b9e16a4b",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/layouts/pricing.md",
+      "gitBlob": "2778da00278a817181690c2f04a151934790293f",
+      "sizeBytes": 12397,
+      "sha256": "873dadf87110740878973263669a5ec24eb0945dff4a7e89ec3ab561e43fc974",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/locked-rules.md",
+      "gitBlob": "67dd329647571088ae2eb15b1fb3a9cb3d9b972a",
+      "sizeBytes": 7232,
+      "sha256": "9adb0156473c6b1d6f8b7ed38ebd4be148d0e4e4fbd05f4f65b397b20adedc57",
+      "terminal": "READ",
+      "depth": "FULL",
+      "reason": "Entry/identity/license/safety-boundary inspection; unchanged blobs or fully observed README delta reuse prior complete reading"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile.md",
+      "gitBlob": "06b81a839ed7fbe090bbce14f25bb5946d5cd8f8",
+      "sizeBytes": 35002,
+      "sha256": "607e275205178599e1e243b362358daf63afe602478a40a4f0179c17b2ab6899",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile/characters.md",
+      "gitBlob": "9ac8078409eb0bc0f5a42b2a1640ddbf3ad0d486",
+      "sizeBytes": 8893,
+      "sha256": "7de2adfa4eab3b4244bb0d4123d4c008b7d9effe7c8ea96951d5276d242bec16",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile/charts.md",
+      "gitBlob": "d2139f7bd009171dcfb3aeff9a16c3ddbbd7086d",
+      "sizeBytes": 8670,
+      "sha256": "788890b4d7fce0bec5fe4bd3b33f653b43dd0a977df6799823d59cb746b11a1d",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile/data-entry.md",
+      "gitBlob": "b5ea4bf2e9b7b03a159af295eeae52d5c11a68eb",
+      "sizeBytes": 8834,
+      "sha256": "28eba951ea117029470ff74b01b373e0b0a48cc94676b4cd53ed666795b0a1b2",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile/faces.md",
+      "gitBlob": "d910281d22bffea2b6c584595235bc00895c9cbc",
+      "sizeBytes": 20038,
+      "sha256": "717197b2bb9e1a6eb94379979f2a8ca81f688729e40303950d6fe7de4cf75cb3",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile/inputs.md",
+      "gitBlob": "0e9e4cb4732779f977ff4cbafd91b3abd152147e",
+      "sizeBytes": 4019,
+      "sha256": "0c47d818458d3aa88a9d181c965b9a73a45cad23baa876992986902f3362bc74",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile/maps.md",
+      "gitBlob": "915241c0046b6b03693f4d76c30f499788749113",
+      "sizeBytes": 2750,
+      "sha256": "6df7420c14ab128fdca4d48a194f4f5d909eafbf919b2e4a3d7a93b4262a4080",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile/motion.md",
+      "gitBlob": "93575a212bca4f46e4d37dc667719e2ce49790f6",
+      "sizeBytes": 4283,
+      "sha256": "0db5d00613d8ffb19fb590308c21687ea7939efc60f35a460423d3d20bcb9b70",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile/native-code.md",
+      "gitBlob": "f70888c8f4afdbc597f56a95e887262d9de7e810",
+      "sizeBytes": 4198,
+      "sha256": "c9a31237d2e2defd11ce8bca4e5d2fbe7628d33b49618470cd465569c4b012d0",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile/onboarding.md",
+      "gitBlob": "dbe4942dd4ca77aaceead9052a9b9ae73aa197fb",
+      "sizeBytes": 7379,
+      "sha256": "bc770f6201e91a815af7adcc4bdfd5c866f9db4cd23bcb8687c585982dddf126",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile/ordering.md",
+      "gitBlob": "375719edc8810cf788fee6df9a1a390f55128514",
+      "sizeBytes": 6845,
+      "sha256": "96a85539e42462adef9f5ece5f5583f4f1fc2bedbbe5b2fd8d3986e3ca63809d",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mobile/showcase.md",
+      "gitBlob": "e0fbaa4de0aa900baa156757f6215b68b57202e8",
+      "sizeBytes": 9575,
+      "sha256": "acb31f90b97dee7a2b8d5c15f44037722cfadc335fde0e6c569475956a88b83a",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/mock-photos.md",
+      "gitBlob": "d49fc944032235d46277aed4d514199c1725748b",
+      "sizeBytes": 2444,
+      "sha256": "d2c1a883557ea88e33fa0c0580458245321cda2d3a4b4215372a086121ffaa25",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/principles.md",
+      "gitBlob": "c977ebe961b36b28a6e0f189bff7708f2eb10bd9",
+      "sizeBytes": 29609,
+      "sha256": "e8f6eded605e39e8bea9862f5920c40c21bdac1a9f4900f37bea628cd89a8ebd",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/refactor.md",
+      "gitBlob": "df421252487bc0bab910dc14c463cb19050da359",
+      "sizeBytes": 12230,
+      "sha256": "c3693a7eeb57ce55bcad8a6d6e6f1866c8b3c42c71e56aa7040d0d473572241c",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/responsive.md",
+      "gitBlob": "b66e21b1472b6c2209ed217e861c08bef52a6444",
+      "sizeBytes": 19195,
+      "sha256": "42c74fedb62facb815c0ff054137e901440c1a93a1df0951e358c6785a96807b",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/review.md",
+      "gitBlob": "ef0cc73172062a7c63fdbec22f6fd388de26cd23",
+      "sizeBytes": 57546,
+      "sha256": "9d3f750b695ab1c5c2d46e1c9264201e147330dcc7d8a27100a1e93b1966c058",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/rules-color.md",
+      "gitBlob": "93043c69adb6dd29860756a7311f264c867280cd",
+      "sizeBytes": 46237,
+      "sha256": "7963dfccb8fc7fd7af1f117ac7ce938ad6b2d3f87b6d66be41cfe983959d1908",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/rules-form.md",
+      "gitBlob": "203e909082b15f664913f67bcb8d9edaaa6284a8",
+      "sizeBytes": 13864,
+      "sha256": "f3a6bdd733a8965c56945fee7ca8895eee7b594f95c8b4c44edbe44b41c57344",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/rules-state.md",
+      "gitBlob": "89548d00193b108006fb56bbfbaaca6a576453b6",
+      "sizeBytes": 47014,
+      "sha256": "b21c6bfea8c934d0651713970e265d625c95677d9b5c00820e9a10eb808d5a05",
+      "terminal": "DEFERRED",
+      "depth": "PARTIAL_NOT_FULL",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/rules-type.md",
+      "gitBlob": "108068d56c36acdf4fc3c163a38a29b8175929e4",
+      "sizeBytes": 23997,
+      "sha256": "4aff97e8fe0d3276574790ee4f3e8564abc2c1949a0402f375fa8503ac646f18",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/styles.md",
+      "gitBlob": "76f96fbd8b425c527fcfa37da348d766e2bc4753",
+      "sizeBytes": 55243,
+      "sha256": "35858feb795ca2713e6bc55e6d0ad245af9a0590fed648c7b6b293c34ac827cb",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/system.md",
+      "gitBlob": "7c45699ac4c8db208365d41ce196489221c3ae97",
+      "sizeBytes": 18054,
+      "sha256": "4609b8d5b92644e8927f970edda555d329dc82782c573f75074f62fa2a5f571f",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/tailwind-v4-traps.md",
+      "gitBlob": "2ac77e5acffc64245f0fe864b78b0f1cd9802bb3",
+      "sizeBytes": 10486,
+      "sha256": "9a83c9a1a28978a76ff7991ab1357747f37172a2f25b47ec9c845de6c182fa45",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/tokens.css",
+      "gitBlob": "37d46235514397ade463170706dffd31c19776ac",
+      "sizeBytes": 27704,
+      "sha256": "b175fdf602007268b623fad807f23a1ba3c239080e39e1205ef9586c85612c6d",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/references/wireframe.md",
+      "gitBlob": "9a5447ad49e18417ce07394648fa3940b8343153",
+      "sizeBytes": 68256,
+      "sha256": "43ee6a104293ad94fbd67863ab1db7524c3156f04814ffc90a1f0612be50fbb5",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/scripts/audit.sh",
+      "gitBlob": "5d98a3e92be9a71a7372caab9a6727afcf562793",
+      "sizeBytes": 4890,
+      "sha256": "8a135e26a623553aeec31dabe9a4156d68df832d1ce841e2a8c19dd817d8627d",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/scripts/check-update.mjs",
+      "gitBlob": "13da174044a04edd2a9039d4736b447ccdeeac6c",
+      "sizeBytes": 4132,
+      "sha256": "efb449a2fc914c97901a8e6c2210bfc1a457ec6c2bfdea3a77fffa23b3236379",
+      "terminal": "READ",
+      "depth": "FULL",
+      "reason": "Entry/identity/license/safety-boundary inspection; unchanged blobs or fully observed README delta reuse prior complete reading"
+    },
+    {
+      "path": "skills/ui-ux/scripts/lint-skill.mjs",
+      "gitBlob": "99421832c2c989e9be800fe657f8390661db61fa",
+      "sizeBytes": 11489,
+      "sha256": "545813bbc874c495590eb849a36326aaff87ac343d5ba1962f1b0c6109418aa6",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/scripts/measure-skill.mjs",
+      "gitBlob": "27709d557584ab457b6643079e52774459681896",
+      "sizeBytes": 3931,
+      "sha256": "d6ff9018526b6a00829dab12f611a3d1b7049be14ecd5d4b5cf204fbb77a66ea",
+      "terminal": "DEFERRED",
+      "depth": "NOT_SELECTED",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    },
+    {
+      "path": "skills/ui-ux/scripts/probe.mjs",
+      "gitBlob": "fabcbe03d70edc563471e2fddf2f6ed671894137",
+      "sizeBytes": 359523,
+      "sha256": "88f3760ae30c28d71dfd5dd0167d8088d2f007ace1e06dc303ca07b8fd842435",
+      "terminal": "DEFERRED",
+      "depth": "PARTIAL_NOT_FULL",
+      "reason": "Outside bounded source intake; must read relevant material before use/execution"
+    }
+  ],
+  "useProof": {
+    "sourceOnly": true,
+    "screenshotsObserved": false,
+    "skillInvoked": false,
+    "scriptsExecuted": false,
+    "dependenciesInstalled": false,
+    "projectCodeChanged": false,
+    "providerCalls": 0
+  },
+  "localSourceObservations": {
+    "cvfWeb": "Next/React/Tailwind; DESIGN.md owns visuals/behavior; /skills is a proposed bounded route, not whole-site acceptance",
+    "shiftReport": "Working source observed only, not a frozen acceptance candidate: HTML/CSS/JS frontend with Python local HTTP server; project is in PNI independent review. No operational DB/personnel data read; no project edit or server start."
+  }
+}

@@ -212,6 +212,11 @@ def validate_root_admission(
     pointer = block.get("rootContractAdmission")
     if pointer is None:
         return [BlockViolation("ROOT_ADMISSION_PARTIAL_POINTER", "null admission pointer is invalid")]
+    local = import_module_local()
+    if local.pointer(block) is not None:
+        return local.validate(block, artifact_path, predecessor_block, evidence_bytes_resolver, validate_work_order)
+    if _source_pointer(block) is not None:
+        return validate_source_repair(block, artifact_path, predecessor_block, evidence_bytes_resolver, validate_work_order)
     if _v2_pointer(block) is not None:
         return validate_post_stop_admission(block, artifact_path, predecessor_block,
                                             evidence_bytes_resolver, validate_work_order)
@@ -586,3 +591,228 @@ def validate_post_stop_admission(
     except _Reject as exc:
         return [exc.violation]
     return []
+
+
+# SOURCE_REPAIR_ONLY: source fulfillment retains the outcome blockers.
+SOURCE_POINTER = "cvf.scecSourceRepairAdmissionPointer@1.0.0"
+SOURCE_GRANT = "cvf.scecSourceRepairAdmission@1.0.0"
+SOURCE_CONTRACT = "cvf.scecSourceRepairContract@1.0.0"
+
+
+def _source_pointer(block):
+    pointer = block.get("rootContractAdmission")
+    return pointer if isinstance(pointer, dict) and pointer.get("schemaVersion") == SOURCE_POINTER else None
+
+
+def is_source_repair_return(block):
+    pointer = _source_pointer(block)
+    return pointer is not None and pointer.get("stage") == "RETURN"
+
+
+def _source_json(ref, resolver, fence, suffix):
+    _need(_object_ref(ref), suffix, "invalid authority pin")
+    body = _pinned_text(ref["path"], ref["sha256"], resolver, suffix, limit=MAX_AUTHORITY_BYTES)
+    matches = re.findall(r"(?ms)^ {0,3}`{3}" + re.escape(fence) + r"[ \t]*\r?\n(.*?)\r?\n {0,3}`{3}[ \t]*\r?$", body)
+    _need(len(matches) == 1, suffix, "authority fence must occur exactly once")
+    try:
+        value = json.loads(matches[0], object_pairs_hook=_no_duplicates,
+                           parse_constant=lambda _: (_ for _ in ()).throw(ValueError("nonfinite")))
+    except ValueError:
+        raise _Reject(suffix, "invalid authority JSON") from None
+    _need(isinstance(value, dict), suffix, "authority must be an object")
+    return value
+
+
+def _source_strings(value):
+    return (isinstance(value, list) and bool(value)
+            and all(isinstance(v, str) and v and v == v.strip() for v in value)
+            and len(set(value)) == len(value))
+
+
+def _source_ledger(work_text, validate_work_order):
+    from importlib import import_module
+    module = import_module((__package__ + "." if __package__ else "") + "check_work_order_acceptance_ledger")
+    match = module.LEDGER_RE.findall(work_text)
+    _need(len(match) == 1, "WORK_ORDER", "one ledger required")
+    try:
+        raw = json.loads(match[0], object_pairs_hook=_no_duplicates,
+                         parse_constant=lambda _: (_ for _ in ()).throw(ValueError("nonfinite")))
+        rows, catalog = raw["requirements"], raw["proofCatalog"]
+        _need(isinstance(rows, list) and rows and isinstance(catalog, list) and catalog, "WORK_ORDER", "missing ledger rows")
+        for row in rows:
+            _need(isinstance(row, dict) and row.get("mandatory") is True
+                  and _source_strings(row.get("expectedArtifacts"))
+                  and _source_strings(row.get("requiredProofIds")), "WORK_ORDER", "unsafe or optional requirement")
+        _need(all(isinstance(row, dict) and isinstance(row.get("proofId"), str)
+                  and isinstance(row.get("locator"), str) and row["locator"]
+                  and row["locator"] == row["locator"].strip() for row in catalog), "WORK_ORDER", "invalid catalog")
+        ids = [pid for row in rows for pid in row["requiredProofIds"]]
+        catalog_ids = [row["proofId"] for row in catalog]
+        locators = [row["locator"] for row in catalog]
+        _need(_source_strings(ids) and _source_strings(catalog_ids) and _source_strings(locators)
+              and set(ids) == set(catalog_ids), "WORK_ORDER", "proof catalog mismatch")
+        ledger, issues = validate_work_order(work_text)
+        _need(ledger is not None and not issues, "WORK_ORDER", "invalid acceptance ledger")
+        return ledger, module
+    except (KeyError, TypeError, ValueError):
+        raise _Reject("WORK_ORDER", "malformed acceptance ledger") from None
+
+
+def _source_return(block, grant, ledger, module, resolver, authority):
+    returned = _read_bound(grant["workerReturnPath"], resolver)
+    _need(isinstance(returned, bytes) and len(returned) <= MAX_EVIDENCE_BYTES, "RETURN", "return unreadable")
+    try:
+        text = returned.decode("utf-8", errors="strict")
+        matches = module.EVIDENCE_RE.findall(text)
+        _need(len(matches) == 1, "RETURN", "one return ledger required")
+        evidence = json.loads(matches[0], object_pairs_hook=_no_duplicates,
+                              parse_constant=lambda _: (_ for _ in ()).throw(ValueError("nonfinite")))
+        rows = evidence["results"]
+        _need(isinstance(rows, list) and rows, "RETURN", "invalid results")
+        for row in rows:
+            _need(isinstance(row, dict) and isinstance(row.get("requirementId"), str)
+                  and _source_strings(row.get("actualArtifacts")) and _source_strings(row.get("proofRefs"))
+                  and row.get("status") == "PASS", "RETURN", "invalid result")
+        _need(not module.validate_return(_read_bound(grant["workOrderPath"], resolver).decode("utf-8"), text, None),
+              "RETURN", "legacy fulfillment rejected")
+        results = {row["requirementId"]: row for row in rows}
+        claims = block["claims"]
+        _need(all(isinstance(c, dict) and c.get("claimClass") != "DOCUMENTATION_ONLY"
+                  and c.get("proofClass") != "PROPOSAL_ONLY_NO_RUNTIME_READINESS" for c in claims), "PROOF", "non-source claim")
+        claim_map = {c["claimId"]: c for c in claims}
+        bindings = block.get("sourceRepairEvidence")
+        ids = {pid for row in ledger["requirements"] for pid in row["requiredProofIds"]}
+        _need(isinstance(bindings, dict) and set(bindings) == ids and len(claim_map) == len(claims) == len(ids),
+              "PROOF", "proof or claim map mismatch")
+        catalog = {row["proofId"]: row["locator"] for row in ledger["proofCatalog"]}
+        used = []
+        for req in ledger["requirements"]:
+            actual = results[req["requirementId"]]
+            _need(set(actual["proofRefs"]) == set(req["requiredProofIds"]), "PROOF", "row proof mismatch")
+            for pid in req["requiredProofIds"]:
+                ref = bindings[pid]
+                _need(isinstance(ref, dict) and set(ref) == {"claimId", "evidencePath", "sha256", "locator"}, "PROOF", "invalid proof binding")
+                path, cid = ref["evidencePath"], ref["claimId"]
+                _need(isinstance(cid, str) and cid in claim_map and path in req["expectedArtifacts"]
+                      and path in actual["actualArtifacts"] and path not in authority
+                      and path != grant["workerReturnPath"] and claim_map[cid]["evidenceRef"] == path
+                      and ref["locator"] == catalog[pid], "PROOF", "proof not joined to its row")
+                _located({"path": path, "sha256": ref["sha256"], "locator": ref["locator"]},
+                         resolver, "PROOF", roots=("",))
+                used.append(cid)
+        _need(len(set(used)) == len(used) and set(used) == set(claim_map), "PROOF", "claim mapping not bijective")
+    except (KeyError, TypeError, ValueError, UnicodeError):
+        raise _Reject("RETURN", "malformed return evidence") from None
+
+
+def validate_source_repair(block, artifact_path, predecessor_block, resolver, validate_work_order):
+    """Validate one source-only pair; retained outcome is never promoted."""
+    try:
+        ptr = block["rootContractAdmission"]
+        _need(set(ptr) == {"schemaVersion", "path", "sha256", "stage"} and safe_path(ptr["path"])
+              and _is_sha(ptr["sha256"]) and ptr["stage"] in ("DISPATCH", "RETURN")
+              and "WORKER_RETURN" not in ptr["path"].upper(), "POINTER", "invalid pointer")
+        _need(safe_path(artifact_path) and resolver is not None and isinstance(predecessor_block, dict)
+              and validate_work_order is not None and block.get("chainMode") == "SUCCESSOR", "CONTEXT", "context required")
+        grant = _source_json({"path": ptr["path"], "sha256": ptr["sha256"]}, resolver, "source-repair-admission-json", "GRANT")
+        fields = {"schemaVersion", "status", "decisionOwner", "operatorInstructionEvidence", "route", "problemKey",
+                  "predecessor", "sourceContract", "workOrderPath", "workerReturnPath", "allowedArtifacts",
+                  "effectCeilings", "issuedAtUtc", "expiresAtUtc"}
+        _need(set(grant) == fields and grant["schemaVersion"] == SOURCE_GRANT
+              and grant["status"] == "ACCEPTED_FOR_ONE_BOUNDED_SOURCE_REPAIR_PAIR"
+              and grant["decisionOwner"] == "LOCAL" and grant["route"] == "SOURCE_REPAIR_ONLY"
+              and grant["problemKey"] == block["problemKey"], "GRANT", "invalid grant")
+        pin = _stop_pin(grant["predecessor"])
+        operator, operator_text = _located(grant["operatorInstructionEvidence"], resolver, "EVIDENCE")
+        _need(isinstance(grant["workOrderPath"], str) and grant["workOrderPath"] in operator_text,
+              "EVIDENCE", "instruction does not name bound work order")
+        source = grant["sourceContract"]
+        _need(_object_ref(source) and source["path"].startswith(GOVERNED_ROOTS)
+              and "WORKER_RETURN" not in source["path"].upper(), "SOURCE", "invalid contract")
+        contract = _source_json(source, resolver, "source-repair-contract-json", "SOURCE")
+        _need(set(contract) == {"schemaVersion", "status", "decisionOwner", "scope", "problemKey", "predecessor", "obligations"}
+              and contract["schemaVersion"] == SOURCE_CONTRACT and contract["status"] == "ACCEPTED_BY_LOCAL"
+              and contract["decisionOwner"] == "LOCAL" and contract["scope"] == "SOURCE_REPAIR_ONLY"
+              and contract["problemKey"] == grant["problemKey"] and contract["predecessor"] == pin, "SOURCE", "invalid source contract")
+        authority = {ptr["path"], source["path"], operator["path"], pin["path"]}
+        rows = contract["obligations"]
+        _need(isinstance(rows, list) and rows and all(isinstance(r, dict) and set(r) ==
+              {"blockerId", "disposition", "designEvidence", "sourceEvidence", "remainderOwner"} for r in rows), "SOURCE", "invalid obligations")
+        ids = [r["blockerId"] for r in rows]
+        _need(_source_strings(ids) and set(ids) == set(pin["blockers"]), "SOURCE", "blockers not retained")
+        for row in rows:
+            _need(row["disposition"] == "RETENTION_NO_OUTCOME_RESOLUTION" and isinstance(row["remainderOwner"], str)
+                  and row["remainderOwner"].strip(), "SOURCE", "invalid retention")
+            for k, roots in (("designEvidence", ("docs/baselines/",)), ("sourceEvidence", ("docs/reviews/",))):
+                ref, content = _located(row[k], resolver, "SOURCE", roots=roots)
+                _need(ref["path"] != source["path"] and row["blockerId"] in content,
+                      "SOURCE", "self-reference or missing blocker")
+                authority.add(ref["path"])
+        _need(len({ptr["path"], source["path"], operator["path"], pin["path"]}) == 4
+              and source["path"].endswith(".md") and ptr["path"].endswith(".md"), "PATH", "authority paths collide")
+        _pinned_text(pin["path"], pin["sha256"], resolver, "SOURCE")
+        effects = grant["effectCeilings"]
+        _need(isinstance(effects, dict) and set(effects) == EFFECT_FIELDS
+              and all(type(x) is int and x == 0 for x in effects.values()), "EFFECT", "effects must be zero")
+        issue, expiry = grant["issuedAtUtc"], grant["expiresAtUtc"]
+        _need(isinstance(issue, str) and isinstance(expiry, str) and CANONICAL_UTC_RE.fullmatch(issue)
+              and CANONICAL_UTC_RE.fullmatch(expiry), "EXPIRED", "invalid UTC")
+        issued = datetime.fromisoformat(issue.replace("Z", "+00:00"))
+        expires = datetime.fromisoformat(expiry.replace("Z", "+00:00"))
+        _need(issued <= _utc_now() < expires and 0 < (expires-issued).total_seconds() <= 14400,
+              "EXPIRED", "grant not current or exceeds four hours")
+        work, ret, allowed = grant["workOrderPath"], grant["workerReturnPath"], grant["allowedArtifacts"]
+        _need(safe_path(work) and work.startswith("docs/work_orders/") and work.endswith(".md")
+              and safe_path(ret) and ret.startswith("docs/reviews/") and ret.endswith(".md")
+              and work != ret and _source_strings(allowed) and all(safe_path(p) for p in allowed)
+              and ret in allowed and not (authority | {work}) & set(allowed), "MANIFEST", "invalid artifact boundary")
+        raw = _read_bound(work, resolver)
+        _need(isinstance(raw, bytes) and len(raw) <= MAX_EVIDENCE_BYTES, "WORK_ORDER", "unreadable work order")
+        ledger, module = _source_ledger(raw.decode("utf-8", errors="strict"), validate_work_order)
+        _need(set(allowed) == {p for r in ledger["requirements"] for p in r["expectedArtifacts"]}
+              and all(set(r["expectedArtifacts"]) - authority - {ret, work} for r in ledger["requirements"]),
+              "MANIFEST", "manifest or proof topology mismatch")
+        parent_ref = {"path": pin["path"], "sha256": pin["sha256"]}
+        _need(predecessor_block.get("problemKey") == grant["problemKey"], "CHAIN", "problem mismatch")
+        _need(block.get("outcomeBinding") == predecessor_block.get("outcomeBinding"),
+              "CHAIN", "enrolled outcome binding must be carried unchanged")
+        if ptr["stage"] == "DISPATCH":
+            _need(artifact_path == work and block["predecessor"] == parent_ref
+                  and predecessor_block.get("requiredDisposition") == "ROOT_CONTRACT_REQUIRED"
+                  and predecessor_block.get("successorScope") == "INTEGRATED_ROOT_CONTRACT"
+                  and predecessor_block.get("chainOrdinal") == pin["chainOrdinal"]
+                  and predecessor_block.get("counters") == pin["counters"]
+                  and set(predecessor_block["blockerDelta"]["current"]) == set(pin["blockers"])
+                  and block["chainOrdinal"] == pin["chainOrdinal"] + 1
+                  and block["requiredDisposition"] == "ROOT_CONTRACT_REQUIRED"
+                  and block["successorScope"] == "INTEGRATED_ROOT_CONTRACT"
+                  and "sourceRepairEvidence" not in block, "DISPATCH", "invalid source dispatch")
+            _check_blocker_state(block, pin, resolved=False)
+        else:
+            _need(artifact_path == ret and block["predecessor"] == {"path": work, "sha256": hashlib.sha256(raw).hexdigest()}
+                  and predecessor_block.get("rootContractAdmission") == {**ptr, "stage": "DISPATCH"}
+                  and predecessor_block.get("predecessor") == parent_ref
+                  and predecessor_block.get("chainOrdinal") == pin["chainOrdinal"] + 1
+                  and block["chainOrdinal"] == pin["chainOrdinal"] + 2
+                  and block["requiredDisposition"] == "STOP_REASSESS_ARCHITECTURE"
+                  and block["successorScope"] == "NO_SUCCESSOR", "RETURN", "invalid source return")
+            shifted = {**pin, "counters": {**pin["counters"], "nonDecreasingBlockerTransitions":
+                       pin["counters"]["nonDecreasingBlockerTransitions"] + 1}}
+            _check_blocker_state(block, shifted, resolved=False)
+            _source_return(block, grant, ledger, module, resolver, authority | {work})
+        _need(block.get("resolutionEvidence") in (None, {}) and not any(
+              RUNTIME_READINESS_CLAIM_RE.search(str(c.get("evidenceRef", ""))) for c in block["claims"]),
+              "CHAIN", "outcome resolution or readiness forbidden")
+        if "outcomeBinding" in block:
+            _need(block["outcomeBinding"].get("operatorAction") == "NONE"
+                  and block["outcomeBinding"].get("readiness") is None, "CHAIN", "outcome must stay held")
+    except _Reject as exc:
+        return [exc.violation]
+    except (KeyError, TypeError, ValueError, UnicodeError, AttributeError):
+        return [BlockViolation("ROOT_ADMISSION_V2_SOURCE", "malformed source admission")]
+    return []
+
+
+def import_module_local():
+    from importlib import import_module
+    return import_module((f"{__package__}." if __package__ else "") + "semantic_convergence_local_runtime_admission")

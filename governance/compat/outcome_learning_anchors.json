@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "cvf.outcomeLearningAnchors@1",
+  "outcomes": {
+    "NCR-HTML-PILOT": {
+      "authority": {
+        "path": "docs/roadmaps/CVF_NCR_HTML_PILOT_DELIVERY_AND_ACCEPTANCE_PLAN_2026-10-21.md",
+        "heading": "## Acceptance Criteria"
+      },
+      "anchor": {
+        "path": "docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_HTML_M6_HUMAN_PROCESS_RESERVE_REPAIR_2026-10-28.md",
+        "sha256": "ce65e16051768601c5216953b38c861d6e89a0a6a607cd0515bdda0eee69ab89"
+      },
+      "history": [
+        {
+          "path": "docs/reviews/CVF_NCR_HTML_M6_HUMAN_UI_PREPARATION_BLOCKED_REVIEW_2026-10-28.md",
+          "sha256": "64e1a7fa41e11256cdb19cafee3ad44477d76c72bb2ae96d0f7075fe1448ce5e"
+        },
+        {
+          "path": "docs/reviews/CVF_NCR_HTML_M6_HUMAN_R3_PROCESS_RESERVE_BLOCKED_REVIEW_2026-10-28.md",
+          "sha256": "71bab6d9bbdc148b5bc32677e8ea46fc73354c870897e35f3ec0e07466a6aa6a"
+        }
+      ],
+      "state": "HELD",
+      "decision": {
+        "path": "CVF_SESSION/state/entries/m6IntegratedImplementation20261028.json",
+        "sha256": "8437f2782afeeda1dd27708b869b1ac8ec68f3647fbd6d2f641a16017a1c330d"
+      }
+    }
+  }
+}

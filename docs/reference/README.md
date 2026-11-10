@@ -23,7 +23,16 @@ Rule:
 - Tài liệu mới phải dùng naming chuẩn CVF
 - Chỉ đặt tài liệu có tính ổn định cao và được dùng làm source of truth
 
-Current canonical docs:
+Current structure navigation (refreshed 2026-11-04):
+
+- [Current Project Catalog](CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md)
+- [Module Inventory](CVF_MODULE_INVENTORY.md)
+- [As-Built Architecture Catalog](system_architecture_catalog/README.md)
+
+Use these for current source navigation; the dated design views listed below
+retain their own status and cannot establish present runtime readiness.
+
+Reference collection (each document retains its own status and scope):
 
 - `CVF_ARCHITECTURE_MAP.md`
 - `CVF_ARCHITECTURE_DIAGRAMS.md`

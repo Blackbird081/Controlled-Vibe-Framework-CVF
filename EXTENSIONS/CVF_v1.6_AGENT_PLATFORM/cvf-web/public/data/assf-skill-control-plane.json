@@ -1,6 +1,6 @@
 {
   "schemaVersion": "0.1.0",
-  "generatedAt": "2026-09-28T11:01:43.027Z",
+  "generatedAt": "2026-11-06T22:37:44.626Z",
   "sourceInventory": "../../../docs/reference/agent_system_skills/control_plane/generated/skill-inventory.json",
   "sourceSkillIndex": "../../../docs/reference/agent_system_skills/generated/skill-index.json",
   "dashboardContract": "Read-only CVF Web projection of Skill Control Plane inventory. Web dashboards may consume this file for display and filtering, but it is not runtime authority, activation authority, provider authority, or public certification authority.",
@@ -432,7 +432,10 @@
         "frontend ui",
         "component design",
         "layout implementation",
-        "user interface"
+        "user interface",
+        "landing page",
+        "web page",
+        "thi\u1ebft k\u1ebf giao di\u1ec7n"
       ],
       "selectionKeywords": [
         "frontend",
@@ -440,7 +443,13 @@
         "component",
         "layout",
         "responsive",
-        "accessibility"
+        "accessibility",
+        "website",
+        "dashboard",
+        "webpage",
+        "m\u00e0n h\u00ecnh",
+        "giao di\u1ec7n",
+        "trang web"
       ],
       "outputGoals": [
         "usable UI",

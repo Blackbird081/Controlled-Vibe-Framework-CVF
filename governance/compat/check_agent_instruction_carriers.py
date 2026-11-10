@@ -80,6 +80,10 @@ REQUIRED_AGENTS_HEADINGS: tuple[str, ...] = (
 )
 
 AGENTS_DIRECT_LITERALS: tuple[str, ...] = (
+    "Autonomous repair convergence: after one failed repair tranche",
+    "Repair Convergence Admission",
+    "Project Development Application",
+    "docs/reference/downstream_gate_profile/CVF_PROJECT_DEVELOPMENT_APPLICATION_STANDARD.md",
     "docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md",
     "Verification questions do not change approved direction",
     "Preserve native capability reuse",
@@ -122,6 +126,11 @@ TEMPLATE_ROLE_TOKENS: tuple[str, ...] = (
     "REVIEWER", "CLOSER", "SESSION_SYNC_STEWARD",
 )
 TEMPLATE_REHYDRATION_TOKENS: tuple[str, ...] = (
+    "Autonomous repair convergence: after one failed repair tranche",
+    "Repair Convergence Admission",
+    "Project Development Application",
+    "docs/reference/downstream_gate_profile/CVF_PROJECT_DEVELOPMENT_APPLICATION_STANDARD.md",
+    "project-development-application-standard",
     "Verification questions do not change approved direction",
     "Preserve native capability reuse",
     "Mandatory Continuity Rehydration", "new or resumed chat/session",

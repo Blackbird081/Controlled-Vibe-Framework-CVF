@@ -52,6 +52,10 @@ const stable = (value: unknown): string => JSON.stringify(value, (_key, v) => v 
 const hex = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 const ident = (value: unknown): value is string => typeof value === 'string' && /^[A-Za-z0-9_-]{1,150}$/.test(value);
 const equalsHex = (a: string, b: string) => hex(a) && hex(b) && timingSafeEqual(Buffer.from(a, 'hex'), Buffer.from(b, 'hex'));
+const selectedHtmlPilotVerifierKey = () => process.env.CVF_RECEIPT_HMAC_SECRET ?? process.env.CVF_AUDIT_SIGNING_KEY ?? '';
+
+/** Report only whether the exact verifier key selection is configured. */
+export function htmlPilotSourceVerifierReady(): boolean { return selectedHtmlPilotVerifierKey() !== ''; }
 
 /** Fixed server-owned grammar for the two already-pinned fictional goals. */
 export function htmlPilotSystemPrompt(parentRunId: string | null): string {
@@ -122,7 +126,7 @@ export async function verifyHtmlPilotSource(input: {
   receipt: GovernanceEvidenceReceipt; output: string; owner: Unsigned['owner'];
   profile: HtmlPilotRuntimeProfile; expectedJobId?: string | null;
 }): Promise<HtmlExecutionEvidence | null> {
-  const secret = process.env.CVF_RECEIPT_HMAC_SECRET ?? process.env.CVF_AUDIT_SIGNING_KEY ?? '';
+  const secret = selectedHtmlPilotVerifierKey();
   const evidence = input.receipt?.htmlPilotEvidence;
   if (!evidence || !verifyHtmlExecutionEvidence({ evidence, receipt: input.receipt, output: input.output,
     owner: input.owner, secret, expectedProfileDigest: input.profile.manifestSha256 })) return null;

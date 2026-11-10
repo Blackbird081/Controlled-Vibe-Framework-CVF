@@ -1,7 +1,8 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { executeAI } from './providers';
 
-afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); delete process.env.CVF_AI_PROVIDER_TIMEOUT_MS; });
+beforeEach(() => { vi.stubEnv('CVF_ALIBABA_FREE_QUOTA_ONLY', '0'); });
+afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); vi.useRealTimers(); delete process.env.CVF_AI_PROVIDER_TIMEOUT_MS; });
 
 describe('selected Alibaba request cancellation', () => {
     it('passes a composed signal to fetch and returns only fixed cancellation data', async () => {

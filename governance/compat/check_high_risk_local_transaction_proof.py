@@ -8,6 +8,8 @@ Unchanged historical artifacts and other document families are not evaluated.
 from __future__ import annotations
 
 import argparse
+import datetime as dt
+import ntpath
 import json
 import re
 import subprocess
@@ -162,12 +164,118 @@ def validate_contract(contract: object) -> list[str]:
     return errors
 
 
+PROFILE = "High-Risk Local Transaction Proof Profile"
+CREATE_PROFILE = "CREATE_ONLY_PROVISIONING"
+CREATE_FIELDS = ("profile", "phase", "target", "allowedEffects", "preconditions", "exclusiveCreate", "securityReadback", "failureDisposition", "independentProbe", "finalEvidenceHashBinding", "claimBoundary", "machineBindings")
+MACHINE_FIELDS = ("sourceCommit", "sourceFile", "sourceSha256", "sourceReceiptPath", "sourceReceiptSha256", "independentReviewPath", "independentReviewSha256", "hostId", "operatorSid", "accountName", "resourceRoots", "allowedEffects", "operatorAuthorizationPath", "operatorAuthorizationSha256", "startUtc", "deadlineUtc", "maxApplyAttempts", "auditCustodyPath", "compensation")
+MACHINE_EFFECTS = ["CREATE_ABSENT_ACCOUNT", "CREATE_ABSENT_DIRECTORY_WITH_INITIAL_SECURITY", "DISABLE_SAME_CREATED_SID_ON_FAILURE", "WRITE_NEW_AUDIT_RECEIPT"]
+MIXED_SCOPE = re.compile(r"\b(?:(?:change|modify|update|alter|harden|restore|repair|mutate)\b[^.\n;]{0,100}\b(?:ownership|owner|security|acl|dacl)\b[^.\n;]{0,100}\b(?:of|on|for)\s+(?:(?:the|an?)\s+)?(?:existing|pre[- ]existing)\b|cross[- ]process\s+(?:lock\w*|mutex\w*|exclusion)|inter[- ]?process\s+(?:file\s+)?lock\w*|(?:named|process[- ]shared)\s+mutex|(?:mutat\w*|chang\w*|modify\w*|updat\w*|harden\w*|restor\w*|repair\w*)\s+(?:(?:the|an?)\s+)?(?:existing|pre[- ]existing)\b|(?:existing|pre[- ]existing)\s+(?:resources?|accounts?|security|acl|dacl|ownership)\s+(?:mutat\w*|chang\w*|modif\w*|updat\w*|harden\w*|restor\w*|repair\w*)|(?:durable\s+(?:append\w*|writ\w*|mutation)|(?:append\w*|writ\w*)\s+durably)[\s\S]*?\brollback\b|\bexact[- ]rollback\b|\brollback\b[\s\S]*?\bdurable\s+(?:append\w*|writ\w*|mutation))", re.I)
+
+
+def _safe_repo(value: object) -> bool:
+    return bool(_meaningful(value) and isinstance(value, str) and re.fullmatch(r"[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*", value) and all(x not in (".", "..") for x in value.split("/")))
+
+
+def _windows_path(value: object) -> bool:
+    if not _meaningful(value) or not isinstance(value, str) or not re.fullmatch(r"[A-Za-z]:\\[^\\/:]+(?:\\[^\\/:]+)*", value):
+        return False
+    return all(part not in (".", "..") and not part.endswith((".", " ")) and not re.search(r'[<>"|?*\x00-\x1f]', part) and not re.fullmatch(r"(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\..*)?", part, re.I) for part in value[3:].split("\\"))
+
+
+def validate_creation_contract(contract: object) -> list[str]:
+    errors: list[str] = []
+    def keys(value: object, expected: tuple | list, label: str) -> bool:
+        if not isinstance(value, dict) or set(value) != set(expected):
+            errors.append(f"{label}: expected exact keys {', '.join(expected)}")
+            return False
+        return True
+    def exact(value: object, expected: object, label: str) -> None:
+        if type(value) is not type(expected) or value != expected:
+            errors.append(f"{label}: required {expected!r}")
+    def members(value: object, expected: list, label: str) -> None:
+        if not isinstance(value, list) or not all(isinstance(x, str) for x in value) or len(value) != len(expected) or set(value) != set(expected):
+            errors.append(f"{label}: required complete unique set")
+    def constants(value: object, expected: dict, label: str) -> None:
+        if keys(value, tuple(expected), label):
+            for k, v in expected.items(): exact(value[k], v, f"{label}.{k}")
+    if not keys(contract, CREATE_FIELDS, "creation contract"):
+        return errors
+    exact(contract['profile'], CREATE_PROFILE, 'profile')
+    phase = contract['phase']
+    if phase not in ('SOURCE_PREPARATION', 'MACHINE_VERIFICATION') or not isinstance(phase, str):
+        errors.append('phase: invalid phase')
+        return errors
+    machine = phase == 'MACHINE_VERIFICATION'
+    target = contract['target']
+    target_ok = keys(target, ('productionEntry', 'accountIdentity', 'roots'), 'target')
+    if target_ok:
+        if not _safe_repo(target['productionEntry']): errors.append('target.productionEntry: invalid repository path')
+        if not _meaningful(target['accountIdentity']): errors.append('target.accountIdentity: invalid identity')
+        roots = target['roots']
+        if not isinstance(roots, list) or not roots or not all(_windows_path(x) for x in roots) or len({x.casefold() for x in roots}) != len(roots): errors.append('target.roots: invalid or duplicate roots')
+    constants(contract['allowedEffects'], {'existingResources':'READ_ONLY','newResources':'CREATE_ONLY_ATOMIC','groupMembership':'NO_MUTATION','applyEffect':'SEPARATELY_AUTHORIZED_TEST_ONLY' if machine else 'FORBIDDEN'}, 'allowedEffects')
+    constants(contract['preconditions'], {'collision':'DENY_NO_OWNERSHIP','parent':'VERIFY_NO_REPARSE_OR_UNSAFE_REPLACEMENT','identity':'PINNED_OS_IDENTITY','ambiguity':'STOP'}, 'preconditions')
+    constants(contract['exclusiveCreate'], {'primitive':'FAIL_IF_EXISTS_WITH_INITIAL_SECURITY','contenderProof':'REAL_PRODUCTION_PATH_SECOND_PROCESS' if machine else 'INJECTED_FAKE_ONLY','ordering':'EXPLICIT_EVENT_HANDSHAKE_NO_TIMEOUT_ORACLE','collisionOracle':'ONE_CREATOR_LOSER_NO_OWNERSHIP_OR_MUTATION'}, 'exclusiveCreate')
+    security = contract['securityReadback']
+    if keys(security, ('fields','aceFields','normalization','adversaries','evidence'), 'securityReadback'):
+        members(security['fields'], SECURITY_FIELDS, 'securityReadback.fields')
+        members(security['aceFields'], ACE_FIELDS, 'securityReadback.aceFields')
+        members(security['adversaries'], ADVERSARIES, 'securityReadback.adversaries')
+        exact(security['normalization'], 'SORT_COMPLETE_ACE_TUPLES', 'securityReadback.normalization')
+        exact(security['evidence'], 'ACTUAL_CREATED_RESOURCE_READBACK' if machine else 'SYNTHETIC_CONSTRUCTION_ONLY', 'securityReadback.evidence')
+    constants(contract['failureDisposition'], {'ownership':'RETURNED_STABLE_IDENTITY_ONLY','action':'DISABLE_CREATED_ACCOUNT_RETAIN_RESOURCES_AND_EVIDENCE','ambiguous':'STOP_NO_NAME_BASED_ACTION','cleanupFailure':'RETAIN_AND_REPORT_NO_AUTORETRY'}, 'failureDisposition')
+    constants(contract['independentProbe'], {'required':True,'owner':'LOCAL_REVIEWER_NOT_IMPLEMENTATION_WORKER','workerReturnDisposition':'PENDING_REVIEWER_EXECUTION','scope':'REAL_MACHINE_ONLY' if machine else 'FAKE_SOURCE_ONLY'}, 'independentProbe')
+    constants(contract['finalEvidenceHashBinding'], {'algorithm':'SHA256','scope':'EXACT_RETURN_BYTES','capture':'BEFORE_AND_AFTER_FINAL_REQUIRED_GATE','equality':'REQUIRED','postGateMutation':'FORBIDDEN'}, 'finalEvidenceHashBinding')
+    exact(contract['claimBoundary'], 'MACHINE_EVIDENCE_ONLY_NO_T3_T4_CLAIM' if machine else 'SOURCE_ONLY_NO_HOST_READINESS', 'claimBoundary')
+    binding = contract['machineBindings']
+    if not machine:
+        exact(binding, None, 'machineBindings')
+    elif keys(binding, MACHINE_FIELDS, 'machineBindings'):
+        for k, length in [('sourceCommit',40), ('sourceSha256',64), ('sourceReceiptSha256',64), ('independentReviewSha256',64), ('operatorAuthorizationSha256',64)]:
+            if not isinstance(binding[k], str) or not re.fullmatch('[0-9a-f]{%d}' % length, binding[k]): errors.append(f'machineBindings.{k}: invalid hash')
+        for k in ('sourceFile','sourceReceiptPath','independentReviewPath','operatorAuthorizationPath'):
+            if not _safe_repo(binding[k]): errors.append(f'machineBindings.{k}: invalid repository path')
+        if not _meaningful(binding['hostId']): errors.append('machineBindings.hostId: invalid host')
+        if not isinstance(binding['operatorSid'], str) or not re.fullmatch(r'S-1-5-21-(?:\d+-){3}\d+', binding['operatorSid']): errors.append('machineBindings.operatorSid: invalid SID')
+        if target_ok:
+            exact(binding['sourceFile'], target['productionEntry'], 'machineBindings.sourceFile')
+            exact(binding['accountName'], target['accountIdentity'], 'machineBindings.accountName')
+            exact(binding['resourceRoots'], target['roots'], 'machineBindings.resourceRoots')
+        members(binding['allowedEffects'], MACHINE_EFFECTS, 'machineBindings.allowedEffects')
+        exact(binding['maxApplyAttempts'], 1, 'machineBindings.maxApplyAttempts')
+        try:
+            times = [binding[x] for x in ('startUtc','deadlineUtc')]
+            if not all(isinstance(x, str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z', x) for x in times): raise ValueError()
+            start, end = [dt.datetime.strptime(x, '%Y-%m-%dT%H:%M:%SZ') for x in times]
+            if not dt.timedelta(0) < end - start <= dt.timedelta(hours=24): raise ValueError()
+        except (ValueError, TypeError): errors.append('machineBindings: invalid finite UTC window')
+        audit = binding['auditCustodyPath']
+        if not _windows_path(audit): errors.append('machineBindings.auditCustodyPath: invalid absolute path')
+        elif target_ok and isinstance(target['roots'], list) and all(_windows_path(x) for x in target['roots']):
+            for root in target['roots']:
+                try:
+                    if ntpath.commonpath([audit.casefold(), root.casefold()]) == root.casefold(): errors.append('machineBindings.auditCustodyPath: inside resource root')
+                except ValueError:
+                    pass  # Different drive cannot be inside the root.
+        constants(binding['compensation'], {'account':'DISABLE_SAME_CREATED_SID_ONLY','resources':'RETAIN_WITH_INVENTORY','ambiguity':'STOP_NO_NAME_BASED_ACTION','failure':'RETAIN_REPORT_NO_AUTORETRY'}, 'machineBindings.compensation')
+    return errors
+
+
 def check_text(text: str) -> list[str]:
     prose, fences = _markdown(text)
     declarations = [line.split(":", 1)[1].strip() for _, line in prose
                     if re.match(r"^" + re.escape(APPLICABILITY) + r"\s*:", line)]
     triggers = risk_triggers(prose)
+    profiles = [line.split(":", 1)[1].strip() for _, line in prose if re.match(r"^" + re.escape(PROFILE) + r"\s*:", line)]
+    if len(profiles) > 1 or (profiles and profiles[0] != CREATE_PROFILE):
+        return ["invalid or duplicate high-risk proof profile"]
+    if profiles:
+        operational = "\n".join(line for heading, line in prose if not EXCLUDED_HEADINGS.search(heading) and heading != CONTRACT_HEADING and not line.startswith(("#", ">")) and not re.match(r"^\s*(?:[-*]\s*)?(?:do not|never|must not|forbidden:|not authorized:)\b", line, re.I))
+        if MIXED_SCOPE.search(operational):
+            return ["CREATE_ONLY_PROVISIONING cannot authorize mixed existing-resource or lock/rollback scope"]
     headings = [line for _, line in prose if re.fullmatch(r"##\s+" + re.escape(CONTRACT_HEADING) + r"\s*", line)]
+    if profiles and (len(declarations) != 1 or declarations[0] != "REQUIRED"):
+        return ["CREATE_ONLY_PROVISIONING requires REQUIRED applicability"]
     if not declarations:
         return ([f"missing {APPLICABILITY} declaration; risk triggers: {', '.join(triggers)}"]
                 if triggers or headings else [])
@@ -192,7 +300,7 @@ def check_text(text: str) -> list[str]:
                               parse_constant=lambda value: (_ for _ in ()).throw(ValueError(f"invalid constant {value}")))
     except (ValueError, RecursionError) as error:
         return [f"invalid contract JSON: {error}"]
-    return validate_contract(contract)
+    return validate_creation_contract(contract) if profiles else validate_contract(contract)
 
 
 def _git(root: Path, *args: str) -> bytes:

@@ -199,6 +199,25 @@ recurrence from being silently relabeled.
 
 ## Learning-To-Acceleration Extension
 
+### Outcome Recurrence And Prevention Proof
+
+Apply Outcome-Level Learning And Operator Time in
+`docs/reference/CVF_AGENT_ERROR_TO_GOVERNANCE_LEARNING_PHILOSOPHY_2026-05-28.md`.
+Exact technical cluster matching is only one signal. Different errors that
+repeatedly prevent the same user checkpoint require one outcome-level assessment;
+do not use separate FIRST_OCCURRENCE labels to justify an endless repair chain.
+Reuse SCEC's enrolled outcome anchors for machine continuity, without replacing
+F2G technical classes or creating another counter ledger.
+
+RULE_EXISTS records rule coverage, not proof that the rule was applied at the
+needed phase. If the operator detected the pattern first, record that control
+escape and its earlier enforcement point. Implemented control, returned learning,
+source-project application and observed effectiveness remain distinct under the
+existing Project Learning Loop. A prevention claim requires positive and negative
+evidence of the originating mechanism, plus the actual application receipt where
+application is claimed. Source fixes and synthetic file-control tests do not
+prove an operator-held UI session succeeded.
+
 F2G classifies the prevention direction of a finding. The Learning-To-
 Acceleration (L2A) standard adds an optional acceleration axis: whether a
 repeated finding can also become a safe helper, scaffold, patch preview, or

@@ -1,448 +1,418 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "artifact": "CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER",
   "status": "ACTIVE_REFERENCE",
-  "lastUpdated": "2026-10-06",
+  "lastUpdated": "2026-11-04",
+  "sourceReceivedDate": "2026-11-04",
   "captureDate": null,
-  "source": "operator-provided Alibaba Model Studio quota screenshots in the 2026-10-06 session; screenshot capture date not established; historical snapshots and 2026-06-18 diagnostics retained",
-  "defaultEndpointHostForCurrentKey": "dashscope-intl.aliyuncs.com",
-  "nonEquivalentEndpointObservation": {
-    "endpointHost": "dashscope.aliyuncs.com",
-    "result": "401 invalid_api_key for current DASHSCOPE_API_KEY alias during 2026-06-18 diagnostic rerun"
+  "source": "Operator supplied four Free Quota screenshots and a replacement workspace API-key CSV in the 2026-11-04 session. Only visible rows are current; screenshot capture time/timezone is not established.",
+  "credentialConfiguration": ".cvf/config/alibaba.env.local (ignored; no key value in this ledger)",
+  "currentEndpointHost": "ws-remplsp27g5oicq1.ap-southeast-1.maas.aliyuncs.com",
+  "endpointQuotaScope": "CSV endpoint is Singapore; screenshots do not show region/workspace. Free entitlement on this endpoint requires same-workspace console confirmation before live testing; no billing-equivalence claim.",
+  "policy": {
+    "timezone": "Asia/Ho_Chi_Minh",
+    "selection": "earliest-expiration-first within task-compatible eligible models",
+    "expirationCutoff": "start-of-expiration-date (date-only source; conservative lock on expiry day)",
+    "freeQuotaOnly": true,
+    "allowPaidFallback": false,
+    "allowUnlistedModels": false,
+    "requireStopOnExhaust": true,
+    "requireEndpointQuotaScopeConfirmation": true,
+    "unlockExpiredModelAutomatically": false
   },
   "useBeforeLiveTestRule": [
-    "Compare current date to expirationDate before using a model for free-quota live proof.",
-    "If current date is after expirationDate, do not classify failure as a Model Gateway runtime defect without fresh quota verification.",
-    "If model is absent from this ledger, treat it as MODEL_FREE_QUOTA_NOT_VERIFIED.",
-    "Do not print or commit raw API key values."
+    "Read the latest ledger and confirm free quota plus Stop-on-Exhaust for the same endpoint/workspace.",
+    "Select the earliest-expiring model compatible with the test task; do not switch modality merely to consume quota.",
+    "Lock on or after the displayed expiration date in Asia/Ho_Chi_Minh; lock exhausted, disabled, superseded or unlisted entries.",
+    "Never disable Stop-on-Exhaust or silently fall back to a paid model. Free balance displays are rounded snapshots, not live billing guarantees.",
+    "Credential refresh and free-quota choice do not grant a live run, reopen a held campaign, or alter a pinned model/effect envelope."
   ],
   "models": [
     {
-      "modelCode": "qwen3.8-27b",
-      "expirationDate": "2026-11-16",
-      "freeQuotaRemaining": 999930,
-      "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "999.93K",
-      "freeQuotaTotalDisplay": "1M",
-      "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
-      "modelCode": "qwen3.7-flash-2026-07-15",
-      "expirationDate": "2026-10-22",
-      "freeQuotaRemaining": 992790,
-      "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "992.79K",
-      "freeQuotaTotalDisplay": "1M",
-      "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
-      "modelCode": "qwen3.8-flash",
-      "expirationDate": "2026-11-24",
-      "freeQuotaRemaining": 989240,
-      "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "989.24K",
-      "freeQuotaTotalDisplay": "1M",
-      "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
-      "modelCode": "kimi-k3",
-      "expirationDate": "2026-11-16",
-      "freeQuotaRemaining": 1000000,
-      "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "1M",
-      "freeQuotaTotalDisplay": "1M",
-      "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
-      "modelCode": "deepseek-v4-flash-0731",
-      "expirationDate": "2026-10-30",
-      "freeQuotaRemaining": 1000000,
-      "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "1M",
-      "freeQuotaTotalDisplay": "1M",
-      "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
-      "modelCode": "qwen3.8-max-0902",
-      "expirationDate": "2026-11-30",
-      "freeQuotaRemaining": 994630,
-      "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "994.63K",
-      "freeQuotaTotalDisplay": "1M",
-      "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
-      "modelCode": "deepseek-v4.1-flash",
-      "expirationDate": "2026-12-12",
-      "freeQuotaRemaining": 1000000,
-      "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "1M",
-      "freeQuotaTotalDisplay": "1M",
-      "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
-      "modelCode": "glm-5.3",
-      "expirationDate": "2026-11-22",
-      "freeQuotaRemaining": 1000000,
-      "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "1M",
-      "freeQuotaTotalDisplay": "1M",
-      "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
       "modelCode": "deepseek-v4-pro-0813",
+      "modelFamily": "text",
+      "modelTypeAtCapture": "Large Language Model",
       "expirationDate": "2026-11-12",
-      "freeQuotaRemaining": 998370,
+      "freeQuotaRemaining": 981240,
       "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "998.37K",
+      "freeQuotaRemainingDisplay": "981.24K",
       "freeQuotaTotalDisplay": "1M",
       "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
       "quotaUnit": "console-displayed units",
       "statusAtCapture": "Enabled",
       "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
+      "sourceReceivedDate": "2026-11-04"
     },
     {
       "modelCode": "qwen3.8-2.4t-a95b",
+      "modelFamily": "text",
+      "modelTypeAtCapture": "Large Language Model",
       "expirationDate": "2026-11-11",
-      "freeQuotaRemaining": 1000000,
+      "freeQuotaRemaining": 991820,
       "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "1M",
+      "freeQuotaRemainingDisplay": "991.82K",
       "freeQuotaTotalDisplay": "1M",
       "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
       "quotaUnit": "console-displayed units",
       "statusAtCapture": "Enabled",
       "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
-      "modelCode": "qwen3.8-max",
-      "expirationDate": "2026-10-31",
-      "freeQuotaRemaining": 998390,
-      "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "998.39K",
-      "freeQuotaTotalDisplay": "1M",
-      "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
-      "modelCode": "qwen3.7-flash",
-      "expirationDate": "2026-10-22",
-      "freeQuotaRemaining": 992250,
-      "freeQuotaTotal": 1000000,
-      "freeQuotaRemainingDisplay": "992.25K",
-      "freeQuotaTotalDisplay": "1M",
-      "freeQuotaRemainingPrecision": "console-rounded",
-      "modelTypeAtCapture": "Large Language Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
+      "sourceReceivedDate": "2026-11-04"
     },
     {
       "modelCode": "qwen-image-2.1-pro",
+      "modelFamily": "vision",
+      "modelTypeAtCapture": "Vision Model",
       "expirationDate": "2026-12-31",
       "freeQuotaRemaining": 10,
       "freeQuotaTotal": 10,
       "freeQuotaRemainingDisplay": "10",
       "freeQuotaTotalDisplay": "10",
       "freeQuotaRemainingPrecision": "as-displayed",
-      "modelTypeAtCapture": "Vision Model",
       "quotaUnit": "console-displayed units",
       "statusAtCapture": "Enabled",
       "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
-      "modelCode": "qwen-image-3.0",
-      "expirationDate": "2026-11-02",
-      "freeQuotaRemaining": 10,
-      "freeQuotaTotal": 10,
-      "freeQuotaRemainingDisplay": "10",
-      "freeQuotaTotalDisplay": "10",
-      "freeQuotaRemainingPrecision": "as-displayed",
-      "modelTypeAtCapture": "Vision Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
+      "sourceReceivedDate": "2026-11-04"
     },
     {
       "modelCode": "wan3.0-video",
+      "modelFamily": "vision",
+      "modelTypeAtCapture": "Vision Model",
       "expirationDate": "2026-11-04",
       "freeQuotaRemaining": 30,
       "freeQuotaTotal": 30,
       "freeQuotaRemainingDisplay": "30",
       "freeQuotaTotalDisplay": "30",
       "freeQuotaRemainingPrecision": "as-displayed",
-      "modelTypeAtCapture": "Vision Model",
       "quotaUnit": "console-displayed units",
       "statusAtCapture": "Enabled",
       "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
-    },
-    {
-      "modelCode": "qwen-image-3.0-pro",
-      "expirationDate": "2026-11-02",
-      "freeQuotaRemaining": 10,
-      "freeQuotaTotal": 10,
-      "freeQuotaRemainingDisplay": "10",
-      "freeQuotaTotalDisplay": "10",
-      "freeQuotaRemainingPrecision": "as-displayed",
-      "modelTypeAtCapture": "Vision Model",
-      "quotaUnit": "console-displayed units",
-      "statusAtCapture": "Enabled",
-      "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
+      "sourceReceivedDate": "2026-11-04"
     },
     {
       "modelCode": "qwen-mt-image-2.0",
+      "modelFamily": "vision",
+      "modelTypeAtCapture": "Vision Model",
       "expirationDate": "2026-11-25",
       "freeQuotaRemaining": 100,
       "freeQuotaTotal": 100,
       "freeQuotaRemainingDisplay": "100",
       "freeQuotaTotalDisplay": "100",
       "freeQuotaRemainingPrecision": "as-displayed",
-      "modelTypeAtCapture": "Vision Model",
       "quotaUnit": "console-displayed units",
       "statusAtCapture": "Enabled",
       "stopOnExhaustAtCapture": true,
-      "sourceReceivedDate": "2026-10-06"
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen-image-2.1-turbo",
+      "modelFamily": "vision",
+      "modelTypeAtCapture": "Vision Model",
+      "expirationDate": "2026-12-31",
+      "freeQuotaRemaining": 10,
+      "freeQuotaTotal": 10,
+      "freeQuotaRemainingDisplay": "10",
+      "freeQuotaTotalDisplay": "10",
+      "freeQuotaRemainingPrecision": "as-displayed",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "wan3.0-video-prime",
+      "modelFamily": "vision",
+      "modelTypeAtCapture": "Vision Model",
+      "expirationDate": "2026-11-20",
+      "freeQuotaRemaining": 30,
+      "freeQuotaTotal": 30,
+      "freeQuotaRemainingDisplay": "30",
+      "freeQuotaTotalDisplay": "30",
+      "freeQuotaRemainingPrecision": "as-displayed",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen3.8-omni-flash",
+      "modelFamily": "multimodal",
+      "modelTypeAtCapture": "Multimodal Model",
+      "expirationDate": "2026-12-16",
+      "freeQuotaRemaining": 991740,
+      "freeQuotaTotal": 1000000,
+      "freeQuotaRemainingDisplay": "991.74K",
+      "freeQuotaTotalDisplay": "1M",
+      "freeQuotaRemainingPrecision": "console-rounded",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen3.8-omni-flash-realtime",
+      "modelFamily": "multimodal",
+      "modelTypeAtCapture": "Multimodal Model",
+      "expirationDate": "2026-12-20",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "freeQuotaRemainingDisplay": "1M",
+      "freeQuotaTotalDisplay": "1M",
+      "freeQuotaRemainingPrecision": "console-rounded",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen-audio-3.1-asr-flash-message",
+      "modelFamily": "speech",
+      "modelTypeAtCapture": "Speech Model",
+      "expirationDate": "2026-12-20",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "freeQuotaRemainingDisplay": "1M",
+      "freeQuotaTotalDisplay": "1M",
+      "freeQuotaRemainingPrecision": "console-rounded",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen-audio-3.1-tts-plus",
+      "modelFamily": "speech",
+      "modelTypeAtCapture": "Speech Model",
+      "expirationDate": "2026-12-15",
+      "freeQuotaRemaining": 10000,
+      "freeQuotaTotal": 10000,
+      "freeQuotaRemainingDisplay": "10K",
+      "freeQuotaTotalDisplay": "10K",
+      "freeQuotaRemainingPrecision": "console-rounded",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen-audio-3.1-asr-flash-streaming",
+      "modelFamily": "speech",
+      "modelTypeAtCapture": "Speech Model",
+      "expirationDate": "2026-12-20",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "freeQuotaRemainingDisplay": "1M",
+      "freeQuotaTotalDisplay": "1M",
+      "freeQuotaRemainingPrecision": "console-rounded",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen-audio-3.1-asr-flash",
+      "modelFamily": "speech",
+      "modelTypeAtCapture": "Speech Model",
+      "expirationDate": "2026-12-20",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "freeQuotaRemainingDisplay": "1M",
+      "freeQuotaTotalDisplay": "1M",
+      "freeQuotaRemainingPrecision": "console-rounded",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen-audio-3.1-asr-flash-filetrans",
+      "modelFamily": "speech",
+      "modelTypeAtCapture": "Speech Model",
+      "expirationDate": "2026-12-20",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "freeQuotaRemainingDisplay": "1M",
+      "freeQuotaTotalDisplay": "1M",
+      "freeQuotaRemainingPrecision": "console-rounded",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen-audio-3.1-tts-flash",
+      "modelFamily": "speech",
+      "modelTypeAtCapture": "Speech Model",
+      "expirationDate": "2026-12-20",
+      "freeQuotaRemaining": 999840,
+      "freeQuotaTotal": 1000000,
+      "freeQuotaRemainingDisplay": "999.84K",
+      "freeQuotaTotalDisplay": "1M",
+      "freeQuotaRemainingPrecision": "console-rounded",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen-audio-3.1-tts-next",
+      "modelFamily": "speech",
+      "modelTypeAtCapture": "Speech Model",
+      "expirationDate": "2026-12-20",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "freeQuotaRemainingDisplay": "1M",
+      "freeQuotaTotalDisplay": "1M",
+      "freeQuotaRemainingPrecision": "console-rounded",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen3.8-livetranslate-flash-realtime",
+      "modelFamily": "speech",
+      "modelTypeAtCapture": "Speech Model",
+      "expirationDate": "2026-12-15",
+      "freeQuotaRemaining": 1000000,
+      "freeQuotaTotal": 1000000,
+      "freeQuotaRemainingDisplay": "1M",
+      "freeQuotaTotalDisplay": "1M",
+      "freeQuotaRemainingPrecision": "console-rounded",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
+    },
+    {
+      "modelCode": "qwen3.7-text-embedding",
+      "modelFamily": "embedding",
+      "modelTypeAtCapture": "Embedding Model",
+      "expirationDate": "2026-11-08",
+      "freeQuotaRemaining": 999500,
+      "freeQuotaTotal": 1000000,
+      "freeQuotaRemainingDisplay": "999.5K",
+      "freeQuotaTotalDisplay": "1M",
+      "freeQuotaRemainingPrecision": "console-rounded",
+      "quotaUnit": "console-displayed units",
+      "statusAtCapture": "Enabled",
+      "stopOnExhaustAtCapture": true,
+      "sourceReceivedDate": "2026-11-04"
     }
   ],
-  "diagnosticRerunSummary": [
+  "retiredModelLocks": [
+    {
+      "modelCode": "deepseek-v4-flash-0731",
+      "expirationDate": "2026-10-30",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "deepseek-v4.1-flash",
+      "expirationDate": "2026-12-12",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "glm-5.1",
+      "expirationDate": "2026-08-25",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "glm-5.2",
+      "expirationDate": "2026-09-23",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "glm-5.3",
+      "expirationDate": "2026-11-22",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "kimi-k2.7-code",
+      "expirationDate": "2026-09-23",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "kimi-k3",
+      "expirationDate": "2026-11-16",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "qwen-image-3.0",
+      "expirationDate": "2026-11-02",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "qwen-image-3.0-pro",
+      "expirationDate": "2026-11-02",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
     {
       "modelCode": "qwen3.7-flash",
-      "endpointHost": "dashscope-intl.aliyuncs.com",
-      "result": "NOT_RUN_PENDING_T6"
+      "expirationDate": "2026-10-22",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "qwen3.7-flash-2026-07-15",
+      "expirationDate": "2026-10-22",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "qwen3.7-max",
+      "expirationDate": "2026-08-19",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "qwen3.7-max-2026-05-17",
+      "expirationDate": "2026-08-23",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "qwen3.7-max-2026-05-20",
+      "expirationDate": "2026-08-19",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "qwen3.7-max-2026-06-08",
+      "expirationDate": "2026-09-07",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "qwen3.7-max-preview",
+      "expirationDate": "2026-08-23",
+      "reason": "superseded_not_in_latest_operator_snapshot"
     },
     {
       "modelCode": "qwen3.7-plus",
-      "endpointHost": "dashscope-intl.aliyuncs.com",
-      "result": "PASS"
+      "expirationDate": "2026-08-31",
+      "reason": "superseded_not_in_latest_operator_snapshot"
     },
     {
-      "modelCode": "deepseek-v4-flash",
-      "endpointHost": "dashscope-intl.aliyuncs.com",
-      "result": "PASS"
+      "modelCode": "qwen3.7-plus-2026-05-26",
+      "expirationDate": "2026-08-31",
+      "reason": "superseded_not_in_latest_operator_snapshot"
     },
     {
-      "modelCode": "qwen3.6-flash-2026-04-16",
-      "endpointHost": "dashscope-intl.aliyuncs.com",
-      "result": "PASS"
+      "modelCode": "qwen3.8-27b",
+      "expirationDate": "2026-11-16",
+      "reason": "superseded_not_in_latest_operator_snapshot"
     },
     {
-      "modelCode": "qwen3.6-plus",
-      "endpointHost": "dashscope-intl.aliyuncs.com",
-      "result": "PASS"
+      "modelCode": "qwen3.8-flash",
+      "expirationDate": "2026-11-24",
+      "reason": "superseded_not_in_latest_operator_snapshot"
     },
     {
-      "modelCode": "qwen3-32b",
-      "endpointHost": "dashscope-intl.aliyuncs.com",
-      "result": "FAIL_FREE_TIER_EXHAUSTED"
+      "modelCode": "qwen3.8-max",
+      "expirationDate": "2026-10-31",
+      "reason": "superseded_not_in_latest_operator_snapshot"
+    },
+    {
+      "modelCode": "qwen3.8-max-0902",
+      "expirationDate": "2026-11-30",
+      "reason": "superseded_not_in_latest_operator_snapshot"
     }
   ],
-  "historicalSnapshots": [
-    {
-      "captureDate": "2026-09-10",
-      "source": "operator-provided Alibaba Model Studio free-quota screenshots in the 2026-09-10 session; historical diagnostic results remain dated 2026-06-18",
-      "models": [
-        {
-          "modelCode": "qwen3.7-flash-2026-07-15",
-          "expirationDate": "2026-10-22",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.7-plus",
-          "expirationDate": "2026-08-31",
-          "freeQuotaRemaining": 989246,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled",
-          "diagnosticRerun": {
-            "date": "2026-06-18",
-            "endpointHost": "dashscope-intl.aliyuncs.com",
-            "result": "PASS"
-          }
-        },
-        {
-          "modelCode": "qwen3.7-flash",
-          "expirationDate": "2026-10-22",
-          "freeQuotaRemaining": 997560,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.7-max-2026-05-17",
-          "expirationDate": "2026-08-23",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.7-max-2026-06-08",
-          "expirationDate": "2026-09-07",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "glm-5.1",
-          "expirationDate": "2026-08-25",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.7-max-preview",
-          "expirationDate": "2026-08-23",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "deepseek-v4-flash-0731",
-          "expirationDate": "2026-10-30",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.7-max",
-          "expirationDate": "2026-08-19",
-          "freeQuotaRemaining": 951277,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "glm-5.2",
-          "expirationDate": "2026-09-23",
-          "freeQuotaRemaining": 798158,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "kimi-k2.7-code",
-          "expirationDate": "2026-09-23",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "deepseek-v4-pro-0813",
-          "expirationDate": "2026-11-12",
-          "freeQuotaRemaining": 999908,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.7-max-2026-05-20",
-          "expirationDate": "2026-08-19",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.7-plus-2026-05-26",
-          "expirationDate": "2026-08-31",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.8-2.4t-a95b",
-          "expirationDate": "2026-11-11",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.8-max",
-          "expirationDate": "2026-10-31",
-          "freeQuotaRemaining": 999836,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.8-27b",
-          "expirationDate": "2026-11-16",
-          "freeQuotaRemaining": 999933,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "kimi-k3",
-          "expirationDate": "2026-11-16",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.8-flash",
-          "expirationDate": "2026-11-24",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        },
-        {
-          "modelCode": "qwen3.8-max-0902",
-          "expirationDate": "2026-11-30",
-          "freeQuotaRemaining": 1000000,
-          "freeQuotaTotal": 1000000,
-          "statusAtCapture": "Enabled"
-        }
-      ]
-    }
-  ],
-  "sourceReceivedDate": "2026-10-06",
-  "captureDateNote": "Use absolute expiration dates as displayed. Relative days-left labels are not used to infer capture date.",
-  "quotaPrecisionNote": "K/M balances are console-rounded displays. Integer values are approximate expansions, not exact counters. Vision quota units are console units, not asserted as text tokens.",
-  "testPurpose": "Authorized model calls supply evidence for workflow improvement; no model ranking or default-model selection follows from these samples."
+  "captureDateNote": "Absolute dates only. Relative days-left text is not used as a clock or capture-date source.",
+  "quotaPrecisionNote": "K/M numeric expansions are approximate. Vision/speech/embedding quota units remain console-displayed units; no uniform token or request unit is asserted.",
+  "historicalEvidence": "Removed from current lookup; prior revisions remain in Git and dated proof records. Retired IDs are deny-only tombstones, not active candidates.",
+  "testPurpose": "Expiry-prioritized free-only testing under existing task, compatibility and effect authority; no model ranking or production-default promotion."
 }

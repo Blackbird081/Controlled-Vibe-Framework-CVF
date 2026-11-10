@@ -33,7 +33,10 @@ const readControl = async (name: string, schema: string) => {
       const value = JSON.parse(await fs.readFile(file, 'utf8')) as Record<string, unknown>;
       expect(value.schema).toBe(schema);
       return value;
-    } catch (error) { if (Date.now() >= deadline) throw new Error(`ROOT_CONTROL_TIMEOUT:${name}:${String(error)}`); }
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+      if (Date.now() >= deadline) throw new Error(`ROOT_CONTROL_TIMEOUT:${name}`);
+    }
     await new Promise(resolve => setTimeout(resolve, 200));
   }
 };
@@ -46,6 +49,341 @@ const expectedV1 = { heading: 'Không gian đọc Ánh Sao', sections: ['Giới 
 const expectedV2 = { ...expectedV1, heading: 'Ngày hội đọc Ánh Sao' };
 const DESKTOP = { width: 1280, height: 800 };
 const MOBILE = { width: 390, height: 844 };
+const mode = process.env.CVF_NCR_HTML_PILOT_MODE;
+
+type HumanCheckpoint = {
+  jobId: string; rootRunId: string; v1Id: string; v2Id: string; v1HtmlSha256: string; v2HtmlSha256: string;
+  profileDigest: string; decisionState: 'PENDING_OPERATOR_ACCEPTANCE'; paidStarts: 2;
+};
+
+async function observeHumanRecoveredVersion(page: Page, exact: HumanCheckpoint,
+  owner: { userId: string; orgId: string; teamId: string }) {
+  // Restoration is a native operator action; observing its exact saved-byte panel is not selecting a version.
+  await expect(page.getByTestId('pilot-show-versions')).toBeVisible();
+  await expect(page.locator(`[data-testid="pilot-restore-version"][data-version-id="${exact.v2Id}"]`))
+    .toBeVisible({ timeout: 420_000 });
+  await expect(page.getByTestId('html-pilot-saved-version')).toHaveAttribute('data-version-id', exact.v2Id, { timeout: 420_000 });
+  await expect(page.getByTestId('html-pilot-saved-version')).toHaveAttribute('data-html-sha256', exact.v2HtmlSha256);
+  await expect(page.getByTestId('pilot-job-id')).toHaveAttribute('data-job-id', exact.jobId);
+  await expect(page.getByTestId('pilot-decision-state')).toHaveAttribute('data-decision', exact.decisionState);
+  const jobResponse = await page.request.get(`/api/artifacts/jobs?${new URLSearchParams({ kind: 'job', jobId: exact.jobId,
+    sourceRecordId: exact.rootRunId })}`);
+  await assertStart('human-recovered-job', jobResponse);
+  const job = await jobResponse.json() as { data?: { owner?: unknown; jobId?: string; sourceRecordId?: string; pilotProfileDigest?: string } };
+  expect(job.data).toMatchObject({ owner, jobId: exact.jobId, sourceRecordId: exact.rootRunId, pilotProfileDigest: exact.profileDigest });
+  for (const [versionId, htmlSha256] of [[exact.v1Id, exact.v1HtmlSha256], [exact.v2Id, exact.v2HtmlSha256]]) {
+    const query = { jobId: exact.jobId, sourceRecordId: exact.rootRunId, versionId };
+    const linked = await page.request.get(`/api/artifacts/jobs?${new URLSearchParams({ kind: 'version', ...query })}`);
+    await assertStart('human-recovered-version', linked);
+    const body = await linked.json() as { data?: { owner?: unknown; jobId?: string; sourceRecordId?: string; versionId?: string; htmlSha256?: string } };
+    expect(body.data).toMatchObject({ owner, ...query, htmlSha256 });
+    const draftResponse = await page.request.get(`/api/artifacts/drafts?${new URLSearchParams({ sourceRecordId: exact.rootRunId, id: versionId })}`);
+    await assertStart('human-recovered-draft', draftResponse);
+    const draft = await draftResponse.json() as { data: { owner: unknown; html: string; htmlSha256: string } };
+    expect(draft.data.owner).toEqual(owner);
+    expect(draft.data.htmlSha256).toBe(htmlSha256);
+    expect(hash(draft.data.html)).toBe(htmlSha256);
+    const decision = await page.request.get(`/api/artifacts/jobs?${new URLSearchParams({ kind: 'product-decision', ...query })}`);
+    expect(decision.status()).toBe(404);
+  }
+}
+
+async function completeHumanRecovery(page: Page, exact: HumanCheckpoint,
+  owner: { userId: string; orgId: string; teamId: string }, secondRequest: Record<string, unknown>,
+  readCounters: (label: string) => Promise<EffectCounters>) {
+  await writeControl('checkpoint.json', { schema: 'cvf.htmlPilotCheckpointRequest.v1', ...exact });
+  const restarted = await readControl('restart.done.json', 'cvf.htmlPilotRestartAck.v1');
+  expect(restarted.schema).toBe('cvf.htmlPilotRestartAck.v1');
+  expect(restarted.jobId).toBe(exact.jobId);
+  expect(restarted.checkpointTreeSha256).toMatch(/^[a-f0-9]{64}$/);
+  await page.reload();
+  await observeHumanRecoveredVersion(page, exact, owner);
+  const restoreStarted = performance.now();
+  await writeControl('restore.request.json', { schema: 'cvf.htmlPilotRestoreRequest.v1', ...exact });
+  const restored = await readControl('restore.done.json', 'cvf.htmlPilotRestoreAck.v1');
+  expect(restored.schema).toBe('cvf.htmlPilotRestoreAck.v1');
+  expect(restored.jobId).toBe(exact.jobId);
+  expect(restored.restore).toMatchObject({ exactBytesMatch: true, newDirectoryAtSameAbsolutePath: true, checkpointRpoLostFiles: 0 });
+  expect(typeof restored.fullRtoSeconds).toBe('number');
+  const rootServerReadySeconds = assertRestoreSeconds(restored.fullRtoSeconds as number, 'human-root-server-ready');
+  await page.reload();
+  await observeHumanRecoveredVersion(page, exact, owner);
+  const fullUsableUiRtoSeconds = assertRestoreSeconds((performance.now() - restoreStarted) / 1000, 'human-full-usable-ui');
+  await writeControl('revoke.request.json', { schema: 'cvf.htmlPilotRevokeRequest.v1', jobId: exact.jobId,
+    profileDigest: exact.profileDigest, paidStarts: 2 });
+  const revoked = await readControl('revoke.done.json', 'cvf.htmlPilotRevokeAck.v1');
+  expect(revoked).toEqual({ schema: 'cvf.htmlPilotRevokeAck.v1', jobId: exact.jobId,
+    profileDigest: exact.profileDigest, state: 'REVOKED' });
+  const beforeDenied = await readCounters('human-post-revoke-before');
+  const denied = await page.request.post('/api/execute', { data: { ...secondRequest,
+    htmlPilotIntent: { ...(secondRequest.htmlPilotIntent as Record<string, unknown>), operationKey: 'human-post-revocation-new-operation' } } });
+  await assertStart('human-post-revoke-new-start', denied, 403);
+  const deniedBody = await denied.json() as { error?: string };
+  expect(deniedBody.error).toBe('PILOT_GRANT_UNAVAILABLE');
+  assertDeniedEffectDelta(beforeDenied, await readCounters('human-post-revoke-after'), 'human-post-revoke');
+  await observeHumanRecoveredVersion(page, exact, owner);
+  await writeControl('restore.consumer-finality.json', { schema: 'cvf.htmlPilotConsumerRestoreFinality.v1', ...exact,
+    rootServerReadySeconds, fullUsableUiRtoSeconds, finishedAt: new Date().toISOString() });
+  return { rootServerReadySeconds, fullUsableUiRtoSeconds };
+}
+
+async function observeHumanConsumer(page: Page, browser: import('@playwright/test').Browser, testInfo: import('@playwright/test').TestInfo) {
+  const starts: string[] = [];
+  const startTimes: number[] = [];
+  const downloads: Array<import('@playwright/test').Download> = [];
+  page.on('download', download => downloads.push(download));
+  const queued: Array<import('@playwright/test').Response> = [];
+  const waiters: Array<(response: import('@playwright/test').Response) => void> = [];
+  const nextResponse = () => new Promise<import('@playwright/test').Response>(resolve => {
+    const found = queued.shift();
+    if (found) resolve(found); else waiters.push(resolve);
+  });
+  page.on('request', request => {
+    const selected = new URL(request.url());
+    if (selected.pathname === '/api/execute' && request.method() === 'POST') {
+      starts.push(request.url());
+      startTimes.push(performance.now());
+    }
+    if (selected.pathname === '/api/artifacts/jobs' && request.method() === 'POST'
+      && request.postDataJSON()?.action === 'DECIDE_PRODUCT_VERSION') starts.push('PRODUCT_DECISION_FORBIDDEN_IN_CONSUMER');
+  });
+  page.on('response', response => {
+    const request = response.request();
+    const selected = new URL(response.url());
+    if (selected.pathname === '/api/execute' && request.method() === 'POST') {
+      const resolve = waiters.shift();
+      if (resolve) resolve(response); else queued.push(response);
+    }
+  });
+  await page.route('**/*', route => {
+    const host = new URL(route.request().url()).hostname;
+    return ['localhost', '127.0.0.1', '[::1]'].includes(host) ? route.continue() : route.abort();
+  });
+  await seedStorageWithAlibaba(page, 'qwen-flash');
+  await page.addInitScript(() => { localStorage.setItem('cvf_language', 'vi'); });
+  await loginAs(page, process.env.CVF_NCR_HTML_PILOT_USER!, process.env.CVF_NCR_HTML_PILOT_PASS!);
+  const session = await (await page.request.get('/api/auth/session')).json() as {
+    user?: { role?: string; userId?: string; orgId?: string; teamId?: string } };
+  expect(session.user?.role).toBe('developer');
+  expect(session.user?.userId).toBe('usr_3');
+  const manifest = JSON.parse(await fs.readFile(process.env.CVF_NCR_HTML_PILOT_MANIFEST_PATH!, 'utf8')) as {
+    operationRoot: string; storeRoot: string; owner: unknown; runId: string;
+  };
+  const owner = assertPinnedPrincipal(manifest.owner, 'effect-profile-owner');
+  expect(session.user).toMatchObject({ ...owner });
+  const readGuard = await openGuardReader();
+  const guardAtStart = await readGuard('human-consumer-start');
+  const readCounters = async (label: string): Promise<EffectCounters> => {
+    const entries = await fs.readdir(manifest.operationRoot);
+    const guard = await readGuard(label);
+    return { operations: entries.filter(name => /^claim-[a-f0-9]{64}\.json$/.test(name)).length,
+      claims: entries.filter(name => /^slot-\d+\.json$/.test(name)).length,
+      outcomes: entries.filter(name => /^outcome-[a-f0-9]{32}\.json$/.test(name)).length,
+      browserExecuteStarts: starts.filter(item => item !== 'PRODUCT_DECISION_FORBIDDEN_IN_CONSUMER').length,
+      artifactWrites: (await listFiles(manifest.storeRoot)).length, guardCallsUsed: guard.callsUsed, guardAttempts: guard.attempts };
+  };
+  const expectedOwner = assertPinnedPrincipal(manifest.owner, 'effect-profile-owner');
+  expect(owner).toEqual(expectedOwner);
+
+  // The only consumer actions are visible operator actions. The script navigates and observes without filling or clicking.
+  await page.goto('/home?template=web_build_handoff&htmlPilot=1');
+  await expect(page.locator('input[name="websiteGoal"]')).toBeVisible();
+  await expect.poll(() => page.locator('input[name="websiteGoal"]').inputValue(), { timeout: 900_000 }).toBe(goal);
+  await expect(page.getByTestId('html-pilot-effect-disclosure')).toBeVisible({ timeout: 900_000 });
+  const beforeDecline = await readCounters('human-decline-before');
+  await expect(page.getByTestId('html-pilot-goal-blocked')).toBeVisible({ timeout: 900_000 });
+  const afterDecline = await readCounters('human-decline-after');
+  expect(starts.filter(item => item !== 'PRODUCT_DECISION_FORBIDDEN_IN_CONSUMER')).toHaveLength(0);
+  assertDeniedEffectDelta(beforeDecline, afterDecline, 'human-decline');
+
+  await page.goto('/home?template=web_build_handoff&htmlPilot=1');
+  await expect.poll(() => page.locator('input[name="websiteGoal"]').inputValue(), { timeout: 900_000 }).toBe(goal);
+  const firstResponsePromise = nextResponse();
+  await expect(page.getByTestId('html-pilot-effect-disclosure')).toBeVisible({ timeout: 900_000 });
+  const first = await firstResponsePromise;
+  await assertStart('human-first-start', first);
+  const firstRequest = first.request().postDataJSON() as Record<string, unknown>;
+  assertSerializedGoal(firstRequest, goal);
+  const firstBody = await first.json() as { success?: boolean; output?: string; governanceEvidenceReceipt?: {
+    provider?: string; model?: string; receiptIntegrity?: { signatureStatus?: string };
+    htmlPilotTiming?: { providerAwaitMs: number; localGovernanceMs: number };
+    htmlPilotEvidence?: { runId?: string; rootRunId?: string; outputSha256?: string; receiptId?: string; profileDigest?: string } } };
+  expect(firstBody.success).toBe(true);
+  expect(firstBody.governanceEvidenceReceipt?.provider).toBe('alibaba');
+  expect(firstBody.governanceEvidenceReceipt?.model).toBe('qwen-flash');
+  expect(firstBody.governanceEvidenceReceipt?.receiptIntegrity?.signatureStatus).toBe('SIGNED');
+  expect(firstBody.governanceEvidenceReceipt?.htmlPilotEvidence?.outputSha256).toBe(hash(firstBody.output ?? ''));
+  const firstEvidence = firstBody.governanceEvidenceReceipt!.htmlPilotEvidence!;
+  expect(starts.filter(item => item !== 'PRODUCT_DECISION_FORBIDDEN_IN_CONSUMER')).toHaveLength(1);
+  const firstCounters = await readCounters('human-first-start');
+  assertGuardDelta({ callsUsed: guardAtStart.callsUsed, attempts: guardAtStart.attempts },
+    { callsUsed: firstCounters.guardCallsUsed, attempts: firstCounters.guardAttempts }, { calls: 1, attempts: 1 }, 'human-first-start');
+
+  const firstLink = page.getByTestId('html-pilot-transfer-exact-run');
+  await expect(firstLink).toBeVisible({ timeout: 900_000 });
+  const firstHref = await firstLink.getAttribute('href');
+  expect(firstHref).toMatch(/^\/work-transfer\?source=/);
+  const firstExecutionId = new URL(`http://localhost${firstHref}`).searchParams.get('source')!;
+  await page.goto(firstHref!);
+  await expect(page.getByTestId('html-pilot-job-controls')).toBeVisible({ timeout: 900_000 });
+  await expect(page.getByTestId('pilot-job-id')).toBeVisible({ timeout: 900_000 });
+  const jobId = (await page.getByTestId('pilot-job-id').getAttribute('data-job-id'))!;
+  expect(jobId).toMatch(/^[0-9a-f-]{36}$/);
+  await expect(page.getByTestId('html-pilot-saved-version')).toBeVisible({ timeout: 900_000 });
+  const v1Id = (await page.getByTestId('html-pilot-saved-version').getAttribute('data-version-id'))!;
+  expect(v1Id).toMatch(/^[0-9a-f-]{36}$/);
+  await expect(page.getByTestId('pilot-status')).toHaveAttribute('data-status-code', 'LINKED', { timeout: 900_000 });
+  await expect(page.getByTestId('pilot-decision-state')).toHaveAttribute('data-decision', 'PENDING_OPERATOR_ACCEPTANCE');
+  const v1Response = await page.request.get(`/api/artifacts/jobs?${new URLSearchParams({ kind: 'version', jobId,
+    sourceRecordId: firstEvidence.rootRunId!, versionId: v1Id })}`);
+  await assertStart('human-v1-read', v1Response);
+  const v1Body = await v1Response.json() as { data?: { htmlSha256?: string; pilotEvidenceSha256?: string } };
+  expect(v1Body.data?.htmlSha256).toMatch(/^[a-f0-9]{64}$/);
+  const v1Preview = page.frameLocator(`iframe[title="${text.previewTitle}"]`);
+  await expect(v1Preview.locator('h1')).toHaveText(expectedV1.heading, { timeout: 420_000 });
+  const v1PreviewSeconds = (performance.now() - startTimes[0]) / 1000;
+  await expect.poll(() => downloads.length, { timeout: 420_000 }).toBe(1);
+  const v1DownloadPath = await downloads[0].path();
+  const v1DraftResponse = await page.request.get(`/api/artifacts/drafts?${new URLSearchParams({
+    sourceRecordId: firstEvidence.rootRunId!, id: v1Id })}`);
+  await assertStart('human-v1-draft', v1DraftResponse);
+  const v1Draft = await v1DraftResponse.json() as { data: { html: string; htmlSha256: string } };
+  assertDownloadedBytes(v1DownloadPath ? await fs.readFile(v1DownloadPath) : null, { sha256: v1Draft.data.htmlSha256,
+    byteLength: Buffer.byteLength(v1Draft.data.html, 'utf8'), boundSha256: v1Body.data!.htmlSha256 });
+  assertPreviewStructure(v1Draft.data.html, expectedV1);
+
+  let markStopRenderHeld!: () => void;
+  let releaseStopRender!: () => void;
+  const stopRenderHeld = new Promise<void>(resolve => { markStopRenderHeld = resolve; });
+  const releaseStopRenderWait = new Promise<void>(resolve => { releaseStopRender = resolve; });
+  let stopRouteClaimed = false;
+  await page.route('**/api/artifacts/export', async route => {
+    if (!stopRouteClaimed && route.request().method() === 'POST') {
+      stopRouteClaimed = true;
+      markStopRenderHeld();
+      await releaseStopRenderWait;
+    }
+    await route.continue();
+  });
+  const beforeStop = await readCounters('human-stop-before');
+  await stopRenderHeld;
+  await expect(page.getByTestId('pilot-stop-render')).toBeVisible({ timeout: 900_000 });
+  await expect(page.getByTestId('pilot-status')).toHaveAttribute('data-status-code', 'RENDER_STOPPED', { timeout: 900_000 });
+  releaseStopRender();
+  await page.waitForTimeout(500);
+  await expect(page.getByTestId('pilot-status')).toHaveAttribute('data-status-code', 'RENDER_STOPPED');
+  assertDeniedEffectDelta(beforeStop, await readCounters('human-stop-after'), 'human-stop');
+  await page.unroute('**/api/artifacts/export');
+
+  await page.goto(`/home?result=${encodeURIComponent(firstExecutionId)}`);
+  const followup = page.getByTestId('followup-section');
+  await expect(followup).toBeVisible({ timeout: 900_000 });
+  await expect.poll(() => followup.locator('textarea').inputValue(), { timeout: 900_000 }).toBe(revision);
+  const secondResponsePromise = nextResponse();
+  await expect(page.getByTestId('html-pilot-effect-disclosure')).toBeVisible({ timeout: 900_000 });
+  const second = await secondResponsePromise;
+  await assertStart('human-second-start', second);
+  const secondRequest = second.request().postDataJSON() as Record<string, unknown>;
+  assertSerializedGoal(secondRequest, revision);
+  const secondBody = await second.json() as typeof firstBody;
+  expect(secondBody.success).toBe(true);
+  const secondEvidence = secondBody.governanceEvidenceReceipt?.htmlPilotEvidence;
+  expect(secondEvidence?.rootRunId).toBe(firstEvidence.rootRunId);
+  expect(secondEvidence?.runId).not.toBe(firstEvidence.runId);
+  expect(secondEvidence?.outputSha256).toBe(hash(secondBody.output ?? ''));
+  expect(secondBody.governanceEvidenceReceipt?.receiptIntegrity?.signatureStatus).toBe('SIGNED');
+  expect(starts.filter(item => item !== 'PRODUCT_DECISION_FORBIDDEN_IN_CONSUMER')).toHaveLength(2);
+  const secondLink = page.getByTestId('html-pilot-transfer-exact-run');
+  await expect(secondLink).toBeVisible({ timeout: 900_000 });
+  const secondHref = await secondLink.getAttribute('href');
+  expect(secondHref).toMatch(/^\/work-transfer\?source=/);
+  const secondExecutionId = new URL(`http://localhost${secondHref}`).searchParams.get('source')!;
+  await page.goto(secondHref!);
+  await expect(page.getByTestId('html-pilot-job-controls')).toBeVisible({ timeout: 900_000 });
+  await expect(page.getByTestId('pilot-job-id')).toHaveAttribute('data-job-id', jobId, { timeout: 900_000 });
+  await expect(page.getByTestId('html-pilot-saved-version')).toBeVisible({ timeout: 900_000 });
+  const v2Id = (await page.getByTestId('html-pilot-saved-version').getAttribute('data-version-id'))!;
+  expect(v2Id).not.toBe(v1Id);
+  await expect(page.getByTestId('pilot-status')).toHaveAttribute('data-status-code', 'LINKED', { timeout: 900_000 });
+  await expect(page.getByTestId('pilot-decision-state')).toHaveAttribute('data-decision', 'PENDING_OPERATOR_ACCEPTANCE');
+  const v2Badge = page.getByTestId('html-pilot-saved-version');
+  const v2HtmlSha256 = (await v2Badge.getAttribute('data-html-sha256'))!;
+  expect(v2HtmlSha256).toMatch(/^[a-f0-9]{64}$/);
+  const v2Response = await page.request.get(`/api/artifacts/jobs?${new URLSearchParams({ kind: 'version', jobId,
+    sourceRecordId: firstEvidence.rootRunId!, versionId: v2Id })}`);
+  await assertStart('human-v2-read', v2Response);
+  const v2Body = await v2Response.json() as { data?: { htmlSha256?: string; pilotEvidenceSha256?: string } };
+  expect(v2Body.data?.htmlSha256).toBe(v2HtmlSha256);
+  expect(v2Body.data?.pilotEvidenceSha256).toMatch(/^[a-f0-9]{64}$/);
+  expect(v2Body.data?.pilotEvidenceSha256).not.toBe(v2Body.data?.htmlSha256);
+  expect((await page.request.get(`/api/artifacts/jobs?${new URLSearchParams({ kind: 'product-decision', jobId,
+    sourceRecordId: firstEvidence.rootRunId!, versionId: v2Id })}`)).status()).toBe(404);
+  const v2Preview = page.frameLocator(`iframe[title="${text.previewTitle}"]`);
+  await expect(v2Preview.locator('h1')).toHaveText(expectedV2.heading, { timeout: 420_000 });
+  const v2PreviewSeconds = (performance.now() - startTimes[1]) / 1000;
+  await expect.poll(() => downloads.length, { timeout: 420_000 }).toBe(2);
+  const v2DownloadPath = await downloads[1].path();
+  const v2DraftResponse = await page.request.get(`/api/artifacts/drafts?${new URLSearchParams({
+    sourceRecordId: firstEvidence.rootRunId!, id: v2Id })}`);
+  await assertStart('human-v2-draft', v2DraftResponse);
+  const v2Draft = await v2DraftResponse.json() as { data: { html: string; htmlSha256: string } };
+  assertDownloadedBytes(v2DownloadPath ? await fs.readFile(v2DownloadPath) : null, { sha256: v2Draft.data.htmlSha256,
+    byteLength: Buffer.byteLength(v2Draft.data.html, 'utf8'), boundSha256: v2HtmlSha256 });
+  assertPreviewStructure(v2Draft.data.html, expectedV2);
+  const timingReadings = [firstBody, secondBody].map((body, index) => ({
+    providerAwaitSeconds: (body.governanceEvidenceReceipt?.htmlPilotTiming?.providerAwaitMs ?? Number.NaN) / 1000,
+    localGovernanceSeconds: (body.governanceEvidenceReceipt?.htmlPilotTiming?.localGovernanceMs ?? Number.NaN) / 1000,
+    previewSeconds: index === 0 ? v1PreviewSeconds : v2PreviewSeconds,
+  }));
+  await testInfo.attach('human-consumer-preview-measurements.json', { contentType: 'application/json', body: JSON.stringify({
+    schema: 'cvf.htmlPilotHumanPreviewMeasurements.v1', timingReadings, includesOperatorActionTime: true,
+    downloads: { v1Sha256: v1Body.data!.htmlSha256, v2Sha256: v2HtmlSha256 },
+  }) });
+  timingReadings.forEach((reading, index) => assertTimings(reading, `human-v${index + 1}`));
+
+  const storeExecution = await page.evaluate((id) => {
+    const raw = localStorage.getItem('cvf-executions-storage');
+    if (!raw) return null;
+    const saved = JSON.parse(raw) as { state?: { executions?: Array<Record<string, unknown>> } };
+    const row = saved.state?.executions?.find(item => item.id === id);
+    if (!row) return null;
+    return { id: row.id, templateId: row.templateId, templateName: row.templateName, category: row.category ?? 'content',
+      input: {}, intent: '', output: row.output, status: row.status, createdAt: row.createdAt,
+      savedReceiptArchive: row.savedReceiptArchive, evidenceReceiptSnapshot: row.evidenceReceiptSnapshot, htmlPilot: row.htmlPilot };
+  }, secondExecutionId);
+  expect(storeExecution?.id).toBe(secondExecutionId);
+  expect(storeExecution?.savedReceiptArchive).toBeTruthy();
+  expect(storeExecution?.evidenceReceiptSnapshot).toBeTruthy();
+  expect((storeExecution?.htmlPilot as { jobId?: string } | undefined)?.jobId).toBe(jobId);
+  const globalManifest = JSON.parse(await fs.readFile(path.join(process.env.CVF_NCR_HTML_PILOT_RUN_ROOT!, 'global-manifest.json'), 'utf8')) as {
+    runId: string; sourceHead: string;
+  };
+  const reviewControl = process.env.CVF_NCR_HTML_PILOT_REVIEW_CONTROL_DIR!;
+  await fs.writeFile(path.join(reviewControl, 'review-context.json'), `${JSON.stringify({
+    schema: 'cvf.htmlPilotRootReviewContext.v1', sourceHead: globalManifest.sourceHead, runId: globalManifest.runId,
+    sourceExecutionId: secondExecutionId, jobId, rootRunId: firstEvidence.rootRunId, v1Id,
+    v2Id, v1HtmlSha256: v1Body.data?.htmlSha256, v2HtmlSha256, profileDigest: firstEvidence.profileDigest,
+    sourceEvidenceSha256: v2Body.data?.pilotEvidenceSha256, decisionState: 'PENDING_OPERATOR_ACCEPTANCE', paidStarts: 2,
+    execution: storeExecution,
+  }, null, 2)}\n`, { flag: 'wx' });
+
+  const exact: HumanCheckpoint = { jobId, rootRunId: firstEvidence.rootRunId!, v1Id, v2Id,
+    v1HtmlSha256: v1Body.data!.htmlSha256!, v2HtmlSha256, profileDigest: firstEvidence.profileDigest!,
+    decisionState: 'PENDING_OPERATOR_ACCEPTANCE', paidStarts: 2 };
+  assertIdentities({ ...exact, v1RunId: firstEvidence.runId!, v2RunId: secondEvidence!.runId! });
+  const recovery = await completeHumanRecovery(page, exact, owner, secondRequest, readCounters);
+  await testInfo.attach('human-consumer-recovery-measurements.json', { contentType: 'application/json', body: JSON.stringify({
+    schema: 'cvf.htmlPilotHumanRecoveryMeasurements.v1', ...exact, ...recovery,
+  }) });
+
+  const finalGuard = await readGuard('human-consumer-end');
+  assertGuardDelta({ callsUsed: guardAtStart.callsUsed, attempts: guardAtStart.attempts },
+    { callsUsed: finalGuard.callsUsed, attempts: finalGuard.attempts }, { calls: 2, attempts: 2 }, 'human-consumer-whole-run');
+  expect(starts.filter(item => item !== 'PRODUCT_DECISION_FORBIDDEN_IN_CONSUMER')).toHaveLength(2);
+  expect(starts).not.toContain('PRODUCT_DECISION_FORBIDDEN_IN_CONSUMER');
+  expect(owner.userId).toBe('usr_3');
+  expect(browser.browserType().name()).toBe('chromium');
+}
 
 /** Only a canonical upper-case code from the route is ever recorded; anything else is reported as unsafe. */
 async function assertStart(stage: string, response: { status(): number; text(): Promise<string> }, expectedStatus = 200) {
@@ -109,6 +447,11 @@ async function openGuardReader(): Promise<(label: string) => Promise<GuardReadin
 
 test('one real Home create and one same-job revision with exact saved-version recovery', async ({ page, browser }, testInfo) => {
   expect(browser.browserType().name()).toBe('chromium');
+  if (mode === 'HUMAN') {
+    await observeHumanConsumer(page, browser, testInfo);
+    return;
+  }
+  expect(mode).toBe('SOFTWARE');
   const fixtureHashes = assertFixtureGoals(goal, revision);
   const starts: string[] = [];
   const executionRequests: { first?: Record<string, unknown>; second?: Record<string, unknown> } = {};

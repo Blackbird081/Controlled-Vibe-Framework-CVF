@@ -23,7 +23,7 @@
  * ever wired" lives beside this port composition, not duplicated in the
  * route file.
  */
-import { CanonicalExecutionAdapter, ProviderExecutionBridge } from 'cvf-model-gateway';
+import { CanonicalExecutionAdapter, ProviderExecutionBridge, ProviderRegistry, QuotaLedger, ProviderHealthMonitor, RoutingPolicyEngine, GatewayReceiptBuilder } from 'cvf-model-gateway';
 import type {
     CanonicalExecutionAttemptBoundaryInput,
     CanonicalExecutionAttemptBoundaryOutcome,
@@ -34,6 +34,7 @@ import type {
 } from 'cvf-model-gateway';
 import {
     admitProviderAttempt,
+    retainJevAttemptReservation,
     recordProviderCallStart,
     type ProviderAttemptLedger,
     type ProviderAttemptPurpose,
@@ -146,4 +147,79 @@ export class CanonicalWebGatewayExecutor {
  */
 export function createCanonicalWebGatewayExecutor(bridge: ProviderExecutionBridge): CanonicalWebGatewayExecutor {
     return new CanonicalWebGatewayExecutor(new CanonicalExecutionAdapter(bridge));
+}
+
+
+/** Explicit Jev composition. The generic callback and NON_VISION default above stay intact. */
+export interface JevCanonicalProfile {
+    canonicalExecutionId: string;
+    stageId: 'wide' | 'narrow';
+    connection?: 'typesafe'|'openrouter-systemone';
+    ledger: ProviderAttemptLedger;
+    admission: import('cvf-model-gateway').AdapterAdmissionRecord | undefined;
+    signal?: AbortSignal;
+    verifyAndCommitStart: (input: CanonicalExecutionAttemptBoundaryInput, attemptIndex: number) => void;
+    onRetainedReservation: (reason: string, attemptIndex: number) => void;
+}
+export function assertJevAdmission(record: import('cvf-model-gateway').AdapterAdmissionRecord | undefined, connection:'typesafe'|'openrouter-systemone'='typesafe'): void {
+    const provider=connection==='typesafe'?'typesafe':'openrouter';const model=connection==='typesafe'?'jev-latest':'typesafe/jev-1.14';
+    if (!record || record.status !== 'admitted' || record.providerId !== provider || record.modelId !== model
+        || record.requestedMethod !== 'system_one' || record.normalizedMethod !== 'system_one'
+        || !record.supportedMethods.includes('system_one') || record.liveExecutionAuthorized !== false
+        || record.conformanceStatus === 'blocked') throw new Error('JEV_ADMISSION_REFUSED');
+}
+export function buildJevCanonicalAttemptBoundary(profile: JevCanonicalProfile) {
+    return async (input: CanonicalExecutionAttemptBoundaryInput): Promise<CanonicalExecutionAttemptBoundaryOutcome> => {
+        try {
+            assertJevAdmission(profile.admission,profile.connection);
+            if (profile.signal?.aborted || input.providerId !== (profile.connection==='openrouter-systemone'?'openrouter':'typesafe') || input.modelId !== (profile.connection==='openrouter-systemone'?'typesafe/jev-1.14':'jev-latest')
+                || input.canonicalExecutionId !== profile.canonicalExecutionId || input.traceId !== profile.canonicalExecutionId
+                || profile.ledger.attempts.length !== (profile.stageId === 'wide' ? 0 : 1)
+                || (profile.stageId === 'narrow' && profile.ledger.providerCallCount !== 1)) throw new Error('JEV_TUPLE_REFUSED');
+        } catch { return { decision:'deny',attemptIndex:profile.ledger.attempts.length,reason:'jev_pre_admission_refused' }; }
+        const admission = await admitProviderAttempt(profile.ledger, profile.stageId === 'wide' ? 'initial' : 'continuation');
+        if (!admission.admitted) return {decision:'deny',attemptIndex:admission.attemptIndex,reason:'provider_attempt_quota_exhausted',retryAfterSeconds:admission.retryAfterSeconds};
+        try {
+            assertJevAdmission(profile.admission,profile.connection);
+            if(profile.signal?.aborted)throw new Error('CANCELLED');
+            profile.verifyAndCommitStart(input,admission.attemptIndex);
+        } catch {
+            retainJevAttemptReservation(profile.ledger,admission.attemptIndex);
+            try { profile.onRetainedReservation('RESERVATION_RETAINED_NO_INVOCATION',admission.attemptIndex); } catch { /* persisted uncertainty is never resumed */ }
+            return {decision:'deny',attemptIndex:admission.attemptIndex,reason:'RESERVATION_RETAINED_NO_INVOCATION'};
+        }
+        recordProviderCallStart(profile.ledger,admission.attemptIndex);
+        return {decision:'allow',attemptIndex:admission.attemptIndex};
+    };
+}
+
+export async function executeJevCanonicalStage(port: CanonicalExecutionPort, profile:JevCanonicalProfile, prompt:string):Promise<CanonicalExecutionPortResult> {
+    assertJevAdmission(profile.admission,profile.connection);
+    const provider=profile.connection==='openrouter-systemone'?'openrouter':'typesafe';const model=profile.connection==='openrouter-systemone'?'typesafe/jev-1.14':'jev-latest';
+    const request:CanonicalExecutionPortRequest = {
+        canonicalExecutionId:profile.canonicalExecutionId,prompt,
+        policy:{traceId:profile.canonicalExecutionId,policyResult:'allow',reason:'verified_jev_action_grant',allowedProviderIds:[provider]},
+        preferredProviderId:provider,routing:{requestedModelId:model,requiredCapabilities:['system_one'],executionStage:profile.stageId},
+        attemptBoundary:buildJevCanonicalAttemptBoundary(profile),signal:profile.signal,
+    };
+    return port.execute(request);
+}
+
+
+/** A sole-provider registry makes fallback impossible without changing generic routing. */
+export function createJevCanonicalPort(options:{
+    adapter:import('cvf-model-gateway').ProviderExecutionAdapter;
+    credential:import('cvf-model-gateway').CredentialBoundary;
+    reference:import('cvf-model-gateway').CredentialReference;
+    admission:import('cvf-model-gateway').AdapterAdmissionRecord;
+    connection?:'typesafe'|'openrouter-systemone';
+}):CanonicalExecutionPort {
+    assertJevAdmission(options.admission,options.connection);
+    const provider=options.connection==='openrouter-systemone'?'openrouter':'typesafe';const model=options.connection==='openrouter-systemone'?'typesafe/jev-1.14':'jev-latest';const env=options.connection==='openrouter-systemone'?'OPENROUTER_API_KEY':'TYPESAFE_API_KEY';
+    if(options.reference.providerId!==provider||options.reference.envNames.join(',')!==env||options.adapter.providerId!==provider)throw new Error('JEV_CREDENTIAL_REFUSED');
+    const registry=new ProviderRegistry([{id:provider,displayName:'Jev',status:'enabled',riskClass:'low',models:[{id:model,riskClass:'low'}]}]);
+    const quota=new QuotaLedger();quota.setLimit(provider,model,{requestsPerDay:2});
+    const health=new ProviderHealthMonitor();
+    return new CanonicalExecutionAdapter(new ProviderExecutionBridge({routing:new RoutingPolicyEngine(registry,health,quota),credential:options.credential,health,quota,
+        receipt:new GatewayReceiptBuilder(),credentialRefs:new Map([[provider,options.reference]]),adapters:new Map([[provider,options.adapter]]),admissionRecords:new Map([[provider,options.admission]])}));
 }

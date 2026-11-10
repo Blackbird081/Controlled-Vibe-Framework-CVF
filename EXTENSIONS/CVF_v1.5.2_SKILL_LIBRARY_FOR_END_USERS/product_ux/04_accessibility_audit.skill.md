@@ -98,6 +98,16 @@ Không yêu cầu.
 - [ ] **No seizure risk:** Không flash > 3 lần/giây?
 - [ ] **Multiple ways:** Có nhiều cách navigate (search, menu, sitemap)?
 
+### Sortable table headers
+
+- Place a real button in each sortable column header, with an accessible name
+  identifying the column and action. Make it operable by keyboard.
+- Expose the current direction using `aria-sort` on the currently sorted
+  header; keep the visible indicator and programmatic state consistent when
+  the user changes direction or column.
+- Verify the interaction and announced direction in the target browser and
+  assistive technology. This guidance alone is not verification evidence.
+
 ### Understandable (Có thể hiểu)
 
 - [ ] **Language:** Page language có declared?

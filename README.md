@@ -54,7 +54,8 @@ Use the root front door in this order:
 
 1. `README.md` for role-based triage and current posture
 2. `START_HERE.md` for the shortest audience-routed redirect
-3. `ARCHITECTURE.md` for the system-shape view before deeper internal references
+3. [Current Project Catalog](docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md) for the verified directory/module map (refreshed 2026-11-04)
+4. `ARCHITECTURE.md` for the system-shape view before deeper internal references
 
 If you want the deeper private-core chain after that, use [Docs Index](docs/INDEX.md).
 
@@ -472,6 +473,13 @@ Primary status anchors:
 
 ## Repository Map
 
+Use the [Current Project Catalog](docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md)
+and [Module Inventory](docs/reference/CVF_MODULE_INVENTORY.md) for the current
+53-extension directory map, source/test navigation and lifecycle declarations.
+The short table below is an orientation sample. Historical release badges and
+dated proof elsewhere on this page retain their original scope; they do not
+certify current `main` or every module.
+
 | Path | Purpose |
 |---|---|
 | `EXTENSIONS/CVF_GUARD_CONTRACT/` | shared guard contract, public SDK boundary, governed helper runtime |
@@ -507,7 +515,7 @@ Primary status anchors:
 
 ### Track status and evidence
 
-- [Technical Product Catalog](docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md) — what CVF can do today, key extensions, and delivery history
+- [Current Project Catalog](docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md) — current structure, module/code/test routes, authority boundaries and refresh evidence
 - [SOT Three-Layer Knowledge Authority](docs/reference/sot_three_layer/README.md) — bounded knowledge-authority architecture (Refinery, Truth Kernel, Truth Flow); local-ready owners, proven in one activation seam and one downstream application, not a universal or provider-wide claim
 - [Release Manifest](docs/reference/CVF_RELEASE_MANIFEST.md)
 - [Module Inventory](docs/reference/CVF_MODULE_INVENTORY.md)

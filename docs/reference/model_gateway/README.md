@@ -4,7 +4,7 @@ Status: ACTIVE_REFERENCE_FRONT_DOOR
 
 Memory class: POINTER_RECORD
 
-Last updated: 2026-06-18
+Last updated: 2026-11-04
 
 ## Purpose
 
@@ -33,10 +33,12 @@ receipts, and closure reviews remain in their existing owner paths.
 | Reference | Use |
 |---|---|
 | `CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER.md` | Human-readable Alibaba free-quota model codes, expiration dates, and use-before-live-test rule. |
-| `CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER.json` | Machine-readable mirror for future guards or scripts. |
+| `CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER.json` | Current machine source for generated quota rules and the pre-test planner. |
 | `../mcp_gateway/CVF_MODEL_GATEWAY_MCP_RUNTIME_BRIDGE_BOUNDARY.md` | Boundary contract for any future MCP tool that intends to call Model Gateway runtime surfaces. |
 
 ## Required Use
+
+Before selecting an Alibaba test, use the quota ledger and `python scripts/cvf_alibaba_free_quota.py --family text`: nearest compatible expiry first, expired/unlisted models locked, no paid fallback. The replacement Singapore endpoint requires same-workspace free-quota confirmation.
 
 Before interpreting an Alibaba/DashScope live-test failure, check the ledger for
 the model code and expiration date. If the model is absent or expired, do not

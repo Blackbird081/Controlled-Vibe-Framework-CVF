@@ -129,10 +129,13 @@ export type {
 export {
   ALIBABA_DASHSCOPE_INTL_ENDPOINT,
   ALIBABA_DASHSCOPE_MAINLAND_ENDPOINT,
+  ALIBABA_WORKSPACE_DASHSCOPE_ENDPOINT,
   ALIBABA_FREE_QUOTA_LEDGER_REFERENCE,
   ALIBABA_FREE_QUOTA_MODELS,
   getAlibabaFreeQuotaModel,
   getAlibabaFreeQuotaStatus,
+  listAlibabaFreeQuotaTestCandidates,
+  assertAlibabaFreeQuotaUse,
   resolveAlibabaDashScopeEndpoint,
 } from "./alibaba-free-quota-model-ledger";
 export type {
@@ -419,3 +422,5 @@ export const MODEL_GATEWAY_WRAPPER = {
 } as const;
 
 // CADP-AI-T3B - Model Gateway provider-neutral constraint projection
+export { reserveActionQuota, transitionActionQuota, validateActionQuota } from "./quota-ledger";
+export type { ActionQuotaSnapshot } from "./quota-ledger";

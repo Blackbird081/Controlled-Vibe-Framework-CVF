@@ -1,7 +1,9 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, beforeEach } from 'vitest';
+// Text Encoding Exception: Existing multilingual search test fixtures retain their source text.
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { fetchFrontDoorSkillRecords } from './frontdoor-skills';
 import {
   BM25,
   parseCSV,
@@ -21,6 +23,27 @@ product_ux/accessibility_audit,product_ux,Accessibility Audit,Easy,R0,Review,"ac
 web_development/07_landing_page_pattern,web_development,Landing Page Pattern Selection,Easy,R0,"Discovery,Design",landing page pattern conversion,"Select landing page layout",web_development/07_landing_page_pattern.skill.md
 security_compliance/security_audit_checklist,security_compliance,Security Audit Checklist,Advanced,R3,"Review,Deploy",security audit checklist owasp,"Security audit for apps",security_compliance/security_audit_checklist.skill.md
 web_development/06_chart_data_visualization,web_development,Chart Data Visualization,Medium,R1,Build,"chart data visualization d3","Data viz best practices",web_development/06_chart_data_visualization.skill.md`;
+
+describe('actual front-door search consumer', () => {
+  it('loads delivered summaries and preserves the missing-purpose corpus fallback', async () => {
+    const categories = [{ id: 'sample', skills: [
+      { id: 'alpha', title: 'Alpha', domain: 'sample', summary: 'keyboard contrast audit', corpusNote: 'ignored', path: 'alpha.md' },
+      { id: 'beta', title: 'Beta', domain: 'sample', summary: '', corpusNote: 'fallback pagination', path: 'beta.md' },
+    ] }];
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ categories }) });
+    vi.stubGlobal('fetch', fetchMock);
+    try {
+      const records = await fetchFrontDoorSkillRecords();
+      expect(fetchMock).toHaveBeenCalledWith('/data/skills-index.json', { cache: 'no-store' });
+      expect(records.map(record => record.description)).toEqual(['keyboard contrast audit', 'fallback pagination']);
+      loadSkills(records);
+      expect(searchSkills('keyboard contrast', { topN: 5 })[0].skill.skill_id).toBe('alpha');
+      expect(searchSkills('pagination', { topN: 5 })[0].skill.skill_id).toBe('beta');
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+});
 
 // ─── BM25 Engine Tests ───────────────────────────────────────────────
 

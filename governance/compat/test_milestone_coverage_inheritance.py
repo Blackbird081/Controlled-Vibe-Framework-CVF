@@ -48,7 +48,7 @@ class InheritanceTests(unittest.TestCase):
     def test_fresh_installed_runner_and_missing_row_refusal(self):
         self.install()
         lock = json.loads((self.root / ".cvf/gate-profile.lock.json").read_text())
-        self.assertEqual(lock["profileId"], "cvf.downstreamGateProfile@1.2.0")
+        self.assertEqual(lock["profileId"], "cvf.downstreamGateProfile@1.4.0")
         data = fixture(self.root)
         packet = "docs/reviews/coverage.md"
         write(self.root, packet, block(data))
@@ -122,10 +122,10 @@ class InheritanceTests(unittest.TestCase):
         _, cov = self.invoke("docs/reviews/invalid.md")
         self.assertIn("COV_INVALID_INPUT:UnicodeDecodeError", [x["code"] for x in cov["findings"]])
 
-    def old_install(self):
+    def old_install(self, old_core=OLD_CORE, expected_profile="cvf.downstreamGateProfile@1.1.0"):
         old = self.base / "old-core"
         def materialize(path):
-            result = subprocess.run(["git", "show", f"{OLD_CORE}:{path}"], cwd=REPO, capture_output=True, timeout=30)
+            result = subprocess.run(["git", "show", f"{old_core}:{path}"], cwd=REPO, capture_output=True, timeout=30)
             self.assertEqual(result.returncode, 0, result.stderr)
             target = old / path
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -133,13 +133,25 @@ class InheritanceTests(unittest.TestCase):
         prefix = "scripts/lib/downstream_governance/"
         materialize(prefix + "cvf_downstream_gate_profile.json")
         profile = json.loads((old / prefix / "cvf_downstream_gate_profile.json").read_text())
-        self.assertEqual(profile["profileId"], "cvf.downstreamGateProfile@1.1.0")
+        self.assertEqual(profile["profileId"], expected_profile)
         for name in profile["installedFiles"]:
             materialize(profile.get("coreSources", {}).get(name, prefix + name))
         materialize(prefix + "downstream_pr_gates.yml.template")
         result = run(sys.executable, "-B", str(old / prefix / "cvf_downstream_gate_runner.py"),
-                     "install", "--project-root", str(self.root), "--core-root", str(old), "--core-commit", OLD_CORE)
+                     "install", "--project-root", str(self.root), "--core-root", str(old), "--core-commit", old_core)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_genuine_12_upgrade_installs_repair_helper_and_preserves_project(self):
+        self.old_install("ce825b8d12f8c5ac3b85c26ecd9618ede3e88a34", "cvf.downstreamGateProfile@1.2.0")
+        write(self.root, "docs/project-owned.md", "keep project facts")
+        result = inst.install(self.root, LIB, REPO, OLD_CORE)
+        self.assertEqual(result["status"], "DRIFT_PRESERVED")
+        result = inst.install(self.root, LIB, REPO, OLD_CORE, upgrade=True)
+        self.assertEqual(result["status"], "UPGRADED", result)
+        self.assertTrue((self.root / "scripts/cvf_gates/cvf_repair_convergence.py").is_file())
+        self.assertEqual((self.root / "docs/project-owned.md").read_text(), "keep project facts")
+        lock = json.loads((self.root / ".cvf/gate-profile.lock.json").read_text())
+        self.assertEqual(lock["profileId"], "cvf.downstreamGateProfile@1.4.0")
 
     def test_genuine_11_explicit_upgrade_retains_project_and_updates_generated_ci(self):
         self.old_install()

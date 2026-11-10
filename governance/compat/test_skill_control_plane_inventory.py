@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 import tempfile
@@ -15,6 +16,7 @@ if str(_HERE) not in sys.path:
 from generate_assf_skill_index import generate_index
 from generate_skill_control_plane_inventory import (
     _activation_decision,
+    _phrase_hits,
     build_inventory,
     recommend_skills_for_spec,
     validate_inventory_matches_sources,
@@ -430,6 +432,40 @@ class SkillControlPlaneInventoryTests(unittest.TestCase):
 
             self.assertEqual(recommendations[0]["skillId"], skill_id)
             self.assertEqual(recommendations[0]["primaryDomain"], "security-hardening")
+
+
+class FrozenMatcherRegressionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        path = _HERE.parents[1] / "docs/reviews/evidence/ccp-r1-20261106/frozen-fixture.json"
+        raw = path.read_bytes()
+        expected_hash = "78ad9b71378e8ff2d102b3f43cd3322fb34af78be953e0a6a976adbbfb431b7b"
+        if hashlib.sha256(raw).hexdigest() != expected_hash:
+            raise AssertionError("Frozen matcher fixture changed; do not regenerate expectations")
+        cls.fixture = json.loads(raw)
+
+    def test_ascii_public_recommendations_match_frozen_preimage(self) -> None:
+        cases = self.fixture["asciiCases"]
+        self.assertEqual(len(cases), 32)
+        for case in cases:
+            with self.subTest(case=case["id"]):
+                actual = recommend_skills_for_spec(case["spec"], self.fixture["inventory"], top=26)
+                self.assertEqual(actual, case["expected"])
+
+    def test_unicode_hits_match_fixed_contract(self) -> None:
+        cases = self.fixture["unicodeCases"]
+        self.assertEqual(len(cases), 12)
+        for case in cases:
+            with self.subTest(case=case["id"]):
+                self.assertEqual(_phrase_hits(case["spec"], case["phrases"]), case["expected"])
+
+    def test_frozen_ascii_corpus_covers_all_26_profiles(self) -> None:
+        profile_ids = self.fixture["profileIds"]
+        self.assertEqual(len(profile_ids), 26)
+        self.assertEqual(len(set(profile_ids)), 26)
+        self.assertEqual(set(profile_ids), {r["skillId"] for r in self.fixture["inventory"]["records"]})
+        observed = {r["skillId"] for case in self.fixture["asciiCases"] for r in case["expected"]}
+        self.assertEqual(observed, set(profile_ids))
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ import { parseDraftInput, SOURCE_ID, VERSION_ID, type DraftPrincipal } from '@/l
 import { HtmlDraftSnapshotStore, type SyntheticDraftProfile } from './html-draft-snapshot-store';
 import { requireHtmlPilotOwner, htmlPilotSameOwner } from './ncr-html-pilot-auth';
 import type { HtmlPilotRuntimeProfile } from './ncr-html-pilot-runtime-profile';
-import { verifyHtmlPilotSource } from './html-execution-evidence';
+import { htmlPilotSourceVerifierReady, verifyHtmlPilotSource } from './html-execution-evidence';
 
 const reply = (status: number, body: Record<string, unknown>) => NextResponse.json(body, {
   status, headers: { 'Cache-Control': 'no-store', Pragma: 'no-cache', 'X-Content-Type-Options': 'nosniff', Vary: 'Cookie, Origin' },
@@ -106,6 +106,7 @@ export function draftRouteHandlers(deps: Dependencies = {}) {
       if (!query.has('list') || query.get('list') !== '1') return fail(400, 'INVALID_QUERY');
       const rows = await store.list(sourceRecordId, owner);
       if (!deps.pilot) return reply(200, { success: true, data: rows });
+      if (!htmlPilotSourceVerifierReady()) return fail(503, 'PILOT_SOURCE_VERIFIER_UNAVAILABLE');
       const verified = [];
       for (const row of rows) {
         const snapshot = await store.get(row.versionId, sourceRecordId, owner);

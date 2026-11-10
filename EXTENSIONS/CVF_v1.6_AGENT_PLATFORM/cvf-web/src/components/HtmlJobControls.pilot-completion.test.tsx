@@ -40,6 +40,7 @@ let calls: Call[];
 let uuids: string[];
 let heldExport: { release: () => void } | null;
 let failCreate: boolean;
+let failVersions: boolean;
 let storedDecision: ReturnType<typeof decisionRow> | null;
 
 const json = (data: unknown, status = 200) => new Response(JSON.stringify({ success: status < 400, data }), { status, headers: { 'Content-Type': 'application/json' } });
@@ -63,13 +64,15 @@ const fixtureFetch = async (input: RequestInfo | URL, init?: RequestInit): Promi
     return json(result);
   }
   if (call.path === '/api/artifacts/drafts' && call.method === 'POST') return json({});
-  if (call.path === '/api/artifacts/drafts' && url.searchParams.get('list')) return json([{ versionId: V1, createdAt: snapshot.generatedAt }]);
+  if (call.path === '/api/artifacts/drafts' && url.searchParams.get('list')) return failVersions
+    ? json({ error: 'PILOT_SOURCE_VERIFIER_UNAVAILABLE' }, 503)
+    : json([{ versionId: V1, createdAt: snapshot.generatedAt }]);
   if (call.path === '/api/artifacts/drafts') return json(snapshot);
   throw new Error(`UNEXPECTED_FIXTURE_FETCH:${call.method}:${call.path}`);
 };
 
 beforeEach(() => {
-  calls = []; uuids = [JOB, V1, DECISION]; heldExport = null; failCreate = false; storedDecision = null;
+  calls = []; uuids = [JOB, V1, DECISION]; heldExport = null; failCreate = false; failVersions = false; storedDecision = null;
   state.updateExecution.mockClear();
   vi.stubGlobal('fetch', vi.fn(fixtureFetch));
   vi.stubGlobal('crypto', { randomUUID: () => uuids.shift() ?? '99999999-9999-4999-8999-999999999999' });
@@ -204,6 +207,18 @@ describe.each(['en', 'vi'] as const)('pilot controls (%s)', language => {
     expect(screen.getByTestId('pilot-decision-state').textContent).toContain('REJECTED');
     expect(posts('DECIDE_PRODUCT_VERSION')).toHaveLength(0);
     expect(posts('CREATE_JOB')).toHaveLength(1);
+  });
+
+  it('shows the localized unavailable state when the recovery list returns HTTP 503', async () => {
+    failVersions = true;
+    mount(language);
+    await click(button(copy.controls.createDraft));
+    await waitFor(() => expect(status().dataset.statusCode).toBe('JOB_CREATED'));
+    await click(button(copy.controls.showVersions));
+    await waitFor(() => expect(status().dataset.statusCode).toBe('VERSIONS_UNAVAILABLE'));
+    expect(status().textContent).toBe(copy.status.VERSIONS_UNAVAILABLE);
+    expect(status().textContent).not.toContain('PILOT_SOURCE_VERIFIER_UNAVAILABLE');
+    expect(screen.queryByRole('button', { name: copy.controls.restore(V1) })).toBeNull();
   });
 
   it('uses only native focusable controls in reading order with visible focus and mobile-size targets', async () => {

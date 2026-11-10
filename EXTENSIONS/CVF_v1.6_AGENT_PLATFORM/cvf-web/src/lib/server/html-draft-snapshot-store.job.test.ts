@@ -3,7 +3,7 @@ import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { HtmlDraftSnapshotStore } from './html-draft-snapshot-store';
-import { JOB_EFFECTS, PILOT_JOB_EFFECTS, type CreateJobInput, type AcceptVersionInput } from '../html-job-contract';
+import { JOB_EFFECTS, PILOT_JOB_EFFECTS, type CreateJobInput, type AcceptVersionInput, type ProductDecisionInput } from '../html-job-contract';
 import type { DraftInput } from '../html-draft-recovery-contract';
 import { htmlPilotFilename, renderLockedHtmlPilotSource } from '../html-cta-rendering';
 
@@ -60,6 +60,17 @@ describe('job sidecars in draft owner namespace', () => {
       const recovered = new HtmlDraftSnapshotStore({ kind: 'real-provider-fictional-content', root, production: false, jobDecisions: true }, () => now);
       expect(await recovered.get(versionId, source, owner)).toEqual(original);
       expect(await recovered.getVersion(jobId, source, versionId, owner)).toEqual(link);
+      expect(await recovered.getProductDecision(jobId, source, versionId, owner)).toBeNull();
+      const productDecision: ProductDecisionInput = { decisionId: '123e4567-e89b-42d3-a456-426614174005', jobId,
+        sourceRecordId: source, versionId, htmlSha256: link!.htmlSha256, sourceEvidenceSha256: link!.pilotEvidenceSha256!,
+        decision: 'ACCEPTED', reviewedVersionConfirmed: true };
+      expect(await recovered.decideProductVersion(productDecision, owner)).toBe('SAVED');
+      const restarted = new HtmlDraftSnapshotStore({ kind: 'real-provider-fictional-content', root, production: false, jobDecisions: true }, () => now);
+      expect(await restarted.getProductDecision(jobId, source, versionId, owner)).toMatchObject({
+        schema: 'cvf.htmlPilotProductDecision.v1', ...productDecision, owner, actor: owner,
+        decidedAt: new Date(now).toISOString(), expiresAt: link!.expiresAt,
+      });
+      expect(await restarted.getProductDecision(jobId, source, versionId, { ...owner, teamId: 'other' })).toBeNull();
       expect(await recovered.acceptVersion({ decisionId, jobId, sourceRecordId: source, versionId,
         requestSha256: link!.requestSha256, htmlSha256: link!.htmlSha256,
         criteriaReview: [{ criterionId: 'c1', passed: true, reviewNote: 'Checked' }], reviewedVersionConfirmed: true }, owner)).toBe('UNAVAILABLE');

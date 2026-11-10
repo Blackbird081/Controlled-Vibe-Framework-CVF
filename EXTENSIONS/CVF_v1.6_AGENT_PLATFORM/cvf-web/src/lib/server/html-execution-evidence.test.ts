@@ -6,7 +6,7 @@ import { buildReceiptIntegrityAnchor } from '@/lib/receipt-integrity-anchor';
 import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 import type { HtmlPilotRuntimeProfile } from './ncr-html-pilot-runtime-profile';
 import { HtmlPilotOperationLedger } from './ncr-html-pilot-operation-ledger';
-import { htmlPilotRequestSha256, issueHtmlExecutionEvidence, verifyHtmlExecutionEvidence,
+import { htmlPilotRequestSha256, htmlPilotSourceVerifierReady, issueHtmlExecutionEvidence, verifyHtmlExecutionEvidence,
   verifyHtmlPilotSource, pilotAmbientContextPresent, measurePilotProvider, htmlPilotSystemPrompt } from './html-execution-evidence';
 
 const secret = 'invented-offline-secret-2026';
@@ -23,6 +23,27 @@ function ownedRoot() {
 }
 
 describe('HTML source evidence', () => {
+  it('reports only readiness using the verifier key nullish precedence', () => {
+    const primary = process.env.CVF_RECEIPT_HMAC_SECRET;
+    const fallback = process.env.CVF_AUDIT_SIGNING_KEY;
+    try {
+      delete process.env.CVF_RECEIPT_HMAC_SECRET;
+      delete process.env.CVF_AUDIT_SIGNING_KEY;
+      expect(htmlPilotSourceVerifierReady()).toBe(false);
+      process.env.CVF_AUDIT_SIGNING_KEY = secret;
+      expect(htmlPilotSourceVerifierReady()).toBe(true);
+      process.env.CVF_RECEIPT_HMAC_SECRET = '';
+      expect(htmlPilotSourceVerifierReady()).toBe(false);
+      process.env.CVF_RECEIPT_HMAC_SECRET = secret;
+      process.env.CVF_AUDIT_SIGNING_KEY = '';
+      expect(htmlPilotSourceVerifierReady()).toBe(true);
+    } finally {
+      if (primary === undefined) delete process.env.CVF_RECEIPT_HMAC_SECRET;
+      else process.env.CVF_RECEIPT_HMAC_SECRET = primary;
+      if (fallback === undefined) delete process.env.CVF_AUDIT_SIGNING_KEY;
+      else process.env.CVF_AUDIT_SIGNING_KEY = fallback;
+    }
+  });
   it('pins the provider format to the locked fictional create/revision renderer', () => {
     const create = htmlPilotSystemPrompt(null);
     const revision = htmlPilotSystemPrompt('parent-run');

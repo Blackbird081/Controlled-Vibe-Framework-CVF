@@ -51,6 +51,15 @@ class CoverageTests(unittest.TestCase):
         self.assertEqual(cov.validate(self.root, self.data), [])
         self.assertEqual(cov.validate_text(self.root, "docs/work_orders/order.md", "Status: READY\n" + block(self.data)), [])
 
+    def test_empty_bootstrap_indexes_are_not_execution_packets(self):
+        for family, title in (("roadmaps", "Roadmaps"), ("work_orders", "Work Orders")):
+            path = f"docs/{family}/README.md"
+            placeholder = f"# {title}\n\nStore project-governed {family} artifacts here. Link active artifacts from docs/INDEX.md.\n"
+            self.assertEqual(cov.validate_text(self.root, path, placeholder.replace("\n", "\r\n")), [])
+            for content in (placeholder + "Status: READY\n", placeholder + "Build this now.\n", "# Actual milestone\n"):
+                self.assertEqual(cov.validate_text(self.root, path, content), ["COV_BLOCK_REQUIRED"])
+            self.assertEqual(cov.validate_text(self.root, f"docs/{family}/plan.md", placeholder), ["COV_BLOCK_REQUIRED"])
+
     def test_omitted_extra_duplicate_rows(self):
         for rows, code in ((self.data["rows"][:1], "COV_CRITERION_SET_MISMATCH"),
                            (self.data["rows"] * 2, "COV_DUPLICATE_ID")):

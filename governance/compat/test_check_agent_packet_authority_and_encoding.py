@@ -674,3 +674,118 @@ def test_exact_raw_inventory_encoding_exception_requires_original_bytes(tmp_path
 def test_similar_raw_inventory_path_keeps_encoding_checks():
     issues = MODULE.find_non_ascii_line_violations("docs/evidence/archive/EXPORT_MANIFEST_OTHER.md", [MODULE.AddedLine(1, "new \u2014 text")], has_exception=False)
     assert issues
+
+
+@pytest.mark.parametrize("path", sorted(MODULE.PINNED_DOCUMENTARY_ENCODING_PREIMAGES))
+def test_documentary_preimage_uses_actual_approved_raw_bytes(path):
+    raw = (MODULE.REPO_ROOT / path).read_bytes()
+    lines = [MODULE.AddedLine(i, line) for i, line in enumerate(raw.decode("utf-8").splitlines(), 1)]
+    assert any(any(ord(c) > 127 for c in row.text) for row in lines)
+    assert MODULE.find_non_ascii_line_violations(path, lines, has_exception=False) == []
+
+
+@pytest.mark.parametrize("path", sorted(MODULE.PINNED_DOCUMENTARY_ENCODING_PREIMAGES))
+def test_documentary_preimage_rejects_any_alteration_even_with_note(path, tmp_path, monkeypatch):
+    raw = (MODULE.REPO_ROOT / path).read_bytes()
+    _write(tmp_path, path, raw)
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    assert MODULE.find_non_ascii_line_violations(path, [], has_exception=False) == []
+    for addition in (b"ASCII alteration\n", b"Text Encoding Exception: changed\n"):
+        (tmp_path / path).write_bytes(raw + addition)
+        assert MODULE.find_non_ascii_line_violations(path, [], has_exception=True)
+
+
+def test_documentary_preimage_missing_path_fails_before_local_note(tmp_path, monkeypatch):
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    path = next(iter(MODULE.PINNED_DOCUMENTARY_ENCODING_PREIMAGES))
+    assert MODULE.find_non_ascii_line_violations(path, [], has_exception=True)
+
+
+def test_documentary_preimage_same_bytes_other_path_keeps_default(tmp_path, monkeypatch):
+    original = next(iter(MODULE.PINNED_DOCUMENTARY_ENCODING_PREIMAGES))
+    raw = (MODULE.REPO_ROOT / original).read_bytes()
+    other = "docs/baselines/CVF_UNAPPROVED_COPY.md"
+    _write(tmp_path, other, raw)
+    monkeypatch.setattr(MODULE, "REPO_ROOT", tmp_path)
+    assert MODULE.find_non_ascii_line_violations(other, [MODULE.AddedLine(1, "quoted \u2014 text")], has_exception=False)
+
+
+def test_documentary_preimage_backslash_alias_is_refused():
+    path = next(iter(MODULE.PINNED_DOCUMENTARY_ENCODING_PREIMAGES)).replace("/", "\\")
+    assert MODULE.find_non_ascii_line_violations(path, [], has_exception=True)
+
+
+def test_documentary_preimage_catalog_is_exact_fixed_catalog():
+    expected = {
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_CASES_2026-11-06.md':
+            '227071d18a22a3d1286bb867063081e03b0a7a0b22ad86615c90306a92f49141',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_LOCK_2026-11-06.md':
+            'f18b5016ba22e7db55a4264a2cf285fe3b72a0735a2d43468d361bd91669f1d3',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_RESULTS_2026-11-06.md':
+            'ccc819e597cf14648b09a69ac3932ced7f6b102a9e64aaedfb467b1799ab079c',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_RESULTS_CLAUDE_REVIEW_2026-11-06.md':
+            '58c314d049ac8a20eab9561c649bb2be8e0a434fa9785006e1a343e077cadda0',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_REVIEW_2026-11-06.md':
+            '3c5e3ca95ebaa85b4df5d50086ef067401c094cabda823157238295f80ec309d',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_CLAUDE_REVIEW_2026-11-06.md':
+            '7db939bafc12ac807d5726e08f90c9559be4c9fba1900d0f8fbebbc03605cc19',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_LOCAL_DECISION_2026-11-06.md':
+            '79d22cde2f8dd8adc981cf78864c432761b9d3b5057e6c46f98d3d45da66047f',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_LOCAL_RESPONSE_2026-11-06.md':
+            '79c741f50d1788093b059ffe72bf32a529a302e83139d441775357ce894a62f4',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_NEXT_STEP_CODEX_REVIEW_2026-11-06.md':
+            '08fe425235405e0e182e9d4236e9e4e3f8e5a26e7567dd8e97439bc1355d97fb',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_NEXT_STEP_PROPOSAL_2026-11-06.md':
+            '23d05a511518e4960db6575b96f7ee230a19eea0fc6deca17084895cb2fcb70a',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_PROPOSAL_2026-11-06.md':
+            'dbb40fb0b0b1291ede0904795d3fb41eb41f07b3189c7f887d152ba9c8e2f252',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_REVIEW_BRIEF_2026-11-06.md':
+            'c0228e6bd625aae1e21df7c0bd5782baf801f038d12bc390cd90df2c1c30f237',
+        'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_ROADMAP_CLOSURE_2026-11-06.md':
+            'e6782b675746ee52ed6b21ad8743c14023d627935e7e0915aaef6176f61fe5c1',
+        'docs/reviews/evidence/ccp-r1-20261106/frozen-fixture.json':
+            '78ad9b71378e8ff2d102b3f43cd3322fb34af78be953e0a6a976adbbfb431b7b',
+        'docs/reviews/evidence/ccp-r1-20261106/independent-oracle.json':
+            'faeadd38d7c7bab717bd267527f213dbfb941639fd824fb9add4fc099fb50b37',
+        'docs/baselines/CVF_GC018_NCR_HTML_M6_FRESH_ADMISSION_PREPARATION_2026-10-30.md':
+            '660b1c573269e34546a3c2528d2738826112d299fa21251877a3bd3e2bf63bad',
+        'docs/baselines/CVF_GC018_NCR_HTML_M6_HUMAN_UI_LIFETIME_R4_CORRECTED_2026-10-30.md':
+            'cc44ee1e3ac7c3ae1160ef3f8218e2ec66d609f1572c28f37f67330993eb6964',
+        'docs/baselines/CVF_GC018_NCR_HTML_M6_INTEGRATED_READINESS_ROOT_CONTRACT_2026-10-30.md':
+            '270dc0315d58a2cd7cfaabc540e816e920e807c296bb667697cd3a8f5d8891b9',
+        'docs/baselines/CVF_GC018_SCEC_SOURCE_REPAIR_ADMISSION_DESIGN_2026-10-30.md':
+            'a18b04c2fb38f94593e528f61f632d04db4b378c7b7b9e3776ba0072be6b4bb9',
+        'docs/baselines/archive/CVF_GC018_NCR_HTML_M6_HUMAN_UI_LIFETIME_R4_2026-10-30.md':
+            'd431eb5bf829290a13346b1f7d8156344e6a8e7c469936653be877fd6c8a3e73',
+        'docs/baselines/evidence/ncr-html-m6-human-ui-lifetime-r4-corrected-manifest-20261030.json':
+            '1cc4214c72669a97849baf5a53d2b4bda7191875798391e0d1a673a0050d67bb',
+        'docs/baselines/evidence/ncr-html-m6-human-ui-lifetime-r4-manifest-20261030.json':
+            '4509711b3a92bbd9d878428c7b6b5803f4df63308ad47e3528ded1fc9c6eda4b',
+    }
+    assert MODULE.PINNED_DOCUMENTARY_ENCODING_PREIMAGES == expected
+
+
+@pytest.mark.parametrize("committed", [False, True])
+@pytest.mark.parametrize("alteration", [b"ASCII alteration\n", b"\x00binary alteration"])
+def test_documentary_preimage_rejects_changed_git_layer_with_restored_worktree(
+    committed, alteration, tmp_path, monkeypatch
+):
+    import hashlib
+    _init_repo(tmp_path)
+    _git(tmp_path, "config", "core.autocrlf", "false")
+    _write(tmp_path, "seed.txt", b"seed\n")
+    _commit_all(tmp_path, "base")
+    base = _rev(tmp_path, "HEAD")
+    path = next(iter(MODULE.PINNED_DOCUMENTARY_ENCODING_PREIMAGES))
+    raw = "Approved evidence \u2014 fixed\n".encode("utf-8")
+    monkeypatch.setitem(MODULE.PINNED_DOCUMENTARY_ENCODING_PREIMAGES, path, hashlib.sha256(raw).hexdigest())
+    _write(tmp_path, path, raw + alteration)
+    _git(tmp_path, "add", "--", path)
+    if committed:
+        _git(tmp_path, "commit", "-q", "-m", "altered object")
+    head = _rev(tmp_path, "HEAD")
+    _write(tmp_path, path, raw)
+    report = _run_check_in_repo(tmp_path, base, head)
+    expected_layer = "range" if committed else "index"
+    assert any(f"pinned documentary {expected_layer} blob SHA256 mismatch" in text
+               for finding in report["violations"] for text in finding["issues"])

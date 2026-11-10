@@ -88,10 +88,176 @@ def _contract(text: str) -> tuple[dict[str, Any] | None, list[str]]:
         return None, [f"target-state feasibility JSON is invalid: {exc}"]
     if not isinstance(payload, dict):
         return None, ["target-state feasibility payload must be a JSON object"]
+    if payload.get("applicability") == METADATA_ONLY:
+        effective = _metadata_declarative_text(text)
+        if len(re.findall(rf"(?m)^{re.escape(CONTRACT_HEADING)}[ \t]*$", effective)) != 1:
+            return None, ["metadata-only contract requires exactly one effective contract section"]
+        blocks = re.findall(r"```json\s*(\{.*?\})\s*```", _section(effective, CONTRACT_HEADING), flags=re.DOTALL)
+        if len(blocks) != 1:
+            return None, ["metadata-only contract requires one effective JSON fence"]
+        try:
+            payload = json.loads(blocks[0], object_pairs_hook=_unique_metadata_object)
+        except ValueError as exc:
+            return None, [str(exc)]
     return payload, []
 
 
+
+METADATA_ONLY = "METADATA_ONLY_NO_LIFECYCLE_MUTATION"
+UNCHANGED_TARGET_FIELDS = ("status", "candidateState", "uatState", "certificationState", "internalAgentDisposition", "truthApprovalStatus", "truthAssuranceLevel", "externalCliMcpDisposition")
+FORBIDDEN_METADATA_SOURCE_PREFIXES = (
+    "docs/reference/agent_system_skills/registry/", "docs/reference/agent_system_skills/packages/",
+    "docs/reference/agent_system_skills/truth/", "docs/reference/agent_system_skills/generated/",
+    "docs/reference/agent_system_skills/control_plane/generated/",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/data/",
+)
+
+def _unique_metadata_object(pairs):
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError("duplicate metadata contract key: " + key)
+        value[key] = item
+    return value
+
+
+def _metadata_declarative_text(text: str) -> str:
+    """Keep only top-level contract/ledger fences; mask examples and comments.
+
+    Reuse the declaration owner's fence grammar and offset-preserving masks.
+    The absent-discriminant legacy parser continues to consume its original text.
+    """
+    try:
+        from governance.compat.check_independent_review_probe_admission import _FENCE_OPEN_RE, _HTML_COMMENT_RE, _blank_span
+    except ModuleNotFoundError:
+        from check_independent_review_probe_admission import _FENCE_OPEN_RE, _HTML_COMMENT_RE, _blank_span
+    text = _HTML_COMMENT_RE.sub(_blank_span, text)
+    out, pos = [], 0
+    for match in _FENCE_OPEN_RE.finditer(text):
+        if match.start() < pos:
+            continue
+        delimiter = match.group(1)
+        close = re.search(rf"(?m)^[ \t]{{0,3}}{re.escape(delimiter[0])}{{{len(delimiter)},}}[ \t]*$", text[match.end():])
+        end = match.end() + close.end() if close else len(text)
+        out.append(text[pos:match.start()])
+        span = text[match.start():end]
+        canonical = match.group(0) in ("```json", "```acceptance-ledger-json") and close is not None
+        out.append(span if canonical else re.sub(r"[^\n]", " ", span))
+        pos = end
+    out.append(text[pos:])
+    return "".join(out)
+
+
+def _metadata_source_paths(text: str) -> tuple[set[str], str | None, list[str]]:
+    """Join the admitted structured ledger and write table, not a path mention."""
+    issues = []
+    text = _metadata_declarative_text(text)
+    blocks = re.findall(r"^```acceptance-ledger-json\s*\n(.*?)^```", text, re.M | re.S)
+    if len(blocks) != 1:
+        return set(), None, ["metadata-only scope requires one structured acceptance ledger"]
+    try:
+        ledger = json.loads(blocks[0], object_pairs_hook=_unique_metadata_object)
+        paths = [p for row in ledger["requirements"] for p in row["expectedArtifacts"]]
+        if any(not isinstance(p, str) for p in paths):
+            raise ValueError("non-string expected artifact")
+    except (ValueError, TypeError, KeyError):
+        return set(), None, ["metadata-only scope has malformed expectedArtifacts"]
+    try:
+        from governance.compat.check_independent_review_probe_admission import DeclarationScanner, _mask_fenced_blocks, _HTML_COMMENT_RE, _blank_span
+    except ModuleNotFoundError:
+        from check_independent_review_probe_admission import DeclarationScanner, _mask_fenced_blocks, _HTML_COMMENT_RE, _blank_span
+    scanner = DeclarationScanner(text)
+    ownership = list(re.finditer(r"(?m)^[ \t]{0,3}##[ \t]+Write Ownership(?:[ \t]+#+)?[ \t]*$", scanner.masked_text))
+    declared = set(paths)
+    if len(ownership) != 1:
+        issues.append("metadata-only scope requires exactly one declarative Write Ownership section")
+    else:
+        start = ownership[0].end()
+        end = re.search(r"(?m)^[ \t]{0,3}##[ \t]+\S", scanner.masked_text[start:])
+        # The shared scanner preserves offsets while masking example headings.
+        # Read the actual table bytes only inside that uniquely located section.
+        table_text = _HTML_COMMENT_RE.sub(_blank_span, _mask_fenced_blocks(text))
+        write = table_text[start:start + end.start()] if end else table_text[start:]
+        rows = [line.strip().strip("|").split("|")[0].strip().strip("`")
+                for line in write.splitlines() if line.strip().startswith("|")]
+        write_paths = {p for p in rows if "/" in p and not p.startswith("---")}
+        if declared != write_paths:
+            issues.append("metadata-only Write Ownership and expectedArtifacts must agree exactly")
+    readable = scanner.scalar("Worker return path", cardinality="EXACTLY_ONE")
+    camel = scanner.scalar("workerReturnPath", cardinality="EXACTLY_ONE")
+    formal = None
+    if not readable.ok or not camel.ok:
+        issues.append("metadata-only scope requires both unique formal path scalars")
+    else:
+        left = re.findall(r"(?m)^Worker return path:[ \t]*`(docs/reviews/[^`\n]+\.md)`[ \t]*$", scanner.masked_text)
+        right = re.findall(r"(?m)^workerReturnPath:[ \t]*`(docs/reviews/[^`\n]+\.md)`[ \t]*$", scanner.masked_text)
+        if len(left) != 1 or len(right) != 1 or left[0] != right[0] or left[0] not in declared:
+            issues.append("metadata-only formal scalars must agree on one admitted docs/reviews Markdown path")
+        else:
+            formal = left[0]
+    if not 1 <= len(declared) <= 17:
+        issues.append("metadata-only admitted artifact set exceeds bounded source/formal scope")
+    return declared, formal, issues
+
+
+def _validate_metadata_contract(payload: dict[str, Any], text: str) -> list[str]:
+    """Explicit no-lifecycle declaration; no identity/state/permission fiction."""
+    issues = []
+    expected = {"schemaVersion", "applicability", "scopeId", "sourcePaths", "targetState", "externalUseClaimed", "expectedDecisions", "blockerRouting", "checkerSources", "mutations"}
+    if set(payload) != expected:
+        issues.append("metadata-only contract has missing or unknown fields")
+    if payload.get("schemaVersion") != SCHEMA or payload.get("applicability") != METADATA_ONLY:
+        issues.append("invalid metadata-only schema or applicability")
+    if not isinstance(payload.get("scopeId"), str) or not payload["scopeId"].strip():
+        issues.append("metadata-only scopeId must be nonempty")
+    if payload.get("mutations") != []:
+        issues.append("metadata-only scope must declare mutations=[]")
+    if payload.get("targetState") != {key: "UNCHANGED" for key in UNCHANGED_TARGET_FIELDS}:
+        issues.append("metadata-only target lifecycle/UAT/truth/internal/external fields must all be UNCHANGED")
+    if payload.get("externalUseClaimed") is not False:
+        issues.append("metadata-only scope must not claim external use")
+    if payload.get("expectedDecisions") != {"internalActivation": "NOT_EVALUATED_UNCHANGED", "externalBodyRead": EXTERNAL_BODY_DENIED, "externalOutputUse": EXTERNAL_OUTPUT_DENIED}:
+        issues.append("metadata-only activation stays unevaluated and external read/output remain denied")
+    routing = payload.get("blockerRouting")
+    if routing != {"technicalDecisionOwner": "LOCAL", "workerTerminalReturn": "BLOCKED_WITH_REASON", "operatorQuestionAllowed": False} or not isinstance(routing, dict) or routing.get("operatorQuestionAllowed") is not False:
+        issues.append("metadata-only blocker routing must remain Local and fail closed")
+    checkers = payload.get("checkerSources")
+    if not isinstance(checkers, list) or not all(isinstance(x, str) for x in checkers) or len(checkers) != len(set(checkers)) or not REQUIRED_CHECKERS.issubset(set(checkers)):
+        issues.append("metadata-only checkerSources must include canonical predicates without duplicates")
+    paths = payload.get("sourcePaths")
+    if not isinstance(paths, list) or not 1 <= len(paths) <= 16 or not all(isinstance(x, str) for x in paths) or len(set(paths)) != len(paths):
+        return issues + ["metadata-only sourcePaths must be a bounded unique nonempty string array"]
+    declared, formal, errors = _metadata_source_paths(text)
+    issues.extend(errors)
+    if set(paths) != declared - ({formal} if formal else set()):
+        issues.append("metadata-only sourcePaths must equal structured admitted source artifacts")
+    from pathlib import PurePosixPath
+    root = REPO_ROOT.resolve()
+    # Validate EVERY admitted path before excluding only the exact formal.
+    for raw in set(paths) | declared:
+        path = PurePosixPath(raw)
+        if not raw or path.is_absolute() or ":" in raw or "\\" in raw or raw != path.as_posix() or any(x in (".", "..") for x in raw.split("/")):
+            issues.append("unsafe metadata-only source path: " + raw)
+            continue
+        lower = raw.lower()
+        if any(lower.startswith(prefix.lower()) for prefix in FORBIDDEN_METADATA_SOURCE_PREFIXES) or any(term in lower for term in ("use-proof", "use_proof", "useproof", "/receipts/")):
+            issues.append("metadata-only source path touches lifecycle/generated/use-proof surface: " + raw)
+        full = root / raw
+        try:
+            resolved = full.resolve()
+            resolved.relative_to(root)
+            if resolved != full.absolute() or any(part.is_symlink() for part in [full, *full.parents] if part != root and root in part.parents):
+                issues.append("metadata-only source path traverses a symlink or redirect: " + raw)
+        except (OSError, ValueError, RuntimeError):
+            issues.append("metadata-only source path escapes or cannot be resolved: " + raw)
+    return issues
+
+
 def validate_contract(payload: dict[str, Any], text: str) -> list[str]:
+    if "applicability" in payload:
+        if payload.get("applicability") != METADATA_ONLY:
+            return ["unsupported explicit applicability"]
+        return _validate_metadata_contract(payload, text)
     issues: list[str] = []
     if payload.get("schemaVersion") != SCHEMA:
         issues.append(f"schemaVersion must equal {SCHEMA}")

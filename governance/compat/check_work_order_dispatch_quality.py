@@ -266,7 +266,7 @@ def _run_check(base: str | None, head: str | None) -> tuple[dict[str, Any], str,
     resolved_base, resolved_head, base_source = _resolve_range(base, head)
     changed = _get_changed(resolved_base, resolved_head)
     report = _classify(sorted(changed), base_ref=resolved_base)
-    report["violations"].extend(collect_coverage_violations(REPO_ROOT, changed))
+    report["violations"].extend(collect_coverage_violations(REPO_ROOT, changed, resolved_base))
     for path in report["checkedFiles"]:
         if not path.startswith("docs/work_orders/"):
             continue

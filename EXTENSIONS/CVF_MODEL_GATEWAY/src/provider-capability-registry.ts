@@ -6,6 +6,7 @@ import type {
 } from "./provider-method-contract";
 import {
   ALIBABA_DASHSCOPE_INTL_ENDPOINT,
+  ALIBABA_WORKSPACE_DASHSCOPE_ENDPOINT,
   ALIBABA_FREE_QUOTA_LEDGER_REFERENCE,
   ALIBABA_FREE_QUOTA_MODELS,
 } from "./alibaba-free-quota-model-ledger";
@@ -25,7 +26,7 @@ export const LEGACY_PROVIDER_METHOD_ALIASES = {
   chat: "complete",
 } as const satisfies Partial<Record<ProviderMethodName, ProviderMethodName>>;
 
-const ALIBABA_FREE_QUOTA_CAPABILITY_MODELS: ProviderCapabilityModel[] = ALIBABA_FREE_QUOTA_MODELS.map(
+const ALIBABA_FREE_QUOTA_CAPABILITY_MODELS: ProviderCapabilityModel[] = ALIBABA_FREE_QUOTA_MODELS.filter(entry => entry.modelFamily === "text").map(
   (entry) => ({
     modelId: entry.modelId,
     supportedMethods: ["complete", "chat"] as const,
@@ -37,9 +38,8 @@ const ALIBABA_FREE_QUOTA_CAPABILITY_MODELS: ProviderCapabilityModel[] = ALIBABA_
       freeQuotaRemainingAtCapture: entry.freeQuotaRemainingAtCapture,
       freeQuotaTotalAtCapture: entry.freeQuotaTotalAtCapture,
       statusAtCapture: entry.statusAtCapture,
-      diagnosticRerunResult:
-        "diagnosticRerunResult" in entry ? entry.diagnosticRerunResult : null,
-      defaultEndpointHost: new URL(ALIBABA_DASHSCOPE_INTL_ENDPOINT).host,
+      stopOnExhaustAtCapture: entry.stopOnExhaustAtCapture,
+      defaultEndpointHost: new URL(ALIBABA_WORKSPACE_DASHSCOPE_ENDPOINT).host,
       claimBoundary:
         "bounded free-quota routing candidate only; no provider parity or ranking claim",
     },
@@ -68,6 +68,16 @@ export const PROVIDER_CAPABILITY_OWNER_REFS = [
 ] as const satisfies readonly ProviderCapabilityOwnerRef[];
 
 export const PROVIDER_CAPABILITY_REGISTRY = [
+  {
+    contractVersion: "cvf.providerCapability.v1", providerId: "openrouter",
+    capabilityRef: "provider-capability/openrouter", ownerRefs: PROVIDER_CAPABILITY_OWNER_REFS,
+    models: [{ modelId: "typesafe/jev-1.14", supportedMethods: ["system_one"], defaultMethod: "system_one" }],
+  },
+  {
+    contractVersion: "cvf.providerCapability.v1", providerId: "typesafe",
+    capabilityRef: "provider-capability/typesafe", ownerRefs: PROVIDER_CAPABILITY_OWNER_REFS,
+    models: [{ modelId: "jev-latest", supportedMethods: ["system_one"], defaultMethod: "system_one" }],
+  },
   {
     contractVersion: "cvf.providerCapability.v1",
     providerId: "alibaba",

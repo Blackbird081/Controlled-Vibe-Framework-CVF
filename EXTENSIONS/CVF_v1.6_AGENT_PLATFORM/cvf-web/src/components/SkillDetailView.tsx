@@ -1,12 +1,29 @@
 'use client';
 
 import { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Skill } from '@/types/skill';
 import { useLanguage } from '@/lib/i18n';
 
 type ViewMode = 'skill' | 'uat';
+
+const markdownComponents: Components = {
+    table: ({ children }) => (
+        <div className="my-4 max-w-full overflow-x-auto">
+            <table className="w-full min-w-[32rem] border-collapse text-sm">{children}</table>
+        </div>
+    ),
+    thead: ({ children }) => (
+        <thead className="bg-slate-100 dark:bg-white/[0.06]">{children}</thead>
+    ),
+    th: ({ children, style, align }) => (
+        <th align={align ?? 'left'} style={style} className="border border-slate-200 px-3 py-2 align-top font-semibold dark:border-white/15">{children}</th>
+    ),
+    td: ({ children, style, align }) => (
+        <td align={align} style={style} className="border border-slate-200 px-3 py-2 align-top dark:border-white/15">{children}</td>
+    ),
+};
 
 export function SkillDetailView({ skill }: { skill: Skill }) {
     const [viewMode, setViewMode] = useState<ViewMode>('skill');
@@ -95,11 +112,11 @@ export function SkillDetailView({ skill }: { skill: Skill }) {
                 </div>
             </div>
 
-            <div className="max-h-[70vh] overflow-y-auto p-6 sm:p-8">
+            <div className="max-h-[70vh] overflow-y-auto p-6 text-slate-700 dark:text-slate-200 sm:p-8">
                 {viewMode === 'uat' ? (
                     skill.uatContent ? (
                         <div className="prose prose-lg max-w-none prose-headings:tracking-[-0.03em] prose-h2:text-2xl prose-h2:font-semibold prose-p:leading-8 prose-code:rounded prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-pink-600 prose-pre:rounded-2xl prose-pre:bg-[#0d0f1a] prose-pre:text-slate-100 dark:prose-invert dark:prose-code:bg-white/[0.06] dark:prose-code:text-pink-300">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                                 {skill.uatContent}
                             </ReactMarkdown>
                         </div>
@@ -108,7 +125,7 @@ export function SkillDetailView({ skill }: { skill: Skill }) {
                     )
                 ) : (
                     <div className="prose prose-lg max-w-none prose-headings:tracking-[-0.03em] prose-h2:text-2xl prose-h2:font-semibold prose-p:leading-8 prose-code:rounded prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-pink-600 prose-pre:rounded-2xl prose-pre:bg-[#0d0f1a] prose-pre:text-slate-100 dark:prose-invert dark:prose-code:bg-white/[0.06] dark:prose-code:text-pink-300">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                             {skill.content || ''}
                         </ReactMarkdown>
                     </div>

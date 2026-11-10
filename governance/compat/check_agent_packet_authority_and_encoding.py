@@ -59,6 +59,55 @@ RAW_PREIMAGE_ARCHIVE_ENCODING_EXCEPTIONS = {
 RAW_PREIMAGE_ARCHIVE_ENCODING_SHA256 = {
     "docs/evidence/archive/EXPORT_MANIFEST_2026-05-09.md": "2ed5727817e3c0bbfbde0f906437f04e06922359967ca0f3ed121a5e7b4e6d0a",
 }
+
+# Exact immutable documentary inputs approved on 2026-10-31. No path patterns.
+PINNED_DOCUMENTARY_ENCODING_PREIMAGES = {
+    # CCP-R1 fixed documentary inputs; bounded Local admission under D124.
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_CASES_2026-11-06.md':
+        '227071d18a22a3d1286bb867063081e03b0a7a0b22ad86615c90306a92f49141',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_LOCK_2026-11-06.md':
+        'f18b5016ba22e7db55a4264a2cf285fe3b72a0735a2d43468d361bd91669f1d3',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_RESULTS_2026-11-06.md':
+        'ccc819e597cf14648b09a69ac3932ced7f6b102a9e64aaedfb467b1799ab079c',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_RESULTS_CLAUDE_REVIEW_2026-11-06.md':
+        '58c314d049ac8a20eab9561c649bb2be8e0a434fa9785006e1a343e077cadda0',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_REVIEW_2026-11-06.md':
+        '3c5e3ca95ebaa85b4df5d50086ef067401c094cabda823157238295f80ec309d',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_CLAUDE_REVIEW_2026-11-06.md':
+        '7db939bafc12ac807d5726e08f90c9559be4c9fba1900d0f8fbebbc03605cc19',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_LOCAL_DECISION_2026-11-06.md':
+        '79d22cde2f8dd8adc981cf78864c432761b9d3b5057e6c46f98d3d45da66047f',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_LOCAL_RESPONSE_2026-11-06.md':
+        '79c741f50d1788093b059ffe72bf32a529a302e83139d441775357ce894a62f4',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_NEXT_STEP_CODEX_REVIEW_2026-11-06.md':
+        '08fe425235405e0e182e9d4236e9e4e3f8e5a26e7567dd8e97439bc1355d97fb',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_NEXT_STEP_PROPOSAL_2026-11-06.md':
+        '23d05a511518e4960db6575b96f7ee230a19eea0fc6deca17084895cb2fcb70a',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_PROPOSAL_2026-11-06.md':
+        'dbb40fb0b0b1291ede0904795d3fb41eb41f07b3189c7f887d152ba9c8e2f252',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_REVIEW_BRIEF_2026-11-06.md':
+        'c0228e6bd625aae1e21df7c0bd5782baf801f038d12bc390cd90df2c1c30f237',
+    'docs/concepts/CVF_CURATED_CAPABILITY_PACKS_ROADMAP_CLOSURE_2026-11-06.md':
+        'e6782b675746ee52ed6b21ad8743c14023d627935e7e0915aaef6176f61fe5c1',
+    'docs/reviews/evidence/ccp-r1-20261106/frozen-fixture.json':
+        '78ad9b71378e8ff2d102b3f43cd3322fb34af78be953e0a6a976adbbfb431b7b',
+    'docs/reviews/evidence/ccp-r1-20261106/independent-oracle.json':
+        'faeadd38d7c7bab717bd267527f213dbfb941639fd824fb9add4fc099fb50b37',
+    'docs/baselines/CVF_GC018_NCR_HTML_M6_FRESH_ADMISSION_PREPARATION_2026-10-30.md':
+        '660b1c573269e34546a3c2528d2738826112d299fa21251877a3bd3e2bf63bad',
+    'docs/baselines/CVF_GC018_NCR_HTML_M6_HUMAN_UI_LIFETIME_R4_CORRECTED_2026-10-30.md':
+        'cc44ee1e3ac7c3ae1160ef3f8218e2ec66d609f1572c28f37f67330993eb6964',
+    'docs/baselines/CVF_GC018_NCR_HTML_M6_INTEGRATED_READINESS_ROOT_CONTRACT_2026-10-30.md':
+        '270dc0315d58a2cd7cfaabc540e816e920e807c296bb667697cd3a8f5d8891b9',
+    'docs/baselines/CVF_GC018_SCEC_SOURCE_REPAIR_ADMISSION_DESIGN_2026-10-30.md':
+        'a18b04c2fb38f94593e528f61f632d04db4b378c7b7b9e3776ba0072be6b4bb9',
+    'docs/baselines/archive/CVF_GC018_NCR_HTML_M6_HUMAN_UI_LIFETIME_R4_2026-10-30.md':
+        'd431eb5bf829290a13346b1f7d8156344e6a8e7c469936653be877fd6c8a3e73',
+    'docs/baselines/evidence/ncr-html-m6-human-ui-lifetime-r4-corrected-manifest-20261030.json':
+        '1cc4214c72669a97849baf5a53d2b4bda7191875798391e0d1a673a0050d67bb',
+    'docs/baselines/evidence/ncr-html-m6-human-ui-lifetime-r4-manifest-20261030.json':
+        '4509711b3a92bbd9d878428c7b6b5803f4df63308ad47e3528ded1fc9c6eda4b',
+}
 EXCEPTION_MARKERS = (
     "Text Encoding Exception",
     "Unicode exception",
@@ -542,6 +591,19 @@ def find_non_ascii_line_violations(
     has_exception: bool,
 ) -> list[str]:
     normalized = path.replace("\\", "/")
+    if normalized in PINNED_DOCUMENTARY_ENCODING_PREIMAGES:
+        target = REPO_ROOT / normalized
+        try:
+            target.resolve().relative_to(REPO_ROOT.resolve())
+            if (path != normalized or not target.is_file()
+                    or any(parent.is_symlink() for parent in [target, *target.parents] if parent != REPO_ROOT)):
+                return ["pinned documentary preimage requires its exact regular repository path"]
+            raw = target.read_bytes()
+        except (OSError, ValueError):
+            return ["pinned documentary preimage is unreadable or outside the repository"]
+        if hashlib.sha256(raw).hexdigest() != PINNED_DOCUMENTARY_ENCODING_PREIMAGES[normalized]:
+            return ["pinned documentary preimage SHA256 mismatch; preserve the approved bytes"]
+        return []
     if normalized in RAW_PREIMAGE_ARCHIVE_ENCODING_SHA256:
         archive = REPO_ROOT / normalized
         expected = RAW_PREIMAGE_ARCHIVE_ENCODING_SHA256[normalized]
@@ -765,6 +827,23 @@ def _decode_failure_diagnostic(path: str, text: str) -> str | None:
     return None
 
 
+def _documentary_layer_issues(path: str, record: ChangeRecord, head: str | None) -> list[str]:
+    if path not in PINNED_DOCUMENTARY_ENCODING_PREIMAGES:
+        return []
+    issues = find_non_ascii_line_violations(path, [], has_exception=False)
+    if not record.layers:
+        return issues + ["pinned documentary preimage lacks Git-layer provenance"]
+    for layer in record.layers:
+        if layer.name not in ("range", "index"):
+            continue
+        spec = f"{head}:{path}" if layer.name == "range" else f":{path}"
+        blob = subprocess.run(["git", "cat-file", "blob", spec], cwd=REPO_ROOT,
+                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+        if blob.returncode or hashlib.sha256(blob.stdout).hexdigest() != PINNED_DOCUMENTARY_ENCODING_PREIMAGES[path]:
+            issues.append(f"pinned documentary {layer.name} blob SHA256 mismatch; preserve the approved bytes")
+    return issues
+
+
 def _run_check(base: str | None, head: str | None) -> dict[str, Any]:
     try:
         changed = _get_changed(base, head)
@@ -789,6 +868,7 @@ def _run_check(base: str | None, head: str | None) -> dict[str, Any]:
             violations.append({"path": path, "issues": path_issues})
             continue
 
+        path_issues.extend(_documentary_layer_issues(path, record, head))
         provenance = _added_lines(path, record, base, head)
         if provenance.is_binary:
             # explicit binary classification: never a text encoding violation

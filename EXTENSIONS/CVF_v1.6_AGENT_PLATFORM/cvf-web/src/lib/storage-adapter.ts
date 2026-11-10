@@ -21,7 +21,7 @@
  * forbidden from adapter records.
  */
 
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, lstatSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Redis } from '@upstash/redis';
@@ -542,3 +542,7 @@ export function buildKeyValueAdapter<T = unknown>(type?: string): KeyValueAdapte
     'Supported values: file, sqlite, redis.',
   );
 }
+
+// Preserve the existing Web import surface while sharing the atomic owner.
+export { AtomicSQLiteError, SQLiteAtomicRecordAdapter, normalizeSQLiteSecurityTuple, sqliteSecurityTuplesEqual } from '../../../../CVF_EXECUTION_PLANE_FOUNDATION/src/mao/atomic.sqlite.record.store';
+export type { AtomicSQLiteCode, AtomicSQLiteRow, AtomicSQLiteWrite, AtomicSQLiteHooks, SQLiteSecurityTuple } from '../../../../CVF_EXECUTION_PLANE_FOUNDATION/src/mao/atomic.sqlite.record.store';

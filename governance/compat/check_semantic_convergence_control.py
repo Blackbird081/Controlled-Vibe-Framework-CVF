@@ -13,6 +13,9 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 _module_prefix = f"{__package__}." if __package__ else ""
 _admission = import_module(_module_prefix + "semantic_convergence_root_admission")
+_fences = import_module(_module_prefix + "semantic_convergence_fences")
+_outcome = import_module(_module_prefix + "semantic_convergence_outcome")
+_local = import_module(_module_prefix + "semantic_convergence_local_runtime_admission")
 BlockViolation = _admission.BlockViolation
 _no_duplicates = _admission._no_duplicates
 _decode_json_unicode_escapes = _admission.decode_json_unicode_escapes
@@ -83,19 +86,12 @@ class ValidationResult:
     @property
     def is_valid(self) -> bool:
         return self.is_active and not self.violations
-def is_active_block(candidate: Any) -> bool:
-    """True only for a real dict with the exact SCEC schema field; a quoted/
-    example marker or non-dict JSON scalar must never activate (invariant 11).
-    """
-    return isinstance(candidate, dict) and candidate.get("schemaVersion") == SCEC_SCHEMA_VERSION
+is_active_block = _fences.is_active_block
+
 def _is_str_list(value: Any) -> bool:
     return isinstance(value, list) and all(isinstance(item, str) for item in value)
-def _is_safe_repo_relative_path(value: str) -> bool:
-    """Reject absolute, drive-qualified, backslash, and traversal paths."""
-    if not value or "\\" in value or value.startswith("/") or WINDOWS_DRIVE_RE.match(value):
-        return False
-    parts = PurePosixPath(value).parts
-    return bool(parts) and all(part not in ("", ".", "..") for part in parts)
+_is_safe_repo_relative_path = _fences.is_safe_repo_relative_path
+
 def _validate_top_shape(block: dict) -> list[BlockViolation]:
     violations: list[BlockViolation] = []
     for field_name in REQUIRED_TOP_FIELDS:
@@ -585,7 +581,9 @@ def validate_block(
         return ValidationResult(is_active=True, violations=tuple(violations))
     violations.extend(_validate_set_reconciliation(block))
     has_admission = "rootContractAdmission" in block
-    ordinary_triggers = not has_admission or _admission.is_post_stop_return(block)
+    if "sourceRepairEvidence" in block and not _admission.is_source_repair_return(block):
+        violations.append(BlockViolation("SOURCE_REPAIR_EVIDENCE_WITHOUT_RETURN", "source evidence requires source-only return"))
+    ordinary_triggers = not has_admission or _admission.is_post_stop_return(block) or _admission.is_source_repair_return(block) or (_local.pointer(block) is not None and _local.pointer(block).get("stage") == "RETURN")
     if ordinary_triggers:
         violations.extend(_validate_escalation_triggers(block))
     violations.extend(_validate_runtime_readiness(block))
@@ -626,13 +624,21 @@ def validate_block(
                     # predecessor. Otherwise a later evidence-target change
                     # could inherit trust silently through the chain.
                     predecessor_has_admission = "rootContractAdmission" in predecessor_blocks[0]
+                    local_chain = _local.pointer(block) is not None or _local.pointer(predecessor_blocks[0]) is not None
+                    if local_chain and _admission_depth >= 8:
+                        violations.append(BlockViolation("ROOT_ADMISSION_DEPTH_LIMIT", "local predecessor depth exceeds bound"))
+                        return ValidationResult(is_active=True, violations=tuple(violations))
+                    recurse = predecessor_has_admission and (_admission_depth < (8 if local_chain else 2))
+                    local_resolver = (_repo_source_regular_bytes_resolver
+                                      if local_chain and evidence_bytes_resolver is _repo_evidence_bytes_resolver
+                                      else evidence_bytes_resolver)
                     predecessor_result = validate_block(
                         predecessor_blocks[0],
-                        predecessor_hash_resolver=predecessor_hash_resolver if predecessor_has_admission and _admission_depth < 2 else None,
-                        predecessor_block_resolver=predecessor_block_resolver if predecessor_has_admission and _admission_depth < 2 else None,
-                        evidence_bytes_resolver=evidence_bytes_resolver,
+                        predecessor_hash_resolver=predecessor_hash_resolver if recurse else None,
+                        predecessor_block_resolver=predecessor_block_resolver if recurse else None,
+                        evidence_bytes_resolver=local_resolver,
                         artifact_path=path if predecessor_has_admission else None,
-                        _evidence_snapshot_cache=_evidence_snapshot_cache,
+                        _evidence_snapshot_cache=None if local_chain else _evidence_snapshot_cache,
                         _admission_depth=_admission_depth + 1,
                     )
                     if predecessor_result.violations:
@@ -653,7 +659,7 @@ def validate_block(
                             )
                         violations.extend(_validate_predecessor_state(
                             block, predecessor_blocks[0],
-                            stop_successor_admitted=has_admission and _admission.post_stop_dispatch_admitted(block, admission),
+                            stop_successor_admitted=has_admission and (_admission.post_stop_dispatch_admitted(block, admission) or (_local.pointer(block) is not None and _local.pointer(block).get("stage") == "DISPATCH" and not admission)),
                         ))
                         violations.extend(admission)
     if has_admission:
@@ -663,60 +669,7 @@ def validate_block(
         if not ordinary_triggers and (not admission_checked or any(v.code.startswith("ROOT_ADMISSION_") for v in violations)):
             violations.extend(_validate_escalation_triggers(block))
     return ValidationResult(is_active=True, violations=tuple(violations))
-def _iter_fenced_blocks(text: str) -> list[tuple[str, str]]:
-    """Yield `(language_tag, body)` per fenced block via an explicit
-    open/close state machine, so a closing fence is never re-paired as a
-    later block's opener (ADIF-0055 mixed-fence hardening).
-    """
-    blocks: list[tuple[str, str]] = []
-    in_fence = False
-    language = ""
-    opening_width = 0
-    body_lines: list[str] = []
-    for line in text.splitlines():
-        normalized_line = line.rstrip("\r")
-        if not in_fence:
-            opening_match = OPEN_FENCE_LINE_RE.match(normalized_line)
-            if opening_match:
-                in_fence = True
-                opening_width = len(opening_match.group(1))
-                info = opening_match.group(2).strip()
-                language = info.split(maxsplit=1)[0].lower() if info else ""
-                body_lines = []
-            continue
-        closing_match = CLOSE_FENCE_LINE_RE.match(normalized_line)
-        if closing_match and len(closing_match.group(1)) >= opening_width:
-            blocks.append((language, "\n".join(body_lines)))
-            in_fence = False
-            language = ""
-            opening_width = 0
-            body_lines = []
-            continue
-        body_lines.append(line)
-    return blocks
-def find_active_blocks(text: str) -> list[dict]:
-    """Extract every fenced-code-block JSON object that is a real active SCEC
-    block (invariant 11: quoted/example markers outside real JSON are never
-    treated as active).
-    """
-    active: list[dict] = []
-    for language, body in _iter_fenced_blocks(text):
-        if language not in ("", "json"):
-            continue
-        marker_body = _decode_json_unicode_escapes(body)
-        opt_in = SCEC_SCHEMA_VERSION in marker_body and '"rootContractAdmission"' in marker_body
-        try:
-            candidate = json.loads(body, object_pairs_hook=_no_duplicates) if opt_in else json.loads(body)
-        except (json.JSONDecodeError, ValueError) as exc:
-            # An attempted opt-in must remain an evaluated, failing object.
-            # Ordinary malformed examples retain historical marker immunity.
-            if opt_in:
-                active.append({"schemaVersion": SCEC_SCHEMA_VERSION,
-                               "_scec_parse_error": f"invalid or duplicate opt-in JSON: {exc}"})
-            continue
-        if is_active_block(candidate):
-            active.append(candidate)
-    return active
+_iter_fenced_blocks, find_active_blocks = _fences._iter_fenced_blocks, _fences.find_active_blocks
 def sha256_of_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 def _configure_stdout() -> None:
@@ -819,6 +772,16 @@ def _repo_evidence_bytes_resolver(path: str) -> bytes | None:
         return full.read_bytes()
     except OSError:
         return None
+
+def _repo_source_regular_bytes_resolver(path: str) -> bytes | None:
+    """Source-only authority rejects symlinks at every repository path component."""
+    if not _is_safe_repo_relative_path(path):
+        return None
+    target = REPO_ROOT / PurePosixPath(path)
+    if any(part.is_symlink() or (hasattr(part, "is_junction") and part.is_junction())
+           for part in (target, *target.parents) if part != REPO_ROOT and REPO_ROOT in part.parents):
+        return None
+    return _repo_evidence_bytes_resolver(path)
 def _repo_predecessor_hash_resolver(path: str) -> str | None:
     content = _repo_evidence_bytes_resolver(path)
     if content is None:
@@ -875,14 +838,32 @@ def diagnose_file(path: str, text: str, *, require_block: bool = False) -> FileD
             block,
             predecessor_hash_resolver=_repo_predecessor_hash_resolver,
             predecessor_block_resolver=_repo_predecessor_block_resolver,
-            evidence_bytes_resolver=_repo_evidence_bytes_resolver,
+            evidence_bytes_resolver=(_repo_source_regular_bytes_resolver
+                                     if _admission._source_pointer(block) is not None or _local.pointer(block) is not None
+                                     else _repo_evidence_bytes_resolver),
             artifact_path=path,
         )
         for violation in result.violations:
             violations.append((index, violation))
+    for code, message in _outcome.validate(
+        REPO_ROOT, path, text, blocks, fences=_iter_fenced_blocks,
+        parse_blocks=find_active_blocks,
+    ):
+        violations.append((-1, BlockViolation(code, message)))
     return FileDiagnostic(path=path, block_count=len(blocks), violations=tuple(violations))
 def run(base: str, head: str) -> list[FileDiagnostic]:
+    with _outcome.snapshot():
+        return _run_with_outcome_snapshot(base, head)
+
+def _run_with_outcome_snapshot(base: str, head: str) -> list[FileDiagnostic]:
     results: list[FileDiagnostic] = []
+    try:
+        outcomes = _outcome.load_registry(REPO_ROOT)
+        _, previous, _ = _run_git(["show", f"HEAD:{_outcome.REGISTRY}"])
+        _outcome.validate_registry_transition(previous, outcomes)
+    except (OSError, UnicodeError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        results.append(FileDiagnostic(_outcome.REGISTRY, 0, ((-1,
+            BlockViolation("OUTCOME_REGISTRY_INVALID", str(exc))),)))
     working_paths = set(_working_tree_md_paths())
     for path in _changed_md_paths(base, head):
         if not _is_governed_work_order_or_return(path):

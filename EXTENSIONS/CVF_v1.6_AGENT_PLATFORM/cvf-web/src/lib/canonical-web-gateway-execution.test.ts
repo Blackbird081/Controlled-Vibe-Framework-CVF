@@ -380,3 +380,39 @@ describe('canonical-web-gateway-execution', () => {
         });
     });
 });
+
+
+import { buildJevCanonicalAttemptBoundary, executeJevCanonicalStage, assertJevAdmission } from './canonical-web-gateway-execution';
+import { buildProviderAttemptReconciliation } from './provider-attempt-admission';
+import type { AdapterAdmissionRecord, CanonicalExecutionPortRequest } from 'cvf-model-gateway';
+const jevRecord={status:'admitted',providerId:'typesafe',modelId:'jev-latest',requestedMethod:'system_one',normalizedMethod:'system_one',supportedMethods:['system_one'],conformanceStatus:'conformant',liveExecutionAuthorized:false} as unknown as AdapterAdmissionRecord;
+describe('Jev additive mandatory callback profile',()=>{
+  it('denies absent/mismatched structural admission and selected tuple before custody',async()=>{
+    expect(()=>assertJevAdmission(undefined)).toThrow();expect(()=>assertJevAdmission({...jevRecord,normalizedMethod:'chat'})).toThrow();
+    const ledger=createProviderAttemptLedger({identityKind:'session',identityHash:'jev-wrong',providerModel:'typesafe/jev-latest'});const commit=vi.fn();
+    const boundary=buildJevCanonicalAttemptBoundary({canonicalExecutionId:'env-jev-test',stageId:'wide',ledger,admission:jevRecord,verifyAndCommitStart:commit,onRetainedReservation:vi.fn()});
+    expect(await boundary({canonicalExecutionId:'env-jev-test',traceId:'env-jev-test',providerId:'alibaba',modelId:'jev-latest'})).toMatchObject({decision:'deny'});expect(commit).not.toHaveBeenCalled();expect(ledger.admittedCount).toBe(0);
+  });
+  it('retains rate admission and false reconciliation on synchronous custody failure',async()=>{
+    const ledger=createProviderAttemptLedger({identityKind:'session',identityHash:'jev-retained',providerModel:'typesafe/jev-latest'});const retained=vi.fn();
+    const boundary=buildJevCanonicalAttemptBoundary({canonicalExecutionId:'env-jev-test',stageId:'wide',ledger,admission:jevRecord,verifyAndCommitStart:()=>{throw Error('COMMIT_UNKNOWN');},onRetainedReservation:retained});
+    expect(await boundary({canonicalExecutionId:'env-jev-test',traceId:'env-jev-test',providerId:'typesafe',modelId:'jev-latest'})).toMatchObject({decision:'deny',attemptIndex:0,reason:'RESERVATION_RETAINED_NO_INVOCATION'});
+    expect(retained).toHaveBeenCalledOnce();expect(buildProviderAttemptReconciliation(ledger,'typesafe','jev-latest')).toMatchObject({admittedAttemptCount:1,providerCallCount:0,reconciles:false});
+  });
+  it('keeps one canonical identity, bounded native routing and explicit continuation',async()=>{
+    const ledger=createProviderAttemptLedger({identityKind:'session',identityHash:'jev-success',providerModel:'typesafe/jev-latest'});const calls:CanonicalExecutionPortRequest[]=[];
+    const port={execute:vi.fn(async(request:CanonicalExecutionPortRequest)=>{calls.push(request);await request.attemptBoundary({canonicalExecutionId:request.canonicalExecutionId,traceId:request.canonicalExecutionId,providerId:'typesafe',modelId:'jev-latest'});return {} as never;})};
+    for(const stageId of ['wide','narrow'] as const)await executeJevCanonicalStage(port,{canonicalExecutionId:'env-jev-test',stageId,ledger,admission:jevRecord,verifyAndCommitStart:()=>{},onRetainedReservation:()=>{}},'{}');
+    expect(calls.map(c=>c.canonicalExecutionId)).toEqual(['env-jev-test','env-jev-test']);expect(calls[0].routing).toMatchObject({requestedModelId:'jev-latest',requiredCapabilities:['system_one']});expect(calls[0].policy.allowedProviderIds).toEqual(['typesafe']);
+    expect(ledger.attempts.map(a=>a.purpose)).toEqual(['initial','continuation']);expect(buildProviderAttemptReconciliation(ledger,'typesafe','jev-latest')).toMatchObject({providerCallCount:2,retryCount:0,reconciles:true});
+    const third=buildJevCanonicalAttemptBoundary({canonicalExecutionId:'env-jev-test',stageId:'narrow',ledger,admission:jevRecord,verifyAndCommitStart:vi.fn(),onRetainedReservation:vi.fn()});
+    expect(await third({canonicalExecutionId:'env-jev-test',traceId:'env-jev-test',providerId:'typesafe',modelId:'jev-latest'})).toMatchObject({decision:'deny'});expect(ledger.attempts).toHaveLength(2);
+  });
+});
+
+
+it('binds structural admission and attempt to the OpenRouter v2 tuple',async()=>{
+ const admission={...jevRecord,providerId:'openrouter',modelId:'typesafe/jev-1.14'};expect(()=>assertJevAdmission(admission,'openrouter-systemone')).not.toThrow();expect(()=>assertJevAdmission(jevRecord,'openrouter-systemone')).toThrow();
+ const ledger=createProviderAttemptLedger({identityKind:'session',identityHash:'openrouter-fixture',providerModel:'openrouter/typesafe/jev-1.14'});const commit=vi.fn();const boundary=buildJevCanonicalAttemptBoundary({connection:'openrouter-systemone',canonicalExecutionId:'env-jev-test',stageId:'wide',ledger,admission,verifyAndCommitStart:commit,onRetainedReservation:vi.fn()});
+ expect(await boundary({canonicalExecutionId:'env-jev-test',traceId:'env-jev-test',providerId:'typesafe',modelId:'jev-latest'})).toMatchObject({decision:'deny'});expect(commit).not.toHaveBeenCalled();
+});

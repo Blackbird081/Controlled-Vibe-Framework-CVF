@@ -220,6 +220,31 @@ def evaluate(active_work_order: str, head: str = "HEAD") -> dict[str, Any]:
     if batch_id and normalized_batch not in normalized_next_move:
         _add(violations, "DR-06", f"nextAllowedMove does not name batch `{batch_id}`")
 
+    # DR-08 is an effect-release boundary. New-mode structural history alone is
+    # never a live grant; strict diagnosis precedes time and attempt checks.
+    try:
+        from importlib import import_module
+        prefix = f"{__package__}." if __package__ else ""
+        local = import_module(prefix + "semantic_convergence_local_runtime_admission")
+        scec = import_module(prefix + "check_semantic_convergence_control")
+        if local.attempts_in_fences(work_order_text, scec):
+            diagnosis = scec.diagnose_file(work_order, work_order_text, require_block=True)
+            blocks = scec.find_active_blocks(work_order_text)
+            if diagnosis.violations or len(blocks) != 1 or local.pointer(blocks[0]) is None or local.pointer(blocks[0]).get("stage") != "DISPATCH":
+                _add(violations, "DR-08", "local VERIFY SCEC diagnosis or exact dispatch pointer invalid")
+            else:
+                ptr = local.pointer(blocks[0])
+                owner = local._owner()
+                grant = owner._authority_json({"path": ptr["path"], "sha256": ptr["sha256"]}, scec._repo_source_regular_bytes_resolver, local.FENCE, "GRANT")
+                live_violations = local.live(grant, REPO_ROOT)
+                target = grant["attemptPath"]
+                ignored, _, _ = _git(["check-ignore", "-q", "--", target])
+                tracked, existing, _ = _git(["ls-files", "--", target])
+                if live_violations or ignored != 0 or tracked != 0 or existing:
+                    _add(violations, "DR-08", "local VERIFY expired, reserved, unsafe or not ignored/untracked")
+    except Exception as error:
+        _add(violations, "DR-08", f"local VERIFY release check failed: {type(error).__name__}")
+
     return _report(work_order, material_commit, batch_id, violations)
 
 

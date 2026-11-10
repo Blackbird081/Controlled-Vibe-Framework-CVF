@@ -7,7 +7,8 @@ export type ProviderMethodName =
   | "json_mode"
   | "vision"
   | "embedding"
-  | "receipt";
+  | "receipt"
+  | "system_one";
 
 export type ProviderCapabilityOwnerRefName = "retry" | "cost" | "risk";
 

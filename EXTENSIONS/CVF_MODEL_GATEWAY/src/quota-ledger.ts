@@ -100,3 +100,66 @@ export class QuotaLedger {
     return `${this.day()}::${this.limitKey(providerId, modelId)}`;
   }
 }
+
+
+/** Opted-in action money dimension. Legacy daily token usage is independent. */
+export interface ActionQuotaSnapshot {
+  schema: "cvf.actionQuota.v1";
+  scopeId: string;
+  reservationId: string;
+  currency: string;
+  totalMicrounits: number;
+  stages: Record<string, { allocation: number; state: "RESERVED" | "STARTED" | "SETTLED" | "UNKNOWN" | "RELEASED"; cost: number | null }>;
+}
+
+export function validateActionQuota(value: ActionQuotaSnapshot): ActionQuotaSnapshot {
+  const money = (n: unknown): n is number => Number.isSafeInteger(n) && (n as number) >= 0;
+  if (Object.keys(value).sort().join(",") !== "currency,reservationId,schema,scopeId,stages,totalMicrounits" || value.schema !== "cvf.actionQuota.v1" || !value.scopeId || !value.reservationId
+      || !/^[A-Z]{3}$/.test(value.currency) || !money(value.totalMicrounits)
+      || !value.stages || Object.keys(value.stages).length < 1 || Object.keys(value.stages).length > 2) throw new Error("ACTION_QUOTA_INVALID");
+  let total = 0;
+  for (const [key, stage] of Object.entries(value.stages)) {
+    if (Object.keys(stage).sort().join(",") !== "allocation,cost,state" || !key || !money(stage.allocation) || !["RESERVED", "STARTED", "SETTLED", "UNKNOWN", "RELEASED"].includes(stage.state)
+        || (stage.cost !== null && (!money(stage.cost) || stage.cost > stage.allocation))
+        || (stage.state === "SETTLED" && stage.cost === null)
+        || (stage.state === "RELEASED" && stage.cost !== 0)) throw new Error("ACTION_QUOTA_INVALID");
+    total += stage.allocation;
+  }
+  if (!Number.isSafeInteger(total) || total > value.totalMicrounits) throw new Error("ACTION_QUOTA_INVALID");
+  return JSON.parse(JSON.stringify(value)) as ActionQuotaSnapshot;
+}
+
+export function reserveActionQuota(input: {
+  scopeId: string; reservationId: string; currency: string; totalMicrounits: number;
+  stageAllocations: Record<string, number>;
+}): ActionQuotaSnapshot {
+  if (input.totalMicrounits <= 0 || Object.values(input.stageAllocations).some(n => n <= 0)) throw new Error("ACTION_QUOTA_REQUIRED");
+  return validateActionQuota({ schema: "cvf.actionQuota.v1", scopeId: input.scopeId,
+    reservationId: input.reservationId, currency: input.currency, totalMicrounits: input.totalMicrounits,
+    stages: Object.fromEntries(Object.entries(input.stageAllocations).map(([key, allocation]) =>
+      [key, { allocation, state: "RESERVED", cost: null }])) });
+}
+
+export function transitionActionQuota(prior: ActionQuotaSnapshot, stageKey: string,
+  action: "start" | "settle" | "unknown" | "release", cost: number | null = null): ActionQuotaSnapshot {
+  const next = validateActionQuota(prior);
+  const stage = next.stages[stageKey];
+  if (!stage) throw new Error("ACTION_STAGE_UNKNOWN");
+  if (action === "start") {
+    if (stage.state !== "RESERVED") throw new Error("ACTION_STAGE_REPLAY");
+    stage.state = "STARTED";
+  } else if (action === "release") {
+    if (stage.state === "RELEASED") return next;
+    if (stage.state !== "RESERVED") throw new Error("ACTION_POSSIBLE_SPEND");
+    stage.state = "RELEASED"; stage.cost = 0;
+  } else if (action === "unknown") {
+    if (stage.state !== "STARTED" && stage.state !== "UNKNOWN") throw new Error("ACTION_STAGE_ORDER");
+    stage.state = "UNKNOWN"; stage.cost = null;
+  } else {
+    if (stage.state === "SETTLED" && stage.cost === cost) return next;
+    if (stage.state !== "STARTED" && stage.state !== "UNKNOWN") throw new Error("ACTION_SETTLEMENT_CONFLICT");
+    if (cost === null) { stage.state = "UNKNOWN"; stage.cost = null; }
+    else { stage.state = "SETTLED"; stage.cost = cost; }
+  }
+  return validateActionQuota(next);
+}

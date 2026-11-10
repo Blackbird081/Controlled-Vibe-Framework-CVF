@@ -427,6 +427,14 @@ def main() -> int:
     if args.active_work_order is not None:
         print(f"Active work order: {args.active_work_order}")
 
+    if args.mode in {"implementation", "dispatch"} and not args.plan_only:
+        continuity = Command("early active session state compatibility", (
+            "python", "governance/compat/check_active_session_state.py", "--enforce",
+        ))
+        if _run(continuity) != 0:
+            print("\nVIOLATION: active continuity blocks planning and expensive workflow gates.")
+            return 1
+
     plan = build_path_plan(args.base, args.head)
     _print_path_plan(plan)
 

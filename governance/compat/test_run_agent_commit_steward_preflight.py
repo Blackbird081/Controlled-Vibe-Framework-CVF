@@ -273,6 +273,32 @@ def test_phase_command_requests_exact_autorun_receipt_reuse() -> None:
     assert command.args[-1] == "--reuse-valid-receipt"
 
 
+def test_early_continuity_failure_stops_before_plan_and_full_bundle(monkeypatch) -> None:
+    for mode in ("implementation", "dispatch"):
+        commands = _isolated_cli(monkeypatch, ["--mode", mode])
+        def run(command):
+            commands.append(command)
+            return 1
+        monkeypatch.setattr(steward, "_run", run)
+        def forbidden_plan(*args):
+            raise AssertionError("planning must not run after continuity failure")
+        monkeypatch.setattr(steward, "build_path_plan", forbidden_plan)
+        assert steward.main() == 1
+        assert [c.name for c in commands] == ["early active session state compatibility"]
+
+
+def test_early_continuity_success_keeps_complete_workflow_and_plan_only_is_read_only(monkeypatch) -> None:
+    for mode in ("implementation", "dispatch"):
+        commands = _isolated_cli(monkeypatch, ["--mode", mode])
+        assert steward.main() == 0
+        assert commands[0].name == "early active session state compatibility"
+        assert commands[0].args == ("python", "governance/compat/check_active_session_state.py", "--enforce")
+        assert commands[1:] == list(steward._mode_commands(mode, "HEAD", "HEAD"))
+        commands = _isolated_cli(monkeypatch, ["--mode", mode, "--plan-only"])
+        assert steward.main() == 0
+        assert commands == []
+
+
 def test_git_output_does_not_mix_stderr_warning_into_paths(monkeypatch) -> None:
     monkeypatch.setattr(
         steward.subprocess,

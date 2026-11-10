@@ -21,9 +21,12 @@ def validate_milestone_coverage(root: Path, path: str, value: str | None = None)
     return module.validate_file(root, path) if value is None else module.validate_text(root, path, value)
 
 
-def collect_coverage_violations(root: Path, changed) -> list[dict]:
+def collect_coverage_violations(root: Path, changed, base=None) -> list[dict]:
     module = _validator()
     candidates, violations = set(changed), []
+    issues = module.validate_repair_transition(root, base)
+    if issues:
+        violations.append({"path": module.AUTHORITY_REGISTRY, "issues": issues})
     bootstrap = root / "CVF_SESSION/ACTIVE_SESSION_BOOTSTRAP_READ_MODEL.json"
     if bootstrap.is_file():
         try:

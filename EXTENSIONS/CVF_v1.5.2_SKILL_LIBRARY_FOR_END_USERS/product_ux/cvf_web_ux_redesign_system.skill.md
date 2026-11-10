@@ -139,6 +139,11 @@ Không copy nguyên prototype vào sản phẩm. Dùng các rule dưới đây �
 - Height 36px, radius 9px, bg input surface, border alpha.
 - Focus border đổi sang accent, không thêm glow lớn.
 
+**Tables**
+
+- Apply `DESIGN.md` section 5, Tables & Dense Data, for filter, sort, bulk
+  action, focus, exception and large-data decisions; adapt to the actual task.
+
 **Empty / Loading / Error**
 
 - Empty state nằm đúng grid/table area, text muted, padding 48-52px.

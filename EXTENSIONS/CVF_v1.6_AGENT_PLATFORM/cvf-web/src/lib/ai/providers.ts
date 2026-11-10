@@ -1,4 +1,6 @@
 import { AIConfig, ExecutionResponse, AIProvider, DEFAULT_MODELS, CVF_SYSTEM_PROMPT } from './types';
+import { assertAlibabaFreeQuotaUse, resolveAlibabaDashScopeEndpoint } from 'cvf-model-gateway';
+import { resolveAlibabaRuntimeEnv } from '@/lib/alibaba-env';
 import { buildExecutionDiagnostic, buildProviderExecutionDiagnostic } from '@/lib/execution-diagnostics';
 import { composeProviderRequestSignal, PROVIDER_DEADLINE_MESSAGE, REQUEST_CANCELLED_MESSAGE } from '@/lib/provider-request-cancellation';
 
@@ -308,7 +310,9 @@ async function executeAlibaba(
 
     try {
         cancellation.throwIfTerminal();
-        const response = await fetch('https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions', {
+        const providerEnv = resolveAlibabaRuntimeEnv();
+        assertAlibabaFreeQuotaUse(config.model, providerEnv);
+        const response = await fetch(resolveAlibabaDashScopeEndpoint(providerEnv), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -413,6 +417,14 @@ async function executeAlibaba(
             success: false, error: PROVIDER_DEADLINE_MESSAGE, provider: 'alibaba', model: config.model,
             executionTime, diagnostic: buildExecutionDiagnostic({ stage: 'provider', class: 'provider_timeout',
                 provider: 'alibaba', model: config.model, latencyMs: executionTime }),
+        };
+        if (error instanceof Error && (error.message.startsWith('ALIBABA_MODEL_LOCKED:') ||
+            error.message.startsWith('ALIBABA_FREE_QUOTA_'))) return {
+            success: false, error: error.message, provider: 'alibaba', model: config.model, executionTime,
+            diagnostic: buildExecutionDiagnostic({ stage: 'governance', class: 'policy_blocked',
+                provider: 'alibaba', model: config.model, latencyMs: executionTime,
+                userAction: 'do_not_retry_without_new_evidence',
+                safeMessage: 'Alibaba free-only access is locked for this model or endpoint. Verify current quota; paid fallback is disabled.' }),
         };
         return {
             success: false,

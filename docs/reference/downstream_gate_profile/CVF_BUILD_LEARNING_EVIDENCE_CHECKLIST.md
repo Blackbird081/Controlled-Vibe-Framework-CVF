@@ -60,6 +60,23 @@ For shared/nested mutable state, restore the actual changed object and verify th
 baseline, not just an outer pointer. Apply the existing O6 P0-P7 reviewer checklist
 when negative-oracle integrity matters; its helper remains deferred.
 
+## Effect Adapter Guard And Failure Evidence
+
+Before an effect, test applicable path/type/version/identity guards against the
+recorded real environment representation: one valid equivalent value and one
+meaningfully different value. Normalize only under the platform contract; retain
+executable, reparse, source-byte and ownership boundaries. A generic text match or
+signature audit is insufficient. Reuse valid adapter evidence; do not launch an
+external application just to generate a documentary learning receipt.
+
+Write launch/identity candidates before validation can reject them. Label each
+trust level: UNVERIFIED facts are diagnostic, never permission to attach, close,
+quit, kill or adopt a process. Publish VERIFIED ownership only after all checks.
+Failure/finally preserves raw error, executed source identity/posthash and cleanup
+disposition; missing ownership remains UNKNOWN. New diagnostics do not repair old
+receipts retroactively. Keep cause identified, static fix, full flow and product
+acceptance distinct. Apply the product contract's autonomous repair trigger.
+
 ## Archive Extraction Identity
 
 When proof runs from a Git archive, bind the archive's actual SHA-256 and source

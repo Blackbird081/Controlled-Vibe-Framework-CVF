@@ -200,7 +200,105 @@ class ContractTests(unittest.TestCase):
         examples = [json.loads(body) for _, language, body in blocks if language == "json"]
         self.assertTrue(examples, "canonical standard must carry an executable contract example")
         for example in examples:
-            self.assertEqual(guard.validate_contract(example), [])
+            validator = guard.validate_creation_contract if example.get("profile") == "CREATE_ONLY_PROVISIONING" else guard.validate_contract
+            self.assertEqual(validator(example), [])
+
+
+def creation_fixture(machine=False):
+    result = {
+        'profile': 'CREATE_ONLY_PROVISIONING', 'phase': 'SOURCE_PREPARATION',
+        'target': {'productionEntry':'scripts/create.ps1','accountIdentity':'example-agent','roots':['C:\\Test\\Control']},
+        'allowedEffects': {'existingResources':'READ_ONLY','newResources':'CREATE_ONLY_ATOMIC','groupMembership':'NO_MUTATION','applyEffect':'FORBIDDEN'},
+        'preconditions': {'collision':'DENY_NO_OWNERSHIP','parent':'VERIFY_NO_REPARSE_OR_UNSAFE_REPLACEMENT','identity':'PINNED_OS_IDENTITY','ambiguity':'STOP'},
+        'exclusiveCreate': {'primitive':'FAIL_IF_EXISTS_WITH_INITIAL_SECURITY','contenderProof':'INJECTED_FAKE_ONLY','ordering':'EXPLICIT_EVENT_HANDSHAKE_NO_TIMEOUT_ORACLE','collisionOracle':'ONE_CREATOR_LOSER_NO_OWNERSHIP_OR_MUTATION'},
+        'securityReadback': {'fields':['ownerSid','protectionState','inheritanceState','aces'],'aceFields':['sid','rights','accessType','isInherited','inheritanceFlags','propagationFlags'],'normalization':'SORT_COMPLETE_ACE_TUPLES','adversaries':['EXTRA_ALLOW','DENY','INHERITED','WRONG_OWNER'],'evidence':'SYNTHETIC_CONSTRUCTION_ONLY'},
+        'failureDisposition': {'ownership':'RETURNED_STABLE_IDENTITY_ONLY','action':'DISABLE_CREATED_ACCOUNT_RETAIN_RESOURCES_AND_EVIDENCE','ambiguous':'STOP_NO_NAME_BASED_ACTION','cleanupFailure':'RETAIN_AND_REPORT_NO_AUTORETRY'},
+        'independentProbe': {'required':True,'owner':'LOCAL_REVIEWER_NOT_IMPLEMENTATION_WORKER','workerReturnDisposition':'PENDING_REVIEWER_EXECUTION','scope':'FAKE_SOURCE_ONLY'},
+        'finalEvidenceHashBinding': {'algorithm':'SHA256','scope':'EXACT_RETURN_BYTES','capture':'BEFORE_AND_AFTER_FINAL_REQUIRED_GATE','equality':'REQUIRED','postGateMutation':'FORBIDDEN'},
+        'claimBoundary':'SOURCE_ONLY_NO_HOST_READINESS', 'machineBindings':None,
+    }
+    if machine:
+        result['phase']='MACHINE_VERIFICATION'
+        result['allowedEffects']['applyEffect']='SEPARATELY_AUTHORIZED_TEST_ONLY'
+        result['exclusiveCreate']['contenderProof']='REAL_PRODUCTION_PATH_SECOND_PROCESS'
+        result['securityReadback']['evidence']='ACTUAL_CREATED_RESOURCE_READBACK'
+        result['independentProbe']['scope']='REAL_MACHINE_ONLY'
+        result['claimBoundary']='MACHINE_EVIDENCE_ONLY_NO_T3_T4_CLAIM'
+        result['machineBindings']={'sourceCommit':'a'*40,'sourceFile':'scripts/create.ps1','sourceSha256':'b'*64,'sourceReceiptPath':'docs/source.md','sourceReceiptSha256':'c'*64,'independentReviewPath':'docs/review.md','independentReviewSha256':'d'*64,'hostId':'TEST-HOST','operatorSid':'S-1-5-21-1-2-3-1001','accountName':'example-agent','resourceRoots':['C:\\Test\\Control'],'allowedEffects':['CREATE_ABSENT_ACCOUNT','CREATE_ABSENT_DIRECTORY_WITH_INITIAL_SECURITY','DISABLE_SAME_CREATED_SID_ON_FAILURE','WRITE_NEW_AUDIT_RECEIPT'],'operatorAuthorizationPath':'docs/auth.md','operatorAuthorizationSha256':'e'*64,'startUtc':'2026-11-09T03:00:00Z','deadlineUtc':'2026-11-09T04:00:00Z','maxApplyAttempts':1,'auditCustodyPath':'C:\\Audit\\receipt.json','compensation':{'account':'DISABLE_SAME_CREATED_SID_ONLY','resources':'RETAIN_WITH_INVENTORY','ambiguity':'STOP_NO_NAME_BASED_ACTION','failure':'RETAIN_REPORT_NO_AUTORETRY'}}
+    return result
+
+
+def creation_packet(value):
+    return ('High-Risk Local Transaction Proof Applicability: REQUIRED\nHigh-Risk Local Transaction Proof Profile: CREATE_ONLY_PROVISIONING\n\n## High-Risk Local Transaction Proof Contract\n```json\n' + json.dumps(value) + '\n```\n')
+
+
+class CreationProfileTests(unittest.TestCase):
+    def test_positive_phases_and_legacy(self):
+        for value in [creation_fixture(), creation_fixture(True)]:
+            self.assertEqual(guard.check_text(creation_packet(value)), [])
+        self.assertEqual(guard.check_text(packet()), [])
+
+    def test_each_top_key_and_nested_key_is_required(self):
+        for machine in (False, True):
+            original=creation_fixture(machine)
+            for field in original:
+                value=creation_fixture(machine); del value[field]
+                self.assertTrue(guard.check_text(creation_packet(value)), field)
+            for field, obj in original.items():
+                if isinstance(obj, dict):
+                    for child in obj:
+                        value=creation_fixture(machine); del value[field][child]
+                        self.assertTrue(guard.check_text(creation_packet(value)), (field,child))
+
+    def test_each_security_member_and_machine_effect(self):
+        for collection in ('fields','aceFields','adversaries'):
+            for item in creation_fixture()['securityReadback'][collection]:
+                value=creation_fixture(); value['securityReadback'][collection].remove(item)
+                self.assertTrue(guard.check_text(creation_packet(value)))
+        for item in creation_fixture(True)['machineBindings']['allowedEffects']:
+            value=creation_fixture(True); value['machineBindings']['allowedEffects'].remove(item)
+            self.assertTrue(guard.check_text(creation_packet(value)))
+
+    def test_phase_confusion_and_security_fail_closed(self):
+        cases=[('phase','OTHER'),('machineBindings',{}),('claimBoundary','MACHINE_EVIDENCE_ONLY_NO_T3_T4_CLAIM')]
+        for field, replacement in cases:
+            value=creation_fixture(); value[field]=replacement
+            self.assertTrue(guard.check_text(creation_packet(value)))
+        for section,field,replacement in [('allowedEffects','applyEffect','SEPARATELY_AUTHORIZED_TEST_ONLY'),('exclusiveCreate','contenderProof','REAL_PRODUCTION_PATH_SECOND_PROCESS'),('independentProbe','required',1),('finalEvidenceHashBinding','equality','OPTIONAL'),('failureDisposition','ownership','BY_NAME')]:
+            value=creation_fixture(); value[section][field]=replacement
+            self.assertTrue(guard.check_text(creation_packet(value)))
+        value=creation_fixture(True); value['securityReadback']['evidence']='SYNTHETIC_CONSTRUCTION_ONLY'
+        self.assertTrue(guard.check_text(creation_packet(value)))
+
+    def test_machine_binding_invalid_fields(self):
+        cases={'sourceCommit':'F'*40,'sourceFile':'../escape','sourceSha256':'x'*64,'sourceReceiptPath':'C:/bad','sourceReceiptSha256':'','independentReviewPath':'a/../b','independentReviewSha256':'X'*64,'hostId':'TBD','operatorSid':'S-1-5-32-544','accountName':'other','resourceRoots':['C:\\Other'],'allowedEffects':['CREATE_ABSENT_ACCOUNT'],'operatorAuthorizationPath':'a\\b','operatorAuthorizationSha256':'1','startUtc':'2026-11-09','deadlineUtc':'2026-11-10T04:00:01Z','maxApplyAttempts':True,'auditCustodyPath':'C:\\Test\\Control\\file','compensation':{}}
+        for key, replacement in cases.items():
+            with self.subTest(key=key):
+                value=creation_fixture(True); value['machineBindings'][key]=replacement
+                self.assertTrue(guard.check_text(creation_packet(value)))
+
+    def test_selector_and_json_rejection(self):
+        valid=creation_packet(creation_fixture())
+        for bad in [valid.replace('CREATE_ONLY_PROVISIONING\n','OTHER\n',1),valid.replace('REQUIRED\n','NOT_APPLICABLE_WITH_REASON - source\n',1), valid+'High-Risk Local Transaction Proof Profile: CREATE_ONLY_PROVISIONING\n',valid.replace('"profile":', '"profile":"x", "profile":',1),valid.replace('High-Risk Local Transaction Proof Profile: CREATE_ONLY_PROVISIONING\n','')]:
+            self.assertTrue(guard.check_text(bad))
+        value=creation_fixture(); value['extra']='bypass'
+        self.assertTrue(guard.check_text(creation_packet(value)))
+
+    def test_scope_mixing_and_negative_text(self):
+        base=creation_packet(creation_fixture())
+        for text in ['Implement cross-process locking.', 'Change existing resource ownership.', 'Change ownership and DACL of existing resources.', 'Modify security on pre-existing resources.', 'Implement durable write with rollback.', 'Implement exact-rollback.']:
+            self.assertTrue(guard.check_text('## Allowed Scope\n'+text+'\n'+base),text)
+        self.assertEqual(guard.check_text('## Forbidden Scope\nDo not change existing resource ownership.\n'+base),[])
+        self.assertEqual(guard.check_text('## Allowed Scope\nCreate an absent account and directory.\n'+base),[])
+
+    def test_windows_paths_and_time(self):
+        for path in ['C:\\Test\\..\\Other','\\\\server\\share','C:\\Test:ads','C:\\Test\\Control\\.', 'C:\\Test\\bad*name', 'C:\\Test\\bad?name', 'C:\\Test\\bad|name', 'C:\\Test\\bad\"name', 'C:\\Test\\bad<name', 'C:\\Test\\bad>name', 'C:\\Test\\bad\x01name', 'C:\\Test\\CON']:
+            value=creation_fixture(); value['target']['roots']=[path]
+            self.assertTrue(guard.check_text(creation_packet(value)),path)
+        value=creation_fixture(True); value['machineBindings']['deadlineUtc']='2026-11-09T02:00:00Z'
+        self.assertTrue(guard.check_text(creation_packet(value)))
+        value=creation_fixture(True); value['machineBindings']['auditCustodyPath']='D:\\Audit\\receipt.json'
+        self.assertEqual(guard.check_text(creation_packet(value)),[])
 
 
 class GitScopeTests(unittest.TestCase):

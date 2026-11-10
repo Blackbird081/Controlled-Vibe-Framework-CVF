@@ -3,7 +3,12 @@
 > **Developed by Tien - Tan Thuan Port@2026**  
 > **Version:** v3.0 (branch `cvf-next`)  
 > **Date:** 2026-03-06  
-> **Status:** DRAFT — pending ADR-016 approval before merge to main
+> **Status:** HISTORICAL_DESIGN_VIEW - dated v3.0 design; not the current project inventory
+>
+> Current navigation: [Project Catalog](CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md),
+> [Module Inventory](CVF_MODULE_INVENTORY.md), and
+> [As-Built Architecture Catalog](system_architecture_catalog/README.md).
+> The design below retains its original branch scope and is not current activation evidence.
 
 ---
 

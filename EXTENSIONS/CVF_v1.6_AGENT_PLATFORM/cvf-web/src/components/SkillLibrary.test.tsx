@@ -12,6 +12,7 @@ const trackEventMock = vi.fn();
 const getSkillCategoriesMock = vi.fn();
 const routerPushMock = vi.fn();
 const fetchMock = vi.fn();
+let mockLanguage = 'en';
 const fixturePath = resolve(dirname(fileURLToPath(import.meta.url)), '__fixtures__/skills-index.fixture.json');
 const fixtureCategories = JSON.parse(readFileSync(fixturePath, 'utf-8'));
 
@@ -47,8 +48,10 @@ vi.mock('@/lib/i18n', () => {
     };
     return {
         useLanguage: () => ({
-            language: 'en',
-            t: (key: string) => enTranslations[key] ?? key,
+            language: mockLanguage,
+            t: (key: string) => mockLanguage === 'vi' && key === 'skills.searchPlaceholder'
+                ? 'T\u00ecm ki\u1ebfm skill...'
+                : enTranslations[key] ?? key,
         }),
     };
 });
@@ -81,7 +84,9 @@ vi.mock('@/lib/template-loader', () => ({
 
 describe('SkillLibrary', () => {
     beforeEach(() => {
+        mockLanguage = 'en';
         trackEventMock.mockClear();
+        routerPushMock.mockClear();
         getSkillCategoriesMock.mockReset();
         getTemplatesForSkillMock.mockReset().mockReturnValue([]);
         setFetchPayload(fixtureCategories);
@@ -223,4 +228,72 @@ describe('SkillLibrary', () => {
             expect(screen.getByText('Adapter: IMPLEMENTED')).toBeTruthy();
         });
     });
+    it('filters by group name or id while preserving skill matches, counts, and reset', async () => {
+        setCategories([
+            { id: 'design', name: 'Design', skills: [
+                { id: 'alpha-id', title: 'Alpha', domain: 'Design', difficulty: 'Easy', summary: '', path: '', content: '' },
+                { id: 'other-id', title: 'Other', domain: 'Design', difficulty: 'Easy', summary: '', path: '', content: '' },
+            ] },
+            { id: 'ops-code', name: 'Operations', skills: [
+                { id: 'beta-id', title: 'Beta', domain: 'Operations', difficulty: 'Easy', summary: '', path: '', content: '' },
+            ] },
+        ]);
+        render(<SkillLibrary />);
+        await waitFor(() => expect(screen.getByText('Alpha')).toBeTruthy());
+        const input = screen.getByRole('textbox', { name: 'Search skills...' });
+        fireEvent.change(input, { target: { value: 'OPERATIONS' } });
+        expect(screen.getByText('Beta')).toBeTruthy();
+        expect(screen.getByText('1/1')).toBeTruthy();
+        expect(screen.queryByText('Alpha')).toBeNull();
+        fireEvent.change(input, { target: { value: 'OPS-CODE' } });
+        expect(screen.getByText('Beta')).toBeTruthy();
+        fireEvent.change(input, { target: { value: 'AlPhA' } });
+        expect(screen.getByText('Alpha')).toBeTruthy();
+        expect(screen.getByText('1/2')).toBeTruthy();
+        expect(screen.queryByText('Other')).toBeNull();
+        fireEvent.change(input, { target: { value: 'OTHER-ID' } });
+        expect(screen.getByText('Other')).toBeTruthy();
+        fireEvent.change(input, { target: { value: 'no-such-skill' } });
+        expect(screen.getByText(/No skills found matching/)).toBeTruthy();
+        fireEvent.change(input, { target: { value: '' } });
+        expect(screen.getByText('Alpha')).toBeTruthy();
+        expect(screen.getByText('Beta')).toBeTruthy();
+    });
+
+    it('exposes the existing localized Vietnamese search label', async () => {
+        mockLanguage = 'vi';
+        render(<SkillLibrary />);
+        expect(await screen.findByRole('textbox', { name: 'T\u00ecm ki\u1ebfm skill...' })).toBeTruthy();
+    });
+
+    it('keeps category identity for duplicate ids and pointer and keyboard navigation', async () => {
+        setCategories([
+            { id: 'dev', name: 'Development', skills: [
+                { id: 's1', title: 'First Skill', domain: 'App Development', difficulty: 'Easy', summary: '', path: '', content: '# First body' },
+            ] },
+            { id: 'other', name: 'Other Group', skills: [
+                { id: 's1', title: 'Second Skill', domain: 'App Development', difficulty: 'Easy', summary: '', path: '', content: '# Second body' },
+            ] },
+        ]);
+        render(<SkillLibrary />);
+        const first = await screen.findByRole('button', { name: /First Skill/ });
+        const second = screen.getByRole('button', { name: /Second Skill/ });
+        fireEvent.click(first);
+        fireEvent.click(screen.getByTitle('Open'));
+        expect(routerPushMock).toHaveBeenLastCalledWith('/skills/dev/s1');
+        expect(getTemplatesForSkillMock).toHaveBeenCalledWith('app_development', 's1');
+        expect(first.className).toContain('bg-blue-50/50');
+        expect(second.className).not.toContain('bg-blue-50/50');
+        fireEvent.keyDown(second, { key: 'Enter' });
+        expect(screen.getByText('Second body')).toBeTruthy();
+        fireEvent.click(screen.getByTitle('Open'));
+        expect(routerPushMock).toHaveBeenLastCalledWith('/skills/other/s1');
+        expect(first.className).not.toContain('bg-blue-50/50');
+        expect(second.className).toContain('bg-blue-50/50');
+        fireEvent.keyDown(first, { key: ' ' });
+        fireEvent.click(screen.getByTitle('Open'));
+        expect(routerPushMock).toHaveBeenLastCalledWith('/skills/dev/s1');
+        expect(screen.getByText('First body')).toBeTruthy();
+    });
+
 });

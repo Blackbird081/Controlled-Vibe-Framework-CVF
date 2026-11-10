@@ -144,6 +144,10 @@
       "exposureClass": "INTERNAL_ONLY"
     },
     {
+      "path": "AGENT_HANDOFF_V65_2026-11-05.md",
+      "exposureClass": "INTERNAL_ONLY"
+    },
+    {
       "path": "AGENT_HANDOFF_V9_2026-05-18.md",
       "exposureClass": "INTERNAL_ONLY"
     },
@@ -298,6 +302,10 @@
     {
       "path": "PROVIDERS.md",
       "exposureClass": "PUBLIC_DOCS_ONLY"
+    },
+    {
+      "path": "AGENT_HANDOFF_V66_2026-11-09.md",
+      "exposureClass": "INTERNAL_ONLY"
     }
   ]
 }

@@ -1,7 +1,9 @@
+// Text Encoding Exception: Vietnamese purpose headings and labels are required native parser literals.
 /* eslint-disable @typescript-eslint/no-require-imports */
 'use strict';
 
 const fs = require('fs');
+const { summarizeSkillContent, serializeAsciiJson } = require('./skill-summary');
 const path = require('path');
 const { loadSkillCorpusGovernance } = require('./skill-corpus-governance');
 
@@ -610,6 +612,8 @@ function buildSkillIndex() {
                 skillRecord.uatContent = existingPublicSkill.uatContent;
             }
 
+            skillRecord.summary = summarizeSkillContent(skillRecord.content);
+
             if (skillRecord.frontDoorVisible) {
                 visibleSkills.push(skillRecord);
             } else {
@@ -681,14 +685,18 @@ function writeIndex(indexPayload) {
             const nextNormalized = normalizeIndexPayload(indexPayload);
 
             if (JSON.stringify(existingNormalized) === JSON.stringify(nextNormalized)) {
-                return { outPath, updated: false };
+                const canonicalRaw = serializeAsciiJson(existingPayload);
+                if (existingRaw === canonicalRaw) return { outPath, updated: false };
+                // Representation-only rewrite retains the existing semantic payload and timestamp.
+                fs.writeFileSync(outPath, canonicalRaw);
+                return { outPath, updated: true };
             }
         } catch (error) {
             console.warn(`Rewriting skills index after parse mismatch: ${outPath}`, error);
         }
     }
 
-    fs.writeFileSync(outPath, JSON.stringify(indexPayload, null, 2));
+    fs.writeFileSync(outPath, serializeAsciiJson(indexPayload));
     return { outPath, updated: true };
 }
 
@@ -702,14 +710,18 @@ function writeControlPlaneProjection(projectionPayload) {
             const existingRaw = fs.readFileSync(outPath, 'utf-8');
             const existingPayload = JSON.parse(existingRaw);
             if (JSON.stringify(normalizeIndexPayload(existingPayload)) === JSON.stringify(normalizedPayload)) {
-                return { outPath, updated: false };
+                const canonicalRaw = serializeAsciiJson(existingPayload);
+                if (existingRaw === canonicalRaw) return { outPath, updated: false };
+                // Representation-only rewrite retains the existing semantic payload and timestamp.
+                fs.writeFileSync(outPath, canonicalRaw);
+                return { outPath, updated: true };
             }
         } catch (error) {
             console.warn(`Rewriting ASSF control plane projection after parse mismatch: ${outPath}`, error);
         }
     }
 
-    fs.writeFileSync(outPath, JSON.stringify(projectionPayload, null, 2));
+    fs.writeFileSync(outPath, serializeAsciiJson(projectionPayload));
     return { outPath, updated: true };
 }
 

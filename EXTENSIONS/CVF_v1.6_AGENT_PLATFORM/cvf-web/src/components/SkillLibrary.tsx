@@ -17,6 +17,7 @@ export function SkillLibrary() {
     const { t, language } = useLanguage();
     const [categories, setCategories] = useState<SkillCategory[]>([]);
     const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -52,10 +53,11 @@ export function SkillLibrary() {
         fetchSkills();
     }, []);
 
+    const query = searchTerm.toLowerCase();
     const filteredCategories = categories.map(cat => {
+        const categoryMatches = cat.name.toLowerCase().includes(query) || cat.id.toLowerCase().includes(query);
         const filteredSkills = cat.skills.filter(s =>
-            s.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            s.id.toLowerCase().includes(searchTerm.toLowerCase())
+            categoryMatches || s.title.toLowerCase().includes(query) || s.id.toLowerCase().includes(query)
         );
         return {
             ...cat,
@@ -98,6 +100,7 @@ export function SkillLibrary() {
                         <input
                             type="text"
                             placeholder={t('skills.searchPlaceholder')}
+                            aria-label={t('skills.searchPlaceholder')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-[#161618] border border-gray-200 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-sm transition-all shadow-sm"
@@ -126,15 +129,17 @@ export function SkillLibrary() {
                                             key={skill.id}
                                             onClick={() => {
                                                 setSelectedSkill(skill);
+                                                setSelectedCategoryId(category.id);
                                                 trackEvent('skill_viewed', { skillId: skill.id, skillTitle: skill.title, domain: skill.domain, difficulty: skill.difficulty });
                                             }}
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter' || e.key === ' ') {
                                                     e.preventDefault();
                                                     setSelectedSkill(skill);
+                                                    setSelectedCategoryId(category.id);
                                                 }
                                             }}
-                                            className={`group w-full text-left px-4 py-3 rounded-2xl text-sm transition-all flex items-center justify-between ${selectedSkill?.id === skill.id
+                                            className={`group w-full text-left px-4 py-3 rounded-2xl text-sm transition-all flex items-center justify-between ${selectedSkill?.id === skill.id && selectedCategoryId === category.id
                                                 ? 'bg-blue-50/50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 shadow-sm'
                                                 : 'hover:bg-gray-50 dark:hover:bg-gray-800/50 text-gray-700 dark:text-gray-300 border border-transparent'
                                                 } cursor-pointer`}
@@ -142,7 +147,7 @@ export function SkillLibrary() {
                                             tabIndex={0}
                                         >
                                             <div className="flex items-center gap-3 overflow-hidden">
-                                                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${selectedSkill?.id === skill.id ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 group-hover:bg-gray-200 dark:group-hover:bg-gray-700'}`}>
+                                                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${selectedSkill?.id === skill.id && selectedCategoryId === category.id ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 group-hover:bg-gray-200 dark:group-hover:bg-gray-700'}`}>
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                                                 </div>
                                                 <span className="font-medium truncate">{skill.title}</span>
@@ -190,7 +195,7 @@ export function SkillLibrary() {
                                             </span>
                                         )}
                                         <button 
-                                            onClick={() => openSkillDetail(selectedSkill.domain?.toLowerCase().replace(/ /g, '-') || '', selectedSkill.id)}
+                                            onClick={() => openSkillDetail(selectedCategoryId || '', selectedSkill.id)}
                                             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                                             title={t('skills.open')}
                                         >

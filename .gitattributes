@@ -1,4 +1,14 @@
 # Preserve exact review and design evidence bytes for SHA-256 reconciliation.
+# Preserve Root P5 admission and its exact copied runtime manifest across checkouts.
+docs/baselines/CVF_GC018_NCR_HTML_M6_FINAL_SOURCE_LIVE_2026-10-28.md text eol=lf
+docs/baselines/evidence/ncr-html-m6-final-source-live-manifest-20261028.json text eol=lf
+docs/reviews/evidence/ncr-html-m6-final-source-release-20261028.json text eol=lf
+docs/baselines/CVF_GC018_NCR_HTML_M6_WINDOWS_PRELOAD_2026-10-28.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_HTML_M6_WINDOWS_PRELOAD_2026-10-28.md text eol=lf
+docs/reviews/CVF_NCR_HTML_M6_WINDOWS_PRELOAD_WORKER_RETURN_2026-10-28.md -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-html-m6-windows-preload-worker-20261028.json -text whitespace=cr-at-eol
+docs/reviews/CVF_NCR_HTML_M6_WINDOWS_PRELOAD_COMPLETION_2026-10-28.md text eol=lf
+docs/reviews/evidence/ncr-html-m6-windows-preload-local-20261028.json text eol=lf
 # Product coverage learning/control raw pins must survive checkout.
 docs/reference/CVF_PRODUCT_MILESTONE_COVERAGE_CONTRACT_2026-10-23.md text eol=lf
 docs/reviews/learnings/CVF_PRODUCT_MILESTONE_COVERAGE_LEARNING_2026-10-23.md text eol=lf
@@ -137,3 +147,292 @@ docs/CVF_ARCHITECTURE_DECISIONS_ARCHIVE_ADR011-015.md text eol=lf
 
 # Preserve the reviewed public May9 archive Git payload on Windows checkout.
 docs/evidence/archive/EXPORT_MANIFEST_2026-05-09.md text eol=lf
+
+# Exact JEV-S1 receiving evidence byte custody; no global normalization change.
+docs/reviews/CVF_JEV_S1_J04_OFFLINE_IMPLEMENTATION_WORKER_RETURN_2026-10-26.md text eol=lf
+docs/reviews/CVF_JEV_S1_J04_OFFLINE_IMPLEMENTATION_COMPLETION_2026-10-26.md text eol=lf
+docs/reviews/evidence/cvf-jev-s1-j04-independent-probe-20261026.json text eol=lf
+
+# Jev single-action evidence bytes
+docs/reviews/CVF_JEV_SINGLE_ACTION_RUNTIME_BINDING_WORKER_RETURN_2026-10-26.md text eol=lf
+docs/reviews/CVF_JEV_SINGLE_ACTION_RUNTIME_BINDING_COMPLETION_2026-10-26.md text eol=lf
+docs/reviews/evidence/cvf-jev-single-action-runtime-audit-20261026.json text eol=lf
+
+docs/reviews/CVF_HTML_RECOVERY_VERIFIER_DIAGNOSTIC_WORKER_RETURN_2026-10-26.md text eol=lf
+docs/reviews/CVF_HTML_RECOVERY_VERIFIER_DIAGNOSTIC_COMPLETION_2026-10-26.md text eol=lf
+docs/reviews/evidence/cvf-html-recovery-verifier-diagnostic-20261026.json text eol=lf
+
+# M6 integrated admission/frozen return identity
+docs/baselines/CVF_GC018_NCR_HTML_M6_INTEGRATED_OFFLINE_2026-10-28.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_HTML_M6_INTEGRATED_OFFLINE_2026-10-28.md text eol=lf
+docs/baselines/evidence/ncr-html-m6-integrated-offline-feasibility-20261028.json text eol=lf
+docs/reviews/CVF_NCR_HTML_M6_INTEGRATED_OFFLINE_WORKER_RETURN_2026-10-28.md -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-html-m6-integrated-offline-worker-20261028.json text eol=lf
+
+docs/reviews/CVF_NCR_HTML_M6_INTEGRATED_OFFLINE_COMPLETION_2026-10-28.md text eol=lf
+docs/reviews/evidence/ncr-html-m6-integrated-offline-local-20261028.json text eol=lf
+
+docs/baselines/CVF_GC018_NCR_HTML_M6_REPAIR_R1_2026-10-28.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_HTML_M6_REPAIR_R1_2026-10-28.md text eol=lf
+docs/baselines/evidence/ncr-html-m6-repair-r1-feasibility-20261028.json text eol=lf
+
+docs/reviews/CVF_NCR_HTML_M6_REPAIR_R1_WORKER_RETURN_2026-10-28.md -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-html-m6-repair-r1-worker-20261028.json -text whitespace=cr-at-eol
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/playwright.config.ncr-html-pilot-root-live.ts -text whitespace=cr-at-eol
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/playwright.config.ncr-html-pilot-root-review.ts -text whitespace=cr-at-eol
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/server/html-draft-snapshot-store.job.test.ts -text whitespace=cr-at-eol
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/ncr-html-pilot-live-consumer.spec.ts -text whitespace=cr-at-eol
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/e2e/ncr-html-pilot-root-review.spec.ts -text whitespace=cr-at-eol
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/tests/helpers/ncr-html-pilot-human-consumer-source.test.ts -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/consumer_runtime.py -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/consumer_runtime_io.py -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/fixtures/m6-history28.json -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/live_control/budget-policy.consumer.json -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/live_control/budget-policy.release.json -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/live_control/dashscope-browser-controls.cjs -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/live_control/dashscope-control.cjs -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/live_control/dashscope-guard-core.cjs -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/live_control/dashscope-preload.cjs -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/live_control/test_live_control.cjs -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/root_consumer_custody.py -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/root_effect_meter.py -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/root_effect_prepare.py -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/root_review.py -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/test_consumer_io_join.py -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/test_consumer_runtime.py -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/test_root_effect.py -text whitespace=cr-at-eol
+scripts/cvf_ncr_html_owned_profile/test_root_review.py -text whitespace=cr-at-eol
+scripts/cvf_release_budget_watchdog.py -text whitespace=cr-at-eol
+scripts/run_cvf_release_gate_bundle.py -text whitespace=cr-at-eol
+scripts/test_cvf_release_budget_watchdog.py -text whitespace=cr-at-eol
+scripts/test_run_cvf_release_gate_bundle.py -text whitespace=cr-at-eol
+docs/reviews/CVF_NCR_HTML_M6_REPAIR_R1_COMPLETION_2026-10-28.md text eol=lf
+docs/reviews/evidence/ncr-html-m6-repair-r1-local-20261028.json text eol=lf
+
+# Root Windows preload source acceptance evidence
+docs/reviews/CVF_NCR_HTML_M6_WINDOWS_PRELOAD_COMPLETION_2026-10-28.md text eol=lf
+docs/reviews/evidence/ncr-html-m6-windows-preload-local-20261028.json text eol=lf
+
+# Corrected-source live admission raw bindings
+docs/baselines/CVF_GC018_NCR_HTML_M6_CORRECTED_SOURCE_LIVE_2026-10-28.md text eol=lf
+docs/baselines/evidence/ncr-html-m6-corrected-source-live-manifest-20261028.json text eol=lf
+
+# M6 webpack/runtime input source admission and frozen outputs
+EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/next.config.ts -text whitespace=cr-at-eol
+scripts/cvf_release_web_runtime_isolation.py -text whitespace=cr-at-eol
+docs/baselines/CVF_GC018_NCR_HTML_M6_WEBPACK_RUNTIME_INPUTS_2026-10-28.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_HTML_M6_WEBPACK_RUNTIME_INPUTS_2026-10-28.md text eol=lf
+docs/reviews/evidence/ncr-html-m6-webpack-keyfree-diagnostic-20261028.json text eol=lf
+docs/reviews/evidence/ncr-html-m6-corrected-source-release-20261028.json text eol=lf
+scripts/test_cvf_ncr_html_release_remaining_budget.py -text whitespace=cr-at-eol
+docs/reviews/CVF_NCR_HTML_M6_WEBPACK_RUNTIME_INPUTS_WORKER_RETURN_2026-10-28.md -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-html-m6-webpack-runtime-inputs-worker-20261028.json -text whitespace=cr-at-eol
+
+# Root webpack runtime inputs acceptance evidence
+docs/reviews/CVF_NCR_HTML_M6_WEBPACK_RUNTIME_INPUTS_COMPLETION_2026-10-28.md text eol=lf
+docs/reviews/evidence/ncr-html-m6-webpack-runtime-inputs-local-20261028.json text eol=lf
+
+# Remaining-budget canonical live admission
+docs/baselines/CVF_GC018_NCR_HTML_M6_REMAINING_BUDGET_LIVE_2026-10-28.md text eol=lf
+docs/baselines/evidence/ncr-html-m6-remaining-budget-live-manifest-20261028.json text eol=lf
+
+# Accepted current-source technical release evidence
+docs/reviews/CVF_NCR_HTML_M6_REMAINING_BUDGET_RELEASE_COMPLETION_2026-10-28.md text eol=lf
+docs/reviews/evidence/ncr-html-m6-remaining-budget-release-20261028.json text eol=lf
+
+scripts/run_cvf_provider_live_canary.py -text
+scripts/test_run_cvf_provider_live_canary.py -text
+scripts/cvf_ncr_html_owned_profile/root_effect_prepare.py -text
+scripts/cvf_ncr_html_owned_profile/root_consumer_custody.py -text
+scripts/cvf_ncr_html_owned_profile/test_root_effect.py -text
+scripts/cvf_release_web_runtime_isolation.py -text
+scripts/test_run_cvf_release_gate_bundle.py -text
+docs/reviews/CVF_NCR_HTML_M6_HUMAN_CREDENTIAL_PATH_WORKER_RETURN_2026-10-28.md -text
+docs/reviews/evidence/ncr-html-m6-human-credential-path-worker-20261028.json -text
+docs/reviews/CVF_NCR_HTML_M6_HUMAN_CREDENTIAL_PATH_COMPLETION_2026-10-28.md -text
+docs/reviews/evidence/ncr-html-m6-human-credential-path-local-20261028.json -text
+
+docs/baselines/CVF_GC018_NCR_HTML_M6_HUMAN_UI_LIFETIME_2026-10-28.md -text
+docs/baselines/evidence/ncr-html-m6-human-ui-lifetime-manifest-20261028.json -text
+
+docs/baselines/CVF_GC018_NCR_HTML_M6_HUMAN_UI_LIFETIME_R1_2026-10-28.md -text
+docs/baselines/evidence/ncr-html-m6-human-ui-lifetime-r1-manifest-20261028.json -text
+
+docs/baselines/CVF_GC018_NCR_HTML_M6_HUMAN_UI_LIFETIME_R2_2026-10-28.md -text
+docs/baselines/evidence/ncr-html-m6-human-ui-lifetime-r2-manifest-20261028.json -text
+
+docs/reviews/CVF_NCR_HTML_M6_HUMAN_UI_PREPARATION_BLOCKED_REVIEW_2026-10-28.md -text
+docs/reviews/evidence/ncr-html-m6-human-ui-preparation-blocked-20261028.json -text
+
+docs/baselines/CVF_GC018_NCR_HTML_M6_OFFLINE_DEPENDENCY_MATERIALIZATION_2026-10-28.md -text
+docs/baselines/evidence/ncr-html-m6-offline-dependency-materialization-20261028.json -text
+
+docs/baselines/CVF_GC018_NCR_HTML_M6_OFFLINE_DEPENDENCY_MATERIALIZATION_R1_2026-10-28.md -text
+docs/baselines/evidence/ncr-html-m6-offline-dependency-materialization-r1-20261028.json -text
+
+docs/reviews/CVF_NCR_HTML_M6_OFFLINE_DEPENDENCY_MATERIALIZATION_REVIEW_2026-10-28.md -text
+docs/reviews/evidence/ncr-html-m6-offline-dependency-materialization-result-20261028.json -text
+
+docs/baselines/CVF_GC018_NCR_HTML_M6_HUMAN_UI_LIFETIME_R3_2026-10-28.md -text
+docs/baselines/evidence/ncr-html-m6-human-ui-lifetime-r3-manifest-20261028.json -text
+
+docs/reviews/CVF_NCR_HTML_M6_HUMAN_R3_PROCESS_RESERVE_BLOCKED_REVIEW_2026-10-28.md -text
+docs/reviews/evidence/ncr-html-m6-human-r3-process-reserve-blocked-20261028.json -text
+
+docs/baselines/CVF_GC018_NCR_HTML_M6_HUMAN_PROCESS_RESERVE_2026-10-28.md -text
+docs/work_orders/CVF_AGENT_WORK_ORDER_NCR_HTML_M6_HUMAN_PROCESS_RESERVE_REPAIR_2026-10-28.md -text
+docs/baselines/evidence/ncr-html-m6-human-process-reserve-manifest-20261028.json -text
+docs/reviews/CVF_NCR_HTML_M6_HUMAN_PROCESS_RESERVE_WORKER_RETURN_2026-10-28.md -text
+docs/reviews/evidence/ncr-html-m6-human-process-reserve-worker-20261028.json -text
+docs/reviews/CVF_NCR_HTML_M6_HUMAN_PROCESS_RESERVE_COMPLETION_2026-10-28.md -text
+docs/reviews/evidence/ncr-html-m6-human-process-reserve-local-20261028.json -text
+
+# Outcome-learning file-control evidence: preserve explicit UTF-8 bytes.
+docs/baselines/CVF_GC018_OUTCOME_LEARNING_HARNESS_2026-10-29.md -text
+docs/reviews/CVF_OUTCOME_LEARNING_HARNESS_LOCAL_REVIEW_2026-10-29.md -text
+docs/reviews/evidence/cvf-outcome-learning-harness-20261029.json -text
+governance/compat/outcome_learning_anchors.json -text
+governance/compat/semantic_convergence_outcome.py -text
+governance/compat/test_semantic_convergence_outcome.py -text
+
+# SCEC source-repair dispatch: retain exact raw documentary authority bytes.
+docs/baselines/CVF_GC018_NCR_HTML_M6_FRESH_ADMISSION_PREPARATION_2026-10-30.md -text whitespace=cr-at-eol
+docs/baselines/CVF_GC018_NCR_HTML_M6_HUMAN_UI_LIFETIME_R4_CORRECTED_2026-10-30.md -text whitespace=cr-at-eol
+docs/baselines/CVF_GC018_NCR_HTML_M6_INTEGRATED_READINESS_ROOT_CONTRACT_2026-10-30.md -text whitespace=cr-at-eol
+docs/baselines/CVF_GC018_SCEC_SOURCE_REPAIR_ADMISSION_DESIGN_2026-10-30.md -text whitespace=cr-at-eol
+docs/baselines/archive/CVF_GC018_NCR_HTML_M6_HUMAN_UI_LIFETIME_R4_2026-10-30.md -text whitespace=cr-at-eol
+docs/baselines/evidence/ncr-html-m6-human-ui-lifetime-r4-corrected-manifest-20261030.json -text whitespace=cr-at-eol
+docs/baselines/evidence/ncr-html-m6-human-ui-lifetime-r4-manifest-20261030.json -text whitespace=cr-at-eol
+docs/baselines/evidence/ncr-html-m6-source-projection-20261030.json -text whitespace=cr-at-eol
+docs/baselines/evidence/scec-source-repair-design-feasibility-20261030.json -text whitespace=cr-at-eol
+docs/reviews/CVF_NCR_HTML_M6_ADMISSION_ARCHITECTURE_DECISION_REVIEW_2026-10-30.md -text whitespace=cr-at-eol
+docs/reviews/CVF_NCR_HTML_M6_ADMISSION_FEASIBILITY_BLOCKED_REVIEW_2026-10-30.md -text whitespace=cr-at-eol
+docs/reviews/CVF_NCR_HTML_M6_ADMISSION_READINESS_ROOT_CONTRACT_REVIEW_2026-10-30.md -text whitespace=cr-at-eol
+docs/reviews/CVF_NCR_HTML_M6_HUMAN_R4_PREPARATION_TIMEOUT_REVIEW_2026-10-30.md -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-html-m6-human-r4-preparation-timeout-20261030.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ncr-html-m6-source-admission-feasibility-20261030.json -text whitespace=cr-at-eol
+docs/baselines/CVF_GC018_SCEC_SOURCE_REPAIR_ADMISSION_IMPLEMENTATION_2026-10-30.md -text whitespace=cr-at-eol
+docs/work_orders/CVF_AGENT_WORK_ORDER_SCEC_SOURCE_REPAIR_ADMISSION_2026-10-30.md -text whitespace=cr-at-eol
+
+# Preserve exact new evidence/test bytes across delivery checkout.
+docs/reviews/CVF_A_SCEC_SOURCE_REPAIR_DISPATCH_PACKAGING_REVIEW_2026-10-31.md -text whitespace=cr-at-eol
+docs/reviews/evidence/scec-encoding-preimage-local-20261031.json -text whitespace=cr-at-eol
+governance/compat/test_semantic_convergence_source_repair_admission.py -text whitespace=cr-at-eol
+docs/reviews/CVF_SCEC_SOURCE_REPAIR_ADMISSION_WORKER_RETURN_2026-10-30.md -text whitespace=cr-at-eol
+docs/reviews/evidence/scec-source-repair-admission-worker-20261030.json -text whitespace=cr-at-eol
+docs/reviews/CVF_SCEC_SOURCE_REPAIR_ADMISSION_COMPLETION_2026-10-31.md -text whitespace=cr-at-eol
+docs/reviews/evidence/scec-source-repair-admission-local-20261031.json -text whitespace=cr-at-eol
+
+# Preserve the accepted raw independent probe digest across Windows checkout.
+docs/reviews/evidence/cvf-jev-eval01-web-link-independent-20261105.json text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_JEV_EVAL02_PROVISIONER_REPAIR_2026-11-05.md text eol=lf
+
+# Preserve exact CCP locked documentary bytes; no binary classification.
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_CASES_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_LOCK_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_RESULTS_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_RESULTS_CLAUDE_REVIEW_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_BASELINE_REVIEW_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_CLAUDE_REVIEW_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_LOCAL_DECISION_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_LOCAL_RESPONSE_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_NEXT_STEP_CODEX_REVIEW_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_NEXT_STEP_PROPOSAL_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_PROPOSAL_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_REVIEW_BRIEF_2026-11-06.md -text whitespace=cr-at-eol
+docs/concepts/CVF_CURATED_CAPABILITY_PACKS_ROADMAP_CLOSURE_2026-11-06.md -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r1-20261106/frozen-fixture.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r1-20261106/independent-oracle.json -text whitespace=cr-at-eol
+
+# Preserve exact typed synchronization repair-history evidence.
+docs/reviews/evidence/ccp-sync-hardening-20261107/*.json -text whitespace=cr-at-eol
+
+# Stable source pins for admitted prevention packet.
+docs/baselines/CVF_GC018_CCP_SYNC_HARDENING_2026-11-07.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_CCP_SYNC_HARDENING_2026-11-07.md text eol=lf
+
+# Immutable raw SCEC dispatch projection.
+docs/reviews/evidence/ccp-sync-hardening-20261107/CVF_SYNC_HARDENING_DISPATCH_ANCHOR_2026-11-07.md -text
+
+# Preserve the reviewed worker oracle independently of future source edits.
+docs/reviews/evidence/ccp-sync-hardening-20261107/worker-oracle.py.txt -text
+
+# Exact CCP-R2 admission packet and immutable generic input snapshots.
+docs/baselines/CVF_GC018_CCP_R2_FRONTEND_VOCABULARY_2026-11-07.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_CCP_R2_FRONTEND_VOCABULARY_2026-11-07.md text eol=lf
+docs/reviews/evidence/ccp-r2-20261107/evaluate.py -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/evaluator-contract.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/holdout-commitment.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/baseline-inventory.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/baseline-profiles.json -text whitespace=cr-at-eol
+
+docs/reviews/evidence/ccp-r2-20261107/04-r2-admission-implementation.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/05-r2-admission-repair.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/06-r2-release-resolution.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/H-v1.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/S-selection-judgment.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/baseline-eligibility.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/baseline-receipt-v1.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/candidate-execution.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/candidate-receipt-v1.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/implementation-lock.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/independent-continuity-causal-audit.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/independent-review.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/receiving-manifest.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/retention.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/worker-focused-tests.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/worker-preimages.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-20261107/worker-return-original.txt -text whitespace=cr-at-eol
+docs/reviews/CVF_CCP_R2_FRONTEND_VOCABULARY_COMPLETION_2026-11-07.md text eol=lf
+docs/reviews/CVF_CCP_R2_FRONTEND_VOCABULARY_WORKER_RETURN_2026-11-07.md text eol=lf
+
+docs/reviews/evidence/ccp-r2-20261107/worker-generator-execution.txt -text whitespace=cr-at-eol
+
+docs/reviews/evidence/ccp-r2-20261107/worker-test-oracle.py.txt -text whitespace=cr-at-eol
+
+docs/baselines/CVF_GC018_CCP_R2_ENCODING_DELIVERY_2026-11-07.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_CCP_R2_ENCODING_DELIVERY_2026-11-07.md text eol=lf
+
+docs/baselines/CVF_GC018_CCP_R2_ENCODING_DELIVERY_V1_1_2026-11-07.md text eol=lf
+
+docs/reviews/CVF_CCP_R2_ENCODING_DELIVERY_COMPLETION_2026-11-07.md text eol=lf
+docs/reviews/evidence/ccp-r2-encoding-delivery-20261107/independent-review.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-encoding-delivery-20261107/worker-oracle.py.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-encoding-delivery-20261107/bound-release.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r2-encoding-delivery-20261107/retention.json -text whitespace=cr-at-eol
+
+docs/reviews/CVF_CCP_R2_ENCODING_DELIVERY_WORKER_RETURN_2026-11-07.md text eol=lf
+
+docs/baselines/CVF_GC018_CCP_R3_DELIVERED_CONTENT_SUMMARIES_2026-11-07.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_CCP_R3_DELIVERED_CONTENT_SUMMARIES_2026-11-07.md text eol=lf
+docs/reviews/evidence/ccp-r3-20261107/admission-review-retention.json -text whitespace=cr-at-eol
+
+docs/reviews/CVF_CCP_R3_DELIVERED_CONTENT_SUMMARIES_WORKER_RETURN_2026-11-07.md text eol=lf
+docs/reviews/evidence/ccp-r3-20261107/independent-preview-review.json -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r3-20261107/independent-preview-oracle.py.txt -text whitespace=cr-at-eol
+docs/reviews/evidence/ccp-r3-20261107/implementation-retention.json -text whitespace=cr-at-eol
+/docs/baselines/CVF_GC018_CCP_R4_SOURCE_DESIGN_GUIDANCE_2026-11-07.md text eol=lf
+/docs/work_orders/CVF_AGENT_WORK_ORDER_CCP_R4_SOURCE_DESIGN_GUIDANCE_2026-11-07.md text eol=lf
+/docs/reviews/CVF_CCP_R4_SOURCE_DESIGN_GUIDANCE_WORKER_RETURN_2026-11-07.md text eol=lf
+/docs/reviews/evidence/ccp-r4-20261107/implementation-receipts.zip -text
+/docs/reviews/evidence/ccp-r4-20261107/implementation-retention.json text eol=lf
+/docs/reviews/evidence/ccp-r4-20261107/independent-source-review.json -text whitespace=cr-at-eol
+/docs/reviews/evidence/ccp-r4-20261107/independent-source-oracle.txt -text whitespace=cr-at-eol
+/docs/reviews/evidence/ccp-r4-20261107/worker-qa-criterion-map.json.txt -text whitespace=cr-at-eol
+
+# D122/D123 design authority and copied independent evidence retain exact byte identities.
+docs/baselines/CVF_GC018_JEV_ORCHESTRATOR_ADAPTER_DESIGN_2026-11-07.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_JEV_ORCHESTRATOR_ADAPTER_DESIGN_2026-11-07.md text eol=lf
+docs/reviews/CVF_JEV_ORCHESTRATOR_ADAPTER_DESIGN_COMPLETION_2026-11-07.md text eol=lf
+docs/reviews/CVF_JEV_00_MAIN_INTEGRATION_AND_AGENT_CAPABILITY_DIRECTION_2026-11-06.md text eol=lf
+docs/reviews/evidence/jev-orchestrator-adapter-design-20261107/* -text whitespace=cr-at-eol
+docs/baselines/CVF_GC018_JEV_ORCHESTRATOR_OFFLINE_PROJECTION_2026-11-07.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_JEV_ORCHESTRATOR_OFFLINE_PROJECTION_2026-11-07.md text eol=lf
+docs/reviews/CVF_JEV_ORCHESTRATOR_OFFLINE_PROJECTION_WORKER_RETURN_2026-11-07.md text eol=lf
+docs/reviews/CVF_JEV_ORCHESTRATOR_OFFLINE_PROJECTION_COMPLETION_2026-11-07.md text eol=lf
+docs/reviews/evidence/jev-orchestrator-offline-projection-20261107/* -text whitespace=cr-at-eol
+docs/baselines/CVF_GC018_JEV_METADATA_FEASIBILITY_APPLICABILITY_2026-11-07.md text eol=lf
+docs/work_orders/CVF_AGENT_WORK_ORDER_JEV_METADATA_FEASIBILITY_APPLICABILITY_2026-11-07.md text eol=lf
+docs/reviews/CVF_JEV_METADATA_FEASIBILITY_APPLICABILITY_WORKER_RETURN_2026-11-07.md text eol=lf
+docs/reviews/CVF_JEV_METADATA_FEASIBILITY_APPLICABILITY_COMPLETION_2026-11-07.md text eol=lf
+docs/reviews/evidence/jev-metadata-feasibility-applicability-20261107/* -text whitespace=cr-at-eol

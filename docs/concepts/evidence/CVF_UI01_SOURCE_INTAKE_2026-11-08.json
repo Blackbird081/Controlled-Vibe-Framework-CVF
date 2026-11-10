@@ -1,0 +1,117 @@
+{
+  "status": "RECEIVED_SOURCE_INTAKE_BUILD_NOT_ADMITTED",
+  "task": "UI01",
+  "criteria": [
+    "A04",
+    "A10",
+    "A12"
+  ],
+  "budgetMinutes": 15,
+  "rootDecisionOwner": "LOCAL Root",
+  "head": "040776a6cd312cd06bee1f392c34a92412147bf6",
+  "outcome": "Using fixture-backed /skills, find or filter a group, select a skill, open its existing detail route and return; preserve content and existing contracts.",
+  "observations": [
+    {
+      "type": "SOURCE_DEFECT",
+      "source": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.tsx",
+      "lines": "55-66",
+      "detail": "Search filters only skill title/id, so a query that matches only category name/id returns no group even though it exists; no explicit group filter exists. Group name/id search is a proposed bounded behavior change, not a measured user failure."
+    },
+    {
+      "type": "SOURCE_DEFECT",
+      "source": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.tsx",
+      "lines": "98-104",
+      "detail": "Search has placeholder but no explicit associated label or aria-label; explicit control labeling required by DESIGN.md section 8."
+    },
+    {
+      "type": "SOURCE_CONDITIONAL_MISMATCH",
+      "source": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.tsx",
+      "lines": "124-129,192-193",
+      "detail": "Selected row belongs to category.id but detail URL derives domain slug; detail page resolves category.id at EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/skills/[domain]/[skill]/page.tsx:32-35. Mismatch produces an unmatched route when values differ; existing i18n test fixture dev vs App Development demonstrates data shape, not actual browser failure."
+    },
+    {
+      "type": "DEFERRED",
+      "source": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.tsx",
+      "lines": "42-49,109-113",
+      "detail": "Fallback load error is logged and then presented like no results; distinguish load error in separately scoped action if required, with translation and recovery ownership. No observed runtime incident."
+    }
+  ],
+  "proposedMinimalSourceManifest": [
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.tsx",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.test.tsx"
+  ],
+  "manifestBoundary": "Proposed only; one component change plus meaningful targeted existing test edits. If semantic group search or error recovery requires i18n/new files, stop and re-admit exact expanded manifest. Preserve tracked and unrelated dirty files. No edits until canonical admission.",
+  "readOnlyDependencies": [
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/skills/[domain]/[skill]/page.tsx",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.i18n.test.tsx",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillDetailView.test.tsx",
+    "DESIGN.md",
+    "docs/reference/agent_system_skills/ui_ux_reference_pack/README.md"
+  ],
+  "sourceSha256": {
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.tsx": "5918850789d95214f95a15d95cd9842059f1377ceef3042df160fa359ee8014b",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/SkillLibrary.test.tsx": "dd51064d98fedde47a1b5e1a259b988db1f4fd4a0158a53524970480f1fd0c25",
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/skills/[domain]/[skill]/page.tsx": "34d480cf8999aba0f6f678550f25be1b759af5896d3a098f0d28cc993a9ff901",
+    "DESIGN.md": "702313ae195ac6dce5b38b32507aa3fa43c8bae044c53cc5fe1b9ecb7aa0f60b",
+    "docs/reference/agent_system_skills/ui_ux_reference_pack/README.md": "1595953ac341e2ff69e1810e215c1ae8636fbc9ba24df2d29b337494fb6a6942"
+  },
+  "nativeReuse": [
+    "existing category/index loading and server fallback",
+    "existing local search, category counts, selection and keyboard handling",
+    "existing next navigation and detail resolver",
+    "existing i18n, project tokens, SkillLibrary and SkillDetailView tests",
+    "existing UI/UX DESIGN.md and QA portfolio; reference pack v0.1 reference only"
+  ],
+  "cases": [
+    {
+      "id": "U1",
+      "input": "two groups: Design (id design) contains Alpha; Operations (id ops) contains Beta; query operations",
+      "expected": "only Operations and Beta remain; counts truthful; no change to underlying skill records"
+    },
+    {
+      "id": "U2",
+      "input": "query mixed-case Alpha; then replace query with a nonsense string and clear it",
+      "expected": "title matching remains case-insensitive; no-results text appears for mismatch; clear restores both groups"
+    },
+    {
+      "id": "U3",
+      "input": "category id dev, skill domain App Development and id s1; select with keyboard then open",
+      "expected": "detail path /skills/dev/s1, preserving category id exactly; detail resolver finds same record in same fixture; no extra request to suggest endpoint"
+    },
+    {
+      "id": "U4",
+      "input": "query by existing skill id; use EN and VI",
+      "expected": "existing id search retained; search control exposes localized explicit accessible name; English and Vietnamese existing text remains"
+    },
+    {
+      "id": "U5",
+      "input": "same selection via Enter and Space; navigate back from detail",
+      "expected": "same skill selection as pointer; keyboard focus visible and destination meaningful; back returns library; verify in browser later, not inferred from unit tests"
+    },
+    {
+      "id": "U6",
+      "input": "valid empty index and separately simulated both data sources failing",
+      "expected": "empty and failure must not be falsely asserted as equivalent; failure recovery deferred unless explicitly admitted; report actual baseline; no fabricated pass"
+    }
+  ],
+  "testsAtBuild": [
+    "cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run test:run -- src/components/SkillLibrary.test.tsx src/components/SkillLibrary.i18n.test.tsx src/components/SkillDetailView.test.tsx",
+    "npm run check and relevant lint under same project after admission",
+    "admitted pure UI browser validation only: 375/768/1024/1440, dark/light and non-default accent, focus, empty/loading/error and navigation; inspect screenshots"
+  ],
+  "testsNotRun": "None during intake; commands are proposed not results. No browser/provider/skill execution.",
+  "comparison": "A/B redesign assessment from D125 still needs frozen baseline, brief, same input, tooling and budget, independent grading and exact finite admission. This intake does not demonstrate pack uplift, discovery, E1 or governance behavior.",
+  "noEffectAndIndependence": "Fixture-only local UI work with mocked index/analytics/navigation and no /skills/suggest, provider, body install, network write, API/data/auth/eligibility change. A09 whole-job restore and A12 total product cost remain UNKNOWN; this nonpersistent offline slice cannot prove them. Root must review whether testing dependencies and observed repair history establish independence, capture cost and stop/reopen decisions, and avoid resetting prior metadata ceiling.",
+  "claimBoundary": "Source inspection only. Screenshot, actual UI behavior, accessibility and value NOT_PROVEN; product criteria unchanged; plan does not authorize BUILD.",
+  "receivedBy": "LOCAL_ROOT",
+  "providerCalls": 0,
+  "productAcceptance": "NOT_PROVEN",
+  "nextAction": "Prepare exact UI01 baseline/work order and frozen UI-only acceptance; no source edit until canonical admission",
+  "receivingReferenceRevision": {
+    "path": "docs/reference/agent_system_skills/ui_ux_reference_pack/README.md",
+    "sha256": "a0c924f51b4e32b3832a17ed91d0af2f58169d4975196d3271c8931404c5fef6",
+    "historicalIntakeHashPreserved": "1595953ac341e2ff69e1810e215c1ae8636fbc9ba24df2d29b337494fb6a6942",
+    "delta": "Text Encoding Exception and explicit upstream NOT_CVF_SOURCE clarification; no source-selection or UI behavior change",
+    "head": "f0bcbd191e760e3e5b4982699d71fe02c87d2b67"
+  }
+}

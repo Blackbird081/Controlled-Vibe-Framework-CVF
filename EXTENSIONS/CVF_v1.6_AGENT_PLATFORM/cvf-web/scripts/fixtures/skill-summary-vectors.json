@@ -1,0 +1,64 @@
+[
+  {
+    "id": "plain",
+    "content": "## M\u1ee5c \u0111\u00edch\nA concise purpose.",
+    "expected": "A concise purpose."
+  },
+  {
+    "id": "missing",
+    "content": "## Purpose\nNot the recognized heading.",
+    "expected": ""
+  },
+  {
+    "id": "crlf",
+    "content": "### M\u1ee5c \u0111\u00edch\r\n> Lead one\r\n- Lead two\r\n\r\n**Khi n\u00e0o n\u00ean d\u00f9ng skill n\u00e0y:**\r\n- First case\r\n* Second case\r\n\r\nStopped\r\n**Kh\u00f4ng ph\u00f9 h\u1ee3p khi:**\r\nAvoided",
+    "expected": "Lead one Lead two Khi n\u00e0o d\u00f9ng: First case; Second case"
+  },
+  {
+    "id": "cr",
+    "content": "# M\u1ee5c \u0111\u00edch\rLead\r**When to use this skill:**\r> Case\r---\rOutside",
+    "expected": "Lead Khi n\u00e0o d\u00f9ng: Case"
+  },
+  {
+    "id": "unknown-label",
+    "content": "## M\u1ee5c \u0111\u00edch\nLead\n**Other:**\nHidden\n**Khi n\u00e0o d\u00f9ng:**\n- Case\n## Next\nOutside",
+    "expected": "Lead Khi n\u00e0o d\u00f9ng: Case"
+  },
+  {
+    "id": "blank-lead",
+    "content": "## M\u1ee5c \u0111\u00edch\nFirst\n\nSecond\n**When to use:**\nCase one\n\nCase ignored",
+    "expected": "First Second Khi n\u00e0o d\u00f9ng: Case one"
+  },
+  {
+    "id": "avoid-only",
+    "content": "## M\u1ee5c \u0111\u00edch\n**Not suitable when:**\nAvoided",
+    "expected": ""
+  },
+  {
+    "id": "lead-clip",
+    "content": "## M\u1ee5c \u0111\u00edch\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "expected": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  {
+    "id": "total-clip",
+    "content": "## M\u1ee5c \u0111\u00edch\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n**Khi n\u00e0o d\u00f9ng:**\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "expected": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa Khi n\u00e0o d\u00f9ng: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  {
+    "id": "bold",
+    "content": "## M\u1ee5c \u0111\u00edch\nA **bold** purpose.\n**When to use:**\n**Useful** case",
+    "expected": "A bold purpose. Khi n\u00e0o d\u00f9ng: Useful case",
+    "boldDelta": true
+  },
+  {
+    "id": "bold-clip",
+    "content": "## M\u1ee5c \u0111\u00edch\n**aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa**",
+    "expected": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "boldDelta": true
+  },
+  {
+    "id": "heading-boundary",
+    "content": "#### M\u1ee5c \u0111\u00edch\nBefore\n### Next\nAfter",
+    "expected": "Before"
+  }
+]

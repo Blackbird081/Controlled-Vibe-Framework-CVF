@@ -48,6 +48,7 @@ import {
   ALIBABA_FREE_QUOTA_LEDGER_REFERENCE,
   getAlibabaFreeQuotaStatus,
   resolveAlibabaDashScopeEndpoint,
+  type AlibabaFreeQuotaStatus,
 } from "../src/alibaba-free-quota-model-ledger";
 
 const REPO_ROOT = resolve(__dirname, "..", "..", "..");
@@ -153,7 +154,7 @@ export interface AttemptOutcome {
   endpointHost: string | null;
   keyAliasUsed: string | null;
   keyPresent: boolean;
-  freeQuotaStatus: "usable" | "expired" | "unknown" | "not_applicable";
+  freeQuotaStatus: AlibabaFreeQuotaStatus | "not_applicable";
   outcome:
     | "PASS"
     | "PARTIAL"
@@ -258,7 +259,7 @@ export async function attemptCandidate(
   if (!aliasUsed) {
     return base;
   }
-  if (freeQuotaStatus === "expired" || freeQuotaStatus === "unknown") {
+  if (freeQuotaStatus !== "usable" && freeQuotaStatus !== "not_applicable") {
     return {
       ...base,
       outcome:
@@ -493,6 +494,16 @@ async function main(): Promise<number> {
     ...loadEnvLocal(ENV_LOCAL),
     ...authorityEnv,
   };
+  const rotatedAlibaba = loadEnvLocal(resolve(REPO_ROOT, ".cvf/config/alibaba.env.local"));
+  if (rotatedAlibaba.ALIBABA_API_KEY) {
+    for (const name of ["ALIBABA_API_KEY", "DASHSCOPE_API_KEY", "ALIBABA_BASE_URL",
+      "DASHSCOPE_COMPAT_ENDPOINT", "CVF_ALIBABA_FREE_QUOTA_ONLY"]) {
+      if (rotatedAlibaba[name] !== undefined) env[name] = rotatedAlibaba[name];
+    }
+    env.CVF_ALIBABA_QUOTA_SCOPE_CONFIRMED = rotatedAlibaba.CVF_ALIBABA_QUOTA_SCOPE_CONFIRMED ?? "0";
+    delete env.CVF_ALIBABA_API_KEY;
+    delete env.CVF_BENCHMARK_ALIBABA_KEY;
+  }
 
   const attempts: AttemptOutcome[] = [];
   let proof: AttemptOutcome | null = null;
@@ -514,6 +525,8 @@ async function main(): Promise<number> {
       proof = outcome;
       break;
     }
+    // An Alibaba free-only refusal cannot fall through to another paid lane.
+    if (candidate.providerId === "alibaba" && env.CVF_ALIBABA_FREE_QUOTA_ONLY === "1") break;
   }
 
   const overall = proof ? "PASS" : "BLOCKED_OR_PARTIAL";

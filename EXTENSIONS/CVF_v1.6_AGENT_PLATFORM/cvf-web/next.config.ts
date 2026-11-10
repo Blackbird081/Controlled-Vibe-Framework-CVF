@@ -1,4 +1,5 @@
 import path from 'node:path';
+import fs from 'node:fs';
 import type { NextConfig } from "next";
 
 const securityHeaders = [
@@ -32,7 +33,20 @@ const securityHeaders = [
   },
 ];
 
+const runtimeTsconfig = process.env.CVF_NEXT_TSCONFIG_PATH;
+if (runtimeTsconfig) {
+  if (!/^tsconfig\.cvf-runtime-[a-f0-9]{32}\.json$/.test(runtimeTsconfig)) {
+    throw new Error('CVF_NEXT_TSCONFIG_PATH_INVALID');
+  }
+  const configFile = path.join(__dirname, runtimeTsconfig);
+  const info = fs.lstatSync(configFile);
+  if (!info.isFile() || info.isSymbolicLink() || info.nlink !== 1) {
+    throw new Error('CVF_NEXT_TSCONFIG_FILE_INVALID');
+  }
+}
+
 const nextConfig: NextConfig = {
+  ...(runtimeTsconfig ? { typescript: { tsconfigPath: runtimeTsconfig } } : {}),
   distDir: process.env.NEXT_DIST_DIR || '.next',
   outputFileTracingRoot: path.resolve(__dirname, '../../..'),
   serverExternalPackages: ['better-sqlite3', 'typescript'],
@@ -51,6 +65,7 @@ const nextConfig: NextConfig = {
     resolveExtensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
   },
   webpack(config) {
+    config.resolve.modules = [...(config.resolve.modules ?? ['node_modules']), path.resolve(__dirname, 'node_modules')];
     config.resolve.extensionAlias = {
       ...config.resolve.extensionAlias,
       '.js': ['.ts', '.tsx', '.js'],

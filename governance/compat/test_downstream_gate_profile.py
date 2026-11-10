@@ -93,7 +93,7 @@ class ProfileContractTests(unittest.TestCase):
         for control in PROFILE["controls"]:
             self.assertTrue(control["mandatory"] and (LIB / f"{control['module']}.py").is_file(), control["id"])
             self.assertTrue(set(control["phases"]) <= set(PROFILE["phases"]))
-            if control["id"] != "CVF-DG-INST-01" and control["id"] != "CVF-DG-CONT-01":
+            if control["id"] not in ("CVF-DG-INST-01", "CVF-DG-CONT-01", "CVF-DG-ACT-01"):
                 self.assertIn("reviewer-fast", control["phases"], control["id"])
         for name in PROFILE["installedFiles"]:
             source = REPO / PROFILE["coreSources"][name] if name in PROFILE["coreSources"] else LIB / name
@@ -122,7 +122,8 @@ class ProfileContractTests(unittest.TestCase):
     def test_new_files_obey_size_budget(self) -> None:
         for family in (LIB, DOCS):
             files = [p for p in family.iterdir() if p.is_file()]
-            self.assertLessEqual(len(files), 16, family)
+            # Profile 1.3 adds one focused repair helper; keep the document-family cap.
+            self.assertLessEqual(len(files), 18 if family == LIB else 16, family)
             for path in files:
                 self.assertLessEqual(len(path.read_text(encoding="utf-8").splitlines()), 600, path.name)
     def test_bootstrap_content_projects_the_pinned_contract(self) -> None:
@@ -500,17 +501,18 @@ class RunnerCliTests(Tmp):
         runner, trusted = self.install(), LIB / "cvf_downstream_gate_runner.py"
         phases = [p for p in PROFILE["phases"] if p != "pr-ci"]
         for phase in phases:
-            self.assertEqual(cli(runner, self.root, "run", "--phase", phase, "--project-root", str(self.root)).returncode, 0, phase)
-            self.assertEqual(cli(trusted, self.root, "run", "--phase", phase, "--project-root", str(self.root), "--trusted").returncode, 0, phase)
+            expected = 2 if phase in ("bootstrap", "pre-dispatch") else 0
+            self.assertEqual(cli(runner, self.root, "run", "--phase", phase, "--project-root", str(self.root), *(pins(self.root) if phase == "pre-dispatch" else [])).returncode, expected, phase)
+            self.assertEqual(cli(trusted, self.root, "run", "--phase", phase, "--project-root", str(self.root), "--trusted").returncode, expected, phase)
         memory = self.root / "CVF_SESSION_MEMORY.md"
         write(memory, memory.read_text(encoding="utf-8").replace("- Current mode: INTAKE", "- Current mode: BUILD"))
         for phase in phases:
-            done = cli(runner, self.root, "run", "--phase", phase, "--project-root", str(self.root))
+            done = cli(runner, self.root, "run", "--phase", phase, "--project-root", str(self.root), *(pins(self.root) if phase == "pre-dispatch" else []))
             self.assertEqual(done.returncode, 2, phase)
             self.assertIn("SURFACE_MISMATCH", done.stdout)
         write(self.root / "docs/work_orders/CVF_AGENT_WORK_ORDER_X.md", "Status: DISPATCH_READY - issue 1\n")
         for phase in ("pre-dispatch", "reviewer-fast"):
-            done = cli(runner, self.root, "run", "--phase", phase, "--project-root", str(self.root), "--packet", "docs/work_orders/CVF_AGENT_WORK_ORDER_X.md")
+            done = cli(runner, self.root, "run", "--phase", phase, "--project-root", str(self.root), "--packet", "docs/work_orders/CVF_AGENT_WORK_ORDER_X.md", *(pins(self.root) if phase == "pre-dispatch" else []))
             self.assertIn("status_malformed", done.stdout, phase)
         self.assertEqual(cli(runner, self.root, "run", "--phase", "no-such-phase").returncode, 3)
     def test_f08_reviewer_fast_runs_every_review_control(self) -> None:

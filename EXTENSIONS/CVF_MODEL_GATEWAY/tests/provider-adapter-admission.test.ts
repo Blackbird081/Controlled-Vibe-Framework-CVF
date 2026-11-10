@@ -8,6 +8,7 @@ import {
   negotiateProviderCapability,
   PROVIDER_CAPABILITY_NEGOTIATION_VERSION,
 } from "../src/provider-capability-negotiation";
+import { PROVIDER_CAPABILITY_REGISTRY } from "../src/provider-capability-registry";
 import type { ProviderCapabilityFile, ProviderMethodName } from "../src/provider-method-contract";
 
 function makeRegistry(overrides?: {
@@ -244,4 +245,11 @@ describe("provider capability negotiation", () => {
     expect(result.status).toBe("blocked");
     expect(result.reasonCodes).toContain("method_not_supported");
   });
+});
+
+
+it("admits only the matching OpenRouter System One candidate structurally",()=>{
+ const report=makeReport({providerId:"openrouter",modelId:"typesafe/jev-1.14",requestedMethod:"system_one",normalizedMethod:"system_one",supportedMethods:["system_one"]});
+ const admitted=admitProviderAdapter(report,PROVIDER_CAPABILITY_REGISTRY);expect(admitted.status).toBe("admitted");expect(admitted.liveExecutionAuthorized).toBe(false);
+ expect(admitProviderAdapter({...report,modelId:"typesafe/jev-1.14-20261014"},PROVIDER_CAPABILITY_REGISTRY).status).toBe("blocked");
 });

@@ -1,15 +1,19 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { CVF_SYSTEM_PROMPT, executeAI } from './providers';
 
 const fetchMock = vi.fn();
 vi.stubGlobal('fetch', fetchMock);
+afterEach(() => vi.unstubAllEnvs());
 
 describe('ai/providers', () => {
     beforeEach(() => {
         fetchMock.mockReset();
+        // Protocol fixtures are isolated from the operator's real quota/key configuration.
+        vi.stubEnv('CVF_ALIBABA_FREE_QUOTA_ONLY', '0');
+        vi.stubEnv('DASHSCOPE_COMPAT_ENDPOINT', 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions');
     });
 
     it('keeps the canonical system prompt language-adaptive', () => {
@@ -275,11 +279,11 @@ describe('ai/providers', () => {
 
     describe('executeAI — Alibaba DashScope', () => {
         it.each([
-            ['qwen3.8-27b', false],
-            ['qwen3.8-flash', false],
+            ['qwen3.8-synthetic', false],
+            ['qwen3.8-synthetic-flash', false],
             ['qwen3.5-plus', false],
-            ['QWEN3.8-27B', false],
-            ['qwen3.8-27b-thinking', true],
+            ['QWEN3.8-SYNTHETIC', false],
+            ['qwen3.8-synthetic-thinking', true],
             ['qwen3-next-80b-a3b-thinking', true],
             ['qwen30-example', undefined],
             ['qwen3.invalid-example', undefined],

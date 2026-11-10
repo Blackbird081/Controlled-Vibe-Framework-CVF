@@ -217,6 +217,7 @@ export async function runLiveProof(
     endpoint,
     secret,
     fetchImpl,
+    quotaEnv: env,
   });
 
   // Governed admission chain: P4C conformance -> P5-A admission record.

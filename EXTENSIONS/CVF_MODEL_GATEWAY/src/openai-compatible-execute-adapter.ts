@@ -6,6 +6,7 @@ import type {
 import type { CredentialReference } from "./credential-boundary";
 import { CredentialBoundary } from "./credential-boundary";
 import { classifyAdapterDestination } from "./adapter-destination-policy";
+import { assertAlibabaFreeQuotaUse } from "./alibaba-free-quota-model-ledger";
 
 export type OpenAiCompatibleFetch = (
   input: string,
@@ -28,6 +29,7 @@ export interface OpenAiCompatibleAdapterOptions {
   endpoint: string;
   secret: string;
   fetchImpl: OpenAiCompatibleFetch;
+  quotaEnv?: Record<string, string | undefined>;
 }
 
 export interface CredentialBoundOpenAiCompatibleAdapterOptions {
@@ -51,6 +53,7 @@ export function createOpenAiCompatibleExecuteAdapter(
       if (input.providerId !== providerId || input.modelId !== modelId) {
         throw new Error("OpenAI-compatible adapter identity mismatch");
       }
+      if (providerId === "alibaba") assertAlibabaFreeQuotaUse(modelId, options.quotaEnv);
 
       // EAFR-R10. Classify the configured endpoint through the single
       // gateway-owned destination policy before ever invoking the injected

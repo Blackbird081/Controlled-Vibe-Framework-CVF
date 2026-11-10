@@ -75,3 +75,20 @@ describe('admission cancellation boundary', () => {
         expect(buildProviderAttemptReconciliation(attempts, 'alibaba', 'qwen-flash').reconciles).toBe(true);
     });
 });
+
+
+import { buildJevCanonicalAttemptBoundary } from './canonical-web-gateway-execution';
+import type { AdapterAdmissionRecord } from 'cvf-model-gateway';
+const jevAdmission={status:'admitted',providerId:'typesafe',modelId:'jev-latest',requestedMethod:'system_one',normalizedMethod:'system_one',supportedMethods:['system_one'],conformanceStatus:'conformant',liveExecutionAuthorized:false} as unknown as AdapterAdmissionRecord;
+it('Jev cancellation during rate reservation retains admitted index and prevents custody/invocation',async()=>{
+    let resolve!: (value:{allowed:boolean;retryAfterSeconds:number})=>void;
+    consume.mockImplementation(()=>new Promise(done=>{resolve=done;}));
+    const attempts=ledger();const abort=new AbortController();const commit=vi.fn();const retained=vi.fn();
+    const run=buildJevCanonicalAttemptBoundary({canonicalExecutionId:'env-jev-cancel',stageId:'wide',ledger:attempts,admission:jevAdmission,signal:abort.signal,verifyAndCommitStart:commit,onRetainedReservation:retained});
+    const promise=run({canonicalExecutionId:'env-jev-cancel',traceId:'env-jev-cancel',providerId:'typesafe',modelId:'jev-latest'});
+    abort.abort();resolve({allowed:true,retryAfterSeconds:0});
+    expect(await promise).toMatchObject({decision:'deny',attemptIndex:0,reason:'RESERVATION_RETAINED_NO_INVOCATION'});
+    expect(commit).not.toHaveBeenCalled();expect(retained).toHaveBeenCalledOnce();
+    expect(attempts.attempts[0].retainedReservation).toBe('RESERVATION_RETAINED_NO_INVOCATION');
+    expect(buildProviderAttemptReconciliation(attempts,'typesafe','jev-latest')).toMatchObject({admittedAttemptCount:1,providerCallCount:0,reconciles:false});
+});

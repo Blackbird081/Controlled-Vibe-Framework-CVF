@@ -447,3 +447,10 @@ describe('buildKeyValueAdapter factory', () => {
     expect(() => buildKeyValueAdapter('bad-type')).toThrow('CVF_CONFIGURATION_ERROR');
   });
 });
+
+
+it('keeps legacy factories separate from the opted-in atomic SQLite owner',()=>{
+  expect(buildKeyValueAdapter('file')).toBeInstanceOf(FileKeyValueAdapter);
+  expect(buildKeyValueAdapter('sqlite')).toBeInstanceOf(SQLiteKeyValueAdapter);
+  expect('transaction' in buildKeyValueAdapter('sqlite')).toBe(false);
+});

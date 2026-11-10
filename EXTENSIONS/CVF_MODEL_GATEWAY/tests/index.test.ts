@@ -45,3 +45,12 @@ describe("CVF_MODEL_GATEWAY", () => {
     expect(MODEL_GATEWAY_WRAPPER.enforcesGuardContractBeforeRouting).toBe(true);
   });
 });
+
+
+it('exports the additive action quota policy without replacing legacy QuotaLedger',async()=>{
+  const exports=await import('../src/index');
+  expect(typeof exports.reserveActionQuota).toBe('function');
+  expect(typeof exports.transitionActionQuota).toBe('function');
+  expect(typeof exports.validateActionQuota).toBe('function');
+  expect(typeof exports.QuotaLedger).toBe('function');
+});

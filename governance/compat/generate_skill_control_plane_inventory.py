@@ -14,6 +14,7 @@ import argparse
 import json
 import re
 import sys
+import unicodedata
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -722,16 +723,29 @@ def validate_inventory_matches_sources(
     return violations
 
 
+def _unicode_tokens(text: str) -> list[str]:
+    folded = unicodedata.normalize("NFC", unicodedata.normalize("NFC", text).casefold())
+    return re.findall(r"[^\W_]+", folded)
+
+
 def _normalized_terms(text: str) -> set[str]:
+    if not text.isascii():
+        return set(_unicode_tokens(text))
     return {term for term in re.split(r"[^a-z0-9]+", text.lower()) if term}
 
 
 def _phrase_hits(spec_text: str, phrases: list[str]) -> list[str]:
-    normalized = " ".join(sorted(_normalized_terms(spec_text)))
+    unicode_spec = _unicode_tokens(spec_text)
     lowered = spec_text.lower()
     spec_terms = _normalized_terms(spec_text)
     hits: list[str] = []
     for phrase in phrases:
+        if not (spec_text.isascii() and phrase.isascii()):
+            tokens = _unicode_tokens(phrase)
+            if tokens and any(unicode_spec[i:i + len(tokens)] == tokens
+                              for i in range(len(unicode_spec) - len(tokens) + 1)):
+                hits.append(phrase)
+            continue
         p = phrase.lower().strip()
         if not p:
             continue
@@ -743,8 +757,7 @@ def _phrase_hits(spec_text: str, phrases: list[str]) -> list[str]:
         if re.search(rf"(?<![a-z0-9]){re.escape(p)}(?![a-z0-9])", lowered):
             hits.append(phrase)
             continue
-        words = phrase_terms
-        if words and words.issubset(_normalized_terms(normalized)):
+        if phrase_terms and phrase_terms.issubset(spec_terms):
             hits.append(phrase)
     return hits
 

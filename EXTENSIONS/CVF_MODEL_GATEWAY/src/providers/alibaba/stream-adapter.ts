@@ -1,7 +1,7 @@
 import type { StreamContract, StreamRequest } from "../../stream-contract";
 import type { ProviderCapabilityFile } from "../../provider-method-contract";
 import { assertProviderMethodSupported } from "../../provider-method-gate";
-import { resolveAlibabaDashScopeEndpoint } from "../../alibaba-free-quota-model-ledger";
+import { assertAlibabaFreeQuotaUse, resolveAlibabaDashScopeEndpoint } from "../../alibaba-free-quota-model-ledger";
 
 type FetchLike = (input: string, init: {
   method: "POST";
@@ -19,6 +19,7 @@ export interface AlibabaStreamAdapterOptions {
   endpoint?: string;
   modelId?: "qwen-flash";
   fetchImpl?: FetchLike;
+  env?: Record<string, string | undefined>;
 }
 
 const ALIBABA_QWEN_FLASH_CAPABILITY: ProviderCapabilityFile = {
@@ -35,6 +36,7 @@ export function createAlibabaQwenTurboStreamAdapter(options: AlibabaStreamAdapte
 
   return {
     async *stream(request: StreamRequest): AsyncIterable<StreamContract> {
+      assertAlibabaFreeQuotaUse(modelId, options.env);
       const response = await fetchImpl(endpoint, {
         method: "POST",
         headers: {

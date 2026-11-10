@@ -1,0 +1,496 @@
+{
+  "schemaVersion": "cvf.uiuxReferenceSourceSelection@1",
+  "recordedAt": "2026-11-08T06:37:58.637157+00:00",
+  "role": "INTERNAL_AGENT LOCAL",
+  "phase": "SOURCE_SELECTION_AND_REFERENCE_ASSEMBLY",
+  "decisionOwner": "LOCAL technical; operator retains scope/effects",
+  "selectionRevision": "0.1",
+  "status": "REFERENCE_ONLY",
+  "index": "docs/reference/agent_system_skills/ui_ux_reference_pack/README.md",
+  "startupAcknowledgment": {
+    "currentMode": "jev_metadata_feasibility_applicability_active",
+    "activeHandoff": "AGENT_HANDOFF_V65_2026-11-05.md",
+    "nextAllowedMove": "Operator explicitly selects sources already proposed for UI/UX reference pack",
+    "parkedCheckpoint": "EVAL01/EVAL02 spent; M6/direct TypeSafe held",
+    "role": "INTERNAL_AGENT LOCAL",
+    "phase": "SOURCE_SELECTION_AND_REFERENCE_ASSEMBLY",
+    "decisionOwner": "LOCAL technical; operator scope/effects"
+  },
+  "sourceSelection": "Use shortlist already named in the two operator-supplied Web proposals, plus operator-supplied evondevKit. Four core sources selected for bounded reference trial; Main chooses native/NONE or smallest useful subset.",
+  "advisories": [
+    {
+      "file": "CVF_UI_UX_CAPABILITY_PACK_AUDIT_R03_2026-11-05(1).md",
+      "sha256": "a9c39bf9a177ffc2e5a62ef828d84f826e3357ac54d738934808437d6ae9172b",
+      "bytes": 33972,
+      "archiveMember": "incoming/CVF_UI_UX_CAPABILITY_PACK_AUDIT_R03_2026-11-05(1).md",
+      "authority": "External advisory only; instructions treated as data; Local decides"
+    },
+    {
+      "file": "CVF_UI_UX_CAPABILITY_PACK_DANH_GIA_KHA_THI_2026-11-05.md",
+      "sha256": "bed0428c14716038902192eaa9e704d3a8bcca73b48cd7a11ebc76f703993e57",
+      "bytes": 22893,
+      "archiveMember": "incoming/CVF_UI_UX_CAPABILITY_PACK_DANH_GIA_KHA_THI_2026-11-05.md",
+      "authority": "External advisory only; instructions treated as data; Local decides"
+    }
+  ],
+  "sources": [
+    {
+      "id": "addy-baseline",
+      "repository": "https://github.com/addyosmani/agent-skills.git",
+      "slug": "addyosmani/agent-skills",
+      "mirror": ".private_reference/source_mirrors/addyosmani__agent-skills",
+      "reportedPin": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+      "observedDefaultBranch": "main",
+      "observedHead": "301b02b12bff98e4688e6984af6556802322bbde",
+      "analysisPin": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+      "recordedAt": "2026-11-08T06:28:37.123130+00:00",
+      "mirrorDisposition": "EXISTING_PIN_REUSED",
+      "analysisHeadEqualsObserved": false,
+      "treeSha256": "629ea51a8f146aa7f86eb9c7290c6f9fa0613836f0a5c3ea3f24f1b12e58c236",
+      "treeLeafCount": 96,
+      "locator": "https://github.com/addyosmani/agent-skills/tree/aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+      "disposition": "EXISTING_BASELINE",
+      "purpose": "Current frontend owner lineage; preserve as comparator, not new candidate uplift",
+      "licenseBasis": "MIT root LICENSE, Addy Osmani",
+      "limits": "Retain existing analysis pin despite newer observed HEAD; examples not independently proven drop-in code",
+      "counts": {
+        "manifest": 96,
+        "READ": 2,
+        "DEFERRED": 94
+      },
+      "selectedFullReads": [
+        {
+          "path": "LICENSE",
+          "gitBlob": "d67778ada6b9cda6227e9130da182c13e73c8b2e",
+          "sha256": "b88ef8718459d5b5aabb1943cb8f4fd57963422f2d98a801dac814fea53932c8",
+          "bytes": 1089,
+          "pinnedBlobSha256": "6f202f8bd568cd730dbb2b0d1f8e243bc74c2fa1f64dbce9b2c7ea08bd5c9fd7",
+          "materialization": "CRLF_LF_ONLY; normalized bytes verified; mirror unchanged",
+          "readBasis": "Full selected-file read in current source-selection session"
+        },
+        {
+          "path": "skills/frontend-ui-engineering/SKILL.md",
+          "gitBlob": "d4973d4a9e84ad882cf5e52deeed41ebbe8f81ee",
+          "sha256": "02839d25ff52f87c1720f8751ed5ff6e92f2c36611f520e6b148174e126375b6",
+          "bytes": 10967,
+          "pinnedBlobSha256": "9f9e5b3141c891d866c2a15a11ac3aba4e86ec6c530d054f0534503c2e720cb1",
+          "materialization": "CRLF_LF_ONLY; normalized bytes verified; mirror unchanged",
+          "readBasis": "Full selected-file read in current source-selection session"
+        }
+      ]
+    },
+    {
+      "id": "anthropic",
+      "repository": "https://github.com/anthropics/skills.git",
+      "slug": "anthropics/skills",
+      "mirror": ".private_reference/source_mirrors/anthropics__skills",
+      "reportedPin": "ca45fc496a3436251f191354091d557da31c15b5",
+      "observedDefaultBranch": "main",
+      "observedHead": "2c5958ecac7cee2b583967a2c4981d0f4a75c579",
+      "analysisPin": "2c5958ecac7cee2b583967a2c4981d0f4a75c579",
+      "recordedAt": "2026-11-08T06:28:32.510419+00:00",
+      "mirrorDisposition": "CLONED_PINNED",
+      "analysisHeadEqualsObserved": true,
+      "treeSha256": "abc8cf0b82936f71557c3878913f0599f0d94eab17c2388cb9b9a32accb3a3b4",
+      "treeLeafCount": 446,
+      "locator": "https://github.com/anthropics/skills/tree/2c5958ecac7cee2b583967a2c4981d0f4a75c579",
+      "disposition": "CORE_REFERENCE",
+      "purpose": "UX-A; frontend design planning; webapp-testing is conditional methodology only",
+      "licenseBasis": "Apache-2.0 in frontend-design/LICENSE.txt; no full-repository licensing claim",
+      "limits": "Brief and DESIGN win; reject assumed prior client rejection and helper-before-source instructions",
+      "counts": {
+        "manifest": 446,
+        "READ": 3,
+        "DEFERRED": 443
+      },
+      "selectedFullReads": [
+        {
+          "path": "skills/frontend-design/LICENSE.txt",
+          "gitBlob": "f433b1a53f5b830a205fd2df78e2b34974656c7b",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "bytes": 10174,
+          "pinnedBlobSha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        },
+        {
+          "path": "skills/frontend-design/SKILL.md",
+          "gitBlob": "a5333457c414d20d625f307df945842c0952ecc3",
+          "sha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3",
+          "bytes": 9390,
+          "pinnedBlobSha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        },
+        {
+          "path": "skills/webapp-testing/SKILL.md",
+          "gitBlob": "4726215301db64a0cc4d41fc3219c61f37a30f4a",
+          "sha256": "51b7349e77ec63b7744a6f63647e7566a0b4d2e301121cc10e8c2113af6556a2",
+          "bytes": 3913,
+          "pinnedBlobSha256": "51b7349e77ec63b7744a6f63647e7566a0b4d2e301121cc10e8c2113af6556a2",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        }
+      ]
+    },
+    {
+      "id": "evon",
+      "repository": "https://github.com/evondev/evondevKit.git",
+      "slug": "evondev/evondevKit",
+      "mirror": ".private_reference/source_mirrors/evondev__evondevKit",
+      "reportedPin": "a3669b675f1810c2284001f1765501f3f3d16db1",
+      "observedDefaultBranch": "master",
+      "observedHead": "a3669b675f1810c2284001f1765501f3f3d16db1",
+      "analysisPin": "a3669b675f1810c2284001f1765501f3f3d16db1",
+      "recordedAt": "2026-11-08T06:28:38.226385+00:00",
+      "mirrorDisposition": "EXISTING_PIN_REUSED",
+      "analysisHeadEqualsObserved": true,
+      "treeSha256": "bb4ac01224f2483a450d5beee1dea30bf52ae8196f2d0cda14a98736839abb6d",
+      "treeLeafCount": 127,
+      "locator": "https://github.com/evondev/evondevKit/tree/a3669b675f1810c2284001f1765501f3f3d16db1",
+      "disposition": "CORE_REFERENCE",
+      "purpose": "UX-E; business app layout and state references; one component, not the whole pack",
+      "licenseBasis": "MIT root LICENSE",
+      "limits": "Reject locked-rules16/I14 focus suppression; preserve handlers; updater/scripts not executed",
+      "counts": {
+        "manifest": 127,
+        "READ": 8,
+        "DEFERRED": 119
+      },
+      "selectedFullReads": [
+        {
+          "path": ".claude-plugin/marketplace.json",
+          "gitBlob": "486d5c8dcc28c347d488af14201f1bf8af716e21",
+          "sha256": "0ac77aa73a6b7646f1ace0cf8b03520e3e81d369b97bd1dce3fd19b83db73f8f",
+          "bytes": 445,
+          "pinnedBlobSha256": "0ac77aa73a6b7646f1ace0cf8b03520e3e81d369b97bd1dce3fd19b83db73f8f",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Prior full read reused at identical pin; source receipt below"
+        },
+        {
+          "path": ".claude-plugin/plugin.json",
+          "gitBlob": "f1ac1368ed49693fcea6b19624d823c974e8b45c",
+          "sha256": "d25a7945677e7e97b665c34612fd6cfe9e2a54e7aaf0ebc2c9b4aa933c671bf8",
+          "bytes": 384,
+          "pinnedBlobSha256": "d25a7945677e7e97b665c34612fd6cfe9e2a54e7aaf0ebc2c9b4aa933c671bf8",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Prior full read reused at identical pin; source receipt below"
+        },
+        {
+          "path": "LICENSE",
+          "gitBlob": "67b54327835d636897e2c1d4ae15c9c2b269b6b7",
+          "sha256": "11eb4e2dc344cdba59dc76ccc07f3db6864d96648d470af08407f048c4e4a560",
+          "bytes": 1070,
+          "pinnedBlobSha256": "11eb4e2dc344cdba59dc76ccc07f3db6864d96648d470af08407f048c4e4a560",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Prior full read reused at identical pin; source receipt below"
+        },
+        {
+          "path": "README.md",
+          "gitBlob": "308042c4dddbb5066068a8e77427ff4a38b58a08",
+          "sha256": "fbb46425bbed40947ea32f5f2d11425c622393659be844e0893128f613f4ce9a",
+          "bytes": 9589,
+          "pinnedBlobSha256": "fbb46425bbed40947ea32f5f2d11425c622393659be844e0893128f613f4ce9a",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Prior full read reused at identical pin; source receipt below"
+        },
+        {
+          "path": "skills/ui-ux/SKILL.md",
+          "gitBlob": "65056747cf9e9b9d30b01847ac57e69d3fd8b4f4",
+          "sha256": "eb971215d5191214cbcbe1fa8fc528546f9957eb29ae06e21ce3b0462ff6b86e",
+          "bytes": 46364,
+          "pinnedBlobSha256": "eb971215d5191214cbcbe1fa8fc528546f9957eb29ae06e21ce3b0462ff6b86e",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Prior full read reused at identical pin; source receipt below"
+        },
+        {
+          "path": "skills/ui-ux/VERSION",
+          "gitBlob": "ac39a106c48515b621e90c028ed94c6f71bc03fa",
+          "sha256": "9d8c94f1ad3ea96b1e2ac4914fda4cb93c76b4a3e0d8cc6dd8976d6c0b227d15",
+          "bytes": 6,
+          "pinnedBlobSha256": "9d8c94f1ad3ea96b1e2ac4914fda4cb93c76b4a3e0d8cc6dd8976d6c0b227d15",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Prior full read reused at identical pin; source receipt below"
+        },
+        {
+          "path": "skills/ui-ux/references/locked-rules.md",
+          "gitBlob": "67dd329647571088ae2eb15b1fb3a9cb3d9b972a",
+          "sha256": "9adb0156473c6b1d6f8b7ed38ebd4be148d0e4e4fbd05f4f65b397b20adedc57",
+          "bytes": 7232,
+          "pinnedBlobSha256": "9adb0156473c6b1d6f8b7ed38ebd4be148d0e4e4fbd05f4f65b397b20adedc57",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Prior full read reused at identical pin; source receipt below"
+        },
+        {
+          "path": "skills/ui-ux/scripts/check-update.mjs",
+          "gitBlob": "13da174044a04edd2a9039d4736b447ccdeeac6c",
+          "sha256": "efb449a2fc914c97901a8e6c2210bfc1a457ec6c2bfdea3a77fffa23b3236379",
+          "bytes": 4132,
+          "pinnedBlobSha256": "efb449a2fc914c97901a8e6c2210bfc1a457ec6c2bfdea3a77fffa23b3236379",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Prior full read reused at identical pin; source receipt below"
+        }
+      ]
+    },
+    {
+      "id": "promax",
+      "repository": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+      "slug": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "mirror": ".private_reference/source_mirrors/nextlevelbuilder__ui-ux-pro-max-skill",
+      "reportedPin": "ccce51cba388476d4f403091ddb91636d5cd9fed",
+      "observedDefaultBranch": "main",
+      "observedHead": "4f2dbb67e64969a9a30ab00742f2d55d66ddec2b",
+      "analysisPin": "4f2dbb67e64969a9a30ab00742f2d55d66ddec2b",
+      "recordedAt": "2026-11-08T06:28:37.317121+00:00",
+      "mirrorDisposition": "CLONED_PINNED",
+      "analysisHeadEqualsObserved": true,
+      "treeSha256": "d05783cfad340fa2fdeb71a1638b20a37d0bca66470c84d6c6bd319acdf6ce97",
+      "treeLeafCount": 712,
+      "locator": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/4f2dbb67e64969a9a30ab00742f2d55d66ddec2b",
+      "disposition": "CORE_REFERENCE",
+      "purpose": "UX-P; selected UX/palette/stack data; no search CLI execution",
+      "licenseBasis": "MIT root LICENSE, Next Level Builder",
+      "limits": "No new design-system authority, persist/force writes, font download or inferred desktop stack support",
+      "counts": {
+        "manifest": 712,
+        "READ": 2,
+        "DEFERRED": 710
+      },
+      "selectedFullReads": [
+        {
+          "path": ".claude/skills/ui-ux-pro-max/SKILL.md",
+          "gitBlob": "2cacc8756e816a1eb6bfa44307372f2aeb445902",
+          "sha256": "14f43337edfbf7822e091428e4ae0c6f92f86e3353deda6a30f6613121e2cf2d",
+          "bytes": 16646,
+          "pinnedBlobSha256": "14f43337edfbf7822e091428e4ae0c6f92f86e3353deda6a30f6613121e2cf2d",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        },
+        {
+          "path": "LICENSE",
+          "gitBlob": "1e71cbf26660f31903807d099fe902c098fc7e4c",
+          "sha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014",
+          "bytes": 1075,
+          "pinnedBlobSha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        }
+      ]
+    },
+    {
+      "id": "taste",
+      "repository": "https://github.com/Leonxlnx/taste-skill.git",
+      "slug": "Leonxlnx/taste-skill",
+      "mirror": ".private_reference/source_mirrors/Leonxlnx__taste-skill",
+      "reportedPin": "9b4bf937a1f69348126959c15d2f99a73e65699b",
+      "observedDefaultBranch": "main",
+      "observedHead": "f6b76575f949707b4e3c37cd86cb44b0b98643e8",
+      "analysisPin": "f6b76575f949707b4e3c37cd86cb44b0b98643e8",
+      "recordedAt": "2026-11-08T06:28:49.075042+00:00",
+      "mirrorDisposition": "CLONED_PINNED",
+      "analysisHeadEqualsObserved": true,
+      "treeSha256": "01ae9823348b9631c95aaaa1f1636fff740298a823db0739bac2bf965f440ae6",
+      "treeLeafCount": 1663,
+      "locator": "https://github.com/Leonxlnx/taste-skill/tree/f6b76575f949707b4e3c37cd86cb44b0b98643e8",
+      "disposition": "DEFERRED_CONDITIONAL",
+      "purpose": "Marketing/company/product website only; not either current operational UI pilot",
+      "licenseBasis": "MIT root LICENSE, Leonxlnx; assets not reviewed",
+      "limits": "Stop hook and node/shell scripts not admitted; entry only partially read",
+      "counts": {
+        "manifest": 1663,
+        "READ": 1,
+        "DEFERRED": 1662
+      },
+      "selectedFullReads": [
+        {
+          "path": "LICENSE",
+          "gitBlob": "48a2f6640b81ff8eca9ce7f6a96337692713ef5b",
+          "sha256": "4575a543ab88dad12ccea7d97e563d0bce5b448b06072e65d3264497dad326df",
+          "bytes": 1065,
+          "pinnedBlobSha256": "4575a543ab88dad12ccea7d97e563d0bce5b448b06072e65d3264497dad326df",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        }
+      ]
+    },
+    {
+      "id": "vercel-guidelines",
+      "repository": "https://github.com/vercel-labs/web-interface-guidelines.git",
+      "slug": "vercel-labs/web-interface-guidelines",
+      "mirror": ".private_reference/source_mirrors/vercel-labs__web-interface-guidelines",
+      "reportedPin": "434b7f91364665f2f733b310ec54809bf8f37937",
+      "observedDefaultBranch": "main",
+      "observedHead": "434b7f91364665f2f733b310ec54809bf8f37937",
+      "analysisPin": "434b7f91364665f2f733b310ec54809bf8f37937",
+      "recordedAt": "2026-11-08T06:28:31.683230+00:00",
+      "mirrorDisposition": "CLONED_PINNED",
+      "analysisHeadEqualsObserved": true,
+      "treeSha256": "8745bef3190d4fbefc6df38e7837eed3b30c0414e95b4946fe0e7ef8d49c9d35",
+      "treeLeafCount": 5,
+      "locator": "https://github.com/vercel-labs/web-interface-guidelines/tree/434b7f91364665f2f733b310ec54809bf8f37937",
+      "disposition": "CORE_REFERENCE",
+      "purpose": "UX-V; pinned accessibility/form/state/i18n review",
+      "licenseBasis": "MIT root LICENSE, Vercel Labs",
+      "limits": "Use command.md at pin; no fetch-main wrapper, mandatory Title Case or unmeasured virtualization threshold",
+      "counts": {
+        "manifest": 5,
+        "READ": 2,
+        "DEFERRED": 3
+      },
+      "selectedFullReads": [
+        {
+          "path": "LICENSE",
+          "gitBlob": "b3575a3c1358eac4b9ee36a4c851872d81417760",
+          "sha256": "6cd1609c9c12233507cdd2ce0d32e9a721e3c27494951be06b90090deeeb7af2",
+          "bytes": 1068,
+          "pinnedBlobSha256": "6cd1609c9c12233507cdd2ce0d32e9a721e3c27494951be06b90090deeeb7af2",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        },
+        {
+          "path": "command.md",
+          "gitBlob": "3eb3a212b7b89493922ea418489d4c6f67ae8bd5",
+          "sha256": "d246b026f4f29b5823a9cc857f9edf3d2507002e055e32040cadeaf3b38e0234",
+          "bytes": 8055,
+          "pinnedBlobSha256": "d246b026f4f29b5823a9cc857f9edf3d2507002e055e32040cadeaf3b38e0234",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        }
+      ]
+    },
+    {
+      "id": "vercel-skills",
+      "repository": "https://github.com/vercel-labs/agent-skills.git",
+      "slug": "vercel-labs/agent-skills",
+      "mirror": ".private_reference/source_mirrors/vercel-labs__agent-skills",
+      "reportedPin": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+      "observedDefaultBranch": "main",
+      "observedHead": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+      "analysisPin": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+      "recordedAt": "2026-11-08T06:28:32.161179+00:00",
+      "mirrorDisposition": "CLONED_PINNED",
+      "analysisHeadEqualsObserved": true,
+      "treeSha256": "6d12caec64228695e60a4d7ccd50bafa8be250ed745854f10b8f803bec1f6698",
+      "treeLeafCount": 444,
+      "locator": "https://github.com/vercel-labs/agent-skills/tree/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+      "disposition": "CONDITIONAL_REFERENCE",
+      "purpose": "React/Next only and a named component/render/data gap",
+      "licenseBasis": "MIT declarations in React/composition frontmatter; no root LICENSE found; no repository-wide clearance",
+      "limits": "No scripts or broad rule import; preserve project React version and semantic HTML",
+      "counts": {
+        "manifest": 444,
+        "READ": 5,
+        "DEFERRED": 439
+      },
+      "selectedFullReads": [
+        {
+          "path": "skills/composition-patterns/SKILL.md",
+          "gitBlob": "d07025bf943345bc1cf15eb923594f889ff881f0",
+          "sha256": "e38e0eaa609316b10423a9a138ed95e35099accd3f735585295c8a8f165c28a3",
+          "bytes": 2886,
+          "pinnedBlobSha256": "e38e0eaa609316b10423a9a138ed95e35099accd3f735585295c8a8f165c28a3",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        },
+        {
+          "path": "skills/react-best-practices/SKILL.md",
+          "gitBlob": "237988de4a66dd8a71d30a2c24ebe1a86b58d04e",
+          "sha256": "71ed7794962fa6e803ee83030517b5b93a9f70fbfeb431ec4535c5480a8d8355",
+          "bytes": 7251,
+          "pinnedBlobSha256": "71ed7794962fa6e803ee83030517b5b93a9f70fbfeb431ec4535c5480a8d8355",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        },
+        {
+          "path": "skills/react-best-practices/rules/async-parallel.md",
+          "gitBlob": "64133f6c31fec81eaaabd712586337d20122e09f",
+          "sha256": "6d2f841896279e976dfcdc1ac89e70771ac188baadfd43c096b5706cb838b961",
+          "bytes": 654,
+          "pinnedBlobSha256": "6d2f841896279e976dfcdc1ac89e70771ac188baadfd43c096b5706cb838b961",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        },
+        {
+          "path": "skills/react-best-practices/rules/rerender-derived-state-no-effect.md",
+          "gitBlob": "3d9fe4050794ea6655add6bee50cfbc104e5dc31",
+          "sha256": "cb11ec76f50aa7b6847269f02d79b120c889a30d9ecd2c1d578f75144419c77a",
+          "bytes": 1201,
+          "pinnedBlobSha256": "cb11ec76f50aa7b6847269f02d79b120c889a30d9ecd2c1d578f75144419c77a",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        },
+        {
+          "path": "skills/web-design-guidelines/SKILL.md",
+          "gitBlob": "ceae92ab319216a68274168fba9b63b998b65997",
+          "sha256": "f4647ca866a3accf763777f83e7682954f0187cd6bea7eea0399796652414e8f",
+          "bytes": 1231,
+          "pinnedBlobSha256": "f4647ca866a3accf763777f83e7682954f0187cd6bea7eea0399796652414e8f",
+          "materialization": "EXACT_BLOB_BYTES",
+          "readBasis": "Full selected-file read in current source-selection session"
+        }
+      ]
+    }
+  ],
+  "deferredUnresolvedSource": {
+    "name": "Fluent Blue / Qt",
+    "reason": "No exact URL/pin in supplied proposals; no Qt demand in the two pilots",
+    "reentry": "Project needs Qt and supplies verifiable upstream identity"
+  },
+  "priorEvonReceipt": {
+    "path": "docs/concepts/evidence/CVF_EVONDEVKIT_UIUX_INTAKE_2026-11-08.json",
+    "sha256": "7dd2a678b964ade36e2c7db0396dc380ac6bceb35f3d0d240b68376aa0902cd1"
+  },
+  "corpus": {
+    "scope": "Seven pinned Git source trees only; .git internals/untracked files excluded by definition, not a machine-wide or whole-repository semantic audit",
+    "manifest": 3493,
+    "ledgerTerminal": 3493,
+    "READ": 23,
+    "DEFERRED": 3470,
+    "unmapped": 0,
+    "unreadableSelectedFiles": [],
+    "verdict": "PARTIAL",
+    "partialReadsRemainDeferred": true,
+    "aggregation": "Per-source independent rows; Anthropic supplies two skills; Vercel has separate source repositories; Addy is existing baseline, not additional uplift",
+    "drift": "Analysis pins fixed; newer observed Addy HEAD retained as observation only; original advisory pins preserved, not assumed current; no old-to-new semantic diff claimed"
+  },
+  "evidenceArchive": {
+    "path": "docs/concepts/evidence/CVF_UI_UX_PACK_SOURCE_EVIDENCE_2026-11-08.zip",
+    "sha256": "ca45f68dd9510368263c388e40decdd8458d5dfe56717dd6019b1e88325b90ca",
+    "memberCount": 17,
+    "contents": "Exact incoming advisory bytes, acquisition observations, seven pinned Git manifests and seven full terminal ledgers; no third-party source bodies copied into Core"
+  },
+  "verification": {
+    "selectedFilesMatchPinnedContent": true,
+    "lineEndingMaterializationRecordedPerFile": true,
+    "allManifestPathsExist": true,
+    "mirrorHeadsMatchAnalysisPins": true,
+    "mirrorWorktreesClean": true,
+    "archiveMemberRoundtrip": true,
+    "preexistingProtectedFilesUnchanged": true,
+    "protectedPathCount": 11
+  },
+  "useProof": "NOT_STARTED; no provider call, upstream script/help/hook, dependency install, ASSF registration/invocation, UI redesign, consumer or project data operation. Source index is usable for manual reference selection; pack benefit not measured.",
+  "destinations": {
+    "trialOwner": "D125 UI01 CVF /skills, then UI02 report lookup after project snapshot/PNI boundary; same native baseline and permissions",
+    "nativeBaseline": "Existing DESIGN, product_ux portfolio, frontend owner and native verification; no replacement or weakened comparator"
+  },
+  "publicExportDisposition": "DEFERRED_PRIVATE_ONLY",
+  "finalAssemblyVerification": {
+    "protectedPathsUnchanged": 11,
+    "selectedReadHashesVerified": 23,
+    "ledgerCounts": {
+      "READ": 23,
+      "DEFERRED": 3470
+    },
+    "localLinksResolved": 25,
+    "scenarioIdsUnchanged": 8,
+    "archiveBytesVerified": true,
+    "staticChecks": {
+      "markdownStructure": "PASS; includes new entry and D125",
+      "fileSize": "PASS; 0 violations, 90 existing advisories",
+      "sourceMirrorMigration": "NOT_APPLICABLE; 0 legacy-path artifacts",
+      "gitDiffCheck": "PASS"
+    },
+    "claim": "Reference assembly only; UI01/UI02 and E1/E2/E3 not run"
+  }
+}

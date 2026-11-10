@@ -170,7 +170,7 @@ describe("provider capability registry", () => {
     const alibaba = PROVIDER_CAPABILITY_REGISTRY.find((entry) => entry.providerId === "alibaba");
     expect(alibaba).toBeDefined();
     const registeredModelIds = new Set(alibaba?.models.map((model) => model.modelId));
-    for (const ledgerEntry of ALIBABA_FREE_QUOTA_MODELS) {
+    for (const ledgerEntry of ALIBABA_FREE_QUOTA_MODELS.filter(entry => entry.modelFamily === "text")) {
       expect(registeredModelIds.has(ledgerEntry.modelId)).toBe(true);
       expect(listRegistrySupportedMethods(
         PROVIDER_CAPABILITY_REGISTRY,
@@ -188,32 +188,48 @@ describe("provider capability registry", () => {
 
   it("keeps Alibaba free-quota metadata bounded to the governed ledger reference", () => {
     const alibaba = PROVIDER_CAPABILITY_REGISTRY.find((entry) => entry.providerId === "alibaba");
-    const qwen37Plus = alibaba?.models.find(
-      (model): model is ProviderCapabilityModel => model.modelId === "qwen3.7-plus",
+    const currentText = alibaba?.models.find(
+      (model): model is ProviderCapabilityModel => model.modelId === "qwen3.8-2.4t-a95b",
     );
-    expect(qwen37Plus?.metadata).toMatchObject({
+    expect(currentText?.metadata).toMatchObject({
       freeQuotaLedgerRef: ALIBABA_FREE_QUOTA_LEDGER_REFERENCE,
-      expirationDate: "2026-08-31",
-      diagnosticRerunResult: "PASS",
-      defaultEndpointHost: "dashscope-intl.aliyuncs.com",
+      expirationDate: "2026-11-11",
+      stopOnExhaustAtCapture: true,
+      defaultEndpointHost: "ws-remplsp27g5oicq1.ap-southeast-1.maas.aliyuncs.com",
     });
-    expect(qwen37Plus?.metadata?.claimBoundary).toContain("no provider parity");
+    expect(currentText?.metadata?.claimBoundary).toContain("no provider parity");
   });
 
   it("classifies Alibaba free-quota model usability by expiration before live use", () => {
     expect(ALIBABA_T6_FREE_QUOTA_TARGET_MODEL).toBe("qwen3.7-flash");
     expect(ALIBABA_T6_FREE_QUOTA_TARGET_SNAPSHOT).toBe("qwen3.7-flash-2026-07-15");
     expect(getAlibabaFreeQuotaStatus(
-      ALIBABA_T6_FREE_QUOTA_TARGET_MODEL,
-      new Date("2026-08-15T00:00:00Z"),
+      "qwen3.8-2.4t-a95b",
+      new Date("2026-11-04T00:00:00Z"),
     )).toBe("usable");
     expect(getAlibabaFreeQuotaStatus(
-      ALIBABA_T6_FREE_QUOTA_TARGET_MODEL,
-      new Date("2026-10-23T00:00:00Z"),
+      "qwen3.8-2.4t-a95b",
+      new Date("2026-11-11T00:00:00Z"),
     )).toBe("expired");
     expect(getAlibabaFreeQuotaStatus(
       "unknown-model",
       new Date("2026-06-18T00:00:00Z"),
     )).toBe("unknown");
   });
+});
+
+
+it('adds only the native TypeSafe system_one method and preserves historical parity',()=>{
+  const contract=getProviderMethodContract(PROVIDER_CAPABILITY_REGISTRY,'typesafe','jev-latest');
+  expect(contract?.supportedMethods).toEqual(['system_one']);
+  expect(contract?.defaultMethod).toBe('system_one');
+  expect(REVIEW_CVF_PROVIDER_METHODS).not.toContain('system_one');
+  expect(listRegistrySupportedMethods(PROVIDER_CAPABILITY_REGISTRY,'typesafe','jev-latest')).not.toContain('complete');
+});
+
+
+it("registers only the fixed OpenRouter System One candidate",()=>{
+  expect(getProviderMethodContract(PROVIDER_CAPABILITY_REGISTRY,"openrouter","typesafe/jev-1.14")).toMatchObject({supportedMethods:["system_one"],defaultMethod:"system_one"});
+  expect(getProviderMethodContract(PROVIDER_CAPABILITY_REGISTRY,"openrouter","typesafe/jev-1.14-20261014")).toBeNull();
+  expect(()=>assertRegistryProviderMethodSupported(PROVIDER_CAPABILITY_REGISTRY,"openrouter","typesafe/jev-1.14","complete")).toThrow();
 });

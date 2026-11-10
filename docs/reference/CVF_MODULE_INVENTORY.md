@@ -1,53 +1,114 @@
 # CVF Module Inventory
 
-Status: canonical module inventory for the current repo baseline.
+Memory class: POINTER_RECORD
+Status: ACTIVE_REFERENCE
+docType: reference
+Last structurally verified: 2026-11-04
 
 ## Purpose
 
-- provide one scan-friendly list of module families and their operational role
-- make it easy to identify current baseline vs historical/reference-only lines
-- support Phase 5 roadmap work on release and maturity discipline
+List the extension directories that actually exist, their entry files and the
+lifecycle classification already declared by CVF. Start with the
+[Current Project Catalog](CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md) for roles,
+code navigation and the distinction between source, evidence and local state.
+
+## Scope / Applies To
+
+Immediate children of `EXTENSIONS/`. The generated table is directory and
+metadata evidence, not a new maturity assessment. `ACTIVE_CANONICAL` means an
+architectural/operational owner; `MERGED_RETAINED` means retained compatibility
+or lineage; `FROZEN_REFERENCE` means reference material. These classes do not
+mean a package is installed, universally invoked, publicly shipped or tested
+at this revision.
+
+## Owner / Source
+
+Directory existence comes from the local filesystem. Lifecycle and exposure
+remain owned by `governance/compat/CVF_EXTENSION_LIFECYCLE_REGISTRY.json` and
+[Repository Lifecycle Classification](CVF_REPOSITORY_LIFECYCLE_CLASSIFICATION.md).
+Release and maturity decisions remain in [Release Manifest](CVF_RELEASE_MANIFEST.md)
+and [Maturity Matrix](CVF_MATURITY_MATRIX.md), with their dated evidence.
 
 ## Inventory
 
-| Path / Family | Scope | Layer / Function | Operational status | Notes |
-|---|---|---|---|---|
-| `v1.0/` | foundation docs | core process baseline | frozen | original learning/baseline entry |
-| `v1.1/` | governance docs | governance refinement | frozen | policy lineage root |
-| `EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/` | development governance runtime | layer 1.5 | stable + local hardening | current hardening target |
-| `EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/` | capability model | layer 2 | frozen | capability governance root |
-| `EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/` | external integration | layer 2 | active | independently reassessed |
-| `EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/` | skill governance runtime | layer 2 | local-ready | part of current operational track |
-| `EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/` | sdk/cli/tooling | layer 2 | frozen | implementation baseline |
-| `EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/` | operator guidance | historical operator line | legacy-reference | retained for lineage |
-| `EXTENSIONS/CVF_v1.4_USAGE_LAYER/` | usage/operator family | historical usage layer | legacy-reference | not current upgrade focus |
-| `EXTENSIONS/CVF_v1.5_UX_PLATFORM/` | ux platform | pre-web UI line | legacy-reference | historical/reference |
-| `EXTENSIONS/CVF_v1.5.1_END_USER_ORIENTATION/` | end-user orientation | reference | legacy-reference | reference line |
-| `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` | skill library | end-user skills | active-reference | operational content library |
-| `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/` | web platform | layer 2.5 app/runtime | active | current main UI line |
-| `EXTENSIONS/CVF_v1.6.1_GOVERNANCE_ENGINE/` | governance engine | layer 2.5 | active | enforcement/runtime support |
-| `EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/` | intelligence controls | safety line root | stable | current safety family root |
-| `EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/` | safety runtime | runtime governance | stable | tested kernel runtime line |
-| `EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/` | dashboard | safety visibility | stable | non-coder UI layer |
-| `EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/` | adapter hub | multi-runtime adapter | active | current adapter line |
-| `EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/` | safety hardening | runtime hardening | local-ready | implemented local line |
-| `EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/` | observability runtime | safety/observability | local-ready | current local line |
-| `EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/` | reproducibility | deterministic replay | local-ready | implemented local line |
-| `EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/` | non-coder safety | simplified runtime | local-ready | implemented local line |
-| `EXTENSIONS/CVF_GUARD_CONTRACT/` | cross-channel guard contract | shared runtime guard contract | active | active helper line for mandatory gateway, governed execution runtime, and now `GC-020` transition + handoff checkpoint surfacing |
-| `EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/` | control-plane foundation shell + usable intake baseline + unified retrieval contract + deterministic packaging contract + real consumer path proof | whitepaper completion `W1-T1 / CP1-CP5`, `W1-T2 / CP1-CP5` | local-ready | closed first and second control-plane tranches; `W1-T2` now canonically closed through `CP5` with intake, retrieval, packaging, and consumer-path contracts plus governed consumption receipts |
-| `EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/` | execution-plane coordination shell | whitepaper completion `W2-T1 / CP1-CP5` | local-ready | closed first execution-plane tranche preserving lineage for MCP bridge, gateway, adapter, memory, prompt-preview, explainability, authorization-boundary surfacing, and explicit closure/defer posture |
-| `EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/` | governance-expansion coordination shell | whitepaper completion `W3-T1 / CP1` | local-ready | closed governance-expansion tranche for operational governance modules with explicit defer of concept-only `Watchdog` and `Audit / Consensus` targets |
-| `EXTENSIONS/examples/` | example contracts, registry records, adapter thought experiments, and rewrite samples | L6 ecosystem examples | active-reference | 13 tracked files across four subdirectories; distributed example owner, not a runtime or release package |
-| `EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/` | core primitives | layer 0 | draft | branch-track / future-facing |
-| `docs/reference/` | canonical reference | source-of-truth docs | active | long-lived authoritative docs |
-| `docs/assessments/` | assessment archive | audit/reassessment | active | evidence archive |
-| `docs/baselines/` | baseline archive | snapshots/freeze | active | baseline chain |
-| `docs/roadmaps/` | roadmap archive | remediation/planning | active | roadmap chain |
-| `docs/reviews/` | scoped review archive | review evidence | active | module-specific review archive |
+<!-- CVF-PROJECT-MODULES:START -->
 
-## Inventory Rules
+| Module path under `EXTENSIONS/` | Existing entry files | Declared lifecycle |
+|---|---|---|
+| [CVF_AGENT_DEFINITION](../../EXTENSIONS/CVF_AGENT_DEFINITION/) | [README.md](../../EXTENSIONS/CVF_AGENT_DEFINITION/README.md), [package.json](../../EXTENSIONS/CVF_AGENT_DEFINITION/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_AGENT_LEDGER](../../EXTENSIONS/CVF_AGENT_LEDGER/) | [README.md](../../EXTENSIONS/CVF_AGENT_LEDGER/README.md), [package.json](../../EXTENSIONS/CVF_AGENT_LEDGER/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_CONTROL_PLANE_FOUNDATION](../../EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/) | [README.md](../../EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/README.md), [package.json](../../EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_ECO_v1.0_INTENT_VALIDATION](../../EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION/) | [README.md](../../EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION/README.md), [package.json](../../EXTENSIONS/CVF_ECO_v1.0_INTENT_VALIDATION/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v1.1_NL_POLICY](../../EXTENSIONS/CVF_ECO_v1.1_NL_POLICY/) | [README.md](../../EXTENSIONS/CVF_ECO_v1.1_NL_POLICY/README.md), [package.json](../../EXTENSIONS/CVF_ECO_v1.1_NL_POLICY/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v1.2_LLM_RISK_ENGINE](../../EXTENSIONS/CVF_ECO_v1.2_LLM_RISK_ENGINE/) | [README.md](../../EXTENSIONS/CVF_ECO_v1.2_LLM_RISK_ENGINE/README.md), [package.json](../../EXTENSIONS/CVF_ECO_v1.2_LLM_RISK_ENGINE/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v1.3_DOMAIN_GUARDS](../../EXTENSIONS/CVF_ECO_v1.3_DOMAIN_GUARDS/) | [package.json](../../EXTENSIONS/CVF_ECO_v1.3_DOMAIN_GUARDS/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v1.4_RAG_PIPELINE](../../EXTENSIONS/CVF_ECO_v1.4_RAG_PIPELINE/) | [package.json](../../EXTENSIONS/CVF_ECO_v1.4_RAG_PIPELINE/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v2.0_AGENT_GUARD_SDK](../../EXTENSIONS/CVF_ECO_v2.0_AGENT_GUARD_SDK/) | [README.md](../../EXTENSIONS/CVF_ECO_v2.0_AGENT_GUARD_SDK/README.md), [package.json](../../EXTENSIONS/CVF_ECO_v2.0_AGENT_GUARD_SDK/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v2.1_GOVERNANCE_CANVAS](../../EXTENSIONS/CVF_ECO_v2.1_GOVERNANCE_CANVAS/) | [package.json](../../EXTENSIONS/CVF_ECO_v2.1_GOVERNANCE_CANVAS/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v2.2_GOVERNANCE_CLI](../../EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/) | [package.json](../../EXTENSIONS/CVF_ECO_v2.2_GOVERNANCE_CLI/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v2.3_AGENT_IDENTITY](../../EXTENSIONS/CVF_ECO_v2.3_AGENT_IDENTITY/) | [README.md](../../EXTENSIONS/CVF_ECO_v2.3_AGENT_IDENTITY/README.md), [package.json](../../EXTENSIONS/CVF_ECO_v2.3_AGENT_IDENTITY/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v2.4_GRAPH_GOVERNANCE](../../EXTENSIONS/CVF_ECO_v2.4_GRAPH_GOVERNANCE/) | [package.json](../../EXTENSIONS/CVF_ECO_v2.4_GRAPH_GOVERNANCE/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v2.5_MCP_SERVER](../../EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/) | [README.md](../../EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/README.md), [package.json](../../EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v3.0_TASK_MARKETPLACE](../../EXTENSIONS/CVF_ECO_v3.0_TASK_MARKETPLACE/) | [README.md](../../EXTENSIONS/CVF_ECO_v3.0_TASK_MARKETPLACE/README.md), [package.json](../../EXTENSIONS/CVF_ECO_v3.0_TASK_MARKETPLACE/package.json) | `MERGED_RETAINED` |
+| [CVF_ECO_v3.1_REPUTATION](../../EXTENSIONS/CVF_ECO_v3.1_REPUTATION/) | [README.md](../../EXTENSIONS/CVF_ECO_v3.1_REPUTATION/README.md), [package.json](../../EXTENSIONS/CVF_ECO_v3.1_REPUTATION/package.json) | `MERGED_RETAINED` |
+| [CVF_EXECUTION_PLANE_FOUNDATION](../../EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/) | [README.md](../../EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/README.md), [package.json](../../EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_EXTRACTION_FOUNDATION](../../EXTENSIONS/CVF_EXTRACTION_FOUNDATION/) | Directory only; inspect child paths | `ACTIVE_CANONICAL` |
+| [CVF_GOVERNANCE_EXPANSION_FOUNDATION](../../EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/) | [README.md](../../EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/README.md), [package.json](../../EXTENSIONS/CVF_GOVERNANCE_EXPANSION_FOUNDATION/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_GUARD_CONTRACT](../../EXTENSIONS/CVF_GUARD_CONTRACT/) | [README.md](../../EXTENSIONS/CVF_GUARD_CONTRACT/README.md), [package.json](../../EXTENSIONS/CVF_GUARD_CONTRACT/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_LEARNING_PLANE_FOUNDATION](../../EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/) | [README.md](../../EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/README.md), [package.json](../../EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_MODEL_GATEWAY](../../EXTENSIONS/CVF_MODEL_GATEWAY/) | [README.md](../../EXTENSIONS/CVF_MODEL_GATEWAY/README.md), [package.json](../../EXTENSIONS/CVF_MODEL_GATEWAY/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_PLANE_FACADES](../../EXTENSIONS/CVF_PLANE_FACADES/) | [package.json](../../EXTENSIONS/CVF_PLANE_FACADES/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_POLICY_ENGINE](../../EXTENSIONS/CVF_POLICY_ENGINE/) | [README.md](../../EXTENSIONS/CVF_POLICY_ENGINE/README.md), [package.json](../../EXTENSIONS/CVF_POLICY_ENGINE/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_REFINERY](../../EXTENSIONS/CVF_REFINERY/) | [README.md](../../EXTENSIONS/CVF_REFINERY/README.md), [package.json](../../EXTENSIONS/CVF_REFINERY/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_SOT_THREE_LAYER_SLICE](../../EXTENSIONS/CVF_SOT_THREE_LAYER_SLICE/) | [package.json](../../EXTENSIONS/CVF_SOT_THREE_LAYER_SLICE/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_STARTER_TEMPLATE_REFERENCE](../../EXTENSIONS/CVF_STARTER_TEMPLATE_REFERENCE/) | [README.md](../../EXTENSIONS/CVF_STARTER_TEMPLATE_REFERENCE/README.md) | `FROZEN_REFERENCE` |
+| [CVF_TOOLKIT_REFERENCE](../../EXTENSIONS/CVF_TOOLKIT_REFERENCE/) | [README.md](../../EXTENSIONS/CVF_TOOLKIT_REFERENCE/README.md), [package.json](../../EXTENSIONS/CVF_TOOLKIT_REFERENCE/package.json) | `FROZEN_REFERENCE` |
+| [CVF_TRUST_SANDBOX](../../EXTENSIONS/CVF_TRUST_SANDBOX/) | [README.md](../../EXTENSIONS/CVF_TRUST_SANDBOX/README.md), [package.json](../../EXTENSIONS/CVF_TRUST_SANDBOX/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_TRUTH_FLOW](../../EXTENSIONS/CVF_TRUTH_FLOW/) | [README.md](../../EXTENSIONS/CVF_TRUTH_FLOW/README.md), [package.json](../../EXTENSIONS/CVF_TRUTH_FLOW/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_TRUTH_KERNEL](../../EXTENSIONS/CVF_TRUTH_KERNEL/) | [README.md](../../EXTENSIONS/CVF_TRUTH_KERNEL/README.md), [package.json](../../EXTENSIONS/CVF_TRUTH_KERNEL/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL](../../EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/) | [README.md](../../EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/README.md), [package.json](../../EXTENSIONS/CVF_v1.1.1_PHASE_GOVERNANCE_PROTOCOL/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_v1.2.1_EXTERNAL_INTEGRATION](../../EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/) | [README.md](../../EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/README.md), [package.json](../../EXTENSIONS/CVF_v1.2.1_EXTERNAL_INTEGRATION/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE](../../EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/) | [README.md](../../EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/README.md), [package.json](../../EXTENSIONS/CVF_v1.2.2_SKILL_GOVERNANCE_ENGINE/package.json) | `MERGED_RETAINED` |
+| [CVF_v1.2_CAPABILITY_EXTENSION](../../EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/) | [README.md](../../EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/README.md) | `MERGED_RETAINED` |
+| [CVF_v1.3.1_OPERATOR_EDITION](../../EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/) | [README.md](../../EXTENSIONS/CVF_v1.3.1_OPERATOR_EDITION/README.md) | `MERGED_RETAINED` |
+| [CVF_v1.3_IMPLEMENTATION_TOOLKIT](../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/) | [README.md](../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/README.md) | `ACTIVE_CANONICAL` |
+| [CVF_v1.4_USAGE_LAYER](../../EXTENSIONS/CVF_v1.4_USAGE_LAYER/) | [README.md](../../EXTENSIONS/CVF_v1.4_USAGE_LAYER/README.md) | `MERGED_RETAINED` |
+| [CVF_v1.5.1_END_USER_ORIENTATION](../../EXTENSIONS/CVF_v1.5.1_END_USER_ORIENTATION/) | [README.md](../../EXTENSIONS/CVF_v1.5.1_END_USER_ORIENTATION/README.md) | `ACTIVE_CANONICAL` |
+| [CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) | [README.md](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/README.md) | `ACTIVE_CANONICAL` |
+| [CVF_v1.5_UX_PLATFORM](../../EXTENSIONS/CVF_v1.5_UX_PLATFORM/) | [README.md](../../EXTENSIONS/CVF_v1.5_UX_PLATFORM/README.md) | `ACTIVE_CANONICAL` |
+| [CVF_v1.6.1_GOVERNANCE_ENGINE](../../EXTENSIONS/CVF_v1.6.1_GOVERNANCE_ENGINE/) | Directory only; inspect child paths | `ACTIVE_CANONICAL` |
+| [CVF_v1.6_AGENT_PLATFORM](../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) | [README.md](../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/README.md) | `ACTIVE_CANONICAL` |
+| [CVF_v1.7.1_SAFETY_RUNTIME](../../EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/) | [README.md](../../EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/README.md), [package.json](../../EXTENSIONS/CVF_v1.7.1_SAFETY_RUNTIME/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_v1.7.2_SAFETY_DASHBOARD](../../EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/) | [README.md](../../EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/README.md), [package.json](../../EXTENSIONS/CVF_v1.7.2_SAFETY_DASHBOARD/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_v1.7.3_RUNTIME_ADAPTER_HUB](../../EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/) | [README.md](../../EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/README.md), [package.json](../../EXTENSIONS/CVF_v1.7.3_RUNTIME_ADAPTER_HUB/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_v1.7_CONTROLLED_INTELLIGENCE](../../EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/) | [README.md](../../EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/README.md), [package.json](../../EXTENSIONS/CVF_v1.7_CONTROLLED_INTELLIGENCE/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME](../../EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/) | [README.md](../../EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/README.md), [package.json](../../EXTENSIONS/CVF_v1.8.1_ADAPTIVE_OBSERVABILITY_RUNTIME/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_v1.8_SAFETY_HARDENING](../../EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/) | [README.md](../../EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/README.md), [package.json](../../EXTENSIONS/CVF_v1.8_SAFETY_HARDENING/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY](../../EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/) | [README.md](../../EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/README.md), [package.json](../../EXTENSIONS/CVF_v1.9_DETERMINISTIC_REPRODUCIBILITY/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_v2.0_NONCODER_SAFETY_RUNTIME](../../EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/) | [README.md](../../EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/README.md), [package.json](../../EXTENSIONS/CVF_v2.0_NONCODER_SAFETY_RUNTIME/package.json) | `ACTIVE_CANONICAL` |
+| [CVF_v3.0_CORE_GIT_FOR_AI](../../EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/) | [README.md](../../EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/README.md), [package.json](../../EXTENSIONS/CVF_v3.0_CORE_GIT_FOR_AI/package.json) | `ACTIVE_CANONICAL` |
+| [examples](../../EXTENSIONS/examples/) | Directory only; inspect child paths | `FROZEN_REFERENCE` |
 
-- any new top-level extension line must be added here
-- release status changes must also update `CVF_RELEASE_MANIFEST.md`
-- maturity changes must also update `CVF_MATURITY_MATRIX.md`
+<!-- CVF-PROJECT-MODULES:END -->
+
+## Verification
+
+`python scripts/refresh_cvf_project_catalog.py --check` verifies the directory
+set, metadata fingerprints, lifecycle declarations and this table. Refresh with
+`python scripts/refresh_cvf_project_catalog.py --write --date YYYY-MM-DD`, then
+review the Catalog narrative and its evidence block. The helper does not assign
+new lifecycle/maturity values. The source manifest and processing ledger are in
+`docs/corpus-intelligence/manifests/cvf-current-project-structure.json`.
+
+## Claim Boundary
+
+Structural routing only. Read the relevant source, caller, tests and accepted
+review before making runtime or readiness claims. Older operational-target
+notes were removed from this current view; their evidence remains in Git and
+the existing dated records. No module was removed or relocated.
+
+## Related Artifacts
+
+- [Current Project Catalog](CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md)
+- [As-Built Architecture Catalog](system_architecture_catalog/README.md)
+- [Corpus Scan Registry](../corpus-intelligence/CVF_CORPUS_SCAN_REGISTRY.md)

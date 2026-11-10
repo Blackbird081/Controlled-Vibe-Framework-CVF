@@ -217,7 +217,7 @@ it('preserves submission nonce on ambiguous failure and never persists goal text
   fireEvent.click(screen.getByRole('button',{name:'Gợi ý kỹ năng'}));await screen.findByRole('alert');
   fireEvent.click(screen.getByRole('button',{name:'Gợi ý kỹ năng'}));await waitFor(()=>expect(transport).toHaveBeenCalledTimes(3));
   expect(JSON.parse(transport.mock.calls[1][1].body).nonce).toBe(JSON.parse(transport.mock.calls[2][1].body).nonce);
-  expect(screen.getByText('Yêu cầu có thể đã được gửi đến Jev; chưa xác nhận được kết quả. CVF không tự gửi lại.')).toBeTruthy();
+  expect(await screen.findByText('Yêu cầu có thể đã được gửi đến Jev; chưa xác nhận được kết quả. CVF không tự gửi lại.')).toBeTruthy();
   expect(sessionStorage.getItem('cvf-jev-run-id')).toBe('fixture-run');expect(JSON.stringify({...sessionStorage})).not.toContain('nonsecret');
 });
 it('recovers an existing result with GET only on reload',async()=>{

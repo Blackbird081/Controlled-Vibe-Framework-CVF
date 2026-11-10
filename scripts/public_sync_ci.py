@@ -12,6 +12,11 @@ REQUIRED_WORKFLOWS = (
     "public-sync-preflight.yml", "ci.yml", "cvf-ci.yml",
     "cvf-static-ci.yml", "cvf-web-ci.yml", "documentation-testing.yml",
 )
+ZERO_SHA = "0" * 40
+CANDIDATE_BASE_EXPRESSION = (
+    "${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha "
+    "|| (github.event.before != '" + ZERO_SHA + "' && github.event.before) || 'origin/main' }}"
+)
 
 
 def project_candidate_trigger(text: str) -> str:
@@ -20,7 +25,30 @@ def project_candidate_trigger(text: str) -> str:
     matches = list(re.finditer(pattern, text))
     if len(matches) != 1:
         raise ValueError("Expected one push trigger before pull_request")
-    return re.sub(pattern, "  push:\n    branches: [main, develop, 'cvf-public-sync-candidate-*']\n", text)
+    push = matches[0].group(0)
+    branch_lines = re.findall(r"(?m)^    branches: \[([^\r\n]*)\]\s*$", push)
+    if re.search(r"(?m)^    branches:", push) and len(branch_lines) != 1:
+        raise ValueError("Expected one literal inline push branch list")
+    if re.search(r"(?m)^    branches-ignore:", push):
+        raise ValueError("Push branch exclusions require explicit candidate review")
+    projected = "  push:\n"
+    if branch_lines:
+        branches = branch_lines[0].strip()
+        if "cvf-public-sync-candidate-*" not in branches:
+            branches += ", 'cvf-public-sync-candidate-*'"
+        projected += f"    branches: [{branches}]\n"
+    # An unfiltered push already includes candidate branches; keep it unfiltered.
+    text = re.sub(pattern, lambda _: projected, text)
+    def project_base(match: re.Match) -> str:
+        expression = match.group(2)
+        if "github.event.before" not in expression or "github.event.pull_request.base.sha" not in expression:
+            raise ValueError("Unknown BASE_SHA expression requires review")
+        return match.group(1) + CANDIDATE_BASE_EXPRESSION
+    # A newly created branch has an all-zero 'before', which is truthy in
+    # Actions expressions but is not a Git commit. Full-history checkouts make
+    # origin/main available for this first-push comparison; never use HEAD as
+    # an empty self-comparison. PR and ordinary push ranges keep their real base.
+    return re.sub(r"(?m)^(\s*BASE_SHA:\s*)(\$\{\{[^\r\n]*\}\})", project_base, text)
 
 
 def classify_runs(runs: list[dict], sha: str, branch: str) -> dict:

@@ -2,7 +2,6 @@ name: CVF v1.6 Web CI
 
 on:
   push:
-    branches: [main, develop, 'cvf-public-sync-candidate-*']
   pull_request:
     paths:
       - "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/**"
@@ -35,7 +34,7 @@ jobs:
           cache-dependency-path: EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/package-lock.json
       - name: Compatibility gate (impact report)
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python ../../../governance/compat/check_core_compat.py --base "$BASE_SHA" --head "$HEAD_SHA" --json --write-report ../../../governance/compat/last-report.json

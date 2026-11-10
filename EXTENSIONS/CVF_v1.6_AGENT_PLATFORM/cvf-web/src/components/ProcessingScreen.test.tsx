@@ -407,6 +407,7 @@ describe('ProcessingScreen — risk badge (W94-T1)', () => {
 describe('ProcessingScreen — governance evidence visibility (W114-T1 CP5)', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    trackEventMock.mockClear();
   });
 
   it('renders provider, routing, knowledge, and policy evidence returned by /api/execute', async () => {
@@ -596,10 +597,10 @@ describe('ProcessingScreen — governance evidence visibility (W114-T1 CP5)', ()
 
     expect(screen.queryByTestId('false-positive-report-panel')).toBeNull();
     expect(screen.getByTestId('approval-status-panel').textContent).toContain('lower-risk planning step');
-    expect(trackEventMock).toHaveBeenCalledWith('task_recovery_prompted', expect.objectContaining({
+    await waitFor(() => expect(trackEventMock).toHaveBeenCalledWith('task_recovery_prompted', expect.objectContaining({
       receiptId: 'rcpt-approval-001',
       decision: 'NEEDS_APPROVAL',
-    }));
+    })));
   });
 });
 

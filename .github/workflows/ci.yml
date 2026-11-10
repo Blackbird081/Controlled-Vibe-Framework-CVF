@@ -1,7 +1,7 @@
 name: CVF CI Pipeline
 on:
   push:
-    branches: [main, develop, 'cvf-public-sync-candidate-*']
+    branches: [main, cvf-next, 'cvf-public-sync-candidate-*']
   pull_request:
     branches: [main]
 

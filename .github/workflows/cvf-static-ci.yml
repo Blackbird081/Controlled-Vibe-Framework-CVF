@@ -2,7 +2,7 @@ name: CVF Static CI Gate
 
 on:
   push:
-    branches: [main, develop, 'cvf-public-sync-candidate-*']
+    branches: [main, cvf-next, 'cvf-public-sync-candidate-*']
   pull_request:
     branches: [main]
 
@@ -17,7 +17,7 @@ jobs:
     permissions:
       contents: read
     env:
-      BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before || 'HEAD' }}
+      BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
       HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
     steps:
       - uses: actions/checkout@v4

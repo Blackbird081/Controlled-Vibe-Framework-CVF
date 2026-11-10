@@ -26,7 +26,7 @@ jobs:
 
       - name: Enforce docs governance guard
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_docs_governance_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -46,7 +46,7 @@ jobs:
 
       - name: Enforce GC-032 governed artifact authoring
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_governed_artifact_authoring.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -66,7 +66,7 @@ jobs:
 
       - name: Enforce GC-045 markdown structural completeness
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_markdown_structural_completeness.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -86,7 +86,7 @@ jobs:
 
       - name: Enforce work-order dispatch quality
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_work_order_dispatch_quality.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -174,7 +174,7 @@ jobs:
 
       - name: Enforce baseline update guard
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_baseline_update_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -194,7 +194,7 @@ jobs:
 
       - name: Enforce GC-018 stop-boundary semantics
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_gc018_stop_boundary_semantics.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -214,7 +214,7 @@ jobs:
 
       - name: Enforce GC-025 session governance bootstrap
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_session_governance_bootstrap.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -234,7 +234,7 @@ jobs:
 
       - name: Enforce GC-026 progress tracker sync
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_progress_tracker_sync.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -271,7 +271,7 @@ jobs:
 
       - name: Enforce GC-042 product value validation guard
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_product_value_validation_guard_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -291,7 +291,7 @@ jobs:
 
       - name: Enforce GC-044 template/skill standard guard
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_template_skill_standard_guard_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -311,7 +311,7 @@ jobs:
 
       - name: Enforce GC-043 knowledge absorption priority guard
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_knowledge_absorption_priority_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -331,7 +331,7 @@ jobs:
 
       - name: Enforce GC-047 corpus completeness and report integrity
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_corpus_completeness_report_integrity.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -351,7 +351,7 @@ jobs:
 
       - name: Enforce GC-048 corpus-to-knowledge-map reconciliation
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_corpus_to_knowledge_map_reconciliation.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -388,7 +388,7 @@ jobs:
 
       - name: Enforce GC-027 multi-agent review governance
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_multi_agent_review_governance_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -408,7 +408,7 @@ jobs:
 
       - name: Enforce GC-028 boardroom runtime governance
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_boardroom_runtime_governance_compat.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -445,7 +445,7 @@ jobs:
 
       - name: Enforce GC-029 extension package check
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_extension_package_check.py --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -585,7 +585,7 @@ jobs:
 
       - name: Enforce GC-030 guard authoring standard
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_guard_authoring_standard.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -673,7 +673,7 @@ jobs:
 
       - name: Enforce audit retention registry compatibility
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_audit_retention_registry.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -693,7 +693,7 @@ jobs:
 
       - name: Enforce review retention registry compatibility
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_review_retention_registry.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce
@@ -713,7 +713,7 @@ jobs:
 
       - name: Enforce foundational guard surfaces
         env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event.before != '0000000000000000000000000000000000000000' && github.event.before) || 'origin/main' }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           python governance/compat/check_foundational_guard_surfaces.py --profile public --base "$BASE_SHA" --head "$HEAD_SHA" --enforce

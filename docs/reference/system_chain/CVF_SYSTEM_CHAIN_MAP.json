@@ -164,7 +164,7 @@
       "sourceFingerprints": [
         {
           "path": ".github/workflows/documentation-testing.yml",
-          "sha256": "45cac3e128b1d6c0fc56a8d6d8a013b46a233600a250eb012475ebf53235d070",
+          "sha256": "0cc543ed650c3a5f2bb63cb03c78fca2b68c865cdc907738789bd3d7358ee148",
           "evidenceRole": "CI job invoking the conformance runner",
           "provenanceSha256": "d3e851fb5dbdbb5f69041bb16cf4d31eba19c1220c1c4c432547b58e46024061",
           "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
